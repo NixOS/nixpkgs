@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-fyqgPFTEyuEj+FZlIwqgfseefbCmAlxzUkoV+QU5S+s=";
+  cargoBuildFlags = [ "--package zeekstd_cli" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zstd ];
