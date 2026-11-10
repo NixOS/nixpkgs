@@ -5,6 +5,7 @@
   lib,
   openssl,
   pkg-config,
+  sqlite,
   gitMinimal,
   rustPlatform,
   writeShellScript,
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     alsa-lib
     dbus
+    sqlite
   ];
 
   passthru.updateScript = writeShellScript "update-script" ''
