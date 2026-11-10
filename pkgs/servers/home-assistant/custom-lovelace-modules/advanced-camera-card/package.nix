@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "advanced-camera-card";
-  version = "8.1.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = "advanced-camera-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9xOUMBOogrYhICsH4iBw3eZxHaMIvkX2942UzcEV8xI=";
+    hash = "sha256-3zrcxnTfBoqe+njExg41MlrQigamyVkxM+5RqgjilPY=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/dermotduffy/advanced-camera-card/blob/main/package.json#L201
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     name = "${finalAttrs.pname}-yarn-deps";
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-vqk1LCuLK3R6DgO/QWn1V96J3ZwRNeif+UAe0Bm6ndI=";
+    hash = "sha256-hlsc+iE7EZxJHA2XJka50+2DRGRv2IvQNg5BFk0uM3U=";
   };
 
   nativeBuildInputs = [
