@@ -25,9 +25,9 @@ However, please do not remove the template, even when nothing is checked!
   - [ ] [Package tests] at `passthru.tests`.
   - [ ] [NixOS tests] in [nixos/tests].
   - [ ] Tests in [lib/tests] or [pkgs/test] for functions and "core" functionality.
-- Nixpkgs Release Notes
+- [Nixpkgs Release Notes]
   - [ ] Package update: when the change is major or breaking.
-- NixOS Release Notes
+- [NixOS Release Notes]
   - [ ] Module addition: when adding a new NixOS module.
   - [ ] Module update: when the change is significant.
 
@@ -42,3 +42,5 @@ However, please do not remove the template, even when nothing is checked!
 [nixos/tests]: https://github.com/NixOS/nixpkgs/blob/master/nixos/tests
 [pkgs/README.md]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md
 [pkgs/test]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/test
+[Nixpkgs Release Notes]: https://github.com/NixOS/nixpkgs/blob/master/doc/release-notes
+[NixOS Release Notes]: https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes
