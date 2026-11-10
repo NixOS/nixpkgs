@@ -3,7 +3,8 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  nodejs_22,
+  nodejs_24,
+  nodejs-slim_24,
   nix-update-script,
   # Vite embeds this prefix in the frontend, so it must also be set at runtime.
   basePath ? "",
@@ -25,11 +26,11 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-27q1ikm88s5pawqPktNUZVzz/bm3uEuefrJJWQFLLo8=";
   # The GraphQL playground plugin still declares Apollo Server 4 as a peer.
   npmFlags = [ "--legacy-peer-deps" ];
-  # Node.js 24.19+ crashes when garbage-collecting better-sqlite3 statements.
-  # https://github.com/nodejs/node/issues/65446
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ nodejs-slim_24 ];
 
   env = {
     BASE_PATH = basePath;
@@ -63,18 +64,33 @@ buildNpmPackage (finalAttrs: {
 
     npm prune --omit=dev --ignore-scripts $npmFlags
 
+    # Keep the native addons without their build files and toolchain references.
+    find node_modules/{better-sqlite3,secp256k1}/build \
+      -type f ! -name '*.node' -delete
+
+    # Replace the build-time Node.js shebangs with the slim runtime.
+    patchShebangs --host --update node_modules
+
     mkdir -p $out/lib/thunderhub/src/client
     cp -r dist drizzle node_modules package.json $out/lib/thunderhub
     cp -r src/client/dist $out/lib/thunderhub/src/client
     install -Dm644 LICENSE $out/share/licenses/thunderhub/LICENSE
 
-    makeWrapper ${lib.getExe nodejs_22} $out/bin/thunderhub \
+    makeWrapper ${lib.getExe nodejs-slim_24} $out/bin/thunderhub \
       --set NODE_ENV production \
       --set BASE_PATH ${lib.escapeShellArg basePath} \
       --add-flags "$out/lib/thunderhub/dist/main.js"
 
     runHook postInstall
   '';
+
+  outputChecks.out.disallowedRequisites = [
+    nodejs_24
+    nodejs-slim_24.npm
+    nodejs-slim_24.corepack
+    nodejs-slim_24.python
+    finalAttrs.npmDeps
+  ];
 
   passthru.updateScript = nix-update-script { };
 
