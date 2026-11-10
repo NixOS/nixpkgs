@@ -4,12 +4,12 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
-  hyprtoolkit,
   hyprlang,
-  sdbus-cpp_2,
-  polkit,
-  systemd,
+  hyprtoolkit,
   libxkbcommon,
+  polkit,
+  sdbus-cpp_2,
+  systemd,
 }:
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpolkitagent";
@@ -28,12 +28,12 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    hyprtoolkit
     hyprlang
-    sdbus-cpp_2
-    polkit
-    systemd
+    hyprtoolkit
     libxkbcommon
+    polkit
+    sdbus-cpp_2
+    systemd
   ];
 
   meta = {
