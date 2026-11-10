@@ -20,11 +20,7 @@ let
     unpackPhase = ''
       runHook preUnpack
 
-      if [ -d $src/super_native_extensions ]; then
-        cp -r $src/super_native_extensions ${src.name}
-      else
-        cp -r $src ${src.name}
-      fi
+      cp -r $src/${src.passthru.packageRoot} ${src.name}
       chmod -R u+w -- "$sourceRoot"
 
       runHook postUnpack
@@ -34,6 +30,7 @@ let
 
     cargoHash =
       rec {
+        _0_10_0-dev_2 = "sha256-PbmAtRQpUJjWTsIVao87ywNCAGiZCB2Np6Ig7yh6c5Y=";
         _0_9_1 = _0_9_0-dev_6;
         _0_9_0-dev_6 = "sha256-1yJIbBxScmkCwy/e+/z2cYA8qQBfT0yoIBmOSPVd4h4=";
         _0_9_0-dev_5 = _0_8_22;
@@ -61,7 +58,11 @@ let
       gtk3
     ];
 
-    passthru.libraryPath = "lib/libsuper_native_extensions.so";
+    passthru.libraryPath =
+      if lib.versionAtLeast (lib.versions.majorMinor version) "0.10" then
+        "lib/libsuper_native_extensions_native.so"
+      else
+        "lib/libsuper_native_extensions.so";
   };
 
   fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
@@ -77,18 +78,29 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
+  postPatch = ''
+    pushd ${src.passthru.packageRoot}
+  ''
+  + (
+    if lib.versionAtLeast (lib.versions.majorMinor version) "0.10" then
+      ''
+        substitute ${./build.dart} hook/build.dart \
+          --replace-fail "@rust-lib@" "${rustDep}/${rustDep.passthru.libraryPath}"
+      ''
+    else
+      ''
+        chmod +rwx cargokit/cmake/cargokit.cmake
+        cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
+      ''
+  )
+  + ''
+    popd
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    cp -r "$src" "$out"
-    if [ -d $out/super_native_extensions ]; then
-      pushd $out/super_native_extensions
-    else
-      pushd $out
-    fi
-    chmod +rwx cargokit/cmake/cargokit.cmake
-    cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
-    popd
+    cp -r . "$out"
 
     runHook postInstall
   '';
