@@ -7,6 +7,7 @@
   buildPackages,
   testers,
   goreleaser,
+  nix-update-script,
 }:
 buildGo127Module (finalAttrs: {
   pname = "goreleaser";
@@ -52,10 +53,13 @@ buildGo127Module (finalAttrs: {
         --zsh  <(${emulator} $out/bin/goreleaser completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = goreleaser;
-    command = "goreleaser -v";
-    inherit (finalAttrs) version;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = goreleaser;
+      command = "goreleaser -v";
+      inherit (finalAttrs) version;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
