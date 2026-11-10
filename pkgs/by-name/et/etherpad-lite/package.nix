@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
-  version = "3.3.13";
+  version = "3.3.16";
 
   src = fetchFromGitHub {
     owner = "ether";
     repo = "etherpad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SD372cs9nC/BsnBXMGsMcq3/HlbBCHLgSKR6WUBmaoI=";
+    hash = "sha256-NOh3STAXUiHlCeBmKul4SSDv3AfOxuG3UH5nQ2wGzZ8=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_12;
     fetcherVersion = 4;
-    hash = "sha256-gBPZiTY7ulsjhs9y2KZLn5IMKB9Zc5IEs8q5hH2BQQg=";
+    hash = "sha256-BmKR2Hvs+87PuGkN335186qo5d3Nx+Q696IWBd6istU=";
   };
 
   nativeBuildInputs = [
