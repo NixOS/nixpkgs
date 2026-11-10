@@ -58,17 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }
 
-    wrapProgram $out/bin/ec2nvme-nsid \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-        ]
-      }
-
     wrapProgram $out/bin/ec2udev-vbd \
       --prefix PATH : ${
         lib.makeBinPath [
-          coreutils
           gnugrep
           gnused
         ]
