@@ -20,6 +20,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-uMb45eScPjJV3NXcqr6TMJQZI/IHYY9cXgprG2j4UJA=";
 
+  # glibc 2.44 aarch64 headers use __u128, which the libbpf vendored in
+  # libbpf-sys 1.7.0 does not provide yet (fixed upstream in f90a9c48).
+  postPatch = ''
+    crate=$(find "$cargoDepsCopy" -type d -name 'libbpf-sys-*' -print -quit)
+    patch -d "$crate" -p1 < ${./libbpf-sys-linux-types-u128.patch}
+  '';
+
   cargoBuildFlags = [
     "--package"
     "blazesym-c"

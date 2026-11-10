@@ -1,0 +1,20 @@
+# Port of libbpf commit f90a9c487d7542d91fa584b83b6a624a4fbeb341
+# ("include: add 128-bit integer types to linux/types.h") to the libbpf
+# copy vendored inside libbpf-sys: glibc's signal.h pulls in
+# asm/sigcontext.h, which uses __u128 on aarch64 (kernel 7.3 UAPI),
+# while the vendored types.h predates that typedef.
+
+--- a/libbpf/include/linux/types.h
++++ b/libbpf/include/linux/types.h
+@@ -12,6 +12,11 @@
+ #include <asm/types.h>
+ #include <asm/posix_types.h>
+ 
++#ifdef __SIZEOF_INT128__
++typedef __signed__ __int128 __s128 __attribute__((aligned(16)));
++typedef unsigned __int128 __u128 __attribute__((aligned(16)));
++#endif
++
+ #define __bitwise__
+ #define __bitwise __bitwise__
+ 
