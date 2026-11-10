@@ -35,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoRoot = "rec-rust-lib/rust";
 
+  # redact configure flags from version output to reduce closure size
+  patches = [ ./version.patch ];
+
   nativeBuildInputs = [
     cargo
     rustc
@@ -68,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit (nixosTests) pdns-recursor ncdns;
   };
+
+  # Use python3 as canary for whether --version references are removed
+  disallowedReferences = [ python3 ];
 
   meta = {
     changelog = "https://doc.powerdns.com/recursor/changelog/${lib.versions.majorMinor finalAttrs.version}.html#change-${finalAttrs.version}";

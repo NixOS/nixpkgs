@@ -6911,6 +6911,12 @@
     githubId = 25856103;
     name = "DDoSolitary";
   };
+  ddymko = {
+    email = "dymkod@gmail.com";
+    github = "ddymko";
+    githubId = 1588386;
+    name = "David Dymko";
+  };
   de11n = {
     email = "nixpkgs-commits@deshaw.com";
     github = "de11n";
@@ -20838,6 +20844,12 @@
     github = "ndavd";
     githubId = 74260683;
     name = "Nuno David";
+  };
+  ndenissov = {
+    email = "n.denissov@proton.me";
+    github = "ndenissov";
+    githubId = 70575593;
+    name = "Nikita Denissov";
   };
   ndl = {
     email = "ndl@endl.ch";

@@ -7,6 +7,8 @@
   stdenv,
   pkg-config,
   cmake,
+  aws-lc,
+  zstd,
   openssl,
   libffi,
   grpc,
@@ -72,6 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
+    zstd
     openssl
     libffi
     grpc

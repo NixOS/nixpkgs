@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Lwc/TYs4cfN3W/Wc74lL0nqD6LCbwDWfMnPyhiXoR+k=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     zstd

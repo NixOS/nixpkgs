@@ -13,6 +13,7 @@
   libxcb,
   libxkbcommon,
   wayland,
+  rust-jemalloc-sys,
   versionCheckHook,
   nix-update-script,
 }:
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libx11
     libxcursor
     libxi
+    rust-jemalloc-sys
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon
