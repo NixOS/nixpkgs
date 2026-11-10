@@ -10272,6 +10272,8 @@ self: super: with self; {
 
   llm-mcp-client = callPackage ../development/python-modules/llm-mcp-client { };
 
+  llm-meta-ai = callPackage ../development/python-modules/llm-meta-ai { };
+
   llm-mistral = callPackage ../development/python-modules/llm-mistral { };
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };

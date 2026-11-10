@@ -89,6 +89,7 @@ let
       llm-llama-server ? false,
       llm-lmstudio ? false,
       llm-mcp-client ? false,
+      llm-meta-ai ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
