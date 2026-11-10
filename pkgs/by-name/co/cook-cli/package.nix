@@ -6,6 +6,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  sqlite,
   nodejs,
   nix-update-script,
 }:
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
   ];
 
   env.OPENSSL_NO_VENDOR = 1;
