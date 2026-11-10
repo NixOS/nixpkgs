@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  libgit2,
   nix-update-script,
 }:
 
@@ -18,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package discord-presence-lsp" ];
   cargoHash = "sha256-oSUrQ6d5A4grI69j0NBr06WtIUnwV9AEkZuqW2IzKSQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   passthru.updateScript = nix-update-script { };
 
