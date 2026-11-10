@@ -10226,6 +10226,8 @@ self: super: with self; {
 
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
+  llm-cmd-comp = callPackage ../development/python-modules/llm-cmd-comp { };
+
   llm-command-r = callPackage ../development/python-modules/llm-command-r { };
 
   llm-deepseek = callPackage ../development/python-modules/llm-deepseek { };

@@ -66,6 +66,7 @@ let
       llm-all-models-async ? false,
       llm-anthropic ? false,
       llm-cmd ? false,
+      llm-cmd-comp ? false,
       llm-command-r ? false,
       llm-deepseek ? false,
       llm-docs ? false,
