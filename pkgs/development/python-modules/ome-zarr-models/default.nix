@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ome-zarr-models";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ome-zarr-py";
     repo = "ome-zarr-models-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yC62hrlv3OOSXp6c3et3ZRa51iMHQkyXv1W7eyJCxlM=";
+    hash = "sha256-vDGXnDFbvXllfSb4SO1h4ubG//UvOboQ0AwCuPUF9Xs=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
