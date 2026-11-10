@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   installShellFiles,
   pkg-config,
@@ -27,6 +28,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-BsSIbZwB6s8i3dDTRYJ1EdVbJmiO0oxcLu6qiYlPkOI=";
   };
+
+  patches = [
+    # cargo 1.100 changed the way the target directory is structured. ripgrep's
+    # tests assumed the old layout, leading to the test suite failing. pull the
+    # new patch which respects `CARGO_BIN_EXE_rg`.
+    (fetchpatch {
+      name = "fix-binary-discovery-for-build-dir-layout-v2.patch";
+      url = "https://github.com/BurntSushi/ripgrep/commit/7525479a9576f1ca4c2d04339d78e47ff5ae9b05.patch";
+      hash = "sha256-JivF0A9RIdtA+N3sBGSKuPAcFBa+YlpE9ux+OrZmCOA=";
+    })
+  ];
 
   cargoHash = "sha256-AqizStE9ICd6mNDZWdeXg6dHuTiY+B0TNauQQYWUa84=";
 
