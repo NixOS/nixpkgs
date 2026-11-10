@@ -112,12 +112,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "337";
+  version = "338";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-6rE7X0nx5vdRsV8VBDtA1mrZnykjAfjpfPzJP/RYDh8=";
+    hash = "sha256-w+STkyrfHfZP5Dr6PdQmucCXzqQV1Fusx8SGHmVPGbk=";
   };
 
   outputs = [
@@ -320,11 +320,7 @@ python.pkgs.buildPythonApplication rec {
     "test_libmix_differences"
   ];
 
-  disabledTestPaths = [
-    # slight difference how files are listed
-    "tests/comparators/test_elf.py::test_lib_differences"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"
