@@ -77,9 +77,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace src/com/eteks/sweethome3d/SweetHome3DBootstrap.java \
-      --replace-fail '"com.eteks.sweethome3d",' \
-        '"com.eteks.sweethome3d", "com.sm.sweethome3d",'
+    rm -r src/com/sm
 
     addAutoPatchelfSearchPath ${jdk}/lib/openjdk/lib/
     autoPatchelf lib

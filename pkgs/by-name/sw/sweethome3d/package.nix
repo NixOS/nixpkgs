@@ -18,6 +18,7 @@ let
   patches = [
     ./build-xml.patch
     ./config.patch
+    ./remove-sourceforge-support.patch
   ];
 
   meta = {
