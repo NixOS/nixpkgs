@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   fribidi,
-  libunibreak,
+  libunibreak_7,
   freetype,
   fontconfig,
   harfbuzz,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fribidi
-    libunibreak
+    libunibreak_7
     freetype
     fontconfig
     harfbuzz
