@@ -44,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.wrapQtAppsHook
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "USE_SYSTEM_PFFFT" true) ];
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_PFFFT" true)
+    (lib.cmakeFeature "PFFFT_INCLUDE_DIRS" "${pffft}/include/pffft")
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
