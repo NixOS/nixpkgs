@@ -39,6 +39,8 @@ let
 
       standard-library-classes = callPackage ../development/libraries/agda/standard-library-classes { };
 
+      standard-library-meta = callPackage ../development/libraries/agda/standard-library-meta { };
+
       iowa-stdlib = callPackage ../development/libraries/agda/iowa-stdlib { };
 
       agda-prelude = callPackage ../development/libraries/agda/agda-prelude { };
