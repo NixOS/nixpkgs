@@ -16197,7 +16197,9 @@ self: super: with self; {
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
-  python-statemachine = callPackage ../development/python-modules/python-statemachine { };
+  python-statemachine = callPackage ../development/python-modules/python-statemachine {
+    inherit (pkgs) graphviz;
+  };
 
   python-status = callPackage ../development/python-modules/python-status { };
 
