@@ -1326,8 +1326,8 @@ in
       "sha256-WlOyKZoXsncOjsoSVckNkR1xeRf0Ff7NiYYTpyCbs6E=";
 
   mypy-boto3-sts =
-    buildMypyBoto3Package "sts" "1.43.94"
-      "sha256-0WnjCd7s+Zy4qJfjRzNXH8qmBUR+Kbn2qMMiAsgmkM4=";
+    buildMypyBoto3Package "sts" "1.44.0"
+      "sha256-SChQDCx7LFXJwqpa0jmXQw2ySmwZpUjoCkIeLQUz9nw=";
 
   mypy-boto3-support =
     buildMypyBoto3Package "support" "1.43.84"
