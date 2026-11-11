@@ -13,6 +13,7 @@
   curl,
   runCommand,
   jq,
+  zstd,
 }:
 
 let
@@ -24,22 +25,22 @@ let
   #
   # Both values below are kept in sync with the package version by
   # passthru.updateScript — do not edit them by hand.
-  litellmPricingRev = "d7620c77a1ebaf30bb55f31030418b9da2f8cd21";
-  litellmPricingHash = "sha256-Sy6wvAfplUF6fhCjm0Qvts2Vsd88qfy1gKGJ0JS2c1U=";
+  litellmPricingUrl = "https://raw.githubusercontent.com/BerriAI/litellm/1046716b6d3d45f30d5efad42becbd440d6187ee/model_prices_and_context_window.json";
+  litellmPricingHash = "sha256-j4Bg2M56QMkbmVx01qJ2V1Q9SePBxTQw2r1VbyRDksY=";
   litellmPricing = fetchurl {
-    url = "https://raw.githubusercontent.com/BerriAI/litellm/${litellmPricingRev}/model_prices_and_context_window.json";
+    url = litellmPricingUrl;
     hash = litellmPricingHash;
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ccusage";
-  version = "20.0.47";
+  version = "20.0.48";
 
   src = fetchFromGitHub {
     owner = "ccusage";
     repo = "ccusage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jFqsF1+K64FiEyjfawVjxoqLbQLoyRQDH6GhFSGwNK8=";
+    hash = "sha256-1Y8BoZqMvmBgRVYkT+faOivrSnvgqEu7Bx4KLrxilbY=";
   };
 
   # The Cargo workspace lives in rust/, not at the repo root.
@@ -52,7 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
     libiconv
   ];
@@ -76,11 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    # Plain nix-update only refreshes version + src/cargo hashes; it can't know
-    # about the LiteLLM pricing pin above. This wrapper bumps the package as
-    # usual, then reads the litellm revision that ccusage locks at the new tag
-    # and rewrites litellmPricingRev/litellmPricingHash to match, so automated
-    # (r-ryantm) bumps stay complete instead of shipping stale pricing data.
     updateScript = lib.getExe (writeShellApplication {
       name = "ccusage-update";
       runtimeInputs = [
@@ -96,16 +95,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
         nix-update "$attr"
 
         version=$(nix-instantiate --eval --raw -A "$attr.version")
-        rev=$(curl --fail --silent --show-error --location \
+        if ! url=$(curl --fail --silent --show-error --location \
           "https://raw.githubusercontent.com/ccusage/ccusage/v''${version}/flake.lock" \
-          | jq --raw-output '.nodes.litellm.locked.rev')
-        hash=$(nix-prefetch-url --type sha256 \
-          "https://raw.githubusercontent.com/BerriAI/litellm/''${rev}/model_prices_and_context_window.json" \
+          | jq --exit-status --raw-output '.nodes[.nodes.root.inputs.litellm].locked.url'); then
+          echo "Could not find the LiteLLM pricing URL in ccusage v$version flake.lock" >&2
+          exit 1
+        fi
+        hash=$(nix-prefetch-url --type sha256 "$url" \
           | xargs nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri)
 
         file=$(nix-instantiate --eval --raw -A "$attr.meta.position" | sed -re 's/:[0-9]+$//')
         sed -i \
-          -e "s|litellmPricingRev = \"[0-9a-f]*\"|litellmPricingRev = \"''${rev}\"|" \
+          -e "s|litellmPricingUrl = \"[^\"]*\"|litellmPricingUrl = \"''${url}\"|" \
           -e "s|litellmPricingHash = \"sha256-[^\"]*\"|litellmPricingHash = \"''${hash}\"|" \
           "$file"
       '';
