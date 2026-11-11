@@ -2239,11 +2239,14 @@ mapAliases {
   postgresql13JitPackages = throw "'postgresql13JitPackages' has been renamed to/replaced by 'postgresql13Packages'"; # Converted to throw 2025-10-27
   postgresql13Packages = throw "postgresql13Packages has been removed since it reached its EOL upstream"; # Added 2025-11-17
   postgresql14JitPackages = throw "'postgresql14JitPackages' has been renamed to/replaced by 'postgresql14Packages'"; # Converted to throw 2025-10-27
+  postgresql14Packages = throw "postgresql14Packages has been removed since postgresql_14 is EOL"; # Added 2026-11-11
   postgresql15JitPackages = throw "'postgresql15JitPackages' has been renamed to/replaced by 'postgresql15Packages'"; # Converted to throw 2025-10-27
   postgresql16JitPackages = throw "'postgresql16JitPackages' has been renamed to/replaced by 'postgresql16Packages'"; # Converted to throw 2025-10-27
   postgresql17JitPackages = throw "'postgresql17JitPackages' has been renamed to/replaced by 'postgresql17Packages'"; # Converted to throw 2025-10-27
   postgresql_13 = throw "postgresql_13 has been removed since it reached its EOL upstream"; # Added 2025-11-17
   postgresql_13_jit = throw "postgresql_13_jit has been removed since it reached its EOL upstream"; # Added 2025-11-17
+  postgresql_14 = throw "postgresql_14 has been removed since it reached its EOL upstream"; # Added 2026-11-11
+  postgresql_14_jit = throw "postgresql_14_jit has been removed since it reached its EOL upstream"; # Added 2026-11-11
   postgresqlJitPackages = throw "'postgresqlJitPackages' has been renamed to/replaced by 'postgresqlPackages'"; # Converted to throw 2025-10-27
   pot = throw "'pot' has been removed as it requires libsoup 2.4 which is EOL"; # Added 2025-10-09
   pothos = throw "'pothos' has been removed as it relies on pcre, and is unmaintained upstream"; # Added 2026-06-17
