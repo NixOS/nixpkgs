@@ -2199,11 +2199,11 @@ won't take effect until you reboot the system.
             eprintln!("stopping the following units: {}", units.join(", "));
         }
 
-        for unit in units_to_stop.keys() {
-            if let Ok(job_path) = systemd.stop_unit(unit, "replace") {
+        if let Ok(jobs) = systemd.enqueue_unit_job_many(units_to_stop.keys().map(|x| &**x).collect::<Vec<_>>(), "stop", "replace", 0) {
+            for (_, job_path, _, _, _) in jobs {
                 let mut j = submitted_jobs.borrow_mut();
                 j.insert(job_path.to_owned(), Job::Stop);
-            };
+            }
         }
 
         block_on_jobs(&dbus_conn, &submitted_jobs)?;
@@ -2500,17 +2500,17 @@ won't take effect until you reboot the system.
         units.sort_by_key(|name| name.to_lowercase());
         eprintln!("reloading the following units: {}", units.join(", "));
 
-        for unit in units {
-            match systemd.reload_unit(unit, "replace") {
-                Ok(job_path) => {
+        match systemd.enqueue_unit_job_many(units, "reload", "replace", 0) {
+            Ok(jobs) => {
+                for (_, job_path, _, _, _) in jobs {
                     submitted_jobs
                         .borrow_mut()
                         .insert(job_path.clone(), Job::Reload);
                 }
-                Err(err) => {
-                    eprintln!("Failed to reload {unit}: {err}");
-                    exit_code = 4;
-                }
+            }
+            Err(err) => {
+                eprintln!("Failed to reload units: {err}");
+                exit_code = 4;
             }
         }
 
@@ -2529,16 +2529,17 @@ won't take effect until you reboot the system.
         units.sort_by_key(|name| name.to_lowercase());
         eprintln!("restarting the following units: {}", units.join(", "));
 
-        for unit in units {
-            match systemd.restart_unit(unit, "replace") {
-                Ok(job_path) => {
-                    let mut jobs = submitted_jobs.borrow_mut();
-                    jobs.insert(job_path, Job::Restart);
+        match systemd.enqueue_unit_job_many(units, "restart", "replace", 0) {
+            Ok(jobs) => {
+                for (_, job_path, _, _, _) in jobs {
+                    submitted_jobs
+                        .borrow_mut()
+                        .insert(job_path.clone(), Job::Restart);
                 }
-                Err(err) => {
-                    eprintln!("Failed to restart {unit}: {err}");
-                    exit_code = 4;
-                }
+            }
+            Err(err) => {
+                eprintln!("Failed to restart units: {err}");
+                exit_code = 4;
             }
         }
 
@@ -2562,16 +2563,17 @@ won't take effect until you reboot the system.
         eprintln!("starting the following units: {}", units.join(", "));
     }
 
-    for unit in units_to_start.keys() {
-        match systemd.start_unit(unit, "replace") {
-            Ok(job_path) => {
-                let mut jobs = submitted_jobs.borrow_mut();
-                jobs.insert(job_path, Job::Start);
+    match systemd.enqueue_unit_job_many(units_to_start.keys().map(|x| &**x).collect::<Vec<_>>(), "start", "replace", 0) {
+        Ok(jobs) => {
+            for (_, job_path, _, _, _) in jobs {
+                submitted_jobs
+                    .borrow_mut()
+                    .insert(job_path.clone(), Job::Start);
             }
-            Err(err) => {
-                eprintln!("Failed to start {unit}: {err}");
-                exit_code = 4;
-            }
+        }
+        Err(err) => {
+            eprintln!("Failed to start units: {err}");
+            exit_code = 4;
         }
     }
 
