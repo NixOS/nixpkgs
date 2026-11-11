@@ -89,10 +89,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.tests = {
-    cmake-config = testers.hasCmakeConfigModules {
-      moduleNames = [ "zfp" ];
-      package = finalAttrs.finalPackage;
+  passthru = {
+    inherit bitStreamWordSize;
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "zfp" ];
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
