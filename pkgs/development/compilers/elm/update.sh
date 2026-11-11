@@ -13,9 +13,9 @@ done
 cabal2nix --no-haddock 'https://github.com/avh4/elm-format' --revision '0.8.8' > packages/ghc9_8/elm-format/elm-format.nix
 cabal2nix 'https://github.com/ekmett/ansi-wl-pprint' --revision 'v0.6.8.1' > packages/ghc9_8/ansi-wl-pprint/default.nix
 
-# We're building binaries from commit corresponding to https://github.com/elm/compiler/releases/tag/0.19.2.
+# We're building binaries from commit corresponding to https://github.com/elm/compiler/releases/tag/0.19.3.
 # These binaries are built with newer ghc version and also support Aarch64 for Linux and Darwin.
-cabal2nix https://github.com/elm/compiler --revision 48befde196cbcbdf459114e36c02b52c49b58050 > packages/ghc9_8/elm/default.nix
+cabal2nix https://github.com/elm/compiler --revision fd5a6d68f8e3a85efee13143ff4a73edae6a761b > packages/ghc9_8/elm/default.nix
 
 echo "need to manually copy registry.dat from an existing elm project"
 #elm2nix snapshot > registry.dat
