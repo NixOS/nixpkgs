@@ -32,14 +32,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plotpy";
-  version = "2.9.0";
+  version = "2.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PlotPy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6nLkpzwQEvaX9dlrpK6IKaDSOX6hAks9p4FjpXFTJjI=";
+    hash = "sha256-jpf+sMk8Pd4HkXiWgNnk2DK5CDHQHOwhbJFjOOlQ9/g=";
   };
 
   build-system = [
@@ -65,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preCheck = ''
-    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}:${qt6.qtsvg}/${qt6.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
     # https://github.com/NixOS/nixpkgs/issues/255262
     cd $out
