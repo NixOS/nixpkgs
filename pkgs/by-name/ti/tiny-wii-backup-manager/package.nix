@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   aws-lc,
+  bzip2,
   libx11,
   libxcb,
   libxcursor,
@@ -15,7 +16,9 @@
   vulkan-loader,
   wayland,
   xdg-utils,
+  xz,
   zenity,
+  zlib,
   zstd,
 }:
 
@@ -40,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     aws-lc
+    bzip2
     openssl
+    xz
+    zlib
     zstd
   ];
 
@@ -77,6 +83,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
   '';
+
+  buildFeatures = [ "dist-flatpak" ];
+  buildNoDefaultFeatures = true;
 
   passthru.updateScript = nix-update-script { };
 
