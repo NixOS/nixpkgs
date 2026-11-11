@@ -295,7 +295,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       tmarkus
       fliegendewurst
     ];
-    mainDarwinApp = "mainDarwinApp.app";
+    mainDarwinApp = "PrusaSlicer.app";
     platforms = lib.platforms.unix;
   };
 })
