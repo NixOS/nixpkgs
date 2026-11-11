@@ -5,7 +5,7 @@
   dj-email-url,
   django-cache-url,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   marshmallow,
   pytestCheckHook,
   python-dotenv,
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-PrUPWifWYKVtQ7izRg5D+RYf8YCHCCCRtTNNdz3CzMc=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     marshmallow
