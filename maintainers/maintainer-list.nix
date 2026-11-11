@@ -14470,6 +14470,11 @@
     githubId = 77691121;
     name = "Jerome Baeyens";
   };
+  js-codegamer = {
+    name = "Jagteshver Singh";
+    github = "JS-CodeGamer";
+    githubId = 85994817;
+  };
   js6pak = {
     name = "js6pak";
     email = "me@6pak.dev";
