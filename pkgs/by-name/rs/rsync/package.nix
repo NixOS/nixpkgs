@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oQ1ZGCUlHgcPdMmN89qtGV3vTtgbSi3hYWkCauoz9sg=";
   };
 
-  patches = [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # The test crashes with FileNotFoundError when locale(1) is not in PATH,
     # e.g. in the Darwin sandbox. Not yet fixed upstream.
     ./output-control-chars-no-locale.patch
