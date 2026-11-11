@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-modprobe";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-aj8GeAdRqX5/zSHkaqfETjklbphVR7EH1oEqABQIlOs=";
   };
 
@@ -23,11 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ gnum4 ];
-
   postPatch = ''
-    substituteInPlace utils.mk --replace-fail "/usr/local" "$out"
+    substituteInPlace utils.mk \
+      --replace-fail \
+        "/usr/local" \
+        "$out"
   '';
+
+  nativeBuildInputs = [
+    gnum4
+  ];
 
   meta = {
     description = "Load the NVIDIA kernel module and create NVIDIA character device files";
