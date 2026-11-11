@@ -458,6 +458,10 @@
                   "file": "hooks/desktop-file-utils.section.md"
                 },
                 {
+                  "id": "desktop-to-darwin-bundle",
+                  "file": "hooks/desktop-to-darwin-bundle.md"
+                },
+                {
                   "id": "gdk-pixbuf",
                   "file": "hooks/gdk-pixbuf.section.md"
                 },

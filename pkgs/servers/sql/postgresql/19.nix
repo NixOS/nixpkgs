@@ -1,6 +1,6 @@
 {
   version = "19rc2";
-  rev = "dffcca2e3c81178c64d4c1f44543a3507d0b7508";
+  rev = "refs/tags/REL_19_RC2";
   hash = "sha256-udWcl8t/OTBVfhpb10+qBQhB5MNbCrnFQtPMbYuV008=";
   muslPatches = {
     dont-use-locale-a = {

@@ -3,6 +3,7 @@
 # - Every item from ./collisions.json (for the respective Shell version) should have an entry in here
 # - Set the value to `null` for filtering (duplicate or unmaintained extensions)
 # - Sort the entries in order of appearance in the collisions.json
+# - Preserve the name of the original extension by checking the diff of ./extensions.json
 {
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
@@ -16,6 +17,7 @@
 
   "clipboard-history@alexsaveau.dev" = "clipboard-history";
   "clipboard-history@Diyar1877" = "clipboard-history-2";
+  "clipboard-history@manouchehr" = "clipboard-history-3";
 
   "clipboard-line-cleaner@example.com" = "clipboard-line-cleaner";
   "clipboard-line-cleaner@epiphanius.github.io" = "clipboard-line-cleaner-2";
@@ -29,6 +31,9 @@
   "InternetSpeedMeter@alshakib.dev" = "internet-speed-meter";
   "speed-meter@mojahid.lunecode.com" = "internet-speed-meter-2";
 
+  "lid-switch@dutaahmad" = "lid-switch";
+  "lid-switch@dhyandevp" = "lid-switch-2";
+
   "memento-mori@paveloom" = "memento-mori";
   "memento-mori@vedeshpadal" = "memento-mori-2";
 
@@ -41,6 +46,9 @@
   "night-light-toggle@egoistpizza.github.com" = "night-light-toggle";
   "nightlighttoggle@sam" = "night-light-toggle-2";
   "night-light-toggle@shivamksharma.github.io" = "night-light-toggle-3";
+
+  "overviewbackground@github.com.orbitcorrection" = "overview-background";
+  "overview-background@github.com.sunnyyangyangyang" = "overview-background-2";
 
   "panel-workspace-scroll@polymeilex.github.io" = "panel-workspace-scroll";
   "panel-scroll@taygun86" = "panel-workspace-scroll-2";

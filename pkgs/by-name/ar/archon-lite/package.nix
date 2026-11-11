@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "archon-lite";
-  version = "9.6.80";
+  version = "9.6.260";
 
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-archon-lite/releases/download/v${finalAttrs.version}/archon-lite-v${finalAttrs.version}.AppImage";
-    hash = "sha256-LiP0PAEShUWHokMJ0AjRniYZjpnEhl7SUz2tkJKnd80=";
+    hash = "sha256-ITooDCk58wNcon3FVPNwOUwPoFLD+iKDokjfK/dx2lw=";
   };
 
   extraInstallCommands = ''

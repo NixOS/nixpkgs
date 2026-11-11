@@ -2,58 +2,36 @@
   lib,
   gcc16Stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  qt6,
   pkg-config,
-  hyprutils,
+  glaze,
+  hyprtoolkit,
   pciutils,
-  hyprland-qt-support,
 }:
-let
-  inherit (lib.strings) makeBinPath;
-in
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsysteminfo";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprsysteminfo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KDxT9B+1SATWiZdUBAQvZu17vk3xmyXcw2Zy56bdWbY=";
+    hash = "sha256-xq8TlF1ZuHUs2t6eMe4jgbOmNJZynE3rke8KhEY8U+A=";
   };
-
-  patches = [
-    # Fix Qt6::WaylandClientPrivate not found
-    # https://github.com/hyprwm/hyprsysteminfo/pull/21
-    (fetchpatch {
-      url = "https://github.com/hyprwm/hyprsysteminfo/commit/fe81610278676d26ff47f62770ac238220285d3a.patch";
-      hash = "sha256-rfKyV0gkfXEhTcPHlAB+yxZ+92umBV22YOK9aLMMBhM=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtdeclarative
-    qt6.qtsvg
-    qt6.qtwayland
-    hyprutils
-    hyprland-qt-support
+    (glaze.override { enableSSL = false; })
+    hyprtoolkit
+    pciutils
   ];
 
-  preFixup = ''
-    qtWrapperArgs+=(--prefix PATH : "${makeBinPath [ pciutils ]}")
-  '';
-
   meta = {
-    description = "Tiny qt6/qml application to display information about the running system";
+    description = "System info utility for Hyprland";
     homepage = "https://github.com/hyprwm/hyprsysteminfo";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];

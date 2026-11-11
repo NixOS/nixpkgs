@@ -4,6 +4,7 @@
   fetchCrate,
   pkg-config,
   openssl,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   meta = {
     description = "Command line program to generate a graph showing number of GitHub stars of a user, org or repo over time";

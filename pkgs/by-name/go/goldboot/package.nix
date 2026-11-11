@@ -2,6 +2,7 @@
   fetchFromGitHub,
   rustPlatform,
   lib,
+  libgit2,
   versionCheckHook,
   pkg-config,
   zstd,
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    libgit2
     zstd
     OVMF
     qemu

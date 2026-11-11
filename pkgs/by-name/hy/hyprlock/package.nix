@@ -4,11 +4,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libGL,
   libxkbcommon,
   hyprgraphics,
   hyprlang,
-  hyprutils,
   hyprwayland-scanner,
   pam,
   sdbus-cpp_2,
@@ -16,11 +14,6 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  cairo,
-  file,
-  libjpeg,
-  libwebp,
-  pango,
   libdrm,
   libgbm,
   nix-update-script,
@@ -45,19 +38,12 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cairo
-    file
     hyprgraphics
     hyprlang
-    hyprutils
     libdrm
-    libGL
-    libjpeg
-    libwebp
     libxkbcommon
     libgbm
     pam
-    pango
     sdbus-cpp_2
     systemdLibs
     wayland

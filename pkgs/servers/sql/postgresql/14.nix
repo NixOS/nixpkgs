@@ -1,6 +1,6 @@
 {
   version = "14.25";
-  rev = "9adcf5f8847e0f485a390b1d3ea40688068d71bd";
+  rev = "refs/tags/REL_14_25";
   hash = "sha256-sPOtXwzoU1Gr5YBXwEy3Zi45Aoziv4ZGi4wCXAKUX2o=";
   muslPatches = {
     disable-test-collate-icu-utf8 = {
