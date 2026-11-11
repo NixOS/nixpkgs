@@ -12,7 +12,8 @@
 
   # dependencies
   click,
-  httpx,
+  distro,
+  httpx2,
   hyperlink,
   keyring,
   packaging,
@@ -48,14 +49,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hatch";
-  version = "1.16.5";
+  version = "1.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     tag = "hatch-v${finalAttrs.version}";
-    hash = "sha256-pUlRy8ar0zXsGGSA1VTZyPiU4LruYp/maU2C5T4E5WI=";
+    hash = "sha256-J0brZmPL4rzX/OWYHaBVxKSZNNvz4ZRNl38y2dwFlqI=";
   };
 
   patches = [
@@ -77,8 +78,9 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     click
+    distro
     hatchling
-    httpx
+    httpx2
     hyperlink
     keyring
     packaging
@@ -106,6 +108,7 @@ buildPythonPackage (finalAttrs: {
     setuptools
     cargo
     gitMinimal
+    uv
     versionCheckHook
     writableTmpDirAsHomeHook
   ]
