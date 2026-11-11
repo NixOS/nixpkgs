@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "connectrpc";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tAI5zk0yzse7463mm78B6VGVnc/WCQ06iKyovWdoRK0=";
+    hash = "sha256-/lT/u/yyLZWkU92MgLFq6v1Jh+78O2WcW9/zqLNPTrc=";
   };
 
   postPatch = ''
@@ -68,6 +68,11 @@ buildPythonPackage (finalAttrs: {
     "test/test_example.py"
     # Needs `pyvoy`, which is not packaged in nixpkgs.
     "test/test_grpc.py"
+  ];
+
+  disabledTests = [
+    # importlib.metadata.PackageNotFoundError
+    "test_joint_release_package_versions_match"
   ];
 
   meta = {
