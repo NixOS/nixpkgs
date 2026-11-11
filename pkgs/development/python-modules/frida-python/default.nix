@@ -5,7 +5,7 @@
   buildPythonPackage,
 }:
 let
-  version = "17.19.0";
+  version = "17.26.2";
   format = "wheel";
   inherit (stdenvNoCC.hostPlatform) system;
 
@@ -13,15 +13,15 @@ let
   pypiMeta =
     {
       x86_64-linux = {
-        hash = "sha256-owM+l9+L3BgfhJaTPoTVcVjJ34ot3MakuAPKCl9dhLc=";
+        hash = "sha256-gb+F0GV+77muXvkyp2GORgU0prr8G94Kaqd9f1dS61o=";
         platform = "manylinux1_x86_64";
       };
       aarch64-linux = {
-        hash = "sha256-EoHA1lQQUdJyA/wFcNfBb/oZk3PM+sKMPcOfxFJcP28=";
+        hash = "sha256-9sUaarEDj1S8N8APql+26X67p8xDhNelyUnpRvwwcTI=";
         platform = "manylinux2014_aarch64";
       };
       aarch64-darwin = {
-        hash = "sha256-nNmLnZx98FEBcVibRFtorpiElvY9ws54R0nfZcYHO34=";
+        hash = "sha256-59sYvYjtkqrkJcnZZAANybTbn1IfJ9mkuWpueIzUVXY=";
         platform = "macosx_11_0_arm64";
       };
     }
