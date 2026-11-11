@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   _7zz,
+  directoryListingUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -29,6 +30,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # app bundle may be messed up by standard fixup
   dontFixup = true;
+
+  passthru.updateScript = directoryListingUpdater {
+    # must match the DMG filename prefix (case-sensitive)
+    pname = "BBEdit";
+    url = "https://www.barebones.com/products/bbedit/download.html";
+  };
 
   meta = {
     description = "Powerful and full-featured professional HTML and text editor for macOS";
