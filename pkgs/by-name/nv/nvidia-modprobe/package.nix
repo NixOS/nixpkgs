@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   gnum4,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvidia-modprobe";
@@ -33,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gnum4
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Load the NVIDIA kernel module and create NVIDIA character device files";
