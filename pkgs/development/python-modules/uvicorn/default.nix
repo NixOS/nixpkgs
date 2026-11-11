@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "encode";
+    owner = "Kludex";
     repo = "uvicorn";
     tag = version;
     hash = "sha256-VX5X2BY8eZc93r3zfJFhtz1vuXHvaqWB5rTj7zddSzU=";

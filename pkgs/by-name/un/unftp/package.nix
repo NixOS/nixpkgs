@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.16.0";
 
   src = fetchFromGitHub {
-    owner = "bolcom";
+    owner = "Cloudinvoke";
     repo = "unftp";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Z9Cse4/QO7uH46foL7lagtffZGhfZ24rS/yP3A9s9zU=";

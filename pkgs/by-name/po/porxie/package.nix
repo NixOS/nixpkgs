@@ -6,6 +6,8 @@
   stdenvNoCC,
   nix-update-script,
   rust-jemalloc-sys,
+  pkg-config,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
@@ -21,7 +23,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
   cargoHash = "sha256-cixgj/kInHafBsy5Idk96tAxmiRkZRajc4DGy6QAjB4=";
 
-  buildInputs = [ rust-jemalloc-sys ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    rust-jemalloc-sys
+    zstd
+  ];
 
   checkFlags = [
     # Requires network access.

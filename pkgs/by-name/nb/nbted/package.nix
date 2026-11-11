@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  libgit2,
   nix-update-script,
 }:
 
@@ -17,6 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-IMF5vc9p/+M/gMrUxOE3eojdATfera5dD62kcJEpzd8=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   env.VERGEN_GIT_SHA = finalAttrs.src.rev;
 

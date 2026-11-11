@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  aws-lc,
   git,
   nix,
   nix-update-script,
@@ -20,6 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-AcUet69xxrm8Vnb7vex8kDeGawx6j2vTPzCv6SrsIlM=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   env = {
     GIT_BIN = lib.getExe git;

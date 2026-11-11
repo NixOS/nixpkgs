@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ssort";
-  version = "0.17.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bwhmather";
     repo = "ssort";
     tag = version;
-    hash = "sha256-g2zEm0W+yaHbeWsnVhEnfITOaPACd1kG9fGOrkppWXY=";
+    hash = "sha256-lNM3ASlDKPqoEGfiQDKnK9Y7xjKIv8FggvhMBNlQyxI=";
   };
 
   # Upstream's release workflow generates src/ssort/_version.py, otherwise the version is 0.0.1+dev

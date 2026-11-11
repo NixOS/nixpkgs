@@ -7,6 +7,7 @@
   dbus,
   sqlite,
   file,
+  libgit2,
   makeWrapper,
 }:
 
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     dbus
     sqlite
+    libgit2
   ];
 
   nativeCheckInputs = [

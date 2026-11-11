@@ -227,7 +227,7 @@ lib.makeExtensible (
       latest = self.nix_2_35;
 
       # Read ./README.md before bumping a major release
-      stable = addFallbackPathsCheck self.nix_2_34;
+      stable = addFallbackPathsCheck self.nix_2_35;
     }
     // lib.optionalAttrs config.allowAliases (
       lib.listToAttrs (

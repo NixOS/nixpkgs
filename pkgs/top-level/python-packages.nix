@@ -9621,6 +9621,8 @@ self: super: with self; {
 
   lerobot = callPackage ../development/python-modules/lerobot { };
 
+  lesscpy = toPythonModule (pkgs.lesscpy.override { python3Packages = self; });
+
   letpot = callPackage ../development/python-modules/letpot { };
 
   leveldb = callPackage ../development/python-modules/leveldb { };
@@ -21179,6 +21181,8 @@ self: super: with self; {
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
   torchbench = callPackage ../development/python-modules/torchbench { };
+
+  torchbenchmark = callPackage ../development/python-modules/torchbenchmark { };
 
   torchcodec = callPackage ../development/python-modules/torchcodec { };
 

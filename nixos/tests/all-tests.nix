@@ -313,6 +313,7 @@ in
   authelia = runTest ./authelia.nix;
   auto-cpufreq = runTest ./auto-cpufreq.nix;
   autobrr = runTest ./autobrr.nix;
+  autofs = runTest ./autofs.nix;
   autopush-rs = runTest ./autopush-rs.nix;
   autosuspend = runTest ./autosuspend.nix;
   avahi = runTest {
@@ -528,6 +529,7 @@ in
   };
   cri-o = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix;
   croc = runTest ./croc.nix;
+  cron = runTest ./cron.nix;
   cross-seed = runTest ./cross-seed.nix;
   crowdsec = import ./crowdsec/default.nix { inherit runTest; };
   cryptpad = runTest ./cryptpad.nix;
@@ -560,6 +562,7 @@ in
     imports = [ ./discourse.nix ];
     _module.args.package = pkgs.discourseAllPlugins;
   };
+  distccd = runTest ./distccd.nix;
   dnscrypt-proxy = runTestOn [ "x86_64-linux" ] ./dnscrypt-proxy.nix;
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
@@ -642,6 +645,7 @@ in
   fanout = runTest ./fanout.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
   fcitx5 = runTest ./fcitx5;
+  fcron = runTest ./fcron.nix;
   fedimintd = runTest ./fedimintd.nix;
   feishin = handleTest ./feishin { };
   ferm = runTest ./ferm.nix;
@@ -1636,6 +1640,7 @@ in
   routinator = handleTest ./routinator.nix { };
   rqbit = runTest ./rqbit.nix;
   rshim = handleTest ./rshim.nix { };
+  rsnapshot = runTest ./rsnapshot.nix;
   rspamd = handleTest ./rspamd.nix { };
   rspamd-trainer = runTest ./rspamd-trainer.nix;
   rss-bridge = handleTest ./web-apps/rss-bridge { };

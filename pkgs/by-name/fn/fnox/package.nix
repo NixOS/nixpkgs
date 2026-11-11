@@ -5,7 +5,9 @@
   rustPlatform,
   perl,
   pkg-config,
+  aws-lc,
   openssl,
+  sqlcipher,
   dbus,
   udev,
   cacert,
@@ -35,7 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    sqlcipher
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus

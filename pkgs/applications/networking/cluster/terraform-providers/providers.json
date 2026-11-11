@@ -218,13 +218,13 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "clevercloud_clevercloud": {
-    "hash": "sha256-nUoEdq0dR1b24vxRuryOLy8mJxk0aICVYbI3KoXCbEM=",
+    "hash": "sha256-UJtYSZ0WH0J4e0K0KBawaiMlaFSJrIhRh9OmPlYF0fE=",
     "homepage": "https://registry.terraform.io/providers/clevercloud/clevercloud",
     "owner": "CleverCloud",
     "repo": "terraform-provider-clevercloud",
-    "rev": "v3.0.0",
+    "rev": "v3.1.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-KS76AlIyquah/b/uwM4qotBgEbpGwF54gx2u6mQpJ4E="
+    "vendorHash": "sha256-SoJxFqkj+Uf/XXXOVul7yi9/BEaUqppHU9+yt123RxU="
   },
   "cloudamqp_cloudamqp": {
     "hash": "sha256-Ih26RaGdJKt9jeeCegcMZWnoxUv4vrzr1Pdx84BEcFA=",

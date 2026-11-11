@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "tb1337";
-    repo = "paperless-api";
+    repo = "pypaperless";
     tag = "v${finalAttrs.version}";
     hash = "sha256-G40x/3bb3h49eynwYCoJPeBLmX1Ty+mq3AGQoBAiZOA=";
   };
@@ -45,9 +45,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/tb1337/paperless-api/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/tb1337/pypaperless/releases/tag/${finalAttrs.src.tag}";
     description = "Little api client for paperless(-ngx)";
-    homepage = "https://github.com/tb1337/paperless-api";
+    homepage = "https://github.com/tb1337/pypaperless";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

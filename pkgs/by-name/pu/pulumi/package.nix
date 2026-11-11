@@ -17,18 +17,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pulumi";
-  version = "3.268.0";
+  version = "3.273.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b3dWvPxaOfpreVEHZ3SxgWo5XEZGr/NrPZRwFL443zQ=";
+    hash = "sha256-3oTzIgMcrHujogWPbo2lJfw9n/BEc/nxUyAu+WMXEUA=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-BkSrtTfrpTuC05aTsgH+wOwdLYudYT7/NvPgQMOInVU=";
+  vendorHash = "sha256-2gshVmFPjQ+IAXQb8EC02CD8NyfF/UhpIy8wrANx9Aw=";
 
   sourceRoot = "${finalAttrs.src.name}/pkg";
 
@@ -171,6 +171,9 @@ buildGoModule (finalAttrs: {
 
         # Requires unavailable access token.
         "TestRunNewYesWithAILanguage"
+
+        # Requires a logged-in backend (fails with "PULUMI_ACCESS_TOKEN must be set").
+        "TestWatchRemovalError"
       ]
     }$"
   ];

@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pytorch";
+    owner = "meta-pytorch";
     repo = "torchsnapshot";
     tag = finalAttrs.version;
     hash = "sha256-F8OaxLH8BL6MPNLFv1hBuVmeEdnEQ5w2Qny6by1wP6k=";
@@ -81,8 +81,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Performant, memory-efficient checkpointing library for PyTorch applications, designed with large, complex distributed workloads in mind";
-    homepage = "https://github.com/pytorch/torchsnapshot/";
-    changelog = "https://github.com/pytorch/torchsnapshot/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/meta-pytorch/torchsnapshot/";
+    changelog = "https://github.com/meta-pytorch/torchsnapshot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [

@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     hash = "sha256-8e2DVjG/2CtJ/+FLzMa1VKajJZfFqjD54XQAMY+0q3U=";
   };
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+
   makeFlags = [
     "PREFIX=$(out)"
   ];
@@ -31,5 +33,6 @@ stdenv.mkDerivation {
     changelog = "https://github.com/wkz/phytool/releases";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.connorbaker ];
+    platforms = lib.platforms.linux;
   };
 }

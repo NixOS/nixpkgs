@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcat-unwrapped";
-  version = "0.6.7";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "Skardyy";
     repo = "mcat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6d9b8lRbaowaFscHoq+JQAe8Jfv7gs+h8rJYpt+vQes=";
+    hash = "sha256-l7b5b/ChXsj1pgEMNjGeqlmSF1NVo14uSDyogf+vO+A=";
   };
 
-  cargoHash = "sha256-MHa89zFlea4DnDjquifLpV27TfkTQXOOAQhiYi0esFg=";
+  cargoHash = "sha256-2iGUe3Wm8wa/8uj1U3U0U4p6jGKUJ4V0M9JMFMvU1j4=";
 
   nativeBuildInputs = [
     installShellFiles
