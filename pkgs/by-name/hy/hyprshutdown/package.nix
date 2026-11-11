@@ -5,13 +5,7 @@
   cmake,
   pkg-config,
   hyprtoolkit,
-  hyprutils,
-  pixman,
-  libdrm,
   glaze,
-  aquamarine,
-  hyprgraphics,
-  cairo,
   nix-update-script,
   versionCheckHook,
 }:
@@ -34,12 +28,6 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hyprtoolkit
-    hyprutils
-    pixman
-    libdrm
-    aquamarine
-    hyprgraphics
-    cairo
     (glaze.override { enableSSL = false; })
   ];
 
