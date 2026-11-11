@@ -5,6 +5,7 @@
   makeBinaryWrapper,
   factor-lang,
   factor-no-gui,
+  staging-images,
   librsvg,
   gdk-pixbuf,
 }@initAttrs:
@@ -113,6 +114,9 @@ in
         vocabBaseName=$(basename "$vocabName")
         mkdir -p "$out/lib/factor" "$TMPDIR/.cache"
         export XDG_CACHE_HOME="$TMPDIR/.cache"
+        mkdir "$XDG_CACHE_HOME/factor"
+        cp -r "${staging-images}"/lib/factor/staging.* "$XDG_CACHE_HOME/factor"
+        chmod -R u+w "$XDG_CACHE_HOME/factor"
 
         # Deploy script writes the deploy path to to $PWD/deploy-path.txt
         factor "${deployScript}" "./$vocabName" "$out/lib/factor"
@@ -127,6 +131,7 @@ in
       '';
 
     __structuredAttrs = true;
+    strictDeps = true;
 
     installPhase =
       attrs.installPhase or /* bash */ ''

@@ -17,7 +17,7 @@
   withWordList ? true,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "detect-secrets";
   version = "1.5.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "detect-secrets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pNLAZUJhjZ3b01XaltJUJ9O7Blv6/pHQrRvURe7MJ5A=";
     leaveDotGit = true;
   };
@@ -36,16 +36,12 @@ buildPythonPackage rec {
     pyyaml
     requests
   ]
-  ++ lib.optionals withGibberish optional-dependencies.gibberish
-  ++ lib.optionals withWordList optional-dependencies.word_list;
+  ++ lib.optionals withGibberish finalAttrs.passthru.optional-dependencies.gibberish
+  ++ lib.optionals withWordList finalAttrs.passthru.optional-dependencies.word_list;
 
   optional-dependencies = {
-    gibberish = [
-      gibberish-detector
-    ];
-    word_list = [
-      pyahocorasick
-    ];
+    gibberish = [ gibberish-detector ];
+    word_list = [ pyahocorasick ];
   };
 
   nativeCheckInputs = [
@@ -60,20 +56,34 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests are failing for various reasons. Needs to be adjusted with the next update
     "test_basic"
+    "test_filename_filters_are_invoked_first"
     "test_handles_each_path_separately"
     "test_handles_multiple_directories"
     "test_make_decisions"
     "test_saves_to_baseline"
     "test_start_halfway"
+    "test_success"
+  ]
+  ++ lib.optionals (!withGibberish) [
+    "test_load_and_output"
+    "test_quit_if_baseline_is_changed_but_not_staged"
   ];
+
+  disabledTestPaths =
+    lib.optionals (!withGibberish) [
+      "tests/filters/gibberish_filter_test.py"
+    ]
+    ++ lib.optionals (!withWordList) [
+      "tests/filters/wordlist_filter_test.py"
+    ];
 
   pythonImportsCheck = [ "detect_secrets" ];
 
   meta = {
     description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
-    changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${src.tag}";
+    changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

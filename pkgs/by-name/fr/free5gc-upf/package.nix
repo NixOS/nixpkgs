@@ -7,17 +7,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "free5gc-upf";
-  version = "1.2.12";
+  version = "1.2.13";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "free5gc";
     repo = "go-upf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MfQbHVEqnoFzUL5FPIE6dQSJxQD7PAZSbAgy/skHs+8=";
+    hash = "sha256-KWJCESbgfggAWMI76U2EhSjvwF+nHwI+ItEo9nPRVzU=";
   };
 
-  vendorHash = "sha256-VPm0Z67Sm/liIofVm1bI3/HU+lwYtwkg6zMRdZFZTZ8=";
+  vendorHash = "sha256-sdeFBWZDzkk28ycoIsVoZNUC2OH1Zv7C/1DqYdCtLyo=";
 
   ldflags = [
     "-X github.com/free5gc/util/version.VERSION=v${finalAttrs.version}"

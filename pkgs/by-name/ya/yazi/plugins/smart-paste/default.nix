@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "smart-paste.yazi";
-  version = "0-unstable-2025-06-18";
+  version = "0-unstable-2026-09-01";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "86d28e4fb4f25f36cc501b8cb0badb37a6b14263";
-    hash = "sha256-m/gJTDm0cVkIdcQ1ZJliPqBhNKoCW1FciLkuq7D1mxo=";
+    rev = "4dc7f1b6458c2578f4494f10d468c68c1082214f";
+    hash = "sha256-BSAOkL4H4LVMbTRFv4kzGGRpLgtKkfNTEsDH2EQ219Q=";
   };
 
   meta = {

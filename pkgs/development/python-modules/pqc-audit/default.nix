@@ -24,6 +24,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-6Nm73BvFNh8gxxWBzuvIBCJLCxO2px+H4c9iRYIMxi8=";
   };
 
+  patches = [
+    # https://github.com/rauleteee/pqc-scanner/pull/1
+    ./mcp-v2-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [ rich ];

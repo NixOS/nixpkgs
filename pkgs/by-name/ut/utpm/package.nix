@@ -7,6 +7,7 @@
   stdenv,
   buildPackages,
   installShellFiles,
+  libgit2,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "utpm";
@@ -23,8 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = 1;
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   buildInputs = [
     openssl
+    libgit2
   ];
   nativeBuildInputs = [
     pkg-config

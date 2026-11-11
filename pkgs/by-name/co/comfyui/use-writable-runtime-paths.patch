@@ -1,8 +1,8 @@
 diff --git a/comfy/cli_args.py b/comfy/cli_args.py
-index 4bef096..30f8920 100644
+index d02b92d0..8543b2be 100644
 --- a/comfy/cli_args.py
 +++ b/comfy/cli_args.py
-@@ -42,7 +42,15 @@ parser.add_argument("--tls-certfile", type=str, help="Path to TLS (SSL) certific
+@@ -67,7 +67,15 @@ def get_file_log_outputs(outputs):
  parser.add_argument("--enable-cors-header", type=str, default=None, metavar="ORIGIN", nargs="?", const="*", help="Enable CORS (Cross-Origin Resource Sharing) with optional origin or allow all with default '*'.")
  parser.add_argument("--max-upload-size", type=float, default=100, help="Set the maximum upload size in MB.")
  
@@ -19,7 +19,7 @@ index 4bef096..30f8920 100644
  parser.add_argument("--extra-model-paths-config", type=str, default=None, metavar="PATH", nargs='+', action='append', help="Load one or more extra_model_paths.yaml files.")
  parser.add_argument("--output-directory", type=str, default=None, help="Set the ComfyUI output directory. Overrides --base-directory.")
  parser.add_argument("--temp-directory", type=str, default=None, help="Set the ComfyUI temp directory (default is in the ComfyUI directory). Overrides --base-directory.")
-@@ -235,9 +243,7 @@ parser.add_argument(
+@@ -265,9 +273,7 @@ def is_valid_directory(path: str) -> str:
      help="Set the base URL for the ComfyUI API.  (default: https://api.comfy.org)",
  )
  
@@ -27,14 +27,14 @@ index 4bef096..30f8920 100644
 -    os.path.join(os.path.dirname(__file__), "..", "user", "comfyui.db")
 -)
 +database_default_path = os.path.join(comfyui_data_home, "user", "comfyui.db")
- parser.add_argument("--database-url", type=str, default=f"sqlite:///{database_default_path}", help="Specify the database URL, e.g. for an in-memory database you can use 'sqlite:///:memory:'.")
+ parser.add_argument("--database-url", type=str, default=None, help="Specify the database URL, e.g. for an in-memory database you can use 'sqlite:///:memory:'. Defaults to 'comfyui.db' in the effective user directory.")
  parser.add_argument("--enable-assets", action="store_true", help="Enable the assets system (API routes, database synchronization, and background scanning).")
  parser.add_argument("--enable-asset-hashing", action="store_true", help="Compute blake3 content hashes when scanning assets. Hashing enables future asset-portability features (deduplication, cross-machine model resolution) but adds startup cost and per-output cost on large models directories. Off by default; enable to opt in.")
 diff --git a/folder_paths.py b/folder_paths.py
-index 7304e1b..32a66c9 100644
+index 6723e52c..c079e2b4 100644
 --- a/folder_paths.py
 +++ b/folder_paths.py
-@@ -38,7 +38,8 @@ folder_names_and_paths["upscale_models"] = ([os.path.join(models_dir, "upscale_m
+@@ -42,7 +42,8 @@
  
  folder_names_and_paths["latent_upscale_models"] = ([os.path.join(models_dir, "latent_upscale_models")], supported_pt_extensions)
  
@@ -42,9 +42,9 @@ index 7304e1b..32a66c9 100644
 +custom_nodes_directory = os.path.join(base_path, "custom_nodes")
 +folder_names_and_paths["custom_nodes"] = ([custom_nodes_directory], set())
  
- folder_names_and_paths["hypernetworks"] = ([os.path.join(models_dir, "hypernetworks")], supported_pt_extensions)
+ folder_names_and_paths["datasets"] = ([os.path.join(base_path, "datasets")], set())
  
-@@ -107,11 +108,12 @@ def map_legacy(folder_name: str) -> str:
+@@ -113,11 +114,12 @@ def map_legacy(folder_name: str) -> str:
                "clip": "text_encoders"}
      return legacy.get(folder_name, folder_name)
  

@@ -2,11 +2,7 @@
   buildDunePackage,
   dns,
   dns-client,
-  domain-name,
-  ipaddr,
-  miou,
   tls-miou-unix,
-  happy-eyeballs,
   happy-eyeballs-miou-unix,
 }:
 
@@ -16,11 +12,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     dns-client
-    domain-name
-    ipaddr
-    miou
     tls-miou-unix
-    happy-eyeballs
     happy-eyeballs-miou-unix
   ];
 

@@ -6,7 +6,7 @@
   python3Packages,
   glibcLocales,
   intltool,
-  gexiv2,
+  gexiv2_0_10,
   pango,
   gobject-introspection,
   wrapGAppsHook3,
@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     gtk3
     pango
-    gexiv2
+    gexiv2_0_10
   ]
   # Map support
   ++ lib.optionals enableOSM [

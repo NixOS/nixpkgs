@@ -7,7 +7,7 @@
   yarnConfigHook,
   rustPlatform,
   nodejs,
-  pdfium-binaries,
+  pdfium,
   openssl,
   dbus,
   glib,
@@ -17,16 +17,17 @@
   pkg-config,
   makeWrapper,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stump";
-  version = "0.1.6";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "stumpapp";
     repo = "stump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y870qA9r9uhFJthKiz0uIu6xFMtZ0L5xBj4iRr20/QI=";
+    hash = "sha256-izz5ijAvSuqCjSBQarVV+XtkTcSt2VYgYSIIvXqXnms=";
   };
 
   frontend = stdenv.mkDerivation (_: {
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
-      hash = "sha256-j+S3FkiWZRZyX3CfwEDbspjG+oltECgIFOZZuN7FKRY=";
+      hash = "sha256-yz+Ersi1fJdUUpi1ulTFxzpSIEU7o/ivKnL3+ICAotk=";
     };
 
     nativeBuildInputs = [
@@ -60,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-2WI/sjRM9GESBc3APrTwQ2F28CPkZCUfzEE+EMMWHKA=";
+  cargoHash = "sha256-434ffJRKlD9iL01v1dQmLatrtfpgDtxVdsryDNmlICg=";
 
   cargoBuildFlags = [
     "--package"
@@ -78,6 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     cacert
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -88,17 +90,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  preCheck = ''
-    export HOME=$TMP
-  '';
-
   postInstall = ''
     wrapProgram $out/bin/stump_server \
       --set-default STUMP_CONFIG_DIR /var/lib/stump/config \
       --set-default STUMP_CLIENT_DIR ${finalAttrs.frontend} \
       --set-default STUMP_PORT 10001 \
       --set-default STUMP_PROFILE release \
-      --set-default PDFIUM_PATH ${pdfium-binaries}/lib/libpdfium.so \
+      --set-default PDFIUM_PATH ${pdfium}/lib/libpdfium.so \
       --set-default API_VERSION v1
   '';
 
@@ -116,7 +114,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://stumpapp.dev/";
     description = "A free and open source comics, manga and digital book server with OPDS support";
     license = lib.licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.all;
     mainProgram = "stump_server";
+    maintainers = with lib.maintainers; [
+      jvanbruegge
+      tr3foil
+    ];
   };
 })

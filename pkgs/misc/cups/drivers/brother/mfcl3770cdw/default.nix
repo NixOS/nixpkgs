@@ -18,7 +18,7 @@ let
   version = "1.0.2-0";
   src = fetchurl {
     url = "https://download.brother.com/welcome/dlf103935/${model}pdrv-${version}.i386.deb";
-    sha256 = "09fhbzhpjymhkwxqyxzv24b06ybmajr6872yp7pri39595mhrvay";
+    hash = "sha256-Xu0Ma0kljZjvuV4cZLJUdXkDFhH7d487n7B6eeFf0CU=";
   };
   reldir = "opt/brother/Printers/${model}/";
 

@@ -12,19 +12,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlogue";
-  version = "0.10.0";
+  version = "0.12.1";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "unhappychoice";
     repo = "gitlogue";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hmWp22UPcKRjLM6vNDkdWrgkvjO27Ys2xzkx/co8lrE=";
+    hash = "sha256-aG/q97qbIctQGXgAeAXUSyCG6wtUxRYAKc3TM0NLNOo=";
   };
 
-  cargoHash = "sha256-PfITSo8iTQ1Y3wn/9PD4fsMGF0oRw1f1Xnhki4voqpM=";
+  cargoHash = "sha256-pA8i0bQcMRnmcU7YjkZpM/3zneVKE+DDLY2aTto40wQ=";
 
   nativeBuildInputs = [ pkg-config ];
 

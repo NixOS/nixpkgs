@@ -5,9 +5,7 @@
   makeWrapper,
   gradle_9,
   openjdk25_headless,
-  libmatthew_java,
   dbus,
-  dbus_java,
   callPackage,
   versionCheckHook,
   signal-cli,
@@ -22,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "signal-cli";
-  version = "0.14.7";
+  version = "0.14.9";
 
   src = fetchFromGitHub {
     owner = "AsamK";
     repo = "signal-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r8m/0NIoUxah0vtRPRj7Zce9Gzhu9cpWLYPz42s+9qY=";
+    hash = "sha256-8asdvlExwF4oGzwUmbqyL165FG7/irZOmINOnesQybc=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libmatthew_java
     dbus
-    dbus_java
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -48,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   __darwinAllowLocalNetworking = true;
+
+  # Prefer IPv4 to fix sandboxed Darwin builds.
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+  };
 
   # Use the JDK for building
   gradleFlags = [
@@ -76,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${openjdk25_headless}/bin/java $out/bin/signal-cli \
       --set JAVA_HOME "${openjdk25_headless}" \
       --add-flags "--enable-native-access=ALL-UNNAMED" \
-      --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
-      --add-flags "-Djava.library.path=$out/lib:${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus" \
+      --add-flags "-classpath '$out/lib/*'" \
+      --add-flags "-Djava.library.path=$out/lib" \
       --add-flags "org.asamk.signal.Main"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''

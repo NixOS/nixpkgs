@@ -59,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
   qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ seafile-shared ]}"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ seafile-shared ])
   ];
 
   meta = {

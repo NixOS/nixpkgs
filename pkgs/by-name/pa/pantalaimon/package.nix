@@ -72,9 +72,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dontWrapGApps = enableDbusUi;
-  makeWrapperArgs = lib.optionals enableDbusUi [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = lib.optionalString enableDbusUi ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # darwin has difficulty communicating with server, fails some integration tests
   # Tests are incompatible with pytest>=8 and Python 3.13
@@ -93,5 +93,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ valodim ];
+    knownVulnerabilities = [
+      ''
+        pantalaimon was archived upstream, the last activity was from 4. June 2025.
+      ''
+    ];
   };
 }

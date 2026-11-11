@@ -9,6 +9,9 @@
   pkg-config,
   volk,
   cppunit,
+  ctestCheckHook,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
   orc,
   boost,
   spdlog,
@@ -26,13 +29,10 @@
   SDL,
   gsl,
   soapysdr,
-  libsodium,
   libsndfile,
   libunwind,
   thrift,
   cppzmq,
-  # Needed only if qt-gui is disabled, from some reason
-  icu,
   # GUI related
   gtk3,
   pango,
@@ -43,14 +43,9 @@
   # Features available to override, the list of them is in featuresInfo. They
   # are all turned on by default.
   features ? { },
-  # If one wishes to use a different src or name for a very custom build
-  overrideSrc ? { },
-  pname ? "gnuradio",
-  version ? "3.10.12.0",
 }:
 
 let
-  sourceSha256 = "sha256-489Pc6z6Ha7jkTzZSEArDQJGkWdWRDIn1uhfFyLLiCo=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -64,13 +59,9 @@ let
         boost
         spdlog
         mpir
-      ]
-      # when gr-qtgui is disabled, icu needs to be included, otherwise
-      # building with boost 1.7x fails
-      ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
+      ];
       pythonNative = with python.pythonOnBuildForHost.pkgs; [
         mako
-        six
       ];
     };
     doxygen = {
@@ -81,7 +72,6 @@ let
       cmakeEnableFlag = "MANPAGES";
     };
     python-support = {
-      pythonRuntime = [ python.pkgs.six ];
       native = [
         python
       ];
@@ -171,12 +161,10 @@ let
       cmakeEnableFlag = "GR_DTV";
     };
     gr-audio = {
-      runtime =
-        [ ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          alsa-lib
-          libjack2
-        ];
+      runtime = lib.optionals stdenv.hostPlatform.isLinux [
+        alsa-lib
+        libjack2
+      ];
       cmakeEnableFlag = "GR_AUDIO";
     };
     gr-channels = {
@@ -184,15 +172,12 @@ let
     };
     gr-pdu = {
       cmakeEnableFlag = "GR_PDU";
-      runtime = [
-        libiio
-        libad9361
-      ];
     };
     gr-iio = {
       cmakeEnableFlag = "GR_IIO";
       runtime = [
         libiio
+        libad9361
       ];
     };
     common-precompiled-headers = {
@@ -230,9 +215,7 @@ let
     };
     gr-modtool = {
       pythonRuntime = with python.pkgs; [
-        setuptools
         click
-        click-plugins
         pygccxml
       ];
       cmakeEnableFlag = "GR_MODTOOL";
@@ -255,7 +238,6 @@ let
       cmakeEnableFlag = "GR_WAVELET";
       runtime = [
         gsl
-        libsodium
       ];
     };
     gr-zeromq = {
@@ -277,73 +259,192 @@ let
       ];
     };
   };
-  shared = (
-    import ./shared.nix {
-      inherit
-        stdenv
-        lib
-        python
-        removeReferencesTo
-        featuresInfo
-        features
-        version
-        sourceSha256
-        overrideSrc
-        fetchFromGitHub
-        ;
-      qt = qt5;
-      gtk = gtk3;
-    }
-  );
-  inherit (shared.passthru) hasFeature; # function
+  hasFeature = feat: features.${feat} or true;
+  enabledFeatures = lib.attrValues (lib.filterAttrs (feat: _: hasFeature feat) featuresInfo);
+  cross = stdenv.hostPlatform != stdenv.buildPlatform;
+  libgnuradioRuntime = "$(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})";
 in
 
-stdenv.mkDerivation (
-  finalAttrs:
-  (
-    shared
-    // {
-      inherit pname version;
-      # Will still evaluate correctly if not used here. It only helps nix-update
-      # find the right file in which version is defined.
-      inherit (shared) src;
-      patches = [
-        # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
-        ./modtool-newmod-permissions.patch
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gnuradio";
+  version = "3.10.12.0";
 
-        # Finding `boost_system` fails because the stub compiled library of
-        # Boost.System, which has been a header-only library since 1.69, was
-        # removed in 1.89.
-        (fetchpatch {
-          url = "https://github.com/gnuradio/gnuradio/commit/d8814e0c3ef68372e5a1093603ef602e2119cd8a.patch";
-          hash = "sha256-TQxqsce1AhSjdwaG2IP11QTeOgdJHN6cAAnznBl8eM8=";
-        })
-      ];
-      passthru = shared.passthru // {
-        # Deps that are potentially overridden and are used inside GR plugins - the same version must
-        inherit
-          uhd
-          boost
-          volk
-          libiio
-          libad9361
-          ;
-        # Used by many gnuradio modules, the same attribute is present in
-        # previous gnuradio versions where there it's log4cpp.
-        logLib = spdlog;
-        inherit (libsForQt5) qwt;
-      };
+  src = fetchFromGitHub {
+    owner = "gnuradio";
+    repo = "gnuradio";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-489Pc6z6Ha7jkTzZSEArDQJGkWdWRDIn1uhfFyLLiCo=";
+  };
 
-      postInstall =
-        shared.postInstall
-        # This is the only python reference worth removing, if needed.
-        + lib.optionalString (!hasFeature "python-support") ''
-          remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-        ''
-        + lib.optionalString (!hasFeature "python-support" && hasFeature "gnuradio-runtime") ''
-          remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
-          remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
-        '';
-    }
-  )
-)
+  patches = [
+    # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
+    ./modtool-newmod-permissions.patch
+
+    # Finding `boost_system` fails because the stub compiled library of
+    # Boost.System, which has been a header-only library since 1.69, was
+    # removed in 1.89.
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/d8814e0c3ef68372e5a1093603ef602e2119cd8a.patch";
+      hash = "sha256-TQxqsce1AhSjdwaG2IP11QTeOgdJHN6cAAnznBl8eM8=";
+    })
+    # Needed for the patch below to be able to apply
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/56d230fd33fa2e8d6dc3685c9545589f21a6a1fd.patch";
+      hash = "sha256-N6Y7B1EJKQxWlpu3E7sjNgivva8+x0V2DlBQMXYLXbA=";
+    })
+    # Fixes a test failing due to precision. See:
+    # https://github.com/gnuradio/gnuradio/pull/8181
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/aee9fd3f79389c4282a98e8d62c8405c73fd91df.patch";
+      hash = "sha256-UtYAJqqmydGs2EP4JOTGrQ6OgvL/jwGVwlhG4xxj8SU=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    removeReferencesTo
+  ]
+  ++ lib.concatMap (info: info.native or [ ] ++ info.pythonNative or [ ]) enabledFeatures;
+  buildInputs = lib.concatMap (
+    info: info.runtime or [ ] ++ lib.optionals (hasFeature "python-support") (info.pythonRuntime or [ ])
+  ) enabledFeatures;
+  cmakeFlags = [
+    # https://pybind11.readthedocs.io/en/stable/changelog.html#version-2-13-0-june-25-2024
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" cross)
+    (lib.cmakeBool "PYBIND11_USE_CROSSCOMPILING" (cross && hasFeature "gnuradio-runtime"))
+  ]
+  ++ lib.mapAttrsToList (
+    feat: info:
+    (
+      if feat == "basic" then
+        # Abuse this unavoidable "iteration" to set this flag which we want as
+        # well - it means: Don't turn on features just because their deps are
+        # satisfied, let only our cmakeFlags decide.
+        (lib.cmakeBool "ENABLE_DEFAULT" false)
+      else
+        (lib.cmakeBool "ENABLE_${info.cmakeEnableFlag}" (hasFeature feat))
+    )
+  ) featuresInfo;
+
+  # Wrapping is done with an external wrapper
+  dontWrapPythonPrograms = true;
+  dontWrapQtApps = true;
+
+  postInstall =
+    # Gcc references
+    lib.optionalString (hasFeature "gnuradio-runtime") ''
+      remove-references-to -t ${stdenv.cc} ${libgnuradioRuntime}
+    ''
+    # Clang references in InstalledDir
+    + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.hostPlatform.isDarwin) ''
+      remove-references-to -t ${stdenv.cc.cc} ${libgnuradioRuntime}
+    ''
+    # This is the only python reference worth removing, if needed.
+    + lib.optionalString (!hasFeature "python-support") ''
+      remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+    ''
+    + lib.optionalString (!hasFeature "python-support" && hasFeature "gnuradio-runtime") ''
+      remove-references-to -t ${python} ${libgnuradioRuntime}
+      remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
+    '';
+  disallowedReferences = [
+    stdenv.cc
+    stdenv.cc.cc
+  ]
+  # If python-support is disabled, we probably don't want it referenced
+  ++ lib.optionals (!hasFeature "python-support") [ python ];
+  # Gcc references from examples
+  stripDebugList = [
+    "lib"
+    "bin"
+  ]
+  ++ lib.optionals (hasFeature "gr-audio") [ "share/gnuradio/examples/audio" ]
+  ++ lib.optionals (hasFeature "gr-uhd") [ "share/gnuradio/examples/uhd" ]
+  ++ lib.optionals (hasFeature "gr-qtgui") [ "share/gnuradio/examples/qt-gui" ];
+
+  # NOTE: Other outputs are disabled due to upstream not using GNU InstallDIrs
+  # cmake  module. It's not that bad since it's a development package for most
+  # purposes. If closure size needs to be reduced, features should be disabled
+  # via an override.
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (hasFeature "man-pages") [
+    "man"
+  ];
+
+  # On darwin, it requires playing with DYLD_FALLBACK_LIBRARY_PATH to make if
+  # find libgnuradio-runtim.3.*.dylib .
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs = [
+    # To allow easier future test manipulations
+    ctestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  preCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+  ''
+  + lib.optionalString (hasFeature "gr-qtgui") ''
+    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    # Deps that are potentially overridden and are used inside GR plugins - the same version must
+    inherit
+      uhd
+      boost
+      volk
+      libiio
+      libad9361
+      python
+      ;
+    # Used by many gnuradio modules, the same attribute is present in
+    # previous gnuradio versions where there it's log4cpp.
+    logLib = spdlog;
+    inherit (libsForQt5) qwt;
+    # Inherit functions and Nix attribute sets
+    inherit
+      hasFeature
+      featuresInfo
+      ;
+    versionAttr = {
+      major = lib.versions.majorMinor finalAttrs.version;
+      minor = lib.versions.patch finalAttrs.version;
+      patch = lib.elemAt (lib.splitVersion finalAttrs.version) 3;
+    };
+    gnuradioOlder = lib.versionOlder finalAttrs.passthru.versionAttr.major;
+    gnuradioAtLeast = lib.versionAtLeast finalAttrs.passthru.versionAttr.major;
+  }
+  // lib.optionalAttrs (hasFeature "gr-qtgui") {
+    qt = qt5;
+  }
+  // lib.optionalAttrs (hasFeature "gnuradio-companion") {
+    gtk = gtk3;
+  };
+
+  meta = {
+    description = "Software Defined Radio (SDR) software";
+    mainProgram = "gnuradio-config-info";
+    longDescription = ''
+      GNU Radio is a free & open-source software development toolkit that
+      provides signal processing blocks to implement software radios. It can be
+      used with readily-available low-cost external RF hardware to create
+      software-defined radios, or without hardware in a simulation-like
+      environment. It is widely used in hobbyist, academic and commercial
+      environments to support both wireless communications research and
+      real-world radio systems.
+    '';
+    homepage = "https://www.gnuradio.org";
+    changelog = "https://github.com/gnuradio/gnuradio/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      doronbehar
+      bjornfor
+      fpletz
+      jiegec
+    ];
+  };
+})

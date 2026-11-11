@@ -220,7 +220,7 @@
       ];
 
       services.udev.extraRules = ''
-        KERNEL=="nvidia", RUN+="${lib.getExe' config.systemd.package "systemctl"} --no-block restart nvidia-container-toolkit-cdi-generator.service'"
+        KERNEL=="nvidia", RUN+="${lib.getExe' config.systemd.package "systemctl"} --no-block restart nvidia-container-toolkit-cdi-generator.service"
       '';
 
       virtualisation = {
@@ -332,7 +332,7 @@
           # devices needed here become available. This is terribly broken and
           # essentially no better than a random sleep(). See PR #452645 for
           # an attempt to fix this issue.
-          ExecStartPre = "-${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
+          ExecStartPre = "-${lib.getExe' config.systemd.package "udevadm"} settle --timeout=180";
           ExecStart =
             let
               script = pkgs.callPackage ./cdi-generate.nix {

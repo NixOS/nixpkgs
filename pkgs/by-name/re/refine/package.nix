@@ -58,13 +58,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pygobject3
   ]);
 
-  strictDeps = true;
-
   mesonFlags = [ (lib.mesonBool "network_tests" false) ];
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # NOTE: `postCheck` is intentionally not used here, as the entire checkPhase
   # is skipped by `buildPythonApplication`

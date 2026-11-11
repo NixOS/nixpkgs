@@ -7,16 +7,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-loki";
-  version = "0.13.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "pySigma-backend-loki";
-    tag = "v${version}";
-    hash = "sha256-36fdFuvUSAeGyV5z55/MGcdMiCNz12EbiRw87MjmaKY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/xci4LKDCbT9vDG/ldFUL32y3r4tXUM0g6dSE0TVHpw=";
   };
 
   build-system = [ poetry-core ];
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -9,6 +9,7 @@
   gettext,
   help2man,
   pkg-config,
+  python3,
   python3Packages,
   cppunit,
   fmt,
@@ -26,7 +27,7 @@
   sdbus-cpp_2,
   sphinx,
   sqlite,
-  systemd,
+  systemdLibs,
   versionCheckHook,
   toml11,
   zchunk,
@@ -35,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.4.2.1";
+  version = "5.4.6.0";
 
   outputs = [
     "out"
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-Z+k47LC3gaBQ3y3090MLsSvPKlwPUVrYEBboKhskTik=";
+    hash = "sha256-7TWCPX7WmGWcDZ3wNaVnwIB5IDyeSzyjuPNAN3ecpdM=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (with python3Packages; [
     breathe
-    sphinx-autoapi
     sphinx-rtd-theme
   ]);
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     rpm
     sdbus-cpp_2
     sqlite
-    systemd
+    systemdLibs
     toml11
     zchunk
   ];
@@ -95,6 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_RUBY" false)
     (lib.cmakeBool "WITH_SYSTEMD" false)
     (lib.cmakeBool "WITH_PLUGIN_RHSM" false) # Red Hat Subscription Manager plugin
+    # doc/atp.py preprocesses manpages, but upstream only runs
+    # find_package(Python3) from targets gated on WITH_PYTHON3.
+    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3))
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
     # (setting it to an absolute path causes include files to go to $out/$out/include,
     #  because the absolute path is interpreted with root at $out).
@@ -107,6 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   prePatch = ''
+    # autoapi needs the swig-generated python bindings (WITH_PYTHON3),
+    # it is only used for the python API docs, not for the man pages.
+    substituteInPlace doc/conf.py.in \
+      --replace-fail "'autoapi.extension'," ""
     substituteInPlace CMakeLists.txt \
       --replace-fail "/usr/lib/systemd/system" "$out/lib/systemd/system"
     substituteInPlace dnf5daemon-server/dbus/CMakeLists.txt \

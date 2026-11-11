@@ -9,14 +9,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "odsgenerator";
-  version = "1.12.0";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdum";
     repo = "odsgenerator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FfwyqNI5Hz2Muoe/VWgQigea6D042UoRbXDV9GNV4w4=";
+    hash = "sha256-+EwjZG2hSXBVApjrGdd1Pja/w6ny15Vqud2nya+ei5g=";
   };
 
   build-system = [ uv-build ];
@@ -31,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.0,<0.10.0" "uv_build"
     substituteInPlace tests/test_cli.py \
       --replace-fail '"odsgenerator"' "\"$out/bin/odsgenerator\""
   '';

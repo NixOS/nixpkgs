@@ -47,13 +47,13 @@
 
 let
   pname = "windmill";
-  version = "1.601.1";
+  version = "1.839.0";
 
   src = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
-    hash = "sha256-3Djrk8gHW3NjNzSy4A38LmTfl18LKDKgFeNMBPKlhfM=";
+    hash = "sha256-YiaC5jAa3UechdnHtHtDh9Aekl/bJ+dzvMrL46JDTjY=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -64,9 +64,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SQLX_OFFLINE = "true";
     FRONTEND_BUILD_DIR = "${finalAttrs.passthru.web-ui}/share/windmill-frontend";
     RUSTY_V8_ARCHIVE = librusty_v8;
+    # `rdkafka` enables the `vendored` feature of `openssl-sys`. Link to the
+    # `openssl` of nixpkgs and not to a copy of OpenSSL inside the binary.
+    OPENSSL_NO_VENDOR = 1;
+    # The link of the `windmill` binary has too many arguments for one `exec`:
+    # /nix/store/[...]/bin/cc: line 283: /nix/store/[...]/bin/gcc: Argument list too long
+    NIX_CC_USE_RESPONSE_FILE = 1;
+    NIX_LD_USE_RESPONSE_FILE = 1;
   };
 
-  cargoHash = "sha256-ivfseD1zWcy4P8Anbo/e1r2rRma/6mj25blkrXpwNHE=";
+  cargoHash = "sha256-nvHxM/oqHC+2Ub0T9zgoHp3vT+8oomPvoLveRNgMMg4=";
 
   buildFeatures = [
     "agent_worker_server"
@@ -86,7 +93,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "jemalloc"
     "kafka"
     "license"
-    "loki"
     "mcp"
     "mqtt_trigger"
     #"mssql"
@@ -133,12 +139,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./run.powershell.config.proto.patch
     ./run.python3.config.proto.patch
     ./run.rust.config.proto.patch
-    ./rust_executor.patch
   ];
 
   postPatch = ''
     substituteInPlace windmill-common/src/utils.rs \
       --replace-fail 'unknown-version' 'v${version}'
+
+    # Upstream links with `mold`, which is not in the build environment.
+    substituteInPlace .cargo/config.toml \
+      --replace-fail '"-C", "link-arg=-fuse-ld=mold"' ""
   '';
 
   buildInputs = [
@@ -160,6 +169,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # needs a postgres database running
   doCheck = false;
+
+  # `cargo-auditable` gives the features of `windmill` to `cargo metadata` for
+  # all workspace members, and `windmill-mcp` refuses `oauth2`.
+  auditable = false;
 
   postFixup = ''
     wrapProgram "$out/bin/windmill" \
@@ -195,7 +208,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-eVN7q8hRH7NYjZiE5dLRMUKlyrtnAPGPdYV6/S4Sc+4=";
+    npmDepsHash = "sha256-PbEplDmyXUSh4JlV5X1kJhN1I5n1OdluYgfXm6KtOfU=";
 
     # without these you get a
     # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory

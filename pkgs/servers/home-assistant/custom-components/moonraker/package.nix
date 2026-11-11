@@ -40,5 +40,7 @@ buildHomeAssistantComponent rec {
     homepage = "https://github.com/marcolivierarsenault/moonraker-home-assistant";
     maintainers = with lib.maintainers; [ _9R ];
     license = lib.licenses.mit;
+    # https://github.com/marcolivierarsenault/moonraker-home-assistant/issues/789
+    broken = true;
   };
 }

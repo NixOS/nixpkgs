@@ -2,8 +2,12 @@
   fetchFromGitHub,
   fontconfig,
   lib,
+  libx11,
   libxcb,
+  libxcursor,
+  libxi,
   libxkbcommon,
+  libxrandr,
   makeBinaryWrapper,
   pkg-config,
   rustPlatform,
@@ -14,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ratty";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "ratty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gQ9qeR9IyPUCy4V2ynnnXeN15Fs7aNDEwjQ+33gonRU=";
+    hash = "sha256-oCz5PWfESX6eDNkMnbLsMHsOlyxAn/sjhxwN8qZ5s+s=";
   };
 
-  cargoHash = "sha256-mSb7QCYQ4EL76S7wmSdHBkjE5wzbVK8ln6oPdAv5BuA=";
+  cargoHash = "sha256-HHrAJy/XuTqkEpfvrbiS+CFPKBRJsB21s5TdmBpD7Nk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,7 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/ratty \
       --set LD_LIBRARY_PATH "${
         lib.makeLibraryPath [
+          libx11
+          libxcursor
+          libxi
           libxkbcommon
+          libxrandr
           vulkan-loader
           wayland
         ]

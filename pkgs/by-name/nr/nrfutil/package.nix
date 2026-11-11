@@ -21,8 +21,7 @@
 
 let
   sources = import ./source.nix;
-  platformSources =
-    sources.${stdenvNoCC.system} or (throw "unsupported platform ${stdenvNoCC.system}");
+  platformSources = sources.${stdenvNoCC.system} or sources.x86_64-linux;
 
   sharedMeta = {
     description = "CLI tool for managing Nordic Semiconductor devices";

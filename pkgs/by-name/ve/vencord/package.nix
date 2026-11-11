@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.15.1";
+  version = "1.15.13";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QwJoc49N0F03w7FvOcFJDmpv+qVO6PwX+o5ZFx1KrUo=";
+    hash = "sha256-YuzFkZafNJ0brt2S3gg+pm6xYXZEAjBkDH76cb0dmd8=";
   };
 
   patches = [ ./fix-deps.patch ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-JmTSfUVHsMG0TcOwXkZWinRxpONZagtwKzESd8Q4LlQ=";
+    hash = "sha256-4dZTLwLoWnz6/svC6HH6SFuroYmPWDEpEAtByGzGHEw=";
   };
 
   nativeBuildInputs = [
@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       _4evy
-      FlafyDev
       Gliczy
       NotAShelf
       Scrumplex

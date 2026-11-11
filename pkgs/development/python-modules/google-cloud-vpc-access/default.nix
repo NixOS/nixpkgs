@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-vpc-access";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_vpc_access";
     inherit (finalAttrs) version;
-    hash = "sha256-c5HvaQIykWRNAuDSBhv72kHZs8qgMY8cyvn5N7mahY4=";
+    hash = "sha256-hBWieTmYkPFrF9j35zhJf118zOkZggN7F7mrE7ZbTtE=";
   };
 
   build-system = [ setuptools ];

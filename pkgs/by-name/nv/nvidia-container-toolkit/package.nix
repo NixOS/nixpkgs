@@ -2,25 +2,23 @@
   lib,
   glibc,
   fetchFromGitHub,
-  makeWrapper,
   buildGoModule,
   autoAddDriverRunpath,
 }:
 
 let
-  # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
+  # From https://github.com/NVIDIA/nvidia-container-toolkit/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
   cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
 in
 buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
-  version = "1.19.1";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0ivgJA5JY/17FIoOrOvUF7NjMMu7aXfh39sMQcabCm8=";
-
+    hash = "sha256-DGu2T9RU4D9y7EfGe/7NxHUzV5b672ql1fdqXf185Dk=";
   };
 
   outputs = [
@@ -59,19 +57,16 @@ buildGoModule (finalAttrs: {
   ];
 
   # Based on upstream's Makefile:
-  # https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L64
+  # https://github.com/NVIDIA/nvidia-container-toolkit/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L64
   ldflags = [
-    "-extldflags=-Wl,-z,lazy" # May be redunandant, cf. `man ld`: "Lazy binding is the default".
+    "-extldflags=-Wl,-z,lazy" # required with the incomplete NVML stub library.
     "-s" # "disable symbol table"
-
-    # "-X name=value"
     "-X ${cliVersionPackage}.version=${finalAttrs.version}"
     "-X ${cliVersionPackage}.gitCommit=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [
     autoAddDriverRunpath
-    makeWrapper
   ];
 
   checkFlags =
@@ -82,7 +77,7 @@ buildGoModule (finalAttrs: {
         "TestDuplicateHook"
       ];
     in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+    [ "-skip=^(${lib.concatStringsSep "|" skippedTests})$" ];
 
   postInstall = ''
     mkdir -p $tools/bin
@@ -90,7 +85,7 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";
+    homepage = "https://github.com/NVIDIA/nvidia-container-toolkit";
     description = "NVIDIA Container Toolkit";
     mainProgram = "nvidia-ctk";
     license = lib.licenses.asl20;

@@ -3,6 +3,9 @@
 {
   imports = [ ../../../modules/virtualisation/lxc-container.nix ];
 
+  # Non-nesting containers lack the namespaces needed by the Nix build sandbox.
+  system.installer.channel.disableSandbox = lib.mkDefault true;
+
   virtualisation.lxc.templates.nix = {
     enable = true;
     target = "/etc/nixos/incus.nix";

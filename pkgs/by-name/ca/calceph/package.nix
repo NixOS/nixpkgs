@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "calceph";
-  version = "5.0.0";
+  version = "5.0.1";
   src = fetchFromGitLab {
     domain = "gitlab.obspm.fr";
     owner = "imcce_calceph";
     repo = "calceph";
     tag = "calceph_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-bSgHRVPo0M8SIlw5uqZ0nyt5cVyg3WmxcHistV1FugY=";
+    hash = "sha256-UZ7u+T00b3CcmLPmOqqHMm4jJ2Ik6lM13fNIBJpdYXY=";
   };
 
   nativeBuildInputs = [

@@ -3,14 +3,17 @@
   buildGoModule,
   fetchFromGitHub,
   fetchurl,
-  jq,
+  python3,
+  runCommand,
   testers,
-  nix-update-script,
+  writeShellApplication,
+  common-updater-scripts,
+  nix-update,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "lark-cli";
-  version = "1.0.58";
+  version = "1.0.98";
 
   __structuredAttrs = true;
 
@@ -18,22 +21,49 @@ buildGoModule (finalAttrs: {
     owner = "larksuite";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MqaxcmzX/79vM2EI8wD4ZAFsUfqWvPAovlpmuDP1IWU=";
+    hash = "sha256-EjahQyEig/3ATH/DqbSsATq5wylYUxYdOHV2GsNdMcI=";
   };
 
-  vendorHash = "sha256-M0/Y62Y+M/P1B/YIDjX5bEyB/GKihCWQakTWVd7zvBg=";
+  vendorHash = "sha256-5ecTHuvSeSUVVC3hI/nzZsRFjl7ppgTY3NHuHB4pojA=";
 
   subPackages = [ "." ];
 
-  metaData = fetchurl {
-    name = "meta_data.json";
-    url = "https://open.feishu.cn/api/tools/open/api_definition?protocol=meta&client_version=v${finalAttrs.version}";
-    hash = "sha256-ihPrq/VzFIBnlrKxE2762NpQZzBRk7ylM3Mvg0iJfCE=";
-    postFetch = ''
-      ${lib.getExe jq} -S ".data" "$out" > normalized
-      mv normalized "$out"
-    '';
+  # The registry of Open Platform APIs that lark-cli embeds at build time
+  # (internal/registry/meta_data.json). Upstream regenerates this file on
+  # every build from a live endpoint (scripts/fetch_meta.py,
+  # https://open.feishu.cn/api/tools/open/api_definition?protocol=meta).
+  # That endpoint serves a continuously updated document with no way to pin
+  # a version: the "data_version" parameter is only an exact-match
+  # conditional against a constant "1.0.0" that is never bumped,
+  # "client_version" is ignored, and there is no ETag, Last-Modified or
+  # historical access. Hash-pinning such a URL breaks as soon as the content
+  # drifts, and old revisions of this package become unbuildable because the
+  # bytes behind the URL are gone forever; this already happened to 1.0.58.
+  #
+  # The official release binaries embed the exact registry that upstream
+  # built the corresponding version with (build.sh runs fetch_meta.py before
+  # go build, and loader_embedded.go go:embeds the file). Release artifacts
+  # are immutable per version and checksummed upstream, so we extract the
+  # registry from the binary for this exact version instead: byte-exact,
+  # version-faithful (building 1.0.x yields the registry the official 1.0.x
+  # binary ships with) and reproducible for old revisions. Extraction is a
+  # pure byte scan, so the linux-amd64 tarball works on every platform.
+  # Hash recorded in the release checksums.txt.
+  metaDataRelease = fetchurl {
+    name = "lark-cli-${finalAttrs.version}-linux-amd64.tar.gz";
+    url = "https://github.com/larksuite/cli/releases/download/v${finalAttrs.version}/lark-cli-${finalAttrs.version}-linux-amd64.tar.gz";
+    hash = "sha256-ShLct6CqslmG2LzQRstFsIJ4UxqarDoStTzz2Uc4/oA=";
   };
+
+  metaData =
+    runCommand "meta_data.json-${finalAttrs.version}"
+      {
+        nativeBuildInputs = [ python3 ];
+      }
+      ''
+        tar xf ${finalAttrs.metaDataRelease} lark-cli
+        python3 ${./extract-meta.py} lark-cli $out
+      '';
 
   postPatch = ''
     cp ${finalAttrs.metaData} internal/registry/meta_data.json
@@ -52,12 +82,21 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) metaData;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--custom-dep"
-        "metaData"
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-lark-cli";
+      runtimeInputs = [
+        common-updater-scripts
+        nix-update
       ];
-    };
+      text = ''
+        nix-update --src-only lark-cli "$@"
+        # goModules runs postPatch, so update the registry archive before
+        # computing vendorHash. nix-update processes custom deps too late.
+        update-source-version lark-cli --source-key=metaDataRelease \
+          --ignore-same-version --ignore-same-hash
+        nix-update --version=skip lark-cli
+      '';
+    });
   };
 
   passthru.tests.version = testers.testVersion {

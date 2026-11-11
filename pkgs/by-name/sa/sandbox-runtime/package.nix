@@ -17,27 +17,19 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "sandbox-runtime";
-  version = "0.0.73";
+  version = "0.0.81";
 
   __structuredAttrs = true;
-
-  src = fetchFromGitHub {
-    owner = "anthropic-experimental";
-    repo = "sandbox-runtime";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-dOncsjSmkWjF5TC+BhjmqlPgZLdVSjfP7RrSzPqzRdE=";
-  };
-
-  postPatch =
-    # Fix the `--version` flag.
-    ''
-      substituteInPlace src/cli.ts \
-        --replace-fail "1.0.0" "${finalAttrs.version}"
-    '';
-
   strictDeps = true;
 
-  npmDepsHash = "sha256-JYDqFC6OaU+uqOuQtObmoTp/JfwXv2uP6ZmC4wJcv2w=";
+  src = fetchFromGitHub {
+    owner = "anthropics";
+    repo = "sandbox-runtime";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mnxo49ng4fY0YantniE9xQm2qU37xZLBepNsmKH0wJA=";
+  };
+
+  npmDepsHash = "sha256-kS6eY5171yLv2Rxcy/65Mf3hGE8w/53cFAiISSfWbks=";
 
   postFixup =
     let
@@ -64,8 +56,8 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Lightweight sandboxing tool for enforcing filesystem and network restrictions on arbitrary processes at the OS level, without requiring a container";
-    changelog = "https://github.com/anthropic-experimental/sandbox-runtime/releases/tag/${finalAttrs.src.tag}";
-    homepage = "https://github.com/anthropic-experimental/sandbox-runtime";
+    changelog = "https://github.com/anthropics/sandbox-runtime/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/anthropics/sandbox-runtime";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "srt";

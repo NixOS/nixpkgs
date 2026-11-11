@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-anthy";
-  version = "5.1.10";
+  version = "5.1.11";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/fcitx5-anthy/${pname}-${version}.tar.zst";
-    hash = "sha256-t4ZdPAPvUbd2iQvfUlFlpUTjC+RG4nYuDFPIfpBZB4Y=";
+    hash = "sha256-nlmhUat8OmE/zhN+09vSeKVu+H9ptsHsKVyDWxl381Y=";
   };
 
   nativeBuildInputs = [

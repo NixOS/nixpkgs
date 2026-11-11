@@ -160,11 +160,14 @@ in
             description = ''
               Specify the configuration for sequelize.
               HedgeDoc supports `mysql`, `postgres`, `sqlite` and `mssql`.
-              See <https://sequelize.readthedocs.io/en/v3/>
-              for more information.
+              See <https://sequelize.readthedocs.io/en/v3/> for more information.
 
               ::: {.note}
-                The relevant parts will be overriden if you set {option}`dbURL`.
+              The relevant parts will be overridden if you set {option}`dbURL`.
+              :::
+
+              ::: {.note}
+              The `sqlite` backend only supports paths under `/var/lib/hedgedoc`.
               :::
             '';
           };

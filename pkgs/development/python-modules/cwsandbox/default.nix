@@ -22,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cwsandbox";
-  version = "0.23.0";
+  version = "1.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "coreweave";
     repo = "cwsandbox-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y9rsuAXmpMok0ZqdLhAfavglXh5Hz4VPy1UByYMM1WA=";
+    hash = "sha256-D8Mklp9XKRWgVf8OCBZSfX7pngfBlG3jN1DasAQkVFg=";
   };
 
   build-system = [

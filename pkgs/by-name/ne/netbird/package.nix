@@ -68,18 +68,25 @@ let
       binaryName = "netbird-proxy";
       license = lib.licenses.agpl3Only;
     };
+    combined = {
+      module = "combined";
+      binaryName = "netbird-server";
+      license = lib.licenses.agpl3Only;
+    };
   };
   component = availableComponents.${componentName};
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.77.0";
+  version = "0.82.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w72ylRblfC20X4h1E7vuycWziLfWE+cCHuIaf7czFb8=";
+    hash = "sha256-NIYOIc0Q7FLLKZCKVhCfGSojbS3Rux8dxPg6Mq0A/cs=";
   };
 
   overrideModAttrs = final: prev: {
@@ -93,7 +100,7 @@ buildGoModule (finalAttrs: {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-kbVBjQUZUp9VZ67Ug4VWtmp2qZw5hLtxLg8utyNCNGg=";
+  vendorHash = "sha256-rzHnfPjjv4fNHSE2qk6/5wCZ3BH0LrFvDDmNNU5Di0s=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -120,7 +127,7 @@ buildGoModule (finalAttrs: {
 
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-T4E4GJgsoMZnLokJRuDm1L43OrYF99PLF4x/4HRIB4E=";
+    hash = "sha256-fcV0AeT1TZRtm/sTqZSYPE88Eh0tS/PHckN8Ef11RjM=";
   };
 
   preBuild = lib.optionalString (componentName == "ui") ''
@@ -189,18 +196,22 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = component.versionCheckProgramArg or "version";
 
   passthru = {
-    tests = lib.attrsets.optionalAttrs (componentName == "client") {
-      nixos = nixosTests.netbird;
-      inherit
-        # make sure child packages are built by `ofborg`
-        netbird-management
-        netbird-relay
-        netbird-signal
-        netbird-ui
-        netbird-upload
-        netbird-proxy
-        ;
-    };
+    tests =
+      lib.attrsets.optionalAttrs (componentName == "client") {
+        nixos = nixosTests.netbird;
+        inherit
+          # make sure child packages are built by `ofborg`
+          netbird-management
+          netbird-relay
+          netbird-signal
+          netbird-ui
+          netbird-upload
+          netbird-proxy
+          ;
+      }
+      // lib.attrsets.optionalAttrs (componentName == "relay") {
+        nixos = nixosTests.netbird-relay;
+      };
     updateScript = nix-update-script { };
   };
 
@@ -210,7 +221,6 @@ buildGoModule (finalAttrs: {
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = component.license;
     maintainers = with lib.maintainers; [
-      nazarewk
       saturn745
       loc
     ];

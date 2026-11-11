@@ -4,21 +4,27 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toss";
   version = "1.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "toss";
-    rev = version;
-    sha256 = "05ql0d8wbdhnmh3dw8ch5bi6clfb9h8v21lq2a74iy02slya2y0r";
+    tag = finalAttrs.version;
+    hash = "sha256-GXihPNUC+EiOEpgGsRFMy1Fm4iqQId4GrBa2xVEDFBc=";
   };
-  preInstall = "export DESTDIR=$out/bin";
-  meta =
 
-    src.meta // {
-      description = "Dead simple LAN file transfers from the command line";
-      license = lib.licenses.mit;
-      platforms = lib.platforms.unix;
-    };
-}
+  installFlags = [ "DESTDIR=$(out)/bin" ];
+
+  meta = {
+    description = "Dead simple LAN file transfers from the command line";
+    homepage = "https://github.com/zerotier/toss";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    mainProgram = "toss";
+  };
+})

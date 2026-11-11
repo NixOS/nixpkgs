@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Command line tool for deskewing scanned text documents";
     homepage = "https://galfar.vevb.net/deskew";
     license = with lib.licenses; [

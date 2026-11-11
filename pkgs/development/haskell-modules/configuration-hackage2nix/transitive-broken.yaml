@@ -108,6 +108,7 @@ dont-distribute-packages:
  - ApplePush
  - approx-rand-test
  - arbor-monad-metric-datadog
+ - arbtt
  - archive-tar-bytestring
  - archlinux-web
  - arduino-copilot
@@ -213,6 +214,7 @@ dont-distribute-packages:
  - battleships
  - bayes-stack
  - bbi
+ - bcp47-orphans
  - bdcs
  - bdcs-api
  - beam-th
@@ -281,6 +283,7 @@ dont-distribute-packages:
  - bitly-cli
  - bitmaps
  - bittorrent
+ - bizzlelude
  - bla
  - blakesum-demo
  - Blammo
@@ -333,6 +336,9 @@ dont-distribute-packages:
  - btc-lsp
  - btree
  - buchhaltung
+ - bugsnag
+ - bugsnag-wai
+ - bugsnag-yesod
  - buildbox-tools
  - buildwrapper
  - bulletproofs
@@ -354,6 +360,7 @@ dont-distribute-packages:
  - cabalrpmdeps
  - cadence
  - caffegraph
+ - cairo-appbase
  - cake
  - cakyrespa
  - cal3d-examples
@@ -417,7 +424,9 @@ dont-distribute-packages:
  - charade
  - chart-cli
  - Chart-fltkhs
+ - Chart-gtk
  - chart-svg-various
+ - Chart-tests
  - chart-unit
  - chassis
  - chatty
@@ -448,6 +457,7 @@ dont-distribute-packages:
  - claferIG
  - claferwiki
  - clash
+ - clash-lib-hedgehog
  - classify-frog
  - classy-effects
  - classy-effects-th
@@ -631,6 +641,7 @@ dont-distribute-packages:
  - csv-enumerator
  - ctpl
  - cube
+ - curryer
  - curryer-rpc
  - cv-combinators
  - cypher
@@ -729,6 +740,7 @@ dont-distribute-packages:
  - dhscanner-kbapi
  - dhscanner-kbgen
  - dia-functions
+ - diagrams-gtk
  - diagrams-html5
  - diagrams-reflex
  - diagrams-wx
@@ -853,6 +865,9 @@ dont-distribute-packages:
  - ersatz-viz
  - esotericbot
  - EsounD
+ - esqueleto
+ - esqueleto-compat
+ - esqueleto-postgis
  - esqueleto-streaming
  - estreps
  - Etage-Graph
@@ -909,6 +924,7 @@ dont-distribute-packages:
  - factual-api
  - fadno
  - FailureT
+ - fakedata
  - fallingblocks
  - family-tree
  - fast-arithmetic
@@ -949,6 +965,7 @@ dont-distribute-packages:
  - ffmpeg-tutorials
  - ficketed
  - FieldTrip
+ - file-modules
  - filepath-crypto
  - filepath-io-access
  - filesystem-enumerator
@@ -961,6 +978,7 @@ dont-distribute-packages:
  - finite-table
  - FiniteCategories
  - FiniteMap
+ - firefly
  - firstify
  - FirstOrderTheory
  - fishfood
@@ -1096,6 +1114,7 @@ dont-distribute-packages:
  - geolite-csv
  - geomancy-layout
  - getemx
+ - ghc-core
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
@@ -1229,7 +1248,11 @@ dont-distribute-packages:
  - gstorable
  - gtfs
  - gtfs-realtime
+ - gtk
+ - gtk-jsinput
  - gtk-serialized-event
+ - gtk-simple-list-view
+ - gtk-toggle-button-list
  - gtk2hs-cast-glade
  - gtk2hs-cast-gnomevfs
  - gtk2hs-cast-gtk
@@ -1384,6 +1407,7 @@ dont-distribute-packages:
  - haskoin-crypto
  - haskoin-protocol
  - haskoin-script
+ - haskoin-wallet
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
@@ -1430,6 +1454,7 @@ dont-distribute-packages:
  - hcg-minus-cairo
  - hcheat
  - hcheckers
+ - hcoord
  - hcube
  - hdbi
  - hdbi-conduit
@@ -1440,14 +1465,17 @@ dont-distribute-packages:
  - hdirect
  - hdocs
  - hdph
+ - headroom
  - heart-app
  - heatitup
+ - heatshrink
  - heavy-log-shortcuts
  - heavy-logger
  - heavy-logger-amazon
  - heavy-logger-instances
  - hecc
  - hedgehog-checkers-lens
+ - hedgehog-fakedata
  - hedgehog-gen-json
  - Hedi
  - hedis-pile
@@ -1510,6 +1538,7 @@ dont-distribute-packages:
  - HiggsSet
  - highjson-swagger
  - highjson-th
+ - highlighter2
  - himpy
  - hinduce-classifier
  - hinduce-classifier-decisiontree
@@ -1551,8 +1580,10 @@ dont-distribute-packages:
  - hmeap-utils
  - hmep
  - HMock
+ - hmp3-ng
  - hMPC
  - hmt-diagrams
+ - hnix-store-db
  - HNM
  - hnormalise
  - hob
@@ -1590,6 +1621,7 @@ dont-distribute-packages:
  - hpaste
  - hpath-directory
  - hpath-io
+ - hpc-threshold
  - hpc-tracer
  - hPDB
  - hPDB-examples
@@ -1622,6 +1654,7 @@ dont-distribute-packages:
  - hs-functors
  - hs-gen-iface
  - hs-ix
+ - hs-opentelemetry-instrumentation-persistent-mysql
  - hs-profunctors
  - hs-sdl-term-emulator
  - hs2ats
@@ -1689,6 +1722,7 @@ dont-distribute-packages:
  - http-enumerator
  - http-response-decoder
  - http-tower-hs
+ - http-trace
  - http2-client-grpc
  - http2-grpc-proto-lens
  - http2-grpc-proto3-wire
@@ -1785,6 +1819,7 @@ dont-distribute-packages:
  - indentation-trifecta
  - indexation
  - IndexedList
+ - indian-language-font-converter
  - indigo
  - inferno-core
  - inferno-lsp
@@ -1890,6 +1925,7 @@ dont-distribute-packages:
  - JsonGrammar
  - jsons-to-schema
  - jspath
+ - juandelacosa
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
  - JuPyTer-notebook
@@ -1949,6 +1985,7 @@ dont-distribute-packages:
  - koji-install
  - koji-tool
  - korfu
+ - krank
  - ks-test
  - ktx-font
  - kubernetes-client
@@ -1962,6 +1999,8 @@ dont-distribute-packages:
  - laika
  - lambda-devs
  - lambda-options
+ - lambdabot
+ - lambdabot-novelty-plugins
  - lambdabot-zulip
  - lambdacat
  - lambdacms-media
@@ -2022,6 +2061,7 @@ dont-distribute-packages:
  - legion-extra
  - leksah
  - leksah-server
+ - lens-regex-pcre
  - lens-utils
  - lenz
  - lenz-mtl
@@ -2038,6 +2078,7 @@ dont-distribute-packages:
  - liblawless
  - liblinear-enumerator
  - libmolude
+ - libnotify
  - libraft
  - librarian
  - libxml-enumerator
@@ -2088,6 +2129,7 @@ dont-distribute-packages:
  - log-utils
  - log4hs
  - logging-effect-extra
+ - logic-TPTP
  - LogicGrowsOnTrees
  - LogicGrowsOnTrees-MPI
  - LogicGrowsOnTrees-network
@@ -2211,6 +2253,7 @@ dont-distribute-packages:
  - Mhailist
  - Michelangelo
  - micro-gateway
+ - microformats2-parser
  - microformats2-types
  - MicrosoftTranslator
  - midimory
@@ -2222,6 +2265,7 @@ dont-distribute-packages:
  - minimung
  - minioperational
  - minirotate
+ - misfortune
  - mismi-kernel
  - mismi-s3-core
  - miss
@@ -2347,6 +2391,8 @@ dont-distribute-packages:
  - mxnet-nn
  - mysnapsession-example
  - mysql-haskell-openssl
+ - mysql-json-table
+ - mysql-simple
  - mysql-simple-typed
  - myTestlll
  - mywatch
@@ -2360,6 +2406,7 @@ dont-distribute-packages:
  - national-australia-bank
  - nats-queue
  - natural-number
+ - nc-indicators
  - NearContextAlgebra
  - nemesis-titan
  - nerf
@@ -2488,6 +2535,7 @@ dont-distribute-packages:
  - order-maintenance
  - org-mode-lucid
  - orgstat
+ - osdkeys
  - osm-download
  - otp-authenticator
  - overeasy
@@ -2536,6 +2584,8 @@ dont-distribute-packages:
  - pcapng
  - pcf
  - PCLT-DB
+ - pcre-heavy
+ - pcre-less
  - pdf-slave
  - pdfname
  - pdfsplit
@@ -2561,7 +2611,11 @@ dont-distribute-packages:
  - persistent-hssqlppp
  - persistent-iproute
  - persistent-map
+ - persistent-mysql
+ - persistent-pagination
  - persistent-protobuf
+ - persistent-sql-lifted
+ - persistent-typed-db
  - persona-idp
  - peyotls
  - peyotls-codec
@@ -2571,6 +2625,7 @@ dont-distribute-packages:
  - pgmq-hasql
  - pgmq-migration
  - phatsort
+ - phizzle
  - phladiprelio-general-shared
  - phladiprelio-general-simple
  - phladiprelio-ukrainian-shared
@@ -2760,6 +2815,7 @@ dont-distribute-packages:
  - qd-vec
  - qhull
  - qnap-decrypt
+ - qr
  - qr-repa
  - qtah-cpp-qt5
  - qtah-cpp-qt6
@@ -2781,6 +2837,7 @@ dont-distribute-packages:
  - quickcheck-poly
  - quickcheck-regex
  - quickcheck-relaxng
+ - quickcheck-string-random
  - quicktest
  - quipper
  - quipper-algorithms
@@ -2803,6 +2860,7 @@ dont-distribute-packages:
  - quiver-interleave
  - quiver-sort
  - qux
+ - r3x-haskell-sdk
  - rail-compiler-editor
  - rails-session
  - rainbow-tests
@@ -2867,6 +2925,7 @@ dont-distribute-packages:
  - refurb
  - reg-alloc-graph-color
  - regex-deriv
+ - regex-easy
  - regex-genex
  - regex-pcre-text
  - regex-pderiv
@@ -2916,6 +2975,7 @@ dont-distribute-packages:
  - retroclash-sim
  - rewrite
  - rewriting
+ - rex
  - rezoom
  - rfc-env
  - rfc-http-client
@@ -3176,6 +3236,7 @@ dont-distribute-packages:
  - siren-json
  - sirkel
  - sized
+ - sizes
  - skeleton
  - skeletons
  - skylark-client
@@ -3320,6 +3381,7 @@ dont-distribute-packages:
  - strict-containers-lens
  - strict-containers-serialise
  - strict-data
+ - string-random
  - string-typelits
  - stripe-haskell
  - stripe-http-client
@@ -3383,6 +3445,7 @@ dont-distribute-packages:
  - tag-stream
  - tagged-list
  - tagged-th
+ - tagging
  - tagsoup-navigate
  - tahoe-directory
  - tahoe-great-black-swamp
@@ -3423,6 +3486,7 @@ dont-distribute-packages:
  - ten-unordered-containers
  - terminal-text
  - terrahs
+ - test-karya
  - test-sandbox-compose
  - test-simple
  - testbench
@@ -3444,6 +3508,7 @@ dont-distribute-packages:
  - tic-tac-toe
  - tickle
  - tighttp
+ - tiktoken
  - timberc
  - time-exts
  - time-http
@@ -3554,6 +3619,7 @@ dont-distribute-packages:
  - typson-esqueleto
  - typson-selda
  - u2f
+ - ua-parser
  - uber
  - ucam-webauth
  - udbus-model
@@ -3622,6 +3688,7 @@ dont-distribute-packages:
  - vacuum-graphviz
  - vacuum-opengl
  - vacuum-ubigraph
+ - validate-input
  - validated-literals
  - variable-media-field-dhall
  - variable-media-field-optics
@@ -3823,6 +3890,8 @@ dont-distribute-packages:
  - yesod-routes-typescript
  - yesod-session-redis
  - yesod-worker
+ - yi
+ - yi-frontend-pango
  - yjftp
  - yjftp-libs
  - Yogurt-Standalone

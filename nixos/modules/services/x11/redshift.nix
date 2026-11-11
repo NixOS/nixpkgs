@@ -52,7 +52,7 @@ in
     temperature = {
       day = mkOption {
         type = types.ints.between 1000 25000;
-        default = 5500;
+        default = 6500;
         description = ''
           Colour temperature to use during the day, between
           `1000` and `25000` K.
@@ -60,7 +60,7 @@ in
       };
       night = mkOption {
         type = types.ints.between 1000 25000;
-        default = 3700;
+        default = 4500;
         description = ''
           Colour temperature to use at night, between
           `1000` and `25000` K.

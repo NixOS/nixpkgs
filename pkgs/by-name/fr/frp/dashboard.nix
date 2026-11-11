@@ -21,7 +21,7 @@ let
         runHook postInstall
       '';
 
-      npmDepsHash = "sha256-CJ8wNJZzzpdT9am40qHMaV66NlRM8ogLnJsrnwtd5zs=";
+      npmDepsHash = "sha256-yiQK196bsGijjA9VyWSnWgK9k6o39a098YELOTfyScU";
 
       meta = frp.meta // {
         description = "Dashboard for frp";

@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "orion-browser";
-  version = "149";
+  version = "151";
 
   src = fetchurl {
     url = "https://cdn.kagi.com/updates/26_0/${finalAttrs.version}.zip";
-    hash = "sha256-C0mtGNE9Or0alFe2Gu4LkRcHMvk1RLXZ/mUo/XtWB2g=";
+    hash = "sha256-d6Va5mwN+ulAaFbo4dIKENzQammRdfkFnqOV2zmPgQA=";
   };
 
   strictDeps = true;

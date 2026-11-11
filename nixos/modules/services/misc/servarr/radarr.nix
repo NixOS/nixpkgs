@@ -55,7 +55,7 @@ in
       description = "Radarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "RADARR" cfg.settings;
+      environment = servarr.mkServarrSettingsEnvVars "RADARR" cfg.settings // servarr.commonDotnetEnvVars;
 
       serviceConfig = {
         Type = "simple";

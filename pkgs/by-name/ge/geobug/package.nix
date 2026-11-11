@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "geobug";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "tpikonen";
     repo = "geobug";
     tag = finalAttrs.version;
-    hash = "sha256-u9+tCKE5zhX6PGl1IsYcqCT0Q1p/eP+V68N6ggAgDoQ=";
+    hash = "sha256-6UQkmoDtbBFXfbTXLeeBpmCTVJKFrRONpErW/F1eW2c=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +42,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "geobug"
   ];
-
-  strictDeps = true;
 
   __structuredAttrs = true;
 

@@ -7,16 +7,13 @@
   nixosTests,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "jicofo";
-  version = "1.0-1153";
+  version = "1.0-1205";
   src = fetchurl {
-    url = "https://download.jitsi.org/stable/jicofo_${version}-1_all.deb";
-    sha256 = "tBvaXyRqNg8VeIy3aI1HbrZNlelsYowLOVlsXyap+gA=";
+    url = "https://download.jitsi.org/stable/jicofo_${finalAttrs.version}-1_all.deb";
+    hash = "sha256-DDfp6j4uPs0StXsDY6QUIaVYYWqbWwcy1KvWEmEWROQ=";
   };
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   dontBuild = true;
 
@@ -52,4 +49,4 @@ stdenv.mkDerivation {
     teams = [ lib.teams.jitsi ];
     platforms = lib.platforms.linux;
   };
-}
+})

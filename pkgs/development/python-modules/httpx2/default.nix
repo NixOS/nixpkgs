@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -42,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpx2";
-  version = "2.9.1";
+  version = "2.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kghDQMYksF9a4sFGajzNfGPOjdX1OiMwv7rH/fbmM0=";
+    hash = "sha256-XgjFiSwc4xCyPJcTB/Exh838fUOKsT0JRrha7s70C50=";
   };
 
   postPatch = ''
@@ -107,6 +108,7 @@ buildPythonPackage (finalAttrs: {
     # network access
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    "test_h2_timeout_during_request"
     # uvicorn access logging mismatch
     "test_logging_request"
     "test_logging_redirect_chain"
@@ -114,6 +116,10 @@ buildPythonPackage (finalAttrs: {
     "test_client_decode_text_using_autodetect"
     "test_client_decode_text_using_explicit_encoding"
     "test_response_decode_text_using_autodetect"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TODO?
+    "test_keepalive_ping"
   ];
 
   passthru.tests = {

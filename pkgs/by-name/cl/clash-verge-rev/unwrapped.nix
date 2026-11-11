@@ -2,6 +2,7 @@
   pname,
   version,
   src,
+  cargoPatches,
   meta,
 
   pnpm-hash,
@@ -26,7 +27,12 @@
   webkitgtk_4_1,
 }:
 rustPlatform.buildRustPackage {
-  inherit version src meta;
+  inherit
+    version
+    src
+    meta
+    cargoPatches
+    ;
   pname = "${pname}-unwrapped";
 
   cargoHash = vendor-hash;

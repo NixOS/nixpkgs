@@ -15,16 +15,16 @@
 }:
 buildNpmPackage rec {
   pname = "vscode-js-debug";
-  version = "1.117.0";
+  version = "1.140.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
     rev = "v${version}";
-    hash = "sha256-1Mj7nfX5iVO0hhydCV/VbqN1x77WFEzG6/ahk1kN1fw=";
+    hash = "sha256-4bYss4fWLGrOsmfKYbaF9zSGl45jmUH73GCuba2IFw0=";
   };
 
-  npmDepsHash = "sha256-uTtA5XjHfuI2e9IuNAYfDNKZE8c/wa+CWqAsmd/M3Xk=";
+  npmDepsHash = "sha256-VoWBedocCL1EyMm7y2f4eOfl3s8SB6LujJQp6wAUJRM=";
 
   nativeBuildInputs = [
     pkg-config

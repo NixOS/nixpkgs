@@ -114,7 +114,9 @@
 
     The threshold depends on the CUDA version because NVIDIA moved Jetson onto the SBSA software stack incrementally:
     - CUDA 12 (JetPack 6): only Thor (10.1) is SBSA; Orin (8.7) is `linux-aarch64`.
-    - CUDA 13 (JetPack 7.2): Orin (8.7) and Thor (11.0) are both SBSA.
+    - CUDA 13.0 and 13.1 (JetPack 7.0 and 7.1): only Thor (11.0) is SBSA; Orin (8.7) is not supported, and NVIDIA
+      provides no `linux-aarch64` redists.
+    - CUDA 13.2 and later (JetPack 7.2): Orin (8.7) and Thor (11.0) are both SBSA.
 
     # Type
 
@@ -129,14 +131,20 @@
     : The major and minor version of CUDA (e.g. "12.6")
   */
   _getJetsonMinSbsaCapability =
-    cudaMajorMinorVersion: if lib.versionAtLeast cudaMajorMinorVersion "13.0" then "8.7" else "10.1";
+    cudaMajorMinorVersion:
+    if lib.versionAtLeast cudaMajorMinorVersion "13.2" then
+      "8.7"
+    else if lib.versionAtLeast cudaMajorMinorVersion "13.0" then
+      "11.0"
+    else
+      "10.1";
 
   /**
     Maps a Nix system to a NVIDIA redistributable system.
 
     NOTE: Certain Nix systems can map to multiple NVIDIA redistributable systems. In particular, ARM systems can map to
     either `linux-sbsa` (for server-grade ARM chips) or `linux-aarch64` (for Jetson devices). Complicating matters
-    further, as of CUDA 13.0, Jetson Thor and Orin devices use `linux-sbsa` instead of `linux-aarch64`.
+    further, as of CUDA 13.0, Jetson Thor uses `linux-sbsa` instead of `linux-aarch64`, as does Jetson Orin as of CUDA 13.2.
 
     NOTE: This function *will* be called by unsupported systems because `cudaPackages` is evaluated on all systems. As
     such, we need to handle unsupported systems gracefully.
@@ -187,6 +195,24 @@
     getRedistSystem {
       cudaCapabilities = [ "11.0" ];
       cudaMajorMinorVersion = "13.0";
+      system = "aarch64-linux";
+    }
+    => "linux-sbsa"
+    ```
+
+    ```nix
+    getRedistSystem {
+      cudaCapabilities = [ "8.7" ];
+      cudaMajorMinorVersion = "13.0";
+      system = "aarch64-linux";
+    }
+    => "linux-aarch64"
+    ```
+
+    ```nix
+    getRedistSystem {
+      cudaCapabilities = [ "8.7" ];
+      cudaMajorMinorVersion = "13.2";
       system = "aarch64-linux";
     }
     => "linux-sbsa"

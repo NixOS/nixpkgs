@@ -1,13 +1,12 @@
 {
   buildPythonPackage,
   brainflow,
-  nptyping,
   numpy,
   python,
   setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   inherit (brainflow)
     pname
     version
@@ -19,15 +18,13 @@ buildPythonPackage {
   pyproject = true;
   build-system = [ setuptools ];
 
-  dependencies = [
-    numpy
-    nptyping
-  ];
+  dependencies = [ numpy ];
 
   buildInputs = [ brainflow ];
 
   postPatch = ''
     cd python_package
+    substituteInPlace setup.py --replace-fail "version='0.0.1'" "version='${finalAttrs.version}'"
   '';
 
   postInstall = ''
@@ -36,4 +33,4 @@ buildPythonPackage {
   '';
 
   pythonImportsCheck = [ "brainflow" ];
-}
+})

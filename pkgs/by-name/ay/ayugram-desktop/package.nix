@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   nix-update-script,
   telegram-desktop,
@@ -12,18 +13,19 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "ayugram-desktop-unwrapped";
-      version = "7.0.9";
+      version = "7.2.9";
 
       src = fetchFromGitHub {
         owner = "AyuGram";
         repo = "AyuGramDesktop";
-        # tag = "v${finalAttrs.version}";
-        # v7.0.9 tag contains a codegen bug due to an outdated submodule
-        # https://github.com/AyuGram/codegen/pull/3
-        rev = "db3b9891cb0b04ebb7d8c0e71ada3bcc669b910a";
-        hash = "sha256-JSx6qPpVul3NX8stNZzZX/ckNBQ3uXZP7lofb6eWauM=";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-JlZWJ+fWdJqgDMpPFLfkfFp/O65eQaA8GQD6ZY/SI/k=";
         fetchSubmodules = true;
       };
+
+      # Find the Swift SDK overlays needed by the translation provider.
+      # Remove after next release
+      env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-L/usr/lib/swift";
 
       passthru.updateScript = nix-update-script { };
 

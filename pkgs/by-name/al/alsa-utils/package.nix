@@ -5,6 +5,7 @@
   fetchurl,
   alsa-lib,
   alsa-plugins,
+  bashNonInteractive,
   gettext,
   makeWrapper,
   pkg-config,
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
+    bashNonInteractive
     alsa-lib
     ncurses
     libsamplerate

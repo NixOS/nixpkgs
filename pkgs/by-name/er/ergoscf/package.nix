@@ -20,7 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     lapack
   ];
 
-  patches = [ ./math-constants.patch ];
+  patches = [
+    ./math-constants.patch
+    # with gcc-16 pi is now a "unqualified-id"
+    ./gcc-16-pi.patch
+  ];
 
   postPatch = ''
     patchShebangs ./test

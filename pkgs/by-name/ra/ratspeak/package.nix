@@ -26,38 +26,38 @@ let
   rsReticulum = fetchFromGitHub {
     owner = "ratspeak";
     repo = "rsReticulum";
-    rev = "17e6107aa8fb9a5b0c2cac2f4fe4b68655593bd8";
-    hash = "sha256-0HjeGZ57eiz9z9akc+ESdZLAN+/uR9LyNaMLgYiTPO8=";
+    tag = "ratspeak-v1.0.40";
+    hash = "sha256-ylMT47isbfKwDJPmDoqzaYUfgWdZIkZnBuPupRleijw=";
   };
   rsLXMF = fetchFromGitHub {
     owner = "ratspeak";
     repo = "rsLXMF";
-    rev = "393478019b3a076abc7af5f0d2c7b980b3329550";
-    hash = "sha256-uCoU4HtdRy6sB8vi5BtifKFAy0a7FPuHuuRb1EJTJ2c=";
+    tag = "ratspeak-v1.0.40";
+    hash = "sha256-4lzyNniGFW9GnS3tNNYQgGNy1L4TmXqrDsqAydr0i7o=";
   };
   rsLXST = fetchFromGitHub {
     owner = "ratspeak";
     repo = "rsLXST";
-    rev = "e3f80815bcf1c1d6af1c07135dfe05b6163d596a";
-    hash = "sha256-921xMNdneOTurUoUR5ImPEB8ztfEQLl9jCZY+s9Cjuo=";
+    tag = "ratspeak-v1.0.40";
+    hash = "sha256-8qLUHVDyGu62Ri6n5fYf/SnH+glNDfSzS4+TUEgERH4=";
   };
   lrgp-rs = fetchFromGitHub {
     owner = "ratspeak";
     repo = "lrgp-rs";
-    rev = "0b55361ebf91c1caa09d5ed8ab88ac0a6d955de6";
-    hash = "sha256-MZGWGCWLc+suHCD9NFV6m8A4EP4pLfogaqm93pMk/ss=";
+    tag = "ratspeak-v1.0.40";
+    hash = "sha256-5blj3uHqFs4hnIKX49LV2wpLCEutKCM95F7AtrBBNLA=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ratspeak";
-  version = "1.0.25";
+  version = "1.0.40";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ratspeak";
     repo = "Ratspeak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HJH31dAnmSK85AkX+ufvmo+Nmd9X6xmLO06Lys8kces=";
+    hash = "sha256-OtgTRW/I0tFLoQ6ZBvvoZVSnLj7/y3e5ZuDGQNRr8No=";
   };
 
   # The app expects the protocol repos next to its own checkout.
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w rsReticulum rsLXMF rsLXST lrgp-rs
   '';
 
-  cargoHash = "sha256-XumEJazJux0FFLS6qcruaXdOLsZ9hfn8Q/hA9Ot4RzM=";
+  cargoHash = "sha256-jkldUxZ76cBYa/7/KGv2M+zeOJJCh1P8RBcp6iuES7Q=";
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 

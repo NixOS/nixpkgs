@@ -22,16 +22,16 @@
 
 buildGoModule rec {
   pname = "easylpac";
-  version = "0.8.0.3";
+  version = "0.8.1.1";
 
   src = fetchFromGitHub {
     owner = "creamlike1024";
     repo = "EasyLPAC";
     tag = version;
-    hash = "sha256-q76p0BqrG8opuTClYKLfmM5hdziJIrZCwQmg2NkzW/E=";
+    hash = "sha256-xMXi+AJjbKX7RlcUAutbL/Gfg+DoltSldQza7YMgUWU=";
   };
 
-  vendorHash = "sha256-52I8hlnoHPhygwr0dxDP50X2A7Gsh0v/0SGQFH3FG/8=";
+  vendorHash = "sha256-9tDXkrTX2usGfmmX5Gt8izQEk6/A3ckwQJfHZ5bSjV4=";
 
   nativeBuildInputs = [
     copyDesktopItems

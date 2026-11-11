@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "velbus-aio";
-  version = "2026.7.25";
+  version = "2026.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "velbus-aio";
     tag = finalAttrs.version;
-    hash = "sha256-KCc2jhwk0YNGpyUf2hDv4iaHzRBuFTfXLQJv78MkA5Q=";
+    hash = "sha256-QHVaPOCFFeqQYTHwbi59eY88rw0hRpIpWyXjHI5rXgs=";
     fetchSubmodules = true;
   };
 

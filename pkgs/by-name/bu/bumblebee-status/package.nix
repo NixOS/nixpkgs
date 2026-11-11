@@ -38,7 +38,14 @@ python3.pkgs.buildPythonPackage {
       url = "https://github.com/tobi-wan-kenobi/bumblebee-status/commit/2fe8f1ff1444daf155b18318005f33a76a5d64b4.patch";
       hash = "sha256-BC1cgQDMJkhuEgq8NJ28521CHbEfqIMueHkFXXlZz2w=";
     })
+    # pkg_resources was removed in setuptools 82
+    ./replace-pkg-resources-with-packaging.patch
   ];
+
+  # versioneer derives the version from git, which is unavailable in the source
+  postPatch = ''
+    substituteInPlace setup.py --replace-fail "versioneer.get_version()" "'${version}'"
+  '';
 
   build-system = with python3.pkgs; [
     setuptools
@@ -51,6 +58,7 @@ python3.pkgs.buildPythonPackage {
   nativeCheckInputs = with python3.pkgs; [
     freezegun
     netifaces
+    packaging
     psutil
     pytest
     pytest-mock

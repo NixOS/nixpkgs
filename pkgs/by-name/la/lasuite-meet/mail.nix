@@ -22,7 +22,7 @@ buildNpmPackage (finalAttrs: {
     pname = "${finalAttrs.pname}-npm-deps";
     inherit version src;
     inherit (finalAttrs) sourceRoot;
-    hash = "sha256-Ojk0giCc7tTFAGOIisirMywfe5j7JCKoTnWGk/hR+U8=";
+    hash = "sha256-RWh8DW9wcgjGVVfYb7dvyDcV/PNiUBgcOqxQG6bdtQQ=";
   };
   npmBuildScript = "build";
 

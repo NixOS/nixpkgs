@@ -38,6 +38,22 @@ in
 
     package = lib.mkPackageOption pkgs "starship" { };
 
+    enableBashIntegration = lib.mkEnableOption "Bash integration" // {
+      default = true;
+    };
+    enableFishIntegration = lib.mkEnableOption "Fish integration" // {
+      default = true;
+    };
+    enableZshIntegration = lib.mkEnableOption "zsh integration" // {
+      default = true;
+    };
+    enableXonshIntegration = lib.mkEnableOption "Xonsh integration" // {
+      default = true;
+    };
+    enableNushellIntegration = lib.mkEnableOption "Nushell integration" // {
+      default = true;
+    };
+
     interactiveOnly =
       lib.mkEnableOption ''
         starship only when the shell is interactive.
@@ -110,7 +126,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    programs.bash.${initOption} = ''
+    programs.bash.${initOption} = lib.mkIf cfg.enableBashIntegration ''
       if [[ $TERM != "dumb" ]]; then
         # don't set STARSHIP_CONFIG automatically if there's a user-specified
         # config file.  starship appears to use a hardcoded config location
@@ -123,7 +139,7 @@ in
       fi
     '';
 
-    programs.fish.${initOption} = ''
+    programs.fish.${initOption} = lib.mkIf cfg.enableFishIntegration ''
       if test "$TERM" != "dumb"
         # don't set STARSHIP_CONFIG automatically if there's a user-specified
         # config file.  starship appears to use a hardcoded config location
@@ -148,7 +164,7 @@ in
       end
     '';
 
-    programs.zsh.${initOption} = ''
+    programs.zsh.${initOption} = lib.mkIf cfg.enableZshIntegration ''
       if [[ $TERM != "dumb" ]]; then
         # don't set STARSHIP_CONFIG automatically if there's a user-specified
         # config file.  starship appears to use a hardcoded config location
@@ -162,7 +178,7 @@ in
     '';
 
     # use `config` instead of `${initOption}` because `programs.xonsh` doesn't have `shellInit` or `promptInit`
-    programs.xonsh.config = ''
+    programs.xonsh.config = lib.mkIf cfg.enableXonshIntegration ''
       if $TERM != "dumb":
         # don't set STARSHIP_CONFIG automatically if there's a user-specified
         # config file.  starship appears to use a hardcoded config location
@@ -174,6 +190,20 @@ in
           $STARSHIP_CONFIG = ('${settingsFile}')
         del _os, _sc
         execx($(${cfg.package}/bin/starship init xonsh))
+    '';
+
+    programs.nushell.interactiveShellInit = lib.mkIf cfg.enableNushellIntegration ''
+      if $env.TERM? != "dumb" {
+        let config = $env.STARSHIP_CONFIG? | default ($env.HOME | path join ".config/starship.toml")
+        if ($config | path type) != "file" {
+          $env.STARSHIP_CONFIG = "${settingsFile}"
+        }
+        use ${
+          pkgs.runCommand "starship-nushell-config.nu" { } ''
+            ${cfg.package}/bin/starship init nu > "$out"
+          ''
+        }
+      }
     '';
   };
 

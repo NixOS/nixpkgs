@@ -9,8 +9,11 @@
 mkRocqDerivation {
   pname = "stdpp";
   inherit version;
-  domain = "gitlab.mpi-sws.org";
-  owner = "iris";
+  # MPI's gitlab is unfortunately under siege of various LLM scrappers
+  # and had to establish some strong rate limiting, a mirror is put on github
+  # domain = "gitlab.mpi-sws.org";
+  # owner = "iris";
+  owner = "rocq-iris";
   defaultVersion =
     let
       case = case: out: { inherit case out; };

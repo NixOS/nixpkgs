@@ -8,14 +8,14 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "berkeleydb";
-  version = "18.1.15";
+  version = "18.1.17";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-evpTFD11TGuyyFZWwTJeuuUYrc/NG1nhPMKruI3fdY4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-EeGTuvzPh7qV4NaK9FO4Fq9MkXY5aTMc3cY6WKdWRtQ=";
   };
 
   build-system = [ setuptools ];
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

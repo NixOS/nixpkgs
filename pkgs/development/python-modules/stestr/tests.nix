@@ -1,4 +1,10 @@
-{ buildPythonPackage, stestr }:
+{
+  buildPythonPackage,
+  stestr,
+  stestrCheckHook,
+  writableTmpDirAsHomeHook,
+  ddt,
+}:
 
 buildPythonPackage {
   pname = "stestr-tests";
@@ -11,10 +17,14 @@ buildPythonPackage {
     pythonOutputDistPhase() { touch $dist; }
   '';
 
-  nativeCheckInputs = [ stestr ];
+  nativeCheckInputs = [
+    stestrCheckHook
+    writableTmpDirAsHomeHook
+    ddt
+  ];
 
-  checkPhase = ''
-    export PATH=$out/bin:$PATH
-    export HOME=$TMPDIR
-  '';
+  stestrFlags = [
+    "--test-path"
+    "stestr/tests"
+  ];
 }

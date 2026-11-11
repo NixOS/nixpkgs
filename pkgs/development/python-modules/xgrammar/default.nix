@@ -7,10 +7,11 @@
   # build-system
   cmake,
   ninja,
-  nanobind,
   scikit-build-core,
+  setuptools-scm,
 
   # dependencies
+  apache-tvm-ffi,
   mlx-lm,
   numpy,
   pydantic,
@@ -25,32 +26,31 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xgrammar";
-  version = "0.1.33";
+  version = "0.2.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlc-ai";
     repo = "xgrammar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mliAmFBY3eLnUP+2HCRGX36KPUjaxn0Eb+2aKyDwdaM=";
+    hash = "sha256-Ff/CLdSjq8ammfci+Eu9hY4433e7csf8EeGu2X9B2rI=";
   };
-
-  patches = [
-    ./0001-fix-find-nanobind-from-python-module.patch
-  ];
 
   build-system = [
     cmake
     ninja
-    nanobind
+    apache-tvm-ffi
     scikit-build-core
+    setuptools-scm
   ];
   dontUseCmakeConfigure = true;
 
   dependencies = [
+    apache-tvm-ffi
     numpy
     pydantic
     torch
@@ -73,36 +73,21 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isLinux [
       # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
       "-ffat-lto-objects"
-    ];
-  };
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      # xgrammar builds with -Werror, and GCC 16 emits a false-positive array-bounds warning
+      # in cpp/json_schema_converter.cc
+      "-Wno-error=array-bounds"
+    ]
+  );
 
   disabledTests = [
-    # You are trying to access a gated repo.
-    "test_grammar_compiler"
-    "test_grammar_matcher"
-    "test_grammar_matcher_ebnf"
-    "test_grammar_matcher_json"
-    "test_grammar_matcher_json_schema"
-    "test_grammar_matcher_tag_dispatch"
-    "test_regex_converter"
-    "test_serialize_compiled_grammar_with_hf_tokenizer"
-    "test_tokenizer_info"
-
-    # Torch not compiled with CUDA enabled
-    "test_token_bitmask_operations"
-
-    # AssertionError
-    "test_json_schema_converter"
-  ];
-
-  disabledTestPaths = [
-    # Requires internet access
-    "tests/python/test_structural_tag_converter.py"
-    "tests/python/test_structural_tag_for_model.py"
+    # ModuleNotFoundError: No module named 'cohere_melody'
+    "melody"
   ];
 
   pythonImportsCheck = [ "xgrammar" ];
@@ -110,7 +95,7 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient, Flexible and Portable Structured Generation";
     homepage = "https://xgrammar.mlc.ai";
-    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
+    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
   };
-}
+})

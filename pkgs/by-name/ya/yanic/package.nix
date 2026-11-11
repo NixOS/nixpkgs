@@ -2,25 +2,33 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   installShellFiles,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "yanic";
-  version = "1.8.3";
+  version = "2.1.1";
 
-  src = fetchFromGitHub {
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
     owner = "FreifunkBremen";
     repo = "yanic";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-6jGuqqUr9DJyPYAVBBHc5qtfJIbvjGndT2Y+RSLMzhY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vTLPPwyJQTHjrIkOEa4+9cgH3lrXsCd6JWd2EFMDb0M=";
   };
 
-  vendorHash = "sha256-TcmkPBHxpmTgXNW8gPkzMpjPGCQu/HrZqAu9jDpPEjo=";
+  vendorHash = "sha256-2ebCeLLNfpsk8d89SBsaeTXvpWX1YNzo8bATCPD/Shw=";
+
+  subPackages = [
+    "."
+    "cmd"
+  ];
 
   ldflags = [
-    "-X github.com/FreifunkBremen/yanic/cmd.VERSION=${finalAttrs.version}"
+    "-X codeberg.org/FreifunkBremen/yanic/cmd.VERSION=${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -34,10 +42,12 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/yanic completion zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tool to collect and aggregate respondd data";
-    homepage = "https://github.com/FreifunkBremen/yanic";
-    changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${finalAttrs.src.rev}";
+    homepage = "https://freifunkbremen.codeberg.page/yanic";
+    changelog = "https://codeberg.org/FreifunkBremen/yanic/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ herbetom ];
     mainProgram = "yanic";

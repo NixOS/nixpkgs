@@ -50,6 +50,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # TypeError: 'async for' requires an object...
+    "test_upload_iter"
+  ];
+
   meta = {
     changelog = "https://github.com/jpbede/aiowebdav2/releases/tag/${src.tag}";
     description = "Async Python 3 client for WebDAV";

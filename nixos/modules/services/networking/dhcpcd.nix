@@ -302,7 +302,7 @@ in
         ]
         ++ lib.optional cfg.setHostname (
           pkgs.writeShellScriptBin "hostname" ''
-            ${lib.getExe' pkgs.systemd "hostnamectl"} set-hostname --transient $1
+            ${lib.getExe' config.systemd.package "hostnamectl"} set-hostname --transient $1
           ''
         );
 

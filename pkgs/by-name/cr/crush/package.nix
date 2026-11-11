@@ -1,26 +1,27 @@
 {
   lib,
   stdenv,
-  buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
+  git,
   installShellFiles,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "crush";
-  version = "0.88.1";
+  version = "0.99.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KW9ecI/JVpQcEqZJo8twUWQ8JEmEZxi/wlfkrmslrzg=";
+    hash = "sha256-S3YI+ZO/zogWUHp+Xiu/V9BiY1cVwgh7wxDDqz1iatg=";
   };
 
-  vendorHash = "sha256-qXR+z31tZ3FWclBUWkBF0k/F463iKSGZ6dCgJMBcWi8=";
+  vendorHash = "sha256-YwjbZrnZn/6aY8Yklu7fEoZnRF2uVicW32D49MA9AJE=";
 
   ldflags = [
     "-s"
@@ -46,7 +47,10 @@ buildGo126Module (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

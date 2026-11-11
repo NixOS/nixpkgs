@@ -5,5 +5,5 @@ mkDerivation {
     "tools/lua"
     "lib/libc/Versions.def"
   ];
-  LUA = "${buildPackages.lua}/bin/lua";
+  LUA = "${buildPackages.lua5_2_compat}/bin/lua";
 }

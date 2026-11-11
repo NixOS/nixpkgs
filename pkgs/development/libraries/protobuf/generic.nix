@@ -14,6 +14,7 @@
   version,
   hash,
   versionCheckHook,
+  symlinkJoin,
 
   # downstream dependencies
   python3,
@@ -35,6 +36,28 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "protobuf";
     tag = "v${version}";
     inherit hash;
+  };
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "proto"
+  ];
+
+  outputChecks = {
+    out.disallowedReferences = [
+      "dev"
+    ];
+    lib.disallowedReferences = [
+      "out"
+      "dev"
+    ];
+    proto.disallowedReferences = [
+      "out"
+      "lib"
+      "dev"
+    ];
   };
 
   patches =
@@ -79,13 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/protocolbuffers/protobuf/pull/25683
       ./fix-upb-packed-enum-be.patch
     ]
-    ++ lib.optionals (lib.versionAtLeast version "34") [
+    ++ lib.optionals ((lib.versionAtLeast version "34") && (lib.versionOlder version "36")) [
       # upb linker-array fix for newer toolchains (notably GCC 15):
       # `UPB_linkarr_internal_empty_upb_AllExts` can conflict with extension
       # entries in `linkarr_upb_AllExts` during test builds.
       # Context: https://github.com/protocolbuffers/protobuf/issues/21021
       ./fix-upb-linkarr-sentinel-init.patch
-
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "34") [
       # Fix BoolKeys test on big-endian
       # https://github.com/protocolbuffers/protobuf/pull/25862
       ./fix-BoolKeys-test-on-be.patch
@@ -106,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     # Keep the sentinel macro non-retained for GCC 15+ to match generated
     # extension objects in linker arrays and avoid section type conflicts.
-    + lib.optionalString (lib.versionAtLeast version "34") ''
+    + lib.optionalString ((lib.versionAtLeast version "34") && (lib.versionOlder version "36")) ''
       substituteInPlace upb/port/def.inc \
         --replace-fail \
           '#define UPB_LINKARR_SENTINEL UPB_RETAIN __attribute__((weak, used))' \
@@ -172,6 +196,23 @@ stdenv.mkDerivation (finalAttrs: {
     GTEST_DEATH_TEST_STYLE = "threadsafe";
   };
 
+  # protoc expects to find `.proto` files relative to itself, so we put those to a separate output and add symlinks.
+  postFixup = ''
+    pushd "$dev" > /dev/null
+
+    find include -name '*.proto' -print0 | while IFS= read -r -d ''' FILE; do
+      mkdir -p "$proto/$(dirname "$FILE")"
+      mkdir -p "$out/$(dirname "$FILE")"
+
+      mv "$FILE" "$proto/$FILE"
+
+      ln -s "$proto/$FILE" "$out/$FILE"
+      ln -s "$proto/$FILE" "$dev/$FILE"
+    done
+
+    popd > /dev/null
+  '';
+
   passthru = {
     tests = {
       pythonProtobuf = python3.pkgs.protobuf;
@@ -179,9 +220,18 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (python3.pkgs) celery;
 
       version = testers.testVersion { package = protobuf; };
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = protobuf;
+      };
     };
 
     inherit abseil-cpp;
+
+    full = symlinkJoin {
+      inherit (finalAttrs.finalPackage) name;
+      paths = finalAttrs.finalPackage.all;
+    };
   };
 
   meta = {
@@ -196,5 +246,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://protobuf.dev/";
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "protoc";
+    pkgConfigModules = [
+      "protobuf"
+      "protobuf-lite"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "22") [
+      "utf8_range"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "27") [
+      "upb"
+    ];
   };
 })

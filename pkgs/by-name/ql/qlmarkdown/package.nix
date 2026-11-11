@@ -7,14 +7,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "qlmarkdown";
-  version = "1.5.2";
+  version = "1.5.7";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/sbarex/QLMarkdown/releases/download/${finalAttrs.version}/QLMarkdown.zip";
-    hash = "sha256-duQwlY87yWKn5RXEaPqZz8oICIsHid8m1i5V7+5bIf4=";
+    hash = "sha256-SdKDN5PorVBXYJGGngM0pa1Huh49AnDeu4RzH/Rjv5k=";
     stripRoot = false;
   };
 

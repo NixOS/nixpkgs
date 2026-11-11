@@ -9,6 +9,7 @@
 
   # dependencies
   arviz,
+  better-optimize,
   cachetools,
   cloudpickle,
   matplotlib,
@@ -23,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "6.3.1";
+  version = "6.4.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-laLj0Dts4E/7cuhQt/1mekfi/P1L7TiOcypiADs0JAc=";
+    hash = "sha256-81/9vKHsuK9MF2MquMxZZsHO7GKCIQpJwrPYyGz6ar0=";
   };
 
   build-system = [
@@ -44,6 +45,7 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     arviz
+    better-optimize
     cachetools
     cloudpickle
     # `matplotlib` is an undeclared runtime dependency: the default (`progressbar = True`) sampling

@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
   ];
 
+  strictDeps = true;
+
   propagatedBuildInputs = [
     publicsuffix-list
   ];
@@ -83,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C library for the Publix Suffix List";
     longDescription = ''
@@ -93,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       the domain in a user interface or sorting domain lists by site.
     '';
     homepage = "https://rockdaboot.github.io/libpsl/";
-    changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/libpsl-${finalAttrs.version}/NEWS";
+    changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/${finalAttrs.version}/NEWS";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "psl";

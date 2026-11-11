@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb-plugin-effects";
-  version = "1.0rc2";
+  version = "1.1";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBEffectsPlugin";
-    tag = "release_candidate_${finalAttrs.version}";
-    hash = "sha256-0W0hO3PSMpPLc0a7g/Nn7GWMcwBXhOxh1Y2flpdcnfE=";
+    tag = "release_${finalAttrs.version}";
+    hash = "sha256-GLrwjfGlerR2gLBI9wYJ6sVWudc47QSV3Aoz9j3/wb0=";
     fetchSubmodules = true;
   };
 

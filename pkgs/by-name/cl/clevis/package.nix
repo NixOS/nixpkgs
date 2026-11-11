@@ -131,14 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
       clevisLuksFallback
       clevisZfs
       clevisZfsFallback
+      clevisLuksAskpass
+      clevisLuksAskpassFallback
       ;
-    clevisLuksSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuks;
-    clevisLuksFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksFallback;
-    clevisLuksAskpassSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksAskpass;
-    clevisLuksAskpassFallbackSystemdStage1 =
-      nixosTests.installer-systemd-stage-1.clevisLuksAskpassFallback;
-    clevisZfsSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfs;
-    clevisZfsFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfsFallback;
   };
 
   meta = {

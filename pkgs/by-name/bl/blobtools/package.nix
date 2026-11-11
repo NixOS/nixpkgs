@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail "CC=g++" "CC=c++"
+      --replace-fail "CC=g++" "CC=${stdenv.cc.targetPrefix}c++"
   '';
 
   installPhase = ''

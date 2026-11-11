@@ -9,15 +9,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "goperf";
-  version = "0-unstable-2026-08-13";
+  version = "0-unstable-2026-10-09";
 
   src = fetchgit {
     url = "https://go.googlesource.com/perf";
-    rev = "fd4a688df89207abdabe0a0cf5b2cd9ccfd376d2";
-    hash = "sha256-YgMIIF9DAjyAPpZJtVoOKSatNhRPg/nPOYr0P06Fi5s=";
+    rev = "be2c69fb417e05de5fec05c732911f4c5f172606";
+    hash = "sha256-Ura+yZPbWLQDB/R+OTSrUpKZtEjDvpitdpabKgDSm2M=";
   };
 
-  vendorHash = "sha256-AZx9tPzsPvjc5kpmiBa6eYKtrw0hczYi0sbcd/lkiiA=";
+  vendorHash = "sha256-caW4rox/r2eq0HxACaAsuDLAeGIKUiLgKtJol8OXzDE=";
+
+  # httptest: failed to listen on a port
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = writeShellScript "update-goperf" ''
     export UPDATE_NIX_ATTR_PATH=goperf

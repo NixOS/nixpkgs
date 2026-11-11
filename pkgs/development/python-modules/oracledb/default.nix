@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "oracledb";
-  version = "4.0.2";
+  version = "26.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     repo = "python-oracledb";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-xT2PWP6kQ0K+9kxe0vNWY5+kMyKZ1J7toiEZBxfsAGE=";
+    hash = "sha256-PeXgi03CO6pMtxll1BsCCygMhzKBn1C0+gzvRDfedcA=";
   };
 
   build-system = [
@@ -40,10 +40,12 @@ buildPythonPackage (finalAttrs: {
     description = "Python driver for Oracle Database";
     homepage = "https://oracle.github.io/python-oracledb";
     changelog = "https://github.com/oracle/python-oracledb/blob/${finalAttrs.src.tag}/doc/src/release_notes.rst";
-    license = with lib.licenses; [
-      asl20 # and or
-      upl
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        upl
+      ];
     maintainers = with lib.maintainers; [ harvidsen ];
   };
 })

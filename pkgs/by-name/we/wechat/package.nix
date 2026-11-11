@@ -1,63 +1,83 @@
 {
-  callPackage,
-  fetchurl,
   lib,
+  stdenv,
   stdenvNoCC,
-}:
+  fetchurl,
 
+  # native
+  _7zz,
+  autoPatchelfHook,
+  dpkg,
+  makeShellWrapper,
+  wrapGAppsHook3,
+
+  # runtime
+  alsa-lib,
+  at-spi2-core,
+  bzip2,
+  cairo,
+  coreutils,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  glib,
+  gtk3,
+  libredirect,
+  libice,
+  libsm,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
+  libglvnd,
+  libjack2,
+  libpulseaudio,
+  libxcb,
+  libxcb-keysyms,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  pipewire,
+  systemd,
+  util-linuxMinimal,
+  wayland,
+  xkeyboard-config,
+  zlib,
+}@args:
 let
-  inherit (stdenvNoCC.hostPlatform) system;
-
   pname = "wechat";
-  meta = {
+
+  passthru = finalAttrs: {
+    sources = lib.importJSON ./sources.json;
+    updateScript = ./update.py;
+    source =
+      finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+  };
+
+  meta = finalAttrs: {
     description = "Messaging and calling app";
     homepage = "https://www.wechat.com/en/";
     downloadPage = "https://linux.weixin.qq.com/en";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ prince213 ];
-    mainProgram = "wechat";
-    platforms = [
-      "aarch64-darwin"
-      "aarch64-linux"
-      "x86_64-linux"
+    maintainers = with lib.maintainers; [
+      larry0x
+      moraxyc
+      prince213
     ];
+    mainProgram = "wechat";
+    platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 
-  sources = {
-    # https://dldir1.qq.com/weixin/mac/mac-release.xml
-    aarch64-darwin =
-      let
-        version = "4.1.8.106-37335";
-        version' = lib.replaceString "-" "_" version;
-      in
-      {
-        inherit version;
-        src = fetchurl {
-          url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_${version'}.dmg";
-          hash = "sha256-lygjqWbNqh9fCnhbyfEhnRdKdfQ9MOwPv5unqwJJsvE=";
-        };
-      };
-    # use https://web.archive.org/save to archive the Linux versions
-    # add `if_` at the end of timestamps to avoid toolbar insertion
-    # for a more complicated guide, see https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine
-    aarch64-linux = {
-      version = "4.1.1.4";
-      src = fetchurl {
-        url = "https://web.archive.org/web/20260311102559if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
-        hash = "sha256-YlWJxT62tXDaNwYVpsPMC5elFH8fsbI1HjTQn6ePiPo=";
-      };
-    };
-    x86_64-linux = {
-      version = "4.1.1.4";
-      src = fetchurl {
-        url = "https://web.archive.org/web/20260311102439if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
-        hash = "sha256-XxAvFnlljqurGPDgRr+DnuCKbdVvgXBPh02DLHY3Oz8=";
-      };
-    };
+  args' = args // {
+    inherit pname passthru meta;
   };
 in
-callPackage (if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
-  inherit pname meta;
-  inherit (sources.${system} or (throw "Unsupported system: ${system}")) version src;
-}
+if stdenvNoCC.hostPlatform.isDarwin then import ./darwin.nix args' else import ./linux.nix args'

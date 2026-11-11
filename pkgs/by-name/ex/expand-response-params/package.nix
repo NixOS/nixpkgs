@@ -26,6 +26,8 @@ stdenv.mkDerivation {
     mv expand-response-params${stdenv.hostPlatform.extensions.executable} $prefix/bin/
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Internal tool used by the nixpkgs wrapper scripts for processing response files";
     longDescription = ''

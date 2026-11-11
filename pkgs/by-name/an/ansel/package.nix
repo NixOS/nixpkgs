@@ -28,7 +28,6 @@
   libde265,
   libepoxy,
   libffi,
-  libgcrypt,
   libgpg-error,
   libheif,
   libjpeg,
@@ -136,7 +135,6 @@ stdenv.mkDerivation {
     libde265
     libepoxy
     libffi
-    libgcrypt
     libgpg-error
     libheif
     libjpeg

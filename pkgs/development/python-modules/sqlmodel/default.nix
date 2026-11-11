@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlmodel";
-  version = "0.0.39";
+  version = "0.0.42";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "sqlmodel";
     tag = finalAttrs.version;
-    hash = "sha256-KrKlg1ZiThxDHmrIwy+oEAAmwUn/u8n4FKGTu1iCh1A=";
+    hash = "sha256-fhj3mWep7Wdw9AYu9ibIWY5plKe+w6F6PghiUsb6z5o=";
   };
 
   build-system = [ pdm-backend ];

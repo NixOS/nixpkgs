@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  flutter338,
+  flutter347,
   fetchFromGitHub,
   autoPatchelfHook,
   desktop-file-utils,
@@ -12,7 +12,6 @@
   libgbm,
   libpulseaudio,
   mpv-unwrapped,
-  mimalloc,
   imagemagick,
   runCommand,
   yq-go,
@@ -57,16 +56,16 @@ let
     };
   });
 
-  version = "1.4.5";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-kVg6lqJF8kT2TgwiK8aKUWW6yEdQUrJKzw2h4DHN+iw=";
+    hash = "sha256-p5o+DtHeZx5S8mxzLrPFEhpKxuprZNnXsJtj1+Mi2BI=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   pname = "oneanime";
   inherit version src;
 
@@ -80,27 +79,6 @@ flutter338.buildFlutterApplication {
   gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
-    # unofficial media_kit_libs_linux
-    media_kit_libs_linux =
-      { version, src, ... }:
-      stdenv.mkDerivation rec {
-        pname = "media_kit_libs_linux";
-        inherit version src;
-        inherit (src) passthru;
-
-        postPatch = ''
-          sed -i '/set(MIMALLOC "mimalloc-/,/add_custom_target/d' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
-          sed -i '/set(PLUGIN_NAME "media_kit_libs_linux_plugin")/i add_custom_target("MIMALLOC_TARGET" ALL DEPENDS ${mimalloc}/lib/mimalloc.o)' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          cp -r . $out
-
-          runHook postInstall
-        '';
-      };
     # unofficial media_kit_video
     media_kit_video =
       { version, src, ... }:

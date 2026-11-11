@@ -27,7 +27,7 @@
   pango,
   polkit,
   webkitgtk_6_0,
-  systemd,
+  systemdLibs,
   libadwaita,
   libnma-gtk4,
   tzdata,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    systemd
+    systemdLibs
     wrapGAppsHook4
   ];
 

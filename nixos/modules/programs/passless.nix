@@ -67,66 +67,13 @@ in
         NoNewPrivileges = true;
         LimitMEMLOCK = "2M";
         SyslogIdentifier = "passless";
-
-        # Found with shh
-        ProtectSystem = "strict";
-        PrivateTmp = "disconnected";
-        PrivateMounts = "true";
-        ProtectKernelTunables = "true";
-        ProtectKernelModules = true;
-        ProtectKernelLogs = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
-        ProtectClock = true;
-        MemoryDenyWriteExecute = true;
-        RestrictAddressFamilies = "AF_UNIX";
-        SocketBindDeny = [
-          "ipv4:tcp"
-          "ipv4:udp"
-          "ipv6:tcp"
-          "ipv6:udp"
-        ];
-        CapabilityBoundingSet = [
-          "~CAP_BLOCK_SUSPEND"
-          "CAP_BPF"
-          "CAP_CHOWN"
-          "CAP_MKNOD"
-          "CAP_NET_RAW"
-          "CAP_PERFMON"
-          "CAP_SYS_BOOT"
-          "CAP_SYS_CHROOT"
-          "CAP_SYS_MODULE"
-          "CAP_SYS_NICE"
-          "CAP_SYS_PACCT"
-          "CAP_SYS_PTRACE"
-          "CAP_SYS_TIME"
-          "CAP_SYSLOG"
-          "CAP_WAKE_ALARM"
-        ];
-        SystemCallFilter = [
-          "~@aio:EPERM"
-          "@chown:EPERM"
-          "@clock:EPERM"
-          "@cpu-emulation:EPERM"
-          "@debug:EPERM"
-          "@ipc:EPERM"
-          "@keyring:EPERM"
-          "@module:EPERM"
-          "@mount:EPERM"
-          "@obsolete:EPERM"
-          "@pkey:EPERM"
-          "@privileged:EPERM"
-          "@raw-io:EPERM"
-          "@reboot:EPERM"
-          "@resources:EPERM"
-          "@sandbox:EPERM"
-          "@setuid:EPERM"
-          "@swap:EPERM"
-          "@sync:EPERM"
-        ];
-
       };
     };
+
+    # So users can use the `passless client` command
+    users.users = lib.genAttrs cfg.users (_: {
+      packages = [ cfg.package ];
+    });
   };
 
   meta.maintainers = with lib.maintainers; [ erictapen ];

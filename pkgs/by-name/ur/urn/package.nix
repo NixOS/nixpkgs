@@ -4,7 +4,7 @@
   fetchFromGitLab,
   buildEnv,
   makeWrapper,
-  lua,
+  lua5_2_compat,
   luajit,
   readline,
   useLuaJit ? false,
@@ -12,6 +12,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   version = "0.7.2";
   # Build a sort of "union package" with all the native dependencies we
   # have: Lua (or LuaJIT), readline, etc. Then, we can depend on this
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
     owner = "urn";
     repo = "urn";
     rev = "v${version}";
-    sha256 = "0nclr3d8ap0y5cg36i7g4ggdqci6m5q27y9f26b57km8p266kcpy";
+    hash = "sha256-/rJpjLiozlOWES75I3CpJjLc3iPvRDMeKx5chdrIlFk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

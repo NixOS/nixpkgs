@@ -16,7 +16,6 @@
   coreutils, # needed at runtime by git-filter-branch etc
   openssh,
   pcre2,
-  bash,
   asciidoc,
   texinfo,
   xmlto,
@@ -29,6 +28,8 @@
   makeWrapper,
   libiconv,
   libiconvReal,
+  pkgsHostHost,
+  runtimeShellPackage,
   svnSupport ? false,
   subversionClient,
   perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
@@ -56,14 +57,16 @@
   cargo,
   rustc,
   nix-update-script,
+  withBreakingChanges ? false,
 }:
 
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
+assert withBreakingChanges -> rustSupport;
 
 let
-  version = "2.55.0";
+  version = "2.56.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -86,6 +89,11 @@ let
     AuthenSASL
     DigestHMAC
   ];
+  gitJumpBinPath = lib.makeBinPath [
+    "$out"
+    perlPackages.perl
+    coreutils
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -105,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-RX/bBNyHKOAH1GiGleaRLm9oByeSDypAvxHqzBdQU1c=";
+    hash = "sha256-JsVsKWs4wGlbJvqV9HXx0BcE0tOOc0ZcowsLL13HidM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -147,20 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace contrib/credential/libsecret/Makefile \
         --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
-  + lib.optionalString finalAttrs.doInstallCheck ''
-    # ensure we are using the correct shell when executing the test scripts
-    patchShebangs t/*.sh
-  ''
   + lib.optionalString withSsh ''
     for x in connect.c git-gui/lib/remote_add.tcl ; do
       substituteInPlace "$x" \
         --subst-var-by ssh "${openssh}/bin/ssh"
     done
-  ''
-  + lib.optionalString (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) ''
-    substituteInPlace Makefile \
-      --replace-fail "RUST_TARGET_DIR = target/" \
-                     "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.cargoShortTarget}/"
   '';
 
   nativeBuildInputs = [
@@ -189,8 +188,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib-ng
     expat
     (if stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv)
-    bash
+    # For patchShebangs on the installed scripts.
+    runtimeShellPackage
   ]
+  ++ lib.optionals pythonSupport [ python3 ]
   ++ lib.optionals perlSupport [ perlPackages.perl ]
   ++ lib.optionals guiSupport [
     tcl
@@ -203,9 +204,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # This is required for building the rust build.rs script when cross compiling
-  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  depsBuildBuild = lib.optionals (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) [
     buildPackages.stdenv.cc
   ];
+
+  strictDeps = true;
 
   env = {
     # required to support pthread_cancel()
@@ -228,7 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
-    makeFlagsArray+=( perllibdir=$out/$(perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}') )
+    makeFlags+=( perllibdir=$out/$(perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}') )
   '';
 
   makeFlags = [
@@ -236,8 +239,13 @@ stdenv.mkDerivation (finalAttrs: {
     "ZLIB_NG=1"
   ]
   # Git does not allow setting a shell separately for building and run-time.
-  # Therefore lets leave it at the default /bin/sh when cross-compiling
-  ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "SHELL_PATH=${stdenv.shell}"
+  # Therefore lets leave it at the default /bin/sh when cross-compiling.  When
+  # compiling natively, use `sh`, not `bash`, as Git sometimes relies on
+  # POSIX-compliant behaviour that Bash only offers when invoked with that
+  # name.
+  ++ lib.optional (
+    stdenv.buildPlatform == stdenv.hostPlatform
+  ) "SHELL_PATH=${lib.getExe' runtimeShellPackage "sh"}"
   ++ (if perlSupport then [ "PERL_PATH=${perlPackages.perl}/bin/perl" ] else [ "NO_PERL=1" ])
   ++ (if pythonSupport then [ "PYTHON_PATH=${python3}/bin/python" ] else [ "NO_PYTHON=1" ])
   ++ lib.optionals stdenv.hostPlatform.isSunOS [
@@ -261,10 +269,11 @@ stdenv.mkDerivation (finalAttrs: {
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
   ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent"
   # Starting with future Git version 3.0.0, rust will be mandatory. For now, it's optional.
-  ++ lib.optional (!rustSupport) "NO_RUST=YesPlease";
+  ++ lib.optional (!rustSupport) "NO_RUST=YesPlease"
+  ++ lib.optional withBreakingChanges "WITH_BREAKING_CHANGES=YesPlease";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    stdenv.shellPackage
+    buildPackages.runtimeShellPackage
   ];
 
   postBuild = ''
@@ -274,7 +283,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
         SHELL="$SHELL"
     )
-    concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+    concatTo flagsArray makeFlags buildFlags
     echoCmd 'build flags' "''${flagsArray[@]}"
   ''
   + lib.optionalString withManual ''
@@ -335,7 +344,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''${enableParallelInstalling:+-j''${NIX_BUILD_CORES}}
         SHELL="$SHELL"
     )
-    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray
+    concatTo flagsArray makeFlags installFlags
     echoCmd 'install flags' "''${flagsArray[@]}"
 
     # Install git-subtree.
@@ -347,11 +356,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a contrib $out/share/git/
     mkdir -p $out/share/bash-completion/completions
     ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
-
-    # grep is a runtime dependency, need to patch so that it's found
-    substituteInPlace $out/libexec/git-core/git-sh-setup \
-        --replace ' grep' ' ${gnugrep}/bin/grep' \
-        --replace ' egrep' ' ${gnugrep}/bin/egrep'
 
     # Fix references to the perl, sed, awk and various coreutil binaries used by
     # shell scripts that git calls (e.g. filter-branch)
@@ -377,9 +381,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Also put git-http-backend into $PATH, so that we can use smart
     # HTTP(s) transports for pushing
     ln -s $out/libexec/git-core/git-http-backend${stdenv.hostPlatform.extensions.executable} $out/bin/git-http-backend
-    ln -s $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump
   ''
   + lib.optionalString perlSupport ''
+    makeWrapper $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump \
+      --prefix PATH : "${gitJumpBinPath}"
+
     # wrap perl commands
     makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/libexec/git-core/git-credential-netrc \
                 --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
@@ -404,6 +410,10 @@ stdenv.mkDerivation (finalAttrs: {
         sed -i -e "/use CGI /i use lib \"$p/${perlPackages.perl.libPrefix}\";" \
             "$out/share/gitweb/gitweb.cgi"
     done
+  ''
+
+  + lib.optionalString pythonSupport ''
+    patchShebangs $out/share/git/contrib/fast-import/import-zips.py
   ''
 
   + (
@@ -478,7 +488,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckTarget = "test";
 
-  # see also installCheckFlagsArray
+  # see also installCheckFlags in preInstallCheck
   installCheckFlags = [
     "DEFAULT_TEST_TARGET=prove"
     "PERL_PATH=${buildPackages.perl}/bin/perl"
@@ -502,12 +512,24 @@ stdenv.mkDerivation (finalAttrs: {
       NIX_BUILD_CORES=32
     fi
 
-    installCheckFlagsArray+=(
+    installCheckFlags+=(
       GIT_PROVE_OPTS="--jobs $NIX_BUILD_CORES --failures --state=failed,save"
       GIT_TEST_INSTALLED=$out/bin
       ${lib.optionalString (!svnSupport) "NO_SVN_TESTS=y"}
     )
-
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # Some tests (e.g. t3434) compare the output of iconv(1) byte-for-byte with
+    # Git's own conversions, so they need the iconv(1) that matches the host's
+    # iconv(3), not the build platform's.  For example, glibc and musl encode
+    # ISO-2022-JP differently, though both encodings are valid.
+    #
+    # Adding `pkgsHostHost.iconv` to nativeInstallCheckInputs isn't enough:
+    # the build platform's iconv(1) comes in via depsBuildBuild's
+    # `buildPackages.stdenv.cc`, which is earlier on PATH.  So prepend it.
+    export PATH="${lib.makeBinPath [ pkgsHostHost.iconv ]}:$PATH"
+  ''
+  + ''
     function disable_test {
       local test=$1 pattern=$2
       if [ $# -eq 1 ]; then
@@ -641,7 +663,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://git-scm.com/";
     description = "Distributed version control system";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.adoc";
 
     longDescription = ''

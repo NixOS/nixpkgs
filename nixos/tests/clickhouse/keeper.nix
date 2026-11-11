@@ -5,7 +5,7 @@
   ...
 }:
 rec {
-  name = "clickhouse-keeper";
+  name = "clickhouse-${package.version}-keeper";
   meta.maintainers = with pkgs.lib.maintainers; [
     jpds
     thevar1able

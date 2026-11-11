@@ -2,16 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   makeWrapper,
-  llvmPackages_18,
+  llvmPackages_21,
   flex,
   zlib,
   perlPackages,
   util-linux,
 }:
 let
-  llvmPackages = llvmPackages_18;
+  llvmPackages = llvmPackages_21;
 in
 
 stdenv.mkDerivation {
@@ -28,6 +29,25 @@ stdenv.mkDerivation {
   patches = [
     # https://github.com/csmith-project/creduce/pull/290
     ./fix-gcc15.patch
+
+    # support for recent llvm versions, fetched from debian which applies fixes to
+    # several open PRs.
+    # https://salsa.debian.org/toolchain-team/creduce/-/commit/86e45dd83b7e8e88d9e5398ff8556883c1679629
+    (fetchpatch {
+      name = "llvm-19-support.patch";
+      url = "https://salsa.debian.org/toolchain-team/creduce/-/raw/86e45dd83b7e8e88d9e5398ff8556883c1679629/debian/patches/llvm-19-fixes.diff";
+      hash = "sha256-uYjZfCJ4csnq20OHVYB7m+qboaeJkLmZm4LlsX5+hvA=";
+    })
+    (fetchpatch {
+      name = "llvm-20-support.patch";
+      url = "https://salsa.debian.org/toolchain-team/creduce/-/raw/86e45dd83b7e8e88d9e5398ff8556883c1679629/debian/patches/287.diff";
+      hash = "sha256-xl9hTCgp37fRqhiYC7T/XuZkpZ3C55IZ6dSPmM81UCg=";
+    })
+    (fetchpatch {
+      name = "llvm-21-support.patch";
+      url = "https://salsa.debian.org/toolchain-team/creduce/-/raw/86e45dd83b7e8e88d9e5398ff8556883c1679629/debian/patches/289.diff";
+      hash = "sha256-DSnAAxGreVGZohrWalY0/1JMo7CL8+QrMfm2tXHn2oE=";
+    })
   ];
 
   postPatch = ''

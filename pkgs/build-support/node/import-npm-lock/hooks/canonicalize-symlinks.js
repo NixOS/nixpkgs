@@ -9,7 +9,6 @@ const path = require("path");
 // This script walks node_modules and canonicalizes symlinks.
 
 async function canonicalize(storePrefix, root) {
-  console.log(storePrefix, root)
   const entries = await fs.promises.readdir(root);
   const paths = entries.map((entry) => path.join(root, entry));
 

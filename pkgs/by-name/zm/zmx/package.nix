@@ -5,11 +5,15 @@
   apple-sdk,
   installShellFiles,
   writeShellScriptBin,
-  zig_0_15,
+  zig_0_16,
   nix-update-script,
+  bats,
+  python3,
+  unixtools,
+  versionCheckHook,
 }:
 let
-  zig = zig_0_15;
+  zig = zig_0_16;
 
   sdkRoot = apple-sdk.sdkroot;
   # Ghostty's Zig build asks Zig to discover the native Darwin SDK via
@@ -24,7 +28,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zmx";
-  version = "0.7.0";
+  version = "0.8.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -32,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "neurosnap";
     repo = "zmx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cWTeFRycSZFEbjCYIzKplNhV9SDM1kDl8CeQPOR3uyk=";
+    hash = "sha256-0gxaoup7boFMm4NQCQ8mHusX1oS8h/MacFxhSPLi2XM=";
   };
 
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-w2jTusfDpW5Vk0lVhi2VNEGtir2n0NKQePsKSE2jpmc=";
+    hash = "sha256-W1vKzna0dYSBdTb8evGErec6ukemFy/9Fhz5uSJeaj0=";
   };
 
   postConfigure = ''
@@ -58,8 +62,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  nativeCheckInputs = [
+    # only needed for postCheck
+    bats
+    python3
+    unixtools.hostname
+  ];
+
   preCheck = ''
     export ZMX_DIR="$TMPDIR/zmx-test"
+  '';
+
+  postCheck = ''
+    bats test
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -68,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
       --zsh <($out/bin/zmx completions zsh) \
       --fish <($out/bin/zmx completions fish)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 

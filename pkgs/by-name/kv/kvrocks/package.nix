@@ -3,7 +3,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nixosTests,
 
   # keep-sorted start
@@ -110,24 +109,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kvrocks";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "kvrocks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CAbhOX7dmyXgl0STNjzALseXUzrpTPNy9tjoPACe0Os=";
+    hash = "sha256-OEHiAa634ooNLlBrIwHpvEmzzkHHprNuRIvQGxMPwl8=";
   };
 
   __structuredAttrs = true;
-
-  patches = [
-    # Fix build with jsoncons 1.9.0
-    (fetchpatch {
-      url = "https://github.com/apache/kvrocks/commit/50cd1f0da4c3eb8f8c86bad080410e556f18fc98.patch";
-      hash = "sha256-uqaVvBP4XOUvRJZGeHKLKQj0TVoKvxN24KhnNj5ebaM=";
-    })
-  ];
 
   postPatch = ''
     # Replace FetchContent-based cmake files with system library finders

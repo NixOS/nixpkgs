@@ -1,23 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   dill,
-  freezegun,
+  fetchPypi,
+  pytest-freezegun,
   pytestCheckHook,
   python-utils,
-  setuptools,
   setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "4.5.0";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZmLLYkiG7THrlNr2HidYO1FE68c4Ohe64Hb49PWQiPs=";
+    hash = "sha256-/kjIlVqEQor3e/8mQrpHBB4bj3yGelt8yU+LwlWo8M8=";
   };
 
   postPatch = ''
@@ -33,15 +33,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dill
-    freezegun
+    pytest-freezegun
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "progressbar" ];
 
+  disabledTestPaths = [
+    # Doesn't work in the sandbox
+    "tests/test_readme_demos.py"
+  ];
+
   meta = {
     description = "Text progressbar library";
     homepage = "https://progressbar-2.readthedocs.io/";
+    changelog = "https://github.com/wolph/python-progressbar/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ashgillman ];
   };

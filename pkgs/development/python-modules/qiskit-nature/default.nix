@@ -3,48 +3,49 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build-system
+  # build
   setuptools,
 
-  # Python Inputs
-  h5py,
-  numpy,
-  psutil,
+  # runtime dependencies
   qiskit,
-  rustworkx,
-  scikit-learn,
+  qiskit-algorithms,
   scipy,
+  numpy,
+  h5py,
+  rustworkx,
+  sympy,
   withPyscf ? false,
   pyscf,
-  # Check Inputs
+
+  # test dependencies
   pytestCheckHook,
   ddt,
   pylatexenc,
   qiskit-aer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qiskit-nature";
-  version = "0.7.2";
+  version = "0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-nature";
-    tag = version;
-    hash = "sha256-SVzg3McB885RMyAp90Kr6/iVKw3Su9ucTob2jBckBo0=";
+    tag = finalAttrs.version;
+    hash = "sha256-ONSeZx83y2FCikPKxcITdGvSrJf5XhmcrrcejZPJ9u0=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    h5py
-    numpy
-    psutil
+  dependencies = [
     qiskit
-    rustworkx
-    scikit-learn
+    qiskit-algorithms
     scipy
+    numpy
+    h5py
+    rustworkx
+    sympy
   ]
   ++ lib.optional withPyscf pyscf;
 
@@ -57,15 +58,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiskit_nature" ];
 
-  pytestFlags = [ "--durations=10" ];
-
-  disabledTests = [
-    "test_two_qubit_reduction" # failure cause unclear
-  ];
-
   meta = {
-    # broken because it depends on qiskit-algorithms which is not yet packaged in nixpkgs
-    broken = true;
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-nature/releases";
@@ -75,6 +68,6 @@ buildPythonPackage rec {
       binaryNativeCode # drivers/gaussiand/gauopen/*.so
     ];
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ chemonke ];
   };
-}
+})

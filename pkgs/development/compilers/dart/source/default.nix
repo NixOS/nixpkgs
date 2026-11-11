@@ -1,5 +1,4 @@
 {
-  bintools,
   buildPackages,
   callPackage,
   cacert,
@@ -8,7 +7,6 @@
   debug ? false,
   fetchurl,
   fetchpatch,
-  gn,
   gitMinimal,
   gitSetupHook,
   icu,
@@ -17,12 +15,8 @@
   nix-update,
   pax-utils,
   pkg-config,
-  python312,
-  ripgrep,
-  runCommand,
-  samurai,
+  python3,
   stdenv,
-  versionCheckHook,
   writableTmpDirAsHomeHook,
   writeShellScript,
   writeText,
@@ -48,7 +42,7 @@ let
 
   buildArchInfo = getArchInfo stdenv.buildPlatform;
 
-  python3 = python312.withPackages (
+  pythonEnv = python3.withPackages (
     ps: with ps; [
       httplib2
       six
@@ -95,7 +89,7 @@ let
         target_cpu = ['x64', 'arm64', 'riscv64']
         target_cpu_only = True
       ''} .gclient
-      export PATH=${python3}/bin:$PATH:${tools.depot_tools}
+      export PATH=${pythonEnv}/bin:$PATH:${tools.depot_tools}
       python3 ${tools.depot_tools}/gclient.py sync --no-history --nohooks --noprehooks
       find sdk -name ".versions" -type d -exec rm -rf {} +
       rm --recursive --force sdk/buildtools/sysroot
@@ -131,8 +125,7 @@ dart-bin.overrideAttrs (oldAttrs: {
   nativeBuildInputs = [
     gitMinimal
     gitSetupHook
-    python312
-    ripgrep
+    python3
     pkg-config
   ];
 
@@ -185,11 +178,11 @@ dart-bin.overrideAttrs (oldAttrs: {
     python3 tools/generate_sdk_version_file.py
     echo "" > tools/bots/dartdoc_footer.html
     JOBS_COUNT=''${NIX_BUILD_CORES:-2}
-    rg --no-ignore -l 'google-analytics\.com' . \
-      | rg -v "\.map\$" \
+    grep --recursive --files-with-matches --binary-files=without-match 'google-analytics\.com' . \
+      | grep --invert-match '\.map$' \
       | xargs --no-run-if-empty -t -n 1 -P "$JOBS_COUNT" \
         sed --in-place --regexp-extended 's|([^/]+\.)?google-analytics\.com|0\.0\.0\.0|g'
-    rg --no-ignore -l 'UA-[0-9]+-[0-9]+' . \
+    grep --recursive --files-with-matches --binary-files=without-match --extended-regexp 'UA-[0-9]+-[0-9]+' . \
       | xargs --no-run-if-empty -t -n 1 -P "$JOBS_COUNT" \
         sed --in-place --regexp-extended 's|UA-[0-9]+-[0-9]+|UA-2137-0|g'
   ''

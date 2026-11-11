@@ -1,37 +1,37 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  scdoc,
-  zig_0_13,
+  callPackage,
+  fetchFromCodeberg,
+  zig_0_16,
 }:
 
 let
-  zig = zig_0_13;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ztags";
-  version = "1.0.1";
+  version = "1.0.1-unstable-2026-04-23";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "gpanders";
     repo = "ztags";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-XDwHuQ+UwScolxyxCHJUmxxG+OgKvZmNGQEZlfywV2s=";
+    rev = "49d45d0db73c6e5705853bfdb25a471d19538993";
+    hash = "sha256-RawMttAMlRj2ofXmtgeCl/g8XxyUZjXg22heHYRpJy8=";
   };
 
-  nativeBuildInputs = [
-    scdoc
-    zig
-  ];
+  deps = callPackage ./deps.nix { };
 
-  postInstall = ''
-    zig build docs --prefix $out
-  '';
+  nativeBuildInputs = [ zig ];
+
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ];
 
   meta = {
     description = "Generate tags files for Zig projects";
-    homepage = "https://github.com/gpanders/ztags";
+    homepage = "https://codeberg.org/gpanders/ztags";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ztags";

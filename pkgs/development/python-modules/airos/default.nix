@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "airos";
-  version = "0.6.11";
+  version = "0.6.13";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "CoMPaTech";
     repo = "python-airos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mCa2Mabw+Y5QAdiFquw7NP3K9HgDj+wZJbln2ugTp0Q=";
+    hash = "sha256-GiAtW6wQvOuDT0+ZMeMcpnZDey7bkFzbh1Eo0b5Pth4=";
   };
 
   build-system = [ setuptools_80 ];

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Channel scanner based on sigutils library";
     homepage = "https://github.com/BatchDrake/suscan";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       polygon

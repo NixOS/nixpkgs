@@ -3,7 +3,7 @@
   fetchFromCodeberg,
   fetchNpmDeps,
   buildGoModule,
-  nodejs_22,
+  nodejs,
   npmHooks,
   python3,
   templ,
@@ -13,17 +13,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.23.1";
+  version = "0.23.5";
 
   src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = finalAttrs.version;
-    hash = "sha256-iB8QXkBSQBbdztN00znoiCRbyhU2gB+B+UvIcKOFspc=";
+    hash = "sha256-PnoFdkZbVW9inpD9ZIqmPWzcW4kMWWkAUTn1/yXF/JQ=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs
     npmHooks.npmConfigHook
     (python3.withPackages (ps: with ps; [ babel ]))
     templ
@@ -34,7 +34,6 @@ buildGoModule (finalAttrs: {
   env.NODE_PATH = "$npmDeps";
 
   postPatch = ''
-    substituteInPlace go.mod --replace-fail "1.26.6" "1.26.5"
     templ generate
   '';
 
@@ -70,10 +69,10 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/web";
-    hash = "sha256-y+bma874Xd/N2urPia8vYFzavgBJsM29VuSS5iQWayA=";
+    hash = "sha256-H8l9cpGYbLhbaU4PsU6KBhr8QZGh5sihE+3XdFwQRTg=";
   };
 
-  vendorHash = "sha256-hAqQRtlaHcMrtatMowL/lmS5U+Jx6AmF0Q2tuiXqTTs=";
+  vendorHash = "sha256-9BTNWePXmmKUMWM1evhgIMYipHX+pxozONZCbcCt8lo=";
 
   passthru = {
     tests = { inherit (nixosTests) readeck; };

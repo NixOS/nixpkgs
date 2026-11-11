@@ -30,7 +30,7 @@
   ninja,
   nut,
   glib,
-  systemd,
+  systemdLibs,
   urjtag,
   gpsd,
   ffmpeg-headless,
@@ -41,13 +41,13 @@
 }:
 
 let
-  thirdparty_version = "2.2.0";
+  thirdparty_version = "2.2.5";
   fxload = libusb1.override { withExamples = true; };
   src-3rdparty = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${thirdparty_version}";
-    hash = "sha256-JGDaRlKYgHADMC3C2kiRmTqoL0dHuJKXiUVAYknQsGA=";
+    hash = "sha256-q7S+PIiU2Pil+qCD/Wuz6DR+mEIN4b99vxq2ZclX15o=";
   };
 
   buildIndi3rdParty =
@@ -77,7 +77,7 @@ let
           "-DRULES_INSTALL_DIR=lib/udev/rules.d"
           "-DINDI_DATA_DIR=share/indi/"
         ]
-        ++ lib.optional doCheck [
+        ++ lib.optionals doCheck [
           "-DINDI_BUILD_UNITTESTS=ON"
           "-DINDI_BUILD_INTEGTESTS=ON"
         ]
@@ -211,7 +211,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
-      systemd
+      systemdLibs
       libdc1394
     ];
     nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
@@ -409,7 +409,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
-      systemd
+      systemdLibs
     ];
     nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
     meta = {

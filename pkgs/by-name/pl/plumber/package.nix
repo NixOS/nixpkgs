@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -17,10 +18,7 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  # connection tests create a config file in user home directory
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   subPackages = [ "." ];
 

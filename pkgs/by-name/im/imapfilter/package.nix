@@ -3,19 +3,20 @@
   stdenv,
   fetchFromGitHub,
   openssl,
-  lua,
+  lua5_5,
   pcre2,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imapfilter";
-  version = "2.8.5";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "lefcha";
     repo = "imapfilter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EiYVkEyOrgX2WwWzFyQcuVheYZs1s3CGl01fMwtXBog=";
+    sha256 = "sha256-7dwfFZJekVReNZSqeS++G48RwXNyeQl5DkMimKtpF0w=";
   };
   makeFlags = [
     "SSLCAFILE=/etc/ssl/certs/ca-bundle.crt"
@@ -25,8 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     pcre2
-    lua
+    lua5_5
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   meta = {
     homepage = "https://github.com/lefcha/imapfilter";

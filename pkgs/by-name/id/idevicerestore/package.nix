@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "idevicerestore";
-  version = "1.0.0-unstable-2026-07-26";
+  version = "1.0.0-unstable-2026-09-07";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "idevicerestore";
-    rev = "45145e9fdc8458022c61a4b87bd029b866d5bcdc";
-    hash = "sha256-0W0DEnO8eZx2G3JKjp7SilLH8vmpfkiJxrwkudyf5rM=";
+    rev = "60192e97f87d1bbab5c493684e0a245b0966363f";
+    hash = "sha256-RLXyjEBO1RzDQGLI9c9wyD/MSIgMVfaPsfQ+NVaXzCI=";
   };
 
   nativeBuildInputs = [

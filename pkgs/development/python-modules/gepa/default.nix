@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "gepa";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,10 +16,14 @@ buildPythonPackage (finalAttrs: {
     owner = "gepa-ai";
     repo = "gepa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9gxOfjiOK1BP+YiAY4SufohMyPaUM5c7jJfJsGnRgSs=";
+    hash = "sha256-s9/Vjzd5/JFuMgT9huiURu6I8qlxsRagi4h6v+75IxM=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   pythonImportsCheck = [ "gepa" ];
 

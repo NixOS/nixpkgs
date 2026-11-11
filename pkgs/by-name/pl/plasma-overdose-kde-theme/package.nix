@@ -1,42 +1,54 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
 }:
 
 stdenv.mkDerivation {
   pname = "plasma-overdose-kde-theme";
-  version = "0-unstable-2022-05-30";
+  version = "0-unstable-2026-04-23";
 
-  src = fetchFromGitHub {
-    owner = "Notify-ctrl";
+  src = fetchFromCodeberg {
+    owner = "notify-ctrl";
     repo = "Plasma-Overdose";
-    rev = "d8bf078b4819885d590db27cd1d25d8f4f08fe4c";
-    sha256 = "187f6rlvb2wf5sj3mgr69mfwh9fpqchw4yg6nzv54l98msmxc4h0";
+    rev = "2ca54efdeef230277294a04b0124c5572a16de0b";
+    hash = "sha256-rdUMoV1aOEmCEP7OajPsxpKz0q2hhPpP1MMQbqe0AAE=";
   };
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share
-    mv colorschemes $out/share/color-schemes
+    mkdir -p $out/share/color-schemes
+    cp plasma/desktoptheme/Plasma-Overdose/colors $out/share/color-schemes/Plasma-Overdose.colors
+
     mv plasma $out/share/plasma
+    mv wallpapers $out/share/wallpapers
 
     mkdir -p $out/share/aurorae
     mv aurorae $out/share/aurorae/themes
 
+    mkdir -p $out/share/kwin/decorations
+    mv kwin/Plasma-Overdose-KWinDeco $out/share/kwin/decorations
+
     mkdir -p $out/share/icons/Plasma-Overdose
     mv cursors/index.theme $out/share/icons/Plasma-Overdose/cursor.theme
     mv cursors/cursors $out/share/icons/Plasma-Overdose/cursors
+
+    mkdir -p $out/share/sounds
+    mv sounds $out/share/sounds/PlasmaOverdose
 
     runHook postInstall
   '';
 
   meta = {
     description = "Cute KDE theme inspired by the game Needy Girl Overdose";
-    homepage = "https://github.com/Notify-ctrl/Plasma-Overdose";
+    homepage = "https://codeberg.org/notify-ctrl/Plasma-Overdose";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ takagiy ];
+    maintainers = with lib.maintainers; [
+      takagiy
+      shadowrz
+    ];
   };
 }

@@ -2,8 +2,7 @@
 
 grafanaPlugin {
   pname = "victoriametrics-logs-datasource";
-  version = "0.30.1";
-  zipHash = "sha256-1dp3TNV+XyFojzzaPrWqwVk1OjLE7b2L7jrwE+J8uZE=";
+  inherit (lib.importTOML ./sources.toml) version packages;
   meta = {
     description = "Grafana datasource for VictoriaLogs";
     license = lib.licenses.asl20;
@@ -11,6 +10,5 @@ grafanaPlugin {
       samw
       shawn8901
     ];
-    platforms = lib.platforms.unix;
   };
 }

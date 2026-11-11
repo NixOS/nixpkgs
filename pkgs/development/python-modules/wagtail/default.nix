@@ -35,16 +35,25 @@
   callPackage,
 }:
 
+let
+  # updating django-treebeard regularly requires changes in code
+  django-treebeard' = django-treebeard.overridePythonAttrs (old: {
+    version = "5.3.1";
+    src = old.src.override {
+      hash = "sha256-s2s/cN1daeST9YxvjwJSH4mbT/gg5/J3n4F6g+S15Rc=";
+    };
+  });
+in
 buildPythonPackage (finalAttrs: {
   pname = "wagtail";
-  version = "7.4.2";
+  version = "7.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "wagtail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6IttzQnASWMDq4fgyrpJj3KrQvO4zMq+0dLTfm8bLzs=";
+    hash = "sha256-26x2Uv8rkuFiF0Zx5lYtGZgPC2wS2FnbOXBHYQ4EtT0=";
   };
 
   nativeBuildInputs = [
@@ -67,11 +76,6 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "django-tasks"
-    "modelsearch"
-  ];
-
   dependencies = [
     anyascii
     beautifulsoup4
@@ -80,7 +84,7 @@ buildPythonPackage (finalAttrs: {
     django-modelcluster
     django-taggit
     django-tasks
-    django-treebeard
+    django-treebeard'
     djangorestframework
     draftjs-exporter
     laces

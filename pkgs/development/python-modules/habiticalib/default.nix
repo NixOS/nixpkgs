@@ -13,7 +13,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage rec {
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   pythonImportsCheck = [ "habiticalib" ];

@@ -19,7 +19,7 @@ assert lib.assertMsg (
 buildGoModule (finalAttrs: {
   pname = "sing-box";
   # NOTE: also update cronet-go
-  version = "1.13.19";
+  version = "1.14.4";
 
   __structuredAttrs = true;
 
@@ -28,10 +28,21 @@ buildGoModule (finalAttrs: {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gXl4fW7iwWylxFBdipU2fKM4yYtfPjI/Hv/19XxkuXA=";
+    hash = "sha256-1tP0gXUTLGVR32c11nypsZSx2FtBOmKMTJkt+7j/fJU=";
   };
 
-  vendorHash = "sha256-nNFqDOvM8bwCRNG399dU24XO+mmal+YAE7EoPghUaZo=";
+  # Remove distrusted CA certificates from the embedded root stores.
+  # TODO: Remove once upstream updates its bundled CA certificates.
+  postPatch = ''
+    grep -Fxq "// AAA Certificate Services" common/certificate/mozilla.go
+    grep -Fq '// CN=emSign ECC Root CA - G3;' common/certificate/chrome.go
+
+    sed -i -E \
+      '/^\/\/ (CN=)?(AAA Certificate Services|emSign ECC Root CA - G3)(;|$)/,/^-----END CERTIFICATE-----$/d' \
+      common/certificate/{mozilla,chrome}.go
+  '';
+
+  vendorHash = "sha256-xZWWzvyTrbaxqHG1UdKOVLOd5dPf9z6JfPJf3WeTm5Y=";
 
   tags = [
     "with_gvisor"
@@ -44,6 +55,10 @@ buildGoModule (finalAttrs: {
     "with_tailscale"
     "with_ccm"
     "with_ocm"
+    "with_cloudflared"
+    "with_usbip"
+    "with_openvpn"
+    "with_openconnect"
     "badlinkname"
     "tfogo_checklinkname0"
   ]
@@ -71,14 +86,14 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
-    "-X=internal/godebug.defaultGODEBUG=multipathtcp=0"
+    "-X=runtime.godebugDefault=multipathtcp=0,tlssha1=1"
     "-checklinkname=0"
   ];
 
   postConfigure = lib.optionalString withNaiveOutbound ''
     pushd vendor/github.com/sagernet/cronet-go
     chmod -R u+w .
-    cp -r ${cronet-go}/ .
+    cp -r ${cronet-go}/. .
     # for !withStaticCronet
     patch -p1 < ${./cronet-go.patch}
     substituteInPlace internal/cronet/loader_unix.go \

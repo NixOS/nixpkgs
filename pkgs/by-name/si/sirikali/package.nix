@@ -8,7 +8,7 @@
   pkg-config,
   qt6,
   kdePackages,
-  fscrypt-experimental,
+  fscrypt,
   gocryptfs,
   sshfs,
   libgcrypt,
@@ -44,13 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        fscrypt-experimental
-        gocryptfs
-        sshfs
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      fscrypt
+      gocryptfs
+      sshfs
+    ])
   ];
 
   doCheck = true;

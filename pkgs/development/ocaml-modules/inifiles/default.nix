@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://ubuntu/pool/universe/o/ocaml-inifiles/ocaml-inifiles_${version}.orig.tar.gz";
-    sha256 = "0jhzgiypmh6hwsv1zpiq77fi0cvcmwbiy5x0yg7mz6p3dh1dmkns";
+    hash = "sha256-2s7aAmzjml/P86AXHxevbDMQ3Tk43h+25tDAen18H0o=";
   };
 
   patches = [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/ocaml-inifiles/ocaml-inifiles.1.2/files/ocaml-inifiles.diff";
-      sha256 = "037kk3172s187w8vwsykdxlpklxzc7m7np57sapk499d8adzdgwn";
+      hash = "sha256-lr/2m0ItJTKv0qdce+phv9N5aW/Ta74RPyhoccKY8ww=";
     })
   ];
 

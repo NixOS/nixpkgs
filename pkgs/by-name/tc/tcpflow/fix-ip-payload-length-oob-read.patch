@@ -1,0 +1,39 @@
+--- a/src/tcpdemux.cpp
++++ b/src/tcpdemux.cpp
+@@ -739,13 +739,19 @@
+     size_t ip_header_len = ip_header->ip_hl * 4;
+ 
+     /* make sure there's some data */
+-    if (ip_header_len > ip_len) {
++    if (ip_header_len < sizeof(struct be13::ip4) ||
++        ip_header_len > ip_len ||
++        ip_header_len > pi.ip_datalen) {
+ 	DEBUG(6) ("received truncated IP datagram!");
+ 	return -1;
+     }
+ 
+     /* do TCP processing, faking an ipv6 address  */
+-    uint16_t ip_payload_len = ip_len - ip_header_len;
++    size_t ip_payload_len = ip_len - ip_header_len;
++    size_t captured_payload_len = pi.ip_datalen - ip_header_len;
++    if (ip_payload_len > captured_payload_len) {
++        ip_payload_len = captured_payload_len;
++    }
+     ipaddr src(ip_header->ip_src.addr);
+     ipaddr dst(ip_header->ip_dst.addr);
+     return (this->*tcp_processor)(src, dst ,AF_INET,
+@@ -779,7 +785,13 @@
+     }
+ 
+     /* do TCP processing */
+-    uint16_t ip_payload_len = ntohs(ip_header->ip6_ctlun.ip6_un1.ip6_un1_plen);
++    size_t ip_payload_len = ntohs(ip_header->ip6_ctlun.ip6_un1.ip6_un1_plen);
++    size_t captured_payload_len = pi.ip_datalen - sizeof(struct be13::ip6_hdr);
++    if (ip_payload_len > captured_payload_len) {
++	DEBUG(6) ("warning: captured only %ld bytes of %ld-byte IPv6 payload",
++		 (long) captured_payload_len, (long) ip_payload_len);
++        ip_payload_len = captured_payload_len;
++    }
+     ipaddr src(ip_header->ip6_src.addr.addr8);
+     ipaddr dst(ip_header->ip6_dst.addr.addr8);
+ 

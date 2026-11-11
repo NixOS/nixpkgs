@@ -7,7 +7,8 @@ readonly zigDefaultOptimizeFlag=@zig_default_optimize_flag@
 function zigConfigurePhase {
   runHook preConfigure
 
-  ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
+  ZIG_GLOBAL_CACHE_DIR="$NIX_BUILD_TOP/.zig-global-cache"
+  mkdir -p "$ZIG_GLOBAL_CACHE_DIR"
   export ZIG_GLOBAL_CACHE_DIR
 
   runHook postConfigure

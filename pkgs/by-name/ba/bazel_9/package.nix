@@ -29,7 +29,7 @@
   cctools,
   # Allow to independently override the jdks used to build and run respectively
   jdk_headless,
-  version ? "9.1.1",
+  version ? "9.2.0",
 }:
 
 let
@@ -89,7 +89,7 @@ let
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-NwZQcycUMAzos1wLdSlwv2EjhDcPVJgQTkLT57AjFvI=";
+    hash = "sha256-sL6fIV2K/00nx1+SrQTWnsPqfg6amHx4053UZNwgg0o=";
     stripRoot = false;
   };
 

@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tlds";
-  version = "2026072401";
+  version = "2026102900";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kichik";
     repo = "tlds";
     tag = finalAttrs.version;
-    hash = "sha256-vG3t9Qt0iX1gRH3cGf0Prtfzu7kqAJNNjjAyHGRhdpQ=";
+    hash = "sha256-n6pY/Qx7/lyqIgq5L4z3aENVk2x1wFHc2uMv5rr03wk=";
   };
 
   nativeBuildInputs = [ setuptools ];

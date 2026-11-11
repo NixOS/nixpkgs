@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-adbc";
-  version = "24";
+  version = "25";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "arrow-adbc";
     tag = "apache-arrow-adbc-${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-iwYm65b1jVZEtChwqSPNqvsGY8IlVed8ORWBfe4witk=";
+    hash = "sha256-I0fWM6PDVFQ+y16pNNNkaVw+s6liwl+L0vZ/pIWouOU=";
   };
 
-  vendorHash = "sha256-vVGOa2yUlKShIpW+eM2cgFktNCPZX5fbxlZ8O83aE/E=";
+  vendorHash = "sha256-j2ofergP9KO6iYmybVh06xNS+NsvSpGxs7x1HhTapIs=";
 
   # We are building the C project
   preConfigure = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   # `goModules` path and other GO[A-Z] environment variables. Ideally, there
   # should be setup hooks for the mechanisms of buildGoModule, that would make
   # it easier.
-  modRoot = "../../go/adbc";
+  modRoot = "../../go/driver";
   inherit (finalAttrs.finalPackage.passthru.go-package) goModules;
   preBuild =
     (lib.pipe finalAttrs.finalPackage.passthru.go-package.configurePhase [
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
         src
         vendorHash
         ;
-      sourceRoot = "${finalAttrs.src.name}/go/adbc";
+      sourceRoot = "${finalAttrs.src.name}/go/driver";
       # This derivation is not really evaluated anyway, but it is used to
       # update the vendorHash...
       dontBuild = true;

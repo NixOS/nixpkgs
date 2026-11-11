@@ -19,7 +19,7 @@
   libxxf86vm,
   openscenegraph,
   expat,
-  libpng12,
+  libpng,
   zlib,
   bash,
   SDL2,
@@ -59,7 +59,7 @@ let
     libxxf86vm
     openscenegraph
     expat
-    libpng12
+    libpng
     zlib
     SDL2
     SDL2_mixer
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libpng12
+    libpng
     libx11
     plib
     openal

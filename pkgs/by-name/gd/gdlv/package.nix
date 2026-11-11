@@ -5,13 +5,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gdlv";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "aarzilli";
     repo = "gdlv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jR19vfYfIeXe0k3/S0Zjft9abND0uN8o2Z8SllgpUYw=";
+    hash = "sha256-P4tsbwntnojFj088ZkH25GXo7PUpT1rLU2SScTjZ1CY=";
   };
 
   vendorHash = null;

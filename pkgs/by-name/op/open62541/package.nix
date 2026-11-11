@@ -33,15 +33,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.4.17";
+  version = "1.4.22";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EUQ/wXv1dON7MzOKmnyNUY0mTC64qUEF1++YzPC2xIo=";
+    hash = "sha256-iOrLLCWpXbUfixxAPMm+J3Nu5Crgy4XAB27Izkhj+tI=";
     fetchSubmodules = true;
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   cmakeFlags = [
     (lib.cmakeFeature "OPEN62541_VERSION" finalAttrs.src.rev)
@@ -150,7 +153,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(1[.]4[.][0-9]+)$"
+    ];
+  };
 
   passthru.tests =
     let

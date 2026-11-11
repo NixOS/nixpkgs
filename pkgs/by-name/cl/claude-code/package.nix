@@ -6,17 +6,17 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  installShellFiles,
-  makeBinaryWrapper,
+  makeShellWrapper,
   autoPatchelfHook,
   alsa-lib,
   procps,
   ripgrep,
   bubblewrap,
   socat,
+  zstd,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-  manifest ? lib.importJSON ./manifest.json,
+  manifest ? lib.importJSON ./manifest.zst.json,
 }:
 let
   stdenv = stdenvNoCC;
@@ -29,19 +29,18 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (manifest) version;
 
   src = fetchurl {
-    url = "${baseUrl}/${finalAttrs.version}/${platformKey}/claude";
+    url = "${baseUrl}/${finalAttrs.version}/${platformKey}/${platformManifestEntry.binary}";
     sha256 = platformManifestEntry.checksum;
   };
 
   dontUnpack = true;
   dontBuild = true;
-  __noChroot = stdenv.hostPlatform.isDarwin;
   # otherwise the bun runtime is executed instead of the binary
   dontStrip = true;
 
   nativeBuildInputs = [
-    installShellFiles
-    makeBinaryWrapper
+    makeShellWrapper
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
 
@@ -50,14 +49,26 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    installBin $src
+    mkdir -p $out/bin
+    unzstd -q $src -o $out/bin/claude
+    chmod 755 $out/bin/claude
 
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1 \
       --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
       --set DISABLE_INSTALLATION_CHECKS 1 \
       --set USE_BUILTIN_RIPGREP 0 \
-      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      --set-default CLAUDE_CODE_CERT_STORE system \
+      ${
+        # darwin reads from the keychain but not the provided roots from there. default to re-using nix's certs
+        lib.optionalString stdenv.hostPlatform.isDarwin ''
+          --run ${lib.escapeShellArg ''
+            if [ -z "''${NODE_EXTRA_CA_CERTS:-}" ] && [ -n "''${NIX_SSL_CERT_FILE:-}" ]; then
+              export NODE_EXTRA_CA_CERTS="$NIX_SSL_CERT_FILE"
+            fi
+          ''} \
+        ''
+      }${lib.optionalString stdenv.hostPlatform.isLinux ''
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
       ''}--prefix PATH : ${
         lib.makeBinPath (

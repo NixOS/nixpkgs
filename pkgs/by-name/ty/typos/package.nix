@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typos";
-  version = "1.49.0";
+  version = "1.51.1";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "typos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WTLj3plODTTO6MW77XQmc1LWaboXdEHVciXux/8kud4=";
+    hash = "sha256-9Awj4gH7pmCm/4hv4gAyr92Q2y2IKUMjYbzsVkDy6hA=";
   };
 
-  cargoHash = "sha256-vLEefaHLP5mx80oQujcFZWq1kn1V4Ycx+2TWXOBHhNo=";
+  cargoHash = "sha256-eLOpe2VVj9ppfsehUDn0/zBHJVVggXsoilN0xDLSU3E=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -37,10 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "typos";
     homepage = "https://github.com/crate-ci/typos";
     changelog = "https://github.com/crate-ci/typos/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       mgttlinger
       chrjabs

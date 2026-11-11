@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ygrek/ocurl/releases/download/${version}/ocurl-${version}.tar.gz";
-    sha256 = "sha256-4DWXGMh02s1VwLWW5d7h0jtMOUubWmBPGm1hghfWd2M=";
+    hash = "sha256-4DWXGMh02s1VwLWW5d7h0jtMOUubWmBPGm1hghfWd2M=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "OCaml bindings to libcurl (deprecated)";
     license = lib.licenses.mit;
-    homepage = "http://ygrek.org.ua/p/ocurl/";
+    homepage = "https://ygrek.org/p/ocurl/";
     maintainers = with lib.maintainers; [
       dandellion
       bennofs

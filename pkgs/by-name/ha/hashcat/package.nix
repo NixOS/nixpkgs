@@ -12,20 +12,24 @@
   ocl-icd,
   perl,
   python3,
-  rocmPackages ? { },
+  rocmPackages,
   rocmSupport ? config.rocmSupport,
   xxhash,
   zlib,
   libiconv,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hashcat";
   version = "7.1.2";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-lUamMm10dTC0T8wHm6utQDBKh/MtPJCAAW1Ys5z8i5Y=";
+    hash = "sha256-lUamMm10dTC0T8wHm6utQDBKh/MtPJCAAW1Ys5z8i5Y=";
   };
 
   postPatch = ''
@@ -93,15 +97,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup =
     let
-      LD_LIBRARY_PATH = builtins.concatStringsSep ":" (
+      LD_LIBRARY_PATH = lib.makeLibraryPath (
         [
-          "${ocl-icd}/lib"
+          ocl-icd
         ]
         ++ lib.optionals cudaSupport [
-          "${cudaPackages.cudatoolkit}/lib"
+          cudaPackages.cuda_nvrtc
+          cudaPackages.cuda_cudart
         ]
         ++ lib.optionals rocmSupport [
-          "${rocmPackages.clr}/lib"
+          rocmPackages.clr
         ]
       );
     in
@@ -115,6 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
         addDriverRunpath "$program"
       done
     '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Fast password cracker";

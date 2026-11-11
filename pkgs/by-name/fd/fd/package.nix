@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fd";
-  version = "10.4.2";
+  version = "10.5.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D1FCry69KqXgLxU4rVmgKjkM3JqeBRQDfbp3sJtVAbU=";
+    hash = "sha256-t05xudeErozrd0/2c3jk2w5gjpooIaydK24sNLXpGBk=";
   };
 
-  cargoHash = "sha256-nsFtnt8z1qohOtHpLk3cstrVXi/yOMMPCTt/SEEB1F0=";
+  cargoHash = "sha256-hzgExvOlMa3l6/ti1lpLD3WBYEKn5ayTxbiXaM/dnOE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -58,10 +58,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/sharkdp/fd";
     changelog = "https://github.com/sharkdp/fd/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       dywedir
       ma27

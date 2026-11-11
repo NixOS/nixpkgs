@@ -36,13 +36,13 @@
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/4eWbt5XtOHzw3C9U0XPtoy8io03GxrEBd9znWMacbY=";
+    hash = "sha256-lvfZGHZYGof4SoPjFs1Cv6xy/Km9/UyDeZn6mmedbzI=";
   };
 
   prePatch = ''

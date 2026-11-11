@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "bdraco";
     repo = "aioemonitor";
     rev = "v${finalAttrs.version}";
-    sha256 = "0h8zqqy8v8r1fl9bp3m8icr2sy44p0mbfl1hbb0zni17r9r50dhn";
+    hash = "sha256-FjZQcsonRPvBWjBQtyq4hHgtMouojrsSdSGjjTzGH0E=";
   };
 
   build-system = [ setuptools ];

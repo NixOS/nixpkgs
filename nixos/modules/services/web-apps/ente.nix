@@ -145,6 +145,14 @@ in
               };
             };
 
+            http = {
+              port = mkOption {
+                type = types.port;
+                default = 8080;
+                description = "The HTTP port for the museum API service.";
+              };
+            };
+
             db = {
               host = mkOption {
                 type = types.str;
@@ -209,7 +217,6 @@ in
           ${utils.genJqSecretsReplacementSnippet cfgApi.settings "/run/ente/local.yaml"}
 
           # Setup paths
-          mkdir -p ${dataDir}/configurations
           ln -sTf /run/ente/local.yaml ${dataDir}/configurations/local.yaml
         '';
 
@@ -259,7 +266,10 @@ in
           Group = cfgApi.group;
 
           SyslogIdentifier = "ente";
-          StateDirectory = "ente";
+          StateDirectory = [
+            (baseNameOf dataDir)
+            "${baseNameOf dataDir}/configurations"
+          ];
           WorkingDirectory = dataDir;
           RuntimeDirectory = "ente";
         };
@@ -286,7 +296,7 @@ in
       services.nginx = mkIf cfgApi.nginx.enable {
         enable = true;
         upstreams.museum = {
-          servers."localhost:8080" = { };
+          servers."localhost:${toString cfgApi.settings.http.port}" = { };
           extraConfig = ''
             zone museum 64k;
             keepalive 20;

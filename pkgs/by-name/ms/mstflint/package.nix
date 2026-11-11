@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
   rdma-core,
   openssl,
   zlib,
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
-  version = "4.36.0-1";
+  version = "4.37.0-1";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H4NMSjSOSmkM9lDcbsEBOB6AM5GBRKUoCDWm5QbaS3g=";
+    hash = "sha256-E6Z/MkDdWH9jQFB/fFPsEz4kxU6DCGnO/4DU6RPu7dM=";
   };
 
   nativeBuildInputs = [
@@ -115,6 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  postInstall = lib.optionalString (!onlyFirmwareUpdater) ''
+    rm $out/etc/mstflint/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/mstflint/ca-bundle.crt
+  '';
 
   hardeningDisable = [ "format" ];
 

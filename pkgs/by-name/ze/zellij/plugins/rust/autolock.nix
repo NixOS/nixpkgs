@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij-autolock";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "fresh2dev";
     repo = "zellij-autolock";
     tag = finalAttrs.version;
-    hash = "sha256-uU7wWSdOhRLQN6cG4NvA9yASlvRwB6gggX89B5K9dyQ=";
+    hash = "sha256-HnFZgDT3jmjWPqbmHLos5pzwYjudYqeqSeV7t+LYMN0=";
   };
 
-  cargoHash = "sha256-ULBQN+EBvyEIdoaLpiMNqoDEQ8Lu0Sc3OeweuKMiIU0=";
+  cargoHash = "sha256-sTzSc/m7JtbDB3xHfcXn7hjzaZJRvAKh1OIHrhLemZo=";
 
   meta = {
     description = "Autolock Zellij when certain processes open";

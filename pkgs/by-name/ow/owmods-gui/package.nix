@@ -21,12 +21,12 @@
 }:
 let
   pname = "owmods-gui";
-  version = "0.15.7";
+  version = "0.16.0";
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     tag = "gui_v${version}";
-    hash = "sha256-xGohK7ki82gvfTnjPUdpamnvPDf8vpuAuC0gjRvx7mQ=";
+    hash = "sha256-pl9osDYgCRZGMIp6crIDV1FhzaKO9zFCIGdgZ/O3Ue0=";
   };
   frontend = buildNpmPackage {
     pname = "owmods-gui-ui";
@@ -37,7 +37,7 @@ let
     src = "${src}/owmods_gui/frontend";
 
     packageJSON = "${src}/owmods_gui/frontend/package.json";
-    npmDepsHash = "sha256-+2PlfZijwYeGXDYycwgOfjbZCRazHs/O3iDDuKLIwxM=";
+    npmDepsHash = "sha256-Sj9YTUng3jlJnAwhM4L9P1UPPCLB474ndbunztB1Ufg=";
 
     postBuild = ''
       cp -r ../dist/ $out
@@ -57,7 +57,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-oYTz7Dzdv9prHzDSSjX9PozzKToMXRW6qs8Y2dfYQ8A=";
+  cargoHash = "sha256-EB+mefZXHn0ecu1fi2g4VlSgZs0nExMXzjuD1ZlRJvA=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [

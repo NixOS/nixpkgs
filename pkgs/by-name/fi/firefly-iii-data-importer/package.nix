@@ -16,13 +16,14 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii-data-importer";
-  version = "2.3.4";
+  version = "2.3.5";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "data-importer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-869oPalwVdc7Ge8zcG6OniTZ6zhLOknlvFQkEHzLg0M=";
+    hash = "sha256-lXPuVuYxIIoDM1gcfdRcCvwUmD3+uArgan3wY4q1cMw=";
   };
 
   buildInputs = [ php ];
@@ -42,12 +43,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   composerStrictValidation = true;
   strictDeps = true;
 
-  vendorHash = "sha256-GEioAwqo9BHzoP4/uetqiQgv+O9Qzqyo/AcW9VP23n0=";
+  vendorHash = "sha256-X440UAEKEGQUeywMr4zE1bW1Sdx9DAECyvUXDjJeljs=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-FEEC89/7cEuKU4mY27Pm5nr5EkOoL7BWZRAOpCZK61I=";
+    hash = "sha256-45SItCuL1RO8kIZtYI/vt0wQyfQRBcb7nY5ECYEeybQ=";
   };
 
   composerRepository = php.mkComposerRepository {

@@ -16,8 +16,8 @@
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2026.08.19",
-    "hash": "sha256-fE5OoE69cK+7Ya1JMcDLAPMf+6PZcxjKda9yLGw1MIU="
+    "rev": "2026.10.19",
+    "hash": "sha256-nWSa4F8otYasAJVGSqZVgFVMLA6J2XqYxaDC0VA1hPg="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
@@ -51,7 +51,7 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
-    "rev": "v11.6.6",
-    "hash": "sha256-bA8tvo7Srm5kIZTVWEA2+gjqHab7LByyL/zqdQxeFlA="
+    "rev": "v11.6.9",
+    "hash": "sha256-FXD2VHnEEyfuqUNCHCbzQzb+a6zawsKVk5ORxupgqeY="
   }
 }

@@ -10,6 +10,7 @@
   pkg-config,
   stdenv,
   xorgproto,
+  xxd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    xxd
   ];
 
   buildInputs = [
@@ -51,11 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
     "VST3_INSTAL_DIR=$(out)/lib/vst3"
     "user=root"
     "STRIP=:"
+    "HAVE_XXD=1"
   ];
 
   postPatch = ''
     substituteInPlace NeuralRack/makefile \
-      --replace-fail "-flto=auto" ""
+      --replace-fail "-flto=auto" "" \
+      --replace-fail "pkg-config" '$(PKG_CONFIG)'
+
+    substituteInPlace libxputty/Build/Makefile \
+      --replace-fail "pkg-config" '$(PKG_CONFIG)'
+
+    substituteInPlace libxputty/Build/Makefile.base \
+      --replace-fail "pkg-config" '$(PKG_CONFIG)'
   '';
 
   meta = {

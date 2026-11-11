@@ -25,6 +25,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-RKVHLKjfukNwIXsAz4CnJDy1oOM4McQeE31Ch+WHc5w=";
 
+  cargoBuildFlags = [
+    "--workspace"
+    "--exclude"
+    "xtask"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
   nativeBuildInputs = [
     pkg-config
   ];

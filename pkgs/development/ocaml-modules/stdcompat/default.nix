@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocamllibs/stdcompat/archive/refs/tags/${version}.tar.gz";
-    sha256 = "sha256-RSJ9AgUEmt23QZCk60ETIXmkJhG7knQe+s8wNxxIHm4=";
+    hash = "sha256-RSJ9AgUEmt23QZCk60ETIXmkJhG7knQe+s8wNxxIHm4=";
   };
 
   patches = [ ./ocaml-4_14_3.patch ];

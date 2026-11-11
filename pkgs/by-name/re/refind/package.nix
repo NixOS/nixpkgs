@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     "HOSTARCH=${hostarch}"
     "ARCH=${hostarch}"
   ]
-  ++ lib.optional stdenv.hostPlatform.isAarch64 [
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # aarch64 is special for GNU-EFI, see BUILDING.txt
     "GNUEFI_ARM64_TARGET_SUPPORT=y"
   ];

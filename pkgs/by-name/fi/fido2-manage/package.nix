@@ -71,8 +71,6 @@ stdenv.mkDerivation rec {
     libcouchbase
   ];
 
-  cmakeFlags = [ "-USE_PCSC=ON" ];
-
   postPatch = ''
     substituteInPlace ./src/libfido2.pc.in \
       --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@"

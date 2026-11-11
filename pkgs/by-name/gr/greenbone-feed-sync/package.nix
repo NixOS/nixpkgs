@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "greenbone-feed-sync";
-  version = "25.4.2";
+  version = "25.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "greenbone-feed-sync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nh5Nw2Rq+Zw4IiBOwcLzayO2J/dFSOJpjHPYcJ/L3Fs=";
+    hash = "sha256-y7eWpLOTq8MWsmgeF7/CsuequBHU7ESrnJUOF1DbXRo=";
   };
 
   build-system = with python3.pkgs; [ hatchling ];

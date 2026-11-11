@@ -6,7 +6,6 @@
   lib,
   lz4,
   lzop,
-  makeWrapper,
   nix-update-script,
   python3Packages,
   ubootTools,
@@ -16,13 +15,13 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "depthcharge-tools";
-  version = "0.6.4";
+  version = "0.7.1";
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "depthcharge-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-McnBtc0UpatKO4XBnMOHf2L8xxcrsRM/5DCbmAmfA1o=";
+    hash = "sha256-kwtl/hUZ57quVQRSHLWHCzSuUmhH/uOfoGkcvqvF8rQ=";
   };
 
   pyproject = true;
@@ -59,7 +58,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Tools to manage the Chrome OS bootloader";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/depthcharge-tools";
+    homepage = "https://gitlab.nura.eco/nura/depthcharge-tools";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.ninelore ];

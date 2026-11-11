@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.45";
+  version = "1.47";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0XwKOLzkFN5u2ItRKPxNVC3hP3X6RVZyEL82LvYS0EA=";
+    hash = "sha256-87ltsDdrZ0GDLmPgIDbfHBQCcWeQ6oS1sohgKcpRbvc=";
   };
 
   outputs = [
@@ -51,15 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  # https://github.com/baldurk/renderdoc/issues/2945
+  # https://github.com/baldurk/renderdoc/issues/3902
   patches = [
-    (fetchpatch {
-      # https://github.com/baldurk/renderdoc/issues/2945
-      # https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895
-      name = "devendor-pcre.patch";
-      url = "https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895.patch?full_index=1";
-      hash = "sha256-uQoSVmgU09tw7ccTnH1MrisDisTUbaXTelA1YdsYPlM=";
-      revert = true;
-    })
+    # trick the build to think PCRE is present, we use PCRE2 instead through fedora patches
+    ./remove-pcre.patch
   ];
   swig_patches = [
     # use PCRE2 instead of PCRE
@@ -172,6 +168,27 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit custom_swig;
     updateScript = nix-update-script { };
+
+    vulkanLayers = [
+      "renderdoc_capture.json"
+    ];
+
+    tests = {
+      vulkanLayersExist = stdenv.mkDerivation {
+        name = "renderdoc-vulkan-layers-exist";
+        dontUnpack = true;
+        buildCommand = ''
+          touch $out # Dummy file to satisfy the build system
+          for f in ${lib.concatStringsSep " " finalAttrs.passthru.vulkanLayers}; do
+            if [ ! -e "${finalAttrs.finalPackage}/share/vulkan/implicit_layer.d/$f" ]; then
+              echo "error: passthru.vulkanLayers lists '$f' but it wasn't found in" \
+                   "${finalAttrs.finalPackage}/share/vulkan/implicit_layer.d" >&2
+              exit 1
+            fi
+          done
+        '';
+      };
+    };
   };
 
   meta = {

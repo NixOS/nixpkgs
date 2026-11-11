@@ -1,29 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
   colored,
-  pytestCheckHook,
+  fetchPypi,
+  hatchling,
   numpy,
   pandas,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ansitable";
-  version = "0.11.4";
+  version = "0.11.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XUjXVs9/ETlbbtvYz8YJqCsP1BFajqQKQfSM+Rvm4O0=";
+    hash = "sha256-A7seYrOgTvO9npvE0vRbKlkiGqi1P6Q/mKXfWKQz4aE=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ colored ];
-
-  pythonImportsCheck = [ "ansitable" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -31,9 +29,12 @@ buildPythonPackage rec {
     pandas
   ];
 
+  pythonImportsCheck = [ "ansitable" ];
+
   meta = {
     description = "Quick and easy display of tabular data and matrices with optional ANSI color and borders";
-    homepage = "https://pypi.org/project/ansitable/";
+    homepage = "https://github.com/petercorke/ansitable";
+    changelog = "";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       djacu

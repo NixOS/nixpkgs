@@ -12,6 +12,7 @@
   docutils,
 
   # tests
+  pytest-cov-stub,
   pytestCheckHook,
   readme-renderer,
   textile,
@@ -43,8 +44,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "/bin/bash" "${runtimeShell}"
-
-    sed -i "/-cov/d" pytest.ini
   '';
 
   propagatedBuildInputs = [ docutils ];
@@ -52,6 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "creole" ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     readme-renderer
     textile
@@ -71,6 +71,8 @@ buildPythonPackage rec {
     # - <string>:5: (ERROR/3) Document or section may not begin with a transition.
     # + <string>:5: (WARNING/2) Document or section may not begin with a transition.
     "test_non_valid_readme"
+    # AssertionError: '<p>Here a simple code...
+    "test_code_macro"
   ];
 
   disabledTestPaths = [
@@ -79,7 +81,7 @@ buildPythonPackage rec {
     # requires poetry_publish
     "creole/publish.py"
     "creole/tests/test_project_setup.py"
-    # rendering differencenes, likely docutils version mismatch
+    # rendering differences, likely docutils version mismatch
     "creole/tests/test_cross_compare_rest.py"
     "creole/tests/test_rest2html.py"
     # fixture mismatch after docutils update

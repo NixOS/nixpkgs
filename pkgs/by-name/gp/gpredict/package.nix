@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpredict";
-  version = "2.5.1";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gpredict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lP+QakQ+uTgBY8NNEC7DwQifh3Zi0ZKbarxNGB4onq0=";
+    hash = "sha256-l61llS0e1blzjWCWeNLpCCBeIQdhGIZNub29Bl94rEU=";
   };
 
   strictDeps = true;

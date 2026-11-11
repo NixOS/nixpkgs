@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   aioquic,
   h11,
   h2,
@@ -27,6 +28,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-RNurpDq5Z3N9Wv9Hq/l6A3yKUriCCKx9BrbrWGwBsUk=";
   };
+
+  patches = [
+    # add :protocol pseudo-header for Extended CONNECT, https://github.com/pgjones/hypercorn/pull/371
+    (fetchpatch2 {
+      name = "add-header.patch";
+      url = "https://github.com/pgjones/hypercorn/commit/9c1f350e2637cfa0287aad2ae9a5bfd003a1d248.patch";
+      hash = "sha256-vHCed1mU/ajHkBVH7IZ8kfuEZQyQi++UL4xhBr6LePk=";
+    })
+  ];
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
@@ -59,12 +69,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hypercorn" ];
 
+  disabledTests = [
+    "test_http2_websocket"
+  ];
+
   meta = {
-    changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
-    homepage = "https://github.com/pgjones/hypercorn";
     description = "ASGI web server inspired by Gunicorn";
-    mainProgram = "hypercorn";
+    homepage = "https://github.com/pgjones/hypercorn";
+    changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dgliwka ];
+    mainProgram = "hypercorn";
   };
 }

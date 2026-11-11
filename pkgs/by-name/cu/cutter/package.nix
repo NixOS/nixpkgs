@@ -32,6 +32,7 @@ let
       cmake
       pkg-config
       python3
+      python3.pkgs.shiboken6-generator
       qt6.wrapQtAppsHook
     ];
 

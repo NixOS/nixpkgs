@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   torch,
@@ -42,6 +43,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "xformers";
   version = "0.0.35";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
@@ -50,6 +52,16 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-UqpRHLN0INpW6sA8DbQCSeL8uhS+IoW60UPVUIh1NY0=";
   };
+
+  patches = [
+    # Fix `IndexError: list assignment index out of range` with torch >= 2.13
+    # https://github.com/facebookresearch/xformers/commit/f06b9a7b0db97a78913ca8dc1652468a0527dc80
+    (fetchpatch {
+      name = "xformers-fix-tests-pytorch-2.13.patch";
+      url = "https://github.com/facebookresearch/xformers/commit/f06b9a7b0db97a78913ca8dc1652468a0527dc80.patch";
+      hash = "sha256-QE3hmwXI3yJBgRWOHKoDUaEsFO+vuqV+DTMW7sjuURU=";
+    })
+  ];
 
   # ModuleNotFoundError: No module named 'xformers.components'
   postPatch = ''
@@ -122,6 +134,8 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     scipy
     timm
     transformers
+  ]
+  ++ lib.optionals cudaSupport [
     triton
   ];
 
@@ -145,6 +159,10 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     # Those tests require access to the GPU and should be tagged accordingly:
     # https://github.com/facebookresearch/xformers/pull/1385
     "tests/test_fwbw_overlap.py"
+  ]
+  ++ lib.optionals (!cudaSupport) [
+    # AttributeError: module 'torch._C' has no attribute '_set_print_stack_traces'
+    "tests/test_multiprocessing_utils.py"
   ];
 
   disabledTests =
@@ -210,6 +228,9 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     homepage = "https://github.com/facebookresearch/xformers";
     changelog = "https://github.com/facebookresearch/xformers/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      happysalada
+    ];
   };
 })

@@ -6,7 +6,6 @@
 
 rustPlatform.buildRustPackage {
   __structuredAttrs = true;
-  strictDeps = true;
 
   pname = "userborn-import-legacy";
   version = (lib.importTOML ./Cargo.toml).package.version;

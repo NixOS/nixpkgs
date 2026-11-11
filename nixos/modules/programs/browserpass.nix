@@ -27,10 +27,6 @@
         # vivaldi
         "opt/vivaldi/native-messaging-hosts/${appId}".source = source "hosts/chromium";
         "opt/vivaldi/policies/managed/${appId}".source = source "policies/chromium";
-
-        # brave
-        "opt/brave/native-messaging-hosts/${appId}".source = source "hosts/chromium";
-        "opt/brave/policies/managed/${appId}".source = source "policies/chromium";
       };
     programs.firefox.nativeMessagingHosts.packages = [ pkgs.browserpass ];
   };

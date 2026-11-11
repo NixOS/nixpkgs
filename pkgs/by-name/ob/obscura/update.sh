@@ -36,6 +36,7 @@ let
   hashes = {
     x86_64-linux = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz")";
     aarch64-linux = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz")";
+    aarch64-darwin = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_release_aarch64-apple-darwin.a.gz")";
   };
 in
 stdenv.mkDerivation {

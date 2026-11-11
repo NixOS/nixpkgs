@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resonarium";
-  version = "0.1.0";
+  version = "0.1.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "resonarium";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-QR1EUCv7Mg52AEtfZikhnprUpPnTc/YPEssFnimfaPA=";
+    hash = "sha256-E9ppeXyjRuPQYVmOMnd3l95qAjDBvllbr4sVNsSyH8c=";
   };
 
   strictDeps = true;

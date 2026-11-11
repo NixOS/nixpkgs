@@ -8,17 +8,19 @@
   fd,
   libqalculate,
   libxkbcommon,
+  nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pop-launcher";
-  version = "1.2.7";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "launcher";
-    tag = finalAttrs.version;
-    hash = "sha256-Db3Lj1GuhoEP2iMwgEF8HnGAUkz0IIr3ZQWmNd1EaOY=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-K2g/aPkC3EK+ew33oqFdJm/pK7Wzzljrz78c5UC6+Qk=";
   };
 
   __structuredAttrs = true;
@@ -31,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
   ];
 
-  cargoHash = "sha256-9gYfQQQd/W3QQFavbLiJVFQDs0dkZtHDm3xNXZPzhLc=";
+  cargoHash = "sha256-k57ondlF1xu5/GU9QzKkT5F2caFNNPC6/Bj2HWwzzGI=";
 
   cargoBuildFlags = [
     "--package"
@@ -67,6 +69,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace plugins/src/terminal/mod.rs \
         --replace-fail '/usr/bin/gnome-terminal' 'gnome-terminal'
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
 
   meta = {
     description = "Modular IPC-based desktop launcher service";

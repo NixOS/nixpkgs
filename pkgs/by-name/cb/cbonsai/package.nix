@@ -11,14 +11,16 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbonsai";
   version = "1.4.2";
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "jallbrit";
     repo = "cbonsai";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TZb/5DBdWcl54GoZXxz2xYy9dXq5lmJQsOA3C26tjEU=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     pkg-config
     scdoc
@@ -32,9 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Grow bonsai trees in your terminal";
-    mainProgram = "cbonsai";
     homepage = "https://gitlab.com/jallbrit/cbonsai";
     license = lib.licenses.gpl3Only;
+    mainProgram = "cbonsai";
+    maintainers = with lib.maintainers; [ quantenzitrone ];
     platforms = lib.platforms.unix;
   };
 })

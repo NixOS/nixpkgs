@@ -20,7 +20,7 @@
   libidn2,
   tre,
   expat,
-  lua,
+  lua5_2_compat,
   curl,
   libcss,
   libdom,
@@ -34,6 +34,9 @@
   perl ? null,
   # re-add javascript support when upstream supports modern spidermonkey
 }:
+let
+  lua = lua5_2_compat;
+in
 
 assert enableGuile -> guile != null;
 assert enablePython -> python != null;

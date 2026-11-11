@@ -20,20 +20,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "sable-unwrapped";
-  version = "1.20.0";
+  version = "1.22.11";
 
   src = fetchFromGitHub {
     owner = "SableClient";
-    repo = "Sable";
+    repo = "Sable-Legacy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ams6Uwblo5mUzah9hlCPCUMXtrLtiUtRWwwKH4uabmk=";
+    hash = "sha256-RwYKaJ4k2lqXjVSPN/o0Qw8GIGnXfb6acCpva36qQoM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-iBvtMeYUHWhsz1DnKjTzydAt3cGPaisUhaagoaZRg1M=";
+    hash = "sha256-sI0tE73l+yKS8186tUHrNAJmGD26XEe7828ohvvc+1o=";
   };
 
   nativeBuildInputs = [
@@ -69,8 +69,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "An almost stable Matrix client";
-    homepage = "https://github.com/SableClient/Sable";
-    changelog = "https://github.com/SableClient/Sable/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/SableClient/Sable-Legacy";
+    changelog = "https://github.com/SableClient/Sable-Legacy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [

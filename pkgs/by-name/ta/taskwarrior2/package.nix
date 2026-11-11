@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       oxalica
       Necior
+      me-and
     ];
     mainProgram = "task";
     platforms = lib.platforms.unix;

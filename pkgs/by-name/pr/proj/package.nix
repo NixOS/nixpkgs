@@ -14,11 +14,12 @@
   python3,
   cacert,
   writableTmpDirAsHomeHook,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.8.1";
+  version = "9.9.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -26,12 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OSGeo";
     repo = "PROJ";
     tag = finalAttrs.version;
-    hash = "sha256-sOAxWihgU1TAMWcju5LN4cPenHHoGgd4oYJ4HA3F/Ks=";
+    hash = "sha256-3WJCqH+8MCs/UOmnCqIehLEnkoLCBRCReO05UP2A02A=";
   };
 
   patches = [
     # https://github.com/OSGeo/PROJ/pull/3252
     ./only-add-curl-for-static-builds.patch
+
+    # Unbreak mapnik
+    (fetchpatch2 {
+      name = "fix_issue_with_target_compile_features.patch";
+      # https://github.com/OSGeo/PROJ/pull/4863
+      url = "https://github.com/OSGeo/PROJ/commit/7ea0fd3ba479845464b34ccf5265b8e6d055cde5.patch?full_index=1";
+      hash = "sha256-IIe0T1/8Jv7tvhUupFn46PaFi7zggAT79EC55cmxHSs=";
+    })
   ];
 
   outputs = [

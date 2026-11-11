@@ -7,23 +7,26 @@
 let
   inherit (lib) types;
 
-  nodeConfigurationAttrs = lib.mkOption {
-    internal = true;
-    type = types.attrsOf (
-      types.submodule {
-        options = {
-          name = lib.mkOption {
-            internal = true;
-            type = types.str;
-          };
-          start_script = lib.mkOption {
-            internal = true;
-            type = types.path;
-          };
-        };
-      }
-    );
-  };
+  nodeConfigurationAttrs =
+    extraOptions:
+    lib.mkOption {
+      internal = true;
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            name = lib.mkOption {
+              internal = true;
+              type = types.str;
+            };
+            start_script = lib.mkOption {
+              internal = true;
+              type = types.path;
+            };
+          }
+          // extraOptions;
+        }
+      );
+    };
 in
 {
   options = {
@@ -32,8 +35,27 @@ in
       internal = true;
       type = types.submodule {
         options = {
-          vms = nodeConfigurationAttrs;
-          containers = nodeConfigurationAttrs;
+          vms = nodeConfigurationAttrs { };
+          containers = nodeConfigurationAttrs {
+            vnc = lib.mkOption {
+              internal = true;
+              default = null;
+              type = types.nullOr (
+                types.submodule {
+                  options = {
+                    x11vnc = lib.mkOption {
+                      internal = true;
+                      type = types.path;
+                    };
+                    tigervnc = lib.mkOption {
+                      internal = true;
+                      type = types.path;
+                    };
+                  };
+                }
+              );
+            };
+          };
           vlans = lib.mkOption {
             internal = true;
             type = types.listOf types.ints.unsigned;

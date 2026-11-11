@@ -40,6 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # protobuf's headers pull in abseil, and the abseil in nixpkgs is built as
+  # C++20: its installed headers use std::partial_ordering and friends, which
+  # fails to compile when the consumer uses C++17.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

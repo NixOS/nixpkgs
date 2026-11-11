@@ -15,9 +15,9 @@
 }:
 let
   hashes = {
-    "x86_64-linux" = "sha256-nrzqgx1NJw4lrhd3vxXiR1ar+/h5GtJylHVGgoOO0As=";
-    "aarch64-linux" = "sha256-BR/fg0n4pm20epkOEaMM0dLgE6xsjkLkjAcr/OwGodU=";
-    "aarch64-darwin" = "sha256-Fg0eq0R8IA4vVKIqZIkByoDuhVVyTsALYMK9qsPE6hw=";
+    "x86_64-linux" = "sha256-es2HtXlRGbJO+6u3ZBtxRpBoPwRJJMcQrJtLq+dM1UY=";
+    "aarch64-linux" = "sha256-K8yrWBLVco6W/4YDif9O0VDAqB3H0YjYuVE2xt6LZL0=";
+    "aarch64-darwin" = "sha256-3F8AHEJpj14Y0nSEPduByRGrLu6SAAsd3XIr+/UCiZI=";
   };
   platformName = {
     "x86_64-linux" = "linux-amd64";
@@ -27,7 +27,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "docker-sbx";
-  version = "0.38.0";
+  version = "0.50.1";
   src =
     let
       throwPlat = throw "Unsupported platform ${stdenvNoCC.hostPlatform.system}";
@@ -93,13 +93,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ''
         runHook preInstall
 
-        mkdir -pv $out
-        cp -rv bin libexec $out
+        mkdir -pv $out/Applications $out/bin
+        cp -rv Sbx.app $out/Applications
+        ln -sv $out/Applications/Sbx.app/Contents/MacOS/{sbx,llmman} $out/bin
 
         installShellCompletion \
-          --bash --name sbx.bash completions/bash/sbx \
-          --zsh  --name _sbx     completions/zsh/_sbx \
-          --fish --name sbx.fish completions/fish/sbx.fish
+          --bash --name sbx.bash Sbx.app/Contents/Resources/completions/bash/sbx \
+          --zsh  --name _sbx     Sbx.app/Contents/Resources/completions/zsh/_sbx \
+          --fish --name sbx.fish Sbx.app/Contents/Resources/completions/fish/sbx.fish
 
         runHook postInstall
       '';

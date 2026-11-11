@@ -16,7 +16,8 @@
   mpfr,
   proj,
   python3,
-  libsForQt5,
+  qt6Packages,
+  gtk3,
 }:
 
 let
@@ -35,20 +36,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gplates";
-  version = "2.5.0-dev3";
+  version = "2.6.0-47";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "GPlates";
     repo = "GPlates";
-    rev = "e3ec5a4ee58147d21d8b42050c4c7e78f861f21c";
-    hash = "sha256-/y+fozK6DvoVuS1I1ZdWtRwy+M/XRFyLDWHcUFu2++M=";
+    tag = "GPlates-${finalAttrs.version}";
+    hash = "sha256-sKhOMZm5ctXTxq0sLw1iDaqxf76yw4iFEorQ8jupGHk=";
   };
 
   nativeBuildInputs = [
     cmake
     doxygen
     graphviz
-    libsForQt5.wrapQtAppsHook
+    python
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -57,15 +62,24 @@ stdenv.mkDerivation (finalAttrs: {
     gdal
     glew
     gmp
+    gtk3
     libGL
     libGLU
     libsm
     mpfr
     proj
     python
-    libsForQt5.qtxmlpatterns
-    libsForQt5.qwt
+    qt6Packages.qt5compat
+    qt6Packages.qwt
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=(
+      --set PYTHONHOME "${python}"
+      --set PYTHONPATH "${python}/${python.sitePackages}"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
+  '';
 
   meta = {
     description = "Desktop software for the interactive visualisation of plate-tectonics";

@@ -7,6 +7,7 @@
   pkg-config,
   doxygen,
   libuecc,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ libuecc ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta = {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
     homepage = "https://github.com/freifunk-gluon/ecdsautils/";
@@ -41,7 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       bsd2
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aiyion ];
+    mainProgram = "ecdsautil";
     platforms = lib.platforms.unix;
   };
 })

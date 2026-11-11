@@ -14,15 +14,16 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-mla";
-  version = "0.1.5";
+  version = "0.2.10";
   pyproject = true;
   __structuredAttrs = true;
 
+  # No git tags. Using the commits named 'Update tokenspeed-mla to XXX'
   src = fetchFromGitHub {
     owner = "lightseekorg";
     repo = "tokenspeed";
-    rev = "a39b3854dfd9b08a410028dbe5260eda08ef6b63";
-    hash = "sha256-rl+cpZabmK24nMcam5Ud4GqnpLA3TqpVRznlX6lz6Xs=";
+    rev = "bf2e923bb422bbc3777fec11ad6b388d2576fde1";
+    hash = "sha256-UmcM+lALQoTbbbbp4D3woo5vsNICbY9m/MS3wjdyJeE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/tokenspeed-mla";
@@ -31,6 +32,9 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "apache-tvm-ffi"
+  ];
   dependencies = [
     apache-tvm-ffi
     nvidia-cutlass-dsl

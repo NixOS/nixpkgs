@@ -209,9 +209,9 @@ in
           DesktopNames=XFCE
           Keywords=xfce;wayland;desktop;environment;session;
         '').overrideAttrs
-        (_: {
-          passthru.providedSessions = [ "xfce-wayland" ];
-        })
+          (_: {
+            passthru.providedSessions = [ "xfce-wayland" ];
+          })
       )
     ];
 

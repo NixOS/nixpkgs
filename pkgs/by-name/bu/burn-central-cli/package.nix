@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-1QXlN1cq5MKZAPgGx5mnf8Jy7o4CnKJDKi0sSith6n0=";
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   buildAndTestSubdir = "crates/burn-central-cli";

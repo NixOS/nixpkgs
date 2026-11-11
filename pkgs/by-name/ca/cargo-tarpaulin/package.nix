@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
   openssl,
   stdenv,
   curl,
@@ -12,21 +13,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-tarpaulin";
-  version = "0.37.2";
+  version = "0.37.5";
 
   src = fetchFromGitHub {
     owner = "xd009642";
     repo = "tarpaulin";
     tag = finalAttrs.version;
-    hash = "sha256-oD8k/M5PChKzG1ek1uH8UP7PoaL9LYot3HCO4Hmetsw=";
+    hash = "sha256-m3z4hBoktmFZTOhXmsQW9tsmbBGQwL1Pi9163tabjcY=";
   };
 
-  cargoHash = "sha256-lZ4wRI1PEcHDxGe8R1mnp/Gk0IDzqXLvosfzkZOIhug=";
+  cargoHash = "sha256-3dbDxnPTjSsU242gSiEUhhLCRuqsHLFN0ZVJ7oKROeo=";
 
   nativeBuildInputs = [
     pkg-config
   ];
   buildInputs = [
+    libgit2
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -46,10 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-tarpaulin";
     homepage = "https://github.com/xd009642/tarpaulin";
     changelog = "https://github.com/xd009642/tarpaulin/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       hugoreeves
       progrm_jarvis

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ClassiCube";
-  version = "1.3.8";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "ClassiCube";
     repo = "ClassiCube";
     tag = finalAttrs.version;
-    hash = "sha256-AF4cr3ZXCixwiihS+2ayrzVH5eYShkjlfF0myb2PbHM=";
+    hash = "sha256-UIqYo2nyrt89fv0/aBRLtowrvXMt1H7F66sF/Xf4iNY=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '%NIXPKGS_FONT_PATH%' "${finalAttrs.font_path}"
     # For some reason, the Makefile doesn't link
     # with libcurl and openal when ClassiCube requires them.
-    substituteInPlace Makefile \
+    substituteInPlace misc/makefiles/linux.mk \
       --replace-fail '-lX11 -lXi -lpthread -lGL -ldl -lm' \
                      '-lX11 -lXi -lpthread -lGL -ldl -lm -lcurl -lopenal'
   '';

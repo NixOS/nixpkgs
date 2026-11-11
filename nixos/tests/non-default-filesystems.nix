@@ -67,7 +67,6 @@ with pkgs.lib;
           boot.initrd.supportedFilesystems = [ "btrfs" ];
 
           boot.initrd.systemd = {
-            enable = true;
             repart = {
               enable = true;
               device = disk;

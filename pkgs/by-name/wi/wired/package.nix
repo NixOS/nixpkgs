@@ -6,6 +6,7 @@
   dbus,
   pango,
   cairo,
+  libxkbcommon,
   libxscrnsaver,
   libxrandr,
   libxi,
@@ -26,8 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-oEyyVhA0G17GMrJQ6z/rJgopSolute/qrcC1Qpg+YQU=";
 
-  strictDeps = true;
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     dbus
@@ -44,6 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/usr/lib/systemd/system
     substitute ./wired.service $out/usr/lib/systemd/system/wired.service --replace /usr/bin/wired $out/bin/wired
     install -Dm444 -t $out/etc/wired wired.ron wired_multilayout.ron
+  '';
+
+  preFixup = ''
+    patchelf $out/bin/wired \
+      --add-needed libxkbcommon-x11.so \
+      --add-rpath ${libxkbcommon}/lib
   '';
 
   meta = {

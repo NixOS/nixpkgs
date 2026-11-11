@@ -1,31 +1,52 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "zvm";
-  version = "0.8.27";
+  version = "0.9.4";
+
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "tristanisham";
     repo = "zvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NDkvTghdqabfzzXSyxYHZj67u+upY0WfLOAO5DWAZ3s=";
+    hash = "sha256-cv9O9fUiYNYvSqH8RXcBXEhErK9lObqzHK9QBERJV7Y=";
   };
 
-  vendorHash = "sha256-kJrCUxzbpyxEUF9UQeAI28tWKA+T7zT1DBI1wf3pjjM=";
+  vendorHash = "sha256-YIhYRq55WWcXz50DDRgMzzXNKbA16vlfKqlrgziD1qA=";
 
-  postPatch = ''
-    substituteInPlace cli/meta/version.go \
-      --replace-fail 'VERSION = "v0.8.25"' 'VERSION = "v${finalAttrs.version}"'
+  ldflags = [
+    "-s"
+    "-X 'main.BuildUpgradeMessage=This package is maintained in Nixpkgs'"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installManPage man/*.1
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   passthru.updateScript = nix-update-script { };
 

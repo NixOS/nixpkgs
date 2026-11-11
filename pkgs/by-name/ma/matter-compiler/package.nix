@@ -18,10 +18,7 @@ bundlerApp {
     '';
     homepage = "https://github.com/apiaryio/matter_compiler/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      rvlander
-      nicknovitski
-    ];
+    maintainers = with lib.maintainers; [ nicknovitski ];
     platforms = lib.platforms.unix;
   };
 }

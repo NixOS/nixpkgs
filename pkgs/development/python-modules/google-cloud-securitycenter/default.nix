@@ -13,13 +13,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-securitycenter";
-  version = "1.46.0";
+  version = "1.48.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_securitycenter";
     inherit (finalAttrs) version;
-    hash = "sha256-W7zRw/zeSCo/ygpOqan61Q65+T8FqBIoCW2SkgDEuMs=";
+    hash = "sha256-q0W0nlPsDpIpYYup7hkUOEhT3b1GQs8mEzhjO6PrXLU=";
   };
 
   build-system = [ setuptools ];

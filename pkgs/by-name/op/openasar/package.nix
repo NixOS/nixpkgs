@@ -23,6 +23,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-aKyhFsecE1nRYYQVSYPUm5MY69dfEv2MnmiyVxfrwhk=";
   };
 
+  patches = [
+    # Remove when upstream fix gets merged: https://github.com/GooseMod/OpenAsar/pull/262
+    ./readonly-modules-dir.patch
+  ];
   postPatch = ''
     # Hardcode unzip path
     substituteInPlace ./src/updater/moduleUpdater.js \

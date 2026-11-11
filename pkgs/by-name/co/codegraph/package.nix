@@ -1,21 +1,20 @@
 {
   lib,
   stdenv,
+  testers,
   fetchurl,
   autoPatchelfHook,
   makeWrapper,
+  nodejs-slim,
   writeShellScript,
   curl,
   common-updater-scripts,
   gnused,
-  cctools,
-  darwin,
-  rcodesign,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codegraph";
-  version = "1.5.0";
+  version = "1.6.2";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -37,10 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-    rcodesign
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -55,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/codegraph
     cp -r lib $out/lib/codegraph/lib
-    cp node $out/lib/codegraph/node
+    ln -s ${lib.getExe nodejs-slim} $out/lib/codegraph/node
 
     install -Dm 755 bin/codegraph $out/lib/codegraph/bin/codegraph
 
@@ -65,25 +60,22 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/lib/codegraph/node \
-      -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
-    '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/lib/codegraph/node
-  '';
-
   passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-arm64.tar.gz";
-        hash = "sha256-z17kNabkTQl7L5jyt7i5QiuxCUhEQE7+2CUZxdoa8s8=";
+        hash = "sha256-100b+0Bg22PsPCtyxOF/dsMZeK87rWrOQ3DRUBrAZi4=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-arm64.tar.gz";
-        hash = "sha256-nxd1Cu30XVH2jKrjntIdbipykLIyblxT+VoWWRjr0dg=";
+        hash = "sha256-yMa+KSviHQDeomutiyjUNHMc9hL7jMR13BD1swOLW2Q=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-x64.tar.gz";
-        hash = "sha256-K6Zeh6EhC3BrseZ9Xki1/EoZNeQ9uz+18xxVl4QNLlg=";
+        hash = "sha256-7wr0FgkhKPsczHI3hgALft9KaXH+YErNCL+Wbk83uCg=";
       };
     };
     updateScript = writeShellScript "update-codegraph" ''

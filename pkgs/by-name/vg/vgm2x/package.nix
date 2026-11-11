@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "VGM file extraction tools";
     homepage = "https://github.com/vampirefrog/vgm2x";
     license = lib.licenses.gpl3Only;

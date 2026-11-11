@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "regebro";
     repo = "pyroma";
     tag = version;
-    sha256 = "sha256-J5+/1jc/Dvh7aPV9FgG/uhxWG4DbQISgx+kX4Ayd1cU=";
+    hash = "sha256-J5+/1jc/Dvh7aPV9FgG/uhxWG4DbQISgx+kX4Ayd1cU=";
   };
 
   propagatedBuildInputs = [
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     mainProgram = "pyroma";
     homepage = "https://github.com/regebro/pyroma";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

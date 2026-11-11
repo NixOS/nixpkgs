@@ -1,9 +1,10 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   makeWrapper,
+  installShellFiles,
   libxkbcommon,
   wayland,
   libx11,
@@ -12,6 +13,7 @@
   libxrandr,
   fontconfig,
   pipewire,
+  xdg-utils,
   versionCheckHook,
 }:
 let
@@ -29,24 +31,24 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spectral-mic";
-  version = "0.8.0";
+  version = "0.10.0";
 
   __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mmc";
     repo = "spectral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2HaTOLhHVLYKnEsWjvLf1GqPvtBdrjotG1kZj9mbwkk=";
+    hash = "sha256-lHk4Tn7fYdc/emTat3x/Xs5h0bToFVr4zQ3P9w/Oe78=";
   };
 
-  cargoHash = "sha256-OMrYfPQim9H178LnRUg2Ues9Nf2txz4u+tEddrllKME=";
+  cargoHash = "sha256-pEUESRjdIYfYSAuIFrPnnCHVshVEAsyy7KxwojkUWlk=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
     makeWrapper
+    installShellFiles
   ];
 
   buildInputs = [
@@ -59,9 +61,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 assets/page.codeberg.mmc.Spectral.metainfo.xml $out/share/metainfo/page.codeberg.mmc.Spectral.metainfo.xml
     install -Dm644 assets/spectral.png $out/share/icons/hicolor/512x512/apps/page.codeberg.mmc.Spectral.png
     install -Dm644 THIRD-PARTY.md $out/share/licenses/spectral-mic/THIRD-PARTY.md
+    installManPage assets/spectral.1
+    installShellCompletion assets/spectral.{bash,fish,zsh}
 
+    # The GUI shells out to xdg-open for its Help links; hosts without
+    # xdg-utils would otherwise fail the spawn silently.
     wrapProgram $out/bin/spectral \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath dlopenLibs}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath dlopenLibs}" \
+      --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "2026.8.0";
+  version = "2026.10.1";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HJjRdQl164eneEQFHC5V28jyWjqAh9LJZRpntTxR/Ro=";
+    hash = "sha256-E51fkzzqe1nZt3S/9f0zJWEo5XKQ23A7Bllqrd/Cndc=";
   };
 
   nativeBuildInputs = [
@@ -85,8 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [
-      ilys
-      _4evy
       isabelroses
     ];
   };

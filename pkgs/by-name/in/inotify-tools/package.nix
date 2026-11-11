@@ -1,28 +1,22 @@
 {
   lib,
-  stdenv,
-  autoreconfHook,
+  rustPlatform,
   fetchFromGitHub,
   nix-update-script,
-  fanotifySupport ? true,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inotify-tools";
-  version = "4.25.9.0";
+  version = "4.26.270";
 
   src = fetchFromGitHub {
     repo = "inotify-tools";
     owner = "inotify-tools";
     rev = finalAttrs.version;
-    hash = "sha256-u7bnFmSEXNGVZTJ71kOTscQLymbjJblJCIY9Uj7/3mM=";
+    hash = "sha256-89EMtoJgfL7mzTXs5G5u5dZ4wrFK3MyIQaI9gI8eUgU=";
   };
 
-  configureFlags = [
-    (lib.enableFeature fanotifySupport "fanotify")
-  ];
-
-  nativeBuildInputs = [ autoreconfHook ];
+  cargoHash = "sha256-KPbnEx2QmHBHMpwrT6MJkjfKldWqEEfiLDiHlbiGMD4=";
 
   passthru = {
     updateScript = nix-update-script { };

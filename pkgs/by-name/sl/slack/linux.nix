@@ -37,7 +37,7 @@
   nss,
   pango,
   pipewire,
-  systemd,
+  systemdLibs,
   wayland,
   xdg-utils,
   libxtst,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
       pango
       pipewire
       stdenv.cc.cc
-      systemd
+      systemdLibs
       wayland
       libx11
       libxscrnsaver

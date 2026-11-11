@@ -16,6 +16,7 @@ let
     getExe
     literalExpression
     optional
+    optionals
     attrValues
     mapAttrs
     ;
@@ -96,7 +97,7 @@ in
         '';
         description = ''
           The configuration of Pinchflat is handled through environment variables.
-          The available configuration options can be found in [the Pinchflat README](https://github.com/kieraneglin/pinchflat/README.md#environment-variables).
+          The available configuration options can be found in [the Pinchflat README](https://github.com/kieraneglin/pinchflat/blob/master/README.md#environment-variables).
         '';
       };
 
@@ -158,13 +159,16 @@ in
           "LOG_LEVEL=${cfg.logLevel}"
           "PHX_SERVER=true"
         ]
-        ++ optional cfg.selfhosted [ "RUN_CONTEXT=selfhosted" ]
+        ++ optionals cfg.selfhosted [ "RUN_CONTEXT=selfhosted" ]
         ++ optional (!isNull config.time.timeZone) "TZ=${config.time.timeZone}"
         ++ attrValues (mapAttrs (name: value: name + "=" + toString value) cfg.extraConfig);
         EnvironmentFile = optional (cfg.secretsFile != null) cfg.secretsFile;
         ExecStartPre = "${lib.getExe' cfg.package "migrate"}";
         ExecStart = "${getExe cfg.package} start";
         Restart = "on-failure";
+
+        # give enough time for migrations to run
+        TimeoutStartSec = "600s";
       };
     };
 

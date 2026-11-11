@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
+  strictDeps = true;
+
   configureFlags =
     # runtime selection of HW-accelerated code; it's default since 3.7
     [ "--enable-fat" ]
@@ -39,6 +41,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   patches = lib.optional (stdenv.hostPlatform.system == "i686-cygwin") ./cygwin.patch;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Cryptographic library";

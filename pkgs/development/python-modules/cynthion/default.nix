@@ -124,6 +124,6 @@ buildPythonPackage {
     homepage = "https://github.com/greatscottgadgets/cynthion";
     changelog = "https://github.com/greatscottgadgets/cynthion/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
   };
 }

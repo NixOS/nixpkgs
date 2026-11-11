@@ -5,29 +5,21 @@
   makeWrapper,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "plexamp";
   version = "4.13.2";
-
   src = fetchurl {
-    url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
-    name = "${pname}-${version}.AppImage";
+    url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${finalAttrs.version}.AppImage";
+    name = "${finalAttrs.pname}-${finalAttrs.version}.AppImage";
     hash = "sha512-Ww/QfMgmeghthfuGfc4Plv7vUKLikLf4R+SImG6TuYg0pDJ5psuHtXQezV0BurVRm6eQ+Ori+YGK2A52tCkcfw==";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/plexamp.desktop $out/share/applications/plexamp.desktop
-    install -m 444 -D ${appimageContents}/plexamp.svg \
+    install -m 444 -D ${finalAttrs.contents}/plexamp.desktop $out/share/applications/plexamp.desktop
+    install -m 444 -D ${finalAttrs.contents}/plexamp.svg \
       $out/share/icons/hicolor/scalable/apps/plexamp.svg
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/${finalAttrs.pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${finalAttrs.pname}'
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram "$out/bin/plexamp" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
@@ -46,4 +38,4 @@ appimageTools.wrapType2 {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

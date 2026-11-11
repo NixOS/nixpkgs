@@ -26,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymatting";
-  version = "1.1.15";
+  version = "1.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymatting";
     repo = "pymatting";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rcatlQE+YgppY//ZgGY9jO5KI0ED30fLlqW9N+xRNqk=";
+    hash = "sha256-mc8op6RKnPZruKJup5ybTrX2VBNseN1/WkjRWsqMoWo=";
   };
 
   build-system = [ setuptools ];

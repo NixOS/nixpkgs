@@ -162,10 +162,10 @@ buildGoModule (finalAttrs: {
     ++ [
       ./rdpclient.patch
     ]
-    ++ lib.optional (lib.versionOlder version "18.8.0") [
+    ++ lib.optionals (lib.versionOlder version "18.8.0") [
       ./0001-fix-add-nix-path-to-exec-env.patch
     ]
-    ++ lib.optional (lib.versionAtLeast version "18.8.0") [
+    ++ lib.optionals (lib.versionAtLeast version "18.8.0") [
       ./0001-fix-add-nix-path-to-exec-env-reexec.patch
     ];
 

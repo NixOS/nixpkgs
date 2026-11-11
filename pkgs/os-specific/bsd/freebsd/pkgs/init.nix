@@ -10,7 +10,6 @@ mkDerivation {
 
   meta = {
     broken = !stdenv.hostPlatform.isStatic;
-    platforms = lib.platforms.freebsd;
     mainProgram = "init";
   };
 }

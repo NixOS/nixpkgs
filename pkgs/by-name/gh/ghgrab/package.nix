@@ -8,20 +8,28 @@
 # note: upstream has a flake
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghgrab";
-  version = "2.0.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "abhixdd";
     repo = "ghgrab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MRELy+iwLt+qbO3ODHHNZcSSAiEtII2hEoMs3Snu+u8=";
+    hash = "sha256-gXpexrfKgEVnFUE0yrYxFCUlyCe2Im4M31Rjnjx9K70=";
   };
 
-  cargoHash = "sha256-Qq4l+BSNlpHrGAUtLXpyNJj0NdGVar+hIfMQPM5b8rU=";
+  cargoHash = "sha256-g/P/p0xdp4iMju9AG4Rc188bfP/s1+wl6whmVnXeqy4=";
 
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # tests/github_fetch_test.rs binds to 127.0.0.1
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags = [
+    # sends request to a github.com url
+    "--skip=test_mcp_repo_info_on_actual_repo"
+  ];
 
   meta = {
     changelog = "https://github.com/abhixdd/ghgrab/releases/tag/v${finalAttrs.version}";

@@ -10,17 +10,17 @@
 
 buildNpmPackage rec {
   pname = "vaultwarden-webvault";
-  version = "2026.6.4+0";
+  version = "2026.10.1+0";
 
   src = fetchFromGitHub {
     owner = "vaultwarden";
     repo = "vw_web_builds";
     tag = "v${version}";
-    hash = "sha256-Uz0wPdhTVy2yOlKWAy5phr+30NmFaIPQQh5bsiWCDLA=";
+    hash = "sha256-xsWCHYCfzpSXs0QyiUl3BDoKXE/Wy1X+ed5jtmuVWlU=";
   };
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-SkzEM54nMFqiYUqIRTbp3+yaZEJMgjFkjRLT5NZTN94=";
+  npmDepsHash = "sha256-6x1qc8cVuBdvZ2W133ajYOKpUz29qda5cECmNvlS9rg=";
 
   nativeBuildInputs = [
     python3
@@ -37,11 +37,6 @@ buildNpmPackage rec {
   preBuild = ''
     echo "export const compilerCommand = ['dart-sass'];" > node_modules/sass-embedded/dist/lib/src/compiler-path.js
   '';
-
-  npmRebuildFlags = [
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
-    "--ignore-scripts"
-  ];
 
   npmBuildScript = "dist:oss:selfhost";
 

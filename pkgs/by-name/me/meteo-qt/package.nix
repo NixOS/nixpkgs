@@ -44,7 +44,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "meteo_qt" ];
 
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "System tray application for weather status information";

@@ -20,25 +20,39 @@
   ndindex,
   numexpr,
   numpy,
-  platformdirs,
-  py-cpuinfo,
-  requests,
+  httpx,
+  threadpoolctl,
+  pydantic,
+  rich,
+
+  # optional dependencies
+  fsspec,
+  h5py,
+  hdf5plugin,
+  matplotlib,
+  pyarrow,
+  textual,
+  textual-image,
+  textual-plotext,
+  zarr,
 
   # tests
   psutil,
   pytestCheckHook,
+  pytest-asyncio,
+  pytest-xdist,
   torch,
   runTorchTests ? lib.meta.availableOn stdenv.hostPlatform torch,
 }:
 
 let
   sleefRev = "7623d6cfa2712462880fa63a4d0f0b5f775d1a83";
-  miniexprRev = "37bf6982bf9619036b47f095b7005bc3c87a7447";
-  tinyccRev = "41208bdc85612042f363f425cda4601b3ed90d64";
+  miniexprRev = "f0b8c94771cd21d3c9029d6ccec204ab3a67584f";
+  tinyccRev = "695ad1e6b5c9a00875192ca1f3a9c4949dee4858";
 in
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "4.1.2";
+  version = "4.14.1";
   pyproject = true;
 
   srcs = [
@@ -46,14 +60,14 @@ buildPythonPackage rec {
       owner = "Blosc";
       repo = "python-blosc2";
       tag = "v${version}";
-      hash = "sha256-z5g3OXSKKR/2yQ5n1hb+br009xaX8C7HxbDDLVfSYNw=";
+      hash = "sha256-SZMsRGkg2Xqo6eKCxwsNWGteeUnM4KtT5Z/0CS0QDPI=";
     })
     (fetchFromGitHub {
       name = "miniexpr";
       owner = "Blosc";
       repo = "miniexpr";
       rev = miniexprRev;
-      hash = "sha256-3YLdAZFYEtmENuQgDiitU3kw8JmW+V03zFSGXV3FwqE=";
+      hash = "sha256-s84xa/94CHq7bu6mw9XU7Q8TfmSFpdhpLxHOG1XrMu4=";
     })
     (fetchFromGitHub {
       name = "sleef";
@@ -67,7 +81,7 @@ buildPythonPackage rec {
       owner = "Blosc";
       repo = "minicc";
       rev = tinyccRev;
-      hash = "sha256-lj0BC/A+Kv/VloLhFe3hmrdZ6QWv6mSrMn8HdHS9PfI=";
+      hash = "sha256-qLomeOAw0ipIJOo8/GtBEa1ZsjVtEDlb3/ph7uMcsZk=";
     })
   ];
   sourceRoot = "source";
@@ -98,13 +112,13 @@ buildPythonPackage rec {
         'has miniexpr source been updated to match pinned version?'
       exit 1
     fi
-    if ! grep -F '${sleefRev}' miniexpr/CMakeLists.txt ; then
-      echo 'Expected to find ${sleefRev} in miniexpr/CMakeLists.txt:' \
+    if ! grep -F '${sleefRev}' miniexpr/cmake/MiniexprFetchDeps.cmake ; then
+      echo 'Expected to find ${sleefRev} in miniexpr/cmake/MiniexprFetchDeps.cmake:' \
         'has sleef source been updated to match pinned version?'
       exit 1
     fi
-    if ! grep -F '${tinyccRev}' miniexpr/CMakeLists.txt ; then
-      echo 'Expected to find ${tinyccRev} in miniexpr/CMakeLists.txt:' \
+    if ! grep -F '${tinyccRev}' miniexpr/cmake/MiniexprFetchDeps.cmake ; then
+      echo 'Expected to find ${tinyccRev} in miniexpr/cmake/MiniexprFetchDeps.cmake:' \
         'has tinycc source been updated to match pinned version?'
       exit 1
     fi
@@ -125,19 +139,28 @@ buildPythonPackage rec {
     ndindex
     numexpr
     numpy
-    platformdirs
-    py-cpuinfo
-    requests
-  ];
+    threadpoolctl
+    pydantic
+    rich
+    httpx
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     psutil
     pytestCheckHook
+    pytest-asyncio
+    pytest-xdist
+    h5py
+    pyarrow
+    textual
+    textual-plotext
   ]
   ++ lib.optionals runTorchTests [ torch ];
 
   disabledTestMarks = [
     "network"
+    "heavy"
   ];
 
   disabledTests = [
@@ -151,6 +174,9 @@ buildPythonPackage rec {
     "test_expand_dims"
   ];
 
+  # otherwise attempts to find package files for doctests
+  enabledTestPaths = [ "tests" ];
+
   disabledTestPaths = [
     # Threads grow without limit
     # https://github.com/Blosc/python-blosc2/issues/556
@@ -158,6 +184,27 @@ buildPythonPackage rec {
     "tests/ndarray/test_lazyexpr_fields.py"
     "tests/ndarray/test_reductions.py"
   ];
+
+  optional-dependencies = rec {
+    fsspec = [
+      fsspec
+      fsspec.optional-dependencies.http
+    ];
+    hdf5 = [
+      h5py
+      hdf5plugin
+    ];
+    hires = tui ++ [
+      matplotlib
+      textual-image
+    ];
+    parquet = [ pyarrow ];
+    tui = [
+      textual
+      textual-plotext
+    ];
+    zarr = [ zarr ];
+  };
 
   passthru.c-blosc2 = c-blosc2;
 

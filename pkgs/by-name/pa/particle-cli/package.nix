@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
   ];
 
   dontNpmBuild = true;
-  dontNpmPrune = true;
+  dontNpmPrune = false;
 
   postInstall = ''
     install -D -t $out/etc/udev/rules.d \

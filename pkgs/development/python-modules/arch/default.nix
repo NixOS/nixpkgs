@@ -3,42 +3,58 @@
   buildPythonPackage,
   python,
   fetchFromGitHub,
+
+  # build-system
   cython,
-  numpy,
-  pandas,
-  property-cached,
-  pytestCheckHook,
-  scipy,
-  setuptools-scm,
-  statsmodels,
   meson-python,
+  numpy,
+  setuptools-scm,
+
+  # dependencies
+  packaging,
+  pandas,
+  scipy,
+  statsmodels,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arch";
   version = "8.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bashtage";
     repo = "arch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qw8sSgsMu6YTiQlzsrePnDKkFBtrxD9RK6ZZE5jFeX0=";
   };
 
+  # nixpkgs ships setuptools-scm 10, upstream pins <10
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools_scm>=9.2.0,<10"' '"setuptools_scm"'
+  '';
+
   build-system = [
-    setuptools-scm
     cython
     meson-python
+    numpy
+    setuptools-scm
   ];
 
   dependencies = [
     numpy
+    packaging
     pandas
-    property-cached
     scipy
     statsmodels
   ];
+
+  pythonImportsCheck = [ "arch" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -58,13 +74,11 @@ buildPythonPackage rec {
     "arch/tests/univariate/test_mean.py"
   ];
 
-  pythonImportsCheck = [ "arch" ];
-
   meta = {
     description = "Autoregressive Conditional Heteroskedasticity (ARCH) and other tools for financial econometrics";
     homepage = "https://github.com/bashtage/arch";
-    changelog = "https://github.com/bashtage/arch/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/bashtage/arch/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [ jherland ];
   };
-}
+})

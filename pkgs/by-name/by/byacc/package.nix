@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-thjF+0TC9fBIhD25D30bJPePR7B5E8jHuoyULT6ySwA=";
   };
 
+  strictDeps = true;
+
   configureFlags = [
     # change yacc to byacc
     "--program-transform-name='s,^,b,'"
@@ -26,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ln -s $out/bin/byacc $out/bin/yacc
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://invisible-island.net/byacc/byacc.html";

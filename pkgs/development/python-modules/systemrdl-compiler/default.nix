@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "systemrdl-compiler";
-  version = "1.32.2";
+  version = "1.33.0";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SystemRDL";
     repo = "systemrdl-compiler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Dx6WxSzGaZxwRzXR/bjfZSU7TsvTYNVN0NaK3qQ7eo=";
+    hash = "sha256-XlZ54SJGnIjRhRHTbEjSzKxDVwKRGskOJf/jDbEhnM4=";
   };
 
   build-system = [

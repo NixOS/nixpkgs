@@ -4,6 +4,8 @@
   anki,
 
   openssl,
+  sqlite,
+  zstd,
   pkg-config,
   buildPackages,
 }:
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
+    sqlite
+    zstd
   ];
 
   env.PROTOC = lib.getExe buildPackages.protobuf;

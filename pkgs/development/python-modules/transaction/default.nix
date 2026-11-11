@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "transaction";
-  version = "5.0";
+  version = "5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "transaction";
     tag = version;
-    hash = "sha256-8yvA2dvB69+EqsAa+hc93rgg6D64lcajl6JgFabhjwY=";
+    hash = "sha256-db6oEea+sIK9SN7fDP19qYgUgbeH9bv3vuQdssq78vo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
+      --replace-fail "setuptools >= 78.1.1,< 81" "setuptools"
   '';
 
   build-system = [

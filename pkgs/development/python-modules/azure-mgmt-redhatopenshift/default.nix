@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-redhatopenshift";
-  version = "3.0.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_redhatopenshift";
     inherit version;
-    hash = "sha256-R3XJvfNjI4g02hReX1n5doOrBPjdvSUN5F1F4zeYMn8=";
+    hash = "sha256-cuPnbKvj4iZIBnkbF7IRoaB3qJxgtLfT6JSgjRcdZrI=";
   };
 
   build-system = [ setuptools ];

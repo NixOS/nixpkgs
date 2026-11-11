@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "compressed-tensors";
-  version = "0.17.1";
+  version = "0.18.0";
   pyproject = true;
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "neuralmagic";
     repo = "compressed-tensors";
     tag = finalAttrs.version;
-    hash = "sha256-14AHbokDlN5iXy/fvOq7Xp1OS8N1b+Xpxd33KOylWiU=";
+    hash = "sha256-cbHP2YZgG0UY+rrcOKKwtgwga2pEZaEEMoJqq57pFb0=";
   };
 
   postPatch = ''
@@ -101,37 +101,41 @@ buildPythonPackage (finalAttrs: {
     "test_compress_decompress_module"
 
     # AssertionError: Torch not compiled with CUDA enabled
-    "test_match_quantizable_tensors"
-    "test_narrow_match_true_child_only"
-    "test_narrow_match_false_when_parent_also_matches"
-    "test_narrow_match_false_when_neither_matches"
-    "test_narrow_match_iterable_targets_any_true"
-    "test_narrow_match_with_explicit_module_argument"
-    "test_narrow_match_top_level_behavior_documented"
-    "test_complex_model_matching"
-    "test_parameter_and_module_consistency"
     "test_all_functions_with_regex"
-    "test_match_quantizable_tensors"
-    "test_mtp_tensors_saved_correctly"
-    "test_index_updated"
-    "test_single_shard_dest_creates_index"
-    "test_no_mtp_tensors_raises"
-    "test_missing_dest_files_raises"
-    "test_custom_mtp_prefix"
     "test_apply_config_detects_deepseekv3_attention_and_hooks"
-    "test_initialize_module_for_quantization_offloaded"
-    "test_correctness_model"
-    "test_random_matrix_device_handling"
-    "test_memory_sharing"
     "test_attention_cache"
-
-    # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
+    "test_complex_model_matching"
+    "test_correctness_model"
+    "test_custom_mtp_prefix"
+    "test_index_updated"
+    "test_initialize_module_for_quantization_offloaded"
+    "test_match_quantizable_tensors"
+    "test_match_quantizable_tensors"
+    "test_memory_sharing"
+    "test_missing_dest_files_raises"
+    "test_mtp_tensors_saved_correctly"
+    "test_narrow_match_false_when_neither_matches"
+    "test_narrow_match_false_when_parent_also_matches"
+    "test_narrow_match_iterable_targets_any_true"
+    "test_narrow_match_top_level_behavior_documented"
+    "test_narrow_match_true_child_only"
+    "test_narrow_match_with_explicit_module_argument"
+    "test_no_mtp_tensors_raises"
+    "test_pack_fp4_non_contiguous"
+    "test_pack_fp4_to_uint8"
+    "test_parameter_and_module_consistency"
+    "test_random_matrix_device_handling"
+    "test_single_shard_dest_creates_index"
+    # Float8_e4m3fn errors
     "test_compressed_model_inference_with_hook"
+    "test_quantize_dequantize_matches_sequential"
   ];
 
   disabledTestPaths = [
     # these try to download models from HF Hub
     "tests/test_quantization/lifecycle/test_apply.py"
+    "tests/test_quantization/test_quant_config.py::test_map_to_checkpoint_names"
+
     # RuntimeError: The weights trying to be saved contained shared tensors
     "tests/test_transform/factory/test_serialization.py::test_serialization[True-hadamard]"
     "tests/test_transform/factory/test_serialization.py::test_serialization[True-random-hadamard]"
@@ -153,6 +157,11 @@ buildPythonPackage (finalAttrs: {
     "tests/test_compressors/distributed/test_module_parallel.py"
     "tests/test_compressors/model_compressors/test_model_compressor_distributed.py"
     "tests/test_offload"
+    # https://github.com/vllm-project/compressed-tensors/issues/885
+    "tests/test_compressors/model_compressors/test_model_compressor.py"
+
+    # Tests require CUDA
+    "tests/test_compressors/test_compress_decompress_module.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Torch not compiled with CUDA enabled

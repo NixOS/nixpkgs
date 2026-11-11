@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "100.0";
+  version = "103.0";
 
   src = fetchFromCodeberg {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-85mL3/x7SoTgOxU/YCFh58vcGzHLG3qPbbG4MD5dB9o=";
+    hash = "sha256-gE6G3L7GZZjIdQk/UUjY5P86tkA2eDCR7inovZuESzo=";
   };
 
   passthru = {

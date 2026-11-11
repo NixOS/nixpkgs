@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Should be removed when bumping to 2.6.x
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION 0.26.1"
+      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION ${libdjinterop.version}"
   '';
 
   nativeBuildInputs = [
@@ -122,7 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
     wavpack
   ];
 
-  qtWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
+  qtWrapperArgs = [
+    "--set"
+    "LOCALE_ARCHIVE"
+    "${glibcLocales}/lib/locale/locale-archive"
+  ];
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall

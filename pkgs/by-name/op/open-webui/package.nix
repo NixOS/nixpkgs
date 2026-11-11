@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.11.0";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-SP5Huefj35PHvVzqS8R/DGSBci/hCHoueEb5RupGVqY=";
+    hash = "sha256-goF+GkNFiT0E6zu2+gZU6j0zfOiuqDa/UDNbD8H+kXg=";
   };
 
   # we need datasets_3 for SpeechT5 embeddings
@@ -35,7 +35,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-9Wa6gP0asGPCoBJh8ufpweOg4zNf7onzBu08iQwgqis=";
+    npmDepsHash = "sha256-/TQOAtz5mVfglV0VdCvTxhtAPpTRZQq4chSp3qX+Kfo=";
 
     npmFlags = [ "--force" ];
 
@@ -43,12 +43,13 @@ let
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
+        --replace-fail "npm run pyodide:fetch && " ""
     '';
 
-    env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
-    env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
-    env.NODE_OPTIONS = "--max-old-space-size=8192";
+    env = {
+      CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
+      ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
+    };
 
     preBuild = ''
       tar xf ${pyodide} -C static/
@@ -122,9 +123,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-auth-oauthlib
       google-cloud-storage
       google-genai
+      google-re2
       googleapis-common-protos
       hiredis
       httpx
+      httpx2
       itsdangerous
       joserfc
       langchain
@@ -141,6 +144,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       onnxruntime
       openai
       opencv-python-headless
+      openpyxl
+      opensearch-py
       opentelemetry-api
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
@@ -152,8 +157,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       opentelemetry-instrumentation-requests
       opentelemetry-instrumentation-sqlalchemy
       opentelemetry-sdk
-      openpyxl
-      opensearch-py
       orjson
       pandas
       pillow
@@ -166,8 +169,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pyjwt
       pymdown-extensions
       pymysql
+      pyotp
       pypandoc
       pypdf
+      python-docx
       python-dotenv
       python-mimeparse
       python-multipart
@@ -176,6 +181,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytube
       pytz
       pyxlsb
+      qrcode
       rank-bm25
       rapidocr
       redis
@@ -220,7 +226,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       azure-search-documents
       colbert-ai
       elasticsearch
-      moto
       oracledb
       pinecone
       playwright
@@ -231,13 +236,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ finalAttrs.passthru.optional-dependencies.mariadb
     ++ finalAttrs.passthru.optional-dependencies.postgres
-    ++ finalAttrs.passthru.optional-dependencies.unstructured
-    ++ moto.optional-dependencies.s3;
+    ++ finalAttrs.passthru.optional-dependencies.unstructured;
   };
 
   pythonImportsCheck = [ "open_webui" ];
 
-  makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
+  makeWrapperArgs = [
+    "--set"
+    "FRONTEND_BUILD_DIR"
+    "${frontend}/share/open-webui"
+  ];
 
   passthru = {
     tests = {
@@ -254,7 +262,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # License history is complex: originally MIT, then a potentially problematic
     # relicensing to a modified BSD-3 clause occurred around v0.5.5/v0.6.6.
     # Due to these concerns and non-standard terms, it's treated as custom non-free.
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "openWebUI";
       fullName = "Open WebUI License";
       url = "https://github.com/open-webui/open-webui/blob/0cef844168e97b70de2abee4c076cc30ffec6193/LICENSE";
       # Marked non-free due to concerns over the MIT -> modified BSD-3 relicensing process,

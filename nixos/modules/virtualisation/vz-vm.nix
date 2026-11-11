@@ -13,7 +13,14 @@ let
 
   hostPkgs = cfg.host.pkgs;
 
-  regInfo = hostPkgs.closureInfo { rootPaths = cfg.additionalPaths; };
+  inherit
+    (import ../../lib/store-registration-info.nix {
+      inherit hostPkgs;
+      rootPaths = cfg.additionalPaths;
+    })
+    regInfo
+    regInfoPath
+    ;
 
   # Host-built erofs store image, named by closure hash so only a changed guest rebuilds it.
   # A derivation is not an option: it would need the Linux builder this VM provides.
@@ -31,7 +38,7 @@ let
     # Virtualization.framework offers a virtio console
     "console=hvc0"
     "init=${toplevel}/init"
-    "regInfo=${regInfo}/registration"
+    "regInfo=${regInfoPath}"
   ]
   ++ config.boot.kernelParams;
 
@@ -67,6 +74,7 @@ let
       else
         { mode = vzCfg.console; };
   }
+  // lib.optionalAttrs (vzCfg.idleTimeout != null) { idleTimeoutSeconds = vzCfg.idleTimeout; }
   // vzCfg.extraConfig;
 
   staticConfigFile = hostPkgs.writeText "vzvm-config.json" (builtins.toJSON staticConfig);
@@ -179,6 +187,25 @@ in
       '';
     };
 
+    virtualisation.vz.idleTimeout = lib.mkOption {
+      type = lib.types.nullOr (lib.types.ints.between 1 (7 * 24 * 60 * 60));
+      default = null;
+      example = 30 * 60;
+      description = ''
+        Run guest on demand: `vzvm` keeps listening on
+        {option}`virtualisation.vz.forwardPorts` and boots guest on first
+        connection. Vzvm powers it off once no forwarded connection has been
+        open for this many seconds. Next connection boots it again and keeps
+        connections on hold until it is ready (~12s).
+
+        Reboots are managed by the `vzvm` process and keep the data disk:
+        nix-darwin's `nix.linux-builder.ephemeral` wipes it when the launchd
+        service starts, not between on-demand boots.
+
+        `null` runs the guest without timeout for as long as `vzvm` runs.
+      '';
+    };
+
     virtualisation.vz.extraConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -213,6 +240,14 @@ in
             writable store. Enable virtualisation.writableStoreUseTmpfs.
           '';
         }
+        {
+          assertion = vzCfg.idleTimeout != null -> vzCfg.forwardPorts != [ ];
+          message = ''
+            {option}`virtualisation.vz.idleTimeout` boots guest on first forwarded
+            connection but virtualisation.vz.forwardPorts is empty:
+            guest would never start.
+          '';
+        }
       ];
 
       boot.loader.grub.enable = false;
@@ -229,8 +264,6 @@ in
       # Inbound connections go via vsock; loaded in the initrd so `systemd-ssh-generator` finds `/dev/vsock`.
       boot.initrd.kernelModules = [ "vmw_vsock_virtio_transport" ];
 
-      boot.initrd.systemd.enable = lib.mkDefault true;
-
       system.requiredKernelConfig = with config.lib.kernelConfig; [
         (isEnabled "VIRTIO_BLK")
         (isEnabled "VIRTIO_PCI")
@@ -246,32 +279,11 @@ in
       ];
 
       # Override per entry and not as a whole: see note in vm-base.nix.
-      fileSystems = {
-        "/" = lib.mkVMOverride {
-          device = "tmpfs";
-          fsType = "tmpfs";
-          neededForBoot = true;
-          options = [ "mode=0755" ];
-        };
-      }
-      // lib.optionalAttrs (!cfg.writableStoreUseTmpfs && vzCfg.diskImage != null) {
-        # Second disk, hence /dev/vdb: store image is always first.
-        "/nix/.rw-store" = lib.mkVMOverride {
-          device = "/dev/vdb";
-          fsType = "ext4";
-          autoFormat = true;
-          neededForBoot = true;
-        };
-      }
-      // lib.mapAttrs' (
-        _: share:
-        lib.nameValuePair share.target (
-          lib.mkVMOverride {
-            device = share.tag;
-            fsType = "virtiofs";
-          }
-        )
-      ) cfg.sharedDirectories;
+      fileSystems = import ./vz-vm-file-systems.nix {
+        inherit lib;
+        inherit (cfg) sharedDirectories writableStoreUseTmpfs;
+        diskImage = vzCfg.diskImage;
+      };
 
       # DHCP and DNS come from host NAT
       networking.useDHCP = lib.mkDefault true;

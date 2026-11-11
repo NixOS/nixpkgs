@@ -18,7 +18,7 @@ buildDunePackage (finalAttrs: {
     owner = "inhabitedtype";
     repo = "httpaf";
     rev = finalAttrs.version;
-    sha256 = "0zk78af3qyvf6w66mg8sxygr6ndayzqw5s3zfxibvn121xwni26z";
+    hash = "sha256-34hoeQ8i2L1id3/owvH3qlmTn+8avWoMN257PJxCZ34=";
   };
 
   checkInputs = [ alcotest ];

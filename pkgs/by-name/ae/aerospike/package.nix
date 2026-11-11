@@ -33,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   dontUseCmakeConfigure = true;
 
   preBuild = ''

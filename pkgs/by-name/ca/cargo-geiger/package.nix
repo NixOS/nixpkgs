@@ -11,6 +11,7 @@
   # testing
   testers,
   cargo-geiger,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -46,9 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # curl-sys wants to run curl-config on darwin
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # skip tests with networking or other failures
   checkFlags = [
@@ -85,10 +84,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/geiger-rs/cargo-geiger";
     changelog = "https://github.com/geiger-rs/cargo-geiger/blob/cargo-geiger-${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "cargo-geiger";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       evanjs
       gepbird

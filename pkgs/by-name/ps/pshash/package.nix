@@ -5,12 +5,12 @@
 }:
 haskellPackages.mkDerivation rec {
   pname = "pshash";
-  version = "0.1.16.0";
+  version = "0.1.23.1";
   src = fetchFromGitHub {
     owner = "thornoar";
     repo = "pshash";
     tag = "v${version}";
-    hash = "sha256-3Qe52Hto3Z96b5q9TLz7XB7BzMfdNBd4p8V6dknH6VM=";
+    hash = "sha256-4R+aJAmL8G6Nhw9+4wbni1BA0Rq0vVdEAKtH7hG8sjE=";
   };
 
   postPatch = ''
@@ -31,6 +31,7 @@ haskellPackages.mkDerivation rec {
     base
     containers
     directory
+    random
   ];
 
   license = lib.licenses.mit;

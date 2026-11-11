@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpv-shim-default-shaders";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = "default-shader-pack";
     rev = "v${version}";
-    sha256 = "sha256-BM2GvmUoWQUUMH464YIIqu5A1t1B+otbJxAGFbySuq8=";
+    sha256 = "sha256-lHFidCHBduvNBy1HGgqLDqZMJeLv3jfVWQ73Hlev7w8=";
   };
 
   installPhase = ''

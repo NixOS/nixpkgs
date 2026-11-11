@@ -15,13 +15,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dcp";
-  version = "0.25.12";
+  version = "0.25.13";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "dcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oNAKEQ58KkVSbZ/2uG1cS5xYqIuHQ1iNiPgYiwLKXDY=";
+    hash = "sha256-dbgvKAsUw6950ig1/eUewUS++P803Bdg5qYmFYnqaGQ=";
   };
 
   vendorHash = "sha256-WBre4iBMYzx1unqz9+F1wDogYbPEsm3DyUgeceB8yko=";

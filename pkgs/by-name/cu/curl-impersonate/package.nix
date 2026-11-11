@@ -17,7 +17,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate";
-  version = "2.1.0";
+  version = "2.1.1";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "lexiforest";
     repo = "curl-impersonate";
     tag = "v${version}";
-    hash = "sha256-gN4TD+WxQM2eJofHsOHA/JpH6bQ8CI3VUTPL8NuySn4=";
+    hash = "sha256-AgC66L0z6cYVqePwc7yO1iO9F/6YD6dTqWKCcCrNLzc=";
   };
 
   separateDebugInfo = true;

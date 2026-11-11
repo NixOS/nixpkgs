@@ -10,6 +10,12 @@
       "source": "hosted",
       "version": "85.0.0"
     },
+    "_macros": {
+      "dependency": "transitive",
+      "description": "dart",
+      "source": "sdk",
+      "version": "0.3.3"
+    },
     "after_layout": {
       "dependency": "transitive",
       "description": {
@@ -374,7 +380,7 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "HEAD",
+        "ref": "bd6b5b41254e57c5bcece202ebfb234de63e6487",
         "resolved-ref": "bd6b5b41254e57c5bcece202ebfb234de63e6487",
         "url": "https://github.com/rustdesk-org/Dash-Chat-2"
       },
@@ -415,8 +421,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "HEAD",
-        "resolved-ref": "b47e8385e5a75d38319ad706a64b0ead3108b093",
+        "ref": "cddc2e64f8fefce4f80db87b20bcda2dd019bed6",
+        "resolved-ref": "cddc2e64f8fefce4f80db87b20bcda2dd019bed6",
         "url": "https://github.com/rustdesk-org/rustdesk_desktop_multi_window"
       },
       "source": "git",
@@ -503,15 +509,15 @@
       "source": "hosted",
       "version": "12.0.1"
     },
-    "external_path": {
-      "dependency": "direct main",
+    "fake_async": {
+      "dependency": "transitive",
       "description": {
-        "name": "external_path",
-        "sha256": "2095c626fbbefe70d5a4afc9b1137172a68ee2c276e51c3c1283394485bea8f4",
+        "name": "fake_async",
+        "sha256": "6a95e56b2449df2273fd8c45a662d6947ce1ebb7aafe80e550a3f68297f3cacc",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.3"
+      "version": "1.3.2"
     },
     "ffi": {
       "dependency": "direct main",
@@ -652,12 +658,13 @@
     "flutter_custom_cursor": {
       "dependency": "direct main",
       "description": {
-        "name": "flutter_custom_cursor",
-        "sha256": "3850a32ac6de351ccc5e4286b6d94ff70c10abecd44479ea6c5aaea17264285d",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "db63b785c38153603e9fb84b50d3ec46f0d7e05e",
+        "resolved-ref": "db63b785c38153603e9fb84b50d3ec46f0d7e05e",
+        "url": "https://github.com/rustdesk-org/flutter_custom_cursor"
       },
-      "source": "hosted",
-      "version": "0.0.4"
+      "source": "git",
+      "version": "0.0.3"
     },
     "flutter_gpu_texture_renderer": {
       "dependency": "direct main",
@@ -795,6 +802,12 @@
       },
       "source": "hosted",
       "version": "2.2.1"
+    },
+    "flutter_test": {
+      "dependency": "direct dev",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
     },
     "flutter_web_plugins": {
       "dependency": "transitive",
@@ -1052,6 +1065,36 @@
       "source": "hosted",
       "version": "4.9.0"
     },
+    "leak_tracker": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker",
+        "sha256": "c35baad643ba394b40aac41080300150a4f08fd0fd6a10378f8f7c6bc161acec",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "10.0.8"
+    },
+    "leak_tracker_flutter_testing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker_flutter_testing",
+        "sha256": "f8b613e7e6a13ec79cfdc0e97638fddb3ab848452eff057653abd3edba760573",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.9"
+    },
+    "leak_tracker_testing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker_testing",
+        "sha256": "6ba465d5d76e67ddf503e1161d1f4a6bc42306f9d66ca1e8f079a47290fb06d3",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.1"
+    },
     "lints": {
       "dependency": "transitive",
       "description": {
@@ -1071,6 +1114,16 @@
       },
       "source": "hosted",
       "version": "1.3.0"
+    },
+    "macros": {
+      "dependency": "transitive",
+      "description": {
+        "name": "macros",
+        "sha256": "1d9e801cd66f7ea3663c45fc708450db1fa57f988142c64289142c9b7ee80656",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.1.3-main.0"
     },
     "matcher": {
       "dependency": "transitive",
@@ -1900,6 +1953,16 @@
       "source": "hosted",
       "version": "0.4.0+2"
     },
+    "vm_service": {
+      "dependency": "transitive",
+      "description": {
+        "name": "vm_service",
+        "sha256": "0968250880a6c5fe7edc067ed0a13d4bae1577fe2771dcf3010d52c4a9d3ca14",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "14.3.1"
+    },
     "wakelock_plus": {
       "dependency": "direct main",
       "description": {
@@ -1974,8 +2037,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "HEAD",
-        "resolved-ref": "85789bfe6e4cfaf4ecc00c52857467fdb7f26879",
+        "ref": "cf4aef0512092fad9344a27ffe1c47ad83269dfc",
+        "resolved-ref": "cf4aef0512092fad9344a27ffe1c47ad83269dfc",
         "url": "https://github.com/rustdesk-org/window_manager"
       },
       "source": "git",
@@ -1985,9 +2048,9 @@
       "dependency": "direct main",
       "description": {
         "path": "plugins/window_size",
-        "ref": "eb3964990cf19629c89ff8cb4a37640c7b3d5601",
-        "resolved-ref": "eb3964990cf19629c89ff8cb4a37640c7b3d5601",
-        "url": "https://github.com/google/flutter-desktop-embedding.git"
+        "ref": "51e67ce047c72b26810b99e8473ddb44612fe356",
+        "resolved-ref": "51e67ce047c72b26810b99e8473ddb44612fe356",
+        "url": "https://github.com/21pages/flutter-desktop-embedding.git"
       },
       "source": "git",
       "version": "0.1.0"

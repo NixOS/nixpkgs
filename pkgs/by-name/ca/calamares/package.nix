@@ -98,14 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ckbcomp
-        os-prober
-        util-linux
-        xdg-open-nixos
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      ckbcomp
+      os-prober
+      util-linux
+      xdg-open-nixos
+    ])
   ]
   ++ extraWrapperArgs;
 

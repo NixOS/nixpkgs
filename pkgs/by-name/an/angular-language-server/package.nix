@@ -11,7 +11,7 @@
   common-updater-scripts,
   jq,
   unzip,
-  typescript,
+  typescript_5,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patchShebangs $out/lib/bin/ngserver $out/lib/index.js $out/lib/node_modules
     makeWrapper $out/lib/bin/ngserver $out/bin/ngserver \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
-      --add-flags "--tsProbeLocations ${typescript}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules"
+      --add-flags "--tsProbeLocations ${typescript_5}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules"
   '';
 
   passthru = {

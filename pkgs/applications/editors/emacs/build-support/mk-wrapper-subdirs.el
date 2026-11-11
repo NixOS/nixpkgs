@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defmacro mk-subdirs-expr (path)
   `(setq load-path
          (delete-dups (append '(,path)

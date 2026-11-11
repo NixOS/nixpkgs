@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nghttp3";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "https://github.com/ngtcp2/nghttp3/releases/download/v${finalAttrs.version}/nghttp3-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-IsBpidVL0mbUpx817vGS1JuJBlWfFqQfO4gssCNhdGM=";
+    hash = "sha256-yiMmaLlKXh+1S0FjLMVkc6tIImSDgUQQ72KnBilOZAI=";
   };
 
   outputs = [
@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit curl;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/ngtcp2/nghttp3";

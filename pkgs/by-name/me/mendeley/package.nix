@@ -6,11 +6,11 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "mendeley";
-  version = "2.148.0";
+  version = "2.150.0";
 
   src = fetchurl {
     url = "https://static.mendeley.com/bin/desktop/mendeley-reference-manager-${finalAttrs.version}-x86_64.AppImage";
-    hash = "sha256-ZejpXyq5ILlvppBfj+F2zHhJ3dLJyGlCYHJlNISCSSs=";
+    hash = "sha256-SSvL2GprttW3goYP6G47qmkZwJL5XF1Vv2kwh362wGg=";
   };
 
   strictDeps = true;

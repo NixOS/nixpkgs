@@ -2,30 +2,30 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "httpx";
-  version = "1.10.0";
+  version = "1.12.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j5OvWPwu5dVWTa5a/eY+CpzijYNO6K4mwnnuyXdAoEc=";
+    hash = "sha256-qUzHGw5jzqNkea5rfdz31A6QunWpQlkjQz2/vi2uYfA=";
   };
 
-  vendorHash = "sha256-Lx/m8B5rxuU5TI0BZe19aVBkc+ye2CkpIINydhLgajM=";
+  vendorHash = "sha256-DZ09vjgmKO5dHN2w+YCQrMlkxOCNWunkIcmVNMZek9o=";
 
   subPackages = [ "cmd/httpx" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   # Tests require network access
   doCheck = false;
@@ -33,6 +33,8 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   versionCheckProgramArg = "-version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast and multi-purpose HTTP toolkit";

@@ -1,14 +1,14 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchurl,
   cmake,
   imagemagick,
   testers,
 }:
 
-# Deprecated: unmaintained, no consumers in nixpkgs as of 2025-10-05, and doesn't compile with gcc 15.
-stdenv.mkDerivation (finalAttrs: {
+# Deprecated: unmaintained, no consumers in nixpkgs as of 2025-10-05, and doesn't compile with gcc 15. Switched to gcc14Stdenv as of 2026-09-13 to fix hydra build error
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "cuneiform";
   version = "1.1.0";
 

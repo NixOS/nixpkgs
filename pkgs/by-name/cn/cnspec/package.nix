@@ -1,26 +1,26 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   getent,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "cnspec";
-  version = "13.35.2";
+  version = "14.9.1";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnspec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V3fVmIrrbTQhbOMFKmsUHkRADlcPadCi5zwr2WXwzAM=";
+    hash = "sha256-JOuJA2j4PfxlrrggFzrswODNasUQD2n7nZbow58phso=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-WA4O3WITS4QW/yVQ8qcpgvSir77iWG7wRmS5JKML2zw=";
+  vendorHash = "sha256-703pP0Gl2m0ozNuc8/Nax7H1B0O59JW1B63wiPxGJo8=";
 
   subPackages = [ "apps/cnspec" ];
 
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X=go.mondoo.com/cnspec/v${(lib.versions.major finalAttrs.version)}.Version=${finalAttrs.version}"
+    "-X=go.mondoo.com/cnspec.Version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;

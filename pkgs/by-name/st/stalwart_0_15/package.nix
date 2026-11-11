@@ -212,12 +212,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.agpl3Only
     ]
     ++ lib.optionals stalwartEnterprise [
-      {
-        fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
-        url = "https://github.com/stalwartlabs/stalwart/blob/main/LICENSES/LicenseRef-SEL.txt";
-        free = false;
-        redistributable = false;
-      }
+      lib.licenses.stalwart
     ];
 
     mainProgram = "stalwart";

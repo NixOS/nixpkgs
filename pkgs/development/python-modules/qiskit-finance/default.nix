@@ -3,28 +3,31 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build-system
+  # build
   setuptools,
 
-  # Python Inputs
-  fastdtw,
-  numpy,
-  pandas,
-  psutil,
+  # runtime dependencies
   qiskit,
+  qiskit-algorithms,
   qiskit-optimization,
-  scikit-learn,
   scipy,
-  quandl,
+  numpy,
+  psutil,
+  fastdtw,
+  pandas,
+  nasdaq-data-link,
   yfinance,
-  # Check Inputs
+  certifi,
+  urllib3,
+
+  # test dependencies
   pytestCheckHook,
   ddt,
   pytest-timeout,
   qiskit-aer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qiskit-finance";
   version = "0.4.1";
   pyproject = true;
@@ -32,27 +35,32 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = "qiskit-finance";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zYhYhojCzlENzgYSenwewjeVHUBX2X6eQbbzc9znBsk=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "pandas<1.4.0" "pandas"
-  '';
+  patches = [
+    # Backport upstream's test and README migration to V2 primitives for Qiskit >= 2.0.
+    # https://github.com/qiskit-community/qiskit-finance/pull/353
+    # Commit: ae42cb8db871c0becf3572551cd4f4903861828b
+    ./qiskit-v2-primitives.patch
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    fastdtw
-    numpy
-    pandas
-    psutil
+  dependencies = [
     qiskit
+    qiskit-algorithms
     qiskit-optimization
-    quandl
-    scikit-learn
     scipy
+    numpy
+    psutil
+    fastdtw
+    pandas
+    nasdaq-data-link
     yfinance
+    certifi
+    urllib3
   ];
 
   nativeCheckInputs = [
@@ -62,7 +70,10 @@ buildPythonPackage rec {
     qiskit-aer
   ];
 
-  pythonImportsCheck = [ "qiskit_finance" ];
+  pythonImportsCheck = [
+    "qiskit_finance"
+    "qiskit_finance.data_providers"
+  ];
   disabledTests = [
     # Fail due to approximation error, ~1-2%
     "test_application"
@@ -71,17 +82,18 @@ buildPythonPackage rec {
     "test_exchangedata"
     "test_yahoo"
     "test_wikipedia"
+
+    # Test fails due to non-determinism/no seed set
+    "test_readme_sample"
   ];
   pytestFlags = [ "--durations=10" ];
 
   meta = {
-    # broken because it depends on qiskit-algorithms which is not yet packaged in nixpkgs
-    broken = true;
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
-    downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
+    downloadPage = "https://github.com/qiskit-community/qiskit-finance/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ chemonke ];
   };
-}
+})

@@ -7,7 +7,6 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  replaceVars,
   writableTmpDirAsHomeHook,
   writeShellScriptBin,
 
@@ -79,6 +78,7 @@
   semver,
   sniffio,
   sqlalchemy,
+  starlette,
   toml,
   typing-extensions,
   uv,
@@ -92,14 +92,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prefect";
-  version = "3.7.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
     repo = "prefect";
     tag = finalAttrs.version;
-    hash = "sha256-AfiXH9u6W6UpE8hepNzPGIm1cxC+5RonhtBYWMu2IaQ=";
+    hash = "sha256-RVcUkRauNZW3zU5SA1SMVGMYDyLTv2r8PuQeP5wvDDg=";
   };
 
   postPatch = ''
@@ -115,9 +115,18 @@ buildPythonPackage (finalAttrs: {
         '__development_base_path__: pathlib.Path = pathlib.Path("${finalAttrs.src}")'
   '';
 
-  # versioningit: NotVCSError: Git not installed; assuming this isn't a Git repository
+  pythonRelaxDeps = [
+    "certifi"
+    "python-slugify"
+    "websockets"
+    "whenever"
+  ];
+
   nativeBuildInputs = [
+    # versioningit: NotVCSError: Git not installed; assuming this isn't a Git repository
     (writeShellScriptBin "git" "false")
+    # prefect wants to create ~/.prefect on import, which pythonImportsCheck triggers
+    writableTmpDirAsHomeHook
   ];
 
   build-system = [
@@ -177,6 +186,7 @@ buildPythonPackage (finalAttrs: {
     ruamel-yaml-clib
     semver
     sniffio
+    starlette
     toml
     typing-extensions
     uvicorn
@@ -258,12 +268,15 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  passthru.tests = {
-    inherit (nixosTests) prefect;
+  passthru = {
+    tests = {
+      inherit (nixosTests) prefect;
+    };
 
+    # Upstream publishes every pre‐release (3.8.4.dev1, …) as a GitHub release,
+    # so restrict the updater to plain three‐component stable tags.
     updateScript = nix-update-script {
       extraArgs = [
-        # avoid pre‐releases
         "--version-regex"
         "^(\\d+\\.\\d+\\.\\d+)$"
       ];
@@ -271,6 +284,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   # FIXME: build killed at ~30%
+
   doCheck = false;
   nativeCheckInputs = [
     pytestCheckHook
@@ -295,6 +309,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Workflow orchestration framework for building resilient data pipelines in Python";
     homepage = "https://github.com/PrefectHQ/prefect";
+    changelog = "https://github.com/PrefectHQ/prefect/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       happysalada

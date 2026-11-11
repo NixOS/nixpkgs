@@ -6,7 +6,6 @@
   doxygen,
   fetchFromGitHub,
   flex,
-  gitMinimal,
   lcov,
   lib,
   libbpf,
@@ -21,13 +20,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "bpfilter";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "bpfilter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mlJQIvOWF8WL4pX8KTKM1ddEFva+dvj5m2S3sWQJsKE=";
+    hash = "sha256-7WEPyfaB7WRlSrlgqbt/T/2H62mN+o/5Fm80Z0C0ztk=";
   };
 
   nativeBuildInputs = [
@@ -66,8 +65,6 @@ clangStdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "zerocallusedregs" ];
 
   preFixup = ''
-    substituteInPlace $out/lib/systemd/system/bpfilter.service --replace-fail /usr/sbin/bpfilter $out/bin/bpfilter
-
     # workaround for https://github.com/NixOS/nixpkgs/issues/144170
     substituteInPlace $lib/lib/pkgconfig/bpfilter.pc --replace-fail \''${prefix}/ ""
   '';
@@ -77,7 +74,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "BPF-based packet filtering framework";
     homepage = "https://bpfilter.io";
-    changelog = "https://github.com/facebook/bpfilter/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/meta/bpfilter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "bpfilter";

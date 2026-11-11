@@ -7,7 +7,7 @@
   unzip,
   autoconf,
   automake,
-  libtool_1_5,
+  libtool,
   makeWrapper,
   cups,
   jbigkit,
@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     unzip
     autoconf
     automake
-    libtool_1_5
+    libtool
     pkg-config
   ];
 

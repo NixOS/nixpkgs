@@ -31,6 +31,7 @@ runCommand "nixpkgs-vet"
     env.NIXPKGS_VET_NIX_PACKAGE = nix;
   }
   ''
+    export NIX_STORE_DIR=$(mktemp -d)
     export NIX_STATE_DIR=$(mktemp -d)
     $NIXPKGS_VET_NIX_PACKAGE/bin/nix-store --init
 

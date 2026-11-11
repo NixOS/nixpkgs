@@ -7,23 +7,23 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yara-x";
-  version = "1.19.0";
+  version = "1.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
-    tag = "v${version}";
-    hash = "sha256-CokjFTQoFT9k/2/MuQSbfzHonW4V0F8hskhqDvpCesM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NyaiHXBW/IsfhhPEwjKAVS6BwOkZ6bKqWgzzBpmettI=";
   };
 
   buildAndTestSubdir = "py";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src version;
-    hash = "sha256-wMh8F++16tQ0IUhacBPb4rDcydmDKZKzQf8EK/qDJXo=";
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-AHVNM1UHU7HqLcqIy2Jh9YCDLCJ+h2+piyCpV/RQI4I=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +40,11 @@ buildPythonPackage rec {
   meta = {
     description = "Official Python library for YARA-X";
     homepage = "https://github.com/VirusTotal/yara-x/tree/main/py";
-    changelog = "https://github.com/VirusTotal/yara-x/tree/${src.tag}/py";
+    changelog = "https://github.com/VirusTotal/yara-x/tree/${finalAttrs.src.tag}/py";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       ivyfanchiang
       lesuisse
     ];
   };
-}
+})

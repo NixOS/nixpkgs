@@ -9,49 +9,57 @@
   # dependencies
   numpy,
 
+  # optional-dependencies
+  matplotlib,
+  scipy,
+
   # tests
   python,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cma";
-  version = "4.4.1";
+  version = "4.5.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "CMA-ES";
     repo = "pycma";
-    tag = "r${version}";
-    hash = "sha256-06QPs2hbrIbrPRWidlZYf0jcMGdcDYfg89Ad+4IX/Co=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-54atJuPFTczLN4piSLh84+W0GKJ1u/LgurZZpRrQZe4=";
   };
-
-  # setuptools.errors.PackageDiscoveryError:
-  # Multiple top-level packages discovered in a flat-layout: ['cma', 'notebooks'].
-  postPatch = ''
-    rm -rf notebooks
-  '';
 
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
 
+  optional-dependencies = {
+    plotting = [ matplotlib ];
+    statistical-tests = [ scipy ];
+  };
+
   pythonImportsCheck = [ "cma" ];
 
-  # At least one doctest fails, thus only limited amount of files is tested
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
   checkPhase = ''
-    ${python.executable} -m cma.test \
-      interfaces.py \
-      purecma.py \
-      logger.py \
-      optimization_tools.py \
-      transformations.py
+    runHook preCheck
+
+    ${python.executable} -m cma.test
+
+    runHook postCheck
   '';
 
   meta = {
     description = "Library for Covariance Matrix Adaptation Evolution Strategy for non-linear numerical optimization";
     homepage = "https://github.com/CMA-ES/pycma";
-    changelog = "https://github.com/CMA-ES/pycma/releases/tag/${src.tag}";
+    changelog = "https://github.com/CMA-ES/pycma/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

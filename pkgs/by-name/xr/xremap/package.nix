@@ -5,11 +5,16 @@
   pkg-config,
   xremap,
 
-  withVariant ? "wlroots",
+  withVariant ? "full",
 }:
 let
   variants = {
+    full = {
+      features = [ "full" ];
+      descriptionSuffix = "full variant";
+    };
     x11 = {
+      suffix = "-x11";
       features = [ "x11" ];
       descriptionSuffix = "X11";
     };
@@ -43,8 +48,13 @@ let
       features = [ "cosmic" ];
       descriptionSuffix = "Cosmic";
     };
+    pantheon = {
+      suffix = "-pantheon";
+      features = [ "pantheon" ];
+      descriptionSuffix = "Pantheon";
+    };
     socket = {
-      suffix = "";
+      suffix = "-socket";
       features = [ "socket" ];
       descriptionSuffix = "Socket client";
     };
@@ -58,13 +68,13 @@ assert (
 );
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xremap${variant.suffix or ""}";
-  version = "0.15.11";
+  version = "0.15.16";
 
   src = fetchFromGitHub {
     owner = "xremap";
     repo = "xremap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N5JItxzg0nU9hsW+fOEJ9FHiq6L0rt8jXvieefuHc5k=";
+    hash = "sha256-LrPAPy5RM0tb9LNWhszbkT0n6ewMzJc11ywtfVL0Uh0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -72,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   buildFeatures = variant.features;
 
-  cargoHash = "sha256-45YN1ZjM485phmvMNOna/hXE+EorZcz3xLpTVZIWZn8=";
+  cargoHash = "sha256-dXNHTJ8VEo7nnm9qRCUEaiBLPrkgmm8NbtzvXVr5k/8=";
 
   passthru = lib.mapAttrs (name: lib.const (xremap.override { withVariant = name; })) variants;
 

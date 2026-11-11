@@ -36,7 +36,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/jakwai01/lurk/releases/tag/v${finalAttrs.version}";
     description = "Simple and pretty alternative to strace";
     homepage = "https://github.com/jakwai01/lurk";
-    license = lib.licenses.agpl3Only;
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     mainProgram = "lurk";
     maintainers = with lib.maintainers; [
       gepbird

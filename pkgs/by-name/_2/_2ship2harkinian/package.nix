@@ -19,6 +19,7 @@
   libpulseaudio,
   libzip,
   nlohmann_json,
+  stb,
   SDL2,
   spdlog,
   tinyxml-2,
@@ -89,12 +90,6 @@ let
     '';
   };
 
-  stb' = fetchurl {
-    name = "stb_image.h";
-    url = "https://raw.githubusercontent.com/nothings/stb/0bc88af4de5fb022db643c2d8e549a0927749354/stb_image.h";
-    hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
-  };
-
   stormlib' = applyPatches {
     src = fetchFromGitHub {
       owner = "ladislav-zezula";
@@ -124,13 +119,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
-    owner = "HarbourMasters";
+    owner = "2ship2harkinian";
     repo = "2ship2harkinian";
     tag = finalAttrs.version;
-    hash = "sha256-lx5+i/S+deWB6iYTTrUOffQfB6qnUvDZrU80NWyqb2Y=";
+    hash = "sha256-+8c6AolEjM7VDhlNTnMRoQMLze4DssARlHl33nJ1zM8=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -220,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     # mirror 2ship's stb
     mkdir stb
-    cp ${stb'} ./stb/${stb'.name}
+    cp ${stb}/include/stb/stb_image.h ./stb/stb_image.h
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
@@ -303,7 +298,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/HarbourMasters/2ship2harkinian";
+    homepage = "https://github.com/2ship2harkinian/2ship2harkinian";
     description = "PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
     mainProgram = "2s2h";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

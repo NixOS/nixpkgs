@@ -63,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/llvm/llvm-project/commit/e2f25af711425fb238317582441f4bda56131891.patch?full_index=1";
       hash = "sha256-zJwl4aeX71UR7a8XHpKl4atbw+hEGCHOQmiFLIJirTY=";
     })
+    # Fix build with GCC on aarch64.
+    # Backport of https://github.com/llvm/llvm-project/commit/d54dfdd1b53ff72344287d250c2b67329792c840.
+    ./0004-Backport-GCC-14-aarch64-fix.patch
   ];
 
   postPatch = ''

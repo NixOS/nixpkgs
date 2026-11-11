@@ -2,65 +2,55 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
-  pkg-config,
-  gtk3,
+  desktop-file-utils,
+  glycin-loaders,
   gnome,
-  adwaita-icon-theme,
-  gdk-pixbuf,
-  librsvg,
-  wrapGAppsHook3,
+  gst_all_1,
+  gtk4,
   itstool,
-  gsound,
+  libadwaita,
+  libglycin-gtk4,
+  libglycin,
   libxml2,
   meson,
   ninja,
-  python3,
+  pkg-config,
   vala,
-  desktop-file-utils,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iagno";
-  version = "3.38.1";
+  version = "50.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/iagno/${lib.versions.majorMinor finalAttrs.version}/iagno-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hLnzLOA4l1iiHWPH6xwifbcRa1HTFJqg6uNQkWjg7SQ=";
+    url = "mirror://gnome/sources/iagno/${lib.versions.major finalAttrs.version}/iagno-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/f1i0YdEGuofHWoOy71OJ3B/XI3cB5cUHKdQ3TBdyII=";
   };
 
-  patches = [
-    # Fix build with recent Vala.
-    # https://gitlab.gnome.org/GNOME/dconf-editor/-/merge_requests/15
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/iagno/-/commit/e8a0aeec350ea80349582142c0e8e3cd3f1bce38.patch";
-      hash = "sha256-OO1x0Yx56UFzHTBsPAMYAjnJHlnTjdO1Vk7q6XU8wKQ=";
-    })
-    # https://gitlab.gnome.org/GNOME/dconf-editor/-/merge_requests/13
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/iagno/-/commit/508c0f94e5f182e50ff61be6e04f72574dee97cb.patch";
-      hash = "sha256-U7djuMhb1XJaKAPyogQjaunOkbBK24r25YD7BgH05P4=";
-    })
-  ];
-
   nativeBuildInputs = [
+    desktop-file-utils
+    itstool
+    libxml2 # for xmllint
     meson
     ninja
-    python3
-    vala
-    desktop-file-utils
     pkg-config
-    wrapGAppsHook3
-    itstool
-    libxml2
+    vala
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
-    adwaita-icon-theme
-    gdk-pixbuf
-    librsvg
-    gsound
+    glycin-loaders
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gtk4
+    libadwaita
+    libglycin
+    libglycin-gtk4
   ];
 
   passthru = {

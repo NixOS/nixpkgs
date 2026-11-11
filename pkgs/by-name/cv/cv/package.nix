@@ -6,7 +6,7 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "cv";
-  version = "0.3.71";
+  version = "0.3.72";
   __structuredAttrs = true;
   strictDeps = true;
   dontUnpack = false;
@@ -15,10 +15,10 @@ php.buildComposerProject2 (finalAttrs: {
     owner = "civicrm";
     repo = "cv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1InNm8ayshrACLUJ4MXb6DTnD9vxRVtwnK9oFAxMMho=";
+    hash = "sha256-haK/DYas0KJjOEyqFcGqGbf2dAikbR7XFdI15fHcZcg=";
   };
 
-  vendorHash = "sha256-7+roKbgbSx00CrHDOwp7yxcSTdq9YDNgTLIdjLT05oM=";
+  vendorHash = "sha256-gL0mleLCSDvR93oQW+O//j/ANs7oYYKfKgGOGQkCFJI=";
 
   installPhase = ''
     runHook preInstall

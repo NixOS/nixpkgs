@@ -15,7 +15,7 @@ mkDerivation rec {
     repo = "functional-linear-algebra";
     owner = "ryanorendorff";
     rev = "v${version}";
-    sha256 = "sha256-3nme/eH4pY6bD0DkhL4Dj/Vp/WnZqkQtZTNk+n1oAyY=";
+    hash = "sha256-3nme/eH4pY6bD0DkhL4Dj/Vp/WnZqkQtZTNk+n1oAyY=";
   };
 
   meta = {

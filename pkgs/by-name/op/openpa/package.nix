@@ -33,5 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       learning new assembly dialects in order improve or maintain application
       portability.
     '';
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

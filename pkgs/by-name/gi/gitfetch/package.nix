@@ -27,11 +27,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        gh
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      gh
+    ]}"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -39,6 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Neofetch-style CLI tool for git provider statistics";
     homepage = "https://github.com/Matars/gitfetch";
+    changelog = "https://github.com/Matars/gitfetch/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "gitfetch";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;

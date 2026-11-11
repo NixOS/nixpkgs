@@ -6,19 +6,25 @@
   pathspec,
   pytestCheckHook,
   pyyaml,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ssort";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bwhmather";
     repo = "ssort";
     tag = version;
-    hash = "sha256-QVodBJsYryVue0QXaZbjo1JtwuCBUiuZ+XU+I7jJCq8=";
+    hash = "sha256-g2zEm0W+yaHbeWsnVhEnfITOaPACd1kG9fGOrkppWXY=";
   };
+
+  # Upstream's release workflow generates src/ssort/_version.py, otherwise the version is 0.0.1+dev
+  postPatch = ''
+    python scripts/freeze_version.py ${version}
+  '';
 
   build-system = [ setuptools ];
 
@@ -29,6 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pyyaml
+    versionCheckHook
   ];
 
   preCheck = ''

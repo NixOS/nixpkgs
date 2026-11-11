@@ -49,6 +49,6 @@ buildPythonPackage rec {
       that client code uses to construct the grammar directly in Python code.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

@@ -25,10 +25,10 @@ diff --git a/kicad/project_template.cpp b/kicad/project_template.cpp
 index bf951fcddb..2bef94326b 100644
 --- a/kicad/project_template.cpp
 +++ b/kicad/project_template.cpp
-@@ -282,6 +282,21 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
+@@ -371,6 +371,21 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
  
-             result = false;
-         }
+                 result = false;
+             }
 +	else if( !destFile.IsFileWritable() && !destFile.SetPermissions(0644) )
 +        {
 +            if( aErrorMsg )
@@ -44,6 +44,6 @@ index bf951fcddb..2bef94326b 100644
 +
 +            result = false;
 +	}
-     }
- 
-     return result;
+             else
+             {
+                 KIPLATFORM::IO::MakeWriteable( destFile.GetFullPath() );

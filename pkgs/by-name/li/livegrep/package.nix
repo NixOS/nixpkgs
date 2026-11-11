@@ -94,7 +94,10 @@ buildBazelPackage {
     "file://${registry}"
   ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     LIBTOOL = "${cctools}/bin/libtool";
   };
 

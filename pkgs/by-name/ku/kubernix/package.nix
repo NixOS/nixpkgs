@@ -2,23 +2,29 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubernix";
-  version = "0.3.5";
+  version = "1.0.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saschagrunert";
     repo = "kubernix";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/abdmhDCakSbVj1SK9EqVw2MDdCc760IFIUIg3HGAJU=";
+    hash = "sha256-guXoQ09tZ/qOEQomlIODED2f01DDFSQyyDNl7vLzahI=";
   };
 
-  cargoHash = "sha256-0buTnenDDLTW8Cy72Hsg4raTj0t3TaHskh1ed1QzmLc=";
+  cargoHash = "sha256-AYWbXxCdtkKePmHTj6MkbLMsW060eB5Ym/o1Hus4FDw=";
 
   # Tests require network access
   doCheck = false;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";

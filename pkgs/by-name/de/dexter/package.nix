@@ -4,17 +4,20 @@
   installShellFiles,
   lib,
   stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "dexter";
-  version = "0.7.1";
+  version = "0.7.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "remoteoss";
     repo = "dexter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VrKLi92fCkAL6C5dvydXuwOCp3dYXsDJSGk9rkHv1t8=";
+    hash = "sha256-4LAcV29ypn56UDt8RN+UdwR1ZMlGUixj+rwALo9a84g=";
   };
 
   vendorHash = "sha256-1mJ4HdDCsZl/g8F+L+NrW2ACuiHe2aSheJO/1XfKAb4=";
@@ -22,7 +25,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -37,10 +39,12 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/dexter completion zsh)
   '';
 
-  __structuredAttrs = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
-    description = "A fast, full-featured Elixir LSP optimized for large codebases";
+    description = "Fast, full-featured Elixir LSP optimized for large codebases";
     homepage = "https://github.com/remoteoss/dexter";
     changelog = "https://github.com/remoteoss/dexter/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

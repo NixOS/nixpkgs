@@ -6,6 +6,7 @@
   less,
   installShellFiles,
   makeWrapper,
+  libgit2,
   zlib,
   versionCheckHook,
 }:
@@ -25,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-WRLCs1hrwFT3tya9CzKUuh5g+6fYqKDtv3yvDx8Wws8=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   nativeBuildInputs = [
     pkg-config
     installShellFiles
@@ -32,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     zlib
   ];
 
@@ -85,10 +89,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     mainProgram = "bat";
     maintainers = with lib.maintainers; [
       dywedir

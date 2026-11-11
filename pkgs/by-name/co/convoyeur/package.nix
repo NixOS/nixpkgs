@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "convoyeur";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromCodeberg {
     owner = "classabbyamp";
     repo = "convoyeur";
     tag = "v${version}";
-    hash = "sha256-gfOmi3yyGEjGPooWocCBIO5wR5hKgz4HmbJBiIMh4RE=";
+    hash = "sha256-l4QAZJX9ht10cwqk/yckmrfdu46vYQlOeT1UtsT+SRY=";
   };
 
-  cargoHash = "sha256-rMRKTaKleO5QNeLM0jAOJ2kCKGfJxQWACWTqU8A8wt8=";
+  cargoHash = "sha256-KvPwyyEK3qI77KDhrqMwcFH4Vq0PF5pRMkFsZggtWS4=";
 
   passthru.updateScript = nix-update-script { };
 

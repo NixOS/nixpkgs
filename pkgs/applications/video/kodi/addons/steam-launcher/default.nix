@@ -17,7 +17,7 @@ buildKodiAddon {
     owner = "teeedubb";
     repo = owner + "-xbmc-repo";
     rev = "76d728bb51ad265a28d4945af99c7fa2626df624";
-    sha256 = "sha256-i8plXt+Fu+O42JPo/FJI365IAUCNvWhREy2eZuG44lQ=";
+    hash = "sha256-i8plXt+Fu+O42JPo/FJI365IAUCNvWhREy2eZuG44lQ=";
   };
 
   propagatedBuildInputs = [

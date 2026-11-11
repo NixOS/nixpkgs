@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multiple-entity-row";
-  version = "4.10.1";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "benct";
     repo = "lovelace-multiple-entity-row";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6fZpiqQyya0I8GOw5EHGlkXXZ/j1cuKDXlYu7GQBtWE=";
+    hash = "sha256-AmTgHvaBejb03QEijbtpfgNQ0P03VcjWkaei30UUZEY=";
   };
 
   offlineCache = fetchYarnDeps {

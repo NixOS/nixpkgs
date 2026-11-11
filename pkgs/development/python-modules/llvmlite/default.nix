@@ -4,13 +4,14 @@
   buildPythonPackage,
   isPyPy,
 
-  setuptools,
-
+  # build-system
   cmake,
   ninja,
+  setuptools,
 
-  llvm_22,
+  # buildInputs
   libxml2,
+  llvm_22,
 
   # tests
   pytestCheckHook,
@@ -22,47 +23,53 @@ let
   llvm = llvm_22;
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llvmlite";
-  version = "0.48.0";
+  version = "0.49.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "numba";
     repo = "llvmlite";
-    tag = "v${version}";
-    hash = "sha256-qFly3Thx0jkCHy6r8+VWuGROUj910oHBEQFMZlAX1aw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AUte9llrcPl2z4ipkZ3PGeryDveZ9vj5oaBQtzGaT+w=";
   };
 
-  build-system = [ setuptools ];
-
-  nativeBuildInputs = [
+  build-system = [
     cmake
     ninja
+    setuptools
   ];
-
-  buildInputs = [ llvm ] ++ lib.optionals withStaticLLVM [ libxml2.dev ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
   dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    llvm
+  ]
+  ++ lib.optionals withStaticLLVM [ libxml2.dev ];
+
+  env.LLVMLITE_SHARED = !withStaticLLVM;
+
+  pythonImportsCheck = [ "llvmlite" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
     cd $out
   '';
 
-  env.LLVMLITE_SHARED = !withStaticLLVM;
-
   passthru = lib.optionalAttrs (!withStaticLLVM) { inherit llvm; };
 
   meta = {
-    changelog = "https://github.com/numba/llvmlite/blob/v${version}/CHANGE_LOG";
     description = "Lightweight LLVM python binding for writing JIT compilers";
+    homepage = "https://llvmlite.pydata.org/";
     downloadPage = "https://github.com/numba/llvmlite";
-    homepage = "http://llvmlite.pydata.org/";
+    changelog = "https://github.com/numba/llvmlite/blob/${finalAttrs.src.tag}/CHANGE_LOG";
     license = lib.licenses.bsd2;
   };
-}
+})

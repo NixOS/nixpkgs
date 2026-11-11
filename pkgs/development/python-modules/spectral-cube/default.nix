@@ -24,16 +24,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spectral-cube";
-  version = "0.6.7";
+  version = "0.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "radio-astro-tools";
     repo = "spectral-cube";
-    tag = "v${version}";
-    hash = "sha256-l5r7oeWr/JrmGOmUo4po2VlGldh8y7E3ufd+Gw1/JmM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G/G3OtyhJ84KfnsmrOMK8Z6I/QTp8Wr8Fdo5R1CRnwU=";
   };
 
   build-system = [
@@ -69,7 +70,11 @@ buildPythonPackage rec {
     "test_reproject_3D_memory"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # This test fails with "Passing a non-Collection iterable to parametrize is deprecated".
+    "spectral_cube/tests/test_casafuncs.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # On x86_darwin, this test fails with "Fatal Python error: Aborted"
     # when sandbox = true.
     "spectral_cube/tests/test_visualization.py"
@@ -80,8 +85,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for reading and analyzing astrophysical spectral data cubes";
     homepage = "https://spectral-cube.readthedocs.io";
-    changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/v${version}";
+    changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

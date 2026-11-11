@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tclcsv";
   version = "2.4.3";
 
   src = fetchzip {
-    url = "mirror://sourceforge/tclcsv/tclcsv${version}-src.tar.gz";
+    url = "mirror://sourceforge/tclcsv/tclcsv${finalAttrs.version}-src.tar.gz";
     hash = "sha256-bNRMgIyUSy4TnOGq9FPCXr79NIkcRfy2SqO5/i+DC/w=";
   };
 
@@ -21,4 +21,4 @@ mkTclDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

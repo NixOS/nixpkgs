@@ -3,16 +3,15 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "fishtape";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "fishtape";
-    rev = version;
-    sha256 = "072a3qbk1lpxw53bxp91drsffylx8fbywhss3x0jbnayn9m8i7aa";
+    tag = finalAttrs.version;
+    hash = "sha256-Sp2IarJe2SVBH1pD7pdDnXrndG4h3b5G4f3SMBceShw=";
   };
 
   checkFunctionDirs = [ "./functions" ]; # fishtape is introspective
@@ -26,4 +25,4 @@ buildFishPlugin rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];
   };
-}
+})

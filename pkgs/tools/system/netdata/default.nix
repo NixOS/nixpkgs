@@ -40,7 +40,7 @@
   sqlite,
   stdenv,
   symlinkJoin,
-  systemd,
+  systemdLibs,
   zlib,
 
   withCloudUi ? false,
@@ -66,13 +66,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.11.0";
+    version = "2.12.2";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-ANXncPtAo3qkhqmOWEQ4wY8oAT5tWvIRS7QVxoT/cMs=";
+      hash = "sha256-+HsS8x4og3FpQEyn+YBZRYjVNYNTn0PkhOStrsbhWP8=";
       fetchSubmodules = true;
     };
 
@@ -127,7 +127,7 @@ stdenv.mkDerivation (
       libnetfilter_acct
     ]
     ++ lib.optionals withSsl [ openssl ]
-    ++ lib.optionals (withSystemdJournal || withSystemdUnits) [ systemd ];
+    ++ lib.optionals (withSystemdJournal || withSystemdUnits) [ systemdLibs ];
 
     patches = [
       # Allow ndsudo to use non-hardcoded `PATH`
@@ -144,11 +144,11 @@ stdenv.mkDerivation (
     ++ lib.optional withCloudUi (
       replaceVars ./dashboard-v3-add.patch {
         # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
-        # last update 12/10/2025 21:25:17
+        # last update 10/25/2026 01:43:42
         dashboardPath = fetchzip {
           # The `if_` suffix is intentional, with out it the hash will vary depending on the region
-          url = "https://web.archive.org/web/20251210212517if_/https://app.netdata.cloud/agent.tar.gz";
-          hash = "sha256-8ovYkvt324l6f0YT6wTG+Y2u7VaVqotAdssnNTtHIEk=";
+          url = "https://web.archive.org/web/20261025014342if_/https://app.netdata.cloud/agent.tar.gz";
+          hash = "sha256-SKPGpQLRo1CkwKyh5O1/jB7EsGzVqh7qxy4uuLrehJI=";
         };
       }
     );
@@ -215,39 +215,40 @@ stdenv.mkDerivation (
       ''}
     '';
 
-    preConfigure = ''
-      ${lib.optionalString (withNetflow || withOtel || withSystemdJournal) ''
-        export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
-      ''}
+    preConfigure =
+      let
+        LOCAL_GOPROXY = lib.concatStringsSep "," (
+          [ "file://${finalAttrs.passthru.netdata-go-modules}" ]
+          ++ lib.optional withNdMcp "file://${finalAttrs.passthru.nd-mcp}"
+        );
+      in
+      ''
+        ${lib.optionalString (withNetflow || withOtel || withSystemdJournal) ''
+          export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
+        ''}
 
-      export GOCACHE=$TMPDIR/go-cache
-      export GOPATH=$TMPDIR/go
-      export GOSUMDB=off
+        export GOCACHE=$TMPDIR/go-cache
+        export GOPATH=$TMPDIR/go
+        export GOSUMDB=off
 
-      substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
-        --replace-fail \
-          'GOPROXY=https://proxy.golang.org' \
-          'GOPROXY=${
-            lib.concatStringsSep "," (
-              [ "file://${finalAttrs.passthru.netdata-go-modules}" ]
-              ++ lib.optional withNdMcp "file://${finalAttrs.passthru.nd-mcp}"
-            )
-          }'
+        substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
+          --replace-fail 'GOPROXY=https://proxy.golang.org' 'GOPROXY=${LOCAL_GOPROXY}'
 
-      # Prevent the path to be caught into the Nix store path.
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'set(CACHE_DIR "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
-        --replace-fail 'set(CONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
-        --replace-fail 'set(LIBCONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
-        --replace-fail 'set(LOG_DIR "''${NETDATA_RUNTIME_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
-        --replace-fail 'set(PLUGINS_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
-        --replace-fail 'set(STOCK_DATA_DIR "''${NETDATA_RUNTIME_PREFIX}/''${STOCK_DATA_DEST}")' 'set(STOCK_DATA_DIR "${placeholder "out"}/share/netdata")' \
-        --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
-        --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
-        --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
-        --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "bin")' \
-        --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
-    '';
+        # Prevent the path to be caught into the Nix store path.
+        substituteInPlace CMakeLists.txt \
+          --replace-fail 'GOPROXY=https://proxy.golang.org' 'GOPROXY=${LOCAL_GOPROXY}' \
+          --replace-fail 'set(CACHE_DIR "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
+          --replace-fail 'set(CONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
+          --replace-fail 'set(LIBCONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
+          --replace-fail 'set(LOG_DIR "''${NETDATA_RUNTIME_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
+          --replace-fail 'set(PLUGINS_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
+          --replace-fail 'set(STOCK_DATA_DIR "''${NETDATA_RUNTIME_PREFIX}/''${STOCK_DATA_DEST}")' 'set(STOCK_DATA_DIR "${placeholder "out"}/share/netdata")' \
+          --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
+          --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
+          --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
+          --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "bin")' \
+          --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
+      '';
 
     cmakeFlags = [
       "-DWEB_DIR=share/netdata/web"
@@ -321,7 +322,7 @@ stdenv.mkDerivation (
 
           sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-          vendorHash = "sha256-hjq91syiZYhVT8udA2LTrBSr0IoYs1WolwAKhO+yTj4=";
+          vendorHash = "sha256-wE3sCKlqBw4GuNRtGaN0hc6LBG+gXXFHCP41fgjDhK0=";
           proxyVendor = true;
           doCheck = false;
 
@@ -374,7 +375,7 @@ stdenv.mkDerivation (
             src
             cargoRoot
             ;
-          hash = "sha256-u8x2vYIStJQvHokHmgL0fl6kCamM2dpl81re1BxSi0Y=";
+          hash = "sha256-eUsgb82KDB9T2UjAIUzp7+EGt8qZDI2kc5y/ykeT6ZA=";
         })
         (rustPlatform.fetchCargoVendor {
           pname = "${finalAttrs.pname}-nd-jf";

@@ -24,11 +24,11 @@ index 000000000..72ef0cc79
 +set -e
 +
 +# Allow slight shrinkage if heap relocation has to adjust for alignment
-+SBCL_DYNAMIC_SPACE_SIZE=234mb run_sbcl_with_args --script <<EOF
++NIX_SBCL_DYNAMIC_SPACE_SIZE=234mb run_sbcl_with_args --script <<EOF
 +(assert (<= 0 (- (* 234 1024 1024) (sb-ext:dynamic-space-size)) 65536))
 +EOF
 +
-+SBCL_DYNAMIC_SPACE_SIZE=555mb run_sbcl_with_args --dynamic-space-size 234mb --script <<EOF
++NIX_SBCL_DYNAMIC_SPACE_SIZE=555mb run_sbcl_with_args --dynamic-space-size 234mb --script <<EOF
 +(assert (<= 0 (- (* 234 1024 1024) (sb-ext:dynamic-space-size)) 65536))
 +EOF
 +
@@ -56,7 +56,7 @@ index faa647e1a..1f2821b5d 100644
  echo "::: Success"
  
 +echo "::: Running :DYNAMIC-SPACE-SIZE-ENV-ACCEPT"
-+SBCL_DYNAMIC_SPACE_SIZE=432MB ./"$tmpcore" --no-userinit --no-sysinit --noprint <<EOF
++NIX_SBCL_DYNAMIC_SPACE_SIZE=432MB ./"$tmpcore" --no-userinit --no-sysinit --noprint <<EOF
 +  (when (dynamic-space-size-good-p 432)
 +    (exit :code 42))
 +EOF
@@ -66,7 +66,7 @@ index faa647e1a..1f2821b5d 100644
 +echo "::: Success"
 +
 +echo "::: Running :DYNAMIC-SPACE-SIZE-PRECEDENCE"
-+SBCL_DYNAMIC_SPACE_SIZE=432MB ./"$tmpcore" --dynamic-space-size 333MB \
++NIX_SBCL_DYNAMIC_SPACE_SIZE=432MB ./"$tmpcore" --dynamic-space-size 333MB \
 +  --no-userinit --no-sysinit --noprint <<EOF
 +  (when (dynamic-space-size-good-p 333))
 +    (exit :code 42))
@@ -112,7 +112,7 @@ index faa647e1a..1f2821b5d 100644
  echo "::: Success"
  
 +echo "::: Running :DYNAMIC-SPACE-SIZE-ENV-IGNORE"
-+SBCL_DYNAMIC_SPACE_SIZE=432MB ./"${tmpcore}2" --no-userinit --no-sysinit --noprint <<EOF
++NIX_SBCL_DYNAMIC_SPACE_SIZE=432MB ./"${tmpcore}2" --no-userinit --no-sysinit --noprint <<EOF
 +  (when (dynamic-space-size-good-p 260)
 +    (exit :code 42))
 +EOF

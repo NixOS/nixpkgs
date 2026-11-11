@@ -1,29 +1,50 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
-  # other
-  gitMinimal,
-  withPcap ? true,
-  withXclip ? stdenv.hostPlatform.isLinux,
+  groff,
+  man-db,
+
+  # dependencies
   xclip,
-  testers,
-  visidata,
-  stdenv,
+  glibcLocales,
+
+  # tests
+  versionCheckHook,
+
+  withPcap ? true,
+  # tabula-py pulls in openjdk
+  withTabula ? false,
+  withXclip ? stdenv.hostPlatform.isLinux,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "visidata";
-  version = "3.3";
-  format = "setuptools";
+  version = "3.5";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-y+HqRww/Fm+YeiNYH0a2TcUYOc72qL+9tC0PRudptrA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Lvs8BFgHdr51MCFtTbQVK4iFUwn5b5o/L6rmMGwA5To=";
   };
 
-  propagatedBuildInputs =
+  postPatch = ''
+    patchShebangs dev/mkman.sh visidata/man/parse_options.py
+  '';
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    groff
+    man-db
+  ];
+
+  dependencies =
     with python3Packages;
     [
       # from visidata/requirements.txt
@@ -34,6 +55,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       lxml
       openpyxl
       xlrd
+      standard-mailcap
       xlwt
       h5py
       psycopg2
@@ -53,7 +75,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       #namestand
       #datapackage
       pdfminer-six
-      #tabula
       vobject
       tabulate
       wcwidth
@@ -66,17 +87,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
       sh
       psutil
       numpy
+      shapely
+      duckdb
 
-      #requests_cache
+      requests-cache
       beautifulsoup4
 
       faker
       praw
       zulip
-      #pyairtable
-
-      setuptools
-      importlib-metadata
+      pyairtable
+      matrix-client
+      pyxlsb
     ]
     ++ lib.optionals withPcap (
       with python3Packages;
@@ -85,39 +107,42 @@ python3Packages.buildPythonApplication (finalAttrs: {
         dnslib
       ]
     )
-    ++ lib.optional withXclip xclip;
+    ++ lib.optionals withTabula [ python3Packages.tabula-py ]
+    ++ lib.optionals withXclip [
+      xclip
+    ];
 
   nativeCheckInputs = [
-    gitMinimal
+    versionCheckHook
   ];
+
+  # tests/issue3195.vdx sets LC_NUMERIC=en_US.UTF-8
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   # check phase uses the output bin, which is not possible when cross-compiling
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  checkPhase = ''
-    runHook preCheck
-
+  preCheck = ''
     # disable some tests which require access to the network
-    rm -f tests/load-http.vd            # http
-    rm -f tests/graph-cursor-nosave.vd  # http
-    rm -f tests/messenger-nosave.vd     # dns
+    rm tests/load-http-flaky.vd       # http
+    rm tests/messenger-nosave.vd      # dns
 
     # tests to disable because we don't have a package to load such files
-    rm -f tests/load-conllu.vdj         # no 'pyconll'
-    rm -f tests/load-sav.vd             # no 'savReaderWriter'
-    rm -f tests/load-fec.vdj            # no 'fecfile'
+    rm tests/load-conllu.vdj          # no 'pyconll'
+    rm tests/load-fec.vdj             # no 'fecfile'
 
-    # tests use git to compare outputs to references
-    git init -b "test-reference"
-    git config user.name "nobody"
-    git config user.email "no@where"
-    git add .
-    git commit -m "test reference"
+    patchShebangs tests/
+    substituteInPlace tests/test-vdx.sh --replace-fail "bin/vd" "$out/bin/vd"
+  '';
 
-    substituteInPlace dev/test.sh --replace "bin/vd" "$out/bin/vd"
+  checkPhase = ''
+    runHook preCheck
     bash dev/test.sh
     runHook postCheck
   '';
+
   postInstall = ''
     python dev/zsh-completion.py
     install -Dm644 _visidata -t $out/share/zsh/site-functions
@@ -125,20 +150,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "visidata" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = visidata;
-    version = "v${finalAttrs.version}";
-  };
-
   meta = {
     description = "Interactive terminal multitool for tabular data";
     mainProgram = "visidata";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       raskin
       markus1189
     ];
     homepage = "https://visidata.org/";
-    changelog = "https://github.com/saulpw/visidata/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/saulpw/visidata/blob/${finalAttrs.src.tag}/CHANGELOG.md";
   };
 })

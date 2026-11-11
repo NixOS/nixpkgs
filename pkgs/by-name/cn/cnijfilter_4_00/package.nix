@@ -1,5 +1,5 @@
 {
-  gcc13Stdenv,
+  stdenv,
   lib,
   fetchzip,
   autoconf,
@@ -21,7 +21,6 @@
 */
 
 let
-  stdenv = gcc13Stdenv;
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       "64"
@@ -67,6 +66,8 @@ stdenv.mkDerivation {
     libusb1
     libxml2
   ];
+
+  env.NIX_CFLAGS_COMPILE = " -std=gnu90";
 
   # patches from https://github.com/tokiclover/bar-overlay/tree/master/net-print/cnijfilter
   patches = [

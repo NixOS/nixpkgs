@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
 
   preFixup = ''
     makeWrapperArgs=(
-      --prefix PATH : "${lib.makeBinPath runtimeDeps}"
+      ${lib.optionalString (runtimeDeps != [ ]) "--prefix PATH : ${lib.makeBinPath runtimeDeps}"}
     )
     gappsWrapperArgs+=(
       # Thumbnailers

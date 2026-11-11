@@ -1,17 +1,24 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i sh -p jq
 
+# Abort on the first failure: without this, a 404 would silently emit an empty hash.
+set -eu
+
 pname="nvidia-cutlass-dsl-libs-base"
 outfile="${pname}-hashes.nix"
 # Clear file
 rm -f $outfile
 
+# The `base` wheel is the one fetched by the derivation itself, the `cu*` ones are fetched by
+# `fetchLibsWheel` and merged in `postInstall`.
 prefetch() {
   package_attr="python${1}Packages.${pname}"
-  echo "Fetching hash for $package_attr on $2"
+  echo "Fetching $3 hash for $package_attr on $2"
 
   expr="(import <nixpkgs> { system = \"$2\"; }).$package_attr.src.url"
   url=$(NIX_PATH=.. nix-instantiate --eval -E "$expr" | jq -r)
+  # The project name appears both in the directory and in the file name, hence the `g` flag.
+  url=$(echo "$url" | sed "s/nvidia_cutlass_dsl_libs_base/nvidia_cutlass_dsl_libs_$3/g")
 
   sha256=$(nix-prefetch-url "$url")
   hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$sha256")
@@ -20,10 +27,23 @@ prefetch() {
   echo
 }
 
-for system in "x86_64-linux" "aarch64-linux"; do
-  echo "${system} = {" >>$outfile
-  for python_version in "311" "312" "313" "314"; do
-    prefetch "$python_version" "$system"
+for flavor in "base" "cu12" "cu13"; do
+  echo "${flavor} = {" >>$outfile
+  for system in "x86_64-linux" "aarch64-linux"; do
+    echo "${system} = {" >>$outfile
+    for python_version in "311" "312" "313" "314"; do
+      prefetch "$python_version" "$system" "$flavor"
+    done
+    echo "};" >>$outfile
   done
   echo "};" >>$outfile
 done
+
+# The `core` wheel is pure-Python (`py3-none-any`), so it needs no such matrix.
+echo "Fetching core hash"
+version=$(NIX_PATH=.. nix-instantiate --eval -E \
+  "(import <nixpkgs> { }).python3Packages.${pname}.version" | jq -r)
+sha256=$(nix-prefetch-url \
+  "https://files.pythonhosted.org/packages/py3/n/nvidia_cutlass_dsl_libs_core/nvidia_cutlass_dsl_libs_core-${version}-py3-none-any.whl")
+hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$sha256")
+echo "core = \"${hash}\";" >>$outfile

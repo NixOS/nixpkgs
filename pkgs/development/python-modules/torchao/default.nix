@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   replaceVars,
 
   # build-system
@@ -21,6 +20,7 @@
 
   # tests
   bitsandbytes,
+  datasets,
   expecttest,
   fire,
   pytest-xdist,
@@ -43,19 +43,15 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "torchao";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mry6jsZKkoC8dq3fYNsRyGbL4+S8ZYuHpkETNDy5qsg=";
+    hash = "sha256-szPyGqvvXSboDRcsLKAkXSBI+Kgx4Fganw/SlONimcY=";
   };
-
-  # AttributeError: 'typing.Union' object has no attribute '__module__' and no __dict__ for setting
-  # new attributes. Did you mean: '__reduce__'?
-  disabled = pythonAtLeast "3.14";
 
   patches = lib.optionals isAarch64Darwin [
     ./use-system-cpuinfo.patch
@@ -96,6 +92,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     bitsandbytes
+    datasets
     expecttest
     fire
     parameterized
@@ -302,10 +299,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
-    # ImportError: cannot import name 'ToyLinearModel' from 'torchao.testing.model_architectures'
-    "benchmarks/microbenchmarks/test/test_benchmark_profiler.py"
-    "benchmarks/microbenchmarks/test/test_utils.py"
-
     # ImportError: cannot import name 'fp8_blockwise_weight_dequant' from 'torchao.kernel.blockwise_quantization'
     "test/kernel/test_blockwise_triton.py"
   ]
@@ -328,6 +321,24 @@ buildPythonPackage (finalAttrs: {
     # Wants network access
     "test/test_low_bit_optim.py::TestQuantize::test_bf16_stochastic_round_dtensor_device_mps_compile_False"
     "test/test_low_bit_optim.py::TestQuantize::test_bf16_stochastic_round_dtensor_device_mps_compile_True"
+
+    # TypeError: Cannot convert a MPS Tensor to float64 dtype as the MPS framework doesn't support float64
+    "test/float8/test_base.py::TestFloat8Linear"
+    "test/float8/test_base.py::TestFloat8TrainingTensor"
+    "test/float8/test_base.py::TestNumerics"
+    "test/float8/test_base.py::TestScaledMM"
+    "test/float8/test_compile.py::TestGraphBreaks::test_float8_graph_input"
+    "test/float8/test_compile.py::TestGraphBreaks::test_float8_with_graph_break_in_the_middle"
+    "test/float8/test_compile.py::test_aot_eager"
+    "test/float8/test_compile.py::test_dynamic_scale_numeric_parity"
+    "test/float8/test_compile.py::test_eager_only"
+    "test/float8/test_numerics_integration.py::TestFloat8NumericsIntegrationTest::test_encoder_fw_bw_from_config_params"
+    "test/float8/test_numerics_integration.py::TestFloat8NumericsIntegrationTest::test_encoder_fw_bw_from_recipe"
+
+    # torch._inductor.exc.InductorError: KeyError: torch.float8_e4m3fn
+    "test/float8/test_compile.py::TestGraphBreaks::test_float8_graph_output"
+    "test/float8/test_compile.py::test_inductor_from_config_params"
+    "test/float8/test_compile.py::test_inductor_from_recipe"
   ];
 
   __darwinAllowLocalNetworking = true;

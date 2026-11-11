@@ -49,13 +49,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nezha";
-  version = "2.3.2";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C8xrgvek/QmjaFry2jT4fM/RfEg7MV4tVBCDKqn5Oho=";
+    hash = "sha256-NBGr4gQI0BzGBMU0mwukUtgaqmcMP04iGqGmNWPvp/A=";
   };
 
   proxyVendor = true;
@@ -95,7 +95,7 @@ buildGoModule (finalAttrs: {
     GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d cmd/dashboard -g main.go -o cmd/dashboard/docs
   '';
 
-  vendorHash = "sha256-QDWLeQfQOEGxU87PQLZaYQqrY2XyldJtRo59CMAiao8=";
+  vendorHash = "sha256-NpGdVymENUkxW1N3BQGdVPGbp/snMOf22khQ6xEsNuk=";
 
   ldflags = [
     "-s"
@@ -124,7 +124,7 @@ buildGoModule (finalAttrs: {
     description = "Self-hosted, lightweight server and website monitoring and O&M tool";
     homepage = "https://github.com/nezhahq/nezha";
     changelog = "https://github.com/nezhahq/nezha/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nezha";
   };

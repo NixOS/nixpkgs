@@ -4,17 +4,21 @@
   fetchFromGitHub,
   bash,
   cmake,
+  pkg-config,
   cfitsio,
+  curl,
   libusb1,
   kmod,
   zlib,
   boost,
   libev,
   libnova,
-  curl,
+  libtheora,
+  libxisf,
   libjpeg,
   gsl,
   fftw,
+  rtl-sdr-librtlsdr,
   gtest,
   udevCheckHook,
   versionCheckHook,
@@ -23,42 +27,46 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.2.0";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XTb+etafMRTP/Arb087s+kZoqFT50RT1fpVDeHaGdmY=";
+    hash = "sha256-3MA1+KfsxO5aV06/dRrPF/5u0p58vq6czX3Brtvd/AU=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   nativeInstallCheckInputs = [
-    versionCheckHook
     udevCheckHook
   ];
 
   buildInputs = [
-    curl
-    cfitsio
-    libev
-    libusb1
-    zlib
     boost
-    libnova
-    libjpeg
-    gsl
+    cfitsio
+    curl
     fftw
+    gsl
+    libev
+    libjpeg
+    libnova
+    libtheora
+    libusb1
+    libxisf
+    rtl-sdr-librtlsdr
+    zlib
   ];
 
   cmakeFlags = [
+    "-DFIX_WARNINGS=OFF" # disable Werror, which can break the build on newer compilers
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
   ]
-  ++ lib.optional finalAttrs.finalPackage.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     "-DINDI_BUILD_UNITTESTS=ON"
     "-DINDI_BUILD_INTEGTESTS=ON"
   ];

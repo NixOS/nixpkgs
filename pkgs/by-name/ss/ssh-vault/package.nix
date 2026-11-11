@@ -2,28 +2,22 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  openssl,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ssh-vault";
-  version = "1.3.2";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "ssh-vault";
     repo = "ssh-vault";
     tag = finalAttrs.version;
-    hash = "sha256-JwCW4IcA1B6A+ax+mITVfbrT/Od+y9NtDezE+KjbHlE=";
+    hash = "sha256-PyyNDrALWDSgyuHg8apXP5O4KxvCZgTMdVzpfWmr4XI=";
   };
 
-  cargoHash = "sha256-aXnFmpxAjX6dLzzNXTJP7iBnuVjGNGcmwia7PNOkeTg=";
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ];
+  cargoHash = "sha256-yoAlrPOdgbJA6Y0mBKDEzPrayHZuhgMX7/ant+0PhaY=";
 
   # `test_setup_io` requires to be executed in an interactive shell
   checkFlags = [

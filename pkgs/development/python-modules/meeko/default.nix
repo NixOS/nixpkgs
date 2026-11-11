@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "meeko";
-  version = "0.7.1";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "forlilab";
     repo = "Meeko";
     tag = "v${version}";
-    hash = "sha256-ObGUUNzfK2k37uJ/aY3DHf9BlJ1nzqTe6tHvV2rj1og=";
+    hash = "sha256-gtYh61HLyaUdjaJPZ1GSA0uN6QoHOYa92m+NQKSF4ds=";
   };
 
   build-system = [

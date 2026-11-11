@@ -46,19 +46,19 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "idescriptor";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "iDescriptor";
     repo = "iDescriptor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d2edq6NMDf4wgvKi29S+LpxCxyunDTwMOm90WmB6O1Y=";
+    hash = "sha256-esvfwsWynH+E34m05/ZmV6byTwvkGbuwwNlVM9djxss=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-QQcl/l6a4v75QE5xtOu8uWOyg0HD0juRyFl+s8GgEt4=";
+    hash = "sha256-PzXiX6gnTB3fh5LxEJDo3n4PbczjE3pDD3TygrMGG/8=";
   };
 
   buildFeatures = [ "package_manager" ];

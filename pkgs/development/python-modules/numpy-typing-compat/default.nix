@@ -5,21 +5,16 @@
   uv-build,
   numpy,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpy-typing-compat";
-  version = "20251206.2.4";
+  version = "20260602.2.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "numpy_typing_compat";
-    inherit version;
-    hash = "sha256-WYgtI6r/BUolNtqAVkASzc4zSHZXvk15xZJbuHBfyrw=";
+    version = finalAttrs.version;
+    hash = "sha256-GIWmeOmiRWSDntXRcRwAMXNft95/C17YjVUOXUWo1Pk=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail "uv_build>=0.9,<0.10" "uv_build>=0.9,<=0.10"
-  '';
 
   build-system = [
     uv-build
@@ -39,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tm-drtina ];
   };
-}
+})

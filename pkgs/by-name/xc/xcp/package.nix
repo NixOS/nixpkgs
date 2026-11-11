@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xcp";
-  version = "0.24.8";
+  version = "0.24.9";
 
   src = fetchFromGitHub {
     owner = "tarka";
     repo = "xcp";
     tag = "xcp-v${finalAttrs.version}";
-    hash = "sha256-OuwzgtMQMQcWhQnwD1Ow2fsT0yhl+DVGkqoebe2osf8=";
+    hash = "sha256-wTQMaMepYa8mr0I9oXeIDIV4TYhwZTECR5VsWpdmrxA=";
   };
 
-  cargoHash = "sha256-8WRiHHMvYwwx7AxuovGjnn83AxIAJK0T86b2WCOtGuw=";
+  cargoHash = "sha256-WSUbRn+OJ6bs7G08ntOSXF/Hk8DydI4Hu5qb9eLECHg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

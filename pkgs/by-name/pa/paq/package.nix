@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "paq";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "gregl83";
     repo = "paq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L9hjTdpV7j1qKX9GSo9Nb+nA1mPKz2aftAquiBuUbn4=";
+    hash = "sha256-1kL3g28nxf6F9izJES4WSW8pdu/rqRhMo6WzOKo9zEI=";
   };
 
-  cargoHash = "sha256-LjAPCdPZI/qGISb4/kY2fRG0G0d/VwHeISAmfZSF4sI=";
+  cargoHash = "sha256-yolA1uoxhpExOF/hzN9EZeQuexoMaBkAza+5qw3lA04=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -29,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/gregl83/paq";
     changelog = "https://github.com/gregl83/paq/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lafrenierejm ];
+    maintainers = with lib.maintainers; [
+      gregl83
+      lafrenierejm
+    ];
     mainProgram = "paq";
   };
 })

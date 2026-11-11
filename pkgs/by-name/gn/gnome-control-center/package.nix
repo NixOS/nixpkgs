@@ -13,6 +13,7 @@
   docbook-xsl-nons,
   fontconfig,
   gdk-pixbuf,
+  gdm,
   gettext,
   glib,
   glib-networking,
@@ -114,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     fontconfig
     gdk-pixbuf
+    gdm # org.gnome.login-screen schema, gates the fingerprint row in the Users panel
     glib
     glib-networking
     gcr_4

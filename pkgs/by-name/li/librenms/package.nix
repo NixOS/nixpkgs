@@ -24,16 +24,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "26.7.0";
+  version = "26.10.2";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    hash = "sha256-BH5ucY+xd5K325mKdzw4vHu4f3v/R3iCsqlG/YZboWM=";
+    hash = "sha256-BoeNACFMgGWA3U92/JYh6Ni8RTe5M0Hz8ar7ui8R+x4=";
   };
 
-  vendorHash = "sha256-vzEBZDe3tpLgl7f0kJniwv56r1MsJSSkPxeYW1zM0pI=";
+  vendorHash = "sha256-7OfUySl2nOyKo5gEcMiLXXIiny7qs4wA4VhxWBwj0qM=";
 
   php = phpPackage;
 
@@ -101,8 +101,6 @@ phpPackage.buildComposerProject2 rec {
       --replace-fail "! function_exists('posix_getpwuid') || ! function_exists('posix_geteuid')" "true"
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
-
-    php $out/artisan vue-i18n:generate --multi-locales --format=umd
 
     rm -rf $out/logs $out/rrd $out/bootstrap/cache $out/storage $out/.env
     ln -s ${logDir} $out/logs

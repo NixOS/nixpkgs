@@ -174,7 +174,7 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${cfg.package}/bin/ras-mc-ctl --register-labels";
+          ExecStart = "${cfg.package}/bin/ras-mc-ctl dimm --register-labels";
           RemainAfterExit = true;
         };
       };

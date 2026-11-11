@@ -38,11 +38,6 @@ not straightforward to include. These packages are:
   - `mft_oem`: unsure of purpose; contains FHS paths.
   - `mft`: unsure of purpose; contains FHS paths.
   - `nvidia_driver`: we don't use the drivers from the CUDA releases; irrelevant.
-  - `nvlsm`: contains FHS paths/NVSwitch and NVLINK software
-  - `libnvidia_nscq`: NVSwitch software
-  - `libnvsdm`: NVSwitch software
-- `cublasmp`:
-  - `libcublasmp`: `nvshmem` isn't packaged.
 - `cudnn`:
   - `cudnn_samples`: requires FreeImage, which is abandoned and not packaged.
 
@@ -58,12 +53,26 @@ not straightforward to include. These packages are:
 available as `cudaPackages.cuda_compat`, is a component which makes it possible
 to run applications built against a newer CUDA toolkit (for example CUDA 12) on
 a machine with an older CUDA driver (for example CUDA 11), which isn't possible
-out of the box. At the time of writing, CUDA Compatibility is only available on
-the Nvidia Jetson architecture, but Nvidia might release support for more
-architectures in the future.
+out of the box. It is available on `linux-x86_64` and `linux-sbsa` (datacenter
+GPUs only), and on Jetson. It must be enabled with
+`config.enableCudaDriverCompat = true`.
 
-As CUDA Compatibility strictly increases the range of supported applications, we
-try our best to enable it by default on supported platforms.
+#### Source
+
+Up to CUDA 13.3, `cuda_compat` is part of the CUDA manifest. Starting with CUDA
+13.4, NVIDIA only lists `cuda_compat_orin` (Jetson) there, and publishes
+`cuda_compat` under the `nvidia-driver` redistributable directory instead:
+
+```
+https://developer.download.nvidia.com/compute/nvidia-driver/redist/cuda_compat/<redistSystem>/cuda_compat-<redistSystem>-<driverVersion>_cuda<major.minor>-archive.tar.xz
+```
+
+The driver manifests do not list these archives, so we maintain hand-made
+manifests in [`_cuda/manifests/nvidia-driver`](./_cuda/manifests/nvidia-driver/README.md).
+Package sets select one with the `nvidia-driver` key in
+[cuda-packages.nix](../../top-level/cuda-packages.nix), and `cuda_compat` uses
+it when the CUDA manifest has no `cuda_compat` entry. We pick the latest driver
+release built for each CUDA release (e.g. 615.71.10 for CUDA 13.4).
 
 #### Functioning
 

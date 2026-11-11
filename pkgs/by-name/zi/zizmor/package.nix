@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.29.0";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2I4RvLsAzsq8HMCiXeG2IrZ9fRvr/VIGCw9qKQ5NHlA=";
+    hash = "sha256-wBBMF6FNwzlJiVag5tE64YnDf5Se+J5kJ/beVfg9H/Q=";
   };
 
-  cargoHash = "sha256-B8TMVvNWKdGUqXWBZ4900alkItj8tIikKFEv8cbpEVw=";
+  cargoHash = "sha256-b7tcTvECEFb1fBVSo6y+NL4YognKuOBjAVMIyrCXZGQ=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -31,14 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
-    # need network
-    "--skip=audit::known_vulnerable_actions::tests::test_first_patched_version_priority"
-    "--skip=audit::known_vulnerable_actions::tests::test_fix_symbolic_ref"
-    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_action_with_subpath"
-    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_actions_checkout"
-    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_actions_setup_node"
-    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_multiple_vulnerable_actions"
-    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_third_party_action"
     # insta snapshot appears to depend on checkout structure
     "--skip=e2e::issue_1745"
   ];

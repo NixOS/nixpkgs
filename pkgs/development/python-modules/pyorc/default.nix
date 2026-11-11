@@ -10,24 +10,17 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyorc";
-  version = "0.10.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noirello";
     repo = "pyorc";
-    tag = "v${version}";
-    hash = "sha256-2w3Qh6g+Yg+D10kTow9YR6B6FhQ+z2DvgDy5GtYxH4g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3vplqS05MEjCoSxVanqa3lBk6N11jZEkccTDbIZZ8aY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail \
-        '"pybind11>2.6.0,<3.0"' \
-        '"pybind11>2.6.0"'
-  '';
 
   build-system = [
     pybind11
@@ -71,10 +64,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/noirello/pyorc/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/noirello/pyorc/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     description = "Python module for Apache ORC file format";
     homepage = "https://github.com/noirello/pyorc";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

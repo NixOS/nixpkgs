@@ -4,36 +4,36 @@
   fetchFromGitHub,
   meson,
   ninja,
-  wrapGAppsHook3,
-  pkg-config,
-  gitUpdater,
-  appstream-glib,
-  json-glib,
-  desktop-file-utils,
-  python3,
-  gtk3,
-  girara,
   gettext,
+  pkg-config,
+  librsvg,
+  sphinx,
+  desktop-file-utils,
+  appstream,
+  gtk4,
+  glib,
+  girara,
+  file, # libmagic
+  json-glib,
+  sqlite,
+  xxhash,
+  texlive, # synctex
+  libseccomp,
+  xvfb-run,
+  weston,
+  wrapGAppsHook4,
+  versionCheckHook,
+  gitUpdater,
+  zathura,
   gnome,
   libheif,
   libjxl,
-  libxml2,
-  check,
-  sqlite,
-  glib,
-  texlive,
-  libintl,
-  libseccomp,
-  file,
-  librsvg,
-  gtk-mac-integration,
   webp-pixbuf-loader,
-  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "2026.05.20";
+  version = "2026.10.4";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pwmt";
     repo = "zathura";
     tag = finalAttrs.version;
-    hash = "sha256-ChrIJKPVukkW6d/grGcMJ6sZ9sctIOmyJv6TAehh1T8=";
+    hash = "sha256-g3FWbuPI2fhBHIHRynDiRjB0eZOf4nAcVfg/OA2EEPw=";
   };
 
   outputs = [
@@ -58,41 +58,37 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
-    "-Dtests=disabled"
     # by default, zathura searches for zathurarc under $out/etc
     "-Dsysconfdir=/etc"
-    # Make sure tests are enabled for doCheck
-    # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "landlock" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "tests-x11" finalAttrs.doCheck)
+    (lib.mesonEnable "tests-wayland" finalAttrs.doCheck)
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkg-config
-    desktop-file-utils
-    python3.pythonOnBuildForHost.pkgs.sphinx
     gettext
-    wrapGAppsHook3
-    libxml2
-    appstream-glib
+    pkg-config
+    librsvg
+    sphinx
+    desktop-file-utils
+    appstream
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
-    girara
-    libintl
-    sqlite
+    gtk4
     glib
-    file
-    librsvg
-    check
+    girara
+    file # libmagic
     json-glib
-    texlive.bin.core
+    sqlite
+    xxhash
+    texlive.bin.core # synctex
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
-  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libseccomp ];
 
   # add support for more image formats
   env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
@@ -106,14 +102,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  nativeCheckInputs = [
+    xvfb-run
+    weston
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    tests = {
+      inherit zathura;
+    };
+  };
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura";
     description = "Core component for zathura PDF viewer";
+    longDescription = ''
+      Zathura is a highly customizable and functional PDF viewer based on the
+      poppler rendering library and the GTK toolkit. The idea behind zathura
+      is an application that provides a minimalistic and space saving interface
+      as well as an easy usage that mainly focuses on keyboard interaction.
+    '';
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mithicspirit ];

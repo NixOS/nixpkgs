@@ -10,22 +10,22 @@
   makeWrapper,
   makeDesktopItem,
 
-  electron_42,
+  electron_44,
   commandLineArgs ? "",
 }:
 
 let
-  electron = electron_42;
+  electron = electron_44;
 in
 buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
-  version = "2.12.2";
+  version = "2.12.6";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0hUm7BfjI4x22DsAPX/VZo+IKInSl6hhylTK0awPhYo=";
+    hash = "sha256-CrQ6kdOY/NqJv8AQ7MuHDUHzY37cRb2bWSVruxjVdJk=";
   };
 
   desktopItems = [
@@ -51,18 +51,15 @@ buildNpmPackage (finalAttrs: {
   ];
 
   patches = [
+    # the upstream use an EOL electron version
+    ./electron-version.patch
+    # clipboard APIs are async since electron 44
+    ./electron-44-clipboard.patch
     # set electron version and dist dir
     # disable before-pack: it would copy prebuilt libraries
     (replaceVars ./electron-builder.patch {
       electron_version = electron.version;
     })
-
-    # the upstream repository hasn't released a version with a newer
-    # electron yet, so we patch `package.json` and the lock file to use
-    # electron 42. updating better-sqlite3 is also required due to the
-    # ABI incompatibility between the original one with electron 42, see
-    # https://github.com/WiseLibs/better-sqlite3/issues/1474
-    ./npm-deps.patch
   ];
 
   nativeBuildInputs = [
@@ -70,7 +67,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-1gizfbnkdG84VxB2MaoGoIEQoydiVHbGeWmy2A03FCI=";
+  npmDepsHash = "sha256-LF/E7JJZQQzEHTEQeFiYa1eMeV+OrqK+8ktwhTmRY30=";
 
   makeCacheWritable = true;
 
@@ -83,6 +80,11 @@ buildNpmPackage (finalAttrs: {
   preBuild = ''
     # delete prebuilt libs
     rm -r build-config/lib
+    rm -r node_modules/better-sqlite3/prebuilds
+
+    # prevent copying previously deleted libs to node_modules
+    substituteInPlace build-config/postinstall.js \
+      --replace-fail 'copyLib()' ""
 
     # don't spam the build logs
     substituteInPlace build-config/pack.js \

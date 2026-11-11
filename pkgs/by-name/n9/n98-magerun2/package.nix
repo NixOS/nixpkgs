@@ -1,5 +1,6 @@
 {
   lib,
+  cacert,
   fetchFromGitHub,
   php,
   versionCheckHook,
@@ -7,16 +8,21 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "n98-magerun2";
-  version = "9.5.1";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "netz98";
     repo = "n98-magerun2";
     tag = finalAttrs.version;
-    hash = "sha256-OLB3/G3Yn6CIzawtHpzS+RYXpioPv0oReyRYMKx5AiI=";
+    hash = "sha256-EbUcHK6CGOoaLRyqo2SYUW2aqb/5C/itfh3/VpVe/Qo=";
   };
 
-  vendorHash = "sha256-pbxcpDhi/1pmeZFqAFn8GNokfDoYzxzDt3RmE8pGW68=";
+  vendorHash = "sha256-QxsfjbneO7AwqkHx+qqbJvhV344r8TZreWhUeKxBTOE=";
+
+  postInstall = ''
+    rm $out/share/php/n98-magerun2/vendor/rmccue/requests/certificates/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/php/n98-magerun2/vendor/rmccue/requests/certificates/cacert.pem
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -1,3 +1,9 @@
 { llama-cpp }:
 
-llama-cpp.override { vulkanSupport = true; }
+# nixpkgs-update: no auto update
+(llama-cpp.override { vulkanSupport = true; }).overrideAttrs (oldAttrs: {
+  meta = oldAttrs.meta // {
+    # Re-anchor meta.position here so nixpkgs-update sees the opt-out above.
+    inherit (oldAttrs.meta) description;
+  };
+})

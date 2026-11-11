@@ -33,7 +33,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qsv";
-  version = "21.1.0";
+  version = "28.0.0";
 
   inherit buildFeatures;
 
@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dathere";
     repo = "qsv";
     rev = finalAttrs.version;
-    hash = "sha256-Qfrt0HA9VqHE7RpqOZ1XZ7MZ9xoLaTccAgfxOOezSMs=";
+    hash = "sha256-cEahgrsV04ZK17j8fIU3NgKcC2VFTG4xnVvFXseVIs4=";
   };
 
-  cargoHash = "sha256-yPDfOq8JTDMI0g/ao5SLnCA5hw6SJaA/LekI7uPVdDk=";
+  cargoHash = "sha256-Pm4VilMxVcm/BiZ3dZw3YJnhSsdrcmu4oSz7y1WiijM=";
 
   buildInputs = [
     file
@@ -70,11 +70,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "CSVs sliced, diced & analyzed";
     homepage = "https://github.com/dathere/qsv";
     changelog = "https://github.com/dathere/qsv/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit
-      # or
-      unlicense
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        unlicense
+      ];
     inherit mainProgram;
     maintainers = with lib.maintainers; [
       detroyejr

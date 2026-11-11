@@ -4,7 +4,7 @@
   writeShellApplication,
   buildFHSEnv,
   webkitgtk_4_1,
-  ffmpeg_7,
+  ffmpeg_8,
   gtk4,
   libepoxy,
   wayland,
@@ -16,6 +16,9 @@
   gdk-pixbuf,
   protobufc,
   cyrus_sasl,
+  pcsclite,
+  libfido2,
+  lz4,
 }:
 
 let
@@ -36,7 +39,7 @@ let
           exit 1
       fi
 
-      echo "Release: 22.04"
+      echo "Release: 24.04"
     '';
   };
 in
@@ -56,7 +59,7 @@ buildFHSEnv {
     libepoxy
     libxcb
     libxi
-    ffmpeg_7
+    ffmpeg_8
     pango
     atk
     cairo
@@ -64,6 +67,9 @@ buildFHSEnv {
     protobufc
     cyrus_sasl
     wayland
+    pcsclite
+    libfido2
+    lz4
   ];
 
   extraBwrapArgs = [

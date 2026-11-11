@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       simultaneous scan jobs, image transformation jobs (deskew, binarize,
       crop, etc), PDF and PNG output.
     '';
-    homepage = "http://swingsane.com/";
+    homepage = "https://sourceforge.net/projects/swingsane/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

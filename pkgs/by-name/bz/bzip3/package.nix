@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
-  version = "1.5.3";
+  version = "1.5.5";
 
   outputs = [
     "bin"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "iczelia";
     repo = "bzip3";
     tag = finalAttrs.version;
-    hash = "sha256-SOouMUctxsAJdkt84rJBaCbK23GKmXRH9nVgGdDodsk=";
+    hash = "sha256-t1wsTdb6DWEeg56n/mGQDVEnW0cUqCUnZTpr2Iynbfw=";
   };
 
   postPatch = ''

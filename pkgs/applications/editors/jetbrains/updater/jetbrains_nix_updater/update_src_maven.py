@@ -1,8 +1,10 @@
 import bisect
 import os
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from urllib.parse import urlparse
+
 from xmltodict import parse
 
 from jetbrains_nix_updater.config import UpdaterConfig
@@ -31,7 +33,11 @@ def add_entries(sources, targets, hashes):
         if path == target["@url"]:
             raise ValueError(f"Unexpected target path {path}")
 
-        bisect.insort(hashes, {"url": url, "hash": artefact["sha256sum"], "path": path}, key=lambda e: e["url"])
+        bisect.insort(
+            hashes,
+            {"url": url, "hash": artefact["sha256sum"], "path": path},
+            key=lambda e: e["url"],
+        )
 
 
 def add_libraries(
@@ -39,7 +45,8 @@ def add_libraries(
 ):
     library_paths = os.listdir(root_path + "/libraries/")
     for path in library_paths:
-        file_contents = parse(open(root_path + "/libraries/" + path).read())
+        with open(root_path + "/libraries/" + path) as f:
+            file_contents = parse(f.read())
         if "properties" not in file_contents["component"]["library"]:
             continue
         sources = ensure_is_list(
@@ -52,17 +59,20 @@ def add_libraries(
         )
         add_entries(sources, targets, hashes)
 
-    modules_xml = parse(open(root_path + "/modules.xml").read())
+    with open(root_path + "/modules.xml") as f:
+        modules_xml = parse(f.read())
     for module in modules_xml["project"]["component"]["modules"]["module"]:
         projects_to_process.append(module["@filepath"])
 
 
 def add_iml(path: str, hashes: list[dict[str, str]], projects_to_process: list[str]):
     try:
-        contents = parse(open(path).read())
+        with open(path) as f:
+            contents = parse(f.read())
     except FileNotFoundError:
         print(
-            f"Warning: path {path} does not exist (did you forget the android directory?)"
+            f"Warning: path {path} does not exist (did you forget the android directory?)",
+            file=sys.stderr,
         )
         return
     for manager in ensure_is_list(contents["module"]["component"]):
@@ -93,7 +103,7 @@ def get_maven_deps_for_ide(config: UpdaterConfig, ide: Ide) -> list[dict]:
                 "--out-link",
                 root_path,
                 "--attr",
-                f"jetbrains.{ide.name}.src.src",
+                f"{ide.name}.src.src",
             ],
             cwd=config.nixpkgs_root,
         )

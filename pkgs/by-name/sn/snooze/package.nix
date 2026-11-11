@@ -6,6 +6,10 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "snooze";
   version = "0.6";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "snooze";

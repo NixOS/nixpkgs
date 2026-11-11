@@ -5,31 +5,33 @@
   python,
   cffi,
   pkg-config,
+  setuptools,
   wayland,
+  wayland-protocols,
   wayland-scanner,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pywayland";
-  version = "0.4.18";
-  format = "setuptools";
+  version = "0.4.19";
+  pyproject = true;
+  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WYreAng6rQWjKPZjtRtpTFq2i9XR4JJsDaPFISxWZTM=";
+    hash = "sha256-nYR49bDfNUAzPM+FpV/os0FQssKMaFgF3p/6hViYVJ4=";
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ wayland-scanner ];
+  nativeBuildInputs = [
+    wayland-protocols
+    wayland-scanner
+  ];
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ wayland ];
   propagatedBuildInputs = [ cffi ];
   nativeCheckInputs = [ pytestCheckHook ];
-
-  postBuild = ''
-    ${python.pythonOnBuildForHost.interpreter} pywayland/ffi_build.py
-  '';
 
   # Tests need this to create sockets
   preCheck = ''

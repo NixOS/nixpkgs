@@ -20,7 +20,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "snakemake-logger-plugin-rich";
-  version = "0.4.2";
+  version = "0.5.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "cademirch";
     repo = "snakemake-logger-plugin-rich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vdPM1nRovZ5QhKudzCebMNMndzOWPvTmI5I1oTbzg9o=";
+    hash = "sha256-zOjidIhGpK9RG9gkxQnR316n8VFyXAm5Luh6QdAlkpg=";
   };
 
   build-system = [

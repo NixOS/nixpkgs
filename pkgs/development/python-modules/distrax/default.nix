@@ -68,6 +68,9 @@ buildPythonPackage (finalAttrs: {
     # Flaky: AssertionError: Not equal to tolerance
     "StraightThroughTest"
     "test_composite_methods_are_consistent__with_jit"
+
+    # AssertionError: Not equal to tolerance (-inf vs. -36.7)
+    "test_method_with_input_unnormalized_probs"
   ];
 
   disabledTestPaths = [

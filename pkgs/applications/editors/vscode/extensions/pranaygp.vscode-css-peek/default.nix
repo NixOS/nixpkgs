@@ -3,7 +3,7 @@
   vscode-utils,
 }:
 let
-  version = "4.4.3";
+  version = "4.5.1";
 in
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -11,7 +11,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     publisher = "pranaygp";
     name = "vscode-css-peek";
     inherit version;
-    hash = "sha256-oY+mpDv2OTy5hFEk2DMNHi9epFm4Ay4qi0drCXPuYhU=";
+    hash = "sha256-pgTkBfpkG7ggDJ7+d3tS9AlpqGcDDGSTei5P3VHraK8=";
   };
 
   meta = {

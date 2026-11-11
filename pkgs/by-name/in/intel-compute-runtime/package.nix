@@ -1,13 +1,14 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   cmake,
-  pkg-config,
+  fetchFromGitHub,
   intel-gmmlib,
   intel-graphics-compiler,
   level-zero,
   libva,
+  nix-update-script,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,20 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "NEO_BUILD_UNVERSIONED_OCLOC" true)
   ];
 
-  outputs = [
-    "out"
-    "drivers"
-  ];
-
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
-
-    mkdir -p $drivers/lib
-    mv -t $drivers/lib $out/lib/libze_intel*
   '';
 
   postFixup = ''
@@ -71,8 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv.cc.cc
       ]
     } \
-      $out/lib/intel-opencl/libigdrcl.so
+      $out/lib/intel-opencl/libigdrcl.so \
+      $out/lib/libze_intel_gpu.so.1 \
+      $out/lib/libocloc.so
   '';
+
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  };
 
   meta = {
     description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";
@@ -84,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      recutita
+    ];
   };
 })

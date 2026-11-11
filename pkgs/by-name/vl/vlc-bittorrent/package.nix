@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vlc-bittorrent";
-  version = "2.16";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "vlc-bittorrent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-e2oMZGE7D93SbwYTb1a4BPN+P8P3rJ2iGtKC4vwdfhI=";
+    hash = "sha256-/+U648Dw8CJ76ElvSnMsrXOVx0jGjCIv6bmgwzFFZhk=";
   };
 
   nativeBuildInputs = [

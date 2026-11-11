@@ -43,10 +43,6 @@ in
     (lib.mkIf cfg.enable {
       assertions = [
         {
-          assertion = config.boot.initrd.systemd.enable;
-          message = "nixos-init can only be used with boot.initrd.systemd.enable";
-        }
-        {
           assertion = config.system.etc.overlay.enable;
           message = "nixos-init can only be used with system.etc.overlay.enable";
         }

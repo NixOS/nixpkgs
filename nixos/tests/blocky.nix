@@ -1,7 +1,7 @@
 {
   name = "blocky";
 
-  nodes = {
+  containers = {
     server =
       { pkgs, ... }:
       {

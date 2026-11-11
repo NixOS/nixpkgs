@@ -12,7 +12,7 @@
   git,
   guile,
   kakoune-unwrapped,
-  lua5_3,
+  lua5_5,
   plan9port,
   rustPlatform,
 }:
@@ -27,7 +27,7 @@ self: super: {
       owner = "FlyingWombat";
       repo = "case.kak";
       rev = "6f1511820aa3abfa118e0f856118adc8113e2185";
-      sha256 = "002njrlwgakqgp74wivbppr9qyn57dn4n5bxkr6k6nglk9qndwdp";
+      hash = "sha256-t/FmcZr0WTNNnn0VS2w7xXqc8r1rR07OfXiqx2mWVgA=";
     };
     meta.homepage = "https://gitlab.com/FlyingWombat/case.kak";
   };
@@ -131,7 +131,7 @@ self: super: {
       owner = "Screwtapello";
       repo = "kakoune-state-save";
       rev = "ab7c0c765326a4a80af78857469ee8c80814c52a";
-      sha256 = "AAOCG0TY3G188NnkkwMCSbkkNe487F4gwiFWwG9Yo+A=";
+      hash = "sha256-AAOCG0TY3G188NnkkwMCSbkkNe487F4gwiFWwG9Yo+A=";
     };
 
     meta = {
@@ -198,13 +198,9 @@ self: super: {
       sha256 = "0y1g3zpa2ql8l9rl5i2w84bka8a09kig9nq9zdchaff5pw660mcx";
     };
 
-    buildInputs = [ lua5_3 ];
-
-    installPhase = ''
-      mkdir -p $out/share/kak/autoload/plugins/
-      cp quickscope.* $out/share/kak/autoload/plugins/
-      # substituteInPlace does not like the pipe
-      sed -e 's,[|] *lua,|${lua5_3}/bin/lua,' quickscope.kak >$out/share/kak/autoload/plugins/quickscope.kak
+    postInstall = ''
+      substituteInPlace $out/share/kak/autoload/plugins/quickscope-kak/quickscope.kak \
+        --replace-fail '|lua ' '|${lib.getExe lua5_5} '
     '';
 
     meta = {

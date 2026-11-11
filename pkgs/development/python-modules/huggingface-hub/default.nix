@@ -11,7 +11,7 @@
   filelock,
   fsspec,
   hf-xet,
-  httpx,
+  httpx2,
   packaging,
   pyyaml,
   tqdm,
@@ -37,11 +37,12 @@
 
   # tests
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.27.0";
+  version = "2.4.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -49,20 +50,17 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AJglCIJZPeabIjgx+qeEpKM2HhX2hr4xx4SWpghDrhE=";
+    hash = "sha256-EbKvIHuUUUcA24dfB4pFJlrAo6Q4WCIPbJps/KUZxXY=";
   };
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "click"
-  ];
   dependencies = [
     click
     filelock
     fsspec
     hf-xet
-    httpx
+    httpx2
     packaging
     pyyaml
     tqdm
@@ -90,7 +88,6 @@ buildPythonPackage (finalAttrs: {
     oauth = [
       authlib
       fastapi
-      httpx
       itsdangerous
     ];
     torch = [
@@ -102,10 +99,17 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Download and publish models and other files on the huggingface.co hub";

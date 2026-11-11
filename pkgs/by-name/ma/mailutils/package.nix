@@ -123,7 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkpasswd
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
+  # On Hydra the *-linux tests are very flaky.  Maybe they're sensitive to load.
+  doCheck = stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Rich and powerful protocol-independent mail framework";

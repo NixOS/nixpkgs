@@ -19,14 +19,14 @@
   docbook_xml_dtd_45,
   libxslt,
   gettext,
-  systemd,
+  systemdLibs,
   gnome-session-ctl,
   wrapGAppsNoGuiHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
-  # Also bump ./ctl.nix when bumping major version.
+  # Also bump ../gnome-session-ctl/package.nix when bumping major version.
   version = "50.1";
 
   outputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
-    systemd
+    systemdLibs
   ];
 
   postPatch = ''

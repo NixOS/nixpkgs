@@ -80,6 +80,7 @@
   tenacity,
   termcolor,
   tomli,
+  tomlkit,
   trove-classifiers,
   types-requests,
   typing-extensions,
@@ -115,7 +116,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = uiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-bKdZ4Y+enrXYuSpJ85eFHl2EM+QfZsMTGqQZ9yLfGEc=";
+        hash = "sha256-+f/AcJSQyvu3YCT6p4wvbNXz/xM0WN8N+MWT7iLlFEk=";
       };
 
       buildPhase = ''
@@ -148,7 +149,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = simpleUiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-Ye8jRs9jgsf3YUd3JPldEcTzQFmgS4cvkOVP6tuZw+8=";
+        hash = "sha256-jLCTKdBdKQufVWQ1XRzOVN4jVC0YAcP+jnz5R966zUY=";
       };
 
       buildPhase = ''
@@ -179,26 +180,47 @@ buildPythonPackage (
         version = providers.${provider}.version;
         pyproject = true;
 
+        dontCheckPythonMetadata = true;
+
+        dontCheckRuntimeDeps = true;
+
         inherit src;
         sourceRoot = "${src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
 
-        buildInputs = [ flit-core ];
+        postPatch = ''
+          # relax dependencies
+          sed -i -E 's/"flit_core==[^"]+"/"flit_core"/' pyproject.toml
+          sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+          sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+          sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
+          sed -i -E 's/"pluggy==[^"]+"/"pluggy"/' pyproject.toml
+          sed -i -E 's/"tomlkit==[^"]+"/"tomlkit"/' pyproject.toml
+          sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+        '';
+
+        build-system = [
+          flit-core
+          hatchling
+          packaging
+          pathspec
+          pluggy
+          tomlkit
+          trove-classifiers
+        ];
 
         dependencies = map (dep: python.pkgs.${dep}) providers.${provider}.deps;
 
         pythonRemoveDeps = [
           "apache-airflow"
         ];
-
-        pythonRelaxDeps = [
-          "flit-core"
-        ];
       };
 
     taskSdk = buildPythonPackage {
-      pname = "task-sdk";
+      pname = "apache-airflow-task-sdk";
       inherit src version;
       pyproject = true;
+
+      dontCheckPythonMetadata = true;
 
       sourceRoot = "${src.name}/task-sdk";
 
@@ -209,8 +231,10 @@ buildPythonPackage (
         # relax dependencies
         sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
         sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
-        sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
         sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
+        sed -i -E 's/"pluggy==[^"]+"/"pluggy"/' pyproject.toml
+        sed -i -E 's/"tomlkit==[^"]+"/"tomlkit"/' pyproject.toml
+        sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
 
         # task-sdk needs config.yml from core subpackage
         mkdir -p src/airflow/config_templates
@@ -219,6 +243,11 @@ buildPythonPackage (
 
       build-system = [
         hatchling
+        packaging
+        pathspec
+        pluggy
+        tomlkit
+        trove-classifiers
       ];
 
       dependencies = [
@@ -235,7 +264,10 @@ buildPythonPackage (
         methodtools
         msgspec
         opentelemetry-api
+        packaging
+        pathspec
         pendulum
+        pluggy
         psutil
         pydantic
         pygtrie
@@ -245,6 +277,7 @@ buildPythonPackage (
         structlog
         tenacity
         types-requests
+        typing-extensions
       ];
     };
 
@@ -252,6 +285,8 @@ buildPythonPackage (
       pname = "apache-airflow-core";
       inherit src version;
       pyproject = true;
+
+      dontCheckPythonMetadata = true;
 
       sourceRoot = "${src.name}/airflow-core";
 
@@ -263,9 +298,11 @@ buildPythonPackage (
         sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
         sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
         sed -i -E 's/"GitPython==[^"]+"/"GitPython"/' pyproject.toml
-        sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
-        sed -i -E 's/"smmap==[^"]+"/"smmap"/' pyproject.toml
         sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
+        sed -i -E 's/"pluggy==[^"]+"/"pluggy"/' pyproject.toml
+        sed -i -E 's/"smmap==[^"]+"/"smmap"/' pyproject.toml
+        sed -i -E 's/"tomlkit==[^"]+"/"tomlkit"/' pyproject.toml
+        sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
 
         # Copy built UI assets
         cp -r ${airflowUi}/share/airflow/ui/dist src/airflow/ui/
@@ -277,8 +314,11 @@ buildPythonPackage (
         gitpython
         hatchling
         packaging
+        pathspec
+        pluggy
         smmap
         tomli
+        tomlkit
         trove-classifiers
       ];
 
@@ -347,21 +387,23 @@ buildPythonPackage (
       ]
       ++ (map buildProvider requiredProviders);
 
-      pythonRelaxDeps = [ "starlette" ];
+      pythonRelaxDeps = [
+        "starlette"
+        "fastapi"
+      ];
     };
   in
   {
     pname = "apache-airflow";
-    version = "3.3.0";
+    version = "3.3.2";
 
-    strictDeps = true;
     __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "apache";
       repo = "airflow";
       tag = finalAttrs.version;
-      hash = "sha256-1DRaJCJ488BKUOEFaFMGnZjS2yxBx4pwHvIP67juu54=";
+      hash = "sha256-iWr1LYq+lThZU7b7CmrIWFbg20bFy+SghrBpE6asgrg=";
     };
 
     pyproject = true;
@@ -370,8 +412,10 @@ buildPythonPackage (
       # relax dependencies
       sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
       sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
-      sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
       sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
+      sed -i -E 's/"pluggy==[^"]+"/"pluggy"/' pyproject.toml
+      sed -i -E 's/"tomlkit==[^"]+"/"tomlkit"/' pyproject.toml
+      sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
     '';
 
     nativeBuildInputs = [ writableTmpDirAsHomeHook ];
@@ -385,6 +429,7 @@ buildPythonPackage (
       pluggy
       smmap
       tomli
+      tomlkit
       trove-classifiers
     ];
 

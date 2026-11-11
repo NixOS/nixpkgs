@@ -11,10 +11,7 @@
   doxygen,
   dpkg,
   gettext,
-  gnutls,
   gtest,
-  libgcrypt,
-  libgpg-error,
   libseccomp,
   libtasn1,
   libxslt,
@@ -35,14 +32,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "3.3.3";
+  version = "3.3.5";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "apt";
     rev = finalAttrs.version;
-    hash = "sha256-pYDd6l9SZR6YXU4/V5cgC36ggvuoHqlKNkHyL++8dp8=";
+    hash = "sha256-LUU9U6ahbsL3P8KqatgUQGfO9xVkoXzyE9Qn+Ny3JyA=";
   };
 
   # cycle detection; lib can't be split
@@ -75,10 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     db
     dpkg
-    gnutls
     gtest
-    libgcrypt
-    libgpg-error
     libseccomp
     libtasn1
     lz4
@@ -96,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeOptionType "filepath" "BERKELEY_INCLUDE_DIRS" "${lib.getDev db}/include")
     (lib.cmakeOptionType "filepath" "DPKG_DATADIR" "${dpkg}/share/dpkg")
     (lib.cmakeOptionType "filepath" "DOCBOOK_XSL" "${docbook_xsl}/share/xml/docbook-xsl")
-    (lib.cmakeOptionType "filepath" "GNUTLS_INCLUDE_DIR" "${lib.getDev gnutls}/include")
     (lib.cmakeFeature "DROOT_GROUP" "root")
     (lib.cmakeBool "USE_NLS" withNLS)
     (lib.cmakeBool "WITH_DOC" withDocs)

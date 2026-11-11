@@ -6,11 +6,11 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nerd-font-patcher";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchzip {
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${finalAttrs.version}/FontPatcher.zip";
-    hash = "sha256-Z3KpaSoJpZx3D07K5EtHBXDl4pyHxnTIg/AuXrzTWWA=";
+    hash = "sha256-gZ41oZPnsVLcchA58eJ1Vl28ccqePpOZd/ZCEKYywX4=";
     stripRoot = false;
   };
 
@@ -28,9 +28,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     runHook preInstall
     mkdir -p $out/bin $out/share $out/lib
     install -Dm755 font-patcher $out/bin/nerd-font-patcher
+    install -Dm644 glyphnames.json $out/share/glyphnames.json
     cp -ra src/glyphs $out/share/
     cp -ra bin/scripts/{braille,name_parser} $out/lib/
     runHook postInstall
+  '';
+
+  preFixup = ''
+    substituteInPlace "$out"/bin/nerd-font-patcher \
+        --replace-fail "'glyphnames.json'" "'$out/share/glyphnames.json'"
   '';
 
   meta = {

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "egl-gbm";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "egl-gbm";
     tag = finalAttrs.version;
-    hash = "sha256-OoHgvFbyd6JakSKyN7N97FMJHNYV1spj7zy3f1g/PN0=";
+    hash = "sha256-98NyUMpEN2uBSMnX2FTQvtn+RNpsVYOjgTagbcaPMME=";
   };
 
   depsBuildBuild = [

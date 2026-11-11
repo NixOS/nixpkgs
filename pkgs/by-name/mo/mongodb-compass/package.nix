@@ -38,7 +38,7 @@
   libxkbcommon,
   libgbm,
   vulkan-loader,
-  systemd,
+  systemdLibs,
   libGL,
   krb5,
   fontconfig,
@@ -52,7 +52,7 @@
 
 let
   pname = "mongodb-compass";
-  version = "1.49.14";
+  version = "1.53.2";
 
   selectSystem =
     attrs:
@@ -66,8 +66,8 @@ let
       }
     }";
     hash = selectSystem {
-      x86_64-linux = "sha256-PrpL72+fbCa/C0JpbxGiEBtAEoEvvZhy9FIkJhq0g0g=";
-      aarch64-darwin = "sha256-dW99BE4w9uzGGTNb47h4RuVrGlMi0b0dklAsV/6MY3g=";
+      x86_64-linux = "sha256-uy1akUXl773hyWRQdVpTz6a/w40zIwQ5cotkSa0JZ/U=";
+      aarch64-darwin = "sha256-PYiojAvEGbOo3+gtx2uq5s3VNyRTmE+pQJPVgkZU/eQ=";
     };
   };
 
@@ -99,7 +99,7 @@ let
     nss
     pango
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libx11
     libxscrnsaver
     libxcomposite

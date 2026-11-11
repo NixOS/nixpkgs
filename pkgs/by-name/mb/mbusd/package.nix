@@ -8,24 +8,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mbusd";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "3cky";
     repo = "mbusd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-RQRSqlbPwBhw0SiNSP+euMVAwVBJo3lx0qB5gyWA+cM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JCDDoyDh1mlnZSfthKfFT+NjVAm3Menzm5FvfMgQYmw=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
-  '';
 
   meta = {
     description = "Modbus TCP to Modbus RTU (RS-232/485) gateway";

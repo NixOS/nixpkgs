@@ -11,13 +11,13 @@
     let
       self = {
         pname = "cbqn";
-        version = "0.11.0";
+        version = "0.12.0";
 
         src = fetchFromGitHub {
           owner = "dzaima";
           repo = "CBQN";
           rev = "v${self.version}";
-          hash = "sha256-ZXhCFLLUVJTgpJqMd97EMSoE4fwuqBJ742kzV662bnY=";
+          hash = "sha256-QQuquhkD6engjcYG4HZwrJ0MVevwdOB2DM7uVn+r++U=";
         };
       };
     in
@@ -49,13 +49,13 @@
 
   singeli = {
     pname = "singeli";
-    version = "0-unstable-2025-11-19";
+    version = "0-unstable-2026-03-12";
 
     src = fetchFromGitHub {
       owner = "mlochbaum";
       repo = "Singeli";
-      rev = "2936c66b061b9df61cafc1f8d07a7ed53bf10bee";
-      hash = "sha256-vxxGmc0eQxKZN7G0GCGx7xjOWgB1a1jJIcbfbaQd2do=";
+      rev = "5187ed3aa22a2257b63c04a5498ec756fa6263cb";
+      hash = "sha256-7tCXKW/xEbZxlqG2GjqA2oVNel2EWb7I04aMyrZHVOE=";
     };
   };
 }

@@ -7,20 +7,15 @@ testModuleArgs@{
   ...
 }:
 let
-  inherit (lib) mkOption types;
-  inherit (types) either lines functionTo;
+  inherit (lib) mkOption types const;
+  inherit (types) coercedTo lines functionTo;
 in
 {
   options = {
     testScript = mkOption {
-      type = either lines (functionTo lines);
-      apply =
-        v:
-        if lib.isFunction v then
-          # Only pass args the testScript function expects.
-          args: v (builtins.intersectAttrs (lib.functionArgs v) args)
-        else
-          v;
+      type = coercedTo lines const (functionTo lines);
+      # Only pass args the testScript function expects.
+      apply = v: args: v (builtins.intersectAttrs (lib.functionArgs v) args);
       description = ''
         A series of python declarations and statements that you write to perform
         the test.
@@ -50,23 +45,19 @@ in
     withoutTestScriptReferences.includeTestScriptReferences = false;
     withoutTestScriptReferences.testScript = lib.mkForce "testscript omitted";
 
-    testScriptString =
-      if lib.isFunction config.testScript then
-        config.testScript {
-          nodes = lib.mapAttrs (
-            k: v:
-            if v.virtualisation.useNixStoreImage then
-              # prevent infinite recursion when testScript would
-              # reference v's toplevel
-              config.withoutTestScriptReferences.nodesCompat.${k}
-            else
-              # reuse memoized config
-              v
-          ) config.nodesCompat;
-          containers = config.containers;
-        }
-      else
-        config.testScript;
+    testScriptString = config.testScript {
+      nodes = lib.mapAttrs (
+        k: v:
+        if v.virtualisation.useNixStoreImage then
+          # prevent infinite recursion when testScript would
+          # reference v's toplevel
+          config.withoutTestScriptReferences.nodesCompat.${k}
+        else
+          # reuse memoized config
+          v
+      ) config.nodesCompat;
+      containers = config.containers;
+    };
 
     nodeDefaults =
       { config, name, ... }:

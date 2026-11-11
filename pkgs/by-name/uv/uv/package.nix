@@ -9,6 +9,7 @@
 
   # nativeBuildInputs
   installShellFiles,
+  makeBinaryWrapper,
 
   buildPackages,
   versionCheckHook,
@@ -18,23 +19,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.12.5";
+  version = "0.13.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-tKdqciPQnteeTqkXtWY8mliWUDv5gMdU8x0UPadQZlQ=";
+    hash = "sha256-SXTusm2EJ49tk03c3vSHcZp3AtAuj9SGOzsMwpnjXDw=";
   };
 
-  cargoHash = "sha256-27NzA/YXYbcGO6ehXP9OgvgLJQG/YP/I+eeflLmzxRQ=";
+  cargoHash = "sha256-spQmSFAjNs6pWnw2nd/d3ZysIMK9j+BjDjrwcnUCmWw=";
 
   buildInputs = [
     rust-jemalloc-sys
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ];
 
   cargoBuildFlags = [
     "--package"
@@ -44,17 +48,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Tests require python3
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd uv \
-        --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
-        --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
-        --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
-    ''
-  );
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        installShellCompletion --cmd uv \
+          --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
+          --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
+          --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
+      ''
+    )
+    # uvx runs the uv next to it, so the wrapper also covers uvx.
+    + ''
+      wrapProgram $out/bin/uv --set-default UV_SYSTEM_CERTS 1
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

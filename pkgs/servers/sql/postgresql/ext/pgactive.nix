@@ -8,13 +8,13 @@
 }:
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgactive";
-  version = "2.1.8";
+  version = "2.1.9";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "pgactive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XkGKhNF9ohfWluKYNGvTRSLgoOp6jYzyaL10BIj0igo=";
+    hash = "sha256-tiCd0YepVz4ZA62OaTtwLUhWG4pR4K6xg6BuyZK+iWc=";
   };
 
   nativeBuildInputs = [

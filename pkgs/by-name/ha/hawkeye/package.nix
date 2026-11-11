@@ -10,7 +10,7 @@ rustPackages.rustPlatform.buildRustPackage (finalAttrs: {
   version = "6.5.1";
 
   src = fetchFromGitHub {
-    owner = "korandoru";
+    owner = "fast";
     repo = "hawkeye";
     tag = "v${finalAttrs.version}";
     hash = "sha256-TBWPpfSr5ONr7HzEzPr3TbQo3fl4Szj/7cl3NafyYms=";
@@ -23,7 +23,7 @@ rustPackages.rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/korandoru/hawkeye";
+    homepage = "https://github.com/fast/hawkeye";
     description = "Simple license header checker and formatter, in multiple distribution forms";
     license = lib.licenses.asl20;
     mainProgram = "hawkeye";

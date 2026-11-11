@@ -27,6 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.16.2";
   passthru.modelVersion = "0.16.4";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_core";
@@ -43,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patch -d $cargoDepsCopy/*/open_jtalk-sys-* -p1 < ./openjtalk.patch
   '';
 
-  cargoBuildFlags = [ "-p voicevox_core_c_api" ];
+  cargoBuildFlags = [ "--package=voicevox_core_c_api" ];
 
   # don't link onnxruntime directly
   buildFeatures = [ "load-onnxruntime" ];

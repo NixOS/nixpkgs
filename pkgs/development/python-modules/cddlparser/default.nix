@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "tidoust";
     repo = "cddlparser";
     tag = "v${version}";
-    sha256 = "sha256-LcIxU77bYpsuE4j1QgzdD3d7CO/EUEA9xwn+uIV68Oc=";
+    hash = "sha256-LcIxU77bYpsuE4j1QgzdD3d7CO/EUEA9xwn+uIV68Oc=";
   };
 
   build-system = [

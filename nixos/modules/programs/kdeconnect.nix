@@ -28,6 +28,8 @@
       environment.systemPackages = lib.optionals (cfg.package != null) [
         cfg.package
       ];
+      # digitizer plugin requires uinput
+      hardware.uinput.enable = lib.mkDefault true;
       networking.firewall = rec {
         allowedTCPPortRanges = [
           {

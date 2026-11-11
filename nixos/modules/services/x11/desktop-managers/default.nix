@@ -24,7 +24,7 @@ in
   imports = [
     ./none.nix
     ./xterm.nix
-    ./phosh.nix
+    ../../desktop-managers/phosh.nix
     ./xfce.nix
     ../../desktop-managers/plasma6.nix
     ./lumina.nix

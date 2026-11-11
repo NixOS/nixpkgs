@@ -12,7 +12,7 @@
   adwaita-icon-theme,
   dconf,
   gtk3,
-  wxwidgets_3_2,
+  wxwidgets_3_3,
   librsvg,
   cups,
   gsettings-desktop-schemas,
@@ -134,9 +134,9 @@ let
     else
       versionsImport.${baseName}.libVersion.version;
 
-  wxGTK = wxwidgets_3_2;
+  wxGTK = wxwidgets_3_3;
   python = python3;
-  wxPython = python.pkgs.wxpython;
+  wxPython = python.pkgs.wxpython_4_3;
   addonPath = "addon.zip";
   addonsDrvs = map (pkg: pkg.override { inherit addonPath python3; }) addons;
 

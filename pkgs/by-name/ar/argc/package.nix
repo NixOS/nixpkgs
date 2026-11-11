@@ -64,11 +64,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "argc";
     homepage = "https://github.com/sigoden/argc";
     changelog = "https://github.com/sigoden/argc/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      mit
-      # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

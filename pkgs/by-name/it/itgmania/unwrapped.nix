@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
   cmake,
   nasm,
   pkg-config,
@@ -63,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/scalable/apps/
     ln -s $out/itgmania/Data/logo.svg $out/share/icons/hicolor/scalable/apps/itgmania.svg
+    rm $out/itgmania/Data/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/itgmania/Data/ca-bundle.crt
   '';
 
   desktopItems = [
@@ -89,7 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.itgmania.com/";
     description = "Fork of StepMania 5.1, improved for the post-ITG community";
     platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Plus
+        cc-by-nc-40
+      ];
     maintainers = with lib.maintainers; [
       ftsimas
       maxwell-lt

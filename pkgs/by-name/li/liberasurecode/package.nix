@@ -11,7 +11,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liberasurecode";
-  version = "1.6.5";
+  version = "1.8.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -23,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openstack";
     repo = "liberasurecode";
     tag = finalAttrs.version;
-    hash = "sha256-242p6lyLM+0UpuYvQqz87Z1S0oayxGXz7CZJW7fbgBk=";
+    hash = "sha256-y1xdirwu7vgIICnL30R3XJmCym4pjvVf0N9L4g6gyCg=";
   };
 
   postPatch = ''
@@ -47,15 +50,24 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-doxygen"
   ];
 
-  postInstall = ''
-    # remove useless man pages about directories
-    rm doc/man/man*/_*
-    # avoid installing doc/man/man3/noname
-    installManPage doc/man/man*/*.*
+  # Required to link the test programs
+  dontDisableStatic = true;
 
-    moveToOutput share/liberasurecode/ $doc
-  '';
+  postInstall =
+    lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      rm $out/lib/*.a
+    ''
+    + ''
+      # remove useless man pages about directories
+      rm doc/man/man*/_*
+      # avoid installing doc/man/man3/noname
+      installManPage doc/man/man*/*.*
 
+      moveToOutput share/liberasurecode/ $doc
+    '';
+
+  # Backends are loaded with dlopen
+  doCheck = !stdenv.hostPlatform.isStatic;
   checkTarget = "test";
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {

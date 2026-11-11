@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl12-compat";
-  version = "1.2.76";
+  version = "1.2.78";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + finalAttrs.version;
-    hash = "sha256-hSHtYFn4gr8Y9cNyLBT6frDgidNCRENPtTrtGfgH3po=";
+    hash = "sha256-vq7ZzcBl8zh4KugNPcI5dVL7pg7g5KcC+6hlcHEmcLo=";
   };
 
   strictDeps = true;

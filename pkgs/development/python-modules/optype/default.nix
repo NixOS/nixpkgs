@@ -12,19 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "optype";
-  version = "0.15.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorenham";
     repo = "optype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tzbS+CeWGxMXK1LFN/LslI6kfbVQPjqYlDB7fX0ogfU=";
+    hash = "sha256-mtcGblOEyLfOmBwQCC+jX9wvpXiRJE/DNPfPMpcKEOI=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.16,<0.10.0" uv_build
+    substituteInPlace tests/numpy/test_any_array.py \
+      --replace-fail "np.timedelta64(0)" "np.timedelta64(0, \"s\")"
   '';
 
   build-system = [

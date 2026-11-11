@@ -228,7 +228,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Run your own AI cluster at home with everyday devices";
     homepage = "https://github.com/exo-explore/exo";
     changelog = "https://github.com/exo-explore/exo/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "exo";
     knownVulnerabilities = [

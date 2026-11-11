@@ -51,16 +51,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.5.24";
+  version = "0.5.28";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-71LP6Jy9C+XI0wIiUIuMqcVj3QrPHz1w5oc5JuesNwE=";
+    hash = "sha256-Sv9G2YGG4CEWbWlrUSBs1zdzMPZbGpvBYsOIxmTrxOg=";
   };
 
-  cargoHash = "sha256-7j7h7UEj6lJDct9Q/L7JXQ5xPgSrVpwaN8xOwchCDIo=";
+  cargoHash = "sha256-ygX7saxVxK9NpnsO2J1zx7sWduTkhkD4RlB8SNLavGY=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -90,6 +90,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ ] ++ lib.optional withX11 "x11" ++ lib.optional withWayland "wayland";
+
+  cargoBuildFlags = [
+    "-p"
+    "rioterm"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "rioterm"
+  ];
 
   checkFlags = [
     # These build "dead" contexts, which carry the placeholder shell PID 1.

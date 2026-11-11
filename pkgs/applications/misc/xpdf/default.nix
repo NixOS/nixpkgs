@@ -7,6 +7,7 @@
   fetchzip,
   cmake,
   makeDesktopItem,
+  copyDesktopItems,
   zlib,
   libpng,
   cups ? null,
@@ -20,14 +21,14 @@ assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
 assert enablePrinting -> cups != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xpdf";
   version = "4.06";
 
   src = fetchzip {
     urls = [
-      "https://dl.xpdfreader.com/xpdf-${version}.tar.gz"
-      "https://dl.xpdfreader.com/old/xpdf-${version}.tar.gz"
+      "https://dl.xpdfreader.com/xpdf-${finalAttrs.version}.tar.gz"
+      "https://dl.xpdfreader.com/old/xpdf-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-n8Qeb1OKELzkjK+wqWlKbjt2XVX/+6hfbbFvw3EzS1w=";
   };
@@ -40,7 +41,11 @@ stdenv.mkDerivation rec {
         'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 3.1.0)'
   '';
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional enableGUI wrapQtAppsHook;
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+  ]
+  ++ lib.optional enableGUI wrapQtAppsHook;
 
   cmakeFlags = [
     "-DSYSTEM_XPDFRC=/etc/xpdfrc"
@@ -57,17 +62,18 @@ stdenv.mkDerivation rec {
   ++ lib.optional enablePrinting cups
   ++ lib.optional enablePDFtoPPM freetype;
 
-  desktopItem = makeDesktopItem {
-    name = "xpdf";
-    desktopName = "Xpdf";
-    comment = "Views Adobe PDF files";
-    icon = "xpdf";
-    exec = "xpdf %f";
-    categories = [ "Office" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "xpdf";
+      desktopName = "Xpdf";
+      comment = "Views Adobe PDF files";
+      icon = "xpdf";
+      exec = "xpdf %f";
+      categories = [ "Office" ];
+    })
+  ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    install -Dm644 ${desktopItem}/share/applications/xpdf.desktop -t $out/share/applications
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
 
@@ -93,8 +99,5 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
-    knownVulnerabilities = [
-      "CVE-2023-26930"
-    ];
   };
-}
+})

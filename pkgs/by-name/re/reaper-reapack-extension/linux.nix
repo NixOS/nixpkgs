@@ -1,9 +1,10 @@
 {
+  lib,
   boost,
   catch2_3,
   cmake,
   curl,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   git,
   libxml2,
   openssl,
@@ -25,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     meta
     ;
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "cfillion";
     repo = "reapack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RhXAjTNAJegeCJaYkvwJedZrXRA92dQ0EeHJr9ngeCg=";
+    hash = "sha256-M1EUBksCCcGD6zRT0Kr32t+inyKMieGR/y+KGxt/qrc=";
     fetchSubmodules = true;
   };
 
@@ -52,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  cmakeFlags = [ "-Wno-dev" ];
+  cmakeFlags = [
+    "-Wno-author"
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+  ];
 
 })

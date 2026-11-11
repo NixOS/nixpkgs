@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
-  electron_41,
+  electron_44,
   makeBinaryWrapper,
   nix-update-script,
 
@@ -13,14 +13,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "zennotes-desktop";
-  version = "2.31.0";
-  npmDepsHash = "sha256-3PvR/WcQj3Eu0qr4o+MNY+rH5SIAgLVhbHk14vzjX/Q=";
+  version = "2.81.1";
+  npmDepsHash = "sha256-MQ3Ahnm6pnbzMI1B3oH94Xth0ExUkXrHOuooVqD7A60=";
 
   src = fetchFromGitHub {
     owner = "ZenNotes";
     repo = "zennotes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iptW9Pplvh8hGZcEXGAm1oC1y/5NOefbjHlYrft443o=";
+    hash = "sha256-ENqJbMGnfAUzWpxBOM3YL47diKnu+J03sIpWhObXMrA=";
   };
 
   npmWorkspace = "apps/desktop";
@@ -35,6 +35,22 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
+  preBuild = ''
+    # fixes error node_modules/.bin/electron-vite: /usr/bin/env: bad interpreter: No such file or directory
+    patchShebangs apps/desktop/node_modules/electron-vite
+  '';
+
+  configurePhase = ''
+    runHook preConfigure
+
+    # Allow getting information about latest releases, change app state from development to managed
+    substituteInPlace apps/desktop/src/main/updater.ts \
+    --replace-fail "let managedInstall = false" "let managedInstall = true" \
+    --replace-fail "isPackaged: app.isPackaged," "isPackaged: true,"
+
+    runHook postConfigure
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -47,11 +63,11 @@ buildNpmPackage (finalAttrs: {
     done
 
     mkdir -p $out/bin
-    makeWrapper ${electron_41}/bin/electron $out/bin/zennotes-desktop \
+    makeWrapper ${electron_44}/bin/electron $out/bin/zennotes-desktop \
       --add-flags "$out/lib/node_modules/zennotes-monorepo/apps/desktop"
 
     ${lib.optionalString installCli ''
-      makeWrapper ${electron_41}/libexec/electron/electron $out/bin/zn \
+      makeWrapper ${electron_44}/libexec/electron/electron $out/bin/zn \
         --set ELECTRON_RUN_AS_NODE 1 \
         --add-flags "$out/lib/node_modules/zennotes-monorepo/apps/desktop/out/main/cli.js"
     ''}

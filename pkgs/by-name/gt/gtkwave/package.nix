@@ -20,12 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gtkwave";
   version = "3.3.128";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "mirror://sourceforge/gtkwave/gtkwave-gtk3-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-gX4Zf8GAj4qsNUPCwvloPLATaMkRkrjq5a9YBw7x0fg=";
   };
 
   nativeBuildInputs = [
+    gperf
     pkg-config
     wrapGAppsHook3
   ]
@@ -35,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     glib
-    gperf
     gtk3
     judy
     tcl

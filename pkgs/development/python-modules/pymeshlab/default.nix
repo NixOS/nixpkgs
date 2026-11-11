@@ -98,7 +98,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pymeshlab" ];
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   meta = {

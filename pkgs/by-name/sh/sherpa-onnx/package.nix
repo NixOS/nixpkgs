@@ -7,6 +7,7 @@
   cmake,
   python3Packages ? { },
   nix-update-script,
+  runCommand,
 
   # dependencies
   alsa-lib,
@@ -29,10 +30,10 @@ let
   # instead of trying to download them (which fails in the sandbox).
   cache = [
     {
-      name = "espeak-ng-f6fed6c58b5e0998b8e68c6610125e2d07d595a7.zip";
+      name = "espeak-ng-ed530aa113046142eb5115cf2fc9157854d0ffe1.zip";
       src = fetchurl {
-        url = "https://github.com/csukuangfj/espeak-ng/archive/f6fed6c58b5e0998b8e68c6610125e2d07d595a7.zip";
-        hash = "sha256-cMv0BQ56AUquGRQLBeVySdpHIPVhKEWfvjqTvq+XGuY=";
+        url = "https://github.com/csukuangfj/espeak-ng/archive/ed530aa113046142eb5115cf2fc9157854d0ffe1.zip";
+        hash = "sha256-5OJiy+NPf+IfkfG6M5fyco4fMOr7rnhT8rdTqe0T8N0=";
       };
     }
     {
@@ -71,17 +72,17 @@ let
       };
     }
     {
-      name = "piper-phonemize-78a788e0b719013401572d70fef372e77bff8e43.zip";
+      name = "piper-phonemize-f3ff95afc03640bc1399e113e83361192a2fafb4.zip";
       src = fetchurl {
-        url = "https://github.com/csukuangfj/piper-phonemize/archive/78a788e0b719013401572d70fef372e77bff8e43.zip";
-        hash = "sha256-iWQaRkiaSJh1RkPOV72pybVLTKRkhf3AK/DchLhmZF0=";
+        url = "https://github.com/csukuangfj/piper-phonemize/archive/f3ff95afc03640bc1399e113e83361192a2fafb4.zip";
+        hash = "sha256-2cyk4r3H1t2N/7lqRmgoPb0/d6nBlKPlMMHo66lAal0=";
       };
     }
     {
-      name = "openfst-1.8.5-2026-04-11.tar.gz";
+      name = "openfst-1.8.5-2026-07-09.tar.gz";
       src = fetchurl {
-        url = "https://github.com/csukuangfj/openfst/archive/refs/tags/v1.8.5-2026-04-11.tar.gz";
-        hash = "sha256-V/vEuVCugbGg4eKYrxVlLalopnI6WSt4dOm0AnqApbQ=";
+        url = "https://github.com/csukuangfj/openfst/archive/refs/tags/v1.8.5-2026-07-09.tar.gz";
+        hash = "sha256-L/cSoylS/LAdNREhpryMz0/cayqgbOjfKzCV3t1RjA4=";
       };
     }
     {
@@ -108,16 +109,34 @@ let
       };
     }
   ];
+
+  # Use the same yesno TDNN model and audio sample as upstream's offline CTC test,
+  # pinned to a Hugging Face repository commit:
+  # https://github.com/k2-fsa/sherpa-onnx/blob/v1.13.8/.github/scripts/test-offline-ctc.sh
+  yesnoModelRev = "93a6f1d8f477397fc607a6cb151bff7a68c28589";
+  yesnoModelUrl = "https://huggingface.co/csukuangfj/sherpa-onnx-tdnn-yesno/resolve/${yesnoModelRev}";
+  yesnoModel = fetchurl {
+    url = "${yesnoModelUrl}/model-epoch-14-avg-2.onnx";
+    hash = "sha256-xFIeHlyCwxH5A64skF1Nj53ccKCqjy/+ePRcTWclKsA=";
+  };
+  yesnoTokens = fetchurl {
+    url = "${yesnoModelUrl}/tokens.txt";
+    hash = "sha256-Zai7QPb5kTkd0WnmRjfYZk3ZEn6qeoioyOaUMXK8yMA=";
+  };
+  yesnoWav = fetchurl {
+    url = "${yesnoModelUrl}/test_wavs/0_0_1_1_0_1_1_0.wav";
+    hash = "sha256-04LPuot4IYNfYsfIHYtQnj46WXzeYqGQ1pC8R3IBy5k=";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa-onnx";
-  version = "1.13.3";
+  version = "1.13.8";
 
   src = fetchFromGitHub {
     owner = "k2-fsa";
     repo = "sherpa-onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xwu45dJOT1yUdU0P6Vjr8XexSeGOOfQ/zt1lhcASm/8=";
+    hash = "sha256-yAkjeRJXSiGW7Pr6cmHKUeYiWZyd88raEMdaJvYhQLM=";
   };
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "python" ];
@@ -206,6 +225,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    # Exercise the installed CLI, ONNX Runtime, model loading, and transcription.
+    # Upstream's yesno model test and expected transcripts:
+    # https://k2-fsa.github.io/sherpa/onnx/pretrained_models/offline-ctc/yesno/
+    tests.offlineRecognition =
+      runCommand "${finalAttrs.pname}-offline-recognition-test"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          sherpa-onnx-offline \
+            --sample-rate=8000 \
+            --feat-dim=23 \
+            --num-threads=1 \
+            --tokens=${yesnoTokens} \
+            --tdnn-model=${yesnoModel} \
+            ${yesnoWav} > result.txt 2>&1
+
+          grep -Fq '"text": "NNYYNYYN"' result.txt
+          touch $out
+        '';
   };
 
   meta = {
@@ -214,7 +254,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/k2-fsa/sherpa-onnx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jaredmontoya ];
+    maintainers = with lib.maintainers; [
+      jaredmontoya
+      ryan4yin
+    ];
     mainProgram = "sherpa-onnx";
   };
 })

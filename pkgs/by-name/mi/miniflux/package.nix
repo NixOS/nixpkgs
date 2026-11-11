@@ -1,24 +1,24 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   nix-update-script,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "miniflux";
-  version = "2.3.3";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     tag = finalAttrs.version;
-    hash = "sha256-zJ8ir6t3J65RTNi7XtTsbuG3VQId3xvEhLP6Cgn0+xg=";
+    hash = "sha256-qia5Xnmku0w6o2UVfxKvAHicF/1pAKcXIfQf8A/wmVM=";
   };
 
-  vendorHash = "sha256-+5vpLTpShQegLzFzAl7H86i71G+PXP66w9mIr440+oA=";
+  vendorHash = "sha256-st4lJ12JwHv1AwxNEEzus+8GkDn5C3bmBJjJtzVt1v0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

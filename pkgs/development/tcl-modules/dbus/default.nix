@@ -6,12 +6,12 @@
   dbus,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "dbus";
   version = "4.1";
 
   src = fetchzip {
-    url = "https://chiselapp.com/user/schelte/repository/dbus/uv/dbus-${version}.tar.gz";
+    url = "https://chiselapp.com/user/schelte/repository/dbus/uv/dbus-${finalAttrs.version}.tar.gz";
     hash = "sha256-8VIw475Q9kRh6UV6FxWCXKLKasqM1z58ed0rMgzEX3I=";
   };
 
@@ -29,4 +29,4 @@ mkTclDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

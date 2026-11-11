@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openhack";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "openhackai";
     repo = "openhack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ptM4jL+Wjmz9n4HPa87s5kLHU1OhSyD2AEz0m/i6E3o=";
+    hash = "sha256-vdjOjCeYXlwia1NBKkD94fPHjb4Ho/69NrCOLoz51No=";
   };
 
   build-system = with python3Packages; [ hatchling ];

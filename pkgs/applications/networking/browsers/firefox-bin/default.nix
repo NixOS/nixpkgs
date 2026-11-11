@@ -44,9 +44,7 @@ let
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
-  isPrefixOf = prefix: string: builtins.substring 0 (builtins.stringLength prefix) string == prefix;
-
-  sourceMatches = locale: source: (isPrefixOf source.locale locale) && source.arch == arch;
+  sourceMatches = locale: source: (lib.hasPrefix source.locale locale) && source.arch == arch;
 
   policies = {
     DisableAppUpdate = true;
@@ -130,8 +128,8 @@ stdenv.mkDerivation {
   passthru = {
     inherit applicationName binaryName;
     libName = "firefox-bin-${version}";
-    ffmpegSupport = true;
-    gssSupport = true;
+    withFFmpeg = true;
+    withGSSAPI = true;
     gtk3 = gtk3;
 
     # update with:
@@ -156,7 +154,7 @@ stdenv.mkDerivation {
     changelog = "https://www.firefox.com/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
-    license = {
+    license = lib.licenses.mkLicense {
       shortName = "firefox";
       fullName = "Firefox Terms of Use";
       url = "https://www.mozilla.org/about/legal/terms/firefox/";

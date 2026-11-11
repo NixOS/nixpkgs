@@ -1,0 +1,11 @@
+--- a/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c
++++ b/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/gstreamer/gst/gstregistry.c
+@@ -1479,7 +1479,7 @@
+ 
+   for (gstlite_plugins_list_index = 0; gstlite_plugins_list[gstlite_plugins_list_index] != NULL; gstlite_plugins_list_index++) {
+     filename_partial = g_build_filename (path, gstlite_plugins_list[gstlite_plugins_list_index], NULL);
+-#ifdef LINUX
++#if 0
+     if (g_str_has_suffix(filename_partial, "libavplugin")) { // Check libav version and load correspondent module.
+       int plugin_version = 0;
+       // Look for libavcodec and check its version to figure out if it is

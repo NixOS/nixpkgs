@@ -4,8 +4,11 @@
   stdenv,
   libiconv,
   ncurses,
-  lua,
+  lua5_2_compat,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dit";

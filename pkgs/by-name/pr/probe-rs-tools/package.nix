@@ -10,17 +10,16 @@
   openssl,
   stdenv,
 }:
-
-let
-  # udev rules are in another unversioned repo
-  udevRules = fetchurl {
-    url = "https://raw.githubusercontent.com/probe-rs/webpage/054a0b16831593091a8a5624d0e2305573e860ee/public/files/69-probe-rs.rules";
-    hash = "sha256-yjxld5ebm2jpfyzkw+vngBfHu5Nfh2ioLUKQQDY4KYo=";
-  };
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "probe-rs-tools";
   version = "0.32.0";
+
+  # udev rules are in another unversioned repo
+  udevRules = fetchurl {
+    # Last updated 2026-08-10
+    url = "https://raw.githubusercontent.com/probe-rs/webpage/9cc4b7d0727cc1ad0b87d5999aa9cdbfd8021632/public/files/69-probe-rs.rules";
+    hash = "sha256-JvH56IOapIIaT1gD9XCd/mdgrha3VVNSjneVDdebnoI=";
+  };
 
   src = fetchFromGitHub {
     owner = "probe-rs";
@@ -47,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+    install -D -m 444 $udevRules $out/etc/udev/rules.d/69-probe-rs.rules
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd probe-rs \
@@ -86,10 +85,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/probe-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       xgroleau
       newam

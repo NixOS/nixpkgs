@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hyprland-monitors";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BlueManCZ";
     repo = "hyprland-monitors";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a7fEDPPN9XYsrpE99C9c9MZGpqg24ZlY6vvHzgvNtzc=";
+    hash = "sha256-7nrLBsU7QacSf5l0Y/LgegfHtx2qHBNCJUBz0cc3dLE=";
   };
 
   build-system = [ hatchling ];

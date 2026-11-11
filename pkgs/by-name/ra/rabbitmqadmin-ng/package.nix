@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
-  strictDeps = true;
-
   # This requires a running rabbitmq instance to communicate with that needs
   # to be set up by hand. It should be possible to run tests in the future
   # if we ever add a `rabbitmqTestHook`, similar to the `postgresqlTestHook`.

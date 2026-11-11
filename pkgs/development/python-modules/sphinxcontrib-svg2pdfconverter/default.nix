@@ -17,23 +17,23 @@ assert (withCairosvg || withInkscape || withLibrsvg);
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-svg2pdfconverter";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "sphinxcontrib_svg2pdfconverter";
-    hash = "sha256-q5yPEIA5HiMYEtIKvyZXpp7jVXRWOxAUQU+VOWSpX6M=";
+    hash = "sha256-l1boLV878RYp/8uvsfihCS07tHieM0lAMs3OmpyEWdM=";
   };
 
   # for enabled modules: provide the full path to the binary
   postPatch =
     lib.optionalString withLibrsvg ''
-      substituteInPlace sphinxcontrib/rsvgconverter.py \
+      substituteInPlace sphinxcontrib/rsvgconverter/__init__.py \
         --replace-fail "'rsvg_converter_bin', 'rsvg-convert'" "'rsvg_converter_bin', '${lib.getExe' librsvg "rsvg-convert"}'"
     ''
     + lib.optionalString withInkscape ''
-      substituteInPlace sphinxcontrib/inkscapeconverter.py \
+      substituteInPlace sphinxcontrib/inkscapeconverter/__init__.py \
         --replace-fail "'inkscape_converter_bin', 'inkscape'" "'inkscape_converter_bin', '${lib.getExe inkscape}'"
     '';
 
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx SVG to PDF converter extension";
     homepage = "https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter";
+    changelog = "https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ dansbandit ];
   };

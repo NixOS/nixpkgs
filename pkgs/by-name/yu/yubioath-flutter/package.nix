@@ -1,6 +1,6 @@
 {
   lib,
-  flutter344,
+  flutter347,
   python3Packages,
   fetchFromGitHub,
   pcre2,
@@ -14,15 +14,16 @@
   nix-update-script,
 }:
 
-flutter344.buildFlutterApplication rec {
+flutter347.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.4.1";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
-    hash = "sha256-7863P463ZOtYcrCN9KLQIj2YOTmKH62PFap5Ja7m5Ig=";
+    hash = "sha256-QBxb5xm2K7UaAhK7UwIlIrLQNkERc0jpBQEhv1/Z/9s=";
+    fetchSubmodules = true;
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

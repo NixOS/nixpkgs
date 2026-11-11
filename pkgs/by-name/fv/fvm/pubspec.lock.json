@@ -684,11 +684,11 @@
       "dependency": "direct main",
       "description": {
         "name": "pub_updater",
-        "sha256": "54e8dc865349059ebe7f163d6acce7c89eb958b8047e6d6e80ce93b13d7c9e60",
+        "sha256": "739a0161d73a6974c0675b864fb0cf5147305f7b077b7f03a58fa7a9ab3e7e7d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.4.0"
+      "version": "0.5.0"
     },
     "pubspec_parse": {
       "dependency": "direct main",

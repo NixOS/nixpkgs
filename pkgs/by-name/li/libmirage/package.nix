@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmirage";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/libmirage-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wMAzJpEue1QnDllWheFk3ZX+8pSkYw13s+GU0G/AOfs=";
+    hash = "sha256-tICwgjCyJVr0DDrIY0TAx3/JloZgFOBaadVVTpA11ls=";
   };
 
   env = {

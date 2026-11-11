@@ -4,52 +4,35 @@
   fetchMixDeps,
   mixRelease,
   nix-update-script,
-
-  # for tests
-  beam27Packages,
-  beam28Packages,
 }:
-# Based on ../elixir-ls/default.nix
 
-let
+mixRelease (finalAttrs: {
   pname = "ex_doc";
-  version = "0.40.3";
+  version = "0.40.4";
   src = fetchFromGitHub {
     owner = "elixir-lang";
-    repo = "${pname}";
-    rev = "v${version}";
-    hash = "sha256-xGZCBnjYr+0x6JNcf0XZVdaKaUB8V72GuZI3lEunzic=";
+    repo = "${finalAttrs.pname}";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wDdBjq62TX8m50LeszMx4f8nlUeMgElpKZ3imHNq7Hs=";
   };
-in
-mixRelease {
-  inherit
-    pname
-    version
-    src
-    ;
 
   escriptBinName = "ex_doc";
 
   stripDebug = true;
 
   mixFodDeps = fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version;
-    hash = "sha256-FSLAQhFk7NCUXRMfNr6E9XvndrviapjcKZDisHbB87Y=";
+    pname = "mix-deps-${finalAttrs.pname}";
+    inherit (finalAttrs) src version;
+    hash = "sha256-gjvvNG8LUFG5YouwFygbXeWUzlxpESAPZWzqXyS6vBw=";
   };
 
   passthru = {
-    tests = {
-      # ex_doc is the doc generation for OTP 27+, so let's make sure they build
-      erlang_27 = beam27Packages.erlang;
-      erlang_28 = beam28Packages.erlang;
-    };
-
     updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://github.com/elixir-lang/ex_doc";
+    changelog = "https://github.com/elixir-lang/ex_doc/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = ''
       ExDoc produces HTML and EPUB documentation for Elixir projects
     '';
@@ -58,4 +41,4 @@ mixRelease {
     mainProgram = "ex_doc";
     maintainers = with lib.maintainers; [ chiroptical ];
   };
-}
+})

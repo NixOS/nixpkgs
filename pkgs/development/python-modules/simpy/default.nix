@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "simpy";
-  version = "4.1.1";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BtB1CniEsR4OjiDOC8fG1O1fF0PUVmlTQNE/3/lQAaY=";
+    hash = "sha256-du82tx4ENrqU5V/rwAHHiHnkk6Mj8EW7z7sLIW6bH7w=";
   };
 
   build-system = [

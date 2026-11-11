@@ -25,10 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI tool to download saved media from Reddit";
     homepage = "https://github.com/manojkarthick/reddsaver";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.manojkarthick ];
     mainProgram = "reddsaver";
   };

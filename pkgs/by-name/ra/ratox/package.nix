@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   meta = {
     description = "FIFO based tox client";
     mainProgram = "ratox";
-    homepage = "http://ratox.2f30.org/";
+    homepage = "https://git.2f30.org/ratox/file/README.html";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
   };

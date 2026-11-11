@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   betamax,
   fixtures,
   hacking,
@@ -17,22 +17,32 @@
   requests-kerberos,
   requests-mock,
   setuptools,
-  stestr,
+  stestrCheckHook,
   stevedore,
   testresources,
   testtools,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keystoneauth1";
-  version = "5.15.0";
+  version = "5.18.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ziys39Ao5lvSP/QD1lcuv6s7AG1tLd46qFwmNnWp+7U=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "keystoneauth";
+    tag = finalAttrs.version;
+    hash = "sha256-a9A7tz8l+onST/PJsYCZpiI0WRtJtD4cUf6TazE+Bi0=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include keystoneauth1 *" > MANIFEST.in
+  '';
 
   build-system = [ setuptools ];
 
@@ -44,7 +54,7 @@ buildPythonPackage rec {
     typing-extensions
   ]
   # TODO: remove this workaround and fix breakages
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   optional-dependencies = {
     betamax = [
@@ -56,6 +66,8 @@ buildPythonPackage rec {
     saml2 = [ lxml ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     fixtures
     hacking
@@ -63,17 +75,16 @@ buildPythonPackage rec {
     oslo-utils
     pycodestyle
     requests-mock
-    stestr
+    stestrCheckHook
     testresources
     testtools
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  checkPhase = ''
-    stestr run
-  '';
-
-  pythonImportsCheck = [ "keystoneauth1" ];
+  pythonImportsCheck = [
+    "keystoneauth1"
+    "keystoneauth1.exceptions"
+  ];
 
   meta = {
     description = "Authentication Library for OpenStack Identity";
@@ -81,4 +92,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

@@ -1,38 +1,34 @@
 {
   lib,
   fetchFromGitHub,
+  substitute,
   stdenv,
   yarn-berry_4,
   nodejs_24,
-  electron_42,
+  electron_45,
   makeWrapper,
   ffmpeg-headless,
   copyDesktopItems,
   makeDesktopItem,
   imagemagick,
-  nix-update-script,
 }:
 let
   yarn-berry = yarn-berry_4;
   nodejs = nodejs_24;
-  electron = electron_42;
+  electron = electron_45;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
-  version = "3.68.0";
+  version = "3.70.2-unstable-2026-10-24";
 
   src = fetchFromGitHub {
     owner = "mifi";
     repo = "lossless-cut";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-LNh9F2aKxVegZTAPuEAqo2f78ynGMgnpwnDXEP1u2+M=";
+    rev = "14b89b425213b447396e3c3cddc2ef2a7d45d61f";
+    hash = "sha256-9iYZT3/cQyU7uVHvXdHoM/jNzubZMX4XYkKhAePl6uo=";
   };
 
   patches = [
-    # fixes a few things that try to guess whether it's a dev build
-    ./undev.patch
-    ./yarn-4.14-support.patch
-    ./disable-update-check.patch
     # LosslessCut will retrieve a URL from mifi.no (the author's domain) and directly embed the HTML in the app.
     # This was previously used to show a Ukraine flag, which I don't have strong opinions on.
     # However, this effectively allows arbitrary code execution, which could be IP-gated. I can't allow that.
@@ -41,11 +37,70 @@ stdenv.mkDerivation (finalAttrs: {
     ./stub-load-mifi.patch
   ];
 
+  prePatch = ''
+    # Catch unreplaced files
+    catchUnreplacedFiles() {
+      local pattern="$1"
+      shift
+      local -i status=0
+      local unreplacedFiles
+      unreplacedFiles=$(grep -r -l "$pattern" "$@") || status="$?"
+      case $status in
+      0)
+        echo "ERROR: Found unreplaced $pattern in files:" >&2
+        printf '%s\n' "$unreplacedFiles" >&2
+        return 1
+        ;;
+      1)
+        # No unmatched file found. Good.
+        ;;
+      *)
+        # Grep failed
+        return "$status"
+        ;;
+      esac
+    }
+  '';
+
   postPatch = ''
+    # Disable afterPack during build,
+    # as afterPack expects the upstream ffmpeg bundle.
+    substituteInPlace package.json \
+      --replace-fail '"afterPack": "./script/afterPack.ts",' ""
+
+    # Disable update check by making enableUpdateCheck configuration always false
+    # * Changge the configuration access.
+    #   * Replace default value.
+    #   * Monkey patch the config getter (whose generic return type is `Config[T]`).
+    substituteInPlace src/main/configStore.ts \
+      --replace-fail "enableUpdateCheck: true," "enableUpdateCheck: false," \
+      --replace-fail \
+        "return store.get(key);" \
+        "return key === 'enableUpdateCheck' ? (false as Config[T]) : store.get(key);"
+    # * Change the "File > Settings" UI.
+    #   * Make the enableUpdateCheck switch non-interactive and keep it unchecked.
+    #   * Change the label to inform users about the option being disabled in Nixpkgs.
+    substituteInPlace src/renderer/src/components/Settings.tsx \
+      --replace-fail \
+        "<KeyCell>{t('Check for updates on startup?')}</KeyCell>" \
+        "<KeyCell>{t('Check for updates on startup? (disabled in Nixpkgs)')}</KeyCell>" \
+      --replace-fail \
+        "<Switch checked={enableUpdateCheck} onCheckedChange={setEnableUpdateCheck} />" \
+        "<Switch checked={false} disabled />"
+
+    # Hard-code app.isPackaged as true
+    for f in src/main/ffmpeg.ts src/main/i18nCommon.ts src/main/logger.ts; do
+      substituteInPlace "$f" \
+        --replace-fail app.isPackaged "true"
+    done
+    catchUnreplacedFiles app.isPackaged --include="*.ts" --include="*.tsx" src
+
+    # Hard-code resources path
     for f in src/main/ffmpeg.ts src/main/i18nCommon.ts; do
       substituteInPlace "$f" \
-        --subst-var-by losslesscut_resources_path $out/share/losslesscut
+        --replace-fail process.resourcesPath "'$out/share/losslesscut/'"
     done
+    catchUnreplacedFiles process.resourcesPath --include="*.ts" --include="*.tsx" src
   '';
 
   env = {
@@ -121,8 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-o0u9dAoo0sTEV+kjQg8TjRNAIcx8fqfk79HsDwAXriA=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-xsw9AqsOTCGHDNPqt+dspXw7dvBhaKcQY35XZQ0Cmag=";
   };
 
   postConfigure = ''
@@ -153,7 +208,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s -t $out/share/losslesscut/ ${lib.getExe' ffmpeg-headless "ffmpeg"} ${lib.getExe' ffmpeg-headless "ffprobe"}
 
     makeWrapper ${lib.getExe electron} $out/bin/losslesscut \
-      --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/share/losslesscut/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
@@ -167,12 +221,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Swiss army knife of lossless video/audio editing";
     homepage = "https://losslesscut.app/";
+    ${if finalAttrs.src.tag != null then "changelog" else null} =
+      "https://github.com/mifi/lossless-cut/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
+    # electron-builder needs `codesign` for ad-hoc signing on darwin
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       shelvacu
       ShamrockLee

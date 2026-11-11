@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustywind";
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "avencera";
     repo = "rustywind";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VlmJJ9movoMumCChINLikz1HJ+KjMvZiTiBhrSCEAdk=";
+    hash = "sha256-DHZF/ftJqeKvjgaYUY8KNOkq7MBguPi2yXyrb1V91M8=";
   };
 
-  cargoHash = "sha256-DAozCVsUBUp6TsbmtfZnU3G73OZE4qtDqtJzpv3fvp4=";
+  cargoHash = "sha256-A2bD4uXU4/9uMJjCHc83dfFVqjn/zgjZ31gDWiAhFVk=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -36,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ipython";
-  version = "9.14.0";
+  version = "9.16.1";
   outputs = [
     "out"
     "man"
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-byf/Dx2eoFDgVR9xVovEs02KuleejxEcW0F19ErGtKo=";
+    hash = "sha256-Wj0fmkf/IW1s+c+GMST2osGhmNE1TFRqTSSjcKKDtkw=";
   };
 
   build-system = [ setuptools ];

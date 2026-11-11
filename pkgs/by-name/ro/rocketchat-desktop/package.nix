@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
   nodejs,
   pkg-config,
   node-gyp,
   python3Packages,
-  electron_42,
+  electron_43,
   vips,
   xvfb-run,
   copyDesktopItems,
@@ -17,32 +18,42 @@
 }:
 let
   yarn-berry = yarn-berry_4;
-  electron = electron_42;
+  electron = electron_43;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.16.0";
+  version = "4.19.0";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
     tag = finalAttrs.version;
-    hash = "sha256-6yFfSZSHWD/RDk2dD1aUWzNM8KOJmmfiz0GWKrTL7mY=";
-  };
+    hash = "sha256-LtJBxhq9ev1XrUOzLAlrYb368awMMyWtgaJODC3tMBU=";
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/RocketChat/Rocket.Chat.Electron/blob/master/package.json#L182
-    ./yarn-4.14-support.patch
-  ];
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/RocketChat/Rocket.Chat.Electron/blob/master/package.json#L187
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   # This might need to be updated between releases.
   # See https://nixos.org/manual/nixpkgs/stable/#javascript-yarnBerry-missing-hashes
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-7zPiu8kgZbp64ugf229hrjpwZujQHHDLwCxlGRVgH4E=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-iFLLePb3lL7cBu9E6v3MuwycRwuY/y5f+JXmWpdWqNw=";
   };
 
   nativeBuildInputs = [
@@ -116,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "rocketchat-desktop";
       exec = "rocketchat-desktop";
       terminal = false;
-      startupWMClass = "Rocket.Chat";
+      startupWMClass = "rocket-chat";
       mimeTypes = [ "x-scheme-handler/rocketchat" ];
     })
   ];
@@ -149,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
     changelog = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mynacol ];
+    maintainers = with lib.maintainers; [ chvp ];
     platforms = lib.platforms.linux;
   };
 })

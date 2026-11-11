@@ -59,10 +59,17 @@ stdenv.mkDerivation (
         dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}"
       ) internalDeps}
     '';
-    checkPhase = "NO_INTERACTON=yes make test";
+
+    checkPhase = ''
+      runHook preCheck
+
+      NO_INTERACTON=yes make test TESTS="--show-diff"
+
+      runHook postCheck
+    '';
 
     passthru = passthru // {
-      # Thes flags were introduced for `nix-update` so that it can update
+      # These flags were introduced for `nix-update` so that it can update
       # PHP extensions correctly.
       # See the corresponding PR: https://github.com/Mic92/nix-update/pull/123
       isPhpExtension = true;

@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphicsmagick";
-  version = "1.3.48";
+  version = "1.3.49";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${finalAttrs.version}.tar.xz";
-    hash = "sha256-khjreBeREPkTcQZqt1yztN0DS5u0ZLKc6bq3oRl5Iys=";
+    hash = "sha256-fvoHDcMRFrQxUGGzn4S8cYHosGC/YSFOya+FETGvnIE=";
   };
 
   outputs = [

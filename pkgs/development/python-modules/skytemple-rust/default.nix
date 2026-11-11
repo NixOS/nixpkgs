@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Binary Rust extensions for SkyTemple";
     homepage = "https://github.com/SkyTemple/skytemple-rust";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
 })

@@ -17,7 +17,7 @@ buildPythonPackage {
     repo = "python-junit-xml";
     # No tags...sigh
     rev = "856414648cbab3f64e69b856bc25cea8b9aa0377";
-    sha256 = "1sg03mv7dk3x4mjxjg127vqjmx0ms7v3a5aibxrclxlhmdqcgvb2";
+    hash = "sha256-Yu3HcKuQdspyX1EVNfbRFfQq8T4iPNllJX3MdnYd4Ok=";
   };
 
   propagatedBuildInputs = [ six ];

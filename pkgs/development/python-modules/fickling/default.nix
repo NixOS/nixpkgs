@@ -48,8 +48,10 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  # Tests fail upstream in pytorch under python 3.14
-  doCheck = pythonOlder "3.14";
+  disabledTests = [
+    # _pickle.UnpicklingError: pickle exhausted before end of frame
+    "test_insert"
+  ];
 
   pythonImportsCheck = [ "fickling" ];
 

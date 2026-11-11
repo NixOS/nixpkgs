@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pizauth";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
     tag = "pizauth-${finalAttrs.version}";
-    hash = "sha256-VL58v/mBwFwDmF4Xg43bzitcBCsPsEwEaLKqV5X9rpg=";
+    hash = "sha256-TCcOynHygf/120gcI+iLwN9Sj33MkV7C71Vucb63vcc=";
   };
 
-  cargoHash = "sha256-pxzPcieUXE3VOyGNDaeDHUQPayRDZXpW57VWMejlZ4k=";
+  cargoHash = "sha256-8gCzEVPQVu5qoddGN0vkkqm7Zf/LDL6j7RWNC42PEmo=";
 
   buildFeatures = lib.optionals enableSystemd [
     "systemd"
@@ -40,6 +40,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     make PREFIX=$out install ${lib.optionalString enableSystemd "install-systemd"}
   '';
+
+  checkFlags = [
+    # Probably a sandbox issue, see:
+    # https://github.com/ltratt/pizauth/issues/108
+    "--skip=token_renewal"
+  ];
+
+  # Integration tests start a mock OAuth server on localhost.
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
 

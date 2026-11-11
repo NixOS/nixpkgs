@@ -13,6 +13,7 @@ buildNpmPackage (finalAttrs: {
   postPatch = ''
     # don't download elm from github
     sed -i '/"elm":/d' package.json
+    substituteInPlace elm.json --replace-fail "0.19.1" "${elmPackages.elm.version}"
   '';
 
   postConfigure = (
@@ -25,7 +26,7 @@ buildNpmPackage (finalAttrs: {
     }
   );
 
-  npmDepsHash = "sha256-2flvNJXsOhE0k10Eu8kWo3p3aAABFB/f3yeYNrIztpw=";
+  npmDepsHash = "sha256-lQaBuiw0IHTLHwqOAwiC4LeNGrzAQFWScMzedKoGQbE=";
 
   nativeBuildInputs = [
     elmPackages.elm

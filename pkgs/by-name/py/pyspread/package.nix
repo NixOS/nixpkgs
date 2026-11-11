@@ -51,8 +51,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     #pycel # compile Excel spreadsheets to Python code
   ];
 
-  strictDeps = true;
-
   doCheck = true;
   pythonImportsCheck = [ "pyspread" ];
 

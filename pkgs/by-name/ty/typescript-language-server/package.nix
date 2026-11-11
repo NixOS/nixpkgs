@@ -2,81 +2,66 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
+  fetchPnpmDeps,
   makeWrapper,
   nodejs,
-  prefetch-yarn-deps,
+  pnpm_12,
+  pnpmBuildHook,
+  pnpmConfigHook,
   replaceVars,
-  yarn,
   testers,
-  typescript,
+  typescript_5,
+  versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typescript-language-server";
-  version = "5.3.0";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "typescript-language-server";
     repo = "typescript-language-server";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9xK1maMfWowWlzAtmwoR3CVqQCkUf6i9uBWVsobBQPA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FOsOphQWtSKnUY87zEtAA5mdMmwdGFpc5CeviNRIKwc=";
   };
 
   patches = [
     (replaceVars ./default-fallbackTsserverPath.diff {
-      typescript = "${typescript}/lib/node_modules/typescript/lib/tsserver.js";
+      typescript = "${typescript_5}/lib/node_modules/typescript/lib/tsserver.js";
     })
   ];
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-68aXoafE/wc1iS7HHwF7g/i8ZREoTj4bV/RL3XYc0Rs=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-klxImN6Bp5/t6V0LfsmYNBvSzYq9Qz9dIU2mkvScx5k=";
   };
 
   nativeBuildInputs = [
-    fixup-yarn-lock
     makeWrapper
     nodejs
-    prefetch-yarn-deps
-    yarn
+    pnpm_12
+    pnpmBuildHook
+    pnpmConfigHook
   ];
-
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup-yarn-lock yarn.lock
-    yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install
-    patchShebangs node_modules
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn --offline build
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
 
-    yarn --offline --production install
+    # The build is a self-contained bundle: there are no runtime dependencies.
+    mkdir -p "$out/lib"
+    cp lib/cli.mjs "$out/lib"
 
-    mkdir -p "$out/lib/node_modules/typescript-language-server"
-    cp -r lib node_modules package.json "$out/lib/node_modules/typescript-language-server"
-
-    makeWrapper "${nodejs}/bin/node" "$out/bin/typescript-language-server" \
-      --add-flags "$out/lib/node_modules/typescript-language-server/lib/cli.mjs"
+    makeWrapper "${lib.getExe nodejs}" "$out/bin/typescript-language-server" \
+      --add-flags "$out/lib/cli.mjs"
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
     tests.version = testers.testVersion {

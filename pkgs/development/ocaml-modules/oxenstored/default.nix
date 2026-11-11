@@ -3,6 +3,7 @@
   buildDunePackage,
   fetchFromGitHub,
   replaceVars,
+  fetchpatch,
   dune-site,
   fmt,
   xen,
@@ -13,6 +14,8 @@ buildDunePackage (finalAttrs: {
   pname = "oxenstored";
   version = "25.3.0";
 
+  minimalOCamlVersion = "4.13";
+
   outputs = [
     "out"
     "doc"
@@ -21,11 +24,22 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xapi-project";
     repo = "oxenstored";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+JXgVO6m63sPzVTwpq/ztDBx/x/g5vtU1Xbcd+t5ons=";
   };
 
-  patches = [ (replaceVars ./xen-paths.patch { inherit xen; }) ];
+  patches = [
+    (replaceVars ./xen-paths.patch { inherit xen; })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa512-oxenstored-1.patch";
+      hash = "sha256-+IWQTWIPrSJGGUCoLykYXQgVMBzTxgDpXLz0aTzk1dk=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa512-oxenstored-2.patch";
+      hash = "sha256-1u/X7hRA1omTVK5lRKrzyY0eIQC9zcea6XyGE3mEgeE=";
+    })
+  ];
 
   buildInputs = [
     dune-site

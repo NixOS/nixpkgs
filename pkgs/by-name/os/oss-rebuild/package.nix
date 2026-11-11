@@ -56,7 +56,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/google/oss-rebuild";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = [ ];
     mainProgram = "oss-rebuild";
   };
 })

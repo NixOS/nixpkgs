@@ -20,7 +20,7 @@
   avahi,
   lame,
   gettext,
-  pcre-cpp,
+  pcre2,
   yajl,
   fribidi,
   which,
@@ -76,6 +76,7 @@
   libcrossguid,
   libmicrohttpd,
   bluez,
+  cacert,
   doxygen,
   giflib,
   glib,
@@ -147,26 +148,26 @@ let
     owner = "xbmc";
     repo = "libdvdcss";
     rev = "1.4.3-Next-Nexus-Alpha2-2";
-    sha256 = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
+    hash = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
   };
 
   libdvdnav = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdnav";
     rev = "6.1.1-Next-Nexus-Alpha2-2";
-    sha256 = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
+    hash = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
   };
 
   libdvdread = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdread";
     rev = "6.1.3-Next-Nexus-Alpha2-2";
-    sha256 = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
+    hash = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
   };
 
   groovy = fetchzip {
     url = "mirror://apache/groovy/4.0.16/distribution/apache-groovy-binary-4.0.16.zip";
-    sha256 = "sha256-OfZBiMVrhw6VqHRHCSC7ZV3FiZ26n4+F8hsskk+L6yU=";
+    hash = "sha256-OfZBiMVrhw6VqHRHCSC7ZV3FiZ26n4+F8hsskk+L6yU=";
   };
 
   apache_commons_lang = fetchzip {
@@ -263,6 +264,15 @@ stdenv.mkDerivation (
         url = "https://github.com/xbmc/xbmc/commit/29492cbd20d4c90a9c00a30ab525d4d0e81a968b.patch";
         hash = "sha256-WNaODPCtRfn30jVU5HbBnAO2Vl/MQp2CYmKOTTyDGZI=";
       })
+
+      # Upstream only support pcre-cpp which is deprecated and to be removed
+      # from nixpkgs. This patch moves all usages to pcre2
+      # See https://github.com/xbmc/xbmc/issues/23184
+      (fetchpatch {
+        name = "kodi-21.3-pcre2.patch";
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/kodi/-/raw/9fdc116256e7c610e2045d5bc6fb3c234234a88d/kodi-21.3-pcre2.patch";
+        hash = "sha256-PJXfuZl8f4WfTjtL5CFMDEQuB40tlTWu7LvkBUeX5DE=";
+      })
     ];
 
     # make  derivations declared in the let binding available here, so
@@ -287,7 +297,7 @@ stdenv.mkDerivation (
       boost
       libmicrohttpd
       gettext
-      pcre-cpp
+      pcre2
       yajl
       fribidi
       libva
@@ -515,6 +525,9 @@ stdenv.mkDerivation (
 
       substituteInPlace $out/share/xsessions/kodi.desktop \
         --replace kodi-standalone $out/bin/kodi-standalone
+
+      rm $out/share/kodi/system/certs/cacert.pem
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/kodi/system/certs/cacert.pem
     '';
 
     doInstallCheck = true;

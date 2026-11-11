@@ -49,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-UgG/efOMVeQJ1r219YOPkgkPqEdaXJquqXyWZW0oWgI=";
   };
 
+  # needed for newer libxisf, can be removed with next version
+  patches = [ ./libxisf-compat.patch ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -90,6 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Necessary because project uses default build dir for flatpaks/snaps
   mesonBuildDir = "nixbld";
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ python3 ]})
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

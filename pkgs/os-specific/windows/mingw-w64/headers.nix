@@ -23,6 +23,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    # Headers-only stand-in used to bootstrap a toolchain before the real libc
+    # exists: runtimes can compile against it, but not link.
+    headersOnly = true;
     tests = {
       inherit (nixosTests) wine;
     };

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lessc";
-  version = "4.9.0";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "less";
     repo = "less.js";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VP2W0aU1ml+wO5aGVeLP7vAaBXB5xIJ0ko3+l4lAOBg=";
+    hash = "sha256-kRhXqmClUyz+W42qXaeBZ2rJXyjZbYl+sxqLGOg5I3Q=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    CI=true pnpm prune --prod --ignore-scripts
     mkdir -p $out/{bin,lib/lessc}
     cp -r {packages,node_modules} $out/lib/lessc
     chmod +x $out/lib/lessc/packages/less/bin/lessc

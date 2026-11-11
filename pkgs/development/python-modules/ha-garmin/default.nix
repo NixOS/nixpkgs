@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-garmin";
-  version = "0.1.36";
+  version = "0.1.55";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "ha-garmin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3KKvrLZ9SB5JToHGvWgkazKOk8MPUpsFFZrC6kBi3Jw=";
+    hash = "sha256-AnijX2HG29dG3duWMuhcvYCjQto+XfxAu9oF7X4hdR0=";
   };
 
   build-system = [ setuptools ];
@@ -33,11 +33,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # Upstream test relies on a field not present in the test fixture
-    "test_fetch_core_data_sleep_fields"
   ];
 
   pythonImportsCheck = [ "ha_garmin" ];

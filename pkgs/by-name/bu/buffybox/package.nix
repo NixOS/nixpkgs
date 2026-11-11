@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.5.1";
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "buffybox";
     fetchSubmodules = true; # to use its vendored lvgl
     tag = finalAttrs.version;
@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
       There's a close to zero chance that anyone with a 32-bit machine will be using BuffyBox.
       In the case that it happens, I expect no complaints whatsoever.
 
-      https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/87
+      https://gitlab.nura.eco/nura/buffybox/-/merge_requests/87
     */
 
     (fetchpatch {
       name = "fix-32-bit-build";
-      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/87.patch";
+      url = "https://gitlab.nura.eco/nura/buffybox/-/merge_requests/87.patch";
       hash = "sha256-GUk+YrG07hL+0w70qvymPzHGTmUXdfzG4Cy35gg/Asw=";
     })
   ];
@@ -72,8 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Suite of graphical applications for the terminal";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/buffybox";
-    changelog = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/blob/main/CHANGELOG.md";
+    homepage = "https://gitlab.nura.eco/nura/buffybox";
+    changelog = "https://gitlab.nura.eco/nura/buffybox/-/blob/main/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];
     platforms = lib.platforms.linux;

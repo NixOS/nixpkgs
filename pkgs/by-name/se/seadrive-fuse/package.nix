@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seadrive-fuse";
-  version = "3.0.24";
+  version = "3.0.26";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seadrive-fuse";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MREXF6ZzlbFwPobjkaDNNWXNCSBNZqdjjQDA8mZp64E=";
+    hash = "sha256-cX/cvEFvbk19kfnL83gxW3JMJpUnN7ycZACpCO2XQ/w=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    broken = true; # stuck on fuse2
     homepage = "https://github.com/haiwen/seadrive-fuse";
     description = "SeaDrive daemon with FUSE interface";
     changelog = "https://github.com/haiwen/seadrive-fuse/releases/tag/v${finalAttrs.version}";

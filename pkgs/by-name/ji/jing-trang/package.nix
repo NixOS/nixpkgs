@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       binaryBytecode # source bundles dependencies as jars
     ];
     maintainers = [ lib.maintainers.bjornfor ];
+    license = lib.licenses.bsd3;
   };
 })

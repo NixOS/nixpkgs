@@ -31,14 +31,14 @@ in
 
 py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "oci-cli";
-  version = "3.90.2";
+  version = "3.95.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FpLbJQGuajT72XSRpBYRpwqggqebuiRXID9x7ucZrng=";
+    hash = "sha256-RLnC3SG7WLk7oT4nrj/T7C3xwh49Y77u8S9EjmfMh/0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -116,10 +116,12 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
     homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
     changelog = "https://github.com/oracle/oci-cli/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      asl20 # or
-      upl
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        upl
+      ];
     mainProgram = "oci";
     maintainers = with lib.maintainers; [
       ilian

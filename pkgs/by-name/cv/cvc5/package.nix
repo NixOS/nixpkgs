@@ -14,17 +14,19 @@
   boost,
   jdk,
   libpoly,
+
+  javaBindings ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cvc5";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cvc5";
     repo = "cvc5";
     tag = "cvc5-${finalAttrs.version}";
-    hash = "sha256-PZcOArSTyJzyd2DKT8K0aFC4RlVXgTCnkoU0f08KPfY=";
+    hash = "sha256-QBDOGWGPoVEaf0j4Ug4jdqntUKpHCObLxKGX7KZR9VI=";
   };
 
   __structuredAttrs = true;
@@ -40,14 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
         tomli
       ]
     ))
-  ];
+  ]
+  ++ lib.optionals javaBindings [ jdk ];
   buildInputs = [
     cadical'.dev
     symfpu
     gmp
     gtest
     boost
-    jdk
     libpoly
   ];
 
@@ -60,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=1"
     "-DUSE_POLY=ON"
+    (lib.cmakeBool "BUILD_BINDINGS_JAVA" javaBindings)
   ];
 
   doCheck = true;

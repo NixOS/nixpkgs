@@ -25,6 +25,8 @@ stdenv.mkDerivation {
     "-Wno-error=incompatible-pointer-types"
     # smScSema.c:183:10: error: implicit declaration of function 'read'; did you mean 'fread'? [-Wimplicit-function-declaration]
     "-Wno-error=implicit-function-declaration"
+    # Fix build with GCC 15 (defaults to C23) which rejects old-style unprototyped function declarations
+    "-std=gnu17"
   ];
 
   installPhase = ''

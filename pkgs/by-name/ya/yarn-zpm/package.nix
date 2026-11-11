@@ -1,29 +1,40 @@
 {
   lib,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   jq,
   nix-update-script,
   runCommand,
   rustPlatform,
   versionCheckHook,
+  stdenv,
+  cacert,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yarn-zpm";
-  version = "6.0.0-rc.19";
+  version = "6.0.0-rc.23";
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "zpm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I7iMmTcz+NfZfSebOTNDTe1YTwqGCU3zC+5pRhkYgsQ=";
+    hash = "sha256-db6uqSBfzr55eLYYf95krHjA47MycnjZVJ2a82Q/Dbw=";
   };
 
-  cargoHash = "sha256-6TPis4c/2uLGfG3NppY72x8YPo8WyAGRXt4urIwIGt0=";
+  cargoHash = "sha256-f/GSG4cqwT8z6Uj7XCl2rN1ZI7Q9DGTDUQ8/pMG+suI=";
 
   cargoBuildFlags = [ "--package=zpm" ];
   cargoTestFlags = [ "--package=zpm" ];
+
+  env = {
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=http::tests::network_concurrency_permit_is_released_after_failure"
+    "--skip=http::tests::network_concurrency_limits_in_flight_response_bodies"
+  ];
 
   # yarn is the Yarn Switch binary (zpm-switch package), yarn-bin is the actual package manager (zpm package)
   # See https://yarn6.netlify.app/getting-started/#:~:text=You%20can%20bypass%20Yarn%20Switch
@@ -40,9 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       simple-test =
         runCommand "yarn-zpm-simple-test"
           {
+            env = finalAttrs.env;
             nativeBuildInputs = [
               jq
-              git
+              gitMinimal
               finalAttrs.finalPackage
             ];
           }
@@ -61,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
             jq -n '{name: "workspace-test"}' > workspace-test/package.json
             yarn install
             jq -e '.name == "workspace-test"' node_modules/workspace-test/package.json
-            jq -e '.workspaces | has("workspace-test")' yarn.lock
+            jq -e '.entries | has("workspace-test@workspace:^")' yarn.lock
             touch $out
           '';
     };

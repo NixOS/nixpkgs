@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # permissions fix for templates
     ./0001-template-copy-permissions-fix.patch
+    # fix linking coda-qt (undefined references to http::Response::readData and StreamSocket::send)
+    ./0002-fix-coda-qt-link.patch
   ];
 
   postPatch = ''

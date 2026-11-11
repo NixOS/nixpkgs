@@ -3,16 +3,17 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  pkg-config,
   elfutils,
   libxml2,
-  pkg-config,
-  strace,
+  xxhash,
+  xz,
   python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libabigail";
-  version = "2.5";
+  version = "2.10";
 
   outputs = [
     "bin"
@@ -22,18 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/libabigail/libabigail-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fPxOmwCuONh/sMY76rsyucv5zkEOUs7rWtWzxb6xEfM=";
+    hash = "sha256-DMEOZHE5gzDgAbn+N/HoxRCKmrYysIypY01sZLw4C3g=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    strace
   ];
 
   buildInputs = [
     elfutils
     libxml2
+    xxhash
+    xz
   ];
 
   nativeCheckInputs = [

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jftui";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "Aanok";
     repo = "jftui";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0gTJ2uXDcK9zCx6yKS3VxFyxSQZ2l4ydKUI2gYbsiao=";
+    sha256 = "sha256-0YhLYaPcFgTl5AiE+8Ah8WDMIaxh5Ov3d5Dk3BLLbbs=";
   };
 
   nativeBuildInputs = [

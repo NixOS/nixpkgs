@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "https://psi-plus.com";
+    homepage = "https://github.com/psi-plus/psi-plus-snapshots";
     description = "XMPP (Jabber) client based on Qt5";
     mainProgram = "psi-plus";
     maintainers = with lib.maintainers; [

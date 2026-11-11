@@ -20,19 +20,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyreqwest";
-  version = "0.12.4";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MarkusSintonen";
     repo = "pyreqwest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tcvIuB+w+D77OMdwLdQ6TftR7QGEs/Dw5XyIbX8jtqI=";
+    hash = "sha256-UgoZQ8QMcoXNC7rHBpbgOCjr3uDGqalndxuhNpwprw0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-NKbAkADPbWV8tvoPCftoQqitDiJSivXO1j70Hkcbgho=";
+    hash = "sha256-k31Jk47wJyq+K3CkTPniS7DmCNE6qsaG3kjT0eJk83U=";
   };
 
   build-system = [

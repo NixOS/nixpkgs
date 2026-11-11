@@ -17,6 +17,8 @@
   webkitgtk_4_1,
   makeWrapper,
   perl,
+  cacert,
+  jre-generate-cacerts,
   ...
 }:
 
@@ -109,6 +111,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
     perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
+  ''
+  # regenerate the bundled JustJ JRE's CA keystore from cacert, as openjdk does
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for cacerts in $out/eclipse/plugins/org.eclipse.justj.openjdk.*/jre/lib/security/cacerts; do
+      [ -e "$cacerts" ] || continue
+      (
+        cd "$(dirname "$cacerts")"
+        rm cacerts
+        JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+          ${jre-generate-cacerts} ${jdk}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      )
+    done
   ''; # */
 
   passthru.updateScript = ./update.sh;

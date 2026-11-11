@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "ktosiek";
     repo = "pytest-vcr";
     rev = version;
-    sha256 = "1i6fin91mklvbi8jzfiswvwf1m91f43smpj36a17xrzk4gisfs6i";
+    hash = "sha256-0Win4yPz536CMkPeqgdxIdXg+OY6ui9RXJvOGpKNzsQ=";
   };
 
   buildInputs = [ pytest ];

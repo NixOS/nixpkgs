@@ -26,10 +26,8 @@ mkNginxPlugin (finalAttrs: {
     export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
   '';
 
-  allowMemoryWriteExecute = true;
-
   passthru.tests = {
-    inherit (nixosTests) nginx-lua;
+    nginx-lua = nixosTests.nginx.mainline.lua;
   };
 
   meta = {

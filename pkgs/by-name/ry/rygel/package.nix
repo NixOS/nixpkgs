@@ -29,7 +29,7 @@
   libmediaart,
   pipewire,
   sqlite,
-  systemd,
+  systemdLibs,
   tinysparql,
   shared-mime-info,
   gnome,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
     libx11
     sqlite
-    systemd
+    systemdLibs
     tinysparql
     shared-mime-info
   ]

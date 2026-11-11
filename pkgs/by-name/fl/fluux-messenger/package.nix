@@ -14,30 +14,47 @@
   cacert,
   wrapGAppsHook3,
   autoPatchelfHook,
+  nix-update-script,
+  swift,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
-  version = "0.17.2";
+  version = "0.18.1";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     name = "${finalAttrs.pname}-${finalAttrs.version}-source";
     owner = "processone";
     repo = "fluux-messenger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-APdzwVnDOGnngZJ3LjQMk2Y6KRbGqXaaFEb+NzhfkIo=";
+    hash = "sha256-3hOe7pEs9QMuAX4K3SGrDRFIjpWK4PEsR3KuQVbGr9Y=";
   };
-
-  cargoRoot = "apps/fluux/src-tauri";
-  cargoHash = "sha256-pjx4tP89aRx1/m5eYjI2DPhTtSuMnFudongEFhiaigE=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-rV5Q8WKcSmL1JSubFefsytOd3qiB5OandcwfZw9DJgE=";
+    hash = "sha256-mKGzLzgMtdY09x/pHBd1R1HZbUccofl1Ho0xE1hYuMw=";
   };
+
+  cargoRoot = "apps/fluux/src-tauri";
+
+  # The swift-rs pin is a macOS-only workaround that Cargo.lock lists as
+  # [[patch.unused]]; fetchCargoVendor does not vendor it, so the offline
+  # build would try to fetch it.
+  postPatch = ''
+    substituteInPlace ${finalAttrs.cargoRoot}/Cargo.toml \
+      --replace-fail 'swift-rs = { git = ' '# swift-rs = { git = '
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace ${finalAttrs.cargoRoot}/tauri.macos.conf.json \
+      --replace-fail 'node scripts/tauri-macos-share.mjs' 'node apps/fluux/scripts/tauri-macos-share.mjs'
+    substituteInPlace apps/fluux/scripts/tauri-macos-share.mjs \
+      --replace-fail "run('/usr/bin/xcrun', ['swiftc'," "run('swiftc', [" \
+      --replace-fail "run('/usr/bin/xcrun', ['lipo'," "run('lipo', ["
+  '';
+
+  cargoHash = "sha256-BEhToIykuf4ZMHlYETzZ3hdaVcjbp25FLSflLawcj6s=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -45,20 +62,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npmHooks.npmConfigHook
     pkg-config
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ swift ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (wrapGAppsHook3.override { isGraphical = true; })
+    wrapGAppsHook3
     autoPatchelfHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libayatana-appindicator
     libxscrnsaver
-    cacert
   ];
 
+  nativeCheckInputs = [ cacert ];
+
   # libayatana-appindicator is not in the RUNPATH by default
-  runtimeDependencies = [ libayatana-appindicator ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ libayatana-appindicator ];
 
   tauriBuildFlags = [ "--no-sign" ];
 
@@ -67,6 +86,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tauriInstallHook only works when we are in cargoRoot
   preInstall = "pushd $buildAndTestSubdir";
   postInstall = "popd";
+
+  # Stripping the Share Extension executable invalidates its bundle signature.
+  stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "FluuxShare" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "XMPP client for communities and organizations";

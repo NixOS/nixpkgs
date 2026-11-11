@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "hjson-go";
-  version = "4.6.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "hjson";
     repo = "hjson-go";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Qg/sy0fHHadQMU1wToz/Nm6tiIe/tm1D1knmbh9zYr0=";
+    hash = "sha256-PCDTXpTClOw9n8xiW5uKp7OhuG5uO9PeL70PR3I5/HM=";
   };
 
   vendorHash = null;

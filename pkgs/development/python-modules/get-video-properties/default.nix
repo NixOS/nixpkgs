@@ -14,7 +14,7 @@ buildPythonPackage {
     owner = "mvasilkov";
     repo = "python-get-video-properties";
     rev = "944c68addbc27e320ebc6313d3f016fb69b5e880";
-    sha256 = "18aslx7amaiw31bl9gambmvzry7hp5nqab6kgp8sg3mz9ih4lzal";
+    hash = "sha256-VH1KYEy/jqfRfdMshW258Pj8d11VvURXGDyqqk6nWqE=";
   };
 
   # no tests

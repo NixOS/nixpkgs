@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "skywalking-eyes";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "skywalking-eyes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uk/tX1AfYfy4ARzyd9IZijFYBEsfrx/DX+QsTVg3Jc4=";
+    hash = "sha256-UNR4BV2rhUBgmPOtD4F+YZMTYX7rr4Sb5ag1Rcp4nwE=";
   };
 
-  vendorHash = "sha256-sH9zV99XX7f8q7guBDkLAJ7Lr3eiQXSQ2+CGd2zphLk=";
+  vendorHash = "sha256-deO/IEu+wayL6MyCxzJ5jAnaF3IeKdgd5hBCD3+YxR0=";
 
   subPackages = [ "cmd/license-eye" ];
 

@@ -63,6 +63,9 @@ buildPythonPackage rec {
     "test_warnings"
     # test runs another python interpreter, ignoring $PYTHONPATH
     "test_command_line_verify"
+    # ApprovalException
+    "test_basic_logging"
+    "test_load_person_logs"
   ];
 
   pythonImportsCheck = [

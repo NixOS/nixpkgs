@@ -2,28 +2,42 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
-python3Packages.buildPythonApplication (finalAttrs: {
+
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mcp-proxy";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "sparfenyuk";
     repo = "mcp-proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hig+ZDFdToiYGOjb/rpqxnu8MaLmQLgSh5WYcgJGA1I=";
+    hash = "sha256-o2qQX1GnU6sxYCxhb0absGrgTq4fYRV4rFZExm/BwvU=";
   };
 
   pyproject = true;
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = [ pythonPackages.setuptools ];
 
-  dependencies = with python3Packages; [
-    uvicorn
+  dependencies = with pythonPackages; [
+    httpx-auth
     mcp
+    uvicorn
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  nativeCheckInputs = with pythonPackages; [
     pytestCheckHook
     pytest-asyncio
   ];

@@ -1,4 +1,5 @@
 import json
+import re
 import xml.parsers.expat as expat
 from html.entities import name2codepoint
 from pathlib import Path
@@ -96,7 +97,7 @@ def test_nav_metadata_opens_selected_entries(tmp_path: Path) -> None:
         {
             "items": [
                 {"label": "Guides", "id": "guides", "children": [
-                    {"label": "Intro", "file": "intro.md"},
+                    {"id": "intro", "label": "Intro", "file": "intro.md"},
                 ]},
             ],
             "open": ["guides", "manual-chap"],
@@ -107,25 +108,6 @@ def test_nav_metadata_opens_selected_entries(tmp_path: Path) -> None:
     # the group opens by its own id. its link points at the child.
     assert '<details open><summary><a href="#intro">Guides</a>' in html
     assert '<details open><summary><a href="#manual-chap"' in html
-
-
-def test_config_group_without_id_is_not_openable(tmp_path: Path) -> None:
-    # the config lists 'intro' in 'open'.
-    # the group has no id, so its key is empty. the group stays closed.
-    html = _render_with_config(
-        tmp_path,
-        {
-            "items": [
-                {"label": "Guides", "children": [
-                    {"file": "intro.md"},
-                ]},
-            ],
-            "open": ["intro"],
-        },
-        {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
-    )
-    assert '<details><summary><a href="#intro">Guides</a>' in html
-    assert "<details open>" not in html
 
 
 def test_sidebar_depth_caps_the_tree(tmp_path: Path) -> None:
@@ -246,7 +228,7 @@ def _render_with_config(
 def test_config_content_renders_before_manual(tmp_path: Path) -> None:
     html = _render_with_config(
         tmp_path,
-        {"items": [{"label": "Intro", "file": "intro.md"}]},
+        {"items": [{"id": "intro", "label": "Intro", "file": "intro.md"}]},
         {"intro.md": "# Introduction {#intro}\n\nConfig intro body.\n"},
     )
     assert "Config intro body." in html
@@ -260,8 +242,8 @@ def test_config_grouping_node_is_sidebar_only(tmp_path: Path) -> None:
         {
             "items": [
                 {
-                    "label": "Guides", "children": [
-                        {"label": "Install", "file": "install.md"},
+                    "id": "guides", "label": "Guides", "children": [
+                        {"id": "install", "label": "Install", "file": "install.md"},
                     ]
                 }
             ]
@@ -283,7 +265,7 @@ def test_config_leaf_derives_id_and_label_from_file(tmp_path: Path) -> None:
     # the sidebar link reuses the heading id. the label reuses the heading title.
     html = _render_with_config(
         tmp_path,
-        {"items": [{"file": "intro.md"}]},
+        {"items": [{"id": "intro", "file": "intro.md"}]},
         {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
     )
     assert '<h2 id="intro" class="title" >Introduction' in html
@@ -295,7 +277,7 @@ def test_config_leaf_label_differs_from_file_title(tmp_path: Path) -> None:
         tmp_path,
         {
             "items": [
-                {"label": "Sidebar Label", "file": "leaf1.md"}
+                {"id": "leaf1", "label": "Sidebar Label", "file": "leaf1.md"}
             ]
         },
         {"leaf1.md": "# File Title {#leaf1}\n\nBody.\n"},
@@ -309,9 +291,9 @@ def test_config_tree_nests_arbitrarily_deep(tmp_path: Path) -> None:
         tmp_path,
         {
             "items": [
-                {"label": "A", "children": [
-                    {"label": "B", "children": [
-                        {"label": "C", "file": "c.md"},
+                {"id": "a", "label": "A", "children": [
+                    {"id": "b", "label": "B", "children": [
+                        {"id": "c", "label": "C", "file": "c.md"},
                     ]},
                 ]}
             ]
@@ -333,7 +315,7 @@ def test_config_id_is_cross_referenceable(tmp_path: Path) -> None:
     html = _render_with_config(
         tmp_path,
         {
-            "items": [{"label": "Intro", "file": "intro.md"}]
+            "items": [{"id": "intro", "label": "Intro", "file": "intro.md"}]
         },
         {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
         manual_chapter="# Manual chapter {#manual-chap}\n\nSee [](#intro).\n",
@@ -342,12 +324,12 @@ def test_config_id_is_cross_referenceable(tmp_path: Path) -> None:
     assert ">Introduction</a>" in html
 
 
-def test_config_duplicate_id_fails(tmp_path: Path) -> None:
+def test_duplicate_heading_id_fails(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError) as excinfo:
         _render_with_config(
             tmp_path,
             {
-                "items": [{"label": "Dup", "file": "dup.md"}]
+                "items": [{"id": "dup", "label": "Dup", "file": "dup.md"}]
             },
             {"dup.md": "# Dup file {#dup}\n\nBody.\n"},
             manual_chapter="# Manual {#dup}\n\nBody.\n",
@@ -367,7 +349,7 @@ def test_config_malformed_node_fails(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError) as excinfo:
         _render_with_config(
             tmp_path,
-            {"items": [{"file": 123}]},
+            {"items": [{"id": "x", "file": 123}]},
             {},
         )
     assert "'file' must be a string" in str(excinfo.value.__cause__)
@@ -375,7 +357,283 @@ def test_config_malformed_node_fails(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError) as excinfo:
         _render_with_config(
             tmp_path,
-            {"items": [{"children": [{"file": "x.md"}]}]},
+            {"items": [{"id": "g", "children": [{"id": "x", "file": "x.md"}]}]},
             {"x.md": "# X {#x}\n\nB.\n"},
         )
     assert "a group requires a non-empty 'label'" in str(excinfo.value.__cause__)
+
+
+_NIXDOC_SNIPPET1 = (
+    "# lib.asserts: assertion functions {#sec-lib-asserts}\n\n"
+    "## `lib.asserts.assertMsg` {#function-library-assertMsg}\n\n"
+    "Body.\n\n"
+    "### Inputs\n\n"
+    "`pred`\n\n"
+    ": Predicate that needs to succeed\n"
+)
+_NIXDOC_SNIPPET2 = (
+    "# lib.attrsets: attribute set functions {#sec-lib-attrsets}\n\n"
+    "## `lib.attrsets.attrByPath` {#function-library-attrByPath}\n\n"
+    "Body.\n\n"
+    "### Inputs\n\n"
+    "`attrPath`\n\n"
+    ": A list of strings\n"
+)
+
+
+def _heading_ids(html: str) -> list[str]:
+    return re.findall(r'<h[1-6] id="([^"]+)"', html)
+
+
+def test_config_id_prefix(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "id": "library",
+                    "label": "Library",
+                    "id-prefix": "auto-generated",
+                    "children": [{"id": "asserts", "file": "functions/library/asserts.md"}],
+                }
+            ]
+        },
+        {"functions/library/asserts.md": _NIXDOC_SNIPPET1},
+    )
+    assert 'id="auto-generated-functions-library-asserts-1.1.1"' in html
+    assert "Predicate that needs to succeed" in html
+
+
+def test_config_id_prefix_keeps_explicit_ids(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "id": "library",
+                    "label": "Library",
+                    "id-prefix": "auto-generated",
+                    "children": [{"id": "asserts", "file": "asserts.md"}],
+                }
+            ]
+        },
+        {"asserts.md": _NIXDOC_SNIPPET1},
+    )
+    assert 'id="sec-lib-asserts"' in html
+    assert 'id="function-library-assertMsg"' in html
+    assert 'id="auto-generated-asserts-1"' not in html
+    assert 'id="auto-generated-asserts-1.1"' not in html
+
+
+def test_config_id_prefix_is_unique(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "id": "library",
+                    "label": "Library",
+                    "id-prefix": "auto-generated",
+                    "children": [
+                        {"id": "asserts", "file": "asserts.md"},
+                        {"id": "attrsets", "file": "attrsets.md"},
+                    ],
+                }
+            ]
+        },
+        # Both snippets have "# Inputs" which would collide
+        {"asserts.md": _NIXDOC_SNIPPET1, "attrsets.md": _NIXDOC_SNIPPET2},
+    )
+    generated = [id for id in _heading_ids(html) if id.startswith("auto-generated-")]
+    assert len(generated) == 2
+    assert len(set(generated)) == 2
+
+
+def test_config_id_prefix_inherit(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "id": "outer",
+                    "label": "Outer",
+                    "id-prefix": "outer",
+                    "children": [
+                        {"id": "inner", "label": "Inner",
+                         "children": [{"id": "asserts", "file": "asserts.md"}]},
+                    ],
+                }
+            ]
+        },
+        {"asserts.md": _NIXDOC_SNIPPET1},
+    )
+    generated = [id for id in _heading_ids(html) if id.startswith("outer-")]
+    assert len(generated) == 1
+
+
+def test_config_id_prefix_nested_override(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "id": "outer",
+                    "label": "Outer",
+                    "id-prefix": "outer",
+                    "children": [
+                        {
+                            "id": "inner",
+                            "label": "Inner",
+                            "id-prefix": "inner",
+                            "children": [{"id": "asserts", "file": "asserts.md"}],
+                        },
+                    ],
+                }
+            ]
+        },
+        {"asserts.md": _NIXDOC_SNIPPET1},
+    )
+    generated = [id for id in _heading_ids(html) if id.startswith(("outer-", "inner-"))]
+    assert len(generated) == 1
+    assert generated[0].startswith("inner-")
+
+
+def test_config_id_prefix_fails(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError) as excinfo:
+        _render_with_config(
+            tmp_path,
+            {"items": [{"id": "library", "label": "Library",
+                        "children": [{"id": "asserts", "file": "asserts.md"}]}]},
+            {"asserts.md": _NIXDOC_SNIPPET1},
+        )
+    assert "heading does not have an id" in str(excinfo.value.__cause__)
+
+
+def test_config_id_must_be_url_safe(tmp_path: Path) -> None:
+    for bad in (
+        {"file": "intro.md"}, # missing id
+        {"id": "Intro", "file": "intro.md"}, # No uppercase
+        {"id": "a/b", "file": "intro.md"}, # no "/" (or other special characters)
+        {"id": "", "file": "intro.md"}, # no empty strings
+        {"id": "0a", "file": "intro.md"}, # no leading number
+        {"id": "foo-bar-", "file": "intro.md"}, # no trailing -
+    ):
+        with pytest.raises(RuntimeError) as excinfo:
+            _render_with_config(
+                tmp_path,
+                {"items": [bad]},
+                {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
+            )
+        assert "'id' must be lowercase letters and digits optionally separated by dashes" in str(excinfo.value.__cause__)
+
+
+_NIXDOC_EXPORT = {
+    "schemaVersion": 1,
+    "groups": [
+        {"id": "asserts", "description": "assertion functions"},
+        {"id": "attrsets", "description": "attribute set functions"},
+    ],
+    "entries": [
+        {
+            "id": "lib.asserts.assertMsg",
+            "attrPath": "lib.asserts.assertMsg",
+            "description": "Throw if pred is false.\n\n# Inputs\n\n`pred`\n",
+            "groups": ["asserts"],
+            "source": {"file": "lib/asserts.nix", "line": 21},
+        },
+        {
+            "id": "lib.attrsets.mapAttrs-prime",
+            "attrPath": "lib.attrsets.mapAttrs'",
+            "description": "Maps over attrs.",
+            "groups": ["attrsets"],
+            "source": {"file": "lib/attrsets.nix", "line": 42},
+        },
+    ],
+}
+
+
+def _render_with_collection(tmp_path: Path, export: object, **kwargs: object) -> str:
+    return _render_with_config(
+        tmp_path,
+        {"items": [{"collection": "lib-functions.json", "type": "nixdoc"}]},
+        {"lib-functions.json": json.dumps(export)},
+        **kwargs,  # type: ignore[arg-type]
+    )
+
+
+def test_config_collection_renders_one_page_per_group(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    # groups become pages, so their headings sit at the level of a config leaf
+    assert '<h2 id="sec-functions-library-asserts" class="title"' in html
+    assert '<h2 id="sec-functions-library-attrsets" class="title"' in html
+    assert "assertion functions" in html
+    # entries nest below their group
+    assert '<h3 id="function-library-lib.asserts.assertMsg" class="title"' in html
+    assert '<h3 id="function-library-lib.attrsets.mapAttrs-prime" class="title"' in html
+    assert "lib.attrsets.mapAttrs&#x27;" in html
+
+
+def test_config_collection_keeps_group_order(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    ids = [id for id in _heading_ids(html) if id.startswith("sec-functions-library-")]
+    assert ids == ["sec-functions-library-asserts", "sec-functions-library-attrsets"]
+
+
+def test_config_collection_pages_are_sidebar_siblings(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    assert 'href="#sec-functions-library-asserts"' in html
+    assert 'href="#sec-functions-library-attrsets"' in html
+
+
+def test_config_collection_prefixes_generated_ids_per_group(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    # '# Inputs' in the doc comment has no authored anchor, so it gets one
+    generated = [id for id in _heading_ids(html) if id.startswith("auto-generated-")]
+    assert generated and all(id.startswith("auto-generated-asserts-") for id in generated)
+
+
+def test_config_collection_links_source_to_revision(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    assert 'href="https://github.com/NixOS/nixpkgs/blob/1.0.0/lib/asserts.nix#L21"' in html
+
+
+def test_config_collection_renders_before_manual(tmp_path: Path) -> None:
+    html = _render_with_collection(tmp_path, _NIXDOC_EXPORT)
+    assert html.index("assertion functions") < html.index("Manual body.")
+
+
+def test_config_collection_rejects_unknown_type(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError) as excinfo:
+        _render_with_config(
+            tmp_path,
+            {"items": [{"collection": "lib-functions.json", "type": "options"}]},
+            {"lib-functions.json": json.dumps(_NIXDOC_EXPORT)},
+        )
+    assert "'type' must be one of ['nixdoc']" in str(excinfo.value.__cause__)
+
+
+def test_config_collection_rejects_label_and_id_prefix(tmp_path: Path) -> None:
+    for extra in ({"label": "Library"}, {"id-prefix": "auto-generated"}):
+        with pytest.raises(RuntimeError) as excinfo:
+            _render_with_config(
+                tmp_path,
+                {"items": [{"collection": "lib-functions.json", "type": "nixdoc"} | extra]},
+                {"lib-functions.json": json.dumps(_NIXDOC_EXPORT)},
+            )
+        assert "neither 'label' nor 'id-prefix'" in str(excinfo.value.__cause__)
+
+
+def test_config_collection_excludes_file_and_children(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError) as excinfo:
+        _render_with_config(
+            tmp_path,
+            {"items": [{"collection": "lib-functions.json", "type": "nixdoc", "file": "x.md"}]},
+            {"x.md": "# X {#x}\n\nB.\n"},
+        )
+    assert "exactly one of 'file', 'children' or 'collection'" in str(excinfo.value.__cause__)
+
+
+def test_config_collection_rejects_unsupported_export(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError) as excinfo:
+        _render_with_collection(tmp_path, _NIXDOC_EXPORT | {"schemaVersion": 2})
+    assert "nixdoc collection" in str(excinfo.value.__cause__)

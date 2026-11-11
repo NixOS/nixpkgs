@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "nemomobile";
     repo = "qtdbusextended";
     rev = version;
-    sha256 = "sha256-tUp7OhNBXwomR2tO4UOaR0vJQ3GTirMk/hRl1cMk61o=";
+    hash = "sha256-tUp7OhNBXwomR2tO4UOaR0vJQ3GTirMk/hRl1cMk61o=";
   };
 
   postPatch = ''

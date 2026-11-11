@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchurl,
@@ -9,7 +8,7 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   udev,
-  pulseaudioSupport ? config.pulseaudio or true,
+  pulseaudioSupport ? true,
   libpulseaudio,
   ossSupport ? false,
   gitUpdater,

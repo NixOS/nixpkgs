@@ -30,6 +30,7 @@ let
       "aarch64-darwin"
     ];
     mainProgram = "slack";
+    mainDarwinApp = "Slack.app";
   };
 in
 callPackage (if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {

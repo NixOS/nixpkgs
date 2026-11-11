@@ -63,7 +63,7 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "emerge";
-  version = "2.8.2";
+  version = "2.8.9";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -71,7 +71,7 @@ buildPythonPackage (finalAttrs: {
     owner = "FennisRobert";
     repo = "EMerge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wxJeSiHfYTY7mRll8cxJSpdciun+uw5V7FLTUKuHu28=";
+    hash = "sha256-2w6PZUT0gE50nZ9MfpFkGjx1UQJEqYso9Mm2rfJK08w=";
   };
 
   postPatch = ''

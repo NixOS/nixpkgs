@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     group = "BC";
     owner = "public/external";
     repo = "mbedtls";
-    sha256 = "sha256-jQpRn2F21sPKKAiaqsUvaKyuR80AnedG/hAyiNamKjc=";
+    hash = "sha256-jQpRn2F21sPKKAiaqsUvaKyuR80AnedG/hAyiNamKjc=";
     fetchSubmodules = true;
   };
 
@@ -73,11 +73,20 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.linphone.org/BC/public/external/mbedtls";
     changelog = "https://gitlab.linphone.org/BC/public/external/mbedtls/-/blob/${rev}/ChangeLog";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL (Linphone fork)";
-    license = with lib.licenses; [
-      asl20 # or
-      gpl2Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        gpl2Plus
+      ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ naxdy ];
+    knownVulnerabilities = [
+      ''
+        bc-mbedtls is a fork of mbedtls 3.6.1, which does not keep up with security fixes in mainline mbedtls.
+        mbedtls 3.6.1 was released 2024-08-30, with the linphone fork receiving a total of 10 commits since, most of which build fixes rather than security fixes.
+        For more information of potential security issues of such ancient mbedtls, see https://nvd.nist.gov/vuln/search?cpeFilterMode=cpe&cpeName=cpe:2.3:a:arm:mbed_tls:3.6.1:*:*:*:*:*:*:*
+      ''
+    ];
   };
 }

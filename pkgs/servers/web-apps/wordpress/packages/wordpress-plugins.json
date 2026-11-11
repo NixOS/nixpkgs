@@ -1,5 +1,6 @@
 {
-  "add-widget-after-content": "gpl3Plus"
+  "activitypub": "mit"
+, "add-widget-after-content": "gpl3Plus"
 , "akismet": "gpl2Plus"
 , "antispam-bee": "gpl2Plus"
 , "async-javascript": "gpl2Plus"
@@ -20,6 +21,7 @@
 , "mailpoet": "gpl3Only"
 , "merge-minify-refresh": "gpl2Plus"
 , "opengraph": "asl20"
+, "polls-for-activitypub": "agpl3Only"
 , "simple-login-captcha": "gpl2Plus"
 , "simple-mastodon-verification": "gpl2Plus"
 , "sqlite-database-integration": "gpl2Plus"

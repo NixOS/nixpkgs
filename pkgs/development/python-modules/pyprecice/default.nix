@@ -6,6 +6,7 @@
   # build-system
   cython,
   pkgconfig,
+  pyprojectVersionPatchHook,
   setuptools,
   setuptools-git-versioning,
 
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   build-system = [
     cython
     pkgconfig
+    pyprojectVersionPatchHook
     setuptools
     setuptools-git-versioning
   ];

@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_SHARED_LIBS=ON"
     "-DSECURITY=ON"
     "-DCOMPILE_EXAMPLES=OFF"
@@ -62,5 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
       panicgh
     ];
     platforms = lib.platforms.linux;
+
+    # Build failure in old version of vendored sqlite3
+    # https://github.com/eProsima/Fast-DDS/issues/6570
+    broken = stdenv.hostPlatform.isAarch64;
   };
 })

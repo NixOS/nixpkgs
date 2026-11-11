@@ -74,7 +74,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     vte
   ];
 
-  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
+  makeWrapperArgs = [
+    "--set"
+    "LOCALE_ARCHIVE"
+    "${glibcLocales}/lib/locale/locale-archive"
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     dbus-python
@@ -101,7 +105,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Drop-down terminal for GNOME";
-    homepage = "http://guake-project.org";
+    homepage = "https://guake.github.io/";
     license = lib.licenses.gpl2Plus;
     maintainers = [
       lib.maintainers.msteen

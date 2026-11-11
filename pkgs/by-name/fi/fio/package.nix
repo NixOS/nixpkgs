@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://github.com/axboe/fio/releases/tag/${finalAttrs.src.tag}";
     description = "Flexible IO Tester - an IO benchmark tool";
-    homepage = "https://git.kernel.dk/cgit/fio/";
+    homepage = "https://github.com/axboe/fio";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };

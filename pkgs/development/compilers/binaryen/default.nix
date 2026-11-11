@@ -20,19 +20,19 @@ let
   testsuite = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "testsuite";
-    rev = "de54fd27ecf3e68dfd16b6199c548df77b6a2cc1";
-    hash = "sha256-vjAGE1MnBi7hqfkQ+PVCdTno8muorAgSiDylnAHqKK4=";
+    rev = "4b24564c844e3d34bf46dfcb3c774ee5163e31cc";
+    hash = "sha256-8VirKLRro0iST58Rfg17u4tTO57KNC/7F/NB43dZ7w4=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "131";
+  version = "133";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-7x4I34sWNJIz0X7orJtjU4BQ1CLbIFtkUTqdy5MrxX0=";
+    hash = "sha256-ip10rXDnBfgSLrc4q8TXGckGnyq4SSoXQKoCU/KQIE8=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     if [ -n "$doCheck" ]; then
-      sed -i '/gtest/d' third_party/CMakeLists.txt
+      sed -i -E '/g(test|mock)/d' third_party/CMakeLists.txt
       rmdir test/spec/testsuite
       ln -s ${testsuite} test/spec/testsuite
       # scripts/test/finalize.py checks `'64' in input_path` to enable the
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   ];
   checkInputs = [ gtest ];
   checkPhase = ''
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py --binaryen-bin=$PWD/bin $tests
   '';
 
   # bin/binaryen-unittests is absent on cross builds which don't have doCheck,

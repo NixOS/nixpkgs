@@ -1,46 +1,32 @@
 {
-  buildPythonApplication,
-  yubikey-manager,
-  mss,
-  zxing-cpp,
-  pillow,
-  poetry-core,
+  rustPlatform,
+  pkg-config,
+  udev,
+  dbus,
+  pcsclite,
 
   src,
   version,
   meta,
 }:
 
-buildPythonApplication {
+rustPlatform.buildRustPackage {
   pname = "yubioath-flutter-helper";
   inherit src version meta;
 
-  pyproject = true;
-
   sourceRoot = "${src.name}/helper";
 
-  nativeBuildInputs = [
-    poetry-core
+  cargoHash = "sha256-EDCidHMOwXzUv3YUZAL8gdtV3HyS9CLQzT4/D+YF2ss=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    udev
+    dbus
+    pcsclite
   ];
 
-  pythonRelaxDeps = true;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "authenticator-helper" "yubioath-flutter-helper" \
-      --replace "0.1.0" "${version}"
-  '';
-
   postInstall = ''
-    install -Dm 0755 authenticator-helper.py $out/bin/authenticator-helper
     install -d $out/libexec/helper
     ln -fs $out/bin/authenticator-helper $out/libexec/helper/authenticator-helper
   '';
-
-  propagatedBuildInputs = [
-    yubikey-manager
-    mss
-    zxing-cpp
-    pillow
-  ];
 }

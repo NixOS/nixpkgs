@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
   openssl,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,19 +19,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-51UjhAC2boNgW5kc7WxZOxcnXirw1E07CjLRcj/GEOM=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   meta = {
     description = "Cargo subcommand for displaying when Rust dependencies are out of date";
     mainProgram = "cargo-outdated";
     homepage = "https://github.com/kbknapp/cargo-outdated";
     changelog = "https://github.com/kbknapp/cargo-outdated/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];

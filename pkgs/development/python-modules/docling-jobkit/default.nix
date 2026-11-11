@@ -3,14 +3,13 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
 
   # build-system
   hatchling,
 
   # dependencies
   boto3,
+  docling-core,
   docling-slim,
   httpx,
   pandas,
@@ -33,6 +32,8 @@
   azure-storage-blob,
   # opensearch:
   opensearch-py,
+  # kafka:
+  confluent-kafka,
 
   # tests
   aiohttp,
@@ -45,7 +46,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "docling-jobkit";
-  version = "3.2.0";
+  version = "3.9.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -53,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     owner = "docling-project";
     repo = "docling-jobkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4OUNDn90jGWqHcs9QPpOKqYnKDxH+N/YUeszY21nhMo=";
+    hash = "sha256-tRws9cRy8zEuy16f/ZTAT99SiAfpVKKtwjnVIa6OLFk=";
   };
 
   build-system = [
@@ -65,6 +66,7 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     boto3
+    docling-core
     docling-slim
     httpx
     pandas
@@ -78,16 +80,14 @@ buildPythonPackage (finalAttrs: {
       rq
       msgpack
     ];
+    # codeflare-sdk is not packaged in nixpkgs
     ray = [
       msgpack
       psutil
       ray
     ]
     ++ ray.optional-dependencies.serve
-    ++ redis.optional-dependencies.hiredis
-    ++ lib.optionals ((pythonAtLeast "3.11") && (pythonOlder "3.14")) [
-      # cloudflare-sdk
-    ];
+    ++ redis.optional-dependencies.hiredis;
     gdrive = [
       google-api-python-client
       google-auth-oauthlib
@@ -101,6 +101,11 @@ buildPythonPackage (finalAttrs: {
     opensearch = [
       opensearch-py
     ];
+    kafka = [
+      confluent-kafka
+    ];
+    # astrapy (astradb), office365-rest-python-client (sharepoint) and boxsdk (box)
+    # are not packaged in nixpkgs
   };
 
   pythonImportsCheck = [
@@ -119,6 +124,11 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
+  pytestFlags = [
+    # Upstream's addopts stop the run after 5 failures
+    "--maxfail=0"
+  ];
+
   disabledTests = [
     # requires network access
     "test_chunk_file"
@@ -129,11 +139,29 @@ buildPythonPackage (finalAttrs: {
     "test_convert_warmup"
     "test_convert_with_callbacks"
     "test_replicated_convert"
+    "test_threaded_request_reaches_conversion"
+
+    # Expect the astradb, box and sharepoint connectors to be registered, but their
+    # dependencies are not packaged in nixpkgs
+    "test_builtin_source_connectors_registered"
+    "test_builtin_target_connectors_registered"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky due to comparison with magic object
     # https://github.com/docling-project/docling-jobkit/issues/45
     "test_options_validator"
+  ];
+
+  disabledTestPaths = [
+    # astrapy, boxsdk and office365-rest-python-client are not packaged in nixpkgs
+    "tests/test_astradb_target_processor.py"
+    "tests/test_box_helper.py"
+    "tests/test_box_source_processor.py"
+    "tests/test_box_target_processor.py"
+    "tests/test_sharepoint_coords.py"
+    "tests/test_sharepoint_helper.py"
+    "tests/test_sharepoint_source_processor.py"
+    "tests/test_sharepoint_target_processor.py"
   ];
 
   __darwinAllowLocalNetworking = true;

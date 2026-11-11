@@ -10,6 +10,7 @@
   lttng-ust_2_12,
   patchelf,
   writeShellScriptBin,
+  fetchurl,
 }:
 
 let
@@ -24,6 +25,18 @@ let
       openssl
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12
+  );
+
+  patchelf' = (
+    patchelf.overrideAttrs (
+      finalAttrs: _: {
+        version = "0.15.2";
+        src = fetchurl {
+          url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+          hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+        };
+      }
+    )
   );
 
 in
@@ -58,19 +71,19 @@ writeShellScriptBin "patch-nupkgs" (
           cp --reflink=auto "$p" "$tmp" || continue
           echo "Patchelfing $p as $tmp"
 
-          ${patchelf}/bin/patchelf \
+          ${patchelf'}/bin/patchelf \
             --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
             "$tmp"
 
           # This makes sure that if the binary requires some specific runtime dependencies, it can find it.
           # This fixes dotnet-built binaries like crossgen2
-          ${patchelf}/bin/patchelf \
+          ${patchelf'}/bin/patchelf \
             --add-needed libicui18n.so \
             --add-needed libicuuc.so \
             --add-needed libz.so \
             --add-needed libssl.so \
             "$tmp"
-          ${patchelf}/bin/patchelf \
+          ${patchelf'}/bin/patchelf \
             --add-rpath "${binaryRPath}" \
             "$tmp"
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "08cy0jd463kng6hwbd3nfldsp4dpd2lknlvdm88cq795wy0kh4wp";
+    hash = "sha256-lxM4geclHcwQqm1TO6lot5GrG3V2tMWheXYOQ5oEniE=";
   };
 
   buildInputs = [ bash ];

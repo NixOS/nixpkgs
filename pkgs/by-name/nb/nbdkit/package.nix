@@ -16,6 +16,7 @@
   lib,
   cdrkit,
   e2fsprogs,
+  useFsync ? stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-libguestfs"
     "--disable-example4"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString useFsync "-Dfdatasync=fsync";
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 

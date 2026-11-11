@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "django-leaflet";
-  version = "0.33.0";
+  version = "0.34.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_leaflet";
     inherit version;
-    hash = "sha256-tRxx5xee7ZlhSE39V7h70ezjsf977k37f01XAiBrLso=";
+    hash = "sha256-gzbnKnu/8LNjBUmC8CrB16O8srL6S8oyYBTd3q63xRU=";
   };
 
   build-system = [ setuptools ];

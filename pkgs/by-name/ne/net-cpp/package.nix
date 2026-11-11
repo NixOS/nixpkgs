@@ -74,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_WERROR" true)
+    # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/work_items/7
+    (lib.cmakeBool "ENABLE_WERROR" false)
   ];
 
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };

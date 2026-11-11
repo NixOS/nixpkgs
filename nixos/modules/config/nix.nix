@@ -168,8 +168,15 @@ in
         default = pkgs.nix;
         defaultText = lib.literalExpression "pkgs.nix";
         description = ''
-          This option specifies the Nix package instance to use throughout the system.
+          This option specifies the Nix package to use throughout the system.
+          It can be used to set a specific version or alternative implementation.
         '';
+        example = [
+          "pkgs.nixVersions.git"
+          "pkgs.nixVersions.latest"
+          "pkgs.nixStatic"
+          "pkgs.lixPackageSets.git.lix"
+        ];
       };
 
       checkConfig = mkOption {
@@ -249,6 +256,16 @@ in
                 available CPU cores in the system. Some builds may become
                 non-deterministic with this option; use with care! Packages will
                 only be affected if enableParallelBuilding is set for them.
+              '';
+            };
+
+            experimental-features = mkOption {
+              type = with types; listOf str;
+              default = [ ];
+              example = [ "ca-derivations" ];
+              description = ''
+                List of experimental features to enable in Nix.
+                See <https://nixos.org/manual/nix/stable/development/experimental-features> for available features.
               '';
             };
 
@@ -337,7 +354,6 @@ in
             trusted-users = mkOption {
               type = types.listOf types.str;
               example = [
-                "root"
                 "alice"
                 "@wheel"
               ];
@@ -347,8 +363,9 @@ in
                 additional binary caches, or to import unsigned NARs. You
                 can also specify groups by prefixing them with
                 `@`; for instance,
-                `@wheel` means all users in the wheel
-                group.
+                `@wheel` means all users in the wheel group.
+                `root` is included as a regular definition, so you do not have to repeat it.
+                Furthermore, `root` normally bypasses the daemon.
               '';
             };
 

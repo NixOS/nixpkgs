@@ -7,27 +7,15 @@
   libxi,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
 }:
-let
-  desktopItem = makeDesktopItem {
-    name = "Write";
-    exec = "Write";
-    comment = "A word processor for handwriting";
-    icon = "write_stylus";
-    desktopName = "Write";
-    genericName = "Write";
-    categories = [
-      "Office"
-      "Graphics"
-    ];
-  };
-in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "styluslabs-write-bin";
   version = "300";
 
   src = fetchurl {
-    url = "http://www.styluslabs.com/write/write${version}.tar.gz";
+    url = "http://www.styluslabs.com/write/write${finalAttrs.version}.tar.gz";
     sha256 = "0h1wf3af7jzp3f3l8mlnshi83d7a4v4y8nfqfai4lmskyicqlz7c";
   };
 
@@ -35,18 +23,37 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Write";
+      exec = "Write";
+      comment = "A word processor for handwriting";
+      icon = "write_stylus";
+      desktopName = "Write";
+      genericName = "Write";
+      categories = [
+        "Office"
+        "Graphics"
+      ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -R Write $out/
     # symlink the binary to bin/
     ln -s $out/Write/Write $out/bin/Write
 
-    # Create desktop item
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
+
+    runHook postInstall
   '';
+
   preFixup =
     let
       libPath = lib.makeLibraryPath [
@@ -77,4 +84,4 @@ stdenv.mkDerivation rec {
       atemu
     ];
   };
-}
+})

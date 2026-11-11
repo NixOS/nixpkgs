@@ -5,40 +5,54 @@
   rustPlatform,
   perl,
   pkg-config,
-  testers,
+  openssl,
   dbus,
   udev,
+  cacert,
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
   pname = "fnox";
-  version = "1.31.1";
+  version = "1.42.1";
+
+  __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "fnox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PAzXu+fltWJXn30RVRUfjCiUUFnt4mb/yeyxM5wCtG8=";
+    hash = "sha256-Hsl0MYwRkZpixeeyWFB7MY9c93Z/FuHQqCWfG06C0go=";
   };
 
-  cargoHash = "sha256-ImD2PEtoTW1ktNpSzGO0ENyXQ/A4f0ydHqZhSIgNroE=";
+  cargoHash = "sha256-pqkwjWftAP8K7vEopAcPiauUro8XsEwHZS2DcPHgR9c=";
 
   nativeBuildInputs = [
     perl
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     udev
   ];
 
-  passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script { };
+  nativeCheckInputs = [ cacert ];
+
+  env = {
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    OPENSSL_NO_VENDOR = 1;
   };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   checkFlags = [
     # requires a D-Bus session unavailable in the sandbox

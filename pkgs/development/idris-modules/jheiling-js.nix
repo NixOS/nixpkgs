@@ -19,7 +19,7 @@ build-idris-package {
     owner = "jheiling";
     repo = "idris-js";
     rev = "59763cd0c9715a9441931ae1077e501bb2ec6020";
-    sha256 = "1mvpxwszh56cfrf509qiadn7gp2l4syanhvdq6v1br0y03g8wk9v";
+    hash = "sha256-O02O3gAe5BW2wW1Dq7wmVNx3bFMRJ1BcdswU+DXvd9c=";
   };
 
   meta = {

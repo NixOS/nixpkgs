@@ -8,13 +8,19 @@
   bleak-retry-connector,
   python-resize-image,
   numpy,
+  odl-renderer,
   qrcode,
+  py-opendisplay,
   requests-toolbelt,
+  silabs-ble-ota,
   websocket-client,
   websockets,
 
   # tests
+  home-assistant,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytest-freezegun,
   pytest-homeassistant-custom-component,
   pytestCheckHook,
 }:
@@ -22,37 +28,44 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "OpenDisplay";
   domain = "opendisplay";
-  version = "2.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "Home_Assistant_Integration";
     tag = finalAttrs.version;
-    hash = "sha256-EmcDY31cTWK+JRErM6EWO0jrQvIaxKXgeI6i5qiwYGU=";
+    hash = "sha256-hAOjCXObYkvoJ/HQLBoWjOwyHHtpJPFCrTyzfn57Hgo=";
   };
 
   dependencies = [
     bleak
     bleak-retry-connector
     numpy
+    odl-renderer
     python-resize-image
     qrcode
+    py-opendisplay
     requests-toolbelt
+    silabs-ble-ota
     websocket-client
     websockets
   ]
   ++ qrcode.optional-dependencies.pil;
 
   ignoreVersionRequirement = [
+    "py-opendisplay"
     "qrcode"
     "websocket-client"
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
+    pytest-freezegun
     pytest-homeassistant-custom-component
     pytestCheckHook
-  ];
+  ]
+  ++ (home-assistant.getPackages "usb" home-assistant.python3Packages);
 
   disabledTestPaths = [
     # Probably mismatch in fontconfig priorities

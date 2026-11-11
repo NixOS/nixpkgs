@@ -1,9 +1,9 @@
 {
-  buildGoModule,
+  buildGo127Module,
   headplane,
   lib,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module {
   pname = "headplane-agent";
   __structuredAttrs = true;
   inherit (headplane) version src;
@@ -29,4 +29,4 @@ buildGoModule (finalAttrs: {
     mainProgram = "hp_agent";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-})
+}

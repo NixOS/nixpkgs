@@ -7,7 +7,7 @@
 set -euo pipefail
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
-old_version=$(nix-instantiate --eval -A 'umami.version' default.nix | tr -d '"' || echo "0.0.1")
+old_version=$(nix-instantiate --eval --raw -A umami.version)
 version=$(curl -s "https://api.github.com/repos/umami-software/umami/releases/latest" | jq -r ".tag_name")
 version="${version#v}"
 

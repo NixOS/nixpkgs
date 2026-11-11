@@ -1,17 +1,14 @@
 {
   buildDartApplication,
-  dart,
   fetchFromGitHub,
   lib,
-  runCommand,
-  testers,
-  unsure,
-  writeText,
 }:
 
-buildDartApplication rec {
+buildDartApplication (finalAttrs: {
   pname = "unsure";
   version = "0.4.0-unstable-2025-04-15";
+
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "filiph";
@@ -34,7 +31,7 @@ buildDartApplication rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://github.com/filiph/unsure/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/filiph/unsure/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Calculate with numbers you’re not sure about";
     downloadPage = "https://github.com/filiph/unsure";
     homepage = "https://filiph.github.io/unsure";
@@ -45,4 +42,4 @@ buildDartApplication rec {
       lib.maintainers.rksm
     ];
   };
-}
+})

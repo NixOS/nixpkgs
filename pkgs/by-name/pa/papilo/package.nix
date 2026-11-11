@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papilo";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YDaahgsE7NqTNE1WvkSp5DwyvfJrP19IcytTkM8VKZo=";
+    hash = "sha256-EnFfFJ2PIWB0Xw8k6HZ1MU4KQRxgvC4kFM2Y/38/4PE=";
   };
 
   # skip SEGFAULT tests
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://scipopt.org/";
     description = "Parallel Presolve for Integer and Linear Optimization";
-    license = lib.licenses.lgpl3Plus;
+    license = lib.licenses.asl20;
     mainProgram = "papilo";
     maintainers = [ ];
     platforms = lib.platforms.unix;

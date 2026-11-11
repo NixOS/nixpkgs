@@ -3,6 +3,7 @@
   fetchNpmDeps,
   lib,
   stdenv,
+  nix-update-script,
   nodejs_24,
   npmHooks,
   postgresql,
@@ -11,27 +12,22 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
-  version = "1.3.4";
+  version = "1.3.8";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "FitTrackee";
     repo = "FitTrackee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PN+YHRKvsAgTaSm4dl2t5voRxbgIo+yoieMfGEuE0oI=";
+    hash = "sha256-wuNaclwnGYpqSlgtVasvoJPbO5k/zFzFREpaBEJKnhY=";
   };
-
-  patches = [
-    # https://codeberg.org/FitTrackee/FitTrackee/pulls/1205
-    ./0001-pytest-Parametrize-compatability-with-9.1.1.patch
-  ];
 
   makeCacheWritable = true;
   npmRoot = "fittrackee_client";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-kN/J7hIeEcnCKaramIPhoBsbBg32VgF372f9KOPi+nY=";
+    hash = "sha256-TALvLIFL1sj/k8wOHbn1AkdXU3khnykPL63pH77Ws20=";
     sourceRoot = "${finalAttrs.src.name}/fittrackee_client";
   };
 
@@ -66,6 +62,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       flask-babel
       flask-bcrypt
       flask-dramatiq
+      flask-jwt-extended
       flask-limiter
       flask-migrate
       flask-sqlalchemy
@@ -122,6 +119,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export TMP=$TMPDIR
     export UI_URL=http://0.0.0.0:5000
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "Self-hosted outdoor activity tracker";

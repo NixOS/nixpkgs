@@ -10,7 +10,7 @@
 
 let
   pname = "jetbrains-toolbox";
-  version = "3.6.4.86641";
+  version = "3.9.0.88839";
 
   updateScript = ./update.sh;
 
@@ -57,18 +57,18 @@ let
         aarch64 = "-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-UqEhoaH8vB6tcy+GcxUy+VupJPbv//q3wEQ8CwMUdic=";
-        aarch64-linux = "sha256-UQwFDdZNPxjtG/kK5imupGZ0xE4oyThCTLFxb0i2fTw=";
-        aarch64-darwin = "sha256-jPlYLiKabVew1kxd+TJ0W0WuT82R0p+yIAPxuIVEYRA=";
+        x86_64-linux = "sha256-Nqov5++wuLy4r08N6inyBmdr9eTdQknrc1AFf0jywTs=";
+        aarch64-linux = "sha256-a6ddxFW+Klkl9te0/wQQgVc/MrMaslA7CICxXlOswm8=";
+        aarch64-darwin = "sha256-rxouFL5G4bvKDjEKhlApsGlNRMBiEFubhH1VfzqmZ2A=";
       };
     in
     selectKernel {
       linux = fetchzip {
-        url = "https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.tar.gz";
+        url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.tar.gz";
         inherit hash;
       };
       darwin = fetchurl {
-        url = "https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.dmg";
+        url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.dmg";
         inherit hash;
       };
     };

@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
 
   # tests
   addBinToPathHook,
@@ -23,6 +24,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-u9yxjYNQrtYtFtUh5tTJ1mGmGB+Ry+FRupli8RzRu3c=";
   };
 
+  patches = [
+    # Fix test_find_names on Python 3.14
+    (fetchpatch {
+      url = "https://github.com/hauntsaninja/pyp/commit/536464aad4752aac3d43d253139c7761bda076d3.patch";
+      hash = "sha256-TUXTkpBTrlns/ItLxTQvkssTEtbCwaAQMh5NfIjrTeE=";
+    })
+  ];
+
   build-system = with python3Packages; [
     flit-core
   ];
@@ -43,7 +52,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     homepage = "https://github.com/hauntsaninja/pyp";
     description = "Easily run Python at the shell";
-    changelog = "https://github.com/hauntsaninja/pyp/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/hauntsaninja/pyp/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "pyp";
     maintainers = with lib.maintainers; [

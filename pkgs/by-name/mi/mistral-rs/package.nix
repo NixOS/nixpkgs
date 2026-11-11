@@ -74,14 +74,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.9.2";
+  version = "0.9.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T7CKIQOCvJXAdYpwLzQ7oFs/xu30OIuxqa8GpYWLK9U=";
+    hash = "sha256-3NZGfKyznzb80diu3Va2GwvQKQeQxypJ5JoGyzeA9ak=";
   };
 
   patches = [
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           ""
     '';
 
-  cargoHash = "sha256-7Vp9nNvVbC8McJwQuiIMJWGfU42xtr6rL1/H8WJ1wkQ=";
+  cargoHash = "sha256-qqFkO5BJ7mhWuLsCDte9BqCVjaqbePp+lY4BqhYYcUQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -217,6 +217,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFeatures = [ ];
 
   checkFlags = [
+    # Error: failed to read MTP model config: No such file or directory (os error 2)
+    "--skip=external_mtp_checkpoint_bytes_are_added_to_the_cache_reservation"
+
+    # Max error 0.27852345 is too large
+    "--skip=vector_fp8::ops::tests::test_fp8_vector_quant_cpu"
+
     # Try to access internet
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_gpt2"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
@@ -228,15 +234,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=sandboxed_session_can_execute_python"
     "--skip=sandboxed_session_default_policy_can_execute_python"
 
-    # Upstream's v0.9.2 bump updated the version example in the generated CLI reference page
-    # but not in the clap doc comment it is generated from, so this golden test fails at the tag.
-    "--skip=docgen::cli_reference_matches_committed"
-
     # Linux namespace / seccomp tests require capabilities the nix build sandbox blocks
     "--skip=network_none_blocks_socket"
     "--skip=rlimit_nproc_caps_processes"
     "--skip=seccomp_blocks_ptrace"
     "--skip=unshare_is_denied_inside_child"
+
+    # Timing-sensitive (relies on a 30ms sleep), flaky under load
+    "--skip=isq_executor::tests::executor_waits_for_budget_release"
+  ]
+  ++ lib.optionals hostPlatform.isDarwin [
+    # system-configuration panics in the sandbox: "Attempted to create a NULL object."
+    "--skip=search::tests::search_tools_refuse_internal_urls"
   ];
 
   nativeInstallCheckInputs = [
@@ -277,6 +286,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         [ "x86_64-linux" ]
       else
         lib.platforms.unix;
-    broken = mklSupport;
+    problems = lib.optionalAttrs mklSupport {
+      broken-mkl-support = {
+        kind = "broken";
+        message = "mistral-rs' MKL support is currently broken.";
+      };
+    };
   };
 })

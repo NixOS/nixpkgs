@@ -19,15 +19,15 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "regclient";
-  version = "0.11.5";
+  version = "0.11.7";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-tJBnNtuN9BIlGvHekrvziyBu5gFPzbID/09eAoM5VUc=";
+    sha256 = "sha256-LYcaNj8Q7//KwM7/1ZBPbeqIKYWJKX26B2ZbMl67Q/0=";
   };
-  vendorHash = "sha256-jpXy3ZWj+JoDKU2r7FanKR8nQGIQPAL9GW4g//e5xZs=";
+  vendorHash = "sha256-GwxnXYCIunp8RS1H55mbYZ/WnsDSFCEUWUowEHFedMM=";
 
   outputs = [ "out" ] ++ bins;
 
@@ -47,8 +47,8 @@ buildGoModule (finalAttrs: {
   postInstall = lib.concatMapStringsSep "\n" (
     bin:
     ''
-      export bin=''$${bin}
-      export outputBin=bin
+      local bin=''$${bin}
+      local outputBin=bin
 
       mkdir -p $bin/bin
       mv $out/bin/${bin} $bin/bin
@@ -61,8 +61,6 @@ buildGoModule (finalAttrs: {
     ''
     + ''
       lndir -silent $bin $out
-
-      unset bin outputBin
     ''
   ) bins;
 

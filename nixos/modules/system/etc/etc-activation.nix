@@ -22,10 +22,6 @@
 
       assertions = [
         {
-          assertion = config.boot.initrd.systemd.enable;
-          message = "`system.etc.overlay.enable` requires `boot.initrd.systemd.enable`";
-        }
-        {
           assertion =
             (!config.system.etc.overlay.mutable)
             -> (config.systemd.sysusers.enable || config.services.userborn.enable);

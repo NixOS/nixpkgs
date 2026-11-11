@@ -2,24 +2,21 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "koruri";
   version = "20210720";
 
   src = fetchFromGitHub {
     owner = "Koruri";
     repo = "Koruri";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-zL9UtT15mWvsXgGJqbTs6cOsQaoh/0AIAyQ5z7JpTXk=";
   };
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm644 *.ttf -t $out/share/fonts/koruri
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Japanese TrueType font obtained by mixing M+ FONTS and Open Sans";
@@ -28,4 +25,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     platforms = lib.platforms.all;
   };
-}
+})

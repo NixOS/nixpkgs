@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       know what is going on in your network, right now or historically,
       you will find Argus a useful tool.
     '';
-    homepage = "http://qosient.com/argus";
+    homepage = "https://openargus.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

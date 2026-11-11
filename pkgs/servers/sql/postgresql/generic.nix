@@ -64,7 +64,10 @@
   icu,
 
   # JIT
-  jitSupport ? stdenv.hostPlatform.canExecute stdenv.buildPlatform,
+  jitSupport ? (
+    # LLVM JIT crashes the backend on riscv64 (26/230 regress tests fail)
+    stdenv.hostPlatform.canExecute stdenv.buildPlatform && !stdenv.hostPlatform.isRiscV64
+  ),
   llvmPackages,
   nukeReferences,
   overrideCC,
@@ -122,7 +125,6 @@
 let
   atLeast = lib.versionAtLeast version;
   olderThan = lib.versionOlder version;
-  lz4Enabled = atLeast "14";
   zstdEnabled = atLeast "15";
 
   dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
@@ -148,6 +150,11 @@ stdenv'.mkDerivation (finalAttrs: {
     # rev, not tag, on purpose: allows updating when new versions
     # are "stamped" a few days before release (tag).
     inherit hash rev;
+    # rev might be "refs/tags/REL_x_y" which is not a valid tag
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "postgres/postgres@${lib.removePrefix "refs/tags/" rev}";
+    };
   };
 
   __structuredAttrs = true;
@@ -237,10 +244,10 @@ stdenv'.mkDerivation (finalAttrs: {
     openssl
     libxml2
     libuuid
+    lz4
   ]
   ++ lib.optionals icuSupport [ icu ]
   ++ lib.optionals jitSupport [ llvmPackages.llvm ]
-  ++ lib.optionals lz4Enabled [ lz4 ]
   ++ lib.optionals zstdEnabled [ zstd ]
   ++ lib.optionals systemdSupport [ systemdLibs ]
   ++ lib.optionals uringSupport [ liburing ]
@@ -311,10 +318,10 @@ stdenv'.mkDerivation (finalAttrs: {
       (lib.optionalString systemdSupport "--with-systemd")
       (if stdenv.hostPlatform.isFreeBSD then "--with-uuid=bsd" else "--with-uuid=e2fs")
       (withFeature perlSupport "perl")
+      "--with-lz4"
     ]
     ++ lib.optionals (withBlocksize != null) [ "--with-blocksize=${toString withBlocksize}" ]
     ++ lib.optionals (withWalBlocksize != null) [ "--with-wal-blocksize=${toString withWalBlocksize}" ]
-    ++ lib.optionals lz4Enabled [ "--with-lz4" ]
     ++ lib.optionals zstdEnabled [ "--with-zstd" ]
     ++ lib.optionals uringSupport [ "--with-liburing" ]
     ++ lib.optionals curlSupport [ "--with-libcurl" ]

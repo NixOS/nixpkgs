@@ -27,7 +27,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "openmm";
-  version = "8.6.0";
+  version = "8.6.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -36,7 +36,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "openmm";
     repo = "openmm";
     tag = finalAttrs.version;
-    hash = "sha256-G4OPiQ5GWM0Uu/fRK8TZoS/12fLkjtRSSXxKYSSJ3M8=";
+    hash = "sha256-CLLsgj9S70rhlGFakSlLSUmCWWDkxGunwiAq+7MwZok=";
   };
 
   # "This test is stochastic and may occasionally fail". It does.

@@ -25,13 +25,17 @@ stdenv.mkDerivation {
     owner = "GNOME";
     repo = "network-manager-iodine";
     rev = "ce18eb60893887e104a7623fb919264c12769d03";
-    sha256 = "wQVajbnw8q544APKQJfoUb7JaSH8MU3qQN3Gp6mYReE=";
+    hash = "sha256-wQVajbnw8q544APKQJfoUb7JaSH8MU3qQN3Gp6mYReE=";
   };
 
   patches = [
     (replaceVars ./fix-paths.patch {
       inherit iodine;
     })
+
+    # https://gitlab.gnome.org/GNOME/network-manager-iodine/-/issues/4
+    # https://gitlab.gnome.org/GNOME/network-manager-iodine/-/merge_requests/6
+    ./CVE-2026-91837.patch
   ];
 
   nativeBuildInputs = [

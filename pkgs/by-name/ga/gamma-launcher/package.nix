@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     gitpython
     platformdirs
     py7zr
-    python-unrar
+    unrar
     requests
     tenacity
     tqdm

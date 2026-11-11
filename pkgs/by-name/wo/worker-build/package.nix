@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
-  version = "0.8.5";
+  version = "0.8.7";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cloudflare";
     repo = "workers-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t+Hmgzc+xbOsEY7exHiR1dIuO8Fpb1wO613Dj2SZ6gI=";
+    hash = "sha256-ZZFyZeu/PGwUatOWG/SPI7y+XyiuUyHO7L5y0qtJl70=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-Iolcx7CcGSlHgnKjmiGdkd/NTAsma5bT/H0+7V3UR3Y=";
+  cargoHash = "sha256-AHTBKz8jwUaQpC03oH15NxtBQYO5PrvUVLwkz4+L5K8=";
 
   buildAndTestSubdir = "worker-build";
 
@@ -28,10 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tool to be used as a custom build command for a Cloudflare Workers `workers-rs` project";
     mainProgram = "worker-build";
     homepage = "https://github.com/cloudflare/workers-rs";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ happysalada ];
   };
 })

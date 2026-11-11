@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "1.4.5";
+  version = "1.5.0";
 in
 python3Packages.buildPythonApplication {
   pname = "newelle";
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-GcNAwrk5y6F0BgRy69nRePkX4WoYviWsB+8X/+N5QwE=";
+    hash = "sha256-P+bwcqrF9BTKFb47vVBO1GzFaqb6zMpaeYlI2g9rhX4=";
   };
 
   postPatch = ''
@@ -81,23 +81,25 @@ python3Packages.buildPythonApplication {
     mcp
   ];
 
-  strictDeps = true;
-
   postInstallCheck = ''
     mesonCheckPhase
   '';
 
   dontWrapGApps = true;
 
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        lsb-release
-        bash
-        ffmpeg
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      lsb-release
+      bash
+      ffmpeg
+    ])
   ];
 
   passthru.updateScript = nix-update-script { };

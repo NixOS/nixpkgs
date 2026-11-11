@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenoh-cpp";
-  version = "1.10.0"; # nixpkgs-update: no auto update
+  version = "1.10.2"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-EX3TSm0gAaRS2mj8o90zKsFvSqv2bgjrCnW4b1cC4JM=";
+    hash = "sha256-2RmbKYKMFJlfWCx3JwXnwoVArZHiLt7ovTr3XIaege0=";
   };
 
   cmakeFlags = [

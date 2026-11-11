@@ -14,14 +14,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "firecrawl-py";
-  version = "2.8.0";
+  version = "4.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mendableai";
     repo = "firecrawl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-7dB3jdp5jkRiNx63C5sjs3t85fuz5vzurfvYY5jWQyU=";
+    # The Python SDK version is decoupled from the firecrawl monorepo tags.
+    tag = "v2.11.226";
+    hash = "sha256-htBM3ywHDMSnJhtbPyQOWLkUtSGSWMIPHpNQ7PNA3Bo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/apps/python-sdk";
@@ -47,7 +48,12 @@ buildPythonPackage (finalAttrs: {
     description = "Turn entire websites into LLM-ready markdown or structured data. Scrape, crawl and extract with a single API";
     homepage = "https://firecrawl.dev";
     changelog = "https://github.com/mendableai/firecrawl/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license =
+      with lib.licenses;
+      AND [
+        agpl3Only
+        mit
+      ];
     maintainers = [ ];
   };
 })

@@ -2,20 +2,19 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  packaging,
   pan-python,
   poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "pan-os-python";
-  version = "1.12.5";
+  version = "1.13.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pan_os_python";
     inherit version;
-    hash = "sha256-Zea0WMdFkZLEZi2aqU9woXFA3aAQBEYhf+D7s5ZaOro=";
+    hash = "sha256-psA/8HV0m+2qoKKXlF5VQ1vJ7JJrCWcaaDCfT6g+zFk=";
   };
 
   postPatch = ''
@@ -24,14 +23,9 @@ buildPythonPackage rec {
       --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api' \
       --replace-fail 'poetry>=0.12' 'poetry-core' \
       --replace-fail 'pan-python = "^0.17.0"' 'pan-python = "^0.25.0"'
-    substituteInPlace panos/__init__.py \
-      --replace-fail "from distutils.version import LooseVersion" "from packaging.version import Version as LooseVersion"
   '';
 
-  dependencies = [
-    packaging
-    pan-python
-  ];
+  dependencies = [ pan-python ];
 
   build-system = [ poetry-core ];
 

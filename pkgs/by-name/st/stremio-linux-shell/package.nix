@@ -6,6 +6,7 @@
   nix-update-script,
 
   # nativeBuildInputs
+  installShellFiles,
   pkg-config,
   wrapGAppsHook4,
 
@@ -26,19 +27,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stremio-linux-shell";
-  version = "1.2.0";
+  version = "1.2.2";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Stremio";
     repo = "stremio-linux-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JFG+sUuK+l8Ik00vHPiXJwan0rmMBiY85DnvudYKCsw=";
+    hash = "sha256-QQ+aAJWvU6yGfGQX9eP4vlRo+CMewiWrEfFo14SHiFQ=";
   };
 
-  cargoHash = "sha256-FnQ2FN9NtL/YyRmLlyGQApjzV/4uS8OnnY8kbTWTGe8=";
+  cargoHash = "sha256-Xx2oIM9Ytlclury1wAULUbZFnJ6BC12nKU9I3HdeaEQ=";
 
   patches = [
     ./out-path.patch
@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
     wrapGAppsHook4
   ];
@@ -74,6 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm755 data/stremio.sh $out/bin/stremio
     install -Dm644 LICENSE $out/share/licenses/stremio/LICENSE
 
+    installManPage data/stremio.1
+
     mv $out/bin/stremio-linux-shell $out/libexec/stremio/stremio
   '';
 
@@ -87,7 +90,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}" \
       --prefix PATH : "${lib.makeBinPath [ nodejs ]}" \
       --prefix ANV_DEBUG : "video-decode,video-encode" \
-      --prefix LC_NUMERIC : "C" \
       --prefix SERVER_PATH : "$out/libexec/stremio/server.js"
   '';
 

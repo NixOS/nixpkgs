@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_43,
+  electron_44,
   python3,
   makeWrapper,
   callPackage,
@@ -28,13 +28,13 @@
 
   withAppleEmojis ? false,
 }:
-assert lib.warnIf (commandLineArgs != "")
-  "`commandLineArgs` has been deprecated and will be removed in the future. Consider creating a wrapper script or a desktop entry with your desired flags."
+assert lib.throwIf (commandLineArgs != "")
+  "`commandLineArgs` has been removed. Consider creating a wrapper script or a desktop entry with your desired flags."
   true;
 let
   nodejs = nodejs_24;
   pnpm = pnpm_11;
-  electron = electron_43;
+  electron = electron_44;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
@@ -42,16 +42,16 @@ let
     inherit nodejs;
   };
 
-  webrtc = callPackage ./webrtc.nix { };
+  webrtc = callPackage ./webrtc.nix { ringrtcSrc = ringrtc.src; };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.24.0";
+  version = "8.32.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-z5Z0ujG2AQvmrrdmJxOAnhi56ISSlGoI4kdMcZMpZzY=";
+    hash = "sha256-6eh+Cuz/OAJP8gs0kOsfRb+trT7IpgQ5d/isr9x0kQg=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -80,8 +80,11 @@ let
         pnpmWorkspaces
         ;
       inherit pnpm;
+      prePnpmInstall = ''
+        pnpm config set fetch-timeout 300000
+      '';
       fetcherVersion = 4;
-      hash = "sha256-3hwxTcxVzD5as6WcI3batU1DBKNeEDvGRn+lfSjrJBM=";
+      hash = "sha256-uL6fTAoKwSy7sQmvKuQheAYP8tmCnZnfBUK1Ijxinhk=";
     };
 
     strictDeps = true;
@@ -184,14 +187,19 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     inherit pnpm;
+    prePnpmInstall = ''
+      pnpm config set fetch-timeout 300000
+    '';
     fetcherVersion = 4;
-    hash = "sha256-3hwxTcxVzD5as6WcI3batU1DBKNeEDvGRn+lfSjrJBM=";
+    hash = "sha256-uL6fTAoKwSy7sQmvKuQheAYP8tmCnZnfBUK1Ijxinhk=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1787172744;
+    # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
+    # We set the source-changed date to match the corresponding upstream release date.
+    SOURCE_DATE_EPOCH = 1792514633;
   };
 
   preBuild = ''

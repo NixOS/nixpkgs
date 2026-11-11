@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caido-server-auth";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "caido_server_auth";
     inherit (finalAttrs) version;
-    hash = "sha256-6ywl6d4VBidgtoES9djprWPusTIlGLkMGgEZppp1JKQ=";
+    hash = "sha256-XuqlS9X4y4QMRK+jHLpiiuzMyEXJZScT7RAodHwxsHA=";
   };
 
   postPatch = ''

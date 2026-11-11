@@ -6,7 +6,7 @@
   meson,
   zstd,
   pkg-config,
-  systemd,
+  systemdLibs,
   ninja,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qrtr
     zstd
-    systemd
+    systemdLibs
   ];
 
   nativeBuildInputs = [

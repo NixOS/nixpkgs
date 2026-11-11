@@ -6,7 +6,7 @@
   cmake,
   flex,
   bison,
-  systemd,
+  systemdLibs,
   boost,
   libedit,
   openssl,
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     libedit
     openssl
-    systemd
+    systemdLibs
   ]
   ++ lib.optional withOtel protobuf
   ++ lib.optional withPostgresql libpq;

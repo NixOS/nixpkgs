@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "playdate-sdk";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "https://download.panic.com/playdate_sdk/Linux/PlaydateSDK-${version}.tar.gz";
-    sha256 = "sha256-K2RXTlZAoT/lZFlE+LUWnrX05MzgQ0gt3B1sRzXhFWs=";
+    sha256 = "sha256-fj2RJhHoL3kAev0qOp5ooZyL/HAltfdhgF8hNoRw15M=";
   };
 
   srcScript = ./playdate-simulator-wrapper.sh;

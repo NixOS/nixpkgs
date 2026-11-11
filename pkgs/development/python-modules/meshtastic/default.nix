@@ -125,7 +125,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

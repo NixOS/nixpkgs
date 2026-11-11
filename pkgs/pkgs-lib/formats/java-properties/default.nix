@@ -13,7 +13,7 @@ let
     ;
 in
 {
-  javaProperties =
+  format =
     {
       comment ? "Generated with Nix",
       boolToString ? lib.boolToString,

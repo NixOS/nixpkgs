@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   git,
@@ -9,20 +9,23 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "entire";
-  version = "0.10.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "entireio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PeCzPnIoeeyNsGqY7SXKykv8qmt2rY/3bQG0xqcPDP0=";
+    hash = "sha256-QIVsDXxQChrgRF6mMNL6gual8tRXBPwDIdx/vY03Wxw=";
   };
 
-  vendorHash = "sha256-7/SWL5axi1jJur0mGEO9dMnGO8NXT1RlUnSzz/IvE0g=";
+  vendorHash = "sha256-RU0ZSkwGk8bL4mkhnMDveNIW7JGwYwudT+ywmncuT2k=";
 
-  subPackages = [ "cmd/entire" ];
+  subPackages = [
+    "cmd/entire"
+    "cmd/git-remote-entire"
+  ];
 
   ldflags = [
     "-s"
@@ -36,6 +39,9 @@ buildGoModule (finalAttrs: {
     git
     writableTmpDirAsHomeHook
   ];
+
+  # git-remote-entire tests bind localhost via httptest
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd entire \
@@ -60,6 +66,7 @@ buildGoModule (finalAttrs: {
       iamanaws
       sheeeng
       squishykid
+      toothbrush
     ];
     mainProgram = "entire";
   };

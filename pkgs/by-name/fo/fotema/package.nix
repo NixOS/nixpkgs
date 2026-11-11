@@ -19,7 +19,7 @@
 
   libadwaita,
   openssl,
-  ffmpeg,
+  ffmpeg_8,
   onnxruntime,
   libshumate,
   opencv,
@@ -73,7 +73,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libadwaita
     openssl
-    ffmpeg
+    ffmpeg_8
     onnxruntime
     libshumate
     opencv

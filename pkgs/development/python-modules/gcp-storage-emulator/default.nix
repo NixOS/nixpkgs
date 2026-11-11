@@ -23,6 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-Lp9Wvod0wSE2+cnvLXguhagT30ax9TivyR8gC/kB7w0=";
   };
 
+  # upstream only sets the real version from GITHUB_REF when its CI builds a tag
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"0.0.0.dev0"' '"${version}"'
+  '';
+
   build-system = [
     setuptools
   ];

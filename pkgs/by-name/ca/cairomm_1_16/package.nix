@@ -8,12 +8,15 @@
   pkg-config,
   cairo,
   fontconfig,
-  libsigcxx30,
+  libsigcxx_3_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cairomm";
   version = "1.18.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -38,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     cairo
-    libsigcxx30
+    libsigcxx_3_0
   ];
 
   mesonFlags = [

@@ -66,7 +66,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
-  version = "2.75.0";
+  version = "2.77.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -74,7 +74,7 @@ buildPythonPackage (finalAttrs: {
     owner = "apache";
     repo = "beam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jlY46uVYECZGrT4hCd2eo6QoM4zUm+veGcgcPsHdD5A=";
+    hash = "sha256-JaIMkMLXfkst8HZs4fFUgRBDZ2YzyyfZd/wrgDkjp3A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/sdks/python";
@@ -89,8 +89,8 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "distlib==0.4.2" "distlib" \
-      --replace-fail "cython>=3.2.5,<4" "cython" \
+      --replace-fail "distlib==0.4.3" "distlib" \
+      --replace-fail "cython>=3.2.6,<4" "cython" \
       --replace-fail "numpy>=1.14.3,<2.5.0" "numpy" \
       --replace-fail "==" ">="
 
@@ -100,14 +100,9 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
-    "cryptography"
-    "envoy-data-plane"
-    "httplib2"
-    "jsonpickle"
     "numpy"
     "objsize"
     "protobuf"
-    "pyarrow"
   ];
 
   build-system = [
@@ -235,6 +230,7 @@ buildPythonPackage (finalAttrs: {
 
     # FIXME AttributeError: 'Namespace' object has no attribute 'test_pipeline_options'
     # Upstream issue https://github.com/apache/beam/issues/33853
+    "apache_beam/runners/portability/kafka_streams_runner_test.py"
     "apache_beam/runners/portability/prism_runner_test.py"
 
     # FIXME ValueError: Unable to run pipeline with requirement: unsupported_requirement
@@ -244,11 +240,6 @@ buildPythonPackage (finalAttrs: {
     "apache_beam/yaml/yaml_transform_unit_test.py"
     "apache_beam/yaml/yaml_udf_test.py"
     "apache_beam/dataframe/frames_test.py"
-
-    # FIXME Those tests do not terminate due to a grpc error (threading issue)
-    # grpc_status:14, grpc_message:"Cancelling all calls"}"
-    # Upstream issue https://github.com/apache/beam/issues/33851
-    "apache_beam/runners/portability/portable_runner_test.py"
 
     # Pandas 3 behavioral changes in Beam's dataframe module (upstream caps pandas < 2.4):
     # the doctests compare against pandas-version-specific output and the taxiride example

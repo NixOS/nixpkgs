@@ -23,7 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://jprs.co.jp/idn/index-e.html";
     description = "Provides functionalities about i18n domain name processing";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "oscl11";
       fullName = "Open Source Code License version 1.1";
       url = "https://jprs.co.jp/idn/idnkit2-OSCL.txt";
     };

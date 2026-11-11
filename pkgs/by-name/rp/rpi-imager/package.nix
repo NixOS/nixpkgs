@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "2.0.10-1-proto1";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5EmriYrjm73fEgcbL/WJ5ggnFqyPQ/DXLBOnhDq1NxA=";
+    hash = "sha256-oIq7+NxTh/IQH78xSfXLZeKx7uMJ3T7THychdb3QcZg=";
   };
 
   patches = [ ./remove-vendoring.patch ];
@@ -97,8 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--unset QT_QPA_PLATFORMTHEME"
-    "--unset QT_STYLE_OVERRIDE"
+    "--unset"
+    "QT_QPA_PLATFORMTHEME"
+
+    "--unset"
+    "QT_STYLE_OVERRIDE"
   ];
 
   dontWrapGApps = true;

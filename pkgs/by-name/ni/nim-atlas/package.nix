@@ -2,6 +2,7 @@
   lib,
   buildNimPackage,
   fetchFromGitHub,
+  nix-update-script,
   openssl,
 }:
 
@@ -20,12 +21,12 @@ in
 buildNimPackage (
   final: prev: rec {
     pname = "atlas";
-    version = "0.14.12";
+    version = "0.16.3";
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "atlas";
       rev = "${version}";
-      hash = "sha256-7LPjxqsWlZ0tjsXfMF0q93O9VLDgT+7J20QrJ+1ihDg=";
+      hash = "sha256-Lsb/m1r9NIy44OtdfDvEjPVLjfkXg0/9AUbnOPbXyPM=";
     };
     buildInputs = [ openssl ];
     preConfigure = ''
@@ -33,6 +34,7 @@ buildNimPackage (
       cp -r ${sat} deps/sat
     '';
     doCheck = false; # tests will clone repos
+    passthru.updateScript = nix-update-script { };
     meta = final.src.meta // {
       description = "Nim package cloner";
       mainProgram = "atlas";

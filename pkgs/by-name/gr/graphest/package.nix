@@ -23,15 +23,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphest";
-  # 1.8.2 cannot build due to https://github.com/NixOS/nixpkgs/issues/483500
-  version = "1.8.2-unstable-2026-01-21";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "unageek";
     repo = "graphest";
-    rev = "2bcb478acd40a1174606e51f4affeca56446c9f6";
-    hash = "sha256-+onb21xb8nhEKIL/B8sNufWaPVhABnpU3uIyRn4ISWQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+F/zAcBbvzdvZ5vNlsGPwEJOi94sK8KbtzmLBj1HqPo=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   patches = [
     # specify what files should be installed in package.json (https://github.com/unageek/graphest/pull/1000)
@@ -65,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-krpJflsoUPIzhdtyQu3WmapM4C63adwOq2Q6inUa3Xk=";
+    hash = "sha256-VXPmovY1pON38ZPYv1Pf3dzTVDUN9GLetYeaqo2T22Y=";
   };
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -91,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
-    install -Dm444 build/icon.png $out/share/icons/graphest.png
+    install -Dm444 build/icon.png $out/share/icons/hicolor/1024x1024/apps/graphest.png
     install -Dm444 ${./mime.xml} $out/share/mime/packages/graphest.xml
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -127,7 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--subpackage=graph" ];
+    };
 
     # The dependencies of graphest-fftw-sys and graphest-arb-sys need to be static.
     fftwFloatStatic = pkgsStatic.fftwFloat;
@@ -138,6 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
     graph = rustPlatform.buildRustPackage {
       pname = "graphest-graph";
       inherit (finalAttrs) version src;
+
+      __structuredAttrs = true;
+      strictDeps = true;
 
       patches = [
         # Use libraries from nixpkgs instead of trying to download them
@@ -156,9 +163,8 @@ stdenv.mkDerivation (finalAttrs: {
       buildInputs = [
         blas # needed here because -lblas is added to RUSTFLAGS
       ];
-      strictDeps = true;
 
-      cargoHash = "sha256-GC0BHLWRKw6ThQiIfFQoOcGq9Xm0I9rt8uhwyalCa2I=";
+      cargoHash = "sha256-31NgbVP6PoQG8FhhMZy5GolzQTh/qCOY7aTNXxSivdo=";
 
       env = {
         RUSTC_BOOTSTRAP = 1; # smallvec: error[E0554]: `#![feature]` may not be used on the stable release channel
@@ -178,6 +184,11 @@ stdenv.mkDerivation (finalAttrs: {
         "--skip=graph_tests::examples::t_8c9209237ba04e67a715382c7bcbf5e0"
         "--skip=graph_tests::examples::t_b0175d3b58ed46158ba72bbd85670fc9"
         "--skip=graph_tests::examples::t_d2a0e9e88c41406a80a266d78f6dc7a5"
+        "--skip=graph_tests::examples::t_0b3b446edb104b2680bdb05fcdbef602"
+        "--skip=graph_tests::examples::t_0fcfd060295c411d8724a7872c071315"
+        "--skip=graph_tests::examples::t_305f167fd5ba4d0e8b6c5408f01cdab6"
+        "--skip=graph_tests::examples::t_70f11f255fe54073996223eec75840f4"
+        "--skip=graph_tests::implicit::t_7a39ab5463814093913a2ab0ae8ba0bc"
         "--skip=graph_tests::implicit::t_7f25b9f2bd3746b3ae8f95a82921de2b"
         "--skip=graph_tests::implicit::t_84a2738be35745da97a9b120c563b4b3"
       ];

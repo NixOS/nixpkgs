@@ -52,8 +52,6 @@ rustPlatform.buildRustPackage {
     gsettings-desktop-schemas
   ];
 
-  strictDeps = true;
-
   postPatch = ''
     substituteInPlace justfile \
         --replace-fail "version := \`git describe --always\`" "version := \"${version}\"" \

@@ -11,6 +11,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.13-unstable-2024-06-08";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "thingsiplay";
     repo = "tochd";
@@ -23,12 +24,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        mame-tools
-        p7zip
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      mame-tools
+      p7zip
+    ])
   ];
 
   postInstall = ''

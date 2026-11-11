@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.4.6";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jL8msC8YTmrD/FHcGHbyuBGqnZmYkYr+pZb3HKYrvQw=";
+    hash = "sha256-za4G56fIJac8bJ22NsWYnVEChmE/JXmHLG0w8O1jeXg=";
   };
 
-  cargoHash = "sha256-hWFGKvob0DuIX2rP20Iq15nTSTpUBxLURiVwI5LNBII=";
+  cargoHash = "sha256-J2FA74Ry2oRrd/GA5yA0a7k/DzIQoRkg9kMWQEE9ZTo=";
 
   __structuredAttrs = true;
 
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags "--no-upgrade-check" \
       --prefix PATH : ${lib.makeBinPath [ python3 ]}
-    rm -rf $out/bin/fresh.dSYM
   '';
 
   # Tests create a local http server to check update functionality
@@ -60,11 +59,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=e2e::"
     "--skip=services::plugins::embedded::tests::test_extract_plugins"
+    # require network access
+    "--skip=services::release_checker::tests::the_release_feed_override_is_shared_by_check_and_update"
   ];
   cargoTestFlags = [
     "--lib"
     "--bins"
   ];
+  # cfg(debug_assertions) is not set for release builds, so we need to run tests in debug mode to get the assertions enabled.
+  checkType = "debug";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -72,19 +75,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Terminal-based text editor with LSP support and TypeScript plugins";
-    homepage = "https://github.com/sinelaw/fresh";
+    description = "Terminal based IDE & text editor: easy, powerful and fast";
+    homepage = "https://getfresh.dev";
     changelog = "https://github.com/sinelaw/fresh/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       chillcicada
       dwt
       randoneering
+      sinelaw
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-    ];
   };
 })

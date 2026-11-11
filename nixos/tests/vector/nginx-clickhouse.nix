@@ -64,7 +64,7 @@
               vector_sink = {
                 type = "vector";
                 inputs = [ "nginx_logs" ];
-                address = "clickhouse:6000";
+                address = "http://clickhouse:6000";
               };
             };
           };

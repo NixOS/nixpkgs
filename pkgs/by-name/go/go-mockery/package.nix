@@ -1,26 +1,29 @@
 {
+  # mockery has historically required changes to support new Go versions, so use the latest
+  # version that mockery supports rather than buildGoLatestModule.
+  # This should be bumped when a mockery release includes support for a new version of Go.
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
   go-task,
   gotestsum,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "go-mockery";
-  version = "3.7.2";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lPyoWjLaRhE4SpVahJd8T3LsCyfdFMIsuxmWODRoLL0=";
+    hash = "sha256-fLsq9gGghIXsOlLum1u3x3i4dUizE3K3LBFspBowE9Y=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-izMi4MqbfKX1PmNMWyCwBOWqiPZfth/ZSzsuEcTN6Pg=";
+  vendorHash = "sha256-ksfAHdPdOd8ELS0CSBg+E7KPd5xX/uGeLPn9HiItjdI=";
 
   ldflags = [
     "-s"
@@ -28,7 +31,14 @@ buildGoModule (finalAttrs: {
     "-X github.com/vektra/mockery/v${lib.versions.major finalAttrs.version}/internal/logging.SemVer=v${finalAttrs.version}"
   ];
 
-  env.CGO_ENABLED = 0;
+  env = {
+    CGO_ENABLED = 0;
+
+    # go.work pulls ./tools into the workspace, which raises mockery's own
+    # dependencies to the tools build list. Build and test against go.mod
+    # alone, matching what upstream's Taskfile does.
+    GOWORK = "off";
+  };
 
   subPackages = [ "." ];
 
@@ -45,12 +55,25 @@ buildGoModule (finalAttrs: {
   prePatch = ''
     # remove test.ci's dependency on lint since we don't need it and
     # it tries to use remote golangci-lint
+    #
     # remove test.ci's git-state check, which runs `git diff --exit-code`;
     # the source has no .git directory, so the check cannot work here
+    #
+    # use gotestsum from nativeCheckInputs rather than building it from the
+    # tools module, which would need network access
     substituteInPlace Taskfile.yml \
       --replace-fail "deps: [lint]" "" \
       --replace-fail "      - task: git-state" "" \
-      --replace-fail "go run gotest.tools/gotestsum" "gotestsum"
+      --replace-fail "    deps: [tools.gotestsum]" "" \
+      --replace-fail "./tools/gotestsum{{exeExt}}" "gotestsum"
+
+    # the e2e scripts reach go-task through the workspace, which GOWORK=off
+    # rules out; use go-task from nativeCheckInputs instead
+    substituteInPlace \
+      e2e/test_mockery_generation.sh \
+      e2e/test_infinite_mocking.sh \
+      e2e/test_missing_interface/run.sh \
+      --replace-fail "go run github.com/go-task/task/v3/cmd/task" "task"
 
     # patch scripts used in e2e testing
     patchShebangs e2e

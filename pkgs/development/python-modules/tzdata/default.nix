@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "tzdata";
-  version = "2026.3";
+  version = "2026.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ShUYuJkwhqeYJSPgcWQ/PA5fIT51shMY54vKv/+dFBU=";
+    hash = "sha256-8bi9Nl2NIQxVNT9Nf41thWHAulDXBLcA0ZWpQku6DXk=";
   };
 
   nativeBuildInputs = [ setuptools ];

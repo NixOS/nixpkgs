@@ -1,32 +1,50 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   aiohttp,
   blinker,
-  buildPythonPackage,
   cloudpickle,
   dill,
-  fetchPypi,
   h5py,
   matplotlib,
   msgpack,
   numpy,
   plotly,
   python-socketio,
-  python,
   scipy,
-  setuptools,
-  versioningit,
+  uncertainties,
+
+  # testing
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bumps";
-  version = "1.0.3";
+  version = "1.0.5";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-O5GUoyDlB0X2Z/O3JprN3omoOBDIhv0xrKfUSHTgGpM=";
+  src = fetchFromGitHub {
+    owner = "bumps";
+    repo = "bumps";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s+SZRH53R5itCUww+lCxk7iEm4tgZcGkvIDyI12fKcY=";
   };
+
+  postPatch = ''
+    # Upstream uses versioningit to set the version
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requires = ["setuptools", "versioningit"]' 'requires = ["setuptools"]'
+    sed -i '/^name =.*/a version = "${finalAttrs.version}"' pyproject.toml
+    sed -i "/dynamic =/d" pyproject.toml
+  '';
 
   pythonRemoveDeps = [
     "mpld3" # not packaged
@@ -34,7 +52,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    versioningit
   ];
 
   dependencies = [
@@ -47,14 +64,16 @@ buildPythonPackage rec {
     msgpack
     numpy
     plotly
-    python
     python-socketio
     scipy
+    uncertainties
     # mpld3 # not packaged
   ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "bumps" ];
 
@@ -62,8 +81,8 @@ buildPythonPackage rec {
     description = "Data fitting with bayesian uncertainty analysis";
     mainProgram = "bumps";
     homepage = "https://bumps.readthedocs.io/";
-    changelog = "https://github.com/bumps/bumps/releases/tag/v${version}";
+    changelog = "https://github.com/bumps/bumps/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ rprospero ];
   };
-}
+})

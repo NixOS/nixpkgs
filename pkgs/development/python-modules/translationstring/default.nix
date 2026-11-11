@@ -2,17 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "translationstring";
   version = "1.4";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "bf947538d76e69ba12ab17283b10355a9ecfbc078e6123443f43f2107f6376f3";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-v5R1ONduaboSqxcoOxA1Wp7PvAeOYSNEP0PyEH9jdvM=";
   };
+
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "translationstring" ];
 
   meta = {
     homepage = "https://pylonsproject.org/";
@@ -20,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

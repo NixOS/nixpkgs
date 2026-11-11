@@ -7,15 +7,17 @@
 
 let
   pname = "wootility";
-  version = "5.4.1";
+  version = "5.4.2";
   src = fetchurl {
     url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
-    sha256 = "sha256-QqkkfLi0teDH5E0mm4hnY42msgE/z1RV1Rl4+Tt+TaQ=";
+    hash = "sha512-3n73cnXW81w+7ta6+nnPymEriU9CpfKwX8DFNuxuNMMEBCyL6YgpQmxa0qKY6hr9WiiHQyuqvrSe+bXURwv31w==";
   };
 in
 
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  passthru.updateScript = ./update.sh;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -50,6 +52,7 @@ appimageTools.wrapType2 {
     maintainers = with lib.maintainers; [
       sodiboo
       returntoreality
+      FlorianFranzen
     ];
     mainProgram = "wootility";
   };

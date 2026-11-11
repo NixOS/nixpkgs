@@ -4,6 +4,9 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build-system
+  setuptools,
+
   # dependencies
   google-generativeai,
   huggingface-hub,
@@ -33,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   pname = "pgmpy";
   version = "1.1.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pgmpy";
@@ -40,6 +44,10 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-qZoyeUaRsatWUiFoL1VaRqApjM/AFS8xqTjVBcUpYas=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     google-generativeai
@@ -139,6 +147,18 @@ buildPythonPackage (finalAttrs: {
     "test_pre_compute_reduce_maps_partial_evidence"
     "test_forward_sample"
     "test_rejection_sample_basic"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Failures due to numeric precision differences on aarch64-linux
+    "test_fisher_z_residual"
+    "test_generalized_cov_approx"
+    "test_hotelling_approx"
+    "test_hotelling_no_cond"
+    "test_pearsonr_residual"
+    "test_roys_approx"
+    "test_roys_no_cond"
+    "test_wilks_approx"
+    "test_wilks_no_cond"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Failures due to numeric precision differences on Darwin

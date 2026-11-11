@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitex";
   version = "0.2.7";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mitex-rs";
     repo = "mitex";
@@ -24,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildAndTestSubdir = "crates/mitex-cli";
 
-  cargoBuildFlags = [ "--features generate-spec" ];
+  cargoBuildFlags = [ "--features=generate-spec" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

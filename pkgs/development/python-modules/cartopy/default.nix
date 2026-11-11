@@ -35,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cartopy";
-  version = "0.25.0.post2";
+  version = "0.26.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SciTools";
     repo = "cartopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N5cE+VKux5Wu2CtGujuMy3UA1fZBFkD+Fin/rb4rtUM=";
+    hash = "sha256-oOLcCMBKJNfOCqIdjGG0vB/7rJf3mw+t4HZ60RuiXk8=";
   };
 
   build-system = [
@@ -100,36 +100,6 @@ buildPythonPackage (finalAttrs: {
   disabledTestMarks = [
     "network"
     "natural_earth"
-  ];
-
-  disabledTests = [
-    # Numerical errors. Example:
-    #   AssertionError: Arrays are not almost equal to 4 decimals
-    "test_LatitudeFormatter_mercator"
-    "test_cursor_values"
-    "test_default"
-    "test_extents"
-    "test_geoaxes_no_subslice"
-    "test_geoaxes_set_boundary_clipping"
-    "test_get_extent"
-    "test_gridliner_labels_zoom"
-    "test_infinite_loop_bounds"
-    "test_invalid_xy_domain_corner"
-    "test_invalid_y_domain"
-    "test_osgb_vals"
-    "test_pcolormesh_datalim"
-    "test_plot_after_contour_doesnt_shrink"
-    "test_sweep"
-    "test_tiny_point_between_boundary_points"
-    "test_transform_point"
-    "test_with_transform"
-
-    # Failed: Error: Image files did not match.
-    "test_background_img"
-    "test_gridliner_constrained_adjust_datalim"
-    "test_imshow"
-    "test_pil_Image"
-    "test_stock_img"
   ];
 
   meta = {

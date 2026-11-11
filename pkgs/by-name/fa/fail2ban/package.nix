@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   installShellFiles,
   nixosTests,
@@ -13,7 +14,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "fail2ban";
@@ -56,6 +56,22 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   doCheck = false;
+
+  patches = [
+    # fixes for systemd socket activation - remove next release
+    (fetchpatch {
+      url = "https://github.com/fail2ban/fail2ban/commit/403df4a91c8ad8f235a3cb9e17d0cc4d29c2dafd.patch";
+      hash = "sha256-HI/9qaB+TMbRu/2NPwV+kVcYK03YNnzcD+iaBOlM20w=";
+      # causes merge conflicts
+      excludes = [ "ChangeLog" ];
+    })
+    # remove next release
+    (fetchpatch {
+      name = "CVE-2026-109786.patch";
+      url = "https://github.com/fail2ban/fail2ban/commit/ddd879d22664904ace24e1255ac6571808c58187.patch";
+      hash = "sha256-0gsSgwlpsHAhF5LfV+tnGF/8ZgEWt5Sesk1eC7/iIcY=";
+    })
+  ];
 
   preInstall = ''
     substituteInPlace setup.py --replace /usr/share/doc/ share/doc/

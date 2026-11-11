@@ -22,7 +22,7 @@
   atk,
   libgbm,
   cups,
-  systemd,
+  systemdLibs,
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -63,7 +63,7 @@ let
     atk
     libgbm
     cups
-    systemd
+    systemdLibs
     alsa-lib
     at-spi2-atk
     at-spi2-core
@@ -92,12 +92,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hey-mail";
-  version = "1.3.6";
-  rev = "33";
+  version = "1.3.9";
+  rev = "36";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/lfWUNpR7PrPGsDfuxIhVxbj0wZHoH7bK_${finalAttrs.rev}.snap";
-    hash = "sha512-UVutihbA/CDPefCqiJtSbHSWDZj5yHGAEpVO9kd/a72DEszcUid7Xg5HzDQYifDEXyP//AfLFP1rAa058K2SNg==";
+    hash = "sha512-GPC3zd0B21CbFb5TuQ+7cZ0HZ87pnEePaMAkczd17yOfW9F0VEq3WuU4RepokOYBgteRL7tiJ71rbks+dEpI3A==";
   };
 
   nativeBuildInputs = [

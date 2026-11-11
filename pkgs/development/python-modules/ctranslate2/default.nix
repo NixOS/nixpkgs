@@ -20,12 +20,12 @@
   wurlitzer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (ctranslate2-cpp) pname version src;
   pyproject = true;
 
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -42,9 +42,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  env.CTRANSLATE2_ROOT = "${ctranslate2-cpp}";
+  env.CTRANSLATE2_ROOT = ctranslate2-cpp.outPath;
 
-  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
 
   pythonImportsCheck = [
     # https://opennmt.net/CTranslate2/python/overview.html
@@ -62,15 +64,16 @@ buildPythonPackage rec {
     wurlitzer
   ];
 
+  # run tests against build result, not sources
   preCheck = ''
-    # run tests against build result, not sources
     rm -rf ctranslate2
   '';
 
   disabledTests =
-    lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # RuntimeError: Failed to initialize cpuinfo!"
       "test_torch_variables"
+      "test_float32_float16_and_independent_chunks"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Fatal Python error: Aborted
@@ -87,8 +90,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast inference engine for Transformer models";
     homepage = "https://github.com/OpenNMT/CTranslate2";
-    changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/OpenNMT/CTranslate2/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -109,12 +109,12 @@ let
       '';
 
   dbAddr =
-    if cfg.database.socket == null then
+    if cfg.database.type == "postgres" then
+      (if cfg.database.socket == null then cfg.database.host else cfg.database.socket)
+    else if cfg.database.socket == null then
       "${cfg.database.host}:${toString cfg.database.port}"
     else if cfg.database.type == "mysql" then
       "${cfg.database.host}:${cfg.database.socket}"
-    else if cfg.database.type == "postgres" then
-      "${cfg.database.socket}"
     else
       throw "Unsupported database type: ${cfg.database.type} for socket: ${cfg.database.socket}";
 

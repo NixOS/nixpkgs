@@ -20,25 +20,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fedistar";
-  version = "1.13.1";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "fedistar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MV2ItwIBzDEY2tKI8WrQj+rAzv6OTC2aZMiD46oLHFw=";
+    hash = "sha256-iQnKC6R9kXyQUZXjbihDr8l5XdQ266azP6hBqWBsEZM=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  cargoHash = "sha256-Ac7u/u0kGlUwKF5/196Ss4+pUMyPhAbGqhlmtlYI2Us=";
+  cargoHash = "sha256-DJN1HvlYfruQawk2+2JAx5tx61haIG0NKezyycjL7DA=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-JaFXAYHoSMyNgHjeNWgJXJ8ZeU9wUi47N58L3QEd0FE=";
+    hash = "sha256-DcaetxlNiXWYbkxC6TXpOhx4TgIiHdOkquVHxM6jROo=";
   };
 
   nativeBuildInputs = [

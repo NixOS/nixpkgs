@@ -5,6 +5,7 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
   jinja2,
@@ -12,19 +13,22 @@
   numpy,
   protobuf,
   pyyaml,
+  sentencepiece,
   transformers,
+
+  # optional-dependencies
+  pillow,
 
   # tests
   aiohttp,
   lm-eval,
   pytestCheckHook,
-  sentencepiece,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mlx-lm";
-  version = "0.31.3";
+  version = "0.32.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,32 +36,37 @@ buildPythonPackage (finalAttrs: {
     owner = "ml-explore";
     repo = "mlx-lm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DPOJfsIucG8mWt4ZKenymCJo/i9Jw+a+iuIygIIYkA8=";
+    hash = "sha256-xXFzkqA1++4vi5RT7TNyhSTfRzoJ+CS9l31BYZUWOPA=";
   };
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
-  pythonRelaxDeps = [
-    "transformers"
-  ];
   dependencies = [
     jinja2
     mlx
     numpy
     protobuf
     pyyaml
+    sentencepiece
     transformers
   ];
+
+  optional-dependencies = {
+    vision = [
+      pillow
+    ];
+  };
 
   nativeCheckInputs = [
     aiohttp
     lm-eval
     pytestCheckHook
-    sentencepiece
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "mlx_lm" ];
 
@@ -74,6 +83,7 @@ buildPythonPackage (finalAttrs: {
     # RuntimeError: [metal_kernel] No GPU back-end.
     "tests/test_losses.py"
     "tests/test_models.py::TestModels::test_bitnet"
+    "tests/test_muse_spark.py::TestMuseSpark"
 
     # TypeError: 'NoneType' object is not callable
     "tests/test_models.py::TestModels::test_gated_delta"

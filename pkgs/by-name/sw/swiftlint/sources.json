@@ -1,17 +1,17 @@
 {
-  "version": "0.65.0",
+  "version": "0.65.1",
   "platforms": {
     "aarch64-linux": {
       "filename": "swiftlint_linux_arm64.zip",
-      "hash": "sha256-EtO4S8W2muE6maWlx5kE+c4lhn8Jn2No0AN4VPnubCY="
+      "hash": "sha256-n/pS9Hjm2OtIXTfRRxX/rJCryBxY8zcNWYv3W+BWBfg="
     },
     "x86_64-linux": {
       "filename": "swiftlint_linux_amd64.zip",
-      "hash": "sha256-eTBqNOXHzFWiIM0QjLuGHcrV8QE43N8mHiYkrosKSGs="
+      "hash": "sha256-yu7W9KZ5w1U5/68ST2xKtKhBaRf32HliedxSt0AmBZ0="
     },
     "aarch64-darwin": {
       "filename": "portable_swiftlint.zip",
-      "hash": "sha256-1ssKp6L18e8wb8nje8tU3Jom+syPd4SsDD3T7M9ca6Y="
+      "hash": "sha256-weQpsFmc8bUW82mi2ewE6vDkNvPBK2N9+IUfpS/2lNA="
     }
   }
 }

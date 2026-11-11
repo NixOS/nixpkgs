@@ -24,16 +24,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-proxy";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "wl-proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WcJDOXpBPU8EIPMca96Yl9CUmMh7juRfkEjftVpQdRo=";
+    hash = "sha256-FZTPoYKvTq1Yz/HE6TGUFDnqXLX2px/fyY28QHUOPqA=";
   };
 
-  cargoHash = "sha256-nGzobdVDz+bhev1PrvopMIDTdHuHu1RAVegc/xglnGU=";
+  cargoHash = "sha256-mdJmlbtWwnf1OETZi9XqPfdYmMg2bjFC7MVK1A6/FQ4=";
 
   cargoBuildFlags = cargoFlags;
 

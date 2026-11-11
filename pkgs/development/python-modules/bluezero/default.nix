@@ -20,6 +20,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-H5760bPdA7NECiOWI7fLCxW3K7+c2L0Y3sa/E/krJJw=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='0.9.0'," "version='${finalAttrs.version}',"
+  '';
+
   build-system = [
     setuptools
   ];

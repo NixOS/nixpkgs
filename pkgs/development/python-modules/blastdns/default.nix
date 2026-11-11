@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
@@ -14,23 +15,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blastdns";
-  version = "1.9.1-unstable-2026-04-15";
+  version = "2.0.2-unstable-2026-10-21";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "blastdns";
-    rev = "a35704b0ec2f6d800da8f85505bfff1893172869";
-    hash = "sha256-N0IbnKz/JdZogJhRHMNaZhhMt2LM9Vhs1ETLqeksE2k=";
+    # https://github.com/blacklanternsecurity/blastdns/issues/142
+    rev = "e5a9ab0c9dcbc82ccede5dc6eaf3d2db5b11d61a";
+    hash = "sha256-lfEAnTR4SrVHY/XGW1MLkaMUT4aXd2kt0iOkwbAyYLQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-wBC/T/XUSfxurujQy/B8zXxZthpUWczKT9qdnG4BK7w=";
+    hash = "sha256-QGp4EqOEXSMSeE0ZT85SzpIGrhva//MXKEjZEd7oYgY=";
   };
 
   build-system = [
@@ -62,13 +62,17 @@ buildPythonPackage (finalAttrs: {
     "tests"
   ];
 
+  # Copying of the tests doesn't work on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   disabledTests = [
-    # Tests requires host system DNS config files that are absent in sandboxed builds.
-    "test_get_system_resolvers"
+    # Tests requires host system DNS config files that are absent in sandboxed builds
     "test_client_resolve"
+    "test_get_system_resolvers"
     "test_mock_matches_real_client"
-    "test_zone_transfer_success"
+    "test_stats_account_for_every_query"
     "test_zone_transfer_nonexistent_zone"
+    "test_zone_transfer_success"
   ];
 
   pythonImportsCheck = [ "blastdns" ];

@@ -13,16 +13,16 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cython";
-  version = "3.2.5";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
-    tag = version;
-    hash = "sha256-wes7UFSWW00tKTmp3Aqk0jDpMMRVHRIhonC6CD7pwB4=";
+    tag = finalAttrs.version;
+    hash = "sha256-gIEqq8DAJF197gH1cMuq5JxI4rV/VHS70vg8hywXDqw=";
   };
 
   build-system = [
@@ -42,8 +42,6 @@ buildPythonPackage rec {
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;
-
-  strictDeps = true;
 
   checkPhase =
     let
@@ -81,8 +79,12 @@ buildPythonPackage rec {
       runHook postCheck
     '';
 
-  passthru.tests = {
-    inherit pygame-ce sage;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    tests = {
+      inherit pygame-ce sage;
+    };
   };
 
   # Force code regeneration in source distributions
@@ -117,10 +119,10 @@ buildPythonPackage rec {
       attributes. This allows the compiler to generate very efficient C code
       from Cython code.
     '';
-    changelog = "https://github.com/cython/cython/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/cython/cython/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     mainProgram = "cython";
     maintainers = [ ];
   };
-}
+})
 # TODO: investigate recursive loop when doCheck is true

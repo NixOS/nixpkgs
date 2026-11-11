@@ -11,13 +11,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-dns";
-  version = "0.37.0";
+  version = "0.37.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_dns";
     inherit (finalAttrs) version;
-    hash = "sha256-MJXO0NRtEGrEa1gvaPtzyVCHZvghttE0g54lwBspIaw=";
+    hash = "sha256-KVYp3g7p9VaeoyHfF6CYb0TZZ19zbWVJOgeBIc2+Mho=";
   };
 
   build-system = [ setuptools ];

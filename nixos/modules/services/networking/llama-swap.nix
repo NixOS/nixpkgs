@@ -7,13 +7,39 @@
 let
   cfg = config.services.llama-swap;
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "config.yaml" cfg.settings;
+  unvalidatedConfigFile = settingsFormat.generate "llama-swap-config.yaml" cfg.settings;
+
+  # similar to writeNginxConfig
+  validateLlamaSwapConfig =
+    file:
+    pkgs.runCommandLocal "llama-swap-validated-config.yaml"
+      {
+        inherit file;
+        __structuredAttrs = true;
+        nativeBuildInputs = [
+          cfg.package
+        ];
+      } # sh
+      ''
+        llama-swap -validate -config $file
+        cp $file $out
+      '';
+
+  configFile =
+    if cfg.validateConfigFile then
+      validateLlamaSwapConfig unvalidatedConfigFile
+    else
+      unvalidatedConfigFile;
 in
 {
   options.services.llama-swap = {
     enable = lib.mkEnableOption "the llama-swap service";
 
     package = lib.mkPackageOption pkgs "llama-swap" { };
+
+    validateConfigFile = lib.mkEnableOption "validating configuration with `llama-swap -validate`" // {
+      default = true;
+    };
 
     listenAddress = lib.mkOption {
       type = lib.types.str;
@@ -69,7 +95,7 @@ in
     settings = lib.mkOption {
       type = lib.types.submodule { freeformType = settingsFormat.type; };
       description = ''
-        llama-swap configuration. Refer to the [llama-swap example configuration](https://github.com/mostlygeek/llama-swap/blob/main/config.example.yaml)
+        llama-swap configuration. Refer to the [llama-swap example configuration](https://github.com/mostlygeek/llama-swap/blob/main/docs/config.example.yaml)
         for details on supported values.
       '';
       example = lib.literalExpression ''

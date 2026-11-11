@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   stdenvNoCC,
   nix-update-script,
@@ -10,18 +10,17 @@
   pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
-  typescript,
   versionCheckHook,
 }:
 
 let
   pname = "autobrr";
-  version = "1.83.0";
+  version = "1.89.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-zVhrQrsv7+qLAGGYCSIcalzZPbmKuUVbgBpubzFuz04=";
+    hash = "sha256-de7a+9caj8QZNzFPDy1D5B3jsQhl7pMr65Q1q1d+mlI=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -32,7 +31,6 @@ let
       nodejs
       pnpmConfigHook
       pnpm_11
-      typescript
     ];
 
     sourceRoot = "${src.name}/web";
@@ -46,7 +44,7 @@ let
         ;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-sb4nRsQQnf/j7BTKb5h1joDnV5OSTuY6Omjzaz8f+k4=";
+      hash = "sha256-5cy1+zoUyrTZj0sa/YMOt6bi50YBSVWc72PIcolh/HM=";
     };
 
     postBuild = ''
@@ -58,14 +56,14 @@ let
     '';
   };
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   inherit
     pname
     version
     src
     ;
 
-  vendorHash = "sha256-WOf3MCqRCGqR2BJ8CV3o/zl/AYVgaTYVDPC9cFw+8rs=";
+  vendorHash = "sha256-9OmPnK6jX2BKEjHD252UHZ6L82FifLnTtLcmvtzHGoA=";
 
   preBuild = ''
     cp -r ${finalAttrs.passthru.autobrr-web}/* web/dist

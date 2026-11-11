@@ -10,7 +10,6 @@ let
   makeZfsTest =
     {
       kernelPackages,
-      enableSystemdStage1 ? false,
       zfsPackage,
       extraTest ? "",
     }:
@@ -43,7 +42,6 @@ let
           boot.kernelPackages = kernelPackages;
           boot.zfs.package = zfsPackage;
           boot.supportedFilesystems = [ "zfs" ];
-          boot.initrd.systemd.enable = enableSystemdStage1;
 
           environment.systemPackages = [ pkgs.parted ];
 
@@ -225,34 +223,14 @@ in
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest {
-    zfsPackage = pkgs.zfs_unstable;
-    kernelPackages = pkgs.linuxPackages;
-    enableSystemdStage1 = true;
-  };
-
   installerBoot =
     (import ./installer.nix {
       inherit system;
-      systemdStage1 = false;
     }).separateBootZfs;
 
   installer =
     (import ./installer.nix {
       inherit system;
-      systemdStage1 = false;
-    }).zfsroot;
-
-  installerBootWithSystemdStage1 =
-    (import ./installer.nix {
-      inherit system;
-      systemdStage1 = true;
-    }).separateBootZfs;
-
-  installerWithSystemdStage1 =
-    (import ./installer.nix {
-      inherit system;
-      systemdStage1 = true;
     }).zfsroot;
 
   expand-partitions = runTest {
@@ -313,5 +291,48 @@ in
           print(f"Disk went from {start_size} to {new_size}, which doesn't seem right.")
           exit(1)
       '';
+  };
+
+  zfs-mount-generator = runTest {
+    name = "zfs-mount-generator";
+    nodes.machine =
+      { ... }:
+      {
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "00000000";
+        virtualisation = {
+          emptyDiskImages = [ 4096 ];
+        };
+      };
+
+    testScript = ''
+      from datetime import timedelta
+
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed(
+          "zpool create -O mountpoint=none test /dev/vdb",
+
+          # Enable list caching for the test pool.
+          "mkdir /etc/zfs/zfs-list.cache",
+          "touch /etc/zfs/zfs-list.cache/test",
+
+          # Trigger the zedlet.
+          "zfs create -o mountpoint=/tmp/foo test/foo",
+      )
+
+      # Wait for the zedlet to update the cache with the new dataset.
+      machine.wait_until_succeeds(
+          "grep -F test/foo /etc/zfs/zfs-list.cache/test",
+          timeout=timedelta(seconds=120)
+      )
+
+      machine.succeed(
+          # Rerun systemd generators.
+          "systemctl daemon-reload",
+          "systemctl cat tmp-foo.mount | grep zfs-mount-generator",
+          "systemctl is-active tmp-foo.mount",
+      )
+    '';
   };
 }

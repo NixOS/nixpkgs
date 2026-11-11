@@ -20,11 +20,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "foxglove-studio";
-  version = "2.56.0";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "https://get.foxglove.dev/desktop/v${finalAttrs.version}/foxglove-studio-${finalAttrs.version}-linux-amd64.deb";
-    hash = "sha256-s9wuCwkq9SRJu7iqpM2ribOOTF5oS42rVUNQXlNWzUU=";
+    hash = "sha256-cGCsitbM9oIgtdOjV7n1zEEj486PCkt+jihCaYpZkqo=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ sascha8a ];
     platforms = [ "x86_64-linux" ];
-    hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

@@ -4,13 +4,12 @@
   fetchurl,
   stdenv,
 
-  boost191,
-  cairomm,
+  boost,
+  cairomm_1_16,
   cgal,
   expat,
   fontconfig,
   gobject-introspection,
-  graphviz,
   gtk3,
   llvmPackages,
   matplotlib,
@@ -29,23 +28,21 @@
 }:
 
 let
-  boost' = boost191.override {
+  boost' = boost.override {
     enablePython = true;
     inherit python;
   };
 in
 buildPythonPackage (finalAttrs: {
   pname = "graph-tool";
-  version = "3.6";
+  version = "3.9";
   pyproject = false;
-
-  strictDeps = true;
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-KFKitvz3zFEQAi8hkvIBC0c5QTRmOJRamdV0cyMbejU=";
+    hash = "sha256-gSqzV1yuE91vqtluTZMnl6enGoRICh6su4dPLrr8fGk=";
   };
 
   postPatch =
@@ -54,14 +51,6 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace configure \
         --replace-fail 'tput setaf $1' : \
         --replace-fail 'tput sgr0' :
-    ''
-    +
-    # hardcode path to graphviz library to avoid find_library, which would require setting LD_LIBRARY_PATH
-    ''
-      substituteInPlace src/graph_tool/draw/graphviz_draw.py \
-        --replace-fail \
-          'ctypes.util.find_library("gvc")' \
-          '"${lib.getLib graphviz}/lib/libgvc${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
 
   configureFlags =
@@ -94,7 +83,7 @@ buildPythonPackage (finalAttrs: {
   # https://graph-tool.skewed.de/installation.html#manual-compilation
   buildInputs = [
     boost'
-    cairomm
+    cairomm_1_16
     cgal
     expat
     mpfr
@@ -134,5 +123,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.mjoerg ];
+    broken = stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "22";
   };
 })

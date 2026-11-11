@@ -7,7 +7,7 @@
   xalanc,
   xercesc,
   openssl,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,11 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-D60JtD4p9ERh6sowvwBHtE9XWVm3D8saooagDvA6ZtQ=";
   };
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--with-openssl"
     "--with-xerces"
     "--with-xalan"
   ];
+
+  env.CXXFLAGS = "-std=gnu++17";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -38,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://shibboleth.atlassian.net/wiki/spaces/DEV/pages/3726671873/Santuario";

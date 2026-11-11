@@ -15,9 +15,9 @@
   xdg-utils,
   versionCheckHook,
 
-  version ? "1.10.1",
-  srcHash ? "sha256-F+64o9z/al0iaLFyQHAYk/3jjf5T0FdgqaU3nEWIheg=",
-  cargoHash ? "sha256-TLffetbkVwIbUDoI+96T99+lfYu2SIpGtwC0DbuJXnU=",
+  version ? "1.10.3",
+  srcHash ? "sha256-xbVu+s4TQMc6fA8iUNq01y5lDxfC76Pwe6Z2rqA6C5Q=",
+  cargoHash ? "sha256-zQ6XnDJt3pek0WzC0J8PY111LGuzZeSCZ1QxwYAhPWw=",
   updateScript ? ./update.sh,
 }:
 
@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   env.RADICLE_VERSION = finalAttrs.version;
@@ -170,12 +169,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://radicle.dev";
     changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     platforms = lib.platforms.unix;
     teams = [ lib.teams.radicle ];
     mainProgram = "rad";
+    knownVulnerabilities = [
+      # https://radicle.dev/2026/09/23/disclosure-of-vulnerability-in-network-protocol
+      "Private repositories are insecure: traffic between nodes is not encrypted and not authenticated."
+    ];
   };
 })

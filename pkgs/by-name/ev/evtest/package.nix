@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libevdev";
     repo = "evtest";
     tag = "evtest-${finalAttrs.version}";
-    sha256 = "sha256-M7AGcHklErfRIOu64+OU397OFuqkAn4dqZxx7sDfklc=";
+    hash = "sha256-M7AGcHklErfRIOu64+OU397OFuqkAn4dqZxx7sDfklc=";
   };
 
   meta = {

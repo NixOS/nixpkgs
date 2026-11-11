@@ -70,7 +70,6 @@ clangStdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DQSCINTILLA_INCLUDE_DIRS=${libsForQt5.qscintilla}/include"
     "-DQSCINTILLA_LIBRARIES_DIRS=${libsForQt5.qscintilla}/lib/"
     "-DQSCINTILLA_LIBRARIES=${

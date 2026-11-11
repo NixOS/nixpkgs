@@ -1,0 +1,13 @@
+diff --git a/netbox/netbox/settings.py b/netbox/netbox/settings.py
+index f334a73a7..8e8d76f0e 100644
+--- a/netbox/netbox/settings.py
++++ b/netbox/netbox/settings.py
+@@ -604,7 +604,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
+ 
+ # Static files (CSS, JavaScript, Images)
+ # STATIC_ROOT is deliberately not a configuration parameter; static files are collected to <NETBOX_ROOT>/static.
+-STATIC_ROOT = os.path.join(NETBOX_ROOT, 'static')
++STATIC_ROOT = getattr(configuration, 'STATIC_ROOT', os.path.join(NETBOX_ROOT, 'static')).rstrip('/')
+ STATIC_URL = f'/{BASE_PATH}static/'
+ STATICFILES_DIRS = (
+     os.path.join(BASE_DIR, 'project-static', 'dist'),

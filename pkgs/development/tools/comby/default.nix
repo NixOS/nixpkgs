@@ -9,7 +9,6 @@
   libev,
   autoconf,
   sqlite,
-  stdenv,
 }:
 let
   mkCombyPackage =
@@ -17,37 +16,28 @@ let
       pname,
       extraBuildInputs ? [ ],
       extraNativeInputs ? [ ],
-      preBuild ? "",
+      preConfigure ? "",
     }:
-    ocamlPackages.buildDunePackage rec {
-      inherit pname preBuild;
-      version = "1.8.1";
-      duneVersion = "3";
-      minimalOCamlVersion = "4.08.1";
+    ocamlPackages.buildDunePackage {
+      inherit pname preConfigure;
+      version = "1.8.1-unstable-2026-06-08";
       doCheck = true;
 
       src = fetchFromGitHub {
         owner = "comby-tools";
         repo = "comby";
-        rev = version;
-        sha256 = "sha256-yQrfSzJgJm0OWJxhxst2XjZULIVHeEfPMvMIwH7BYDc=";
+        rev = "3b6bdff7bc3b50361b621da9db030152772e7e6b";
+        hash = "sha256-1BbsHnvJ/h99zZb5qKlQpXMsV5xW0idpJWt/SQEOd6M=";
       };
-
-      patches = [ ./comby.patch ];
 
       nativeBuildInputs = extraNativeInputs;
 
       buildInputs = [
         ocamlPackages.core
         ocamlPackages.core_kernel
-        ocamlPackages.ocaml_pcre
-        ocamlPackages.mparser
-        ocamlPackages.mparser-pcre
-        ocamlPackages.angstrom
+        ocamlPackages.core_unix
         ocamlPackages.ppx_deriving
         ocamlPackages.ppx_deriving_yojson
-        ocamlPackages.ppx_sexp_conv
-        ocamlPackages.ppx_sexp_message
       ]
       ++ extraBuildInputs;
 
@@ -58,28 +48,33 @@ let
         mainProgram = "comby";
         license = lib.licenses.asl20;
         homepage = "https://comby.dev";
-        broken = true; # Not compatible with ocamlPackages.tar ≥ 3
       };
     };
 
-  combyKernel = mkCombyPackage { pname = "comby-kernel"; };
+  combyKernel = mkCombyPackage {
+    pname = "comby-kernel";
+    extraBuildInputs = [
+      ocamlPackages.ocaml_pcre
+      ocamlPackages.bigstringaf
+    ];
+    # tests cannot be built until all of comby is built
+    preConfigure = ''
+      rm src test -r
+    '';
+
+  };
   combySemantic = mkCombyPackage {
     pname = "comby-semantic";
     extraBuildInputs = [ ocamlPackages.cohttp-lwt-unix ];
+    # tests cannot be built until all of comby is built
+    preConfigure = ''
+      rm src test -r
+    '';
+
   };
 in
 mkCombyPackage {
   pname = "comby";
-
-  # tests have to be removed before building otherwise installPhase will fail
-  # cli tests expect a path to the built binary
-  preBuild = ''
-    substituteInPlace test/common/dune \
-      --replace "test_cli_list" "" \
-      --replace "test_cli_helper" "" \
-      --replace "test_cli" ""
-    rm test/common/{test_cli_list,test_cli_helper,test_cli}.ml
-  '';
 
   extraBuildInputs = [
     zlib
@@ -91,25 +86,16 @@ mkCombyPackage {
     ocamlPackages.patience_diff
     ocamlPackages.toml
     ocamlPackages.cohttp-lwt-unix
-    ocamlPackages.textutils
-    ocamlPackages.jst-config
     ocamlPackages.parany
     ocamlPackages.conduit-lwt-unix
     ocamlPackages.lwt_react
     ocamlPackages.tar-unix
-    ocamlPackages.tls
-    ocamlPackages.ppx_jane
-    ocamlPackages.ppx_expect
+    ocamlPackages.ocaml_pcre
+    ocamlPackages.cstruct-lwt
     ocamlPackages.dune-configurator
     combyKernel
     combySemantic
-  ]
-  ++ (
-    if !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 then
-      [ ocamlPackages.hack_parallel ]
-    else
-      [ ]
-  );
+  ];
 
   extraNativeInputs = [
     autoconf

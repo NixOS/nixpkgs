@@ -19,7 +19,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pveber";
     repo = "dbf";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-096GodM3J/4dsVdylG+6xz/p6ogUkhDGdFjiPwl/jLQ=";
   };
 

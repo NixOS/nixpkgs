@@ -5,7 +5,7 @@
   gnupg,
   pbr,
   sphinx,
-  stestr,
+  stestrCheckHook,
   testresources,
   testscenarios,
   virtualenv,
@@ -35,22 +35,20 @@ buildPythonPackage {
     git
     gnupg
     sphinx
-    stestr
+    stestrCheckHook
     testresources
     testscenarios
     virtualenv
     wheel
   ];
 
-  checkPhase = ''
-    stestr run -e <(echo "
-    pbr.tests.test_core.TestCore.test_console_script_develop
-    pbr.tests.functional.test_console_scripts.TestConsoleScripts.test_console_script_install
-    pbr.tests.functional.test_wsgi_scripts.TestWsgiScripts.test_with_argument
-    pbr.tests.functional.test_wsgi_scripts.TestWsgiScripts.test_wsgi_script_run
+  disabledTests = [
+    "pbr.tests.functional.test_console_scripts.TestConsoleScripts.test_console_script_install"
+    "pbr.tests.functional.test_wsgi_scripts.TestWsgiScripts.test_with_argument"
+    "pbr.tests.functional.test_wsgi_scripts.TestWsgiScripts.test_wsgi_script_run"
+    "pbr.tests.test_core.TestCore.test_console_script_develop"
     # Tests are failing because of fixture timeouts
-    pbr.tests.functional.test_pep517.TestPEP517Support.test_pep_517_support
-    pbr.tests.functional.test_requirements.TestRequirementParsing.test_requirement_parsing
-    ")
-  '';
+    "pbr.tests.functional.test_pep517.TestPEP517Support.test_pep_517_support"
+    "pbr.tests.functional.test_requirements.TestRequirementParsing.test_requirement_parsing"
+  ];
 }

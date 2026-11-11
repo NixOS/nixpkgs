@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
-    repo = "tweaks";
+    repo = "cosmic-ext-tweaks";
     tag = finalAttrs.version;
     hash = "sha256-kREYDT42Xh/APrZAs3uho6Mw2MNEGeG0jc00I2yQemI=";
   };
@@ -52,9 +52,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/cosmic-utils/tweaks/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/cosmic-utils/cosmic-ext-tweaks/releases/tag/${finalAttrs.version}";
     description = "Tweaking tool for the COSMIC Desktop Environment";
-    homepage = "https://github.com/cosmic-utils/tweaks";
+    homepage = "https://github.com/cosmic-utils/cosmic-ext-tweaks";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-ext-tweaks";
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];

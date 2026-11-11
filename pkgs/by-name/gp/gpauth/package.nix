@@ -1,39 +1,42 @@
 {
   rustPlatform,
   lib,
-  fetchFromGitHub,
+  gpclient,
+  glib-networking,
   openssl,
   pkg-config,
   perl,
   webkitgtk_4_1,
+  wrapGAppsHook3,
   stdenv,
-  nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpauth";
-  version = "2.6.5";
 
-  src = fetchFromGitHub {
-    owner = "yuezk";
-    repo = "GlobalProtect-openconnect";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-WCCSd20qkDtJ88ru+ufFZrNQZSKkCzYo5fZpbB7Sn7o=";
-    fetchSubmodules = true;
-  };
+  # Anchor automatic updates on gpclient so the bot builds both packages.
+  # nixpkgs-update: no auto update
+  inherit (gpclient)
+    cargoHash
+    src
+    version
+    ;
 
   buildAndTestSubdir = "apps/gpauth";
-
-  cargoHash = "sha256-6+x5SRQHIchtkdYZAZl+b28hMCaiQHrp9i3tMsN3DhE=";
 
   nativeBuildInputs = [
     perl
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
   ];
   buildInputs = [
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
     webkitgtk_4_1
   ];
 
@@ -43,7 +46,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=cli::tests::client_version_arg_sets_profile_client_version"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.runtime-tls = nixosTests.gpauth-tls;
+  };
 
   meta = {
     changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/${finalAttrs.src.rev}/changelog.md";
@@ -58,7 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      binary-eater
       booxter
       m1dugh
     ];

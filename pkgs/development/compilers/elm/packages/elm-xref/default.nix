@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   elmPackages,
+  fetchpatch,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -16,7 +17,16 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-J58NTSMo2uxpWFnPX+AGHVAqQOiRfgBxYzis/PZp1MA=";
   };
 
-  npmDepsHash = "sha256-LZynUf2M+g31mia41jw7vmGNugUUUAX/TehDxQ7j+YY=";
+  patches = [
+    # Upstream PR:
+    # https://github.com/zwilias/elm-xref/pull/17
+    (fetchpatch {
+      url = "https://github.com/turboMaCk/elm-xref/commit/55ad630c1afc110197a4785bd2a4cd2388a1d160.patch";
+      hash = "sha256-67s8gozhkWN8ci/S3OSwnNABdATY7gpBPy7zaZJPamw=";
+    })
+  ];
+
+  npmDepsHash = "sha256-QH/F0vhva806AL5F3ySMAyfyrLLqCV32WMGTi715X5I=";
 
   nativeBuildInputs = [
     elmPackages.elm

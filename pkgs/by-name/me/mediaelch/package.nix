@@ -80,7 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # libmediainfo.so.0 is loaded dynamically
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${libmediainfo}/lib"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${libmediainfo}/lib"
   ];
 
   env = {

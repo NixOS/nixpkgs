@@ -2,20 +2,27 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  cacert,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-rpxy";
-  version = "0.13.2";
+  version = "0.14.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "junkurihara";
     repo = "rust-rpxy";
     tag = finalAttrs.version;
-    hash = "sha256-fdpr6HWMuMT0nXj7V5JQbiLVOGoWaTsX1OI+yCEErDA=";
+    hash = "sha256-yXcC5c0OfsJrn4zMubNNo9OxEH9Sg6MEhvPVRNgPlSM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-WsK7eQffO+Ehx6H2Jj99XWON1Wc3Ud5Yaq1Nyz/oeSY=";
+  nativeBuildInputs = [
+    cacert
+  ];
+
+  cargoHash = "sha256-sehnZSQnlb1yd8A7iE/D5kuGX45QeIB2jcndpIt2Nzg=";
 
   meta = {
     description = "Http reverse proxy serving multiple domain names and terminating TLS for http/1.1, 2 and 3, written in Rust";
@@ -25,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      kybe236
       jpteb
     ];
     mainProgram = "rpxy";

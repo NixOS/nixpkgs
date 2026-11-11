@@ -10,18 +10,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_polars";
-  inherit (nushell) version src;
-
-  cargoHash = "sha256-Vby1x3/W1IUs73bFz/+AZpn4IepWScqrGp0tXlF6an4=";
+  inherit (nushell)
+    version
+    src
+    cargoPatches
+    cargoHash
+    ;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [ openssl ];
 
   buildAndTestSubdir = "crates/nu_plugin_polars";
 
-  checkFlags = [
-    "--skip=dataframe::command::core::to_repr::test::test_examples"
-  ];
+  checkFlags = [ "--skip=dataframe::command::core::to_repr::test::test_examples" ];
+
+  patches = [ ../plugin-engine-default-features.patch ];
 
   passthru.updateScript = nix-update-script {
     # Skip the version check and only check the hash because we inherit version from nushell.

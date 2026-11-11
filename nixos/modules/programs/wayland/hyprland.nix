@@ -30,23 +30,11 @@ in
           p:
           wayland-lib.genFinalPackage p {
             enableXWayland = cfg.xwayland.enable;
+            withUWSM = cfg.withUWSM;
           };
       };
 
-    portalPackage =
-      lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" {
-        extraDescription = ''
-          If the package is not overridable with `hyprland`, then the Hyprland package
-          used by the portal may differ from the one set in the module option {option}`package`.
-        '';
-      }
-      // {
-        apply =
-          p:
-          wayland-lib.genFinalPackage p {
-            hyprland = cfg.package;
-          };
-      };
+    portalPackage = lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
     xwayland.enable = lib.mkEnableOption "XWayland" // {
       default = true;
@@ -88,14 +76,8 @@ in
           pathsToLink = [ "/share/hypr" ];
         };
 
-        # Hyprland needs permissions to give itself SCHED_RR on startup:
-        # https://github.com/hyprwm/Hyprland/blob/main/src/init/initHelpers.cpp
-        security.wrappers.Hyprland = {
-          owner = "root";
-          group = "root";
-          capabilities = "cap_sys_nice+ep";
-          source = lib.getExe cfg.package;
-        };
+        # Hyprland asks rtkit for SCHED_RR on startup
+        security.rtkit.enable = lib.mkDefault true;
 
         xdg.portal = {
           enable = true;

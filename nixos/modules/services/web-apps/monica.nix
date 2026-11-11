@@ -345,11 +345,11 @@ in
     services.phpfpm.pools.monica = {
       inherit user group;
       phpPackage = cfg.phpPackage;
-      phpOptions = ''
-        log_errors = on
-        post_max_size = ${cfg.maxUploadSize}
-        upload_max_filesize = ${cfg.maxUploadSize}
-      '';
+      phpOptions = {
+        log_errors = "on";
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
+      };
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = user;

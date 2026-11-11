@@ -30,4 +30,5 @@ symlinkJoin {
       mkdir -p $out/var/empty
     '')
   ];
+  meta.license = lib.licenses.mit;
 }

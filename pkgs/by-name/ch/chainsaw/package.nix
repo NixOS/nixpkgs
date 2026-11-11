@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chainsaw";
-  version = "2.16.4";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
-    owner = "WithSecureLabs";
+    owner = "WithSecureOpenSource";
     repo = "chainsaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J+yIAhiZE1MK5lGZtlxqmElrO/KqEdtkKE4nKPxMGzw=";
+    hash = "sha256-bS6xYFfbnD8ZgSzVt+CQWGhfQCFYfzj1pRjLVlk8QMg=";
   };
 
-  cargoHash = "sha256-q959QVqdISSI2SkUgamtR29DKd7oF/5eGsXpwHir1nE=";
+  cargoHash = "sha256-iWEerjilcwSms95v6Dinf2UCLeraOdO/TDi7gFBNdws=";
 
   ldflags = [ "-s" ];
 
@@ -36,8 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Rapidly Search and Hunt through Windows Forensic Artefacts";
-    homepage = "https://github.com/WithSecureLabs/chainsaw";
-    changelog = "https://github.com/WithSecureLabs/chainsaw/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/WithSecureOpenSource/chainsaw";
+    changelog = "https://github.com/WithSecureOpenSource/chainsaw/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "chainsaw";

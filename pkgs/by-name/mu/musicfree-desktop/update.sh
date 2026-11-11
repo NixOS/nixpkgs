@@ -3,14 +3,14 @@
 
 set -euo pipefail
 
-old_version=$(nix-instantiate --eval -A musicfree-desktop.version | tr -d '"')
+old_version=$(nix-instantiate --eval --raw -A musicfree-desktop.version)
 new_version=$(curl -sL ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} https://api.github.com/repos/maotoumao/MusicFreeDesktop/releases/latest | jq -r .tag_name | tr -d v)
 if [ "$old_version" == "$new_version" ]; then
   echo "Already up to date" >&2
   exit
 fi
 
-patch=$(dirname $(nix-instantiate --eval -A musicfree-desktop.meta.position | tr -d '"' | cut -d : -f 1))/bump-deps.patch
+patch=$(dirname $(nix-instantiate --eval --raw -A musicfree-desktop.meta.position | cut -d : -f 1))/bump-deps.patch
 
 export HOME=$(mktemp -d)
 pushd $HOME

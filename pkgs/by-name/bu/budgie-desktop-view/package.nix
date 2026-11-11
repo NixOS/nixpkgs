@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop-view";
-  version = "10.10.2";
+  version = "10.10.3";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop-view";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XwfNbrK9+FCYtO2tiz5TfHsJmctFbcEaUORiVs/aynE=";
+    hash = "sha256-DRN2a20EdfCFeSLE7tMfXH7mgwY5FayhkLWSxThPSFY=";
   };
 
   nativeBuildInputs = [
@@ -43,8 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-layer-shell
     libxfce4windowing
   ];
-
-  mesonFlags = [ (lib.mesonBool "werror" false) ];
 
   passthru = {
     updateScript = nix-update-script { };

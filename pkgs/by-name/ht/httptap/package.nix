@@ -32,5 +32,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
     mainProgram = "httptap";
+    # `gvisor.dev/gvisor/pkg/rawfile` has no Go files for Darwin.
+    platforms = lib.platforms.linux;
   };
 })

@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 4 Jul 2026 10:13:45 -0400
+Subject: [PATCH 2/2] Devendor SwiftFoundation and SwiftFoundationICU
+
+---
+ CMakeLists.txt | 22 ++--------------------
+ 1 file changed, 2 insertions(+), 20 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 08f69905..540afe42 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -81,26 +81,8 @@ option(FOUNDATION_BUILD_NETWORKING "build FoundationNetworking"
+ 
+ set(CMAKE_POSITION_INDEPENDENT_CODE YES)
+ 
+-# Fetchable dependencies
+-include(FetchContent)
+-if (_SwiftFoundationICU_SourceDIR)
+-    FetchContent_Declare(SwiftFoundationICU
+-        SOURCE_DIR ${_SwiftFoundationICU_SourceDIR})
+-else()
+-    FetchContent_Declare(SwiftFoundationICU
+-        GIT_REPOSITORY https://github.com/apple/swift-foundation-icu.git
+-        GIT_TAG 0.0.9)
+-endif()
+-
+-if (_SwiftFoundation_SourceDIR)
+-    FetchContent_Declare(SwiftFoundation
+-        SOURCE_DIR ${_SwiftFoundation_SourceDIR})
+-else()
+-    FetchContent_Declare(SwiftFoundation
+-        GIT_REPOSITORY https://github.com/apple/swift-foundation.git
+-        GIT_TAG main)
+-endif()
+-FetchContent_MakeAvailable(SwiftFoundationICU SwiftFoundation)
++find_package(SwiftFoundation)
++find_package(SwiftFoundationICU)
+ 
+ include(CheckLinkerFlag)
+ include(CheckSymbolExists)
+-- 
+2.54.0
+

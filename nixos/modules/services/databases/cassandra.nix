@@ -69,7 +69,8 @@ let
     cassandraEnvPkg = "${cfg.package}/conf/cassandra-env.sh";
     cassandraLogbackConfig = pkgs.writeText "logback.xml" cfg.logbackConfig;
 
-    passAsFile = [ "extraEnvSh" ];
+    strictDeps = true;
+    __structuredAttrs = true;
     inherit (cfg) extraEnvSh package;
 
     buildCommand = ''
@@ -80,7 +81,7 @@ let
 
       ( cat "$cassandraEnvPkg"
         echo "# lines from services.cassandra.extraEnvSh: "
-        cat "$extraEnvShPath"
+        printf "%s" "$extraEnvSh"
       ) > "$out/cassandra-env.sh"
 
       # Delete default JMX Port, otherwise we can't set it using env variable
@@ -97,8 +98,16 @@ let
     map (role: "${role.username} ${role.password}") cfg.jmxRoles
   );
 
+  # Ahead of jvmOpts, so that those override them.
+  defaultJvmOptions = [
+    # The working directory is not writable, so the JVM would fall back to /tmp.
+    # %% because systemd expands specifiers in Environment=.
+    "-XX:ErrorFile=${cfg.homeDir}/hs_err_pid%%p.log"
+  ];
+
   fullJvmOptions =
-    cfg.jvmOpts
+    defaultJvmOptions
+    ++ cfg.jvmOpts
     ++ [
       # Historically, we don't use a log dir, whereas the upstream scripts do
       # expect this. We override those by providing our own -Xlog:gc flag.
@@ -511,6 +520,7 @@ in
         Group = cfg.group;
         ExecStart = "${cfg.package}/bin/cassandra -f";
         SuccessExitStatus = 143;
+        PrivateTmp = true;
       };
     };
 
@@ -522,6 +532,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        PrivateTmp = true;
         ExecStart = concatStringsSep " " (
           [
             "${cfg.package}/bin/nodetool"
@@ -551,6 +562,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        PrivateTmp = true;
         ExecStart = concatStringsSep " " (
           [
             "${cfg.package}/bin/nodetool"
@@ -572,5 +584,6 @@ in
     };
   };
 
+  meta.doc = ./cassandra.md;
   meta.maintainers = with lib.maintainers; [ roberth ];
 }

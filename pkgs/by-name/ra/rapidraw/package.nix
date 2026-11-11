@@ -10,6 +10,8 @@
   openssl,
   onnxruntime,
   webkitgtk_4_1,
+  aws-lc,
+  oniguruma,
   gtk3,
   glib,
   gdk-pixbuf,
@@ -33,6 +35,7 @@
   dbus,
   gvfs,
   libheif,
+  libgphoto2,
   glib-networking,
   nodejs_24,
   npmHooks,
@@ -43,20 +46,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.6.1";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+sV8XRK+rBVKB6AdoGuz7q6bYtz8HwnVZghK3JjGFes=";
+    hash = "sha256-VLIXy6phMtz/DJ+PiyeCgJ3yS7t6M8E95RrRQXuWz08=";
   };
 
-  cargoHash = "sha256-QItJQ7POtH+SRr5pyLJAWD4wx+fRpx1JI/KK6KIgNT8=";
+  cargoHash = "sha256-xJTOk1rLj5lA4oIauS9wf009tlx9CVUnsj8YJKn8aqU=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-DXz+An1LzPiHM8rY+7KdrsieimAjwPYJBiGSa624SE0=";
+    hash = "sha256-MbecY5iU1Swc1gCPsIaiiOJ2/BZx7j5+qSW9tH5tyKs=";
   };
 
   nativeBuildInputs = [
@@ -66,10 +69,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs_24
     npmHooks.npmConfigHook
     cargo-tauri.hook
+    rustPlatform.bindgenHook
     writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
+    aws-lc
+    oniguruma
     nodejs_24
     glib-networking
     openssl
@@ -96,6 +102,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libheif
     onnxruntime
     wrapGAppsHook4
+    libgphoto2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
@@ -114,10 +121,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '  "identifier": "io.github.CyberTimon.RapidRAW",' '  "identifier": "io.github.CyberTimon.RapidRAW", "mainBinaryName": "rapidraw",'
 
-    # Disable downloading of ONNX runtime library this is correctly linked during postInstall
+    # Patch out required runtime dependencies to avoid downloading them during the build
+    # onnxruntime is correctly linked during postInstall
     substituteInPlace src-tauri/build.rs \
-      --replace-fail 'if !is_valid' 'if false'
+      --replace-fail 'runtime_libraries(&target_os, &target_arch)' 'Vec::<(&str, &str, &str)>::new()'
   '';
+
+  tauriBuildFlags = [
+    "--features"
+    "tethering"
+  ];
 
   dontWrapGApps = true;
 

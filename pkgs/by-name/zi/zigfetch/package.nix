@@ -11,13 +11,13 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "zigfetch";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "utox39";
     repo = "zigfetch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xqB/S9fDUxx5K1iLbBCjYMsxYq+s/lYHv66QNHCDT8Y=";
+    hash = "sha256-oF4kYKTijS67Ek0sww/fyBXb3lia2h3rmBR8Hs+aTXs=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -44,5 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ heisfer ];
     mainProgram = "zigfetch";
     inherit (zig_0_16.meta) platforms;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

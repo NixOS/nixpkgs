@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-sdk";
-  version = "0.4.2";
+  version = "0.4.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "sdk==${finalAttrs.version}";
-    hash = "sha256-30BY7f8m3YiqEBhb3+TQYTW0N40xI9kTQbMTh4BwcyU=";
+    hash = "sha256-ypYo+pqQZ+KUYU+c8iwVApxFtdTpLd0NbJ/ZyiDzWyw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/sdk-py";

@@ -11,6 +11,7 @@
   fetchzip,
   dovecot,
   openssl,
+  pkg-config,
   libstemmer,
   perl,
   python3,
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dovecot
     openssl
+    pkg-config
   ]
   ++ lib.optional (isCurrent && stdenv.hostPlatform.isDarwin) libstemmer
   ++ lib.optionals withLDAP [

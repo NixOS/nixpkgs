@@ -1,4 +1,4 @@
-From a41f0707bdcc9fb6dab39eb8ce7e392138d16dc0 Mon Sep 17 00:00:00 2001
+From 0089a264f255fbbb5476df2b65a783d595cc9dde Mon Sep 17 00:00:00 2001
 From: zinzilulo <214774502+zinzilulo@users.noreply.github.com>
 Date: Wed, 27 May 2026 18:25:14 +0100
 Subject: [PATCH] Allow GNAT 13 bootstrap on aarch64-darwin with nested
@@ -19,14 +19,13 @@ between the Alire/GNAT-FSF-build GNAT 13.2.0-2 compiler and the
 IainS/gcc-13-branch 13.4-darwin-r0 source tree.
 ---
  gcc/builtins.def                        | 4 ++--
- gcc/config/darwin.h                     | 8 ++++----
  gcc/doc/invoke.texi                     | 4 ++--
  gcc/tree.cc                             | 8 ++++----
  libgcc/config/aarch64/heap-trampoline.c | 8 ++++----
  libgcc/config/i386/heap-trampoline.c    | 8 ++++----
  libgcc/libgcc-std.ver.in                | 4 ++--
  libgcc/libgcc2.h                        | 4 ++--
- 8 files changed, 24 insertions(+), 24 deletions(-)
+ 7 files changed, 20 insertions(+), 20 deletions(-)
 
 diff --git a/gcc/builtins.def b/gcc/builtins.def
 index 448cf837ec8..5bf4769ae47 100644
@@ -43,30 +42,11 @@ index 448cf837ec8..5bf4769ae47 100644
  
  /* Implementing __builtin_setjmp.  */
  DEF_BUILTIN_STUB (BUILT_IN_SETJMP_SETUP, "__builtin_setjmp_setup")
-diff --git a/gcc/config/darwin.h b/gcc/config/darwin.h
-index 0cc6f021365..47bca6f1db1 100644
---- a/gcc/config/darwin.h
-+++ b/gcc/config/darwin.h
-@@ -433,10 +433,10 @@ extern GTY(()) int darwin_ms_struct;
- 	   ___emutls_get_address -exported_symbol ___emutls_get_address \
- 	  -U ___emutls_register_common \
- 	  -exported_symbol ___emutls_register_common \
--	  -U ___gcc_nested_func_ptr_created \
--	  -exported_symbol ___gcc_nested_func_ptr_created \
--	  -U ___gcc_nested_func_ptr_deleted \
--	  -exported_symbol ___gcc_nested_func_ptr_deleted \
-+	  -U ___builtin_nested_func_ptr_created \
-+	  -exported_symbol ___builtin_nested_func_ptr_created \
-+	  -U ___builtin_nested_func_ptr_deleted \
-+	  -exported_symbol ___builtin_nested_func_ptr_deleted \
-       }} \
-     }}}\
-     %{!r:%{!nostdlib:%{!nostartfiles:%E}}} %{T*} %{F*} "\
 diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
-index 8f82ba0ecfa..4d5bba42fcd 100644
+index 5607481acb9..b36e95efa2b 100644
 --- a/gcc/doc/invoke.texi
 +++ b/gcc/doc/invoke.texi
-@@ -18718,8 +18718,8 @@ for nested functions.
+@@ -18722,8 +18722,8 @@ for nested functions.
  By default, trampolines are generated on stack.  However, certain platforms
  (such as the Apple M1) do not permit an executable stack.  Compiling with
  @option{-ftrampoline-impl=heap} generate calls to
@@ -78,10 +58,10 @@ index 8f82ba0ecfa..4d5bba42fcd 100644
  implemented in libgcc, and will only be provided on specific targets:
  x86_64 Darwin, x86_64 and aarch64 Linux.  @emph{PLEASE NOTE}: Heap
 diff --git a/gcc/tree.cc b/gcc/tree.cc
-index 032b87ee1c8..54abc791c88 100644
+index 806dd0ef8ae..701a6fbb39f 100644
 --- a/gcc/tree.cc
 +++ b/gcc/tree.cc
-@@ -9874,17 +9874,17 @@ build_common_builtin_nodes (void)
+@@ -9888,17 +9888,17 @@ build_common_builtin_nodes (void)
  					ptr_type_node, // void *func
  					ptr_ptr_type_node, // void **dst
  					NULL_TREE);
@@ -198,5 +178,5 @@ index a7a5dff0184..ac7eaab4f01 100644
  extern int __gcc_bcmp (const unsigned char *, const unsigned char *, size_t);
  extern void __clear_cache (void *, void *);
 -- 
-2.50.1 (Apple Git-155)
+2.55.0
 

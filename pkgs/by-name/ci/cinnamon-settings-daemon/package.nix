@@ -13,7 +13,7 @@
   pkg-config,
   lib,
   stdenv,
-  systemd,
+  systemdLibs,
   upower,
   cups,
   polkit,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2
     libcanberra-gtk3
     libnotify
-    systemd
+    systemdLibs
     upower
     cups
     polkit

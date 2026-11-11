@@ -11,7 +11,9 @@
       containers = {
         test-container = {
           autoStart = true;
-          config = { };
+          config = {
+            nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
+          };
         };
       };
     };

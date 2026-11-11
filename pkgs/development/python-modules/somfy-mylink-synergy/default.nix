@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "bendews";
     repo = "somfy-mylink-synergy";
     rev = "v${version}";
-    sha256 = "1aa178b5lxdzfa4z7sjw6ky39dkfazp7dqs9dq78z2zay2sqgmgr";
+    hash = "sha256-+dWHtfDqi48Obknjdu5XbrY0/DRc6vOJcr91WhY6Qak=";
   };
 
   # no tests implemented

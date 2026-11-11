@@ -1,6 +1,8 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index ec9bbc77..02a30719 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -156,6 +156,7 @@
+@@ -158,6 +158,7 @@ function(ov_tokenizers_link_sentencepiece TARGET_NAME)
          "${_sp_src}/third_party/protobuf-lite" # for "google/protobuf/port_def.inc"
          "${_sp_src}/third_party/" # for "absl/strings/string_view.h" and "darts_clone/darts.h"
          "${_sp_src}" # for "third_party/absl/strings/string_view.h"
@@ -8,7 +10,7 @@
          )
      else()
        target_include_directories(${TARGET_NAME} SYSTEM PRIVATE
-@@ -180,27 +181,9 @@
+@@ -182,28 +183,9 @@ function(ov_tokenizers_link_sentencepiece TARGET_NAME)
  endfunction()
  
  function(ov_tokenizers_link_pcre2 TARGET_NAME)
@@ -24,6 +26,7 @@
 -    set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 -    set(CMAKE_POLICY_DEFAULT_CMP0126 NEW)
 -    set(PCRE2_SUPPORT_JIT ON)
+-    set(PCRE2_LINK_SIZE 3 CACHE STRING "PCRE2 internal link size" FORCE)
 -    set(PCRE2_STATIC_PIC ON)
 -    set(PCRE2_BUILD_TESTS OFF)
 -    set(PCRE2_BUILD_PCRE2GREP OFF)
@@ -38,3 +41,4 @@
 +  target_link_libraries(${TARGET_NAME} PRIVATE PkgConfig::PCRE2_8)
    target_compile_definitions(${TARGET_NAME} PRIVATE PCRE2_CODE_UNIT_WIDTH=8)
  endfunction()
+ 

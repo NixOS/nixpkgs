@@ -13,7 +13,7 @@ let
 in
 maven.buildMavenPackage {
   inherit pname version;
-  mvnHash = "sha256-OCFs1Q4NL5heP8AVvkQ+ZdhmPD2SNZMCF2gxjXpbfW4=";
+  mvnHash = "sha256-hcfuLtYWEs1WFCpsM1q+axMlCgi04/McQl6nQBNkqyw=";
 
   src = fetchFromGitHub {
     owner = "gaul";

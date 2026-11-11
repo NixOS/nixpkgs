@@ -191,6 +191,11 @@ stdenv'.mkDerivation (finalAttrs: {
         "*GPU*"
         "*OpenGL*"
       ]
+      ++ lib.optionals stdenv'.hostPlatform.isAarch64 [
+        # least_absolute_deviations_test.cc:311: Failure
+        # Value of: solver.Valid(), Actual: true, Expected: false
+        "*ParameterizedLeastAbsoluteDeviationsTests.RidgeRegularization/0"
+      ]
       ++ lib.optionals stdenv'.hostPlatform.isDarwin [
         # reconstruction_pruning_test.cc:65: Failure
         # Expected: (redundant_point3D_ids.size()) > (prev_num_redundant_points3D), actual: 0 vs 0

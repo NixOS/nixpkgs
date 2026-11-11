@@ -5,17 +5,16 @@
   bubblewrap,
   fakeroot,
   unixtools,
-  cudaSupport,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixinsight";
-  version = "1.9.4-20260621";
+  version = "1.9.6-20261029";
 
   src = requireFile {
-    name = "PI-linux-x64-${finalAttrs.version}-c.tar.xz";
+    name = "PI-linux-x64-gpu-${finalAttrs.version}-c.tar.xz";
     url = "http://pixinsight.com";
-    hash = "sha256-ITJq6q7rLBYe1+6jk2ZtpOSu5M5Z5bRzFPu06PPd7UI=";
+    hash = "sha256-kVaJ+oCPpwqlDqm88S9ASJ2b9GQDvmsxqjqyOC9zLjw=";
   };
 
   nativeBuildInputs = [
@@ -59,12 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
         --install-mime-dir=$out/share/mime \
         --install-icons-dir=$out/share/icons/hicolor \
         --no-bin-launcher"
-  ''
-  + lib.optionalString cudaSupport ''
-    # Remove bundled libtensorflow-cpu files
-    rm -f $out/opt/PixInsight/bin/lib/libtensorflow*
-  ''
-  + ''
+
     runHook postInstall
   '';
 

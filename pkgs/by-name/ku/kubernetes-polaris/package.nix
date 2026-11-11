@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "kubernetes-polaris";
-  version = "10.1.7";
+  version = "10.2.6";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
-    rev = finalAttrs.version;
-    sha256 = "sha256-0uz5Q7RvPTDIo6R6YIsK2jr1UIq1OJN0+IjyWciyA28=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g605PV9oetJMaV3vo0h+Flh7WYZ+HFVPHC6i65L83BA=";
   };
 
-  vendorHash = "sha256-M+/Jtw+SiLY+G3UKtRCFX1j6tH35FIQMX33YgacJAec=";
+  vendorHash = "sha256-8hdQolkLnmx2fcawXHuwFCHD8++B4QvydrLFVIuAYXc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,6 +26,11 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X main.Version=${finalAttrs.version}"
     "-X main.Commit=${finalAttrs.version}"
+  ];
+
+  # These tests don't work in the build sandbox.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=^TestConfig(FromURL|NoServerError)$"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

@@ -341,6 +341,7 @@ in
       APP_URL = cfg.appURL;
       DB_HOST = db.host;
       DB_PORT = db.port;
+      DB_SOCKET = lib.mkIf db.createLocally "/run/mysqld/mysqld.sock";
       DB_DATABASE = db.name;
       DB_USERNAME = db.user;
       DB_PASSWORD._secret = db.passwordFile;
@@ -379,10 +380,10 @@ in
 
     services.phpfpm.pools.snipe-it = {
       inherit user group phpPackage;
-      phpOptions = ''
-        post_max_size = ${cfg.maxUploadSize}
-        upload_max_filesize = ${cfg.maxUploadSize}
-      '';
+      phpOptions = {
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
+      };
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = user;

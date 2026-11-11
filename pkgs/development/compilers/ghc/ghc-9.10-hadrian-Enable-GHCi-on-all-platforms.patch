@@ -1,0 +1,42 @@
+From a19a206f1daba6f8bb72138ea7fc0b80b51e40c1 Mon Sep 17 00:00:00 2001
+From: darkyzhou <me@zqy.io>
+Date: Mon, 29 Dec 2025 10:13:16 +0800
+Subject: [PATCH] hadrian: Enable GHCi on all platforms
+
+This removes the platform-specific restrictions for GHCi support,
+allowing it to be built on all target OS and architecture combinations.
+
+Originally implemented for Debian packaging to ensure GHCi availability
+across all supported platforms.
+
+Co-authored-by: Ilias Tsitsimpis <iliastsi@debian.org>
+---
+ hadrian/src/Oracles/Setting.hs | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/hadrian/src/Oracles/Setting.hs b/hadrian/src/Oracles/Setting.hs
+index e854c1c..cb5a91c 100644
+--- a/hadrian/src/Oracles/Setting.hs
++++ b/hadrian/src/Oracles/Setting.hs
+@@ -196,16 +196,8 @@ hostSupportsRPaths = queryHostTarget (\t -> let os = archOS_OS (tgtArchOs t)
+ -- | Check whether the target supports GHCi.
+ ghcWithInterpreter :: Action Bool
+ ghcWithInterpreter = do
+-    goodOs <- anyTargetOs [ OSMinGW32, OSLinux, OSSolaris2 -- TODO "cygwin32"?,
+-                          , OSFreeBSD, OSDragonFly, OSNetBSD, OSOpenBSD
+-                          , OSDarwin, OSKFreeBSD ]
+-    goodArch <- (||) <$>
+-                anyTargetArch [ ArchX86, ArchX86_64, ArchPPC
+-                              , ArchAArch64, ArchS390X
+-                              , ArchPPC_64 ELF_V1, ArchPPC_64 ELF_V2
+-                              , ArchRISCV64 ]
+-                              <*> isArmTarget
+-    return $ goodOs && goodArch
++    -- Enable GHCi on all platforms
++    return True
+ 
+ -- | Which variant of the ARM architecture is the target (or 'Nothing' if not
+ -- ARM)?
+-- 
+2.51.2
+

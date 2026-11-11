@@ -10,9 +10,11 @@ let
   format = pkgs.formats.toml { };
 
   inherit (lib)
+    all
     escapeShellArgs
     getExe'
     maintainers
+    mkAfter
     mkDefault
     mkEnableOption
     mkIf
@@ -36,6 +38,18 @@ in
       description = "Arguments to add to the noctalia-greeter-session invocation.";
       type = listOf str;
       default = [ ];
+    };
+
+    passwordlessSyncUsers = mkOption {
+      type = listOf str;
+      default = [ ];
+      description = ''
+        Local users allowed to apply the constrained appearance-only sync through
+        Polkit without authentication. The constrained sync operation never accepts
+        session command configuration. Leave empty to require administrator
+        authentication for every sync.
+      '';
+      example = [ "alice" ];
     };
 
     settings = mkOption {
@@ -91,6 +105,10 @@ in
           assertion = (config.users.users.${user} or { }) != { };
           message = "noctalia-greeter: user ${user} does not exist. Please create it before referencing it.";
         }
+        {
+          assertion = all (name: builtins.hasAttr name config.users.users) cfg.passwordlessSyncUsers;
+          message = "noctalia-greeter: every passwordless sync user must be a configured user.";
+        }
       ];
 
       services.displayManager.noctalia-greeter.settings.cursor = mkIf (cfg.cursorTheme.package != null) {
@@ -119,8 +137,24 @@ in
         settings.default_session.command = mkDefault "${getExe' cfg.package "noctalia-greeter-session"} ${escapeShellArgs cfg.extraArgs}";
       };
 
-      security.polkit.enable = mkDefault true;
       services.accounts-daemon.enable = mkDefault true;
+
+      security.polkit = {
+        enable = mkDefault true;
+        enablePkexecWrapper = mkDefault true;
+        extraConfig = mkIf (cfg.passwordlessSyncUsers != [ ]) (mkAfter ''
+          polkit.addRule(function(action, subject) {
+            var allowedUsers = ${builtins.toJSON cfg.passwordlessSyncUsers};
+            if (action.id == "org.noctalia.greeter.sync-appearance" &&
+                action.lookup("program") == "${getExe' cfg.package "noctalia-greeter-apply-appearance"}" &&
+                action.lookup("user") == "root" &&
+                subject.local && subject.active &&
+                allowedUsers.indexOf(subject.user) >= 0) {
+              return polkit.Result.YES;
+            }
+          });
+        '');
+      };
     };
 
   meta.maintainers = with maintainers; [

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -24,6 +23,5 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/gennaro-tedesco/element";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.j0hax ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

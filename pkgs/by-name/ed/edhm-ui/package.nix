@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edhm-ui";
-  version = "3.0.70";
+  version = "3.0.75";
 
   strictDeps = true;
 
   src = fetchzip {
     url = "https://github.com/BlueMystical/EDHM_UI/releases/download/v${finalAttrs.version}/edhm-ui-v3-linux-x64.zip";
-    hash = "sha256-jAvUWrjQl8dmXxd99ONYqgdnPkzDQwdSEf8ar2nLEds=";
+    hash = "sha256-hc3rF641jdk+qPKyiy6KKMU4xHz2hwE3GS7nyajP5BY=";
   };
 
   nativeBuildInputs = [
@@ -113,13 +113,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "HUD modification manager for Elite Dangerous";
     homepage = "https://github.com/BlueMystical/EDHM_UI";
     license = [
-      lib.licenses.gpl3Only
-      {
+      lib.licenses.gpl3Plus
+      (lib.licenses.mkLicense {
         shortName = "edhm-custom";
         fullName = "EDHM Custom Restrictive License - Non-redistributable";
         free = false;
         redistributable = false;
-      }
+      })
     ];
     maintainers = with lib.maintainers; [
       graysontinker

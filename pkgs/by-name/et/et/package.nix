@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "et";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "oxzi";
     repo = "et";
     rev = finalAttrs.version;
-    sha256 = "0i0lgmnly8n7y4y6pb10pxgxyz8s5zk26k8z1g1578v1wan01lnq";
+    sha256 = "sha256-mJDRhi7osW4hsNVx3soLYqN9crwU7+kQUolCjqehQT4=";
   };
 
   buildInputs = [
@@ -35,6 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/oxzi/et";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ lennartmueh ];
   };
 })

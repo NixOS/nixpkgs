@@ -8,17 +8,18 @@
   gnu-efi,
   python3,
   python3Packages,
+  fwupd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd-efi";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "fwupd";
     repo = "fwupd-efi";
     rev = "${finalAttrs.version}";
-    hash = "sha256-resmgi+t1YahXWxt1ZPgAXW3L0ejBclwcA8W8AS31is=";
+    hash = "sha256-yjNlai7NhHYCACdIiCvWEBfweN6U86g/kGHNNji/vnE=";
   };
 
   nativeBuildInputs = [
@@ -52,9 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://fwupd.org/";
-    maintainers = [ ];
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
+    description = "EFI Application used by uefi-capsule plugin in fwupd";
+    inherit (fwupd.meta)
+      homepage
+      maintainers
+      license
+      platforms
+      ;
+    teams = [ lib.teams.boot-security ];
   };
 })

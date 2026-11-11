@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   cabextract,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -16,7 +17,10 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-saMIBEDTt9Ijv8g1nQHRNTG1ykIbHrCxjzdhhRYYleM=";
   };
 
-  nativeBuildInputs = [ cabextract ];
+  nativeBuildInputs = [
+    cabextract
+    installFonts
+  ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -28,9 +32,6 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
 
     # Set up no-op font configs to override any aliases set up by
     # other packages.

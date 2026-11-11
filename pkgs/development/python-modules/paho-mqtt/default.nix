@@ -78,6 +78,11 @@ buildPythonPackage rec {
     "tests/lib/test_08_ssl_connect_no_auth.py"
   ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${src.rev}/ChangeLog.txt";
     description = "MQTT version 5.0/3.1.1 client class";

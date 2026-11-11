@@ -5,25 +5,30 @@
   meson,
   ninja,
   curl,
+  mimalloc,
   nlohmann_json,
   pkg-config,
   stdenv,
   nixComponents,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-eval-jobs";
-  version = "2.35.1";
+  version = "2.35.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "nix-eval-jobs";
-    tag = "v${version}";
-    hash = "sha256-EFJnN35L7UieL8zV8qPrpqfdfzztWksY8JYuXF+mr9o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t1FbcjvTWQ1WO3hJNKN+viNXuz4BX9Pte5K4F+IJLDk=";
   };
 
   buildInputs = [
     boost
     curl
+    mimalloc
     nlohmann_json
     nixComponents.nix-store
     nixComponents.nix-fetchers
@@ -64,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "nix-eval-jobs";
   };
-}
+})

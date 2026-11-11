@@ -45,6 +45,7 @@
   pytest-freezegun,
   pytest-mock,
   pytest-snapshot,
+  pytest-timeout,
   requests-mock,
   types-freezegun,
 }:
@@ -119,6 +120,8 @@ buildPythonPackage (finalAttrs: {
     "opentelemetry-api"
     "opentelemetry-exporter-otlp-proto-http"
     "opentelemetry-sdk"
+    "peewee"
+    "pyjwt"
     "wcmatch"
   ];
   dependencies = [
@@ -162,6 +165,7 @@ buildPythonPackage (finalAttrs: {
     pytest-freezegun
     pytest-mock
     pytest-snapshot
+    pytest-timeout
     requests-mock
     types-freezegun
   ];
@@ -202,5 +206,6 @@ buildPythonPackage (finalAttrs: {
   meta = common.meta // {
     description = common.meta.description + " - cli";
     inherit (semgrep-core.meta) platforms;
+    mainProgram = "semgrep";
   };
 })

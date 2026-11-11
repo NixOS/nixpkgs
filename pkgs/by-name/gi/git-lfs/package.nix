@@ -12,17 +12,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-lfs";
-  version = "3.7.1";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N5ckTnyA3mueZre+rMhFZBiAFgEu4pmtzkiUidXnan8=";
+    hash = "sha256-HqAzgnct0myRef8K95qdCNY9v8tDn0tHw1VbCpHuzjs=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-SUnZ9uN43CAw/iHC8cPBm3nYD03d3Pg2pYS2PwjDCnE=";
+  vendorHash = "sha256-M8wYdEMYUrmEXPUCnSa4zL9/G4w/+CL+jXwmZDDNOrw=";
 
   nativeBuildInputs = [
     asciidoctor

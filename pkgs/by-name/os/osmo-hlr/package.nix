@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-hlr";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-hlr";
     rev = finalAttrs.version;
-    hash = "sha256-+wAwMP3zoFFOlZa4LhCr2hxP97mEZPViniwoOxpINyk=";
+    hash = "sha256-04RtspubktD4qAXVuimxyJNQcpogPjj1RPx8vIB0Auk=";
   };
 
   postPatch = ''

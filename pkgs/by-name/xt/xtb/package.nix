@@ -91,14 +91,17 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=v(\\d.*)"
+    ];
   };
 
   meta = {
     description = "Semiempirical Extended Tight-Binding Program Package";
     homepage = "https://github.com/grimme-lab/xtb";
     # changelog = "https://github.com/grimme-lab/xtb/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       GaetanLepage
       sheepforce

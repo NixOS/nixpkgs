@@ -6,13 +6,13 @@
   # Build deps
   bun,
   tailwindcss_4,
-  typescript,
   makeBinaryWrapper,
 
   # Runtime deps
   assimp,
   calibre,
   dasel,
+  djvulibre,
   ffmpeg-headless,
   graphicsmagick,
   imagemagick,
@@ -81,7 +81,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     makeBinaryWrapper
     tailwindcss_4
-    typescript
+    bun
   ];
 
   dontConfigure = true;
@@ -91,29 +91,29 @@ stdenvNoCC.mkDerivation {
 
     ln -s ${node_modules}/lib/node_modules ./node_modules
     tailwindcss -i ./src/main.css -o ./public/generated.css
-    tsc
 
-    substituteInPlace ./dist/src/index.js \
-      --replace-fail "assets: \"public\"" "assets: \"$out/share/convertx/dist/public\""
+    substituteInPlace ./src/index.tsx \
+      --replace-fail "assets: \"public\"" "assets: \"$out/share/convertx/public\""
+
+    bun build --compile --minify --sourcemap --bytecode --format=esm \
+      --define 'process.env.NODE_ENV=\"production\"' \
+      src/index.tsx \
+      --outfile $out/bin/convertx
 
     runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
     mkdir -p $out/share/convertx
-    cp -R ./dist $out/share/convertx
-    cp -R ./public $out/share/convertx/dist
-    ln -s ${node_modules}/lib/node_modules $out
+    cp -R ./public $out/share/convertx
 
-    makeBinaryWrapper ${bun}/bin/bun $out/bin/convertx \
-      --add-flags "run --prefer-offline --no-install $out/share/convertx/dist/src/index.js" \
-      --set NODE_ENV production \
+    wrapProgram $out/bin/convertx \
       --suffix PATH : ${
         lib.makeBinPath [
           assimp
           calibre
           dasel
+          djvulibre
           ffmpeg-headless
           graphicsmagick
           imagemagick
@@ -125,7 +125,7 @@ stdenvNoCC.mkDerivation {
           pandoc
           perl5Packages.EmailOutlookMessage
           potrace
-          (python3.withPackages (ps: [ ps.markitdown ]))
+          (python3.withPackages (ps: [ ps.markitdown ] ++ ps.markitdown.optional-dependencies.all))
           resvg
           (texliveBasic.withPackages (ps: [
             ps.dvisvgm

@@ -24,6 +24,7 @@
   makeWrapper,
   nixosTests,
   bintools,
+  buildPackages,
 }:
 
 stdenv.mkDerivation {
@@ -50,6 +51,15 @@ stdenv.mkDerivation {
     substituteInPlace src/main-executable/main.c \
       --replace-fail '@out@' "$out"
   '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  depsBuildBuild = [
+    buildPackages.glib
+    buildPackages.wayland-scanner
+    buildPackages.art-standalone
+  ];
 
   nativeBuildInputs = [
     makeWrapper

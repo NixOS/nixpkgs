@@ -8,7 +8,6 @@
   libxml2,
   minizip,
   pkg-config,
-  pcre-cpp,
   readline,
   uriparser,
   zlib,
@@ -16,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collada-dom";
-  version = "2.5.4";
+  version = "2.5.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -25,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Gepetto";
     repo = "collada-dom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6V1Ew1YWybgqt0dikNdXwK+4D1odgVN/7NvaikjRqE4=";
+    hash = "sha256-51CwWqxQP+rTQgsHfnI/krJcpI9Lb6PXe/td/ztoiRY=";
   };
 
   postInstall = ''
@@ -42,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     libxml2
     minizip
-    pcre-cpp
     readline
     uriparser
     zlib

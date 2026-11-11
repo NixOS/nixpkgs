@@ -39,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./clap-option.diff
   ];
 
+  # fix build w/ glibc-2.44 and stringop-overflow in embedded sqlite
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers -Wno-error=stringop-overflow";
+
   postPatch = ''
     # see https://github.com/NixOS/nixpkgs/pull/149487#issuecomment-991747333
     export XDG_DOCUMENTS_DIR=$(mktemp -d)

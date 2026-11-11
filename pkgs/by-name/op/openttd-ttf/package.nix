@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -17,6 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    installFonts
     (python3.withPackages (
       pp: with pp; [
         fontforge
@@ -42,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -m444 -Dt $out/share/fonts/truetype */*.ttf
+
     runHook postInstall
   '';
 

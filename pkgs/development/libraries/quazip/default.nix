@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "stachenov";
     repo = "quazip";
     rev = "v${version}";
-    sha256 = "sha256-AOamvy2UgN8n7EZ8EidWkVzRICzEXMmvZsB18UwxIVo=";
+    hash = "sha256-AOamvy2UgN8n7EZ8EidWkVzRICzEXMmvZsB18UwxIVo=";
   };
 
   buildInputs = [

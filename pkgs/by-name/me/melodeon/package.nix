@@ -29,8 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   meta = {
     description = "QWebEngine wrapper for MaterialSkin on Lyrion Music Server (formerly Logitech Media Server)";
     mainProgram = "melodeon";

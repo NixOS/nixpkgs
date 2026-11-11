@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kati-unstable";
-  version = "0-unstable-2026-02-12";
+  version = "0-unstable-2026-09-18";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "kati";
-    rev = "985493689b70e28970952bde44ac2a8433257b5e";
-    sha256 = "sha256-fn+eA/TBmiyQYeUQvviL/zc9qxUYfW1BaeqNCILsk+w=";
+    rev = "55ea1e26f4da6d52a4ddca8f36a130dc26120525";
+    sha256 = "sha256-VStvrYUQIBqv9TTbMOzCJYye8BrlIcRz1pmglVAabl4=";
   };
 
   patches = [
@@ -32,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/kati";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danielfullmer ];
+    maintainers = with lib.maintainers; [
+      danielfullmer
+      evanwporter
+    ];
   };
 })

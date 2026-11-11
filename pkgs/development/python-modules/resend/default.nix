@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  httpx,
   setuptools,
   pytest-asyncio,
   pytestCheckHook,
@@ -11,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "resend";
-  version = "2.36.0";
+  version = "2.50.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "resend";
     repo = "resend-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7ok/Bze68hJLrDL2kjdjCzWNt7mYpTfedBEe9KAFwXY=";
+    hash = "sha256-BrrEvc9rXnzIzqEWA/IM4R/zwQE8CvVvGmArb9dqoHA=";
   };
 
   build-system = [ setuptools ];
@@ -28,10 +29,15 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    async = [ httpx ];
+  };
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "resend" ];
 

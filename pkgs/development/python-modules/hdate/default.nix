@@ -9,19 +9,19 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
     tag = "v${version}";
-    hash = "sha256-6CCaHnpZEU7krLzkRKRF4Iui7Vd7AOfIn1fTzIdxPtw=";
+    hash = "sha256-3MOxDVrEMuMfk/fCCo6IItqR1DMr/0KN7L4hYjMYCGM=";
   };
 
   pythonRelaxDeps = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   pytestFlags = [ "--snapshot-warn-unused" ];

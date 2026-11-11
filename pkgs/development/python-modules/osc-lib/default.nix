@@ -12,27 +12,29 @@
   requests-mock,
   setuptools,
   stdenv,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osc-lib";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    tag = version;
-    hash = "sha256-XwOJSd3k/74FvSZGveSTjH+KGLlQ2jNbk8GrTzFhbL0=";
+    tag = finalAttrs.version;
+    hash = "sha256-GVjzDPmASEItGsZCjH+tjgP8bRf5WgEOoDr+uOhQtws=";
   };
 
-  patches = [
-    ./fix-pyproject.diff
-  ];
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
-  env.PBR_VERSION = version;
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include osc_lib *" > MANIFEST.in
+  '';
 
   build-system = [
     pbr
@@ -51,23 +53,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     requests-mock
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase =
-    let
-      disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
-        "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
-        "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
-        "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
-      ];
-    in
-    ''
-      runHook preCheck
-      stestr run -e <(echo "${lib.concatStringsSep "\n" disabledTests}")
-      runHook postCheck
-    '';
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
+    "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
+    "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
+    "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
+  ];
 
   pythonImportsCheck = [
     "osc_lib"
@@ -89,4 +83,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

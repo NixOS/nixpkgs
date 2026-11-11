@@ -44,6 +44,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       timbertson
       tiramiseb
+      hideyosh1
     ];
     homepage = "http://gfxmonk.net/dist/0install/gnome-shell-impatience.xml";
   };

@@ -20,10 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-toml-lint";
     homepage = "https://github.com/fuellabs/cargo-toml-lint";
     changelog = "https://github.com/fuellabs/cargo-toml-lint/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       mitchmindtree
       matthiasbeyer

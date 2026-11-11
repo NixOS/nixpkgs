@@ -7,9 +7,9 @@
   ninja,
   python3,
   gtk3,
-  glibmm,
-  cairomm,
-  pangomm,
+  glibmm_2_4,
+  cairomm_1_0,
+  pangomm_1_4,
   atkmm,
   libepoxy,
   gnome,
@@ -42,11 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libepoxy ];
 
   propagatedBuildInputs = [
-    glibmm
+    glibmm_2_4
     gtk3
     atkmm
-    cairomm
-    pangomm
+    cairomm_1_0
+    pangomm_1_4
   ];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=764521

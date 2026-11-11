@@ -9,15 +9,16 @@
   libxt,
 
   nix-update-script,
+  commandLineArgs ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "awakened-poe-trade";
-  version = "3.29.103";
+  version = "3.29.108";
 
   src = fetchurl {
     url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v${finalAttrs.version}/Awakened-PoE-Trade-${finalAttrs.version}.AppImage";
-    hash = "sha256-Nxq9b58nmpvXs3xKWYi0IpI9QyYbrLPWJplA1l6hKzE=";
+    hash = "sha256-DIksV61mC0E2ZPztWK+WnMqR9KXwLMWQpc7hajaymyE=";
   };
 
   passthru = {
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a ${finalAttrs.passthru.appImageContents}/usr/share/icons $out/share
 
     substituteInPlace $out/share/applications/awakened-poe-trade.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=awakened-poe-trade'
+      --replace-fail 'Exec=AppRun' 'Exec=awakened-poe-trade ${lib.escapeShellArgs commandLineArgs}'
 
     runHook postInstall
   '';
@@ -51,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     makeWrapper ${lib.getExe electron} $out/bin/awakened-poe-trade \
       --add-flags $out/share/awakened-poe-trade/resources/app.asar \
+      ${
+        lib.optionalString (commandLineArgs != [ ]) "--add-flags ${lib.escapeShellArgs commandLineArgs}"
+      } \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libxtst

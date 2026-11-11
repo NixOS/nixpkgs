@@ -7,16 +7,16 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "buildstream-plugins";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream-plugins";
-    tag = version;
-    hash = "sha256-vbHfceMdaedAg0fVt8pBF+S7yPYhfQlgEYvb48ym+4I=";
+    tag = finalAttrs.version;
+    hash = "sha256-9FlSgGOSXhSAyVwVIRzd+rc1PytxKmrss36dxaswKvs=";
   };
 
   build-system = [
@@ -35,10 +35,11 @@ buildPythonPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/apache/buildstream-plugins/blob/${finalAttrs.src.tag}/NEWS";
     description = "BuildStream plugins";
     homepage = "https://github.com/apache/buildstream-plugins";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shymega ];
   };
-}
+})

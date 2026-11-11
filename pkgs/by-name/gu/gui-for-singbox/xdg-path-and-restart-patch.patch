@@ -1,7 +1,6 @@
-diff -ruN a/bridge/bridge.go b/bridge/bridge.go
 --- a/bridge/bridge.go
 +++ b/bridge/bridge.go
-@@ -51,6 +51,7 @@
+@@ -50,6 +50,7 @@
  
  	Env.BasePath = filepath.ToSlash(filepath.Dir(exePath))
  	Env.AppName = filepath.Base(exePath)
@@ -29,7 +28,6 @@ diff -ruN a/bridge/bridge.go b/bridge/bridge.go
  		OS:           Env.OS,
  		ARCH:         Env.ARCH,
  		IsPrivileged: Env.IsPrivileged,
-diff -ruN a/bridge/types.go b/bridge/types.go
 --- a/bridge/types.go
 +++ b/bridge/types.go
 @@ -21,6 +21,7 @@
@@ -40,10 +38,10 @@ diff -ruN a/bridge/types.go b/bridge/types.go
  	OS           string `json:"os"`
  	ARCH         string `json:"arch"`
  	IsPrivileged bool   `json:"isPrivileged"`
-diff -ruN a/bridge/utils.go b/bridge/utils.go
 --- a/bridge/utils.go
 +++ b/bridge/utils.go
-@@ -23,7 +23,29 @@
+@@ -21,7 +21,29 @@
+ 
  var requestTransportCache sync.Map
  
 +func GetConfigPath() string {
@@ -72,4 +70,3 @@ diff -ruN a/bridge/utils.go b/bridge/utils.go
  	if !filepath.IsAbs(path) {
  		path = filepath.Join(Env.BasePath, path)
  	}
- 	return filepath.ToSlash(filepath.Clean(path))

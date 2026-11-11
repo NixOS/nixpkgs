@@ -17,7 +17,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.version [
-      (case (range "8.14" "9.1") "5.2.1")
+      (case (range "8.14" "9.2") "5.2.1")
       (case (isEq "8.13") "5.2.0+20241009")
       (case (range "8.10" "8.16") "4.0.0")
     ] null;

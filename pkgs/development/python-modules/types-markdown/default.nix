@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-markdown";
-  version = "3.10.2.20260712";
+  version = "3.11.2.20261029";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_markdown";
     inherit (finalAttrs) version;
-    hash = "sha256-Ja6hcoJJDzWraxeod3Gr0vR5GFqv+Oj0oANQQ/AvLFI=";
+    hash = "sha256-DlygU9ACqNkLGaHUgVpFANtoXMzmoQcgRv8PS/6ccnw=";
   };
 
   build-system = [ setuptools ];

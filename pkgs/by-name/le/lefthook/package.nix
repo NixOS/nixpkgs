@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "lefthook";
-  version = "2.1.10";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GR97Z9wnM6z6gNIcf35leBGkhdj1d6OHQ9oFnaz3f1s=";
+    hash = "sha256-8Gl+Q1xU3nPYWfPI9o+o5b29tZ5ca3eb0YeApnaQ2LI=";
   };
 
-  vendorHash = "sha256-G+v6ZqnkcFdPDzXlN89oqD7mOnHfq1tvIkFxdoVnBNo=";
+  vendorHash = "sha256-EbyzNWEEE85MawYQZUyHPvQJ13DcaCSXYv4JFC+GSac=";
 
   nativeBuildInputs = [ installShellFiles ];
 

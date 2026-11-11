@@ -53,7 +53,7 @@ let
     owner = "installer-team";
     repo = "busybox";
     rev = "debian/1%${debianVersion}";
-    sha256 = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
+    hash = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
   };
   debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
@@ -89,13 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
     # archival: disallow path traversals (CVE-2023-39810)
     (fetchpatch {
       name = "CVE-2023-39810.patch";
-      url = "https://git.busybox.net/busybox/patch/?id=9a8796436b9b0641e13480811902ea2ac57881d3";
+      url = "https://github.com/vda-linux/busybox_mirror/commit/9a8796436b9b0641e13480811902ea2ac57881d3.patch";
       hash = "sha256-pOARbCwiucrkNITBoOMpLF3GniYvJiyBeBi2/Aw2JY8=";
     })
     # tar: strip unsafe hardlink components - GNU tar does the same
     (fetchpatch {
       name = "CVE-2026-26157_CVE-2026-26158.patch";
-      url = "https://git.busybox.net/busybox/patch/?id=3fb6b31c716669e12f75a2accd31bb7685b1a1cb";
+      url = "https://github.com/vda-linux/busybox_mirror/commit/3fb6b31c716669e12f75a2accd31bb7685b1a1cb.patch";
       excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
       hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
     })
@@ -118,6 +118,14 @@ stdenv.mkDerivation (finalAttrs: {
     # [PATCH v2 1/1] wget: don't allow control characters or spaces in the URL
     # https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
     ./CVE-2025-60876.patch
+
+    # archival/libarchive: sanitize filenames on output (CVE-2025-46394)
+    # https://bugs.busybox.net/show_bug.cgi?id=16018
+    (fetchpatch {
+      name = "CVE-2025-46394.patch";
+      url = "https://github.com/vda-linux/busybox_mirror/commit/f5e1bf966b19ea1821f00a8c9ecd7774598689b4.patch";
+      hash = "sha256-BNAF25DpkxjJpu2nA0chOwPuadPzVUcaoAJMLRQCUik=";
+    })
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 

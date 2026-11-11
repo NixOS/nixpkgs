@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "puremagic"
     "pydantic-settings"
     "python-json-logger"
+    "textual-image"
   ];
 
   pythonImportsCheck = [

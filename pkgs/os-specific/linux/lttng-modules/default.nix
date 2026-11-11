@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.14.3";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "lttng";
     repo = "lttng-modules";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W9mfCMboVkImqBtUlTxoBkn3IHjjfbZiSaeoeFX5IcM=";
+    hash = "sha256-HAzQaMU6j/YFG1o2q88yAg8JSnzOQDykMYwYBx3JeP4=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

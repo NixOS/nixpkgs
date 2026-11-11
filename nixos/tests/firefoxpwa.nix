@@ -4,7 +4,7 @@
   name = "firefoxpwa";
   meta.maintainers = with lib.maintainers; [ camillemndn ];
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       imports = [ ./common/x11.nix ];
@@ -19,8 +19,6 @@
       };
 
       services.jellyfin.enable = true;
-      # Jellyfin requires at least 2 GB of disk space
-      virtualisation.diskSize = 3 * 1024; # 3 GB
     };
 
   enableOCR = true;

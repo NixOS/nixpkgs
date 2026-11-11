@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Morfessor";
     inherit version;
-    sha256 = "bb3beac234341724c5f640f65803071f62373a50dba854d5a398567f9aefbab2";
+    hash = "sha256-uzvqwjQ0FyTF9kD2WAMHH2I3OlDbqFTVo5hWf5rvurI=";
   };
 
   build-system = [ setuptools_80 ];

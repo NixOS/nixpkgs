@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "7.0.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-debug-toolbar";
     tag = version;
-    hash = "sha256-Xwl6LsNW3/VXJ59QaW4l6D+8VEbl45ysv5KaySbS4M4=";
+    hash = "sha256-OwMul+wGKLU9LwybsCtqV51lp/CQvexP0TWJSg8E3iQ=";
   };
 
   postPatch = ''

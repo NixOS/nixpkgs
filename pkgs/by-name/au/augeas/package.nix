@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "augeas";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "hercules-team";
     repo = "augeas";
     tag = "release-${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-U5tm3LDUeI/idHtL2Zy33BigkyvHunXPjToDC59G9VE=";
+    hash = "sha256-FH+i/6nnhbp2j+45eNT63LzI/uY5KvLYePivyaO1odM=";
   };
 
   patches = [

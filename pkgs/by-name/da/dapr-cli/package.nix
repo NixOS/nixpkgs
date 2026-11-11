@@ -3,20 +3,21 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "dapr-cli";
-  version = "1.18.1";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lMHuXf4v4xcCcvTqVVXwszMjQ/C3P80J1hXh4Py/jls=";
+    hash = "sha256-toNZAdqESKohgrKkjhfx7qAwseJsYBgSyQZIT/1kNG4=";
   };
 
-  vendorHash = "sha256-P7zrfUcb/Hxo7QbIQfq9JSf2d7meZShQ++GG8HkEoLE=";
+  vendorHash = "sha256-8zF+NXuSqypv52Eyy4QRcyLM60EiyVj9FLl6ky8PXWI=";
 
   proxyVendor = true;
 
@@ -24,9 +25,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"

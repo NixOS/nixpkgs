@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   texliveInfraOnly,
@@ -188,7 +189,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "manim";
-  version = "0.21.0";
+  version = "0.22.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -196,10 +197,16 @@ buildPythonPackage (finalAttrs: {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K6+U+ri/bBf760JmyhpkzQsQqp+ofve5zBByZPVdc1w=";
+    hash = "sha256-qeI2lUsRQ8Fzfa1q4qAfOynUC5vPMcr0U9txJicqsnY=";
   };
 
-  patches = [ ./pytest-report-header.patch ];
+  patches = [
+    ./pytest-report-header.patch
+
+    # Parse modified SVGs from memory instead of a fixed temp file next to the source, which races
+    # when tests load the same SVG in parallel
+    ./svg-parse-race.patch
+  ];
 
   postPatch =
     # nixpkgs still ships uv-build < 0.12.1
@@ -285,6 +292,12 @@ buildPythonPackage (finalAttrs: {
   # about 45 of ~1050 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
 
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Without system fonts, CoreText falls back to LastResort (which draws a box for every glyph,
+    # whitespace included) and text-related tests fail
+    "/System/Library/Fonts"
+  ];
+
   pythonImportsCheck = [ "manim" ];
 
   meta = {
@@ -302,6 +315,7 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       osbm
       ivyfanchiang
+      haansn08
     ];
   };
 })

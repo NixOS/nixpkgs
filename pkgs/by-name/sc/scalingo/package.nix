@@ -3,24 +3,23 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "scalingo";
-  version = "1.48.0";
+  version = "1.51.0";
 
   src = fetchFromGitHub {
     owner = "scalingo";
     repo = "cli";
     rev = version;
-    hash = "sha256-vwTgr9zzRo4/o3D9p/jcmwKskmjClj4sfd8zalK7PDg=";
+    hash = "sha256-5E8ktzM2Bds+FHU6HNGcczC/Aefp7asPNBtxYQCiEIg=";
   };
 
   vendorHash = null;
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''

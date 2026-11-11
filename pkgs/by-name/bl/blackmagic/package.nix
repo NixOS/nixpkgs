@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       pjones
       sorki
-      carlossless
+      karstx
     ];
     platforms = lib.platforms.unix;
   };

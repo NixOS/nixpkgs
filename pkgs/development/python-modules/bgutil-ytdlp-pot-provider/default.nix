@@ -16,21 +16,25 @@
 
 buildPythonPackage rec {
   pname = "bgutil-ytdlp-pot-provider";
-  version = "1.3.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Brainicism";
     repo = "bgutil-ytdlp-pot-provider";
     tag = version;
-    hash = "sha256-dhpataQ1HSCRPnm4k3K/NMaQPQdNrx8C4q855l7kbbQ=";
+    hash = "sha256-rV85jle5R8je7iR8uZaXEdDuQEh2lf/Eoht+9k6bpC4=";
   };
+
+  postPatch = ''
+    cp README.md plugin/README.md
+  '';
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
     src = src + "/server";
-    npmDepsFetcherVersion = 2;
-    hash = "sha256-Qwwi6W+Oeu6ZeLmZP5vEfAKOJyivbULR5mlk7tcVIE8=";
+    npmDepsFetcherVersion = 3;
+    hash = "sha256-Ffse1RelOmLpfYM50zZ/xqkfy9l2TGYE8CumK0b9cQg=";
   };
 
   npmRoot = "server";
@@ -76,7 +80,7 @@ buildPythonPackage rec {
     description = "Proof-of-origin token provider plugin for yt-dlp";
     homepage = "https://github.com/Brainicism/bgutil-ytdlp-pot-provider";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = [ ];
     mainProgram = "bgutil-ytdlp-pot-provider";
   };
 }

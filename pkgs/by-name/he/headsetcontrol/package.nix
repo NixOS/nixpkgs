@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "headsetcontrol";
-  version = "4.0.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "Sapd";
     repo = "HeadsetControl";
     rev = finalAttrs.version;
-    sha256 = "sha256-3mwX6XqoW5wphBHEqDQ1LMCSCv+3OtNlE9cz4M437ME=";
+    sha256 = "sha256-QwgH6w2CFRbH22Dc+MOdbtNZENbjf70XLhQ7D4DnhQc=";
   };
 
   nativeBuildInputs = [

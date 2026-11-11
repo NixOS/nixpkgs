@@ -1,26 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
-  entrypoints,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  click,
+  entrypoints,
   funcy,
-  gitSetupHook,
   pydantic,
   pydantic-settings,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-test-utils,
-  pytestCheckHook,
   rich,
   ruamel-yaml,
   scmrepo,
   semver,
-  setuptools-scm,
-  setuptools,
   tabulate,
   typer,
+
+  # tests
+  cacert,
+  freezegun,
+  gitSetupHook,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-test-utils,
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -42,6 +49,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    click
     entrypoints
     funcy
     pydantic

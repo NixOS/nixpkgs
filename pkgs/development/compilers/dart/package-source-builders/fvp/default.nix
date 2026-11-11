@@ -5,7 +5,7 @@
 
 { version, src, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fvp";
   inherit version src;
   inherit (src) passthru;

@@ -24,7 +24,7 @@
 }:
 
 let
-  version = "2.5.3";
+  version = "2.5.6";
 
   openjdk = zulu25.override { enableJavaFX = true; };
 
@@ -53,8 +53,8 @@ let
     url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
     hash =
       {
-        x86_64-linux = "sha256-xRtMh8nYHzjMyb8zSPQZNIbcfQIuKk4izfPW/PLK2zg=";
-        aarch64-linux = "sha256-Kl4SV5MSIfCszUI2uN9/eLK+25gkSWkRHoSf8X837VM=";
+        x86_64-linux = "sha256-YIWhaob+tIpjf6afDsSpLhsMHw7bS6dtZ3oKFYmE7xU=";
+        aarch64-linux = "sha256-vSpAPsWgOUN/D/OelrHiluSloDj5WGk2hskEPIP1zks=";
       }
       ."${stdenvNoCC.hostPlatform.system}";
 
@@ -85,12 +85,12 @@ let
 
   manifest = fetchurl {
     url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt";
-    hash = "sha256-oVR5lJOWHTyEe+fBbxa+ZPh9GERHlZbZMPmaGImmdhg=";
+    hash = "sha256-6EvoaVgK4/tgo9BfvoTHA2CNSDrYiJ3w2OieNMRGwZs=";
   };
 
   manifestSignature = fetchurl {
     url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt.asc";
-    hash = "sha256-9ohRv/3rcOr78Mr0Bfny9zn+SqpLFaf0hn9G2LMAc8Q=";
+    hash = "sha256-XTYOOG4pwmLU1Xtdg3yZSJ1rW+HBEFhZEfpY/Z66IQM=";
   };
 
   publicKey = ./publickey.asc;

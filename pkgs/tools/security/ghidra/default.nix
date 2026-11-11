@@ -4,40 +4,30 @@
   lib,
   makeWrapper,
   autoPatchelfHook,
-  openjdk21,
+  openjdk25,
   pam,
   makeDesktopItem,
+  copyDesktopItems,
   icoutils,
 }:
 
 let
-
+  openjdk = openjdk25;
   pkg_path = "$out/lib/ghidra";
-
-  desktopItem = makeDesktopItem {
-    name = "ghidra";
-    exec = "ghidra";
-    icon = "ghidra";
-    desktopName = "Ghidra";
-    genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = [ "Development" ];
-    terminal = false;
-    startupWMClass = "ghidra-Ghidra";
-  };
-
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghidra";
-  version = "12.1.2";
-  versiondate = "20260605";
+  version = "12.2";
+  versiondate = "20261016";
   src = fetchzip {
-    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = "sha256-ulIBecjWAnrM8iJmqQZAZRerUCKpIBcXyv6KIB7I/ZA=";
+    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${finalAttrs.version}_build/ghidra_${finalAttrs.version}_PUBLIC_${finalAttrs.versiondate}.zip";
+    hash = "sha256-ueJ5zUytJsXR6S3o/s/Qgp+MBWKFKsu3jhWQstTpqeI=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     icoutils
+    copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
@@ -48,11 +38,24 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ghidra";
+      exec = "ghidra";
+      icon = "ghidra";
+      desktopName = "Ghidra";
+      genericName = "Ghidra Software Reverse Engineering Suite";
+      categories = [ "Development" ];
+      terminal = false;
+      startupWMClass = "ghidra-Ghidra";
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "${pkg_path}"
-    mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "${pkg_path}/support/ghidra.ico"
     rm ghidra_4_40x40x32.png
@@ -61,6 +64,8 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/share/icons/hicolor/$res/apps"
       mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
     done;
+
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -69,7 +74,7 @@ stdenv.mkDerivation rec {
     ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
 
     wrapProgram "${pkg_path}/support/launch.sh" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk ]}
   '';
 
   meta = {
@@ -91,4 +96,4 @@ stdenv.mkDerivation rec {
     ];
   };
 
-}
+})

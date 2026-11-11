@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "goresym";
-  version = "3.4";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "goresym";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zDa+NxoC9mAaITWEHzejJykWVnoqnlLQtzbu0vs3NoQ=";
+    hash = "sha256-NqAn1jcVZxFfYU5ns4ZTM+R34ZZY2VER0vDEhkEuFeQ=";
   };
 
   subPackages = [ "." ];

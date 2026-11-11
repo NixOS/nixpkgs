@@ -12,6 +12,7 @@
   openssl,
   glib-networking,
   webkitgtk_4_1,
+  gst_all_1,
   jq,
   moreutils,
   nix-update-script,
@@ -20,18 +21,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
-  version = "4.12.6";
+  version = "4.12.8";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XNbdTRm+oJjnuWEk1AT63HRmOV4OjSK7aj874z+15pE=";
+    hash = "sha256-vP5csQPRmfAuXY0enLVZJoY4uOSPm6OOJNKdRKuErDQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  cargoHash = "sha256-2jzsXj6iLf4TRUIgWe+VTEjBtYgnHJPBnZmlfvTlrXs=";
+  cargoHash = "sha256-1Ja4u+KZLrJBlUsTFaUTrZ3OOLb/ZdhpeXXQgZnw6nw=";
 
   postPatch =
     let
@@ -75,6 +76,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib-networking
     openssl
     webkitgtk_4_1
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
   ];
 
   buildNoDefaultFeatures = true;

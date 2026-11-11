@@ -20,7 +20,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WaHAZRLjaEJUba/I2r3Yof/iUqA3PFUuVbzm88izG1k=";
   };
 

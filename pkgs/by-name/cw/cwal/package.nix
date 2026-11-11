@@ -2,31 +2,27 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
-  pkg-config,
+  pkgconf,
   imagemagick,
   libimagequant,
   luajit,
-  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cwal";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "nitinbhat972";
     repo = "cwal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RDtYBgqTG3Ycn1D6QtaHGZVXKxw8UqhzssxXA4temYo=";
+    hash = "sha256-n9v2EiW1wRMsYoNk+m20qQao52vvmD6NDM8Z/oEyjbU=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    cmake
-    pkg-config
-    makeBinaryWrapper
+    pkgconf
   ];
 
   buildInputs = [
@@ -35,9 +31,23 @@ stdenv.mkDerivation (finalAttrs: {
     luajit
   ];
 
-  postFixup = ''
-    wrapProgram $out/bin/cwal \
-      --prefix XDG_DATA_DIRS : $out/share
+  postPatch = ''
+    substituteInPlace config.h \
+      --replace-fail '#define INSTALL_DIR "/usr"' \
+      "#define INSTALL_DIR \"$out\""
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    cc nob.c -o nob
+    ./nob build
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    ./nob install
+    runHook postInstall
   '';
 
   meta = {

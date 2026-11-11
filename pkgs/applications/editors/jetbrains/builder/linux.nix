@@ -1,37 +1,27 @@
 # Linux-specific base builder.
 
 {
-  stdenv,
-  lib,
-  makeDesktopItem,
-  makeWrapper,
-  patchelf,
-  writeText,
-  coreutils,
-  gnugrep,
-  which,
-  git,
-  unzip,
-  libsecret,
-  libnotify,
-  udev,
-  e2fsprogs,
-  python3,
-  autoPatchelfHook,
-  glibcLocales,
-  fontconfig,
-  libGL,
-  libx11,
-
-  # bundled jcef-plugin
+  # keep-sorted start
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
   atk,
+  autoPatchelfHook,
   cairo,
+  coreutils,
   cups,
   dbus,
+  e2fsprogs,
+  fontconfig,
+  git,
+  glibcLocales,
+  gnugrep,
+  lib,
+  libGL,
   libgbm,
+  libnotify,
+  libsecret,
+  libx11,
   libxcb,
   libxcomposite,
   libxdamage,
@@ -39,13 +29,21 @@
   libxfixes,
   libxkbcommon,
   libxrandr,
+  makeDesktopItem,
+  makeWrapper,
   nspr,
   nss,
   pango,
+  patchelf,
+  python3,
+  stdenv,
+  udev,
+  unzip,
+  which,
+  writeText,
+  # keep-sorted end
 
-  jdk,
   vmopts ? null,
-  forceWayland ? null,
   excludeDrvArgNames,
 }:
 
@@ -62,7 +60,8 @@ lib.extendMkDerivation {
       productShort ? product,
       wmClass,
 
-      libdbm,
+      jdk,
+      jetbrains-libdbm,
       fsnotifier,
 
       extraLdPath ? [ ],
@@ -78,11 +77,6 @@ lib.extendMkDerivation {
       loName = lib.toLower productShort;
       hiName = lib.toUpper productShort;
       vmoptsName = loName + lib.optionalString stdenv.hostPlatform.is64bit "64" + ".vmoptions";
-      finalExtraWrapperArgs =
-        extraWrapperArgs
-        ++ lib.optionals forceWayland [
-          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
-        ];
 
       desktopItem = makeDesktopItem {
         name = finalAttrs.pname;
@@ -102,12 +96,7 @@ lib.extendMkDerivation {
       inherit desktopItem vmoptsIDE vmoptsFile;
 
       buildInputs = buildInputs ++ [
-        stdenv.cc.cc
-        fontconfig
-        libGL
-        libx11
-        # required for the bundled jcef-plugin
-        udev
+        # keep-sorted start
         alsa-lib
         at-spi2-atk
         at-spi2-core
@@ -115,7 +104,10 @@ lib.extendMkDerivation {
         cairo
         cups
         dbus
+        fontconfig
+        libGL
         libgbm
+        libx11
         libxcb
         libxcomposite
         libxdamage
@@ -126,13 +118,18 @@ lib.extendMkDerivation {
         nspr
         nss
         pango
+        stdenv.cc.cc
+        udev
+        # keep-sorted end
       ];
 
       nativeBuildInputs = nativeBuildInputs ++ [
+        # keep-sorted start
+        autoPatchelfHook
         makeWrapper
         patchelf
         unzip
-        autoPatchelfHook
+        # keep-sorted end
       ];
 
       postPatch = ''
@@ -167,11 +164,9 @@ lib.extendMkDerivation {
         fi
         echo -Djna.library.path=${
           lib.makeLibraryPath [
-            libsecret
             e2fsprogs
             libnotify
-            # Required for Help -> Collect Logs
-            # in at least rider and goland
+            libsecret
             udev
           ]
         } >> $vmopts_file
@@ -185,7 +180,7 @@ lib.extendMkDerivation {
         cp -a . $out/$pname
         [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/icons/hicolor/128x128/apps/${pname}.png
         [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-        cp ${libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
+        cp ${jetbrains-libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
         cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
 
         jdk=${jdk.home}
@@ -205,16 +200,16 @@ lib.extendMkDerivation {
           wrapProgram  "$launcher" \
             --prefix PATH : "${
               lib.makeBinPath [
-                jdk
                 coreutils
-                gnugrep
-                which
                 git
+                gnugrep
+                jdk
+                which
               ]
             }" \
             --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
             --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
-            ${lib.concatStringsSep " " finalExtraWrapperArgs} \
+            ${lib.concatStringsSep " " extraWrapperArgs} \
             --set-default JDK_HOME "$jdk" \
             --set-default ANDROID_JAVA_HOME "$jdk" \
             --set-default JAVA_HOME "$jdk" \

@@ -38,6 +38,7 @@ let
       version,
       phpSrc ? null,
       hash ? null,
+      knownVulnerabilities ? [ ],
       extraPatches ? [ ],
       packageOverrides ? (final: prev: { }),
       phpAttrsOverrides ? (final: prev: { }),
@@ -147,6 +148,8 @@ let
             phpWithExtensions = symlinkJoin {
               pname = "php-with-extensions";
               inherit (php) version;
+              strictDeps = true;
+              __structuredAttrs = true;
               nativeBuildInputs = [ makeBinaryWrapper ];
               passthru = php.passthru // {
                 buildEnv = mkBuildEnv allArgs allExtensionFunctions;
@@ -292,7 +295,7 @@ let
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional ztsSupport "--enable-zts"
             ++ lib.optional staticSupport "--enable-static"
-            ++ lib.optional (!zendSignalsSupport) [ "--disable-zend-signals" ]
+            ++ lib.optionals (!zendSignalsSupport) [ "--disable-zend-signals" ]
             ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
 
             # Sendmail
@@ -358,8 +361,11 @@ let
             lib.optionals (lib.versionOlder version "8.4") [
               ./fix-paths-php7.patch
             ]
-            ++ lib.optionals (lib.versionAtLeast version "8.4") [
+            ++ lib.optionals (lib.versionAtLeast version "8.4" && lib.versionOlder version "8.6") [
               ./fix-paths-php84.patch
+            ]
+            ++ lib.optionals (lib.versionAtLeast version "8.6") [
+              ./fix-paths-php86.patch
             ]
             ++ extraPatches;
 
@@ -422,6 +428,7 @@ let
 
           meta = {
             description = "HTML-embedded scripting language";
+            inherit knownVulnerabilities;
             homepage = "https://www.php.net/";
             license = lib.licenses.php301;
             mainProgram = "php";

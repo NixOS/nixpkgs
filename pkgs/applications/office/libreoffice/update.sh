@@ -30,9 +30,6 @@ cd "$(dirname $fname)/src-$variant"
 
 case $variant in
 (stable)
-    # The pup command prints both fresh and still versions one after another, and
-    # we use either head -1 or tail -1 to get the right version, per the if elif
-    # above.
     version_major="$(curl --silent https://www.libreoffice.org/download/ |\
         pup '.version_heading' 'text{}' | xargs)"
     echoerr got from website ${variant}_version "[[$version_major]]"

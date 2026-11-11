@@ -35,7 +35,7 @@ in
       description = ''
         go2rtc configuration as a Nix attribute set.
 
-        See the [wiki](https://github.com/AlexxIT/go2rtc/wiki/Configuration) for possible configuration options.
+        See the [wiki](https://github.com/AlexxIT/go2rtc/blob/master/internal/app/README.md) for possible configuration options.
       '';
       type = submodule {
         freeformType = format.type;

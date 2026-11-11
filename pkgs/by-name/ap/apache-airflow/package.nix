@@ -12,31 +12,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = pySelf: pySuper: {
-      smmap = pySuper.smmap.overridePythonAttrs rec {
-        version = "5.0.2";
-        src = fetchFromGitHub {
-          owner = "gitpython-developers";
-          repo = "smmap";
-          tag = "v${version}";
-          hash = "sha256-0Y175kjv/8UJpSxtLpWH4/VT7JrcVPAq79Nf3rtHZZM=";
-        };
-      };
-      structlog = pySuper.structlog.overridePythonAttrs (o: rec {
-        version = "25.4.0";
-        src = fetchFromGitHub {
-          owner = "hynek";
-          repo = "structlog";
-          tag = version;
-          hash = "sha256-iNnUogcICQJvHBZO2J8uk4NleQY/ra3ZzxQgnSRKr30=";
-        };
-        nativeCheckInputs =
-          with pySelf;
-          o.nativeCheckInputs
-          ++ [
-            freezegun
-            pretend
-          ];
-      });
       apache-airflow = pySelf.callPackage ./python-package.nix { inherit enabledProviders; };
     };
   };

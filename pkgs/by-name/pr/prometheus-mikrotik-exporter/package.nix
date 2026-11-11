@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  stdenv, # for meta.broken
 }:
 
 buildGoModule rec {
@@ -23,6 +24,8 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) mikrotik; };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     inherit (src.meta) homepage;
     description = "Prometheus MikroTik device(s) exporter";
     mainProgram = "mikrotik-exporter";

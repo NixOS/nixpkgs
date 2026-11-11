@@ -20,7 +20,6 @@
   libxext,
   libxcursor,
   libx11,
-  ilmbase,
   llvmPackages,
   unstableGitUpdater,
 }:
@@ -61,7 +60,6 @@ stdenv.mkDerivation {
     libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ilmbase
     llvmPackages.openmp
   ];
 

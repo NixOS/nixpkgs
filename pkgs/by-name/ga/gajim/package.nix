@@ -42,14 +42,13 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchFromGitLab {
-    domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = finalAttrs.version;
-    hash = "sha256-3/HQNizXLjeQpCdEK14LMflyNUKF1BI8eli3BGxiH40=";
+    hash = "sha256-85ilpq/PMdrXjNdWUTxrdrfcRPdsh8ir5iNbRVgE0xM=";
   };
 
   pyproject = true;
@@ -98,25 +97,22 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   propagatedBuildInputs =
     with python3.pkgs;
     [
-      nbxmpp
-      dbus-python
-      pillow
       css-parser
-      precis-i18n
+      emoji
+      httpx2
       keyring
-      setuptools
-      packaging
-      gssapi
+      nbxmpp
       omemo-dr
+      pillow
+      precis-i18n
+      pysequoia
       qrcode
       sqlalchemy
-      emoji
-      httpx
-      h2
       truststore
-      pysequoia
+      setuptools
     ]
-    ++ httpx.optional-dependencies.socks
+    ++ httpx2.optional-dependencies.http2
+    ++ httpx2.optional-dependencies.socks
     ++ lib.optional enableRST docutils
     ++ extraPythonPackages python3.pkgs;
 
@@ -131,7 +127,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "http://gajim.org/";
     description = "XMPP chat client";
     longDescription = "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat with your friends or family, easily share pictures and thoughts or discuss the news with your groups.";
-    changelog = "https://dev.gajim.org/gajim/gajim/-/blob/${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/gajim/gajim/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       raskin

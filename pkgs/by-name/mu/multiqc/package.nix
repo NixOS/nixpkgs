@@ -1,17 +1,18 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   procps,
-  stdenv,
   versionCheckHook,
   addBinToPathHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "multiqc";
-  version = "1.30";
+  version = "1.35";
   pyproject = true;
+  __structuredAttrs = true;
 
   # Two data sources. One for the code, another for the test data
   srcs = [
@@ -20,13 +21,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
       owner = "MultiQC";
       repo = "MultiQC";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-TR5YFoWj97gpsykIzc1lqtYVePsVLRIT0HXw+VPJ7o4=";
+      hash = "sha256-ecEXuIhUP9go4jUyNEqfyJf3PNMpuyoleHfvCdHBikg=";
     })
     (fetchFromGitHub {
       owner = "MultiQC";
       repo = "test-data";
-      rev = "cc9f853e7892eb537e91505e0e847ff63669138d";
-      hash = "sha256-/MiNnPayG6wpF2S09ENYTlEBF7Km4aH1RjdGOfMgZcA=";
+      rev = "84dc905e6edb97668b87660896dfd78f175008ca";
+      hash = "sha256-Fz/hopECe+oyeXyM1Oeq14JtYhmOu+kMBnRBalOf9Is=";
       name = "test-data";
     })
   ];
@@ -38,8 +39,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail \
         "max_retries: int = 10," \
         "max_retries: int = 2,"
-    substituteInPlace pyproject.toml \
-      --replace 'polars-lts-cpu' 'polars'
   '';
 
   sourceRoot = "multiqc";
@@ -99,7 +98,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       addBinToPathHook
     ];
 
-  disabledTests =
+  disabledTests = [
+    # Outdated assertion on click's error message format (fixed upstream in #3577)
+    "test_unknown_command_line_option"
+  ]
+  ++
     # On darwin, kaleido fails to starts
     lib.optionals (stdenv.hostPlatform.isDarwin) [
       "test_flat_plot"

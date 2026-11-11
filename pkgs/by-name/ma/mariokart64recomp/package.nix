@@ -17,6 +17,7 @@
   makeDesktopItem,
   n64recomp,
   directx-shader-compiler,
+  fetchpatch,
 }:
 
 let
@@ -57,6 +58,18 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
+
+  patches = [
+    # Fix building with gcc16
+    (fetchpatch {
+      name = "rmlui-cstdint.patch";
+      url = "https://github.com/mikke89/RmlUi/commit/8c27b0a5cb601a3c57ecddc6ce8769ca93a97cb8.patch";
+      stripLen = 1;
+      extraPrefix = "lib/RmlUi/";
+      hash = "sha256-oIyPlnBsLcrGIbylT16i5SLttyXmzF5ZP1js/JDRG3o=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -115,12 +128,10 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     installBin MarioKart64Recompiled
-    install -Dm644 -t $out/share ../recompcontrollerdb.txt
+    install -Dm644 -t $out/share/mariokart64recomp ../recompcontrollerdb.txt
     install -Dm644 ../icons/512.png $out/share/icons/hicolor/512x512/apps/MarioKart64Recompiled.png
     install -Dm644 ../flatpak/io.github.mariokart64recomp.mariokart64recomp.desktop $out/share/applications/MarioKart64Recompiled.desktop
-    cp -r ../assets $out/share/
-    ln -s $out/share/recompcontrollerdb.txt $out/bin/recompcontrollerdb.txt
-    ln -s $out/share/assets $out/bin/assets
+    cp -r ../assets $out/share/mariokart64recomp/
 
     install -Dm644 -t $out/share/licenses/mariokart64recompiled ../COPYING
     install -Dm644 -t $out/share/licenses/mariokart64recompiled/N64ModernRuntime ../lib/N64ModernRuntime/COPYING
@@ -137,9 +148,8 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
      )
   '';
 
-  # The game will segfault when not run from the same directory as the binary.
   postFixup = ''
-    wrapProgram $out/bin/MarioKart64Recompiled --chdir "$out/bin/"
+    wrapProgram $out/bin/MarioKart64Recompiled --chdir "$out/share/mariokart64recomp"
   '';
 
   meta = {

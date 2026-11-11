@@ -2,26 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  pytest,
-  gym,
-  scipy,
-  tqdm,
-  joblib,
-  dill,
-  progressbar2,
-  cloudpickle,
+
+  # build-system
+  setuptools_80,
+
+  # dependencies
   click,
-  pyzmq,
-  tensorflow,
+  cloudpickle,
+  dill,
+  gym,
+  joblib,
   mpi4py,
+  progressbar2,
+  pyzmq,
+  scipy,
+  tensorflow,
+  tqdm,
 }:
 
 buildPythonPackage {
   pname = "baselines";
   version = "0.1.6"; # remember to manually adjust the rev
   pyproject = true;
-
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -32,20 +34,24 @@ buildPythonPackage {
     hash = "sha256-lK1HRBdKR92E2hHZF5cFZ0P3N1aJ57pw8tazrPOZTEg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    # `pkg_resources` was removed from more recent versions
+    #   ModuleNotFoundError: No module named 'pkg_resources'
+    setuptools_80
+  ];
 
   dependencies = [
-    gym
-    scipy
-    tqdm
-    joblib
-    pyzmq
-    dill
-    progressbar2
-    mpi4py
-    cloudpickle
-    tensorflow
     click
+    cloudpickle
+    dill
+    gym
+    joblib
+    mpi4py
+    progressbar2
+    pyzmq
+    scipy
+    tensorflow
+    tqdm
   ];
 
   postPatch = ''
@@ -57,8 +63,6 @@ buildPythonPackage {
 
   # fails to create a daemon, probably because of sandboxing
   doCheck = false;
-
-  nativeCheckInputs = [ pytest ];
 
   pythonImportsCheck = [ "baselines" ];
 

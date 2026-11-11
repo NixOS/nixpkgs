@@ -8,6 +8,7 @@
   mixCompileHook,
   mixAppConfigPatchHook,
 
+  cacert,
   lib,
   stdenv,
   writeText,
@@ -60,6 +61,9 @@ lib.extendMkDerivation {
       }
       // (args.env or { });
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       __darwinAllowLocalNetworking = true;
 
       # add to ERL_LIBS so other modules can find at runtime.
@@ -71,6 +75,7 @@ lib.extendMkDerivation {
       '';
 
       nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+        erlang
         elixir
         hex
 
@@ -86,5 +91,10 @@ lib.extendMkDerivation {
       passthru = (args.passthru or { }) // {
         inherit beamDeps;
       };
+    }
+    // lib.optionalAttrs (args.name == "castore") {
+      postPatch = (args.postPatch or "") + ''
+        cp ${cacert}/etc/ssl/certs/ca-bundle.crt priv/cacerts.pem
+      '';
     };
 }

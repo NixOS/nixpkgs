@@ -10,7 +10,7 @@
   pytestCheckHook,
   python-dotenv,
   setuptools,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytestCheckHook
     python-dotenv
-    syrupy
+    syrupy_5
   ];
 
   pythonImportsCheck = [ "bring_api" ];

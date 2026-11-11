@@ -154,7 +154,7 @@ let
       script =
         "exec "
         + lib.optionalString cfg.inhibitsSleep ''
-          ${pkgs.systemd}/bin/systemd-inhibit \
+          ${config.systemd.package}/bin/systemd-inhibit \
               --who="borgbackup" \
               --what="sleep" \
               --why="Scheduled backup" \

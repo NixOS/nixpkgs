@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -117,6 +118,16 @@ let
             CGO_ENABLED = "1";
           };
         });
+    # From version 1.0.2, `go.mod` requires Go 1.27 (version 1.1.2 requires Go 1.27.1).
+    # Remove this override when `buildGoModule` uses Go 1.27.1 or newer.
+    charpand_openprovider = automated-providers.charpand_openprovider.override {
+      mkProviderGoModule = buildGoLatestModule;
+    };
+    # The `main` package of the provider is not at the root of the repository.
+    # The repository also has a CLI, which is not built here.
+    tasansga_lldap = automated-providers.tasansga_lldap.overrideAttrs (_: {
+      subPackages = [ "cmd/terraform-provider-lldap" ];
+    });
   };
 
   # Put all the providers we not longer support in this list.
@@ -131,6 +142,14 @@ let
       sapcc_ccloud = removed "sapcc_ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
       argocd = removed "argocd" "2025/12. Try argoproj-labs_argocd instead.";
       oboukili_argocd = removed "oboukili_argocd" "2025/12. Try argoproj-labs_argocd instead.";
+      denoland_deno = removed "denoland_deno" "2026/11";
+      cloudfoundry-community_cloudfoundry = archived "cloudfoundry-community_cloudfoundry" "2026/07";
+      cullenmcdermott_porkbun = archived "cullenmcdermott_porkbun" "2025/11";
+      determinatesystems_hydra = archived "determinatesystems_hydra" "2026/05";
+      kislerdm_neon = archived "kislerdm_neon" "2026/09";
+      oktadeveloper_oktaasa = archived "oktadeveloper_oktaasa" "2025/11";
+      pablovarela_slack = archived "pablovarela_slack" "2026/02";
+      vmware_wavefront = archived "vmware_wavefront" "2026/01";
     };
 
   # excluding aliases, used by terraform-full

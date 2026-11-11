@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     mainProgram = "proxytunnel";
-    homepage = "http://proxytunnel.sf.net/";
+    homepage = "https://proxytunnel.sourceforge.io";
     description = "Stealth tunneling through HTTP(S) proxies";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;

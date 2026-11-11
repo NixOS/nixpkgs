@@ -9,8 +9,8 @@
 buildPecl {
   pname = "pdo_sqlsrv";
 
-  version = "5.13.0";
-  sha256 = "sha256-76hZvMSNl/JSaNvevx2yXyVhDX+jaz7pEHPByZQR4kw=";
+  version = "5.13.3";
+  sha256 = "sha256-GYp7N9oGWNNqk9FYoOwXmxN7Ok0kHJCmZQrp7o+R7Eo=";
 
   internalDeps = [ php.extensions.pdo ];
 
@@ -21,6 +21,6 @@ buildPecl {
     license = lib.licenses.mit;
     homepage = "https://github.com/Microsoft/msphpsql";
     teams = [ lib.teams.php ];
-    broken = lib.versionAtLeast php.version "8.5";
+    broken = lib.versionAtLeast php.version "8.6";
   };
 }

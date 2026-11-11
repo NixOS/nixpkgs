@@ -6,9 +6,9 @@ set -eu -o pipefail
 nixpkgs="$(git rev-parse --show-toplevel)"
 path="$nixpkgs/pkgs/by-name/pr/prl-tools/package.nix"
 
-# Currently this script only supports Parallels 26
+# Currently this script only supports Parallels 27
 # Please change the knowledge base url after each major release
-kb_url="https://kb.parallels.com/en/131014"
+kb_url="https://kb.parallels.com/en/131168"
 content="$(curl -s "$kb_url")"
 
 # Extract all version/build pairs and select the latest (by semver, then build)
@@ -50,4 +50,4 @@ sha256="$(nix store prefetch-file "$dmg_url" --json | jq -r '.hash')"
 sed -i -e "s,version = \"$old_version\",version = \"$version\"," \
     -e "s,hash = \"sha256-.*\",hash = \"$sha256\"," "$path"
 
-echo "Updated linuxPackages_latest.prl-tools $old_version -> $version"
+echo "Updated prl-tools $old_version -> $version"

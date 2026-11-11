@@ -21,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace contrib/Orochi/contrib/hipew/src/hipew.cpp --replace-fail '"/opt/rocm/hip/lib/' '"${clr}/lib'
     substituteInPlace hiprt/hiprt_libpath.h --replace-fail '"/opt/rocm/hip/lib/' '"${clr}/lib/'
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'COMMAND ''${CMAKE_CURRENT_SOURCE_DIR}/tools/bakeKernel.sh' \
+        'COMMAND bash ''${CMAKE_CURRENT_SOURCE_DIR}/tools/bakeKernel.sh'
   '';
 
   nativeBuildInputs = [

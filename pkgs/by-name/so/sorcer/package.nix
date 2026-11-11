@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   boost,
-  cairomm,
+  cairomm_1_0,
   cmake,
   libsndfile,
   lv2,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     boost
-    cairomm
+    cairomm_1_0
     libsndfile
     lv2
     ntk

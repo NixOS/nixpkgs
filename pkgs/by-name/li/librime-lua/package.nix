@@ -3,18 +3,21 @@
   stdenvNoCC,
   fetchFromGitHub,
   unstableGitUpdater,
-  lua,
+  lua5_2_compat,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenvNoCC.mkDerivation {
   pname = "librime-lua";
-  version = "0-unstable-2026-05-02";
+  version = "0-unstable-2026-10-10";
 
   src = fetchFromGitHub {
     owner = "hchunhui";
     repo = "librime-lua";
-    rev = "ec52e48ea18f11af37717a01c337f853215cf70b";
-    hash = "sha256-ipqsYAqlt29dZlgynziCC4rHFDbXsD64KPkhXQiz8/w=";
+    rev = "6da5d6cedb853380ed1b5b9b6979cb1a9c028353";
+    hash = "sha256-zEgTdBf8Qjd++kaWkPY+2FEOgPYufspNQPFG52QZkUo=";
   };
 
   propagatedBuildInputs = [ lua ];

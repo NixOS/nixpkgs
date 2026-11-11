@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alavrik";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-qE+yybTn+kzbY0h8udhZYO+GwQPI/J/6p3LMmF12cFU=";
+    tag = "v${version}";
+    hash = "sha256-qE+yybTn+kzbY0h8udhZYO+GwQPI/J/6p3LMmF12cFU=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "https://piqi.org";
+    homepage = "https://github.com/alavrik/piqi";
     description = "Universal schema language and a collection of tools built around it";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.maurer ];

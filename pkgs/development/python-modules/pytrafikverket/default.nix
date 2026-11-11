@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pytrafikverket";
-  version = "1.1.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yfo36fAVC2LaresQ1QcXq2EGhGtkVzNbWvD6lynhusQ=";
+    hash = "sha256-iSHRqQ4spfyXHepYVJ6dcC5fH7Aw2YlKFAnip3V8gNQ=";
   };
 
   build-system = [ poetry-core ];

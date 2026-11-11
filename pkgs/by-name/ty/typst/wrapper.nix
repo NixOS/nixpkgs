@@ -17,9 +17,7 @@ lib.makeOverridable (
     inherit (typst) meta;
     name = "${typst.name}-env";
 
-    paths = lib.foldl' (acc: p: acc ++ lib.singleton p ++ p.propagatedBuildInputs) [ ] (
-      packages typstPkgs
-    );
+    paths = lib.closePropagation (packages typstPkgs);
 
     pathsToLink = [ "/lib/typst-packages" ];
 

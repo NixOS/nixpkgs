@@ -22,7 +22,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "6.0.6";
+  version = "6.0.9";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-kvWxM0Omq5y6y3vuwFs2Tb2/u9AAwxvmBJWeVhAQagk=";
+    npmDepsHash = "sha256-t0ekoKE9LQk6an4Sk51IOqKBOSmA7sbnoYLsOlsEZIo=";
 
     dontBuild = true;
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-yb8TcrVQC2Qbpe55+WXnruxTg6bmPX4bTmKPQOYlj54=";
+    hash = "sha256-zfNbudFzII/nc0oyojalEaVppSWbCg7v1yiM7ENYQSE=";
     rev = version;
   };
 
@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
     (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
+    # Remove this patch when llvmPackages reaches LLVM 23
+    ./0002-libunwind-restore-Unwind_CallPersonality.patch
   ];
 
   buildPhase = ''
@@ -194,6 +196,21 @@ stdenv.mkDerivation rec {
     fi
 
         runHook postInstall
+  '';
+
+  doInstallCheck = true;
+
+  # C++ exceptions with -fwasm-exceptions must compile and link
+  # see https://github.com/NixOS/nixpkgs/pull/556385
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    pushd $TMPDIR
+    echo 'int main() { try { throw 42; } catch (int) { return 0; } return 1; }' > throw.cpp
+    $out/bin/em++ -fwasm-exceptions throw.cpp -o throw.js
+    popd
+
+    runHook postInstallCheck
   '';
 
   passthru = {

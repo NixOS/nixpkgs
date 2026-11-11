@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veracrypt";
-  version = "1.26.29";
+  version = "1.26.30";
 
   src = fetchFromGitHub {
     owner = "veracrypt";
     repo = "VeraCrypt";
     tag = "VeraCrypt_${finalAttrs.version}";
-    hash = "sha256-Q+WUz8F63cP9/KlZUn9xLu2V9wO4FeY7AtErE1T9Km4=";
+    hash = "sha256-sjccuVsHU9C76tgRRw8Ew8scaDOT900+/7SnpqRjPRQ=";
   };
 
   patches = [

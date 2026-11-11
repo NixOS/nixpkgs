@@ -1,7 +1,6 @@
 {
   lib,
   stdenvNoCC,
-  overrideCC,
   pkgsCross,
   bash,
 }:
@@ -9,39 +8,31 @@
 stdenvNoCC.mkDerivation (
   finalAttrs:
   let
+    # No threading library apart from the libc, which on MinGW means the
+    # `win32` model. With GCC NG in the cross case there are multiple packages
+    # consuming `threads` in multiple package sets spliced together, so we are
+    # best off with an overlay rather than extending scopes or overriding
+    # single packages.
     useWin32ThreadModel =
-      stdenv:
-      overrideCC stdenv (
-        stdenv.cc.override (old: {
-          cc = old.cc.override {
-            threadsCross = {
-              model = "win32";
-              package = null;
-            };
-          };
-        })
-      );
+      pkgs:
+      pkgs.appendOverlays [
+        (final: prev: { threads = null; })
+      ];
 
-    mingw32Stdenv = useWin32ThreadModel pkgsCross.mingw32.stdenv;
-    mingwW64Stdenv = useWin32ThreadModel pkgsCross.mingwW64.stdenv;
+    pkgsMingw32 = useWin32ThreadModel pkgsCross.mingw32;
+    pkgsMingwW64 = useWin32ThreadModel pkgsCross.mingwW64;
 
     dxvk32 =
       if stdenvNoCC.hostPlatform.isDarwin then
-        pkgsCross.mingw32.dxvk_1.override {
-          stdenv = mingw32Stdenv;
-          enableMoltenVKCompat = true;
-        }
+        pkgsMingw32.dxvk_1.override { enableMoltenVKCompat = true; }
       else
-        pkgsCross.mingw32.dxvk_2.override { stdenv = mingw32Stdenv; };
+        pkgsMingw32.dxvk_3;
 
     dxvk64 =
       if stdenvNoCC.hostPlatform.isDarwin then
-        pkgsCross.mingwW64.dxvk_1.override {
-          stdenv = mingwW64Stdenv;
-          enableMoltenVKCompat = true;
-        }
+        pkgsMingwW64.dxvk_1.override { enableMoltenVKCompat = true; }
       else
-        pkgsCross.mingwW64.dxvk_2.override { stdenv = mingwW64Stdenv; };
+        pkgsMingwW64.dxvk_3;
   in
   {
     pname = "dxvk";

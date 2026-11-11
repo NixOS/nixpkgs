@@ -9,15 +9,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wmderland";
-  version = "unstable-2020-07-17";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "aesophor";
     repo = "wmderland";
-    rev = "a40a3505dd735b401d937203ab6d8d1978307d72";
-    sha256 = "0npmlnybblp82mfpinjbz7dhwqgpdqc1s63wc1zs8mlcs19pdh98";
+    tag = finalAttrs.version;
+    hash = "sha256-kzd5Wo+HruPC8R7UENyvjTOXBs0gmYWd5wVykr/DQHY=";
   };
 
   nativeBuildInputs = [
@@ -51,9 +51,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Modern and minimal X11 tiling window manager";
     homepage = "https://github.com/aesophor/wmderland";
+    changelog = "https://github.com/aesophor/wmderland/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = libx11.meta.platforms;
     maintainers = with lib.maintainers; [ takagiy ];
     mainProgram = "wmderland";
   };
-}
+})

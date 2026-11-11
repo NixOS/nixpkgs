@@ -11,7 +11,7 @@ build-idris-package {
     owner = "ctford";
     repo = "flying-spaghetti-monster";
     rev = "9253db1048d155b9d72dd5319f0a2072b574d406";
-    sha256 = "0n1kqpxysl3dji0zd8c47ir4144s0n3pb8i1mqp6ylma3r7rlg1l";
+    hash = "sha256-NDyaTx6qUm8uriGidYcFmpBAcjyEofZBlG1Q7fvFM1g=";
   };
 
   meta = {

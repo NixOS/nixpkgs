@@ -8,19 +8,20 @@
   static ? stdenv.hostPlatform.isStatic,
 
   lz4,
+  zfp,
   zlib-ng,
   zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-blosc2";
-  version = "2.23.1";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "c-blosc2";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-iyEB1Hnvo42tMHyB4pDfXru5doFwNiFuxq21Tr3zLIg=";
+    sha256 = "sha256-X/LR88pHbCk0TPu0oGPsg9phXmwnHlXCxdxd+Wa69UY=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     lz4
+    zfp
     zlib-ng
     zstd
   ];
@@ -43,9 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_STATIC=${if static then "ON" else "OFF"}"
     "-DBUILD_SHARED=${if static then "OFF" else "ON"}"
 
-    "-DPREFER_EXTERNAL_LZ4=ON"
-    "-DPREFER_EXTERNAL_ZLIB=ON"
-    "-DPREFER_EXTERNAL_ZSTD=ON"
+    "-DBLOSC_DEPENDENCY_MODE=EXTERNAL"
 
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_BENCHMARKS=OFF"

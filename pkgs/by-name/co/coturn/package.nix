@@ -61,6 +61,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ _0x4A6F ];
-    broken = stdenv.hostPlatform.isDarwin; # 2018-10-21
   };
 })

@@ -23,7 +23,7 @@
   dbus,
   cups,
   libexif,
-  systemd,
+  systemdLibs,
   libva,
   libGL,
   freetype,
@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "8.1.4087.66";
+  version = "8.2.4133.96";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-7cTCzyIb0e+y0Pa6Im0QGBp7J5KhbYWsYEAgTtcNZIw=";
-        x86_64-linux = "sha256-fwwJ07JmPT+6st8aYgvmkQtn6Pc8aP4GcSf1jAnRBAg=";
+        aarch64-linux = "sha256-KiYHDdLwFqmUN1w/npAZ8Th+Yx3Ke+SBplB21q4NjAM=";
+        x86_64-linux = "sha256-b3WAVJrdD+IQ4Hs/5iiIBTNN71uvQ3CtciUDFPD0724=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -102,7 +102,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     stdenv.cc.cc
-    stdenv.cc.libc
     zlib
     libx11
     libxt
@@ -130,7 +129,7 @@ stdenv.mkDerivation rec {
     gtk3
     gdk-pixbuf
     libexif
-    systemd
+    systemdLibs
     libva
     qt6.qtbase
     qt6.qtwayland
@@ -171,10 +170,6 @@ stdenv.mkDerivation rec {
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${libPath}" \
         opt/vivaldi/$f
-    done
-
-    for f in libGLESv2.so libqt5_shim.so libqt6_shim.so; do
-      patchelf --set-rpath "${libPath}" opt/vivaldi/$f
     done
   ''
   + lib.optionalString proprietaryCodecs ''

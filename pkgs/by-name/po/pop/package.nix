@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pop";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "pop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2114PK3xcIykC4QTTzj54S4EjHVbcxpy8D7C735xdew=";
+    hash = "sha256-3rXpU7R4hV5TOIiUOxBfNXlol0plecnJakBM8fbpHmg=";
   };
 
-  vendorHash = "sha256-v3rozaY/kp/M4K397c+qtktIPyJJ+RIvPtPvd9qVpwU=";
+  vendorHash = "sha256-rLJyyjRsEnPF4mPqWGxsI/QZWLk0fpYGadjdMAXq9uE=";
 
   env.GOWORK = "off";
 

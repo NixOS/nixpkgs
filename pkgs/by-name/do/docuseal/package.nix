@@ -5,7 +5,7 @@
   bundlerEnv,
   nixosTests,
   ruby_4_0,
-  pdfium-binaries,
+  pdfium,
   leptonica,
   makeWrapper,
   fetchYarnDeps,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/rails \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
-          pdfium-binaries
+          pdfium
           leptonica
         ]
       }"

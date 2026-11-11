@@ -3,7 +3,7 @@
   name = "miracle-wm";
 
   meta = {
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
   };
 
   nodes.machine =

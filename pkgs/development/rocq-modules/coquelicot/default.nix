@@ -20,6 +20,7 @@ let
       in
       with lib.versions;
       lib.switch coq.coq-version [
+        (case (range "8.12" "9.3") "3.4.5")
         (case (range "8.12" "9.1") "3.4.4")
         (case (range "8.12" "9.1") "3.4.3")
         (case (range "8.12" "8.20") "3.4.2")
@@ -29,6 +30,7 @@ let
         (case (range "8.8" "8.13") "3.1.0")
         (case (range "8.5" "8.9") "3.0.2")
       ] null;
+    release."3.4.5".hash = "sha256-cqlfyfNw04kg8x70dWmLi3+BwWBXoAirsNhXmwi7whU=";
     release."3.4.4".hash = "sha256-xuL1ZpAfiBvQwXGjS7aN2N7KqSZlw+ywB8HvL9/Bjqs=";
     release."3.4.3".hash = "sha256-bzzAIENU2OYTtmdBU9Xw8zyBvz9vqTiqjWSm7RnXXRA=";
     release."3.4.2".hash = "sha256-aBTF8ZKu67Rb3ryCqFyejUXf/65KgG8i5je/ZMFSrj4=";

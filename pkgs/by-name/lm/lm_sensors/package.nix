@@ -10,20 +10,14 @@
   rrdtool,
   sensord ? false,
 }:
-
-let
-  version = "3.6.2";
-  tag = "V" + lib.replaceStrings [ "." ] [ "-" ] version;
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lm-sensors";
-  inherit version;
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "hramrach"; # openSUSE fork used by openSUSE and Gentoo
     repo = "lm-sensors";
-    inherit tag;
+    tag = "V" + lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version;
     hash = "sha256-EmS9H3TQac6bHs2G8t1C2cQNAjN13zPoKDysny6aTFw=";
   };
 
@@ -80,8 +74,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://hwmon.wiki.kernel.org/lm_sensors.html";
-    changelog = "https://raw.githubusercontent.com/hramrach/lm-sensors/${tag}/CHANGES";
+    homepage = "https://archive.kernel.org/oldwiki/hwmon.wiki.kernel.org/lm_sensors.html";
+    changelog = "https://raw.githubusercontent.com/hramrach/lm-sensors/${finalAttrs.src.tag}/CHANGES";
     description = "Tools for reading hardware sensors - maintained fork";
     license = with lib.licenses; [
       lgpl21Plus
@@ -94,4 +88,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "sensors";
   };
-}
+})

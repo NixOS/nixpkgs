@@ -27,6 +27,7 @@
   wheel,
   python-xlib,
   qtbase,
+  qtsvg,
   wrapQtAppsHook,
   hidapi,
   xkbcommon,
@@ -127,6 +128,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     qtbase
+    qtsvg
   ];
 
   nativeCheckInputs = [
@@ -152,6 +154,11 @@ buildPythonPackage (finalAttrs: {
   dontWrapQtApps = true;
 
   pythonImportsCheck = [ "plover" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "OpenSteno Plover stenography software";

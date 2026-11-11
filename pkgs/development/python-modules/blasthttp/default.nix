@@ -15,19 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blasthttp";
-  version = "0.9.0";
+  version = "0.10.1";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-JuoGy+QdBsVPMtD0T4Y/NSoeJcO7dwg3HmpqHxTxCIc=";
+    hash = "sha256-SA8tEo9Zd56laeiu3e5lw+thP7g2SWgolqJ7znTSuzk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-1+OFAD9n8JntZSV+PZbYLPRM/XDlFwgrEMFGv/LzTN8=";
+    hash = "sha256-Im1/ews/hPh3dcub80m2k1RICD/5Jfnl+e/VM1Btk44=";
   };
 
   postPatch = ''

@@ -2,31 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   http-message-signatures,
   http-sfv,
-  requests,
   pytestCheckHook,
-  setuptools-scm,
+  requests,
+  urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-http-signature";
-  version = "0.7.1";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = "requests-http-signature";
-    rev = "v${version}";
-    hash = "sha256-sW2vYqT/nY27DvEKHdptc3dUpuqKmD7PLMs+Xp+cpeU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v+oO1j3VqACNMg8DBpKPURuW6d/ST2CLtBm4NCx7nAw=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  pythonRelaxDeps = [ "urllib3" ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     http-message-signatures
     http-sfv
     requests
+    urllib3
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -43,7 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
+    changelog = "https://github.com/pyauth/requests-http-signature/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.22";
   pyproject = true;
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

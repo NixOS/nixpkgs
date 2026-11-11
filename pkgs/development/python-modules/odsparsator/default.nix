@@ -8,14 +8,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "odsparsator";
-  version = "1.14.0";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdum";
     repo = "odsparsator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DpVWkspaZYYJHGYOrLte4JevH25xRzu38M2+QdFG22M=";
+    hash = "sha256-RM0wFFdJh+6qxIW4akKsEhTMbg04xl02wfsbLnahU8E=";
   };
 
   build-system = [ uv-build ];
@@ -27,8 +27,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.0,<0.10.0" "uv_build"
     substituteInPlace tests/test_cli.py \
       --replace-fail '"odsparsator"' "\"$out/bin/odsparsator\""
   '';

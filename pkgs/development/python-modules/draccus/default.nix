@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -15,40 +14,31 @@
 
   # tests
   pytestCheckHook,
+  syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "draccus";
-  version = "0.11.5";
+  version = "0.11.6";
   pyproject = true;
+  __structuredAttrs = true;
 
-  # No (recent) tags on GitHub
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uC4sICcDCuGg8QVRUSX5FOBQwHZqtRjfOgVgoH0Q3ck=";
+  src = fetchFromGitHub {
+    owner = "marin-community";
+    repo = "draccus";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L9lvMjd76jm9ZIq5Pl2EOVQP2r4ReWQUOUGOPXDVfEI=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # TODO: remove when updating to the next release
-      # Removes the pyyaml-include~=1.4 dependency
-      # https://github.com/dlwh/draccus/issues/46#issuecomment-3180810991
-      name = "remove-pyyaml-include-dep.patch";
-      url = "https://github.com/dlwh/draccus/commit/3a6db0bc786e46cc13c481bc2235101d7a411441.patch";
-      hash = "sha256-0OLUjXJSZ9eIL8dgE8o1Mg0HIMX+4XABSf0tYNFWn8I=";
-    })
-  ];
 
   # Pass non-callable type= (typing.Union, X | Y) through argparse.
   postPatch = ''
     substituteInPlace draccus/wrappers/field_wrapper.py \
-      --replace-fail '_arg_options["type"] = tpe' \
-                     '_arg_options["type"] = tpe if callable(tpe) else str'
+      --replace-fail \
+        '_arg_options["type"] = tpe' \
+        '_arg_options["type"] = tpe if callable(tpe) else str'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     mergedeep
@@ -61,12 +51,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    syrupy
   ];
 
   meta = {
     description = "Framework for simple dataclass-based configurations based on Pyrallis";
-    homepage = "https://github.com/dlwh/draccus";
+    homepage = "https://github.com/marin-community/draccus";
+    changelog = "https://github.com/marin-community/draccus/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

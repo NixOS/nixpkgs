@@ -19,18 +19,17 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cine";
-  version = "1.8.2";
+  version = "1.8.8";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "diegopvlk";
     repo = "Cine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kgWK27GThlQFZ0M8UjGR37vKdaPvbg0MfZPB5gq+xGY=";
+    hash = "sha256-C8gUFeNVc1UNrbEsuTrwz7prekVkUHjeZ/46/eA0CQI=";
     fetchSubmodules = true;
   };
 
-  strictDeps = true;
   dontWrapGApps = true;
 
   nativeBuildInputs = [

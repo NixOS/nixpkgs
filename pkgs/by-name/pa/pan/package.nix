@@ -18,7 +18,7 @@
   spellChecking ? true,
   gnomeSupport ? true,
   libsecret,
-  gcr,
+  gcr_3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals spellChecking [ gspell ]
   ++ lib.optionals gnomeSupport [
     libsecret
-    gcr
+    gcr_3
   ];
 
   cmakeFlags = [

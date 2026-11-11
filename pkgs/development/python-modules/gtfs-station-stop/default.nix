@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gtfs-station-stop";
-  version = "0.11.7";
+  version = "0.11.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bcpearce";
     repo = "gtfs-station-stop";
     tag = finalAttrs.version;
-    hash = "sha256-Z9pOdLXcNGK1ng7qhzg2J7CvSoDIOczN4P5Es5F2cLs=";
+    hash = "sha256-LAciJDrsFs3CbV7iSP+hG4ZZgkLOOJNSbZMJ3ejfzSs=";
   };
 
   build-system = [ hatchling ];

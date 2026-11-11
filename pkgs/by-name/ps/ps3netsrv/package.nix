@@ -1,40 +1,47 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   mbedtls,
   meson,
   ninja,
 }:
-let
-  webManModVersion = "1.47.42";
-in
 stdenv.mkDerivation rec {
   pname = "ps3netsrv";
-  version = "20220813";
+  version = "20260913";
 
-  src = fetchzip {
-    url = "https://github.com/aldostools/webMAN-MOD/releases/download/${webManModVersion}/${pname}_${version}.zip";
-    hash = "sha256-ynFuCD+tp8E/DDdB/HU9BCmwKcmQy6NBx26MKnP4W0o=";
+  src = fetchFromGitHub {
+    owner = "aldostools";
+    repo = pname;
+    tag = version;
+    hash = "sha256-Lsazt178L6oP9AzpKs4MP6aMRFq7HydJ/uVZMYbOWGE=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  buildInputs = [
+  # ps3netsrv will crash with a buffer overflow error,
+  # when trying loading a game without this.
+  hardeningDisable = [ "fortify" ];
+
+  nativeBuildInputs = [
     meson
     ninja
+  ];
+
+  buildInputs = [
     mbedtls
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Doff64_t=off_t";
 
   postInstall = ''
-    install -Dm644 ../LICENSE.TXT $out/usr/share/licenses/${pname}/LICENSE.TXT
+    install -Dm644 $src/LICENSE.TXT $out/usr/share/licenses/${pname}/LICENSE.TXT
   '';
 
   meta = {
     description = "PS3 Net Server (mod by aldostools)";
-    homepage = "https://github.com/aldostools/webMAN-MOD/";
+    homepage = "https://github.com/aldostools/ps3netsrv/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ makefu ];

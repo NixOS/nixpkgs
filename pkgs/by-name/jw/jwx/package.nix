@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "jwx";
-  version = "4.3.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "lestrrat-go";
     repo = "jwx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kx22Km2sFwxMV2LNb0oRG7nJvTD+D7og9Hsswh+SOqk=";
+    hash = "sha256-/BIpIv5lwOzgaIgQDEod65Jsd0B9ZO4RxGI9PnFKqSs=";
   };
 
-  vendorHash = "sha256-0ehf6+hW4Yxn1WgOLdOfaSf3zg/UTAlUHRENQD5J3Sw=";
+  vendorHash = "sha256-p3D0Wt39d9WeOyynSyJC9m20ovSTCRIvjppkIGTzAUE=";
 
   sourceRoot = "${finalAttrs.src.name}/cmd/jwx";
 

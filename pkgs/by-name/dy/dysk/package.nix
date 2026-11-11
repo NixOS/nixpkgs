@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dysk";
-  version = "3.6.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "dysk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6yjLIioul6wEocv3pzghPMWLKd5kDqCb7ezh4oFcdmU=";
+    hash = "sha256-UCfKlG2k2C6VTDq8LDzw+vgmfyiyP2gPME9lVb9tOHs=";
   };
 
-  cargoHash = "sha256-vpSel0bHQ40kMRfvi3YKf6oAl0f/sjK5GHxAEt6of8Y=";
+  cargoHash = "sha256-uYlbbjVFmrXOzLbmBLzgiE16A4sy6yTscvDjVfCFYC0=";
 
   nativeBuildInputs = [
     installShellFiles

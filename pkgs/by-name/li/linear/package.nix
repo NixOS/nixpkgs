@@ -21,11 +21,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = "Linear";
 
-  # -snld prevents "ERROR: Dangerous symbolic link path was ignored".
-  # -xr'!*:com.apple.*' prevents macOS extended attributes from being
-  # extracted as regular files, which corrupts the .app bundle.
-  unpackCmd = "7zz x -snld -xr'!*:com.apple.*' $curSrc";
-
   installPhase = ''
     runHook preInstall
 
@@ -41,6 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "App to manage software development and track bugs";
     homepage = "https://linear.app/";
     license = lib.licenses.unfree;
+    mainDarwinApp = "Linear.app";
     maintainers = with lib.maintainers; [
       wini
       pradyuman

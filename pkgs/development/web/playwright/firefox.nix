@@ -19,8 +19,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-ol9Ai8BpstZdfd6v1NDq66BjLTr/5THya0Fk2z1toJg=";
-          aarch64-linux = "sha256-G0pcHmjRj5GKsDF7iHdQyGsJCiv4gqaFv2PwGa/t8bw=";
+          x86_64-linux = "sha256-/jJgGzxaH1TD4iQyempHcrW63mN1FOqfH6ODv7CsWYI=";
+          aarch64-linux = "sha256-TeM4JS8dR+G/01Kw+r1v5pAuAndNpiFpyt9AAHtrBpA=";
         }
         .${system} or throwSystem;
     };
@@ -40,7 +40,11 @@ let
   };
   firefox-darwin = fetchzip {
     inherit (download) url stripRoot;
-    hash = "sha256-Opwa5SbuAaXf2A+qrldHc6BkhRaOzzl0dy7R4vodG5w=";
+    hash =
+      {
+        aarch64-darwin = "sha256-Yo+y0ISDe8/iG2MsbmZklTcz+HjdblO2lunrpejauks=";
+      }
+      .${system} or throwSystem;
   };
 in
 {

@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -42,8 +42,35 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-glTeELaebo5C6RethwYIHF4gB7CgKZlPr4wf45ih9cs=";
+    hash = "sha256-ajgEEV0RUp4sxlCz17lrdWNQ08kFmPEnk0VzSKEZ2uk=";
   };
+
+  patches = [
+    # PyAV>=18 removed the option/descriptor API (https://github.com/PyAV-Org/PyAV/commit/08d9f504d4)
+    # Codec option validation becomes a no-op, and codec availability is checked with get_codec().
+    ./pyav-0-18-compat.patch
+  ];
+
+  postPatch =
+    # PyAV>=19 returns AVRational (no __int__) instead of Fraction
+    ''
+      substituteInPlace src/lerobot/datasets/video_utils.py \
+        --replace-fail \
+          "int(video_stream.base_rate)" \
+          "int(float(video_stream.base_rate))"
+    ''
+    # huggingface-hub 2.x compatibility, pending upstream inclusion:
+    # https://github.com/huggingface/lerobot/pull/5145
+    + ''
+      substituteInPlace src/lerobot/datasets/lerobot_dataset.py \
+        --replace-fail \
+          "hub_api.upload_large_folder(" \
+          "hub_api.upload_folder("
+      substituteInPlace src/lerobot/jobs/hf.py tests/jobs/test_hf.py \
+        --replace-fail \
+          "import httpx" \
+          "from huggingface_hub.utils import httpx"
+    '';
 
   build-system = [
     cmake
@@ -53,7 +80,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "cmake"
-    "draccus"
+    "datasets"
+    "huggingface-hub"
     "numpy"
     "packaging"
     "setuptools"
@@ -113,12 +141,6 @@ buildPythonPackage (finalAttrs: {
     # ValueError: pix_fmt='yuv420p' is not supported by codec 'h264_vaapi'; supported pixel formats: ['vaapi']
     "test_vaapi_options"
 
-    # draccus.utils.ParsingError: Expected a dict with a 'type' key for ...
-    "test_reward_model_config_from_pretrained_roundtrip"
-
-    # TypeError: cannot create weak reference to 'str' object
-    "test_save_pretrained_round_trip_via_disk"
-
     # [Errno 1094995529] Invalid data found when processing input: '/build/source/tests/artifacts/encoded_videos/clip_4frames.mp4'
     "test_depth_encoder_config_sets_is_depth_map_true"
     "test_geometry_preserved"
@@ -130,8 +152,22 @@ buildPythonPackage (finalAttrs: {
     "test_three_clips_frame_count"
     "test_two_clips_frame_count"
 
+    # Codec option validation is a no-op without PyAV's descriptor API (see postPatch)
+    # Failed: DID NOT RAISE ValueError
+    "test_bool_on_numeric_option_raises"
+    "test_libsvtav1_crf_out_of_range_raises"
+    "test_libsvtav1_crf_rejects_python_float"
+    "test_libsvtav1_extra_crf_rejects_float"
+    "test_libsvtav1_extra_crf_rejects_fractional_string"
+    "test_libsvtav1_preset_out_of_range_raises"
+    "test_non_numeric_string_on_numeric_option_raises"
+    "test_numeric_out_of_range_raises"
+    "test_numeric_string_out_of_range_raises"
+    "test_validate_is_rerunnable"
+
     # RuntimeError: OpenCVCamera(/build/source/tests/artifacts/cameras/image_480x270.png) read failed
     "test_async_read"
+    "test_color_mode_conversion"
     "test_fourcc_with_camer"
     "test_read"
     "test_rotation"

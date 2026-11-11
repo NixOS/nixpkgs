@@ -8,18 +8,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.7.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O3rXqg0wSAb4YXxgXqf42oo9sJinZhZ1U6e5WCnvo9I=";
+    hash = "sha256-DNfVHuwL7zdLl+geGBX77Tfm6B9uYYsbrKyKtm28Qbo=";
   };
 
-  vendorHash = "sha256-8WrGFLIoXmHQmyFGhOjBAFkaYZ1xhx0aldpyZULfAL4=";
+  vendorHash = "sha256-koXJU3e0zDyUqR413//zVQt4r77BXf7g9iQGw0t51qs=";
 
   excludedPackages = [
+    # depends on cgo/cuda
+    "cmd/cuobjtest"
+    "cmd/vgwrdma"
+    "rdma"
+
     "plugins/noop"
     "tests/checker"
     "tests/rest_scripts"
@@ -32,8 +37,29 @@ buildGoModule (finalAttrs: {
     "-X main.Version=v${finalAttrs.version}"
   ];
 
-  # requires real s3
-  checkFlags = [ "-skip=^TestIntegration$" ];
+  env.CGO_ENABLED = "0";
+
+  checkFlags =
+    let
+      skippedTests = [
+        # requires real s3
+        "^TestIntegration$"
+
+        # requires extended attributes
+        "^TestObjectPublishLockHonorsContextWhileWaiting$"
+        "^TestFsyncPutObject"
+        "^TestFsyncFailureFailsThePut$"
+        "^TestListObjectsV2ContinuationTokenEcho$"
+        "^TestObjectLockModeNoneRejectsConditionalWrites$"
+        "^TestListObjectsExcludeDirsFileNotSkipped$"
+        "^TestListObjectsNestedMetaTmpDir$"
+        "^TestExcludeDirsCaseAgrees$"
+        "^TestExcludedDirKeysReserved$"
+        "^TestExcludeDirsEmptyKeysAllowed$"
+        "/xattr$"
+      ];
+    in
+    [ "-skip=${builtins.concatStringsSep "|" skippedTests}" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

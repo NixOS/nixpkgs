@@ -42,7 +42,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "lue" ];
 
-  makeWrapperArgs = [ "--prefix PATH :${lib.makeBinPath [ ffmpeg ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
+  ];
 
   meta = {
     description = "Terminal eBook Reader with Text-to-Speech";

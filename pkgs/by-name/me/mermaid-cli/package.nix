@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "11.16.0";
+  version = "12.0.0";
 in
 buildNpmPackage {
   pname = "mermaid-cli";
@@ -17,14 +17,14 @@ buildNpmPackage {
     owner = "mermaid-js";
     repo = "mermaid-cli";
     rev = version;
-    hash = "sha256-jK87Ffsv9qeh0UPJaLTuIJYbnR9HVqjm7hWrwUaP5zA=";
+    hash = "sha256-8CPcwqWz7A91Qyp9fpObv1m7K8H6A0c8UULjj1XlB+c=";
   };
 
   patches = [
     ./remove-puppeteer-from-dev-deps.patch # https://github.com/mermaid-js/mermaid-cli/issues/830
   ];
 
-  npmDepsHash = "sha256-sOEDz8ZT2zF+TH+ZJhb+LSyyUF1HWVVLzCqtYtg7A0E=";
+  npmDepsHash = "sha256-Y1w7oMGDUU7fNFijbjNbnlhY9nEMSR7ilNC3RnlLMaU=";
 
   env = {
     PUPPETEER_SKIP_DOWNLOAD = true;

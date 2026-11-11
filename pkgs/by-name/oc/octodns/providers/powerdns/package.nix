@@ -39,6 +39,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  pytestFlags = [
+    # Ignore octoDNS deprecation warnings
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   meta = {
     description = "PowerDNS API provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-powerdns/";

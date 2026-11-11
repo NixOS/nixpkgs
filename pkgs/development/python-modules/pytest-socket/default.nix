@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-socket";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miketheman";
     repo = "pytest-socket";
     tag = version;
-    hash = "sha256-UFUh0FhIEakAY1NZQD6hFY7wnnPs2NjjsfionIg0jRs=";
+    hash = "sha256-Z8aCucbYR6kIgrtZlITPjElwBiIW7DhAk5oTnuiEwWQ=";
   };
 
   nativeBuildInputs = [ uv-build ];

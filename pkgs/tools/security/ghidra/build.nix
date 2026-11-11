@@ -3,9 +3,9 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle,
+  gradle_9,
   makeBinaryWrapper,
-  openjdk21,
+  openjdk25,
   unzip,
   makeDesktopItem,
   copyDesktopItems,
@@ -18,9 +18,11 @@
 }:
 
 let
+  gradle = gradle_9;
+  openjdk = openjdk25;
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "12.1.2";
+  version = "12.2";
 
   isMacArm64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
 
@@ -30,17 +32,17 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-7/5TR273Sqqr03lE7qpOJUnwTzdr3BzKk+6GhhdOfo8=";
+    hash = "sha256-cShsTAyn96ChXr776ViQ8ij7ddx53F/YXuu4XVdbHW4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
       git rev-parse HEAD > $out/COMMIT
-      # 1970-Jan-01
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%b-%d" > $out/SOURCE_DATE_EPOCH
-      # 19700101
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/SOURCE_DATE_EPOCH_SHORT
+      # Git commit date, e.g. 2026-Sep-11
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%b-%d" > $out/COMMIT_DATE
+      # Git commit date, e.g. 20260911
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/COMMIT_DATE_SHORT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
@@ -54,6 +56,9 @@ let
 
     # Remove build dates from output filenames for easier reference
     ./0003-Remove-build-datestamp.patch
+
+    # Remove timestamps from generated JavaHelp files
+    ./0004-Remove-help-timestamps.patch
   ];
 
   postPatch = ''
@@ -61,8 +66,8 @@ let
     sed -i -e 's/application\.release\.name=.*/application.release.name=${releaseName}/' Ghidra/application.properties
 
     # Set build date and git revision
-    echo "application.build.date=$(cat SOURCE_DATE_EPOCH)" >> Ghidra/application.properties
-    echo "application.build.date.short=$(cat SOURCE_DATE_EPOCH_SHORT)" >> Ghidra/application.properties
+    echo "application.build.date=$(cat COMMIT_DATE)" >> Ghidra/application.properties
+    echo "application.build.date.short=$(cat COMMIT_DATE_SHORT)" >> Ghidra/application.properties
     echo "application.revision.ghidra=$(cat COMMIT)" >> Ghidra/application.properties
 
     # Tells ghidra to use our own protoc binary instead of the prebuilt one.
@@ -122,13 +127,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  # fallback to ipv4 during build on darwin to ensure match with sandbox
+  # profile rule
+  #  https://github.com/anthropics/sandbox-runtime/blob/bcad38810efcc2b7342bbc6ec26d15b7bbbabcfb/src/sandbox/macos-sandbox-utils.ts#L1098-L1115
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+  };
+
   mitmCache = gradle.fetchDeps {
     inherit pname;
     data = ./deps.json;
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${openjdk21}"
+    "-Dorg.gradle.java.home=${openjdk}"
   ]
   ++ lib.optionals isMacArm64 [
     # For some reason I haven't been able to figure out yet, ghidra builds for
@@ -145,6 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
+    export LANG=C.UTF-8
+    export LC_ALL=C.UTF-8
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
     gradle -I gradle/support/fetchDependencies.gradle
   '';
@@ -183,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
     wrapProgram "${pkg_path}/support/launch.sh" \
       --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk ]}
   '';
 
   passthru = {
@@ -216,6 +230,5 @@ stdenv.mkDerivation (finalAttrs: {
       roblabla
       vringar
     ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

@@ -3,7 +3,10 @@
   lib,
   unstick,
   unzip,
+  pkgsCross,
+  radare2,
   fetchurl,
+  variant,
   withQuesta ? true,
   supportedDevices ? [
     "Arria II"
@@ -22,8 +25,8 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "quartus-prime-lite-unwrapped";
-  version = "25.1std.0.1129";
+  pname = "quartus-prime-${variant}-unwrapped";
+  version = finalAttrs.passthru.version';
 
   nativeBuildInputs = [
     unstick
@@ -31,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     # they are failed to be extracted because the installer tries to run its
     # own `unzip` utility.
     unzip
+    radare2
   ];
 
   buildCommand = ''
@@ -48,7 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
       chmod u+w,+x $TEMP/${installer.name}
       patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $TEMP/${installer.name}
     ''))
-    (lib.concatStringsSep "\n")
+    lib.concatLines
+  ]
+  + lib.pipe finalAttrs.finalPackage.passthru.installerParts [
+    (lib.mapAttrsToList finalAttrs.finalPackage.passthru.download)
+    (map (installerPart: "ln -s ${installerPart} $TEMP/${installerPart.name}"))
+    lib.concatLines
   ]
   + (
     let
@@ -75,26 +84,40 @@ stdenv.mkDerivation (finalAttrs: {
       ))
       # See NOTE above `map` that iterates the installers.
       (map (component: "ln -s ${component} $TEMP/${component.name}"))
-      (lib.concatStringsSep "\n")
+      lib.concatLines
     ]
   )
-  # New line preceding the below bash commands is required for the `echo` below
-  # to be in its own line.
   + ''
-
     echo "executing installer..."
-    # "Could not load seccomp program: Invalid argument" might occur if unstick
-    # itself is compiled for x86_64 instead of the non-x86 host. In that case,
-    # override the input.
-    unstick $TEMP/${finalAttrs.finalPackage.passthru.mainInstaller} \
-      --disable-components ${
-        lib.concatStringsSep "," (
-          disabledComponents
-          ++ lib.optional (!withQuesta) "questa_fse"
-          ++ lib.attrValues (lib.removeAttrs finalAttrs.finalPackage.passthru.deviceIds supportedDevices)
-        )
-      } \
-      --mode unattended --installdir $out --accept_eula 1
+    # seccomp bpf syscall is unsupported by qemu-user/rosetta-linux,
+    # so try an aarch64 native version if the x86_64 version fails;
+    # this is impure but morally okay because the output is
+    # identical. aarch64 unstick is included even on regular x86_64
+    # to ensure the output hash of quartus is consistent
+    set +e
+    for unstick in unstick ${pkgsCross.aarch64-multiplatform.pkgsStatic.unstick}/bin/unstick; do
+      $unstick $TEMP/${finalAttrs.finalPackage.passthru.mainInstaller} \
+        --disable-components ${
+          lib.concatStringsSep "," (
+            disabledComponents
+            ++ lib.optional (!withQuesta) "questa_fse"
+            ++ lib.attrValues (lib.removeAttrs finalAttrs.finalPackage.passthru.deviceIds supportedDevices)
+          )
+        } \
+        --mode unattended --installdir $out --accept_eula 1 && break
+    done
+    if [ $? -ne 0 ]; then
+      echo "could not execute unstick; supported native host systems are x86_64 and aarch64"
+      exit 1
+    fi
+    set -e
+
+    # vendored library contains undocumented x87 instruction FFREEP
+    # that rosetta-linux does not support; patch it out with the
+    # semantically equivalent instruction FSTP
+    # newer versions of macOS (27) seem to have fixed this issue, so
+    # this hack can be removed once macOS 26 support is dropped from nixpkgs
+    r2 -q -w -c 'aaaa; wx ddd @@=`/aF ffreep~[0]`' $out/quartus/linux64/libccl_sqlite3.so
 
     echo "installer log:"
     cat "$out/logs/quartus-${finalAttrs.version}-linux-install.log"
@@ -104,49 +127,149 @@ stdenv.mkDerivation (finalAttrs: {
 
     # replace /proc pentium check with a true statement. this allows usage under emulation.
     substituteInPlace $out/quartus/adm/qenv.sh \
-      --replace-fail 'grep sse /proc/cpuinfo > /dev/null 2>&1' ':'
+      --replace-fail 'grep ${
+        if variant == "pro" then "sse4_2" else "sse"
+      } /proc/cpuinfo > /dev/null 2>&1' ':'
   '';
 
-  passthru = {
-    deviceIds = {
-      "Arria II" = "arria_lite";
-      "Cyclone V" = "cyclonev";
-      "Cyclone IV" = "cyclone";
-      "Cyclone 10 LP" = "cyclone10lp";
-      "MAX II/V" = "max";
-      "MAX 10 FPGA" = "max10";
-    };
-    components = {
-      "arria_lite" = "sha256-Epxvu1z7Z4vQWASIYEJAy5P7Meee114ZNVIAZnmTEH8=";
-      "cyclone" = "sha256-lKOYy61BHxY4OyonxADg6d7IGwckGX8zu0x6dpGB5Lo=";
-      "cyclone10lp" = "sha256-lurSlhCuE6i2ULKNFvlWNtk6rqdvVwREC607HbMSH2I=";
-      "cyclonev" = "sha256-1uSE/RsKR3hbyLzTGOQn1Ml5j5J26e+SmFI1hl9ry28=";
-      "max" = "sha256-jY/b906fJKgJOL3h5nWR5RQdvAJ3U9of6y4VopGo2z0=";
-      "max10" = "sha256-gFeESwuRwrp+8rN7GYbRmOxPGDHMm+ClLRjl/rTBnOk=";
-    };
-    installers = {
-      "QuartusLiteSetup-${finalAttrs.version}-linux.run" =
-        "sha256-UYQz7H3NYXJVYK9lM1P3pcMgzOnlKLInR7io3zZ0xOs=";
-    }
-    // lib.optionalAttrs withQuesta {
-      "QuestaSetup-${finalAttrs.version}-linux.run" =
-        "sha256-0F7psE+jTimCoy+UVJRgxNC6GEVdY/PJu49hf+D7T3U=";
-    };
-    mainInstaller = "QuartusLiteSetup-${finalAttrs.version}-linux.run";
-    # Make it a bit easier to override the download URL schema.
-    baseURL = "https://downloads.intel.com/akdlm/software/acdsinst";
-    # e.g. "23.1std.1.993" -> "23.1std/993"
-    URLdir = "${lib.versions.majorMinor finalAttrs.version}std/${lib.elemAt (lib.splitVersion finalAttrs.version) 4}/ib_installers";
-    download =
-      name: hash:
-      fetchurl {
-        inherit name hash;
-        url = "${finalAttrs.finalPackage.baseURL}/${finalAttrs.finalPackage.URLdir}/${name}";
+  passthru =
+    {
+      lite = {
+        version' = "25.1std.0.1129";
+        deviceIds = {
+          "Arria II" = "arria_lite";
+          "Cyclone V" = "cyclonev";
+          "Cyclone IV" = "cyclone";
+          "Cyclone 10 LP" = "cyclone10lp";
+          "MAX II/V" = "max";
+          "MAX 10 FPGA" = "max10";
+        };
+        components = {
+          "arria_lite" = "sha256-Epxvu1z7Z4vQWASIYEJAy5P7Meee114ZNVIAZnmTEH8=";
+          "cyclone" = "sha256-lKOYy61BHxY4OyonxADg6d7IGwckGX8zu0x6dpGB5Lo=";
+          "cyclone10lp" = "sha256-lurSlhCuE6i2ULKNFvlWNtk6rqdvVwREC607HbMSH2I=";
+          "cyclonev" = "sha256-1uSE/RsKR3hbyLzTGOQn1Ml5j5J26e+SmFI1hl9ry28=";
+          "max" = "sha256-jY/b906fJKgJOL3h5nWR5RQdvAJ3U9of6y4VopGo2z0=";
+          "max10" = "sha256-gFeESwuRwrp+8rN7GYbRmOxPGDHMm+ClLRjl/rTBnOk=";
+        };
+        installers = {
+          "QuartusLiteSetup-${finalAttrs.version}-linux.run" =
+            "sha256-UYQz7H3NYXJVYK9lM1P3pcMgzOnlKLInR7io3zZ0xOs=";
+        }
+        // lib.optionalAttrs withQuesta {
+          "QuestaSetup-${finalAttrs.version}-linux.run" =
+            "sha256-0F7psE+jTimCoy+UVJRgxNC6GEVdY/PJu49hf+D7T3U=";
+        };
+        installerParts = { };
+        mainInstaller = "QuartusLiteSetup-${finalAttrs.version}-linux.run";
       };
-  };
+      standard = {
+        version' = "25.1std.0.1129";
+        deviceIds = {
+          "Arria II" = "arria";
+          "Arria V" = "arriav";
+          "Arria V GZ" = "arriavgz";
+          "Arria 10" = "arria10";
+          "Cyclone V" = "cyclonev";
+          "Cyclone IV" = "cyclone";
+          "Cyclone 10 LP" = "cyclone10lp";
+          "MAX II/V" = "max";
+          "MAX 10 FPGA" = "max10";
+          "Stratix IV" = "stratixiv";
+          "Stratix V" = "stratixv";
+        };
+        components = {
+          arria = "sha256-BNfOuJ7e4s3hVNx6J6+UEh4NWW+5z0Muz6Ty7NfVkf0=";
+          arria10 = "sha256-v3cfAu7qX4uerHH0uJWsi4uK+sSMfdyprqXyWThrYzY=";
+          arriav = "sha256-WpQAJE6OrGcQhxINkLYJt6KP1zn/LmU6KkDklCl8vSU=";
+          arriavgz = "sha256-1jgeM3u/tdjwh5k38UblHq2a/Y/iwT8qI3pOA12RIPg=";
+          cyclone = "sha256-lKOYy61BHxY4OyonxADg6d7IGwckGX8zu0x6dpGB5Lo=";
+          cyclone10lp = "sha256-lurSlhCuE6i2ULKNFvlWNtk6rqdvVwREC607HbMSH2I=";
+          cyclonev = "sha256-1uSE/RsKR3hbyLzTGOQn1Ml5j5J26e+SmFI1hl9ry28=";
+          max = "sha256-jY/b906fJKgJOL3h5nWR5RQdvAJ3U9of6y4VopGo2z0=";
+          max10 = "sha256-gFeESwuRwrp+8rN7GYbRmOxPGDHMm+ClLRjl/rTBnOk=";
+          stratixiv = "sha256-DalqBhE/97sAt015o4hUmo93NBKGSFJPPZO49YcoSMM=";
+          stratixv = "sha256-UJbBk6UQ/DKm1Uvl5o3FUPYDvai95t8Obb/c1It0fjg=";
+        };
+        installers = {
+          "QuartusSetup-${finalAttrs.version}-linux.run" =
+            "sha256-b++VtYqGBXW+yYEMddMjk8bwH0oiLmjb143Of6QDoog=";
+        }
+        // lib.optionalAttrs withQuesta {
+          "QuestaSetup-${finalAttrs.version}-linux.run" =
+            "sha256-0F7psE+jTimCoy+UVJRgxNC6GEVdY/PJu49hf+D7T3U=";
+        };
+        installerParts = { };
+        mainInstaller = "QuartusSetup-${finalAttrs.version}-linux.run";
+      };
+      pro = {
+        # Quartus Prime Pro doesn't provide device files for Cyclone 10 GX or Arria 10 on x.x.1 releases
+        version' = "26.1.0.110";
+        deviceIds = {
+          "Agilex common files" = "agilex_common";
+          "Agilex 3" = "agilex3";
+          "Agilex 5" = "agilex5";
+          "Agilex 7" = "agilex7";
+          "Arria 10" = "arria10";
+          "Cyclone 10 GX" = "cyclone10gx";
+          "Stratix 10" = "stratix10";
+        };
+        components = {
+          agilex_common = "sha256-iP/AwGnSVpUFk3pqp6r920ldHQnmBaZY5SWf8XpPtAM=";
+          agilex3 = "sha256-XSaV+NbeEYh5CMWnUqvz0cW3PaKhdzXAz8GdoA/cgi4=";
+          agilex5 = "sha256-sceVIybyPDQ/KPyQpefPfD15WzwclnesV7nHPN3MgCc=";
+          agilex7 = "sha256-dUF0qDZefP+ssxs2u0n6pssbKr4CTe4KU4A3Uo3UiB0=";
+          arria10 = "sha256-xvAp5Hrd/zukIyNxviaXHZwLjrF6Q+AIneyzk0xKSng=";
+          cyclone10gx = "sha256-bkwkBButejpJpkXSpwHNxk1ko6iqZDnsDwxb85k8Nfs=";
+          stratix10 = "sha256-uBUKcYcN1FcKrzTumzFnyVZ5pR9jT9Y4a94FXC9TWCA=";
+        };
+        installers = {
+          "QuartusProSetup-${finalAttrs.version}-linux.run" =
+            "sha256-hE8qbaRDCvEDlpbz0Stmn9WBPgPuJr0flN3Inx03RjI=";
+        }
+        // lib.optionalAttrs withQuesta {
+          "QuestaSetup-${finalAttrs.version}-linux.run" =
+            "sha256-79ZqW7CRTWqzm+VqKAJbbzJnBKfRA19uzQRIBj19aoo=";
+        };
+        installerParts = {
+          "QuartusProSetup-part2-${finalAttrs.version}.qdz" =
+            "sha256-fQDStWkoq4+CJsWefckZaofm603w217GefFyELMhUrs=";
+        };
+        mainInstaller = "QuartusProSetup-${finalAttrs.version}-linux.run";
+      };
+    }
+    .${variant}
+    // {
+      # Make it a bit easier to override the download URL schema.
+      baseURL = "https://download.altera.com/akdlm/software/acdsinst";
+      # e.g.
+      # "23.1std.1.993" -> "23.1std.1/993"
+      # "24.1std.0.1077" -> "24.1std/1077"
+      # "26.1.1.130" -> "26.1.1/130"
+      # "26.1.0.110" -> "26.1/110"
+      URLdir =
+        let
+          split = lib.splitString "." finalAttrs.version;
+          patch = builtins.elemAt split 2;
+          shortVer = builtins.concatStringsSep "." (
+            (lib.take 2 split) ++ (lib.optional (patch != "0") patch)
+          );
+        in
+        "${shortVer}/${builtins.elemAt split 3}/ib_installers";
+      download =
+        name: hash:
+        fetchurl {
+          inherit name hash;
+          url = "${finalAttrs.finalPackage.baseURL}/${finalAttrs.finalPackage.URLdir}/${name}";
+          curlOptsList = [
+            "--user-agent"
+            "Alterabot/1.0"
+          ];
+        };
+    };
 
   meta = {
-    homepage = "https://fpgasoftware.intel.com";
+    homepage = "https://www.altera.com/downloads/fpga-development-tools/quartus-prime-${variant}-current";
     description = "FPGA design and simulation software";
     mainProgram = "quartus";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -157,6 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
       kwohlfahrt
       zainkergaye
       doronbehar
+      Mop-u
     ];
   };
 })

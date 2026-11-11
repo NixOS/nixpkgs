@@ -48,6 +48,8 @@ let
     installPhase = ''
       install -D -m 0755 -t $out/share/d3-flame-graph/ ./dist/templates/*
     '';
+
+    meta.license = lib.licenses.asl20;
   };
 in
 
@@ -172,5 +174,6 @@ stdenv.mkDerivation {
     mainProgram = "perf";
     maintainers = with lib.maintainers; [ tobim ];
     platforms = lib.platforms.linux;
+    inherit (linux_latest.meta) license;
   };
 }

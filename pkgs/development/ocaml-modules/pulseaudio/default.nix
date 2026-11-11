@@ -14,8 +14,8 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-pulseaudio";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eG2HS5g3ycDftRDyXGBwPJE7VRnLXNUgcEgNfVm//ds=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eG2HS5g3ycDftRDyXGBwPJE7VRnLXNUgcEgNfVm//ds=";
   };
 
   nativeBuildInputs = [ pkg-config ];

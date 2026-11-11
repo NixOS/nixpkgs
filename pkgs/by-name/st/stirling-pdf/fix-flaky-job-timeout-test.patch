@@ -1,0 +1,42 @@
+diff --git a/app/common/src/test/java/stirling/software/common/service/JobExecutorServiceMoreTest.java b/app/common/src/test/java/stirling/software/common/service/JobExecutorServiceMoreTest.java
+--- a/app/common/src/test/java/stirling/software/common/service/JobExecutorServiceMoreTest.java
++++ b/app/common/src/test/java/stirling/software/common/service/JobExecutorServiceMoreTest.java
+@@ -15,5 +15,6 @@ import java.util.Map;
+ import java.util.Optional;
+ import java.util.concurrent.CompletableFuture;
++import java.util.concurrent.CountDownLatch;
+ import java.util.function.Supplier;
+ 
+ import org.junit.jupiter.api.BeforeEach;
+@@ -202,17 +203,24 @@ class JobExecutorServiceMoreTest {
+         @Test
+         @DisplayName("a job that exceeds its timeout is recorded as timed out")
+         void asyncTimeoutRecorded() {
++            CountDownLatch finishWork = new CountDownLatch(1);
+             Supplier<Object> work =
+                     () -> {
+-                        long start = System.nanoTime();
+-                        while (System.nanoTime() - start < 200_000_000L) {
+-                            // busy wait beyond the 1ms timeout
++                        try {
++                            // Keep the work pending until the timeout has been observed.
++                            finishWork.await();
++                        } catch (InterruptedException e) {
++                            Thread.currentThread().interrupt();
+                         }
+                         return "late";
+                     };
+-            // 1ms custom timeout, async, non-queueable.
+-            ResponseEntity<?> response = service.runJobGeneric(true, work, 1L, false, 10);
+-            assertThat(response.getBody()).isInstanceOf(JobResponse.class);
+-            verify(taskManager, timeout(5000)).setError(anyString(), eq("Job timed out"));
++            try {
++                // 1ms custom timeout, async, non-queueable.
++                ResponseEntity<?> response = service.runJobGeneric(true, work, 1L, false, 10);
++                assertThat(response.getBody()).isInstanceOf(JobResponse.class);
++                verify(taskManager, timeout(5000)).setError(anyString(), eq("Job timed out"));
++            } finally {
++                finishWork.countDown();
++            }
+         }
+     }

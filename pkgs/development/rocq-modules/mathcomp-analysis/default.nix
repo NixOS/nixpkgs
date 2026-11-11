@@ -16,7 +16,9 @@ let
   repo = "analysis";
   owner = "math-comp";
 
-  release."1.16.0".sha256 = "sha256-L0dCbxEqxI8rFv6OOEoIT/U3GKX37ageU9yw2H6hrWY=";
+  release."1.19.0".hash = "sha256-QNTvMYmjuBb4P4uTYE2ihJJgPGAcdaH/n3YVjYUhglg=";
+  release."1.18.0".hash = "sha256-286G/C2n6ZQC4Xn/R7UfMW7scTADYh42Bo36416PUsw=";
+  release."1.16.0".hash = "sha256-L0dCbxEqxI8rFv6OOEoIT/U3GKX37ageU9yw2H6hrWY=";
   release."1.14.0".hash = "sha256-FFcfxnF1wtz2e9Rdqu4Wd0rtLW0DYoXswCTji//RSCQ=";
   release."1.13.0".hash = "sha256-nn2gl6cAO93QEdMvLGlB9WAPddQiOdeRtk1pLO+gxII=";
   release."1.12.0".hash = "sha256-PF10NlZ+aqP3PX7+UsZwgJT9PEaDwzvrS/ZGzjP64Wo=";
@@ -61,6 +63,8 @@ let
     lib.switch
       [ rocq-core.rocq-version mathcomp.version ]
       [
+        (case (range "9.0" "9.3") (range "2.6.0" "2.6.0") "1.19.0")
+        (case (range "9.0" "9.3") (range "2.6.0" "2.6.0") "1.18.0")
         (case (range "9.0" "9.3") (range "2.4.0" "2.6.0") "1.16.0")
         (case (range "8.20" "9.1") (range "2.4.0" "2.5.0") "1.14.0")
         (case (range "8.20" "9.1") (range "2.1.0" "2.4.0") "1.13.0")

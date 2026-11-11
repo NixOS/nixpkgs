@@ -6,33 +6,30 @@
   electron,
   python3,
   xcodebuild,
-  applyPatches,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "dopamine";
-  version = "3.0.7";
+  version = "3.0.9";
 
-  # needed to upgrade better-sqlite3 in npmConfigHook
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "digimezzo";
-      repo = "dopamine";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-zYuf5BIQaxTqHBXWX1PLghGR5WmwtnSxTYrNosVFebc=";
-    };
-    patches = [
-      # register-scheme contains install scripts, but has no lockfile
-      ./remove-register-scheme.patch
-
-      # fixes node-addon-api errors with aarch64-darwin
-      ./update-node-addon-api.patch
-
-      # bump better-sqlite3 to work with electron 41
-      ./bump-better-sqlite3.patch
-    ];
+  src = fetchFromGitHub {
+    owner = "digimezzo";
+    repo = "dopamine";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2I/xGuBFGtSCKWaM5J574tk1c1yxgCo1fnJr/uGPq2c=";
   };
 
-  npmDepsHash = "sha256-m5y8TmOUAUf2IE87b73hFe2vj/uRAqFGgfuy3vkUX/s=";
+  patches = [
+    # register-scheme contains install scripts, but has no lockfile
+    ./remove-register-scheme.patch
+
+    # fixes node-addon-api errors with aarch64-darwin
+    ./update-node-addon-api.patch
+
+    # bump better-sqlite3 to work with electron 41
+    ./bump-better-sqlite3.patch
+  ];
+
+  npmDepsHash = "sha256-LaHqS36bMN/kkb6+3GpmTOTAEaEMH3yy04jM3OfR+1k=";
 
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ distutils ]))

@@ -22,7 +22,6 @@ python3Packages.buildPythonApplication {
   '';
 
   __structuredAttrs = true;
-  strictDeps = true;
   build-system = with python3Packages; [ setuptools ];
   dependencies = with python3Packages; [
     biopython

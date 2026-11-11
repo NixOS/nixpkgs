@@ -4,6 +4,7 @@
   aiohttp,
   anthropic,
   apscheduler,
+  azure-ai-contentsafety,
   azure-identity,
   azure-keyvault-secrets,
   azure-storage-blob,
@@ -11,33 +12,43 @@
   backoff,
   boto3,
   buildPythonPackage,
+  certifi,
   click,
   cryptography,
+  detect-secrets,
+  expression,
   fastapi,
   fastapi-sso,
   fastuuid,
   fetchFromGitHub,
+  filelock,
   google-cloud-iam,
   google-cloud-kms,
+  google-cloud-speech,
   google-genai,
   grpcio,
   gunicorn,
   httpx,
+  httpx2,
+  huggingface-hub,
   importlib-metadata,
   inquirerpy,
   jinja2,
   jsonschema,
   langfuse,
-  maturin,
+  litellm-proxy-extras,
+  llm-sandbox,
   mcp,
   openai,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
   opentelemetry-sdk,
   orjson,
+  packaging,
   polars,
   prisma,
   prometheus-client,
+  psycopg,
   pydantic,
   pydantic-settings,
   pyjwt,
@@ -46,6 +57,7 @@
   python-dotenv,
   python-multipart,
   pyyaml,
+  redisvl,
   resend,
   restrictedpython,
   rich,
@@ -55,6 +67,8 @@
   soundfile,
   tiktoken,
   tokenizers,
+  tomlkit,
+  typing-extensions,
   uvicorn,
   uvloop,
   websockets,
@@ -62,16 +76,16 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "litellm";
-  version = "1.97.0";
+  version = "1.108.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}";
-    hash = "sha256-9nVVXRvtfxntAgSetCy66jfDpunR12DEIoQKAjSZn/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n30jJ/pDhCAhLTJuDOS+z8cXnvvVYkn4ETxVVR5uZuI=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -82,35 +96,48 @@ buildPythonPackage rec {
   cargoRoot = "litellm-rust";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       cargoRoot
       ;
-    hash = "sha256-iwgIclG8BGeHDNtm686w2Rxe+9ddvBrz1sMfOBeuKK0=";
+    hash = "sha256-2Hok5ZKrpeyW/KuXdOuVB/vAdxdk4R6bamcqVQoCRmA=";
   };
+
+  patches = [
+    # fix import race when offline
+    ./model-cost-map-retry-wait-for-import.patch
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "maturin==1.9.4" "maturin==${maturin.version}"
+      --replace-fail "maturin==1.15.0" "maturin>=1.0,<2.0"
   '';
 
   dependencies = [
     aiohttp
+    boto3
+    certifi
     click
     fastuuid
+    filelock
     httpx
+    huggingface-hub
     importlib-metadata
     jinja2
     jsonschema
     openai
+    packaging
     pydantic
     pydantic-settings
     python-dotenv
+    pyyaml
     tiktoken
     tokenizers
-  ];
+    typing-extensions
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   optional-dependencies = {
     proxy = [
@@ -118,14 +145,15 @@ buildPythonPackage rec {
       azure-identity
       azure-storage-blob
       backoff
-      boto3
       cryptography
+      expression
       fastapi
       fastapi-sso
       gunicorn
+      httpx2
       inquirerpy
       # FIXME package litellm-enterprise
-      # FIXME package litellm-proxy-extras
+      litellm-proxy-extras
       mcp
       orjson
       polars
@@ -137,6 +165,7 @@ buildPythonPackage rec {
       rich
       rq
       soundfile
+      tomlkit
       uvloop
       uvicorn
       websockets
@@ -149,17 +178,19 @@ buildPythonPackage rec {
       google-cloud-iam
       google-cloud-kms
       prisma
-      # FIXME package redisvl
+      psycopg
+      redisvl
       resend
     ];
 
     proxy-runtime = [
       anthropic
-      # FIXME package azure-ai-contentsafety
+      azure-ai-contentsafety
       azure-storage-file-datalake
       # FIXME package ddtrace
-      # FIXME package detect-secrets
+      detect-secrets
       # FIXME package google-cloud-aiplatform
+      google-cloud-speech
       google-genai
       grpcio
       langfuse
@@ -167,18 +198,23 @@ buildPythonPackage rec {
       opentelemetry-api
       opentelemetry-exporter-otlp
       opentelemetry-sdk
-      # FIXME package llm-sandbox
+      llm-sandbox
       prometheus-client
       pypdf
       sentry-sdk
-    ];
+    ]
+    # litellm's skills executor uses the default docker backend
+    ++ llm-sandbox.optional-dependencies.docker;
   };
 
   pythonImportsCheck = [ "litellm" ];
 
   pythonRelaxDeps = [
     "aiohttp"
+    "boto3"
+    "certifi"
     "click"
+    "huggingface-hub"
     "importlib-metadata"
     "jsonschema"
     "openai"
@@ -194,17 +230,20 @@ buildPythonPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v([0-9]+\\.[0-9]+\\.[0-9]+)"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
     };
   };
 
   meta = {
-    description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
+    description = "Call LLM APIs in OpenAI (or native) format with cost tracking, guardrails, load balancing, and logging";
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
-    changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
+    changelog = "https://github.com/BerriAI/litellm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      happysalada
+      anish
+    ];
   };
-}
+})

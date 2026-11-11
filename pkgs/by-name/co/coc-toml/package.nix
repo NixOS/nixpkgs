@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.2.5";
 
   src = fetchFromGitHub {
-    owner = "kkiyama117";
+    owner = "neoclide";
     repo = "coc-toml";
     tag = "v${finalAttrs.version}";
     hash = "sha256-iyQRa4h23mfmCmujNYYV8Y+82+HLYUtXgBzU1dtovYc=";
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Toml extension for coc.nvim";
-    homepage = "https://github.com/kkiyama117/coc-toml";
+    homepage = "https://github.com/neoclide/coc-toml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soopyc ];
   };

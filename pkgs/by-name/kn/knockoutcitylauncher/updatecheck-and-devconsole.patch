@@ -1,0 +1,121 @@
+diff --git a/src/main/index.ts b/src/main/index.ts
+index a727e2d..e9c0753 100644
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -134,11 +134,6 @@ function createWindow(): void {
+     return { action: 'deny' }
+   })
+ 
+-  if (!app.isPackaged)
+-    win.webContents.openDevTools({
+-      mode: 'detach'
+-    })
+-
+   async function updateServerList(): Promise<void> {
+     try {
+       serverList = [
+@@ -813,103 +808,7 @@ if (gotTheLock) {
+       }
+       app.quit()
+     }
+-
+-    axios
+-      .get('https://cdn.ipmake.dev/kocity/version', {
+-        timeout: 5000
+-      })
+-      .then(async (res) => {
+-        console.log('Checking for update')
+-        // get the version of the app from electron
+-        const version = app.getVersion().trim()
+-        console.log(`${version} => ${res.data}`)
+-
+-        if (res.data === undefined || res.data === null || String(res.data).trim().length >= 10) {
+-          console.log('No update available')
+-          createWindow()
+-          return
+-        }
+-
+-        if (`${res.data}`.trim() == `${version}`.trim()) {
+-          createWindow()
+-        } else {
+-          if (!(os.platform() === 'win32')) {
+-            dialog.showErrorBox(
+-              'Update Available',
+-              'There is an update available but auto updating is currently only supported on Windows. Please download the latest version from https://kocity.xyz'
+-            )
+-            createWindow()
+-            return
+-          }
+-          const { response } = await dialog.showMessageBox({
+-            type: 'info',
+-            title: 'Update Available',
+-            message: `An update is available for the Knockout City Launcher! Would you like to download it?`,
+-            buttons: ['Yes', 'No']
+-          })
+-          if (response === 0) {
+-            // open a small update window
+-            const updateWindow = new BrowserWindow({
+-              width: 500,
+-              height: 250,
+-              frame: false,
+-              transparent: true,
+-              alwaysOnTop: true,
+-              skipTaskbar: true,
+-              titleBarStyle: 'hidden',
+-              movable: false,
+-              resizable: false,
+-              icon: './www/logo.png',
+-              webPreferences: {
+-                nodeIntegration: true
+-              }
+-            })
+-            console.log('Update window opened!')
+-
+-            if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+-              updateWindow.loadFile(
+-                path.join(process.env['ELECTRON_RENDERER_URL'], '../../resources/update.html')
+-              )
+-            } else {
+-              updateWindow.loadFile(path.join(__dirname, '../../resources/update.html'))
+-            }
+-
+-            // download the exe file using axios
+-            console.log('Downloading update...')
+-            axios
+-              .get(
+-                `https://github.com/kocxyz/Launcher/releases/download/v${String(res.data).trim()}/Knockoutcitylauncher-Setup.exe`,
+-                {
+-                  responseType: 'arraybuffer'
+-                }
+-              )
+-              .then(async (res) => {
+-                console.log('Update complete!')
+-
+-                // write it to the download folder
+-                fs.writeFileSync(`${os.tmpdir()}/kocity-update.exe`, res.data)
+-
+-                // open the file
+-                spawn(`${os.tmpdir()}/kocity-update.exe`, { detached: true, stdio: 'ignore' })
+-
+-                setTimeout(() => {
+-                  app.quit()
+-                  process.exit(0)
+-                }, 1000)
+-              })
+-          } else {
+-            createWindow()
+-          }
+-        }
+-      })
+-      .catch((err) => {
+-        console.error('Error checking for update:', err)
+-        dialog.showErrorBox(
+-          'Update Check Failed',
+-          'Failed to check for updates. Please try again later.'
+-        )
+-        createWindow()
+-      })
++    createWindow()
+   })
+ } else {
+   app.quit()

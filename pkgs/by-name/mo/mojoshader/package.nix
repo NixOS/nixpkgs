@@ -23,14 +23,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mojoshader";
-  version = "0-unstable-2026-04-28";
+  version = "0-unstable-2026-09-03";
 
   src = fetchFromGitHub {
     owner = "icculus";
     repo = "mojoshader";
-    rev = "6333f74dbd5644789a63e903816441b16c1e8b60";
+    rev = "ad5dff84830c2863c841f4b1f4e3df78c705b383";
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
-    hash = "sha256-32gRoYFGzQksOccpM9qvhd4Q6PyyH3EpQ2rcOI7qfp4=";
+    hash = "sha256-rif2aHcjx+YIPRI9pKIA9wGYUVrIkTqu0f/p/0aN3J8=";
   };
 
   buildInputs = [ SDL2 ];

@@ -28,7 +28,19 @@ buildGhidraExtension {
   src = "${ghidra}/lib/ghidra/Extensions/Ghidra/${ghidra.distroPrefix}_GnuDisassembler.zip";
 
   postPatch = ''
-    ln -s ${binutils-src} binutils-${binutils-version}.tar.bz2
+    mkdir binutils-patched
+    tar -xjf ${binutils-src} -C binutils-patched
+
+    patch -p1 \
+      -d binutils-patched/binutils-${binutils-version} \
+      < ${./0005-gprofng-protect-against-standard-library-macros.patch}
+
+    tar -cjf binutils-${binutils-version}.tar.bz2 \
+      -C binutils-patched \
+      binutils-${binutils-version}
+
+    rm -rf binutils-patched
+
     substituteInPlace build.gradle \
       --replace-fail 'ext.binutils = "binutils-2.41"' 'ext.binutils = "binutils-${binutils-version}"'
   '';
@@ -64,6 +76,8 @@ buildGhidraExtension {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Leverage the binutils disassembler capabilities for various processors";
     homepage = "https://ghidra-sre.org/";
     downloadPage = "https://github.com/NationalSecurityAgency/ghidra/tree/master/GPL/GnuDisassembler";

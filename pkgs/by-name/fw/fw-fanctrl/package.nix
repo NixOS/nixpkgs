@@ -21,7 +21,12 @@ python3Packages.buildPythonPackage rec {
 
   dependencies = [ python3Packages.jsonschema ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ fw-ectool ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ fw-ectool ])
+  ];
 
   postInstall = ''
     mkdir -p $out/share/fw-fanctrl

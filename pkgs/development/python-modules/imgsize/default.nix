@@ -8,19 +8,19 @@
 
 buildPythonPackage rec {
   pname = "imgsize";
-  version = "4.0.2";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ojii";
     repo = "imgsize";
     tag = version;
-    sha256 = "sha256-pHLYDC3UjrCKOdfgo2OreE5hGyIyWVSIsQR6piJZe6k=";
+    hash = "sha256-5EpmZMszpubl3/vyCufADLwNlrHN3JwnLlLzR4xN2fw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-AXBd6cCpBVEYnU/uqynnO8wsVypV34r023kwzwSsbe4=";
+    hash = "sha256-I62N8iW0CZ2UVzUSqCnOto1otmmRANa4SKszbHBk39w=";
   };
 
   nativeBuildInputs = [

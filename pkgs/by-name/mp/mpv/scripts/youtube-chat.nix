@@ -7,7 +7,7 @@
 
 buildLua {
   pname = "youtube-chat";
-  version = "unstable-2024-06-08";
+  version = "0-unstable-2024-06-08";
 
   src = fetchFromGitHub {
     owner = "BanchouBoo";

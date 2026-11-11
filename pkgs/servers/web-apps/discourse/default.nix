@@ -12,6 +12,8 @@
 
   defaultGemConfig,
   ruby_3_4,
+  pkg-config,
+  oniguruma,
   fetchzip,
   gzip,
   gnutar,
@@ -54,13 +56,13 @@
 }:
 
 let
-  version = "2026.7.1";
+  version = "2026.9.1";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
-    rev = "v${version}";
-    sha256 = "sha256-sGygaOCygtDVjg8uBGdDVaRouUKib8aAukaBAY8aQ9w=";
+    tag = "v${version}";
+    hash = "sha256-j3JjLYNcv3lluoCekyUUKMfkSX/ExeDsa8zrQ+pDrwg=";
   };
 
   pnpm = pnpm_10;
@@ -180,8 +182,8 @@ let
   rubyEnv =
     let
       # these hashes are auto-updated by update.py
-      dart-x64-hash = "sha256-2rnqNeEr8PFMuFa4IhutxxXui1dCw3XQVqCV5ZwsUR8=";
-      dart-arm64-hash = "sha256-8sgc9IaeWSRnURFtMuSOqnKACkDc5WynmLIboYWwoSM=";
+      dart-x64-hash = "sha256-pNK3ekjTYP/FCInhtb5uxDBDP/yA79fnE76avxoHt9k=";
+      dart-arm64-hash = "sha256-B6OWLvW7dM6DIeO5A6WbpQ0IHJca54HZCRLyAn2XKK0=";
     in
     bundlerEnv rec {
       name = "discourse-ruby-env-${version}";
@@ -250,8 +252,13 @@ let
           nativeBuildInputs = [
             cargo
             rustc
+            pkg-config
             rustPlatform.cargoSetupHook
             rustPlatform.bindgenHook
+          ];
+
+          buildInputs = [
+            oniguruma
           ];
 
           disallowedReferences = [
@@ -274,7 +281,7 @@ let
               unpackPhase
               nativeBuildInputs
               ;
-            hash = "sha256-OIkSavAjja1atbeyPAKFXsXoYI3nUk9c5G3RFBj53Uk=";
+            hash = "sha256-2OITwITCGoAIahIXpemWP38iFGSlrycUV319pmdD1dY=";
           };
 
           dontBuild = false;
@@ -350,7 +357,7 @@ let
       pname = "discourse-assets";
       inherit version src pnpm;
       fetcherVersion = 3;
-      hash = "sha256-T0qcUYHqpjeGlyozcaiVI/Art0zh2PLyuMzbquhfe/o=";
+      hash = "sha256-oahr5SJzHfIfcB7NFxeeEYDf3Q4m/iC/JMpNjlEWgSE=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -392,7 +399,7 @@ let
       # because we fail to copy tmp/ (the default directory where the asset processor is cached,
       # see notes in the discourse `installPhase`) we need to change the directory to something under
       # frontend/ which is moved over as expected.
-      ./prebuild-asset-processor.patch
+      ./include-precompiled-bundles.patch
 
       # safe_exec.rb, which is used to execute ImageMagick among other things, restricts executable paths to standard FHS paths
       # which breaks on nix. this patch adds the entire /nix/store to allowed paths, which is sub-optimal but
@@ -471,6 +478,8 @@ let
     dontCheckForBrokenSymlinks = true;
   };
 
+  voiceAssets = rubyEnv.gems.discourse_voice_assets;
+
   discourse = stdenv.mkDerivation {
     pname = "discourse";
     inherit version src;
@@ -507,7 +516,7 @@ let
       # because we fail to copy tmp/ (the default directory where the asset processor is cached,
       # see notes in the discourse `installPhase`) we need to change the directory to something under
       # frontend/ which is moved over as expected.
-      ./prebuild-asset-processor.patch
+      ./include-precompiled-bundles.patch
 
       # safe_exec.rb, which is used to execute ImageMagick among other things, restricts executable paths to standard FHS paths
       # which breaks on nix. this patch adds the entire /nix/store to allowed paths, which is sub-optimal but
@@ -517,6 +526,12 @@ let
       # Our app/assets/generated folder is a symlink, but the ruby File.mkdir_p doesn't allow
       # a symlink in the way to the last directory. This patch explicitly resolves the symlink.
       ./resolve_generated_assets_symlink.patch
+
+      # in the imagemagick sandbox, symlinks permissions are checked (as you would hope) but this causes other problems..
+      ./optimize-image-fix.patch
+
+      # Skip voice plugin asset symlink removal/recreation at runtime.
+      ./voice-plugin-assets.patch
     ];
 
     postPatch = ''
@@ -562,6 +577,14 @@ let
         p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}"
       ) plugins}
 
+      # The voice plugin creates its asset symlink below its source tree. That
+      # works during the asset build, but the package source tree is read-only
+      # at runtime..
+      mkdir -p $out/share/discourse/plugins/voice/public/javascripts
+      ln -sf \
+        ${voiceAssets}/lib/ruby/gems/${rubyEnv.ruby.version.libDir}/gems/discourse_voice_assets-${voiceAssets.version}/vendor \
+        $out/share/discourse/plugins/voice/public/javascripts/${voiceAssets.version}
+
       runHook postInstall
     '';
 
@@ -589,7 +612,10 @@ let
     };
     meta = {
       homepage = "https://www.discourse.org/";
-      platforms = lib.platforms.linux;
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       maintainers = with lib.maintainers; [
         leona
         talyz

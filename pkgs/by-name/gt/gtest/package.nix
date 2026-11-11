@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtest";
-  version = "1.17.0";
+  version = "1.18.0";
 
   outputs = [
     "out"
@@ -39,36 +39,37 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rXsn2L0xeWvfxTjMAoWEu0UFZ7xOSfYmhbKgRF5J9co=";
   };
-
-  patches = [
-    ./fix-cmake-config-includedir.patch
-  ];
 
   nativeBuildInputs = [
     cmake
     ninja
-  ]
-  ++ lib.optionals withAbseil [
+  ];
+
+  buildInputs = lib.optionals withAbseil [
     abseil-cpp
     re2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
   ]
   ++ lib.optionals (cxx_standard != null) [
-    "-DCMAKE_CXX_STANDARD=${cxx_standard}"
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxx_standard)
   ]
-  ++ lib.optional withAbseil "-DGTEST_HAS_ABSL=ON";
+  ++ lib.optional withAbseil (lib.cmakeBool "GTEST_HAS_ABSL" true);
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Google's framework for writing C++ tests";
     homepage = "https://github.com/google/googletest";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ stephen-huan ];
   };
 })

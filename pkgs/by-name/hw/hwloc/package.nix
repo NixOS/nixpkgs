@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwloc";
-  version = "2.14.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "open-mpi";
     repo = "hwloc";
     tag = "hwloc-${finalAttrs.version}";
-    hash = "sha256-lbh8tkKeUcHta7/q9TuHQhccyWjkBgrC5fVifFJqQyY=";
+    hash = "sha256-IZXTjKUp3wULSF87b/JNMtaQGBUoUZiG4grgxfZ1nX0=";
   };
 
   configureFlags = [

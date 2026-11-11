@@ -20,16 +20,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "busylight-for-humans";
-  version = "1.0.1";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
     tag = "busylight-cli/v${finalAttrs.version}";
-    hash = "sha256-h+YPrcf32SgzdQDYCeQlh4enzsXfsHr470W3tiFBO7g=";
+    hash = "sha256-mEAtNu6lBe7N+Cf02vGQLdeHzT+zfTbN4G7yk1ak77Q=";
     rootDir = "packages/busylight";
   };
+
+  pythonRelaxDeps = [ "typer" ];
 
   build-system = [ uv-build ];
 
@@ -63,6 +65,11 @@ buildPythonPackage (finalAttrs: {
     mkdir -p $out/lib/udev/rules.d
     $out/bin/busylight udev-rules -o $out/lib/udev/rules.d/99-busylight.rules
   '';
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Control USB connected presence lights from multiple vendors via the command-line or web API";

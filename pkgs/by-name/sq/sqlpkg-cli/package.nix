@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,9 +27,7 @@ buildGoModule (finalAttrs: {
     mv -v $out/bin/cli $out/bin/sqlpkg
   '';
 
-  preCheck = ''
-    export HOME="$TMP"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "SQLite package manager";

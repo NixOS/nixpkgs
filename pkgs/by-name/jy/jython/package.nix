@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  makeWrapper,
+  fetchFromGitHub,
+  ant,
+  jdk,
   jre,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,26 +13,42 @@ stdenv.mkDerivation (finalAttrs: {
 
   version = "2.7.4";
 
-  src = fetchurl {
-    url = "https://search.maven.org/remotecontent?filepath=org/python/jython-standalone/${finalAttrs.version}/jython-standalone-${finalAttrs.version}.jar";
-    sha256 = "sha256-H7oXae/8yLGfXhBDa8gnShWM6YhVnyV5J8JMc7sTfzw=";
+  src = fetchFromGitHub {
+    owner = "jython";
+    repo = "jython";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ef5pabXjQlVLn+8RE5rSwmxbjr04okBN4jRDMWBMOJo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+  ];
 
-  dontUnpack = true;
+  buildPhase = ''
+    runHook preBuild
+
+    ant jar-standalone
+
+    runHook postBuild
+  '';
 
   installPhase = ''
-    mkdir -pv $out/bin
-    cp $src $out/jython.jar
-    makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
+    runHook preInstall
+
+    install -Dm644 dist/jython-standalone.jar $out/share/jython.jar
+
+    makeWrapper ${lib.getExe jre} $out/bin/jython \
+      --add-flags "-jar $out/share/jython.jar"
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Python interpreter written in Java";
     mainProgram = "jython";
     homepage = "https://jython.org/";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.psfl;
     platforms = jre.meta.platforms;
   };

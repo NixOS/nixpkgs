@@ -2,6 +2,9 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  rustPlatform,
+  cargo,
+  rustc,
 
   # tests
   gitMinimal,
@@ -14,7 +17,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "seagoat";
-  version = "1.2.0";
+  version = "1.6.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,49 +25,65 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ps+pwFOpCQWyI2SrOZSysq1kUeo53I2cfW2WC+SwccE=";
+    hash = "sha256-lsEu58GWdVdunip0n3fdrqjEABnpZDQ4iWtaIBb4M/U=";
   };
 
-  build-system = [ python3Packages.poetry-core ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-HYlUKQSUPcQknd+ie8OAyOfFHXifYS/TcuxLlhWYhLE=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    cargo
+    rustc
+  ];
 
   pythonRelaxDeps = [
+    "certifi"
     "chardet"
-    "chromadb"
-    "ollama"
-    "psutil"
-    "setuptools"
+    "openai"
+    "platformdirs"
     "stop-words"
   ];
 
   dependencies = with python3Packages; [
-    appdirs
-    blessed
+    certifi
     chardet
     chromadb
+    click
     deepmerge
     flask
-    gitpython
-    halo
     jsonschema
     mcp
-    nest-asyncio
     ollama
+    openai
+    orjson
+    packaging
+    platformdirs
     psutil
     pygments
-    python-dotenv
+    pyyaml
     requests
     stop-words
+    tqdm
     waitress
+    yaspin
   ];
+
+  pythonImportsCheck = [ "seagoat" ];
 
   nativeCheckInputs =
     with python3Packages;
     [
       pytestCheckHook
       freezegun
+      gitpython
       pytest-asyncio
       pytest-mock
-      pytest-snapshot
+      pytest-timeout
+      syrupy
     ]
     ++ [
       gitMinimal
@@ -73,6 +92,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       writableTmpDirAsHomeHook
     ];
 
+  pytestFlags = [
+    # The snapshot of the (disabled) test_snapshot_results_with_real_repo is unused
+    "--snapshot-warn-unused"
+  ];
+
   disabledTests = import ./failing_tests.nix;
 
   # require network access
@@ -80,9 +104,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/test_chroma.py"
   ];
 
-  preCheck = ''
-    git init
-  '';
+  preCheck =
+    # Prevent the source tree (without the compiled _native module) from shadowing the installed package
+    ''
+      rm -rf seagoat
+    ''
+    + ''
+      git init
+    '';
 
   __darwinAllowLocalNetworking = true;
 

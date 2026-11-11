@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 let
   font-awesome =
@@ -10,7 +11,7 @@ let
       hash,
       rev ? version,
     }:
-    stdenvNoCC.mkDerivation {
+    stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "font-awesome";
       inherit version;
 
@@ -20,13 +21,10 @@ let
         inherit rev hash;
       };
 
-      installPhase = ''
-        runHook preInstall
+      nativeBuildInputs = [ installFonts ];
+      dontInstallWebfonts = true;
 
-        install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
-
-        runHook postInstall
-      '';
+      sourceRoot = "${finalAttrs.src.name}/${if version == "4.7.0" then "fonts" else "otfs"}";
 
       meta = {
         description = "Font Awesome - OTF font";
@@ -37,12 +35,9 @@ let
         homepage = "https://fontawesome.com/";
         license = lib.licenses.ofl;
         platforms = lib.platforms.all;
-        maintainers = with lib.maintainers; [
-          abaldeau
-          johnazoidberg
-        ];
+        maintainers = with lib.maintainers; [ johnazoidberg ];
       };
-    };
+    });
 in
 {
   # Keeping version 4 and 5 because version 6 is incompatible for some icons. That

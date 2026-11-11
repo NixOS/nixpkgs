@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pyprojectVersionPatchHook,
   lxml,
   sqlalchemy,
   python,
@@ -25,6 +26,8 @@ buildPythonPackage {
   ];
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     lxml

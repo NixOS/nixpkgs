@@ -128,7 +128,7 @@
       path = ./.;
       type = "path";
     };
-    version = "9.5.0";
+    version = "9.7.0";
   };
   io-console = {
     groups = [

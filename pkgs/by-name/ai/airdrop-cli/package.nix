@@ -1,13 +1,12 @@
 {
   lib,
   fetchFromGitHub,
+  stdenv,
   swift,
-  swiftPackages,
   swiftpm,
 }:
 
-# Doesn't build without using the same stdenv (and Clang) to build swift
-swiftPackages.stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "airdrop-cli";
   version = "0-unstable-2025-07-14";
 
@@ -26,6 +25,8 @@ swiftPackages.stdenv.mkDerivation {
   makeFlags = [
     "PREFIX=$(out)"
   ];
+
+  dontUseSwiftpmInstall = true;
 
   meta = {
     description = "Use Airdrop from the CLI on macOS written in Swift";

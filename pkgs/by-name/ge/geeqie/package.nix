@@ -7,23 +7,22 @@
   ninja,
   xxd,
   gettext,
-  intltool,
-  gtk3,
+  gtk4,
   lcms2,
   exiv2,
-  libchamplain_libsoup3,
-  clutter-gtk,
   ffmpegthumbnailer,
   fbida,
   libarchive,
   djvulibre,
   libheif,
+  libshumate,
+  libspelling,
+  ffmpeg-headless,
   openjpeg,
   libjxl,
   libraw,
   lua5_3,
   poppler,
-  gspell,
   libtiff,
   libwebp,
   gphoto2,
@@ -32,7 +31,7 @@
   exiftool,
   zenity,
   libnotify,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   doxygen,
   nix-update-script,
   openexr,
@@ -41,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geeqie";
-  version = "2.9";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6g1aBeQUy9+WMlikAqvlb0NcCT7h0qgBRSsCOdRiZ/E=";
+    hash = "sha256-VS+/K7DBYXh3n39cEG/mODbWmyAzrm6l9zCfSmkNqpM=";
   };
 
   postPatch = ''
@@ -57,8 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     gettext
-    intltool
-    wrapGAppsHook3
+    wrapGAppsHook4
     doxygen
     meson
     ninja
@@ -66,22 +64,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     lcms2
     exiv2
-    libchamplain_libsoup3
-    clutter-gtk
     ffmpegthumbnailer
     fbida
     libarchive
     djvulibre
     libheif
+    libshumate
+    libspelling
+    ffmpeg-headless
     openjpeg
     libjxl
     libraw
     lua5_3
     poppler
-    gspell
     libtiff
     libwebp
     openexr
@@ -149,6 +147,15 @@ stdenv.mkDerivation (finalAttrs: {
             lcms2
           ]
         }:$PATH'
+        # Sets file mtime to the Exif.Image.DateTime of the file.
+        sed -i $out/lib/geeqie/geeqie-exif-datetime-to-file \
+            -e '1 a export PATH=${
+              lib.makeBinPath [
+                zenity
+                exiv2
+                exiftool
+              ]
+            }:$PATH'
   '';
 
   enableParallelBuilding = true;

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-misc";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "scikit-misc";
     tag = "v${version}";
-    hash = "sha256-G0zK13upo0tPd8x87X8cTBKWK63E5JPmAr1IVEijtaw=";
+    hash = "sha256-m4yo+aTx1++SeaugkZIPJ3VKlVIv33rSeoGvUEdUnnU=";
   };
 
   postPatch = ''

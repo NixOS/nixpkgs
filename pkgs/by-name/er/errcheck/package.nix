@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "errcheck";
-  version = "1.20.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "kisielk";
     repo = "errcheck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bXt0GuXV4Amg8dE261KC8f6C5sOclOzhFj1D4/kaBYs=";
+    hash = "sha256-3oap11vNjA7YZAFEkVTkZgXuJW5PRPvGkSYoAVo//8M=";
   };
 
-  vendorHash = "sha256-mhpKZ47jaX3pp/5TOXADip0iPosIDl5FzpaID98rpHQ=";
+  vendorHash = "sha256-sFcuL18a8Jw/e3qphOzrm/ORu8zJWY5B9refZCrCWeY=";
 
   subPackages = [ "." ];
 

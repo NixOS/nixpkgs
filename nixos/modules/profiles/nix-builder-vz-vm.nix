@@ -8,8 +8,6 @@
 
   Main differences:
 
-  - `networking.nameservers = [ "8.8.8.8" ]` is not needed.
-    vz uses the host's NAT, which provides working DNS.
   - `virtualisation.graphics = false`: no display support in vz
   - `virtualisation.useNixStoreImage`: vz only supports nix store image
 */
@@ -41,6 +39,8 @@ in
         guest.port = 22;
       }
     ];
+
+    virtualisation.vz.idleTimeout = lib.mkDefault (10 * 60);
 
     # The guest console belongs where a Mac user looks for service logs. Switch to `file`
     # for a complete record: the unified log drops messages under bursts.

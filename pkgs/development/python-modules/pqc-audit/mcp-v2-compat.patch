@@ -1,0 +1,35 @@
+diff --git a/src/pqc_scanner/interfaces/mcp_server.py b/src/pqc_scanner/interfaces/mcp_server.py
+index bfb31d9..48a7096 100644
+--- a/src/pqc_scanner/interfaces/mcp_server.py
++++ b/src/pqc_scanner/interfaces/mcp_server.py
+@@ -11,12 +11,12 @@ Run the server (stdio transport) with ``pqc-audit-mcp`` or
+ 
+ from __future__ import annotations
+ 
+-from mcp.server.fastmcp import FastMCP
++from mcp.server.mcpserver import MCPServer
+ 
+ from pqc_scanner import scan, to_cbom
+ from pqc_scanner.outputs.report import summarize
+ 
+-mcp = FastMCP(
++mcp = MCPServer(
+     "pqc-audit",
+     instructions=(
+         "Detects quantum-vulnerable cryptography (RSA, ECC, DH, Ed25519, …) across "
+diff --git a/tests/test_mcp.py b/tests/test_mcp.py
+index cf904d9..e52642d 100644
+--- a/tests/test_mcp.py
++++ b/tests/test_mcp.py
+@@ -43,9 +43,9 @@ def test_call_tool_through_mcp_dispatch():
+     # Exercise the actual MCP tool-dispatch path, not just the Python function.
+     # FastMCP returns a list of content blocks; a dict result is serialized to
+     # JSON in a TextContent block.
+-    blocks = asyncio.run(
++    result = asyncio.run(
+         mcp_server.mcp.call_tool("scan_repository", {"path": str(EXAMPLES)})
+     )
+-    payload = json.loads(blocks[0].text)
++    payload = json.loads(result.content[0].text)
+     assert payload["summary"]["CRITICAL"] >= 1
+     assert payload["verdict"].startswith("quantum-critical")

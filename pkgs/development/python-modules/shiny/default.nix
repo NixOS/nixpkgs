@@ -16,6 +16,7 @@
   markdown-it-py,
   mdit-py-plugins,
   narwhals,
+  opentelemetry-api,
   orjson,
   packaging,
   platformdirs,
@@ -36,6 +37,7 @@
   langchain-core,
   ollama,
   openai,
+  opentelemetry-sdk,
   pandas,
   polars,
   pytest-asyncio,
@@ -45,17 +47,16 @@
   pytest-xdist,
   pytestCheckHook,
 }:
-
 buildPythonPackage (finalAttrs: {
   pname = "shiny";
-  version = "1.5.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8iqnm1SQ4h0GuwqKDzL6qEdbw0gJ2a5Aqg5WJgbaKBI=";
+    hash = "sha256-4DnWfJS3vb2AASXyhLBcYhBh4LjLihTEIylm2ChWNtk=";
   };
 
   build-system = [
@@ -71,6 +72,7 @@ buildPythonPackage (finalAttrs: {
     markdown-it-py
     mdit-py-plugins
     narwhals
+    opentelemetry-api
     orjson
     packaging
     platformdirs
@@ -101,6 +103,7 @@ buildPythonPackage (finalAttrs: {
     langchain-core
     ollama
     openai
+    opentelemetry-sdk
     pandas
     polars
     pytest-asyncio

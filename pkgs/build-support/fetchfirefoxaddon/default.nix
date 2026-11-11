@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   jq,
   strip-nondeterminism,
@@ -35,7 +35,7 @@ let
           ;
       };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit name;
 
   passthru = {
@@ -62,4 +62,7 @@ stdenv.mkDerivation {
     unzip
     zip
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 }

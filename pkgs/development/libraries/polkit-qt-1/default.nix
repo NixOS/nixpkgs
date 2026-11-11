@@ -14,7 +14,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/polkit-qt-1/polkit-qt-1-${version}.tar.xz";
-    sha256 = "sha256-LrDyJEWIgpX/or+8DDaThHoPlzu2sMPkzOAhi+fjkH4=";
+    hash = "sha256-LrDyJEWIgpX/or+8DDaThHoPlzu2sMPkzOAhi+fjkH4=";
   };
 
   nativeBuildInputs = [

@@ -2,33 +2,32 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sn-pro";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "supernotes";
     repo = "sn-pro";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-H8YG7FMn03tiBxz5TZDzowicqtewfX6rYd03pdTPYSo=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -Dm644 -t $out/share/fonts/otf exports/SNPro/*.otf
-    install -Dm644 -t $out/share/fonts/woff2 exports/SNPro/*.woff2
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "SN Pro Font Family";
     homepage = "https://github.com/supernotes/sn-pro";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
-}
+})

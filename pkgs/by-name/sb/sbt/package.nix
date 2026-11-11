@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "2.0.6";
+  version = "2.0.12";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
-    hash = "sha256-YM54pQtya1szKlJ342PWfAKPFqOhUVf3ikFsCylJvG0=";
+    hash = "sha256-p5fh2UAmDJ1uigpDT/j8MkfBtxHSzzArrmKuJDKT/lU=";
   };
 
   # This is baked into conf/sbtopts below, so it is the JDK every sbt

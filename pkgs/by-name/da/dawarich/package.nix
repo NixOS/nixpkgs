@@ -7,7 +7,7 @@
   nixosTests,
   nodejs,
   npmHooks,
-  ruby_3_4,
+  ruby_4_0,
   stdenv,
   tailwindcss_3,
   gemset ? import ./gemset.nix,
@@ -20,7 +20,7 @@
   },
 }:
 let
-  ruby = ruby_3_4;
+  ruby = ruby_4_0;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dawarich";
@@ -35,15 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     patches = [
       # bundix and bundlerEnv fail with system-specific gems
       ./0001-build-ffi-gem.diff
-      # Ensure fix for CVE-2026-66066
-      # https://github.com/rails/rails/security/advisories/GHSA-xr9x-r78c-5hrm
-      # While Dawarich 1.10.3 already unintentionally patches this vulnerability,
-      # it is safer to bump rails to a fixed version.
-      ./0002-rails-CVE-2026-66066.diff
     ];
     postPatch = ''
       substituteInPlace ./Gemfile \
-        --replace-fail "ruby File.read('.ruby-version').strip" "ruby '>= 3.4.0'"
+        --replace-fail "ruby File.read('.ruby-version').strip" "ruby '>= 4.0.0'"
     '';
   };
 

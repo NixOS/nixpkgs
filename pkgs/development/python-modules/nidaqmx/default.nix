@@ -8,6 +8,7 @@
   fetchFromGitHub,
   grpcio,
   hightime,
+  nitypes,
   numpy,
   poetry-core,
   protobuf,
@@ -16,19 +17,20 @@
   sphinx-rtd-theme,
   sphinx,
   toml,
+  typing-extensions,
   tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
     tag = version;
-    hash = "sha256-Khydb14+yJKWYcO4pROfbainXw3bHceXK5Gc9GCIYNo=";
+    hash = "sha256-dxSHaqNTzzMcUk/wtMtxmiHMpoL8f2T3p/h37tw/5AA=";
   };
 
   build-system = [ poetry-core ];
@@ -37,9 +39,11 @@ buildPythonPackage rec {
     click
     deprecation
     hightime
+    nitypes
     numpy
     python-decouple
     requests
+    typing-extensions
     tzlocal
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

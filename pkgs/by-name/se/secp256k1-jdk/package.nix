@@ -20,8 +20,9 @@ maven.buildMavenPackage (finalAttrs: {
   mvnJdk = jdk25;
   mvnGoal = "deploy"; # The secp256k1-jdk POM targets a `local-staging` repository using a file URL
   mvnOffline = false; # We need actions not allowed in Maven offline mode, but Nix sandboxing will still be enforced
-  mvnParameters = "-Drevision=${finalAttrs.version}"; # make snapshot builds reproducible
-  mvnHash = "sha256-a62jDFapnYV/mguZ/5PDzI5Unz7BnuvieLmpsocYMO4=";
+  # make snapshot builds reproducible, disable Kotlin compiler daemon
+  mvnParameters = "-Drevision=${finalAttrs.version} -Dkotlin.compiler.daemon=false";
+  mvnHash = "sha256-RedwILMEz1UKkzNugcUvlzRojV7Mdx0Wbf58hxxANpA=";
 
   strictDeps = true;
   __structuredAttrs = true;

@@ -41,9 +41,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      mbode
-      autophagy
-    ];
+    maintainers = with lib.maintainers; [ autophagy ];
   };
 }

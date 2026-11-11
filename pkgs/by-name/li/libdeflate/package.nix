@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdeflate";
-  version = "1.25";
+  version = "1.26";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-2TiV3kmFs9j4aYetoYeWg3+MoZ542/0zaD0hwn9b8ZA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QVF2XL8Qu3mTszKKtx+8BExkTGkpMANXjkAe3XXPUJQ=";
   };
 
   cmakeFlags = [
@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ zlib ];
 
+  strictDeps = true;
+
   passthru.tests = {
     static = pkgsStatic.libdeflate;
     pkg-config = testers.hasPkgConfigModules {
@@ -36,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Fast DEFLATE/zlib/gzip compressor and decompressor";

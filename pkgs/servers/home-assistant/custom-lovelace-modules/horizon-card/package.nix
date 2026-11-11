@@ -3,6 +3,7 @@
   fetchFromGitHub,
   stdenvNoCC,
   yarn-berry,
+  substitute,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,14 +14,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "rejuvenate";
     repo = "lovelace-horizon-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n8UNL5kSwLz1ncGranmbGyIC5mIKGIV2F3cEF0PSwnU=";
-  };
+    hash = "sha256-p4GI4R5P1LjiXwzF1Hlk6Kk57i+YUcEEsm8bN+qIYdE=";
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
+    # Remove after upstream updates to Yarn 4.15
     # https://github.com/rejuvenate/lovelace-horizon-card/blob/main/package.json#L4
-    ./yarn-4.14-support.patch
-  ];
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   nativeBuildInputs = [
     yarn-berry
@@ -30,8 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # nix run nixpkgs#yarn-berry_4.yarn-berry-fetcher missing-hashes yarn.lock
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-WrBUsho7GZI/Un2zvhqZ970psDeAiESiBGJikgX3E5Q=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-iHMIcnCQEbDkAugB9FO4G++eDq3/ABfp0E7Q6893fVY=";
   };
 
   buildPhase = ''

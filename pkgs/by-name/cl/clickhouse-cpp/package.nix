@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkgConfigCheckHook,
   abseil-cpp,
 }:
 
@@ -38,12 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAll ${./clickhouse-cpp.pc.in} $out/lib/pkgconfig/clickhouse-cpp.pc
   '';
 
+  nativeInstallCheckInputs = [ pkgConfigCheckHook ];
+  pkgConfigModules = [
+    "clickhouse-cpp"
+  ];
+  doInstallCheck = true;
+
   meta = {
     description = "C++ client library for ClickHouse";
     homepage = "https://github.com/clickhouse/clickhouse-cpp";
     changelog = "https://github.com/clickhouse/clickhouse-cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jlesquembre ];
+    inherit (finalAttrs) pkgConfigModules;
     mainProgram = "clickhouse-cpp";
     platforms = lib.platforms.all;
   };

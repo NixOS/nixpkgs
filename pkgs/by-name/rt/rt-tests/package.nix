@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rt-tests";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/snapshot/rt-tests-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-LHlihC7otuP/yXXiZ0XdQ4gSpyGKX6qVvGoouWq7CyM=";
+    sha256 = "sha256-AXQt8UueTZ86SN0I/owVhgx6siAFV13ph+ZJww9kXVU=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow";

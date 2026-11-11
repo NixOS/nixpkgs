@@ -20,7 +20,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hist";
-  version = "2.11.0";
+  version = "2.12.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scikit-hep";
     repo = "hist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vAaP8oaZUUofymLu0uId94X+vt4o4XyRj5gITxs0ASs=";
+    hash = "sha256-GvsgTqkIjzEI9W9RdSMrNIwt9COIsT1xwSZ2+h67KKU=";
   };
 
   build-system = [

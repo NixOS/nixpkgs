@@ -12,7 +12,7 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/K/KA/KAMENSKY/Text-Bidi-${version}.tar.gz";
-    sha256 = "1w65xbi4mw5acsrpv3phyzv82ghb29kpbb3b1b1gcinlfxl6f61m";
+    hash = "sha256-NRhnaHfURvbCCmusdWcSCz6B9vfwjn2zZqrwSuLqxfA=";
   };
 
   nativeBuildInputs = [

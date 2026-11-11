@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxsqlite3";
-  version = "4.11.2";
+  version = "4.12.8";
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-RSAA4wZRouGPpIekfSXA8cTUb9ByCK2GbV5/mcJ/6eQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sZRDEGxTf1Fl77gWma9vkUVDyFC7sC5L5/zJkmRQ4Es=";
   };
 
   enableParallelBuilding = true;

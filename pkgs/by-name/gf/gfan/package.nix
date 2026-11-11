@@ -6,39 +6,38 @@
   gmp,
   mpir,
   cddlib,
+  onetbb,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gfan";
-  version = "0.7";
+  version = "0.8beta";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://home.math.au.dk/jensen/software/gfan/gfan${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-q4M3V+Hk1KmGYvSqaROUAT6poib2QWuPhWU1bW/MmJ4=";
+    hash = "sha256-+niE5fMXxQ+PtPN7z11Bnw/V97kNYDc0nRlX6nPOu+4=";
   };
 
   patches = [
     ./gfan-0.6.2-cddlib-prefix.patch
-    (fetchpatch {
-      name = "cstdint.patch";
-      url = "https://salsa.debian.org/math-team/gfan/-/raw/6bb6bc3dd517b3c26fbcb76bfdc47f04d1978007/debian/patches/cstdint.patch";
-      hash = "sha256-ALD8Exe2SW8TZg0hIfhvUuiEbbT3Sk7v+oLnNsYA8hs=";
-    })
   ]
   ++ lib.optionals (stdenv.cc.isClang) [
+    ./gfan-0.8beta-libcxx-threading.patch
     (fetchpatch {
       name = "clang-fix-miscompilation.patch";
       url = "https://raw.githubusercontent.com/sagemath/sage/eea1f59394a5066e9acd8ae39a90302820914ee3/build/pkgs/gfan/patches/nodel.patch";
-      sha256 = "sha256-RrncSgFyrBIk/Bwe3accxiJ2rpOSJKQ84cV/uBvQsDc=";
+      hash = "sha256-RrncSgFyrBIk/Bwe3accxiJ2rpOSJKQ84cV/uBvQsDc=";
     })
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # On macOS, we need to address differences in int64_t types and remove the
-    # "experimental/" library and namespace prefixes as well as references to
-    # std::execution.
-    ./gfan-0.7-macos.patch
   ];
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'UNAME_S := $(shell uname -s)' 'UNAME_S := "nix"' \
+      --replace-fail "-march=native" ""
+  ''
+  + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace Makefile --replace-fail "-fno-guess-branch-probability" "" \
       --replace-fail "-finline-limit=1000" ""
 
@@ -56,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     mpir
     cddlib
+    onetbb
   ];
   enableParallelBuilding = true;
   hardeningDisable = [ "libcxxhardeningfast" ];
@@ -64,8 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
   # The test runner still exits successfully when there are failed tests, so check
   # stdout to see if anything failed.
   checkPhase = ''
+    runHook preCheck
     make check | tee "$TMPDIR/test.log"
     ! grep -q "Failed tests:" "$TMPDIR/test.log"
+    runHook postCheck
   '';
 
   meta = {
@@ -73,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     license =
       with lib.licenses;
       OR [
-        gpl2
-        gpl3
+        gpl2Only
+        gpl3Only
       ];
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;

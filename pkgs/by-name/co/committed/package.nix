@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage {
     changelog = "https://github.com/crate-ci/committed/blob/v${version}/CHANGELOG.md";
     description = "Nitpicking commit history since beabf39";
     mainProgram = "committed";
-    license = [
-      lib.licenses.asl20 # or
+    license = lib.licenses.OR [
+      lib.licenses.asl20
       lib.licenses.mit
     ];
     maintainers = [ lib.maintainers.pigeonf ];

@@ -11,14 +11,14 @@ let
     serviceName:
     buildPythonPackage (finalAttrs: {
       pname = "huaweicloudsdk${serviceName}";
-      version = "3.1.210";
+      version = "3.1.213";
       pyproject = true;
 
       src = fetchFromGitHub {
         owner = "huaweicloud";
         repo = "huaweicloud-sdk-python-v3";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-F8qJVDuGM1YD4dmdcaRaDGHkGbV/w6onAQ8dbvS8hrk=";
+        hash = "sha256-Bir0DWGN0xpfUfC9KMwu/kfzM8jWaqC7S6BUat49zEY=";
       };
 
       sourceRoot = "${finalAttrs.src.name}/huaweicloud-sdk-${serviceName}";
@@ -46,6 +46,7 @@ in
   huaweicloudsdkaad = buildHuaweiCloudSdkPackage "aad";
   huaweicloudsdkagentarts = buildHuaweiCloudSdkPackage "agentarts";
   huaweicloudsdkagentidentity = buildHuaweiCloudSdkPackage "agentidentity";
+  huaweicloudsdkaidatalake = buildHuaweiCloudSdkPackage "aidatalake";
   huaweicloudsdkantiddos = buildHuaweiCloudSdkPackage "antiddos";
   huaweicloudsdkaom = buildHuaweiCloudSdkPackage "aom";
   huaweicloudsdkaos = buildHuaweiCloudSdkPackage "aos";

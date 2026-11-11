@@ -3,19 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   graphviz,
+  hatchling,
   idapro,
   nix-update-script,
   packaging,
   pytest-cov-stub,
   pytestCheckHook,
-  setuptools,
   typing-extensions,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ida-domain";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -24,10 +24,10 @@ buildPythonPackage (finalAttrs: {
     owner = "HexRaysSA";
     repo = "ida-domain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oa3VQgWDEr4tPQ166EugfS7QrW1DlRb/hwypwKP+Xv4=";
+    hash = "sha256-vlVJnRaRNMelQ3w1SgCDvtIQJKBuULLOqKKdAvDK2y4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     idapro

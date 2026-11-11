@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     "faup1090"
   ];
 
+  # interactive.c: error: '%5d' directive output may be truncated writing between 5 and 11 bytes into a region of size 7
+  # Upstreamed as https://github.com/flightaware/dump1090/pull/321
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+
   doCheck = true;
 
   installPhase = ''

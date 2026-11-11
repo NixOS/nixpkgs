@@ -6,26 +6,23 @@
 }:
 
 let
-  # A list of binaries to put into separate outputs
-  bins = [
-    "geth"
-    "clef"
-  ];
+  # Place geth in a separate output from the other utilities in subPackages, to reduce closure size of the module.
+  bins = [ "geth" ];
 
 in
 buildGoModule (finalAttrs: {
   pname = "go-ethereum";
-  version = "1.17.3";
+  version = "1.17.10";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "go-ethereum";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BLcpUbE2lkXkpzYWSIVaLNXlFTvSuXw9Vm0iTtrqOKQ=";
+    hash = "sha256-ER95dQDnrSRq8lbno+nZzHSlDfhKc5EVZOODbsSiAZU=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-AOdGqr738EgwbZhHHP3ctQYUilgyOc/tIJyaI0H3oeM=";
+  vendorHash = "sha256-4Xi/33CwGfiikbv0yxcpM36VFGqcRLWXZjl6k0ILhRg=";
 
   doCheck = false;
 
@@ -43,7 +40,6 @@ buildGoModule (finalAttrs: {
     "cmd/abidump"
     "cmd/abigen"
     "cmd/blsync"
-    "cmd/clef"
     "cmd/devp2p"
     "cmd/era"
     "cmd/ethkey"

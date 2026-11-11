@@ -18,7 +18,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  llvmPackages_19,
+  llvmPackages_22,
   gitMinimal,
   writableTmpDirAsHomeHook,
 }:
@@ -30,7 +30,7 @@ let
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
 
-  inherit (llvmPackages_19) llvm;
+  inherit (llvmPackages_22) llvm;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -90,10 +90,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       tools-preview` or install the `llvm-tools-preview` component using your Nix
       library (e.g. fenix or rust-overlay)
     '';
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       wucke13
       matthiasbeyer

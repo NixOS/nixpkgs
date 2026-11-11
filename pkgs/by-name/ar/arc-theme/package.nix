@@ -12,6 +12,7 @@
   cinnamon,
   gnome-shell,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation {
@@ -25,6 +26,12 @@ stdenv.mkDerivation {
     hash = "sha256-vvZvJmsmeYcJT3xVQLg4tmYXEgHprWJls1fbxA3Jxnw=";
   };
 
+  patches = [
+    # Fixes `common/gnome-shell/meson.build:98:28: ERROR: File .../icons does not exist.`
+    # See https://github.com/jnsh/arc-theme/pull/238
+    ./meson_1.12.patch
+  ];
+
   nativeBuildInputs = [
     glib # for glib-compile-resources
     inkscape
@@ -32,15 +39,11 @@ stdenv.mkDerivation {
     ninja
     python3
     sassc
+    writableTmpDirAsHomeHook
   ];
 
   postPatch = ''
     patchShebangs meson/install-file.py
-  '';
-
-  preBuild = ''
-    # Shut up inkscape's warnings about creating profile directory
-    export HOME="$TMPDIR"
   '';
 
   # Fontconfig error: Cannot load default config file: No such file: (null)

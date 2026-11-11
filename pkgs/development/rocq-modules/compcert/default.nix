@@ -46,6 +46,7 @@ let
       in
       with lib.versions;
       lib.switch coq.version [
+        (case (range "8.15" "9.2") "3.18")
         (case (range "8.15" "9.1") "3.17")
         (case (range "8.14" "8.20") "3.15")
         (case (isEq "8.13") "3.10")
@@ -65,6 +66,7 @@ let
       "3.15".hash = "sha256-QFTueGZd0hAWUj+c5GZL/AyNpfN4FuJiIzCICmwRXJ8=";
       "3.16".hash = "sha256-Ep8bcSFs3Cu+lV5qgo89JJU2vh4TTq66Or0c4evo3gM=";
       "3.17".hash = "sha256-RRc39FUe2sHQdO/ybwA3B7o31qfxcUkgah6I20i0ElE=";
+      "3.18".hash = "sha256-WadkhdtAgh+Tz8RxHT7NEV8RMeBBXxzJ1pLQPs94vfo=";
     };
 
     strictDeps = true;
@@ -330,6 +332,19 @@ let
               (fetchpatch {
                 url = "https://github.com/AbsInt/CompCert/commit/6e5d40fb028d787249cd897fe4a1b96420addb8b.patch";
                 hash = "sha256-YBDsvhfup1IMc5GcW7BdsHUKGCv3A1eGIeb4Wal4x7A=";
+              })
+            ];
+          }
+          {
+            cases = [
+              (_: true)
+              (isEq "3.18")
+            ];
+            out = [
+              # Fix version number
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/8135de0cc006f094e4a96aff9bb76cf716c9065a.patch";
+                hash = "sha256-vqbS7rMjO2+vrBhvG+JGCHpsGZyrBoAYS+JOaXdcnMg=";
               })
             ];
           }

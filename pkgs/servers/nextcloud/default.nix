@@ -3,9 +3,9 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  nextcloud32Packages,
   nextcloud33Packages,
   nextcloud34Packages,
+  nextcloud35Packages,
 }:
 
 let
@@ -56,22 +56,22 @@ let
     };
 in
 {
-  nextcloud32 = generic {
-    version = "32.0.14";
-    hash = "sha512-2bO5WilP+dar/LnyHZ3qxFz6Q0fsG6mBGJzrEDvlHGbWkM1sUsBqA4sUyOQGGevyEr9biMNv1a7vXdOG75nHvA==";
-    packages = nextcloud32Packages;
-  };
-
   nextcloud33 = generic {
-    version = "33.0.8";
-    hash = "sha512-L5ryxWhjhUNnHMGBrY36/qoRVYmu39OiYkDYs8l7Wcer8v3fAUVooo0ESAaMBNcSzP2dB36CmbSxFD+BXdguPQ==";
+    version = "33.0.10";
+    hash = "sha256-QnEQuW/YWA2P6yOkCkHQBlfpdflF4ISEhaaibXd9fK4=";
     packages = nextcloud33Packages;
   };
 
   nextcloud34 = generic {
-    version = "34.0.3";
-    hash = "sha512-NGPbverlJ1oHkbEVz4au1BxaE4/dGbsy7BKDemaYEGtvFy4k+xJkotTiCyuAW894QbIzjk4C8f1TlPvtgwzGlQ==";
+    version = "34.0.5";
+    hash = "sha256-BOw93fRlyfLCqebuXzm4GDmdTz1YFVb0HQhyvutZsKk=";
     packages = nextcloud34Packages;
+  };
+
+  nextcloud35 = generic {
+    version = "35.0.2";
+    hash = "sha256-38eVXq7FYh3pDgMdEPdgBhc7Pz4x1dbhdIIdHaFPFi0=";
+    packages = nextcloud35Packages;
   };
 
   # tip: get the sha with:

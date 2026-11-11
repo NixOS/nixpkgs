@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyeclib";
   version = "1.8.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-v7pkV5s10AxU+vgp+gcQF8lJmm6yzDwkqunWuT0zU4c=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     mainProgram = "pyeclib-backend";
     teams = [ lib.teams.openstack ];
   };
-}
+})

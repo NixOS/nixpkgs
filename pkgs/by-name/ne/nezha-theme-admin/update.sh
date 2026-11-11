@@ -17,7 +17,7 @@ trap 'rm -rf -- "${TMPDIR}"' EXIT
 git clone "https://github.com/nezhahq/admin-frontend" -b "v$version" "$TMPDIR/src"
 pushd "$TMPDIR/src"
 rm package-lock.json
-npm install --package-lock-only --ignore-scripts
+npm install --package-lock-only --ignore-scripts --legacy-peer-deps
 popd
 
 cp "$TMPDIR/src/package-lock.json" pkgs/by-name/ne/nezha-theme-admin/

@@ -5,6 +5,7 @@
   installShellFiles,
   stdenv,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -39,12 +40,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Data interchange with algebraic data types";
     mainProgram = "typical";
     homepage = "https://github.com/stepchowfun/typical";
     changelog = "https://github.com/stepchowfun/typical/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
   };
 })

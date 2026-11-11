@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-release";
-  version = "1.1.3";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5fe+iIPZAKi8aQW2PfanO7U2d70Oc3KvL/RZTV9/ZU8=";
+    hash = "sha256-mchPi5n+4Noykl2GUXNeLAKCMbxCU+mXBbk+bLav1rM=";
   };
 
-  cargoHash = "sha256-abTQuKpVcjorr6RQ1t9sAzqvS39XT6lg4fALAqO68YI=";
+  cargoHash = "sha256-c+cyxqkRNUZYSbd+w9fjgGgfHN1WWCbvYZidhOEGUds=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,6 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git
   ];
 
+  checkFlags = [
+    # Skip tests that require internet connection
+    "--skip=publish::unpublished_git_dependency"
+    "--skip=publish::unpublished_workspace_dependency"
+  ];
+
   # disable vendored-libgit2 and vendored-openssl
   buildNoDefaultFeatures = true;
 
@@ -50,10 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-release";
     homepage = "https://github.com/crate-ci/cargo-release";
     changelog = "https://github.com/crate-ci/cargo-release/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       gerschtli
       progrm_jarvis

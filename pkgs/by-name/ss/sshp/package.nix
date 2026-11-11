@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sshp";
-  version = "1.1.4";
+  version = "1.1.5";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bahamas10";
     repo = "sshp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4DrNGQQ1ETKuLiB3N+3KnRxx4BEhrCOgskpowbF/KWc=";
+    hash = "sha256-5sVXBqu/bqBCf7FjT7WxirrVG8XX9461jNdpNY31RXQ=";
   };
 
   outputs = [

@@ -1,14 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 
   # build-system
   hatchling,
 
   # dependencies
   eval-type-backport,
-  httpx,
+  httpx2,
   jsonpath-python,
   opentelemetry-api,
   opentelemetry-semantic-conventions,
@@ -21,8 +21,10 @@
   griffe,
   mcp,
   google-auth,
+  msgpack,
   requests,
   websockets,
+  zstandard,
   opentelemetry-exporter-otlp-proto-http,
 
   # tests
@@ -33,20 +35,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.9.1";
+  version = "3.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "mistralai";
-    repo = "client-python";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-liWCT2ArXdRmyB+oPwSLJRRyfossW+jfSNpWgeSfvb0=";
+  # Upstream stopped tagging releases on GitHub after v3.2.0
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-l8xSW43clvuLW7CPRm3T0i+QTyHd/kUQPadsJf5gG/I=";
   };
-
-  preBuild = ''
-    python scripts/prepare_readme.py
-  '';
 
   build-system = [
     hatchling
@@ -57,7 +54,7 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     eval-type-backport
-    httpx
+    httpx2
     jsonpath-python
     opentelemetry-api
     opentelemetry-semantic-conventions
@@ -72,6 +69,9 @@ buildPythonPackage (finalAttrs: {
       griffe
       mcp
     ];
+    mcp = [
+      mcp
+    ];
     gcp = [
       google-auth
       requests
@@ -82,6 +82,10 @@ buildPythonPackage (finalAttrs: {
     telemetry = [
       opentelemetry-sdk
       opentelemetry-exporter-otlp-proto-http
+    ];
+    workflow_payload_compression = [
+      msgpack
+      zstandard
     ];
   };
 
@@ -94,21 +98,29 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.agents
   ++ finalAttrs.passthru.optional-dependencies.gcp
   ++ finalAttrs.passthru.optional-dependencies.realtime
-  ++ finalAttrs.passthru.optional-dependencies.telemetry;
+  ++ finalAttrs.passthru.optional-dependencies.telemetry
+  ++ finalAttrs.passthru.optional-dependencies.workflow_payload_compression;
 
   disabledTestPaths = [
-    # ModuleNotFoundError: No module named 'opentelemetry.instrumentation'
+    # ImportError: cannot import name 'HTTPX2ClientInstrumentor' from 'opentelemetry.instrumentation.httpx'
+    # (requires opentelemetry-instrumentation-httpx>=0.65b0)
     "src/mistralai/extra/tests/test_otel_tracing.py"
-    # ModuleNotFoundError: No module named 'msgpack'
-    "src/mistralai/extra/tests/test_workflow_encoding.py"
-    # '062f2cad7f1fee8c3e409b73d431e71b' not found in '00-e5d29cde482d5d796428c10d13e86060-468fe44f7efdb086-01'
-    "src/mistralai/extra/tests/test_traceparent_hook.py::TestTraceparentInjectionHook::test_propagates_sampled_active_span"
+
+    # ModuleNotFoundError: No module named 'livekit'
+    "src/mistralai/extra/tests/voice_agents/"
+  ]
+  ++ lib.optionals (lib.versionOlder mcp.version "2.2") [
+    # Upstream requires mcp>=2.2,<3 and these test modules import mcp>=2.2 APIs
+    # (MCPError, mcp.client._transport) that are absent from older versions such
+    # as mcp_1, used by some application scopes (e.g. oterm for fastmcp-slim).
+    "src/mistralai/extra/tests/test_connectors_gateway.py"
+    "src/mistralai/extra/tests/test_mcp_streamable_http.py"
   ];
 
   meta = {
     description = "Python client library for Mistral AI platform";
     homepage = "https://github.com/mistralai/client-python";
-    changelog = "https://github.com/mistralai/client-python/blob/${finalAttrs.src.tag}/RELEASES.md";
+    changelog = "https://github.com/mistralai/client-python/blob/main/RELEASES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage

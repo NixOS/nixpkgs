@@ -14,20 +14,36 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.44.0";
+  version = "0.47.0";
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ojhsg083nb/GWzNIaLzCg0/9hdCHkb3xdrvGqxhNDmY=";
+    hash = "sha256-Ggcah2btQD2Z8r34qOrlUFHQWU29TBszrNMYfWiiSq4=";
   };
 
-  cargoHash = "sha256-RrIZS8BjG4a4sKgXdYF/kgq2saRMXjr8Ao6lOCJMmtU=";
+  cargoHash = "sha256-pVa1BESjxL9hTq+wI7wJkKyXTxw8GTYekavaxF6suMA=";
 
   nativeBuildInputs = [
     installShellFiles
-  ];
+    buildPackages.mkdocs
+  ]
+  # Via buildPackages: nested python3.pkgs.* access is not spliced, so these
+  # would otherwise be built for the host platform, breaking pkgsStatic.
+  ++ (with buildPackages.python3.pkgs; [
+    mdx-breakless-lists
+    mdx-truly-sane-lists
+    mike
+    mkdocs-include-markdown-plugin
+    mkdocs-material
+    mkdocs-redirects
+    mkdocs-table-reader-plugin
+  ]);
 
   nativeCheckInputs = [
     gitMinimal
@@ -61,6 +77,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBSSH2_SYS_USE_PKG_CONFIG = "1";
   };
 
+  preBuild = ''
+    mkdocs build -d $name
+  '';
+
   postInstall =
     let
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
@@ -74,6 +94,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --fish <(COMPLETE=fish ${jj}) \
         --nushell <(${jj} util completion nushell) \
         --zsh <(COMPLETE=zsh ${jj})
+    ''
+    + ''
+      mkdir -p $doc/share/doc
+      mv $name $doc/share/doc
     '';
 
   doInstallCheck = true;

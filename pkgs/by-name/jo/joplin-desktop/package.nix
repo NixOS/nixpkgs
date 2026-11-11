@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  nodejs_22,
+  nodejs,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -26,9 +26,7 @@
 }:
 
 let
-  # nodejs pin should be obsolete once #522655 is in master
-  nodejs = nodejs_22;
-  yarn-berry = yarn-berry_4.override { inherit nodejs; };
+  yarn-berry = yarn-berry_4;
 
   releaseData = lib.importJSON ./release-data.json;
 in
@@ -46,10 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
-
-      # Remove after upstream updates to Yarn 4.14
-      # https://github.com/laurent22/joplin/blob/dev/package.json#L103
-      sed -i '/__metadata/{n;s/version: 8$/version: 9/;}' $out/yarn.lock
     '';
     inherit (releaseData) hash;
   };
@@ -73,10 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libnotify
   ];
 
@@ -109,9 +101,15 @@ stdenv.mkDerivation (finalAttrs: {
     # before we can patchShebangs additional paths (see buildPhase).
     # https://github.com/NixOS/nixpkgs/blob/3cd051861c41df675cee20153bfd7befee120a98/pkgs/by-name/ya/yarn-berry/fetcher/yarn-berry-config-hook.sh#L83
     YARN_ENABLE_SCRIPTS = 0;
+
+    # Use nixpkgs' patched offline Yarn instead of Joplin's vendored Yarn.
+    YARN_IGNORE_PATH = 1;
   };
 
   postPatch = ''
+    # Nixpkgs provides Electron; don't run Joplin's networked Electron installer.
+    sed -i "/^[[:space:]]*'installElectron',$/d" packages/app-desktop/gulpfile.ts
+
     # Don't automatically build everything
     sed -i '/postinstall/d' package.json
     # Don't install onenote-converter subpackage deps
@@ -230,13 +228,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "joplin";
+      name = "appimagekit-joplin";
       desktopName = "Joplin";
       exec = "joplin-desktop %U";
       icon = "joplin";
       comment = "Joplin for Desktop";
       categories = [ "Office" ];
-      startupWMClass = "joplin-app-desktop";
+      startupWMClass = "appimagekit-joplin";
       mimeTypes = [ "x-scheme-handler/joplin" ];
     })
   ];

@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
 
   glibc = stdenv.cc.libc.out;
 
+  # fpc only uses clang to assemble and link, so every cc-wrapper flag is reported as unused
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  };
+
   # Patch paths for linux systems. Other platforms will need their own patches.
   patches = [
     ./mark-paths.patch # mark paths for later substitution in postPatch
@@ -93,6 +98,11 @@ stdenv.mkDerivation rec {
     # to resolve the location of /etc
     mkdir -p $out/etc
     $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/etc
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Remove the Xcode binary search path.
+    substituteInPlace "$out/etc/fpc.cfg" \
+      --replace-fail "-FD/Applications/Xcode.app/Contents/Developer/usr/bin" ""
   '';
 
   passthru = {

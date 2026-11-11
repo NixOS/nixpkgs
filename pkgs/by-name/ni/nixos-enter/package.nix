@@ -28,7 +28,7 @@ replaceVarsWith {
 
   meta = {
     description = "Run a command in a NixOS chroot environment";
-    homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-install";
+    homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-enter";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "nixos-enter";

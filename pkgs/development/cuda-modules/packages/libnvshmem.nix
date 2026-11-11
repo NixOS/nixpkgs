@@ -9,7 +9,7 @@
   cuda_nvcc,
   cuda_nvml_dev,
   cuda_nvrtc,
-  cuda_nvtx,
+  nvtx,
   cudaAtLeast,
   cudaMajorMinorVersion,
   cudaNamePrefix,
@@ -64,16 +64,22 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "libnvshmem";
-  version = "3.6.5-0";
+  version = "3.8.0-0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvshmem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2E3/WGbg6srT/e3ykK0qxTy1ZlJ9JGGLlergG0ITwTY=";
+    hash = "sha256-Md2MGj0MB8O3o5KjDhYQzeeu6XH6R7JowaCQA6gF3rk=";
   };
 
-  outputs = [ "out" ];
+  # The examples and perftest binaries are most of the install, so they get outputs of their own.
+  # nvshmem-info stays in 'out' because NVSHMEMConfig.cmake imports it from 'out/bin'.
+  outputs = [
+    "out"
+    "samples"
+    "test"
+  ];
 
   nativeBuildInputs = [
     # libnvshmem_host dlopens libcuda.so.1 and libnvidia-ml.so.1 by bare soname
@@ -119,7 +125,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     cuda_cudart
     cuda_nvml_dev
     cuda_nvrtc
-    cuda_nvtx
+    nvtx
     libnvjitlink
     rdma-core
   ]
@@ -195,6 +201,9 @@ backendStdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     nixLog "moving top-level files in $out to $out/share"
     mv -v "$out"/{changelog,git_commit.txt,License.txt,version.txt} "$out/share/"
+
+    moveToOutput "bin/examples" "$samples"
+    moveToOutput "bin/perftest" "$test"
   '';
 
   # These are all dlopen'd by bare soname, so buildInputs alone never reaches a RUNPATH. The contrast
@@ -226,8 +235,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     # diagnostic banner that nvshmem-info and init.cu only print. Nix still counts the store paths, so
     # build-only inputs become runtime dependencies -- and the banner is substituted into an installed
     # header, so consumers inherit them too. Only the dev outputs and nvcc are stripped: gdrcopy and
-    # mpi appear in the same string but are genuine runtime dependencies. No disallowedRequisites
-    # guard here, unlike nccl and gdrcopy, because ucx and openmpi pull nvcc in on their own.
+    # mpi appear in the same string but are genuine runtime dependencies.
     + ''
       nixLog "removing build-time references baked into NVSHMEM_BUILD_VARS"
       remove-references-to ${
@@ -244,6 +252,9 @@ backendStdenv.mkDerivation (finalAttrs: {
         "$out"/include/non_abi/nvshmem_version.h \
         "$out"/share/src/*/include/non_abi/nvshmem_version.h
     '';
+
+  # C.f. remove-references-to above, and cuda_nvcc's nvlink wrapper for the device code.
+  disallowedRequisites = [ (getBin cuda_nvcc) ];
 
   doCheck = false;
 

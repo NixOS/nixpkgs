@@ -1,26 +1,26 @@
 {
-  stdenv,
-  kernel,
-  fetchurl,
-  lib,
-  pam,
-  libxslt,
-  libxext,
-  libxcursor,
-  libxmu,
-  glib,
-  libxrandr,
   dbus,
-  xz,
+  fetchurl,
+  glib,
+  lib,
+  libxcrypt,
+  libxcursor,
+  libxext,
+  libxmu,
+  libxrandr,
+  libxslt,
+  linuxHeaders,
+  makeself,
+  openssl,
+  pam,
+  patchelf,
   pkg-config,
+  stdenv,
   which,
   xorg-server,
   xrandr,
+  xz,
   yasm,
-  patchelf,
-  makeself,
-  linuxHeaders,
-  openssl,
   virtualboxVersion,
   virtualboxSubVersion,
   virtualboxSha256,
@@ -31,7 +31,7 @@ let
   buildType = "release";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "VirtualBox-GuestAdditions-builder-${kernel.version}";
+  pname = "VirtualBox-GuestAdditions-builder";
   version = "${virtualboxVersion}${virtualboxSubVersion}";
 
   inherit virtualboxVersion virtualboxSubVersion;
@@ -53,8 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     linuxHeaders
     xz
-  ]
-  ++ kernel.moduleBuildDependencies;
+    libxcrypt
+  ];
+
   buildInputs = [
     dbus
     libxslt
@@ -64,9 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxmu
     libxrandr
   ];
-
-  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
   prePatch = ''
     rm -r src/VBox/Additions/x11/x11include/
@@ -139,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./configure \
       --only-additions \
-      --with-linux=${kernel.dev} \
       --disable-kmods
 
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig @' \

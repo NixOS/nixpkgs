@@ -13,14 +13,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-manager";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
   __structuredAttrs = true;
 
+  # Updates should be correlated with arrow-adbc top-level attribute, so:
+  # nixpkgs-update: no auto update
   src = fetchPypi {
     pname = "adbc_driver_manager";
     inherit (finalAttrs) version;
-    hash = "sha256-RZkfDC3jadMwxqIRyi7bzOY4nF3IHN5wRhvetvj3smg=";
+    hash = "sha256-ctYW5D0DtzXkAAtlMwdTGi0YIPH34M6Ullbwq5Ob1T4=";
   };
 
   build-system = [

@@ -6,7 +6,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exegol";
-  version = "5.1.11";
+  version = "6.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "ThePorgs";
     repo = "Exegol";
     tag = finalAttrs.version;
-    hash = "sha256-FI6lBJkJqmDexfxOWOa4tFe06tOFmUezy7OoDqXQN24=";
+    hash = "sha256-wOUvEA7W44ogYlVdCQHK8IVrlAVD1Ypq+UgryHXsuXs=";
   };
 
   build-system = with python3Packages; [ pdm-backend ];
@@ -67,13 +67,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Only
-      {
+      (mkLicense {
+        shortName = "esl10";
         fullName = "Exegol Software License (ESL) - Version 1.0";
         url = "https://docs.exegol.com/legal/software-license";
         # Please use exegol4 if you prefer to avoid the unfree version of Exegol.
         free = false;
         redistributable = false;
-      }
+      })
     ];
     mainProgram = "exegol";
     maintainers = with lib.maintainers; [

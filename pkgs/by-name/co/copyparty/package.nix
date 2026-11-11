@@ -71,11 +71,11 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "copyparty${nameSuffix}";
-  version = "1.20.20";
+  version = "1.20.26";
 
   src = fetchurl {
     url = "https://github.com/9001/copyparty/releases/download/v${version}/copyparty-${version}.tar.gz";
-    hash = "sha256-ox+eSkPlZgh2XhCDUxQHhNUBgcN+cF6c6O2fOJn1ffo=";
+    hash = "sha256-rH6gW96NQxsyzC/2GPJ1Tka9lnvxDeqmZU2smkSab/k=";
   };
 
   pyproject = true;
@@ -109,7 +109,12 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optional withMagic magic
     ++ (extraPythonPackages python3Packages);
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath runtimeDeps}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath runtimeDeps)
+  ];
 
   meta = {
     description = "turn almost any device into a file server over http(s), webdav, ftp(s), and tftp";
@@ -132,8 +137,8 @@ python3Packages.buildPythonApplication rec {
           # https://github.com/codemirror/codemirror5
           codemirror = lib.licenses.mit;
           # https://github.com/cure53/DOMPurify
-          dompurify = [
-            asl20 # or
+          dompurify = OR [
+            asl20
             mpl20
           ];
           # https://github.com/FortAwesome/Font-Awesome
@@ -157,7 +162,7 @@ python3Packages.buildPythonApplication rec {
           lib.unique
         ];
       in
-      res;
+      lib.licenses.AND res;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       # the javascript deps come pre-built

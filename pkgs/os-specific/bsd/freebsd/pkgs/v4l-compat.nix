@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Video4Linux header files for FreeBSD";
     maintainers = [ lib.maintainers.rhelmot ];
-    platforms = lib.platforms.freebsd;
     license = lib.licenses.gpl2Only;
   };
 }

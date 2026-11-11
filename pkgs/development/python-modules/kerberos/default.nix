@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdd046142a4e0060f96a00eb13d82a5d9ebc0f2d7934393ed559bac773460a2c";
+    hash = "sha256-zdBGFCpOAGD5agDrE9gqXZ68Dy15NDk+1Vm6x3NGCiw=";
   };
 
   nativeBuildInputs = [ libkrb5 ];

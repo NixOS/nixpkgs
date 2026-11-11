@@ -10,17 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "dae";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hzX3b86BHvxXQZotSteiHoyBMF/P4WubeuJ6xpxa8ac=";
+    hash = "sha256-+Gls/lFhOjzfPisgWS96mEevI0mMtQ139Zf4NIik2X8=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-S2dNFvMeZqGhzu+sIBGeaET4bQXfeucao6XR4QSTpog=";
+  vendorHash = "sha256-N2noQXRV9Vewie4PiWkjDeX6U2+kF1kQ9L10kZ5X/LI=";
 
   proxyVendor = true;
 

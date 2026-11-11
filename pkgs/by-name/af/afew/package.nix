@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.sphinxHook
   ];
 
+  sphinxRoot = "docs";
   sphinxBuilders = [
     "html"
     "man"
@@ -46,7 +47,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]);
 
   makeWrapperArgs = [
-    ''--prefix PATH ':' "${pkgs.notmuch}/bin"''
+    "--prefix"
+    "PATH"
+    ":"
+    "${pkgs.notmuch}/bin"
   ];
 
   outputs = [
@@ -54,6 +58,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "doc"
     "man"
   ];
+
+  # Workaround for upstream packaging paths, can be removed once #573479 is resolved
+  postInstall = ''
+    sphinx-build -b man docs docs/build/man
+    install -Dm644 docs/build/man/*.1 -t $man/share/man/man1/
+  '';
 
   meta = {
     homepage = "https://github.com/afewmail/afew";

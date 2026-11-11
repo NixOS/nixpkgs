@@ -62,7 +62,7 @@ buildPythonPackage {
     mainProgram = "pdf2docx";
     homepage = "https://github.com/ArtifexSoftware/pdf2docx";
     changelog = "https://github.com/ArtifexSoftware/pdf2docx/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
 }:
 
 buildGoModule (finalAttrs: {
@@ -24,12 +23,13 @@ buildGoModule (finalAttrs: {
     "-X=github.com/davrodpin/mole/cmd.version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "CLI application to create SSH tunnels";
     homepage = "https://github.com/davrodpin/mole";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
-    broken = stdenv.hostPlatform.isDarwin; # build fails with go > 1.17
     mainProgram = "mole";
   };
 })

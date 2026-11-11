@@ -19,27 +19,34 @@
 }:
 
 let
-  version = "9.3.1";
+  version = "10.0.0";
   x2t = callPackage ./x2t.nix { };
+  # https://github.com/ONLYOFFICE/DocumentServer/issues/3832
+  server-src-db-schemas = fetchFromGitHub {
+    owner = "ONLYOFFICE";
+    repo = "server";
+    rev = "47c0db08aa33af4174f719af26313e64910a8046";
+    hash = "sha256-MwsOxJTeErzjRKYeX44U69U8vWgH29xS/CalfBDvBhc=";
+  };
   server-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "server";
-    tag = "v9.3.1.1";
-    hash = "sha256-uN1L/4I7wrg0BqAAu3zdn8LqtdfJDAHnAMbCvzQnOvI=";
+    tag = "v9.4.1.22";
+    hash = "sha256-vRFMGV92FxtkdTNO7lasZhpghgYY/RH0xxmwRiXLqic=";
   };
   # This is required but not included in the submodules for some reason.
   # https://github.com/ONLYOFFICE/server/blob/34adaeeb4cc1e032a5cf188924880a25546dc67c/Makefile#L81-L83
   document-templates-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "document-templates";
-    tag = "v9.3.1.1";
-    hash = "sha256-+52+MK/8DARJrQRbIpN5nk3j3J9cy6Wd1FDMnCVZKRE=";
+    tag = "v10.0.0.176";
+    hash = "sha256-LGp8fCVmR2KDfDRC4k9TKmr8wCm/29vfctBrH5yiSQ8=";
   };
   document-formats-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "document-formats";
-    tag = "v9.3.1.1";
-    hash = "sha256-HpGhV+PGbQ5hHH6mPQTAdFpBT3nUni4VtDxTExJypAc=";
+    tag = "v10.0.0.176";
+    hash = "sha256-6cLHe/HYZYGnDrbyYGY6aERXzH74cbkmTcS3A4wzmtU=";
   };
   common = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-server-Common";
@@ -65,7 +72,7 @@ let
     buildInputs = [
       vips.dev
     ];
-    npmDepsHash = "sha256-eD7hyeIcSL0nLcmBE5+gDJcjT+LdUaqIZ+g5sPcn8HQ=";
+    npmDepsHash = "sha256-xpissa3UVBdQcFcRmW33lV+NSihKuNMDvEk3JAVijhc=";
     npmFlags = [ "--loglevel=verbose" ];
     dontNpmBuild = true;
     postInstall = ''
@@ -73,6 +80,10 @@ let
       # because common/sources/notificationService.js has a circular dependency
       # back on DocService
       cp -r ${common}/lib/node_modules/common $out/lib/node_modules/Common
+      # it would be neater if this were a 'ln -s', but this is not possible
+      # because fileconverter/sources/sources/converter.js has a circular dependency
+      # back on DocService
+      cp -r ${fileconverter}/lib/node_modules/fileconverter $out/lib/node_modules/FileConverter
       ln -s $out/lib/node_modules/coauthoring $out/lib/node_modules/DocService
     '';
   });
@@ -88,7 +99,10 @@ let
 
     postInstall = ''
       ln -s ${common}/lib/node_modules/common $out/lib/node_modules/Common
-      ln -s ${docservice}/lib/node_modules/coauthoring $out/lib/node_modules/DocService
+      # it would be neater if this were a 'ln -s', but this is not possible
+      # because cuauthoring in docservice has a circular dependency
+      # back on FileConverter
+      #cp -r $docservice/lib/node_modules/coauthoring $out/lib/node_modules/DocService
     '';
   });
 
@@ -147,13 +161,13 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation {
     pname = "onlyoffice-documentserver";
-    version = "9.3.1";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "document-server-package";
-      tag = "v9.3.1.11";
-      hash = "sha256-AUXOiI6yRjbkSyCFbqMchGba5wiwQOVl1ciFXuWUOd4=";
+      tag = "v10.0.0.176";
+      hash = "sha256-SGiFeh9L9y/6TVAWeWqFxQl7RuSkUi0ecABkNcD21Vw=";
     };
 
     buildPhase = ''
@@ -169,7 +183,7 @@ let
       cp ${server-src}/Common/config/log4js/production.json $out/etc/onlyoffice/documentserver/log4js
 
       mkdir -p $out/var/www/onlyoffice/documentserver-example
-      cp -r common/documentserver-example/welcome $out/var/www/onlyoffice/documentserver-example
+      cp -r ${server-src}/branding/welcome $out/var/www/onlyoffice/documentserver-example
 
       mkdir -p $out/var/www/onlyoffice/documentserver
 
@@ -193,6 +207,8 @@ let
       echo "[]" > $out/var/www/onlyoffice/documentserver/sdkjs-plugins/plugin-list-default.json
 
       mkdir -p $out/var/www/onlyoffice/documentserver/server/schema
+      ls ${server-src-db-schemas}/schema
+      cp -r ${server-src-db-schemas}/schema/*sql $out/var/www/onlyoffice/documentserver/server/schema
       cp -r ${server-src}/schema/* $out/var/www/onlyoffice/documentserver/server/schema
 
       ln -s ${document-templates-src} $out/var/www/onlyoffice/documentserver/document-templates

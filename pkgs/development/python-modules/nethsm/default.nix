@@ -7,21 +7,20 @@
   poetry-core,
   pycryptodome,
   pytestCheckHook,
-  python-dateutil,
   typing-extensions,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "nethsm";
-  version = "2.1.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nethsm-sdk-py";
     tag = "v${version}";
-    hash = "sha256-1bU3C8dlErDpHQIqsEabi92VPC91/wTNvZnx2dDHcmw=";
+    hash = "sha256-kOZ/kNvYlnKi/ojv4b4ZGmNZqARZPAT0g12xi6gw39E=";
   };
 
   pythonRelaxDeps = true;
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   dependencies = [
     certifi
     cryptography
-    python-dateutil
     typing-extensions
     urllib3
   ];
@@ -58,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Nitrokey/nethsm-sdk-py";
     changelog = "https://github.com/Nitrokey/nethsm-sdk-py/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.panicgh ];
   };
 }

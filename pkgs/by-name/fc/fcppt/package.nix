@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcppt";
-  version = "5.0.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "cpreh";
     repo = "fcppt";
     rev = finalAttrs.version;
-    hash = "sha256-8dBG6LdSngsutBboqb3WVVg3ylayoUYDOJV6p/ZFkoE=";
+    hash = "sha256-mPkuMz+PfPA4QkwVpCMPKOCEmaxMg0OfLHAqvH08tUk=";
   };
 
   nativeBuildInputs = [ cmake ];

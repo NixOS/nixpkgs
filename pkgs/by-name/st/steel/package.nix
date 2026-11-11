@@ -19,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steel";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GZ0VeoAwVGnK/Px5IvBGIHlpEsAh2do/QPuYtLexLt4=";
+    hash = "sha256-rfifl52OXqL821l/aJBVbOXO90iPZG0UvjHJxaAIaEI=";
   };
 
-  cargoHash = "sha256-Z5v+8bhIgBCB2pDB5AgX42vFiNkgqjU95gata0sLUrA=";
+  cargoHash = "sha256-2trUpxAQzsJp/ezphLb0A4Z7E/F1Ll1Q2ChrBGyxzEg=";
 
   nativeBuildInputs = [
     curl
@@ -89,12 +89,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/steel completions zsh)
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/steel --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/steel-language-server --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/forge --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/cargo-steel-lib --set-default STEEL_HOME "$out/lib/steel"
-  '';
+  postFixup =
+    lib.concatMapStringsSep "\n"
+      (bin: ''wrapProgram "$out/bin/${bin}" --prefix SEARCH_STEEL_PATHS : "$out/lib/steel/cogs"'')
+      [
+        "cargo-steel-lib"
+        "forge"
+        "steel"
+        "steel-language-server"
+      ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

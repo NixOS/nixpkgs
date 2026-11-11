@@ -20,6 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-nKE5n/ingB/+sEPJvpUQVsjCn+4/EPpcfZAM91CCZDE=";
   };
 
+  __structuredAttrs = true;
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   cargoHash = "sha256-sE4I1TW6XEgdqcPL0kRHQ+usb1UYIvbf8ujpJHu4LXo=";
 
   postPatch = ''
@@ -79,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    FLAGS=$(PKG_CONFIG_PATH="$out/lib/pkgconfig" pkg-config --cflags --libs temporal_capi)
+    FLAGS=$(PKG_CONFIG_PATH="$dev/lib/pkgconfig" pkg-config --cflags --libs temporal_capi)
     cc $FLAGS temporal_capi/tests/c/simple.c -o c_test
     ./c_test
     c++ $FLAGS temporal_capi/tests/cpp/simple.cpp -o cpp_test

@@ -1,7 +1,9 @@
 {
   callPackage,
+  stdenv,
+  fetchFromGitHub,
+  gradle-native-platform ? null,
   jdk11,
-  jdk17,
   jdk21,
   jdk25,
   nix-update-script,
@@ -104,6 +106,8 @@ let
       # A current LTS version of a JDK is a good choice.
       defaultJava,
 
+      extraNativePlatformJars ? null,
+
       # The platforms supported by this Gradle package.
       # Gradle Native-Platform ships some binaries that
       # are compatible only with specific platforms.
@@ -117,7 +121,8 @@ let
         "x86_64-cygwin"
         "x86_64-linux"
         "x86_64-windows"
-      ],
+      ]
+      ++ (if extraNativePlatformJars != null then [ "riscv64-linux" ] else [ ]),
 
       # Extra attributes to be merged into the resulting derivation's
       # meta attribute.
@@ -240,7 +245,12 @@ let
           export PATH="${buildPackages.jdk}/bin:$PATH"
           . ${./patching.sh}
 
-          nativeVersion="$(extractVersion native-platform $gradleLibexec/lib/native-platform-*.jar)"
+          nativeVersion="$(extractVersion native-platform $gradleLibexec/lib/native-platform-*.jar)"${
+            lib.optionalString (extraNativePlatformJars != null) ''
+
+              cp -t "$gradleLibexec/lib/" ${extraNativePlatformJars}/lib/*.jar
+            ''
+          }
           for variant in "" "-ncurses5" "-ncurses6"; do
             autoPatchelfInJar \
               $gradleLibexec/lib/native-platform-linux-${arch}$variant-''${nativeVersion}.jar \
@@ -359,6 +369,21 @@ let
 
   # Calls the generated Gradle package with default arguments.
   mkGradle = args: callPackage (mkGradle' args) { };
+
+  # gradle 9 ships native-platform 0.22-milestone-29
+  # TODO: make this unconditional for all platforms
+  gradle-native-platform-m29 = gradle-native-platform.overrideAttrs (
+    finalAttrs: _: {
+      version = "0.22-milestone-29";
+      src = fetchFromGitHub {
+        owner = "gradle";
+        repo = "native-platform";
+        tag = finalAttrs.version;
+        hash = "sha256-HNVA6QDiPPKh0BQpCBjwiv4LNYxDySlqXcZjYC+FdFo=";
+      };
+      nativeVersionHash = "660c5614fbf4a5f2a75b1949f50a0caf5cd603558e7d8a26e50b933a0cfb79d1";
+    }
+  );
 in
 rec {
   # Keep these exposed (but not at toplevel) so users can call
@@ -371,24 +396,19 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.5.1";
-    hash = "sha256-uvwUG2Ga1jUP2XX8kDFW3VwVGZjMiwWOjBBEq197Ax8=";
+    version = "9.8.2";
+    hash = "sha256-Ib1dot5JtkKQQHfzjA79x3eOkrPtCIk5LcphuX44lgc=";
     defaultJava = jdk25;
     updateScriptMajorVersion = "9";
+    extraNativePlatformJars =
+      if stdenv.hostPlatform.isRiscV64 then gradle-native-platform-m29 else null;
   };
   gradle_8 = mkGradle {
-    version = "8.14.4";
-    hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
+    version = "8.14.6";
+    hash = "sha256-eYjtBxsqB5AOLscV/KFcarcrzm20M68wH6f6fpQHvSQ=";
     defaultJava = jdk21;
     updateScriptMajorVersion = "8";
-  };
-  gradle_7 = mkGradle {
-    version = "7.6.6";
-    hash = "sha256-Zz2XdvMDvHBI/DMp0jLW6/EFGweJO9nRFhb62ahnO+A=";
-    defaultJava = jdk17;
-    meta.knownVulnerabilities = [
-      "Gradle 7 no longer receives security updates with the release of Gradle 9 on 31 July 2025. https://endoflife.date/gradle"
-    ];
+    extraNativePlatformJars = if stdenv.hostPlatform.isRiscV64 then gradle-native-platform else null;
   };
 
   # Default version of Gradle in nixpkgs.

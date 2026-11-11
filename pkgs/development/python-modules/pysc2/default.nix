@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = "pysc2";
     tag = "v${version}";
-    sha256 = "sha256-70Uqs30Dyq1u+e1CTR8mO/rzZangBvgY0ah2l7VJLhQ=";
+    hash = "sha256-70Uqs30Dyq1u+e1CTR8mO/rzZangBvgY0ah2l7VJLhQ=";
   };
 
   patches = [

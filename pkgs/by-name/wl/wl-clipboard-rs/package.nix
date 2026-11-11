@@ -6,20 +6,20 @@
   pkg-config,
   wayland,
   withNativeLibs ? false,
+  nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-clipboard-rs";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eUD3XmEiBVMf+bImG6Ah48/96AxFhqTiLjK1gPJFdpw=";
+    hash = "sha256-JfY/3hG5DduWGYePYh7IuA7FJ0pU1Ia1Bua9q91hOlI=";
   };
 
-  cargoHash = "sha256-yTQ4EZ8ae3v0H4C94lV6AVNVSi+XDroKxjjHU4MagGU=";
+  cargoHash = "sha256-b7EeY4og/K2fxRQ+Iuvk52Fx0ZNAL8NlZKo0o4cIDOg=";
 
   cargoBuildFlags = [
     "--package=wl-clipboard-rs"
@@ -70,6 +70,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish target/completions/wl-paste.fish \
       --zsh target/completions/_wl-paste
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Command-line copy/paste utilities for Wayland, written in Rust";

@@ -52,6 +52,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "aiodiscover" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Python module to discover hosts via ARP and PTR lookup";
     homepage = "https://github.com/bdraco/aiodiscover";

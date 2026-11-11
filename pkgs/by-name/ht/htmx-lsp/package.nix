@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "htmx-lsp";
-  version = "0.1.0-unstable-2025-06-14";
+  version = "0.2.0-unstable-2025-10-18";
 
   src = fetchFromGitHub {
     owner = "ThePrimeagen";
     repo = "htmx-lsp";
-    rev = "c45f55b2bf8be2d92489fd6d69a3db07fe5f214b";
-    hash = "sha256-7CAlYYwsanlOCGeY7gYE5Fzk5IEO4hThgINiJmXql7s=";
+    rev = "a05bf01d33710f1e86e3e4165badda9826a7a9bb";
+    hash = "sha256-IX24OeYc/R9DJzWICmk5NL6HXzeAXZWjlyNa1Ehtc/w=";
   };
 
-  cargoHash = "sha256-/ypaTrctJo88DHtF/hv6B0dqB06axd/qKFnuI8zs8KA=";
+  cargoHash = "sha256-Z3t9MJ56k5MYNLLyrKpT8WeWc1+N4IhdhIgxsqjefCc=";
 
   passthru.updateScript = unstableGitUpdater { };
 

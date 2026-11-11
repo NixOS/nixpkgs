@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dtschema";
-  version = "2026.06";
+  version = "2026.09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devicetree-org";
     repo = "dt-schema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F0SRUW2Dj3hZymhYYVbHmQ1P7hPApH78eOdfftuic0Y=";
+    hash = "sha256-7GLRG6l05IGS9E2BoOYMYv7vk2hDU5wt0jPiflwhxWc=";
   };
 
   build-system = [ setuptools-scm ];
@@ -46,10 +46,12 @@ buildPythonPackage (finalAttrs: {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      bsd2 # or
-      gpl2Only
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        bsd2
+        gpl2Only
+      ];
     maintainers = with lib.maintainers; [ sorki ];
 
     # Library not loaded: @rpath/libfdt.1.dylib

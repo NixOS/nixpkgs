@@ -89,10 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "premake5";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sarahec ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "aarch64-darwin"
-    ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 })

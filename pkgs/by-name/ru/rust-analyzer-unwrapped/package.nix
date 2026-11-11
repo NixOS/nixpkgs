@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   rustPlatform,
   cmake,
@@ -9,19 +10,20 @@
   doCheck ? true,
   nix-update-script,
   versionCheckHook,
+  rust-analyzer,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-analyzer-unwrapped";
-  version = "2026-08-03";
+  version = "2026-10-26";
 
-  cargoHash = "sha256-QWxF5HvI1W/gVucVe09hEYx5BbX7SThI9FJ0KNnKmuI=";
+  cargoHash = "sha256-pvUF1JqpENYc/p5CHoTZ8RKhIBEQnebmbwd5H2s8oYk=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = finalAttrs.version;
-    hash = "sha256-+HtsUgRhJR1pYz8lhKK4ChfBmZTjwcTmiq0mWBcvrfo=";
+    hash = "sha256-3/DMV3Lpmthk6OV2b7bJSJ5Okouyvl755YZENyLwllo=";
   };
 
   cargoBuildFlags = [
@@ -63,10 +65,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    # FIXME: Pass overridden `rust-analyzer` once `buildRustPackage` also implements #119942
-    # FIXME: test script can't find rust std lib so hover doesn't return expected result
-    # https://github.com/NixOS/nixpkgs/pull/354304
-    # tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
+
+    tests.neovim-lsp = callPackage ./test-neovim-lsp.nix {
+      rust-analyzer = rust-analyzer.override {
+        rust-analyzer-unwrapped = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = {
@@ -76,7 +80,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ oxalica ];
+    maintainers = with lib.maintainers; [
+      diogotcorreia
+      oxalica
+    ];
     mainProgram = "rust-analyzer";
   };
 })

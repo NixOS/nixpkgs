@@ -47,7 +47,7 @@ cat > $SOURCE_NIX <<-EOF
 }
 EOF
 
-GO_HASH="$(nix-instantiate --eval -A mailpit.vendorHash | tr -d '"')"
+GO_HASH="$(nix-instantiate --eval --raw -A mailpit.vendorHash)"
 VENDOR_HASH=$(extractVendorHash "$GO_HASH")
 
 cat > $SOURCE_NIX <<-EOF

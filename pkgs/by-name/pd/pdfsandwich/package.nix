@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     description = "OCR tool for scanned PDFs";
     homepage = "http://www.tobias-elze.de/pdfsandwich/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.rps ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "pdfsandwich";
   };

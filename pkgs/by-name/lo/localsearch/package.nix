@@ -39,7 +39,7 @@
   libxml2,
   libzip,
   poppler,
-  systemd,
+  systemdLibs,
   taglib,
   upower,
   totem-pl-parser,
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
-    systemd
+    systemdLibs
     upower
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

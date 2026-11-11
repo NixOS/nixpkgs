@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     repo = "bitmask-vpn";
     rev = "8b3ac473f64b6de0262fbf945ff25af8029134f1";
     leaveDotGit = true;
-    sha256 = "sha256-XUgCVHnTLZXFU+r0s1yuYryWNBJRgQrFlf3g1iRrLWs=";
+    hash = "sha256-XUgCVHnTLZXFU+r0s1yuYryWNBJRgQrFlf3g1iRrLWs=";
   };
   vendorHash = null;
 

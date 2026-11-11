@@ -26,7 +26,7 @@
   meson,
   ninja,
   libraw,
-  gexiv2,
+  gexiv2_0_10,
   libwebp,
   luajit,
   openexr,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     libraw
     libwebp
-    gexiv2
+    gexiv2_0_10
     openexr
     suitesparse
     vala

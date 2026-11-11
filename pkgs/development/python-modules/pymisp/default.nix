@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymisp";
-  version = "2.5.34.2";
+  version = "2.5.34.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "MISP";
     repo = "PyMISP";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d3veOFVQSA7jbiT02xmwIYYHdK+4gRkXOunc22YV20o=";
+    hash = "sha256-rKGvzjhpxK60J9MEnv4jJbrmtjvo/sMsqbAXeWpuzQo=";
   };
 
   build-system = [ poetry-core ];

@@ -22,7 +22,7 @@
   gtk3,
   libmediaart,
   sqlite,
-  systemd,
+  systemdLibs,
   tinysparql,
   shared-mime-info,
   gnome,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     gtk3
     libmediaart
     sqlite
-    systemd
+    systemdLibs
     tinysparql
     shared-mime-info
   ]

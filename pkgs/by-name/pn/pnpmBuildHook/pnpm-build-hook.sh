@@ -12,15 +12,21 @@ pnpmBuildHook() {
     concatTo pnpmWorkspacesArray pnpmWorkspaces
 
     local -a pnpmBuildFlagsArray
-    concatTo pnpmBuildFlagsArray pnpmFlags pnpmBuildFlags
+    concatTo pnpmBuildFlagsArray pnpmBuildFlags
 
+    local -a pnpmFlagsArray
+    concatTo pnpmFlagsArray pnpmFlags
+
+    # You cannot combine bash formatting operators unfortunately.
+    local -r buildScript="${pnpmBuildScript:-build}"
+    local -r workspacesArray=("${pnpmWorkspacesArray[@]/#/--filter=}")
 
     echo
     echo "Running"
-    echo "pnpm run ${pnpmWorkspacesArray[*]/#/--filter=} ${pnpmBuildScript:-build} ${pnpmBuildFlagsArray[*]}"
+    echo "pnpm ${pnpmFlagsArray[*]@Q} run ${workspacesArray[*]@Q} ${buildScript@Q} ${pnpmBuildFlagsArray[*]@Q}"
     echo
 
-    if ! pnpm run "${pnpmWorkspacesArray[@]/#/--filter=}" "${pnpmBuildScript:-build}" "${pnpmBuildFlagsArray[@]}"; then
+    if ! pnpm "${pnpmFlagsArray[@]}" run "${workspacesArray[@]}" "${buildScript}" "${pnpmBuildFlagsArray[@]}"; then
         echo
         echo "ERROR: 'pnpm run ${pnpmBuildScript:-build}' failed"
         echo

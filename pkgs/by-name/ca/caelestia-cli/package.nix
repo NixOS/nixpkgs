@@ -20,13 +20,13 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "caelestia-cli";
   __structuredAttrs = true;
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "caelestia-dots";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-cCP6RAEh6JliKFmvtgi97uIG1dH0lIIuDNAdrdX+1U0=";
+    hash = "sha256-71nGzEgBK7lZVjjKC9h1zmVlloZOmSlzn0Q4VoYo6gI=";
   };
 
   pyproject = true;
@@ -74,7 +74,6 @@ python3.pkgs.buildPythonApplication rec {
         --replace-fail '"qs", "-c", "caelestia"' '"caelestia-shell"'
 
     substituteInPlace src/caelestia/subcommands/toggle.py \
-        --replace-fail 'discord' 'discord' \
         --replace-fail '["todoist"]' '["todoist.desktop"]'
   '';
 
@@ -83,7 +82,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "The main control script for the Caelestia dotfiles";
+    description = "The main control script for the Caelestia Shell";
     homepage = "https://github.com/caelestia-dots/cli";
     license = lib.licenses.gpl3Only;
     mainProgram = "caelestia";

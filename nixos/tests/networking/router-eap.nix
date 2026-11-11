@@ -1,4 +1,7 @@
-{ eapCerts }:
+{
+  eapCerts,
+  wifi ? null,
+}:
 { config, pkgs, ... }:
 let
   radiusDir =
@@ -70,6 +73,37 @@ let
     };
   inherit (pkgs) lib;
   vlanIfs = lib.range 1 (lib.length config.virtualisation.vlans);
+  # The hostapd module is Wi-Fi focused, so retain a custom service for wired EAP tests.
+  wiredHostapdService =
+    let
+      hostapdConfig = builtins.toFile "hostapd.conf" ''
+        interface=eth1
+        driver=wired
+        logger_stdout=-1
+        logger_stdout_level=1
+        debug=2
+        dump_file=/tmp/hostapd.dump
+        ieee8021x=1
+        eap_reauth_period=3600
+        use_pae_group_addr=1
+        ##### RADIUS configuration ####################################################
+        own_ip_addr=127.0.0.1
+        nas_identifier=ap.example.com
+        auth_server_addr=127.0.0.1
+        auth_server_port=1812
+        auth_server_shared_secret=insecure
+      '';
+    in
+    {
+      description = "IEEE 802.11 Host Access-Point Daemon";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.hostapd}/bin/hostapd ${hostapdConfig}";
+        Restart = "always";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        RuntimeDirectory = "hostapd";
+      };
+    };
 in
 {
   virtualisation.vlans = [
@@ -112,35 +146,41 @@ in
     debug = true;
   };
 
-  # upstream nixpkgs hostapd is focused on Wifi
-  systemd.services.hostapd =
-    let
-      hostapdConfig = builtins.toFile "hostapd.conf" ''
-        interface=eth1
-        driver=wired
-        logger_stdout=-1
-        logger_stdout_level=1
-        debug=2
-        dump_file=/tmp/hostapd.dump
-        ieee8021x=1
-        eap_reauth_period=3600
-        use_pae_group_addr=1
-        ##### RADIUS configuration ####################################################
-        own_ip_addr=127.0.0.1
-        nas_identifier=ap.example.com
-        auth_server_addr=127.0.0.1
-        auth_server_port=1812
-        auth_server_shared_secret=insecure
-      '';
-    in
-    {
-      description = "IEEE 802.11 Host Access-Point Daemon";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.hostapd}/bin/hostapd ${hostapdConfig}";
-        Restart = "always";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        RuntimeDirectory = "hostapd";
+  services.hostapd = lib.mkIf (wifi != null) {
+    enable = true;
+    radios.${wifi.interface} = {
+      channel = 1;
+      networks.${wifi.interface} = {
+        inherit (wifi) ssid;
+        authentication.mode = "none";
+        settings = {
+          ieee8021x = true;
+          wpa = 2;
+          wpa_key_mgmt = "WPA-EAP";
+          rsn_pairwise = "CCMP";
+          eap_reauth_period = 3600;
+          own_ip_addr = "127.0.0.1";
+          nas_identifier = "ap.example.com";
+          auth_server_addr = "127.0.0.1";
+          auth_server_port = 1812;
+          auth_server_shared_secret = "insecure";
+        };
       };
     };
+  };
+
+  systemd.services.hostapd =
+    if wifi == null then
+      wiredHostapdService
+    else
+      {
+        after = [
+          "freeradius.service"
+          "vwifi-client.service"
+        ];
+        wants = [
+          "freeradius.service"
+          "vwifi-client.service"
+        ];
+      };
 }

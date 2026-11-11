@@ -13,10 +13,11 @@ with pkgs.lib;
     meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
     nodes.machine =
-      { config, pkgs, ... }:
+      { lib, ... }:
       {
         services.rsyslogd.enable = true;
-        services.journald.forwardToSyslog = false;
+        # Verify that the module's option default remains overridable by downstream defaults.
+        services.journald.settings.Journal.ForwardToSyslog = lib.mkDefault false;
       };
 
     # ensure rsyslogd isn't receiving messages from journald if explicitly disabled
@@ -31,7 +32,7 @@ with pkgs.lib;
     meta.maintainers = [ pkgs.lib.maintainers.aanderse ];
 
     nodes.machine =
-      { config, pkgs, ... }:
+      { ... }:
       {
         services.rsyslogd.enable = true;
       };

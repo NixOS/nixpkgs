@@ -20,11 +20,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Minimal, fast alternative to 'du -sh'";
     homepage = "https://github.com/sharkdp/diskus";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
-    maintainers = [ lib.maintainers.fuerbringer ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     longDescription = ''
       diskus is a very simple program that computes the total size of the

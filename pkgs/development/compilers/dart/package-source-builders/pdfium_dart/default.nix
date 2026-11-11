@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  pdfium-binaries,
+  pdfium,
 }:
 
 { version, src, ... }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString (lib.versionAtLeast version "0.2.0") ''
     substitute ${./build.dart} hook/build.dart \
-      --replace-fail "@pdfium-binaries@" "${pdfium-binaries}"
+      --replace-fail "@pdfium-binaries@" "${lib.getLib pdfium}"
   '';
 
   installPhase = ''

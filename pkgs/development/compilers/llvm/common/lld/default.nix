@@ -22,14 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } ''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/lld "$out"
-        mkdir -p "$out/libunwind"
-        cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
-        mkdir -p "$out/llvm"
-      ''
+      runCommand "lld-src-${version}"
+        {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        ''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/lld "$out"
+          mkdir -p "$out/libunwind"
+          cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
+          mkdir -p "$out/llvm"
+        ''
     else
       src;
 
@@ -38,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (getVersionFile "lld/gnu-install-dirs.patch")
   ]
+  # https://github.com/llvm/llvm-project/pull/198129, which is fixed in 22.1.8
+  ++ lib.optional (lib.versionOlder release_version "22") (
+    getVersionFile "lld/initialize-symbol-fields.patch"
+  )
   ++ lib.optional (lib.versions.major release_version == "18") (
     # https://github.com/llvm/llvm-project/pull/97122
     fetchpatch {
@@ -57,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
     (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
@@ -73,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "dev"
   ];
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://lld.llvm.org/";

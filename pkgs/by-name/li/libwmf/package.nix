@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwmf";
-  version = "0.2.15";
+  version = "0.2.16";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "caolanm";
     repo = "libwmf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bpxr04dQ6EjX1FBVF4KcbJQvUjsPK6L03xLIXG6F2FI=";
+    hash = "sha256-cQY0DFG+S35G7vblbBxWMTWFp8WqnpNSvjohQSLzijU=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "WMF library from wvWare";
     homepage = "https://wvware.sourceforge.net/libwmf.html";
     downloadPage = "https://github.com/caolanm/libwmf/releases";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };
 })

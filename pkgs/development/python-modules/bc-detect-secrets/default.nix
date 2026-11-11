@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gibberish-detector,
@@ -17,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bc-detect-secrets";
-  version = "1.5.50";
+  version = "1.5.52";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     tag = finalAttrs.version;
-    hash = "sha256-t9uG5EFA0I6243P1x/ZLu8J92RM0wRDtsOXt3VXH2fk=";
+    hash = "sha256-QCC7Psto8xIy7d2U56a5b4PTG2u9efnHtHhLQQbJkBQ=";
   };
 
   build-system = [ setuptools ];
@@ -60,6 +61,10 @@ buildPythonPackage (finalAttrs: {
     "TestGetFilesToScan"
     "TestLineNumberChanges"
     "TestModifiesBaselineFromVersionChange"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_filename_filters_are_invoked_first"
+    "test_success"
   ];
 
   pythonImportsCheck = [ "detect_secrets" ];

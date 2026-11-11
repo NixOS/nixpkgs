@@ -1,97 +1,90 @@
 {
   stdenv,
   fetchurl,
-  fetchpatch,
   libxml2,
   gnutls,
   libxslt,
   pkg-config,
-  libgcrypt,
   libtool,
   openssl,
   nss,
   lib,
+  python3Packages,
   runCommandCC,
   writeText,
 }:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "xmlsec";
+  version = "1.3.12";
 
-lib.fix (
-  self:
-  stdenv.mkDerivation (finalAttrs: {
-    pname = "xmlsec";
-    version = "1.3.7";
+  __structuredAttrs = true;
 
-    src = fetchurl {
-      urls = [
-        "https://www.aleksey.com/xmlsec/download/xmlsec1-${finalAttrs.version}.tar.gz"
+  src = fetchurl {
+    urls = [
+      "https://www.aleksey.com/xmlsec/download/xmlsec1-${finalAttrs.version}.tar.gz"
 
-        # for when the ${finalAttrs.version} gets older than the last two
-        "https://www.aleksey.com/xmlsec/download/older-releases/xmlsec1-${finalAttrs.version}.tar.gz"
-      ];
-      hash = "sha256-2C6TtpuKogWmFrYpF6JpMiv2Oj6q+zd1AU5hdSsgE+o=";
-    };
-
-    patches = [
-      ./lt_dladdsearchdir.patch
-      ./remove_bsd_base64_decode_flag.patch
-      (fetchpatch {
-        # xmlDoc.encoding is no longer const in libxml 2.15, so fetch the fix
-        url = "https://github.com/lsh123/xmlsec/commit/ef0e3b5cac04db13ce070b1e5bcad7dd7b0eb49b.patch?full_index=1";
-        hash = "sha256-Hv8PaJXkXLq++NuCAJ4IvsYBPj8wkN7dBTniYucq18o=";
-      })
+      # for when the ${finalAttrs.version} gets older than the last two
+      "https://www.aleksey.com/xmlsec/download/older-releases/xmlsec1-${finalAttrs.version}.tar.gz"
     ];
+    hash = "sha256-JARRma8S2T/l/bu/fjhugj5IQgcelDLiuQrBCLiJqSM=";
+  };
 
-    postPatch = ''
-      substituteAllInPlace src/dl.c
-    '';
+  patches = [
+    ./lt_dladdsearchdir.patch
+    ./remove_bsd_base64_decode_flag.patch
+  ];
 
-    outputs = [
-      "out"
-      "dev"
-    ];
+  postPatch = ''
+    substituteInPlace src/dl.c --replace-fail "@out@" "$out"
+  '';
 
-    nativeBuildInputs = [ pkg-config ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-    buildInputs = [
-      libxml2
-      gnutls
-      libgcrypt
-      libtool
-      openssl
-      nss
-    ];
+  strictDeps = true;
 
-    propagatedBuildInputs = [
-      # required by xmlsec/transforms.h
-      libxslt
-    ];
+  nativeBuildInputs = [ pkg-config ];
 
-    enableParallelBuilding = true;
-    doCheck = true;
-    nativeCheckInputs = [ nss.tools ];
-    preCheck = ''
-      export TMPFOLDER=$(mktemp -d)
-      substituteInPlace tests/testrun.sh --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000'
-    '';
+  buildInputs = [
+    libxml2
+    gnutls
+    libtool
+    openssl
+    nss
+  ];
 
-    # enable deprecated soap headers required by lasso
-    # https://dev.entrouvert.org/issues/18771
-    configureFlags = [ "--enable-soap" ];
+  propagatedBuildInputs = [
+    # required by xmlsec/transforms.h
+    libxslt
+  ];
 
-    # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
-    env.NIX_LDFLAGS = "-lgcrypt";
+  enableParallelBuilding = true;
+  doCheck = true;
+  nativeCheckInputs = [ nss.tools ];
+  preCheck = ''
+    export TMPFOLDER=$(mktemp -d)
+    substituteInPlace tests/testrun.sh --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000'
+  '';
 
-    postInstall = ''
-      moveToOutput "bin/xmlsec1-config" "$dev"
-      moveToOutput "lib/xmlsec1Conf.sh" "$dev"
-    '';
+  # enable deprecated soap headers required by lasso
+  # https://dev.entrouvert.org/issues/18771
+  configureFlags = [ "--enable-soap" ];
 
-    passthru.tests.libxmlsec1-crypto =
+  postInstall = ''
+    moveToOutput "bin/xmlsec1-config" "$dev"
+    moveToOutput "lib/xmlsec1Conf.sh" "$dev"
+  '';
+
+  passthru.tests = {
+    python-xmlsec = python3Packages.xmlsec;
+    libxmlsec1-crypto =
       runCommandCC "libxmlsec1-crypto-test"
         {
           nativeBuildInputs = [ pkg-config ];
           buildInputs = [
-            self
+            finalAttrs.finalPackage
             libxml2
             libxslt
             libtool
@@ -109,20 +102,20 @@ lib.fix (
             }
           ''}
 
-          for crypto in "" gcrypt gnutls nss openssl; do
+          for crypto in "" gnutls nss openssl; do
             ./crypto-test $crypto
           done
           touch $out
         '';
+  };
 
-    meta = {
-      description = "XML Security Library in C based on libxml2";
-      homepage = "https://www.aleksey.com/xmlsec/";
-      downloadPage = "https://www.aleksey.com/xmlsec/download.html";
-      license = lib.licenses.mit;
-      mainProgram = "xmlsec1";
-      maintainers = [ ];
-      platforms = with lib.platforms; linux ++ darwin;
-    };
-  })
-)
+  meta = {
+    description = "XML Security Library in C based on libxml2";
+    homepage = "https://www.aleksey.com/xmlsec/";
+    downloadPage = "https://www.aleksey.com/xmlsec/download.html";
+    license = lib.licenses.mit;
+    mainProgram = "xmlsec1";
+    maintainers = [ ];
+    platforms = with lib.platforms; linux ++ darwin;
+  };
+})

@@ -17,6 +17,7 @@
   minizip,
   pkg-config,
   speechd-minimal,
+  sqlite,
   sword,
   webkitgtk_4_1,
   wrapGAppsHook3,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xiphos";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "crosswire";
     repo = "xiphos";
     tag = finalAttrs.version;
-    hash = "sha256-csbhlYSn/TFxZV/pGHgJT4Hnqa26BZQUKD/CBHhxi/U=";
+    hash = "sha256-yZEdyjFcWchUOXqU94BC6KAcZRbVUkOEqe2umCnuq2E=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     minizip
     speechd-minimal
+    sqlite
     sword
     webkitgtk_4_1
   ];

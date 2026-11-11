@@ -15,13 +15,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-bigquery-datatransfer";
-  version = "3.21.0";
+  version = "3.24.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery_datatransfer";
     inherit (finalAttrs) version;
-    hash = "sha256-zVgZBASf80Iv4RPHFa9Oy7E8+/UqU+l63UH6nl6+SHA=";
+    hash = "sha256-5X6HMhRX71XKAa6f94vRIRcN8HKHZWjjYcpsofQ5Z98=";
   };
 
   build-system = [ setuptools ];
