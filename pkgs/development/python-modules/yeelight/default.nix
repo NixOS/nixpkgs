@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "yeelight";
-  version = "0.7.16";
+  version = "0.7.17";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "stavros";
     repo = "python-yeelight";
     tag = "v${version}";
-    hash = "sha256-WLEXTDVcSpGCmfEI31cQXGf9+4EIUCkcaeaj25f4ERU=";
+    hash = "sha256-TrajX5a67MJhtixjnnCJ4aw5NleNHg0gwAORz0NaXiU=";
   };
 
   build-system = [ flit-core ];
