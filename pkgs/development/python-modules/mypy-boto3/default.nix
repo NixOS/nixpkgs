@@ -1330,8 +1330,8 @@ in
       "sha256-SChQDCx7LFXJwqpa0jmXQw2ySmwZpUjoCkIeLQUz9nw=";
 
   mypy-boto3-support =
-    buildMypyBoto3Package "support" "1.43.84"
-      "sha256-idAR4rzgGjV373VLw6vB6GBK33GawNjNMVApo6YayUs=";
+    buildMypyBoto3Package "support" "1.44.0"
+      "sha256-kEdFlcA5/gbc3Bw7/xcmRrUfJNbrIR0DY1XkHSjpjlo=";
 
   mypy-boto3-support-app =
     buildMypyBoto3Package "support-app" "1.43.0"
