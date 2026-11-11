@@ -8,6 +8,7 @@
   libubox,
   ubus,
   uci,
+  nixosTests,
   unstableGitUpdater,
   withDhcpv4 ? true,
   withUbus ? false,
@@ -40,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DHCPV4_SUPPORT" withDhcpv4)
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    tests = nixosTests.odhcpd;
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = {
     description = "Embedded DHCP, DHCPv6 and router advertisement server for OpenWrt";
