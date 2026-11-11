@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   alsa-lib,
+  desktopToDarwinBundle,
   libGL,
   libgit2,
   libx11,
@@ -31,13 +33,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
-    alsa-lib
     libgit2
     zstd
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   cargoHash = "sha256-C7rCx0g77R+1f0la+j3pVW0bShGPdJD3btAIYg3yzMw=";
 
@@ -59,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "/usr/share/icons" "$out/share/icons"
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${
       lib.makeLibraryPath [
         libGL
@@ -87,7 +92,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/twvd/snow/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nulleric ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "snowemu";
+    mainDarwinApp = "Snow.app";
   };
 })
