@@ -8,12 +8,10 @@
   setuptools,
 
   # dependencies
-  distutils,
   h5py,
   numpy,
   qtpy,
   requests,
-  tomli,
 
   # tests
   pytestCheckHook,
@@ -30,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "guidata";
-  version = "3.14.2";
+  version = "3.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iUfZX51Ef1PY7roy9ER8hG34BAhCLs3Sagoasd5BT3E=";
+    hash = "sha256-R9CPpH7rgIBgs1WS7RjxNSfRXeVQi8MJItYRF0WfLUg=";
   };
 
   build-system = [
@@ -45,12 +43,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    distutils
     h5py
     numpy
     qtpy
     requests
-    tomli
   ];
 
   nativeCheckInputs = [
@@ -61,7 +57,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preCheck = ''
-    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}:${qt6.qtsvg}/${qt6.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
   '';
 
