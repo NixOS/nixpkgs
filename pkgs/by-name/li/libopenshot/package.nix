@@ -29,19 +29,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot";
-  version = "0.7.0-unstable-2026-07-22";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
-    rev = "eac81cf91555438c54fbadef7fdd05bf803f26ee";
-    hash = "sha256-XeEXvKi5O/0J6rEc8rZs4+x/ImF4X0GFw/dOWn9HCCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OSyBuvprhkGMfpSeEPR7FccBgb+9y0jCuNDrAXhs/0M=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Darwin requires both Magick++ and MagickCore for a successful linkage
-    ./0001-link-magickcore.diff
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -106,12 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit libopenshot-audio;
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "http://openshot.org/";
-    changelog = "https://github.com/OpenShot/libopenshot/releases";
+    changelog = "https://github.com/OpenShot/libopenshot/releases/tag/v${finalAttrs.version}";
     description = "Free, open-source video editor library";
     longDescription = ''
       OpenShot Library (libopenshot) is an open-source project dedicated to
