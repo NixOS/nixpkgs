@@ -12922,10 +12922,6 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-instrumentation-asgi
       { };
 
-  opentelemetry-instrumentation-botocore =
-    callPackage ../development/python-modules/opentelemetry-instrumentation-botocore
-      { };
-
   opentelemetry-instrumentation-celery =
     callPackage ../development/python-modules/opentelemetry-instrumentation-celery
       { };
