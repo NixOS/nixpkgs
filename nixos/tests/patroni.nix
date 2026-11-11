@@ -34,7 +34,7 @@ import ./make-test-python.nix (
 
           enable = true;
 
-          postgresqlPackage = pkgs.postgresql_14.withPackages (p: [ p.pg_safeupdate ]);
+          postgresqlPackage = pkgs.postgresql_15.withPackages (p: [ p.pg_safeupdate ]);
 
           scope = "cluster1";
           name = "node${toString (index + 1)}";
@@ -129,7 +129,7 @@ import ./make-test-python.nix (
       client =
         { pkgs, ... }:
         {
-          environment.systemPackages = [ pkgs.postgresql_14 ];
+          environment.systemPackages = [ pkgs.postgresql_15 ];
 
           networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
             {
