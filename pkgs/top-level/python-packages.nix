@@ -12079,7 +12079,9 @@ self: super: with self; {
 
   nebula3-python = callPackage ../development/python-modules/nebula3-python { };
 
-  nemo-relay = callPackage ../development/python-modules/nemo-relay { };
+  nemo-relay = callPackage ../development/python-modules/nemo-relay {
+    inherit (pkgs) zstd;
+  };
 
   nemosis = callPackage ../development/python-modules/nemosis { };
 
@@ -17382,6 +17384,8 @@ self: super: with self; {
   python-ripple-api = callPackage ../development/python-modules/python-ripple-api { };
 
   python-roborock = callPackage ../development/python-modules/python-roborock { };
+
+  python-rpm-spec = callPackage ../development/python-modules/python-rpm-spec { };
 
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
 

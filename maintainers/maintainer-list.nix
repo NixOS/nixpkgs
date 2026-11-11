@@ -10413,6 +10413,12 @@
     github = "gefla";
     githubId = 56790;
   };
+  gegnep = {
+    name = "Zain Hammad";
+    email = "nix@zainham.com";
+    github = "gegnep";
+    githubId = 96670443;
+  };
   genga898 = {
     email = "genga898@gmail.com";
     github = "genga898";

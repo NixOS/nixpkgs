@@ -72,17 +72,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.167.0";
+  version = "0.167.1";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     rev = finalAttrs.buildCommit;
-    hash = "sha256-9BVM0mUQ+F9QpqvnG+7x4ZXYaNTclcGLtF5DzEU5Zzg=";
+    hash = "sha256-S63Qd9OGCACz1EK/IzH6LGsZxMovk0UBkOKtv/jnQ+I=";
   };
 
   # Matching client/helper stamps; build_id() requires a full commit SHA.
-  buildCommit = "086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a";
+  buildCommit = "0a94398fa60c4fac0e7659e4213a0a36e613dd46";
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 

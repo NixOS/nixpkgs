@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "apk-info";
-  version = "1.0.13";
+  version = "1.1.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "delvinru";
     repo = "apk-info";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+ToIYtzbC6xYrmGHbbCDifqe0IMUevW92aKhoCf9r3k=";
+    hash = "sha256-hsLR4y3aiFF8whlC6QI0BvM5725viZHsbeQTrzoR9QI=";
   };
 
-  cargoHash = "sha256-6BP9O4J21I2Pi9Fa0DuzD5wljgGVwsfoDDNyoQQ2dLQ=";
+  cargoHash = "sha256-jRy+GuKlCIkgWCE24x8YXRR69Bc82tgDryU3PiT7Ehc=";
 
   nativeBuildInputs = [ python3 ];
 

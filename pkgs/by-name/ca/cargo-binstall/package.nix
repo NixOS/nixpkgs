@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -7,6 +8,7 @@
   bzip2,
   xz,
   zstd,
+  installShellFiles,
   versionCheckHook,
 }:
 
@@ -24,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-xJkrMHjbyv/nnmQv2Amru0FZGBdKtQaRvMxsw6oeb1k=";
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
   ];
 
@@ -59,6 +62,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_no_such_release"
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd cargo-binstall \
+      --bash <($out/bin/cargo-binstall --completions bash) \
+      --fish <($out/bin/cargo-binstall --completions fish) \
+      --zsh <($out/bin/cargo-binstall --completions zsh)
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
