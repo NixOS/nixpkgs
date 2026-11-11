@@ -10,6 +10,7 @@
   libx11,
   libsForQt5,
   lua5_5,
+  libssh2,
   writableTmpDirAsHomeHook,
 }:
 
@@ -41,26 +42,42 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     glib
     libx11
+    libssh2
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libsForQt5.libqtpas;
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
 
   postPatch = ''
-    # Double Commander saves this default into the user's configuration, so use
-    # the symlink installed next to the executable instead of a store path.
-    substituteInPlace src/platform/lua.pas \
-      --replace-fail "LuaDLL = 'liblua5.1.so.0';" "LuaDLL = '%COMMANDER_PATH%/liblua.so';"
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/platform/lua.pas \
-        --replace-fail "LuaDLL = 'liblua5.1.dylib';" "LuaDLL = '%COMMANDER_PATH%/liblua.dylib';"
-      patchShebangs install/darwin/install.sh
-    ''}
-    patchShebangs build.sh install/linux/install.sh
+    patchShebangs build.sh
     substituteInPlace build.sh \
       --replace-warn '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
-    substituteInPlace install/linux/install.sh \
-      --replace-warn '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
+
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          patchShebangs install/darwin/install.sh
+
+          # Double Commander saves this default into the user's configuration, so use
+          # the symlink installed next to the executable instead of a store path.
+          substituteInPlace src/platform/lua.pas \
+            --replace-fail "LuaDLL = 'liblua5.1.dylib';" "LuaDLL = '%COMMANDER_PATH%/liblua.dylib';"
+          substituteInPlace plugins/wfx/ftp/src/sftp/libssh.pas \
+            --replace-fail "'libssh2.dylib'" "'${lib.getLib libssh2}/lib/libssh2.dylib'"
+        ''
+      else
+        ''
+          patchShebangs install/linux/install.sh
+          substituteInPlace install/linux/install.sh \
+            --replace-warn '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
+
+          # Same as on Darwin: use the symlink installed next to the executable.
+          substituteInPlace src/platform/lua.pas \
+            --replace-fail "LuaDLL = 'liblua5.1.so.0';" "LuaDLL = '%COMMANDER_PATH%/liblua.so';"
+          substituteInPlace plugins/wfx/ftp/src/sftp/libssh.pas \
+            --replace-fail "'libssh2.so.1'" "'${lib.getLib libssh2}/lib/libssh2.so.1'"
+        ''
+    }
   '';
 
   buildPhase = ''
