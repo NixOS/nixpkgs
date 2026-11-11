@@ -8,6 +8,7 @@
   python3Packages,
   rPackages,
   runCommand,
+  runtimeShell,
   testers,
   writers,
   writeText,
@@ -20,6 +21,7 @@ let
 
   inherit (writers)
     makeFSharpWriter
+    makeScriptWriter
     writeBash
     writeBashBin
     writeBabashka
@@ -669,5 +671,26 @@ recurseIntoAttrs {
           exit 1
         fi
       '';
+  };
+
+  makeScriptWriter = recurseIntoAttrs {
+    verbatim =
+      let
+        content = "printf '%s\\n' \\\\ 100%";
+        script = makeScriptWriter { interpreter = runtimeShell; } "/bin/verbatim" content;
+      in
+      testers.testEqualContents {
+        assertion = "makeScriptWriter writes content verbatim";
+        actual = "${script}/bin/verbatim";
+        expected = writeText "expected" "#! ${runtimeShell}\n${content}";
+        checkMetadata = false;
+      };
+
+    check-failure = testers.testBuildFailure' {
+      drv = makeScriptWriter {
+        interpreter = runtimeShell;
+        check = "false";
+      } "/bin/check-failure" "echo foo";
+    };
   };
 }
