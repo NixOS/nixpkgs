@@ -98,6 +98,7 @@ mapAliases {
   aocd = throw "'aocd' has been renamed to 'advent-of-code-data'"; # Added 2026-10-10
   apkit = throw "apkit was removed because it is unmaintained upstream and different from apkit on PyPI"; # added 2025-09-13
   APScheduler = throw "'APScheduler' has been renamed to/replaced by 'apscheduler'"; # Converted to throw 2025-10-29
+  arelle-headless = throw "'arelle-headless' has been removed. Please use `.override { gui = false; }` to disable the GUI instead."; # added 2026-11-11
   argon2_cffi = throw "'argon2_cffi' has been renamed to/replaced by 'argon2-cffi'"; # Converted to throw 2025-10-29
   asmog = throw "'asmog' has been removed because the service it polled is offline and the library has been unmaintained since 2019"; # Added 2026-06-04
   aspell-python = aspell-python-py3; # added 2026-06-18

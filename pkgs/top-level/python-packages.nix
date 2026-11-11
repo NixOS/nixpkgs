@@ -1319,8 +1319,6 @@ self: super: with self; {
 
   arelle = callPackage ../development/python-modules/arelle { gui = true; };
 
-  arelle-headless = callPackage ../development/python-modules/arelle { gui = false; };
-
   aresponses = callPackage ../development/python-modules/aresponses { };
 
   argcomplete = callPackage ../development/python-modules/argcomplete { };
