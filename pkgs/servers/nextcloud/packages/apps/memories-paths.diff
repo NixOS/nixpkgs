@@ -31,3 +31,35 @@ index 7814f071..bb1309fa 100644
          // Check if the key is valid
          if (!\array_key_exists($key, self::DEFAULTS)) {
              throw new \InvalidArgumentException("Invalid system config key: {$key}");
+diff --git a/lib/Service/BinExt.php b/lib/Service/BinExt.php
+index 0b6a3fe..cea6450 100644
+--- a/lib/Service/BinExt.php
++++ b/lib/Service/BinExt.php
+@@ -136,18 +136,7 @@ final class BinExt
+      */
+     public function getExiftool(): array
+     {
+-        if (!$this->hasExiftoolEnv) {
+-            $this->hasExiftoolEnv = true;
+-            putenv('LANG=C'); // set perl lang to suppress warning
+-        }
+-
+-        $path = realpath(__DIR__.'/../../bin-ext/exiftool/exiftool') ?: '';
+-
+-        if ($this->systemConfig->get('memories.exiftool_no_local')) {
+-            return ['perl', $path];
+-        }
+-
+-        return [$this->getEPerlBin(), $path];
++        return ["@exiftool@"];
+     }
+
+     /**
+@@ -462,6 +451,7 @@ final class BinExt
+     public function testVipsBin(string $path): string
+     {
+         $version = trim(Util::execSafe([$path, '--version'], 3000) ?: '');
++        $version = preg_replace('/^vips-/', '', $version);
+         if (!preg_match('/^\d+\.\d+\.\d+(-\d+)?$/', $version)) {
+             throw new \Exception("failed to detect version, found {$version}");
+         }
