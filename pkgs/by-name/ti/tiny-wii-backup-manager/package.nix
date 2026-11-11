@@ -5,6 +5,7 @@
   makeWrapper,
   pkg-config,
 
+  aws-lc,
   dbus,
   fontconfig,
   libGL,
@@ -28,21 +29,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tiny-wii-backup-manager";
-  version = "6.0.8";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "mq1";
     repo = "TinyWiiBackupManager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zY/vLzsj256uKMkr+uxXj5SLQPKxfkS3IB0mXePlGiA=";
+    hash = "sha256-df4MYTBiDDaFNfCakJ68Xjjnvbw23zixoSi9ZW5F7Js=";
   };
 
-  cargoHash = "sha256-unv/9LoCpRcfGRq8mo6Y1b5PEf0+5UONi2eked8gfSg=";
-
-  cargoBuildFlags = [
-    "--bin"
-    "twbm-gui"
-  ];
+  cargoHash = "sha256-ljildHQccDyZlbJyrS38FZLY2bgDomkwHHTAJ6JdHQ4=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -50,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     dbus
     fontconfig
     libGL
@@ -71,8 +68,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   postInstall = ''
-    mv $out/bin/twbm-gui $out/bin/TinyWiiBackupManager
-
     install -Dm644 package/linux/AppDir/usr/share/applications/it.mq1.TinyWiiBackupManager.desktop \
       $out/share/applications/it.mq1.TinyWiiBackupManager.desktop
     install -Dm644 package/linux/it.mq1.TinyWiiBackupManager.metainfo.xml \
