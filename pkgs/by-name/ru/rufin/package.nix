@@ -94,7 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/screwys/Rufin";
     changelog = "https://github.com/screwys/Rufin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ screwys ];
+    maintainers = with lib.maintainers; [
+      screwys
+      Superredstone
+    ];
     mainProgram = "rufin";
     platforms = lib.platforms.linux;
   };
