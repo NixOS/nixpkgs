@@ -327,6 +327,7 @@ in
   ax25 = runTest ./ax25.nix;
   ayatana-indicators = runTest ./ayatana-indicators.nix;
   babeld = runTest ./babeld.nix;
+  bash = runTest ./bash.nix;
   bazarr = runTest ./bazarr.nix;
   bcache = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bcache.nix;
   bcachefs = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bcachefs.nix;
