@@ -7,6 +7,7 @@
   cython,
   hypothesis,
   jinja2,
+  libunwind,
   numpy,
   nvidia-ml-py,
   psutil,
@@ -41,14 +42,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "scalene";
-  version = "2.2.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a8laU7w6DLNIxmfhis/PvYd0iQMSqiQ2j6WURbsWPxk=";
+    hash = "sha256-0PUG2Uw1eO0jvm8IRW5O4/xZsfIz1E8CyPvZfHi2Ndc=";
   };
 
   patches = [
@@ -69,6 +70,14 @@ buildPythonPackage (finalAttrs: {
     # Fix hash mismatch
     rm vendor/printf/printf.c
 
+    # Link against nixpkgs libunwind (shared) instead of the vendored static build
+    substituteInPlace GNUmakefile \
+      --replace-fail 'LIBUNWIND_TARGET := $(LIBUNWIND_LIB)' 'LIBUNWIND_TARGET :='
+    substituteInPlace setup.py \
+      --replace-fail 'libunwind_dir = path.join(path.dirname(__file__), "vendor", "libunwind")' 'libunwind_dir = "${lib.getDev libunwind}"' \
+      --replace-fail 'libs_dir = path.join(libunwind_dir, "src", ".libs")' 'libs_dir = "${libunwind}/lib"' \
+      --replace-fail 'extra_objects.append(path.join(libs_dir, "libunwind.a"))' 'libraries.extend([ "unwind-${stdenv.hostPlatform.linuxArch}", "unwind" ])'
+
     # Set correct sys.executable
     substituteInPlace tests/test_{multiprocessing_pool_spawn,on_off_windows}.py \
       --replace-fail "sys.executable" "\"${pythonPath}\""
@@ -79,6 +88,8 @@ buildPythonPackage (finalAttrs: {
     setuptools
     setuptools-scm
   ];
+
+  buildInputs = [ libunwind ];
 
   dependencies = [
     cloudpickle
@@ -120,9 +131,10 @@ buildPythonPackage (finalAttrs: {
     "tests/test_multiprocessing_spawn.py::TestSpawnModeIntegration"
   ];
 
-  # remove scalene directory to prevent pytest import confusion
+  # remove scalene python modules to prevent pytest import confusion,
+  # while keeping scalene-gui, whose sources tests inspect
   preCheck = ''
-    rm -rf scalene
+    rm -f scalene/*.py
   '';
 
   pythonImportsCheck = [ "scalene" ];
