@@ -1,30 +1,41 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  autoreconfHook,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.10";
   pname = "xtermcontrol";
+  version = "3.11";
 
-  src = fetchurl {
-    url = "https://thrysoee.dk/xtermcontrol/xtermcontrol-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Prl7HZ2KrhutT+LEHKOj27ENLWfmykWZqh9jGkBQPe4=";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitHub {
+    owner = "JessThrysoee";
+    repo = "xtermcontrol";
+    tag = finalAttrs.version;
+    hash = "sha256-HS99l9APrW/1l3HwoGga81kX8CPosipISXtp+OnA1vU=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  doCheck = true;
 
   meta = {
     description = "Enables dynamic control of xterm properties";
     longDescription = ''
-      Enables dynamic control of xterm properties.
-      It makes it easy to change colors, title, font and geometry of a running xterm, as well as to report the current settings of these properties.
-      Window manipulations de-/iconify, raise/lower, maximize/restore and reset are also supported.
-      To complete the feature set; xtermcontrol lets advanced users issue any xterm control sequence of their choosing.
+      Change colors, title, font, and geometry of a running xterm, and report
+      the current settings. Window manipulations such as iconify, raise, lower,
+      maximize, restore, and reset are supported. Advanced users can issue any
+      xterm control sequence.
     '';
-    homepage = "http://thrysoee.dk/xtermcontrol";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = [ ];
+    homepage = "https://thrysoee.dk/xtermcontrol";
+    changelog = "https://github.com/JessThrysoee/xtermcontrol/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "xtermcontrol";
+    platforms = lib.platforms.unix;
   };
 })
