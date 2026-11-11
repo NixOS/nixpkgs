@@ -1222,8 +1222,8 @@ in
       "sha256-syvN/Nz92XKCFaD6+IxpiT+6kVso1UTpp6TKz+V27kU=";
 
   mypy-boto3-securitylake =
-    buildMypyBoto3Package "securitylake" "1.43.0"
-      "sha256-pwyBQN0XXWN83ccE0gbCcJE8ozPn2pNMgj/nEOo/yq0=";
+    buildMypyBoto3Package "securitylake" "1.44.0"
+      "sha256-cjDmVi9WpprejbIxM2vY1TQZFpq+CawzbdaGgiBaog4=";
 
   mypy-boto3-serverlessrepo =
     buildMypyBoto3Package "serverlessrepo" "1.43.0"
