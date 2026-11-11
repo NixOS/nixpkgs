@@ -15,11 +15,13 @@
   libcap_ng,
   libselinux,
   p11-kit,
+  systemdLibs,
   wrapGAppsNoGuiHook,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
   gnome,
   useWrappedDaemon ? true,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     gcr_3
     p11-kit
+  ]
+  ++ lib.optionals withSystemd [
+    systemdLibs
   ];
 
   nativeCheckInputs = [ dbus ];
@@ -64,8 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     # installation directories
     "-Dpkcs11-config=${placeholder "out"}/etc/pkcs11" # todo: this should probably be /share/p11-kit/modules
     "-Dpkcs11-modules=${placeholder "out"}/lib/pkcs11"
-    # TODO: enable socket activation
-    "-Dsystemd=disabled"
+    (lib.mesonEnable "systemd" withSystemd)
   ];
 
   doCheck = true;
@@ -95,7 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
     + lib.optionalString useWrappedDaemon ''
-      files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
+      files=(
+        $out/etc/xdg/autostart/*
+        $out/share/dbus-1/services/*
+        ${lib.optionalString withSystemd "$out/share/systemd/user/gnome-keyring-daemon.service"}
+      )
 
       for file in "''${files[@]}"; do
         substituteInPlace "$file" \
