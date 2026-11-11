@@ -33,6 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     stb
   ];
 
+  outputs = [
+    "lib"
+    "dev"
+    "out"
+  ];
+
   cmakeFlags = [
     "-DZXING_BLACKBOX_TESTS=OFF"
     "-DZXING_DEPENDENCIES=LOCAL"
