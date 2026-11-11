@@ -11475,6 +11475,8 @@ self: super: with self; {
 
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
+  multi-demangle = callPackage ../development/python-modules/multi-demangle { };
+
   multi-key-dict = callPackage ../development/python-modules/multi-key-dict { };
 
   multiaddr = callPackage ../development/python-modules/multiaddr { };
@@ -22712,6 +22714,8 @@ self: super: with self; {
   warrant-lite = callPackage ../development/python-modules/warrant-lite { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
+
+  wasm-tools = callPackage ../development/python-modules/wasm-tools { inherit (pkgs) jq; };
 
   inherit (self.wasmerPackages)
     wasmer
