@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ zstd ];
 
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

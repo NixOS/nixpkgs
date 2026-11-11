@@ -6,18 +6,20 @@
   zstd,
   versionCheckHook,
   nix-update-script,
+  stdenv,
+  darwin,
 }:
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "anytype-cli";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xLR2drI0THlwknb6AWgZj81zGmGQrtaVYPxEtsJ3SIA=";
+    hash = "sha256-Qob8abtP9TSbRSi1WZtKx8uLJCyo+PmQXdjvI6FzOo8=";
   };
 
   vendorHash = "sha256-4MkXsSCa4c6aXLJ/tZ5w0tE3BnGkTak4lprrozs61oI=";
@@ -28,6 +30,17 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [ zstd ];
   env.NIX_LDFLAGS = "-lzstd";
+
+  preCheck = "export ${
+    if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
+  }=${lib.makeLibraryPath [ zstd ]}";
+
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.file_cmds ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmd/machine/machine_darwin_test.go core/localstate/acl_darwin_test.go \
+      --replace-fail '"/bin/chmod"' '"${lib.getExe' darwin.file_cmds "chmod"}"'
+  '';
 
   ldflags = [
     "-s"
