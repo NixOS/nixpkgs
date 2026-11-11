@@ -22,20 +22,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = "7.6.0";
+  version = "7.6.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     tag = finalAttrs.version;
-    hash = "sha256-8kWmVgtw1l1HckfWS4sukQs8KFJced2zTVhKlR/9qP8=";
+    hash = "sha256-IfA7neI5rbFcF0kyzl51ThaFpMYebhcDE267sWi/Ufs=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-HOeKyzk+EIPdlVuJ6wbgtWT4YEGv9IQZYSo0L7fH23I=";
+    hash = "sha256-6wgy/Bdex30y9RG3bObboWMe9OSx32YMd8WOFeGpfog=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
