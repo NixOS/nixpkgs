@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   buildFHSEnv,
   fetchurl,
@@ -9,46 +8,31 @@
 
   # Either "community" or "pro"
   iconName ? "community",
-  licenseAccepted ? config.burpsuite.accept_license or false,
+  licenseAccepted ? false,
 }:
 assert lib.assertMsg (
   iconName == "pro" || iconName == "community"
 ) "iconName has to be either pro or community";
 
-let
+buildFHSEnv (finalAttrs: {
   pname = "burpsuite";
   version = "2026.10.1";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger-cdn.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
-      "https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
+      "https://portswigger-cdn.net/burp/releases/download?product=desktop&version=${finalAttrs.version}&type=Jar"
+      "https://portswigger.net/burp/releases/download?product=desktop&version=${finalAttrs.version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${finalAttrs.version}&type=Jar"
     ];
     hash = "sha256-6KsIZTexZDuRygnS/CpsPgiouuDIUoB5fFyex2UGw8U=";
   };
 
-  description = "Integrated platform for performing security testing of web applications";
-
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    desktopName = "Burp Suite Desktop";
-    comment = description;
-    categories = [
-      "Development"
-      "Security"
-      "System"
-    ];
-  };
-in
-buildFHSEnv {
-  inherit pname version;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   runScript =
-    "${lib.getExe jdk} -jar ${src} --suppress-jre-check --disable-check-for-updates-dialog --disable-auto-update"
+    "${lib.getExe jdk} -jar ${finalAttrs.src} --suppress-jre-check --disable-check-for-updates-dialog --disable-auto-update"
     + lib.optionalString licenseAccepted " --i-accept-the-license-agreement";
 
   targetPkgs =
@@ -83,14 +67,27 @@ buildFHSEnv {
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/64x64/apps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${iconName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
-    cp -r ${desktopItem}/share/applications $out/share
+    ${lib.getBin unzip}/bin/unzip -p ${finalAttrs.src} resources/Media/icon64${iconName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
+    cp -r ${finalAttrs.desktopItem}/share/applications $out/share
   '';
+
+  desktopItem = makeDesktopItem {
+    name = finalAttrs.pname;
+    exec = finalAttrs.pname;
+    icon = finalAttrs.pname;
+    desktopName = "Burp Suite Desktop";
+    comment = finalAttrs.meta.description;
+    categories = [
+      "Development"
+      "Security"
+      "System"
+    ];
+  };
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    inherit description;
+    description = "Integrated platform for performing security testing of web applications";
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
       Its various tools work seamlessly together to support the entire testing process, from
@@ -99,7 +96,7 @@ buildFHSEnv {
     '';
     homepage = "https://portswigger.net/burp/";
     changelog = "https://portswigger.net/burp/releases/professional-community-${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.unfree;
@@ -113,4 +110,4 @@ buildFHSEnv {
     ];
     mainProgram = "burpsuite";
   };
-}
+})
