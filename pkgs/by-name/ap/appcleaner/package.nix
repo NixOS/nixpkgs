@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/Applications
-    unzip -d $out/Applications $src
+    unzip -d $out/Applications $src -x '__MACOSX/*'
 
     runHook postInstall
   '';
