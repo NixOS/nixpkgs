@@ -7,32 +7,28 @@
   ffmpeg-headless,
   yt-dlp,
   makeDesktopItem,
-  electron_43,
+  electron_44,
 }:
 let
-  electron = electron_43;
+  electron = electron_44;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "ytDownloader";
-  version = "4.0.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
-    tag = "v${version}";
-    hash = "sha256-chTaQ0nHTtdIhMo4GBSoQ6YbqDy8HNj190JNUt5nDiE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XuJki4PyBIwOhIjIiiebHNry/OFGkyfG7wnVay4dToM=";
   };
 
-  npmDepsHash = "sha256-Czs09QnQ7lnNjgysvSb7TFKz6t8ChvoT+1KzHFJ87SA=";
+  npmDepsHash = "sha256-Pd52ytVwvrx+LmY67weqTWVWiIAdxkpTDnFVfN6VPc0=";
   makeCacheWritable = true;
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-  ];
-  buildInputs = [
-    ffmpeg-headless
-    yt-dlp
   ];
 
   desktopItems = [
@@ -85,4 +81,4 @@ buildNpmPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "ytdownloader";
   };
-}
+})
