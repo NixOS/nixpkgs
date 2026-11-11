@@ -1,10 +1,12 @@
 {
   lib,
+  libgit2,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   curl,
   openssl,
+  sqlite,
   versionCheckHook,
   nix-update-script,
 }:
@@ -29,7 +31,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     curl
+    libgit2
     openssl
+    sqlite
   ];
 
   env.OPENSSL_NO_VENDOR = true;
