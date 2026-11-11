@@ -1576,6 +1576,9 @@ class QemuMachine(BaseMachine):
                 readable = sel.select(1)
                 if readable:
                     conn, _ = sock.accept()
+                    # Blocking mode is platform-dependent: macOS inherits nonblocking mode.
+                    # https://docs.python.org/3/library/socket.html#timeouts-and-the-accept-method
+                    conn.setblocking(True)
                     return conn
                 rc = self.process.poll()
                 if rc is not None:
