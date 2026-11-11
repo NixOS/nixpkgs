@@ -998,8 +998,8 @@ in
       "sha256-DDNWvmo+i3O3s8sL16zg+QhWYzfrSTPOBHni8PVOgbs=";
 
   mypy-boto3-payment-cryptography =
-    buildMypyBoto3Package "payment-cryptography" "1.43.24"
-      "sha256-R+9NhCyUKOhMZCyWll1kilbBGlcNfpqEXgQVskDo/nU=";
+    buildMypyBoto3Package "payment-cryptography" "1.44.0"
+      "sha256-bAgq4IG3zRyi7qxm7trhF8CIecGRzOdji3Mw4o6dKJo=";
 
   mypy-boto3-payment-cryptography-data =
     buildMypyBoto3Package "payment-cryptography-data" "1.43.101"
