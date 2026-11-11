@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usbvfiod";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "cyberus-technology";
     repo = "usbvfiod";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gYKWmUaB7c5netQjR7qHKuBq82X3J+o4gQCsB/3cq50=";
+    hash = "sha256-9/znBMDA0yLJVBnttgol9SCi6pzvbtEB9VmF5RGlYik=";
   };
 
-  cargoHash = "sha256-B4iyADjXjX7VdGaTIdCKUalwJt6vMVnqqUCyLsu5wUI=";
+  cargoHash = "sha256-lVHW70s8f3NYuKcyu8CQbGe+P7B3qETrv7mTxrp4o2Q=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
