@@ -2090,9 +2090,9 @@
   };
 
   odoc = rec {
-    version = "0.2.0";
+    version = "0.2.1";
     url = "github:tmcgilchrist/tree-sitter-odoc?ref=${version}";
-    hash = "sha256-hLx5spgka2fW7L2yjdDvNxRcEwcZsGGQ9Xd5bFITg8A=";
+    hash = "sha256-wUCXPzr00HuQdT4YEHZaTewqQo5IrL0+fCq3/tjjlkw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
