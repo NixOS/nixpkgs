@@ -2,76 +2,53 @@
   stdenv,
   lib,
   fetchzip,
-  libglut,
-  libxmu,
-  libxi,
-  libx11,
-  libice,
-  libGLU,
-  libGL,
-  libsm,
-  libxext,
-  glibc,
-  lua5_2_compat,
-  luabind,
-  glfw,
-  libgccjit,
-  dialog,
+  autoPatchelfHook,
   makeWrapper,
+  glfw,
+  libGL,
+  libGLU,
+  openssl,
+  zenity,
 }:
-let
-  lua = lua5_2_compat;
-  lpath = lib.makeLibraryPath [
-    libxmu
-    libxi
-    libx11
-    libglut
-    libice
-    libGLU
-    libGL
-    libsm
-    libxext
-    glibc
-    lua
-    glfw
-    luabind
-    libgccjit
-  ];
-in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation {
   pname = "iceSL";
-  version = "2.4.1";
+  version = "20261109";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchzip {
-        url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=amd64";
-        extension = "zip";
-        sha256 = "0rrnkqkhlsjclif5cjbf17qz64vs95ja49xarxjvq54wb4jhbs4l";
-      }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchzip {
-        url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=i386";
-        extension = "zip";
-        sha256 = "0n2yyxzw0arkc70f0qli4n5chdlh9vc7aqizk4v7825mcglhwlyh";
-      }
-    else
-      throw "Unsupported architecture";
+  src = fetchzip {
+    url = "https://raw.githubusercontent.com/icesl/icesl-builds/039c92381bc407abef9ff4e17f9e9d8843f9c26b/icesl/linux/amd64/icesl_linux_amd64-20261109.zip";
+    hash = "sha256-mGRhrbh/w5pp5EF0qwu92OX9zrZ7PHeg4mTkqi+Wyo8=";
+  };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
+
+  buildInputs = [
+    glfw
+    libGL
+    libGLU
+    openssl
+    stdenv.cc.cc.lib
+  ];
+
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
-    cp -r ./ $out
-    rm $out/bin/*.so
-    mkdir $out/oldbin
-    mv $out/bin/IceSL-slicer $out/oldbin/IceSL-slicer
+    runHook preInstall
+
+    mkdir -p $out/share/icesl $out/bin
+    cp -r . $out/share/icesl
+    makeWrapper $out/share/icesl/bin/IceSL-slicer $out/bin/icesl \
+      --prefix PATH : ${lib.makeBinPath [ zenity ]}
+
     runHook postInstall
   '';
 
-  postInstall = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lpath}" \
-      $out/oldbin/IceSL-slicer
-    makeWrapper $out/oldbin/IceSL-slicer $out/bin/icesl --prefix PATH : ${dialog}/bin
+  preFixup = ''
+    addAutoPatchelfSearchPath $out/share/icesl/bin
   '';
 
   meta = {
@@ -79,10 +56,8 @@ stdenv.mkDerivation rec {
     homepage = "https://icesl.loria.fr/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.inria-icesl;
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ mgttlinger ];
+    mainProgram = "icesl";
   };
 }
