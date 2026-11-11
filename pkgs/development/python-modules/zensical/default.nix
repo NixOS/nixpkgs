@@ -3,8 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  nix-update,
+  nix,
   rustPlatform,
   versionCheckHook,
+  writeShellApplication,
+  yq-go,
 
   # dependencies
   click,
@@ -70,6 +74,21 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "zensical-update";
+    runtimeInputs = [
+      nix
+      nix-update
+      yq-go
+    ];
+    text = ''
+      nix-update zensical
+      toml=$(nix-instantiate --eval -A zensical.src.outPath --json | yq -r)/pyproject.toml
+      version=$(yq -r '.project.dependencies[] | select(test("^zensical-ui==")) | sub("^zensical-ui=="; "")' "$toml")
+      nix-update zensical.ui --version "$version"
+    '';
+  });
 
   meta = {
     description = "Static site generator for documentation";
