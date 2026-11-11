@@ -1010,8 +1010,8 @@ in
       "sha256-tF8hJ/SRQxdpW9UdaSzzHW71FOUb+t9sQzFpFLfk/wY=";
 
   mypy-boto3-personalize =
-    buildMypyBoto3Package "personalize" "1.43.0"
-      "sha256-YM3HbNdW4xYvsJaiQ0MxAOo7bTHXbB95jNwyUBqV488=";
+    buildMypyBoto3Package "personalize" "1.44.0"
+      "sha256-R+YMQPX3loaywK/8k/o2Ej6DvyTz7Jr9itOQ6tW+KJc=";
 
   mypy-boto3-personalize-events =
     buildMypyBoto3Package "personalize-events" "1.43.0"
