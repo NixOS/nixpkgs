@@ -758,8 +758,8 @@ in
       "sha256-eg+EoS4hWXHjCr0hgd4vIUeeITFhdY2y+d3DuqBvkKk=";
 
   mypy-boto3-kms =
-    buildMypyBoto3Package "kms" "1.43.119"
-      "sha256-l7XrFd+5rLolR4qkVFpc6DbM0debVh4neWxROCQqy3U=";
+    buildMypyBoto3Package "kms" "1.44.0"
+      "sha256-TjEEHeXyYR11jZFvvhYNGFmsop1bXJZP4SNuQyEx1cY=";
 
   mypy-boto3-lakeformation =
     buildMypyBoto3Package "lakeformation" "1.43.113"
