@@ -7961,6 +7961,8 @@ self: super: with self; {
 
   httpx2-pytest = callPackage ../development/python-modules/httpx2-pytest { };
 
+  httpxthrottlecache = callPackage ../development/python-modules/httpxthrottlecache { };
+
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
   inherit (callPackage ../development/python-modules/huaweicloudsdk { })
