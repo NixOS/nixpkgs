@@ -2,46 +2,46 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pkg-config,
   autoreconfHook,
   c-ares,
-  openssl ? null,
-  nix-update-script,
+  openssl,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sipsak";
-  version = "4.5.12.1";
+  version = "0.9.8.1-unstable-2023-06-02";
 
-  nativeBuildInputs = [ autoreconfHook ];
+  src = fetchFromGitHub {
+    owner = "nils-ohlmeier";
+    repo = "sipsak";
+    rev = "ed6a911f07012c9fdf7f5a27970bb5fc0ee541fb";
+    hash = "sha256-YoiBg6hvuUbo7VnnP4JJJCkmSjxBhtlNpWq/5XzYK7E=";
+  };
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+
   buildInputs = [
     openssl
     c-ares
   ];
 
-  # -fcommon: workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: transport.o:/build/source/sipsak.h:323: multiple definition of
-  #     `address'; auth.o:/build/source/sipsak.h:323: first defined here
-  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -fcommon";
-
-  src = fetchFromGitHub {
-    owner = "sipwise";
-    repo = "sipsak";
-    tag = "mr${finalAttrs.version}";
-    hash = "sha256-j4KF87krXvY2pcepEYRRxtadV8QxHRGICK6VrmXw5BQ=";
-  };
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = unstableGitUpdater { };
   };
 
   meta = {
-    homepage = "https://github.com/sipwise/sipsak";
+    homepage = "https://github.com/nils-ohlmeier/sipsak";
     description = "SIP Swiss army knife";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
     mainProgram = "sipsak";
   };
-
 })
