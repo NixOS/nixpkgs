@@ -5,7 +5,7 @@
   pillow,
   poetry-core,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
 }:
 let
   owner = "whtsky";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pillow
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 
