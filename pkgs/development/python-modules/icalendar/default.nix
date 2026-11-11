@@ -2,36 +2,46 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
+  pyprojectVersionPatchHook,
   pythonOlder,
   hatch-vcs,
   hatchling,
   python-dateutil,
   typing-extensions,
   tzdata,
-  hypothesis,
-  pyprojectVersionPatchHook,
   pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage (finalAttrs: {
-  version = "7.2.2";
   pname = "icalendar";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QDxyMotlG50khBP9luRwoXa9YyZ5qOA/vbdHMwFXv3g=";
+    hash = "sha256-SrQ5Bfb3ZyUyYYvT9FkUs6pAwx9WGL+DdWTAn1N0RrA=";
   };
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
+  patches = [
+    # https://github.com/collective/icalendar/pull/1661
+    (fetchpatch2 {
+      name = "warn-on-cached-tzid-guess.patch";
+      url = "https://github.com/collective/icalendar/commit/0213619845d5ff2525de409d70dd40c0fe1d5f1f.patch?full_index=1";
+      hash = "sha256-dkzQp3nsKqdDR2sACe8imYvJyNVJzBfFXpE4gXv5oiY=";
+    })
   ];
 
   build-system = [
     hatch-vcs
     hatchling
+  ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
   dependencies = [
@@ -44,9 +54,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    hypothesis
     pytestCheckHook
+    pytz
   ];
+
+  pythonImportsCheck = [ "icalendar" ];
 
   disabledTests = [
     # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
@@ -57,11 +69,11 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "src/icalendar" ];
 
   meta = {
-    changelog = "https://github.com/collective/icalendar/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
-    mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
+    changelog = "https://github.com/collective/icalendar/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
+    mainProgram = "icalendar";
   };
 })
