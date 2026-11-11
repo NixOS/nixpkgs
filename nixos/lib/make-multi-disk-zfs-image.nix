@@ -305,6 +305,13 @@ let
             export PATH=${tools}:$PATH
             set -x
 
+            # zpool waits for udev to initialize newly created partitions.
+            mkdir -p /etc/udev/rules.d
+            ln -s ${pkgs.systemdMinimal}/lib/udev/rules.d/60-persistent-storage.rules /etc/udev/rules.d
+            ${pkgs.systemdMinimal}/bin/systemd-notify --fork -- \
+              ${pkgs.systemdMinimal}/lib/systemd/systemd-udevd
+            ${pkgs.systemdMinimal}/bin/udevadm trigger --settle /dev/vdb
+
             cp -sv /dev/vda /dev/sda
             cp -sv /dev/vda /dev/xvda
 
@@ -331,6 +338,7 @@ let
 
             mkdir -p /mnt/boot
             mkfs.vfat -n ESP /dev/vda2
+            ${pkgs.systemdMinimal}/bin/udevadm trigger --settle /dev/vda2
             mount /dev/vda2 /mnt/boot
 
             mount
