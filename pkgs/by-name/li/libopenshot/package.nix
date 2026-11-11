@@ -15,6 +15,7 @@
   jsoncpp,
   libopenshot-audio,
   llvmPackages,
+  nix-update-script,
   opencv4,
   pipewire,
   pkg-config,
@@ -105,10 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit libopenshot-audio;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
     homepage = "http://openshot.org/";
+    changelog = "https://github.com/OpenShot/libopenshot/releases";
     description = "Free, open-source video editor library";
     longDescription = ''
       OpenShot Library (libopenshot) is an open-source project dedicated to
