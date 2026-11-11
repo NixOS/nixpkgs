@@ -150,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optional stdenv.hostPlatform.isMusl "misc-coverage"
         # These require a native compiler and dynamic interposition.
         ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+          "hardlinks-emlink-recovery"
           "link-dest-symlink-enotsup"
           "partial-protected-regular-retry-linux"
         ]
