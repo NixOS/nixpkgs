@@ -112,7 +112,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.4.0";
+  version = "3.4.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -121,14 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JnFhVuMekKDvmxE7X2gngAfmAOHiu6WyhjNSACpT3Vw=";
+    hash = "sha256-G6GKWwmdPCq7+jpp1H/kZAHIcOOh+e5Y0k0L/xWvgA8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-nFNLPAhC7wkgqHfXfXywASAAF7lIO6xxFp3cHYHCWZ8=";
+    hash = "sha256-tIpO5diN8bbyFFmJPwnIBjlDG5u7gIjrJnzG+xTYt58=";
   };
 
   postPatch = ''
