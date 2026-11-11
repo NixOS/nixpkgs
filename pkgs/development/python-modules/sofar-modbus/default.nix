@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sofar-modbus";
-  version = "0.18.0";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darkrain-nl";
     repo = "sofar-modbus";
     tag = finalAttrs.version;
-    hash = "sha256-Ks8NhghqiXsHwKB+DxZMMFe2ZomVZwpDGX/Avlnf3KE=";
+    hash = "sha256-xzCH5oeIGHu3pjN+Hek3NVcPF0iEblPhdeuKKuc8Evs=";
   };
 
   nativeBuildInputs = [
