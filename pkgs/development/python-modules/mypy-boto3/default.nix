@@ -734,8 +734,8 @@ in
       "sha256-piypzNdjJrLVU6vc5TvaDuIEPCFHUxjhppvbrA7ZP/8=";
 
   mypy-boto3-kinesis-video-media =
-    buildMypyBoto3Package "kinesis-video-media" "1.43.0"
-      "sha256-bmd/SlahjC1HKvg1Ac+4m2RtXiNvDjJ1drGqTLXF8ak=";
+    buildMypyBoto3Package "kinesis-video-media" "1.44.0"
+      "sha256-AR5sGrTkoe/dj5ImQVDwtRIy05R+J9oeeUij2DPeN8c=";
 
   mypy-boto3-kinesis-video-signaling =
     buildMypyBoto3Package "kinesis-video-signaling" "1.43.0"
