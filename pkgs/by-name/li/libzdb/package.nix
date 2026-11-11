@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = "sh ./bootstrap";
 
+  configureFlags = [ "ac_cv_cxx_compile_cxx20=yes" ];
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
