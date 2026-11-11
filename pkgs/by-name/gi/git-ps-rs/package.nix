@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   dbus,
+  libgit2,
   openssl,
 }:
 
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    libgit2
     openssl
     dbus
   ];

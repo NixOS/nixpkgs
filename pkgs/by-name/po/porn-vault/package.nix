@@ -13,6 +13,7 @@
   openssl,
   pkg-config,
   makeWrapper,
+  zstd,
 }:
 let
   nodejs = nodejs_26;
@@ -50,6 +51,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm'
     makeWrapper
   ];
+
+  buildInputs = [ zstd ];
 
   prePnpmInstall = ''
     cd app

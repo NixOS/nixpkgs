@@ -92,14 +92,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prefect";
-  version = "3.9.1";
+  version = "3.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
     repo = "prefect";
     tag = finalAttrs.version;
-    hash = "sha256-P99agVyJ7frOKP8JI4ZiGkd3WaV7mmPVCCrvK1yAxxQ=";
+    hash = "sha256-Mu299fagUGz+8/jjWK364EfhNl7fZHhK0LsOk/Hu7fE=";
   };
 
   postPatch = ''

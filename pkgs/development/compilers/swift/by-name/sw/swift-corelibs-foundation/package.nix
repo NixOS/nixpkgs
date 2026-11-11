@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   cmake,
   createToolchainStubsHook,
   curl,
@@ -40,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./patches/0001-gnu-install-dirs.patch
     ./patches/0002-Devendor-SwiftFoundation-and-SwiftFoundationICU.patch
+    # Fixes a crash when Foundation can’t find the timezone database on NixOS (because it looks in the wrong place).
+    # See: https://github.com/swiftlang/swift-corelibs-foundation/pull/5657
+    ./patches/0003-Read-TZDIR-from-the-environment-and-probe-common-zon.patch
   ];
 
   strictDeps = true;
@@ -106,6 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests = lib.packagesFromDirectoryRecursive {
+    inherit callPackage;
+    directory = ./tests;
+  };
 
   __structuredAttrs = true;
 
