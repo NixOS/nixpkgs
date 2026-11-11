@@ -5,13 +5,17 @@
   writableTmpDirAsHomeHook,
   macaulay2,
 }:
+let
+  version = "1.26.06";
+in
 vimUtils.buildVimPlugin {
   pname = "macaulay2";
-  inherit (macaulay2) version;
+  inherit version;
 
   # we don't need the whole (rather large) repo
   src = fetchFromGitHub {
-    inherit (macaulay2.src) repo owner tag;
+    inherit (macaulay2.src) repo owner;
+    tag = "release-${version}";
     rootDir = "M2/Macaulay2/editors/vim";
     hash = "sha256-F/Vo8tOA/ZRczZJiUHY0Sr3ibRXHBLtqqSYIamqjk18=";
   };
