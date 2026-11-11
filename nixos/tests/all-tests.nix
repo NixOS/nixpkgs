@@ -371,6 +371,7 @@ in
   boot = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./boot.nix { };
   boot-stage2 = runTest ./boot-stage2.nix;
   bootspec = handleTestOn [ "x86_64-linux" ] ./bootspec.nix { };
+  bootvine = runTest ./bootvine.nix;
   borgbackup = runTest ./borgbackup.nix;
   borgmatic = runTest ./borgmatic.nix;
   bpf = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bpf.nix;
