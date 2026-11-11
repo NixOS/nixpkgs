@@ -686,8 +686,8 @@ in
       "sha256-qk7Okb8ENeJwDAqg3aFoS8RrI8UNPmcqYAxhHZnxO00=";
 
   mypy-boto3-iottwinmaker =
-    buildMypyBoto3Package "iottwinmaker" "1.43.0"
-      "sha256-v5cHLJTqCyncFbrEz5dFN4PEsQ63cVKXKj6jwllUpPU=";
+    buildMypyBoto3Package "iottwinmaker" "1.44.0"
+      "sha256-7THMoXcSdmoCWLW1cVCBCi59k/la8NhsCTvCpaPDaPM=";
 
   mypy-boto3-iotwireless =
     buildMypyBoto3Package "iotwireless" "1.43.115"
