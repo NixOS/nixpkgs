@@ -1310,8 +1310,8 @@ in
       "sha256-uZnkrFyjgx6yV9r/yM3+xvVS6lfku1WCSFR/TCMAFxI=";
 
   mypy-boto3-sso-admin =
-    buildMypyBoto3Package "sso-admin" "1.43.119"
-      "sha256-8gW9SYhu8NehGKCkwC6RXcjPL5K21839RDmspZV5RwE=";
+    buildMypyBoto3Package "sso-admin" "1.44.0"
+      "sha256-05Ju1bb0DDUEj3cPBUX93Te7Ev8nNQN1qtLZKgIX4IY=";
 
   mypy-boto3-sso-oidc =
     buildMypyBoto3Package "sso-oidc" "1.43.0"
