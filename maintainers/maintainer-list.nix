@@ -13074,6 +13074,12 @@
     githubId = 1358764;
     name = "Jamie Magee";
   };
+  jancopieters = {
+    name = "Janco Pieters";
+    email = "git@sl.jpieters.co.za";
+    github = "JancoPieters";
+    githubId = 12518076;
+  };
   janezp = {
     name = "Janez Podhostnik";
     email = "janez.podhostnik@ourplace.is";
