@@ -32,6 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ gaelj ];
   };
 })
