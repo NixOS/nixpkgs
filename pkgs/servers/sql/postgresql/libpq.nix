@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "f5c41f6681c910b3f69951bf6fb97c6d74605d25";
+    rev = "refs/tags/REL_18_7";
     hash = "sha256-w4i0GEdrJBn56ZSgn/BsCe3QPAj0wZjl8odggO2cTXI=";
   };
 
