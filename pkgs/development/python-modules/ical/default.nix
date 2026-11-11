@@ -9,7 +9,7 @@
   pdoc,
   pydantic,
   pytest-aiohttp,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
   python-dateutil,
   setuptools,
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     freezegun
     pdoc
     pytest-aiohttp
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
     syrupy
   ]

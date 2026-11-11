@@ -21,7 +21,7 @@
   faker,
   mock,
   py,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-flask,
   pytest-mock,
   pytest-vcr,
@@ -57,7 +57,7 @@ buildPythonPackage (finalAttrs: {
     faker
     mock
     py
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-flask
     pytest-mock
     pytest-vcr

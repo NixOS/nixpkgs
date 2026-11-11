@@ -7,7 +7,7 @@
   pyprojectVersionPatchHook,
   pytestCheckHook,
   requests,
-  pytest-benchmark,
+  pytest-benchmark-stub,
 }:
 
 buildPythonPackage {
@@ -26,7 +26,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     opentelemetry-test-utils
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
     requests
   ];
 

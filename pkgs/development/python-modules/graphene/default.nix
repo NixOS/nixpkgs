@@ -6,7 +6,7 @@
   graphql-core,
   graphql-relay,
   pytest-asyncio,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-mock,
   pytestCheckHook,
   typing-extensions,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-mock
   ];
 

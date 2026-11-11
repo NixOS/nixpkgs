@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   py,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
   setuptools,
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     py
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 

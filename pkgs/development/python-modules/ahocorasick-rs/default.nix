@@ -8,7 +8,7 @@
   pyahocorasick,
   hypothesis,
   typing-extensions,
-  pytest-benchmark,
+  pytest-benchmark-stub,
 }:
 
 buildPythonPackage rec {
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   dependencies = lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
     pyahocorasick
     hypothesis

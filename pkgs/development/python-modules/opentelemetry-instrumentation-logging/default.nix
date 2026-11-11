@@ -4,7 +4,7 @@
   opentelemetry-api,
   opentelemetry-instrumentation,
   opentelemetry-test-utils,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     opentelemetry-test-utils
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 

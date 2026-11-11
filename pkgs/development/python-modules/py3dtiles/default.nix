@@ -27,7 +27,7 @@
   psycopg2-binary,
 
   # tests
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-cov-stub,
   pytestCheckHook,
   writeText,
@@ -86,7 +86,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-cov-stub
     moreutils # chronic
   ];

@@ -19,7 +19,7 @@
   pyserial,
   pytest,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-dependency,
   pytest-mock,
   pyudev,
@@ -79,7 +79,7 @@ buildPythonPackage (finalAttrs: {
     openssh
     psutil
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-mock
     pytest-dependency
     util-linux

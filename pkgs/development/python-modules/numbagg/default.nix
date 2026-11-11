@@ -16,7 +16,7 @@
   bottleneck,
   hypothesis,
   pandas,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   tabulate,
 }:
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     bottleneck
     hypothesis
     tabulate
-    pytest-benchmark
+    pytest-benchmark-stub
   ];
 
   pytestFlags = [ "--benchmark-disable" ];

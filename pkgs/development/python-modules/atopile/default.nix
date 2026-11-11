@@ -53,7 +53,7 @@
   # tests
   pytestCheckHook,
 
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-timeout,
   pytest-datafiles,
   pytest-xdist,
@@ -141,7 +141,7 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
     pytestCheckHook
     pytest-xdist
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-datafiles
     pytest-timeout
     hypothesis

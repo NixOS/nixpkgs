@@ -4,7 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   nix-update-script,
 }:
 let
@@ -36,7 +36,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
   ];
 
   pytestFlags = [ "--benchmark-disable" ];

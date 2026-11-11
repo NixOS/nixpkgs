@@ -6,7 +6,7 @@
   poetry-dynamic-versioning,
   typing-extensions,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-cov-stub,
   pydantic,
 }:
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pydantic
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-cov-stub
   ];
 

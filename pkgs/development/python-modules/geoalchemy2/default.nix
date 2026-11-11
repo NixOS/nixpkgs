@@ -8,7 +8,7 @@
   shapely,
   sqlalchemy,
   alembic,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     alembic
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ]
   ++ optional-dependencies.shapely;

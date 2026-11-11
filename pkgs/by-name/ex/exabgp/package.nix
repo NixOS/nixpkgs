@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hypothesis
     psutil
     pytest-asyncio
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-timeout
     pytest-xdist
     pytestCheckHook

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   hatchling,
   httpx,
   tomli,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
   ]
   ++ optional-dependencies.web;
 

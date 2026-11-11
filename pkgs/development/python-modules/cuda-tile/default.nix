@@ -23,7 +23,7 @@
   llvm,
   numba-cuda,
   numpy,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-env,
   pytestCheckHook,
   torch,
@@ -140,7 +140,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     llvm # FileCheck, for the MLIR tests
     numba-cuda
     numpy
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-env
     pytestCheckHook
     torch

@@ -8,7 +8,7 @@
   prometheus-client,
   pylibmc,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-cov-stub,
   redis,
   setuptools_80,
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-    pytest-benchmark
+    pytest-benchmark-stub
     pika
     redis
     pylibmc

@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-codspeed
     pytest-cov-stub
     pytestCheckHook

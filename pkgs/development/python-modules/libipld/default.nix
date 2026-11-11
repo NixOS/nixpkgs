@@ -10,7 +10,7 @@
 
   # nativeCheckInputs
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-codspeed,
   pytest-xdist,
 }:
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-codspeed
     pytest-xdist
   ];

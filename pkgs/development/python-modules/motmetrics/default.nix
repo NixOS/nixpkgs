@@ -14,7 +14,7 @@
 
   # tests
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
 }:
 
 let
@@ -44,7 +44,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
   ];
 
   pytestFlags = [ "--benchmark-disable" ];

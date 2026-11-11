@@ -22,7 +22,7 @@
 
   # tests
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-xdist,
   cloudpickle,
   hypothesis,
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-xdist
     cloudpickle
     hypothesis

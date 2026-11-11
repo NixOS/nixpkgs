@@ -21,7 +21,7 @@
   black,
   filelock,
   hypothesis,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-httpserver,
   pytest-mock,
   pytest-randomly,
@@ -128,7 +128,7 @@ buildPythonPackage (finalAttrs: {
     black
     filelock
     hypothesis
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-httpserver
     pytest-mock
     pytest-randomly

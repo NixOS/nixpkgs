@@ -24,7 +24,7 @@
   # test
   myst-parser,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
 }:
 
 buildPythonPackage rec {
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     myst-parser
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
   ]
   ++ lib.concatAttrValues optional-dependencies;
 

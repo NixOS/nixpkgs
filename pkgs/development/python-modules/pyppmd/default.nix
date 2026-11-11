@@ -5,7 +5,7 @@
   setuptools,
   setuptools-scm,
   hypothesis,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-timeout,
   pytestCheckHook,
 }:
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-timeout
     pytestCheckHook
   ];

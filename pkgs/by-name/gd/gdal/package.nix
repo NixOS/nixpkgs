@@ -257,7 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   nativeInstallCheckInputs = with python3Packages; [
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-env
     filelock
     lxml

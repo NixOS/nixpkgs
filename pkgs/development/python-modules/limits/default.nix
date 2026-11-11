@@ -14,7 +14,7 @@
   pymemcache,
   pymongo,
   pytest-asyncio,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-cov-stub,
   pytest-lazy-fixtures,
   pytestCheckHook,
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     flaky
     hiro
     pytest-asyncio
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-cov-stub
     pytest-lazy-fixtures
     pytestCheckHook

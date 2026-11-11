@@ -14,7 +14,7 @@
   # tests
   numpy,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-rerunfailures,
 }:
 
@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     numpy
     pytestCheckHook
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-rerunfailures
   ];
 

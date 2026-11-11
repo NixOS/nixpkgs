@@ -6,7 +6,7 @@
   setuptools,
   asgiref,
   twisted,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
   nix-update-script,
 }:
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;

@@ -5,7 +5,7 @@
   fetchPypi,
   hatchling,
   py,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     py
     pytestCheckHook
     pytest-mock
-    pytest-benchmark
+    pytest-benchmark-stub
     pyyaml
   ];
 

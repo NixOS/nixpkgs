@@ -9,7 +9,7 @@
   httpretty,
   mocket,
   opentelemetry-test-utils,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
 }:
 
@@ -34,7 +34,7 @@ buildPythonPackage {
     httpretty
     mocket
     opentelemetry-test-utils
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 

@@ -6,7 +6,7 @@
   hatchling,
   pytestCheckHook,
   pytest-asyncio,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-mock,
   pytest-timeout,
   pytest-django,
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-mock
     pytest-timeout
     pytest-django

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   bitarray,
   setuptools,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   dependencies = [ bitarray ];
 
   nativeCheckInputs = [
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   hatch-vcs,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
   setuptools,
 }:
@@ -25,7 +25,7 @@ let
     ];
 
     nativeCheckInputs = [
-      pytest-benchmark
+      pytest-benchmark-stub
       pytestCheckHook
     ];
 

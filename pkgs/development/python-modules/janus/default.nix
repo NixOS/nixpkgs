@@ -4,7 +4,7 @@
   fetchPypi,
   pytestCheckHook,
   pytest-asyncio,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-cov-stub,
   typing-extensions,
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-cov-stub
     pytestCheckHook
   ];

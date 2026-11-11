@@ -5,7 +5,7 @@
   fetchFromCodeberg,
   jaconv,
   py-cpuinfo,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
   setuptools-scm,
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     py-cpuinfo
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 

@@ -5,7 +5,7 @@
   pytestCheckHook,
 
   pystac,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-console-scripts,
   pytest-mock,
   pytest-recording,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
     pytest-console-scripts
     pytest-mock

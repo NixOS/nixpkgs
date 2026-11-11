@@ -5,7 +5,7 @@
   setuptools,
   cffi,
   aspectlib,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
 }:
 
@@ -37,7 +37,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     aspectlib
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 

@@ -23,7 +23,7 @@
   # tests
   jax,
   jaxlib,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-mock,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -73,7 +73,7 @@ buildPythonPackage (finalAttrs: {
     jax
     jaxlib
     numba
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-mock
     pytestCheckHook
     writableTmpDirAsHomeHook

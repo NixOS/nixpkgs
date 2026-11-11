@@ -12,7 +12,7 @@
   pytest-codspeed ? null, # Not in Nixpkgs
   pytest-cov-stub,
   pytest-xdist,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   rustc,
   rustPlatform,
   runCommand,
@@ -217,7 +217,7 @@ buildPythonPackage (finalAttrs: {
       pytestCheckHook
       pytest-cov-stub
       pytest-xdist
-      pytest-benchmark
+      pytest-benchmark-stub
     ];
 
     pytestFlags = [
