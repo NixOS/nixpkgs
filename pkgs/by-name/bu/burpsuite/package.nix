@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   jre,
+  copyDesktopItems,
   makeBinaryWrapper,
   makeShellWrapper,
   makeDesktopItem,
@@ -46,6 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   nativeBuildInputs = [
+    copyDesktopItems
     makeBinaryWrapper
     makeShellWrapper
     unzip
@@ -117,21 +119,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p "$out/share/icons/hicolor/64x64/apps"
     unzip -p ${finalAttrs.src} resources/Media/icon64${iconName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
-    cp -r ${finalAttrs.desktopItem}/share/applications $out/share
   '';
 
-  desktopItem = makeDesktopItem {
-    name = finalAttrs.pname;
-    exec = finalAttrs.pname;
-    icon = finalAttrs.pname;
-    desktopName = "Burp Suite Desktop";
-    comment = finalAttrs.meta.description;
-    categories = [
-      "Development"
-      "Security"
-      "System"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      exec = "burpsuite";
+      icon = "burpsuite";
+      desktopName = "Burp Suite Desktop";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Development"
+        "Security"
+        "System"
+      ];
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 
