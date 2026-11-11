@@ -13,6 +13,7 @@
   curl,
   runCommand,
   jq,
+  zstd,
 }:
 
 let
@@ -52,7 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
     libiconv
   ];
