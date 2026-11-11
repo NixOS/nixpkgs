@@ -902,8 +902,8 @@ in
       "sha256-fumgFRmGbvxAhWqq73urFBv0O9utpqN2FPcjDXZ4GaQ=";
 
   mypy-boto3-mgh =
-    buildMypyBoto3Package "mgh" "1.43.0"
-      "sha256-V6xgiUn87wqIlWJGOpc7Zu24EDzROAspAn3qkRifsFU=";
+    buildMypyBoto3Package "mgh" "1.44.0"
+      "sha256-2zp2/RULK6mjOSyjmDinxsmKCDCS4tb0lOoMHWwXp24=";
 
   mypy-boto3-mgn =
     buildMypyBoto3Package "mgn" "1.43.124"
