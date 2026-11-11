@@ -1430,6 +1430,6 @@ in
       "sha256-I6vZwP2I0qYfbGtl4hs+qL9IK+bJsQokQIL+dtCb284=";
 
   mypy-boto3-xray =
-    buildMypyBoto3Package "xray" "1.43.115"
-      "sha256-Kr74XaniaA8/DMOEXDxFIfY9vBFfeW3t0cPoh2tJVpI=";
+    buildMypyBoto3Package "xray" "1.44.0"
+      "sha256-JWMEd/9xNxYIrSWC8RRYlHDBhobKMuhVTDGlqJ7SP7w=";
 }
