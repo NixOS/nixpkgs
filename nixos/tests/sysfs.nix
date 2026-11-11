@@ -14,6 +14,12 @@
 
       block."*".queue.scheduler = "none";
     };
+
+    # Second generation with a changed value, to check that sysfs attribute
+    # changes are also applied on configuration switches, not only at boot.
+    specialisation.changed-sysfs.configuration = {
+      boot.kernel.sysfs.kernel.mm.transparent_hugepage.enabled = lib.mkForce "madvise";
+    };
   };
 
   testScript =
@@ -33,5 +39,10 @@
         '[${sysfs.kernel.mm.transparent_hugepage.defrag}]')
       check('/sys/kernel/mm/transparent_hugepage/shmem_enabled',
         '[${sysfs.kernel.mm.transparent_hugepage.shmem_enabled}]')
+
+      with subtest("apply changed sysfs attributes on switch"):
+        machine.succeed('/run/current-system/specialisation/changed-sysfs/bin/switch-to-configuration switch')
+        check('/sys/kernel/mm/transparent_hugepage/enabled',
+          '[madvise]')
     '';
 }
