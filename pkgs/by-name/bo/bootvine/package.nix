@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://codeberg.org/wvhulle/bootvine/releases/tag/${finalAttrs.src.tag}";
     description = "Boot animation showing stages of systemd as a tree";
     homepage = "https://codeberg.org/wvhulle/bootvine";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "bootvine";
     maintainers = with lib.maintainers; [ wvhulle ];
     platforms = lib.platforms.linux;
