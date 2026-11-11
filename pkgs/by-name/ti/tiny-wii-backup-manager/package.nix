@@ -1,35 +1,30 @@
 {
   lib,
   fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  pkg-config,
-
   aws-lc,
-  dbus,
-  fontconfig,
-  libGL,
   libx11,
   libxcb,
   libxcursor,
-  libxext,
   libxi,
-  libxinerama,
   libxkbcommon,
-  libxrandr,
+  makeBinaryWrapper,
+  nix-update-script,
   openssl,
+  pkg-config,
+  rustPlatform,
   vulkan-loader,
   wayland,
   xdg-utils,
   zenity,
   zstd,
-
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tiny-wii-backup-manager";
   version = "6.2.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "mq1";
@@ -38,31 +33,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-df4MYTBiDDaFNfCakJ68Xjjnvbw23zixoSi9ZW5F7Js=";
   };
 
-  cargoHash = "sha256-ljildHQccDyZlbJyrS38FZLY2bgDomkwHHTAJ6JdHQ4=";
-
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
   buildInputs = [
     aws-lc
-    dbus
-    fontconfig
-    libGL
-    libx11
-    libxcb
-    libxcursor
-    libxext
-    libxi
-    libxinerama
-    libxkbcommon
-    libxrandr
     openssl
-    vulkan-loader
-    wayland
     zstd
   ];
+
+  cargoHash = "sha256-ljildHQccDyZlbJyrS38FZLY2bgDomkwHHTAJ6JdHQ4=";
 
   # Upstream does not currently ship tests.
   doCheck = false;
@@ -85,18 +67,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       } \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          dbus
-          fontconfig
-          libGL
           libx11
           libxcb
           libxcursor
-          libxext
           libxi
-          libxinerama
           libxkbcommon
-          libxrandr
-          openssl
           vulkan-loader
           wayland
         ]
@@ -105,15 +80,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Tiny game backup and homebrew app manager for the Wii";
     homepage = "https://github.com/mq1/TinyWiiBackupManager";
     changelog = "https://github.com/mq1/TinyWiiBackupManager/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ yisraeldov ];
-    mainProgram = "TinyWiiBackupManager";
     platforms = lib.platforms.linux;
+    mainProgram = "TinyWiiBackupManager";
   };
 })
