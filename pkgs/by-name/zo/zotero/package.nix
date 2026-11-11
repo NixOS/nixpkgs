@@ -49,14 +49,14 @@ let
   };
 
   pname = "zotero";
-  version = "10.0.8";
+  version = "10.0.9";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-wHcMOTb6cLY1NoDBtsYQPFAShN5qrJA51WgTEsmMlWA=";
+    hash = "sha256-obcPnD+Guryg8i/oI5EpizC20Ev6NNew0abH6yk5KHo=";
   };
 
   pdf-js = buildNpmPackage {
