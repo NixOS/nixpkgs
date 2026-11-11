@@ -22576,7 +22576,7 @@ self: super: with self; {
     inherit (pkgs) protobuf;
   };
 
-  vllm = callPackage ../development/python-modules/vllm { };
+  vllm = callPackage ../development/python-modules/vllm { inherit (pkgs) zstd; };
 
   vllm-tt-plugin = callPackage ../development/python-modules/vllm-tt-plugin { };
 
