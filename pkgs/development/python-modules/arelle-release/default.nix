@@ -51,7 +51,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "arelle${lib.optionalString (!gui) "-headless"}";
+  pname = "arelle-release";
   version = "2.39.10";
   pyproject = true;
 

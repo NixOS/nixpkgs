@@ -1317,7 +1317,7 @@ self: super: with self; {
 
   area = callPackage ../development/python-modules/area { };
 
-  arelle = callPackage ../development/python-modules/arelle { gui = true; };
+  arelle-release = callPackage ../development/python-modules/arelle-release { };
 
   aresponses = callPackage ../development/python-modules/aresponses { };
 
