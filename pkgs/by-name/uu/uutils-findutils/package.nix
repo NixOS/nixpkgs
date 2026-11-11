@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-findutils";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "findutils";
     tag = finalAttrs.version;
-    hash = "sha256-0M3sOHVsIKG3rPthikommvKvHB1Q1RohogjS9LT5yU0=";
+    hash = "sha256-WtPo8gRg1OnBhde8cvHMVCNJ9HPCUQ6nQUNpeQVMHjo=";
   };
 
-  cargoHash = "sha256-6M3kLNtvZ1nsCAkVJExQBWV72Bf9Kq5iei7SVpYsYio=";
+  cargoHash = "sha256-+0haTOFy/QUI4jCedqyX7rCrpjSWutTSdLHKN1aLYdk=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -29,9 +29,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm $out/bin/testing-commandline
   '';
 
-  checkFlags = [
+  checkFlags = map (t: "--skip=${t}") [
     # assertion failed: deps.get_output_as_string().contains("./test_data/simple/subdir")
-    "--skip=find::tests::test_find_newer_xy_before_changed_time"
+    "find::tests::test_find_newer_xy_before_changed_time"
+
+    # Rely on setuid permissions, which the nix restricts.
+    "find::matchers::printf::tests::test_printf_permissions"
+    "find::matchers::printf::tests::test_printf_permissions_precision_and_flags"
+    "find_ls_shows_file_type_and_special_bits"
+
+    # The explicitly configured PATH (`tools/bin`, /usr/bin`, `/bin`) does not guarantee an external `true` executable on NixOS.
+    "exec_accepts_relative_path_entries"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
