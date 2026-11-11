@@ -36,6 +36,10 @@ buildPythonPackage rec {
     hash = "sha256-Ci9lHlP2X95y7ldHBbqb5qWozPj3TJ0AxeVhqzVsdFA=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace-fail "tag_build = .dev" "tag_build ="
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
