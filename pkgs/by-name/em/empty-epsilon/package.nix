@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   sfml,
   libx11,
@@ -72,6 +73,15 @@ stdenv.mkDerivation {
     tag = "EE-${versions.emptyepsilon}";
     hash = "sha256-JsHFwbt4VGsgaZz9uxEmwzZGfkYTNsIZTKkpvCCmI48=";
   };
+
+  patches = [
+    # Pin C++17: GCC 16 defaults to C++20, where path::u8string() returns std::u8string
+    (fetchpatch2 {
+      name = "force-cxx17.patch";
+      url = "https://github.com/daid/EmptyEpsilon/commit/0b60486eefc1f54b7048d0d8a46bc1d2dc25ee3b.patch?full_index=1";
+      hash = "sha256-bCeickV9Ob+I8QItKCDALuzMdnlOY2uA9Sl9eM4Pin8=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
