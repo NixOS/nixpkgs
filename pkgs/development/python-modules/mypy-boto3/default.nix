@@ -618,8 +618,8 @@ in
       "sha256-jFU3LB2Fcc0KY4duOc+8hDTHYOtSYz+x2Pnaef9Unf0=";
 
   mypy-boto3-inspector =
-    buildMypyBoto3Package "inspector" "1.43.0"
-      "sha256-9P8m5QYikdsimepaivrYcb/tP1iThyPZWFMkyo24+bo=";
+    buildMypyBoto3Package "inspector" "1.44.0"
+      "sha256-vb/GJXHTedWJecZWILJzAObi5GCpLRnSuu0MmQcx51o=";
 
   mypy-boto3-inspector2 =
     buildMypyBoto3Package "inspector2" "1.43.120"
