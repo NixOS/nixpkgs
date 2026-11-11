@@ -78,7 +78,7 @@ export function evaluateTargetBranchPolicy({
 
   // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
   const isExemptHomeAssistantUpdate =
-    maxRebuildCount <= 1500 && head === 'wip-home-assistant'
+    maxRebuildCount <= 2500 && head === 'wip-home-assistant'
 
   const details = {
     isExemptKernelUpdate,
