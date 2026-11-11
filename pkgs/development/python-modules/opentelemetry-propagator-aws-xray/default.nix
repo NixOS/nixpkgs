@@ -11,8 +11,9 @@
 }:
 
 buildPythonPackage {
-  inherit (opentelemetry-instrumentation) version src;
+  inherit (opentelemetry-instrumentation) src;
   pname = "opentelemetry-propagator-aws-xray";
+  version = "1.1.0.dev";
   pyproject = true;
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/propagator/opentelemetry-propagator-aws-xray";
