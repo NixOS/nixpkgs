@@ -40,7 +40,7 @@
   withFullDeps ? ffmpegVariant == "full",
 
   fetchgit,
-  fetchpatch2,
+  fetchpatch,
 
   # Feature flags
   withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Alsa in/output support
@@ -466,64 +466,64 @@ stdenv.mkDerivation (
     patches =
       [ ]
       ++ optionals (lib.versionOlder version "5") [
-        (fetchpatch2 {
+        (fetchpatch {
           name = "rename_iszero";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/b27ae2c0b704e83f950980102bc3f12f9ec17cb0";
-          hash = "sha256-l1t4LcUDSW757diNu69NzvjenW5Mxb5aYtXz64Yl9gs=";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/b27ae2c0b704e83f950980102bc3f12f9ec17cb0.patch";
+          hash = "sha256-/eSorcbLpV0q3QXNyM2i5Y/YbSL8/54ToSG+E3B5mwM=";
         })
       ]
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
       ]
       ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.1.4") [
-        (fetchpatch2 {
+        (fetchpatch {
           name = "unbreak-hardcoded-tables.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/1d47ae65bf6df91246cbe25c997b25947f7a4d1d";
-          hash = "sha256-ulB5BujAkoRJ8VHou64Th3E94z6m+l6v9DpG7/9nYsM=";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/1d47ae65bf6df91246cbe25c997b25947f7a4d1d.patch";
+          hash = "sha256-TZoEdfuqLatejyMZprV5eD1AbS3v0DLlGVhU1iFWcy0=";
         })
       ]
       ++ optionals (lib.versionOlder version "7.1.1" && lib.versions.major version != "5") [
-        (fetchpatch2 {
+        (fetchpatch {
           name = "texinfo-7.1.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4d9cdf82ee36a7da4f065821c86165fe565aeac2";
-          hash = "sha256-BZsq1WI6OgtkCQE8koQu0CNcb5c8WgTu/LzQzu6ZLuo=";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/4d9cdf82ee36a7da4f065821c86165fe565aeac2.patch";
+          hash = "sha256-F29LD4FAGxq2186fqEjJ9CJOGRI03sMtSHrtdwgsR5k=";
         })
       ]
       ++ optionals (lib.versionOlder version "7" && stdenv.hostPlatform.isAarch32) [
-        (fetchpatch2 {
+        (fetchpatch {
           name = "binutils-2-43-compat.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/654bd47716c4f36719fb0f3f7fd8386d5ed0b916";
-          hash = "sha256-OLiQHKBNp2p63ZmzBBI4GEGz3WSSP+rMd8ITfZSVRgY=";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/654bd47716c4f36719fb0f3f7fd8386d5ed0b916.patch";
+          hash = "sha256-AxWAsNsvJtu0GDkhw2+ArYfzdAaQEug+FwbGcy6zJaI=";
         })
       ]
       ++ optionals (lib.versionAtLeast version "7.1.1") [
         # Expose a private API for Chromium / Qt WebEngine.
-        (fetchpatch2 {
+        (fetchpatch {
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
-          hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
+          hash = "sha256-A3/8R2ig6+54eZ0iJIB4FNmpCaA1a8HGTc54OkYeRHs=";
         })
       ]
       ++ optionals (lib.versionOlder version "7.1.2") [
-        (fetchpatch2 {
+        (fetchpatch {
           name = "unbreak-svt-av1-3.0.0.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d1ed5c06e3edc5f2b5f3664c80121fa55b0baa95";
-          hash = "sha256-2NVkIhQVS1UQJVYuDdeH+ZvWYKVbtwW9Myu5gx7JnbA=";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/d1ed5c06e3edc5f2b5f3664c80121fa55b0baa95.patch";
+          hash = "sha256-MqSBWe9r7syY2oiSKx/qOqWblbN6cVmzz2xw+r97VRw=";
         })
       ]
       ++ optionals (lib.versionAtLeast version "6" && lib.versionOlder version "7.1.4") [
-        (fetchpatch2 {
+        (fetchpatch {
           name = "svt-av1-4.0.0-compat.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/a5d4c398b411a00ac09d8fe3b66117222323844c";
-          hash = "sha256-peIXXU5+5DRQc3Xdpz5V+xIN7Vohs0Dlal6mHiMryXc=";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/a5d4c398b411a00ac09d8fe3b66117222323844c.patch";
+          hash = "sha256-IqNI8inVcBxyBL/vmXRgXg8+RQgiyr78o7SmVgN3sLk=";
         })
       ]
       ++ optionals (lib.versionAtLeast version "8") [
         # compatibility with openapv 1.1. remove when >8.1.3 and >9.0.2
         # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24663
-        (fetchpatch2 {
+        (fetchpatch {
           name = "openapv-1.1-compat.patch";
           url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/c54710db21c1827dbc3e47658a562525af0fe528.patch";
-          hash = "sha256-ENpPDEHtl3kj/UF52hfV+LwvO7CUaK8UvTy+OAYlWFw=";
+          hash = "sha256-TNEOOHtlI+tAqs9jfQfPu0+s8EQpcpmtnI6CSsh1Et4=";
         })
       ];
 
