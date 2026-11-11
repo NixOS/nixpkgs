@@ -1,6 +1,7 @@
 {
   lib,
   buildDunePackage,
+  ocaml,
   fetchurl,
   astring,
   cmdliner,
@@ -13,11 +14,16 @@
 
 buildDunePackage (finalAttrs: {
   pname = "alcotest";
-  version = "1.9.1";
+  version = if lib.versionAtLeast ocaml.version "4.14" then "1.10.0" else "1.9.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/alcotest/releases/download/${finalAttrs.version}/alcotest-${finalAttrs.version}.tbz";
-    hash = "sha256-HinDtB1DKQYhBbcj39o6/4a4zvXnx1ANDkkfxf145II=";
+    hash =
+      {
+        "1.10.0" = "sha256-5B9Zs9rquSfatrvstoXt9myHKYjzcmhWgHmpvfwxSXw=";
+        "1.9.1" = "sha256-HinDtB1DKQYhBbcj39o6/4a4zvXnx1ANDkkfxf145II=";
+      }
+      ."${finalAttrs.version}";
   };
 
   nativeBuildInputs = [ ocaml-syntax-shims ];
