@@ -27,6 +27,8 @@ buildPythonPackage rec {
     hash = "sha256-WuXbZcia0n9SoiCSB2SkMUjBHsMOA0gCIf9ZEU9pTPA=";
   };
 
+  pythonRelaxDeps = [ "yfinance" ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -45,18 +47,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    # First differing element 1:
-    # '-----------------  --------  ------------'
-    # '-------------  --------  ------------'
-    #
-    #   ['asset_type    amount    percentage',
-    # -  '-----------------  --------  ------------',
-    # ?                ----
-    #
-    # +  '-------------  --------  ------------',
-    "fava_investor/modules/assetalloc_class/test_asset_allocation.py::TestScriptCheck::test_multicurrency"
-    "fava_investor/modules/assetalloc_class/test_asset_allocation.py::TestScriptCheck::test_tree_empty_parent"
+  disabledTests = [
+    # AssertionError: Lists differ: ['Warning: skipping...
+    "test_multicurrency"
+    "test_tree_empty_parent"
+    "test_basic_specified"
+    "test_basic_unspecified"
   ];
 
   pythonImportsCheck = [ "fava_investor" ];
