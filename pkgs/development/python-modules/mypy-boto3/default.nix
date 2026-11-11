@@ -1034,8 +1034,8 @@ in
       "sha256-cNTNVboRCItLxLA4eUfkt6KhTLST9kAtAtMPccdp/O0=";
 
   mypy-boto3-pinpoint-sms-voice =
-    buildMypyBoto3Package "pinpoint-sms-voice" "1.43.0"
-      "sha256-A8/WYxFn06rUXtcIHsKfs7HxvOBges0wDGskm31NIyw=";
+    buildMypyBoto3Package "pinpoint-sms-voice" "1.44.0"
+      "sha256-Vu/IVgLs/pvfiOhK/8hePGMfr4CvtiPvMtq630aNhaQ=";
 
   mypy-boto3-pinpoint-sms-voice-v2 =
     buildMypyBoto3Package "pinpoint-sms-voice-v2" "1.43.112"
