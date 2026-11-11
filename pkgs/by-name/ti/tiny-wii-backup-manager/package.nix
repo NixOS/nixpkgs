@@ -65,6 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r package/linux/AppDir/usr/share/icons/hicolor $out/share/icons/
 
     wrapProgram $out/bin/TinyWiiBackupManager \
+      --set-default TWBM_DISABLE_UPDATES 1 \
       --prefix PATH : ${
         lib.makeBinPath [
           xdg-utils
