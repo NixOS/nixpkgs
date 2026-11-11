@@ -71,8 +71,8 @@ buildFHSEnv (
     '';
 
     passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=v([\\d.]+)" ];
-  };
+      extraArgs = [ "--version-regex=v([\\d.]+)" ];
+    };
 
     meta = {
       maintainers = with lib.maintainers; [ juanqp07 ];
