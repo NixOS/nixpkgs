@@ -1230,8 +1230,8 @@ in
       "sha256-fGXEebTfQLktgrRTkosXgyz7zLgZjJojBc4SZZRHYvw=";
 
   mypy-boto3-service-quotas =
-    buildMypyBoto3Package "service-quotas" "1.43.89"
-      "sha256-VGIbYSvDorqsQfAZFpeRB4eDh3lyy1RjXMwQEv+ldg8=";
+    buildMypyBoto3Package "service-quotas" "1.44.0"
+      "sha256-QaINChn9ThLO6FUVLGbQGH9PzzidvC1WzuyvJ4OrALk=";
 
   mypy-boto3-servicecatalog =
     buildMypyBoto3Package "servicecatalog" "1.43.0"
