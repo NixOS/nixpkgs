@@ -1154,8 +1154,8 @@ in
       "sha256-FJhdetbWUDYFKIw6i3OvMGDc+iRS20SqxUDTB6zhX4E=";
 
   mypy-boto3-rum =
-    buildMypyBoto3Package "rum" "1.43.0"
-      "sha256-8or7NMBfeq9jZRzAu0Q1ShoTXTm8GCXR4kov0kaJCcE=";
+    buildMypyBoto3Package "rum" "1.44.0"
+      "sha256-b1sDfF6Ht6a/zAD99SizLBrOLFamW5RwyU8eqbs6v/U=";
 
   mypy-boto3-s3 =
     buildMypyBoto3Package "s3" "1.43.106"
