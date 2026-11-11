@@ -13,6 +13,7 @@
 
   # optionals
   arabic-reshaper,
+  brotli,
   cryptography,
   fonttools,
   pillow,
@@ -23,7 +24,6 @@
   pytestCheckHook,
   pytest-timeout,
 }:
-
 buildPythonPackage (finalAttrs: {
   pname = "pypdf";
   version = "7.0.0";
@@ -56,16 +56,21 @@ buildPythonPackage (finalAttrs: {
     myst-parser
   ];
 
-  optional-dependencies = rec {
-    full = crypto ++ fonts ++ image ++ rtl_text;
-    crypto = [ cryptography ];
-    fonts = [ fonttools ];
-    image = [ pillow ];
-    rtl_text = [
-      arabic-reshaper
-      python-bidi
-    ];
-  };
+  optional-dependencies =
+    let
+      deps = finalAttrs.passthru.optional-dependencies;
+    in
+    {
+      full = deps.crypto ++ deps.fonts ++ deps.image ++ deps.rtl_text ++ deps.brotli;
+      brotli = [ brotli ];
+      crypto = [ cryptography ];
+      fonts = [ fonttools ];
+      image = [ pillow ];
+      rtl_text = [
+        arabic-reshaper
+        python-bidi
+      ];
+    };
 
   pythonImportsCheck = [ "pypdf" ];
 
