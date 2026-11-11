@@ -40,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ];
 
+  # Remove with the first upstream release that links t_acl against the snprintf fallback.
+  postPatch = ''
+    substituteInPlace Makefile.in \
+      --replace-fail 'T_ACL_OBJ = t_acl.o lib/acl.o' 'T_ACL_OBJ = t_acl.o lib/acl.o lib/snprintf.o'
+  '';
+
   preBuild = ''
     patchShebangs ./runtests.py ./support/rrsync
 
