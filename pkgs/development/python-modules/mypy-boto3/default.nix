@@ -1246,8 +1246,8 @@ in
       "sha256-vQKdqjwuwC5BCXQqODWRVEUa91WFP76HlvN0LexEiNI=";
 
   mypy-boto3-ses =
-    buildMypyBoto3Package "ses" "1.43.0"
-      "sha256-JO9Mm6dTJuFnbyRzuSaPpT2lvDNaSUMlspWgeH+bt5M=";
+    buildMypyBoto3Package "ses" "1.44.0"
+      "sha256-2FLaNkeV7GzVh9cV/kwhpb668Cxg49Gk5pqt1XT5lg8=";
 
   mypy-boto3-sesv2 =
     buildMypyBoto3Package "sesv2" "1.43.110"
