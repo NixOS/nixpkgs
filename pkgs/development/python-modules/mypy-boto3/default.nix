@@ -702,8 +702,8 @@ in
       "sha256-yfd/Mmp1bfz4jkKkPinEYdYb+04yYdpOWyJhC6uIgFA=";
 
   mypy-boto3-ivschat =
-    buildMypyBoto3Package "ivschat" "1.43.0"
-      "sha256-9XMdnVsYUmz8Uf9kAgVMbG960vy0TOJturoD9/ZoM98=";
+    buildMypyBoto3Package "ivschat" "1.44.0"
+      "sha256-6ag+JfOaAgM3vDbulu/Hi/znT66v5wZUzdO6BP7Up6U=";
 
   mypy-boto3-kafka =
     buildMypyBoto3Package "kafka" "1.43.79"
