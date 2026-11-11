@@ -8,6 +8,7 @@
   autoconf-archive,
   autoreconfHook,
   bison,
+  fetchpatch2,
   fetchzip,
   flex,
   fluidsynth,
@@ -55,6 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./bundled-mods.patch
     ./game-data-in-home.patch
+    (fetchpatch2 {
+      url = "https://github.com/exult/exult/commit/6baa6d252fdbc9212b09e59b95c4838b7e3e63c3.patch?full_index=1";
+      hash = "sha256-424sACGG8rZpBZjtBvINZwEwG2w3FpcyJDi0Qy3zWrQ=";
+      includes = [ "desktop/*.metainfo.xml" ];
+      name = "metainfo-add-1.12-releases.patch";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
