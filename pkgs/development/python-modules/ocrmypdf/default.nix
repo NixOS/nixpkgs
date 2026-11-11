@@ -10,6 +10,8 @@
   hypothesis,
   img2pdf,
   jbig2enc,
+  numpy,
+  onnxruntime,
   packaging,
   pdfminer-six,
   pillow-heif,
@@ -22,6 +24,7 @@
   pytest-xdist,
   pytestCheckHook,
   python-dotenv,
+  rapidocr,
   rich,
   reportlab,
   replaceVars,
@@ -36,7 +39,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ocrmypdf";
-  version = "17.13.0";
+  version = "17.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -49,7 +52,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-4gjA33EEY9v+dmXh2yMthnE9x8lJ+wU1ZVBN5fnoqdA=";
+    hash = "sha256-5HGkwF98L7TnFP2WjJfowD4BCttMnBhCEjXWInbQwjU=";
   };
 
   patches = [
@@ -86,6 +89,10 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     heic = [ pillow-heif ];
+    rapidocr = [
+      onnxruntime
+      rapidocr
+    ];
     watcher = [
       cyclopts
       python-dotenv
@@ -96,6 +103,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     hypothesis
+    numpy
     pytest-xdist
     pytestCheckHook
     reportlab
