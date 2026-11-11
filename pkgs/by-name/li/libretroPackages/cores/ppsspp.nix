@@ -51,9 +51,5 @@ mkLibretroCore {
     description = "PPSSPP libretro port";
     homepage = "https://github.com/hrydgard/ppsspp";
     license = lib.licenses.gpl2Plus;
-    badPlatforms = [
-      # error: cannot convert 'uint32x4_t' to 'int' in initialization
-      "aarch64-linux"
-    ];
   };
 }
