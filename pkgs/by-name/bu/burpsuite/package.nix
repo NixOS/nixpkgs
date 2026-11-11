@@ -159,6 +159,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       blackzeshi
       fab
       yechielw
+      letgamer
     ];
     mainProgram = "burpsuite";
   };
