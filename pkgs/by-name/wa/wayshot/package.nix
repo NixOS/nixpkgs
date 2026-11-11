@@ -24,13 +24,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayshot";
-  version = "1.6.0";
+  version = "1.7.1-wayshot";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "wayshot";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MihZAAZ+K95jBE1gp0kne/+Z3rBUDqlphmyBI0FI1jE=";
+    hash = "sha256-UXDOK3GD1v+ZiNQ98Q22TnU+bSLAliiskAj4iCThRFY=";
   };
   nativeBuildInputs = [
     pkg-config
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   buildInputs = [ wayland ] ++ lib.optional (selectorSupport || colorPickerSupport) pango;
 
-  cargoHash = "sha256-SAI+KXRV4E130ROmNyXraaO31D341CRWXGuIPV8depA=";
+  cargoHash = "sha256-abkedmr1tbrPVa1yp8mIlOciVbmAqN3A6Tz7HVGn5SY=";
 
   buildNoDefaultFeatures = true;
   buildFeatures =
