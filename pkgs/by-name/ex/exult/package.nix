@@ -52,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  patches = [ ./bundled-mods.patch ];
+  patches = [
+    ./bundled-mods.patch
+    ./game-data-in-home.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace macosx/macosx.am \
