@@ -19,6 +19,19 @@ let
   );
   servicename =
     if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then "ananicy-cpp" else "ananicy";
+  cgroupCleanup = pkgs.writeShellScript "ananicy-cgroup-cleanup" ''
+    grep_cgroups() {
+      ${pkgs.coreutils}/bin/tr -d '\n\r' < "$1" | ${pkgs.gnugrep}/bin/grep -oP '"cgroup"\s*:\s*"\K[^"]+' || true
+    }
+    for f in /etc/ananicy.d/*.cgroups; do
+      [ -e "$f" ] || continue
+      grep_cgroups "$f"
+    done | ${pkgs.coreutils}/bin/sort -u | while read -r name; do
+      ${pkgs.coreutils}/bin/rmdir --ignore-fail-on-non-empty "/sys/fs/cgroup/$name" 2>/dev/null || true
+      ${pkgs.coreutils}/bin/rmdir --ignore-fail-on-non-empty "/sys/fs/cgroup/cpu/$name" 2>/dev/null || true
+    done
+    ${pkgs.coreutils}/bin/rmdir --ignore-fail-on-non-empty /sys/fs/cgroup/ananicy_test_cgroup2 2>/dev/null || true
+  '';
 in
 {
   options.services.ananicy = {
@@ -152,7 +165,7 @@ in
           {
             # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/blob/master/src/config.cpp#L12
             loglevel = mkOD "warn"; # default is info but its spammy
-            cgroup_realtime_workaround = true;
+            cgroup_realtime_workaround = mkOD true;
             log_applied_rule = mkOD false;
           }
         else
@@ -167,6 +180,10 @@ in
       packages = [ cfg.package ];
       services."${servicename}" = {
         wantedBy = [ "default.target" ];
+        serviceConfig = {
+          Delegate = "yes";
+          ExecStopPost = [ cgroupCleanup ];
+        };
       };
     };
   };
