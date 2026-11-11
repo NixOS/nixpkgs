@@ -678,8 +678,8 @@ in
       "sha256-uK54/ED/f+CGQkBSAlesSVsPHfKjTjmYtVSF1eEK4lU=";
 
   mypy-boto3-iotsitewise =
-    buildMypyBoto3Package "iotsitewise" "1.43.124"
-      "sha256-gWy8hxhnWVRPeSEfOwxN6Fi7xM8QYp24cgHTKgLgGT0=";
+    buildMypyBoto3Package "iotsitewise" "1.44.0"
+      "sha256-RGuzTArAl0bILr5L8Szwt38Co9FPVl7z4cXiCIbXPrU=";
 
   mypy-boto3-iotthingsgraph =
     buildMypyBoto3Package "iotthingsgraph" "1.43.0"
