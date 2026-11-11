@@ -16,7 +16,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blastdns";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -25,12 +25,12 @@ buildPythonPackage (finalAttrs: {
     owner = "blacklanternsecurity";
     repo = "blastdns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lfEAnTR4SrVHY/XGW1MLkaMUT4aXd2kt0iOkwbAyYLQ=";
+    hash = "sha256-Zw1iHuQD2jPifrp16eWXE1WJ8PuYW1P+wS6hkODI1pY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-QGp4EqOEXSMSeE0ZT85SzpIGrhva//MXKEjZEd7oYgY=";
+    hash = "sha256-Q2OZhiLi/UcTjHyxPWeI+rJTv9zPKh3X8G030rfgDVY=";
   };
 
   build-system = [
