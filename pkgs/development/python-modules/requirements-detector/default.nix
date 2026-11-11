@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "landscapeio";
+    owner = "prospector-dev";
     repo = "requirements-detector";
     tag = finalAttrs.version;
     hash = "sha256-AdKVZUb3MTxh6mRJly0xcCm6ogu83m0IsKcamSUup7M=";
@@ -40,8 +40,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python tool to find and list requirements of a Python project";
-    homepage = "https://github.com/landscapeio/requirements-detector";
-    changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/prospector-dev/requirements-detector";
+    changelog = "https://github.com/prospector-dev/requirements-detector/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "detect-requirements";

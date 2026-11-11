@@ -9,7 +9,7 @@
   pyyaml,
   requests,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   mock,
 }:
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     mock
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 

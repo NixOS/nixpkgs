@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "26.10.0";
+  version = "26.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
       # export-subst prevents reproducibility
       rm $out/.git_archival.txt
     '';
-    hash = "sha256-xc4sOijhbd4TJcDIRHAIAxCW2QK+RUOhYDDZ4YdHvVk=";
+    hash = "sha256-ku9+BzEoFimh+OGsI7TBEyO9+FSoUATKnitSZXEeKlg=";
   };
 
   build-system = [

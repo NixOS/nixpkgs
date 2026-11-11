@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llm-anthropic";
-  version = "0.30";
+  version = "0.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
     tag = finalAttrs.version;
-    hash = "sha256-FEo56gX1khvXzJlAdBZqGp+ARReX/3CTj+KKIDumc5A=";
+    hash = "sha256-ELp5wsrCKfMA2YAdm6L5o380HNcjSq2OSxUIxeyMcWE=";
   };
 
   build-system = [
@@ -54,6 +54,7 @@ buildPythonPackage (finalAttrs: {
     "test_prompt"
     "test_schema_prompt"
     "test_thinking_prompt"
+    "test_mcp_server_side_tool"
 
     # TypeError: Messages.stream() got an unexpected keyword argument 'temperature'
     "test_image_with_no_prompt"

@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "oh-my-rime";
-  version = "0-unstable-2026-10-29";
+  version = "0-unstable-2026-11-08";
 
   src = fetchFromGitHub {
     owner = "Mintimate";
     repo = "oh-my-rime";
-    rev = "cb4f7dda2fb74332cda0a7712ffc89ea5ded856f";
-    hash = "sha256-JTHGHeY+2Zv4z/TCoaRypHWfcMqqzagyKwxtWRVFzL8=";
+    rev = "1d90ca226f6c53dbc74f290de19dbd1c5ea663dd";
+    hash = "sha256-IUb2UxmNY2n3wzIJ2O0xiEeKIcXcnFPdxKm8EafHfZg=";
   };
 
   installPhase = # bash

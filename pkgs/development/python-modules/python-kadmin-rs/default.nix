@@ -13,7 +13,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "authentik-community";
+    owner = "authentik-labs";
     repo = "kadmin-rs";
     tag = "kadmin/version/${finalAttrs.version}";
     hash = "sha256-+PHTtVWN7tU1VnInXl7sMEy/Bpd+pTZU+rIKZssxiPk=";
@@ -70,8 +70,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Rust and Python interfaces to the Kerberos administration interface (kadm5)";
-    homepage = "https://github.com/authentik-community/kadmin-rs";
-    changelog = "https://github.com/authentik-community/kadmin-rs/releases/tag/kadmin%2Fversion%2F${finalAttrs.version}";
+    homepage = "https://github.com/authentik-labs/kadmin-rs";
+    changelog = "https://github.com/authentik-labs/kadmin-rs/releases/tag/kadmin%2Fversion%2F${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jvanbruegge

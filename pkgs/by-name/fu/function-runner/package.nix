@@ -4,7 +4,9 @@
   writableTmpDirAsHomeHook,
   rustPlatform,
   pkg-config,
+  aws-lc,
   openssl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,7 +28,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    zstd
+  ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

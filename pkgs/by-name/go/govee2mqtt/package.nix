@@ -4,6 +4,7 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,7 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
   postInstall = ''
     mkdir -p $out/share/govee2mqtt/

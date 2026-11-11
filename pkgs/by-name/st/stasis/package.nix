@@ -8,6 +8,7 @@
   wayland-protocols,
   dbus,
   pkg-config,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stasis";
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     wayland-protocols
     dbus
+    sqlite
   ];
 
   #There are no tests

@@ -20,6 +20,7 @@
   odbcSupport ? false,
   parallelBuild ? true,
 
+  coreutils,
   fetchFromGitHub,
   gawk,
   gnum4,
@@ -72,6 +73,7 @@ let
       systemdSupport;
 
   runtimePath = lib.makeBinPath [
+    coreutils
     gawk
     gnused
   ];

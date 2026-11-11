@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "spicedb";
-  version = "1.57.0";
+  version = "1.57.1";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "spicedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZcqSCAtbtFhojNkCqEWL4NVEHzzRN/k6V/UAS1RYxts=";
+    hash = "sha256-IU0+eBkEplJ7EDZhw3iaNlRaLb9nJNf7muelLfu46fw=";
   };
 
   vendorHash = "sha256-iemsayke/kfrspGAlk0FqwBqEVyP/3RVvp08pFDEi/k=";

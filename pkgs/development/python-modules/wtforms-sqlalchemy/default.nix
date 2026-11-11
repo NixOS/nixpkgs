@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "wtforms";
+    owner = "pallets-eco";
     repo = "wtforms-sqlalchemy";
     tag = version;
     hash = "sha256-E2F8lOcgne2yGEyn6g8j3mHr045eOyKu77DFGwWTPkc=";
@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "WTForms integration for SQLAlchemy";
-    homepage = "https://github.com/wtforms/wtforms-sqlalchemy";
-    changelog = "https://github.com/wtforms/wtforms-sqlalchemy/blob/${src.tag}/CHANGES.rst";
+    homepage = "https://github.com/pallets-eco/wtforms-sqlalchemy";
+    changelog = "https://github.com/pallets-eco/wtforms-sqlalchemy/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };

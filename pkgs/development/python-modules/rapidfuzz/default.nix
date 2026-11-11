@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "maxbachmann";
+    owner = "rapidfuzz";
     repo = "RapidFuzz";
     tag = "v${finalAttrs.version}";
     hash = "sha256-yE0YH7WVjULPoxAp5keYIy5/kzdDxpWyHFSMObtCiXA=";
@@ -79,8 +79,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Rapid fuzzy string matching";
-    homepage = "https://github.com/maxbachmann/RapidFuzz";
-    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    homepage = "https://github.com/rapidfuzz/RapidFuzz";
+    changelog = "https://github.com/rapidfuzz/RapidFuzz/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
