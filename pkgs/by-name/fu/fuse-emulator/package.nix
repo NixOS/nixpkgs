@@ -5,7 +5,7 @@
   perl,
   pkg-config,
   wrapGAppsHook3,
-  SDL,
+  SDL2,
   bzip2,
   glib,
   gtk3,
@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-emulator";
-  version = "1.9.1";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/fuse-emulator/fuse-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WBW0IlbU3ShYHVnzzuwz/Nc2t6aK/gMrHmW6cU+1VkI=";
+    hash = "sha256-9XzTDxW6xvt6hzsO5AbrABRhdpH2ZcqgHQAWJLSVPpc=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    SDL
+    SDL2
     bzip2
     glib
     gtk3
