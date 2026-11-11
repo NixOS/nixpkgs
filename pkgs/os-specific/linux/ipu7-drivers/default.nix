@@ -8,14 +8,18 @@
 
 stdenv.mkDerivation {
   pname = "ipu7-drivers";
-  version = "0-unstable-2026-08-12";
+  version = "20260926_1900_40";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu7-drivers";
-    rev = "495acc90feb09d8008c0a6228fb8bb4c6415ca62";
-    hash = "sha256-a2hIJ4wMCHQeDb4gp+5pjLizJ/CCfA0JivVDWeqB4vY=";
+    rev = "20260926_1900_40";
+    hash = "sha256-JdCtc+BWp9BlhyilVTwpBEWw4zxk/2VfaYfgX0O+vzw=";
   };
+
+  patches = [
+    ./ipu7-psys-in-tree-core-abi.patch # https://github.com/intel/ipu7-drivers/pull/120
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
