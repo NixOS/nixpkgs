@@ -21,6 +21,7 @@
   wayland,
   xdg-utils,
   zenity,
+  zstd,
 
   nix-update-script,
 }:
@@ -63,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     vulkan-loader
     wayland
+    zstd
   ];
 
   # Upstream does not currently ship tests.
