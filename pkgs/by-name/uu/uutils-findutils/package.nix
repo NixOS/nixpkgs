@@ -43,15 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/find";
   doInstallCheck = true;
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/uutils/findutils/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/uutils/findutils/releases/tag/${finalAttrs.src.tag}";
     description = "Rust implementation of findutils";
     homepage = "https://github.com/uutils/findutils";
     license = lib.licenses.mit;
