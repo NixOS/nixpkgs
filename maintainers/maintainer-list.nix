@@ -26597,7 +26597,7 @@
     name = "Christian Rackerseder";
   };
   screwys = {
-    email = "screwygit@proton.me";
+    email = "me@screwy.dev";
     github = "screwys";
     githubId = 254296947;
     name = "screwy";
