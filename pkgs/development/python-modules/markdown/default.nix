@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "markdown";
-  version = "3.11.2";
+  version = "3.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-Markdown";
     repo = "markdown";
     tag = finalAttrs.version;
-    hash = "sha256-3tgkMM0BlfmZWTEK+DoZsAMgjIj2KS/DvbqcOCD4rao=";
+    hash = "sha256-/fiTUTrBRmEEHJd92iRtTcyzf9dTouzVPEpPj1rYEdU=";
   };
 
   build-system = [ setuptools ];
