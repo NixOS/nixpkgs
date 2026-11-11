@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/flamingspaz/framework-settings";
     license = lib.licenses.gpl3Plus;
     mainProgram = "frameworkd";
+    maintainers = with lib.maintainers; [ LRFLEW ];
     platforms = lib.platforms.linux;
   };
 }

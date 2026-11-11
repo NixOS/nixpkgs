@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Framework Laptop settings GUI, KDE module, and system service";
     homepage = "https://github.com/flamingspaz/framework-settings";
     license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ LRFLEW ];
     platforms = lib.platforms.linux;
   }
   // lib.optionalAttrs withGui {
