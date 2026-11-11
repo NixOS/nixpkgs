@@ -1158,8 +1158,8 @@ in
       "sha256-b1sDfF6Ht6a/zAD99SizLBrOLFamW5RwyU8eqbs6v/U=";
 
   mypy-boto3-s3 =
-    buildMypyBoto3Package "s3" "1.43.106"
-      "sha256-cxGV8VgwaZo24p08irspGLzNNYfrLtyyM/gEaWeJMnk=";
+    buildMypyBoto3Package "s3" "1.44.0"
+      "sha256-7Zjwxqvq27NqltomGcj2jyEvZnFlje/dPrgMAYxxedo=";
 
   mypy-boto3-s3control =
     buildMypyBoto3Package "s3control" "1.43.127"
