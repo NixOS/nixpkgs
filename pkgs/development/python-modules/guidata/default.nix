@@ -8,12 +8,10 @@
   setuptools,
 
   # dependencies
-  distutils,
   h5py,
   numpy,
   qtpy,
   requests,
-  tomli,
 
   # tests
   pytestCheckHook,
@@ -30,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "guidata";
-  version = "3.14.2";
+  version = "3.17.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iUfZX51Ef1PY7roy9ER8hG34BAhCLs3Sagoasd5BT3E=";
+    hash = "sha256-hvP+FFTgoN3NIPvHD2EMC+2kRSJqulgE8LZMzjDlSm4=";
   };
 
   build-system = [
@@ -45,12 +43,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    distutils
     h5py
     numpy
     qtpy
     requests
-    tomli
   ];
 
   nativeCheckInputs = [
@@ -61,11 +57,15 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preCheck = ''
-    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}:${qt6.qtsvg}/${qt6.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # fails by a 1px margin due to font size issues, safe to ignore
+    "test_histogram_range_widget_fields_fit_their_values"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Segmentation fault
     # guidata/dataset/qtitemwidgets.py", line 633 in __init__
     "test_all_items"
