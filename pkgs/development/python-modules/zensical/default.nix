@@ -20,19 +20,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zensical";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zensical";
     repo = "zensical";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dhNQe6fnKeEN/8LmMWWAP6dyFsB5iUKLdsYKQiyP5Go=";
+    hash = "sha256-ssdnmg1bvRxcNfjKCleKDA4XOuOru1nLuVVX+B5qMls=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-sVAWbIii0f+murNRcEy7w/+BR7/mrjqBhMop7DYdmmM=";
+    hash = "sha256-bse528U80zjZSXcGNpzJtJGlujCFhpPiBTcJ/vzoneg=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -42,13 +42,13 @@ buildPythonPackage (finalAttrs: {
 
   ui = buildPythonPackage (finalAttrs: {
     pname = "zensical-ui";
-    version = "0.0.41";
+    version = "0.0.42";
     pyproject = true;
     src = fetchFromGitHub {
       owner = "zensical";
       repo = "ui";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-pgygAqMMRQckjFmfEhG3p6YHcQUGs1M7drEMvSEbt24=";
+      hash = "sha256-FAdE3QH1WXAIQpt/yQ+d4lxxpNJdqemDqBcOcv5y3JA=";
     };
     build-system = [ hatchling ];
   });
