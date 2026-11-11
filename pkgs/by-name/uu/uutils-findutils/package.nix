@@ -53,7 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/uutils/findutils";
     license = lib.licenses.mit;
     mainProgram = "find";
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = with lib.maintainers; [
+      defelo
+      kybe236
+    ];
     platforms = lib.platforms.unix;
   };
 })
