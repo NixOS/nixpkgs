@@ -20,6 +20,7 @@
   docbook-xsl-nons,
   docbook_xml_dtd_43,
   gnome,
+  nixosTests,
   useWrappedDaemon ? true,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
@@ -112,6 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
+    tests = {
+      inherit (nixosTests) gnome-keyring;
+    };
     updateScript = gnome.updateScript {
       packageName = "gnome-keyring";
     };
