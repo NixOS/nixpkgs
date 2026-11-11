@@ -22,7 +22,7 @@ let
 in
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.31.2";
+  version = "2.33.0";
 
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ buildGoModule rec {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = "v${version}";
-    hash = "sha256-7COG0LwInqoX9a1SwJyXcF+ptGCKTYJz6wP9uN/CKZo=";
+    hash = "sha256-P9Sblsega7DIPCQFE9+3yUvyEVaQv+GWPhTtg/Vojik=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ buildGoModule rec {
   ];
 
   # the fuseftp file system is linked into the binary and requires CGO (libfuse)
-  # ref: https://github.com/telepresenceio/telepresence/blob/v2.31.2/build-aux/main.mk#L38-L43
+  # ref: https://github.com/telepresenceio/telepresence/blob/v2.33.0/build-aux/main.mk#L38-L43
   buildInputs = [
     # cgofuse uses the fuse2 header locations on darwin
     (if stdenv.hostPlatform.isDarwin then (macfuse-stubs.override { isFuse3 = false; }) else fuse3)
@@ -53,15 +53,15 @@ buildGoModule rec {
     cp ${k8sDefsJson} charts/telepresence-oss/k8s-defs.json
   '';
 
-  vendorHash = "sha256-5kqdZS5+1cp+DXb/zi4Yc7A38yZPZaOUvOccPKYjP98=";
+  vendorHash = "sha256-2XIp3+mHqrt8+BRmEx+4O+wF6NHuxQBfyrRxBEeGTcA=";
 
   # required for the encoding/json/v2 and encoding/json/jsontext imports,
   # which are still experimental in Go 1.26
-  # ref: https://github.com/telepresenceio/telepresence/blob/v2.31.2/build-aux/main.mk#L33
+  # ref: https://github.com/telepresenceio/telepresence/blob/v2.33.0/build-aux/main.mk#L33
   env.GOEXPERIMENT = "jsonv2";
 
   # ldflags copied from Makefile
-  # ref: https://github.com/telepresenceio/telepresence/blob/v2.31.2/build-aux/main.mk#L240-L243
+  # ref: https://github.com/telepresenceio/telepresence/blob/v2.33.0/build-aux/main.mk#L240-L243
   ldflags = [
     "-s"
     "-w"
