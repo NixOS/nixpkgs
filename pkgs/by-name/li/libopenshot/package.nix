@@ -42,6 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-link-magickcore.diff
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
+    sed -i 's/\blerp(/lerp_(/g' src/effects/{AnalogTape,DenoiseImage,FilmGrain}.cpp
+  '';
+
   nativeBuildInputs = [
     cmake
     doxygen
