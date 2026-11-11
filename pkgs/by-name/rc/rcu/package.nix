@@ -138,7 +138,7 @@ python3Packages.buildPythonApplication rec {
     ln -s ${src}/icons/64x64/rcu-icon-64x64.svg $out/share/icons/hicolor/scalable/apps/rcu.svg
 
     mkdir -p $out/share/doc/rcu
-    for docfile in {COPYING,manual.pdf}; do
+    for docfile in COPYING manual.pdf; do
       ln -s ${src}/manual/$docfile $out/share/doc/rcu/$docfile
     done
 

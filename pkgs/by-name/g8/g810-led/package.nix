@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -D bin/g810-led $out/bin/g810-led
 
     # See https://github.com/MatMoul/g810-led#compatible-keyboards-
-    for keyboard in {g213,g410,g413,g512,g513,g610,g815,g910,gpro}; do
+    for keyboard in g213 g410 g413 g512 g513 g610 g815 g910 gpro; do
       ln -s \./g810-led $out/bin/$keyboard-led
     done
 
