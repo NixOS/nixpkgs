@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyperf";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyperf";
     inherit (finalAttrs) version;
-    hash = "sha256-3ZPM/aeSFHJSk+lfH6bgDLSmStzxMmA5SG1OH5HKqmI=";
+    hash = "sha256-5TgTotl9xaiXYM9mDb0bahQlWPy20ys1KcimstA9vfg=";
   };
 
   nativeBuildInputs = [ setuptools ];
