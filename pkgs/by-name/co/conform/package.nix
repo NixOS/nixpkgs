@@ -33,6 +33,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       jmgilman
       jk
+      terlar
     ];
     mainProgram = "conform";
   };
