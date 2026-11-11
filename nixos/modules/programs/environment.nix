@@ -16,14 +16,8 @@ in
 
     environment.variables = {
       NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
-      # note: many programs exec() this directly, so default options for less must not
-      # be specified here; do so in the default value of programs.less.envVariables instead
-      PAGER = lib.mkDefault "less";
       EDITOR = lib.mkDefault "nano";
     };
-
-    # since we set PAGER to this above, make sure it's installed
-    programs.less.enable = true;
 
     environment.profiles = lib.mkAfter [
       "/nix/var/nix/profiles/default"
