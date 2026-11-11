@@ -48,6 +48,9 @@
   writableTmpDirAsHomeHook,
   pytestCheckHook,
   boto3,
+
+  # tests
+  arelle, # prefer finalAttrs where possible
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -155,6 +158,12 @@ buildPythonPackage (finalAttrs: {
     "tests/unit_tests/arelle/test_updater.py"
     "tests/unit_tests/arelle/test_import.py"
   ];
+
+  passthru = {
+    tests = {
+      build-headless = arelle.override { gui = false; };
+    };
+  };
 
   meta = {
     description = "Open source XBRL platform";
