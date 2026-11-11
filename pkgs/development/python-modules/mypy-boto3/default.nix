@@ -714,8 +714,8 @@ in
       "sha256-q+Tnmh/V17hFstRU4hdifr+C7uklapCndCqkJhFiBOQ=";
 
   mypy-boto3-kendra =
-    buildMypyBoto3Package "kendra" "1.43.23"
-      "sha256-zrQQQNejq/o1IQTpwQO2roa5RYTegdkRxPsmEEZKCFc=";
+    buildMypyBoto3Package "kendra" "1.44.0"
+      "sha256-N8hZHgnn/dzQECcZpMiX/LvSKHo5XA6k8Yh/dwDiAtY=";
 
   mypy-boto3-kendra-ranking =
     buildMypyBoto3Package "kendra-ranking" "1.43.55"
