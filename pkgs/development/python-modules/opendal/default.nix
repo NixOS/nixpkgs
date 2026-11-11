@@ -1,7 +1,9 @@
 {
   lib,
+  aws-lc,
   buildPythonPackage,
   fetchFromGitHub,
+  pkg-config,
   rustPlatform,
 
   # tests
@@ -41,6 +43,10 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   pythonImportsCheck = [ "opendal" ];
 
