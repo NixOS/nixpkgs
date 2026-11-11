@@ -189,6 +189,7 @@ mapAliases {
   dataclasses-serialization = throw "'dataclasses-serialization' has been removed due to lack of upstream maintenance."; # added 2026-07-14
   dataprep-ml = throw "'dataprep-ml' has been removed due to lack of upstream maintenance."; # added 2026-11-02
   datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
+  datashaper = throw "'datashaper' has been removed due to being archived upstream and incompatible with pandas 3"; # added 2026-11-11
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   datauri = warnAlias "'datauri' has been renamed to by 'python-datauri'" python-datauri; # Added 2026-07-28
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
