@@ -4,7 +4,8 @@
   fetchFromGitHub,
   pytestCheckHook,
   rustPlatform,
-  nix-update-script,
+  pkg-config,
+  zstd,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
   ];
 
   nativeCheckInputs = [
