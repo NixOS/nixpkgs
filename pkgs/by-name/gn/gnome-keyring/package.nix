@@ -80,14 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   checkPhase = ''
-    runHook postCheck
+    runHook preCheck
 
     export HOME=$(mktemp -d)
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
 
-    runHook preCheck
+    runHook postCheck
   '';
 
   postFixup =
@@ -104,9 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString useWrappedDaemon ''
       files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
 
-      for file in ''${files[*]}; do
-        substituteInPlace $file \
-          --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
+      for file in "''${files[@]}"; do
+        substituteInPlace "$file" \
+          --replace-fail "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
       done
     '';
 
