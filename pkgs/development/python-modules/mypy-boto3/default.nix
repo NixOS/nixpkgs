@@ -1058,8 +1058,8 @@ in
       "sha256-T04icQC+XwQZhaAEBWRiqfCUaayXP1szpbLdAG/7t3k=";
 
   mypy-boto3-proton =
-    buildMypyBoto3Package "proton" "1.43.0"
-      "sha256-zWR60l2zlboeCCP7n9wrx6j4R6/jfnrBkWaT0u669pc=";
+    buildMypyBoto3Package "proton" "1.44.0"
+      "sha256-5PW/aeG6NvAsuqG3/EPyMVZQJgmADpuzBuWEHxWGxr0=";
 
   mypy-boto3-qldb =
     buildMypyBoto3Package "qldb" "1.40.54"
