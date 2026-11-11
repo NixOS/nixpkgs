@@ -158,6 +158,14 @@ let
     in
     attrs: lib.concatStringsSep " " (lib.attrValues (lib.mapAttrs toFlag attrs));
 
+  # Our libxslt is vulnerable to [CVE-2026-125350] (zero-day) and other CVEs the vendored
+  # version in chromium carries [patches] for. Exclude electron for now to spare us some
+  # rebuilds and because electon did not backport and release the fix for CVE-2026-125350 yet.
+  #
+  # [CVE-2026-125350]: https://chromium-review.googlesource.com/c/chromium/src/+/8762073
+  # [patches]: https://chromium.googlesource.com/chromium/src/+/refs/tags/157.0.8103.50/third_party/libxslt/chromium/
+  withSystemXslt = isElectron;
+
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
   gnSystemLibraries = [
     # TODO:
@@ -171,8 +179,12 @@ let
     # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
     #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
     # "libwebp"
+  ]
+  ++ lib.optionals withSystemXslt [
     "libxml"
     "libxslt" # depends on libxml, always remove or re-add as a pair
+  ]
+  ++ [
     # "opus"
   ];
 
@@ -478,8 +490,12 @@ let
       libusb1
       re2
       ffmpeg
+    ]
+    ++ lib.optionals withSystemXslt [
       libxslt
       libxml2
+    ]
+    ++ [
       nasm
       nspr
       nss
@@ -533,8 +549,12 @@ let
       libusb1
       re2
       ffmpeg
+    ]
+    ++ lib.optionals withSystemXslt [
       libxslt
       libxml2
+    ]
+    ++ [
       nasm
       nspr
       nss
