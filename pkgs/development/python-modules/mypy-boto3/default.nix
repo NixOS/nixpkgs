@@ -1166,8 +1166,8 @@ in
       "sha256-QS+DHp0zS69sQ71IrXeUVtXLq6e/3WbuNW07F3wUBZY=";
 
   mypy-boto3-s3outposts =
-    buildMypyBoto3Package "s3outposts" "1.43.0"
-      "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
+    buildMypyBoto3Package "s3outposts" "1.44.0"
+      "sha256-K1NDjbl3sfaZA+x8upUQkEfojgK0Ig556B+Ixo7wYjQ=";
 
   mypy-boto3-sagemaker =
     buildMypyBoto3Package "sagemaker" "1.43.127"
