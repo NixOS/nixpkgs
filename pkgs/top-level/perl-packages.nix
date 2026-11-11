@@ -1347,10 +1347,10 @@ with self;
 
   Apppapersway = buildPerlPackage rec {
     pname = "App-papersway";
-    version = "3.000";
+    version = "3.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SP/SPWHITTON/App-papersway-${version}.tar.gz";
-      hash = "sha256-60H7zCtVbBfYOqVKw9X1EjOM7mzjSuPj5IwcDWhC+dE=";
+      hash = "sha256-NzfifKVXV5OQkisHlRkQjF3xNzaERzHuhLg0mA2oDzQ=";
     };
     buildInputs = [
       AnyEvent
