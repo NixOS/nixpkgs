@@ -2,6 +2,7 @@
   python3Packages,
   lib,
   fetchFromGitHub,
+  fetchpatch,
 
   # build inputs
   atk,
@@ -71,6 +72,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-4mNknvfJQJEPZjQoNdKLQcW4CI93D6BUDPj8LtD940A=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-GnomeDesktop-AttributeError.patch";
+      url = "https://github.com/lutris/lutris/commit/fd91646fbae9b0f7ce90fb5d7dda34e8f13856fe.patch";
+      hash = "sha256-FCIEawp58JR9ImsFod2TMvWdXo2PmBi+4eoJz7rgcMo=";
+    })
+  ];
 
   pyproject = false;
 

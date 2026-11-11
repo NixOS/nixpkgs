@@ -2,6 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  aws-lc,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +21,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-j4eWSQUIsH4E45NgMLIWA+IpyBLh3IJwLoXIr8wSEaY=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
 
   checkFlags = [
     # Requires internet access

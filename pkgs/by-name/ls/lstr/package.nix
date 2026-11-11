@@ -6,6 +6,7 @@
   pkg-config,
   gitMinimal,
   openssl,
+  libgit2,
   versionCheckHook,
 }:
 
@@ -24,7 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ (lib.getDev openssl) ];
+  buildInputs = [
+    (lib.getDev openssl)
+    libgit2
+  ];
 
   nativeCheckInputs = [ gitMinimal ];
 

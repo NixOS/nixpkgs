@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jupyter";
+    owner = "spyder-ide";
     repo = "qtconsole";
     tag = finalAttrs.version;
     hash = "sha256-GL6CAXijlgc/3nj9KaJJgK+AIq6wHdEf0kpgryJ3KuQ=";

@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "stevemcgrath";
+    owner = "librestfly";
     repo = "restfly";
     tag = "v${finalAttrs.version}";
     hash = "sha256-gAHWVkURgdi4mfHJnr/qq7dlNXMt6+2WjbK73Kaag0c=";
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python RESTfly API Library Framework";
-    homepage = "https://github.com/stevemcgrath/restfly";
+    homepage = "https://github.com/librestfly/restfly";
     changelog = "https://github.com/librestfly/restfly/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

@@ -7,6 +7,8 @@
   installShellFiles,
   pkg-config,
   openssl,
+  libgit2,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geode-cli";
@@ -29,7 +31,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
+    zstd
   ];
 
   postFixup = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''

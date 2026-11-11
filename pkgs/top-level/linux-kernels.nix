@@ -240,6 +240,8 @@ in
           "KBUILD_OUTPUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
           "DEPMOD=true"
           "INSTALL_MOD_STRIP=1"
+          # Remove kernel.dev references added by rustc from out-of-tree modules
+          "KRUSTFLAGS=--remap-path-prefix=${kernel.dev}/=/kernel/"
         ];
         # Obsolete aliases (these packages do not depend on the kernel).
         inherit (pkgs) odp-dpdk pktgen; # added 2018-05

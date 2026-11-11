@@ -2907,6 +2907,13 @@
     github = "auchter";
     githubId = 1190483;
   };
+  AugustDeer = {
+    email = "august@augustdeer.com";
+    github = "AugustDeer";
+    githubId = 153777330;
+    keys = [ { fingerprint = "20E3 D713 5379 ACEF C9BF  E537 4D9B FFF0 C24F 5930"; } ];
+    name = "August Deer";
+  };
   augustebaum = {
     email = "auguste.apple@gmail.com";
     github = "augustebaum";
@@ -23012,6 +23019,12 @@
     githubId = 1368952;
     name = "Pedro Lara Campos";
   };
+  pedrosandre = {
+    name = "Pedro André";
+    github = "PedroSAndre";
+    githubId = 48893259;
+    email = "pedro@ndre.pt";
+  };
   peelz = {
     email = "peelz.dev+nixpkgs@gmail.com";
     github = "notpeelz";
@@ -30399,6 +30412,11 @@
     matrix = "@tudbut:matrix.tudbut.de";
     github = "tudbut";
     githubId = 48156391;
+  };
+  tulku = {
+    name = "Lucas Chiesa";
+    github = "tulku";
+    githubId = 764126;
   };
   Tungsten842 = {
     name = "Tungsten842";

@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jstasiak";
+    owner = "python-zeroconf";
     repo = "python-zeroconf";
     tag = finalAttrs.version;
     hash = "sha256-KDHDVXg1s72iqgPYknp9dHB2oc5jNACdxplxWnPTh6w=";

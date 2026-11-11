@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mapproxy";
-  version = "7.0.0";
+  version = "8.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
     tag = finalAttrs.version;
-    hash = "sha256-R2lL0lEXnu3tAg9fsI7zTY7DSMcxmu9ohUTkG5XL6l0=";
+    hash = "sha256-fyVkA9e75PRxrxxXHtLstwM/JRNDTOjxquMpG2qmDHc=";
   };
 
   prePatch = ''

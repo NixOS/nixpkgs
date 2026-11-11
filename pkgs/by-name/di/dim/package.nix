@@ -12,6 +12,7 @@
   libvaSupport ? stdenv.hostPlatform.isLinux,
   libva,
   fetchpatch,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -84,7 +85,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git
   ];
 
-  buildInputs = [ sqlite ] ++ lib.optional libvaSupport libva;
+  buildInputs = [
+    sqlite
+    zstd
+  ]
+  ++ lib.optional libvaSupport libva;
 
   buildFeatures = lib.optional libvaSupport "vaapi";
 

@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder";
-  version = "6.1.6";
+  version = "6.1.7";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder";
     tag = finalAttrs.version;
-    hash = "sha256-Y2u+C0ioSORKkEiKRLAABGzTSAnoFU3J7OIlNOC4MAQ=";
+    hash = "sha256-mSOMCzEiD0Ha18gxEZHdQgBb63ptT1pdflSXroGOdhM=";
   };
 
   postPatch = ''

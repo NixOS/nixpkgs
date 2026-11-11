@@ -36,11 +36,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta5";
+  version = "6.0.0-beta5.1";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.xz";
-    hash = "sha256-OURyol7pwkGcRKXnGkAcIb/+zy/csn++IXPQ//0YdaQ=";
+    hash = "sha256-92zkjHTj9N+KKrTW0GXXu0G119KuxCLNXdsRO+iwwZM=";
   };
 
   sourceRoot = ".";

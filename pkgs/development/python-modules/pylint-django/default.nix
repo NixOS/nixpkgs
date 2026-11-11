@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
+    owner = "pylint-dev";
     repo = "pylint-django";
     tag = "v${finalAttrs.version}";
     hash = "sha256-W3BPCK6fj4poZ1EaBUGyVyfRo/0sZa+2ktk96Ic6+q0=";
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Pylint plugin to analyze Django applications";
-    homepage = "https://github.com/PyCQA/pylint-django";
+    homepage = "https://github.com/pylint-dev/pylint-django";
     changelog = "https://github.com/pylint-dev/pylint-django/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];

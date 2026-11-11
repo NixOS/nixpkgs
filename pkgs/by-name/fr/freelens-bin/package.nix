@@ -16,20 +16,20 @@
 let
 
   pname = "freelens-bin";
-  version = "1.10.3";
+  version = "2.0.0";
 
   sources = {
     x86_64-linux = {
       url = "https://github.com/freelensapp/freelens/releases/download/v${version}/Freelens-${version}-linux-amd64.AppImage";
-      hash = "sha256-W+RokOsT4WdVm4Yrmm8kbu7ApydhwLPpGmRjKTI1gek=";
+      hash = "sha256-NyoBl2UXCtQgsCJNZT1Ijr68QfqpcgUvo98TN8LLEdE=";
     };
     aarch64-linux = {
       url = "https://github.com/freelensapp/freelens/releases/download/v${version}/Freelens-${version}-linux-arm64.AppImage";
-      hash = "sha256-2aAw90YfTPDkiehj1ziurBeILEuEOmbJeUV2d7Bbmo4=";
+      hash = "sha256-1JFCwg/+e004G6frTULh8aCuYVzkNXIPQbS4MJyborw=";
     };
     aarch64-darwin = {
       url = "https://github.com/freelensapp/freelens/releases/download/v${version}/Freelens-${version}-macos-arm64.dmg";
-      hash = "sha256-rjPhHV24WNofZK4sT3yjg1eGeAvLKvAuVf51bwiQBBk=";
+      hash = "sha256-WEErbbNnxOfwgbHuFLhM7PDZ7QDLWFP+erz0DqBiA7U=";
     };
   };
 

@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "qiskit";
+    owner = "qiskit-community";
     repo = "qiskit-optimization";
     tag = finalAttrs.version;
     hash = "sha256-aonL08avVZlpGQ/FCZnrsPMvu1lbhRiadzKf/oPndZk=";
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
-    downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
+    downloadPage = "https://github.com/qiskit-community/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ chemonke ];
