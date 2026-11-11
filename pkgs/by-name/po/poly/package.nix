@@ -1,55 +1,35 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  unzip,
+  stdenvNoCC,
+  fetchFromGitHub,
+  installFonts,
 }:
 
-stdenv.mkDerivation rec {
-  name = "poly";
+stdenvNoCC.mkDerivation {
+  pname = "poly";
+  version = "0-unstable-2026-03-25";
 
-  regular = fetchurl {
-    # Finally a mirror that has a sha256 that doesn't change.
-    url = "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Regular.otf";
-    sha256 = "1mxp2lvki6b1h7r9xcj1ld0g4z5y3dmsal85xam4yr764zpjzaiw";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "fonts";
+    rev = "6032a8073954d9a94207b25b0d682592375f4625";
+    hash = "sha256-XQlJciU6GTmfXwnBngICwod2zysS209OBb1/tnynv48=";
+    rootDir = "ofl/poly";
   };
 
-  italic = fetchurl {
-    # Finally a mirror that has a sha256 that doesn't change.
-    url = "https://googlefontdirectory.googlecode.com/hg-history/d7441308e589c9fa577f920fc4152fa32477a267/poly/src/Poly-Italic.otf";
-    sha256 = "1chzcy3kyi7wpr4iq4aj1v24fq1wwph1v5z96dimlqcrnvm66h2l";
-  };
-
-  nativeBuildInputs = [ unzip ];
-
-  sourceRoot = ".";
-
-  dontUnpack = true;
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp ${regular} $out/share/fonts/opentype/Poly-Regular.otf
-    cp ${italic} $out/share/fonts/opentype/Poly-Italic.otf
-  '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "11d7ldryfxi0wzfrg1bhw23a668a44vdb8gggxryvahmp5ahmq2h";
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Medium contrast serif font";
     longDescription = ''
       With short ascenders and a very high x-height, Poly is efficient in small
-      sizes. Thanks to its careful balance between the x-height and glyph widths,
-      it allows more economy and legibility than standard web serifs, even in
-      small sizes. The aglutinative language for which it was designed contains
-      very long words. The goal was to develop a typeface that would tolerate
-      cramped tracking and that would increase the number of letters on a single
-      line. Poly is a Unicode typeface family that supports Open Type features
-      and languages that use the Latin script and its variants.
+      sizes. It was designed for agglutinative languages with very long words,
+      so it tolerates cramped tracking and fits more letters on a line.
+      Poly supports the Latin script and its variants.
     '';
-    homepage = "http://www.fontsquirrel.com/fonts/poly";
+    homepage = "https://fonts.google.com/specimen/Poly";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
+    platforms = lib.platforms.all;
   };
 }
