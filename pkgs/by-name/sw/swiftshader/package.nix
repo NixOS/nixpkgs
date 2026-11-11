@@ -35,6 +35,8 @@ stdenv.mkDerivation {
       --replace-fail  "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.5)"
   '';
 
+  cmakeFlags = [ (lib.cmakeBool "SWIFTSHADER_BUILD_TESTS" false) ];
+
   nativeBuildInputs = [
     cmake
     python3
