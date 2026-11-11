@@ -21,7 +21,6 @@
   makeFontsConf,
   dejavu_fonts,
   bash,
-  coreutils,
   curl,
   git,
   writableTmpDirAsHomeHook,
@@ -41,7 +40,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr-desktop";
-  version = "0.1.13";
+  version = "0.1.15";
 
   __structuredAttrs = true;
 
@@ -50,10 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "herdr-app";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-vM25epPf+4Y+gUj/2BTQ6fpOIBI7T5UddFdlMAr6X0o=";
+    hash = "sha256-CNktD+tQrMMN4vpzFPZkZWnwDalaTkUV0A2UiLVeO3E=";
   };
 
-  cargoHash = "sha256-7bz9iEMvf2o2I0SsnXaZ0135PlMm73DrJ9ZhSqAjcKY=";
+  cargoHash = "sha256-usCdairGam65XVKtb1jJpRC0tNXnoafAnMFQjPgvgqQ=";
 
   # zig.fetchDeps fails in the Darwin sandbox with CertificateBundleLoadFailure:
   # Zig reads its root certificates from the system keychains, which the
@@ -105,11 +104,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail '"xdg-open"' '"${lib.getExe' xdg-utils "xdg-open"}"'
       substituteInPlace vendor/gpui-pre-linux/src/linux/platform.rs \
         --replace-fail 'new_std_command("xdg-open")' 'new_std_command("${lib.getExe' xdg-utils "xdg-open"}")'
-
-      # Outside macOS this check only exists for a test, which calls
-      # /bin/test; the sandbox lacks it.
-      substituteInPlace src/core_bin.rs \
-        --replace-fail 'Command::new("/bin/test")' 'Command::new("${lib.getExe' coreutils "test"}")'
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Ghostty's build calls these by absolute path, which the sandbox lacks.
