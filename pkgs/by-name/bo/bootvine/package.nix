@@ -50,5 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "bootvine";
     maintainers = with lib.maintainers; [ wvhulle ];
+    platforms = lib.platforms.linux;
   };
 })
