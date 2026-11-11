@@ -13,7 +13,7 @@ let
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
-  pname = "immich-machine-learning";
+  pname = "immich-ml";
   inherit (immich) version;
   src = "${immich.src}/machine-learning";
   pyproject = true;

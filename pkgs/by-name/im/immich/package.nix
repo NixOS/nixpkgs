@@ -11,7 +11,7 @@
   runCommand,
   nix-update-script,
   nixosTests,
-  immich-machine-learning,
+  immich-ml,
   # build-time deps
   pkg-config,
   makeWrapper,
@@ -240,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) immich immich-vectorchord-reindex;
     };
 
-    machine-learning = immich-machine-learning.override {
+    machine-learning = immich-ml.override {
       immich = finalAttrs.finalPackage;
     };
 
