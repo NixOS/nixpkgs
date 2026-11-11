@@ -248,20 +248,20 @@ const cases: Array<{
     name: 'Home Assistant exemption suppresses a mass rebuild',
     facts: {
       head: 'wip-home-assistant',
-      maxRebuildCount: 1500,
+      maxRebuildCount: 2500,
     },
     expected: 'dismiss',
   },
   {
-    name: 'does not exempt a Home Assistant update above 1500 rebuilds',
-    facts: { head: 'wip-home-assistant', maxRebuildCount: 1501 },
+    name: 'does not exempt a Home Assistant update above 2500 rebuilds',
+    facts: { head: 'wip-home-assistant', maxRebuildCount: 2501 },
     expected: 'mass-rebuild',
   },
   {
     name: 'Home Assistant exemption does not suppress a NixOS test rebuild',
     facts: {
       head: 'wip-home-assistant',
-      maxRebuildCount: 1500,
+      maxRebuildCount: 2500,
       rebuildsAllTests: true,
     },
     expected: 'nixos-rebuild',
