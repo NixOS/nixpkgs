@@ -9,18 +9,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyperf";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyperf";
     inherit (finalAttrs) version;
-    hash = "sha256-3ZPM/aeSFHJSk+lfH6bgDLSmStzxMmA5SG1OH5HKqmI=";
+    hash = "sha256-5TgTotl9xaiXYM9mDb0bahQlWPy20ys1KcimstA9vfg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ psutil ];
+  dependencies = [ psutil ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
@@ -33,10 +33,10 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python module to generate and modify perf";
-    mainProgram = "pyperf";
     homepage = "https://pyperf.readthedocs.io/";
     changelog = "https://github.com/psf/pyperf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    mainProgram = "pyperf";
   };
 })

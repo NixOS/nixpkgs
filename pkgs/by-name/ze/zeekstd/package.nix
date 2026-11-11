@@ -6,19 +6,26 @@
   rustPlatform,
   writeShellScript,
   versionCheckHook,
+  zstd,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeekstd";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "rorosen";
     repo = "zeekstd";
     tag = "v${finalAttrs.version}-cli";
-    hash = "sha256-ZoV2F74Lsxd2YKsf2Y07Ky1d18dgxod+DfVfKVhhESw=";
+    hash = "sha256-3kbPu64tj7TlS0ieoVLyronfGo02I5/DbNUBxnin3fA=";
   };
 
-  cargoHash = "sha256-PpfNNRh+K61jfWtBYtWSx3cWXZ2v7tS52Ny1T1XSYVw=";
+  cargoHash = "sha256-fyqgPFTEyuEj+FZlIwqgfseefbCmAlxzUkoV+QU5S+s=";
+  cargoBuildFlags = [ "--package zeekstd_cli" ];
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ zstd ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 

@@ -6,22 +6,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "protoc-gen-go-ttrpc";
-  version = "1.2.8";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "ttrpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B7tEuRHBMzZZ7NZ3zliFpXqtZcApDEYz6T4ZHzd4bD0=";
+    hash = "sha256-exDaw/hfisqEBJVuUZiOXoXiX3477Y66oaQ9UsNGLoo=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-fDq1lYp1JB5CQUOQcM1KCO0W1d37u3x22MSJCzUCYdE=";
+  vendorHash = "sha256-78pZHRAdvl0ZQib4GVEsgLWZIfgSpneRh+Qh5xd6/ZY=";
 
-  subPackages = [
-    "cmd/protoc-gen-go-ttrpc"
-    "cmd/protoc-gen-gogottrpc"
-  ];
+  subPackages = [ "cmd/protoc-gen-go-ttrpc" ];
 
   env.CGO_ENABLED = 0;
   ldflags = [

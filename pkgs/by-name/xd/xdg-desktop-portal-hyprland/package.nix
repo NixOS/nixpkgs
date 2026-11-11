@@ -6,24 +6,16 @@
   makeWrapper,
   pkg-config,
   nix-update-script,
-  aquamarine,
-  cairo,
   grim,
-  hyprgraphics,
   hyprland-protocols,
   hyprlang,
   hyprtoolkit,
-  hyprutils,
   hyprwayland-scanner,
-  libGL,
-  libdrm,
   libgbm,
   libuuid,
-  pango,
   pipewire,
   sdbus-cpp_2,
   slurp,
-  wayland,
   wayland-protocols,
   wayland-scanner,
   debug ? false,
@@ -51,21 +43,13 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    aquamarine
-    cairo
-    hyprgraphics
     hyprland-protocols
     hyprlang
     hyprtoolkit
-    hyprutils
-    libGL
-    libdrm
     libgbm
     libuuid
-    pango
     pipewire
     sdbus-cpp_2
-    wayland
     wayland-protocols
     wayland-scanner
   ];

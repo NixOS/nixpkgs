@@ -8,7 +8,6 @@
   cairo,
   file,
   hyprutils,
-  lcms2,
   libGL,
   libdrm,
   libjpeg,
@@ -17,7 +16,6 @@
   libspng,
   libwebp,
   pango,
-  pixman,
 }:
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
@@ -36,20 +34,21 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     cairo
-    file
     hyprutils
-    lcms2
     libGL
+    pango
+  ];
+
+  buildInputs = [
+    file
     libdrm
     libjpeg
     libjxl
     librsvg
     libspng
     libwebp
-    pango
-    pixman
   ];
 
   outputs = [
@@ -58,6 +57,7 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  strictDeps = true;
 
   cmakeBuildType = "RelWithDebInfo";
   separateDebugInfo = true;

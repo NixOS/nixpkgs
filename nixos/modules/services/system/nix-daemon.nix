@@ -250,6 +250,18 @@ in
         '';
       };
 
+      buildLogRetention = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "30d";
+        description = ''
+          How long to keep the build logs in {file}`/nix/var/log/nix/drvs`,
+          as a systemd time span. `systemd-tmpfiles-clean` deletes older logs
+          daily, judged by modification time only, so reading a log does not
+          keep it. `null` keeps them forever.
+        '';
+      };
+
       # Environment variables for running Nix.
       envVars = lib.mkOption {
         type = lib.types.attrs;
@@ -276,6 +288,10 @@ in
 
     # The upstream Nix tmpfiles.d file assumes the daemon runs as root
     systemd.tmpfiles.packages = lib.mkIf (cfg.daemonUser == "root") [ nixPackage ];
+
+    systemd.tmpfiles.settings.nix-build-logs = lib.mkIf (cfg.buildLogRetention != null) {
+      "/nix/var/log/nix/drvs".e.age = "mM:${cfg.buildLogRetention}";
+    };
 
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 

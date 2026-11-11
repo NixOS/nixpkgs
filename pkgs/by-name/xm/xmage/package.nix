@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmage";
-  version = "1.4.62-dev_2026-10-03_20-47";
+  version = "1.4.63-dev_2026-10-31_09-42";
 
   src = fetchurl {
     url = "https://github.com/magefree/mage/releases/download/${finalAttrs.passthru.tag}/mage-full_${finalAttrs.version}.zip";
-    hash = "sha256-0lYlGuQRVWOCM8LLIKf+yC8/Lep6Rol2aRZkxV41exY=";
+    hash = "sha256-9I5polg3IIAKtqRHRY7ec73tXLIZBbDZZYpgUqtDkIo=";
   };
 
   preferLocalBuild = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    tag = "xmage_1.4.62V1";
+    tag = "xmage_1.4.63V1";
     updateScript = ./update.sh;
   };
 

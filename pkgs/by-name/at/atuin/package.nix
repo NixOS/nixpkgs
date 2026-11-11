@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.24.5";
+  version = "18.24.6";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cQmfUN+lrw4Z8LZ6XRYwq6utHCH+ockw81AdEYJ/oqA=";
+    hash = "sha256-4CBh/FcX5HxGUz2qqIDVstTGy343rX8sZucAzAQ6aqU=";
   };
 
-  cargoHash = "sha256-2ACFqpVZsEu+vmtpllGYvUDCghH6EbcRYMELs+EEx/g=";
+  cargoHash = "sha256-eB0HHlrHdttJB7DYo68c6hGeqAiMj/b9zS/9eZLw1hM=";
 
   # crates/atuin-common/src/secrets.rs sets a `REDACT_BUDGET` of 250ms for release builds
   # and 5s (which we increase to 30s here) for debug builds.
