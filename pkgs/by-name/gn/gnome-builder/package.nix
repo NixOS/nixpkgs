@@ -76,7 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    python3
+    (python3.withPackages (ps: [
+      ps.sphinx
+      ps.sphinx-rtd-theme
+    ]))
     wrapGAppsHook4
   ];
 
@@ -116,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dhelp=true"
 
     # Making the build system correctly detect clang header and library paths
     # is difficult. Somebody should look into fixing this.
