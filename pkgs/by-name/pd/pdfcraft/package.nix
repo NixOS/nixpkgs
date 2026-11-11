@@ -35,16 +35,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pdfcraft";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "pdfcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mqlS1JXzw6lQRyPY4EiCNocpiVnQWgsw9n93XESmxpo=";
+    hash = "sha256-jaWcKhwOLygHFawczt/zkf4ypaVfdB2jV88DfhcqDxM=";
   };
 
-  cargoHash = "sha256-VHPrDEntypGEyeCg1VcIlZ6NRQQw+kXAn+bXJZvnMmI=";
+  cargoHash = "sha256-krSzN9lwsEADMm+qqM9Ah2DM3LItAg5G2u/CX/iPnvw=";
 
   # [[patch.unused]] egui fork entries in Cargo.toml break cargo --offline in the sandbox.
   postPatch = ''
