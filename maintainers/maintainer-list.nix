@@ -18723,6 +18723,17 @@
     githubId = 55053574;
     name = "Max Headroom";
   };
+  Max-42 = {
+    email = "max@dyren.de";
+    github = "Max-42";
+    githubId = 68824507;
+    name = "Max";
+    keys = [
+      {
+        fingerprint = "0552 A9FB 08D4 CA34 4D5F 3CC0 9435 AEC8 D364 23C0";
+      }
+    ];
+  };
   max-amb = {
     email = "max_a@e.email";
     github = "max-amb";
