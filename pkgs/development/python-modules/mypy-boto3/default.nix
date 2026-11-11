@@ -746,8 +746,8 @@ in
       "sha256-rzGwp49Q+H1KU7AW2LYYx1vNq0CGwwDhRUNh1H6KvLY=";
 
   mypy-boto3-kinesisanalytics =
-    buildMypyBoto3Package "kinesisanalytics" "1.43.0"
-      "sha256-mFybt0ZyAZIvW5UoJQxxDGAALawLzwGJqE+Y0YOPQC0=";
+    buildMypyBoto3Package "kinesisanalytics" "1.44.0"
+      "sha256-Na0HmksUOCYCQ/IKmJuaRLUbNbvvTNec4LF4jQZUYhE=";
 
   mypy-boto3-kinesisanalyticsv2 =
     buildMypyBoto3Package "kinesisanalyticsv2" "1.43.51"
