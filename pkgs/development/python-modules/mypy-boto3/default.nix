@@ -1258,8 +1258,8 @@ in
       "sha256-CJ+b3np7qbNFK8lPEg1QH2GOtvPyUp9GyBM052d0/BE=";
 
   mypy-boto3-signer =
-    buildMypyBoto3Package "signer" "1.43.0"
-      "sha256-O/moShH3i7avL5pzZ3NnmAwMAm0UUFp9g/TVTurpKzk=";
+    buildMypyBoto3Package "signer" "1.44.0"
+      "sha256-DvbNsJkiMKCRh0kwdOi28aPy4V0o0NsKxYQhtvjPfLo=";
 
   mypy-boto3-simspaceweaver =
     buildMypyBoto3Package "simspaceweaver" "1.43.0"
