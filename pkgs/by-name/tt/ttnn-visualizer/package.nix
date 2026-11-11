@@ -11,11 +11,11 @@
 }:
 
 let
-  version = "0.88.0";
+  version = "0.110.0";
 
   patchNodeEngine = ''
     substituteInPlace package.json \
-      --replace-fail '"node": "24.15.0"' '"node": ">=24.15.0"'
+      --replace-fail '"node": "24.22.1"' '"node": ">=24.22.1"'
     substituteInPlace pnpm-workspace.yaml \
       --replace-fail 'engineStrict: true' 'engineStrict: false'
   '';
@@ -25,7 +25,7 @@ let
     owner = "tenstorrent";
     repo = "ttnn-visualizer";
     tag = "v${version}";
-    hash = "sha256-9ohL+xjiu56gasor8+eKsJPWhoDVD1zxFw60QYbWsHQ=";
+    hash = "sha256-MLKLdXHmcnF8LmzZUb4FuaRGj9mFw6lHhrFEVhzWFo8=";
   };
 
   frontendSource = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ let
       inherit (finalAttrs) src pname version;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-25yC1PR8o3zppmIsK1fkYsB9K2XBUVLHk5+qJlHJfLI=";
+      hash = "sha256-lVFVvi/ORiCbYOzuAczUkLyrsUFyo6cfpv6tjaAWBMc=";
       postPatch = patchNodeEngine;
     };
 
@@ -96,7 +96,7 @@ let
 
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace-fail 'setuptools==78.1.1' 'setuptools'
+        --replace-fail 'setuptools>=78.1.1,<81.0' 'setuptools'
     '';
 
     propagatedBuildInputs = [
@@ -121,16 +121,19 @@ let
     ];
 
     pythonRelaxDeps = [
+      "alembic"
       "flask-cors"
       "flask-socketio"
       "flask"
       "gevent"
       "gunicorn"
       "pandas"
-      "pydantic"
       "pydantic-core"
+      "pydantic"
+      "python-dotenv"
       "pyyaml"
       "setuptools"
+      "tt-perf-report"
       "uvicorn"
       "zstd"
     ];

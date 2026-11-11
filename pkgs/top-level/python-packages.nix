@@ -14655,7 +14655,7 @@ self: super: with self; {
 
   pyarrow-hotfix = callPackage ../development/python-modules/pyarrow-hotfix { };
 
-  pyaskalono = callPackage ../development/python-modules/pyaskalono { };
+  pyaskalono = callPackage ../development/python-modules/pyaskalono { inherit (pkgs) zstd; };
 
   pyasn = callPackage ../development/python-modules/pyasn { };
 

@@ -3270,6 +3270,7 @@ assertNoAdditions {
       "nvchad.blink.config"
       # Circular dependency with base46
       "nvchad.utils"
+      "nvchad.themes.api"
     ];
   };
 

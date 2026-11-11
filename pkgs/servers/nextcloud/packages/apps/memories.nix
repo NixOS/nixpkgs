@@ -2,6 +2,7 @@
   stdenv,
   buildGo127Module,
   exiftool,
+  vips,
   fetchurl,
   ffmpeg-headless,
   fetchFromGitHub,
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
       ffmpeg = lib.getExe ffmpeg-headless;
       ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
       go-vod = lib.getExe go-vod;
+      vips = lib.getExe vips;
     })
   ];
 
@@ -81,8 +83,11 @@ stdenv.mkDerivation rec {
     rm -rf bin-ext/
 
     sed -i 's/EXIFTOOL_VER = .*/EXIFTOOL_VER = @;/' lib/Service/BinExt.php
+    sed -i 's/VIPS_VER = .*/VIPS_VER = @;/' lib/Service/BinExt.php
     substituteInPlace lib/Service/BinExt.php \
       --replace-fail "EXIFTOOL_VER = @" "EXIFTOOL_VER = '${exiftool.version}'"
+    substituteInPlace lib/Service/BinExt.php \
+      --replace-fail "VIPS_VER = @" "VIPS_VER = '${vips.version}'"
   '';
 
   installPhase = ''
