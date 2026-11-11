@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.12.5";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-goF+GkNFiT0E6zu2+gZU6j0zfOiuqDa/UDNbD8H+kXg=";
+    hash = "sha256-cyMlCVgUd+zNsrmkL833lVjwfhF50IQsNjC1cWwu8bs=";
   };
 
   # we need datasets_3 for SpeechT5 embeddings
@@ -35,7 +35,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-/TQOAtz5mVfglV0VdCvTxhtAPpTRZQq4chSp3qX+Kfo=";
+    npmDepsHash = "sha256-uYXXyi6qN2269PLMQg6POqREdM1UCJc4cEzyGp6LkAQ=";
 
     npmFlags = [ "--force" ];
 
