@@ -6,6 +6,7 @@
   python3,
   nixosTests,
   stdenv,
+  yq,
 }:
 let
   python = python3.override {
@@ -22,12 +23,18 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     substituteInPlace immich_ml/sessions/ort.py \
       --replace-fail 'Path(ort.__file__).parent / "capi" / "libopenvino_c.so"' '"${lib.getLib openvino}/lib/libopenvino_c.so"' \
       --replace-fail '"libOpenCL.so.1"' '"${lib.getLib ocl-icd}/lib/libOpenCL.so.1"'
+
+    immich_model_rev=$(tomlq -r '.tool.uv.sources."immich-model".rev' pyproject.toml)
+    test $immich_model_rev = ${finalAttrs.passthru.immich-model.src.rev} \
+      || (echo "error: immich-model needs to updated to rev $immich_model_rev" && exit 1)
   '';
+
+  nativeBuildInputs = [
+    yq
+  ];
 
   pythonRelaxDeps = [
     "huggingface-hub"
-    "onnx"
-    "pillow"
   ];
 
   build-system = with python.pkgs; [
@@ -37,7 +44,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   dependencies =
     with python.pkgs;
     [
-      aiocache
       fastapi
       gunicorn
       huggingface-hub
@@ -46,6 +52,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       opencv-python-headless
       orjson
       pillow
+      pillow-jxl-plugin
       pydantic
       pydantic-settings
       python-multipart
@@ -70,9 +77,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/immich
-    cp immich_ml/log_conf.json $out/share/immich
-
     cp -r ann $out/${python.sitePackages}/
 
     makeWrapper ${lib.getExe python.pkgs.gunicorn} "''${!outputBin}"/bin/machine-learning \
@@ -85,8 +89,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       --add-flags "immich_ml.main:app -k immich_ml.config.CustomUvicornWorker \
         -w \"\$MACHINE_LEARNING_WORKERS\" \
         -b \"\$IMMICH_HOST:\$IMMICH_PORT\" \
-        -t \"\$MACHINE_LEARNING_WORKER_TIMEOUT\"
-        --log-config-json $out/share/immich/log_conf.json"
+        -t \"\$MACHINE_LEARNING_WORKER_TIMEOUT\""
   '';
 
   passthru = {

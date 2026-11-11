@@ -14,7 +14,8 @@
   ],
   "clipboard-history": [
     "clipboard-history@Diyar1877",
-    "clipboard-history@alexsaveau.dev"
+    "clipboard-history@alexsaveau.dev",
+    "clipboard-history@manouchehr"
   ],
   "clipboard-line-cleaner": [
     "clipboard-line-cleaner@epiphanius.github.io",
@@ -32,6 +33,10 @@
     "InternetSpeedMeter@alshakib.dev",
     "speed-meter@mojahid.lunecode.com"
   ],
+  "lid-switch": [
+    "lid-switch@dhyandevp",
+    "lid-switch@dutaahmad"
+  ],
   "memento-mori": [
     "memento-mori@paveloom",
     "memento-mori@vedeshpadal"
@@ -48,6 +53,10 @@
     "night-light-toggle@egoistpizza.github.com",
     "night-light-toggle@shivamksharma.github.io",
     "nightlighttoggle@sam"
+  ],
+  "overview-background": [
+    "overview-background@github.com.sunnyyangyangyang",
+    "overviewbackground@github.com.orbitcorrection"
   ],
   "panel-workspace-scroll": [
     "panel-scroll@taygun86",

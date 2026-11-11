@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  libgit2,
   nix-update-script,
   openssl,
   pkg-config,
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
   ];
 

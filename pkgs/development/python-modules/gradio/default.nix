@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonAtLeast,
   writeScript,
   writeShellScriptBin,
@@ -97,6 +98,10 @@ buildPythonPackage (finalAttrs: {
     # build output, which fails offline.
     # Copy it (and its dependency closure) from the already-fetched pnpm workspace.
     ./dont-npm-install-http-proxy.patch
+    (fetchpatch2 {
+      url = "https://github.com/gradio-app/gradio/commit/1028366300f10b26f0b54a1d6cda6d520895acbb.patch?full_index=1";
+      hash = "sha256-YxydWMCZTczvIMa3P2W6wwYqX3bTX7LMMUNp98DQMRE=";
+    })
   ];
 
   pnpmDeps = fetchPnpmDeps {

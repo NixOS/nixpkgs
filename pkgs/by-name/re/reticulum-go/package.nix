@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/Quad4-Software/Reticulum-Go/releases/tag/${finalAttrs.src.tag}";
     description = "High-performance Go implementation of the Reticulum Network Stack";
     homepage = "https://github.com/Quad4-Software/Reticulum-Go";
-    license = lib.licenses.asl20;
+    license = lib.licenses.reticulum;
     mainProgram = "reticulum-go";
     maintainers = with lib.maintainers; [ drupol ];
   };
