@@ -5,9 +5,12 @@
 use std::{
     cell::RefCell,
     collections::HashMap,
+    fmt::Display,
     io::{BufRead, Read, Write},
-    os::unix::fs::{MetadataExt, PermissionsExt},
-    os::unix::process::CommandExt,
+    os::unix::{
+        fs::{MetadataExt, PermissionsExt},
+        process::CommandExt,
+    },
     path::{Path, PathBuf},
     rc::Rc,
     str::FromStr,
@@ -150,6 +153,15 @@ impl From<&Action> for &'static str {
 enum UnitScope {
     System,
     User,
+}
+
+impl Display for UnitScope {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::User => write!(f, "user"),
+            Self::System => write!(f, "system"),
+        }
+    }
 }
 
 impl UnitScope {
@@ -1036,7 +1048,7 @@ fn unit_is_active(conn: &LocalConnection, unit: &str) -> Result<bool> {
 
 static ACTION: OnceLock<Action> = OnceLock::new();
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 enum Job {
     Start,
     Restart,
@@ -1056,6 +1068,30 @@ impl std::fmt::Display for Job {
                 Job::Stop => "stop",
             }
         )
+    }
+}
+
+impl Job {
+    fn execute<'dbus>(
+        &self,
+        systemd: &Proxy<'_, &LocalConnection>,
+        unit: &str,
+    ) -> Result<dbus::Path<'dbus>, dbus::Error> {
+        match self {
+            Job::Stop => systemd.stop_unit(unit, "replace"),
+            Job::Start => systemd.start_unit(unit, "replace"),
+            Job::Restart => systemd.restart_unit(unit, "replace"),
+            Job::Reload => systemd.reload_unit(unit, "replace"),
+        }
+    }
+
+    fn required_unit_props(&self) -> Vec<&str> {
+        match self {
+            Job::Start => vec!["CanStart"],
+            Job::Restart => vec!["CanStop", "CanStart"],
+            Job::Reload => vec!["CanReload"],
+            Job::Stop => vec!["CanStop"],
+        }
     }
 }
 
@@ -1524,11 +1560,15 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
     // Stop units before reexec so that ExecStop runs with the old definition.
     print_units("stopping", &units_to_stop);
-    for unit in units_to_stop.keys() {
-        if let Ok(job_path) = systemd.stop_unit(unit, "replace") {
-            submitted_jobs.borrow_mut().insert(job_path, Job::Stop);
-        }
-    }
+    try_enqueue_many_units(
+        &systemd,
+        &dbus_conn,
+        Job::Stop,
+        units_to_stop.keys().map(|x| &**x).collect::<Vec<_>>(),
+        submitted_jobs.clone(),
+        &mut Some(&mut exit_code),
+        UnitScope::User,
+    )?;
     block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     if !units_to_skip.is_empty() {
@@ -1544,50 +1584,44 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     _ = systemd.reload();
 
     print_units("reloading", &units_to_reload);
-    for unit in units_to_reload.keys() {
-        match systemd.reload_unit(unit, "replace") {
-            Ok(job_path) => {
-                submitted_jobs.borrow_mut().insert(job_path, Job::Reload);
-            }
-            Err(err) => {
-                eprintln!("Failed to reload user unit {unit}: {err}");
-                exit_code = 4;
-            }
-        }
-    }
+    try_enqueue_many_units(
+        &systemd,
+        &dbus_conn,
+        Job::Reload,
+        units_to_reload.keys().map(|x| &**x).collect::<Vec<_>>(),
+        submitted_jobs.clone(),
+        &mut Some(&mut exit_code),
+        UnitScope::User,
+    )?;
     block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&reload_list)
         .with_context(|| format!("Failed to remove {}", reload_list.display()))?;
 
     print_units("restarting", &units_to_restart);
-    for unit in units_to_restart.keys() {
-        match systemd.restart_unit(unit, "replace") {
-            Ok(job_path) => {
-                submitted_jobs.borrow_mut().insert(job_path, Job::Restart);
-            }
-            Err(err) => {
-                eprintln!("Failed to restart user unit {unit}: {err}");
-                exit_code = 4;
-            }
-        }
-    }
+    try_enqueue_many_units(
+        &systemd,
+        &dbus_conn,
+        Job::Restart,
+        units_to_restart.keys().map(|x| &**x).collect::<Vec<_>>(),
+        submitted_jobs.clone(),
+        &mut Some(&mut exit_code),
+        UnitScope::User,
+    )?;
     block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&restart_list)
         .with_context(|| format!("Failed to remove {}", restart_list.display()))?;
 
     let start_filtered = filter_units(&units_to_filter, &units_to_start);
     print_units("starting", &start_filtered);
-    for unit in units_to_start.keys() {
-        match systemd.start_unit(unit, "replace") {
-            Ok(job_path) => {
-                submitted_jobs.borrow_mut().insert(job_path, Job::Start);
-            }
-            Err(err) => {
-                eprintln!("Failed to start user unit {unit}: {err}");
-                exit_code = 4;
-            }
-        }
-    }
+    try_enqueue_many_units(
+        &systemd,
+        &dbus_conn,
+        Job::Start,
+        units_to_start.keys().map(|x| &**x).collect::<Vec<_>>(),
+        submitted_jobs.clone(),
+        &mut Some(&mut exit_code),
+        UnitScope::User,
+    )?;
     block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&start_list)
         .with_context(|| format!("Failed to remove {}", start_list.display()))?;
@@ -1674,46 +1708,40 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         }
 
         print_units("reloading (post-activation)", &to_reload);
-        for unit in to_reload.keys() {
-            match systemd.reload_unit(unit, "replace") {
-                Ok(job_path) => {
-                    submitted_jobs.borrow_mut().insert(job_path, Job::Reload);
-                }
-                Err(err) => {
-                    eprintln!("Failed to reload user unit {unit}: {err}");
-                    exit_code = 4;
-                }
-            }
-        }
+        try_enqueue_many_units(
+            &systemd,
+            &dbus_conn,
+            Job::Reload,
+            to_reload.keys().map(|x| &**x).collect::<Vec<_>>(),
+            submitted_jobs.clone(),
+            &mut Some(&mut exit_code),
+            UnitScope::User,
+        )?;
         block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         print_units("restarting (post-activation)", &to_restart);
-        for unit in to_restart.keys() {
-            match systemd.restart_unit(unit, "replace") {
-                Ok(job_path) => {
-                    submitted_jobs.borrow_mut().insert(job_path, Job::Restart);
-                }
-                Err(err) => {
-                    eprintln!("Failed to restart user unit {unit}: {err}");
-                    exit_code = 4;
-                }
-            }
-        }
+        try_enqueue_many_units(
+            &systemd,
+            &dbus_conn,
+            Job::Restart,
+            to_restart.keys().map(|x| &**x).collect::<Vec<_>>(),
+            submitted_jobs.clone(),
+            &mut Some(&mut exit_code),
+            UnitScope::User,
+        )?;
         block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         let to_start_filtered = filter_units(&units_to_filter, &to_start);
         print_units("starting (post-activation)", &to_start_filtered);
-        for unit in to_start.keys() {
-            match systemd.start_unit(unit, "replace") {
-                Ok(job_path) => {
-                    submitted_jobs.borrow_mut().insert(job_path, Job::Start);
-                }
-                Err(err) => {
-                    eprintln!("Failed to start user unit {unit}: {err}");
-                    exit_code = 4;
-                }
-            }
-        }
+        try_enqueue_many_units(
+            &systemd,
+            &dbus_conn,
+            Job::Start,
+            to_start.keys().map(|x| &**x).collect::<Vec<_>>(),
+            submitted_jobs.clone(),
+            &mut Some(&mut exit_code),
+            UnitScope::User,
+        )?;
         block_on_jobs(&dbus_conn, &submitted_jobs)?;
     }
 
@@ -1754,6 +1782,144 @@ dry-activate: show what would be done if this configuration were activated
 "#
     );
     std::process::exit(1);
+}
+
+fn strip_instance_part(name: &str) -> Option<String> {
+    let mut split = name.split('@');
+    if let Some(first) = split.next() {
+        let ext = Path::new(name)
+            .extension()
+            .and_then(|x| x.to_str())
+            .map(|ext| format!(".{ext}"))
+            .unwrap_or(".service".into());
+
+        if !first.ends_with(&ext) {
+            return Some(format!("{first}@{ext}"));
+        }
+    }
+
+    None
+}
+
+fn filter_incompatible_units<'unit>(
+    units: Vec<&'unit str>,
+    systemd: &Proxy<'_, &LocalConnection>,
+    op: &Job,
+    dbus: &LocalConnection,
+    scope: UnitScope,
+) -> Vec<&'unit str> {
+    let props = op.required_unit_props();
+    units
+        .into_iter()
+        .filter(|name| {
+            let unit = systemd.load_unit(name).or_else(|e| {
+                if let Some(try_with) = strip_instance_part(name).filter(|name_without_instance| {
+                    name != name_without_instance && e.name().map(|name| name == "org.freedesktop.systemd1.NoSuchUnit").unwrap_or(false)
+                }) {
+                    systemd.load_unit(&try_with)
+                } else {
+                    Err(e)
+                }
+            });
+
+            let can_x = unit.and_then(|unit| {
+                let unit_proxy =
+                    dbus.with_proxy(
+                        "org.freedesktop.systemd1",
+                        unit,
+                        Duration::from_millis(5000),
+                    );
+                let mut result = true;
+
+                for prop in props.iter() {
+                    result &= unit_proxy.get::<bool>("org.freedesktop.systemd1.Unit", prop)?;
+                }
+
+                Ok(result)
+            })
+            .unwrap_or_else(|e| {
+                eprintln!("warning: Failed determining for {scope} unit {name} whether it can {op}, excluding: {e:?}");
+                false
+            });
+
+            if !can_x {
+                eprintln!(
+                    "warning: {scope} unit {name} cannot {op} ('{}' is false), excluding.",
+                    props.join(" && ")
+                );
+            }
+
+            can_x
+        })
+        .collect::<Vec<_>>()
+}
+
+fn try_enqueue_many_units(
+    systemd: &Proxy<'_, &LocalConnection>,
+    dbus: &LocalConnection,
+    op: Job,
+    units: Vec<&str>,
+    submitted_jobs: Rc<RefCell<HashMap<dbus::Path<'static>, Job>>>,
+    exit_code: &mut Option<&mut i32>,
+    scope: UnitScope,
+) -> Result<(), dbus::Error> {
+    let units = filter_incompatible_units(units, systemd, &op, dbus, scope);
+    if units.is_empty() {
+        return Ok(());
+    }
+
+    match systemd.enqueue_unit_job_many(units.clone(), &op.to_string(), "replace", 0) {
+        Ok(jobs) => {
+            for (_, path, _, _, _) in jobs {
+                submitted_jobs
+                    .borrow_mut()
+                    .insert(path.to_owned(), op.clone());
+            }
+        }
+        Err(e)
+            if e.name()
+                .map(|name| {
+                    if name == "org.freedesktop.DBus.Error.UnknownMethod" {
+                        true
+                    } else if name == "org.freedesktop.systemd1.TransactionOrderIsCyclic" {
+                        eprintln!("warning: Failed to {op} {scope} units: {e}\nTrying to {op} individually");
+                        if let Some(exit_code) = exit_code {
+                            **exit_code = 4;
+                        }
+                        true
+                    } else {
+                        false
+                    }
+                })
+                .unwrap_or(false) =>
+        {
+            for unit in units {
+                match op.execute(systemd, unit) {
+                    Ok(path) => {
+                        submitted_jobs
+                            .borrow_mut()
+                            .insert(path.to_owned(), op.clone());
+                    }
+                    Err(err) if op != Job::Stop => {
+                        eprintln!("Failed to {op} {scope} {unit}: {err}");
+                        if let Some(exit_code) = exit_code {
+                            **exit_code = 4;
+                        }
+                    }
+                    _ => {}
+                };
+            }
+        }
+        Err(err) if op != Job::Stop => {
+            eprintln!("Failed to {op} {scope} units: {err}");
+            if let Some(exit_code) = exit_code {
+                **exit_code = 4;
+            }
+        }
+        _ => {}
+    };
+
+    Ok(())
 }
 
 /// Performs switch-to-configuration functionality for the entire system
@@ -2199,12 +2365,15 @@ won't take effect until you reboot the system.
             eprintln!("stopping the following units: {}", units.join(", "));
         }
 
-        for unit in units_to_stop.keys() {
-            if let Ok(job_path) = systemd.stop_unit(unit, "replace") {
-                let mut j = submitted_jobs.borrow_mut();
-                j.insert(job_path.to_owned(), Job::Stop);
-            };
-        }
+        try_enqueue_many_units(
+            &systemd,
+            &dbus_conn,
+            Job::Stop,
+            units_to_stop.keys().map(|x| &**x).collect::<Vec<_>>(),
+            submitted_jobs.clone(),
+            &mut None,
+            UnitScope::System,
+        )?;
 
         block_on_jobs(&dbus_conn, &submitted_jobs)?;
     }
@@ -2500,19 +2669,15 @@ won't take effect until you reboot the system.
         units.sort_by_key(|name| name.to_lowercase());
         eprintln!("reloading the following units: {}", units.join(", "));
 
-        for unit in units {
-            match systemd.reload_unit(unit, "replace") {
-                Ok(job_path) => {
-                    submitted_jobs
-                        .borrow_mut()
-                        .insert(job_path.clone(), Job::Reload);
-                }
-                Err(err) => {
-                    eprintln!("Failed to reload {unit}: {err}");
-                    exit_code = 4;
-                }
-            }
-        }
+        try_enqueue_many_units(
+            &systemd,
+            &dbus_conn,
+            Job::Reload,
+            units,
+            submitted_jobs.clone(),
+            &mut Some(&mut exit_code),
+            UnitScope::System,
+        )?;
 
         block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
@@ -2529,18 +2694,15 @@ won't take effect until you reboot the system.
         units.sort_by_key(|name| name.to_lowercase());
         eprintln!("restarting the following units: {}", units.join(", "));
 
-        for unit in units {
-            match systemd.restart_unit(unit, "replace") {
-                Ok(job_path) => {
-                    let mut jobs = submitted_jobs.borrow_mut();
-                    jobs.insert(job_path, Job::Restart);
-                }
-                Err(err) => {
-                    eprintln!("Failed to restart {unit}: {err}");
-                    exit_code = 4;
-                }
-            }
-        }
+        try_enqueue_many_units(
+            &systemd,
+            &dbus_conn,
+            Job::Restart,
+            units,
+            submitted_jobs.clone(),
+            &mut Some(&mut exit_code),
+            UnitScope::System,
+        )?;
 
         block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
@@ -2562,18 +2724,15 @@ won't take effect until you reboot the system.
         eprintln!("starting the following units: {}", units.join(", "));
     }
 
-    for unit in units_to_start.keys() {
-        match systemd.start_unit(unit, "replace") {
-            Ok(job_path) => {
-                let mut jobs = submitted_jobs.borrow_mut();
-                jobs.insert(job_path, Job::Start);
-            }
-            Err(err) => {
-                eprintln!("Failed to start {unit}: {err}");
-                exit_code = 4;
-            }
-        }
-    }
+    try_enqueue_many_units(
+        &systemd,
+        &dbus_conn,
+        Job::Start,
+        units_to_start.keys().map(|x| &**x).collect::<Vec<_>>(),
+        submitted_jobs.clone(),
+        &mut Some(&mut exit_code),
+        UnitScope::System,
+    )?;
 
     block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
@@ -2726,6 +2885,8 @@ fn main() -> anyhow::Result<()> {
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
+
+    use crate::strip_instance_part;
 
     #[test]
     fn parse_fstab() {
@@ -3122,6 +3283,23 @@ After=dev-disk-by\x2dlabel-root.device
                 &[("X-OnlyManualStart", "true")]
             )])),
             MigrationAction::Skip
+        );
+    }
+
+    #[test]
+    fn stripped_instance() {
+        assert_eq!(None, strip_instance_part("foo.service"));
+        assert_eq!(
+            Some("foo@.service".into()),
+            strip_instance_part("foo@.service")
+        );
+        assert_eq!(
+            Some("foo@.service".into()),
+            strip_instance_part("foo@bar.service")
+        );
+        assert_eq!(
+            Some("foo@.socket".into()),
+            strip_instance_part("foo@bar.socket")
         );
     }
 }
