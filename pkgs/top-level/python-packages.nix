@@ -5074,6 +5074,8 @@ self: super: with self; {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  dl-translate = callPackage ../development/python-modules/dl-translate { };
+
   dlib = callPackage ../development/python-modules/dlib { inherit (pkgs) dlib; };
 
   dlinfo = callPackage ../development/python-modules/dlinfo { };
