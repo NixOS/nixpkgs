@@ -1,76 +1,61 @@
 {
   lib,
   fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  pkg-config,
-
-  dbus,
-  fontconfig,
-  libGL,
+  aws-lc,
+  bzip2,
   libx11,
   libxcb,
   libxcursor,
-  libxext,
   libxi,
-  libxinerama,
   libxkbcommon,
-  libxrandr,
+  makeBinaryWrapper,
+  nix-update-script,
   openssl,
+  pkg-config,
+  rustPlatform,
   vulkan-loader,
   wayland,
   xdg-utils,
+  xz,
   zenity,
-
-  nix-update-script,
+  zlib,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tiny-wii-backup-manager";
-  version = "6.0.8";
+  version = "6.2.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "mq1";
     repo = "TinyWiiBackupManager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zY/vLzsj256uKMkr+uxXj5SLQPKxfkS3IB0mXePlGiA=";
+    hash = "sha256-df4MYTBiDDaFNfCakJ68Xjjnvbw23zixoSi9ZW5F7Js=";
   };
 
-  cargoHash = "sha256-unv/9LoCpRcfGRq8mo6Y1b5PEf0+5UONi2eked8gfSg=";
-
-  cargoBuildFlags = [
-    "--bin"
-    "twbm-gui"
-  ];
-
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
   buildInputs = [
-    dbus
-    fontconfig
-    libGL
-    libx11
-    libxcb
-    libxcursor
-    libxext
-    libxi
-    libxinerama
-    libxkbcommon
-    libxrandr
+    aws-lc
+    bzip2
     openssl
-    vulkan-loader
-    wayland
+    xz
+    zlib
+    zstd
   ];
+
+  cargoHash = "sha256-ljildHQccDyZlbJyrS38FZLY2bgDomkwHHTAJ6JdHQ4=";
 
   # Upstream does not currently ship tests.
   doCheck = false;
 
   postInstall = ''
-    mv $out/bin/twbm-gui $out/bin/TinyWiiBackupManager
-
     install -Dm644 package/linux/AppDir/usr/share/applications/it.mq1.TinyWiiBackupManager.desktop \
       $out/share/applications/it.mq1.TinyWiiBackupManager.desktop
     install -Dm644 package/linux/it.mq1.TinyWiiBackupManager.metainfo.xml \
@@ -80,6 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r package/linux/AppDir/usr/share/icons/hicolor $out/share/icons/
 
     wrapProgram $out/bin/TinyWiiBackupManager \
+      --set-default TWBM_DISABLE_UPDATES 1 \
       --prefix PATH : ${
         lib.makeBinPath [
           xdg-utils
@@ -88,27 +74,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
       } \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          dbus
-          fontconfig
-          libGL
           libx11
           libxcb
           libxcursor
-          libxext
           libxi
-          libxinerama
           libxkbcommon
-          libxrandr
-          openssl
           vulkan-loader
           wayland
         ]
       }
   '';
 
-  passthru.updateScript = nix-update-script { };
+  buildFeatures = [ "dist-flatpak" ];
+  buildNoDefaultFeatures = true;
 
-  __structuredAttrs = true;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tiny game backup and homebrew app manager for the Wii";
@@ -116,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mq1/TinyWiiBackupManager/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ yisraeldov ];
-    mainProgram = "TinyWiiBackupManager";
     platforms = lib.platforms.linux;
+    mainProgram = "TinyWiiBackupManager";
   };
 })
