@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [ "--enable-desktop-integration" ];
 
   enableParallelBuilding = true;
+  doCheck = true;
 
   meta = {
     homepage = "https://fuse-emulator.sourceforge.net/";
