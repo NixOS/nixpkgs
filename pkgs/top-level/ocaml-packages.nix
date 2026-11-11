@@ -1308,8 +1308,6 @@ let
 
         minisat = callPackage ../development/ocaml-modules/minisat { };
 
-        minttea = callPackage ../development/ocaml-modules/minttea { };
-
         miou = callPackage ../development/ocaml-modules/miou { };
 
         mirage = callPackage ../development/ocaml-modules/mirage { };
@@ -2002,8 +2000,6 @@ let
         ringo = callPackage ../development/ocaml-modules/ringo { };
 
         rio = callPackage ../development/ocaml-modules/rio { };
-
-        riot = callPackage ../development/ocaml-modules/riot { };
 
         rock = callPackage ../development/ocaml-modules/rock { };
 

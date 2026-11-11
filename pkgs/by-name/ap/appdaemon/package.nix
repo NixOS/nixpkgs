@@ -17,6 +17,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-GoKYaMCwfZ8tKsyrNDQN5OeptkAuct90ziXO9MxU2FA=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.26,<0.13.0" "uv_build"
+  '';
+
   nativeBuildInputs = [
     python3Packages.pyprojectVersionPatchHook
   ];

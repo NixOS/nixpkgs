@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-notification";
-  version = "1.3.8";
+  version = "1.3.9";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-notification";
     tag = finalAttrs.version;
-    hash = "sha256-nojlYxNqoB9x8LBNYKERzQzp+l+cALkKYV+ORMZjBlo=";
+    hash = "sha256-hPA1OLIxlwJAGTvUXWwgqRV3x5L+qkXGYa3A44w2nSc=";
   };
 
   depsBuildBuild = [ pkg-config ];
