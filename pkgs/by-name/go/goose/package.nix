@@ -46,7 +46,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Database migration tool which supports SQL migrations and Go functions";
     homepage = "https://pressly.github.io/goose/";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "goose";
   };
