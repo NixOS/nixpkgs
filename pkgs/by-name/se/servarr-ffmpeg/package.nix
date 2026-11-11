@@ -1,7 +1,7 @@
 {
   ffmpeg-headless,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   lib,
 }:
 
@@ -78,10 +78,10 @@ in
     pname = "servarr-ffmpeg";
 
     patches = old.patches ++ [
-      (fetchpatch2 {
+      (fetchpatch {
         name = "fix_build_failure_due_to_libjxl_version_to_new";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
-        hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
+        url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/75b1a555a70c178a9166629e43ec2f6250219eb2.patch";
+        hash = "sha256-prgag4Q1inVXwKhXRZubyoDhoKtnsaCtXQ4McALTaPU=";
       })
     ];
 
