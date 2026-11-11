@@ -116,7 +116,9 @@ in
         NIX_REMOTE = "daemon?protocol=any";
       };
 
-    systemd.sockets."lix-daemon-xp1".wantedBy = lib.mkIf enableExperimentalRpc [ "sockets.target" ];
+    systemd.sockets."lix-daemon-xp1" = lib.mkIf enableExperimentalRpc {
+      wantedBy = [ "sockets.target" ];
+    };
 
     systemd.services."lix-daemon-xp1@" = lib.mkIf enableExperimentalRpc (
       lib.mkMerge [
