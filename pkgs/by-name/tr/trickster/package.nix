@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   go,
+  stdenv,
   nixosTests,
 }:
 
@@ -31,7 +32,7 @@ buildGoModule rec {
     BuildTime = "1970-01-01T00:00:00+0000";
     GitCommitID = rev;
     GoVersion = "go${go.version}}";
-    GoArch = "${go.GOARCH}";
+    GoArch = "${stdenv.hostPlatform.go.GOARCH}";
   });
 
   # Tests are broken.

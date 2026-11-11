@@ -554,13 +554,6 @@ let
             nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
           });
 
-          zig-mode = super.zig-mode.overrideAttrs (attrs: {
-            postPatch = attrs.postPatch or "" + ''
-              substituteInPlace zig-mode.el \
-                --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${lib.getExe pkgs.zig}"'
-            '';
-          });
-
           zmq = super.zmq.overrideAttrs (old: {
             stripDebugList = [ "share" ];
             preBuild = ''

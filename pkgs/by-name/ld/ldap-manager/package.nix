@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ldap-manager";
-  version = "1.6.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "netresearch";
     repo = "ldap-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MqR4Dj/obMpUKGDMDwEi8kQMMFQXVBPjDBby5t7RfAk=";
+    hash = "sha256-xkIu/NdpSGheCNfd5Ba09ODxXQ3NcKgLeqsCtl2vc9A=";
   };
 
-  vendorHash = "sha256-ZM2MjG3roOl4PFiBuo9F8cTTVWt1ZHuNmaZFvpH804c=";
+  vendorHash = "sha256-+RjnWUjGSItVgOhEKsDRZ7FsOKqsZw4NXaYFrE03yso=";
 
   excludedPackages = [
     "internal/e2e"

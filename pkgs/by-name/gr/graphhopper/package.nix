@@ -55,6 +55,8 @@ let
         -o -name resolver-status.properties \
         -o -name _remote.repositories \) \
         -delete
+      # Also delete .meta files that can change between 2 invocations
+      rm $out/.m2/.meta -rf
     '';
 
     outputHashMode = "recursive";

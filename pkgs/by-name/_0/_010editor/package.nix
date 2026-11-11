@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
-  version = "16.0.4";
+  version = "17.0.1";
 
   src = finalAttrs.passthru.srcs.${stdenv.hostPlatform.system};
 
@@ -88,12 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.srcs = {
     x86_64-linux = fetchzip {
       url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-      hash = "sha256-M1D2Bmi45sYiB0Ci+0X0AxyIeR+On60xt4jP1Jsy5tA=";
+      hash = "sha256-eJvgw4+ItCYC4unu5C3khi4zrsKuOoEkS4oOCv6uU9w=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-+yU5JdPNS2BfiZLsBLyyC+ieVNqbIWba3teBlTIDWtk=";
+      hash = "sha256-YUTKyDpvTFq4GpOR8gdIBORyCYpoaSXeetIIW/R6fIo=";
     };
   };
 
