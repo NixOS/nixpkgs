@@ -6127,6 +6127,10 @@ self: super: with self; {
 
   ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
 
+  ffsubsync = callPackage ../development/python-modules/ffsubsync {
+    inherit (pkgs) ffmpeg;
+  };
+
   fhirpy = callPackage ../development/python-modules/fhirpy { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
