@@ -22878,6 +22878,8 @@ self: super: with self; {
 
   whisper = callPackage ../development/python-modules/whisper { };
 
+  whisper-timestamped = callPackage ../development/python-modules/whisper-timestamped { };
+
   whispers = callPackage ../development/python-modules/whispers { };
 
   whisperx = callPackage ../development/python-modules/whisperx {
