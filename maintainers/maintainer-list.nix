@@ -747,6 +747,13 @@
     githubId = 1773511;
     name = "Adrien Devresse";
   };
+  adevries17 = {
+    email = "andrew@andrewdevries.net";
+    github = "adevries17";
+    githubId = 63887471;
+    name = "Andrew DeVries";
+    keys = [ { fingerprint = "3435 D8D7 A412 1174 8660  4323 1C22 6419 DBB0 AEAD"; } ];
+  };
   adfaure = {
     email = "adfaure@pm.me";
     matrix = "@adfaure:matrix.org";
