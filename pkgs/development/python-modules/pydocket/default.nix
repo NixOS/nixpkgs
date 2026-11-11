@@ -25,15 +25,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.25.2";
+  version = "0.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "docket";
-    tag = finalAttrs.version;
-    hash = "sha256-xiA4VHRDPv3iMil/MjFezAQCqw6rsR1nHj9fdBzHEQk=";
+    tag = "python/v${finalAttrs.version}";
+    hash = "sha256-X9lOHTw5lvcklMgR0wRUcYJCI9qVhy2Bs2FXsCI8g84=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/python";
+
+  pythonRelaxDeps = [ "opentelemetry-api" ];
 
   build-system = [
     hatch-vcs

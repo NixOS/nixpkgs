@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
   oniguruma,
   openssl,
 }:
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    libgit2
     openssl
     oniguruma
   ];
