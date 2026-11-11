@@ -1,4 +1,5 @@
 {
+  aws-lc,
   buildFeatures ? [ ],
   buildNoDefaultFeatures ? false,
   buildPackages,
@@ -8,6 +9,7 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installShellFiles,
   lib,
+  libgit2,
   openssl,
   pkg-config,
   rustPlatform,
@@ -63,10 +65,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs =
-    lib.optional nativeTls openssl
-    # dbus is provided by vendors on windows
-    ++ lib.optional (notify && !stdenv.hostPlatform.isWindows) dbus';
+  buildInputs = [
+    aws-lc
+    libgit2
+  ]
+  ++ lib.optional nativeTls openssl
+  # dbus is provided by vendors on windows
+  ++ lib.optional (notify && !stdenv.hostPlatform.isWindows) dbus';
 
   buildFeatures =
     buildFeatures
