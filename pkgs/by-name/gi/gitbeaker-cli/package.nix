@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/jdalrymple/gitbeaker/releases/tag/${finalAttrs.version}";
     description = "CLI Wrapper for the @gitbeaker/rest SDK";
     homepage = "https://github.com/jdalrymple/gitbeaker";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ DimitarNestorov ];
     mainProgram = "gitbeaker";
     license = lib.licenses.mit;
   };
