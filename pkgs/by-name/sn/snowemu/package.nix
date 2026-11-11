@@ -21,7 +21,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snowemu";
-  version = "1.5.0";
+  version = "1.6.0";
 
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "twvd";
     repo = "snow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BA4uCuluSfIGXwBxE2X6Gke0ITsYEPzKoFDwx6jRYsk=";
+    hash = "sha256-aUHMITWs7zSFJBn1apg+y0/81KbBx0OneB9/Mh8Uy/M=";
     fetchSubmodules = true;
   };
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
-  cargoHash = "sha256-C7rCx0g77R+1f0la+j3pVW0bShGPdJD3btAIYg3yzMw=";
+  cargoHash = "sha256-w5l0dyisMrH+0CeG0P6cqD3ObSeD3cRE8CVPz4xXn/8=";
 
   env.CARGO_PROFILE_RELEASE_LTO = "fat";
 
