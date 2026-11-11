@@ -834,8 +834,8 @@ in
       "sha256-J2p2uFzOJXZuuZaKNMWzYW/zdx/VvxQj81cUxS1wTPU=";
 
   mypy-boto3-managedblockchain =
-    buildMypyBoto3Package "managedblockchain" "1.43.0"
-      "sha256-ZsalJBzTODl1ba6QA0bj/7rrZ70DNro4PUTfrowYepw=";
+    buildMypyBoto3Package "managedblockchain" "1.44.0"
+      "sha256-cMZuBKgQnenLH37cePepmUz0ro+HVFKhBzyP8+pZaE8=";
 
   mypy-boto3-managedblockchain-query =
     buildMypyBoto3Package "managedblockchain-query" "1.43.0"
