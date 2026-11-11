@@ -8,7 +8,6 @@
   dbus,
   libgcrypt,
   pam,
-  python3,
   glib,
   libxslt,
   gettext,
@@ -59,10 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     p11-kit
   ];
 
-  nativeCheckInputs = [
-    dbus
-    python3
-  ];
+  nativeCheckInputs = [ dbus ];
 
   mesonFlags = [
     # installation directories
@@ -72,20 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd=disabled"
   ];
 
-  # Tends to fail non-deterministically.
-  # - https://github.com/NixOS/nixpkgs/issues/55293
-  # - https://github.com/NixOS/nixpkgs/issues/51121
-  # - At least “gnome-keyring:gkm::xdg-store / xdg-trust” is still flaky on 48.beta.
-  doCheck = false;
+  doCheck = true;
   strictDeps = true;
 
   checkPhase = ''
     runHook preCheck
 
     export HOME=$(mktemp -d)
+    # The import test races its own teardown and aborts under load.
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
+      meson test --print-errorlogs --exclude gnome-keyring:import
 
     runHook postCheck
   '';
