@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smb1r";
-  version = "1.1-stable";
+  version = "1.1-26w28a";
 
   src = fetchFromGitHub {
     owner = "JHDev2006";
     repo = "Super-Mario-Bros.-Remastered-Public";
     tag = finalAttrs.version;
-    hash = "sha256-2js1i2hQRw9ZNkj7587EZzVOt3ylOVW3WOpIEA/72Fk=";
+    hash = "sha256-QxKm65kAs+zo/rjQHg7t8/Y1Pp0sUTkyB+p2nTGN5kw=";
   };
 
   __structuredAttrs = true;
