@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   curl,
   webkitgtk_4_1,
   libmicrohttpd,
@@ -23,6 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-n88PQgFqsYiFwngaz1LGicVszoiepafshZa5/DiNw3I=";
   };
+
+  patches = [
+    # Proposed to upstream https://github.com/indigo-dc/oidc-agent/pull/671
+    (fetchpatch {
+      name = "crypt-stdio.patch";
+      url = "https://github.com/indigo-dc/oidc-agent/commit/50c0c44815f0ca0076148de6f0034e4dc5ba4f5c.patch?full_index=1";
+      hash = "sha256-R7w+SvoVDD/OiGlhQxAiV5BUaEAxEUCGg6pE/0kzHhk=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
