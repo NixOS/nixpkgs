@@ -1,7 +1,7 @@
 let
   chap-secrets = {
     text = ''"flynn" * "reindeerflotilla" *'';
-    mode = "0640";
+    mode = "0600";
   };
 in
 { pkgs, ... }:
