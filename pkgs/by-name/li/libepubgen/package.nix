@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libepubgen";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/libepubgen/code";
     rev = "libepubgen-${finalAttrs.version}";
-    hash = "sha256-wPpU8Sfhx9GIgDmT/otT5yV4iQKm9QPZqgSBTfFcbbg=";
+    hash = "sha256-EzhUkxqW2rXX01l0B64Lyw/+qSWgEIUvHn430gKhpZM=";
   };
 
   nativeBuildInputs = [
