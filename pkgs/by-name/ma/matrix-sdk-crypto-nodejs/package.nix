@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-sdk-crypto-nodejs";
-  version = "0.6.6";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-rust-sdk-crypto-nodejs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-itTtLOLkqhcEQDmeVbYVokbTZw0xxdEi4BblIzY0iVY=";
+    hash = "sha256-942DqzcV5dT43LHB7ievB8j57hFWOm5eFQpzLapomM4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-sFN2V+Du7ZsN992E6btI0R5iGO9835+0z+Uxw4VzvoM=";
+    hash = "sha256-2Jr/aSodaT/0UWJEeaz2xrH4Vodw0ZvVk4e/SpVKyHA=";
   };
 
   nativeBuildInputs = [
