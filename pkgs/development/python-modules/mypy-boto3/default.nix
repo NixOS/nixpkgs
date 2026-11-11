@@ -958,8 +958,8 @@ in
       "sha256-gs9eGyRaZN7Fsl0D5fSqtTiYZ+Exp0s8QW/X8ZR7guA=";
 
   mypy-boto3-oam =
-    buildMypyBoto3Package "oam" "1.43.0"
-      "sha256-BUl/wnJKR3TB1YsTCLrJdEoH9Lz8DZ6H94STOOX8gkQ=";
+    buildMypyBoto3Package "oam" "1.44.0"
+      "sha256-ROzgOlpPC8J/c/LB+KX8K51ejz+llRXupUVeIHm+iaQ=";
 
   mypy-boto3-omics =
     buildMypyBoto3Package "omics" "1.43.123"
