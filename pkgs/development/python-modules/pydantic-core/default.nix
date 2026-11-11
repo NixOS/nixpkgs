@@ -7,7 +7,7 @@
   pytestCheckHook,
   hypothesis,
   inline-snapshot,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-run-parallel,
   pytest-timeout,
   pytest-mock,
@@ -64,7 +64,7 @@ let
       inline-snapshot
       pytest-timeout
       dirty-equals
-      pytest-benchmark
+      pytest-benchmark-stub
       pytest-mock
       pytest-run-parallel
       typing-inspection
