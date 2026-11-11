@@ -114,6 +114,18 @@ in
       '';
       type = lib.types.submodule {
         options = {
+          updateOnStart = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = ''
+              Whether to run `cscli hub update` in the setup step before the
+              service starts. Set to `false` for hermetic or air-gapped
+              deployments where the hub is unreachable: an unconditional
+              update there fails the setup script and the service never
+              starts. The daily `autoUpdateService` timer is unaffected.
+            '';
+          };
+
           collections = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = [ ];
@@ -721,9 +733,11 @@ in
               ) "cscli ${lib.toLower x} install ${argString cfg.hub.${x}}";
           in
           ''
-            echo "Updating hub..."
+            ${lib.optionalString cfg.hub.updateOnStart ''
+              echo "Updating hub..."
 
-            cscli hub update
+              cscli hub update
+            ''}
 
             echo "Installing resources..."
 
