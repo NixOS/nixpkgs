@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "libultrahdr";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SLhHiwuyHzVx/Kv+eBy8LzHTnShKXlJoszxZNPATbhs=";
   };
 
@@ -109,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Reference codec for the Ultra HDR format";
