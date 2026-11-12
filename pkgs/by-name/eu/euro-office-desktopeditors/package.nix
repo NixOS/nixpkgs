@@ -80,12 +80,17 @@ let
     pulseaudio
   ];
 
+  # Regular releases are tagged `v<version>` and ship assets named
+  # `<version>-0`, while hotfix releases (e.g. `9.3.5-2`) already include the
+  # build number in both the tag and the asset name.
+  sourceVersion = version: if lib.hasInfix "-" version then version else "${version}-0";
+
   derivation = stdenv.mkDerivation (finalAttrs: {
     pname = "euro-office-desktopeditors";
-    version = "9.3.5-2";
+    version = "9.3.6";
     src = fetchurl {
-      url = "https://github.com/Euro-Office/DesktopEditors/releases/download/v${finalAttrs.version}/euro-office-euro-office_${finalAttrs.version}_amd64.deb";
-      hash = "sha256-0ekoe/uSePacpynl3z0d0mD1iiZy9Qai76ZKS7Al5aQ=";
+      url = "https://github.com/Euro-Office/DesktopEditors/releases/download/v${finalAttrs.version}/euro-office-euro-office_${sourceVersion finalAttrs.version}_amd64.deb";
+      hash = "sha256-+AWZ9ArJEoEEYBiLkWVoiwise+4zcl/2W7XOuXxay4E=";
     };
 
     unpackPhase = ''
