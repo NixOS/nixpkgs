@@ -2,6 +2,7 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
+  nix-update-script,
 
   # nativeBuildInputs
   cmake,
@@ -121,6 +122,8 @@ clangStdenv.mkDerivation (finalAttrs: {
   + ''
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://zl-audio.github.io/plugins/zlcompressor/";
