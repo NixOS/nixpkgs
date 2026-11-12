@@ -1050,6 +1050,8 @@ with pkgs;
 
   gerrit_3_14 = callPackage ../by-name/ge/gerrit/3_14.nix { };
 
+  gerrit_3_15 = callPackage ../by-name/ge/gerrit/3_15.nix { };
+
   github-cli = gh;
 
   git-credential-aol = callPackage ../by-name/gi/git-credential-email/git-credential-aol { };
