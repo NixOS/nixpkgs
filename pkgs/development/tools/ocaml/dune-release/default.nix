@@ -41,15 +41,12 @@ let
 in
 buildDunePackage (finalAttrs: {
   pname = "dune-release";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/dune-release/releases/download/${finalAttrs.version}/dune-release-${finalAttrs.version}.tbz";
-    hash = "sha256-A0es0mk6aEMdKvweVfffkaezfgIi1DWAr3dLmNwGOTo=";
+    hash = "sha256-T5egUxBe6gukCXo77TH4/JNyjqSdkpKRLdLxuf8CaD8=";
   };
-
-  # Compatibility with opam-format 2.6
-  patches = [ ./opam-2_6.patch ];
 
   nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [
