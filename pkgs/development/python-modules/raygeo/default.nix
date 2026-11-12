@@ -2,11 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cargo,
-  rustc,
+
+  # build
+  pkg-config,
+  pyprojectVersionPatchHook,
   rustPlatform,
+  zstd,
+
+  # dependencies
   msgpack,
   numpy,
+
+  # test
   dejavu_fonts,
   makeFontsConf,
   pycairo,
@@ -15,27 +22,29 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "raygeo";
-  version = "1.68.0";
+  version = "1.76.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "barebaric";
     repo = "raygeo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MBy5lKXwAK+gobegNEKUdBLuh1br6z778wLMcYCqk0g=";
+    hash = "sha256-eTUM9mgt02i3e2g9kIaHCtPtetkSBGtBeMniwP/GH5U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-3LkEttV4JYGxtEmIZCtihE6LZRP0F0naitb19OARtB8=";
+    hash = "sha256-0TyUurWGFKHgLvrLJBRFZC/0vWaLf+SxE+lnHMMT3WI=";
   };
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    cargo
-    rustc
+    pyprojectVersionPatchHook
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   dependencies = [
     msgpack
