@@ -22,15 +22,15 @@ let
 in
 buildPythonPackage {
   pname = "motmetrics";
-  version = "${version}-unstable-2025-01-14";
+  version = "${version}-unstable-2026-07-17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cheind";
     repo = "py-motmetrics";
-    # Latest release is not compatible with pandas 2.0
-    rev = "c199b3e853d589af4b6a7d88f5bcc8b8802fc434";
-    hash = "sha256-DJ82nioW3jdIVo1B623BE8bBhVa1oMzYIkhhit4Z4dg=";
+    # Latest release (1.4.0) is not compatible with pandas >= 2.0
+    rev = "e5ae766fab03b804f485d7c95ee1809b94d32dcc";
+    hash = "sha256-B3uJ7q5r8eb17hHHVe81pKFI+RTwJ7rn5BT11sm20t0=";
   };
 
   build-system = [ setuptools ];
