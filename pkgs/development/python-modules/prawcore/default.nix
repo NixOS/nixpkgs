@@ -5,7 +5,7 @@
   betamax-serializers,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   mock,
   pytestCheckHook,
   requests,
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-tECZRx6VgyiJDKHvj4Rf1sknFqUhz3sDFEsAMOeB7/g=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   propagatedBuildInputs = [ requests ];
 
