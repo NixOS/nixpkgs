@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   absl-py,
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     "testsout"
   ];
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     absl-py
