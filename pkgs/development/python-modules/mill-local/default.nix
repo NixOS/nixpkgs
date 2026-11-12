@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "mill-local";
-  version = "0.5.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyMillLocal";
     tag = version;
-    hash = "sha256-t6nZ6KXX5GFIcdNIXyFxYtSjOuuUJmCekaBITNgcIkU=";
+    hash = "sha256-KlytsnjzeWJGF2k+vBhj75AMNxTfCiboF/xV7ROzSRs=";
   };
 
   buildInputs = [ setuptools_80 ];
