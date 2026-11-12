@@ -17,8 +17,10 @@
   nix-prefetch-git,
   cmake,
   span-lite,
+  srcOnly,
   gitUpdater,
   writeShellApplication,
+  zlib,
 }:
 let
   # NOTE: before changing the following fetches, see the updateScript below
@@ -52,13 +54,6 @@ let
     repo = "yamc";
     rev = "4e015a7e8eb0d61c34e6928676c8c78881a72d73";
     hash = "sha256-J5wAqF5yQ5KYArJJyKzaqscWsXq+KAPKXybYfVgasXs=";
-  };
-  # using nixpkgs zlib gives a linking error
-  zlib-src = fetchFromGitHub {
-    owner = "madler";
-    repo = "zlib";
-    rev = "216c70c020aa53f0c40920d155f808b6b59c9acb";
-    hash = "sha256-Sthd9RsydSLaITNlBp6g1X35WKZdS4h7gr0QhRqdGoI=";
   };
 in
 mkLibretroCore rec {
@@ -94,7 +89,7 @@ mkLibretroCore rec {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBRETRO-COMMON" "${libretro-common-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_EMBED-BINARIES" "${embed-binaries-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLM" "${glm.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZLIB" "${zlib-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZLIB" "${srcOnly zlib}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBSLIRP" "${libslirp.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PNTR" "${pntr-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FMT" "${fmt_12.src}")
