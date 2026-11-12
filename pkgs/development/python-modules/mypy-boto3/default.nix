@@ -1254,8 +1254,8 @@ in
       "sha256-YMIFaQlwLFdhp0iTzbNl5th4G3Yk0Mr4YGSknmkYiP0=";
 
   mypy-boto3-shield =
-    buildMypyBoto3Package "shield" "1.44.0"
-      "sha256-CJ+b3np7qbNFK8lPEg1QH2GOtvPyUp9GyBM052d0/BE=";
+    buildMypyBoto3Package "shield" "1.44.1"
+      "sha256-pHFTBer2vMktQFrSw7i16l3nDFmF1YqXvACWHklwbms=";
 
   mypy-boto3-signer =
     buildMypyBoto3Package "signer" "1.44.0"
