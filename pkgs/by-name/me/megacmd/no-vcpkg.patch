@@ -1,0 +1,40 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bb161de8..5fa97e79 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,7 +39,7 @@ execute_process(
+ )
+ endif()
+ 
+-if((NOT WIN32 OR BASH_VERSION_RESULT EQUAL 0) AND NOT EXISTS ${VCPKG_ROOT})
++if(VCPKG_ROOT AND (NOT WIN32 OR BASH_VERSION_RESULT EQUAL 0) AND NOT EXISTS ${VCPKG_ROOT})
+     message(STATUS "vcpkg will be cloned into ${VCPKG_ROOT}")
+     execute_process(
+         #TODO: have the same for windows ... or at least check if bash is available
+@@ -468,17 +468,19 @@ elseif(NOT WIN32)
+         DESTINATION "etc/sysctl.d"
+         )
+ 
+-    #Install vcpkg dynamic libraries in locations defined by GNUInstallDirs.
+-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+-        SET(vcpkg_lib_folder "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib/")
+-    else()
+-        SET(vcpkg_lib_folder "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/")
+-    endif()
+-    install(DIRECTORY "${vcpkg_lib_folder}"
++    if(VCPKG_ROOT)
++        #Install vcpkg dynamic libraries in locations defined by GNUInstallDirs.
++        if(CMAKE_BUILD_TYPE STREQUAL "Debug")
++            SET(vcpkg_lib_folder "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib/")
++        else()
++            SET(vcpkg_lib_folder "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/")
++        endif()
++        install(DIRECTORY "${vcpkg_lib_folder}"
+             DESTINATION ${CMAKE_INSTALL_LIBDIR}
+             FILES_MATCHING
+             PATTERN "lib*.so*"
+             PATTERN "*dylib*" #macOS
+             PATTERN "manual-link" EXCLUDE
+             PATTERN "pkgconfig" EXCLUDE)
++    endif()
+ endif() #not WIN32

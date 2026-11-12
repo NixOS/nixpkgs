@@ -1,0 +1,23 @@
+diff --git a/src/abagames/tf/stuckenemy.d b/src/abagames/tf/stuckenemy.d
+index a90d1f1003..cd20d291e6 100644
+--- a/src/abagames/tf/stuckenemy.d
++++ b/src/abagames/tf/stuckenemy.d
+@@ -217,11 +217,13 @@
+     cnt++;
+     int mp = 1;
+     int sen = SoundManager.Se.STUCK_BONUS;
+-    if (manager.mode == GameManager.Mode.EXTRA)
+-      if (stuckEnemies.pullInRatio >= 1)
+-	mp = 5;
+-      else
+-	sen = SoundManager.Se.STUCK_BONUS_PUSHIN;
++    if (manager.mode == GameManager.Mode.EXTRA) {
++      if (stuckEnemies.pullInRatio >= 1) {
++	mp = 5;
++      } else {
++	sen = SoundManager.Se.STUCK_BONUS_PUSHIN;
++      }
++    }
+     if (tumikiSet.fireScoreInterval > 0 &&
+ 	(cnt % tumikiSet.fireScoreInterval) == 0 &&
+ 	!field.checkHit(pos)) {

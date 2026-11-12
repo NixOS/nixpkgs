@@ -1,0 +1,31 @@
+__BEGIN_DECLS/__END_DECLS are BSD specific and not defined in musl
+glibc and uclibc had sys/cdefs.h doing it.
+
+Upstream-Status: Pending
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+
+Index: tcp_wrappers_7.6/tcpd.h
+===================================================================
+--- tcp_wrappers_7.6.orig/tcpd.h
++++ tcp_wrappers_7.6/tcpd.h
+@@ -11,7 +11,9 @@
+ #include <netinet/in.h>
+ #include <stdio.h>
+ 
+-__BEGIN_DECLS
++#ifdef __cplusplus
++extern "C" {
++#endif
+ 
+ /* Structure to describe one communications endpoint. */
+ 
+@@ -252,6 +254,8 @@ extern char *fix_strtok();
+ extern char *my_strtok();
+ #endif
+ 
+-__END_DECLS
++#ifdef __cplusplus
++}
++#endif
+ 
+ #endif

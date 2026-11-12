@@ -1,0 +1,13 @@
+diff --git a/lib/LANraragi/Utils/Vips.pm b/lib/LANraragi/Utils/Vips.pm
+index fba395e..0579bdc 100644
+--- a/lib/LANraragi/Utils/Vips.pm
++++ b/lib/LANraragi/Utils/Vips.pm
+@@ -20,7 +20,7 @@ my $glib_ffi = undef;
+ my $gobject_ffi = undef;
+ 
+ if (IS_UNIX) {
+-    my @vips_libs = find_lib(lib => [ 'vips', 'vips-42' ]);
++    my @vips_libs = find_lib(lib => [ 'vips', 'vips-42' ], libpath => '@vips_lib@');
+     my $lib_path;
+ 
+     if (@vips_libs) {

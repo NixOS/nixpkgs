@@ -1,0 +1,11 @@
+--- a/src/error-helpers.h
++++ b/src/error-helpers.h
+@@ -64,7 +64,7 @@
+       } \
+     catch (OCTAVE__EXECUTION_EXCEPTION& e) \
+       { \
+-        verror (e, __VA_ARGS__); \
++        c_verror (e, __VA_ARGS__); \
+       }
+ #endif
+ 

@@ -1,0 +1,15 @@
+diff --git a/src/app/observers/update-observer.tsx b/src/app/observers/update-observer.tsx
+index 7dd77aa..4a88a4f 100644
+--- a/src/app/observers/update-observer.tsx
++++ b/src/app/observers/update-observer.tsx
+@@ -30,8 +30,8 @@ export function UpdateObserver() {
+ 
+   const { data: updateCheckResult } = useQuery({
+     queryKey: [queryKeys.update.check],
+-    queryFn: async () => await window.api.checkForUpdates(),
+-    enabled: !remindOnNextBoot,
++    queryFn: async () => ({ files: [] }),
++    enabled: false,
+     refetchOnWindowFocus: false,
+     refetchOnMount: false,
+     staleTime: Infinity,

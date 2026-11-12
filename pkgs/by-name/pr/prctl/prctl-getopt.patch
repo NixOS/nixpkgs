@@ -1,0 +1,55 @@
+From 6745b6362681f57823a57575a7949bd510767ac4 Mon Sep 17 00:00:00 2001
+From: Mikael Voss <mvs@nyantec.com>
+Date: Wed, 23 Jul 2025 18:37:10 +0200
+Subject: [PATCH 1/2] Replace unsound use of EOF
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+While getopt_long returns -1 on error, EOF is an implementation‐defined
+negative integer constant that just happens to be defined as -1 by most
+C standard libraries.
+---
+ prctl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/prctl.c b/prctl.c
+index 38cbcd1..527584c 100644
+--- a/prctl.c
++++ b/prctl.c
+@@ -299,8 +299,8 @@ main(int argc, char **argv)
+ 		exit(1);
+ 	}
+ 	opterr = 0;
+-	while ((opt = getopt_long(argc, argv, "+qhv", longopts, 
+-					(int *) NULL)) != EOF) {
++	while ((opt = getopt_long(argc, argv, "+qhv", longopts,
++					(int *) NULL)) != -1) {
+ 		switch (opt) {
+ 		case 'u':
+ 			if (strcmp(optarg, "silent") == 0) {
+
+From 0c11b937c30e41e97c3fa852f6d65cd595bc193f Mon Sep 17 00:00:00 2001
+From: Mikael Voss <mvs@nyantec.com>
+Date: Wed, 23 Jul 2025 18:54:39 +0200
+Subject: [PATCH 2/2] Properly display invalid long options
+
+---
+ prctl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/prctl.c b/prctl.c
+index 527584c..4c1d632 100644
+--- a/prctl.c
++++ b/prctl.c
+@@ -375,8 +375,8 @@ main(int argc, char **argv)
+ 			break;
+ 
+ 		case '?':
+-			fprintf(stderr, "%s: invalid option - %c\n", 
+-					progname, optopt);
++			fprintf(stderr, "%s: invalid option: %s\n",
++					progname, argv[optind - 1]);
+ 			exit(1);
+ 			break;
+ 		}

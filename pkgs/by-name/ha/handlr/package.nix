@@ -1,0 +1,55 @@
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  shared-mime-info,
+  libiconv,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
+}:
+
+rustPlatform.buildRustPackage {
+  pname = "handlr";
+  version = "0.6.4-unstable-2021-08-28";
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "chmln";
+    repo = "handlr";
+    rev = "90e78ba92d0355cb523abf268858f3123fd81238";
+    hash = "sha256-wENhlUBwfNg/r7yMKa1cQI1fbFw+qowwK8EdO912Yys=";
+  };
+
+  cargoHash = "sha256-/Kk2vuFkgtHarLrjqc5PkRZL2pV1Y7Gb02mWwtaVpDI=";
+
+  nativeBuildInputs = [
+    installShellFiles
+    shared-mime-info
+  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  # shared-mime-info 2.5 aliased application/x-shellscript to text/x-shellscript
+  postPatch = ''
+    substituteInPlace src/common/mime_types.rs \
+      --replace-fail '"application/x-shellscript"' '"text/x-shellscript"'
+  '';
+
+  postInstall = ''
+    installShellCompletion \
+      --zsh  completions/_handlr \
+      --bash  completions/handlr \
+      --fish completions/handlr.fish
+  '';
+
+  meta = {
+    description = "Alternative to xdg-open to manage default applications with ease";
+    homepage = "https://github.com/chmln/handlr";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ artturin ];
+    mainProgram = "handlr";
+  };
+}

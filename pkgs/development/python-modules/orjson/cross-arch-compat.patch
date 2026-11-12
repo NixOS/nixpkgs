@@ -1,0 +1,59 @@
+From 7e2adf4811f9109f1bb35d8da46f1d0cb7e53183 Mon Sep 17 00:00:00 2001
+From: FlashOnFire_ <flashonfire@proton.me>
+Date: Thu, 9 Jul 2026 09:27:58 +0200
+Subject: [PATCH] Fix cross-compilation by checking target arch in build.rs
+
+Previously, build.rs used #[cfg(target_arch)] attributes which check
+the host architecture where the build script runs, not the target
+being compiled for. This caused AVX-512 features to be incorrectly
+enabled when cross-compiling from x86_64 to other architectures like
+riscv64, leading to compilation errors.
+
+Now uses CARGO_CFG_TARGET_ARCH environment variable to correctly
+detect the target architecture during cross-compilation.
+
+Co-authored-by: DavHau <hsngrmpf+github@gmail.com>
+---
+ build.rs | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/build.rs b/build.rs
+index 09b723e..4093c9e 100644
+--- a/build.rs
++++ b/build.rs
+@@ -11,14 +11,20 @@ fn main() {
+     #[allow(unused_variables)]
+     let is_64_bit_python = matches!(python_config.pointer_width, Some(64));
+ 
++    let target_arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap_or_default();
++    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap_or_default();
++
+     match python_config.implementation {
+         pyo3_build_config::PythonImplementation::CPython => {
+             println!("cargo:rustc-cfg=CPython");
+             if python_config.abi3 {
+                 println!("cargo:rustc-cfg=Py_LIMITED_ABI");
+             }
+-            #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
+-            if is_64_bit_python && !python_config.abi3 {
++
++            if (target_arch == "x86_64" || target_arch == "aarch64")
++                && is_64_bit_python
++                && !python_config.abi3
++            {
+                 println!("cargo:rustc-cfg=feature=\"inline_int\"");
+                 #[cfg(target_endian = "little")]
+                 println!("cargo:rustc-cfg=feature=\"inline_str\"");
+@@ -51,8 +57,7 @@ fn main() {
+     println!("cargo:rustc-check-cfg=cfg(Py_LIMITED_ABI)");
+     println!("cargo:rustc-check-cfg=cfg(PyPy)");
+ 
+-    #[cfg(all(target_arch = "x86_64", not(target_os = "macos")))]
+-    if is_64_bit_python {
++    if target_arch == "x86_64" && target_os != "macos" && is_64_bit_python {
+         println!("cargo:rustc-cfg=feature=\"avx512\"");
+     }
+ 
+-- 
+2.54.0
+

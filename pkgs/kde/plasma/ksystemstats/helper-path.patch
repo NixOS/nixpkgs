@@ -1,0 +1,10 @@
+diff --git a/plugins/gpu/IntelHelperLocation.h.cmake b/plugins/gpu/IntelHelperLocation.h.cmake
+index 6f9ba83..a252c1b 100644
+--- a/plugins/gpu/IntelHelperLocation.h.cmake
++++ b/plugins/gpu/IntelHelperLocation.h.cmake
+@@ -6,4 +6,4 @@
+ 
+ #pragma once
+ 
+-constexpr auto helperLocation = "@KDE_INSTALL_FULL_LIBEXECDIR@/ksystemstats_intel_helper";
++constexpr auto helperLocation = "/run/wrappers/bin/ksystemstats_intel_helper";

@@ -1,0 +1,66 @@
+Backport of [4bd630]: --without-tzdata on windows
+
+Upstream fixed this on core-9-0-branch in check-in fd06472ef41e1d73:
+https://core.tcl-lang.org/tcl/info/fd06472ef41e1d73
+
+This branch's `win` build system is older -- `configure.in` rather than
+`configure.ac`, and no `INSTALL_*` target variables to hang this off --
+so this is the same option rather than the same diff.
+
+--- a/win/configure.in
++++ b/win/configure.in
+@@ -457,6 +457,34 @@
+ AC_SUBST(MAKE_DLL)
+ AC_SUBST(MAKE_EXE)
+ 
++#--------------------------------------------------------------------
++#	Timezone data
++#--------------------------------------------------------------------
++
++AC_MSG_CHECKING([for timezone data])
++AC_ARG_WITH(tzdata,
++    AC_HELP_STRING([--with-tzdata],
++	[install timezone data (default: yes)]),
++    [tcl_ok=$withval], [tcl_ok=yes])
++#
++# Unlike on Unix there is no system copy to fall back on, so the default is
++# to install ours. Saying no is for a build that supplies the data by some
++# other means.
++#
++case $tcl_ok in
++    no)
++	AC_MSG_RESULT([supplied by other means])
++    ;;
++    yes)
++	AC_MSG_RESULT([supplied by Tcl])
++	INSTALL_TZDATA=install-tzdata
++    ;;
++    *)
++	AC_MSG_ERROR([invalid argument: $tcl_ok])
++    ;;
++esac
++AC_SUBST(INSTALL_TZDATA)
++
+ # empty on win, but needs sub'ing
+ AC_SUBST(TCL_BUILD_LIB_SPEC)
+ AC_SUBST(TCL_CC_SEARCH_FLAGS)
+--- a/win/Makefile.in
++++ b/win/Makefile.in
+@@ -176,6 +176,8 @@
+ # it can be required to run make dist.
+ TCL_EXE			= @TCL_EXE@
+ 
++INSTALL_TZDATA		= @INSTALL_TZDATA@
++
+ @SET_MAKE@
+ 
+ # Setting the VPATH variable to a list of paths will cause the Makefile to
+@@ -702,7 +704,7 @@
+ 	    $(COPY) $(REG_LIB_FILE) "$(LIB_INSTALL_DIR)/reg${REGDOTVER}"; \
+ 	    fi
+ 
+-install-libraries: libraries install-tzdata install-msgs
++install-libraries: libraries $(INSTALL_TZDATA) install-msgs
+ 	@for i in "$(prefix)/lib" "$(INCLUDE_INSTALL_DIR)" \
+ 		"$(SCRIPT_INSTALL_DIR)" "$(MODULE_INSTALL_DIR)"; \
+ 	    do \

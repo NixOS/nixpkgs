@@ -1,0 +1,50 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "xplr";
+  version = "1.2.2";
+
+  src = fetchFromGitHub {
+    owner = "sayanarijit";
+    repo = "xplr";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gW7+gaMSNZiSlZu45yNIXLrj8+wh9WTVnHs7hUFt4ps=";
+  };
+
+  cargoHash = "sha256-CmpiMRiif7fkJtcNHapWuY8p0QgIROzF4tXUQ8/1I7s=";
+
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp assets/desktop/xplr.desktop $out/share/applications
+
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp assets/icon/xplr.svg $out/share/icons/hicolor/scalable/apps
+
+    for size in 16 32 64 128; do
+      icon_dir=$out/share/icons/hicolor/''${size}x$size/apps
+      mkdir -p $icon_dir
+      cp assets/icon/xplr$size.png $icon_dir/xplr.png
+    done
+  '';
+
+  meta = {
+    description = "Hackable, minimal, fast TUI file explorer";
+    mainProgram = "xplr";
+    homepage = "https://xplr.dev";
+    changelog = "https://github.com/sayanarijit/xplr/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sayanarijit
+      suryasr007
+      mimame
+    ];
+  };
+})

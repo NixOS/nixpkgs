@@ -1,0 +1,111 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/zjgvbd2l57kn33qnngr17qdqsinwqhzl-source",
+      "rev": "46ecdd598dbafeb0e0ba38e87e6bc98b4637cd13",
+      "sha256": "1rsl8z2gsa0pqh4wx8dvdjf94b0wn4bfbvcq9bfcvc7qkmn96mkg",
+      "url": "https://github.com/disruptek/ups/archive/46ecdd598dbafeb0e0ba38e87e6bc98b4637cd13.tar.gz",
+      "ref": "0.4.0",
+      "packages": [
+        "ups"
+      ],
+      "srcDir": ""
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/sh8prqisw6dmi91hbi7c4x934vvgy46p-source",
+      "rev": "64f71af2fa4572c2bdf8987a56a427c1d88fc34f",
+      "sha256": "1slqsl9gj782hlfzpklxwdy0hip6hhykrk226xzq31sg40nfh9r6",
+      "url": "https://github.com/haltcase/glob/archive/64f71af2fa4572c2bdf8987a56a427c1d88fc34f.tar.gz",
+      "packages": [
+        "glob"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/z211zbzrd1808rpr5j8lgfzc7rqwqpbr-source",
+      "rev": "358c8969183dcf365cbc34f9c9c035da0f8c60c7",
+      "sha256": "1x2rp0wj048hvbrj7xkdm408adj16rr8wg4wdfynxxryl08vl30l",
+      "url": "https://github.com/disruptek/insideout/archive/358c8969183dcf365cbc34f9c9c035da0f8c60c7.tar.gz",
+      "ref": "0.1.0",
+      "packages": [
+        "insideout"
+      ],
+      "srcDir": ""
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/xpn694ibgipj8xak3j4bky6b3k0vp7hh-source",
+      "rev": "ec0cc6e64ea4c62d2aa382b176a4838474238f8d",
+      "sha256": "1fi9ls3xl20bmv1ikillxywl96i9al6zmmxrbffx448gbrxs86kg",
+      "url": "https://github.com/zevv/npeg/archive/ec0cc6e64ea4c62d2aa382b176a4838474238f8d.tar.gz",
+      "ref": "1.2.2",
+      "packages": [
+        "npeg"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/fclb7r25h7ldq4k8lrc9mc614nihyhp7-source",
+      "rev": "667736f52983239aa6b76a07605add23598362ca",
+      "sha256": "0y1a9p21hclrm2p3x018idrh4sk09hpr6csvcrnh5ka6baj6wj3k",
+      "url": "https://github.com/nim-works/cps/archive/667736f52983239aa6b76a07605add23598362ca.tar.gz",
+      "ref": "0.11.1",
+      "packages": [
+        "cps"
+      ],
+      "srcDir": ""
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/y6w1gzbf6i691z35rbn6kzrmf1n5bmdc-source",
+      "rev": "cb8b7bfdcdc2272aadf92153c668acd3c901bd6b",
+      "sha256": "1ggp5rvs217dv2n0p5ddm5h17pv2mc7724n8cd0b393kmsjiykhz",
+      "url": "https://github.com/nitely/nim-regex/archive/cb8b7bfdcdc2272aadf92153c668acd3c901bd6b.tar.gz",
+      "ref": "v0.25.0",
+      "packages": [
+        "regex"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/1mcck56sr1h1sf8gv87m761x6f3d1k0l-source",
+      "rev": "7c6ee4bfc184d7121896a098d68b639a96df7af1",
+      "sha256": "06j8d0bjbpv1iibqlmrac4qb61ggv17hvh6nv4pbccqk1rlpxhsq",
+      "url": "https://github.com/nitely/nim-unicodedb/archive/7c6ee4bfc184d7121896a098d68b639a96df7af1.tar.gz",
+      "ref": "v0.9.0",
+      "packages": [
+        "unicodedb"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/16fm03dql3pplz3ip40k0nbxw1gc0880-source",
+      "rev": "f5d50197b266173dd4ca4c6fdd30361398433bb4",
+      "sha256": "1cd3n9l45z60gpv0rc84v1ngkjxn0i45vz0lzy63052m7m0j2rks",
+      "url": "https://github.com/nitely/nim-unicodeplus/archive/f5d50197b266173dd4ca4c6fdd30361398433bb4.tar.gz",
+      "ref": "v0.9.1",
+      "packages": [
+        "unicodeplus"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/c4c1bbxd29gmjj543wma2sbya5wvw5yg-source",
+      "rev": "6845c68cf00c1546f49d628ae11334acba966bfb",
+      "sha256": "007bkx8dwy8n340zbp6wyqfsq9bh6q5ykav1ywdlwykyp1n909bh",
+      "url": "https://github.com/nitely/nim-segmentation/archive/6845c68cf00c1546f49d628ae11334acba966bfb.tar.gz",
+      "ref": "v0.1.0",
+      "packages": [
+        "segmentation"
+      ],
+      "srcDir": "src"
+    }
+  ]
+}

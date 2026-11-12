@@ -1,0 +1,13 @@
+diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
+index 4e8ee816b..ff1981d84 100644
+--- a/bindings/python/CMakeLists.txt
++++ b/bindings/python/CMakeLists.txt
+@@ -106,7 +106,7 @@ endif()
+ message(STATUS "Python 3 site packages: ${_PYTHON3_SITE_ARCH}")
+ message(STATUS "Python 3 extension suffix: ${Python3_SOABI}")
+ 
+-install(TARGETS python-libtorrent DESTINATION "${_PYTHON3_SITE_ARCH}")
++install(TARGETS python-libtorrent DESTINATION "\$ENV{DESTDIR}${_PYTHON3_SITE_ARCH}")
+ 
+ if (python-egg-info)
+ 	set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.cmake.in")

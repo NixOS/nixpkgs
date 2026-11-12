@@ -1,0 +1,13 @@
+diff --git a/setup.cfg b/setup.cfg
+index 3f97885..3b55c34 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -38,7 +38,7 @@ install_requires =
+   pytest-cov
+   pytest-repeat
+   pytest-rerunfailures
+-  setuptools>=30.3.0,<80
++  setuptools>=30.3.0
+   # toml is also supported but deprecated
+   tomli>=1.0.0; python_version < "3.11"
+ packages = find:

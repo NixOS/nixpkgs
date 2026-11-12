@@ -1,0 +1,81 @@
+#! /bin/sh -e
+
+url=$1
+rev=$2
+expHash=$3
+
+hashType=$NIX_HASH_ALGO
+if test -z "$hashType"; then
+    hashType=sha256
+fi
+if test -z "$hashFormat"; then
+    hashFormat=--base32
+fi
+
+if test -z "$url"; then
+    echo "syntax: nix-prefetch-svn URL [REVISION [EXPECTED-HASH]]" >&2
+    exit 1
+fi
+
+test -n "$rev" || rev="HEAD"
+
+repoName=$(echo $url | sed '
+  s,.*/\([^/]\+\)/trunk/*$,\1,;t
+  s,.*/\([^/]\+\)/branches/\([^/]\+\)/*$,\1-\2,;t
+  s,.*/\([^/]\+\)/tags/\([^/]\+\)/*$,\1-\2,;t
+  s,.*/\([^/]\+\)/*$,\1,;t
+')
+dstFile=$repoName-r$rev
+
+# If the hash was given, a file with that hash may already be in the
+# store.
+if test -n "$expHash"; then
+    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" $dstFile)
+    if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
+        finalPath=
+    fi
+    hash=$expHash
+fi
+
+
+# If we don't know the hash or a path with that hash doesn't exist,
+# download the file and add it to the store.
+if test -z "$finalPath"; then
+    # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+    # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+    tmpPath="$(realpath "$(mktemp -d --tmpdir svn-checkout-tmp-XXXXXXXX)")"
+    trap "rm -rf \"$tmpPath\"" EXIT
+
+    tmpFile="$tmpPath/$dstFile"
+
+    # Perform the checkout.
+    if test "$NIX_PREFETCH_SVN_LEAVE_DOT_SVN" != 1
+    then
+	command="export"
+    else
+	command="checkout"
+    fi
+
+    echo p | svn "$command" --quiet -r "$rev" "$url" "$tmpFile" >&2
+    echo "svn revision is $(svn info -r "$rev" "$url" | grep "Revision: " | cut -d' ' -f2)"
+
+    # Compute the hash.
+    hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
+    if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
+
+    # Add the downloaded file to the Nix store.
+    finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+
+    if test -n "$expHash" -a "$expHash" != "$hash"; then
+        echo "hash mismatch for URL \`$url'"
+        exit 1
+    fi
+fi
+
+if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
+
+echo $hash
+
+if test -n "$PRINT_PATH"; then
+    echo $finalPath
+fi

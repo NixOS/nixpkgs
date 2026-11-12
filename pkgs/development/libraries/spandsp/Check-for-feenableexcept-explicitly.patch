@@ -1,0 +1,132 @@
+From c0caa79a2aa6ac5b358f30719ff80ee2c6db51f7 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Mon, 3 Nov 2025 12:06:15 +0100
+Subject: [PATCH] Check for feenableexcept() explicitly
+
+musl provides <fenv.h>, but not the non-standard feenableexcept()
+function, so using feenableexcept() whenever <fenv.h> was present
+caused build failures on musl.  Instead, explicitly check for the
+non-standard function we want to use.
+---
+ configure.ac         | 2 +-
+ tests/v17_tests.c    | 6 +++---
+ tests/v27ter_tests.c | 6 +++---
+ tests/v29_tests.c    | 6 +++---
+ 4 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index fa87245..a8864d8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -186,6 +186,7 @@ AC_CHECK_FUNCS([strstr])
+ AC_CHECK_FUNCS([strtol])
+ AC_CHECK_FUNCS([gettimeofday])
+ AC_CHECK_FUNCS([drand48])
++AC_CHECK_FUNCS([feenableexcept])
+ 
+ AC_HEADER_SYS_WAIT
+ 
+@@ -209,7 +210,6 @@ AC_CHECK_HEADERS([sys/select.h])
+ AC_CHECK_HEADERS([sys/ioctl.h])
+ AC_CHECK_HEADERS([sys/fcntl.h])
+ AC_CHECK_HEADERS([sndfile.h])
+-AC_CHECK_HEADERS([fenv.h])
+ AC_CHECK_HEADERS([fftw3.h], , [AC_CHECK_HEADERS([fftw.h])])
+ AC_CHECK_HEADERS([pcap.h])
+ AC_CHECK_HEADERS([pthread.h])
+diff --git a/tests/v17_tests.c b/tests/v17_tests.c
+index 17c7fcb..411396c 100644
+--- a/tests/v17_tests.c
++++ b/tests/v17_tests.c
+@@ -59,7 +59,7 @@ display of modem status is maintained.
+ #include <string.h>
+ #include <sndfile.h>
+ #include <signal.h>
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+ #define __USE_GNU
+ #include <fenv.h>
+ #endif
+@@ -263,7 +263,7 @@ static void qam_report(void *user_data, const complexf_t *constel, const complex
+ }
+ /*- End of function --------------------------------------------------------*/
+ 
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+ static void sigfpe_handler(int sig_num, siginfo_t *info, void *data)
+ {
+     switch (sig_num)
+@@ -425,7 +425,7 @@ int main(int argc, char *argv[])
+     inhandle = NULL;
+     outhandle = NULL;
+ 
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+     fpe_trap_setup();
+ #endif
+ 
+diff --git a/tests/v27ter_tests.c b/tests/v27ter_tests.c
+index 14b06f8..f0559a4 100644
+--- a/tests/v27ter_tests.c
++++ b/tests/v27ter_tests.c
+@@ -58,7 +58,7 @@ display of modem status is maintained.
+ #include <string.h>
+ #include <sndfile.h>
+ #include <signal.h>
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+ #define __USE_GNU
+ #include <fenv.h>
+ #endif
+@@ -286,7 +286,7 @@ static void qam_report(void *user_data, const complexf_t *constel, const complex
+ }
+ /*- End of function --------------------------------------------------------*/
+ 
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+ static void sigfpe_handler(int sig_num, siginfo_t *info, void *data)
+ {
+     switch (sig_num)
+@@ -440,7 +440,7 @@ int main(int argc, char *argv[])
+     inhandle = NULL;
+     outhandle = NULL;
+ 
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+     fpe_trap_setup();
+ #endif
+ 
+diff --git a/tests/v29_tests.c b/tests/v29_tests.c
+index 390663f..7a43797 100644
+--- a/tests/v29_tests.c
++++ b/tests/v29_tests.c
+@@ -58,7 +58,7 @@ display of modem status is maintained.
+ #include <string.h>
+ #include <sndfile.h>
+ #include <signal.h>
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+ #define __USE_GNU
+ #include <fenv.h>
+ #endif
+@@ -257,7 +257,7 @@ static void qam_report(void *user_data, const complexf_t *constel, const complex
+ }
+ /*- End of function --------------------------------------------------------*/
+ 
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+ static void sigfpe_handler(int sig_num, siginfo_t *info, void *data)
+ {
+     switch (sig_num)
+@@ -410,7 +410,7 @@ int main(int argc, char *argv[])
+     inhandle = NULL;
+     outhandle = NULL;
+ 
+-#if defined(HAVE_FENV_H)
++#if defined(HAVE_FEENABLEEXCEPT)
+     fpe_trap_setup();
+ #endif
+ 
+-- 
+2.51.0
+

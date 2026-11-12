@@ -1,0 +1,61 @@
+diff --git a/spraycharles/lib/analyze.py b/spraycharles/lib/analyze.py
+index 537f6db..424f87e 100755
+--- a/spraycharles/lib/analyze.py
++++ b/spraycharles/lib/analyze.py
+@@ -4,7 +4,7 @@ from enum import Enum
+ from rich.table import Table
+ 
+ from spraycharles.lib.logger import console, logger
+-from spraycharles.lib.utils import discord, slack, teams, SMBStatus, SprayResult, HookSvc
++from spraycharles.lib.utils import discord, slack, SMBStatus, SprayResult, HookSvc
+ 
+ 
+ class Analyzer:
+@@ -210,8 +210,6 @@ class Analyzer:
+                     pass
+                 case HookSvc.SLACK:
+                     slack(self.webhook, self.host)
+-                case HookSvc.TEAMS:
+-                    teams(self.webhook, self.host)
+                 case HookSvc.DISCORD:
+                     discord(self.webhook, self.host)
+                 case _:
+diff --git a/spraycharles/lib/utils/__init__.py b/spraycharles/lib/utils/__init__.py
+index 59eda99..3615e4c 100644
+--- a/spraycharles/lib/utils/__init__.py
++++ b/spraycharles/lib/utils/__init__.py
+@@ -1,4 +1,4 @@
+-from spraycharles.lib.utils.notify import discord, teams, slack, HookSvc
++from spraycharles.lib.utils.notify import discord, slack, HookSvc
+ from spraycharles.lib.utils.ntlm_challenger import main as ntlm_challenger
+ from spraycharles.lib.utils.smbstatus import SMBStatus
+ from spraycharles.lib.utils.sprayresult import SprayResult
+diff --git a/spraycharles/lib/utils/notify.py b/spraycharles/lib/utils/notify.py
+index f39d10d..f0d62f9 100644
+--- a/spraycharles/lib/utils/notify.py
++++ b/spraycharles/lib/utils/notify.py
+@@ -1,12 +1,10 @@
+ from enum import Enum
+-import pymsteams
+ from discord_webhook import DiscordWebhook
+ import requests
+ 
+ 
+ class HookSvc(str, Enum):
+     SLACK   = "Slack"
+-    TEAMS   = "Teams"
+     DISCORD = "Discord"
+ 
+ 
+@@ -18,12 +16,6 @@ def slack(webhook, host):
+     response.raise_for_status()  # Raises an error for bad responses
+ 
+ 
+-def teams(webhook, host):
+-    notify = pymsteams.connectorcard(webhook)
+-    notify.text(f"Credentials guessed for host: {host}")
+-    notify.send()
+-
+-
+ def discord(webhook, host):
+     notify = DiscordWebhook(

@@ -1,0 +1,42 @@
+diff -ur dspam-3.10.2.orig/configure dspam-3.10.2/configure
+--- dspam-3.10.2.orig/configure	2012-04-24 02:53:49.000000000 +0900
++++ dspam-3.10.2/configure	2019-05-24 01:59:06.557890494 +0900
+@@ -13280,7 +13280,7 @@
+     #include <mysql.h>
+     #include <mysqld_error.h>
+     #include <errmsg.h>
+-    #if defined(PROTOCOL_VERSION) && defined(ER_LOCK_DEADLOCK) && defined(ER_LOCK_WAIT_TIMEOUT) && defined(ER_LOCK_OR_ACTIVE_TRANSACTION) && defined(CR_ERROR_FIRST)
++    #if defined(PROTOCOL_VERSION) && defined(ER_LOCK_DEADLOCK) && defined(ER_LOCK_WAIT_TIMEOUT) && defined(ER_LOCK_OR_ACTIVE_TRANSACTION) && defined(CR_MIN_ERROR)
+     /* Success */
+     #else
+     #error Unsupported version of MySQL
+@@ -13293,7 +13293,7 @@
+ 
+                 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "Unsupported version of MySQL (no PROTOCOL_VERSION or ER_LOCK_DEADLOCK or ER_LOCK_WAIT_TIMEOUT or ER_LOCK_OR_ACTIVE_TRANSACTION or CR_ERROR_FIRST defined)
++as_fn_error $? "Unsupported version of MySQL (no PROTOCOL_VERSION or ER_LOCK_DEADLOCK or ER_LOCK_WAIT_TIMEOUT or ER_LOCK_OR_ACTIVE_TRANSACTION or CR_MIN_ERROR defined)
+ See \`config.log' for more details" "$LINENO" 5; }
+                 mysql_headers_success=no
+ 
+diff -ur dspam-3.10.2.orig/m4/mysql_drv.m4 dspam-3.10.2/m4/mysql_drv.m4
+--- dspam-3.10.2.orig/m4/mysql_drv.m4	2011-08-17 07:38:30.000000000 +0900
++++ dspam-3.10.2/m4/mysql_drv.m4	2019-05-24 02:00:08.301217506 +0900
+@@ -80,7 +80,7 @@
+     #include <mysql.h>
+     #include <mysqld_error.h>
+     #include <errmsg.h>
+-    #if defined(PROTOCOL_VERSION) && defined(ER_LOCK_DEADLOCK) && defined(ER_LOCK_WAIT_TIMEOUT) && defined(ER_LOCK_OR_ACTIVE_TRANSACTION) && defined(CR_ERROR_FIRST)
++    #if defined(PROTOCOL_VERSION) && defined(ER_LOCK_DEADLOCK) && defined(ER_LOCK_WAIT_TIMEOUT) && defined(ER_LOCK_OR_ACTIVE_TRANSACTION) && defined(CR_MIN_ERROR)
+     /* Success */
+     #else
+     #error Unsupported version of MySQL 
+@@ -88,7 +88,7 @@
+             ]])],
+             [],
+             [
+-                AC_MSG_FAILURE([Unsupported version of MySQL (no PROTOCOL_VERSION or ER_LOCK_DEADLOCK or ER_LOCK_WAIT_TIMEOUT or ER_LOCK_OR_ACTIVE_TRANSACTION or CR_ERROR_FIRST defined)])
++                AC_MSG_FAILURE([Unsupported version of MySQL (no PROTOCOL_VERSION or ER_LOCK_DEADLOCK or ER_LOCK_WAIT_TIMEOUT or ER_LOCK_OR_ACTIVE_TRANSACTION or CR_MIN_ERROR defined)])
+                 mysql_headers_success=no
+             ])
+ fi

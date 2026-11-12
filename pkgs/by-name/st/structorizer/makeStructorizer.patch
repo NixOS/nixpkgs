@@ -1,0 +1,54 @@
+Reason: There is no StructorizerApplet.java anywhere in the source, no .cgt files and running the program in a headless environment fails. Besides, tests should be conducted in passthru.tests anyway. There is also no AppleStructorizerApplication.java, only the jar.
+
+diff --git a/makeStructorizer b/makeStructorizer
+index 99a5e8d3..e954be13 100644
+--- a/makeStructorizer
++++ b/makeStructorizer
+@@ -117,18 +117,6 @@ echo "Done"
+ echo; echo "Compiling Structorizer..."
+ javac $str_javac_opts -classpath "$str_classpath" Structorizer.java
+ echo "Done"
+-echo; echo "Compiling Structorizer Applet..."
+-javac $str_javac_opts -classpath "$str_classpath" StructorizerApplet.java
+-echo "Done"
+-
+-# OS specific classes
+-if test -n "$do_apple"; then
+-  echo; echo "Compiling Apple specific code..."
+-  javac $str_javac_opts -classpath "$str_classpath" lu/fisch/structorizer/application/AppleStructorizerApplication.java
+-  echo "Done"
+-else
+-  echo; echo "Apple specific code skipped"
+-fi
+ 
+ # copying some other files to binary tree
+ echo; echo "Copying resources..."
+@@ -147,7 +135,6 @@ cp lu/fisch/structorizer/gui/*.txt ../bin/lu/fisch/structorizer/gui/
+ cp lu/fisch/structorizer/gui/*.xml ../bin/lu/fisch/structorizer/gui/
+ cp lu/fisch/structorizer/locales/*.txt ../bin/lu/fisch/structorizer/locales/
+ cp lu/fisch/structorizer/generators/*.txt ../bin/lu/fisch/structorizer/generators/
+-cp lu/fisch/structorizer/parsers/*.cgt ../bin/lu/fisch/structorizer/parsers/
+ cp lu/fisch/structorizer/parsers/*.egt ../bin/lu/fisch/structorizer/parsers/
+ cp lu/fisch/structorizer/parsers/*.grm ../bin/lu/fisch/structorizer/parsers/
+ cp lu/fisch/structorizer/parsers/*.xsd ../bin/lu/fisch/structorizer/parsers/
+@@ -155,20 +142,5 @@ cp lu/fisch/structorizer/parsers/*.nsd ../bin/lu/fisch/structorizer/parsers/
+ cp lu/fisch/structorizer/*.properties ../bin/lu/fisch/structorizer/
+ echo "Done"
+ 
+-if test -n "$start_compiled"; then
+-
+-  # changing into binary directory
+-  cd ../bin/
+-
+-  # run the application
+-  echo; echo "Running Structorizer from compiled class files"
+-  if test "$start_compiled" = "s"; then
+-    java -cp $str_classpath Structorizer
+-  else
+-    java -cp $str_classpath Structorizer &
+-  fi
+-
+-fi  # start block end
+-
+ # move back into the folder where we started
+ popd >/dev/null

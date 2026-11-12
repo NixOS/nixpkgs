@@ -1,0 +1,40 @@
+--- a/platforms/unix/config/bin.squeak.sh.in
++++ b/platforms/unix/config/bin.squeak.sh.in
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ # Run the VM, setting SQUEAK_PLUGINS if unset to the VM's containing directory
+ # if unset, and ensuring LD_LIBRARY_PATH includes the VM's containing directory.
+-BIN=`/usr/bin/dirname "$0"`/../@expanded_relative_imgdir@
++BIN=`dirname "$0"`/../@expanded_relative_imgdir@
+ GDB=
+ if [ "${SQUEAK_PLUGINS-unset}" = unset ]; then
+        export SQUEAK_PLUGINS="$BIN"
+@@ -26,7 +26,7 @@ fi
+ # libc (e.g. through the FFI) then it must use the same version that the VM uses
+ # and so it should take precedence over /lib libc.  This is done by setting
+ # LD_LIBRARY_PATH appropriately, based on ldd's idea of the libc use by the VM.
+-LIBC_SO="`/usr/bin/ldd "$BIN/squeak" | /bin/fgrep /libc. | sed 's/^.*=> \([^ ]*\).*/\1/'`"
++LIBC_SO="`@glibc@/bin/ldd "$BIN/squeak" | @gnugrep@/bin/fgrep /libc. | sed 's/^.*=> \([^ ]*\).*/\1/'`"
+ PLATFORMLIBDIR=`expr "$LIBC_SO" : '\(.*\)/libc.*'`
+ 
+ if [ "$PLATFORMLIBDIR" = "" ]; then
+--- a/platforms/unix/config/squeak.sh.in
++++ b/platforms/unix/config/squeak.sh.in
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ # Run the VM, setting SQUEAK_PLUGINS if unset to the VM's containing directory
+ # if unset, and ensuring LD_LIBRARY_PATH includes the VM's containing directory.
+-BIN=`/usr/bin/dirname "$0"`/@expanded_relative_imgdir@
++BIN=`dirname "$0"`/@expanded_relative_imgdir@
+ GDB=
+ if [ "${SQUEAK_PLUGINS-unset}" = unset ]; then
+        export SQUEAK_PLUGINS="$BIN"
+@@ -26,7 +26,7 @@ fi
+ # libc (e.g. through the FFI) then it must use the same version that the VM uses
+ # and so it should take precedence over /lib libc.  This is done by setting
+ # LD_LIBRARY_PATH appropriately, based on ldd's idea of the libc use by the VM.
+-LIBC_SO="`/usr/bin/ldd "$BIN/squeak" | /bin/fgrep /libc. | sed 's/^.*=> \([^ ]*\).*/\1/'`"
++LIBC_SO="`@glibc@/bin/ldd "$BIN/squeak" | @gnugrep@/bin/fgrep /libc. | sed 's/^.*=> \([^ ]*\).*/\1/'`"
+ PLATFORMLIBDIR=`expr "$LIBC_SO" : '\(.*\)/libc.*'`
+ 
+ if [ "$PLATFORMLIBDIR" = "" ]; then

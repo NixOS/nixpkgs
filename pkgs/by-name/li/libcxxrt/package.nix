@@ -1,0 +1,57 @@
+{
+  lib,
+  stdenv,
+  overrideCC,
+  buildPackages,
+  stdenv' ?
+    if stdenv.hostPlatform.useLLVM or false then
+      overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
+    else
+      stdenv,
+  fetchFromGitHub,
+  cmake,
+  unstableGitUpdater,
+}:
+
+stdenv'.mkDerivation {
+  pname = "libcxxrt";
+  version = "4.0.10-unstable-2025-02-25";
+
+  src = fetchFromGitHub {
+    owner = "libcxxrt";
+    repo = "libcxxrt";
+    rev = "a6f71cbc3a1e1b8b9df241e081fa0ffdcde96249";
+    sha256 = "+oTjU/DgOEIwJebSVkSEt22mJSdeONozB8FfzEiESHU=";
+  };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  nativeBuildInputs = [ cmake ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  installPhase = ''
+    mkdir -p $dev/include $out/lib
+    cp ../src/cxxabi.h $dev/include
+    cp lib/libcxxrt${stdenv'.hostPlatform.extensions.library} $out/lib
+  '';
+
+  passthru = {
+    libName = "cxxrt";
+    updateScript = unstableGitUpdater { };
+  };
+
+  meta = {
+    homepage = "https://github.com/libcxxrt/libcxxrt";
+    description = "Implementation of the Code Sourcery C++ ABI";
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
+  };
+}

@@ -1,0 +1,52 @@
+--- a/port/linux/src/server_mode.c
++++ b/port/linux/src/server_mode.c
+@@ -16,6 +16,7 @@
+ #include "port_config.h"
+ #include "posix.h"
+ #include "server_mode.h"
++#include "xiso.h"
+ 
+ #if HALO_SERVER_BUILD
+ 
+@@ -166,6 +167,7 @@
+ 		"  --server         a dedicated server (docs/dedicated_server.md)\n"
+ 		"  --probe [<invite>]  prints the invite's game (or the LAN's first) as one line of JSON\n"
+ 		"  --config <file>  the settings file (else config.toml beside the executable)\n"
++		"  --extract-xiso <image> <destination>  extracts the Xbox maps without a display\n"
+ 		"  --keygen         writes a publisher key for the master servers and prints its public key\n"
+ 		"  --sign <text>    prints the publisher key's signature of the text (an application's proof)\n"
+ 		"  --version        prints the build and its network version\n");
+@@ -187,6 +189,23 @@
+ 		if (!strcmp(argument, "--help") || !strcmp(argument, "-h"))
+ 		{
+ 			print_help();
++			exit(EXIT_SUCCESS);
++		}
++		if (!strcmp(argument, "--extract-xiso"))
++		{
++			char image[4096], destination[4096], error[512];
++
++			if (!posix_command_line_argument(index + 1, image, sizeof(image)) ||
++				!posix_command_line_argument(index + 2, destination, sizeof(destination)))
++			{
++				fprintf(stderr, "Usage: opence --extract-xiso IMAGE DESTINATION\n");
++				exit(EXIT_FAILURE);
++			}
++			if (!xiso_extract_maps(image, destination, NULL, NULL, error, sizeof(error)))
++			{
++				fprintf(stderr, "%s\n", error);
++				exit(EXIT_FAILURE);
++			}
+ 			exit(EXIT_SUCCESS);
+ 		}
+ 		if (!strcmp(argument, "--keygen"))
+--- a/port/linux/src/port_config.c
++++ b/port/linux/src/port_config.c
+@@ -2321,6 +2321,7 @@
+ 	/* (a run that only answers its command line, halo --version, writes no
+ 	settings: the file read is left as it is) */
+ 	config_answer_only = config_argument("--help", NULL, 0) || config_argument("--version", NULL, 0) ||
++		config_argument("--extract-xiso", NULL, 0) ||
+ 		config_argument("--keygen", NULL, 0) || config_argument("--sign", NULL, 0) || config_probe_mode;
+ #endif
+ 	text = config_read_file(path, &size);

@@ -1,0 +1,26 @@
+diff --git a/ext/sass/Rakefile b/ext/sass/Rakefile
+index a36b11a..93f97cf 100644
+--- a/ext/sass/Rakefile
++++ b/ext/sass/Rakefile
+@@ -84,10 +84,18 @@ file File.absolute_path('node_modules/sass', ARCHDIR) do
+ end
+ 
+ task 'dart-sass' => (
+-  if SassConfig.dart_support?
+-    File.absolute_path('dart-sass/sass', ARCHDIR)
++  p ENV
++  if ENV.has_key?('DART_SASS_VENDORED')
++    mkdir_p ARCHDIR
++    cp_r ENV.fetch('DART_SASS_VENDORED'), File.absolute_path('dart-sass', ARCHDIR)
+   else
+-    File.absolute_path('node_modules/sass', ARCHDIR)
++    raise Errno::EINVAL, "no vendored SASS"
++    begin
++      SassConfig.dart_sass
++      File.absolute_path('dart-sass/sass', ARCHDIR)
++    rescue NotImplementedError
++      File.absolute_path('node_modules/sass', ARCHDIR)
++    end
+   end
+ )
+ 

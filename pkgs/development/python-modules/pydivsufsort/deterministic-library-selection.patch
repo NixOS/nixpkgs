@@ -1,0 +1,14 @@
+--- a/build.sh
++++ b/build.sh
+@@ -27,7 +27,9 @@
+ 
+ cd ..
+ 
+-# copy the two largest files, aka the dll of divsufsort and divsufsort64
+-mv $(du $OUTPATH* | sort -nr | head -n2 | cut -f2) pydivsufsort
++# copy the two largest files, aka the dll of divsufsort and divsufsort64.
++# Compare apparent sizes in bytes (-b), not allocated disk blocks: block usage
++# depends on the build filesystem and can rank a symlink above a library.
++mv $(du -b $OUTPATH* | sort -nr | head -n2 | cut -f2) pydivsufsort
+ rm -rf tempbuild
+ 
