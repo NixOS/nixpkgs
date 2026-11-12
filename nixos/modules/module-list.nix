@@ -1702,6 +1702,7 @@
   ./services/web-apps/bulwark.nix
   ./services/web-apps/c2fmzq-server.nix
   ./services/web-apps/calibre-web.nix
+  ./services/web-apps/casdoor.nix
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/chhoto-url.nix
   ./services/web-apps/cloudlog.nix

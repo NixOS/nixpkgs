@@ -397,6 +397,7 @@ in
   calibre-web = runTest ./calibre-web.nix;
   canaille = runTest ./canaille.nix;
   cardwire = runTest ./cardwire.nix;
+  casdoor = runTest ./casdoor.nix;
   cassandra = runTest {
     imports = [ ./cassandra.nix ];
     _module.args.getPackage = pkgs: pkgs.cassandra;

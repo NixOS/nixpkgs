@@ -1,4 +1,31 @@
 {
+  "module-services-casdoor": [
+    "index.html#module-services-casdoor"
+  ],
+  "module-services-casdoor-database": [
+    "index.html#module-services-casdoor-database"
+  ],
+  "module-services-casdoor-extra-configuration": [
+    "index.html#module-services-casdoor-extra-configuration"
+  ],
+  "module-services-casdoor-initial-data": [
+    "index.html#module-services-casdoor-initial-data"
+  ],
+  "module-services-casdoor-ldap-radius": [
+    "index.html#module-services-casdoor-ldap-radius"
+  ],
+  "module-services-casdoor-quickstart": [
+    "index.html#module-services-casdoor-quickstart"
+  ],
+  "module-services-casdoor-redis": [
+    "index.html#module-services-casdoor-redis"
+  ],
+  "module-services-casdoor-reverse-proxy": [
+    "index.html#module-services-casdoor-reverse-proxy"
+  ],
+  "module-services-casdoor-web-console": [
+    "index.html#module-services-casdoor-web-console"
+  ],
   "module-services-jellystat": [
     "index.html#module-services-jellystat"
   ],
