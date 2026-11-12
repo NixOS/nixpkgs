@@ -72,9 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://gwyddion.net/";
-
     description = "Scanning probe microscopy data visualization and analysis";
-
     longDescription = ''
       A modular program for SPM (scanning probe microscopy) data
       visualization and analysis. Primarily it is intended for the
