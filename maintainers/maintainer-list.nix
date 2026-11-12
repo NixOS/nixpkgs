@@ -2828,6 +2828,12 @@
     github = "Atemu";
     githubId = 18599032;
   };
+  athanclark = {
+    email = "athan.clark@gmail.com";
+    github = "athanclark";
+    githubId = 1534966;
+    name = "Athan Clark";
+  };
   athas = {
     email = "athas@sigkill.dk";
     github = "athas";
