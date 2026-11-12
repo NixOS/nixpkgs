@@ -1510,7 +1510,7 @@ CHECKSUMS
   zxcvbn (0.1.10) sha256=46e49a7cadcaab543b0073715341607ed99ffcacfc96d6f883bf1bfefaf0aaa5
 
 RUBY VERSION
-   ruby 3.4.11
+   ruby 3.4.12
 
 BUNDLED WITH
    2.7.2

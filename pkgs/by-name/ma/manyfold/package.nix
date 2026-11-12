@@ -9,6 +9,7 @@
   libarchive,
   nodejs_24,
   ruby_3_4,
+  runCommand,
   stdenvNoCC,
   writeTextDir,
   yarn-berry_3,
@@ -17,9 +18,12 @@
 let
   yarn-berry = yarn-berry_3;
   ruby = ruby_3_4;
+  lockfile = runCommand "Gemfile.lock" { } ''
+    sed -E 's/ruby [0-9]+\.[0-9]+\.[0-9]+/ruby ${ruby.version}/' ${./Gemfile.lock} > $out
+  '';
   gems = bundlerEnv {
     name = "manyfold-env";
-    inherit ruby;
+    inherit ruby lockfile;
     gemdir = ./.;
     gemset = lib.recursiveUpdate (import ./gemset.nix) {
       byebug.platforms = [ ];
@@ -51,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   prePatch = ''
     echo ${gems.ruby.version} >.ruby-version
-    cp -f ${./Gemfile.lock} Gemfile.lock
+    cp -f ${lockfile} Gemfile.lock
     chmod +w Gemfile.lock
 
     substituteInPlace app/lib/file_handlers/f3d_cli.rb \
