@@ -5,6 +5,8 @@
   cctools,
   fetchFromGitHub,
   gitMinimal,
+  runtimeShell,
+  which,
   gmp,
   cadical,
   leangz,
@@ -13,7 +15,11 @@
   pkg-config,
   libuv,
   enableMimalloc ? true,
+  ctestCheckHook,
+  coreutils,
   perl,
+  python3,
+  tzdata,
   versionCheckHook,
 
   # Official releases go up to `stage2`.  It should typically be enough to build `stage1`, but
@@ -45,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WjyIRo2BvfnNq13r+YSnTc6VaYupKJIsgfQhFBMa0aU=";
   };
 
+  patches = [
+    # Darwin's stdenv uses GNU sed and the GNU coreutils
+    ./macos-test-flags-gnu.patch
+  ];
+
   postPatch =
     let
       pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
@@ -56,16 +67,21 @@ stdenv.mkDerivation (finalAttrs: {
         stage0/src/CMakeLists.txt \
         stage0/src/runtime/CMakeLists.txt \
         --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
-    ''
-    # Remove tests that fails in sandbox.
-    # It expects `sourceRoot` to be a git repository.
-    + ''
-      rm -rf src/lake/examples/git/
-    '';
 
-  preConfigure = ''
-    patchShebangs stage0/src/bin/ src/bin/
-  '';
+      patchShebangs --build stage0/src/bin/ src/bin/ tests/
+
+      substituteInPlace src/lean.mk.in \
+        --replace-fail 'SHELL = /usr/bin/env bash' \
+                      'SHELL = ${runtimeShell}'
+
+      substituteInPlace src/lake/Lake/CLI/Check.lean \
+        --replace-fail 'cmd := "which"' \
+                      'cmd := "${lib.getExe which}"'
+
+      substituteInPlace tests/lake/tests/fake-bwrap.sh \
+        --replace-fail 'ENV_BIN=/usr/bin/env' \
+                      'ENV_BIN=${coreutils}/bin/env'
+    '';
 
   nativeBuildInputs = [
     cadical'
@@ -89,11 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/lean \
       --prefix PATH : ${cadical'}/bin
   '';
-
-  nativeCheckInputs = [
-    gitMinimal
-    perl
-  ];
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -129,6 +140,34 @@ stdenv.mkDerivation (finalAttrs: {
     "all"
     "stage${toString leanStage}"
   ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
+    perl
+    python3
+    tzdata
+  ];
+
+  ctestFlags = [
+    "--test-dir"
+    "stage${toString leanStage}"
+  ];
+
+  disabledTests = [
+    # Assumes we are in a git repo
+    "lint.py"
+
+    # Fails without network access
+    "elab/async_dns.lean"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails on Darwin
+    "elab/async_systems_info.lean"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  doCheck = true;
 
   installFlags = [
     "-C"

@@ -1,0 +1,42 @@
+diff --git a/tests/lake/tests/common.sh b/tests/lake/tests/common.sh
+index 6d2c7023a4..2f8d544145 100644
+--- a/tests/lake/tests/common.sh
++++ b/tests/lake/tests/common.sh
+@@ -29,15 +29,9 @@ LIB_PREFIX=lib
+ SHARED_LIB_EXT=so
+ fi
+ 
+-if [ "$UNAME" = Darwin ] || [ "$UNAME" = FreeBSD ]; then
+-  sed_i() { sed -i '' "$@"; }
+-  stat_ch() { stat -f %l -- "$1"; }
+-  TAIL=gtail
+-else
+-  sed_i() { sed -i "$@"; }
+-  stat_ch() { stat -c %h -- "$1"; }
+-  TAIL=tail
+-fi
++sed_i() { sed -i "$@"; }
++stat_ch() { stat -c %h -- "$1"; }
++TAIL=tail
+ 
+ if [ "$OS" = Windows_NT ]; then
+   norm_path() { cygpath -u "$1";  }
+diff --git a/tests/pkg/ver_clash/run_test.sh b/tests/pkg/ver_clash/run_test.sh
+index ee7b1ef6a4..fc81bdb67e 100644
+--- a/tests/pkg/ver_clash/run_test.sh
++++ b/tests/pkg/ver_clash/run_test.sh
+@@ -31,13 +31,7 @@ cd "$WORK_DIR"
+ # Since committing a Git repository to a Git repository is not well-supported,
+ # We reinitialize the repositories on each test.
+ 
+-# Stolen from the lake test suite
+-UNAME="$(uname)"
+-if [ "$UNAME" = Darwin ] || [ "$UNAME" = FreeBSD ]; then
+-  sed_i() { sed -i '' "$@"; }
+-else
+-  sed_i() { sed -i "$@"; }
+-fi
++sed_i() { sed -i "$@"; }
+ 
+ # Stolen from the lake test suite
+ init_git() {
