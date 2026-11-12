@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "certinfo";
-  version = "1.0.40";
+  version = "1.0.41";
 
   src = fetchFromGitHub {
     owner = "pete911";
     repo = "certinfo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2Feb2+7UJ+39waO9rFyT3ZDlEdS5s3uLuxUiDh4iuJE=";
+    sha256 = "sha256-ieqR/LkjQzKxycLTCIP5mGCrtDZcbqlcXmSzaIVp3zA=";
   };
 
   ldflags = [

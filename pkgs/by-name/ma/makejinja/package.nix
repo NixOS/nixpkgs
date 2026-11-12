@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "makejinja";
-  version = "2.9.1";
+  version = "2.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V6Xa+akL2sQlfdbIzpm77El7jgeWuPXgVwNLfExutVA=";
+    hash = "sha256-JoatQev0eQ9pHZCDkxDQDwgxovalc0uHyP172UDBr5U=";
   };
 
   build-system = with python3Packages; [ uv-build ];

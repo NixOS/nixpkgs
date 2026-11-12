@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "websocat";
-  version = "1.14.1";
+  version = "1.14.2";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "vi";
     repo = "websocat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ukz7qM6yT6LCdUxew8KhwTeEuz3JF7LOsoHKGM9rBmQ=";
+    hash = "sha256-dPlnY63oKG+ZJsgkWM+OQTl+rqQaM0gKVEDbR6YKRAY=";
   };
 
-  cargoHash = "sha256-taG+oi+9eh6CnhS7wKSxEzLXOtvVhtLT1D3EuS4AwWY=";
+  cargoHash = "sha256-qfMheEKUrNFhbY360u1gRz4UZVvT1Ad6uL+UQDiuwhs=";
 
   nativeBuildInputs = [
     pkg-config

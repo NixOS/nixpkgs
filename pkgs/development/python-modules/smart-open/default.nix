@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "smart-open";
-  version = "8.0.1";
+  version = "9.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "piskvorky";
     repo = "smart_open";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qr2GzmRDCCvR6Q/msSC8F2i8EDYmCIuQP8f593aIisI=";
+    hash = "sha256-aKXinZFw3tr4VXK/f9iPPa8N6WE4rr13GCw17rVAu0o=";
   };
 
   build-system = [

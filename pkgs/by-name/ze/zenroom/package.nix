@@ -48,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build/{embed-lualibs,meson_version.sh}
     patchShebangs test/
+
+    # test credentials in dcql.bats expired on 2026-10-31
+    # https://github.com/dyne/Zenroom/issues/1198
+    substituteInPlace build/meson.build \
+      --replace-fail \
+        "exclude = 'bindings_exec" \
+        "exclude = 'dcql bindings_exec"
   '';
 
   __structuredAttrs = true;
