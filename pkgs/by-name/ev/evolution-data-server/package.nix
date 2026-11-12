@@ -47,6 +47,7 @@
   protobuf,
   libiconv,
   makeHardcodeGsettingsPatch,
+  evolution,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -188,6 +189,9 @@ stdenv.mkDerivation (finalAttrs: {
         "org.gnome.desktop.interface" = "GDS";
       };
       inherit (finalAttrs) src patches;
+    };
+    tests = {
+      inherit evolution;
     };
     updateScript =
       let
