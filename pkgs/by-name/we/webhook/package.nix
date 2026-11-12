@@ -16,11 +16,14 @@ buildGoModule (finalAttrs: {
     hash = "sha256-P+uLVv0YMlTXrbWVapXRXc+VvQZxUiimLG0EX9tDxpM=";
   };
 
+  postPatch = ''
+    substituteInPlace webhook_test.go \
+      --replace-fail '/bin/echo' 'echo'
+  '';
+
   vendorHash = null;
 
   subPackages = [ "." ];
-
-  doCheck = false;
 
   passthru.tests = { inherit (nixosTests) webhook; };
 
