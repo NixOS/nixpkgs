@@ -10,7 +10,7 @@
 
   pandoc,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "typ2docx";
   version = "0.8.0";
   pyproject = true;
@@ -18,17 +18,17 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sghng";
     repo = "typ2docx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8Jb13qiS+dpyfJS4m2T6STzORs1VzRKwC8GGgEwiVtU=";
   };
 
   lockFile = fetchurl {
-    url = "https://github.com/sghng/typ2docx/releases/download/v${version}/Cargo.lock";
+    url = "https://github.com/sghng/typ2docx/releases/download/v${finalAttrs.version}/Cargo.lock";
     hash = "sha256-irWv7+uqNyyq42JVLSy9WQz78ynYVsYuQ8fk5nardWw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   postPatch = ''
-    ln -s ${lockFile} Cargo.lock
+    ln -s ${finalAttrs.lockFile} Cargo.lock
   '';
 
   nativeBuildInputs = [
@@ -80,9 +80,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Convert Math-Rich Typst Project to Microsoft Word Format";
     homepage = "https://github.com/sghng/typ2docx";
-    changelog = "https://github.com/sghng/typ2docx/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sghng/typ2docx/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hhr2020 ];
     mainProgram = "typ2docx";
   };
-}
+})
