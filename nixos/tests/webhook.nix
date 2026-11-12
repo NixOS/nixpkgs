@@ -21,6 +21,7 @@ in
 
         services.webhook = {
           enable = true;
+          hardening.enable = true;
           listenStream = toString internalPort;
           hooks = {
             echo = {
@@ -56,6 +57,7 @@ in
 
         services.webhook = {
           enable = true;
+          hardening.enable = true;
           listenStream = "/run/webhook/socket";
           hooks.echo = {
             execute-command = "echo";

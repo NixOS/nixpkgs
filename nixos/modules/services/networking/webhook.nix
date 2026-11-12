@@ -88,6 +88,47 @@ in
           If set, you must create this group yourself!
         '';
       };
+      hardening.enable = mkEnableOption ''
+        systemd hardening for the webhook systemd unit. Enabling this will
+        probably break some workflows.
+        The author of this option, quantenzitrone, recommends to have the
+        webhook touch a file in /run/webhook and then listen for changes on
+        that file with a systemd.path(5) unit that triggers a systemd.service(5)
+        of Type=oneshot. Like this:
+
+        ```nix
+          {
+            services.webhook = {
+              enable = true;
+              hardening.enable = true;
+
+              hooks.myhook = {
+                execute-command = pkgs.writeShellScript "trigger-myhook" "touch /run/webhook/myhook.trigger";
+                response = "successfully triggered myhook";
+              };
+            };
+
+            systemd.paths.myhook = {
+              description = "start myhook when /run/webhook/myhook.trigger changes";
+              pathConfig.PathModified = "/run/webhook/myhook.trigger";
+              wantedBy = [ "multi-user.target" ];
+            };
+
+            systemd.services.myhook = {
+              serviceConfig = {
+                Type = "oneshot";
+                # ...
+              };
+
+              script = '${""}'
+                # ...
+              '${""}';
+            };
+          }
+        ```
+
+        You can then harden each oneshot unit for each webhook separately for its specific needs.
+      '';
       listenStream = mkOption {
         type = types.str;
         default = "127.0.0.1:9000";
@@ -248,6 +289,36 @@ in
           ''
             ${cfg.package}/bin/webhook ${escapeShellArgs args}
           '';
+      }
+      // optionalAttrs cfg.hardening.enable {
+        ProtectSystem = "strict";
+        CapabilityBoundingSet = "";
+        RestrictAddressFamilies = "none";
+        RestrictNamespaces = true;
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources @privileged"
+        ];
+        ProtectHostname = true;
+        PrivateDevices = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        PrivateUsers = true;
+        PrivateNetwork = true;
+        ProtectClock = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
+        ProtectKernelTunables = true;
+        ProtectHome = true;
+        RemoveIPC = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        SystemCallArchitectures = "native";
       };
     };
   };
