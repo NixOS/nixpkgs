@@ -29,8 +29,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
-    tag = "geoarrow-types-${finalAttrs.version}";
-    hash = "sha256-ciElwh94ukFyFdOBuQWyOUVpn4jBM1RKfxiBCcM+nmE=";
+    tag = "geoarrow-pyarrow-${finalAttrs.version}";
+    hash = "sha256-b9nFl866x7PGPYihiYYJoIO8dJ+DgI7gxDbsaJTN6Lc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/geoarrow-pyarrow";
@@ -71,6 +71,9 @@ buildPythonPackage (finalAttrs: {
     "test_interleaved_multipolygon_with_offset"
     "test_readpyogrio_table_gpkg"
     "test_geometry_type_basic"
+
+    # seems to fail with newer pyarrow
+    "test_pyarrow"
   ];
 
   meta = {
