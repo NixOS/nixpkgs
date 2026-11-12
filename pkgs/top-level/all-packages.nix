@@ -2060,9 +2060,7 @@ with pkgs;
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
 
-  hyphen = callPackage ../development/libraries/hyphen { };
-
-  hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
+  hyphenDicts = recurseIntoAttrs (callPackages ../by-name/hy/hyphen/dictionaries.nix { });
 
   icepeak = haskell.lib.compose.justStaticExecutables haskellPackages.icepeak;
 
