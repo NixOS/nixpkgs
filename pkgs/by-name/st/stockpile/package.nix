@@ -11,17 +11,18 @@
   desktop-file-utils,
   appstream-glib,
   libadwaita,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stockpile";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromCodeberg {
     owner = "turtle";
     repo = "stockpile";
     tag = finalAttrs.version;
-    hash = "sha256-e8mBZyZFGtiDGsAb4kyNOzLNA9GIE6X8buRJj6DCbxM=";
+    hash = "sha256-6RYd1vhArdH4s68QOSIDVPQqX2w+Dsa8HLVxCKPzYWo=";
   };
 
   postPatch = ''
@@ -41,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ libadwaita ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Keep count of restockable items";
