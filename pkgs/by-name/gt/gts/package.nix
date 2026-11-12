@@ -4,6 +4,7 @@
   stdenv,
   pkg-config,
   autoreconfHook,
+  bashNonInteractive,
   gettext,
   glib,
   buildPackages,
@@ -29,8 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     glib # required to satisfy AM_PATH_GLIB_2_0
   ];
-  buildInputs = [ gettext ];
+  buildInputs = [
+    bashNonInteractive
+    gettext
+  ];
   propagatedBuildInputs = [ glib ];
+
+  strictDeps = true;
 
   env = {
     # Doesn't build on Darwin with -std=gnu23. Apply uniformly as C standard target is something unlikely to vary across platforms.
