@@ -251,7 +251,11 @@ in
       description = "ESPHome Device Builder";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ cfg.package ];
+      path = [
+        cfg.package
+        # ESP-IDF builds run ninja, which in nixpkgs spawns `sh` from PATH.
+        pkgs.bashNonInteractive
+      ];
 
       environment = {
         # Set PLATFORMIO_CORE_DIR to a real path (not a symlink) so PlatformIO

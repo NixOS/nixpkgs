@@ -139,6 +139,9 @@ in
         )
         assert host_sum == unit_sum, f"{host_sum} != {unit_sum}"
 
+    with subtest("sh resolves on the esphome unit's PATH"):
+        esphomeNixLd.succeed(in_esphome_unit(esphomeNixLd, "sh -c true"))
+
     with subtest("with nix-ld.enable = false the esphome unit keeps stub-ld"):
         output = esphomeUnix.fail(in_esphome_unit(esphomeUnix, f"{probe} 2>&1"))
         assert stub_ld_message in output, output
