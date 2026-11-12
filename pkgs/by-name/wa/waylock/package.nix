@@ -10,20 +10,20 @@
   wayland,
   wayland-scanner,
   wayland-protocols,
-  zig_0_16,
+  zig_0_17,
 }:
 let
-  zig = zig_0_16;
+  zig = zig_0_17;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromCodeberg {
     owner = "ifreund";
     repo = "waylock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A/XPgoon1J+fmEVUGuqvqbimRRDfLPkzkMYipPaKrfo=";
+    hash = "sha256-0KSiAGsvdQdod5WviQe4gxKxV/fHx+IJ1oF6wZa2qA0=";
   };
 
   postPatch = ''
