@@ -18074,7 +18074,7 @@ self: super: with self; {
 
   raydriver = callPackage ../development/python-modules/raydriver { };
 
-  raygeo = callPackage ../development/python-modules/raygeo { };
+  raygeo = callPackage ../development/python-modules/raygeo { inherit (pkgs) zstd; };
 
   raylib = callPackage ../development/python-modules/raylib { inherit (pkgs) raylib; };
 
