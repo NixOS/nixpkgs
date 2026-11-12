@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "daikhan";
-  version = "0.1-alpha5";
+  version = "0.1-alpha7";
 
   src = fetchFromGitLab {
     owner = "daikhan";
     repo = "daikhan";
     tag = finalAttrs.version;
-    hash = "sha256-pnvpjb/NqktZJJp3pkVpgYnJJzq+790CcmiVbDUQ4bs=";
+    hash = "sha256-6Y2+4WUrbtzHin0UhTy6Iw4J7eY1glZU9CCv2mv10gI=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/daikhan/daikhan";
     changelog = "https://gitlab.com/daikhan/daikhan/-/blob/${finalAttrs.version}/NEWS";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ samirbgno ];
     mainProgram = "daikhan";
     platforms = lib.platforms.linux;
   };
