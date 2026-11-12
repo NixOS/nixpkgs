@@ -5,6 +5,8 @@
   cctools,
   fetchFromGitHub,
   gitMinimal,
+  runtimeShell,
+  which,
   gmp,
   cadical,
   leangz,
@@ -13,7 +15,12 @@
   pkg-config,
   libuv,
   enableMimalloc ? true,
+  ctestCheckHook,
+  coreutils,
+  curl,
   perl,
+  python3,
+  tzdata,
   versionCheckHook,
 }:
 let
@@ -52,7 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   preConfigure = ''
-    patchShebangs stage0/src/bin/ src/bin/
+    chmod +x tests/lake/tests/samply/mock-samply.py
+    patchShebangs --build stage0/src/bin/ src/bin/ tests/
+
+    substituteInPlace src/lean.mk.in \
+      --replace-fail 'SHELL = /usr/bin/env bash' \
+                     'SHELL = ${runtimeShell}'
+
+    substituteInPlace src/lake/Lake/CLI/Check.lean \
+      --replace-fail 'cmd := "which"' \
+                     'cmd := "${lib.getExe which}"'
+
+    substituteInPlace tests/lake/tests/fake-bwrap.sh \
+      --replace-fail 'ENV_BIN=/usr/bin/env' \
+                     'ENV_BIN=${coreutils}/bin/env'
   '';
 
   nativeBuildInputs = [
@@ -77,11 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/lean \
       --prefix PATH : ${cadical'}/bin
   '';
-
-  nativeCheckInputs = [
-    gitMinimal
-    perl
-  ];
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -114,9 +129,34 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+  nativeCheckInputs = [
+    ctestCheckHook
+    curl # Needed by tests/lake/tests/samply/test.sh
+    perl
+    python3
+    tzdata
+  ];
+
+  ctestFlags = [
+    "--test-dir"
+    "stage1"
+    "--no-tests=error"
+  ];
+
+  disabledTests = [
+    # Assumes we are in a git repo
+    "lint.py"
+
+    # Fails without network access
+    "elab/async_dns.lean"
+  ];
+
+  doCheck = true;
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
   doInstallCheck = true;
 
   meta = {
