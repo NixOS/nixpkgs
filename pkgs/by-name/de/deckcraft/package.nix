@@ -20,6 +20,8 @@
   wayland,
   dbus,
   nix-update-script,
+  xcbuild,
+  rcodesign,
 }:
 
 let
@@ -61,6 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     patchelf
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    rcodesign
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
@@ -99,11 +105,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 packaging/linux/ai.storyteller.deckcraft.mime.xml $out/share/mime/packages/ai.storyteller.deckcraft.xml
-    mkdir -p $out/share/icons
-    cp -R assets/app-icon/hicolor $out/share/icons/
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 packaging/linux/ai.storyteller.deckcraft.mime.xml $out/share/mime/packages/ai.storyteller.deckcraft.xml
+      mkdir -p $out/share/icons
+      cp -R assets/app-icon/hicolor $out/share/icons/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      APP="$out/Applications/DeckCraft.app"
+
+      mkdir -p $APP/Contents/{MacOS,Resources}
+
+      ln -s $out/bin/deckcraft $APP/Contents/MacOS/DeckCraft
+
+      cp $NIX_BUILD_TOP/source/assets/app-icon/deckcraft.icns $APP/Contents/Resources/DeckCraft.icns
+
+      sed -e "s/@VERSION@/${finalAttrs.version}/g" -e "s/@SHORT_VERSION@/${finalAttrs.version}/g" \
+        -e "s/@BUILD_SHA@/unknown}/g" \
+        "$NIX_BUILD_TOP/source/packaging/macos/Info.plist.in" >"$APP/Contents/Info.plist"
+      plutil -lint "$APP/Contents/Info.plist"
+
+      printf 'APPL????' >"$APP/Contents/PkgInfo"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP/Contents/MacOS/DeckCraft"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP"
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${lib.makeLibraryPath runtimeDeps} $out/bin/deckcraft
