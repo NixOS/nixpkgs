@@ -43,6 +43,7 @@
   patch,
   rpm,
   attr,
+  versionCheckHook,
 }:
 
 let
@@ -52,7 +53,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak-builder";
-  version = "1.4.10";
+  version = "1.4.12";
 
   outputs = [
     "out"
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   # fetchFromGitHub fetches an archive which does not contain the full source (https://github.com/flatpak/flatpak-builder/issues/558)
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${finalAttrs.version}/flatpak-builder-${finalAttrs.version}.tar.xz";
-    hash = "sha256-sXIQeMBpfIyh19uWUjK1CdGqh/aLTa43jrUAvd3bnME=";
+    hash = "sha256-jVt5H3qESdao68/wyNar1TNRE/VnA79Xd+5MfbS9o3g=";
   };
 
   patches = [
@@ -144,6 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/flatpak-builder --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufLoadersCache}
     '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     installedTestsDependencies = [
       gnupg
@@ -164,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flatpak-builder";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
   };
 })
