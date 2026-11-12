@@ -5,7 +5,6 @@
   setuptools,
   mypy,
   pytestCheckHook,
-  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-xdist
   ];
 
   meta = {
