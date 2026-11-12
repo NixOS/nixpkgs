@@ -6,6 +6,7 @@
   symlinkJoin,
   cmake,
   ninja,
+  openssl,
   pathspec,
   pcre,
   scikit-build-core,
@@ -35,7 +36,15 @@ buildPythonPackage rec {
 
   env.CMAKE_ARGS = "-DHS_SRC_ROOT=${pkgs.hyperscan.src} -DHS_BUILD_LIB_ROOT=${lib-deps}/lib";
 
+  # hyperscan >= 5.4.2.1 uses OpenSSL for database HMAC, but libhs.a does not
+  # carry the dependency, so link the extension against libcrypto explicitly.
+  postPatch = ''
+    echo 'target_link_libraries(''${HS_EXT_NAME} PRIVATE crypto)' >> CMakeLists.txt
+  '';
+
   dontUseCmakeConfigure = true;
+
+  buildInputs = [ openssl ];
 
   build-system = [
     cmake
