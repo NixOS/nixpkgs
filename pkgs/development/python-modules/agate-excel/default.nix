@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "agate-excel";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wireservice";
     repo = "agate-excel";
     tag = finalAttrs.version;
-    hash = "sha256-sKy7NaRhJ4KYOOUKuNs0SGutUn8XEmSeQFQ/57gTGCg=";
+    hash = "sha256-5l27WJ6wJwd06l61SWPlWMj4X8bT3LvnQypisLvEXB0=";
   };
 
   build-system = [ setuptools ];
