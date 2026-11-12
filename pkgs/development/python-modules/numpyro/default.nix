@@ -25,6 +25,7 @@
   pytest-xdist,
   pytestCheckHook,
   scikit-learn,
+  tensorflow,
   tensorflow-probability,
 }:
 
@@ -61,6 +62,9 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     scikit-learn
+  ]
+  # tensorflow (required by tensorflow-probability) is not available for all python versions
+  ++ lib.optionals tensorflow.meta.available [
     tensorflow-probability
   ];
 
@@ -117,11 +121,26 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Not equal to tolerance rtol=0.06, atol=0
     "test_functional_map"
+  ]
+  ++ lib.optionals (!tensorflow.meta.available) [
+    # ImportError: Please install `tensorflow_probability>=0.18`
+    "test_cdf_and_icdf"
+    "test_left_truncated_cdf"
+    "test_no_tracer_leak_at_lazy_property_sample"
+    "test_output_is_array"
+    "test_right_truncated_cdf"
+    "test_two_sided_truncated_cdf"
   ];
 
   disabledTestPaths = [
     # Require internet access
     "test/test_example_utils.py"
+  ]
+  ++ lib.optionals (!tensorflow.meta.available) [
+    # Require tensorflow-probability
+    "test/contrib/hsgp/test_approximation.py"
+    "test/contrib/hsgp/test_spectral_densities.py"
+    "test/contrib/test_tfp.py"
   ];
 
   meta = {
