@@ -15,6 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.2";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dosfstools";
