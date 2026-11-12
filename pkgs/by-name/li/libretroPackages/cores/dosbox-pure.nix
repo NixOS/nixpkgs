@@ -20,6 +20,6 @@ mkLibretroCore {
   meta = {
     description = "Port of DOSBox to libretro aiming for simplicity and ease of use";
     homepage = "https://codeberg.org/schelling/dosbox-pure";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
   };
 }
