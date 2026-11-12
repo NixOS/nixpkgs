@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "hkdb";
     repo = "aerion";
     rev = "v${version}";
-    hash = "sha256-LeYOgP1aLWBB2lRkaBOMT3LfqXk0uuQxNnkKfooqWC8=";
+    hash = "sha256-0IErTyS47lQWBeSl05KCw1mYM/wbxphN8oImhdbraD4=";
   };
 
   frontend = buildNpmPackage {
@@ -30,7 +30,7 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-a4N34fzmFMZoafX1rXUyeSAm12uV7njfhRkq3KT8h+I=";
+    npmDepsHash = "sha256-wxQKRpzhDJE+vL099FowPGxaEMEi1mDIfdfwxTVWhlc=";
 
     buildPhase = ''
       npm run build

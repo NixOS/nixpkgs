@@ -14,6 +14,8 @@ buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
   version = "1.20.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
