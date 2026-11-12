@@ -48,6 +48,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail "${python3}" ""
   '';
 
+  # doesn't produce .dist-info/METADATA
+  dontCheckPythonMetadata = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gi-docgen";
