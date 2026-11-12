@@ -29,7 +29,7 @@ let
   loadersPath = "${gdk-pixbuf.binaryDir}/jxl-loaders.cache";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjxl";
   version = "0.13.0";
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fVT+HIAMpXnr12uNVI624SeD9oRhBTp+LPd6k30ZHwM=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
@@ -145,9 +145,7 @@ stdenv.mkDerivation rec {
     shopt -u extglob
 
     substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
-      --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
-    substituteInPlace CMakeLists.txt \
-      --replace 'sh$' 'sh( -e$|$)'
+      --replace-fail '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
   '';
 
   # Move `benchmark_xl` into a separate output to avoid a file collision
@@ -197,6 +195,8 @@ stdenv.mkDerivation rec {
     ".*bitSqueeze.*"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/libjxl/libjxl";
     description = "JPEG XL image format reference implementation";
@@ -204,4 +204,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = lib.platforms.all;
   };
-}
+})
