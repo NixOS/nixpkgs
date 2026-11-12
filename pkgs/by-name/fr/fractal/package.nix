@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "14.1";
+  version = "14.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "World";
     repo = "fractal";
     tag = finalAttrs.version;
-    hash = "sha256-GQdEa5JHXkpQdKcnzT4udZ0Cr4eJv4zoB7sknWnuGCI=";
+    hash = "sha256-AHksQ+DXIf/wFj/K24xbiT5Qr6tbzRHOLnCDMlAbTC0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-y3osmwhrB9x2s9V8L9qI1qs2fv2ygynq+mS+cA/KIyA=";
+    hash = "sha256-wRTXNnM8NscEjNbO7sXaO8LM1u2iuDYUtVuot7csBcg=";
   };
 
   patches = [
