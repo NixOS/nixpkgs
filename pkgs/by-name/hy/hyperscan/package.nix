@@ -8,19 +8,20 @@
   util-linux,
   pkg-config,
   boost,
+  openssl,
   pcre,
   withStatic ? false, # build only shared libs by default, build static+shared if true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyperscan";
-  version = "5.4.2";
+  version = "5.4.2.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "hyperscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tzmVc6kJPzkFQLUM1MttQRLpgs0uckbV6rCxEZwk1yk=";
+    hash = "sha256-6wfekQ4ySN+ejh8cGdFwZb2tOTYZxoZye3ROMsV4oYg=";
   };
 
   outputs = [
@@ -47,10 +48,38 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail \
         "cmake_minimum_required (VERSION 2.8.11)" \
-        "cmake_minimum_required (VERSION 3.10)" \
+        "cmake_minimum_required (VERSION 3.10)"
+  ''
+  # FAT_RUNTIME prefixes every global symbol not listed in keep.syms. Upstream
+  # adds libcrypto's symbols via `cc --print-file-name`, which cannot find the
+  # library in the Nix sandbox, so OpenSSL references get prefixed and fail to link.
+  + ''
+    substituteInPlace cmake/build_wrapper.sh \
+      --replace-fail \
+        'LIBCRYPTO_SO=$("$@" --print-file-name=libcrypto.so)' \
+        'LIBCRYPTO_SO=${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}'
+  ''
+  # unit-hyperscan calls these internal helpers, but shared builds use
+  # -fvisibility=hidden, so the test fails to link against libhs.so.
+  + ''
+    substituteInPlace src/database.h \
+      --replace-fail \
+        "void hs_db_free(void *ptr, size_t size);" \
+        "HS_PUBLIC_API void hs_db_free(void *ptr, size_t size);" \
+      --replace-fail \
+        "void hs_db_unprotect(void *ptr, size_t size);" \
+        "HS_PUBLIC_API void hs_db_unprotect(void *ptr, size_t size);"
+  ''
+  # hscollider (an uninstalled test tool, built only when pcre sources are
+  # present) includes util/hash_util.h, which upstream never committed.
+  + ''
+    rm tools/hscollider/CMakeLists.txt
   '';
 
-  buildInputs = [ boost ];
+  buildInputs = [
+    boost
+    openssl
+  ];
   nativeBuildInputs = [
     cmake
     ragel
