@@ -88,6 +88,7 @@ backendStdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [
+      _81reap
       GaetanLepage
       connorbaker
     ];
