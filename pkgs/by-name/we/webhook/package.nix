@@ -35,6 +35,7 @@ buildGoModule (finalAttrs: {
     description = "Incoming webhook server that executes shell commands";
     mainProgram = "webhook";
     homepage = "https://github.com/adnanh/webhook";
+    changelog = "https://github.com/adnanh/webhook/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.quantenzitrone ];
   };
