@@ -64,10 +64,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-h6Ta7HAs+50mSh8LII5Dpj3WZ5HGDYgSyMRibsqHwe4=",
+                    "hash": "sha256-rVdzfBmXpe5LBlfN6bH2xzXIUxR7fkA2GSug4pLRvsU=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v43.8.7"
+                    "tag": "v43.8.9"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1444,7 +1444,7 @@
         },
         "modules": "148",
         "node": "24.22.1",
-        "version": "43.8.7"
+        "version": "43.8.9"
     },
     "44": {
         "chrome": "152.0.7977.169",
