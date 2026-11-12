@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "htmlcxx";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ highghlow ];
   };
 })
