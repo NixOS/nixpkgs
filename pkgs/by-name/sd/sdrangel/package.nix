@@ -8,7 +8,6 @@
   cm256cc,
   cmake,
   codec2,
-  dab_lib,
   dsdcc,
   faad2,
   fetchFromGitHub,
@@ -20,6 +19,7 @@
   hidapi,
   ffmpeg,
   inmarsatc,
+  libacars,
   libiio,
   libogg,
   libopus,
@@ -57,6 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lnXTxuRzpfZNU10mytpw6EnfqiN5DZMGHT9k4LSEipQ=";
   };
 
+  # FindAptDec sets AptDec_FOUND but plugins/channelrx checks APT_FOUND,
+  # so the APT demodulator is silently skipped since 8.0.0
+  postPatch = ''
+    substituteInPlace cmake/Modules/FindAptDec.cmake \
+      --replace-fail "FIND_PACKAGE_HANDLE_STANDARD_ARGS(AptDec" "FIND_PACKAGE_HANDLE_STANDARD_ARGS(APT"
+  '';
+
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -74,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     cm256cc
     codec2
-    dab_lib
     dsdcc
     faad2
     ffmpeg
@@ -84,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     hackrf
     hidapi
+    libacars
     libbladeRF
     libiio
     libogg
@@ -121,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "APT_DIR" aptdec.outPath)
-    (lib.cmakeFeature "DAB_DIR" dab_lib.outPath)
+    (lib.cmakeFeature "LIBACARS_DIR" libacars.outPath)
     (lib.cmakeFeature "SGP4_DIR" sgp4.outPath)
     (lib.cmakeFeature "SOAPYSDR_DIR" soapysdr-with-plugins.outPath)
     (lib.cmakeBool "ENABLE_QT6" true)
