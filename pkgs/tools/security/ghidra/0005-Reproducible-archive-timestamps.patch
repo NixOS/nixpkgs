@@ -1,0 +1,10 @@
+diff --git a/build.gradle b/build.gradle
+--- a/build.gradle
++++ b/build.gradle
+@@ -80,5 +80,5 @@ allprojects {
+ allprojects {
+ 	tasks.withType(AbstractArchiveTask).configureEach {
+-		preserveFileTimestamps = true
++		preserveFileTimestamps = false
+ 	}
+ }
