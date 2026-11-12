@@ -53,6 +53,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       antoineco
       ethancedwards8
+      mdaniels5757
     ];
     mainProgram = "gh-stack";
   };
