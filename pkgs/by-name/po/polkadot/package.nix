@@ -4,6 +4,7 @@
   lib,
   nix-update-script,
   openssl,
+  zstd,
   pkg-config,
   protobuf,
   rocksdb,
@@ -62,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
 

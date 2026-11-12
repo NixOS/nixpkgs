@@ -1,8 +1,9 @@
 {
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   fetchPnpmDeps,
   lib,
+  writableTmpDirAsHomeHook,
   nixosTests,
   nodejs,
   pnpm_10,
@@ -10,7 +11,9 @@
   stdenvNoCC,
   testers,
 }:
-buildGoModule (finalAttrs: {
+# Stash build currently fails for Go 1.27
+# https://github.com/stashapp/stash/issues/7342
+buildGo126Module (finalAttrs: {
   pname = "stash";
   version = "0.31.1";
   appDate = "2026-04-13 01:48:00";
@@ -39,6 +42,9 @@ buildGoModule (finalAttrs: {
   ];
 
   subPackages = [ "cmd/stash" ];
+
+  # This should fix the error Message "failed to create modcache index dir: mkdir /homeless-shelter: permission denied"
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   postConfigure = ''
     cp -a ${finalAttrs.passthru.frontend} ui/v2.5/build

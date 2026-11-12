@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "flake8-bugbear";
-  version = "26.10.27";
+  version = "26.11.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8-bugbear";
     tag = version;
-    hash = "sha256-5TJtTikMmJPHx7h4euOYmu+DxM2TGpLwoyklrKndCGA=";
+    hash = "sha256-geiPStWS31/HlPfORjX9DKjhh9UecZlRON2+BZsuC4w=";
   };
 
   build-system = [ setuptools ];

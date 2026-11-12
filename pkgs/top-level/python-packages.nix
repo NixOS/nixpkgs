@@ -5420,6 +5420,8 @@ self: super: with self; {
 
   e2b-code-interpreter = callPackage ../development/python-modules/e2b-code-interpreter { };
 
+  e2b-dockerfile-utils = callPackage ../development/python-modules/e2b-dockerfile-utils { };
+
   e3-core = callPackage ../development/python-modules/e3-core { };
 
   e3-testsuite = callPackage ../development/python-modules/e3-testsuite { };
