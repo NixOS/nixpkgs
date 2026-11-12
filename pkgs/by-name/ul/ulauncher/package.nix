@@ -25,12 +25,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ulauncher";
-  version = "5.16.2";
+  version = "5.16.3";
   pyproject = true;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${finalAttrs.version}/ulauncher_${finalAttrs.version}.tar.gz";
-    hash = "sha256-WiKfURgMdW/aaNKtt2ThZT/vH0tfBa+gGzFjcl9q2qw=";
+    hash = "sha256-XNeqCdAFmgqmGiN3VvOYUuYCmlTlQyRKmW6w3qrdDRI=";
   };
 
   nativeBuildInputs = [
