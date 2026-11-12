@@ -5,8 +5,10 @@
   fetchFromGitHub,
   rustPlatform,
   pythonAtLeast,
+  pkgs,
 
   # buildInputs
+  aws-lc,
   openssl,
 
   # nativeBuildInputs
@@ -98,7 +100,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    (pkgs.__splicedPackages.zstd or pkgs.zstd)
   ];
 
   dependencies = [
@@ -162,6 +166,9 @@ buildPythonPackage (finalAttrs: {
     # TypeError: FFILanceTableProvider.__datafusion_table_provider__() missing 1 required positional
     # argument: 'session'
     "test_sql_query"
+
+    # AssertionError: the LanceDB native extension must use rustls ...
+    "test_native_extension_does_not_link_openssl"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # TypeError: Converting Pydantic type to Arrow Type: unsupported type

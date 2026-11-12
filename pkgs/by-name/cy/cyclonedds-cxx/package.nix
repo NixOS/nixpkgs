@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyclonedds-cxx";
-  version = "11.0.1";
+  version = "11.1.0";
 
   outputs = [
     "out"
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds-cxx";
     tag = finalAttrs.version;
-    hash = "sha256-O6jNvq8NcwLxL7zIDeNdh10XUJ9FjHb3HYfCCa38cyA=";
+    hash = "sha256-sTplnqRxVvui2YHcTMRjsbvKUxlPezyddS6AQWRbQi0=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -941,7 +941,10 @@ in
     # https://github.com/systemd/systemd/blob/v259.3/src/vmspawn/vmspawn.c#L2662
     # this service is used, for example, when NixOS is started via systemd-vmspawn
     systemd.services."sshd-vsock@" = mkIf config.services.openssh.enable {
-      serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
+      serviceConfig.ExecSearchPath = lib.makeBinPath [
+        config.services.openssh.package
+        cfg.package
+      ];
       overrideStrategy = "asDropin";
     };
 
