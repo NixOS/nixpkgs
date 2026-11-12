@@ -3,8 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  fetchNpmDeps,
-  cargo-tauri,
   glib-networking,
   gst_all_1,
   gtk3,
@@ -13,17 +11,23 @@
   libclang,
   libgbm,
   librsvg,
-  nodejs,
-  npmHooks,
+  sqlite,
+  libxkbcommon,
+  libx11,
+  libxrandr,
+  libxcb,
   openssl,
   pipewire,
   pkg-config,
-  webkitgtk_4_1,
   wrapGAppsHook4,
+  webkitgtk_4_1,
+  vulkan-loader,
+  wayland,
+  libglvnd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lookout";
-  version = "0.3.11";
+  version = "0.4.2";
 
   __structuredAttrs = true;
 
@@ -31,36 +35,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "hackclub";
     repo = "lookout";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WF+1nUX+JmYZIeXYLdO5FbTh52FbdL77ob0kYnHTgl0=";
+    hash = "sha256-nLTPchUIKnXosw/pKJnITrzdJLGbbabgqKK4vgsqEbY=";
   };
 
   patches = [ ./remove-updater.patch ];
 
-  cargoRoot = "clients/desktop/src-tauri";
+  cargoRoot = "clients/native";
   buildAndTestSubdir = finalAttrs.cargoRoot;
-  cargoHash = "sha256-eNVTOu1KyM0aJX3X5/YNq4W6EKa2dfSBn6NZRtEJWbA=";
-
-  # upstream src/window_shape.rs doctest embeds ASCII-art (┌───┐) that the
-  # rustdoc lexer rejects; the real unit/integration tests all pass
+  cargoHash = "sha256-I21uYvRICUW4uvp32s4xXcDbA2zJk0g0tqDawXxZfcM=";
+  cargoBuildFlags = [
+    "-p"
+    "lookout-native"
+  ];
   cargoTestFlags = [
-    "--lib"
-    "--bins"
-    "--tests"
+    "-p"
+    "lookout-native"
   ];
 
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
-    fetcherVersion = 2;
-    hash = "sha256-1BYF8hfXNctFi/KZYj3j1lbAa/qyXU+4fEI4nYjuhGY=";
-  };
-
   nativeBuildInputs = [
-    cargo-tauri.hook
-    libclang.lib
-    nodejs
-    npmHooks.npmConfigHook
     pkg-config
+    libclang.lib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
@@ -84,42 +78,35 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     pipewire
     webkitgtk_4_1
+    sqlite
+    vulkan-loader
+    wayland
+    libx11
+    libxrandr
+    libxcb
+    libxkbcommon
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # libappindicator-sys dlopens "libayatana-appindicator3.so.1" at runtime;
-    # hardpoint it to the store path so the tray icon resolves.
-    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
-      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-
-    # Drop beforeBuildCommand entirely: tauri would re-run the frontend
-    # build here, but nixpkgs already does it in preBuild.
-    substituteInPlace clients/desktop/src-tauri/tauri.conf.json \
-      --replace-fail '"beforeDevCommand": "npm run dev",' '"beforeDevCommand": "npm run dev"' \
-      --replace-fail '"beforeBuildCommand": "npm run build"' ""
-
-    # Neutralize the frontend background updater (30-min check + auto-install).
-    # The Rust plugin is gone, so `check()` would reject at runtime every
-    # launch; stub the hook to an idle phase instead. UpdatePill renders
-    # nothing for state === "idle", so the UI is unchanged.
-    cat > clients/desktop/src/hooks/useAppUpdate.ts <<'EOF'
-    export type UpdatePhase =
-      | { state: "idle" }
-      | { state: "downloading"; version: string; progress: number }
-      | { state: "ready"; version: string }
-      | { state: "installing"; version: string };
-
-    export function useAppUpdate(): { phase: UpdatePhase; restart: () => void } {
-      return { phase: { state: "idle" }, restart: () => {} };
-    }
-    EOF
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          vulkan-loader
+          wayland
+          libxkbcommon
+          libglvnd
+          libx11
+          libxcb
+        ]
+      }"
+    )
   '';
 
-  preBuild = ''
-    # npm workspaces: build deps in dependency order before `vite build`
-    npm run build -w @lookout/shared
-    npm run build -w @lookout/react
-    npm run build -w @lookout/desktop
+  postInstall = ''
+    install -Dm644 clients/native/packaging/linux/com.hackclub.lookout.desktop $out/share/applications/com.hackclub.lookout.desktop
+    install -Dm644 clients/native/assets/app-icon.png $out/share/icons/hicolor/128x128/apps/com.hackclub.lookout.png
+    substituteInPlace $out/share/applications/com.hackclub.lookout.desktop \
+      --replace "Exec=lookout" "Exec=$out/bin/lookout"
   '';
 
   meta = {
@@ -128,7 +115,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ cloudglides ];
     platforms = lib.platforms.linux;
-    mainProgram = "lookout-desktop";
+    mainProgram = "lookout";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })
