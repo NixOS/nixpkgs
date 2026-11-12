@@ -42,15 +42,15 @@ let
   isDarwin = stdenv.hostPlatform.isDarwin;
   supported = {
     x86_64-linux = {
-      hash = "sha256-og4lqDIo14VKViPEnwDDNzd4K/3eh0/v9Bf+LZtSwAI=";
+      hash = "sha256-hYBS0ckg+USN6+szaVK18to9HGhMRBfegZIW0AmUL94=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-m2ni6PnptPvNpPrzQvdWKkuUce9hBvAPlxbYCKgRdVg=";
+      hash = "sha256-NCIXuQ3mjWX4NIziy+qMg85CedawPipi+rX87NuYf0k=";
       arch = "linux-arm64";
     };
     aarch64-darwin = {
-      hash = "sha256-yiNgrk6+qnSqATx94D14OFlStIgHnF3NXiwL/AY9Yuo=";
+      hash = "sha256-NNKOx4gZvwhuRjtPPwGZwE5NLzifYyAFrqmZBgRezwo=";
       arch = "darwin-arm64";
     };
   };
@@ -63,7 +63,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.34.4";
+    version = "1.35.6";
   };
 
   nativeBuildInputs = [
