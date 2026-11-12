@@ -37,6 +37,6 @@ mkLibretroCore {
   meta = {
     description = "Port of Hatari to libretro";
     homepage = "https://github.com/libretro/hatari";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
   };
 }
