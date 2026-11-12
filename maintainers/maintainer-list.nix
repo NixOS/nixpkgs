@@ -5807,6 +5807,17 @@
     github = "uninsane";
     githubId = 106709944;
   };
+  colinxu2020 = {
+    email = "colinxu2020@gmail.com";
+    github = "colinxu2020";
+    githubId = 63941938;
+    name = "Xu Colin";
+    keys = [
+      {
+        fingerprint = "8135 7B65 4FBE F2AD 009C EB3A 30CA D8CC 8FD6 EE77";
+      }
+    ];
+  };
   collares = {
     email = "mauricio@collares.org";
     github = "collares";
