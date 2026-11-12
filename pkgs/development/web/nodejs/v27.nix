@@ -19,8 +19,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "27.0.0-alpha.0.0.0";
-  sha256 = "b603fcef5f1964bd37111d518eb275f1ebb6362a0fabb5bfaecb3234d4636a37";
+  version = "27.0.0-alpha.0.1.0";
+  sha256 = "01781f9193340d95c859c32150c71adb82ce79640117e6179003ea13f2cdf894";
   patches =
     (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
       url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
@@ -43,12 +43,6 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
-
-      # TODO: remove once included in a release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/d8e22bfdb2bf5f721453ca0b1670f98ef63f4e7f.patch?full_index=1";
-        hash = "sha256-xiwSpWMBgOiIMg1NmNGntkTztlfT6ai7h0LUlDpVvJA=";
-      })
     ]
     ++ gypPatches;
 }
