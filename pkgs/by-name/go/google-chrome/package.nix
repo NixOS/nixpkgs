@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   makeWrapper,
+  nixosTests,
   patchelf,
   stdenvNoCC,
   testers,
@@ -300,7 +301,10 @@ let
 
     passthru = {
       updateScript = ./update.sh;
-      tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+      tests = {
+        nixos = nixosTests.google-chrome;
+        version = testers.testVersion { package = finalAttrs.finalPackage; };
+      };
     };
   });
 
