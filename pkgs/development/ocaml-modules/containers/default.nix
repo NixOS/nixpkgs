@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   buildDunePackage,
   dune-configurator,
   either,
@@ -14,23 +13,15 @@
 }:
 
 buildDunePackage (finalAttrs: {
-  version = "3.16";
+  version = "3.18";
   pname = "containers";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WaHAZRLjaEJUba/I2r3Yof/iUqA3PFUuVbzm88izG1k=";
+    hash = "sha256-1h5Q0PPccd/3wMfV21OdMtcM6LNqEvQHMjEKLBlZsAA=";
   };
-
-  patches = [
-    # Compatibility with qcheck ≥ 0.26
-    (fetchpatch {
-      url = "https://github.com/c-cube/ocaml-containers/commit/3b49ad2a4e8cfe366d0588e1940d626f0e1b8a2d.patch";
-      hash = "sha256-LFe+LtpBBrf82SX57b4iQSvfd9tSXmnfhffjvjcfLpg=";
-    })
-  ];
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
