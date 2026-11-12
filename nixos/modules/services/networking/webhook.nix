@@ -41,6 +41,10 @@ let
 
 in
 {
+  meta.maintainers = [
+    lib.maintainers.quantenzitrone
+  ];
+
   options = {
     services.webhook = {
       enable = mkEnableOption ''
