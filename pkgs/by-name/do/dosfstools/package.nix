@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dosfstools/dosfstools/commit/8da7bc93315cb0c32ad868f17808468b81fa76ec.patch";
       sha256 = "sha256-Quegj5uYZgACgjSZef6cjrWQ64SToGQxbxyqCdl8C7o=";
     })
-    ./gettext-0.25.patch
   ];
 
   nativeBuildInputs = [
