@@ -62,6 +62,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     ln -sv . "$out/include/cccl"
   '';
 
+  passthru.tests.export = callPackage ./tests/export.nix { cccl = finalAttrs.finalPackage; };
+
   meta = {
     description = "Building blocks that make it easier to write safe and efficient CUDA C++ code";
     longDescription = ''
