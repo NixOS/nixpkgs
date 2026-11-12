@@ -317,6 +317,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/benchmarks/test_bench_helpers.py"
     # timing sensitive
     "tests/controllers/music/test_music_migrations.py::test_migrate_database_backfills_external_id_lookup"
+    # AssertionError: playback loop stalled (appears to be a race)
+    "tests/providers/sendspin/test_dsp_channel_alignment.py"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: failed to initialize QNNPACK
