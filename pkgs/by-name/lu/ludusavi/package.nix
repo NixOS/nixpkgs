@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  desktopToDarwinBundle,
   installShellFiles,
   cmake,
   pkg-config,
@@ -44,22 +45,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     pkg-config
     makeWrapper
-    wrapGAppsHook3
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ];
 
   buildInputs = [
-    gtk3
     bzip2
-    glib
     sqlite
     zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk3
+    glib
   ];
 
   postInstall = ''
     install -Dm644 assets/linux/com.mtkennerly.ludusavi.metainfo.xml -t \
       "$out/share/metainfo/"
+  ''
+  # desktopToDarwinBundle upscales any PNG it finds instead of rasterizing the SVG
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 assets/icon.png \
       "$out/share/icons/hicolor/64x64/apps/com.mtkennerly.ludusavi.png"
+  ''
+  + ''
     install -Dm644 assets/icon.svg \
       "$out/share/icons/hicolor/scalable/apps/com.mtkennerly.ludusavi.svg"
     install -Dm644 "assets/linux/com.mtkennerly.ludusavi.desktop" -t "$out/share/applications/"
@@ -85,8 +94,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libxcb
       ];
     in
-    ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf --add-rpath "${libPath}" "$out/bin/ludusavi"
+    ''
+    + ''
       wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ rclone ]} "''${gappsWrapperArgs[@]}"
     '';
 
@@ -100,5 +111,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       megheaiulian
     ];
     mainProgram = "ludusavi";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
