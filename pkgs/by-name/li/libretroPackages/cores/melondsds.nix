@@ -1,9 +1,8 @@
 {
   lib,
-  applyPatches,
   coreutils,
   fetchFromGitHub,
-  fmt_11,
+  fmt_12,
   gitMinimal,
   glm,
   gnugrep,
@@ -27,14 +26,14 @@ let
   melonDS-src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "melonDS";
-    rev = "7117178c2dd56df32b6534ba6a54ad1f8547e693";
-    hash = "sha256-6bwagPFIv87WtmQ3cl8cDZ/1A8Ab6itLHAr33CJy/Eo=";
+    rev = "16f127dbb587a73371827ce79689c5d237c4b59b";
+    hash = "sha256-55LrwWBPljMMoTOKsmZIBiVICFNm9Gr/GJlCvdKWUkA=";
   };
   libretro-common-src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "libretro-common";
-    rev = "ad9124f1ecc5d0092fd285cbf9c4ffac317b1a65";
-    hash = "sha256-YdKpiAZo3ZeJocskowEWnnmqGU1tSW7jxyxcsRNBsUM=";
+    rev = "fa8a1b572a444fcb552007019f8caf68281108aa";
+    hash = "sha256-kI0hHiEr64wKvMF4di3rUMwoM2dEjEzpSPHFNILj6oE=";
   };
   embed-binaries-src = fetchFromGitHub {
     owner = "andoalon";
@@ -45,8 +44,8 @@ let
   pntr-src = fetchFromGitHub {
     owner = "robloach";
     repo = "pntr";
-    rev = "922aed03c4c53803466100596211da7549945da7";
-    hash = "sha256-xlr5US4QttUDepp5kIbOALLMQM1fYQtn5mnwzDZq3HQ=";
+    rev = "a47fe167703b0ac3bfad00785b20b0dce6712509";
+    hash = "sha256-DWYL0TI1UetbUD0qr/f0VZSu1JJvrBzqqT+m6ZfWraw=";
   };
   yamc-src = fetchFromGitHub {
     owner = "yohhoy";
@@ -55,25 +54,22 @@ let
     hash = "sha256-J5wAqF5yQ5KYArJJyKzaqscWsXq+KAPKXybYfVgasXs=";
   };
   # using nixpkgs zlib gives a linking error
-  zlib-src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "madler";
-      repo = "zlib";
-      rev = "925af44f3cde53c6b076611c297850091b5dc7bb";
-      hash = "sha256-TkPLWSN5QcPlL9D0kc/yhH0/puE9bFND24aj5NVDKYs=";
-    };
-    patches = [ ./patches/melondsds-zlib-no-zconf-rename.patch ];
+  zlib-src = fetchFromGitHub {
+    owner = "madler";
+    repo = "zlib";
+    rev = "216c70c020aa53f0c40920d155f808b6b59c9acb";
+    hash = "sha256-Sthd9RsydSLaITNlBp6g1X35WKZdS4h7gr0QhRqdGoI=";
   };
 in
 mkLibretroCore rec {
   core = "melondsds";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "melonds-ds";
     tag = "v${version}";
-    hash = "sha256-DX08/1YJJD5SLcv7MIc+lkaKB5GVgiSGCRWN9ebZ6OE=";
+    hash = "sha256-bgtpomn/NnrxbuwSRfkWAcdG7AIZZAvTwK7sbveT3NM=";
   };
 
   postPatch = ''
@@ -101,7 +97,7 @@ mkLibretroCore rec {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZLIB" "${zlib-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBSLIRP" "${libslirp.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PNTR" "${pntr-src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FMT" "${fmt_11.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FMT" "${fmt_12.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAMC" "${yamc-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SPAN-LITE" "${span-lite.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DATE" "${howard-hinnant-date.src}")
