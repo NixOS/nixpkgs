@@ -11,11 +11,14 @@
   setuptools,
 
   # dependencies
+  datalab-capsule,
   fastapi,
   guidata,
+  jedi,
   numpy,
   packaging,
   pandas,
+  pip,
   plotpy,
   psutil,
   pydantic,
@@ -23,6 +26,7 @@
   scikit-image,
   scipy,
   sigima,
+  sigimax,
   uvicorn,
 
   # optional-dependencies
@@ -40,6 +44,7 @@
   sphinx-intl,
   sphinx-sitemap,
   sphinxcontrib-svg2pdfconverter,
+  sphinxext-opengraph,
   opencv-python-headless,
   pyinstaller,
   pyqt5,
@@ -49,6 +54,7 @@
   pytest,
   pytest-xvfb,
   pytestCheckHook,
+  pyyaml,
   versionCheckHook,
   websockets,
 
@@ -58,14 +64,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datalab-platform";
-  version = "1.2.2";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DataLab-Platform";
     repo = "DataLab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c9ze/Qw6FZ78JEkoQzJSESf/0tWvbL9wHuE2xlzKlv8=";
+    hash = "sha256-hbGXTjuSScPgC/nIocIqJWiO5w7DEjCGwh0+iNZTWk0=";
   };
 
   # NOTE: DataLab is compatible with qt6, but it's apparently not perfect as
@@ -87,11 +93,18 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    datalab-capsule
     fastapi
     guidata
+    jedi
     numpy
     packaging
     pandas
+    # pip is used only in an isolated child processes with `--isolated --no-index --target`
+    # to install pinned plugin wheels into a profile (`~/.config/.DataLab_v1/installed_plugins/`)
+    # leaving the nix store, and global pip directory untouched.
+    # Without this the plugin's functionality is diminished
+    pip
     plotpy
     psutil
     pydantic
@@ -99,6 +112,7 @@ buildPythonPackage (finalAttrs: {
     scikit-image
     scipy
     sigima
+    sigimax
     uvicorn
   ]
   ++ uvicorn.optional-dependencies.standard
@@ -128,6 +142,7 @@ buildPythonPackage (finalAttrs: {
       sphinx-intl
       sphinx-sitemap
       sphinxcontrib-svg2pdfconverter
+      sphinxext-opengraph
     ];
     exe = [
       opencv-python-headless
@@ -142,13 +157,6 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  pythonRelaxDeps = [
-    "guidata"
-    "numpy"
-    "plotpy"
-    "scipy"
-  ];
-
   pythonImportsCheck = [
     "datalab"
   ];
@@ -161,6 +169,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     httpx2
     pytestCheckHook
+    pyyaml
   ]
   ++ lib.optionals fullTestSuite [
     pytest-xvfb
