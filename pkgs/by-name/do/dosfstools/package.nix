@@ -64,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/dosfstools/dosfstools";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.quantenzitrone ];
+    maintainers = [
+      lib.maintainers.quantenzitrone
+      lib.maintainers.thunze
+    ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "dosfstools_project" finalAttrs.version;
   };
 })
