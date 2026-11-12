@@ -20514,6 +20514,8 @@ self: super: with self; {
 
   swh-model = callPackage ../development/python-modules/swh-model { };
 
+  swh-mosaic = callPackage ../development/python-modules/swh-mosaic { };
+
   swh-objstorage = callPackage ../development/python-modules/swh-objstorage { };
 
   swh-scanner = callPackage ../development/python-modules/swh-scanner { };
