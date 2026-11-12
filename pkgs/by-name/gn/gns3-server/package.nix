@@ -31,8 +31,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-jLDD2sVWwVBjXv6tvxyYDwo2wEdzoH5uUjXc0IpZSq0=";
   };
 
-  # GNS3 2.2 requires a static BusyBox for the Docker integration
-  prePatch = ''
+  # GNS3 2.2 requires a static BusyBox for the Docker integration (Linux-only)
+  prePatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     cp ${busybox-static}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
@@ -64,8 +64,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     rm $out/bin/gns3loopback
   '';
 
-  # util-linux (script program) is required for Docker support
-  makeWrapperArgs = [
+  # util-linux (script program) is required for Docker support (Linux-only)
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--suffix"
     "PATH"
     ":"
@@ -88,6 +88,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # fails on ofborg because of lack of cpu vendor information
     "tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
     "tests/controller/test_project.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Docker and IOU are only supported on Linux
+    "tests/compute/docker/test_docker_vm.py"
+    "tests/handlers/api/compute/test_capabilities.py"
+    "tests/handlers/api/compute/test_docker.py"
+    "tests/handlers/api/compute/test_iou.py"
   ];
 
   passthru = {
@@ -109,6 +116,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Graphical Network Simulator 3 server";
     longDescription = ''
@@ -119,7 +128,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://www.gns3.com/";
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3server";
   };
