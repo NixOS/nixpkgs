@@ -8,6 +8,7 @@
   npmHooks,
   pkg-config,
   rustPlatform,
+  sqlite,
   stdenv,
   webkitgtk_4_1,
   wrapGAppsHook4,
@@ -51,7 +52,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     webkitgtk_4_1
   ];

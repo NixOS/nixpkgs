@@ -94,7 +94,8 @@ lib.makeOverridable (
         maintainers = with lib.maintainers; [ ericson2314 ];
         platforms = lib.platforms.openbsd;
         license = lib.licenses.bsd2;
-      };
+      }
+      // attrs.meta or { };
     }
     // lib.optionalAttrs stdenv'.hasCC {
       # TODO should CC wrapper set this?
@@ -105,6 +106,9 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // lib.optionalAttrs stdenv'.hostPlatform.isStatic { NOLIBSHARED = true; }
-    // (removeAttrs attrs [ "extraNativeBuildInputs" ])
+    // (removeAttrs attrs [
+      "extraNativeBuildInputs"
+      "meta"
+    ])
   )
 )

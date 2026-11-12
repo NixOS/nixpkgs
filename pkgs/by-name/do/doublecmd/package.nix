@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Two-panel graphical file manager written in Pascal";
     license = lib.licenses.gpl2Plus;
     mainProgram = "doublecmd";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.gordon01 ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

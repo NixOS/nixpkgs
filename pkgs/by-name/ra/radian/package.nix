@@ -60,6 +60,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--set"
     "R_HOME"
     "${R}/lib/R"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${placeholder "out"}/${python3Packages.python.sitePackages}:${python3Packages.makePythonPath finalAttrs.propagatedBuildInputs}"
   ];
 
   preCheck = ''

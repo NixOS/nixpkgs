@@ -8,6 +8,7 @@
   texttable,
   tqdm,
   certifi,
+  nix-update-script,
   housekeeping,
   puremagic,
   pydiffx,
@@ -35,6 +36,10 @@ buildPythonPackage rec {
     tag = "release-${version}";
     hash = "sha256-Ci9lHlP2X95y7ldHBbqb5qWozPj3TJ0AxeVhqzVsdFA=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg --replace-fail "tag_build = .dev" "tag_build ="
+  '';
 
   build-system = [ setuptools ];
 
@@ -78,7 +83,15 @@ buildPythonPackage rec {
     "rbtools/clients/tests/test_scanning.py::ScanningTests::test_scanning_nested_repos_2"
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
+  };
+
   meta = {
+    changelog = "https://github.com/reviewboard/rbtools/blob/release-${version}/docs/releasenotes/${version}.rst";
     homepage = "https://www.reviewboard.org/docs/rbtools/dev/";
     description = "RBTools is a set of command line tools for working with Review Board and RBCommons";
     mainProgram = "rbt";

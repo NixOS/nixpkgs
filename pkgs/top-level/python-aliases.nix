@@ -98,6 +98,8 @@ mapAliases {
   aocd = throw "'aocd' has been renamed to 'advent-of-code-data'"; # Added 2026-10-10
   apkit = throw "apkit was removed because it is unmaintained upstream and different from apkit on PyPI"; # added 2025-09-13
   APScheduler = throw "'APScheduler' has been renamed to/replaced by 'apscheduler'"; # Converted to throw 2025-10-29
+  arelle = arelle-release; # added 2026-11-11
+  arelle-headless = throw "'arelle-headless' has been removed. Please use `.override { gui = false; }` to disable the GUI instead."; # added 2026-11-11
   argon2_cffi = throw "'argon2_cffi' has been renamed to/replaced by 'argon2-cffi'"; # Converted to throw 2025-10-29
   asmog = throw "'asmog' has been removed because the service it polled is offline and the library has been unmaintained since 2019"; # Added 2026-06-04
   aspell-python = aspell-python-py3; # added 2026-06-18
@@ -187,6 +189,7 @@ mapAliases {
   dataclasses-serialization = throw "'dataclasses-serialization' has been removed due to lack of upstream maintenance."; # added 2026-07-14
   dataprep-ml = throw "'dataprep-ml' has been removed due to lack of upstream maintenance."; # added 2026-11-02
   datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
+  datashaper = throw "'datashaper' has been removed due to being archived upstream and incompatible with pandas 3"; # added 2026-11-11
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   datauri = warnAlias "'datauri' has been renamed to by 'python-datauri'" python-datauri; # Added 2026-07-28
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29

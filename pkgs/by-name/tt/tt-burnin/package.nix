@@ -8,14 +8,14 @@
 # TODO: switch back to python3Packages once typish supports Python 3.14
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-burnin";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-burnin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZHc9qhOZE8fv/oj0bHGTyncZNT1mJtk1pFAPCRY4TtE=";
+    hash = "sha256-0eNeoLldVWiHUUND72TgpJ1gRq0Oxex7oFs2XVZsbeI=";
   };
 
   build-system = with python313Packages; [

@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/catppuccin/whiskers";
     description = "Templating tool to simplify the creation of Catppuccin ports";
