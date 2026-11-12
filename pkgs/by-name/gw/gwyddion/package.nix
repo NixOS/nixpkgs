@@ -2,10 +2,14 @@
   lib,
   stdenv,
   fetchurl,
-  gtk2,
+
+  # nativeBuildInputs
   pkg-config,
-  fftw,
   file,
+
+  # buildInputs
+  gtk2,
+  fftw,
   openexrSupport ? true,
   openexr,
   libzipSupport ? true,
