@@ -52,8 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     make clean
     popd
 
-    substituteInPlace src/Makefile --replace "./predicates_init" "./predicates_init_build"
+    substituteInPlace src/Makefile --replace-fail "./predicates_init" "./predicates_init_build"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gts.sourceforge.net/";
