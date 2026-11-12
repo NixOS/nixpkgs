@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cargo,
   rustc,
   rustPlatform,
@@ -18,14 +18,16 @@ buildPythonPackage (finalAttrs: {
   version = "1.68.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-HrWFyXg2MdpNSm+KyKoAVo5PSEfeNFShMS7N3n7HZzk=";
+  src = fetchFromGitHub {
+    owner = "barebaric";
+    repo = "raygeo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MBy5lKXwAK+gobegNEKUdBLuh1br6z778wLMcYCqk0g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-h8kwp7kK6qzrjjUBOa5wjn6oWSnMHFk/xqPAFtu0A7I=";
+    hash = "sha256-3LkEttV4JYGxtEmIZCtihE6LZRP0F0naitb19OARtB8=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +56,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "High-performance 2D/3D geometry library backed by Rust";
     homepage = "https://github.com/barebaric/raygeo";
+    changelog = "https://github.com/barebaric/raygeo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kanagawamarcos ];
   };
