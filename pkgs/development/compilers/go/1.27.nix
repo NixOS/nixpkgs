@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
+    # This patch is never used in tree, and very rarely out-of-tree. The one exception is in
+    # gomod2nix. ref. https://github.com/NixOS/nixpkgs/pull/109127 (patchfile in PR has more context)
     ./go_no_vendor_checks-1.27.patch
     ./go-env-go_ldso.patch
   ];
