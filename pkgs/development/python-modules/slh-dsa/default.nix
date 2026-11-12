@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pure Python implementation of the SLH-DSA algorithm";
     homepage = "https://github.com/colinxu2020/slhdsa";
-    license = lib.licenses.mit;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ prusnak ];
   };
 }
