@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
 
   # build-system
