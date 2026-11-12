@@ -219,10 +219,15 @@ lib.makeOverridable (
 
     patches =
       # kernelPatches can contain config changes and no actual patch
-      lib.filter (p: p != null) (map (p: p.patch) kernelPatches)
-      # Required for deterministic builds along with some postPatch magic.
-      ++ [
+      lib.filter (p: p != null) (map (p: p.patch) kernelPatches) ++ [
+        # Required for deterministic builds along with some postPatch magic.
         ./randstruct-provide-seed-5.19.patch
+
+        # We build inside of $dev, so architectures with uncompressed vmlinux as their build target (e.g. powerpc64[le]-linux)
+        # need to be *perfectly free* of debug information, otherwise we get a cyclic dependency between outputs.
+        # This ports some things from x86/riscv archs to powerpc, to get debuginfo-free purgatory & vDSOs.
+        # TODO: Should be submitted to LKML. *I* am not touching that place...
+        ./powerpc-strip-embedded-ELFs.patch
       ];
 
     buildFlags = [
