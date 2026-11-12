@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rssguard";
-  version = "5.2.5";
+  version = "5.3.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "martinrotter";
     repo = "rssguard";
     tag = finalAttrs.version;
-    hash = "sha256-Q1TRIBvFWrc2+TdlmsRCWkMM916VGbkXIWnQ6QREn/o=";
+    hash = "sha256-7ek0pISGqBfnhNjykJ6rdgmvlrP3SibjvDAQQ3TRbkg=";
     fetchSubmodules = true;
   };
 
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
         pname = "rssguard-article-extractor";
         inherit (finalAttrs) version src;
         modRoot = "resources/scripts/standalone/article-extractor";
-        vendorHash = "sha256-SUwNdHh9XAgX/2Jm0LK8kNjNZNu/1kRuk7/ew2WI3rg=";
+        vendorHash = "sha256-ZIiz6iOQ8twqMCLGTXB02mnraJ9ub1bn3otg5h6yQQM=";
       }).goModules;
     updateScript = nix-update-script { };
   };
