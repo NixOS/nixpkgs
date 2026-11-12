@@ -328,6 +328,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/comparators/test_macho.py"
     # OSError: AF_UNIX path too long
     "tests/comparators/test_sockets.py"
+    # Attempts a recursive call to pytestCheckHook
+    "tests/comparators/test_rpm.py"
   ];
 
   passthru = {
