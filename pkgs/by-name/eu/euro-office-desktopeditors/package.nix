@@ -88,10 +88,15 @@ let
   derivation = stdenv.mkDerivation (finalAttrs: {
     pname = "euro-office-desktopeditors";
     version = "9.3.6";
-    src = fetchurl {
-      url = "https://github.com/Euro-Office/DesktopEditors/releases/download/v${finalAttrs.version}/euro-office-euro-office_${sourceVersion finalAttrs.version}_amd64.deb";
-      hash = "sha256-+AWZ9ArJEoEEYBiLkWVoiwise+4zcl/2W7XOuXxay4E=";
-    };
+    src =
+      (fetchurl {
+        url = "https://github.com/Euro-Office/DesktopEditors/releases/download/v${finalAttrs.version}/euro-office-euro-office_${sourceVersion finalAttrs.version}_amd64.deb";
+        hash = "sha256-+AWZ9ArJEoEEYBiLkWVoiwise+4zcl/2W7XOuXxay4E=";
+      })
+      // {
+        # Hint for nix-update, only consider stable releases
+        tag = "refs/tags/v${finalAttrs.version}";
+      };
 
     unpackPhase = ''
       mkdir -p source
@@ -199,6 +204,9 @@ in
 # Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv (finalAttrs: {
   inherit (derivation) pname version;
+
+  # Expose the source on the wrapper for nix-update
+  src = derivation.src;
 
   targetPkgs = pkgs': [
     curl
