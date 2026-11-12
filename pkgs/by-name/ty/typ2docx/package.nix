@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
+    click
     pdf2docx
     pdfservices-sdk
     pypdf
