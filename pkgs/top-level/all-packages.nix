@@ -2461,9 +2461,7 @@ with pkgs;
 
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
-  optifinePackages = callPackage ../tools/games/minecraft/optifine { };
-
-  optifine = optifinePackages.optifine-latest;
+  optifinePackages = callPackage ../by-name/op/optifine { };
 
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
