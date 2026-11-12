@@ -11,8 +11,8 @@
   },
   {
     "pname": "FCastSenderSDKDotnet",
-    "version": "0.0.7",
-    "hash": "sha256-/eHsYJd+7cqDVMW+XiKBPBrjR+eVLUpYazb96Bh3fac="
+    "version": "0.1.0",
+    "hash": "sha256-bVH39y8ZORginy/Zvf7mXNoOvSkx5VqdhYlxl8x091E="
   },
   {
     "pname": "Fizzler",
@@ -233,6 +233,11 @@
     "pname": "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl",
     "version": "4.3.0",
     "hash": "sha256-SrHqT9wrCBsxILWtaJgGKd6Odmxm8/Mh7Kh0CUkZVzA="
+  },
+  {
+    "pname": "runtime.linux-arm64.Microsoft.DotNet.ILCompiler",
+    "version": "8.0.33",
+    "hash": "sha256-Nqn16qXGa1LABaBTvTJKRQpedPPlFt4QFdakMVSQE90="
   },
   {
     "pname": "runtime.native.System",
