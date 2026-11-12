@@ -30334,6 +30334,11 @@
     github = "Trundle";
     githubId = 332418;
   };
+  trvorth = {
+    name = "CarefulRattleSnake";
+    github = "trvorth";
+    githubId = 209536500;
+  };
   tsandrini = {
     email = "t@tsandrini.sh";
     name = "Tomáš Sandrini";
