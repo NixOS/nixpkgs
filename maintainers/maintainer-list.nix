@@ -6950,6 +6950,11 @@
     githubId = 225436867;
     matrix = "@debtquity:matrix.org";
   };
+  debugactiveprocess = {
+    name = "Ialle Teixeira";
+    github = "debugactiveprocess";
+    githubId = 49375302;
+  };
   declan = {
     name = "Declan Rixon";
     email = "declan.fraser.rixon@gmail.com";
