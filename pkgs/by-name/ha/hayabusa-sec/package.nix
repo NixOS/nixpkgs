@@ -5,6 +5,7 @@
   makeWrapper,
   nix-update-script,
   pkg-config,
+  libgit2,
   openssl,
   rust-jemalloc-sys,
 }:
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
     rust-jemalloc-sys # transitive dependency via the hayabusa-evtx crate
   ];
