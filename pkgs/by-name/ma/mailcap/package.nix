@@ -20,7 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     urls = [
       "https://releases.pagure.org/mailcap/mailcap-${finalAttrs.version}.tar.xz"
-      "https://distfiles.alpinelinux.org/distfiles/v3.17/mailcap-${finalAttrs.version}.tar.xz"
+      "https://distfiles.alpinelinux.org/distfiles/v3.25/mailcap-${finalAttrs.version}.tar.xz"
+      "https://web.archive.org/web/20260824140020/https://releases.pagure.org/mailcap/mailcap-${finalAttrs.version}.tar.xz"
     ];
     hash = "sha256-mkAyIC/A0rCFj0GxZzianP5SrCTsKC5kebkHZTGd4RM=";
   };
