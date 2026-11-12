@@ -1,12 +1,7 @@
 {
   lib,
-  alsa-lib,
   fetchFromGitHub,
-  libGL,
-  libGLU,
   mkLibretroCore,
-  portaudio,
-  libx11,
 }:
 mkLibretroCore {
   core = "same_cdi";
@@ -18,14 +13,6 @@ mkLibretroCore {
     rev = "ff9bb99a50d518aef6d2add1c49b7c44447e3e78";
     hash = "sha256-njOlXPMmfI408B5/aFKwg8Z9+FJvScxhnWOauvMnZao=";
   };
-
-  extraBuildInputs = [
-    alsa-lib
-    libGL
-    libGLU
-    portaudio
-    libx11
-  ];
 
   meta = {
     description = "SAME_CDI is a libretro core to play CD-i games";
