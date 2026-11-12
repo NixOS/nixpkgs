@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rayforge";
-  version = "1.11.2";
+  version = "1.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "barebaric";
     repo = "rayforge";
     tag = finalAttrs.version;
-    hash = "sha256-7aWfU73PipmHkovCZEyBIK+CV3PAGGP/yKmTaYnDqrY=";
+    hash = "sha256-vfBlmDy+iG86N071dzsYcSff1GqlwSakxPwqDNH4ylI=";
   };
 
   # setuptools-git-versioning derives the version from a git repository, which
@@ -78,11 +78,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyserial
     pyvips
     pyyaml
+    raydriver
     raygeo
     ruida-pa
     scipy
     semver
     svgelements
+    threadpoolctl
     trimesh
     vtracer
     websockets
