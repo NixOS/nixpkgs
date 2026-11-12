@@ -1893,10 +1893,6 @@ with pkgs;
 
   fabric = with python3Packages; toPythonApplication fabric;
 
-  flatpak-builder = callPackage ../development/tools/flatpak-builder {
-    binutils = binutils-unwrapped;
-  };
-
   bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
   };
