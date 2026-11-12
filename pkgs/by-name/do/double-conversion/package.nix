@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     ctestCheckHook
   ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   cmakeFlags = [
@@ -45,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     pkgConfigModules = [ "double-conversion" ];
