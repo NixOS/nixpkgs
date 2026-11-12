@@ -221,8 +221,9 @@
                 ];
                 unconfigureRunner = writeScript "unconfigure" ''
                   copy_tokens() {
-                    # Copy the configured token file to the state dir and allow the service user to read the file
-                    install --mode=666 ${lib.escapeShellArg cfg.tokenFile} "${newConfigTokenPath}"
+                    # Copy the configured token file to the state dir and allow only the service user to read the file
+                    install --mode=600 ${lib.escapeShellArg cfg.tokenFile} "${newConfigTokenPath}"
+                    chown --reference="$STATE_DIRECTORY" "${newConfigTokenPath}"
                     # Also copy current file to allow for a diff on the next start
                     install --mode=600 ${lib.escapeShellArg cfg.tokenFile} "${currentConfigTokenPath}"
                   }
@@ -270,10 +271,12 @@
 
                   find "$STATE_DIRECTORY/" -mindepth 1 -delete
 
-                  umask 000
+                  umask 077
                   ${lib.getExe' fetchRegistrationToken "github-runner-registration-token"} \
                     | ${pkgs.jq}/bin/jq -r '.token' > "${newConfigTokenPath}"
                   install --mode=600 "${newConfigTokenPath}" "${currentConfigTokenPath}"
+                  # Allow only the service user to read the new token file
+                  chown --reference="$STATE_DIRECTORY" "${newConfigTokenPath}"
 
                   # Always clean workDir
                   find -H "$WORK_DIRECTORY" -mindepth 1 -delete
