@@ -522,7 +522,7 @@ stdenv.mkDerivation (
         # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24663
         (fetchpatch2 {
           name = "openapv-1.1-compat.patch";
-          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/c54710db21c1827dbc3e47658a562525af0fe528.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/c54710db21c1827dbc3e47658a562525af0fe528";
           hash = "sha256-ENpPDEHtl3kj/UF52hfV+LwvO7CUaK8UvTy+OAYlWFw=";
         })
       ];
