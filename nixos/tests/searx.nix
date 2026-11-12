@@ -7,7 +7,7 @@
     name = "searx-basic";
     meta.maintainers = pkgs.searxng.meta.maintainers;
 
-    nodes.machine = {
+    containers.machine = {
       services.searx = {
         enable = true;
         environmentFile = pkgs.writeText "secrets" ''
@@ -61,7 +61,7 @@
     name = "searx-fancy";
     meta.maintainers = pkgs.searxng.meta.maintainers;
 
-    nodes.fancy =
+    containers.fancy =
       { config, lib, ... }:
       {
         services.searx = {
