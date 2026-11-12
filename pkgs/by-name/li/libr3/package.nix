@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qsnkzciPuBoz2ZJWQUEjieBIY5ix2coFTJaGtDBH6uo=";
   };
 
+  patches = [
+    # Use the portable s6_addr instead of glibc's internal __in6_u
+    # https://github.com/c9s/r3/issues/175
+    ./fix-in6-addr-portability.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
