@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "spotifyaio";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-spotify";
     tag = "v${version}";
-    hash = "sha256-Bob6JpbUaQkeH2c5YKVSUkY/FNyVTf+qtB2Rm1xCRX0=";
+    hash = "sha256-bBEhElQO36jDsEt12MI7hfhSV5zCuavkPwB3TcTTqfI=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     syrupy
     pytest-asyncio
     pytest-cov-stub

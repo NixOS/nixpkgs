@@ -20,19 +20,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "renault-api";
-  version = "0.5.15";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hlnWSNTckmSOEC58dhGjra1wSkKrffJnIAJNZfyCsIs=";
+    hash = "sha256-GymSyI5/nDFQ2Mrh//Q9B77aIR0lfgrTYWWcmdFRnfE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.12.21,<0.13" "uv_build"
+      --replace-fail "uv_build>=0.13,<0.14" "uv_build"
   '';
 
   build-system = [ uv-build ];

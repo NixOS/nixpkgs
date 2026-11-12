@@ -1,0 +1,27 @@
+diff --git a/src/pytest_homeassistant_custom_component/common.py b/src/pytest_homeassistant_custom_component/common.py
+index 57f2b72..f092b6b 100644
+--- a/src/pytest_homeassistant_custom_component/common.py
++++ b/src/pytest_homeassistant_custom_component/common.py
+@@ -54,8 +54,8 @@
+ from homeassistant.components.logger import (
+     DOMAIN as LOGGER_DOMAIN,
+     SERVICE_SET_LEVEL,
+-    _clear_logger_overwrites,
+ )
++from homeassistant.components.logger.helpers import _clear_logger_overwrites
+ from homeassistant.config import IntegrationConfigInfo, async_process_component_config
+ from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult
+ from homeassistant.const import (
+diff --git a/src/pytest_homeassistant_custom_component/plugins.py b/src/pytest_homeassistant_custom_component/plugins.py
+index 78f3f6b..3ef263f 100644
+--- a/src/pytest_homeassistant_custom_component/plugins.py
++++ b/src/pytest_homeassistant_custom_component/plugins.py
+@@ -44,6 +44,8 @@
+ import pytest_asyncio
+ import pytest_socket
+ import requests_mock
++import httpx2
++httpx2.alias_httpx()
+ import respx
+ from syrupy.assertion import SnapshotAssertion
+ 

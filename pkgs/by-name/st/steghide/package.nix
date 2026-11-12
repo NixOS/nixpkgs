@@ -3,6 +3,7 @@
   stdenv,
   fetchFromCodeberg,
   autoreconfHook,
+  libintl,
   libjpeg,
   libmcrypt,
   libmhash,
@@ -28,11 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libintl
     libjpeg
     libmcrypt
     libmhash
     zlib
   ];
+
+  # the bundled intl/ and configure's libintl check use pre-C23 syntax
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
 
   postPatch = ''
     cd src

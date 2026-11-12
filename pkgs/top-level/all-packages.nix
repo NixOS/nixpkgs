@@ -1797,7 +1797,7 @@ with pkgs;
 
   cudaPackages_12 = cudaPackages_12_9;
 
-  cudaPackages_13 = cudaPackages_13_4;
+  cudaPackages_13 = cudaPackages_13_5;
 
   cudaPackages = recurseIntoAttrs cudaPackages_13;
 
@@ -2227,6 +2227,9 @@ with pkgs;
 
   nodejs-slim_26 = callPackage ../development/web/nodejs/v26.nix { };
   nodejs_26 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_26; };
+
+  nodejs-slim_27 = callPackage ../development/web/nodejs/v27.nix { };
+  nodejs_27 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_27; };
 
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs_26;
@@ -6870,10 +6873,15 @@ with pkgs;
   home-assistant-custom-components = recurseIntoAttrs (
     lib.makeExtensible (
       self:
-      lib.packagesFromDirectoryRecursive {
-        inherit (home-assistant.python3Packages) callPackage;
-        directory = ../servers/home-assistant/custom-components;
-      }
+      let
+        packages = lib.packagesFromDirectoryRecursive {
+          inherit (home-assistant.python3Packages) callPackage;
+          directory = ../servers/home-assistant/custom-components;
+        };
+
+        aliases = import ../servers/home-assistant/custom-components/aliases.nix self;
+      in
+      packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
   home-assistant-custom-lovelace-modules = recurseIntoAttrs (
@@ -7085,7 +7093,6 @@ with pkgs;
     ;
 
   inherit (postgresqlVersions)
-    postgresql_14
     postgresql_15
     postgresql_16
     postgresql_17
@@ -7094,7 +7101,6 @@ with pkgs;
     ;
 
   inherit (postgresqlJitVersions)
-    postgresql_14_jit
     postgresql_15_jit
     postgresql_16_jit
     postgresql_17_jit
@@ -7104,7 +7110,6 @@ with pkgs;
   postgresql = postgresql_18;
   postgresql_jit = postgresql_18_jit;
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
-  postgresql14Packages = recurseIntoAttrs postgresql_14.pkgs;
   postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
   postgresql16Packages = recurseIntoAttrs postgresql_16.pkgs;
   postgresql17Packages = recurseIntoAttrs postgresql_17.pkgs;

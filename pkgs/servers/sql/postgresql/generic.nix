@@ -125,7 +125,6 @@
 let
   atLeast = lib.versionAtLeast version;
   olderThan = lib.versionOlder version;
-  zstdEnabled = atLeast "15";
 
   dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
@@ -248,7 +247,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals icuSupport [ icu ]
   ++ lib.optionals jitSupport [ llvmPackages.llvm ]
-  ++ lib.optionals zstdEnabled [ zstd ]
+  ++ [ zstd ]
   ++ lib.optionals systemdSupport [ systemdLibs ]
   ++ lib.optionals uringSupport [ liburing ]
   ++ lib.optionals curlSupport [ curl ]
@@ -322,7 +321,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (withBlocksize != null) [ "--with-blocksize=${toString withBlocksize}" ]
     ++ lib.optionals (withWalBlocksize != null) [ "--with-wal-blocksize=${toString withWalBlocksize}" ]
-    ++ lib.optionals zstdEnabled [ "--with-zstd" ]
+    ++ [ "--with-zstd" ]
     ++ lib.optionals uringSupport [ "--with-liburing" ]
     ++ lib.optionals curlSupport [ "--with-libcurl" ]
     ++ lib.optionals numaSupport [ "--with-libnuma" ]
@@ -361,12 +360,7 @@ stdenv'.mkDerivation (finalAttrs: {
       else
         ./patches/relative-to-symlinks.patch
     )
-    (
-      if atLeast "15" then
-        ./patches/empty-pg-config-view-15+.patch
-      else
-        ./patches/empty-pg-config-view.patch
-    )
+    ./patches/empty-pg-config-view-15+.patch
     ./patches/less-is-more.patch
     ./patches/paths-for-split-outputs.patch
     ./patches/paths-with-postgresql-suffix.patch
