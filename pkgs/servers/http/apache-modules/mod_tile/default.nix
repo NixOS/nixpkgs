@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   stdenv,
   cmake,
@@ -24,14 +25,22 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mod_tile";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zDe+pFzK16K+8I0v1Z7p83PIgQlVDbjcnD4vzwdB1Oo=";
+    hash = "sha256-hIVkhcs6bvADpCZ5LA3MTEJX2EvkVSTwLnYRywZM/mg=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "cache-expire-tests-single-address-host.patch";
+      url = "https://github.com/openstreetmap/mod_tile/commit/a56b8f572c333a32dd8ce9f56298230fbd90ecee.patch?full_index=1";
+      hash = "sha256-e25bX2zw4oI9Ox96uPoKGh4ISbZzUvmQ+roC/nx8zb8=";
+    })
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;
