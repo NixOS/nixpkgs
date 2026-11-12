@@ -26,6 +26,7 @@ let
       gnugrep,
       gnused,
       systemdMinimal,
+      systemdLibs,
       smartmontools,
       enableMail ? false,
       sysstat,
@@ -51,6 +52,8 @@ let
       kernelModuleAttribute,
       extraLongDescription ? "",
       extraPatches ? [ ],
+      extraUserPatches ? [ ],
+      enableLibudev ? false,
       rev ? "zfs-${version}",
       kernelMinSupportedMajorMinor,
       kernelMaxSupportedMajorMinor,
@@ -104,7 +107,10 @@ let
         inherit rev hash;
       };
 
-      patches = extraPatches ++ optionals buildPyzfs [ ./pyzfs-dlopen-absolute-path.patch ];
+      patches =
+        extraPatches
+        ++ optionals buildUser extraUserPatches
+        ++ optionals buildPyzfs [ ./pyzfs-dlopen-absolute-path.patch ];
 
       postPatch =
         optionalString buildKernel ''
@@ -195,6 +201,7 @@ let
           openssl
           curl
         ]
+        ++ optional (buildUser && enableLibudev) systemdLibs
         ++ optionals (buildUser && enablePython) [ python3Packages.python ]
         ++ optionals buildPyzfs [
           python3Packages.packaging

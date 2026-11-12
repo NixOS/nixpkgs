@@ -21,6 +21,8 @@ callPackage ./generic.nix args {
 
   # if adding a patch here, check if it also needs to be applied to the stable branches
   extraPatches = [ ];
+  extraUserPatches = callPackage ./udev-patches.nix { };
+  enableLibudev = true;
 
   tests = {
     inherit (nixosTests.zfs) unstable;
