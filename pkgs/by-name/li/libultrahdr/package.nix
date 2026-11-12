@@ -96,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     ctestCheckHook
   ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   nativeInstallCheckInputs = [
