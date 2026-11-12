@@ -8,13 +8,13 @@
 }:
 mkLibretroCore {
   core = "mame2016";
-  version = "0-unstable-2022-04-06";
+  version = "0-unstable-2026-09-06";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mame2016-libretro";
-    rev = "01058613a0109424c4e7211e49ed83ac950d3993";
-    hash = "sha256-IsM7f/zlzvomVOYlinJVqZllUhDfy4NNTeTPtNmdVak=";
+    rev = "ae07c2f88ff2482ba9f50ffc8c9e7e6fbfe97d0a";
+    hash = "sha256-Jpb7JJ4iPaNO3SuI5xZ83sh28NQShslUl1/+Q2Jd8/Y=";
   };
 
   postPatch = ''
@@ -22,7 +22,6 @@ mkLibretroCore {
     ln -s ${lib.getInclude rapidjson} 3rdparty/rapidjson
   '';
 
-  patches = [ ./patches/mame2016-python311.patch ];
   extraNativeBuildInputs = [ python3 ];
   extraBuildInputs = [ alsa-lib ];
   makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
