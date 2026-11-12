@@ -41,6 +41,16 @@ let
       cfg.trustedDomains != [ ]
     ) "--trusted-domains=${lib.concatStringsSep "," cfg.trustedDomains}"
     ++ cfg.extraArgs;
+
+  inherit (pkgs.stdenv.cc.bintools) dynamicLinker;
+  loaderDir = "/${pkgs.stdenv.hostPlatform.libDir}";
+
+  nixLdLibraries = pkgs.buildEnv {
+    name = "esphome-nix-ld-libraries";
+    paths = map lib.getLib cfg.nix-ld.libraries;
+    pathsToLink = [ "/lib" ];
+    ignoreCollisions = true;
+  };
 in
 {
   meta.maintainers = with maintainers; [
@@ -157,6 +167,58 @@ in
         Extra command line arguments for the ESPHome Device Builder.
       '';
     };
+
+    nix-ld = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          Whether to run the downloaded toolchains through [nix-ld](https://github.com/nix-community/nix-ld), inside the ESPHome unit only.
+          Without it, the Device Builder cannot compile firmware with ESPHome's default toolchains.
+          Set it to `false` to leave the unit's loader path and environment unchanged.
+
+          ESPHome builds ESP32 firmware with ESP-IDF and ESP8266 firmware with its own Arduino toolchain by default, rather than through PlatformIO.
+          Both toolchains download compilers and build tools built for generic Linux into the state directory.
+          NixOS cannot run these binaries as they are, so compiling fails with `Could not start dynamically linked executable`.
+
+          This option mounts nix-ld at the system's dynamic loader path in the unit's mount namespace.
+          It points nix-ld at glibc and {option}`services.esphome.nix-ld.libraries`.
+          Other programs keep the stub loader from {option}`environment.stub-ld.enable`.
+          {option}`programs.nix-ld.enable` instead applies nix-ld to every program.
+        '';
+      };
+
+      package = lib.mkPackageOption pkgs "nix-ld" { };
+
+      libraries = mkOption {
+        type = types.listOf types.package;
+        default = with pkgs; [
+          stdenv.cc.cc
+          zlib
+          zstd
+        ];
+        defaultText = lib.literalExpression ''
+          with pkgs; [
+            stdenv.cc.cc
+            zlib
+            zstd
+          ]
+        '';
+        example = lib.literalExpression ''
+          with pkgs; [
+            stdenv.cc.cc
+            zlib
+            zstd
+            openssl
+          ]
+        '';
+        description = ''
+          Libraries the downloaded toolchains can load through nix-ld, besides glibc.
+          The default covers the ESP-IDF and ESP8266 toolchains.
+        '';
+      };
+    };
   };
 
   imports = [
@@ -198,6 +260,10 @@ in
         # platformio needs a writable HOME for its configuration
         HOME = stateDir;
       }
+      // lib.optionalAttrs cfg.nix-ld.enable {
+        NIX_LD = dynamicLinker;
+        NIX_LD_LIBRARY_PATH = "${nixLdLibraries}/lib";
+      }
       // cfg.environment;
 
       serviceConfig = {
@@ -215,6 +281,12 @@ in
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ReadWritePaths = [ stateDir ];
         ExecPaths = [ stateDir ];
+        # The loader path is a symlink to stub-ld, which systemd would follow
+        # and mount nix-ld over stub-ld's store path; mount on a tmpfs instead.
+        TemporaryFileSystem = mkIf cfg.nix-ld.enable [ "${loaderDir}:ro" ];
+        BindReadOnlyPaths = mkIf cfg.nix-ld.enable [
+          "${cfg.nix-ld.package}/libexec/nix-ld:${loaderDir}/${baseNameOf dynamicLinker}"
+        ];
 
         # Hardening
         CapabilityBoundingSet = "";
