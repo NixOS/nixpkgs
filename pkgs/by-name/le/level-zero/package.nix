@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
     # The loader checks for drivers in fixed directories before dlopen, ignoring RUNPATH
@@ -38,13 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath $out/lib/libze_loader.so
   '';
 
+  postInstall = ''
+    substituteInPlace $out/lib/pkgconfig/*.pc --replace-fail \
+      'prefix=''${pcfiledir}/../../' \
+      'prefix=${placeholder "out"}'
+  '';
+
   setupHook = ./setup-hook.sh;
 
   passthru = {
     tests = {
       inherit intel-compute-runtime openvino;
       pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
+        package = finalAttrs.finalPackage.dev;
         versionCheck = true;
       };
     };
