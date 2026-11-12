@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-VDPyBm0v2DZEXpEbOMwbrvBvjELHEzRAgTJnm3MRrVY=";
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    aws-lc
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   # This requires a running rabbitmq instance to communicate with that needs
