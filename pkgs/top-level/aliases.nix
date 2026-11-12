@@ -1158,6 +1158,7 @@ mapAliases {
   goocanvas = warnAlias "'goocanvas' has been renamed to goocanvas_1" goocanvas_1; # Added 2026-01-17
   goocanvas_1 = throw "'goocanvas_1' has been removed, as it relies on gtk2 libraries"; # Added 2026-08-11
   google-app-engine-go-sdk = throw "'google-app-engine-go-sdk' has been removed as it was replaced upstream and is now obsolete."; # Added 2026-10-22
+  goose-lang = throw "'goose-lang' has been removed as it was archived upstream"; # Added 2026-11-12
   gosmore = throw "'gosmore' has been removed as it was unmaintained and relied on gtk2"; # Added 2026-07-26
   gphotos-sync = throw "'gphotos-sync' has been removed, as it was archived upstream due to API changes that ceased its functions"; # Added 2025-11-06
   gprbuild-boot = throw "'gprbuild-boot' has been renamed to/replaced by 'gnatPackages.gprbuild-boot'"; # Converted to throw 2025-10-27
