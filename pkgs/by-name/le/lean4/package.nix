@@ -9,8 +9,11 @@
   which,
   gmp,
   cadical,
+  cadicalForLean ? cadical.override {
+    version = "2.1.3";
+    extraConfigureFlags = [ "-fvisibility=hidden" ];
+  },
   leangz,
-  makeWrapper,
   openssl,
   pkg-config,
   libuv,
@@ -23,12 +26,10 @@
   tzdata,
   versionCheckHook,
 }:
-let
-  cadical' = cadical.override { version = "2.1.3"; };
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.35.0";
+  version = "4.36.0-rc2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WjyIRo2BvfnNq13r+YSnTc6VaYupKJIsgfQhFBMa0aU=";
+    hash = "sha256-1tkhKkYaGGIV4CHo+rMmXL1lIyFR0Zgy/94aMGrgEqU=";
   };
 
   postPatch = ''
@@ -58,10 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    cadical'
+    cadicalForLean
     cmake
     pkg-config
-    makeWrapper
     leangz # Provides leantar
     gitMinimal
   ]
@@ -70,15 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    cadicalForLean
     gmp
     libuv
     openssl
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/lean \
-      --prefix PATH : ${cadical'}/bin
-  '';
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -98,8 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Flags for top-level `CMakeLists.txt`
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "USE_MIMALLOC" enableMimalloc)
+    (lib.cmakeFeature "CADICAL_LIB" "${lib.getLib cadicalForLean}/lib/libcadical.a")
+    (lib.cmakeFeature "CADICAL_INCLUDE_DIR" "${lib.getDev cadicalForLean}/include/")
 
     # Flags for inner `src/CMakeLists.txt`
+    (lib.cmakeFeature "STAGE1_LEAN_SPECIAL_VERSION_DESC" "rc2")
     (lib.cmakeBool "STAGE1_USE_GITHASH" false)
     (lib.cmakeBool "STAGE1_INSTALL_LICENSE" false)
     (lib.cmakeBool "STAGE1_INSTALL_CADICAL" false)
