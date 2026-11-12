@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clockenstein";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "clockenstein";
     tag = finalAttrs.version;
-    hash = "sha256-BFwjtPjBNa8x/cY7w2qyw4G4PstjThx3gHHhyBC2vEI=";
+    hash = "sha256-kR1E6U2PyEEs2MHw4pyo/pJm5QQb6nreeL7qsWadGEw=";
   };
 
   strictDeps = true;
