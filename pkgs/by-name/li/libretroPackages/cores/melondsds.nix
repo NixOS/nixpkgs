@@ -32,7 +32,7 @@ let
     hash = "sha256-55LrwWBPljMMoTOKsmZIBiVICFNm9Gr/GJlCvdKWUkA=";
   };
   libretro-common-src = fetchFromGitHub {
-    owner = "JesseTG";
+    owner = "libretro";
     repo = "libretro-common";
     rev = "fa8a1b572a444fcb552007019f8caf68281108aa";
     hash = "sha256-kI0hHiEr64wKvMF4di3rUMwoM2dEjEzpSPHFNILj6oE=";
