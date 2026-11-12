@@ -143,6 +143,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "spotlight";
     maintainers = [
       lib.maintainers.danny19862025
+      lib.maintainers.mmknisali
     ];
   };
 })

@@ -19745,6 +19745,11 @@
     githubId = 64036912;
     matrix = "@mmkaram:matrix.org";
   };
+  mmknisali = {
+    name = "Ali Alalialhammor";
+    github = "mmknisali";
+    githubId = 96299863;
+  };
   mmlb = {
     email = "i@m.mmlb.dev";
     github = "mmlb";
