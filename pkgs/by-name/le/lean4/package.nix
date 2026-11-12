@@ -106,6 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "STAGE1_LEAN_EXTRA_LAKE_OPTS" "--no-ansi")
   ];
 
+  preBuild = ''
+    if [ -z "$enableParallelBuilding" ]; then
+      export LEAN_NUM_THREADS=1
+    else
+      export LEAN_NUM_THREADS=$NIX_BUILD_CORES
+    fi
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
