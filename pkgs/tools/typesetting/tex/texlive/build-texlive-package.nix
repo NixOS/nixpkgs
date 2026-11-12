@@ -8,7 +8,7 @@
   bash,
   jdk,
   perl,
-  python3,
+  python313,
   ruby,
   snobol4,
   tk,
@@ -176,7 +176,7 @@ let
   extToInput = {
     jar = jdk;
     lua = texliveBinaries.luatex;
-    py = python3;
+    py = python313;
     rb = ruby;
     sno = snobol4;
     tcl = tk;
