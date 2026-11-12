@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    file
   ];
 
   buildInputs = [
