@@ -16,6 +16,7 @@
   # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
   pkgs,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   withAudit ? false,
   audit,
@@ -72,6 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # Fix the build with --without-openssl (linkOpenssl = false) in 10.6p2.
+    (fetchpatch {
+      name = "openssh-auth-passwd-include-stdlib.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/102bee7f3a873b39784c909ba238c90b0b4c395f.patch";
+      hash = "sha256-78EBwPsR5NREMGQYvfFLBeW6p4AyrnMs8rEGwdiTt0g=";
+    })
   ]
   ++ extraPatches;
 

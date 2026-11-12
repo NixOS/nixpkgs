@@ -2,7 +2,7 @@
   autoreconfHook,
   bash,
   fetchFromGitHub,
-  fetchpatch,
+  gitUpdater,
   lib,
   libpcap,
   libxcrypt,
@@ -16,24 +16,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.2";
   pname = "ppp";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "ppp-project";
     repo = "ppp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NV8U0F8IhHXn0YuVbfFr992ATQZaXA16bb5hBIwm9Gs=";
+    hash = "sha256-Ny1To4tzfqUT13jMVgKuW36tjMB07bKDFUV+sLdOobM=";
   };
-
-  patches = [
-    # Fix build with gcc15
-    # https://github.com/ppp-project/ppp/pull/548
-    (fetchpatch {
-      url = "https://github.com/ppp-project/ppp/commit/05361692ee7d6260ce5c04c9fa0e5a1aa7565323.patch";
-      hash = "sha256-ybuWyA1t9IJ1Sg06a0b0tin4qssr0qzmenfGoA1X0BE=";
-    })
-  ];
 
   configureFlags = [
     "--localstatedir=/var"
@@ -60,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     for file in $(find -name Makefile.linux); do
-      substituteInPlace "$file" --replace '-m 4550' '-m 550'
+      substituteInPlace "$file" --replace-fail '-m 4550' '-m 550'
     done
 
     patchShebangs --host \
@@ -84,14 +75,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    substituteInPlace "$out/bin/pon" --replace "/usr/sbin" "$out/bin"
+    substituteInPlace "$out/bin/pon" --replace-fail "/usr/sbin" "$out/bin"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) pppd;
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+    tests = {
+      inherit (nixosTests) pppd;
+    };
   };
 
   meta = {
+    changelog = "https://github.com/ppp-project/ppp/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://ppp.samba.org";
     description = "Point-to-point implementation to provide Internet connections over serial lines";
     license = with lib.licenses; [

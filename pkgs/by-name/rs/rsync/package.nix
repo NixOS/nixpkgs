@@ -8,6 +8,7 @@
   perl,
   python3,
   libiconv,
+  libidn2,
   zlib,
   popt,
 
@@ -29,32 +30,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsync";
-  version = "3.5.0";
+  version = "3.5.2";
 
   src = fetchurl {
     # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
     url = "mirror://samba/rsync/src/rsync-${finalAttrs.version}.tar.gz";
-    hash = "sha256-x//R72U+mVQPZh5HywC3+crR7muXI5mxb5PWcmVuDTM=";
+    hash = "sha256-oQ1ZGCUlHgcPdMmN89qtGV3vTtgbSi3hYWkCauoz9sg=";
   };
 
   patches = [ ];
-
-  # Remove with the first upstream release that links t_acl against the snprintf fallback.
-  postPatch = ''
-    substituteInPlace Makefile.in \
-      --replace-fail 'T_ACL_OBJ = t_acl.o lib/acl.o' 'T_ACL_OBJ = t_acl.o lib/acl.o lib/snprintf.o'
-  '';
 
   preBuild = ''
     patchShebangs ./runtests.py ./support/rrsync
 
     # patchShebangs ignores non-executable test sources and embedded shebangs.
     substituteInPlace \
-      testsuite/{daemon-namecvt-{empty-response,newline-token},rrsync-{sender-parent-pin,symlink}}_test.py \
+      testsuite/{daemon-namecvt-{empty-response,newline-token},rrsync-{sender-parent-pin,symlink,receiver-file-arg}}_test.py \
       --replace-fail '#!/usr/bin/env python3' '#!${python3}/bin/python3'
 
     substituteInPlace \
-      testsuite/rsync-ssl-stunnel-{ca-required,hostname-check}_test.py \
+      testsuite/{rsync-ssl-type-option,rsync-ssl-stunnel-{ca-required,hostname-check}}_test.py \
       --replace-fail '#!/usr/bin/env bash' '#!${stdenv.shell}'
   '';
 
@@ -66,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bashNonInteractive
     libiconv
+    libidn2
     zlib
     popt
   ]
@@ -147,6 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   __darwinAllowLocalNetworking = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Fast incremental file transfer utility";

@@ -8,7 +8,7 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "libdatrie";
   version = "2019-12-20";
@@ -35,18 +35,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv ];
 
+  strictDeps = true;
+
   preAutoreconf =
     let
       reports = "https://github.com/tlwg/libdatrie/issues";
     in
     ''
       sed -i -e "/AC_INIT/,+3d" configure.ac
-      sed -i "5iAC_INIT(${pname},${version},[${reports}])" configure.ac
+      sed -i "5iAC_INIT(libdatrie,${finalAttrs.version},[${reports}])" configure.ac
     '';
 
   postInstall = ''
     installManPage man/trietool.1
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://linux.thai.net/~thep/datrie/datrie.html";
@@ -56,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     pkgConfigModules = [ "datrie-0.2" ];
   };
-}
+})

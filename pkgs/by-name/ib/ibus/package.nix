@@ -11,7 +11,7 @@
   vala,
   wrapGAppsHook3,
   dbus,
-  systemd,
+  systemdLibs,
   dconf ? null,
   glib,
   gdk-pixbuf,
@@ -30,6 +30,7 @@
   libnotify ? null,
   enableUI ? !libOnly,
   withWayland ? !libOnly,
+  withSystemd ? !libOnly && lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   libxkbcommon,
   wayland,
   wayland-protocols,
@@ -137,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature (!libOnly && dconf != null) "dconf")
     (lib.enableFeature (!libOnly && libnotify != null) "libnotify")
     (lib.enableFeature withWayland "wayland")
+    (lib.enableFeature withSystemd "systemd-services")
     (lib.enableFeature enableUI "ui")
     (lib.enableFeature (!libOnly) "gtk3")
     (lib.enableFeature (!libOnly) "gtk4")
@@ -187,13 +189,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
-    systemd
     dconf
-    python3.pkgs.pygobject3 # for pygobject overrides
     isocodes
     json-glib
     libx11
-    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
+  ]
+  ++ lib.optionals withSystemd [
+    systemdLibs
   ]
   ++ lib.optionals (!libOnly) [
     gtk3
@@ -201,6 +203,8 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libdbusmenu-gtk3
     libnotify
+    python3.pkgs.pygobject3 # for pygobject overrides
+    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ]
   ++ lib.optionals withWayland [
     libxkbcommon

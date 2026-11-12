@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.3.2";
+  version = "1.4";
 
   src =
     let
@@ -43,16 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
         # Stable archive path, but captcha can be encountered, causing hash mismatch.
         "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
       ];
-      hash = "sha256-uzKaCizQJ00FUZ1hxmfAYuBpkNcuEl7i36jeZPARnRY=";
+      hash = "sha256-At0Vl4NnenScBK290CtVuKK8x+BU9Rt2tUkZmpFq1YQ=";
     };
 
-  # https://github.com/madler/zlib/pull/1171
   patches = [
-    ./export-variable.patch
     # https://github.com/madler/zlib/pull/1296
     ./mingw-shared.patch
-    # CVE-2026-85091: buffer overflow in non-blocking gzwrite
-    ./cve-2026-85091.patch
   ];
 
   postPatch = ''

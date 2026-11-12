@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://itstool.org/";
     description = "XML to PO and back again";
