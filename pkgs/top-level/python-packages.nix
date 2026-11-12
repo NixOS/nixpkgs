@@ -18072,6 +18072,8 @@ self: super: with self; {
 
   ray = callPackage ../development/python-modules/ray { };
 
+  raydriver = callPackage ../development/python-modules/raydriver { };
+
   raygeo = callPackage ../development/python-modules/raygeo { };
 
   raylib = callPackage ../development/python-modules/raylib { inherit (pkgs) raylib; };
