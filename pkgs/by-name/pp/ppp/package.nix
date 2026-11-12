@@ -2,7 +2,6 @@
   autoreconfHook,
   bash,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
   lib,
   libpcap,
@@ -17,14 +16,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.4";
   pname = "ppp";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "ppp-project";
     repo = "ppp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UPYWsu6yEWRZ7SwFjINF4xbK/gmSvNEEC1vw7wfXsn8=";
+    hash = "sha256-Ny1To4tzfqUT13jMVgKuW36tjMB07bKDFUV+sLdOobM=";
   };
 
   configureFlags = [
@@ -89,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/ppp-project/ppp/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://ppp.samba.org";
     description = "Point-to-point implementation to provide Internet connections over serial lines";
     license = with lib.licenses; [
