@@ -10214,8 +10214,7 @@ with pkgs;
         done
       '';
 
-  vdr = callPackage ../applications/video/vdr { };
-  vdrPlugins = recurseIntoAttrs (callPackage ../applications/video/vdr/plugins.nix { });
+  vdrPlugins = recurseIntoAttrs (callPackage ../by-name/vd/vdr/plugins.nix { });
   compressDrv = callPackage ../build-support/compress-drv { };
 
   compressDrvWeb = callPackage ../build-support/compress-drv/web.nix { };
