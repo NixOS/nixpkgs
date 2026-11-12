@@ -32,10 +32,17 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "gwyddion";
   version = "2.71";
+
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${finalAttrs.version}.tar.xz";
     hash = "sha256-LfchvvzL5NXuK6Vksy5pNB+M4d5jfiBFg4oJotRrXbo=";
   };
+  patches = [
+    # Corrects problems with python support, but should apply cleanly
+    # regardless of whether python support is enabled, and have no effects if
+    # it is disabled.
+    ./codegen.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -60,10 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional zlibSupport zlib
   ++ lib.optional libzipSupport libzip;
 
-  # This patch corrects problems with python support, but should apply cleanly
-  # regardless of whether python support is enabled, and have no effects if
-  # it is disabled.
-  patches = [ ./codegen.patch ];
   meta = {
     homepage = "http://gwyddion.net/";
 
