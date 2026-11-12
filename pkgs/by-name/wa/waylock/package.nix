@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Small screenlocker for Wayland compositors";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      adamcstephens
       jordanisaacs
     ];
     mainProgram = "waylock";
