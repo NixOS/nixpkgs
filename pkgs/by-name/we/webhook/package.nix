@@ -17,6 +17,8 @@ buildGoModule (finalAttrs: {
     hash = "sha256-P+uLVv0YMlTXrbWVapXRXc+VvQZxUiimLG0EX9tDxpM=";
   };
 
+  __structuredAttrs = true;
+
   postPatch = ''
     substituteInPlace webhook_test.go \
       --replace-fail '/bin/echo' 'echo'
