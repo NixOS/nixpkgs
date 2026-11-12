@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "overturemaps";
-  version = "1.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-6SNV3MKWHaDOlauYN6WfLRW8w1e+UdDEFc6rPYEvyX0=";
+    hash = "sha256-QbOh4yTT8M/M8CEiiLVE8JZXIsYBJh7hez8ZEk16I60=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -21,7 +21,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
   dependencies = with python3Packages; [
     click
     colorama
-    geopandas
     numpy
     orjson
     pyarrow
@@ -29,6 +28,12 @@ python3Packages.buildPythonPackage (finalAttrs: {
     shapely
     tqdm
   ];
+
+  optional-dependencies = with python3Packages; {
+    geopandas = [
+      geopandas
+    ];
+  };
 
   pythonImportsCheck = [ "overturemaps" ];
 
@@ -44,9 +49,13 @@ python3Packages.buildPythonPackage (finalAttrs: {
     "tests/test_releases.py"
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.geopandas;
 
   meta = {
     description = "Official command-line tool of the Overture Maps Foundation";
