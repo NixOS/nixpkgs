@@ -9,6 +9,7 @@
   which,
   gmp,
   cadical,
+  cadical' ? cadical.override { version = "2.1.3"; },
   leangz,
   makeWrapper,
   openssl,
@@ -17,6 +18,7 @@
   enableMimalloc ? true,
   ctestCheckHook,
   coreutils,
+  curl,
   perl,
   python3,
   tzdata,
@@ -25,12 +27,8 @@
 
   # Official releases go up to `stage2`.  It should typically be enough to build `stage1`, but
   # obscure issues can arise if the checked-in `stage0` is not up-to-date.
-  leanStage ? 1,
+  leanStage ? 2,
 }:
-
-let
-  cadical' = cadical.override { version = "2.1.3"; };
-in
 
 assert lib.elem leanStage [
   1
@@ -40,7 +38,7 @@ assert lib.elem leanStage [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.35.0";
+  version = "4.36.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -49,15 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WjyIRo2BvfnNq13r+YSnTc6VaYupKJIsgfQhFBMa0aU=";
+    hash = "sha256-9SOI50OuqCknfsJGGpIyzaDRDGADqsJza+5iWbeFmzc=";
   };
 
   patches = [
     # Darwin's stdenv uses GNU sed and the GNU coreutils
     ./macos-test-flags-gnu.patch
+
+    # Don't export `libcadical.a`'s symbols in Lean's shared libraries
+    ./cadical-no-reexport.patch
   ];
 
   postPatch = ''
+    chmod +x tests/lake/tests/samply/mock-samply.py
     patchShebangs --build stage0/src/bin/ src/bin/ tests/
 
     substituteInPlace src/lean.mk.in \
@@ -86,15 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    cadical'
     gmp
     libuv
     openssl
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/lean \
-      --prefix PATH : ${cadical'}/bin
-  '';
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -113,6 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Intentionally untyped i.e. no `-DFOO:BOOL=FALSE`. The top-level CMakeLists.txt will not forward
   # the flags to each stage otherwise.
   cmakeFlags = [
+    "-DCADICAL_INCLUDE_DIR=${lib.getDev cadical'}/include"
+    "-DCADICAL_LIB=${lib.getLib cadical'}/lib/libcadical.a"
+
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
 
@@ -141,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     ctestCheckHook
+    curl # Needed by tests/lake/tests/samply/test.sh
     perl
     python3
     tzdata
