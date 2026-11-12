@@ -11,6 +11,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   openssl,
+  zstd,
   nix-update-script,
   pkg-config,
   webkitgtk_4_1,
@@ -62,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking # Most Tauri apps need networking
