@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-B+EmVkj/UdojjJr3oYs/HcewxmtPIacvJ8dLOWzTM20=";
   };
 
+  patches = [
+    # https://salsa.debian.org/debian/gpgmepy/-/merge_requests/1
+    ./build-with-swig-4.5.0.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail ', "swig"' ""

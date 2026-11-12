@@ -1,0 +1,58 @@
+Description: Build with swig 4.5.0
+ Without this patch, the package FTBFS with swig 4.5.0. This is due to
+ the removal of the Python 2 compatibility macros in version 4.5.0.
+ According to the SWIG authors, these macros were retained in the
+ generated code (pyhead.swg) solely for user typemaps. All typemap
+ using these macros are updated to call the Python 3 C API
+ directly.
+Author: Rafael Laboissière <rafael@debian.org>
+Bug-Debian: https://bugs.debian.org/1145351
+Forwarded: no
+Last-Update: 2026-08-25
+
+--- gpgmepy-2.0.0.orig/gpgme.i
++++ gpgmepy-2.0.0/gpgme.i
+@@ -94,8 +94,8 @@
+             }
+           $1[i] = PyBytes_AsString(pyVector[i]);
+         }
+-      else if (PyString_Check(o))
+-	$1[i] = PyString_AsString(o);
++      else if (PyBytes_Check(o))
++	$1[i] = PyBytes_AsString(o);
+       else {
+ 	PyErr_Format(PyExc_TypeError,
+                      "arg %d: list must contain only str or bytes, got %s "
+@@ -316,8 +316,8 @@
+   if (PyLong_Check($input))
+     $1 = PyLong_AsLong($input);
+ #if PY_MAJOR_VERSION < 3
+-  else if (PyInt_Check($input))
+-    $1 = PyInt_AsLong($input);
++  else if (PyLong_Check($input))
++    $1 = PyLong_AsLong($input);
+ #endif
+   else {
+     PyErr_SetString(PyExc_TypeError, "Numeric argument expected");
+@@ -341,8 +341,8 @@
+     $1 = PyLong_AsLong($input);
+ #endif
+ #if PY_MAJOR_VERSION < 3
+-  else if (PyInt_Check($input))
+-    $1 = PyInt_AsLong($input);
++  else if (PyLong_Check($input))
++    $1 = PyLong_AsLong($input);
+ #endif
+   else {
+     PyErr_SetString(PyExc_TypeError, "Numeric argument expected");
+@@ -357,8 +357,8 @@
+     if (PyLong_Check($input))
+       tmp$argnum = PyLong_AsLong($input);
+ #if PY_MAJOR_VERSION < 3
+-    else if (PyInt_Check($input))
+-      tmp$argnum = PyInt_AsLong($input);
++    else if (PyLong_Check($input))
++      tmp$argnum = PyLong_AsLong($input);
+ #endif
+     else
+       {
