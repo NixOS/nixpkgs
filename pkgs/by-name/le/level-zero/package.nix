@@ -6,6 +6,7 @@
   intel-compute-runtime,
   openvino,
   stdenv,
+  testers,
   nix-update-script,
 }:
 
@@ -39,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       inherit intel-compute-runtime openvino;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
     };
     updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
   };
@@ -52,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ziguana
       recutita
+    ];
+    pkgConfigModules = [
+      "level-zero"
+      "libze_loader"
     ];
   };
 })
