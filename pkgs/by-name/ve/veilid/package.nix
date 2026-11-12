@@ -5,6 +5,7 @@
   protobuf,
   capnproto,
   cmake,
+  sqlite,
   testers,
   veilid,
   gitUpdater,
@@ -27,6 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     capnproto
     cmake
     protobuf
+  ];
+
+  buildInputs = [
+    sqlite
   ];
 
   cargoBuildFlags = [

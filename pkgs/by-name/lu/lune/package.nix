@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
+  aws-lc,
+  zstd,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lune";
@@ -18,6 +20,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-QnLpJK5ORrRySYEVQ+asRB2fXoPISMZ93pkN8NiZAfY=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''

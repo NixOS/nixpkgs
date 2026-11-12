@@ -7,6 +7,7 @@
   systemdLibs,
   nix-update-script,
   versionCheckHook,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -41,14 +42,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.bootvine;
+  };
 
   meta = {
     changelog = "https://codeberg.org/wvhulle/bootvine/releases/tag/${finalAttrs.src.tag}";
     description = "Boot animation showing stages of systemd as a tree";
     homepage = "https://codeberg.org/wvhulle/bootvine";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "bootvine";
     maintainers = with lib.maintainers; [ wvhulle ];
+    platforms = lib.platforms.linux;
   };
 })

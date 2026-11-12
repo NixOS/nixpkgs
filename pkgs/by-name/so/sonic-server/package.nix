@@ -4,8 +4,11 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
+  pkg-config,
+  rust-jemalloc-sys-unprefixed,
   rustPlatform,
   versionCheckHook,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +25,13 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-HahfO0WcaCjGrTkfVTge/LP/H/rQN0PqrusGYp80RBY=";
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    rust-jemalloc-sys-unprefixed
+    zstd
   ];
 
   postPatch = ''
