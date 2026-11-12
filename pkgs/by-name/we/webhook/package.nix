@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,7 +26,10 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  passthru.tests = { inherit (nixosTests) webhook; };
+  passthru = {
+    tests = { inherit (nixosTests) webhook; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Incoming webhook server that executes shell commands";
