@@ -5,6 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
+  aws-lc,
   sqlite,
   writableTmpDirAsHomeHook,
   cacert,
@@ -17,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snouty";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "antithesishq";
     repo = "snouty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wm0AtZr63kiuyQ7QfNFaGiSx48jbn2XkbDeE7VyvcOY=";
+    hash = "sha256-bW2B2LRan2amJxrNKjg6AGaNExSqaqmZWsFBu8g62yQ=";
   };
 
-  cargoHash = "sha256-hYnPz3aMS9iEWepJ3LEW0fr274LRgsWw2cnqCjsjDrQ=";
+  cargoHash = "sha256-hfBMPhGK+pUqNXcLCLdIxQE2g1BFaYA6YgRjkGrPiEY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     sqlite
   ];
 
