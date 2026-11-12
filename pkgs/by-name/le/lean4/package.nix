@@ -108,6 +108,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLEAN_PLATFORM_TARGET=${stdenv.hostPlatform.config}"
   ];
 
+  preBuild = ''
+    if [ -z "$enableParallelBuilding" ]; then
+      export LEAN_NUM_THREADS=1
+    else
+      export LEAN_NUM_THREADS=$NIX_BUILD_CORES
+    fi
+  '';
+
   postFixup = ''
     # Replace the installed copy of `leantar` with a symlink.
     ln -sf ${leangz}/bin/leantar $out/bin/leantar
