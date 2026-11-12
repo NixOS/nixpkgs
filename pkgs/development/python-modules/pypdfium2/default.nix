@@ -29,13 +29,13 @@ let
   ctypesgen = fetchFromGitHub {
     owner = "pypdfium2-team";
     repo = "ctypesgen";
-    rev = "4ddc2b2cdc4daefb0be450e8b5152e11337e9e3c";
-    hash = "sha256-S98kIimLZa3wJ5aKlADYOkqxsOhUlLqLHogC7Id0vVo=";
+    rev = "4f5d6e46aa40bb6bc55c5377434eee75ec0ef346";
+    hash = "sha256-2+JEjAWGK1lCPeLX4BAIiIXlQo7+OgZ8oh6plwfrHuY=";
   };
 in
 buildPythonPackage rec {
   pname = "pypdfium2";
-  version = "5.14.0";
+  version = "5.15.2";
   pyproject = true;
 
   # Use GitHub because the PyPI source distribution excludes the test suite.
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "pypdfium2-team";
     repo = "pypdfium2";
     tag = version;
-    hash = "sha256-KnZkIbV1ke0tL+VdUOkHElZXVrJixNBBoD0fpLPHNbY=";
+    hash = "sha256-xomIK2uW7xdBd9zaXblUWqwb0mpfGSsbLwr+kV4ZHU0=";
   };
 
   build-system = [
