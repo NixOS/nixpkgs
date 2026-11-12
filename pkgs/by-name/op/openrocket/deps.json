@@ -8,60 +8,6 @@
    "pom": "sha256-lnHi4VqRQqT020HObQDo5tpbrkCqG6szudH2ufKb/KE="
   }
  },
- "https://jogamp.org/deployment/maven/org/jogamp": {
-  "gluegen#gluegen-rt-main/2.5.0": {
-   "jar": "sha256-zBFPTAspsv5NBqXHkxg4gURSoEzJeJ4nshqwXTVBwQc=",
-   "pom": "sha256-KDtSN+Uh/300IFXZw6Zy0FgglyLQgvPnVPZw3mVtghg="
-  },
-  "gluegen#gluegen-rt/2.5.0": {
-   "jar": "sha256-NiDBhTaoZx/LHFlddEjp0xImuCQRevakxtRcZX9Nq+M=",
-   "pom": "sha256-6S7gyRmGFTV50qfh5QJQaMLCSlNSc3L+Vrqk2ZCwGPM="
-  },
-  "gluegen#gluegen-rt/2.5.0/natives-android-aarch64": {
-   "jar": "sha256-NFx328LbuUpcVwOVNfPp1k0LTqFyVS1lvwiyJKadhKc="
-  },
-  "gluegen#gluegen-rt/2.5.0/natives-linux-aarch64": {
-   "jar": "sha256-GuQH+YQzcknnzZvx8eFjdzvgVSi1Vi7KBhvM9jSxDa8="
-  },
-  "gluegen#gluegen-rt/2.5.0/natives-linux-amd64": {
-   "jar": "sha256-bZmNDB8E8QOJS3aQSQhhJFBQY86oaoKJYZS7U8iLBAo="
-  },
-  "gluegen#gluegen-rt/2.5.0/natives-linux-armv6hf": {
-   "jar": "sha256-STL1+0J/TAal/QOzhUPqAhmVY8QX8HS1gTf6JWSlRN0="
-  },
-  "gluegen#gluegen-rt/2.5.0/natives-macosx-universal": {
-   "jar": "sha256-Pb1dBU8QjD+MDAcoHm40lLhbibDYs/D770v2xByiVOw="
-  },
-  "gluegen#gluegen-rt/2.5.0/natives-windows-amd64": {
-   "jar": "sha256-pPA54vqdYWvp8mKE/9av5fribVIdIfKBJuXqoHP4pDg="
-  },
-  "jogl#jogl-all-main/2.5.0": {
-   "jar": "sha256-zBFPTAspsv5NBqXHkxg4gURSoEzJeJ4nshqwXTVBwQc=",
-   "pom": "sha256-mGNBTE/Rxfbuq3A2Lhs626GUgWl3cZVqMlbtU4nR0kc="
-  },
-  "jogl#jogl-all/2.5.0": {
-   "jar": "sha256-JFcXzOq8omSiEKiZ+IOdR70Sf1D4CJLq0id92Jy80wE=",
-   "pom": "sha256-awhqLkYde3kRocFl/8veKrebAMVMNgzxkcoA9feE22o="
-  },
-  "jogl#jogl-all/2.5.0/natives-android-aarch64": {
-   "jar": "sha256-M4/4m89L/TTDJSOYA9o+BB4ZmPUNuGCYzVSJoXTwk7U="
-  },
-  "jogl#jogl-all/2.5.0/natives-linux-aarch64": {
-   "jar": "sha256-5LngFakf5SKdPVOEjii4ZwCpD6vY5f6FeW9rHUm0Jm4="
-  },
-  "jogl#jogl-all/2.5.0/natives-linux-amd64": {
-   "jar": "sha256-6XhQ8pDY5Eugf6BQDXoHH/REIJCZ8Dct89unB8uj3cE="
-  },
-  "jogl#jogl-all/2.5.0/natives-linux-armv6hf": {
-   "jar": "sha256-tQgMQid574BQpqAk7O+AW8rP1Vp9TU4/b8XXDinY+4s="
-  },
-  "jogl#jogl-all/2.5.0/natives-macosx-universal": {
-   "jar": "sha256-Ay5WFnRDqA+fRHf77vJV5ZmIxs1SN6FRuUi95Ly3yAw="
-  },
-  "jogl#jogl-all/2.5.0/natives-windows-amd64": {
-   "jar": "sha256-zgt1X2vA7u/ThlOectE+TY6W4fCGyiIvigLhEyADIUI="
-  }
- },
  "https://plugins.gradle.org/m2": {
   "com/adarshr#gradle-test-logger-plugin/3.2.0": {
    "jar": "sha256-LW0Bksjs90nVxLHkUz/P2WXrsuteW9G+6qpLEJYdldg=",
@@ -223,10 +169,6 @@
   }
  },
  "https://repo.maven.apache.org/maven2": {
-  "antlr#antlr/2.7.7": {
-   "jar": "sha256-iPvaS5Ellrn1bo4S5YDMlUus+1F3bs/d0+GPwc9W3Ew=",
-   "pom": "sha256-EA95O6J/i05CBO20YXHr825U4PlM/AJSf+oHoLsfzrc="
-  },
   "aopalliance#aopalliance/1.0": {
    "jar": "sha256-Ct3sZw/tzT8RPFyAkdeDKA0j9146y4QbYanNsHk3agg=",
    "pom": "sha256-JugjMBV9a4RLZ6gGSUXiBlgedyl3GD4+Mf7GBYqppZs="

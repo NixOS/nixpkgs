@@ -5,6 +5,10 @@
   jdk17,
   makeWrapper,
   gradle,
+  libxxf86vm,
+  libGL,
+  jogl,
+  replaceVars,
 }:
 
 let
@@ -23,6 +27,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    (replaceVars ./use-nixpkgs-jogl.patch {
+      inherit jogl;
+    })
+  ];
+
   # The mitmCache update script expects core dependency to be built before it pulls the swing dependency
   # first so we place a dummy jar file, jogamp repositories may fallback to HTTP, we substitute in an arg that allows the fallback
   postPatch = ''
@@ -38,8 +48,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # patch the jogamp repository to allow HTTP fallback redirects
     substituteInPlace build.gradle \
-      --replace-fail 'url "https://jogamp.org/deployment/maven/"' \
-      'url "https://www.jogamp.org/deployment/maven/"; allowInsecureProtocol = true'
+      --replace-fail 'url = "https://jogamp.org/deployment/maven/"' \
+      'url = "https://jogamp.org/deployment/maven/"; allowInsecureProtocol = true'
   '';
 
   nativeBuildInputs = [
@@ -52,6 +62,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pkg = finalAttrs.finalPackage;
     data = ./deps.json;
   };
+  gradleFlags = [ "-Dfile.encoding=utf-8" ];
+
+  # Needed to run gradle on darwin
+  __darwinAllowLocalNetworking = true;
 
   doCheck = true;
 
@@ -64,7 +78,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 build/libs/OpenRocket-${finalAttrs.version}.jar -t $out/share/openrocket
 
     makeWrapper ${lib.getExe jdk} $out/bin/openrocket \
-        --add-flags "-jar $out/share/openrocket/OpenRocket-${finalAttrs.version}.jar"
+        --add-flags "-jar $out/share/openrocket/OpenRocket-${finalAttrs.version}.jar" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libxxf86vm
+            libGL
+          ]
+        }"
 
     runHook postInstall
   '';
@@ -76,15 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "openrocket";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-linux"
-      "armv7l-linux"
-      "armv6l-linux"
-      "powerpc64le-linux"
-      "riscv64-linux"
-    ];
+    platforms = jdk.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
