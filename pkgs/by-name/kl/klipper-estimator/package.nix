@@ -32,6 +32,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
+  # libgit2-sys 0.16 needs libgit2 1.7, nixpkgs has 1.9: use the bundled copy
+  preBuild = ''
+    export LIBGIT2_NO_VENDOR=0
+  '';
+
   meta = {
     description = "Tool for determining the time a print will take using the Klipper firmware";
     homepage = "https://github.com/Annex-Engineering/klipper_estimator";
