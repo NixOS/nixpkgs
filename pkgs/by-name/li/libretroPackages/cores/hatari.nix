@@ -1,24 +1,38 @@
 {
   lib,
+  cmake,
   fetchFromGitHub,
   mkLibretroCore,
-  which,
 }:
 mkLibretroCore {
   core = "hatari";
-  version = "0-unstable-2026-07-31";
+  version = "0-unstable-2026-11-06";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "hatari";
-    rev = "92e2874e664be40e1b51b97e0ff925a1aa917f22";
-    hash = "sha256-TwPlz/H0FKHI0wELj5gYTTL2RJIQOwLLIe+UktK3XXI=";
+    rev = "819c2f7fb2e3aaea5ce6a7db99836af3a985fcbd";
+    hash = "sha256-ncPdxJHn9wpRWDwWFEhv6fA5mKIWMlHE15toInOYc0g=";
   };
 
-  extraNativeBuildInputs = [ which ];
-  dontConfigure = true;
-  # zlib is already included in mkLibretroCore as buildInputs
-  makeFlags = [ "EXTERNAL_ZLIB=1" ];
+  extraNativeBuildInputs = [ cmake ];
+
+  # https://github.com/libretro/hatari/blob/819c2f7fb2e3aaea5ce6a7db99836af3a985fcbd/.gitlab-ci-libretro.yml#L10
+  # without ENABLE_STATIC_ZLIB and ENABLE_STATIC_CAPSIMAGE, which would fetch
+  # sources at configure time; zlib comes from mkLibretroCore
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_LIBRETRO" true)
+    (lib.cmakeBool "ENABLE_HATARI" false)
+    (lib.cmakeBool "ENABLE_TOOLS" false)
+  ];
+
+  # src/CMakeLists.txt only links libm into the standalone Hatari binary,
+  # leaving the core with unresolved math symbols
+  env.NIX_LDFLAGS = "-lm";
+
+  makefile = "Makefile";
+
+  postBuild = "cd src";
 
   meta = {
     description = "Port of Hatari to libretro";
