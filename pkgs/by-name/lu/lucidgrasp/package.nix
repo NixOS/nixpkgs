@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lucidgrasp";
-  version = "1.2.3";
+  version = "1.3.0";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dialga-cmd";
     repo = "LucidGrasp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/Jpm9NpikIANEPTiadJQqgowj8ZW0qWp+NVl4csDDG4=";
+    hash = "sha256-UPI7YHI3mGoMwfG8QGMLtrNTddtqnAN8BNo8EAWCSy4=";
   };
 
   nativeBuildInputs = [
