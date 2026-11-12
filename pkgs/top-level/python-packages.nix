@@ -19282,6 +19282,8 @@ self: super: with self; {
 
   sigima = callPackage ../development/python-modules/sigima { };
 
+  sigimax = callPackage ../development/python-modules/sigimax { };
+
   signalrcore = callPackage ../development/python-modules/signalrcore { };
 
   signalslot = callPackage ../development/python-modules/signalslot { };
