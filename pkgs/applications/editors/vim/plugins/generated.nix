@@ -10742,6 +10742,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mistral-codestral-nvim = buildVimPlugin {
+    pname = "mistral-codestral.nvim";
+    version = "1.1.0";
+    src = fetchFromGitHub {
+      owner = "jrollin";
+      repo = "mistral-codestral.nvim";
+      tag = "v1.1.0";
+      hash = "sha256-Pp+cG8CULPWLDRfHMD9kwLHbJzLTVECsYD/dRwkU6yc=";
+    };
+    meta.homepage = "https://github.com/jrollin/mistral-codestral.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   mkdir-nvim = buildVimPlugin {
     pname = "mkdir.nvim";
     version = "0-unstable-2022-07-23";
