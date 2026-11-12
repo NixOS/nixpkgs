@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "6.0.5";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l9/r6GIghNGl1PCSue1nkl9p+CI/6Au1yA36QcQzFe4=";
+    hash = "sha256-pG+n9KBm+AklRSiDG8BKmq5rmAzqWuM+5dLDNeW2Duc=";
   };
 
   passthru = {
@@ -52,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
   ];
+
+  # Provides dbus-run-session for the private-bus regression when checks run.
+  nativeCheckInputs = [ dbus ];
 
   buildInputs = [
     acl
