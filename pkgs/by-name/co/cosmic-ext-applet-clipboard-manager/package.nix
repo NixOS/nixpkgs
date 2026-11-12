@@ -11,7 +11,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-applet-clipboard-manager";
   version = "0-unstable-2026-03-04";
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace justfile \
-      --replace-warn '`git rev-parse --short HEAD`' '"${version}"'
+      --replace-warn '`git rev-parse --short HEAD`' '"${finalAttrs.version}"'
   '';
 
   dontUseJustBuild = true;
@@ -67,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ krit ];
     platforms = platforms.linux;
   };
-}
+})
