@@ -34,7 +34,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     attrs
     aws-encryption-sdk
     base64io
-    setuptools # for pkg_resources
     urllib3
   ];
 
