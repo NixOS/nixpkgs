@@ -127,6 +127,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://zl-audio.github.io/plugins/zlcompressor/";
+    changelog = "https://github.com/ZL-Audio/ZLCompressor/releases/tag/${finalAttrs.version}";
     description = "Versatile compressor plugin for VST3, LV2 and standalone";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
