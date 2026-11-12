@@ -1,6 +1,6 @@
 {
   lib,
-  flutter338,
+  flutter347,
   fetchFromGitHub,
   libayatana-appindicator,
   libsodium,
@@ -15,16 +15,16 @@ let
   simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
   desktopId = "io.ente.auth";
 in
-flutter338.buildFlutterApplication rec {
+flutter347.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.4.25";
+  version = "4.4.26";
 
   src = fetchFromGitHub {
     owner = "ente";
     repo = "ente";
     sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
-    hash = "sha256-zOZg4RW7T3v/QS075KWEEdmT2+2xcMa1BlSM4In75uM=";
+    hash = "sha256-gxiOXkjKL7LpOH+p+ZXPCW0931VcykdNX/0mrAkY+OU=";
   };
 
   sourceRoot = "${src.name}/mobile";
