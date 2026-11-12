@@ -10,6 +10,7 @@
   nodejs,
   npmHooks,
   yarn-berry_4,
+  fetchFromGitHub,
   unzip,
   writers,
 
@@ -24,7 +25,17 @@
 
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
-  yarn-berry = yarn-berry_4;
+  # Use yarn version 4.18+, required since electron 45 with typscript 7
+  # Fixes build error: ENOENT: no such file or directory, lstat '/node_modules/typescript/lib/_tsc.js
+  yarn-berry = yarn-berry_4.overrideAttrs (_: {
+    version = "4.18.1";
+    src = fetchFromGitHub {
+      owner = "yarnpkg";
+      repo = "berry";
+      tag = "@yarnpkg/cli/4.18.1";
+      hash = "sha256-4qbW3T3kUJzsgc1Lp2g/O3fORhAlyaPoXusEj0FWyk0=";
+    };
+  });
   upstream-info = info.chromium // {
     inherit gclientDeps;
   };
