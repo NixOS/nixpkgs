@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails 2 tests
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://libgd.github.io/";
     description = "Dynamic image creation library";
