@@ -6794,6 +6794,8 @@ self: super: with self; {
 
   generic = callPackage ../development/python-modules/generic { };
 
+  genguardx = callPackage ../development/python-modules/genguardx { };
+
   genie-partner-sdk = callPackage ../development/python-modules/genie-partner-sdk { };
 
   geniushub-client = callPackage ../development/python-modules/geniushub-client { };
