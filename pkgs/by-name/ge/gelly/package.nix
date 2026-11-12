@@ -15,6 +15,7 @@
   bubblewrap,
   glycin-loaders,
   nix-update-script,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -50,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libadwaita
     libseccomp
     openssl
+    aws-lc
   ];
 
   # Adapted from upstream's `justfile`
