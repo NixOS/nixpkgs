@@ -11,6 +11,7 @@
   webkitgtk_4_1,
   glib-networking,
   udev,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -54,16 +55,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'child.execSync("git rev-parse --short HEAD").toString().trim()' '"${finalAttrs.src.rev}"'
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Betaflight flight control system configuration tool";
-    mainProgram = "betaflight-configurator";
+    description = "Cross platform configuration and management application for the Betaflight firmware";
+    mainProgram = "betaflight-app";
     longDescription = ''
-      A crossplatform configuration tool for the Betaflight flight control system.
-      Various types of aircraft are supported by the tool and by Betaflight, e.g.
-      quadcopters, hexacopters, octocopters and fixed-wing aircraft.
+      A crossplatform configuration and management application for the Betaflight flight control system.
+
+      Various types of aircraft are supported by the tool and by Betaflight, e.g. quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
-    homepage = "https://github.com/betaflight/betaflight/wiki";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    homepage = "https://github.com/betaflight/betaflight-configurator";
+    changelog = "https://betaflight.com/docs/category/release-notes";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       wucke13
