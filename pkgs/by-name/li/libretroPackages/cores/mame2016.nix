@@ -29,8 +29,16 @@ mkLibretroCore {
   env = {
     # Build failures when this is set to a bigger number
     NIX_BUILD_CORES = 8;
-    # Fix build errors in GCC 13
-    NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
+    NIX_CFLAGS_COMPILE = toString [
+      # Fix build errors in GCC 13
+      "-Wno-error"
+      "-fpermissive"
+      # make_unique_clear zeroes memory before placement new, which GCC
+      # otherwise optimizes away, leaving e.g. rom_load_manager's error count
+      # uninitialized so that loading any game fails with "Required files are
+      # missing"
+      "-fno-lifetime-dse"
+    ];
   };
 
   meta = {
