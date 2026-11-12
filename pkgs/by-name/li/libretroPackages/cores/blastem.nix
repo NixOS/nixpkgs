@@ -22,6 +22,6 @@ mkLibretroCore {
     description = "Port of BlastEm to libretro";
     homepage = "https://github.com/libretro/blastem";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.x86;
+    platforms = lib.platforms.linux;
   };
 }
