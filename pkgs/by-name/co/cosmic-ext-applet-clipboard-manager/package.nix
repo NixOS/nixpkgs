@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-applet-clipboard-manager";
   version = "0-unstable-2026-03-04";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "clipboard-manager";
