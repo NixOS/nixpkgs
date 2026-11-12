@@ -1185,8 +1185,6 @@ self: super: with self; {
 
   anthropic = callPackage ../development/python-modules/anthropic { };
 
-  anthropic_0 = callPackage ../development/python-modules/anthropic/0.nix { };
-
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
     inherit (pkgs) antlr4;
   };
@@ -2721,6 +2719,8 @@ self: super: with self; {
   broadbean = callPackage ../development/python-modules/broadbean { };
 
   broadlink = callPackage ../development/python-modules/broadlink { };
+
+  broadlink-async = callPackage ../development/python-modules/broadlink-async { };
 
   brother = callPackage ../development/python-modules/brother { };
 
@@ -15193,8 +15193,6 @@ self: super: with self; {
 
   pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
 
-  pyfronius = callPackage ../development/python-modules/pyfronius { };
-
   pyftdi = callPackage ../development/python-modules/pyftdi { };
 
   pyftgl = callPackage ../development/python-modules/pyftgl { };
@@ -15231,6 +15229,8 @@ self: super: with self; {
   pygame-sdl2 = callPackage ../development/python-modules/pygame-sdl2 { };
 
   pygatt = callPackage ../development/python-modules/pygatt { };
+
+  pygbl = callPackage ../development/python-modules/pygbl { };
 
   pygccxml = callPackage ../development/python-modules/pygccxml { };
 
@@ -15358,8 +15358,6 @@ self: super: with self; {
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
-
-  pyialarm = callPackage ../development/python-modules/pyialarm { };
 
   pyiceberg = callPackage ../development/python-modules/pyiceberg { };
 
@@ -16254,8 +16252,6 @@ self: super: with self; {
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
 
-  pyrituals = callPackage ../development/python-modules/pyrituals { };
-
   pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
   pyro-api = callPackage ../development/python-modules/pyro-api { };
@@ -16285,8 +16281,6 @@ self: super: with self; {
   pysail = callPackage ../development/python-modules/pysail {
     protoc = pkgs.protobuf;
   };
-
-  pysaj = callPackage ../development/python-modules/pysaj { };
 
   pysam = callPackage ../development/python-modules/pysam { };
 
@@ -22603,8 +22597,6 @@ self: super: with self; {
   voip-utils = callPackage ../development/python-modules/voip-utils { };
 
   volatile = callPackage ../development/python-modules/volatile { };
-
-  volkswagencarnet = callPackage ../development/python-modules/volkswagencarnet { };
 
   volkszaehler = callPackage ../development/python-modules/volkszaehler { };
 

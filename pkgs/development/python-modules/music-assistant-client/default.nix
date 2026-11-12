@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "music-assistant-client";
-  version = "1.5.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8EsLeRtPH/YZyl8uKyzA1L5n+6lkGAFqYipVbaW4sSg=";
+    hash = "sha256-BPFx8/G4XfzuOLmssMMhVppmPgKFrdI/R6OKneoToT4=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
