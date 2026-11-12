@@ -10,6 +10,7 @@
   fetchpatch,
   fetchzip,
   dovecot,
+  icu75,
   openssl,
   pkg-config,
   libstemmer,
@@ -48,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pkg-config
   ]
-  ++ lib.optional (isCurrent && stdenv.hostPlatform.isDarwin) libstemmer
+  ++ lib.optionals (isCurrent && stdenv.hostPlatform.isDarwin) [
+    icu75
+    libstemmer
+  ]
   ++ lib.optionals withLDAP [
     cyrus_sasl
     openldap
