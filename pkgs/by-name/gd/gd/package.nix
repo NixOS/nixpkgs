@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxpm
   ];
 
+  strictDeps = true;
+
   outputs = [
     "bin"
     "dev"
