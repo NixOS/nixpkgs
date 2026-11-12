@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-/VFeLCC80ipTGuXcR0kihukCxtAt6ksLjnoZPwjy+w4=";
 
-  env.LIBGIT2_NO_VENDOR = 1;
-
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [

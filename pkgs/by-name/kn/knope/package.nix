@@ -30,8 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
   ];
 
-  env.LIBGIT2_NO_VENDOR = 1;
-
   nativeCheckInputs = [ git ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 

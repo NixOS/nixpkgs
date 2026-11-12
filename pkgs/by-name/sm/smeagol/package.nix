@@ -34,12 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = "1";
-    LIBZ_SYS_STATIC = "0";
-    ZSTD_SYS_USE_PKG_CONFIG = "1";
-  };
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

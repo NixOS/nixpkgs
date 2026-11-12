@@ -50,11 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git config --global user.email nixbld@example.com
   '';
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-    RUSTONIG_SYSTEM_LIBONIG = true;
-  };
-
   meta = {
     description = "Dive into a file's history to find root cause";
     homepage = "https://github.com/gitext-rs/git-dive";

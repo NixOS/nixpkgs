@@ -48,10 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_criterion_build_and_run_filtered_by_name_single"
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   meta = {
     changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/v${finalAttrs.version}";
     description = "Cargo extension to build & run your codspeed benchmarks";

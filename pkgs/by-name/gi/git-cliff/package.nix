@@ -25,12 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-yO8Ov2+cJky3JqePy2mnOd4AFEKJRuAirm/iozTwArU=";
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-    LIBZ_SYS_STATIC = 0;
-    ZSTD_SYS_USE_PKG_CONFIG = 1;
-  };
-
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;
 

@@ -35,9 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    OPENSSL_NO_VENDOR = 1;
-    LIBGIT2_NO_VENDOR = 1;
-    LIBSSH2_SYS_USE_PKG_CONFIG = 1;
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 

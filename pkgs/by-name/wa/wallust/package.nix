@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-XrIi+8p2OZ7O6MTgqKbgN/9gLUbvB7uN9Yr2X1BYHIU=";
 
-  env.LIBGIT2_NO_VENDOR = 1;
-
   nativeBuildInputs = [
     makeWrapper
     installShellFiles

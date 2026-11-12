@@ -40,11 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
-  env = {
-    LIBGIT2_NO_VENDOR = true;
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-  };
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

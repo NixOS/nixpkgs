@@ -38,8 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # grammars can be configured in a config file and installed with `zee --build`
     # see https://github.com/zee-editor/zee#syntax-highlighting
     ZEE_DISABLE_GRAMMAR_BUILD = 1;
-
-    LIBGIT2_NO_VENDOR = 1;
   };
 
   meta = {

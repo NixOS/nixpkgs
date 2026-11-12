@@ -34,10 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   postInstall = ''
     installManPage \
       target/manpages/teamtype.1 \

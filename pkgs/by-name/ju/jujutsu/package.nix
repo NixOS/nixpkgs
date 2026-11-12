@@ -70,13 +70,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "!test(test_build_truncated_evolution_graph)"
   ];
 
-  env = {
-    # Disable vendored libraries.
-    ZSTD_SYS_USE_PKG_CONFIG = "1";
-    LIBGIT2_NO_VENDOR = "1";
-    LIBSSH2_SYS_USE_PKG_CONFIG = "1";
-  };
-
   preBuild = ''
     mkdocs build -d $name
   '';
