@@ -70,7 +70,7 @@ buildNimPackage (finalAttrs: {
     ''
       runHook preInstall
       mv $out/bin/main $out/bin/animdustry
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         wrapProgram $out/bin/animdustry \
           --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}" \
           --set __GLX_VENDOR_LIBRARY_NAME "mesa"
