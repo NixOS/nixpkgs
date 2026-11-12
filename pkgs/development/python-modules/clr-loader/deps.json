@@ -20,9 +20,9 @@
     "hash": "sha256-oS7sUMzKBkLmhggqbI6eBqb1OPAipH0TDTaDaBixcwM="
   },
   {
-    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net472",
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net461",
     "version": "1.0.3",
-    "hash": "sha256-/6ClVwo5+RE5kWTQWB/93vmbXj37ql8iDlziKWm89Xw="
+    "hash": "sha256-vVIonl+4dlCQuxibOZoGR3o1DAhjAYpFW15dnkUpjMk="
   },
   {
     "pname": "NETStandard.Library",
