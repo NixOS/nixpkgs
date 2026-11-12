@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "bump-my-version";
-  version = "1.7.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
     tag = version;
-    hash = "sha256-Dh0bSxZJPKPkxLSlFOs0+aYlCEEVGV/q3DkAbDnpNww=";
+    hash = "sha256-mqliODDEr7SYZCyDyYBV0skSrYnYVynSXmqBzOG6Fs0=";
   };
 
   build-system = [
