@@ -65,7 +65,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/betaflight/betaflight/wiki";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ wucke13 ];
+    maintainers = with lib.maintainers; [
+      wucke13
+      issai
+    ];
     platforms = lib.platforms.linux;
   };
 })
