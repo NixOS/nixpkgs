@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://waterlander.net/dos2unix/";
     changelog = "https://sourceforge.net/p/dos2unix/dos2unix/ci/dos2unix-${finalAttrs.version}/tree/dos2unix/NEWS.txt?format=raw";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ highghlow ];
     platforms = lib.platforms.all;
   };
 })
