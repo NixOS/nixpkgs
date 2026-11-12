@@ -25,12 +25,7 @@ let
     echo '<Project><PropertyGroup><Version/></PropertyGroup></Project>' > \
       Directory.Build.props
 
-    substituteInPlace example/example.csproj \
-      --replace-fail 'net8.0;netstandard2.0' 'net10.0;netstandard2.0'
-
     substituteInPlace tests/test_common.py \
-      --replace-fail 'return build_example(tmp_path_factory, "net8.0")' \
-        'return build_example(tmp_path_factory, "net10.0")' \
       --replace-fail 'def test_coreclr_properties(example_netcore: Path):' \
         'def test_coreclr_properties(example_netcore: Path, example_netstandard: Path):'
   '';
@@ -96,7 +91,11 @@ buildPythonPackage {
       -p:Deterministic=true
   '';
 
-  passthru.fetch-deps = dotnet-build.fetch-deps;
+  passthru = {
+    inherit (dotnet-build) fetch-deps;
+    # update-python-libraries only bumps version and hash, leaving deps.json and postPatch stale
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Generic pure Python loader for .NET runtimes";
