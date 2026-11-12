@@ -34,7 +34,7 @@ let
 in
 ocPkgs.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "3.0.0";
+  version = "3.1.0";
   release_year = 2026;
 
   minimalOCamlVersion = "5.4";
@@ -43,7 +43,7 @@ ocPkgs.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-CSnmSN8TD0a8TKbJPs0vggh11XMqf9GpKP/Du04a1b8=";
+    hash = "sha256-AW9jcfnGM1Wi3bPKBfP8rZXjRAbwn8FIlue3SxgWGIA=";
   };
 
   nativeBuildInputs = [
