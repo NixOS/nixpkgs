@@ -25,6 +25,7 @@
   pytest-xdist,
   pytestCheckHook,
   scikit-learn,
+  tensorflow,
   tensorflow-probability,
 }:
 
@@ -61,6 +62,9 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     scikit-learn
+  ]
+  # tensorflow (required by tensorflow-probability) is not available for all python versions
+  ++ lib.optionals tensorflow.meta.available [
     tensorflow-probability
   ];
 
@@ -122,6 +126,10 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Require internet access
     "test/test_example_utils.py"
+  ]
+  ++ lib.optionals (!tensorflow.meta.available) [
+    # Requires tensorflow-probability
+    "test/contrib/test_tfp.py"
   ];
 
   meta = {
