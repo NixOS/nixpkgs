@@ -44,14 +44,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "coffea";
-  version = "2026.9.0";
+  version = "2026.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "coffea";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zVcTAlL4Wl6oUm2VOmX0zBgsHbEyI93RNQwf4NBhE9s=";
+    hash = "sha256-LYfZR36HEmNrv4iB0CDdrFz5d5tlVAT5OvcyXPxLsxI=";
   };
 
   build-system = [
