@@ -1,9 +1,10 @@
 {
+  busybox,
   fetchFromGitHub,
   gns3-server,
   lib,
+  musl,
   nixosTests,
-  pkgsStatic,
   python3Packages,
   stdenv,
   testers,
@@ -12,6 +13,12 @@
   writeScript,
 }:
 
+let
+  busybox-static = busybox.override {
+    enableStatic = true;
+    useMusl = lib.meta.availableOn stdenv.hostPlatform musl;
+  };
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gns3-server";
   version = "2.2.61";
@@ -26,7 +33,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # GNS3 2.2 requires a static BusyBox for the Docker integration
   prePatch = ''
-    cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
+    cp ${busybox-static}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
   pythonRelaxDeps = [
