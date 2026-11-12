@@ -5,6 +5,7 @@
   lib,
   python3Packages,
   qt6,
+  stdenv,
   testers,
   writableTmpDirAsHomeHook,
 }:
@@ -23,7 +24,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
-  buildInputs = [ qt6.qtwayland ];
+  buildInputs = [
+    qt6.qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -71,7 +77,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://www.gns3.com/";
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3";
   };
