@@ -29,12 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  strictDeps = true;
+
   postPatch = ''
     substituteInPlace src/install.c \
-      --replace \"update-desktop-database\" \"$out/bin/update-desktop-database\"
+      --replace-fail \"update-desktop-database\" \"$out/bin/update-desktop-database\"
   '';
 
   setupHook = ./setup-hook.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/desktop-file-utils";
