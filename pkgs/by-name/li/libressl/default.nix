@@ -144,30 +144,17 @@ in
   # 4.2 was released October 2025 and will become unsupported on October 22,
   # 2026, one year after the release of OpenBSD 7.8.
   libressl_4_2 = generic {
-    version = "4.2.1";
-    hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
+    version = "4.2.3";
+    hash = "sha256-QGPmWbx5VzFG0PqrAa0odi9RQazcOd8pJH/CVarfGHw=";
     patches = [
       common-cmake-install-full-dirs-patch
     ];
   };
 
-  # 4.3 was released April 2026 and will become unsupported one year after the
-  # release of OpenBSD 7.9.
+  # 4.3 was released April 2026 and will become unsupported on May 19, 2027,
+  # one year after the release of OpenBSD 7.9.
   libressl_4_3 = generic {
-    version = "4.3.1";
-    hash = "sha256-wttCrOFOfVQZgm+rNadC7G5NEnJaBRpR0M6jwQug+lA=";
-    patches = [
-      # Fix for https://github.com/libressl/portable/issues/1278, where LibreSSL
-      # 4.3 started requiring executable stack because some objects were missing
-      # a .note.GNU-stack section; will probably be included in the next release.
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/libressl/portable/4dae91d056c6c75ba5cf2bc5e6148b8e02239119/patches/gnu-stack.patch";
-        hash = "sha256-Q1oWL4N8w5Zmjfq5QkTJR53NgZ4GqChSDaBicli5G2I=";
-        # This patch is written to be applied with -p0, with no leading path
-        # component, but Nix applies with -p1 by default, so we add it to not
-        # break compatibility with how other patches must be applied.
-        decode = "sed 's|^--- |--- a/|; s|^+++ |+++ b/|'";
-      })
-    ];
+    version = "4.3.4";
+    hash = "sha256-V8iy+Mb5UFWHq67dqwA+okPWFe237XGVeWgSH8Yxa9Y=";
   };
 }

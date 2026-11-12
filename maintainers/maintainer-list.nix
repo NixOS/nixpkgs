@@ -19418,6 +19418,12 @@
     githubId = 364510;
     name = "Tobias Geerinckx-Rice";
   };
+  ndenissov = {
+    email = "n.denissov@proton.me";
+    github = "ndenissov";
+    githubId = 70575593;
+    name = "Nikita Denissov";
+  };
   ndl = {
     email = "ndl@endl.ch";
     github = "ndl";

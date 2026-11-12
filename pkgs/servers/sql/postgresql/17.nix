@@ -1,6 +1,6 @@
 import ./generic.nix {
   version = "17.12";
-  rev = "702b3dc86d35bcc08c8e23cffa3c4d9fe9d32c85";
+  rev = "refs/tags/REL_17_12";
   hash = "sha256-+DD+nYTFHwyDW3CIMoeTnCfyxQBXl9gvHlUmo4eOFjo=";
   muslPatches = {
     dont-use-locale-a = {
