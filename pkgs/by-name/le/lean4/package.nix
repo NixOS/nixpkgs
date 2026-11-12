@@ -93,11 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    (lib.cmakeBool "USE_GITHASH" false)
-    (lib.cmakeBool "INSTALL_LICENSE" false)
-    (lib.cmakeBool "INSTALL_CADICAL" false)
+    # Flags for top-level `CMakeLists.txt`
     (lib.cmakeBool "USE_MIMALLOC" enableMimalloc)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MIMALLOC" finalAttrs.mimalloc-src.outPath)
+
+    # Flags for inner `src/CMakeLists.txt`
+    (lib.cmakeBool "STAGE1_USE_GITHASH" false)
+    (lib.cmakeBool "STAGE1_INSTALL_LICENSE" false)
+    (lib.cmakeBool "STAGE1_INSTALL_CADICAL" false)
+
+    # Produces better log output in sandbox
+    (lib.cmakeFeature "STAGE1_LEAN_EXTRA_LAKE_OPTS" "--no-ansi")
   ];
 
   nativeInstallCheckInputs = [
