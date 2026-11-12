@@ -5,11 +5,17 @@
 
   # nativeBuildInputs
   pkg-config,
-  file,
+  gettext,
+  glib,
+  gobject-introspection,
+  python3,
+  wrapGAppsHook3,
 
   # buildInputs
-  gtk2,
+  gtk3,
   fftw,
+  libpng,
+  zlib,
   openexrSupport ? true,
   openexr,
   libzipSupport ? true,
@@ -18,56 +24,54 @@
   libxml2,
   libwebpSupport ? true,
   libwebp,
-  libXmuSupport ? false,
-  libxmu,
-  libxsltSupport ? true,
-  libxslt,
+  jsonGlibSupport ? true,
+  json-glib,
   fitsSupport ? true,
   cfitsio,
-  zlibSupport ? true,
-  zlib,
-  libpngSupport ? true,
-  libpng,
+  hdf5Support ? true,
+  hdf5,
+  bzip2Support ? true,
+  bzip2,
+  zstdSupport ? true,
+  zstd,
   openglSupport ? !stdenv.hostPlatform.isDarwin,
-  gtkglext,
-  libGL,
+  libepoxy,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gwyddion";
-  version = "2.71";
+  version = "3.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LfchvvzL5NXuK6Vksy5pNB+M4d5jfiBFg4oJotRrXbo=";
+    hash = "sha256-1EWh9LcLO3xe5OnNHT0VPhWhNZIzk3YC/b9HGFx0xYg=";
   };
-  patches = [
-    # Corrects problems with python support, but should apply cleanly
-    # regardless of whether python support is enabled, and have no effects if
-    # it is disabled.
-    ./codegen.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
+    gettext
+    glib # glib-mkenums, glib-genmarshal
+    gobject-introspection
+    python3
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gtk2
+    glib
+    gtk3
     fftw
+    libpng
+    zlib
   ]
-  ++ lib.optionals openglSupport [
-    gtkglext
-    libGL
-  ]
+  ++ lib.optional openglSupport libepoxy
   ++ lib.optional openexrSupport openexr
-  ++ lib.optional libXmuSupport libxmu
   ++ lib.optional fitsSupport cfitsio
-  ++ lib.optional libpngSupport libpng
-  ++ lib.optional libxsltSupport libxslt
+  ++ lib.optional hdf5Support hdf5
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional libwebpSupport libwebp
-  ++ lib.optional zlibSupport zlib
+  ++ lib.optional jsonGlibSupport json-glib
+  ++ lib.optional bzip2Support bzip2
+  ++ lib.optional zstdSupport zstd
   ++ lib.optional libzipSupport libzip;
 
   meta = {
@@ -90,6 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
-    mainProgram = "gwyddion";
+    mainProgram = "gwyddion3";
   };
 })
