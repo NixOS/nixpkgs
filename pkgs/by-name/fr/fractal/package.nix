@@ -19,6 +19,7 @@
   desktop-file-utils,
   appstream-glib,
   openssl,
+  aws-lc,
   pipewire,
   libshumate,
   wrapGAppsHook4,
@@ -34,6 +35,9 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
   version = "14.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -88,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libglycin-gtk4
     openssl
+    aws-lc
     pipewire
     libshumate
     sqlite
