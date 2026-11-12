@@ -52,7 +52,8 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Computer management web app";
     homepage = "https://meshcentral.com/";
-    maintainers = [ ];
+    changelog = "https://github.com/Ylianst/MeshCentral/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ samirbgno ];
     license = lib.licenses.asl20;
     mainProgram = "meshcentral";
   };
