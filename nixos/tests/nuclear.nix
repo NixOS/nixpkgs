@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.proteus ];
 
   name = "nuclear";
 
