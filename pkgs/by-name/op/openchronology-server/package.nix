@@ -8,6 +8,9 @@
   makeWrapper,
   nodejs_24,
   nix-update-script,
+  nixosTests,
+  runCommand,
+  jq,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -86,6 +89,25 @@ buildNpmPackage (finalAttrs: {
   passthru = {
     och-convert = callPackage ./och-convert.nix { inherit (finalAttrs) version src; };
     updateScript = nix-update-script { };
+    tests = {
+      nixos = nixosTests.openchronology;
+      # A timeline written as an .och file (SQLite) and read back, its exact time intact.
+      och-convert =
+        runCommand "och-convert-round-trip"
+          {
+            nativeBuildInputs = [
+              finalAttrs.passthru.och-convert
+              jq
+            ];
+          }
+          ''
+            echo '{"format":"openchronology","version":1,"title":"Round trip","description":"","events":[{"id":"a","time":"1/3","metadata":{"title":"A third"}}]}' \
+              | och-convert write timeline.och
+            och-convert read timeline.och > back.json
+            jq -e '.title == "Round trip" and .events[0].time == "1/3" and .events[0].metadata.title == "A third"' back.json
+            touch $out
+          '';
+    };
   };
 
   meta = {
