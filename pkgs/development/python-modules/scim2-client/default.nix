@@ -9,14 +9,14 @@
   pytest-httpserver,
   pytest-asyncio,
   scim2-server,
-  httpx,
+  httpx2,
   werkzeug,
   cacert,
 }:
 
 buildPythonPackage rec {
   pname = "scim2-client";
-  version = "0.7.5";
+  version = "0.14.1";
 
   pyproject = true;
 
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "python-scim";
     repo = "scim2-client";
     tag = version;
-    hash = "sha256-vySSYdCd7O7wDB3NDzGizhREwBJQdLfaXk6edJ1HqGE=";
+    hash = "sha256-1or/+rRZat53znkT9db2uanEIILMyNfa8u354dvm424=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'uv_build>=0.8.9,<0.9.0' 'uv_build'
+      --replace-fail 'uv_build>=0.12.13,<0.14.0' 'uv_build'
   '';
 
   build-system = [ uv-build ];
@@ -41,16 +41,19 @@ buildPythonPackage rec {
     portpicker
     pytest-httpserver
     pytest-asyncio
-    scim2-server
+    (scim2-server.overridePythonAttrs {
+      # Avoid circular dependency
+      doCheck = false;
+    })
     werkzeug
     cacert
   ]
-  ++ optional-dependencies.httpx;
+  ++ optional-dependencies.httpx2;
 
   pythonImportsCheck = [ "scim2_client" ];
 
   optional-dependencies = {
-    httpx = [ httpx ];
+    httpx2 = [ httpx2 ];
     werkzeug = [ werkzeug ];
   };
 

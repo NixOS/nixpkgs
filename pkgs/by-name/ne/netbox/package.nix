@@ -83,7 +83,6 @@ py.pkgs.buildPythonApplication (finalAttrs: {
       ]
       ++ psycopg.optional-dependencies.c
       ++ psycopg.optional-dependencies.pool
-      ++ social-auth-core.optional-dependencies.openidconnect
     )
     ++ extraBuildInputs;
 

@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "mujoco_core";
     inherit (finalAttrs) version;
-    hash = "sha256-cwDMIy8nzrhpSqRbJseQZn7r1KBihhVrSblybjvx188=";
+    hash = "sha256-BiiDysA1sbOuanaczNFV7MjwbYwcsATDPgHRyw8Mz0k=";
   };
 
   nativeBuildInputs = [ cmake ];

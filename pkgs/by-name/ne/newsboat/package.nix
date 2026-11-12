@@ -21,18 +21,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsboat";
-  version = "2.45";
+  version = "2.45.1";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-3joEytlm0KPLF7hbIG+9X6X+D6ydeLFTRrWf14j3p+E=";
+    hash = "sha256-uZCR1ze0Qt3VgOCROlwtnl+AECUoXzNIIptmXrU28Kg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Tp1P/kE21jtM8vxBwy0FmScPU2LTHx9EH6YfhCWn0kE=";
+    hash = "sha256-BrDiaRIBKIX9vMfO9TmRstzQmDqAl6E/Fit7cHNuxqE=";
   };
 
   # allow other ncurses versions on Darwin

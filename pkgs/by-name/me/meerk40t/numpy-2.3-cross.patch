@@ -1,0 +1,39 @@
+--- a/meerk40t/tools/geomstr.py
++++ b/meerk40t/tools/geomstr.py
+@@ -126,6 +126,18 @@
+         return self.geomstr.bbox(mx)
+ 
+ 
++def _cross_2d(a, b):
++    """
++    2D scalar cross product (z-component), broadcasting over the last axis.
++
++    NumPy 2.3 removed support for 2-dimensional inputs to ``np.cross``; this
++    helper replaces those calls.
++    """
++    a = np.asarray(a)
++    b = np.asarray(b)
++    return a[..., 0] * b[..., 1] - a[..., 1] * b[..., 0]
++
++
+ def triangle_area(p1, p2, p3):
+     """
+     calculates the area of a triangle given its vertices
+@@ -4847,7 +4859,7 @@
+         """
+ 
+         def process(S, P, a, b):
+-            signed_dist = np.cross(S[P] - S[a], S[b] - S[a])
++            signed_dist = _cross_2d(S[P] - S[a], S[b] - S[a])
+             K = [i for s, i in zip(signed_dist, P) if s > 0 and i != a and i != b]
+ 
+             if len(K) == 0:
+@@ -5475,7 +5487,7 @@
+             if line_length == 0:
+                 return np.linalg.norm(points - start, axis=-1)
+             if line.size == 2:
+-                return abs(np.cross(line, start - points)) / line_length  # 2D case
++                return abs(_cross_2d(line, start - points)) / line_length  # 2D case
+             return (
+                 abs(np.linalg.norm(np.cross(line, start - points), axis=-1))
+                 / line_length

@@ -38,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "1da510b8155f8fa81924616dcc517ecc4202e4d3";
-      hash = "sha256-8Dljp09cMal3CJuRrt9lZFnG/ABmF1kUU/jZ4mr4uu0=";
+      rev = "48f0b66cb2c41a392f88be7485205f71b97b1a16";
+      hash = "sha256-S41bKTjJ9oCzpuAnyPkqfgKMpXb4H4APiVU0xhcuBZk=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -90,7 +90,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "4.0.0";
+  version = "4.0.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-Cj4Z5OKzX8gQfSjNrL/EzK2eOkos0ibX3gkZ/qdIhag=";
+    hash = "sha256-xJh8jrgoUTsN8fUjg4Q1IzStq5/SWTVhZUo5PKdiJ5c=";
   };
 
   patches = [

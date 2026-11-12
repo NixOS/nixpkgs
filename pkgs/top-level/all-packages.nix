@@ -7916,7 +7916,7 @@ with pkgs;
   );
   android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
-  arelle = with python3Packages; toPythonApplication arelle;
+  arelle = with python3Packages; toPythonApplication arelle-release;
 
   audacious = audacious-bare.override { withPlugins = true; };
 

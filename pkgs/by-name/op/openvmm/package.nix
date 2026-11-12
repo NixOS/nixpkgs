@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   protobuf,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage {
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage {
   ];
   buildInputs = [
     openssl
+    sqlite
   ];
 
   cargoHash = "sha256-u0E09yFssd71wUS1BD766ztDImauu90T/jIWOb2v0mE=";

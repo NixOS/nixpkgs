@@ -16,6 +16,7 @@
   cacert,
   pkg-config,
   makeWrapper,
+  sqlite,
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
@@ -87,6 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     glib
     gtk3
+    sqlite
     webkitgtk_4_1
   ];
 

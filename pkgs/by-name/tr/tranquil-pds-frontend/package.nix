@@ -12,12 +12,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tranquil-frontend";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromTangled {
     did = "did:plc:jj6ajj6duxnlthwtnob4qyuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qsV7AXQHITaWQ3lFGyvdukV8gcVoI4P02QWS4BsZxIQ=";
+    hash = "sha256-0/eBbeO31lCI99TNSSQlk9QaWzegpAuYyGCQMupPb9s=";
   };
   sourceRoot = "${finalAttrs.src.name}/frontend";
 
@@ -58,6 +58,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "First party frontend for the Tranquil PDS implementation";
     homepage = "https://tangled.org/tranquil.farm/tranquil-pds";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ nelind ];
+    maintainers = with lib.maintainers; [
+      nelind
+      pyrox0
+    ];
   };
 })
