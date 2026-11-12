@@ -90,5 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "gwyddion";
   };
 })
