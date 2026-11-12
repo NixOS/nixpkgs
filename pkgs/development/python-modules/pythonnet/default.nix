@@ -9,17 +9,19 @@
   dotnet-sdk_10,
   buildDotnetModule,
   clr-loader,
+  packaging,
+  pyproject-parser,
   setuptools,
 }:
 
 let
   pname = "pythonnet";
-  version = "3.0.5";
+  version = "3.2.1";
   src = fetchFromGitHub {
     owner = "pythonnet";
     repo = "pythonnet";
     tag = "v${version}";
-    hash = "sha256-3LBrV/cQrXFKMFE1rCalDsPZ3rOY7RczqXoryMoVi14=";
+    hash = "sha256-hE0dDcbImBPS6/aZlRHkziKBE+REtso3g14Tqs6vucc=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -39,32 +41,23 @@ buildPythonPackage {
 
   pyproject = true;
 
+  # Upstream's commented-out CoreCLR hint targets net6.0, which the .NET 10 SDK can't run
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-
-    # .NET SDK 10 uses a newer toolchain that triggers NonCopyableAnalyzer failures
-    # in this release; disable analyzers for the Nix build to keep the package building.
-    substituteInPlace Directory.Build.props \
-      --replace-fail '</PropertyGroup>' $'  <RunAnalyzers>false</RunAnalyzers>\n  </PropertyGroup>'
-
-    # Tests (run with --runtime=coreclr) need a CoreCLR target; net6.0 requires a
-    # runtime that isn't shipped with the .NET 10 SDK, so target net10.0 instead.
-    substituteInPlace src/testing/Python.Test.csproj \
-      --replace-fail 'netstandard2.0;net6.0' 'netstandard2.0;net10.0'
-
     substituteInPlace tests/conftest.py \
       --replace-fail '        # fw = "net6.0"' '        fw = "net10.0"'
   '';
 
   buildInputs = dotnet-build.nugetDeps;
 
-  nativeBuildInputs = [
+  build-system = [
+    packaging
+    pyproject-parser
     setuptools
-    dotnet-sdk_10
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ dotnet-sdk_10 ];
+
+  dependencies = [
     pycparser
     clr-loader
   ];
@@ -79,8 +72,12 @@ buildPythonPackage {
     psutil # needed for memory leak tests
   ];
 
-  # Rerun this when updating to refresh Nuget dependencies
-  passthru.fetch-deps = dotnet-build.fetch-deps;
+  passthru = {
+    # Rerun this when updating to refresh Nuget dependencies
+    inherit (dotnet-build) fetch-deps;
+    # update-python-libraries only bumps version and hash, leaving deps.json stale
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = ".NET integration for Python";
