@@ -14,7 +14,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh";
-  version = "2.103.3";
+  version = "2.104.0";
 
   __structuredAttrs = true;
   separateDebugInfo = true;
@@ -23,14 +23,14 @@ buildGoModule (finalAttrs: {
     owner = "cli";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wg8m6G5DbDk//nw7IEbR+ZcVG9TTFSzJ5cYJkGjhHMw=";
+    hash = "sha256-DkspgQoWfbWi+jWR5U9Zyo9dnDFsFtYTLNe+5QHoK5c=";
 
     postCheckout = ''
       git -C "$out" log -1 --pretty=%ct > $out/SOURCE_DATE_EPOCH
     '';
   };
 
-  vendorHash = "sha256-e9E2iTwF8kYNgW7Vs5upQBD2VT2lJ4dZcUDUk+igq/Y=";
+  vendorHash = "sha256-ggv4DIkA25qacx65RZ2mPWpbTcbl4KaZoj+JEkfwPXI=";
 
   nativeBuildInputs = [
     installShellFiles
