@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-gammu";
-  version = "3.5.0";
+  version = "3.5.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "python-gammu";
     rev = version;
-    hash = "sha256-5brp1i/061dchPX1w50CCwYnAs6SRM3+ifowvEJ7zVs=";
+    hash = "sha256-hSc3fGI/on/DoiZiuYxxJoqdl6wmb+ZjXL6EjMmMlKU=";
   };
 
   nativeBuildInputs = [ pkg-config ];

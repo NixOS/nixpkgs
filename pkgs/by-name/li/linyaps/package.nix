@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-host-path.patch
+    ./drop-tmpfiles-hook-dir.patch
   ];
 
   postPatch = ''

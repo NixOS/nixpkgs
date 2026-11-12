@@ -22,19 +22,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "connectrpc";
-  version = "0.11.1";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z0ltm1HZH2hFhKiAMaaoz9EVqzbxASLZ6wRpQx9XU0Q=";
+    hash = "sha256-/lT/u/yyLZWkU92MgLFq6v1Jh+78O2WcW9/zqLNPTrc=";
   };
 
-  build-system = [
-    uv-build
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout = 1800  # 30 min" 'timeout = "1800"'
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     # Upstream pins protobuf-py to this exact version; bump the two together.
@@ -65,6 +68,11 @@ buildPythonPackage (finalAttrs: {
     "test/test_example.py"
     # Needs `pyvoy`, which is not packaged in nixpkgs.
     "test/test_grpc.py"
+  ];
+
+  disabledTests = [
+    # importlib.metadata.PackageNotFoundError
+    "test_joint_release_package_versions_match"
   ];
 
   meta = {
