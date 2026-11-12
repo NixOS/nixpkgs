@@ -15,7 +15,7 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "omegaconf";
   version = "2.3.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hydra-ecosystem";
     repo = "omegaconf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HvK6bNInPIkfdpNh8DifH7Wxt8m9uR+Y/qL3voIUw6w=";
   };
 
@@ -78,8 +78,8 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for configuring complex applications";
     homepage = "https://github.com/hydra-ecosystem/omegaconf";
-    changelog = "https://github.com/hydra-ecosystem/omegaconf/blob/v${version}/NEWS.md";
+    changelog = "https://github.com/hydra-ecosystem/omegaconf/blob/${finalAttrs.src.tag}/NEWS.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})
