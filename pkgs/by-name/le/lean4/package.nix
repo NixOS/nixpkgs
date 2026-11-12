@@ -92,12 +92,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vNVZw2YsDkf0GcdFTNb/fXMQLQYvoc8P425LupPShpo=";
   };
 
+  # Intentionally untyped i.e. no `-DFOO:BOOL=FALSE`. The top-level CMakeLists.txt will not forward
+  # the flags to each stage otherwise.
   cmakeFlags = [
-    (lib.cmakeBool "USE_GITHASH" false)
-    (lib.cmakeBool "INSTALL_LICENSE" false)
-    (lib.cmakeBool "INSTALL_CADICAL" false)
-    (lib.cmakeBool "USE_MIMALLOC" enableMimalloc)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MIMALLOC" finalAttrs.mimalloc-src.outPath)
+    "-DUSE_GITHASH=OFF"
+    "-DINSTALL_CADICAL=OFF"
+    "-DINSTALL_LICENSE=OFF"
+    "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
+    "-DFETCHCONTENT_SOURCE_DIR_MIMALLOC=${finalAttrs.mimalloc-src.outPath}"
+
+    # Better log output with a "dumb" terminal
+    "-DLEAN_EXTRA_LAKE_OPTS=--no-ansi"
   ];
 
   postFixup = ''
