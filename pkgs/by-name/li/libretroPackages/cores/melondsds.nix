@@ -4,6 +4,7 @@
   coreutils,
   fetchFromGitHub,
   fmt_11,
+  gitMinimal,
   glm,
   gnugrep,
   gnused,
@@ -17,12 +18,12 @@
   nix-prefetch-git,
   cmake,
   span-lite,
-  unstableGitUpdater,
+  gitUpdater,
   writeShellApplication,
 }:
 let
   # NOTE: before changing the following fetches, see the updateScript below
-  # https://github.com/JesseTG/melonds-ds/blob/33c48260402865ef77667487528efd5ca7ce1233/cmake/FetchDependencies.cmake#L44
+  # https://github.com/JesseTG/melonds-ds/blob/main/cmake/FetchDependencies.cmake
   melonDS-src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "melonDS";
@@ -66,12 +67,12 @@ let
 in
 mkLibretroCore rec {
   core = "melondsds";
-  version = "0-unstable-2026-08-22";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "melonds-ds";
-    rev = "bc4e4b67d2d470d7c682810a1e892cafd6f9082b";
+    tag = "v${version}";
     hash = "sha256-DX08/1YJJD5SLcv7MIc+lkaKB5GVgiSGCRWN9ebZ6OE=";
   };
 
@@ -113,6 +114,7 @@ mkLibretroCore rec {
       name = "update-libretro-melondsds";
       runtimeInputs = [
         coreutils
+        gitMinimal
         gnugrep
         gnused
         jq
@@ -120,9 +122,7 @@ mkLibretroCore rec {
         nix-prefetch-git
       ];
       text = ''
-        ${lib.escapeShellArgs (unstableGitUpdater {
-          hardcodeZeroVersion = true;
-        })}
+        ${lib.escapeShellArgs (gitUpdater { rev-prefix = "v"; }).command}
 
         src=$(nix-build --no-out-link -A "$UPDATE_NIX_ATTR_PATH.src")
         core_file="pkgs/by-name/li/libretroPackages/cores/melondsds.nix"
@@ -154,6 +154,13 @@ mkLibretroCore rec {
             fi
 
             echo "> ''${name}: ''${url} (''${rev})" >&2
+
+            # dependencies may be pinned to a branch; resolve it to a commit
+            if branch_rev=$(git ls-remote --exit-code "''${url}" "refs/heads/''${rev}" | cut -f1)
+            then
+              echo "> branch ''${rev} is at ''${branch_rev}" >&2
+              rev="$branch_rev"
+            fi
 
             prefetch=$(nix-prefetch-git --url "''${url}" --rev "''${rev}" --quiet)
             rev=$(echo "$prefetch" | jq -r ".rev")
