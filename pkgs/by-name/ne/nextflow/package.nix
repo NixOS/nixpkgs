@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  version = "26.10.0";
+  version = "26.10.5";
 
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nextflow-io";
     repo = "nextflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-llpZJ2XsSuGjEeVW0M/dZBqGkEI4tQT0wDAJWwJrfss=";
+    hash = "sha256-xpDp6SkZTUyDXwWEpMkdWhBMLsDbNtYEXdldqyTT7i8=";
   };
 
   buildInputs = [
