@@ -11,7 +11,7 @@ Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mkosi/sandbox.py b/mkosi/sandbox.py
-index 4a41f333a764bc41abbd36302bd9fe86baa45a3f..1f7f133912c022a9fb3258437f4ed09872d79dd4 100755
+index 4867ded501b42d579121b1832f0eca31d13a30b5..4ccc614cb3043192c3cd6b58e5f4553fd838cfd1 100755
 --- a/mkosi/sandbox.py
 +++ b/mkosi/sandbox.py
 @@ -158,7 +158,7 @@ class cap_user_data_t(ctypes.Structure):

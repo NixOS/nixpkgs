@@ -1,27 +1,27 @@
 {
   lib,
-  libgit2,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
   alsa-lib,
-  pkg-config,
-  libxrandr,
-  libxi,
-  libxcursor,
-  libx11,
-  wayland,
-  libxkbcommon,
+  desktopToDarwinBundle,
   libGL,
+  libgit2,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
+  libxrandr,
   nix-update-script,
+  pkg-config,
+  python3,
+  rustPlatform,
+  wayland,
   zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snowemu";
-  version = "1.5.0";
+  version = "1.6.0";
 
   __structuredAttrs = true;
 
@@ -29,67 +29,56 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "twvd";
     repo = "snow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BA4uCuluSfIGXwBxE2X6Gke0ITsYEPzKoFDwx6jRYsk=";
+    hash = "sha256-aUHMITWs7zSFJBn1apg+y0/81KbBx0OneB9/Mh8Uy/M=";
     fetchSubmodules = true;
   };
-  cargoHash = "sha256-C7rCx0g77R+1f0la+j3pVW0bShGPdJD3btAIYg3yzMw=";
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
-    copyDesktopItems
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
-    alsa-lib
     libgit2
     zstd
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
-  postInstall = ''
-    install -Dm644 assets/snow_icon.png $out/share/icons/snowemu.png
+  cargoHash = "sha256-w5l0dyisMrH+0CeG0P6cqD3ObSeD3cRE8CVPz4xXn/8=";
 
-    substituteInPlace assets/dev.thomasw.snow.metainfo.xml \
-      --replace-fail "snow.desktop" "snowemu.desktop" \
-      --replace-fail "/usr/share/icons/hicolor/1024x1024/apps/snow_icon.png" \
-        "$out/share/icons/snowemu.png"
-    install -Dm644 assets/dev.thomasw.snow.metainfo.xml \
-      $out/share/metainfo/dev.thomasw.snow.metainfo.xml
+  env.CARGO_PROFILE_RELEASE_LTO = "fat";
 
-    wrapProgram $out/bin/snowemu \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libx11
-          libxcursor
-          libxrandr
-          libxi
-          wayland
-          libxkbcommon
-          libGL
-        ]
-      }
+  nativeCheckInputs = [ python3 ];
+
+  preCheck = ''
+    pushd testdata/m68000
+    python3 decode.py
+    popd
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "snowemu";
-      exec = "snowemu";
-      icon = "snowemu";
-      desktopName = "Snow Emulator";
-      comment = finalAttrs.meta.description;
-      genericName = "Vintage Macintosh emulator";
-      categories = [
-        "Game"
-        "Emulator"
-      ];
-      keywords = [
-        "macintosh"
-        "emulator"
-        "vintage"
-        "68k"
-      ];
-    })
-  ];
+  postInstall = ''
+    install -Dm644 assets/snow.desktop -t $out/share/applications
+    install -Dm644 assets/snow_icon.png -t $out/share/icons/hicolor/1024x1024/apps
+    install -Dm644 assets/dev.thomasw.snow.metainfo.xml -t $out/share/metainfo
+    substituteInPlace $out/share/metainfo/dev.thomasw.snow.metainfo.xml \
+      --replace-fail "/usr/share/icons" "$out/share/icons"
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${
+      lib.makeLibraryPath [
+        libGL
+        libx11
+        libxcursor
+        libxi
+        libxkbcommon
+        libxrandr
+        wayland
+      ]
+    } $out/bin/snowemu
+  '';
+
+  cargoTestFlags = [ "--workspace" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -100,10 +89,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       It currently emulates the Macintosh 128K, Macintosh 512K, Macintosh Plus, Macintosh SE, Macintosh Classic and Macintosh II.
     '';
     homepage = "https://snowemu.com/";
-    changelog = "https://github.com/twvd/snow/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/twvd/snow/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nulleric ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "snowemu";
+    mainDarwinApp = "Snow.app";
   };
 })

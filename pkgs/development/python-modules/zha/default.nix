@@ -8,7 +8,7 @@
   frozendict,
   looptime,
   pyprojectVersionPatchHook,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zha";
-  version = "2.3.1";
+  version = "2.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "zigpy";
     repo = "zha";
     tag = finalAttrs.version;
-    hash = "sha256-OwYO22/DEVn6746+KKyUjxCM7C/MdSvPGMfu8/p2y10=";
+    hash = "sha256-5nouE72Zw9y1hciH93EUP4s6miu9qWxh/8EmSw69ID4=";
   };
 
   postPatch = ''
@@ -69,7 +69,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     freezegun
     looptime
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-timeout
     pytest-xdist
     pytestCheckHook

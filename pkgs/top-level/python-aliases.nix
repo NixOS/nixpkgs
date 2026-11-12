@@ -95,6 +95,7 @@ mapAliases {
   ansible-vault-rw = ansible-vault; # Added 2026-07-10
   ansiconv = throw "ansiconv has been removed because it was archived upstream"; # Added 2026-01-14
   ansiwrap = throw "ansiwrap has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
+  anthropic_0 = throw "'anthropic_0' was removed because Home Assistant no longer needs it"; # added 2026-11-07
   aocd = throw "'aocd' has been renamed to 'advent-of-code-data'"; # Added 2026-10-10
   apkit = throw "apkit was removed because it is unmaintained upstream and different from apkit on PyPI"; # added 2025-09-13
   APScheduler = throw "'APScheduler' has been renamed to/replaced by 'apscheduler'"; # Converted to throw 2025-10-29
@@ -574,6 +575,7 @@ mapAliases {
   pyflick = throw "pyflick was removed because Flick Electric no longer exists"; # added 2025-12-03
   pyflunearyou = throw "'pyflunearyou' has been renamed to/replaced by 'pyoutbreaksnearme'"; # Converted to throw 2025-10-29
   pyfribidi = throw "'pyfribidi' has been removed because it is unmaintained upstream"; # added 2026-09-27
+  pyfronius = throw "pyfronius has been removed because Home-Assistant switched to fronius-solarapi"; # Added 2026-11-06
   pygame_sdl2 = throw "'pygame_sdl2' has been renamed to/replaced by 'pygame-sdl2'"; # Converted to throw 2025-10-29
   PyGithub = throw "'PyGithub' has been renamed to/replaced by 'pygithub'"; # Converted to throw 2025-10-29
   pygls_2 = pygls; # added 2026-01-05
@@ -582,6 +584,7 @@ mapAliases {
   pyheif = throw "pyheif has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   pyhidra = throw "'pyhidra' has been removed as it was incorporated into upstream and renamed 'pyghidra'"; # Added 2026-04-21
   pyhiveapi = throw "'pyhiveapi' has been renamed to/replaced by 'pyhive-integration'"; # Converted to throw 2025-10-29
+  pyialarm = throw "'pyialarm' has been removed because it was unmaintained and Home Assistant switched to pyasyncialarm"; # Added 2026-11-06
   pyialarmxr = throw "'pyialarmxr' has been renamed to/replaced by 'pyialarmxr-homeassistant'"; # Converted to throw 2025-10-29
   PyICU = throw "'PyICU' has been renamed to/replaced by 'pyicu'"; # Converted to throw 2025-10-29
   pyitachip2ir = throw "'pyitachip2ir' has been removed in favor of 'pyitachip2ir2'"; # Added 2026-10-31
@@ -621,11 +624,13 @@ mapAliases {
   pyreadability = throw "'pyreadability' has been renamed to/replaced by 'readability-lxml'"; # Converted to throw 2025-10-29
   pyreaderwriterlock = throw "'pyreaderwriterlock' has been removed as it was unmaintained upstream"; # Added 2026-03-21
   pyRFC3339 = throw "'pyRFC3339' has been renamed to/replaced by 'pyrfc3339'"; # Converted to throw 2025-10-29
+  pyrituals = throw "'pyrituals' was removed because it was unmaintained and Home Assistant switched to ritualsgenie"; # Added 2026-11-06
   Pyro4 = throw "'Pyro4' has been renamed to/replaced by 'pyro4'"; # Converted to throw 2025-10-29
   Pyro5 = throw "'Pyro5' has been renamed to/replaced by 'pyro5'"; # Converted to throw 2025-10-29
   pyrogram = throw "'pyrogram' has been removed as it was archived upstream"; # Added 2026-03-21
   pyrr = throw "pyrr has been removed because it is incompatible with NumPy 2.0+"; # Added 2026-02-18
   PyRSS2Gen = throw "'PyRSS2Gen' has been renamed to/replaced by 'pyrss2gen'"; # Converted to throw 2025-10-29
+  pysaj = throw "'pysaj' has been removed because it was unmaintained and Home Assistant switched to aiosaj"; # Added 2026-11-06
   pyside6-fluent-widgets = throw "pyside6-fluent-widgets has been removed, since it is unmaintained"; # added 2025-08-20
   pysidesix-frameless-window = throw "pysidesix-frameless-window has been removed, since it is unmaintained"; # added 2025-08-20
   pysigma-pipeline-crowdstrike = pysigma-backend-crowdstrike; # added 2026-08-17
@@ -851,6 +856,7 @@ mapAliases {
   vega_datasets = throw "'vega_datasets' has been renamed to/replaced by 'vega-datasets'"; # Converted to throw 2025-10-29
   ViennaRNA = throw "'ViennaRNA' has been renamed to/replaced by 'viennarna'"; # Converted to throw 2025-10-29
   vncdo = vncdotool; # Added 2026-06-30
+  volkswagencarnet = throw "'volkswagencarnet' was removed because Volkswagen turned off API access"; # added 2026-11-06
   volvooncall = throw "'volvooncall' was removed because Home Assistant dropped the integration"; # added 2026-07-20
   vqgan-jax = throw "'vqgan-jax' has been removed, as it was unmaintained upstream and has unclear license"; # Added 2026-08-07
   vulcan-api = throw "vulcan-api has been removed. Their API has changed and they don't allow access from unofficial software anymore."; # added 2025-09-05

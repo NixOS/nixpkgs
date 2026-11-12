@@ -5,7 +5,6 @@
   setuptools,
   mypy,
   pytestCheckHook,
-  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +20,6 @@ buildPythonPackage rec {
 
   env.SLHDSA_BUILD_OPTIMIZED = "1";
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"mypy>=1.10.1",' ""
-  '';
-
   build-system = [
     setuptools
     mypy
@@ -35,13 +29,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-xdist
   ];
 
   meta = {
     description = "Pure Python implementation of the SLH-DSA algorithm";
     homepage = "https://github.com/colinxu2020/slhdsa";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ prusnak ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
+      colinxu2020
+      prusnak
+    ];
   };
 }

@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "nielsfaber";
   domain = "scheduler";
-  version = "3.3.8";
+  version = "3.3.9";
 
   src = fetchFromGitHub {
     owner = "nielsfaber";
     repo = "scheduler-component";
     tag = "v${version}";
-    hash = "sha256-QN7rkNuj9IBbV2ths7ZdL/EkXFJUpjNbgJNUnAHjLBA=";
+    hash = "sha256-F7bjbmr9EiMDWJbAo9/ySt2i8U2hXtMaTaithDWzxlw=";
   };
 
   dontBuild = true;

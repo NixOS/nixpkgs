@@ -3,29 +3,28 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   pytestCheckHook,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "3.1.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Galorhallen";
     repo = "govee-local-api";
     tag = "v${version}";
-    hash = "sha256-0MrT99GbtBrYkKxathl51YvaKnyflNQgwnp8JP1zrRc=";
+    hash = "sha256-JjrO9lOIrkp595+O6usa8wVrKmWyoywHEeIOP5HxL0Q=";
   };
 
   postPatch = ''
-    # dont depend on poetry at runtime
-    # https://github.com/Galorhallen/govee-local-api/pull/75/files#r1943826599
-    sed -i '/poetry = "^1.8.5"/d' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.30,<0.12" "uv_build"
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

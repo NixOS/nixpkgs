@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -406,20 +407,28 @@ in
 
       pihole-ftl-log-deleter = mkIf cfg.queryLogDeleter.enable {
         description = "Pi-hole FTL DNS query log deleter";
+        # Avoid creating an empty database file if it doesn't yet exist
+        unitConfig.ConditionFileNotEmpty = cfg.settings.files.database;
         serviceConfig = {
           Type = "oneshot";
           User = cfg.user;
           Group = cfg.group;
-          # Avoid creating an empty database file if it doesn't yet exist
-          ConditionFileNotEmpty = cfg.settings.files.database;
           ExecStart =
             let
               days = toString cfg.queryLogDeleter.age;
               database = cfg.settings.files.database;
             in
             [
-              "${getExe' pkgs.coreutils "echo"} 'Deleting query logs older than ${days} days'"
-              "${getExe cfg.package} sqlite3 '${database}' 'DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1'"
+              (utils.escapeSystemdExecArgs [
+                (getExe' pkgs.coreutils "echo")
+                "Deleting query logs older than ${days} days"
+              ])
+              (utils.escapeSystemdExecArgs [
+                (getExe cfg.package)
+                "sqlite3"
+                database
+                "DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1"
+              ])
             ];
           # Hardening
           NoNewPrivileges = true;
@@ -471,6 +480,8 @@ in
           (map (
             port:
             lib.pipe port [
+              (lib.splitString ":")
+              lib.last
               (builtins.split "[[:alpha:]]+")
               builtins.head
               lib.toInt

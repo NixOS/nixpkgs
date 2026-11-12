@@ -7,6 +7,8 @@
   nix-update-script,
   pytestCheckHook,
   rustPlatform,
+  pkg-config,
+  aws-lc,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +32,11 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
   ];
 
   nativeCheckInputs = [
