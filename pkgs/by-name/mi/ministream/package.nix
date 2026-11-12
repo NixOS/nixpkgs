@@ -4,6 +4,7 @@
   buildPackages,
   fetchurl,
   meson,
+  mesonEmulatorHook,
   ninja,
   pkg-config,
   glib,
@@ -34,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
