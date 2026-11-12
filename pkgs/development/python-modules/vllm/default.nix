@@ -28,7 +28,9 @@
   setuptools-rust,
 
   # buildInputs
+  oniguruma,
   onednn,
+  zstd,
   numactl,
   llvmPackages,
 
@@ -486,7 +488,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ];
 
   buildInputs = [
+    oniguruma
     openssl
+    zstd
   ]
   ++ lib.optionals cpuSupport [
     onednn

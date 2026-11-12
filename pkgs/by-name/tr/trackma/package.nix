@@ -44,6 +44,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     fetchSubmodules = true; # for anime-relations submodule
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"^1.2.0 || ^2.0.0"' '">=1.2.0,<3.0.0"'
+  '';
+
   nativeBuildInputs = [
     copyDesktopItems
     python3.pkgs.poetry-core

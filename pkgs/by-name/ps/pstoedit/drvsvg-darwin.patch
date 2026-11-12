@@ -1,0 +1,17 @@
+Treat Darwin as POSIX in the SVG driver
+
+drvsvg.cpp only checks unix/__unix__/NetBSD, none of which Apple clang
+defines, so Darwin falls through to the Windows branch and fails on
+'#include <io.h>'.
+
+--- a/src/drvsvg.cpp
++++ b/src/drvsvg.cpp
+@@ -36,7 +36,7 @@
+ #include I_stdio
+ #include I_stdlib
+ 
+-#if (defined(unix) || defined(__unix__) || defined(_unix) || defined(__unix) || defined (NetBSD) ) && !defined(DJGPP)
++#if (defined(unix) || defined(__unix__) || defined(_unix) || defined(__unix) || defined (NetBSD) || defined(__APPLE__) ) && !defined(DJGPP)
+ #include <unistd.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>

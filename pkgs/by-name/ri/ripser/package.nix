@@ -59,12 +59,11 @@ stdenv.mkDerivation {
       with lib.licenses;
       AND [
         mit
-        {
+        (mkLicense {
+          shortName = "ripser";
           fullName = "Ripser extra clause";
           url = "https://github.com/Ripser/ripser/blob/v${version}/CONTRIBUTING.txt";
-          licenseType = "simple";
-          free = true;
-        }
+        })
       ];
     maintainers = with lib.maintainers; [ erikryb ];
     platforms = lib.platforms.linux;

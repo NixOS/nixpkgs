@@ -1317,9 +1317,7 @@ self: super: with self; {
 
   area = callPackage ../development/python-modules/area { };
 
-  arelle = callPackage ../development/python-modules/arelle { gui = true; };
-
-  arelle-headless = callPackage ../development/python-modules/arelle { gui = false; };
+  arelle-release = callPackage ../development/python-modules/arelle-release { };
 
   aresponses = callPackage ../development/python-modules/aresponses { };
 
@@ -4178,8 +4176,6 @@ self: super: with self; {
 
   datashader = callPackage ../development/python-modules/datashader { };
 
-  datashaper = callPackage ../development/python-modules/datashaper { };
-
   datasketch = callPackage ../development/python-modules/datasketch { };
 
   datastar-py = callPackage ../development/python-modules/datastar-py { };
@@ -6407,6 +6403,8 @@ self: super: with self; {
 
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
 
+  flask-wtforms-htmx = callPackage ../development/python-modules/flask-wtforms-htmx { };
+
   flask-xml-rpc-re = callPackage ../development/python-modules/flask-xml-rpc-re { };
 
   flatbencode = callPackage ../development/python-modules/flatbencode { };
@@ -7638,6 +7636,8 @@ self: super: with self; {
   hatch-regex-commit = callPackage ../development/python-modules/hatch-regex-commit { };
 
   hatch-requirements-txt = callPackage ../development/python-modules/hatch-requirements-txt { };
+
+  hatch-rs = callPackage ../development/python-modules/hatch-rs { };
 
   hatch-sphinx = callPackage ../development/python-modules/hatch-sphinx { };
 
@@ -11472,6 +11472,8 @@ self: super: with self; {
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
 
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
+
+  multi-demangle = callPackage ../development/python-modules/multi-demangle { };
 
   multi-key-dict = callPackage ../development/python-modules/multi-key-dict { };
 
@@ -16820,6 +16822,8 @@ self: super: with self; {
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
   pytest-mypy-plugins = callPackage ../development/python-modules/pytest-mypy-plugins { };
+
+  pytest-mysql = callPackage ../development/python-modules/pytest-mysql { };
 
   pytest-notebook = callPackage ../development/python-modules/pytest-notebook { };
 
@@ -22576,7 +22580,7 @@ self: super: with self; {
     inherit (pkgs) protobuf;
   };
 
-  vllm = callPackage ../development/python-modules/vllm { };
+  vllm = callPackage ../development/python-modules/vllm { inherit (pkgs) zstd; };
 
   vllm-tt-plugin = callPackage ../development/python-modules/vllm-tt-plugin { };
 
@@ -22710,6 +22714,8 @@ self: super: with self; {
   warrant-lite = callPackage ../development/python-modules/warrant-lite { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
+
+  wasm-tools = callPackage ../development/python-modules/wasm-tools { inherit (pkgs) jq; };
 
   inherit (self.wasmerPackages)
     wasmer
@@ -22993,7 +22999,13 @@ self: super: with self; {
 
   wtforms-bootstrap5 = callPackage ../development/python-modules/wtforms-bootstrap5 { };
 
+  wtforms-htmx = callPackage ../development/python-modules/wtforms-htmx { };
+
+  wtforms-htmx-components = callPackage ../development/python-modules/wtforms-htmx-components { };
+
   wtforms-sqlalchemy = callPackage ../development/python-modules/wtforms-sqlalchemy { };
+
+  wtforms_3_3 = callPackage ../development/python-modules/wtforms/3_3.nix { };
 
   wunsen = callPackage ../development/python-modules/wunsen { };
 

@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
-  zig,
+  fetchFromCodeberg,
+  zig_0_17,
   pkg-config,
   wayland-scanner,
   wayland-protocols,
@@ -12,18 +12,20 @@
   nix-update-script,
 }:
 
+let
+  zig = zig_0_17;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-channel";
   version = "0.5.2";
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Sivecano";
     repo = "channel";
     tag = finalAttrs.version;
-    hash = "sha256-7okWgYaxybijX9/Ll0JGF12B8YiuQaUT8jNdUTa7tXM=";
+    hash = "sha256-4OhtFcveAYuolOedTWetDDHffaFPmLsPieBWyUE5nvw=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-2ZvhTuV8Xakofc4mRiVsrPRXjVFykjZW8KkxZJK6wsA=";
+    hash = "sha256-bKADg3LwI3ehAyIGRX6vw9dutOXXmrDQ0NkDotI6eZw=";
   };
 
   postConfigure = ''

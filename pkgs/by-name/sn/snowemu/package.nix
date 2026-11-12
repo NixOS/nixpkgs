@@ -1,5 +1,6 @@
 {
   lib,
+  libgit2,
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
@@ -15,6 +16,7 @@
   libxkbcommon,
   libGL,
   nix-update-script,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -38,7 +40,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = [ alsa-lib ];
+  buildInputs = [
+    alsa-lib
+    libgit2
+    zstd
+  ];
 
   postInstall = ''
     install -Dm644 assets/snow_icon.png $out/share/icons/snowemu.png

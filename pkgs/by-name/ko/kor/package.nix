@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kor";
-  version = "0.6.9";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "yonahd";
     repo = "kor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z+ZZ97sHoHhpfKMzNn5oAJtuvRaDAN2cFT8IoZvggr4=";
+    hash = "sha256-mIzNkH1JpnLMrjl+dxYJ8MpSzuX/11Zfv7Hn6SoyThg=";
   };
 
-  vendorHash = "sha256-ff2MF/2kPczKLpvbfi9WsCMi1zSzZbtrMysaF1t2b38=";
+  vendorHash = "sha256-3xcIrSm4BQ2AgwEr8X9q0W9RHscbgegzunUQV/Pb6Wo=";
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
