@@ -1,5 +1,8 @@
 {
   lib,
+  zstd,
+  libgit2,
+  pkg-config,
   rustPlatform,
   fetchFromGitHub,
   nixosTests,
@@ -9,16 +12,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "static-web-server";
-  version = "2.44.0";
+  version = "2.44.1";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = "static-web-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1DhPGQUBPQ2nKVYj6YfZK8bEZZlr0rGL+G+b6ss0CUQ=";
+    hash = "sha256-Cd362+zrXnLKxmV9XJBk6ZrfUUHWahT8oHlgpkYH7FE=";
   };
 
-  cargoHash = "sha256-bBg51aT1qGYvwElFXkomB8CFg8UFr8atycyaMMtSNBw=";
+  cargoHash = "sha256-ilWyC0YuvTA1wzxbQWQ3l4T+3ojblMSelPlIG1xVArY=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    zstd
+    libgit2
+  ];
 
   # static-web-server already has special handling for files with modification
   # time = Unix epoch, but the nix store is Unix epoch + 1 second.
@@ -49,10 +59,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "A cross-platform, high-performance and asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
     changelog = "https://github.com/static-web-server/static-web-server/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       misilelab
       progrm_jarvis

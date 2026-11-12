@@ -77,15 +77,21 @@ A link or a list of links to the location of Changelog for a package. A link may
 
 ### `license` {#var-meta-license}
 
-The license, or licenses, for the package. One from the attribute set defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix). At this moment using both a list of licenses and a single license is valid. If the license field is in the form of a list representation, then it means that parts of the package are licensed differently. Each license should preferably be referenced by their attribute. The non-list attribute value can also be a space delimited string representation of the contained attribute `shortNames` or `spdxIds`. The following are all valid examples:
+The license, or licenses, for the package.
+The following are all valid examples:
 
-- Single license referenced by attribute (preferred) `lib.licenses.gpl3Only`.
-- Single license referenced by its attribute shortName (frowned upon) `"gpl3Only"`.
-- Single license referenced by its attribute spdxId (frowned upon) `"GPL-3.0-only"`.
-- Multiple licenses referenced by attribute (preferred) `with lib.licenses; [ asl20 free ofl ]`.
-- Multiple licenses referenced as a space delimited string of attribute shortNames (frowned upon) `"asl20 free ofl"`.
+- Single license covering the entire package: `lib.licenses.gpl3Only`.
+- Multiple licenses covering the same part of a package, where users can select which to use: `with lib.licenses; OR [ mit asl20 ]`.
+- Multiple licenses covering a package, where users are bound by the obligations of all: `with lib.licenses; AND [ bsd3 cc0 ]`.
+  - This applies when the package directly incorporates code under another license.
 
-For details, see [Licenses](#sec-meta-license).
+These compound licenses may also be combined within each other: `with lib.licenses; AND [ (OR [ mit asl20 ]) gpl3Plus ]`.
+See [Multiple Licenses](#sec-meta-license-multiple) for the full set of license operators.
+
+The list of valid licenses is defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix).
+See [Licenses](#sec-meta-license) for additional generic values.
+Custom licenses may be specified directly in the `license` field, using the `lib.licenses.mkLicense` function.
+This should only be done when the license doesn't have an SPDX identifier and is unlikely to be useful for other packages.
 
 ### `sourceProvenance` {#var-meta-sourceProvenance}
 
@@ -104,6 +110,10 @@ A list of the teams of this Nix expression. Teams are defined in [`nixpkgs/maint
 ### `mainProgram` {#var-meta-mainProgram}
 
 The name of the main binary for the package. This affects the binary `nix run` executes. Example: `"rg"`
+
+### `mainDarwinApp` {#var-meta-mainDarwinApp}
+
+The name of the main Darwin/macOS Application for the package. It must end in `.app`. Example: `"VSCodium.app"`
 
 ### `priority` {#var-meta-priority}
 
@@ -216,25 +226,78 @@ If this list is not empty, the package is marked as "insecure", meaning that it 
 
 ## Licenses {#sec-meta-license}
 
-The `meta.license` attribute should preferably contain a value from `lib.licenses` defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix), or in-place license description of the same format if the license is unlikely to be useful in another expression.
+When available, use a value from `lib.licenses` defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix).
+Otherwise, a custom license can be defined using `lib.licenses.mkLicense`.
 
-Although it’s typically better to indicate the specific license, a few generic options are available:
+### Multiple Licenses {#sec-meta-license-multiple}
 
-### `lib.licenses.free`, `"free"` {#lib.licenses.free-free}
+If the package is covered under multiple licenses, use license operators to produce compound licenses.
+These operators model the structure of SPDX license expressions, and their semantics are defined in the [SPDX specification][spdx-spec].
+
+#### `lib.licenses.OR [ ... ]` {#lib.licenses.OR}
+
+If the user is able to choose between two or more licenses, use `OR`.
+
+```nix
+# Apache-2.0 OR MIT
+lib.licenses.OR [
+  lib.licenses.asl20
+  lib.licenses.mit
+]
+```
+
+#### `lib.licenses.AND [ ... ]` {#lib.licenses.AND}
+
+If the user must simultaneously abide by the rules of two or more licenses, use `AND`.
+
+```nix
+# GPL-2.0-only AND CC-BY-3.0
+lib.licenses.AND [
+  lib.licenses.gpl2Only
+  lib.licenses.cc-by-30
+]
+```
+
+#### `lib.licenses.WITH license exception` {#lib.licenses.WITH}
+
+If the license text is modified from the original, use `WITH`.
+Common license exceptions are included in `lib.licenses`.
+
+```nix
+# Apache-2.0 WITH LLVM-exception
+lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception
+```
+
+#### `lib.licenses.PLUS license` {#lib.licenses.PLUS}
+
+If the content is licensed under the current version of the license or any later version, use `PLUS`.
+For GPL licenses, do not use the PLUS operator.
+Instead use the "-or-later" license (ex. `GPL-3.0-or-later`, `lib.licenses.gpl3Plus`).
+
+```nix
+# CDDL-1.0+
+lib.licenses.PLUS lib.licenses.cddl
+```
+
+### Generic Licenses {#sec-meta-license-generic}
+
+Although it’s typically better to indicate the specific license, the following generic options are also available.
+
+#### `lib.licenses.free`, `"free"` {#lib.licenses.free-free}
 
 Catch-all for free software licenses not listed above.
 
-### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"` {#lib.licenses.unfreeredistributable-unfree-redistributable}
+#### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"` {#lib.licenses.unfreeredistributable-unfree-redistributable}
 
 Unfree package that can be redistributed in binary form. That is, it’s legal to redistribute the *output* of the derivation. This means that the package can be included in the Nixpkgs channel.
 
 Sometimes proprietary software can only be redistributed unmodified. Make sure the builder doesn’t actually modify the original binaries; otherwise we’re breaking the license. For instance, the NVIDIA X11 drivers can be redistributed unmodified, but our builder applies `patchelf` to make them work. Thus, its license is `"unfree"` and it cannot be included in the Nixpkgs channel.
 
-### `lib.licenses.unfree`, `"unfree"` {#lib.licenses.unfree-unfree}
+#### `lib.licenses.unfree`, `"unfree"` {#lib.licenses.unfree-unfree}
 
 Unfree package that cannot be redistributed. You can build it yourself, but you cannot redistribute the output of the derivation. Thus it cannot be included in the Nixpkgs channel.
 
-### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
+#### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
 
 This package supplies unfree, redistributable firmware. This is a separate value from `unfree-redistributable` because not everybody cares whether firmware is free.
 
@@ -369,3 +432,5 @@ It provides an interface for additional identifiers of `mkDerivation.src` or for
 
 Additional identifiers are generally not recommended, as they might cause maintenance overhead or diverge.
 For example, a source distribution `pkg:github` may be hard to keep correctly aligned with the corresponding binary distribution `pkg:pypi`.
+
+[spdx-spec]: https://spdx.github.io/spdx-spec/v3.0.1/annexes/spdx-license-expressions/

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "ptcryan";
     repo = "hydrawiser";
     rev = "v${version}";
-    sha256 = "161hazlpvd71xcl2ja86560wm5lnrjv210ki3ji37l6c6gwmhjdj";
+    hash = "sha256-sklY+TPM0DOiHHGCILbMlpbKgSkGKSko6+G0felXMJg=";
   };
 
   propagatedBuildInputs = [ requests ];

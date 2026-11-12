@@ -4,9 +4,10 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
-  coreutils,
   runCommand,
   runtimeShell,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
   writeText,
   terraform-providers,
   installShellFiles,
@@ -15,18 +16,24 @@
 let
   package = buildGoModule rec {
     pname = "terraform";
-    version = "1.16.1";
+    version = "1.17.1";
 
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "terraform";
-      rev = "v${version}";
-      hash = "sha256-0cCEQU+f6wVfcVqFoRA3hpf9Qwdxko2AraeCJQ/vkM4=";
+      tag = "v${version}";
+      hash = "sha256-/eQWz7J+u7Jt49difHhKqgC60jfLKNFZq25SMKJ16sk=";
     };
 
-    vendorHash = "sha256-w/dtggDM8sDDA5rqzsRfuZHkBThu6JVvhr13R71E/d8=";
+    proxyVendor = true; # darwin/linux hash mismatch
+    vendorHash = "sha256-FkhDbT6wFmWXARMRGkZDR042/m3fkP9T4ZRzQy5oWRE=";
 
-    patches = [ ./provider-path-0_15.patch ];
+    patches = [
+      ./provider-path-0_15.patch
+      # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
+      # can't use substituteInPlace for the path in goModules when using proxyVendor so update dependency instead
+      ./stty.patch
+    ];
 
     # Set CGO_ENABLED based on platform:
     # - Linux: CGO_ENABLED=0 for static linking (avoids LTO plugin issues)
@@ -40,22 +47,6 @@ let
       "-X 'github.com/hashicorp/terraform/version.dev=no'"
     ];
 
-    postPatch = ''
-      # Between go 1.23 and 1.24 the following GODEBUG setting was removed, and a new
-      # similar one was added.
-      # https://github.com/golang/go/issues/72111
-      # The setting is configured upstream due to the following timeouts caused by
-      # the TLS handshake using post-quantum crypto with servers that don't support it
-      # https://tldr.fail/
-      substituteInPlace go.mod \
-        --replace-quiet 'godebug tlskyber=0' 'godebug tlsmlkem=0'
-    '';
-    postConfigure = ''
-      # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
-      substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-        --replace-fail "/bin/stty" "${coreutils}/bin/stty"
-    '';
-
     nativeBuildInputs = [ installShellFiles ];
 
     postInstall = ''
@@ -63,10 +54,15 @@ let
       installShellCompletion --bash --name terraform <(echo complete -C terraform terraform)
     '';
 
-    preCheck = ''
-      export HOME=$TMPDIR
-      export TF_SKIP_REMOTE_TESTS=1
-    '';
+    __darwinAllowLocalNetworking = true;
+
+    nativeCheckInputs = [
+      writableTmpDirAsHomeHook
+      versionCheckHook
+    ];
+
+    doInstallCheck = true;
+    versionCheckProgramArg = "version";
 
     subPackages = [ "." ];
 

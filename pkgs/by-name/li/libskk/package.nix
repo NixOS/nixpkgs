@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/ueno/libskk";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ yuriaisaka ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -17,20 +17,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iptvnator";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "4gray";
     repo = "iptvnator";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JHEiazpC4rbbUELn7m2koVFXr6XzNJCCZt/s+AVtc24=";
+    hash = "sha256-WcWvMBpJWrQsqvI40YOocS1seEXyiGkXwH9RiTdTVog=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-Gs10M9mejtfKf/uBw+ojx726EMBRWQGByUQvjrUu3PM=";
+    hash = "sha256-7Z6TyZ0krE/0okcURf8sVVO//4xxMj/11EZKS0IwNns=";
   };
 
   __structuredAttrs = true;

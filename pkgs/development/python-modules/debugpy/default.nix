@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.21";
+  version = "1.8.22";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' "$out/src/debugpy/_version.py"
     '';
 
-    hash = "sha256-7XM476tfL6QLCHB1kwlbN/dmlgnjuTE+ulQ9yOHfgEE=";
+    hash = "sha256-gH+MDKiPQpZm32wF48toJEI8804xYqSdTera8SheuOU=";
   };
 
   patches = [
@@ -120,12 +120,12 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
 
-  postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  postCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     unset no_proxy
   '';
 

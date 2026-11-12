@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GStreamer bindings for clutter";
 
-    homepage = "http://www.clutter-project.org/";
+    homepage = "https://gitlab.gnome.org/Archive/clutter-gst";
 
     license = lib.licenses.lgpl2Plus;
 

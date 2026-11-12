@@ -31,19 +31,14 @@ assert lib.elem ___qtVersion [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
-  version = "2.6.6-unstable-2026-04-13";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
     repo = "fceux";
-    rev = "1e1168db6662ce86848460b5d078e17c6dc6e2ce";
-    hash = "sha256-FHNMDvEMgKnZjpm0DEN2rj0aI3T244zfcS+NEYWytaU=";
+    rev = "fceux-${finalAttrs.version}";
+    hash = "sha256-DZYSBLATbJSKIx3ZqR7K7H/zfVqrJLn/vFSN0Y64/xg=";
   };
-
-  patches = [
-    # https://github.com/TASEmulators/fceux/pull/834
-    ./0001-cmake-fix-qt6-build-on-linux.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -63,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     x264
   ];
 
+  cmakeFlags = [ "-DGLVND=1" ];
+
   strictDeps = true;
 
   postInstall = ''
@@ -74,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.fceux.com";
     description = "Nintendo Entertainment System (NES) Emulator";
-    changelog = "https://github.com/TASEmulators/fceux/blob/${finalAttrs.src.rev}/changelog.txt";
+    changelog = "https://github.com/TASEmulators/fceux/releases";
     license = lib.licenses.gpl2Plus;
     mainProgram = "fceux";
     maintainers = with lib.maintainers; [ kuflierl ];

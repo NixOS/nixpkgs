@@ -69,11 +69,13 @@ let
       contribs = lib.recurseIntoAttrs (callPackage ../development/rocq-modules/contribs { });
 
       aac-tactics = callPackage ../development/rocq-modules/aac-tactics { };
+      actris = callPackage ../development/rocq-modules/actris { };
       addition-chains = callPackage ../development/rocq-modules/addition-chains { };
       async-test = callPackage ../development/rocq-modules/async-test { };
       atbr = callPackage ../development/rocq-modules/atbr { };
       autosubst = callPackage ../development/rocq-modules/autosubst { };
       autosubst-ocaml = callPackage ../development/rocq-modules/autosubst-ocaml { };
+      base64 = callPackage ../development/rocq-modules/base64 { };
       bbv = callPackage ../development/rocq-modules/bbv { };
       bignums = callPackage ../development/rocq-modules/bignums { };
       CakeMLExtraction = callPackage ../development/rocq-modules/CakeMLExtraction { };
@@ -219,6 +221,8 @@ let
       rewriter = callPackage ../development/rocq-modules/rewriter { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       coq-elpi = self.rocq-elpi;
+      rocqide-server = callPackage ../development/rocq-modules/rocqide-server { };
+      rocqide = callPackage ../development/rocq-modules/rocqide { };
       rocqnavi = callPackage ../development/rocq-modules/rocqnavi { };
       RustExtraction = callPackage ../development/rocq-modules/RustExtraction { };
       semantics = callPackage ../development/rocq-modules/semantics { };
@@ -260,6 +264,10 @@ let
               with lib.versions;
               lib.switch self.coq.version [
                 {
+                  case = range "8.19" "9.0";
+                  out = "3.17";
+                }
+                {
                   case = range "8.15" "8.18";
                   out = "3.13.1";
                 }
@@ -277,6 +285,7 @@ let
           };
         })
       );
+      vst-ora = callPackage ../development/rocq-modules/vst-ora { };
       wasmcert = callPackage ../development/rocq-modules/wasmcert { };
       waterproof = callPackage ../development/rocq-modules/waterproof { };
       zorns-lemma = callPackage ../development/rocq-modules/zorns-lemma { };

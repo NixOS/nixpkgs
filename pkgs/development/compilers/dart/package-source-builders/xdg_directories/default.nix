@@ -5,7 +5,7 @@
 
 { version, src, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xdg_directories";
   inherit version src;
   inherit (src) passthru;

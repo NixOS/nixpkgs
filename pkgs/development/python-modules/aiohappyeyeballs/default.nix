@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "aio-libs";
     repo = "aiohappyeyeballs";
     tag = "v${version}";
     hash = "sha256-smpdmmut4wYekVew13KZXluI71lSUdZriPejUumkLNU=";
@@ -56,8 +56,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Happy Eyeballs for pre-resolved hosts";
-    homepage = "https://github.com/bdraco/aiohappyeyeballs";
-    changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/aio-libs/aiohappyeyeballs";
+    changelog = "https://github.com/aio-libs/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [
       fab

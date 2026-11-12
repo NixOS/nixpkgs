@@ -46,14 +46,20 @@ let
           repo = "armagetronad";
           inherit rev hash;
         };
+
+      # abseil (via protobuf) requires C++20, but configure prefers C++17.
+      cxx20PostPatch = ''
+        substituteInPlace configure.ac \
+          --replace-fail "AX_CXXFLAGS_GCC_OPTION(-std=c++17)" "AX_CXXFLAGS_GCC_OPTION(-std=c++20)"
+      '';
     in
     {
       # https://gitlab.com/armagetronad/armagetronad/-/tags
       ${latestVersionMajor} =
         let
-          version = "${latestVersionMajor}.3.0";
+          version = "${latestVersionMajor}.3.1";
           rev = "v${version}";
-          hash = "sha256-xoUb0AAhaiAYA88Sn5/CfofMjGkYDLsCPVKwzHGz1XA=";
+          hash = "sha256-uC6GPt4ddnsKW2EnkDdqP9Cj4rbunbwty6hpE/ZiXJA=";
         in
         dedicatedServer: {
           inherit version;
@@ -72,8 +78,8 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/commits/trunk/?ref_type=heads
       ${unstableVersionMajor} =
         let
-          rev = "16da4a669d4c4d269132a903228918c2a8b87b08";
-          hash = "sha256-nTTJwxnTYP3kBxSMNpcYaKfMVGF6U/pYa2r10d8YdCE=";
+          rev = "bd705b0b659399194a2472ae52e523d1124ea90d";
+          hash = "sha256-66rX8C8L4hZ1GgE+J3mh0O/dGvdymLbv1VwtdaV5s6c=";
         in
         dedicatedServer: {
           version = "${unstableVersionMajor}-${lib.substring 0 8 rev}";
@@ -93,14 +99,18 @@ let
             SDL2_image
             SDL2_mixer
           ];
-          extraNativeBuildInputs = [ bison ];
+          extraNativeBuildInputs = [
+            bison
+            protobuf.dev
+          ];
+          postPatch = cxx20PostPatch;
         };
 
       # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads
       "${latestVersionMajor}-sty+ct+ap" =
         let
-          rev = "b74df624eae13e919b4b04f9b18043bce9d04431";
-          hash = "sha256-tjEcgyYxaGgHiIH8y9xYM7HEpgZa7DEWIVqK8r0dmaY=";
+          rev = "940b919d0f309274293cd0d090d2116091d6b641";
+          hash = "sha256-bOUy0t8cbJdbororhEtAufE7mKTQAn/82UNi4U5kyqI=";
         in
         dedicatedServer: {
           version = "${latestVersionMajor}-sty+ct+ap-${lib.substring 0 8 rev}";

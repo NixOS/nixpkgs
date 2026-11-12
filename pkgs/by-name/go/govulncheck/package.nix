@@ -8,13 +8,13 @@
 
 buildGoLatestModule (finalAttrs: {
   pname = "govulncheck";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OvgAEWf7WtPNXZEZYNeSqy7dZP9cF3wfQSt9WU79OIM=";
+    hash = "sha256-XChu+f2RVp9flyk6R7n090Xbcgzi2ThQPuTqktkOC+U=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ buildGoLatestModule (finalAttrs: {
     })
   ];
 
-  vendorHash = "sha256-wSSxsmEzpFiaDfRsgFWOtA9UnoENm57VVltB+MA6y0E=";
+  vendorHash = "sha256-vPBwW2DtmJbX1UeJeC3J8wnRvq9+C/XDazbsXKkHkaQ=";
 
   subPackages = [
     "cmd/govulncheck"

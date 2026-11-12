@@ -89,6 +89,7 @@ let
     "systemd-fsck-root.service"
     "systemd-growfs@.service"
     "systemd-growfs-root.service"
+    "systemd-loop@.service"
     "systemd-remount-fs.service"
     "systemd-pstore.service"
     "local-fs.target"
@@ -425,6 +426,17 @@ in
       '';
     };
 
+    defaultPath = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = ''
+        Packages appended to the {env}`PATH` environment variable of all
+        system and user services.
+
+        Individual services can opt out by setting `enableDefaultPath = false`.
+      '';
+    };
+
     globalEnvironment = mkOption {
       type =
         with types;
@@ -733,6 +745,15 @@ in
       // listToAttrs (map (withName mountToUnit) cfg.mounts)
       // listToAttrs (map (withName automountToUnit) cfg.automounts);
 
+    # Default path for systemd services. Should be quite minimal.
+    systemd.defaultPath = [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+      cfg.package
+    ];
+
     # Environment of PID 1
     systemd.managerEnvironment = {
       # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
@@ -820,6 +841,10 @@ in
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
+    # `systemd-bless-boot good` fails once the current boot has been blessed.
+    systemd.services.systemd-bless-boot = lib.mkIf cfg.package.withBootloader {
+      restartIfChanged = false;
+    };
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.services.systemd-importd = lib.mkIf cfg.package.withImportd {
@@ -900,7 +925,10 @@ in
     # https://github.com/systemd/systemd/blob/v259.3/src/vmspawn/vmspawn.c#L2662
     # this service is used, for example, when NixOS is started via systemd-vmspawn
     systemd.services."sshd-vsock@" = mkIf config.services.openssh.enable {
-      serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
+      serviceConfig.ExecSearchPath = lib.makeBinPath [
+        config.services.openssh.package
+        cfg.package
+      ];
       overrideStrategy = "asDropin";
     };
 

@@ -13,16 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ua-generator";
-  version = "2.1.5";
+  version = "2.1.8";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "iamdual";
     repo = "ua-generator";
     tag = finalAttrs.version;
-    hash = "sha256-EEEpB8qyXsYBsvsQ9Q1CRtQRlTYtbgIUTPlX5tes16Q=";
+    hash = "sha256-dFhaQboiJmri3B5cIuX0fxIiFR1MtoOIeACLlazILWc=";
   };
 
   build-system = [ setuptools ];

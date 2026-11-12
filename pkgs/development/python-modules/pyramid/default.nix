@@ -38,6 +38,8 @@ buildPythonPackage (finalAttrs: {
     plaster
     plaster-pastedeploy
     repoze-lru
+    # upstream requires setuptools < 82 at runtime for pkg_resources (pyramid/path.py)
+    setuptools_80
     translationstring
     venusian
     webob

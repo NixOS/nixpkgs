@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pynndescent";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "pynndescent";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-RfIbPPyx+Y7niuFrLjA02cUDHTSv9s5E4JiXv4ZBNEc=";
+    hash = "sha256-1mYBYnugMyHomNb4QAykClG6lDz9CxMSRceQ/GJwbek=";
   };
 
   build-system = [ setuptools ];

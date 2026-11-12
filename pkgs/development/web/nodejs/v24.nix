@@ -1,21 +1,17 @@
 {
   lib,
   stdenv,
+  pinTolibcxx20 ? stdenv.hostPlatform.isDarwin, # libcxx21 makes FD tracking unreliable on Darwin
   buildPackages,
   callPackage,
   fetchpatch2,
-  openssl,
-  python3,
-}:
+  ...
+}@args:
 
 let
   buildNodejs = callPackage ./nodejs.nix (
-    {
-      inherit openssl;
-      python = python3;
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      # libcxx21 makes FD tracking unreliable on Darwin. Pinning to libcxx20:
+    args
+    // lib.optionalAttrs pinTolibcxx20 {
       stdenv = buildPackages.llvmPackages_20.libcxxStdenv;
     }
   );
@@ -29,8 +25,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "24.20.0";
-  sha256 = "2732fc3f588dd335cd6779c06864f7cd424bb1b5ff9a1743059a66c54f9ca4a1";
+  version = "24.22.3";
+  sha256 = "48ca3aa8a9b02133356922ef4fc80200e00598c80a4ef446f7c39a459222593d";
   patches =
     (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
       url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
@@ -53,12 +49,6 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
-
-      # TODO: remove when support for OpenSSL 3.6.4 has landed upstream
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/a37601c99d7bde9abb3b3ae57b2fb2bacd81ec9d.patch?full_index=1";
-        hash = "sha256-AdAPMs1RZgqJ0bzNZ6IvChjT97lbW+XV4cRWygzU1qc=";
-      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [

@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "dynacat";
-  version = "3.0.0";
+  version = "3.0.2";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "Panonim";
     repo = "dynacat";
     tag = finalAttrs.version;
-    hash = "sha256-rsZTIEXxyLYYqyoy8NGUN6jOWTx1WPDyom56D1mevbI=";
+    hash = "sha256-Pqo/2MYFzqoGA8SrK6vzv3ndxnnHHXiyXkYyIPRhiGk=";
   };
 
-  vendorHash = "sha256-mpEeOPYhqJABNxheSHYWngyYJQJJTqtiW7dlm+O4LpI=";
+  vendorHash = "sha256-RyCKxVKyt0Srcpc9fKu0lXuq9HgO4/dqSNDciRhOa2U=";
 
   ldflags = [
     "-s"

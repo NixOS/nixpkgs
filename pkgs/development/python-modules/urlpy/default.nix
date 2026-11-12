@@ -11,10 +11,10 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "urlpy";
     rev = "v${version}";
-    sha256 = "962jLyx+/GS8wrDPzG2ONnHvtUG5Pqe6l1Z5ml63Cmg=";
+    hash = "sha256-962jLyx+/GS8wrDPzG2ONnHvtUG5Pqe6l1Z5ml63Cmg=";
   };
 
   dontConfigure = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Simple URL parsing, canonicalization and equivalence";
-    homepage = "https://github.com/nexB/urlpy";
+    homepage = "https://github.com/aboutcode-org/urlpy";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

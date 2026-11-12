@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  iana-etc,
+  libredirect,
   nixosTests,
   stdenv,
 }:
@@ -24,7 +26,15 @@ buildGoModule (finalAttrs: {
     substituteInPlace $out/lib/systemd/system/acme-dns.service --replace-fail "/usr/local/bin/acme-dns" "$out/bin/acme-dns"
   '';
 
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
+  '';
+
   passthru.tests = { inherit (nixosTests) acme-dns; };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Limited DNS server to handle ACME DNS challenges easily and securely";
@@ -33,7 +43,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilylange ];
     mainProgram = "acme-dns";
-    # Tests time out on darwin.
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -10,7 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "calibre-web";
   version = "0.6.27";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "janeczku";
@@ -37,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mv cps src/calibreweb
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'cps = "calibreweb.__main__:main"' 'calibre-web = "calibreweb.__main__:main"'
+      --replace-fail 'cps = "calibreweb.__main__:main"' 'calibre-web = "calibreweb:main"'
   '';
 
   build-system = [ python3Packages.setuptools ];

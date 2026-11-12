@@ -4,22 +4,22 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-E1xhKV3ahZ8ahCDalga2XSOiLea0UyC8b1t3Gd4P6xA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XbRqZWsr012zT6dXumg4YShsjXeVNt6Qk52ttEFm/Oo=";
   };
 
-  vendorHash = "sha256-WxQMzzWcMJJATibiXXSBmCQz8YAlRu/MPGBkQaiHht8=";
+  vendorHash = "sha256-yjiKKAB+IoY3mn0Ae4ITKU4yPNuZhX7Y9Ct1LEZj5zQ=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
@@ -94,11 +94,9 @@ buildGoModule (finalAttrs: {
     installShellCompletion helm.{bash,zsh,fish}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "helm version";
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   meta = {
     homepage = "https://github.com/helm/helm";

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "213758fe96d74be502f69f2620f7666961a85caa0551d14573637315035a9745";
+    hash = "sha256-ITdY/pbXS+UC9p8mIPdmaWGoXKoFUdFFc2NzFQNal0U=";
   };
 
   # Tests require a postgresql + postgis server

@@ -38,7 +38,7 @@ in
 
 buildDotnetModule (finalAttrs: {
   pname = "stelliberty";
-  version = "2.0.25";
+  version = "2.0.36";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -47,10 +47,13 @@ buildDotnetModule (finalAttrs: {
     owner = "Kindness-Kismet";
     repo = "stelliberty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WlIUBxLRZUDBONOxviFb2HWBcC2aBqWsvu/KB4igdwU=";
+    hash = "sha256-uTFeFoGvQ15CGJVkTO6IrdnwRlU7KB5xKvHS9pZyhrk=";
   };
 
-  projectFile = "src/Stelliberty.Desktop/Stelliberty.Desktop.csproj";
+  projectFile = [
+    "src/Stelliberty.Tray/Stelliberty.Tray.csproj"
+    "src/Stelliberty.Desktop/Stelliberty.Desktop.csproj"
+  ];
   nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_11_0;
@@ -58,22 +61,20 @@ buildDotnetModule (finalAttrs: {
   executables = [ "stelliberty" ];
 
   postPatch = ''
-    substituteInPlace src/Stelliberty.Application/Platform/PortableDataDirectoryResolver.cs \
-      --replace-fail "InstallDataDirectory(baseDirectory)" \
-      "Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), \"stelliberty\"))"
+    substituteInPlace Directory.Build.props \
+      --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
 
     substituteInPlace native/hub/src/infra/paths.rs \
       --replace-fail "data_core_dir.join" "user_data_dir.join"
 
     substituteInPlace native/service/src/core.rs \
       --replace-fail "service_data_root()?.join(\"service\")" "std::env::temp_dir().join(\"stelliberty_service\")"
-
-    ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  # the upstream does not provide a Cargo.lock
-  # https://github.com/Kindness-Kismet/stelliberty/issues/99#issuecomment-5079064300
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-p7aLfalSxEEc2qakMXLuW7adWirFPzIjDZbdGP9ilaw=";
+  };
 
   nativeBuildInputs = [
     stdenv.cc # cc-rs
@@ -123,6 +124,8 @@ buildDotnetModule (finalAttrs: {
     ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/stelliberty/data/core/geosite.dat
     ln -s ${lib.getExe mihomo} $out/lib/stelliberty/data/core/clash-mihomo-core
 
+    ln -s $out/lib/stelliberty/stelliberty_ui $out/lib/stelliberty/data/deps/stelliberty_ui
+
     install -Dm755 target/${stdenv.hostPlatform.rust.rustcTarget}/release/stelliberty_service \
       $out/lib/stelliberty/data/service/update/release/stelliberty_service
 
@@ -157,12 +160,7 @@ buildDotnetModule (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--generate-lockfile"
-      "--use-github-releases"
-    ];
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Cross-platform desktop proxy client";

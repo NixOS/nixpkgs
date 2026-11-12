@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3,
-  fetchpatch2,
   plugins ? _ps: [ ],
   nixosTests,
   nix-update-script,
@@ -18,27 +17,19 @@ let
   extraBuildInputs = plugins py.pkgs;
 in
 py.pkgs.buildPythonApplication (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox";
-  version = "4.6.8";
+  version = "4.7.3";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fhEcQBYL5R9Tv9CpAf3Ce1oIzsXCjtH5j+dP9sD6kdg=";
+    hash = "sha256-t/Ch4BNLrO3YhZo7BCY2xy3ArHrHh3qsH5d0o3SvRBc=";
   };
 
   patches = [
     ./custom-static-root.patch
-    # TODO: remove before upgrading to NetBox v4.7
-    (fetchpatch2 {
-      name = "upgrade-django-tables2-v3.0.patch";
-      url = "https://github.com/netbox-community/netbox/commit/d57346d9f0eef8126eafcd5033ea43864faeaf0d.patch";
-      hash = "sha256-6/wdd8wDVT4eqDKMNx8tmoPTDvw8OE7atf9nzg3LZzk=";
-    })
   ];
 
   dependencies =
@@ -50,10 +41,9 @@ py.pkgs.buildPythonApplication (finalAttrs: {
         django-cors-headers
         django-debug-toolbar
         django-filter
-        django-graphiql-debug-toolbar
         django-htmx
         django-mptt
-        django-pglocks
+        django-pgware
         django-prometheus
         django-redis
         django-rq
@@ -93,7 +83,6 @@ py.pkgs.buildPythonApplication (finalAttrs: {
       ]
       ++ psycopg.optional-dependencies.c
       ++ psycopg.optional-dependencies.pool
-      ++ social-auth-core.optional-dependencies.openidconnect
     )
     ++ extraBuildInputs;
 
@@ -162,6 +151,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       minijackson
       transcaffeine
+      felbinger
     ];
   };
 })

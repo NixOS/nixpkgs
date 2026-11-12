@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
     hash = "sha256-H5T039YtYWP01UFtg7Y/7uGt9jhYEa7Q7j/9JhhSDfw=";
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Implementation of the QUIC transport protocol";
-    homepage = "https://github.com/facebook/mvfst";
+    homepage = "https://github.com/meta/mvfst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

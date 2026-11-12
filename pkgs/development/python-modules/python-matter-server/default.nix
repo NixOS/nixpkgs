@@ -152,7 +152,7 @@ buildPythonPackage rec {
     "tests/server/ota/test_dcl.py"
   ];
 
-  env.dontCheckPythonMetadata = true;
+  env.dontCheckPythonMetadata = !withDashboard;
 
   meta = {
     changelog = "https://github.com/matter-js/python-matter-server/releases/tag/${src.tag}";

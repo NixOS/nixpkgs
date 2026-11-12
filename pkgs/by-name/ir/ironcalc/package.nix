@@ -16,20 +16,19 @@
   sqlite,
   writeShellApplication,
   symlinkJoin,
-  nix-update-script,
 }:
 
 let
-  version = "0.7.1-unstable-2026-04-29";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ironcalc";
     repo = "ironcalc";
-    rev = "8461ff71347ab19145cd7ad50ef829181ba765c2";
-    hash = "sha256-vjI3M+hS9bXK8QQlopAy6f4dCISfQHGMvN9sMNKp88Q=";
+    tag = "v${version}";
+    hash = "sha256-uC1ovWBYXwWxaBh85hDSuKPfrx7Kr5gqvbgnc3hwfWA=";
   };
 
-  cargoHash = "sha256-q5DnqhIYKUUqfJ4/TNHYF1QgTbH198QtgirQ+lP30wk=";
+  cargoHash = "sha256-eeyKsKFb4XyCHph3cT4mTj2d3ymM83N8QHRZYFBnjrk=";
 
   meta = {
     description = "Open source selfhosted spreadsheet engine";
@@ -41,8 +40,6 @@ let
     mainProgram = "ironcalc";
     maintainers = with lib.maintainers; [ phanirithvij ];
     teams = with lib.teams; [ ngi ];
-    # see checkNoDefaultFeatures below
-    broken = stdenv.hostPlatform.isAarch64;
   };
 
   server = rustPlatform.buildRustPackage {
@@ -52,14 +49,15 @@ let
     buildAndTestSubdir = "webapp/app.ironcalc.com/server";
     cargoRoot = "webapp/app.ironcalc.com/server";
 
-    cargoHash = "sha256-46IwZJI9AOs+IQFbfz89A2yIi5db7rVMVNsO9W+tn+c=";
+    cargoHash = "sha256-bd1EGOzxpNNdms1F7mEXnC9avn85aVGa3Rcxy+U7+GY=";
 
-    __structuredAttrs = true;
     strictDeps = true;
+    __structuredAttrs = true;
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       bzip2
+      sqlite
       zstd
     ];
 
@@ -73,18 +71,25 @@ let
     };
   };
 
-  frontend_packages = callPackage ./frontend.nix { };
-
-  inherit (frontend_packages)
-    frontend
-    wasm
-    widget
-    ;
+  wasm = callPackage ./frontend/wasm.nix { };
+  workbook = callPackage ./frontend/workbook.nix { };
+  frontend = callPackage ./frontend/frontend.nix { };
 
   tools = rustPlatform.buildRustPackage {
     pname = "ironcalc-tools";
     inherit src version;
     inherit cargoHash;
+
+    cargoBuildFlags = [
+      "--package"
+      "ironcalc"
+    ];
+    cargoTestFlags = [
+      "--package"
+      "ironcalc"
+      "--package"
+      "ironcalc_base"
+    ];
 
     patches = [
       # nix specific issue, can't reproduce without nix, not upstreaming
@@ -92,11 +97,9 @@ let
     ];
 
     __structuredAttrs = true;
-    strictDeps = true;
 
     nativeBuildInputs = [
       pkg-config
-      python3
     ];
 
     buildInputs = [
@@ -105,11 +108,6 @@ let
     ];
 
     doCheck = true;
-
-    # for aarch64-darwin and aarch64-linux
-    # there are a lot of undefined references to Py
-    # https://github.com/PyO3/pyo3/issues/1800
-    checkNoDefaultFeatures = stdenv.hostPlatform.isAarch64;
 
     doInstallCheck = true;
     installCheckPhase = ''
@@ -154,7 +152,6 @@ let
 
   python = python3Packages.ironcalc;
   nodejs = callPackage ./nodejs.nix { };
-  docs = callPackage ./docs.nix { };
 in
 symlinkJoin {
   pname = "ironcalc";
@@ -172,15 +169,15 @@ symlinkJoin {
       exports = {
         inherit
           frontend
-          widget
+          workbook
           server
           tools
-          docs
           wasm
           nodejs
           python
           wrapper
           ;
+        widget = workbook; # alias
       };
     in
     {

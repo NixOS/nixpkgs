@@ -13,8 +13,8 @@
   plugins ? [ ],
   pam,
   withPAM ? stdenv.hostPlatform.isLinux,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   libcap,
   withCap ? stdenv.hostPlatform.isLinux,
   python3,
@@ -113,12 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     libxcrypt
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     expat
     zlib
   ]
   ++ lib.optional withPAM pam
-  ++ lib.optional withSystemd systemd
+  ++ lib.optional withSystemd systemdLibs
   ++ lib.optional withCap libcap
   ++ lib.concatMap (x: x.inputs) needed;
 

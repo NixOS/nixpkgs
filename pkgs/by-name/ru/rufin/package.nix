@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   cacert,
   cargo,
   cmake,
@@ -15,12 +16,13 @@
   ninja,
   pkg-config,
   rustc,
+  sqlite,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rufin";
-  version = "0.15.4";
+  version = "0.17.1";
 
   __structuredAttrs = true;
 
@@ -28,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "screwys";
     repo = "Rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a9F0UIFpPaDQS5reV4ISzF3TAxNuRBLE5MPLveABYbo=";
+    hash = "sha256-ew0KiMZDLQJ+A7+dZFuAT6kS4tSSs2TPVkR8hKk++xs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-puijPhfe548I/RD4wtlBnbS6OWabQlTv4yBRyRsCEvQ=";
+    hash = "sha256-LmJd70im2kZyAi8SUicqx2PfSHaZJyXYPrH7kXrLOos=";
   };
 
   strictDeps = true;
@@ -50,10 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib
     glib-networking
     gtk4
     libadwaita
+    sqlite
   ]
   ++ (with gst_all_1; [
     gstreamer
@@ -86,11 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Native GTK4/libadwaita music client for Jellyfin, Subsonic, Navidrome and local libraries written in Rust";
+    description = "Native music player for Jellyfin, Navidrome/OpenSubsonic, Plex, and Emby servers;  local folders,  WebDAV including a direct Nextcloud browser login path, Samba and NAS shares";
     homepage = "https://github.com/screwys/Rufin";
     changelog = "https://github.com/screwys/Rufin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ screwys ];
+    maintainers = with lib.maintainers; [
+      screwys
+      Superredstone
+    ];
     mainProgram = "rufin";
     platforms = lib.platforms.linux;
   };

@@ -12,21 +12,21 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.14.0";
+  version = "1.15.0";
   src = fetchFromCodeberg {
     owner = "mrmn";
     repo = "PdfDing";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yxDN6aFYRdrpDV7AdKeam1ZUcs5GTXU1fLaOHB7Mx8c=";
+    hash = "sha256-7sviMLShkFumWJbwx8soADPl4lteAuE+OJozc4nD9Pw=";
   };
   pyproject = true;
-
-  strictDeps = true;
-  __structuredAttrs = true;
 
   # remove supervisor from dependencies, we use systemd
   postPatch = ''
     sed -i 's/supervisor.*$//' pyproject.toml
+
+    substituteInPlace pdfding/pdf/tasks.py \
+      --replace-fail "file_path.unlink()" "file_path.unlink(missing_ok=True)"
   '';
 
   dependencies =

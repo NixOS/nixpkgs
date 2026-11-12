@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tonewinner-rs232";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emma-sg";
     repo = "tonewinner-rs232";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zi7yjEv1GXBfETiHLs7RbQNk1z5jK35wHEs49/z/mjw=";
+    hash = "sha256-j5xDN5HG9tSN5WNoSXJoNAgcxF+gmxynwHVGCRgOiWw=";
   };
 
   build-system = [ uv-build ];

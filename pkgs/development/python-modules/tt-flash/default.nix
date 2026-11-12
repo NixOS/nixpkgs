@@ -18,16 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tt-flash";
-  version = "4.0.0";
+  version = "4.2.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-flash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-efl6Ecz7nBtixGZBv6wLU6Bdq+TLXRXIttgUvKXxQz4=";
+    hash = "sha256-rA1U5smOwWWeS9Kxq1udjS9LyqWsT8UV5k3NewDfahQ=";
   };
 
   pythonRelaxDeps = [
@@ -54,6 +52,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://tenstorrent.com";
     downloadPage = "https://github.com/tenstorrent/tt-flash";
     changelog = "https://github.com/tenstorrent/tt-flash/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = lib.licenses.asl20;
   };

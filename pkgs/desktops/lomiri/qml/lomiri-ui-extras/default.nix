@@ -27,6 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y3p3VXltTg7tbVKjLdoBgL6yAlCdKBUEYzyHyqawxBg=";
   };
 
+  patches = [
+    # Fixes finding of printer test page in LSS
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-ui-extras/-/merge_requests/104 merged & in release
+    ./1001-lomiri-ui-extras-fix-cups-testpage-finding.patch
+  ];
+
   postPatch = ''
     substituteInPlace modules/Lomiri/Components/Extras{,/{plugin,PamAuthentication}}/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://erratique.ch/software/hmap/releases/${pname}-${version}.tbz";
-    sha256 = "10xyjy4ab87z7jnghy0wnla9wrmazgyhdwhr4hdmxxdn28dxn03a";
+    hash = "sha256-agDbGxK29V4bJBnyBv37qmaeFLUcePisPP+gpYiXvoM=";
   };
 
   nativeBuildInputs = [

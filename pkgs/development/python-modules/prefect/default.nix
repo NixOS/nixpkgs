@@ -92,23 +92,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prefect";
-  version = "3.8.5";
+  version = "3.9.2";
   pyproject = true;
-
-  # keeps list elements containing spaces intact, which disabledTests below needs
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
     repo = "prefect";
     tag = finalAttrs.version;
-    hash = "sha256-ZKPYdsTo/SaptGo3TiBiBZq64JCXPLJFztHg1KVNAPE=";
+    hash = "sha256-Mu299fagUGz+8/jjWK364EfhNl7fZHhK0LsOk/Hu7fE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail \
-        'default-version = "3.6.24+nogit"' \
+        'default-version = "3.9.0+nogit"' \
         'default-version = "${finalAttrs.version}"'
   ''
   + lib.optionalString finalAttrs.finalPackage.doCheck ''
@@ -117,6 +114,13 @@ buildPythonPackage (finalAttrs: {
         '__development_base_path__: pathlib.Path = __module_path__.parents[1]' \
         '__development_base_path__: pathlib.Path = pathlib.Path("${finalAttrs.src}")'
   '';
+
+  pythonRelaxDeps = [
+    "apprise"
+    "certifi"
+    "python-slugify"
+    "websockets"
+  ];
 
   nativeBuildInputs = [
     # versioningit: NotVCSError: Git not installed; assuming this isn't a Git repository

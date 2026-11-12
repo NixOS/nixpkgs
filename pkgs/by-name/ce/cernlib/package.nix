@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace-fail "find_program ( SED NAMES gsed" "find_program ( SED NAMES sed"
 
+    # gfortran 16 Fortran 2023 SPLIT intrinsic shadows DIVON SPLIT unless declared EXTERNAL.
+    # https://github.com/gcc-mirror/gcc/commit/fa6c9c2e483ba1707b6ac83010e4ae47c9100b21
+    substituteInPlace mathlib/gen/divon/recpar.F \
+      --replace-fail "      LOGICAL TERMNL" $'      LOGICAL TERMNL\n      EXTERNAL SPLIT'
+
     # termio.h is not found. Use the POSIX header
     substituteInPlace packlib/cspack/tcpaw/tcpaw.c \
       --replace-fail "#include <termio.h>" "#include <termios.h>" \
@@ -66,6 +71,7 @@ stdenv.mkDerivation rec {
     platforms = [
       "aarch64-linux"
       "i686-linux"
+      "riscv64-linux"
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [ veprbl ];

@@ -34,18 +34,20 @@ let
     qbittorrent-api
     transmission-rpc
     authlib
+    joserfc
     apprise
     httpx
     h2
+    publicsuffixlist
   ];
 
-  version = "1.3.15";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "calibrain";
     repo = "shelfmark";
     tag = "v${version}";
-    hash = "sha256-TW02RyRSUMVTKP/PE7BTCHFZKHR8AB+rQ+NNuV1FUuE=";
+    hash = "sha256-/AF+Uzu+P7yKFiC8lIN6EBbDVdbqs174HMkivb9/+gE=";
   };
 
   frontend = buildNpmPackage (finalAttrs: {
@@ -54,7 +56,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
-    npmDepsHash = "sha256-93MKxyEA8zgay67Divp2LuFHPklqv8WMexmJ7yq4ckg=";
+    npmDepsHash = "sha256-YhYzzLRJkRG56N1xmRC8GHIaiJP3rQakO4RSYK0mZWA=";
 
     installPhase = ''
       runHook preInstall

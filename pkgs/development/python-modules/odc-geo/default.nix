@@ -31,15 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "odc-geo";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-geo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iubxn3ysx7aIMSrlrPPnfKYI8K7wSugM0/Zp2YIXeIg=";
+    hash = "sha256-twQSp2QeOKpx+JB+GoYjwowlbJCZLFN1UkscjO24xQ4=";
   };
 
   build-system = [

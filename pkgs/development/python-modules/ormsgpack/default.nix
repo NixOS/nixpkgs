@@ -18,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "ormsgpack";
-  version = "1.12.2";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "aviramha";
+    owner = "ormsgpack";
     repo = "ormsgpack";
     tag = version;
-    hash = "sha256-a2PgCCIPPJt6YNW7UFl9urYZkAoVj5Np0lbv4QfzMAs=";
+    hash = "sha256-O4497RObrvDViQVKbpsG2XCG4L570pDGpZEfIGDxEmM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-PLLSVoQLsbTOIMqOsaaei/dm8SybfyqP0WLJW8hTOoo=";
+    hash = "sha256-6Xmu5GgcC6DuxBk4d/M3p8lboEhG5+8HwW2LnivpHHE=";
   };
 
   build-system = [
@@ -60,8 +60,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Fast msgpack serialization library for Python derived from orjson";
-    homepage = "https://github.com/aviramha/ormsgpack";
-    changelog = "https://github.com/aviramha/ormsgpack/releases/tag/${version}";
+    homepage = "https://github.com/ormsgpack/ormsgpack";
+    changelog = "https://github.com/ormsgpack/ormsgpack/releases/tag/${version}";
     license = with lib.licenses; [
       asl20
       mit

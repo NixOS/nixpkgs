@@ -30,6 +30,7 @@
   zlib,
   pciutils,
   makeDesktopItem,
+  copyDesktopItems,
   xkeyboard-config,
   dbus,
   runtimeShell,
@@ -63,29 +64,36 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "saleae-logic";
   version = "1.2.18";
 
   src = fetchurl {
-    name = "saleae-logic-${version}-64bit.zip";
-    url = "https://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
+    name = "saleae-logic-${finalAttrs.version}-64bit.zip";
+    url = "https://downloads.saleae.com/logic/${finalAttrs.version}/Logic%20${finalAttrs.version}%20(64-bit).zip";
     sha256 = "0lhair2vsg8sjvzicvfcjfmvy30q7i01xj4z02iqh7pgzpb025h8";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "saleae-logic";
-    exec = "saleae-logic";
-    icon = ""; # the package contains no icon
-    comment = "Software for Saleae logic analyzers";
-    desktopName = "Saleae Logic";
-    genericName = "Logic analyzer";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "saleae-logic";
+      exec = "saleae-logic";
+      icon = ""; # the package contains no icon
+      comment = "Software for Saleae logic analyzers";
+      desktopName = "Saleae Logic";
+      genericName = "Logic analyzer";
+      categories = [ "Development" ];
+    })
+  ];
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    unzip
+    copyDesktopItems
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     # Copy prebuilt app to $out
     mkdir "$out"
     cp -r * "$out"
@@ -117,13 +125,11 @@ stdenv.mkDerivation rec {
     EOF
     chmod a+x "$out"/bin/saleae-logic
 
-    # Copy the generated .desktop file
-    mkdir -p "$out/share/applications"
-    cp "$desktopItem"/share/applications/* "$out/share/applications/"
-
     # Install provided udev rules
     mkdir -p "$out/etc/udev/rules.d"
     cp Drivers/99-SaleaeLogic.rules "$out/etc/udev/rules.d/"
+
+    runHook postInstall
   '';
 
   meta = {
@@ -134,4 +140,4 @@ stdenv.mkDerivation rec {
     platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

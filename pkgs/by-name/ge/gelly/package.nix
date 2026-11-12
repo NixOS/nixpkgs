@@ -15,20 +15,21 @@
   bubblewrap,
   glycin-loaders,
   nix-update-script,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gelly";
-  version = "1.11.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "Fingel";
     repo = "gelly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Won8IYaDbd6NljLZU+Ih/7gnUmXnhdpoCanwBbloVFU=";
+    hash = "sha256-yzZ8rHm7NHvleLs63b9BKST1VrLDOL3nfmjdNAHjLMo=";
   };
 
-  cargoHash = "sha256-yCJydR4BGd7HcKnOl4bquoD3QzI4l5WBrOeXiF5IdHI=";
+  cargoHash = "sha256-wUEya5nNFtEt4yQ9oS9fbgtUoIFwdCXIUZ7Rf7uZBTU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libadwaita
     libseccomp
     openssl
+    aws-lc
   ];
 
   # Adapted from upstream's `justfile`

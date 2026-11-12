@@ -36,7 +36,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   optional-dependencies = with python3.pkgs; {
     binary-conversion = [
       markitdown
-    ];
+    ]
+    ++ markitdown.optional-dependencies.all;
   };
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];

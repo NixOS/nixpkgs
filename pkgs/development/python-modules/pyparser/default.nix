@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchhg {
     url = "https://keep.imfreedom.org/grim/pyparser";
     rev = "v${version}";
-    sha256 = "0aplb4zdpgbpmaw9qj0vr7qip9q5w7sl1m1lp1nc9jmjfij9i0hf";
+    hash = "sha256-DoKYZHSyysRsuDTUQPXhBacb8ckbSJy4qne92z5Z9Co=";
   };
 
   postPatch = "sed -i 's/parse==/parse>=/' requirements.txt";

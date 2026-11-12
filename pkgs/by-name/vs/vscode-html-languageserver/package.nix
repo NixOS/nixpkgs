@@ -9,18 +9,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vscode-html-languageserver";
-  version = "1.136.1";
+  version = "1.138.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode";
     tag = finalAttrs.version;
-    hash = "sha256-Y6FRttdpn353w/ykJbaE+NjM1NfXQewl9Fgux7m10lk=";
+    hash = "sha256-PQqCs0tXjwEMjvHCuIRO6lc4ih2vISMrtXZrgl4Jypg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/extensions/html-language-features/server";
 
-  npmDepsHash = "sha256-3LdWhp2wJwa0jQgkVZPH3ae8RexS1SU07xaPjM+XcWQ=";
+  npmDepsHash = "sha256-sE4tqJPE9aOhpPbV6Q0ZBFVJw8TlQ+osiSxV2pfC6Fw=";
 
   __structuredAttrs = true;
 

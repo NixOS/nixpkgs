@@ -5,7 +5,7 @@ Create a `shell.nix` with the following:
 ```nix
 # shell.nix
 let
-  nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+  nixpkgs = fetchTarball "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
   pkgs = import nixpkgs { };
 in
 pkgs.mkShell {
@@ -25,7 +25,7 @@ nix-shell
 This activates your `shell.nix` and you should see:
 
 ```sh
-unpacking 'https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz' into the Git cache...
+unpacking 'https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst' into the Git cache...
 Welcome in your nix shell
 ```
 

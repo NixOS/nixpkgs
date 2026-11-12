@@ -4,6 +4,7 @@
   fetchFromGitHub,
   runCommand,
   buildNpmPackage,
+  callPackage,
   clang,
   go,
   qt5,
@@ -12,6 +13,8 @@
 }:
 
 let
+  breez-sdk-spark = callPackage ./breez-sdk-spark.nix { };
+
   # Qt 6 doesn’t provide the rcc binary so we create an ad hoc package pulling
   # it from Qt 5.
   rcc = runCommand "rcc" { } ''
@@ -21,19 +24,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.51.4";
+  version = "4.52.0";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-j2nGOGN3/U7Ii04XedupJuvPcMpvrTVAQi7eGPs45S8=";
+    hash = "sha256-urQjnrBcqTwP+xpcM0L8IpE/Vc+CQiN/2hE5jlBnzdU=";
   };
 
   postPatch = ''
     substituteInPlace frontends/qt/resources/linux/usr/share/applications/bitbox.desktop \
         --replace-fail 'Exec=BitBox %u' 'Exec=bitbox %u'
+
+    # Link against the Rust library built from source, not the vendored binary.
+    substituteInPlace vendor/github.com/breez/breez-sdk-spark-go/breez_sdk_spark/cgo.go \
+      --replace-fail "\''${SRCDIR}/lib/linux-amd64" '${lib.getLib breez-sdk-spark}/lib'
+    rm vendor/github.com/breez/breez-sdk-spark-go/breez_sdk_spark/lib/linux-amd64/libbreez_sdk_spark_bindings.so
   '';
 
   dontConfigure = true;
@@ -43,7 +51,7 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit src;
     sourceRoot = "${src.name}/frontends/web";
-    npmDepsHash = "sha256-kIYyUeaTgj4dJXfAJ1+3WDIYSADFcs5ypRGTODlxwDI=";
+    npmDepsHash = "sha256-G8ZhBG9zdiFvkMVgjLFJcbFFpbqh6+q1xezv9fwwaAg=";
     installPhase = "cp -r build $out";
   };
 

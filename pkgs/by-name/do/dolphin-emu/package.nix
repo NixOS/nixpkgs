@@ -51,17 +51,18 @@
   # passthru
   testers,
   nix-update-script,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2606a";
+  version = "2609b"; # Please backport to stable for netplay compat
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-TAIxBEGbbYvoOi+dukr2Hij0J/NL9Iy6pcgf2bhEgI8=";
+    hash = "sha256-7e9wjc0+B25qDKzILz18z0cMMdUczRUDvsh8mKLAM2c=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -158,7 +159,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ vulkan-loader ])
   ];
 
   doInstallCheck = true;
@@ -184,14 +188,14 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
-        command = "dolphin-emu-nogui --version";
+        command = "${lib.getExe xvfb-run} dolphin-emu --version";
         inherit (finalAttrs) version;
       };
     };
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "([0-9]+)"
+        "([0-9]+[a-z]*)"
       ];
     };
   };

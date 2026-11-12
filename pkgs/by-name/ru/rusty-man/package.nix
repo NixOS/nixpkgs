@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromSourcehut,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
@@ -10,17 +12,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-man";
   version = "0.5.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromSourcehut {
     owner = "~ireas";
     repo = "rusty-man";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-djprzmogT1OEf0/+twdxzx30YaMNzFjXkZd4IDsH8oo=";
   };
 
   cargoHash = "sha256-ZIRwp5AJugMDxg3DyFIH5VlD0m4Si2tJdspKE5QEB4M=";
 
-  # Fix build with gcc 15
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

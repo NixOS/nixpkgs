@@ -14,28 +14,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fasttransform";
-  version = "0.0.2";
+  version = "0.0.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AnswerDotAI";
     repo = "fasttransform";
     tag = finalAttrs.version;
-    hash = "sha256-d41645xOXkFv4rjFBfOXepYHGbYiCbHN2O30aePVVxM=";
+    hash = "sha256-hGIbUzKW1HevBPUeh536nRoO2d48yPweurj4ozYxLr4=";
   };
 
-  # pkg_resources used to come with setuptools but was removed
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail \
-        "from pkg_resources import parse_version" \
-        "from packaging.version import parse as parse_version"
-  '';
-
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     fastcore

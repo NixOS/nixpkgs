@@ -50,6 +50,37 @@ let
     mkOption
     mkEnableOption
     ;
+
+  immichPostgresExtensions = [
+    "unaccent"
+    "uuid-ossp"
+    "cube"
+    "earthdistance"
+    "pg_trgm"
+    "vector"
+    "vchord"
+  ];
+
+  immichPostgresSetupSQL = pkgs.writeText "immich-pgvectors-setup.sql" ''
+    -- save previous version of vectorchord to trigger reindex on update
+    SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+    ${lib.concatMapStringsSep "\n" (
+      ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";"
+    ) immichPostgresExtensions}
+    ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") immichPostgresExtensions}
+    ALTER SCHEMA public OWNER TO ${cfg.database.user};
+
+    -- trigger reindex if vectorchord updates
+    -- https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
+    SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+    SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
+    \if :has_vchord_updated
+      REINDEX INDEX face_index;
+      REINDEX INDEX clip_index;
+    \endif
+  '';
 in
 {
   imports = [
@@ -232,8 +263,19 @@ in
         // {
           default = true;
         };
-      createDB = mkEnableOption "the automatic creation of the database for immich." // {
+      createDB = mkEnableOption "the automatic creation of the database for immich" // {
         default = true;
+      };
+      setupSQL = mkOption {
+        type = types.path;
+        readOnly = true;
+        default = immichPostgresSetupSQL;
+        defaultText = lib.literalMD "the generated immich PostgreSQL setup SQL";
+        description = ''
+          Path to the SQL script that installs and updates the PostgreSQL
+          extensions required by immich and reindexes VectorChord after
+          upgrades.
+        '';
       };
       name = mkOption {
         type = types.str;
@@ -325,41 +367,13 @@ in
         search_path = "\"$user\", public, vectors";
       };
     };
-    systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
-      let
-        extensions = [
-          "unaccent"
-          "uuid-ossp"
-          "cube"
-          "earthdistance"
-          "pg_trgm"
-          "vector"
-          "vchord"
-        ];
-        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-          -- save previous version of vectorchord to trigger reindex on update
-          SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
-
-          ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
-          ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
-          ALTER SCHEMA public OWNER TO ${cfg.database.user};
-
-          -- trigger reindex if vectorchord updates
-          -- https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
-          SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
-
-          SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
-          \if :has_vchord_updated
-            REINDEX INDEX face_index;
-            REINDEX INDEX clip_index;
-          \endif
-        '';
-      in
-      [
+    systemd.services.postgresql-setup = mkIf cfg.database.enable {
+      serviceConfig.ExecStartPost = [
         ''
-          ${lib.getExe' cfg.database.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ${lib.getExe' cfg.database.package "psql"} -p "${toString cfg.database.port}" -d "${cfg.database.name}" -f "${cfg.database.setupSQL}"
         ''
       ];
+    };
 
     services.redis.servers = mkIf cfg.redis.enable {
       immich = {
@@ -375,7 +389,9 @@ in
       let
         postgresEnv =
           if isPostgresUnixSocket then
-            { DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}"; }
+            {
+              DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}&port=${toString cfg.database.port}";
+            }
           else
             {
               DB_HOSTNAME = cfg.database.host;
@@ -451,8 +467,7 @@ in
 
     systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
       description = "immich machine learning";
-      requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
-      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
@@ -489,6 +504,6 @@ in
     users.groups = mkIf (cfg.group == "immich") { immich = { }; };
   };
   meta = {
-    maintainers = with lib.maintainers; [ jvanbruegge ];
+    inherit (pkgs.immich.meta) maintainers;
   };
 }

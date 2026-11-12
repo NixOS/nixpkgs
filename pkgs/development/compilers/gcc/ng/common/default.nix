@@ -15,7 +15,7 @@
   binutils,
   buildGccPackages,
   targetGccPackages,
-  windows,
+  threads,
   makeScopeWithSplicing',
   otherSplices,
   ...
@@ -141,18 +141,10 @@ makeScopeWithSplicing' {
       };
     in
     {
-      # Where the libc's own threading is not the one we want, a separate
-      # library supplies it: MinGW offers only `win32`, and `mcfgthreads` gives
-      # `mcf`, which is the better answer on Windows. `null`, the answer
-      # everywhere else, means "whatever the libc offers".
-      # The model is not written down here; the package declares it, in the
-      # same `passthru.threadModel` a libc uses.
-      #
-      # This stays out of the bootstrap cycle by itself: it is built with
-      # `windows.crossThreadsStdenv`, which on `useGccNG` platforms is stage 3
-      # — real libc, bootstrap single-threaded libgcc — the very compiler that
-      # goes on to build the threaded `libgcc-libc`.
-      threads = if stdenv.hostPlatform.isMinGW then windows.mcfgthreads else null;
+      # See `threads` in pkgs/top-level/all-packages.nix. It is re-bound in
+      # this scope only to make overriding it for the other runtime libraries
+      # easier.
+      inherit threads;
 
       stdenv = overrideCC stdenv gccPackages.gcc;
 

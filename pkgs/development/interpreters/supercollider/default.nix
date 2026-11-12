@@ -21,7 +21,6 @@
   gitUpdater,
   supercollider-with-plugins,
   supercolliderPlugins,
-  writeText,
   runCommand,
 }:
 
@@ -87,25 +86,29 @@ stdenv.mkDerivation rec {
     };
 
     tests = {
-      # test to make sure sclang runs and included plugins are successfully found
+      # Check both language classes and server UGens, without an audio device.
       sclang-sc3-plugins =
         let
           supercollider-with-test-plugins = supercollider-with-plugins.override {
             plugins = with supercolliderPlugins; [ sc3-plugins ];
           };
-          testsc = writeText "test.sc" ''
-            var err = 0;
-            try {
-            MdaPiano.name.postln;
-            } {
-            err = 1;
-            };
-            err.exit;
-          '';
         in
-        runCommand "sclang-sc3-plugins-test" { } ''
-          timeout 60s env XDG_CONFIG_HOME="$(mktemp -d)" QT_QPA_PLATFORM=minimal ${supercollider-with-test-plugins}/bin/sclang ${testsc} >$out
-        '';
+        runCommand "sclang-sc3-plugins-test"
+          {
+            QT_QPA_PLATFORM = "offscreen";
+          }
+          ''
+            export XDG_CONFIG_HOME="$TMPDIR/config"
+            export XDG_DATA_HOME="$TMPDIR/data"
+            export XDG_CACHE_HOME="$TMPDIR/cache"
+            mkdir -p "$out"
+            timeout 60s ${supercollider-with-test-plugins}/bin/sclang \
+              ${./tests/sc3-plugins.scd} "$out" 2>&1 | tee "$out/log"
+            grep -Fq 'SC3 plugins rendered successfully' "$out/log"
+            if grep -E 'ERROR|FAILURE|duplicate' "$out/log"; then
+              exit 1
+            fi
+          '';
     };
   };
 

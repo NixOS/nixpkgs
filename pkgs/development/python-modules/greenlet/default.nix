@@ -15,14 +15,15 @@
 }:
 
 let
-  greenlet = buildPythonPackage rec {
+  greenlet = buildPythonPackage (finalAttrs: {
     pname = "greenlet";
-    version = "3.5.3";
+    version = "3.5.5";
     pyproject = true;
 
     src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-ph78AY/T6zF+7KMaupDunn8m8iiEp5tsbscVv3G7YvE=";
+      pname = "greenlet";
+      inherit (finalAttrs) version;
+      hash = "sha256-rbS64C6RqOhj5IsXfkAUvcrIprXgR+od9oemFTS4Xmw=";
     };
 
     build-system = [ setuptools ];
@@ -45,7 +46,7 @@ let
       pushd ${placeholder "out"}/${python.sitePackages}
     '';
 
-    unittestFlagsArray = [ "greenlet.tests" ];
+    unittestFlags = [ "--start-directory=greenlet.tests" ];
 
     postCheck = ''
       popd
@@ -56,7 +57,7 @@ let
     });
 
     meta = {
-      changelog = "https://github.com/python-greenlet/greenlet/blob/${version}/CHANGES.rst";
+      changelog = "https://github.com/python-greenlet/greenlet/blob/${finalAttrs.version}/CHANGES.rst";
       homepage = "https://github.com/python-greenlet/greenlet";
       description = "Module for lightweight in-process concurrent programming";
       license = with lib.licenses; [
@@ -64,6 +65,6 @@ let
         mit
       ];
     };
-  };
+  });
 in
 greenlet

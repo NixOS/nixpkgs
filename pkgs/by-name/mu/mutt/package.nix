@@ -31,7 +31,7 @@ assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.4.2";
+  version = "2.4.3";
   outputs = [
     "out"
     "doc"
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    hash = "sha256-JwP/GlGpnDFj1P2ZisIumCu9VJPVEqfFvecWqK26A5Q=";
+    hash = "sha256-zpFU46/t5iLZi5CiLIfQbzIFHJMKmvsrfvQWVsTbyUg=";
   };
 
   patches = [

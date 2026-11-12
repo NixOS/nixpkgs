@@ -38,7 +38,7 @@
 }:
 
 let
-  version = "3.14.0";
+  version = "3.16.0";
 
   pname = "prometheus";
 
@@ -46,7 +46,7 @@ let
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${version}";
-    hash = "sha256-7PSfh+KWUpmL3BZ7INa1DOZ/ysaXXdWG9n/F+H0cGYo=";
+    hash = "sha256-vkFloS1cfC3EtqT0Ta0C5SeOqcNxRyYDKtjLPU3YPT8=";
   };
 
   assets = stdenv.mkDerivation (finalAssetsAttrs: {
@@ -65,7 +65,7 @@ let
       inherit (finalAssetsAttrs) pname version src;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-lmKUkeDdinb6WlnZSx3FnBlF/ACgUmvSMpYo84tRdCw=";
+      hash = "sha256-39gQDCdBq4QtEEBpZvF4h9AyQduS4lq0tgKLYe+pNUc=";
     };
 
     nativeBuildInputs = [
@@ -113,7 +113,7 @@ buildGoModule (finalAttrs: {
     src
     ;
 
-  vendorHash = "sha256-sCgxO2/w3Bi6Ncs/Q+JVZVtQC448FEx3llYxe/UxWEE=";
+  vendorHash = "sha256-IX7dR1SS/gPTHZ3WJQraMt35SONizf1ZRb8FIk401Ok=";
 
   proxyVendor = true;
 
@@ -126,6 +126,7 @@ buildGoModule (finalAttrs: {
   excludedPackages = [
     "documentation/prometheus-mixin"
     "internal/tools"
+    "promql/promqltest/cmd/migrate"
     "web/ui/mantine-ui/src/promql/tools"
   ];
 

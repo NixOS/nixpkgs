@@ -11,6 +11,9 @@
   wlroots_0_20,
   libxkbcommon,
   libinput,
+  libei,
+  systemd,
+  libdisplay-info,
   pixman,
   cairo,
   pango,
@@ -23,14 +26,14 @@
   jemalloc,
   tomlplusplus,
   nlohmann_json,
-  xwayland-satellite,
+  xwayland,
   makeBinaryWrapper,
   versionCheckHook,
   unstableGitUpdater,
 }:
 stdenv.mkDerivation {
   pname = "umbriel";
-  version = "0-unstable-2026-09-13";
+  version = "0-unstable-2026-11-09";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -39,8 +42,8 @@ stdenv.mkDerivation {
     owner = "noctalia-dev";
     repo = "umbriel";
     # No tagged releases yet
-    rev = "11c0c99b85c5aa579224cf0d2302f4f7356ac5c4";
-    hash = "sha256-Ot18ZKFwRSPzyXhSkDhLOI8nAXfeoFPuB04Jk5DkzV4=";
+    rev = "0a22bd2431b8d735ffc6dbb47e29b5b1fdcd5b02";
+    hash = "sha256-r2gk56nlrvI1j7ypEoIZiggYsBuK5nxegWbtsQ2oSxI=";
   };
 
   nativeBuildInputs = [
@@ -54,10 +57,12 @@ stdenv.mkDerivation {
   buildInputs = [
     wayland
     wayland-protocols
-    wayland-scanner
     wlroots_0_20
     libxkbcommon
     libinput
+    libei
+    systemd
+    libdisplay-info
     pixman
     tomlplusplus
     libGL
@@ -74,15 +79,13 @@ stdenv.mkDerivation {
 
   mesonBuildType = "release";
 
-  mesonInstallFlags = [ "--skip-subprojects" ];
-
   postInstall = ''
     if [ -f "$out/share/wayland-sessions/umbriel.desktop" ]; then
       substituteInPlace "$out/share/wayland-sessions/umbriel.desktop" \
         --replace-fail 'Exec=start-umbriel' "Exec=$out/bin/start-umbriel"
     fi
     wrapProgram $out/bin/umbriel \
-      --prefix PATH : ${lib.makeBinPath [ xwayland-satellite ]}
+      --prefix PATH : ${lib.makeBinPath [ xwayland ]}
   '';
 
   doCheck = true;

@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "thanos";
-  version = "0.42.4";
+  version = "0.42.5";
 
   src = fetchFromGitHub {
     owner = "thanos-io";
     repo = "thanos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aqYKctocTdg6i0wMee6fJhRC3wcv9u07zyGj1NzNg98=";
+    hash = "sha256-akhOvV7qU0OKSouks9soSpusn4BEKhGlGh7LFTwGxOU=";
   };
 
   vendorHash = "sha256-YKiFfXA93/L3LRCYUbuwpOIhbeqw6fXNSK+Fb8Gltn0=";

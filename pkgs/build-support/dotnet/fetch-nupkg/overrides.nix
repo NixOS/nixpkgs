@@ -6,6 +6,11 @@
   libice,
   libsm,
   libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
   stdenv,
   writeText,
 }:
@@ -58,7 +63,12 @@
           prependToVar dotnetRuntimeDeps \
             "${lib.getLib libice}" \
             "${lib.getLib libsm}" \
-            "${lib.getLib libx11}"
+            "${lib.getLib libx11}" \
+            "${lib.getLib libxcursor}" \
+            "${lib.getLib libxext}" \
+            "${lib.getLib libxfixes}" \
+            "${lib.getLib libxi}" \
+            "${lib.getLib libxrandr}"
         '';
       }
     );
@@ -79,7 +89,10 @@
       lib.optionalAttrs stdenv.hostPlatform.isLinux {
         nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ autoPatchelfHook ];
 
-        buildInputs = old.buildInputs or [ ] ++ [ fontconfig ];
+        buildInputs =
+          old.buildInputs or [ ]
+          ++ [ fontconfig ]
+          ++ lib.optional (lib.versionAtLeast old.version "4") (lib.getLib stdenv.cc.cc);
 
         preInstall = old.preInstall or "" + ''
           cd runtimes

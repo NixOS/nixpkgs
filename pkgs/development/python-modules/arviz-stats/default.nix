@@ -41,7 +41,6 @@ buildPythonPackage (finalAttrs: {
   pname = "arviz-stats";
   inherit (arviz) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";

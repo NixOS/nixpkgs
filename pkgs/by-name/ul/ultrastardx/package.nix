@@ -4,7 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   pkg-config,
-  lua,
+  lua5_5,
   fpc,
   portaudio,
   freetype,
@@ -34,7 +34,7 @@ let
     SDL2_net
     SDL2_ttf
     sqlite
-    lua
+    lua5_5
     zlib
     ffmpeg
   ]
@@ -46,13 +46,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
-  version = "2026.9.0";
+  version = "2026.11.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fSSwMjX1Dk1o6XI06PPR8/Q22YY38Hz9spnU/WsUTA4=";
+    hash = "sha256-1dRLxqkOSoP9bpS9D2pP8S2E1k2BylBYhXfTgsPmlKc=";
   };
 
   nativeBuildInputs = [
@@ -85,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     make macos-app
     mkdir -p "$out/Applications" "$out/bin"
-    cp -R UltraStarDeluxe.app "$out/Applications/"
-    ln -s "$out/Applications/UltraStarDeluxe.app/Contents/MacOS/ultrastardx" \
+    cp -R "UltraStar Deluxe.app" "$out/Applications/"
+    ln -s "$out/Applications/UltraStar Deluxe.app/Contents/MacOS/ultrastardx" \
           "$out/bin/ultrastardx"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -11,25 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-language-tools";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "g-plane";
     repo = "wasm-language-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XyVWNhVDo190/hnKj6A5dDYnlO9/WI0GYJIrkyfUkTw=";
+    hash = "sha256-emiSs0I5g47WIs/3HKd/R+RGwC3Ej6kIGEnUqkFWibk=";
   };
 
-  patches = [
-    # Fix test for Rust 1.98: https://github.com/rust-lang/rust/pull/155527
-    (fetchpatch {
-      name = "update-snapshot-for-rust-1.98.patch";
-      url = "https://github.com/g-plane/wasm-language-tools/commit/d7cabdba9fa90ec74a461dcc6b470288184d6c86.patch";
-      hash = "sha256-dPPMebvNVVtFTURsxGGHTwZ6SM3CDMlZucENzwOO6/4=";
-    })
-  ];
-
-  cargoHash = "sha256-VoApXHdD8SF8ZqnDVynxunjVoZ5WKai2Xzw0UYy7hSg=";
+  cargoHash = "sha256-SDeKzo/w0VNi9Nzm9DzrhsUsUo0rlGn/4y6aKCgVQmg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/wat_server";

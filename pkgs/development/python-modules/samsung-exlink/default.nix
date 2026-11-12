@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "samsung-exlink";
-  version = "1.1.1";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "samsung-exlink";
     tag = finalAttrs.version;
-    hash = "sha256-JnuHinva05/nG93qNYojIe6c/UkjrN2y16Cwi1BnQQM=";
+    hash = "sha256-TURxefpsWB6nqU9smQBIU2STlZBLdAaZ3Fs4WGLPlMA=";
   };
 
   postPatch = ''

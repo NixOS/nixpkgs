@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     # See also: https://github.com/jqlang/jq/blob/859a8073ee8a21f2133154eea7c2bd5e0d60837f/tests/optional.test#L15-L18
     # "-D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64" would be preferable, but breaks with dynamic linking,
     # unless done globally in stdenv for all of 32 bit.
+    # FIXME(time32)
     ./disable-end-of-epoch-conversion-test.patch
   ];
 

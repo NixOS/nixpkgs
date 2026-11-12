@@ -8,7 +8,6 @@ buildGoModule {
   pname = "fastd-exporter";
   version = "0-unstable-2024-04-09";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

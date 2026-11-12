@@ -5,26 +5,24 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm_11,
-  nodejs,
-  nodejs-slim_latest,
+  nodejs-slim,
   nix-update-script,
   makeBinaryWrapper,
+  runCommand,
+  vue-language-server,
 }:
 let
-  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627.
-  pnpm = pnpm_11.override {
-    nodejs-slim = nodejs-slim_latest;
-  };
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.3.11";
+  version = "3.3.13";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-a8gs53zcq5qssqnxlMGjxfZaBICisdjqkLfzqZStPfQ=";
+    hash = "sha256-7PDscQkBmL47vxGqH4eap+UA5CRnIyfN2iWYnjexcPY=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -35,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-aUxUw3PjlSyUATb2FFQstpq+3P3ymPGZnmdiuYUQ3AE=";
+    hash = "sha256-XTcLYnVgWl/CZExeumDsFMKqyq8pS37X7Mo/kwmz9HM=";
   };
 
   nativeBuildInputs = [
-    nodejs
+    nodejs-slim
     pnpmConfigHook
     pnpm
     makeBinaryWrapper
@@ -62,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules packages/language-server/node_modules -xtype l -delete
-
-    # remove non-deterministic files
-    rm node_modules/.modules.yaml node_modules/.pnpm-workspace-state-v1.json
   '';
 
   installPhase = ''
@@ -73,14 +68,31 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/language-tools}
     cp -r {node_modules,packages,extensions} $out/lib/language-tools/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/vue-language-server \
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/vue-language-server \
       --inherit-argv0 \
       --add-flags $out/lib/language-tools/packages/language-server/bin/vue-language-server.js
 
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.smoke = runCommand "vue-language-server-smoke-test" { } ''
+      INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":"file:///tmp","workspaceFolders":[{"uri":"file:///tmp","name":"test"}],"capabilities":{}}}'
+      CONTENT_LENGTH=''${#INIT_REQUEST}
+
+      RESPONSE=$(
+        {
+          printf "Content-Length: %d\r\n\r\n%s" "$CONTENT_LENGTH" "$INIT_REQUEST"
+          sleep 1
+        } | timeout 3  ${lib.getExe vue-language-server} --stdio 2>&1 | head -c 1000
+      ) || true
+
+      echo "$RESPONSE" | grep -q '"capabilities"'
+      touch $out
+    '';
+  };
 
   meta = {
     description = "Official Vue.js language server";

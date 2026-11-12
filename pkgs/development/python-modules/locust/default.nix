@@ -4,6 +4,7 @@
   python,
   callPackage,
   fetchFromGitHub,
+  substitute,
   hatchling,
   hatch-vcs,
   pytestCheckHook,
@@ -24,18 +25,35 @@
   retry,
   tomli,
   werkzeug,
+  yarn-berry,
 }:
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.46.3";
+  version = "2.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-Diz5fGcX8hXQSuNT20LUcjKJZEYNvN+6myrGi5F4Hss=";
+    hash = "sha256-lK2roAp5nfYtK4r7PuBialpekzf2vp5qMa+25Lh7L50=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/locustio/locust/blob/master/locust/webui/package.json#L89
+    postFetch = ''
+      cd $out/locust/webui
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   postPatch = ''
@@ -47,7 +65,7 @@ buildPythonPackage rec {
   '';
 
   webui = callPackage ./webui.nix {
-    inherit version;
+    inherit version yarn-berry;
     src = "${src}/locust/webui";
   };
 

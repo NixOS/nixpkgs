@@ -49,6 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/98d9f202ef768f22ae21b5c43a080a1aa64a7107.patch";
       sha256 = "sha256-3AbnkbhWOh0aNjUkmVoSV/9jFQtvTllOr7plnkntb2o=";
     })
+
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/a634fa8d9fbc59b093f2f07110b2c867f622599d.patch";
+      hash = "sha256-xNwpuVwYajlfQUbT6aDrTBqwa61Je8EhD0C9+PL/qx0=";
+    })
   ];
 
   nativeBuildInputs = [

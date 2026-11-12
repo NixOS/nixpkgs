@@ -1,24 +1,29 @@
-import sys
-
 import json
 import re
+import sys
 from pathlib import Path
-from xmltodict import parse
 from subprocess import CalledProcessError
+
+from xmltodict import parse
 
 from jetbrains_nix_updater.config import UpdaterConfig
 from jetbrains_nix_updater.fetcher import VersionInfo
 from jetbrains_nix_updater.ides import Ide
 from jetbrains_nix_updater.update_src_maven import (
-    get_maven_deps_for_ide,
     ensure_is_list,
+    get_maven_deps_for_ide,
 )
-from jetbrains_nix_updater.util import replace_blocks, run_command, convert_hash_to_sri
+from jetbrains_nix_updater.util import convert_hash_to_sri, run_command
+
+
+class InvalidMetadataException(Exception):
+    "raised when required metadata is invalid or malformed."
 
 
 def jar_repositories(root_path: Path) -> list[str]:
     repositories = []
-    file_contents = parse(open(root_path / ".idea" / "jarRepositories.xml").read())
+    with open(root_path / ".idea" / "jarRepositories.xml") as f:
+        file_contents = parse(f.read())
     component = file_contents["project"]["component"]
     if component["@name"] != "RemoteRepositoriesConfiguration":
         return repositories
@@ -38,7 +43,8 @@ def jar_repositories(root_path: Path) -> list[str]:
 
 
 def kotlin_jps_plugin_info(root_path: Path) -> tuple[str, str]:
-    file_contents = parse(open(root_path / ".idea" / "kotlinc.xml").read())
+    with open(root_path / ".idea" / "kotlinc.xml") as f:
+        file_contents = parse(f.read())
     components = file_contents["project"]["component"]
     for component in components:
         if component["@name"] != "KotlinJpsPluginSettings":
@@ -58,10 +64,14 @@ def kotlin_jps_plugin_info(root_path: Path) -> tuple[str, str]:
         )
 
         return (version, convert_hash_to_sri(prefetch))
+    raise InvalidMetadataException(
+        "No KotlinJpsPluginSettings component in kotlinc.xml"
+    )
 
 
 def requested_kotlinc_version(root_path: Path) -> str:
-    file_contents = parse(open(root_path / ".idea" / "kotlinc.xml").read())
+    with open(root_path / ".idea" / "kotlinc.xml") as f:
+        file_contents = parse(f.read())
     components = file_contents["project"]["component"]
     for component in components:
         if component["@name"] != "KotlinJpsPluginSettings":
@@ -71,6 +81,9 @@ def requested_kotlinc_version(root_path: Path) -> str:
         version = option["@value"]
 
         return version
+    raise InvalidMetadataException(
+        "No KotlinJpsPluginSettings component in kotlinc.xml"
+    )
 
 
 def prefetch_intellij_community(variant: str, version: str) -> tuple[str, Path]:
@@ -148,12 +161,11 @@ def generate_jps_hash(config: UpdaterConfig, root_path: Path) -> str:
     )
 
 
-def maven_out_path(jb_root: Path, name: str) -> Path:
-    return jb_root / "source" / f"{name}_maven_artefacts.json"
-
-
 def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
     variant = ide.name.removesuffix("-oss")
+    if variant.endswith("idea"):
+        variant = variant.removeprefix("intellij-")
+
     try:
         intellij_hash, intellij_outpath = prefetch_intellij_community(
             variant, info.version
@@ -177,43 +189,37 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
         f"[i] Prefetched IDEA Open Source requested Kotlin compiler {kotlinc_version}"
     )
 
-    repositories_nix = " ".join(f'"{x}"' for x in repositories)
+    source_args_path = ide.package_dir / "source_args.json"
+    source_args = {
+        "version": info.version,
+        "buildNumber": info.build_number,
+        "buildType": variant,
+        "ideaHash": intellij_hash,
+        "androidHash": android_hash,
+        "jpsHash": jps_hash,
+        "restarterHash": restarter_hash,
+        "repositories": repositories,
+        "kotlin-jps-plugin": {
+            "version": kjps_plugin_version,
+            "hash": kjps_plugin_hash,
+        },
+    }
 
-    try:
-        replace_blocks(
-            config,
-            ide.drv_path,
-            [
-                (
-                    "source-args",
-                    f"""
-                        version = "{info.version}";
-                        buildNumber = "{info.build_number}";
-                        buildType = "{variant}";
-                        ideaHash = "{intellij_hash}";
-                        androidHash = "{android_hash}";
-                        jpsHash = "{jps_hash}";
-                        restarterHash = "{restarter_hash}";
-                        mvnDeps = ../source/{variant}_maven_artefacts.json;
-                        repositories = [
-                            {repositories_nix}
-                        ];
-                        kotlin-jps-plugin = {{
-                            version = "{kjps_plugin_version}";
-                            hash = "{kjps_plugin_hash}";
-                        }};
-                    """,
-                )
-            ],
-        )
-    except Exception as e:
-        print(f"[!] Writing update info to file failed: {e}", file=sys.stderr)
-        return False
+    print(f"[*] Writing mkJetBrainsSource args to {source_args_path}")
+    if not config.dry_run:
+        with source_args_path.open("w") as f:
+            json.dump(source_args, f, indent=2)
+            f.write("\n")
 
     if not config.no_maven_deps:
         print("[*] Collecting maven hashes")
         maven_hashes = get_maven_deps_for_ide(config, ide)
-        with open(maven_out_path(config.jetbrains_root, variant), "w") as f:
-            json.dump(maven_hashes, f, indent=4)
-            f.write("\n")
+        maven_out_path = ide.package_dir / "maven_artefacts.json"
+        if config.dry_run:
+            assert maven_out_path.parent.exists()
+            print(f"[D] --dry-run: {maven_out_path} not modified", file=sys.stderr)
+        else:
+            with maven_out_path.open("w") as f:
+                json.dump(maven_hashes, f, indent=4)
+                f.write("\n")
     return True

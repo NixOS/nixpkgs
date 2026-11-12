@@ -25,6 +25,7 @@ let
     assertOneOf
     attrNames
     concatStringsSep
+    elem
     escapeShellArgs
     flip
     last
@@ -187,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
       getTargets (from: to: if (isNull to) then "cp -v ${from} $out" else "cp -v ${from} $out/${to}")
     )}
   ''
-  + optionalString isx86 ''
+  + optionalString (elem "undionly.kpxe" binaries) ''
     # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
     # let's provide it as a symlink to be compatible in this case.
     ln -s undionly.kpxe $out/undionly.kpxe.0

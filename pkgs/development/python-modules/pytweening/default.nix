@@ -9,7 +9,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pytweening";
   version = "1.2.0";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {

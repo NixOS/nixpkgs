@@ -36,13 +36,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-texlab";
-  version = "0-unstable-2026-07-27";
+  version = "0-unstable-2026-10-14";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-texlab";
-    rev = "80282b28a6e5c2667099529df40ab1beed3e0cd6";
-    hash = "sha256-QUWg83Z27+Qi1sWkI9pkXPq3LgDAZ4EBl9cWAIXHYrc=";
+    rev = "6a504ad8a7ee16e49b3a3073f3c6d845e0d69546";
+    hash = "sha256-BIZ+7KiHv44VoTcVhxUrzO/FIrdYzLceV0eNgjq5Xr8=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

@@ -5,7 +5,8 @@
 }:
 
 let
-  version = "0.3.4";
+  # nixpkgs-update: no auto update
+  version = "0.3.6";
 
   archMap = {
     "x86_64-linux" = "x86_64";
@@ -17,7 +18,7 @@ let
 
   shimHashes = {
     "x86_64" = "sha256-7PLMiY2Aqx33IsdMMtZd2WLsErWLZTAYV+5TcED0pUU=";
-    "aarch64" = "sha256-4RvFbxJGwM70huziY2ELoCouTrtMasgoqFUncBeBFvU=";
+    "aarch64" = "sha256-kATIsB2j/kloYq9WSRcTgxKSUA0neuWtF3hlyPyxWBk=";
   };
 in
 stdenv.mkDerivation {

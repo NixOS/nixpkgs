@@ -3,6 +3,7 @@
   fetchNpmDeps,
   lib,
   stdenv,
+  nix-update-script,
   nodejs_24,
   npmHooks,
   postgresql,
@@ -11,14 +12,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
-  version = "1.3.5";
+  version = "1.3.8";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "FitTrackee";
     repo = "FitTrackee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IJ/Y1y94esoJtGNJBUbwQo5H0s6hGcUDCIfI1RUht1c=";
+    hash = "sha256-wuNaclwnGYpqSlgtVasvoJPbO5k/zFzFREpaBEJKnhY=";
   };
 
   makeCacheWritable = true;
@@ -26,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zIqkJdXeQjvXW9TSKZ2Qs9YwiSdRb7HNhZB9Roauu9Y=";
+    hash = "sha256-TALvLIFL1sj/k8wOHbn1AkdXU3khnykPL63pH77Ws20=";
     sourceRoot = "${finalAttrs.src.name}/fittrackee_client";
   };
 
@@ -61,6 +62,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       flask-babel
       flask-bcrypt
       flask-dramatiq
+      flask-jwt-extended
       flask-limiter
       flask-migrate
       flask-sqlalchemy
@@ -117,6 +119,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export TMP=$TMPDIR
     export UI_URL=http://0.0.0.0:5000
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "Self-hosted outdoor activity tracker";

@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zigpy-znp";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-znp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JQe8A4pfKEBJInd0Fq91c2/UgAsQP1vbHy4wF/FO46c=";
+    hash = "sha256-+rTos8iSyS1b6iAHYbEbStwNH00XQP7SdCwAQBVNnYM=";
   };
 
   postPatch = ''

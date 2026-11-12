@@ -83,7 +83,7 @@ in
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
       defaultText = literalExpression "pkgs.linuxPackages";
-      example = literalExpression "pkgs.linuxKernel.packages.linux_5_10";
+      example = literalExpression "pkgs.linuxKernel.packages.linux_6_18";
       description = ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are

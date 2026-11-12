@@ -9,6 +9,7 @@
   gdk-pixbuf,
   libxkbcommon,
   vulkan-loader,
+  wayland,
   makeDesktopItem,
   autoPatchelfHook,
   copyDesktopItems,
@@ -18,16 +19,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lockbook-desktop";
-  version = "26.9.3";
+  version = "26.11.5";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
     tag = finalAttrs.version;
-    hash = "sha256-MSRuvyuq8DxQELJHTKCdfYl4cqd9PTDsnAgmA1xeUiw=";
+    hash = "sha256-zBIWu++x02T1IhTvyMHFZ97sBee6kbTG+LOC24GLNt8=";
   };
 
-  cargoHash = "sha256-Mo/XO/1/sVRln99Bw1fxtIgn8zkl3s/4OdXI0xcb11c=";
+  cargoHash = "sha256-37YPok26MmLBs3yN+mOK5T/JJ+BxJpTFjKNoREqXxEw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   runtimeDependencies = [
     vulkan-loader
     libxkbcommon
+    wayland
   ];
 
   doCheck = false; # there are no cli tests
@@ -58,7 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     name = "lockbook-desktop";
     comment = desc;
     icon = "lockbook";
-    exec = "lockbook-desktop";
+    exec = "lockbook-desktop %u";
+    mimeTypes = [ "x-scheme-handler/lb" ];
     categories = [
       "Office"
       "Documentation"

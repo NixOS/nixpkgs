@@ -144,7 +144,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "26.07";
+  version = "26.09";
 
   nativeBuildInputs = [
     makeWrapper
@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-YCcRXbhlIYV0cP4RLTknYnfSpkknLenvWOYs9kt7m3c=";
+    hash = "sha256-wSrzb+UOqCFp/vk+Q8spukKBzRqquIPt6fkmyVFAz0w=";
   };
 
   passthru.tests = {
@@ -192,6 +192,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
     (lib.enableFeature withMysql "mysql")
     (lib.enableFeature withPgsql "pgsql")
     (lib.enableFeature withSqlite "sqlite")
@@ -204,6 +206,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withBootstrap "bootstrap")
   ]
   ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+
+  installFlags = [
+    "ETCDIR=${placeholder "out"}/etc/ejabberd"
+    "SPOOLDIR=$(TMPDIR)/spool"
+    "LOGDIR=$(TMPDIR)/log"
+  ];
 
   enableParallelBuilding = true;
 

@@ -2,32 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yyjson";
-  version = "0.12.0";
+  version = "0.13.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "ibireme";
     repo = "yyjson";
     tag = finalAttrs.version;
-    hash = "sha256-1CYnEgUMUc7eqdkv6M/KyL/MdVQBMov9HgLCycF6++w=";
+    hash = "sha256-N/lVqkgko/4PRs596NtF/MyqAdO/I+QJvkVnCJWEE3I=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  patches = [
-    # https://github.com/ibireme/yyjson/pull/295
-    (fetchpatch {
-      url = "https://github.com/ibireme/yyjson/commit/bef00cb5fe1929944cc13dec13f0f23fa4ad568b.patch";
-      hash = "sha256-oRFN95sgLqiwCzxvC3G4CFsD6sJtI5NeBWp4/WeaKCc=";
-    })
-  ];
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "Fastest JSON library in C";
@@ -35,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ibireme/yyjson/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
+    pkgConfigModules = [ "yyjson" ];
     platforms = lib.platforms.all;
   };
 })

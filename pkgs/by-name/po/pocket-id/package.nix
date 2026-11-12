@@ -4,7 +4,7 @@
   buildGo127Module,
   stdenvNoCC,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -14,18 +14,18 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "pocket-id";
-  version = "2.14.0";
+  version = "2.19.2";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4BtVTfjXu/V9l4L2ucabpQXjrTBEB4cTrO4tb/oE3YU=";
+    hash = "sha256-Vwl5rTWjdyGOxlGBRb4cddBotDeONRv63kLHVSU7kCw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-SrpUgyruwbIJZ1HB6sqidbGAwzBOqKcJzR+cH9E0siw=";
+  vendorHash = "sha256-DJqProNx+z3yPalEXzn3PAaHhREXxVE0XG8S7vZMeMk=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -64,13 +64,13 @@ buildGo127Module (finalAttrs: {
       nodejs
       pnpmConfigHook
       pnpmBuildHook
-      pnpm_10
+      pnpm_11
     ];
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      pnpm = pnpm_10;
-      fetcherVersion = 4;
-      hash = "sha256-KswQQVz2Xw/dG21134SObM3mQAKP2IHc+UM/BX/dvrI=";
+      pnpm = pnpm_11;
+      fetcherVersion = 5;
+      hash = "sha256-fb02Rv/SqoJ4ufOdKqwvMpPZLO/5KTzJjscpbM3+8M8=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";

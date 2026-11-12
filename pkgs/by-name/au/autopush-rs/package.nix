@@ -7,6 +7,8 @@
   stdenv,
   pkg-config,
   cmake,
+  aws-lc,
+  zstd,
   openssl,
   libffi,
   grpc,
@@ -23,8 +25,6 @@ let
     python3Packages.buildPythonApplication {
       pname = "fernet_key";
       inherit version src;
-
-      __structuredAttrs = true;
 
       format = "other";
 
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.83.1";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   outputs = [
     "out"
@@ -64,6 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-T1FLDDAIU+YEdDRY11XzUvxKQS3ETqufDC7B4U5vyFk=";
   };
 
+  patches = [ ./0001-delete-acked-messages.patch ]; # See https://github.com/mozilla-services/autopush-rs/pull/1234
+
   cargoHash = "sha256-a413jA5s6EcjwF6Jxf8Mnqxv4ULVwXRzpUTnLv2CkCg=";
 
   nativeBuildInputs = [
@@ -73,6 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
+    zstd
     openssl
     libffi
     grpc

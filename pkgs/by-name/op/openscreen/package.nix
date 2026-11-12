@@ -6,7 +6,6 @@
   copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
-  xcbuild,
   electron_41,
   nodejs_22,
   nix-update-script,
@@ -35,9 +34,6 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    xcbuild
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -117,7 +113,7 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Free, open-source alternative to Screen Studio (sort of)";
-    homepage = "https://openscreen.vercel.app";
+    homepage = "https://github.com/siddharthvaddem/openscreen";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       etiennelescot

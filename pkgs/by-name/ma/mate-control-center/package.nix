@@ -29,7 +29,7 @@
   mate-panel,
   mate-settings-daemon,
   udisks,
-  systemd,
+  systemdLibs,
   hicolor-icon-theme,
   wrapGAppsHook3,
   yelp-tools,
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     mate-panel # for org.mate.panel schema, see m-c-c#678
     mate-settings-daemon
     udisks
-    systemd
+    systemdLibs
   ];
 
   postPatch = ''

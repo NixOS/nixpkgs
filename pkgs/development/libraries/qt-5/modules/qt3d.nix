@@ -18,7 +18,5 @@ qtModule {
     "bin"
   ];
   # error: use of undeclared identifier 'stat64'
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-  ) "-Dstat64=stat";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Dstat64=stat";
 }

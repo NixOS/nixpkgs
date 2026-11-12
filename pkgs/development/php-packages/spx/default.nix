@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   fetchFromGitHub,
   zlib,
 }:
@@ -25,6 +26,7 @@ buildPecl {
   ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/NoiseByNorthwest/php-spx/releases/tag/v${version}";
     description = "Simple & straight-to-the-point PHP profiling extension with its built-in web UI";
     homepage = "https://github.com/NoiseByNorthwest/php-spx";

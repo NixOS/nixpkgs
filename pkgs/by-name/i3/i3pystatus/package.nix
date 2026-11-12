@@ -14,7 +14,7 @@
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "3.35-unstable-2026-09-14";
+  version = "3.35-unstable-2026-10-02";
   pname = "i3pystatus";
   pyproject = true;
   build-system = [ python3Packages.setuptools ];
@@ -22,8 +22,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "enkore";
     repo = "i3pystatus";
-    rev = "6eba55f345e1674bfbef28dfdb0a6ff76ade9f0c";
-    hash = "sha256-ZXJCsPoAYxxqhawqnXtTXkHMGcjOSkFnNcYGidfBvLw=";
+    rev = "2cdd90728f6a19b4d7c8346ca76a9fe818898a43";
+    hash = "sha256-7cqdstL+X/uPLV64zNRhLjHwzQglXwSpbpnbIOmOIjg=";
   };
 
   patches = [

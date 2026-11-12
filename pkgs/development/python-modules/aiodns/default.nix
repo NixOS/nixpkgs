@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "saghul";
+    owner = "aio-libs";
     repo = "aiodns";
     tag = "v${finalAttrs.version}";
     hash = "sha256-TLiiSRhZaEbHeyrQPk8uvj10VEttRanYEgkBy7DxH4Y=";
@@ -29,8 +29,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Simple DNS resolver for asyncio";
-    homepage = "https://github.com/saghul/aiodns";
-    changelog = "https://github.com/saghul/aiodns/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/aio-libs/aiodns";
+    changelog = "https://github.com/aio-libs/aiodns/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

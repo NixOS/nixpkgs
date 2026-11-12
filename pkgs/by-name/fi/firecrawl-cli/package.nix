@@ -15,7 +15,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firecrawl-cli";
-  version = "1.23.3";
+  version = "1.26.3";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "firecrawl";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2BPD48hnJpUPppV57lDRjHQNh6t+QEsOU4tOepUtyc4=";
+    hash = "sha256-FY/nYMohh4CEcd7OpGEyO5lHCwdm9SkziNQylzb9eps=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-R59OM/4zZF3+JGMG3URe60I+Vs5x9WPeQfuZjuHDodc=";
+    hash = "sha256-keD3uhO0nBODJTN2L3luIhKUK4vTd2fxoEI8d8ihlog=";
   };
 
   nativeBuildInputs = [
@@ -68,8 +68,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules -xtype l -delete
-    # - remove non-deterministic files
-    rm node_modules/{.modules.yaml,.pnpm-workspace-state-v1.json}
     # - copy over node modules
     cp -r dist node_modules $out/lib/firecrawl-cli
     cp package.json $out/lib/firecrawl-cli

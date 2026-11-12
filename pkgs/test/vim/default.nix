@@ -25,6 +25,26 @@ lib.recurseIntoAttrs {
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };
 
+  test_vim_plugin_dont_unpack =
+    let
+      plugin = vimUtils.buildVimPlugin {
+        pname = "vim-plugin-dont-unpack-test";
+        version = "0";
+        src = pkgs.writeText "probe.vim" "";
+        dontUnpack = true;
+        buildPhase = ''
+          install -D "$src" "$out/colors/probe.vim"
+        '';
+      };
+    in
+    pkgs.runCommand "vim-plugin-dont-unpack-test" { } ''
+      test -f ${plugin}/colors/probe.vim
+      for file in env-vars .attrs.json .attrs.sh; do
+        test ! -e ${plugin}/"$file"
+      done
+      mkdir -p "$out"
+    '';
+
   # test that all vimPlugins have `passthru.vimPlugin = true`
   test-all-plugins-have-vimPlugin-true =
     let
@@ -53,4 +73,27 @@ lib.recurseIntoAttrs {
       ) == [ ];
     # testing is done during evaluation above so this derivation is irrelevant
     vim-full;
+
+  test_vim_plugin_install_phase =
+    let
+      plugin = vimUtils.buildVimPlugin {
+        pname = "vim-plugin-install-phase-test";
+        version = "0";
+        src = pkgs.runCommand "vim-plugin-install-phase-test-src" { } ''
+          mkdir -p $out/plugin $out/extra
+          touch $out/plugin/probe.vim $out/extra/unwanted
+        '';
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp -r plugin $out/
+          runHook postInstall
+        '';
+      };
+    in
+    pkgs.runCommand "vim-plugin-install-phase-test" { } ''
+      test -f ${plugin}/plugin/probe.vim
+      test ! -e ${plugin}/extra
+      mkdir -p "$out"
+    '';
 }

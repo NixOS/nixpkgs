@@ -35,15 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pandas-stubs";
-  version = "3.0.5.260730";
+  version = "3.0.5.260914";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ke1v5ubrUe32fvf8vw1Neux6jzRcDA9QvxIP3765EG0=";
+    hash = "sha256-5SSqxYzTUszIDB+1OIDYR5rdxD8GI8ubuhe/kfoNvoc=";
   };
 
   build-system = [ poetry-core ];
@@ -102,7 +101,7 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_clipboard" # FileNotFoundError: [Errno 2] No such file or directory: 'pbcopy'
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Disable tests for types that are not supported on aarch64 in `numpy` < 2.0
     "test_astype_float" # `f16` and `float128`
     "test_astype_complex" # `c32` and `complex256`
@@ -113,7 +112,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Type annotations for Pandas";
     homepage = "https://github.com/pandas-dev/pandas-stubs";
-    license = lib.licenses.mit;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ malo ];
   };
 })

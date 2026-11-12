@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   applyPatches,
   libuuid,
@@ -53,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     patches = [
       ./fix-cross-compilation-antlr-dlg.patch
+      (fetchpatch {
+        url = "https://github.com/tianocore/edk2/pull/13302.patch";
+        name = "GHSA-99cj-7hg9-mp4m_CVE-2026-97631.patch";
+        hash = "sha256-Hec2ei9mFOYXuleeoOYahv7ibbaTOD5LdW2V53lacQc=";
+      })
     ];
 
     postPatch = ''

@@ -10,6 +10,8 @@
   openssl,
   cmake,
   zlib,
+  libgit2,
+  sqlite,
   installShellFiles,
   makeWrapper,
   rustPlatform,
@@ -54,6 +56,8 @@ rustPlatform.buildRustPackage.override
       python3
       openssl
       zlib
+      libgit2
+      sqlite
     ];
 
     env = {
@@ -115,6 +119,8 @@ rustPlatform.buildRustPackage.override
       rustPlatform.rust.rustc
       rustPlatform.rust.rustc.unwrapped
     ];
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://crates.io";

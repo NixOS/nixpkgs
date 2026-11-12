@@ -453,11 +453,6 @@
         "libpcap"
       ]
     },
-    "libpcre": {
-      "attrPath": [
-        "pcre"
-      ]
-    },
     "libpcre2-16": {
       "attrPath": [
         "pcre2"
@@ -739,11 +734,6 @@
     "tdjson": {
       "attrPath": [
         "tdlib"
-      ]
-    },
-    "tensorflow": {
-      "attrPath": [
-        "libtensorflow"
       ]
     },
     "uuid": {

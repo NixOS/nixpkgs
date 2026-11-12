@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/mirage/parse-argv/releases/download/v${finalAttrs.version}/parse-argv-v${finalAttrs.version}.tbz";
-    sha256 = "06dl04fcmwpkydzni2fzwrhk0bqypd55mgxfax9v82x65xrgj5gw";
+    hash = "sha256-/BX5ci+mC7RTV66/Wkq7Hi8wYebfiWh/8/PyyhwBtBk=";
   };
 
   propagatedBuildInputs = [ astring ];

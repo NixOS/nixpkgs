@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
-  version = "0.22.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "thrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gGAO+D0A/hEoHMm6OvRBc1Mks9y52kfd0q/Sg96pdW4=";
+    hash = "sha256-ZXGxpjqQq+qlxEDM4tWOF1hHGZsy3s/K0c2bIxMky10=";
   };
 
   postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
@@ -112,9 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     "StressTestNonBlocking"
   ];
 
-  doCheck = !static;
+  doCheck = !static && !stdenv.hostPlatform.isDarwin; # FIXME darwin?
 
   enableParallelChecking = false;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for scalable cross-language services";

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goshs";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "goshs-labs";
     repo = "goshs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0d4iB6Mtann0OZd/KyWnwq7+fCcWEibAzHSYe30Mce0=";
+    hash = "sha256-RnpzlAH5wbes40FkCvDhzwbg6oaHbMkg2I/U7Lm9IFs=";
   };
 
-  vendorHash = "sha256-E+GZn7Trnz3KqzTsEfavWxP1dhsGPx4PyYYae8wjCb4=";
+  vendorHash = "sha256-G8QG2h44d8IjhfDGTt8ObTXOzv9jnz8HHB/Ctr4wU8c=";
 
   patches = [
     # No upstream fix yet; remove when updating to a release that uses goldmark 1.7.17 or later.

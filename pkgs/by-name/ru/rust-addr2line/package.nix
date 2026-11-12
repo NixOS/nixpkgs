@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
   pname = "rust-addr2line";
   version = "0.26.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "gimli-rs";
     repo = "addr2line";
@@ -17,7 +19,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+GrX5/AgKlU0rNIKkt4XAQFab6G6F4DN4Qkol8Jd5DQ=";
   };
 
-  cargoBuildFlags = "--bin addr2line --features bin";
+  cargoBuildFlags = [
+    "--bin=addr2line"
+    "--features=bin"
+  ];
 
   cargoHash = "sha256-aC69kyyMNwifIsjRPCgKxqguKtU7zSN8Mn9tChXykNo=";
 

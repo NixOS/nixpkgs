@@ -16,7 +16,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "rclone";
-  version = "1.75.1";
+  version = "1.76.0";
 
   outputs = [
     "out"
@@ -27,10 +27,10 @@ buildGoModule (finalAttrs: {
     owner = "rclone";
     repo = "rclone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d2WGx9Rplf7nrUZbYRYJffPKB7Fk0OZc9o3TUVoaG50=";
+    hash = "sha256-QHmiqASFr4ZJQE+QsSXEbIlgNfsw8iOVvBLdl57bbDQ=";
   };
 
-  vendorHash = "sha256-3HkOymYmr3JFG/Cs8GKHImRioQaHbiI3MEJR1ZPhbu8=";
+  vendorHash = "sha256-+08M76VSLYFZjblRMFXg925k0qOzW25By0YyeIOLNo4=";
 
   subPackages = [ "." ];
 
@@ -44,9 +44,11 @@ buildGoModule (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then (macfuse-stubs.override { isFuse3 = false; }) else fuse3
   );
 
-  tags =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse3" ]
-    ++ lib.optionals enableCmount [ "cmount" ];
+  tags = [
+    "noselfupdate"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse3" ]
+  ++ lib.optionals enableCmount [ "cmount" ];
 
   ldflags = [
     "-s"

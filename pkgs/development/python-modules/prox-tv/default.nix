@@ -20,7 +20,7 @@ buildPythonPackage {
     owner = "albarji";
     repo = "proxTV";
     rev = "e621585d5aaa7983fbee68583f7deae995d3bafb";
-    sha256 = "0mlrjbb5rw78dgijkr3bspmsskk6jqs9y7xpsgs35i46dvb327q5";
+    hash = "sha256-BR8x1m6GxDL007cfnzSWZk6t69Vr5Cnja+jwXNaSmVY=";
   };
 
   build-system = [ setuptools ];

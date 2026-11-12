@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  fetchpatch,
   buildPackages,
   ninja,
   gn,
@@ -17,6 +16,7 @@
   apple-sdk,
   xcodebuild,
   llvmPackages,
+  ringrtcSrc,
 }:
 
 let
@@ -95,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # --warning-suppression-mappings is a Clang-only option.
+    # https://github.com/signalapp/webrtc/pull/180
+    ./guard-clang-only-warning-flags.patch
+
     # clang++: error: unknown argument: '-fno-lifetime-dse'
     ./chromium-147-llvm-22.patch
 
@@ -102,20 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
     # clang++: error: unknown argument: '-fdiagnostics-show-inlining-chain'
     # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
     # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
-    ./chromium-149-llvm-22.patch
-
-    # ninja: error: 'ar', needed by 'obj/third_party/protobuf/libprotoc_lib.a',
-    # missing and no known rule to make it
-    (fetchpatch {
-      name = "chromium-150-backport-build--Omit-ar-from-inputs-when-resolved-via--PATH.patch";
-      # https://chromium-review.googlesource.com/c/chromium/src/+/7904982
-      url = "https://chromium.googlesource.com/chromium/src/+/60f987d8d5f7272793a40290d060b8f50933f825^!?format=TEXT";
-      decode = "base64 -d";
-      hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
-    })
+    ./chromium-153-llvm-22.patch
   ];
 
   postPatch = ''
+    # The RingRTC FFI headers live in the ringrtc repo; upstream symlinks them
+    # into the webrtc checkout from ringrtc's bin/env.sh.
+    cp -r ${ringrtcSrc}/src/rust/src/webrtc_include ringrtc/rffi/api
+
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace-fail 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
 

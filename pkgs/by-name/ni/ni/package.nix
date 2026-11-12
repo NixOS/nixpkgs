@@ -15,20 +15,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ni";
-  version = "30.5.0";
+  version = "30.6.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "ni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FYBq3UpwAEsLZ1mvDiI4jWkXFPIRerinmq05t/AaFkU=";
+    hash = "sha256-yeaE2c/B9u1dCcbZt1Ap2slypI/mfBAPgILoLF4ndqg=";
   };
+
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail "prepare" "dont-prepare"
+  '';
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-CSMH9Dv1rJaQfVLRMpwc/Go4M8ybShstEiWDz7gQ37c=";
+    hash = "sha256-JAXq7hkhcqynYDH2OsVWBvFQBLFdGB5su806hGe54zM=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     find dist -type f \( -name '*.cjs' -or -name '*.cts' -or -name '*.ts' \) -delete
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
   '';
 
   dontNpmPrune = true;

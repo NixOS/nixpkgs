@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "7.0.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-commons";
     repo = "django-debug-toolbar";
     tag = version;
-    hash = "sha256-Xwl6LsNW3/VXJ59QaW4l6D+8VEbl45ysv5KaySbS4M4=";
+    hash = "sha256-OwMul+wGKLU9LwybsCtqV51lp/CQvexP0TWJSg8E3iQ=";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Configurable set of panels that display debug information about the current request/response";
-    homepage = "https://github.com/jazzband/django-debug-toolbar";
+    homepage = "https://github.com/django-commons/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = lib.licenses.bsd3;
     maintainers = [ ];

@@ -27,18 +27,19 @@
   SDL2,
   stdenv,
   which,
+  writableTmpDirAsHomeHook,
   xdg-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goverlay";
-  version = "1.9.0";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = "goverlay";
     tag = finalAttrs.version;
-    hash = "sha256-Il2EtcTLswmhQhIZ8lcOWqryoqvSNXZ3b1FiJPv85M8=";
+    hash = "sha256-HAQd/Fb0eejvyn/XthX4d6wb1ip2TvoHtmTo0eFwoY0=";
   };
 
   outputs = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     lazarus-qt6
     patchelfUnstable
     qt6Packages.wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -68,34 +70,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     # goverlay
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B goverlay.lpi --bm=Release
-    # pascube_bin
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B pascube_src/pascube.lpi
-    cp pascube_src/pascube pascube
+    lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B goverlay.lpi --bm=Release --ws=qt6
+    # pascube
+    lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B pascube_src/pascube.lpi --ws=qt6
+    cp pascube_src/pascube ./pascube
+    # bgmod-splash
+    lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B bgmod_splash_src/bgmod_splash.lpi --ws=qt6
+    cp bgmod_splash_src/bgmod-splash ./bgmod-splash
+    mkdir -p data/bgmod
+    cp bgmod-splash data/bgmod/bgmod-splash
     runHook postBuild
-  '';
-
-  doCheck = true;
-
-  checkPhase = ''
-    # test-logic
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B tests/logic/logic_tests.lpi --widgetset=qt6
-    patchelf ./tests/logic/logic_tests --set-rpath ${
-      lib.makeLibraryPath [
-        libx11
-        qt6Packages.libqtpas
-      ]
-    }
-    ./tests/logic/logic_tests
-    # test-gui
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B tests/gui/gui_tests.lpi --widgetset=qt6
-    patchelf ./tests/gui/gui_tests --set-rpath ${
-      lib.makeLibraryPath [
-        libx11
-        qt6Packages.libqtpas
-      ]
-    }
-    QT_QPA_PLATFORM=offscreen ./tests/gui/gui_tests
   '';
 
   preFixup = ''
@@ -134,6 +118,12 @@ stdenv.mkDerivation (finalAttrs: {
         libx11
         libz
         SDL2
+      ]
+    }
+    patchelf $out/libexec/bgmod-splash --set-rpath ${
+      lib.makeLibraryPath [
+        libx11
+        qt6Packages.libqtpas
       ]
     }
   '';

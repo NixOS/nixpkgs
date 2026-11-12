@@ -39,13 +39,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "coiled";
-  version = "1.135.1";
+  version = "1.135.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-dI3AT4hogMHLAg7jyXuJNPHeJG9U0nEwwN+MQ+UgxTA=";
+    hash = "sha256-wnD0wa0PVOiuS9LfFtWcfOSjUMnmyy485lc7P3PoGsg=";
   };
 
   build-system = [

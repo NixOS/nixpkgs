@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  aws-lc,
   cargo-tauri,
   jq,
   libsoup_3,
@@ -13,26 +14,27 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
+  sqlcipher,
   webkitgtk_4_1,
   wrapGAppsHook3,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "3.8.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "wealthfolio";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5CqLHnwBzqA+yf/sQM2ie3xuO+5aM5EDA0bhZ6r1VIM=";
+    hash = "sha256-Z89ZF/BTa6fU/Ogi5V4KhDDlcHKQHIOhUv5if9QrPB8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-I9s1hFNb7oHYH5OhKmtMbMsmQZXE6ovpupusN6M1YKc=";
+    hash = "sha256-YAaWBxT0w0bIZDKgL6VgjWHbt/XVkJB2MInbRBuhC+0=";
   };
 
   cargoRoot = ".";
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-PFMmpQhQubMzomvLWMJZrriH9emwEzO/rTFCovzFt6w=";
+    hash = "sha256-IoKuEkgVju7+f6kFvtQPU9dAulBk4bjtfcN3jmdm384=";
   };
 
   nativeBuildInputs = [
@@ -61,12 +63,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     libsoup_3
     openssl
+    sqlcipher
     webkitgtk_4_1
   ];
 
+  env.OPENSSL_NO_VENDOR = "1";
+
   postPatch = ''
+    # Use the system CA certificates instead of the bundled Mozilla roots.
+    substituteInPlace crates/http/src/lib.rs \
+      --replace-fail \
+        'reqwest::Client::builder().tls_certs_only(ROOTS.iter().cloned())' \
+        'reqwest::Client::builder()'
+
     jq \
       '.plugins.updater.endpoints = [ ]
       | .bundle.createUpdaterArtifacts = false' \

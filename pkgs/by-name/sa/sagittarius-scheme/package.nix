@@ -57,10 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.hostPlatform.isDarwin [
       "-Wno-error=int-conversion"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # error: '__builtin_ia32_aeskeygenassist128' needs target feature aes
-      "-maes"
-    ]
   );
 
   meta = {

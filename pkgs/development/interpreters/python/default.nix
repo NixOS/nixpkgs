@@ -20,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "14";
-          patch = "7";
+          patch = "10";
           suffix = "";
         };
-        hash = "sha256-O0jayPtZ9i6qZ6yDwesSvaG3oIQG3ShuJSwRpmvif4E=";
+        hash = "sha256-3kFKVxGavvUnhNiZPjQdU67WNfwrBcJgfZ+YosW3IDI=";
       };
     };
 
@@ -35,10 +35,10 @@
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "16";
+        patch = "18";
         suffix = "";
       };
-      hash = "sha256-kbzev93iOaADrpNzin/OD5Iw/uXEvCuG9uboxvmKq+g=";
+      hash = "sha256-kSDgplOGj242mNNs3ZnlpYkD7JRp5EjyHZj3sW2PopA=";
       inherit passthruFun;
     };
 
@@ -47,10 +47,10 @@
       sourceVersion = {
         major = "3";
         minor = "12";
-        patch = "14";
+        patch = "16";
         suffix = "";
       };
-      hash = "sha256-XIRir1eQuvQ6MhoVWdvg2wbRvkMA+4X7U8QAYGaOVIo=";
+      hash = "sha256-tXlpFdxF/3Rc+06ZCn58k9b1RjKKECzjFEjWnrw3V1w=";
       inherit passthruFun;
     };
 
@@ -59,10 +59,10 @@
       sourceVersion = {
         major = "3";
         minor = "13";
-        patch = "15";
+        patch = "18";
         suffix = "";
       };
-      hash = "sha256-HmanlFpIOQ7kwqQmig5BhYhAWaE8SqttFIqiCN7qSnY=";
+      hash = "sha256-q7AQLm1K4CdQm8uCMn2d2FUVtEo7qK1TjPxemEcCn2g=";
       inherit passthruFun;
     };
 
@@ -79,10 +79,22 @@
       sourceVersion = {
         major = "3";
         minor = "15";
-        patch = "0";
-        suffix = "rc2";
+        patch = "2";
+        suffix = "";
       };
-      hash = "sha256-jZOvXqqupa39Qb14anuj8D8q0atXxqZeC5Y96rkdWtc=";
+      hash = "sha256-i1U20oAULs9s3+FdEqIbocZeMAu/eyio0M24SVdXl94=";
+      inherit passthruFun;
+    };
+
+    python316 = callPackage ./cpython {
+      self = __splicedPackages.python315;
+      sourceVersion = {
+        major = "3";
+        minor = "16";
+        patch = "0";
+        suffix = "a1";
+      };
+      hash = "sha256-3KqQKUNrcj4zQSxoyhfwEwvnMFjkejp8BJy4zfYDTuk=";
       inherit passthruFun;
     };
 

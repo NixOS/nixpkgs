@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "faad2";
-  version = "2.11.2";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faad2";
-    rev = finalAttrs.version;
-    hash = "sha256-JvmblrmE3doUMUwObBN2b+Ej+CDBWNemBsyYSCXGwo8=";
+    tag = finalAttrs.version;
+    hash = "sha256-luBimrRvTMb1yo9ZXka2n2YJqmDtymR7ImbEcXqs7dE=";
   };
 
   outputs = [
@@ -30,11 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   passthru.tests = {
     inherit mpd vlc;
     inherit (gst_all_1) gst-plugins-bad;
     ocaml-faad = ocamlPackages.faad;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC decoder";

@@ -63,7 +63,10 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.pixeldata;
-
+  # this package ships dicom data files which, when 'strip' (llvm-strip on darwin)
+  # runs and perceived to be empty COFF objects due to leading zero bytes,
+  # are truncated to 24 bytes, corrupting the data files
+  stripExclude = [ "*/pydicom/data/*" ];
   passthru.pydicom-data = test_data;
 
   doCheck = false; # circular dependency

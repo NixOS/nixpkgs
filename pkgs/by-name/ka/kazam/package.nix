@@ -76,7 +76,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Screencasting program created with design in mind";
     homepage = "https://github.com/niknah/kazam";
     changelog = "https://github.com/niknah/kazam/raw/${finalAttrs.src.rev}/NEWS";
-    license = lib.licenses.lgpl3;
+    license = with lib.licenses; [
+      gpl3Plus
+      gpl2Plus
+    ];
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "kazam";

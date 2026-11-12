@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.20";
 
   src = fetchurl {
-    url = "${finalAttrs.meta.homepage}/peg-${finalAttrs.version}.tar.gz";
+    url = "http://piumarta.com/software/peg/peg-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-uLcXvJOll2ijXWUlZ5pODOlOa/ZvkrrPKXnGR0VytFo=";
   };
 

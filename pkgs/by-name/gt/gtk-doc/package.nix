@@ -5,6 +5,7 @@
   ninja,
   pkg-config,
   python3,
+  bashNonInteractive,
   docbook_xml_dtd_43,
   docbook-xsl-nons,
   libxslt,
@@ -32,10 +33,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "pkg-config" "$PKG_CONFIG"
+      --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
-
-  strictDeps = true;
 
   depsBuildBuild = [
     python3
@@ -51,6 +50,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     docbook_xml_dtd_43
     docbook-xsl-nons
     libxslt
@@ -75,7 +75,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   postFixup = ''
     # Do not propagate Python
     substituteInPlace $out/nix-support/propagated-build-inputs \
-      --replace "${python3}" ""
+      --replace-fail "${python3}" ""
   '';
 
   passthru = {
@@ -84,8 +84,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       versionPolicy = "none";
     };
   };
-
-  __structuredAttrs = true;
 
   meta = {
     changelog = "https://gitlab.gnome.org/GNOME/gtk-doc/-/blob/${finalAttrs.src.tag}/NEWS";

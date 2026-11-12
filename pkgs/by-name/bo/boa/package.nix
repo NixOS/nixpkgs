@@ -7,6 +7,7 @@
   pkg-config,
   bzip2,
   openssl,
+  rust-jemalloc-sys,
   zstd,
 }:
 
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     openssl
+    rust-jemalloc-sys
     zstd
   ];
 
@@ -48,10 +50,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Embeddable and experimental Javascript engine written in Rust";
     homepage = "https://github.com/boa-dev/boa";
     changelog = "https://github.com/boa-dev/boa/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [
-      mit # or
-      unlicense
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        unlicense
+      ];
     mainProgram = "boa";
     maintainers = with lib.maintainers; [ iamanaws ];
   };

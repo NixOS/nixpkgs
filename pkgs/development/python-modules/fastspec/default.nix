@@ -10,16 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastspec";
-  version = "0.2.3";
+  version = "0.2.7";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AnswerDotAI";
     repo = "fastspec";
     tag = finalAttrs.version;
-    hash = "sha256-bSD3x/oqxfPfUAe5jl5UhXknsvJ39j5voVIX6zDntW4=";
+    hash = "sha256-vxP9u1VMDQgFnPk3Z7Ob5HNl1eYxyl5IOVEVC9LjmB4=";
   };
 
   build-system = [ setuptools ];

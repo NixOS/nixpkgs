@@ -42,6 +42,7 @@
   gtk3,
   gtk4,
   qt6,
+  kdePackages,
   libx11,
   libxscrnsaver,
   libxcomposite,
@@ -62,13 +63,16 @@
   nspr,
   nss,
   pango,
+  pciutils,
   pipewire,
   snappy,
+  speechd-minimal,
   udev,
   wayland,
   xdg-utils,
   coreutils,
   libxcb,
+  vulkan-loader,
   zlib,
   # Darwin dependencies
   undmg,
@@ -86,8 +90,10 @@
   enableVideoAcceleration ? libvaSupport,
   # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
   vulkanSupport ? false,
-  addDriverRunpath,
   enableVulkan ? vulkanSupport,
+  # Add KDE Plasma/Breeze Qt plugins for theming. Disabled by default to
+  # avoid pulling KDE dependencies into the default Brave closure.
+  plasmaSupport ? false,
 }:
 
 let
@@ -150,14 +156,24 @@ let
     nspr
     nss
     pango
+    pciutils # ANGLE dlopens libpci to identify GPUs, including for VA-API device selection.
     pipewire
     udev
     wayland
     libxcb
     zlib
     snappy
+    speechd-minimal # Text-to-speech through speech-dispatcher (--enable-speech-dispatcher).
     libkrb5
+    vulkan-loader # Chromium and Dawn dlopen libvulkan.so.1 by name.
     qt6.qtbase
+  ]
+  ++ optionals plasmaSupport [
+    # KDE libraries need the libstdc++ they were built with, ahead of any
+    # older copy that the session's graphics driver may load first.
+    stdenv.cc.cc.lib
+    kdePackages.plasma-integration
+    kdePackages.breeze
   ]
   ++ optional pulseSupport libpulseaudio
   ++ optional libvaSupport libva;
@@ -189,7 +205,7 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchurl { inherit (archive) url sha256; };
+  src = fetchurl { inherit (archive) url hash; };
 
   sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "${darwinApp}.app";
 
@@ -263,6 +279,11 @@ stdenv.mkDerivation {
           ln -s $out/opt/brave.com/${optName}/product_logo_''${icon}.png $out/share/icons/hicolor/''${icon}x''${icon}/apps/${fileBase}.png
       done
 
+      # ANGLE loads this copy by absolute path; the NixOS-patched loader finds ICDs
+      # under /run/opengl-driver, the bundled one does not.
+      rm $out/opt/brave.com/${optName}/libvulkan.so.1
+      ln -s ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 $out/opt/brave.com/${optName}/libvulkan.so.1
+
       # Replace xdg-settings and xdg-mime
       ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/${optName}/xdg-settings
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/${optName}/xdg-mime
@@ -293,6 +314,15 @@ stdenv.mkDerivation {
         ]
       }
       --set CHROME_WRAPPER ${pname}
+      # Always put Brave's own qtbase plugins first; a session with a different
+      # Qt version could otherwise make Qt load incompatible platform or
+      # shell-integration plugins and abort. The Plasma/Breeze plugins sit
+      # behind plasmaSupport to avoid pulling KDE into the default closure.
+      --prefix QT_PLUGIN_PATH : ${qt6.qtbase}/lib/qt-6/plugins
+      ${optionalString plasmaSupport ''
+        --prefix QT_PLUGIN_PATH : ${kdePackages.plasma-integration}/lib/qt-6/plugins
+        --prefix QT_PLUGIN_PATH : ${kdePackages.breeze}/lib/qt-6/plugins
+      ''}
       ${optionalString (enableFeatures != [ ]) ''
         --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime=true}}"
       ''}
@@ -300,9 +330,6 @@ stdenv.mkDerivation {
         --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
       ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
-      ${optionalString vulkanSupport ''
-        --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"
-      ''}
       --add-flags ${escapeShellArg commandLineArgs}
     )
   '';
@@ -341,9 +368,9 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       uskudnik
       jefflabonte
-      nasirhm
       buckley310
       rachalaraj
+      bachp
     ];
     platforms = builtins.attrNames archives;
     mainProgram = if flavor == "origin" then "brave-origin" else "brave";

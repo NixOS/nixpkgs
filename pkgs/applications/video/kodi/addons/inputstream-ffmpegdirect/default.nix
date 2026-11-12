@@ -17,7 +17,7 @@ buildKodiBinaryAddon rec {
     owner = "xbmc";
     repo = "inputstream.ffmpegdirect";
     rev = "${version}-${rel}";
-    sha256 = "sha256-IgCSEJzu3a2un7FdiZCEVs/boxvIhSNleTPpOCljCZo=";
+    hash = "sha256-IgCSEJzu3a2un7FdiZCEVs/boxvIhSNleTPpOCljCZo=";
   };
 
   extraBuildInputs = [

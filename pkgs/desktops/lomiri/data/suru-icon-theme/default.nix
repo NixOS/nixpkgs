@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suru-icon-theme";
-  version = "2026.03.0";
+  version = "2026.10.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/suru-icon-theme";
     rev = finalAttrs.version;
-    hash = "sha256-cH3Ce2DKlfFZYpkYA7J4GFtYBYSoHoQICPWygI45/so=";
+    hash = "sha256-/Og9ixEny6bu8iTZyyEqGOcZSvNLy0bB7ZfNeUAs1SI=";
   };
 
   # Commit 79763fa4ff701d1d89d7362c37c65b2a3cbdf543 introduced abunch of symlinks for Lomiri apps' icons to files from this theme.

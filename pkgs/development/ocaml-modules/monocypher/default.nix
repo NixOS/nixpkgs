@@ -10,6 +10,8 @@ buildDunePackage (finalAttrs: {
   pname = "monocypher";
   version = "0.3.0";
 
+  minimalOCamlVersion = "4.13";
+
   __structuredAttrs = true;
 
   src = fetchFromCodeberg {

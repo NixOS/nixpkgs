@@ -31,6 +31,7 @@
 let
   atLeast15 = lib.versionAtLeast version "15";
   atLeast14 = lib.versionAtLeast version "14";
+  is16 = majorVersion == "16";
   is15 = majorVersion == "15";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
@@ -80,7 +81,6 @@ optionals noSysDirs (
       "13" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
-        ./13/libsanitizer-fix-with-glibc-2.42.patch
       ];
     }
     ."${majorVersion}" or [ ]
@@ -105,19 +105,24 @@ optionals noSysDirs (
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
+# LoongArch: fix miscompile of both_non_zero{,_subreg} when operands[0] == operands[2]
+# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=127153
+++ optional is16 ./16/loongarch-fix-miscompile-of-both_non_zero.patch
+# Allow room for the sign in libgomp device UIDs; GCC 16 otherwise fails with
+# -Werror=format-truncation when cross-compiling against glibc.
+++ optional is16 ../ng/16/libgomp/uid-buffer-size.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 
-## Linux
+## AArch64
 
-# Linux 7.1 removed `linux/scc.h`.
-# For GCC 14 and higher, there have already been releases with the fix.
-++ optional (is13 && targetPlatform.isLinux) (fetchpatch {
-  name = "libsanitizer-fix-with-linux-7.1-headers.patch";
-  url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch";
-  relative = "compiler-rt/lib";
-  extraPrefix = "libsanitizer/";
-  hash = "sha256-UYekGGOkYdBNJEp48QFPFadf3wPFJZL2t3D+iwUeGJA=";
+# Fix an ICE when a function type carries a C++11 attribute without a namespace.
+# Fixed in GCC 15, never backported to the GCC 14 branch:
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116598
+++ optional (is14 && targetPlatform.isAarch64) (fetchpatch {
+  name = "aarch64-fix-ice-in-lookup-shared-state-flags.patch";
+  url = "https://github.com/gcc-mirror/gcc/commit/1247fa6e95cdf4a6422ec802f733f1f7ecaa3557.patch";
+  hash = "sha256-p8fyIcAx8CvLtQboXPevw/J3LsvkSZp36bHtGHjxsiQ=";
 })
 
 ## Darwin
@@ -165,8 +170,14 @@ optionals noSysDirs (
       (fetchpatch {
         name = "gcc-13-darwin-aarch64-support.patch";
         url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/d23df58f83aeb2c3f43bdcc277a9fac0bbe3e896/Patches/gcc/gcc-13.4.0.diff";
-        hash = "sha256-xqkBDFYZ6fdowtqR3kV7bR8a4Cu11RDokSzGn1k3a1w=";
+        excludes = [ "gcc/config.gcc" ];
+        hash = "sha256-doecTdFl6wkyvrk+44g1TMcZgVhbMF2W/5+ZOsEmwEY=";
       })
+      # The only file which conflicts with the 13.5.0 source tree in the patch
+      # above is gcc/config.gcc. In order to avoid vendoring the whole 15k line
+      # patch into Nixpkgs, we omit just gcc/config.gcc and vendor the rebased
+      # version of the patch for only that file.
+      ./13/gcc-13-darwin-aarch64-support-config-gcc.patch
     ];
   }
   .${majorVersion} or [ ]
@@ -175,6 +186,8 @@ optionals noSysDirs (
 ++ optional (
   is13 && langAda && stdenv.targetPlatform.isDarwin
 ) ./13/gnat13-aarch64-darwin-trampoline.patch
+
+++ optional (langAda && stdenv.targetPlatform.isDarwin) ./gnat-darwin-trampoline.patch
 
 ++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
   name = "libstdc-fix-compilation-in-freestanding-win32.patch";

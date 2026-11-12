@@ -26,8 +26,8 @@ let
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "834a61fc65e8b7885fcf177f1230ae4b897118fa";
-      hash = "sha256-V5pVCG5QdFlgBIVKMv4jyTTB22BWfTHD3HolVPDFpgQ=";
+      rev = "a6b4a9f00b36c19af9997d68a1cf6e0b5b3d032c";
+      hash = "sha256-yJzrkJxJUtCXmBJK474mu4MHJTT6ZnNnBRNwuCkRHEo=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -38,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "ea13a98decd497a8c5588fb5de71b57bcf10d864";
-      hash = "sha256-v9bNWc9yfK3vG8hYhQ7vkc7DHaoPF6RAKfX9kC0Gw8c=";
+      rev = "48f0b66cb2c41a392f88be7485205f71b97b1a16";
+      hash = "sha256-S41bKTjJ9oCzpuAnyPkqfgKMpXb4H4APiVU0xhcuBZk=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -50,8 +50,8 @@ let
     miniz = fetchFromGitHub {
       owner = "richgel999";
       repo = "miniz";
-      rev = "d10b03cc73475af673df40f06e5cefd1d5f940d9";
-      hash = "sha256-hRB/0TVVQjr4VwjozfRnYKUJfeqO+1PNfdvP/rrOCR4=";
+      rev = "77d0dce8627735138c51770d1799a1ef48f2117d";
+      hash = "sha256-/MAJWZXZ+pbelFduGE75rK/x9qEzxSFEj8RJWe3JUv0=";
     };
     qhull = fetchFromGitHub {
       owner = "qhull";
@@ -82,15 +82,15 @@ let
     lodepng = fetchFromGitHub {
       owner = "lvandeve";
       repo = "lodepng";
-      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
-      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
+      rev = "22561883dd63fd1850f18e1f6adac321e4f609b0";
+      hash = "sha256-JscUapUNVs2n0Ky08dksFCigBv83DcbxWHcaktqYP7Y=";
     };
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.13.0";
+  version = "4.0.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-uf1AGy9OBdZUNOKHzBnQOibIR7yPRDOKwnivIqakkOI=";
+    hash = "sha256-xJh8jrgoUTsN8fUjg4Q1IzStq5/SWTVhZUo5PKdiJ5c=";
   };
 
   patches = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Install plugins to expose them in python to fix mujoco-warp tests
   # ref. https://github.com/google-deepmind/mujoco/pull/3602
   postPatch = ''
-    for plugin in actuator elasticity sensor; do
+    for plugin in actuator sensor; do
       echo "install(TARGETS $plugin)" >> plugin/$plugin/CMakeLists.txt
     done
 
@@ -191,6 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pythonMujoco = python3Packages.mujoco;
+      pythonMujocoCore = python3Packages.mujoco-core;
       pythonMujocoMjx = python3Packages.mujoco-mjx;
     };
   };

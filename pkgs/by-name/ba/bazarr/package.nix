@@ -1,27 +1,28 @@
 {
   buildNpmPackage,
+  cacert,
   dart-sass,
   fetchFromGitHub,
   ffmpeg,
   lib,
   nix-update-script,
   nixosTests,
-  nodejs_22,
-  python313Packages,
+  nodejs_24,
+  python3Packages,
   unar,
 }:
-python313Packages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bazarr";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "morpheus65535";
     repo = "bazarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3H0JEcGYzQOTHVR/zONmtOIF+LnJd+qn2pcAj8vdOA=";
+    hash = "sha256-5bhNbLfuL1wzraO3UypRRstC1+ULTaFVNJC++Qov6AE=";
   };
 
-  dependencies = with python313Packages; [
+  dependencies = with python3Packages; [
     lxml
     numpy
     pillow
@@ -30,7 +31,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
     webrtcvad
   ];
 
-  __structuredAttrs = true;
   dontBuild = true;
   dontWrapPythonPrograms = true;
   pyproject = false;
@@ -53,7 +53,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
       }
     }" > $out/lib/bazarr/package_info
 
-    makeWrapper ${lib.getExe python313Packages.python} $out/bin/bazarr \
+    makeWrapper ${lib.getExe python3Packages.python} $out/bin/bazarr \
       --add-flags $out/lib/bazarr/bazarr.py \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -61,10 +61,15 @@ python313Packages.buildPythonApplication (finalAttrs: {
           unar
         ]
       } \
-      --prefix PYTHONPATH : ${python313Packages.makePythonPath finalAttrs.passthru.dependencies} \
+      --prefix PYTHONPATH : ${python3Packages.makePythonPath finalAttrs.passthru.dependencies} \
       --set PYTHONNOUSERSITE true
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    rm $out/lib/bazarr/libs/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/lib/bazarr/libs/certifi/cacert.pem
   '';
 
   passthru = {
@@ -74,9 +79,9 @@ python313Packages.buildPythonApplication (finalAttrs: {
 
       sourceRoot = "${finalAttrs.src.name}/frontend";
 
-      nodejs = nodejs_22;
+      nodejs = nodejs_24;
 
-      npmDepsHash = "sha256-cb++eqVtKZer9B1rwJ9WR4mZImnASeFU2MojgXAPWf4=";
+      npmDepsHash = "sha256-uvUXk5+/WOfFRuBnC/SQOkau+0uIkJ4OTofMXckmwzw=";
 
       nativeBuildInputs = [ dart-sass ];
 

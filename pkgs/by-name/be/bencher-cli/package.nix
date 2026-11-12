@@ -3,26 +3,35 @@
   fetchFromGitHub,
   rustPlatform,
   mold,
+  pkg-config,
+  aws-lc,
   nix-update-script,
   versionCheckHook,
   rustc,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bencher-cli";
-  version = "0.6.12";
+  version = "0.6.16";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "bencherdev";
     repo = "bencher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7tM35WsQfnGj/xLj8/GICsd6gELh82LP+aCwXLM9byA=";
+    hash = "sha256-00ciVT9j50DAf+W7h2uSeb9KOErrzzLtal2qMvxYzzw=";
   };
 
-  cargoHash = "sha256-EuRobN0g/3iA8YqrrMV5O3WfZHNVWW6yaO6esY/uXOU=";
+  cargoHash = "sha256-nXP175Ix8YOEAgHBJzq+QvandMcN1AMgdNpt+5MRqi4=";
 
-  nativeBuildInputs = [ mold ];
+  nativeBuildInputs = [
+    pkg-config
+    mold
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 

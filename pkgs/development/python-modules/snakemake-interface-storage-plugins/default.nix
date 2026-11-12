@@ -8,7 +8,6 @@
 
   # dependencies
   humanfriendly,
-  reretry,
   snakemake-interface-common,
   tenacity,
   throttler,
@@ -27,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-storage-plugins";
   version = "4.4.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
@@ -40,7 +38,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     humanfriendly
-    reretry
     snakemake-interface-common
     tenacity
     throttler

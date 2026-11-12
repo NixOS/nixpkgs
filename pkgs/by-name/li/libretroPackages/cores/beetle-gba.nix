@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "mednafen-gba";
-  version = "0-unstable-2026-08-23";
+  version = "0-unstable-2026-09-03";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "beetle-gba-libretro";
-    rev = "bb9edd1d611f245cd5aeb0b39986f2ecf6ec843f";
-    hash = "sha256-E8DTXn+1ar7LwLwLUZqonmaYieX3BGfhjgxGFOz8F44=";
+    rev = "b158166237b17253188cfdbe73a8a0b9fe4b3a8c";
+    hash = "sha256-0G1H3VdXtgj+cU2gT9F7135NFu+vyk3hthIjKBweDyQ=";
   };
 
   makefile = "Makefile";

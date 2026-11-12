@@ -5,6 +5,8 @@
   lib,
   rocksdb,
   rust-jemalloc-sys,
+  zstd,
+  pkg-config,
   rustPlatform,
   stdenv,
 }:
@@ -24,12 +26,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     # Needed for librocksdb-sys
+    pkg-config
     rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     # tikv-jemalloc-sys's vendored jemalloc configure breaks under gcc 15.
     rust-jemalloc-sys
+    zstd
   ];
 
   env = {

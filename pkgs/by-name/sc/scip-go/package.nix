@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "scip-go";
-  version = "0.2.7";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "scip-code";
     repo = "scip-go";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Him9V4+cXxQxG6a3L960rXEhxJYKl7n8mRlRK2PeMIg=";
+    hash = "sha256-cl9GwCjysTit5nPG1uivEbz1HDaClFvYRVwutQ4W9AY=";
   };
 
-  vendorHash = "sha256-aKOjU6LhixVpMW2JUkI++jjd4eQbv3w4apBjLbfqpvw=";
+  vendorHash = "sha256-5pQSrYS1SU2cwaWiGcYlVHm2pQIY68Is+F8611wNNXI=";
 
   ldflags = [
     "-s"

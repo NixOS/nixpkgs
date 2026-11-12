@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  makeBinaryWrapper,
   python3Packages,
   fetchpatch,
 }:
@@ -21,6 +22,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       sha256 = "0rdgz6xpmbx77lkr1ixklliy1aavdsjmfdqvzwrjylbv0xh5wc8z";
     })
   ];
+
+  # use the binary wrapper to allow usage in security.wrappers via programs.iotop
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   build-system = [ python3Packages.setuptools ];
 

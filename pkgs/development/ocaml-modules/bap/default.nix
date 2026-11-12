@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   sigs = fetchurl {
     url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v${finalAttrs.version}/sigs.zip";
-    sha256 = "0d69jd28z4g64mglq94kj5imhmk5f6sgcsh9q2nij3b0arpcliwk";
+    hash = "sha256-k0fKblZgDRmtwAlq9rRxZVZYY5GTJExfJeaRj0STyTQ=";
   };
 
   createFindlibDestdir = true;

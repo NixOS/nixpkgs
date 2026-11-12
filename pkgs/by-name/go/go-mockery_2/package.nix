@@ -1,28 +1,30 @@
 {
+  # mockery has historically required changes to support new Go versions, so use the latest
+  # version that mockery supports rather than buildGoLatestModule.
+  # This should be bumped when a mockery release includes support for a new version of Go.
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
   go-task,
   gotestsum,
-  getent,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "go-mockery_2";
   # supported upstream until 2029-12-31
   # https://vektra.github.io/mockery/latest/v3/#v2-support-lifecycle
-  version = "2.53.7";
+  version = "2.53.8";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fPFtPerdgb+7DiRPJUcH/O2jQzyU24D0XlrLlHNneMc=";
+    hash = "sha256-l8aRTjRvDX871gw1PoapWCZNRhbeDVEJS6heWXmKFew=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-D3vTsd5FaEQ7/AuKG2Q54nE+Di05ZHHpiqyyStZCFNU=";
+  vendorHash = "sha256-8YhkbAh8rHdNzvyiT1rScjOnyAcE5/hgcibCOEm7Cvo=";
 
   ldflags = [
     "-s"

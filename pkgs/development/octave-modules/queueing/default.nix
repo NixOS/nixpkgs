@@ -10,7 +10,7 @@ buildOctavePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mmarzolla/queueing/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-kJGURTYig+aImnjXu8ldyqFAJDqV+fpUzR+h6OdvwzM=";
+    hash = "sha256-kJGURTYig+aImnjXu8ldyqFAJDqV+fpUzR+h6OdvwzM=";
   };
 
   meta = {

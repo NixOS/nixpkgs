@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     extension = "zip";
@@ -33,6 +31,6 @@ buildPythonPackage (finalAttrs: {
     description = "Microsoft Azure Key Vault Namespace Package [Internal]";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

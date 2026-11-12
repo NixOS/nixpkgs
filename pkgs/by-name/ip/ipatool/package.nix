@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ipatool";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yC6MSyL3b9u/mb+YJUIZTsH2dtVgE0w2K3F2LlQE9tI=";
+    hash = "sha256-wT2oo2TvwkpH8WC497q7W7hX6PozESpkm240LVGcvLU=";
   };
 
-  vendorHash = "sha256-/DIJ41YXPMKZgnNraBasnJ1AIgfC5OA3fLn/vFJqs/Q=";
+  vendorHash = "sha256-ePQ78/Ki1u9US9yLvWVx3oxvBWXYA1Pg3jl+IGYpXW8=";
 
   # Fixes "import lookup disabled by -mod=vendor" for onepassword-sdk-go on macOS
   proxyVendor = true;
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Command-line tool that allows searching and downloading app packages (known as ipa files) from the iOS App Store";
     homepage = "https://github.com/majd/ipatool";
-    changelog = "https://github.com/majd/ipatool/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/majd/ipatool/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ipatool";

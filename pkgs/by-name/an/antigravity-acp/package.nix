@@ -8,20 +8,7 @@
   cacert,
 }:
 let
-  sources = {
-    x86_64-linux = {
-      url = "https://dl.google.com/agy-extensions/releases/linux/agy-acp-server-agy_acp_server_1.1.1-linux-x86_64.zip";
-      hash = "sha256-OPYtAbMt6wkHs9OacewwH9Njafb/0c8mLUrzhRd/ed8=";
-    };
-    aarch64-linux = {
-      url = "https://dl.google.com/agy-extensions/releases/linux/agy-acp-server-agy_acp_server_1.1.1-linux-arm64.zip";
-      hash = "sha256-7WnmSzCPyxI6tUvzJ3v5yw1lEGT4hepaqw/1IMcXU5g=";
-    };
-    aarch64-darwin = {
-      url = "https://dl.google.com/agy-extensions/releases/macos/agy-acp-server-agy_acp_server_1.1.1-darwin-arm64.zip";
-      hash = "sha256-/fqRVlLNt7qAhcyP/+0HLL4AklGqLJUaq92geowooYk=";
-    };
-  };
+  sources = lib.importJSON ./sources.json;
 
   srcInfo =
     sources.${stdenv.hostPlatform.system}
@@ -29,7 +16,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "antigravity-acp";
-  version = "1.1.1"; # https://github.com/agentclientprotocol/registry/blob/main/antigravity-acp/agent.json
+  inherit (sources) version;
 
   src = fetchurl {
     inherit (srcInfo) url hash;
@@ -65,6 +52,11 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/agy_acp_server.par \
       --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
+
+  passthru.updateScript = [
+    ./update.sh
+    (builtins.toString ./.)
+  ];
 
   meta = {
     description = "Google's AI coding agent. Official ACP server powered by Antigravity";

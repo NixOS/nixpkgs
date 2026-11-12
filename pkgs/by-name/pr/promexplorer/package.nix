@@ -2,16 +2,18 @@
   lib,
   buildNimPackage,
   fetchFromGitHub,
+  openssl,
 }:
 buildNimPackage (finalAttrs: {
   pname = "promexplorer";
-  version = "0.0.5";
+  version = "0.1.0";
   src = fetchFromGitHub {
     owner = "marcusramberg";
     repo = "promexplorer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-a+9afqdgLgGf2hOWf/QsElq+CurDfE1qDmYCzodZIDU=";
+    hash = "sha256-j86NINqCNPuW8v5VcLbyvRUATN94d10xcQYAYSSPYBA=";
   };
+  buildInputs = [ openssl ];
 
   lockFile = ./lock.json;
 

@@ -17,9 +17,6 @@ lib.makeScope pkgs.newScope (
     # This will go away, do not use outside Nixpkgs.
     _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
 
-    # ISO installer
-    # installerIso = callPackage ./installer.nix {};
-
     #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
     gvfs = pkgs.gvfs.override { gnomeSupport = true; };

@@ -1,6 +1,6 @@
 genericBuilder:
 
 genericBuilder {
-  version = "29.1";
-  hash = "sha256-G1YZCdaicgmuZYXIi6g5bRM4nkvJoLb7fGdBCD+NIvQ=";
+  version = "29.1.2";
+  hash = "sha256-bu5ynOJ+hq0hmVG8zEeMQ2nM0CuK6jAyh7XpewcoYXY=";
 }

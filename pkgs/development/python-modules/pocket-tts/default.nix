@@ -17,6 +17,7 @@
   safetensors,
   scipy,
   sentencepiece,
+  tokenizers,
   torch,
   typer,
   typing-extensions,
@@ -29,15 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
-  version = "3.1.0";
+  version = "4.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kyutai-labs";
     repo = "pocket-tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ilCoDUw9UfW4olLdzQp+YdlHtHYmFlLxnhbntDeGiK0=";
+    hash = "sha256-wSYp4wcqMYkqpWjN/X7gePlPWf63VSAsAAF4LOckDTw=";
   };
 
   build-system = [
@@ -55,6 +55,7 @@ buildPythonPackage (finalAttrs: {
     safetensors
     scipy
     sentencepiece
+    tokenizers
     torch
     typer
     typing-extensions

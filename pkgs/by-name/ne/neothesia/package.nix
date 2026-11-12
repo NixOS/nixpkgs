@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neothesia";
   version = "0.4.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "PolyMeilex";
     repo = "Neothesia";
@@ -47,7 +49,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-gX9DlgPgrM8KukX3auxbBKpJq7QG4+kRhHSUk3eQjAQ=";
 
   cargoBuildFlags = [
-    "-p neothesia -p neothesia-cli"
+    "--package=neothesia"
+    "--package=neothesia-cli"
   ];
 
   postInstall = ''

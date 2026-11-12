@@ -1,4 +1,5 @@
 {
+  aws-lc,
   buildPythonPackage,
   cacert,
   dirty-equals,
@@ -7,6 +8,7 @@
   granian,
   httpx,
   lib,
+  pkg-config,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
@@ -16,28 +18,36 @@
   syrupy,
   trustme,
   yarl,
+  zstd-c,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyreqwest";
-  version = "0.13.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MarkusSintonen";
     repo = "pyreqwest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j8/EGxoXxNfI2wSWZ67dkOi7VImtDlRA+di5+RDdM/Q=";
+    hash = "sha256-UgoZQ8QMcoXNC7rHBpbgOCjr3uDGqalndxuhNpwprw0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-f+LFfMND0WPu/zRWO6DoNxqHq/L3LCM+wOTXe5Nm+Og=";
+    hash = "sha256-k31Jk47wJyq+K3CkTPniS7DmCNE6qsaG3kjT0eJk83U=";
   };
 
   build-system = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    zstd-c
   ];
 
   pythonImportsCheck = [ "pyreqwest" ];

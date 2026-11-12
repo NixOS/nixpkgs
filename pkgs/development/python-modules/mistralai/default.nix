@@ -1,14 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 
   # build-system
   hatchling,
 
   # dependencies
   eval-type-backport,
-  httpx,
+  httpx2,
   jsonpath-python,
   opentelemetry-api,
   opentelemetry-semantic-conventions,
@@ -28,7 +28,6 @@
   opentelemetry-exporter-otlp-proto-http,
 
   # tests
-  opentelemetry-instrumentation-httpx,
   opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
@@ -36,20 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.9.4";
+  version = "3.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "mistralai";
-    repo = "client-python";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-w7nU4fiduMhpuvKZMJ3JTLEg8Bvuv5L5OXeJYve3/fI=";
+  # Upstream stopped tagging releases on GitHub after v3.2.0
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-l8xSW43clvuLW7CPRm3T0i+QTyHd/kUQPadsJf5gG/I=";
   };
-
-  preBuild = ''
-    python scripts/prepare_readme.py
-  '';
 
   build-system = [
     hatchling
@@ -60,7 +53,7 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     eval-type-backport
-    httpx
+    httpx2
     jsonpath-python
     opentelemetry-api
     opentelemetry-semantic-conventions
@@ -73,6 +66,9 @@ buildPythonPackage (finalAttrs: {
     agents = [
       authlib
       griffe
+      mcp
+    ];
+    mcp = [
       mcp
     ];
     gcp = [
@@ -95,7 +91,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
-    opentelemetry-instrumentation-httpx
     pytest-asyncio
     pytestCheckHook
   ]
@@ -106,17 +101,25 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.workflow_payload_compression;
 
   disabledTestPaths = [
-    # Local test servers cannot bind in the Nix sandbox.
-    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_app_otel_does_not_enable_mistral_span_without_mistral_telemetry"
-    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_concurrent_async_httpx_auto_instrumented_spans_are_genai_children"
-    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_httpx_auto_instrumented_span_is_child_of_genai_span"
-    "src/mistralai/extra/tests/test_otel_tracing.py::TestPerInstanceTracerProvider::test_get_telemetry_tracer_dedicated_provider_captures_app_spans"
+    # ImportError: cannot import name 'HTTPX2ClientInstrumentor' from 'opentelemetry.instrumentation.httpx'
+    # (requires opentelemetry-instrumentation-httpx>=0.65b0)
+    "src/mistralai/extra/tests/test_otel_tracing.py"
+
+    # ModuleNotFoundError: No module named 'livekit'
+    "src/mistralai/extra/tests/voice_agents/"
+  ]
+  ++ lib.optionals (lib.versionOlder mcp.version "2.2") [
+    # Upstream requires mcp>=2.2,<3 and these test modules import mcp>=2.2 APIs
+    # (MCPError, mcp.client._transport) that are absent from older versions such
+    # as mcp_1, used by some application scopes (e.g. oterm for fastmcp-slim).
+    "src/mistralai/extra/tests/test_connectors_gateway.py"
+    "src/mistralai/extra/tests/test_mcp_streamable_http.py"
   ];
 
   meta = {
     description = "Python client library for Mistral AI platform";
     homepage = "https://github.com/mistralai/client-python";
-    changelog = "https://github.com/mistralai/client-python/blob/${finalAttrs.src.tag}/RELEASES.md";
+    changelog = "https://github.com/mistralai/client-python/blob/main/RELEASES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage

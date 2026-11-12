@@ -12,6 +12,7 @@
   glib,
   gtk3,
   openssl,
+  libgit2,
   libGL,
   libxkbcommon,
   wrapGAppsHook3,
@@ -76,6 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ [
       glib
       gtk3
+      libgit2
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

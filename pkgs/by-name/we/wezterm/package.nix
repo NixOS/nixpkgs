@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fontconfig,
   installShellFiles,
+  callPackage,
+  libgit2,
   libGL,
   libx11,
   libxcb,
@@ -16,6 +18,7 @@
   python3,
   runCommand,
   rustPlatform,
+  sqlite,
   vulkan-loader,
   wayland,
   wezterm,
@@ -24,19 +27,20 @@
   libxcb-keysyms,
   libxcb-wm,
   zlib,
+  zstd,
   rcodesign,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wezterm";
-  version = "0-unstable-2026-08-31";
+  version = "0-unstable-2026-11-08";
 
   src = fetchFromGitHub {
     owner = "wezterm";
     repo = "wezterm";
-    rev = "4fbd6b8e90e2326b8e25c589768f98bd71ddd047";
+    rev = "458a100c1bf4134d36cb5c42dd90e4c8266d9e1a";
     fetchSubmodules = true;
-    hash = "sha256-Fe2rH9HegaUixPXHyHv4B8c0RI34GPbeX8mTzHCQwQ4=";
+    hash = "sha256-mi+KIahT+w8itvt0Q6uY2Oc0dHAfYio/WV1cJMXSAoE=";
   };
 
   postPatch = ''
@@ -59,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-h/qbCAEukgk1ADvn5iUfE4u596Sf+C24OsELlnCNX0g=";
+  cargoHash = "sha256-GiHuJkkcPKoQpzVKDlbI2eZVj+5Fns/CHKxRtBw39WU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -74,8 +78,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     fontconfig
+    libgit2
     openssl
+    sqlite
     zlib
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
@@ -136,14 +143,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     # the headless variant is useful when deploying wezterm's mux server on remote severs
-    headless = import ./headless.nix {
-      inherit
-        openssl
-        pkg-config
-        rustPlatform
-        wezterm
-        ;
-    };
+    headless = callPackage ./headless.nix { };
 
     terminfo =
       runCommand "wezterm-terminfo"
@@ -169,6 +169,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://wezterm.org";
     license = lib.licenses.mit;
     mainProgram = "wezterm";
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      yvnth
+    ];
   };
 })

@@ -4,6 +4,7 @@
   airplay-cli,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg_7-headless,
   nixosTests,
   openssl,
@@ -17,6 +18,9 @@ let
     final: prev: {
       # TODO: package properly when no longer using a fork
       aiolibdatachannel = final.callPackage ./aiolibdatachannel.nix { };
+
+      # mcp v2 breaks fastmcp-slim
+      mcp = final.mcp_1;
 
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
@@ -78,18 +82,24 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.10.3";
+  version = "2.10.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-5YfXmk4GE1BNdWLFbAvBo1s6SlD3Mo38Oa6zgehTJTs=";
+    hash = "sha256-li2rdPMT4Jn6DCK6Rc+GJD9l2ggiHFvM3WRcy1eU7fw=";
   };
 
   patches = [
+    # Fix streams tests leaking a raised log level into other tests
+    # https://github.com/music-assistant/server/pull/6344
+    (fetchpatch {
+      url = "https://github.com/music-assistant/server/commit/28a25af1674cb9a72cc9f6a9fb8faf6632857222.patch";
+      hash = "sha256-sOF1RTt8+DJ10+pMYFuwgdq00FQ9XVWSYfX8qexYP48=";
+    })
+
     (replaceVars ./ffmpeg.patch {
       ffmpeg = lib.getExe' ffmpeg_7-headless "ffmpeg";
       ffprobe = lib.getExe' ffmpeg_7-headless "ffprobe";
@@ -123,11 +133,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # As providers must be configured through the nixos module, there is no gain
     # if Music Assistant tries to enable some of them without the proper dependencies.
     ./disable-default-provider.diff
-
-    # Fixes this warning on startup:
-    #  On-device ML inference capability probe was inconclusive (exit code 1); assuming this CPU is capable
-    # Music-Assistant's site-packages is injected via passthru.pythonPath, because $out cannot be used with replaceVars
-    ./inherit-env-for-avx2-check.diff
   ];
 
   postPatch = ''
@@ -270,6 +275,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "squeezelite"
       "tidal"
       "vban_receiver"
+      "wiim"
       "ytmusic"
     ]);
 
@@ -287,13 +293,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/bandcamp"
     "tests/providers/bbc_sounds"
     "tests/providers/deezer"
+    "tests/providers/genius_lyrics"
     "tests/providers/hue_entertainment"
+    "tests/providers/ibroadcast"
     "tests/providers/kion_music"
     "tests/providers/nicovideo"
     "tests/providers/qqmusic"
     "tests/providers/siriusxm"
     "tests/providers/stream_limits"
-    "tests/providers/wiim"
     "tests/providers/yandex_music"
     "tests/providers/yandex_smarthome"
     "tests/providers/yandex_station"
@@ -310,15 +317,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/benchmarks/test_bench_helpers.py"
     # timing sensitive
     "tests/controllers/music/test_music_migrations.py::test_migrate_database_backfills_external_id_lookup"
-  ];
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: failed to initialize QNNPACK
-    "test_beat_detection"
-    "test_digital_silence_yields_finite_spectral_centroid"
-    "test_extended_analysis_fields"
-    "test_finalize_returns_audio_analysis_data"
-    "test_finalize_returns_none_on_early_exit"
+    # TODO: revisit with 2.11.0
+    "tests/providers/smart_fades/test_provider.py"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
@@ -347,10 +350,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://github.com/music-assistant/server";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      hexa
-      emilylange
-    ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "mass";
   };
 })

@@ -1,15 +1,15 @@
 diff --git a/requirements/rocm.txt b/requirements/rocm.txt
-index 375f0a019..04a59dc3b 100644
+index cd7a114721..7fea5da4cf 100644
 --- a/requirements/rocm.txt
 +++ b/requirements/rocm.txt
-@@ -10,14 +10,8 @@
+@@ -10,14 +10,8 @@ numba == 0.65.0 # Required for N-gram speculative decoding
  # Dependencies for AMD GPUs
  datasets
  peft
 -pytest-asyncio
 -tensorizer==2.10.1
  packaging>=24.2
--setuptools>=77.0.3,<80.0.0
+-setuptools>=78.1.1,<80.0.0
 -setuptools-scm>=8
  setuptools-rust>=1.9.0
 -runai-model-streamer[s3,gcs,azure]==0.15.7

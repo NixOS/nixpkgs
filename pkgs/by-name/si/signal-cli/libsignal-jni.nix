@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-jni";
-  version = "0.102.1";
+  version = "0.103.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YF0mwf9QQ3fbv7KNiniGUVCbemj+59jOKixp4IaywSw=";
+    hash = "sha256-0I0xo8nKs53b69vARtbb/7VRJFXrJqwsfZl9P+1N9LM=";
   };
 
-  cargoHash = "sha256-bdp+DJWmg4czoZAP0GalCuK73/8lDTvVrRAwUCNJQXE=";
+  cargoHash = "sha256-LvRGjukdpkHFBXLqlnDTi0+pVOVgg3bpFDLVFjzRGlE=";
 
   nativeBuildInputs = [
     cmake

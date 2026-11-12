@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  nodejs_22,
+  nodejs,
   node-gyp,
   gnutar,
   inter,
@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.33.1";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-/rEVeNxLgqeoxJTyzArZAGzAbJjfOjHuG+zpOnf40Mk=";
+    hash = "sha256-UgsT5tVB8AmXzpO6KynH3kT38RCX8LEHMTDhQZBii+8=";
   };
 
   patches = [
@@ -41,9 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3
-    # nodejs 22 avoids a worker crash on 24.19+ while waiting for a proper fix to https://github.com/karakeep-app/karakeep/issues/2989
-    # should be safe to revert after seeing forward movement at https://github.com/karakeep-app/karakeep/blob/main/docker/Dockerfile#L13
-    nodejs_22
+    nodejs
     node-gyp
     pnpmConfigHook
     pnpm_11
@@ -62,15 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-0ExBj87CbzgTis9/Z0J2d82051SXlEOgwXO+jAWxCi4=";
+    hash = "sha256-0l84j5g33ngDHYyzefXRkic3mpqZ4cXP1MEZfyWEGt8=";
   };
   buildPhase = ''
     runHook preBuild
 
     # Based on matrix-appservice-discord
     pushd node_modules/better-sqlite3
-    npm run build-release --offline "--nodedir=${srcOnly nodejs_22}"
-    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs_22}" {} \;
+    npm run build-release --offline "--nodedir=${srcOnly nodejs}"
+    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs}" {} \;
     popd
 
     export CI=true
@@ -89,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     pushd apps/workers
     pnpm run build
     popd
+
+    pnpm prune --prod
 
     runHook postBuild
   '';
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
         --subst-var-by KARAKEEP_LIB_PATH "$KARAKEEP_LIB_PATH" \
         --subst-var-by VERSION "${finalAttrs.version}" \
-        --subst-var-by NODEJS "${nodejs_22}"
+        --subst-var-by NODEJS "${nodejs}"
       chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
       patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done

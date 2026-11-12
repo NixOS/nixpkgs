@@ -5,13 +5,13 @@
 }:
 mkLibretroCore rec {
   core = "uzem";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-08-23";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-uzem";
-    rev = "d4fe82c38bf3fc789b955bcfcc81dc2e3a2ea89f";
-    hash = "sha256-zS2Sr/IP/kAQoXNhRH37ZfQevVKVQAKlNwlaC43dkuw=";
+    rev = "d991ee94547c8294abc1c4cb73d63116aa58b5bc";
+    hash = "sha256-EVvcJ2eBiTAG2paYsE6cPgFaRh70rRto6riZRuarbm0=";
   };
 
   makefile = "Makefile";

@@ -10,6 +10,7 @@ in
   libc,
   llvmPackages,
   makeScopeWithSplicing',
+  nixosTests,
   pkgs,
   preLibcHeaders,
   stdenv,
@@ -142,6 +143,9 @@ makeScopeWithSplicing' {
         xcode_26_5_Apple_silicon
         xcode_26_6
         xcode_26_6_Apple_silicon
+        xcode_27
+        xcode_27_1
+        xcode_27_2
         xcode
         requireXcode
         ;
@@ -202,7 +206,13 @@ makeScopeWithSplicing' {
             system = null;
           };
         in
-        nixos.config.system.build.macos-builder-installer
+        nixos.config.system.build.macos-builder-installer.overrideAttrs (oldAttrs: {
+          passthru = oldAttrs.passthru // {
+            tests = (oldAttrs.passthru.tests or { }) // {
+              store-gc = nixosTests.linux-builder-vz-store-gc;
+            };
+          };
+        })
       ) { modules = [ ]; };
     }
   );

@@ -32,31 +32,44 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "docling-parse";
-  version = "7.8.1";
+  version = "7.25.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-parse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WTXWIJWwxfBdPnoCvo1sq7o9itG/MUX3FNz1GGtvaVo=";
+    hash = "sha256-JQxvDfXMifxiO2tlKtp38ymv+5UdSz07IeQnP71C6KY=";
   };
 
-  # cibuildwheel and delocate are listed as build-system dependencies but are only used in CI to
-  # build wheels.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail \
-        "cmake>=3.27.0,<4.0.0" \
-        "cmake>=3.27.0" \
-      --replace-fail \
-        "\"cibuildwheel>=2.19.2,<4.0.0; python_version >= '3.11'\"," \
-        "" \
-      --replace-fail \
-        '"delocate>=0.11.0,<1.0.0",' \
-        ""
-  '';
+  postPatch =
+    # cibuildwheel and delocate are listed as build-system dependencies but are only used in CI to
+    # build wheels.
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          "\"cibuildwheel>=4.3.0,<5.0.0; python_version >= '3.11'\"," \
+          "" \
+        --replace-fail \
+          '"delocate>=0.11.0,<1.0.0",' \
+          ""
+    ''
+    # Upstream vendors utfcpp 4.0.6. In newer releases (as packaged in nixpkgs), the 3-argument
+    # `internal::validate_next` was renamed `internal::decode_next`.
+    + ''
+      substituteInPlace src/parse/pdf_resources/page_font.h \
+        --replace-fail \
+          "utf8::internal::validate_next(itr, value.end(), cp)" \
+          "utf8::internal::decode_next(itr, value.end(), cp)"
+    ''
+    # The throwing `is_directory` overload aborts parsing when a font directory can't be read,
+    # e.g. /System/Library/Fonts in the darwin sandbox
+    + ''
+      substituteInPlace src/render/blend2d_font_resolver.h \
+        --replace-fail \
+          "if (not fs::is_directory(dir))" \
+          "if (std::error_code dir_ec; not fs::is_directory(dir, dir_ec))"
+    '';
 
   dontUseCmakeConfigure = true;
 
@@ -102,9 +115,9 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-parse/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling-parse/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Simple package to extract text with coordinates from programmatic PDFs";
-    homepage = "https://github.com/DS4SD/docling-parse";
+    homepage = "https://github.com/docling-project/docling-parse";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

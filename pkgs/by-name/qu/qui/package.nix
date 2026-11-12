@@ -10,15 +10,16 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 buildGo127Module (finalAttrs: {
   pname = "qui";
-  version = "1.29.0";
+  version = "1.35.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GTW/kHy4UtBjQK8PugrHXso5wj5VOig3sOiv5PiJprQ=";
+    hash = "sha256-siNanqbdoYBPRCAznE5GrjSxdpGET6kzIVLrOsT3Yao=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -42,7 +43,7 @@ buildGo127Module (finalAttrs: {
         ;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-tzLY3R6nOL18eIKgWhZdUVvu5XdmpxlMRuVvW/gtnYE=";
+      hash = "sha256-mSuYyypzioQ2H/CZG/LonTZvtZONk9gJk+5n5rJEO6I=";
     };
 
     postBuild = ''
@@ -54,7 +55,7 @@ buildGo127Module (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-8po/cyG8R39NwNwszcvvo9LL1OceCptL671zU8E/NDg=";
+  vendorHash = "sha256-p5dDcPhFgeA75Mi0Gv+F80H+TAQdjPqzmQSIQDMOnPQ=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -65,12 +66,18 @@ buildGo127Module (finalAttrs: {
     "-X main.PolarOrgID="
   ];
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   # some season-pack tests use non-existent source paths (e.g. /media/...) and
   # assert on a same-filesystem check that resolves them up to /. go's
   # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
-  # something sane
+  # something sane. We use realpath, because on macOS it's symliked to
+  # /private/tmp during the build, and tests were failing when comparing
+  # non-resolved paths to resolved paths.
   preCheck = ''
-    export TMPDIR=/tmp
+    export TMPDIR="$(realpath /tmp)"
   '';
 
   checkFlags = [

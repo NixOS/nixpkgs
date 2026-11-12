@@ -24,8 +24,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   version = "0.0.9.post1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "fzyzcjy";
     repo = "torch_memory_saver";
@@ -53,7 +51,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     CUDA_HOME = symlinkJoin {
       name = "cudatoolkit-joined";
       paths = [
-        cudaPackages.cuda_nvcc # crt/host_defines.h
+        (
+          # crt/host_defines.h
+          if (cudaPackages.cudaAtLeast "13.0") then cudaPackages.cuda_crt else cudaPackages.cuda_nvcc
+        )
         cudaPackages.cuda_cudart # cuda_runtime_api.h
       ];
     };

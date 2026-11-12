@@ -3,6 +3,7 @@
   fetchFromGitea,
   rustPlatform,
   pkg-config,
+  aws-lc,
   openssl,
   nix-update-script,
 }:
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
   ];
 

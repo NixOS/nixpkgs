@@ -7,6 +7,7 @@
   rustPlatform,
   makeBinaryWrapper,
   pkg-config,
+  aws-lc,
   openssl,
   curl,
   writableTmpDirAsHomeHook,
@@ -25,16 +26,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
-  version = "1.29.0";
+  version = "1.29.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     tag = finalAttrs.version;
-    hash = "sha256-jbB0nmXtc95Ac+YfmyELh6n5OTRMmeDPT4OFIlJNrZc=";
+    hash = "sha256-KEfqZtjUSVg0aJTgf5jC7jNJOPYIRuf+8uZRtOXQQ9o=";
   };
 
-  cargoHash = "sha256-m/KoXNJh00zYKZo7MIJsBvo4zldfKdofrUh8AItJqXI=";
+  cargoHash = "sha256-7NvkXWG8sa7zDveU1jWJ5C+KMpoSg/zSoP44UXNyjUw=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     curl
     zlib
@@ -91,6 +93,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # reaches out to the network to test TLS roots, which can't be done in the
     # build sandbox
     "--skip=suite::static_roots::store_static_roots"
+    # tries to hide the cc from rustup by setting PATH to an empty directory,
+    # but this doesn't work due to how nixpkgs wraps binaries
+    "--skip=suite::cli_inst_interactive::install_warns_if_default_linker_missing"
   ];
 
   postInstall = ''
@@ -156,10 +161,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
     changelog = "https://github.com/rust-lang/rustup/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       mic92
     ];

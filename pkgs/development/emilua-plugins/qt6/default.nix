@@ -23,14 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "emilua-qt6";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "qt6";
     rev = "v${version}";
-    hash = "sha256-Ch99ntLreiOjACxyJVR4174sHJT8EYXzDGPdysqmBXM=";
+    hash = "sha256-WMTvwjNYcYpx59QWGv5xWY119feoBgb2x0md+Uq+gzQ=";
   };
+
+  patches = [
+    # std::mutex and std::lock_guard are used here without <mutex>.
+    ./missing-mutex-include.patch
+  ];
 
   buildInputs = with qt6Packages; [
     qtbase

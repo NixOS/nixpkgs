@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cockpit-dockermanager";
-  version = "1.0.8.2";
+  version = "1.0.9.1";
 
   src = fetchFromGitHub {
     owner = "chrisjbawden";
     repo = "cockpit-dockermanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NYRLlS9mk1OOlpX3L8ezl6Cvn2kP9+8YDLzuCb54pso=";
+    hash = "sha256-guqyXG9X/bvtethpAQmsp8HTVAhnHAAP+sEriqaaGbc=";
   };
 
   __structuredAttrs = true;

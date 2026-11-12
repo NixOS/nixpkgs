@@ -5,13 +5,14 @@
 }:
 let
   pname = "realvnc-vnc-viewer";
-  version = "7.15.1";
+  version = "8.5.0";
 
   meta = {
     description = "VNC remote desktop client software by RealVNC";
     homepage = "https://www.realvnc.com/en/connect/download/viewer/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "vncConnect";
       fullName = "VNC Connect End User License Agreement";
       url = "https://static.realvnc.com/media/documents/LICENSE-4.0a_en.pdf";
       free = false;
@@ -21,7 +22,7 @@ let
       onedragon
     ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
-    mainProgram = "vncviewer";
+    mainProgram = "realvnc-vnc-viewer";
   };
 in
 if stdenv.hostPlatform.isDarwin then

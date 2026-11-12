@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "numpy-quaternion";
   version = "2024.0.13";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "moble";

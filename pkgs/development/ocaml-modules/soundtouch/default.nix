@@ -13,8 +13,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-soundtouch";
-    rev = "v${version}";
-    sha256 = "sha256-81Mhk4PZx4jGrVIevzMslvVbKzipzDzHWnbtOjeZCI8=";
+    tag = "v${version}";
+    hash = "sha256-81Mhk4PZx4jGrVIevzMslvVbKzipzDzHWnbtOjeZCI8=";
   };
 
   buildInputs = [ dune-configurator ];

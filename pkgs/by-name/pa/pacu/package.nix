@@ -3,6 +3,7 @@
   awscli,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -55,9 +56,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytestCheckHook
   ];
 
-  postBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   pythonImportsCheck = [ "pacu" ];
 

@@ -4,7 +4,7 @@ import sys
 import time
 import unicodedata
 from abc import ABC, abstractmethod
-from collections.abc import Iterator
+from collections.abc import Generator
 from contextlib import ExitStack, contextmanager
 from enum import IntEnum
 from pathlib import Path
@@ -31,12 +31,12 @@ class AbstractLogger(ABC):
 
     @abstractmethod
     @contextmanager
-    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Generator[None]:
         pass
 
     @abstractmethod
     @contextmanager
-    def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def nested(self, message: str, attributes: dict[str, str] = {}) -> Generator[None]:
         pass
 
     @abstractmethod
@@ -94,7 +94,7 @@ class JunitXMLLogger(AbstractLogger):
             self.tests[self.currentSubtest].stdout += message + os.linesep
 
     @contextmanager
-    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Generator[None]:
         old_test = self.currentSubtest
         self.tests.setdefault(name, self.TestCaseState())
         self.currentSubtest = name
@@ -104,7 +104,7 @@ class JunitXMLLogger(AbstractLogger):
         self.currentSubtest = old_test
 
     @contextmanager
-    def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def nested(self, message: str, attributes: dict[str, str] = {}) -> Generator[None]:
         self.log(message)
         yield
 
@@ -185,14 +185,14 @@ class CompositeLogger(AbstractLogger):
             logger.log(message, attributes)
 
     @contextmanager
-    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Generator[None]:
         with ExitStack() as stack:
             for logger in self.logger_list:
                 stack.enter_context(logger.subtest(name, attributes))
             yield
 
     @contextmanager
-    def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def nested(self, message: str, attributes: dict[str, str] = {}) -> Generator[None]:
         with ExitStack() as stack:
             for logger in self.logger_list:
                 stack.enter_context(logger.nested(message, attributes))
@@ -234,13 +234,15 @@ class CompositeLogger(AbstractLogger):
 
 class TerminalLogger(AbstractLogger):
     def __init__(self) -> None:
+        self._start_time = time.monotonic()
         self._print_serial_logs = True
         self._log_level = LogLevel.INFO
 
     def maybe_prefix(self, message: str, attributes: dict[str, str]) -> str:
+        elapsed = time.monotonic() - self._start_time
         if "machine" in attributes:
-            return f"{attributes['machine']}: {message}"
-        return message
+            message = f"{attributes['machine']}: {message}"
+        return Style.DIM + f"[{elapsed:.2f}s]" + Style.RESET_ALL + f" {message}"  # ty: ignore[unsupported-operator]
 
     @staticmethod
     def _eprint(*args: object, **kwargs: Any) -> None:
@@ -250,12 +252,12 @@ class TerminalLogger(AbstractLogger):
         self._eprint(self.maybe_prefix(message, attributes))
 
     @contextmanager
-    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Generator[None]:
         with self.nested("subtest: " + name, attributes):
             yield
 
     @contextmanager
-    def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def nested(self, message: str, attributes: dict[str, str] = {}) -> Generator[None]:
         self._eprint(
             self.maybe_prefix(
                 Style.BRIGHT + Fore.GREEN + message + Style.RESET_ALL,  # ty: ignore[unsupported-operator]
@@ -263,9 +265,9 @@ class TerminalLogger(AbstractLogger):
             )
         )
 
-        tic = time.time()
+        tic = time.monotonic()
         yield
-        toc = time.time()
+        toc = time.monotonic()
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
 
     def debug(self, *args, **kwargs) -> None:
@@ -320,10 +322,27 @@ class XMLLogger(AbstractLogger):
         self.xml.endDocument()
         self.logfile_handle.close()
 
-    def sanitise(self, message: str) -> str:
+    @staticmethod
+    def sanitise(message: str) -> str:
+        r"""Remove the characters of Unicode's "Other" categories, such as
+        control characters, from serial output before it is written to XML.
+
+        >>> XMLLogger.sanitise("booting\x00...\x07")
+        'booting...'
+        >>> XMLLogger.sanitise("Grüße")
+        'Grüße'
+        """
         return "".join(ch for ch in message if unicodedata.category(ch)[0] != "C")
 
-    def maybe_prefix(self, message: str, attributes: dict[str, str]) -> str:
+    @staticmethod
+    def maybe_prefix(message: str, attributes: dict[str, str]) -> str:
+        """Prefix the message with the name of the machine, if there is one.
+
+        >>> XMLLogger.maybe_prefix("booting", {"machine": "server"})
+        'server: booting'
+        >>> XMLLogger.maybe_prefix("booting", {})
+        'booting'
+        """
         if "machine" in attributes:
             return f"{attributes['machine']}: {message}"
         return message
@@ -381,22 +400,22 @@ class XMLLogger(AbstractLogger):
             pass
 
     @contextmanager
-    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Generator[None]:
         with self.nested("subtest: " + name, attributes):
             yield
 
     @contextmanager
-    def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+    def nested(self, message: str, attributes: dict[str, str] = {}) -> Generator[None]:
         self.xml.startElement("nest", attrs=AttributesImpl({}))
         self.xml.startElement("head", attrs=AttributesImpl(attributes))
         self.xml.characters(message)
         self.xml.endElement("head")
 
-        tic = time.time()
+        tic = time.monotonic()
         self.drain_log_queue()
         yield
         self.drain_log_queue()
-        toc = time.time()
+        toc = time.monotonic()
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
 
         self.xml.endElement("nest")

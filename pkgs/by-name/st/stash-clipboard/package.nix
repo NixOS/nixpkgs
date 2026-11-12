@@ -3,22 +3,27 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  pkg-config,
+  sqlite,
   createSymlinks ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stash-clipboard";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "NotAShelf";
     repo = "stash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vB3fyaq8ca+y0ct0RQhFTZAVG/vgYXOd9kPocky/wmM=";
+    hash = "sha256-bHaOGQrF472K98Styymc3NUTrSgDAdWhL01K0wkhRl0=";
   };
 
-  cargoHash = "sha256-m5ra/XCWogrY3edfQfrvKFHKP7mEWWRNJPYC/phPeDA=";
+  cargoHash = "sha256-8xQ501X4AJrsZN/jnG/mSRZp4JTcaFxSYM3TeWfDhQ8=";
 
   __structuredAttrs = true;
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ sqlite ];
 
   postInstall = lib.optionalString createSymlinks ''
     mkdir -p $out

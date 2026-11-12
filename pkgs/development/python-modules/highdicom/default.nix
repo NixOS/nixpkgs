@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "MGHComputationalPathology";
+    owner = "ImagingDataCommons";
     repo = "highdicom";
     tag = "v${version}";
     hash = "sha256-Tfy7u5MVapRE24CZLFzTnYChnH9JJ9V7FuUhDoktBFc=";

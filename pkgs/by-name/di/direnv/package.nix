@@ -7,20 +7,20 @@
   fish,
   zsh,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "direnv";
-  version = "2.37.1";
+  version = "2.38.2";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-92xjoCjH5O7wx8U7OFG8Lw9eDOAdeVKNvxBHW+TiniM=";
+    hash = "sha256-0TVuQ0TEqkkCo36zrdFbfZ+FJSVrvNA7egAcsS9YFtA=";
   };
 
-  vendorHash = "sha256-SAIGFQGACTB3Q0KnIdiKKNYY6fVjf/09wGqNr0Hkg+M=";
+  vendorHash = "sha256-3ojb8iLIzhjUZa7Gt+gJjOFy9qm4LOrFBLZ6fk5x1HM=";
 
   # we have no bash at the moment for windows
   env.BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
@@ -37,11 +37,20 @@ buildGoModule (finalAttrs: {
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
+    runHook preBuild
+
     make BASH_PATH=$BASH_PATH
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install PREFIX=$out
+    rm -rf "$out/share/fish"
+
+    runHook postInstall
   '';
 
   nativeCheckInputs = [
@@ -58,9 +67,7 @@ buildGoModule (finalAttrs: {
     runHook postCheck
   '';
 
-  postInstall = ''
-    rm -rf "$out/share/fish"
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Shell extension that manages your environment";

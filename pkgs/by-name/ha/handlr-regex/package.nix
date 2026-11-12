@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-7psjlu0qyoZYTVwq2JYJJkB76ejlmMtmstDw+liMcj8=";
   };
 
+  patches = [
+    ./shared-mime-info-2.5.patch
+  ];
+
   cargoHash = "sha256-a91WaIFBS9Rh4T/dwpLQJMoE604Tj0mVN38RKmNcZU0=";
 
   nativeBuildInputs = [

@@ -6,17 +6,18 @@
   vim,
   neovim-unwrapped,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "panvimdoc";
-  version = "5.0.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "panvimdoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O1Ufn9TEO6M8dbPa0nxArXdG3Vsi1Q+zA82kTi5wjks";
+    hash = "sha256-a0Yom5YW/3jENySjIrkupsPSssYFm8KX7sC93IALnQc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,6 +39,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ]
     }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Write documentation in pandoc markdown. Generate documentation in vimdoc";

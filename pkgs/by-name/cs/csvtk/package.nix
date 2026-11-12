@@ -7,7 +7,7 @@
   buildPackages,
 }:
 let
-  version = "0.37.0";
+  version = "0.39.0";
 in
 buildGoModule {
   pname = "csvtk";
@@ -17,10 +17,10 @@ buildGoModule {
     owner = "shenwei356";
     repo = "csvtk";
     tag = "v${version}";
-    hash = "sha256-dpWxLOckdA0tNhSM8wGqBag/cXmMFhonybN+W1+KBXA=";
+    hash = "sha256-N9zbcSTeIZEmyjCBXNQ8VX7zQP1QGuyG4BpZk8+nvQk=";
   };
 
-  vendorHash = "sha256-wi7WPwCg0MoNxgCLZO1UxG4M0g/Vo/GCiCGu8c5avyU=";
+  vendorHash = "sha256-yzgjDmk9e6uPwttMdOppJk6vSQqmjiqmhHKZGMlpFzo=";
 
   # stale upstream test: asserts byte length, but expr-lang now returns rune count
   checkFlags = [ "-skip=TestMutate3" ];

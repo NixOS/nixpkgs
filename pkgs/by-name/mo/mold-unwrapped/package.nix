@@ -1,71 +1,74 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-
-  cmake,
-  mimalloc,
-  ninja,
-  onetbb,
-  zlib,
-  zstd,
-
   buildPackages,
   clangStdenv,
+  fetchFromGitHub,
   gccStdenv,
   hello,
+  installShellFiles,
+  lib,
   mold,
   mold-unwrapped,
+  nix-update-script,
+  pkg-config,
+  runCommand,
   runCommandCC,
-  testers,
+  rustPlatform,
+  stdenv,
+  zstd,
   useMoldLinker,
-
   versionCheckHook,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mold-unwrapped";
-  version = "2.42.1";
+  version = "3.0.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3buWURGv4cnXUArWAjH+0Qwa54EAP//INe+/27Wt1S8=";
+    hash = "sha256-XigEJb7wv46XuzT9s83pllLxCqN0Va3ZN7P/Ch9qXsY=";
   };
 
+  cargoHash = "sha256-DgCFmTz+qulwXu1Oax8gBnc/6HIT6TlY8+xzBRGFvu0=";
+
+  strictDeps = true;
+
   nativeBuildInputs = [
-    cmake
-    ninja
+    installShellFiles
+    pkg-config
   ];
 
-  buildInputs = [
-    onetbb
-    zlib
-    zstd
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    mimalloc
-  ];
+  buildInputs = [ zstd ];
 
-  cmakeFlags = [
-    "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
-    "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
-  ];
+  # Upstream integration tests are way to finicky to keep around. Our internal
+  # linking tests should suffice.
+  doCheck = false;
+
+  postInstall = ''
+    ln -s $out/bin/{,ld.}mold
+
+    ${lib.optionalString stdenv.targetPlatform.isLinux ''
+      mkdir -p $out/lib/mold
+      mv $out/lib/mold-wrapper.so $out/lib/mold
+    ''}
+
+    installManPage docs/mold.1
+    ln -s $out/share/man/man1/{,ld.}mold.1.gz
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = nix-update-script { };
-    tests =
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux (
       let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
         helloTest =
           name: helloMold:
           let
             command = "$READELF -p .comment ${lib.getExe helloMold}";
-            emulator = stdenv.hostPlatform.emulator buildPackages;
           in
           runCommandCC "mold-${name}-test" { passthru = { inherit helloMold; }; } ''
             echo "Testing running the 'hello' binary which should be linked with 'mold'" >&2
@@ -92,9 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
           '';
       in
       {
-        version = testers.testVersion { package = mold-unwrapped; };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         adapter-gcc = helloTest "adapter-gcc" (
           hello.override (old: {
             stdenv = useMoldLinker gccStdenv;
@@ -108,19 +108,24 @@ stdenv.mkDerivation (finalAttrs: {
         wrapped = helloTest "wrapped" (
           hello.overrideAttrs (previousAttrs: {
             nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [ mold ];
-            NIX_CFLAGS_LINK = toString (previousAttrs.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+            env.NIX_CFLAGS_LINK = toString (previousAttrs.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
           })
         );
-      };
+        run = runCommand "mold-run-test" { } ''
+          ${emulator} ${lib.getExe mold-unwrapped} -run true
+          if [[ "$?" == 0 ]]; then
+            touch $out
+          fi
+        '';
+      }
+    );
   };
 
   meta = {
-    description = "Faster drop-in replacement for existing Unix linkers (unwrapped)";
+    description = "A high-performance ELF linker, rewritten in Rust";
     longDescription = ''
-      mold is a faster drop-in replacement for existing Unix linkers. It is
-      several times faster than the LLVM lld linker. mold is designed to
-      increase developer productivity by reducing build time, especially in
-      rapid debug-edit-rebuild cycles.
+      mold is a high-performance drop-in replacement for existing Unix linkers,
+      designed to speed up builds.
     '';
     homepage = "https://github.com/rui314/mold";
     changelog = "https://github.com/rui314/mold/releases/tag/v${finalAttrs.version}";

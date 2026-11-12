@@ -6,7 +6,9 @@
   installShellFiles,
   pkg-config,
   curl,
+  libssh2,
   openssl,
+  sqlite,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -15,14 +17,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij-unwrapped";
-  version = "0.45.1";
+  version = "0.46.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pp++8CTIM4PuAYOjM7GnzU4TXTaw8XuDMow5k/7KQgY=";
+    hash = "sha256-JpSNWC6jHahirUmnWRZKiVRonFjjIZx9j0V//6t1+iM=";
   };
 
   # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
@@ -36,8 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail ', "web_server_capability"' ""
   '';
 
-  cargoHash = "sha256-rCK7FyAUIjUq6dxEw9YBaGm29xYvlYjX0b1xHU03XVU=";
+  cargoHash = "sha256-i3Vh7w9YeGUkGIsbqA2UIiLtMqsSC+/ehdSDIfTckM8=";
 
+  env.LIBSSH2_SYS_USE_PKG_CONFIG = 1;
   env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
@@ -48,7 +51,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     curl
+    libssh2
     openssl
+    sqlite
   ];
 
   nativeCheckInputs = [

@@ -8,6 +8,7 @@
   mixCompileHook,
   mixAppConfigPatchHook,
 
+  cacert,
   lib,
   stdenv,
   writeText,
@@ -34,6 +35,8 @@ lib.extendMkDerivation {
       # among other things to keep builds more reproducible. See their docs for more:
       # https://www.erlang.org/doc/man/compile
       erlangDeterministicBuilds ? true,
+
+      enableHex ? true,
       ...
     }@args:
     {
@@ -73,22 +76,31 @@ lib.extendMkDerivation {
         addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
       '';
 
-      nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
-        erlang
-        elixir
-        hex
+      nativeBuildInputs =
+        (args.nativeBuildInputs or [ ])
+        ++ [
+          erlang
+          elixir
 
-        beamCopySourceHook
-        beamModuleInstallHook
-        mixBuildDirHook
-        mixCompileHook
-        mixAppConfigPatchHook
-      ];
+          beamCopySourceHook
+          beamModuleInstallHook
+          mixBuildDirHook
+          mixCompileHook
+          mixAppConfigPatchHook
+        ]
+        ++ lib.optionals enableHex [
+          hex
+        ];
 
       propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ beamDeps;
 
       passthru = (args.passthru or { }) // {
         inherit beamDeps;
       };
+    }
+    // lib.optionalAttrs (args.name == "castore") {
+      postPatch = (args.postPatch or "") + ''
+        cp ${cacert}/etc/ssl/certs/ca-bundle.crt priv/cacerts.pem
+      '';
     };
 }

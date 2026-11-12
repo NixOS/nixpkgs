@@ -42,7 +42,7 @@ let
       # Flaky numerical assertion (AssertionError)
       "test_baseline_predict"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # floating point mismatch on aarch64
       # 27079905.88052468 too far from 27079905.880496684
       "test_coxnet"

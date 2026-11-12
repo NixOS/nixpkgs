@@ -22,9 +22,10 @@
   libmpdclient,
   libnl,
   libpulseaudio,
-  libsigcxx,
+  libsigcxx_2_0,
   libxkbcommon,
   meson,
+  modemmanager,
   ncurses,
   ninja,
   pipewire,
@@ -51,6 +52,7 @@
   gpsSupport ? true,
   inputSupport ? true,
   jackSupport ? true,
+  mangoSupport ? true,
   mpdSupport ? true,
   mprisSupport ? stdenv.hostPlatform.isLinux,
   niriSupport ? true,
@@ -63,8 +65,10 @@
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   traySupport ? true,
   udevSupport ? true,
+  umbrielSupport ? true,
   upowerSupport ? true,
   wireplumberSupport ? true,
+  wwanSupport ? true,
   withMediaPlayer ? mprisSupport && false,
   nix-update-script,
 }:
@@ -72,7 +76,8 @@
 let
   libcava =
     let
-      version = "0.10.7-beta";
+      # This comes from subprojects/libcava.wrap in the waybar sources
+      version = "8d6e963db9cd29c2b3b5a5df1e46bb65c410f9cc";
     in
     {
       inherit version;
@@ -80,20 +85,20 @@ let
       src = fetchFromGitHub {
         owner = "LukashonakV";
         repo = "cava";
-        tag = "v${version}";
-        hash = "sha256-IX1B375gTwVDRjpRfwKGuzTAZOV2pgDWzUd4bW2cTDU=";
+        rev = version;
+        hash = "sha256-tWY3D3sEVFDHJjO/enCu0lEobM1CF4vupavOHgIslnA=";
       };
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     tag = finalAttrs.version;
-    hash = "sha256-49ZKgK96a9uFip+svOdnw397xcEjiftXzd9gyv1H3sU=";
+    hash = "sha256-mHBaRnquV9tSt8FuaAU9/HG7B8gditQX6p3NgwiLmMY=";
   };
 
   postUnpack = lib.optionalString cavaSupport ''
@@ -123,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-layer-shell
     gtkmm3
     jsoncpp
-    libsigcxx
+    libsigcxx_2_0
     libxkbcommon
     spdlog
     wayland
@@ -150,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional udevSupport udev
   ++ lib.optional upowerSupport upower
   ++ lib.optional wireplumberSupport wireplumber
+  ++ lib.optional wwanSupport modemmanager
   ++ lib.optional (cavaSupport || pipewireSupport) pipewire
   ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
 
@@ -177,10 +183,13 @@ stdenv.mkDerivation (finalAttrs: {
       "tests" = runTests;
       "upower_glib" = upowerSupport;
       "wireplumber" = wireplumberSupport;
+      "wwan" = wwanSupport;
     })
     ++ (lib.mapAttrsToList lib.mesonBool {
       "experimental" = experimentalPatches;
+      "mango" = mangoSupport;
       "niri" = niriSupport;
+      "umbriel" = umbrielSupport;
     });
 
   env = lib.optionalAttrs systemdSupport {

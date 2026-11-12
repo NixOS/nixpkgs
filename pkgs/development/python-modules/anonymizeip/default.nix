@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python library for anonymizing IP addresses";
     homepage = "https://github.com/samuelmeuli/anonymize-ip";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

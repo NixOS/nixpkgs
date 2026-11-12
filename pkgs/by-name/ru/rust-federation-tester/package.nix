@@ -4,6 +4,7 @@
   lib,
   nixosTests,
   cacert,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   cargoHash = "sha256-nTcE8eqQO0CFdeH0jjT6m1fd4qhG7e/CDpdZHkBq9f8=";
   cargoTestFlags = finalAttrs.cargoBuildFlags;
@@ -28,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "migration"
   ];
+
+  buildInputs = [ sqlite ];
 
   nativeCheckInputs = [ cacert ];
 

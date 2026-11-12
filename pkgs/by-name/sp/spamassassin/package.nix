@@ -67,12 +67,17 @@ perlPackages.buildPerlPackage rec {
       openssl
     ];
 
+  strictDeps = true;
+
   makeFlags = [
     "PERL_BIN=${perlPackages.perl}/bin/perl"
     "ENABLE_SSL=yes"
   ];
 
-  makeMakerFlags = [ "SYSCONFDIR=/etc LOCALSTATEDIR=/var/lib/spamassassin" ];
+  makeMakerFlags = [
+    "SYSCONFDIR=/etc"
+    "LOCALSTATEDIR=/var/lib/spamassassin"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -136,6 +141,8 @@ perlPackages.buildPerlPackage rec {
         --prefix C_INCLUDE_PATH : ${lib.makeSearchPathOutput "include" "include" [ libxcrypt ]}
     done
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://spamassassin.apache.org/";

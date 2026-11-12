@@ -9,6 +9,7 @@
 
   # nativeBuildInputs
   cmake,
+  pyprojectVersionPatchHook,
 
   # dependencies
   torch,
@@ -22,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "deepwave";
   version = "0.0.27";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ar4";
@@ -38,6 +38,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pyprojectVersionPatchHook
   ];
   dontUseCmakeConfigure = true;
 

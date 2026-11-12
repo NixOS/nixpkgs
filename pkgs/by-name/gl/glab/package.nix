@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitLab,
   installShellFiles,
   makeBinaryWrapper,
@@ -11,34 +11,27 @@
   gitMinimal,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "glab";
-  version = "1.114.0";
+  version = "1.128.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V396Fo7YSd5TL/EO82WoF3b+mWlBtrT2kTVCysm5sGs=";
-    leaveDotGit = true;
-    postFetch = ''
-      cd "$out"
-      git rev-parse --short HEAD > $out/COMMIT
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
+    hash = "sha256-Uihcx/2y+FMp30JikEWd91/AL6RxUBeZjuCmtUlMP4g=";
   };
 
-  vendorHash = "sha256-UvdML7WKMFJwRqscXhladUDxVXwAWaisWc8c6B1wJNg=";
+  vendorHash = "sha256-wlDtdRd/op7aLQszGrw7DTHDAGjXVOgpupGHu6MRn7M=";
 
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
-
-  preBuild = ''
-    ldflags+=" -X main.commit=$(cat COMMIT)"
-  '';
 
   nativeBuildInputs = [
     installShellFiles
@@ -65,6 +58,17 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     git init
   '';
+
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "Test_addTelemetryHook"
+        "Test_buildTelemetryEvent"
+        "Test_sendTelemetryData"
+      ];
+    in
+    [ "-skip=^(${lib.concatStringsSep "|" skippedTests})" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [

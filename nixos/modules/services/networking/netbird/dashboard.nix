@@ -60,6 +60,10 @@ in
           AUTH_AUDIENCE = "netbird";
           AUTH_CLIENT_ID = "netbird";
           AUTH_SUPPORTED_SCOPES = "openid profile email";
+          NETBIRD_AGENT_NETWORK_ENABLED = false;
+          NETBIRD_AGENT_NETWORK_ONLY = false;
+          NETBIRD_CLOUD = false;
+          NETBIRD_LICENSED = false;
           NETBIRD_TOKEN_SOURCE = "idToken";
           USE_AUTH0 = false;
         }
@@ -115,6 +119,10 @@ in
         AUTH_AUDIENCE = "netbird"; # must be set for your devices to be able to log in
         AUTH_CLIENT_ID = "netbird";
         AUTH_SUPPORTED_SCOPES = "openid profile email";
+        NETBIRD_AGENT_NETWORK_ENABLED = false;
+        NETBIRD_AGENT_NETWORK_ONLY = false;
+        NETBIRD_CLOUD = false;
+        NETBIRD_LICENSED = false;
         NETBIRD_TOKEN_SOURCE = "idToken";
         USE_AUTH0 = false;
       });
@@ -133,10 +141,21 @@ in
                 "$AUTH_REDIRECT_URI"
                 "$AUTH_SILENT_REDIRECT_URI"
                 "$AUTH_SUPPORTED_SCOPES"
+                "$NETBIRD_AGENT_NETWORK_ENABLED"
+                "$NETBIRD_AGENT_NETWORK_ONLY"
+                "$NETBIRD_ANALYTICS_EXCLUDED_EMAILS"
+                "$NETBIRD_ANNOUNCEMENT"
+                "$NETBIRD_AUTH_SERVICE_URL"
+                "$NETBIRD_CLOUD"
                 "$NETBIRD_DRAG_QUERY_PARAMS"
                 "$NETBIRD_GOOGLE_ANALYTICS_ID"
                 "$NETBIRD_GOOGLE_TAG_MANAGER_ID"
                 "$NETBIRD_HOTJAR_TRACK_ID"
+                "$NETBIRD_HUBSPOT_ONBOARDING_FORM_ID"
+                "$NETBIRD_HUBSPOT_PORTAL_ID"
+                "$NETBIRD_HUBSPOT_SIGNUP_FORM_ID"
+                "$NETBIRD_HUBSPOT_SURVEY_FORM_ID"
+                "$NETBIRD_LICENSED"
                 "$NETBIRD_MGMT_API_ENDPOINT"
                 "$NETBIRD_MGMT_GRPC_API_ENDPOINT"
                 "$NETBIRD_TOKEN_SOURCE"

@@ -8,36 +8,54 @@
   npmHooks,
   fetchNpmDeps,
   pkg-config,
+  aws-lc,
   webkitgtk_4_1,
   libayatana-appindicator,
   libxscrnsaver,
   cacert,
   wrapGAppsHook3,
   autoPatchelfHook,
+  nix-update-script,
+  swift,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
-  version = "0.17.4";
+  version = "0.18.2";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     name = "${finalAttrs.pname}-${finalAttrs.version}-source";
     owner = "processone";
     repo = "fluux-messenger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HHXdWdKXf0qLKNJQEA1oPPpv4kxpfNuPH2uXEMo3DHg=";
+    hash = "sha256-AFtf5GIrecR/MKDMq6Mh858TJXow9pNDgqnlQriI1T8=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-Gy1zXHsclHo0FNfZh8v0GLfSKel4boSAKBKIYxGfSW0=";
+    hash = "sha256-OFJqWMLYPQfkp3pcENkJCwVEM8cv1uZgODOuNB3eFdc=";
   };
 
   cargoRoot = "apps/fluux/src-tauri";
-  cargoHash = "sha256-/Gx4fu9fBL8IEZqMP+ePpv5hvTwLrl2Nywf76g0d/Fw=";
+
+  # The swift-rs pin is a macOS-only workaround that Cargo.lock lists as
+  # [[patch.unused]]; fetchCargoVendor does not vendor it, so the offline
+  # build would try to fetch it.
+  postPatch = ''
+    substituteInPlace ${finalAttrs.cargoRoot}/Cargo.toml \
+      --replace-fail 'swift-rs = { git = ' '# swift-rs = { git = '
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace ${finalAttrs.cargoRoot}/tauri.macos.conf.json \
+      --replace-fail 'node scripts/tauri-macos-share.mjs' 'node apps/fluux/scripts/tauri-macos-share.mjs'
+    substituteInPlace apps/fluux/scripts/tauri-macos-share.mjs \
+      --replace-fail "run('/usr/bin/xcrun', ['swiftc'," "run('swiftc', [" \
+      --replace-fail "run('/usr/bin/xcrun', ['lipo'," "run('lipo', ["
+  '';
+
+  cargoHash = "sha256-7xLyxDMHfU3yBENE+lDTS9TMu3YeXE6B/+TKBYqGeLA=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -45,19 +63,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npmHooks.npmConfigHook
     pkg-config
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ swift ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (wrapGAppsHook3.override { isGraphical = true; })
+    wrapGAppsHook3
     autoPatchelfHook
   ];
 
   buildInputs = [
-    cacert
+    aws-lc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libayatana-appindicator
     libxscrnsaver
   ];
+
+  nativeCheckInputs = [ cacert ];
 
   # libayatana-appindicator is not in the RUNPATH by default
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ libayatana-appindicator ];
@@ -69,6 +90,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tauriInstallHook only works when we are in cargoRoot
   preInstall = "pushd $buildAndTestSubdir";
   postInstall = "popd";
+
+  # Stripping the Share Extension executable invalidates its bundle signature.
+  stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "FluuxShare" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "XMPP client for communities and organizations";

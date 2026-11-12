@@ -85,7 +85,5 @@ in
   ++ optionals (zlib != null) [ zlib ]
   ++ optionals (langGo && stdenv.hostPlatform.isMusl) [ libucontext ];
 
-  depsTargetTarget = optionals (
-    !withoutTargetLibc && threadsCross != { } && threadsCross.package != null
-  ) [ threadsCross.package ];
+  depsTargetTarget = optionals (!withoutTargetLibc && threadsCross != null) [ threadsCross ];
 }

@@ -11,13 +11,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "domanchi";
     repo = "gibberish-detector";
     rev = "v${finalAttrs.version}";
-    sha256 = "1si0fkpnk9vjkwl31sq5jkyv3rz8a5f2nh3xq7591j9wv2b6dn0b";
+    hash = "sha256-C9hmltg8yZDKwX1AK1xR6Oex/ZQF6zAon3Knae90IOo=";
   };
 
   build-system = [ setuptools ];

@@ -4,24 +4,26 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  nix-update-script,
   stdenv,
   versionCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.73.2";
+  version = "3.12.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OadbfQ0onCAFtPuDkgxxdNoqAElHbMHoNTqSAXEEAcQ=";
+    hash = "sha256-QAsb2mLCJR2GWXp3/J8DrIaKHlFx6D+fiW5Nf8ksmJc=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-twmFBZ+uDk/43N5Fy7hq3OWjG1eKaSswgqj11pLhY5Y=";
+  vendorHash = "sha256-XNBoFr7dF41tL0JqRv/MB6cO8z6HZ53NMoXcKs5eqjg=";
 
+  strictDeps = true;
   nativeBuildInputs = [ installShellFiles ];
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs ]
@@ -34,7 +36,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
+    "-X github.com/werf/werf/v3/pkg/werf.Version=v${finalAttrs.version}"
   ]
   ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
     "-extldflags=-static"
@@ -49,7 +51,6 @@ buildGoModule (finalAttrs: {
     "dfssh"
   ]
   ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
-    "cni"
     "exclude_graphdriver_devicemapper"
     "netgo"
     "no_devmapper"
@@ -57,24 +58,9 @@ buildGoModule (finalAttrs: {
     "static_build"
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
-  preCheck = ''
-    # Test all packages.
-    unset subPackages
-
-    # Remove tests that fail or require external services.
-    rm -rf \
-      integration/suites \
-      pkg/container_backend/buildah_backend_data_archives_test.go \
-      pkg/true_git/*_test.go \
-      pkg/werf/exec/*_test.go \
-      test/e2e \
-      test/legacy_e2e
-  ''
-  + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
-    # A workaround for osusergo.
-    export USER=nixbld
-  '';
+  # As of 3.0.0 tests are way to burdensome to maintain because of a bespoke way
+  # they are handled and a general sandbox incompatability.
+  doCheck = false;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -87,6 +73,8 @@ buildGoModule (finalAttrs: {
         --$shell <($out/bin/werf completion --shell=$shell)
     done
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "GitOps delivery tool";

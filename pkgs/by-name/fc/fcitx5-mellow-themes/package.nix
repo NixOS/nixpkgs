@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "fcitx5-mellow-themes";
-  version = "0-unstable-2024-11-11";
+  version = "0-unstable-2026-09-10";
 
   src = fetchFromGitHub {
     owner = "sanweiya";
     repo = "fcitx5-mellow-themes";
-    rev = "9694953eb1bd6c9363cf9c76833347bfa5ffd886";
-    hash = "sha256-+wJOPUmUkR/uR9zdFyrV86D6nsYnC94zHXkEfjmAVjs=";
+    rev = "2c93b0ea3418a55c03f526d963c84a7ccde2c1e9";
+    hash = "sha256-y7Q7BgObG99l0+8UVn24TibmUK3Xdq+/1N/G4o9eYAY=";
   };
 
   nativeBuildInputs = [ jdupes ];

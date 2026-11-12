@@ -9,7 +9,7 @@
 let
 
   # To create Gemfile.lock and gemset.nix
-  # > nix-shell -p bundix bundler zlib
+  # > NIX_CFLAGS_COMPILE="-Wno-error=format-security" nix-shell -p bundix bundler zlib
   # > bundle install
   # > bundix
   gems = bundlerEnv {
@@ -23,13 +23,13 @@ stdenv.mkDerivation {
 
   pname = "polar";
   # The package has no releases so let's use the latest commit
-  version = "unstable-2021-01-12";
+  version = "0-unstable-2026-06-25";
 
   src = fetchFromGitHub {
     owner = "cmaion";
     repo = "polar";
-    rev = "be15f5f897f8a919dd639009873147dca2a9cea0";
-    sha256 = "0gqkqfrqnrsy6avg372xwqj22yz8g6r2hnzbw6197b1rf7zr1il7";
+    rev = "f5adbd57fa74dc808999b1589237258d6cf10558";
+    sha256 = "sha256-ileJGlnphUBBShyHXLR5gMAPnTqQ8GCBYFzxyPhX5qM=";
   };
 
   prePatch = ''

@@ -8,7 +8,6 @@
   fetchpatch,
 
   # build time
-  apple-sdk_14,
   apple-sdk_15,
   buildPackages,
   cargo,
@@ -23,7 +22,6 @@
   zip,
 
   # runtime
-  icu75,
   icu77,
   nspr,
   readline,
@@ -32,7 +30,7 @@
 }:
 
 let
-  apple-sdk = (if (lib.versionAtLeast version "140") then apple-sdk_15 else apple-sdk_14);
+  apple-sdk = apple-sdk_15;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spidermonkey";
@@ -52,12 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     # use pkg-config for all systems
     ./always-check-for-pkg-config-128.patch
     ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot-128.patch
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
-    # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
-    ./fix-float-i686.patch
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "140") [
     # mozjs-140.pc does not contain -DXP_UNIX on Linux
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1973994
     (fetchpatch {
@@ -65,7 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-SsyO5g7wlrxE7y2+VTHfmUDamofeZVqge8fv2y0ZhuU=";
     })
   ]
-  ++ lib.optionals (lib.versionAtLeast version "140" && stdenv.hostPlatform.is32bit) [
+  ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
+    # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
+    ./fix-float-i686.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
     ./fix-32bit-build.patch
   ];
 
@@ -84,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    (if (lib.versionAtLeast version "140") then icu77 else icu75)
+    icu77
     nspr
     readline
     zlib
@@ -113,8 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-release"
     "--enable-shared-js"
     "--disable-debug"
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "140") [
     # For pkgconfig file.
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1907030
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1957023
@@ -139,25 +133,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
-    export LIBXUL_DIST=$out
-    export PYTHON="${buildPackages.python3.interpreter}"
-    export M4=m4
-    export AWK=awk
-    export AS=$CC
-    export AC_MACRODIR=$PWD/build/autoconf/
-    patchShebangs build/cargo-linker
-    # We can't build in js/src/, so create a build dir
-    mkdir obj
-    cd obj/
-    configureScript=../js/src/configure
-  '';
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+      # match the vendor too, so rustc picks riscv64gc over riscv64-oe-linux-gnu
+      substituteInPlace build/moz.configure/rust.configure \
+        --replace-fail \
+          'and c.target.raw_cpu == host_or_target.raw_cpu' \
+          'and c.target.raw_cpu == host_or_target.raw_cpu and c.target.vendor == host_or_target.vendor'
+    ''
+    + ''
+      export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
+      export LIBXUL_DIST=$out
+      export PYTHON="${buildPackages.python3.interpreter}"
+      export M4=m4
+      export AWK=awk
+      export AS=$CC
+      export AC_MACRODIR=$PWD/build/autoconf/
+      patchShebangs build/cargo-linker
+      # We can't build in js/src/, so create a build dir
+      mkdir obj
+      cd obj/
+      configureScript=../js/src/configure
+    '';
 
-  env = lib.optionalAttrs (lib.versionAtLeast version "140") {
-    # '-Wformat-security' ignored without '-Wformat'
-    NIX_CFLAGS_COMPILE = "-Wformat";
-  };
+  # '-Wformat-security' ignored without '-Wformat'
+  env.NIX_CFLAGS_COMPILE = "-Wformat";
 
   # Remove unnecessary static lib
   preFixup = ''

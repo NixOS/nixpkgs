@@ -1,22 +1,32 @@
 {
+  aws-lc,
   fetchFromGitHub,
   lib,
+  libgit2,
   nix-update-script,
+  pkg-config,
   versionCheckHook,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unftp";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
-    owner = "bolcom";
+    owner = "Cloudinvoke";
     repo = "unftp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/2IzVr3QQl7UV3WjG1bWntYdx2RXqKWrTkcwIBgnCsk=";
+    hash = "sha256-Z9Cse4/QO7uH46foL7lagtffZGhfZ24rS/yP3A9s9zU=";
   };
 
-  cargoHash = "sha256-2Mwp/bK0JFdCtCDkAAdpFpf8zxE0ueZNXTkZDaamGyg=";
+  cargoHash = "sha256-fR03iwfd5QZ3iU4jxYcQbVcgR+s+dUIRIIgHDt+n8EA=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    libgit2
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

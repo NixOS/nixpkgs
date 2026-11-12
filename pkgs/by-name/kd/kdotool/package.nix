@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
+  nix-update-script,
   rustPlatform,
   pkg-config,
   dbus,
@@ -23,10 +23,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "xdotool clone for KDE Wayland";
     homepage = "https://github.com/jinliu/kdotool";
+    changelog = "https://github.com/jinliu/kdotool/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kotatsuyaki ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = lib.platforms.linux;
+    mainProgram = "kdotool";
   };
 })

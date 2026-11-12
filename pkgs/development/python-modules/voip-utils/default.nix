@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "voip-utils";
-  version = "0.4.3";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voip-utils";
     tag = "v${version}";
-    hash = "sha256-dbWkUYi48MGbFN1uW++aJbY8+yiyD+dX2dsow+ZVegY=";
+    hash = "sha256-gtLcUUiZlrBIilowTT6jB2BcSEfGwqu3vop8I0zDwXo=";
   };
 
   postPatch = ''

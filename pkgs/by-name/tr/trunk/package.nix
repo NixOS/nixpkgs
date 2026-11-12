@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,12 +18,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-0T8ZkBA1Zf4z2HXYeBwJ+2EGoUpxGrqSb4fS4CnL28A=";
   };
 
+  cargoPatches = [
+    ./update-libdeflate-gcc-16.patch # https://github.com/NixOS/nixpkgs/issues/569854
+  ];
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-/5zvbSlMzZHxnAwuu0Jd6WVVjxJtIAQpRwZZHgYyPbs=";
+  cargoHash = "sha256-8HwfZ9dyplxc405rM33uNnjNt5JBFGWcmDNZJGMha9s=";
 
   meta = {
     homepage = "https://github.com/trunk-rs/trunk";

@@ -23,7 +23,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "folia-major";
-  version = "0.7.4";
+  version = "0.7.15";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -32,10 +32,10 @@ buildNpmPackage (finalAttrs: {
     owner = "chthollyphile";
     repo = "folia-major";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cTnxh+UZ9XTHdH0193sqVaFnNhLU1PMjBlyUHrurYDY=";
+    hash = "sha256-TzplbxRUH10bSvV6gnRkaZJfp91TQq21pvN5haTFYfM=";
   };
 
-  npmDepsHash = "sha256-xlJBQjg3iwd05crLaomlBAF9SAxH4Il9NmU3rYYugYo=";
+  npmDepsHash = "sha256-7SXUneDyMmqMzyEI/oXTGVD4FOq1pQf/aSS995fz9oU=";
 
   nativeBuildInputs = [
     makeWrapper

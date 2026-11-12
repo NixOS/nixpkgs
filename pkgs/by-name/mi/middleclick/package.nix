@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "middleclick";
-  version = "3.2.0";
+  version = "3.3.0";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://github.com/artginzburg/MiddleClick/releases/download/${finalAttrs.version}/MiddleClick.zip";
-    hash = "sha256-6T8XYSp3QTxefO+UI/DcnbFm1m841B14OpkOLqa6aYw=";
+    hash = "sha256-VbYVeb6hv/lXXQquVTFvgmreHPyJSNqRFRvMmd85V9o=";
   };
 
   strictDeps = true;

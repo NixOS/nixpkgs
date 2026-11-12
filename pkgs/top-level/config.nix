@@ -348,6 +348,17 @@ let
       '';
     };
 
+    enableCudaDriverCompat = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable the cuda_compat package which provides user mode backports of newer kernel
+        mode driver functionality.
+        Only enable this if your host driver is older than the driver provided by the default
+        cudaPackages package set.
+      '';
+    };
+
     replaceBootstrapFiles = mkMassRebuild {
       type = types.functionTo (types.attrsOf types.package);
       default = lib.id;
@@ -527,7 +538,10 @@ in
           config.problems.matchers = [ { kind = "maintainerless"; handler = "warn"; } ];
 
         See this page for more details: https://nixos.org/manual/nixpkgs/unstable#sec-problems
-      '';
+      ''
+      ++ lib.optionals (config ? pulseaudio) [
+        "`config.pulseaudio` is deprecated, and no longer has an effect. Please remove it from your Nixpkgs configuration."
+      ];
 
     assertions =
       # Collect the assertions from the problems.matchers.* submodules, propagate them into here

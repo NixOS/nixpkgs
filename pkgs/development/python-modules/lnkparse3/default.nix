@@ -33,5 +33,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Matmaus/LnkParse3/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "lnkparse";
   };
 }

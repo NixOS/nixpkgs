@@ -3,6 +3,7 @@
   stdenv,
   replaceVars,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   gettext,
   makeWrapper,
@@ -10,7 +11,7 @@
   vala,
   wrapGAppsHook3,
   dbus,
-  systemd,
+  systemdLibs,
   dconf ? null,
   glib,
   gdk-pixbuf,
@@ -29,6 +30,7 @@
   libnotify ? null,
   enableUI ? !libOnly,
   withWayland ? !libOnly,
+  withSystemd ? !libOnly && lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   libxkbcommon,
   wayland,
   wayland-protocols,
@@ -88,6 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
       PYTHON = null;
     })
     ./build-without-dbus-launch.patch
+
+    # Fix crashes in `gtk_im_multicontext_set_delegate` with latest GTK
+    # GTK issue: https://gitlab.gnome.org/GNOME/gtk/-/work_items/8341
+    # Upstream PR: https://github.com/ibus/ibus/pull/2929
+    (fetchpatch {
+      name = "fix-gtk-crashes.patch";
+      url = "https://github.com/ibus/ibus/commit/c534999a9dbea2666864250d74e058ecfb46e76f.patch";
+      hash = "sha256-1h48hvdrDh2Qh4+SufL147CxlfiwvP/Jv509X0WnbrA=";
+    })
   ];
 
   outputs = [
@@ -127,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature (!libOnly && dconf != null) "dconf")
     (lib.enableFeature (!libOnly && libnotify != null) "libnotify")
     (lib.enableFeature withWayland "wayland")
+    (lib.enableFeature withSystemd "systemd-services")
     (lib.enableFeature enableUI "ui")
     (lib.enableFeature (!libOnly) "gtk3")
     (lib.enableFeature (!libOnly) "gtk4")
@@ -177,13 +189,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
-    systemd
     dconf
-    python3.pkgs.pygobject3 # for pygobject overrides
     isocodes
     json-glib
     libx11
-    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
+  ]
+  ++ lib.optionals withSystemd [
+    systemdLibs
   ]
   ++ lib.optionals (!libOnly) [
     gtk3
@@ -191,6 +203,8 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libdbusmenu-gtk3
     libnotify
+    python3.pkgs.pygobject3 # for pygobject overrides
+    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ]
   ++ lib.optionals withWayland [
     libxkbcommon

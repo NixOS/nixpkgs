@@ -11,7 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyspread";
   version = "2.4.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "pyspread";
@@ -50,8 +49,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     #py-moneyed # currency & money classes
     #pycel # compile Excel spreadsheets to Python code
   ];
-
-  strictDeps = true;
 
   doCheck = true;
   pythonImportsCheck = [ "pyspread" ];

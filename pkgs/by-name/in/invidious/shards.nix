@@ -1,8 +1,8 @@
 {
   "ameba" = {
     url = "https://github.com/crystal-ameba/ameba.git";
-    rev = "v1.6.1";
-    sha256 = "1qlgqpgycfxvvrfzih7b9ayb6fvkffz5aw0msbj70z2q7wvsq29p";
+    rev = "v1.7.0";
+    sha256 = "0blfyizcajyrgbfxhiwnvf1xmz3wfx6kpf9jf8x7daxihany4r9z";
   };
   "athena-negotiation" = {
     url = "https://github.com/athena-framework/negotiation.git";
@@ -51,8 +51,8 @@
   };
   "spectator" = {
     url = "https://github.com/icy-arctic-fox/spectator.git";
-    rev = "v0.10.6";
-    sha256 = "0w6mv1q44is2m19pyspkyiwm84h55nchsm4pp82gdbb0j9ylhckx";
+    rev = "v0.12.4";
+    sha256 = "1ykq1h7xl7zdssgk4ml8x3g17k4q0mz6kfddqjryx7xzd91s3x2y";
   };
   "sqlite3" = {
     url = "https://github.com/crystal-lang/crystal-sqlite3.git";

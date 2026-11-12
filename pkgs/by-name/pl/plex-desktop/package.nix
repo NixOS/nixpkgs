@@ -8,6 +8,7 @@
   ffmpeg_6-headless,
   lib,
   libdrm,
+  libdeflate,
   libedit,
   libgbm,
   libpulseaudio,
@@ -37,8 +38,8 @@
 }:
 let
   pname = "plex-desktop";
-  version = "1.112.0";
-  rev = "87";
+  version = "1.115.0";
+  rev = "88";
   meta = {
     homepage = "https://plex.tv/";
     description = "Streaming media player for Plex";
@@ -67,7 +68,7 @@ let
 
     src = fetchurl {
       url = "https://api.snapcraft.io/api/v1/snaps/download/qc6MFRM433ZhI1XjVzErdHivhSOhlpf0_${rev}.snap";
-      hash = "sha512-xDBnqPkYIpSsUe+X6oalecNz1bsX0O3pXUTI9GBZLAsT+4U4qdovn2ILPh4APJaqwNEswoIYepkjTSmm9pOI9A==";
+      hash = "sha512-ofqr1B31aVpymFD381zlB66Dh93G9WqqRZjTPDTlG7IV90BPiPNgDSxdbci60HARP0zD6XnZa5kuqERqbupwZw==";
     };
 
     nativeBuildInputs = [
@@ -79,6 +80,7 @@ let
     buildInputs = [
       elfutils
       ffmpeg_6-headless
+      libdeflate
       libedit
       libgbm
       libpulseaudio
@@ -126,19 +128,17 @@ let
       rm $out/lib/libswresample.so*
       rm $out/lib/libva-*.so*
       rm $out/lib/libva.so*
-      rm $out/lib/libEGL.so*
       rm $out/lib/libdrm.so*
-      rm $out/lib/libdrm*
 
       # Keep dependencies where the version from nixpkgs is higher.
       cp usr/lib/x86_64-linux-gnu/libasound.so.2 $out/lib/libasound.so.2
       cp usr/lib/x86_64-linux-gnu/libjbig.so.0 $out/lib/libjbig.so.0
       cp usr/lib/x86_64-linux-gnu/libjpeg.so.8 $out/lib/libjpeg.so.8
       cp usr/lib/x86_64-linux-gnu/liblcms2.so.2 $out/lib/liblcms2.so.2
-      cp usr/lib/x86_64-linux-gnu/libpci.so.3.6.4 $out/lib/libpci.so.3
+      cp usr/lib/x86_64-linux-gnu/libpci.so.3.7.0 $out/lib/libpci.so.3
       cp usr/lib/x86_64-linux-gnu/libsnappy.so.1.1.8 $out/lib/libsnappy.so.1
       cp usr/lib/x86_64-linux-gnu/libtiff.so.5 $out/lib/libtiff.so.5
-      cp usr/lib/x86_64-linux-gnu/libwebp.so.6 $out/lib/libwebp.so.6
+      cp usr/lib/x86_64-linux-gnu/libwebp.so.7 $out/lib/libwebp.so.7
       cp usr/lib/x86_64-linux-gnu/libxkbfile.so.1.0.2 $out/lib/libxkbfile.so.1
       cp usr/lib/x86_64-linux-gnu/libxslt.so.1.1.34 $out/lib/libxslt.so.1
 

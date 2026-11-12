@@ -25,13 +25,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.28.1";
+  version = "0.29.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zRvJ9/LVAIoW2qKveqD6WSdr0jDypPrbQdw1aatRS70=";
+    hash = "sha256-9L9H1vVmPwTx2gvtWF7P5AwmlW1jtO4I80xXs9eyjuY=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -59,8 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     "CMAKE_INSTALL_BINDIR" = "bin";
     "CMAKE_INSTALL_LIBDIR" = "lib";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -111,12 +112,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH :  ${
-      lib.makeBinPath [
-        nodejs
-        (placeholder "out")
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      nodejs
+      (placeholder "out")
+    ])
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -151,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       zstg
       nolight132
+      miniharinn
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "vicinae";

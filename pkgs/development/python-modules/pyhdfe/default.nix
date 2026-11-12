@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyhdfe";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeffgortmaker";
     repo = "pyhdfe";
     tag = "v${version}";
-    hash = "sha256-UXVQHf4Nmq/zQZtPaLba4TShhpgPUBwPM+zCEa8qaKs=";
+    hash = "sha256-ug071o9tMtEWIIdNSNrOWm07Mt6L173aeUIpWBnDiNQ=";
   };
 
   build-system = [ setuptools ];

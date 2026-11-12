@@ -6,12 +6,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "asmc-linux";
-  version = "2.39.07";
+  version = "2.41";
   src = fetchFromGitHub {
     owner = "nidud";
     repo = "asmc_linux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JtJsyaw4UqMf9epMLGH+iQA0FYYlE9k2NG1aPOu6pec=";
+    hash = "sha256-2Otg/l0xwNfp0x9wStCTh06Y+/b0vKHELvRsJfkeRK0=";
   };
 
   enableParallelBuilding = true;

@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  aws-lc,
+  zstd,
 
   # tests
   datafusion,
@@ -17,18 +20,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyiceberg-core";
-  version = "0.9.1";
+  version = "0.11.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PE19tUEk3VmJ9h4JiBVYgbAVuQ3EzSngESj+CZc7ODs=";
+    hash = "sha256-mNlMnIHEdp5HozBJ4wDHbg186HOg09btD4dhsLZmI/I=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/bindings/python";
+  cargoRoot = "../..";
+
+  # The workspace root is outside of `sourceRoot`, hence not writable
+  env.CARGO_TARGET_DIR = "./target";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
@@ -36,13 +42,20 @@ buildPythonPackage (finalAttrs: {
       version
       src
       sourceRoot
+      cargoRoot
       ;
-    hash = "sha256-aEk+K9dWwgkiE7Wx2J+rF3JLQ5deTqRm2sfFSphyALY=";
+    hash = "sha256-HYrwozAfgqUa3eY9HCF5zumC3JsJFhYN6KnuDwVJHr8=";
   };
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
   ];
 
   pythonImportsCheck = [ "pyiceberg_core" ];
@@ -56,11 +69,6 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ pyiceberg.optional-dependencies.pyarrow
   ++ pyiceberg.optional-dependencies.sql-sqlite;
-
-  disabledTests = [
-    # AttributeError: 'function' object has no attribute 'cache_clear'
-    "test_read_manifest_entry"
-  ];
 
   # Circular dependency on pyiceberg
   doCheck = false;

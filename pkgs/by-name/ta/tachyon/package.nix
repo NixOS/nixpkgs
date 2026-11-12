@@ -50,8 +50,6 @@ stdenv.mkDerivation rec {
       "linux-arm"
     else if stdenv.hostPlatform.system == "aarch64-darwin" then
       "macosx"
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      "macosx-x86-64-thr"
     else if stdenv.hostPlatform.system == "i686-cygwin" then
       "win32"
     else if stdenv.hostPlatform.system == "x86_64-freebsd" then

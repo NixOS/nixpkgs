@@ -27,7 +27,6 @@ fi
 
 if [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
-    echo "structuredAttrs is enabled"
 
     _exportOutputsByName() {
         local outputName
@@ -1318,10 +1317,11 @@ unpackPhase() {
     # source archives, we record the contents of the current
     # directory, then look below which directory got added.  Yeah,
     # it's rather hacky.
-    local dirsBefore=""
+    local -a dirsBefore=()
+    local dirBefore
     for i in *; do
         if [ -d "$i" ]; then
-            dirsBefore="$dirsBefore $i "
+            dirsBefore+=("$i")
         fi
     done
 
@@ -1340,17 +1340,17 @@ unpackPhase() {
     elif [ -z "$sourceRoot" ]; then
         for i in *; do
             if [ -d "$i" ]; then
-                case $dirsBefore in
-                    *\ $i\ *)
-                        ;;
-                    *)
-                        if [ -n "$sourceRoot" ]; then
-                            echo "unpacker produced multiple directories"
-                            exit 1
-                        fi
-                        sourceRoot="$i"
-                        ;;
-                esac
+                for dirBefore in "${dirsBefore[@]}"; do
+                    if [ "$i" = "$dirBefore" ]; then
+                        continue 2
+                    fi
+                done
+
+                if [ -n "$sourceRoot" ]; then
+                    echo "unpacker produced multiple directories"
+                    exit 1
+                fi
+                sourceRoot="$i"
             fi
         done
     fi

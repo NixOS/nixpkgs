@@ -14,14 +14,14 @@ buildDunePackage rec {
     owner = "sanette";
     repo = "ubase";
     tag = version;
-    sha256 = "sha256-zmYjWEk0r1h87RczCJu2tYlS79F/pAiBt16BplPmA7c=";
+    hash = "sha256-zmYjWEk0r1h87RczCJu2tYlS79F/pAiBt16BplPmA7c=";
   };
 
   doCheck = true;
 
   meta = {
     description = "Remove accents from utf8 strings";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/sanette/ubase";
     maintainers = with lib.maintainers; [ mrdev023 ];
   };

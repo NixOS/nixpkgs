@@ -33,6 +33,13 @@ stdenv.mkDerivation {
       url = "https://github.com/google/gasket-driver/commit/6fbf8f8f8bcbc0ac9c9bef7a56f495a2c9872652.patch";
       hash = "sha256-roCo0/ETWuDVtZfbpFbrmy/icNI12A/ozOGQNLTtBUs=";
     })
+    (fetchpatch2 {
+      # https://github.com/NixOS/nixpkgs/issues/535359
+      # zap_vma_ptes() was replaced by zap_special_vma_range() in Linux 7.1
+      name = "linux-7.1-compat.patch";
+      url = "https://github.com/KyleGospo/gasket-dkms/commit/56597d14586ceebe479d43d71a462710bb4bd1ba.patch";
+      hash = "sha256-DlZrkcMFJgK98GKj9xy9j4QDWq9S46oPOHkWsBXswfQ=";
+    })
   ];
 
   postPatch = ''

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonAtLeast,
   writeScript,
   writeShellScriptBin,
@@ -82,15 +83,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.22.0"; # please always backport gradio changes
+  version = "6.29.0"; # please always backport gradio changes
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${finalAttrs.version}";
-    hash = "sha256-9FcGnZ/yktKM8sTGpgTv3QLIe2IoGbSw10rLWgj1zSU=";
+    hash = "sha256-OgYUbXEDSFvREb/kpHYnucKUvvw9mBBAqDgHcn717t4=";
   };
 
   patches = [
@@ -98,8 +98,10 @@ buildPythonPackage (finalAttrs: {
     # build output, which fails offline.
     # Copy it (and its dependency closure) from the already-fetched pnpm workspace.
     ./dont-npm-install-http-proxy.patch
-
-    ./fix-transformers-pipelines-imports.patch
+    (fetchpatch2 {
+      url = "https://github.com/gradio-app/gradio/commit/1028366300f10b26f0b54a1d6cda6d520895acbb.patch?full_index=1";
+      hash = "sha256-YxydWMCZTczvIMa3P2W6wwYqX3bTX7LMMUNp98DQMRE=";
+    })
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -107,7 +109,7 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-TX4sLAfka/j002OsUKqxqi5B6Fb+DXSGdeL+w6V9XuM=";
+    hash = "sha256-JL0tYymcQt6hSeoCe8fHzTCMW461+sWa48elhPOm2Co=";
   };
 
   env = {
@@ -229,6 +231,11 @@ buildPythonPackage (finalAttrs: {
     # requires network, via subprocess.run
     "test_endpoint_status"
 
+    # caused by our xfail hook, it assumes no pytest fixtures are present
+    "test_there_is_no_client_push_route"
+    "test_a_hub_failure_does_not_fail_the_prediction"
+    "test_client_cannot_choose_record_metadata"
+
     # Flaky, tries to pin dependency behaviour. Sensitive to dep versions
     # These error only affect downstream use of the check dependencies.
     "test_no_color"
@@ -284,8 +291,14 @@ buildPythonPackage (finalAttrs: {
     "test_component_example_values"
     "test_public_request_pass"
     "test_theme_builder_launches"
+
+    # md5 hash mismatch
+    "test_convert_audio_remuxes_already_playable_codec"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # it caught our xfail exception, expecting a different exception
+    "test_sleep_"
+
     # flaky on darwin (depend on port availability)
     "test_all_status_messages"
     "test_analytics_summary"
@@ -474,6 +487,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2"; # https://github.com/gradio-app/gradio/pull/13921
     homepage = "https://www.gradio.app/";
     changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for easily interacting with trained machine learning models";

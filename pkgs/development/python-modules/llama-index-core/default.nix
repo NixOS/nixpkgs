@@ -11,41 +11,44 @@
   filetype,
   fsspec,
   hatchling,
-  jsonpath-ng,
+  httpx,
   llama-index-workflows,
   nest-asyncio,
   networkx,
-  nltk-data,
   nltk,
+  nltk-data,
   numpy,
   openai,
-  pandas,
   pillow,
+  platformdirs,
+  pydantic,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pyvis,
   pyyaml,
   requests,
-  spacy,
+  setuptools,
   sqlalchemy,
   tenacity,
-  tinytag,
   tiktoken,
+  tinytag,
+  tqdm,
   tree-sitter,
+  typing-extensions,
   typing-inspect,
+  wrapt,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-core";
-  version = "0.14.24";
+  version = "0.14.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TW6ARp6XwJZzlN3WZERAvIhNihPCjeN+9rcsg82w7vk=";
+    hash = "sha256-JHrDxjXfQmrdNL9PmQvUzupg7su4ShwtVaCHsJjKIgo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
@@ -64,11 +67,6 @@ buildPythonPackage (finalAttrs: {
     cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
 
-  pythonRelaxDeps = [
-    "setuptools"
-    "tenacity"
-  ];
-
   build-system = [ hatchling ];
 
   dependencies = [
@@ -80,27 +78,31 @@ buildPythonPackage (finalAttrs: {
     dirtyjson
     filetype
     fsspec
-    jsonpath-ng
+    httpx
     llama-index-workflows
     nest-asyncio
     networkx
     nltk
     numpy
-    openai
-    pandas
     pillow
-    pyvis
+    platformdirs
+    pydantic
     pyyaml
     requests
-    spacy
+    setuptools
     sqlalchemy
     tenacity
-    tinytag
     tiktoken
+    tinytag
+    tqdm
+    typing-extensions
     typing-inspect
-  ];
+    wrapt
+  ]
+  ++ sqlalchemy.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
+    openai
     tree-sitter
     pytest-asyncio
     pytest-mock

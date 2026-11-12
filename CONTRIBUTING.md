@@ -137,6 +137,18 @@ Details not covered by the title and links to existing related issues should go 
 
 When a PR is created, it will be pre-populated with some checkboxes.
 
+Check only the entries that describe what you actually did.
+Entries that cannot apply to your change may be left unchecked, or removed if your summary reads better without them: a change that does not touch NixOS cannot be tested with a NixOS test.
+
+Neither leaving such an entry unchecked nor removing it is a merge requirement, and [reviewers][pr-review] are asked not to make it one.
+Keep the section headings and the template itself in place, so that summaries stay comparable between pull requests.
+
+You are also welcome to add entries that are specific to your change: an `stdenv`
+change may warrant a note on the compilers and bootstrapping stages exercised,
+a bootloader change on the machines it was actually booted on. Keep such
+entries short and checkable, and explain anything longer in the summary at the
+top.
+
 #### Tested using sandboxing
 
 When sandbox builds are enabled, Nix will set up an isolated environment for each build process.
@@ -204,9 +216,14 @@ It's important to test a modified package's executables.
 Look into `./result/bin` and run all files in there, or at a minimum, the main executable.
 For example, if you make a change to `texlive`, you probably would only check the binaries associated with the change you made, rather than testing all of them.
 
+#### Release notes
+
+The last two entries are about [release notes](#release-notes).
+Only check the first one when a package update is major or breaking, and the second one when a NixOS module is added or receives a significant update.
+
 #### Meets Nixpkgs contribution standards
 
-The last two checkboxes are about whether it fits the guidelines in this `CONTRIBUTING.md` file.
+The first two checkboxes are about whether the change fits the guidelines in this `CONTRIBUTING.md` file together with the READMEs of the areas it touches, and whether it follows the [automation/AI policy](#automationai-policy).
 This document details our standards for commit messages, reviews, licensing of contributions, etc...
 Everyone should read and understand these standards before submitting a pull request.
 
@@ -298,6 +315,7 @@ When doing a review:
 - Aim to drive the proposal to a timely conclusion.
 - Focus on the proposed changes and keep the scope narrow.
 - Help the contributor prioritise their efforts towards getting their change merged.
+- Leave the [pull request template][pr-template] alone: which entries are ticked, and whether inapplicable ones were removed, is not a merge requirement and not worth review time.
 
 If you find anything related that could be improved but is not immediately required for acceptance, consider:
 - Implementing the changes yourself in a follow-up pull request,
@@ -506,9 +524,9 @@ These PRs go to `staging-nixos`, see [the next section for more context](#change
 Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
 These changes pose a significant impact on the build infrastructure.
 
-Hence, these PRs should either target a `staging`-branch or `staging-nixos`-branch, provided one of following conditions applies:
+Hence, these PRs should target the `staging-nixos` branch, provided one of the following conditions applies:
 
-* The label `10.rebuild-nixos-tests` is set, or
+* The label `10.rebuild-nixos-tests` is set (but there is no mass rebuild per [the previous section][mass-rebuild], in which case use `staging`), or
 * The PR is a change affecting the Linux kernel.
 
 The branch gets merged whenever mainline kernel updates or critical security fixes land on the branch.

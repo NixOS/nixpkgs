@@ -22,7 +22,15 @@
   gst_all_1,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until posthog works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "gnome-frog";
   version = "1.6.0";
 
@@ -68,7 +76,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gst_all_1.gstreamer
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with pythonPackages; [
     loguru
     nanoid
     posthog
@@ -89,7 +97,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://getfrog.app/";
+    homepage = "https://github.com/TenderOwl/Frog";
     description = "Intuitive text extraction tool (OCR) for GNOME desktop";
     license = lib.licenses.mit;
     mainProgram = "frog";

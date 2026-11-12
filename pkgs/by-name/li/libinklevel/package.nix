@@ -4,20 +4,22 @@
   fetchurl,
   pkg-config,
   libusb1,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libinklevel";
-  version = "0.9.4";
+  version = "0.9.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/libinklevel/libinklevel-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-J0cEaC5v4naO4GGUzdfV55kB7KzA+q+v64i5y5Xbp9Q=";
+    sha256 = "sha256-gZ07tMJXhyLBBXyfPamZoaPrRmKPD+ka61K/zNOIRnU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libusb1
+    libxml2
   ];
 
   outputs = [

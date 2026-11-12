@@ -2,6 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
+  sqlite,
+  zstd,
   protobuf,
   versionCheckHook,
   cmake,
@@ -13,13 +16,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.10.7";
+  version = "0.10.11";
 
   src = fetchFromGitHub {
-    owner = "Watfaq";
+    owner = "Watfaq-legacy";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tY/GB6J8kr6Ni9ScOpKkDYLaLffvtaIxH8tXK24LHt8=";
+    hash = "sha256-kGJ06U4Z7CETt0BI9JswEzYEPnSbt4oQH/n13anfvSc=";
   };
 
   patches = [
@@ -27,13 +30,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./skip-npm-ci.patch
   ];
 
-  cargoHash = "sha256-SlkqNu6Vk1D9aU4GgyNDW9Or3z8KSbEjwCUK9w3Jyx0=";
+  cargoHash = "sha256-adYPPjMaA4RmcbKm3PyPn3mO7zgfiVx1w3E3tRzACs4=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/clash-dashboard";
-    hash = "sha256-H8G3GuEh4JXZV1zxTfo89tl6D6WA5hWGOF9i8qP0njw=";
+    hash = "sha256-HdM2VyRBSDlTZiJ1iuclgdtAqAJiBbTTgioqnt7cdrM=";
   };
 
   npmRoot = "clash-dashboard";
@@ -44,6 +47,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
     nodejs
     npmHooks.npmConfigHook
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
   ];
 
   nativeInstallCheckInputs = [
@@ -79,7 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Custom protocol, rule based network proxy software";
-    homepage = "https://github.com/Watfaq/clash-rs";
+    homepage = "https://github.com/Watfaq-legacy/clash-rs";
     mainProgram = "clash";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];

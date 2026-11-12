@@ -24,4 +24,5 @@ buildEnv {
     mkdir "$out/nix-support"
     cp '${pythonLibxml2.dev}/nix-support/propagated-build-inputs' "$out/nix-support/"
   '';
+  meta.license = pythonLibxml2.meta.license;
 }

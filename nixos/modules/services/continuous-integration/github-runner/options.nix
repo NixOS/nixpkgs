@@ -460,7 +460,6 @@
               type =
                 with lib.types;
                 nonEmptyListOf (enum [
-                  "node20"
                   "node24"
                 ]);
               default = [

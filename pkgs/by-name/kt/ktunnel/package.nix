@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 let
   version = "2.0.2";
@@ -24,7 +25,7 @@ buildGoModule {
 
   vendorHash = "sha256-9RT5NtsuhFGXHYoP9YFrNfQQlbeu1DB7gDkKgTn5z7g=";
 
-  preCheck = "export HOME=$(mktemp -d)";
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # # TODO investigate why some tests are failing
   doCheck = false;
@@ -39,7 +40,7 @@ buildGoModule {
     description = "Cli that exposes your local resources to kubernetes";
     mainProgram = "ktunnel";
     homepage = "https://github.com/omrikiei/ktunnel";
-    license = lib.licenses.asl20;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 }

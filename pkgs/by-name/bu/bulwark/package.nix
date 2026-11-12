@@ -10,13 +10,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "bulwark";
-  version = "1.9.2";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "bulwarkmail";
     repo = "webmail";
     tag = finalAttrs.version;
-    hash = "sha256-HWDBwOZ84wbT+tUBTeSyD/4y8RJUbdL15BofXPdIT1Q=";
+    hash = "sha256-fVYFas6YWt3IEXPFodduTLDk4jtGUaZpgSGXP7yUZcQ=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  npmDepsHash = "sha256-pNA8Kl1ZsblsMRZyqiLx07MPec4fPnJJqJs0gbLfNaA=";
+  npmDepsHash = "sha256-0a/41q/e7h6FdBSJKhVPBHxEFsUdPLaA4yIpptBeQIU=";
 
   strictDeps = true;
 
@@ -40,6 +40,9 @@ buildNpmPackage (finalAttrs: {
     cp "${
       google-fonts.override { fonts = [ "GeistMono" ]; }
     }/share/fonts/truetype/GeistMono[wght].ttf" app/fonts/GeistMono.ttf
+    cp "${
+      google-fonts.override { fonts = [ "HankenGrotesk" ]; }
+    }/share/fonts/truetype/HankenGrotesk[wght].ttf" app/fonts/HankenGrotesk.ttf
 
     runHook postConfigure
   '';

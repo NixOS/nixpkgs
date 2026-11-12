@@ -6,6 +6,8 @@
   libxkbcommon,
   libGL,
   autoPatchelfHook,
+  pkg-config,
+  oniguruma,
   nix-update-script,
 }:
 
@@ -24,7 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    pkg-config
   ];
+
+  buildInputs = [ oniguruma ];
 
   runtimeDependencies = [
     wayland

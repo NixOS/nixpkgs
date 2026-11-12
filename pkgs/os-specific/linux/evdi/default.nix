@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CXF7PvmrPjjNoWXbWxEkFE/Sw4bO6YqDplPwF/OxhB0=";
+    hash = "sha256-3g6OETXJSf6AScJ2K9F67mPlh3Wpi20Yq+f+xe78p9Y=";
   };
 
   patches = [
@@ -52,6 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "DESTDIR=${placeholder "out"}"
+  ];
+
+  buildFlags = [ "module" ];
+
+  installFlags = [
+    "-C"
     "module"
   ];
 
@@ -61,11 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     "fortify"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 module/evdi.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/evdi/evdi.ko
+  postInstall = ''
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
-    runHook postInstall
   '';
 
   enableParallelBuilding = true;

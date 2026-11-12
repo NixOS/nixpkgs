@@ -16,16 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uncalled-for";
-  version = "0.4.0";
+  version = "0.6.1";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "uncalled-for";
     tag = finalAttrs.version;
-    hash = "sha256-owpWPOV70z1NCpfVOGlyczfqrPR8Yyd7SUzY9wWZiXU=";
+    hash = "sha256-Gb7WN5uWqMpIE8CRMf1eJWxrr9Mjue1iN63xHKLW/q4=";
   };
 
   build-system = [

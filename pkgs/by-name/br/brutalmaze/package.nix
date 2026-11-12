@@ -13,7 +13,7 @@ python312Packages.buildPythonApplication (finalAttrs: {
     owner = "~cnx";
     repo = "brutalmaze";
     tag = finalAttrs.version;
-    sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
+    hash = "sha256-nrylnCmGOvVAYdB6oiqRy9TVqEqFe02MvL6iM3AsINQ=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ python312Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Minimalist thrilling shoot 'em up game";
     mainProgram = "brutalmaze";
-    homepage = "https://brutalmaze.rtfd.io";
+    homepage = "https://brutalmaze.readthedocs.io";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
   };

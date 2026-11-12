@@ -2,6 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  nix-update-script,
   pytestCheckHook,
   sentence-stream,
 }:
@@ -9,13 +10,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "sfortis";
   domain = "openai_tts";
-  version = "3.9.1";
+  version = "3.11";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "openai_tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hpGKSUMJuW2XSAGuqmCIXTtN4Qh2nwOFJWAg5X9JljA=";
+    hash = "sha256-eBSp1gKPB7NE2zJgs8+czdUrEN1qg7vsKSzr+5484pk=";
   };
 
   dependencies = [ sentence-stream ];
@@ -23,6 +24,13 @@ buildHomeAssistantComponent (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex=^v([0-9]+\\.[0-9]+(\\.[0-9]+)?)$"
+    ];
+  };
 
   meta = {
     description = "Custom TTS component for Home Assistant. Utilizes the OpenAI speech engine or any compatible endpoint to deliver high-quality speech";

@@ -7,17 +7,15 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-bgp";
-  version = "0.19.0";
+  version = "0.20.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-bgp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6LZLsUPC9L9L19KeXJilJvmZYcl6YwqysGO8nFAUmcI=";
+    hash = "sha256-uwLo7KB1gP9PDdyq+8k1RMoF1Jfr41m0R0f37IULZAc=";
   };
 
   build-system = [ setuptools ];

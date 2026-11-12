@@ -4,12 +4,12 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  swiftPackages,
+  open-apple-macros,
+  stdenv,
+  swift,
 }:
 
 let
-  inherit (swiftPackages) stdenv swift;
-
   blueSocket = stdenv.mkDerivation (finalAttrs: {
     pname = "blue-socket";
     version = "2.0.4";
@@ -44,7 +44,7 @@ let
         -emit-module \
         -module-name Socket \
         -emit-module-path "$buildDir/Socket.swiftmodule" \
-        -Xlinker -install_name -Xlinker "$out/lib/swift/libSocket.dylib" \
+        -Xlinker -install_name -Xlinker "$out/lib/libSocket.dylib" \
         Sources/Socket/*.swift \
         -o "$buildDir/libSocket.dylib"
 
@@ -54,9 +54,9 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p "$out/lib/swift"
-      cp build/libSocket.dylib "$out/lib/swift/"
-      cp build/Socket.* "$out/lib/swift/"
+      mkdir -p "$out/lib/swift/macosx"
+      cp build/libSocket.dylib "$out/lib"
+      cp build/Socket.* "$out/lib/swift/macosx"
 
       runHook postInstall
     '';
@@ -76,7 +76,7 @@ let
       CFBundlePackageType = "APPL";
       CFBundleShortVersionString = version;
       CFBundleSupportedPlatforms = [ "MacOSX" ];
-      CFBundleVersion = "18";
+      CFBundleVersion = "21";
       LSApplicationCategoryType = "public.app-category.developer-tools";
       LSMinimumSystemVersion = "13.5";
       LSUIElement = true;
@@ -85,7 +85,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "swipeaerospace";
-  version = "0.3.1";
+  version = "0.3.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -94,12 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MediosZ";
     repo = "SwipeAeroSpace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-468QGWjbRtA9Fml6jjeJZBTCUEp227cQPckqwyLK0dM=";
+    hash = "sha256-lEWbZ/FvxtlY4VnFRk//tDeVrW9+udyJ+hbUsG61jhI=";
   };
-
-  # Keep SettingsView unchanged, but open it through a regular WindowGroup.
-  # @Environment(\.openSettings) does not compile with nixpkgs' SwiftUI SDK.
-  patches = [ ./settings-window.patch ];
 
   nativeBuildInputs = [
     swift
@@ -123,6 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
     done < <(find SwipeAeroSpace -name '*.swift' -print0)
 
     swiftc \
+      -I${lib.getDev blueSocket}/lib/swift/${stdenv.hostPlatform.swift.platform} \
+      -external-plugin-path ${open-apple-macros}/lib/swift/host/plugins#${open-apple-macros}/libexec/swift/plugins/OpenAppleMacrosServer \
+      -disable-sandbox \
       -O \
       -swift-version 5 \
       -parse-as-library \

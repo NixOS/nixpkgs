@@ -4,22 +4,26 @@
   fetchFromGitHub,
   pkg-config,
   udev,
+  libgit2,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-tool-tui";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "grouzen";
     repo = "framework-tool-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AvxLx3BoAcbL7iekRZwlSA04VdBN3EVZYOCsPfZ9ZFc=";
+    hash = "sha256-8fnpgO6iOkOldh1LWrk7lgLR51lk5vKC1k9/qbrhuC8=";
   };
 
-  cargoHash = "sha256-y+QJ4gKZ17oYxDLnt3UrGRmdEF1OJqzxvsJTKsYNOFw=";
+  cargoHash = "sha256-+Baf6BFb8DtRoVBM/P2pVidiq+BA+tWt0XqKYwsSh7o=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ];
+  buildInputs = [
+    libgit2
+    udev
+  ];
 
   meta = {
     description = "TUI for controlling and monitoring Framework Computers hardware";

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amiberry";
-  version = "8.3.0";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "BlitterStudio";
     repo = "amiberry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8kkI+xINpV58riZxwJOycy0sJ0lmcMc5OFLOUkSrKiE=";
+    hash = "sha256-lYkscGoSVgiZbVwvoR0hXpKbnfRloiKL0NGhnD5NItU=";
   };
 
   nativeBuildInputs = [
@@ -55,10 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/BlitterStudio/amiberry";
+    changelog = "https://github.com/BlitterStudio/amiberry/releases/tag/v${finalAttrs.version}";
     description = "Optimized Amiga emulator for Linux/macOS";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ samirbgno ];
     mainProgram = "amiberry";
   };
 })

@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "python-lsp-ruff";
   version = "2.3.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-lsp";

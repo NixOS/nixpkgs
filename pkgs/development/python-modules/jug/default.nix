@@ -12,16 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jug";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "jug";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YjBhA+yEdMQ/4yYf25kkXwbvw+ta9Nb4CX8Rnr0du6k=";
+    hash = "sha256-B+s+GsK3/YqmS2wGDMW+ClhMWubKjXc6f5TkGtpu8Rk=";
   };
 
   build-system = [ setuptools ];

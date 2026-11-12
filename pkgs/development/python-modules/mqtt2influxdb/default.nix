@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "hardwario";
-    repo = "bch-mqtt2influxdb";
+    repo = "mqtt2influxdb";
     tag = "v${version}";
     hash = "sha256-DS1k3JcTUK0yXRkJSFMeIZHSXpiIgSXJPZb3+72Wqko=";
   };
@@ -49,8 +49,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Flexible MQTT to InfluxDB Bridge";
-    homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
-    changelog = "https://github.com/hardwario/bch-mqtt2influxdb/releases/tag/${src.tag}";
+    homepage = "https://github.com/hardwario/mqtt2influxdb";
+    changelog = "https://github.com/hardwario/mqtt2influxdb/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
     mainProgram = "mqtt2influxdb";

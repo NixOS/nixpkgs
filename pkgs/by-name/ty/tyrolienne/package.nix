@@ -2,6 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
+  aws-lc,
   cargo-bundle,
   copyDesktopItems,
   fetchFromGitea,
@@ -15,17 +16,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tyrolienne";
-  version = "1.2.2";
+  version = "1.2.5";
 
   src = fetchFromGitea {
     domain = "git.uku3lig.net";
     owner = "uku";
     repo = "tyrolienne";
     tag = finalAttrs.version;
-    hash = "sha256-JdXamx+pwUEJWSbPFvROrx/XJojZ5sC+MEH0QVpKD+Y=";
+    hash = "sha256-/BmB8tpUEU7gfgplJuOWNrJ6DGMKpDo0M5p0T7FUcM4=";
   };
 
-  cargoHash = "sha256-JM4Y0FyqVYqChpPh9p/QulfV8IesUJ0p/ooxAJLfo6I=";
+  cargoHash = "sha256-quy+c+STWopwTyun1LQWe+4CDHWYYYrvgLtKz4y7vr0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,7 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-bundle
   ];
 
-  buildInputs = [ libadwaita ];
+  buildInputs = [
+    aws-lc
+    libadwaita
+  ];
 
   # Tests are disabled because there are none, avoids having to recompile everything twice
   doCheck = false;
@@ -52,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/tyrolienne target/release/tyrolienne
 
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
+    app_path=$(cargo bundle --release --format osx | xargs)
     mkdir -p $out/Applications
     mv $app_path $out/Applications/
 

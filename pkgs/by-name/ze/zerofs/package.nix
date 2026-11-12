@@ -3,6 +3,10 @@
   lib,
   cmake,
   fetchFromGitHub,
+  aws-lc,
+  rust-jemalloc-sys,
+  zstd,
+  pkg-config,
   nix-update-script,
   rustPlatform,
   versionCheckHook,
@@ -10,20 +14,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zerofs";
-  version = "2.3.3";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "Barre";
     repo = "ZeroFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ItrRbZM8aPIHgVoM0tMKDv+H2rhxUUaX2n7HU+qMaWg=";
+    hash = "sha256-uAXfq5LLnSv62IDX9H7j+XqAtOnyofzhkj2F3AY/lws=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/zerofs";
 
-  cargoHash = "sha256-y3ZerOXiQqtQEW4fbocpTBr/5xjryVrhz6VPMLg+1IY=";
+  cargoHash = "sha256-djeu78G0T44mULNieHlC4Dx/Zdrwcyf9DXG1Ia9dTao=";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
+    zstd
+  ];
 
   env = {
     RUSTFLAGS = "--cfg tokio_unstable";

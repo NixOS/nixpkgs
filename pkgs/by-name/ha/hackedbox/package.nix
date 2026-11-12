@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   autoreconfHook,
   freetype,
   fribidi,
@@ -21,10 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hackedbox";
   version = "0.8.5.1";
 
-  src = fetchFromGitHub {
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
     owner = "museoa";
     repo = "hackedbox";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-hxfbEj7UxQ19xhetmdi0iyK6ceLUfUvAAyyTbNivlLQ=";
   };
 
@@ -56,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Bastard hacked offspring of Blackbox";
-    homepage = "https://github.com/museoa/hackedbox/";
+    homepage = "https://codeberg.org/museoa/hackedbox";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     inherit (libx11.meta) platforms;

@@ -42,10 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   # If no explicit coreutils is given, use the one from stdenv.
   buildInputs = [ coreutils ];
 
+  __structuredAttrs = true;
   strictDeps = true;
+  enableParallelBuilding = true;
 
-  # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under
-  # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow and test-sigaction fail.
   # Disable all gnulib tests when building on Darwin due to test-nl_langinfo-mt failure
   # known by upstream https://www.mail-archive.com/bug-gnulib@gnu.org/msg50806.html
   postPatch =
@@ -53,9 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         sed -i 's:gnulib-tests::g' Makefile.in
       ''
-    else if
-      ((stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) || (stdenv.hostPlatform.isAarch32))
-    then
+    else if stdenv.hostPlatform.isAarch32 then
       ''
         sed -i -E 's:[[:space:]]test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
         sed -i -E 's:[[:space:]]test-sigsegv-catch-stackoverflow[12]\$\(EXEEXT\)::g' gnulib-tests/Makefile.in
@@ -72,15 +70,21 @@ stdenv.mkDerivation (finalAttrs: {
     # "pr" need not be on the PATH as a run-time dep, so we need to tell
     # configure where it is. Covers the cross and native case alike.
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.isGnu) [
       "gl_cv_func_getopt_gnu=yes"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "gl_cv_func_strcasecmp_works=yes"
+    ]
+    # gnulib only detects static linking via `-static` in LDFLAGS, but our
+    # wrapper injects it through NIX_CFLAGS_LINK. Weak pthread references then
+    # resolve to NULL, breaking the multithreaded gnulib tests.
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "gl_cv_have_weak=no"
     ];
 
   # Test failure on QEMU only (#300550)
   doCheck = !stdenv.buildPlatform.isRiscV64;
-
-  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";

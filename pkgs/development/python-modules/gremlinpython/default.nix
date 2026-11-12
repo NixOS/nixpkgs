@@ -15,17 +15,16 @@
 }:
 
 buildPythonPackage rec {
-  __structuredAttrs = true;
 
   pname = "gremlinpython";
-  version = "3.8.0";
+  version = "3.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
     tag = version;
-    hash = "sha256-dslSvtne+0mobjhjZDiO7crQE3aW5wEMWw7l3LkBTV8=";
+    hash = "sha256-5lAcBFDj1babD6qklSnevL5Ad570I2gTJF3BcuDZfao=";
   };
 
   patches = [
@@ -39,9 +38,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     cd gremlin-python/src/main/python
-
-    substituteInPlace gremlin_python/__init__.py \
-      --replace-fail ".dev1" ""
   '';
 
   build-system = [ setuptools ];
@@ -71,14 +67,14 @@ buildPythonPackage rec {
 
   # many tests expect a running tinkerpop server
   disabledTestPaths = [
-    "tests/driver/test_client.py"
-    "tests/driver/test_driver_remote_connection.py"
-    "tests/driver/test_driver_remote_connection_http.py"
-    "tests/driver/test_driver_remote_connection_threaded.py"
-    "tests/driver/test_web_socket_client_behavior.py"
-    "tests/process/test_dsl.py"
-    "tests/process/test_traversal.py" # dead locks
-    "tests/structure/io/test_functionalityio.py"
+    "tests/integration/driver/test_client.py"
+    "tests/integration/driver/test_driver_remote_connection.py"
+    "tests/integration/driver/test_driver_remote_connection_http.py"
+    "tests/integration/driver/test_driver_remote_connection_threaded.py"
+    "tests/integration/driver/test_web_socket_client_behavior.py"
+    "tests/integration/process/test_dsl.py"
+    "tests/integration/process/test_traversal.py" # dead locks
+    "tests/integration/structure/io/test_functionalityio.py"
   ];
 
   disabledTests = [

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchsvn,
+  gtk3,
   makeWrapper,
   unzip,
   jre,
@@ -11,20 +12,20 @@
 }:
 let
   pname = "josm";
-  version = "19613";
+  version = "19678";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-e7qbXV61fbOQZy3c5XGmfenVzwsOj+YQxNveFfvlkHc=";
+      hash = "sha256-m64rKxBQAuSpSEQafopfpMGE98/d0DHZpk0YqNbWRf0=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-9qSb8gGNuWhIIV/ZOtLTVnUAGME1HfGuA9zeatWLKmY=";
+      hash = "sha256-gXHfIZQplUJAUR45ICrP0ZoAsB5m38hUGqdGXgbC0Ow=";
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      hash = "sha256-sAG9GI0SQpmdDqIXbSH/FN1io/QcsAJFv6/YT483aMA=";
+      hash = "sha256-luRlw0LPKDqQfk+vKYj/8oqgIIiV7eJT3u+TGrXin3A=";
     };
   };
 
@@ -55,9 +56,11 @@ stdenv.mkDerivation {
         cp -R ${srcs.pkg}/usr/share $out
 
         # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
+        # The GTK file chooser needs the gtk3 gsettings schemas
         makeWrapper ${jre}/bin/java $out/bin/josm \
           --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
           --prefix LD_LIBRARY_PATH ":" '${libxxf86vm}/lib' \
+          --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
           --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
           --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
       '';

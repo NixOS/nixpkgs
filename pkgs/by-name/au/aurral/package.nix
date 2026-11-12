@@ -1,7 +1,13 @@
 {
   lib,
-  buildNpmPackage,
+  stdenv,
+  fetchPnpmDeps,
+  pnpm_12,
+  pnpmConfigHook,
+  cloudflared,
+  procps,
   fetchFromGitHub,
+  gitMinimal,
   nix-update-script,
   nodejs_26,
   sqlite,
@@ -12,45 +18,92 @@
   makeFontsConf,
   noto-fonts-color-emoji,
   dejavu_fonts,
+  nixosTests,
 }:
 
-buildNpmPackage (finalAttrs: {
+let
+  pnpm = pnpm_12.override { nodejs-slim = nodejs_26; };
+  # Upstream pins a Node minor release, but Nixpkgs tracks the latest Node 26.
+  relaxNodeVersion = ''
+    substituteInPlace package.json \
+      --replace-fail '"node": "26.12.x"' '"node": "26.x"'
+  '';
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "aurral";
-  version = "2.9.0";
+  version = "2.13.0";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "lklynet";
     repo = "aurral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pwk+efWL0dfvKiobRmGXgPtvunpRDOVbtxohbJamVqY=";
+    hash = "sha256-covP+bdzYNxAo+DFL2Ck2A3XCltsHz431PFdrs2cWO0=";
   };
 
-  # Specifies files to package leveraging npm & nix hooks. Not used by upstream.
-  # Remove engine constraint not matching upstream dockerfile.
-  patches = [
-    ./package.json.patch
+  postPatch = relaxNodeVersion;
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    postPatch = relaxNodeVersion;
+    fetcherVersion = 5;
+    hash = "sha256-WdhVTDDuuwCjC6izOWb6g0bmIR8RNKHvlw8bK1NoZEE=";
+  };
+
+  nativeBuildInputs = [
+    nodejs_26
+    pnpm
+    pnpmConfigHook
   ];
 
-  npmDepsHash = "sha256-NVz5eqDDtMBKiTDl3aX0pHBYGTcYal8lmCf8mbKu31I=";
-
-  nodejs = nodejs_26;
+  buildPhase = ''
+    runHook preBuild
+    pnpm rebuild
+    pnpm --filter aurral-frontend run build
+    runHook postBuild
+  '';
 
   env.VITE_APP_VERSION = finalAttrs.version;
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [ sqlite ];
+  env.FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [
+      noto-fonts-color-emoji
+      dejavu_fonts
+    ];
+  };
 
-  npmInstallFlags = [
-    "--include=optional"
-    "--include-workspace-root=false"
+  doCheck = true;
+  nativeCheckInputs = [
+    ffmpeg
+    gitMinimal
+    procps
   ];
+  checkPhase = ''
+    runHook preCheck
+    # Test forks start background workers, so bound their concurrency as well.
+    testWorkers=$((NIX_BUILD_CORES < 2 ? NIX_BUILD_CORES : 2))
+    pnpm test --maxWorkers="$testWorkers"
+    pnpm run test:integration --maxWorkers="$testWorkers"
+    runHook postCheck
+  '';
 
-  npmBuildFlags = [ "--workspace=frontend" ];
+  installPhase = ''
+    runHook preInstall
 
-  npmPruneFlags = [
-    "--workspace=backend"
-    "--include=optional"
-    "--include-workspace-root=false"
-  ];
+    # pnpm prune does not support this workspace with the packaged pnpm version.
+    # Reinstall only the root and backend production dependencies from the offline store.
+    rm -rf node_modules backend/node_modules frontend/node_modules docs/node_modules
+    pnpm install --offline --ignore-scripts --frozen-lockfile --prod \
+      --filter=aurral --filter=aurral-backend
+
+    mkdir -p $out/lib/aurral/frontend
+    cp -r package.json backend lib node_modules $out/lib/aurral/
+    cp -r frontend/dist $out/lib/aurral/frontend/
+    runHook postInstall
+  '';
 
   postInstall = ''
     mkdir $out/bin
@@ -64,27 +117,21 @@ buildNpmPackage (finalAttrs: {
     }
     export PATH=${
       lib.makeBinPath [
-        finalAttrs.nodejs
+        nodejs_26
         ffmpeg
         yt-dlp
+        cloudflared
       ]
     }\''${PATH:+:}\$PATH
-    export FONTCONFIG_FILE=${
-      makeFontsConf {
-        fontDirectories = [
-          noto-fonts-color-emoji
-          dejavu_fonts
-        ];
-      }
-    }
+    export FONTCONFIG_FILE=${finalAttrs.env.FONTCONFIG_FILE}
     export APP_VERSION=${finalAttrs.version}
     export NODE_ENV=production
     case "\$1" in
         resetAdminPassword)
-        exec node $out/lib/node_modules/aurral/backend/scripts/resetAdminPassword.js "\$@"
+        exec node $out/lib/aurral/backend/scripts/resetAdminPassword.ts "\$@"
         ;;
         server|"")
-        exec node $out/lib/node_modules/aurral/backend/server.js
+        exec node --max-semi-space-size=4 $out/lib/aurral/backend/server.ts
         ;;
         -h|--help|*)
         echo "Usage: (server|resetAdminPassword)"
@@ -97,7 +144,10 @@ buildNpmPackage (finalAttrs: {
     chmod +x $out/bin/aurral
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = nixosTests.aurral;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Aurral is the Lidarr companion for self-hosted music discovery";

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "absperf";
+    owner = "ProCern";
     repo = "asyncinotify";
     tag = "v${version}";
     hash = "sha256-NncqHS6JK9OYv/155PXYi0Sg4oX7p0WAGZ9wnvoYlgE=";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
       "aarch64-darwin"
     ];
     description = "Module for inotify";
-    homepage = "https://github.com/absperf/asyncinotify/";
-    changelog = "https://github.com/absperf/asyncinotify/releases/tag/${src.tag}";
+    homepage = "https://github.com/ProCern/asyncinotify/";
+    changelog = "https://github.com/ProCern/asyncinotify/releases/tag/${src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ cynerd ];
   };

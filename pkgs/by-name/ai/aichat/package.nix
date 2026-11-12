@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  oniguruma,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
@@ -26,6 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
+  buildInputs = [
+    oniguruma
+  ];
+
   postInstall = ''
     installShellCompletion ./scripts/completions/aichat.{bash,fish,zsh}
   '';
@@ -43,7 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";
     homepage = "https://github.com/sigoden/aichat";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mwdomino ];
+    maintainers = with lib.maintainers; [
+      mwdomino
+      VZstless
+    ];
     mainProgram = "aichat";
   };
 })

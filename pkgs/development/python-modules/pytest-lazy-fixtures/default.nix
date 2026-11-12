@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-lazy-fixtures";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dev-petrov";
     repo = "pytest-lazy-fixtures";
     tag = version;
-    hash = "sha256-mKRWuRz8DDjdtG4Fx5Wcy5PIg2ao3+n9RFbiha7+f5I=";
+    hash = "sha256-z4j9mITPUkug2/YaKwij5nlJYIoMpkDUPUmW/peNUXQ=";
   };
 
   postPatch = ''

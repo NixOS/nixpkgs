@@ -11,7 +11,7 @@
   version ? "2.4.0",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qtermwidget";
   inherit version;
 

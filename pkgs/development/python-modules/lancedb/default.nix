@@ -5,8 +5,10 @@
   fetchFromGitHub,
   rustPlatform,
   pythonAtLeast,
+  pkgs,
 
   # buildInputs
+  aws-lc,
   openssl,
 
   # nativeBuildInputs
@@ -36,28 +38,25 @@
   pytest-mock,
   pytestCheckHook,
   tantivy,
-
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.37.1";
+  version = "0.40.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ibyiZeZDSI7W7Cog+6N5zp7jr2Rm0Ql0BfePngucPW0=";
+    hash = "sha256-6L6ayJJaL8nhO+ep9Us1zq+bYDaUashVjmzW1ji8yAk=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-aBc77iHWrFJhygwtcZaIu6ScHNnDXxn+QKHmvjRYLWg=";
+    hash = "sha256-aNTHrXC8Zheg5NG8Ew+jQNRcNLmZeVznzQqQgzRo9+s=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -78,6 +77,18 @@ buildPythonPackage (finalAttrs: {
 
     substituteInPlace "$lanceDistance/cosine_u8.rs" \
       --replace-fail "return |a, b| unsafe { x86::cosine_u8_accum_avx512_vnni(a, b) };" ""
+  ''
+  # Same for `lance-index`'s pairwise BQ/SQ kernels: make their AVX-512 VNNI dispatch
+  # statically false so that the scalar fallbacks are always used.
+  + ''
+    lanceVector=("$cargoDepsCopy"/source-registry-0/lance-index-*/src/vector)
+
+    substituteInPlace "$lanceVector/bq/pairwise.rs" \
+      --replace-fail "if simd && *x86::HAS_AVX512_VNNI {" "if false {"
+
+    substituteInPlace "$lanceVector/sq/pairwise.rs" \
+      --replace-fail "dim <= MAX_BATCHED_DIM && has_vnni" "false && dim <= MAX_BATCHED_DIM && has_vnni" \
+      --replace-fail "if self.batched {" "if false {"
   '';
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -89,7 +100,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    (pkgs.__splicedPackages.zstd or pkgs.zstd)
   ];
 
   dependencies = [
@@ -131,6 +144,9 @@ buildPythonPackage (finalAttrs: {
     # Requires internet access
     # RuntimeError: lance error: LanceError(IO): Generic S3 error
     "test_bucket_without_dots_is_not_rejected"
+    # RuntimeError: lance error: LanceError(IO): Generic HTTP client error
+    "test_bucket_with_dots_and_aws_region_is_not_rejected"
+    "test_bucket_with_dots_and_region_is_not_rejected"
 
     # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
     "TestAsyncNamespaceConnection"
@@ -139,9 +155,20 @@ buildPythonPackage (finalAttrs: {
     # Failed: DID NOT RAISE <class 'Exception'>
     "test_merge_insert"
 
+    # Flaky: writes a module next to an already-imported one without invalidating the import caches
+    # ModuleNotFoundError: No module named 'fx_uses_local'
+    "test_local_module_outside_code_warns_at_registration"
+
+    # Runs `python -I` in a subprocess, which ignores PYTHONPATH:
+    # ModuleNotFoundError: No module named 'pyarrow'
+    "test_shared_helpers_construct_state_on_every_path"
+
     # TypeError: FFILanceTableProvider.__datafusion_table_provider__() missing 1 required positional
     # argument: 'session'
     "test_sql_query"
+
+    # AssertionError: the LanceDB native extension must use rustls ...
+    "test_native_extension_does_not_link_openssl"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # TypeError: Converting Pydantic type to Arrow Type: unsupported type
@@ -169,7 +196,7 @@ buildPythonPackage (finalAttrs: {
     "test_remote_db.py"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";

@@ -15,7 +15,7 @@ maven.buildMavenPackage (finalAttrs: {
     hash = "sha256-EshNZ7COraluW7zyj6BB0yo390ms2nBbB7mCnKcOPtw=";
   };
 
-  mvnHash = "sha256-cz5GFZ4IWTHe3o0fr1BRVRqIiutGLECuUoVl9I8gsW4=";
+  mvnHash = "sha256-UcLHMd/AieezdJewXXMsd4ToZaNncHoeCt5ZU3BzF7w=";
 
   # e2e tests need docker (testcontainers/selenium)
   mvnParameters = "-DskipTests";

@@ -6,6 +6,7 @@
   cmake,
   openssl,
   python3,
+  nix-update-script,
 }:
 
 let
@@ -17,14 +18,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rasterbar";
-  version = "2.0.13";
+  version = "2.0.15";
 
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-0L7C3IY/XA+/vLJjZr47aFdYypevhMn1tzZNvDtOjbw=";
+    hash = "sha256-5ntJQmNj+2cQJXbsJwdeT4styMYU6jT5PwtlpaDNw6w=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [
     ./python-destdir.patch
@@ -84,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "python-bindings" true)
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://libtorrent.org/";

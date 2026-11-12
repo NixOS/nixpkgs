@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -29,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpcore2";
-  version = "2.9.1";
+  version = "2.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kghDQMYksF9a4sFGajzNfGPOjdX1OiMwv7rH/fbmM0=";
+    hash = "sha256-XgjFiSwc4xCyPJcTB/Exh838fUOKsT0JRrha7s70C50=";
   };
 
   postPatch = ''
@@ -78,12 +79,17 @@ buildPythonPackage (finalAttrs: {
 
   pytestFlags = [ "tests/httpcore2" ];
 
+  # Skip tests does not pass: 10ms cancellation-timing test
+  disabledTests = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "test_h2_timeout_during_request"
+    "test_h2_timeout_during_response"
+  ];
+
   passthru.tests = {
     inherit httpx2;
   };
 
   __darwinAllowLocalNetworking = true;
-  __structuredAttrs = true;
 
   meta = {
     description = "A next generation HTTP client for Python";

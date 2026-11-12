@@ -6,19 +6,19 @@
   ncurses,
   flex,
   bison,
-  lua5_4,
+  lua5_5,
 }:
 
 stdenv.mkDerivation {
   pname = "unnethack";
-  version = "6.0.14";
+  version = "6.0.16";
 
   src = fetchFromGitHub {
     owner = "UnNetHack";
     repo = "UnNetHack";
     # releases are not tagged
-    rev = "c8c1a467bb114fc7cb9967d20ebf389e11e1e7fd";
-    hash = "sha256-45sybOM2zCPCCuHGZ5sEeJzkgcwvi3MhgOC1v1kRwWg=";
+    rev = "7618459ee32b62004efb492ab7ac1b47c6852a80";
+    hash = "sha256-MZdwdjP9J+ZGz44eiMdAdMcBW9RW1HWiiZQ1x4dGyPE=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     ncurses
-    lua5_4
+    lua5_5
   ];
 
   nativeBuildInputs = [

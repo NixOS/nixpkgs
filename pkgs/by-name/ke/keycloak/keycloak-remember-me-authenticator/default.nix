@@ -15,7 +15,7 @@ maven.buildMavenPackage (finalAttrs: {
     hash = "sha256-zIFWbv02wbf3D6Weyc8N4YM+fFFxnve0ti5yS52KN3c=";
   };
 
-  mvnHash = "sha256-Dqz6CTJaSdv0rVlzw3HzyUVkVqM4DMBrnjRMfmcK92E=";
+  mvnHash = "sha256-yKLRWqQL8fQna+kmPkQ+RjsPrPr0mkgRWeq5QEel8J8=";
 
   strictDeps = true;
   __structuredAttrs = true;

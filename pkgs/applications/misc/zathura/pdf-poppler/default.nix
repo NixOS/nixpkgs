@@ -1,28 +1,30 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
+  desktop-file-utils,
+  appstream,
   zathura_core,
   girara,
   poppler,
-  desktop-file-utils,
-  appstream,
-  appstream-glib,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-pdf-poppler";
-  version = "2026.05.10";
+  version = "2026.07.18";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-pdf-poppler";
     tag = finalAttrs.version;
-    hash = "sha256-Iks3wv9XfdTsgI00njKPW0+yCTZ5hW9N3JAb0b0PNqE=";
+    hash = "sha256-yTNox1MH2wYwVUtIEQ3QoC6jKsTQSfQdltQaB+pkAgY=";
   };
 
   nativeBuildInputs = [
@@ -31,13 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     desktop-file-utils
     appstream
-    appstream-glib
-    zathura_core
   ];
 
   buildInputs = [
-    poppler
+    zathura_core
     girara
+    poppler
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";

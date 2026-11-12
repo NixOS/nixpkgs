@@ -32,8 +32,6 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  __structuredAttrs = true;
-
   meta = {
     changelog = "https://github.com/wmbest2/aiovban/releases/tag/${finalAttrs.src.tag}";
     description = "PyAudio wrapper for aiovban";

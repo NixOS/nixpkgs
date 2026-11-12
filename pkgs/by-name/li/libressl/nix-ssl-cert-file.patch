@@ -1,0 +1,87 @@
+--- a/crypto/x509/by_file.c
++++ b/crypto/x509/by_file.c
+@@ -58,6 +58,7 @@
+ 
+ #include <errno.h>
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <time.h>
+ #include <unistd.h>
+ 
+@@ -86,6 +87,28 @@
+ }
+ LCRYPTO_ALIAS(X509_LOOKUP_file);
+ 
++/* Same order as nixpkgs' openssl; setuid programs ignore the variables. */
++static const char *
++nix_cert_file_env(void)
++{
++	static const char *names[] = { "NIX_SSL_CERT_FILE", "SSL_CERT_FILE" };
++	const char *file;
++	size_t i;
++
++	for (i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
++#if defined(__linux__)
++		file = secure_getenv(names[i]);
++#elif defined(_WIN32)
++		file = getenv(names[i]);
++#else
++		file = issetugid() ? NULL : getenv(names[i]);
++#endif
++		if (file != NULL)
++			return file;
++	}
++	return NULL;
++}
++
+ static int
+ by_file_ctrl(X509_LOOKUP *ctx, int cmd, const char *argp, long argl,
+     char **ret)
+@@ -97,7 +120,8 @@
+ 		return 0;
+ 
+ 	if (argl == X509_FILETYPE_DEFAULT) {
+-		file = X509_get_default_cert_file();
++		if ((file = nix_cert_file_env()) == NULL)
++			file = X509_get_default_cert_file();
+ 		type = X509_FILETYPE_PEM;
+ 	}
+ 	if (X509_load_cert_crl_file(ctx, file, type) != 0)
+--- a/tls/tls_config.c
++++ b/tls/tls_config.c
+@@ -31,9 +31,35 @@
+ 
+ static const char default_ca_file[] = TLS_DEFAULT_CA_FILE;
+ 
++/* Same order as nixpkgs' openssl; setuid programs ignore the variables. */
++static const char *
++nix_cert_file_env(void)
++{
++	static const char *names[] = { "NIX_SSL_CERT_FILE", "SSL_CERT_FILE" };
++	const char *file;
++	size_t i;
++
++	for (i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
++#if defined(__linux__)
++		file = secure_getenv(names[i]);
++#elif defined(_WIN32)
++		file = getenv(names[i]);
++#else
++		file = issetugid() ? NULL : getenv(names[i]);
++#endif
++		if (file != NULL)
++			return file;
++	}
++	return NULL;
++}
++
+ const char *
+ tls_default_ca_cert_file(void)
+ {
++	const char *file;
++
++	if ((file = nix_cert_file_env()) != NULL)
++		return file;
+ 	return default_ca_file;
+ }
+ 

@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Minimalistic configuration management system";
-    homepage = "https://www.sdi.st";
+    homepage = "https://www.cdi.st";
     changelog = "https://code.ungleich.ch/ungleich-public/cdist/src/tag/${finalAttrs.version}/docs/changelog";
 
     # Mostly. There are still couple types that are gpl3-only.

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corectrl";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NwGrvDqImiyPc3AsL7rMwNG9na+AzZS6NvXQOc6VWHg=";
+    hash = "sha256-qZIHFSWxxmXCr5tyhEVaAfn25WyMVki2E0VgzOE8O3w=";
   };
 
   nativeBuildInputs = [
@@ -54,10 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-tools
   ];
 
-  patches = [
-    ./Always-locate-polkit-with-pkg-config.diff
-  ];
-
   cmakeFlags = [
     "-DINSTALL_DBUS_FILES_IN_PREFIX=true"
     "-DPOLKIT_POLICY_INSTALL_DIR=${placeholder "out"}/share/polkit-1/actions"
@@ -73,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath finalAttrs.runtimeInputs)
   ];
 
   meta = {

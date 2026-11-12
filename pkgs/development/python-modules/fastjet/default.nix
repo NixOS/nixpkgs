@@ -24,16 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastjet";
-  version = "3.5.1.4";
+  version = "3.5.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "fastjet";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Q2ukR7aA12d0+mRm/y8hAMpOo3vRkFo3B/fx6XChARI=";
+    hash = "sha256-uR7HK00s3uuojJ2x5LmNhvJHJ+umCOua4SUXafH0NEk=";
   };
 
   build-system = [

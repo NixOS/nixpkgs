@@ -9,13 +9,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-plugin-countdown";
-  version = "2.2.0";
+  version = "2.2.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "ashmanix";
     repo = "obs-plugin-countdown";
     tag = finalAttrs.version;
-    hash = "sha256-0E2pNRg4vwXK54aYuWYZyuRJaNrpwX7X0Dq6V8B/SgA=";
+    hash = "sha256-nWHOraPfFXDJ13uLa5vvKfqXumTa7atUV6qqFHelClQ=";
   };
 
   buildInputs = [

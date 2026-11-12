@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-cbindgen";
   version = "0.29.4";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cbindgen";

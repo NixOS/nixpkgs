@@ -99,7 +99,9 @@ stdenv'.mkDerivation {
   '';
 
   qtWrapperArgs = [
-    "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
+    "--set-default"
+    "PERFPROFILER_PARSER_FILEPATH"
+    "${lib.getBin perf}/bin"
   ];
 
   postInstall = ''

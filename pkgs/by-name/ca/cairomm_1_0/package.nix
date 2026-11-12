@@ -6,7 +6,7 @@
   boost,
   cairo,
   fontconfig,
-  libsigcxx,
+  libsigcxx_2_0,
   meson,
   ninja,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     cairo
-    libsigcxx
+    libsigcxx_2_0
   ];
 
   mesonFlags = [

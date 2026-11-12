@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "connect-box3";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-connect-box3";
     tag = finalAttrs.version;
-    hash = "sha256-eLrCMziV/+maLIded1n0248Xb14uVBps/gzTUz8NMMc=";
+    hash = "sha256-DwR/B0qB8XS3o/MAjC7Cvh83nBm95gkTbxW8gF3ws0g=";
   };
 
   build-system = [ hatchling ];

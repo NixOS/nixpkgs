@@ -1,10 +1,11 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitLab,
+  fetchFromCodeberg,
   pkg-config,
   openssl,
   spade,
+  zstd,
   git,
 }:
 
@@ -12,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   pname = "swim";
   version = "0.20.0";
 
-  src = fetchFromGitLab {
+  src = fetchFromCodeberg {
     owner = "spade-lang";
     repo = "swim";
     rev = "v${version}";
@@ -25,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   nativeCheckInputs = [
@@ -48,8 +50,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Build tool for spade";
-    homepage = "https://gitlab.com/spade-lang/swim";
-    changelog = "https://gitlab.com/spade-lang/swim/-/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://codeberg.com/spade-lang/swim";
+    changelog = "https://codeberg.org/spade-lang/swim/src/branch/main/CHANGELOG.md";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "swim";

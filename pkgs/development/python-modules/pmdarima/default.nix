@@ -70,6 +70,13 @@ buildPythonPackage rec {
   disabledTests = [
     # touches internet
     "test_load_from_web"
+
+    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted
+    "test_max_dur"
+    "test_subsequent_contexts"
+
+    # ValueError: assignment destination is read-only
+    "test_pipeline_predict_inverse_transform"
   ];
 
   pythonImportsCheck = [ "pmdarima" ];

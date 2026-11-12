@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = "ppx_yojson_conv_lib";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XGgpcAEemBNEagblBjpK+BiL0OUsU2JPqOq+heHbqVk=";
   };
 

@@ -61,7 +61,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   env.DESTDIR = "/";
 
   makeWrapperArgs = [
-    "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
+    "--prefix"
+    "XDG_DATA_DIRS"
+    ":"
+    "${hicolor-icon-theme}/share"
   ];
 
   passthru = {

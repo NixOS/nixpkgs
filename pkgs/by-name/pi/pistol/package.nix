@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pistol";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "doronbehar";
     repo = "pistol";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cL9hHehajqMIpdD10KYIbNkBt2fiRQkx81m9H3Yd1UY=";
+    sha256 = "sha256-8ZoGGb2/jfRpeEaSKZtPdd+vsTBSvtOQ2U5nBo1EyAs=";
   };
 
-  vendorHash = "sha256-+moQ3qZnWmmGpOXUxyBS3hIETK/ZtRwmvD2tXFf0A3o=";
+  vendorHash = "sha256-1+kt6SUqy/acMEJJhWjuC8nnU7UT/7BkmZ25prHpjnM=";
 
   doCheck = false;
 
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
     asciidoctor
   ];
   postInstall = ''
-    asciidoctor -b manpage -d manpage README.adoc
+    make manpage
     installManPage pistol.1
   '';
 

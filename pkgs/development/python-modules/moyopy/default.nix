@@ -16,15 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "moyopy";
-  version = "0.18.0";
+  version = "0.22.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "spglib";
     repo = "moyo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vCVyQqR1haJuvcRpgerMIvWmAP7TGaNoP71WPDzg6lA=";
+    hash = "sha256-kv46GgaYspyyO60TAP0san8nCN9HRTaOwyf17fjSXGY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/moyopy";
@@ -47,7 +46,7 @@ buildPythonPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-nByEmLE6gbFq/3uClS+pb6CUZZ7CR2BeqWwLd2/VEKE=";
+    hash = "sha256-bZxbLd0KBd/iIkMcMC8CgPhNSwWlzMkEDBghJcgt5NE=";
   };
 
   build-system = [

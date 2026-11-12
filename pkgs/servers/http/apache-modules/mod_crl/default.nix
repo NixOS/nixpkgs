@@ -9,12 +9,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mod_crl";
   version = "0.2.4";
 
   src = fetchurl {
-    url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
+    url = "https://redwax.eu/dist/rs/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-w8YIhed9J1uo5uwhfOVe5LhNLUvFZCgUO4FrHm344Rg=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dirkx ];
   };
-}
+})

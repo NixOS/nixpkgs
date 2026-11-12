@@ -5,17 +5,16 @@
   python3,
 }:
 
-python3Packages.buildPythonApplication rec {
-  __structuredAttrs = true;
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "graphify";
-  version = "0.9.61";
+  version = "0.9.91";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Graphify-Labs";
     repo = "graphify";
-    tag = "v${version}";
-    hash = "sha256-9AEbHmqqZv/fBioUMNv60KAb/FpvWpwC6QhGSdBxISs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rVR7VNV95vrftrym4gBG6Tib4Dae4fIYnTO0X0dkZIk=";
   };
 
   build-system = [
@@ -130,7 +129,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "AI coding assistant skill. Turn any folder of code, docs, papers, images, or videos into a queryable knowledge graph.";
     homepage = "https://github.com/Graphify-Labs/graphify";
-    changelog = "https://github.com/Graphify-Labs/graphify/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Graphify-Labs/graphify/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -138,4 +137,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ stunkymonkey ];
     mainProgram = "graphify";
   };
-}
+})

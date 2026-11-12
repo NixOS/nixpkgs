@@ -67,11 +67,13 @@ qtModule {
 
   cmakeFlags = [
     "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"
+    # don't dlopen pipewire
+    "-DFEATURE_pipewire_symbolloader=0"
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
   ];
 
-  env = {
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
-    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AudioToolbox";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-include AudioToolbox/AudioToolbox.h";
+    NIX_LDFLAGS = "-framework AudioToolbox";
   };
 }

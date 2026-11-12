@@ -3,16 +3,15 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "forgit";
-  version = "26.09.1";
+  version = "26.11.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
-    rev = version;
-    hash = "sha256-02w+BGrRDEFWLtH6tniiTgs+FHmghiHn9FMxO+U4wrI=";
+    tag = finalAttrs.version;
+    hash = "sha256-XjGNq7ezjX6xPTS0p/1b0An9fFGn3Xm+4ojuq2EZf1I=";
   };
 
   postInstall = ''
@@ -25,4 +24,4 @@ buildFishPlugin rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

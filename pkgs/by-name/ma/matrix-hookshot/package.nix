@@ -2,13 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchPnpmDeps,
   makeWrapper,
   matrix-sdk-crypto-nodejs,
-  yarnConfigHook,
+  pnpmConfigHook,
   cargo,
+  pnpm_11,
   rustPlatform,
   rustc,
+  aws-lc,
   napi-rs-cli,
   pkg-config,
   nodejs,
@@ -16,32 +18,41 @@
   nix-update-script,
 }:
 
+let
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = "7.4.0";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     tag = finalAttrs.version;
-    hash = "sha256-Nsbs3m1sFQaJGqVW8Jk8kSMYXrRnqLBVs6glpuP76ps=";
+    hash = "sha256-oWmVjwDl1TcCFzvN97xbnmmWuLUioKlzjBc9EC0srdg=";
   };
 
-  offlineCache = fetchYarnDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-93g8DvTZACDhURoMCaeg5Zqpk1dnbOqscRkSV9lnYCI=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-KbXT3Ee7XTiiapVi1R4gBME0SGrP4gw8EQ4szahRV1Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-FKCzafDeqJs1o24H+Qy/9vRJeG5bEa+/y+yp4T2ADVg=";
+    hash = "sha256-R2iAu0hF3AMr+oetLmiyWEHQOH9tTMZks11FyuOn5dI=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    yarnConfigHook
+    pnpmConfigHook
+    pnpm
     pkg-config
     cargo
     rustc
@@ -50,20 +61,32 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
+  patchPhase = ''
+    runHook prePatch
+
+    patchShebangs scripts/build-modules.sh
+
+    runHook postPatch
+  '';
+
   preBuild = ''
-    # We want nixpkgs' version of this instead
-    rm -rf node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
-      node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-    chmod -R a+rwx node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    yarn run build:app:rs --target ${stdenv.hostPlatform.rust.rustcTargetSpec}
-    yarn run build:app
-    yarn run build:web
+    pnpm run build:app:rs --target ${stdenv.hostPlatform.rust.rustcTargetSpec}
+    pnpm run build:app
+    pnpm run build:web
+    pnpm run build:modules
 
     runHook postBuild
   '';
@@ -71,20 +94,27 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    rm -rf ./node_modules
-    yarn install --production --offline --force --ignore-engines --no-bin-links --frozen-lockfile
+    rm -r ./node_modules
+    pnpm install --production --offline --ignore-scripts --frozen-lockfile
 
     # Re-install matrix-sdk-crypto-nodejs
-    rm -rf node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
-      node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-    chmod -R a+rwx node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
 
-    mkdir -p $out/lib/node_modules/matrix-hookshot/
+    mkdir -p $out/lib/node_modules/.pnpm/matrix-hookshot/
     mkdir $out/bin
 
-    mv ./lib/* $out/lib/node_modules/matrix-hookshot
-    mv ./public ./assets ./node_modules ./package.json $out/lib/node_modules/matrix-hookshot
+    mv ./lib/* $out/lib/node_modules/.pnpm/matrix-hookshot
+    mv ./public ./assets ./node_modules ./package.json $out/lib/node_modules/.pnpm/matrix-hookshot
+    # Fix symlink broken by the above mv
+    ln -sf $out/lib/node_modules/.pnpm/matrix-hookshot/public/modules/openproject/element-web \
+      $out/lib/node_modules/.pnpm/matrix-hookshot/node_modules/.pnpm/node_modules/openproject-module
 
     runHook postInstall
   '';
@@ -92,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" \
       --set NODE_ENV "production" \
-      --add-flags "$out/lib/node_modules/matrix-hookshot/App/BridgeApp.js"
+      --add-flags "$out/lib/node_modules/.pnpm/matrix-hookshot/App/BridgeApp.js"
   '';
 
   passthru.updateScript = nix-update-script { };

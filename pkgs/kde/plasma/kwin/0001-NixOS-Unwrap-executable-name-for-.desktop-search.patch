@@ -10,13 +10,6 @@ file in-use according to the kernel!
 Wrappers cannot affect the `/proc/.../exe` symlink!
 
 Co-authored-by: Yaroslav Bolyukin <iam@lach.pw>
----
- src/nixos_utils.h     | 41 +++++++++++++++++++++++++++++++++++++++++
- src/service_utils.h   |  4 +++-
- src/waylandwindow.cpp |  5 ++++-
- 3 files changed, 48 insertions(+), 2 deletions(-)
- create mode 100644 src/nixos_utils.h
-
 diff --git a/src/nixos_utils.h b/src/nixos_utils.h
 new file mode 100644
 index 0000000..726065d
@@ -64,51 +57,25 @@ index 0000000..726065d
 +}// namespace
 +
 +#endif // NIXOS_UTILS_H
-diff --git a/src/utils/serviceutils.h b/src/utils/serviceutils.h
-index 8a70c1f..475b15d 100644
---- a/src/utils/serviceutils.h
-+++ b/src/utils/serviceutils.h
-@@ -19,6 +19,7 @@
- #include <QLoggingCategory>
- //KF
- #include <KApplicationTrader>
+diff --git a/src/wayland/clientconnection.cpp b/src/wayland/clientconnection.cpp
+index 194e0498c0..69ddda9b25 100644
+--- a/src/wayland/clientconnection.cpp
++++ b/src/wayland/clientconnection.cpp
+@@ -19,6 +19,8 @@
+ #include <systemd/sd-login.h>
+ #endif
+
 +#include "nixos_utils.h"
- 
++
  namespace KWin
  {
-@@ -26,8 +27,9 @@ namespace KWin
- const static QString s_waylandInterfaceName = QStringLiteral("X-KDE-Wayland-Interfaces");
- const static QString s_dbusRestrictedInterfaceName = QStringLiteral("X-KDE-DBUS-Restricted-Interfaces");
- 
--static QStringList fetchProcessServiceField(const QString &executablePath, const QString &fieldName)
-+static QStringList fetchProcessServiceField(const QString &in_executablePath, const QString &fieldName)
- {
-+    const QString executablePath = unwrapExecutablePath(in_executablePath);
-     // needed to be able to use the logging category in a header static function
-     static QLoggingCategory KWIN_UTILS ("KWIN_UTILS", QtWarningMsg);
-     const auto servicesFound = KApplicationTrader::query([&executablePath] (const KService::Ptr &service) {
-diff --git a/src/waylandwindow.cpp b/src/waylandwindow.cpp
-index fd2c0c1..ae8cf96 100644
---- a/src/waylandwindow.cpp
-+++ b/src/waylandwindow.cpp
-@@ -10,6 +10,7 @@
- #include "screens.h"
- #include "wayland_server.h"
- #include "workspace.h"
-+#include "nixos_utils.h"
- 
- #include <KWaylandServer/display.h>
- #include <KWaylandServer/clientbuffer.h>
-@@ -173,7 +174,9 @@ void WaylandWindow::updateIcon()
- 
- void WaylandWindow::updateResourceName()
- {
--    const QFileInfo fileInfo(surface()->client()->executablePath());
-+    const QString in_path = surface()->client()->executablePath();
-+    const QString path = unwrapExecutablePath(in_path);
-+    const QFileInfo fileInfo(path);
-     if (fileInfo.exists()) {
-         const QByteArray executableFileName = fileInfo.fileName().toUtf8();
-         setResourceClass(executableFileName, executableFileName);
--- 
-2.32.0
+
+@@ -92,7 +94,7 @@ ClientConnectionPrivate::ClientConnectionPrivate(wl_client *c, Display *display,
+     wl_client_add_destroy_listener(c, &destroyListener);
+
+     wl_client_get_credentials(client, &pid, &user, &group);
+-    executablePath = executablePathFromPid(pid);
++    executablePath = unwrapExecutablePath(executablePathFromPid(pid));
+
+ #if HAVE_SYSTEMD
+     sandboxed = isSandboxed(pid);

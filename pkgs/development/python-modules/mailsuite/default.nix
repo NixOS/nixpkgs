@@ -22,17 +22,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mailsuite";
-  version = "2.3.2";
+  version = "2.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seanthegeek";
     repo = "mailsuite";
     tag = finalAttrs.version;
-    hash = "sha256-idpgHGvUeg7QIrc9J6IHqcxvqLUcNQNLUSiixMovIbQ=";
+    hash = "sha256-ooGR5Y+g58sX3CRS53FJ75CvJEDcCbxLhJ0tWV4ACYk=";
   };
-
-  pythonRelaxDeps = [ "mail-parser" ];
 
   build-system = [ hatchling ];
 
@@ -63,7 +61,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "mailsuite" ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = finalAttrs.passthru.optional-dependencies.all ++ [
     pytestCheckHook
   ];
 

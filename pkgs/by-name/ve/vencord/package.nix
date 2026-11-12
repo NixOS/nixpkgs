@@ -6,7 +6,7 @@
   lib,
   nix-update,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
@@ -18,36 +18,27 @@
   buildWebExtension ? false,
 }:
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.15.5";
+  version = "1.15.17";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AiZjrbx2A3NMkbyKJBGiCB/zq7fIvWlhpAAcyPrtT7Q=";
+    hash = "sha256-+dN4wAFNmYVDiEe0QStqrFBRFHBBRkApqbmhuvsLZZM=";
   };
-
-  patches = [ ./fix-deps.patch ];
-
-  postPatch = ''
-    substituteInPlace packages/vencord-types/package.json \
-      --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.1.0"'
-  '';
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       src
-      patches
-      postPatch
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-LiAcWwGmZlpO+rr0tcMNpViBiBRhSHj+wvyHFIe32lw=";
+    fetcherVersion = 5;
+    hash = "sha256-/cnY+wj2/oHohUwf7zUHsE4aWI8YdhBNO8jSVuvQH+M=";
   };
 
   nativeBuildInputs = [

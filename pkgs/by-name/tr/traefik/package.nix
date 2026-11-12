@@ -8,16 +8,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "traefik";
-  version = "3.7.13";
+  version = "3.7.16";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${finalAttrs.version}/traefik-v${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-xwq4iqD0UM9xClVN4OkntEio1jGXU0JTFkXj+kpFkwE=";
+    hash = "sha256-gEVtpTABX8SN0ffWp9k4LXRm5mftuiDgDEDsFYSKE7U=";
     stripRoot = false;
   };
 
-  vendorHash = "sha256-jlrZ78urMkNoBtV1VcfAA++1H+XuUaUxMA8ZX4w1lhg=";
+  vendorHash = "sha256-3Xt2HSx2XfNSnVMi9sNmcFmTO9hZrSQv6Ilh7eRuaE0=";
 
   proxyVendor = true;
 

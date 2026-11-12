@@ -24,7 +24,7 @@ let
     substitutions = {
       out = placeholder "out";
       pythonInterpreter = python.pythonOnBuildForHost.interpreter;
-      pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
+      pythonIncludeDir = "${python}/include/${python.libPrefix}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
     meta.license = lib.licenses.mit;
@@ -137,9 +137,6 @@ buildPythonPackage (finalAttrs: {
       bindings of existing C++ code.
     '';
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      yuriaisaka
-      dotlambda
-    ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 })

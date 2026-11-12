@@ -41,10 +41,19 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    # This file determines the date shown in the infopage.
+    # It is unreproducible because CVE-2026-66486.patch touches it.
+    # We could reset it to SOURCE_DATE_EPOCH or the date of that patch.
+    touch -d $(date --utc --date="@''${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y-%m-%d) doc/cpio.texi
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     texinfo # for makeinfo
   ];
+
+  strictDeps = true;
 
   separateDebugInfo = true;
 
@@ -66,10 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     initrd = nixosTests.systemd-initrd-simple;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/cpio/";
     description = "Program to create or extract from cpio archives";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raboof ];
     platforms = lib.platforms.all;
     priority = 6; # resolves collision with gnutar's "libexec/rmt"
     mainProgram = "cpio";

@@ -20,22 +20,28 @@
   blueprint-compiler,
   desktop-file-utils,
   wrapGAppsHook4,
+  aws-lc,
+  sqlcipher,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.22.2";
+  version = "0.22.8";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
-    hash = "sha256-D6jhEfsLxQI2/pU6IPFtMmbCEPWASjbd1gVAX5G7Snk=";
+    hash = "sha256-yZqILhe/6ii+4zENilFrAISOy4cPCsYoXHoVQhgJndI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-NsBuEujUvrflgpx20tqJVluFVwXJgCYQCDlmNDtncjQ=";
+    hash = "sha256-YE5+Eqt8bHUfinScPJtjzwOMZ3W2ddeFEnFA0MFH4nY=";
   };
 
   nativeBuildInputs = [
@@ -50,15 +56,18 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    protobuf
   ];
 
   buildInputs = [
+    aws-lc
     gtksourceview5
     libadwaita
     libsecret
     libspelling
     openssl
-    protobuf
+    sqlcipher
+    sqlite
 
     # To reproduce audio messages
     gst_all_1.gstreamer
@@ -73,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flare";
     homepage = "https://gitlab.com/schmiddi-on-mobile/flare";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      marcel
+    ];
     platforms = lib.platforms.linux;
   };
 })

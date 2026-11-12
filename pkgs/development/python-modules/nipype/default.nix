@@ -54,7 +54,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nipype";
   version = "1.11.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nipy";

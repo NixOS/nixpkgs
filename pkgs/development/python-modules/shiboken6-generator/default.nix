@@ -13,12 +13,12 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6-generator";
-  version = "6.11.1";
+  version = "6.12.0";
 
   src = fetchgit {
     url = "https://code.qt.io/pyside/pyside-setup.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m1vBGIUOgjx+0/MkiCASP6HaX5YM2B/txnbww7dKjCk=";
+    hash = "sha256-RZUcY1Os6xlFWQ54XJw0BMUGOw8Pe9uevHAqA34PZZQ=";
   };
 
   patches = [

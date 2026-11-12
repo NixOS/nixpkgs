@@ -24,10 +24,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     unzip -p $src github-copilot-intellij/copilot-agent/bin/copilot-agent-${
-      if stdenv.hostPlatform.isDarwin then
-        (if stdenv.hostPlatform.isAarch64 then "macos-arm64" else "macos")
-      else
-        "linux"
+      if stdenv.hostPlatform.isDarwin then "macos-arm64" else "linux"
     } | install -m755 /dev/stdin $out/bin/copilot-agent
 
     runHook postInstall

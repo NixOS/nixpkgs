@@ -22,6 +22,8 @@ buildPythonPackage rec {
     hash = "sha256-yOO38fkaDo59G5RuGyJPTzkYfaDfL4EnMTYaQ2oX9HI=";
   };
 
+  pythonRelaxDeps = [ "typepy" ];
+
   build-system = [
     setuptools
     setuptools-scm

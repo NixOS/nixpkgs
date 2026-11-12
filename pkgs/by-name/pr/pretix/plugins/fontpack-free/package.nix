@@ -8,15 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pretix-fontpack-free";
-  version = "1.11.1";
+  version = "1.11.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-fontpack-free";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eeU8awLf/PSsLuAOobZhXVyQ3KM7jOEIz1ZLt4eDxzQ=";
+    hash = "sha256-FXMzD1r5xegz10JbeXJDLy9oxUhAIjYknZz/y2Og4Dw=";
   };
 
   build-system = [

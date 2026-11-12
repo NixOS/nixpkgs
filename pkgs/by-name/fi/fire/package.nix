@@ -178,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.bluewingsmusic.com/Fire";
     license = lib.licenses.agpl3Only; # Not clarified if Only or Plus
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
   }
   // lib.optionalAttrs withStandalone {
     mainProgram = "Fire";

@@ -15,6 +15,7 @@
   webkitgtk_4_1,
   wrapGAppsHook3,
   xdg-utils,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -60,11 +61,8 @@ python3Packages.buildPythonApplication rec {
     glibcLocales
     pytestCheckHook
     simplejson
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   dontWrapGApps = true;
 

@@ -16,14 +16,14 @@
 let
   self = buildPythonPackage {
     pname = "pylibjpeg-libjpeg";
-    version = "2.4.0";
+    version = "2.5.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydicom";
       repo = "pylibjpeg-libjpeg";
       tag = "v${self.version}";
-      hash = "sha256-e25xCw3KUrZmWSDUQI507n7kybuK0R+xPbJWzzEhZtQ=";
+      hash = "sha256-squBHA/tK06NcIBkiStDqyyGr73uUiID8iAtyIfw1IA=";
     };
 
     postPatch = ''

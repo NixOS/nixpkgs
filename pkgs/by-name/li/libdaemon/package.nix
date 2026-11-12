@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./fix-includes.patch ];
 
+  strictDeps = true;
+
   configureFlags = [
     "--disable-lynx"
   ]
@@ -28,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Can't run this test while cross-compiling
     "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Lightweight C library that eases the writing of UNIX daemons";

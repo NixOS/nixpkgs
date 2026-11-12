@@ -7,17 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "incus-compose";
-  version = "1.3.4";
+  version = "1.3.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus-compose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XQm2rf6Au57u77TAQBvR2unS61Ep9A2xjRjdjlUWhNw=";
+    hash = "sha256-WLwhEGBZ3/DMjaVUTwyR+DKoQGRcu4q7qjfiBKDCj9Q=";
   };
 
-  vendorHash = "sha256-ji1QGBQWDpHJ+kMS/TK7cNFyqeEcBQK9fn1F5zenIBc=";
+  vendorHash = "sha256-A6VSF2gTR9NiLT3yMk1jp5neOqrxvWC5mPvVW1OCS8Y=";
 
   env.CGO_ENABLED = 0;
 

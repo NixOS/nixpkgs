@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "prophet";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Bu+ztg6sj1jh2iair6v1CdbF0Fi4b+h8yLzB3xTMD3Y=";
@@ -63,7 +63,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "prophet" ];
 
   meta = {
-    changelog = "https://github.com/facebook/prophet/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/meta/prophet/releases/tag/${finalAttrs.src.tag}";
     description = "Tool for producing high quality forecasts for time series data that has multiple seasonality with linear or non-linear growth";
     homepage = "https://facebook.github.io/prophet/";
     license = lib.licenses.mit;

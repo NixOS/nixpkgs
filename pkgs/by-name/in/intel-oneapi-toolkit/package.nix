@@ -50,7 +50,9 @@
   libuuid,
   sqlite,
   libffi,
+  openssl,
   bash,
+  ocl-icd,
   # The list of components to install;
   # Either [ "all" ], [ "default" ], or a custom list of components.
   # If you want to install all default components plus an extra one, pass [ "default" <your extra components here> ]
@@ -125,12 +127,9 @@ let
             exit 1
         fi
 
-        regex="$pname-([0-9]+)[.]([0-9]+)[.]([0-9]+)[.]([0-9]+)_offline[.]sh"
+        regex="$pname-([0-9]+[.][0-9]+[.][0-9]+[.][0-9]+)_offline[.]sh"
         if [[ "$filename" =~ $regex ]]; then
-            versionYear="''${BASH_REMATCH[1]}"
-            versionMajor="''${BASH_REMATCH[2]}"
-            versionMinor="''${BASH_REMATCH[3]}"
-            versionRel="''${BASH_REMATCH[4]}"
+            version="''${BASH_REMATCH[1]}"
         else
             echo "'$filename' does not match the expected format $regex" >&2
             exit 1
@@ -144,10 +143,7 @@ let
         echo "The new download URL is $url, prefetching it to store" >&2
         hash="$(nix hash convert --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")"
 
-        sed -i "s|versionYear = \".*\";|versionYear = \"$versionYear\";|" "$file"
-        sed -i "s|versionMajor = \".*\";|versionMajor = \"$versionMajor\";|" "$file"
-        sed -i "s|versionMinor = \".*\";|versionMinor = \"$versionMinor\";|" "$file"
-        sed -i "s|versionRel = \".*\";|versionRel = \"$versionRel\";|" "$file"
+        sed -i "s|^  version = \".*\";|  version = \"$version\";|" "$file"
         sed -i "s|url = \".*\";|url = \"$url\";|" "$file"
         sed -i "s|hash = \".*\";|hash = \"$hash\";|" "$file"
       '';
@@ -216,19 +212,16 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "intel-oneapi-toolkit";
 
-  versionYear = "2026";
-  versionMajor = "0";
-  versionMinor = "1";
-  versionRel = "27";
-
-  version = "${finalAttrs.versionYear}.${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.${finalAttrs.versionRel}";
+  version = "2026.2.0.667";
+  versionYear = lib.versions.major finalAttrs.version;
+  versionMajor = lib.versions.minor finalAttrs.version;
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/c9c3d3e3-ddb4-490e-bb41-6e9041ba32a7/intel-oneapi-toolkit-2026.0.1.27_offline.sh";
-    hash = "sha256-MCMdAN4BCIkuptUOeFCRtAy4eQuwBryl5PXmRzWjPPo=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/902d3dfc-ece4-4282-9a4a-48020ca454e6/intel-oneapi-toolkit-2026.2.0.667_offline.sh";
+    hash = "sha256-WbZe6YkOFpMtLOvdWXZrbvlEBDRntO4e9v+iK1bMGJQ=";
   };
 
   nativeBuildInputs = [
@@ -243,6 +236,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     # Required for patchShebangs to discover the correct interpreter
     bash
+    # libstdc++/libgcc_s for non-vtune components (vtune uses its bundled copies)
+    (lib.getLib stdenv.cc.cc)
+    # libcrypto.so.3 for ippcp's crypto_mb
+    openssl
   ]
   ++ lib.concatMap (
     comp:
@@ -288,9 +285,31 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf "$out"/logs
     rm -rf "$out"/.toolkit_linking_tool
 
+    # The bundled OpenCL loader reads /etc/OpenCL/vendors; point it to ocl-icd,
+    # which reads /run/opengl-driver/etc/OpenCL/vendors where NixOS puts the
+    # drivers. Keep the file names: libomptarget dlopens libOpenCL.so.
+    for f in "$out"/compiler/*/lib/libOpenCL.so*; do
+      [[ ! -e $f ]] || ln -sf "${lib.getLib ocl-icd}/lib/''${f##*/}" "$f"
+    done
+
     ln -s "$out/$versionYear.$versionMajor"/{lib,etc,bin,share,opt,include} "$out"
 
     runHook postInstall
+  '';
+
+  # Patch vtune separately: autoPatchelf prefers libraries in the patched paths,
+  # so other components would pick up vtune's old bundled libstdc++.
+  dontAutoPatchelf = true;
+  postFixup = ''
+    others=()
+    for dir in "$out"/*; do
+      [[ -L $dir || $dir == "$out/vtune" ]] || others+=("$dir")
+    done
+    autoPatchelf -- "''${others[@]}"
+    if [[ -d $out/vtune ]]; then
+      addAutoPatchelfSearchPath "''${others[@]}"
+      autoPatchelf -- "$out/vtune"
+    fi
   '';
 
   autoPatchelfIgnoreMissingDeps = [
@@ -329,6 +348,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       balsoft
       kilyanni
+      recutita
     ];
     platforms = [ "x86_64-linux" ];
   };

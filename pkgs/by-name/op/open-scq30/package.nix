@@ -25,13 +25,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "open-scq30";
-  version = "2.12.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5/b71nZrvN7Q/56FM/orMz6vb+FKf6k/qqYgusirTyI=";
+    hash = "sha256-u9bOq1oAIrm6161t/SFbPprc9851+Yq38jX43aZ8Ut4=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxi
   ];
 
-  cargoHash = "sha256-mLKK2J3CJ6qSM5EDjB6LkrFWKxijFl6jjcjrCgXVg8c=";
+  cargoHash = "sha256-R3iSKgNtqMLzKzaAbq6IWvlLNBQpU+21TS7QUjwABYA=";
 
   # Requires headphones
   doCheck = false;

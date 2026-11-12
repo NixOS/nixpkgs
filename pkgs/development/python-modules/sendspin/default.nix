@@ -21,15 +21,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sendspin";
-  version = "7.5.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
-    repo = "sendspin-cli";
+    repo = "sendspin-python-cli";
     tag = finalAttrs.version;
-    hash = "sha256-Oux9hEtN5AiPf3gAqXGVinDfDIuNVugchUNuLMfMoYc=";
+    hash = "sha256-cEISCLSmu5IgvlJ6Dsuc2rk04OL5+Ic0pErApnoT93c=";
   };
+
+  pythonRelaxDeps = [ "aiosendspin" ];
 
   nativeBuildInputs = [
     pyprojectVersionPatchHook
@@ -69,8 +71,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Synchronized audio player for Sendspin servers";
-    homepage = "https://github.com/Sendspin/sendspin-cli";
-    changelog = "https://github.com/Sendspin/sendspin-cli/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/Sendspin/sendspin-python-cli";
+    changelog = "https://github.com/Sendspin/sendspin-python-cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -6,18 +6,21 @@
 
   # nativeBuildInputs
   installShellFiles,
+  pkg-config,
 
   # buildInputs
   rust-jemalloc-sys,
+  zstd,
 
   buildPackages,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.80";
+  version = "0.0.99";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -25,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Fr806UFsB9zLUsqjSeg31x2Gs5sl1G3QNLSLuolb0HI=";
+    hash = "sha256-Xfs82DP1AyAldmmwp5VMrwSXRMQwSfU6ZeWo12A5NEM=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -39,10 +42,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-pPILCWR81PQQrpq6PyFs4z8tQBHhg+WAqthAsfLbMIo=";
+  cargoHash = "sha256-N+xOMGpz1NIS7ZX/YwmJLCeK3/LEhXPGdUN2bZ7ZFR0=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ rust-jemalloc-sys ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    rust-jemalloc-sys
+    zstd
+  ];
 
   # `ty`'s tests use `insta-cmd`, which depends on the structure of the `target/` directory,
   # and also fails to find the environment variable `$CARGO_BIN_EXE_ty`, which leads to tests failing.
@@ -95,6 +105,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    # ensure that an update doesn't break the test-driver.
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+    };
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

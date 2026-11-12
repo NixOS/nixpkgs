@@ -8,14 +8,15 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-testing";
   version = "1.0.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "ef661775b5722d7b00f67fc229104317d35637a4fb4434bf2c005afdf1da4d09";
+    pname = "sphinx-testing";
+    inherit (finalAttrs) version;
+    hash = "sha256-72YXdbVyLXsA9n/CKRBDF9NWN6T7RDS/LABa/fHaTQk=";
   };
 
   nativeCheckInputs = [
@@ -27,9 +28,8 @@ buildPythonPackage rec {
     six
   ];
 
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
   ];
 
   # Test failures https://github.com/sphinx-doc/sphinx-testing/issues/5
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     description = "Testing utility classes and functions for Sphinx extensions";
   };
-}
+})

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "fb303";
     tag = "v${finalAttrs.version}";
     hash = "sha256-euqoTxNizn4cA9UY/U6X6m2bV1owEuqEQIDEiDM9n5w=";
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
-    homepage = "https://github.com/facebook/fb303";
+    homepage = "https://github.com/meta/fb303";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

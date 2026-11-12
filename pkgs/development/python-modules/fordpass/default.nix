@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "clarkd";
     repo = "fordpass-python";
     rev = version;
-    sha256 = "0i1dlswxc2bv1smc5d4r1adbxbl7sgr1swh2cjfajp73vs43xa0m";
+    hash = "sha256-Fag+iN7jXKmcZAJyHfLTh66+mgqZtMKqDnsJ1rmmLUQ=";
   };
 
   propagatedBuildInputs = [ requests ];

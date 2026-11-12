@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tree-sitter-sql";
   version = "0.3.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   # The git tree does not contain the generated parser (`src/parser.c`), which is required for
   # compilation. Only the release tarball ships it.

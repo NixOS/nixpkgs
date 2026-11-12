@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "soco";
-  version = "0.31.2";
+  version = "0.31.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TCnKzAOrpQxh8JaBkoPs2e81xUS/iQ8D/Qtt3WU9J1k=";
+    hash = "sha256-v24UzJ+/TlEBmNYP51UTI96bvi10E5orNFKS5q1bSyE=";
   };
 
   build-system = [ setuptools ];
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "CLI and library to control Sonos speakers";
-    homepage = "http://python-soco.com/";
+    homepage = "https://github.com/SoCo/SoCo";
     changelog = "https://github.com/SoCo/SoCo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];

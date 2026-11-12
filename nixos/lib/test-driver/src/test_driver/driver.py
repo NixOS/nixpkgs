@@ -9,7 +9,7 @@ import tempfile
 import threading
 import traceback
 import warnings
-from collections.abc import Callable, Generator, Iterator
+from collections.abc import Callable, Generator
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
 from pathlib import Path
@@ -30,6 +30,7 @@ from test_driver.machine import (
     QemuMachine,
     retry,
 )
+from test_driver.machine.nspawn_display import NspawnVncConfiguration
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
@@ -37,6 +38,7 @@ from test_driver.vlan import VLan
 class NodeConfiguration(BaseModel):
     name: str
     start_script: Path
+    vnc: NspawnVncConfiguration | None = None
 
 
 class DriverConfiguration(BaseModel):
@@ -85,6 +87,30 @@ def get_tmp_dir() -> Path:
 
 
 def pythonize_name(name: str) -> str:
+    """Turn a machine name into a valid Python identifier.
+
+    Names that already are valid identifiers stay the same:
+
+    >>> pythonize_name("node_1")
+    'node_1'
+
+    Every character that is not allowed in an identifier becomes "_":
+
+    >>> pythonize_name("my-vm")
+    'my_vm'
+    >>> pythonize_name("web.example.org")
+    'web_example_org'
+    >>> pythonize_name("münchen")
+    'm_nchen'
+
+    A leading digit is replaced rather than prefixed, so it gets lost, while
+    digits later in the name are kept:
+
+    >>> pythonize_name("1node")
+    '_node'
+    >>> pythonize_name("12node")
+    '_2node'
+    """
     return re.sub(r"^[^A-Za-z_]|[^A-Za-z0-9_]", "_", name)
 
 
@@ -158,6 +184,7 @@ class Driver:
         logger: AbstractLogger,
         keep_machine_state: bool = False,
         debug: DebugAbstract = DebugNop(),
+        interactive: bool = False,
     ):
         self.config = config
         self.tests = config.test_script.read_text()
@@ -166,6 +193,7 @@ class Driver:
         self.debug = debug
         self.polling_conditions = []
         self.keep_machine_state = keep_machine_state
+        self.interactive = interactive
 
     def __enter__(self) -> "Driver":
         self.race_timer = threading.Timer(
@@ -214,6 +242,7 @@ class Driver:
             NspawnMachine(
                 name=name,
                 start_command=container_config.start_script.as_posix(),
+                vnc=container_config.vnc if self.interactive else None,
                 tmp_dir=tmp_dir,
                 logger=self.logger,
                 keep_machine_state=self.keep_machine_state,
@@ -314,7 +343,7 @@ class Driver:
 
     def test_symbols(self) -> dict[str, Any]:
         @contextmanager
-        def subtest(name: str) -> Iterator[None]:
+        def subtest(name: str) -> Generator[None]:
             return self.subtest(name)
 
         general_symbols = dict(

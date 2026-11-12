@@ -5,45 +5,44 @@
   makeWrapper,
   nix-update-script,
 }:
+
 let
+  appId = "net.davidotek.pupgui2";
+in
+appimageTools.wrapType2 (finalAttrs: {
   pname = "protonup-qt";
-  version = "2.15.1";
+  version = "2.16.0";
 
   src = fetchurl {
-    url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
-    hash = "sha256-/Xjvsf+gkHpSV4RGJJS5tCk4+f18AZ8+rqO4+vg36ME=";
+    url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${finalAttrs.version}/ProtonUp-Qt-${finalAttrs.version}-x86_64.AppImage";
+    hash = "sha256-hipxdQLwuWAfI+hJpLTf49aa7X58omLPG9xKVT+N5+w=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
+  extraPkgs = pkgs: [ pkgs.zstd ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    install -Dm644 ${appimageContents}/net.davidotek.pupgui2.desktop $out/share/applications/protonup-qt.desktop
-    install -Dm644 ${appimageContents}/net.davidotek.pupgui2.png $out/share/pixmaps/protonup-qt.png
-    substituteInPlace $out/share/applications/protonup-qt.desktop \
-      --replace-fail "Exec=net.davidotek.pupgui2" "Exec=protonup-qt" \
-      --replace-fail "Icon=net.davidotek.pupgui2" "Icon=protonup-qt"
-    wrapProgram $out/bin/protonup-qt \
+    cp -r ${finalAttrs.contents}/usr/share $out
+    chmod -R u+w $out/share
+    substituteInPlace $out/share/applications/${appId}.desktop \
+      --replace-fail "Exec=${appId}" "Exec=${finalAttrs.meta.mainProgram}"
+
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       --unset QT_PLUGIN_PATH \
       --unset QML2_IMPORT_PATH
   '';
 
-  extraPkgs = pkgs: with pkgs; [ zstd ];
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://davidotek.github.io/protonup-qt/";
     description = "Install and manage Proton-GE and Luxtorpeda for Steam and Wine-GE for Lutris with this graphical user interface";
+    homepage = "https://davidotek.github.io/protonup-qt/";
+    changelog = "https://github.com/DavidoTek/ProtonUp-Qt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    mainProgram = "protonup-qt";
-    changelog = "https://github.com/DavidoTek/ProtonUp-Qt/releases/tag/v${version}";
-    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ michaelBelsanti ];
+    mainProgram = "protonup-qt";
+    platforms = [ "x86_64-linux" ];
   };
-}
+})

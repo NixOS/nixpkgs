@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Tool to keep your application settings in sync (OS X/Linux)";
     changelog = "https://github.com/lra/mackup/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/lra/mackup";
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "mackup";

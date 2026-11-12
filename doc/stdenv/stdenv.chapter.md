@@ -613,7 +613,7 @@ Specifies the phases. You can change the order in which phases are executed, or 
 
 The elements of `phases` must not contain spaces. If `phases` is specified as a Nix Language attribute, it should be specified as lists instead of strings. The same rules apply to the `*Phases` variables.
 
-It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obviously needed phases (like `fixupPhase` which patches the shebang of scripts).
+It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obvious phases (like `fixupPhase` which patches the shebang of scripts).
 Usually, if you just want to add a few phases, it’s more convenient to set one of the `*Phases` variables below.
 
 ##### `prePhases` {#var-stdenv-prePhases}
@@ -1197,6 +1197,9 @@ They cannot be overridden without rebuilding the package.
 :::
 
 If dependencies should be resolved at runtime, use `--suffix` to append fallback values to `PATH`.
+
+`makeBinaryWrapper` refuses a `--prefix` or `--suffix` value that would introduce an empty segment (an empty value, or a leading, trailing or doubled separator), because many `PATH`-like variables interpret an empty segment as the current directory.
+For variables where an empty segment is useful and safe, such as `LUA_PATH` where `;;` stands for the default search path, use `--prefix-unchecked` or `--suffix-unchecked` instead.
 
 There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/by-name/ma/makeBinaryWrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
 

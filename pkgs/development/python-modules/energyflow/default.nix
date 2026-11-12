@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pkomiske";
+    owner = "thaler-lab";
     repo = "EnergyFlow";
     tag = "v${finalAttrs.version}";
     hash = "sha256-4RzhpeOOty8IaVGByHD+PyeaeWgR7ZF98mSCJYoM9wY=";

@@ -3,6 +3,7 @@
   fetchFromGitHub,
   nix-update-script,
   openssl,
+  aws-lc,
   pkg-config,
   rustPlatform,
   versionCheckHook,
@@ -10,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adhammer";
-  version = "1.5.1";
+  version = "1.5.2";
 
   __structuredAttrs = true;
 
@@ -18,23 +19,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "icedracon";
     repo = "adhammer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9wUpvYzbXpgB2nzseLx1qHKBzyDLehrVY0PCy3dHBQM=";
+    hash = "sha256-/k2zdHBUysKopRcl34KOo7QlJu35aD+cv1Aza1XOAkE=";
   };
 
-  cargoHash = "sha256-l9Gw3HXbQ5TYN4XdwG68HU1+lr2PU+zalvjMQ6NKPXs=";
+  cargoHash = "sha256-H2wlwVPTEH7E6TT/J54IenxUoLedaBG1kkF3ebioBc8=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    aws-lc
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Active Directory security-assessment toolkit";

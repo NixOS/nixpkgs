@@ -91,6 +91,7 @@ luaepnf,,,,,,
 luaevent,,,,,,
 luaexpat,,,,,,arobyn flosse
 luaffi,,,https://luarocks.org/dev,,,
+luaffi-tkl,,,,,,
 luafilesystem,,,,,,flosse alerque
 lualdap,,,,,,aanderse
 lualine.nvim,,,https://luarocks.org/dev,,,
@@ -100,6 +101,7 @@ luaposix,,,,,,lblasc
 luaprompt,,,,,,Freed-Wu
 luarepl,,,,,,
 luarocks,,,,,,mrcjkb teto
+luarocks-build-luke,,,,,,
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luarocks-build-tree-sitter-cli,,,,,,
 luarocks-build-treesitter-parser,,,,,,mrcjkb
@@ -185,4 +187,5 @@ utf8,,,,,,
 vicious,,,,,,
 vstruct,,,,,,
 vusted,,,,,,
+warna,,,,,,Freed-Wu
 xml2lua,,,,,,teto

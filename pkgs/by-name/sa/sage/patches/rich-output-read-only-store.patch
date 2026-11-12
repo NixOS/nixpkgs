@@ -1,0 +1,25 @@
+--- a/src/sage/repl/rich_output/buffer.py
++++ b/src/sage/repl/rich_output/buffer.py
+@@ -138,12 +138,18 @@
+             # files, as it will cause trouble when upgrading Sage
+             return
+         import stat
+-        mode = os.stat(filename).st_mode
+-        mode = stat.S_IMODE(mode) & ~(stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH)
+-        # The file may already be read only for that user
++        old_mode = stat.S_IMODE(os.stat(filename).st_mode)
++        mode = old_mode & ~(stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH)
++        if mode == old_mode:
++            # Already read only; nothing to do. This also avoids touching
++            # files on a read-only file system (e.g. a read-only
++            # installation of Sage), where chmod fails with EROFS.
++            return
++        # The file may not be owned by the user (EPERM) or may live on a
++        # read-only file system (EROFS)
+         try:
+             os.chmod(filename, mode)
+-        except PermissionError:
++        except OSError:
+             pass
+ 
+     def _repr_(self):

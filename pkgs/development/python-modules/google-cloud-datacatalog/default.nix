@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-datacatalog";
-  version = "3.31.0";
+  version = "3.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-datacatalog-v${finalAttrs.version}";
-    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
+    hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-datacatalog";
@@ -56,6 +56,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--version-regex"
         "google-cloud-datacatalog-v([0-9.]+)"
       ];

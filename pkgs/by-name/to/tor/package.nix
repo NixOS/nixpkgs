@@ -11,7 +11,7 @@
   zlib,
   torsocks,
   libseccomp,
-  systemd,
+  systemdLibs,
   libcap,
   xz,
   zstd,
@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.9.12";
+  version = "0.4.9.16";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wNMHydza7khIqMpT6dbE7JKCPk8wvhJ5Cw+938ZRX1s=";
+    hash = "sha256-YYDhkxUvRSW9ylR1FoQZsqIDW5Y8PGAWKhh/huYWDkg=";
   };
 
   outputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
-    systemd
+    systemdLibs
     libcap
   ];
 
@@ -102,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
   # disable tests on linux aarch32
   # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
+
+  # some tests (e.g. util/socketpair_ersatz) fail in the darwin sandbox otherwise.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     mkdir -p $geoip/share/tor

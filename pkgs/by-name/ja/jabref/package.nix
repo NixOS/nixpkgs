@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   fetchFromGitHub,
   wrapGAppsHook3,
   makeDesktopItem,
@@ -49,22 +48,17 @@ let
     ];
   };
   gradle = gradle_9;
-  ltwaUrl = "https://www.issn.org/wp-content/uploads/2021/07/ltwa_20210702.csv";
-  ltwa = fetchurl {
-    url = ltwaUrl;
-    hash = "sha256-jnS8Y9x8eg2L3L3RPnS6INTs19mEtwzfNIjJUw6HtIY=";
-  };
   kotlinDslVersion = "6.7.3";
 in
 stdenv.mkDerivation rec {
-  version = "6.0-alpha.4";
+  version = "6.0-alpha.6";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     tag = "v${version}";
-    hash = "sha256-ZhyWYZD8QT3dH6MwG2kMjTAjkxaVFIMR4C9aAvi3FJQ=";
+    hash = "sha256-FdRQBSLmSobukDcNJVJd75PawFQkCBLi6k27WD6uwPo=";
     fetchSubmodules = true;
   };
 
@@ -88,8 +82,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    sed -i -e '/vendor/d' -e '/JavaLanguageVersion/s/24/25/' build-logic/src/main/kotlin/org.jabref.gradle.feature.compile.gradle.kts
-    sed -i -e '/javafx-base/s/24.0.2/25/' build-support/src/main/java/*.java
+    sed -i -e '/vendor/d' build-logic/src/main/kotlin/org.jabref.gradle.feature.compile.gradle.kts
+    sed -i -e '/javafx-base/s/26.0.1/25/' build-support/src/main/java/*.java
     sed -i -e 's/javafx = .*/javafx = "25"/' versions/build.gradle.kts
 
     sed -i -e '1a //REPOS file://${mitmCache}/https/repo.maven.apache.org/maven2,file://${mitmCache}/https/plugins.gradle.org/m2' build-support/src/main/java/*.java
@@ -109,9 +103,6 @@ stdenv.mkDerivation rec {
       --replace-fail '/usr' '/run/current-system/sw'
 
     sed -i -e '/setOutputRedirector/d' src/main/java/org/jabref/logic/search/PostgreServer.java
-
-    substituteInPlace build.gradle.kts \
-      --replace-fail '${ltwaUrl}' 'file://${ltwa}'
 
     popd
   '';
@@ -159,18 +150,44 @@ stdenv.mkDerivation rec {
     # Resources in the jar can't be found, workaround copied from AUR
     cp -r */build/resources $out/share/java/jabref
 
-    for tarball in */build/distributions/*.tar; do
-      tar xf $tarball -C $out --strip-components=1
+    for tarball in */build/distributions/*shadow*.tar; do
+      tar xf $tarball --strip-components=1
     done
 
     # Replace .so files with the ones from nixpkgs
     cp ${openjfx}/modules_libs/javafx.graphics/*.so $out/lib
     # Temp fix: openjfx doesn't build with webkit
-    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
+    unzip lib/jabgui*.jar libjfxwebkit.so -d $out/lib/
 
-    zip -d $out/lib/javafx-media-*-*.jar "*.so"
-    zip -d $out/lib/javafx-graphics-*-*.jar "*.so"
-    zip -d $out/lib/javafx-web-*-*.jar "*.so"
+    for jar in lib/*.jar; do
+      zip -d $jar "*.so" "postgres-*.txz"
+    done
+    mv lib/*.jar $out/lib
+
+    mkdir -p $out/bin
+    for bin in jabgui jabkit jabsrv-cli jabls-cli; do
+      DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" bin/$bin | sed -e 's/"//g')
+      CLASSPATH=$(sed -n -E 's/^CLASSPATH=(.*)$/\1/p' bin/$bin | sed -e "s|\$APP_HOME|$out|g")
+      MODULE=$(sed -n -E 's/\s*--module .*\/(.*) \\/\1/p' bin/$bin)
+
+      # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
+      makeWrapper ${jre}/bin/java $out/bin/$bin \
+        "''${gappsWrapperArgs[@]}" \
+        --suffix PATH : ${
+          lib.makeBinPath [
+            xdg-utils
+            postgresql
+          ]
+        } \
+        --add-flags "$DEFAULT_JVM_OPTS \
+          -Djava.library.path=$out/lib/ \
+          -classpath $CLASSPATH \
+          $MODULE"
+    done
+
+    # lowercase alias (for convenience and required for browser extensions)
+    ln -sf $out/bin/jabgui $out/bin/jabref
+    ln -sf $out/bin/jabgui $out/bin/JabRef
 
     # Use postgresql from nixpkgs since the bundled binary doesn't work on NixOS
     ARCH1=${if stdenv.hostPlatform.isAarch64 then "arm64v8" else "amd64"}
@@ -189,37 +206,13 @@ stdenv.mkDerivation rec {
     jar=$(ls $out/lib/embedded-postgres-binaries-linux-$ARCH1-*.jar)
 
     tar -cJf postgres-linux-$ARCH2.txz *
-    zip $jar postgres-linux-$ARCH2.txz
+
+    for jar in $out/lib/*.jar; do
+      zip -u $jar postgres-linux-$ARCH2.txz
+    done
     cd ..
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    for bin in jabgui jabkit jabsrv-cli; do
-      DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/$bin | sed -e 's/"//g')
-      MODULE_PATH=$(sed -n -E 's/^MODULE_PATH=(.*)$/\1/p' $out/bin/$bin | sed -e "s|\$APP_HOME|$out|g")
-      MODULE=$(sed -n -E 's/\s*--module (.*) \\/\1/p' $out/bin/$bin)
-      rm $out/bin/$bin*
-
-      # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
-      makeWrapper ${jre}/bin/java $out/bin/$bin \
-        "''${gappsWrapperArgs[@]}" \
-        --suffix PATH : ${
-          lib.makeBinPath [
-            xdg-utils
-            postgresql
-          ]
-        } \
-        --add-flags "$DEFAULT_JVM_OPTS \
-          -Djava.library.path=$out/lib/ \
-          --module-path $MODULE_PATH \
-          --module $MODULE"
-    done
-
-    # lowercase alias (for convenience and required for browser extensions)
-    ln -sf $out/bin/jabgui $out/bin/jabref
-    ln -sf $out/bin/jabgui $out/bin/JabRef
   '';
 
   gradleUpdateScript = ''

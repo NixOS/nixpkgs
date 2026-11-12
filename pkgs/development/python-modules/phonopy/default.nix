@@ -26,16 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "phonopy";
-  version = "4.4.0";
+  version = "4.7.2";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "phonopy";
     repo = "phonopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w31B4/o/lo/0LIfrn7DR2cJ2OY6Pfe4zAMgcQfJ2q1g=";
+    hash = "sha256-3KbyMF/LLCuuNHy/rX6+eSmH4Vhbkoa2iAxHj8aDjPA=";
   };
 
   postPatch = ''
@@ -82,7 +80,7 @@ buildPythonPackage (finalAttrs: {
     description = "Modulefor phonon calculations at harmonic and quasi-harmonic levels";
     homepage = "https://phonopy.github.io/phonopy/";
     changelog = "http://phonopy.github.io/phonopy/changelog.html";
-    license = lib.licenses.bsd0;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       psyanticy
       chn

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter341,
+  flutter347,
   callPackage,
   makeDesktopItem,
   copyDesktopItems,
@@ -20,15 +20,15 @@ let
   libsideswap-client = callPackage ./libsideswap-client.nix { };
 in
 
-flutter341.buildFlutterApplication (finalAttrs: {
+flutter347.buildFlutterApplication (finalAttrs: {
   pname = "sideswap";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "sideswap-io";
     repo = "sideswapclient";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E+njx//oCr85nwF8rvuOjDTNvs5177+lh9uy5LEvTVE=";
+    hash = "sha256-j+U1kztMCpU3xivnUQvwtGlwed0iZ4tLlRzfi8coAoA=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

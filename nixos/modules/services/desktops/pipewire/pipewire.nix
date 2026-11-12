@@ -393,6 +393,8 @@ in
       }
     ];
 
+    warnings = lib.optional cfg.jack.enable "`services.pipewire.jack.enable` is deprecated, because it introduces global impurity via `LD_LIBRARY_PATH`. Use the `pw-jack` wrapper from `pipewire.jack` where necessary instead.";
+
     environment.systemPackages = [ cfg.package ] ++ optional cfg.jack.enable jack-libs;
 
     systemd.packages = [ cfg.package ];

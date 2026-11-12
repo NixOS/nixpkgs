@@ -4,26 +4,31 @@
   buildGoModule,
   fetchFromCodeberg,
   installShellFiles,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "yanic";
-  version = "1.9.0";
+  version = "2.1.1";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "FreifunkBremen";
     repo = "yanic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zVe4Z/Gkhrj/Qa6oXAHDG1iJgJeEj8/STylyIBbpBoo=";
+    hash = "sha256-vTLPPwyJQTHjrIkOEa4+9cgH3lrXsCd6JWd2EFMDb0M=";
   };
 
-  vendorHash = "sha256-TcmkPBHxpmTgXNW8gPkzMpjPGCQu/HrZqAu9jDpPEjo=";
+  vendorHash = "sha256-2ebCeLLNfpsk8d89SBsaeTXvpWX1YNzo8bATCPD/Shw=";
+
+  subPackages = [
+    "."
+    "cmd"
+  ];
 
   ldflags = [
-    "-X github.com/FreifunkBremen/yanic/cmd.VERSION=${finalAttrs.version}"
+    "-X codeberg.org/FreifunkBremen/yanic/cmd.VERSION=${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -36,6 +41,8 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/yanic completion fish) \
       --zsh <($out/bin/yanic completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to collect and aggregate respondd data";

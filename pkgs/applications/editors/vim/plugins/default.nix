@@ -55,7 +55,14 @@ let
     inherit llvmPackages;
   };
 
-  aliases = if config.allowAliases then (import ./aliases.nix lib) else final: prev: { };
+  aliases =
+    final: prev:
+    let
+      defined = import ./aliases.nix lib final prev;
+      shadowed = builtins.attrNames (builtins.intersectAttrs prev defined);
+    in
+    assert lib.assertMsg (shadowed == [ ]) "vimPlugins aliases shadow plugins: ${toString shadowed}";
+    lib.optionalAttrs config.allowAliases defined;
 in
 lib.pipe initialPackages [
   (extends plugins)

@@ -32,7 +32,7 @@ let
   version = sources.version;
   format = "wheel";
   pyShortVersion = "cp${lib.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-  cudaVersion = "cu${lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version}";
+  cudaVersion = "cu${lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudaMajorMinorVersion}";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
   systemSources = sources."${stdenv.hostPlatform.system}" or throwSystem;
@@ -125,8 +125,12 @@ buildPythonPackage {
           ++ lib.optionals cudaSupport (
             with cudaPackages;
             [
-              cudatoolkit.lib
-              cudatoolkit.out
+              cuda_cudart
+              cuda_nvrtc
+              libcublas
+              libcurand
+              libcusolver
+              libcusparse
               cudnn
             ]
           )

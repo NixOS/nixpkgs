@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "certgraph";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "lanrat";
     repo = "certgraph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WlNrKmny4fODnSEkP8HUF+VzMX1/LKYMdSnm7DON8Po=";
+    hash = "sha256-76OqwLGg+ZMLvY281XvRTSpOq6iLPAnLRjDs/Xee2hQ=";
   };
 
-  vendorHash = "sha256-4wj96eDibGB3oX56yIr01CYLZCYMFnfoaPWaNdFH7IE=";
+  vendorHash = "sha256-AvwoQffkiaK3QsV5UXO0EwFM/Y3DxVMp0brKiFD+N7I=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

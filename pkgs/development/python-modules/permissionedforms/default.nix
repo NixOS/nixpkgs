@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = "django-permissionedforms";
     owner = "wagtail";
     rev = "v${version}";
-    sha256 = "sha256-DQzPGmh5UEVpGWnW3IrEVPkZZ8mdiW9J851Ej4agTDc=";
+    hash = "sha256-DQzPGmh5UEVpGWnW3IrEVPkZZ8mdiW9J851Ej4agTDc=";
   };
 
   propagatedBuildInputs = [ django ];

@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "simple-parsing";
   version = "0.1.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lebrice";

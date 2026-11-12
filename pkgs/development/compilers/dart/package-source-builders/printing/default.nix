@@ -7,7 +7,7 @@
 
 { version, src, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "printing";
   inherit version src;
   inherit (src) passthru;

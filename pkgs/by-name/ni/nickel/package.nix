@@ -6,24 +6,26 @@
   python3,
   gitMinimal,
   versionCheckHook,
+  oniguruma,
   pkg-config,
   nixVersions,
   nix-update-script,
   enableNixImport ? false,
+  nickel,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.17.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "nickel-lang";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-D+OI00Ouwm0v65igIYSCGPXKCl6/SZsOyz1wFM1VAF4=";
+    hash = "sha256-9os/QtFNL8zobOmg5V09Op8/P43YS6qpQh1qcHqXbgE=";
   };
 
-  cargoHash = "sha256-hIeTHajL+h6xhuje8TmfgkkM9R+tGwYFzlnSwaN3nK8=";
+  cargoHash = "sha256-0zrxOPWKP0Yz0og9UZtiiyNJtB4mwIKz1fi++wwm7oE=";
 
   cargoBuildFlags = [
     "--package"
@@ -35,13 +37,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     python3
     gitMinimal
-  ]
-  ++ lib.optionals enableNixImport [
     pkg-config
   ];
 
-  buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_31
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals enableNixImport [
+    nixVersions.nix_2_34
     boost
   ];
 
@@ -87,6 +90,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests = {
+    build = lib.recurseIntoAttrs {
+      nickelWithNix = nickel.override {
+        enableNixImport = true;
+      };
+    };
+  };
 
   meta = {
     homepage = "https://nickel-lang.org/";

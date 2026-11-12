@@ -61,9 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '94i (test-skip 1)' ./tests/proxy.scm
   '';
 
+  guileImportsCheck = [
+    "git"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Bindings to Libgit2 for GNU Guile";
     homepage = "https://gitlab.com/guile-git/guile-git";
     license = lib.licenses.gpl3Plus;

@@ -28,9 +28,8 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mlflow";
-  version = "3.16.0";
+  version = "3.17.1";
   format = "wheel";
-  __structuredAttrs = true;
 
   # We build from the PyPI wheel rather than fetchFromGitHub, because the mlflow-server
   # JS UI is absent from GitHub but provided in the wheel.
@@ -40,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-xKxehjSqytGj19WhoxvpJ5WT69SLhCcoQ2gtsRlwz3E=";
+    hash = "sha256-cmv3/qwl29tbMJi/ILhldDk7t1Ro7vchkC7AJeckdS8=";
   };
 
   # Nix-wrapped python populates sys.path via NIX_PYTHONPATH/site hooks,

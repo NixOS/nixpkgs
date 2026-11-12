@@ -7,6 +7,7 @@
   openssl,
   perl,
   rdkafka,
+  zstd,
   # these are features in the cargo, where one may be disabled to reduce the final size
   enableS3 ? true,
   enableAzure ? true,
@@ -38,6 +39,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     openssl
     rdkafka
+    zstd
   ];
 
   # #![deny(warnings)] breaks the build when newer rustc emits new lints.

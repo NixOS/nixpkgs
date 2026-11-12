@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -22,6 +23,8 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X github.com/slurdge/goeland/version.GitCommit=${finalAttrs.version}"
   ];
+
+  passthru.tests.nixos = nixosTests.goeland;
 
   meta = {
     description = "Alternative to rss2email written in golang with many filters";

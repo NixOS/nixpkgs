@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "selinux-python";
-  version = "3.10";
+  version = "3.11";
 
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/selinux-python-${finalAttrs.version}.tar.gz";
-    hash = "sha256-nQpbafL7zOjlzNjg8X1W9x5gBadWOG+Ps2wx+UJBkaI=";
+    hash = "sha256-+FTX/meYHYDGEgZ+l8GAT2QanfzKLTi66z7+UreHU5g=";
   };
 
   strictDeps = true;
@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     selinuxPython3
     python3.pkgs.wrapPython
+    python3.pkgs.build
     gettext
   ];
 
@@ -105,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "SELinux policy core utilities written in Python";
     license = lib.licenses.gpl2Plus;
-    homepage = "https://selinuxproject.org";
+    homepage = "https://github.com/SELinuxProject/selinux";
     inherit (libsepol.meta) maintainers;
     platforms = lib.platforms.linux;
   };

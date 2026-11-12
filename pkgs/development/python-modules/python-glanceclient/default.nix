@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   coreutils,
   setuptools,
   pbr,
@@ -14,33 +14,26 @@
   oslo-utils,
   wrapt,
   pyopenssl,
-  stestr,
+  stestrCheckHook,
   testscenarios,
   ddt,
   requests-mock,
-  writeText,
 }:
-let
+
+buildPythonPackage (finalAttrs: {
   pname = "python-glanceclient";
   version = "4.13.0";
-
-  disabledTests = [
-    # Skip tests which require networking.
-    "glanceclient.tests.unit.test_http.TestClient.test_http_chunked_response"
-    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
-    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
-    ''glanceclient\.tests\.unit\.test_ssl\.TestHTTPSVerifyCert\..*''
-  ];
-in
-buildPythonPackage {
-  inherit pname version;
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_glanceclient";
-    inherit version;
-    hash = "sha256-+jNZvIvZPnrryjctr+yOGQA7TB9kSZ4uuCsncdqPpBw=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-glanceclient";
+    tag = finalAttrs.version;
+    hash = "sha256-5KwZ5XVosCUFObXaraVPWOO6ZdeMYWO+n2IsUwojFJg=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   postPatch = ''
     substituteInPlace glanceclient/tests/unit/v1/test_shell.py \
@@ -65,15 +58,19 @@ buildPythonPackage {
     ddt
     openstacksdk
     requests-mock
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e ${writeText "disabled-tests" (lib.concatStringsSep "\n" disabledTests)}
-    runHook postCheck
-  '';
+  # Skip tests which require networking.
+  disabledTests = [
+    "glanceclient.tests.unit.test_http.TestClient.test_http_chunked_response"
+    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
+  ];
+
+  disabledTestsRegex = [
+    ''glanceclient\.tests\.unit\.test_ssl\.TestHTTPSVerifyCert\..*''
+  ];
 
   pythonImportsCheck = [ "glanceclient" ];
 
@@ -83,4 +80,4 @@ buildPythonPackage {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

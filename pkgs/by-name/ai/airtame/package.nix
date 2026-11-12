@@ -31,7 +31,7 @@
   lib,
   libnotify,
   libappindicator,
-  systemd,
+  systemdLibs,
   pciutils,
 }:
 let
@@ -71,11 +71,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "airtame-application";
-  version = "4.16.0";
+  version = "4.16.1";
 
   src = fetchurl {
     url = "https://downloads.airtame.com/app/latest/linux/Airtame-${finalAttrs.version}.deb";
-    hash = "sha256-wjWuPqXXonxbaobwl6dpYmUHA5W3+LXYskFJLUsjDf8=";
+    hash = "sha256-Kp0SUMuz8LX2/e4ZiOdKD6m5/Zk+Q6rziApm16QbG0E=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = deps;
   runtimeDependencies = [
-    (lib.getLib systemd)
+    (lib.getLib systemdLibs)
     libnotify
     libappindicator
     pulseaudio

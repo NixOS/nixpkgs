@@ -1,0 +1,20 @@
+diff --git a/voice-host/src/runtime.rs b/voice-host/src/runtime.rs
+index 0c795188d452..52b61449cd5e 100644
+--- a/voice-host/src/runtime.rs
++++ b/voice-host/src/runtime.rs
+@@ -127,10 +127,13 @@ impl Runtime {
+
+ fn private_file(root: &Path, relative: &str) -> io::Result<PathBuf> {
+     let path = root.join(relative);
+-    if path.canonicalize()? != path || !path.is_file() {
++    let canonical = path.canonicalize()?;
++    let is_nix_runtime_file = std::env::split_paths("@voiceRuntimeRoots@")
++        .any(|root| canonical.starts_with(&root) && canonical != root);
++    if !path.is_file() || (canonical != path && !is_nix_runtime_file) {
+         return Err(runtime_error());
+     }
+-    Ok(path)
++    Ok(canonical)
+ }
+
+ fn load(path: &Path) -> io::Result<ManuallyDrop<Library>> {

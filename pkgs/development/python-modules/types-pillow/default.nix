@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "10.2.0.20240822";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "types-Pillow";

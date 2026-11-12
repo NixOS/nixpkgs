@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crow";
-  version = "1.3.2";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "CrowCpp";
     repo = "Crow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MN2x1hgJ9TziZFPSZn6RuAEfl4mZv3ijU9LqQJkw6UM=";
+    hash = "sha256-XFiRxvVoNjk8TVt8X7Ha1E1O90jzoLRyH4PdTtRAWUg=";
   };
 
   patches = [

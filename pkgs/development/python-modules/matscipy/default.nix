@@ -48,7 +48,6 @@ buildPythonPackage (finalAttrs: {
   pname = "matscipy";
   version = "1.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "libAtoms";

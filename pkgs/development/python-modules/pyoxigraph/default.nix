@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   version = "0.5.9";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "oxigraph";
     repo = "oxigraph";

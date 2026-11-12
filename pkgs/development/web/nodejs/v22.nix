@@ -4,15 +4,11 @@
   buildPackages,
   callPackage,
   fetchpatch2,
-  openssl,
-  python3,
-}:
+  ...
+}@args:
 
 let
-  buildNodejs = callPackage ./nodejs.nix {
-    inherit openssl;
-    python = python3;
-  };
+  buildNodejs = callPackage ./nodejs.nix args;
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
@@ -23,8 +19,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "22.23.2";
-  sha256 = "bbe768df8d5815d7fa76124052985332452e0a4742d39f32027550d1aab8f6fb";
+  version = "22.23.5";
+  sha256 = "6cce7c58bf058700c643944903d60a325e8c9ceede1f5c2c088b435f2ada091a";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -68,12 +64,6 @@ buildNodejs {
         url = "https://github.com/nodejs/node/commit/064e2eee1ec7b17c4bc6e36befc2935eee80d0f7.patch?full_index=1";
         hash = "sha256-RcmWiTpWYwA952nNmhaiq4zw/iuVAXFnuTeuB6ltR1U=";
         includes = [ "test/fixtures/wpt/url/resources/urltestdata.json" ];
-      })
-
-      # TODO: remove when support for OpenSSL 3.6.4 has landed upstream
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/40eac4a32f3676b286fd44435be4514962a40b79.patch?full_index=1";
-        hash = "sha256-zLMd79mQclmZpS1oiTOZ0JOPDSjKGtLl0e4itUNm4og=";
       })
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [

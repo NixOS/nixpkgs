@@ -57,7 +57,6 @@ let
     mainProgram = "proxyman";
     maintainers = with lib.maintainers; [
       nilathedragon
-      matteopacini
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

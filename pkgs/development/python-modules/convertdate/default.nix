@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "convertdate";
-  version = "2.4.1";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fitnr";
     repo = "convertdate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YgLKUSg95j9rRejkmep+Levy5Rvnl/kXEiXuS7hazbY=";
+    hash = "sha256-zxcEIqCdEIG+tRGGFqeZDy2DNLbq/CNifK35bRyqEcU=";
   };
 
   build-system = [ setuptools ];

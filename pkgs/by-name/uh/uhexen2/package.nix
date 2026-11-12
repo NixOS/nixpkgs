@@ -21,6 +21,10 @@ stdenv.mkDerivation {
     rev = "4ef664bc41e3998b0d2a55ff1166dadf34c936be";
   };
 
+  nativeBuildInputs = [
+    SDL # for sdl-config
+  ];
+
   buildInputs = [
     SDL
     alsa-lib
@@ -31,19 +35,19 @@ stdenv.mkDerivation {
     xdelta
   ];
 
-  preBuild = ''
-    makeFiles=(
-        "engine/hexen2 glh2"
-        "engine/hexen2 clean"
-        "engine/hexen2 h2"
-        "engine/hexen2/server"
-        "engine/hexenworld/client glhw"
-        "engine/hexenworld/client clean"
-        "engine/hexenworld/client hw"
-        "engine/hexenworld/server"
-        "h2patch"
-    )
-  '';
+  strictDeps = true;
+
+  makeFiles = [
+    "engine/hexen2 glh2"
+    "engine/hexen2 clean"
+    "engine/hexen2 h2"
+    "engine/hexen2/server"
+    "engine/hexenworld/client glhw"
+    "engine/hexenworld/client clean"
+    "engine/hexenworld/client hw"
+    "engine/hexenworld/server"
+    "h2patch"
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
@@ -53,11 +57,11 @@ stdenv.mkDerivation {
           local flagsArray=(
             -j$NIX_BUILD_CORES
             SHELL=$SHELL
-            $makeFlags "''${makeFlagsArray[@]}"
-            $buildFlags "''${buildFlagsArray[@]}"
+            "''${makeFlags[@]}"
+            "''${buildFlags[@]}"
           )
           echoCmd 'build flags' ""''${flagsArray[@]}""
-          make  -C $makefile ""''${flagsArray[@]}""
+          make -C $makefile ""''${flagsArray[@]}""
           unset flagsArray
     done
     runHook postBuild
@@ -70,6 +74,8 @@ stdenv.mkDerivation {
     install -Dm755 h2patch/h2patch -t $out/bin
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;

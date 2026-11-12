@@ -24,6 +24,7 @@
   libxi,
   libxrandr,
   libxcb,
+  oniguruma,
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
   testers,
@@ -51,37 +52,39 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.5.27";
+  version = "0.5.28";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NkuuhH5ygCH45ZP71mZ4+16TSQJLlCoLuqobHX8INSI=";
+    hash = "sha256-Sv9G2YGG4CEWbWlrUSBs1zdzMPZbGpvBYsOIxmTrxOg=";
   };
 
-  cargoHash = "sha256-iIKZTv2PdSD33Tfeg5p//00XSHAkBusEYXCi5jhP3iY=";
+  cargoHash = "sha256-ygX7saxVxK9NpnsO2J1zx7sWduTkhkD4RlB8SNLavGY=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    pkg-config
     ncurses
     scdoc
     installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     cmake
-    pkg-config
     autoPatchelfHook
     shaderc
   ];
 
   runtimeDependencies = rlinkLibs;
 
-  buildInputs =
-    rlinkLibs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libutil
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ rlinkLibs
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libutil
+  ];
 
   outputs = [
     "out"
@@ -159,6 +162,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       tornax
       otavio
       oluceps
+      ethancedwards8 # darwin
     ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/releases/tag/v${finalAttrs.version}";

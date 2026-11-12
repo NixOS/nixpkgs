@@ -14,15 +14,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kotonoha";
-  version = "0.2.1";
+  version = "0.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "locez";
     repo = "kotonoha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vym24/K7K4vVFzGnNTCasLkZirsqLRuMNe+vtlDglPQ=";
+    hash = "sha256-4S1ervaJ1RJPN+on4RqEYAffkVVQng/cxCRWc+QRuDo=";
   };
 
   build-system = [ python3Packages.scikit-build-core ];

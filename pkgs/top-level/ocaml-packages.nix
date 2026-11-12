@@ -217,6 +217,12 @@ let
 
         capnp = callPackage ../development/ocaml-modules/capnp { };
 
+        capnp-rpc = callPackage ../development/ocaml-modules/capnp-rpc { };
+
+        capnp-rpc-net = callPackage ../development/ocaml-modules/capnp-rpc/net.nix { };
+
+        capnp-rpc-unix = callPackage ../development/ocaml-modules/capnp-rpc/unix.nix { };
+
         caqti = callPackage ../development/ocaml-modules/caqti { };
 
         caqti-async = callPackage ../development/ocaml-modules/caqti/async.nix { };
@@ -258,6 +264,10 @@ let
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
         charon = callPackage ../development/ocaml-modules/charon { };
+
+        charrua = callPackage ../development/ocaml-modules/charrua { };
+
+        charrua-server = callPackage ../development/ocaml-modules/charrua/server.nix { };
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
@@ -335,6 +345,10 @@ let
         config = callPackage ../development/ocaml-modules/config { };
 
         config-file = callPackage ../development/ocaml-modules/config-file { };
+
+        console = callPackage ../development/ocaml-modules/console { };
+
+        console-eio = callPackage ../development/ocaml-modules/console/eio.nix { };
 
         containers = callPackage ../development/ocaml-modules/containers { };
 
@@ -469,12 +483,7 @@ let
 
         dolmen_loop = callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
-        dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix {
-          lsp = lsp.override {
-            jsonrpc = jsonrpc.override { yojson = yojson_2; };
-            ppx_yojson_conv_lib = ppx_yojson_conv_lib.override { yojson = yojson_2; };
-          };
-        };
+        dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
 
         dolmen_model = callPackage ../development/ocaml-modules/dolmen/model.nix { };
 
@@ -1059,6 +1068,8 @@ let
 
         ### K ###
 
+        k7 = callPackage ../development/ocaml-modules/k7 { };
+
         kafka = callPackage ../development/ocaml-modules/kafka { };
 
         kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix {
@@ -1143,11 +1154,7 @@ let
 
         linksem = callPackage ../development/ocaml-modules/linksem { };
 
-        linol = callPackage ../development/ocaml-modules/linol {
-          ppx_yojson_conv_lib = ppx_yojson_conv_lib.override {
-            yojson = yojson_2;
-          };
-        };
+        linol = callPackage ../development/ocaml-modules/linol { };
 
         linol-eio = callPackage ../development/ocaml-modules/linol/eio.nix { };
 
@@ -1231,6 +1238,8 @@ let
 
         markup = callPackage ../development/ocaml-modules/markup { };
 
+        matrix = callPackage ../development/ocaml-modules/mosaic/matrix.nix { };
+
         mccs = callPackage ../development/ocaml-modules/mccs { };
 
         mdx = callPackage ../development/ocaml-modules/mdx {
@@ -1299,8 +1308,6 @@ let
 
         minisat = callPackage ../development/ocaml-modules/minisat { };
 
-        minttea = callPackage ../development/ocaml-modules/minttea { };
-
         miou = callPackage ../development/ocaml-modules/miou { };
 
         mirage = callPackage ../development/ocaml-modules/mirage { };
@@ -1347,6 +1354,8 @@ let
 
         mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
 
+        mirage-kv-mem = callPackage ../development/ocaml-modules/mirage-kv-mem { };
+
         mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
 
         mirage-mtime = callPackage ../development/ocaml-modules/mirage-mtime { };
@@ -1354,6 +1363,8 @@ let
         mirage-nat = callPackage ../development/ocaml-modules/mirage-nat { };
 
         mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
+
+        mirage-net-solo5 = callPackage ../development/ocaml-modules/mirage-net-solo5 { };
 
         mirage-net-xen = callPackage ../development/ocaml-modules/mirage-net-xen { };
 
@@ -1370,6 +1381,8 @@ let
         mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
 
         mirage-sleep = callPackage ../development/ocaml-modules/mirage-sleep { };
+
+        mirage-solo5 = callPackage ../development/ocaml-modules/mirage-solo5 { };
 
         mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
@@ -1410,9 +1423,9 @@ let
           };
         };
 
-        mparser = callPackage ../development/ocaml-modules/mparser { };
+        mosaic = callPackage ../development/ocaml-modules/mosaic { };
 
-        mparser-pcre = callPackage ../development/ocaml-modules/mparser/pcre.nix { };
+        mparser = callPackage ../development/ocaml-modules/mparser { };
 
         mparser-re = callPackage ../development/ocaml-modules/mparser/re.nix { };
 
@@ -1503,8 +1516,6 @@ let
         ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
 
         ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
-
-        ocaml_pcre = callPackage ../development/ocaml-modules/pcre { };
 
         ocaml-print-intf = callPackage ../development/ocaml-modules/ocaml-print-intf { };
 
@@ -1825,6 +1836,8 @@ let
 
         ppx_deriving_encoding = callPackage ../development/ocaml-modules/ppx_deriving_encoding { };
 
+        ppx_deriving_hash = callPackage ../development/ocaml-modules/ppx_deriving_hash { };
+
         ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf { };
 
         ppx_deriving_qcheck = callPackage ../development/ocaml-modules/qcheck/ppx_deriving_qcheck.nix { };
@@ -1841,9 +1854,13 @@ let
 
         ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson { };
 
+        ppx_expect_nobase = callPackage ../development/ocaml-modules/ppx_expect_nobase { };
+
         ppx_gen_rec = callPackage ../development/ocaml-modules/ppx_gen_rec { };
 
         ppx_import = callPackage ../development/ocaml-modules/ppx_import { };
+
+        ppx_inline_test_nobase = callPackage ../development/ocaml-modules/ppx_inline_test_nobase { };
 
         ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
 
@@ -1862,6 +1879,8 @@ let
         ppx_tools = callPackage ../development/ocaml-modules/ppx_tools { };
 
         ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
+
+        ppx_windtrap = callPackage ../development/ocaml-modules/windtrap/ppx.nix { };
 
         ppx_yojson_conv = callPackage ../development/ocaml-modules/ppx_yojson_conv { };
 
@@ -1981,8 +2000,6 @@ let
         ringo = callPackage ../development/ocaml-modules/ringo { };
 
         rio = callPackage ../development/ocaml-modules/rio { };
-
-        riot = callPackage ../development/ocaml-modules/riot { };
 
         rock = callPackage ../development/ocaml-modules/rock { };
 
@@ -2176,6 +2193,8 @@ let
 
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
+        toffee = callPackage ../development/ocaml-modules/mosaic/toffee.nix { };
+
         toml = callPackage ../development/ocaml-modules/toml { };
 
         top-closure = callPackage ../development/ocaml-modules/top-closure { };
@@ -2241,6 +2260,8 @@ let
         uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
 
         uring = callPackage ../development/ocaml-modules/uring { };
+
+        utcp = callPackage ../development/ocaml-modules/utcp { };
 
         utop = callPackage ../development/tools/ocaml/utop { };
 

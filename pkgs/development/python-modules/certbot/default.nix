@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "certbot";
-  version = "5.6.0";
+  version = "5.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-knaEk4bjC0cdnMiO4ENvaDm/i/3tn6ZOJPdyqJxLKOs=";
+    hash = "sha256-Josk4he121DjSNGgP3aZwN9lHsX3H3YaKvghTycXvm0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/certbot";
@@ -77,7 +77,12 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${dialog}/bin"
+  ];
 
   # certbot.withPlugins has a similar calling convention as python*.withPackages
   # it gets invoked with a lambda, and invokes that lambda with the python package set matching certbot's:
@@ -89,7 +94,7 @@ buildPythonPackage (finalAttrs: {
     in
     runCommand "certbot-with-plugins-${finalAttrs.version}"
       {
-        inherit (finalAttrs) pname version;
+        inherit (finalAttrs) pname version meta;
       }
       ''
         mkdir -p $out/bin

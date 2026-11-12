@@ -5,8 +5,11 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
+  makeBinaryWrapper,
   libgit2,
   openssl,
+  aws-lc,
+  zstd,
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -14,25 +17,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi";
-  version = "0.80.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PeTSCk6b8GaEXlMWmHMGczIXpj72twXRd3vb8Sb0ZWs=";
+    hash = "sha256-2jRqyS7NsH4fkw5IfDs+hwWzFYpW5kNGc3y49ly4e1w=";
   };
 
-  cargoHash = "sha256-M6pP4xGeuJMzjKLbH3uIfLkfs6M0uztoea4GPTiDQ1E=";
+  cargoHash = "sha256-vqcmIOkQ1qzIRd10bQ/9x4jEwJCYwQIgS6GX0j/g0wI=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    makeBinaryWrapper
   ];
 
   buildInputs = [
     libgit2
     openssl
+    aws-lc
+    zstd
   ];
 
   env = {
@@ -54,6 +60,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --zsh <(${emulator} $out/bin/pixi completion --shell zsh)
     ''
   );
+
+  postFixup = ''
+    wrapProgram $out/bin/pixi --set-default PIXI_TLS_ROOT_CERTS system
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

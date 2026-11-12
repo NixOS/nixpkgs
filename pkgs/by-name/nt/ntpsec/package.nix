@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntpsec";
-  version = "1.2.5";
+  version = "1.2.6";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://ftp.ntpsec.org/pub/releases/ntpsec-${finalAttrs.version}.tar.gz";
-    hash = "sha256-b7GRzdr2B+d1Sx9pFaGmHcQBiz5O7z0v+s7JYcloKUk=";
+    hash = "sha256-gCO+uaDIapPwv5TUP9OIxxpvpU2AvL10fYmZFRkbtZI=";
   };
 
   outputs = [

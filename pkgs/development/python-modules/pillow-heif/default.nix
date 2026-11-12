@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   cmake,
@@ -25,17 +26,30 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pillow-heif";
-  version = "1.4.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
-    tag = "v${version}";
-    hash = "sha256-EaislmA4v2qKCDQ87I85Pn8IlS4VJWyNXkITipKSBC8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UO8FlVPlxBAM/8kM9jh+GTCsqLSRSsrEpFdxIG/AxMA=";
   };
+
+  patches = [
+    # fix compatibility with libheif 1.23.7
+    (fetchpatch {
+      url = "https://github.com/bigcat88/pillow_heif/commit/558ee2bfbe85a64b4371bcc1bc067883c5f9573d.diff";
+      excludes = [
+        "CHANGELOG.md"
+        "LICENSES_bundled.txt"
+        "libheif/*"
+      ];
+      hash = "sha256-ToIAnz4PH87gyIBTnB57n3hA9BZXxtw0tS9mW4LUAGA=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
@@ -95,7 +109,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/${src.tag}";
+    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for working with HEIF images and plugin for Pillow";
     homepage = "https://github.com/bigcat88/pillow_heif";
     license = with lib.licenses; [
@@ -107,4 +121,4 @@ buildPythonPackage rec {
       kuflierl
     ];
   };
-}
+})

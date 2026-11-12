@@ -14,15 +14,15 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-3FE2tZtkDZttZlD7foqt1qgcb1w37mT0/RC30HYEvNA=";
+        hash = "sha256-hcRjZ+z7gUg0jG12c9k98d+3knGgtW6XRF2tSfQQvOg=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-xxniWRtMkh3NE9OWJkR9xUARJTBnQkoTRlXrQa95K/k=";
+        hash = "sha256-4375B2WsRajVtCewX2ruWDrdgsGlccefcfHDl8X6z9A=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-/pj6HPuqvAYXrBVX/FoOZRDYL5xvdnM+PPM27/5+hxw=";
+        hash = "sha256-3na7btLQRIAb9EtHAHUSbLvdM/j/EJ9z0W5qv0Ysoz4=";
       };
     }
     .${system} or (throw "Unsupported system: ${system}");
@@ -34,7 +34,7 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
     # Please update the corresponding binary (typos-lsp)
     # when updating this extension.
     # See pkgs/by-name/ty/typos-lsp/package.nix
-    version = "0.1.55";
+    version = "0.1.56";
     inherit (extInfo) hash arch;
   };
 

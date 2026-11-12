@@ -3,7 +3,9 @@
   libuuid,
   cups,
   dpkg,
-  fetchurl,
+  cacert,
+  curl,
+  jq,
   glib,
   libssh2,
   gtk3,
@@ -18,7 +20,8 @@
   libGL,
   nss,
   libxdamage,
-  systemd,
+  systemdLibs,
+  runCommandLocal,
   stdenv,
   undmg,
   at-spi2-core,
@@ -31,12 +34,40 @@
 }:
 
 let
-  sources = import ./sources.nix { inherit fetchurl; };
+  fetchqq =
+    {
+      url,
+      hash,
+    }:
+    runCommandLocal (baseNameOf url)
+      {
+        outputHash = hash;
+        outputHashMode = "flat";
+        nativeBuildInputs = [
+          curl
+          jq
+          cacert
+        ];
+      }
+      ''
+        # https://github.com/flathub/com.qq.QQ/issues/274#issuecomment-5512982615
+        signedUrl=$(
+          curl -fsS --retry 3 -X POST "https://im.qq.com/http2rpc/gotrpc/noauth/trpc.qqntv2.urlsign.UrlSign/GetSign" \
+            -H "Content-Type: application/json" \
+            -H 'x-oidb: {"uint32_command":"0x9b8e","uint32_service_type":1}' \
+            -d "{\"url\":\"${url}\"}" | jq -er '.data.url'
+        )
+        curl -fL --retry 3 -o "$out" "$signedUrl"
+      '';
+  sources = import ./sources.nix { };
   source =
     sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   pname = "qq";
-  inherit (source) version src;
+  version = source.version;
+  src = fetchqq {
+    inherit (source) url hash;
+  };
   passthru = {
     # nixpkgs-update: no auto update
     updateScript = ./update.sh;
@@ -116,7 +147,7 @@ else
     dontWrapGApps = true;
 
     runtimeDependencies = map lib.getLib [
-      systemd
+      systemdLibs
       libkrb5
     ];
 
@@ -179,8 +210,8 @@ else
         cp -r opt $out/opt
         cp -r usr/share $out/share
         substituteInPlace $out/share/applications/qq.desktop \
-          --replace-fail "/opt/QQ/qq" "$out/bin/qq" \
-          --replace-fail "/usr/share" "$out/share"
+          --replace-fail "Exec=/opt/QQ/qq" "Exec=qq" \
+          --replace-fail "Icon=/usr/share/icons/hicolor/512x512/apps/qq.png" "Icon=qq"
         makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
           --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
           --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \

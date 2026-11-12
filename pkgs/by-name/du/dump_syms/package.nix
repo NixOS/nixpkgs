@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  zstd,
 
   # tests
   firefox-esr-unwrapped,
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   checkFlags = [

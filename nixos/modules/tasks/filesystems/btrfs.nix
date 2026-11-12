@@ -101,20 +101,6 @@ in
         )
       );
 
-      boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-        copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
-        ln -sv btrfs $out/bin/btrfsck
-        ln -sv btrfsck $out/bin/fsck.btrfs
-      '';
-
-      boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
-        $out/bin/btrfs --version
-      '';
-
-      boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-        btrfs device scan
-      '';
-
       boot.initrd.systemd.initrdBin = [ pkgs.btrfs-progs ];
     })
 
@@ -171,25 +157,33 @@ in
         serviceConfig =
           let
             btrfsCmd = getExe pkgs.btrfs-progs;
-            btrfsCancelCmd = pkgs.writers.writePython3 "btrfs-scrub-maybe-cancel" { } ''
-              import subprocess
-              import sys
+            btrfsCancelCmd =
+              pkgs.writers.writePython3 "btrfs-scrub-maybe-cancel"
+                {
+                  flakeIgnore = [
+                    # `btrfsCmd` may exceed 80-character line length for some platforms
+                    "E501"
+                  ];
+                }
+                ''
+                  import subprocess
+                  import sys
 
-              btrfs = "${escape [ "\"" "\\" ] btrfsCmd}"
-              result = subprocess.run(
-                  [btrfs, "scrub", "cancel"] + sys.argv[1:],
-                  stderr=subprocess.PIPE,
-                  check=False,
-                  shell=False
-              )
+                  btrfs = "${escape [ "\"" "\\" ] btrfsCmd}"
+                  result = subprocess.run(
+                      [btrfs, "scrub", "cancel"] + sys.argv[1:],
+                      stderr=subprocess.PIPE,
+                      check=False,
+                      shell=False
+                  )
 
-              # ignore errors if there was no running scrub to cancel
-              if result.returncode == 2:
-                  sys.exit(0)
+                  # ignore errors if there was no running scrub to cancel
+                  if result.returncode == 2:
+                      sys.exit(0)
 
-              sys.stderr.buffer.write(result.stderr)
-              sys.exit(result.returncode)
-            '';
+                  sys.stderr.buffer.write(result.stderr)
+                  sys.exit(result.returncode)
+                '';
             additionalScrubArgs = optionals (cfgScrub.limit != null) [
               "--limit"
               cfgScrub.limit

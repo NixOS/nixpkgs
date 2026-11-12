@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "nkeys";
-  version = "0.4.16";
+  version = "0.4.17";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nkeys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GR1OvyA8bjZRTPTn12izxQXjACIaXFbGsSquHucusRY=";
+    hash = "sha256-kBkd9PTmkZn5hBmtPIufFzV0ER32BdofHut1iyxNrL4=";
   };
 
   vendorHash = "sha256-WszCsYEK0xOuSNI3UxJJLWKus8viVREaNj4xVQY6eBM=";

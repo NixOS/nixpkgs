@@ -202,7 +202,7 @@ in
 
         (mkIf cfg.playwrightSupport {
           changedetection-io-playwright = {
-            image = "browserless/chrome";
+            image = "docker.io/browserless/chrome";
             environment = {
               SCREEN_WIDTH = "1920";
               SCREEN_HEIGHT = "1024";

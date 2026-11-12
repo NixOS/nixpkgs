@@ -32,9 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     zopfli
   ];
 
-  preBuild = ''
-    buildFlagsArray+=("LIBS=-lzopfli -lstdc++ -lpng -lz")
-  '';
+  strictDeps = true;
+
+  buildFlags = [
+    "LIBS=-lzopfli -lstdc++ -lpng -lz"
+  ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 apngopt $out/bin/apngopt
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://sourceforge.net/projects/apng/";

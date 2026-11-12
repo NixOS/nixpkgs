@@ -23,15 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vector";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hHoJ8GFauswG5XCsQ4+pDbVPJvzuSz6eGx8ykUUegWk=";
+    hash = "sha256-7LssN38bnxZDc1lUp0Tq+6oNjJcA5pTkR3UHAizKvoc=";
   };
 
   build-system = [
@@ -75,10 +74,6 @@ buildPythonPackage (finalAttrs: {
     "test_method_transform2D"
     "test_method_transform3D"
     "test_method_transform4D"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # AssertionError: assert 2.1073424255447017e-08 == 0.0
-    "test_issue_463"
   ];
 
   meta = {

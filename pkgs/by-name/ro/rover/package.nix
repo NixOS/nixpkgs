@@ -1,5 +1,6 @@
 {
   lib,
+  libgit2,
   fetchFromGitHub,
   pkg-config,
   rustPlatform,
@@ -21,6 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-nMb0kwtzYmfOB+Ub8vXK39wp3vAe5HNFb9k579We26c=";
 
   buildInputs = [
+    libgit2
     openssl
   ];
 

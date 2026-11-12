@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "bluezero";
   version = "0.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ukBaz";
@@ -19,6 +18,11 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-H5760bPdA7NECiOWI7fLCxW3K7+c2L0Y3sa/E/krJJw=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='0.9.0'," "version='${finalAttrs.version}',"
+  '';
 
   build-system = [
     setuptools

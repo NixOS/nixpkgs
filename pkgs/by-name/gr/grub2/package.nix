@@ -223,6 +223,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   hardeningDisable = [ "all" ];
 
   separateDebugInfo = !xenSupport;
@@ -325,12 +328,15 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
 
-  passthru.tests = {
-    nixos-grub = nixosTests.grub;
-    nixos-install-simple = nixosTests.installer.simple;
-    nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
-    nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
-  };
+  passthru.tests =
+    lib.attrsets.mapAttrs' (
+      attrName: lib.attrsets.nameValuePair "nixos-grub-${attrName}"
+    ) nixosTests.grub
+    // {
+      nixos-install-simple = nixosTests.installer.simple;
+      nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
+      nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
+    };
 
   meta = {
     description = "GNU GRUB, the Grand Unified Boot Loader";

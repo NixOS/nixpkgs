@@ -11,12 +11,14 @@
   makeBinaryWrapper,
   versionCheckHook,
   librusty_v8 ? callPackage ./rusty-v8 { },
+  aws-lc,
   libffi,
   sqlite,
   pkg-config,
   zstd,
   lcms2,
   lld,
+  vulkan-loader,
   writableTmpDirAsHomeHook,
 
   # Test deps
@@ -36,7 +38,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.9.6";
+  version = "2.9.8";
 
   __structuredAttrs = true;
 
@@ -51,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-4X7IfQk9NJizhZKqH2EuDnSfk8axkKFyiZEv1FOfWTM=";
+    hash = "sha256-piJetMgFpg8xzEveqRQEq4kJINaLRDOrHp7Nd0z8wok=";
   };
 
-  cargoHash = "sha256-EKRC+wqIos9O0GHaxjmb/ghyzV6oCi1qwhO2tjszWR4=";
+  cargoHash = "sha256-LNYXzS0oespQMeT/1fGcOvaDy5ErVeY7jUPL19OgeZ4=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -70,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libffi
     sqlite
     zstd
+    aws-lc
   ];
 
   nativeBuildInputs = [
@@ -177,10 +180,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=npm::lock_file_lock_write"
     "--skip=happy_eyeballs::tests::test_parallel_second_wins"
 
-    # GPU access
-    "--skip=js_unit_tests::webgpu_test"
-    "--skip=js_unit_tests::jupyter_test"
-
     # Use of /usr/bin
     "--skip=specs::permission::proc_self_fd"
 
@@ -265,6 +264,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
       --zsh <($out/bin/deno completions zsh)
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]} $out/bin/deno
   '';
 
   doInstallCheck = canExecute;

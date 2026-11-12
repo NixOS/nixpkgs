@@ -12,22 +12,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "upterm";
-  version = "0.24.0";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-b52Rny6mYkmfF6Umn2tzlnUhNkENHPFpCzp55OWj92w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XDD7qC7TBfNUz7QQnQI+p1CddrzUWXR7mokXEcRBr28=";
   };
+
+  vendorHash = "sha256-/or+hvaOm6WLJGBt+49g5QBZLZuXGYQGKbwTudCIq2I=";
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/owenthereal/upterm/internal/version.Version=${finalAttrs.version}"
   ];
-
-  vendorHash = "sha256-UkZnLbxn0dPT43ycuevcwMw0dXnX1OPHLh5F1XMHWDI=";
 
   subPackages = [
     "cmd/upterm"
@@ -69,7 +69,12 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Secure terminal-session sharing";
     homepage = "https://upterm.dev";
+    changelog = "https://github.com/owenthereal/upterm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hax404 ];
+    maintainers = with lib.maintainers; [
+      hax404
+      debtquity
+    ];
+    mainProgram = "upterm";
   };
 })

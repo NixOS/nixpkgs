@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astyle";
-  version = "3.6.18";
+  version = "3.6.21";
 
   src = fetchurl {
     url = "mirror://sourceforge/astyle/astyle-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-1PxDPP6syVLeKVlhvIrp6rci4IWAuqbB6Oezmnovu0g=";
+    hash = "sha256-JyPkO8D7RTlCo5QTNoMiL9hbEUPuauCx97Wx2zjfMc0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "astyle";
     homepage = "https://astyle.sourceforge.net/";
     license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
     platforms = lib.platforms.unix;
   };
 })

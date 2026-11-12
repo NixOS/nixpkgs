@@ -14,7 +14,7 @@ build-idris-package {
     owner = "yurrriq";
     repo = "idris-logic";
     rev = "e0bed57e17fde1237fe0358cb77b25f488a04d2f";
-    sha256 = "0kvn1p0v71vkwlchf20243c47jcfid44w5r0mx4dydijq9gylxfz";
+    hash = "sha256-33XqX8IyNt9IryAXTkiLjslD2CACCAcZ5XOHs8ENdk8=";
   };
 
   # tests fail

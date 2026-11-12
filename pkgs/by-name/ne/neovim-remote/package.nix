@@ -5,6 +5,7 @@
   python3,
   neovim,
   fetchpatch,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -41,13 +42,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     neovim
     python3.pkgs.pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   pythonImportsCheck = [ "nvr" ];
 

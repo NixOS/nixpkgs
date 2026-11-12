@@ -80,13 +80,12 @@ buildPythonPackage (finalAttrs: {
     "--prefix"
     "PYTHONPATH"
     ":"
-    "$out/${python.sitePackages}"
+    "${placeholder "out"}/${python.sitePackages}"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # ModuleNotFoundError: No module named '_watchdog_fsevents'
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+  doCheck = true;
 
   preCheck = ''
     export HOME=$(mktemp -d)

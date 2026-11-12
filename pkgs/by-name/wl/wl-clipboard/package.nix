@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       dywedir
       kashw2
     ];
-    platforms = lib.platforms.unix;
+    platforms = wayland.meta.platforms;
+    badPlatforms = wayland.meta.badPlatforms;
   };
 })

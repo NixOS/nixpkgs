@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "jaxe";
-  version = "0-unstable-2026-04-02";
+  version = "0-unstable-2026-07-24";
 
   src = fetchFromGitHub {
     owner = "kurtjd";
     repo = "jaxe";
-    rev = "581befc5d7273abc20ea1b137744f414aa70592c";
-    hash = "sha256-jJPg4qRxraz9wycAiWNgwXXZMF2qG8hQv7Bfexkwyqs=";
+    rev = "c767afd785e01a15bcd575a2d93b737add82b675";
+    hash = "sha256-qkoYVzAFiMACHt9Zx2qfNhUig6DEovyXZ2jE/GLo+ro=";
     fetchSubmodules = true;
   };
 

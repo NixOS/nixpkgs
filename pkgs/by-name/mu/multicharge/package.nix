@@ -15,7 +15,7 @@
   mstore,
 }:
 
-assert !blas.isILP64 && !lapack.isILP64;
+assert blas.isILP64 == lapack.isILP64;
 assert (
   builtins.elem buildType [
     "meson"
@@ -62,6 +62,31 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     mctc-lib
     mstore
+  ];
+
+  # For the Meson build, the `ilp64` option sets the -DIK=i8 preprocessor flag
+  # for 64-bit integer BLAS/LAPACK calls.  Because nixpkgs always provides the
+  # BLAS library as `libblas` (regardless of the integer size), the `custom`
+  # LAPACK vendor is used with explicit library names when ILP64 is enabled,
+  # instead of the upstream default which would look for `libblas64`.
+  mesonFlags = [
+    "-Dilp64=${if blas.isILP64 then "true" else "false"}"
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "-Dlapack=custom"
+    "-Dcustom_libraries=blas,lapack"
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_ILP64" blas.isILP64)
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "-DBLAS_LIBRARIES=${lib.getLib blas}/lib/libblas${
+      if stdenv.hostPlatform.isStatic then ".a" else stdenv.hostPlatform.extensions.sharedLibrary
+    }"
+    "-DLAPACK_LIBRARIES=${lib.getLib lapack}/lib/liblapack${
+      if stdenv.hostPlatform.isStatic then ".a" else stdenv.hostPlatform.extensions.sharedLibrary
+    }"
   ];
 
   outputs = [

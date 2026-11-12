@@ -2,32 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  testers,
-  igrep,
+  pkg-config,
+  oniguruma,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "igrep";
   version = "1.3.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "konradsz";
     repo = "igrep";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZZhzBGLpzd9+rok+S/ypKpWXVzXaA1CnviC7LfgP/CU=";
   };
 
   cargoHash = "sha256-NZN9pB9McZkTlpGgAbxi8bwn+aRiPMymGmBLYBc6bmw=";
 
-  # Fix build with gcc 15
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+  nativeBuildInputs = [ pkg-config ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = igrep;
-      command = "ig --version";
-    };
-  };
+  buildInputs = [ oniguruma ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Interactive Grep";

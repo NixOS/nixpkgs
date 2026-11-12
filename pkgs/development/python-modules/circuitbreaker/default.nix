@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.1.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "fabfuel";
     repo = "circuitbreaker";

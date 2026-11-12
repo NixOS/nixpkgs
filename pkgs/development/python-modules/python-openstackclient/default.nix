@@ -35,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openstackclient";
-  version = "10.3.0";
+  version = "10.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-openstackclient";
     tag = finalAttrs.version;
-    hash = "sha256-xOvDAwnJGYbMJDG+lO1TCLRFavlciJRVmbjYqU/E1DY=";
+    hash = "sha256-xhRJFp5gNEzCNrI4MHCKVcSyWoKfgcnb+g+yU9CIAY8=";
   };
 
   env.PBR_VERSION = finalAttrs.version;

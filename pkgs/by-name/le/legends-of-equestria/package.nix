@@ -12,7 +12,7 @@
   cairo,
   dbus,
   xorg_sys_opengl,
-  systemd,
+  systemdLibs,
   libcap,
   libdrm,
   pulseaudio,
@@ -44,24 +44,24 @@
 
 let
   pname = "legends-of-equestria";
-  version = "2025.06.002";
+  version = "2026.03.001";
   description = "Free-to-play MMORPG";
 
   srcOptions = {
     x86_64-linux = {
-      url = "https://mega.nz/file/QmBXXDiC#XoG19N2_uBIHVKDNId5mE4cod9q29iPkYOfGDgAX_Oo";
-      outputHash = "IdcowkU2k2grg133jTf3EOENATCCige64BMYXtFupRE=";
+      url = "https://mega.nz/file/oup1jboB#VGv-EmYKCPZupB8HkWHZA5ks62U6bGndWfen7XNHCQk";
+      outputHash = "q2nrNZKhs8CblZUYbLqBLfglLvb0xntjmTEz0qON184=";
     };
     aarch64-darwin = {
-      url = "https://mega.nz/file/xr4AHIrb#pD5wDIiYys2my4_59UWiYoqBpdyUQHf_CalPZe7hpME";
-      outputHash = "PpDUFnobznB5FHYSF+m9S3RcNIdi7eWyxxDHRdS+zlY=";
+      url = "https://mega.nz/file/ZywXjbQB#47Zdevfo1kiLalnjbmLqV5QyIX22gLCOME9Tytmj1NY";
+      outputHash = "74jyiGReVs4Y8JdtJcMDHSw730eKl8BfzpYqQ7+11K4=";
     };
   };
 
   runtimeDeps = [
     dbus.lib
     xorg_sys_opengl
-    systemd
+    systemdLibs
     libcap.lib
     libdrm
     pulseaudio
@@ -112,6 +112,11 @@ stdenv.mkDerivation {
         mkdir -p $out
         unzip -d $out $dest/*.zip
       '';
+
+  sourceRoot = "mega-loe/LoE_${if stdenv.hostPlatform.isLinux then "Linux" else "Mac"}_${version}";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   dontBuild = true;
   buildInputs = [

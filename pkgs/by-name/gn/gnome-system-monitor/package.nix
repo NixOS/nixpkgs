@@ -6,7 +6,6 @@
   pkg-config,
   gtkmm4,
   bash,
-  catch2_3,
   gtk4,
   libadwaita,
   glib,
@@ -20,16 +19,16 @@
   librsvg,
   gdk-pixbuf,
   libgtop,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-system-monitor";
-  version = "50.0";
+  version = "51.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major finalAttrs.version}/gnome-system-monitor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pBOKp1S0WExG3pH60daF4nsSvCRX3nYYY7a+AthMSGI=";
+    hash = "sha256-iIewNCcjCsCBbUsMgBzmYorR/JE57TBykU6fqogbqGg=";
   };
 
   patches = [
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash
-    catch2_3
     gtk4
     libadwaita
     glib
@@ -59,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     librsvg
     gsettings-desktop-schemas
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [

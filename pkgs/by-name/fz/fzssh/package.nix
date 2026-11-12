@@ -1,4 +1,5 @@
 {
+  directoryListingUpdater,
   fetchurl,
   lib,
   libargon2,
@@ -9,24 +10,18 @@
   pkg-config,
   stdenv,
   testers,
-
-  autoreconfHook,
-  gettext,
-  gnutls,
-  libiconv,
-  libxcrypt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fzssh";
-  version = "1.3.0";
+  version = "1.5.0";
   __structuredAttrs = true;
 
   src = fetchurl {
     # Upstream download link was made unstable on purpose
     # See https://trac.filezilla-project.org/ticket/13186
     url = "https://sources.archlinux.org/other/packages/fzssh/fzssh-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hkWCsgNyZYi1oW2GFB/5Wrd9I5l2L+u+H97ZLk8EeZY=";
+    hash = "sha256-Ionh58P8EdNyC2nua+5ASQwLPVvKIdfQYV38odgzeG0=";
   };
 
   strictDeps = true;
@@ -43,6 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     nettle
   ];
 
+  doCheck = true;
+
+  passthru.updateScript = directoryListingUpdater { };
+
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lib.filezilla-project.org/";
     description = "SSH/SFTP library based on libfilezilla";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     pkgConfigModules = [ "libfzssh-client" ];
   };
 })

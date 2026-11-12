@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "26.7.30";
+  version = "26.9.27";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfJ4ADJBCriC67YpRiKbJKW799iJnXcS1dp7AQoz2Ew=";
+    hash = "sha256-Cf0ZcrJGSQgQ6l08qTPeO9p25mz6S+73Piw/LWwNPK4=";
   };
 
   nativeBuildInputs = [
@@ -68,13 +68,18 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   qtWrapperArgs = [
-    "--set FREI0R_PATH ${
-      (frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })
-    }/lib/frei0r-1"
-    "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])
-    }"
+    "--set"
+    "FREI0R_PATH"
+    "${(frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })}/lib/frei0r-1"
+
+    "--set"
+    "LADSPA_PATH"
+    "${ladspaPlugins}/lib/ladspa"
+
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ]))
   ];
 
   preFixup = ''

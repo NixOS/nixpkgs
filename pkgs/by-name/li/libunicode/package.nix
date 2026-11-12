@@ -21,17 +21,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunicode";
-  version = "0.9.0";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "libunicode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EBu8zn5XritudZmBvQmjOmU08XLjhyKI6hVCrnWoR6k=";
+    hash = "sha256-vHJ1o3rP5LjKZzhSFN5RUWAgY69z80H8oWi86h/CjVI=";
   };
-
-  # Fix: set_target_properties Can not find target to add properties to: Catch2, et al.
-  patches = [ ./remove-target-properties.diff ];
 
   nativeBuildInputs = [
     cmake

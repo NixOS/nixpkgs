@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "More expressive universal gRPC client";
     mainProgram = "evans";
-    homepage = "https://evans.syfm.me/";
+    homepage = "https://github.com/ktr0731/evans";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ diogox ];
   };

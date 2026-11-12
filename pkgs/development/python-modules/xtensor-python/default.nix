@@ -22,6 +22,10 @@ toPythonModule (
       hash = "sha256-GN1X46gmeXh3pM6sw9sSUahLOxnSoimoY+K66vy8SxM=";
     };
 
+    postPatch = ''
+      substituteInPlace test/CMakeLists.txt --replace-fail "-std=c++17" "-std=c++20"
+    '';
+
     nativeBuildInputs = [ cmake ];
     buildInputs = [ pybind11 ];
     nativeCheckInputs = [ gtest ];

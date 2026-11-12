@@ -2,17 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
-  libsForQt5,
+  qt6,
 
   apple-sdk_15,
   asciidoctor,
   botan3,
-  curl,
   darwinMinVersionHook,
+  keyutils,
   libxi,
   libxtst,
-  libargon2,
   libusb1,
   minizip,
   nix-update-script,
@@ -23,45 +23,60 @@
   wrapGAppsHook3,
   zlib,
 
-  withKeePassBrowser ? true,
-  withKeePassBrowserPasskeys ? true,
-  withKeePassFDOSecrets ? stdenv.hostPlatform.isLinux,
-  withKeePassKeeShare ? true,
+  withKeePassMinimal ? false,
+  withKeePassBrowser ? !withKeePassMinimal,
+  withKeePassDocs ? true,
+  withKeePassFDOSecrets ? !withKeePassMinimal && stdenv.hostPlatform.isLinux,
   withKeePassNetworking ? true,
-  withKeePassSSHAgent ? true,
+  withKeePassSSHAgent ? !withKeePassMinimal,
   withKeePassX11 ? true,
-  withKeePassYubiKey ? true,
 
   nixosTests,
 }:
 
+assert
+  !withKeePassMinimal || (!withKeePassBrowser && !withKeePassSSHAgent && !withKeePassFDOSecrets);
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepassxc";
-  version = "2.7.12";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     tag = finalAttrs.version;
-    hash = "sha256-eg8jRaSJdRBpEOHQ8E3jXcdwRzsnyq6r4RLyltdpIB8=";
+    hash = "sha256-821zL+xnCsHU8VvxsJh2a2LRGstSIq3tWQbWBk8g4hc=";
   };
 
-  env =
-    lib.optionalAttrs stdenv.cc.isClang {
-      NIX_CFLAGS_COMPILE = toString [
-        "-Wno-old-style-cast"
-        "-Wno-error"
-        "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
-      ];
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      NIX_LDFLAGS = toString [
-        "-rpath"
-        "${libargon2}/lib"
-      ];
-    };
+  __structuredAttrs = true;
 
-  patches = [ ./darwin-remove-macdeployqt.patch ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (withKeePassDocs && stdenv.hostPlatform.isLinux) [
+    "man"
+    "doc"
+  ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-old-style-cast"
+      "-Wno-error"
+      "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
+    ];
+  };
+
+  patches = [
+    ./darwin-remove-macdeployqt.patch
+    # Botan 3.14 randomizes ECDSA signatures by default, which breaks
+    # TestPasskeys' hardcoded signatures; verify the signatures instead.
+    # Backported from develop, remove on next version bump.
+    (fetchpatch2 {
+      name = "botan-3.14-verify-passkey-signatures.patch";
+      url = "https://github.com/keepassxreboot/keepassxc/commit/b111337c25d1ceae829ddfb6c618305f05137ede.patch?full_index=1";
+      hash = "sha256-92vcGxoB++qvZYc/Bkqnn6WykY0ODzTZv+2LHh1vhS4=";
+    })
+  ];
 
   # Upstream develops against a build of PCSC from Xcode.
   # The types are incompatible with nixpkgs pcsclite.
@@ -74,15 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
     (lib.cmakeBool "WITH_GUI_TESTS" true)
-    (lib.cmakeBool "WITH_XC_UPDATECHECK" false)
-    (lib.cmakeBool "WITH_XC_X11" withKeePassX11)
-    (lib.cmakeBool "WITH_XC_BROWSER" withKeePassBrowser)
-    (lib.cmakeBool "WITH_XC_BROWSER_PASSKEYS" withKeePassBrowserPasskeys)
-    (lib.cmakeBool "WITH_XC_KEESHARE" withKeePassKeeShare)
-    (lib.cmakeBool "WITH_XC_NETWORKING" withKeePassNetworking)
-    (lib.cmakeBool "WITH_XC_SSHAGENT" withKeePassSSHAgent)
-    (lib.cmakeBool "WITH_XC_FDOSECRETS" withKeePassFDOSecrets)
-    (lib.cmakeBool "WITH_XC_YUBIKEY" withKeePassYubiKey)
+    (lib.cmakeBool "KPXC_FEATURE_UPDATES" false)
+    (lib.cmakeBool "WITH_X11" withKeePassX11)
+    (lib.cmakeBool "KPXC_MINIMAL" withKeePassMinimal)
+    (lib.cmakeBool "KPXC_FEATURE_DOCS" withKeePassDocs)
+    (lib.cmakeBool "KPXC_FEATURE_BROWSER" withKeePassBrowser)
+    (lib.cmakeBool "KPXC_FEATURE_NETWORK" withKeePassNetworking)
+    (lib.cmakeBool "KPXC_FEATURE_SSHAGENT" withKeePassSSHAgent)
+    (lib.cmakeBool "KPXC_FEATURE_FDOSECRETS" withKeePassFDOSecrets)
   ];
 
   doCheck = true;
@@ -111,7 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       export LC_ALL="en_US.UTF-8"
       export QT_QPA_PLATFORM=offscreen
-      export QT_PLUGIN_PATH="${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}"
 
       make test ARGS+="-E '${disabledTests}' --output-on-failure"
 
@@ -119,12 +132,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [
-    asciidoctor
     cmake
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
     pkg-config
   ]
+  ++ lib.optional withKeePassDocs asciidoctor
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
@@ -136,6 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.concatLines [
+    (lib.optionalString (withKeePassDocs && stdenv.hostPlatform.isLinux) ''
+      mkdir -p $doc/share/doc
+      mv $out/share/keepassxc/docs/ $doc/share/doc/keepassxc
+    '')
+
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/bin"
       for program in keepassxc-cli keepassxc-proxy; do
@@ -156,12 +174,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     botan3
-    curl
     libxi
     libxtst
-    libargon2
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+    qt6.qtbase
+    qt6.qtsvg
     minizip
     pcsclite
     qrencode
@@ -169,18 +185,14 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libsForQt5.qtmacextras
-
     apple-sdk_15
     # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
     # https://developer.apple.com/documentation/screencapturekit
     (darwinMinVersionHook "12.3")
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    keyutils
     libusb1
-  ]
-  ++ lib.optionals withKeePassX11 [
-    libsForQt5.qtx11extras
   ];
 
   passthru = {

@@ -4,16 +4,9 @@
   fetchurl,
   ncurses5,
   libxcrypt-legacy,
-  xz,
-  zstd,
-  makeBinaryWrapper,
-  darwin,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "gcc-arm-embedded";
-  version = "13.3.rel1";
-
+let
   platform =
     {
       aarch64-darwin = "darwin-arm64";
@@ -21,9 +14,13 @@ stdenv.mkDerivation rec {
       x86_64-linux = "x86_64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gcc-arm-embedded";
+  version = "13.3.rel1";
 
   src = fetchurl {
-    url = "https://developer.arm.com/-/media/Files/downloads/gnu/${version}/binrel/arm-gnu-toolchain-${version}-${platform}-arm-none-eabi.tar.xz";
+    url = "https://developer.arm.com/-/media/Files/downloads/gnu/${finalAttrs.version}/binrel/arm-gnu-toolchain-${finalAttrs.version}-${platform}-arm-none-eabi.tar.xz";
     # hashes obtained from location ${url}.sha256asc
     sha256 =
       {
@@ -40,11 +37,6 @@ stdenv.mkDerivation rec {
     ./info-fix.patch
   ];
 
-  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    makeBinaryWrapper
-    darwin.sigtool
-  ];
-
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
@@ -57,32 +49,22 @@ stdenv.mkDerivation rec {
     rm $out/bin/{arm-none-eabi-gdb-py,arm-none-eabi-gdb-add-index-py} || :
   '';
 
-  preFixup =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      find $out -type f | while read f; do
-        patchelf "$f" > /dev/null 2>&1 || continue
-        patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
-        patchelf --set-rpath ${
-          lib.makeLibraryPath [
-            "$out"
-            stdenv.cc.cc
-            ncurses5
-            libxcrypt-legacy
-          ]
-        } "$f" || true
-      done
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      find "$out" -executable -type f | while read executable; do
-        ( \
-          install_name_tool \
-            -change "/usr/local/opt/zstd/lib/libzstd.1.dylib" "${lib.getLib zstd}/lib/libzstd.1.dylib" \
-            -change "/usr/local/opt/xz/lib/liblzma.5.dylib" "${lib.getLib xz}/lib/liblzma.5.dylib" \
-            "$executable" \
-          && codesign -f -s - "$executable" \
-        ) || true
-      done
-    '';
+  # Set RPATH before the interpreter to work around a patchelf bug:
+  # https://github.com/NixOS/patchelf/issues/674
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    find $out -type f | while read f; do
+      patchelf "$f" > /dev/null 2>&1 || continue
+      patchelf --set-rpath ${
+        lib.makeLibraryPath [
+          "$out"
+          stdenv.cc.cc
+          ncurses5
+          libxcrypt-legacy
+        ]
+      } "$f" || true
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
+    done
+  '';
 
   meta = {
     description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors";
@@ -106,4 +88,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

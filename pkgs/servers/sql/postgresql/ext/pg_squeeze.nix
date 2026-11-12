@@ -26,6 +26,7 @@ postgresqlBuildExtension (finalAttrs: {
     postgresqlExtraSettings = ''
       wal_level = logical
       shared_preload_libraries = 'pg_squeeze'
+      output_plugin_libraries = 'pg_squeeze'
     '';
     sql = ''
       CREATE EXTENSION pg_squeeze;

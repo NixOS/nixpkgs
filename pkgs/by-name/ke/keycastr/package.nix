@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Open-source keystroke visualizer";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

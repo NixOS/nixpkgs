@@ -8,6 +8,7 @@
   cmake,
   ninja,
   pkg-config,
+  buildPackages,
 
   double-conversion,
   fast-float,
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "folly";
     tag = "v${finalAttrs.version}";
     hash = "sha256-xxS1FU3thl8UA1DzumVEazelISayLioabFjKlXX67Yk=";
@@ -106,7 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
     (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/folly")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
-  ];
+  ]
+  ++
+    lib.optionals
+      (
+        !stdenv.buildPlatform.canExecute stdenv.hostPlatform
+        && stdenv.hostPlatform.emulatorAvailable buildPackages
+      )
+      [ (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages)) ];
 
   env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
     [
@@ -118,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  # https://github.com/facebook/folly/blob/main/folly/DiscriminatedPtr.h
+  # https://github.com/meta/folly/blob/main/folly/DiscriminatedPtr.h
   # error: #error "DiscriminatedPtr is x64, arm64, ppc64 and riscv64 specific code."
   doCheck =
     stdenv.hostPlatform.isx86_64
@@ -134,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     # `dev` output’s CMake files.
     ./install-test-certs.patch
 
-    # https://github.com/facebook/folly/pull/2561
+    # https://github.com/meta/folly/pull/2561
     ./memset-memcpy-aarch64.patch
 
     # https://github.com/Homebrew/homebrew-core/blob/1bebfe2c3e393a65c27f3e74f254770219b126f3/Formula/f/folly.rb#L83
@@ -182,6 +190,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # fails in containerized environments due to fork behavior
     "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
+
+    # several tests in this suite bound on specific ranges of random numbers,
+    # which is not compatible with gcc 16's implementation of
+    # "P0952R2: A new specification for std::generate_canonical"
+    # https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p0952r2.html
+    "stats_tdigest_test.*/DistributionTest.ReasonableError/*"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"
@@ -206,9 +220,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Open-source C++ library developed and used at Facebook";
-    homepage = "https://github.com/facebook/folly";
+    homepage = "https://github.com/meta/folly";
     license = lib.licenses.asl20;
-    # 32bit is not supported: https://github.com/facebook/folly/issues/103
+    # 32bit is not supported: https://github.com/meta/folly/issues/103
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     maintainers = with lib.maintainers; [

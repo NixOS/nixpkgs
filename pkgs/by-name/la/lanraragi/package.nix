@@ -13,13 +13,13 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.81";
+  version = "0.9.82";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
     tag = "v.${version}";
-    hash = "sha256-oXId9VrNNp/S1ZrNFba/9jMqE3/qZWB63dU3DpLiDDo=";
+    hash = "sha256-Uk1qGpH+CDfBAdI/6IMsAdFFt9OM9EoFeyz7Hej5ERM=";
   };
 
   patches = [
@@ -83,7 +83,6 @@ buildNpmPackage rec {
       ParallelLoops
       MCE # (has MCE::Loop)
       MCEShared
-      SysCpuAffinity
       FileChangeNotify
       ModulePluggable
       TimeLocal

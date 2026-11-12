@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   gitMinimal,
+  python3,
   installShellFiles,
   installAgentSkills,
   versionCheckHook,
@@ -13,22 +14,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk";
-  version = "0.74.0";
+  version = "0.81.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uSGGnQ8VmkbSuy8RrdRXEc4thNTlXfdsIolp2wWrGAk=";
+    hash = "sha256-Sgim8WgH5nGr1GhSZRtwkRu87b/S2W9gp7eHgtTGBAo=";
   };
 
-  cargoHash = "sha256-Py/zcsUHT9IGjRDbTntwTaQ9G60auZKVD9G/16bRFuI=";
+  cargoHash = "sha256-cJ5rd4+5IIxuUTWWAe5DF2cDU+lyZVMUq+l+I029peU=";
 
   cargoBuildFlags = [ "--package=worktrunk" ];
 
   # vergen-gitcl calls `git describe` at build time; VERGEN_IDEMPOTENT makes it
   # fall back gracefully when no git history is available (Nix sandbox).
   env.VERGEN_IDEMPOTENT = "1";
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/shell_exec.rs \
+      --replace-fail '/usr/bin/python3' 'python3'
+  '';
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,13 +57,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/wt config shell completions zsh)
   '';
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    # shell_exec and signal_forwarder tests run python3 as a child process
+    python3
+  ];
 
   checkFlags = [
-    # Expects `which` on PATH
-    "--skip=output::commit_generation::tests::test_command_exists_known_command"
     # Integration tests use insta snapshots with environment-specific paths
     "--skip=integration_tests::"
+    # Relies on environment-specific behavior. Notably, fails on the r-ryantm update-bot host
+    "--skip=git::repository::working_tree::tests::working_tree_diff_stats_with_untracked_reports_only_a_moves_line_delta"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # These tests probe the live process table — on macOS that means libproc
@@ -91,6 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       siriobalmelli
       DuskyElf
       yzx9
+      nirvdrum
     ];
   };
 })

@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "dask-image";
   version = "2026.5.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";

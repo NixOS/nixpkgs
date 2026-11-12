@@ -5,18 +5,19 @@
   cargo,
   rustPlatform,
   rustc,
+  sqlite,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gersemi";
-  version = "0.28.1";
+  version = "0.29.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BlankSpruce";
     repo = "gersemi";
     tag = finalAttrs.version;
-    hash = "sha256-eKaloLttIzBsLSNroTQLAN5WKvL5M/u0d6eSlw58oro=";
+    hash = "sha256-PEx5cT6jn0v4fm5ABqBvUKaJH9YS8kfZWdg5rUHSrUw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -31,6 +32,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     rustc
+  ];
+
+  buildInputs = [
+    sqlite
   ];
 
   build-system = with python3Packages; [

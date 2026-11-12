@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     fixDarwinDylibNames
   ];
 
+  strictDeps = true;
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ]
@@ -78,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
       openjdk
       ;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for reading and writing gif images";

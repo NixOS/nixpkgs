@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = [ ];
     mainProgram = "dvdisaster";
     # Tests are not parallelized, and take a long time to run (1-3 hours, depending on CPU)
     # Max observed time: ~4 hours on a "big-parallel" builder

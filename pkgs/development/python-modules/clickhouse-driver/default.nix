@@ -20,8 +20,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.11";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # pypi source doesn't contain tests
   src = fetchFromGitHub {
     owner = "mymarilyn";

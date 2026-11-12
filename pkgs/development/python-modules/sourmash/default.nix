@@ -80,7 +80,7 @@ buildPythonPackage rec {
     # argparse subparser usage prefix changed in 3.14
     "test_cmd_3"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # rocksdb segfaults pytest workers
     "rocksdb"
     "disk_revindex"

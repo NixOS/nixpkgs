@@ -15,14 +15,17 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "rauleteee";
     repo = "pqc-scanner";
     tag = "v${finalAttrs.version}";
     hash = "sha256-6Nm73BvFNh8gxxWBzuvIBCJLCxO2px+H4c9iRYIMxi8=";
   };
+
+  patches = [
+    # https://github.com/rauleteee/pqc-scanner/pull/1
+    ./mcp-v2-compat.patch
+  ];
 
   build-system = [ setuptools ];
 

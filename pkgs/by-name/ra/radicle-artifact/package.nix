@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromRadicle,
+  pkg-config,
+  libgit2,
   stdenv,
   gitMinimal,
   versionCheckHook,
@@ -9,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-artifact";
-  version = "0.19.0";
+  version = "0.23.3";
 
   __structuredAttrs = true;
 
@@ -17,10 +19,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     seed = "radicle.norman.life";
     repo = "z4VYyJ9KuwMNkXGQnmKuGPGKw3inv";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-b+yi/Kqmtn1Lpnc7Vt1Od0DAx6cOahrru0+Lb6hbM10=";
+    hash = "sha256-FB2VxpKXd/ZG4Ffk0IOWEi0GaURTvLGqjIQ0ipsNT84=";
   };
 
-  cargoHash = "sha256-EPDkr9qT5X8n3FO3v8RSpTl1Alz1zndu5RExN7gPXxk=";
+  cargoHash = "sha256-Kk5yKuNOEf3gu7XNzsQJ54tsCExg2uRzmp8LcVDAn0E=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   nativeCheckInputs = [ gitMinimal ];
 

@@ -28,25 +28,25 @@ in
 # runs without an external linter, which leaves `jsPlugins` configs inert.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxlint";
-  version = "1.82.0";
+  version = "1.91.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-jDFBK5yshhSYP/Zl5DpVOPYgRrfB0gAGg7sv6hd4qds=";
+    hash = "sha256-sWib0M9Myv5hHfrxOrxjRwRuphBUscgnbdtBOxfjTA8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-YiNm3jL8pDr4UUixnLVjEAEX/izi2SqBKsrtyX8SFrQ=";
+    hash = "sha256-p61SGFyu4+CXKZn+gLbU5WEDhDqcGvF7vgqjw0Lfpkw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-CMU2VhsSeSM7zJ4YxCfJWP3ThGRpzpgOTur1wU5F28I=";
+    fetcherVersion = 5;
+    hash = "sha256-en0DqsJPtDmBQbqBNDswNItCPYDntAz0S6UEgXPe+Gk=";
   };
 
   dontUseCmakeConfigure = true;
@@ -69,16 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.OXC_VERSION = finalAttrs.version;
 
-  # @napi-rs/cli >= 3.8 reads the process start time via `/bin/ps` while
-  # acquiring its filesystem reconciliation lock. The Darwin build sandbox
-  # denies that exec; Node raises it as a synchronous `spawn EPERM` from
-  # execFile, which escapes napi's callback-based error handling. Point the
-  # lookup at a store `ps` so the sandbox allows it. The result is only used
-  # to detect stale lock files.
+  # Use store paths for napi's lock identity probes; Darwin's sandbox blocks
+  # execution of the hardcoded host tools.
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for cli in node_modules/.pnpm/@napi-rs+cli@*/node_modules/@napi-rs/cli/dist/cli.js; do
       substituteInPlace "$cli" \
-        --replace-fail '"/bin/ps"' '"${darwin.adv_cmds}/bin/ps"'
+        --replace-fail '"/bin/ps"' '"${lib.getExe' darwin.adv_cmds.ps "ps"}"' \
+        --replace-fail '"/usr/sbin/ioreg"' '"${lib.getExe' darwin.IOKitTools "ioreg"}"' \
+        --replace-fail '"/usr/sbin/sysctl"' '"${lib.getExe' darwin.system_cmds "sysctl"}"'
     done
   '';
 
@@ -149,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Collection of JavaScript tools written in Rust";
+    description = "High-performance linter for JavaScript and TypeScript";
     homepage = "https://github.com/oxc-project/oxc";
     changelog = "https://github.com/oxc-project/oxc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;

@@ -1,19 +1,21 @@
 {
   lib,
+  stdenv,
   buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
+  bash,
   coreutils,
-  gawk,
   fd,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-  writeShellScript,
+  writeShellScriptBin,
 }:
 
 let
-  duForTests = writeShellScript "mole-cleaner-du-for-tests" ''
+  duForTests = writeShellScriptBin "du" ''
     args=()
     while (( $# > 0 )); do
       case "$1" in
@@ -33,36 +35,60 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "mole-cleaner";
-  version = "1.46.0";
+  version = "1.58.0";
 
   src = fetchFromGitHub {
     owner = "tw93";
     repo = "Mole";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-rIoVXEz4K0RFb1ir1gRCyDw5euNwQvLS0GwBsJhuApE=";
+    hash = "sha256-fk77PqWiRQu1q5c7VFpyS0HdfGhhfuPVOjPjmg2m+Xs=";
   };
 
-  vendorHash = "sha256-hLFlAy4AE1eNOxd4d75Mbo3ZKlwvNK7QV2DNVPd7NHc=";
+  vendorHash = "sha256-iGwtKV6mJfSgZ5rMB5ASXzdKTPBy9RqoysM4JRh0dts=";
 
   __structuredAttrs = true;
 
+  env.CGO_ENABLED = 0;
+
+  postPatch = ''
+    # The cancellation test stub blocks on `tail`, unreachable at /usr/bin
+    # inside the Darwin sandbox. PATH resolves the stdenv coreutils one.
+    substituteInPlace cmd/analyze/analyze_test.go \
+      --replace-fail '/usr/bin/tail' 'tail'
+
+    substituteInPlace mole \
+      --replace-fail '/bin/pwd' 'pwd' \
+      --replace-fail 'update_message="$(read_update_message_cache "$msg_cache")"' 'update_message=""'
+  '';
+
+  buildInputs = [
+    bash
+  ];
+
   nativeBuildInputs = [
+    installShellFiles
     makeWrapper
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-    writableTmpDirAsHomeHook
-    coreutils
-    gawk
+  ldflags = [
+    "-s"
+    "-w"
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    go build -p "$NIX_BUILD_CORES" -o analyze ./cmd/analyze
-    go build -p "$NIX_BUILD_CORES" -o status ./cmd/status
-    runHook postBuild
-  '';
+  nativeCheckInputs = [
+    duForTests
+  ];
+
+  # No usable ps in the build sandbox: /usr/bin is not mounted and nixpkgs'
+  # ps (adv_cmds) lacks entitlements, so %mem/rss are empty for foreign
+  # processes and exit 1. Upstream CI runs these against the system ps.
+  #
+  # No /Users in the build sandbox either: account-root protection compares a
+  # path's parent against an existing /Users directory, so that assertion
+  # cannot hold while sandboxed.
+  checkFlags = [
+    "-skip=AcceptsCurrentDarwinOutput|CollectProcessesUnderCommaLocale|TestValidateTrashTargetRejectsCriticalRoots"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -70,18 +96,17 @@ buildGoModule (finalAttrs: {
     install -Dm755 mole $out/libexec/mole/mole
     cp -r bin lib $out/libexec/mole/
 
-    install -Dm755 analyze $out/libexec/mole/bin/analyze-go
-    install -Dm755 status $out/libexec/mole/bin/status-go
-
-    patchShebangs $out/libexec/mole
-
-    substituteInPlace $out/libexec/mole/mole \
-      --replace-fail 'update_message="$(read_update_message_cache "$msg_cache")"' 'update_message=""'
-
-    mkdir -p $out/libexec/mole/nix-bin
-    ln -s ${lib.getExe' coreutils "timeout"} $out/libexec/mole/nix-bin/timeout
+    install -Dm755 $GOPATH/bin/analyze $out/libexec/mole/bin/analyze-go
+    install -Dm755 $GOPATH/bin/status $out/libexec/mole/bin/status-go
 
     makeWrapper $out/libexec/mole/mole $out/bin/mo \
+     --prefix PATH : '/bin' \
+     --prefix PATH : '/usr/bin' \
+     --prefix PATH : ${
+       lib.makeBinPath [
+         fd
+       ]
+     } \
       --run '
         case "$1" in
           update|remove)
@@ -89,37 +114,26 @@ buildGoModule (finalAttrs: {
             exit 1
             ;;
         esac
-        export PATH=${
-          lib.makeBinPath [
-            fd
-          ]
-        }:'"$out"'/libexec/mole/nix-bin:/usr/bin:/bin:''${PATH}
-      '
+        '
 
     runHook postInstall
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    # Keep buildGoModule's test behavior: tests can rely on their source paths.
-    export GOFLAGS="''${GOFLAGS//-trimpath/}"
-    mkdir -p "$TMPDIR/mole-test-bin"
-    ln -s ${duForTests} "$TMPDIR/mole-test-bin/du"
-    PATH="$TMPDIR/mole-test-bin:$PATH" go test ./...
-    runHook postCheck
+  postFixup = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mo \
+      --bash <($out/bin/mo completion bash) \
+      --fish <($out/bin/mo completion fish) \
+      --zsh <($out/bin/mo completion zsh)
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   doInstallCheck = true;
   versionCheckKeepEnvironment = "HOME PATH";
   versionCheckProgram = "${placeholder "out"}/bin/mo";
-  versionCheckProgramArg = "--version";
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/mo --help > /dev/null
-    test -w "$HOME"
-    test ! -e $out/bin/mole
-    runHook postInstallCheck
-  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=^V(.*)$" ];

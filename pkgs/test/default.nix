@@ -148,6 +148,7 @@ in
   fetchDebianPatch = recurseIntoAttrs (callPackages ../build-support/fetchdebianpatch/tests.nix { });
   fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
   fetchgit = recurseIntoAttrs (callPackages ../build-support/fetchgit/tests.nix { });
+  fetchRepoProject = recurseIntoAttrs (callPackages ../build-support/fetchrepoproject/tests.nix { });
   fetchNextcloudApp = recurseIntoAttrs (
     callPackages ../build-support/fetchnextcloudapp/tests.nix { }
   );
@@ -183,6 +184,7 @@ in
 
   buildRustCrate = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
   importCargoLock = recurseIntoAttrs (callPackage ../build-support/rust/test/import-cargo-lock { });
+  fetchCargoVendor = recurseIntoAttrs (callPackage ../build-support/rust/test/fetch-cargo-vendor { });
 
   vim = callPackage ./vim { };
 
@@ -226,12 +228,10 @@ in
     makeBinaryWrapper = pkgs.makeBinaryWrapper.override {
       # Enable sanitizers in the tests only, to avoid the performance cost in regular usage.
       # The sanitizers cause errors on aarch64-darwin, see https://github.com/NixOS/nixpkgs/pull/150079#issuecomment-994132734
-      sanitizers =
-        optionals (!(pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64))
-          [
-            "undefined"
-            "address"
-          ];
+      sanitizers = optionals (!pkgs.stdenv.hostPlatform.isDarwin) [
+        "undefined"
+        "address"
+      ];
     };
   };
 

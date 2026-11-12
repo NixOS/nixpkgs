@@ -3,27 +3,37 @@
   lib,
   nix-update-script,
   rustPlatform,
+  pkg-config,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "budget-tracker-tui";
-  version = "1.6.0";
+  version = "1.7.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Feromond";
-    repo = "budget_tracker_tui";
+    repo = "budget-tracker-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hkk25SpIQ7t8otp0vLYtNcCXlbFoXnF7bQKg1qvEYEE=";
+    hash = "sha256-WflCwLK4GI0UOzpJGnZBpNd1EDoxn/+wTgNz4HXfbaY=";
   };
-  cargoHash = "sha256-P4Fl2muXjog8RRJ4EZ6EWWIB1wUG0Rqm3ugVMvbQ1cI=";
+  cargoHash = "sha256-zWL9LH83iz/bgodo19Pfitiuqj5Q5M93AgMOFwRErxk=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    sqlite
+  ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/Feromond/budget_tracker_tui";
+    homepage = "https://github.com/Feromond/budget-tracker-tui";
     description = "Terminal User Interface (TUI) budget tracker";
-    changelog = "https://github.com/Feromond/budget_tracker_tui/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/Feromond/budget-tracker-tui/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "Budget_Tracker";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ tomasrivera ];

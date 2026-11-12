@@ -19,17 +19,17 @@ let
     x86_64-linux = {
       name = "manylinux_2_27_x86_64";
       hashes = {
-        cp312 = "sha256-2zSLkZmBC+W1OAwRObTUgC1t7G8Mpr8Z/LgYgFNB9ZA=";
-        cp313 = "sha256-C1ebRy0AbJPOUGORCbdkhfLReJ3k4b+fAOz2eXN9Jf0=";
-        cp314 = "sha256-6CAG8dgVLjTPUySYWk1tcKHfrSXSWzP6Qhfhh8Z9vNI=";
+        cp312 = "sha256-YCj68XnnqnzGQQDtPHx7GxE0b1qgXV6eM+j+YMUon6E=";
+        cp313 = "sha256-SBcsMa7srjEhwFYbVNm4otDHVUk1l5jc7/PluevPdN8=";
+        cp314 = "sha256-FrfbYs0i21END/Uv268dOxSQic/2oZPRldkinY6xQ3k=";
       };
     };
     aarch64-linux = {
       name = "manylinux_2_27_aarch64";
       hashes = {
-        cp312 = "sha256-9udjg5/ChxzqewgrphHNOlufxQhstED7tMkgmPmxtWc=";
-        cp313 = "sha256-TqmizXyPmKVGVCF1mZW1HntI20yopYFFvOUyYnYC2CA=";
-        cp314 = "sha256-74XFhZxLy91yNLtvh152zfh0ElzV4eZBfJVzfUzeRNc=";
+        cp312 = "sha256-CH8TMc1asn3NQwO61xKe+vfx3u2DDVZLjQXX7+yUbWE=";
+        cp313 = "sha256-hGeGn/1kvpd7DzwiuY/B+NYBl3Z8ZI9qLHv7/1ZIlK4=";
+        cp314 = "sha256-in5K+eDFVwsue9VCOva2hm26pxndlR0kF7lIBvfJFCs=";
       };
     };
   };
@@ -43,7 +43,6 @@ buildPythonPackage {
   pname = "jax-cuda13-plugin";
   inherit version;
   pyproject = false;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jax_cuda13_plugin";

@@ -8,15 +8,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xstatic-jquery-file-upload";
-  version = "10.31.0.1";
+  version = "10.32.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
-    pname = "XStatic-jQuery-File-Upload";
+    pname = "xstatic_jquery_file_upload";
     inherit (finalAttrs) version;
-    hash = "sha256-fXFvJqyhRzLDXFTwum04GHYAq0cvyYqR2XLRLFpw2yc=";
+    hash = "sha256-3p/FoprrGViy9x9iao7ooZ/YELl8AtEOnEis0rFyoEc=";
   };
 
   build-system = [ setuptools_80 ];

@@ -5,24 +5,29 @@
   fetchFromGitHub,
   libcosmicAppHook,
   just,
+  aws-lc,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-ext-applet-sysinfo";
-  version = "0-unstable-2026-09-08";
+  version = "0-unstable-2026-10-30";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "cosmic-ext-applet-sysinfo";
-    rev = "74265699a6d2b9803707bd1be9a4241b192f78fe";
-    hash = "sha256-kSxBoRepJX0bw6xhFXNp6inzv5vMlp2c5SDHxLY4I0s=";
+    rev = "0a8c9810640ade6d3714c715fa71230daf0d365a";
+    hash = "sha256-AlPwDa5PLs/0UbT7BLbcN1KVGRixLwYAIGklsfdDpNk=";
   };
 
-  cargoHash = "sha256-xCzrsLQb9k7VcNmt+pyHQk6UdxR0TjdhRz9wPZ4tsEY=";
+  cargoHash = "sha256-zgVHjySWPHqtL7noCOpR871Qp9yVw8og3GBHo/V1m5k=";
 
   nativeBuildInputs = [
     libcosmicAppHook
     just
+  ];
+
+  buildInputs = [
+    aws-lc
   ];
 
   dontUseJustBuild = true;

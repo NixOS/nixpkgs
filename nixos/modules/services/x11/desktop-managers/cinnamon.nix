@@ -277,10 +277,12 @@ in
           warpinator
 
           # cinnamon xapp
+          xepub
           xviewer
           xreader
           xed-editor
           pix
+          superlight
 
           # external apps shipped with linux-mint
           celluloid

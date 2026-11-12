@@ -3,8 +3,8 @@
   runCommand,
   rustc-unwrapped,
   sysroot ? null,
-  stdenvNoCC,
-  shell ? stdenvNoCC.shell,
+  runtimeShell,
+  shell ? runtimeShell,
 }:
 let
   sysrootFlag = lib.optionalString (sysroot != null) "--sysroot ${sysroot}";
@@ -48,6 +48,8 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}"
         ;
       unwrapped = rustc-unwrapped;
     };
+
+    __structuredAttrs = true;
 
     meta = rustc-unwrapped.meta // {
       description = "${rustc-unwrapped.meta.description} (wrapper script)";

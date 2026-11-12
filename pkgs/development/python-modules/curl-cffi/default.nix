@@ -16,10 +16,8 @@
   pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
-  python,
   python-multipart,
   rich,
-  stdenv,
   trustme,
   uvicorn,
   websockets,
@@ -27,14 +25,14 @@
 }:
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.16.0";
+  version = "0.16.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
     tag = "v${version}";
-    hash = "sha256-VqfJS6vztIBIkOW+ZrY7JSiuJsxBBqxRbqeQyWR7bTo=";
+    hash = "sha256-KagVuHhsHmA5/CY/1y5GLOFXx2ETPud6xk2vn4sG1hI=";
   };
 
   patches = [ ./use-system-libs.patch ];

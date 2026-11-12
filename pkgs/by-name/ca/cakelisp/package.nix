@@ -57,6 +57,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
     maintainers = [ lib.maintainers.sbond75 ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

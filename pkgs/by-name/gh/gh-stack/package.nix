@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh-stack";
-  version = "0.1.1";
+  version = "0.3.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-stack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jwfqiCnCOOW0AKA52hbgvCCoLzfFX+QfM+vXABkzZgw=";
+    hash = "sha256-dENuxVuz68Y7P8WW5C7pzVbfJRxGMGIKQ2AnWrTacOs=";
   };
 
-  vendorHash = "sha256-0Xtr/MOpX4u5GnbRdNxKPA0GpSzi8PIbVc9MmP05De4=";
+  vendorHash = "sha256-y+eTfmZTdSkHh943o/XtFrrMWv/lxvWekKUp/JKb0h4=";
 
   ldflags = [
     "-s"
@@ -33,6 +33,11 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [ gitMinimal ];
+
+  # some tests resolve branches through git and need to run inside a repository
+  preCheck = ''
+    git init --quiet
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

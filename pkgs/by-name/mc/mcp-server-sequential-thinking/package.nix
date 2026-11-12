@@ -4,21 +4,25 @@
   yq-go,
   typescript_7,
   fetchFromGitHub,
+  fetchNpmDeps,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "mcp-server-sequential-thinking";
-  version = "2026.8.18";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
-    tag = finalAttrs.version;
-    hash = "sha256-tRx/ZCyHnDP3BmK/xOgVKtjlKCyKUfIll8y1sSDgzV8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L6t0QuJshn207uc3+n+IoDp7vPuY2YLcu6ku1rEgzHk=";
   };
 
   postPatch = ''
     yq -i '.compilerOptions.types = ["node"]' tsconfig.json
+    # Remove this since it fails during `npmInstallHook` otherwise
+    substituteInPlace src/sequentialthinking/package.json \
+      --replace-fail "prepare" "dont-prepare"
   '';
 
   nativeBuildInputs = [
@@ -26,9 +30,11 @@ buildNpmPackage (finalAttrs: {
     typescript_7
   ];
 
-  dontNpmPrune = true;
   npmWorkspace = "src/sequentialthinking";
-  npmDepsHash = "sha256-psy1XH4DuZu2+tkHpe/bQw3R7uNr8nF5u/AFKoxJeTg=";
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-fBa3SEyrXM0R63ph6nK3HNI8xIK7km4Hg0LIBOz1D40=";
+  };
 
   # TODO: revisit this when https://github.com/NixOS/nixpkgs/pull/333759 has landed
   postInstall = ''

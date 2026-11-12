@@ -9,6 +9,7 @@
   nodejs,
   node-gyp,
   runCommand,
+  nix-update-script,
   nixosTests,
   immich-machine-learning,
   # build-time deps
@@ -33,6 +34,7 @@
   pango,
   perl,
   pixman,
+  runtimeShellPackage,
   vips,
   buildPackages,
 }:
@@ -84,7 +86,7 @@ let
     in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-zxMbIEFF5MA2qkAbXs4sD4EQFWfCYt8t3AaC0m0LtEY=";
+        outputHash = "sha256-otk0VysLd9qG24JLar4r0CohqJG5ESUkBb3FCvWBUg0=";
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -100,6 +102,7 @@ let
         curl -Lo ./cities500.zip "$url/cities500.zip"
         curl -Lo $out/admin1CodesASCII.txt "$url/admin1CodesASCII.txt"
         curl -Lo $out/admin2Codes.txt "$url/admin2Codes.txt"
+        curl -Lo $out/countryInfo.txt "$url/countryInfo.txt"
         curl -Lo $out/ne_10m_admin_0_countries.geojson \
           https://github.com/nvkelso/natural-earth-vector/raw/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
 
@@ -109,20 +112,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.2.2";
+  version = "3.4.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-napG+EMZbbbeq7R8FtnuDsDwdpxItkwTVWztnw07DfA=";
+    hash = "sha256-G6GKWwmdPCq7+jpp1H/kZAHIcOOh+e5Y0k0L/xWvgA8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-N6eaRcJxik1wzGE1H/LnKR1JUcSc8iswPFkIGymOKVA=";
+    hash = "sha256-tIpO5diN8bbyFFmJPwnIBjlDG5u7gIjrJnzG+xTYt58=";
   };
 
   postPatch = ''
@@ -157,18 +163,19 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     # Required for sharp
     vips
+    # Required for some packages in node_modules
+    runtimeShellPackage
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
   # fix for node-gyp, see https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919
   env.npm_config_nodedir = nodejs;
+  # Prevent Python (via node-gyp) from writing bytecode to ensure build determinism
+  env.PYTHONDONTWRITEBYTECODE = "1";
 
   buildPhase = ''
     runHook preBuild
-
-    # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
-    rm node_modules/.pnpm/node_modules/exiftool-vendored.pl
 
     pnpm --filter immich... --filter immich-web... --filter @immich/plugin-core... build
 
@@ -202,6 +209,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
 
+    # make exiftool-vendored to use exiftool from the PATH
+    find "$packageOut/node_modules" -type l -name "exiftool-vendored.pl" -delete
+    find "$packageOut/node_modules" -type d -name "exiftool-vendored.pl@*" -exec rm -rf {} +
+    find "$packageOut/node_modules" -type f -path "*/node_modules/.bin/exiftool" -delete
+
     makeWrapper '${lib.getExe nodejs}' "$out/bin/immich-admin" \
       --add-flags "$packageOut/dist/main" \
       --add-flags immich-admin
@@ -222,6 +234,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = nix-update-script { };
+
     tests = {
       inherit (nixosTests) immich immich-vectorchord-reindex;
     };

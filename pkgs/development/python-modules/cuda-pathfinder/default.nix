@@ -14,15 +14,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cuda-pathfinder";
-  version = "1.8.0";
+  version = "1.8.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "cuda-pathfinder-v${finalAttrs.version}";
-    hash = "sha256-BQstl5FMKuAeaH3cQXrU/+tDM0WYliYvbHeAw3LnaTg=";
+    # GitHub expands the export-subst'd .git_archival.txt when generating the tarball. Its ref-names line lists every
+    # branch pointing at the tagged commit, so the hash changes when e.g. a release branch moves on, even though the tag
+    # did not. Keep only the tag, which setuptools-scm still resolves to the right version.
+    postFetch = ''
+      sed -i 's/^ref-names: .*$/ref-names: tag: cuda-pathfinder-v${finalAttrs.version}/' "$out/.git_archival.txt"
+      grep -qx 'ref-names: tag: cuda-pathfinder-v${finalAttrs.version}' "$out/.git_archival.txt"
+    '';
+    hash = "sha256-XC5R90aGMP01xip+VBaar3pVYaB27veme5d3SEpHvSM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cuda_pathfinder";
@@ -42,12 +48,18 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "one-stop solution for locating CUDA components";
     homepage = "https://github.com/NVIDIA/cuda-python/tree/main/cuda_pathfinder";
     changelog = "https://nvidia.github.io/cuda-python/cuda-pathfinder/${finalAttrs.version}/release/${finalAttrs.version}-notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    teams = [ lib.teams.cuda ];
     platforms = lib.platforms.linux;
   };
 })

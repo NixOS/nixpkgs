@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "razer-cli";
-  version = "2.3.1";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lolei";
     repo = "razer-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cxBzf7gDJB3B5TXH5H65P4zTXmbSj8mD0Li2OHxajyQ=";
+    hash = "sha256-dVqICfCYwUaPU3/5+n3texmBLejv4GE+x4F0q/ZKPd8=";
   };
 
   build-system = with python3.pkgs; [

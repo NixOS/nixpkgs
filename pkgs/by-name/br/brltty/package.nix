@@ -7,6 +7,8 @@
   bluez,
   tcl,
   acl,
+  polkitSupport ? lib.meta.availableOn stdenv.hostPlatform polkit,
+  polkit,
   kmod,
   coreutils,
   shadow,
@@ -42,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     tcl # For TCL bindings
   ]
   ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional polkitSupport polkit
   ++ lib.optional systemdSupport systemdMinimal;
 
   doInstallCheck = true;
@@ -76,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-writable-directory=/run/brltty"
     "--with-updatable-directory=/var/lib/brltty"
     "--with-api-socket-path=/var/lib/BrlAPI"
+    (lib.enableFeature polkitSupport "polkit")
   ];
   installFlags = [
     "install-systemd"

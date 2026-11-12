@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "kk7ds";
+    owner = "uilibs";
     repo = "uvcclient";
     tag = "v${version}";
     hash = "sha256-V7xIvZ9vIXHPpkEeJZ6QedWk+4ZVNwCzj5ffLyixFz4=";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/uilibs/uvcclient/blob/${src.rev}/CHANGELOG.md";
     description = "Client for Ubiquiti's Unifi Camera NVR";
     mainProgram = "uvc";
-    homepage = "https://github.com/kk7ds/uvcclient";
+    homepage = "https://github.com/uilibs/uvcclient";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hexa ];
   };

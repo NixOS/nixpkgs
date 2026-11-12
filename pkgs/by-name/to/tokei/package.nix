@@ -26,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
+  dontCargoUseSystemLibs = true;
+
   # enable all output formats
   buildFeatures = [ "all" ];
 
@@ -41,10 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/XAMPPRocky/tokei";
     changelog = "https://github.com/XAMPPRocky/tokei/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "tokei";
   };

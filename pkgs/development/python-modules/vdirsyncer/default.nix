@@ -14,6 +14,7 @@
   aiostream,
   aiohttp-oauthlib,
   aiohttp,
+  tenacity,
   pytest-asyncio,
   trustme,
   aioresponses,
@@ -23,13 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vdirsyncer";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-/rGlM1AKlcFP0VVzOhBW/jWRklU9gsB8a6BPy/xAsS0=";
+    hash = "sha256-tqwEC4gNpnWPZcF6NpVy9i5zI76NIc0zDCb6E00bE3M=";
   };
+
+  pythonRelaxDeps = [ "aiostream" ];
 
   build-system = [
     setuptools
@@ -42,6 +45,7 @@ buildPythonPackage (finalAttrs: {
     requests
     aiostream
     aiohttp
+    tenacity
   ];
 
   optional-dependencies = {

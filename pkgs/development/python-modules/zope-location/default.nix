@@ -12,7 +12,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-location";
   version = "6.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.location";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-s7HZda+U87P62elX/KbDp2o9zAplgFVmnedDI/uq2sk=";
   };
 
@@ -47,15 +47,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "src/zope/location/tests" ];
+  unittestFlags = [ "--start-directory=src/zope/location/tests" ];
 
   pythonNamespaces = [ "zope" ];
 
   meta = {
     homepage = "https://github.com/zopefoundation/zope.location/";
     description = "Zope Location";
-    changelog = "https://github.com/zopefoundation/zope.location/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.location/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

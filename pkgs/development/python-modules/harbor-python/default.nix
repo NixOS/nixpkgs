@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "harbor-python";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Harbor-Systems";
     repo = "harbor-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sdC7b355JlkliTXiPbSPKykRQ8QJ83CVEMoT53+lVj8=";
+    hash = "sha256-868eU9viOJvCv7DGEIPW/NEtFSwOjZkBNAd+ScQmCEk=";
   };
 
   build-system = [ hatchling ];

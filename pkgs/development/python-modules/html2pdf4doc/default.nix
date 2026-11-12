@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mettta";
+    owner = "strictdoc-project";
     repo = "html2pdf4doc_python";
     tag = version;
     hash = "sha256-d5Y1llC7Yb1Vw2tvxAhgIw7wk18mFJ+sm8Rrr+UwxUI=";
@@ -43,8 +43,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Print HTML to PDF in the Browser – Python Package for HTML2PDF.js";
-    homepage = "https://github.com/mettta/html2pdf4doc_python";
-    changelog = "https://github.com/mettta/html2pdf4doc_python/releases/tag/${src.tag}";
+    homepage = "https://github.com/strictdoc-project/html2pdf4doc_python";
+    changelog = "https://github.com/strictdoc-project/html2pdf4doc_python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ puzzlewolf ];
   };

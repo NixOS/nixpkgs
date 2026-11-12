@@ -6,24 +6,31 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
   rust-jemalloc-sys,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "1.3.0-dev.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-Yy++t4Dt9EqCIKWb9UUokJplc6bJe0zeZ0DjDTbPRKU=";
+    hash = "sha256-Uid4IpymX9+3TtLlLjl1B1nqAczgfgjphe0cuk0neVE=";
   };
 
   buildAndTestSubdir = "pyrefly";
 
-  cargoHash = "sha256-uccN2djXZPkWqbRGW/ssv7Usl85YPD4sgolOgXcqu/A=";
+  cargoHash = "sha256-snm1x7OKC5Sz12C8MyAf7ph0O01ghFWWlk6lpHujR7c=";
 
-  buildInputs = [ rust-jemalloc-sys ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    rust-jemalloc-sys
+    zstd
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -38,11 +45,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export TMPDIR=$(mktemp -d)
   '';
 
-  passthru.updateScript = nix-update-script { };
+  # avoid autoupdates for *-dev.* tags
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^([\\d.]+)$" ];
+  };
 
   meta = {
     description = "Fast type checker and IDE for Python";
-    homepage = "https://github.com/facebook/pyrefly";
+    homepage = "https://github.com/meta/pyrefly";
     license = lib.licenses.mit;
     mainProgram = "pyrefly";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

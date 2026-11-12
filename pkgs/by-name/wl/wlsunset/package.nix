@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~kennylevinsen";
     repo = "wlsunset";
     rev = finalAttrs.version;
-    sha256 = "sha256-U/yROKkU9pOBLIIIsmkltF64tt5ZR97EAxxGgrFYwNg=";
+    hash = "sha256-U/yROKkU9pOBLIIIsmkltF64tt5ZR97EAxxGgrFYwNg=";
   };
 
   strictDeps = true;

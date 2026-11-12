@@ -16,7 +16,9 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "2.3.5";
+  version = "2.4.1";
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -28,7 +30,7 @@ buildGoModule rec {
     owner = "containerd";
     repo = "containerd";
     tag = "v${version}";
-    hash = "sha256-RIZxlXwgOizLVKr4XRIKAlUP19URolGp4J849hoQMSM=";
+    hash = "sha256-wp4cP3kYm1k9ZPj9B37dQx8//1Ept8aIfZseob9Nyv0=";
   };
 
   postPatch = ''
@@ -42,8 +44,6 @@ buildGoModule rec {
   '';
 
   vendorHash = null;
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     util-linux
@@ -70,13 +70,13 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    make $makeFlags
+    make "''${makeFlags[@]}"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    make $makeFlags $installTargets
+    make "''${makeFlags[@]}" "''${installTargets[@]}"
     runHook postInstall
   '';
 

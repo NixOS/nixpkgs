@@ -8,15 +8,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "infracost";
-  version = "0.10.45";
+  version = "0.10.47";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${finalAttrs.version}";
     repo = "infracost";
-    sha256 = "sha256-ionW8XChMCQxekKqbiNc6wSu5pxdG59WX2CxlCqStXk=";
+    sha256 = "sha256-qtUzAVu+sxe0/edHA64ru+SkOIWVxClwbN+AOdoZeic=";
   };
-  vendorHash = "sha256-fwMVYzbCHENra1ySNMQnWF/JnYngO/oHgxZvMZ2+3TQ=";
+  vendorHash = "sha256-HGm59prvLzPmjjLMTto8ziPb7I8jbOPoGzeRCUi+A2w=";
 
   ldflags = [
     "-s"

@@ -174,11 +174,11 @@
       "dependency": "direct main",
       "description": {
         "name": "background_downloader",
-        "sha256": "d27fcaf94f738032f1e6db098230799bf31ae7bf184f173fc9a752fcdae75c0e",
+        "sha256": "ae55e127f87397b372578fc9474568b879fa78326103c342e00160558d08e527",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "9.5.6"
+      "version": "9.5.9"
     },
     "balanced_text": {
       "dependency": "direct main",
@@ -1159,11 +1159,11 @@
       "dependency": "direct main",
       "description": {
         "name": "intl",
-        "sha256": "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5",
+        "sha256": "1ca20c894b1717686a2319b8548763d812bc0aabdac580420a44c5178c57a867",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.20.2"
+      "version": "0.20.3"
     },
     "io": {
       "dependency": "transitive",
@@ -1394,11 +1394,11 @@
       "dependency": "transitive",
       "description": {
         "name": "matcher",
-        "sha256": "dc0b7dc7651697ea4ff3e69ef44b0407ea32c487a39fff6a4004fa585e901861",
+        "sha256": "31bd099b47c10cd1aeb55146a2d46ce0277630ecef3f7dae54ad7873f36696cd",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.12.19"
+      "version": "0.12.20"
     },
     "material_color_utilities": {
       "dependency": "transitive",
@@ -1445,11 +1445,11 @@
       "dependency": "direct main",
       "description": {
         "name": "meta",
-        "sha256": "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349",
+        "sha256": "307249ce4ff29d58a18e97f6345f539382eb9c9c29ecda628900f31de0443dd9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.18.0"
+      "version": "1.19.0"
     },
     "mime": {
       "dependency": "transitive",
@@ -2274,11 +2274,11 @@
       "dependency": "transitive",
       "description": {
         "name": "test_api",
-        "sha256": "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e",
+        "sha256": "2a122cbe059f8b610d3a5415f42e255b6c17b1f21eee1d960f31080237fb4f11",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.11"
+      "version": "0.7.12"
     },
     "threshold": {
       "dependency": "transitive",
@@ -2494,11 +2494,11 @@
       "dependency": "transitive",
       "description": {
         "name": "vector_math",
-        "sha256": "d530bd74fea330e6e364cda7a85019c434070188383e1cd8d9777ee586914c5b",
+        "sha256": "92b9910f66ed1057fd4da7b040ae7c74cafacf885bdc81be496928d5049b032d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.0"
+      "version": "2.4.3"
     },
     "visibility_detector": {
       "dependency": "direct main",

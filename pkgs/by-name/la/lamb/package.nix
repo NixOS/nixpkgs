@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lamb";
-  version = "unstable-2025-12-22";
+  version = "0-unstable-2025-12-22";
 
   src = fetchFromGitHub {
     owner = "tsoding";

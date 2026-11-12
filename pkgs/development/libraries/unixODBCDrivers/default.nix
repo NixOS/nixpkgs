@@ -144,13 +144,14 @@
       "--with-sqlite3=${sqlite.dev}"
     ];
 
-    installTargets = [ "install-3" ];
+    enableParallelInstalling = false;
 
-    # move libraries to $out/lib where they're expected to be
-    postInstall = ''
+    # Will not be automatically created by the makefile
+    preInstall = ''
       mkdir -p "$out/lib"
-      mv "$out"/*.* "$out/lib"
     '';
+
+    installTargets = [ "install-3" ];
 
     # see the top of the file for an explanation
     passthru = {
@@ -178,7 +179,7 @@
 
     src = fetchurl {
       url = "https://packages.microsoft.com/debian/10/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
-      sha256 = "0vwirnp56jibm3qf0kmi4jnz1w7xfhnsfr8imr0c9hg6av4sk3a6";
+      hash = "sha256-Ro2pyVbmwcRArhFlpy10/fDwrSSxTuDwqCtKU67NkW8=";
     };
 
     nativeBuildInputs = [
@@ -328,7 +329,7 @@
 
     src = fetchurl {
       url = "https://s3.amazonaws.com/redshift-downloads/drivers/odbc/${version}/AmazonRedshiftODBC-64-bit-${version}-1.x86_64.deb";
-      sha256 = "sha256-r5HvsZjB7+x+ClxtWoONkE1/NAbz90NbHfzxC6tf7jA=";
+      hash = "sha256-r5HvsZjB7+x+ClxtWoONkE1/NAbz90NbHfzxC6tf7jA=";
     };
 
     nativeBuildInputs = [ dpkg ];

@@ -12,7 +12,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/sdk/nodejs/cmd/pulumi-language-bun";
 
-    vendorHash = null;
+    vendorHash = "sha256-Fps7U7ORVPaOloJCAiz9sxqinZIxQmYxPv7eQoiR4hk=";
 
     ldflags = [
       "-s"
@@ -39,11 +39,10 @@ symlinkJoin (finalAttrs: {
     description = "Language host for Pulumi programs written in TypeScript & JavaScript (Bun)";
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-bun";
-    maintainers =
-      with lib.maintainers;
-      lib.teams.pulumi.members
-      ++ [
-        niklasravnsborg
-      ];
+    maintainers = with lib.maintainers; [
+      niklasravnsborg
+      wrbbz
+    ];
+    teams = [ lib.teams.pulumi ];
   };
 })

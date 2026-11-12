@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./repect-xml-catalog-file-var.patch ];
 
   meta = {
-    homepage = "https://wiki.lxde.org/en/LXSession";
+    homepage = "https://github.com/lxde/lxsession";
     description = "Classic LXDE session manager";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

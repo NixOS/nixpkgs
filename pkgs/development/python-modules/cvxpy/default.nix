@@ -28,15 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.9.2";
+  version = "1.9.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nYfS9HXWTKcvVrq+wm5cgvB7keMAQPmKEe8bI0jngFg=";
+    hash = "sha256-7EBvCt+Qic+lfl8g5MMIJTKCnsfSm8fmUdq6P2SdF5I=";
   };
 
   postPatch =

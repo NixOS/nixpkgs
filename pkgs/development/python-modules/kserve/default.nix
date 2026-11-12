@@ -60,18 +60,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XSEdhYrsSdrKjHnFCoMPoS0nAZ+Fa8JGj+izVw3wl0o=";
+    hash = "sha256-V8x9TZ6p21ttvZvs9H2iiTnUDrAGOmgoDpxeo1ZD8aI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
+
+  patches = [
+    # vllm 0.29.0 removed vllm.entrypoints.openai.engine.protocol
+    # vllm 0.32.0 moved vllm.entrypoints.chat_utils to vllm.renderers.chat_utils
+    # vllm 0.33.0 no longer re-exports some openai types from vllm.renderers.chat_utils
+    ./vllm-compat.patch
+  ];
 
   build-system = [
     setuptools

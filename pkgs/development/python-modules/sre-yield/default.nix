@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "sre_yield";
     inherit (finalAttrs) version;

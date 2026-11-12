@@ -5,6 +5,7 @@
   pkg-config,
   installShellFiles,
   openssl,
+  zstd,
   cacert,
   stdenv,
   curl,
@@ -25,12 +26,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-KwkmkbQ1E2LJeif7iQmb7pFjZtXhu7BU+YutGb5UmY4=";
 
+  # Fix archive downloads following symlinks outside the served tree.
+  # https://github.com/svenstaro/miniserve/pull/1573
+  patches = [ ./0001-fix-archive-symlink-escape.patch ];
+
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
 
   nativeCheckInputs = [
     curl

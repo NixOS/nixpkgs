@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "rush-parallel";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "rush";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K1DKwG22anoiLBSFC2S5WJkY0tFozTwbHZx9PNCGJLA=";
+    hash = "sha256-T0uR/RPz/E8JlBnW5hTCSK/fRWC8YSptxt0rzaS/Dfo=";
   };
 
-  vendorHash = "sha256-1q5qD496PfK/4LnVI6FWuHorg8EseqodAM7NCB03Lt8=";
+  vendorHash = "sha256-EnVmzHxalg6CnmNyLFklS5eYE+Yo4fQnmkyLECcuZqQ=";
 
   ldflags = [
     "-s"

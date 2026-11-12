@@ -3,7 +3,10 @@
   fetchFromGitHub,
   rustPlatform,
   cacert,
+  aws-lc,
+  zstd,
   cmake,
+  pkg-config,
   gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -15,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.32.0";
 
   src = fetchFromGitHub {
-    owner = "jdx";
+    owner = "aubepkg";
     repo = "aube";
     tag = "v${finalAttrs.version}";
     hash = "sha256-0BnaxRk6+KY4AGZ31lis0zxc9uWp3OrxCgp9SgOrqNI=";
@@ -23,7 +26,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vYbbnEpVWG6kjnycl1kk3D+lXuzTzOKuilA0ImBHYAI=";
 
-  nativeBuildInputs = [ cmake ]; # libz-ng-sys
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]; # libz-ng-sys
 
   nativeCheckInputs = [
     gitMinimal
@@ -52,13 +63,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   meta = {
     description = "Fast Node.js package manager";
-    homepage = "https://github.com/jdx/aube";
-    changelog = "https://github.com/jdx/aube/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/aubepkg/aube";
+    changelog = "https://github.com/aubepkg/aube/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       chillcicada

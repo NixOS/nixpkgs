@@ -1,13 +1,35 @@
 This directory contains the build expressions needed to build any of the JetBrains IDEs.
 The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 
+## IDE packages
+
+The IDEs live in by-name/:
+
+| IDE Name                       | Package Location                              |
+|--------------------------------|-----------------------------------------------|
+| Clion                          | pkgs/by-name/cl/clion/package.nix             |
+| DataGrip                       | pkgs/by-name/da/datagrip/package.nix          |
+| DataSpell                      | pkgs/by-name/da/dataspell/package.nix         |
+| Gateway                        | pkgs/by-name/je/jetbrains-gateway/package.nix |
+| Goland                         | pkgs/by-name/go/goland/package.nix            |
+| IntelliJ IDEA                  | pkgs/by-name/in/intellij-idea/package.nix     |
+| IntelliJ IDEA (Open Source)    | pkgs/by-name/in/intellij-idea-oss/package.nix |
+| MPS                            | pkgs/by-name/je/jetbrains-mps/package.nix     |
+| PhpStorm                       | pkgs/by-name/ph/phpstorm/package.nix          |
+| PyCharm                        | pkgs/by-name/py/pycharm/package.nix           |
+| PyCharm (Open Source)          | pkgs/by-name/py/pycharm-oss/package.nix       |
+| Rider                          | pkgs/by-name/ri/rider/package.nix             |
+| RubyMine                       | pkgs/by-name/ru/ruby-mine/package.nix         |
+| RustRover                      | pkgs/by-name/ru/rust-rover/package.nix        |
+| WebStorm                       | pkgs/by-name/we/webstorm/package.nix          |
+
 ## Tests:
 - To test the build process of every IDE (as well as the process for adding plugins), build `jetbrains.plugins.tests.empty`.
 - To test that plugins are correctly stored in the plugins directory, build `jetbrains.plugins.tests.stored-correctly`.
 
 ## How to use plugins:
  - Pass your IDE package and a list of plugin packages to `jetbrains.plugins.addPlugins`.
-   E.g. `pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea [ ideavim ]`
+   E.g. `pkgs.jetbrains.plugins.addPlugins pkgs.intellij-idea [ ideavim ]`
  - The list has to contain drvs giving the directory contents of the plugin or a single `.jar` (executable).
 
 Nixpkgs does not package JetBrains plugins, however you can use third-party sources, such as
@@ -43,17 +65,18 @@ fetchurl {
    - The IDEs have `passthru.updateScript` set up to run `./updater/main.py`.
      The script then uses the `UPDATE_NIX_*` environment variables as documented.
 
-To keep things simple, the update script will search for the following markers and may replace any content between them:
-- `update-script-start: urls` / `update-script-end: urls`: URLs for binary IDEs
-- `update-script-start: version` / `update-script-end: version`: Version and build number for binary IDEs
-- `update-script-start: source-args` / `update-script-end: source-args`: Arguments for `mkJetBrainsSource` for source IDEs.
+To keep things simple, the update script generates files within the package directory:
+- `version.json`: version information for binary packages, and `urls` for the package source.
+- `source_args.json`: arguments to pass to `mkJetBrainsSource` in source packages.
+- `maven_artefacts.json`: maven artefacts used by source packages.
 
-Any comments or other manual changes between these markers will be removed when the script runs.
+Packages are responsible for importing these files, using `lib.importJSON`.
+Other than `maven_artefacts.json`, which is passed directly to `mkJetBrainsSource` as `mvnDeps`.
 
 ## How to add an IDE:
- - Add a new derivation in `ides/`
+ - Add a new derivation in `/pkgs/by-name/...`
  - Add an entry to the URL templates in `updater/updateInfo.json`
- - Add it to `default.nix`
+ - Add it to the table at the top ("IDE packages")
 
 ### TODO:
  - get rid of remaining `overrideAttrs` in IDE drvs:

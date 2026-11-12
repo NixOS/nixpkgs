@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.12.3";
+  version = "3.13.4";
 
   src = fetchurl {
     url = "https://algol68genie.nl/algol68g-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TS5m+Byi+5j4jiOuQbR159QERfNJsQiGNngtoyC9IrE=";
+    hash = "sha256-YldGzLCOb7/qH1JkAM8hBoqyrzT2tkdWzMION+TS1Pg=";
   };
 
   outputs = [

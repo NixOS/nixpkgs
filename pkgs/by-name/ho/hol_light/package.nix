@@ -22,14 +22,14 @@ let
 in
 
 let
-  ocamlPath = lib.makeSearchPath "/lib/ocaml/${ocaml.version}/site-lib" [
+  ocamlPath = lib.makeSearchPathOutput "dev" "/lib/ocaml/${ocaml.version}/site-lib" [
     camlp5
     camlp-streams
     fmt
     pcre2
     zarith
   ];
-  stublibsPath = lib.makeSearchPath "/lib/ocaml/${ocaml.version}/site-lib/stublibs" [
+  stublibsPath = lib.makeSearchPathOutput "dev" "/lib/ocaml/${ocaml.version}/site-lib/stublibs" [
     zarith
     pcre2
   ];

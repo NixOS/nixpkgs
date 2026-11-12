@@ -3,70 +3,70 @@
   version_jetson = "2.16.1+nv24.08";
   x86_64-linux_310 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow_cpu-2.21.0-cp310-cp310-manylinux_2_27_x86_64.whl";
-    sha256 = "10sbn67bm17mhbn8vbv87b2hxz9frmrqzjpa4vxcsq86bhpyjhyi";
+    hash = "sha256-0UPpL1wGYc36JurKj3PNLv0OxTpor43sgvWEuo6xS4M=";
   };
   x86_64-linux_311 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow_cpu-2.21.0-cp311-cp311-manylinux_2_27_x86_64.whl";
-    sha256 = "0v2vdqp269xy4d6n351wdhcs1njh6apishwixlqpgvh2gchpv11b";
+    hash = "sha256-K4R9IXsC7ncx7ZFDHa8yUNqgGWw8lGFNI74nIy5uW2w=";
   };
   x86_64-linux_312 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow_cpu-2.21.0-cp312-cp312-manylinux_2_27_x86_64.whl";
-    sha256 = "1jr0z3hgbf83wpxrgspl1a1hcdvpic3ikvmnjr92vr1h579szj6w";
+    hash = "sha256-3Miv0ykw5C1SlrbuGQeLdzcGgwr06pf75QO59eD4IMs=";
   };
   x86_64-linux_313 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow_cpu-2.21.0-cp313-cp313-manylinux_2_27_x86_64.whl";
-    sha256 = "14vp3parbn85lkczwiqggcd8709rgr87p32rnl8fjkazsck7rbq5";
+    hash = "sha256-Ba98JtNfTekQtVmMe1B+OYGDGnsPR/7ZpAXZldUdd5M=";
   };
   x86_64-linux_310_gpu = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp310-cp310-manylinux_2_27_x86_64.whl";
-    sha256 = "191kjb4p35xbvffmlff1j9pcqc3mv7w30zfx7hl1vslmwscg5ikp";
+    hash = "sha256-d8bymOaV6h0oPN19MPjZdTDMbpLBOVqd26uXccmSM6Q=";
   };
   x86_64-linux_311_gpu = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp311-cp311-manylinux_2_27_x86_64.whl";
-    sha256 = "097iamhva8rypzzvqfxm9y0fi5m1b3cwprhsnw85h8q4pb4znmlh";
+    hash = "sha256-kFb7yboEI1gQtxrmy9lYoZbogE+1O7z/vz4jtWFV8SQ=";
   };
   x86_64-linux_312_gpu = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp312-cp312-manylinux_2_27_x86_64.whl";
-    sha256 = "1h0kpc9kflb1xr26ibw4xhbz6hp1rcsznf4rhcjvj3p7qi1mdfdk";
+    hash = "sha256-s7lWQ8TnDrklg5k4+zXL4ULzF+yEr2hE7mFRNxO7E8A=";
   };
   x86_64-linux_313_gpu = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp313-cp313-manylinux_2_27_x86_64.whl";
-    sha256 = "01jljjx1n46x57d6n33fgs86y09gmxqblcph8pxhwrdrra6xmn79";
+    hash = "sha256-6djajcq5ZQ77RfAyunCvLwFvkH5uDGvaKd0QG7qUVAY=";
   };
   aarch64-linux_310 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp310-cp310-manylinux_2_27_aarch64.whl";
-    sha256 = "0pcskswb7v82282w4mmj5smy5pmwbbw336b1x05chw6g4n5r75vw";
+    hash = "sha256-fJeTiyXPcMgK6GGZMfhavN7iqy6yVsIFEgLts7ieml0=";
   };
   aarch64-linux_311 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp311-cp311-manylinux_2_27_aarch64.whl";
-    sha256 = "0p7bwqxrz2xc6a3akpqg9l7x5hw4qh20qwkzqgqkqyjjdnhsq92b";
+    hash = "sha256-SySsoW1Sejzxw39yDATEhMPSD00P36mGMqyLnzvm61w=";
   };
   aarch64-linux_312 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp312-cp312-manylinux_2_27_aarch64.whl";
-    sha256 = "0ljmpixm6b4m5691nlnw5288xq8v9fagfzkcwfc3hlq6firiazdh";
+    hash = "sha256-sH0Vc3QGUziY42x+95RLG+GOkCjcUhuSKZUsU3u8VVI=";
   };
   aarch64-linux_313 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp313-cp313-manylinux_2_27_aarch64.whl";
-    sha256 = "1q4kln5iwcy37lgka8b5iqmcbk5pagqs688h4l62328iigxvs2m1";
+    hash = "sha256-oQq9+4sRiSEMJRAho/FTt8zFKo5lITUfPcMzHoulk+A=";
   };
   aarch64-linux_310_jetson = {
     url = "https://developer.download.nvidia.com/compute/redist/jp/v61/tensorflow/tensorflow-2.16.1+nv24.08-cp310-cp310-linux_aarch64.whl";
-    sha256 = "0z18zdcjc2dingl94kivhd5cpzbvkjp9j12q57acjppp4hyd6g7f";
+    hash = "sha256-7jzTPCT3XsnUKVgEma6ce/3LSoM7TpLos7EJJln7KHw=";
   };
   aarch64-darwin_310 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp310-cp310-macosx_12_0_arm64.whl";
-    sha256 = "0rgm8wbcf7pg4vagfzj0k7l59hd8hrxwh25jalacxsg0i4l66qk4";
+    hash = "sha256-ZGJjKIng6c4UVbIIyHuGqMFU6JlAfvfUJu8exxZH9WU=";
   };
   aarch64-darwin_311 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp311-cp311-macosx_12_0_arm64.whl";
-    sha256 = "126a8gmjq8dn784gyh5z943ghxjqqyj75k10g7y0378k0r46zx2i";
+    hash = "sha256-UfRvSAYTnQH8eSDMcqTHWHb4Bkm/QP8IOrYhLOtDyog=";
   };
   aarch64-darwin_312 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp312-cp312-macosx_12_0_arm64.whl";
-    sha256 = "04npxa04fv5gv5y3djwjmjakkz7rbfvm0kb9y8fvxb19fkadgv2n";
+    hash = "sha256-VuzX1HQprL4d8mlNULdb+fw5laySyzZ82a9sR4Dq1xI=";
   };
   aarch64-darwin_313 = {
     url = "https://storage.googleapis.com/tensorflow/versions/%222.21.0%22/tensorflow-2.21.0-cp313-cp313-macosx_12_0_arm64.whl";
-    sha256 = "1x279567yrwpvn1iylg5qxnzqsjgmw60fvciz71vg4l1qm3fsid1";
+    hash = "sha256-oUXtRsWBkrfD+ZFtBwyvT2r8bcflUR+D3Zdnf0xJR/Q=";
   };
 }

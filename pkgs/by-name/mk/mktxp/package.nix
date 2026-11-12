@@ -2,9 +2,10 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "2.0.3";
+  version = "2.1.0";
 in
 python3Packages.buildPythonApplication {
   pname = "mktxp";
@@ -15,7 +16,7 @@ python3Packages.buildPythonApplication {
     owner = "akpw";
     repo = "mktxp";
     tag = "v${version}";
-    hash = "sha256-6CVVYBQWsEiFuJSeEiXAtsWuAKWBGrSFCT8xzCW5QrQ=";
+    hash = "sha256-KHsjOozplUtUj3X54QCZ4pJLDWB11SKwX6KnliBrK80=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -35,12 +36,8 @@ python3Packages.buildPythonApplication {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-mock
+    writableTmpDirAsHomeHook
   ];
-
-  # tests create the mktxp config under $HOME
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "mktxp" ];
 

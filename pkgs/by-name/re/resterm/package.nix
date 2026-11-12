@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "resterm";
-  version = "1.7.2";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "unkn0wn-root";
     repo = "resterm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WqyfSzRdB+eOKLfSJ6+PAjfwTyLZFk+H/GuYxATYaow=";
+    hash = "sha256-oTedc9TVh8VAR//qayjdJ2F9x7K1htbFkpy1txZe/ck=";
   };
 
-  vendorHash = "sha256-8nu7E7jwj2EodR2yICPQpbpLUJlXY32SzEEGm783s0A=";
+  vendorHash = "sha256-zkMcKNQPjM6IlnkttYfCwLhttVV9d56/DPN03JUen8E=";
 
   # modernc.org/libc (via modernc.org/sqlite) tries to read /etc/protocols
   modPostBuild = ''

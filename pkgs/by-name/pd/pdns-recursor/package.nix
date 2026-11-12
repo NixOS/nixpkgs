@@ -7,7 +7,6 @@
   nixosTests,
   openssl,
   systemd,
-  lua,
   luajit,
   protobuf,
   libsodium,
@@ -21,20 +20,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.4.5";
+  version = "5.4.9";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ExBXaNlJAGdZbyY9fTSLzAxnmFdMfZkcxAlS8YudrBE=";
+    hash = "sha256-Zv6r2G4y1fs45QZk55lC9kut63Iy197FvD2iaLTjgf8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/rec-rust-lib/rust";
-    hash = "sha256-r0fVF/N1K2rYUEuEZ4NYYbpYxILMklhwAodeAEK7SFs=";
+    hash = "sha256-Q7R+2mehLNwbfL4cNnakH7rkb5iYOc12CU0OAZpK1jc=";
   };
 
   cargoRoot = "rec-rust-lib/rust";
+
+  # redact configure flags from version output to reduce closure size
+  patches = [ ./version.patch ];
 
   nativeBuildInputs = [
     cargo
@@ -48,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     openssl
     systemd
-    lua
     luajit
     libsodium
     curl
@@ -70,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit (nixosTests) pdns-recursor ncdns;
   };
+
+  # Use python3 as canary for whether --version references are removed
+  disallowedReferences = [ python3 ];
 
   meta = {
     changelog = "https://doc.powerdns.com/recursor/changelog/${lib.versions.majorMinor finalAttrs.version}.html#change-${finalAttrs.version}";

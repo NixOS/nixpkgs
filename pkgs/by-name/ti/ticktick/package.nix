@@ -12,7 +12,7 @@
   libgbm,
   alsa-lib,
   xdg-utils,
-  systemd,
+  systemdLibs,
 }:
 let
   baseUrl = "https://d2atcrkye2ik4e.cloudfront.net/download";
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Needed to make the process get past zygote_linux fork()'ing
-  runtimeDependencies = [ systemd ];
+  runtimeDependencies = [ systemdLibs ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -72,10 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sf "$out/opt/ticktick/ticktick" "$out/bin/ticktick"
 
     substituteInPlace "$out/share/applications/ticktick.desktop" \
-      --replace "Exec=/opt/TickTick/ticktick" "Exec=$out/bin/ticktick"
+      --replace-fail "Exec=/opt/TickTick/ticktick" "Exec=ticktick"
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Powerful to-do & task management app with seamless cloud synchronization across all your devices";

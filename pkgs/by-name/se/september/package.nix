@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "september";
-  version = "0.5.0";
+  version = "0.5.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gemrest";
     repo = "september";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g50hWDuf5TgzI8vfQAAkNYZs6UTIve7IX+fNTWzxu4w=";
+    hash = "sha256-c0o0jH2ZkdJzzc/ZbnVhvA7wBAB0GEjwf1qBYa9mbbg=";
   };
 
-  cargoHash = "sha256-tOoiIKeG/b1l/TpTD1K1ZRhVDcWxNILhKqLpJp7QIec=";
+  cargoHash = "sha256-+h+CV1L6lvca9ryFUNtxZ5nswGmxx4Rcv/2qp32IZok=";
 
   nativeBuildInputs = [
     pkg-config

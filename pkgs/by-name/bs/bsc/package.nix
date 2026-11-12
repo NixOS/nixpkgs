@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bsc";
-  version = "3.3.12";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "IlyaGrebnov";
     repo = "libbsc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3dFwmThnDzbXB6m/rDfbSz4DZAlIsm4gUOT7YwexpKA=";
+    hash = "sha256-wVAKgCgxGiRYZWWvzoFRzngnorq6usuNYuNHq+tH5dY=";
   };
 
   enableParallelBuilding = true;
@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "High performance block-sorting data compression library";
+    changelog = "https://github.com/IlyaGrebnov/libbsc/blob/v${finalAttrs.version}/CHANGES";
     homepage = "http://libbsc.com/";
     maintainers = with lib.maintainers; [ sigmanificient ];
     license = lib.licenses.asl20;

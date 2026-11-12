@@ -14,10 +14,9 @@ buildPythonPackage (finalAttrs: {
   pname = "django-rest-knox";
   version = "5.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-commons";
     repo = "django-rest-knox";
     tag = finalAttrs.version;
     hash = "sha256-YK2dD2QAnrgDqWy506afRnEbnla4VT8RFV4Rg0BRjEY=";
@@ -44,8 +43,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Authentication module for Django REST Framework";
-    homepage = "https://github.com/jazzband/django-rest-knox";
-    changelog = "https://github.com/jazzband/django-rest-knox/blob/${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/django-commons/django-rest-knox";
+    changelog = "https://github.com/django-commons/django-rest-knox/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ darshancode2005 ];
   };

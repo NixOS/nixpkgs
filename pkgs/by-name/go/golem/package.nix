@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  writeShellScriptBin,
 
   # nativeBuildInputs
   pkg-config,
@@ -18,13 +19,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "golem";
-  version = "1.1.0";
+  version = "1.5.10";
 
   src = fetchFromGitHub {
     owner = "golemcloud";
     repo = "golem";
     tag = "v${version}";
-    hash = "sha256-6AUUgXWlDaoI16p/Hrl115XMGYUIDD5YWHX6JfDk9SI=";
+    hash = "sha256-6a+OTIKDuo9ievCypGV/3jg4dNqMIHAC/EwYVTAaLUg=";
   };
 
   # Taker from https://github.com/golemcloud/golem/blob/v1.0.26/Makefile.toml#L399
@@ -32,10 +33,21 @@ rustPlatform.buildRustPackage rec {
     grep -rl --include 'Cargo.toml' '0\.0\.0' | xargs sed -i "s/0\.0\.0/${version}/g"
   '';
 
+  # shadow_rs (used by golem-common) shells out to `git describe` during
+  # build.rs execution. The unpacked archive has no .git directory, so
+  # provide a stub `git` that returns the current tag.
+  gitStub = writeShellScriptBin "git" ''
+    case "$1" in
+      describe) echo "v${version}"; exit 0 ;;
+    esac
+    exec /bin/git "$@"
+  '';
+
   nativeBuildInputs = [
     pkg-config
     protobuf
     rustPlatform.bindgenHook
+    gitStub
   ];
 
   buildInputs = [
@@ -43,16 +55,7 @@ rustPlatform.buildRustPackage rec {
     (lib.getDev openssl)
   ];
 
-  env = {
-    # Required for golem-wasm-rpc's build.rs to find the required protobuf files
-    # https://github.com/golemcloud/wasm-rpc/blob/v1.0.6/wasm-rpc/build.rs#L7
-    GOLEM_WASM_AST_ROOT = "../golem-wasm-ast-1.1.0";
-    # Required for golem-examples's build.rs to find the required Wasm Interface Type (WIT) files
-    # https://github.com/golemcloud/golem-examples/blob/v1.0.6/build.rs#L9
-    GOLEM_WIT_ROOT = "../golem-wit-1.1.0";
-  };
-
-  cargoHash = "sha256-zf/L7aNsfQXCdGpzvBZxgoatAGB92bvIuj59jANrXIc=";
+  cargoHash = "sha256-MmMaeRA+4W78UBtj0G3UW2IgLJW1R5FrrvyGqU/YoCc=";
 
   # Tests are failing in the sandbox because of some redis integration tests
   doCheck = false;

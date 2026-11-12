@@ -11,6 +11,8 @@
   # dependencies
   draccus,
   einops,
+  filelock,
+  fsspec,
   gymnasium,
   huggingface-hub,
   numpy,
@@ -34,16 +36,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-glTeELaebo5C6RethwYIHF4gB7CgKZlPr4wf45ih9cs=";
+    hash = "sha256-2NUijbKINcC1p+lSnLHMiKYl+0DZKxFHX5vFr25vlS4=";
   };
+
+  patches = [
+    # PyAV>=18 removed the option/descriptor API (https://github.com/PyAV-Org/PyAV/commit/08d9f504d4)
+    # Codec option validation becomes a no-op, and codec availability is checked with get_codec().
+    ./pyav-0-18-compat.patch
+  ];
 
   build-system = [
     cmake
@@ -53,17 +60,14 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "cmake"
-    "draccus"
     "numpy"
-    "packaging"
-    "setuptools"
-    "torch"
-    "torchvision"
   ];
   dependencies = [
     cmake
     draccus
     einops
+    filelock
+    fsspec
     gymnasium
     huggingface-hub
     numpy
@@ -100,7 +104,7 @@ buildPythonPackage (finalAttrs: {
     "test_make_env_from_hub_with_trust"
     "test_policy_defaults"
     "test_save_and_load_pretrained"
-    "test_save_pretrained_with_state_dict"
+    "test_save_pretrained_single_file_artifact"
 
     # Hang indefinitely
     "test_aggregate_datasets"
@@ -113,12 +117,6 @@ buildPythonPackage (finalAttrs: {
     # ValueError: pix_fmt='yuv420p' is not supported by codec 'h264_vaapi'; supported pixel formats: ['vaapi']
     "test_vaapi_options"
 
-    # draccus.utils.ParsingError: Expected a dict with a 'type' key for ...
-    "test_reward_model_config_from_pretrained_roundtrip"
-
-    # TypeError: cannot create weak reference to 'str' object
-    "test_save_pretrained_round_trip_via_disk"
-
     # [Errno 1094995529] Invalid data found when processing input: '/build/source/tests/artifacts/encoded_videos/clip_4frames.mp4'
     "test_depth_encoder_config_sets_is_depth_map_true"
     "test_geometry_preserved"
@@ -126,12 +124,32 @@ buildPythonPackage (finalAttrs: {
     "test_reencode_video"
     "test_reencode_video_trim_window"
     "test_returns_all_stream_fields"
+    "test_stream_copy_declines_open_gop_keyframes"
     "test_stream_derived_keys_take_precedence_over_config"
     "test_three_clips_frame_count"
     "test_two_clips_frame_count"
 
+    # Codec option validation is a no-op without PyAV's descriptor API (see postPatch)
+    # Failed: DID NOT RAISE ValueError
+    "test_bool_on_numeric_option_raises"
+    "test_libsvtav1_crf_out_of_range_raises"
+    "test_libsvtav1_crf_rejects_python_float"
+    "test_libsvtav1_extra_crf_rejects_float"
+    "test_libsvtav1_extra_crf_rejects_fractional_string"
+    "test_libsvtav1_preset_out_of_range_raises"
+    "test_non_numeric_string_on_numeric_option_raises"
+    "test_numeric_out_of_range_raises"
+    "test_numeric_string_out_of_range_raises"
+    "test_validate_is_rerunnable"
+
+    # RuntimeError: --docker=true builds simulator images from a LeRobot source checkout
+    "test_docker_launch_builds_a_local_envhub_directory"
+    "test_docker_launch_selects_backend_from_overridden_config"
+    "test_docker_launch_serves_an_envhub_repository"
+
     # RuntimeError: OpenCVCamera(/build/source/tests/artifacts/cameras/image_480x270.png) read failed
     "test_async_read"
+    "test_color_mode_conversion"
     "test_fourcc_with_camer"
     "test_read"
     "test_rotation"

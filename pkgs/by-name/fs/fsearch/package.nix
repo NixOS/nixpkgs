@@ -41,11 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     icu
   ];
 
-  preFixup = ''
-    substituteInPlace $out/share/applications/io.github.cboxdoerfer.FSearch.desktop \
-      --replace "Exec=fsearch" "Exec=$out/bin/fsearch"
-  '';
-
   meta = {
     description = "Fast file search utility for Unix-like systems based on GTK+3";
     homepage = "https://github.com/cboxdoerfer/fsearch.git";

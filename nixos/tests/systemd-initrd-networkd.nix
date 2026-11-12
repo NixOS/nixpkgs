@@ -5,7 +5,6 @@ let
     { pkgs, ... }:
     {
       boot.initrd.systemd = {
-        enable = true;
         network.wait-online.timeout = 10;
         network.wait-online.anyInterface = true;
         targets.network-online.requiredBy = [ "initrd.target" ];

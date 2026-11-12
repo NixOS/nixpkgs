@@ -50,6 +50,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    hardware.uinput.enable = true;
+
     environment.systemPackages = [ cfg.package ];
 
     services.udev.packages = [ cfg.package ];

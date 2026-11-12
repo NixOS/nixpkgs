@@ -4,10 +4,12 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turso";
-  version = "0.7.2";
+  version = "0.8.3";
 
   __structuredAttrs = true;
 
@@ -15,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tursodatabase";
     repo = "turso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xy2HFwOsoh0sXDDYq437/bWbm65G/iRvA4lIFdjIDM0=";
+    hash = "sha256-wUbRmGo4eQtwKXm/tGyxyqJOeqwG1EWBjuCyfp7mVzQ=";
   };
 
-  cargoHash = "sha256-8sNDuWH7nGZpLPsM7RLu9E5LGzLLxpPaJ8k7/ScGaSo=";
+  cargoHash = "sha256-7AoiZAX9wKlPUVhb5HH4b9u8xT0EZ2OksHNMZQVcTjs=";
 
   cargoBuildFlags = [
     "--bin"
@@ -26,6 +28,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

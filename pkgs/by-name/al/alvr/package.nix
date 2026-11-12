@@ -41,6 +41,7 @@
   wayland,
   x264,
   xvidcore,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alvr";
@@ -132,6 +133,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     x264
     xvidcore
+    zstd
   ];
 
   postBuild = ''

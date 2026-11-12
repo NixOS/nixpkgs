@@ -10,11 +10,15 @@
   cctools,
   cargo-tauri,
   jq,
+  sqlite,
   writableTmpDirAsHomeHook,
   makeBinaryWrapper,
   swift,
   apple-sdk_26,
+  open-apple-macros,
+  replaceVars,
   symlinkJoin,
+  nix-update-script,
 
   # Linux-only
   webkitgtk_4_1,
@@ -55,7 +59,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handy";
-  version = "0.9.6";
+  version = "0.9.8";
 
   __structuredAttrs = true;
 
@@ -63,13 +67,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cjpais";
     repo = "Handy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6eNa9iNjwKgLL8t72GeMHTxjyHaeVl+9VF/QWjlHzts=";
+    hash = "sha256-3j73ss9pwkcK4MfeNY/9PFp//Cbc0OSICDdlmHprSso=";
   };
 
   cargoRoot = "src-tauri";
-  cargoHash = "sha256-fzTklIGMCE2ugLc6KIj3XDqxB4qjhtm14LKBUb8kBWE=";
+  cargoHash = "sha256-I9OLUF96PgqdcYlycBICfl43rENkiyzZDLmtmnNX87A=";
 
   nativeInstallInputs = [ jq ];
+
+  patches =
+    # Use apple-open-macros to enable using Apple Intelligence on Darwin.
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      (replaceVars ./add-plugin-path-for-swift-macros.patch {
+        inherit open-apple-macros;
+      })
+    ];
 
   postPatch = ''
     patch_json() {
@@ -120,6 +132,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    sqlite
     onnxruntime
     openssl
   ]
@@ -153,6 +166,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     );
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lclang_rt.osx"; # Make sure `__isPlatformVersionAtLeast` is available for runtime version checks.
     SWIFTC = lib.getExe' swift "swiftc"; # Explicit so the Handy build system can avoid xcrun
   };
 
@@ -192,6 +206,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gappsWrapperArgs+=(
       --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --set ALSA_PLUGIN_DIR "${finalAttrs.passthru.alsaPluginDirectory}"
+      # Disable the in-app updater
+      --set HANDY_DISABLE_UPDATER 1
     )
   '';
 
@@ -249,9 +265,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       outputHash =
         {
-          "x86_64-linux" = "sha256-huOC2smHU0sGIxeyvWmzdewUEpKHfdSGNhf9xWpH9Jk=";
-          "aarch64-linux" = "sha256-UDn8nIgIx23ampe43Qr0j9h+hlU9g1QzzlIlbRH2CKs=";
-          "aarch64-darwin" = "sha256-8Rw4iNvqeq/sRvZpbtZo0f0iPAwu1TeB8Y+ut4kb9uw=";
+          "x86_64-linux" = "sha256-sBrQToz8+tRTAQNZkSE0Ke5mZ0Sfagl8+IE/4VL990E=";
+          "aarch64-linux" = "sha256-Yp1OtXeY4abE4qFdG8K30D2M0fdbRmeQMzk0Y6BrZuw=";
+          "aarch64-darwin" = "sha256-AIxRev4JwrjRJQBnlknOH1QtZarjM9m9ICjB8bNL7Wk=";
         }
         .${stdenv.hostPlatform.system};
 
@@ -263,6 +279,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       paths = [
         "${pipewire}/lib/alsa-lib"
         "${alsa-plugins}/lib/alsa-lib"
+      ];
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontendDeps"
       ];
     };
   };

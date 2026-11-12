@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3";
   pyproject = true;
   dontUseCmakeConfigure = true; # handled by python
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "atx";

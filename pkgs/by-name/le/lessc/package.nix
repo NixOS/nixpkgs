@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    CI=true pnpm prune --prod --ignore-scripts
     mkdir -p $out/{bin,lib/lessc}
     cp -r {packages,node_modules} $out/lib/lessc
     chmod +x $out/lib/lessc/packages/less/bin/lessc

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-guppy";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
     tag = "guppy-${finalAttrs.version}";
-    hash = "sha256-y/5t1Mr0CvT/wNwZ696Uahiei3rpyAF8XOMSbQbh06w=";
+    hash = "sha256-MJyp66Q99rWZda4HNtGg4qsiiFVQuotrZ2F+dUKxvm4=";
   };
 
-  cargoHash = "sha256-tTX8cGY+6aL8MvZUgfKtMC8d+FKqAOpm5y6O9L3Gr5A=";
+  cargoHash = "sha256-ogAcGIF1IgfTTZtRdD/caguB2o5R7EcJy22YMa/aKts=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -42,10 +42,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/guppy-rs/guppy/releases/tag/${finalAttrs.src.tag}";
     description = "Command-line frontend for guppy";
     homepage = "https://github.com/guppy-rs/guppy/tree/main/cargo-guppy";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     mainProgram = "cargo-guppy";
     maintainers = with lib.maintainers; [ hythera ];
   };

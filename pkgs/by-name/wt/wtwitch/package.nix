@@ -2,7 +2,7 @@
   bash,
   coreutils-prefixed,
   curl,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   gnused,
   gnugrep,
   installShellFiles,
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wtwitch";
   version = "2.6.3";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "krathalan";
     repo = "wtwitch";
     tag = finalAttrs.version;
@@ -86,7 +86,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Terminal user interface for Twitch";
-    homepage = "https://github.com/krathalan/wtwitch";
+    homepage = "https://codeberg.org/krathalan/wtwitch";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.all;

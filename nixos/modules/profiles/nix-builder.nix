@@ -138,6 +138,18 @@ in
       max-free = cfg.max-free;
 
       trusted-users = [ user ];
+
+      # enable nspawn nixos tests
+      auto-allocate-uids = true;
+      experimental-features = [
+        "auto-allocate-uids"
+        "cgroups"
+      ];
+      extra-system-features = [
+        "uid-range"
+        "devnet"
+      ];
+      extra-sandbox-paths = [ "/dev/net" ];
     };
 
     services = {
@@ -200,11 +212,24 @@ in
           ''
         );
 
-        run-builder = hostPkgs.writeShellScriptBin "run-builder" ''
-          set -euo pipefail
-          KEYS="''${KEYS:-./keys}"
-          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
-        '';
+        mkRunBuilder =
+          vm:
+          hostPkgs.writeShellScriptBin "run-builder" ''
+            set -euo pipefail
+            KEYS="''${KEYS:-./keys}"
+
+            temporaryDirectory="$(${hostPkgs.coreutils}/bin/mktemp -d)"
+            trap '${hostPkgs.coreutils}/bin/rm -rf "$temporaryDirectory"' EXIT
+
+            # The guest needs only the public key. Store imports are world-readable.
+            ${hostPkgs.coreutils}/bin/install -Dm444 \
+              "$KEYS/${user}_${keyType}.pub" \
+              "$temporaryDirectory/keys/${user}_${keyType}.pub"
+
+            KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$temporaryDirectory/keys")" ${lib.getExe vm}
+          '';
+
+        run-builder = mkRunBuilder config.system.build.vm;
 
       in
       hostPkgs.writeTextFile {

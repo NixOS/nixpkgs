@@ -93,7 +93,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
       exec = "localsend_app %U";
       icon = "localsend";
       desktopName = "LocalSend";
-      startupWMClass = "localsend_app";
+      startupWMClass = "org.localsend.localsend_app";
       comment = meta.description;
       genericName = "File Transfer";
       categories = [
@@ -115,7 +115,9 @@ flutter341.buildFlutterApplication (finalAttrs: {
     rustLib = rustPlatform.buildRustPackage {
       pname = "${finalAttrs.pname}-rust-lib";
       inherit (finalAttrs) version src;
-      cargoHash = "sha256-mdyWYfzS6YieY+dwQXREZJDo4PEKO5W9C3A3XGWoDKI=";
+      # use the system CA trust store instead of the vendored webpki-roots
+      cargoPatches = [ ./native-roots.patch ];
+      cargoHash = "sha256-N3I+9ziS4pEIcRYbjLZ7s7rO5G+9gG1W+3/IJaI1/FA=";
       buildAndTestSubdir = "packages/localsend_isolates/rust";
     };
     tests = { inherit (nixosTests) localsend; };

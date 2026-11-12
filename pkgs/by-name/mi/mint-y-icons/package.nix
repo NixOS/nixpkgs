@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-y-icons";
-  version = "1.9.3";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-y-icons";
     rev = version;
-    hash = "sha256-aDuM3IpnQdkdjNSV0U/wwn1pXVFbPKEeZhDxt9GPcFE=";
+    hash = "sha256-Dunh5RS8MVw5tT5menjzgEYTu/vJa+QCW1nngiH6C3Y=";
   };
 
   propagatedBuildInputs = [

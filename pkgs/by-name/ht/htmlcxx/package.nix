@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./c++17.patch
   ];
 
+  postPatch = ''
+    substituteInPlace html/tree.h --replace-fail "allocate(1,0)" "allocate(1)"
+  '';
+
   meta = {
     homepage = "https://htmlcxx.sourceforge.net/";
     description = "Simple non-validating css1 and html parser for C++";

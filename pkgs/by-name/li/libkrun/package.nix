@@ -6,6 +6,7 @@
   cargo,
   pkg-config,
   glibc,
+  zstd,
   openssl,
   libcap_ng,
   libepoxy,
@@ -35,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun" + lib.optionalString (variant != null) "-${variant}";
-  version = "1.19.0";
+  version = "1.19.7";
 
   src = fetchFromGitHub {
     owner = "libkrun";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g4u34sGdgv6mRRry9b5TAXSx+pmVwCNSD3YNtr6qRxo=";
+    hash = "sha256-VtepY0sAqP18OIhIPwESoGi7E2Ahs4ihJjLyLH78JAM=";
   };
 
   outputs = [
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-rxdaqEKDDMxFwRuX6kLhqGyFXJTz+Bx4mJJhYL5nPgU=";
+    hash = "sha256-Ab7b37Npf0vNg7rF8KfPdLYCBuBCyRAYhR13RLecV04=";
   };
 
   # Make sure libkrunfw can be found by dlopen()
@@ -90,7 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     virglrenderer
   ]
   ++ lib.optional withSound pipewire
-  ++ lib.optional (variant == "sev" || variant == "tdx") openssl;
+  ++ lib.optional (variant == "sev" || variant == "tdx") openssl
+  ++ lib.optional stdenv.hostPlatform.isx86_64 zstd;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

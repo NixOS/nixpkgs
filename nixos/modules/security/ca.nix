@@ -8,7 +8,10 @@ let
   cfg = config.security.pki;
 
   cacertPackage = pkgs.cacert.override {
-    blacklist = cfg.caCertificateBlacklist;
+    blacklist = cfg.caCertificateBlacklist ++ [
+      # CVE-2026-111943
+      "Comodo AAA Services root"
+    ];
     extraCertificateFiles = cfg.certificateFiles;
     extraCertificateStrings = cfg.certificates;
   };

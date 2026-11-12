@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   alsa-lib,
+  bashNonInteractive,
   fltk_1_3,
   gtk3,
   gtk4,
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
+    bashNonInteractive
     gtk3
     gtk4
     psmisc
@@ -99,13 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
-
+  postFixup = ''
     wrapProgram $out/bin/hdajackretask \
       --prefix PATH : ${lib.makeBinPath [ psmisc ]}
-
-    runHook postFixup
   '';
 
   meta = {

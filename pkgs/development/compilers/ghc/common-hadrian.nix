@@ -254,21 +254,14 @@
               "sha256-vtjT+TL/7sYPu4rcVV3xCqJQ+uqkyBbf9l0KIi97j/0=";
         })
       ]
-      ++
-        lib.optionals
-          (
-            (stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64)
-            && lib.versionAtLeast version "9.10"
-            && lib.versionOlder version "9.12"
-          )
-          [
-            # Fix LLVM backend split sections causing bin/out reference cycles: https://gitlab.haskell.org/ghc/ghc/-/issues/26770
-            (fetchpatch {
-              name = "ghc-llvm-fix-split-sections.patch";
-              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/b18b2c42c32488ad6d3480a56a1fcd753cad2023.patch";
-              hash = "sha256-kEgZARwcdnWcvjuTfyqnn8V1zAUczZN0qiy/1WbCy1s=";
-            })
-          ]
+      ++ lib.optionals (lib.versionAtLeast version "9.10" && lib.versionOlder version "9.12") [
+        # Fix LLVM backend split sections causing bin/out reference cycles: https://gitlab.haskell.org/ghc/ghc/-/issues/26770
+        (fetchpatch {
+          name = "ghc-llvm-fix-split-sections.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/b18b2c42c32488ad6d3480a56a1fcd753cad2023.patch";
+          hash = "sha256-kEgZARwcdnWcvjuTfyqnn8V1zAUczZN0qiy/1WbCy1s=";
+        })
+      ]
       ++ lib.optionals (lib.versionOlder version "9.12") [
         (fetchpatch {
           name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
@@ -798,7 +791,7 @@ stdenv.mkDerivation (
       # Tool used to update GHC's settings file in postInstall
       bootPkgs.ghc-settings-edit
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       autoSignDarwinBinariesHook
     ]
     ++ lib.optionals enableDocs [

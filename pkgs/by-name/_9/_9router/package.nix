@@ -9,14 +9,14 @@ buildNpmPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "9router";
-  version = "0.5.75";
+  version = "0.5.116";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/9router/-/9router-${finalAttrs.version}.tgz";
-    hash = "sha256-4G6DXod9H6FOJ6MSWm//p4lpjT4032/7YfpsqrvdT9A=";
+    hash = "sha256-xASuRKTRl9NwVtHIkGEsPBve0YA1uUL4rDADaptmqc8=";
   };
 
-  npmDepsHash = "sha256-L1FsPonQR0CkezH6A3fQdIUwb5Tzd269CFO6NhhXbGQ=";
+  npmDepsHash = "sha256-R3RFTB7Trm75fbVsCtFo+wb/jRTrIG4ZC5kKDQdQHKo=";
 
   postPatch = ''
     # devDependencies only drive the upstream bundling step, which the tarball

@@ -2,22 +2,30 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "treemd";
-  version = "0.9.0";
+  version = "0.10.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Epistates";
     repo = "treemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HSLl24PEOsSmoMNbfQm866msgjfcs0QKSED9GPhmjvQ=";
+    hash = "sha256-5zbYuyXdccq+cr/b3JLuaC6uE6YCWowW9j0a7Hyv3Wo=";
   };
 
-  cargoHash = "sha256-YmejEZAZrmiviXGXvLqEGHia1fHNyJaYZGg4Px18Ae0=";
+  cargoHash = "sha256-tFNEytLFpB990yAc632qwPwVXtYHhAe4zL6rdDxmr+I=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

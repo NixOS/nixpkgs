@@ -36,13 +36,13 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
   stdenvNoCC.mkDerivation
   rec {
     pname = "tela-circle-icon-theme";
-    version = "2025-02-10";
+    version = "2026-07-07";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "tela-circle-icon-theme";
       tag = version;
-      hash = "sha256-5Kqf6QNM+/JGGp2H3Vcl69Vh1iZYPq3HJxhvSH6k+eQ=";
+      hash = "sha256-0P4KLwrBPsLMaSdaq06dUe8E1qFoGLlMbWxZ89GebKE=";
     };
 
     nativeBuildInputs = [
@@ -74,6 +74,9 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
       ./install.sh -d $out/share/icons \
         ${lib.optionalString circularFolder "-c"} \
         ${if allColorVariants then "-a" else toString colorVariants}
+
+      # remove broken symlinks
+      find $out -xtype l -print -delete
 
       jdupes --quiet --link-soft --recurse $out/share
 

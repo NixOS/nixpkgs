@@ -8,15 +8,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "reticulum-go";
-  version = "1.1.1";
-  strictDeps = true;
+  version = "1.4.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Quad4-Software";
     repo = "Reticulum-Go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YNEVf8nmqEE3jN37jS+oKwcvFKzIe8afr/tBrZPjGRQ=";
+    hash = "sha256-fIa+LSm5W02DvLQUYtCfXlaIpsTcZVPANqYcc1oMeDE=";
   };
 
   vendorHash = null;
@@ -41,7 +40,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/Quad4-Software/Reticulum-Go/releases/tag/${finalAttrs.src.tag}";
     description = "High-performance Go implementation of the Reticulum Network Stack";
     homepage = "https://github.com/Quad4-Software/Reticulum-Go";
-    license = lib.licenses.asl20;
+    license = lib.licenses.reticulum;
     mainProgram = "reticulum-go";
     maintainers = with lib.maintainers; [ drupol ];
   };

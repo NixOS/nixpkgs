@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
+    "-DDATABASE_DIRECTORY=/var/lib/clamav"
     "-DCVD_CERTS_DIRECTORY=${placeholder "out"}/share/clamav/certs"
   ]
   ++ lib.optionals systemdSupport [

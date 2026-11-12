@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
+  configureFlags = lib.optionals stdenv.hostPlatform.isx86_64 [ "--enable-simd=sse2" ];
+
   preConfigure = ''
     export HOME="$PWD"
   '';

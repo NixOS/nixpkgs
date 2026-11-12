@@ -5,7 +5,7 @@
   lib,
   stdenv,
   nodejs_24,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   dart-sass,
@@ -14,6 +14,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "vikunja-frontend";
   inherit version src;
+
+  __structuredAttrs = true;
 
   sourceRoot = "${finalAttrs.src.name}/frontend";
 
@@ -24,16 +26,16 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-aQWTzJZU6NJrZxuoCeQDJjujPq+niixmFvqtPdWS4wk=";
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-8Z1kV1sbrAYFVHSb6d4iB6gzPsxk7IDROeYMN9Mjueo=";
   };
 
   nativeBuildInputs = [
     nodejs_24
     dart-sass
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
   ];
 
   postPatch = ''

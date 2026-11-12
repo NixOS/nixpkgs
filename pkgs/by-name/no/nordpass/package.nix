@@ -32,7 +32,7 @@
   libpng,
   libnotify,
   libgcrypt,
-  systemd,
+  systemdLibs,
   fontconfig,
   dbus,
   expat,
@@ -83,7 +83,7 @@ let
     nss_latest
     pango
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libice
     libsm
     libx11
@@ -155,7 +155,7 @@ let
       description = "Secure and simple password manager for a stress-free online experience";
       license = lib.licenses.unfree;
       mainProgram = "nordpass";
-      maintainers = with lib.maintainers; [ coconnor ];
+      maintainers = [ ];
       platforms = [ "x86_64-linux" ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };

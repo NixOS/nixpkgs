@@ -156,13 +156,28 @@ Feel free to merge changes to the team if the existing members are unresponsive.
 #### Synced GitHub teams
 
 As an alternative to tracking team members in `team-list.nix`, a corresponding GitHub team can be created by any org member and its members subsequently managed directly on GitHub.
-When creating the team it should be created with the `nixpkgs-maintainers` team as parent.
-Once approved, the team will have the right privileges to be pinged and requested for review in Nixpkgs.
 
-> [!TIP]
-> The team name should be as short as possible; because it is nested under the maintainers group, no -maintainers suffix is needed.
-
-After the first [weekly team sync](../.github/workflows/teams.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
+1. [Create a new team](https://github.com/orgs/NixOS/new-team?parent_team=nixpkgs-maintainers) on the NixOS org, with `@NixOS/nixpkgs-maintainers` as its parent.
+   - The team name should be as short as possible.
+     Because it is nested under the maintainers group, no -maintainers suffix is needed.
+   - If you do not use the above link, you may need to separately request for your new team to become a child of `@NixOS/nixpkgs-maintainers`.
+     [Open an issue](https://github.com/NixOS/org/issues/new) on `NixOS/org` if in doubt.
+1. Wait for an org-owner to approve the team's relationship with `@NixOS/nixpkgs-maintainers`.
+   - Once approved, the team will have the right privileges to be pinged and requested for review in Nixpkgs.
+   - Before approval, the weekly team sync will not include the team.
+   - Consider [opening an issue](https://github.com/NixOS/org/issues/new) on the `NixOS/org` repo, to make org-owners aware of the request.
+1. Wait for the [weekly team sync](../.github/workflows/teams.yml).
+   - Nixpkgs committers can also manually trigger the sync workflow.
+1. Wait for the sync PR to be merged.
+1. You can now inherit the GitHub team's members in `team-list.nix` entries.
+   The syntax is `github = "team-name"`:
+   ```nix
+   {
+     ci = {
+       github = "nixpkgs-ci";
+     };
+   }
+   ```
 
 # Maintainer scripts
 

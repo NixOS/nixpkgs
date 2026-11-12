@@ -13,11 +13,12 @@
   sqlite,
   stdenv,
   testers,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "8.1.3";
+  version = "8.2.3";
 
   # lighthouse/common/deposit_contract/build.rs, `TAG`
   depositContractSpecVersion = "0.12.1";
@@ -28,14 +29,14 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     tag = "v${version}";
-    hash = "sha256-TXJT9ZFgf3B5K44sWVaUpEGM+sZim2mBA5w3eAuoVds=";
+    hash = "sha256-eTPhi5nlzZ7QSoUuGiDea+0E7GOqLTs40OcX8zc0jkU=";
   };
 
   patches = [
     ./use-system-sqlite.patch
   ];
 
-  cargoHash = "sha256-T40R4LfdM5V2PAgkOWayId6xUm2FlGJrefqXgPTDzvM=";
+  cargoHash = "sha256-msJMn0JGTvJg2czglJ20DJVC4K7Q0pwsQfAySOVE56I=";
 
   buildFeatures = [
     "gnosis"
@@ -51,6 +52,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     rust-jemalloc-sys
     sqlite
+    zstd
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     openssl
@@ -320,7 +322,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=move_validators::test::two_validators_move_one_where_one_is_a_duplicate"
     "--skip=move_validators::test::two_validators_move_one_with_identical_password_files"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
     "--skip=subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip=subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"

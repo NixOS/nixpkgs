@@ -5,6 +5,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  libgit2,
   installShellFiles,
   curl,
 }:
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    libgit2
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl

@@ -3,22 +3,28 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syswatch";
-  version = "0.14.2";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "syswatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-udVUX1qNaPDBI+nEjm7LQ+2+HG6TBlgsjyQOP8pBqao=";
+    hash = "sha256-YIXcKVnJ8uv74t0oPC73vdzcFY3YlFNy7XywJLl5FeU=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-iFqECXUMODxvjXQ4o0mD4dTdG9RYbpOBeyJzvteZZmI=";
+  cargoHash = "sha256-yhTPEVb3ezGAKrVbwTSyukGUayqgF0xu2dfD+mAXlo4=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [ versionCheckHook ];
 

@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   fetchurl,
+  pkg-config,
+  zstd,
   versionCheckHook,
   writeShellApplication,
   curl,
@@ -13,8 +15,8 @@
 
 let
   # This file can be found in Stockfish/src/evaluate.h
-  nnueFile = "nn-89cb98a217f7.nnue";
-  nnueHash = "sha256-icuYohf3IBR8coYXYQl76koEKJl90iDsioGlYkMbu+Y=";
+  nnueFile = "nn-1a298aa575a0.nnue";
+  nnueHash = "sha256-GimKpXWghUNNKQJ5eNw2hn/pxbzqk3ZlS3qOuh5S38I=";
   nnue = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
     hash = nnueHash;
@@ -22,13 +24,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fishnet";
-  version = "2.14.0";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p6gZEQfC/XX0qp7nJZps5FNDea5iOVXN4hQ6f5nGKCc=";
+    hash = "sha256-v3wtFZMinDfw13ofsRPZWL0jTvUl6yZdrriXV7vfT4M=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +39,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -v '${nnue}' 'Fairy-Stockfish/src/${nnueFile}'
   '';
 
-  cargoHash = "sha256-S3mgeYujRLvEoJYLG8Np1f1JYuftF3lZlptG33QqbNM=";
+  cargoHash = "sha256-b6rRXaNpcQ9S/IdpwxvzQPl6/cXyyDDa9nracqS+vRA=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

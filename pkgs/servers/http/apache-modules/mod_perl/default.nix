@@ -8,12 +8,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mod_perl";
   version = "2.0.13";
 
   src = fetchurl {
-    url = "mirror://apache/perl/${pname}-${version}.tar.gz";
+    url = "mirror://apache/perl/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-reO+McRHuESIaf7N/KziWNbVh7jGx3PF8ic19w2C1to=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   libcap,
   libsodium,
   openssl,
@@ -19,16 +20,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "proftpd";
-  version = "1.3.9d";
+  version = "1.3.9e";
 
   src = fetchFromGitHub {
     owner = "proftpd";
     repo = "proftpd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e0E775p8+UdLy9YqdeY5NJGYn8ojWtvOLVAr+UkTEv0=";
+    hash = "sha256-TdPdZHQt6H58s/MblgWs2Dd4r8dgL09cC3hk77nkkQM=";
   };
 
-  patches = [ ./no-install-user.patch ];
+  patches = [
+    ./no-install-user.patch
+    (fetchpatch {
+      url = "https://github.com/proftpd/proftpd/commit/933abc9ae115ffc59e4b2a98495ec267bf341d23.diff?full_index=1";
+      hash = "sha256-f7TFjKX1/q1YFA1q2/K4KB+LPDaFGkyf75f6vjLDkXA=";
+    })
+  ];
 
   strictDeps = true;
   enableParallelBuilding = true;

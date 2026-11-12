@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "motioneye-client";
-  version = "0.3.14";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "dermotduffy";
+    owner = "motioneye-project";
     repo = "motioneye-client";
     rev = "v${version}";
-    hash = "sha256-kgFSd5RjO+OtnPeAOimPTDVEfJ47rXh2Ku5xEYStHv8=";
+    hash = "sha256-z7a3TsO+L3ouWo+gO6QPopyLQEelE/f3B8Z4kU/7WW4=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for motionEye";
-    homepage = "https://github.com/dermotduffy/motioneye-client";
+    homepage = "https://github.com/motioneye-project/motioneye-client";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;

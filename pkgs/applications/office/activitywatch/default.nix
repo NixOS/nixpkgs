@@ -7,6 +7,7 @@
   perl,
   openssl,
   rust-jemalloc-sys,
+  sqlite,
   python3,
   python3Packages,
   qt6,
@@ -115,7 +116,10 @@ rec {
     dontWrapQtApps = true;
 
     makeWrapperArgs = [
-      "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+      "--suffix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [ xdg-utils ])
     ];
 
     postInstall = ''
@@ -208,6 +212,7 @@ rec {
     buildInputs = [
       openssl
       rust-jemalloc-sys
+      sqlite
     ];
 
     env.AW_WEBUI_DIR = aw-webui;

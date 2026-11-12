@@ -7,12 +7,9 @@
   swift,
   swiftpm,
   swiftpm2nix,
-  swiftPackages,
   libarchive,
   p7zip,
-  # Building from source on x86_64 fails (among other things) due to:
-  # error: cannot load underlying module for 'Darwin'
-  fromSource ? (stdenv.system != "x86_64-darwin"),
+  fromSource ? true,
 }:
 
 let
@@ -30,7 +27,7 @@ let
     platforms = lib.platforms.darwin;
   };
 
-  buildFromSource = swiftPackages.stdenv.mkDerivation (finalAttrs: {
+  buildFromSource = stdenv.mkDerivation (finalAttrs: {
     inherit pname version meta;
 
     src = fetchFromGitHub {
@@ -59,7 +56,7 @@ let
 
     installPhase = ''
       runHook preInstall
-      install -Dm755 .build/${stdenv.hostPlatform.darwinArch}-apple-macosx/release/dockutil -t $out/bin
+      install -Dm755 $(swiftpmBinPath)/dockutil -t $out/bin
       runHook postInstall
     '';
   });

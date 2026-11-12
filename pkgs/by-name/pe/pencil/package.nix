@@ -35,7 +35,7 @@
   libxcomposite,
   libx11,
   libxcb,
-  systemd,
+  systemdLibs,
 }:
 let
 
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         $out/opt/pencil/pencil
 
       # fix missing libudev
-      ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
+      ln -s ${lib.getLib systemdLibs}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
       wrapProgram $out/opt/pencil/pencil \
         --prefix LD_LIBRARY_PATH : $out/opt/pencil
     '';

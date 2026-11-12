@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "devbisme";
     repo = "skidl";
     tag = "v${version}";
-    sha256 = "sha256-7rauFhaLXyZ5SGtEF7qoAbrj/VgP4qpl+BWUeERefb4=";
+    hash = "sha256-7rauFhaLXyZ5SGtEF7qoAbrj/VgP4qpl+BWUeERefb4=";
   };
 
   propagatedBuildInputs = [

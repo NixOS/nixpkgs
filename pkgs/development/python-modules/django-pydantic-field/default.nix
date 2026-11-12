@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "django-pydantic-field";
-  version = "0.5.4";
+  version = "0.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "surenkov";
     repo = "django-pydantic-field";
     tag = "v${version}";
-    hash = "sha256-pnB6kYfN67102Z3R41BHIWnWoJQgd/ixyT+bbtY9PC8=";
+    hash = "sha256-GZ7yPUNSgvjxgyd77GSPLyeFzcSVIVUjyinabKoLsHw=";
   };
 
   postPatch = ''

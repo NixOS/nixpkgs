@@ -21,18 +21,18 @@ let
   devaMapsSource = fetchzip {
     name = "aspell-u-deva";
     url = "https://ftp.gnu.org/gnu/aspell/dict/mr/aspell6-mr-0.10-0.tar.bz2";
-    sha256 = "1v8cdl8x2j1d4vbvsq1xrqys69bbccd6mi03fywrhkrrljviyri1";
+    hash = "sha256-IWYft6Q5T5i5dwPEahpjayWjPc49YL3XJi1I0RFtDO0=";
   };
 
 in
 
 stdenv.mkDerivation rec {
   pname = "aspell";
-  version = "0.60.8.2";
+  version = "0.60.8.3";
 
   src = fetchurl {
     url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
-    hash = "sha256-V/5IY+rmBI9yJFqFdbRLcY+4XKFLn4wK/EGyVN/XaRk=";
+    hash = "sha256-BTTq4REyQFEg0R5Gv1lb1d0Ym8Ekunel3WquhhtIoWI=";
   };
 
   patches = lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;

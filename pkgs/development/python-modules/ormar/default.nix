@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "collerek";
+    owner = "ormar-orm";
     repo = "ormar";
     tag = version;
     hash = "sha256-DjqjHvRmlFyOQt1FlqZ9iT1zy25FdizRrXfKwMy2uI0=";
@@ -132,8 +132,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Async ORM with fastapi in mind and pydantic validation";
-    homepage = "https://github.com/collerek/ormar";
-    changelog = "https://github.com/collerek/ormar/releases/tag/${src.tag}";
+    homepage = "https://github.com/ormar-orm/ormar";
+    changelog = "https://github.com/ormar-orm/ormar/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andreasfelix ];
     broken = true;

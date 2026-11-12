@@ -2,7 +2,9 @@
   lib,
   stdenv,
   useMoldLinker,
+  applyPatches,
   fetchFromGitHub,
+  fetchpatch,
   gitMinimal,
   makeBinaryWrapper,
   cmake,
@@ -11,6 +13,7 @@
   testers,
   cachix,
   nixVersions,
+  aws-lc,
   openssl,
   dbus,
   protobuf,
@@ -19,6 +22,7 @@
   glibcLocalesUtf8,
   boehmgc,
   libghostty-vt,
+  zstd,
   llvmPackages,
   nixd,
   bash,
@@ -26,16 +30,27 @@
 }:
 
 let
-  version = "2.3.1";
+  version = "2.4.0";
   devenvNixVersion = "2.35";
-  devenvNixRev = "b9b81726b38469c55b9706d80d37d6c73cc7f76c";
+  devenvNixRev = "2a2ff1045ef7361212d7eac0c062534538968de6";
 
-  devenvNixSrc = fetchFromGitHub {
+  # Patch the source directly to keep Nix's version parseable by nix-bindings.
+  devenvNixSrc = applyPatches {
     name = "devenv-nix-${devenvNixVersion}-source";
-    owner = "cachix";
-    repo = "nix";
-    rev = devenvNixRev;
-    hash = "sha256-3NT3yTvoRT7+rxLDNovpyeTDIJkZlBoO72rcu2x9Y9o=";
+    src = fetchFromGitHub {
+      name = "devenv-nix-${devenvNixVersion}-source";
+      owner = "cachix";
+      repo = "nix";
+      rev = devenvNixRev;
+      hash = "sha256-1CSuPNIbGyL2JJjOVg0KU7NWst1yZ6iXGDkiN/3bY5o=";
+    };
+    # Fix ignored nodiscard results when building the pinned Nix fork on Darwin.
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/cachix/nix/commit/34f5e5824de5025c63895ac64457c3a077548fb4.patch";
+        hash = "sha256-bYLhGWpAxyLd50HHt6s7sVlkDEFAJ72Z5fcfWeYxCOo=";
+      })
+    ];
   };
 
   nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
@@ -54,16 +69,20 @@ buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v2.3.1";
-    hash = "sha256-zZB/UVcdL0VWuAPEe/ALY7onj8Q18efSUdL3ZJlUspk=";
+    tag = "v${version}";
+    hash = "sha256-MCSbrGsgWXod/Qzk4v5tYO/fev1d5OcEGZ2vzVAvMfQ=";
   };
 
-  cargoHash = "sha256-oaBQMX8gTj/jFliJnfl+lO4yndSrorJT/Y3p2/YoRas=";
+  cargoHash = "sha256-ed2k0D5tp7tlvpqXdxr4uGJozI2gvW1Dvz1SSJDR4NI=";
+
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail '"pkg-config",' '"pkg-config", "link-dynamic",'
+  '';
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
-    OPENSSL_NO_VENDOR = "1";
     DEVENV_IS_RELEASE = true;
   };
 
@@ -86,6 +105,7 @@ buildRustPackage {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     sqlite
     dbus
@@ -98,6 +118,7 @@ buildRustPackage {
     nix_components.nix-cmd-c
     nix_components.nix-fetchers-c
     nix_components.nix-main-c
+    zstd
   ];
 
   nativeCheckInputs = [
@@ -175,6 +196,7 @@ buildRustPackage {
     maintainers = with lib.maintainers; [
       domenkozar
       sandydoo
+      anish
     ];
   };
 }

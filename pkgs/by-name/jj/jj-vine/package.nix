@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromCodeberg,
+  pkg-config,
+  aws-lc,
   jujutsu,
   git,
   writableTmpDirAsHomeHook,
@@ -22,6 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-7j/eWCc5PvllLYSyC2CcL+R5xxDqqfjdhQ/xtb2b3rE=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   nativeCheckInputs = [
     jujutsu

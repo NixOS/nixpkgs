@@ -26,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./fix-ip-payload-length-oob-read.patch
+  ];
+
   nativeBuildInputs = [
     automake
     autoconf

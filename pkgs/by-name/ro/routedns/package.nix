@@ -7,23 +7,26 @@
 
 buildGoModule (finalAttrs: {
   pname = "routedns";
-  version = "0.1.237";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "routedns";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-X4N+7P8GwzhDQwjctmfenhMYprjzYxknSzEBRib22kw=";
+    hash = "sha256-hutpyaFdtHlBcADDAghnYl9IgQ986OTc1y6Tv+vcV+Y=";
   };
 
-  vendorHash = "sha256-w8rZue6/cc8wg40Ey+P216cQGhbCznjSsLi1G4YfRsI=";
+  vendorHash = "sha256-25UOMNZGUstFBhdx9/ROe42Pp/ReHiwFRZF4YlyzcZg=";
 
   subPackages = [ "./cmd/routedns" ];
 
   ldflags = [
     "-s"
     "-w"
+    "-X github.com/folbricht/routedns.BuildVersion=v${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

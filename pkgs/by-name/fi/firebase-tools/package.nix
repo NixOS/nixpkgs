@@ -3,25 +3,23 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   python3,
   xcbuild,
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "firebase-tools";
-  version = "15.30.0";
-  nodejs = nodejs_22;
+  version = "15.34.1";
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
-    tag = "v${version}";
-    hash = "sha256-pnEdnZWI9osazHlEBCnbqisvxHq3RbfKtJl7u6RxNdQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aD1yACx2n5EjjyC0+9U81P6JXbW+mGNMdHGvB+Lpixs=";
   };
 
-  npmDepsHash = "sha256-bHXyMeyzatoW+BHRWNNXYi/aeCdVWbGozHhDfPhNTd4=";
+  npmDepsHash = "sha256-2pd9XLhWeSmEfaahemJyoCvEOUZq3945bbyW1C0d9zM=";
 
   # No more package-lock.json in upstream src
   postPatch = ''
@@ -40,7 +38,7 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/firebase/firebase-tools/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/firebase/firebase-tools/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Manage, and deploy your Firebase project from the command line";
     homepage = "https://github.com/firebase/firebase-tools";
     license = lib.licenses.mit;
@@ -49,4 +47,4 @@ buildNpmPackage rec {
       sarahec
     ];
   };
-}
+})

@@ -37,8 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail '"upscayl-bin",' '"${lib.getExe upscayl-ncnn}",'
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     wrapGAppsHook4
     meson
@@ -75,7 +73,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "Upscale and enhance images";

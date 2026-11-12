@@ -13,6 +13,7 @@
   python-socks,
   rencode,
   setuptools,
+  sniffio,
   tiny-proxy,
 }:
 
@@ -28,7 +29,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-4FWfzt+A9BY4nnaQU3xwdDFhuOMtfBFHYNoHaEOy7+0=";
   };
 
-  pythonRelaxDeps = [ "async-timeout" ];
+  pythonRelaxDeps = [
+    "async-timeout"
+    "python-socks"
+  ];
 
   build-system = [ setuptools ];
 
@@ -46,6 +50,7 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    sniffio
     tiny-proxy
   ];
 
@@ -72,6 +77,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Asynchronous low-level communication with BitTorrent clients";
     homepage = "https://aiobtclientrpc.readthedocs.io";
+    changelog = "https://codeberg.org/plotski/aiobtclientrpc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };

@@ -20,7 +20,6 @@
   libcap_ng,
   libconfig,
   systemdLibs,
-  fuse,
   yajl,
   libvirt,
   hivex,
@@ -89,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     libcap_ng
     libconfig
     systemdLibs
-    fuse
     yajl
     libvirt
     gmp

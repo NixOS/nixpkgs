@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "foundry";
-  version = "1.8.1";
+  version = "1.8.6";
 
   __structuredAttrs = true;
 
@@ -21,12 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-klIOiuK9rpYtL56RMWum71XH6XlZQDWHSg347SHMcQM=";
+    hash = "sha256-BpyYQai8iR75wDKcKccuqhrwFxu/JChVxCTvpV2mYt8=";
   };
 
-  cargoHash = "sha256-u3QuzSnmj/ppOsz737jN0VtbiouCn2XQWAylH0z6OlQ=";
-
-  strictDeps = true;
+  cargoHash = "sha256-2spjGbWSg1NpEgojA9tBeheqrYwlYMfablZfo9pAG/E=";
 
   nativeBuildInputs = [
     # `sha3-asm`'s build script runs cryptogams perl scripts to generate

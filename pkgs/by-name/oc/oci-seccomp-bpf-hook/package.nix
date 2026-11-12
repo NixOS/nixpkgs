@@ -12,6 +12,9 @@
 buildGoModule (finalAttrs: {
   pname = "oci-seccomp-bpf-hook";
   version = "1.3.0";
+
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "containers";
     repo = "oci-seccomp-bpf-hook";

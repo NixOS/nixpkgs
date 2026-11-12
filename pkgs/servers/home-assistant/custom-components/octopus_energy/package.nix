@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "BottlecapDave";
   domain = "octopus_energy";
-  version = "19.0.1";
+  version = "19.2.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "HomeAssistant-OctopusEnergy";
     tag = "v${version}";
-    hash = "sha256-PtDyUk4OzElgB0FeM/028O108R7J97k5SwGfNAIybJ8=";
+    hash = "sha256-KkQxLmp/5X/Z1WwklLzOCvL49Tn6ZinID2Rf2GZngXI=";
   };
 
   dependencies = [ pydantic ];
@@ -56,7 +56,7 @@ buildHomeAssistantComponent rec {
     changelog = "https://github.com/BottlecapDave/HomeAssistant-OctopusEnergy/releases/tag/v${version}";
     description = "Unofficial Home Assistant integration for interacting with Octopus Energy";
     homepage = "https://github.com/BottlecapDave/HomeAssistant-OctopusEnergy";
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = [ ];
     license = lib.licenses.mit;
   };
 

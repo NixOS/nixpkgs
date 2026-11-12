@@ -7,7 +7,6 @@
 }:
 
 buildPythonPackage rec {
-  __structuredAttrs = true;
 
   pname = "streamingjson";
   version = "0.0.5";

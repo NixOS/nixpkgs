@@ -6,16 +6,13 @@
   mkfontscale,
 }:
 
-let
-  version = "1.11";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tamsyn-font";
-  inherit version;
+  version = "1.11";
 
   src = fetchurl {
-    url = "http://www.fial.com/~scott/tamsyn-font/download/tamsyn-font-${version}.tar.gz";
-    sha256 = "0kpjzdj8sv5871b8827mjgj9dswk75h94jj5iia2bds18ih1pglp";
+    url = "https://web.archive.org/web/20250824075220if_/http://www.fial.com/~scott/tamsyn-font/download/tamsyn-font-${finalAttrs.version}.tar.gz";
+    hash = "sha256-l74bYERBtyVUjEVKkmA5k+uW5JP1CIRWOKhsjWT78k4=";
   };
 
   nativeBuildInputs = [
@@ -52,9 +49,7 @@ stdenv.mkDerivation {
       font was further inspired by Gohufont, Terminus, Dina, Proggy, Fixedsys, and
       Consolas.
     '';
-    homepage = "http://www.fial.com/~scott/tamsyn-font/";
-    downloadPage = "http://www.fial.com/~scott/tamsyn-font/download";
     license = lib.licenses.free;
-    maintainers = [ lib.maintainers.rps ];
+    maintainers = [ ];
   };
-}
+})

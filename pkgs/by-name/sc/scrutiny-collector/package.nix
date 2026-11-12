@@ -9,14 +9,14 @@
 }:
 
 buildGoModule (finalAttrs: {
-  version = "0.9.4";
+  version = "0.9.5";
   pname = "scrutiny-collector";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hdCBkF7LZ8S0ZP3qR8A3QvyFpaoXo9Yx2Jt6K4updCQ=";
+    hash = "sha256-WhValn6Wn36aSJq9WTO7lMhLfRos0R0T80364LADQEo=";
   };
 
   subPackages = "collector/cmd/collector-metrics";

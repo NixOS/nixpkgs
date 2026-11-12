@@ -7,21 +7,21 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "photini";
-  version = "2024.9.1";
+  version = "2026.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "Photini";
     tag = finalAttrs.version;
-    hash = "sha256-0jr1mNejCF0yW9LkrrsOTcE4ZPGZrMU9Pnt0eXD+3YQ=";
+    hash = "sha256-IztPABT/CVTyWS0bIrypJ05Gk2UlXr3HN7nLCNpejmE=";
   };
 
   build-system = with python3Packages; [ setuptools-scm ];
   dependencies = with python3Packages; [
     pyside6
     cachetools
-    appdirs
+    platformdirs
     chardet
     exiv2
     filetype
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/jim-easterbrook/Photini";
-    changelog = "https://photini.readthedocs.io/en/release-${finalAttrs.version}/misc/changelog.html";
+    changelog = "https://github.com/jim-easterbrook/Photini/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     description = "Easy to use digital photograph metadata (Exif, IPTC, XMP) editing application";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ zebreus ];

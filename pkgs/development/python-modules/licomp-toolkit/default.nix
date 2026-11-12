@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
 
   # build-system
   setuptools,
@@ -27,10 +27,8 @@ buildPythonPackage (finalAttrs: {
   pname = "licomp-toolkit";
   version = "0.5.20";
   pyproject = true;
-  __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "software-compliance-org";
     repo = "licomp-toolkit";
     tag = finalAttrs.version;

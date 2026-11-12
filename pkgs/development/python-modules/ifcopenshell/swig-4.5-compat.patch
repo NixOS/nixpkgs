@@ -1,0 +1,46 @@
+diff --git a/src/ifcwrap/utils/type_conversion.i b/src/ifcwrap/utils/type_conversion.i
+index 9c3cf82e7..5b02bb8d9 100644
+--- a/src/ifcwrap/utils/type_conversion.i
++++ b/src/ifcwrap/utils/type_conversion.i
+@@ -74,7 +74,7 @@
+ 
+ 	template <>
+ 	int cast_pyobject(PyObject* element) {
+-		return static_cast<int>(PyInt_AsLong(element));
++		return static_cast<int>(PyLong_AsLong(element));
+ 	}
+ 
+ 	template <>
+@@ -168,8 +168,8 @@
+ 		}
+ 	}
+ 
+-	PyObject* pythonize(const int& t)                   { return PyInt_FromLong(t);                                                                  }
+-	PyObject* pythonize(const unsigned int& t)          { return PyInt_FromLong(t);                                                                  }
++	PyObject* pythonize(const int& t)                   { return PyLong_FromLong(t);                                                                  }
++	PyObject* pythonize(const unsigned int& t)          { return PyLong_FromLong(t);                                                                  }
+ 	PyObject* pythonize(const bool& t)                  { return PyBool_FromLong(t);                                                                 }
+ 	PyObject* pythonize(const boost::logic::tribool& t) { return boost::logic::indeterminate(t) ? PyUnicode_FromString("UNKNOWN") : PyBool_FromLong((bool)t) ;}
+ 	PyObject* pythonize(const double& t)                { return PyFloat_FromDouble(t);                                                              }
+diff --git a/src/ifcwrap/utils/typemaps_out.i b/src/ifcwrap/utils/typemaps_out.i
+index 4fbc3ff05..6b3ad5f50 100644
+--- a/src/ifcwrap/utils/typemaps_out.i
++++ b/src/ifcwrap/utils/typemaps_out.i
+@@ -17,7 +17,7 @@
+ 
+ 
+ %typemap(out) IfcUtil::ArgumentType {
+-	$result = SWIG_Python_str_FromChar(IfcUtil::ArgumentTypeToString($1));
++	$result = PyUnicode_FromString(IfcUtil::ArgumentTypeToString($1));
+ }
+ 
+ %typemap(out) IfcParse::declaration* {
+@@ -38,7 +38,7 @@
+ 
+ %typemap(out) IfcParse::simple_type::data_type {
+ 	static const char* const data_type_strings[] = {"binary", "boolean", "integer", "logical", "number", "real", "string"};
+-	$result = SWIG_Python_str_FromChar(data_type_strings[(int)$1]);
++	$result = PyUnicode_FromString(data_type_strings[(int)$1]);
+ }
+ 
+ %typemap(out) AttributeValue {

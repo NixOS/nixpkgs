@@ -13,15 +13,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiolibrenms";
-  version = "0.0.3";
+  version = "0.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aiolibrenms";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mfOLB2br4RZHl4ky1vZDcSmh6szzDKvnGawHMpxWihg=";
+    hash = "sha256-2f52QmCcwk5VX7+Wy21agNmkyjQ94jAs8P5v0n/DAHE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==84.0.0" setuptools
+  '';
 
   build-system = [ setuptools ];
 

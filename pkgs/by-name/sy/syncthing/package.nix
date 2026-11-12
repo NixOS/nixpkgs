@@ -22,16 +22,16 @@ assert builtins.elem target [
 
 buildGoModule (finalAttrs: {
   pname = "syncthing";
-  version = "2.1.3";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uTjmOAjis2eBm2SnZbyvDDiQXKN8De+DhjNHbFLLbn0=";
+    hash = "sha256-XJqXWzZ0gePbrXeMpCgwXhYN1Lqco16wmEESJDAhFiA=";
   };
 
-  vendorHash = "sha256-ueUf9YEa5z7mG6MofIJ3Xco+PxVPi/85Rdi+1aean6c=";
+  vendorHash = "sha256-gLbRwLPldH4GRuDu8nmZagBfFzg3FZ7Rpa2nDBRWcZo=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     # Recent versions of macOS seem to require binaries to be signed when
@@ -43,6 +43,8 @@ buildGoModule (finalAttrs: {
   ];
 
   doCheck = false;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env = {
     BUILD_USER = "nix";
@@ -52,11 +54,11 @@ buildGoModule (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     (
-      export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
+      export GOOS="${stdenv.buildPlatform.go.GOOS}" GOARCH="${stdenv.buildPlatform.go.GOARCH}" CC=$CC_FOR_BUILD
       go build build.go
       go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/infra/strelaypoolsrv/auto
     )
-    ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${finalAttrs.version} build ${target}
+    ./build -goos ${stdenv.hostPlatform.go.GOOS} -goarch ${stdenv.hostPlatform.go.GOARCH} -no-upgrade -version v${finalAttrs.version} build ${target}
     runHook postBuild
   '';
 
@@ -100,11 +102,14 @@ buildGoModule (finalAttrs: {
     tests = {
       inherit (nixosTests)
         syncthing
+        syncthing-defaults
         syncthing-folders
         syncthing-guiPassword
         syncthing-guiPasswordFile
         syncthing-init
+        syncthing-many-devices
         syncthing-no-settings
+        syncthing-private-relay
         syncthing-relay
         ;
     };
@@ -122,6 +127,7 @@ buildGoModule (finalAttrs: {
       noahbiewesch
       peterhoeg
       zainkergaye
+      nivalux
     ];
     mainProgram = target;
     platforms = lib.platforms.unix;

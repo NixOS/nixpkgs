@@ -5,17 +5,14 @@
   ninja,
   lib,
   fetchFromGitHub,
-  fetchurl,
   copyDesktopItems,
   makeDesktopItem,
   python3,
   glew,
-  boost,
   SDL2,
   SDL2_net,
   pkg-config,
   libpulseaudio,
-  libpng,
   imagemagick,
   zenity,
   makeWrapper,
@@ -37,6 +34,7 @@
   bzip2,
   libx11,
   sdl_gamecontrollerdb,
+  zlib,
 }:
 
 let
@@ -69,11 +67,18 @@ let
     hash = "sha256-AmHAa3/cQdh7KAMFOtz5TQpcM6FqO9SppmDpKPTjTt8=";
   };
 
+  monocypher = fetchFromGitHub {
+    owner = "LoupVaillant";
+    repo = "Monocypher";
+    rev = "0d85f98c9d9b0227e42cf795cb527dff372b40a4";
+    hash = "sha256-RrM8Ep/CM7U5Q4+4FAHfBknb6b0upohoiqy4f7eMye0=";
+  };
+
   prism = fetchFromGitHub {
     owner = "KiritoDv";
     repo = "prism-processor";
-    rev = "bbcbc7e3f890a5806b579361e7aa0336acd547e7";
-    hash = "sha256-jRPwO1Vub0cH12YMlME6kd8zGzKmcfIrIJZYpQJeOks=";
+    rev = "1de054450e7b3c5f777d2e3dfcb228ad120c329d";
+    hash = "sha256-5MlscqbKlUm4nYW+Obf5KlnUdtHK/xlDUc4wxr52ySM=";
   };
 
   stb_impl = writeTextFile {
@@ -109,15 +114,23 @@ let
     tag = "macOS13_iOS16";
     hash = "sha256-CSYIpmq478bla2xoPL/cGYKIWAeiORxyFFZr0+ixd7I";
   };
+
+  yaml-cpp = fetchFromGitHub {
+    owner = "jbeder";
+    repo = "yaml-cpp";
+    tag = "yaml-cpp-0.9.0";
+    hash = "sha256-+FOsPQY44h1g9tEw3O281LkiYKXdW2jnFKw+oTRkhGw=";
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "9.2.3";
+  version = "9.3.1";
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-jTKhvyFaP59+T85CI7IteMABggOt6WVvQJ1vbSz1ops=";
+    hash = "sha256-EW7zU/oS8DZdbuKfsZLkDjiO9b+z70oSAsH4vvjJ0DU=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -153,11 +166,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
     glew
     SDL2
     SDL2_net
-    libpng
     libzip
     nlohmann_json
     tinyxml-2
@@ -168,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     bzip2
     libx11
+    zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -175,21 +187,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_REMOTE_CONTROL" true)
     (lib.cmakeBool "NON_PORTABLE" true)
+    (lib.cmakeBool "CMAKE_CXX_SCAN_FOR_MODULES" false)
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DR_LIBS" "${dr_libs}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONOCYPHER" "${monocypher}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TINYXML2" "${tinyxml-2.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-cpp}")
     (lib.cmakeFeature "OPUS_INCLUDE_DIR" "${lib.getDev libopus}/include/opus")
     (lib.cmakeFeature "OPUSFILE_INCLUDE_DIR" "${lib.getDev opusfile}/include/opus")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_METALCPP" "${metalcpp}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SPDLOG" "${spdlog}")
+    # The generated .pc joins absolute install dirs with a prefix, tripping cmake's pc-file check
+    (lib.cmakeBool "tinyxml2_INSTALL_PKGCONFIG" false)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-int-conversion -Wno-implicit-int -Wno-elaborated-enum-base";
@@ -214,20 +231,14 @@ stdenv.mkDerivation (finalAttrs: {
     --replace-fail "@CMAKE_PROJECT_GIT_BRANCH@" "$(cat GIT_BRANCH)" \
     --replace-fail "@CMAKE_PROJECT_GIT_COMMIT_HASH@" "$(cat GIT_COMMIT_HASH)" \
     --replace-fail "@CMAKE_PROJECT_GIT_COMMIT_TAG@" "$(cat GIT_COMMIT_TAG)"
+
+    # Use system zlib
+    substituteInPlace torch/CMakeLists.txt \
+      --replace-fail "if(EMSCRIPTEN OR ANDROID)" "if(TRUE)"
   '';
 
   postBuild = ''
-    port_ver=$(grep CMAKE_PROJECT_VERSION: "$PWD/CMakeCache.txt" | cut -d= -f2)
     cp ${sdl_gamecontrollerdb}/share/gamecontrollerdb.txt gamecontrollerdb.txt
-    mv ../libultraship/src/fast/shaders ../soh/assets/custom
-    pushd ../OTRExporter
-    python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../soh/assets/xml --custom-assets-path ../soh/assets/custom --custom-otr-file soh.o2r --port-ver $port_ver
-    popd
-  '';
-
-  preInstall = ''
-    # Cmake likes it here for its install paths
-    cp ../OTRExporter/soh.o2r soh/soh.o2r
   '';
 
   postInstall =
@@ -283,9 +294,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
     mainProgram = "soh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = with lib.maintainers; [ qubitnano ];
     license = with lib.licenses; [
-      # OTRExporter, OTRGui, ZAPDTR, libultraship
+      # libultraship, Torch
       mit
       # Ship of Harkinian itself
       unfree

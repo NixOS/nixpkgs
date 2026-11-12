@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "string-view-lite";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "nonstd-lite";
     repo = "string-view-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WMWTrzkAex8gR1juvYdUhq1y6qSdxHowJK3EpjAlYbI=";
+    hash = "sha256-L22wItXKg+W2bchdHwGLagRlBCkUNKGs31dUwvAZUro=";
   };
 
   nativeBuildInputs = [

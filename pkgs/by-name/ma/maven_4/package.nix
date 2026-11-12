@@ -13,11 +13,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
-  version = "4.0.0-rc-6";
+  version = "4.0.0-rc-7";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-4/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-/B0VCwGZnwlmKbuvSOiuQ00ATV3DbDOWK8i+ZXnT+R0=";
+    hash = "sha256-lRxjJnaH1Bi7nAbAjiVUQyhYNRmRm5Zheqci+BOxnm8=";
   };
 
   sourceRoot = ".";
@@ -42,6 +42,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    jdk = jdk_headless;
+
     # Reuse maven's builder so build-maven-package.nix is not duplicated.
     buildMavenPackage = maven.mkBuildMavenPackage finalAttrs.finalPackage;
 

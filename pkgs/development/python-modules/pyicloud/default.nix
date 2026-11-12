@@ -3,46 +3,48 @@
   buildPythonPackage,
   certifi,
   click,
+  cryptography,
   fetchFromGitHub,
   fido2,
   keyring,
   keyrings-alt,
   protobuf,
   pydantic,
-  pytest-mock,
   pytest-socket,
+  pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
   requests,
   rich,
-  setuptools_80,
+  setuptools,
   setuptools-scm,
   srp,
   tinyhtml,
   typer,
+  typing-extensions,
   tzlocal,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyicloud";
-  version = "2.6.5";
+  version = "2026.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timlaing";
     repo = "pyicloud";
     tag = finalAttrs.version;
-    hash = "sha256-wlBVQPGGt8Q6EeLceORfRn+MtRKtmum+z3WAG6ZR+2Q=";
+    hash = "sha256-Bzv7wSCeB8h+V1TJMFjT3r972PghR5MNupoqf2rWPG4=";
   };
 
   build-system = [
-    setuptools_80
+    setuptools
     setuptools-scm
   ];
 
   dependencies = [
     certifi
-    click
+    cryptography
     fido2
     keyring
     keyrings-alt
@@ -51,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     requests
     srp
     tinyhtml
+    typing-extensions
     tzlocal
   ];
 
@@ -58,24 +61,20 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     cli = [
+      click
       rich
       typer
     ];
   };
 
   nativeCheckInputs = [
-    pytest-mock
     pytest-socket
+    pytest-timeout
     pytestCheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "pyicloud" ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/picklepete/pyicloud/issues/446
-    "test_storage"
-  ];
 
   meta = {
     description = "Module to interact with iCloud webservices";

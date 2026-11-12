@@ -35,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     fpc
     lazarus-qt6
-    autoPatchelfHook
     qt6Packages.wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   buildInputs = [
     cairo
@@ -50,7 +50,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./simplify-build-script.patch ];
 
-  postPatch = "ln -s ${finalAttrs.kcontrols} kcontrols";
+  postPatch = ''
+    ln -s ${finalAttrs.kcontrols} kcontrols
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace buildit.bash \
+      --replace-fail 'OS="linux"' 'OS="darwin"' \
+      --replace-fail 'FPCKOPT=" -B' 'FPCKOPT=" -dLCL -dLCL$WIDGET -B' \
+      --replace-fail '-Fi$LAZ_DIR/components/printers/unix ' \
+        '-Fi$LAZ_DIR/components/printers/unix -Fi$LAZ_DIR/components/printers/qt '
+  '';
 
   # The build script checks for magic files like `Qt5` or `Qt6`
   # in order to determine which graphical toolkit tomboy-ng will
@@ -73,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     COMPILER = lib.getExe' fpc "fpc";
     LAZ_DIR = "${lazarus-qt6}/share/lazarus";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-F${lib.getLib qt6Packages.libqtpas}/lib";
   };
 
   meta = {

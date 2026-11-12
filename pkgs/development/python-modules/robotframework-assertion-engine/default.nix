@@ -2,24 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  setuptools,
   robotframework,
   robotframework-pythonlibcore,
 }:
 
 buildPythonPackage rec {
   pname = "robotframework-assertion-engine";
-  version = "3.0.3";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "robotframework_assertion_engine";
     inherit version;
-    hash = "sha256-HGCNTGnZZSCYah3cbe8Px/foSVIPHmiCpjO1HbuY/Yg=";
+    hash = "sha256-+MHdJ1cGSAikMlWPRqOV2pQvIj10oRBBn8aJmS+dYA4=";
   };
 
   build-system = [
-    poetry-core
+    setuptools
   ];
 
   dependencies = [

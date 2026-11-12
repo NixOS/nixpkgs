@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_43,
+  electron_45,
   python3,
   makeWrapper,
   callPackage,
@@ -28,13 +28,13 @@
 
   withAppleEmojis ? false,
 }:
-assert lib.warnIf (commandLineArgs != "")
-  "`commandLineArgs` has been deprecated and will be removed in the future. Consider creating a wrapper script or a desktop entry with your desired flags."
+assert lib.throwIf (commandLineArgs != "")
+  "`commandLineArgs` has been removed. Consider creating a wrapper script or a desktop entry with your desired flags."
   true;
 let
   nodejs = nodejs_24;
   pnpm = pnpm_11;
-  electron = electron_43;
+  electron = electron_45;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
@@ -42,16 +42,16 @@ let
     inherit nodejs;
   };
 
-  webrtc = callPackage ./webrtc.nix { };
+  webrtc = callPackage ./webrtc.nix { ringrtcSrc = ringrtc.src; };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.26.0";
+  version = "8.35.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-GgNFy7ZNft4rwTmS+OGp4eis6izlc7RGubnmSc8OeKc=";
+    hash = "sha256-REvgZ3xp/29kokMB/ThR3ZdPjqJfRC8PH7dJ5F+mrPQ=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -69,6 +69,9 @@ let
     pname = "signal-desktop-sticker-creator";
     inherit src version;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     pnpmRoot = "sticker-creator";
     pnpmWorkspaces = [ "signal-art-creator" ];
 
@@ -83,11 +86,10 @@ let
       prePnpmInstall = ''
         pnpm config set fetch-timeout 300000
       '';
-      fetcherVersion = 4;
-      hash = "sha256-9LC62SFDnP4GMDqsP8NcSiACUA+BkPwnbdmNnvJ8gKg=";
+      fetcherVersion = 5;
+      hash = "sha256-QTtGgkRFQMiOs+g/enYq5Kt3sytiUiAHnFy/vibA/qE=";
     };
 
-    strictDeps = true;
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
@@ -106,7 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop";
   inherit src version;
 
+  __structuredAttrs = true;
   strictDeps = true;
+
   nativeBuildInputs = [
     actool
     node-gyp
@@ -190,8 +194,8 @@ stdenv.mkDerivation (finalAttrs: {
     prePnpmInstall = ''
       pnpm config set fetch-timeout 300000
     '';
-    fetcherVersion = 4;
-    hash = "sha256-9LC62SFDnP4GMDqsP8NcSiACUA+BkPwnbdmNnvJ8gKg=";
+    fetcherVersion = 5;
+    hash = "sha256-QTtGgkRFQMiOs+g/enYq5Kt3sytiUiAHnFy/vibA/qE=";
   };
 
   env = {
@@ -199,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     SIGNAL_ENV = "production";
     # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
     # We set the source-changed date to match the corresponding upstream release date.
-    SOURCE_DATE_EPOCH = 1788454304;
+    SOURCE_DATE_EPOCH = 1794438623;
   };
 
   preBuild = ''

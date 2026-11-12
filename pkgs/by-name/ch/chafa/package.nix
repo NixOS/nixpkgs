@@ -11,6 +11,7 @@
   libavif,
   libjxl,
   librsvg,
+  libwebp,
   libxslt,
   libxml2,
   docbook_xml_dtd_412,
@@ -19,7 +20,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.18.2";
+  version = "1.18.3";
   pname = "chafa";
 
   __structuredAttrs = true;
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hpjansson";
     repo = "chafa";
     tag = finalAttrs.version;
-    hash = "sha256-M4TTLpaIV7H3aLj7/C7FHT0GNCxN9SRZ81FtxuWNzjo=";
+    hash = "sha256-lMpofiJ6Hhxqna5OMWAG4tp7i2O/RZcimyaZsYsGu+c=";
   };
 
   outputs = [
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     libjxl
     librsvg
+    libwebp
   ];
 
   patches = [ ./xmlcatalog_patch.patch ];

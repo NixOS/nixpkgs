@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "XCB utility library that gives human readable names to error, event & request codes";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcb-errors";

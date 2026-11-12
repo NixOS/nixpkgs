@@ -13,6 +13,7 @@
 
   # optionals
   arabic-reshaper,
+  brotli,
   cryptography,
   fonttools,
   pillow,
@@ -23,10 +24,9 @@
   pytestCheckHook,
   pytest-timeout,
 }:
-
 buildPythonPackage (finalAttrs: {
   pname = "pypdf";
-  version = "6.18.1";
+  version = "7.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-BfscatAwiiPQfbgTSBE3CM2As2LkcNh0zkr5jIq45Ww=";
+    hash = "sha256-US6xKukjLUN1Z5BwF8ZewN3USC/L6MJ6jrira70VwGI=";
   };
 
   outputs = [
@@ -56,16 +56,21 @@ buildPythonPackage (finalAttrs: {
     myst-parser
   ];
 
-  optional-dependencies = rec {
-    full = crypto ++ fonts ++ image ++ rtl_text;
-    crypto = [ cryptography ];
-    fonts = [ fonttools ];
-    image = [ pillow ];
-    rtl_text = [
-      arabic-reshaper
-      python-bidi
-    ];
-  };
+  optional-dependencies =
+    let
+      deps = finalAttrs.passthru.optional-dependencies;
+    in
+    {
+      full = deps.crypto ++ deps.fonts ++ deps.image ++ deps.rtl_text ++ deps.brotli;
+      brotli = [ brotli ];
+      crypto = [ cryptography ];
+      fonts = [ fonttools ];
+      image = [ pillow ];
+      rtl_text = [
+        arabic-reshaper
+        python-bidi
+      ];
+    };
 
   pythonImportsCheck = [ "pypdf" ];
 
@@ -79,6 +84,13 @@ buildPythonPackage (finalAttrs: {
   disabledTestMarks = [
     # don't access the network
     "enable_socket"
+  ];
+
+  disabledTests = [
+    # timing sensitive, these allocate hundreds of megabytes and assert on a
+    # five second pytest-timeout, which slower builders cannot meet
+    "test_dictionary_object__read_from_stream__missing_length__limit"
+    "test_flatedecode__decode_png_prediction__speed"
   ];
 
   meta = {

@@ -21,8 +21,6 @@ python3Packages.buildPythonApplication {
     sed -i 's|biopython==|biopython>=|' setup.py
   '';
 
-  __structuredAttrs = true;
-  strictDeps = true;
   build-system = with python3Packages; [ setuptools ];
   dependencies = with python3Packages; [
     biopython

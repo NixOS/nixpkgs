@@ -14,18 +14,21 @@
 
 buildGo127Module (finalAttrs: {
   pname = "golangci-lint";
-  version = "2.13.2";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RbWKPIG+UK82S9W9tp/CciZ669vudh95VOfHfdQWx3M=";
+    hash = "sha256-m9PoJHescRuT9DiKsb6LL+lQlc7RKAWDiRyf8pNMffA=";
   };
 
-  vendorHash = "sha256-R83GeyfuZ+w30jZqFGYi0yua8E1Ey2q7/OlVmw8zDCg=";
+  vendorHash = "sha256-gWbhZc/BJwuiwyTMaR1ShEBI1lo0bGLCXsdj5n91baw=";
 
   subPackages = [ "cmd/golangci-lint" ];
+
+  # Tests exist, but not in the selected subPackages
+  doCheck = false;
 
   nativeBuildInputs = [ installShellFiles ];
 

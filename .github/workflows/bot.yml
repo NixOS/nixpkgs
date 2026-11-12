@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-slim
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           sparse-checkout: |
@@ -53,7 +53,7 @@ jobs:
         working-directory: ci/github-script
 
       # Use a GitHub App, because it has much higher rate limits: 12,500 instead of 5,000 req / hour.
-      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_CI_CLIENT_ID
         id: app-token
         with:
@@ -76,7 +76,7 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           retries: 3
           script: |
-            const { default: bot } = await import('${{ github.workspace }}/ci/github-script/bot.js')
+            const { default: bot } = await import('${{ github.workspace }}/ci/github-script/bot.ts')
             await bot({
               github,
               context,

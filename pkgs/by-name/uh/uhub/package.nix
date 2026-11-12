@@ -6,7 +6,7 @@
   openssl,
   sqlite,
   pkg-config,
-  systemd,
+  systemdLibs,
   tlsSupport ? false,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     sqlite
-    systemd
+    systemdLibs
   ]
   ++ lib.optional tlsSupport openssl;
 

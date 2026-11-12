@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "moonraker-api";
-  version = "2.0.6";
+  version = "4.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cmroche";
     repo = "moonraker-api";
     tag = "v${version}";
-    hash = "sha256-AwSHF9BbxKBXIQdG4OX1vYYP/ST4jSz3uMMDUx0MSEg=";
+    hash = "sha256-I+/c3dVVuNGKWztVsEKi2AErACbhQoU8ZE3ye9B2HxM=";
   };
 
   postPatch = ''

@@ -30,8 +30,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "pyworld" ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "PyWorld is a Python wrapper for WORLD vocoder";
     homepage = "https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder";

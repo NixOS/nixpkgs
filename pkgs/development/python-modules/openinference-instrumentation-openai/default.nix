@@ -25,8 +25,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.54";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Arize-ai";
     repo = "openinference";
@@ -72,7 +70,16 @@ buildPythonPackage (finalAttrs: {
     "test_tool_calls"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  disabledTestPaths = [
+    # want to connect to OpenAI's API
+    "tests/openinference/instrumentation/openai/test_instrumentor.py"
+  ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "OpenInference OpenAI SDK Instrumentation";

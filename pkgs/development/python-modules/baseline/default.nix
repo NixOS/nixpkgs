@@ -12,8 +12,6 @@ buildPythonPackage {
   version = "1.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

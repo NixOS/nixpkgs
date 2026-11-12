@@ -1,65 +1,59 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
   base58,
   beautifulsoup4,
   bech32,
   brotli,
+  buildPythonPackage,
   colorama,
   cryptography,
+  deepdiff,
+  fetchFromGitHub,
   gitpython,
+  hatchling,
   humanfriendly,
+  hypothesis,
   lxml,
+  lz4,
   numpy,
   odfpy,
   onnxruntime,
   openpyxl,
   pandas,
   pdfminer-six,
+  psutil,
   pybase62,
   pygments,
   pyjks,
   pysquashfsimage,
+  pytestCheckHook,
   python-dateutil,
   python-docx,
   python-pptx,
+  pythonOlder,
   pyxlsb,
   pyyaml,
   rpmfile,
   striprtf,
+  tabulate,
   tqdm,
+  versionCheckHook,
   whatthepatch,
   xlrd,
-  # python>=3.14 only:
   zstandard,
-
-  # tests
-  deepdiff,
-  hypothesis,
-  psutil,
-  pytestCheckHook,
-  pythonOlder,
-  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.18.4";
+  version = "1.19.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1ElNvejQc5pzMvPJVjEyCkIY14M42W0ktNY83WKWk7A=";
+    hash = "sha256-ZVui8Dz9r2CAGL20UQ9XW/HmuqfsqjtNOfVSIdjrVK8=";
   };
 
   build-system = [ hatchling ];
@@ -74,6 +68,7 @@ buildPythonPackage (finalAttrs: {
     gitpython
     humanfriendly
     lxml
+    lz4
     numpy
     odfpy
     onnxruntime
@@ -104,6 +99,7 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     psutil
     pytestCheckHook
+    tabulate
     versionCheckHook
   ];
 
@@ -121,6 +117,9 @@ buildPythonPackage (finalAttrs: {
     "test_match_n"
     "test_multi_jobs_p"
     "test_rules_ml_p"
+
+    # Hang indefinitely on some CPUs
+    "TestInt"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:

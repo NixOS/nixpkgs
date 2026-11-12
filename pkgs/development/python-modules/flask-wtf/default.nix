@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "flask-wtf";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flask_wtf";
     inherit version;
-    hash = "sha256-edLuHkNs9XC8y32RZTP6GHV6LxjCkKzP+rG5oLaEZms=";
+    hash = "sha256-YdXavFDD34hcKX3L2AgQRDpdYyEGyKacq4znQPDN18w=";
   };
 
   build-system = [

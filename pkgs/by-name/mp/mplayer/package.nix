@@ -33,7 +33,7 @@
   cddaSupport ? !stdenv.hostPlatform.isDarwin,
   cdparanoia,
   dvdnavSupport ? !stdenv.hostPlatform.isDarwin,
-  libdvdnav_4_2_1,
+  libdvdnav,
   dvdreadSupport ? config.mplayer.dvdreadSupport or true,
   libdvdread,
   bluraySupport ? config.mplayer.bluraySupport or true,
@@ -53,7 +53,7 @@
   x264,
   jackaudioSupport ? config.mplayer.jackaudioSupport or false,
   libjack2,
-  pulseSupport ? config.pulseaudio or false,
+  pulseSupport ? config.mplayer.pulseSupport or false,
   libpulseaudio,
   bs2bSupport ? config.mplayer.bs2bSupport or false,
   libbs2b,
@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional theoraSupport libtheora
   ++ lib.optional cacaSupport libcaca
   ++ lib.optional xineramaSupport libxinerama
-  ++ lib.optional dvdnavSupport libdvdnav_4_2_1
+  ++ lib.optional dvdnavSupport libdvdnav
   ++ lib.optional dvdreadSupport libdvdread
   ++ lib.optional bluraySupport libbluray
   ++ lib.optional cddaSupport cdparanoia
@@ -303,5 +303,7 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "aarch64-linux"
     ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

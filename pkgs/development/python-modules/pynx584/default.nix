@@ -12,16 +12,16 @@
   stevedore,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pynx584";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "pynx584";
-    tag = "0.8.2";
-    hash = "sha256-q5ra7tH4kaBrw0VAiyMsmWOkVhA7Y6bRuFP8dlxQjsE=";
+    tag = finalAttrs.version;
+    hash = "sha256-hTBi/muMmPrn7AVHQuuM3egADW+p18eFzU7l6bN/NkM=";
   };
 
   build-system = [ setuptools ];
@@ -44,7 +44,8 @@ buildPythonPackage {
   meta = {
     description = "Python package for communicating to NX584/NX8E interfaces";
     homepage = "https://github.com/kk7ds/pynx584";
+    changelog = "https://github.com/kk7ds/pynx584/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

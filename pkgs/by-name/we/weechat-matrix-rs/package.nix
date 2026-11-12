@@ -7,6 +7,7 @@
   weechat,
   openssl,
   sqlite,
+  zstd,
   runCommand,
 }:
 
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     weechat
     openssl
     sqlite
+    zstd
   ];
 
   postInstall = ''

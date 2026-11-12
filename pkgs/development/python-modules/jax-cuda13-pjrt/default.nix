@@ -17,11 +17,11 @@ let
   platforms = {
     x86_64-linux = {
       name = "manylinux_2_27_x86_64";
-      hash = "sha256-TKiiYaVIWtuFL96VTkuRRfVCwNivRwSojgX67jVBryE=";
+      hash = "sha256-WJm7YXftqG6lMq+5omeU8r3QSWb2oB+QKCZrFsK2z5A=";
     };
     aarch64-linux = {
       name = "manylinux_2_27_aarch64";
-      hash = "sha256-gZx0TjXd8Cckv0WWpijSvjhzaah82mBXUTfuQ37NeXo=";
+      hash = "sha256-QHWNBC34wGmRtqGoAWtW6c77HtTGd8BiElw+txw9q5c=";
     };
   };
   currentPlatform = platforms.${stdenv.hostPlatform.system};
@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jax-cuda13-pjrt";
   inherit version;
   pyproject = false;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jax_cuda13_pjrt";

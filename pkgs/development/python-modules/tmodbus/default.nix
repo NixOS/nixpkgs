@@ -64,8 +64,6 @@ buildPythonPackage (finalAttrs: {
   inherit version src;
   pyproject = true;
 
-  __structuredAttrs = true;
-
   postPatch = ''
     substituteInPlace integration_tests/helpers.py \
       --replace-fail "/usr/bin/socat" "${lib.getExe socat}"

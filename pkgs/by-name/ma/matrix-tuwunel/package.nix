@@ -6,6 +6,8 @@
   libredirect,
   bzip2,
   zstd,
+  aws-lc,
+  rust-jemalloc-sys,
   stdenv,
   rocksdb,
   nix-update-script,
@@ -89,13 +91,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.9.1";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MBHChIMNLrP7u8ECRroGiniRGtZGArrpRPfAdkOaOXg=";
+    hash = "sha256-TuX1JOCTOaynGho9lGpBKjuoJQXT69kp25FM99rDGcg=";
   };
 
   # Integration tests require networking. Only run the unit tests.
@@ -104,7 +106,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bins"
   ];
 
-  cargoHash = "sha256-NDjFv0iKDfkKwOQ3RZ4gO9eQufGf/dmFaGLTcFWH5uw=";
+  cargoHash = "sha256-bQxdrPghImV6OytnTGtoVyEEh80FfI4ApYNE0zsoETI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -120,7 +122,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     zstd
+    aws-lc
   ]
+  ++ lib.optional enableJemalloc (rust-jemalloc-sys.override { unprefixed = true; })
   ++ lib.optional enableLiburing liburing;
 
   env = {
@@ -205,5 +209,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       scvalex
     ];
     mainProgram = "tuwunel";
+    broken = stdenv.hostPlatform.isDarwin; # macos build fails with a rocksdb linker error
   };
 })

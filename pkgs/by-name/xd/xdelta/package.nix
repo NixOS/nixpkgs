@@ -2,53 +2,44 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
+  cmake,
+  libblake3,
   lzmaSupport ? true,
   xz ? null,
 }:
 
 assert lzmaSupport -> xz != null;
 
-let
-  mkWith = flag: name: if flag then "--with-${name}" else "--without-${name}";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdelta";
-  version = "3.1.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
-    sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
-    rev = "v${finalAttrs.version}";
-    repo = "xdelta-gpl";
     owner = "jmacd";
+    repo = "xdelta";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-flIXs6a9vU/x4ElNhYTEaunAIltRTCeVdgU1dPRNPcQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ] ++ lib.optionals lzmaSupport [ xz ];
+  sourceRoot = "${finalAttrs.src.name}/xdelta3";
 
   postPatch = ''
-    cd xdelta3
+    # the template assumes a relative CMAKE_INSTALL_LIBDIR, but nixpkgs passes an absolute one
+    substituteInPlace cmake/xdelta3.pc.in \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  configureFlags = [
-    (mkWith lzmaSupport "liblzma")
+  nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optionals lzmaSupport [ xz ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "XD3_LZMA_MODE" (if lzmaSupport then "on" else "off"))
+    # upstream downloads BLAKE3 with FetchContent, which can't work in the sandbox
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BLAKE3" "${libblake3.src}")
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
   ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
-  checkPhase = ''
-    mkdir $PWD/tmp
-    for i in testing/file.h xdelta3-test.h; do
-      substituteInPlace $i --replace /tmp $PWD/tmp
-    done
-    ./xdelta3regtest
-  '';
-
-  installPhase = ''
-    install -D -m755 xdelta3 $out/bin/xdelta3
-    install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
-  '';
 
   meta = {
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
@@ -57,10 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
       file differences. This is similar to diff and patch, but it is targeted
       for binary files and does not generate human readable output.
     '';
-    # The dedicated homepage pointed to a gambling website
-    homepage = "https://github.com/jmacd/xdelta";
-    license = lib.licenses.gpl2Plus;
+    homepage = "https://jmacd.github.io/xdelta/";
+    changelog = "https://github.com/jmacd/xdelta/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     mainProgram = "xdelta3";
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ samirbgno ];
   };
 })

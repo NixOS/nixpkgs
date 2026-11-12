@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  libgit2,
   openssl,
   runCommand,
   patchelf,
@@ -13,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bisect-rustc";
-  version = "0.6.11";
+  version = "0.6.12";
 
   __structuredAttrs = true;
 
@@ -21,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rust-lang";
     repo = "cargo-bisect-rustc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uyIdQn9EQnjBAHBPqvphaKg2KRufveOXOiHEKk0fTGQ=";
+    hash = "sha256-egNp51aBzFvfGGugvUkrtAtFZY+uuX2ICweLRw9xwbM=";
   };
 
   patches =
@@ -45,9 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
-  cargoHash = "sha256-WSO5LvdJkAorSwsICz9NAWKNM7x4aeNvhGLhJSO6Vi8=";
+  cargoHash = "sha256-kJ/mLHBrp67U5RkVZrkCyFjWLLwHvuLTCSxDmG1n9l0=";
 
   checkFlags = [
     "--skip=test_github" # requires internet

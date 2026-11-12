@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aarch64-esr-decoder";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "aarch64-esr-decoder";
     tag = finalAttrs.version;
-    hash = "sha256-ZpSrz7iwwzNrK+bFTMn5MPx4Zjceao9NKhjAyjuPLWY=";
+    hash = "sha256-DO/MS/Mt5KBFEEQt9BuJHF1J9UWqDJ3eWKzsw3X75jc=";
   };
 
-  cargoHash = "sha256-xOBJ8QYiWu5vmkRpttN2CXCXi4bNj+qph31hSkDadjI=";
+  cargoHash = "sha256-pbBIvenBe0+tt3VPuoTtFTDFy6yO5bju0FS2hXJtGZU=";
 
   meta = {
     description = "Utility for decoding aarch64 ESR register values";

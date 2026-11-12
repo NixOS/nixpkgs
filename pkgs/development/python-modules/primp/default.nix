@@ -7,11 +7,14 @@
   libiconv,
   pytestCheckHook,
   pytest-asyncio,
+  pkg-config,
+  aws-lc,
+  zstd-c,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "primp";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,23 +23,28 @@ buildPythonPackage (finalAttrs: {
     owner = "deedy5";
     repo = "primp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5a+L51565v1R29qq9na4R0+HcrFu10ImK2YbODnwm/I=";
+    hash = "sha256-eGVmdW6Npi9tCxeMUhrL5GG3f0FgHo+9fA/+ivH2n1M=";
   };
 
   buildAndTestSubdir = "crates/primp-python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-TatQkEMLjrdPli+FQUNw4qcqidgI3x5Gq1H7rjxgnYM=";
+    hash = "sha256-V3m7q1Gvv62VIyfJqeeDLUyNUA1FEqgVW4GCQW1+86o=";
   };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    aws-lc
+    zstd-c
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 

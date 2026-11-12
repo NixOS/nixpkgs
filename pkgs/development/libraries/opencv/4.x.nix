@@ -154,8 +154,6 @@ let
         { ${name "lnx_intel64"} = ""; }
       else if effectiveStdenv.hostPlatform.system == "i686-linux" then
         { ${name "lnx_ia32"} = ""; }
-      else if effectiveStdenv.hostPlatform.system == "x86_64-darwin" then
-        { ${name "mac_intel64"} = ""; }
       else
         throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
@@ -184,7 +182,7 @@ let
       owner = "opencv";
       repo = "opencv_3rdparty";
       rev = "34e4206aef44d50e6bbcd0ab06354b52e7466d26";
-      sha256 = "13yig1xhvgghvxspxmdidss5lqiikpjr0ddm83jsi0k85j92sn62";
+      hash = "sha256-wlgtkixogqjlQLU1kOWdMWJatG6x1X513/C9DXt40Y8=";
     };
     files = {
       "boostdesc_bgm.i" = "0ea90e7a8f3f7876d450e4149c97c74f";
@@ -305,6 +303,16 @@ effectiveStdenv.mkDerivation {
   ++ optionals enableCuda (
     [
       ./cuda_opt_flow.patch
+    ]
+    ++ optionals (lib.versionOlder version "4.14.0") [
+      # Backport https://github.com/opencv/opencv_contrib/pull/4130
+      (fetchpatch {
+        name = "videostab-add-missing-include-to-fix-build-failure";
+        url = "https://github.com/opencv/opencv_contrib/commit/054007b78c8288ef2fd040e77dc0cf2e45f70c15.patch";
+        stripLen = 2;
+        extraPrefix = "opencv_contrib/";
+        hash = "sha256-vDW6kfDmwPB/tTurkDXuvViXrzXYV4njjDN6kLoIvJ4=";
+      })
     ]
     ++ optionals (cudaPackages.cudaAtLeast "13.2") [
       # Backport https://github.com/opencv/opencv_contrib/pull/4097
@@ -635,13 +643,7 @@ effectiveStdenv.mkDerivation {
 
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
-    }
-    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) {
-      inherit qimgv;
-      withIpp = opencv4.override { enableIpp = true; };
-    }
-    // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
-    // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
+
       opencv4-tests = callPackage ./tests.nix {
         inherit
           enableGStreamer
@@ -653,6 +655,11 @@ effectiveStdenv.mkDerivation {
         inherit opencv4;
       };
     }
+    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) {
+      inherit qimgv;
+      withIpp = opencv4.override { enableIpp = true; };
+    }
+    // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
     // optionalAttrs enableCuda {
       no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv4"; };
     };

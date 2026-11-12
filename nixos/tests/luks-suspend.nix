@@ -57,7 +57,6 @@ in
       { pkgs, lib, ... }:
       {
         imports = [ commonMachine ];
-        boot.initrd.systemd.enable = true;
 
         # The test framework's qemu-vm module force-clears
         # boot.initrd.luks.devices via mkVMOverride (priority 10) when

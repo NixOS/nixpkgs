@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace locale/locale.pri \
       --replace-fail '$$[QT_INSTALL_BINS]/lrelease' '${lib.getDev qt6.qttools}/bin/lrelease'
+
+    substituteInPlace lib/media/src/mpv/mpvwidget.cpp \
+      --replace-fail "        Display *display = nullptr;" "        void *display = nullptr;"
   '';
 
   nativeBuildInputs = [

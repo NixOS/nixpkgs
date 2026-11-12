@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ytdl-sub";
-  version = "2026.08.26.post1";
+  version = "2026.11.01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = finalAttrs.version;
-    hash = "sha256-5G6t78BTm1qT69PpDEH4rs+gABBWycI4MXlZBrZk7vY=";
+    hash = "sha256-sZ8cTQbrvO9yPwRoUO4uv1IxgP/n13AwKFLjFgpAVCo=";
   };
 
   postPatch = ''
@@ -39,8 +39,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg_7 "ffmpeg"}"
-    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg_7 "ffprobe"}"
+    "--set"
+    "YTDL_SUB_FFMPEG_PATH"
+    (lib.getExe' ffmpeg_7 "ffmpeg")
+    "--set"
+    "YTDL_SUB_FFPROBE_PATH"
+    (lib.getExe' ffmpeg_7 "ffprobe")
   ];
 
   nativeCheckInputs = [

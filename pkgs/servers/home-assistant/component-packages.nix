@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.9.2";
+  version = "2026.10.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -521,6 +521,9 @@
       ps: with ps; [
         pyaussiebb
       ];
+    "austroflamm" =
+      ps: with ps; [
+      ];
     "autarco" =
       ps: with ps; [
         autarco
@@ -588,6 +591,10 @@
         aiohasupervisor
         axis
         paho-mqtt
+      ];
+    "axle_energy" =
+      ps: with ps; [
+        aioaxlevpp
       ];
     "azure_data_explorer" =
       ps:
@@ -697,6 +704,10 @@
     "bitcoin" =
       ps: with ps; [
         blockchain
+      ];
+    "bitvis" =
+      ps: with ps; [
+        bitvis-protobuf
       ];
     "bizkaibus" =
       ps: with ps; [
@@ -876,8 +887,7 @@
       ];
     "broadlink" =
       ps: with ps; [
-        broadlink
-      ];
+      ]; # missing inputs: broadlink-async
     "brother" =
       ps: with ps; [
         brother
@@ -1600,9 +1610,6 @@
         aiohasupervisor
         paho-mqtt
       ];
-    "dublin_bus_transport" =
-      ps: with ps; [
-      ];
     "duckdns" =
       ps: with ps; [
       ];
@@ -1673,6 +1680,9 @@
     "econet" =
       ps: with ps; [
         pyeconet
+      ];
+    "ecospar" =
+      ps: with ps; [
       ];
     "ecovacs" =
       ps: with ps; [
@@ -1925,10 +1935,6 @@
       ps: with ps; [
         essent-dynamic-pricing
       ];
-    "etherscan" =
-      ps: with ps; [
-        python-etherscan-api
-      ];
     "eufy" =
       ps: with ps; [
         lakeside
@@ -2161,8 +2167,7 @@
       ];
     "flipr" =
       ps: with ps; [
-        flipr-api
-      ];
+      ]; # missing inputs: flipr-api
     "flo" =
       ps: with ps; [
         aioflo
@@ -2620,6 +2625,10 @@
         greeclimate
         ifaddr
       ];
+    "gree_infrared" =
+      ps: with ps; [
+        infrared-protocols
+      ];
     "green_planet_energy" =
       ps: with ps; [
         greenplanet-energy-api
@@ -2652,6 +2661,9 @@
     "guntamatic" =
       ps: with ps; [
         guntamatic
+      ];
+    "haas_sohn" =
+      ps: with ps; [
       ];
     "habitica" =
       ps: with ps; [
@@ -2736,6 +2748,9 @@
       ps: with ps; [
         here-routing
         here-transit
+      ];
+    "heta" =
+      ps: with ps; [
       ];
     "hexaom" =
       ps: with ps; [
@@ -2990,7 +3005,7 @@
       ];
     "huisbaasje" =
       ps: with ps; [
-        energyflip-client
+        energyflip-api-client
       ];
     "humidifier" =
       ps: with ps; [
@@ -3239,6 +3254,10 @@
       ps: with ps; [
         indevolt-api
       ];
+    "indi_allsky" =
+      ps: with ps; [
+        aioindiallsky
+      ];
     "indianamichiganpower" =
       ps: with ps; [
       ];
@@ -3371,7 +3390,7 @@
       ];
     "ipp" =
       ps: with ps; [
-        pyipp
+        aioipp
       ];
     "iqvia" =
       ps: with ps; [
@@ -3521,6 +3540,16 @@
       ps: with ps; [
         pyjvcprojector
       ];
+    "kaco_modbus" =
+      ps:
+      with ps;
+      [
+        kaco-modbus
+        modbus-connection
+        pymodbus
+        tmodbus
+      ]
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "kaiser_nienhaus" =
       ps: with ps; [
       ];
@@ -3951,10 +3980,8 @@
       ];
     "lifx" =
       ps: with ps; [
-        aiolifx
-        aiolifx-effects
-        aiolifx-themes
         ifaddr
+        lifx-async
       ];
     "lifx_cloud" =
       ps: with ps; [
@@ -3982,10 +4009,6 @@
       ];
     "linksys_smart" =
       ps: with ps; [
-      ];
-    "linode" =
-      ps: with ps; [
-        linode-api
       ];
     "linux_battery" =
       ps: with ps; [
@@ -4684,7 +4707,9 @@
       ];
     "music_assistant" =
       ps: with ps; [
+        ha-ffmpeg
         music-assistant-client
+        mutagen
       ];
     "mutesync" =
       ps: with ps; [
@@ -4697,6 +4722,10 @@
     "my" =
       ps: with ps; [
         home-assistant-frontend
+      ];
+    "my_pv" =
+      ps: with ps; [
+        my-pv
       ];
     "myneomitis" =
       ps: with ps; [
@@ -5012,6 +5041,9 @@
     "ogemray" =
       ps: with ps; [
       ];
+    "ogeneral" =
+      ps: with ps; [
+      ];
     "ohmconnect" =
       ps: with ps; [
         defusedxml
@@ -5115,6 +5147,9 @@
     "onewire" =
       ps: with ps; [
         aio-ownet
+      ];
+    "onida_infrared" =
+      ps: with ps; [
       ];
     "onkyo" =
       ps: with ps; [
@@ -5282,10 +5317,6 @@
         serialx
         zeroconf
       ];
-    "oru" =
-      ps: with ps; [
-        oru
-      ];
     "oru_opower" =
       ps: with ps; [
       ];
@@ -5296,6 +5327,10 @@
     "osoenergy" =
       ps: with ps; [
         pyosoenergyapi
+      ];
+    "osram_infrared" =
+      ps: with ps; [
+        infrared-protocols
       ];
     "osramlightify" =
       ps: with ps; [
@@ -5462,6 +5497,10 @@
       ];
     "permobil" =
       ps: with ps; [
+      ];
+    "persang_infrared" =
+      ps: with ps; [
+        infrared-protocols
       ];
     "persistent_notification" =
       ps: with ps; [
@@ -5898,10 +5937,6 @@
       ps: with ps; [
         pyrainbird
       ];
-    "raincloud" =
-      ps: with ps; [
-        raincloudy
-      ];
     "rainforest_eagle" =
       ps: with ps; [
         aioeagle
@@ -6006,7 +6041,7 @@
       ];
     "rejseplanen" =
       ps: with ps; [
-        rjpl
+        pyrejseplan
       ];
     "remember_the_milk" =
       ps: with ps; [
@@ -6240,7 +6275,6 @@
         ifaddr
         samsungctl
         samsungtvws
-        wakeonlan
       ]
       ++ samsungctl.optional-dependencies.websocket
       ++ samsungtvws.optional-dependencies.async
@@ -6500,9 +6534,6 @@
     "siemens" =
       ps: with ps; [
       ];
-    "sigfox" =
-      ps: with ps; [
-      ];
     "sighthound" =
       ps: with ps; [
         pillow
@@ -6523,9 +6554,12 @@
         simplefin4py
       ];
     "simplepush" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         simplepush
-      ];
+      ]
+      ++ simplepush.optional-dependencies.legacy;
     "simplisafe" =
       ps: with ps; [
         simplisafe-python
@@ -6652,6 +6686,7 @@
       ];
     "smtp" =
       ps: with ps; [
+        aiosmtplib
       ];
     "smud" =
       ps: with ps; [
@@ -6716,10 +6751,19 @@
         solaredge-web
         sqlalchemy
       ];
-    "solaredge_local" =
-      ps: with ps; [
-        solaredge-local
-      ];
+    "solaredge_modbus" =
+      ps:
+      with ps;
+      [
+        aiohasupervisor
+        aiousbwatcher
+        modbus-connection
+        pymodbus
+        serialx
+        solaredged
+        tmodbus
+      ]
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "solarlog" =
       ps: with ps; [
         solarlog-cli
@@ -6886,10 +6930,19 @@
         discovery30303
         ifaddr
       ];
-    "stiebel_eltron" =
+    "steinway_lyngdorf" =
       ps: with ps; [
-        pystiebeleltron
       ];
+    "stiebel_eltron" =
+      ps:
+      with ps;
+      [
+        modbus-connection
+        pymodbus
+        pystiebeleltron
+        tmodbus
+      ]
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "stookwijzer" =
       ps: with ps; [
         stookwijzer
@@ -6924,6 +6977,10 @@
     "sunricher_dali" =
       ps: with ps; [
         pysrdaligateway
+      ];
+    "sunsynk" =
+      ps: with ps; [
+        sunsynk-api-client
       ];
     "sunweg" =
       ps: with ps; [
@@ -7096,10 +7153,6 @@
       ps: with ps; [
         tami4edgeapi
       ];
-    "tank_utility" =
-      ps: with ps; [
-        tank-utility
-      ];
     "tankerkoenig" =
       ps: with ps; [
         aiotankerkoenig
@@ -7190,8 +7243,35 @@
       ];
     "teslemetry" =
       ps: with ps; [
+        aioesphomeapi
+        aiohasupervisor
+        aiopowerwall
+        aioruuvigateway
+        aioshelly
+        aiousbwatcher
+        bleak
+        bleak-esphome
+        bleak-retry-connector
+        bleak-smlight
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        esphome-dashboard-api
+        gazetteer-matcher
+        ha-ffmpeg
+        habluetooth
+        hassil
+        home-assistant-intents
+        ifaddr
+        mutagen
+        pymicro-vad
+        pysmlight
+        pyspeex-noise
+        serialx
         tesla-fleet-api
         teslemetry-stream
+        zeroconf
       ];
     "tessie" =
       ps: with ps; [
@@ -7200,6 +7280,10 @@
       ];
     "text" =
       ps: with ps; [
+      ];
+    "theben_conexa" =
+      ps: with ps; [
+        theben-conexa-smgw
       ];
     "thermador" =
       ps: with ps; [
@@ -7288,6 +7372,10 @@
         pyroute2
         python-otbr-api
         zeroconf
+      ];
+    "threema" =
+      ps: with ps; [
+        aiothreema
       ];
     "threshold" =
       ps: with ps; [
@@ -7509,10 +7597,6 @@
     "transport_nsw" =
       ps: with ps; [
         pytransportnsw
-      ];
-    "travisci" =
-      ps: with ps; [
-        travispy
       ];
     "trend" =
       ps: with ps; [
@@ -7803,6 +7887,10 @@
       ps: with ps; [
         aioaquarite
       ];
+    "vitesy" =
+      ps: with ps; [
+        aiovitesy
+      ];
     "vivotek" =
       ps: with ps; [
         libpyvivotek
@@ -7990,6 +8078,10 @@
     "wilight" =
       ps: with ps; [
         pywilight
+      ];
+    "willow" =
+      ps: with ps; [
+        pywillow
       ];
     "window" =
       ps: with ps; [
@@ -8285,10 +8377,6 @@
       ps: with ps; [
         pyzerproc
       ];
-    "zestimate" =
-      ps: with ps; [
-        xmltodict
-      ];
     "zeversolar" =
       ps: with ps; [
         zeversolar
@@ -8331,6 +8419,10 @@
     "zoneminder" =
       ps: with ps; [
         zm-py
+      ];
+    "zonneplan" =
+      ps: with ps; [
+        pyzonneplan
       ];
     "zwave_js" =
       ps: with ps; [
@@ -8432,6 +8524,7 @@
     "aws"
     "aws_s3"
     "axis"
+    "axle_energy"
     "azure_data_explorer"
     "azure_devops"
     "azure_event_hub"
@@ -8445,6 +8538,7 @@
     "bayesian"
     "besen"
     "binary_sensor"
+    "bitvis"
     "blackbird"
     "blebox"
     "blink"
@@ -8462,7 +8556,6 @@
     "brands"
     "braviatv"
     "bring"
-    "broadlink"
     "brother"
     "brottsplatskartan"
     "brunt"
@@ -8538,6 +8631,7 @@
     "diagnostics"
     "dialogflow"
     "directv"
+    "discogs"
     "discord"
     "discovergy"
     "dlink"
@@ -8640,7 +8734,6 @@
     "flexit"
     "flexit_bacnet"
     "flic"
-    "flipr"
     "flo"
     "flow_it"
     "flume"
@@ -8719,6 +8812,7 @@
     "gpslogger"
     "graphite"
     "gree"
+    "gree_infrared"
     "green_planet_energy"
     "greencell"
     "greeneye_monitor"
@@ -8807,6 +8901,7 @@
     "improv_ble"
     "incomfort"
     "indevolt"
+    "indi_allsky"
     "inels"
     "influxdb"
     "infrared"
@@ -8849,6 +8944,7 @@
     "juicenet"
     "justnimbus"
     "jvc_projector"
+    "kaco_modbus"
     "kaleidescape"
     "karakeep"
     "keenetic_ndms2"
@@ -8894,6 +8990,7 @@
     "liebherr"
     "life360"
     "lifx"
+    "lifx_cloud"
     "light"
     "linkplay"
     "litejet"
@@ -8997,6 +9094,7 @@
     "music_assistant"
     "mutesync"
     "my"
+    "my_pv"
     "myneomitis"
     "myq"
     "mysensors"
@@ -9088,6 +9186,7 @@
     "oralb"
     "orvibo"
     "osoenergy"
+    "osram_infrared"
     "otbr"
     "otp"
     "ouman_eh_800"
@@ -9107,6 +9206,7 @@
     "peco"
     "pegel_online"
     "permobil"
+    "persang_infrared"
     "persistent_notification"
     "person"
     "pglab"
@@ -9140,6 +9240,7 @@
     "prowl"
     "proximity"
     "proxmoxve"
+    "proxy"
     "prusalink"
     "ps4"
     "ptdevices"
@@ -9149,6 +9250,7 @@
     "push"
     "pushbullet"
     "pushover"
+    "pushsafer"
     "pvoutput"
     "pvpc_hourly_pricing"
     "pyload"
@@ -9182,6 +9284,7 @@
     "redgtech"
     "refoss"
     "rehlko"
+    "rejseplanen"
     "remember_the_milk"
     "remote"
     "remote_calendar"
@@ -9249,7 +9352,6 @@
     "shelly"
     "shopping_list"
     "sia"
-    "sigfox"
     "sighthound"
     "signal_messenger"
     "silla_prism"
@@ -9280,6 +9382,7 @@
     "snooz"
     "sofar"
     "solaredge"
+    "solaredge_modbus"
     "solarlog"
     "solarman"
     "solax"
@@ -9316,7 +9419,9 @@
     "suez_water"
     "sun"
     "sunricher_dali"
+    "sunsynk"
     "sunweg"
+    "supla"
     "surepetcare"
     "swiss_public_transport"
     "swisscom"
@@ -9358,10 +9463,12 @@
     "teslemetry"
     "tessie"
     "text"
+    "theben_conexa"
     "thermobeacon"
     "thermopro"
     "thethingsnetwork"
     "thread"
+    "threema"
     "threshold"
     "tibber"
     "tile"
@@ -9446,12 +9553,14 @@
     "victron_remote_monitoring"
     "vilfo"
     "vistapool"
+    "vitesy"
     "vivotek"
     "vizio"
     "vlc_telnet"
     "vodafone_station"
     "voicerss"
     "voip"
+    "volkszaehler"
     "volumio"
     "volvo"
     "wake_on_lan"
@@ -9482,6 +9591,7 @@
     "wiffi"
     "wiim"
     "wilight"
+    "willow"
     "window"
     "wirelesstag"
     "withings"
@@ -9491,6 +9601,7 @@
     "wolflink"
     "workday"
     "worldclock"
+    "worldtidesinfo"
     "ws66i"
     "wsdot"
     "wyoming"
@@ -9524,6 +9635,7 @@
     "zodiac"
     "zone"
     "zoneminder"
+    "zonneplan"
     "zwave_js"
     "zwave_me"
   ];

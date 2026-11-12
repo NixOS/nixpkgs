@@ -42,5 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Full-featured mastering suite for authoring, disassembling and analyzing Video CDs and Super Video CDs";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

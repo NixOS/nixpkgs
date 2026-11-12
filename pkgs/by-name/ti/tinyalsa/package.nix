@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinyalsa";
-  version = "2.0.0-unstable-2026-07-27";
+  version = "2.0.0-unstable-2026-10-23";
 
   src = fetchFromGitHub {
     owner = "tinyalsa";
     repo = "tinyalsa";
-    rev = "9fab97ca07184371ecad81154d1dadb09d0fa7cf";
-    hash = "sha256-+/wz0pwyF1kulUA5kjFGVOwbSkunEU+WzsZf/UsCEVk=";
+    rev = "a7cd26a17fe2add2ff38d2f281ed0b919187a068";
+    hash = "sha256-B2u9xjH3oHb5zrQyyKVUK86hx1Voq+AxdVP4n9ZYerg=";
   };
 
   separateDebugInfo = true;

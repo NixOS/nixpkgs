@@ -210,6 +210,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           Environment = environment;
+          EnvironmentFile = cfg.environmentFile;
 
           ExecStart = getExe' cfg.package "bookorbit-migrate";
         };

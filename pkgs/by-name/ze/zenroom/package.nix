@@ -30,13 +30,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenroom";
-  version = "5.37.2";
+  version = "5.38.1";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "Zenroom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gNUclaXF7C2yBywo1TAwHOfB9Pe17g6fCLhEcFq8JL0=";
+    hash = "sha256-FDGIMeWzhHSLsVUAH/y3cgJbkXzzX3yiHjXeSL2xnto=";
     postFetch = ''
       # conflict on case-insensitive filesystems
       pushd $out/docs/examples/zencode_cookbook/cookbook_when
@@ -48,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build/{embed-lualibs,meson_version.sh}
     patchShebangs test/
+
+    # test credentials in dcql.bats expired on 2026-10-31
+    # https://github.com/dyne/Zenroom/issues/1198
+    substituteInPlace build/meson.build \
+      --replace-fail \
+        "exclude = 'bindings_exec" \
+        "exclude = 'dcql bindings_exec"
   '';
 
   __structuredAttrs = true;

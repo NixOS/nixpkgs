@@ -4,23 +4,28 @@
   fetchFromGitHub,
   protobuf,
   pkg-config,
+  aws-lc,
   python3,
+  zstd,
+  xz,
+  zlib,
+  libgit2,
   nix-update-script,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sail";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "lakehq";
     repo = "sail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UJP2d56IF0h9s/kZhNWVkCp/YfTf1RpQStM1NjzJKK4=";
+    hash = "sha256-aYxFA0fUJONk6SB8dIlxVqPK3rd1YW6JMYcNseqI4Kg=";
   };
 
-  cargoHash = "sha256-a0NOVMH5dObFpwUaEsB6w66XVSjnWQRiK5i/KylEgAU=";
+  cargoHash = "sha256-icNh2aYZBVvhm+Ktx+o1kSQ4GmGS10TVIdwh6ngqHv0=";
 
   cargoBuildFlags = [
     "-p"
@@ -37,7 +42,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     python3
+    zstd
+    xz
+    zlib
+    libgit2
   ];
 
   env = {

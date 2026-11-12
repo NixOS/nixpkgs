@@ -10,6 +10,7 @@
   perl,
   gfortran,
   slurm,
+  testers,
   openssh,
   hwloc,
   zlib,
@@ -43,9 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mvapich";
   version = "4.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-JaU9NyW2aeLGSBWPt8n8WxOIlT86L5SXSFhsRH0OQ+4=";
+    hash = "sha256-JaU9NyW2aeLGSBWPt8n8WxOIlT86L5SXSFhsRH0OQ+4=";
   };
 
   outputs = [
@@ -59,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     makeWrapper
     gfortran
+    perl
     python3
     removeReferencesTo
   ]
@@ -81,8 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     rdma-core
     libfabric
   ]
-  ++ lib.optional useSlurm slurm
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+  ++ lib.optionals useSlurm [ slurm ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
+  ]
   ++ lib.optionals rocmSupport (
     with rocmPackages;
     [
@@ -152,12 +160,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit cudaSupport rocmSupport;
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = {
     description = "MPI-3.1 implementation optimized for Infiband and OmniPath transport";
     homepage = "https://mvapich.cse.ohio-state.edu";
     license = lib.licenses.bsd3;
+    pkgConfigModules = [ "mvapich" ];
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };

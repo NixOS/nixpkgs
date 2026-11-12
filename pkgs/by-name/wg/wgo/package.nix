@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "wgo";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "bokwoon95";
     repo = "wgo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t1gVH/8woXhsJHJhAmSv0iFwdEjAKrI87kR23isS5n8=";
+    hash = "sha256-2pDqSEeawPRU3+1Jr+Ph0ix8ooEZhfsEb5jL6W4+7k4=";
   };
 
   vendorHash = "sha256-c7Cp08kmDOV63tvfSkGcO+SWgpuzJEm/vqbCVPS/v/Q=";

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "emilazy";
-    repo = "autopen";
+    repo = "boot-security-tools";
     tag = "v${finalAttrs.version}";
     hash = "sha256-7/uAwpNNQByKAjrpr6R40dkVWg5t15bqLD4KJNT53wI=";
   };
@@ -27,8 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useNextest = true;
 
   cargoTestFlags = [ "--max-fail=all" ];
-
-  strictDeps = true;
 
   __structuredAttrs = true;
 
@@ -59,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Cryptographic signing tool with an object‐capability interface";
-    homepage = "https://github.com/emilazy/autopen";
+    homepage = "https://github.com/emilazy/boot-security-tools";
     license = lib.licenses.blueOak100;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     teams = [ lib.teams.boot-security ];

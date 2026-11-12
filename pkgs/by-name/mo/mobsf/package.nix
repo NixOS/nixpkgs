@@ -54,15 +54,14 @@ let
 in
 buildPythonApplication (finalAttrs: {
   pname = "mobsf";
-  version = "4.5.2";
+  version = "4.5.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MobSF";
     repo = "Mobile-Security-Framework-MobSF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zICRuK5NI0aPHSW7GAcFXAuLtrbckzRI/0RHJJmRFhw=";
+    hash = "sha256-DVyRBBiXPDkxxgcdo0rfZGeaMqCpvYynFC1vS6p7U6s=";
   };
 
   patches = [

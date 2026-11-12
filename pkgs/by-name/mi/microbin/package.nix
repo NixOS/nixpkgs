@@ -6,6 +6,8 @@
   pkg-config,
   rustPlatform,
   nix-update-script,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     oniguruma
     openssl
+    sqlite
+    zstd
   ];
 
   env = {
@@ -40,8 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/szabodanika/microbin";
     changelog = "https://github.com/szabodanika/microbin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = [
-    ];
+    maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "microbin";
   };
 })

@@ -1,20 +1,30 @@
 {
   lib,
+  stdenv,
   buildGraalvmNativeImage,
   fetchurl,
+  libffiReal,
   writeScript,
   installShellFiles,
   unzip,
   zip,
 }:
-
+let
+  libffiStatic = libffiReal.overrideAttrs { dontDisableStatic = true; };
+  libffiArchive = "${lib.getLib libffiStatic}/lib/libffi.a";
+  libffiArchiveArgs =
+    if stdenv.hostPlatform.isDarwin then
+      "-H:NativeLinkerOption=-Wl,-force_load,${libffiArchive}"
+    else
+      "-H:NativeLinkerOption=-Wl,--whole-archive,${libffiArchive},--no-whole-archive";
+in
 buildGraalvmNativeImage (finalAttrs: {
   pname = "babashka-unwrapped";
-  version = "1.13.220";
+  version = "1.13.229";
 
   src = fetchurl {
     url = "https://github.com/babashka/babashka/releases/download/v${finalAttrs.version}/babashka-${finalAttrs.version}-standalone.jar";
-    sha256 = "sha256-0fpvbrEJU89mMo9A9IM7kAqiGCdnexrEslGtjt+iBxg=";
+    sha256 = "sha256-mhsgcFMA3OWFt4QVBFdshg85QuAcfxG7r8y68e/KtwM=";
   };
 
   nativeBuildInputs = [
@@ -39,10 +49,14 @@ buildGraalvmNativeImage (finalAttrs: {
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
     "-H:+SharedArenaSupport"
+    "${libffiArchiveArgs}"
+    "-EBABASHKA_FEATURE_LIBFFI"
     "--no-fallback"
     "--native-image-info"
     "--enable-preview"
   ];
+
+  env.BABASHKA_FEATURE_LIBFFI = "true";
 
   doInstallCheck = true;
 
@@ -55,15 +69,20 @@ buildGraalvmNativeImage (finalAttrs: {
     $out/bin/bb '(prn "bépo àê")' | fgrep 'bépo àê'
     $out/bin/bb '(:out (babashka.process/sh "echo" "ä"))' | fgrep 'ä'
     $out/bin/bb '(into-array [:f])'
+    $out/bin/bb '(babashka.ffi/defcfn c-printf "printf" [:string :&] :int) (c-printf "%s: %.0f\n" "count" 42.0)' | fgrep 'count: 42'
 
     runHook postInstallCheck
   '';
 
-  postInstall = ''
-    installShellCompletion --cmd bb --bash ${./completions/bb.bash}
-    installShellCompletion --cmd bb --zsh ${./completions/bb.zsh}
-    installShellCompletion --cmd bb --fish ${./completions/bb.fish}
-  '';
+  postInstall =
+    # babashka.cli 0.12.85+ (bundled since bb 1.13.219) generates shell
+    # completions itself, see https://github.com/babashka/cli#completions
+    lib.optionalString (stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+      installShellCompletion --cmd bb \
+        --bash <($out/bin/bb org.babashka.cli/completions snippet --shell bash --prog bb) \
+        --fish <($out/bin/bb org.babashka.cli/completions snippet --shell fish --prog bb) \
+        --zsh <($out/bin/bb org.babashka.cli/completions snippet --shell zsh --prog bb)
+    '';
 
   passthru.updateScript = writeScript "update-babashka" ''
     #!/usr/bin/env nix-shell

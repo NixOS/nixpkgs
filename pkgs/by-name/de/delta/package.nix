@@ -6,24 +6,26 @@
   installShellFiles,
   pkg-config,
   oniguruma,
+  libgit2,
   stdenv,
   git,
   zlib,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "delta";
-  version = "0.19.2";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = "delta";
     tag = finalAttrs.version;
-    hash = "sha256-vW2mPAxlPXdwqyK/QhU/DOx6MD9u6DDVCDm0OEWm4AQ=";
+    hash = "sha256-p/vYclCifRzk8ockxT5k1zBCBL+eF4oldhD3lTvy2EA=";
   };
 
-  cargoHash = "sha256-CC2ncgujdcn1CJxU16beCjfQ1HR2+f6D8qYbZULEm7g=";
+  cargoHash = "sha256-YjmYeSRt9X/+PROEGg3pBQ1IRnNuwziZ30bA/nKqbWc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     oniguruma
+    libgit2
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     zlib
@@ -41,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
@@ -68,7 +72,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
 
   meta = {

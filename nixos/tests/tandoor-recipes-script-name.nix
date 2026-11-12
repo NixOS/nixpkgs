@@ -25,7 +25,7 @@
 
       origin_url = "http://${address}:${toString port}"
       base_url = f"{origin_url}${SCRIPT_NAME}"
-      login_path = "/admin/login/"
+      login_path = "/account/login/"
       login_url = f"{base_url}{login_path}"
 
       cookie_jar_path = "/tmp/cookies.txt"

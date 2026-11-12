@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation {
   pname = "frozen-containers";
-  version = "1.2.0-unstable-2026-04-20";
+  version = "1.2.0-unstable-2026-10-09";
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "frozen";
-    rev = "b07a5c8187bc3e6f1461efab89fe07f467e300db";
-    hash = "sha256-eZdiLKUcx1MTcW+HyoRi6U/lUbs/qAQhRw0wX3tpUjY=";
+    rev = "d53e0a11578d56dc331dc267c2084d52bcdee1d9";
+    hash = "sha256-j/K8KbQKkucM0JYmXSTXRk/PcdlADpDeLzkWfyHq1q0=";
   };
 
   nativeBuildInputs = [ cmake ];

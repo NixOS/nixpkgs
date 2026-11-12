@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.4.0";
 
   src = fetchFromGitHub {
-    owner = "drowe67";
+    owner = "freedv";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Nd0oOGiMrERviaGOtdOQ0KTSSL/+69Q2bRHjojBUknU=";
@@ -200,10 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://freedv.org/";
     description = "Digital voice for HF radio";
     license = lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [
-      mvs
-      wegank
-    ];
+    maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
     mainProgram = "freedv";
   };

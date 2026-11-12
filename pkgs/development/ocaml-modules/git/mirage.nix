@@ -37,8 +37,6 @@ buildDunePackage {
 
   inherit (git) version src;
 
-  minimalOCamlVersion = "4.08";
-
   buildInputs = [
     happy-eyeballs-mirage
     ipaddr

@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "secrethound";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "rafabd1";
     repo = "SecretHound";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ca0AwD1oFBB8F2J4gLMtaDssacczugAkkSYdBTvT4VQ=";
+    hash = "sha256-wTed0dJNhh8LpTYN/R6uyuWPyuHGAJdnR8Sbv+UPV5c=";
   };
 
-  vendorHash = "sha256-oTyI3/+evDTzyH+BjfSP0A1r2bYVAMxtWRsg0G1d2zQ=";
+  vendorHash = "sha256-Gpbz7Cc6CyQDd3BaNfVIVKL36W/u+sM5g7dJ0Ey+6y8=";
 
   ldflags = [
     "-s"

@@ -6,17 +6,18 @@
   nodejs,
   npmHooks,
   stdenv,
+  versionCheckHook,
   zlib,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "codebase-memory-mcp";
-  version = "0.10.8";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "DeusData";
     repo = "codebase-memory-mcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lPuayLN6W31zQ45UTQehP+tmoo/UrQJuRsJzi1wZ9Tg=";
+    hash = "sha256-qmLm6jALuPUh6+gSEmWzECWL7AC8HOHAbUHDpYOJlbs=";
   };
 
   patches = [
@@ -27,13 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile.cbm \
       --replace-fail "npm ci &&" ""
 
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Keep mimalloc available through its direct API, without interposing on libc.
+      substituteInPlace Makefile.cbm \
+        --replace-fail 'ifneq ($(filter yes,$(IS_MINGW) $(IS_LINUX)),)' 'ifneq ($(filter yes,$(IS_MINGW)),)'
+    ''}
+
     patchShebangs scripts/embed-frontend.sh
   '';
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-cDwGJi8M/t7eTHVKu6TzW7L9OUAQgB+0c+fiTgPn7cE=";
+    hash = "sha256-MKXmiMUofKka1C1jwlm+Mq8X90cTMvipfTC3eX0iv60=";
   };
 
   npmRoot = "graph-ui";
@@ -43,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     npmHooks.npmConfigHook
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   buildInputs = [
     bash
     zlib
@@ -50,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  env = {
+    # Do not let onnxruntime-node fetch execution providers from NuGet.
+    ONNXRUNTIME_NODE_INSTALL = "skip";
+  };
 
   enableParallelBuilding = true;
 
@@ -65,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     install -Dm755 build/c/codebase-memory-mcp $out/bin/codebase-memory-mcp
+
     runHook postInstall
   '';
 
@@ -75,5 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gdifolco ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    broken = stdenv.hostPlatform.isMusl;
   };
 })

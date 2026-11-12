@@ -31,14 +31,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "python-arango";
-  version = "8.3.5";
+  version = "8.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";
     tag = finalAttrs.version;
-    hash = "sha256-GHpmWQKvF0gKoemytiAkMQfd3vBWlrRzSSveSE/5PAo=";
+    hash = "sha256-NW4z5ozA6MbKzbMcNb8dK/7vSmJTrJZlIE7sMg59nrU=";
   };
 
   build-system = [

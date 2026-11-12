@@ -15,13 +15,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "unifly";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "hyperb1iss";
     repo = "unifly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M8bLBa7qyWYKdDghrLSA+HPzGQ4WmllryBA+p77xK40=";
+    hash = "sha256-FpUdo2tg6iiGp86dzkU3a9C3vieGZDZCt6/Maa+8nYs=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ dbus ];
 
-  cargoHash = "sha256-bO+wfKuG/LERbe/prjqo+t5SuwcvI7daxrJIKdK9Gxw=";
+  cargoHash = "sha256-8Mb7BOlpupETbuWv0GPjTCncj1ekACFrmYb1Kmxhhhw=";
 
   doCheck = false;
   doInstallCheck = true;

@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  libgit2,
   stdenv,
   rustPlatform,
   gtk4,
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     gtk4
+    libgit2
     pango
   ];
 
@@ -70,8 +72,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "USB 2.0 protocol analysis application for use with Cynthion";
     homepage = "https://github.com/greatscottgadgets/packetry";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
     mainProgram = "packetry";
+    mainDarwinApp = "Packetry.app";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

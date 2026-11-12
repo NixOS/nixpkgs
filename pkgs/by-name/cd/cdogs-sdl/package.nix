@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdogs-sdl";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     repo = "cdogs-sdl";
     owner = "cxong";
     tag = finalAttrs.version;
-    hash = "sha256-588bPis3n9BZnEywLmgouRgpiEvB+sKp6/xhUDhfddQ=";
+    hash = "sha256-1t8LiR5zg+Z9eeP1rS5kU3deMlbPB9+tBLziuFzlQ+Q=";
   };
 
   postPatch = ''
@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=stringop-overflow"
+    # Needed with GCC 16
+    "-Wno-error=unused-but-set-variable"
   ];
 
   nativeBuildInputs = [

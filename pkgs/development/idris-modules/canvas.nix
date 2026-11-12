@@ -13,7 +13,7 @@ build-idris-package {
     owner = "JinWuZhao";
     repo = "idriscanvas";
     rev = "2957c78c0721ec3afaee9d64e051a8f8d9b6f426";
-    sha256 = "0jirkqciv3j1phpm2v6fmch40b5a01rmqdng16y8mihq1wb70ayy";
+    hash = "sha256-3itwFg8Yxoq8Cc82XHMAqixAIKvObFEvvEGOHRmeOUo=";
   };
 
   meta = {

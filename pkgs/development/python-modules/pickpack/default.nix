@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "anafvana";
+    owner = "gc-av";
     repo = "pickpack";
     rev = "v${version}";
     hash = "sha256-IUIs+Cgl2fvjSougyVSzhmY2SeEYL2T2ODrBWBg3zZM=";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Curses-based (and pick-based) interactive picker for the terminal. Now covering trees also";
-    homepage = "https://github.com/anafvana/pickpack";
+    homepage = "https://github.com/gc-av/pickpack";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

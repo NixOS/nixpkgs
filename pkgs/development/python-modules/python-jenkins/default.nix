@@ -11,7 +11,7 @@
   testscenarios,
   requests,
   requests-mock,
-  stestr,
+  stestrCheckHook,
   multiprocess,
 }:
 
@@ -47,14 +47,11 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     testscenarios
     requests-mock
     multiprocess
   ];
-  checkPhase = ''
-    stestr run
-  '';
 
   meta = {
     description = "Python bindings for the remote Jenkins API";

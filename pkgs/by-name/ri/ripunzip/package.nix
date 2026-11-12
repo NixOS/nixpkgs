@@ -7,6 +7,7 @@
   testers,
   fetchzip,
   ripunzip,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,7 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-J6FtaWjeJhbSB1WoAbh6c4DeShPmqGgmh2NTNRS6CUk=";
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   checkFlags = [

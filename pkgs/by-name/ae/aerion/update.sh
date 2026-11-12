@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix nix-update nix-prefetch-scripts common-updater-scripts
+#!nix-shell -i bash -p nix nix-update common-updater-scripts
 
 set -euo pipefail
 

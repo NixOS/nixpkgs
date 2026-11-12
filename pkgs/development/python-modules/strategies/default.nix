@@ -11,14 +11,13 @@ buildPythonPackage (finalAttrs: {
   pname = "strategies";
   version = "0.2.3";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   # GitHub upstream do not have proper release tags
   src = fetchPypi {
     pname = "strategies";
     inherit (finalAttrs) version;
-    sha256 = "02i4ydrs9k61p8iv2vl2akks8p9gc88rw8031wlwb1zqsyjmb328";
+    hash = "sha256-SIxVpdf4h8UpDwMgnhFiL12k51SCbrEjusHMpHPzJAo=";
   };
 
   build-system = [ setuptools ];

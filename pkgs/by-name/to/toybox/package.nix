@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   which,
   buildPackages,
   libxcrypt,
@@ -17,14 +18,23 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toybox";
-  version = "0.8.14";
+  version = "0.8.15";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = "toybox";
     tag = finalAttrs.version;
-    hash = "sha256-46iKwUSIQ4M9ZL86e4rY4hGcz8y06HZMC0mvNp3jR1s=";
+    hash = "sha256-eZz8s0+jUMGZ3QJ4vX3nXGl+JFJhqfvxDaNJQ8RTHLk=";
   };
+
+  patches = [
+    # fix darwin build
+    (fetchpatch2 {
+      name = "macos-drop-readahead.patch";
+      url = "https://github.com/landley/toybox/commit/6a0c0ef5eeb2c43e4feef9781398c1718b8bddcb.patch";
+      hash = "sha256-KSHWHmLXSieyTHshTbYbTOi/DW27X+iAQnxes7uszwQ=";
+    })
+  ];
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
@@ -94,7 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://landley.net/toybox/";
     license = lib.licenses.bsd0;
     platforms = with lib.platforms; linux ++ darwin ++ freebsd;
-    maintainers = with lib.maintainers; [ hhm ];
+    maintainers = with lib.maintainers; [
+      hhm
+      coolcuber
+    ];
     priority = 10;
   };
 })

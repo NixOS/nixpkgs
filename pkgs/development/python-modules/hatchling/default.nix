@@ -8,6 +8,7 @@
   packaging,
   pathspec,
   pluggy,
+  tomlkit,
   trove-classifiers,
 
   # tests
@@ -19,12 +20,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hatchling";
-  version = "1.31.0";
+  version = "1.33.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-a0itQGikgu1yObOoIVvFW0eq0zRdWN/JTlU8XS1GIRs=";
+    hash = "sha256-TEIr1NVU/P9d5bc+lZb4XkHp+X9+VT2PdZXssxpie+8=";
   };
 
   # listed in backend/pyproject.toml
@@ -33,6 +34,7 @@ buildPythonPackage (finalAttrs: {
     packaging
     pathspec
     pluggy
+    tomlkit
     trove-classifiers
   ];
 

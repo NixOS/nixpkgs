@@ -34,13 +34,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = config.boot.initrd.systemd.enable;
-        message = "clevis-luks-askpass requires boot.initrd.systemd.enable = true";
-      }
-    ];
-
     warnings =
       if
         cfg.useTang && !config.boot.initrd.network.enable && !config.boot.initrd.systemd.network.enable

@@ -17,6 +17,7 @@
   rustc,
   rustPlatform,
   stdenv,
+  sqlite,
   xcbuild,
 }:
 
@@ -26,17 +27,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2026.8.0";
+  version = "2026.10.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "desktop-v${finalAttrs.version}";
-    hash = "sha256-6rtOJfSTJuxFR7ahTdjGKnes6qV+WS/5bIfx+dkgT7o=";
+    hash = "sha256-bSkS7WNIpXaOwkgfld4CtQBKhz1vLeVlWbK6Qeb++T4=";
   };
 
   patches = [
-    ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
@@ -74,7 +74,7 @@ buildNpmPackage (finalAttrs: {
 
   npmWorkspace = "apps/desktop";
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-5i6/TlqBhPLv00tN0sxFA/iRQ8QRyUxhCqYkhVBLz3w=";
+  npmDepsHash = "sha256-6x1qc8cVuBdvZ2W133ajYOKpUz29qda5cECmNvlS9rg=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
@@ -84,7 +84,7 @@ buildNpmPackage (finalAttrs: {
       cargoRoot
       patches
       ;
-    hash = "sha256-OtdwNqZzoMt47O353IKr7FA7DF/tN0MYNK6Eg6skez8=";
+    hash = "sha256-q7fDejVEE5Q0rzGP6ATeljatuC9GWqX3yCx+As1TjmA=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -106,6 +106,10 @@ buildNpmPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     darwin.autoSignDarwinBinariesHook
+  ];
+
+  buildInputs = [
+    sqlite
   ];
 
   preBuild = ''

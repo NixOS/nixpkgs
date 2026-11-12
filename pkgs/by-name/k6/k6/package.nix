@@ -4,17 +4,18 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "k6";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "k6";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-2F1n/VlHpyLlAzycSCV25+pa35bzSwgWTSE/NU21G+I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aPys0ZuVujPui2MClZzN/Nr2rQMYKzvl+DyRBvataSM=";
   };
 
   subPackages = [ "./" ];
@@ -23,10 +24,9 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/k6 version | grep ${finalAttrs.version} > /dev/null
-  '';
+  versionCheckProgramArg = "version";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd k6 \

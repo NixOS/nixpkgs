@@ -2,7 +2,6 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../.. { inherit system config; },
-  systemdStage1,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -42,8 +41,6 @@ let
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC hello ];
-
-        boot.initrd.systemd.enable = ${boolToString systemdStage1};
 
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.extraConfig = "serial; terminal_output serial";
@@ -713,14 +710,9 @@ let
                 ../modules/profiles/installation-device.nix
                 ../modules/profiles/base.nix
                 extraInstallerConfig
-                ./common/auto-format-root-device.nix
               ];
 
-              # In systemdStage1, also automatically format the device backing the
-              # root filesystem.
-              virtualisation.fileSystems."/".autoFormat = systemdStage1;
-
-              boot.initrd.systemd.enable = systemdStage1;
+              virtualisation.fileSystems."/".autoFormat = true;
 
               # Use a small /dev/vdb as the root disk for the
               # installer. This ensures the target disk (/dev/vda) is
@@ -780,6 +772,8 @@ let
                   # add curl so that rather than seeing the test attempt to download
                   # curl's tarball, we see what it's trying to download
                   curl
+
+                  config.system.nixos-init.package
                 ]
                 ++ optionals (bootLoader == "grub") (
                   let
@@ -797,9 +791,7 @@ let
                 ++ optionals (bootLoader == "systemd-boot") [
                   pkgs.zstd.bin
                   pkgs.mypy
-                ]
-                ++ optionals clevisTest [ pkgs.klibc ]
-                ++ optional systemdStage1 config.system.nixos-init.package;
+                ];
 
               nix.settings = {
                 substituters = mkForce [ ];
@@ -859,7 +851,7 @@ let
       createPartitions = ''
         installer.succeed(
             "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-            + " mkpart primary ext2 1M 100MB"  # /boot
+            + " mkpart primary ext4 1M 100MB"  # /boot
             + " mkpart primary linux-swap 100M 1024M"
             + " mkpart primary 1024M -1s",  # LUKS
             "udevadm settle",
@@ -868,30 +860,17 @@ let
             "modprobe dm_mod dm_crypt",
             "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
             "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
-            "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
-            "mount LABEL=nixos /mnt",
-            "mkfs.ext3 -L boot /dev/vda1",
+            "mkfs.ext4 -L nixos /dev/mapper/cryptroot",
+            "mount -t ext4 LABEL=nixos /mnt",
+            "mkfs.ext4 -L boot /dev/vda1",
             "mkdir -p /mnt/boot",
-            "mount LABEL=boot /mnt/boot",
+            "mount -t ext4 LABEL=boot /mnt/boot",
         )
       '';
-      # The serial console is much more reliable than OCR, but
-      # scripted stage 1 doesn't forward logs / password prompts to
-      # it. (TODO: The test framework should use 'console=ttyS0'
-      # anyway, but currently it uses 'console=tty0' for the sake of
-      # the interactive driver)
-      enableOCR = !systemdStage1;
-      postBootCommands =
-        if systemdStage1 then
-          ''
-            target.wait_for_console_text("passphrase for")
-            target.send_console("supersecret\n")
-          ''
-        else
-          ''
-            target.wait_for_text("[Pp]assphrase for")
-            target.send_chars("supersecret\n")
-          '';
+      postBootCommands = ''
+        target.wait_for_console_text("passphrase for")
+        target.send_console("supersecret\n")
+      '';
     };
 
   # The (almost) simplest partitioning scheme: a swap partition and
@@ -901,12 +880,12 @@ let
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
           + " mkpart primary linux-swap 1M 1024M"
-          + " mkpart primary ext2 1024M -1s",
+          + " mkpart primary ext4 1024M -1s",
           "udevadm settle",
           "mkswap /dev/vda1 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/vda2",
-          "mount LABEL=nixos /mnt",
+          "mkfs.ext4 -L nixos /dev/vda2",
+          "mount -t ext4 LABEL=nixos /mnt",
       )
     '';
   };
@@ -933,15 +912,15 @@ let
           + " mkpart ESP fat32 1M 100MiB"  # /boot
           + " set 1 boot on"
           + " mkpart primary linux-swap 100MiB 1024MiB"
-          + " mkpart primary ext2 1024MiB -1MiB",  # /
+          + " mkpart primary ext4 1024MiB -1MiB",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mkfs.ext4 -L nixos /dev/vda3",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=BOOT /mnt/boot",
+          "mount -t vfat LABEL=BOOT /mnt/boot",
       )
     '';
     bootLoader = "grub";
@@ -995,7 +974,7 @@ let
       createPartitions = ''
         installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 100MB"
+          + " mkpart primary ext4 1M 100MB"
           + " mkpart primary linux-swap 100M 1024M"
           + " mkpart primary 1024M -1s",
           "udevadm settle",
@@ -1005,9 +984,9 @@ let
           "echo -n password | mkfs.bcachefs -L root --encrypted /dev/vda3",
           "echo -n password | bcachefs unlock /dev/vda3",
           "echo -n password | mount -t bcachefs /dev/vda3 /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
+          "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle")
       '';
       extraConfig = ''
@@ -1037,7 +1016,7 @@ let
       createPartitions = ''
         installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 100MB"
+          + " mkpart primary ext4 1M 100MB"
           + " mkpart primary linux-swap 100M 1024M"
           + " mkpart primary 1024M -1s",
           "udevadm settle",
@@ -1046,27 +1025,18 @@ let
           "modprobe dm_mod dm_crypt",
           "echo -n password | cryptsetup luksFormat -q /dev/vda3 -",
           "echo -n password | cryptsetup luksOpen --key-file - /dev/vda3 crypt-root",
-          "mkfs.ext3 -L nixos /dev/mapper/crypt-root",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/mapper/crypt-root",
+          "mount -t ext4 LABEL=nixos /mnt",
+          "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle")
       '';
       extraConfig = ''
         boot.initrd.clevis.devices."crypt-root".secretFile = "/etc/nixos/clevis-secret.jwe";
       '';
       postBootCommands = optionalString fallback ''
-        ${
-          if systemdStage1 then
-            ''
-              target.wait_for_text("Please enter")
-            ''
-          else
-            ''
-              target.wait_for_text("Passphrase for")
-            ''
-        }
+        target.wait_for_text("Please enter")
         target.send_chars("password\n")
       '';
     };
@@ -1086,7 +1056,7 @@ let
       createPartitions = ''
         installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 100MB"
+          + " mkpart primary ext4 1M 100MB"
           + " mkpart primary linux-swap 100M 1024M"
           + " mkpart primary 1024M -1s",
           "udevadm settle",
@@ -1095,11 +1065,11 @@ let
           "modprobe dm_mod dm_crypt",
           "echo -n password | cryptsetup luksFormat -q /dev/vda3 -",
           "echo -n password | cryptsetup luksOpen --key-file - /dev/vda3 crypt-root",
-          "mkfs.ext3 -L nixos /dev/mapper/crypt-root",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/mapper/crypt-root",
+          "mount -t ext4 LABEL=nixos /mnt",
+          "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle")
       '';
       postBootCommands = optionalString fallback ''
@@ -1127,7 +1097,7 @@ let
         createPartitions = ''
           installer.succeed(
             "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-            + " mkpart primary ext2 1M 100MB"
+            + " mkpart primary ext4 1M 100MB"
             + " mkpart primary linux-swap 100M 1024M"
             + " mkpart primary 1024M -1s",
             "udevadm settle",
@@ -1145,9 +1115,9 @@ let
         ''
         + ''
           "mount -t zfs rpool/root /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
+          "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle")
         '';
         extraConfig =
@@ -1168,20 +1138,68 @@ let
             networking.hostId = "00000000";
           '';
         postBootCommands = optionalString fallback ''
-          ${
-            if systemdStage1 then
-              ''
-                target.wait_for_text("Enter key for rpool${optionalString (!parentDataset) "/root"}")
-              ''
-            else
-              ''
-                target.wait_for_text("Key load error")
-              ''
-          }
+          target.wait_for_text("Enter key for rpool${optionalString (!parentDataset) "/root"}")
           target.send_chars("password\n")
         '';
       };
 
+  # To test bcachefsEncrypted against multiple kernels
+  mkBcachefsEncryptedTest =
+    {
+      nameSuffix ? "",
+      # Name of a pkgs.linuxPackages* attribute, e.g. "linuxPackages_latest".
+      kernelAttribute ? null,
+    }:
+    makeInstallerTest "bcachefs-encrypted${nameSuffix}" {
+      extraInstallerConfig = {
+        boot = {
+          supportedFilesystems = [ "bcachefs" ];
+        }
+        // optionalAttrs (kernelAttribute != null) {
+          kernelPackages = pkgs.${kernelAttribute};
+        };
+
+        # disable zfs so we can support latest kernel if needed
+        imports = [ no-zfs-module ];
+
+        environment.systemPackages = with pkgs; [ keyutils ];
+      };
+
+      extraConfig = ''
+        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+      ''
+      + optionalString (kernelAttribute != null) ''
+        boot.kernelPackages = pkgs.${kernelAttribute};
+      '';
+
+      enableOCR = true;
+      postBootCommands = ''
+        # Enter it wrong once
+        target.wait_for_text("enter passphrase for ")
+        target.send_chars("wrong\n")
+        # Then enter it right.
+        target.wait_for_text("enter passphrase for ")
+        target.send_chars("password\n")
+      '';
+
+      createPartitions = ''
+        installer.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext4 1M 100MB"          # /boot
+          + " mkpart primary linux-swap 100M 1024M"  # swap
+          + " mkpart primary 1024M -1s",             # /
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
+          "echo password | bcachefs unlock -k session /dev/vda3",
+          "echo password | mount -t bcachefs /dev/vda3 /mnt",
+          "mkfs.ext4 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount /dev/vda1 /mnt/boot",
+        )
+      '';
+    };
 in
 {
 
@@ -1215,15 +1233,15 @@ in
           + " mkpart ESP fat32 1M 170MiB"  # /boot
           + " set 1 boot on"
           + " mkpart primary linux-swap 170MiB 1024MiB"
-          + " mkpart primary ext2 1024MiB -1MiB",  # /
+          + " mkpart primary ext4 1024MiB -1MiB",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mkfs.ext4 -L nixos /dev/vda3",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=BOOT /mnt/boot",
+          "mount -t vfat LABEL=BOOT /mnt/boot",
       )
     '';
     bootLoader = "systemd-boot";
@@ -1241,17 +1259,17 @@ in
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary ext4 1M 100MB"  # /boot
           + " mkpart primary linux-swap 100MB 1024M"
-          + " mkpart primary ext2 1024M -1s",  # /
+          + " mkpart primary ext4 1024M -1s",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/vda3",
+          "mount -t ext4 LABEL=nixos /mnt",
+          "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
       )
     '';
   };
@@ -1261,17 +1279,17 @@ in
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary ext4 1M 100MB"  # /boot
           + " mkpart primary linux-swap 100MB 1024M"
-          + " mkpart primary ext2 1024M -1s",  # /
+          + " mkpart primary ext4 1024M -1s",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mkfs.ext4 -L nixos /dev/vda3",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=BOOT /mnt/boot",
+          "mount -t vfat LABEL=BOOT /mnt/boot",
       )
     '';
   };
@@ -1294,16 +1312,16 @@ in
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 256MB"   # /boot
+          + " mkpart primary ext4 1M 256MB"   # /boot
           + " mkpart primary linux-swap 256MB 1280M"
-          + " mkpart primary ext2 1280M -1s", # /
+          + " mkpart primary ext4 1280M -1s", # /
           "udevadm settle",
 
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
 
           "mkfs.ext4 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
 
           # Use as many ZFS features as possible to verify that GRUB can handle them
           "zpool create"
@@ -1383,7 +1401,7 @@ in
           "mount -t zfs rpool/root/usr /mnt/usr",
           "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir /mnt/boot",
-          "mount LABEL=BOOT /mnt/boot",
+          "mount -t vfat LABEL=BOOT /mnt/boot",
           "udevadm settle",
       )
     '';
@@ -1409,12 +1427,12 @@ in
           "swapon -L swap",
           "mkfs.ext4 -L boot /dev/MyVolGroup/boot",
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
-          "mount LABEL=nixos /mnt",
+          "mount -t xfs LABEL=nixos /mnt",
           "mkdir /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
       )
     '';
-    extraConfig = optionalString systemdStage1 ''
+    extraConfig = ''
       boot.initrd.services.lvm.enable = true;
     '';
   };
@@ -1435,23 +1453,23 @@ in
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary ext4 1M 100MB"  # /boot
           + " mkpart primary linux-swap 100M 1024M"
           + " mkpart primary 1024M 1280M"  # LUKS with keyfile
           + " mkpart primary 1280M -1s",
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/vda4",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/vda4",
+          "mount -t ext4 LABEL=nixos /mnt",
+          "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "modprobe dm_mod dm_crypt",
           "echo -n supersecret > /mnt/keyfile",
           "cryptsetup luksFormat -q /dev/vda3 --key-file /mnt/keyfile",
           "cryptsetup luksOpen --key-file /mnt/keyfile /dev/vda3 crypt",
-          "mkfs.ext3 -L test /dev/mapper/crypt",
+          "mkfs.ext4 -L test /dev/mapper/crypt",
           "cryptsetup luksClose crypt",
           "mkdir -p /mnt/test",
       )
@@ -1459,11 +1477,11 @@ in
     extraConfig = ''
       fileSystems."/test" = {
         device = "/dev/disk/by-label/test";
-        fsType = "ext3";
+        fsType = "ext4";
         encrypted.enable = true;
         encrypted.blkDev = "/dev/vda3";
         encrypted.label = "crypt";
-        encrypted.keyFile = "/${if systemdStage1 then "sysroot" else "mnt-root"}/keyfile";
+        encrypted.keyFile = "/sysroot/keyfile";
       };
     '';
   };
@@ -1476,7 +1494,7 @@ in
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
           + " mkpart ESP fat32 1M 100MiB"  # /boot/efi
           + " set 1 boot on"
-          + " mkpart primary ext2 1024MiB -1MiB",  # LUKS
+          + " mkpart primary ext4 1024MiB -1MiB",  # LUKS
           "udevadm settle",
           "modprobe dm_mod dm_crypt",
           "dd if=/dev/random of=luks.key bs=256 count=1",
@@ -1490,9 +1508,9 @@ in
           "mkfs.vfat -n efi /dev/vda1",
           "mkfs.ext4 -L nixos /dev/crypt/nixos",
           "mkswap -L swap /dev/crypt/swap",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkdir -p /mnt/{etc/nixos,boot/efi}",
-          "mount LABEL=efi /mnt/boot/efi",
+          "mount -t vfat LABEL=efi /mnt/boot/efi",
           "swapon -L swap",
           "mv luks.key /mnt/etc/nixos/"
       )
@@ -1531,7 +1549,7 @@ in
           "mkfs.ext4 -L nixos /dev/mapper/cryptroot",
           "mkswap -L swap /dev/vda2",
           "swapon -L swap",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkdir -p /mnt/etc/nixos",
           # Add a keyfile so stage 1 can unlock the root device without a second,
           # interactive prompt. This keeps the test independent of the stage 1
@@ -1568,7 +1586,7 @@ in
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda --"
           + " mklabel msdos"
-          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary ext4 1M 100MB"  # /boot
           + " mkpart extended 100M -1s"
           + " mkpart logical 102M 3102M"  # md0 (root), first device
           + " mkpart logical 3103M 6103M"  # md0 (root), second device
@@ -1586,11 +1604,11 @@ in
           "udevadm settle",
           "mkswap -f /dev/md1 -L swap",
           "swapon -L swap",
-          "mkfs.ext3 -L nixos /dev/md0",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/md0",
+          "mount -t ext4 LABEL=nixos /mnt",
+          "mkfs.ext4 -L boot /dev/vda1",
           "mkdir /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle",
       )
     '';
@@ -1604,7 +1622,7 @@ in
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda --"
           + " mklabel msdos"
-          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary ext4 1M 100MB"  # /boot
           + " mkpart primary 100MB 512MB  "  # swap
           + " mkpart primary 512MB 1024MB"  # Cache (typically SSD)
           + " mkpart primary 1024MB -1s ",  # Backing device (typically HDD)
@@ -1612,11 +1630,11 @@ in
           "udevadm settle",
           "make-bcache -B /dev/vda4 -C /dev/vda3",
           "udevadm settle",
-          "mkfs.ext3 -L nixos /dev/bcache0",
-          "mount LABEL=nixos /mnt",
-          "mkfs.ext3 -L boot /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/bcache0",
+          "mount -t ext4 LABEL=nixos /mnt",
+          "mkfs.ext4 -L boot /dev/vda1",
           "mkdir /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "mkswap -f /dev/vda2 -L swap",
           "swapon -L swap",
       )
@@ -1632,7 +1650,7 @@ in
     createPartitions = ''
       installer.succeed(
         "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary ext4 1M 100MB"          # /boot
         + " mkpart primary linux-swap 100M 1024M"  # swap
         + " mkpart primary 1024M -1s",             # /
         "udevadm settle",
@@ -1640,54 +1658,23 @@ in
         "swapon -L swap",
         "mkfs.bcachefs -L root /dev/vda3",
         "mount -t bcachefs /dev/vda3 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
+        "mkfs.ext4 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot",
       )
     '';
   };
 
-  bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
-    extraInstallerConfig = {
-      boot.supportedFilesystems = [ "bcachefs" ];
+  bcachefsEncrypted = mkBcachefsEncryptedTest { };
 
-      # disable zfs so we can support latest kernel if needed
-      imports = [ no-zfs-module ];
+  bcachefsEncryptedLatestKernel = mkBcachefsEncryptedTest {
+    nameSuffix = "-latest-kernel";
+    kernelAttribute = "linuxPackages_latest";
+  };
 
-      environment.systemPackages = with pkgs; [ keyutils ];
-    };
-
-    extraConfig = ''
-      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-    '';
-
-    enableOCR = true;
-    postBootCommands = ''
-      # Enter it wrong once
-      target.wait_for_text("enter passphrase for ")
-      target.send_chars("wrong\n")
-      # Then enter it right.
-      target.wait_for_text("enter passphrase for ")
-      target.send_chars("password\n")
-    '';
-
-    createPartitions = ''
-      installer.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
-        "echo password | bcachefs unlock -k session /dev/vda3",
-        "echo password | mount -t bcachefs /dev/vda3 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
+  bcachefsEncryptedRcKernel = mkBcachefsEncryptedTest {
+    nameSuffix = "-rc-kernel";
+    kernelAttribute = "linuxPackages_testing";
   };
 
   bcachefsMulti = makeInstallerTest "bcachefs-multi" {
@@ -1701,7 +1688,7 @@ in
     createPartitions = ''
       installer.succeed(
         "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary ext4 1M 100MB"          # /boot
         + " mkpart primary linux-swap 100M 1024M"  # swap
         + " mkpart primary 1024M 4096M"            # /
         + " mkpart primary 4096M -1s",             # /
@@ -1710,7 +1697,7 @@ in
         "swapon -L swap",
         "mkfs.bcachefs -L root --metadata_replicas 2 --foreground_target ssd --promote_target ssd --background_target hdd --label ssd /dev/vda3 --label hdd /dev/vda4",
         "mount -t bcachefs /dev/vda3:/dev/vda4 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
+        "mkfs.ext4 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot",
       )
@@ -1726,7 +1713,7 @@ in
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L root /dev/vda3",
-          "mount LABEL=root /mnt",
+          "mount -t ext4 LABEL=root /mnt",
       )
     '';
     grubIdentifier = "label";
@@ -1766,7 +1753,7 @@ in
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.btrfs -L root /dev/vda3",
-          "mount LABEL=root /mnt",
+          "mount -t btrfs LABEL=root /mnt",
       )
     '';
   };
@@ -1781,7 +1768,7 @@ in
           "swapon -L swap",
           "mkfs.btrfs -L root /dev/vda3",
           "btrfs device scan",
-          "mount LABEL=root /mnt",
+          "mount -t btrfs LABEL=root /mnt",
           "btrfs subvol create /mnt/boot",
           "btrfs subvol create /mnt/nixos",
           "btrfs subvol create /mnt/nixos/default",
@@ -1803,7 +1790,7 @@ in
           "swapon -L swap",
           "mkfs.btrfs -L root /dev/vda3",
           "btrfs device scan",
-          "mount LABEL=root /mnt",
+          "mount -t btrfs LABEL=root /mnt",
           "btrfs subvol create /mnt/badpath",
           "btrfs subvol create /mnt/badpath/boot",
           "btrfs subvol create /mnt/nixos",
@@ -1829,7 +1816,7 @@ in
           "swapon -L swap",
           "mkfs.btrfs -L root /dev/vda3",
           "btrfs device scan",
-          "mount LABEL=root /mnt",
+          "mount -t btrfs LABEL=root /mnt",
           "btrfs subvol create '/mnt/nixos in space'",
           "btrfs subvol create /mnt/boot",
           "umount /mnt",
@@ -1839,8 +1826,6 @@ in
       )
     '';
   };
-}
-// {
   clevisBcachefs = mkClevisBcachefsTest { };
   clevisBcachefsFallback = mkClevisBcachefsTest { fallback = true; };
   clevisLuks = mkClevisLuksTest { };
@@ -1852,8 +1837,6 @@ in
     parentDataset = true;
     fallback = true;
   };
-}
-// optionalAttrs systemdStage1 {
   clevisLuksAskpass = mkClevisLuksAskpassTest { };
   clevisLuksAskpassFallback = mkClevisLuksAskpassTest { fallback = true; };
 
@@ -1861,7 +1844,7 @@ in
     createPartitions = ''
       installer.succeed(
         "sgdisk --zap-all /dev/vda",
-        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=1:0:+200M --typecode=0:ef00 /dev/vda", # /boot
         "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
         "sgdisk --new=3:0:+5G --typecode=0:8300 /dev/vda", # /
         "udevadm settle",

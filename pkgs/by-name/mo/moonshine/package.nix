@@ -15,6 +15,8 @@
   versionCheckHook,
   vulkan-loader,
   wayland,
+  aws-lc,
+  sqlite,
 }:
 
 let
@@ -29,19 +31,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonshine";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "hgaiser";
     repo = "moonshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SpDGhIi6FTYAWDzMZwPdNbwPmDEA3w/xOi2z5wRR1Qc=";
+    hash = "sha256-CmSOU263HD4qDFwGRxyozo2u2BlM+bT8AE7EwFPEhnA=";
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
-  cargoHash = "sha256-GhHjXPx3aEYPO9OsuB1ZAiwvessXoOOQ8MqFwmORJOs=";
+  cargoHash = "sha256-g9X9tiO+mUW4eTYi16nvesHIvWsQgAft7ZLEK1/CQHg=";
 
   # Build Moonshine binary and Vulkan layer
   cargoBuildFlags = [
@@ -63,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libopus
     libxkbcommon
     wayland
+    aws-lc
+    sqlite
   ];
 
   # Patch build.rs from inputtino-sys with the C++ inputtino sources.

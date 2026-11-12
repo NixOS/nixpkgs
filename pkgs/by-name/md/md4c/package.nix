@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mity";
     repo = "md4c";
-    rev = "release-${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-rsNJlNLsmTEiAARqQ5TovNWmHNikMiRi8eEyn8o43ao=";
   };
 
@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/mity/md4c";

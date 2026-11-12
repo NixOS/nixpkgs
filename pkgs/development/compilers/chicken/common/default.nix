@@ -92,6 +92,7 @@ lib.makeScope newScope (self: {
                 "lgpl-3" = lib.licenses.lgpl3Only;
                 "lgplv3" = lib.licenses.lgpl3Only;
                 "lgpl-3.0-or-later" = lib.licenses.lgpl3Plus;
+                "licenseref-owl-0.9.4" = lib.licenses.owl094;
                 "public-domain" = lib.licenses.publicDomain;
                 "srfi" = lib.licenses.bsd3;
                 "unicode" = lib.licenses.ucd;

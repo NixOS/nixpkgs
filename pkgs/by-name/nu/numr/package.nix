@@ -1,36 +1,44 @@
 {
-  stdenv,
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  openssl,
+  aws-lc,
+  cacert,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "numr";
-  version = "0.6.0";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "nasedkinpv";
     repo = "numr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GmG6iGcN0Y+0YgUmV+sAtdnusNpuVKLUrzKklmz+dvs=";
+    hash = "sha256-jpHkKqALN85rbSswU1/nRUi064VKkbbDoNoeyXOhTWU=";
   };
 
-  cargoHash = "sha256-SbgCF+m4dR2zPPJrVFxRLOOAyyjOSubXsYvzOa5tTyg=";
+  cargoHash = "sha256-x0frzDiD2kr0geNOZagc1n7bs0UH6StG1Va0Q5EQFl4=";
 
-  nativeBuildInputs = [
-    pkg-config
+  checkFlags = [
+    # Skip tests that require network access
+    "--skip=fetch::tests::test_build_crypto_prices_request_adds_query_params"
+    "--skip=fetch::tests::test_build_crypto_prices_request_skips_api_key_for_non_coingecko_url"
+    "--skip=fetch::tests::test_build_crypto_prices_request_uses_demo_api_key_header"
+    "--skip=fetch::tests::test_build_crypto_prices_request_uses_pro_api_key_header"
+    # "Operation not permitted"
+    "--skip=persistence::tests::private_overwrite_preserves_file_and_existing_directory_modes"
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  env.OPENSSL_NO_VENDOR = true;
+  buildInputs = [ aws-lc ];
+
+  # "No CA certificates were loaded from the system"
+  nativeCheckInputs = [ cacert ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -45,6 +53,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
+    badPlatforms = [ "aarch64-darwin" ];
+    # the crate `...` requires panic strategy `abort` which is incompatible with this crate's strategy of `unwind`
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "numr";
   };
 })

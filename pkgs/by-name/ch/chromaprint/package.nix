@@ -10,7 +10,6 @@
   testers,
   validatePkgConfig,
   nix-update-script,
-  withExamples ? true,
   withTools ? true,
 }:
 
@@ -37,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     zlib
   ];
+
+  strictDeps = true;
 
   # with trivialautovarinit enabled can produce an empty .pc file
   hardeningDisable = [ "trivialautovarinit" ];
@@ -75,11 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postCheck
     '';
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/acoustid/chromaprint/releases/tag/v${finalAttrs.version}";
     homepage = "https://acoustid.org/chromaprint";
     description = "AcoustID audio fingerprinting library";
     license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.quantenzitrone ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "libchromaprint" ];
   }

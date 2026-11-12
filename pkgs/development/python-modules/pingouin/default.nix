@@ -26,15 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pingouin";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "raphaelvallat";
     repo = "pingouin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-22nVAw6qbYwumwVJr/ZZD2HSpgD+9onnMe/hULjQHZI=";
+    hash = "sha256-KBRGJm3ny6jBvGkjAqsAHsDhkPJkOXTyboQe50df45Q=";
   };
 
   build-system = [

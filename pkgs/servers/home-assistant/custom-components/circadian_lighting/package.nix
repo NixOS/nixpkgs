@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "claytonjn";
   domain = "circadian_lighting";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "claytonjn";
     repo = "hass-circadian_lighting";
     tag = version;
-    hash = "sha256-6S1wIO6UgPdUPt9oDCzIb4duUOql4KgnTd6MjRhrSb0=";
+    hash = "sha256-tFwlnZWfsxvVcG9VJklSgwHFwDM1ZIai60AStoB+Pus=";
   };
 
   passthru.updateScript = nix-update-script { };

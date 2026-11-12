@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "davmail";
-  version = "6.8.1";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "mguessan";
     repo = "davmail";
     tag = finalAttrs.version;
-    hash = "sha256-kIDAMVenUzc7tIC49yzc1MzqNa9B7nNlX1bzwpG8Vp0=";
+    hash = "sha256-Fz85n5lmjYmxa1upnDsFCHkR/veGEPe74CHcn6/E9EM=";
   };
 
   buildPhase = ''
@@ -81,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
-      doronbehar
       shymega
     ];
     platforms = lib.platforms.all;

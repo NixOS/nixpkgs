@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Parses command-line arguments from shell scripts";
     mainProgram = "getopt";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ coolcuber ];
   };
 })

@@ -23,15 +23,31 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-3TdU3vBVuFle+jon2oJLa/rTLIiwYkvzscTDbMEXD1Q=";
   };
 
-  # When insecure is enabled on both galene and galene-stream, passing the ssl_context with certificate checking disabled when trying to open a websocket connection to ws:// errors out, because no ssl_context is expected to be passed for an SSL-less websocket like that
-  # When --insecure in galene-stream, don't pass ssl_context here
-  # TODO: How does this interact with a galene with insecure disabled? Expecting endpoint there to be wss://. Might need more sophisticated patch.
-  postPatch = ''
-    substituteInPlace galene_stream/galene.py \
-      --replace-fail 'await websockets.connect(status["endpoint"], ssl=ssl_context)' 'await websockets.connect(status["endpoint"], ssl=None if self.insecure else ssl_context)'
-  '';
+  patches = [
+    # Python 3.14 no longer creates an implicit event loop and will raise a
+    # RuntimeError if there is no current one [1^], so we need to do this
+    # ourselves.
+    #
+    # [1^]: https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.get_event_loop
+    ./create-and-set-current-event-loop.patch
+  ];
 
-  strictDeps = true;
+  postPatch = ''
+    # When insecure is enabled on both galene and galene-stream, passing the
+    # ssl_context with certificate checking disabled when trying to open a
+    # websocket connection to ws:// errors out, because no ssl_context is
+    # expected to be passed for an SSL-less websocket like that.
+    #
+    # When --insecure in galene-stream, don't pass ssl_context here.
+    #
+    # TODO: How does this interact with a galene with insecure disabled?
+    # Expecting endpoint there to be wss://. Might need more sophisticated
+    # patch.
+    substituteInPlace galene_stream/galene.py \
+      --replace-fail \
+        'await websockets.connect(status["endpoint"], ssl=ssl_context)' \
+        'await websockets.connect(status["endpoint"], ssl=None if self.insecure else ssl_context)'
+  '';
 
   nativeBuildInputs = [
     gobject-introspection
@@ -63,6 +79,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
   passthru = {
     tests.vm = nixosTests.galene.stream;

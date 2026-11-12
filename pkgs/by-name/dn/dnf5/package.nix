@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchFromGitHub,
-  fetchpatch,
   appstream,
   cmake,
   createrepo_c,
@@ -28,7 +28,7 @@
   sdbus-cpp_2,
   sphinx,
   sqlite,
-  systemd,
+  systemdLibs,
   versionCheckHook,
   toml11,
   zchunk,
@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.4.4.0";
+  version = "5.4.6.0";
 
   outputs = [
     "out"
@@ -48,16 +48,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-l0wdC2XMl8CevKtq4VINoCZ4p/KEMCKaKTQ8bjskb3M=";
+    hash = "sha256-7TWCPX7WmGWcDZ3wNaVnwIB5IDyeSzyjuPNAN3ecpdM=";
   };
 
   patches = [
-    # fmt 12.2.0 no longer includes <cstring> transitively.
-    (fetchpatch {
-      url = "https://github.com/rpm-software-management/dnf5/commit/10b3ea5df53349511df179eee8dbe3b7a77e8ba4.patch";
-      hash = "sha256-vhkEqoFtB/hk1vhHo6qpzrqbEVrn5eVdsDsnNsb70uM=";
+    (fetchpatch2 {
+      # https://github.com/rpm-software-management/dnf5/issues/3033
+      # https://github.com/rpm-software-management/dnf5/pull/3034
+      name = "make-weror-overridable-from-cmdline.patch";
+      url = "https://github.com/rpm-software-management/dnf5/commit/a974a0bb759289a191f46b37ed9c7f1acc14c7d9.patch?full_index=1";
+      hash = "sha256-OMJZPjGZ0d4hYVMHwyGMg0DUeQTf9hxvU3479zTBcqs=";
     })
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -66,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     help2man
     pkg-config
+    rpm
     sphinx
   ]
   ++ (with python3Packages; [
     breathe
-    sphinx-autoapi
     sphinx-rtd-theme
   ]);
 
@@ -91,13 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     rpm
     sdbus-cpp_2
     sqlite
-    systemd
+    systemdLibs
     toml11
     zchunk
   ];
-
-  # workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329
-  env.NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PERL5" false)
@@ -113,6 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
     #  because the absolute path is interpreted with root at $out).
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    # Upstream treats warnings as errors by default, but we don't want mere
+    # warnings, for example from a dependency, to abort the build.
+    "--compile-no-warning-as-error"
   ];
 
   postBuild = ''
@@ -120,6 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   prePatch = ''
+    # autoapi needs the swig-generated python bindings (WITH_PYTHON3),
+    # it is only used for the python API docs, not for the man pages.
+    substituteInPlace doc/conf.py.in \
+      --replace-fail "'autoapi.extension'," ""
     substituteInPlace CMakeLists.txt \
       --replace-fail "/usr/lib/systemd/system" "$out/lib/systemd/system"
     substituteInPlace dnf5daemon-server/dbus/CMakeLists.txt \

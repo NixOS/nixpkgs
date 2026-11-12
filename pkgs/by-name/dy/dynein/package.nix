@@ -5,6 +5,7 @@
   openssl,
   pkg-config,
   rustPlatform,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   preBuild = ''

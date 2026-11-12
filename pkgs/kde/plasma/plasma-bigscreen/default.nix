@@ -2,6 +2,7 @@
   lib,
   mkKdeDerivation,
   plasma-workspace,
+  kdeconnect-kde,
   pkg-config,
   qtwebengine,
   libcec,
@@ -30,6 +31,8 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     qtwebengine
+
+    kdeconnect-kde
 
     libcec
     libcec_platform

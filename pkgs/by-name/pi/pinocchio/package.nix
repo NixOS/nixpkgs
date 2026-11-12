@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wWuW58okWARbF/nonybw3DbGY4hrHDiEsdjiF6RoaVc=";
   };
 
+  patches = [
+    # gcc 16: C++20 reversed operator== recurses forever
+    ./fix-recursive-constraint-data-comparison.patch
+  ];
+
   outputs = [
     "out"
     "doc"

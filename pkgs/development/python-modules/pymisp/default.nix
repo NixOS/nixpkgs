@@ -28,16 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymisp";
-  version = "2.5.34.3";
+  version = "2.5.34.4";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MISP";
     repo = "PyMISP";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BHA1rSXdusQC/oFERg2gpxi4zlug7qVQVRdNt8/Dkfg=";
+    hash = "sha256-rKGvzjhpxK60J9MEnv4jJbrmtjvo/sMsqbAXeWpuzQo=";
   };
 
   build-system = [ poetry-core ];

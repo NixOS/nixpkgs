@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sandbox";
     description = "SELinux sandbox utility";
     license = lib.licenses.gpl2Only;
-    homepage = "https://selinuxproject.org";
+    homepage = "https://github.com/SELinuxProject/selinux";
     platforms = lib.platforms.linux;
     inherit (selinux-python.meta) maintainers;
   };

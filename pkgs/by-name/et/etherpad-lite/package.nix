@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
-  version = "2.7.2";
+  version = "3.3.17";
 
   src = fetchFromGitHub {
     owner = "ether";
     repo = "etherpad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8DCgbfp3ttpMTXS9SNkN1R63LZHaklsNHViRhmWVFuk=";
+    hash = "sha256-/idVzI/xjf8b3eoZURYDHRbgDEH/dAbmjLF+0lSK4+s=";
   };
 
   patches = [
@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_12;
     fetcherVersion = 4;
-    hash = "sha256-scJhcZDyqUVdKv/EQvB5+EJN/SvMw220+QOcTUxTFJQ=";
+    hash = "sha256-41iZ/oYVPx8BH+Qx0IJotektW2uwd7osDR71QTLbjpQ=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
     makeWrapper
   ];
 
@@ -52,13 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    # remove unnecessary files
-    rm node_modules/.modules.yaml
-    CI=true pnpm prune --prod --ignore-scripts
-    find -type f \( -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
+    # Remove development dependencies without pnpm prune.
+    rm -rf node_modules
+    CI=true pnpm install --offline --frozen-lockfile --prod --ignore-scripts --config.trust-lockfile=true
 
-    # remove non-deterministic files
-    rm node_modules/.modules.yaml
+    # Remove unnecessary files
+    find -type f \( -name "*.d.ts" -o -name "*.map" \) -delete
   '';
 
   # Upstream scripts uses `pnpm run prod` which is equivalent to
@@ -70,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/etherpad-lite \
       --inherit-argv0 \
       --add-flags "--require tsx/cjs $out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node/server.ts" \
-      --suffix PATH : "${lib.makeBinPath [ pnpm_10 ]}" \
+      --suffix PATH : "${lib.makeBinPath [ pnpm_12 ]}" \
       --set NODE_PATH "$out/lib/node_modules:$out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node_modules" \
       --set-default NODE_ENV production
     find $out/lib -xtype l -delete

@@ -36,7 +36,6 @@ python3Packages.buildPythonApplication {
   '');
 
   pyproject = false;
-  strictDeps = true;
 
   doCheck = true;
 

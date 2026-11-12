@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "160.4";
+  version = "160.7";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,14 +48,14 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-gWAsYavRkRfdJ89IHrbK89Jwp/Whvu2FnswlJBb1rfQ=";
+    hash = "sha256-b6zbdd8/MD5WzGTQ2LPMnZ09H/cVAsxksKwjTuPm8NE=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-V4j0VNwcc1C5xaWiE1cPEKLah+ba3ahPANPEVi43cCE=";
+    hash = "sha256-sQ9QnMBqbcdVKoNLfdyUCvFsBd92f04aKystrhCfsfo=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -235,7 +235,7 @@ stdenv.mkDerivation {
           echo "# $dep" >> $out/bin/mindustry
         done
 
-        install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+        install -Dm644 core/assets/icons/icon.png $out/share/icons/hicolor/64x64/apps/mindustry.png
       '';
       installServer = ''
         install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar

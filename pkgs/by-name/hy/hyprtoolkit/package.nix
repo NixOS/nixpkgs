@@ -5,22 +5,16 @@
   cmake,
   pkg-config,
   hyprwayland-scanner,
-  wayland-scanner,
   abseil-cpp,
   aquamarine,
-  cairo,
   gtest,
   hyprgraphics,
   hyprlang,
   hyprutils,
   iniparser,
-  libdrm,
   libgbm,
-  libGL,
   libxkbcommon,
-  pango,
-  pixman,
-  wayland,
+  wayland-scanner,
   wayland-protocols,
 }:
 
@@ -42,23 +36,21 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
+  propagatedBuildInputs = [
+    aquamarine
+    hyprgraphics
+    hyprutils
+  ];
+
   buildInputs = [
     abseil-cpp
-    aquamarine
-    cairo
     gtest
-    hyprgraphics
     hyprlang
-    hyprutils
     iniparser
-    libdrm
     libgbm
-    libGL
     libxkbcommon
-    pango
-    pixman
-    wayland
     wayland-protocols
+    wayland-scanner
   ];
 
   meta = {

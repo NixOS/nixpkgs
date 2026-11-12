@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   autoreconfHook,
   autoconf-archive,
@@ -15,8 +14,8 @@
   libyaml,
   withKrb5 ? true,
   libkrb5,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   withJemalloc ? true,
   jemalloc,
   withMysql ? true,
@@ -66,21 +65,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsyslog";
-  version = "8.2608.0";
+  version = "8.2610.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/rsyslog-${finalAttrs.version}.tar.gz";
-    hash = "sha256-49YMg0BSaMQi+V/ux0BFWhzEuRHQC9hCTV0ScrxQmxo=";
+    hash = "sha256-e9+V6B6mwO5dWGNC1X0qbjlbCJ+zxnMYoNxVWBbeQEs=";
   };
-
-  patches = [
-    # Remove with the first rsyslog release containing this fix.
-    (fetchpatch {
-      name = "CVE-2026-78002.patch";
-      url = "https://github.com/rsyslog/rsyslog/commit/667e3f61aec5ee02c5c2ee6f0f8accf6fe4301a9.patch";
-      hash = "sha256-QsxOJCvr6VBbLbXzednwgvCfisSvNm6zfxPaMFxXVT0=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -119,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withHiredis hiredis
   ++ lib.optional withMaxminddb libmaxminddb
   ++ lib.optional withMysql libmysqlclient
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -204,10 +194,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
-    mainProgram = "rsyslogd";
     changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    mainProgram = "rsyslogd";
   };
 })

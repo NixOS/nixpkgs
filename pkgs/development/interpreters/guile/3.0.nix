@@ -5,7 +5,6 @@
   fetchpatch,
   boehmgc,
   buildPackages,
-  coverageAnalysis ? null,
   gawk,
   gmp,
   libffi,
@@ -19,19 +18,16 @@
   readline,
   writeScript,
   pkgsStatic,
+  guileImportsCheckHook,
 }:
 
-let
-  # Do either a coverage analysis build or a standard build.
-  builder = if coverageAnalysis != null then coverageAnalysis else stdenv.mkDerivation;
-in
-builder rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile";
   version = "3.0.11";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-gYx50jZlen+pb7NkE3zHtBs73uDWXGF0ygN2lVlXlGA=";
+    url = "mirror://gnu/guile/guile-${finalAttrs.version}.tar.xz";
+    hash = "sha256-gYx50jZlen+pb7NkE3zHtBs73uDWXGF0ygN2lVlXlGA=";
   };
 
   outputs = [
@@ -77,6 +73,9 @@ builder rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxcrypt
   ];
+  propagatedNativeBuildInputs = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    (guileImportsCheckHook.override { effectiveVersion = finalAttrs.passthru.effectiveVersion; })
+  ];
 
   strictDeps = true;
 
@@ -89,7 +88,6 @@ builder rec {
   patches = [
     ./eai_system.patch
   ]
-  ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
   ++ lib.optional stdenv.hostPlatform.isDarwin (fetchpatch {
     url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
     sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
@@ -145,7 +143,7 @@ builder rec {
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.doCheck;
 
   # guile-3 uses ELF files to store bytecode. strip does not
   # always handle them correctly and destroys the image:
@@ -156,12 +154,12 @@ builder rec {
 
   setupHook = ./setup-hook-3.0.sh;
 
-  passthru = rec {
+  passthru = {
     tests.static = pkgsStatic.guile;
 
-    effectiveVersion = lib.versions.majorMinor version;
-    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
-    siteDir = "share/guile/site/${effectiveVersion}";
+    effectiveVersion = lib.versions.majorMinor finalAttrs.version;
+    siteCcacheDir = "lib/guile/${finalAttrs.passthru.effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${finalAttrs.passthru.effectiveVersion}";
 
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell
@@ -193,4 +191,4 @@ builder rec {
     platforms = lib.platforms.all;
     mainProgram = "guile";
   };
-}
+})

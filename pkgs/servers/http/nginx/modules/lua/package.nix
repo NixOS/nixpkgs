@@ -27,7 +27,7 @@ mkNginxPlugin (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) nginx-lua;
+    nginx-lua = nixosTests.nginx.mainline.lua;
   };
 
   meta = {

@@ -5,6 +5,8 @@
 
   ffmpeg,
   makeWrapper,
+  sqlite,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,7 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  nativeCheckInputs = [ ffmpeg ];
+  buildInputs = [ sqlite ];
+
+  nativeCheckInputs = [
+    ffmpeg
+    writableTmpDirAsHomeHook
+  ];
 
   cargoBuildFlags = [ "-p substudy" ];
 
@@ -30,12 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # flaky: relies on sqlite ms timestamps differing across 3 quick inserts
     "--skip=cache::tests::test_cache"
   ];
-
-  preCheck = ''
-    # That's to make sure the `test_ai_request_static`
-    # test has access to the cache at `$HOME/.cache`
-    export HOME=$(mktemp -d)
-  '';
 
   postFixup = ''
     wrapProgram "$out/bin/substudy" \

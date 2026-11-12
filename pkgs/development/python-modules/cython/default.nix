@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cython";
-  version = "3.2.5";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
     tag = finalAttrs.version;
-    hash = "sha256-wes7UFSWW00tKTmp3Aqk0jDpMMRVHRIhonC6CD7pwB4=";
+    hash = "sha256-NuSEJSGfa287DLJZs5wxfe7oh/Pii5rMF1F1wWle0Ck=";
   };
 
   build-system = [
@@ -79,8 +79,12 @@ buildPythonPackage (finalAttrs: {
       runHook postCheck
     '';
 
-  passthru.tests = {
-    inherit pygame-ce sage;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    tests = {
+      inherit pygame-ce sage;
+    };
   };
 
   # Force code regeneration in source distributions

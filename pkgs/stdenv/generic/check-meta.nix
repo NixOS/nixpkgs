@@ -23,6 +23,7 @@ let
     optional
     optionalString
     seq
+    toLower
     unsafeGetAttrPos
     warn
     all
@@ -263,6 +264,7 @@ let
       # These keys are documented
       description = str;
       mainProgram = str;
+      mainDarwinApp = str;
       longDescription = str;
       branch = str;
       homepage = either str (listOf str);
@@ -281,6 +283,7 @@ let
       teams = listOf attrs; # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
+      cmakeConfigModules = listOf str;
       inherit platforms;
       hydraPlatforms = listOf str;
       # Automatically turns into meta.problems.broken, see ./problems.nix
@@ -470,7 +473,7 @@ let
       teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
 
       problems = completeMetaProblems' attrs;
-      problemsGroupedByKind = groupBy (p: p.name) (
+      problemsGroupedByKind = groupBy (p: p.problem.kind) (
         mapAttrsToList (name: problem: {
           inherit name;
           inherit problem;
@@ -537,7 +540,7 @@ let
           defaultCPEParts = {
             part = "a";
             #vendor = null;
-            ${if attrs.pname or null != null then "product" else null} = attrs.pname;
+            ${if attrs.pname or null != null then "product" else null} = toLower attrs.pname;
             #version = null;
             #update = null;
             edition = "*";

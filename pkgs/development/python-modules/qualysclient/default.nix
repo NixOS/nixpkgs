@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
     changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

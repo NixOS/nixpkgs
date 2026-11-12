@@ -44,6 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FLIGHTDECK_VERSION" finalAttrs.version)
   ];
 
+  postPatch = ''
+    substituteInPlace src/caelestia/caelestiavars.cpp src/hyprland/hyprlandschema.cpp \
+      --replace-fail '/usr/share/flightdeck' "$out/share/flightdeck"
+  '';
+
+  postInstall = ''
+    ln -s share/flightdeck $out/data
+  '';
+
   preFixup = ''
     qtWrapperArgs+=(
       --prefix QML2_IMPORT_PATH : "${caelestia-shell.plugin}/${qt6.qtbase.qtQmlPrefix}:${caelestia-shell.m3shapesModule}/${qt6.qtbase.qtQmlPrefix}"

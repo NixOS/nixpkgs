@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "CybercentreCanada";
     repo = "cart";

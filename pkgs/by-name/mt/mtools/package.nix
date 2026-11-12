@@ -7,17 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mtools";
-  version = "4.0.49";
+  version = "4.0.50";
 
   src = fetchurl {
     url = "mirror://gnu/mtools/mtools-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-b+UZNYPW58Wdp15j1yNPdsCwfK8zsQOJT0b2aocf/J8=";
+    hash = "sha256-86WObPwmNLA8JARCVI47ABA2kjV6/Cjh5xBHRN1keLU=";
   };
-
-  patches = lib.optional stdenv.hostPlatform.isDarwin ./UNUSED-darwin.patch;
-
-  # fails to find X on darwin
-  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--without-x";
 
   outputs = [
     "out"
@@ -39,6 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/mtools/";
     description = "Utilities to access MS-DOS disks";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3;
+    license = lib.licenses.AND [
+      lib.licenses.gpl3Plus
+      lib.licenses.fdl13Plus
+    ];
+    maintainers = with lib.maintainers; [
+      quantenzitrone
+      kamadorueda
+    ];
   };
 })

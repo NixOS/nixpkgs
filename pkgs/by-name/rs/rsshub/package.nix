@@ -4,7 +4,7 @@
   makeBinaryWrapper,
   nix-update-script,
   nodejs,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   replaceVars,
@@ -12,44 +12,46 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "0-unstable-2026-07-05";
+  version = "2026.11.03-8565.53c4e54";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
-    rev = "719cc1994b10bc96fcd17df6cf2046023d0cd9ba";
-    hash = "sha256-Db1nh42S2zrPheUT9nlHMRt7/qmKeMpHZ415rwWnedI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1TUmbdmVMEZ9C9vmd5I4GiGg1RqtjDUwODxhQT27Gc0=";
   };
 
   patches = [
     (replaceVars ./0001-fix-git-hash.patch {
-      GIT_HASH = finalAttrs.src.rev;
+      GIT_HASH = lib.last (lib.splitString "." finalAttrs.version);
     })
-    ./0002-fix-network-call.patch
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 3;
-    hash = "sha256-ykKWrU9NCOXBuFb+I3TG5XFO81W4K9Y7fZk/KjB+5JI=";
-    pnpm = pnpm_10;
+    fetcherVersion = 5;
+    hash = "sha256-uypVk5hiymS6ZBchGo9r1XceADIqSHuBnyMIGHz7vnw=";
+    pnpm = pnpm_12;
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
   ];
 
   buildPhase = ''
     runHook preBuild
-    # First build route metadata using directoryImport (avoids executing
-    # module-level code that would trigger network requests)
-    BUILD_ROUTES_MODE=1 pnpm run build:routes
-    # Then build the application
     pnpm run build
     runHook postBuild
+  '';
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
   '';
 
   installPhase = ''
@@ -67,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "$out/lib/rsshub/dist/index.mjs"
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "RSS feed generator";
@@ -81,7 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://docs.rsshub.app";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ xinyangli ];
+    maintainers = with lib.maintainers; [
+      xinyangli
+      davinci42
+    ];
     mainProgram = "rsshub";
     platforms = lib.platforms.all;
   };

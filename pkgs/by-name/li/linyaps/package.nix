@@ -39,17 +39,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps";
-  version = "1.14.1";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-Mo2/aWYJFR/MxUMnali8BXd9A3lSJieOL6jgfmCu3Dk=";
+    hash = "sha256-RWSoVTTYwFzYvFBHvBJmLungjEVYryHwzK6P2h5SiaQ=";
   };
 
   patches = [
     ./fix-host-path.patch
+    ./drop-tmpfiles-hook-dir.patch
   ];
 
   postPatch = ''
@@ -114,21 +115,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Add runtime dependencies to PATH for all wrapped binaries
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        bash
-        binutils
-        coreutils
-        desktop-file-utils
-        erofs-utils
-        fuse3
-        fuse-overlayfs
-        glib
-        gnutar
-        shared-mime-info
-        linyaps-box
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bash
+      binutils
+      coreutils
+      desktop-file-utils
+      erofs-utils
+      fuse3
+      fuse-overlayfs
+      glib
+      gnutar
+      shared-mime-info
+      linyaps-box
+    ])
   ];
 
   # Note: ll-init must be statically linked and should not be wrapped

@@ -33,13 +33,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.337.0";
+  version = "2.338.2";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aM8GmgCkjgaipEDBjC5v6U61WPjCAdKnPEGQypfTzmA=";
+    hash = "sha256-Rs6sNQ7h4EARlnGlSg6UcEO5HXMTdcSpv6SaY1KPOB4=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git-revision
@@ -128,7 +128,7 @@ buildDotnetModule (finalAttrs: {
     # needed for `uname`
     coreutils
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 

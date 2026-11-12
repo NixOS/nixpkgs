@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "azure-ai-vision-imageanalysis";
   version = "1.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
@@ -34,6 +33,11 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "azure.ai.vision.imageanalysis" ];
 
   doCheck = false; # cannot import 'devtools_testutils'
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Azure Image Analysis client library for Python";

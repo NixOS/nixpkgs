@@ -7,13 +7,8 @@
   hatchling,
 
   # tests
-  jupyter,
-  nbconvert,
   numpy,
-  parameterized,
-  pillow,
   pytestCheckHook,
-  torch,
   writableTmpDirAsHomeHook,
 }:
 
@@ -21,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "einops";
   version = "0.8.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
@@ -33,13 +27,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   nativeCheckInputs = [
-    jupyter
-    nbconvert
     numpy
-    parameterized
-    pillow
     pytestCheckHook
-    torch
     writableTmpDirAsHomeHook
   ];
 

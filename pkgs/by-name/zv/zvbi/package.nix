@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zvbi";
-  version = "0.2.45";
+  version = "0.2.46";
 
   src = fetchFromGitHub {
     owner = "zapping-vbi";
     repo = "zvbi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Nkg/Y7tHYAEi3ndbiJwwutVrGCOIE5RUCNQW3j12BkM=";
+    hash = "sha256-7x14IzU5qSY4Tu1LQtqnlbUjbIyMnI8zOtMYRc3m5d8=";
   };
 
   configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     tzdata
   ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Vertical Blanking Interval (VBI) utilities";

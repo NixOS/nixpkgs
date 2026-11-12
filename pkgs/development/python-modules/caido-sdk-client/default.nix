@@ -14,15 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caido-sdk-client";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "caido_sdk_client";
     inherit (finalAttrs) version;
-    hash = "sha256-9jvd49QePhboxtHDDyWcumliNLX8n2bfOjNjcZWLKDs=";
+    hash = "sha256-lOeCi/FzvtoHFYBDs3mFgGwghY7pBFh72o/wy8pigIA=";
   };
 
   postPatch = ''

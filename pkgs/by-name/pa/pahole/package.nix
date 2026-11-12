@@ -14,10 +14,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pahole";
-  version = "1.31";
+  version = "1.32";
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Afy0SysuDbTOa8H3m4hexy12Rmuv2NZL2wHfO4JtKL0=";
+    hash = "sha256-+vydbVzkM+VUROo3Zo+XJeJMkvwtwEIS/4GgxmqvAZE=";
   };
 
   nativeBuildInputs = [

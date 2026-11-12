@@ -29,7 +29,7 @@
   openssl,
   pixman,
   pkg-config,
-  systemd,
+  systemdLibs,
   libxcb-util,
   libxcb-wm,
   libxcb-image,
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalPackages: rec {
     nettle
     openssl
     pixman
-    systemd
+    systemdLibs
     libxcb-util
     libxcb-wm
     libxcb-image

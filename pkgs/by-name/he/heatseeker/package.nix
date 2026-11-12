@@ -3,6 +3,9 @@
   fetchFromGitHub,
   rustPlatform,
   coreutils,
+  libgit2,
+  pkg-config,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-qBTHNArPgf/qrce6hP3GJ1f9NcJ5OmSokCs5IVtyJQQ=";
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
+
   # https://github.com/rschmitt/heatseeker/issues/42
   # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple
   # as a substitution, and this works since we have the path to coreutils stty.
@@ -31,11 +38,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "screen::unix::tests::winsize_test"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "General-purpose fuzzy selector";
     homepage = "https://github.com/rschmitt/heatseeker";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "hs";
     platforms = lib.platforms.unix;
   };

@@ -17,16 +17,16 @@ let
   version = "1.1.4-0";
   cupsdeb = fetchurl {
     url = "https://download.brother.com/welcome/dlf007070/hl3140cwcupswrapper-${version}.i386.deb";
-    sha256 = "a76281828ca6ee86c63034673577fadcf5f24e8ed003213bdbb6bf47a7aced6f";
+    hash = "sha256-p2KBgoym7obGMDRnNXf63PXyTo7QAyE727a/R6es7W8=";
   };
   srcdir = "hl3140cw_cupswrapper_GPL_source_${version}";
   cupssrc = fetchurl {
     url = "https://download.brother.com/welcome/dlf006740/${srcdir}.tar.gz";
-    sha256 = "1wp85rbvbar6rqqkaffymxjpls6jx9m9230dlrpqwy5akiaxf0rl";
+    hash = "sha256-NAPXVZyqeI5vpg0MkWrq0mh6Za/eOTUxziartVcu6PI=";
   };
   lprdeb = fetchurl {
     url = "https://support.brother.com/g/b/files/dlf/dlf007068/hl3140cwlpr-1.1.2-1.i386.deb";
-    sha256 = "601f392b52ed7080f71b780181823bb8f6abfd0591146b452ba1f23e21f9f865";
+    hash = "sha256-YB85K1LtcID3G3gBgYI7uPar/QWRFGtFK6HyPiH5+GU=";
   };
 in
 stdenv.mkDerivation {

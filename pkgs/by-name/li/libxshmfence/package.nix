@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Shared memory 'SyncFence' synchronization primitive library";
     longDescription = ''

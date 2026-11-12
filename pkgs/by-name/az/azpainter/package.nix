@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Full color painting software for illustration drawing";
-    homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
+    homepage = "https://azelpg.gitlab.io/azsky2/";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;

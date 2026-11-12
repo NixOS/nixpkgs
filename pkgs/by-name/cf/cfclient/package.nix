@@ -17,8 +17,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-+3RZRShELL2iXxz95eRhK5UPp5NZ1yJO4NDlZ7cDTjI=";
   };
 
-  strictDeps = true;
-
   buildInputs = [
     qt6.qtbase
   ];

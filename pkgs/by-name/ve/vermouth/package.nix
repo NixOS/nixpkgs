@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vermouth";
-  version = "2.2.1";
+  version = "2.7.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,20 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dekomote";
     repo = "vermouth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HvjRi5nIjZAjXVrv/Y8dS4HPSfiqIfiZzJpSm9rREv8=";
+    hash = "sha256-lLdTmZCPSFU9GRMABKPXOXuAKO4rkALWF2rPpyMSW2Y=";
   };
 
   nativeBuildInputs = [
     cmake
     qt6.qtbase
     qt6.wrapQtAppsHook
+    kdePackages.extra-cmake-modules
   ];
 
   buildInputs = [
     qt6.qtbase
     qt6.qtdeclarative
 
-    kdePackages.extra-cmake-modules
     kdePackages.kcoreaddons
     kdePackages.ki18n
     kdePackages.kirigami

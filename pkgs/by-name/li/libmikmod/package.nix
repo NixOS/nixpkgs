@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmikmod";
-  version = "3.3.13";
+  version = "3.3.16";
 
   src = fetchurl {
     url = "mirror://sourceforge/mikmod/libmikmod-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-n8F5n36mqVx8WILemL6F/H0gugpKb8rK4RyMazgrsgc=";
+    sha256 = "sha256-eyTkFGiw3+f64RBK5qDXxS4Epl4YUbJoxwdOTQZoWlM=";
   };
 
   buildInputs = [ texinfo ] ++ optional stdenv.hostPlatform.isLinux alsa-lib;

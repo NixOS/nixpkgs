@@ -3,6 +3,7 @@
 # - Every item from ./collisions.json (for the respective Shell version) should have an entry in here
 # - Set the value to `null` for filtering (duplicate or unmaintained extensions)
 # - Sort the entries in order of appearance in the collisions.json
+# - Preserve the name of the original extension by checking the diff of ./extensions.json
 {
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
@@ -16,9 +17,13 @@
 
   "clipboard-history@alexsaveau.dev" = "clipboard-history";
   "clipboard-history@Diyar1877" = "clipboard-history-2";
+  "clipboard-history@manouchehr" = "clipboard-history-3";
 
   "clipboard-line-cleaner@example.com" = "clipboard-line-cleaner";
   "clipboard-line-cleaner@epiphanius.github.io" = "clipboard-line-cleaner-2";
+
+  "pomodoro@lsbcodes" = "focus-timer";
+  "focus-timer@focustimerhq.github.io" = "focus-timer-2";
 
   "FuzzyClock@johngoetz" = "fuzzy-clock";
   "FuzzyClock@fire-man-x" = "fuzzy-clock-3"; # '-3' preserves backwards compatibility
@@ -26,8 +31,8 @@
   "InternetSpeedMeter@alshakib.dev" = "internet-speed-meter";
   "speed-meter@mojahid.lunecode.com" = "internet-speed-meter-2";
 
-  "lockkeys@febueldo.test" = "lock-keys";
-  "lockkeys@vaina.lt" = "lock-keys-2";
+  "lid-switch@dutaahmad" = "lid-switch";
+  "lid-switch@dhyandevp" = "lid-switch-2";
 
   "memento-mori@paveloom" = "memento-mori";
   "memento-mori@vedeshpadal" = "memento-mori-2";
@@ -40,6 +45,10 @@
 
   "night-light-toggle@egoistpizza.github.com" = "night-light-toggle";
   "nightlighttoggle@sam" = "night-light-toggle-2";
+  "night-light-toggle@shivamksharma.github.io" = "night-light-toggle-3";
+
+  "overviewbackground@github.com.orbitcorrection" = "overview-background";
+  "overview-background@github.com.sunnyyangyangyang" = "overview-background-2";
 
   "panel-workspace-scroll@polymeilex.github.io" = "panel-workspace-scroll";
   "panel-scroll@taygun86" = "panel-workspace-scroll-2";
@@ -58,9 +67,7 @@
 
   "system-monitor@gnome-shell-extensions.gcampax.github.com" = "system-monitor";
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
-  "system-monitor@axet.github.com" = "system-monitor-3";
   "sysmonitor@talhasiddique7" = "system-monitor-4";
-  "system-monitor@jtourteau" = "system-monitor-5";
 
   "system-monitor-panel@naimur" = "system-monitor-panel";
   "system-monitor-panel@gnome-shell-extensions" = "system-monitor-panel-2";
@@ -68,8 +75,8 @@
   "system-rpg@conan513" = "systemquest";
   "system-rpg@gnome-rpg.local" = "systemquest-2";
 
-  "tailscale-gnome-qs@tailscale-qs.github.io" = "tailscale-qs";
-  "tailscale@joaophi.github.com" = "tailscale-qs-2";
+  "text-extractor@aditya190803" = "text-extractor";
+  "text-extractor@imshaaz21.github.com" = "ocr-text-extractor";
 
   "workspace-wallpapers@jonathan.aljl.eu" = "workspace-wallpapers";
   "workspace-wallpapers@ero" = "workspace-wallpapers-2";
@@ -83,6 +90,7 @@
   "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
   "power-profile@fthx" = "power-profile-indicator-2";
   "mouse-follows-focus@crisidev.org" = "mouse-follows-focus-2";
+  "lockkeys@vaina.lt" = "lock-keys-2";
 
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually

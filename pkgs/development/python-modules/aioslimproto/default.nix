@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioslimproto";
-  version = "3.2.0";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "home-assistant-libs";
+    owner = "music-assistant";
     repo = "aioslimproto";
     tag = finalAttrs.version;
-    hash = "sha256-TqaUCJ+VwVz6VIFpSFU75CzOzWEo74REwPkTRb2aCJw=";
+    hash = "sha256-TSoVQ1AwJSWAwMKfxZC/9lWyCiMo9Fvq9L0fuyUmAMY=";
   };
 
   postPatch = ''
@@ -40,8 +40,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Module to control Squeezebox players";
-    homepage = "https://github.com/home-assistant-libs/aioslimproto";
-    changelog = "https://github.com/home-assistant-libs/aioslimproto/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/music-assistant/aioslimproto";
+    changelog = "https://github.com/music-assistant/aioslimproto/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

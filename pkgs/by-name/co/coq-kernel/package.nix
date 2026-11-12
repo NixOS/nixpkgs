@@ -3,7 +3,7 @@
   callPackage,
   runCommand,
   makeWrapper,
-  coq,
+  rocqPackages,
   imagemagick,
   python312,
 }:
@@ -18,6 +18,8 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.coq = coq-kernel.definition; }'
 
 let
+  coq = rocqPackages.coq;
+
   # Nixpkgs master is currently on python3 >= python313. This doesn't work with
   # this package, because it depends on the "future" package, which is no longer
   # compatible with Python 3.13.
@@ -81,8 +83,8 @@ let
       }
       {
         name = "OCAMLPATH";
-        value = lib.concatStringsSep ":" (
-          map (x: "${x}/lib/ocaml/${coq.ocaml.version}/site-lib/") ([ coq.ocamlPackages.findlib ] ++ packages)
+        value = lib.makeSearchPathOutput "dev" "lib/ocaml/${coq.ocaml.version}/site-lib" (
+          [ coq.ocamlPackages.findlib ] ++ packages
         );
       }
     ];

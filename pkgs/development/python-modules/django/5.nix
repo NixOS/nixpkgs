@@ -39,16 +39,16 @@
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "5.2.17";
+  version = "5.2.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
-    tag = version;
-    hash = "sha256-7it3opzsiN/hHhpipZz4ogmRKGz7E9/LmTF03/UYIB0=";
+    tag = finalAttrs.version;
+    hash = "sha256-XnSmncUWLnWLGRCvWC1AsBfNJnxg2dLnv5asLGXV3c0=";
   };
 
   patches = [
@@ -59,6 +59,9 @@ buildPythonPackage rec {
     ./5.2/pythonpath.patch
     # disable test that expects timezone issues
     ./5.2/disable-failing-test.patch
+    # skip flaky performnace test
+    ./6.0/skip-flaky-tests.patch
+    ./6.x/fix-flaky-tests.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./5.2/gdal.patch {
@@ -102,7 +105,7 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     # make sure the installed library gets imported
@@ -130,11 +133,28 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
-    changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
+    changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor finalAttrs.version}/releases/${finalAttrs.version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
+    identifiers = {
+      cpeParts = {
+        inherit (finalAttrs) version;
+        product = "django";
+        update = "*";
+        vendor = "djangoproject";
+      };
+      purlParts = {
+        type = "pypi";
+        spec = "django@${finalAttrs.version}";
+      };
+    };
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

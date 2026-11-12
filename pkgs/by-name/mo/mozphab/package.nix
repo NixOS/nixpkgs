@@ -7,6 +7,7 @@
   git,
   mercurial,
   patch,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -42,6 +43,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     git
     mercurial
     patch
+    writableTmpDirAsHomeHook
   ]
   ++ (with python3.pkgs; [
     callee
@@ -50,10 +52,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mock
     pytestCheckHook
   ]);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # AttributeError: 'called_once' is not a valid assertion.

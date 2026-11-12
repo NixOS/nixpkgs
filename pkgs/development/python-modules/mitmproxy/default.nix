@@ -3,12 +3,14 @@
   aioquic_1_2,
   argon2-cffi,
   asgiref,
+  backports-zstd,
   bcrypt,
   brotli,
   buildPythonPackage,
   certifi,
   cryptography,
   fetchFromGitHub,
+  fetchpatch,
   flask,
   h11,
   h2,
@@ -27,6 +29,7 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
   requests,
   ruamel-yaml,
   setuptools,
@@ -34,20 +37,30 @@
   tornado,
   urwid,
   wsproto,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.3";
+  version = "12.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-YgM8GjWmWKxOZcahR3+9XO2Xyfu9v8rNgxKn/2oL35Y=";
+    hash = "sha256-Hd8Nk9ycd74aXHodiPKMRGWArpduiAchtxscVZq4W1M=";
   };
+
+  patches = [
+    # Use mitmproxy's own TLS client in test_emudhra, CPython's ssl module rejects
+    # chains with compromised eMudhra intermediate keys since 3.13.18/3.14.10
+    # https://github.com/python/cpython/issues/160040
+    (fetchpatch {
+      name = "fix-test-emudhra.patch";
+      url = "https://github.com/mitmproxy/mitmproxy/commit/992052ee92d7ff4d240eafbe1afdf87c94b3f080.patch";
+      hash = "sha256-kxCt72m8G+yoAWe8xsXjt1U6B2Sh02u8MCFiqi18lng=";
+    })
+  ];
 
   # pins many dependencies way to strict
   pythonRelaxDeps = true;
@@ -82,8 +95,8 @@ buildPythonPackage rec {
     tornado
     urwid
     wsproto
-    zstandard
-  ];
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [ backports-zstd ];
 
   nativeCheckInputs = [
     hypothesis
@@ -132,6 +145,9 @@ buildPythonPackage rec {
     # fails in pytest asyncio internals
     "test_decorator"
     "test_exception_handler"
+    # RuntimeError: Event loop is closed
+    # relies on cleanup from tests deselected by test_errorcheck and test_order above
+    "test_emudhra_revocation_block"
   ];
 
   disabledTestPaths = [
@@ -158,7 +174,10 @@ buildPythonPackage rec {
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      Misaka13514
+    ];
     mainProgram = "mitmproxy";
   };
 }

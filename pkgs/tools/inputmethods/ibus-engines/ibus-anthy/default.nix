@@ -13,12 +13,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ibus-anthy";
   version = "1.5.17";
 
   src = fetchurl {
-    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/ibus/ibus-anthy/releases/download/${finalAttrs.version}/ibus-anthy-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-nh0orX2ivl4NnA6w2Pt1V/yJdwqiI3Jy3r4Ze9YavUA=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

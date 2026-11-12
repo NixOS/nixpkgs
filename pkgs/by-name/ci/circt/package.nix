@@ -9,11 +9,9 @@
   ninja,
   lit,
   z3,
-  sv-lang_10, # update sv-lang version here according to upstream requirements
   fmt,
   boost,
   mimalloc,
-  gitUpdater,
   callPackage,
   versionCheckHook,
 
@@ -24,15 +22,16 @@
 let
   pythonEnv = python3.withPackages (ps: [ ps.psutil ]);
   circt-llvm = callPackage ./circt-llvm.nix { };
+  circt-sv-lang = callPackage ./sv-lang.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "circt";
-  version = "1.147.0";
+  version = "1.161.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     tag = "firtool-${finalAttrs.version}";
-    hash = "sha256-rtnvahI7EzUJXE80X3XPWjjDD/6f9BPmZ7S97Lstuhw=";
+    hash = "sha256-OUnFe6RwACzY+gf2fGEJxhitaQWApreg8tV/nda6+ek=";
     fetchSubmodules = true;
   };
 
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     fmt
     mimalloc
-    sv-lang_10
+    circt-sv-lang
   ];
 
   cmakeFlags = [
@@ -85,22 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
         #    https://github.com/NixOS/nixpkgs/issues/214945 discusses this issue.
         #
         # As a temporary fix, we disabled these tests when using clang stdenv
-        lib.optionals stdenv.cc.isClang [ "CIRCT :: Target/ExportSystemC/.*\\.mlir" ]
-        # Disable some tests on x86_64-darwin
-        ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-          # These test seem to pass on hydra (rosetta) but not on x86_64-darwin machines
-          "CIRCT :: Target/ExportSMTLIB/.*\\.mlir"
-          "CIRCT :: circt-bmc/.*\\.mlir"
-          # These tests were having issues on rosetta
-          "CIRCT :: Dialect/.*/Reduction/.*\\.mlir"
-          "CIRCT :: Dialect/SMT/.*\\.mlir"
-          "CIRCT :: circt-as-dis/.*\\.mlir"
-          "CIRCT :: circt-reduce/.*\\.mlir"
-          "CIRCT :: circt-test/basic.mlir"
-          "CIRCT :: firld/.*\\.mlir"
-          "CIRCT :: Tools/domaintool/clock-spec-json.mlir"
-        ]
-        ++ [
+        lib.optionals stdenv.cc.isClang [ "CIRCT :: Target/ExportSystemC/.*\\.mlir" ] ++ [
           # Temporarily disable for bump: https://github.com/llvm/circt/issues/8000
           "CIRCT :: Dialect/FIRRTL/SFCTests/ExtractSeqMems/Compose.fir"
           "CIRCT :: Dialect/FIRRTL/SFCTests/ExtractSeqMems/Simple2.fir"
@@ -111,6 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs tools/circt-test
+
+    # Keep the self-contained TableGen tests compatible with nixpkgs' lit.
+    substituteInPlace test/Tools/circt-tblgen/self-contained/self_contained_td_format.py \
+      --replace-fail \
+        'timeout = test.config.maxIndividualTestTime or None' \
+        'timeout = getattr(test.config, "maxIndividualTestTime", None)'
 
     # Replace slang references to match the package in nixpkgs
     substituteInPlace \
@@ -169,10 +159,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "firtool-";
-    };
+    updateScript = ./update.sh;
     llvm = circt-llvm;
+    sv-lang = circt-sv-lang;
   };
 
   meta = {

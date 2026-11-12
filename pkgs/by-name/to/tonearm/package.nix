@@ -42,12 +42,12 @@ in
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   pname = "tonearm";
-  version = "1.5.0";
+  version = "1.5.1";
   src = fetchFromCodeberg {
     owner = "dergs";
     repo = "Tonearm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OUqKM9VFoQ732xL9d36QKHZlrH5dXH3xtxI3epZXbIM=";
+    hash = "sha256-+QSm4NSGJX+BoAPjyssCvItE8cRnVQJ9dmu06QAlzR0=";
   };
   vendorHash = "sha256-pa0C0zMaKIa1wK49JIxHyfE1rbzzBB3yn44swlrR4HY=";
 

@@ -27,9 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.pytestCheckHook
   ];
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   meta = jrl-cmakemodules.meta // {
     description = "Release scripting tools for JRL CMake modules";
     mainProgram = "jrl-release";

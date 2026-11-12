@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "shacl2code";
   version = "1.3.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "JPEWdev";

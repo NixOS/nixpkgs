@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+test@{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   name = "containers-imperative";
   meta = {
@@ -6,6 +11,19 @@
       aszlig
     ];
   };
+  imports = [
+    {
+      options.test-nix-in-container = lib.mkOption {
+        type = lib.types.bool;
+        description = ''
+          Whether to test nix inside the container.
+          We also run this test without daemon, in which case that won't work.
+          Activated by `./containers-imperative-no-daemon.nix`.
+        '';
+        default = true;
+      };
+    }
+  ];
 
   nodes.machine =
     {
@@ -131,11 +149,13 @@
       with subtest("Execute commands via the root shell"):
           assert "Linux" in machine.succeed(f"nixos-container run {id1} -- uname")
 
-      with subtest("Execute a nix command via the root shell. (regression test for #40355)"):
-          machine.succeed(
-              f"nixos-container run {id1} -- nix-instantiate -E "
-              + '\'derivation { name = "empty"; builder = "false"; system = "false"; }\' '
-          )
+      ${lib.optionalString test.config.test-nix-in-container ''
+        with subtest("Execute a nix command via the root shell. (regression test for #40355)"):
+            machine.succeed(
+                f"nixos-container run {id1} -- nix-instantiate -E "
+                + '\'derivation { name = "empty"; builder = "false"; system = "false"; }\' '
+            )
+      ''}
 
       with subtest("Stop and start (regression test for #4989)"):
           machine.succeed(f"nixos-container stop {id1}")

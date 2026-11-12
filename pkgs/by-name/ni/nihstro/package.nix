@@ -51,5 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "nihstro-assemble";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

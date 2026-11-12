@@ -19,7 +19,7 @@
   libhandy,
   libsoup_3,
   libosinfo,
-  systemd,
+  systemdLibs,
   vala,
   libcap,
   yajl,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     spice-gtk
     spice-protocol
-    systemd
+    systemdLibs
     vte
     webkitgtk_4_1
     yajl

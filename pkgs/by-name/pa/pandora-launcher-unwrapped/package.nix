@@ -9,6 +9,7 @@
   pkg-config,
 
   alsa-lib,
+  aws-lc,
   dbus,
   fontconfig,
   libGL,
@@ -16,8 +17,11 @@
   libxcb,
   libxkbcommon,
   openssl,
+  sqlite,
+  udev,
   vulkan-loader,
   wayland,
+  zstd,
 
   copyDesktopItems,
   makeDesktopItem,
@@ -29,16 +33,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pandora-launcher-unwrapped";
-  version = "5.5.2";
+  version = "6.0.0";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Moulberry";
     repo = "PandoraLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mn+ZYSIJajc6gzYSdZUvDrfDouXJWlbSeO7nfjKN4sY=";
+    hash = "sha256-kSWlvcGQ77hHgUnBEWZ1nSLVCKJPIXO51jEWQHwnL+E=";
   };
 
   # Currently the client id is hardcoded and must be patched like this.
@@ -59,8 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     fontconfig
     openssl
+    sqlite
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -68,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libseccomp
     libxcb
     libxkbcommon
+    udev
     wayland
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -94,7 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     for size in 16 24 32 48 64 128 256; do
       geometry="$size"x"$size"
       mkdir -p "$out/share/icons/hicolor/$geometry/apps"
-      magick package/windows.svg -resize "$geometry" \
+      magick -background none package/windows.svg -resize "$geometry" \
         "$out/share/icons/hicolor/$geometry/apps/pandora_launcher.png"
     done
   '';
@@ -132,6 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Minecraft launcher that balances ease-of-use with powerful instance management features";
     homepage = "https://github.com/Moulberry/PandoraLauncher";
+    changelog = "https://github.com/Moulberry/PandoraLauncher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dtomvan

@@ -2,10 +2,12 @@
   lib,
   python314,
   fetchFromGitLab,
+  fetchpatch,
   callPackage,
   stdenv,
   makeWrapper,
   nixosTests,
+  zstd,
 }:
 
 let
@@ -14,7 +16,9 @@ let
     packageOverrides = final: prev: {
       django = final.django_6;
       django-allauth-async = final.callPackage ./django-allauth-async.nix { };
-      glitchtip-rust = final.callPackage ./glitchtip-rust.nix { };
+      glitchtip-rust = final.callPackage ./glitchtip-rust.nix { inherit zstd; };
+      # Necessary until glitchtip works with mcp 2.x
+      mcp = final.mcp_1;
     };
   };
 
@@ -88,6 +92,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RGYD6HAFZZTSNJWd8n7/gMy9FkjZno9LO1jGxav5d9M=";
   };
 
+  patches = [
+    # support django-async-backend>=6.1
+    (fetchpatch {
+      url = "https://gitlab.com/glitchtip/glitchtip-backend/-/commit/4cf8c9d1518f5835b71c0692a72b63d8a62bea4a.patch";
+      includes = [
+        "glitchtip/ingest_asgi.py"
+        "glitchtip/settings.py"
+      ];
+      hash = "sha256-FwOJYSsJcJoqUwuHwHPWkzQqVB81Chex4RFTIhl82XM=";
+    })
+  ];
+
   postPatch = ''
     echo 'import os
     ALLAUTH_TRUSTED_CLIENT_IP_HEADER = os.getenv(
@@ -140,7 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/glitchtip/glitchtip-backend/-/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
     mainProgram = "glitchtip-manage";

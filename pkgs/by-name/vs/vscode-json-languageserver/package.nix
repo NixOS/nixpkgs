@@ -9,18 +9,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vscode-json-languageserver";
-  version = "1.136.1";
+  version = "1.138.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode";
     tag = finalAttrs.version;
-    hash = "sha256-Y6FRttdpn353w/ykJbaE+NjM1NfXQewl9Fgux7m10lk=";
+    hash = "sha256-PQqCs0tXjwEMjvHCuIRO6lc4ih2vISMrtXZrgl4Jypg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/extensions/json-language-features/server";
 
-  npmDepsHash = "sha256-kVZ7pnC/3m0I1jwuN3Ad6carWpj+O7IYnRZ3cx5W00g=";
+  npmDepsHash = "sha256-4VqxQYvCaKemc/Tr99bu47PHfmjCJ/KfljMn4bAydog=";
 
   __structuredAttrs = true;
 

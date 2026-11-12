@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nezha-agent";
-  version = "2.3.5";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8rrzMaaY8DZecaY6JNyvBJVVPH02Y6ghaVJBInTViBY=";
+    hash = "sha256-HiR2D+EiYB4N3HbzGz7W2v5RVq19ph22dyyBr4eCltI=";
   };
 
-  vendorHash = "sha256-hgYeFu7oo5dW1/rBgybVjY25EDdVnL9xmzXpfvLU4/c=";
+  vendorHash = "sha256-KDPTFTY8T9igj0FvDym2byzrUxQeUhbxn03ua3L8nNQ=";
 
   ldflags = [
     "-s"
@@ -25,6 +25,8 @@ buildGoModule (finalAttrs: {
     "-X main.arch=${stdenv.hostPlatform.system}"
   ];
 
+  # some tests bind to localhost
+  __darwinAllowLocalNetworking = true;
   checkFlags =
     let
       # Skip tests that require network access
@@ -33,6 +35,10 @@ buildGoModule (finalAttrs: {
         "TestGeoIPApi"
         "TestFetchGeoIP"
         "TestCloudflareDetection"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # os/user.Current() cannot resolve the Nix build UID
+        "TestTask_RejectsMalformedFrame_OpOnlyCommandsUseLegacyBehavior/list_falls_back_to_home_directory"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

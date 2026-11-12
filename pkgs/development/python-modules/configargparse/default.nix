@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "configargparse";
-  version = "1.7.7";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bw2";
     repo = "ConfigArgParse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s1QkHTU36Kj+XK8dNiEXAxZrW2oDPISai056V+B4eog=";
+    hash = "sha256-3ehzjwHLcxRw3O/g77lGG4tKWCc4ppswq+vcm0QCYFo=";
   };
 
   build-system = [

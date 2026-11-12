@@ -9,8 +9,10 @@
 
   # dependencies
   accelerate,
+  certifi,
   cut-cross-entropy,
   datasets,
+  einops,
   filelock,
   hf-transfer,
   huggingface-hub,
@@ -22,6 +24,7 @@
   protobuf,
   psutil,
   regex,
+  requests,
   sentencepiece,
   torch,
   torchao,
@@ -29,8 +32,8 @@
   tqdm,
   transformers,
   trl,
-  tyro,
   typing-extensions,
+  wheel,
 
   # tests
   cudaPackages,
@@ -39,35 +42,34 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "unsloth-zoo";
-  version = "2026.4.7";
+  version = "2026.11.2";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     pname = "unsloth_zoo";
     inherit (finalAttrs) version;
-    hash = "sha256-jJ58d2+5lEALEaASELZtQkY2YxNWaLrfLvOCUGnwrh4=";
+    hash = "sha256-vYUhoIENyDluEO+vlc9fZWPxHvvIKtJm8324iRgw9iQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==84.2.1" "setuptools" \
+      --replace-fail "setuptools==80.9.0" "setuptools" \
+      --replace-fail "setuptools-scm==10.3.4" "setuptools-scm"
+  ''
+  # Avoid circular dependency in Nix, since `unsloth` depends on `unsloth-zoo`.
+  + ''
+    substituteInPlace unsloth_zoo/__init__.py \
       --replace-fail \
-        "setuptools==80.9.0" \
-        "setuptools" \
-      --replace-fail \
-        "setuptools-scm==9.2.0" \
-        "setuptools-scm"
+        'raise ImportError("Please install Unsloth via `pip install unsloth`!")' \
+        'pass'
   '';
 
   pythonRelaxDeps = [
+    "certifi"
     "datasets"
-    "torch"
     "transformers"
-  ];
-
-  patches = [
-    # Avoid circular dependency in Nix, since `unsloth` depends on `unsloth-zoo`.
-    ./dont-require-unsloth.patch
   ];
 
   build-system = [
@@ -77,8 +79,10 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     accelerate
+    certifi
     cut-cross-entropy
     datasets
+    einops
     filelock
     hf-transfer
     huggingface-hub
@@ -90,6 +94,7 @@ buildPythonPackage (finalAttrs: {
     protobuf
     psutil
     regex
+    requests
     sentencepiece
     torch
     torchao
@@ -97,15 +102,15 @@ buildPythonPackage (finalAttrs: {
     tqdm
     transformers
     trl
-    tyro
     typing-extensions
+    wheel
   ];
 
   # No tests
   doCheck = false;
 
-  # Importing touches torch.cuda at module import time and queries GPU memory.
-  dontUsePythonImportsCheck = true;
+  # Without a GPU, unsloth falls back to its CPU backend.
+  pythonImportsCheck = [ "unsloth_zoo" ];
 
   # Cover the import path on GPU-enabled runners instead of pure builders.
   passthru.gpuCheck =
@@ -131,7 +136,13 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Utils for Unsloth";
     homepage = "https://github.com/unslothai/unsloth_zoo";
-    license = lib.licenses.lgpl3Plus;
+    license = with lib.licenses; [
+      lgpl3Plus
+      # Several code sections are AGPL-3.0-only.
+      agpl3Only
+      # Vendored flash-linear-attention
+      mit
+    ];
     maintainers = with lib.maintainers; [ hoh ];
   };
 })

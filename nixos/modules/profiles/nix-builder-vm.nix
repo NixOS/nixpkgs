@@ -21,6 +21,7 @@
         {
           from = "host";
           guest.port = 22;
+          host.address = "127.0.0.1";
           host.port = config.virtualisation.darwin-builder.hostPort;
         }
       ];

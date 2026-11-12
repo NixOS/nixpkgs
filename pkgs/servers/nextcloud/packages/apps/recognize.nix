@@ -28,9 +28,14 @@ let
       modelHash = "sha256-Yx/NJwtD4ltETpkzlcadZsFKqEmMneoZaXiHVSB1WoE=";
     };
     "34" = {
-      version = "12.0.0";
-      appHash = "sha256-1TpfDRMmJ7d5MPp0iTr/RpZHAG7LDsXof9u35O3+5Mg=";
-      modelHash = "sha256-+ec7kRPyWPVTk2wgRKMOP5mdmSnpv9mZmiRicEDKD6A=";
+      version = "12.0.3";
+      appHash = "sha256-9T/MP1jPjlkvTyO8pm4yW9aA70CAht/RYtjTragxs3A=";
+      modelHash = "sha256-Owp6OBVDZyClp8nlVXNWncz4ZBFDZ7Gv38noUhBOW74=";
+    };
+    "35" = {
+      version = "13.2.0";
+      appHash = "sha256-xe/cizixT2W8bEwZ6oQBNo1x0T7C7DLdJRyWx+U6wKU=";
+      modelHash = "sha256-utc6hCdqb9J68r5/E216S7Ho2Sb6pEIzIHSYocy/WSY=";
     };
   };
   currentVersionInfo =

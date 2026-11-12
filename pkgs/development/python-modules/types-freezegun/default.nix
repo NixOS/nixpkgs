@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.1.10";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "types-freezegun";
     inherit (finalAttrs) version;

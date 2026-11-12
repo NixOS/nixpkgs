@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "pd777";
-  version = "0-unstable-2026-06-19";
+  version = "0-unstable-2026-10-30";
 
   src = fetchFromGitHub {
     owner = "mittonk";
     repo = "PD777";
-    rev = "118c8f893073f2e59eba6eb9fd1dd34d36318605";
-    hash = "sha256-j52fWDJ5V0+9IsFT2lhdrkNWe/oaUrGUsLiki84CRXM=";
+    rev = "13910d1cf8b139b7560fc61f7a2e0f6c95e407e5";
+    hash = "sha256-2cDQZ91Fy2qbp+hDnNv/uyIwt++885rSth6wj0L+6Ig=";
   };
 
   sourceRoot = "source/source/libretro";

@@ -13,7 +13,6 @@
   libpng,
   libsndfile,
   libvorbis,
-  lua,
   makeDesktopItem,
   makeWrapper,
   miniupnpc,
@@ -64,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libsndfile
     libvorbis
-    lua
     miniupnpc
     openal
     SDL2

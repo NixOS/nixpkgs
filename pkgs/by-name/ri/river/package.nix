@@ -18,16 +18,16 @@
   wayland-scanner,
   wlroots_0_20,
   xwayland,
-  zig_0_16,
+  zig_0_17,
   withManpages ? true,
   xwaylandSupport ? true,
 }:
 let
-  zig = zig_0_16;
+  zig = zig_0_17;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.4.8";
+  version = "0.5.2";
   __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "river";
     repo = "river";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vqOGyd0sddjYZ47xPMFmfzDIg8mHfIBzAJQ2CcsMQ3Y=";
+    hash = "sha256-60ezbC1xntng5tOUzk20J881mGljc9UZIE5EuzwY9mY=";
   };
 
   strictDeps = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-MVFoc361EKGhz5V/9tAOc8lldAi45o592oyOfHX1vTM=";
+    hash = "sha256-m9qXQPqrZzw7N0VjfCFJ3PZKbb3udzR0r8Xys4YEGL4=";
   };
 
   postConfigure = ''

@@ -30,7 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
   ];
 
-  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libgig ]}" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ libgig ])
+  ];
 
   meta = {
     homepage = "https://qsampler.sourceforge.io";

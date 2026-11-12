@@ -29,13 +29,9 @@ mkMesonExecutable (finalAttrs: {
   buildInputs = [
     nix-fetchers
     nix-store-test-support
+    nix-fetchers-c
     rapidcheck
     gtest
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
-    nix-fetchers-c
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "2.27") [
     libgit2
   ];
 

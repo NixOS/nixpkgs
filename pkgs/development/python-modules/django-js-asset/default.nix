@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-js-asset";
-  version = "4.1";
+  version = "4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "matthiask";
+    owner = "feincms";
     repo = "django-js-asset";
     tag = version;
-    hash = "sha256-ZfSO0S6NL8Jw1gynwHy3j6Em6nC5BYNNo9SEfoHmy0w=";
+    hash = "sha256-DGaVoscW76sLqP7E1goKgzphIk1tyqeW3B5ZCoCyGtM=";
   };
 
   build-system = [ hatchling ];
@@ -36,9 +36,9 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/matthiask/django-js-asset/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/feincms/django-js-asset/blob/${version}/CHANGELOG.rst";
     description = "Script tag with additional attributes for django.forms.Media";
-    homepage = "https://github.com/matthiask/django-js-asset";
+    homepage = "https://github.com/feincms/django-js-asset";
     maintainers = with lib.maintainers; [ hexa ];
     license = lib.licenses.bsd3;
   };

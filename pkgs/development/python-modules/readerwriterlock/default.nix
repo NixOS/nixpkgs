@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "readerwriterlock";
-  version = "1.0.9";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elarivie";
     repo = "pyReaderWriterLock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8FC+4aDgGpF1BmOdlkFtMy7OfWdSmvn9fjKXSmmeJlg=";
+    hash = "sha256-fPKO2SKbfVVFhlJaSeRicHuAaemBY3pcwa1kKLfKdAE=";
   };
 
   build-system = [ setuptools ];

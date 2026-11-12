@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "cocoon";
-  version = "0.11.3";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "haileyok";
     repo = "cocoon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+Qpv8cZmAkhIZFM4fCT4oXBYHlXzqFDRMRErjjZG67A=";
+    hash = "sha256-pvbEXY/ps+XB/Peq3+R76D2zd06Y33W1xzrnDiXiqxI=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-BFnZlUT4/jVdTC7bccKXLa9KiHaUM11J76DcFuBI7Ts=";
+  vendorHash = "sha256-2MF2rB+7DSjaF1bmyC2TcNaHFLaBOk6BIBFVDevPnDA=";
 
   passthru = {
     tests = lib.optionalAttrs stdenvNoCC.hostPlatform.isLinux { inherit (nixosTests) cocoon; };

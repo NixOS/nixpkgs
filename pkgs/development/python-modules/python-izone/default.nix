@@ -12,9 +12,9 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-izone";
-  version = "1.3.10";
+  version = "1.3.12";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Swamp-Ig";
     repo = "pizone";
-    tag = "v${version}";
-    hash = "sha256-X5yH3mzevCq4hO1IikfcvXmk9rTfL3jiMaf7mACZ+k0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G4Hx3gXIaASZ6SKC+q3Gowc/JKOmTVC0ACUy+DrZegg=";
   };
 
   build-system = [
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

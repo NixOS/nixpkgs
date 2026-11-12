@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   getopt,
-  lua,
+  lua5_2_compat,
   boost,
   libxcrypt,
   pkg-config,
@@ -13,6 +13,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   self = stdenv.mkDerivation (finalAttrs: {
     pname = "highlight";
     version = "4.21";

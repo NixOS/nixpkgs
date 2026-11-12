@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "apftool-rs";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "suyulin";
     repo = "afptool-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bu6iaKGoaj+EKLJ7ulYdKyKSQuaX++zXnyiwBNUKz3Q=";
+    hash = "sha256-5cNxwkL1oHWMcZus27yNeC/pT7DCWJ+GDUY16NZ/0yE=";
   };
 
-  cargoHash = "sha256-/AJ5UCrh3RYklrfQ7zb1N9n2rXsdPrvH+QGYnKGU1dc=";
+  cargoHash = "sha256-4Zvu+5BKYO5EWllbYgp31ZRPL0SBqDN0QOMjQUFZyUM=";
 
   meta = {
     description = "About Tools for Rockchip image unpack tool";

@@ -10,9 +10,10 @@
   elfutils,
   nix,
   nixosTests,
-  systemd,
+  systemdLibs,
   util-linux,
   cacert,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -31,9 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libarchive
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemd
+    systemdLibs
   ];
 
   nativeBuildInputs = [ pkg-config ];

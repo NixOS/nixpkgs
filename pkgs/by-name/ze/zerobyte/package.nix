@@ -68,14 +68,14 @@ let
       # Required, otherwise the fixed-output derivation references store paths.
       dontFixup = true;
 
-      outputHash = "sha256-GHLJ04D+f7uzWhFDxWVP++XGF2tPziMcfYrgaz2oQL8=";
+      outputHash = "sha256-4MuYKmi4Vit50g5kUQhHuTTyz7aL73igFcD0yaLRckw=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zerobyte";
-  version = "0.42.0";
+  version = "0.43.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nicotsx";
     repo = "zerobyte";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gueZUwoEetsEuAG5QXvLgUUrib79sk2azcmD0XZMhQo=";
+    hash = "sha256-Bv2ZFOWYiKEwjVLHnAY/N8+KqZVaF03mRGl9rkNyohI=";
   };
 
   nativeBuildInputs = [
@@ -108,6 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R ${finalAttrs.passthru.node_modules}/packages ./packages
     chmod -R u+w ./node_modules ./packages
     patchShebangs --build ./node_modules
+
+    # Nitro embeds build and asset timestamps, and collects assets in parallel.
+    # Use a stable timestamp and sort the completed asset map before serializing.
+    substituteInPlace node_modules/nitro/dist/_build/common.mjs \
+      --replace-fail 'new Date()).toJSON()' 'new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000)).toJSON()' \
+      --replace-fail 'stat.mtime.toJSON()' 'new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000).toJSON()' \
+      --replace-fail 'JSON.stringify(assets, null, 2)' 'JSON.stringify(Object.fromEntries(Object.keys(assets).sort().map((id) => [id, assets[id]])), null, 2)'
 
     runHook postConfigure
   '';

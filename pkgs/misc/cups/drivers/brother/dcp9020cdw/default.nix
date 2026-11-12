@@ -26,7 +26,7 @@ in
 
     src = fetchurl {
       url = "https://download.brother.com/welcome/dlf100441/dcp9020cdwlpr-${version}-1.i386.deb";
-      sha256 = "1z6nma489s0a0b0a8wyg38yxanz4k99dg29fyjs4jlprsvmwk56y";
+      hash = "sha256-3pTJ69b5Ukm09C6J11Ka5FvVPRrPc6TAAgrohIiq1vw=";
     };
 
     nativeBuildInputs = [
@@ -83,7 +83,7 @@ in
 
     src = fetchurl {
       url = "https://download.brother.com/welcome/dlf100443/dcp9020cdwcupswrapper-${version}-1.i386.deb";
-      sha256 = "04yqm1qv9p4hgp1p6mqq4siygl4056s6flv6kqln8mvmcr8zaq1s";
+      hash = "sha256-OmD1UWZ1V2QpnmZTZ7QpgNDnoyYYV3PDfZDctHGo2BM=";
     };
 
     nativeBuildInputs = [

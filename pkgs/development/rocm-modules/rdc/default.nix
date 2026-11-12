@@ -49,7 +49,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "7.2.3";
+  version = "7.2.4";
 
   outputs = [
     "out"
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rdc"
       "shared"
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_ROCRTEST=ON"
     "-DRSMI_INC_DIR=${rocm-smi}/include"
     "-DRSMI_LIB_DIR=${rocm-smi}/lib"
-    "-DGRPC_ROOT=${grpc}"
+    "-DGRPC_ROOT=${lib.getDev grpc}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"

@@ -16,6 +16,8 @@
   fmt,
   jsoncpp,
   icu77,
+  libzippp,
+  libzip,
   # options
   enableMysql ? false,
   libmysqlclient,
@@ -123,13 +125,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gerbera";
-  version = "3.0.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dszd4WSTjOWwLNha0yq1gtC5kxCrJMhnnhKYaor8JyU=";
+    sha256 = "sha256-4j3TXPdc1MXzt7wFogAbRISPiE9hgySMpZGKuoNeUv0=";
   };
 
   postPatch =
@@ -167,6 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     jsoncpp
     icu77
+    libzippp
+    libzip
   ]
   ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 

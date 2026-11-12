@@ -47,7 +47,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk_headless;
-  mvnHash = "sha256-IJBmztfNco5UF0BwfeU5QHwvr50bXsrZFOSIPoGBijA=";
+  mvnHash = "sha256-iym/VVGoNV2+H39cdLNsRG6EElxfGGzytFAfrV+cFOY=";
 
   # Disable gitcommitid plugin which needs a .git folder which we don't have.
   # Disable failing tests which either need internet access or are flaky.

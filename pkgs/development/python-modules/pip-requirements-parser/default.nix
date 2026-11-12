@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "pip-requirements-parser";
     tag = "v${finalAttrs.version}";
     hash = "sha256-UMrwDXxk+sD3P2jk7s95y4OX6DRBjWWZZ8IhkR6tnZ4=";
@@ -54,8 +54,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Module to parse pip requirements";
-    homepage = "https://github.com/nexB/pip-requirements-parser";
-    changelog = "https://github.com/nexB/pip-requirements-parser/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    homepage = "https://github.com/aboutcode-org/pip-requirements-parser";
+    changelog = "https://github.com/aboutcode-org/pip-requirements-parser/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

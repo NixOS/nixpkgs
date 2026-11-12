@@ -317,8 +317,21 @@
     };
 
     # 13.3 to 13.4 adds support for Clang 22 and GCC 16
-    # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    # https://docs.nvidia.com/cuda/archive/13.4.3/cuda-installation-guide-linux/index.html#host-compiler-support-policy
     "13.4" = {
+      clang = {
+        maxMajorVersion = "22";
+        minMajorVersion = "7";
+      };
+      gcc = {
+        maxMajorVersion = "16";
+        minMajorVersion = "6";
+      };
+    };
+
+    # No changes from 13.4 to 13.5: the host compiler checks in crt/host_config.h are unchanged
+    # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "13.5" = {
       clang = {
         maxMajorVersion = "22";
         minMajorVersion = "7";

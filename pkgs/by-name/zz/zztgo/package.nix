@@ -10,7 +10,6 @@ buildGoModule {
   version = "0-unstable-2020-05-29";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "benhoyt";

@@ -269,7 +269,7 @@ in
       # and if not, bootstrap a secret in `/var/lib/lldap/jwt_secret_file` and give that to lldap.
       script =
         lib.optionalString (!cfg.settings ? jwt_secret) ''
-          if [[ -z "$LLDAP_JWT_SECRET_FILE" ]] && [[ -z "$LLDAP_JWT_SECRET" ]]; then
+          if [[ -z "''${LLDAP_JWT_SECRET_FILE:-}" ]] && [[ -z "''${LLDAP_JWT_SECRET:-}" ]]; then
             if [[ ! -e "./jwt_secret_file" ]]; then
               ${lib.getExe pkgs.openssl} rand -base64 -out ./jwt_secret_file 32
             fi

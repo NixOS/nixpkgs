@@ -11,6 +11,9 @@
   hyphen,
   icu,
   imagemagick,
+  jxrlib,
+  libavif,
+  libjxl,
   libjpeg,
   libmtp,
   libpng,
@@ -23,7 +26,7 @@
   optipng,
   piper-tts,
   pkg-config,
-  podofo0,
+  podofo,
   poppler-utils,
   python314Packages,
   qt6,
@@ -41,19 +44,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.14.0";
+  version = "9.17.0";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-0bwkAksJQkKcYn6cXQsl1R35wa8eHY3KPlcvA7GUxWE=";
+    hash = "sha256-B1B+qKzl+KD3aME6/beZrWhaY2wc29ixEWLdtBl0O+U=";
   };
 
   patches =
     let
-      debian-source = "ds+_0.10.6-1";
+      debian-source = "ds+_1.1.2-1";
       debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         name = "0007-Hardening-Qt-code-${debian-tag}.patch";
         url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-        hash = "sha256-ItJalYmBhK4Qgz6QDGbPpBMaa6oGQetQvg5ie3oxFMM=";
+        hash = "sha256-IMrk//WCn3rvriBuivnYrurRdLc7R7XBCpaWgHmMcHY=";
       })
     ];
 
@@ -113,16 +116,19 @@ stdenv.mkDerivation (finalAttrs: {
     hyphen
     icu
     imagemagick
+    libavif
     libjpeg
+    libjxl
     libmtp
     libpng
     libstemmer
     libuchardet
     libusb1
     onnxruntime
-    podofo0
+    podofo
     poppler-utils
     qt6.qtbase
+    qt6.qtimageformats
     qt6.qtwayland
     sqlite
     (python3Packages.python.withPackages (
@@ -188,8 +194,8 @@ stdenv.mkDerivation (finalAttrs: {
     MAGICK_LIB = "${lib.getLib imagemagick}/lib";
     FC_INC_DIR = "${lib.getDev fontconfig}/include/fontconfig";
     FC_LIB_DIR = "${lib.getLib fontconfig}/lib";
-    PODOFO_INC_DIR = "${lib.getDev podofo0}/include/podofo";
-    PODOFO_LIB_DIR = "${lib.getLib podofo0}/lib";
+    PODOFO_INC_DIR = "${lib.getDev podofo}/include/podofo";
+    PODOFO_LIB_DIR = "${lib.getLib podofo}/lib";
     XDG_DATA_HOME = "${placeholder "out"}/share";
     XDG_UTILS_INSTALL_MODE = "user";
   }
@@ -240,6 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
           --set QTWEBENGINE_CHROMIUM_FLAGS "--disable-gpu" \
           --prefix PATH : ${
             lib.makeBinPath [
+              jxrlib
               libjpeg
               libwebp
               optipng
@@ -263,7 +270,7 @@ stdenv.mkDerivation (finalAttrs: {
       excludedTestNames = [
         "test_7z" # we don't include 7z support
         "test_zstd" # we don't include zstd support
-        "test_qt" # we don't include svg or webp support
+        "test_qt" # the sandbox has too few fonts for its headless Qt check
         "test_import_of_all_python_modules" # explores actual file paths, gets confused
         "test_websocket_basic" # flaky
 
@@ -302,6 +309,9 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       runHook preInstallCheck
+
+      # Only the wrapper puts the webp plugin on the plugin path
+      export QT_PLUGIN_PATH=${qt6.qtimageformats}/${qt6.qtbase.qtPluginPrefix}''${QT_PLUGIN_PATH:+:$QT_PLUGIN_PATH}
 
       python setup.py test ${testFlags}
 

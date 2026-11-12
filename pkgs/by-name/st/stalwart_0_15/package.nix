@@ -13,6 +13,7 @@
   nix-update-script,
   nixosTests,
   rocksdb,
+  rust-jemalloc-sys-unprefixed,
   callPackage,
   withFoundationdb ? false,
   stalwartEnterprise ? false,
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     openssl
+    rust-jemalloc-sys-unprefixed
     sqlite
     zstd
   ]
@@ -67,6 +69,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "redis"
     "azure"
     "nats"
+    # Needed for rust-jemalloc-sys-unprefixed.
+    "jemallocator/unprefixed_malloc_on_supported_platforms"
   ]
   ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];
@@ -212,12 +216,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.agpl3Only
     ]
     ++ lib.optionals stalwartEnterprise [
-      {
-        fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
-        url = "https://github.com/stalwartlabs/stalwart/blob/main/LICENSES/LicenseRef-SEL.txt";
-        free = false;
-        redistributable = false;
-      }
+      lib.licenses.stalwart
     ];
 
     mainProgram = "stalwart";

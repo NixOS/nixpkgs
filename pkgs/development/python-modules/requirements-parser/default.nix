@@ -33,7 +33,7 @@ buildPythonPackage rec {
     description = "Pip requirements file parser";
     homepage = "https://github.com/davidfischer/requirements-parser";
     changelog = "https://github.com/madpah/requirements-parser/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.bsd2;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

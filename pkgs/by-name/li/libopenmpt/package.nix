@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchurl,
@@ -11,13 +10,13 @@
   portaudio,
   libsndfile,
   flac,
-  usePulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  usePulseAudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenmpt";
-  version = "0.8.9";
+  version = "0.8.10";
 
   outputs = [
     "out"
@@ -27,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${finalAttrs.version}+release.autotools.tar.gz";
-    hash = "sha256-186E/QXWhsS89mr0Dq6Fevo3FELbYO7aP4dL1s9vwxg=";
+    hash = "sha256-l20lkojEDNKFdx930J7/PQJRRRHVZ37Pz7U75QEzF+I=";
   };
 
   enableParallelBuilding = true;
@@ -49,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
   ];
 
+  strictDeps = true;
+
   configureFlags = [
     (lib.strings.withFeature usePulseAudio "pulseaudio")
   ];
@@ -60,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Cross-platform C++ and C library to decode tracked music files into a raw PCM audio stream";

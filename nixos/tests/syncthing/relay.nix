@@ -1,9 +1,9 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "syncthing-relay";
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.me-and ];
 
-  nodes.machine = {
+  containers.machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.jq ];
     services.syncthing.relay = {
       enable = true;

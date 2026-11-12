@@ -50,8 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/diyan/pywinrm";
     changelog = "https://github.com/diyan/pywinrm/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    maintainers = [ ];
   };
 }

@@ -4,6 +4,9 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
+  zstd,
+  sqlite,
   git,
   nix-eval-jobs,
   nix-output-monitor,
@@ -24,21 +27,25 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npb";
-  version = "1.1.3";
+  version = "1.2.2";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "samestep";
     repo = "npb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8GsMAmwRGTZ9ZvDXfPmVDoOCSHJuQd/1EwIP7hmTDGo=";
+    hash = "sha256-jGpuGREsth+sI+9EWCcItV9tVTLIFsnhCo89Jj7wdyk=";
   };
 
-  cargoHash = "sha256-apnM5aLI0bXp86yvTgkUL6LnHHCEDeVD9ltovmsQ0ak=";
+  cargoHash = "sha256-ychFjWdbkDiFmYYpv9JTK1k25H2AcBizDkka/LDEmqM=";
 
-  nativeBuildInputs = lib.optional buildCanExecuteHost installShellFiles;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional buildCanExecuteHost installShellFiles;
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   env = {
     GIT_BIN = lib.getExe git;

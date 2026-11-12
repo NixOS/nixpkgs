@@ -8,7 +8,7 @@
   tdir,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "runs";
   version = "1.2.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rec";
     repo = "runs";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aEamhXr3C+jYDzQGzcmGFyl5oEtovxlNacFM08y0ZEk=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Run a block of text as a subprocess";
     homepage = "https://github.com/rec/runs";
-    changelog = "https://github.com/rec/runs/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/rec/runs/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

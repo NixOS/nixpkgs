@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "entangle";
     repo = "entangle";
     tag = "v${finalAttrs.version}";
-    sha256 = "hz2WSDOjriQSavFlDT+35x1X5MeInq80ZrSP1WR/td0=";
+    hash = "sha256-hz2WSDOjriQSavFlDT+35x1X5MeInq80ZrSP1WR/td0=";
   };
 
   patches = [

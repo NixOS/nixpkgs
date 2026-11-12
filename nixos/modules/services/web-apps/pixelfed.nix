@@ -18,25 +18,9 @@ let
     optipng
     pngquant
     gifsicle
-    ffmpeg
+    ffmpeg-headless
   ];
-  # Ensure PHP extensions: https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L135-L147
-  phpPackage = cfg.phpPackage.buildEnv {
-    extensions =
-      { enabled, all }:
-      enabled
-      ++ (with all; [
-        bcmath
-        ctype
-        curl
-        mbstring
-        gd
-        intl
-        zip
-        redis
-        imagick
-      ]);
-  };
+  phpPackage = cfg.phpPackage;
   configFile = pkgs.writeText "pixelfed-env" (lib.generators.toKeyValue { } cfg.settings);
   # Management script
   pixelfed-manage = pkgs.writeShellScriptBin "pixelfed-manage" ''
@@ -66,7 +50,12 @@ in
     pixelfed = {
       enable = mkEnableOption "a Pixelfed instance";
       package = mkPackageOption pkgs "pixelfed" { };
-      phpPackage = mkPackageOption pkgs "php83" { };
+      phpPackage = mkOption {
+        type = types.package;
+        default = cfg.package.phpPackage;
+        defaultText = lib.literalExpression "config.services.pixelfed.package.phpPackage";
+        description = "The PHP package to use for Pixelfed.";
+      };
 
       user = mkOption {
         type = types.str;
@@ -281,6 +270,7 @@ in
         REDIS_SCHEME = "unix";
         REDIS_HOST = config.services.redis.servers.pixelfed.unixSocket;
         REDIS_PATH = config.services.redis.servers.pixelfed.unixSocket;
+        REDIS_PORT = 0;
       })
       (mkIf (cfg.database.createLocally) {
         DB_CONNECTION = cfg.database.type;
@@ -335,11 +325,11 @@ in
       inherit user group;
       inherit phpPackage;
 
-      phpOptions = ''
-        post_max_size = ${toString cfg.maxUploadSize}
-        upload_max_filesize = ${toString cfg.maxUploadSize}
+      phpOptions = {
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
         max_execution_time = 600;
-      '';
+      };
 
       settings = {
         "listen.owner" = user;
@@ -413,8 +403,12 @@ in
     systemd.services.pixelfed-data-setup = {
       description = "Pixelfed setup: migrations, environment file update, cache reload, data changes";
       wantedBy = [ "multi-user.target" ];
-      after = lib.optional cfg.database.createLocally dbUnit;
-      requires = lib.optional cfg.database.createLocally dbUnit;
+      after =
+        (lib.optional cfg.database.createLocally dbUnit)
+        ++ (lib.optional cfg.redis.createLocally redisService);
+      requires =
+        (lib.optional cfg.database.createLocally dbUnit)
+        ++ (lib.optional cfg.redis.createLocally redisService);
       path =
         with pkgs;
         [
@@ -437,7 +431,7 @@ in
         # Before running any PHP program, cleanup the code cache.
         # It's necessary if you upgrade the application otherwise you might
         # try to import non-existent modules.
-        rm -f ${cfg.runtimeDir}/app.php
+        rm -f ${cfg.runtimeDir}/{app,providers}.php
         rm -rf ${cfg.runtimeDir}/cache/*
 
         # Concatenate non-secret .env and secret .env
@@ -455,9 +449,10 @@ in
         chmod g+x ${cfg.dataDir}/storage ${cfg.dataDir}/storage/app
         chmod -R g+rX ${cfg.dataDir}/storage/app/public
 
-        # Link the app.php in the runtime folder.
+        # Link the bootstrap files in the runtime folder.
         # We cannot link the cache folder only because bootstrap folder needs to be writeable.
         ln -sf ${pixelfed}/bootstrap-static/app.php ${cfg.runtimeDir}/app.php
+        ln -sf ${pixelfed}/bootstrap-static/providers.php ${cfg.runtimeDir}/providers.php
 
         # https://laravel.com/docs/10.x/filesystem#the-public-disk
         # Creating the public/storage → storage/app/public link

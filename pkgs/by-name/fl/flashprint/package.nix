@@ -28,7 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
   ];
 
-  qtWrapperArgs = [ "--prefix QT_QPA_PLATFORM : xcb" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "QT_QPA_PLATFORM"
+    ":"
+    "xcb"
+  ];
 
   installPhase = ''
     runHook preInstall

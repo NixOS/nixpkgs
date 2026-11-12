@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-XuAVckgTsKvngrR/blgpLgONaWxfrn8o7hCKqCGPNeM=";
   };
 
-  strictDeps = true;
-
   cargoHash = "sha256-VcdHlQOplki31uLOutVx7HH7rjH9a5fEZhlxtLvuS9E=";
 
   __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [

@@ -57,12 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
     mainProgram = "DSView";
+    mainDarwinApp = "DSView.app";
     homepage = "https://www.dreamsourcelab.com/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       bachp
-      carlossless
+      karstx
     ];
   };
 })

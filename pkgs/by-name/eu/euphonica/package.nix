@@ -10,6 +10,7 @@
   rustPlatform,
   rustc,
   wrapGAppsHook4,
+  alsa-lib,
   cairo,
   dbus,
   gdk-pixbuf,
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "euphonica";
-  version = "0.99.7-beta-1";
+  version = "0.99.8-beta-1";
 
   src = fetchFromGitHub {
     owner = "htkhiem";
     repo = "euphonica";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Te6/LAP4J1kW1aOvSVVrbLJSBfBwt3ia0dM7cBzOOD8=";
+    hash = "sha256-Z/WSfo1d51NOA45vcWQZRCzpcM/J8Q8fUjnUufzm5hc=";
     fetchSubmodules = true;
   };
 
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-TRERgKHkQa+/32JS2xUiuXxg9bEsur1Z7hITbhQOFEM=";
+    hash = "sha256-RGqGKBu63iLhN+lAT1VjDshge3XGvvw4ep+w4BZKc8A=";
   };
 
   mesonBuildType = "release";
@@ -81,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    alsa-lib
     cairo
     dbus
     gdk-pixbuf

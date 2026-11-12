@@ -15,7 +15,6 @@ buildPythonPackage {
   pname = "openexr";
   inherit (pkgs.openexr) version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \

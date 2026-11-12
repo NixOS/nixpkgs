@@ -4,18 +4,24 @@
   fetchurl,
   pkg-config,
   intltool,
+  meson,
+  ninja,
   python3Packages,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
+  dbus,
+  desktop-file-utils,
+  fribidi,
   glib,
+  libadwaita,
   libxml2,
   libxslt,
   sqlite,
   libsoup_3,
-  webkitgtk_4_1,
+  webkitgtk_6_0,
   json-glib,
   gst_all_1,
   libnotify,
-  gtk3,
+  gtk4,
   gsettings-desktop-schemas,
   libpeas2,
   libsecret,
@@ -26,25 +32,31 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.16.14";
+  version = "2.0.3";
 
   src = fetchurl {
-    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-/zux42TNR453/XCep9/BJgObEXwT5Lq0dAVbucET1Og=";
+    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-77hZXT4+dkalBmhlNB5ScWCOC6TKhYavOFlQc382QG8=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook3
+    desktop-file-utils
+    wrapGAppsHook4
     python3Packages.wrapPython
     intltool
+    meson
+    ninja
     pkg-config
     gobject-introspection
   ];
 
   buildInputs = [
+    dbus
+    fribidi
     glib
-    gtk3
-    webkitgtk_4_1
+    gtk4
+    webkitgtk_6_0
+    libadwaita
     libxml2
     libxslt
     sqlite
@@ -66,9 +78,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postFixup = ''
-    buildPythonPath ${python3Packages.pycairo}
-    patchPythonScript $out/lib/liferea/plugins/trayicon.py
-
     buildPythonPath ${python3Packages.requests}
     patchPythonScript $out/lib/liferea/plugins/download-manager.py
   '';

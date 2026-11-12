@@ -8,17 +8,15 @@
   django-polymorphic,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-routing";
-  version = "0.4.3";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DanSheps";
     repo = "netbox-routing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3biANhaAi3uRtaXnAw4i6nWnHkARkkBVqyBHLXIMOdA=";
+    hash = "sha256-e4CSO1Tl4J7Nwmqp4Pi+x7h61elgtzBOco/GclT1VtU=";
   };
 
   build-system = [ setuptools ];

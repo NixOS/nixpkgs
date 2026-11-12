@@ -3,13 +3,22 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  makeBinaryWrapper,
+  glib,
+  libsecret,
 }:
 
+let
+  libPath = lib.makeLibraryPath [
+    libsecret
+    glib
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "sonarqube-cli";
-  version = "1.8.0.5274";
+  version = "1.11.0.16877";
 
   src =
     let
@@ -18,15 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     {
       x86_64-linux = fetchurl {
         url = "${baseUrl}/linux/sonarqube-cli-${finalAttrs.version}-linux-x86-64.bin";
-        hash = "sha256-+/05s3mNfBGhxcgTdzUfgrqK5r5lM1JD8Ls8keepIdE=";
+        hash = "sha256-A7czalWXnFubR+NWlqI9f81TBr1vghf9KerhBleNBCg=";
       };
       aarch64-linux = fetchurl {
         url = "${baseUrl}/linux/sonarqube-cli-${finalAttrs.version}-linux-arm64.bin";
-        hash = "sha256-Uy5x5IuRDFh0H5EYzehFhUweSoIe0PUOFQLwbNo8m7U=";
+        hash = "sha256-S0dhm9ra18IaGW1zUmhFk8JdD8ZwfdK2FSsFY0hzDr0=";
       };
       aarch64-darwin = fetchurl {
         url = "${baseUrl}/macos/sonarqube-cli-${finalAttrs.version}-macos-arm64.bin";
-        hash = "sha256-uk+y6o6YdC2zYRYuyEVCOdXWLIy6imxBMEytt/IVFWA=";
+        hash = "sha256-j+V3SsI80FQY5t5TePahqQydKb13X0lNTSlglzYJk24=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -35,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
+    makeBinaryWrapper
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -55,6 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     install -Dm755 $src $out/bin/sonar
     runHook postInstall
+  '';
+
+  # The binary dlopen()s libsecret-1.so.0, libgobject-2.0.so.0 and
+  # libglib-2.0.so.0 for keychain storage. Patching the ELF (RPATH/NEEDED)
+  # corrupts the Bun payload, so expose them via LD_LIBRARY_PATH.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/sonar \
+      --prefix LD_LIBRARY_PATH : ${libPath}
   '';
 
   doInstallCheck = true;

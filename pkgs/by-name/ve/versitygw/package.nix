@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fnmhA3Et3rF0GgRdV41rdTrBZCh2b8dvRYTATaqDb18=";
+    hash = "sha256-DNfVHuwL7zdLl+geGBX77Tfm6B9uYYsbrKyKtm28Qbo=";
   };
 
-  vendorHash = "sha256-HyDY6tTDvEDQI85Z4SGb11oDPTicnp8TR1sH7n7Bbcg=";
+  vendorHash = "sha256-koXJU3e0zDyUqR413//zVQt4r77BXf7g9iQGw0t51qs=";
 
   excludedPackages = [
     # depends on cgo/cuda
@@ -47,6 +47,15 @@ buildGoModule (finalAttrs: {
 
         # requires extended attributes
         "^TestObjectPublishLockHonorsContextWhileWaiting$"
+        "^TestFsyncPutObject"
+        "^TestFsyncFailureFailsThePut$"
+        "^TestListObjectsV2ContinuationTokenEcho$"
+        "^TestObjectLockModeNoneRejectsConditionalWrites$"
+        "^TestListObjectsExcludeDirsFileNotSkipped$"
+        "^TestListObjectsNestedMetaTmpDir$"
+        "^TestExcludeDirsCaseAgrees$"
+        "^TestExcludedDirKeysReserved$"
+        "^TestExcludeDirsEmptyKeysAllowed$"
         "/xattr$"
       ];
     in

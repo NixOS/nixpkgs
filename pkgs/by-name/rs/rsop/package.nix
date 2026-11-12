@@ -7,20 +7,21 @@
   nix-update-script,
   testers,
   rsop,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsop";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromCodeberg {
     owner = "heiko";
     repo = "rsop";
     rev = "rsop/v${finalAttrs.version}";
-    hash = "sha256-vZW4L3hm2vRRoLcxU631jiNrbk+w0hDaL4VXIrtP2aY=";
+    hash = "sha256-0sXrXDROuqUT6psFdHyxWAaijQqBIyaguR7m3SwY5to=";
   };
 
-  cargoHash = "sha256-qrurMKwSs0w2D6KPto7tpsuLGuAJ9drKhdmIAbEaD9M=";
+  cargoHash = "sha256-Oee/9ja5QuBxDr56dO5998RVpdZD/rwSoQGVilGbH5Q=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -1,7 +1,9 @@
 {
+  callPackage,
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   libbpf,
   libcap_ng,
@@ -30,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
-  version = "26.03.2";
+  version = "26.09.0";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aIC9l9rCBcc+IaMEz1HJlcUDm7Q09htJXsGa+p3qk48=";
+    hash = "sha256-Hw1sOADqQYn0JX3rJcT6bCAarzRV1OaTPyuRCDv5sF4=";
     fetchSubmodules = true;
   };
 
@@ -46,6 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
     "dev"
     "tools"
+  ];
+
+  patches = [
+    # tests: Make localnet loopback IGMP report scapy 2.8 safe.
+    # TODO: remove on next update
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/fb3dbe3d9fb0c4e46874480b6ad30b4014b24b03.patch";
+      hash = "sha256-C3nucwyyouMY+CcfZQJrwIlpqq9Oh6vwuxKDKHnsQBA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -162,7 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Open Virtual Network";

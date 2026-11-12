@@ -39,9 +39,6 @@
         };
       };
 
-      # Prerequisites
-      boot.initrd.systemd.enable = true;
-
       specialisation.new-generation.configuration = {
         environment.etc."newgen".text = "newgen";
         # Regression test for https://github.com/NixOS/nixpkgs/issues/505475:

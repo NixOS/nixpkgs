@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "p1c2u";
+    owner = "python-openapi";
     repo = "openapi-schema-validator";
     tag = version;
     hash = "sha256-XOtSnlJJGEa6pOQDHTFRF0zqNxJIB2VlZvFv5kxwUIM=";

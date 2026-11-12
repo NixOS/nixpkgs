@@ -17,6 +17,8 @@ let
           sha256 = "sha256-gTAjJpaGBF+OAeIonMHn6a5asi3dHihJqQk6s6tycOs=";
         };
 
+        patches = [ ];
+
         nativeBuildInputs = with final; [
           setuptools
         ];

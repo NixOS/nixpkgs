@@ -55,7 +55,6 @@ buildPythonPackage (finalAttrs: {
   pname = "opensfm";
   version = "0.5.1-unstable-2026-08-17";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mapillary";

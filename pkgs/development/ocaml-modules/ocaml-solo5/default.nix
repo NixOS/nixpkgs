@@ -28,13 +28,13 @@ assert lib.asserts.assertOneOf "ocaml-solo5's ocaml version" entry allowlisted;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml-solo5";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-solo5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZbJoh3HHjD7XNvGK1Ehdu/uEoPFtRgVNNz8vtT7zaXI=";
+    hash = "sha256-ncCmcRs5zjDvJONF/SmE3OFWnBZzeP//1dZteDK4D6Y=";
   };
 
   strictDeps = true;
@@ -84,6 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkTarget = "test";
 
+  # 1.3.5 stopped installing a threads META (mirage/ocaml-solo5#187)
+  # findlib 1.9.8 `ocamlfind ocamlopt` exits when no threads package is found
+  # which breaks C stubs built with it, e.g. mirage-solo5 bindings
+  # drop once findlib has ocaml/ocamlfind@aedee07
+  postInstall = ''
+    mkdir -p $out/lib/ocaml-solo5/lib/threads
+    echo 'type_of_threads = "posix"' > $out/lib/ocaml-solo5/lib/threads/META
+  '';
+
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
@@ -111,6 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
               buildInputs = [ fmt ];
 
               env.MODE = mode;
+
+              # The custom installPhase installs everything into $out.
+              outputs = [ "out" ];
 
               buildPhase = ''
                 runHook preBuild

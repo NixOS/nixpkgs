@@ -7,15 +7,20 @@
   versionCheckHook,
   nix-update-script,
   pkg-config,
+  pkl,
+  python3,
+  aws-lc,
   libgit2,
   openssl,
-  usage,
+  cacert,
   gitMinimal,
+  writableTmpDirAsHomeHook,
+  runCommand,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hk";
-  version = "1.57.0";
+  version = "2.11.1";
 
   __structuredAttrs = true;
 
@@ -23,36 +28,49 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jdx";
     repo = "hk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n2u//Gq0MTTAF02ed/ioINxSC/y0J0uC3M04fTudpi0=";
+    hash = "sha256-92RZr2ldltEziMAVbJkjkhZ8JjQkgwi4ArbnCfA/AcA=";
   };
 
-  cargoHash = "sha256-UyJUIrnnqPAI9Li5DgPgKYFzn+hYW0yRMar+1nTi8eQ=";
+  cargoHash = "sha256-CGZcs1aYCLpw3tPgf6rf4yt6G2XxivcQOYLtB1KSzCk=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-    usage
+    pkl
+    python3
   ];
 
   buildInputs = [
+    aws-lc
     libgit2
     openssl
   ];
 
-  # Some tests build fixture repositories by shelling out to git.
-  nativeCheckInputs = [ gitMinimal ];
+  # Generate Builtins.pkl and metadata missing from the source archive
+  preBuild = ''
+    python3 scripts/gen_builtins.py
+  '';
 
-  # These tests require external dependencies and are fragile -- skipping.
-  checkFlags = [
-    "--skip=cli::init::detector::tests::test_detect_builtins_with_cargo_toml"
-    "--skip=cli::init::detector::tests::test_detect_builtins_with_package_json"
-    "--skip=cli::init::detector::tests::test_detect_eslint_with_contains"
-    "--skip=cli::init::detector::tests::test_detect_shell_scripts"
-    "--skip=cli::util::python_check_ast::tests::test_invalid_python"
-    "--skip=settings::tests::test_settings_builder_fluent_api"
-    "--skip=settings::tests::test_settings_from_config"
-    "--skip=settings::tests::test_settings_snapshot_caching"
+  env = {
+    HK_REQUIRE_EMBEDDED_PKL = "1";
+    LIBGIT2_NO_VENDOR = 1;
+  };
+
+  nativeCheckInputs = [
+    # reqwest needs a CA bundle even for local Pkl modules
+    cacert
+    # Some tests build fixture repositories by shelling out to git
+    gitMinimal
+    writableTmpDirAsHomeHook
   ];
+
+  preCheck = ''
+    # Some tests expect to run in a Git repo
+    git init --quiet
+  '';
+
+  # Pkl HTTP tests bind to localhost
+  __darwinAllowLocalNetworking = true;
 
   cargoBuildFlags = [
     "--bin"
@@ -64,14 +82,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  # Generate completions after patchelf to avoid ETXTBSY
+  postFixup = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hk \
       --bash <($out/bin/hk completion bash) \
       --fish <($out/bin/hk completion fish) \
       --zsh <($out/bin/hk completion zsh)
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.init =
+      runCommand "hk-init"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            cacert
+            gitMinimal
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          export HK_PKL_OFFLINE=1
+          export HK_PKL_CACHE_DIR="$TMPDIR/pkl-cache"
+
+          mkdir repo
+          cd repo
+          git init --quiet
+          echo '{}' > biome.jsonc
+
+          hk init
+          grep -F 'Builtins.biome' hk.pkl
+          hk validate
+
+          touch "$out"
+        '';
+  };
 
   meta = {
     description = "Tool for managing git hooks";

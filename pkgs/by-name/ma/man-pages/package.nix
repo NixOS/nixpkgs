@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "man-pages";
-  version = "6.19";
+  version = "6.20";
 
   # `man` is first: most people installing `man-pages` want man pages.
   # The binaries could be split to a separate package (as upstream suggests),
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/man-pages-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iKfEKtLgPYuW3HLZXkUfLYdf8PQxA6jrisgkITO9ywU=";
+    hash = "sha256-GA8NFqIULdlnF2CsCv6tzCXoYfaV60ICk+EgaofKCD8=";
   };
 
   # See https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/man/man7/man.7,

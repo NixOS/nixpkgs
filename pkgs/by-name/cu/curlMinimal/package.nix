@@ -37,6 +37,7 @@
   http3Support ? false,
   nghttp3,
   ngtcp2,
+  httpsigSupport ? false,
   websocketSupport ? false,
   idnSupport ? false,
   libidn2,
@@ -87,7 +88,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.22.0";
+  version = "8.23.0";
 
   src = fetchurl {
     urls = [
@@ -96,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-9+866KIuUh8omAP+k1Q+tkwym1iqc6niJN/ZFaKl9Pc=";
+    hash = "sha256-ja3X0lNqMU+YKtBaZRtxP0Jr99Aswsds/7l5byIY5sU=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -195,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature ldapSupport "ldap")
     (lib.enableFeature ldapSupport "ldaps")
     (lib.enableFeature websocketSupport "websockets")
+    (lib.enableFeature httpsigSupport "httpsig")
     # --with-ca-fallback is only supported for openssl https://github.com/curl/curl/blame/curl-8_16_0/acinclude.m4#L1258
     (lib.withFeature opensslSupport "ca-fallback")
     (lib.withFeature http3Support "nghttp3")
@@ -300,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
         # error: attribute 'override' missing
         # Additional checking with support http3 protocol.
         # nginx-http3 = useThisCurl nixosTests.nginx-http3;
-        nginx-http3 = nixosTests.nginx-http3;
+        nginx-http3 = nixosTests.nginx.mainline.http3;
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
         static = pkgsStatic.curl;
       };

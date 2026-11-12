@@ -1,18 +1,19 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
-  zig_0_14,
+  zig_0_17,
   nix-update-script,
+  anyzigExe ? "zig", # "zig" or "zls"
 }:
 
 let
-  zig = zig_0_14;
+  zig = zig_0_17;
 in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "anyzig";
-  version = "2026_03_26";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "any${anyzigExe}";
+  version = "2026_11_03";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,34 +22,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "marler8997";
     repo = "anyzig";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MQWFKVXsJdv/kV9Kn0GexiSLNDJdd9IGN9rQa2lhF6k=";
+    hash = "sha256-ripM/SMZNvfRcQyq5hM+kcQH3yQik1WVmACAWhOK/eE=";
   };
-
-  postPatch = ''
-    substituteInPlace build.zig.zon --replace-fail \
-      '12201a08d7eff7619c8eb8284691a3ff959861b4bdd87216f180ed136672fb4ea26f' \
-      'zipcmdline-0.0.0-AAAAAKBaAAAaCNfv92GcjrgoRpGj_5WYYbS92HIW8YDt'
-  '';
 
   nativeBuildInputs = [ zig ];
 
   zigDeps = zig.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-BeCa4IrFbb/bsz+ZuhKRUb9wV8a+JV/11FOBt8JJOKA=";
+    inherit (finalAttrs) version src;
+    pname = "anyzig";
+    hash = "sha256-UHKvzdYb7akR87WucYdCa/hlfo+KQxV8BSug7BbIkHk=";
   };
 
   postConfigure = ''
     ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
+  zigBuildFlags = lib.optionals (anyzigExe != "zig") [ "install-${anyzigExe}" ];
+
+  installPhase = ''
+    runHook preInstall
+    install -Dt $out/bin zig-out/bin/${anyzigExe}
+    runHook postInstall
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Universal zig executable that lets you run any version of zig";
+    description = "Universal ${anyzigExe} executable that lets you run any version of ${anyzigExe}";
     homepage = "https://github.com/marler8997/anyzig";
-    changelog = "https://github.com/marler8997/anyzig/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/marler8997/anyzig/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
-    mainProgram = "zig";
+    mainProgram = anyzigExe;
   };
 })

@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cyclonedx-python,
 }:
 
@@ -9,10 +9,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sbom-compliance-tool";
   version = "0.0.11";
   pyproject = true;
-  __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "software-compliance-org";
     repo = "sbom-compliance-tool";
     tag = finalAttrs.version;

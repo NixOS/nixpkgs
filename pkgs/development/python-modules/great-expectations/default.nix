@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "great-expectations";
+    owner = "fivetran";
     repo = "great_expectations";
     tag = finalAttrs.version;
     hash = "sha256-8yKuEVupqbwlBGeUDu25pvGltybljkmpbkcbC+G+/VI=";
@@ -138,7 +138,7 @@ buildPythonPackage (finalAttrs: {
     broken = true; # 408 tests fail
     description = "Library for writing unit tests for data validation";
     homepage = "https://docs.greatexpectations.io";
-    changelog = "https://github.com/great-expectations/great_expectations/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/fivetran/great_expectations/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

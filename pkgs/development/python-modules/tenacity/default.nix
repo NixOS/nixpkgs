@@ -2,26 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools-scm,
   tornado,
   typeguard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "tenacity";
-  version = "9.1.4";
+  version = "9.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jd";
     repo = "tenacity";
     tag = finalAttrs.version;
-    hash = "sha256-JiWfIlStps3HZQw4KEohKAUWWZtMAuluXXzvqU+p8V4=";
+    hash = "sha256-FuHzvj5E4GTUjDVQrM0nIapsj5P12p7pClwqJZLlq94=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

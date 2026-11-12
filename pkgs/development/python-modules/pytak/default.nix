@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pytak";
   version = "7.3.10";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snstac";

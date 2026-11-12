@@ -74,7 +74,7 @@ in
       description = "Sonarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "SONARR" cfg.settings;
+      environment = servarr.mkServarrSettingsEnvVars "SONARR" cfg.settings // servarr.commonDotnetEnvVars;
       serviceConfig = {
         Type = "simple";
         User = cfg.user;

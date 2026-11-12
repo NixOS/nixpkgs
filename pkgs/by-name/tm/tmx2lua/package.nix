@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "tmx2lua";
   version = "1.0.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "hawkthorne";
     repo = "tmx2lua";

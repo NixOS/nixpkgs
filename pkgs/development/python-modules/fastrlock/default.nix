@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "fastrlock";
-  version = "0.8.3";
+  version = "0.8.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scoder";
     repo = "fastrlock";
     tag = "v${version}";
-    hash = "sha256-NB/AR6g1ZP5Atc0zwZNuXLsxg8BM67rWnx3Q6Pb0k5k=";
+    hash = "sha256-yUPptWzmJ6vr4vMR6AQUQGAxymF4e9Otu3wr6NsCbmg=";
   };
 
   nativeBuildInputs = [ cython ];

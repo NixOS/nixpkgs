@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-openjpeg";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg-openjpeg";
     tag = "v${version}";
-    hash = "sha256-siZ/Mm1wmd7dWhGa4rdH9Frxis2jB9av/Kw2dEe5dpI=";
+    hash = "sha256-LLYinJ6cePXPkY+QhCr/xOeD2tWk9OyU8J/6yWgSXoI=";
   };
 
   # don't use vendored openjpeg submodule:

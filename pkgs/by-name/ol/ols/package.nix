@@ -8,14 +8,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ols";
-  version = "dev-2026-06";
+  version = "dev-2026-10";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
     tag = finalAttrs.version;
-    hash = "sha256-BqLaPVntNzK5N3lffjn4umLhqSM0bOcAVgzk+f13BKM=";
+    hash = "sha256-tVg9g5aN4ovUElpDzTSLpTQUq3OEiYUaq3YO98ex8wA=";
   };
+
+  patches = [
+    ./odin-2026-11-compat.patch
+  ];
 
   postPatch = ''
     substituteInPlace build.sh \
@@ -54,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       astavie
       atomicptr
+      yvnth
     ];
     mainProgram = "ols";
   };

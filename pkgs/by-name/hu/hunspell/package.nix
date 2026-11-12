@@ -4,7 +4,6 @@
   autoreconfHook,
   callPackage,
   fetchFromGitHub,
-  hunspellDicts,
   ncurses,
   nix-update-script,
   readline,
@@ -14,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hunspell";
-  version = "1.7.3";
+  version = "1.7.5";
 
   outputs = [
     "bin"
@@ -27,10 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hunspell";
     repo = "hunspell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NoLlH+4Hb6w+HYl2fSBzroav1Pb3GojFSTJGBxlteBM=";
+    hash = "sha256-K7r7t1ZIy1/LD1c24hpPEG8/+M9lmuwo2yVJ08I3YPE=";
   };
-
-  patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];
 
   postPatch = ''
     patchShebangs tests
@@ -99,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       getchoo
+      magicquark
       RossSmyth
     ];
     mainProgram = "hunspell";

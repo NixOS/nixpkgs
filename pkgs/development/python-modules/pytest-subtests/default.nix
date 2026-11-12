@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pytest-subtests";
   version = "0.15.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";

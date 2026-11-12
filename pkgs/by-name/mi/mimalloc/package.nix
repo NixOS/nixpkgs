@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mimalloc";
-  version = "3.4.5";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vNVZw2YsDkf0GcdFTNb/fXMQLQYvoc8P425LupPShpo=";
+    hash = "sha256-GmLMWdUR2/VXJY7A8dZtwoV9FJIx0sxj8KWI4kG8IrU=";
   };
 
   doCheck = !stdenv.hostPlatform.isStatic;
@@ -34,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
   ];
+
+  strictDeps = true;
+
   cmakeFlags = lib.mapAttrsToList lib.cmakeBool {
     MI_INSTALL_TOPLEVEL = true;
     MI_SECURE = secureBuild;
@@ -78,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Compact, fast, general-purpose memory allocator";

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jwodder";
+    owner = "wheelodex";
     repo = "wheel-filename";
     tag = "v${version}";
     hash = "sha256-YlJ3mQoaNY7wiLzADLZuTET5i37e/zn2S7n9dOdcE0E=";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Parse wheel filenames";
-    homepage = "https://github.com/jwodder/wheel-filename";
+    homepage = "https://github.com/wheelodex/wheel-filename";
     changelog = "https://github.com/wheelodex/wheel-filename/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];

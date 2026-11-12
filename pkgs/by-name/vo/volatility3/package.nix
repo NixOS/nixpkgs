@@ -3,23 +3,27 @@
   fetchFromGitHub,
   makeWrapper,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "volatility3";
-  version = "2.28.0";
+  version = "2.28.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = "volatility3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QO3rwGlVRBWEjReIGRDTK0LPVFN+4omkvxITaFC+5e0=";
+    hash = "sha256-UQgWJhxu7ETnVvd2Q1owiSsgi7+sIISgEcu/Zn+tny0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    writableTmpDirAsHomeHook
+  ];
 
   dependencies = with python3.pkgs; [
     capstone
@@ -28,10 +32,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pycryptodome
     yara-python
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d);
-  '';
 
   postFixup = ''
     for executable in vol volshell; do

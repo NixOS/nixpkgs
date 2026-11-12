@@ -50,12 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "SELinux binary policy manipulation library";
-    homepage = "http://userspace.selinuxproject.org";
+    homepage = "https://github.com/SELinuxProject/selinux";
     platforms = lib.platforms.linux;
     # Note: changing maintainers here changes maintainers for all SELinux-related libraries
     maintainers = with lib.maintainers; [
       RossComputerGuy
       numinit
+      naxdy
     ];
     license = lib.licenses.gpl2Plus;
     pkgConfigModules = [ "libselinux" ];

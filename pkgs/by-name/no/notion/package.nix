@@ -12,7 +12,7 @@
   libxft,
   libxinerama,
   libxrandr,
-  lua,
+  lua5_2_compat,
   makeWrapper,
   pkg-config,
   readline,
@@ -20,6 +20,9 @@
   xmessage,
   xterm,
 }:
+let
+  lua = lua5_2_compat;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
   version = "4.0.4";

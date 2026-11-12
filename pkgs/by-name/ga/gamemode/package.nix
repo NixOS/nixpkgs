@@ -9,7 +9,7 @@
   pkg-config,
   dbus,
   inih,
-  systemd,
+  systemdLibs,
   appstream,
   findutils,
   gawk,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dbus
     inih
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [

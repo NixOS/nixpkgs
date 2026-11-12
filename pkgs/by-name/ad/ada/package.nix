@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TvjoLUKO2+YgS1mlyglLb+rBLTO/SWSBVA2S34Z6kMI=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     validatePkgConfig
@@ -53,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "WHATWG-compliant and fast URL parser written in modern C";

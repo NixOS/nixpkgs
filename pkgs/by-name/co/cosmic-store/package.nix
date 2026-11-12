@@ -6,26 +6,28 @@
   libcosmicAppHook,
   pkg-config,
   just,
+  aws-lc,
   glib,
   flatpak,
   openssl,
+  zstd,
   nix-update-script,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-store";
-  version = "1.8.0";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-z2w+FYNGsvRzCRp5EQ1QwrITHso2HhCAVz19M50Tk48=";
+    hash = "sha256-fCyMOvNp2537Jx4b/xUj4IKZWmKuQMfVGMoEvMy0cNw=";
   };
 
-  cargoHash = "sha256-MxLb1ur7IwVAfAxViXXaFoVN35vhuIF1S1HRvg3wPo4=";
+  cargoHash = "sha256-1/RVp17C2dRbPjc/BkAUrzjhFqyOL3p3+Ol0Mte3vfI=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -39,9 +41,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib
     flatpak
     openssl
+    zstd
   ];
 
   dontUseJustBuild = true;

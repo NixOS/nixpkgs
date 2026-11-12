@@ -25,15 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rsl-rl-lib";
-  version = "5.4.2";
+  version = "5.5.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "leggedrobotics";
     repo = "rsl_rl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m9M9yWCKs5vLHb7k5A7AFfHko980HDeF3qr1x7s1KGE=";
+    hash = "sha256-vSKy5Yg4Wk3kildaBoNnin9aVAZnp72U/jWoWd5QIYU=";
   };
 
   build-system = [
@@ -66,6 +65,8 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Fast and simple implementation of learning algorithms for robotics";

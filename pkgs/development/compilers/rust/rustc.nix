@@ -20,6 +20,7 @@
   rustc,
   rustfmt,
   pkg-config,
+  bashNonInteractive,
   openssl,
   xz,
   zlib,
@@ -105,6 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
     RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
+  }
+  // lib.optionalAttrs ((lib.versions.majorMinor rustc.version) == "1.99") {
+    # https://github.com/rust-lang/rust/issues/161742
+    # https://github.com/rust-lang/rust/issues/163272
+    # Default in built rustc is patched, still need to override the one from the unpatched prebuilt binaries
+    RUST_MIN_STACK = 17 * 1024 * 1024;
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -267,10 +274,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
       "--disable-docs"
     ]
-    ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # https://github.com/rust-lang/rust/issues/92173
-      "--set=rust.jemalloc"
-    ]
     ++ optionals (useLLVM && !stdenv.targetPlatform.isFreeBSD) [
       # https://github.com/NixOS/nixpkgs/issues/311930
       "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
@@ -354,11 +357,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace compiler/rustc_codegen_ssa/src/back/link.rs \
       --replace-fail "/usr/bin/strip" "${lib.getExe' llvmShared "llvm-strip"}"
   ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    # See https://github.com/jemalloc/jemalloc/issues/1997
-    # Using a value of 48 should work on both emulated and native x86_64-darwin.
-    export JEMALLOC_SYS_WITH_LG_VADDR=48
-  ''
   + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
     mkdir .cargo
     cat > .cargo/config.toml <<\EOF
@@ -402,6 +400,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     openssl
     rust-jemalloc-sys
   ]
@@ -410,6 +409,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional (!withBundledLLVM) llvmShared.lib
   ++ optional (useLLVM && !withBundledLLVM) llvmPackages.libunwind;
+
+  strictDeps = true;
 
   outputs = [
     "out"

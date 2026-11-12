@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "tantale";
+    owner = "laurent-laporte-pro";
     repo = "deprecated";
     tag = "v${finalAttrs.version}";
     hash = "sha256-1mB9aRZOsaW7Mqcu1SWIYTusQ7MlMvUucdTyfu++Nx8=";
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/laurent-laporte-pro/deprecated/releases/tag/${finalAttrs.src.tag}";
-    homepage = "https://github.com/tantale/deprecated";
+    homepage = "https://github.com/laurent-laporte-pro/deprecated";
     description = "Python @deprecated decorator to deprecate old python classes, functions or methods";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tilpner ];

@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "grpcio-gcp";
     inherit (finalAttrs) version;

@@ -41,7 +41,6 @@ buildPythonPackage (finalAttrs: {
   pname = "django-allauth-async";
   version = "65.16.1.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
@@ -118,7 +117,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://allauth.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
   };

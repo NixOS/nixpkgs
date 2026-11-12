@@ -1,6 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
+  fetchFromGitLab,
   fetchpatch,
   makeWrapper,
   lib,
@@ -34,7 +35,7 @@
   enableOpenMP ? false,
   enablePython ? true,
   extraPythonPackages ? ps: [ ],
-  enableRemote ? true,
+  enableRemote ? false,
   enableShark ? true,
   enableSAR ? true,
   enableSegmentation ? true,
@@ -45,6 +46,89 @@ let
   inherit (lib) optionals;
   pythonInputs =
     optionals enablePython (with python3.pkgs; [ numpy ]) ++ (extraPythonPackages python3.pkgs);
+
+  fetchOtbModule =
+    {
+      repo,
+      rev,
+      hash,
+    }:
+    fetchFromGitLab {
+      domain = "gitlab.orfeo-toolbox.org";
+      owner = "orfeotoolbox/otb-modules";
+      inherit repo rev hash;
+    };
+  otbModules =
+    optionals enableFeatureExtraction [
+      {
+        name = "FeaturesExtraction";
+        src = fetchOtbModule {
+          repo = "featuresextraction";
+          rev = "c7edb5f77f5da4363c3d947f6f576ea100c2b178";
+          hash = "sha256-4LorhzFm0fvR88/F7E5epYUFkIv9aHfdQSuxfNRWq6I=";
+        };
+      }
+    ]
+    ++ optionals enableLearning [
+      {
+        name = "Learning";
+        src = fetchOtbModule {
+          repo = "learning";
+          rev = "0e05670e5806bcc78e6ea1fc25ce70977506646d";
+          hash = "sha256-AsHBPxIKqMeRgb6uLnr1BFoJVcemoYs/m4h4nkgLURg=";
+        };
+      }
+    ]
+    ++ optionals enableSAR [
+      {
+        name = "SAR";
+        src = fetchOtbModule {
+          repo = "sar";
+          rev = "d278c3cba9475c170012230afecf50d8d086c37f";
+          hash = "sha256-0XL7JJifqk+4Lhk64jBba+ZZ+wdFxN8IdD5aRMGoRhc=";
+        };
+      }
+    ]
+    ++ optionals enableSegmentation [
+      {
+        name = "Segmentation";
+        src = fetchOtbModule {
+          repo = "segmentation";
+          rev = "2e6910f5672a3dd03866d168bf0a72cf89c0ca3e";
+          hash = "sha256-44t2mxfBK15WaCDMDa4ljzS5UyVpSEfbRKFsCdQP97s=";
+        };
+      }
+    ]
+    ++ optionals enableHyperspectral [
+      {
+        name = "Hyperspectral";
+        src = fetchOtbModule {
+          repo = "hyperspectral";
+          rev = "34c6ed806ddb576082694ffc1ba0f9bb16e05f72";
+          hash = "sha256-9Bs6trDTqqjOzdjvP0zOzCiOJjW44wSmHOeveBNa9d0=";
+        };
+      }
+    ]
+    ++ optionals enableStereoProcessing [
+      {
+        name = "StereoProcessing";
+        src = fetchOtbModule {
+          repo = "stereoprocessing";
+          rev = "8ee7dddd729197d52eead0933621cfa1cb9f171f";
+          hash = "sha256-pkwp4zTuB+zg2T8lSIqwgNMydJfIcCRf6pzVpdlDk8o=";
+        };
+      }
+    ]
+    ++ optionals enableMiscellaneous [
+      {
+        name = "Miscellaneous";
+        src = fetchOtbModule {
+          repo = "miscellaneous";
+          rev = "a65337c6b95f12bfe8c87d0ee7f1e2d9d9e0804e";
+          hash = "sha256-8gV03IQKGypJWblKka10duqnWViXoF63394E22otBDE=";
+        };
+      }
+    ];
 
   # ITK configs for OTB requires 5.3.0 and
   # filter out gdcm, libminc from list of ITK deps as it's not needed for OTB
@@ -60,17 +144,6 @@ let
     "fftw"
   ];
   itkIsInDepsToRemove = dep: builtins.elem dep.name itkDepsToRemove;
-
-  # remove after https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2451
-  otbSwig = swig.overrideAttrs (oldArgs: {
-    version = "4.2.1";
-    src = fetchFromGitHub {
-      owner = "swig";
-      repo = "swig";
-      tag = "v4.2.1";
-      hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
-    };
-  });
 
   # override the ITK version with OTB version
   # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads#L145
@@ -227,41 +300,55 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "otb";
-  version = "10.0-unstable-2025-12-11";
+  version = "10.0.0-rc1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "otb";
-    rev = "2dd72c102a0a95794c0cc3e7da1843bc67537f6e";
-    hash = "sha256-dLphF4h/QkO/lSVEmVUPuRRGDU5SRhNLoxXxHWpINbU=";
+    tag = finalAttrs.version;
+    hash = "sha256-c8o1iGPacaceZ8VnG5gzN7lnCTLS5Nkb1jajtLBfzmw=";
   };
 
   patches = [
     ./1-otb-swig-include-itk.diff
     # GDAL >= 3.13 returns CSLConstList from GDALGetMetadata, which no longer converts to char**.
     ./2-otb-gdal-cslconstlist.diff
+    # Use the module sources copied into the tree instead of attempting network access.
+    ./3-use-packaged-modules.diff
   ];
 
   postPatch = ''
     substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt \
-      --replace-fail ''\'''${ITK_INCLUDE_DIRS}' "${otb-itk}/include/ITK-${itkMajorMinorVersion}"
+      --replace-fail \
+        ''\'''${ITK_INCLUDE_DIRS}' \
+        "${lib.getInclude otb-itk}/include/ITK-${itkMajorMinorVersion}"
   ''
-  # Add the header file "vcl_legacy_aliases.h", which defines the legacy vcl_* functions.
-  # This patch fixes the unreproducible build of OTB.
-  # See https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2484.
-  + ''
-    sed -i '/#include "vcl_compiler.h"/a #include "vcl_legacy_aliases.h"' Modules/Core/Mosaic/include/otbMosaicFunctors.h
-  '';
+  + lib.concatMapStringsSep "\n" (
+    module: "cp -r --no-preserve=mode ${module.src} Modules/${module.name}"
+  ) otbModules;
+
+  # Some core targets include ITK headers indirectly through otbMacro.h without declaring
+  # OTBITK as a module dependency, so its include directory is missing during compilation.
+  env.NIX_CFLAGS_COMPILE = "-I${otb-itk}/include/ITK-${itkMajorMinorVersion}";
 
   nativeBuildInputs = [
     cmake
     makeWrapper
     which
+  ]
+  ++ optionals enablePython [
+    python3
+    swig
   ];
 
   # https://www.orfeo-toolbox.org/CookBook/CompilingOTBFromSource.html#native-build-with-system-dependencies
   # activates all modules and python by default
   cmakeFlags = [
+    # Let OTB use LD_LIBRARY_PATH when running build-time tools; Nix adds the final RPATHs during fixup.
+    (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
     (lib.cmakeBool "OTBGroup_Core" true)
     (lib.cmakeBool "OTB_BUILD_FeaturesExtraction" enableFeatureExtraction)
     (lib.cmakeBool "OTB_BUILD_Hyperspectral" enableHyperspectral)
@@ -296,7 +383,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals enablePython (
     [
       python3
-      otbSwig
+      swig
     ]
     ++ pythonInputs
   )

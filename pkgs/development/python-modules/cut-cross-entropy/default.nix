@@ -30,7 +30,7 @@ buildPythonPackage {
   # The `ml-cross-entropy` Pypi comes from a third-party.
   # Apple recommends installing from the repo's main branch directly
   src = fetchFromGitHub {
-    owner = "apple";
+    owner = "apple-aiml-research";
     repo = "ml-cross-entropy";
     rev = "b19a424ed30a05b8261cfa84d83b2601a9454c67"; # no tags
     hash = "sha256-AwUqKiI7XjEOZ7ofjQCOsqvxHyTFD4RZ70odPyxxntc=";
@@ -75,7 +75,7 @@ buildPythonPackage {
 
   meta = {
     description = "Memory-efficient cross-entropy loss implementation using Cut Cross-Entropy (CCE)";
-    homepage = "https://github.com/apple/ml-cross-entropy";
+    homepage = "https://github.com/apple-aiml-research/ml-cross-entropy";
     license = lib.licenses.aml;
     maintainers = with lib.maintainers; [ hoh ];
   };

@@ -5,7 +5,6 @@
   djvulibre,
   fetchFromGitHub,
   fetchpatch,
-  freetype,
   ghostscript,
   harfbuzz,
   installShellFiles,
@@ -13,7 +12,6 @@
   man,
   mupdf,
   pkg-config,
-  poppler,
   qt6,
   qt6Packages,
   stdenv,
@@ -24,13 +22,12 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "apvlv";
 
-  # If you change the version, please also update src.rev accordingly
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "naihe2010";
     repo = "apvlv";
-    tag = "v0.7.0-final";
+    tag = "v${finalAttrs.version}-final";
     hash = "sha256-PDqH3nROR16q11dHIkC5+jAiRSIIfp52M8o4IT1BaT0=";
   };
 
@@ -121,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/naihe2010/apvlv/blob/v${finalAttrs.version}/NEWS";
     description = "PDF viewer with Vim-like behaviour";
     homepage = "https://naihe2010.github.io/apvlv/";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       apvlv is a PDF/DJVU/UMD/TXT Viewer Under Linux/WIN32
       with Vim-like behaviour.

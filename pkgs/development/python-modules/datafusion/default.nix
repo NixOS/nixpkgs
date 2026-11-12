@@ -7,10 +7,11 @@
   pythonOlder,
 
   # nativeBuildInputs
+  pkg-config,
   protoc,
 
   # buildInputs
-  protobuf,
+  pkgsHostTarget,
 
   # dependencies
   cloudpickle,
@@ -30,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   # WARNING: Ensure rerun-sdk is compatible with this version of datafusion
   version = "54.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     name = "datafusion-source";
@@ -50,11 +50,13 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    pkg-config
     protoc
   ];
 
   buildInputs = [
-    protobuf
+    pkgsHostTarget.protobuf
+    pkgsHostTarget.zstd
   ];
 
   dependencies = [

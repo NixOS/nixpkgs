@@ -22,7 +22,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "peertube";
-  version = "8.3.0";
+  version = "8.3.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gHWtQRpbYV1oW7/V2dpAsiTZhV/vtCkuBF23T1Or3Qc=";
+    hash = "sha256-x41ngH8fiuMm0xG/YP+qRQRWJ9bGd5vFae6aoK3j6qk=";
   };
 
   outputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-fadktAeQEjjGm06Re0gQuXUxsqEF7tWBf4KNrsF5pfI=";
+    hash = "sha256-nGmDbJ+2ChGccC5cGJuG/Cbc/QVqH0t0S9/M/hbGY8A=";
   };
 
   nativeBuildInputs = [
@@ -121,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv ./packages/server-commands/{dist,package.json} $out/packages/server-commands
     mv ./packages/transcription/{dist,package.json} $out/packages/transcription
     mv ./packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
+    mkdir -p $out/share
+    mv ./config/config-schema.json $out/share/config-schema.json
     mv ./{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,pnpm-lock.yaml} $out
 
     # Remove broken symlinks in node_modules from workspace packages that aren't needed

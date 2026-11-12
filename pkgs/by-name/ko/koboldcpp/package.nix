@@ -132,7 +132,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
-      maxstrid
       _4evy
     ];
     platforms = lib.platforms.unix;

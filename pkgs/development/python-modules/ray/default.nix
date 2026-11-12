@@ -60,6 +60,7 @@
   scipy,
   # serve
   fastapi,
+  grpcio-reflection,
   jinja2,
   mmh3,
   starlette,
@@ -78,9 +79,8 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.58.0";
+  version = "2.60.0";
   format = "wheel";
-  __structuredAttrs = true;
 
   disabled = pythonAtLeast "3.15";
 
@@ -96,22 +96,22 @@ buildPythonPackage (finalAttrs: {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp311 = "sha256-/D3S3s67NdHzaCwhHsnWyYB7MVLw3vpC7AlCgXAT4YA=";
-          cp312 = "sha256-HiDEqNJWPZWA5498FSl6n4r+kkAbaYvOtBBsNLMMAcY=";
-          cp313 = "sha256-siYhQKGZRYxa1veRfsdY0FfRZp+CQEj3hRGcbOJTk2M=";
-          cp314 = "sha256-eXZbOtrsDs6K5OeujNWZ/1macebdTw53OhGHtHJhyns=";
+          cp311 = "sha256-4if2sq+KtGJt2aNaWGCzOGQyXqE3OD1X+FTUY37j/qI=";
+          cp312 = "sha256-uVG0CWWUemNhWDCRa+BPJkQNI03h6aKdvyFV0D+prSo=";
+          cp313 = "sha256-f3+yCaLfN18UHo0OEy52RLjo7+OFW3D0hE+/sU6mZyw=";
+          cp314 = "sha256-DsP0SvKWHYytL41pm0cOL2hD1EPMxvQDlIru63etNcM=";
         };
         aarch64-linux = {
-          cp311 = "sha256-wgvEy6IdJsVjRJXWWZJ3rEfbf8M707JsDsd4H4zMOzw=";
-          cp312 = "sha256-YvLxek1QFQlp3PCkzL2vva+ofWviJe4SCKe1a9Nzo3w=";
-          cp313 = "sha256-uRG6i1F/LQnF1fMIZYU+JYnQOUF6VJEoPfIYktyGSYw=";
-          cp314 = "sha256-IGllfupWv92rpYzyNTKlgtzGa8vfTLpNqK0f4qcsAoo=";
+          cp311 = "sha256-1R1iPWr070n13ufTNAuVtEzcd0tqeWToYyrN/Oi576w=";
+          cp312 = "sha256-DwjHrwY1g7aL5V/quQ3QViVdTWiaN+Z7yU/K15gAop4=";
+          cp313 = "sha256-A7Bc4j0wnkwtFia/lDQ+Oj6eJvpMDSynC2b4a4TJfyY=";
+          cp314 = "sha256-sgIVpX+IeyA0Y9W4B0yLEzvOI66JyFUiufky3cWJMB8=";
         };
         aarch64-darwin = {
-          cp311 = "sha256-pVszZTqtwhwpi7ApzD7Zh4sysrCH/ikTxebg4tsfaZ4=";
-          cp312 = "sha256-MIhjpkaNyWnR1SqZIzVp16KpwnRfWJt0/yd+l2lIYHc=";
-          cp313 = "sha256-imZMsfvg9/15TsZiTdx3JJT4+q/O+oOlhWn5qcaZRWI=";
-          cp314 = "sha256-2SRh/w4nhjWzwJrvx/5W4RSRSp2+er/T2caSrG3xlTs=";
+          cp311 = "sha256-qkIHy/QIF9C/TjWqeTuKOphwCMNCwOjLzeGKbjG2uFo=";
+          cp312 = "sha256-ue49K9MhC5fi4lMEYzOhLghhfG+z5qH6wIJonWcJZgo=";
+          cp313 = "sha256-zPGU/1NM2ClNUrQyfRRXpcDWAfSMwchJyJjx1NvEQyg=";
+          cp314 = "sha256-Nn1u/noVZR11qgx1SFP4TvJ9kx1J68UxoweQKo5yiBE=";
         };
       };
     in
@@ -220,10 +220,10 @@ buildPythonPackage (finalAttrs: {
     serve = lib.unique (
       [
         fastapi
-        # Undeclared upstream: `ray.serve._private.haproxy`, imported by the serve controller since
-        # 2.57.0, needs it
+        grpcio-reflection
         jinja2
         mmh3
+        numpy
         requests
         starlette
         uvicorn

@@ -26,6 +26,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Ff6fHFBOBQmrf8OLPNuhHjRqyPuS1sStd5hWh4oI0cI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.30.1" "hatchling>=1.30.1" \
+      --replace-fail "packaging==26.2" "packaging" \
+      --replace-fail "pluggy==1.6.0" "pluggy" \
+      --replace-fail "trove-classifiers==2026.6.1.19" "trove-classifiers"
+  '';
+
   build-system = [
     hatchling
     packaging
@@ -40,17 +48,12 @@ buildPythonPackage (finalAttrs: {
     tzlocal
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.30.1" "hatchling>=1.30.1"
-  '';
-
-  pythonImportsCheck = [ "croniter" ];
-
   nativeInstallCheckInputs = [
     versionCheckHook
     which
   ];
+
+  pythonImportsCheck = [ "croniter" ];
 
   versionCheckProgramArg = "${placeholder "out"}/${python.sitePackages}";
 

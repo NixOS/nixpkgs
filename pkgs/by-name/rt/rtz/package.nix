@@ -5,6 +5,7 @@
   pkg-config,
   bzip2,
   openssl,
+  aws-lc,
   zstd,
 }:
 
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     openssl
+    aws-lc
     zstd
   ];
 

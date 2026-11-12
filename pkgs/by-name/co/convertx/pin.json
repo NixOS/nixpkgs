@@ -1,6 +1,6 @@
 {
-  "version": "0.18.0",
-  "srcHash": "sha256-S8oUU21VOy+4MiWvnEBOSUBuMysYq9H4tQIcEOvLjKw=",
-  "x86_64-linux": "sha256-rAZROhjbvGg/7aRPlh6yGmPDmbEsYjDHJEVaWXejxts=",
-  "aarch64-linux": "sha256-yJbwexqwe95XIZ51gbjwpg6cRm5ssJl1qrIS+Vrd+vo="
+  "version": "0.20.0",
+  "srcHash": "sha256-B1a5X8/pxT2bBR+RVFxPZ2BjZeHcU9PQD2brhgCtUVs=",
+  "x86_64-linux": "sha256-lfMtAArs0S+kgjdrjnqGteBN5ltAvAQPqGx3Qjknd6w=",
+  "aarch64-linux": "sha256-On1fm/2H5OENYB63/maATApKKfiCiPTuug3N+r1mKYg="
 }

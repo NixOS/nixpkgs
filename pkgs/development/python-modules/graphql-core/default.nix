@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.2.7";
+  version = "3.2.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphql-core";
     tag = "v${version}";
-    hash = "sha256-ag8yFf6254dX2xNZMKtVBW5QtI5JOZjzgcZveuoeAss=";
+    hash = "sha256-06oxzqUVgmfEQXGmJLgMKw3/gCIMNyyXpwIO4rj7FYc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools>=59,<81"' ""
+      --replace-fail ', "setuptools>=59,<85"' ""
 
     # avoid big pytest-benchmark dependency
     substituteInPlace setup.cfg \
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Port of graphql-js to Python";
     homepage = "https://github.com/graphql-python/graphql-core";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = with lib.maintainers; [ mirdukkkkk ];
   };
 }

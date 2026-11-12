@@ -22,10 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Expression-based file search combining name, content, metadata, and structured data predicates";
     homepage = "https://github.com/inanna-malick/detect/";
     changelog = "https://github.com/inanna-malick/detect/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [ lilyball ];
     mainProgram = "detect";
   };

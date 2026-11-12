@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "stratis-cli";
-  version = "3.8.3";
+  version = "3.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratis-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wkFInG/sbHxyi5UIjIANxsTd9BrIHuyAfYG4DvqLsmU=";
+    hash = "sha256-OxqzJO8iNdqx3IP00DIO40WmTsg8CV4kRemDoT4IIJA=";
   };
 
   build-system = with python3Packages; [
@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     justbytes
     packaging
     psutil
-    python-dateutil
     wcwidth
   ];
 
@@ -37,12 +36,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   disabledTestPaths = [
     # tests below require dbus daemon
-    "tests/whitebox/integration"
+    "tests/integration"
   ];
 
   pythonImportsCheck = [ "stratis_cli" ];
-
-  env.STRATIS_STRICT_POOL_FEATURES = "1"; # required for unit tests
 
   passthru.tests = nixosTests.stratis;
 

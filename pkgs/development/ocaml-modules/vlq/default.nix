@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-vlq/releases/download/v${version}/vlq-v${version}.tbz";
-    sha256 = "02wr9ph4q0nxmqgbc67ydf165hmrdv9b655krm2glc3ahb6larxi";
+    hash = "sha256-sWdFzYJqMPpEzbMUs9JuucJigmv+GLYert0CTOBNmQs=";
   };
 
   buildInputs = [ dune-configurator ];

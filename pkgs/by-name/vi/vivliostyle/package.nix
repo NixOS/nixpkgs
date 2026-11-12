@@ -58,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     "production"
   ];
 
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -69,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     chmod +x $out/lib/dist/cli.js
-    patchShebangs $out/usr/lib/dist/cli.js
+    patchShebangs $out/lib/dist/cli.js
 
     makeWrapper $out/lib/dist/cli.js $out/bin/vivliostyle \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]} \

@@ -46,7 +46,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  buildFeatures = lib.optional withLsp "lsp";
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "completions"
+    "lint"
+    "native-tls"
+    "toml-test"
+  ]
+  ++ lib.optional withLsp "lsp";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd taplo \

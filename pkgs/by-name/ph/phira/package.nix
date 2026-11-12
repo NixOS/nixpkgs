@@ -12,7 +12,7 @@
   # A derivation or a path that contains a dir `assets`.
   overrideAssets ? fetchzip {
     url = "https://github.com/TeamFlos/phira/releases/download/v${phira-unwrapped.version}/Phira-windows-x86_64-v${phira-unwrapped.version}.zip";
-    hash = "sha256-1/FBg1i8O83yusEAFlXiYWyabv04n1qkXwLgWaw8sTc=";
+    hash = "sha256-tstS4he6SleX0xbpw4sTBLwZn/1gmbxUcEn7ZCMEM0Q=";
     stripRoot = false;
     meta.license = lib.licenses.unfree;
   },

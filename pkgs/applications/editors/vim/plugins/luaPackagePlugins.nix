@@ -25,6 +25,8 @@ let
     "lze"
     "lzextras"
     "lzn-auto-require"
+    "mega-cmdparse"
+    "mega-logging"
     "middleclass"
     "mini-test"
     "neorg"

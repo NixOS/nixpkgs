@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.46";
+  version = "1.47";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NW0gqSTKL5X6PWda/l/+qjdENySwh9dmD4k5CBr2kG0=";
+    hash = "sha256-87ltsDdrZ0GDLmPgIDbfHBQCcWeQ6oS1sohgKcpRbvc=";
   };
 
   outputs = [
@@ -54,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/baldurk/renderdoc/issues/2945
   # https://github.com/baldurk/renderdoc/issues/3902
   patches = [
-    # custom revert of
-    # https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895
+    # trick the build to think PCRE is present, we use PCRE2 instead through fedora patches
     ./remove-pcre.patch
   ];
   swig_patches = [
@@ -169,6 +168,27 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit custom_swig;
     updateScript = nix-update-script { };
+
+    vulkanLayers = [
+      "renderdoc_capture.json"
+    ];
+
+    tests = {
+      vulkanLayersExist = stdenv.mkDerivation {
+        name = "renderdoc-vulkan-layers-exist";
+        dontUnpack = true;
+        buildCommand = ''
+          touch $out # Dummy file to satisfy the build system
+          for f in ${lib.concatStringsSep " " finalAttrs.passthru.vulkanLayers}; do
+            if [ ! -e "${finalAttrs.finalPackage}/share/vulkan/implicit_layer.d/$f" ]; then
+              echo "error: passthru.vulkanLayers lists '$f' but it wasn't found in" \
+                   "${finalAttrs.finalPackage}/share/vulkan/implicit_layer.d" >&2
+              exit 1
+            fi
+          done
+        '';
+      };
+    };
   };
 
   meta = {

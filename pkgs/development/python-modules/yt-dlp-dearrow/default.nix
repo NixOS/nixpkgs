@@ -23,6 +23,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "yt_dlp_plugins" ];
 
+  # setup.cfg declares name as only "DeArrow"
+  dontCheckPythonMetadata = true;
+
   meta = {
     description = "Post-processor plugin to use DeArrow video titles in YT-DLP";
     homepage = "https://github.com/QuantumWarpCode/yt-dlp-dearrow";

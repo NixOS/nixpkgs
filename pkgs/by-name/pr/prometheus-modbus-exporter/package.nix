@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-modbus-exporter";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "richih";
     repo = "modbus_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZkES+CDthYZrNZ7wVO0oRx6pBMX23AyUOhU+OBTD42g=";
+    hash = "sha256-QUFYdu8f8OfYCYy4qQ+WIwHpZDIbtOv3CFLGFRraeU0=";
   };
 
   ldflags = [
@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-RfpJLoYPR5Ura3GvLIAePg+fuiaiXig6XaSNCPhZ/Vg=";
+  vendorHash = "sha256-qIxlqWxUIG6QFAUGWcUQntWPeX7AGaJ7KszcSa/j8MA=";
 
   passthru.updateScript = nix-update-script { };
 

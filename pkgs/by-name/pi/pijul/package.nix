@@ -5,10 +5,12 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
+  aws-lc,
   dbus,
   libsodium,
   openssl,
   xxhash,
+  nix-update-script,
   gitImportSupport ? true,
   libgit2 ? null,
 }:
@@ -17,14 +19,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "pijul";
-  version = "1.0.0-beta.23";
+  version = "1.0.0-beta.26";
 
   src = fetchCrate {
     inherit (finalAttrs) version pname;
-    hash = "sha256-+qbJniBWp+cOmrYyhEvGapPR5jV92s4oF1giujkx1mM=";
+    hash = "sha256-VNmIja07dgfMgB7g8XxugEv8LrsnXNyMCJpfFoijhKY=";
   };
 
-  cargoHash = "sha256-RO9fN4jS3g+qfatjtlWI8Oko7X91PNyf723Ipkg4BX0=";
+  cargoHash = "sha256-LIvFveN3NhQUXWu809S7GviLKwcsS2E6Wt/vFku4fVE=";
 
   # Tests require a TTY, which the Nix sandbox does not provide.
   doCheck = false;
@@ -33,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
+    aws-lc
     dbus
     openssl
     libsodium
@@ -48,6 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/pijul completion fish) \
       --zsh <($out/bin/pijul completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=unstable" ];
+  };
 
   meta = {
     description = "Distributed version control system";

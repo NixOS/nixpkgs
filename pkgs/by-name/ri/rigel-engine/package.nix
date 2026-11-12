@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   pname = "rigel-engine";
   version = "0-unstable-2024-05-26";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "lethal-guitar";
     repo = "RigelEngine";

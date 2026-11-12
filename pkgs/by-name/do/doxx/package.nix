@@ -4,6 +4,8 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +20,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-Eix63WAxOdK4//WBDfAdqMrtHCM1VSepSy841hCndeI=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ zstd ];
 
   # https://github.com/bgreenwell/doxx/issues/65
   checkFlags = [ "--skip=terminal_image::tests::test_renderer_creation" ];

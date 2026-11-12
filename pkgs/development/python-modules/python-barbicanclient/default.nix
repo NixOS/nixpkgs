@@ -14,22 +14,23 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-barbicanclient";
-  version = "7.3.0";
+  version = "7.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-barbicanclient";
-    tag = version;
-    hash = "sha256-SFAldyA/M0rkKb2o6ePp+9ITWrUszyTz5jvCnUadufo=";
+    tag = finalAttrs.version;
+    hash = "sha256-hRzzByFJxYbFxGtP/0/Rko/zgGtgXzyIS6dny+ZaTMQ=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   postPatch = ''
     # Disable rsvgconverter not needed to build manpage
@@ -58,14 +59,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     requests-mock
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "barbicanclient" ];
 
@@ -76,4 +71,4 @@ buildPythonPackage rec {
     mainProgram = "barbican";
     teams = [ lib.teams.openstack ];
   };
-}
+})

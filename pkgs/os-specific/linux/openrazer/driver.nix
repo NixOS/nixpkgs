@@ -24,16 +24,23 @@ stdenv.mkDerivation (
 
     makeFlags = kernelModuleMakeFlags ++ [
       "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      "INSTALL_MOD_PATH=${placeholder "out"}"
+      "INSTALL_MOD_DIR=kernel/drivers/hid"
+      "INSTALL_MOD_STRIP=1"
+      "DEPMOD=true"
     ];
 
     doInstallCheck = true;
 
-    installPhase = ''
-      runHook preInstall
+    installTargets = [ "modules_install" ];
 
-      binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hid"
-      mkdir -p "$binDir"
-      cp -v driver/*.ko "$binDir"
+    installFlags = [
+      "-C"
+      "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      "M=$(PWD)/driver"
+    ];
+
+    postInstall = ''
       RAZER_MOUNT_OUT="$out/bin/razer_mount"
       RAZER_RULES_OUT="$out/etc/udev/rules.d/99-razer.rules"
       install -m 644 -v -D install_files/udev/99-razer.rules $RAZER_RULES_OUT
@@ -46,8 +53,6 @@ stdenv.mkDerivation (
         --replace chgrp ${coreutils}/bin/chgrp \
         --replace "PATH='/sbin:/bin:/usr/sbin:/usr/bin'" "" \
         --replace plugdev openrazer
-
-      runHook postInstall
     '';
 
     enableParallelBuilding = true;

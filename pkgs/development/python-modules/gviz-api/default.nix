@@ -11,11 +11,9 @@ buildPythonPackage (finalAttrs: {
   version = "1.10.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "sha256-hGaS3YzHMiT8MbGOQVib2TThzAUJDGV2r0tLJsLnG5A=";
+    hash = "sha256-hGaS3YzHMiT8MbGOQVib2TThzAUJDGV2r0tLJsLnG5A=";
   };
 
   build-system = [ setuptools ];

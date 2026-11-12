@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.0.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "Arpeggio";
     inherit (finalAttrs) version;

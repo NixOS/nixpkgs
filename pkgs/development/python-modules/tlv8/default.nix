@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.10.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # pypi does not contain test files
   src = fetchFromGitHub {
     owner = "jlusiardi";

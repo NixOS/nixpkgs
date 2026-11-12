@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -107,6 +108,9 @@ let
     dmacvicar_libvirt = automated-providers.dmacvicar_libvirt.overrideAttrs (_: {
       propagatedBuildInputs = [ cdrtools ];
     });
+    hashicorp_helm = automated-providers.hashicorp_helm.override {
+      mkProviderGoModule = buildGo126Module;
+    };
     aminueza_minio = automated-providers.aminueza_minio.override { spdx = "AGPL-3.0-only"; };
     # proxyVendor is necessary because enabling CGO causes `go mod vendor` to include
     # platform-specific files leading to vendorHash varying across platforms.
@@ -117,6 +121,11 @@ let
             CGO_ENABLED = "1";
           };
         });
+    # The `main` package of the provider is not at the root of the repository.
+    # The repository also has a CLI, which is not built here.
+    tasansga_lldap = automated-providers.tasansga_lldap.overrideAttrs (_: {
+      subPackages = [ "cmd/terraform-provider-lldap" ];
+    });
   };
 
   # Put all the providers we not longer support in this list.
@@ -131,6 +140,14 @@ let
       sapcc_ccloud = removed "sapcc_ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
       argocd = removed "argocd" "2025/12. Try argoproj-labs_argocd instead.";
       oboukili_argocd = removed "oboukili_argocd" "2025/12. Try argoproj-labs_argocd instead.";
+      denoland_deno = removed "denoland_deno" "2026/11";
+      cloudfoundry-community_cloudfoundry = archived "cloudfoundry-community_cloudfoundry" "2026/07";
+      cullenmcdermott_porkbun = archived "cullenmcdermott_porkbun" "2025/11";
+      determinatesystems_hydra = archived "determinatesystems_hydra" "2026/05";
+      kislerdm_neon = archived "kislerdm_neon" "2026/09";
+      oktadeveloper_oktaasa = archived "oktadeveloper_oktaasa" "2025/11";
+      pablovarela_slack = archived "pablovarela_slack" "2026/02";
+      vmware_wavefront = archived "vmware_wavefront" "2026/01";
     };
 
   # excluding aliases, used by terraform-full

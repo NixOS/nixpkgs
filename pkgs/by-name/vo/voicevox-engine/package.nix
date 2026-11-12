@@ -78,7 +78,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   makeWrapperArgs = [
-    ''--add-flags "--voicelib_dir=${voicevox-core.wrapped}/lib"''
+    "--add-flag"
+    "--voicelib_dir=${voicevox-core.wrapped}/lib"
   ];
 
   preCheck = ''

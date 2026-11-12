@@ -12,7 +12,7 @@ let
     "include/EGL/eglmesaext.h"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mesa-gl-headers";
 
   # These are a bigger rebuild and don't change often, so keep them separate.
@@ -22,9 +22,11 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
-    rev = "mesa-${version}";
+    tag = "mesa-${finalAttrs.version}";
     hash = "sha256-UlI+6OMUj5F6uVAw+Mg2wOZrjfdRq73d1qufaXVI/go";
   };
+
+  strictDeps = true;
 
   dontBuild = true;
 
@@ -36,5 +38,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit headers; };
 
+  __structuredAttrs = true;
+
   inherit (common) meta;
-}
+})

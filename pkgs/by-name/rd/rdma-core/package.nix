@@ -1,28 +1,27 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   gitUpdater,
   cmake,
   pkg-config,
   docutils,
-  pandoc,
   libnl,
   udev,
   udevCheckHook,
   python3,
   perl,
+  withManPages ? !stdenv.hostPlatform.isi686,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "64.0";
+  version = "65.0";
 
-  src = fetchFromGitHub {
-    owner = "linux-rdma";
-    repo = "rdma-core";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Y0pCGkvCjZ1F9Ojouesozn2Lxj+x7/0ck6/9tJmdkWw=";
+  # Use release tarball instead of git sources (contains pre-built man pages and avoids Pandoc dependency)
+  src = fetchurl {
+    url = "https://github.com/linux-rdma/rdma-core/releases/download/v${finalAttrs.version}/rdma-core-${finalAttrs.version}.tar.gz";
+    hash = "sha256-jrk8FHQBRuBMKKwlh04Qa2HH06tmo20HCZ6TiYXvBoA=";
   };
 
   __structuredAttrs = true;
@@ -30,18 +29,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-    "man"
     "dev"
     "scripts"
+  ]
+  ++ lib.optionals withManPages [
+    "man"
   ];
 
   nativeBuildInputs = [
     cmake
-    docutils
-    pandoc
     pkg-config
     python3
     udevCheckHook
+  ]
+  ++ lib.optionals withManPages [
+    docutils
   ];
 
   buildInputs = [
@@ -54,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
     "-DSYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
+    (lib.cmakeFeature "Python_EXECUTABLE" python3.pythonOnBuildForHost.interpreter)
+  ]
+  ++ lib.optionals (!withManPages) [
+    "-DNO_MAN_PAGES=1"
   ];
 
   postPatch = ''
@@ -79,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {
+    url = "https://github.com/linux-rdma/rdma-core.git";
     rev-prefix = "v";
   };
 

@@ -5,11 +5,12 @@
   rustPlatform,
 
   # native build inputs
+  capnproto,
   pkg-config,
   installShellFiles,
   makeWrapper,
   mandoc,
-  rustfmt,
+  buildPackages,
   file,
   writableTmpDirAsHomeHook,
 
@@ -17,10 +18,10 @@
   openssl,
   dbus,
   sqlite,
+  nettle,
 
   # runtime deps
   gpgme,
-  gnum4,
 
   withNotmuch ? true,
   notmuch,
@@ -28,7 +29,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.13";
+  version = "0.9.0";
 
   src = fetchzip {
     urls = [
@@ -36,31 +37,33 @@ rustPlatform.buildRustPackage rec {
       "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
       "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
     ];
-    hash = "sha256-uyhxNEKoRKrqvU76SuTKl1wlwOdHIxMFLXB5LwsdvQE=";
+    hash = "sha256-e8KY0t54wWcC2MlWJQkutx1roGj3trgdUSgo/im2TtQ=";
   };
 
-  cargoHash = "sha256-wDj4g5Cjm6zedjCmpc/A40peHO951lLuEQGsn+i3eT0=";
+  cargoHash = "sha256-qBthm+tFSlzASzCZHlIM8SA9h3wIcWIcL1hif2aHufo=";
 
   # Needed to get openssl-sys to use pkg-config
   env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
+    capnproto
     pkg-config
     installShellFiles
     makeWrapper
     mandoc
-    (rustfmt.override { asNightly = true; })
+    rustPlatform.bindgenHook
+    (buildPackages.rustfmt.override { asNightly = true; })
   ];
 
   buildInputs = [
     openssl
     dbus
     sqlite
+    nettle
   ];
 
   nativeCheckInputs = [
     file
-    gnum4
     writableTmpDirAsHomeHook
   ];
 
@@ -68,10 +71,12 @@ rustPlatform.buildRustPackage rec {
     installManPage meli/docs/*.{1,5,7}
 
     wrapProgram $out/bin/meli \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath ([ gpgme ] ++ lib.optional withNotmuch notmuch)
-      } \
-      --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ gpgme ] ++ lib.optional withNotmuch notmuch)}
+
+    installShellCompletion --cmd meli \
+      --bash <($out/bin/meli completions bash) \
+      --fish <($out/bin/meli completions fish) \
+      --zsh <($out/bin/meli completions zsh)
   '';
 
   checkFlags = [
@@ -81,7 +86,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal e-mail client and e-mail client library";
     mainProgram = "meli";
-    homepage = "https://meli.delivery";
+    homepage = "https://meli-email.org/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       _0x4A6F

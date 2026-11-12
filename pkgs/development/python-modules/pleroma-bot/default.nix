@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.0";
   pyproject = true;
   build-system = [ setuptools ];
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "robertoszek";

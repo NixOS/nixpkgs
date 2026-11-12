@@ -18,14 +18,17 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   # Don't forget to change passthru.abiVersion
-  version = "0.8.1-unstable-2026-01-02";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDR";
-    rev = "1551ea0d39ce546b32a15808b9b1241018a89fc8";
-    hash = "sha256-k1ocvnkgmucewWeUgj7hY8hj9gOBl3G2iH9KM2h/Sck=";
+    tag = "soapy-sdr-${finalAttrs.version}";
+    hash = "sha256-Xulk079m/PEe8LvBU/LWhuSrdCEbckpSPw0GoLKTGhs=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -64,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     # SOAPY_SDR_ABI_VERSION defined in include/SoapySDR/Version.h
-    abiVersion = "0.8-3";
+    abiVersion = "0.9";
     searchPath = "lib/SoapySDR/modules${finalAttrs.passthru.abiVersion}";
   };
 

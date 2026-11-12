@@ -6,12 +6,12 @@
 
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "ajt-card-management";
-  version = "26.2.21.0";
+  version = "26.10.31.0";
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "learn-now-button";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9PLEEE9M+4LQX5xI7R/xORvykq9qf0k+Eo2UG71e1iM=";
+    hash = "sha256-MIGlymYle3GEMYMnBhdSHDu50RgI1meJBaIN/rIhmZw=";
     fetchSubmodules = true;
   };
   sourceRoot = "${finalAttrs.src.name}/card_management";

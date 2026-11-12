@@ -75,7 +75,6 @@ buildPythonPackage (finalAttrs: {
   pname = "frictionless";
   version = "5.19.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "frictionlessdata";

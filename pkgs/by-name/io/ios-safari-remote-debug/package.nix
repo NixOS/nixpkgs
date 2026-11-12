@@ -4,9 +4,11 @@
   fetchgit,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ios-safari-remote-debug";
-  version = "unstable-2024-09-09";
+  version = "0-unstable-2024-09-09";
+
+  __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://git.gay/besties/ios-safari-remote-debug.git";
@@ -19,12 +21,12 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace build/build.go \
-      --replace-fail 'cp.Copy("' 'cp.Copy("${placeholder "out"}/share/${pname}/'
+      --replace-fail 'cp.Copy("' 'cp.Copy("${placeholder "out"}/share/${finalAttrs.pname}/'
   '';
 
   postBuild = ''
-    mkdir -p $out/share/${pname}
-    cp -r injectedCode views $out/share/${pname}
+    mkdir -p $out/share/${finalAttrs.pname}
+    cp -r injectedCode views $out/share/${finalAttrs.pname}
   '';
 
   meta = {
@@ -34,4 +36,4 @@ buildGoModule rec {
     mainProgram = "ios-safari-remote-debug";
     maintainers = [ ];
   };
-}
+})

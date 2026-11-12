@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   python,
   pythonRecompileBytecodeHook,
   swig,
@@ -22,6 +23,17 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-jBc7+hoG1x7KDYPbexPRwnll9qz4qA3Y1w7A7DuES2Y=";
   };
+
+  patches = [
+    # Fix build against SWIG >= 4.5
+    # https://github.com/FreeCAD/pivy/pull/8
+    (fetchpatch {
+      name = "swig-4.5-compat";
+      url = "https://github.com/FreeCAD/pivy/commit/c42d938aec005efda5f0ff114298d7ecb0a494b8.patch";
+      excludes = [ "interfaces/CMakeLists.txt" ];
+      hash = "sha256-Ox+qbmmJA1cBJ7J3LhzFuAwh0q3s2gZPCUKZr/W3cwg=";
+    })
+  ];
 
   nativeBuildInputs = [
     swig

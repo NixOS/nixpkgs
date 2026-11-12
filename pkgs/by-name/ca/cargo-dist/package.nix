@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
+  aws-lc,
   bzip2,
   xz,
   zstd,
@@ -14,22 +15,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-dist";
-  version = "0.32.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WNbo3sm5tSNYQMLB4bjiNtLwp5pD4KAoyG2lwWYEpzk=";
+    hash = "sha256-u0Ux0V6Jdeq/1uwSu9+8sm/KGAg3RbWQph/UdL2IMZU=";
   };
 
-  cargoHash = "sha256-gzaDAGAjWDcJyoES0foFOyhTP4HDsaQHrrwCQmAzXZA=";
+  cargoHash = "sha256-sOLAyXEOGGnKNeEtPbjYjuJK/d71nluj2MsHNIuuLvQ=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
+    aws-lc
     bzip2
     xz
     zstd

@@ -11,25 +11,26 @@
   aprutil,
   libxml2,
   luaSupport ? false,
-  lua5,
+  lua5_5,
   perl,
   versionCheckHook,
 }:
 
 let
-  luaValue = if luaSupport then lua5 else "no";
+  luaValue = if luaSupport then lua5_5 else "no";
   optional = lib.optional;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "modsecurity";
-  version = "2.9.12";
+  version = "2.9.15";
 
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
     repo = "modsecurity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-scMOiu8oI3+VcXe05gLNQ8ILmnP4iwls8ZZ9r+3ei5Y=";
+    fetchSubmodules = true;
+    hash = "sha256-gxR4OpY0Z9X0o0Bt3Oq921x1djxIUSCCwdXxI2CmhoM=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     aprutil
     libxml2
   ]
-  ++ optional luaSupport lua5;
+  ++ optional luaSupport lua5_5;
 
   configureFlags = [
     "--enable-standalone-module"
@@ -60,10 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  outputs = [
-    "out"
-    "nginx"
-  ];
   patches = [
     # by default modsecurity's install script copies compiled output to httpd's modules folder
     # this patch removes those lines
@@ -72,11 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   nativeCheckInputs = [ perl ];
-
-  postInstall = ''
-    mkdir -p $nginx
-    cp -R * $nginx
-  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [

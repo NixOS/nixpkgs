@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   copyDesktopItems,
-  electron_42,
+  electron_44,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
@@ -13,7 +13,7 @@
 }:
 
 let
-  electron = electron_42;
+  electron = electron_44;
   nodejs = nodejs_24;
   description = "Cross-platform desktop app for managing periodic breaks";
 in

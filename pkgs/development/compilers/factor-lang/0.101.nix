@@ -1,6 +1,6 @@
 { callPackage, fetchurl, ... }@args:
 
-callPackage ./unwrapped.nix (
+(callPackage ./unwrapped.nix (
   rec {
     version = "0.101";
     src = fetchurl {
@@ -12,4 +12,9 @@ callPackage ./unwrapped.nix (
     "callPackage"
     "fetchurl"
   ])
-)
+)).overrideAttrs
+  (oA: {
+    meta = (oA.meta or { }) // {
+      problems.removal.message = "Package to be removed in release following 26.11";
+    };
+  })

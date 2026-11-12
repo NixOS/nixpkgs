@@ -18,18 +18,19 @@
 
 stdenv.mkDerivation {
   pname = "libyafaray";
-  version = "unstable-2022-09-17";
+  version = "3.5.1-unstable-2024-01-28";
 
   src = fetchFromGitHub {
     owner = "YafaRay";
     repo = "libYafaRay";
-    rev = "6e8c45fb150185b3356220e5f99478f20408ee49";
-    sha256 = "sha256-UVBA1vXOuLg4RT+BdF4rhbZ6I9ySeZX0N81gh3MH84I=";
+    rev = "8f4906ae88f8a527bbce37991a95e3e3857cb9ac";
+    hash = "sha256-CBigthJWRTeZKbImJGJU/ytRzI+FWOvHLWhU8Qeraj8=";
   };
 
+  # include/math/math.h:152:3: error: unrecognized instruction mnemonic
   postPatch = ''
-    sed '1i#include <memory>' -i \
-      include/geometry/poly_double.h include/noise/noise_generator.h # gcc12
+    substituteInPlace include/math/math.h \
+      --replace-fail "defined (__APPLE__)" "0"
   '';
 
   nativeBuildInputs = [
@@ -52,13 +53,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Free, open source raytracer";
     downloadPage = "https://github.com/YafaRay/libYafaRay";
-    homepage = "http://www.yafaray.org";
+    homepage = "https://github.com/YafaRay/libYafaRay";
     maintainers = [ ];
-    license = lib.licenses.lgpl21;
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
 

@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "5.6.1";
+  version = "6.0.4";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-4nTE7pjrheas/OdtHCLok8mw0ZhcDL1pL2VFekPgmdI=";
+    hash = "sha256-3tAH9apdBhxrwfn5+rFfs0O8YRt4RivcY4ou6opS3xQ=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-Y+E1HhQRdmdQf9kfkL09W/R29oN8wCLNsMBDnNGx6T0=";
+      hash = "sha256-I0Cr+VIjGmvKcFSM5GJ1je0djXXf1qG58UmwXyUkMjA=";
     };
 
     nativeBuildInputs = [
@@ -51,6 +51,14 @@ let
           };
         }
       );
+      mcp = self.mcp_1;
+      # mistralai's MCP integration (unused here) requires mcp>=2
+      mistralai = super.mistralai.overridePythonAttrs (old: {
+        disabledTestPaths = old.disabledTestPaths or [ ] ++ [
+          "src/mistralai/extra/tests/test_connectors_gateway.py"
+          "src/mistralai/extra/tests/test_mcp_streamable_http.py"
+        ];
+      });
     }
   );
 in
@@ -75,7 +83,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # at the top level
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.11.9,<0.12" "uv_build"
+      --replace-fail "uv_build>=0.13.4,<0.14" "uv_build"
   ''
   # Otherwise fails with:
   # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
@@ -106,6 +114,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       django-filter
       django-lasuite
       django-parler
+      django-prometheus
       django-redis
       django-silk
       django-storages
@@ -128,6 +137,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       nested-multipart-parser
       openai
       posthog
+      prometheus-client
       psycopg
       pycrdt
       pydantic-ai-slim

@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "saucectl";
-  version = "0.214.0";
+  version = "0.216.0";
 
   __darwinAllowLocalNetworking = true;
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "saucelabs";
     repo = "saucectl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xMWNuVDXcg0AXa6x8HujOImTWzDT5YU770Eib7GuD18=";
+    hash = "sha256-QQM/Gd2ySpgSSdPjPDDew0eeBYyTiEcicAbOK0rkuUk=";
   };
 
   ldflags = [

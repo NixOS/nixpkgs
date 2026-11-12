@@ -2,27 +2,36 @@
   lib,
   fetchFromGitHub,
   symlinkJoin,
-  buildGo126Module,
+  buildGo127Module,
   makeWrapper,
   nix-update-script,
-  v2ray-rules-dat,
+  xray-rules-dat,
   assets ? [
-    v2ray-rules-dat
+    xray-rules-dat
   ],
 }:
 
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "xray";
-  version = "26.3.27";
+  version = "26.11.9";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tSSoaIKHgLf9ry6p0Y+BM1Nx8X+40BDDfJJYkABUoEc=";
+    hash = "sha256-1XxY2RnbDY2WrCPpsr/jfx1cFIxcBdx2IDGM3ow9MXc=";
   };
 
-  vendorHash = "sha256-kwvck6Eo/e6qgb1ENznhwZ/GPX75ssLUvR2u8Qm3UIM=";
+  vendorHash = "sha256-67Z5i14wwGBVTiUKzijNUctbNK93n/dpKFpwJZG8ysw=";
+
+  patches = [
+    ./use-system-certs.patch
+  ];
+
+  postPatch = ''
+    sed -i '/golang\.org\/x\/crypto\/x509roots\/fallback/d' go.mod
+    sed -i '/golang\.org\/x\/crypto\/x509roots\/fallback/d' go.sum
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -41,7 +50,7 @@ buildGo126Module (finalAttrs: {
   '';
 
   assetsDrv = symlinkJoin {
-    name = "v2ray-assets";
+    name = "xray-assets";
     paths = assets;
   };
 
@@ -60,6 +69,9 @@ buildGo126Module (finalAttrs: {
     mainProgram = "xray";
     homepage = "https://github.com/XTLS/Xray-core";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ iopq ];
+    maintainers = with lib.maintainers; [
+      iopq
+      nix-julia
+    ];
   };
 })

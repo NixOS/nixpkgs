@@ -32,19 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "onnx";
-  version = "1.22.0";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gc65t/VN3kdvV9tiFoOk6Sw+OZe4Udgm3VcZPP9gzpE=";
+    hash = "sha256-5o8WhE8nQbDWN2gDs+HF1wrXbMqYg5/h0FrF5y1cils=";
   };
 
-  # We can't use pythonRelaxDeps as we're not using buildPythonPackage
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "protobuf==4.25.1" "protobuf"
+      --replace-fail "protobuf==6.31.1" "protobuf"
   '';
 
   outputs = [

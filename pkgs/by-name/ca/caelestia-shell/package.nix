@@ -33,8 +33,8 @@
   withCli ? true,
 }:
 let
-  version = "2.4.0";
-  rev = "24aa15eefdb146350d2548c0a015b04eddbd1008";
+  version = "2.5.0";
+  rev = "d999d4878ee4cec134168e60d913714566a8cfa6";
 
   m3shapes_src = fetchFromGitHub {
     owner = "soramanew";
@@ -75,7 +75,7 @@ let
 
   shellSrc = fetchurl {
     url = "https://github.com/caelestia-dots/shell/releases/download/v${version}/caelestia-shell-v${version}.tar.gz";
-    hash = "sha256-r3SRcn/zBplpgVD598GGCJzNFxpQne8zK8uh3hyzF3E=";
+    hash = "sha256-a++f7/n5xq/rb98Lm7HPw8/X3/TCoCDoB51nIJdfO2o=";
   };
 
   extras = stdenv.mkDerivation {

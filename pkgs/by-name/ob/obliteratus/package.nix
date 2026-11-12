@@ -6,12 +6,18 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until gradio works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "obliteratus";
   version = "0.1.3";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "elder-plinius";
@@ -26,9 +32,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "wheel==0.45.1" "wheel"
   '';
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with pythonPackages; [ setuptools ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     accelerate
     bitsandbytes
     datasets
@@ -45,13 +51,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     transformers
   ];
 
-  optional-dependencies = with python3Packages; {
+  optional-dependencies = with pythonPackages; {
     spaces = [ gradio ];
   };
 
   pythonImportsCheck = [ "obliteratus" ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with pythonPackages; [
     gradio
     hypothesis
     pytest-cov-stub
@@ -85,6 +91,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Tests are hardware-dependent
     "test_jetson_cuda_runtime_contract"
     "test_jetson_cuda_offloaded_surgery_contract"
+    "test_policy_rejects_unknown_cpu_exclusion_gate"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
@@ -103,5 +110,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "obliteratus";
+    # currently broken on aarch64-linux and aarch64-darwin, see https://hydra.nixos.org/build/346387789
+    broken = stdenv.hostPlatform.isAarch64;
   };
 })

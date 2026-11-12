@@ -22,6 +22,9 @@ buildGoModule rec {
     mainProgram = "nut_exporter";
     homepage = "https://github.com/DRuggeri/nut_exporter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jhh ];
+    maintainers = with lib.maintainers; [
+      booxter
+      jhh
+    ];
   };
 }

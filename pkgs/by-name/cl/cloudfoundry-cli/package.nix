@@ -4,19 +4,21 @@
   fetchFromGitHub,
   fetchurl,
   installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cloudfoundry-cli";
-  version = "8.19.0";
+  version = "8.19.1";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fSt3OyeXK6YAbKem/s+fvhm/BxTve65GSEk4htjzBAI=";
+    sha256 = "sha256-ovGOHIXfSK9BmJiNAhJXn0ulnG7rVjNdhyeeeneMcH0=";
   };
-  vendorHash = "sha256-cDiYny1BiikrzLRkFmDQefOVTOvzbM86N1Uted3m9Mg=";
+  vendorHash = "sha256-bVGOhjXxwHS1uNKCA1cJ/jL5mwpF3tDzvf/KYuXICqA=";
 
   subPackages = [ "." ];
 
@@ -32,14 +34,24 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"
-    "-X code.cloudfoundry.org/cli/version.binaryVersion=${finalAttrs.version}"
+    "-X code.cloudfoundry.org/cli/v8/version.binaryBuildDate=1970-01-01"
+    "-X code.cloudfoundry.org/cli/v8/version.binaryVersion=${finalAttrs.version}"
+    "-X code.cloudfoundry.org/cli/v8/version.binarySHA=${finalAttrs.src.rev}"
   ];
 
   postInstall = ''
     mv "$out/bin/cli" "$out/bin/cf"
     installShellCompletion --bash $bashCompletionScript
   '';
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "Official command line client for Cloud Foundry";

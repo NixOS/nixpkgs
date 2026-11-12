@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ipympl";
   version = "0.10.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "matplotlib";

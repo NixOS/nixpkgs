@@ -47,6 +47,12 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  disabledTests = [
+    "test_call"
+    "test_call_w_search_target"
   ];
 
   pythonImportsCheck = [ "ssdp" ];

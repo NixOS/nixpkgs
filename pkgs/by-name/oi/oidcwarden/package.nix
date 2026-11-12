@@ -9,6 +9,8 @@
   dbBackend ? "sqlite",
   libmysqlclient,
   libpq,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
   ++ lib.optional (dbBackend == "mysql") libmysqlclient

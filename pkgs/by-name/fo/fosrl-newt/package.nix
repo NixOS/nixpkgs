@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "newt";
-  version = "1.16.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "newt";
     tag = finalAttrs.version;
-    hash = "sha256-Ehmo7RUbZDZhBYAmaheh6IT01rhDj3LsQrXbaYQpSxg=";
+    hash = "sha256-K+pCgClmhrjZ2zx4+Yjp4Z+VFsZEg5uY6BcfAb3H300=";
   };
 
-  vendorHash = "sha256-JhNBJhj5YX3Wurv7r/JDu6YtHizOMLk+NCob7ISx+3c=";
+  vendorHash = "sha256-g9OiXbL+mW5uDsOig4SIU90j8xsulf1zx+WSxKXuPbk=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

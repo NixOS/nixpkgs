@@ -2,12 +2,12 @@
   lib,
   fetchFromGitHub,
   callPackage,
-  zig,
+  zig_0_16,
 }:
 let
   versions = [
     {
-      inherit zig;
+      zig = zig_0_16;
       version = "0-unstable-2026-04-02";
       src = fetchFromGitHub {
         owner = "Vexu";

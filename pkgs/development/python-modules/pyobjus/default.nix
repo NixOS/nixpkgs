@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyobjus";
   version = "1.2.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kivy";

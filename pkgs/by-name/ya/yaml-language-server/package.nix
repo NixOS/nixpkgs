@@ -5,16 +5,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "yaml-language-server";
-  version = "1.24.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-JIThwWGunUn4fHxPx7wBqi/F9aslNhWjcx11TvMyoDQ=";
+    hash = "sha256-tahzUtzi+p8SPivvVl5txUjnVCGTjGT6nuS+kLMAuEw=";
   };
 
-  npmDepsHash = "sha256-0jmq/4XpuZLjoRCxpGBZdGgfyvBTBBoT893o2mooCVw=";
+  npmDepsHash = "sha256-firOmhVhj0vc3MI8gC5Yq/cx2WYTIjzExhbN5bH8vKg=";
 
   strictDeps = true;
 

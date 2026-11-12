@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "esp-pylib";
-  version = "1.1.4";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esp-pylib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-anos6sLybT6HQXslFpmRl6+0gF1OjrQqe3UAPbgcTYI=";
+    hash = "sha256-TsICch+nrWgQdzlNJjPEpvsGn+OuFxhgOAUHdAxNNYw=";
   };
 
   build-system = [ setuptools ];

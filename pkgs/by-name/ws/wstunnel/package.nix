@@ -1,28 +1,34 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   rustPlatform,
   nixosTests,
+  pkg-config,
   nix-update-script,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wstunnel";
-  version = "10.7.1";
+  version = "11.1.0";
 
   src = fetchFromGitHub {
     owner = "erebe";
     repo = "wstunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZquDqZFNYdFnPjW7vN4TffU20kyP+WAi4ButX3C5FwQ=";
+    hash = "sha256-mgkoulB9+6USkojl7EIPJqeVxwQdH/z54ZMIMq3rxnA=";
   };
 
-  cargoHash = "sha256-lbVJJDnAZ+W0YE8uQ79e1i/A6HhzxSzBpkgHor6hfXo=";
+  cargoHash = "sha256-K6AQlANNkAm/vZhsQQZrN/QInF9AkAJkVFGoE9he3q4=";
 
   cargoBuildFlags = [ "--package wstunnel-cli" ];
 
-  nativeBuildInputs = [ versionCheckHook ];
+  nativeBuildInputs = [
+    pkg-config
+    versionCheckHook
+  ];
+  buildInputs = [ aws-lc ];
   doInstallCheck = true;
 
   checkFlags = [

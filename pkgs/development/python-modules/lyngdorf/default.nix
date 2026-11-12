@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
@@ -10,19 +11,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lyngdorf";
-  version = "1.4.8";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fishloa";
     repo = "lyngdorf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KasnlVp9Hx4B3NccLL1qaViLJRLKFY41yXu2bz1/8hA=";
+    hash = "sha256-bCQKKr8woaFM06DYbGz5RmRtZzwQk1MAmYrSIZTzAn8=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [ attrs ];
+  dependencies = [
+    aiohttp
+    attrs
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

@@ -55,10 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://spwhitton.name/tech/code/git-remote-gcrypt";
     description = "Git remote helper for GPG-encrypted remotes";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
-      ellis
-      montag451
-    ];
+    maintainers = with lib.maintainers; [ montag451 ];
     platforms = lib.platforms.unix;
     mainProgram = "git-remote-gcrypt";
   };

@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   intltool,
-  libtorrent-rasterbar,
+  libtorrent-rasterbar-2_0_x,
   python3Packages,
   gtk3,
   libappindicator,
@@ -45,8 +45,8 @@ let
           pyxdg
           pyopenssl
           service-identity
-          libtorrent-rasterbar.dev
-          libtorrent-rasterbar.python
+          libtorrent-rasterbar-2_0_x.dev
+          libtorrent-rasterbar-2_0_x.python
           # pkg_resources was removed in setuptools>=82; deluge 2.2.0 still uses it
           # standard-pkg-resources is an independent PyPI redistribution providing it
           # TODO: remove once deluge migrates off pkg_resources

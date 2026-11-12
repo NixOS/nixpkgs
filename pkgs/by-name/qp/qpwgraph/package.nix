@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rncbc";
     repo = "qpwgraph";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-KZXKGujfn6IZff28eMmM+UwH1+T3/mEOiysecwWOO1o=";
+    hash = "sha256-KZXKGujfn6IZff28eMmM+UwH1+T3/mEOiysecwWOO1o=";
   };
 
   nativeBuildInputs = [

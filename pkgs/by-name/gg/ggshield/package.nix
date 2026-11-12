@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   git,
   python3,
@@ -7,15 +8,20 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
-  version = "1.54.0";
+  version = "1.56.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8U8kY8IiYM1NXL30cRHrh3Sy5UWIiS8eATKhiugHVik=";
+    hash = "sha256-ytFRk86W34fhhJVgpbBF6Sbc6mTw0OmWjwBVpZIr6RQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.32.0" "hatchling"
+  '';
 
   pythonRelaxDeps = true;
 
@@ -40,6 +46,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pyyaml
     requests
     rich
+    ruamel-yaml
     sigstore
     tomli
     tomlkit
@@ -91,7 +98,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # Generated hooks config references pytest binary, instead of ggshield CLI. Odd!
     "test_install_cursor_local_fresh"
     "test_install_vibe_global"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_git_command_includes_longpaths_on_windows"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Tool to find and fix various types of hardcoded secrets and infrastructure-as-code misconfigurations";

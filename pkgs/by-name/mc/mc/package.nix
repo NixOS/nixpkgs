@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # The preFixup hook rewrites the binary, which invaliates the code
   # signature. Add the fixup hook to sign the output.
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 
@@ -83,12 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /bin/rm ${coreutils}/bin/rm
   '';
 
-  postFixup = lib.optionalString ((!stdenv.hostPlatform.isDarwin) && x11Support) ''
-    # libX11.so is loaded dynamically so autopatch doesn't detect it
-    patchelf \
-      --add-needed ${libx11}/lib/libX11.so \
-      $out/bin/mc
-  '';
+  postFixup =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin && x11Support && !stdenv.hostPlatform.isStatic)
+      ''
+        # libX11.so is loaded dynamically so autopatch doesn't detect it
+        patchelf \
+          --add-needed ${libx11}/lib/libX11.so \
+          $out/bin/mc
+      '';
 
   passthru.updateScript = writeScript "update-mc" ''
     #!/usr/bin/env nix-shell

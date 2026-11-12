@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mergecal";
-  version = "0.5.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mergecal";
     repo = "python-mergecal";
     tag = "v${version}";
-    hash = "sha256-Je3gFREu97Ycofszhr6pKOCiK76oBuzb3ji4LAf5aE8=";
+    hash = "sha256-HWUZ9MJJMTqDzCJiqt/q7YXDM9Sp9i1qcdBxheZyfrg=";
   };
 
   build-system = [ setuptools ];

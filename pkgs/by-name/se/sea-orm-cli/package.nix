@@ -4,26 +4,29 @@
   fetchCrate,
   pkg-config,
   openssl,
+  sqlite,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sea-orm-cli";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-tkyZSsTE1a08AIif5NNkBazASs+pvBgP69CnZhEZkhw=";
+    hash = "sha256-jQda7XP8w8SCqlmCcyf3N3apaMHBrbdVgMTCmqBa3c4=";
   };
 
-  cargoHash = "sha256-4+rFHOBRyUGF6DXxT4Y54Y2s4F9MGcNF/ELWj/4fPWo=";
+  cargoHash = "sha256-PevIaSzmdC2Yix4c5Y+oTIQoBrmYAuGOqPKlzgP4o1w=";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -38,10 +41,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://www.sea-ql.org/SeaORM";
     description = "Command line utility for SeaORM";
     changelog = "https://github.com/SeaQL/sea-orm/releases/tag/sea-orm-cli%40${finalAttrs.version}";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       traxys
       anish

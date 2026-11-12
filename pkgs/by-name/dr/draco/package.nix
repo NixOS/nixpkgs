@@ -18,20 +18,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "draco";
-  version = "1.5.7";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = finalAttrs.version;
-    hash = "sha256-Y1bwBFe3bCklZN2+TBs6mhqDKQjrezMiT5zXlPFuMew=";
+    hash = "sha256-g0RnJ5kDj6YKpk2KqbUQKrwW6NDphcl4YMjT5xrXcE0=";
   };
-
-  # ld: unknown option: --start-group
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/draco_targets.cmake \
-      --replace-fail "^Clang" "^AppleClang"
-  '';
 
   nativeBuildInputs = [
     cmake

@@ -36,8 +36,6 @@ python3Packages.buildPythonApplication {
       --replace-fail 'shutil.copy(' 'shutil.copyfile('
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     meson
     ninja
@@ -65,7 +63,9 @@ python3Packages.buildPythonApplication {
   ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = nix-update-script { };
 

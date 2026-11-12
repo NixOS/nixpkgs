@@ -36,7 +36,6 @@ buildPythonPackage (finalAttrs: {
   pname = "perplexityai";
   version = "0.42.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "perplexityai";
@@ -45,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-/JXcWvKTspVSoRrnHYoyhjZQsOaMZE/Xj1lVI3JKyTQ=";
   };
 
-  # Can't use relaxPythonDeps as this is a version lock in the build system
+  # Can't use pythonRelaxDeps as this is a version lock in the build system
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"hatchling==1.26.3"' '"hatchling"'

@@ -7,7 +7,6 @@
   iana-etc,
   mailcap,
   buildPackages,
-  pkgsBuildTarget,
   targetPackages,
   # for testing
   buildGo127Module,
@@ -17,19 +16,15 @@
 let
   goBootstrap = buildPackages.callPackage ./bootstrap124.nix { };
 
-  # We need a target compiler which is still runnable at build time,
-  # to handle the cross-building case where build != host == target
-  targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
-
-  isCross = stdenv.buildPlatform != stdenv.targetPlatform;
+  isCross = !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.27.1";
+  version = "1.27.4";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-TkCKuuEm2Ra2FkYnGT8sVPDjyhMS1pO4bbRfhiqyOLE=";
+    hash = "sha256-c8+4VxrsDAEXdofbhxY9Rqog6XeWcncokaoXZU2aYJk=";
   };
 
   strictDeps = true;
@@ -38,9 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsBuildTarget = lib.optional isCross targetCC;
-
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads;
 
   postPatch = ''
     patchShebangs .
@@ -66,7 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
+    # These control the architectures we're building the toolchain itself for in make.bash.
+    # Go's "target architecture" is our host.
+    inherit (stdenv.hostPlatform.go) GOOS GOARCH GOARM;
     # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
     # Go will nevertheless build a for host system that we will copy over in
     # the install phase.
@@ -92,10 +87,24 @@ stdenv.mkDerivation (finalAttrs: {
     GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
   }
   // lib.optionalAttrs isCross {
-    # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
-    # to be different from CC/CXX
-    CC_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}cc";
-    CXX_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}c++";
+    # Go's "target architecture" is our host, so these variables are the compilers for
+    # building the toolchain for hostPlatform (passed as GOOS/GOARCH above)
+    CC_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+    CXX_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
+  }
+  // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.targetPlatform) {
+    # Prefer external linker for cross when CGO is supported, since
+    # we haven't taught go's internal linker to pick the correct ELF
+    # interpreter for cross
+    # When CGO is not supported we rely on static binaries being built
+    # since they don't need an ELF interpreter
+
+    # Without an equivalent, pkgsStatic builds fail. See for some extra context
+    # https://github.com/NixOS/nixpkgs/issues/582185
+
+    # TODO: Clean this up. Out-of-tree users should almost never be hitting this case,
+    # except through buildGoModule, so we have relative freedom in doing so.
+    GO_EXTLINK_ENABLED = finalAttrs.env.CGO_ENABLED;
   };
 
   buildPhase = ''
@@ -108,15 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
     export PATH=$(pwd)/bin:$PATH
 
     ${lib.optionalString isCross ''
-      # Independent from host/target, CC should produce code for the building system.
-      # We only set it when cross-compiling.
+      # "Command line to run to compile C code for GOHOSTARCH."
+      # Go's "host" is our buildPlatform.
       export CC=${buildPackages.stdenv.cc}/bin/cc
-      # Prefer external linker for cross when CGO is supported, since
-      # we haven't taught go's internal linker to pick the correct ELF
-      # interpreter for cross
-      # When CGO is not supported we rely on static binaries being built
-      # since they don't need an ELF interpreter
-      export GO_EXTLINK_ENABLED=${toString finalAttrs.env.CGO_ENABLED}
     ''}
     ulimit -a
 
@@ -132,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/regexp/syntax/make_perl_groups.pl
   ''
   + (
+    # Not equivalent to isCross; e.g. x86_64-linux vs. musl64 have the same system string
     if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
       ''
         mv bin/*_*/* bin

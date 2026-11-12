@@ -13,7 +13,7 @@ bundlerApp {
 
   meta = {
     description = "Ruby runtime developer console and IRB alternative";
-    homepage = "https://pryrepl.org";
+    homepage = "https://pry.github.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.tckmn ];
     platforms = lib.platforms.unix;

@@ -9,23 +9,24 @@
   openssl,
   pkg-config,
   rustPlatform,
-  systemd,
+  systemdLibs,
   xz,
+  zstd,
   zlib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ciel";
-  version = "3.10.4";
+  version = "3.11.5";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oKYPhevy0o5IxxqMneWAamRyZr7yForbsuhszWDUaQk=";
+    hash = "sha256-eN9ajkRIWvReT1yDyqzQpge9xDHI3nZ+CtRQd8L2+FI=";
   };
 
-  cargoHash = "sha256-hrjZKowkTQaNDrwOYM6pvUomcBrMrvlgvLl0UreeW8U=";
+  cargoHash = "sha256-O2VWIP4ro249vTUWi1nlftRUTPJ2Ze8M1kmGyWaFfAI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,12 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Therefore, bash is required for plugins to work.
   buildInputs = [
     bash
-    systemd
+    systemdLibs
     dbus
     openssl
     libssh2
     libgit2
     xz
+    zstd
     zlib
   ];
 

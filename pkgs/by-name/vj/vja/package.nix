@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vja";
-  version = "6.0.3";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ce72";
     repo = "vja";
     tag = finalAttrs.version;
-    hash = "sha256-wyKhDwqQXDU+DaVJo0LCyK1KV1vkRPbrUDs46x7hBEI=";
+    hash = "sha256-/HmhZBp67V271r+aREvcZC8aNrJDW+YnD14rCvBf0u0=";
   };
 
   build-system = [

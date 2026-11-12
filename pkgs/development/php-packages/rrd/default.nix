@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   pkg-config,
   rrdtool,
   fetchpatch,
@@ -33,6 +34,7 @@ buildPecl {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP bindings to RRD tool system";
     license = lib.licenses.bsd0;
     homepage = "https://github.com/php/pecl-processing-rrd";

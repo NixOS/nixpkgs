@@ -24,15 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gcsfs";
-  version = "2026.7.0";
+  version = "2026.8.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "gcsfs";
     tag = finalAttrs.version;
-    hash = "sha256-Q+aqlFyNiGj0alOrnyjV9ILSSv6jRp+2DjDF/+f65po=";
+    hash = "sha256-IAXUqYeQu+Z2Z2OumIpYmYOFomsN0Ojx8YpGKE+7i1U=";
   };
 
   build-system = [

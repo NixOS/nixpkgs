@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wlr-utils";
-  version = "1.8.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "sjourdois";
     repo = "wlr-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H+XXWFmtjxSZEETUygdJCj0hHWWB/TO3QU83RL2oCqQ=";
+    hash = "sha256-AVlZpmUA73UcZjLALHKEz+AhGP6MwqmHgAdamENosTE=";
   };
 
-  cargoHash = "sha256-fz3yVFfCEYq0rBwjeimez3XFIQbVrXvMzTF94X4aqHI=";
+  cargoHash = "sha256-NaBFMTTlgEkiVtWbHQCuNUmmCPLZc7088AsTwbzSG5o=";
 
   nativeBuildInputs = [
     pkg-config

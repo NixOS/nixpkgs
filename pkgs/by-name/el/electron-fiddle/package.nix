@@ -1,7 +1,6 @@
 {
   buildFHSEnv,
   fetchFromGitHub,
-  fetchYarnDeps,
   electron,
   git,
   lib,
@@ -10,6 +9,7 @@
   stdenvNoCC,
   util-linux,
   yarn-berry_4,
+  substitute,
   zip,
 }:
 
@@ -22,7 +22,23 @@ let
     owner = "electron";
     repo = "fiddle";
     tag = "v${version}";
-    hash = "sha256-nmmj1PvW9LOoEdwwWRRXe9q9J8z6Fp45Tt038BjWD+k=";
+    hash = "sha256-5Pw889lHRwWoTUVbLmToPF8/bDz382qFMO9mL/EKLo0=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/electron/fiddle/blob/main/package.json#L163
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   patches = [
@@ -31,9 +47,6 @@ let
 
     # zip extraction fails on newer nodejs versions without this fix
     ./bump-yauzl.patch
-
-    # https://github.com/nixos/nixpkgs/issues/542343
-    ./yarn-metadata-version.patch
   ];
 
   missingHashes = ./missing-hashes.json;
@@ -49,7 +62,7 @@ let
 
     offlineCache = yarn-berry.fetchYarnBerryDeps {
       inherit src patches missingHashes;
-      hash = "sha256-xxguRiyZDGdVt3eYh+KUI/odLZZ/LeScRBfexMxAOVI=";
+      hash = "sha256-O9zaCL0W8JPYQz8EBWOz0qGjW57Js3oMosUbz72YBc4=";
     };
 
     nativeBuildInputs = [

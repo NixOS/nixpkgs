@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yarl";
-  version = "1.24.5";
+  version = "1.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "yarl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2Uqn1TwfH375CBIveEpsco4dDNrhxHwX8wIP8dKhh/M=";
+    hash = "sha256-cQsVglP3OqaQW95OYPlbWCFTs5p6L5wOzx7QCIqqJ9U=";
   };
 
   build-system = [

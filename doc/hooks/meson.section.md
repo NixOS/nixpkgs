@@ -92,3 +92,10 @@ Meson setup hook.
 - `prefixKey`
 - `enableParallelBuilding`
 - `enableParallelChecking`
+- `disabledTests`
+
+#### `disabledTests` {#meson-disabled-tests}
+
+Specifies a list of tests to skip in `mesonCheckPhase`.
+You can optionally specify a subproject using a colon prefix, e.g. `subproject:test_name`.
+Meson will pick up the main project name as a default if no subproject is specified.

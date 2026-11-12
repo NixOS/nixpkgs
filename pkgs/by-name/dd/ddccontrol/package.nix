@@ -20,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ddccontrol";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
     tag = finalAttrs.version;
-    sha256 = "sha256-8VqnmWLXt6rXapAqvzvtDQ9XjQ7H6s7pLqPhQ6Zflc4=";
+    sha256 = "sha256-1rCO99n89N2dbUU5vfTFyCrLC18iBF3ShcCjVjTz2to=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-UN308Tt9LCRLBSswem06UupjdIFntt6SqpTxteY5O78=";
+    hash = "sha256-eLRK1fNl/vCs7pR78BglN87/axh8G/gYvZv0dQzzy8c=";
   };
 
   nativeBuildInputs = [

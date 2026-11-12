@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sqltrie";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "sqltrie";
     tag = version;
-    hash = "sha256-D1vYXyh/i0wy7sttW117vsMbUlQJ/mq7rlxLMJWoki0=";
+    hash = "sha256-sBu82SDOBqlQLONYgQ4eCw6MVFsLIs5/LfevP4cUDTo=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -35,8 +35,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "DVC's data management subsystem";
-    homepage = "https://github.com/iterative/sqltrie";
-    changelog = "https://github.com/iterative/sqltrie/releases/tag/${version}";
+    homepage = "https://github.com/treeverse/sqltrie";
+    changelog = "https://github.com/treeverse/sqltrie/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

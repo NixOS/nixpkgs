@@ -15,9 +15,9 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "obsrvbl";
+    owner = "obsrvbl-oss";
     repo = "flowlogs-reader";
-    # https://github.com/obsrvbl/flowlogs-reader/issues/57
+    # https://github.com/obsrvbl-oss/flowlogs-reader/issues/57
     tag = "v${version}";
     hash = "sha256-9UwCRLRKuIFRTh3ntAzlXCyN175J1wobT3GSLAhl+08=";
   };
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
     mainProgram = "flowlogs_reader";
-    homepage = "https://github.com/obsrvbl/flowlogs-reader";
+    homepage = "https://github.com/obsrvbl-oss/flowlogs-reader";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cransom ];
   };

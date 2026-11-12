@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ yuriaisaka ];
+    maintainers = [ ];
     mainProgram = "imagej";
   };
 })

@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool for the automated removal of spurious sequences or poorly aligned regions from a multiple sequence alignment";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    homepage = "http://trimal.cgenomics.org";
+    homepage = "https://trimal.readthedocs.io/en/latest/";
     maintainers = [ lib.maintainers.bzizou ];
   };
 })

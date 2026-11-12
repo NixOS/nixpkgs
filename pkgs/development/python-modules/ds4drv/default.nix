@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "chrippa";
     repo = "ds4drv";
     rev = "v${version}";
-    sha256 = "0vinpla0apizzykcyfis79mrm1i6fhns83nkzw85svypdhkx2g8v";
+    hash = "sha256-Gz3RJ2zXb10Q/9MOpC10Joaaazo6Os+m/z9eBRS9Nm4=";
   };
 
   postPatch = ''

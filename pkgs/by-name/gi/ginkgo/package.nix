@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ginkgo";
-  version = "2.32.2";
+  version = "2.34.0";
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tPw47ItW6S7ULab4ioXhvssd6eNV2CGMM3pzz8dtb9g=";
+    sha256 = "sha256-gHbX+ZPAteT9st7/Yv+l/tsn0/Bu6QRZ1S5JIyML6js=";
   };
   vendorHash = "sha256-lj8b9f5q9hbPML7uLca74lTCadNOCtGIDmvP+CUwJx4=";
 

@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_43,
+  electron_44,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
@@ -14,21 +14,21 @@
 }:
 
 let
-  electron = electron_43;
+  electron = electron_44;
 in
 
 buildNpmPackage (finalAttrs: {
   pname = "appium-inspector";
-  version = "2026.7.1";
+  version = "2026.9.2";
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = "appium-inspector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7pxXlY/aifrg4cuGZSgxONF+RPL8P7JcZ6Gobqv2nz4=";
+    hash = "sha256-ePHLOHEXaigZwoCrZG18K7oYVeFEg3ZhZIKJJHyFQe8=";
   };
 
-  npmDepsHash = "sha256-W9FWIHhtS2d9xBpIEGB8sWmDfcdyphL+0eCk1+8pu2s=";
+  npmDepsHash = "sha256-MvDKtSx/1w3s8NjQczEzvxSE6SmJrWb5CUpPYhSX7Ts=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
@@ -91,9 +91,13 @@ buildNpmPackage (finalAttrs: {
         PKG_FILE = toString ./package.nix;
       };
       text = ''
+        current_electron_version="$(grep -oP -m 1 "(?<=electron_)(\d+)" "$PKG_FILE")"
         new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
         new_electron_major="$(jq -r '.devDependencies.electron | split(".")[0] | tonumber' "$new_src/package.json")"
-        sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+        if (( current_electron_version >= new_electron_major )); then
+          exit 0
+        fi
+        sed -i -E "s/electron_$current_electron_version/electron_$new_electron_major/g" "$PKG_FILE"
       '';
     }))
   ];

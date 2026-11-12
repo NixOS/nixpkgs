@@ -31,14 +31,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "4.10.0";
+  version = "4.13.0";
   pname = "baresip";
 
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EUnMcRvSvQoCgVmDVPjtfeppUiheVU2xD49D9hZbGb4=";
+    hash = "sha256-cwNlErJjG0XlvRHQ6v14/tttjBfsbS+iR0NxFKIlQhc=";
   };
 
   patches = [
@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace cmake/FindGTK3.cmake --replace-fail GTK3_CFLAGS_OTHER ""
+    # Fix incorrect path joining in cmake
+    # https://github.com/NixOS/nixpkgs/issues/144170
+    substituteInPlace packaging/libbaresip.pc.in \
+      --replace-fail 'libdir=''${prefix}/@CMAKE_INSTALL_LIBDIR@' \
+                     'libdir=@CMAKE_INSTALL_FULL_LIBDIR@'
   ''
   + lib.optionalString (!dbusSupport) ''
     substituteInPlace cmake/modules.cmake --replace-fail 'list(APPEND MODULES ctrl_dbus)' ""

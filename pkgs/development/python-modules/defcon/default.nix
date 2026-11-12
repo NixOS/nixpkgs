@@ -2,25 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   setuptools-scm,
   fonttools,
   fontpens,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "defcon";
   version = "0.12.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Jd/n/QFSzPKSyxkNGSikfViImcILBGhUKT4DnhyT5eA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fonttools
   ]
   ++ fonttools.optional-dependencies.ufo
@@ -38,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Set of UFO based objects for use in font editing applications";
     homepage = "https://github.com/robotools/defcon";
-    changelog = "https://github.com/robotools/defcon/releases/tag/${version}";
+    changelog = "https://github.com/robotools/defcon/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

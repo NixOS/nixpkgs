@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jcalbert";
     repo = "uEagle";

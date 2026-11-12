@@ -7,6 +7,10 @@
   replaceVars,
   setuptools,
   stdenv,
+  pytestCheckHook,
+  pygame,
+  psutil,
+  xvfb,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,9 +34,33 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  # mosts tests fail in the nix sandbox with:
-  #  GLX is not supported
-  doCheck = false;
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs = [
+    xvfb
+    mesa.llvmpipeHook
+    pytestCheckHook
+    pygame
+    psutil
+  ];
+
+  # setup a virtual x11 display
+  preCheck = ''
+    export DISPLAY=:$((2000 + $RANDOM % 1000))
+    Xvfb $DISPLAY -screen 5 1024x768x8 &
+    xvfb_pid=$!
+  '';
+  postCheck = ''
+    kill $xvfb_pid
+  '';
+
+  disabledTests = [
+    # undefined symbol: glutSolidTeapot
+    "test_check_glut_load"
+    # gbmdevice is None
+    "test_egl_ext_enumerate"
+    # failed assertion: assert depth in (1, (1,))
+    "test_glCallLists_twice2"
+  ];
 
   # PyOpenGL looks for libraries during import, making this a somewhat decent test of our patching
   # (these are impure deps on darwin)
@@ -51,7 +79,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru.runtimeLibs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    "/run/opengl-driver/lib"
+    "/run/opengl-driver"
     pkgs.libglvnd
     pkgs.libGLU
     pkgs.libglut

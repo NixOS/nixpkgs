@@ -10,6 +10,7 @@
   # dependencies
   argparse-dataclass,
   configargparse,
+  packaging,
 
   # tests
   pytestCheckHook,
@@ -23,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-common";
   version = "1.23.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
@@ -48,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     argparse-dataclass
     configargparse
+    packaging
   ];
 
   pythonImportsCheck = [ "snakemake_interface_common" ];

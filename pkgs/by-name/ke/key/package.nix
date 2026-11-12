@@ -3,42 +3,33 @@
   stdenv,
   fetchFromGitHub,
   jdk,
-  gradle_8,
+  gradle_9,
   jre,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  testers,
   z3,
   cvc5,
-  key,
-  substitute,
+  versionCheckHook,
 }:
 
 let
-  gradle = gradle_8;
+  gradle = gradle_9;
 
 in
 stdenv.mkDerivation rec {
   pname = "key";
-  version = "2.12.3";
+  version = "3.0.0";
   src = fetchFromGitHub {
     owner = "KeYProject";
     repo = "key";
-    tag = "KEY-${version}";
-    hash = "sha256-1pN0lmr/teVitpMIM9M9lSTkmnVcZwdAQay2pzgJDCk=";
+    tag = "KeY-${version}";
+    hash = "sha256-aEkQtTLSdZPXu0g9QHa40Oye4IyCl2BFpxmm5dqjKCk=";
   };
 
   patches = [
     # Remove linting framework, causes issues with the update script.
-    (substitute {
-      src = ./remove-eisop-checker.patch;
-      substitutions = [
-        "--subst-var-by"
-        "version"
-        version
-      ];
-    })
+    ./remove-eisop-checker.patch
   ];
 
   nativeBuildInputs = [
@@ -67,9 +58,11 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # TODO: on update to 2.12.4+, try again
-  # (currently some tests are failing)
-  doCheck = false;
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  nativeCheckInputs = [
+    z3
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -91,10 +84,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = key;
-    command = "KeY --help";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--show-properties";
 
   meta = {
     description = "Java formal verification tool";

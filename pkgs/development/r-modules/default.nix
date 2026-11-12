@@ -40,12 +40,17 @@ let
     args:
     let
       hydraPlatforms' = hydraPlatforms;
+      licenseMap = {
+        # Deprecated spdxID same as BSD-2-Clause-Views (https://spdx.org/licenses/BSD-2-Clause-FreeBSD.html)
+        BSD-2-Clause-FreeBSD = lib.licenses.bsd2WithViews;
+      };
     in
     lib.makeOverridable (
       {
         name,
         version,
         sha256,
+        spdx ? null,
         depends ? [ ],
         doCheck ? true,
         requireX ? false,
@@ -68,6 +73,18 @@ let
         meta.hydraPlatforms = hydraPlatforms;
         meta.broken = broken;
         meta.maintainers = maintainers;
+        meta.license =
+          # Unknown license
+          if spdx == null || lib.any isNull spdx then
+            lib.licenses.unfree
+          # Unlimited license
+          else if spdx == [ ] then
+            lib.licenses.free
+          # Known license
+          else
+            (if lib.length spdx == 1 then lib.head else lib.licenses.OR) (
+              lib.map (x: lib.getLicenseFromSpdxIdOr x licenseMap.${x}) spdx
+            );
       }
     );
 
@@ -198,6 +215,17 @@ let
       }
     ) overrides;
 
+  # Override automatically detected licenses using string representation of
+  # spdx licenses. Valid values are listed under lib.licensesSpdx
+  overrideLicenses =
+    overrides: old:
+    lib.mapAttrs (
+      name: value:
+      (builtins.getAttr name old).override {
+        spdx = value;
+      }
+    ) overrides;
+
   # Overrides package definitions with new R dependencies.
   # For example,
   #
@@ -237,15 +265,12 @@ let
   # }
   overrideRequireX =
     packageNames: old:
-    let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          requireX = true;
-        };
-      }) packageNames;
-    in
-    builtins.listToAttrs nameValuePairs;
+    lib.genAttrs packageNames (
+      name:
+      old.${name}.override {
+        requireX = true;
+      }
+    );
 
   # Overrides package definition requiring a home directory to install or to
   # run tests.
@@ -267,18 +292,15 @@ let
   # }
   overrideRequireHome =
     packageNames: old:
-    let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).overrideAttrs (oldAttrs: {
-          preInstall = ''
-            ${oldAttrs.preInstall or ""}
-            export HOME=$(mktemp -d)
-          '';
-        });
-      }) packageNames;
-    in
-    builtins.listToAttrs nameValuePairs;
+    lib.genAttrs packageNames (
+      name:
+      old.${name}.overrideAttrs (oldAttrs: {
+        preInstall = ''
+          ${oldAttrs.preInstall or ""}
+          export HOME=$(mktemp -d)
+        '';
+      })
+    );
 
   # Overrides package definition to skip check.
   # For example,
@@ -296,15 +318,12 @@ let
   # }
   overrideSkipCheck =
     packageNames: old:
-    let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          doCheck = false;
-        };
-      }) packageNames;
-    in
-    builtins.listToAttrs nameValuePairs;
+    lib.genAttrs packageNames (
+      name:
+      old.${name}.override {
+        doCheck = false;
+      }
+    );
 
   # Overrides package definition to mark it broken.
   # For example,
@@ -322,15 +341,12 @@ let
   # }
   overrideBroken =
     packageNames: old:
-    let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          broken = true;
-        };
-      }) packageNames;
-    in
-    builtins.listToAttrs nameValuePairs;
+    lib.genAttrs packageNames (
+      name:
+      old.${name}.override {
+        broken = true;
+      }
+    );
 
   defaultOverrides =
     old: new:
@@ -346,7 +362,8 @@ let
       old6 = old5 // (overrideBuildInputs packagesWithBuildInputs old5);
       old7 = old6 // (overrideBroken brokenPackages old6);
       old8 = old7 // (overrideMaintainers packagesWithMaintainers old7);
-      old = old8;
+      old9 = old8 // (overrideLicenses packagesWithLicenses old8);
+      old = old9;
     in
     old // (otherOverrides old new);
 
@@ -391,6 +408,54 @@ let
     # keep-sorted end
   };
 
+  packagesWithLicenses = {
+    # keep-sorted start block=yes
+    CHETAH = [ "AGPL-3.0-only" ];
+    CRISPRseek = [ "Artistic-2.0" ];
+    DMRcate = [ "GPL-3.0" ];
+    DNABarcodeCompatibility = [ "GPL-2.0" ];
+    EGSEAdata = [ "CC-BY-ND-4.0" ];
+    FRASER = [ "CC-BY-NC-4.0" ];
+    GenomicInteractionNodes = [ "Apache-2.0" ];
+    IMPCdata = [ "Apache-2.0" ];
+    LACE = [ "GPL-3.0" ];
+    MACSdata = [ "BSD-3-Clause" ];
+    MOFA2 = [ "LGPL-3.0" ];
+    MSstatsBioNet = [ "Artistic-2.0" ];
+    MultiDataSet = [ "MIT" ];
+    OUTRIDER = [ "CC-BY-NC-4.0" ];
+    OncoScore = [ "GPL-3.0" ];
+    RESOLVE = [ "Apache-2.0" ];
+    RITAN = [ "GPL-2.0" ];
+    RITANdata = [ "GPL-2.0-or-later" ];
+    Rtsne = [ "BSD-3-Clause" ];
+    Rttf2pt1 = [ "BSD-3-Clause" ];
+    SCANVIS = [ ];
+    SIMLR = [ "GPL-3.0" ];
+    SiPSiC = [ "GPL-3.0" ];
+    SparseSignatures = [ "Apache-2.0" ];
+    VERSO = [ "Apache-2.0" ];
+    biotmleData = [ "MIT" ];
+    breakpointR = [ "MIT" ];
+    breakpointRdata = [ "MIT" ];
+    cat = [ ];
+    cmapR = [ "BSD-3-Clause" ];
+    factR = [ "Apache-2.0" ];
+    fontBitstreamVera = [ "Bitstream-Vera" ];
+    fontLiberation = [ "OFL-1.1" ];
+    ggcyto = [ "MIT" ];
+    hdxmsqc = [ "Apache-2.0" ];
+    palinsol = [ ];
+    scoreInvHap = [ "MIT" ];
+    stringi = [ "BSD-3-Clause" ];
+    wpp2019 = [ "CC-BY-3.0" ];
+    x13binary = [
+      "GPL-2.0-or-later"
+      "Unlicense"
+    ];
+    # keep-sorted end
+  };
+
   packagesWithRDepends = {
     # keep-sorted start block=yes
     BayesPET = [ self.rstantools ];
@@ -423,6 +488,11 @@ let
     DirichletMultinomial = [ pkgs.gsl ]; # for gsl-config
     GLAD = [ pkgs.gsl ]; # for gsl-config
     GPBayes = [ pkgs.gsl ]; # for gsl-config
+    ICESat2VegR = with pkgs; [
+      gdal # for gdal-config
+      pkg-config
+    ];
+    IntegMultiReg = [ pkgs.gsl ]; # for gsl-config
     JMcmprsk = [ pkgs.gsl ]; # for gsl-config
     KSgeneral = with pkgs; [ pkg-config ];
     LCMCR = [ pkgs.gsl ]; # for gsl-config
@@ -455,6 +525,7 @@ let
     RcppDPR = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     RcppGSL = [ pkgs.gsl ]; # for gsl-config
     RcppMeCab = [ pkgs.mecab ]; # for mecab-config
+    RcppParallel = [ pkgs.cmake ];
     RcppPlanc = with pkgs; [
       which
       cmake
@@ -468,16 +539,7 @@ let
       pkgs.which
       pkgs.hostname
     ];
-    Rhpc = with pkgs; [
-      mpi
-      # deps for `R CMD config --ldflags`
-      bzip2
-      icu
-      libdeflate
-      xz
-      zlib
-      zstd
-    ];
+    Rhpc = [ pkgs.mpi ];
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
     RmecabKo = [ pkgs.mecab ]; # for mecab-config
@@ -503,6 +565,10 @@ let
     ];
     V8 = [ pkgs.pkg-config ];
     VBLPCM = [ pkgs.gsl ]; # for gsl-config
+    WebGestaltR = with pkgs; [
+      cargo
+      rustc
+    ];
     XBRL = [ pkgs.libxml2 ]; # for xml2-config
     XML = with pkgs; [
       pkg-config
@@ -542,6 +608,10 @@ let
       rustc
     ];
     arcpbf = with pkgs; [
+      cargo
+      rustc
+    ];
+    arity = with pkgs; [
       cargo
       rustc
     ];
@@ -593,6 +663,14 @@ let
       rustc
     ];
     chebpol = [ pkgs.pkg-config ];
+    churon = with pkgs; [
+      cargo
+      rustc
+    ];
+    cidian = with pkgs; [
+      cargo
+      rustc
+    ];
     ciflyr = with pkgs; [
       cargo
       rustc
@@ -602,6 +680,7 @@ let
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.pkg-config ];
     coga = [ pkgs.gsl ]; # for gsl-config
+    coinclp = [ pkgs.pkg-config ];
     cpp11bigwig = [ pkgs.curl ]; # for curl-config
     crc32c = [
       pkgs.which
@@ -612,9 +691,17 @@ let
       cargo
       rustc
     ];
+    delta_sharing = with pkgs; [
+      cargo
+      rustc
+    ];
     diseq = [ pkgs.gsl ]; # for gsl-config
     diversitree = [ pkgs.gsl ]; # for gsl-config
     drogonR = [ pkgs.pkg-config ];
+    dwg2geo = with pkgs; [
+      cargo
+      rustc
+    ];
     dynr = [ pkgs.gsl ]; # for gsl-config
     eaf = [ pkgs.gsl ]; # for gsl-config
     econetwork = [ pkgs.gsl ]; # for gsl-config via RcppGSL
@@ -651,12 +738,20 @@ let
     flan = [ pkgs.gsl ]; # for gsl-config
     flint = [ pkgs.pkg-config ];
     flowPeaks = [ pkgs.gsl ]; # for gsl-config
+    foresightr = with pkgs; [
+      cargo
+      rustc
+    ];
     fozziejoin = with pkgs; [
       cargo
       rustc
     ];
     frailtyMMpen = [ pkgs.gsl ]; # for gsl-config
     fraq = [ pkgs.pkg-config ];
+    freestiler = with pkgs; [
+      cargo
+      rustc
+    ];
     fru = with pkgs; [
       cargo
       rustc
@@ -706,20 +801,48 @@ let
       pkgs.which
       pkgs.cmake
     ];
+    hobbs = with pkgs; [
+      cargo
+      rustc
+    ];
     httpuv = [ pkgs.pkg-config ];
     hypergeo2 = [ pkgs.pkg-config ];
     iBMQ = [ pkgs.gsl ]; # for gsl-config
+    icebergr = with pkgs; [
+      cargo
+      rustc
+    ];
     image_textlinedetector = [ pkgs.pkg-config ];
     imager = [ pkgs.pkg-config ];
     immunoClust = [ pkgs.gsl ]; # for gsl-config
     interpolation = [ pkgs.pkg-config ];
+    ipf = with pkgs; [
+      cargo
+      rustc
+    ];
     iscream = with pkgs; [
       pkg-config
       which
     ];
     island = [ pkgs.gsl ]; # for gsl-config
+    isodistrreg = with pkgs; [
+      cargo
+      rustc
+    ];
     jSDM = [ pkgs.gsl ]; # for gsl-config
     jack = [ pkgs.pkg-config ];
+    jiebaRS = with pkgs; [
+      cargo
+      rustc
+    ];
+    jsslintr = with pkgs; [
+      cargo
+      rustc
+    ];
+    koopman_dmd = with pkgs; [
+      cargo
+      rustc
+    ];
     kza = [ pkgs.pkg-config ];
     libdeflate = with pkgs; [
       cmake
@@ -729,6 +852,10 @@ let
     libipldr = with pkgs; [
       cargo
       rustc
+    ];
+    libopenexr = with pkgs; [
+      cmake
+      pkg-config
     ];
     llmjson = with pkgs; [
       cargo
@@ -745,6 +872,7 @@ let
       geos # for geos-config
     ];
     magick = [ pkgs.pkg-config ];
+    marcxmlr = [ pkgs.pkg-config ];
     markets = [ pkgs.gsl ]; # for gsl-config
     mashr = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     mcrPioda = [ pkgs.gsl ]; # for gsl-config
@@ -773,6 +901,10 @@ let
     ];
     odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
+    openfhe_R = with pkgs; [
+      cmake
+      which
+    ];
     openssl = [ pkgs.pkg-config ];
     orbweaver = with pkgs; [
       cargo
@@ -802,6 +934,10 @@ let
     pexm = [ pkgs.jags ];
     phytools = [ pkgs.which ];
     png = [ pkgs.libpng ]; # for libpng-config
+    polyglotSQL = with pkgs; [
+      cargo
+      rustc
+    ];
     protolite = [ pkgs.protobuf ];
     prqlr = with pkgs; [
       cargo
@@ -830,6 +966,7 @@ let
     resultant = [ pkgs.pkg-config ];
     rgdal = [ pkgs.gdal ]; # for gdal-config
     rgeos = [ pkgs.geos ]; # for geos-config
+    rgph = [ pkgs.jdk ]; # remove after https://github.com/tdaverse/rgph/issues/3 is addressed and a new version is released
     ridge = [ pkgs.gsl ]; # for gsl-config
     rip_opencv = [ pkgs.pkg-config ];
     rjags = [ pkgs.pkg-config ];
@@ -842,6 +979,10 @@ let
     rmatio = [ pkgs.pkg-config ];
     rnetcarto = [ pkgs.gsl ]; # for gsl-config
     roxigraph = with pkgs; [
+      cargo
+      rustc
+    ];
+    rpic = with pkgs; [
       cargo
       rustc
     ];
@@ -877,6 +1018,10 @@ let
       rustc
     ];
     sbrl = [ pkgs.gsl ]; # for gsl-config
+    scanr = with pkgs; [
+      cargo
+      rustc
+    ];
     sceua = with pkgs; [
       cargo
       rustc
@@ -886,6 +1031,7 @@ let
       which
     ];
     scorematchingad = [ pkgs.cmake ];
+    sezgi = [ pkgs.cargo ];
     sf = with pkgs; [
       pkg-config
       gdal # for gdal-config
@@ -925,6 +1071,11 @@ let
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     talib = [ pkgs.pkg-config ];
+    tantivyr = with pkgs; [
+      cargo
+      rustc
+    ];
+    telegramR = [ pkgs.pkg-config ];
     tergo = with pkgs; [
       cargo
       rustc
@@ -955,6 +1106,7 @@ let
       cargo
       rustc
     ];
+    uqsa = [ pkgs.pkg-config ];
     uuidx = with pkgs; [
       cargo
       rustc
@@ -978,12 +1130,17 @@ let
       rustc
     ];
     xml2 = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
+    xmlrectr = [ pkgs.pkg-config ];
     xslt = [ pkgs.pkg-config ];
     yaml12 = with pkgs; [
       cargo
       rustc
     ];
     ymd = with pkgs; [
+      cargo
+      rustc
+    ];
+    zmij = with pkgs; [
       cargo
       rustc
     ];
@@ -1021,6 +1178,7 @@ let
       openbabel
       zlib
     ];
+    DDIwR = [ pkgs.zlib ];
     DEploid = [ pkgs.zlib ];
     DEploid_utils = [ pkgs.zlib ];
     DGP4LCF = [
@@ -1045,6 +1203,10 @@ let
       bzip2
     ];
     GRAB = [ pkgs.zlib ];
+    GeneralizedUmatrixGPU = with pkgs; [
+      ocl-icd
+      opencl-headers
+    ];
     GeneralizedWendland = [ pkgs.gsl ];
     GeoFIS = with pkgs; [
       mpfr
@@ -1056,6 +1218,10 @@ let
     HiCParser = [ pkgs.zlib ];
     HiCseg = [ pkgs.gsl ];
     HiSpaR = [ pkgs.armadillo ];
+    ICESat2VegR = with pkgs; [
+      gdal
+      proj
+    ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw ];
     LOMAR = [ pkgs.gmp ];
@@ -1136,6 +1302,13 @@ let
       hdf5
     ];
     RcppZiggurat = [ pkgs.gsl ];
+    Rduckhts = with pkgs; [
+      bzip2
+      curl
+      openssl
+      xz
+      zlib
+    ];
     Rfastp = with pkgs; [
       xz
       bzip2
@@ -1145,6 +1318,15 @@ let
     Rhdf5lib = with pkgs; [
       curl
       zlib
+    ];
+    Rhpc = with pkgs; [
+      # deps for `R CMD config --ldflags`
+      bzip2
+      icu
+      libdeflate
+      xz
+      zlib
+      zstd
     ];
     Rhtslib = with pkgs; [
       bzip2
@@ -1275,6 +1457,7 @@ let
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.zeromq ];
     cmtkr = [ pkgs.zlib ];
+    coinclp = [ pkgs.clp ];
     cpp11bigwig = [ pkgs.zlib ];
     cpp11qpdf = with pkgs; [
       libjpeg
@@ -1295,6 +1478,7 @@ let
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp
     );
+    datasetjson = [ pkgs.zlib ];
     deepSNV = with pkgs; [
       xz
       bzip2
@@ -1452,6 +1636,7 @@ let
     lstar = [ pkgs.zlib ];
     lwgeom = [ pkgs.proj ];
     mBvs = [ pkgs.gsl ];
+    mRpostman = [ pkgs.curl ];
     maftools = with pkgs; [
       zlib
       bzip2
@@ -1459,6 +1644,7 @@ let
     ];
     magick = [ pkgs.imagemagick ];
     mappoly = [ pkgs.zlib ];
+    marcxmlr = [ pkgs.libxml2 ];
     markets = [ pkgs.gsl ];
     matchingMarkets = [ pkgs.zlib ];
     methylKit = with pkgs; [
@@ -1468,6 +1654,7 @@ let
     ];
     milorGWAS = [ pkgs.zlib ];
     minimaxALT = [ pkgs.gsl ];
+    misha = [ pkgs.zlib ];
     mitoClone2 = with pkgs; [
       xz
       bzip2
@@ -1492,6 +1679,7 @@ let
     ncdfFlow = [ pkgs.zlib ];
     ndjson = [ pkgs.zlib ];
     neojags = [ pkgs.jags ];
+    neuroim2 = [ pkgs.zlib ];
     nloptr = [ pkgs.nlopt ];
     npRmpi = [ pkgs.mpi ];
     odbc = [ pkgs.unixodbc ];
@@ -1524,6 +1712,7 @@ let
     protolite = [ pkgs.protobuf ];
     psbcGroup = [ pkgs.gsl ];
     qckitfastq = [ pkgs.zlib ];
+    qio = [ pkgs.zlib ];
     qpdf = with pkgs; [
       libjpeg
       zlib
@@ -1574,6 +1763,7 @@ let
     ];
     ravetools = [ pkgs.fftw ];
     rawrr = [ pkgs.mono ];
+    rayrender = [ pkgs.libx11 ];
     rbedrock = [ pkgs.zlib ];
     rcdd = [ pkgs.gmp ];
     redux = [ pkgs.hiredis ];
@@ -1601,6 +1791,7 @@ let
       sqlite
     ];
     rmatio = [ pkgs.zlib ];
+    rmoriebricklayer = [ pkgs.curl ];
     rmumps = with pkgs; [ zlib ];
     rrd = [ pkgs.rrdtool ];
     rsbml = [ pkgs.libsbml ];
@@ -1762,6 +1953,7 @@ let
       zlib
       zstd
     ];
+    uqsa = [ pkgs.gsl ];
     vapour = [ pkgs.proj ];
     vcfR = with pkgs; [ zlib ];
     vcfppR = with pkgs; [
@@ -1777,6 +1969,7 @@ let
     writexl = with pkgs; [ zlib ];
     xdvir = [ pkgs.freetype ];
     xml2 = [ pkgs.libxml2 ];
+    xmlrectr = [ pkgs.libxml2 ];
     xslt =
       with pkgs;
       [
@@ -1893,6 +2086,7 @@ let
     "R_filesets"
     "R_rsp"
     "Rogue"
+    "SMTrackR"
     "ShinyQuickStarter"
     "SpatialDecon"
     "TBRDist"
@@ -2259,12 +2453,8 @@ let
       };
     });
 
-    SingleR = old.SingleR.overrideAttrs (attrs: {
-      postPatch = ''
-        substituteInPlace src/find_classic_markers.cpp --replace-fail \
-          "Rcpp::IntegerVector val(de_n);" \
-          "Rcpp::IntegerVector val(static_cast<int>(de_n));"
-      '';
+    SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     SynExtend = old.SynExtend.overrideAttrs (attrs: {
@@ -2818,9 +3008,14 @@ let
     });
 
     s2 = old.s2.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        S2_FORCE_BUNDLED_ABSEIL = "false";
+      };
       preConfigure = ''
         substituteInPlace "configure" \
           --replace-fail "absl_s2" "absl_flags absl_check"
+        substituteInPlace src/Makevars.in \
+          --replace-fail CXX17 CXX20
       '';
     });
 
@@ -2888,10 +3083,6 @@ let
         pkgs.rustPlatform.cargoSetupHook
         pkgs.cargo
       ];
-    });
-
-    trajeR = old.trajeR.overrideAttrs (attrs: {
-      patches = [ ./patches/trajeR.patch ];
     });
 
     trigger = old.trigger.overrideAttrs (attrs: {

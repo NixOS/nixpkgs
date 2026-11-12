@@ -9,6 +9,8 @@ let
   cfg = config.programs.iftop;
 in
 {
+  meta.maintainers = [ lib.maintainers.booxter ];
+
   options = {
     programs.iftop.enable = lib.mkEnableOption "iftop and setcap wrapper for it";
   };

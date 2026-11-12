@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-storage-plugin-s3";
   version = "0.3.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

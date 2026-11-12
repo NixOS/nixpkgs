@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "kaggle";
   version = "2.2.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";

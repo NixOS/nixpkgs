@@ -15,13 +15,13 @@
 
 buildDotnetModule rec {
   pname = "OpenUtau";
-  version = "0.1.565";
+  version = "0.1.576";
 
   src = fetchFromGitHub {
     owner = "openutau";
     repo = "OpenUtau";
     tag = version;
-    hash = "sha256-tjW1xmt409AlEmw/N1RG46oigP4mWAoTecQGV/hwMo4=";
+    hash = "sha256-4lbwv8F+RRSbj9QBVTdof6zec7uMj5i9ROID2l/F9yk=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -42,14 +42,14 @@ buildDotnetModule rec {
     })
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   # [...]/Microsoft.NET.Sdk.targets(157,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [[...]/OpenUtau.Core.csproj]
   # [...]/Microsoft.NET.Sdk.targets(157,5): error MSB4018: System.IO.IOException: The process cannot access the file '[...]/OpenUtau.Core.deps.json' because it is being used by another process. [[...]/OpenUtau.Core.csproj]
   enableParallelBuilding = false;
 
-  projectFile = "OpenUtau.sln";
+  projectFile = "OpenUtau/OpenUtau.csproj";
   nugetDeps = ./deps.json;
 
   executables = [ "OpenUtau" ];
@@ -66,8 +66,11 @@ buildDotnetModule rec {
 
   dotnetInstallFlags = [ "-p:PublishReadyToRun=false" ];
 
-  # socket cannot bind to localhost on darwin for tests
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # socket cannot bind to localhost on darwin for tests +
+  #
+  # Testing with VSTest target is no longer supported
+  # by Microsoft.Testing.Platform on .NET 10 SDK and later.
+  doCheck = false;
 
   # need to make sure proprietary worldline resampler is copied
   postInstall =

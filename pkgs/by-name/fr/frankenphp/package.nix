@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   php,
   brotli,
@@ -28,15 +28,15 @@ let
   phpConfig = "${phpUnwrapped.dev}/bin/php-config";
   pieBuild = stdenv.hostPlatform.isMusl;
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "frankenphp";
-  version = "1.12.7";
+  version = "1.13.5";
 
   src = fetchFromGitHub {
     owner = "php";
     repo = "frankenphp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UDxtI/+QSBRLZouHD3Lxdg4GFpU8tqybyPMvWpP/FA0=";
+    hash = "sha256-QVDomvFyWS7/IvjRCP6OshuY4j78Awv8Anx7/LJS8Ok=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/caddy";
@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-RXD7mJIV7cgo1YG8ECepuWtvIiOHbcZ1by/noaQZVFI=";
+  vendorHash = "sha256-zqnBEKHw0VPvIoP1eX6uKlhDaVCyjicxQlr7uXcEyeQ=";
 
   buildInputs = [
     phpUnwrapped
@@ -54,9 +54,9 @@ buildGoModule (finalAttrs: {
   ++ phpUnwrapped.buildInputs;
   nativeBuildInputs = [
     makeBinaryWrapper
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    pkg-config
     cctools
     darwin.autoSignDarwinBinariesHook
     libiconv
@@ -125,7 +125,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/php/frankenphp";
     license = lib.licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = [ lib.maintainers.piotrkwiecinski ];
+    maintainers = with lib.maintainers; [
+      piotrkwiecinski
+      mykiwi
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

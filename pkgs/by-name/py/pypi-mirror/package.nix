@@ -24,6 +24,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "pypi-mirror";
     homepage = "https://github.com/montag451/pypi-mirror";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

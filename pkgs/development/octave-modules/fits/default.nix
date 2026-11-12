@@ -13,7 +13,7 @@ buildOctavePackage rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0jab5wmrpifqphmrfkqcyrlpc0h4y4m735yc3avqqjajz1rl24lm";
+    hash = "sha256-lRJBc/hSSYy3GsyXcSrxBAJ2afYMT5crvNjFmysvS0k=";
   };
 
   # Found here: https://build.opensuse.org/package/view_file/science/octave-forge-fits/octave-forge-fits.spec?expand=1

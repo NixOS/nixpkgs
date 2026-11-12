@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   aiosqlite,
   alembic,
   debtcollector,
@@ -15,21 +15,30 @@
   setuptools,
   sqlalchemy,
   stevedore,
-  stestr,
+  stestrCheckHook,
   testresources,
   testscenarios,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-db";
   version = "18.1.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "oslo_db";
-    inherit version;
-    hash = "sha256-Ujm6BZuUw4HGG1q+YHrc0V6u6N8RXerduKNtyzZuRPo=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.db";
+    tag = finalAttrs.version;
+    hash = "sha256-YBF0JeaS65NWkvsM0K0WB3TtYqsHEwCbLyi29v6+WTI=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include oslo_db *" > MANIFEST.in
+  '';
 
   build-system = [
     pbr
@@ -51,19 +60,17 @@ buildPythonPackage rec {
     aiosqlite
     oslo-context
     oslotest
-    stestr
+    stestrCheckHook
     psycopg2
     testresources
     testscenarios
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
-
-  pythonImportsCheck = [ "oslo_db" ];
+  pythonImportsCheck = [
+    "oslo_db"
+    "oslo_db.sqlalchemy"
+    "oslo_db.sqlalchemy.migration_cli"
+  ];
 
   meta = {
     description = "Oslo Database library";
@@ -71,4 +78,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

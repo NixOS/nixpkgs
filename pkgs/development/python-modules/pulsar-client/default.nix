@@ -22,8 +22,8 @@
   protobuf,
   ratelimit,
 
-  # tests
-  unittestCheckHook,
+  # for meta.broken
+  stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -76,15 +76,8 @@ buildPythonPackage (finalAttrs: {
     avro = [ fastavro ];
   };
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ]
-  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
-
-  unittestFlagsArray = [
-    "-s"
-    "test"
-  ];
+  # tests require a running Pulsar broker
+  doCheck = false;
 
   pythonImportsCheck = [ "pulsar" ];
 
@@ -96,5 +89,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/apache/pulsar-client-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

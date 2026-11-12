@@ -27,11 +27,10 @@ let
       ./fix-unsigned-char.patch
     ];
 
-    # Don't fail on missing code documentation and allow dead_code/lifetime/unused_assignments warnings
-    postPatch = ''
-      substituteInPlace flux-core/src/lib.rs \
-        --replace-fail "deny(warnings, missing_docs))]" "deny(warnings), allow(dead_code, mismatched_lifetime_syntaxes, unused_assignments))]"
-    '';
+    # the `strict` feature, which is enabled by default, makes warnings fatal.
+    # this often causes build failures when new compiler versions are released.
+    buildNoDefaultFeatures = true;
+    buildFeatures = [ "cffi" ];
     sourceRoot = "${finalAttrs.src.name}/libflux";
 
     cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "2.0.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "speakersafetyd";
     tag = finalAttrs.version;
-    hash = "sha256-duIPpTzZqVSZLxF/CYlxa1PPtnzeABTCYfZZ7lomkls=";
+    hash = "sha256-tUAHkCEteyFqF9XKQ7TLzYLU11Iy89Wlp251tI1w+Zw=";
   };
 
-  cargoHash = "sha256-gg1VcCrXKk5QsNvU7wz039md0gpFom6SrLuW6tjNQog=";
+  cargoHash = "sha256-9SGNhP0ccr5Spiz5B6rfnYMGGR7Q5fDivL2EZuwKwkU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       flokli
       yuka
     ];
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 })

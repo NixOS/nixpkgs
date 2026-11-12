@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "alibabacloud_darabonba_encode_util";
     inherit (finalAttrs) version;

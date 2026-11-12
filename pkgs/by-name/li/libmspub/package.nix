@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-docs" ];
 
+  env = {
+    CXXFLAGS = "-std=gnu++17";
+  };
+
   patches = [
     (fetchpatch {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libmspub/-/raw/8721a52e09e14f905311abd3d5f2ad9bb3fe78a2/buildfix.diff";
@@ -49,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

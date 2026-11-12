@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.15";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "alibabacloud_tea_util";
     inherit (finalAttrs) version;

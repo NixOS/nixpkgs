@@ -195,6 +195,8 @@ let
         error_log ${cfg.logError};
         daemon off;
 
+        worker_processes ${toString cfg.workerProcesses};
+
         # load_module is a main-context directive that must precede events{}/http{}.
         ${optionalString (
           (cfg.package.dynamicModules or [ ]) != [ ]
@@ -241,16 +243,17 @@ let
             }
 
             ${optionalString cfg.recommendedTlsSettings ''
-              # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
+              # Consider https://configurator.tlsref.org/#server=nginx&config=intermediate as the lower bound
 
               ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
-              ssl_session_timeout 1d;
-              ssl_session_cache shared:SSL:10m;
-              # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
-              ssl_session_tickets off;
-              # We don't enable insecure ciphers by default, so this allows
-              # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+
+              # Allow clients to choose the most performant ciphersuite from our safe allowlist
+              # https://github.com/mozilla/server-side-tls/issues/260
               ssl_prefer_server_ciphers off;
+
+              # Support TLS session resumption (cache and tickets)
+              ssl_session_cache shared:SSL:10m; # ~40k sessions
+              ssl_session_timeout 1d;
             ''}
 
             ${optionalString cfg.recommendedBrotliSettings ''
@@ -288,10 +291,6 @@ let
               proxy_connect_timeout   ${cfg.proxyTimeout};
               proxy_send_timeout      ${cfg.proxyTimeout};
               proxy_read_timeout      ${cfg.proxyTimeout};
-              proxy_http_version      1.1;
-              # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
-              # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
-              proxy_set_header        "Connection" "";
               include ${recommendedProxyConfig};
             ''}
 
@@ -720,6 +719,14 @@ in
         '';
       };
 
+      workerProcesses = mkOption {
+        type = types.either types.ints.positive (types.enum [ "auto" ]);
+        default = "auto";
+        description = ''
+          Defines the number of worker processes.
+        '';
+      };
+
       defaultListen = mkOption {
         type =
           with types;
@@ -1049,7 +1056,7 @@ in
 
       sslCiphers = mkOption {
         type = types.nullOr (types.either types.str (types.listOf types.str));
-        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+        # Keep in sync with https://configurator.tlsref.org/#server=nginx&config=intermediate
         default = [
           "ECDHE-ECDSA-AES128-GCM-SHA256"
           "ECDHE-RSA-AES128-GCM-SHA256"

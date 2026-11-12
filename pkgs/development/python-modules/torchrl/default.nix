@@ -54,6 +54,7 @@
   minari,
   pandas,
   pillow,
+  pyarrow,
   requests,
   scikit-learn,
   torchvision,
@@ -73,19 +74,19 @@
   pytestCheckHook,
   pyyaml,
   scipy,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ATfvAobn9MjY+PHY7xY+iPztyKBZ5YpGXL1ZCzgvQXc=";
+    hash = "sha256-AxnTz+Z2aChf5d2Sh5cCfzl0hVs/HJnvorQpdkl0nQ0=";
   };
 
   postPatch = ''
@@ -104,6 +105,9 @@ buildPythonPackage (finalAttrs: {
   ];
   dontUseCmakeConfigure = true;
 
+  pythonRelaxDeps = [
+    "tensordict"
+  ];
   dependencies = [
     cloudpickle
     hoptorch
@@ -149,11 +153,13 @@ buildPythonPackage (finalAttrs: {
       vmas
     ];
     offline-data = [
+      datasets
       h5py
       huggingface-hub
       minari
       pandas
       pillow
+      pyarrow
       requests
       scikit-learn
       torchvision
@@ -166,7 +172,6 @@ buildPythonPackage (finalAttrs: {
       # procgen (unpackaged)
     ];
     rendering = [ moviepy ];
-    replay-buffer = [ torch ];
     utils = [
       git
       hydra-core
@@ -212,6 +217,7 @@ buildPythonPackage (finalAttrs: {
     pyyaml
     scipy
     torchvision
+    writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.atari
   ++ finalAttrs.passthru.optional-dependencies.gym-continuous
@@ -249,6 +255,9 @@ buildPythonPackage (finalAttrs: {
 
     # ray.exceptions.RuntimeEnvSetupError: Failed to set up runtime environment
     "TestRayCollector"
+
+    # AttributeError: module 'ray.internal' has no attribute 'free'
+    "test_ray_collector_stats"
 
     # torchrl is incompatible with gymnasium>=1.0
     # https://github.com/pytorch/rl/discussions/2483
@@ -330,6 +339,13 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: Tensor-likes are not equal!
     "test/modules/test_dreamer_components.py::TestDreamerV3Components::test_discrete_actor[cpu-autocast]"
+
+    # ValueError: Hugging Face could not decode row 0: Needed to copy 1 chunks with 1 nulls, but
+    # zero_copy_only was True
+    "test/libs/test_datasets.py::TestHuggingFaceDatasetAdapter::test_nullable_array_features"
+
+    # AssertionError: Tensor-likes are not close!
+    "test/libs/test_mujoco.py::TestMujoco::test_menagerie_task_keyframes_reward_and_termination"
 
     # OSError: We couldn't connect to 'https://huggingface.co' to load the files,...
     "test/transforms/test_key_transforms.py::TestTokenizer::test_single_string_attention_mask_padding"

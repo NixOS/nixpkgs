@@ -27,13 +27,15 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "vikunja";
-  version = "2.6.0";
+  version = "2.8.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Xh1ozUTOVqywk0i8xQWkG/bPRgPH9EABjRW8p4do1mE=";
+    hash = "sha256-tDroq5hpRd9f3TLvchPtOzEqa5SbpVR39j5A+vT6KRA=";
   };
 
   nativeBuildInputs =
@@ -54,7 +56,7 @@ buildGoModule (finalAttrs: {
       writableTmpDirAsHomeHook
     ];
 
-  vendorHash = "sha256-R6M5UyF10pIdoAvjWnS6Dqe/U6LTxmS6OwRTgmxfU4g=";
+  vendorHash = "sha256-MSYOufpQKQ96LqjSLOAOHq6Xlrx8gfYTZ9PhEEFyu0U=";
 
   frontend = callPackage ./frontend.nix {
     inherit (finalAttrs) src version;
@@ -76,6 +78,8 @@ buildGoModule (finalAttrs: {
     # These tests require a full config with public URL and CORS enabled.
     ${skipTest 1 "TestCreateOrganizationMap" "pkg/modules/migration/trello/trello_test.go"}
     ${skipTest 1 "TestTaskAttachmentUploadSize" "pkg/webtests/task_attachment_upload_test.go"}
+    # filesystem walk incompatible with trimpath
+    rm pkg/web/error_codes_test.go
   '';
 
   buildPhase = ''
@@ -104,8 +108,14 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
-    # used by vikunja-desktop
-    inherit (finalAttrs) frontend;
+    desktop = callPackage ./desktop.nix {
+      inherit (finalAttrs)
+        src
+        version
+        meta
+        frontend
+        ;
+    };
 
     tests.vikunja = nixosTests.vikunja;
 
@@ -115,6 +125,8 @@ buildGoModule (finalAttrs: {
         "frontend"
         "--subpackage"
         "veans"
+        "--subpackage"
+        "desktop"
       ];
     };
   };

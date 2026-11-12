@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   fetchpatch2,
-  tetex,
+  texliveTeTeX,
   makeWrapper,
 }:
 buildGoModule (finalAttrs: {
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/grafana-reporter \
-      --prefix PATH : ${lib.makeBinPath [ tetex ]}
+      --prefix PATH : ${lib.makeBinPath [ texliveTeTeX ]}
   '';
 
   meta = {

@@ -21,10 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  # https://github.com/libgeos/geos/issues/930
-  cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;unit-geom-Envelope"
-  ];
+  strictDeps = true;
 
   doCheck = true;
 
@@ -32,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     geos = callPackage ./tests.nix { geos = finalAttrs.finalPackage; };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";

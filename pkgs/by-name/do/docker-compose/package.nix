@@ -7,17 +7,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "docker-compose";
-  version = "5.5.1";
+  version = "5.7.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f4lIO9zSONHSQoZy80NSg3pcXyDfT5GXRcB3RkXC9sw=";
+    hash = "sha256-GMXHVWZaJ/fx/jhe3HOkLaKIRHvjiUvlrq9/FrWde6M=";
   };
 
-  vendorHash = "sha256-8I+gPz7gdNKjuqLi0AnW4NjaONKxoYIhHZR064QYt6g=";
+  vendorHash = "sha256-FWTZtRToK47uii081j9PeW+Jkjd4kMTL3sU6FNH8OAg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -32,6 +32,12 @@ buildGoModule (finalAttrs: {
 
   doCheck = false;
   doInstallCheck = true;
+  excludedPackages = [
+    # New module `compose-relay` introduced in this release.
+    # Compiling compose-relay is unnecessary for `docker-compose`, hence the exclusion.
+    # See [the compose-relay README](https://github.com/docker/compose/blob/524a36d2cf2deaf9eed1c3671d7cb93f07671b48/relay/README.md).
+    "relay"
+  ];
   installPhase = ''
     runHook preInstall
     install -D $GOPATH/bin/cmd $out/libexec/docker/cli-plugins/docker-compose

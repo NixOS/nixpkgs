@@ -5,7 +5,7 @@
   buildPackages,
   cmake,
   boost,
-  lua,
+  lua5_5,
   protobuf_21,
   rapidjson,
   shapelib,
@@ -17,6 +17,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "tilemaker";
   version = "3.2.0";
+  # XXX: Check the Lua version on update
 
   src = fetchFromGitHub {
     owner = "systemed";
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    lua
+    lua5_5
     protobuf_21
     rapidjson
     shapelib

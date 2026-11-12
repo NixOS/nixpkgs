@@ -14,16 +14,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "joserfc";
-  version = "1.6.9";
+  version = "1.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authlib";
     repo = "joserfc";
-    tag = version;
-    hash = "sha256-Ge1r34GVmpJ9h5GtRkPd0mkV7HuLf7D31ikuPAnpkuY=";
+    tag = finalAttrs.version;
+    hash = "sha256-birvQGduuehzxZyZsZ1a6l9Y1yMgHKsJqS4MQNAam8E=";
   };
 
   build-system = [ setuptools ];
@@ -34,23 +34,18 @@ buildPythonPackage rec {
     drafts = [ pycryptodome ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
-
-  disabledTests = [
-    # https://github.com/authlib/joserfc/issues/94
-    "test_ECDH_ES_with_EC_key"
-    "test_import_p512_key"
-    "test_ec_incorrect_curve"
-    "test_ES512"
-  ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "joserfc" ];
 
   meta = {
-    changelog = "https://github.com/authlib/joserfc/blob/${src.tag}/docs/changelog.rst";
     description = "Implementations of JOSE RFCs in Python";
     homepage = "https://github.com/authlib/joserfc";
+    changelog = "https://github.com/authlib/joserfc/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -7,6 +7,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "urlencode";
   version = "1.0.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "dead10ck";
     repo = "urlencode";

@@ -8,13 +8,13 @@
 (callPackage ./common.nix { }).overrideAttrs (
   finalAttrs: _: {
     pname = "chatterino2";
-    version = "2.5.5";
+    version = "2.5.6";
 
     src = fetchFromGitHub {
       owner = "Chatterino";
       repo = "chatterino2";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-bTf3UECylAdb0l0+tItbhmiyNDSkxY8hgNPJHuOmwtE=";
+      hash = "sha256-vELs8CblNJ3SItg6UDkeHJYLGuteM7pAd2TALdSwB4M=";
       fetchSubmodules = true;
       leaveDotGit = true;
       postFetch = ''

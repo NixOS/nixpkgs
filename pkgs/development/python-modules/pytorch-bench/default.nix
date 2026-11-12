@@ -24,7 +24,6 @@ buildPythonPackage {
   pname = "pytorch-bench";
   version = "0-unstable-2025-05-05";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MaximeGloesener";

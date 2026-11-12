@@ -2,6 +2,10 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  pkg-config,
+  zstd,
   nix-update-script,
   versionCheckHook,
   vscode-extensions,
@@ -9,18 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "2.11.0";
+  version = "3.1.0";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Automattic";
     repo = "harper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bsXHj9jJezAz22aQkQ6YN+09AxR2ASm0Al+xotIbkEQ=";
+    hash = "sha256-iwG7MO8LEJAaeEBwzpO47+GqBYu7uF8/5aWJwXEgf/I=";
   };
 
-  cargoHash = "sha256-1scyXlOCp0hVHgHNCPxl0KUY4Q+6rsO507p5Es6rN3E=";
+  cargoHash = "sha256-WRagmxLhgOzC07mW6VoySgLOgj7sLmjgmob5UGolC6Y=";
 
   cargoBuildFlags = [
     "--package=harper-cli"
@@ -31,6 +34,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=harper-cli"
     "--package=harper-ls"
   ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+  buildInputs = [ zstd ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd harper-cli \
+      --bash <($out/bin/harper-cli completion bash) \
+      --fish <($out/bin/harper-cli completion fish) \
+      --zsh <($out/bin/harper-cli completion zsh)
+  '';
 
   passthru = {
     tests.vscode = vscode-extensions.elijah-potter.harper;

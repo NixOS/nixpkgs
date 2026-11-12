@@ -14,16 +14,15 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "catgirldownloader";
-  version = "0.5";
+  version = "0.6.1";
 
-  __structuredAttrs = true;
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "NyarchLinux";
     repo = "CatgirlDownloader";
     tag = finalAttrs.version;
-    hash = "sha256-+RyQOgqPZN3AnVdd5mtgppQ/z51VIEeEsiW2RFTnVbk=";
+    hash = "sha256-SuPsQQjMg+4xB4tIhrNirM17/iX23zxTILYeWQ4a2qk=";
   };
 
   nativeBuildInputs = [

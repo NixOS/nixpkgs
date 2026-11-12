@@ -35,13 +35,12 @@ buildPythonPackage (finalAttrs: {
   pname = "mlflow-skinny";
   inherit (mlflow) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2nWu+P9bGAl+1p3ZfxO2XdBMrfePJI6EBk82r99w480=";
+    hash = "sha256-myWmiBc6TuoVuS10TLqWZoCmPJdzynDJS7ImwkHP5Lk=";
   };
 
   postPatch = ''

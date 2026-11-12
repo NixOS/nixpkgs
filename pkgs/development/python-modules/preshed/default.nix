@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   cymem,
-  cython,
+  cython_3_2,
   fetchPypi,
   murmurhash,
   pytestCheckHook,
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-119xi7/ZfpkveCfg+n+vapG92cki1bqktQ1icxOWy4k=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [ cython_3_2 ];
 
   propagatedBuildInputs = [
     cymem

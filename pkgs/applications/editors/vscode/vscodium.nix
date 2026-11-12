@@ -18,6 +18,7 @@ let
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
       loongarch64-linux = "linux-loong64";
+      riscv64-linux = "linux-riscv64";
     }
     .${system} or throwSystem;
 
@@ -25,10 +26,11 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-rfNUjfBV0Y5HbN7oh0iLp0hrh5rZmjGlRsa1xf8pbCQ=";
-      aarch64-linux = "sha256-c9h9RtTcII/hLASX3GB6qwpuK/My9UoLaCajoaoyvDQ=";
-      aarch64-darwin = "sha256-8h7lJinrXjnAVdrqcBGLemBVxjmuzz2tBeGZeprYOsA=";
-      loongarch64-linux = "sha256-p8hwOg5BbVvJGeQoBrgtd4gHsYmwEhsF/I+bk8gzIo4=";
+      x86_64-linux = "sha256-yhiVqgQL2RoJxwnXnqx4YtjBqgI3/cJbUD3uuLzYfv0=";
+      aarch64-linux = "sha256-nycK4kJWGBKs0Cvpz1wTyEjaNZs1Yyet/kS4FalTIwk=";
+      aarch64-darwin = "sha256-rej14Ov0fl6p4keIRPFQxo5D3vGStvi+BdAynSXsCRc=";
+      loongarch64-linux = "sha256-uS7mxUGCxWu6NArM9wgUIjL7H8s3sCXE/oRvG4drAj0=";
+      riscv64-linux = "sha256-r+5jMMCT6AR3oklayzOSbdNXkBSl5nKKty8DHYwz7YE=";
     }
     .${system} or throwSystem;
 
@@ -39,8 +41,8 @@ buildVscode rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.126.04524";
-  vscodeVersion = "1.126.0";
+  version = "1.143.17232";
+  vscodeVersion = "1.143.1";
   pname = "vscodium";
 
   executableName = "codium";
@@ -82,11 +84,13 @@ buildVscode rec {
       bobby285271
     ];
     mainProgram = "codium";
+    mainDarwinApp = "VSCodium.app";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "aarch64-darwin"
       "loongarch64-linux"
+      "riscv64-linux"
     ];
     # requires libc.so.6 and other glibc specifics
     broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu;

@@ -8,6 +8,7 @@
   stdenv,
   wrapGAppsHook3,
   libjack2,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-LDE3xmZVjO/AuInLpH853tMit39MRKjtrtWLBNNm7qQ=";
   };
+
+  # quick fix for now, better fix coming soon
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-110698.patch";
+      url = "https://github.com/praat/praat.github.io/commit/a910d21a2705ef4cd16d91f29cdc8da1ab1a7221.patch?full_index=1";
+      hash = "sha256-JWpjTq2nJnlutD6pmb0OD38CslkUB7Wxm6NcJyZWwXE=";
+    })
+  ];
 
   strictDeps = true;
 

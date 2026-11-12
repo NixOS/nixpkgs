@@ -11,10 +11,10 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "hackercowboy";
+    owner = "uebelack";
     repo = "python-${pname}";
     rev = "V${version}";
-    sha256 = "10k61gfpnqljf3p3qxr97xq7j67a9cr4ivd9v72hdni0znrbx6ym";
+    hash = "sha256-1Zu+sv0g2gbF2antSDJL6hh5cD8pdzzucJJie90LZoI=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "eQ-3/ELV MAX! Cube Python API";
-    homepage = "https://github.com/hackercowboy/python-maxcube-api";
+    homepage = "https://github.com/uebelack/python-maxcube-api";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

@@ -4,7 +4,9 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
   openssl,
+  sqlite,
   libiconv,
 }:
 
@@ -21,11 +23,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-DGfAsBucFRFJkjmJkpTpNfQO79jaNa5NezXKf7hYYeM=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   nativeBuildInputs = [ pkg-config ];
 
   # TODO figure out how to use provided curl instead of compiling curl from curl-sys
   buildInputs = [
+    libgit2
     openssl
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

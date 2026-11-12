@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildNpmPackage,
   nodejs_24,
-  nix-update-script,
   pkg-config,
   xcbuild,
   pango,
@@ -13,15 +12,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "jellyfin-web";
-  version = "12.1";
+  version = "12.4";
 
   src =
+    # updated together with jellyfin by its update script
     assert finalAttrs.version == jellyfin.version;
     fetchFromGitHub {
       owner = "jellyfin";
       repo = "jellyfin-web";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-WR62ZkhLVn0+cbY0FEDvKcmCGb78tIiK2wIc5Y6rUn8=";
+      hash = "sha256-ctITxOsWIEK7oLWXmhl4zCeG9Zxaqw1SA2C7zJNcyY0=";
     };
 
   nodejs = nodejs_24;
@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "git describe --always --dirty" "echo ${finalAttrs.src.rev}"
   '';
 
-  npmDepsHash = "sha256-xsDGITy7W/CTER/c3qa3aD0L297s5OflePPgfRIV+Y8=";
+  npmDepsHash = "sha256-OyEdJekxJgH9VBfffmqEFmPPRfGdWpmulV1rjjDk2ks=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -57,8 +57,6 @@ buildNpmPackage (finalAttrs: {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Web Client for Jellyfin";

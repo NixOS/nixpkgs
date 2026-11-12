@@ -14,7 +14,8 @@
   networkmanager,
   openresolv,
   glib,
-  systemd,
+  libcap,
+  systemdLibs,
   tpm2-tss,
   libxml2,
   pam,
@@ -151,7 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (features.eap-sim-pcsc or false) pcsclite
     ++ lib.optional (features.openssl or false) openssl
     ++ lib.optional (features.curl or false) curl
-    ++ lib.optional (features.systemd or false) systemd
+    ++ lib.optional (features.systemd or false) systemdLibs
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optional (features.tnc-ifmap or false) libxml2
     ++ lib.optional (features.xauth-pam or false) pam
     ++ lib.optional (features.forecast or false || features.connmark or false) iptables
@@ -169,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = (lib.mapAttrsToList (lib.flip lib.enableFeature)) features ++ [
     "--sysconfdir=/etc"
+    (lib.withFeatureAs stdenv.hostPlatform.isLinux "capabilities" "libcap")
     (lib.withFeatureAs (features.nm or false) "nm-ca-dir" "/etc/ssl/certs")
     (lib.withFeatureAs (features.systemd or false
     ) "systemdsystemunitdir" "${placeholder "out"}/etc/systemd/system")

@@ -1,16 +1,15 @@
 {
-  lib,
   stdenv,
   callPackage,
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_11,
+  pnpm_12,
 }:
 let
   common = callPackage ./common.nix { };
 
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "woodpecker-webui";

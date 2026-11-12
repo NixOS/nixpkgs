@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mendingwall";
-  version = "0.3.9";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "lawmurray";
     repo = "mendingwall";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+p5fpop22zHmKZxoZBjTET2p+X/ulQyMMnZxiPLkZC0=";
+    hash = "sha256-rf9JNtUBR3LZPzaZ52UegymOCCXDDlBrKnb2xOHNdC4=";
   };
 
   strictDeps = true;

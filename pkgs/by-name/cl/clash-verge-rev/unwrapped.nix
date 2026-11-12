@@ -2,6 +2,7 @@
   pname,
   version,
   src,
+  cargoPatches,
   meta,
 
   pnpm-hash,
@@ -17,6 +18,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
 
+  aws-lc,
   glib,
   kdePackages,
   libayatana-appindicator,
@@ -26,7 +28,12 @@
   webkitgtk_4_1,
 }:
 rustPlatform.buildRustPackage {
-  inherit version src meta;
+  inherit
+    version
+    src
+    meta
+    cargoPatches
+    ;
   pname = "${pname}-unwrapped";
 
   cargoHash = vendor-hash;
@@ -91,6 +98,7 @@ rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
+    aws-lc
     libayatana-appindicator
     libsoup_3
     openssl

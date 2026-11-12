@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-preview-share-picker";
-  version = "0.2.1";
+  version = "0.3.1";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "hyprland-preview-share-picker";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Zztb0soSN/NynWnBIGPuUNRKt2xSx/+f+QpYIPRyRdc=";
+    hash = "sha256-0yn7YG18SC6+h3vkJNDUda/esmBl6U1tu1LHIIXSknc=";
   };
 
-  cargoHash = "sha256-AqX9jKj7JLEx1SLefyaWYGbRdk0c3H/NDTIsZy6B6hY=";
+  cargoHash = "sha256-4nd0X6Ii6pbpQgzFCw2yXhl2+C5FyqDsHtbzKNpGW5o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,8 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk4
     gtk4-layer-shell
   ];
-
-  strictDeps = true;
 
   postInstall = ''
     $out/bin/hyprland-preview-share-picker schema > schema.json

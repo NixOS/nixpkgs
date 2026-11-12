@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-serialization-json";
-  version = "1.12.3";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-serialization-json-v${finalAttrs.version}";
-    hash = "sha256-kzpOKvPw8D19Go1wnNYZLR5NUbsr9aZyCQNCUim1tUw=";
+    hash = "sha256-e2BJoovCVw9ye7a6kOFCpVuUjKCkGimZyVT4e/oM7W8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/serialization/json/";
@@ -40,8 +40,12 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "kiota_serialization_json" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-serialization-json-v";
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "microsoft-kiota-serialization-json-v";
+    };
   };
 
   meta = {

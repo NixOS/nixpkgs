@@ -42,7 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Semiempirical quantum chemistry";
     homepage = "https://github.com/openmopac/mopac";
-    license = lib.licenses.lgpl3Plus;
+    # also mopac-makpol, mopac-param
+    mainProgram = "mopac";
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       sheepforce

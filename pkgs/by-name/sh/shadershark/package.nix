@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AYZWfqMckPKgXNIX9kAAv1mvD3opLi5EUElFsigiF3c=";
   };
 
+  postPatch = ''
+    substituteInPlace x11.h \
+      --replace-fail "#include <cstring>" "#include <cstring>
+    #include <unistd.h>"
+  '';
+
   nativeBuildInputs = [
     pkg-config
     makeWrapper

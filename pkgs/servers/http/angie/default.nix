@@ -9,11 +9,11 @@
 
 callPackage ../nginx/generic.nix args rec {
   pname = "angie";
-  version = "1.12.1";
+  version = "1.12.4";
 
   src = fetchurl {
     url = "https://download.angie.software/files/angie-${version}.tar.gz";
-    hash = "sha256-X08gO+Kspv4gdwtInHIORuUdM35SEGXn5HK2HiTj0vU=";
+    hash = "sha256-sjbxUq21Q/tuSpTycbhzzcDUjVcPhrG9BENfhYQ/RSc=";
   };
 
   configureFlags = lib.optionals withAcme [
@@ -31,10 +31,8 @@ callPackage ../nginx/generic.nix args rec {
     ln -s $out/bin/nginx $out/bin/angie
   '';
 
-  passthru.tests = {
-    angie = nixosTests.nginx-variants.angie;
+  passthru.tests = nixosTests.angie // {
     angie-api = nixosTests.angie-api;
-    angie-http3 = nixosTests.nginx-http3.angie;
   };
 
   meta = {

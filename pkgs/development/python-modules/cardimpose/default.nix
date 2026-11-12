@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # Get source from Pypi as the GitHub repository doesn't have any version
   # indicators, so there's no way to tell when a new version is available or
   # what the version should be.

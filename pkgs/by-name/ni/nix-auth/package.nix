@@ -1,7 +1,9 @@
 {
+  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -27,6 +29,16 @@ buildGoModule (finalAttrs: {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd nix-auth \
+      --bash <($out/bin/nix-auth completion bash) \
+      --fish <($out/bin/nix-auth completion fish) \
+      --powershell <($out/bin/nix-auth completion powershell) \
+      --zsh <($out/bin/nix-auth completion zsh)
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

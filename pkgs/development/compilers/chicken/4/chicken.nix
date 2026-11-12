@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeWrapper
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 
@@ -98,6 +98,12 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.call-cc.org/";
     license = lib.licenses.bsd3;
+    problems.removal = {
+      message = "CHICKEN 4 is an outdated release which upstream no longer supports; use chickenPackages_5 or chickenPackages_6 instead. This set will be removed once ugarit, its only remaining user in Nixpkgs, has been ported to a supported release.";
+      urls = [
+        "https://wiki.call-cc.org/man/4/The%20User's%20Manual#outdated-chicken-release"
+      ];
+    };
     maintainers = with lib.maintainers; [ corngood ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin; # Maybe other Unix
     description = "Portable compiler for the Scheme programming language";

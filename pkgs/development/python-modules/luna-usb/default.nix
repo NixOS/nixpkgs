@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Amaranth HDL framework for monitoring, hacking, and developing USB devices";
     homepage = "https://github.com/greatscottgadgets/luna";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
   };
 }

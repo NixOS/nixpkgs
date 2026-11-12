@@ -3,11 +3,15 @@
   lib,
   rustPlatform,
   installShellFiles,
+  sqlite,
   fetchFromGitHub,
   nix-update-script,
   buildPackages,
   sudo,
   versionCheckHook,
+  aws-lc,
+  zstd,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh-unwrapped";
@@ -31,6 +35,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    sqlite
+    aws-lc
+    zstd
   ];
 
   # pkgs.sudo is not available on the Darwin platform, and thus breaks build
@@ -105,7 +116,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  env.NH_REV = finalAttrs.src.tag;
+  env = {
+    NH_REV = finalAttrs.src.tag;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
+  };
 
   meta = {
     changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.tag}/CHANGELOG.md";

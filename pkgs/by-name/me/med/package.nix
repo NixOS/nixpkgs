@@ -6,18 +6,18 @@
   cmake,
   pkg-config,
   jsoncpp,
-  readline,
+  icu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "med";
-  version = "3.10.1";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "allencch";
     repo = "med";
     rev = finalAttrs.version;
-    hash = "sha256-m2lVRSNaklB0Xfqgtyc0lNWXfTD8wTWsE06eGv4FOBE=";
+    hash = "sha256-4NWpP/J35bomvQ7qDw1pGMMCQC7dU5TnAB+32BtnB7E=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtwayland
     jsoncpp
-    readline
+    icu
   ];
-
-  postPatch = ''
-    find . -type f -exec sed -i "s|/opt/med|$out/share/med|g" {} +
-  '';
 
   meta = {
     description = "GUI game memory scanner and editor";
@@ -44,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ zebreus ];
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
-    mainProgram = "med";
+    mainProgram = "med-ui";
   };
 })

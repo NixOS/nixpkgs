@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://www.openprinting.org/driver/Postscript-Lexmark/";
     description = "Lexmark Postscript Drivers";
     platforms = lib.platforms.linux;
+    license = lib.licenses.free; # Custom license that mostly pulls from BSD
   };
 }

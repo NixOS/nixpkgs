@@ -317,7 +317,7 @@ rec {
     };
 
     meta = {
-      homepage = "http://eclipsecolorthemes.org/";
+      homepage = "https://github.com/eclipse-color-theme/eclipse-color-theme";
       description = "Plugin to switch color themes conveniently and without side effects";
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.epl10;
@@ -573,12 +573,12 @@ rec {
 
   spotbugs = buildEclipseUpdateSite rec {
     pname = "spotbugs";
-    version = "3.1.11";
+    version = "4.10.5";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
-      sha256 = "0aanqwx3gy1arpbkqd846381hiy6272lzwhfjl94x8jhfykpqqbj";
+      hash = "sha256-umDKckw5LUbN8CERoHJtrgT22SuTUCXeimefILGYYRk=";
     };
 
     meta = {

@@ -5,56 +5,62 @@
   gradle_9,
   nix-update-script,
   libGL,
-  jdk21,
+  jetbrains,
   git,
   cargo,
   rustc,
   rustPlatform,
+  pkg-config,
+  aws-lc,
+  sqlite,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.08.08-1";
+  version = "26.10.26";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SbDdC910EdQy4HEwovuHjTzK4zEbzeI1w6pEQ1EQAGI=";
+    hash = "sha256-fpfLgmLXmM7SGSp6qZtEQc3WK+fd8++Toi0Jad37ZYE=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-P0NcsKNmLHlfZ8tMjkfOChLrJ7l5tc9xy6FtZqyL1As=";
+    hash = "sha256-OhASitog//ojP4zy/u05x9nN4+KhQKgYDEjItCgAwJo=";
   };
 
   nativeBuildInputs = [
-    jdk21
+    jetbrains.jdk-no-jcef
     gradle_9
     git
     cargo
     rustc
     rustPlatform.cargoSetupHook
+    pkg-config
   ];
-  #broken entry unused entry in Cargo.toml, can probably be removed with next update
-  postUnpack = ''
-      substituteInPlace ./source/matrix-rust-sdk/Cargo.toml --replace-fail \
-      "ruma = { git = \"https://github.com/matrix-org/ruma\", rev = \"2a1d714314f6f711d5bca755c73cf2ce3053c3d1\" }" \
-    ""
-  '';
+
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
+  ];
+
+  # Workaround for a Vergen related build failure
+  env = {
+    VERGEN_GIT_SHA = "0000000000000000000000000000000000000000";
+  };
 
   gradleBuildTask = "createReleaseDistributable";
 
   gradleUpdateScript = ''
     runHook preBuild
 
-    gradle composeApp:dependencies composeApp:checkRuntime --write-verification-metadata sha256
-    ##### Fallback
-    ## If the update script starts missing dependencies after an update this should still work.
-    ## Unfortunately it also unnecessarily builds the entire rust crate
-    #gradle createReleaseDistributable --write-verification-metadata sha256
+    gradle createReleaseDistributable composeApp:kspCommonMainKotlinMetadata --write-verification-metadata sha256
   '';
 
   mitmCache = gradle_9.fetchDeps {
@@ -78,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    patchelf $out/lib/app/libskiko-linux-x64.so \
+    patchelf $out/lib/app/libskiko-linux-*.so \
     --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
 

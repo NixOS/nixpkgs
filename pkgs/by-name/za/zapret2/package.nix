@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret2";
-  version = "1.0.5.1";
+  version = "1.0.7";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bol-van";
     repo = "zapret2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JQNnuqOxkqw9VBj2182TZlrWa0iO/ZLl4lfkSBox2J4=";
+    hash = "sha256-/zyxOmbpEsUJQ5u2JDCrBnK/zaP+DRgxorN1Yq+WeV0=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$ZAPRET_BASE"
-    for spec in "blockcheck2.sh" "blockcheck2.d" "common" "ipset" "lua"; do
+    for spec in "blockcheck2.sh" "blockcheck2.d" "common" "ipset" "lua" "files"; do
       cp -R "$spec" "$ZAPRET_BASE/"
     done
 

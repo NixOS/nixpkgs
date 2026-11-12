@@ -11,7 +11,7 @@ build-idris-package {
     owner = "vmchale";
     repo = "permutations";
     rev = "f0de6bc721bb9d31e16f9168ded6eb6e34935881";
-    sha256 = "1dirzqy40fczbw7gp2jr51lzqsnq5vcx9z5l6194lcrq2vxgzv1s";
+    hash = "sha256-Ouz/+hY4M0pSMLT81Nku2Gr8aShZivsOX585QDz+ObY=";
   };
 
   meta = {

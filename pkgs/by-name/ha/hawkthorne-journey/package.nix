@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   love,
-  lua,
   zip,
   makeWrapper,
   makeDesktopItem,
@@ -26,11 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     zip
     makeWrapper
     copyDesktopItems
-  ];
-
-  buildInputs = [
-    love
-    lua
     tmx2lua
   ];
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bdwgc";
     repo = "bdwgc";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5yeAB5Y92YjOutwRXBJkMxoOLkmzmqIJs4PirKX89fE=";
   };
 
@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
   ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--enable-cplusplus"
@@ -72,13 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     export NIX_LDFLAGS="$NIX_LDFLAGS -T $TMP/openbsd.ldscript"
   '';
 
-  # `gctest` fails under x86_64 emulation on aarch64-darwin
-  # and also on aarch64-linux (qemu-user)
-  doCheck =
-    !(
-      (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
-      || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
-    );
+  # `gctest` fails on aarch64-linux under qemu-user.
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   enableParallelBuilding = true;
 

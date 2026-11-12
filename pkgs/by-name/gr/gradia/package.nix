@@ -27,8 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.13.0";
   pyproject = false;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";

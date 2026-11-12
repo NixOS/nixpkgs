@@ -77,7 +77,7 @@ stdenv.mkDerivation {
       version of the simplex algorithm.
     '';
 
-    homepage = "http://bugseng.com/products/ppl/";
+    homepage = "https://bugseng.com/ppl";
 
     license = lib.licenses.gpl3Plus;
 

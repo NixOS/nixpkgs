@@ -11,16 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dbus-signature-pyparsing";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "dbus-signature-pyparsing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+jY8kg3jBDpZr5doih3DiyUEcSskq7TgubmW3qdBoZM=";
+    hash = "sha256-3jfqZCLmBW3VxTot1nA5NNTYK4sS4t2iKjB+DisOfK0=";
   };
 
   build-system = [ setuptools ];

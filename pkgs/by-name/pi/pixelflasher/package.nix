@@ -10,14 +10,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pixelflasher";
-  version = "9.2.1.0";
+  version = "10.0.0.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "badabing2005";
     repo = "PixelFlasher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2MUtmG4waVT1EDXuio4lU/FSEkfOBDRPnTfPzOk1Fd4=";
+    hash = "sha256-wHdNpRElGlRzVlhSncSm9gTKWle+l5oxKE09R0iOO4A=";
   };
 
   desktopItems = [
@@ -61,11 +61,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildPhase =
     let
-      specFile =
-        if stdenv.hostPlatform.isDarwin then
-          if stdenv.hostPlatform.isAarch64 then "build-on-mac" else "build-on-mac-intel-only"
-        else
-          "build-on-linux";
+      specFile = if stdenv.hostPlatform.isDarwin then "build-on-mac" else "build-on-linux";
     in
     ''
       runHook preBuild

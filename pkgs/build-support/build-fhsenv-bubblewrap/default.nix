@@ -129,6 +129,8 @@ lib.makeOverridable (
               "pki"
               # Custom dconf profiles
               "dconf"
+              # EGL platform definitions (required by nvidia-x11)
+              "egl"
             ];
           in
           map (path: "/etc/${path}") files;

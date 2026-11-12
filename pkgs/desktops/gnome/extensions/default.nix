@@ -66,21 +66,12 @@ let
 in
 rec {
   # Remember to import all these in all-packages.nix
-  gnome38Extensions = mapUuidNames (produceExtensionsList "38");
-  gnome40Extensions = mapUuidNames (produceExtensionsList "40");
-  gnome41Extensions = mapUuidNames (produceExtensionsList "41");
-  gnome42Extensions = mapUuidNames (produceExtensionsList "42");
-  gnome43Extensions = mapUuidNames (produceExtensionsList "43");
-  gnome44Extensions = mapUuidNames (produceExtensionsList "44");
-  gnome45Extensions = mapUuidNames (produceExtensionsList "45");
-  gnome46Extensions = mapUuidNames (produceExtensionsList "46");
-  gnome47Extensions = mapUuidNames (produceExtensionsList "47");
-  gnome48Extensions = mapUuidNames (produceExtensionsList "48");
   gnome49Extensions = mapUuidNames (produceExtensionsList "49");
   gnome50Extensions = mapUuidNames (produceExtensionsList "50");
+  gnome51Extensions = mapUuidNames (produceExtensionsList "51");
 
   # Keep the last three versions in here
-  gnomeExtensions = lib.trivial.pipe (gnome48Extensions // gnome49Extensions // gnome50Extensions) [
+  gnomeExtensions = lib.trivial.pipe (gnome49Extensions // gnome50Extensions // gnome51Extensions) [
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix { })
     # Add all manually packaged extensions

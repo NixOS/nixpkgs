@@ -114,6 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
 
     # https://github.com/zcash/zcash/issues/4405
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

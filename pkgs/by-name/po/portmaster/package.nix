@@ -21,12 +21,12 @@
   stdenv,
   unzip,
   webkitgtk_4_1,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   zip,
 }:
 
 let
-  version = "2.2.3";
+  version = "2.2.8";
 
   nodejsPython = buildPackages.nodejs.python.withPackages (ps: [ ps.setuptools ]);
 
@@ -34,7 +34,7 @@ let
     owner = "safing";
     repo = "portmaster";
     tag = "v${version}";
-    hash = "sha256-MVcynhN8svv83TDOx54dZ/zFyl4lDfUT1bIgHcmeKYE=";
+    hash = "sha256-INqNYIIxrsIcHj2LVcZVEQnnp1gsc6Qp2tG/NMRqWBs=";
   };
 
   portmasterUI = buildNpmPackage {
@@ -49,7 +49,7 @@ let
     ];
 
     sourceRoot = "${src.name}/desktop/angular";
-    npmDepsHash = "sha256-TvH3dIrSFmkfuHoJfUjEfPoOJcIzximFQ8vkwQHJXac=";
+    npmDepsHash = "sha256-Tdoqd/tIG0ZuyWIfBJ2i22IMz44SZc4B50zPBGKN75Y=";
 
     nativeBuildInputs = [ nodejsPython ];
 
@@ -85,7 +85,7 @@ let
     pname = "portmaster-desktop";
     inherit version src;
 
-    cargoHash = "sha256-9xJMNkihi+v5eRl6CfcxN4WTMrE/x+jp/isgwNwq1Cs=";
+    cargoHash = "sha256-RO06OFXjPYhSQGayH7gaClF0AdIyLbxnGWtLElrbJKU=";
     cargoRoot = "desktop/tauri/src-tauri";
     buildAndTestSubdir = finalAttrs.cargoRoot;
 
@@ -101,7 +101,7 @@ let
     nativeBuildInputs = [
       cargo-tauri.hook
       pkg-config
-      wrapGAppsHook4
+      wrapGAppsHook3
     ];
 
     buildInputs = [
@@ -158,7 +158,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
-    wrapGAppsHook4
+    wrapGAppsHook3
     zip
   ];
 
@@ -200,12 +200,13 @@ buildGoModule (finalAttrs: {
     install -m755 $GOPATH/bin/portmaster-core $out/lib/portmaster/
     install -m755 ${portmasterDesktop}/bin/portmaster $out/lib/portmaster/
 
+    # Add the files in a fixed order to make the archives reproducible.
     pushd ${portmasterUI}
-    zip -q -r -9 -X $out/lib/portmaster/portmaster.zip .
+    find . -mindepth 1 -printf '%P\n' | LC_ALL=C sort | zip -q -9 -X -@ $out/lib/portmaster/portmaster.zip
     popd
 
     pushd assets/data
-    zip -q -r -9 -X $out/lib/portmaster/assets.zip .
+    find . -mindepth 1 -printf '%P\n' | LC_ALL=C sort | zip -q -9 -X -@ $out/lib/portmaster/assets.zip
     popd
 
     for size in 128 256 512; do
@@ -230,8 +231,10 @@ buildGoModule (finalAttrs: {
     substituteInPlace "$out/share/applications/portmaster.desktop" \
       --replace-fail 'Exec=portmaster' "Exec=$out/bin/portmaster"
 
-    wrapGApp "$out/lib/portmaster/portmaster"
-    ln -s ../lib/portmaster/portmaster "$out/bin/portmaster"
+    # portmaster-core recognises its UI by the exact path <bin-dir>/portmaster,
+    # so the real executable stays there and the wrapper goes to bin/.
+    makeWrapper "$out/lib/portmaster/portmaster" "$out/bin/portmaster" \
+      --inherit-argv0 "''${gappsWrapperArgs[@]}"
 
     makeWrapper "$out/lib/portmaster/portmaster-core" "$out/bin/portmaster-core" \
       --prefix PATH : ${
@@ -243,7 +246,7 @@ buildGoModule (finalAttrs: {
       }
   '';
 
-  # The desktop executable is wrapped explicitly in its non-standard location.
+  # The desktop executable is wrapped explicitly in preFixup.
   dontWrapGApps = true;
 
   doInstallCheck = true;
@@ -252,15 +255,17 @@ buildGoModule (finalAttrs: {
     runHook preInstallCheck
 
     $out/bin/portmaster-core version | grep -F 'Portmaster ${version}'
-    ${lib.getExe unzip} -tq $out/lib/portmaster/portmaster.zip
-    ${lib.getExe unzip} -tq $out/lib/portmaster/assets.zip
-    ${lib.getExe unzip} -Z1 $out/lib/portmaster/portmaster.zip | grep -Fx index.html
-    ${lib.getExe unzip} -Z1 $out/lib/portmaster/assets.zip | grep -q '^img/flags/'
-    ! ${lib.getExe unzip} -Z1 $out/lib/portmaster/assets.zip | grep -q '^data/'
-    test -x $out/lib/portmaster/.portmaster-wrapped
-    grep -aF \
+    unzip -tq $out/lib/portmaster/portmaster.zip
+    unzip -tq $out/lib/portmaster/assets.zip
+    unzip -Z1 $out/lib/portmaster/portmaster.zip | grep -Fx index.html
+    unzip -Z1 $out/lib/portmaster/assets.zip > assets.list
+    grep -q '^img/flags/' assets.list
+    # A negated command doesn't trigger set -e, but a failing subshell does.
+    (! grep -q '^data/' assets.list)
+    test -x $out/lib/portmaster/portmaster
+    grep -qaF \
       '${libayatana-appindicator}/lib/libayatana-appindicator3.so.1' \
-      $out/lib/portmaster/.portmaster-wrapped
+      $out/lib/portmaster/portmaster
 
     runHook postInstallCheck
   '';
@@ -288,6 +293,7 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       WitteShadovv
+      azahi
       nyabinary
     ];
     mainProgram = "portmaster";

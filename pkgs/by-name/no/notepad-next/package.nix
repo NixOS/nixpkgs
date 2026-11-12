@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "notepad-next";
-  version = "0.14";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XVwB8y3SrVmw0/PhvkpUDirm4QZ4ltKjDcyJOdS+1CU=";
+    hash = "sha256-FqmeB8hEL4STgOoaJD7uZOXNAwiuk/PK+0+UW8eBNAM=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
@@ -103,8 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mv $out/bin $out/Applications
-    rm -fr $out/share
+    mkdir -p $out/Applications
+    mv $out/NotepadNext.app $out/Applications/
+    rm -rf $out/share
     mkdir -p $out/bin
     ln -s $out/Applications/NotepadNext.app/Contents/MacOS/NotepadNext $out/bin/NotepadNext
   '';

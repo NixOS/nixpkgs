@@ -16,19 +16,20 @@
   chevron,
   sh,
   font-v,
+  pyyaml,
   ninja,
 }:
 
 buildPythonPackage {
   pname = "notobuilder";
-  version = "0-unstable-2026-06-26";
+  version = "0-unstable-2026-10-12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notobuilder";
-    rev = "5b55818eb3f535481135a5f57a337eec6d28cda0";
-    hash = "sha256-pdfWl8rp4tizgb7j0UR7hOW/Ae2dPhTSw1IHljM15LE=";
+    rev = "a5b5b0435705b4bdc30e291e827a7c11cc15bd1a";
+    hash = "sha256-jP2gxWzKCZAF4tnvb45dqsh1WpGVGfi5xOTH6zwzftY=";
   };
 
   postPatch = ''
@@ -55,8 +56,13 @@ buildPythonPackage {
     chevron
     sh
     font-v
+    pyyaml
   ]
   ++ gftools.optional-dependencies.qa;
+
+  pythonRelaxDeps = [
+    "chevron"
+  ];
 
   pythonImportsCheck = [
     "notobuilder"

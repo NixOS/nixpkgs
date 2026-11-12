@@ -7,7 +7,6 @@
   graphviz,
   doxygen,
   ocamlPackages,
-  coq,
   dune,
   why3,
   withWP ? true,
@@ -104,7 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
           apron.dev
         ];
 
-      ocamlPath = lib.makeSearchPath "/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" runtimeDeps;
+      ocamlPath =
+        lib.makeSearchPathOutput "dev" "/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib"
+          runtimeDeps;
     in
     ''
       wrapProgram $out/bin/frama-c \

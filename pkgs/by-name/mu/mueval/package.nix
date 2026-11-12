@@ -38,5 +38,8 @@ stdenv.mkDerivation {
   '';
 
   passthru = { inherit defaultPkgs; };
-  meta.mainProgram = "mueval";
+  meta = {
+    mainProgram = "mueval";
+    inherit (haskellPackages.mueval.meta) license;
+  };
 }

@@ -3,41 +3,45 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  lazysql,
   libx11,
-  darwin ? null,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lazysql";
-  version = "0.5.7";
+  version = "0.7.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jorgerojas26";
     repo = "lazysql";
-    rev = "v${version}";
-    hash = "sha256-5JGSpA4tAV6/f9y58PfjGOamxRYyCKKZXecRzpvq4E0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s22JHYS8H1KQb54mExJlh1yrADcgLohf5/xeevnrxAo=";
   };
 
-  vendorHash = "sha256-FyvPTqvlNtU3Yud5Pq9CRLG0xg4LIXb9CDEBvigGow8=";
+  vendorHash = "sha256-dhQRURBA8WzA0uweIWcS/x9edClGatbMCcOn55xlF2w=";
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
-  passthru.tests.version = testers.testVersion {
-    package = lazysql;
-    command = "lazysql --version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Cross-platform TUI database management tool written in Go";
     homepage = "https://github.com/jorgerojas26/lazysql";
+    changelog = "https://github.com/jorgerojas26/lazysql/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "lazysql";
   };
-}
+})

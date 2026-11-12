@@ -5,14 +5,13 @@
   defusedxml,
   fetchFromGitHub,
   httpretty,
-  lxml,
   oauthlib,
   pyjwt,
+  python3-openid,
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  python-jose,
-  python3-openid,
+  google-auth,
   python3-saml,
   requests,
   requests-oauthlib,
@@ -21,21 +20,21 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "social-auth-core";
-  version = "4.9.1";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";
-    tag = version;
-    hash = "sha256-HIRqueDoT5MiK5wYto1/MhZOJVBGUdsHma/klOyVHtM=";
+    tag = finalAttrs.version;
+    hash = "sha256-4Z08ZHTSPSNG9x9XZWwGuvKYk3UnogLm5pO/MHWN0CE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     defusedxml
     oauthlib
@@ -43,15 +42,15 @@ buildPythonPackage rec {
     python3-openid
     requests
     requests-oauthlib
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   optional-dependencies = {
-    openidconnect = [ python-jose ];
+    google-onetap = [ google-auth ];
     saml = [
-      lxml
       python3-saml
     ];
-    azuread = [ cryptography ];
+    # shopify = [ shopifyapi];
   };
 
   nativeCheckInputs = [
@@ -62,15 +61,11 @@ buildPythonPackage rec {
     responses
     typing-extensions
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
-    # missing google-auth-stubs
-    "social_core/tests/backends/test_google.py"
-
-    # network access
-    "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_login"
-    "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_partial_pipeline"
+    # shopify is not packaged
+    "social_core/tests/backends/test_shopify.py"
   ];
 
   pythonImportsCheck = [ "social_core" ];
@@ -78,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
-    changelog = "https://github.com/python-social-auth/social-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-social-auth/social-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

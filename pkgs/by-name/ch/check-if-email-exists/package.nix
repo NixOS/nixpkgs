@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "check-if-email-exists";
-  version = "0.11.7";
+  version = "0.11.9";
 
   __structuredAttrs = true;
 
@@ -18,15 +18,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "reacherhq";
     repo = "check-if-email-exists";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KRnSTufgpmT6Yo+7NcaRARjtXOCwvbcXXX4or8YTmjo=";
+    hash = "sha256-x82NioTCi+NwPFHPV511sYrKSAXUkFAuTMS+X9l5cuA=";
   };
 
-  cargoHash = "sha256-syuwY4qpnvWTXDZ6onnpFSmiEs1GCttSDtR5+vzuUDY=";
+  cargoHash = "sha256-IWg6dlS8ohnuB5XkSMi4cfMiqbCy93kTMMHgCkyRNho=";
 
   # upstream forgot to bump crate version
   postPatch = ''
     substituteInPlace cli/Cargo.toml \
-      --replace-fail 'version = "0.11.6"' 'version = "${finalAttrs.version}"'
+      --replace-fail 'version = "0.11.8"' 'version = "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [ pkg-config ];
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Check if an email address exists without sending any email";
     homepage = "https://github.com/reacherhq/check-if-email-exists";
     changelog = "https://github.com/reacherhq/check-if-email-exists/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stepbrobd ];
     mainProgram = "check_if_email_exists";
   };

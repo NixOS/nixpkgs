@@ -13,8 +13,6 @@ let
       "linux-arm64.cpp"
     else if clangStdenv.hostPlatform.system == "i686-linux" then
       "linux-i386.cpp"
-    else if clangStdenv.hostPlatform.system == "x86_64-darwin" then
-      "darwin-amd64.cpp"
     else if clangStdenv.hostPlatform.system == "aarch64-darwin" then
       "darwin-arm64.cpp"
     else

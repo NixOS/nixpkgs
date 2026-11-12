@@ -3,23 +3,40 @@
   cacert,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  aws-lc,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-cli";
-  version = "1.0.12";
+  version = "1.0.14";
+
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pf/Nriu0uRWNHHhWebrAlv+TRQgzUHDDrXhaWY6lz9M=";
+    hash = "sha256-3SotRkEDIrI3hgYFjAkkKhCZoD/woXreLshBaLr0Y2c=";
   };
-  cargoHash = "sha256-CesZQ/rDcQS1hxgUAwTzAKsuKq4MuIqUpGlEHcIdx5o=";
+
+  cargoHash = "sha256-/vYb083UVPDZQpDWh16XkMWk+n9081OiV9S1i1om5zQ=";
+
   __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
+
   # `Result::unwrap()` on an `Err` value: Network(reqwest::Error { kind: Builder, source: General("No CA certificates were loaded from the system") })
   nativeCheckInputs = [ cacert ];
+
   doInstallCheck = true;
+
   nativeInstallCheckInputs = [ versionCheckHook ];
+
   meta = {
     description = "Stalwart Command Line Interface";
     longDescription = ''
@@ -31,16 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/stalwartlabs/cli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.OR [
       lib.licenses.agpl3Only
-      {
-        fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
-        url = "https://github.com/stalwartlabs/cli/blob/main/LICENSES/LicenseRef-SEL.txt";
-        free = false;
-        redistributable = false;
-      }
+      lib.licenses.stalwart
     ];
     mainProgram = "stalwart-cli";
     maintainers = with lib.maintainers; [
-      giomf
       debtquity
     ];
   };

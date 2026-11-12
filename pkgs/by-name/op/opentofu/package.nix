@@ -14,18 +14,18 @@
 }:
 
 let
-  package = buildGoModule rec {
+  package = buildGoModule (finalAttrs: {
     pname = "opentofu";
-    version = "1.12.6";
+    version = "1.13.9";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
-      tag = "v${version}";
-      hash = "sha256-gtbgfjnGrB1J+7smGpFGavP6r/IDrcd5MgI0hS5FzHw=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-FC2CQO7WnHRy02CHypa2a5grZ32ulobNUyg5VG3rWQI=";
     };
 
-    vendorHash = "sha256-70b/19/kquvOwjDeB8+WH6IwB4J0nBTjIw4+rfvqzkI=";
+    vendorHash = "sha256-NwHu+t6GFPCGMLt9PHdz+PMAzcrUBGXwmi5vvl2NsEw=";
     ldflags = [
       "-s"
       "-w"
@@ -67,7 +67,7 @@ let
     meta = {
       description = "Tool for building, changing, and versioning infrastructure";
       homepage = "https://opentofu.org/";
-      changelog = "https://github.com/opentofu/opentofu/blob/v${version}/CHANGELOG.md";
+      changelog = "https://github.com/opentofu/opentofu/blob/v${finalAttrs.version}/CHANGELOG.md";
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
         nickcao
@@ -75,7 +75,7 @@ let
       ];
       mainProgram = "tofu";
     };
-  };
+  });
 
   opentofu_plugins_test =
     let

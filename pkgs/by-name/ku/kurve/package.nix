@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
-    repo = "kurve";
+    repo = "plasma-audio-visualizer";
     tag = "v${finalAttrs.version}";
     hash = "sha256-EEOKf/0Ti/PyhxUs4n56jRvDFBLVwsZx2icO5PzBIrQ=";
   };
@@ -45,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "KDE Plasma widget displaying CAVA audio visualizations.";
-    homepage = "https://github.com/luisbocanegra/kurve";
-    changelog = "https://github.com/luisbocanegra/kurve/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/luisbocanegra/plasma-audio-visualizer";
+    changelog = "https://github.com/luisbocanegra/plasma-audio-visualizer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ chrisheib ];
     inherit (kdePackages.kwindowsystem.meta) platforms;

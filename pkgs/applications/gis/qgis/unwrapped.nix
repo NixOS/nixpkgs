@@ -88,14 +88,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qgis-unwrapped";
-  version = "4.2.1";
+  version = "4.2.3";
   outputs = [ "out" ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "man";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-tdZNSA6kZHwS96YRbN7YF+ODPJrnINa/QGCo8pw196I=";
+    hash = "sha256-XbzaRlccfRPjcJVSRkOV+Qpi9dy3ZztMgyz8AvEUK9g=";
   };
 
   postPatch = ''
@@ -201,8 +201,14 @@ stdenv.mkDerivation rec {
     "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
   );
 
+  postInstall = ''
+    install -Dm644 -t "$out/share/mime/packages" "$src/debian/qgis.xml"
+  '';
+
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}/platforms"
+    "--set"
+    "QT_QPA_PLATFORM_PLUGIN_PATH"
+    "${qtbase}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
   dontWrapGApps = true; # wrapper params passed below

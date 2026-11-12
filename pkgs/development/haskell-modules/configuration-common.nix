@@ -106,7 +106,7 @@ with haskellLib;
           # to bogus references to some dependencies.
           overrideCabal (
             old:
-            lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+            lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
               postInstall = ''
                 ${old.postInstall or ""}
                 remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
@@ -685,6 +685,15 @@ with haskellLib;
         # TODO(@sternenseemann): submit upstreamable patch resolving this
         # (this should be possible by also taking PREFIX into account).
         ./patches/git-annex-no-usr-prefix.patch
+        (fetchpatch {
+          name = "support-bup-0.34.patch";
+          url = "http://source.git-annex.branchable.com/?p=source.git;a=patch;h=0b0bd012976b20b3857d532f00a1fc7a9bab12a3";
+          excludes = [
+            "CHANGELOG"
+            "doc/bugs/support_new_bup_version.mdwn"
+          ];
+          hash = "sha256-d/PII/daPkevjqqx73iPUFnN+FyeCtzk2+QaAZi4FLo=";
+        })
       ];
 
       postPatch = ''
@@ -2846,16 +2855,7 @@ with haskellLib;
   monad-bayes =
     # Floating point precision issues. Test suite is only checked on x86_64.
     # https://github.com/tweag/monad-bayes/issues/368
-    dontCheckIf
-      (
-        let
-          inherit (pkgs.stdenv) hostPlatform;
-        in
-        !hostPlatform.isx86_64
-        # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
-        # also fails on Hydra
-        || hostPlatform.isDarwin
-      )
+    dontCheckIf (!pkgs.stdenv.hostPlatform.isx86_64)
       # Too strict bounds on brick (<2.6), vty (<6.3)
       # https://github.com/tweag/monad-bayes/issues/378
       (doJailbreak super.monad-bayes);
@@ -2993,21 +2993,17 @@ with haskellLib;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
 
-  # 2026-05-10: Remove again, when hackage bump is recent enough
-  botan-low = overrideCabal {
-    version = "0.2.0.1";
-    sha256 = "sha256-yC+GJDNO58TIc197Mgn/vqpt4fY3YghLhJfmGkQjsxk=";
-    revision = null;
-    editedCabalFile = null;
-  } (warnAfterVersion "0.2.0.1" super.botan-low);
-
-  # 2026-05-10: Remove again, when hackage bump is recent enough
-  botan-bindings = overrideCabal {
-    version = "0.3.0.0";
-    sha256 = "sha256-tsarIc3LcUKPgSWZ+xcGPWGO2f9OF6SWHB6nmX/vJYw=";
-    revision = null;
-    editedCabalFile = null;
-  } (warnAfterVersion "0.3.0.0" super.botan-bindings);
+  # 2026-05-10: Remove overrideCabal again, when hackage bump is recent enough
+  # 2026-11-05: Adapt tests to Botan 3.14, which rejects DSA groups with
+  # q > 256 bits and reports PBKDF2 without a PRF as not implemented
+  botan-low = appendPatch ./patches/botan-low-botan-3.14-tests.patch (
+    overrideCabal {
+      version = "0.2.0.1";
+      sha256 = "sha256-yC+GJDNO58TIc197Mgn/vqpt4fY3YghLhJfmGkQjsxk=";
+      revision = null;
+      editedCabalFile = null;
+    } (warnAfterVersion "0.2.0.1" super.botan-low)
+  );
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 

@@ -1,6 +1,6 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   dpkg,
   fetchurl,
   nixosTests,
@@ -9,9 +9,9 @@
   jdk25_headless,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unifi-controller";
-  version = "10.6.106";
+  version = "10.6.109";
 
   # See https://community.ui.com/releases or https://www.ui.com/download/unifi.
   #
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # as well.
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${finalAttrs.version}/unifi_sysvinit_all.deb";
-    hash = "sha256-6Ttw5zuZg8Xk0KjMwtXRm4bbBeePmowYUMr4msBpskA=";
+    hash = "sha256-u71RS3hsJ7/BPC4HXg7NOyedqxKqgAd7SzUcNQFmK/I=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    stdenv.cc.cc.lib
     systemd
   ];
 

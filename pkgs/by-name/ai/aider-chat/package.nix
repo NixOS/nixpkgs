@@ -173,6 +173,9 @@ let
         url = "https://github.com/Aider-AI/aider/commit/38716cc5a2621499c50454aa77ee379aa2b0c590.patch";
         hash = "sha256-uDIUHbauAmzCfaqx6aswnkUHcmgJi4X2OdMPyn4NeYU=";
       })
+
+      # add exceptions exported by newer litellm
+      ./add-litellm-exceptions.patch
     ];
 
     disabledTestPaths = [

@@ -1,7 +1,7 @@
 {
   lib,
   copyPkgconfigItems,
-  fetchFromRepoOrCz,
+  fetchgit,
   makePkgconfigItem,
   apple-sdk,
   perl,
@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcc";
-  version = "0.9.27-unstable-2025-01-06";
+  version = "0.9.27-unstable-2026-09-22";
 
   outputs = [
     "dev"
@@ -22,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  src = fetchFromRepoOrCz {
-    repo = "tinycc";
-    rev = "f6385c05308f715bdd2c06336801193a21d69b50";
-    hash = "sha256-tO3N+NplYy8QUOC2N3x0CO5Ui75j9bQzLSZQF1HQyhY=";
+  src = fetchgit {
+    url = "git://repo.or.cz/tinycc.git";
+    rev = "3dc99dbc82f8e07308c5d398136803e62f9676df";
+    hash = "sha256-qYsGgihowp2C6WFzbQuXEWgJG6evtu/10p5IH/ozIKY=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     # build cross compilers
     "--enable-cross"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # The bounds checker has an unresolved arm64 atomic helper on Darwin.
     "--config-bcheck=no"
   ]
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # TCC cannot cross-compile x86 long double constants from aarch64-darwin.
     makeFlagsArray+=("TCC_X=i386-win32 x86_64-win32 arm arm64 arm-wince c67 riscv64 arm64-osx")
   '';

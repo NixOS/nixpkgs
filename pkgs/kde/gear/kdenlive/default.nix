@@ -26,11 +26,12 @@ mkKdeDerivation {
       inherit mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
-    ./no-qmllint.patch
   ];
 
   extraCmakeFlags = [
     "-DFETCH_OTIO=0"
+    # breaks because our QML import paths are not set up at build time
+    "-DBUILD_RUN_QMLLINT=0"
   ];
 
   extraNativeBuildInputs = [
@@ -56,7 +57,9 @@ mkKdeDerivation {
   ];
 
   qtWrapperArgs = [
-    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--set"
+    "FREI0R_PATH"
+    "${frei0r}/lib/frei0r-1"
   ];
 
   meta.mainProgram = "kdenlive";

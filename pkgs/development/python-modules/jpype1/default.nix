@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "originell";
+    owner = "jpype-project";
     repo = "jpype";
     tag = "v${version}";
     hash = "sha256-CDiVQugxLgmUwAG0e0ryamWvrjUaJxJrU0YSFIIWS1I=";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/originell/jpype/";
+    homepage = "https://github.com/jpype-project/jpype/";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode

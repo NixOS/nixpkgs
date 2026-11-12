@@ -20,7 +20,7 @@
   exceptiongroup,
   glom,
   jsonschema,
-  mcp,
+  mcp_1,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
@@ -45,6 +45,7 @@
   pytest-freezegun,
   pytest-mock,
   pytest-snapshot,
+  pytest-timeout,
   requests-mock,
   types-freezegun,
 }:
@@ -59,7 +60,6 @@ buildPythonPackage (finalAttrs: {
   pname = "semgrep";
   inherit (common) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "semgrep";
@@ -119,6 +119,8 @@ buildPythonPackage (finalAttrs: {
     "opentelemetry-api"
     "opentelemetry-exporter-otlp-proto-http"
     "opentelemetry-sdk"
+    "peewee"
+    "pyjwt"
     "wcmatch"
   ];
   dependencies = [
@@ -131,7 +133,7 @@ buildPythonPackage (finalAttrs: {
     exceptiongroup
     glom
     jsonschema
-    mcp
+    mcp_1
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
     opentelemetry-instrumentation-requests
@@ -162,6 +164,7 @@ buildPythonPackage (finalAttrs: {
     pytest-freezegun
     pytest-mock
     pytest-snapshot
+    pytest-timeout
     requests-mock
     types-freezegun
   ];
@@ -202,5 +205,6 @@ buildPythonPackage (finalAttrs: {
   meta = common.meta // {
     description = common.meta.description + " - cli";
     inherit (semgrep-core.meta) platforms;
+    mainProgram = "semgrep";
   };
 })

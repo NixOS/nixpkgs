@@ -4,7 +4,7 @@
   appstream-glib,
   blueprint-compiler,
   desktop-file-utils,
-  fetchFromGitHub,
+  fetchFromGitLab,
   glib,
   gst_all_1,
   gtk4,
@@ -22,12 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "exercise-timer";
   version = "1.9.1";
 
-  src = fetchFromGitHub {
-    owner = "mfep";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
     repo = "exercise-timer";
     tag = "v${finalAttrs.version}";
     hash = "sha256-81bGX5Oa5z5AbtYDzPcSyFsz0/zWcDw/Ky9n+EfnZNo=";
-    fetchLFS = true;
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Timer app for high intensity interval training";
     homepage = "https://apps.gnome.org/Hiit/";
-    changelog = "https://github.com/mfep/exercise-timer/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://gitlab.gnome.org/World/exercise-timer/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "hiit";

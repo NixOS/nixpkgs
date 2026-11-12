@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Bluetooth-Devices";
     repo = "aiodiscover";
     tag = "v${finalAttrs.version}";
     hash = "sha256-yrXy665O9VZ3aWn23QQCJm5USBV0P5aTSsQU5QGIcP8=";
@@ -52,10 +52,12 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "aiodiscover" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Python module to discover hosts via ARP and PTR lookup";
-    homepage = "https://github.com/bdraco/aiodiscover";
-    changelog = "https://github.com/bdraco/aiodiscover/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/Bluetooth-Devices/aiodiscover";
+    changelog = "https://github.com/Bluetooth-Devices/aiodiscover/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

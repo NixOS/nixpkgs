@@ -30,8 +30,8 @@ let
     "2.4.6".sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.6.7".sha256 = "sha256-Hr3DXJ3I4nG4zRrESWXgC/JV+cAiFlD8t38Ps0wtOt4=";
     "2.6.8".sha256 = "sha256-rVEm39+6XbJ+53vMJYkwIP5SLQt2U9RbTEeVrePdwj0=";
+    "2.6.9".sha256 = "sha256-xv0dc1Vw60/zTK+WCZiMp37QvRK1XQmk/tB1vokNpRM=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
@@ -256,11 +256,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Fails to find `O_LARGEFILE` otherwise.
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
-  # Set minimum macOS version to 10.12 for x86_64-darwin to support clock_gettime()
-  env.SBCL_MACOSX_VERSION_MIN = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "10.12";
-
   buildPhase = ''
     runHook preBuild
 
@@ -271,11 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  # Tests on ofBorg’s x86_64-darwin platforms are so unstable that a random one
-  # will fail every other run. There’s a deeper problem here; we might as well
-  # disable them entirely so at least the other platforms get to benefit from
-  # testing.
-  doCheck = stdenv.hostPlatform.system != "x86_64-darwin";
+  doCheck = true;
 
   # From the INSTALL docs
   checkPhase = ''
@@ -322,8 +313,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    # Broken since 2025-09-05 https://hydra.nixos.org/job/nixpkgs/staging-next/sbcl.x86_64-darwin
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
     license = lib.licenses.publicDomain; # and FreeBSD

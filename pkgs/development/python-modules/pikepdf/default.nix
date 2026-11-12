@@ -1,35 +1,32 @@
 {
   lib,
   stdenv,
-  attrs,
   buildPythonPackage,
   clang-tools,
   cmake,
   fetchFromGitHub,
+  fonttools,
   hypothesis,
   jbig2dec,
-  deprecated,
+  jsonschema,
   lxml,
   withMupdf ? false,
   mupdf-headless,
   nanobind,
   ninja,
-  numpy,
   packaging,
   pillow,
-  psutil,
   pytest-xdist,
   pytestCheckHook,
-  python-dateutil,
-  python-xmp-toolkit,
   qpdf,
+  referencing,
   replaceVars,
   scikit-build-core,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pikepdf";
-  version = "10.10.0";
+  version = "10.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-ZNynqKNmUO8wGoT3Ml2sS2kOGJD37JRaHzBV9igvoHw=";
+    hash = "sha256-QhjsuXTO28SNFSneqwOXGdjqRuFQWoSHhbvZeMlFR3g=";
   };
 
   patches = [
@@ -77,24 +74,35 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [
-    attrs
     hypothesis
-    numpy
     pytest-xdist
-    psutil
     pytestCheckHook
-    python-dateutil
-    python-xmp-toolkit
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   dependencies = [
-    deprecated
     lxml
     packaging
     pillow
   ];
 
+  optional-dependencies = {
+    pdfa = [
+      fonttools
+      jsonschema
+      referencing
+    ];
+  };
+
   pythonImportsCheck = [ "pikepdf" ];
+
+  disabledTests = [
+    # timezone issues in sandbox
+    "test_assume_local_time_zone_for_dates"
+    "test_declare_docinfo_agrees_and_validates"
+    "test_declare_properties"
+    "test_prepare_keeps_partial_docinfo_dates"
+  ];
 
   meta = {
     homepage = "https://github.com/pikepdf/pikepdf";

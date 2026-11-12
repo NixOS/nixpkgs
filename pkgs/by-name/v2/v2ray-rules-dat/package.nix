@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "v2ray-rules-dat";
-  version = "202609132350";
+  version = "202611082203";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,8 +16,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 ${finalAttrs.passthru.geoipDat} $out/share/v2ray/geoip.dat
-    install -Dm444 ${finalAttrs.passthru.geositeDat} $out/share/v2ray/geosite.dat
+    mkdir -p $out/share/v2ray
+    ln -s ${finalAttrs.passthru.geoipDat} $out/share/v2ray/geoip.dat
+    ln -s ${finalAttrs.passthru.geositeDat} $out/share/v2ray/geosite.dat
 
     runHook postInstall
   '';
@@ -25,11 +26,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru = {
     geoipDat = fetchurl {
       url = "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${finalAttrs.version}/geoip.dat";
-      hash = "sha256-RTJf7hVVyL8EEVEAaUzoQpuIybs7NUirz9I2ocjqFG8=";
+      hash = "sha256-kLeKuGHBzcP4cfMF+c7t+41tYynjpAKV5nc+BXKXOEw=";
     };
     geositeDat = fetchurl {
       url = "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${finalAttrs.version}/geosite.dat";
-      hash = "sha256-JpFPaZLfwNce8uMRCgFXEGixXS9K40Ogpa+8HJ5OVZA=";
+      hash = "sha256-l+8qBgo6tghA91oTXCaHLE4fuqKEfQ9N5XqSdGD3Hog=";
     };
     updateScript = ./update.sh;
   };

@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.22";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "venstarcolortouch";
     inherit (finalAttrs) version;

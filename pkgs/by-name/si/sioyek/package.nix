@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2026-08-18";
+  version = "2.0.0-unstable-2026-10-31";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "d0b2c1915ececf8394c355b9e4dcdd675154f5d0";
-    hash = "sha256-Mun68PZXpSuU8xzo0wmBbQgGwGoLPkfDhgz6dKxeIDI=";
+    rev = "84b10d0136a976a1284931b6f5aa4976873feecd";
+    hash = "sha256-Ka7Txn7E/OS958mBludtH4V6gtTw+AaOlSeOSMLfPtg=";
   };
 
   buildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         install -Dm644 tutorial.pdf $out/share/tutorial.pdf
         cp -r pdf_viewer/shaders $out/share/
-        install -Dm644 -t $out/etc/ pdf_viewer/{keys,prefs}.config
+        install -Dm644 -t $out/share/ pdf_viewer/{keys,prefs}.config
         installManPage resources/sioyek.1
       '';
 

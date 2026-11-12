@@ -5,44 +5,49 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
   python3,
   dart-sass,
+  node-gyp,
   bash,
   jemalloc,
   ffmpeg-headless,
   writeShellScript,
 }:
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2026.6.0";
+  version = "2026.10.1";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-jq1HtLabix9qxaAjaCgUN3nsY438ruHgHgC3MuGeR2E=";
+    hash = "sha256-6N2YUs/iw4KCBM8ltjjwxTMJTstNXxNbXWQeZQPUXG0=";
     fetchSubmodules = true;
   };
 
-  # Misskey converts its YAML config to JSON at runtime, which doesn't work
-  # because it tries to write it to the Nix store. As a workaround, hardcode
-  # this to a path which the service can write to until a better solution is
-  # supported, upstream.
-  # https://github.com/misskey-dev/misskey/issues/17075
   postPatch = ''
+    # Misskey converts its YAML config to JSON at runtime, which doesn't work
+    # because it tries to write it to the Nix store. As a workaround, hardcode
+    # this to a path which the service can write to until a better solution is
+    # supported, upstream.
+    # https://github.com/misskey-dev/misskey/issues/17075
     substituteInPlace packages/backend/src/config.ts \
       --replace-fail \
         "resolve(projectBuiltDir, '.config.json')" \
         "resolve('/run/misskey/default.json')"
     substituteInPlace {.,packages/backend}/package.json \
       --replace-fail "pnpm compile-config && " ""
+
+    # Misskey complains about nodejs version being too old https://github.com/misskey-dev/misskey/blob/14554ff2b49d9b1a26d9a1444e783f08eaa29444/packages/backend/package.json#L7
+    substituteInPlace pnpm-workspace.yaml \
+      --replace-fail 'engineStrict: true' 'engineStrict: false'
   '';
 
   nativeBuildInputs = [
@@ -52,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     python3
     dart-sass
+    node-gyp # for sharp and re2
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -59,11 +65,19 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
+      postPatch
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-GCkSASkgwUvlAlm8hiy4Yk/QMVerVGacxOh1AYouH0g=";
+    fetcherVersion = 5;
+    hash = "sha256-mZ4fnibh35jpUfR9w+yP6Zg7LQTmDxDqCNQzOXz7Ph0=";
   };
+
+  preBuild = ''
+    # In darwin sandboxed build, scripts will try to call preinstalled sed outside of the sandbox
+    patchShebangs packages/*/node_modules/.bin
+    patchShebangs packages/*/*/node_modules/.bin
+    patchShebangs packages-private/*/node_modules/.bin
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -79,10 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     (
       cd node_modules/.pnpm/node_modules/re2
       pnpm run rebuild --nodedir=${nodejs}
-    )
-    (
-      cd node_modules/.pnpm/node_modules/sharp
-      pnpm run install
     )
 
     # Force sass-embedded npm package to use our dart-sass instead of bundled binaries.
@@ -155,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source, federated social media platform";
     homepage = "https://misskey-hub.net/";
+    changelog = "https://github.com/misskey-dev/misskey/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.feathecutie ];
     teams = [ lib.teams.ngi ];

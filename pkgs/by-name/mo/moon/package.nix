@@ -4,6 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
   openssl,
+  aws-lc,
+  zstd,
   pkg-config,
   protobuf,
   versionCheckHook,
@@ -15,23 +17,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moon";
-  version = "2.5.4";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "moon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GRsndVgJtGmursik5hW6buIjh1haIQK0MOSnSVwuFSs=";
+    hash = "sha256-8hFkMycHklfFZEdEzqxAt63ajQ8Wk5dusC65bpiNxbw=";
   };
 
-  cargoHash = "sha256-rbq20TBP4mTvlvmAwl2i10P36KwxSpkpyvqISzsjMkQ=";
+  cargoHash = "sha256-UqyfHdHN4i7Cuw1bN2BH8mQh3TAdl4JN9pP4q2EiNcQ=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
     OPENSSL_NO_VENDOR = 1;
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    aws-lc
+    zstd
+  ];
   nativeBuildInputs = [
     pkg-config
     protobuf

@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = toString [ "-Wno-incompatible-pointer-types" ];
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C interface to the X Window System protocol";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcb";

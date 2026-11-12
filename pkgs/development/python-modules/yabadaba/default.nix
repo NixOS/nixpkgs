@@ -18,15 +18,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yabadaba";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "yabadaba";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nXGQT/c+Sio3VQTqHY3SOiqJRQCQxZ/o0RCQGptcQig=";
+    hash = "sha256-K/GPHocMn4f1E4n3Tb2OOffJqR6cMvjfwYmLwBMA7N8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.26,<0.12" "uv_build"
+  '';
 
   build-system = [ uv-build ];
 

@@ -1,8 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  writeShellScript,
+  writers,
   dash,
+  shellcheck-minimal,
+  makeBinaryWrapper,
   gitMinimal,
   php,
   phpCfg ? null,
@@ -19,11 +21,11 @@ let
   defaultMinifyOpts = {
     script = {
       enable = false;
-      target = "es2020";
+      target = "es2022";
     };
     style = {
       enable = false;
-      browserslist = "defaults, Firefox ESR, Firefox 91, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
+      browserslist = "defaults, Firefox ESR, Firefox 141, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
     };
     svg = {
       enable = false;
@@ -42,16 +44,31 @@ let
     else
       { }
   );
+
+  writeDash =
+    name: text:
+    writers.writeDash name {
+      check =
+        /* sh */ ''
+          target="$out"
+          ${lib.getExe dash} -n "$target"
+        ''
+        + lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable /* sh */ ''
+          ${lib.getExe shellcheck-minimal} --norc --shell=dash --severity=info \
+             --exclude=SC1090,SC1091,SC2016,SC2034,SC2154,SC2164 "$target"
+        ''
+        + ":";
+    } text;
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.35";
+  version = "0.35.5";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XUjqUP0VNvh+1Txyq0arL4+8HSalhVmDshdrvEtUEt0=";
+    hash = "sha256-YDXEdhtubI0ZGUwiRoCe+Wh4ieHOMmUODs3waE7xb0U=";
   };
 
   php = php.buildEnv (
@@ -84,10 +101,12 @@ php.buildComposerProject2 (finalAttrs: {
     }
   );
 
-  nativeBuildInputs =
-    lib.optional minify.script.enable esbuild
-    ++ lib.optional minify.style.enable lightningcss
-    ++ lib.optional minify.svg.enable scour;
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optional minify.script.enable esbuild
+  ++ lib.optional minify.style.enable lightningcss
+  ++ lib.optional minify.svg.enable scour;
 
   # Composer ≥2.8 defaults preferred-install to
   # dist only (not auto), which prevents fallback
@@ -108,7 +127,7 @@ php.buildComposerProject2 (finalAttrs: {
     nativeBuildInputs = [ gitMinimal ];
   };
 
-  vendorHash = "sha256-Oc0+OAtmHP9/L79fQmV1xW8HC5SPyI3hDLGxyzzQaDw=";
+  vendorHash = "sha256-kExcDTbez7xmnGZQIwcul47JFwiU7A/RjwUj2G4nfwk=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
@@ -133,50 +152,41 @@ php.buildComposerProject2 (finalAttrs: {
   '';
 
   preBuild =
-    lib.optionalString minify.script.enable
-      # sh
-      ''
-        find ./public -type f -iname "*.js" -print0 \
-          | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_script_minify" ''
-            file="$1"
-            tmp="$(mktemp)"
-            esbuild $file --minify --target=${lib.escapeShellArg minify.script.target} --outfile=$tmp
-            [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
-          ''}
-      ''
-    +
-      lib.optionalString minify.style.enable
-        # sh
-        ''
-          find ./public -type f -iname "*.css" -print0 \
-            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
-              export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
-              file="$1"
-              tmp="$(mktemp)"
-              lightningcss $file --minify --browserslist --output-file=$tmp
-              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
-            ''}
-        ''
-    +
-      lib.optionalString minify.svg.enable
-        # sh
-        ''
-          find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
-            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
-              file="$1"
-              tmp="$(mktemp)"
-              scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
-              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
-            ''}
-        '';
+    lib.optionalString minify.script.enable /* bash */ ''
+      find ./public -type f -iname "*.js" -print0 \
+        | xargs -0 -n 1 -P "$NIX_BUILD_CORES" ${writeDash "movim_script_minify" ''
+          file="$1"
+          tmp="$(mktemp)"
+          esbuild "$file" --minify --target=${lib.escapeShellArg minify.script.target} --outfile="$tmp"
+          mv "$tmp" "$file"
+        ''}
+    ''
+    + lib.optionalString minify.style.enable /* bash */ ''
+      find ./public -type f -iname "*.css" -print0 \
+        | xargs -0 -n 1 -P "$NIX_BUILD_CORES" ${writeDash "movim_style_minify" ''
+          export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
+          file="$1"
+          tmp="$(mktemp)"
+          lightningcss "$file" --minify --browserslist --output-file="$tmp"
+          mv "$tmp" "$file"
+        ''}
+    ''
+    + lib.optionalString minify.svg.enable /* bash */ ''
+      find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
+        | xargs -0 -n 1 -P "$NIX_BUILD_CORES" ${writeDash "movim_svg_minify" ''
+          file="$1"
+          tmp="$(mktemp)"
+          scour -i "$file" -o "$tmp" --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
+          if [ "$(stat -c %s "$tmp")" -lt "$(stat -c %s "$file")" ]; then
+            mv "$tmp" "$file"
+          fi
+        ''}
+    '';
 
   postInstall = ''
     mkdir -p $out/bin
-    cat << EOF > $out/bin/movim
-    #!${lib.getExe dash}
-    ${lib.getExe finalAttrs.php} $out/share/php/movim/daemon.php "\$@"
-    EOF
-    chmod +x $out/bin/movim
+    makeBinaryWrapper "${lib.getExe finalAttrs.php}" "$out/bin/movim" \
+      --add-flag "$out/share/php/movim/daemon.php"
 
     mkdir -p \
       $out/share/bash-completion/completion \

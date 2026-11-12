@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-executor-plugin-cluster-generic";
   version = "1.0.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

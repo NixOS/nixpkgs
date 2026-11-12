@@ -2,20 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flake-checker";
-  version = "0.2.14";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "flake-checker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MUbF2mOrcoODe26j0OaXHLk73yFhB+0/d2yPaeBEi6M=";
+    hash = "sha256-J0RAJJdpKYgMeV8+aojCRKVkXWa4PzdaAJHLjZInB4E=";
   };
 
-  cargoHash = "sha256-toC9qMq06Grh6NJZZUb7cbQdNeI7lwqDqbJO85a3zwk=";
+  cargoHash = "sha256-8iHYK8Pf1P4TlfCkFVMeco/sldzAU40jLfod1qcucPg=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   meta = {
     description = "Health checks for your Nix flakes";

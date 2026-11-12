@@ -10,6 +10,7 @@
   cplex,
   fatrop,
   fetchFromGitHub,
+  fetchpatch2,
   gurobi,
   highs,
   hpipm,
@@ -46,6 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GY7Dyt53QE3+/aPB5oDRfZzpRLqKTGrxrmvihq4YJ2o=";
   };
 
+  # fix python build
+  # ref. https://github.com/casadi/casadi/pull/4418 merged upstream
+  patches = lib.optionals pythonSupport [
+    (fetchpatch2 {
+      name = "add-missing-stub-guards.patch";
+      url = "https://github.com/casadi/casadi/commit/fc4b71177089c2fabbfc3a41dca8a6e40a0a81f4.patch?full_index=1";
+      hash = "sha256-/T9Fof36l/wEeKusI1teCcrax3Zg+fhpteBwnVjWr0o=";
+    })
+  ];
+
   postPatch = ''
     # fix case of hpipmConfig.cmake
     substituteInPlace CMakeLists.txt --replace-fail \
@@ -64,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       "add_library(_casadi MODULE \''${PYTHON_FILE})" \
       "add_library(_casadi MODULE \''${PYTHON_FILE})
        target_include_directories(_casadi SYSTEM PRIVATE
-         ${python3Packages.python}/include/python3.${python3Packages.python.sourceVersion.minor})"
+         ${python3Packages.python}/include/${python3Packages.python.libPrefix})"
 
     # I have no clue. without this, it tries to install a non existent file.
     # maybe a run without SWIG_IMPORT is required before a run with SWIG_IMPORT.

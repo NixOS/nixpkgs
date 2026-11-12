@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "deck-app";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchurl {
     url = "https://github.com/yuzeguitarist/Deck/releases/download/v${finalAttrs.version}/Deck.dmg";
-    hash = "sha256-U5iMoQZGycwiiehxKUB3iohvzAh42gkC1sk3AJ62Ujs=";
+    hash = "sha256-VA1MwKZVr9QRdzyzI4Sdg1b+oM1p1FDIN7f/TM2zxOc=";
   };
 
   nativeBuildInputs = [ undmg ];

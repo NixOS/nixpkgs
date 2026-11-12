@@ -55,6 +55,7 @@ in
         {
           name = "DeskjetRemote";
           deviceUri = "ipp://server/printers/DeskjetLocal";
+          location = "";
           model = "drv:///sample.drv/deskjet.ppd";
         }
         {
@@ -94,6 +95,10 @@ in
     assert "scheduler is running" in client.succeed("lpstat -r")
 
     client.wait_until_succeeds("journalctl -u cups.service --grep 'CUPS provisioning complete'")
+
+    with subtest("Empty printer options are handled correctly"):
+        client.wait_for_file("/etc/cups/printers.conf")
+        client.fail("grep -F 'Location -mdrv://' /etc/cups/printers.conf")
 
     with subtest("UNIX socket is used for connections"):
         assert "/var/run/cups/cups.sock" in client.succeed("lpstat -H")

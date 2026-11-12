@@ -12,20 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "53.0";
+  version = "54.1";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fPTGf8bAITDA8QwllWbbGXA7tJ6p/SxRDfcBQVRvCTI=";
+    hash = "sha256-y4EFkezXk5ktxczA9hc821Q49OdG2da2sSchzL+5xAQ=";
   };
 
-  cargoHash = "sha256-+RbW/9ap/69MyODUk/bHBlH6ZuqYYIyKaarYSMQ2G7w=";
-
-  patches = [
-    ./musl-1.2.6.patch
-  ];
+  cargoHash = "sha256-wlMXBzWiw8XEdto2Z3a8Vk1LZUHbv0JqpWu9CCZsDkg=";
 
   separateDebugInfo = true;
 
@@ -47,6 +43,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "--exclude"
+    "test_infra"
+    "--exclude"
+    "performance-metrics"
+    "--exclude"
+    "cloud-hypervisor"
+  ]
+  ++ [
     "--"
     # io_uring syscalls are blocked by the Lix sandbox
     "--skip=formats"

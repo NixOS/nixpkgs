@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
-    repo = "calculator";
+    repo = "cosmic-ext-calculator";
     tag = finalAttrs.version;
     hash = "sha256-t8xuM0B2eh2AbAhDgSOGapTwmmm9eC+wHsqwq4Jn5yU=";
   };
@@ -52,9 +52,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/cosmic-utils/calculator/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/cosmic-utils/cosmic-ext-calculator/releases/tag/${finalAttrs.version}";
     description = "Calculator for the COSMIC Desktop Environment";
-    homepage = "https://github.com/cosmic-utils/calculator";
+    homepage = "https://github.com/cosmic-utils/cosmic-ext-calculator";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-ext-calculator";
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];

@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     util-macros
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "font-util-";
@@ -33,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "X.Org font package creation/installation utilities";
@@ -47,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
       # or its an older version that the one on spdx
       unicodeTOU
     ];
-    maintainers = [ ];
     pkgConfigModules = [ "fontutil" ];
     platforms = lib.platforms.unix;
+    teams = [ lib.teams.freedesktop ];
   };
 })

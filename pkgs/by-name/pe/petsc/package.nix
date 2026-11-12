@@ -91,7 +91,7 @@ let
     blas = self.callPackage blas.override { };
     lapack = self.callPackage lapack.override { };
     hdf5 = self.callPackage hdf5.override {
-      fortran = gfortran;
+      inherit gfortran;
       cppSupport = !mpiSupport;
     };
     metis = self.callPackage metis.override { };
@@ -250,9 +250,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.unittestCheckHook
   ];
 
-  unittestFlagsArray = [
-    "-s"
-    "src/binding/petsc4py/test"
+  unittestFlags = [
+    "--start-directory=src/binding/petsc4py/test"
     "-v"
   ];
 
@@ -286,6 +285,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   setupHook = ./setup-hook.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Portable Extensible Toolkit for Scientific computation";

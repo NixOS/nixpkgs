@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  installShellFiles,
   rustPlatform,
 }:
 
@@ -17,14 +18,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-FPaMBxrSrmHbq5b4Q9QxElD+jAhn22gvKP55QWwZ/mo=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  env.SHELL_COMPLETIONS_DIR = "completions";
+
+  postInstall = ''
+    installShellCompletion \
+      --bash $SHELL_COMPLETIONS_DIR/pastel.bash \
+      --zsh $SHELL_COMPLETIONS_DIR/_pastel \
+      --fish $SHELL_COMPLETIONS_DIR/pastel.fish
+    installManPage $SHELL_COMPLETIONS_DIR/*.1
+  '';
+
   meta = {
     description = "Command-line tool to generate, analyze, convert and manipulate colors";
     homepage = "https://github.com/sharkdp/pastel";
     changelog = "https://github.com/sharkdp/pastel/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ ];
     mainProgram = "pastel";
   };

@@ -8,9 +8,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   src = fetchFromGitHub {
     owner = "quentinsf";
     repo = "IMAPdedup";

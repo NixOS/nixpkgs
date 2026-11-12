@@ -13,10 +13,12 @@
   cargo,
   rustPlatform,
   buildRubyGem,
+  pkg-config,
+  oniguruma,
 }:
 
 let
-  version = "7.0.1";
+  version = "7.0.3";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -48,9 +50,11 @@ let
         nativeBuildInputs = [
           cargo
           rustc
+          pkg-config
           rustPlatform.cargoSetupHook
           rustPlatform.bindgenHook
         ];
+        buildInputs = [ oniguruma ];
         disallowedReferences = [
           rustc.unwrapped
         ];
@@ -73,7 +77,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-aFOLQxD6UKx5pSEEXLVf47z/7VwVYtaETPkOZudhkgk=";
+    hash = "sha256-C2skwDM0Gp161Sz8+nsbyRPBkcemBPdA2GPxYkndPBU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

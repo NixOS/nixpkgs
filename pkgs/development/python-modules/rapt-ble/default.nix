@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "rapt-ble";
-  version = "0.1.2";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sairon";
     repo = "rapt-ble";
     tag = "v${version}";
-    hash = "sha256-ozZwVgTV/xYl1nXLiybcPs6DQKocNdbxTEYDfYyQuvY=";
+    hash = "sha256-3+E/ZDoakUGcSyoNw9N2Z5XBQ5hZUseesaq5Iz9EoK4=";
   };
 
   build-system = [ poetry-core ];

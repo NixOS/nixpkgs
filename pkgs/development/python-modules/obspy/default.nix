@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "obspy";
   version = "1.5.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "obspy";

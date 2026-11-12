@@ -2,17 +2,21 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  cmake,
+  aws-lc,
   pkg-config,
   protobuf,
   zlib,
+  zstd,
+  libgit2,
+  oniguruma,
+  rust-jemalloc-sys-unprefixed,
   nix-update-script,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "greptimedb";
-  version = "1.1.4";
+  version = "1.2.1";
 
   __structuredAttrs = true;
 
@@ -20,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "GreptimeTeam";
     repo = "greptimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+Qb3cyvGrUhi3nBbEUoG2jJyYHFcTSIg34E6ZiI+weY=";
+    hash = "sha256-hE4hQ3NR0UPVghQv84jdpV+xeWpapxWfBR3PSTFHhww=";
   };
 
-  cargoHash = "sha256-/Sj7TRPsJ2mP8Da2FUhL2+bl5seFFDuS7RqZ1DLTF2o=";
+  cargoHash = "sha256-xkirWIE+RoZVDzkpGk4gf1DHybqCmGO6EzlVnbz+0A8=";
 
   # otel-arrow-rust regenerates its protos from a directory that sits outside the
   # crate, which cargo vendoring drops. Its generated sources are committed, so
@@ -42,16 +46,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    cmake
     pkg-config
     protobuf
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ zlib ];
-
-  # cmake is here only to build the vendored C sources of aws-lc-sys
-  dontUseCmakeConfigure = true;
+  buildInputs = [
+    zlib
+    aws-lc
+    zstd
+    libgit2
+    oniguruma
+    rust-jemalloc-sys-unprefixed
+  ];
 
   env = {
     # Installed binaries are stripped during fixup, so delete.

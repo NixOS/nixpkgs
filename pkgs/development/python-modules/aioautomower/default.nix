@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioautomower";
-  version = "2.8.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3pl56NhKrE2gwwSwlnHb+YWpB8OPkD9kctJbOdsFzlU=";
+    hash = "sha256-/uYQaNWSUmZGyW7sccUNfSPHw3aFBlEeT0gUiZ27UA8=";
   };
 
   build-system = [ hatchling ];
@@ -71,7 +71,7 @@ buildPythonPackage (finalAttrs: {
     description = "Module to communicate with the Automower Connect API";
     homepage = "https://github.com/Thomas55555/aioautomower";
     changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

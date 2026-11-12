@@ -15,15 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openccu-loom-client";
-  version = "2026.9.4";
+  version = "2026.10.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "openccu-loom-client";
     tag = finalAttrs.version;
-    hash = "sha256-tDFXRxAF0UvQV1QHShTYw3rx9h7Eye1+M2OkeN2zOCg=";
+    hash = "sha256-pKJ+rkeexSNQkp74uDEXpVMUWmia3tC4FGUAzQqBUwo=";
   };
 
   build-system = [ setuptools ];

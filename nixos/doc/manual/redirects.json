@@ -1,4 +1,25 @@
 {
+  "module-services-jellystat": [
+    "index.html#module-services-jellystat"
+  ],
+  "module-services-jellystat-configuration": [
+    "index.html#module-services-jellystat-configuration"
+  ],
+  "module-services-jellystat-external-database": [
+    "index.html#module-services-jellystat-external-database"
+  ],
+  "module-services-jellystat-paths": [
+    "index.html#module-services-jellystat-paths"
+  ],
+  "module-services-jellystat-quickstart": [
+    "index.html#module-services-jellystat-quickstart"
+  ],
+  "module-services-jellystat-secrets": [
+    "index.html#module-services-jellystat-secrets"
+  ],
+  "module-services-jellystat-troubleshooting": [
+    "index.html#module-services-jellystat-troubleshooting"
+  ],
   "module-services-netbird-relay": [
     "index.html#module-services-netbird-relay"
   ],
@@ -146,6 +167,21 @@
   "module-services-mautrix-discord-troubleshooting": [
     "index.html#module-services-mautrix-discord-troubleshooting"
   ],
+  "module-services-navidrome": [
+    "index.html#module-services-navidrome"
+  ],
+  "module-services-navidrome-basic-usage": [
+    "index.html#module-services-navidrome-basic-usage"
+  ],
+  "module-services-navidrome-configuration-options": [
+    "index.html#module-services-navidrome-configuration-options"
+  ],
+  "module-services-navidrome-plugins": [
+    "index.html#module-services-navidrome-plugins"
+  ],
+  "module-services-navidrome-secrets": [
+    "index.html#module-services-navidrome-secrets"
+  ],
   "module-services-onedrive": [
     "index.html#module-services-onedrive"
   ],
@@ -265,8 +301,8 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
-  "sec-boot-problems-scripted-stage-1": [
-    "index.html#sec-boot-problems-scripted-stage-1"
+  "sec-crowdsec-reset": [
+    "index.html#sec-crowdsec-reset"
   ],
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
@@ -318,6 +354,9 @@
   ],
   "ssec-testing-user-units": [
     "index.html#ssec-testing-user-units"
+  ],
+  "stage-1-26.05": [
+    "release-notes.html#stage-1-26.05"
   ],
   "test-opt-containerDefaults": [
     "index.html#test-opt-containerDefaults"
@@ -692,13 +731,9 @@
     "index.html#sec-luks-file-systems"
   ],
   "sec-luks-file-systems-fido2": [
-    "index.html#sec-luks-file-systems-fido2"
-  ],
-  "sec-luks-file-systems-fido2-legacy": [
+    "index.html#sec-luks-file-systems-fido2",
+    "index.html#sec-luks-file-systems-fido2-systemd",
     "index.html#sec-luks-file-systems-fido2-legacy"
-  ],
-  "sec-luks-file-systems-fido2-systemd": [
-    "index.html#sec-luks-file-systems-fido2-systemd"
   ],
   "sec-nfs-file-systems": [
     "index.html#sec-nfs-file-systems"
@@ -923,12 +958,8 @@
     "index.html#module-services-garage"
   ],
   "module-services-garage-upgrade-scenarios": [
-    "index.html#module-services-garage-upgrade-scenarios"
-  ],
-  "module-services-garage-advanced-upgrades": [
-    "index.html#module-services-garage-advanced-upgrades"
-  ],
-  "module-services-garage-maintainer-info": [
+    "index.html#module-services-garage-upgrade-scenarios",
+    "index.html#module-services-garage-advanced-upgrades",
     "index.html#module-services-garage-maintainer-info"
   ],
   "module-services-youtrack": [
@@ -975,6 +1006,27 @@
   ],
   "module-services-plausible-basic-usage": [
     "index.html#module-services-plausible-basic-usage"
+  ],
+  "module-pelican-wings": [
+    "index.html#module-pelican-wings"
+  ],
+  "module-pelican-wings-setup": [
+    "index.html#module-pelican-wings-setup"
+  ],
+  "module-pelican-wings-traefik": [
+    "index.html#module-pelican-wings-traefik"
+  ],
+  "module-pelican-panel": [
+    "index.html#module-pelican-panel"
+  ],
+  "module-pelican-panel-basic-usage": [
+    "index.html#module-pelican-panel-basic-usage"
+  ],
+  "module-pelican-panel-environment": [
+    "index.html#module-pelican-panel-environment"
+  ],
+  "module-pelican-panel-reverse-proxy": [
+    "index.html#module-pelican-panel-reverse-proxy"
   ],
   "module-services-pict-rs": [
     "index.html#module-services-pict-rs"
@@ -1087,12 +1139,6 @@
   "module-services-jitsi-configuration": [
     "index.html#module-services-jitsi-configuration"
   ],
-  "module-services-honk": [
-    "index.html#module-services-honk"
-  ],
-  "module-services-honk-basic-usage": [
-    "index.html#module-services-honk-basic-usage"
-  ],
   "module-services-hatsu": [
     "index.html#module-services-hatsu"
   ],
@@ -1170,12 +1216,6 @@
   ],
   "module-services-draupnir-setup-ems": [
     "index.html#module-services-draupnir-setup-ems"
-  ],
-  "module-services-castopod": [
-    "index.html#module-services-castopod"
-  ],
-  "module-services-castopod-quickstart": [
-    "index.html#module-services-castopod-quickstart"
   ],
   "module-services-c2fmzq": [
     "index.html#module-services-c2fmzq"
@@ -1460,6 +1500,24 @@
   "modules-services-certspotter-hooks": [
     "index.html#modules-services-certspotter-hooks"
   ],
+  "module-services-wanderer": [
+    "index.html#module-services-wanderer"
+  ],
+  "module-services-wanderer-basic-usage": [
+    "index.html#module-services-wanderer-basic-usage"
+  ],
+  "module-services-wanderer-superuser": [
+    "index.html#module-services-wanderer-superuser"
+  ],
+  "module-services-wanderer-secrets": [
+    "index.html#module-services-wanderer-secrets"
+  ],
+  "module-services-wanderer-plugins": [
+    "index.html#module-services-wanderer-plugins"
+  ],
+  "module-services-wanderer-external-meilisearch": [
+    "index.html#module-services-wanderer-external-meilisearch"
+  ],
   "module-services-weechat": [
     "index.html#module-services-weechat"
   ],
@@ -1507,9 +1565,6 @@
   ],
   "module-services-gitlab-runner": [
     "index.html#module-services-gitlab-runner"
-  ],
-  "ex-gitlab-runner-podman": [
-    "index.html#ex-gitlab-runner-podman"
   ],
   "module-forgejo": [
     "index.html#module-forgejo"
@@ -1730,6 +1785,12 @@
   "module-services-flatpak": [
     "index.html#module-services-flatpak"
   ],
+  "module-services-cassandra": [
+    "index.html#module-services-cassandra"
+  ],
+  "module-services-cassandra-diagnostics": [
+    "index.html#module-services-cassandra-diagnostics"
+  ],
   "module-services-tigerbeetle": [
     "index.html#module-services-tigerbeetle"
   ],
@@ -1920,9 +1981,6 @@
   "module-services-input-methods-uim": [
     "index.html#module-services-input-methods-uim"
   ],
-  "module-services-input-methods-hime": [
-    "index.html#module-services-input-methods-hime"
-  ],
   "module-services-input-methods-kime": [
     "index.html#module-services-input-methods-kime"
   ],
@@ -2069,7 +2127,8 @@
     "index.html#ch-troubleshooting"
   ],
   "sec-boot-problems": [
-    "index.html#sec-boot-problems"
+    "index.html#sec-boot-problems",
+    "index.html#sec-boot-problems-scripted-stage-1"
   ],
   "sec-maintenance-mode": [
     "index.html#sec-maintenance-mode"
@@ -2440,6 +2499,9 @@
   ],
   "sec-running-nixos-tests-interactively": [
     "index.html#sec-running-nixos-tests-interactively"
+  ],
+  "sec-nixos-test-interactive-graphical": [
+    "index.html#sec-nixos-test-interactive-graphical"
   ],
   "sec-nixos-test-shell-access": [
     "index.html#sec-nixos-test-shell-access"
@@ -2952,5 +3014,46 @@
   ],
   "ch-reference": [
     "index.html#ch-reference"
+  ],
+  "sec-release-26.05-incompatibilities-services-honk-removed": [
+    "release-notes.html#sec-release-26.05-incompatibilities-services-honk-removed",
+    "index.html#module-services-honk",
+    "index.html#module-services-honk-basic-usage"
+  ],
+  "module-garm": [
+    "index.html#module-garm"
+  ],
+  "module-garm-secrets": [
+    "index.html#module-garm-secrets"
+  ],
+  "module-garm-providers": [
+    "index.html#module-garm-providers"
+  ],
+  "module-garm-reachability": [
+    "index.html#module-garm-reachability"
+  ],
+  "module-garm-setup": [
+    "index.html#module-garm-setup"
+  ],
+  "module-services-falco": [
+    "index.html#module-services-falco"
+  ],
+  "module-services-falco-basic-usage": [
+    "index.html#module-services-falco-basic-usage"
+  ],
+  "module-services-falco-configuration": [
+    "index.html#module-services-falco-configuration"
+  ],
+  "module-services-falco-rules": [
+    "index.html#module-services-falco-rules"
+  ],
+  "module-services-falco-outputs": [
+    "index.html#module-services-falco-outputs"
+  ],
+  "module-services-falco-webserver": [
+    "index.html#module-services-falco-webserver"
+  ],
+  "module-services-falco-best-practices": [
+    "index.html#module-services-falco-best-practices"
   ]
 }

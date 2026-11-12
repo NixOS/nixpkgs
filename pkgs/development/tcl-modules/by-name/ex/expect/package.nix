@@ -6,6 +6,7 @@
   tcl,
   makeWrapper,
   autoreconfHook,
+  bashNonInteractive,
   replaceVars,
   dejagnu,
 }:
@@ -36,6 +37,10 @@ tcl.mkTclDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     makeWrapper
+  ];
+
+  buildInputs = [
+    bashNonInteractive
   ];
 
   postInstall = ''

@@ -2,20 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comrak";
-  version = "0.55.0";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "kivikakk";
     repo = "comrak";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-uxOCxuOL3iMMVPZCG0tE9To7lJp94ILf2crm/ShCChE=";
+    sha256 = "sha256-cqwvkEuHTTNP5PiWDIhWa8D8MAqIDVN8pWNMEWP3Yzc=";
   };
 
-  cargoHash = "sha256-fn9y6Hwtw3vUq5BES796IsyNXHQm8YydmYUDWbXUA3o=";
+  cargoHash = "sha256-Bc9c0urg+iAKyjg9d2wwpLgq3EwJn4mJLl8oAB8PZD8=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   meta = {
     description = "CommonMark-compatible GitHub Flavored Markdown parser and formatter";

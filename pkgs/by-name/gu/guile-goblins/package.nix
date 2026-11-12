@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   # tests hang on darwin, and fail randomly on aarch64-linux on ofborg
   doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
 
+  guileImportsCheck = [ "goblins" ];
+
   meta = {
     description = "Spritely Goblins for Guile";
     homepage = "https://spritely.institute/goblins/";

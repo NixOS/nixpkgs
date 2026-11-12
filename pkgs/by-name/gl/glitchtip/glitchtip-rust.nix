@@ -1,9 +1,12 @@
 {
   lib,
+  aws-lc,
   buildPythonPackage,
   django-vpg,
   fetchFromGitLab,
+  pkg-config,
   rustPlatform,
+  zstd,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -24,8 +27,14 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
   ];
 
   dependencies = [ django-vpg ];
@@ -38,7 +47,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://gitlab.com/glitchtip/glitchtip-rust/-/tags/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
   };

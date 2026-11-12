@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fmt,
   lib,
-  ocaml,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -32,18 +31,6 @@ buildDunePackage (finalAttrs: {
   # tailwindcss version, and would prevent independent upgrades of tw
   # and tailwindcss.
   doCheck = false;
-
-  outputs = [
-    "bin"
-    "lib"
-    "out"
-  ];
-
-  installPhase = ''
-    runHook preInstall
-    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib
-    runHook postInstall
-  '';
 
   meta = {
     description = "Type-safe Tailwind CSS v4 in OCaml";

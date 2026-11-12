@@ -14,7 +14,7 @@ build-idris-package {
     owner = "ziman";
     repo = "lightyear";
     rev = "f737e25a09c1fe7c5fff063c53bd7458be232cc8";
-    sha256 = "05x66abhpbdm6yr0afbwfk6w04ysdk78gylj5alhgwhy4jqakv29";
+    hash = "sha256-SeypsCQe8gepKpL6h85s2hPAzXR8OQWyN7WtC5cyphc=";
   };
 
   meta = {

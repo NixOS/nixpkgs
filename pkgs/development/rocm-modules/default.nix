@@ -313,12 +313,7 @@ let
     );
 in
 outer
-// builtins.listToAttrs (
-  map (arch: {
-    name = arch;
-    value = scopeForArches [ arch ];
-  }) outer.clr.gpuTargets
-)
+// lib.genAttrs outer.clr.gpuTargets (arch: scopeForArches [ arch ])
 // {
   gfx9 = scopeForArches [
     "gfx906"

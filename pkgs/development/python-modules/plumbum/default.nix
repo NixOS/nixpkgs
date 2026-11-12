@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "plumbum";
   version = "2.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";

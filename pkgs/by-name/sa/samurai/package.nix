@@ -2,41 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "samurai";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "michaelforney";
     repo = "samurai";
     rev = finalAttrs.version;
-    hash = "sha256-RPY3MFlnSDBZ5LOkdWnMiR/CZIBdqIFo9uLU+SAKPBI=";
+    hash = "sha256-0AKbuoOG1PfH9li57X3FqGVRHlXtcmfweP5zSBks5y8=";
   };
 
   makeFlags = [
     "DESTDIR="
     "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "LDLIBS="
   ];
 
-  patches = [
-    # NULL pointer dereference in writefile() in util.c; remove this at the next
-    # release
-    (fetchpatch {
-      name = "CVE-2021-30218.patch";
-      url = "https://github.com/michaelforney/samurai/commit/e84b6d99c85043fa1ba54851ee500540ec206918.patch";
-      sha256 = "sha256-hyndwj6st4rwOJ35Iu0qL12dR5E6CBvsulvR27PYKMw=";
-    })
-    # NULL pointer dereference in printstatus() in build.c; remove this at the
-    # next release
-    (fetchpatch {
-      name = "CVE-2021-30219.patch";
-      url = "https://github.com/michaelforney/samurai/commit/d2af3bc375e2a77139c3a28d6128c60cd8d08655.patch";
-      sha256 = "sha256-rcdwKjHeq5Oaga9wezdHSg/7ljkynfbnkBc2ciMW5so=";
-    })
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ninja-compatible build tool written in C";

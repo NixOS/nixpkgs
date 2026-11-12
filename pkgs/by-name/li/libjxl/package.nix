@@ -31,7 +31,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.12.0";
+  version = "0.13.0";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     tag = "v${version}";
-    hash = "sha256-rJyvJo1ZveE1pvMErK9ilFQA0NXkD2ka93L+1gXeqf8=";
+    hash = "sha256-fVT+HIAMpXnr12uNVI624SeD9oRhBTp+LPd6k30ZHwM=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -171,9 +171,7 @@ stdenv.mkDerivation rec {
     CXXFLAGS = "-mfp16-format=ieee";
   };
 
-  # FIXME x86_64-darwin:
-  # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
-  doCheck = with stdenv.hostPlatform; !(isi686 || isDarwin && isx86_64);
+  doCheck = with stdenv.hostPlatform; !isi686;
 
   disabledTests = lib.optionals stdenv.hostPlatform.isBigEndian [
     # https://github.com/libjxl/libjxl/issues/3629

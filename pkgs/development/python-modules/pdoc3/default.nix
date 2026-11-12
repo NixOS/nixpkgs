@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   mako,
   markdown,
   setuptools-scm,
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-I8EPsjwA9dHOLvM2Oa4dbtB0N4dVczeGfzk+BVyfBcQ=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-setext-headers-with-markdown-3.10.3.patch";
+      url = "https://github.com/pdoc3/pdoc/commit/2aaba16a50be488f2939e98dc9b0c0a995c262a3.patch?full_index=1";
+      hash = "sha256-y5ja7qini/qcllMVWfw/iOtkMogFKX+5owVgoIGBNlQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

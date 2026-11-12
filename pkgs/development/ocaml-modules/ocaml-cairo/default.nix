@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://cgit.freedesktop.org/cairo-ocaml/snapshot/cairo-ocaml-${finalAttrs.version}.zip";
-    sha256 = "0l4p9bp6kclr570mxma8wafibr1g5fsjj8h10yr4b507g0hmlh0l";
+    hash = "sha256-FEBaIXgHlEWyBwEiKbUrL+QVneJI1V7BKZmyae5Kl1A=";
   };
 
   patches = [ ./META.patch ];

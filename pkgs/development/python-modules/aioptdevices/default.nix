@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioptdevices";
-  version = "2026.7.1";
+  version = "2026.07.1";
   pyproject = true;
 
   src = fetchFromGitHub {

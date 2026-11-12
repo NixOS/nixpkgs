@@ -6,6 +6,7 @@
   fetchPypi,
   hatchling,
   llama-index-core,
+  pandas,
   pymupdf,
   pypdf,
   striprtf,
@@ -35,6 +36,7 @@ buildPythonPackage (finalAttrs: {
     beautifulsoup4
     defusedxml
     llama-index-core
+    pandas
     pymupdf
     pypdf
     striprtf

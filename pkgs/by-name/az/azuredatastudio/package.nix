@@ -27,7 +27,7 @@
   nss,
   openssl,
   pango,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
   libxrandr,
   libxfixes,
@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
       libxkbfile
       pango
       stdenv.cc.cc
-      systemd
+      systemdLibs
     ])
     targetPath
     sqltoolsserviceRpath

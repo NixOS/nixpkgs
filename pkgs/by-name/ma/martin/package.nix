@@ -140,10 +140,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     teams = [ lib.teams.geospatial ];
     sourceProvenance = with lib.sourceTypes; [
       binaryNativeCode # maplibre-native

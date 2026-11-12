@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ipykernel";
   version = "7.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
@@ -36,9 +35,9 @@ buildPythonPackage (finalAttrs: {
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
   pythonRemoveDeps = [ "debugpy" ];
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     comm
     ipython
     jupyter-client

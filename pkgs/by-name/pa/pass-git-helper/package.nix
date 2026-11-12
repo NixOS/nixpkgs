@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pass-git-helper";
-  version = "4.3.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "pass-git-helper";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/Brx86YRmSkSr00xj5B5J/bNBqknoXRwX9B6595dEwU=";
+    sha256 = "sha256-g/syiF0rI2DCyfcf7It3/PAQZZrg55cCQrcISPh33rA=";
   };
 
   build-system = with python3Packages; [ setuptools ];

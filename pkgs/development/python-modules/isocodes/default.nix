@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "isocodes";
   version = "2026.9.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Atem18";

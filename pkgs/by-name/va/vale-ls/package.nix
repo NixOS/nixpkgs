@@ -6,18 +6,19 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
   vale,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vale-ls";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "vale-cli";
     repo = "vale-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cwnnle2oaRe4DtO7WuW19wx2winS7eeKkwAPjI4xCjE=";
+    hash = "sha256-cAhABQ7n6SiFDcjGQgNe1LBtunR4k2izEywSffSu0rU=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   checkFlags = [
@@ -42,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
 
-  cargoHash = "sha256-F7bJJ4CLq7xb34G2FKaL48NjD/EjNWeUde2KzloBt18=";
+  cargoHash = "sha256-6VotndueXjZR5nN4Eu/QIxP6ykTlVEkG+SuCL2T3mY0=";
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \

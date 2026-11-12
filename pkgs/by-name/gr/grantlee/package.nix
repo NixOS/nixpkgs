@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   qt5,
   cmake,
 }:
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./grantlee-nix-profiles.patch
     ./grantlee-no-canonicalize-filepath.patch
+    # https://github.com/steveire/grantlee/pull/93
+    ./Fix-cpp-20-build.patch
   ];
 
   outputs = [

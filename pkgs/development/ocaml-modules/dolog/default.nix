@@ -11,7 +11,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "UnixJunkie";
     repo = "dolog";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g68260mcb4G4wX8y4T0MTaXsYnM9wn2d0V1VCdSFZjY=";
   };
 

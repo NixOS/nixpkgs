@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.62.3";
+  version = "2.63.4";
 
   outputs = [
     "out"
@@ -62,12 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-frRJsnIqdoAhNW9m3+4yAsIptU7U5qcM5AwJDpf/FvI=";
+    hash = "sha256-MfB9k1Da0/iWT9YTwxMJrBYP3vE9+sWd9v0ILeeNbo8=";
   };
 
-  # FIXME: This patch should be made unconditional the next time librsvg is
-  # updated.
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+  patches = [
     # Rebased copy of https://gitlab.gnome.org/GNOME/gtk-osx/-/blob/2c1492036ff92d1c87d7b7a4c3c5a7a3f042f825/patches/librsvg-libpixbufloader-install-names.patch.
     # Fixes https://gitlab.gnome.org/GNOME/librsvg/-/work_items/1161.
     ./librsvg-libpixbufloader-install-names.patch
@@ -76,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-9ubfIl9R2BdcAWn7i050KBbb4cMdlakvrKdnjpZCQjA=";
+    hash = "sha256-HXNpilwfKx+IYgZRIunKY8vSP9DgQKIn0zkBvjLR46o=";
     dontConfigure = true;
   };
 
@@ -187,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
       let
         updateSource = gnome.updateScript {
           packageName = "librsvg";
+          versionPolicy = "ninety-micro-unstable";
         };
 
         updateLockfile = {

@@ -17,6 +17,7 @@
   zlib,
 
   electron_41,
+  nix-update-script,
 }:
 
 let
@@ -24,13 +25,13 @@ let
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2026.5.0";
+  version = "2026.7.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-yeYDft2d2RHNXYrmnHlBzsZ43bvBgwwsqxQr/Q+/AuQ=";
+    hash = "sha256-l0vnnIJpG5Ttt9lgWx9tsS8Vne53sGW/50CsnwPFhUQ=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +53,7 @@ buildNpmPackage rec {
     zlib
   ];
 
-  npmDepsHash = "sha256-5y7q6SnA9s85+HFOhqif1N8XRO7ekGJ4nfVbWZ/diuI=";
+  npmDepsHash = "sha256-m2+knAWSSraNGNGjMFoMC9+MlOhs+XyXs90GcMx9ulw=";
 
   makeCacheWritable = true;
 
@@ -131,6 +132,8 @@ buildNpmPackage rec {
       terminal = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/jitsi/jitsi-meet-electron/releases/tag/${src.rev}";

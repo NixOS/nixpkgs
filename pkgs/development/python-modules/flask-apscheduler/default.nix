@@ -14,7 +14,6 @@ buildPythonPackage rec {
   pname = "flask-apscheduler";
   version = "1.13.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "viniciuschiele";

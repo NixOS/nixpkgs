@@ -35,16 +35,16 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "berglas";
-  version = "2.0.17";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "berglas";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-TRx152Xw26FpS6GcKjlC0hNsh/XAUp87h7QfhkYZr5M=";
+    sha256 = "sha256-/0mbhuuHBSCHJ6d5RanCEDmMMQr3Orklax14eyUNDk4=";
   };
 
-  vendorHash = "sha256-gSa5ryDPhE0Sk4UXnaxWPdusIX8xeVykiH4lItfCFEs=";
+  vendorHash = "sha256-7T7aH9d652BydS3yiMV5lzR6XX0Jn1J89CNq4A/c4CY=";
 
   ldflags = [
     "-s"

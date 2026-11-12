@@ -94,6 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://www.openwall.com/lists/musl/2026/04/10/3/1";
       hash = "sha256-HuKfZPnKjorXw0l3nWYf9rUhJqJ1ddNYaYE1elLEBvs=";
     })
+    (fetchurl {
+      name = "CVE-2026-107891.patch";
+      url = "https://www.openwall.com/lists/musl/2026/10/21/1/1";
+      hash = "sha256-DPAJCrQz6PntCK4DoMk6/1V8HT40cmD2KmGhAoH1Mzs=";
+    })
   ];
 
   env = {

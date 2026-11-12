@@ -32,10 +32,14 @@ let
         inherit (package) phpPackage;
         phpOptions = toKeyValue cfg.phpOptions;
         preferLocalBuild = true;
-        passAsFile = [ "phpOptions" ];
+        strictDeps = true;
+        __structuredAttrs = true;
       }
       ''
-        cat $phpPackage/etc/php.ini $phpOptionsPath > $out
+        (
+          cat $phpPackage/etc/php.ini
+          printf "%s" "$phpOptions"
+        ) > $out
       '';
 
   artisanWrapper = pkgs.writeShellScriptBin "librenms-artisan" ''
@@ -562,7 +566,7 @@ in
       user = cfg.user;
       group = cfg.group;
       inherit (package) phpPackage;
-      phpOptions = toKeyValue cfg.phpOptions;
+      phpOptions = cfg.phpOptions;
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = config.services.nginx.user;

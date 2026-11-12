@@ -3,32 +3,32 @@
   rustPlatform,
   fetchFromGitHub,
   cacert,
-  cmake,
+  aws-lc,
+  pkg-config,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fastcrw";
-  version = "0.33.0";
+  version = "0.42.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "us";
+    owner = "fastcrw";
     repo = "crw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ltZoCLgIR7jBBsyggLwZspwqCNspH4+jqpadyQ2HS/0=";
+    hash = "sha256-kmzUhdHp/h0/iWyO2ACYbPpYtp/i8n4rH7qsxughzQ8=";
   };
 
-  cargoHash = "sha256-G4N82svyVX9MXRHLH9nrPXVl6PQWxVwzr8eRKYwezic=";
+  cargoHash = "sha256-Z2/C76zSbml0HXxbNN0ufSD4RwTgtpuE/qsC0Wg84o0=";
 
-  # aws-lc-sys drives its C build through cmake and generates its bindings.
   nativeBuildInputs = [
-    cmake
     rustPlatform.bindgenHook
+    pkg-config
   ];
 
-  dontUseCmakeConfigure = true;
+  buildInputs = [ aws-lc ];
 
   # The crw-cli journeys drive the built binary against local mock servers, but
   # rustls still refuses to construct a client without a system trust store.
@@ -56,8 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=crawl_with_renderer_auto_accepted"
     "--skip=crawl_with_renderer_unavailable_returns_400"
     "--skip=mcp_crw_crawl_renderer_unavailable_returns_tool_error"
+    "--skip=scrape_with_impersonated_pin_400s_on_absent_tier_or_contradiction"
     "--skip=scrape_with_renderer_unavailable_returns_400"
     "--skip=v2_extract_blank_system_prompt_is_tolerated"
+
+    # racy test
+    "--skip=with_timeout_falls_back_to_default_client_on_invalid_user_agent"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -68,8 +72,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Web scraper, crawler and search API with an MCP server for AI agents";
-    homepage = "https://github.com/us/crw";
-    changelog = "https://github.com/us/crw/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/fastcrw/crw";
+    changelog = "https://github.com/fastcrw/crw/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "crw";

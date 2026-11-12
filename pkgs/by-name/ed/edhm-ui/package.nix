@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edhm-ui";
-  version = "3.0.71";
+  version = "3.0.75";
 
   strictDeps = true;
 
   src = fetchzip {
     url = "https://github.com/BlueMystical/EDHM_UI/releases/download/v${finalAttrs.version}/edhm-ui-v3-linux-x64.zip";
-    hash = "sha256-wMsP2VeSbo78II/tT5nBAvOIQc3lCBqy+l0F2r3ulEM=";
+    hash = "sha256-hc3rF641jdk+qPKyiy6KKMU4xHz2hwE3GS7nyajP5BY=";
   };
 
   nativeBuildInputs = [
@@ -114,12 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BlueMystical/EDHM_UI";
     license = [
       lib.licenses.gpl3Plus
-      {
+      (lib.licenses.mkLicense {
         shortName = "edhm-custom";
         fullName = "EDHM Custom Restrictive License - Non-redistributable";
         free = false;
         redistributable = false;
-      }
+      })
     ];
     maintainers = with lib.maintainers; [
       graysontinker

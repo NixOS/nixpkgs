@@ -1,24 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "glance";
-  version = "0.8.5";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
     repo = "glance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2WFX1Gca7ign9i1zOQ9lRdtOSGq9QG33vIA5QTnq9E8=";
+    hash = "sha256-b/FTXk0ZKvCZvJ0F4cJiJ5uByQTShY6MrB3EmdipCow=";
   };
 
-  vendorHash = "sha256-a92V/duqvrWEb8QSJLA5rHYYZCcJ4fBC962SEr4FJDA=";
+  vendorHash = "sha256-btFhC33IwzldCtPi9lqGz7tNG6wqujjIlp11Iqi24qk=";
 
   ldflags = [
     "-s"

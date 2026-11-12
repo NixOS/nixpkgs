@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wsgidav";
-  version = "4.3.5";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mar10";
     repo = "wsgidav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LsHVCGXgeXjHJt6VfB+uKsYjqCybBRcweTGvoR8tJ1E=";
+    hash = "sha256-VRndRDgVSCcj9QoqJ8i/nswqTfmVr1D98uU6LZRnASk=";
   };
 
   pythonRelaxDeps = [ "bcrypt" ];

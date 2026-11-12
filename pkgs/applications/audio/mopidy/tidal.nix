@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Mopidy extension for playing music from Tidal";
     homepage = "https://github.com/EbbLabs/mopidy-tidal";
     changelog = "https://github.com/EbbLabs/mopidy-tidal/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 })

@@ -3,27 +3,31 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  gitMinimal,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwe";
-  version = "0.19.1";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "iwe-org";
     repo = "iwe";
     tag = "iwe-v${finalAttrs.version}";
-    hash = "sha256-rNhOwq9Hk+59MgS2lPL9UfsiJnaMJmDXZKAGZWpJhv4=";
+    hash = "sha256-hmHNNmUBL5SjXNQenFnJY8Ua46uQsRuhjvbgTg7SH2Q=";
   };
 
-  cargoHash = "sha256-MGtm68g2msoCkceAn4ewp3x9hD8r9TEQAX/h1niQVb8=";
+  cargoHash = "sha256-u6g+oCHlp5nTPb+2srV5a5HZseyF0zl5VvqMo/od9Tg=";
 
   cargoBuildFlags = [
     "--package=iwe"
     "--package=iwec"
     "--package=iwes"
   ];
+
+  nativeCheckInputs = [ gitMinimal ];
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     substituteInPlace crates/iwe/tests/common.rs --replace-fail \

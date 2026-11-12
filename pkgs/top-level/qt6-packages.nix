@@ -10,7 +10,6 @@
   __splicedPackages,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
-  stdenv,
   pkgsHostTarget,
   kdePackages,
 }:
@@ -111,8 +110,6 @@ makeScopeWithSplicing' {
 
       qt6ct = callPackage ../tools/misc/qt6ct { };
 
-      qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
-
       qt-color-widgets = callPackage ../development/libraries/qt-color-widgets { };
 
       qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
@@ -163,6 +160,7 @@ makeScopeWithSplicing' {
       wayqt = callPackage ../development/libraries/wayqt { };
     }
     // lib.optionalAttrs config.allowAliases {
+      qt6gtk2 = throw "'qt6Packages.qt6gtk2' has been removed, as it relies on gtk2 libraries"; # Added 2026-09-21
       qwlroots = throw ''
         'qt6Packages.qwlroots' has been removed because it has been merged into treeland upstream.
         The upstream no longer provides it as a standalone development library.

@@ -3,8 +3,9 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  nodejs_22,
+  nodejs_24,
   nix-update-script,
+  nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "jellystat";
@@ -29,10 +30,9 @@ buildNpmPackage (finalAttrs: {
 
   makeCacheWritable = true;
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
   npmPackFlags = [ "--ignore-scripts" ];
-  npmFlags = [ "--legacy-peer-deps" ];
 
   env.NODE_OPTIONS = "--openssl-legacy-provider";
 
@@ -49,7 +49,7 @@ buildNpmPackage (finalAttrs: {
     mkdir -p $out/share/jellystat $out/bin
     cp -r . $out/share/jellystat/
 
-    makeWrapper ${nodejs_22}/bin/node $out/bin/jellystat \
+    makeWrapper ${nodejs_24}/bin/node $out/bin/jellystat \
       --chdir $out/share/jellystat \
       --add-flags $out/share/jellystat/backend/server.js
 
@@ -58,6 +58,7 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) jellystat; };
   };
 
   meta = with lib; {

@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  aws-lc,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "telemt";
@@ -16,6 +18,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-sGimKbZwFQFopSIHB38dareGGdCoorygEj8RhUGb1qE=";
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
+
   checkFlags = [
     # flaky: races between MiddleClientWriterCancelled and TrafficBudgetWaitCancelled observation paths
     "--skip=proxy::middle_relay::middle_relay_atomic_quota_invariant_tests::me_writer_data_write_obeys_flow_cancellation"
@@ -29,12 +35,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/telemt/telemt";
     maintainers = with lib.maintainers; [ r4v3n6101 ];
     platforms = lib.platforms.linux;
-    license = {
+    license = lib.licenses.mkLicense {
       # Custom license "based on Apache License 2 principles"
       shortName = "telemt-pl3";
       fullName = "Telemt Public License 3";
-      free = true;
-      redistributable = true;
     };
   };
 }

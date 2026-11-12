@@ -6,6 +6,7 @@
   cuda_cudart,
   cuda_nvcc,
   cudaAtLeast,
+  cudaMajorMinorVersion,
   cudaNamePrefix,
   fetchFromGitHub,
   flags,
@@ -14,7 +15,6 @@
   patchelf,
   python3,
   rdma-core,
-  removeReferencesTo,
   which,
   # passthru.updateScript
   gitUpdater,
@@ -23,7 +23,8 @@
   withRdmaCore ? true,
 }:
 let
-  inherit (_cuda.lib) _mkMetaBadPlatforms;
+  inherit (_cuda.lib) _getJetsonMinSbsaCapability _mkMetaBadPlatforms;
+  sbsaJetsonCapability = _getJetsonMinSbsaCapability cudaMajorMinorVersion;
   inherit (backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
   inherit (lib)
     all
@@ -56,7 +57,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   #   newer versions of NCCL than what we provide here.
   version =
     if cudaAtLeast "12.0" then
-      "2.31.2-1"
+      "2.32.6-1"
     else if cudaAtLeast "11.7" then
       "2.28.7-1"
     else if cudaAtLeast "11.6" then
@@ -69,11 +70,21 @@ backendStdenv.mkDerivation (finalAttrs: {
     repo = "nccl";
     tag = "v${finalAttrs.version}";
     hash = getAttr finalAttrs.version {
-      "2.31.2-1" = "sha256-G3Nx9pCgSNBYX0CV86ruiNC9aZ9YuZH5hF/WnoOF2mQ=";
+      "2.32.6-1" = "sha256-GgYG84IUJwIPCJGsg2xEGB6kbYakvutI5mH4GGytbNA=";
       "2.28.7-1" = "sha256-NM19OiBBGmv3cGoVoRLKSh9Y59hiDoei9NIrRnTqWeA=";
       "2.26.6-1" = "sha256-vkWMGXCy+dIpYCecdafmOAGlnfRxIQ5Y2ZQuMjinraI=";
       "2.25.1-1" = "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
     };
+    # .git_archival.txt is marked with `export-subst` attribute since
+    # https://github.com/NVIDIA/nccl/commit/76c747405b7846240eaaf4e50f8ee238a5c07ba6
+    # %(describe...) expression generates string like `nccl4py-v0.6.0-3-g12df1a11af`,
+    # but leaves the length of the commit hash prefix up to GitHub's whim that changes
+    # trim everything after `-g` to keep only more stable and predictable parts of this value
+    postFetch = ''
+      if [ -f "$out/bindings/nccl4py/.git_archival.txt" ]; then
+        sed -E -i 's/^(describe-name: .*)-g[0-9a-h]+/\1/' "$out/bindings/nccl4py/.git_archival.txt"
+      fi
+    '';
   };
 
   outputs = [
@@ -89,7 +100,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     cuda_nvcc
     patchelf
     python3
-    removeReferencesTo
     which
   ];
 
@@ -140,17 +150,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     _overrideFirst outputStatic "static" "lib" "out"
     moveToOutput lib/libnccl_static.a "''${!outputStatic:?}"
   ''
-  # Since CUDA 12.8, the cuda_nvcc path leaks in:
-  # - libnccl.so's .nv_fatbin section
-  # - libnccl_static.a
-  # &devrt -L /nix/store/00000000000000000000000000000000-...nvcc-.../bin/...
-  # This string makes cuda_nvcc a runtime dependency of nccl.
-  # See https://github.com/NixOS/nixpkgs/pull/457803
-  + ''
-    remove-references-to -t "${lib.getBin cuda_nvcc}" \
-      ''${!outputLib}/lib/libnccl.so.* \
-      ''${!outputStatic}/lib/*.a
-  ''
   # makefiles/common.mk sets RDMA_CORE=0 and MLX5DV=0, so libibverbs/libmlx5/libgdrapi are dlopen'd
   # rather than DT_NEEDED and buildInputs would not reach the runpath. Losing them is quiet: NCCL
   # logs at INFO and falls back to the socket transport.
@@ -161,15 +160,16 @@ backendStdenv.mkDerivation (finalAttrs: {
     }" "''${!outputLib:?}"/lib/libnccl.so.*.*
   '';
 
-  # C.f. remove-references-to above. Ensure *all* references to cuda_nvcc are removed
+  # nvlink records its library directories in libnccl's device code; cuda_nvcc's nvlink wrapper removes them.
   disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
 
   passthru = {
     platformAssertions = [
       {
-        message = "Pre-Thor Jetson devices (CUDA capabilities < 10.1) are not supported by NCCL";
+        message = "Pre-SBSA Jetson devices (CUDA capabilities < ${sbsaJetsonCapability}) are not supported by NCCL";
         assertion =
-          !hasJetsonCudaCapability || all (flip versionAtLeast "10.1") requestedJetsonCudaCapabilities;
+          !hasJetsonCudaCapability
+          || all (flip versionAtLeast sbsaJetsonCapability) requestedJetsonCudaCapabilities;
       }
     ];
 
@@ -182,13 +182,14 @@ backendStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
+    changelog = "https://github.com/NVIDIA/nccl/releases/tag/${finalAttrs.src.tag}";
     license = licenses.bsd3;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    # NCCL is not supported on Pre-Thor Jetsons, because it does not use NVLink or PCI-e for inter-GPU communication.
-    # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
+    # NCCL does not support Jetson that need NVIDIA's linux-aarch64 (L4T) packages. Since CUDA 13.2, Orin uses SBSA.
+    # https://forums.developer.nvidia.com/t/how-do-i-correctly-install-pytorch-on-jetpack-7-2/372773
     badPlatforms = _mkMetaBadPlatforms finalAttrs;
     maintainers = with maintainers; [
       mdaiter

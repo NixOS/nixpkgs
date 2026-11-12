@@ -21,9 +21,13 @@ let
       lib.mapAttrsToList (
         username: opts:
         let
-          uid = if opts.uid == null then "/var/lib/nixos/uid/${username}" else toString opts.uid;
+          # systemd-sysusers does not split "uid:group" when the UID is a path,
+          # so a ":group" suffix would become part of the path and the marker
+          # file would never be read. The group is set with an "m" line below.
+          id =
+            if opts.uid == null then "/var/lib/nixos/uid/${username}" else "${toString opts.uid}:${opts.group}";
         in
-        ''u ${username} ${uid}:${opts.group} "${opts.description}" ${opts.home} ${utils.toShellPath opts.shell}''
+        ''u ${username} ${id} "${opts.description}" ${opts.home} ${utils.toShellPath opts.shell}''
       ) systemUsers
     )}
 
@@ -42,6 +46,16 @@ let
       lib.mapAttrsToList (
         groupname: opts: (lib.concatMapStrings (username: "m ${username} ${groupname}\n")) opts.members
       ) userCfg.groups
+    )}
+    ${lib.concatStrings (
+      lib.mapAttrsToList (username: opts: "m ${username} ${opts.group}\n") (
+        lib.filterAttrs (
+          username: opts:
+          opts.uid == null
+          && opts.group != username
+          && !(lib.elem username (userCfg.groups.${opts.group}.members or [ ]))
+        ) systemUsers
+      )
     )}
   '';
 
@@ -111,7 +125,7 @@ in
             group = opts.group;
           };
         }
-      ) (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);
+      ) (lib.filterAttrs (_username: opts: opts.createHome && opts.home != "/var/empty") systemUsers);
 
       # Create uid/gid marker files for those without an explicit id
       tmpfiles.settings.nixos-uid = lib.mapAttrs' (

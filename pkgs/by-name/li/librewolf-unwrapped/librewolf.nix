@@ -11,8 +11,6 @@ rec {
 
   inherit (src) packageVersion firefox source;
 
-  extraPatches = [ "${source}/patches/pref-pane/pref-pane-small.patch" ];
-
   extraConfigureFlags = [
     "--with-unsigned-addon-scopes=app,system"
     "--disable-default-browser-agent"
@@ -26,21 +24,31 @@ rec {
 
   extraPreConfigure = ''
     export MOZ_TELEMETRY_REPORTING=
+    export MOZ_PKG_VERSION=${packageVersion}
   '';
 
   extraPostPatch = ''
     while read patch_name; do
+      # Assets (`librewolf.cfg`, `local-settings.js` and `policies.json) are being
+      # applied manually with `extraPrefsFiles` and `extraPoliciesFiles`.
+      if [ "$patch_name" = "patches/lw-dir.patch" ]; then
+        continue
+      fi
+
       echo "applying LibreWolf patch: $patch_name"
       patch -p1 < ${source}/$patch_name
     done <${source}/assets/patches.txt
 
-    sed -i 's/5bc8c9bbe8c0eabe408d9a7cd7a8e6e09eee0ead817607643882b38a36d07c91/bddacbe056ce7458663a39dc99d5bb3434099aa69cae793cf0c57d4e54f5a6a4/g' third_party/rust/glean-core/.cargo-checksum.json
-    sed -i 's/c20989b1aa336b0849e96ec1b2beea1eab825ffd192c2c3a636e20f830b811d0/0b43fbc5f86c6c247c5189af58be425a829c3b09018c6b26589661eec9a5ad24/g' third_party/rust/glean-core/.cargo-checksum.json
+    sed -i 's/e2bc0630d2a94105a5211a3595a824f52f9031ef515080013700849887150230/633b003cb5b0157e739e9d920c7b126e544e66fe839a06f70718118818f9e5fb/g' third_party/rust/glean-core/.cargo-checksum.json
+    sed -i 's/8b28662ab15031496b495fa701f211aa336c119b99c25b522be6f396a1231891/c07441d4938b3331ea81162efc079a489c7c75c48f63b6d6741f699ab420de73/g' third_party/rust/glean-core/.cargo-checksum.json
+
+    find . -type f -name '*.yaml' -exec sed -i 's/follows_collection_enabled: false/follows_collection_enabled: true/g' {} +
 
     rm toolkit/components/ml/content/backends/OpenAIPipeline.mjs
     rm -rf toolkit/components/ml/vendor/openai
 
     cp -r ${source}/themes/browser .
+    cp ${source}/assets/icons/* browser/themes/shared/icons/
     cp ${source}/assets/search-config-v2.json services/settings/dumps/main/search-config-v2.json
     cp ${source}/assets/search-config-icons.json services/settings/dumps/main/search-config-icons.json
     cp ${source}/assets/2c4b8834-030c-4097-a887-c7506689095c services/settings/dumps/main/search-config-icons
@@ -82,7 +90,7 @@ rec {
 
   extraPassthru = {
     librewolf = {
-      inherit src extraPatches;
+      inherit src;
     };
     inherit extraPrefsFiles extraPoliciesFiles;
   };

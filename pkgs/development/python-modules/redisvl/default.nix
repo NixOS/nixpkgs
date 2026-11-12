@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "redisvl";
-  version = "0.27.1";
+  version = "0.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-vl-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0jrSr3fhYt/ofqNBzFl6DM6fY8BaN7fsrCwwVGmlO0A=";
+    hash = "sha256-fT64RCjXk6UEpA+1QYINwI0ppRfC/PvxWuEy2dyKLqM=";
   };
 
   build-system = [ hatchling ];
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python client library and CLI for using Redis as a vector database";
-    homepage = " https://redisvl.com";
+    homepage = "https://redisvl.com";
     changelog = "https://github.com/redis/redis-vl-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "rvl";

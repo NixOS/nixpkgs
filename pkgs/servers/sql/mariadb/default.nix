@@ -52,6 +52,7 @@ let
       libsodium,
       msgpack-cxx,
       zeromq,
+      git,
       withStorageRocks ? true,
       withEmbedded ? false,
       withNuma ? false,
@@ -116,15 +117,10 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
-        env =
-          lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
-            # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
-            NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
-          }
-          // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-            # Detection of netdb.h doesnt work for some reason on x86_64-darwin
-            NIX_CFLAGS_COMPILE = "-DHAVE_NETDB_H";
-          };
+        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+        };
 
         patches = [
           ./patch/cmake-includedir.patch
@@ -298,6 +294,7 @@ let
             judy
             libevent
             libxml2
+            git
           ]
           ++ lib.optional withNuma numactl
           ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
@@ -423,12 +420,12 @@ self: {
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.12";
-    hash = "sha256-WreIPbUZv86/3SqsCbxVRKEs4yjznt1G0L8BaQYV72w=";
+    version = "11.4.13";
+    hash = "sha256-G7JUsQbQp8qHHPoY+m4Y1LgKdDD57J0VcexCcaE975Y=";
   };
   mariadb_118 = self.callPackage generic {
     # Supported until 2028-06-04
-    version = "11.8.8";
-    hash = "sha256-vQI6SVn68BLbfw6/wNJ2cp5n5UQ98ZMWP5jYD9/FJMk=";
+    version = "11.8.9";
+    hash = "sha256-LgFbfpEAQULtqLOiDTzrh1zyrlXnJgPnIizUl9Tlb8Y=";
   };
 }

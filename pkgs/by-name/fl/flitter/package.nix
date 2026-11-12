@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/alexozer/flitter";
     platforms = lib.platforms.unix;
     mainProgram = "flitter";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

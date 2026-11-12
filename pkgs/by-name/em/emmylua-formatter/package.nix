@@ -9,7 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit (emmylua-ls) version src cargoHash;
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   buildAndTestSubdir = "crates/emmylua_formatter";
 

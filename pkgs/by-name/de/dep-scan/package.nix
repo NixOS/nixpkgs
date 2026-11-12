@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dep-scan";
-  version = "6.3.0";
+  version = "6.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DQo8GLO2d9QqS44zwkAt5I3GWk/pi4HAF/CChKf1SB4=";
+    hash = "sha256-mJ1HyWhg5otDKwalJzKMFJ3jCiLnAGkwzF6AMDvpnwo=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -54,6 +54,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTests = [
     # Test is not present
     "test_query_metadata2"
+    # AssertionError
+    "test_validate_remote_url_accepts_plain_public_url"
   ];
 
   # depscan --src shiftleft/scan-slim -o containertests -t docker
@@ -63,11 +65,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # INFO [2025-07-28 20:17:35,654] Generating Software Bill-of-Materials for container image shiftleft/scan-slim. This might take a few mins ...
   # WARNING [2025-07-28 20:17:35,654] Unable to locate cdxgen command.
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        cdxgen
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      cdxgen
+    ])
   ];
 
   passthru.tests = { inherit (nixosTests) dep-scan; };

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  glibmm,
+  glibmm_2_4,
   gtk4-layer-shell,
   gtkmm4,
   libevdev,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    glibmm
+    glibmm_2_4
     gtk4-layer-shell
     gtkmm4
     libevdev
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple heads up display written in gtkmm 4";
     mainProgram = "syshud";
     homepage = "https://github.com/System64fumo/syshud";
-    license = lib.licenses.wtfpl;
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ colinsane ];
   };

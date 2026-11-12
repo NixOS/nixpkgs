@@ -9,16 +9,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdjson";
-  version = "4.6.8";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "simdjson";
     repo = "simdjson";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZMYYjwyeqqlklwY4UWBgT5sJ0Ojkg38Xcxg6CO461Ec=";
+    hash = "sha256-w9vhyjCjm4A094DbiIsWlUx8YajQGXGgNPCYsOOe1Bc=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [ cmake ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   cmakeFlags = [
     (lib.cmakeBool "SIMDJSON_DEVELOPER_MODE" false)

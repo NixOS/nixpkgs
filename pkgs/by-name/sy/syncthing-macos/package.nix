@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syncthing-macos";
-  version = "2.0.14-1";
+  version = "2.1.5-1";
 
   src = fetchurl {
     url = "https://github.com/syncthing/syncthing-macos/releases/download/v${finalAttrs.version}/Syncthing-${finalAttrs.version}.dmg";
-    hash = "sha256-5BjYwS2xcANqEXWadbppUwIGNd1UTQjzhWIAyATwWEU=";
+    hash = "sha256-UJA6KmIhhW4cNuPFxf856JcFPSmqH2ha1XZiLJMGnog=";
   };
 
   nativeBuildInputs = [ undmg ];

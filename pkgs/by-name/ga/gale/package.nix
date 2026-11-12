@@ -14,9 +14,11 @@
   pkg-config,
   wrapGAppsHook3,
 
+  aws-lc,
   glib-networking,
   libsoup_3,
   openssl,
+  sqlite,
   webkitgtk_4_1,
 
   nix-update-script,
@@ -38,13 +40,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.22.2";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-XyMfu3fLN9wongMld1YA7A4BurXABuaLsDl7dh4NbQE=";
+    hash = "sha256-+5dJglKw0aK2FuqqSYpRwo3eA/GA2ighLPTVN6pkTo0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -70,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-/b0a35IO0DHAPiDZy0jG0OXTDd+W36vMX0XD0UfhQ+c=";
+  cargoHash = "sha256-F23Bpkk0ujh4dFzp9tCNEdn/c9rk9IdVt5ipxzMOw+c=";
 
   checkFlags = [
     "--skip=config::bepinex::tests::check_from_string" # Fails a left == right check, even with left and right data being identical
@@ -88,9 +90,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib-networking # needed to load icons
     libsoup_3
     openssl
+    sqlite
     webkitgtk_4_1
   ];
 
@@ -104,6 +108,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       notohh
+      gegnep
     ];
     platforms = lib.platforms.linux;
   };

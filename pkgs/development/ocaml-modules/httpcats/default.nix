@@ -18,15 +18,12 @@
 
 buildDunePackage (finalAttrs: {
   pname = "httpcats";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchurl {
     url = "https://github.com/robur-coop/httpcats/releases/download/v${finalAttrs.version}/httpcats-${finalAttrs.version}.tbz";
-    hash = "sha256-n0InZn+7jaDbf3WaMACdh3DPMfkfewmkcXQAVfR81rg=";
+    hash = "sha256-lYHXFn3E+c7ljuXaqptzRWFQSkhmgWnr71xu1bADE2Y=";
   };
-
-  # Fix tests with x509 1.2
-  patches = [ ./x509-1_2.patch ];
 
   propagatedBuildInputs = [
     h2

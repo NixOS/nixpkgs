@@ -6,9 +6,11 @@
   perl,
   pkg-config,
   curl,
+  libgit2,
   libiconv,
   openssl,
   gitMinimal,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-CYvvwgDZ+yAr7kLGEVZLVx7+sZUc5vu85AT5xLJBSbQ=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   preCheck = ''
     export HOME=$(mktemp -d)
     git config --global user.name "Nixpkgs Test"
@@ -36,7 +40,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

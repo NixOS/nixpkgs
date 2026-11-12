@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "portugueslab";
     repo = "lightparam";
     rev = "v${version}";
-    sha256 = "13hlkvjcyz2lhvlfqyavja64jccbidshhs39sl4fibrn9iq34s3i";
+    hash = "sha256-cWgycEw2r+gI1WloCHWLizFJjJJbeezohlR8z+SeFI4=";
   };
 
   propagatedBuildInputs = [

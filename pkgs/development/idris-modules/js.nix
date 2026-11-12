@@ -18,7 +18,7 @@ build-idris-package {
     owner = "rbarreiro";
     repo = "idrisjs";
     rev = "1ce91ecec69a7174c20bff927aeac3928a01ed3f";
-    sha256 = "13whhccb7yjq10hnngdc8bc9z9vvyir1wjkclpz006cr4cd266ca";
+    hash = "sha256-ihkjGiOZGQD+pWxKHnL0e6ef2EKsPWshCFj6sxiDkI8=";
   };
 
   meta = {

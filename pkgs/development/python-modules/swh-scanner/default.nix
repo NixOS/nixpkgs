@@ -6,8 +6,9 @@
   pythonAtLeast,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-requirements-txt,
+  hatch-vcs,
 
   # dependencies
   flask,
@@ -31,10 +32,8 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-scanner";
-  version = "0.8.3";
+  version = "0.9.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.softwareheritage.org";
@@ -42,12 +41,13 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-scanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-baUUuYFapBD7iuDaDP8CSR9f4glVZcS5qBpZddVf7z8=";
+    hash = "sha256-0I9v4Hae/+UhttLVF5Kw4204M4ZJ1awL6mrnCNzuLwQ=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-requirements-txt
+    hatch-vcs
   ];
 
   dependencies = [

@@ -42,8 +42,8 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ydataai";
-    repo = "ydata-profiling";
+    owner = "Data-Centric-AI-Community";
+    repo = "fg-data-profiling";
     tag = "v${finalAttrs.version}";
     hash = "sha256-CNeHsOpFkKvcCWGEholabcsqXJzINUUxFZ7I5bPBoYM=";
   };
@@ -129,7 +129,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Create HTML profiling reports from Pandas DataFrames";
     homepage = "https://ydata-profiling.ydata.ai";
-    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/Data-Centric-AI-Community/fg-data-profiling/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "ydata_profiling";

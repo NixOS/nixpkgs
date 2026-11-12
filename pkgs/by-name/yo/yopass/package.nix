@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   lib,
+  nixosTests,
 }:
 let
   version = "14.9.0";
@@ -21,7 +22,6 @@ buildGoModule (finalAttrs: {
   pname = "yopass";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   vendorHash = "sha256-CFo/rI6M7pbjVK0AtL92UyehNgobfWkw61tDNvqpCLY=";
 
@@ -41,6 +41,8 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/yopass-server \
       --add-flags "--asset-path ${website}"
   '';
+
+  passthru.tests = nixosTests.yopass;
 
   meta = {
     description = "Secure sharing of secrets, passwords and files";

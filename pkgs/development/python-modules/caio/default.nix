@@ -15,15 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caio";
-  version = "0.12.4";
+  version = "0.12.10";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "caio";
     tag = finalAttrs.version;
-    hash = "sha256-iXrShoaMK39z47y0p0jwQQbQw3iz4cIS49cy6+G8x0k=";
+    hash = "sha256-MVjvXdvJU3PN1veklNNO+ZhqCVq24LoRcl84diWbCso=";
   };
 
   postPatch = ''

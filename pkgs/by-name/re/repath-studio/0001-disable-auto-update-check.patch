@@ -5,32 +5,45 @@ Subject: [PATCH] disable auto update check
 
 Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
 ---
- src/electron/main.cljs | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ src/electron/main.cljs | 10 ----------
+ 1 file changed, 10 deletions(-)
 
 diff --git a/src/electron/main.cljs b/src/electron/main.cljs
-index cdc2a5a0..e86922d6 100644
+index 716dc5a..7383798 100644
 --- a/src/electron/main.cljs
 +++ b/src/electron/main.cljs
 @@ -5,7 +5,6 @@
     ["@sentry/electron/main" :as sentry-electron-main]
-    ["electron" :refer [app shell ipcMain BrowserWindow]]
+    ["electron" :refer [app shell ipcMain BrowserWindow Menu]]
     ["electron-log/main" :as log]
 -   ["electron-updater" :refer [autoUpdater]]
-    ["electron-window-state" :as window-state-keeper]
     ["os" :as os]
     ["path" :as path]
-@@ -148,9 +147,7 @@
-     (register-web-contents-events)
-     (register-ipc-on-events)
-     (register-ipc-handle-events)
--    (register-window-events)
--
--    (.checkForUpdatesAndNotify autoUpdater)))
-+    (register-window-events)))
+    ["url" :as url]
+@@ -64,14 +63,6 @@
+   (.close ^js @loading-window)
+   (.initialize log)
  
- (defn init-loading-window! []
-   (set! (.-allowRendererProcessReuse app) false)
+-  (set! (.-autoDownload autoUpdater) false)
+-
+-  (.on autoUpdater "update-available"
+-       (fn [^js info]
+-         (send-to-renderer "update-available" (.-version info))))
+-
+-  (.checkForUpdatesAndNotify autoUpdater)
+-
+   (send-to-renderer (if (.isMaximized ^js @main-window)
+                       "maximized"
+                       "unmaximized"))
+@@ -104,8 +95,7 @@
+      ["save-document" file/save]
+      ["save-document-as" file/save-as]
+      ["print" file/show-print-dialog]
+-     ["open-documents-from-args" #(open-arg-document (.-argv js/process))]
+-     ["apply-update" #(.downloadUpdate autoUpdater)]]]
++     ["open-documents-from-args" #(open-arg-document (.-argv js/process))]]]
+     (.handle ipcMain e #(f %2))))
+ 
+ (defn register-window-events []
 -- 
 2.55.0
-

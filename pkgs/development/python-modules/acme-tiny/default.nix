@@ -4,9 +4,8 @@
   fetchPypi,
   setuptools,
   setuptools-scm,
-  fusepy,
-  fuse,
-  openssl,
+  pkgs,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +20,10 @@ buildPythonPackage rec {
   };
 
   patchPhase = ''
-    substituteInPlace acme_tiny.py --replace-fail '"openssl"' '"${openssl.bin}/bin/openssl"'
-    substituteInPlace tests/test_module.py --replace-fail '"openssl"' '"${openssl.bin}/bin/openssl"'
-    substituteInPlace tests/utils.py --replace-fail /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf
+    substituteInPlace acme_tiny.py tests/utils.py tests/test_module.py \
+      --replace-fail '"openssl"' '"${lib.getExe pkgs.openssl}"'
+    substituteInPlace tests/utils.py \
+      --replace-fail /etc/ssl/openssl.cnf ${pkgs.openssl.out}/etc/ssl/openssl.cnf
   '';
 
   build-system = [
@@ -32,9 +32,15 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    fusepy
-    fuse
+    pytestCheckHook
   ];
+
+  doCheck = false; # fails to setup pebble
+
+  preCheck = ''
+    export ACME_TINY_PEBBLE_BIN=${lib.getExe pkgs.pebble}
+    export ACME_TINY_DOMAIN=localhost
+  '';
 
   pythonImportsCheck = [ "acme_tiny" ];
 

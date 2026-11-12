@@ -11,7 +11,7 @@ buildFishPlugin {
     owner = "derekstavis";
     repo = "fish-ai";
     rev = "b22952232fbf71287c56c8a09c8be2f938d33b51";
-    sha256 = "sha256-ogkbNX+e5qaEbW+iO3na8JC2Xfk/9BndXRm2AcHyOmc=";
+    hash = "sha256-ogkbNX+e5qaEbW+iO3na8JC2Xfk/9BndXRm2AcHyOmc=";
   };
 
   meta = {

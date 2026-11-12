@@ -22,6 +22,7 @@
   ld64,
   libffi,
   libiconv,
+  libplist,
   libxml2,
   llvmPackages,
   ncurses,
@@ -180,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # copy sigtool
       cp -d ${getBin darwin.sigtool}/bin/{codesign,sigtool} $out/bin
+      cp -d ${getLib libplist}/lib/libplist*.dylib $out/lib
 
       # tools needed to unpack bootstrap archive
       mkdir -p unpack/bin unpack/lib
