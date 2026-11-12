@@ -379,8 +379,8 @@ in
       "sha256-FDEjPH5F5uHLbEXYHd93tjJxI9IIARZgUPlL0gL/3gY=";
 
   mypy-boto3-datasync =
-    buildMypyBoto3Package "datasync" "1.44.0"
-      "sha256-PYiWW5GGTxoQDLTitRuhjKnjmf39sE0ZN0yMRXbCvNA=";
+    buildMypyBoto3Package "datasync" "1.44.1"
+      "sha256-ox/QQ0hT4yFQE9UiI0H0zAQH0GQDSpvZnfKFIkTHr/g=";
 
   mypy-boto3-dax =
     buildMypyBoto3Package "dax" "1.44.0"
