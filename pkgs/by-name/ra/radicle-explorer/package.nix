@@ -13,7 +13,7 @@ buildNpmPackage (finalAttrs: {
   version = "0-unstable-2026-11-09";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.dev";
+    seed = "oak.radicle.garden";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
     rev = "11cf896b903fafc8ff860f8547394d98664ecd99";
     nonConeMode = true;
