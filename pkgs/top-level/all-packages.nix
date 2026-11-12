@@ -1797,7 +1797,7 @@ with pkgs;
 
   cudaPackages_12 = cudaPackages_12_9;
 
-  cudaPackages_13 = cudaPackages_13_4;
+  cudaPackages_13 = cudaPackages_13_5;
 
   cudaPackages = recurseIntoAttrs cudaPackages_13;
 
