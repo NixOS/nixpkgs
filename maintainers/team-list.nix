@@ -377,7 +377,6 @@ with lib.maintainers;
 
   jetbrains = {
     members = [
-      leona
       theCapypara
       jamesward
     ];
