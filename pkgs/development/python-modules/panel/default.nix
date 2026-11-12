@@ -67,6 +67,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ locnide ];
+    maintainers = with lib.maintainers; [
+      locnide
+      sarahec
+    ];
   };
 })
