@@ -4017,12 +4017,12 @@ final: prev: {
 
   confetti-vim-syntax = buildVimPlugin {
     pname = "confetti-vim-syntax";
-    version = "0.1.0";
+    version = "0.1.1";
     src = fetchFromGitHub {
       owner = "unclechu";
       repo = "confetti-vim-syntax";
-      tag = "v0.1.0";
-      hash = "sha256-1aUmEG2x+WsrjL+6Tixoh4rzx1PeCBw2JxyWuh6qxjA=";
+      tag = "v0.1.1";
+      hash = "sha256-WVciS1f8c1RYODH+EQQQcWDR/qSWJjJg6UwH3vuDIxg=";
     };
     meta.homepage = "https://github.com/unclechu/confetti-vim-syntax/";
     meta.license = getLicenseFromSpdxId "Unlicense";
