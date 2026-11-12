@@ -59,6 +59,7 @@ buildNpmPackage rec {
       exec = "bruno %U";
       icon = "bruno";
       comment = "Opensource API Client for Exploring and Testing APIs";
+      mimeTypes = [ "x-scheme-handler/bruno" ];
       categories = [ "Development" ];
       startupWMClass = "Bruno";
     })
