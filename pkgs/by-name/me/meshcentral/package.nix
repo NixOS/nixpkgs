@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "meshcentral";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "Ylianst";
     repo = "MeshCentral";
     tag = finalAttrs.version;
-    hash = "sha256-a+vqNjmKP866O2t+UsedpgYtWFbjeoYNtuCziAa436A=";
+    hash = "sha256-nDBgXSWrkMhfnGgpWJQyaUCz2RuF1P7U1I8A4qTIYh0=";
   };
 
-  npmDepsHash = "sha256-ZnSpqw4pn6OI8Gh9qLseTLH24jtj1zPGfHiMlUX+l/s=";
+  npmDepsHash = "sha256-7AajJbMRirj1diuSIHC8MgYMChsZfvq1t+IBk0y/46Y=";
   # Using the npmDeps with a newer nodejs causes `npm ci` errors, also upstream
   # states they stick to the LTS version of nodejs:
   # https://meshcentral.com/docs/MeshCentral2InstallGuide.pdf
@@ -29,6 +29,12 @@ buildNpmPackage (finalAttrs: {
     # main file as a module, and thus nothing happens when it runs. We remove
     # this conditional since we never use this as a module.
     ./run.patch
+    # Modules with a pinned version (e.g. `otplib`, `ua-client-hints-js`) that
+    # have `exports` in their `package.json` are looked up in `$out/lib/node_modules`
+    # by the fallback check, but we install them into
+    # `$out/lib/node_modules/meshcentral/node_modules`. Without this MeshCentral
+    # thinks they are missing and tries to run `npm install` at runtime.
+    ./fix-module-version-check.patch
     # Add `optionalDependencies` that are used during runtime, to
     # `package{,-lock}.json`. During a video meeting with upstream, they sort
     # of agreed to track these optionalDependencies from now on, but they are
