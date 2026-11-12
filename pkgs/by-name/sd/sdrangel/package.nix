@@ -48,13 +48,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "7.27.2";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hq43N6wK8qhGmVOWaslDcPMCLFznzdgziLZq0Ver/AI=";
+    hash = "sha256-lnXTxuRzpfZNU10mytpw6EnfqiN5DZMGHT9k4LSEipQ=";
   };
 
   __structuredAttrs = true;
