@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   nix-update-script,
+  nixosTests,
   versionCheckHook,
 }:
 
@@ -130,7 +131,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "changedetectionio.flask_app"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) changedetection-io; };
+  };
 
   meta = {
     description = "Self-hosted free open source website change detection tracking, monitoring and notification service";
