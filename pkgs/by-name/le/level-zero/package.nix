@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YX+fE+FXMQlml2H5oGOOJMy9ESM042EvRO/n0QLouWQ=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   patches = [
     # The loader checks for drivers in fixed directories before dlopen, ignoring RUNPATH
     ./search-run-opengl-driver.patch
