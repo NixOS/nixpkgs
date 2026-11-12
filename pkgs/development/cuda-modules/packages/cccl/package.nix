@@ -1,71 +1,65 @@
 {
-  buildRedist,
-  cudaAtLeast,
-  cudaOlder,
-  lib,
+  backendStdenv,
+  callPackage,
+  cmake,
+  fetchFromGitHub,
   fetchpatch,
+  lib,
+  manifests,
+  markForCudatoolkitRootHook,
 }:
-buildRedist {
-  redistName = "cuda";
-  pname = if cudaAtLeast "13.3" then "cccl" else "cuda_cccl";
+let
+  inherit (lib.strings) cmakeBool cmakeFeature;
 
-  # Restrict header-only packages to a single output.
-  # Also, when using multiple outputs (i.e., `out`, `dev`, and `include`), something isn't being patched correctly,
-  # so libnvshmem fails to build, complaining about being unable to find the thrust include directory. This is likely
-  # because the `dev` output contains the CMake configuration and is written to assume it will share a parent
-  # directory with the include directory rather than be in a separate output.
-  outputs = [ "out" ];
+  # NVIDIA renamed cuda_cccl to cccl in CUDA 13.3.
+  redist = manifests.cuda.cccl or manifests.cuda.cuda_cccl;
 
-  prePatch = lib.optionalString (cudaAtLeast "13.0") ''
-    nixLog "removing top-level $PWD/include/nv directory"
-    rm -rfv "$PWD/include/nv"
-    nixLog "un-nesting top-level $PWD/include/cccl directory"
-    mv -v "$PWD/include/cccl"/* "$PWD/include/"
-    nixLog "removing empty $PWD/include/cccl directory"
-    rmdir -v "$PWD/include/cccl"
-  '';
+  release =
+    (import ./releases.nix { inherit fetchpatch; }).${redist.version}
+      or (throw "cudaPackages.cccl: no CCCL release is known for the ${redist.version} redistributable; add it to releases.nix");
+in
+backendStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  patches =
-    lib.optionals (cudaAtLeast "12.9" && cudaOlder "13.0") [
-      # Fix missing _CCCL_PP_SPLICE_WITH_IMPL20 in preprocessor.h
-      # https://github.com/NVIDIA/cccl/issues/4967
-      # https://github.com/NVIDIA/cccl/pull/4972
-      (fetchpatch {
-        name = "fix-missing-_CCCL_PP_SPLICE_WITH_IMPL20";
-        url = "https://github.com/NVIDIA/cccl/commit/2c2276d8b19d737cb16811ce2eb761030f472e60.patch";
-        stripLen = 1;
-        hash = "sha256-hYfMFsd7Y8CwuNGaPYG6uEB+lg1TmWSIIU5ToVMULKY=";
-      })
-    ]
-    ++ lib.optionals (cudaAtLeast "13.2" && cudaOlder "13.3") [
-      # Fix onnxruntime compilation error: https://github.com/microsoft/onnxruntime/issues/28023
-      # Backport: https://github.com/NVIDIA/cccl/pull/8771
-      (fetchpatch {
-        name = "fix-invalid-cpp-syntax";
-        url = "https://github.com/NVIDIA/cccl/commit/8e41eeabe54ab9ae48ad5640cfa7153b0a1071af.patch";
-        stripLen = 2;
-        extraPrefix = "include/";
-        hash = "sha256-eko1GSD2NPSLtbQ3diwgKMbuS6wU9lHDOajLJy5lBwM=";
-      })
-    ]
-    ++ lib.optionals (cudaAtLeast "13.4" && cudaOlder "13.5") [
-      # cuda::make_tma_descriptor checks the outermost box dimension instead of the innermost against the 16-byte
-      # requirement, rejecting valid descriptors; fixed in CCCL 3.5.0.
-      # Backport: https://github.com/NVIDIA/cccl/pull/10546
-      (fetchpatch {
-        name = "fix-make_tma_descriptor";
-        url = "https://github.com/NVIDIA/cccl/commit/c95095c8d5faf1d8e978057a4f5cc0c27bccab70.patch";
-        relative = "libcudacxx/include";
-        extraPrefix = "include/";
-        hash = "sha256-QmbzcRMHNX2PuUihaXNrbB2kWwAOUArC4OZ6v9+Tf/g=";
-      })
-    ];
+  pname = "cccl";
+  inherit (release) version;
 
-  # NVIDIA, in their wisdom, expect CCCL to be a directory inside include.
+  src = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "cccl";
+    tag = "v${finalAttrs.version}";
+    inherit (release) hash;
+  };
+
+  patches = release.patches or [ ];
+
+  nativeBuildInputs = [
+    cmake
+    markForCudatoolkitRootHook
+  ];
+
+  # The developer builds need a CUDA compiler, and are enabled by default before CCCL 3.0.
+  cmakeFlags = [
+    (cmakeBool "CCCL_ENABLE_LIBCUDACXX" false)
+    (cmakeBool "CCCL_ENABLE_CUB" false)
+    (cmakeBool "CCCL_ENABLE_THRUST" false)
+    (cmakeBool "CCCL_ENABLE_EXAMPLES" false)
+    # The *-header-search.cmake files append CMAKE_INSTALL_INCLUDEDIR to a path relative to their own directory, so the
+    # absolute path set by the CMake setup hook makes find_package fail to locate the headers.
+    (cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+  ]
+  # Before CCCL 2.8, the install rules of each library are only enabled with its developer build.
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "2.8") [
+    (cmakeBool "libcudacxx_ENABLE_INSTALL_RULES" true)
+    (cmakeBool "CUB_ENABLE_INSTALL_RULES" true)
+    (cmakeBool "THRUST_ENABLE_INSTALL_RULES" true)
+  ];
+
+  # CUDA 13 installs CCCL in include/cccl, where projects such as CUTLASS look for it.
   # https://github.com/NVIDIA/cutlass/blob/087c84df83d254b5fb295a7a408f1a1d554085cf/CMakeLists.txt#L773
-  postInstall = lib.optionalString (cudaAtLeast "13.0") ''
-    nixLog "creating alias for ''${!outputInclude:?}/include/cccl"
-    ln -srv "''${!outputInclude:?}/include" "''${!outputInclude:?}/include/cccl"
+  postInstall = lib.optionalString (lib.versionAtLeast finalAttrs.version "3") ''
+    ln -sv . "$out/include/cccl"
   '';
 
   meta = {
@@ -75,6 +69,26 @@ buildRedist {
       efficient code.
     '';
     homepage = "https://github.com/NVIDIA/cccl";
-    changelog = "https://github.com/NVIDIA/cccl/releases";
+    changelog = "https://github.com/NVIDIA/cccl/releases/tag/v${finalAttrs.version}";
+    license =
+      with lib.licenses;
+      AND [
+        (WITH asl20 llvm-exception)
+        asl20
+        bsd2
+        bsd3
+        boost
+        mit
+        ncsa
+      ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      connorbaker
+    ];
+    teams = [ lib.teams.cuda ];
   };
-}
+})
