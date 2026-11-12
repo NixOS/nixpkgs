@@ -1,6 +1,7 @@
 { callPackage }:
 
 {
+  code_forge = callPackage ./code_forge { };
   file_picker = callPackage ./file_picker { };
   flutter_discord_rpc = callPackage ./flutter_discord_rpc { };
   flutter_secure_storage_linux = callPackage ./flutter-secure-storage-linux { };
@@ -27,4 +28,5 @@
   super_native_extensions = callPackage ./super_native_extensions { };
   volume_controller = callPackage ./volume_controller { };
   xdg_directories = callPackage ./xdg_directories { };
+  zstandard_linux = callPackage ./zstandard_linux { };
 }
