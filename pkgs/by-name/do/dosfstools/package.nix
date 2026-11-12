@@ -8,6 +8,7 @@
   libiconv,
   gettext,
   xxd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ xxd ];
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
