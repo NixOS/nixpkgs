@@ -22,6 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vR/TtfUOa2Fmc4APfqG+Xu+mTAILGV+/JJnnmNHNJdQ=";
   };
 
+  # The python modules don't link libpython; let the interpreter provide its symbols at load time
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/python/Makefile.am \
+      --replace-fail "_LDFLAGS = -no-undefined -module" "_LDFLAGS = -Wl,-undefined,dynamic_lookup -module"
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
