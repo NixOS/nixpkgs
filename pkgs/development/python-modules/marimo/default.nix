@@ -41,6 +41,11 @@ buildPythonPackage rec {
     hash = "sha256-k02yzrbCuMmuNRSnoi5rIuz1T6vqC2E4rtGYD48VNv8=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.8.3,<0.13.0' 'uv_build>=0.8.3'
+  '';
+
   build-system = [ uv-build ];
 
   pythonRelaxDeps = [ "jedi" ];
