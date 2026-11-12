@@ -41,6 +41,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [ "zstd/pkg-config" ];
 
+  # libgit2-sys 0.17 needs libgit2 1.8, nixpkgs has 1.9: use the bundled copy
+  preBuild = ''
+    export LIBGIT2_NO_VENDOR=0
+  '';
+
   checkFlags = [
     # extra test files not shipped with the repository
     "--skip=functions::tests::test_list_up_contents"
