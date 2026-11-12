@@ -11,7 +11,7 @@
   nodejs_22,
   pkg-config,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_12,
   stdenv,
   # Linux Dependents
   glib-networking,
@@ -46,9 +46,9 @@ rustPlatform.buildRustPackage (
         src
         patches
         ;
-      pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-nwqUTgcLxEq01Q2vEJNFxBTPH/vi3u+LKADrqE+9cXg=";
+      pnpm = pnpm_12;
+      fetcherVersion = 5;
+      hash = "sha256-cJ4qYkpUV4nczhvd+5WfE+0fA8Fu67viBSfvPAwTvjk=";
     };
 
     cargoRoot = "packages/player/src-tauri";
@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (
       nodejs_22
       pkg-config
       pnpmConfigHook
-      pnpm_10
+      pnpm_12
       wrapGAppsHook4
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
@@ -93,9 +93,9 @@ rustPlatform.buildRustPackage (
 
     meta = {
       description = "Streaming music player that finds free music for you";
-      homepage = "https://nuclear.js.org/";
-      license = lib.licenses.agpl3Plus;
-      maintainers = [ ];
+      homepage = "https://nuclearplayer.com/";
+      license = lib.licenses.agpl3Only;
+      maintainers = [ lib.maintainers.proteus ];
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
       mainProgram = "nuclear-music-player";
     };
