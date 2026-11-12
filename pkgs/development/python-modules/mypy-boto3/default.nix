@@ -335,8 +335,8 @@ in
       "sha256-UhRUrwj+/kd3zRTPyK0kFiXeAq1r9G29Qntc+lQV8b0=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.44.0"
-      "sha256-bDkAtSXDQQU+Ch0v/kwEPsQuijGKXDqE2QellrhSHPM=";
+    buildMypyBoto3Package "connect" "1.44.1"
+      "sha256-2ahNtyh17pHNwa0xaGr0REWv3T0Hfy6ZTU3mjl9tzrY=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.44.0"
