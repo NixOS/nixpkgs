@@ -29,6 +29,8 @@ buildGo126Module (finalAttrs: {
     "main.version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   checkFlags =
     let
       # these tests require a network connection
