@@ -57,10 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./bundled-mods.patch
     ./game-data-in-home.patch
     (fetchpatch2 {
+      name = "metainfo-add-1.12-releases.patch";
       url = "https://github.com/exult/exult/commit/6baa6d252fdbc9212b09e59b95c4838b7e3e63c3.patch?full_index=1";
       hash = "sha256-424sACGG8rZpBZjtBvINZwEwG2w3FpcyJDi0Qy3zWrQ=";
       includes = [ "desktop/*.metainfo.xml" ];
-      name = "metainfo-add-1.12-releases.patch";
+    })
+    # https://github.com/exult/exult/commit/f3fcdb521bcf5531256abf07538b50fc2d33a425
+    (fetchpatch2 {
+      name = "mockup-palette-size.patch";
+      url = "https://github.com/exult/exult/commit/f3fcdb521bcf5531256abf07538b50fc2d33a425.patch?full_index=1";
+      hash = "sha256-6UBIXif8T+8bHy1PLz7rMQBI56BrT8g7rHUqPHaa3UU=";
     })
   ];
 
@@ -111,8 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableTools [ "--enable-shp-thumbnailer=ingame" ];
 
-  # mockup check aborts on Darwin
-  doCheck = enableTools && !stdenv.hostPlatform.isDarwin;
+  doCheck = enableTools;
   preCheck = ''
     export SDL_VIDEODRIVER=dummy
   '';
