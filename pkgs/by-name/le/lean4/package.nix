@@ -100,6 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MIMALLOC" finalAttrs.mimalloc-src.outPath)
   ];
 
+  postFixup = ''
+    # Replace the installed copy of `leantar` with a symlink.
+    ln -sf ${leangz}/bin/leantar $out/bin/leantar
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
