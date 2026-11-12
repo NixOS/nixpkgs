@@ -2,27 +2,29 @@
   lib,
   stdenv,
   fetchurl,
-  perl,
-  pkg-config,
-  wrapGAppsHook3,
-  SDL,
-  bzip2,
+  SDL2,
   glib,
   gtk3,
-  libgcrypt,
   libpng,
   libspectrum,
   libxml2,
+  perl,
+  pkg-config,
+  versionCheckHook,
+  wrapGAppsHook3,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-emulator";
-  version = "1.9.1";
+  version = "1.10.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/fuse-emulator/fuse-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WBW0IlbU3ShYHVnzzuwz/Nc2t6aK/gMrHmW6cU+1VkI=";
+    hash = "sha256-9XzTDxW6xvt6hzsO5AbrABRhdpH2ZcqgHQAWJLSVPpc=";
   };
 
   nativeBuildInputs = [
@@ -32,11 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    SDL
-    bzip2
+    SDL2
     glib
     gtk3
-    libgcrypt
     libpng
     libspectrum
     libxml2
@@ -45,14 +45,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-desktop-integration" ];
 
+  doCheck = true;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "https://fuse-emulator.sourceforge.net/";
     description = "ZX Spectrum emulator";
-    mainProgram = "fuse";
+    homepage = "https://fuse-emulator.sourceforge.net/";
+    changelog = "https://sourceforge.net/p/fuse-emulator/fuse/ci/fuse-${finalAttrs.version}/tree/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
     maintainers = [ ];
+    platforms = lib.platforms.linux;
+    mainProgram = "fuse";
   };
 })
