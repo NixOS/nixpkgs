@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
     homepage = "https://github.com/dosfstools/dosfstools";
+    changelog = "https://github.com/dosfstools/dosfstools/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
     maintainers = [
