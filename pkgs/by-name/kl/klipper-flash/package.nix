@@ -7,7 +7,7 @@
   dfu-util,
   stm32flash,
   mcu ? "mcu",
-  flashDevice ? null,
+  flashDevice ? "/dev/null",
   canbusNetwork ? null,
   canbusDevice ? null,
   firmwareConfig ? ./simulator.cfg,
