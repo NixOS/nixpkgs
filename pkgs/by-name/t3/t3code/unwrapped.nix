@@ -1,7 +1,6 @@
 {
   cctools,
   copyDesktopItems,
-  desktop-file-utils,
   electron_44,
   fetchFromGitHub,
   installShellFiles,
@@ -20,7 +19,6 @@
   stdenv,
   writeDarwinBundle,
   xcbuild,
-  xdg-utils,
   fetchPnpmDeps,
   pnpm_12,
   pnpmConfigHook,
@@ -181,13 +179,7 @@ stdenv.mkDerivation (
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop \
-        --inherit-argv0 \
-        ${lib.optionalString stdenv.hostPlatform.isLinux ''--prefix PATH : "${
-          lib.makeBinPath [
-            desktop-file-utils
-            xdg-utils
-          ]
-        }"''}
+        --inherit-argv0
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # node-pty tries to chmod this helper at runtime, but the Nix store is
