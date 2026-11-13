@@ -37,8 +37,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-AFHhZWHDAmSH1TFm4YOnUCpXaAmTgbjPus3GnMTSqA4=";
   };
 
-  patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # fix architecture checks in build.rs to fix build for non x86_64
+  patches = [
+    # fix missing target_arch checks for avx512 feature
     ./cross-arch-compat.patch
   ];
 
