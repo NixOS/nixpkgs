@@ -5497,6 +5497,8 @@ self: super: with self; {
 
   edalize = callPackage ../development/python-modules/edalize { };
 
+  edgartools = callPackage ../development/python-modules/edgartools { };
+
   edge-tts = callPackage ../development/python-modules/edge-tts { };
 
   editables = callPackage ../development/python-modules/editables { };
@@ -7974,6 +7976,8 @@ self: super: with self; {
   httpx2 = callPackage ../development/python-modules/httpx2 { };
 
   httpx2-pytest = callPackage ../development/python-modules/httpx2-pytest { };
+
+  httpxthrottlecache = callPackage ../development/python-modules/httpxthrottlecache { };
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
