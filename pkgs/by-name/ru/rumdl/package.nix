@@ -4,7 +4,6 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
-  gitMinimal,
   rust-jemalloc-sys,
   aws-lc,
   stdenv,
@@ -34,10 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ];
-
-  nativeCheckInputs = [
-    gitMinimal
   ];
 
   buildInputs = [
