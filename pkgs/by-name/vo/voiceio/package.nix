@@ -106,6 +106,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       libayatana-appindicator
       pango.out
     ])
+    # Pin the interpreter explicitly: upstream's find_system_python() probes
+    # /usr/bin/python3 and /run/current-system/sw/bin/python3 before
+    # sys.executable, so without this the GObject subprocesses could select a
+    # different Python than the one voiceio is installed in.
     "--set"
     "VOICEIO_SYSTEM_PYTHON"
     (lib.getExe systemPython)
