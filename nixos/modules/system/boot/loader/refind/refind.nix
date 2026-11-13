@@ -31,6 +31,8 @@ let
       timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
       extraConfig = cfg.extraConfig;
       additionalFiles = cfg.additionalFiles;
+      
+      inherit icons profileIcons;
     }
   );
 in
@@ -81,6 +83,18 @@ in
 
           See {option}`boot.loader.grub.efiInstallAsRemovable`
         '';
+      };
+      icon = lib.mkOption {
+        type = lib.types.nullOr (lib.types.either lib.types.path lib.types.str);
+        default = null;
+        example = "os_nixos.png";
+        description = "Icon filename in /efi/refind/icons, an ESP-relative path, or a Nix store path.";
+      };
+      profileIcons = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.either lib.types.path lib.types.str);
+        default = { };
+        example = { work = "os_ubuntu.png"; };
+        description = "Per-profile icon overrides.";
       };
     };
   };
