@@ -23,7 +23,7 @@
 
 let
   pname = "zammad";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -87,7 +87,7 @@ stdenvNoCC.mkDerivation {
     pnpm = pnpm_11;
 
     fetcherVersion = 4;
-    hash = "sha256-fLC1bcqVDPUb84SN3J9BKMNL0idK0mXQqwr+o52kRLI=";
+    hash = "sha256-ZIDcpzfVpb6rh2DVNamk2OEt/bpRQa3FPK5I+mWQ/Js=";
   };
 
   buildPhase = ''
