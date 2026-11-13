@@ -14,11 +14,7 @@ in
   meta.maintainers = [ lib.maintainers.quantenzitrone ];
 
   options.services.qemuGuest = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Whether to enable the qemu guest agent.";
-    };
+    enable = lib.mkEnableOption "the qemu guest agent";
     package = mkPackageOption pkgs [ "qemu_kvm" "ga" ] { };
   };
 
