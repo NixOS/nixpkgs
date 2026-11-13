@@ -69,14 +69,11 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-mock
-    matplotlib
-    pyvisa-py
-    openpyxl
-    networkx
     pytestCheckHook
     pytest-cov-stub
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
 
