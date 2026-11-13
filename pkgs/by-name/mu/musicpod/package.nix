@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter341,
+  flutter344,
   fetchFromGitHub,
   alsa-lib,
   mpv-unwrapped,
@@ -15,15 +15,15 @@
   dart,
 }:
 
-flutter341.buildFlutterApplication (finalAttrs: {
+flutter344.buildFlutterApplication (finalAttrs: {
   pname = "musicpod";
-  version = "2.16.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-riBBJXeSsCi3i0+aKnGElIbhQdvkpvIqMdu4FB3veFU=";
+    hash = "sha256-1NExoDNp3/EiIb0e+BVjNOsvKogGpWGuDwQ+Cw0AYPo=";
   };
 
   customSourceBuilders = {
