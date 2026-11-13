@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "certbot";
-  version = "5.9.0";
+  version = "5.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Josk4he121DjSNGgP3aZwN9lHsX3H3YaKvghTycXvm0=";
+    hash = "sha256-+XPoVRF/1RgeETGHNIzgrojMAl2JWrJQ4B+EZn3u/40=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/certbot";
