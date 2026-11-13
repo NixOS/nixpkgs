@@ -223,8 +223,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
 
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
+    # Since 3.8.10, build:electron deletes and recreates electron-dist for the
+    # app's own compiled code. Keep the Electron runtime under a different name
+    # so the build hook cannot remove it.
+    cp -r ${electron.dist} electron-runtime
+    chmod -R u+w electron-runtime
   ''
   + lib.optionalString hasOCR ''
     # ---- offline built-in OCR resources (since v3.8.7) ----
@@ -269,7 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
     electronBuilderArgs=(
       --dir
       --config electron-builder-${platformId}.yml
-      -c.electronDist=electron-dist
+      -c.electronDist=electron-runtime
       -c.electronVersion=${electron.version}
       -c.mac.identity=null
     )
