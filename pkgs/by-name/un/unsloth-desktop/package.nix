@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "0.1.808-beta";
+  version = "0.1.916-beta";
 
   unsloth-desktop-unwrapped = stdenv.mkDerivation {
     pname = "unsloth-desktop-unwrapped";
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/unslothai/unsloth/releases/download/v${version}/Unsloth-Desktop-Ubuntu.deb";
-      hash = "sha256-cyKUax4L5foIOT6RyOeGnbH72kpLFKjWtYv0cJszkLw=";
+      hash = "sha256-3Co+2g1l35xU5W9RrkFQkcljGTRuqH0cFbXNC7xMnb8=";
     };
 
     nativeBuildInputs = [ dpkg ];
