@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.16)
+project(consumer LANGUAGES CXX)
+enable_testing()
+foreach(component IN LISTS COMPONENTS)
+  find_package(OusterSDK ${SDK_VERSION} EXACT CONFIG REQUIRED COMPONENTS ${component})
+endforeach()
+foreach(library ouster_viz shared_library)
+  add_executable(test_${library} main.cpp)
+  target_link_libraries(test_${library} PRIVATE OusterSDK::${library})
+  add_test(NAME ${library} COMMAND test_${library})
+endforeach()
+# Link core explicitly, as in upstream's visualization examples.
+target_link_libraries(test_ouster_viz PRIVATE OusterSDK::ouster_core)

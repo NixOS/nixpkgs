@@ -75,10 +75,10 @@
 qtModule {
   pname = "qtwebengine";
 
-  version = "6.140.0-rc";
+  version = "6.140.0";
   src = fetchzip {
-    url = "https://download.qt.io/development_releases/qtwebengine/6.140.0-rc/qtwebengine-everywhere-src-6.140.0-rc.tar.xz";
-    hash = "sha256-ij7oWNkbzf98FwKjhub3lyvDb32G4qFtUiYJvdlw01Y=";
+    url = "https://download.qt.io/official_releases/qtwebengine/6.140/6.140.0/src/qtwebengine-everywhere-src-6.140.0.tar.xz";
+    hash = "sha256-t8n34Ica4VIfe026Ubk4hvdJvIPMWrm6eKMITd6evJs=";
   };
 
   nativeBuildInputs = [

@@ -2,6 +2,7 @@
   lib,
   backendStdenv,
   fetchFromGitHub,
+  fetchpatch,
   flags,
 
   # nativeBuildInputs
@@ -37,6 +38,14 @@ backendStdenv.mkDerivation (finalAttrs: {
     # Force a dynamic Boost build and link against the CUDA driver / NVML stubs via the CMake
     # imported targets exposed by `find_package(CUDAToolkit)`.
     ./use-cuda-imported-targets.patch
+
+    # Fix link failure when the last CUDA arch is < sm_100 (e.g. [ "10.0" "8.9" ])
+    # https://github.com/NVIDIA/nvbandwidth/pull/74
+    (fetchpatch {
+      name = "fix-multi-arch-kernel-stubs.patch";
+      url = "https://github.com/NVIDIA/nvbandwidth/commit/3a32d2c84d419bde4b4e7485ae62953ed09bf63e.patch";
+      hash = "sha256-5RYNnCv31hMn+Er/LNJJlh30kWpmu2O/knYMluLA1vM=";
+    })
   ];
 
   nativeBuildInputs = [

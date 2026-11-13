@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  zstd,
   nix-update-script,
 }:
 
@@ -17,6 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-1jpjVQ+EiDUnGaTwDHMpLwLA/CkVGdZ+iLiWEkEpAwg=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   checkFlags = [
     "--skip=test::test_oodle"

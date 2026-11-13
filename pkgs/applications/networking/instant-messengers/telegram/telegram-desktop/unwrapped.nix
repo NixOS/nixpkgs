@@ -50,15 +50,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "7.4.1";
+  version = "7.4.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-s4+nS5baMv2QvVrp9d+bRLWB8ihufLLin2e40BcRAzM=";
+    hash = "sha256-B5JZ7Byz1aM7U0b8xf/2NgJhq9haULIYf+goYoDTrjo=";
   };
+
+  postPatch = ''
+    substituteInPlace Telegram/cmake/telegram_apple_swift_runtime.cmake \
+     --replace-warn 'COMMAND "''${swift_bin_dir}/swift-stdlib-tool"' 'COMMAND true' \
+     --replace-warn 'COMMAND xcrun swift-stdlib-tool'                'COMMAND true'
+  '';
 
   nativeBuildInputs = [
     pkg-config

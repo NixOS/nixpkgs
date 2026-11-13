@@ -99,6 +99,7 @@ in
       bootvine-shutdown = {
         description = "Live dependency tree of shutdown jobs";
         wantedBy = [ "shutdown.target" ];
+        before = [ "shutdown.target" ];
         after = [
           "bootvine.service"
           "display-manager.service"

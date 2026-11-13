@@ -38,15 +38,55 @@ might write:
 
 ```nix
 {
+  stdenv,
+  chicken,
+  chickenPackages,
+}:
+
+stdenv.mkDerivation {
+  pname = "hello";
+  version = "1.0";
+
+  src = ./.;
+
+  nativeBuildInputs = [ chicken ];
   buildInputs = [
     chicken
     chickenPackages.chickenEggs.srfi-189
   ];
+
+  buildPhase = ''
+    runHook preBuild
+    csc hello.scm -o hello
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 hello -t $out/bin
+    runHook postInstall
+  '';
 }
 ```
 
-Both `chicken` and its eggs have a setup hook which configures the environment
-variables `CHICKEN_INCLUDE_PATH` and `CHICKEN_REPOSITORY_PATH`.
+`chicken` has a setup hook which configures the environment variables
+`CHICKEN_INCLUDE_PATH` and `CHICKEN_REPOSITORY_PATH` from the eggs among the
+inputs. Put `chicken` in `nativeBuildInputs` for `csc`, and in `buildInputs`
+for its runtime.
+
+Compile with `csc -static` to link the eggs into the program. Otherwise, the
+program loads them at run time and needs `CHICKEN_REPOSITORY_PATH` to find them.
+
+`chicken` puts its runtime in the `lib` output, and eggs put what is only used
+to build against them in `dev`.
+
+## Cross-Compilation {#sec-chicken-cross}
+
+The example above and the eggs of CHICKEN 5 and 6 cross-compile, for example
+`pkgsCross.aarch64-multiplatform.chickenPackages_5.chickenEggs.base64`. List
+eggs in `buildInputs` only, as for a native build. Compiling `(import foo)`
+loads the import library of `foo` into the compiler, so the cross CHICKEN needs
+`foo` built for the build platform, which each egg propagates.
 
 ## Updating Eggs {#sec-chicken-updating-eggs}
 
@@ -120,3 +160,6 @@ let
 in
 <...>
 ```
+
+The overrides also apply to the packages built for the build platform when
+cross-compiling.

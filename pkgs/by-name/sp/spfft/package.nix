@@ -34,12 +34,27 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = "SpFFT";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Qc/omdRv7dW9NJUOczMZJKhc+Z/sXeIxv3SbpegAGdU=";
   };
+
+  # Support absolute install dirs, required for split outputs
+  postPatch = ''
+    substituteInPlace cmake/SpFFT.pc.in \
+      --replace-fail ''\'''${prefix}/@CMAKE_INSTALL_LIBDIR@' '@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail ''\'''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail '$<INSTALL_INTERFACE:include>' '$<INSTALL_INTERFACE:''${CMAKE_INSTALL_FULL_INCLUDEDIR}>' \
+      --replace-fail '$<INSTALL_INTERFACE:include/spfft>' '$<INSTALL_INTERFACE:''${CMAKE_INSTALL_FULL_INCLUDEDIR}/spfft>'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -70,9 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SPFFT_MPI" true)
     (lib.cmakeBool "SPFFT_SINGLE_PRECISION" false)
     (lib.cmakeBool "SPFFT_FORTRAN" true)
-    # Required due to broken CMake files
-    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
-    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     (lib.cmakeFeature "SPFFT_GPU_BACKEND" "CUDA")
