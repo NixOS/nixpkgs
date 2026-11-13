@@ -12,13 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-tea-openapi";
-  version = "0.4.6";
+  version = "0.4.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "alibabacloud_tea_openapi";
     inherit (finalAttrs) version;
-    hash = "sha256-2vwyQBcS9bIcEtw9BbqIepGtFW2bSadmInn5/ZBSb7I=";
+    hash = "sha256-9DIiguR5P10TqlKMoebLZh255/VB01UB1u7XPqxFRtU=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];
