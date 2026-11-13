@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     fontconfig
   ];
+
   mesonFlags = [
     (lib.mesonBool "installed_data" true)
     # Provide a fallback cursor theme for systems without one installed.
