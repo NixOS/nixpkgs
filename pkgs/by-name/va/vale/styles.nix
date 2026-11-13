@@ -94,12 +94,12 @@ in
 
   microsoft = buildStyle rec {
     name = "Microsoft";
-    version = "0.15.1";
+    version = "0.15.2";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
       rev = "v${version}";
-      hash = "sha256-MycWukXoeTZzGAcoNODzt592VHWgjnMXZdNPoQWDC18=";
+      hash = "sha256-BrdGsj+8oh/3tuJeH2ZSyG+Xe05rorq/YxwgQCRttDE=";
     };
     meta = {
       description = "Vale-compatible implementation of the Microsoft Writing Style Guide";

@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiounifi";
-  version = "98";
+  version = "99";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kane610";
     repo = "aiounifi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QUNIFM7gXyJ6X2tn+YTCqep/0hiJe6wGtjs4vNesjUs=";
+    hash = "sha256-r5Rnbt9bG/Q0EIozBOtmoMYtQIuVb2A+phxaQhWZ3fk=";
   };
 
   postPatch = ''

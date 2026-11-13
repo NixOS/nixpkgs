@@ -96,6 +96,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-quiet 'Command::new("tc")' 'Command::new("${lib.getExe' iproute2 "tc"}")' \
       --replace-quiet 'Command::new("dot")' 'Command::new("${lib.getExe' graphviz "dot"}")'
     shopt -u globstar
+
+    # link system libbpf
+    substituteInPlace lqos_sys/Cargo.toml \
+      --replace-fail 'libbpf-sys = "1"' 'libbpf-sys = { version = "1", default-features = false }'
   '';
 
   # upstream pins an exact esbuild version and download on mismatch
@@ -180,6 +184,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [ lib.maintainers.stepbrobd ];
     teams = [ lib.teams.ngi ];
     mainProgram = "lqosd";
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 })

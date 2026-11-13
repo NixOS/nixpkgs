@@ -21,8 +21,7 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "sphinx-automodapi";
     tag = "v${version}";
-    hash = "sha256-u7paD0W7sqUaW9A630AG5jjnX6CJT6PhrQtthQvlXhA=";
-    leaveDotGit = true;
+    hash = "sha256-GQWZl9KsofeCQkpNXENSsmNtKXlnYImlK2E4J8hDRnw=";
   };
 
   build-system = [ setuptools-scm ];

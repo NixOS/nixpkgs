@@ -64,13 +64,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
         --replace-fail \
           'os.path.join(sysconfig.get_path("purelib"), "nvidia/cudnn/lib/libcudnn.so.*[0-9]")' \
           '"${lib.getLib cudaPackages.cudnn}/lib/libcudnn.so"'
-    ''
-    # Upstream's v1.32.1 tag was cut from develop and still reports 1.33.0
-    + ''
-      substituteInPlace python/cudnn/__init__.py \
-        --replace-fail \
-          '__version__ = "1.33.0"' \
-          '__version__ = "${finalAttrs.version}"'
     '';
 
   build-system = [
