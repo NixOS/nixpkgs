@@ -8,7 +8,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "adno";
-  version = "1.0.6";
+  version = "1.0.9";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -16,10 +16,10 @@ buildNpmPackage (finalAttrs: {
     owner = "adnodev";
     repo = "adno";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FO93b3uQb6eX/BDoFc3ueoqePKEGNi4+SxObeUQ0hjA=";
+    hash = "sha256-RN+Bu7+D5CkcQUAS/Ow3+N4HD+dKUqAezPk2/uPnNGw=";
   };
 
-  npmDepsHash = "sha256-5UOxzIWb2gU+YsvNOWC7SqZVWP2kYa+vzTNPdzBKNko=";
+  npmDepsHash = "sha256-obGUjphHLMxxYqEgR4B4a/OMMTCOTHeTBHTral8dZQk=";
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/share/adno"
