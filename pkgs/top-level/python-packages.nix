@@ -18546,7 +18546,7 @@ self: super: with self; {
 
   rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
 
-  rocksdict = callPackage ../development/python-modules/rocksdict { };
+  rocksdict = callPackage ../development/python-modules/rocksdict { inherit (pkgs) zstd; };
 
   roku = callPackage ../development/python-modules/roku { };
 
