@@ -117,13 +117,16 @@ stdenv.mkDerivation (finalAttrs: {
   # - Dependencies are looked for among those the setup hook finds, not only
   #   in the repository of the target's runtime.
   # The programs using these files are compiled anew below.
-  ${if isCrossChicken then "patches" else null} = [
-    # Objects built for the target get their .target suffix before the
-    # extension, so csc still takes them for objects, and are passed to ar
-    # with it. Upstream 53b5a8d84c414c9b61c47e3877e5d465bcf8c285.
-    ./ensure-target-marker.patch
-    ./cross-chicken-install-${lib.versions.major version}.patch
-  ];
+  ${if isCrossChicken then "patches" else null} =
+    lib.optionals (lib.versionOlder finalAttrs.version "6.1.0") [
+      # Objects built for the target get their .target suffix before the
+      # extension, so csc still takes them for objects, and are passed to ar
+      # with it. Upstream 53b5a8d84c414c9b61c47e3877e5d465bcf8c285.
+      ./ensure-target-marker.patch
+    ]
+    ++ [
+      ./cross-chicken-install-${lib.versions.major version}.patch
+    ];
 
   # The target's libraries and data are assumed to be under TARGET_PREFIX, but
   # are in the lib output of the target's runtime, apart from its headers.
@@ -264,6 +267,11 @@ stdenv.mkDerivation (finalAttrs: {
   ${if isCrossChicken then "preBuild" else null} = ''
     makeFlags+=("TARGET_LIBRARIES=$(sed -n 's/^# define C_INSTALL_MORE_LIBS "\(.*\)"$/\1/p' \
       ${targetChicken}/include/chicken/chicken-config.h)")
+  '';
+
+  # chicken-install -update-db needs a writable location
+  preInstall = ''
+    export CHICKEN_EGG_CACHE="$TMPDIR/chicken-egg-cache"
   '';
 
   # Darwin has no sonames: a library linked by absolute path is loaded again if
