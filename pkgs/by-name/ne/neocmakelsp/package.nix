@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neocmakelsp";
-  version = "0.11.2";
+  version = "0.12.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "neocmakelsp";
     repo = "neocmakelsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AgwrIdEh2w92hr9SFnpOnsR48yTyInkD/6uaWeGc0mQ=";
+    hash = "sha256-3S2Uz4WvuVik1tkavpmQq47nU9fiVWUFrQtVGe38I/Y=";
   };
 
-  cargoHash = "sha256-sZiGeo2OhnyvwwSd86WGVo3UAZKLQt2g9zBecBQLzrQ=";
+  cargoHash = "sha256-V0r7uEGCRdkzD2X0VBP9zD7+s3+WQj+TuajGlZiK1DI=";
 
   nativeBuildInputs = [
     installShellFiles
