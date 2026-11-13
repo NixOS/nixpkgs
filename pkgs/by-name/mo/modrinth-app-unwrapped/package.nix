@@ -13,7 +13,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   replaceVars,
@@ -29,17 +29,18 @@
 let
   gradle = gradle_9.override { java = jdk; };
   jdk = jdk17;
+  pnpm = pnpm_12;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.21.6";
+  version = "0.23.5";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SBrnyAqbsgAhzF/7p3OalvhJVN/LyHRo9I7m3MEWVxg=";
+    hash = "sha256-W+shEjcObasPfDho9ylhxyM6N21Hl5uFO8W7PORqHlo=";
   };
 
   patches = [
@@ -63,13 +64,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./remove-spotless.patch
   ];
 
-  # Let the app know about our actual version number
   postPatch = ''
+    # Let the app know about our actual version number
     substituteInPlace {apps/app,packages/app-lib}/Cargo.toml apps/app-frontend/package.json \
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
+
+    # Ignore running pnpm version not matching the declared version.
+    # Pnpm will try to to download the correct version otherwise.
+    # See: https://pnpm.io/settings/cli#pmonfail
+    echo 'pmOnFail: warn' >> pnpm-workspace.yaml
   '';
 
-  cargoHash = "sha256-YQz/DbTZVx1zpct0d4IMBB++RqFg26zmg2Px/xCPa8A=";
+  cargoHash = "sha256-s1NlmC7R4KQoJGDnc7mxbPOSqraMkQrwpNyKH07Vsiw=";
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -77,10 +83,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   pnpmDeps = fetchPnpmDeps {
+    inherit pnpm;
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-soooHZJ4OQ+MshWMIhpPURZkMMkpFkZa6AEaiEAm3ts=";
+    fetcherVersion = 5;
+    hash = "sha256-B9iUYcxEZp5iF9oA+3Vg6mHxfqCij1ZdKN8nLLJEsUw=";
   };
 
   nativeBuildInputs = [
@@ -90,8 +96,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gradle
     nodejs
     pkg-config
+    pnpm
     pnpmConfigHook
-    pnpm_10
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
@@ -177,10 +183,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "ModrinthApp";
     platforms = with lib.platforms; linux ++ darwin;
-    # This builds on architectures like aarch64, but the launcher itself does not support them yet.
-    # Darwin is the only exception
-    # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
-    broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache
