@@ -30,6 +30,7 @@ let
       concurrent-ruby.platforms = [ ];
       tzinfo-data.platforms = [ ];
       tzinfo.platforms = [ ];
+      win32ole.platforms = [ { engine = "mswin"; } ];
     };
     groups = [
       "production"
@@ -44,13 +45,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "manyfold";
-  version = "0.153.0";
+  version = "0.154.1";
 
   src = fetchFromGitHub {
     owner = "manyfold3d";
     repo = "manyfold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hOt8IKAmvddnc4Wh0GxmNUymFPUA+soUzsSY26HDz+w=";
+    hash = "sha256-IXa8GZ72VoZjgPPbr2IBG/M90kaGSO1VxwltWJ+AjbM=";
   };
 
   prePatch = ''
@@ -80,7 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-iQxlmCWx91SGfhFqYzxH627XPgG0GNJzVtEw5HfoqGs=";
+    hash = "sha256-je/ZAdkrWmAONl4Jp/R5Xx6ecMRS2ITX1cXY3YoS7rE=";
   };
 
   # dynamically loaded by ruby gems
