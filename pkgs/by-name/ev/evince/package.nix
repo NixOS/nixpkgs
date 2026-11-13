@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     license = lib.licenses.gpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     platforms = lib.platforms.unix;
     mainProgram = "evince";
     teams = [
