@@ -7229,8 +7229,6 @@ with pkgs;
   # `.override` clobbered. C.F. `llvmPackages` which does the same.
   darwin = callPackage ./darwin-packages.nix { };
 
-  dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
-
   libuuid = if stdenv.hostPlatform.isLinux then util-linuxMinimal else null;
 
   error-inject = recurseIntoAttrs (callPackages ../os-specific/linux/error-inject { });
