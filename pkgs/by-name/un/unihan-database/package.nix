@@ -1,13 +1,18 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   unzip,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unihan-database";
   version = "17.0.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = false; # nothing to build
+  doCheck = false; # no tests to run
 
   src = fetchurl {
     url = "https://www.unicode.org/Public/${finalAttrs.version}/ucd/Unihan.zip";
@@ -40,5 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.unicode.org/";
     license = lib.licenses.unicode-30;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      sandarukasa
+    ];
   };
 })
