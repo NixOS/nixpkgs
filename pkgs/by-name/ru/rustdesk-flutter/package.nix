@@ -20,6 +20,7 @@
   libyuv,
   pam,
   makeDesktopItem,
+  nix-update-script,
   rustPlatform,
   libayatana-appindicator,
   rustc,
@@ -253,6 +254,8 @@ flutter329.buildFlutterApplication rec {
       startupNotify = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Virtual / remote desktop infrastructure for everyone! Open source TeamViewer / Citrix alternative";
