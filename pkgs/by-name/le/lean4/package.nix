@@ -40,25 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WjyIRo2BvfnNq13r+YSnTc6VaYupKJIsgfQhFBMa0aU=";
   };
 
-  postPatch =
-    let
-      pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
-    in
-    ''
-      substituteInPlace \
-        src/CMakeLists.txt \
-        src/runtime/CMakeLists.txt \
-        stage0/src/CMakeLists.txt \
-        stage0/src/runtime/CMakeLists.txt \
-        --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
-    ''
-    # Remove tests that fails in sandbox.
-    # It expects `sourceRoot` to be a git repository.
-    + ''
-      rm -rf src/lake/examples/git/
-    '';
-
-  preConfigure = ''
+  postPatch = ''
     chmod +x tests/lake/tests/samply/mock-samply.py
     patchShebangs --build stage0/src/bin/ src/bin/ tests/
 
@@ -107,10 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vNVZw2YsDkf0GcdFTNb/fXMQLQYvoc8P425LupPShpo=";
   };
 
+  preConfigure = ''
+    mkdir -p ''${cmakeBuildDir:-build}/mimalloc/src/
+    ln -s ${finalAttrs.mimalloc-src} ''${cmakeBuildDir:-build}/mimalloc/src/mimalloc
+  '';
+
   cmakeFlags = [
     # Flags for top-level `CMakeLists.txt`
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "USE_MIMALLOC" enableMimalloc)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MIMALLOC" finalAttrs.mimalloc-src.outPath)
 
     # Flags for inner `src/CMakeLists.txt`
     (lib.cmakeBool "STAGE1_USE_GITHASH" false)
