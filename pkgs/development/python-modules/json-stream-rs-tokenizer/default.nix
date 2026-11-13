@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.5.1";
+  version = "0.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     tag = "v${version}";
-    hash = "sha256-D18nMRyCDr2NGBkdo7Lq8gaaMiOXwZAob4DymZwFvW0=";
+    hash = "sha256-p+BDobGGRWtPELMpp9xWzya0IdSlXbXsqv/L0qy62Tg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-IPQrqayhyQ/gmT6nK+TgDcUQ4mPrG9yiJJk6enBzybA=";
+    hash = "sha256-/I7pddi0aGeVzp2TLaCVax4VdSlRPQV01eQMQLg9a9g=";
   };
 
   nativeBuildInputs = [
