@@ -1,11 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   dill,
   fetchFromGitHub,
   hatchling,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [ dill ];
 
