@@ -1,24 +1,32 @@
 {
   lib,
   fetchFromGitHub,
+  gitUpdater,
   mkLibretroCore,
 }:
-mkLibretroCore {
+mkLibretroCore (finalAttrs: {
   core = "virtualjaguar";
-  version = "0-unstable-2026-05-09";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "virtualjaguar-libretro";
-    rev = "18828045f76a803206ebffc9b8d57842287b7552";
-    hash = "sha256-lHQsApSoZNvyTp6D3lOBHyLCQ321cirUVXZRHXvIdP4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UaRk6BxjtMEoygyor1SwzCAhtMSz3GullKvvSqGztJw=";
   };
 
+  postPatch = ''
+    patchShebangs scripts
+  '';
+
   makefile = "Makefile";
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Port of VirtualJaguar to libretro";
     homepage = "https://github.com/libretro/virtualjaguar-libretro";
+    changelog = "https://github.com/libretro/virtualjaguar-libretro/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
   };
-}
+})

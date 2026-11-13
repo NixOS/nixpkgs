@@ -1,19 +1,21 @@
-scons does not use os environment by default:
-  https://scons.org/doc/2.1.0/HTML/scons-user/x1750.html
-
-nixpkgs' cc-wrapper on the other hand relies on various NIX_* variables
-to be passed through like NIX_CFLAGS_COMPILE_BEFORE.
 --- a/SConstruct
 +++ b/SConstruct
-@@ -559,10 +559,7 @@ options = dict(
-     SHLINKCOMSTR=link_shared_library_message,
-     LINKCOMSTR=link_program_message,
-     PREFIX=GetOption('prefix'),
--    ENV = dict([ (key, os.environ[key])
--                 for key in os.environ
--                 if key in ['PATH', 'TERM', 'HOME', 'PKG_CONFIG_PATH']
--              ])
-+    ENV = os.environ,
- )
+@@ -187,13 +187,14 @@
+     'SHLINKCOMSTR': link_shared_library_message,
+     'LINKCOMSTR': link_program_message,
+     'ENV': {
+         key: os.environ[key]
+-        for key in ('PATH', 'TERM', 'HOME',
+-                    'PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_SYSROOT_DIR',
+-                    'CPATH', 'C_INCLUDE_PATH', 'LIBRARY_PATH',
+-                    'SOURCE_DATE_EPOCH')
+-        if key in os.environ
++        for key in os.environ
++        # pass through NIX_* environment variables for nixpkgs' cc-wrapper.
++        if key in ('PATH', 'TERM', 'HOME',
++                   'PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_SYSROOT_DIR',
++                   'CPATH', 'C_INCLUDE_PATH', 'LIBRARY_PATH',
++                   'SOURCE_DATE_EPOCH') or key.startswith('NIX_')
+     } | {'TZ': 'UTC', 'LANG': 'C.UTF-8', 'LC_ALL': 'C.UTF-8'},
+ }
  
- if ARGUMENTS.get('VERBOSE') == "1":

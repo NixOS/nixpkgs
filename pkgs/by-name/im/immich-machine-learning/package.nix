@@ -93,6 +93,9 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
+    # version and src come from immich, whose updateScript updates both
+    updateScript = null;
+
     tests = {
       inherit (nixosTests) immich;
     };

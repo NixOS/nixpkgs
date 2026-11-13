@@ -2,12 +2,10 @@
   lib,
   stdenv,
   rustPlatform,
-  rustc,
   fetchFromGitHub,
   pkg-config,
-  patchelf,
-  copyDesktopItems,
-  makeDesktopItem,
+  desktopToDarwinBundle,
+  craft-fonts,
   versionCheckHook,
   alsa-lib,
   vulkan-loader,
@@ -38,71 +36,55 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deckcraft";
-  version = "0.6.1";
+  version = "0.17.0";
 
   __structuredAttrs = true;
-  strictDeps = true;
+
+  env = {
+    CRAFT_FONTS_DIR = craft-fonts;
+    CRAFT_FONTS_REQUIRED = "1";
+  };
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "deckcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c6uNNn58NsSeAoa87AU2bIMhCWmgPk/HoJ11IRhU4HU=";
+    hash = "sha256-C2rXOAQVTlHUWv/8VctowVyKKETZHc7S/vyAm3Ut20I=";
   };
 
-  cargoHash = "sha256-z6QdxDIyLjr8Es08bpQEUxirK48PqBVIjjKPGHgZFXE=";
+  cargoHash = "sha256-ik0r3TS3rSmGh/Cg6GeJCfqbN7uRw7voGnKDnWBh/M4=";
 
   cargoBuildFlags = [
     "--package=deckcraft"
     "--package=deckcraft-cli"
   ];
 
+  # The deckcraft crate runs live GPU tests.
+  cargoTestFlags = [
+    "--package=deckcraft-cli"
+  ];
+
+  # [[patch.unused]] egui fork entries break cargo --offline.
+  postPatch = ''
+    sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+  '';
+
   nativeBuildInputs = [
     pkg-config
-    patchelf
-    copyDesktopItems
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ai.storyteller.deckcraft";
-      desktopName = "DeckCraft";
-      genericName = "Presentation";
-      comment = "Create and present slide decks";
-      exec = "deckcraft %F";
-      tryExec = "deckcraft";
-      icon = "ai.storyteller.deckcraft";
-      terminal = false;
-      startupNotify = true;
-      startupWMClass = "ai.storyteller.deckcraft";
-      categories = [
-        "Office"
-        "Presentation"
-      ];
-      keywords = [
-        "presentation"
-        "slides"
-        "slide show"
-        "deck"
-        "pptx"
-        "keynote"
-        "powerpoint"
-      ];
-      mimeTypes = [
-        "application/x-deckcraft"
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-        "application/vnd.openxmlformats-officedocument.presentationml.template"
-        "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
-      ];
-    })
-  ];
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 packaging/linux/ai.storyteller.deckcraft.mime.xml $out/share/mime/packages/ai.storyteller.deckcraft.xml
+  postInstall = ''
     mkdir -p $out/share/icons
     cp -R assets/app-icon/hicolor $out/share/icons/
+    install -Dm644 packaging/linux/ai.storyteller.deckcraft.desktop \
+      $out/share/applications/ai.storyteller.deckcraft.desktop
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 packaging/linux/ai.storyteller.deckcraft.mime.xml \
+      $out/share/mime/packages/ai.storyteller.deckcraft.xml
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -118,12 +100,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Presentation app with PPTX support";
     homepage = "https://github.com/storytold/deckcraft";
     changelog = "https://github.com/storytold/deckcraft/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.OR [
-      lib.licenses.mit
-      lib.licenses.asl20
+    license =
+      with lib.licenses;
+      AND [
+        (OR [
+          mit
+          asl20
+        ])
+        ofl
+      ];
+    maintainers = with lib.maintainers; [
+      cleboost
+      sophronesis
     ];
-    maintainers = with lib.maintainers; [ sophronesis ];
     mainProgram = "deckcraft";
-    platforms = rustc.meta.platforms;
   };
 })

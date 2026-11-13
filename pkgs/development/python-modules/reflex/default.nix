@@ -12,6 +12,7 @@
   click,
   granian,
   httpx,
+  httpx2,
   packaging,
   platformdirs,
   psutil,
@@ -25,18 +26,21 @@
 
   # sub package dependencies
   aiohttp,
+  brotli,
   griffelib,
   mistletoe,
   opentelemetry-api,
   opentelemetry-instrumentation,
   opentelemetry-instrumentation-asgi,
   pyyaml,
+  sqlalchemy,
   tomli,
   towncrier,
   typing-inspection,
   tzdata,
   email-validator,
   ruff-format,
+  websockets,
 
   # tests
   attrs,
@@ -84,12 +88,33 @@ let
       pyproject = true;
       sourceRoot = workspace.sourceRoot or "${src.name}/packages/${pname}";
 
-      postPatch = lib.optionalString (pname == "reflex-release") ''
-        substituteInPlace pyproject.toml \
-          --replace-fail '"towncrier >=24.8.0,<26"' '"towncrier"' \
-          --replace-fail '"hatchling == 1.31.0"' '"hatchling"' \
-          --replace-fail '"uv-dynamic-versioning == 0.14.0"' '"uv-dynamic-versioning"'
-      '';
+      postPatch =
+        lib.optionalString (pname == "reflex-release") ''
+          substituteInPlace pyproject.toml \
+            --replace-fail \
+              '"uv-dynamic-versioning == 0.14.0"' \
+              '"uv-dynamic-versioning"'
+        ''
+        + lib.optionalString (pname == "reflex-hosting-cli") ''
+          substituteInPlace pyproject.toml \
+            --replace-fail \
+              '"reflex-build-sdk[httpx] >=0.1.1,<0.1.2.post,!=0.1.2"' \
+              '"reflex-build-sdk[httpx]"'
+        ''
+        +
+          lib.optionalString
+            (lib.elem pname [
+              "reflex-components-core"
+              "reflex-components-code"
+              "reflex-components-sonner"
+              "reflex-components-radix"
+            ])
+            ''
+              substituteInPlace pyproject.toml \
+                --replace-fail \
+                  '"reflex-components-lucide >= 1.1.0"' \
+                  '"reflex-components-lucide"'
+            '';
 
       build-system = [
         hatchling
@@ -117,14 +142,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.9.12";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rGwDSaYtkMZH+pxTT8Tee0OqMxAUlJ5Zii7OddeB2J4=";
+    hash = "sha256-cbmtWg1IMgVJQYjJ+3IPEJdoju+xkScIXZkVC0RcQzk=";
   };
 
   build-system = [
@@ -147,8 +172,8 @@ buildPythonPackage (finalAttrs: {
         '"redis >=6.4,<8.0"' \
         '"redis >=6.4,<9.0"' \
       --replace-fail \
-        '"wrapt >=1.17.0,<2.4"' \
-        '"wrapt >=1.17.0"'
+        '"reflex-components-lucide >= 1.1.1"' \
+        '"reflex-components-lucide"'
   '';
 
   nativeBuildInputs = [
@@ -216,6 +241,7 @@ buildPythonPackage (finalAttrs: {
       versionCheckHook
       gitMinimal
       writableTmpDirAsHomeHook
+      subPkgs.reflex-bench
       subPkgs.reflex-build-sdk
       subPkgs.reflex-otel
       subPkgs.reflex-release
@@ -237,6 +263,34 @@ buildPythonPackage (finalAttrs: {
     # tries to run bun or npm
     "test_output_system_info"
 
+    # missing assets in reflex-bench that its build does not add to the wheel
+    # upstream requires running the test from a checkout
+    "test_playground_dir_is_the_checkouts_playground"
+    "test_fixture_hash_is_the_fixtures_content_hash"
+    "test_the_hash_is_the_committed_line"
+    "test_materialize_playground_copies_the_tracked_files"
+    "test_materialize_playground_skips_build_output"
+    "test_staged_playground_keeps_its_content_hash_across_an_edit"
+    "test_the_readme_lists_every_route"
+    "test_the_repo_budgets_name_declared_metrics"
+
+    # requires a git checkout
+    "test_examples_import_reflex_only_as_rx"
+
+    # sensitive to whether stderr is a tty
+    "test_rich_output_parity"
+    "test_markup_rendered_when_opted_in"
+    "test_markup_literal_by_default"
+    "test_warning_with_markup_tags_stays_literal"
+    "test_level_gating"
+    "test_default_level_gates_like_info"
+    "test_dedupe"
+    "test_timing_logs_at_debug"
+    "test_console_shims_delegate"
+
+    # Failed: DID NOT RAISE OSError
+    "test_write_stateful_pages_marker_closes_descriptor_on_open_failure"
+
     # reflex.utils.exceptions.StateSerializationError: Failed to serialize state
     # reflex___istate___dynamic____dill_state due to unpicklable object.
     "test_fallback_pickle"
@@ -250,42 +304,31 @@ buildPythonPackage (finalAttrs: {
     "test_page_names_the_module_the_class_is_defined_in"
   ];
 
+  enabledTestPaths = [ "tests/" ]; # this excludes doc tests
+
   disabledTestPaths = [
     "tests/benchmarks/"
     "tests/integration/"
 
-    # unable to import agent_files (should be in docs/app/agent_files/)
-    "docs/app/tests/test_agent_files.py"
-    "docs/app/tests/test_rendered_markdown.py"
+    # requires pytest-codspeed which is not packaged
+    "tests/units/benchmarks/test_shared_state.py"
+
+    # missing assets in reflex-bench that its build does not add to the wheel
+    # upstream requires running the test from a checkout
+    "tests/units/reflex_bench/drivers/"
+    "tests/units/reflex_bench/suites/"
+    "tests/units/reflex_bench/fixtures/test_playground.py"
+    "tests/units/reflex_bench/fixtures/test_playground_app.py"
 
     # circular imports (reflex-docgen)
     "tests/units/docgen/test_class_and_component.py"
     "tests/units/docgen/test_markdown.py"
     "tests/units/docgen/test_reflex_transformer.py"
-    "docs/app/tests/test_api_reference_layout.py"
-    "docs/app/tests/test_breadcrumbs.py"
-    "docs/app/tests/test_changelogs.py"
-    "docs/app/tests/test_doc_description.py"
-    "docs/app/tests/test_doc_links.py"
-    "docs/app/tests/test_docgen_double_eval.py"
-    "docs/app/tests/test_docpage_pager.py"
-    "docs/app/tests/test_docs_landing_links.py"
-    "docs/app/tests/test_docs_navbar.py"
-    "docs/app/tests/test_frontmatter_meta.py"
-    "docs/app/tests/test_overview_pages.py"
-    "docs/app/tests/test_redirects.py"
-    "docs/app/tests/test_sidebar.py"
-    "docs/app/tests/test_site_quality.py"
-
-    # circular imports (reflex-integrations-docs)
-    "docs/app/tests/test_integrations.py"
 
     # circular imports (reflex-components-internal)
     "tests/units/reflex_components_internal/"
 
     # circular imports (reflex-site-shared)
-    "docs/app/tests/test_config.py"
-    "docs/app/tests/test_routes.py"
     "tests/units/reflex_site_shared/"
   ];
 
@@ -303,7 +346,6 @@ buildPythonPackage (finalAttrs: {
     "reflex.components"
     "reflex.config"
     "reflex.constants"
-    "reflex.custom_components"
     "reflex.environment"
     "reflex.event"
     "reflex.experimental"
@@ -347,10 +389,19 @@ buildPythonPackage (finalAttrs: {
           rich
           typing-extensions
         ];
+        reflex-bench.dependencies = [
+          brotli
+          click
+          packaging
+          playwright
+          psutil
+          rich
+          websockets
+        ];
         reflex-build-sdk.dependencies = [
           aiohttp
           httpx
-          platformdirs
+          httpx2
         ];
         reflex-components-code.dependencies = [
           subPkgs.reflex-base
@@ -460,6 +511,7 @@ buildPythonPackage (finalAttrs: {
           httpx
           packaging
           platformdirs
+          subPkgs.reflex-build-sdk
           rich
         ];
         reflex-otel.dependencies = [
@@ -470,7 +522,6 @@ buildPythonPackage (finalAttrs: {
         ];
         reflex-release.dependencies = [
           packaging
-          tomli
           towncrier
           tzdata
         ];
@@ -498,6 +549,10 @@ buildPythonPackage (finalAttrs: {
           subPkgs.reflex-integrations-docs
           ruff
           ruff-format
+        ];
+        reflex-workflow.dependencies = [
+          sqlalchemy
+          tzdata
         ];
       };
 

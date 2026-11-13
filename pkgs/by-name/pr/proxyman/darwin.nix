@@ -10,6 +10,8 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname;
   version = "6.14.0";
+  # Keep update tools from treating the wrapper as the source package.
+  pos = __curPos;
 
   src = fetchurl {
     url = "https://github.com/ProxymanApp/Proxyman/releases/download/${finalAttrs.version}/Proxyman_${finalAttrs.version}.dmg";
