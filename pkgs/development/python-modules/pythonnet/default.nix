@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonAtLeast,
   pytestCheckHook,
-  pycparser,
   psutil,
   dotnet-sdk_10,
   buildDotnetModule,
@@ -57,10 +56,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [ dotnet-sdk_10 ];
 
-  dependencies = [
-    pycparser
-    clr-loader
-  ];
+  dependencies = [ clr-loader ];
 
   pytestFlags = [
     # Run tests using .NET Core, Mono is unsupported for now due to find_library problem in clr-loader
