@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   mpv,
   yt-dlp,
   nix-update-script,
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postInstall = ''
     install -Dm644 share/linux/mpv-handler.desktop -t $out/share/applications/
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 share/linux/config.toml -t $out/share/doc/mpv-handler/
 
     wrapProgram $out/bin/mpv-handler \
-      --prefix PATH : ${
+      --suffix PATH : ${
         lib.makeBinPath [
           mpv
           yt-dlp
@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Play website videos and songs with mpv & yt-dlp";
     homepage = "https://github.com/akiirui/mpv-handler";
+    changelog = "https://github.com/akiirui/mpv-handler/releases/tag/v${finalAttrs.version}";
     mainProgram = "mpv-handler";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lonerOrz ];
