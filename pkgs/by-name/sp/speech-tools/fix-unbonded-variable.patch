@@ -1,0 +1,39 @@
+diff --git a/scripts/est_examples.sh b/scripts/est_examples.sh
+index 5e6f38c..b931fda 100755
+--- a/scripts/est_examples.sh
++++ b/scripts/est_examples.sh
+@@ -64,7 +64,7 @@ EOF
+ prepend() {
+ 	var="$1"
+ 	extra="$2"
+-	eval "val=\$$var"
++	eval "val=\${$var:-}"
+ 	
+ 	if [ -n "$val" ]
+ 		then
+diff --git a/scripts/shared_script b/scripts/shared_script
+index b159134..2732699 100644
+--- a/scripts/shared_script
++++ b/scripts/shared_script
+@@ -5,7 +5,7 @@
+ extend() {
+ 	var="$1"
+ 	extra="$2"
+-	eval "val=\$$var"
++	eval "val=\${$var:-}"
+ 	
+ 	if [ -n "$val" ]
+ 		then
+diff --git a/scripts/shared_setup_sh b/scripts/shared_setup_sh
+index 64f0ba9..e0488f4 100644
+--- a/scripts/shared_setup_sh
++++ b/scripts/shared_setup_sh
+@@ -4,7 +4,7 @@
+ extend() {
+ 	var="$1"
+ 	extra="$2"
+-	eval "val=\$$var"
++	eval "val=\${$var:-}"
+ 	
+ 	if [ -n "$val" ]
+ 		then

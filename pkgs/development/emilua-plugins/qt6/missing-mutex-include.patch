@@ -1,0 +1,11 @@
+diff --git a/include/emilua_qt/standarditemmodel.hpp b/include/emilua_qt/standarditemmodel.hpp
+--- a/include/emilua_qt/standarditemmodel.hpp
++++ b/include/emilua_qt/standarditemmodel.hpp
+@@ -4,6 +4,7 @@
+ #pragma once
+ 
+ #include <QtGui/QStandardItemModel>
++#include <mutex>
+ #include <emilua_qt/workqueue.hpp>
+ 
+ class QCoreApplication;

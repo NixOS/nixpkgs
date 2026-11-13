@@ -1,0 +1,16 @@
+--- a/main.js
++++ b/main.js
+@@ -19,6 +19,14 @@ const { platform } = require("os");
+ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "true";
+ autoUpdater.autoDownload = false;
+ 
++// Set the config directory to XDG_CONFIG_HOME/ytdownloader
++const xdgConfigHome = process.env.XDG_CONFIG_HOME;
++let configDir = app.getPath('home') + "/.config/ytdownloader";
++if (xdgConfigHome) {
++	configDir = xdgConfigHome + "/ytdownloader";
++}
++app.setPath ('userData', configDir);
++
+ const USER_DATA_PATH = app.getPath("userData");
+ const CONFIG_FILE_PATH = path.join(USER_DATA_PATH, "ytdownloader.json");

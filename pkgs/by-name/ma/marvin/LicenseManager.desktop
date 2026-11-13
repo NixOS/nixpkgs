@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=ChemAxon License Manager
+Exec=@out@/bin/LicenseManager
+Icon=LicenseManager
+Categories=Education;Science;Chemistry;
+StartupWMClass=com-install4j-runtime-launcher-UnixLauncher
+Comment=License manager for ChemAxon software like MarvinSketch

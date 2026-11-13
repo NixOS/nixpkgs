@@ -1,0 +1,38 @@
+diff --git a/src/lerobot/datasets/pyav_utils.py b/src/lerobot/datasets/pyav_utils.py
+index 7b7d1e5d..c638c1fe 100644
+--- a/src/lerobot/datasets/pyav_utils.py
++++ b/src/lerobot/datasets/pyav_utils.py
+@@ -70,12 +70,12 @@ def get_codec(vcodec: str) -> av.codec.Codec | None:
+ 
+ 
+ @functools.cache
+-def _get_codec_options_by_name(vcodec: str) -> dict[str, av.option.Option]:
++def _get_codec_options_by_name(vcodec: str) -> dict[str, Any]:
+     """Private-option name → PyAV ``Option`` for *vcodec* (empty if unavailable)."""
+     codec = get_codec(vcodec)
+     if codec is None:
+         return {}
+-    return {opt.name: opt for opt in codec.descriptor.options}
++    return {opt.name: opt for opt in getattr(getattr(codec, "descriptor", None), "options", ())}
+ 
+ 
+ @functools.cache
+@@ -105,7 +105,7 @@ def detect_available_encoders_pyav(encoders: list[str] | str) -> list[str]:
+     return available
+ 
+ 
+-def _check_option_value(vcodec: str, label: str, value: Any, opt: av.option.Option) -> None:
++def _check_option_value(vcodec: str, label: str, value: Any, opt: Any) -> None:
+     """Range-check numeric *value* and choice-check string *value* against *opt*."""
+     type_name = opt.type.name
+     if type_name in FFMPEG_NUMERIC_OPTION_TYPES:
+@@ -212,8 +212,7 @@ def check_video_encoder_parameters_pyav(
+     Raises:
+         ValueError: on the first incompatibility encountered.
+     """
+-    options = _get_codec_options_by_name(vcodec)
+-    if not options:
++    if get_codec(vcodec) is None:
+         raise ValueError(f"Codec {vcodec!r} is not available in the bundled FFmpeg build")
+     _check_pixel_format(vcodec, pix_fmt)
+     if channels is not None:

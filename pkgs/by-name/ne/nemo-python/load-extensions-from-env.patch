@@ -1,0 +1,27 @@
+diff --git a/src/nemo-python.c b/src/nemo-python.c
+index 8d2acdb..900811b 100644
+--- a/src/nemo-python.c
++++ b/src/nemo-python.c
+@@ -255,6 +255,7 @@ nemo_module_initialize(GTypeModule *module)
+ {
+ 	gchar *user_extensions_dir;
+ 	const gchar *env_string;
++	const gchar *python_extensiondir;
+ 
+ 	env_string = g_getenv("NEMO_PYTHON_DEBUG");
+ 	if (env_string != NULL)
+@@ -269,8 +270,12 @@ nemo_module_initialize(GTypeModule *module)
+ 
+ 	all_types = g_array_new(FALSE, FALSE, sizeof(GType));
+ 
+-	// Look in the new global path, $DATADIR/nemo-python/extensions
+-	nemo_python_load_dir(module, PYTHON_EXTENSION_DIR);
++	// Look in NEMO_PYTHON_EXTENSION_DIR
++	python_extensiondir = g_getenv("NEMO_PYTHON_EXTENSION_DIR");
++	if (python_extensiondir == NULL) {
++		python_extensiondir = PYTHON_EXTENSION_DIR;
++	}
++	nemo_python_load_dir(module, python_extensiondir);
+ 
+ 	// Look in XDG_DATA_DIR, ~/.local/share/nemo-python/extensions
+ 	user_extensions_dir = g_build_filename(g_get_user_data_dir(), 

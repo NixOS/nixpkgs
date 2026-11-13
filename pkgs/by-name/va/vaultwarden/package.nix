@@ -1,0 +1,69 @@
+{
+  lib,
+  stdenv,
+  callPackage,
+  rustPlatform,
+  fetchFromGitHub,
+  nixosTests,
+  pkg-config,
+  openssl,
+  zstd,
+  libiconv,
+  dbBackend ? "sqlite_system",
+  libmysqlclient,
+  libpq,
+  sqlite,
+}:
+
+let
+  webvault = callPackage ./webvault.nix { };
+in
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "vaultwarden";
+  version = "1.37.5";
+
+  src = fetchFromGitHub {
+    owner = "dani-garcia";
+    repo = "vaultwarden";
+    tag = finalAttrs.version;
+    hash = "sha256-7r4vTThc98coMIOxPA61X/A8pLiAfPVJxJlWQY8yELw=";
+  };
+
+  cargoHash = "sha256-onyxPAt3bVsF9Zj0Z+rnXoUA0NQLabYxxGqzhnVHz/E=";
+
+  # used for "Server Installed" version in admin panel
+  env.VW_VERSION = finalAttrs.version;
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    openssl
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optional (dbBackend == "mysql") libmysqlclient
+  ++ lib.optional (dbBackend == "postgresql") libpq
+  ++ lib.optional (dbBackend == "sqlite" || dbBackend == "sqlite_system") sqlite;
+
+  buildFeatures = dbBackend;
+
+  passthru = {
+    inherit webvault;
+    tests = nixosTests.vaultwarden;
+    updateScript = callPackage ./update.nix { };
+  };
+
+  meta = {
+    description = "Unofficial Bitwarden compatible server written in Rust";
+    homepage = "https://github.com/dani-garcia/vaultwarden";
+    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      SuperSandro2000
+    ];
+    mainProgram = "vaultwarden";
+  };
+})

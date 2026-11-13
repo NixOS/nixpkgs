@@ -1,0 +1,45 @@
+From 366607d5e2bc8a7e067105f1c0d0e6c2c235c131 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Mon, 29 Jun 2026 10:04:36 -0700
+Subject: [PATCH] main: handle --version/--help before loading the Lua config
+
+main() loads the Lua configuration before parsing arguments, and the
+loader exits when no config file exists. That makes `pkgit --version`
+and `pkgit --help` fail on a fresh install. Answer those informational
+flags first so they work without a config.
+---
+ src/main.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/src/main.c b/src/main.c
+index 9010d3e..4c45b8a 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -1,4 +1,5 @@
+ #include <stdio.h>
++#include <string.h>
+ 
+ #include "cla_parse.h"
+ #include "lua_state.h"
+@@ -7,6 +8,18 @@
+ 
+ int main(int argc, char *argv[]) {
+   init_vars();
++
++  /* Respond to informational flags before loading the Lua config, which aborts
++     when no config file (~/.config/pkgit/init.lua) exists. This keeps
++     `pkgit --version` and `pkgit --help` usable on a fresh install. */
++  for (int i = 1; i < argc; i++) {
++    if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version") ||
++        !strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
++      cla_parse(argc, argv);
++      return 0;
++    }
++  }
++
+   init_lua_state();
+   setup_pkgit();
+   cache_repos();
+-- 
+2.54.0
+

@@ -1,0 +1,101 @@
+{
+  writeText,
+  writeScriptBin,
+  xorg-server,
+  xf86-video-dummy,
+  font-misc-misc,
+  font-cursor-misc,
+  font-bh-lucidatypewriter-75dpi,
+  font-bh-lucidatypewriter-100dpi,
+  font-bh-100dpi,
+  font-adobe-75dpi,
+  font-adobe-100dpi,
+  xkeyboard_config,
+  runtimeShell,
+  unfreeFonts ? false,
+  lib,
+}:
+
+let
+  xorgConfig = writeText "dummy-xorg.conf" ''
+    Section "ServerLayout"
+      Identifier     "dummy_layout"
+      Screen         0 "dummy_screen"
+      InputDevice    "dummy_keyboard" "CoreKeyboard"
+      InputDevice    "dummy_mouse" "CorePointer"
+    EndSection
+
+    Section "ServerFlags"
+      Option "DontVTSwitch" "true"
+      Option "AllowMouseOpenFail" "true"
+      Option "PciForceNone" "true"
+      Option "AutoEnableDevices" "false"
+      Option "AutoAddDevices" "false"
+    EndSection
+
+    Section "Files"
+      ModulePath "${xorg-server.out}/lib/xorg/modules"
+      ModulePath "${xf86-video-dummy}/lib/xorg/modules"
+      XkbDir "${xkeyboard_config}/share/X11/xkb"
+      FontPath "${font-adobe-75dpi}/share/fonts/X11/75dpi"
+      FontPath "${font-adobe-100dpi}/share/fonts/X11/100dpi"
+      FontPath "${font-misc-misc}/share/fonts/X11/misc"
+      FontPath "${font-cursor-misc}/share/fonts/X11/misc"
+    ${lib.optionalString unfreeFonts ''
+      FontPath "${font-bh-lucidatypewriter-75dpi}/share/fonts/X11/75dpi"
+      FontPath "${font-bh-lucidatypewriter-100dpi}/share/fonts/X11/100dpi"
+      FontPath "${font-bh-100dpi}/share/fonts/X11/100dpi"
+    ''}
+    EndSection
+
+    Section "Module"
+      Load           "dbe"
+      Load           "extmod"
+      Load           "freetype"
+      Load           "glx"
+    EndSection
+
+    Section "InputDevice"
+      Identifier     "dummy_mouse"
+      Driver         "void"
+    EndSection
+
+    Section "InputDevice"
+      Identifier     "dummy_keyboard"
+      Driver         "void"
+    EndSection
+
+    Section "Monitor"
+      Identifier     "dummy_monitor"
+      HorizSync       30.0 - 130.0
+      VertRefresh     50.0 - 250.0
+      Option         "DPMS"
+    EndSection
+
+    Section "Device"
+      Identifier     "dummy_device"
+      Driver         "dummy"
+      VideoRam       192000
+    EndSection
+
+    Section "Screen"
+      Identifier     "dummy_screen"
+      Device         "dummy_device"
+      Monitor        "dummy_monitor"
+      DefaultDepth    24
+      SubSection     "Display"
+        Depth       24
+        Modes      "1280x1024"
+      EndSubSection
+    EndSection
+  '';
+
+in
+writeScriptBin "xdummy" ''
+  #!${runtimeShell}
+  exec ${xorg-server.out}/bin/Xorg \
+    -noreset \
+    -logfile /dev/null \
+    "$@" \
+    -config "${xorgConfig}"
+''

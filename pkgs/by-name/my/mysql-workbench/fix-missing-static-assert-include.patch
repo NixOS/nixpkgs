@@ -1,0 +1,12 @@
+--- a/library/base/base/string_utilities.h
++++ b/library/base/base/string_utilities.h
+@@ -40,6 +40,8 @@
+ #include <typeinfo>
+ #include <string.h>
+ 
++// Required for BOOST_STATIC_ASSERT
++#include <boost/static_assert.hpp>
+ #include <boost/optional.hpp>
+ #include <memory>
+ #include <iomanip>
+

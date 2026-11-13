@@ -1,0 +1,16 @@
+diff --git a/setup.py b/setup.py
+index d8e0860291..bc09dada5a 100644
+--- a/setup.py
++++ b/setup.py
+@@ -476,6 +476,11 @@ class CMakeBuild(build_ext):
+             cmake_args.append("-DLLVM_EXTERNAL_LIT=" + lit_dir)
+         cmake_args.extend(thirdparty_cmake_args)
+ 
++        import json
++
++        nix_attrs_json = json.load(open(os.environ["NIX_ATTRS_JSON_FILE"]))
++        cmake_args.extend(thirdparty_cmake_args + nix_attrs_json.get("cmakeFlags", []))
++
+         # configuration
+         cfg = get_build_type()
+         build_args = ["--config", cfg]

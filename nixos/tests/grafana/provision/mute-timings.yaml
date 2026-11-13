@@ -1,0 +1,4 @@
+apiVersion: 1
+
+muteTimes:
+  - name: "Test Mute Timing"

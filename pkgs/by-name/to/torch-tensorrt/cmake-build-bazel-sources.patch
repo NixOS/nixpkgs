@@ -1,0 +1,120 @@
+From d9e585902a2650c5625141997be6de40d28e8397 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Tue, 27 Oct 2026 20:23:46 -0700
+Subject: [PATCH] fix(cmake): build with C++20 and the sources that the Bazel
+ build compiles
+
+The CMake build lagged behind the Bazel build:
+
+- It compiled with C++17, but PyTorch's headers (and the Bazel build) need
+  C++20.
+- core/runtime did not compile RuntimeSettings.cpp and TRTRuntimeConfig.cpp,
+  so linking torchtrtc failed with undefined references to them. Their
+  headers, which TRTEngine.h includes, were not installed either.
+- core/runtime did not define TRT_HAS_IRUNTIME_CONFIG, which the Bazel build
+  defines for every TensorRT except JetPack's.
+- core/conversion/converters did not compile the bitwise, einsum and
+  internal_ops converters.
+- libtorchtrt.so did not contain the plugins, which the Bazel build links into
+  the runtime (and so into libtorchtrt.so) to register them on load.
+---
+ CMakeLists.txt                            | 4 ++--
+ core/CMakeLists.txt                       | 2 ++
+ core/conversion/converters/CMakeLists.txt | 3 +++
+ core/runtime/CMakeLists.txt               | 8 ++++++++
+ 4 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1fdd9390e..4645670d7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,8 +2,8 @@
+ cmake_minimum_required(VERSION 3.17)
+ project(Torch-TensorRT LANGUAGES CXX)
+ 
+-# use c++17 like PyTorch
+-set(CMAKE_CXX_STANDARD 17)
++# use c++20 like PyTorch and the Bazel build
++set(CMAKE_CXX_STANDARD 20)
+ 
+ # Build the libraries with -fPIC
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+diff --git a/core/CMakeLists.txt b/core/CMakeLists.txt
+index c360bff02..8d1c73a80 100644
+--- a/core/CMakeLists.txt
++++ b/core/CMakeLists.txt
+@@ -16,6 +16,7 @@ target_sources(${lib_name}
+         $<TARGET_OBJECTS:core_lowering>
+         $<TARGET_OBJECTS:core_conversion>
+         $<TARGET_OBJECTS:core_runtime>
++        $<TARGET_OBJECTS:core_plugins>
+         $<TARGET_OBJECTS:core_partitioning>
+         $<TARGET_OBJECTS:core_util_logging>
+ )
+@@ -25,6 +26,7 @@ target_link_libraries(${lib_name}
+         torch
+         TensorRT::nvinfer
+         core_runtime
++        core_plugins
+         core_conversion
+         core_lowering
+         core_partitioning
+diff --git a/core/conversion/converters/CMakeLists.txt b/core/conversion/converters/CMakeLists.txt
+index 392a82b74..43ab86f6d 100644
+--- a/core/conversion/converters/CMakeLists.txt
++++ b/core/conversion/converters/CMakeLists.txt
+@@ -6,6 +6,7 @@ target_sources(${lib_name}
+             "${CMAKE_CURRENT_SOURCE_DIR}/Weights.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/activation.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/batch_norm.cpp"
++            "${CMAKE_CURRENT_SOURCE_DIR}/impl/bitwise.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/cast.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/chunk.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/concat.cpp"
+@@ -13,8 +14,10 @@ target_sources(${lib_name}
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/constant_pad.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/conv_deconv.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/cumsum.cpp"
++            "${CMAKE_CURRENT_SOURCE_DIR}/impl/einsum.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/element_wise.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/expand.cpp"
++            "${CMAKE_CURRENT_SOURCE_DIR}/impl/internal_ops.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/interpolate.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/layer_norm.cpp"
+             "${CMAKE_CURRENT_SOURCE_DIR}/impl/linear.cpp"
+diff --git a/core/runtime/CMakeLists.txt b/core/runtime/CMakeLists.txt
+index f190300dd..aba7df08b 100644
+--- a/core/runtime/CMakeLists.txt
++++ b/core/runtime/CMakeLists.txt
+@@ -6,6 +6,8 @@ set(CXX_SRCS
+     "${CMAKE_CURRENT_SOURCE_DIR}/RTDevice.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/TRTEngine.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/TRTEngineProfiler.cpp"
++    "${CMAKE_CURRENT_SOURCE_DIR}/TRTRuntimeConfig.cpp"
++    "${CMAKE_CURRENT_SOURCE_DIR}/RuntimeSettings.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/execute_engine.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/register_jit_hooks.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/runtime.cpp"
+@@ -18,6 +20,8 @@ set(HEADER_FILES
+     "${CMAKE_CURRENT_SOURCE_DIR}/TensorRTBindingNames.h"
+     "${CMAKE_CURRENT_SOURCE_DIR}/TRTEngine.h"
+     "${CMAKE_CURRENT_SOURCE_DIR}/TRTEngineProfiler.h"
++    "${CMAKE_CURRENT_SOURCE_DIR}/TRTRuntimeConfig.h"
++    "${CMAKE_CURRENT_SOURCE_DIR}/RuntimeSettings.h"
+     "${CMAKE_CURRENT_SOURCE_DIR}/runtime.h"
+     "${CMAKE_CURRENT_SOURCE_DIR}/Platform.h"
+ )
+@@ -40,6 +44,10 @@ target_link_libraries(${lib_name}
+         core_util
+ )
+ 
++# nvinfer1::IRuntimeConfig, which TRTRuntimeConfig.cpp uses, was added in TensorRT 10.11. As in the Bazel build, every
++# configuration except JetPack's older TensorRT has it.
++target_compile_definitions(${lib_name} PUBLIC TRT_HAS_IRUNTIME_CONFIG)
++
+ if(NOT WIN32)
+     target_link_libraries(${lib_name}
+         PUBLIC
+-- 
+2.43.0
+

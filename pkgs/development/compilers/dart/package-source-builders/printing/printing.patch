@@ -1,0 +1,33 @@
+--- a/linux/CMakeLists.txt
++++ b/linux/CMakeLists.txt
+@@ -14,6 +14,9 @@
+ cmake_minimum_required(VERSION 3.10)
+ set(PROJECT_NAME "printing")
+ project(${PROJECT_NAME} LANGUAGES CXX)
++
++set(PDFIUM_LIB_DIR @pdfiumLib@)
++set(PDFIUM_INCLUDE_DIR @pdfiumDev@/include/public)
+
+ set(PDFIUM_VERSION "5200" CACHE STRING "Version of pdfium used")
+ string(REPLACE "linux-" "" TARGET_ARCH ${FLUTTER_TARGET_PLATFORM})
+@@ -31,15 +34,12 @@
+-# Download pdfium
+-include(../windows/DownloadProject.cmake)
+-download_project(PROJ
+-                 pdfium
+-                 URL
+-                 ${PDFIUM_URL})
+-
+ # This value is used when generating builds using this plugin, so it must not be
+ # changed
+ set(PLUGIN_NAME "printing_plugin")
+
+-include(${pdfium_SOURCE_DIR}/PDFiumConfig.cmake)
++set(PDFium_LIBRARY "${PDFIUM_LIB_DIR}/lib/libpdfium.so")
++add_library(pdfium SHARED IMPORTED)
++set_target_properties(pdfium PROPERTIES
++                      IMPORTED_LOCATION "${PDFium_LIBRARY}"
++                      INTERFACE_INCLUDE_DIRECTORIES "${PDFIUM_INCLUDE_DIR}")
+
+ # System-level dependencies.
+ find_package(PkgConfig REQUIRED)

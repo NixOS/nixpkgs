@@ -1,0 +1,18 @@
+trtllmGen_gemm_export/GemmInterface.h (shipped in flashinfer-cubin) uses std::reference_wrapper
+without including <functional>. With GCC 16's libstdc++, nothing included before it in
+trtllm_gemm_runner.cu provides it:
+  error: incomplete type "std::reference_wrapper<gemm::gemm::GemmInterface::ModuleCache>" is not allowed
+Include it before that header.
+
+--- a/csrc/trtllm_gemm_runner.cu
++++ b/csrc/trtllm_gemm_runner.cu
+@@ -23,6 +23,9 @@
+ #include "flashinfer/exception.h"
+ #include "flashinfer/trtllm/common.h"
+ #include "flashinfer/trtllm/gemm/trtllmGen_gemm_export/Enums.h"
++// GemmInterface.h uses std::reference_wrapper without including <functional>
++#include <functional>
++
+ #include "flashinfer/trtllm/gemm/trtllmGen_gemm_export/GemmInterface.h"
+ #include "flashinfer/trtllm/gemm/trtllmGen_gemm_export/trtllm/gen/DtypeDecl.h"
+ #include "flashinfer/trtllm/gemm/trtllmGen_gemm_export/trtllm/gen/SfLayoutDecl.h"

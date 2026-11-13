@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 9 Dec 2025 21:03:16 -0500
+Subject: [PATCH 2/6] treat-nixpkgs-sdk-as-xcode
+
+---
+ Sources/SWBCore/Core.swift                      | 4 ++--
+ Sources/SWBTestSupport/SkippedTestSupport.swift | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/SWBCore/Core.swift b/Sources/SWBCore/Core.swift
+index 7186b5a2..792fbe3f 100644
+--- a/Sources/SWBCore/Core.swift
++++ b/Sources/SWBCore/Core.swift
+@@ -278,7 +278,7 @@ public final class Core: Sendable {
+ 
+             switch developerPath {
+             case .xcode(let path):
+-                toolchainPaths.append(.init(path: path.join("Toolchains"), strict: path.str.hasSuffix(".app/Contents/Developer"), type: .toolchainsDirectoryPath))
++                toolchainPaths.append(.init(path: path.join("Toolchains"), strict: path.str.hasSuffix(".app/Contents/Developer") || path.str.hasPrefix("@store-dir@"), type: .toolchainsDirectoryPath))
+             case .swiftToolchain(let path, xcodeDeveloperPath: let xcodeDeveloperPath):
+                 if hostOperatingSystem == .windows {
+                     toolchainPaths.append(.init(path: path.join("Toolchains"), strict: true, type: .toolchainsDirectoryPath, aliases: ["default"]))
+@@ -286,7 +286,7 @@ public final class Core: Sendable {
+                     toolchainPaths.append(.init(path: path, strict: false, type: .toolchainPath, aliases: ["default"]))
+                 }
+                 if let xcodeDeveloperPath {
+-                    toolchainPaths.append(.init(path: xcodeDeveloperPath.join("Toolchains"), strict: xcodeDeveloperPath.str.hasSuffix(".app/Contents/Developer"), type: .toolchainsDirectoryPath))
++                    toolchainPaths.append(.init(path: xcodeDeveloperPath.join("Toolchains"), strict: xcodeDeveloperPath.str.hasSuffix(".app/Contents/Developer") || path.str.hasPrefix("@store-dir@"), type: .toolchainsDirectoryPath))
+                 }
+             }
+ 
+diff --git a/Sources/SWBTestSupport/SkippedTestSupport.swift b/Sources/SWBTestSupport/SkippedTestSupport.swift
+index 5984e25b..d992314f 100644
+--- a/Sources/SWBTestSupport/SkippedTestSupport.swift
++++ b/Sources/SWBTestSupport/SkippedTestSupport.swift
+@@ -169,7 +169,7 @@ extension Trait where Self == Testing.ConditionTrait {
+     /// Constructs a condition trait that causes a test to be disabled if the developer directory is pointing at an Xcode developer directory.
+     package static var skipXcodeToolchain: Self {
+         disabled("This test is incompatible with Xcode toolchains.") { core in
+-            core.developerPath.path.str.contains(".app/Contents/Developer")
++            core.developerPath.path.str.contains(".app/Contents/Developer") || core.developerPath.path.str.hasPrefix("@store-dir@")
+         }
+     }
+ 
+-- 
+2.54.0
+

@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 9 Oct 2026 14:37:23 -0400
+Subject: [PATCH] gnu-install-dirs
+
+---
+ Sources/IndexStoreDB/CMakeLists.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/IndexStoreDB/CMakeLists.txt b/Sources/IndexStoreDB/CMakeLists.txt
+index cdc008c..86e65a8 100644
+--- a/Sources/IndexStoreDB/CMakeLists.txt
++++ b/Sources/IndexStoreDB/CMakeLists.txt
+@@ -25,8 +25,8 @@ if(NOT CMAKE_SYSTEM_NAME STREQUAL Darwin)
+ endif()
+ 
+ install(TARGETS IndexStoreDB
+-  ARCHIVE DESTINATION lib/swift$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:_static>/$<LOWER_CASE:${CMAKE_SYSTEM_NAME}>
+-  LIBRARY DESTINATION lib/swift$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:_static>/$<LOWER_CASE:${CMAKE_SYSTEM_NAME}>
+-  RUNTIME DESTINATION bin)
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ install_swiftmodule(IndexStoreDB)
+ set_property(GLOBAL APPEND PROPERTY IndexStoreDB_EXPORTS IndexStoreDB)
+-- 
+2.54.0
+

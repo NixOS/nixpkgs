@@ -1,0 +1,68 @@
+diff --git a/lemon/path.h b/lemon/path.h
+--- a/lemon/path.h
++++ b/lemon/path.h
+@@ -26,6 +26,7 @@
+ 
+ #include <vector>
+ #include <algorithm>
++#include <memory>
+ 
+ #include <lemon/error.h>
+ #include <lemon/core.h>
+@@ -448,7 +449,10 @@ namespace lemon {
+ 
+     Node *first, *last;
+ 
+-    std::allocator<Node> alloc;
++    typedef std::allocator<Node> Allocator;
++    typedef std::allocator_traits<Allocator> AllocatorTraits;
++
++    Allocator alloc;
+ 
+   public:
+ 
+@@ -582,7 +586,7 @@ namespace lemon {
+     void clear() {
+       while (first != 0) {
+         last = first->next;
+-        alloc.destroy(first);
++        AllocatorTraits::destroy(alloc, first);
+         alloc.deallocate(first, 1);
+         first = last;
+       }
+@@ -596,7 +600,7 @@ namespace lemon {
+     /// \brief Add a new arc before the current path
+     void addFront(const Arc& arc) {
+       Node *node = alloc.allocate(1);
+-      alloc.construct(node, Node());
++      AllocatorTraits::construct(alloc, node, Node());
+       node->prev = 0;
+       node->next = first;
+       node->arc = arc;
+@@ -617,7 +621,7 @@ namespace lemon {
+       } else {
+         last = 0;
+       }
+-      alloc.destroy(node);
++      AllocatorTraits::destroy(alloc, node);
+       alloc.deallocate(node, 1);
+     }
+ 
+@@ -629,7 +633,7 @@ namespace lemon {
+     /// \brief Add a new arc behind the current path.
+     void addBack(const Arc& arc) {
+       Node *node = alloc.allocate(1);
+-      alloc.construct(node, Node());
++      AllocatorTraits::construct(alloc, node, Node());
+       node->next = 0;
+       node->prev = last;
+       node->arc = arc;
+@@ -650,7 +654,7 @@ namespace lemon {
+       } else {
+         first = 0;
+       }
+-      alloc.destroy(node);
++      AllocatorTraits::destroy(alloc, node);
+       alloc.deallocate(node, 1);
+     }
+ 

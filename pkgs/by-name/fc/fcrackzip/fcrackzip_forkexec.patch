@@ -1,0 +1,105 @@
+--- origin/main.c	2016-12-12 12:53:38.344285376 +0100
++++ main.c	2016-12-12 13:01:41.134548824 +0100
+@@ -26,11 +26,13 @@
+ #include <string.h>
+ 
+ #ifdef USE_UNIX_REDIRECTION
+-#define DEVNULL ">/dev/null 2>&1"
++#define DEVNULL "/dev/null"
+ #else
+-#define DEVNULL ">NUL 2>&1"
++#define DEVNULL "NUL"
+ #endif
+ 
++#include <errno.h>
++
+ #include "crack.h"
+ 
+ int use_unzip;
+@@ -47,21 +49,77 @@
+ int REGPARAM
+ check_unzip (const char *pw)
+ {
+-  char buff[1024];
+-  int status;
++pid_t cpid;
++cpid = fork ();
++if (cpid == -1)
++  {
++    perror ("fork");
++    exit (EXIT_FAILURE);
++  }
++
++if (cpid == 0)
++  {
++    // Redirect STDERR/STDOUT to /dev/null
++    int oldfd_stderr, oldfd_stdout;
++    oldfd_stdout = dup (fileno (stdout));
++    if (oldfd_stdout == -1)
++      {
++        perror ("dup for stdout");
++        _exit (127);
++      }
++    oldfd_stderr = dup (fileno (stderr));
++    if (oldfd_stderr == -1)
++      {
++        perror ("dup for stderr");
++        _exit (127);
++      }
++    if (freopen (DEVNULL, "w", stdout) == NULL)
++      {
++        perror ("freopen " DEVNULL " for stdout");
++        _exit (127);
++      }
++    if (freopen (DEVNULL, "w", stderr) == NULL)
++      {
++        perror ("freopen " DEVNULL " for stderr");
++        _exit (127);
++      }
++    execlp ("unzip", "unzip", "-qqtP", pw, file_path[0], NULL);
++
++    // When execlp failed.
++    // Restores the stderr/stdout redirection to print an error.
++    int errno_saved = errno;
++    dup2 (oldfd_stderr, fileno (stderr));
++    dup2 (oldfd_stdout, fileno (stdout));
++    close (oldfd_stderr);
++    close (oldfd_stdout);
++    errno = errno_saved;
++    perror ("execlp for unzip");
++    _exit (127); // Returns 127 on error as system(3) does
++  }
+ 
+-  sprintf (buff, "unzip -qqtP \"%s\" %s " DEVNULL, pw, file_path[0]);
+-  status = system (buff);
+-
+-#undef REDIR
++  int status;
+ 
+-  if (status == EXIT_SUCCESS)
++  if (waitpid (cpid, &status, 0) == -1)
+     {
+-      printf("\n\nPASSWORD FOUND!!!!: pw == %s\n", pw);
++    perror ("waitpid");
++    exit (EXIT_FAILURE);
++  }
++
++  // The child process does not terminated normally, OR returns the exit status 127.
++  if (!WIFEXITED (status)
++    || (WIFEXITED (status) && (WEXITSTATUS (status) == 127)))
++  {
++    fprintf (stderr, "Executing unzip failed.\n");
++    exit (EXIT_FAILURE);
++  }
++// unzip exited normally with the exit status 0 then...
++ if (WIFEXITED (status) && (WEXITSTATUS (status) == EXIT_SUCCESS))
++  {
++    printf ("\n\nPASSWORD FOUND!!!!: pw == %s\n", pw);
+       exit (EXIT_SUCCESS);
+     }
+ 
+-  return !status;
++  return 0;
+ }
+ 
+ /* misc. callbacks.  */

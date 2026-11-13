@@ -1,0 +1,14 @@
+diff --git a/Directory.Build.props b/Directory.Build.props
+index f124456..117c096 100644
+--- a/Directory.Build.props
++++ b/Directory.Build.props
+@@ -9,9 +9,5 @@
+       <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
+       <RunApiCompat>False</RunApiCompat>
+       <LangVersion>12</LangVersion>
+-      <CreateHardLinksForCopyAdditionalFilesIfPossible>true</CreateHardLinksForCopyAdditionalFilesIfPossible>
+-      <CreateHardLinksForCopyFilesToOutputDirectoryIfPossible>true</CreateHardLinksForCopyFilesToOutputDirectoryIfPossible>
+-      <CreateHardLinksForCopyLocalIfPossible>true</CreateHardLinksForCopyLocalIfPossible>
+-      <CreateHardLinksForPublishFilesIfPossible>true</CreateHardLinksForPublishFilesIfPossible>
+   </PropertyGroup>
+ </Project>

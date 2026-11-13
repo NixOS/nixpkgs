@@ -1,0 +1,20 @@
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -22,7 +22,7 @@ import { AppIds } from "./pages/AppIds";
+ import { Settings } from "./pages/Settings";
+ import { Pairing } from "./pages/Pairing";
+ import { getVersion } from "@tauri-apps/api/app";
+-import { checkForUpdates } from "./update";
++// import { checkForUpdates } from "./update";
+ import logo from "./iloader.svg";
+ import { GlassCard } from "./components/GlassCard";
+ import { useTranslation } from "react-i18next";
+@@ -70,7 +70,7 @@ function App() {
+   }, []);
+ 
+   useEffect(() => {
+-    checkForUpdates();
++    // checkForUpdates();
+   }, []);
+ 
+   useEffect(() => {

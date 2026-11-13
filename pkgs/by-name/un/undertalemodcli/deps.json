@@ -1,0 +1,162 @@
+[
+  {
+    "pname": "coverlet.collector",
+    "version": "10.0.1",
+    "hash": "sha256-6nZ5qWvy1SPYM9SfYbZEdGGrErdnOPluZXgJJ/hiarw="
+  },
+  {
+    "pname": "Fody",
+    "version": "6.9.3",
+    "hash": "sha256-JLom3mbO4NCUXDHoU86l720QXlRx52+ROb5wBwcC5nM="
+  },
+  {
+    "pname": "Magick.NET-Q8-AnyCPU",
+    "version": "14.16.0",
+    "hash": "sha256-MGiC4fEbc5QUD92s40Ed1MwQzkebYaKn1yA81Q261GM="
+  },
+  {
+    "pname": "Magick.NET.Core",
+    "version": "14.16.0",
+    "hash": "sha256-s01OlHK355YUYdG2LAiHMUO/VtztLYLAG0FVJcSz8kQ="
+  },
+  {
+    "pname": "Microsoft.Bcl.AsyncInterfaces",
+    "version": "10.0.11",
+    "hash": "sha256-6+uy6Zu0BHFuj7ay6HOJBbHDm6k/tMAQrSrJTDf0Cus="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Analyzers",
+    "version": "5.9.0-1.26328.17",
+    "hash": "sha256-p+9Mmyz0A79U5LUuuPuJ6UaiholPFI7L51Fdgcew9hI="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Common",
+    "version": "5.9.0",
+    "hash": "sha256-d+/UcVwkyM1rNvm5KYCi9ahuSntTZI1PHKO3mjkzpCk="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp",
+    "version": "5.9.0",
+    "hash": "sha256-dgLD26oSImjzsmxswN0C65Ik3qlELtJ69cP+VtZDmT8="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp.Scripting",
+    "version": "5.9.0",
+    "hash": "sha256-Yf+EY8Hev0S/xMpLwxpqdNu8tExhY/3hsF3bhREUqnk="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Scripting.Common",
+    "version": "5.9.0",
+    "hash": "sha256-BYd3o3nivWsATri8jYGq6yXwlEPYCXnyukZ5T0NLU0U="
+  },
+  {
+    "pname": "Microsoft.CodeCoverage",
+    "version": "18.9.0",
+    "hash": "sha256-fubaxGJ8F22BnbJGfx9B7DVZcKPqHopri6eD6gcvwz0="
+  },
+  {
+    "pname": "Microsoft.NET.Test.Sdk",
+    "version": "18.9.0",
+    "hash": "sha256-PBkxJ1SimRYLr8sZIQTFdxmEnwVYmzrl/tLiHbz09bA="
+  },
+  {
+    "pname": "Microsoft.TestPlatform.ObjectModel",
+    "version": "18.9.0",
+    "hash": "sha256-/RJOUlUCKDgC0qZ9ALc3nTm7nGa6hFktzxm3OQDscIo="
+  },
+  {
+    "pname": "Microsoft.TestPlatform.TestHost",
+    "version": "18.9.0",
+    "hash": "sha256-RSJCqMGYoaT0XlSij6PEyjqAuSSbvN8sAv2bgYwC0e4="
+  },
+  {
+    "pname": "NETStandard.Library.Ref",
+    "version": "2.1.0",
+    "hash": "sha256-Ruovy9EKgXaFuFr3zgw5fRKUS9yBIJ4nLeHgXv0zx4o="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.4",
+    "hash": "sha256-8JCB1FdAW681qXP6DFDWvycu1oPyVoxaYgpJ2pUvZSk="
+  },
+  {
+    "pname": "PropertyChanged.Fody",
+    "version": "4.1.0",
+    "hash": "sha256-SAId/w7y5RZqMnpnJ6nmMjaPXQIr2h6QsRKZ4yuoYYU="
+  },
+  {
+    "pname": "runtime.osx.10.10-x64.CoreCompat.System.Drawing",
+    "version": "6.0.5.128",
+    "hash": "sha256-upmM1/1NGfoBrpNfbaAxFBqqDo+vQ5eDkA/WlxUcXdg="
+  },
+  {
+    "pname": "SharpZipLib",
+    "version": "1.4.2",
+    "hash": "sha256-/giVqikworG2XKqfN9uLyjUSXr35zBuZ2FX2r8X/WUY="
+  },
+  {
+    "pname": "System.CommandLine",
+    "version": "2.0.11",
+    "hash": "sha256-SJ8q/PVeR3pwEb5/Xh7hgq6VWzA/OWx27ULt5qwaOEw="
+  },
+  {
+    "pname": "System.IO.Pipelines",
+    "version": "10.0.11",
+    "hash": "sha256-2gBbActq+Wfeng8uTBFHek/GEdjpBx0+1X/cJeLI80s="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "6.1.2",
+    "hash": "sha256-X2p/U680Zfkr622oc+vg5JYgbDEzE7mLre5DVaayWTc="
+  },
+  {
+    "pname": "System.Text.Encodings.Web",
+    "version": "10.0.11",
+    "hash": "sha256-T19fI5f3CZRtLVWTxV2kl66dGPn+Dzg0iqfwyZlcm7Y="
+  },
+  {
+    "pname": "System.Text.Json",
+    "version": "10.0.11",
+    "hash": "sha256-bOJ+B/ziXHw+Vy8i8ggk+HkG6zjuUqg/SoetkOopbrw="
+  },
+  {
+    "pname": "xunit",
+    "version": "2.9.3",
+    "hash": "sha256-BPrpSbjlIB7PoH+ocCusqMDrMZgRQZSzeTeJzHK/I9c="
+  },
+  {
+    "pname": "xunit.abstractions",
+    "version": "2.0.3",
+    "hash": "sha256-0D1y/C34iARI96gb3bAOG8tcGPMjx+fMabTPpydGlAM="
+  },
+  {
+    "pname": "xunit.analyzers",
+    "version": "1.18.0",
+    "hash": "sha256-DOgamLnfi9Ua5IDm3JVm9MaOFbSSbmq5l8j2NPO3qd0="
+  },
+  {
+    "pname": "xunit.assert",
+    "version": "2.9.3",
+    "hash": "sha256-vHYOde8bd10pOmr7iTAYNtPlqHzsJl4x3t1DDuYdDCA="
+  },
+  {
+    "pname": "xunit.core",
+    "version": "2.9.3",
+    "hash": "sha256-qkVQ8Jw/LZWmxirkPOwiry7bvZn3IuaRzu/sp2H8anw="
+  },
+  {
+    "pname": "xunit.extensibility.core",
+    "version": "2.9.3",
+    "hash": "sha256-mcpVX+m0R7F0ev9CaBnbai9gtu4GVcqijEuRqe89D0g="
+  },
+  {
+    "pname": "xunit.extensibility.execution",
+    "version": "2.9.3",
+    "hash": "sha256-2rxMs2Dt4cAcmOFMwP5Yd3RpP0BnmiL8cXlKysXY0jw="
+  },
+  {
+    "pname": "xunit.runner.visualstudio",
+    "version": "4.0.0",
+    "hash": "sha256-1CY2ZY7UEnMdeTFXW4dX4xHD1mB4VWuU1Rsa8ROHcQE="
+  }
+]

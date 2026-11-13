@@ -1,0 +1,13 @@
+--- a/testing/embedder_test.cpp
++++ b/testing/embedder_test.cpp
+@@ -1286,6 +1286,10 @@ void EmbedderTest::CompareBitmapWithExpectationSuffix(
+                    kFontationsDiffOptions.max_window_mean_squared_error);
+     }
+   }
++#if BUILDFLAG(IS_MAC)
++  effective_options.max_pixel_per_channel_delta =
++      std::max(effective_options.max_pixel_per_channel_delta, 1);
++#endif
+   std::vector<std::string> candidate_png_path =
+       GetEmbedderTestExpectationsWithSuffixPath(expectation_png_name);
+   for (const std::string& png_path : candidate_png_path) {

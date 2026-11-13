@@ -1,0 +1,12 @@
+diff --git a/libs/CLI11/include/CLI/Validators.hpp b/libs/CLI11/include/CLI/Validators.hpp
+index 536f8a6..3371905 100644
+--- a/libs/CLI11/include/CLI/Validators.hpp
++++ b/libs/CLI11/include/CLI/Validators.hpp
+@@ -18,6 +18,7 @@
+ // Could be swapped for filesystem in C++17
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#include <cstdint>
+ 
+ namespace CLI {
+ 

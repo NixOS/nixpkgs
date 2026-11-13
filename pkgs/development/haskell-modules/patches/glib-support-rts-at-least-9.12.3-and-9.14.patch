@@ -1,0 +1,24 @@
+From 2e1ddf6f4a28819f42db45859a83f3dd7ed14c0e Mon Sep 17 00:00:00 2001
+From: Tuong Nguyen Manh <tuongnm88@gmail.com>
+Date: Sat, 14 Feb 2026 11:58:29 +0100
+Subject: [PATCH] Fix glib for RTS API change in GHC 9.12.3/9.14.1
+
+---
+ glib/System/Glib/hsgclosure.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/glib/System/Glib/hsgclosure.c b/glib/System/Glib/hsgclosure.c
+index 1610702b..6049827f 100644
+--- a/System/Glib/hsgclosure.c
++++ b/System/Glib/hsgclosure.c
+@@ -107,7 +107,9 @@ gtk2hs_closure_marshal(GClosure *closure,
+     WHEN_DEBUG(g_debug("gtk2hs_closure_marshal(%p): about to rts_evalIO", hc->callback));
+     
+     /* perform the call */
+-    #if __GLASGOW_HASKELL__>=704
++    #if (__GLASGOW_HASKELL__>=912 && __GLASGOW_HASKELL_PATCHLEVEL1__>=3) || __GLASGOW_HASKELL__>=914
++    rts_evalIO(&cap, rts_apply(CAP (HaskellObj)ghc_hs_iface->runIO_closure, call),&ret);
++    #elif __GLASGOW_HASKELL__>=704
+     rts_evalIO(&cap, rts_apply(CAP (HaskellObj)runIO_closure, call),&ret);
+     #else
+     cap=rts_evalIO(CAP rts_apply(CAP (HaskellObj)runIO_closure, call),&ret);
