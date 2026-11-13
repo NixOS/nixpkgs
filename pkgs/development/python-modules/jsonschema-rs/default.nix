@@ -1,10 +1,12 @@
 {
+  lib,
+  aws-lc,
   buildPythonPackage,
   cacert,
   fetchPypi,
   hypothesis,
-  lib,
   nix-update-script,
+  pkg-config,
   pytestCheckHook,
   rustPlatform,
 }:
@@ -27,10 +29,13 @@ buildPythonPackage rec {
     hash = "sha256-zfV64UD6hbU5qfpecnlt7Q0kXP9KLQtMTdiNcXy9hOw=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = [ aws-lc ];
 
   nativeCheckInputs = [
     hypothesis
