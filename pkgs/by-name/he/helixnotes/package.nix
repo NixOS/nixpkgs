@@ -18,23 +18,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "helixnotes";
-  version = "1.3.6";
+  version = "1.3.7";
   __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "ArkHost";
     repo = "HelixNotes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-06U9404JTZju1fjMtzkncWjf2zuww1P+oDLcZak5XkA=";
+    hash = "sha256-maJjuPpSCp8hML4tp5bQSFkTfzOQa7E11zlOw24wwyU=";
   };
 
-  cargoHash = "sha256-t03bO221qKv0EL3h2e12G2qfKfaRW7BMYqTgKcYRYp8=";
+  cargoHash = "sha256-DoXtVS5mhPg8s+MJ5Uw3Ap9dgwqaOGX/WE96l2IzD58=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-xfzamKcryQIYBm+b3dul0lRK3O8+sLVF4vibVS3NWGU=";
+    hash = "sha256-tBJIrILdromYkF19aQSChW0ZhBbK32GMQPleWVy1PuY=";
   };
 
   nativeBuildInputs = [
