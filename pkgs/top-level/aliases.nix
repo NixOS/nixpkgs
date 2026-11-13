@@ -1489,6 +1489,7 @@ mapAliases {
   libiconv-darwin = throw "'libiconv-darwin' has been renamed to/replaced by 'darwin.libiconv'"; # Converted to throw 2025-10-27
   libindicator-gtk2 = throw "'libindicator-gtk2' has been removed as it depended on the deprecated GTK 2 engine."; # Added 2026-08-10
   libindicator-gtk3 = libindicator; # Added 2026-08-10
+  libintPsi4 = throw "'libintPsi4' has been removed as it is outdated and no longer used by Psi4"; # Converted to throw 2026-11-18
   libixp_hg = throw "'libixp_hg' has been renamed to/replaced by 'libixp'"; # Converted to throw 2025-10-27
   libkkc = throw "'libkkc' has been removed due to lack of maintenance. Consider using anthy instead"; # Added 2025-08-28
   libkkc-data = throw "'libkkc-data' has been removed as it depended on libkkc which was removed"; # Added 2025-08-28
