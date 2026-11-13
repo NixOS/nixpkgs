@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://downloads.sourceforge.net/omniorb/omniORBpy-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-pwnDx3ucawhhbhyeEqWpudXMwfLc9vZH8gUBjXf4Gac=";
+    hash = "sha256-etgTjEcbRRMtwbzVsbQptf4H7v6ehXlVjxs2Br3aQXI=";
   };
 
   outputs = [
