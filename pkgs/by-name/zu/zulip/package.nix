@@ -118,7 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/zulip/zulip-desktop";
     changelog = "https://github.com/zulip/zulip-desktop/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ andersk ];
+    maintainers = with lib.maintainers; [
+      andersk
+      debtquity
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "zulip";
   };
