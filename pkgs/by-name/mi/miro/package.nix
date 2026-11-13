@@ -18,21 +18,23 @@
   libarchive,
   brotli,
   versionCheckHook,
+  gtk3,
+  xdotool,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miro";
-  version = "0.10.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "vincent-uden";
     repo = "miro";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aCXPaUir4sd27S9CEdPbgaas2mstAxONcIWmZMpX6a8=";
+    hash = "sha256-crDsYiuAOp4uJpwn1eVB3gOedkn+IHHxerKAX8AcvUc=";
   };
 
-  cargoHash = "sha256-/XlkdtZNx05WgdlHZ2WWUrjadiAUJz6x25jSKiO/H34=";
+  cargoHash = "sha256-ww0VUDCKslHoOhnBlAQu4vO8M3hX78wEgl16vBLp4KE=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -54,6 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tesseract
     libarchive
     brotli
+    gtk3
+    xdotool
   ];
 
   env = {
@@ -82,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Native PDF viewer (Wayland/X11) with configurable keybindings";
     homepage = "https://github.com/vincent-uden/miro";
+    changelog = "https://github.com/vincent-uden/miro/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "miro-pdf";

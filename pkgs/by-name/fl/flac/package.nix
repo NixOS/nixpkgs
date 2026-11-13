@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--url=https://github.com/xiph/flac" ]; };
 
   meta = {
     homepage = "https://xiph.org/flac/";

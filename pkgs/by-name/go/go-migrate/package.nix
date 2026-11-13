@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,6 +21,11 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/migrate" ];
 
+  ldflags = [
+    "-s"
+    "-X main.Version=${finalAttrs.version}"
+  ];
+
   tags = [
     "cassandra"
     "clickhouse"
@@ -37,7 +43,6 @@ buildGoModule (finalAttrs: {
     "redshift"
     "rqlite"
     "shell"
-    "snowflake"
     "spanner"
     "sqlite3"
     "sqlserver"
@@ -45,6 +50,9 @@ buildGoModule (finalAttrs: {
     "testing"
     "yugabytedb"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     homepage = "https://github.com/golang-migrate/migrate";

@@ -5,13 +5,14 @@
 }:
 mkLibretroCore {
   core = "theodore";
-  version = "0-unstable-2026-04-03";
+  version = "0-unstable-2026-08-17";
 
   src = fetchFromGitHub {
     owner = "Zlika";
     repo = "theodore";
-    rev = "121ae2513d3ee29f0aaf765a64dc086d57e7a4c7";
-    hash = "sha256-dEBjoxtX59J4pHMbLLlcJTh/R0458B9XkfvYHSGX89Q=";
+    rev = "4d469ce0f71ee046ceb78cdbf8e9f18364aaa918";
+    hash = "sha256-5QSbU35DrjwyJnVG5Fsy8VXTJiXuHU3iOmyD8/yzQX8=";
+    fetchSubmodules = true;
   };
 
   makefile = "Makefile";

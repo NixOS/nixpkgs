@@ -13,6 +13,9 @@ buildPecl {
   version = version;
   hash = "sha256-it8w8hOLYwtCZoDYhaP5k5TD/pQLtj37K2lSESF80ok=";
 
+  # The source is a PECL tarball and PECL lacks releases that GitHub tags have (2.0.2)
+  passthru.updateScript = null;
+
   buildInputs = [ mpdecimal ];
   configureFlags = [ "--with-libmpdec-path=${mpdecimal}" ];
 

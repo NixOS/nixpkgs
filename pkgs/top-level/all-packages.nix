@@ -1532,13 +1532,7 @@ with pkgs;
 
   geekbench_7 = geekbench;
 
-  ghidra = callPackage ../tools/security/ghidra/build.nix {
-    protobuf = protobuf_21;
-  };
-
-  ghidra-extensions = recurseIntoAttrs (callPackage ../tools/security/ghidra/extensions.nix { });
-
-  ghidra-bin = callPackage ../tools/security/ghidra { };
+  ghidra-extensions = recurseIntoAttrs (callPackage ../by-name/gh/ghidra/extensions.nix { });
 
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
@@ -1553,10 +1547,6 @@ with pkgs;
   intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
 
   klaus = with python3Packages; toPythonApplication klaus;
-
-  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
-
-  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { flashDevice = "/dev/null"; };
 
   lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
@@ -1893,10 +1883,6 @@ with pkgs;
 
   fabric = with python3Packages; toPythonApplication fabric;
 
-  flatpak-builder = callPackage ../development/tools/flatpak-builder {
-    binutils = binutils-unwrapped;
-  };
-
   bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
   };
@@ -1936,16 +1922,6 @@ with pkgs;
   };
 
   gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
-
-  dapl = callPackage ../development/interpreters/dzaima-apl {
-    buildNativeImage = false;
-    stdenv = stdenvNoCC;
-    jdk = jre;
-  };
-  dapl-native = callPackage ../development/interpreters/dzaima-apl {
-    buildNativeImage = true;
-    jdk = graalvmPackages.graalvm-ce;
-  };
 
   gnucap-full = gnucap.withPlugins (p: [ p.verilog ]);
 
@@ -2054,15 +2030,11 @@ with pkgs;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
 
-  html-proofer = callPackage ../tools/misc/html-proofer { };
-
   httpie = with python3Packages; toPythonApplication httpie;
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
 
-  hyphen = callPackage ../development/libraries/hyphen { };
-
-  hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
+  hyphenDicts = recurseIntoAttrs (callPackages ../by-name/hy/hyphen/dictionaries.nix { });
 
   icepeak = haskell.lib.compose.justStaticExecutables haskellPackages.icepeak;
 
@@ -2406,8 +2378,6 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
-
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
@@ -2481,9 +2451,7 @@ with pkgs;
 
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
-  optifinePackages = callPackage ../tools/games/minecraft/optifine { };
-
-  optifine = optifinePackages.optifine-latest;
+  optifinePackages = callPackage ../by-name/op/optifine { };
 
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
@@ -2522,11 +2490,6 @@ with pkgs;
   };
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
-
-  pdsh = callPackage ../tools/networking/pdsh {
-    rsh = true; # enable internal rsh implementation
-    ssh = openssh;
-  };
 
   phosh-mobile-settings =
     callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix
@@ -2983,7 +2946,10 @@ with pkgs;
 
   fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
     inherit (stdenv.hostPlatform) isx86_64;
+    # Run the updater with native tools rather than the 32-bit bootstrap tools.
+    inherit (fasm-bin) updateScript;
   };
+
   filecheck = with python3Packages; toPythonApplication filecheck;
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
@@ -7500,8 +7466,6 @@ with pkgs;
     }
   );
 
-  rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
-
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
     protobuf = protobuf_33;
   };
@@ -9205,9 +9169,7 @@ with pkgs;
     inherit (python3Packages) beancount beancount-plugin-utils;
   };
 
-  cataclysmDDA = callPackage ../games/cataclysm-dda { };
-
-  cataclysm-dda = cataclysmDDA.stable.tiles;
+  cataclysmDDA = callPackage ../by-name/ca/cataclysm-dda { };
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
@@ -9328,12 +9290,10 @@ with pkgs;
 
   blightmud-tts = callPackage ../by-name/bl/blightmud/package.nix { withTTS = true; };
 
-  openraPackages_2019 = import ../games/openra_2019 {
+  openraPackages_2019 = import ../by-name/op/openra_2019 {
     inherit lib;
     pkgs = pkgs.__splicedPackages;
   };
-
-  openra_2019 = openraPackages_2019.engines.release;
 
   openraPackages = recurseIntoAttrs (callPackage ../by-name/op/openra/engines { });
 
@@ -9341,17 +9301,7 @@ with pkgs;
 
   pokerth-server = pokerth.override { target = "server"; };
 
-  inherit (import ../games/quake3 pkgs.callPackage)
-    quake3wrapper
-    quake3arenadata
-    quake3demodata
-    quake3pointrelease
-    quake3arena
-    quake3arena-hires
-    quake3demo
-    quake3demo-hires
-    quake3hires
-    ;
+  quake3wrapper = callPackage ../by-name/qu/quake3arena/wrapper.nix { };
 
   inherit (callPackage ../by-name/sc/scummvm/games.nix { })
     beneath-a-steel-sky
@@ -9422,10 +9372,7 @@ with pkgs;
   xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
   xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
 
-  inherit
-    (callPackage ../games/quake2/yquake2 {
-    })
-    yquake2
+  inherit (callPackage ../by-name/yq/yquake2/addons.nix { })
     yquake2-ctf
     yquake2-ground-zero
     yquake2-the-reckoning
@@ -10126,8 +10073,6 @@ with pkgs;
 
   py-wacz = with python3Packages; toPythonApplication wacz;
 
-  wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
-
   winePackagesFor = wineBuild: callPackage ./wine-packages.nix { inherit wineBuild; };
 
   winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));
@@ -10162,9 +10107,7 @@ with pkgs;
     inherit (stdenv) mkDerivation;
   };
 
-  znc = callPackage ../applications/networking/znc { };
-
-  zncModules = recurseIntoAttrs (callPackage ../applications/networking/znc/modules.nix { });
+  zncModules = recurseIntoAttrs (callPackage ../by-name/zn/znc/modules.nix { });
 
   inherit
     ({
@@ -10218,8 +10161,7 @@ with pkgs;
         done
       '';
 
-  vdr = callPackage ../applications/video/vdr { };
-  vdrPlugins = recurseIntoAttrs (callPackage ../applications/video/vdr/plugins.nix { });
+  vdrPlugins = recurseIntoAttrs (callPackage ../by-name/vd/vdr/plugins.nix { });
   compressDrv = callPackage ../build-support/compress-drv { };
 
   compressDrvWeb = callPackage ../build-support/compress-drv/web.nix { };

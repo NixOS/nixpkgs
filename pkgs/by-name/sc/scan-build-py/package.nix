@@ -32,6 +32,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     (lib.makeBinPath [ clang-unwrapped ])
   ];
 
+  # The src and version come from clang-unwrapped
+  passthru.updateScript = null;
+
   meta = {
     description = "intercepts the build process to generate a compilation database";
     homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${finalAttrs.version}/clang/tools/scan-build-py/";
