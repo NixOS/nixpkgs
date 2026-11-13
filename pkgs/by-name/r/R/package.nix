@@ -22,7 +22,6 @@
   zlib,
   less,
   texinfo,
-  graphviz,
   icu,
   pkg-config,
   bison,
@@ -98,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     less
     texinfo
-    graphviz
     icu
     which
     blas
