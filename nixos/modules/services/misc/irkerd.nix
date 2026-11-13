@@ -10,11 +10,7 @@ let
 in
 {
   options.services.irkerd = {
-    enable = lib.mkOption {
-      description = "Whether to enable irker, an IRC notification daemon.";
-      default = false;
-      type = lib.types.bool;
-    };
+    enable = lib.mkEnableOption "irker, an IRC notification daemon";
 
     openPorts = lib.mkOption {
       description = "Open ports in the firewall for irkerd";

@@ -13,11 +13,7 @@ in
 {
 
   options.services.etcd = {
-    enable = lib.mkOption {
-      description = "Whether to enable etcd.";
-      default = false;
-      type = lib.types.bool;
-    };
+    enable = lib.mkEnableOption "etcd";
 
     package = lib.mkPackageOption pkgs "etcd" { };
 

@@ -89,11 +89,7 @@ in
     };
 
     web = {
-      enable = lib.mkOption {
-        description = "Whether to enable graphite web frontend.";
-        default = false;
-        type = lib.types.bool;
-      };
+      enable = lib.mkEnableOption "graphite web frontend";
 
       listenAddress = lib.mkOption {
         description = "Graphite web frontend listen address.";
@@ -134,11 +130,7 @@ in
         type = lib.types.str;
       };
 
-      enableCache = lib.mkOption {
-        description = "Whether to enable carbon cache, the graphite storage daemon.";
-        default = false;
-        type = lib.types.bool;
-      };
+      enableCache = lib.mkEnableOption "carbon cache, the graphite storage daemon";
 
       storageAggregation = lib.mkOption {
         description = "Defines how to aggregate data to lower-precision retentions.";
@@ -191,11 +183,7 @@ in
         '';
       };
 
-      enableRelay = lib.mkOption {
-        description = "Whether to enable carbon relay, the carbon replication and sharding service.";
-        default = false;
-        type = lib.types.bool;
-      };
+      enableRelay = lib.mkEnableOption "carbon relay, the carbon replication and sharding service";
 
       relayRules = lib.mkOption {
         description = "Relay rules are used to send certain metrics to a certain backend.";
@@ -208,11 +196,7 @@ in
         '';
       };
 
-      enableAggregator = lib.mkOption {
-        description = "Whether to enable carbon aggregator, the carbon buffering service.";
-        default = false;
-        type = lib.types.bool;
-      };
+      enableAggregator = lib.mkEnableOption "carbon aggregator, the carbon buffering service";
 
       aggregationRules = lib.mkOption {
         description = "Defines if and how received metrics will be aggregated.";
@@ -226,11 +210,7 @@ in
     };
 
     seyren = {
-      enable = lib.mkOption {
-        description = "Whether to enable seyren service.";
-        default = false;
-        type = lib.types.bool;
-      };
+      enable = lib.mkEnableOption "seyren service";
 
       port = lib.mkOption {
         description = "Seyren listening port.";

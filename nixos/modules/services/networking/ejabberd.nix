@@ -28,11 +28,7 @@ in
 
     services.ejabberd = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable ejabberd server";
-      };
+      enable = lib.mkEnableOption "ejabberd server";
 
       package = lib.mkPackageOption pkgs "ejabberd" { };
 

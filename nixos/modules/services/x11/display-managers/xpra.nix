@@ -18,11 +18,7 @@ in
 
   options = {
     services.xserver.displayManager.xpra = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable xpra as display manager.";
-      };
+      enable = lib.mkEnableOption "xpra as display manager";
 
       bindTcp = mkOption {
         default = "127.0.0.1:10000";

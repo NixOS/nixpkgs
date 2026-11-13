@@ -95,11 +95,7 @@ in
   options = {
     services.dysnomia = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable Dysnomia";
-      };
+      enable = lib.mkEnableOption "Dysnomia";
 
       enableAuthentication = lib.mkOption {
         type = lib.types.bool;

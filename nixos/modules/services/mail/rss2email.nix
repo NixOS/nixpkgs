@@ -15,11 +15,7 @@ in
 
     services.rss2email = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable rss2email.";
-      };
+      enable = lib.mkEnableOption "rss2email";
 
       to = lib.mkOption {
         type = lib.types.str;

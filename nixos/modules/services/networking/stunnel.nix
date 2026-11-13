@@ -40,11 +40,7 @@ in
 
     services.stunnel = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the stunnel TLS tunneling service.";
-      };
+      enable = lib.mkEnableOption "the stunnel TLS tunneling service";
 
       user = lib.mkOption {
         type = with lib.types; nullOr str;

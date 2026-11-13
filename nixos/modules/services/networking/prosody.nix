@@ -501,11 +501,7 @@ let
         description = "Domain name";
       };
 
-      enabled = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the virtual host";
-      };
+      enabled = lib.mkEnableOption "the virtual host";
 
       ssl = mkOption {
         type = types.nullOr (types.submodule sslOpts);
@@ -647,11 +643,7 @@ in
 {
   options = {
     services.prosody = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the prosody server";
-      };
+      enable = lib.mkEnableOption "the prosody server";
 
       checkConfig = mkOption {
         type = types.bool;
