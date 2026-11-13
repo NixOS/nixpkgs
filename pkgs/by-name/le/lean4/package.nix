@@ -56,32 +56,21 @@ stdenv.mkDerivation (finalAttrs: {
     ./macos-test-flags-gnu.patch
   ];
 
-  postPatch =
-    let
-      pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
-    in
-    ''
-      substituteInPlace \
-        src/CMakeLists.txt \
-        src/runtime/CMakeLists.txt \
-        stage0/src/CMakeLists.txt \
-        stage0/src/runtime/CMakeLists.txt \
-        --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
+  postPatch = ''
+    patchShebangs --build stage0/src/bin/ src/bin/ tests/
 
-      patchShebangs --build stage0/src/bin/ src/bin/ tests/
+    substituteInPlace src/lean.mk.in \
+      --replace-fail 'SHELL = /usr/bin/env bash' \
+                     'SHELL = ${runtimeShell}'
 
-      substituteInPlace src/lean.mk.in \
-        --replace-fail 'SHELL = /usr/bin/env bash' \
-                      'SHELL = ${runtimeShell}'
+    substituteInPlace src/lake/Lake/CLI/Check.lean \
+      --replace-fail 'cmd := "which"' \
+                     'cmd := "${lib.getExe which}"'
 
-      substituteInPlace src/lake/Lake/CLI/Check.lean \
-        --replace-fail 'cmd := "which"' \
-                      'cmd := "${lib.getExe which}"'
-
-      substituteInPlace tests/lake/tests/fake-bwrap.sh \
-        --replace-fail 'ENV_BIN=/usr/bin/env' \
-                      'ENV_BIN=${coreutils}/bin/env'
-    '';
+    substituteInPlace tests/lake/tests/fake-bwrap.sh \
+      --replace-fail 'ENV_BIN=/usr/bin/env' \
+                     'ENV_BIN=${coreutils}/bin/env'
+  '';
 
   nativeBuildInputs = [
     cadical'
@@ -115,14 +104,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vNVZw2YsDkf0GcdFTNb/fXMQLQYvoc8P425LupPShpo=";
   };
 
+  preConfigure = ''
+    mkdir -p ''${cmakeBuildDir:-build}/mimalloc/src/
+    ln -s ${finalAttrs.mimalloc-src} ''${cmakeBuildDir:-build}/mimalloc/src/mimalloc
+  '';
+
   # Intentionally untyped i.e. no `-DFOO:BOOL=FALSE`. The top-level CMakeLists.txt will not forward
   # the flags to each stage otherwise.
   cmakeFlags = [
+    "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+    "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
+
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_CADICAL=OFF"
     "-DINSTALL_LICENSE=OFF"
-    "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
-    "-DFETCHCONTENT_SOURCE_DIR_MIMALLOC=${finalAttrs.mimalloc-src.outPath}"
 
     # Better log output with a "dumb" terminal
     "-DLEAN_EXTRA_LAKE_OPTS=--no-ansi"
