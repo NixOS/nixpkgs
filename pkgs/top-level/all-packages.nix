@@ -209,6 +209,12 @@ with pkgs;
     systemd = pkgs.systemd;
   };
 
+  image-test-driver = pkgs.python3Packages.callPackage ../build-support/testers/image-test-driver {
+    # The driver imports test_driver.{logger,errors,duration} from the NixOS
+    # driver.
+    inherit (pkgs) nixos-test-driver test-thing;
+  };
+
   ### Push NixOS tests inside the fixed point
 
   # See also allTestsForSystem in nixos/release.nix
