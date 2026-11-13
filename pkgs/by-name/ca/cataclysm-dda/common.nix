@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs lang/compile_mo.sh
     substituteInPlace data/fontdata.json \
       --replace-fail 'data/font/' 'font/'
+  ''
+  # The Makefile hardcodes a macOS deployment target older than libc++ supports, and builds
+  # with -Werror
+  + optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i 's/-mmacosx-version-min=[0-9.]*/-mmacosx-version-min=${stdenv.hostPlatform.darwinMinVersion}/' Makefile
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -67,6 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     "NATIVE=osx"
     "CLANG=1"
     "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
+    # The tests are only built, not run or installed, and new_character_test.cpp's std::less
+    # specialization fails to compile with libc++ 22
+    "TESTS=0"
   ];
 
   postInstall =
