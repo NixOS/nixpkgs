@@ -60,11 +60,11 @@
     },
     "45": {
         "hashes": {
-            "aarch64-darwin": "ed40f8473a3c62a7c0463bd42f6724ccb8d5919cfdc64e0d9f65f61bdb3fe4d2",
-            "aarch64-linux": "98bb5dbdcd5c6daaba6d2de293fe84bfae0ba61eb4288042a13723cf865b060a",
-            "headers": "0lz8y3qf9yc7b0wrx2lg3mvldm7a0nsmra2x2qwk3qp1453wn37g",
-            "x86_64-linux": "c61d44206f8bd533d30310840b5baaa7fd0e8421cd711b8d1f719a7a336cbce7"
+            "aarch64-darwin": "8bdf5d55fbcc2c348b5d34b9e87a364cd2947d00b7c8bfadc6cc50233cd79ac6",
+            "aarch64-linux": "e869334b60a1768b2cbb0ae066d25de333511cbb1957cdac9a345e120d41e11b",
+            "headers": "033ky9v4nws1w2c9icyxabvpaf86h5gig3vzcxhr87bbmsagv1wl",
+            "x86_64-linux": "0ae270dcca192d2f0a0e2be585307a2460f59303d76b7d19171fc6442d72a829"
         },
-        "version": "45.3.1"
+        "version": "45.3.2"
     }
 }
