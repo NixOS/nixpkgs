@@ -10,7 +10,7 @@ in
 {
   options = {
     services.bitbox-bridge = {
-      enable = lib.mkEnableOption "Bitbox bridge daemon, for use with Bitbox hardware wallets.";
+      enable = lib.mkEnableOption "Bitbox bridge daemon, for use with Bitbox hardware wallets";
 
       package = lib.mkPackageOption pkgs "bitbox-bridge" { };
 

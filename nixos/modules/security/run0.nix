@@ -37,7 +37,12 @@ in
       '';
     };
 
-    sudo-shim.enable = mkEnableOption "make {command}`sudo` an alias to {command}`run0`.";
+    sudo-shim.enable = mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = "make {command}`sudo` an alias to {command}`run0`";
+    };
     sudo-shim.package = mkPackageOption pkgs "run0-sudo-shim" { };
   };
 

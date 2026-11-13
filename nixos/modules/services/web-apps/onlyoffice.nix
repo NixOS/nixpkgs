@@ -106,7 +106,7 @@ in
       description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
     };
 
-    wopi = lib.mkEnableOption "Enable WOPI support";
+    wopi = lib.mkEnableOption "WOPI support";
 
     loglevel = lib.mkOption {
       type = lib.types.str;

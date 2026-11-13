@@ -10,7 +10,7 @@ let
 in
 {
   options.hardware.facter.detected.virtualisation = {
-    virtio_scsi.enable = lib.mkEnableOption "Enable the Facter Virtualisation Virtio SCSI module" // {
+    virtio_scsi.enable = lib.mkEnableOption "the Facter Virtualisation Virtio SCSI module" // {
       default = lib.any (
         { vendor, device, ... }:
         # vendor (0x1af4) Red Hat, Inc.
@@ -24,15 +24,15 @@ in
       ) (report.hardware.scsi or [ ]);
       defaultText = "hardware dependent";
     };
-    oracle.enable = lib.mkEnableOption "Enable the Facter Virtualisation Oracle module" // {
+    oracle.enable = lib.mkEnableOption "the Facter Virtualisation Oracle module" // {
       default = report.virtualisation or null == "oracle";
       defaultText = "environment dependent";
     };
-    parallels.enable = lib.mkEnableOption "Enable the Facter Virtualisation Parallels module" // {
+    parallels.enable = lib.mkEnableOption "the Facter Virtualisation Parallels module" // {
       default = report.virtualisation or null == "parallels";
       defaultText = "environment dependent";
     };
-    qemu.enable = lib.mkEnableOption "Enable the Facter Virtualisation Qemu module" // {
+    qemu.enable = lib.mkEnableOption "the Facter Virtualisation Qemu module" // {
       default = builtins.elem (report.virtualisation or null) [
         "qemu"
         "kvm"
@@ -40,12 +40,12 @@ in
       ];
       defaultText = "environment dependent";
     };
-    hyperv.enable = lib.mkEnableOption "Enable the Facter Virtualisation Hyper-V module" // {
+    hyperv.enable = lib.mkEnableOption "the Facter Virtualisation Hyper-V module" // {
       default = report.virtualisation or null == "microsoft";
       defaultText = "environment dependent";
     };
     # no virtualisation detected
-    none.enable = lib.mkEnableOption "Enable the Facter Virtualisation None module" // {
+    none.enable = lib.mkEnableOption "the Facter Virtualisation None module" // {
       default = report.virtualisation or null == "none";
       defaultText = "environment dependent";
     };

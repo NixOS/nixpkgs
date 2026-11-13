@@ -118,8 +118,18 @@ in
               };
             };
             smtp = {
-              tls = lib.mkEnableOption "Whether TLS encryption should be used.";
-              tls_allow_insecure = lib.mkEnableOption "Whether to allow insecure TLS.";
+              tls = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                example = true;
+                description = "Whether TLS encryption should be used.";
+              };
+              tls_allow_insecure = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                example = true;
+                description = "Whether to allow insecure TLS.";
+              };
               host = lib.mkOption {
                 type = lib.types.str;
                 default = "";

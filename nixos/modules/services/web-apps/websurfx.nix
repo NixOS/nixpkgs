@@ -15,7 +15,12 @@ in
     services.websurfx = {
       enable = lib.mkEnableOption "Websurfx, a metasearch engine";
       package = lib.mkPackageOption pkgs "websurfx" { };
-      openFirewall = lib.mkEnableOption "Whether to open the used port in the firewall";
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        description = "Whether to open the used port in the firewall";
+        default = false;
+        example = true;
+      };
       settings = lib.mkOption {
         type = lib.types.submodule {
           freeformType = settingsFormat.type;

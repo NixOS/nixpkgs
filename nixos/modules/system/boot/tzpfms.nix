@@ -111,7 +111,7 @@ in
     boot.zfs.tzpfms = {
       enable = lib.mkEnableOption ''
         TPM-backed ZFS encryption using tzpfms.
-        Supports both TPM 2.0 & TPM 1.x.
+        Supports both TPM 2.0 & TPM 1.x
       '';
 
       package = lib.mkPackageOption pkgs "tzpfms" { };

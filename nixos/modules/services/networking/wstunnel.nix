@@ -239,7 +239,12 @@ let
           example = "https://wstunnel.server.com:8443";
         };
 
-        addNetBind = lib.mkEnableOption "Whether add CAP_NET_BIND_SERVICE to the tunnel service, this should be enabled if you want to bind port < 1024";
+        addNetBind = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          example = true;
+          description = "Whether to add CAP_NET_BIND_SERVICE to the tunnel service, this should be enabled if you want to bind port < 1024";
+        };
 
         settings = lib.mkOption {
           type = lib.types.submodule {

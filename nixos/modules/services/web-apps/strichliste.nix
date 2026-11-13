@@ -34,7 +34,7 @@ in
   meta.buildDocsInSandbox = false;
 
   options.services.strichliste = {
-    enable = mkEnableOption "strichliste, a web based tally sheet.";
+    enable = mkEnableOption "strichliste, a web based tally sheet";
 
     packages = {
       backend = mkPackageOption pkgs "strichliste" { };

@@ -24,7 +24,7 @@ in
       Writing config changes to disk through the UI, triggering a rebuild through the UI and application status checks are
       unavailable without the node server; Everything else will work fine.
 
-      See the deployment docs for [building from source](https://dashy.to/docs/deployment#build-from-source), [hosting with a CDN](https://dashy.to/docs/deployment#hosting-with-cdn) and [CDN cloud deploy](https://dashy.to/docs/deployment#cdn--cloud-deploy) for more information.
+      See the deployment docs for [building from source](https://dashy.to/docs/deployment#build-from-source), [hosting with a CDN](https://dashy.to/docs/deployment#hosting-with-cdn) and [CDN cloud deploy](https://dashy.to/docs/deployment#cdn--cloud-deploy) for more information
     '';
 
     virtualHost = {

@@ -18,8 +18,10 @@ in
 
     package = lib.mkPackageOption pkgs "oncall" { };
 
-    database.createLocally = lib.mkEnableOption "Create the database and database user locally." // {
+    database.createLocally = lib.mkOption {
+      type = lib.types.bool;
       default = true;
+      description = "Create the database and database user locally.";
     };
 
     settings = lib.mkOption {

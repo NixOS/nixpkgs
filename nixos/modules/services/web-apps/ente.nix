@@ -105,7 +105,7 @@ in
         description = "The domain under which the api will be served.";
       };
 
-      enableLocalDB = mkEnableOption "the automatic creation of a local postgres database for museum.";
+      enableLocalDB = mkEnableOption "the automatic creation of a local postgres database for museum";
 
       settings = mkOption {
         description = ''

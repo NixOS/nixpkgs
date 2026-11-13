@@ -22,7 +22,7 @@ in
 
         Required: You need the Ollama backend service running by having
         "services.nextjs-ollama-llm-ui.ollamaUrl" point to the correct url.
-        You can host such a backend service with NixOS through "services.ollama".
+        You can host such a backend service with NixOS through "services.ollama"
       '';
       package = lib.mkPackageOption pkgs "nextjs-ollama-llm-ui" { };
 

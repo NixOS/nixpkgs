@@ -5,7 +5,7 @@ let
 in
 {
   options.hardware.facter.detected.graphics = {
-    amd.enable = lib.mkEnableOption "Enable the AMD Graphics module" // {
+    amd.enable = lib.mkEnableOption "the AMD Graphics module" // {
       default = builtins.elem "amdgpu" (
         facterLib.collectDrivers (config.hardware.facter.report.hardware.graphics_card or [ ])
       );

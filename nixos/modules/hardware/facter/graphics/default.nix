@@ -8,7 +8,7 @@ in
     ./amd.nix
   ];
   options.hardware.facter.detected = {
-    graphics.enable = lib.mkEnableOption "Enable the Graphics module" // {
+    graphics.enable = lib.mkEnableOption "the Graphics module" // {
       default = builtins.length (config.hardware.facter.report.hardware.monitor or [ ]) > 0;
       defaultText = "hardware dependent";
     };

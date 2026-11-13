@@ -204,13 +204,13 @@ in
           '';
         };
 
-        samples = lib.mkEnableOption "Enable printing the analytics samples to stdout. This is useful for debugging and verification purposes only.";
+        samples = lib.mkEnableOption "printing the analytics samples to stdout. This is useful for debugging and verification purposes only";
       };
 
       package = lib.mkPackageOption pkgs "ncps" { };
 
       openTelemetry = {
-        enable = lib.mkEnableOption "Enable OpenTelemetry logs, metrics, and tracing";
+        enable = lib.mkEnableOption "OpenTelemetry logs, metrics, and tracing";
 
         grpcURL = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
@@ -223,7 +223,7 @@ in
         };
       };
 
-      prometheus.enable = lib.mkEnableOption "Enable Prometheus metrics endpoint at /metrics";
+      prometheus.enable = lib.mkEnableOption "Prometheus metrics endpoint at /metrics";
 
       logLevel = lib.mkOption {
         type = lib.types.enum logLevels;
@@ -236,15 +236,25 @@ in
       };
 
       cache = {
-        allowDeleteVerb = lib.mkEnableOption ''
-          Whether to allow the DELETE verb to delete narinfo and nar files from
-          the cache.
-        '';
+        allowDeleteVerb = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          example = true;
+          description = ''
+            Whether to allow the DELETE verb to delete narinfo and nar files from
+            the cache.
+          '';
+        };
 
-        allowPutVerb = lib.mkEnableOption ''
-          Whether to allow the PUT verb to push narinfo and nar files directly
-          to the cache.
-        '';
+        allowPutVerb = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          example = true;
+          description = ''
+            Whether to allow the PUT verb to push narinfo and nar files directly
+            to the cache.
+          '';
+        };
 
         requireTrustedSignature = lib.mkEnableOption ''
           rejecting narinfos uploaded via PUT that do not carry a signature
@@ -275,9 +285,7 @@ in
         };
 
         cdc = {
-          enabled = lib.mkEnableOption ''
-            Whether to enable Content-Defined Chunking (CDC) for deduplication (experimental).
-          '';
+          enabled = lib.mkEnableOption "Content-Defined Chunking (CDC) for deduplication (experimental)";
 
           min = lib.mkOption {
             type = lib.types.ints.u32;

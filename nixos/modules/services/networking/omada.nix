@@ -12,7 +12,7 @@ in
 {
   options = {
     services.omada = {
-      enable = lib.mkEnableOption "Enable the Omada Software Controller service.";
+      enable = lib.mkEnableOption "the Omada Software Controller service";
 
       package = lib.mkPackageOption pkgs "omada-software-controller" { };
 

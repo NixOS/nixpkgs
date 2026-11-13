@@ -688,7 +688,7 @@ let
           enable = lib.mkEnableOption ''
             automatically unlock the user's default Session Keyring using pam_oo7.
             If the user's login password does not match their keyring password,
-            oo7 will prompt separately after login.
+            oo7 will prompt separately after login
           '';
         };
 

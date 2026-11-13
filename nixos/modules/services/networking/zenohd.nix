@@ -21,7 +21,7 @@ in
 {
   options = {
     services.zenohd = {
-      enable = lib.mkEnableOption "Zenoh daemon.";
+      enable = lib.mkEnableOption "Zenoh daemon";
 
       package = mkPackageOption pkgs "zenoh" { };
 

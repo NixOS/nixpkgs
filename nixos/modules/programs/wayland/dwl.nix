@@ -11,7 +11,7 @@ in
   options.programs.dwl = {
     enable = lib.mkEnableOption ''
       Dwl is a compact, hackable compositor for Wayland based on wlroots.
-      You can manually launch Dwl by executing "exec dwl" on a TTY.
+      You can manually launch Dwl by executing "exec dwl" on a TTY
     '';
 
     package = lib.mkPackageOption pkgs "dwl" {

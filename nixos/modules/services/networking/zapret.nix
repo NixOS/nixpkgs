@@ -21,7 +21,7 @@ let
 in
 {
   options.services.zapret = {
-    enable = lib.mkEnableOption "the Zapret DPI bypass service.";
+    enable = lib.mkEnableOption "the Zapret DPI bypass service";
     package = lib.mkPackageOption pkgs "zapret" { };
     params = lib.mkOption {
       default = [ ];

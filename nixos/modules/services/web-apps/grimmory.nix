@@ -20,7 +20,7 @@ let
 in
 {
   options.services.grimmory = {
-    enable = mkEnableOption "Whether to enable Grimmory Server.";
+    enable = mkEnableOption "Grimmory Server";
 
     package = mkPackageOption pkgs "grimmory" { };
 
