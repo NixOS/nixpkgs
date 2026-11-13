@@ -11,6 +11,7 @@ let
   cfg = config.services.qemuGuest;
 in
 {
+  meta.maintainers = [ lib.maintainers.quantenzitrone ];
 
   options.services.qemuGuest = {
     enable = mkOption {
