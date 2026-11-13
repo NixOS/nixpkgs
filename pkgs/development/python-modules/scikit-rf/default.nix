@@ -80,12 +80,9 @@ buildPythonPackage (finalAttrs: {
 
   pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
 
-  disabledTests = [
-    # numpy.exceptions.VisibleDeprecationWarning: dtype(): align should be
-    #  passed as Python or NumPy boolean but got `align=0`
-    "test_constructor_from_pathlib"
-    "test_constructor_from_pickle"
-    "test_constructor_from_touchstone_special_encoding"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests for an exact 0 but gets 1.6e-17
+    "test_passivity"
   ];
 
   pythonImportsCheck = [ "skrf" ];
