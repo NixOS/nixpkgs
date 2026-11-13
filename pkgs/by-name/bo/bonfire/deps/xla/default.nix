@@ -71,7 +71,7 @@ buildBazelPackage {
     sha256 =
       {
         # Warning(reproducibility): ofborg's hash, can't reproduce it on makemake.ngi.nixos.org
-        x86_64-linux = "sha256-tkY+EjmrCHvz/MRLN/uFgcnzarLjSP8mHl7+kdcGkNE=";
+        x86_64-linux = "sha256-4OZp7k6dLyt9APNMzCAkH0t8eDXpik9A9nsXcllRgLU=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     inherit (xla.deps)
