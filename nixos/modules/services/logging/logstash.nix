@@ -84,6 +84,22 @@ in
         '';
       };
 
+      user = lib.mkOption {
+        type = lib.types.str;
+        default = "logstash";
+        description = ''
+          User under which logstash runs. The module creates the user only if this is `"logstash"`.
+        '';
+      };
+
+      group = lib.mkOption {
+        type = lib.types.str;
+        default = "logstash";
+        description = ''
+          Group under which logstash runs. The module creates the group only if this is `"logstash"`.
+        '';
+      };
+
       logLevel = lib.mkOption {
         type = lib.types.enum [
           "debug"
@@ -185,12 +201,31 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    users.users = lib.mkIf (cfg.user == "logstash") {
+      logstash = {
+        isSystemUser = true;
+        inherit (cfg) group;
+        home = cfg.dataDir;
+      };
+    };
+    users.groups = lib.mkIf (cfg.group == "logstash") { logstash = { }; };
+
+    systemd.tmpfiles.settings.logstash.${cfg.dataDir} = {
+      d = {
+        inherit (cfg) user group;
+        mode = "0700";
+      };
+      # Earlier versions of this module ran logstash as root.
+      Z = { inherit (cfg) user group; };
+    };
+
     systemd.services.logstash = {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bash ];
       serviceConfig = {
-        ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';
+        User = cfg.user;
+        Group = cfg.group;
         ExecStart = lib.concatStringsSep " " (
           lib.filter (s: lib.stringLength s != 0) [
             "${cfg.package}/bin/logstash"
