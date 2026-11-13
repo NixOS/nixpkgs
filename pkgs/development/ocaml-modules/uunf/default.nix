@@ -22,8 +22,8 @@ let
     }
     ."${version}";
 in
-stdenv.mkDerivation (finallAttrs: {
-  name = "ocaml${ocaml.version}-${finallAttrs.pname}-${finallAttrs.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
   inherit version pname;
 
   src = fetchurl {
