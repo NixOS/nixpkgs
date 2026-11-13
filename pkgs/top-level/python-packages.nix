@@ -1567,6 +1567,8 @@ self: super: with self; {
 
   atopile-easyeda2kicad = callPackage ../development/python-modules/atopile-easyeda2kicad { };
 
+  atopile-kicad-python = callPackage ../development/python-modules/atopile-kicad-python { };
+
   atproto = callPackage ../development/python-modules/atproto { };
 
   atpublic = callPackage ../development/python-modules/atpublic { };
