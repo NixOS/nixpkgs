@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Framework that provides access to various sources of multimedia content, using a pluggable system";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     platforms = lib.platforms.unix;
   };
 })
