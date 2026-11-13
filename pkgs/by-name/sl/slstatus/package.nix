@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { url = "https://git.suckless.org/slstatus"; };
 
   meta = {
     homepage = "https://tools.suckless.org/slstatus/";

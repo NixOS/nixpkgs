@@ -65,6 +65,9 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "quango" ];
 
+  # nix-update does not support this forge
+  passthru.updateScript = null;
+
   meta = {
     description = "Nice generic user interface for Tango devices";
     homepage = "https://forge.frm2.tum.de/review/plugins/gitiles/frm2/tango/apps/quango";

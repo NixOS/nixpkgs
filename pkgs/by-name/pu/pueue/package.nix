@@ -59,7 +59,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       processed, even if you no longer have any active ssh sessions.
     '';
     changelog = "https://github.com/Nukesor/pueue/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
 })

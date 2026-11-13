@@ -36,6 +36,7 @@
   glfw3,
   glfw3-minecraft,
   openal,
+  sdl3,
   libglvnd,
   alsa-lib,
   wayland,
@@ -50,13 +51,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.16.4";
+  version = "3.17.1";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-mPASPzjoamBqpYP3TSGudBKGeekh6n7AxDqyYwN2fp4=";
+    hash = "sha256-ZH7hixCtmE1rFdkW4OTnBV7hX1AC+gLwJd3FyENGZ94=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -71,12 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
   terracottaBundleJava = fetchurl {
     name = "hmcl-terracotta-bundle-java-${finalAttrs.version}";
     url = "https://raw.githubusercontent.com/HMCL-dev/HMCL/v${finalAttrs.version}/${finalAttrs.terracottaBundleJavaPath}";
-    hash = "sha256-dZHRim/7VNW0/nA6I8r3t5zGfzIMxG2lzdZ//dzv2Gs=";
+    hash = "sha256-07MUDwDVTCqgKU8VmYzr49b+xjwKfeG7SzjtX/hpKO4=";
   };
   macOSProviderJava = fetchurl {
     name = "hmcl-macos-provider-java-${finalAttrs.version}";
     url = "https://raw.githubusercontent.com/HMCL-dev/HMCL/v${finalAttrs.version}/${finalAttrs.macOSProviderJavaPath}";
-    hash = "sha256-7vI2U8vx3GYwlshoHJF/J8n2RS6TZ/cvoAivqYtW23Q=";
+    hash = "sha256-WEz540Ui1oaYabSeFXCeTA1iwAcHRCvy/iGdozVnnW4=";
   };
   terracottaBundleJavaPath = "HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaBundle.java";
   macOSProviderJavaPath = "HMCL/src/main/java/org/jackhuang/hmcl/terracotta/provider/MacOSProvider.java";
@@ -126,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       comment = finalAttrs.meta.description;
       desktopName = "HMCL";
       categories = [ "Game" ];
+      startupWMClass = "org.jackhuang.hmcl.Launcher";
     })
   ];
 
@@ -145,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     glfw3'
     glib
     openal
+    sdl3
     libglvnd
     vulkan-loader
   ]
@@ -208,7 +211,13 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource # Our patch jar is built from source
       binaryBytecode
     ];
-    license = lib.licenses.gpl3Only;
+    license =
+      with lib.licenses;
+      WITH gpl3Plus (mkLicense {
+        shortName = "AdditionRef-HMCL";
+        fullName = "Additional Terms for Hello Minecraft! Launcher";
+        url = "https://github.com/HMCL-dev/HMCL/blob/v${finalAttrs.version}/LICENSE";
+      });
     longDescription = ''
       Hello Minecraft! Launcher (HMCL) is a free, open-source, and cross-platform Minecraft launcher.
       It provides comprehensive support for managing multiple game versions and mod loaders,

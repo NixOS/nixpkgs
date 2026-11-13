@@ -21,14 +21,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "flash-attn-4";
-  version = "4.0.0.beta38";
+  version = "4.0.0.beta39";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Dao-AILab";
     repo = "flash-attention";
     tag = "fa4-v${finalAttrs.version}";
-    hash = "sha256-15pwTj4SSFyLnrod13HIKPJRdSZAelvTvxH0kmOD7Z8=";
+    hash = "sha256-81Yf16tDuLW6ooqyw99aFLGOiYg75XKKKIkJQ0rBMLs=";
   };
 
   # FA4 is a separate distribution shipped under flash_attn/cute/ with its own pyproject.toml.

@@ -3,16 +3,7 @@
   lib,
   pkgsCross,
   buildPythonPackage,
-  common-updater-scripts,
-  coreutils,
-  curl,
-  diffutils,
-  fetchFromGitHub,
-  gnutar,
-  gzip,
-  jq,
-  nix,
-  nix-update,
+  fetchPypi,
   packaging,
   setuptools,
   pdfium,
@@ -21,40 +12,24 @@
   pytestCheckHook,
   removeReferencesTo,
   python,
-  writeShellApplication,
 }:
 
-let
-  # Use the fork revision bundled with this release's source distribution.
-  ctypesgen = fetchFromGitHub {
-    owner = "pypdfium2-team";
-    repo = "ctypesgen";
-    rev = "4ddc2b2cdc4daefb0be450e8b5152e11337e9e3c";
-    hash = "sha256-S98kIimLZa3wJ5aKlADYOkqxsOhUlLqLHogC7Id0vVo=";
-  };
-in
 buildPythonPackage rec {
   pname = "pypdfium2";
-  version = "5.14.0";
+  version = "5.15.1";
   pyproject = true;
 
-  # Use GitHub because the PyPI source distribution excludes the test suite.
-  src = fetchFromGitHub {
-    owner = "pypdfium2-team";
-    repo = "pypdfium2";
-    tag = version;
-    hash = "sha256-KnZkIbV1ke0tL+VdUOkHElZXVrJixNBBoD0fpLPHNbY=";
+  # Use pypi source distribution because it includes their ctypegen fork,
+  # which saves us some hassle keeping multiple checkouts aligned.
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-tGVqDvziG+fyQpA4zj+7QXZEVl/FCFjmWq7SOAHzPUI=";
   };
 
   build-system = [
     packaging
     setuptools
   ];
-
-  postPatch = ''
-    mkdir -p deps
-    ln -s ${ctypesgen} deps/ctypesgen
-  '';
 
   nativeBuildInputs = [
     removeReferencesTo
@@ -83,7 +58,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Avoid collecting ctypesgen's tests, which also define tests.conftest.
+  # The source distribution omits this empty directory used by the tests.
+  preCheck = ''
+    mkdir -p tests/output
+  '';
+
   enabledTestPaths = [ "tests" ];
 
   disabledTestPaths = [
@@ -96,23 +75,6 @@ buildPythonPackage rec {
   ];
 
   passthru = {
-    inherit ctypesgen;
-
-    updateScript = lib.getExe (writeShellApplication {
-      name = "pypdfium2-update";
-      runtimeInputs = [
-        common-updater-scripts
-        coreutils
-        curl
-        diffutils
-        gnutar
-        gzip
-        jq
-        nix
-        nix-update
-      ];
-      text = builtins.readFile ./update.sh;
-    });
     tests.cross = pkgsCross.aarch64-multiplatform.python3Packages.pypdfium2;
   };
 
