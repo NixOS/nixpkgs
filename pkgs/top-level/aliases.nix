@@ -777,6 +777,7 @@ mapAliases {
   drone-runner-exec = throw "'drone-runner-exec' has been removed as it was deprecated and archived upstream."; # Added 2026-07-20
   dsd = throw "dsd has been removed, as it was broken and lack of upstream maintenance"; # Added 2025-08-25
   dsearch = warnAlias "'dsearch' has been renamed to 'dux-search'" dux-search; # Added 2026-10-20
+  dspam = throw "'dspam' has been removed because upstream development ceased and the project has no active maintainer; consider another maintained spam filter."; # Added 2026-11-13
   dtv-scan-tables_linuxtv = throw "'dtv-scan-tables_linuxtv' has been renamed to/replaced by 'dtv-scan-tables'"; # Converted to throw 2025-10-27
   dtv-scan-tables_tvheadend = throw "'dtv-scan-tables_tvheadend' has been renamed to/replaced by 'dtv-scan-tables'"; # Converted to throw 2025-10-27
   du-dust = throw "'du-dust' has been renamed to/replaced by 'dust'"; # Converted to throw 2025-10-27
@@ -1223,6 +1224,7 @@ mapAliases {
   hamsket = throw "hamsket is no longer actively maintained by upstream"; # Added 2026-10-26
   harmony-music = throw "harmony-music is unmaintained and has been removed"; # Added 2025-08-26
   hasmail = throw "'hasmail' has been removed, as the GTK 2 project is no longer maintained upstream."; # Added 2026-05-22
+  haste-server = throw "'haste-server' has been removed because the upstream repository was deleted."; # Added 2026-08-31
   haxe_4_0 = throw "'haxe_4_0' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
   haxe_4_1 = throw "'haxe_4_1' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
   haxor-news = throw "'haxor-news' has been removed as it is unmaintained"; # Added 2026-06-16
@@ -1780,6 +1782,7 @@ mapAliases {
   mangowc = mango; # Added 2026-06-23
   manrope = throw "'manrope' has been removed because its source has been pulled"; # Added 2025-12-20
   mariadb-client = throw "mariadb-client has been renamed to mariadb.client"; # Converted to throw 2025-10-26
+  mariadb_106 = throw "mariadb_106 has been removed as it reached its end-of-life"; # Added 2026-11-13
   marwaita = throw "'marwaita' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   marwaita-manjaro = throw "'marwaita-manjaro' has been renamed to/replaced by 'marwaita-teal'"; # Converted to throw 2025-10-27
   marwaita-mint = throw "'marwaita-mint' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
@@ -2639,7 +2642,6 @@ mapAliases {
   svt-av1-psy = warnAlias "'svt-av1-psy' has been replaced by 'svt-av1-psyex'" svt-av1-psyex; # Added 2026-01-10
   svt-av1-psyex = throw "'svt-av1-psyex' has been removed. Upstream suggests 'svt-av1-hdr' instead"; # Converted to throw 2026-06-23
   swagger-cli = throw "'swagger-cli' has been removed as it is broken and unmaintained. Upstream suggests using 'redocly' instead"; # Added 2026-04-23
-  sweet = throw "'sweet' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   swig4 = throw "'swig4' has been renamed to/replaced by 'swig'"; # Converted to throw 2025-10-27
   swiProlog = throw "'swiProlog' has been renamed to/replaced by 'swi-prolog'"; # Converted to throw 2025-10-27
   swiPrologWithGui = throw "'swiPrologWithGui' has been renamed to/replaced by 'swi-prolog-gui'"; # Converted to throw 2025-10-27

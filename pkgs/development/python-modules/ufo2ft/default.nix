@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ufo2ft";
-  version = "3.9.1";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufo2ft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0IXOWUEoQY+QJHJDR3YR86+OkO3pIdGYUfQSt+SF80I=";
+    hash = "sha256-IWndaY9zvzq1m5ckcgcWIJGN2OhzH9V48sVgD+3sfZQ=";
   };
 
   build-system = [

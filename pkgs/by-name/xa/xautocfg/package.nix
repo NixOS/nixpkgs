@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   libx11,
   libxi,
 }:
@@ -16,6 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-NxfuBknNRicmEAPBeMaNb57gpM0y0t+JmNMKpSNzlQM=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/SFTtech/xautocfg/commit/7ffc353ebee60471cf6f6a377e7d689006acfd40.patch";
+      hash = "sha256-ChY80PnV4fukXlK9yDn/7Ofy3LRwbCw557dN+86n/no=";
+    })
+  ];
 
   buildInputs = [
     libx11

@@ -5,7 +5,7 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "2.0.2";
+  version = "2.5.0";
 in
 buildGoModule {
   pname = "ktunnel";
@@ -15,7 +15,7 @@ buildGoModule {
     owner = "omrikiei";
     repo = "ktunnel";
     rev = "v${version}";
-    sha256 = "sha256-SJ6WCLJLKVODVsvPQUngV0oz60dpFT1mRDLNaeJ6P7M=";
+    sha256 = "sha256-PFlst+i7ixNrs2dxKyEfCMEsslqcFl5ngy9EJrs9LqQ=";
   };
 
   ldflags = [

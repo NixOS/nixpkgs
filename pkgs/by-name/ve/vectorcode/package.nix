@@ -96,6 +96,8 @@ let
         ];
       });
       lsprotocol = self.lsprotocol_2023;
+      # vectorcode requires mcp<2.0.0
+      mcp = self.mcp_1;
       pygls = self.pygls_1;
     };
   };

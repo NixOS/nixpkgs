@@ -1,29 +1,44 @@
-diff --git a/config/template.cmake b/config/template.cmake
-index 2b3abcbb..59fcd728 100644
---- a/config/template.cmake
-+++ b/config/template.cmake
-@@ -8,9 +8,7 @@ if(NOT TARGET "@PROJECT_NAME@::@PROJECT_NAME@")
- 
-   include(CMakeFindDependencyMacro)
- 
--  if(NOT TARGET "OpenMP::OpenMP_Fortran" AND "@PROJECT_NAME@_WITH_OpenMP")
--    find_dependency("OpenMP")
--  endif()
-+  find_dependency("OpenMP")
- 
-   if(NOT TARGET "toml-f::toml-f" AND "@PROJECT_NAME@_WITH_JSON")
-     find_dependency("toml-f")
-diff --git a/config/template.pc b/config/template.pc
-index 84c3498c..2da50191 100644
+Fix wrong generation of package config include paths.
+
+When CMAKE_INSTALL_INCLUDEDIR is an absolute path (as in nixpkgs multi-output
+builds), the templates concatenate it with CMAKE_INSTALL_PREFIX, producing
+double absolute paths. Use the full path variables instead.
+
+--- a/config/template-targets.cmake
++++ b/config/template-targets.cmake
+@@ -3,11 +3,11 @@
+ set(
+   MCTCLIB_INCLUDEDIRS
+-  "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@"
+-  "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/@module-dir@"
++  "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
++  "@CMAKE_INSTALL_FULL_INCLUDEDIR@/@module-dir@"
+ )
+ find_library(
+   MCTCLIB_LIBRARIES
+   "@PROJECT_NAME@"
+-  PATHS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@"
++  PATHS "@CMAKE_INSTALL_FULL_LIBDIR@"
+   NO_DEFAULT_PATH
+ )
+
 --- a/config/template.pc
 +++ b/config/template.pc
-@@ -1,6 +1,6 @@
--prefix=@CMAKE_INSTALL_PREFIX@
+@@ -1,5 +1,5 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
 -libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
 -includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
-+prefix=@CMAKE_INSTALL_PREFIX@
 +libdir=@CMAKE_INSTALL_FULL_LIBDIR@
 +includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
- 
+
  Name: @PROJECT_NAME@
- Description: @PROJECT_DESCRIPTION@
+
+--- a/meson.build
++++ b/meson.build
+@@ -94,4 +94,6 @@
+     'CMAKE_INSTALL_PREFIX': get_option('prefix'),
+     'CMAKE_INSTALL_INCLUDEDIR': get_option('includedir'),
+     'CMAKE_INSTALL_LIBDIR': get_option('libdir'),
++    'CMAKE_INSTALL_FULL_INCLUDEDIR': get_option('includedir').startswith('/') ? get_option('includedir') : get_option('prefix') / get_option('includedir'),
++    'CMAKE_INSTALL_FULL_LIBDIR': get_option('libdir').startswith('/') ? get_option('libdir') : get_option('prefix') / get_option('libdir'),
+     'MCTCLIB_WITH_OpenMP': get_option('openmp') ? 'ON' : 'OFF',

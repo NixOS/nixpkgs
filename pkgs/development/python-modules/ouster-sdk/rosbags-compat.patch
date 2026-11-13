@@ -1,0 +1,123 @@
+Use rosbags native MCAP support without replacing reader constructors.
+Handle ROS2 directories ending in .bag and keep writer output readable by
+upstream's pinned rosbags 0.9.23 by selecting format version 8.
+
+--- a/python/src/ouster/sdk/bag/bag_packet_source.py
++++ b/python/src/ouster/sdk/bag/bag_packet_source.py
+@@ -127,6 +127,17 @@
+     self.tmpdir = None
+
+
++def _make_anyreader(paths, default_typestore=None):
++    from rosbags.rosbag2 import Reader as Reader2
++
++    reader = AnyReader(paths, default_typestore=default_typestore)
++    # ROS2 output directories may end in .bag, which AnyReader treats as ROS1.
++    if not reader.is2 and all(path.is_dir() for path in paths):
++        reader.is2 = True
++        reader.readers = [Reader2(path) for path in paths]
++    return reader
++
++
+ class BagPacketSource(_PacketSource):
+     """Read a sensors packet streams out of a bag file as an iterator."""
+
+@@ -165,11 +176,11 @@
+         from rosbags.rosbag2 import Reader as Reader2
+
+         # lets monkeypatch AnyReader
+-        if AnyReader.__init__ != _anybag_monkey:
++        if ".mcap" not in Reader2.STORAGE_PLUGINS and AnyReader.__init__ != _anybag_monkey:
+             AnyReader.old_init = AnyReader.__init__
+             AnyReader.__init__ = _anybag_monkey
+
+-        if Reader2.__init__ != _bag2_monkey:
++        if ".mcap" not in Reader2.STORAGE_PLUGINS and Reader2.__init__ != _bag2_monkey:
+             Reader2.old_init = Reader2.__init__
+             Reader2.__init__ = _bag2_monkey
+
+@@ -179,7 +190,7 @@
+         self._typestore.register(get_types_from_msg(msg_text, "ouster_sensor_msgs/msg/PacketMsg"))
+         self._typestore.register(get_types_from_msg(msg_text, "ouster_msgs/msg/PacketMsg"))
+
+-        self._reader = AnyReader([Path(self._bag_path)], default_typestore=self._typestore)
++        self._reader = _make_anyreader([Path(self._bag_path)], default_typestore=self._typestore)
+         self._reader.open()
+
+         connections = self._reader.connections
+--- a/python/src/ouster/cli/plugins/source_bag.py
++++ b/python/src/ouster/cli/plugins/source_bag.py
+@@ -13,7 +13,7 @@
+                           source_multicommand,
+                           _nanos_to_string)
+
+-from ouster.sdk.bag.bag_packet_source import _anybag_monkey, _bag2_monkey  # type: ignore
++from ouster.sdk.bag.bag_packet_source import _anybag_monkey, _bag2_monkey, _make_anyreader  # type: ignore
+
+
+ @click.command
+@@ -30,15 +30,15 @@
+     file = ctx.source_uri or ""
+
+     # monkeypatch AnyReader and Reader2 to support mcap directly
+-    if AnyReader.__init__ != _anybag_monkey:
++    if ".mcap" not in Reader2.STORAGE_PLUGINS and AnyReader.__init__ != _anybag_monkey:
+         AnyReader.old_init = AnyReader.__init__  # type: ignore
+         AnyReader.__init__ = _anybag_monkey  # type: ignore
+
+-    if Reader2.__init__ != _bag2_monkey:
++    if ".mcap" not in Reader2.STORAGE_PLUGINS and Reader2.__init__ != _bag2_monkey:
+         Reader2.old_init = Reader2.__init__  # type: ignore
+         Reader2.__init__ = _bag2_monkey  # type: ignore
+
+-    with AnyReader([Path(file)]) as reader:
++    with _make_anyreader([Path(file)]) as reader:
+         print(f"Filename: {file}")
+         print(f"Start: {reader.start_time / 1e9} ({_nanos_to_string(reader.start_time)})")
+         print(f"End: {reader.end_time / 1e9} ({_nanos_to_string(reader.end_time)})")
+@@ -94,7 +94,8 @@
+         my_typestore = get_typestore(Stores.ROS2_FOXY)
+         fn_serialize = my_typestore.serialize_cdr
+         MyWriter = Writer2
+-        writer_params = {}  # type: ignore
++        # Preserve compatibility with upstream's pinned rosbags 0.9.23 reader.
++        writer_params = {"version": 8}  # type: ignore
+     else:
+         packet_type = "ouster_ros/msg/PacketMsg"
+         my_typestore = get_typestore(Stores.ROS1_NOETIC)
+--- a/python/tests/test_bag.py
++++ b/python/tests/test_bag.py
+@@ -36,9 +36,20 @@
+         os.chdir(self.origin)
+
+
+-@pytest.fixture
+-def test_bag_file() -> str:
+-    return str(Path(BAGS_DATA_DIR) / '512x10_raw.bag')
++@pytest.fixture(params=["bag", "mcap-dir", "mcap-file"])
++def test_bag_file(request, tmp_path_factory):
++    from rosbags import convert, highlevel, rosbag2
++    constructors = highlevel.AnyReader.__init__, rosbag2.Reader.__init__
++    bag = Path(BAGS_DATA_DIR) / '512x10_raw.bag'
++    if request.param != "bag":
++        dst = tmp_path_factory.mktemp("mcap") / "recording.mcap"
++        convert.convert([bag], dst, dst_storage="mcap", dst_version=8, compress=None,
++                compress_mode="file", default_typestore=None, typestore=None,
++                exclude_topics=[], include_topics=[], exclude_msgtypes=[], include_msgtypes=[])
++        dst = dst.rename(dst.with_suffix(".bag"))
++        bag = next(dst.glob("*.mcap")) if request.param == "mcap-file" else dst
++    yield str(bag)
++    assert (highlevel.AnyReader.__init__, rosbag2.Reader.__init__) == constructors
+
+
+ def test_bag_convert(tmp_path, test_bag_file):
+@@ -51,6 +62,9 @@
+         # there's at most one OSF file in output dir
+         files = os.listdir(tmp_path)
+         assert len(files) == 1
++        from ruamel.yaml import YAML
++        metadata = YAML(typ="safe").load(Path("test.bag/metadata.yaml").read_text())
++        assert metadata["rosbag2_bagfile_information"]["version"] == 8
+
+         # now verify it has all messages
+         src = BagFrameSetSource("test.bag")

@@ -13211,6 +13211,10 @@ self: super: with self; {
 
   ourgroceries = callPackage ../development/python-modules/ourgroceries { };
 
+  ouster-sdk = callPackage ../development/python-modules/ouster-sdk {
+    inherit (pkgs) ouster-sdk;
+  };
+
   outcome = callPackage ../development/python-modules/outcome { };
 
   outdated = callPackage ../development/python-modules/outdated { };
@@ -20653,7 +20657,7 @@ self: super: with self; {
 
   tblib = callPackage ../development/python-modules/tblib { };
 
-  tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
+  tblite = callPackage ../by-name/tb/tblite/python.nix {
     inherit (pkgs)
       tblite
       meson
