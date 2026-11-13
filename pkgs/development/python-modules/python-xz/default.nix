@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "python-xz";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "python_xz";
-    hash = "sha256-yNxRBweZ7p533dndIHoRzJFw6SmFQvgecYcHLg1UNHg=";
+    hash = "sha256-e29VhGEY3tRblOztiSkbA6QoSXIKIMJYZNJzNgBPMaM=";
   };
 
   build-system = [
