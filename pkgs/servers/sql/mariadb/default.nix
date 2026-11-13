@@ -228,6 +228,9 @@ let
             thoughtpolice
           ];
           platforms = lib.platforms.all;
+          knownVulnerabilities = lib.optionals (lib.versions.majorMinor version == "10.6") [
+            "MariaDB 10.6 reached its end of life in July 2026"
+          ];
         };
       };
 
