@@ -1,23 +1,26 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  aiohttp,
   mashumaro,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
   python-socketio,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioaudiobookshelf";
-  version = "0.1.25";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "aioaudiobookshelf";
     tag = version;
-    hash = "sha256-i5S9rrC4Ap4RG7PEfqCiS3wNw7drlI0cvbWwm8Lx1hA=";
+    hash = "sha256-cAb8CUiIuMbBdJZqLFoLbHjTJXzS2t5/BODibHJ4XQo=";
   };
 
   build-system = [
@@ -28,6 +31,12 @@ buildPythonPackage rec {
     aiohttp
     mashumaro
     python-socketio
+  ];
+
+  nativeCheckInputs = [
+    pytest-aiohttp
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
