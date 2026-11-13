@@ -48,7 +48,6 @@ let
     StateDirectory = "lasuite-docs-yhub-server";
     WorkingDirectory = "%S/lasuite-docs-yhub-server";
     User = "lasuite-docs-yhub-server";
-    RuntimeDirectory = "lasuite-docs-yhub-server";
   };
 
   commonServiceConfig' = {
@@ -680,6 +679,7 @@ in
       description = "Docs Celery broker from SuiteNumérique";
       after = [
         "network.target"
+        "lasuite-docs-setup-keys.service"
       ]
       ++ (optional cfg.postgresql.createLocally "postgresql.target")
       ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
