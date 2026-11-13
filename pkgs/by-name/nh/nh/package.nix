@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   cargoBuildFlags = [
     "-p"
@@ -48,6 +49,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # if added to nativeCheckInputs. We must manually disable the tests that
   # *require* it, because they will fail when sudo is missing.
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ sudo ];
+
+  useNextest = true;
+
   checkFlags = [
     # These do not work in Nix's sandbox
     "--skip"
@@ -116,13 +120,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  env = {
-    NH_REV = finalAttrs.src.tag;
-    LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
-  };
+  env.NH_REV = finalAttrs.src.rev;
 
   meta = {
-    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Yet another nix cli helper";
     homepage = "https://github.com/nix-community/nh";
     license = lib.licenses.eupl12;
