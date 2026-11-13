@@ -57,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
       --replace-fail '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
+
+    substituteInPlace deps/libdatachannel/deps/libjuice/CMakeLists.txt --replace-fail "set(CMAKE_C_STANDARD 11)" ""
+    substituteInPlace deps/libdatachannel/deps/libsrtp/CMakeLists.txt --replace-fail "set(CMAKE_C_STANDARD 99)" ""
+    substituteInPlace deps/libdatachannel/deps/usrsctp/CMakeLists.txt --replace-fail "-std=c99" ""
   '';
 
   postInstall = ''
