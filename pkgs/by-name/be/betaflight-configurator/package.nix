@@ -55,6 +55,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'child.execSync("git rev-parse --short HEAD").toString().trim()' '"${finalAttrs.src.rev}"'
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    npx vitest run
+    runHook postCheck
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
