@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tokscale";
-  version = "4.0.4";
+  version = "4.22.1";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "junhoyeo";
     repo = "tokscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vFBIq7z0+bmMk2teDORrUVWrv7N3w1CsDrT2s85k6/U=";
+    hash = "sha256-H+f84Rev3i+aFnbqP4Ym99FhKURrskmo5C6iJdC1cPc=";
   };
 
-  cargoHash = "sha256-iXHriY+Kyn5pSx3uwouH2rkMBXkJX6zH5/xiFeCMqbQ=";
+  cargoHash = "sha256-+rhyQYELntvYmZ+c0BNrIuWRsKd5VxQ5Rw6FYq+pRf8=";
 
   nativeBuildInputs = [
     pkg-config
