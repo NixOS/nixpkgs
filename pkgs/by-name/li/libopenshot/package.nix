@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
     sed -i 's/\blerp(/lerp_(/g' src/effects/{AnalogTape,DenoiseImage,FilmGrain}.cpp
+    # The test's `#define private public` also rewrites `private:` in libc++ and Qt headers,
+    # which breaks libc++ 22's <ranges>. Include Clip.h first so those headers are already processed.
+    sed -i 's/^#define private public$/#include "Clip.h"\n#define private public/' tests/FFmpegReader.cpp
   '';
 
   nativeBuildInputs = [
@@ -85,10 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ ctestCheckHook ];
 
-  # Spherical metadata is not round-tripped when writing/reading with FFmpeg 8
+  # Spherical metadata is not round-tripped when writing/reading with FFmpeg 8.
+  # AudioDeviceManager expects a 44100 Hz default output device, which depends on the host.
   ctestFlags = [
     "--exclude-regex"
-    "^SphericalMetadata"
+    "^(SphericalMetadata|AudioDeviceManager)"
   ];
 
   cmakeFlags = [
