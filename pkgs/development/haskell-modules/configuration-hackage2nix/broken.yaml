@@ -2752,7 +2752,6 @@ broken-packages:
   - highWaterMark # failure in job https://hydra.nixos.org/build/233244731 at 2023-09-02
   - hikchr # failure in job https://hydra.nixos.org/build/295094234 at 2025-04-22
   - hills # failure in job https://hydra.nixos.org/build/233215201 at 2023-09-02
-  - himari # failure in job https://hydra.nixos.org/build/320159405 at 2026-01-26
   - himg # failure in job https://hydra.nixos.org/build/233213810 at 2023-09-02
   - hindley-milner # failure in job https://hydra.nixos.org/build/233195252 at 2023-09-02
   - hindley-milner-type-check # failure in job https://hydra.nixos.org/build/233216545 at 2023-09-02

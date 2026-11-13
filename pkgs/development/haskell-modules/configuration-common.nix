@@ -354,6 +354,10 @@ with haskellLib;
   # https://codeberg.org/fgaz/changelog-d/pulls/27
   changelog-d = doJailbreak super.changelog-d;
 
+  # 2026-11-13: Allow sydtest 0.31, fixed upstream in himari 1.1.6.2
+  # https://github.com/ncaq/himari/commit/594b2537ca0d90eeb8dba8ab7122276f723b628f
+  himari = doJailbreak super.himari;
+
   # network < 3.2.8
   # bound only required when running under WINE: https://github.com/haskell/network/issues/604
   iserv-proxy = doJailbreak super.iserv-proxy;

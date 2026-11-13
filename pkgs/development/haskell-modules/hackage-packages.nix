@@ -340193,9 +340193,7 @@ self: {
       testToolDepends = [ hlint ];
       description = "A standard library for Haskell as an alternative to rio";
       license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "example-anomaly-monitor";
-      broken = true;
     }
   ) { };
 
