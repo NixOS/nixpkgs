@@ -6,12 +6,13 @@
   pytest-asyncio,
   pytestCheckHook,
   python,
+  pyprojectVersionPatchHook,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "vtherm-api";
-  version = "0.6.2";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = python.version != home-assistant.python3Packages.python.version;
@@ -20,8 +21,12 @@ buildPythonPackage (finalAttrs: {
     owner = "jmcollin78";
     repo = "vtherm_api";
     tag = finalAttrs.version;
-    hash = "sha256-XiomlTJz7+9yjdfc/1BszMmBWizD5ZzGxBNcPnUDFkA=";
+    hash = "sha256-GWQILIHE8YbklwEhZz711RU4Y9GGla6z2ywJAkIyWlw=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -29,6 +34,11 @@ buildPythonPackage (finalAttrs: {
     home-assistant
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # checks wrong version number
+    "tests/test_package.py::test_package_exports_algorithm_plugin_api"
   ];
 
   pythonImportsCheck = [ "vtherm_api" ];
