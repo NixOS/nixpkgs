@@ -55,6 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "$out/lib/servers/y-provider/dist/start-server.js" \
       --set NODE_PATH "$out/lib/node_modules"
 
+    # Rm broken symlinks
+    rm \
+      $out/lib/node_modules/@sentry/nextjs/node_modules/@sentry/bundler-plugins/node_modules/.bin/webpack \
+      $out/lib/node_modules/@sentry/nextjs/node_modules/@sentry/bundler-plugins/node_modules/.bin/rollup
+
     runHook postInstall
   '';
 
