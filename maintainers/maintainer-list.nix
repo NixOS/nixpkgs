@@ -29267,6 +29267,11 @@
     githubId = 280235;
     name = "Terje Larsen";
   };
+  terminalnode = {
+    github = "terminalnode";
+    githubId = 2683344;
+    name = "Alexander Rundberg";
+  };
   terrorjack = {
     email = "astrohavoc@gmail.com";
     github = "TerrorJack";
