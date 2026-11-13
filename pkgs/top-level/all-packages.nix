@@ -5776,8 +5776,6 @@ with pkgs;
 
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3 { };
 
-  tblite = callPackage ../development/libraries/science/chemistry/tblite { };
-
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation.
@@ -9410,8 +9408,6 @@ with pkgs;
     ;
 
   ### SCIENCE/CHEMISTY
-
-  libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
 
   molbar = with python3Packages; toPythonApplication molbar;
 

@@ -3,9 +3,7 @@ Fortran modules, leading to link errors with gfortran 16.
 
 --- a/src/tblite/api/calculator.f90
 +++ b/src/tblite/api/calculator.f90
-@@ -46,8 +46,11 @@
-       & new_xtb_calculator_api
-    public :: set_calculator_mixer_damping_api, set_calculator_max_iter_api, &
+@@ -52,5 +52,8 @@
        & set_calculator_accuracy_api, set_calculator_temperature_api, &
 -      & set_calculator_save_integrals_api
 +      & set_calculator_save_integrals_api, set_calculator_guess_api
@@ -13,9 +11,8 @@ Fortran modules, leading to link errors with gfortran 16.
 +   public :: get_calculator_shell_count, get_calculator_shell_map, &
 +      & get_calculator_angular_momenta, get_calculator_orbital_count, &
 +      & get_calculator_orbital_map
-    public :: push_back_post_processing_param_api, push_back_post_processing_str_api
- 
- 
+    public :: push_back_post_processing_param_api, push_back_post_processing_str_api, &
+       & push_back_post_processing_localization_api
 --- a/src/tblite/api/container.f90
 +++ b/src/tblite/api/container.f90
 @@ -36,6 +36,7 @@

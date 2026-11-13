@@ -22,20 +22,16 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mctc-lib";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mctc-lib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rlwUNeuLzgSWZXDKCFS/H82+oH23tEzhhILqC/ZV6PI=";
+    hash = "sha256-LSqsg5P28ZKZhCvK9bJrzZF7kSivxmKoZEz0jR8VRLY=";
   };
 
   patches = [
-    # Allow dynamically linked jonquil as dependency. That then additionally
-    # requires linking in toml-f
-    ./meson.patch
-
     # Fix wrong generation of package config include paths
     ./cmake.patch
   ];
