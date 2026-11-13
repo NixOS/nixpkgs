@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    model = "${finalAttrs.finalPackage}/ssdlite_mobilnet_v2.xml";
+    model = "${finalAttrs.finalPackage}/ssdlite_mobilenet_v2.xml";
     labelmap = fetchurl {
       url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
       hash = "sha256-cQBhlxYm2yS6s7rm/06c5uZmUFZZkBI/P4bxLThbN9E=";
