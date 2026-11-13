@@ -9,20 +9,15 @@
 }:
 mkLibretroCore {
   core = "citra";
-  version = "0-unstable-2026-09-04";
+  version = "0-unstable-2026-09-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "citra";
-    rev = "e4cbe379bfa8990af706977d699e16a618523778";
-    hash = "sha256-rROcJpctx73DI4AGU7QBaFkPAmsCDNQnj8WRynTC9Fk=";
+    rev = "a0483e9abe8134ae6b290cdca7d49cb77689f05b";
+    hash = "sha256-o0B/y2gMhZE+29LUmnXubQ6BJBDlU7ItqsYbQhylEFA=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix build with GCC 15. See https://github.com/KhronosGroup/glslang/pull/3684.
-    ./patches/citra-gcc-15.patch
-  ];
 
   makefile = "Makefile";
 
@@ -34,7 +29,7 @@ mkLibretroCore {
 
   extraNativeBuildInputs = [ cmake ];
 
-  # https://github.com/libretro/citra/blob/a31aff7e1a3a66f525b9ea61633d2c5e5b0c8b31/.gitlab-ci.yml#L6
+  # https://github.com/libretro/citra/blob/a0483e9abe8134ae6b290cdca7d49cb77689f05b/.gitlab-ci.yml#L6
   cmakeFlags = with lib.strings; [
     (cmakeBool "ENABLE_TESTS" false)
     (cmakeBool "ENABLE_DEDICATED_ROOM" false)
@@ -46,6 +41,8 @@ mkLibretroCore {
     (cmakeBool "ENABLE_LIBUSB" false)
     (cmakeBool "CITRA_ENABLE_BUNDLE_TARGET" false)
     (cmakeBool "CITRA_WARNINGS_AS_ERRORS" false)
+    # glslang's SPIR-V optimizer needs SPIRV-Tools, which is not vendored
+    (cmakeBool "ENABLE_OPT" false)
     # Workaround the following error:
     # > CMake Error at 3rdparty/libzip/libzip/CMakeLists.txt:1 (cmake_minimum_required):
     # > Compatibility with CMake < 3.5 has been removed from CMake.

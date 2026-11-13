@@ -10,6 +10,7 @@
   nix-store-test-support,
 
   libgit2,
+  zlib,
   rapidcheck,
   gtest,
   runCommand,
@@ -33,6 +34,9 @@ mkMesonExecutable (finalAttrs: {
     rapidcheck
     gtest
     libgit2
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "2.36pre") [
+    zlib
   ];
 
   mesonFlags = [

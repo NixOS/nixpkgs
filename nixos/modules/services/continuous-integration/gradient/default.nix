@@ -159,7 +159,7 @@ in
 
     packages = {
       server = lib.mkPackageOption pkgs "gradient" { };
-      frontend = lib.mkPackageOption pkgs [ "gradient" "frontend" ] { };
+      frontend = lib.mkPackageOption pkgs "gradient-frontend" { };
     };
 
     domain = lib.mkOption {

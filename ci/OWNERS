@@ -85,6 +85,7 @@
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus
+/pkgs/build-support/proton @Mistyttm
 
 # Nix, the package manager
 # @raitobezarius is not "code owner", but is listed here to be notified of changes
@@ -530,6 +531,7 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @4evy @johnrtitor
 /nixos/lib/testing                                          @NixOS/test-driver
 /nixos/tests/nixos-test-driver                              @NixOS/test-driver
 /nixos/modules/virtualisation/nspawn-container/run-nspawn   @NixOS/test-driver
+/nixos/modules/virtualisation/run-virtiofsd-qemu            @NixOS/test-driver
 
 # Boot security
 /pkgs/by-name/au/autopen    @NixOS/boot-security
