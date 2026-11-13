@@ -10,13 +10,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "rtl8189es";
-  version = "2025-09-26";
+  version = "0-unstable-2026-11-03";
 
   src = fetchFromGitHub {
     owner = "jwrdegoede";
     repo = "rtl8189ES_linux";
-    rev = "0a5d04114fac3c9f48a343cb905fbb6a3f9f5df5";
-    hash = "sha256-cGPjA5Az0EEbPGG0KfgAqdhbLj54BxoIohWmcR10vPI=";
+    rev = "81e7b8939cf2b4ba0a80da6786055ba0dc740362";
+    hash = "sha256-bNZXeXPS3M7inWEGz3OuIt/6hTMvoqSpQob5cHhj0Xw=";
   };
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
