@@ -9571,6 +9571,8 @@ self: super: with self; {
 
   lerobot = callPackage ../development/python-modules/lerobot { };
 
+  lessqlite = callPackage ../development/python-modules/lessqlite { };
+
   letpot = callPackage ../development/python-modules/letpot { };
 
   leveldb = callPackage ../development/python-modules/leveldb { };
