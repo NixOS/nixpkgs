@@ -1584,6 +1584,8 @@ class QemuMachine(BaseMachine):
                 readable = sel.select(1)
                 if readable:
                     conn, _ = sock.accept()
+                    # accept() inherits O_NONBLOCK on darwin
+                    conn.setblocking(True)
                     return conn
                 rc = self.process.poll()
                 if rc is not None:
