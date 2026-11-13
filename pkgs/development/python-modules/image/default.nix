@@ -10,14 +10,14 @@
 
 let
   pname = "image";
-  version = "1.5.33";
+  version = "1.5.34";
 in
 buildPythonPackage rec {
   inherit pname version;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uqLgkXgnfapQ8i/W0dUex48ZwSaIkhy5q1gIdD8JcSY=";
+    hash = "sha256-OM5GpN1/IIH4d5gIRW/cxW7DST1Q5jb83gzDxtZWDko=";
   };
 
   pyproject = true;
