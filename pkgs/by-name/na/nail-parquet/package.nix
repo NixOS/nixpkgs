@@ -7,6 +7,7 @@
   stdenv,
   pkg-config,
   openssl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,13 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-c4yuXCQAlwpDlKURwN51d3AI+m7cUNGRdgl29qgWIvA=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
-  ];
+  buildInputs = [ zstd ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   passthru.tests = {
     version = testers.testVersion {
