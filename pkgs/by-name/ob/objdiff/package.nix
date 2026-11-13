@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  aws-lc,
   protobuf,
   fontconfig,
   freetype,
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     fontconfig
     freetype
     libxkbcommon
