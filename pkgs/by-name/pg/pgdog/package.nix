@@ -11,6 +11,7 @@
   pkg-config,
   readline,
   rustPlatform,
+  rust-jemalloc-sys-unprefixed,
   useMoldLinker,
   versionCheckHook,
   withMold ? with clangStdenv.hostPlatform; isLinux,
@@ -57,6 +58,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
     openssl
     readline
     zlib
+    rust-jemalloc-sys-unprefixed
   ];
 
   # Several tests rely on networking
