@@ -3036,6 +3036,7 @@ mapAliases {
   xmpp-bridge = throw "'xmpp-bridge' has been removed as it is unmaintained upstream."; # Added 2026-09-04
   xneur = throw "'xneur' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-06
   xo = throw "Use 'dbtpl' instead of 'xo'"; # Added 2025-09-28
+  xonotic-data = xonotic.data; # Added 2026-11-12
   xonsh-unwrapped = throw "'xonsh-unwrapped' has been renamed to/replaced by 'python3Packages.xonsh'"; # Converted to throw 2025-10-27
   xorg = # Added 2026-01-29
     lib.mapAttrs
