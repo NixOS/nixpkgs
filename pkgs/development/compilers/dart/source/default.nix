@@ -6,7 +6,6 @@
   dart-bin,
   debug ? false,
   fetchurl,
-  fetchpatch,
   gitMinimal,
   gitSetupHook,
   icu,
@@ -24,7 +23,7 @@
 }:
 
 let
-  version = "3.13.0";
+  version = "3.14.0";
 
   tools = callPackage ../../flutter/engine/tools.nix { inherit (stdenv) hostPlatform buildPlatform; };
 
@@ -75,7 +74,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-kw6bygtcy+yAPLX61CYzcA9l0GRZaI70hB5oY0xJEjU=";
+    outputHash = "sha256-e1I/QRomhosp0fzBHhvjabn6275smSFsNJGVdV7/TOI=";
 
     buildCommand = ''
       mkdir source
@@ -93,9 +92,10 @@ let
       python3 ${tools.depot_tools}/gclient.py sync --no-history --nohooks --noprehooks
       find sdk -name ".versions" -type d -exec rm -rf {} +
       rm --recursive --force sdk/buildtools/sysroot
-      rm --recursive --force sdk/buildtools/linux-arm64
+      rm --recursive --force sdk/buildtools/linux-*
       rm --recursive --force sdk/buildtools/reclient
       rm --recursive --force sdk/buildtools/*/clang
+      rm --recursive --force sdk/third_party/gcloud
       find sdk -type f \( -name "*.snapshot" -o -name "*.dill" -o -name "*.sym" \) -delete
       rm --recursive --force sdk/tools/sdks/dart-sdk
       find . -type l ! -exec test -e {} \; -delete
@@ -138,16 +138,10 @@ dart-bin.overrideAttrs (oldAttrs: {
     ./gcc13.patch
     ./zlib-not-found.patch
     ./custom-flags.patch
-
-    # Remove when upgrading to Dart 3.14:
-    (fetchpatch {
-      name = "dart-ignore-binaryen-warnings.patch";
-      url = "https://github.com/dart-lang/sdk/commit/963b46dfebad01cab9e063fc8b508df227154a31.patch";
-      hash = "sha256-+JY97WFq+UWNoGikXfHIPxBwPdCWV1HYHjhi9pzqVCo=";
-    })
   ]
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     ./unbundle-icu.patch
+    ./unbundle-icu-cli-runtime.patch
   ];
 
   postPatch = ''
