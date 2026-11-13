@@ -20,9 +20,9 @@ let
       vendorHash = null;
     };
     "34" = {
-      version = "11.1.1";
-      appHash = "sha256-Wei3mzl/MrMHzIjmPV/gdt9p+Gk20rQH8VyAzX8nqzU=";
-      srcHash = "sha256-tVrWVxWtSCfo/Ao4JaYcgVxF2/CY2UgBmfzoDvTd/w4=";
+      version = "11.1.3";
+      appHash = "sha256-yR7XoKzMFltcK8cyVySownlT2mbgoF41uj+JE+5GVcw=";
+      srcHash = "sha256-XGANsawGORq6VVyvrex5TpCS/nv4/861wX0qEPbLi08=";
       vendorHash = "sha256-rEJXO55TKg3GMV5/5JQsRf0tktzNQovY9ONtDFuznqk=";
     };
     "35" = latestVersionForNc."34";
