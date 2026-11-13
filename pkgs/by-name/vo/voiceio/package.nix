@@ -31,9 +31,14 @@ let
     pynput
     pystray
     pillow
+    # PyGObject for the IBus engine / AppIndicator tray subprocesses. Upstream
+    # treats it as a distro package (not pip-installable in a venv), hence the
+    # separate `systemPython` env; in nixpkgs it is a normal python package, so
+    # the package interpreter can satisfy the gi probes too.
+    pygobject3
   ];
 
-  systemPython = python3.withPackages (ps: runtimeDeps ++ [ ps.pygobject3 ]);
+  systemPython = python3.withPackages (ps: runtimeDeps);
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "voiceio";
