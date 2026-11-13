@@ -18570,7 +18570,7 @@ self: super: with self; {
 
   rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
 
-  rocksdict = callPackage ../development/python-modules/rocksdict { };
+  rocksdict = callPackage ../development/python-modules/rocksdict { inherit (pkgs) zstd; };
 
   roku = callPackage ../development/python-modules/roku { };
 
@@ -19723,7 +19723,7 @@ self: super: with self; {
 
   soupsieve = callPackage ../development/python-modules/soupsieve { };
 
-  sourmash = callPackage ../development/python-modules/sourmash { };
+  sourmash = callPackage ../development/python-modules/sourmash { inherit (pkgs) zstd; };
 
   soxr = callPackage ../development/python-modules/soxr { libsoxr = pkgs.soxr; };
 
@@ -20746,7 +20746,7 @@ self: super: with self; {
 
   tempora = callPackage ../development/python-modules/tempora { };
 
-  temporalio = callPackage ../development/python-modules/temporalio { };
+  temporalio = callPackage ../development/python-modules/temporalio { inherit (pkgs) zstd; };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
