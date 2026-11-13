@@ -1,9 +1,12 @@
 {
   buildPythonPackage,
   setuptools,
-  nftables,
+  pkgs,
 }:
 
+let
+  inherit (pkgs) nftables;
+in
 buildPythonPackage (finalAttrs: {
   pname = "nftables";
   inherit (nftables) version src;
