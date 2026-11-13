@@ -11,6 +11,7 @@
   sane-backends,
   libnotify,
   libtiff,
+  libappindicator,
 }:
 
 buildDotnetModule rec {
@@ -52,6 +53,7 @@ buildDotnetModule rec {
     sane-backends
     libnotify
     libtiff
+    libappindicator
   ];
 
   postInstall = ''
