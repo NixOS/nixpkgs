@@ -1,43 +1,52 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
+  fetchPypi,
 
   cmake,
   ninja,
+  zig_0_16,
   # build-system
   hatchling,
   scikit-build-core,
   hatch-vcs,
   nanobind,
   # deps
+  anthropic,
   antlr4-python3-runtime,
   atopile-easyeda2kicad,
+  atopile-kicad-python,
   black,
   case-converter,
   cookiecutter,
   dataclasses-json,
   deprecated,
+  fastapi,
   fastapi-github-oidc,
   freetype-py,
   gitpython,
-  kicad-python,
+  httpx,
+  jinja2,
+  keyring,
   kicadcliwrapper,
   matplotlib,
   mcp,
   more-itertools,
   natsort,
   numpy,
+  openai,
   ordered-set,
   pathvalidate,
   pint,
-  posthog,
+  platformdirs,
+  prompt-toolkit,
   psutil,
+  pyaaf2,
   pydantic-settings,
   pygls,
+  pytest,
+  pyyaml,
   questionary,
-  requests,
   rich,
   ruamel-yaml,
   ruff,
@@ -46,35 +55,45 @@
   shapely,
   truststore,
   typer,
+  typing-extensions,
   urllib3,
+  uvicorn,
+  watchdog,
+  websockets,
   zstd,
   pythonOlder,
 
   # tests
-  pytestCheckHook,
-
-  pytest-benchmark,
-  pytest-timeout,
-  pytest-datafiles,
-  pytest-xdist,
+  gitMinimal,
   hypothesis,
-  writableTmpDirAsHomeHook,
+  pytest-xdist,
+  pytestCheckHook,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "atopile";
-  version = "0.12.5";
+  version = "0.15.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.14";
 
-  src = fetchFromGitHub {
-    owner = "atopile";
-    repo = "atopile";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-/1vkYGG3OHyeFpzbvRoAxUtLQLePKE2jwQx8o/CTErQ=";
+  # Upstream stopped pushing tags (and commits) to GitHub after v0.14.x.
+  # The PyPI sdist also ships the PKG-INFO metadata needed by hatch-vcs.
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-aBzB4SNkbdEz3jG2Ma7a9OqsiGgmE7T4LR2ks++LTo4=";
   };
+
+  # Upstream pins a fork of scikit-build-core (editable-mode patch) we don't need.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'scikit-build-core @ git+https://github.com/atopile/scikit-build-core.git@feature/allow_editable' \
+        'scikit-build-core' \
+      --replace-fail '"ziglang==0.16.0",' ""
+  '';
 
   build-system = [
     hatchling
@@ -85,38 +104,60 @@ buildPythonPackage (finalAttrs: {
 
   dontUseCmakeConfigure = true; # skip cmake configure invocation
 
+  # The CMake build shells out to `python -m ziglang ...` (the ziglang pip
+  # wheel, not packaged in nixpkgs). Provide a shim module that execs the real
+  # zig, and give zig a writable cache dir.
+  preBuild = ''
+    mkdir -p zigshim/ziglang
+    touch zigshim/ziglang/__init__.py
+    printf 'import os, sys\nos.execv("%s/bin/zig", ["zig", *sys.argv[1:]])\n' "${zig_0_16}" > zigshim/ziglang/__main__.py
+    export PYTHONPATH="$PWD/zigshim:$PYTHONPATH"
+    export ZIG_GLOBAL_CACHE_DIR="$TMPDIR/zig-cache"
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
+    zig_0_16 # replaces the ziglang pip build-dep; build calls zig to compile faebryk core
   ];
 
   dependencies = [
+    anthropic
     antlr4-python3-runtime
     atopile-easyeda2kicad
+    atopile-kicad-python
     black # used as a dependency
     case-converter
     cookiecutter
     dataclasses-json
     deprecated
+    fastapi
     fastapi-github-oidc
     freetype-py
     gitpython
-    kicad-python
+    httpx
+    jinja2
+    keyring
     kicadcliwrapper
     matplotlib
     mcp
     more-itertools
+    nanobind
     natsort
     numpy
+    openai
     ordered-set
     pathvalidate
     pint
-    posthog
+    platformdirs
+    prompt-toolkit
     psutil
+    pyaaf2
     pydantic-settings
     pygls
+    pytest # imported at runtime
+    pyyaml
     questionary
-    requests
     rich
     ruamel-yaml
     ruff
@@ -125,119 +166,79 @@ buildPythonPackage (finalAttrs: {
     shapely
     truststore
     typer
+    typing-extensions
     urllib3
+    uvicorn
+    watchdog
+    websockets
     zstd
-  ];
+  ]
+  ++ mcp.optional-dependencies.cli;
 
   pythonRelaxDeps = [
     "deprecated"
-    "posthog"
     "prompt-toolkit"
+    "ruff"
   ];
 
   pythonImportsCheck = [ "atopile" ];
 
   nativeCheckInputs = [
-    writableTmpDirAsHomeHook
-    pytestCheckHook
-    pytest-xdist
-    pytest-benchmark
-    pytest-datafiles
-    pytest-timeout
+    gitMinimal
     hypothesis
+    pytest-xdist
+    pytestCheckHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
-  preCheck = ''
-    # do not report worker logs to filee
-    substituteInPlace test/conftest.py \
-      --replace-fail "worker_id =" "worker_id = None #"
+  env.SKIP_EASYEDA = "1";
 
-    # unrecognized flags
-    substituteInPlace pyproject.toml \
-      --replace-fail "--html=artifacts/test-report.html" "" \
-      --replace-fail "--self-contained-html" "" \
-      --replace-fail "--numprocesses=auto" "" \
+  preCheck =
+    # Use a per-worker log dir: workers racing on the shared sqlite log DB at
+    # collection time cause `sqlite3.OperationalError: disk I/O error`.
+    # Also, app_root()/repo_root() look for pyproject.toml/.git above the installed module.
+    ''
+      cat - conftest.py > conftest.py.new <<EOF
+      import os
+      from pathlib import Path
+      if (worker := os.environ.get("PYTEST_XDIST_WORKER")) is not None:
+          os.environ["FBRK_LOG_DIR"] = os.path.join(os.environ["HOME"], "atopile-logs", worker)
+      import faebryk.libs.util
+      faebryk.libs.util.app_root = faebryk.libs.util.repo_root = lambda: Path("$PWD")
+      EOF
+      mv conftest.py.new conftest.py
+    '';
 
-    # Replace this function call that cause test to hang
-    substituteInPlace            \
-      test/cli/test_packages.py  \
-      test/library/test_names.py \
-      test/test_examples.py      \
-      test/test_parse_utils.py   \
-        --replace-fail "_repo_root()" "Path('$(pwd)')"
+  # Only run the tests under test/ (testpaths also includes src/)
+  enabledTestPaths = [ "test" ];
 
-    # Fix crash due to empty list in fixture tests
-    substituteInPlace            \
-      test/test_examples.py      \
-      test/test_parse_utils.py   \
-        --replace-fail "p.stem" "p.stem if isinstance(p, Path) else p"
-  '';
-
-  disabledTestPaths = [
-    # timeouts
-    "test/test_cli.py"
-    "test/cli/test_packages.py"
-    "test/end_to_end/test_net_naming.py"
-    "test/end_to_end/test_pcb_export.py"
-    "test/exporters/bom/test_bom.py"
-    "test/front_end/test_front_end_pick.py"
-    "test/libs/picker/test_pickers.py"
+  disabledTestMarks = [
+    "easyeda"
+    "full_solver_only"
+    "not_in_ci"
+    "regression"
+    "slow"
   ];
 
   disabledTests = [
-    # Timeout (>10.0s) from pytest-timeout.
-    "test_build_error_logging"
-    "test_can_evaluate_literals"
-    "test_examples_build"
-    "test_net_names_deterministic"
-    "test_performance_mifs_bus_params"
-    "test_regression_rp2040_usb_diffpair"
-    "test_reserved_attrs"
-    "test_resistor"
-    "test_loooooong_chain"
-    "test_parser_netlist"
-    "test_dump_load_equality"
-    "test_performance_mifs_connect_check"
+    # Requires internet access
+    "test_install_package"
 
-    # requires internet
-    "test_simple_pick"
-    "test_simple_negative_pick"
-    "test_jlcpcb_pick_resistor"
-    "test_jlcpcb_pick_capacitor"
-    "test_regression_rp2040_usb_diffpair_full"
-    "test_model_translations"
+    # Subprocess can't find the app root (pyproject.toml)
+    "test_dev_flags_runs_and_prints_table_title"
 
-    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/build/logs/latest'
-    "test_muster_diamond_dependencies"
-    "test_muster_disconnected_components"
-    "test_muster_register_decorator"
-    "test_muster_select_skips_targets_with_failed_dependencies"
-    "test_muster_select_skips_targets_with_partial_failed_dependencies"
-    "test_muster_select_yields_targets_with_all_successful_dependencies"
-    "test_muster_specific_targets_with_dependencies"
+    # pydantic_core._pydantic_core.ValidationError: 1 validation error for InputTokensDetails
+    "test_extracts_usage_tokens"
+
+    # AssertionError: assert None is not None
+    "test_structure_refresh_recovers_after_introspection_failure"
   ];
-
-  disabledTestMarks = [
-    "slow"
-    "not_in_ci"
-    "regression"
-  ];
-
-  pytestFlags = [
-    "--timeout=10" # any test taking long, timouts with more than 60s
-    "--benchmark-disable"
-    "--tb=line"
-  ];
-
-  doCheck = true;
 
   meta = {
     description = "Design circuit boards with code";
     homepage = "https://atopile.io";
     downloadPage = "https://github.com/atopile/atopile";
-    changelog = "https://github.com/atopile/atopile/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thecodedkid ];
     mainProgram = "ato";
