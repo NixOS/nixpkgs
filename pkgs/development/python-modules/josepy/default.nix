@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "josepy";
     tag = "v${version}";
-    hash = "sha256-3YzcXdzwf5elkEJeCn4wBb987HTrYM5tT2XfOQIpZ9Q=";
+    hash = "sha256-7pyJ7DP4mB94MuuoJQ1Leb2LQINiqFSISIVwfPWZ9OA=";
   };
 
   build-system = [ poetry-core ];
