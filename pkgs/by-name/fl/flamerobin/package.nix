@@ -32,7 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Database administration tool for Firebird RDBMS";
     homepage = "https://github.com/mariuz/flamerobin";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.AND [
+      lib.licenses.mit
+      (lib.licenses.mkLicense {
+        shortName = "ibpp";
+        fullName = "IBPP License v1.1";
+        url = "https://ibpp.sourceforge.io/license";
+      })
+      lib.licenses.lgpl2Only
+    ];
     maintainers = with lib.maintainers; [ uralbash ];
     platforms = lib.platforms.unix;
     mainProgram = "flamerobin";
