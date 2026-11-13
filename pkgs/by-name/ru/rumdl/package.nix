@@ -84,6 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       kachick
       hasnep
       faukah
+      yiyu
     ];
     mainProgram = "rumdl";
     platforms = with lib.platforms; unix ++ windows;
