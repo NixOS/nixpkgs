@@ -1,5 +1,6 @@
 {
   lib,
+  anyascii,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -8,29 +9,28 @@
   unidecode,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-slugify";
-  version = "8.0.4";
+  version = "9.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-slugify";
-    tag = "v${version}";
-    hash = "sha256-zReUMIkItnDot3XyYCoPUNHrrAllbClWFYcxdTy3A30=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WBhw5TnjxEks8tNLGTptL3ydwOzahRsdMFc54rnLGYA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ text-unidecode ];
+  dependencies = [ text-unidecode ];
 
   optional-dependencies = {
+    anyascii = [ anyascii ];
     unidecode = [ unidecode ];
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  enabledTestPaths = [ "test.py" ];
 
   pythonImportsCheck = [ "slugify" ];
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
     description = "Python Slugify application that handles Unicode";
     mainProgram = "slugify";
     homepage = "https://github.com/un33k/python-slugify";
-    changelog = "https://github.com/un33k/python-slugify/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/un33k/python-slugify/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

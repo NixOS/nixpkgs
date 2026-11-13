@@ -3120,6 +3120,8 @@ self: super: with self; {
 
   chardet_5 = callPackage ../development/python-modules/chardet/5.nix { };
 
+  chardet_7 = callPackage ../development/python-modules/chardet/7.nix { };
+
   charset-normalizer = callPackage ../development/python-modules/charset-normalizer { };
 
   chat-downloader = callPackage ../development/python-modules/chat-downloader { };
@@ -6053,6 +6055,12 @@ self: super: with self; {
   fastmcp = callPackage ../development/python-modules/fastmcp { };
 
   fastmcp-slim = callPackage ../development/python-modules/fastmcp-slim { };
+
+  fastmcp-slim_4 = callPackage ../development/python-modules/fastmcp-slim_4 { };
+
+  fastmcp-tasks = callPackage ../development/python-modules/fastmcp-tasks { };
+
+  fastmcp_4 = callPackage ../development/python-modules/fastmcp_4 { };
 
   fastmri = callPackage ../development/python-modules/fastmri { };
 
@@ -14958,6 +14966,14 @@ self: super: with self; {
   pydantic-monty = callPackage ../development/python-modules/pydantic-monty {
     inherit (pkgs) zstd;
   };
+
+  pydantic-monty-client = callPackage ../development/python-modules/pydantic-monty-client { };
+
+  pydantic-monty-runtime = callPackage ../development/python-modules/pydantic-monty-runtime {
+    inherit (pkgs) zstd;
+  };
+
+  pydantic-monty_1 = callPackage ../development/python-modules/pydantic-monty_1 { };
 
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 

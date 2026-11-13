@@ -13,7 +13,7 @@ index 8a8a470fd..86d33f2f6 100644
  # Supported PCM formats for the Music Assistant -> Snapserver TCP source.
  # 24-bit requires Snapserver packed_s24le ingest support (snapcast/snapcast#1532).
 diff --git a/music_assistant/providers/snapcast/provider.py b/music_assistant/providers/snapcast/provider.py
-index b1e7abc2f..2182f71a1 100644
+index 78416146e..a2b68003d 100644
 --- a/music_assistant/providers/snapcast/provider.py
 +++ b/music_assistant/providers/snapcast/provider.py
 @@ -41,6 +41,7 @@
@@ -24,7 +24,7 @@ index b1e7abc2f..2182f71a1 100644
      DEFAULT_SNAPCAST_FORMAT,
      DEFAULT_SNAPSERVER_CONFIG_FILE,
      DEFAULT_SNAPSERVER_IP,
-@@ -508,8 +509,7 @@ async def _builtin_server_runner(self) -> None:
+@@ -514,8 +515,7 @@ async def _builtin_server_runner(self) -> None:
              f"--stream.send_to_muted={str(self._snapcast_server_send_to_muted).lower()}",
              f"--streaming_client.initial_volume={self._snapcast_server_initial_volume}",
          ]
