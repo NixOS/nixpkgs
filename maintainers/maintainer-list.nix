@@ -8697,6 +8697,11 @@
     githubId = 10492681;
     name = "Michael Hoang";
   };
+  eon5942 = {
+    github = "eon5942";
+    githubId = 284518848;
+    name = "eon";
+  };
   eonpatapon = {
     email = "eon@patapon.info";
     github = "eonpatapon";
