@@ -59,6 +59,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kachick
+      mdaniels5757
     ];
     mainProgram = "gh-actions-lock";
     platforms = with lib.platforms; unix ++ windows;
