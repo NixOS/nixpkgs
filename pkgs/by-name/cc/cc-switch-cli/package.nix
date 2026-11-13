@@ -7,6 +7,9 @@
   installShellFiles,
   writableTmpDirAsHomeHook,
   lsof,
+  pkg-config,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,7 +27,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-VEpDWh8fHG+889IMVFmq2d+6TGStbqdJolD2cpfkjxc=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cc-switch \
       --bash <($out/bin/cc-switch completions bash) \
@@ -34,9 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
-  # rusqlite uses the "bundled" feature which compiles SQLite from source,
-  # so no system sqlite dependency is needed.
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook # needs $HOME for many tests
