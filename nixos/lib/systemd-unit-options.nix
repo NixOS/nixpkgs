@@ -2,6 +2,10 @@
 
 let
   inherit (systemdUtils.lib)
+    assertCPUQuotaFormat
+    assertMemoryFormat
+    assertRlimitSizeFormat
+    assertTasksMaxFormat
     assertValueOneOf
     checkUnitConfig
     makeJobScript
@@ -23,26 +27,67 @@ let
     types
     ;
 
-  checkService = checkUnitConfig "Service" [
-    (assertValueOneOf "Type" [
-      "exec"
-      "simple"
-      "forking"
-      "oneshot"
-      "dbus"
-      "notify"
-      "notify-reload"
-      "idle"
-    ])
-    (assertValueOneOf "Restart" [
-      "no"
-      "on-success"
-      "on-failure"
-      "on-abnormal"
-      "on-abort"
-      "always"
-    ])
+  # systemd.resource-control(5) applies to service, socket, mount, swap, slice
+  # and scope units.
+  resourceControlChecks = [
+    (assertMemoryFormat "MemoryMin")
+    (assertMemoryFormat "MemoryLow")
+    (assertMemoryFormat "MemoryHigh")
+    (assertMemoryFormat "MemoryMax")
+    (assertMemoryFormat "MemorySwapMax")
+    (assertMemoryFormat "MemoryZSwapMax")
+    (assertMemoryFormat "StartupMemoryLow")
+    (assertMemoryFormat "StartupMemoryHigh")
+    (assertMemoryFormat "StartupMemoryMax")
+    (assertMemoryFormat "StartupMemorySwapMax")
+    (assertMemoryFormat "StartupMemoryZSwapMax")
+    (assertCPUQuotaFormat "CPUQuota")
+    (assertTasksMaxFormat "TasksMax")
   ];
+
+  # The byte-based resource limits of systemd.exec(5). The remaining ones take
+  # counts or time spans rather than sizes.
+  rlimitChecks = [
+    (assertRlimitSizeFormat "LimitAS")
+    (assertRlimitSizeFormat "LimitCORE")
+    (assertRlimitSizeFormat "LimitDATA")
+    (assertRlimitSizeFormat "LimitFSIZE")
+    (assertRlimitSizeFormat "LimitMEMLOCK")
+    (assertRlimitSizeFormat "LimitMSGQUEUE")
+    (assertRlimitSizeFormat "LimitRSS")
+    (assertRlimitSizeFormat "LimitSTACK")
+  ];
+
+  checkSlice = checkUnitConfig "Slice" resourceControlChecks;
+
+  checkSocket = checkUnitConfig "Socket" (resourceControlChecks ++ rlimitChecks);
+
+  checkMount = checkUnitConfig "Mount" (resourceControlChecks ++ rlimitChecks);
+
+  checkService = checkUnitConfig "Service" (
+    resourceControlChecks
+    ++ rlimitChecks
+    ++ [
+      (assertValueOneOf "Type" [
+        "exec"
+        "simple"
+        "forking"
+        "oneshot"
+        "dbus"
+        "notify"
+        "notify-reload"
+        "idle"
+      ])
+      (assertValueOneOf "Restart" [
+        "no"
+        "on-success"
+        "on-failure"
+        "on-abnormal"
+        "on-abort"
+        "always"
+      ])
+    ]
+  );
 
 in
 rec {
@@ -654,7 +699,7 @@ rec {
         example = {
           ListenStream = "/run/my-socket";
         };
-        type = types.attrsOf unitOption;
+        type = types.addCheck (types.attrsOf unitOption) checkSocket;
         description = ''
           Each attribute in this set specifies an option in the
           `[Socket]` section of the unit.  See
@@ -785,7 +830,7 @@ rec {
         example = {
           DirectoryMode = "0775";
         };
-        type = types.attrsOf unitOption;
+        type = types.addCheck (types.attrsOf unitOption) checkMount;
         description = ''
           Each attribute in this set specifies an option in the
           `[Mount]` section of the unit.  See
@@ -860,7 +905,7 @@ rec {
         example = {
           MemoryMax = "2G";
         };
-        type = types.attrsOf unitOption;
+        type = types.addCheck (types.attrsOf unitOption) checkSlice;
         description = ''
           Each attribute in this set specifies an option in the
           `[Slice]` section of the unit.  See
