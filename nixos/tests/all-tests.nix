@@ -753,6 +753,8 @@ in
   ghostfolio = runTest ./ghostfolio.nix;
   ghostunnel = runTest ./ghostunnel;
   ghostunnel-modular = runTest ./ghostunnel-modular;
+  ghostunnel-modular-no-nscd = runTest ./ghostunnel-modular/no-nscd.nix;
+  ghostunnel-no-nscd = runTest ./ghostunnel/no-nscd.nix;
   git-pages-modular = runTest ./git-pages.nix;
   gitdaemon = runTest ./gitdaemon.nix;
   gitea = import ./gitea.nix {
