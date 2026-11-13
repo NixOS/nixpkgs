@@ -43,9 +43,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    LIBCLANG_PATH = "${libclang.lib}/lib";
+    LIBCLANG_PATH = "${lib.getLib libclang}/lib";
     BORING_BSSL_PATH = boringssl;
-    BORING_BSSL_INCLUDE_PATH = "${boringssl.dev}/include";
+    BORING_BSSL_INCLUDE_PATH = "${lib.getDev boringssl}/include";
   };
 
   postPatch = ''
