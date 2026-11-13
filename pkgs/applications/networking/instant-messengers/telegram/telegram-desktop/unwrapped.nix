@@ -60,6 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-B5JZ7Byz1aM7U0b8xf/2NgJhq9haULIYf+goYoDTrjo=";
   };
 
+  postPatch = ''
+    substituteInPlace Telegram/cmake/telegram_apple_swift_runtime.cmake \
+     --replace-warn 'COMMAND "''${swift_bin_dir}/swift-stdlib-tool"' 'COMMAND true' \
+     --replace-warn 'COMMAND xcrun swift-stdlib-tool'                'COMMAND true'
+  '';
+
   nativeBuildInputs = [
     pkg-config
     cmake
