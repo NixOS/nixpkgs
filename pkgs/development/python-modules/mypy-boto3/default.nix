@@ -207,8 +207,8 @@ in
       "sha256-nvEcTYzI6seVmTfUEwftmeDR2Dd3EdFSc1/A2Wp9AjM=";
 
   mypy-boto3-cleanrooms =
-    buildMypyBoto3Package "cleanrooms" "1.44.0"
-      "sha256-FOZY/LLTnDgQC+BukapV5adK25vfgzTRlbGJJVNMTYs=";
+    buildMypyBoto3Package "cleanrooms" "1.44.2"
+      "sha256-zMr05GY6HM1n8ow7B+uAoIylBa/77VXgbiYeInbZ2Nk=";
 
   mypy-boto3-cloud9 =
     buildMypyBoto3Package "cloud9" "1.44.0"
