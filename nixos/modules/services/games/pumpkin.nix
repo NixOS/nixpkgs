@@ -458,19 +458,9 @@ in
             };
 
             proxy = {
-              enabled = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = "Whether to enable proxy (Velocity/BungeeCord) support.";
-                example = true;
-              };
+              enabled = lib.mkEnableOption "proxy (Velocity/BungeeCord) support";
               velocity = {
-                enabled = lib.mkOption {
-                  type = lib.types.bool;
-                  default = false;
-                  description = "Whether to enable the Velocity modern forwarding protocol.";
-                  example = true;
-                };
+                enabled = lib.mkEnableOption "the Velocity modern forwarding protocol";
                 secretFile = lib.mkOption {
                   type = lib.types.nullOr lib.types.path;
                   default = null;
@@ -484,12 +474,7 @@ in
                   example = "/run/secrets/pumpkin-velocity-secret";
                 };
               };
-              bungeecord.enabled = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = "Whether to enable BungeeCord IP forwarding.";
-                example = true;
-              };
+              bungeecord.enabled = lib.mkEnableOption "BungeeCord IP forwarding";
             };
 
             lan_broadcast.enabled = lib.mkOption {
