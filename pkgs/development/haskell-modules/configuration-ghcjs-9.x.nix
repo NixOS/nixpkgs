@@ -32,8 +32,8 @@ with haskellLib;
   entropy = addBuildDepend self.ghcjs-dom super.entropy;
 
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25083#note_578275
-  patch = haskellLib.disableParallelBuilding super.patch;
-  reflex-dom-core = haskellLib.disableParallelBuilding super.reflex-dom-core;
+  patch = disableParallelBuilding super.patch;
+  reflex-dom-core = disableParallelBuilding super.reflex-dom-core;
 
   # Marked as dontDistribute in -common because of jsaddle-webkit2gtk
   # which requires an unmaintained version of libsoup. Since this dep
@@ -66,5 +66,5 @@ with haskellLib;
   }) super.splitmix;
 
   # See https://gitlab.haskell.org/ghc/ghc/-/issues/26019#note_621324, without this flag the build OOMs
-  SHA = haskellLib.appendConfigureFlag "--ghc-option=-fignore-interface-pragmas" super.SHA;
+  SHA = appendConfigureFlag "--ghc-option=-fignore-interface-pragmas" super.SHA;
 })
