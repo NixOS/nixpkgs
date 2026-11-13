@@ -9,14 +9,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "chroncal";
-  version = "0.17.4";
+  version = "0.17.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DouglasdeMoura";
     repo = "chroncal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fNYEkgCUpnQYgiSHrjn3KA0a9xb2+MrqCTXVxaYr5po=";
+    hash = "sha256-lPTM11K+8VxTn4a6IzV7Ae3OFq1BMrfEwnPncSgE5CE=";
   };
 
   vendorHash = "sha256-7QW8BQ+5Vj6eGECLxbaiZ2CEgHYIbi55g+Rzmf/txcw=";
