@@ -17493,6 +17493,12 @@
     githubId = 68616614;
     name = "Lukas Soigneux";
   };
+  lukasgierth = {
+    email = "lukas.gierth@posteo.de";
+    github = "lukasgierth";
+    githubId = 18207828;
+    name = "Lukas Gierth";
+  };
   lukaslihotzki = {
     email = "lukas@lihotzki.de";
     github = "lukaslihotzki";
