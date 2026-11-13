@@ -966,6 +966,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-OAd8SeTqTrH0kMoM2LsK3vM2PI23b3gl57FaJYM9hM0="
   },
+  "neondatabase_neon": {
+    "hash": "sha256-Zd0JsHndE4JmpexQhZf5ePQuHZEwOQSPVION+cLVHvA=",
+    "homepage": "https://registry.terraform.io/providers/neondatabase/neon",
+    "owner": "neondatabase",
+    "repo": "terraform-provider-neon",
+    "rev": "v0.19.0-beta.0",
+    "spdx": "Apache-2.0",
+    "vendorHash": "sha256-anDXIahFYXpKQtrKIUeq1WzKdqHssTzcOM79LdUAYPE="
+  },
   "newrelic_newrelic": {
     "hash": "sha256-BssV6o5jK1c3vQcyYUK8y3TRjXJLNpVXk2AGx88q4dU=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
