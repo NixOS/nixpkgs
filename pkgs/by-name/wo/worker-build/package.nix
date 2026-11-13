@@ -4,13 +4,17 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
   version = "0.9.0";
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
   nativeBuildInputs = [ pkg-config ];
   src = fetchFromGitHub {
     owner = "cloudflare";
