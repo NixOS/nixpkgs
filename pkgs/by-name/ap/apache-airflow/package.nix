@@ -20,6 +20,8 @@ in
   # not work at all due to the unexpected version overrides
   # here.
   passthru = (previousAttrs.passthru or { }) // {
-    pythonPackages = python3.pkgs;
+    pythonPackages = python3.pkgs // {
+      inherit apache-airflow;
+    };
   };
 })

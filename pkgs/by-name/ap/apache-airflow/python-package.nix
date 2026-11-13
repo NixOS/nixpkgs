@@ -223,9 +223,9 @@ buildPythonPackage (
 
         ${relaxBuildDeps}
 
-        # task-sdk needs config.yml from core subpackage
+        # task-sdk reads these data files from core relative to its own module
         mkdir -p src/airflow/config_templates
-        cp ../airflow-core/src/airflow/config_templates/* src/airflow/config_templates/
+        cp ../airflow-core/src/airflow/config_templates/{config.yml,provider_config_fallback_defaults.cfg,unit_tests.cfg} src/airflow/config_templates/
       '';
 
       build-system = [
@@ -266,6 +266,19 @@ buildPythonPackage (
         truststore
         typing-extensions
       ];
+
+      # Verify task-sdk's copied config_templates data files are present
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        ${python.interpreter} -c '
+        from airflow.sdk.configuration import _default_config_file_path
+        for name in ("config.yml", "provider_config_fallback_defaults.cfg", "unit_tests.cfg"):
+            _default_config_file_path(name)
+        '
+
+        runHook postInstallCheck
+      '';
     };
 
     airflowCore = buildPythonPackage {
@@ -369,6 +382,11 @@ buildPythonPackage (
         "starlette"
         "fastapi"
       ];
+
+      postInstall = ''
+        # Avoid colliding with apache-airflow's bin/airflow symlink in buildEnv
+        rm -rf $out/bin
+      '';
     };
   in
   {
