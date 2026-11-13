@@ -20,10 +20,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # https://github.com/opensrcsec/paxtest/pull/1
   postPatch = ''
+    # https://github.com/opensrcsec/paxtest/pull/1
     substituteInPlace src/Makefile.psm \
       --replace-fail 'chmod 755 ../$@' 'chmod 755 $@'
+
+    # aarch64 falls back to the x86 `ret` shellcode (SIGILL)
+    substituteInPlace src/shellcode.h \
+      --replace-fail '#elif defined(__arm__) && !defined(__arch64__)' '#elif defined(__aarch64__)
+    #define SHELLCODE_RETURN "\xc0\x03\x5f\xd6"
+    #elif defined(__arm__) && !defined(__arch64__)'
+
+    # chpax fails on aarch64, setting PaX flags is best effort anyway
+    # https://hydra.nixos.org/build/352872657/step/2/log
+    echo 'exit 0' >> contrib/setpaxflags
   '';
 
   makefile = "Makefile.psm";
