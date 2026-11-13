@@ -8,7 +8,7 @@
   pandas,
   matplotlib,
   nbval,
-  pyvisa,
+  pyvisa-py,
   networkx,
   ipython,
   ipykernel,
@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scikit-rf";
-  version = "1.9.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iOKTQOOJTsj6YIQaJVWFcp9HdUEj43aytpo7VzItxr8=";
+    hash = "sha256-g8JDTGwvijnS0LJBHn50gdfahqMovs+A1uWDAyZdHu0=";
   };
 
   build-system = [ setuptools ];
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     plot = [ matplotlib ];
     xlsx = [ openpyxl ];
     netw = [ networkx ];
-    visa = [ pyvisa ];
+    visa = [ pyvisa-py ];
     docs = [
       ipython
       ipykernel
@@ -70,7 +70,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-mock
     matplotlib
-    pyvisa
+    pyvisa-py
     openpyxl
     networkx
     pytestCheckHook
