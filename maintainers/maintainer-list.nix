@@ -31196,6 +31196,12 @@
     name = "Vincent Bernat";
     keys = [ { fingerprint = "AEF2 3487 66F3 71C6 89A7  3600 95A4 2FE8 3535 25F9"; } ];
   };
+  vindeckyy = {
+    email = "35399491+vindeckyy@users.noreply.github.com";
+    github = "vindeckyy";
+    githubId = 35399491;
+    name = "Hayden";
+  };
   vinetos = {
     name = "vinetos";
     email = "contact+git@vinetos.fr";
