@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "cssselect2";
-  version = "0.9.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dZqiLCFjJjVvZeYueR1mFgoPnJHRQk6NitxedN3fxvs=";
+    hash = "sha256-g7DYIO9YnauvaTKJtkfC9bQQ920oX1beupEf+nWnudE=";
   };
 
   postPatch = ''
