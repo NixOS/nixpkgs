@@ -19,6 +19,7 @@
   zstd,
   versionCheckHook,
   nix-update-script,
+  fuse3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,15 +62,18 @@ stdenv.mkDerivation (finalAttrs: {
     liburcu
     libuuid
 
+    fuse3
     e2fsprogs
     ntfs3g
     nilfs-utils
   ];
 
   configureFlags = [
+    "--enable-fuse"
     "--enable-xfs"
     "--enable-extfs"
     "--enable-hfsp"
+    "--enable-apfs"
     "--enable-fat"
     "--enable-exfat"
     "--enable-ntfs"
