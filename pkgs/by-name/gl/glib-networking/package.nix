@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Network-related giomodules for glib";
     homepage = "https://gitlab.gnome.org/GNOME/glib-networking";
     license = lib.licenses.lgpl21Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
     badPlatforms = [
