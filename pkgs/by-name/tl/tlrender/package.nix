@@ -116,6 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableUsd [ openusd ];
 
   cmakeFlags = [
+    # Match the upstream SuperBuild; GCC 16's default C++20 breaks u8string() conversions.
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+
     (lib.cmakeBool "TLRENDER_NET" enableNet)
     (lib.cmakeBool "TLRENDER_OCIO" enableOcio)
     (lib.cmakeBool "TLRENDER_SDL2" enableSdl2)
