@@ -42,16 +42,40 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp ${type}-Edit $out/bin/.${finalAttrs.pname}
 
-    cat >$out/bin/${finalAttrs.pname} <<EOF
-    #!${runtimeShell} -eu
-    exec ${lib.getExe bubblewrap} \
-      --dev-bind / / \
-      --ro-bind "${debian}/lib" /lib \
-      --ro-bind "${debian}/lib64" /lib64 \
+    cat >$out/bin/${finalAttrs.pname} <<'EOF'
+    #!@runtimeShell@
+    set -eu
+
+    # Build the sandbox root from scratch (bwrap's default tmpfs root), so
+    # mountpoints for /lib and /lib64 are created there instead of on the
+    # host's real root, where unprivileged users can't write.
+    args=()
+    for p in /*; do
+      case "$p" in
+        /lib|/lib64|/usr) continue ;;
+      esac
+      if [ -L "$p" ]; then
+        args+=(--symlink "$(readlink "$p")" "$p")
+      else
+        args+=(--dev-bind "$p" "$p")
+      fi
+    done
+
+    exec @bwrap@ \
+      "''${args[@]}" \
+      --ro-bind "@debian@/lib" /lib \
+      --ro-bind "@debian@/lib64" /lib64 \
       --tmpfs /usr \
-      --ro-bind "${debian}/usr/lib" /usr/lib \
-      $out/bin/.${finalAttrs.pname}
+      --ro-bind "@debian@/usr/lib" /usr/lib \
+      "@out@/bin/.@pname@" "$@"
     EOF
+
+    substituteInPlace $out/bin/${finalAttrs.pname} \
+      --subst-var-by runtimeShell "${runtimeShell}" \
+      --subst-var-by bwrap "${lib.getExe bubblewrap}" \
+      --subst-var-by debian "${debian}" \
+      --subst-var-by out "$out" \
+      --subst-var-by pname "${finalAttrs.pname}"
     chmod 755 $out/bin/${finalAttrs.pname}
   '';
 
