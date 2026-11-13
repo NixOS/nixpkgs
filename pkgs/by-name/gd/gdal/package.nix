@@ -144,7 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OSGeo/gdal/commit/7cf7bb5976130bb065cfc05f5ba9aedee77b62c1.diff";
       hash = "sha256-cRYW+OkXLWpEXnomkG1Ojm/wF1CjeCrwHVpc2u6hS7k=";
     })
-  ];
+  ]
+  # https://github.com/OSGeo/gdal/pull/15471#issuecomment-6845965799
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./test_ogr_gml_billion_laugh-expat-2.10-fixup.patch
+  ;
 
   nativeBuildInputs = [
     bison
