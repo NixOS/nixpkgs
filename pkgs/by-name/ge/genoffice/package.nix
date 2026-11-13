@@ -35,7 +35,7 @@ buildNpmPackage (finalAttrs: {
     owner = "genspark-ai";
     repo = "genoffice";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OxZxMH/mHNkJ8Fp2yCqraYRUz7QrJzuIZTjHhUpLFgc=";
+    hash = "sha256-X2HdpRHQlqEo9v5ZEYSSungerr/uSqZPhbEYQG477e0=";
   };
 
   buildInputs = [
