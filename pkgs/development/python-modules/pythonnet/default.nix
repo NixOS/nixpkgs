@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonAtLeast,
   pytestCheckHook,
   psutil,
   dotnet-sdk_10,
@@ -35,8 +34,6 @@ let
 in
 buildPythonPackage {
   inherit pname version src;
-
-  disabled = pythonAtLeast "3.14";
 
   pyproject = true;
 
