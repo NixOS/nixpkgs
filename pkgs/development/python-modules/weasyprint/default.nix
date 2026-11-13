@@ -4,7 +4,6 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   fontconfig,
   glib,
   harfbuzz,
@@ -28,14 +27,16 @@
   # tests
   pytest-cov-stub,
   pytestCheckHook,
-  replaceVars,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
+let
+  libPath = pkg: name: "${lib.getLib pkg}/lib/${name}${stdenv.hostPlatform.extensions.sharedLibrary}";
+in
 buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "69.0";
+  version = "70.0";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -44,24 +45,24 @@ buildPythonPackage (finalAttrs: {
     owner = "Kozea";
     repo = "WeasyPrint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kd5ei3dBty8VL0ATPz8LZFP+UTUq7yTjuDtO1s/fdxg=";
+    hash = "sha256-tb/E27Vmt3xh0MyWv25WVm1eIDo+OtNFKhap8alZaUo=";
   };
 
-  patches = [
-    (replaceVars ./library-paths.patch {
-      fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
-      gobject = "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}";
-      harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
-      harfbuzz_subset = "${harfbuzz.out}/lib/libharfbuzz-subset${stdenv.hostPlatform.extensions.sharedLibrary}";
-      pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
-      pangoft2 = "${pango.out}/lib/libpangoft2-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-    (fetchpatch2 {
-      name = "fix-unicode-test";
-      url = "https://github.com/Kozea/WeasyPrint/commit/b2efb459fbe7f7fd35ab9078734121cb87d3d65a.patch?full_index=1";
-      hash = "sha256-uixfpg9fvkdNmSTqz/M1c1vkV/mJDqOs7zDAunn2rEY=";
-    })
-  ];
+  # Upstream tries several library names per platform; point the first one at
+  # the store path and only try that one, so no host libraries are ever picked up.
+  # libharfbuzz-vector is optional (COLR emoji fonts) and only present when
+  # harfbuzz is built with `withVector = true`.
+  postPatch = ''
+    substituteInPlace weasyprint/text/ffi.py \
+      --replace-fail "for name in names:" "for name in names[:1]:" \
+      --replace-fail "'libgobject-2.0-0'" "'${libPath glib "libgobject-2.0"}'" \
+      --replace-fail "'libpango-1.0-0'" "'${libPath pango "libpango-1.0"}'" \
+      --replace-fail "'libpangoft2-1.0-0'" "'${libPath pango "libpangoft2-1.0"}'" \
+      --replace-fail "'libharfbuzz-0'" "'${libPath harfbuzz "libharfbuzz"}'" \
+      --replace-fail "'libharfbuzz-subset-0'" "'${libPath harfbuzz "libharfbuzz-subset"}'" \
+      --replace-fail "'libharfbuzz-vector-0'" "'${libPath harfbuzz "libharfbuzz-vector"}'" \
+      --replace-fail "'libfontconfig-1'" "'${libPath fontconfig "libfontconfig"}'"
+  '';
 
   build-system = [ flit-core ];
 
