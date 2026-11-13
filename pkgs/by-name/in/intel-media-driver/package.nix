@@ -20,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "intel-media-driver";
   version = "26.3.5";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
