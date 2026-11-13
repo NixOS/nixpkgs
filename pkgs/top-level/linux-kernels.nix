@@ -350,7 +350,7 @@ in
 
         lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
 
-        linux-gpib = callPackage ../applications/science/electronics/linux-gpib/kernel.nix { };
+        linux-gpib = callPackage ../by-name/li/linux-gpib/kernel.nix { };
 
         liquidtux = callPackage ../os-specific/linux/liquidtux { };
 
