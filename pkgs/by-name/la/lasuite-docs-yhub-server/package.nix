@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lasuite-docs-yhub-server";
-  version = "6.0.4";
+  version = "6.1.0";
 
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "suitenumerique";
       repo = "docs";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-3tAH9apdBhxrwfn5+rFfs0O8YRt4RivcY4ou6opS3xQ=";
+      hash = "sha256-H43DGVYqUnhi3K7hKZhJBZ5Lfx2RczB7S9yO8Oe19ZQ=";
     };
 
     patches = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/src/yhub-server/yarn.lock";
-    hash = "sha256-luqVKWLcWJ9IZC4V+dAgx8BhW4EFEWEYyXCH0x4w+FM=";
+    hash = "sha256-eoQ6LO+vqKd0HZGkI5Q0GU8CHLH+LN3yy2vM3bM4iPI=";
   };
 
   nativeBuildInputs = [
