@@ -7,7 +7,6 @@
   dotnetCorePackages,
   setuptools,
   setuptools-scm,
-  wheel,
   buildDotnetModule,
   cffi,
 }:
@@ -61,14 +60,14 @@ buildPythonPackage {
 
   buildInputs = dotnetCorePackages.sdk_10_0.packages ++ dotnet-build.nugetDeps;
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
-    dotnetCorePackages.sdk_10_0
   ];
 
-  propagatedBuildInputs = [ cffi ];
+  nativeBuildInputs = [ dotnetCorePackages.sdk_10_0 ];
+
+  dependencies = [ cffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
