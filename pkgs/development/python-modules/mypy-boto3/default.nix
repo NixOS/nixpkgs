@@ -886,8 +886,8 @@ in
       "sha256-a4BR8AK7ZnI1EOtu2Jstq+53e7z+LvYb5oJRQfV2mqQ=";
 
   mypy-boto3-mediatailor =
-    buildMypyBoto3Package "mediatailor" "1.44.0"
-      "sha256-pFEkOxw4TMi1HgbWgpH2oD1Sm/LPfviJyWjYXh7hobs=";
+    buildMypyBoto3Package "mediatailor" "1.44.2"
+      "sha256-zjNA1ftNr49t6SSEzTWTH0A6ILIkQ8TpiVSsXEbbbZA=";
 
   mypy-boto3-medical-imaging =
     buildMypyBoto3Package "medical-imaging" "1.44.0"
