@@ -4,7 +4,7 @@
   testers,
   wrapGAppsHook3,
   fetchzip,
-  sbcl,
+  sbcl_2_4_6,
   pkg-config,
   libfixposix,
   gobject-introspection,
@@ -18,12 +18,7 @@
   webkitgtk_4_1,
   openssl,
   sqlite,
-  gstreamer,
-  gst-libav,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-plugins-bad,
-  gst-plugins-ugly,
+  gst_all_1,
   xdg-utils,
   xclip,
   wl-clipboard,
@@ -44,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [
-    sbcl
+    sbcl_2_4_6
     # for groveller
     pkg-config
     libfixposix
@@ -53,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     glib-networking
     gtk3
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
+    gst_all_1.gstreamer
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
   ];
 
   # for cffi
