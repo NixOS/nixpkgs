@@ -20857,6 +20857,13 @@
     githubId = 57151943;
     name = "aoife cassidy";
   };
+  ncaq = {
+    email = "ncaq@ncaq.net";
+    github = "ncaq";
+    githubId = 2913112;
+    name = "ncaq";
+    keys = [ { fingerprint = "7DDE 3BC4 05DC 58D9 4BF6  61D3 4224 8C7D 0FB7 3D57"; } ];
+  };
   ncfavier = {
     email = "n@monade.li";
     matrix = "@ncfavier:matrix.org";
