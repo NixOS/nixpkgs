@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage rec {
     make install DESTDIR=$out PROFILE=release USER=lp GROUP=lp \
       SYSCONFDIR=/etc/cups SPOOLDIR=/var/spool/cups LOGDIR=/var/log/cups \
       CACHEDIR=/var/cache/cups RUNDIR=/run/cups
+
+    # The daemon installs units under usr/lib/systemd (FHS layout);
+    # nixpkgs' systemd.packages scan looks in $out/lib/systemd.
+    mkdir -p $out/lib
+    ln -s ../usr/lib/systemd $out/lib/systemd
   '';
 
   meta = with lib; {
