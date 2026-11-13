@@ -4,12 +4,14 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "terraform-docs";
   version = "0.25.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
@@ -38,15 +40,14 @@ buildGoModule (finalAttrs: {
     installShellCompletion terraform-docs.{bash,fish,zsh}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
+    changelog = "https://github.com/terraform-docs/terraform-docs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       zimbatm
