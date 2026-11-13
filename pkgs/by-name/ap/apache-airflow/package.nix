@@ -1,5 +1,6 @@
 {
   python3,
+  runCommand,
 
   # Extra airflow providers to enable
   enabledProviders ? [ ],
@@ -22,6 +23,22 @@ in
   passthru = (previousAttrs.passthru or { }) // {
     pythonPackages = python3.pkgs // {
       inherit apache-airflow;
+    };
+    tests = (previousAttrs.passthru.tests or { }) // {
+      python-with-packages =
+        let
+          pythonEnv = python3.withPackages (_: [ apache-airflow ]);
+        in
+        runCommand "apache-airflow-python-with-packages-test" { } ''
+          HOME=$(mktemp -d) ${pythonEnv}/bin/python -c '
+          from airflow.sdk.configuration import conf
+          conf.load_test_config()
+          from airflow.config_templates.airflow_local_settings import DEFAULT_LOGGING_CONFIG
+          assert DEFAULT_LOGGING_CONFIG
+          '
+          HOME=$(mktemp -d) ${pythonEnv}/bin/airflow version
+          touch $out
+        '';
     };
   };
 })
