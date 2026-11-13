@@ -85,6 +85,6 @@ stdenv.mkDerivation {
     mainProgram = "hollywood";
     homepage = "https://a.hollywood.computer/";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ olduser101 ];
   };
 }
