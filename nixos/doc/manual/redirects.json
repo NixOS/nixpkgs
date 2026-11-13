@@ -1028,6 +1028,15 @@
   "module-pelican-panel-reverse-proxy": [
     "index.html#module-pelican-panel-reverse-proxy"
   ],
+  "module-pelican-panel-database": [
+    "index.html#module-pelican-panel-database"
+  ],
+  "module-pelican-panel-database-type": [
+    "index.html#module-pelican-panel-database-type"
+  ],
+  "module-pelican-panel-database-remote-database": [
+    "index.html#module-pelican-panel-database-remote-database"
+  ],
   "module-services-pict-rs": [
     "index.html#module-services-pict-rs"
   ],
