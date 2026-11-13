@@ -1,0 +1,143 @@
+{
+  lib,
+  flutter338,
+  fetchFromGitHub,
+  libayatana-appindicator,
+  libsodium,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  jdk17_headless,
+}:
+let
+  # fetch simple-icons directly to avoid cloning with submodules,
+  # which would also clone a whole copy of flutter
+  simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
+  desktopId = "io.ente.auth";
+in
+flutter338.buildFlutterApplication rec {
+  pname = "ente-auth";
+  version = "4.4.25";
+
+  src = fetchFromGitHub {
+    owner = "ente";
+    repo = "ente";
+    sparseCheckout = [ "mobile" ];
+    tag = "auth-v${version}";
+    hash = "sha256-zOZg4RW7T3v/QS075KWEEdmT2+2xcMa1BlSM4In75uM=";
+  };
+
+  sourceRoot = "${src.name}/mobile";
+
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
+
+  postPatch = ''
+    rmdir apps/auth/assets/simple-icons
+    ln -s ${simple-icons} apps/auth/assets/simple-icons
+  '';
+
+  preBuild = ''
+    (cd packages/strings && flutter gen-l10n)
+
+    # Flutter needs this reference to find the workspace package config generated
+    # by the Dart hook. Otherwise it runs pub get and tries to download dependencies,
+    # which fails because the build sandbox has no network access.
+    mkdir -p apps/auth/.dart_tool/pub
+    echo '{"workspaceRoot":"../../../../.dart_tool/package_config.json"}' \
+      > apps/auth/.dart_tool/pub/workspace_ref.json
+    pushd apps/auth
+  '';
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
+
+  buildInputs = [
+    libayatana-appindicator
+    libsodium
+    # The networking client used by ente-auth (native_dio_adapter)
+    # introduces a transitive dependency on Java, which technically
+    # is only needed for the Android implementation.
+    # Unfortunately, attempts to remove it from the build entirely were
+    # unsuccessful.
+    jdk17_headless # JDK version used by upstream CI
+  ];
+
+  env = {
+    # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+    CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+    # Use the system library instead of sodium_libs' build-time download.
+    LIBSODIUM_USE_PKGCONFIG = "1";
+  };
+
+  runtimeDependencies = [ libsodium ];
+
+  flutterBuildFlags = [
+    # Disable update notifications and auto-update functionality
+    "--dart-define=app.flavor=independent"
+  ];
+
+  # Based on https://github.com/ente/ente/blob/main/mobile/apps/auth/linux/packaging/rpm/make_config.yaml
+  # and https://github.com/ente/ente/blob/main/mobile/apps/auth/linux/packaging/enteauth.appdata.xml
+  desktopItems = [
+    (makeDesktopItem {
+      name = desktopId;
+      exec = "enteauth";
+      icon = "enteauth";
+      desktopName = "Ente Auth";
+      genericName = "Ente Authentication";
+      comment = "Open source 2FA authenticator, with end-to-end encrypted backups";
+      categories = [ "Utility" ];
+      keywords = [
+        "Authentication"
+        "2FA"
+      ];
+      mimeTypes = [ "x-scheme-handler/enteauth" ];
+      startupNotify = false;
+    })
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/pixmaps
+    ln -s $out/app/ente-auth/data/flutter_assets/assets/icons/auth-icon.png $out/share/pixmaps/enteauth.png
+
+    install -Dm444 linux/packaging/enteauth.appdata.xml $out/share/metainfo/${desktopId}.metainfo.xml
+    substituteInPlace $out/share/metainfo/${desktopId}.metainfo.xml \
+      --replace-fail '<id>enteauth</id>' '<id>${desktopId}</id>' \
+      --replace-fail 'enteauth.desktop' '${desktopId}.desktop'
+
+    # For backwards compatibility
+    ln -s $out/bin/enteauth $out/bin/ente_auth
+
+    # Not required at runtime as it's only used on Android
+    rm $out/app/ente-auth/lib/libdartjni.so
+
+    # Return to the workspace root so the Dart cache hook can find .dart_tool.
+    popd
+  '';
+
+  passthru.updateScript = ./update.sh;
+
+  meta = {
+    description = "End-to-end encrypted, cross platform and free app for storing your 2FA codes with cloud backups";
+    longDescription = ''
+      Ente's 2FA app. An end-to-end encrypted, cross platform and free app for storing your 2FA codes with cloud backups. Works offline. You can even use it without signing up for an account if you don't want the cloud backups or multi-device sync.
+    '';
+    homepage = "https://ente.io/auth/";
+    changelog = "https://github.com/ente/ente/releases/tag/auth-v${version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      niklaskorz
+      schnow265
+      zi3m5f
+      gepbird
+    ];
+    mainProgram = "enteauth";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+  };
+}

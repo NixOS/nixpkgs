@@ -1,0 +1,585 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+  uv-dynamic-versioning,
+
+  # dependencies
+  requests,
+  click,
+  granian,
+  httpx,
+  httpx2,
+  packaging,
+  platformdirs,
+  psutil,
+  python-multipart,
+  python-socketio,
+  redis,
+  rich,
+  starlette,
+  typing-extensions,
+  wrapt,
+
+  # sub package dependencies
+  aiohttp,
+  brotli,
+  griffelib,
+  mistletoe,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-instrumentation-asgi,
+  pyyaml,
+  sqlalchemy,
+  tomli,
+  towncrier,
+  typing-inspection,
+  tzdata,
+  email-validator,
+  ruff-format,
+  websockets,
+
+  # tests
+  attrs,
+  typer,
+  numpy,
+  openai,
+  opentelemetry-sdk,
+  pandas,
+  pillow,
+  playwright,
+  plotly,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  python-dotenv,
+  ruff,
+  starlette-admin,
+  uvicorn,
+  gitMinimal,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  nodejs-slim,
+}:
+
+let
+
+  metaCommon = {
+    description = "Web apps in pure Python";
+    homepage = "https://github.com/reflex-dev/reflex";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
+  };
+
+  buildSubPackage =
+    {
+      pname,
+      version,
+      src,
+      workspace,
+      workspaces,
+      subPkgs,
+    }:
+    buildPythonPackage {
+      inherit pname version src;
+      pyproject = true;
+      sourceRoot = workspace.sourceRoot or "${src.name}/packages/${pname}";
+
+      postPatch =
+        lib.optionalString (pname == "reflex-release") ''
+          substituteInPlace pyproject.toml \
+            --replace-fail \
+              '"uv-dynamic-versioning == 0.14.0"' \
+              '"uv-dynamic-versioning"'
+        ''
+        + lib.optionalString (pname == "reflex-hosting-cli") ''
+          substituteInPlace pyproject.toml \
+            --replace-fail \
+              '"reflex-build-sdk[httpx] >=0.1.1,<0.1.2.post,!=0.1.2"' \
+              '"reflex-build-sdk[httpx]"'
+        ''
+        +
+          lib.optionalString
+            (lib.elem pname [
+              "reflex-components-core"
+              "reflex-components-code"
+              "reflex-components-sonner"
+              "reflex-components-radix"
+            ])
+            ''
+              substituteInPlace pyproject.toml \
+                --replace-fail \
+                  '"reflex-components-lucide >= 1.1.0"' \
+                  '"reflex-components-lucide"'
+            '';
+
+      build-system = [
+        hatchling
+        uv-dynamic-versioning
+        ruff
+      ]
+      ++ lib.optional (pname != "hatch-reflex-pyi") subPkgs.hatch-reflex-pyi;
+
+      pythonRelaxDeps = [ "rich" ];
+
+      preBuild = ''
+        # for .ruff_cache and whatnot, written by hatch-reflex-pyi
+        chmod -R +w ../..
+      '';
+
+      inherit (workspace) dependencies;
+
+      # the top-level package tests everything
+      doCheck = false;
+
+      meta = metaCommon;
+    };
+
+in
+
+buildPythonPackage (finalAttrs: {
+  pname = "reflex";
+  version = "0.10.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "reflex-dev";
+    repo = "reflex";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cbmtWg1IMgVJQYjJ+3IPEJdoju+xkScIXZkVC0RcQzk=";
+  };
+
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
+
+  pythonRelaxDeps = [
+    # pinned to satisfy pyright
+    # https://github.com/reflex-dev/reflex/commit/67489196035bacb2e4bb2fe6ae165088bc6db988
+    "wrapt"
+    # preemptive upper bound, doesn't seem breaking
+    "redis"
+    "rich"
+  ];
+  # pythonRelaxDeps is not sufficient
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"redis >=6.4,<8.0"' \
+        '"redis >=6.4,<9.0"' \
+      --replace-fail \
+        '"reflex-components-lucide >= 1.1.1"' \
+        '"reflex-components-lucide"'
+  '';
+
+  nativeBuildInputs = [
+    ruff
+  ];
+
+  dependencies =
+    let
+      inherit (finalAttrs.passthru) subPkgs;
+    in
+    [
+      click
+      requests
+      granian
+      httpx
+      openai
+      packaging
+      psutil
+      python-multipart
+      python-socketio
+      redis
+      rich
+      starlette
+      typing-extensions
+      wrapt
+      plotly
+
+      subPkgs.reflex-base
+      subPkgs.reflex-components-code
+      subPkgs.reflex-components-core
+      subPkgs.reflex-components-dataeditor
+      subPkgs.reflex-components-gridjs
+      subPkgs.reflex-components-lucide
+      subPkgs.reflex-components-markdown
+      subPkgs.reflex-components-moment
+      subPkgs.reflex-components-plotly
+      subPkgs.reflex-components-radix
+      subPkgs.reflex-components-react-player
+      subPkgs.reflex-components-recharts
+      subPkgs.reflex-components-sonner
+      subPkgs.reflex-hosting-cli
+    ]
+    ++ granian.optional-dependencies.reload;
+
+  nativeCheckInputs =
+    let
+      inherit (finalAttrs.passthru) subPkgs;
+    in
+    [
+      attrs
+      typer
+      nodejs-slim
+      numpy
+      pandas
+      pillow
+      playwright
+      opentelemetry-sdk
+      pytest-asyncio
+      pytest-mock
+      pytestCheckHook
+      python-dotenv
+      pyyaml
+      starlette-admin
+      uvicorn
+      versionCheckHook
+      gitMinimal
+      writableTmpDirAsHomeHook
+      subPkgs.reflex-bench
+      subPkgs.reflex-build-sdk
+      subPkgs.reflex-otel
+      subPkgs.reflex-release
+    ];
+  versionCheckProgramArg = "--version";
+
+  disabledTests = [
+    # Touches network
+    "test_node_version"
+
+    # /proc is too funky in nix sandbox
+    "test_get_cpu_info"
+
+    # flaky
+    "test_preprocess" # KeyError: 'reflex___state____state'
+    "test_send" # AssertionError: Expected 'post' to have been called once. Called 0 times.
+    "test_state_manager_lock" # Lock expired for token 87164611-f...
+
+    # tries to run bun or npm
+    "test_output_system_info"
+
+    # missing assets in reflex-bench that its build does not add to the wheel
+    # upstream requires running the test from a checkout
+    "test_playground_dir_is_the_checkouts_playground"
+    "test_fixture_hash_is_the_fixtures_content_hash"
+    "test_the_hash_is_the_committed_line"
+    "test_materialize_playground_copies_the_tracked_files"
+    "test_materialize_playground_skips_build_output"
+    "test_staged_playground_keeps_its_content_hash_across_an_edit"
+    "test_the_readme_lists_every_route"
+    "test_the_repo_budgets_name_declared_metrics"
+
+    # requires a git checkout
+    "test_examples_import_reflex_only_as_rx"
+
+    # sensitive to whether stderr is a tty
+    "test_rich_output_parity"
+    "test_markup_rendered_when_opted_in"
+    "test_markup_literal_by_default"
+    "test_warning_with_markup_tags_stays_literal"
+    "test_level_gating"
+    "test_default_level_gates_like_info"
+    "test_dedupe"
+    "test_timing_logs_at_debug"
+    "test_console_shims_delegate"
+
+    # Failed: DID NOT RAISE OSError
+    "test_write_stateful_pages_marker_closes_descriptor_on_open_failure"
+
+    # reflex.utils.exceptions.StateSerializationError: Failed to serialize state
+    # reflex___istate___dynamic____dill_state due to unpicklable object.
+    "test_fallback_pickle"
+
+    # AssertionError (mocked_open.call_count == 2)
+    "test_delete_token_from_config"
+
+    # circular imports (reflex-docgen)
+    "test_compiling_docs_does_not_evaluate_upload"
+    "test_enterprise_parent_breadcrumb_uses_overview_route"
+    "test_page_names_the_module_the_class_is_defined_in"
+  ];
+
+  enabledTestPaths = [ "tests/" ]; # this excludes doc tests
+
+  disabledTestPaths = [
+    "tests/benchmarks/"
+    "tests/integration/"
+
+    # requires pytest-codspeed which is not packaged
+    "tests/units/benchmarks/test_shared_state.py"
+
+    # missing assets in reflex-bench that its build does not add to the wheel
+    # upstream requires running the test from a checkout
+    "tests/units/reflex_bench/drivers/"
+    "tests/units/reflex_bench/suites/"
+    "tests/units/reflex_bench/fixtures/test_playground.py"
+    "tests/units/reflex_bench/fixtures/test_playground_app.py"
+
+    # circular imports (reflex-docgen)
+    "tests/units/docgen/test_class_and_component.py"
+    "tests/units/docgen/test_markdown.py"
+    "tests/units/docgen/test_reflex_transformer.py"
+
+    # circular imports (reflex-components-internal)
+    "tests/units/reflex_components_internal/"
+
+    # circular imports (reflex-site-shared)
+    "tests/units/reflex_site_shared/"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "reflex"
+    "reflex.admin"
+    "reflex.app"
+    "reflex.app_mixins.lifespan"
+    "reflex.app_mixins.middleware"
+    "reflex.app_mixins.mixin"
+    "reflex.assets"
+    "reflex.compiler"
+    "reflex.components"
+    "reflex.config"
+    "reflex.constants"
+    "reflex.environment"
+    "reflex.event"
+    "reflex.experimental"
+    "reflex.experimental.client_state"
+    "reflex.experimental.hooks"
+    "reflex.experimental.memo"
+    "reflex.istate"
+    "reflex.middleware"
+    "reflex.model"
+    "reflex.page"
+    "reflex.plugins"
+    "reflex.plugins.sitemap"
+    "reflex.plugins.tailwind_v3"
+    "reflex.plugins.tailwind_v4"
+    "reflex.reflex"
+    "reflex.route"
+    "reflex.state"
+    "reflex.style"
+    "reflex.utils"
+    "reflex.vars"
+  ];
+
+  passthru = {
+    # all [tool.uv.sources] workspaces in pyproject.toml
+    workspaces =
+      let
+        inherit (finalAttrs.passthru) subPkgs;
+      in
+      # this is generated with:
+      # ./pkgs/development/python-modules/reflex/mk_workspaces.sh
+      {
+        hatch-reflex-pyi.dependencies = [
+          hatchling
+        ];
+        reflex-integrations-docs.sourceRoot = "${finalAttrs.src.name}/packages/integrations-docs";
+        reflex-integrations-docs.dependencies = [
+        ];
+        reflex-base.dependencies = [
+          packaging
+          platformdirs
+          rich
+          typing-extensions
+        ];
+        reflex-bench.dependencies = [
+          brotli
+          click
+          packaging
+          playwright
+          psutil
+          rich
+          websockets
+        ];
+        reflex-build-sdk.dependencies = [
+          aiohttp
+          httpx
+          httpx2
+        ];
+        reflex-components-code.dependencies = [
+          subPkgs.reflex-base
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-radix
+          subPkgs.reflex-components-sonner
+          ruff
+        ];
+        reflex-components-core.dependencies = [
+          python-multipart
+          subPkgs.reflex-base
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-sonner
+          ruff
+          starlette
+          typing-extensions
+        ];
+        reflex-components-dataeditor.dependencies = [
+          subPkgs.reflex-base
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-sonner
+          ruff
+        ];
+        reflex-components-gridjs.dependencies = [
+          subPkgs.reflex-base
+          ruff
+        ];
+        reflex-components-internal.dependencies = [
+          finalAttrs.finalPackage # reflex
+          subPkgs.reflex-base
+          subPkgs.reflex-components-code
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-dataeditor
+          subPkgs.reflex-components-gridjs
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-markdown
+          subPkgs.reflex-components-moment
+          subPkgs.reflex-components-plotly
+          subPkgs.reflex-components-radix
+          subPkgs.reflex-components-react-player
+          subPkgs.reflex-components-recharts
+          subPkgs.reflex-components-sonner
+          subPkgs.reflex-hosting-cli
+          ruff
+        ];
+        reflex-components-lucide.dependencies = [
+          subPkgs.reflex-base
+          ruff
+        ];
+        reflex-components-markdown.dependencies = [
+          subPkgs.reflex-base
+          subPkgs.reflex-components-code
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-radix
+          subPkgs.reflex-components-sonner
+          ruff
+        ];
+        reflex-components-moment.dependencies = [
+          subPkgs.reflex-base
+          ruff
+        ];
+        reflex-components-plotly.dependencies = [
+          subPkgs.reflex-base
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-sonner
+          ruff
+        ];
+        reflex-components-radix.dependencies = [
+          subPkgs.reflex-base
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-sonner
+          ruff
+        ];
+        reflex-components-react-player.dependencies = [
+          subPkgs.reflex-base
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-sonner
+          ruff
+        ];
+        reflex-components-recharts.dependencies = [
+          subPkgs.reflex-base
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-sonner
+          ruff
+        ];
+        reflex-components-sonner.dependencies = [
+          subPkgs.reflex-base
+          subPkgs.reflex-components-lucide
+          ruff
+        ];
+        reflex-docgen.dependencies = [
+          griffelib
+          mistletoe
+          pyyaml
+          finalAttrs.finalPackage # reflex
+          typing-inspection
+        ];
+        reflex-hosting-cli.dependencies = [
+          click
+          httpx
+          packaging
+          platformdirs
+          subPkgs.reflex-build-sdk
+          rich
+        ];
+        reflex-otel.dependencies = [
+          opentelemetry-api
+          opentelemetry-instrumentation
+          opentelemetry-instrumentation-asgi
+          subPkgs.reflex-base
+        ];
+        reflex-release.dependencies = [
+          packaging
+          towncrier
+          tzdata
+        ];
+        reflex-site-shared.dependencies = [
+          email-validator
+          httpx
+          pyyaml
+          finalAttrs.finalPackage # reflex
+          subPkgs.reflex-base
+          subPkgs.reflex-components-code
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-dataeditor
+          subPkgs.reflex-components-gridjs
+          subPkgs.reflex-components-internal
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-markdown
+          subPkgs.reflex-components-moment
+          subPkgs.reflex-components-plotly
+          subPkgs.reflex-components-radix
+          subPkgs.reflex-components-react-player
+          subPkgs.reflex-components-recharts
+          subPkgs.reflex-components-sonner
+          subPkgs.reflex-docgen
+          subPkgs.reflex-hosting-cli
+          subPkgs.reflex-integrations-docs
+          ruff
+          ruff-format
+        ];
+        reflex-workflow.dependencies = [
+          sqlalchemy
+          tzdata
+        ];
+      };
+
+    inherit buildSubPackage;
+    subPkgs = lib.flip lib.mapAttrs finalAttrs.passthru.workspaces (
+      pname: workspace:
+      (finalAttrs.passthru.buildSubPackage {
+        inherit pname workspace;
+        inherit (finalAttrs) version src;
+        inherit (finalAttrs.passthru) workspaces subPkgs;
+      })
+    );
+
+    tests = {
+      # overridePythonAttrs does not exist for finalAttrs.finalPackage
+      reflex-no-checks = finalAttrs.finalPackage.overrideAttrs (old: {
+        pname = "${old.pname}-sans-check-phase";
+        doCheck = false;
+        doInstallCheck = false;
+        dontCheckPythonMetadata = true;
+      });
+    }
+    // finalAttrs.passthru.subPkgs;
+  };
+
+  meta = metaCommon // {
+    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${finalAttrs.src.tag}";
+    mainProgram = "reflex";
+  };
+})

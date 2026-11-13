@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+--- a/configure.ac
++++ b/configure.ac
+@@ -30,7 +30,7 @@ fi
+ 
+ PKG_CHECK_MODULES([LIBZ], [zlib])
+ AC_MSG_CHECKING([libz library directory])
+-PKG_CHECK_VAR([LIBZ_LIBDIR], [zlib], [libdir])
++PKG_CHECK_VAR([LIBZ_LIBDIR], [zlib], [sharedlibdir])
+ AC_MSG_RESULT([$LIBZ_LIBDIR])
+ AS_IF([test "x$LIBZ_LIBDIR" = "x"], [
+   AC_MSG_FAILURE([Unable to identify libz lib path.])

@@ -1,0 +1,50 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libosmocore,
+  libosmoabis,
+  libosmo-netif,
+  enableOrtp ? false,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "osmo-bts";
+  version = "1.12.0";
+
+  src = fetchFromGitHub {
+    owner = "osmocom";
+    repo = "osmo-bts";
+    rev = finalAttrs.version;
+    hash = "sha256-i3MUWTsZQ0kABzLp/bMM/mEAaw3FDWMUYRwvJtCYpsU=";
+  };
+
+  postPatch = ''
+    echo "${finalAttrs.version}" > .tarball-version
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    libosmocore
+    libosmoabis
+    libosmo-netif
+  ];
+
+  configureFlags = lib.optional (!enableOrtp) "--disable-ortp";
+
+  enableParallelBuilding = true;
+
+  meta = {
+    description = "Osmocom GSM Base Transceiver Station (BTS)";
+    homepage = "https://osmocom.org/projects/osmobts";
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+  };
+})

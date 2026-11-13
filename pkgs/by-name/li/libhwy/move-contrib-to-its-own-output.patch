@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -657,4 +657,4 @@
+ install(TARGETS hwy_contrib EXPORT hwy_targets
+-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
++  LIBRARY DESTINATION "${CMAKE_CONTRIB_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
++  ARCHIVE DESTINATION "${CMAKE_CONTRIB_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
++  RUNTIME DESTINATION "${CMAKE_CONTRIB_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+diff --git a/libhwy-contrib.pc.in b/libhwy-contrib.pc.in
+--- a/libhwy-contrib.pc.in
++++ b/libhwy-contrib.pc.in
+@@ -1,3 +1,3 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=${prefix}
++exec_prefix=@CMAKE_CONTRIB_PREFIX@
+ libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@

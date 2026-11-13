@@ -1,0 +1,13 @@
+diff --git a/UI/Config/FileAssociationHelper.cs b/UI/Config/FileAssociationHelper.cs
+index bcd40ce..4965c7a 100644
+--- a/UI/Config/FileAssociationHelper.cs
++++ b/UI/Config/FileAssociationHelper.cs
+@@ -152,7 +152,7 @@ namespace Mesen.Config
+ 				"Comment=Emulator" + Environment.NewLine +
+ 				"Keywords=game;emulator;emu" + Environment.NewLine +
+ 				"Categories=GNOME;GTK;Game;Emulator;" + Environment.NewLine +
+-				"Exec=" + mainModule.FileName + " %f" + Environment.NewLine +
++				"Exec=" + "Mesen" + " %f" + Environment.NewLine +
+ 				"NoDisplay=false" + Environment.NewLine +
+ 				"StartupNotify=true" + Environment.NewLine +
+ 				"Icon=MesenIcon" + Environment.NewLine;

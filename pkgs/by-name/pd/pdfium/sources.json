@@ -1,0 +1,33 @@
+{
+  "version": {
+    "major": 158,
+    "minor": 0,
+    "build": 8110,
+    "patch": 1
+  },
+  "pdfium": {
+    "hash": "sha256-PMU7tXIJJs1WXZLw8yP4Qz0tPT+N8IjIxIIWqzub5dQ="
+  },
+  "build": {
+    "rev": "ebdaeefa62db7c40f27cacb0eb034db3a5cdb849",
+    "hash": "sha256-y5OihZ42g75TGGWNdc5L2p3WqzmYm37qMBO6zIS/I3E="
+  },
+  "chromiumBuildtools": {
+    "hash": "sha256-Vtow8uVdeSMUVlV2o6bXrzHutzDEiGu0a3mTunw1reE="
+  },
+  "dragonbox": {
+    "rev": "beeeef91cf6fef89a4d4ba5e95d47ca64ccb3a44",
+    "hash": "sha256-j6swuGgYGfiFcK3iqd4EKTeU92rZHKTbF5T1fcak/ko="
+  },
+  "generateShimHeaders": {
+    "hash": "sha256-/ViuvxJjjJ4gixjoGu6GXxKX8iXSZuy3BL+Yi0GLVDQ="
+  },
+  "testFonts": {
+    "rev": "7f51783942943e965cd56facf786544ccfc07713",
+    "hash": "sha256-gBnAOW/X2R13AP9507uPsvQ4A2ZUPbvzFcg3Neu3DT8=",
+    "bundle": {
+      "object": "cd96fc55dc243f6c6f4cb63ad117cad6cd48dceb",
+      "hash": "sha256-7Jc+zNZp1Bf78tCk2scwdEoxdCaP8GLbVFG1XIK8NJI="
+    }
+  }
+}

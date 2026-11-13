@@ -1,0 +1,57 @@
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+  nix-update-script,
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "galene";
+  version = "1.2.1";
+
+  src = fetchFromGitHub {
+    owner = "jech";
+    repo = "galene";
+    tag = "galene-${finalAttrs.version}";
+    hash = "sha256-1427Jnr8GJAVaVJiUdhWzsuG68eCp6QCUYvzXq5EwT0=";
+  };
+
+  vendorHash = "sha256-gDn46qIYjAnPn8KmKpIIQrf6vZVtCHhAQ/+OvvWe37Q=";
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+  preCheck = "export TZ=UTC";
+
+  outputs = [
+    "out"
+    "static"
+  ];
+
+  postInstall = ''
+    mkdir $static
+    cp -r ./static $static
+  '';
+
+  passthru = {
+    tests = nixosTests.galene;
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=galene-(.*)" ];
+    };
+  };
+
+  meta = {
+    description = "Videoconferencing server that is easy to deploy, written in Go";
+    homepage = "https://github.com/jech/galene";
+    changelog = "https://github.com/jech/galene/blob/${finalAttrs.src.tag}/CHANGES";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.ngi ];
+    maintainers = with lib.maintainers; [
+      rgrunbla
+      erdnaxe
+    ];
+  };
+})

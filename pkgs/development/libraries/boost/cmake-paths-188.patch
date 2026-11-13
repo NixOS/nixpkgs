@@ -1,0 +1,21 @@
+diff --color -ur boost_1_88_0-unpatched/tools/boost_install/boost-install.jam boost_1_88_0/tools/boost_install/boost-install.jam
+--- boost_1_88_0-unpatched/tools/boost_install/boost-install.jam	2025-07-29 21:46:33.010181683 +0800
++++ boost_1_88_0/tools/boost_install/boost-install.jam	2025-07-29 21:47:34.346642613 +0800
+@@ -794,7 +794,7 @@
+         ""
+         "# Compute the include and library directories relative to this file."
+         ""
+-        "get_filename_component(_BOOST_CMAKEDIR \"${CMAKE_CURRENT_LIST_DIR}/../\" REALPATH)"
++        "get_filename_component(_BOOST_REAL_CMAKEDIR \"${CMAKE_CURRENT_LIST_DIR}/../\" REALPATH)"
+         : true ;
+ 
+     if [ path.is-rooted $(cmakedir) ]
+@@ -813,6 +813,8 @@
+             "  unset(_BOOST_CMAKEDIR_ORIGINAL)"
+             "endif()"
+             ""
++	    "# Assume that the installer actually did know where the libs were to be installed"
++            "get_filename_component(_BOOST_CMAKEDIR \"$(cmakedir-native)\" REALPATH)"
+             : true ;
+     }
+ 

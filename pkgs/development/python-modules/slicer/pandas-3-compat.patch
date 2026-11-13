@@ -1,0 +1,13 @@
+--- a/slicer/slicer_internal.py
++++ b/slicer/slicer_internal.py
+@@ -571,6 +571,10 @@
+         ("scipy.sparse.lil", "lil_matrix"): ArrayHandler,
+         ("pandas.core.frame", "DataFrame"): DataFrameHandler,
+         ("pandas.core.series", "Series"): SeriesHandler,
++        # pandas v3 reports the public "pandas" module for these types
++        # instead of their private location.
++        ("pandas", "DataFrame"): DataFrameHandler,
++        ("pandas", "Series"): SeriesHandler,
+     }
+ 
+     @classmethod

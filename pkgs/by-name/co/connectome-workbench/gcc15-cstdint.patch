@@ -1,0 +1,10 @@
+--- a/Common/CaretRgb.h
++++ b/Common/CaretRgb.h
+@@ -23,6 +23,7 @@
+ 
+ 
+ #include <array>
++#include <cstdint>
+ #include <memory>
+ 
+ namespace caret {

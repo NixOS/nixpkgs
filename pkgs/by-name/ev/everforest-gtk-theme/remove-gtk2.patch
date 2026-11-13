@@ -1,0 +1,24 @@
+--- a/themes/install.sh
++++ b/themes/install.sh
+@@ -132,13 +132,6 @@
+ 	ln -s assets/no-notifications.svg no-notifications.svg
+ 	cd - > /dev/null
+ 
+-	# GTK2 Themes
+-	mkdir -p                                                                      		 "${THEME_DIR}/gtk-2.0"
+-	# cp -r "${SRC_DIR}/main/gtk-2.0/gtkrc${theme}${ELSE_DARK:-}${ctype}" 				 "${THEME_DIR}/gtk-2.0/gtkrc"
+-	cp -r "${SRC_DIR}/main/gtk-2.0/common/"*'.rc'                                 		 "${THEME_DIR}/gtk-2.0"
+-	cp -r "${SRC_DIR}/assets/gtk-2.0/assets-common${ELSE_DARK:-}"                 		 "${THEME_DIR}/gtk-2.0/assets"
+-	cp -r "${SRC_DIR}/assets/gtk-2.0/assets${theme}${ELSE_DARK:-}${ctype}/"*"png" 		 "${THEME_DIR}/gtk-2.0/assets"
+-
+ 	# GTK3 Themes
+ 	mkdir -p                                                                             "${THEME_DIR}/gtk-3.0"
+     cp -r "${SRC_DIR}/assets/gtk/assets${theme}${ctype}"                                 "${THEME_DIR}/gtk-3.0/assets"
+@@ -576,7 +569,6 @@
+ 		for color in "${colors[@]}"; do
+ 			for size in "${sizes[@]}"; do
+ 				install "${dest:-$DEST_DIR}" "${name:-$THEME_NAME}" "$theme" "$color" "$size" "$ctype" "$window"
+-				make_gtkrc "${dest:-$DEST_DIR}" "${name:-$THEME_NAME}" "$theme" "$color" "$size" "$ctype" "$window"
+ 			done
+ 		done
+ 	done

@@ -1,0 +1,37 @@
+[
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
+  },
+  {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies",
+    "version": "1.0.0",
+    "hash": "sha256-6faPQ4jaFY3OGGVk3lZKW+DEZaIOBZ/wHqbiDTsRR1k="
+  },
+  {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies",
+    "version": "1.0.3",
+    "hash": "sha256-FBoJP5DHZF0QHM0xLm9yd4HJZVQOuSpSKA+VQRpphEE="
+  },
+  {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net461",
+    "version": "1.0.0",
+    "hash": "sha256-oS7sUMzKBkLmhggqbI6eBqb1OPAipH0TDTaDaBixcwM="
+  },
+  {
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net472",
+    "version": "1.0.3",
+    "hash": "sha256-/6ClVwo5+RE5kWTQWB/93vmbXj37ql8iDlziKWm89Xw="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "hash": "sha256-Prh2RPebz/s8AzHb2sPHg3Jl8s31inv9k+Qxd293ybo="
+  },
+  {
+    "pname": "NXPorts",
+    "version": "1.1.0",
+    "hash": "sha256-etygV3Z2OnkrErt/1WVMHCGuvO00YtxxfFmp0W7x6is="
+  }
+]

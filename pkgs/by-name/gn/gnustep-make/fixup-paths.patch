@@ -1,0 +1,197 @@
+diff -r -u gnustep-make-2.6.6/common.make gnustep-make-2.6.6.patched/common.make
+--- gnustep-make-2.6.6/common.make	2013-03-04 17:21:55.000000000 +0600
++++ gnustep-make-2.6.6.patched/common.make	2015-01-18 14:36:25.000000000 +0600
+@@ -135,7 +135,9 @@
+ endif
+ # Then include makefiles with flags/config options installed by the 
+ # libraries themselves
+--include $(GNUSTEP_MAKEFILES)/Additional/*.make
++ifneq ($(NIX_GNUSTEP_MAKEFILES_ADDITIONAL),)
++include $(NIX_GNUSTEP_MAKEFILES_ADDITIONAL)
++endif
+ 
+ #
+ # Determine target specific settings
+diff -r -u gnustep-make-2.6.6/GNUmakefile.in gnustep-make-2.6.6.patched/GNUmakefile.in
+--- gnustep-make-2.6.6/GNUmakefile.in	2013-09-20 12:13:15.000000000 +0600
++++ gnustep-make-2.6.6.patched/GNUmakefile.in	2014-12-07 20:35:27.000000000 +0600
+@@ -173,7 +173,6 @@
+ 		"$(makedir)/$(GNUSTEP_TARGET_CPU)" \
+ 		"$(makedir)/$(GNUSTEP_TARGET_DIR)" \
+ 		"$(makedir)/$(GNUSTEP_TARGET_LDIR)" \
+-		"$(makedir)/Additional" \
+ 		"$(makedir)/Auxiliary" \
+ 		"$(makedir)/Master" \
+ 		"$(makedir)/Instance" \
+@@ -314,7 +313,6 @@
+ 	-rmdir "$(makedir)/Instance"
+ 	-rmdir "$(makedir)/Master"
+ 	-rmdir "$(makedir)/Auxiliary"
+-	-rmdir "$(makedir)/Additional"
+ 	-rmdir "$(makedir)/$(GNUSTEP_TARGET_LDIR)"
+ 	-rmdir "$(makedir)/$(GNUSTEP_TARGET_DIR)"
+ 	-rmdir "$(makedir)/$(GNUSTEP_TARGET_CPU)"
+diff -r -u gnustep-make-2.6.6/gnustep-config.in gnustep-make-2.6.6.patched/gnustep-config.in
+--- gnustep-make-2.6.6/gnustep-config.in	2013-07-02 16:06:24.000000000 +0600
++++ gnustep-make-2.6.6.patched/gnustep-config.in	2014-12-09 21:29:49.000000000 +0600
+@@ -66,6 +66,7 @@
+     echo "    --variable=OBJCXX"
+     echo "    --variable=GNUMAKE"
+     echo "    --variable=GNUSTEP_MAKEFILES"
++    echo "    --variable=NIX_GNUSTEP_MAKEFILES_ADDITIONAL"
+     echo "    --variable=GNUSTEP_USER_DEFAULTS_DIR"
+     echo "    --variable=GNUSTEP_HOST"
+     echo "    --variable=GNUSTEP_HOST_CPU"
+@@ -153,6 +154,8 @@
+ 
+ export GNUSTEP_MAKEFILES
+ 
++export NIX_GNUSTEP_MAKEFILES_ADDITIONAL
++
+ #
+ # If all they want to know if GNUSTEP_MAKEFILES or anything that
+ # we can compute only using GNUSTEP_MAKEFILES, we can print it out
+@@ -168,6 +171,8 @@
+               exit 0;;
+   --variable=GNUSTEP_MAKEFILES) echo "$GNUSTEP_MAKEFILES"
+               exit 0;;
++  --variable=NIX_GNUSTEP_MAKEFILES_ADDITIONAL) echo "$NIX_GNUSTEP_MAKEFILES_ADDITIONAL"
++              exit 0;;
+   --variable=GNUMAKE) echo "@GNUMAKE@"
+               exit 0;;
+   --debug-flags) @GNUMAKE@ -s -f "$GNUSTEP_MAKEFILES/empty.make" print-gnustep-make-objc-flags quiet=yes debug=yes 2>/dev/null
+Only in gnustep-make-2.6.6.patched: gnustep-config.in~
+diff -r -u gnustep-make-2.6.6/GNUstep.csh.in gnustep-make-2.6.6.patched/GNUstep.csh.in
+--- gnustep-make-2.6.6/GNUstep.csh.in	2011-05-03 13:40:10.000000000 +0600
++++ gnustep-make-2.6.6.patched/GNUstep.csh.in	2014-12-09 20:14:05.000000000 +0600
+@@ -130,6 +130,10 @@
+   setenv GNUSTEP_MAKEFILES "@GNUSTEP_MAKEFILES@"
+ endif
+ 
++if ( ! ${?NIX_GNUSTEP_MAKEFILES_ADDITIONAL} ) then
++  setenv NIX_GNUSTEP_MAKEFILES_ADDITIONAL "@NIX_GNUSTEP_MAKEFILES_ADDITIONAL@"
++endif
++
+ if ( "${GNUSTEP_MAKE_STRICT_V2_MODE}" == "yes" ) then
+   unsetenv GNUSTEP_USER_DIR
+   unsetenv GNUSTEP_USER_ROOT
+Only in gnustep-make-2.6.6.patched: GNUstep.csh.in~
+diff -r -u gnustep-make-2.6.6/GNUstep.sh.in gnustep-make-2.6.6.patched/GNUstep.sh.in
+--- gnustep-make-2.6.6/GNUstep.sh.in	2012-02-21 20:21:38.000000000 +0600
++++ gnustep-make-2.6.6.patched/GNUstep.sh.in	2015-01-18 14:48:09.000000000 +0600
+@@ -173,7 +173,6 @@
+ fi
+ export GNUSTEP_MAKEFILES
+ 
+-
+ if [ "$GNUSTEP_MAKE_STRICT_V2_MODE" = "yes" ]; then
+   # Make sure this is never set in gnustep-make v2 strict mode; it
+   # might have been set in the config file.
+@@ -300,7 +299,7 @@
+ # for each duplicate.  When there are many duplicates it's faster to
+ # use print_unique_pathlist.sh first to remove them and skip the
+ # echos+greps later.
+-GNUSTEP_TOOLS_PATHLIST=`$GNUSTEP_MAKEFILES/print_unique_pathlist.sh "$GNUSTEP_USER_TOOLS" "$GNUSTEP_LOCAL_TOOLS" "$GNUSTEP_NETWORK_TOOLS" "$GNUSTEP_SYSTEM_TOOLS" $fixup_paths`
++GNUSTEP_TOOLS_PATHLIST=$NIX_GNUSTEP_SYSTEM_TOOLS
+ 
+ # Now, we check the paths in GNUSTEP_*_ADMIN_TOOLS.  These paths
+ # should only be used by Administrators -- normal users don't have
+@@ -313,7 +312,7 @@
+ 
+ # So we examine GNUSTEP_*_ADMIN_TOOLS; if we find any path in that
+ # list that exists and that we can write to, we add it to our PATH.
+-for dir in "$GNUSTEP_SYSTEM_ADMIN_TOOLS" "$GNUSTEP_NETWORK_ADMIN_TOOLS" "$GNUSTEP_LOCAL_ADMIN_TOOLS" "$GNUSTEP_USER_ADMIN_TOOLS"; do
++for dir in $(echo "$NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS" | tr ":" "\n"); do
+   if [ -d "$dir"  -a  -w "$dir" ]; then
+     # Only add the new dir if it's not already in GNUSTEP_TOOLS_PATHLIST
+     if (echo ":${GNUSTEP_TOOLS_PATHLIST}:" \
+@@ -356,7 +355,7 @@
+ export PATH
+ 
+ # Determine the library paths
+-GNUSTEP_LIBRARIES_PATHLIST=`$GNUSTEP_MAKEFILES/print_unique_pathlist.sh "$GNUSTEP_USER_LIBRARIES" "$GNUSTEP_LOCAL_LIBRARIES" "$GNUSTEP_NETWORK_LIBRARIES" "$GNUSTEP_SYSTEM_LIBRARIES" $fixup_paths`
++GNUSTEP_LIBRARIES_PATHLIST=$NIX_GNUSTEP_SYSTEM_LIBRARIES
+ 
+ old_IFS="$IFS"
+ IFS=:
+@@ -486,7 +485,7 @@
+ #
+ # Setup Java CLASSPATH and Guile GUILE_LOAD_PATH
+ #
+-GNUSTEP_LIBRARY_PATHLIST=`$GNUSTEP_MAKEFILES/print_unique_pathlist.sh "$GNUSTEP_USER_LIBRARY" "$GNUSTEP_LOCAL_LIBRARY" "$GNUSTEP_NETWORK_LIBRARY" "$GNUSTEP_SYSTEM_LIBRARY" $fixup_paths`
++GNUSTEP_LIBRARY_PATHLIST=$NIX_GNUSTEP_SYSTEM_LIBRARY
+ 
+ old_IFS="$IFS"
+ IFS=:
+@@ -526,7 +525,7 @@
+ # xxx/Library/Documentation/info, are found by the info browsing
+ # programs.  To get this effect, we add those paths to INFOPATH.
+ #
+-GNUSTEP_INFO_PATHLIST=`$GNUSTEP_MAKEFILES/print_unique_pathlist.sh "$GNUSTEP_USER_DOC_INFO" "$GNUSTEP_LOCAL_DOC_INFO" "$GNUSTEP_NETWORK_DOC_INFO" "$GNUSTEP_SYSTEM_DOC_INFO" $fixup_paths`
++GNUSTEP_INFO_PATHLIST=$NIX_GNUSTEP_SYSTEM_DOC_INFO
+ old_IFS="$IFS"
+ IFS=:
+ for dir in $GNUSTEP_INFO_PATHLIST; do
+@@ -559,6 +558,7 @@
+ 
+   unset GNUSTEP_KEEP_CONFIG_FILE GNUSTEP_KEEP_USER_CONFIG_FILE
+ 
++  
+   export GNUSTEP_CONFIG_FILE GNUSTEP_USER_CONFIG_FILE
+ 
+   export GNUSTEP_USER_DEFAULTS_DIR
+diff -r -u gnustep-make-2.6.6/GNUstep-strict-v2.conf.in gnustep-make-2.6.6.patched/GNUstep-strict-v2.conf.in
+--- gnustep-make-2.6.6/GNUstep-strict-v2.conf.in	2008-01-15 20:35:36.000000000 +0600
++++ gnustep-make-2.6.6.patched/GNUstep-strict-v2.conf.in	2014-12-07 22:04:56.000000000 +0600
+@@ -47,7 +47,6 @@
+ # Traditionally, this is /usr/GNUstep/System/Library/Makefiles
+ GNUSTEP_MAKEFILES=@GNUSTEP_MAKEFILES@
+ 
+-
+ # This is where the user home directories are.  Only used to provide
+ # NSUserDirectory in gnustep-base.  Never used anywhere else.
+ GNUSTEP_SYSTEM_USERS_DIR=@GNUSTEP_SYSTEM_USERS_DIR@
+diff -r -u gnustep-make-2.6.6/library-combo.make gnustep-make-2.6.6.patched/library-combo.make
+--- gnustep-make-2.6.6/library-combo.make	2012-02-21 19:53:02.000000000 +0600
++++ gnustep-make-2.6.6.patched/library-combo.make	2014-12-09 20:15:05.000000000 +0600
+@@ -142,7 +142,7 @@
+ #
+ # Third-party foundations not using make package
+ # Our own foundation will install a base.make file into 
+-# $GNUSTEP_MAKEFILES/Additional/ to set the needed flags
++# $NIX_GNUSTEP_MAKEFILES_ADDITIONAL to set the needed flags
+ #
+ ifeq ($(FOUNDATION_LIB), nx)
+   # -framework Foundation is used both to find headers, and to link
+@@ -166,7 +166,7 @@
+ 
+ #
+ # FIXME - Ask Helge to move this inside his libFoundation, and have 
+-# it installed as a $(GNUSTEP_MAKEFILES)/Additional/libFoundation.make
++# it installed as a $(NIX_GNUSTEP_MAKEFILES_ADDITIONAL)/libFoundation.make
+ #
+ ifeq ($(FOUNDATION_LIB),fd)
+   -include $(GNUSTEP_MAKEFILES)/libFoundation.make
+@@ -193,7 +193,7 @@
+ GUI_LIBS = 
+ #
+ # Third-party GUI libraries - our own sets its flags into 
+-# $(GNUSTEP_MAKEFILES)/Additional/gui.make
++# $(NIX_GNUSTEP_MAKEFILES_ADDITIONAL)/gui.make
+ #
+ ifeq ($(GUI_LIB), nx)
+   GUI_DEFINE = -DNeXT_GUI_LIBRARY=1
+diff -r -u gnustep-make-2.6.6/rules.make gnustep-make-2.6.6.patched/rules.make
+--- gnustep-make-2.6.6/rules.make	2013-07-04 16:05:44.000000000 +0600
++++ gnustep-make-2.6.6.patched/rules.make	2014-12-09 21:31:04.000000000 +0600
+@@ -667,7 +667,9 @@
+ 	exit 1$(END_ECHO)
+ endif
+ 
+-$(GNUSTEP_MAKEFILES)/Additional/*.make: ;
++ifneq ($(NIX_GNUSTEP_MAKEFILES_ADDITIONAL),)
++$(NIX_GNUSTEP_MAKEFILES_ADDITIONAL): ;
++endif
+ 
+ $(GNUSTEP_MAKEFILES)/Master/*.make: ;
+ 

@@ -1,0 +1,27 @@
+diff --git a/Modules/OTBInternalModules.cmake b/Modules/OTBInternalModules.cmake
+index e09f393..098a39b 100644
+--- a/Modules/OTBInternalModules.cmake
++++ b/Modules/OTBInternalModules.cmake
+@@ -137,13 +137,15 @@ while(${__i} LESS ${__nb_internal_groups})
+         list(GET otb_internal_groups_get_submodules "${__i}" __get_submodules)
+ 
+         message(STATUS "Downloading internal module ${__otb_group_name} at ${__location} with ref ${__otb_group_tag} and submodules at ${__get_submodules}")
+-        otb_fetch_module("${__otb_group_name}"
+-                         "${__otb_group_desc}"
+-                         ${__location}
+-                         GIT_REPOSITORY "${__otb_group_repo}"
+-                         GIT_TAG "${__otb_group_tag}"
+-                         GIT_SUBMODULES "${__get_submodules}"
+-        )
++        if(NOT EXISTS "${__location}")
++            otb_fetch_module("${__otb_group_name}"
++                             "${__otb_group_desc}"
++                             ${__location}
++                             GIT_REPOSITORY "${__otb_group_repo}"
++                             GIT_TAG "${__otb_group_tag}"
++                             GIT_SUBMODULES "${__get_submodules}"
++            )
++        endif()
+         set_property(GLOBAL APPEND PROPERTY ENABLED_GROUPS ${__otb_group_name})
+         add_subdirectory("${__location}")
+ 

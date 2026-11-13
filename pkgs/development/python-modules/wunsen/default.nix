@@ -1,0 +1,44 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  unittestCheckHook,
+
+  hatchling,
+
+  khanaa,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "wunsen";
+  version = "0.0.3";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "cakimpei";
+    repo = "wunsen";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lMEhtcWG+S3vAz+Y/qDxhaZslsO0pbs5xUn5QgZNs2U=";
+  };
+
+  build-system = [ hatchling ];
+
+  dependencies = [ khanaa ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlags = [
+    "--start-directory=tests"
+  ];
+
+  pythonImportsCheck = [ "wunsen" ];
+
+  meta = {
+    description = "Transliterate/transcribe other languages into Thai Topics";
+    homepage = "https://github.com/cakimpei/wunsen";
+    changelog = "https://github.com/cakimpei/wunsen/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
+  };
+})

@@ -1,0 +1,25 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 5a92226..8a55f65 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -11607,6 +11607,7 @@ dependencies = [
+  "once_cell",
+  "percent-encoding",
+  "rustls",
++ "rustls-native-certs",
+  "serde",
+  "serde_json",
+  "sha2 0.10.9",
+diff --git a/Cargo.toml b/Cargo.toml
+index 3e72bd2..27bb477 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -485,7 +485,7 @@ seahash = { version = "4.1.0", default-features = false }
+ smallvec = { version = "1", default-features = false, features = ["union", "serde"] }
+ snap = { version = "1.1.1", default-features = false }
+ socket2.workspace = true
+-sqlx = { version = "0.8.6", default-features = false, features = ["derive", "postgres", "chrono", "runtime-tokio", "tls-rustls-ring"], optional = true }
++sqlx = { version = "0.8.6", default-features = false, features = ["derive", "postgres", "chrono", "runtime-tokio", "tls-rustls-ring-native-roots"], optional = true }
+ stream-cancel = { version = "0.8.2", default-features = false }
+ strip-ansi-escapes = { version = "0.2.1", default-features = false }
+ syslog = { version = "6.1.1", default-features = false, optional = true }

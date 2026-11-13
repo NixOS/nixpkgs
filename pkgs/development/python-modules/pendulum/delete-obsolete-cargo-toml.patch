@@ -1,0 +1,39 @@
+From dd0c442ab1f50f19dde95875b39a6a4463e6e835 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Sat, 4 Jul 2026 18:18:19 +0100
+Subject: [PATCH] Delete obsolete `.cargo/config.toml`
+
+Maturin adds these flags by itself, but the presence of this file can
+seemingly cause them to not get added at all in some environments,
+likely related to them using their own `.cargo/config.toml` file.
+
+This was possibly caused by
+<https://github.com/PyO3/maturin/commit/74baa6714808eae61ac330c972d22a9122f9b190>,
+as we noticed it when bumping Maturin past that commit in
+Nixpkgs. Removing the file fixes the macOS build in our environment.
+---
+ rust/.cargo/config.toml | 15 ---------------
+ 1 file changed, 15 deletions(-)
+ delete mode 100644 rust/.cargo/config.toml
+
+diff --git a/rust/.cargo/config.toml b/rust/.cargo/config.toml
+deleted file mode 100644
+index f0ba8af4..00000000
+--- a/rust/.cargo/config.toml
++++ /dev/null
+@@ -1,15 +0,0 @@
+-[build]
+-rustflags = []
+-
+-# see https://pyo3.rs/main/building_and_distribution.html#macos
+-[target.x86_64-apple-darwin]
+-rustflags = [
+-  "-C", "link-arg=-undefined",
+-  "-C", "link-arg=dynamic_lookup",
+-]
+-
+-[target.aarch64-apple-darwin]
+-rustflags = [
+-  "-C", "link-arg=-undefined",
+-  "-C", "link-arg=dynamic_lookup",
+-]

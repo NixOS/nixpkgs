@@ -1,0 +1,67 @@
+From d888b448740abd4d5846535ef1dc5ba1c74a134a Mon Sep 17 00:00:00 2001
+From: Andreas Rammhold <andreas@rammhold.de>
+Date: Thu, 1 Jan 2026 16:41:50 +0100
+Subject: [PATCH] Fix compilation of the trace-clone test on GCC 15
+
+With GCC 15 invalid pointer conversion in the trace-clone test will
+throw an error like so:
+
+> ./ltrace.minor/trace-clone.c:33:15: error: passing argument 1 of
+> 'clone' from incompatible pointer type
+> [8;;https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Warning-Options.html#index-Wincompatible-pointer-types-Wincompatible-pointer-types8;;]
+>    33 |   pid = clone((myfunc)&child, stack + STACK_SIZE, CLONE_FS, NULL);
+>       |               ^~~~~~~~~~~~~~
+>       |               |
+>       |               int (*)(void)
+> In file included from .../glibc-2.40-66-dev/include/sched.h:43,
+>                  from ./ltrace.minor/trace-clone.c:12:
+> .../glibc-2.40-66-dev/include/bits/sched.h:86:25: note: expected 'int (*)(void *)' but argument is of type 'int (*)(void)'
+>    86 | extern int clone (int (*__fn) (void *__arg), void *__child_stack,
+>       |                   ~~~~~~^~~~~~~~~~~~~~~~~~~
+> ./ltrace.minor/trace-clone.c:15:5: note: 'child' declared here
+>    15 | int child ()
+>       |     ^~~~~
+
+Previously the child function was being cast to a custom type that
+arguably didn't match the type that the clone(2) function expects. It
+was missing the void* argument. Instead of casting the function to a
+custom type we can just give it an unused argument and make everyone happy.
+---
+ testsuite/ltrace.minor/trace-clone.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/testsuite/ltrace.minor/trace-clone.c b/testsuite/ltrace.minor/trace-clone.c
+index 6aab235..0e1a3d6 100644
+--- a/testsuite/ltrace.minor/trace-clone.c
++++ b/testsuite/ltrace.minor/trace-clone.c
+@@ -12,14 +12,12 @@
+ #include <sched.h>
+ #include <unistd.h>
+ 
+-int child ()
++int child (void *)
+ {
+   sleep(1);
+   return 0;
+ }
+ 
+-typedef int (* myfunc)();
+-
+ #define STACK_SIZE 1024
+ 
+ int main ()
+@@ -28,9 +26,9 @@ int main ()
+   static __attribute__ ((aligned (16))) char stack[STACK_SIZE];
+ 
+ #ifdef __ia64__
+-  pid = __clone2((myfunc)&child, stack, STACK_SIZE, CLONE_FS, NULL);
++  pid = __clone2(&child, stack, STACK_SIZE, CLONE_FS, NULL);
+ #else
+-  pid = clone((myfunc)&child, stack + STACK_SIZE, CLONE_FS, NULL);
++  pid = clone(&child, stack + STACK_SIZE, CLONE_FS, NULL);
+ #endif
+   if (pid < 0)
+     {
+-- 
+GitLab
+

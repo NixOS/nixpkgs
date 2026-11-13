@@ -1,0 +1,22 @@
+diff --git a/shared/utils.c b/shared/utils.c
+index 453e277..28716a5 100644
+--- a/shared/utils.c
++++ b/shared/utils.c
+@@ -39,7 +39,7 @@ check_ipsec_daemon(const char *path)
+ const char *
+ nm_find_ipsec(void)
+ {
+-    static const char *ipsec_binary_paths[] = {"/usr/bin/ipsec",
++    static const char *ipsec_binary_paths[] = {"@strongswan@/bin/ipsec",
+                                                "/sbin/ipsec",
+                                                "/usr/sbin/ipsec",
+                                                "/usr/local/sbin/ipsec",
+@@ -70,7 +70,7 @@ nm_find_l2tpd(NML2tpL2tpDaemon *l2tp_daemon)
+                                                "/usr/local/sbin/kl2tpd",
+                                                NULL};
+ 
+-    static const char *xl2tp_binary_paths[] = {"/usr/bin/xl2tpd",
++    static const char *xl2tp_binary_paths[] = {"@xl2tpd@/bin/xl2tpd",
+                                                "/sbin/xl2tpd",
+                                                "/usr/sbin/xl2tpd",
+                                                "/usr/local/sbin/xl2tpd",

@@ -1,0 +1,21 @@
+--- a/SConstruct
++++ b/SConstruct
+@@ -187,13 +187,14 @@
+     'SHLINKCOMSTR': link_shared_library_message,
+     'LINKCOMSTR': link_program_message,
+     'ENV': {
+         key: os.environ[key]
+-        for key in ('PATH', 'TERM', 'HOME',
+-                    'PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_SYSROOT_DIR',
+-                    'CPATH', 'C_INCLUDE_PATH', 'LIBRARY_PATH',
+-                    'SOURCE_DATE_EPOCH')
+-        if key in os.environ
++        for key in os.environ
++        # pass through NIX_* environment variables for nixpkgs' cc-wrapper.
++        if key in ('PATH', 'TERM', 'HOME',
++                   'PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_SYSROOT_DIR',
++                   'CPATH', 'C_INCLUDE_PATH', 'LIBRARY_PATH',
++                   'SOURCE_DATE_EPOCH') or key.startswith('NIX_')
+     } | {'TZ': 'UTC', 'LANG': 'C.UTF-8', 'LC_ALL': 'C.UTF-8'},
+ }
+ 

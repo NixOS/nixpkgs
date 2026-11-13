@@ -1,0 +1,19 @@
+diff --git a/setup.py b/setup.py
+index 6e295c8..048db19 100755
+--- a/setup.py
++++ b/setup.py
+@@ -111,9 +111,11 @@ class build_man(NoOptionCommand):
+                 info('compressing man page to %s', gzfile)
+ 
+                 if not self.dry_run:
+-                    compressed = gzip.open(gzfile, 'w', 9)
+-                    compressed.write(manpage)
+-                    compressed.close()
++                    with open(gzfile, 'wb') as file:
++                        with gzip.GzipFile(fileobj=file, mode='wb', filename='', mtime=0, compresslevel=9) as compressed:
++                            compressed.write(manpage)
++                            compressed.close()
++                            file.close()
+ 
+ class update_translator_credits(NoOptionCommand):
+     description = 'Examine the git history to produce an updated metadata file.'

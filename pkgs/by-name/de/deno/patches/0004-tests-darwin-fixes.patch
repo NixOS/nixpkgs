@@ -1,0 +1,43 @@
+Disable codesign check and a Darwin-specific temp dir workaround.
+
+Note: the darwin.sigtool package includes a codesign utility, but it doesn't support the -v flag used in this test.
+
+diff --git a/tests/integration/compile_tests.rs b/tests/integration/compile_tests.rs
+index 503538d24..ca89e3133 100644
+--- a/tests/integration/compile_tests.rs
++++ b/tests/integration/compile_tests.rs
+@@ -32,17 +32,6 @@ fn compile_basic() {
+     output.assert_matches_text("Welcome to Deno!\n");
+   }
+ 
+-  // On arm64 macOS, check if `codesign -v` passes
+-  #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+-  {
+-    let output = std::process::Command::new("codesign")
+-      .arg("-v")
+-      .arg(&exe)
+-      .output()
+-      .unwrap();
+-    assert!(output.status.success());
+-  }
+-
+   // now ensure this works when the deno_dir is readonly
+   let readonly_dir = dir.path().join("readonly");
+   readonly_dir.make_dir_readonly();
+diff --git a/tests/unit/dir_test.ts b/tests/unit/dir_test.ts
+index 757c8fec3..22b999820 100644
+--- a/tests/unit/dir_test.ts
++++ b/tests/unit/dir_test.ts
+@@ -12,11 +12,7 @@ Deno.test(
+     const path = Deno.makeTempDirSync();
+     Deno.chdir(path);
+     const current = Deno.cwd();
+-    if (Deno.build.os === "darwin") {
+-      assertEquals(current, "/private" + path);
+-    } else {
+-      assertEquals(current, path);
+-    }
++    assertEquals(current, path);
+     Deno.chdir(initialdir);
+   },
+ );

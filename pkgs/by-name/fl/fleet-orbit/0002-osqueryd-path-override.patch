@@ -1,0 +1,40 @@
+diff --git a/orbit/cmd/orbit/orbit.go b/orbit/cmd/orbit/orbit.go
+index ed6f10d..c4518fd 100644
+--- a/orbit/cmd/orbit/orbit.go
++++ b/orbit/cmd/orbit/orbit.go
+@@ -112,6 +112,16 @@ func main() {
+ 			Usage:   "Path to the Fleet server certificate chain",
+ 			EnvVars: []string{"ORBIT_FLEET_CERTIFICATE"},
+ 		},
++		&cli.StringFlag{
++			Name:    "osqueryd-path",
++			Usage:   "Override the path to the osqueryd binary",
++			EnvVars: []string{"NIX_ORBIT_OSQUERYD_PATH"},
++		},
++		&cli.StringFlag{
++			Name:    "desktop-path",
++			Usage:   "Override the path to the Fleet Desktop binary",
++			EnvVars: []string{"NIX_ORBIT_DESKTOP_PATH"},
++		},
+ 		&cli.StringFlag{
+ 			Name:    "fleet-desktop-alternative-browser-host",
+ 			Usage:   "Alternative host:port to use for Fleet Desktop in the browser (this may be required when using TLS client authentication in the Fleet server)",
+@@ -623,7 +633,17 @@ func orbitAction(c *cli.Context) error {
+ 	var updater *update.Updater
+ 	var updateRunner *update.Runner
+ 	var osqueryVersion string
+-	if !c.Bool("disable-updates") || c.Bool("dev-mode") {
++	if override := c.String("osqueryd-path"); override != "" {
++		log.Info().Msgf("Overriding osqueryd path: %s", override)
++		osquerydPath = override
++	}
++	if override := c.String("desktop-path"); override != "" {
++		log.Info().Msgf("Overriding Fleet Desktop path: %s", override)
++		desktopPath = override
++	}
++	if osquerydPath != "" && (!c.Bool("fleet-desktop") || desktopPath != "") {
++		log.Info().Msg("Using externally supplied component paths")
++	} else if !c.Bool("disable-updates") || c.Bool("dev-mode") {
+ 		updater, err := update.NewUpdater(opt)
+ 		if err != nil {
+ 			return fmt.Errorf("create updater: %w", err)

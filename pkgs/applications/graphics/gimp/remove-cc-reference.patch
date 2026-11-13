@@ -1,0 +1,13 @@
+diff --git a/app/gimp-version.c b/app/gimp-version.c
+index 6e311c8252..e6fd9d1d78 100644
+--- a/app/gimp-version.c
++++ b/app/gimp-version.c
+@@ -90,7 +90,7 @@ gimp_version (gboolean be_verbose,
+                                       GIMP_BUILD_ID,
+                                       gimp_version_get_revision (),
+                                       GIMP_BUILD_PLATFORM_FAMILY,
+-                                      CC_VERSION,
++                                      "@cc_version@",
+                                       lib_versions);
+       g_free (lib_versions);
+ 

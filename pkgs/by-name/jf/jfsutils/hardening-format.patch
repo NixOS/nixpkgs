@@ -1,0 +1,37 @@
+--- a/fscklog/fscklog.c	2016-01-29 04:59:54.102223291 +0000
++++ b/fscklog/fscklog.c	2016-01-29 05:00:10.707552565 +0000
+@@ -252,8 +252,8 @@
+ 
+ 	sprintf(debug_detail, " [%s:%d]\n", basename(file_name), line_number);
+ 
+-	printf(msg_string);
+-	printf(debug_detail);
++	printf("%s", msg_string);
++	printf("%s", debug_detail);
+ 
+ 	return 0;
+ }
+--- a/fscklog/display.c	2016-01-29 05:05:42.582133444 +0000
++++ b/fscklog/display.c	2016-01-29 05:05:47.541231780 +0000
+@@ -182,7 +182,7 @@
+ 				} else {
+ 					/* the record looks ok */
+ 					msg_txt = &log_entry[log_entry_pos];
+-					printf(msg_txt);
++					printf("%s", msg_txt);
+ 					/*
+ 					 * set up for the next record
+ 					 */
+--- a/logdump/helpers.c	2016-01-29 05:06:26.081996021 +0000
++++ b/logdump/helpers.c	2016-01-29 05:06:43.097333425 +0000
+@@ -95,8 +95,8 @@
+ 
+ 	sprintf(debug_detail, " [%s:%d]\n", file_name, line_number);
+ 
+-	printf(msg_string);
+-	printf(debug_detail);
++	printf("%s", msg_string);
++	printf("%s", debug_detail);
+ 
+ 	return 0;
+ }

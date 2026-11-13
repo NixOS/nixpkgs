@@ -1,0 +1,38 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  sqlalchemy,
+}:
+
+buildPythonPackage rec {
+  pname = "telethon-session-sqlalchemy";
+  version = "0.2.16";
+  format = "setuptools";
+
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-+EfFcwKhAuuI4p7ZW49O+mlYLbKWb9gGwhN2uaZq1Kg=";
+  };
+
+  propagatedBuildInputs = [ sqlalchemy ];
+
+  # No tests available
+  doCheck = false;
+
+  meta = {
+    homepage = "https://github.com/tulir/telethon-session-sqlalchemy";
+    description = "SQLAlchemy backend for Telethon session storage";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nyanloutre ];
+
+    # Package requires SQLAlchemy <2
+    # https://github.com/tulir/telethon-session-sqlalchemy/blob/d498503ddde332e190bfa47e70f0bfa59fe6b5ef/setup.py#L17
+    # Repo is archived and so this is unlikely to change unless someone forks
+    # and takes over development
+    broken = lib.versionAtLeast sqlalchemy.version "2";
+  };
+}

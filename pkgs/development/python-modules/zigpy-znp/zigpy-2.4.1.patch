@@ -1,0 +1,530 @@
+From afe64c762c028df37db3629a8b82933ab221f236 Mon Sep 17 00:00:00 2001
+From: puddly <32534428+puddly@users.noreply.github.com>
+Date: Wed, 4 Nov 2026 14:33:03 +0000
+Subject: [PATCH 1/2] Separate radio TSN from ZCL/ZDO TSN
+
+---
+ tests/application/test_requests.py |  95 +++++++++++++++++----
+ tests/conftest.py                  |  15 ++--
+ zigpy_znp/zigbee/application.py    | 128 ++++++++++++++++-------------
+ 3 files changed, 159 insertions(+), 79 deletions(-)
+
+diff --git a/tests/application/test_requests.py b/tests/application/test_requests.py
+index f073cf6..1392a92 100644
+--- a/tests/application/test_requests.py
++++ b/tests/application/test_requests.py
+@@ -5,6 +5,7 @@
+ from zigpy.exceptions import DeliveryError
+ import zigpy.profiles
+ import zigpy.types as zigpy_t
++import zigpy.zcl.foundation
+ import zigpy.zdo.types as zdo_t
+ 
+ import zigpy_znp.commands as c
+@@ -68,16 +69,15 @@ async def test_zigpy_request(device, make_application):
+             DstEndpoint=1,
+             SrcEndpoint=1,
+             ClusterId=6,
+-            TSN=TSN,
+             Data=bytes([0x01, TSN, 0x01]),
+             partial=True,
+         ),
+         responses=[
+             c.AF.DataRequestExt.Rsp(Status=t.Status.SUCCESS),
+-            c.AF.DataConfirm.Callback(
++            lambda req: c.AF.DataConfirm.Callback(
+                 Status=t.Status.SUCCESS,
+                 Endpoint=1,
+-                TSN=TSN,
++                TSN=req.TSN,
+             ),
+             c.ZDO.SrcRtgInd.Callback(DstAddr=device.nwk, Relays=[]),
+             c.AF.IncomingMsg.Callback(
+@@ -127,16 +127,15 @@ async def test_zigpy_request_failure(device, make_application, mocker):
+             DstEndpoint=1,
+             SrcEndpoint=1,
+             ClusterId=6,
+-            TSN=TSN,
+             Data=bytes([0x01, TSN, 0x01]),
+             partial=True,
+         ),
+         responses=[
+             c.AF.DataRequestExt.Rsp(Status=t.Status.SUCCESS),
+-            c.AF.DataConfirm.Callback(
++            lambda req: c.AF.DataConfirm.Callback(
+                 Status=t.Status.FAILURE,
+                 Endpoint=1,
+-                TSN=TSN,
++                TSN=req.TSN,
+             ),
+         ],
+     )
+@@ -251,7 +250,6 @@ async def test_broadcast(device, make_application, mocker):
+             DstPanId=0x0000,
+             SrcEndpoint=1,
+             ClusterId=3,
+-            TSN=1,
+             Radius=3,
+             Data=b"???",
+             partial=True,
+@@ -341,6 +339,72 @@ async def callback(req):
+     await app.shutdown()
+ 
+ 
++@pytest.mark.parametrize("device", [FormedLaunchpadCC26X2R1])
++async def test_concurrent_same_tsn_requests(device, make_application):
++    app, znp_server = make_application(server_cls=device)
++    await app.startup(auto_form=False)
++
++    device1 = app.add_initialized_device(ieee=t.EUI64(range(8)), nwk=0xAAAA)
++    device2 = app.add_initialized_device(ieee=t.EUI64(range(1, 9)), nwk=0xBBBB)
++
++    requests = {}
++    both_sent = asyncio.Event()
++
++    def delayed_confirm(req):
++        requests[req.DstAddrModeAddress.address] = req
++
++        if len(requests) == 2:
++            both_sent.set()
++
++        async def inner():
++            await both_sent.wait()
++
++            # The second device fails and its confirm arrives first
++            if req.DstAddrModeAddress.address == device1.nwk:
++                await asyncio.sleep(0.1)
++                status = t.Status.SUCCESS
++            else:
++                status = t.Status.MAC_NO_ACK
++
++            znp_server.send(
++                c.AF.DataConfirm.Callback(Status=status, Endpoint=1, TSN=req.TSN)
++            )
++
++        asyncio.create_task(inner())
++
++    znp_server.reply_to(
++        c.AF.DataRequestExt.Req(partial=True),
++        responses=[
++            c.AF.DataRequestExt.Rsp(Status=t.Status.SUCCESS),
++            delayed_confirm,
++        ],
++    )
++
++    # Both requests use the same ZCL TSN
++    rsp1, rsp2 = await asyncio.gather(
++        *[
++            app.request(
++                device=dev,
++                profile=260,
++                cluster=1,
++                src_ep=1,
++                dst_ep=1,
++                sequence=1,
++                data=b"\x00\x01\x00",
++            )
++            for dev in (device1, device2)
++        ],
++        return_exceptions=True,
++    )
++
++    assert requests[device1.nwk].TSN != requests[device2.nwk].TSN
++    assert rsp1 == (zigpy.zcl.foundation.Status.SUCCESS, "")
++    assert isinstance(rsp2, DeliveryError)
++    assert rsp2.status == t.Status.MAC_NO_ACK
++
++    await app.shutdown()
++
++
+ @pytest.mark.parametrize("device", FORMED_DEVICES)
+ async def test_nonstandard_profile(device, make_application):
+     app, znp_server = make_application(server_cls=device)
+@@ -382,7 +446,7 @@ async def test_nonstandard_profile(device, make_application):
+                 SecurityUse=t.Bool(False),
+                 TimeStamp=12345678,
+                 TSN=0,
+-                Data=b"\x08" + bytes([req.TSN]) + b"\x0b\x00\x00",
++                Data=b"\x08" + bytes([req.Data[1]]) + b"\x0b\x00\x00",
+                 MacSrcAddr=device.nwk,
+                 MsgResultRadius=29,
+             ),
+@@ -554,7 +618,7 @@ def data_confirm_replier(req):
+         return c.AF.DataConfirm.Callback(
+             Status=t.Status.SUCCESS if route_discovered else t.Status.NWK_NO_ROUTE,
+             Endpoint=1,
+-            TSN=1,
++            TSN=req.TSN,
+         )
+ 
+     def set_route_discovered(req):
+@@ -622,7 +686,7 @@ def data_confirm_replier(req):
+         return c.AF.DataConfirm.Callback(
+             Status=next(data_confirm_statuses),
+             Endpoint=1,
+-            TSN=1,
++            TSN=req.TSN,
+         )
+ 
+     znp_server.reply_to(
+@@ -707,7 +771,7 @@ def data_confirm_replier(req):
+         return c.AF.DataConfirm.Callback(
+             Status=t.Status.MAC_TRANSACTION_EXPIRED if bad_assoc else final_status,
+             Endpoint=1,
+-            TSN=1,
++            TSN=req.TSN,
+         )
+ 
+     znp_server.reply_to(
+@@ -871,17 +935,16 @@ async def test_send_security_and_packet_source_route(device, make_application, m
+             DstEndpoint=packet.dst_ep,
+             # SrcEndpoint=packet.src_ep,
+             ClusterId=packet.cluster_id,
+-            TSN=packet.tsn,
+             Data=packet.data.serialize(),
+             SourceRoute=packet.source_route,
+             partial=True,
+         ),
+         responses=[
+             c.AF.DataRequestSrcRtg.Rsp(Status=t.Status.SUCCESS),
+-            c.AF.DataConfirm.Callback(
++            lambda req: c.AF.DataConfirm.Callback(
+                 Status=t.Status.SUCCESS,
+                 Endpoint=packet.dst_ep,
+-                TSN=packet.tsn,
++                TSN=req.TSN,
+             ),
+         ],
+     )
+@@ -918,10 +981,10 @@ async def test_send_packet_failure(device, make_application, mocker):
+         request=c.AF.DataRequestExt.Req(partial=True),
+         responses=[
+             c.AF.DataRequestExt.Rsp(Status=t.Status.SUCCESS),
+-            c.AF.DataConfirm.Callback(
++            lambda req: c.AF.DataConfirm.Callback(
+                 Status=t.Status.MAC_NO_ACK,
+                 Endpoint=packet.dst_ep,
+-                TSN=packet.tsn,
++                TSN=req.TSN,
+             ),
+         ],
+     )
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 58b2690..d2902c5 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -288,6 +288,7 @@ def zdo_request_matcher(
+     zdo_kwargs = {k: v for k, v in kwargs.items() if k.startswith("zdo_")}
+ 
+     kwargs = {k: v for k, v in kwargs.items() if not k.startswith("zdo_")}
++    zdo_tsn = kwargs.pop("TSN")
+     kwargs.setdefault("DstEndpoint", 0x00)
+     kwargs.setdefault("DstPanId", 0x0000)
+     kwargs.setdefault("SrcEndpoint", 0x00)
+@@ -297,7 +298,7 @@ def zdo_request_matcher(
+     return c.AF.DataRequestExt.Req(
+         DstAddrModeAddress=dst_addr,
+         ClusterId=command_id,
+-        Data=bytes([kwargs["TSN"]]) + serialize_zdo_command(command_id, **zdo_kwargs),
++        Data=bytes([zdo_tsn]) + serialize_zdo_command(command_id, **zdo_kwargs),
+         **kwargs,
+         partial=True,
+     )
+@@ -623,7 +624,7 @@ def on_zdo_mgmt_permit_joining_req(self, req, PermitDuration, TC_Significant):
+                     IsBroadcast=t.Bool.false,
+                     ClusterId=zdo_t.ZDOCmd.Mgmt_Permit_Joining_rsp,
+                     SecurityUse=0,
+-                    TSN=req.TSN,
++                    TSN=req.Data[0],
+                     MacDst=0x0000,
+                     Data=serialize_zdo_command(
+                         command_id=zdo_t.ZDOCmd.Mgmt_Permit_Joining_rsp,
+@@ -648,7 +649,7 @@ def on_zdo_mgmt_nwk_update_req(self, req, NwkUpdate):
+                 IsBroadcast=t.Bool.false,
+                 ClusterId=zdo_t.ZDOCmd.Mgmt_NWK_Update_rsp,
+                 SecurityUse=0,
+-                TSN=req.TSN,
++                TSN=req.Data[0],
+                 MacDst=0x0000,
+                 Data=serialize_zdo_command(
+                     command_id=zdo_t.ZDOCmd.Mgmt_NWK_Update_rsp,
+@@ -683,7 +684,7 @@ def on_zdo_active_ep_req(self, req, NWKAddrOfInterest):
+                     IsBroadcast=t.Bool.false,
+                     ClusterId=zdo_t.ZDOCmd.Active_EP_rsp,
+                     SecurityUse=0,
+-                    TSN=req.TSN,
++                    TSN=req.Data[0],
+                     MacDst=0x0000,
+                     Data=serialize_zdo_command(
+                         command_id=zdo_t.ZDOCmd.Active_EP_rsp,
+@@ -743,7 +744,7 @@ def on_zdo_simple_desc_req(self, req, NWKAddrOfInterest, EndPoint):
+                     IsBroadcast=t.Bool.false,
+                     ClusterId=zdo_t.ZDOCmd.Simple_Desc_rsp,
+                     SecurityUse=0,
+-                    TSN=req.TSN,
++                    TSN=req.Data[0],
+                     MacDst=0x0000,
+                     Data=serialize_zdo_command(
+                         command_id=zdo_t.ZDOCmd.Simple_Desc_rsp,
+@@ -1026,7 +1027,7 @@ def on_zdo_node_desc_req(self, req, NWKAddrOfInterest):
+                     IsBroadcast=t.Bool.false,
+                     ClusterId=zdo_t.ZDOCmd.Node_Desc_rsp,
+                     SecurityUse=0,
+-                    TSN=req.TSN,
++                    TSN=req.Data[0],
+                     MacDst=0x0000,
+                     Data=serialize_zdo_command(
+                         command_id=zdo_t.ZDOCmd.Node_Desc_rsp,
+@@ -1281,7 +1282,7 @@ def on_zdo_node_desc_req(self, req, NWKAddrOfInterest):
+                     IsBroadcast=t.Bool.false,
+                     ClusterId=zdo_t.ZDOCmd.Node_Desc_rsp,
+                     SecurityUse=0,
+-                    TSN=req.TSN,
++                    TSN=req.Data[0],
+                     MacDst=0x0000,
+                     Data=serialize_zdo_command(
+                         command_id=zdo_t.ZDOCmd.Node_Desc_rsp,
+diff --git a/zigpy_znp/zigbee/application.py b/zigpy_znp/zigbee/application.py
+index 30f33e4..704cd1c 100644
+--- a/zigpy_znp/zigbee/application.py
++++ b/zigpy_znp/zigbee/application.py
+@@ -57,6 +57,13 @@ def __init__(self, config: conf.ConfigType):
+         self._version_rsp = None
+         self._join_announce_tasks: dict[t.EUI64, asyncio.TimerHandle] = {}
+ 
++        # Z-Stack only echoes the AF `TransID` back in `AF.DataConfirm`, it must be
++        # unique among in-flight requests. The FIFO delays reuse of recent IDs.
++        self._free_trans_ids: asyncio.Queue[int] = asyncio.Queue()
++
++        for trans_id in range(256):
++            self._free_trans_ids.put_nowait(trans_id)
++
+     ##################################################################
+     # Implementation of the core zigpy ControllerApplication methods #
+     ##################################################################
+@@ -722,31 +729,6 @@ async def _send_request_raw(
+         # We pick ours based on the registered endpoints when using an older firmware
+         src_ep = self._find_endpoint(dst_ep=dst_ep, profile=profile, cluster=cluster)
+ 
+-        if relays is None:
+-            request = c.AF.DataRequestExt.Req(
+-                DstAddrModeAddress=dst_addr,
+-                DstEndpoint=dst_ep or 0,
+-                DstPanId=0x0000,
+-                SrcEndpoint=src_ep,
+-                ClusterId=cluster,
+-                TSN=sequence,
+-                Options=options,
+-                Radius=radius,
+-                Data=data,
+-            )
+-        else:
+-            request = c.AF.DataRequestSrcRtg.Req(
+-                DstAddr=dst_addr.address,
+-                DstEndpoint=dst_ep or 0,
+-                SrcEndpoint=src_ep,
+-                ClusterId=cluster,
+-                TSN=sequence,
+-                Options=options,
+-                Radius=radius,
+-                SourceRoute=relays,  # force the packet to go through specific parents
+-                Data=data,
+-            )
+-
+         if self._znp is None:
+             raise DeliveryError("Coordinator is disconnected, cannot send request")
+ 
+@@ -810,39 +792,73 @@ async def _send_request_raw(
+                     )
+                 )
+ 
+-        if dst_ep == ZDO_ENDPOINT or dst_addr.mode == t.AddrMode.Broadcast:
+-            # Broadcasts and ZDO requests will not receive a confirmation
+-            await self._znp.request(request=request, RspStatus=t.Status.SUCCESS)
+-        else:
+-            async with asyncio.timeout(
+-                EXTENDED_DATA_CONFIRM_TIMEOUT
+-                if extended_timeout
+-                else DATA_CONFIRM_TIMEOUT
+-            ):
+-                # Shield from cancellation to prevent requests that time out in higher
+-                # layers from missing expected responses
+-                response = await asyncio.shield(
+-                    self._znp.request_callback_rsp(
+-                        request=request,
+-                        RspStatus=t.Status.SUCCESS,
+-                        callback=c.AF.DataConfirm.Callback(
+-                            partial=True,
+-                            TSN=sequence,
+-                            # XXX: can this ever not match?
+-                            # Endpoint=src_ep,
+-                        ),
+-                        # Multicasts eventually receive a confirmation but waiting for
+-                        # it is unnecessary
+-                        background=(dst_addr.mode == t.AddrMode.Group),
+-                    )
++        trans_id = await self._free_trans_ids.get()
++        confirm_task = None
++
++        try:
++            if relays is None:
++                request = c.AF.DataRequestExt.Req(
++                    DstAddrModeAddress=dst_addr,
++                    DstEndpoint=dst_ep or 0,
++                    DstPanId=0x0000,
++                    SrcEndpoint=src_ep,
++                    ClusterId=cluster,
++                    TSN=trans_id,
++                    Options=options,
++                    Radius=radius,
++                    Data=data,
++                )
++            else:
++                request = c.AF.DataRequestSrcRtg.Req(
++                    DstAddr=dst_addr.address,
++                    DstEndpoint=dst_ep or 0,
++                    SrcEndpoint=src_ep,
++                    ClusterId=cluster,
++                    TSN=trans_id,
++                    Options=options,
++                    Radius=radius,
++                    SourceRoute=relays,  # force the packet through specific parents
++                    Data=data,
+                 )
+ 
+-                # Both the callback and the response can have an error status
+-                if response.Status != t.Status.SUCCESS:
+-                    raise InvalidCommandResponse(
+-                        f"Unsuccessful request status code: {response.Status!r}",
+-                        response,
+-                    )
++            if dst_ep == ZDO_ENDPOINT or dst_addr.mode == t.AddrMode.Broadcast:
++                # Broadcasts and ZDO requests will not receive a confirmation
++                await self._znp.request(request=request, RspStatus=t.Status.SUCCESS)
++                return
++
++            confirm_task = asyncio.create_task(
++                self._znp.request_callback_rsp(
++                    request=request,
++                    RspStatus=t.Status.SUCCESS,
++                    callback=c.AF.DataConfirm.Callback(partial=True, TSN=trans_id),
++                    # Multicasts eventually receive a confirmation but waiting for
++                    # it is unnecessary
++                    background=(dst_addr.mode == t.AddrMode.Group),
++                )
++            )
++        finally:
++            if confirm_task is None:
++                self._free_trans_ids.put_nowait(trans_id)
++            else:
++                # The confirm listener can outlive this coroutine, keep the ID until
++                # it is gone
++                confirm_task.add_done_callback(
++                    lambda _: self._free_trans_ids.put_nowait(trans_id)
++                )
++
++        async with asyncio.timeout(
++            EXTENDED_DATA_CONFIRM_TIMEOUT if extended_timeout else DATA_CONFIRM_TIMEOUT
++        ):
++            # Shield from cancellation to prevent requests that time out in higher
++            # layers from missing expected responses
++            response = await asyncio.shield(confirm_task)
++
++        # Both the callback and the response can have an error status
++        if response.Status != t.Status.SUCCESS:
++            raise InvalidCommandResponse(
++                f"Unsuccessful request status code: {response.Status!r}",
++                response,
++            )
+ 
+     @combine_concurrent_calls
+     async def _discover_route(self, nwk: t.NWK) -> None:
+
+From 2e2b8ef461c3a37df0fd0da7c742b0219fb1694f Mon Sep 17 00:00:00 2001
+From: puddly <32534428+puddly@users.noreply.github.com>
+Date: Wed, 4 Nov 2026 15:48:34 +0000
+Subject: [PATCH 2/2] Bump minimum zigpy version
+
+---
+ pyproject.toml                    |  2 +-
+ tests/application/test_joining.py |  3 +++
+ tests/application/test_startup.py |  5 +++--
+ tests/conftest.py                 | 12 ++++++++++++
+ 4 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index d3153d2..f64d622 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -14,7 +14,7 @@ readme = "README.md"
+ license = {text = "GPL-3.0"}
+ requires-python = ">=3.11"
+ dependencies = [
+-    "zigpy>=1.5.0",
++    "zigpy>=2.4.1",
+     "voluptuous",
+     "coloredlogs",
+     "jsonschema",
+diff --git a/tests/application/test_joining.py b/tests/application/test_joining.py
+index 886a92d..c4abc0b 100644
+--- a/tests/application/test_joining.py
++++ b/tests/application/test_joining.py
+@@ -60,6 +60,9 @@ async def test_permit_join(device, mocker, make_application):
+     )
+ 
+     await app.startup(auto_form=False)
++
++    # Green Power commissioning also consumes sequence numbers
++    mocker.patch.object(app, "get_sequence", return_value=2)
+     await app.permit(time_s=10)
+ 
+     await permit_join_broadcast
+diff --git a/tests/application/test_startup.py b/tests/application/test_startup.py
+index 8211bc9..fda0925 100644
+--- a/tests/application/test_startup.py
++++ b/tests/application/test_startup.py
+@@ -103,10 +103,11 @@ async def test_endpoints(device, make_application):
+ 
+     await app.startup(auto_form=False)
+ 
+-    # We currently just register two endpoints
+-    assert len(endpoints) == 2
++    # ZHA, ZLL, and Green Power
++    assert len(endpoints) == 3
+     assert 1 in app._device.endpoints
+     assert 2 in app._device.endpoints
++    assert 242 in app._device.endpoints
+ 
+     await app.shutdown()
+ 
+diff --git a/tests/conftest.py b/tests/conftest.py
+index d2902c5..e6566a1 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -17,7 +17,9 @@
+     from asynctest import CoroutineMock  # type:ignore[no-redef]  # noqa: F401
+ 
+ import zigpy.endpoint
++from zigpy.zcl.clusters.greenpower import GreenPowerProxy
+ import zigpy.zdo.types as zdo_t
++import zigpy.zgp
+ 
+ from zigpy_znp.api import ZNP
+ import zigpy_znp.commands as c
+@@ -595,6 +597,16 @@ def permit_join(self, request):
+             c.ZDO.MgmtPermitJoinRsp.Callback(Src=0x0000, Status=t.ZDOStatus.SUCCESS),
+         ]
+ 
++    @reply_to(
++        c.AF.DataRequestExt.Req(
++            partial=True,
++            DstEndpoint=zigpy.zgp.GP_ENDPOINT,
++            ClusterId=GreenPowerProxy.cluster_id,
++        )
++    )
++    def on_gp_broadcast(self, req):
++        return [c.AF.DataRequestExt.Rsp(Status=t.Status.SUCCESS)]
++
+     @reply_to(c.AF.DataRequestExt.Req(partial=True, DstEndpoint=0))
+     def on_zdo_request(self, req):
+         kwargs = deserialize_zdo_command(req.ClusterId, req.Data[1:])

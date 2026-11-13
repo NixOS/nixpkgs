@@ -1,0 +1,13 @@
+font_browser.cxx uses pthread_create and pthread_t, but never includes <pthread.h>
+The header is likely pulled from a different header that includes it; however, on stricter/newer compilers it will fail (It needs the header to be explicity included in the file it is called in)
+
+--- a/src/widgets/font_browser.cxx
++++ b/src/widgets/font_browser.cxx
+@@ -33,6 +33,7 @@
+ #include <string>
+ #include <cstdio>
+ #include <stdint.h>
++#include <pthread.h>
+
+ #include <FL/Fl.H>
+ #include <FL/Fl_Color_Chooser.H>

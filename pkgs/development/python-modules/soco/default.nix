@@ -1,0 +1,61 @@
+{
+  lib,
+  aiohttp,
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphviz,
+  ifaddr,
+  lxml,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  setuptools,
+  xmltodict,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "soco";
+  version = "0.32.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "SoCo";
+    repo = "SoCo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lGHhhZ7zRM06Fnm7yb5gQSWOQUbsBYW3T1/WfQX2PdA=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    appdirs
+    ifaddr
+    lxml
+    requests
+    xmltodict
+  ];
+
+  optional-dependencies.events_asyncio = [ aiohttp ];
+
+  nativeCheckInputs = [
+    graphviz
+    mock
+    pytest-asyncio
+    pytestCheckHook
+    requests-mock
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.events_asyncio;
+
+  pythonImportsCheck = [ "soco" ];
+
+  meta = {
+    description = "CLI and library to control Sonos speakers";
+    homepage = "https://github.com/SoCo/SoCo";
+    changelog = "https://github.com/SoCo/SoCo/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovesegfault ];
+  };
+})

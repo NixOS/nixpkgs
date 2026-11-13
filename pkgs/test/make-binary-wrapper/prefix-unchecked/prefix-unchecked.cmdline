@@ -1,0 +1,2 @@
+    --prefix-unchecked LUA_PATH ';' '/usr/share/lua/?.lua;;' \
+    --suffix-unchecked LUA_CPATH ';' ''

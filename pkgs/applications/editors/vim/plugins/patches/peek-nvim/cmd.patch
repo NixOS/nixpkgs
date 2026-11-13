@@ -1,0 +1,24 @@
+diff --git a/lua/peek/app.lua b/lua/peek/app.lua
+index af5148e..5e67563 100644
+--- a/lua/peek/app.lua
++++ b/lua/peek/app.lua
+@@ -38,10 +38,17 @@ function module.setup()
+   end
+
+   cmd = vim.list_extend({
+-    'deno',
+-    'task',
+-    '--quiet',
++    'deno',
+     'run',
++    '--allow-read',
++    '--allow-write',
++    '--allow-net',
++    '--allow-env',
++    '--allow-run',
++    '--no-check',
++    '--allow-import',
++    '--no-lock',
++    '../../app/src/main.ts',
+   }, args)
+ end

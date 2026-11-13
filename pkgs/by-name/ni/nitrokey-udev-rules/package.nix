@@ -1,0 +1,48 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
+  udevCheckHook,
+}:
+
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "nitrokey-udev-rules";
+  version = "1.1.1";
+
+  src = fetchFromGitHub {
+    owner = "Nitrokey";
+    repo = "nitrokey-udev-rules";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-e++vva7Y+1zjzRznzFjemm94CMTHQBne94FGRZlvn8Q=";
+  };
+
+  nativeBuildInputs = [
+    python3
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    make generate
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    install -D 41-nitrokey.rules -t $out/etc/udev/rules.d
+  '';
+
+  meta = {
+    description = "udev rules for Nitrokey devices";
+    homepage = "https://github.com/Nitrokey/nitrokey-udev-rules";
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
+      robinkrahl
+      liamthexpl0rer
+    ];
+  };
+})

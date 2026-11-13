@@ -1,0 +1,445 @@
+{
+  config,
+  pkgs,
+  lib,
+  options,
+  utils,
+  ...
+}:
+let
+  cfg = config.services.firefox-syncserver;
+  opt = options.services.firefox-syncserver;
+  defaultDatabase = "firefox_syncserver";
+  defaultUser = "firefox-syncserver";
+
+  dbIsMySQL = cfg.database.type == "mysql";
+  dbIsPostgreSQL = cfg.database.type == "postgresql";
+
+  dbIsLocal = cfg.database.host == "localhost";
+
+  dbURL =
+    if dbIsMySQL then
+      "mysql://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}${lib.optionalString dbIsLocal "?socket=/run/mysqld/mysqld.sock"}"
+    else if dbIsLocal then
+      # Use Unix socket connection with peer authentication by default.
+      "postgres:///${cfg.database.name}?host=/run/postgresql&user=${cfg.database.user}"
+    else
+      "postgres://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}";
+
+  # postgresql.target waits for postgresql-setup.service (which runs
+  # ensureDatabases / ensureUsers) to complete, avoiding race conditions
+  # where the syncserver starts before its database and role exist.
+  dbService = if dbIsMySQL then "mysql.service" else "postgresql.target";
+
+  syncserver =
+    if cfg.package != null then
+      cfg.package
+    else if dbIsMySQL then
+      pkgs.syncstorage-rs-mysql
+    else
+      pkgs.syncstorage-rs-pgsql;
+
+  format = pkgs.formats.toml { };
+  settings = {
+    human_logs = true;
+    syncstorage = {
+      database_url = dbURL;
+    };
+    tokenserver = {
+      node_type = if dbIsMySQL then "mysql" else "postgres";
+      database_url = dbURL;
+      fxa_email_domain = "api.accounts.firefox.com";
+      fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
+      run_migrations = true;
+      # if JWK caching is not enabled the token server must verify tokens
+      # using the fxa api, on a thread pool with a static size.
+      additional_blocking_threads_for_fxa_requests = 10;
+    }
+    // lib.optionalAttrs cfg.singleNode.enable {
+      # Single-node mode is likely to be used on small instances with little
+      # capacity. The default value (0.1) can only ever release capacity when
+      # accounts are removed if the total capacity is 10 or larger to begin
+      # with.
+      # https://github.com/mozilla-services/syncstorage-rs/issues/1313#issuecomment-1145293375
+      node_capacity_release_rate = 1;
+    };
+  };
+  configFile = format.generate "syncstorage.toml" (lib.recursiveUpdate settings cfg.settings);
+
+  setupScript =
+    let
+      dbSpecific =
+        if dbIsMySQL then
+          {
+            listTables = "mysql ${cfg.database.name} -Ne 'SHOW TABLES'";
+            execSql = "mysql ${cfg.database.name}";
+            upsertSql = ''
+              BEGIN;
+
+              INSERT INTO `services` (`id`, `service`, `pattern`)
+                VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
+                ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
+              INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
+                                   `capacity`, `downed`, `backoff`)
+                VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
+                0, ${toString cfg.singleNode.capacity}, 0, 0)
+                ON DUPLICATE KEY UPDATE node = '${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
+
+              COMMIT;
+            '';
+          }
+        else
+          {
+            listTables = "psql -d ${cfg.database.name} -tAc \"SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'\"";
+            execSql = "psql -d ${cfg.database.name}";
+            upsertSql = ''
+              BEGIN;
+
+              INSERT INTO services (id, service, pattern)
+                VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
+                ON CONFLICT (id) DO UPDATE SET service = 'sync-1.5', pattern = '{node}/1.5/{uid}';
+              INSERT INTO nodes (id, service, node, available, current_load,
+                                 capacity, downed, backoff)
+                VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
+                0, ${toString cfg.singleNode.capacity}, 0, 0)
+                ON CONFLICT (id) DO UPDATE SET node = '${cfg.singleNode.url}', capacity = ${toString cfg.singleNode.capacity};
+
+              COMMIT;
+            '';
+          };
+    in
+    pkgs.writeShellScript "firefox-syncserver-setup" ''
+      set -euo pipefail
+      shopt -s inherit_errexit
+
+      schema_configured() {
+        ${dbSpecific.listTables} | grep -q services
+      }
+
+      update_config() {
+        ${dbSpecific.execSql} <<'EOF'
+      ${dbSpecific.upsertSql}
+      EOF
+      }
+
+      for (( try = 0; try < 60; try++ )); do
+        if ! schema_configured; then
+          sleep 2
+        else
+          update_config
+          exit 0
+        fi
+      done
+
+      echo "Single-node setup failed"
+      exit 1
+    '';
+in
+
+{
+  options = {
+    services.firefox-syncserver = {
+      enable = lib.mkEnableOption ''
+        the Firefox Sync storage service.
+
+        Out of the box this will not be very useful unless you also configure at least
+        one service and one nodes by inserting them into the database manually, e.g.
+        by running
+
+        ```
+          INSERT INTO services (id, service, pattern) VALUES (1, 'sync-1.5', '{node}/1.5/{uid}');
+          INSERT INTO nodes (id, service, node, available, current_load,
+              capacity, downed, backoff)
+            VALUES (1, 1, 'https://mydomain.tld', 1, 0, 10, 0, 0);
+        ```
+
+        {option}`${opt.singleNode.enable}` does this automatically when enabled
+      '';
+
+      package = lib.mkOption {
+        type = lib.types.nullOr lib.types.package;
+        default = null;
+        defaultText = lib.literalExpression ''
+          if config.${opt.database.type} == "mysql" then
+            pkgs.syncstorage-rs-mysql
+          else
+            pkgs.syncstorage-rs-pgsql
+        '';
+        description = ''
+          Syncstorage server package to use. When `null`, the package is
+          selected automatically based on {option}`${opt.database.type}`.
+        '';
+      };
+
+      database.type = lib.mkOption {
+        type = lib.types.enum [
+          "mysql"
+          "postgresql"
+        ];
+        description = ''
+          Which database backend to use for storage.
+          ::: {.note}
+          `"postgresql"` is recommended for new deployments. `"mysql"` is the
+          backend used by legacy installations.
+          :::
+        '';
+      };
+
+      database.name = lib.mkOption {
+        type = lib.types.strMatching "[a-z_][a-z0-9_]*";
+        default = defaultDatabase;
+        description = ''
+          Database to use for storage. Will be created automatically if it does not exist
+          and `config.${opt.database.createLocally}` is set.
+        '';
+      };
+
+      database.user = lib.mkOption {
+        type = lib.types.str;
+        default = if dbIsPostgreSQL then defaultDatabase else defaultUser;
+        defaultText = lib.literalExpression ''
+          if database.type == "postgresql" then "${defaultDatabase}" else "${defaultUser}"
+        '';
+        description = ''
+          Username for database connections.  When using PostgreSQL with
+          `createLocally`, this defaults to the database name so that
+          `ensureDBOwnership` works (it requires user and database names
+          to match).
+        '';
+      };
+
+      database.host = lib.mkOption {
+        type = lib.types.str;
+        default = "localhost";
+        description = ''
+          Database host name. `localhost` is treated specially and inserts
+          systemd dependencies, other hostnames or IP addresses of the local machine do not.
+        '';
+      };
+
+      database.createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to create database and user on the local machine if they do not exist.
+          This includes enabling the configured database service and setting up
+          authentication for the configured user.
+        '';
+      };
+
+      logLevel = lib.mkOption {
+        type = lib.types.str;
+        default = "error";
+        description = ''
+          Log level to run with. This can be a simple log level like `error`
+          or `trace`, or a more complicated logging expression.
+        '';
+      };
+
+      secrets = lib.mkOption {
+        type = lib.types.path;
+        description = ''
+          A file containing the various secrets. Should be in the format expected by systemd's
+          `EnvironmentFile` directory. Two secrets are currently available:
+          `SYNC_MASTER_SECRET` and
+          `SYNC_TOKENSERVER__FXA_METRICS_HASH_SECRET`.
+        '';
+      };
+
+      singleNode = {
+        enable = lib.mkEnableOption "auto-configuration for a simple single-node setup";
+
+        enableTLS = lib.mkEnableOption "automatic TLS setup";
+
+        enableNginx = lib.mkEnableOption "nginx virtualhost definitions";
+
+        hostname = lib.mkOption {
+          type = lib.types.str;
+          description = ''
+            Host name to use for this service.
+          '';
+        };
+
+        capacity = lib.mkOption {
+          type = lib.types.ints.unsigned;
+          default = 10;
+          description = ''
+            How many sync accounts are allowed on this server. Setting this value
+            equal to or less than the number of currently active accounts will
+            effectively deny service to accounts not yet registered here.
+          '';
+        };
+
+        url = lib.mkOption {
+          type = lib.types.str;
+          default = "${if cfg.singleNode.enableTLS then "https" else "http"}://${cfg.singleNode.hostname}";
+          defaultText = lib.literalExpression ''
+            ''${if cfg.singleNode.enableTLS then "https" else "http"}://''${config.${opt.singleNode.hostname}}
+          '';
+          description = ''
+            URL of the host. If you are not using the automatic webserver proxy setup you will have
+            to change this setting or your sync server may not be functional.
+          '';
+        };
+      };
+
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          freeformType = format.type;
+
+          options = {
+            port = lib.mkOption {
+              type = lib.types.port;
+              default = 5000;
+              description = ''
+                Port to bind to.
+              '';
+            };
+
+            tokenserver.enabled = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = ''
+                Whether to enable the token service as well.
+              '';
+            };
+          };
+        };
+        default = { };
+        description = ''
+          Settings for the sync server. These take priority over values computed
+          from NixOS options.
+
+          See the example config in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/config/local.example.toml>
+          and the doc comments on the `Settings` structs in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage-settings/src/lib.rs>
+          and
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/tokenserver-settings/src/lib.rs>
+          for available options.
+        '';
+      };
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    services.mysql = lib.mkIf (cfg.database.createLocally && dbIsMySQL) {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "all privileges";
+          };
+        }
+      ];
+    };
+
+    services.postgresql = lib.mkIf (cfg.database.createLocally && dbIsPostgreSQL) {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensureDBOwnership = true;
+        }
+      ];
+    };
+
+    systemd.services.firefox-syncserver = {
+      wantedBy = [ "multi-user.target" ];
+      requires = lib.mkIf dbIsLocal [ dbService ];
+      after = lib.mkIf dbIsLocal [ dbService ];
+      restartTriggers = lib.optional cfg.singleNode.enable setupScript;
+      environment.RUST_LOG = cfg.logLevel;
+      serviceConfig = {
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe syncserver)
+          "--config"
+          configFile
+        ];
+        User = cfg.database.user;
+        Group = cfg.database.user;
+        EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
+        Restart = "on-failure";
+        RestartSec = "5s";
+
+        # hardening
+        RemoveIPC = true;
+        CapabilityBoundingSet = [ "" ];
+        DynamicUser = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        ProtectClock = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        SystemCallArchitectures = "native";
+        # syncstorage-rs uses python-cffi internally, and python-cffi does not
+        # work with MemoryDenyWriteExecute=true
+        MemoryDenyWriteExecute = false;
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        ProtectHostname = true;
+        LockPersonality = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictRealtime = true;
+        ProtectSystem = "strict";
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ProtectHome = true;
+        PrivateUsers = true;
+        PrivateTmp = true;
+        SystemCallFilter = [
+          "@system-service"
+          "~ @privileged @resources"
+        ];
+        UMask = "0077";
+      };
+    };
+
+    systemd.services.firefox-syncserver-setup = lib.mkIf cfg.singleNode.enable {
+      wantedBy = [ "firefox-syncserver.service" ];
+      requires = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal dbService;
+      after = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal dbService;
+      path =
+        if dbIsMySQL then [ config.services.mysql.package ] else [ config.services.postgresql.package ];
+      serviceConfig = {
+        ExecStart = [ "${setupScript}" ];
+      }
+      // lib.optionalAttrs dbIsPostgreSQL {
+        # Peer authentication maps the system user to the database role of the
+        # same name, which owns the database (ensureDBOwnership), so no
+        # superuser access is required.
+        User = cfg.database.user;
+        Group = cfg.database.user;
+        DynamicUser = true;
+      };
+    };
+
+    services.nginx.virtualHosts = lib.mkIf cfg.singleNode.enableNginx {
+      ${cfg.singleNode.hostname} = {
+        enableACME = cfg.singleNode.enableTLS;
+        forceSSL = cfg.singleNode.enableTLS;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString cfg.settings.port}";
+          # We need to pass the Host header that matches the original Host header. Otherwise,
+          # Hawk authentication will fail (because it assumes that the client and server see
+          # the same value of the Host header).
+          recommendedProxySettings = true;
+        };
+      };
+    };
+  };
+
+  meta = {
+    maintainers = [ ];
+    doc = ./firefox-syncserver.md;
+  };
+}

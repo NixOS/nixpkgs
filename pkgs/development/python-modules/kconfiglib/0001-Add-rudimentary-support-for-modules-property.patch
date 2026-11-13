@@ -1,0 +1,41 @@
+From 3161fec0b9ff9154dbd952c3481400118fabb744 Mon Sep 17 00:00:00 2001
+From: Helmut Grohne <helmut.grohne@intenta.de>
+Date: Thu, 21 Apr 2022 10:07:53 +0200
+Subject: [PATCH] Add rudimentary support for modules property
+
+In linux commit 6dd85ff178cd76851e2184b13e545f5a88d1be30, Linux Torvalds
+changed "option modules" to plain "modules" since it was the only option
+left. kconfiglib does not have much support for either besides parsing
+it and suppressing warnings when it is applied to the 'MODULES' symbol.
+Mirror this behaviour for the newer "modules" property.
+
+Fixes: #106
+---
+ kconfiglib.py | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/kconfiglib.py b/kconfiglib.py
+index c67895c..ccef123 100644
+--- a/kconfiglib.py
++++ b/kconfiglib.py
+@@ -3263,6 +3263,20 @@ def _parse_props(self, node):
+                 else:
+                     self._parse_error("unrecognized option")
+ 
++            elif t0 is _T_MODULES:
++                # 'modules' formerly was 'option modules'. See above for why
++                # and when it is ignored. It was changed in
++                # linux commit 6dd85ff178cd76851e2184b13e545f5a88d1be30.
++                if node.item is not self.modules:
++                    self._warn("the 'modules' property is not supported. Let "
++                               "me know if this is a problem for you, as it "
++                               "wouldn't be that hard to implement. Note that "
++                               "modules are supported -- Kconfiglib just "
++                               "assumes the symbol name MODULES, like older "
++                               "versions of the C implementation did when "
++                               "'modules' wasn't used.",
++                               self.filename, self.linenr)
++
+             elif t0 is _T_OPTIONAL:
+                 if node.item.__class__ is not Choice:
+                     self._parse_error('"optional" is only valid for choices')

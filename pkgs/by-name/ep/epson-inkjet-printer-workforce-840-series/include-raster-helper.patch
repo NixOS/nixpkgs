@@ -1,0 +1,23 @@
+diff --git a/src/pagemanager/pagemanager.c b/src/pagemanager/pagemanager.c
+index 029e6d3..2881585 100644
+--- a/src/pagemanager/pagemanager.c
++++ b/src/pagemanager/pagemanager.c
+@@ -23,6 +23,7 @@
+ #include "debuglog.h"
+ #include "memory.h"
+ #include "raster.h"
++#include "raster-helper.h"
+ #include "pagemanager.h"
+
+ extern int JobCanceled;
+diff --git a/src/raster_to_epson.c b/src/raster_to_epson.c
+index 6e621c8..6eea77c 100644
+--- a/src/raster_to_epson.c
++++ b/src/raster_to_epson.c
+@@ -36,6 +36,7 @@
+ #include "raster.h"
+ #include "memory.h"
+ #include "raster_to_epson.h"
++#include "raster-helper.h"
+ #include "pagemanager.h"
+ #include "filter_option.h"
