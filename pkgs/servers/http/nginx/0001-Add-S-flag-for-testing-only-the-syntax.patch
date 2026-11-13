@@ -1,0 +1,190 @@
+From babea5a09fb4faa9ea124f84254d158e227458b5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gutyina=20Gerg=C5=91?= <gutyina.gergo.2@gmail.com>
+Date: Sun, 28 Dec 2025 14:01:03 +0100
+Subject: [PATCH] Add -S flag for testing only the syntax
+
+It is a lightweight version of `-T` that only validates the syntax,
+skips testing modules, avoids creating a pidfile, etc.
+Impurities like inet host resolution (requires internet) and
+SSL certificate lookups (usually requires accessing /var/lib/acme/)
+are disabled with `-S`.
+---
+ src/core/nginx.c              |  9 ++++++++-
+ src/core/ngx_cycle.c          |  6 ++++++
+ src/core/ngx_cycle.h          |  1 +
+ src/core/ngx_inet.c           | 29 +++++++++++++++++++++++++++++
+ src/event/ngx_event_openssl.c | 20 ++++++++++++++++++++
+ 5 files changed, 64 insertions(+), 1 deletion(-)
+
+diff --git a/src/core/nginx.c b/src/core/nginx.c
+index 0deb27b7f..41748f6dc 100644
+--- a/src/core/nginx.c
++++ b/src/core/nginx.c
+@@ -395,7 +395,7 @@ ngx_show_version_info(void)
+ 
+     if (ngx_show_help) {
+         ngx_write_stderr(
+-            "Usage: nginx [-?hvVtTq] [-s signal] [-p prefix]" NGX_LINEFEED
++            "Usage: nginx [-?hvVtTSq] [-s signal] [-p prefix]" NGX_LINEFEED
+             "             [-e filename] [-c filename] [-g directives]"
+                           NGX_LINEFEED NGX_LINEFEED
+             "Options:" NGX_LINEFEED
+@@ -406,6 +406,7 @@ ngx_show_version_info(void)
+             "  -t            : test configuration and exit" NGX_LINEFEED
+             "  -T            : test configuration, dump it and exit"
+                                NGX_LINEFEED
++            "  -S            : test configuration syntax, dump it and exit" NGX_LINEFEED
+             "  -q            : suppress non-error messages "
+                                "during configuration testing" NGX_LINEFEED
+             "  -s signal     : send signal to a master process: "
+@@ -841,6 +842,12 @@ ngx_get_options(int argc, char *const *argv)
+                 ngx_dump_config = 1;
+                 break;
+ 
++            case 'S':
++                ngx_test_config = 1;
++                ngx_dump_config = 1;
++                ngx_test_syntax = 1;
++                break;
++
+             case 'q':
+                 ngx_quiet_mode = 1;
+                 break;
+diff --git a/src/core/ngx_cycle.c b/src/core/ngx_cycle.c
+index a75bdf878..1c291c140 100644
+--- a/src/core/ngx_cycle.c
++++ b/src/core/ngx_cycle.c
+@@ -26,6 +26,7 @@ static ngx_event_t     ngx_cleaner_event;
+ static ngx_event_t     ngx_shutdown_event;
+ 
+ ngx_uint_t             ngx_test_config;
++ngx_uint_t             ngx_test_syntax;
+ ngx_uint_t             ngx_dump_config;
+ ngx_uint_t             ngx_quiet_mode;
+ 
+@@ -292,6 +293,11 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
+                        cycle->conf_file.data);
+     }
+ 
++    // we are done with syntax checking, return
++    if (ngx_test_syntax) {
++        return cycle;
++    }
++
+     for (i = 0; cycle->modules[i]; i++) {
+         if (cycle->modules[i]->type != NGX_CORE_MODULE) {
+             continue;
+diff --git a/src/core/ngx_cycle.h b/src/core/ngx_cycle.h
+index 0c47f25fe..edd90bc2e 100644
+--- a/src/core/ngx_cycle.h
++++ b/src/core/ngx_cycle.h
+@@ -142,6 +142,7 @@ extern volatile ngx_cycle_t  *ngx_cycle;
+ extern ngx_array_t            ngx_old_cycles;
+ extern ngx_module_t           ngx_core_module;
+ extern ngx_uint_t             ngx_test_config;
++extern ngx_uint_t             ngx_test_syntax;
+ extern ngx_uint_t             ngx_dump_config;
+ extern ngx_uint_t             ngx_quiet_mode;
+ 
+diff --git a/src/core/ngx_inet.c b/src/core/ngx_inet.c
+index 2233e617b..e1bef1f3c 100644
+--- a/src/core/ngx_inet.c
++++ b/src/core/ngx_inet.c
+@@ -1120,6 +1120,20 @@ ngx_parse_inet6_url(ngx_pool_t *pool, ngx_url_t *u)
+ ngx_int_t
+ ngx_inet_resolve_host(ngx_pool_t *pool, ngx_url_t *u)
+ {
++    // skip resolving original host as it requires internet, resolve localhost instead
++    // we can't just return NGX_OK because side effects of ngx_inet_add_addr may be needed
++    if (ngx_test_syntax) {
++        struct sockaddr_in   sin;
++
++        ngx_memzero(&sin, sizeof(struct sockaddr_in));
++        sin.sin_family = AF_INET;
++        sin.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
++        sin.sin_port = htons(u->port);
++
++        return ngx_inet_add_addr(pool, u, (struct sockaddr *) &sin,
++                                 sizeof(struct sockaddr_in), 1);
++    }
++
+     u_char           *host;
+     ngx_uint_t        n;
+     struct addrinfo   hints, *res, *rp;
+@@ -1201,6 +1215,21 @@ failed:
+ ngx_int_t
+ ngx_inet_resolve_host(ngx_pool_t *pool, ngx_url_t *u)
+ {
++    // skip resolving original host as it requires internet, resolve localhost instead
++    // we can't just return NGX_OK because side effects of ngx_inet_add_addr may be needed
++    if (ngx_test_syntax) {
++        struct sockaddr_in   sin;
++
++        ngx_memzero(&sin, sizeof(struct sockaddr_in));
++
++        sin.sin_family = AF_INET;
++        sin.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
++        sin.sin_port = htons(u->port);
++
++        return ngx_inet_add_addr(pool, u, (struct sockaddr *) &sin,
++                                 sizeof(struct sockaddr_in), 1);
++    }
++
+     u_char              *host;
+     ngx_uint_t           i, n;
+     struct hostent      *h;
+diff --git a/src/event/ngx_event_openssl.c b/src/event/ngx_event_openssl.c
+index d1386d3a6..94b727829 100644
+--- a/src/event/ngx_event_openssl.c
++++ b/src/event/ngx_event_openssl.c
+@@ -475,6 +475,11 @@ ngx_int_t
+ ngx_ssl_certificate(ngx_conf_t *cf, ngx_ssl_t *ssl, ngx_str_t *cert,
+     ngx_str_t *key, ngx_array_t *passwords)
+ {
++    // requires loading certificate from disk, skip it
++    if (ngx_test_syntax) {
++        return NGX_OK;
++    }
++
+     char            *err;
+     X509            *x509, **elm;
+     u_long           n;
+@@ -944,6 +949,11 @@ ngx_int_t
+ ngx_ssl_client_certificate(ngx_conf_t *cf, ngx_ssl_t *ssl, ngx_str_t *cert,
+     ngx_int_t depth)
+ {
++    // requires loading certificate from disk, skip it
++    if (ngx_test_syntax) {
++        return NGX_OK;
++    }
++
+     int                   n, i;
+     char                 *err;
+     X509                 *x509;
+@@ -1048,6 +1058,11 @@ ngx_int_t
+ ngx_ssl_trusted_certificate(ngx_conf_t *cf, ngx_ssl_t *ssl, ngx_str_t *cert,
+     ngx_int_t depth)
+ {
++    // requires loading certificate from disk, skip it
++    if (ngx_test_syntax) {
++        return NGX_OK;
++    }
++
+     int              i, n;
+     char            *err;
+     X509            *x509;
+@@ -1109,6 +1124,11 @@ ngx_ssl_trusted_certificate(ngx_conf_t *cf, ngx_ssl_t *ssl, ngx_str_t *cert,
+ ngx_int_t
+ ngx_ssl_crl(ngx_conf_t *cf, ngx_ssl_t *ssl, ngx_str_t *crl)
+ {
++    // requires loading certificate from disk, skip it
++    if (ngx_test_syntax) {
++        return NGX_OK;
++    }
++
+     int                  n, i;
+     char                *err;
+     X509_CRL            *x509;
+-- 
+2.51.2
+
