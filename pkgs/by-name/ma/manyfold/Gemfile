@@ -31,7 +31,7 @@ gem "bootsnap", "~> 1.26", require: false
 # All are installed by default, but you can exclude ones you don't want with bundler.
 # e.g. `bundle install --without="postgres mysql"` or `bundle config set without "postgres mysql"`
 group :sqlite3 do
-  gem "sqlite3", "~> 2.9"
+  gem "sqlite3", "~> 2.10"
   gem "sqlite3_ar_regexp", "~> 3.0"
 end
 group :mysql do
@@ -39,7 +39,7 @@ group :mysql do
 end
 group :postgres do
   gem "pg", "~> 1.7"
-  gem "pghero", "~> 4.0"
+  gem "pghero", "~> 4.1"
   gem "pg_query", "~> 6.2"
 end
 
@@ -76,7 +76,7 @@ group :development, :test do
   # Documentation
   gem "yard-activerecord", "~> 0.0.17"
   gem "yard-activesupport-concern", "~> 0.0.1"
-  gem "yard-lint", "~> 1.12"
+  gem "yard-lint", "~> 1.13"
   gem "rubocop-yard", "~> 1.3"
 end
 
@@ -158,7 +158,7 @@ gem "shrine", "~> 3.10"
 gem "tus-server", "~> 2.3"
 gem "shrine-tus", "~> 3.0"
 
-gem "aws-sdk-s3", "< 1.234"
+gem "aws-sdk-s3", "< 1.238"
 
 gem "better_content_security_policy", "~> 0.1"
 
@@ -173,7 +173,7 @@ gem "nanoid", "~> 2.0"
 
 gem "kramdown", "~> 2.5"
 
-gem "omniauth", "~> 2.1"
+gem "omniauth", "~> 2.3"
 gem "omniauth_openid_connect", "~> 0.8"
 
 gem "sidekiq-cron", "~> 2.4"
@@ -189,7 +189,7 @@ gem "to_regexp", "~> 0.2"
 
 gem "activejob-unique", "~> 0.5"
 
-gem "job-iteration", "~> 1.15"
+gem "job-iteration", "~> 1.17"
 gem "rswag", "~> 2.17"
 gem "warning", "~> 1.6"
 

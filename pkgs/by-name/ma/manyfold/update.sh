@@ -1,9 +1,9 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update bundix bundler nixfmt-rfc-style yarn-berry_3.yarn-berry-fetcher nix-prefetch-git ruby_3_4
+#!nix-shell -i bash -p nix-update bundix bundler pkgs.nixfmt yarn-berry_3.yarn-berry-fetcher nix-prefetch-git ruby_3_4
 
 set -eux
 
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 UPDATE_NIX_ATTR_PATH="${UPDATE_NIX_ATTR_PATH:-manyfold}"
 HOME=$(mktemp -d)
 
@@ -19,9 +19,23 @@ yarn-berry-fetcher missing-hashes "$src/yarn.lock" >"$SCRIPT_DIR/missing-hashes.
 # Update ruby deps
 cp --recursive --no-preserve=mode "$src"/. .
 BUNDLE_FORCE_RUBY_PLATFORM=true bundle lock
-bundix
+ruby -rbundix -rbundix/commandline -e '
+cli = Bundix::CommandLine.new
+gemset = cli.build_gemset
+def clean_nils(obj)
+  if obj.is_a?(Hash)
+    obj.transform_values { |v| clean_nils(v) }
+  elsif obj.is_a?(Array)
+    obj.compact.map { |v| clean_nils(v) }
+  else
+    obj
+  end
+end
+gemset = clean_nils(gemset)
+cli.save_gemset(gemset)
+'
 nixfmt gemset.nix
-install -D ./{Gemfile,Gemfile.lock,gemset.nix} -t "$SCRIPT_DIR"
+install -m 0644 -D ./{Gemfile,Gemfile.lock,gemset.nix} -t "$SCRIPT_DIR"
 popd
 
 # Update dependency hashes
