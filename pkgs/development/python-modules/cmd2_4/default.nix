@@ -37,6 +37,8 @@ buildPythonPackage (finalAttrs: {
     rich-argparse
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
 
   nativeCheckInputs = [
