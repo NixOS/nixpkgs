@@ -6,7 +6,6 @@
   fetchFromGitHub,
   fetchurl,
   unzip,
-  nix-update-script,
   pkg-config,
   makeBinaryWrapper,
   libxkbcommon,
@@ -116,7 +115,7 @@ let
         }
     '';
 
-    passthru.updateScript = nix-update-script { };
+    passthru.updateScript = ./update.sh;
 
     meta = meta // {
       platforms = lib.platforms.linux;
@@ -155,6 +154,8 @@ let
 
       runHook postInstall
     '';
+
+    passthru.updateScript = ./update.sh;
 
     meta = meta // {
       platforms = [ "aarch64-darwin" ];
