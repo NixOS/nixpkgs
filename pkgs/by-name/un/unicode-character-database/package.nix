@@ -5,14 +5,18 @@
   unzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unicode-character-database";
   version = "17.0.0";
 
   src = fetchurl {
-    url = "https://www.unicode.org/Public/${version}/ucd/UCD.zip";
+    url = "https://www.unicode.org/Public/${finalAttrs.version}/ucd/UCD.zip";
     sha256 = "sha256-IGbRkJsuqTkWzgktocDuSAjqPvhAfJS08U9bfrJj0o4=";
   };
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = false; # nothing to build
+  doCheck = false; # no tests to run
 
   nativeBuildInputs = [
     unzip
@@ -35,5 +39,8 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.unicode.org/";
     license = lib.licenses.unicode-30;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      sandarukasa
+    ];
   };
-}
+})
