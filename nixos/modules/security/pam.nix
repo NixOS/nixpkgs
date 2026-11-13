@@ -654,7 +654,7 @@ let
             pkgsText = "pkgs.kdePackages";
           };
 
-          forceRun = lib.mkEnableOption null // {
+          forceRun = lib.mkEnableOption "" // {
             description = ''
               The `force_run` option is used to tell the PAM module for KWallet
               to forcefully run even if no graphical session (such as a GUI

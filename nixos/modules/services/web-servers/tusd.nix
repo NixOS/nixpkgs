@@ -61,7 +61,7 @@ in
       description = "The directory to store uploads in.";
     };
 
-    behindProxy = lib.mkEnableOption null // {
+    behindProxy = lib.mkEnableOption "" // {
       description = "Whether to respect X-Forwarded-* and similar headers which may be set by proxies.";
     };
 

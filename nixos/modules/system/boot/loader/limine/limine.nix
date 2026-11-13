@@ -56,7 +56,7 @@ in
     enable = lib.mkEnableOption "the Limine Bootloader";
     package = lib.mkPackageOption pkgs "limine" { };
 
-    enableEditor = lib.mkEnableOption null // {
+    enableEditor = lib.mkEnableOption "" // {
       description = ''
         Whether to allow editing the boot entries before booting them.
         It is recommended to set this to false, as it allows gaining root
@@ -134,21 +134,21 @@ in
       '';
     };
 
-    validateChecksums = lib.mkEnableOption null // {
+    validateChecksums = lib.mkEnableOption "" // {
       default = true;
       description = ''
         Whether to validate file checksums before booting.
       '';
     };
 
-    panicOnChecksumMismatch = lib.mkEnableOption null // {
+    panicOnChecksumMismatch = lib.mkEnableOption "" // {
       description = ''
         Whether or not checksum validation failure should be a fatal
         error at boot time.
       '';
     };
 
-    efiSupport = lib.mkEnableOption null // {
+    efiSupport = lib.mkEnableOption "" // {
       default = pkgs.stdenv.hostPlatform.isEfi;
       defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform.isEfi";
       description = ''
@@ -156,7 +156,7 @@ in
       '';
     };
 
-    efiInstallAsRemovable = lib.mkEnableOption null // {
+    efiInstallAsRemovable = lib.mkEnableOption "" // {
       default = !efi.canTouchEfiVariables;
       defaultText = lib.literalExpression "!config.boot.loader.efi.canTouchEfiVariables";
       description = ''
@@ -166,7 +166,7 @@ in
       '';
     };
 
-    biosSupport = lib.mkEnableOption null // {
+    biosSupport = lib.mkEnableOption "" // {
       default = !cfg.efiSupport && pkgs.stdenv.hostPlatform.isx86;
       defaultText = lib.literalExpression "!config.boot.loader.limine.efiSupport && pkgs.stdenv.hostPlatform.isx86";
       description = ''
@@ -190,7 +190,7 @@ in
       '';
     };
 
-    enrollConfig = lib.mkEnableOption null // {
+    enrollConfig = lib.mkEnableOption "" // {
       default = cfg.panicOnChecksumMismatch;
       defaultText = lib.literalExpression "boot.loader.limine.panicOnChecksumMismatch";
       description = ''
@@ -199,7 +199,7 @@ in
       '';
     };
 
-    force = lib.mkEnableOption null // {
+    force = lib.mkEnableOption "" // {
       description = ''
         Force installation even if the safety checks fail, use absolutely only if necessary!
       '';
@@ -217,7 +217,7 @@ in
     };
 
     secureBoot = {
-      enable = lib.mkEnableOption null // {
+      enable = lib.mkEnableOption "" // {
         description = ''
           Whether to use sign the limine binary with sbctl.
 
@@ -236,12 +236,12 @@ in
         '';
       };
 
-      autoGenerateKeys = lib.mkEnableOption null // {
+      autoGenerateKeys = lib.mkEnableOption "" // {
         description = "Generate keys automatically when none exists during bootloader installation";
       };
 
       autoEnrollKeys = {
-        enable = lib.mkEnableOption null // {
+        enable = lib.mkEnableOption "" // {
           description = "Enroll automatically generated keys";
         };
         extraArgs = lib.mkOption {
@@ -255,7 +255,7 @@ in
       };
 
       signAdditionalFiles = {
-        enable = lib.mkEnableOption null // {
+        enable = lib.mkEnableOption "" // {
           default = cfg.secureBoot.enable;
           defaultText = lib.literalExpression "boot.loader.limine.secureBoot.enable";
           description = ''
@@ -365,14 +365,14 @@ in
           '';
         };
 
-        helpHidden = lib.mkEnableOption null // {
+        helpHidden = lib.mkEnableOption "" // {
           description = ''
             Whether or not to hide the keybinds at the top of the screen.
           '';
         };
       };
       graphicalTerminal = {
-        enable = lib.mkEnableOption null // {
+        enable = lib.mkEnableOption "" // {
           default = true;
           example = false;
           description = ''

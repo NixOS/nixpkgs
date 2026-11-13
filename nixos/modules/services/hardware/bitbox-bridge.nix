@@ -22,7 +22,7 @@ in
         '';
       };
 
-      runOnMount = lib.mkEnableOption null // {
+      runOnMount = lib.mkEnableOption "" // {
         default = true;
         description = ''
           Run bitbox-bridge.service only when hardware wallet is plugged, also registers the systemd device unit.
