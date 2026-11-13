@@ -23,10 +23,6 @@ let
   postPatch = ''
     echo '<Project><PropertyGroup><Version/></PropertyGroup></Project>' > \
       Directory.Build.props
-
-    substituteInPlace tests/test_common.py \
-      --replace-fail 'def test_coreclr_properties(example_netcore: Path):' \
-        'def test_coreclr_properties(example_netcore: Path, example_netstandard: Path):'
   '';
 
   # This buildDotnetModule is used only to get nuget sources, the actual
