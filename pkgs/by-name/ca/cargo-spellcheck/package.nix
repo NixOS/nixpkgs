@@ -3,11 +3,15 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
+  oniguruma,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-spellcheck";
   version = "0.15.7";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "drahnr";
@@ -18,9 +22,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-0TsDcdO7qCVcj6eNVu/lcehwsO2IhpNzW1C9zLbXXJs=";
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
+  buildInputs = [ oniguruma ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
+    RUSTONIG_SYSTEM_LIBONIG = true;
+  };
 
   preCheck = "HOME=$(mktemp -d)";
 
