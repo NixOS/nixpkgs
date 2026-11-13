@@ -209,6 +209,23 @@
       node.pkgs = pkgsLinux;
     };
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-runImageTest
+  # or doc/build-helpers/testers.chapter.md
+  runImageTest =
+    let
+      vmTest = import ./vm-test/run.nix {
+        inherit lib;
+        hostPkgs = pkgs;
+      };
+    in
+    testModule:
+    vmTest.runTest {
+      _file = "pkgs.runImageTest implementation";
+      imports = [
+        (lib.setDefaultModuleLocation "the argument that was passed to pkgs.runImageTest" testModule)
+      ];
+    };
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
   # or doc/build-helpers/testers.chapter.md
   nixosTest =
