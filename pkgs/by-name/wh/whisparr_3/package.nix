@@ -2,6 +2,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  fetchpatch2,
   fetchYarnDeps,
   lib,
   nix-update-script,
@@ -27,6 +28,19 @@ buildDotnetModule (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
+
+  patches = [
+    # https://github.com/Whisparr/Whisparr-Eros/pull/1039
+    (fetchpatch2 {
+      name = "remove-trakt-connection.patch";
+      url = "https://github.com/Whisparr/Whisparr-Eros/commit/3881db749d6edbd14599eabab34c4dd2c594df77.patch?full_index=1";
+      includes = [
+        "src/NzbDrone.Core.Test/NotificationTests/TraktTests/*"
+        "src/NzbDrone.Core/Notifications/Trakt/*"
+      ];
+      hash = "sha256-IulnlR6zS+22d6g7yVaFv5Y4GhprOSSC9oUe3eicmPg=";
+    })
+  ];
 
   postPatch = "mv src/NuGet.config NuGet.Config";
 
