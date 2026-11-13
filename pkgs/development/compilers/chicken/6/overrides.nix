@@ -2,6 +2,7 @@
   stdenv,
   pkgs,
   lib,
+  chickenEggs,
 }:
 let
   inherit (lib) addMetaAttrs;
@@ -10,6 +11,9 @@ let
   };
   addToBuildInputs = pkg: old: {
     buildInputs = (old.buildInputs or [ ]) ++ lib.toList pkg;
+  };
+  addToPropagatedBuildInputs = pkg: old: {
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ lib.toList pkg;
   };
   addPkgConfig = old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
@@ -46,9 +50,42 @@ in
     (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv) old)
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -liconv" old);
   cairo = addToBuildInputsWithPkgConfig pkgs.cairo;
+  cmark = addToBuildInputs pkgs.cmark;
+  crypt =
+    old:
+    (addToBuildInputs pkgs.libxcrypt old)
+    # When cross-compiling, the build script cannot run its probe of which hash
+    # types crypt() supports, so they are forced to those libxcrypt is built
+    # with, which the probe would find. The DES ones have no scheme id, so the
+    # egg always provides those.
+    // lib.optionalAttrs (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) {
+      env =
+        let
+          hashTypes = {
+            "2a" = "blowfish";
+            "6" = "sha512";
+            "5" = "sha256";
+            "1" = "md5";
+          };
+        in
+        (old.env or { })
+        // {
+          FORCE_CRYPT_HASHTYPES = toString (
+            map (id: hashTypes.${id}) (lib.filter (id: hashTypes ? ${id}) pkgs.libxcrypt.enabledCryptSchemeIds)
+          );
+        };
+      # The build script also compiles the import library for the build
+      # platform, which the compiler for the target cannot do; the one for the
+      # target is built separately anyway.
+      postPatch = (old.postPatch or "") + ''
+        substituteInPlace build-crypt.scm \
+          --replace-fail '(compile-file "crypt.import.scm" #:options `("-s" "-O2"))' ""
+      '';
+    };
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
   ezxdisp = addToBuildInputsWithPkgConfig pkgs.libx11;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
+  imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
   lazy-ffi = addToBuildInputs pkgs.libffi;
   # The egg bundles the leptonica headers it needs, but not the library.
   leptonic = addToBuildInputs pkgs.leptonica;
@@ -67,6 +104,19 @@ in
     };
   openssl = addToBuildInputs pkgs.openssl;
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
+  raylib = addToBuildInputsWithPkgConfig pkgs.raylib;
+  sqlite3 = addToBuildInputs pkgs.sqlite;
+  uuid-lib = addToBuildInputs pkgs.libuuid;
+
+  # Missing dependencies in the upstream eggs.
+  # s9fes.draw-tree imports srfi-13.
+  s9fes-char-graphics = addToPropagatedBuildInputs chickenEggs.srfi-13;
+  # chicken.blob is no longer part of CHICKEN 6, but is provided by the
+  # chicken-blob egg.
+  aes = addToPropagatedBuildInputs chickenEggs.chicken-blob;
+  crypto-tools = addToPropagatedBuildInputs chickenEggs.chicken-blob;
+  lmdb-ht =
+    old: (addToBuildInputs pkgs.lmdb old) // (addToPropagatedBuildInputs chickenEggs.chicken-blob old);
 
   # fltk-config has to be on PATH: the egg runs it to get its compiler flags.
   # Those flags include -lGL and -lGLU, which fltk does not pull in itself.
@@ -116,10 +166,14 @@ in
   # ld: library not found for -lrt
   posix-shm = brokenOnDarwin;
 
-  # pdf-font.scm imports srfi-69, which is no longer a builtin unit in CHICKEN 6.
-  pdf = broken;
   # Unresolved identifiers: the egg is not CHICKEN 6 compatible.
   spiffy-uri-match = broken;
+  # chicken.compiler.support#read/source-info no longer exists.
+  begin-syntax = broken;
+  # chicken-home is no longer exported by chicken.platform.
+  chicken-doc = broken;
+  # "Cannot combine block compilation mode with emitting import libraries"
+  matchertext = broken;
 
   # feathers is implemented in Tcl and its .egg declares no source for the
   # program it builds, so chicken-install falls back to a feathers.scm that the
