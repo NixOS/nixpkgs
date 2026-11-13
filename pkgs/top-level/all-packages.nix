@@ -5776,8 +5776,6 @@ with pkgs;
 
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3 { };
 
-  tblite = callPackage ../development/libraries/science/chemistry/tblite { };
-
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation.

@@ -20653,7 +20653,7 @@ self: super: with self; {
 
   tblib = callPackage ../development/python-modules/tblib { };
 
-  tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
+  tblite = callPackage ../by-name/tb/tblite/python.nix {
     inherit (pkgs)
       tblite
       meson
