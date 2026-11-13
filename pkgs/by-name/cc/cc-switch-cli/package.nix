@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch2,
   versionCheckHook,
   stdenv,
   installShellFiles,
@@ -12,29 +11,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cc-switch-cli";
-  version = "5.10.5";
+  version = "5.11.3";
 
   src = fetchFromGitHub {
     owner = "SaladDay";
     repo = "cc-switch-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RreuW2hlJFH2ETQPwUOB/DE3CtyK8+sEqjbb5cWbR0g=";
+    hash = "sha256-xws/t6NKnIwK651uC/IzhGLW90/VZBJtaDX8QzVBFEs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  cargoHash = "sha256-OiK0PN1ILtMzl9+QndPnYa1PdFM2Y3BmE7MYJjAWnDc=";
-
-  patches = [
-    (fetchpatch2 {
-      # already merged but not yet released
-      # https://github.com/SaladDay/cc-switch-cli/pull/463
-      name = "cc-switch-cli-skip-non-utf8-filename-test-on-macos";
-      url = "https://github.com/SaladDay/cc-switch-cli/commit/1ae36f7ac66e3a837c064c8c3fb1c56449f3f7c1.patch?full_index=1";
-      relative = "src-tauri";
-      hash = "sha256-qMwAnjBsZZk8xwdlrVx/GpRW7DT+JNbONKxdK583xU4=";
-    })
-  ];
+  cargoHash = "sha256-VEpDWh8fHG+889IMVFmq2d+6TGStbqdJolD2cpfkjxc=";
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
