@@ -3148,9 +3148,9 @@
   };
 
   tera = {
-    version = "0.1.2";
+    version = "0.1.3";
     url = "github:uncenter/tree-sitter-tera";
-    hash = "sha256-zjD92no4d2aGb4HDR0sbnvV/igwsUbO19QnSnT0QtTg=";
+    hash = "sha256-uBSVxsn36GZAaHDS5z35cScdhOPMFHpCBPtdl20SiAw=";
     meta = {
       license = lib.licenses.mit;
     };
