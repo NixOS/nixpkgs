@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonAtLeast,
   pytestCheckHook,
   dotnetCorePackages,
   setuptools,
@@ -49,8 +48,6 @@ buildPythonPackage {
     src
     postPatch
     ;
-
-  disabled = pythonAtLeast "3.14";
 
   pyproject = true;
 
