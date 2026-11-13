@@ -1,6 +1,11 @@
 {
   _7zz,
-}:
-_7zz.override {
-  enableUnfree = true;
-}
+  ...
+}@args:
+
+_7zz.override (
+  {
+    enableUnfree = true;
+  }
+  // removeAttrs args [ "_7zz" ]
+)
