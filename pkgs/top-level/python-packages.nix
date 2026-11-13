@@ -14633,6 +14633,8 @@ self: super: with self; {
 
   py7zr = callPackage ../development/python-modules/py7zr { };
 
+  pyaaf2 = callPackage ../development/python-modules/pyaaf2 { };
+
   pyabpoa = toPythonModule (
     pkgs.abpoa.override {
       enablePython = true;
