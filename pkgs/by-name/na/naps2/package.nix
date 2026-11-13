@@ -27,6 +27,7 @@ buildDotnetModule rec {
   patches = [
     ./01-donate-button.patch
     ./02-button-dpi.patch
+    ./03-service-exec-path.patch
   ];
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
