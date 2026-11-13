@@ -14275,6 +14275,11 @@
     githubId = 8580434;
     name = "Jonny Bolton";
   };
+  jonnydeates = {
+    name = "Jon Deates";
+    github = "JonnyDeates";
+    githubId = 48420377;
+  };
   jonochang = {
     name = "Jono Chang";
     email = "j.g.chang@gmail.com";
