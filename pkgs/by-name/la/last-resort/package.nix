@@ -1,7 +1,9 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  fetchFromGitHub,
+  python3,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -10,22 +12,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
-  enableParallelBuilding = false; # nothing to build
+  enableParallelBuilding = false; # nothing to parallelize
   doCheck = false; # no tests to run
 
-  src = fetchurl {
-    url = "https://github.com/unicode-org/last-resort-font/releases/download/${finalAttrs.version}/LastResortHE-Regular.ttf";
-    hash = "sha256-y3wiYsuGoz5736vQpRdG5ziw3RCSQSbEUwxBTF/H5LY=";
+  src = fetchFromGitHub {
+    owner = "unicode-org";
+    repo = "last-resort-font";
+    tag = finalAttrs.version;
+    hash = "sha256-kbuXVQnfuenjsMnxdOdgo20B/Dw7vV8+jI76FqTxgtc=";
   };
 
-  dontUnpack = true;
+  patches = [
+    ./bash.patch
+  ];
 
-  installPhase = ''
-    runHook preInstall
+  postPatch = ''
+    patchShebangs --build ./build.sh
+  '';
 
-    install -D -m 0644 $src $out/share/fonts/truetype/LastResortHE-Regular.ttf
+  nativeBuildInputs = [
+    (python3.withPackages (
+      pypkgs: with pypkgs; [
+        afdko
+      ]
+    ))
+    installFonts
+  ];
 
-    runHook postInstall
+  buildPhase = ''
+    runHook preBuild
+    ./build.sh
+    runHook postBuild
   '';
 
   meta = {
