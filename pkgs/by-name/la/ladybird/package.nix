@@ -226,6 +226,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Ladybird requires icu 78, but without this flag the default icu
     # from other dependencies gets picked up instead.
     (lib.cmakeFeature "ICU_ROOT" (toString icu78.dev))
+    # Upstream defaults to -Ctarget-cpu=native for Rust, which cc-wrapper
+    # cannot strip; target a portable baseline instead.
+    (lib.cmakeBool "ENABLE_CI_BASELINE_CPU" true)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"

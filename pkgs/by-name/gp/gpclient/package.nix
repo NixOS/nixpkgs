@@ -46,6 +46,7 @@ let
     [
       coreutils
       gawk
+      openssl
       unixtools.ps
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -62,17 +63,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpclient";
-  version = "3.0.5";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QQPi7ex/VwVhyBrgRaJugJog7x3WbatDgD7gdNkmxr0=";
+    hash = "sha256-nQl+zXsO+8hxZ+RLPA+hxEX7FhM2GN22Qb1sTFxvPKk=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-bMLbvofHnGOcydcLJVZJt54sAXLPayNu8hl2zETx8uI=";
+  cargoHash = "sha256-CqcGbfsIMSnCYUwvgC+jXDINJr9zaLHgc8VsOmHT1go=";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--use-github-releases" ];
@@ -126,6 +127,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=connect::args::tests::stdin_host_id_sets_profile_runtime_identity_seed"
     "--skip=connect::flow_tests::"
     "--skip=session::tests::builds_session_context_from_os_profile"
+
+    # Automatically allocated build UIDs have no user database entry on Darwin.
+    # https://github.com/yuezk/GlobalProtect-openconnect/pull/696
+    "--skip=connect::gateway::tests::explicit_hip_user_resolves_to_the_selected_account"
   ];
 
   patches = [

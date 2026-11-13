@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.5.7";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "zstd";
     tag = "v${finalAttrs.version}";
     hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./playtests-darwin.patch
 
     # Pull missing manpages update:
-    #   https://github.com/facebook/zstd/pull/4302
+    #   https://github.com/meta/zstd/pull/4302
     # TODO: remove with 1.5.8 release
     ./man-fix.patch
   ];
@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
       property shared by most LZ compression algorithms, such as zlib.
     '';
     homepage = "https://facebook.github.io/zstd/";
-    changelog = "https://github.com/facebook/zstd/blob/v${finalAttrs.version}/CHANGELOG";
+    changelog = "https://github.com/meta/zstd/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3; # Or, at your opinion, GPL-2.0-only.
     mainProgram = "zstd";
     platforms = lib.platforms.all;

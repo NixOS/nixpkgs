@@ -10,6 +10,7 @@
   bun,
   writableTmpDirAsHomeHook,
 
+  aws-lc,
   glib,
   glib-networking,
   gst_all_1,
@@ -93,7 +94,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    aws-lc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     webkitgtk_4_1

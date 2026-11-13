@@ -3,7 +3,10 @@
   fetchFromGitHub,
   rustPlatform,
   cacert,
+  aws-lc,
+  zstd,
   cmake,
+  pkg-config,
   gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -23,7 +26,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vYbbnEpVWG6kjnycl1kk3D+lXuzTzOKuilA0ImBHYAI=";
 
-  nativeBuildInputs = [ cmake ]; # libz-ng-sys
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]; # libz-ng-sys
 
   nativeCheckInputs = [
     gitMinimal

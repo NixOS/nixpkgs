@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   pkg-config,
   meson,
   ninja,
@@ -9,15 +9,18 @@
   perl,
   libxslt,
   gettext,
-  writeScript,
+  gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkeyboard-config";
-  version = "2.48";
+  version = "2.49";
 
-  src = fetchurl {
-    url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-${finalAttrs.version}.tar.xz";
-    hash = "sha256-t3BBMk8BCfdxYe5DdD/gS6pIWGavhGDTHkdq0/dkj9U=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "xkeyboard-config";
+    repo = "xkeyboard-config";
+    tag = "xkeyboard-config-${finalAttrs.version}";
+    hash = "sha256-55CigEgcPNc3YQlwFVKv+fV5W9JYwnsi9ZPgs13Z14w=";
   };
 
   strictDeps = true;
@@ -48,17 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts
-
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
-        --url https://xorg.freedesktop.org/releases/individual/data/xkeyboard-config/ \
-        | sort -V | tail -n1)"
-
-      update-source-version ${finalAttrs.pname} "$version"
-    '';
+    updateScript = gitUpdater { };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Provides a consistent, well-structured, database of keyboard configuration data";

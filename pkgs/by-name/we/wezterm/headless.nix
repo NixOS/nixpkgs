@@ -1,8 +1,10 @@
 {
+  libgit2,
   openssl,
   pkg-config,
   rustPlatform,
   wezterm,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage {
@@ -17,7 +19,11 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+    zstd
+  ];
 
   cargoBuildFlags = [
     "--package"

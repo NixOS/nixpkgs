@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "9.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromSourcehut {
     owner = "~olly";
     repo = "yoyo";

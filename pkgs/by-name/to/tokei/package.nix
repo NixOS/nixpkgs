@@ -26,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
+  dontCargoUseSystemLibs = true;
+
   # enable all output formats
   buildFeatures = [ "all" ];
 

@@ -24,7 +24,7 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     pixman
   ];
 

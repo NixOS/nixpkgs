@@ -17,16 +17,16 @@ in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "6.3.1";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-CkSV0zKWz60qGrYpdhzyBU5CqjrvQba1B9vQZtyuEAw=";
+    hash = "sha256-mrV0rQWgJNGEBw0FTFcfMrgh96FHo1WnLB8l3UGIoH8=";
   };
 
-  npmDepsHash = "sha256-wZTKNb2nIRlMDkIt4lQHCf98lk7MhblKSA0gNjvJDO8=";
+  npmDepsHash = "sha256-2Uv0VMMkTVZRMyTvbk0Y6XpeHYddx0Ypt6rgaiwbLL4=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 

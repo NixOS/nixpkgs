@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  strictDeps = true;
+
   # with trivialautovarinit enabled can produce an empty .pc file
   hardeningDisable = [ "trivialautovarinit" ];
 
@@ -73,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.optionalString withTools "diff -u <(src/cmd/fpcalc -plain ${exampleAudio} | sha256sum | cut -c-64) <(echo '${expectedHash}')"}
       runHook postCheck
     '';
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/acoustid/chromaprint/releases/tag/v${finalAttrs.version}";

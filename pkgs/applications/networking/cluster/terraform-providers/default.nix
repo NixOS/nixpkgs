@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  buildGoLatestModule,
+  buildGo126Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -108,6 +108,9 @@ let
     dmacvicar_libvirt = automated-providers.dmacvicar_libvirt.overrideAttrs (_: {
       propagatedBuildInputs = [ cdrtools ];
     });
+    hashicorp_helm = automated-providers.hashicorp_helm.override {
+      mkProviderGoModule = buildGo126Module;
+    };
     aminueza_minio = automated-providers.aminueza_minio.override { spdx = "AGPL-3.0-only"; };
     # proxyVendor is necessary because enabling CGO causes `go mod vendor` to include
     # platform-specific files leading to vendorHash varying across platforms.
@@ -118,11 +121,6 @@ let
             CGO_ENABLED = "1";
           };
         });
-    # From version 1.0.2, `go.mod` requires Go 1.27 (version 1.1.2 requires Go 1.27.1).
-    # Remove this override when `buildGoModule` uses Go 1.27.1 or newer.
-    charpand_openprovider = automated-providers.charpand_openprovider.override {
-      mkProviderGoModule = buildGoLatestModule;
-    };
     # The `main` package of the provider is not at the root of the repository.
     # The repository also has a CLI, which is not built here.
     tasansga_lldap = automated-providers.tasansga_lldap.overrideAttrs (_: {

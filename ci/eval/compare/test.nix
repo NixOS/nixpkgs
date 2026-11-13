@@ -227,6 +227,91 @@ let
         ];
       };
     };
+    testDirectoryModuleMaintainers = {
+      expr = fun {
+        pkgs = mockPkgs {
+          modules = [ "a" ];
+        };
+        changedFiles = [ "a/default.nix" ];
+        affectedAttrPaths = [ ];
+      };
+      expected = {
+        packages = [ ];
+        teams."100" = [
+          { file = "a/default.nix"; }
+        ];
+        users."0" = [
+          { file = "a/default.nix"; }
+        ];
+      };
+    };
+    testDirectoryModuleMaintainersNonGithub = {
+      expr = fun {
+        pkgs = mockPkgs {
+          modules = [ "a" ];
+          githubTeams = false;
+        };
+        changedFiles = [ "a/default.nix" ];
+        affectedAttrPaths = [ ];
+      };
+      expected = {
+        packages = [ ];
+        teams = { };
+        users."100" = [
+          { file = "a/default.nix"; }
+        ];
+        users."0" = [
+          { file = "a/default.nix"; }
+        ];
+      };
+    };
+    testModuleMaintainersBothPaths = {
+      expr = fun {
+        pkgs = mockPkgs {
+          modules = [
+            "a"
+            "a/default.nix"
+          ];
+        };
+        changedFiles = [ "a/default.nix" ];
+        affectedAttrPaths = [ ];
+      };
+      expected = {
+        packages = [ ];
+        teams."100" = [
+          { file = "a/default.nix"; }
+        ];
+        teams."101" = [
+          { file = "a/default.nix"; }
+        ];
+        users."0" = [
+          { file = "a/default.nix"; }
+        ];
+        users."1" = [
+          { file = "a/default.nix"; }
+        ];
+      };
+    };
+    testDirectoryModuleUnrelatedFiles = {
+      expr = fun {
+        pkgs = mockPkgs {
+          modules = [ "a" ];
+        };
+        changedFiles = [
+          "a/doc.md"
+          "a/helper.nix"
+          "a/sub/default.nix"
+          "ab/default.nix"
+          "a/default.nix.bak"
+        ];
+        affectedAttrPaths = [ ];
+      };
+      expected = {
+        packages = [ ];
+        teams = { };
+        users = { };
+      };
+    };
     testGroupAttrdiffByPlatform = {
       expr = utils.groupAttrdiffByPlatform {
         added = [

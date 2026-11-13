@@ -6,6 +6,7 @@
   pkg-config,
   protobuf,
   rustPlatform,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     alsa-lib
     openssl
+    sqlite
   ];
 
   meta = {

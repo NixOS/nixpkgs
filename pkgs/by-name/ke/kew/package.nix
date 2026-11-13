@@ -106,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       demine
       ddogfoodd
-      matteopacini
     ];
     mainProgram = "kew";
   };

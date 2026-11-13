@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = lib.optionals enablePython [
     pythonPackages.scipy
-    pythonPackages.pytest-cov
+    pythonPackages.pytest-cov-stub
   ];
 
   preConfigure = ''

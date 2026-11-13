@@ -2,7 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
   rocksdb_9_10,
+  zstd,
 }:
 
 let
@@ -25,7 +27,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # needed for librocksdb-sys
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [ zstd ];
 
   env = {
     # link rocksdb dynamically

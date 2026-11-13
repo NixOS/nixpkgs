@@ -19,8 +19,8 @@ buildPythonPackage rec {
   disabled = isPyPy || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
-    owner = "aleaxit";
-    repo = "gmpy";
+    owner = "gmpy2";
+    repo = "gmpy2";
     tag = "v${version}";
     hash = "sha256-joeHec/d82sovfASCU3nlNL6SaThnS/XYPqujiZ9h8s=";
   };
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "GMP or MPIR interface to Python 2.4+ and 3.x";
-    homepage = "https://github.com/aleaxit/gmpy/";
+    homepage = "https://github.com/gmpy2/gmpy2/";
     license = lib.licenses.lgpl21Plus;
   };
 }

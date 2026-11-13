@@ -33,7 +33,7 @@
   cddaSupport ? !stdenv.hostPlatform.isDarwin,
   cdparanoia,
   dvdnavSupport ? !stdenv.hostPlatform.isDarwin,
-  libdvdnav_4_2_1,
+  libdvdnav,
   dvdreadSupport ? config.mplayer.dvdreadSupport or true,
   libdvdread,
   bluraySupport ? config.mplayer.bluraySupport or true,
@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional theoraSupport libtheora
   ++ lib.optional cacaSupport libcaca
   ++ lib.optional xineramaSupport libxinerama
-  ++ lib.optional dvdnavSupport libdvdnav_4_2_1
+  ++ lib.optional dvdnavSupport libdvdnav
   ++ lib.optional dvdreadSupport libdvdread
   ++ lib.optional bluraySupport libbluray
   ++ lib.optional cddaSupport cdparanoia

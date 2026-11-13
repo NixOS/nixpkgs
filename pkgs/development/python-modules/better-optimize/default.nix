@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "better-optimize";
   version = "0.5.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jessegrabowski";

@@ -17,21 +17,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "adriconf";
-  version = "2.7.3";
+  version = "2.7.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "adriconf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MRZYAinBL4fzj/Nhhn22sJgupVMpoeeyOYYWTr+fK+E=";
+    hash = "sha256-6YKoN4EuQAZ+RQPuFuSAFYY+rlf1ogtIs3XkbvwlNKw=";
   };
-
-  # fix build with c23
-  #    error: 'uint16_t' does not name a type
-  postPatch = ''
-    sed -i '1i #include <cstdint>' adriconf/ValueObject/GPUInfo.h
-  '';
 
   nativeBuildInputs = [
     cmake

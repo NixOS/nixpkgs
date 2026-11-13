@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  libgit2,
   stdenv,
   rustPlatform,
   gtk4,
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     gtk4
+    libgit2
     pango
   ];
 

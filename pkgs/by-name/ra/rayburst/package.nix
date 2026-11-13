@@ -16,6 +16,7 @@
   openssl,
   webkitgtk_4_1,
   libayatana-appindicator,
+  sqlite,
   actool,
   wrapGAppsHook4,
   desktop-file-utils,
@@ -69,7 +70,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # we don't want to wrap aria2c
   dontWrapGApps = true;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     openssl
     webkitgtk_4_1

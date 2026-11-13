@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "asottile";
-    repo = "reorder_python_imports";
+    repo = "reorder-python-imports";
     tag = "v${version}";
     hash = "sha256-LH4h9c9rF8zShgOJYnWJu4n8Uj70oUDHHtFv9FzV82o=";
   };
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tool for automatically reordering python imports";
-    homepage = "https://github.com/asottile/reorder_python_imports";
+    homepage = "https://github.com/asottile/reorder-python-imports";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
     mainProgram = "reorder-python-imports";

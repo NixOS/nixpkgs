@@ -1,4 +1,5 @@
 {
+  aws-lc,
   fetchCrate,
   installShellFiles,
   lib,
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     pkg-config
   ];
+
+  buildInputs = [ aws-lc ];
 
   cargoHash = "sha256-Yl7IM3zVZyqznXePPWZFrObky2vtZCULXaBK5ojKga4=";
 

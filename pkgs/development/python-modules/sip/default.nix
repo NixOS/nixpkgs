@@ -34,6 +34,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   patches = [
+    ./deterministic-wheel-order.patch
+
     # Backports pyqt5 compile failure fix from upstream
     # https://github.com/Python-SIP/sip/issues/114
     (fetchpatch {

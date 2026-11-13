@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "monty";
   version = "2026.10.21";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "materialyzeai";

@@ -1,0 +1,99 @@
+From 25fdbd0ca103ecc6cc750832ca064779aa9717cd Mon Sep 17 00:00:00 2001
+From: BernatBC <bernat.borrasc@gmail.com>
+Date: Thu, 10 Sep 2026 17:01:54 +0200
+Subject: [PATCH 1/2] Add support for Gnome 51
+
+---
+ metadata.json | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/metadata.json b/metadata.json
+index 84a0c5ed..ebd743c7 100644
+--- a/metadata.json
++++ b/metadata.json
+@@ -10,6 +10,7 @@
+         "47",
+         "48",
+         "49",
+-        "50"
++        "50",
++	"51"
+     ]
+ }
+
+From 31f04c32d2fbf92afcd3dd5194ac16755008bae2 Mon Sep 17 00:00:00 2001
+From: BernatBC <bernat.borrasc@gmail.com>
+Date: Mon, 5 Oct 2026 19:18:00 +0200
+Subject: [PATCH 2/2] Apply changes for gnome 51.0 release version
+
+---
+ metadata.json         |  2 +-
+ src/panel_settings.ts |  2 +-
+ src/search.ts         | 12 ++++++++++--
+ 3 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/metadata.json b/metadata.json
+index ebd743c7..b60c521b 100644
+--- a/metadata.json
++++ b/metadata.json
+@@ -11,6 +11,6 @@
+         "48",
+         "49",
+         "50",
+-	"51"
++        "51"
+     ]
+ }
+diff --git a/src/panel_settings.ts b/src/panel_settings.ts
+index b72c6f3f..446ae661 100644
+--- a/src/panel_settings.ts
++++ b/src/panel_settings.ts
+@@ -134,7 +134,7 @@ function floating_window_exceptions(ext: Ext, menu: any): any {
+ 
+     let icon = new St.Icon({ icon_name: 'go-next-symbolic', icon_size: 16 });
+ 
+-    let widget = new St.BoxLayout({ vertical: false });
++    let widget = new St.BoxLayout();
+     widget.add_child(label);
+     widget.add_child(icon);
+     widget.set_x_expand(true);
+diff --git a/src/search.ts b/src/search.ts
+index 09460ba4..52a4e472 100644
+--- a/src/search.ts
++++ b/src/search.ts
+@@ -19,6 +19,14 @@ import { Overview } from 'resource:///org/gnome/shell/ui/overview.js';
+ 
+ let overview_toggle: any = null;
+ 
++function set_vertical_layout(layout: any): void {
++    if (typeof layout.set_orientation === 'function') {
++        layout.set_orientation(Clutter.Orientation.VERTICAL);
++    } else {
++        layout.set_vertical(true);
++    }
++}
++
+ export class Search {
+     dialog: Shell.ModalDialog = new ModalDialog({
+         styleClass: 'pop-shell-search modal-dialog',
+@@ -207,8 +215,8 @@ export class Search {
+ 
+         this.list = new St.BoxLayout({
+             styleClass: 'pop-shell-search-list',
+-            vertical: true,
+         });
++        set_vertical_layout(this.list);
+ 
+         const scroller = new St.ScrollView();
+         scroller.add_child(this.list);
+@@ -435,9 +443,9 @@ export class SearchOption {
+ 
+         const info_box = new St.BoxLayout({
+             y_align: Clutter.ActorAlign.CENTER,
+-            vertical: true,
+             x_expand: true,
+         });
++        set_vertical_layout(info_box);
+         info_box.add_child(label);
+ 
+         if (description) {

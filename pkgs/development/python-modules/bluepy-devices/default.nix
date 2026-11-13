@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "bluepy_devices";
     inherit (finalAttrs) version;

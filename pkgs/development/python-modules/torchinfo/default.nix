@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.8.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "TylerYep";
     repo = "torchinfo";

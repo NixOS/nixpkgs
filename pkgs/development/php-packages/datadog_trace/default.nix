@@ -12,6 +12,8 @@
   pcre2,
   valgrind,
   libiconv,
+  pkg-config,
+  zstd,
 }:
 
 buildPecl rec {
@@ -40,6 +42,7 @@ buildPecl rec {
   nativeBuildInputs = [
     cargo
     cmake
+    pkg-config
     rustc
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
@@ -48,6 +51,7 @@ buildPecl rec {
   buildInputs = [
     curl
     pcre2
+    zstd
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     valgrind

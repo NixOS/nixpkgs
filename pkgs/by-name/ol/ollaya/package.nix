@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   cacert,
+  pkg-config,
+  aws-lc,
   onnxruntime,
   llama-cpp,
   versionCheckHook,
@@ -22,7 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-6NMXfwsWg3mo8TH+9fgEhgKbu22/3QbaGjiMBQYZlxE=";
 
-  buildInputs = [ onnxruntime ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    onnxruntime
+  ];
 
   __structuredAttrs = true;
 

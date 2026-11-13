@@ -6,6 +6,8 @@
   gitMinimal,
   gh,
   makeWrapper,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
 }:
 
@@ -22,7 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-epAMROmX0Kgp5SEDCTLy55bF7ArWzhgq8Phhk/2PINY=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [ oniguruma ];
 
   nativeCheckInputs = [
     gitMinimal

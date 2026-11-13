@@ -180,40 +180,26 @@ stdenv.mkDerivation (
       moveToOutput "lib/libclang-cpp.*" "$lib"
       mkdir -p $python/bin $python/share/clang/
     ''
-    + (
-      # This conditional will be dropped on staging. Doing this to fix ROCm on master without rebuilding Darwin.
-      if lib.hasSuffix "rocm" finalAttrs.version then
-        ''
-          declare -a pythonScripts=(
-            analyze-build
-            git-clang-format
-            hmaptool
-            intercept-build
-            run-clang-tidy
-            scan-build-py
-            scan-view
-            set-xcode-analyzer
-          )
-          for pythonScript in "''${pythonScripts[@]}"; do
-            if [ -e $out/bin/$pythonScript ]; then
-              mv $out/bin/$pythonScript $python/bin
-            fi
-          done
-          mv $out/share/clang/*.py $python/share/clang
-          # Delete the Perl implementation of scan-build. It doesn’t even work when libexec is in a separate output.
-          rm -rf $out/bin/scan-build $lib/libexec
-        ''
-      else
-        ''
-          mv $out/bin/{analyze-build,git-clang-format,hmaptool,intercept-build,run-clang-tidy,scan-build-py,scan-view} $python/bin
-          if [ -e $out/bin/set-xcode-analyzer ]; then
-            mv $out/bin/set-xcode-analyzer $python/bin
-          fi
-          mv $out/share/clang/*.py $python/share/clang
-          # Delete the Perl implementation of scan-build. It doesn’t even work when libexec is in a separate output.
-          rm -rf $out/bin/scan-build $lib/libexec
-        ''
-    )
+    + ''
+      declare -a pythonScripts=(
+        analyze-build
+        git-clang-format
+        hmaptool
+        intercept-build
+        run-clang-tidy
+        scan-build-py
+        scan-view
+        set-xcode-analyzer
+      )
+      for pythonScript in "''${pythonScripts[@]}"; do
+        if [ -e $out/bin/$pythonScript ]; then
+          mv $out/bin/$pythonScript $python/bin
+        fi
+      done
+      mv $out/share/clang/*.py $python/share/clang
+      # Delete the Perl implementation of scan-build. It doesn’t even work when libexec is in a separate output.
+      rm -rf $out/bin/scan-build $lib/libexec
+    ''
     + lib.optionalString (lib.versionOlder release_version "22") ''
       rm $out/bin/c-index-test
     ''

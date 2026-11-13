@@ -10,13 +10,13 @@
 
 buildGo127Module (finalAttrs: {
   pname = "kubescape";
-  version = "4.0.19";
+  version = "4.0.20";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/g+Wof8KHc9l9enBpZCfrX6cgQzaFXIenbcZLTEeW28=";
+    hash = "sha256-M0Ye2qICyduA3y0bfUyL70+1A3qYdkCdWCwQK4RQgTU=";
     fetchSubmodules = true;
   };
 

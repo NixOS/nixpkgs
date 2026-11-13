@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fica";
   version = "0.4.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chrispyles";

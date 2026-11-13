@@ -23,7 +23,6 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "plover";
   version = "4.0.2";

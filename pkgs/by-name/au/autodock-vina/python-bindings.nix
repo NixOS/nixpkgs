@@ -24,7 +24,6 @@ buildPythonPackage {
     src
     ;
   pyproject = true;
-  __structuredAttrs = true;
 
   sourceRoot = "${autodock-vina.src.name}/build/python";
 

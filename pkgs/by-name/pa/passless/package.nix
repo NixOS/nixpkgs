@@ -1,5 +1,6 @@
 {
   lib,
+  libgit2,
   stdenv,
   rustPlatform,
   fetchFromGitHub,
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     udev
   ];
 

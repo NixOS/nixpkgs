@@ -7,6 +7,7 @@
   nixosTests,
   pkg-config,
   openssl,
+  zstd,
   libiconv,
   dbBackend ? "sqlite_system",
   libmysqlclient,
@@ -37,13 +38,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ]
   ++ lib.optional (dbBackend == "mysql") libmysqlclient
   ++ lib.optional (dbBackend == "postgresql") libpq
-  ++ lib.optional (dbBackend == "sqlite_system") sqlite;
+  ++ lib.optional (dbBackend == "sqlite" || dbBackend == "sqlite_system") sqlite;
 
   buildFeatures = dbBackend;
 

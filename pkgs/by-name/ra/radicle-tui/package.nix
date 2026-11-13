@@ -76,5 +76,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     teams = [ lib.teams.radicle ];
     mainProgram = "rad-tui";
+    problems.broken.message = "src is not fetchable due to missing canonical references for release tags, the package depends on an outdated version of libgit2, and upstream is effectively not being maintained at the moment.";
   };
 })

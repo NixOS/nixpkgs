@@ -48,8 +48,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Without a GPU, logging a CUDA error dereferences uninitialized strings and crashes instead of
-    # falling back to the CPU.
-    # https://github.com/cdcseacave/openMVS/pull/1316
+    # falling back to the CPU. Fixed upstream after 2.4.0 by
+    # https://github.com/cdcseacave/openMVS/commit/e0ef7ee96f3b4e69a265adf48a2a94db8ce47c2b
+    # (https://github.com/cdcseacave/openMVS/pull/1324), which does not apply to 2.4.0.
+    # Remove on the next release.
     ./report-cuda-error-uninit.patch
   ];
 

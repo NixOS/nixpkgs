@@ -6,22 +6,22 @@
   autoconf,
   automake,
   libtool,
-  fftw,
-  fftwSinglePrec,
+  fftwFloat,
   alsa-lib,
   libsndfile,
   libpulseaudio,
+  autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.24-1";
   pname = "minimodem";
 
   src = fetchFromGitHub {
     owner = "kamalmostafa";
     repo = "minimodem";
-    rev = "${pname}-${version}";
-    sha256 = "1b5xy36fjcp7vkp115dpx4mlmqg2fc7xvxdy648fb8im953bw7ql";
+    tag = "minimodem-${finalAttrs.version}";
+    hash = "sha256-FB++Rkk1ouUQMb713Q9z4uFKK+m3lRDu3Ocy6czwvaw=";
   };
 
   nativeBuildInputs = [
@@ -29,21 +29,14 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
+    autoreconfHook
   ];
   buildInputs = [
-    fftw
-    fftwSinglePrec
+    fftwFloat
     alsa-lib
     libsndfile
     libpulseaudio
   ];
-
-  preConfigure = ''
-    aclocal \
-    && autoheader \
-    && automake --gnu --add-missing \
-    && autoconf
-  '';
 
   meta = {
     description = "General-purpose software audio FSK modem";
@@ -56,8 +49,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.whence.com/minimodem/";
     license = lib.licenses.gpl3Plus;
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "minimodem";
   };
-}
+})

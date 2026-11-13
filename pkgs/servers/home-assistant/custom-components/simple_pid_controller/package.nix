@@ -12,13 +12,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "bvweerd";
   domain = "simple_pid_controller";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "bvweerd";
     repo = "simple_pid_controller";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sQyQbcPS8sf5qKURJMk8cOpPKPmfXEWlCT6PTHt+ODM=";
+    hash = "sha256-j3rICbluEPuKrpsUpaQV90o4kHwRjQR4bSojdLhWF30=";
   };
 
   dependencies = [ simple-pid ];

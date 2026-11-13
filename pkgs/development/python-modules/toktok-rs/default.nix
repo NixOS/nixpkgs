@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "toktok-rs";
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vectorize-io";

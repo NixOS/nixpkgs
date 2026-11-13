@@ -5,6 +5,7 @@
   pkg-config,
   installShellFiles,
   openssl,
+  oniguruma,
   cachix,
   versionCheckHook,
   nix-update-script,
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    oniguruma
     openssl
   ];
 

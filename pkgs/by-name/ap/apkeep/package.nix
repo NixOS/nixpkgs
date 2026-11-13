@@ -1,9 +1,11 @@
 {
   lib,
+  aws-lc,
   fetchCrate,
   rustPlatform,
   openssl,
   pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,7 +28,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    zstd
   ];
 
   meta = {

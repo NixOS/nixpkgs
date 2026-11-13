@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.12";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "JAMdotTech";
     repo = "py-scale-codec";

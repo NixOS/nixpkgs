@@ -242,7 +242,7 @@ class TerminalLogger(AbstractLogger):
         elapsed = time.monotonic() - self._start_time
         if "machine" in attributes:
             message = f"{attributes['machine']}: {message}"
-        return f"[{elapsed:.2f}s] {message}"
+        return Style.DIM + f"[{elapsed:.2f}s]" + Style.RESET_ALL + f" {message}"  # ty: ignore[unsupported-operator]
 
     @staticmethod
     def _eprint(*args: object, **kwargs: Any) -> None:
@@ -322,10 +322,27 @@ class XMLLogger(AbstractLogger):
         self.xml.endDocument()
         self.logfile_handle.close()
 
-    def sanitise(self, message: str) -> str:
+    @staticmethod
+    def sanitise(message: str) -> str:
+        r"""Remove the characters of Unicode's "Other" categories, such as
+        control characters, from serial output before it is written to XML.
+
+        >>> XMLLogger.sanitise("booting\x00...\x07")
+        'booting...'
+        >>> XMLLogger.sanitise("Grüße")
+        'Grüße'
+        """
         return "".join(ch for ch in message if unicodedata.category(ch)[0] != "C")
 
-    def maybe_prefix(self, message: str, attributes: dict[str, str]) -> str:
+    @staticmethod
+    def maybe_prefix(message: str, attributes: dict[str, str]) -> str:
+        """Prefix the message with the name of the machine, if there is one.
+
+        >>> XMLLogger.maybe_prefix("booting", {"machine": "server"})
+        'server: booting'
+        >>> XMLLogger.maybe_prefix("booting", {})
+        'booting'
+        """
         if "machine" in attributes:
             return f"{attributes['machine']}: {message}"
         return message

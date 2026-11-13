@@ -5,6 +5,8 @@
   cacert,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asphalt";
@@ -20,6 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-R4pNHy/4BmmbKzuYWM31Iih626AL46lLe1BY3d57FZI=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   # reqwest/rustls refuses to build a client without a CA bundle.
   nativeCheckInputs = [ cacert ];

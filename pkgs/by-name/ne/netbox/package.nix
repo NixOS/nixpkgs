@@ -17,8 +17,6 @@ let
   extraBuildInputs = plugins py.pkgs;
 in
 py.pkgs.buildPythonApplication (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox";
   version = "4.7.3";
   pyproject = false;
@@ -85,7 +83,6 @@ py.pkgs.buildPythonApplication (finalAttrs: {
       ]
       ++ psycopg.optional-dependencies.c
       ++ psycopg.optional-dependencies.pool
-      ++ social-auth-core.optional-dependencies.openidconnect
     )
     ++ extraBuildInputs;
 

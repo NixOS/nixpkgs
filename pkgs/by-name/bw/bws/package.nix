@@ -6,6 +6,7 @@
   pkg-config,
   oniguruma,
   openssl,
+  sqlite,
   stdenv,
   python3,
   perl,
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     oniguruma
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl

@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.5.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "bosondata";
     repo = "beanstalkc";

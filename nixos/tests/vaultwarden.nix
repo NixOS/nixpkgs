@@ -160,6 +160,12 @@ let
 
                   environment.systemPackages = [ pkgs.sqlite ];
                 };
+
+                sqlite_system = {
+                  services.vaultwarden.backupDir = "/srv/backups/vaultwarden";
+
+                  environment.systemPackages = [ pkgs.sqlite ];
+                };
               }
               .${backend}
 
@@ -257,8 +263,9 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
   mysql = { };
   postgresql = { };
   sqlite = { };
+  sqlite_system = { };
   sqlite-backup = {
-    backend = "sqlite";
+    backend = "sqlite_system";
     withClient = false;
 
     testScript = ''

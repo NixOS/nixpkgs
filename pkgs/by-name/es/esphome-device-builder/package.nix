@@ -34,17 +34,15 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "esphome-device-builder";
-  version = "1.26.0";
+  version = "1.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "device-builder";
     tag = finalAttrs.version;
-    hash = "sha256-S1y0IXrCQV/EK9gQ7UdSKfdKJZK6UY6q7NdFEcy7yao=";
+    hash = "sha256-ff5jzHYOnWgwSeBOLIL9LNvuef2Tib+Mp0dOtHiF9qo=";
   };
-
-  __structuredAttrs = true;
 
   nativeBuildInputs = with pythonPackages; [
     pyprojectVersionPatchHook

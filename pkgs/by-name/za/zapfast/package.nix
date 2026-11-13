@@ -5,11 +5,12 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  perl,
   makeWrapper,
   icnsify,
   nix-update-script,
   rcodesign,
+  openssl,
+  sqlcipher,
   alsa-lib,
   pipewire,
   libGL,
@@ -52,7 +53,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    perl
     rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ]
@@ -61,14 +61,17 @@ rustPlatform.buildRustPackage rec {
     icnsify
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      pipewire
-      libGL
-      libx11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
+  buildInputs = [
+    openssl
+    sqlcipher
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    pipewire
+    libGL
+    libx11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   env.ZAPFAST_TEST_RTL_FONT = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
 

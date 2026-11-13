@@ -5,36 +5,37 @@
   cmake,
   cgal,
   boost,
+  eigen,
   mpfr,
+  nlohmann_json,
   gmp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfcgal";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitLab {
     owner = "sfcgal";
     repo = "SFCGAL";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9caucSIEAjzc4cWShuwbBC+BLs5a3e3y58aT4aLzN5E=";
+    hash = "sha256-VwbcAdSORUUbkYoH5H1wkKMOqBlUMltMVYEoNtPH0p4=";
   };
-
-  # boost 1.89 removed the boost_system stub library
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      'set( SFCGAL_Boost_COMPONENTS thread system serialization )' \
-      'set( SFCGAL_Boost_COMPONENTS thread serialization )'
-  '';
 
   buildInputs = [
     cgal
     boost
+    eigen
     mpfr
+    nlohmann_json
     gmp
   ];
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "SFCGAL_WITH_EIGEN" true)
+  ];
 
   meta = {
     description = "C++ wrapper library around CGAL with the aim of supporting ISO 191007:2013 and OGC Simple Features for 3D operations";

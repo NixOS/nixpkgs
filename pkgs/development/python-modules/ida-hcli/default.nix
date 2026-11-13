@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ida-hcli";
-  version = "0.27.3";
+  version = "0.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HexRaysSA";
     repo = "ida-hcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6K7G8pOYPRpkdvSdoWbDl8TDJnWl3sPNdxmwhBcC+rc=";
+    hash = "sha256-k8leKdGUXXCqcp7NrzYTgy3Gzh4uAkFyP6KD+bEWiIM=";
   };
 
   postPatch = ''

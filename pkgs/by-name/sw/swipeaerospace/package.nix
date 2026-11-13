@@ -4,6 +4,7 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  open-apple-macros,
   stdenv,
   swift,
 }:
@@ -119,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     swiftc \
       -I${lib.getDev blueSocket}/lib/swift/${stdenv.hostPlatform.swift.platform} \
+      -external-plugin-path ${open-apple-macros}/lib/swift/host/plugins#${open-apple-macros}/libexec/swift/plugins/OpenAppleMacrosServer \
+      -disable-sandbox \
       -O \
       -swift-version 5 \
       -parse-as-library \

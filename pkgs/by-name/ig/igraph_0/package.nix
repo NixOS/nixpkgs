@@ -18,7 +18,7 @@
   pkg-config,
   plfit,
   python3,
-  sourceHighlight,
+  source-highlight,
   xmlto,
 }:
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     python3
-    sourceHighlight
+    source-highlight
     xmlto
   ];
 

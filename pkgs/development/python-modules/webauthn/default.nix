@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "webauthn";
   version = "3.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "duo-labs";

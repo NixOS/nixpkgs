@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "commoncode";
     tag = "v${finalAttrs.version}";
     hash = "sha256-A2FE+qhLQahuAtptP3hCnIUgh7j61Wf02avO6DM0b5E=";
@@ -65,8 +65,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Set of common utilities, originally split from ScanCode";
-    homepage = "https://github.com/nexB/commoncode";
-    changelog = "https://github.com/nexB/commoncode/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    homepage = "https://github.com/aboutcode-org/commoncode";
+    changelog = "https://github.com/aboutcode-org/commoncode/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

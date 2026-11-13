@@ -6,7 +6,7 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fotowall";
   version = "1.1.4";
   strictDeps = true;
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fotowall";
     repo = "fotowall";
-    rev = "v${version}";
-    hash = "sha256-1aFHHt1DtjtEF5NievhlzVR1JbUS+3W98Klfi5bcPSk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9v8ybq+zKGiS5PT/88SYg9lXBclE3bj57FDL3uf4Eqc=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     description = "Pictures collage & creativity tool";
     homepage = "https://github.com/fotowall/fotowall";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.arntanguy ];
     platforms = lib.platforms.linux;
     mainProgram = "fotowall";
   };
-}
+})

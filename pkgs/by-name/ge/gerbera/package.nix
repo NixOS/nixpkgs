@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   nixosTests,
@@ -126,25 +125,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gerbera";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6GEJjX0wDjwXHGgn5d0UOdAyPXS5jekDuI2SY82vOtM=";
+    sha256 = "sha256-4j3TXPdc1MXzt7wFogAbRISPiE9hgySMpZGKuoNeUv0=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/gerbera/gerbera/pull/3889.patch";
-      hash = "sha256-2pR1l+Ss9CHZmdFDtso1vDv4yz9RhteOPS9wmycmUfs=";
-    })
-    (fetchpatch {
-      url = "https://github.com/gerbera/gerbera/pull/3841.patch";
-      hash = "sha256-R43VBw9imoy8HJpjmtBzPgPQyHH5gLaDUymqhWrSj+w=";
-    })
-  ];
 
   postPatch =
     let

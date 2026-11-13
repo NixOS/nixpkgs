@@ -1,12 +1,15 @@
 {
   lib,
+  aws-lc,
   cacert,
   fetchFromGitHub,
   nix-update-script,
+  pkg-config,
   rustPlatform,
   stdenv,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,6 +30,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkType = "debug";
   dontUseCargoParallelTests = true;
   __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook

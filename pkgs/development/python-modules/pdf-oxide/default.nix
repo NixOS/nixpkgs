@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
     ;
 
   pyproject = true;
-  __structuredAttrs = true;
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook

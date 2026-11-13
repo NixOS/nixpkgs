@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2026.4.1";
+  version = "2026.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "securetar";
     tag = version;
-    hash = "sha256-y2Ow272094Qrn52LGYkuRcjaR6d0C6bF12g7W6AwSMI=";
+    hash = "sha256-+XP6bbRbs1ceIq3/juJcwr7NwdYAJg7MM/PZ/FZZZoY=";
   };
 
   build-system = [ setuptools ];

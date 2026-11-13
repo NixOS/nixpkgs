@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pffft";
-  version = "1.1.0";
+  version = "1.3.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "marton78";
     repo = "pffft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+efWiBrJzC188tDSPHMARRDArzx/4E8GYPMfDHAND8k=";
+    hash = "sha256-+36zlaB2vEaeRJTXchAoHNfEqh7R7Az1B1otjuZP4d4=";
   };
 
   nativeBuildInputs = [ cmake ];

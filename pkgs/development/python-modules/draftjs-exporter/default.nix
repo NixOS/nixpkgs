@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     repo = "draftjs_exporter";
-    owner = "springload";
+    owner = "wagtail";
     tag = "v${version}";
     hash = "sha256-AR8CK75UdtEThE68WSE6DFSqryI509GTW1fBl1SL29w=";
   };
@@ -42,8 +42,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library to convert Draft.js ContentState to HTML";
-    homepage = "https://github.com/springload/draftjs_exporter";
-    changelog = "https://github.com/springload/draftjs_exporter/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/wagtail/draftjs_exporter";
+    changelog = "https://github.com/wagtail/draftjs_exporter/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
   };

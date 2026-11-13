@@ -11,17 +11,18 @@
   rustPlatform,
   rustc,
   stdenv,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polkadot";
-  version = "2606-2";
+  version = "2609-2";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-stable${finalAttrs.version}";
-    hash = "sha256-Pwu+l4DaS/37yegNedNm3yZHBPng8ECdECdDq/XkWjs=";
+    hash = "sha256-kXMJWznzWwneC7h23i3WdFzLRHSP8rwyE5Iox4G3MPk=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -42,12 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .git_commit
   '';
 
-  cargoPatches = [
-    # make picosimd compile on nix (https://github.com/koute/picosimd/pull/3)
-    ./picosimd-0.9.3.patch
-  ];
-
-  cargoHash = "sha256-2YXF6bcsSuhtdPASAb3KKQ7+y1nFeUVziDug6/PJOSk=";
+  cargoHash = "sha256-Ia4AN9XamXvBEN3q7LZASoPAD7dhnhgz2Sl8Swmmmo8=";
 
   buildType = "production";
   buildAndTestSubdir = "polkadot";
@@ -62,6 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
 

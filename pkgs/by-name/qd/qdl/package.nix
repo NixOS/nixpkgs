@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "2.8";
+  version = "2.9.1";
 
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-msm";
     repo = "qdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ysL9tO1GKvzphxezMspGMW8kkUNGHHspA1YU+v5HA/A=";
+    hash = "sha256-0ZlvD81tP+IvfWFGut5f257hgIs9PDdis9gE3QMwGMo=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "--prefix=${placeholder "out"}"
     "-DVERSION=${finalAttrs.version}"
+    "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
   ];
 
   enableParallelBuilding = true;

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DNRF_BLE_DRIVER_VERSION=${version}"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DARCH=arm64"
   ];
 

@@ -1,0 +1,40 @@
+commit 22a786da1047189825233c293dd5fc2a129fd8ea
+Author: Sandro Jäckel <sandro.jaeckel@gmail.com>
+Date:   Thu, 5 Nov 2026 20:02:33 +0100
+
+    Fix CLI structure test with typer 0.26
+
+diff --git a/tests/cli/test_cli.py b/tests/cli/test_cli.py
+index 74d842f..9264105 100644
+--- a/tests/cli/test_cli.py
++++ b/tests/cli/test_cli.py
+@@ -10,9 +10,10 @@
+ from typing import TYPE_CHECKING
+ from unittest.mock import AsyncMock, MagicMock
+ 
+-import click
+ import pytest
+ from awesomeversion import AwesomeVersion
++from typer import BadParameter
++from typer.core import TyperGroup
+ from typer.main import get_command
+ from typer.testing import CliRunner
+ 
+@@ -80,7 +81,7 @@ def client(monkeypatch: pytest.MonkeyPatch) -> AsyncMock:
+ def test_cli_structure(snapshot: SnapshotAssertion) -> None:
+     """Test the commands and their parameters stay as they are."""
+     command = get_command(cli)
+-    assert isinstance(command, click.Group)
++    assert isinstance(command, TyperGroup)
+ 
+     structure = {
+         name: sorted(param.name for param in sub.params if param.name)
+@@ -279,7 +280,7 @@ def test_parse_duration(value: str, expected: timedelta) -> None:
+ )
+ def test_parse_duration_invalid(value: str, message: str) -> None:
+     """Test values that are not a positive duration are rejected."""
+-    with pytest.raises(click.BadParameter, match=message):
++    with pytest.raises(BadParameter, match=message):
+         parse_duration(value)
+ 
+ 

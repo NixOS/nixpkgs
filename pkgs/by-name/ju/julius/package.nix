@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       Thra11
-      matteopacini
     ];
     platforms = lib.platforms.all;
   };

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  mujoco,
   fetchFromGitHub,
 
   # build-system
@@ -10,11 +9,13 @@
   # dependencies
   absl-py,
   etils,
+  mujoco-core,
   numpy,
   warp-lang,
 
   # optional-dependencies
   jax,
+  pillow,
 
   # tests
   pytestCheckHook,
@@ -23,15 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mujoco-warp";
-  inherit (mujoco) version;
+  inherit (mujoco-core) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "mujoco_warp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uk/h7Rl5jrR8fPsYvJ6zy4+y9vMTpQ0mmCQys9eTUg8=";
+    hash = "sha256-f/SNbWrit7mCarA0nhh0nzTe8M0sAFtGvs+KniqLw1o=";
   };
 
   build-system = [
@@ -41,12 +41,16 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     absl-py
     etils
-    mujoco
+    mujoco-core
     numpy
     warp-lang
   ];
 
   optional-dependencies = {
+    viewer = [
+      pillow
+    ]
+    ++ mujoco-core.optional-dependencies.rendering;
     cpu = [
       jax
     ];

@@ -11,6 +11,9 @@
     {
       imports = [ ./common/x11.nix ];
       programs.firefox.enable = true;
+      # firefox_decrypt does not support the newer logins.db storage yet.
+      # https://github.com/unode/firefox_decrypt/issues/124
+      programs.firefox.package = pkgs.firefox-esr;
       environment.systemPackages = [ pkgs.firefox_decrypt ];
     };
 
@@ -30,7 +33,7 @@
         "password": "".join(random.choices(string.ascii_letters + string.digits, k=32)),
     }
 
-    machine.execute("firefox about:logins >&2 &")
+    machine.execute("firefox-esr about:logins >&2 &")
 
     # press "Add password" button
     # "Search Passwords" is not found by OCR, probably due to too low contrast.

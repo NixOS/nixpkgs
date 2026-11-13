@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" stdenv.hostPlatform.darwinMinVersion)
+  ];
+
   nativeCheckInputs = [
     lit
     nodejs

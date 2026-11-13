@@ -10,6 +10,7 @@
   util-linux,
   libgbm,
   pipewire,
+  zstd,
   gst_all_1,
   cosmic-wallpapers,
   nix-update-script,
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     libgbm
     pipewire
+    zstd
   ];
 
   checkInputs = [ gst_all_1.gstreamer ];

@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "llmfit";
-  version = "1.1.18";
+  version = "1.1.20";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "AlexsJones";
     repo = "llmfit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/72n/ToFDX3+ttkO6Ojek6rtYil4tG1lBbh0Jgd3T1U=";
+    hash = "sha256-V6fGiSlaUdTohQ+Le+qPJ/k0FCaWAgbXZ6chMnS/0rA=";
   };
 
-  cargoHash = "sha256-Kbe17m9qOmhEs8vfJq3HSAcitECj3YVK6LiDsuWrQTA=";
+  cargoHash = "sha256-7OKNryw7bYbg6o/xTqxTy9znvqP5JboQPEYM9E0RmcI=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

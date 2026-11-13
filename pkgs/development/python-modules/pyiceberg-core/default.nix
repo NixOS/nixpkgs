@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  aws-lc,
+  zstd,
 
   # tests
   datafusion,
@@ -17,15 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyiceberg-core";
-  version = "0.10.1";
+  version = "0.11.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5l9pmXbQsiFCtDVop4Dq+FnAfiUBj4qFUMz7njx7/b0=";
+    hash = "sha256-mNlMnIHEdp5HozBJ4wDHbg186HOg09btD4dhsLZmI/I=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/bindings/python";
@@ -42,12 +44,18 @@ buildPythonPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-0ZdjkQfOotd/Clxc/g14kYgAh4bUcKaa1+YVIgGydoI=";
+    hash = "sha256-HYrwozAfgqUa3eY9HCF5zumC3JsJFhYN6KnuDwVJHr8=";
   };
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
   ];
 
   pythonImportsCheck = [ "pyiceberg_core" ];
@@ -61,18 +69,6 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ pyiceberg.optional-dependencies.pyarrow
   ++ pyiceberg.optional-dependencies.sql-sqlite;
-
-  disabledTestPaths = [
-    # Segfaults: the bundled `datafusion-ffi` 53.x is ABI-incompatible with the
-    # packaged `datafusion` 54.x
-    # https://github.com/apache/datafusion/issues/17374
-    "tests/test_datafusion_table_provider.py"
-  ];
-
-  disabledTests = [
-    # Same `datafusion-ffi` ABI mismatch as above
-    "test_cdc_write_and_read_via_datafusion"
-  ];
 
   # Circular dependency on pyiceberg
   doCheck = false;

@@ -38,7 +38,7 @@ index 0ecc538..393c4bd 100644
  
      //    listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
 diff --git a/shared/logic/build.gradle.kts b/shared/logic/build.gradle.kts
-index a7e2031..9084eba 100644
+index e155ad7..91b351e 100644
 --- a/shared/logic/build.gradle.kts
 +++ b/shared/logic/build.gradle.kts
 @@ -19,7 +19,6 @@ import java.util.Properties
@@ -76,7 +76,7 @@ index a7e2031..9084eba 100644
          jvmMain.dependencies {
              implementation(libs.ktor.client.okhttp)
              implementation(libs.androidx.sqlite.bundled)
-@@ -117,7 +103,6 @@ room3 { schemaDirectory("$projectDir/schemas") }
+@@ -120,7 +106,6 @@ room3 { schemaDirectory("$projectDir/schemas") }
  
  dependencies {
      add("kspJvm", libs.androidx.room.compiler)
@@ -85,7 +85,7 @@ index a7e2031..9084eba 100644
      //    add("kspIosArm64", libs.androidx.room.compiler)
  }
 diff --git a/shared/ui/build.gradle.kts b/shared/ui/build.gradle.kts
-index f387ceb..b925c3d 100644
+index 6b0585a..d9f4811 100644
 --- a/shared/ui/build.gradle.kts
 +++ b/shared/ui/build.gradle.kts
 @@ -18,7 +18,6 @@
@@ -110,7 +110,7 @@ index f387ceb..b925c3d 100644
      jvm()
  
      sourceSets {
-@@ -81,20 +73,9 @@ kotlin {
+@@ -81,10 +73,6 @@ kotlin {
              implementation(libs.koin.compose.viewmodel.navigation)
              implementation(libs.koin.annotations)
          }
@@ -118,7 +118,10 @@ index f387ceb..b925c3d 100644
 -            implementation(projects.androidLibs.visualizerHelper)
 -            implementation(libs.accompanist.permissions)
 -        }
-     }
+         commonTest.dependencies {
+             implementation(kotlin("test"))
+             implementation(libs.kotlinx.coroutines.test)
+@@ -93,12 +81,5 @@ kotlin {
  }
  
  dependencies {

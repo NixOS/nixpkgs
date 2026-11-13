@@ -6,18 +6,18 @@
   wayland-scanner,
   wayland,
   libinput,
-  yaml-cpp,
+  libyaml,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "way-displays";
-  version = "1.15.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
     rev = finalAttrs.version;
-    sha256 = "sha256-M1d6o4mODnFNInSt0GL1aCUcRU9VBVhHFQuwTrw6zY4=";
+    sha256 = "sha256-OHIztOHxqkGuOCaNn/1w+qHSZAw7PrVOeXKRAsqJYTk=";
   };
 
   strictDeps = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayland
-    yaml-cpp
+    libyaml
     libinput
   ];
 

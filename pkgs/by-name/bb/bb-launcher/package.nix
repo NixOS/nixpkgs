@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bb-launcher";
-  version = "16.12";
+  version = "16.13";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rainmakerv3";
     repo = "BB_Launcher";
     tag = "Release${finalAttrs.version}";
-    hash = "sha256-W6La/VGcssN1vLKSGYGydaUXkYJjzqj+CKqWituO4GU=";
+    hash = "sha256-E0hEhkvE6+VbjimW6JkpI9uBcQwTBrdPozuaIbB4E18=";
 
     # qmicroz is the only external left after unbundle-externals.patch, and
     # qtstatic is a big prebuilt Qt for Windows only, so free some disk space.

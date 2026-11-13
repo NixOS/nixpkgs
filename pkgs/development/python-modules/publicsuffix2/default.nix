@@ -11,12 +11,12 @@ in
 buildPythonPackage {
   pname = "publicsuffix2";
   # tags have dashes, while the library version does not
-  # see https://github.com/nexB/python-publicsuffix2/issues/12
+  # see https://github.com/aboutcode-org/python-publicsuffix2/issues/12
   version = lib.replaceStrings [ "-" ] [ "" ] tagVersion;
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "python-publicsuffix2";
     rev = "release-${tagVersion}";
     hash = "sha256-OV0O4LLxQ2LQiEHc1JTvScu35o2IWxo/hgn/COh2e7Y=";
@@ -37,7 +37,7 @@ buildPythonPackage {
 
   meta = {
     description = "Get a public suffix for a domain name using the Public Suffix List";
-    homepage = "https://github.com/nexB/python-publicsuffix2";
+    homepage = "https://github.com/aboutcode-org/python-publicsuffix2";
     license = lib.licenses.mpl20;
     maintainers = [ ];
   };

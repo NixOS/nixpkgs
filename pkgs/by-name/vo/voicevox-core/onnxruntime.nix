@@ -52,12 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     license = with lib.licenses; [
       mit
-      {
-        name = "VOICEVOX ONNX Runtime Terms of Use";
+      (mkLicense {
+        shortName = "voicevox-onnx";
+        fullName = "VOICEVOX ONNX Runtime Terms of Use";
         url = "https://github.com/VOICEVOX/voicevox_resource/blob/main/onnxruntime/README.md";
         free = false;
         redistributable = true;
-      }
+      })
     ];
     maintainers = with lib.maintainers; [
       tomasajt

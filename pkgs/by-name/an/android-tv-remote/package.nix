@@ -21,8 +21,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-oGSDMGpOvIt1NFBx6g1dLtoCJBBQi+3Yl7g+XvIcRn8=";
   };
 
-  __structuredAttrs = true;
-
   scrcpy-server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v3.1/scrcpy-server-v3.1";
     hash = "sha256-lY8JRKYvI7HzOhbp6xSETBoEuILKF1pzjBbSPLIrhsA=";

@@ -21,6 +21,8 @@ in
     "aarch64-linux"
   ],
   variant ? "cuda",
+  # The empty list uses default CUDA capabilities
+  cudaCapabilities ? [ ],
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
@@ -33,7 +35,8 @@ in
 
       # Don't evaluate duplicate and/or deprecated attributes
       allowAliases = false;
-    };
+    }
+    // lib.optionalAttrs (cudaCapabilities != [ ]) { inherit cudaCapabilities; };
 
     __allowFileset = false;
   },

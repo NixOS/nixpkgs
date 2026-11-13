@@ -23,6 +23,11 @@ mkLibretroCore {
     "FORCE_DRC_C_BACKEND=1"
   ];
 
+  # MAME zeroes memory before placement new (auto_alloc_clear and friends)
+  # to initialize objects, which GCC otherwise optimizes away, leaving e.g.
+  # input port settings uninitialized so that games fail validity checks
+  env.NIX_CFLAGS_COMPILE = "-fno-lifetime-dse";
+
   meta = {
     description = "Port of MAME ~2010 to libretro, compatible with MAME 0.139 sets";
     homepage = "https://github.com/libretro/mame2010-libretro";

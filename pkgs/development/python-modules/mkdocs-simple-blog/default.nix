@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "FernandoCelmer";
     repo = "mkdocs-simple-blog";

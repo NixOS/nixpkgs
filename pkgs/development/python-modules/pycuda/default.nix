@@ -51,7 +51,6 @@ let
   );
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "pycuda";
   version = "2026.1";

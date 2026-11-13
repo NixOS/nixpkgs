@@ -2,6 +2,7 @@
   stdenv,
   lib,
   rustPlatform,
+  libgit2,
   openssl,
   nushell,
   pkg-config,
@@ -17,8 +18,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargoHash
     ;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   buildAndTestSubdir = "crates/nu_plugin_gstat";
 

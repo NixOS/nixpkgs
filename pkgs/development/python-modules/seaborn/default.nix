@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "seaborn";
   version = "0.13.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mwaskom";

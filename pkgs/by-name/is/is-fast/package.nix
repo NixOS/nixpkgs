@@ -5,6 +5,8 @@
   stdenv,
   pkg-config,
   oniguruma,
+  sqlite,
+  zstd,
   writableTmpDirAsHomeHook,
   nix-update-script,
 }:
@@ -24,7 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ oniguruma ];
+  buildInputs = [
+    oniguruma
+    sqlite
+    zstd
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

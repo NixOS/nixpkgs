@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sympy";
   version = "1.14.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sympy";

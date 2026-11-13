@@ -5,6 +5,8 @@
   rustPlatform,
   pkg-config,
   alsa-lib,
+  libgit2,
+  oniguruma,
   openssl,
   withTTS ? false,
   speechd-minimal,
@@ -34,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
+    oniguruma
     openssl
   ]
   ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]

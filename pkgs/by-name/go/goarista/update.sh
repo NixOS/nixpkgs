@@ -5,7 +5,7 @@ set -eou pipefail
 
 nix-update pkgs.goarista --version branch
 
-# The last github release in 2020 was named ockafka-v0.0.5.
-# I don't want this in the version name, it's from when Arista
-# was doing per-package releases in the repo, and not just trunk
-sed -i 's/ockafka-v0\.0\.5-/0-/' pkgs/by-name/go/goarista/package.nix
+# nix-update prefixes the version with the latest tag (e.g. the 2020
+# per-package release ockafka-v0.0.5, or stray tags like untagged-<hash>).
+# None of those describe trunk, so always use 0 as the version prefix.
+sed -i -E 's/version = "[^"]*-unstable-/version = "0-unstable-/' pkgs/by-name/go/goarista/package.nix

@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "craft-fonts";
-  version = "0-unstable-2026-10-11";
+  version = "0-unstable-2026-10-25";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -15,8 +15,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "craft-fonts";
-    rev = "3d9ab3a132ed0eff457e424226a435a901da30d3";
-    hash = "sha256-mNnDzBcOp1X10dzmiW0iBAkb74QjuzMO4slWudxXCTE=";
+    rev = "aced4137c022f1f587624d48e81ec77e1914a9cc";
+    hash = "sha256-5GjvL6EMCtOzK1/XbbzuBJDYpHC4SfBbOpGbPRjeME8=";
   };
 
   nativeBuildInputs = [ installFonts ];
@@ -27,6 +27,8 @@ stdenvNoCC.mkDerivation {
   postInstall = ''
     install -d $out/fonts
     install -m644 fonts/manifest.txt $out/fonts/
+    install -m644 fonts/simplified-chinese-manifest.txt $out/fonts/
+    install -m644 fonts/latin-manifest.txt $out/fonts/
 
     for dir in fonts/*/; do
       family=$(basename "$dir")

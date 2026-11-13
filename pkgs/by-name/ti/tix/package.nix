@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tix";
-  version = "0-unstable-2026-04-07";
+  version = "0-unstable-2026-08-31";
 
   src = fetchFromGitHub {
     owner = "JRMurr";
     repo = "tix";
-    rev = "6088dff2cc837ebf5e8c99494d7af8cc87150859";
-    hash = "sha256-Zt0gSt/C1M4ue7K+CjcEyXk4+ox8m+AD3pDArOP2GAs=";
+    rev = "ccb804fa81e457e3ab4b528a6c7a7cded6addd42";
+    hash = "sha256-nwIuN26+odykj9fFDU/eadeZckzzZt6iCHF2mcmPp9E=";
   };
 
-  cargoHash = "sha256-6fPg5hvbBLDMnIHalJL1oTkKFrTCB4IDnCRYGa94J9E=";
+  cargoHash = "sha256-ZlEPXz65u8zikyFZppAH9W49hVFDdjIYey+H0OZQrUk=";
 
   # Disabling failing tests:
   # - thread 'generate_module_stub_from_evalmodules_and_use_it' (12980) panicked at crates/cli/tests/custom_stubs.rs:39:10:
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A nix type checker/lsp";
+    description = "Nix type checker/lsp";
     homepage = "https://github.com/JRMurr/tix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];

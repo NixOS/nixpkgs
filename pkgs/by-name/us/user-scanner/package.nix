@@ -19,8 +19,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   version = "1.5.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "kaifcodec";
     repo = "user-scanner";

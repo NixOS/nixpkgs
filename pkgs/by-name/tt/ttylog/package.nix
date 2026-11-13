@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   cmake,
 }:
 
@@ -9,11 +9,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ttylog";
   version = "0.31";
 
-  src = fetchFromGitHub {
-    owner = "rocasa";
-    repo = "ttylog";
-    rev = finalAttrs.version;
-    sha256 = "0c746bpjpa77vsr88fxk8h1803p5np1di1mpjf4jy5bv5x3zwm07";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchurl {
+    url = "mirror://sourceforge/project/ttylog/ttylog/${finalAttrs.version}/ttylog-${finalAttrs.version}.tar.gz";
+    hash = "sha256-En4uG+vRm1MgZ/ZY55TBLG37JWvwEQvlihyW/EQsEJY=";
   };
 
   nativeBuildInputs = [ cmake ];

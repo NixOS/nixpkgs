@@ -22,7 +22,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "aviramha";
+    owner = "ormsgpack";
     repo = "ormsgpack";
     tag = version;
     hash = "sha256-O4497RObrvDViQVKbpsG2XCG4L570pDGpZEfIGDxEmM=";
@@ -60,8 +60,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Fast msgpack serialization library for Python derived from orjson";
-    homepage = "https://github.com/aviramha/ormsgpack";
-    changelog = "https://github.com/aviramha/ormsgpack/releases/tag/${version}";
+    homepage = "https://github.com/ormsgpack/ormsgpack";
+    changelog = "https://github.com/ormsgpack/ormsgpack/releases/tag/${version}";
     license = with lib.licenses; [
       asl20
       mit

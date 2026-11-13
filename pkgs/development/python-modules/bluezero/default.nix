@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "bluezero";
   version = "0.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ukBaz";

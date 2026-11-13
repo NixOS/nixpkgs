@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-1x0QESkxze/MP7/E0whPwx3zSv+JC2OH7pz5adO1JFk=";
+
+  buildInputs = [ sqlite ];
 
   meta = {
     description = "Rust implementation of the Starlark language";

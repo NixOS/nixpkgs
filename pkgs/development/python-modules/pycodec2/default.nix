@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pycodec2";
   version = "4.1.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gregorias";

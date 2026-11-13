@@ -3,6 +3,8 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,7 +26,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Requires an internet connection
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [ zstd ];
 
   postInstall = ''
     for shell in bash fish zsh; do

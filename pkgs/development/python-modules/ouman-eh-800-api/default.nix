@@ -41,6 +41,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # wants to connect to the network
+    "tests/test_client.py"
+  ];
+
   pythonImportsCheck = [ "ouman_eh_800_api" ];
 
   meta = {

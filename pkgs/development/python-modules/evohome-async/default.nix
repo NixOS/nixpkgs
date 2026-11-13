@@ -2,7 +2,6 @@
   lib,
   aiofiles,
   aiohttp,
-  aioresponses,
   aiozoneinfo,
   asyncclick,
   buildPythonPackage,
@@ -11,25 +10,27 @@
   hatchling,
   hatch-vcs,
   keyring,
+  probatio,
   pytest-asyncio,
   pytest-freezer,
   pytestCheckHook,
   pyyaml,
   syrupy,
-  voluptuous,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "evohome-async";
-  version = "2.1.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "evohome-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1wWUYhDj8lO8q8YF251z9uQDQTozTf5kIUjrNLrNdQA=";
+    hash = "sha256-NoaW5wSOdYcWXPuK/mqSwaVoeh8N0uyNw08ih/729WM=";
   };
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [
     hatchling
@@ -39,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     aiozoneinfo
-    voluptuous
+    probatio
   ];
 
   optional-dependencies = {
@@ -52,7 +53,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    aioresponses
     pytest-asyncio
     pytest-freezer
     pytestCheckHook

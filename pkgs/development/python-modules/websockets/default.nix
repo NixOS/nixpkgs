@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "aaugustin";
+    owner = "python-websockets";
     repo = "websockets";
     tag = version;
     hash = "sha256-7qY2u0rIHnwQNZtgZ59YOcO2EKCV++/lc9q1BHRdJr0=";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "WebSocket implementation in Python";
     homepage = "https://websockets.readthedocs.io/";
-    changelog = "https://github.com/aaugustin/websockets/blob/${src.tag}/docs/project/changelog.rst";
+    changelog = "https://github.com/python-websockets/websockets/blob/${src.tag}/docs/project/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

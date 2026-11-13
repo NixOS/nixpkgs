@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substitute,
   cmake,
-  coreutils,
   libpng,
   bzip2,
   curl,
@@ -23,6 +21,7 @@
   graphviz,
   libxi,
   libx11,
+  libzip,
   gmp,
   libspatialindex,
   leveldb,
@@ -43,25 +42,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.17.0";
+  version = "5.18.0";
 
   src = fetchFromGitHub {
     owner = "luanti-org";
     repo = "luanti";
     tag = finalAttrs.version;
-    hash = "sha256-PieiiJTpgUK7q0WiUY2EAp72ywHkDR2Mba1DCDkvCaY=";
+    hash = "sha256-39N8CiAh8d6nmQdEaf+P8kDaasxUJFvpJfDKItQL9uw=";
   };
-
-  patches = [
-    (substitute {
-      src = ./0000-mark-rm-for-substitution.patch;
-      substitutions = [
-        "--subst-var-by"
-        "RM_COMMAND"
-        "${coreutils}/bin/rm"
-      ];
-    })
-  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
@@ -99,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     gmp
     libspatialindex
+    libzip
   ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "deltalake";
   version = "1.6.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   # The GitHub repository does not ship a Cargo.lock
   src = fetchPypi {

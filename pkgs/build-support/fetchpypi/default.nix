@@ -45,6 +45,17 @@ let
     in
     compute (removeAttrs attrs [ "format" ]);
 
+  # Normalize a PyPI package name per PEP 503 / purl-spec:
+  # lowercase, then collapse runs of '.', '_', '-' to a single '-'.
+  # https://github.com/package-url/purl-spec/blob/main/types/pypi-definition.json
+  normalizePypiName =
+    name:
+    let
+      lowered = lib.strings.toLower name;
+      parts = builtins.filter builtins.isString (builtins.split "[._-]+" lowered);
+    in
+    builtins.concatStringsSep "-" parts;
+
 in
 lib.makeOverridable (
   {
@@ -65,8 +76,8 @@ lib.makeOverridable (
     meta = {
       identifiers.purlParts = {
         type = "pypi";
-        # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/pypi-definition.md
-        spec = "${pname}@${version}";
+        # https://github.com/package-url/purl-spec/blob/main/types/pypi-definition.json
+        spec = "${normalizePypiName pname}@${version}";
       };
     };
   in

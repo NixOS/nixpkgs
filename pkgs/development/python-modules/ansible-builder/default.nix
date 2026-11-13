@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-builder";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ansible_builder";
     inherit version;
-    hash = "sha256-nYi8FazH0xBW0MUZFKYQLayOWtc/ny01upg3jIlxTtI=";
+    hash = "sha256-jNhjkBESeqpQRv1g5WrnU+tZkGG/ST7KLGt1xUz8YhI=";
   };
 
   patchPhase = ''

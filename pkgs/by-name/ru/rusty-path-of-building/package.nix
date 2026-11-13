@@ -12,6 +12,8 @@
   libxkbcommon,
   vulkan-loader,
   wayland,
+  aws-lc,
+  zstd,
   libxi,
   libxcursor,
   libx11,
@@ -40,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     luajit
     openssl
     wayland
+    aws-lc
+    zstd
   ];
 
   postInstall = ''

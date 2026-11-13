@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "7.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "azure_mgmt_batchai";

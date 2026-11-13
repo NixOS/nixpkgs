@@ -93,7 +93,7 @@ index cec5417..38f1a87 100644
  		if (g_settings_get_boolean (settings, "use-system-timezone"))
  			location = e_cal_util_get_system_timezone_location ();
 diff --git a/src/common/e-ews-common-utils.c b/src/common/e-ews-common-utils.c
-index 1cc5a58..05b3610 100644
+index 2ed285f..970368a 100644
 --- a/src/common/e-ews-common-utils.c
 +++ b/src/common/e-ews-common-utils.c
 @@ -167,10 +167,21 @@ e_ews_common_utils_get_configured_icaltimezone (void)

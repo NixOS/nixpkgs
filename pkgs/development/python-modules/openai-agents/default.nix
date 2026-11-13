@@ -8,8 +8,8 @@
   openai,
   pydantic,
   requests,
-  types-requests,
   typing-extensions,
+  websockets,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -27,14 +27,18 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "openai"
+  ];
+
   dependencies = [
     griffelib
     mcp
     openai
     pydantic
     requests
-    types-requests
     typing-extensions
+    websockets
   ];
 
   pythonImportsCheck = [

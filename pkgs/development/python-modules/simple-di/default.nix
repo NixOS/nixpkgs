@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "simple_di";
     inherit (finalAttrs) version;

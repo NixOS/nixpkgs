@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  sqlite,
   nix-update-script,
 }:
 
@@ -15,6 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-g9gpnYLuK7sIJ6HFz5aG9LcsHvb1NLuSRCz4+XwRwIc=";
   };
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
 
   env.GIT_COMMIT_HASH = finalAttrs.src.rev;
 

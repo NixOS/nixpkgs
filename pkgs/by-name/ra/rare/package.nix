@@ -19,9 +19,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-APca/YE3/tDZPxw+sV0CG2s8/zjCMgglBoHQm4YNxK8=";
   };
 
-  strictDeps = true;
-  __structuredAttrs = true;
-
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
     qt6.qtbase

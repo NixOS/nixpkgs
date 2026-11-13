@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2026-08-10";
+  version = "0-unstable-2026-11-03";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "c23e80e4fe54a2ad20f36a9f21a0987f5e3e4505";
-    hash = "sha256-ZwK+MxrTodDvvJuQCIhcDkluor4ri856m/WhcVRwfzo=";
+    rev = "e1de48743ace45cdbf4cc23caa902710d4a739bc";
+    hash = "sha256-86MIQkXGbYGSjlgOQHxZpi35QNS5iHbYKL+3HPwdw64=";
   };
 
   # fails in `preInstall` without doing this
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-AqmUWgVDksQeBKcC8mpq1xgQ5NcHTjX/YSgm9J+feBs=";
+    hash = "sha256-snXQpcdHv/jkcFmTbjt+HrdE7gkrQqLbVv3nHDOYGW8=";
   };
 
   buildPhase = ''

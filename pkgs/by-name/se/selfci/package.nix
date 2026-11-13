@@ -4,6 +4,8 @@
   nix-update-script,
   rustPlatform,
   git,
+  libgit2,
+  pkg-config,
   makeWrapper,
 }:
 
@@ -22,6 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
   ];
 
   doCheck = false;

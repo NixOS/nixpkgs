@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitLab,
-  openssl,
   libGL,
   vulkan-loader,
   wayland,
@@ -46,19 +45,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "airshipper";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitLab {
     owner = "Veloren";
     repo = "airshipper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M89RswC08MZnNfk2T1+rtDajTpDGTnJoZ2U8bU5U2+0=";
+    hash = "sha256-8OZNYkBZFNFk81C9XkHI4ShaZ3wgqdeglTGzfoekgNo=";
   };
 
-  cargoHash = "sha256-ry0hFvMDnotDQu6mqgyt+6hKOvGRJLmZKs3SxEVtDRg=";
+  cargoHash = "sha256-9xqGeiia5gGKhuDoWNTnYeBSnDmi75PBWN82ABRc5/4=";
 
   buildInputs = [
-    openssl
     wayland
     wayland-protocols
     libxkbcommon

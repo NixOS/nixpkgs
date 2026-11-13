@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mhcflurry";
   version = "2.3.25";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openvax";

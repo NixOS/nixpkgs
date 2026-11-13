@@ -32,8 +32,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.4.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "heretic";

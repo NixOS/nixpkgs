@@ -13,7 +13,15 @@ swiftpm_addCVars() {
         fi
         # Compiler plugins
         if [[ "$d" =~ plugins(/testing)?$ && -n "$(ls "$d"/*@sharedLibrary@)" ]]; then
-            appendToVar swiftpmFlags -Xswiftc -plugin-path -Xswiftc "$d"
+            pluginServerPath="$1/libexec/swift/plugins"
+            if [[ -e "$1/libexec/swift/plugins" && "$(ls "$pluginServerPath" | wc -l)" -eq "1" ]]; then
+              # Only one plugin server in `libexec/swift/plugins` is supported for now.
+              # Support for more can be added later when it’s needed.
+              pluginServerExePath=$(realpath "$pluginServerPath"/*)
+              appendToVar swiftpmFlags -Xswiftc -external-plugin-path -Xswiftc "$d#$pluginServerExePath"
+            else
+              appendToVar swiftpmFlags -Xswiftc -plugin-path -Xswiftc "$d"
+            fi
         fi
     done < <(find "$1" -type d -and -regex "$swiftLibDir" -print0)
 }
@@ -32,7 +40,6 @@ swiftpmBuildPhase() {
     local flagsArray=(
         -j "$buildCores"
         -c "${swiftpmBuildConfig-release}"
-        -Xswiftc -module-cache-path -Xswiftc "$NIX_BUILD_TOP/module-cache"
     )
     concatTo flagsArray swiftpmFlags swiftpmFlagsArray
 
@@ -61,8 +68,12 @@ swiftpmCheckPhase() {
     )
     concatTo flagsArray swiftpmFlags swiftpmFlagsArray
 
+    if [ "@disableXCTest@" = 1 ]; then
+        appendToVar flagsArray --disable-xctest
+    fi
+
     echoCmd 'check flags' "${flagsArray[@]}"
-    TERM=dumb swift test "${flagsArray[@]}"
+    TERM=dumb swift test --disable-sandbox "${flagsArray[@]}"
 
     runHook postCheck
 }
@@ -114,7 +125,8 @@ swiftpmInstallPhase() {
         install -D -t "${!outputLib}/lib" "${libsToInstall[@]}"
         # Only install modules if there are any library products.
         if [ -n "${modulesToInstall}" ]; then
-            install -D -t "${!outputInclude}/lib/swift/@swiftPlatform@" "${modulesToInstall[@]}"
+            mkdir -p "${!outputInclude}/lib/swift/@swiftPlatform@"
+            cp -Rv "${modulesToInstall[@]}" "${!outputInclude}/lib/swift/@swiftPlatform@"
         fi
     fi
 
@@ -130,7 +142,7 @@ makeSwiftPMFindLibs() {
     local -A swiftpmLibFlags
     isystem_seen=
     iframework_seen=
-    for flag in ${NIX_CFLAGS_COMPILE-}; do
+    for flag in ${NIX_CFLAGS_COMPILE-} ${NIX_LDFLAGS-}; do
         if test -n "$isystem_seen" && test -d "$flag"; then
             isystem_seen=
             swiftpmLibFlags["${flag}"]="-Xcc -isystem -Xcc"

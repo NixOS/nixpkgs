@@ -4,17 +4,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  aquamarine,
-  cairo,
-  hyprgraphics,
   hyprlang,
   hyprtoolkit,
-  hyprutils,
-  libdrm,
-  libGL,
   libxkbcommon,
-  pango,
-  pixman,
   nix-update-script,
 }:
 
@@ -35,17 +27,9 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    aquamarine
-    cairo
-    hyprgraphics
     hyprlang
     hyprtoolkit
-    hyprutils
-    libdrm
-    libGL
     libxkbcommon
-    pango
-    pixman
   ];
 
   strictDeps = true;

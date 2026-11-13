@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
 
   # Pypi does not have the tests
   src = fetchFromGitHub {
-    owner = "tomerfiliba";
+    owner = "tomerfiliba-org";
     repo = "reedsolomon";
     tag = "v${finalAttrs.version}";
     hash = "sha256-nzdD1oGXHSeGDD/3PpQQEZYGAwn9ahD2KNYGqpgADh0=";
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Pure-python universal errors-and-erasures Reed-Solomon Codec";
-    homepage = "https://github.com/tomerfiliba/reedsolomon";
+    homepage = "https://github.com/tomerfiliba-org/reedsolomon";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ yorickvp ];
   };

@@ -1,14 +1,14 @@
 {
   lib,
   stdenvNoCC,
-  buildGoLatestModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
 }:
-buildGoLatestModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "dux-greeter";
-  version = "2.1.0";
+  version = "2.1.2";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoLatestModule (finalAttrs: {
     owner = "duxlabs-dev";
     repo = "dux-greeter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PFaB7HT5qL4Q9kaX43DlTeiYCwaVI2HrKvYFksPUHS0=";
+    hash = "sha256-U4yhyaRJE1R4RVm3VLIq/zGWrkzuuwGDggT6rQiXRkQ=";
     fetchSubmodules = true;
   };
 

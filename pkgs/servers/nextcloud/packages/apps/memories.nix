@@ -2,6 +2,7 @@
   stdenv,
   buildGo127Module,
   exiftool,
+  vips,
   fetchurl,
   ffmpeg-headless,
   fetchFromGitHub,
@@ -19,9 +20,9 @@ let
       vendorHash = null;
     };
     "34" = {
-      version = "11.0.2";
-      appHash = "sha256-ygV6UFNKOr5zUaSPtwcH/wIf7hfxbzj4kUTFoM0sxD8=";
-      srcHash = "sha256-Fp9tgiyHXnqEsS4xA+eEDGkl0ouXQhnHQn5eETyot+c=";
+      version = "11.1.1";
+      appHash = "sha256-Wei3mzl/MrMHzIjmPV/gdt9p+Gk20rQH8VyAzX8nqzU=";
+      srcHash = "sha256-tVrWVxWtSCfo/Ao4JaYcgVxF2/CY2UgBmfzoDvTd/w4=";
       vendorHash = "sha256-rEJXO55TKg3GMV5/5JQsRf0tktzNQovY9ONtDFuznqk=";
     };
     "35" = latestVersionForNc."34";
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
       ffmpeg = lib.getExe ffmpeg-headless;
       ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
       go-vod = lib.getExe go-vod;
+      vips = lib.getExe vips;
     })
   ];
 
@@ -81,8 +83,11 @@ stdenv.mkDerivation rec {
     rm -rf bin-ext/
 
     sed -i 's/EXIFTOOL_VER = .*/EXIFTOOL_VER = @;/' lib/Service/BinExt.php
+    sed -i 's/VIPS_VER = .*/VIPS_VER = @;/' lib/Service/BinExt.php
     substituteInPlace lib/Service/BinExt.php \
       --replace-fail "EXIFTOOL_VER = @" "EXIFTOOL_VER = '${exiftool.version}'"
+    substituteInPlace lib/Service/BinExt.php \
+      --replace-fail "VIPS_VER = @" "VIPS_VER = '${vips.version}'"
   '';
 
   installPhase = ''

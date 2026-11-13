@@ -4,6 +4,7 @@
   pkg-config,
   gitMinimal,
   rustPlatform,
+  libgit2,
   openssl,
   versionCheckHook,
   nix-update-script,
@@ -22,12 +23,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-7/1Jf3GJmEydTDVL3oGIKIkCHAMKJ8BE6PUmpWH0xcQ=";
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
+    libgit2
     openssl
   ];
 
   nativeCheckInputs = [
-    pkg-config
     gitMinimal
   ];
 

@@ -12,15 +12,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pykaleidescape";
-  version = "1.1.6";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pykaleidescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-irXm1kX9gy6XU1PWvFKG2IeUE7raKI2C0I6Vge1ZKsI=";
+    hash = "sha256-hVjxbmacnv3Ky0WYT2QGWMk/DPUiO151EE1l06GXiNU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==84.0.0" "setuptools"
+  '';
 
   build-system = [ setuptools ];
 

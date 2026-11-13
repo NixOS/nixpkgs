@@ -27,8 +27,6 @@ buildPythonPackage (finalAttrs: {
 
   doCheck = false; # no tests
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Correlate SQL query logs in your database with your Django application and logs";
     homepage = "https://github.com/pretix/django-querytagger";

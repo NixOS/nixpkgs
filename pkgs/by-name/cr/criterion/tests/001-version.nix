@@ -3,9 +3,13 @@
   pkg-config,
   criterion,
 }:
-stdenv.mkDerivation rec {
-  name = "version-tester";
+stdenv.mkDerivation {
+  pname = "version-tester";
   inherit (criterion) version;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = ./test_dummy.c;
 
   dontUnpack = true;
@@ -13,13 +17,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildPhase = ''
-    cc -o ${name} $src `pkg-config --libs criterion`
+    cc -o version-tester $src `pkg-config --libs criterion`
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ${name} $out/bin/${name}
+    install -Dm477 version-tester -t $out/bin
   '';
 
-  meta.mainProgram = name;
+  meta.mainProgram = "version-tester";
 }

@@ -1,10 +1,12 @@
 {
   lib,
+  aws-lc,
   rustPlatform,
   buildNpmPackage,
   fetchFromGitHub,
   pkg-config,
   openssl,
+  sqlite,
   nix-update-script,
 }:
 let
@@ -39,7 +41,11 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    sqlite
+  ];
 
   preBuild = ''
     cp -pr --reflink=auto -- ${ui} ui/dist

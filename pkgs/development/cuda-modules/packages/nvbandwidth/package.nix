@@ -21,7 +21,7 @@
 }:
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nvbandwidth";
-  version = "0.10.0";
+  version = "0.11.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,7 +30,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     owner = "NVIDIA";
     repo = "nvbandwidth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bmE9EEe4mPzgo2QQucs+gof/NYN0rkvV/4ZxPWP1mMs=";
+    hash = "sha256-XB6uzSBTiXLdietsjFkxrwco6kmFmMnGc921noE002I=";
   };
 
   patches = [

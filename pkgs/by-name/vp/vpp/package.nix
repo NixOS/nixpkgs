@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   nix-update-script,
   writeText,
 
@@ -63,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs scripts/
     substituteInPlace pkg/CMakeLists.txt \
       --replace-fail "/etc/os-release" "${osRelease}"
+    substituteInPlace plugins/dpdk/device/common.c \
+      --replace-fail "RTE_DEV_TO_PCI (info->device)" "RTE_BUS_DEVICE (info->device, struct rte_pci_device)"
   '';
 
   preConfigure = ''
@@ -78,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src";
 
   enableParallelBuilding = true;
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers -Wno-error=maybe-uninitialized";
+
   cmakeFlags = [
     "-DVPP_PLATFORM=default"
     "-DVPP_LIBRARY_DIR=lib"
@@ -121,6 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # VPP links to static RDMA/XDP by default
     ./use-dynamic-libs.patch
+    (fetchpatch2 {
+      name = "tap-include-limits.h.patch";
+      url = "https://github.com/FDio/vpp/commit/70a225d6b28222b03b8d46cf3f52512516ae6786.patch?full_index=1";
+      relative = "src";
+      hash = "sha256-KQDhvuJxGuovn9kgjOOR3wLmntOqkVkRjAejSBF5gGE=";
+    })
   ]
   ++ lib.optional enableAfXdpSkbMode ./xdp-skb-mode.patch;
 

@@ -12,7 +12,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "multiqc";
   version = "1.35";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Two data sources. One for the code, another for the test data
   srcs = [

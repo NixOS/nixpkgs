@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "robotframework-assertion-engine";
-  version = "3.5.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "robotframework_assertion_engine";
     inherit version;
-    hash = "sha256-cY0PP2nt3kirnWAbnT55KsUtGt+nkGQqeI6gn5bVr6g=";
+    hash = "sha256-+MHdJ1cGSAikMlWPRqOV2pQvIj10oRBBn8aJmS+dYA4=";
   };
 
   build-system = [

@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "alphaessopenapi";
-  version = "0.0.19";
+  version = "0.0.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CharlesGillanders";
     repo = "alphaess-openAPI";
     tag = version;
-    hash = "sha256-wdwA1MIQrkZCT4zIf8WXyq0+F+peC/auVtjDJ8ZZyxE=";
+    hash = "sha256-rSgaMW/IVvZUXEud1vqxJ0ieJi/u7Su6z8QfdYlPa4o=";
   };
 
   build-system = [ setuptools ];

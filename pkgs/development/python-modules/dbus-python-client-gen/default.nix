@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.8.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "dbus-python-client-gen";

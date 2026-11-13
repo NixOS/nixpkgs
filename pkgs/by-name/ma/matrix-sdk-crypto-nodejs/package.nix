@@ -8,6 +8,8 @@
   napi-rs-cli,
   nodejs,
   libiconv,
+  pkg-config,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-rust-sdk-crypto-nodejs";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-itTtLOLkqhcEQDmeVbYVokbTZw0xxdEi4BblIzY0iVY=";
   };
 
@@ -32,9 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     napi-rs-cli
     nodejs
+    pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  buildInputs = [
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildPhase = ''
     runHook preBuild

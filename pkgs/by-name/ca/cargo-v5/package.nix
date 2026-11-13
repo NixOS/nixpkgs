@@ -6,6 +6,7 @@
   dbus,
   udev,
   openssl,
+  oniguruma,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-v5";
@@ -25,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     udev
     openssl
+    oniguruma
   ];
 
   meta = {

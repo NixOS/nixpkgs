@@ -2,7 +2,7 @@
   lib,
   nix-update-script,
   fetchFromGitHub,
-  buildPythonApplication,
+  buildPythonPackage,
   setuptools,
   pytestCheckHook,
   click,
@@ -12,7 +12,7 @@
   colorlog,
   packaging,
 }:
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "hyperglot";
   version = "0.8.1";
   pyproject = true;

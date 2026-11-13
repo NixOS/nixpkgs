@@ -34,7 +34,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ale-py";
   version = "0.12.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";

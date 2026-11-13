@@ -4,6 +4,7 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
+  libgit2,
   libiconv,
   rustPlatform,
   libz,
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl.dev
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

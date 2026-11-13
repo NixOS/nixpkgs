@@ -6,6 +6,7 @@
   fetchFromGitHub,
   libpulseaudio,
   libxcb,
+  aws-lc,
   ncurses,
   nix-update-script,
   openssl,
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
   buildInputs = [
+    aws-lc
     ncurses
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux openssl

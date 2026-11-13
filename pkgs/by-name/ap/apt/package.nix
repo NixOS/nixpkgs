@@ -32,14 +32,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "3.3.5";
+  version = "3.3.7";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "apt";
     rev = finalAttrs.version;
-    hash = "sha256-LUU9U6ahbsL3P8KqatgUQGfO9xVkoXzyE9Qn+Ny3JyA=";
+    hash = "sha256-F6XXAhbNZGjwLDPdpK1bLQPu6+giCarCJv0FkxXf28o=";
   };
 
   # cycle detection; lib can't be split
@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "DROOT_GROUP" "root")
     (lib.cmakeBool "USE_NLS" withNLS)
     (lib.cmakeBool "WITH_DOC" withDocs)
+    (lib.cmakeBool "WITH_HEGEL_TESTS" false) # haskellPackages.hegel is broken as of writing
   ];
 
   passthru.updateScript = nix-update-script { };

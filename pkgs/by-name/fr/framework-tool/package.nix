@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
   udev,
 }:
 
@@ -20,7 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-gc/diU6reAaFnar1HZ4tMzYsGo8k3LH35g9Er5T8xas=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ];
+
+  buildInputs = [
+    libgit2
+    udev
+  ];
 
   meta = {
     description = "Swiss army knife for Framework laptops";

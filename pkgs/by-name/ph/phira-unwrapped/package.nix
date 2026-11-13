@@ -10,11 +10,12 @@
   ffmpeg_8,
   alsa-lib,
   gtk3,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phira-unwrapped";
-  version = "0.8.2";
+  version = "0.8.3";
 
   __structuredAttrs = true;
 
@@ -22,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "TeamFlos";
     repo = "phira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SjqWdMv2BF7+5IURex45yWpHH5iPnXhyZoLf1eCcI6E=";
+    hash = "sha256-Ev0TJVjrXwHg+wgQCTBaUmpgwC/fA62ldrSrBzLQrXI=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     # The handwritten FFI bindings in prpr-avc target FFmpeg 8.
     ffmpeg_8
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # for crate alsa-sys
@@ -47,14 +49,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # use dynamically linked ffmpeg instead of expecting static lib
     ./ffmpeg.patch
 
-    # missing macro from tracing crate
+    # missing warn macro import
     ./tracing.patch
 
     # allow using env var to specify location of assets and data
     ./assets.patch
   ];
 
-  cargoHash = "sha256-Mfrwxz/j1ksJMBnOXEheV85GevMwbI1oDj8xhEMuaEQ=";
+  cargoHash = "sha256-EqYKFRBd79dYWH9PrzHJpoMoSEE9UIG6lbHTf+hxBU8=";
 
   # The developer put assets necessary for this test in gitignore, so it cannot run.
   checkFlags = [ "--skip=test_parse_chart" ];

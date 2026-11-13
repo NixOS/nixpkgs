@@ -23,13 +23,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.16.0";
+  version = "3.17.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_logging";
     inherit version;
-    hash = "sha256-CKMHa48PckIZ1vc7KiQu9p1R6LziJhM66+QaJfI/VAA=";
+    hash = "sha256-1zQ/K4K0+ekkS/yKunrQNMQV+bu0Be0o0RJao30nC3I=";
   };
 
   build-system = [ setuptools ];

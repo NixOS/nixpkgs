@@ -27,8 +27,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "pkg_resources_backport";
     inherit (finalAttrs) version;

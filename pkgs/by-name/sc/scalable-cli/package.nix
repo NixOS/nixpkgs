@@ -3,6 +3,8 @@
   lib,
   nix-update-script,
   rustPlatform,
+  pkg-config,
+  aws-lc,
   versionCheckHook,
 }:
 
@@ -29,6 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   passthru = {
     updateScript = nix-update-script { };

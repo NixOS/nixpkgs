@@ -32,6 +32,10 @@ buildNpmPackage (finalAttrs: {
     libsecret
   ];
 
+  # @vscode/vsce-sign's postinstall script fails on exotic architectures.
+  # We ignore the scripts, and this does not change the output.
+  npmFlags = [ "--ignore-scripts" ];
+
   meta = {
     description = "Lightweight server clone of Azure Storage that simulates most of the commands supported by it with minimal dependencies";
     homepage = "https://github.com/Azure/Azurite";

@@ -4,6 +4,8 @@
   rustPlatform,
   testers,
   git-stack,
+  libgit2,
+  pkg-config,
   stdenv,
   zlib,
 }:
@@ -20,11 +22,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-n+kU6OLwsAjUVc1LPZpcn54FJroU09LNWmrar2oNyXI=";
 
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    libgit2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
 
   # Many tests try to access the file system.
   doCheck = false;

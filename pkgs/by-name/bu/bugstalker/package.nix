@@ -3,11 +3,15 @@
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bugstalker";
   version = "0.4.7";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "godzie44";
@@ -20,6 +24,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Tests require rustup.
   doCheck = false;
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ oniguruma ];
 
   nativeInstallCheckHook = [ versionCheckHook ];
   doInstallCheck = true;

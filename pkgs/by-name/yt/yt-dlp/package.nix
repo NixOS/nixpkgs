@@ -54,7 +54,6 @@ python3Packages.buildPythonApplication rec {
     ''}
   '';
 
-  __structuredAttrs = true;
   outputs = [
     "out"
     "man"

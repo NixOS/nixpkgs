@@ -7,6 +7,7 @@
   pkg-config,
   openssl,
   cacert,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,7 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     openssl
   ];
 

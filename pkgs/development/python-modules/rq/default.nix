@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rq";
   version = "2.12";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rq";
@@ -56,8 +55,7 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  # redisTestHook does not work on darwin-x86_64
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+  doCheck = true;
 
   disabledTests =
     lib.optionals

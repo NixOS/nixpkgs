@@ -1,32 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hs-dbus-signature";
-  version = "0.7";
-  format = "setuptools";
+  version = "0.8.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NNnTcSX+K8zU+sj1QBd13h7aEXN9VqltJMNWCuhgZ6I=";
+  src = fetchFromGitHub {
+    owner = "mulkieran";
+    repo = "hs-dbus-signature";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A9+v9xO8Ne+u48Fj4Njml4V4T0alXqpkwuB6/cH3av4=";
   };
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    hypothesis
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    hypothesis
   ];
 
   pythonImportsCheck = [ "hs_dbus_signature" ];
 
   meta = {
     description = "Hypothesis Strategy for Generating Arbitrary DBus Signatures";
-    homepage = "https://github.com/stratis-storage/hs-dbus-signature";
+    homepage = "https://github.com/mulkieran/hs-dbus-signature";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

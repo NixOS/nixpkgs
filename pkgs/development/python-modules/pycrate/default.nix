@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pycrate";
   version = "0.8.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pycrate-org";

@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mcp-types";
   inherit (mcp) version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   sourceRoot = "${finalAttrs.src.name}/src/mcp-types";
 

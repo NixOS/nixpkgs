@@ -7,7 +7,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "owocr";
   version = "1.26.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AuroraWright";

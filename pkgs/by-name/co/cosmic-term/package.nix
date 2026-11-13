@@ -9,6 +9,7 @@
   fontconfig,
   freetype,
   libinput,
+  zstd,
   nix-update-script,
   nixosTests,
 }:
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
     freetype
     libinput
+    zstd
   ];
 
   dontUseJustBuild = true;

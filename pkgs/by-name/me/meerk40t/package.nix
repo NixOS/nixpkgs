@@ -20,6 +20,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-KvXX4s+oKj7nksQyb4U827A2JQ1z6hwrBxBAg4RfW8s=";
   };
 
+  # https://github.com/meerk40t/MeerK40t/pull/3247 adapted to the moved file; remove with the next release
+  patches = [ ./numpy-2.3-cross.patch ];
+
   nativeBuildInputs = [
     wrapGAppsHook3
   ]

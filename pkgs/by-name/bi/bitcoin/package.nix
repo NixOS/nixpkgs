@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     gnupg
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     autoSignDarwinBinariesHook
   ]
   ++ lib.optionals withGui [ qt6.wrapQtAppsHook ];

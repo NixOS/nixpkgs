@@ -39,8 +39,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.6";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "spdx-python-model";

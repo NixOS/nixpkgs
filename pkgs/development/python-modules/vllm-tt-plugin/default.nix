@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "vllm-tt-plugin";
   version = "0.1.0-unstable-2026-10-09";
   pyproject = true;
-  __structuredAttrs = true;
 
   disabled = pythonAtLeast "3.14";
 

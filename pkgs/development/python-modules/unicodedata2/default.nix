@@ -1,19 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "unicodedata2";
-  version = "17.0.1";
+  version = "18.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) version pname;
-    hash = "sha256-15lD0VP19r++P1Wl7GEZhRhL2jf87bPsx1Mi2CrmrTs=";
+  src = fetchFromGitHub {
+    owner = "mikekap";
+    repo = "unicodedata2";
+    tag = finalAttrs.version;
+    hash = "sha256-om+IJCVGuXA91RuweViW46scTX8TLa6dQeFo/pEhLzY=";
   };
 
   build-system = [ setuptools ];
@@ -21,6 +23,12 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "unicodedata2" ];
+
+  disabledTests = [
+    # Date is missing
+    "test_all_names"
+    "test_normalization"
+  ];
 
   meta = {
     description = "Backport and updates for the unicodedata module";

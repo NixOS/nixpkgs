@@ -7,6 +7,7 @@
   makeWrapper,
   pkg-config,
   openssl,
+  libgit2,
   maa-assistant-arknights,
   android-tools,
   git,
@@ -29,7 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    libgit2
+  ];
 
   nativeCheckInputs = [ git ];
 

@@ -24,8 +24,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.40.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "rdflib";
     repo = "pyshacl";

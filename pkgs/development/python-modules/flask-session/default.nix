@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
 
@@ -67,8 +66,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # Hang indefinitely
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+  doCheck = true;
 
   meta = {
     description = "Flask extension that adds support for server-side sessions";

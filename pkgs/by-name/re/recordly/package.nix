@@ -13,7 +13,6 @@
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
-  nodejs_22,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "recordly";
@@ -25,8 +24,6 @@ buildNpmPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-2vyaSpyfjQA8p9sfw5Gksj5jDTGKWu31FDLiPW9F+ow=";
   };
-
-  nodejs = nodejs_22;
 
   __structuredAttrs = true;
 

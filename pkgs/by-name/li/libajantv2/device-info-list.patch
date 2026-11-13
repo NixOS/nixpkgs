@@ -1,7 +1,7 @@
-From 5d6984729190139ddcbefb825e4d59a8bdfc3551 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Sun, 22 Jun 2025 14:05:49 +0100
-Subject: [PATCH 2/3] Properly mark CNTV2DeviceScanner::GetDeviceInfoList as a
+Subject: [PATCH] Properly mark CNTV2DeviceScanner::GetDeviceInfoList as a
  class member method
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 2/3] Properly mark CNTV2DeviceScanner::GetDeviceInfoList as a
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/ajantv2/src/ntv2devicescanner.cpp b/ajantv2/src/ntv2devicescanner.cpp
-index 11d145be..1fb0b433 100644
+index b135d6d7a40e13c40711e317655a66af5580f789..3bcd540c0c2f0c6e1de847aea4252f2b8b276c6e 100644
 --- a/ajantv2/src/ntv2devicescanner.cpp
 +++ b/ajantv2/src/ntv2devicescanner.cpp
-@@ -117,7 +117,7 @@ CNTV2DeviceScanner::CNTV2DeviceScanner (const bool inScanNow)
+@@ -94,7 +94,7 @@ CNTV2DeviceScanner::CNTV2DeviceScanner (const bool inScanNow)
  		}
  	#endif	//	!defined(NTV2_DEPRECATE_16_3)
  
@@ -21,6 +21,3 @@ index 11d145be..1fb0b433 100644
  {
  	AJAAutoLock tmpLock(&sDevInfoListLock);
  	return sDevInfoList;
--- 
-2.49.0
-

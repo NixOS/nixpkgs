@@ -14,6 +14,7 @@
   stdenv,
   makeWrapper,
   zenity,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfer";
@@ -27,13 +28,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
     (lib.getLib stdenv.cc.cc)
   ];

@@ -27,8 +27,6 @@ buildPythonPackage.override { inherit (nixl) stdenv; } (finalAttrs: {
     pname
     version
     src
-    __structuredAttrs
-    strictDeps
     nativeBuildInputs
     dontUseCmakeConfigure
     buildInputs

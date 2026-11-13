@@ -5,6 +5,8 @@
   fetchpatch2,
   pkg-config,
   libgit2,
+  oniguruma,
+  rust-jemalloc-sys,
   zlib,
   vimUtils,
   nix-update-script,
@@ -52,6 +54,8 @@ let
 
     buildInputs = [
       libgit2
+      oniguruma
+      rust-jemalloc-sys
       zlib
     ];
   };

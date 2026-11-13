@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "qiskit";
+    owner = "stfc";
     repo = "qiskit-machine-learning";
     tag = version;
     hash = "sha256-l7lzdGSarj1DiC0igeyr6kP+GYYE+eGKdW9+IN+2uh8=";
@@ -81,7 +81,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    broken = true; # incompatible with qiskit >= 2.0 (see https://github.com/Qiskit/qiskit-machine-learning/issues/934)
+    broken = true; # incompatible with qiskit >= 2.0 (see https://github.com/stfc/qiskit-machine-learning/issues/934)
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";

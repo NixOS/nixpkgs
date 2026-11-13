@@ -24,6 +24,7 @@
   yasm,
 
   # runtime deps
+  aws-lc,
   fontconfig,
   freetype,
   gst_all_1,
@@ -39,7 +40,10 @@
   libxcursor,
   libx11,
   libxcb,
+  rust-jemalloc-sys,
+  sqlite,
   zlib,
+  zstd,
 
   # tests
   nixosTests,
@@ -69,13 +73,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-blDr9zZHHAGqK8Eoh0ixazeUDZKr2T1El7Y5k2axXcc=";
+    hash = "sha256-ZoYk5aXHuYSxXjeRfqugMeLSP1vcqm/fNqY67wJSWqI=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -85,7 +89,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-3jUZNiESi9zYFQAbf1dYmHVgHNzmD2aY2CuS8K7SxEY=";
+  cargoHash = "sha256-jkRafwC8BLJ/H9Rx3y0kvocf2MM0oKz6xNhyAdPSBgg=";
 
   postPatch = ''
     # The mozjs crates all use cbindgen with `cargo metadata` invocations,
@@ -144,6 +148,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     fontconfig
     freetype
     gst_all_1.gstreamer
@@ -154,7 +159,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     harfbuzz
     libunwind
     libGL
+    rust-jemalloc-sys
+    sqlite
     zlib
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland

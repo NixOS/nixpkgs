@@ -128,6 +128,8 @@ in
 
 {
 
+  meta.maintainers = [ lib.maintainers.booxter ];
+
   ###### interface
 
   options = {

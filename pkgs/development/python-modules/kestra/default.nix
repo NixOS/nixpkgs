@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "kestra";
   version = "2.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kestra-io";

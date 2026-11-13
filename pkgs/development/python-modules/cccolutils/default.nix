@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "CCColUtils";
     inherit (finalAttrs) version;

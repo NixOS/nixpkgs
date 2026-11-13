@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.6";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Calysto";
     repo = "calysto";

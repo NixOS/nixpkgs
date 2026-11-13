@@ -15,10 +15,12 @@ pkgConfigCheckHook() {
   # Module names do not contain spaces
   # shellcheck disable=SC2206,2048
   for moduleName in ${pkgConfigModules[*]-}; do
-    if ! moduleVersion="$(@pkgconfig@ --modversion "$moduleName")"; then
+    # unlike --modversion, --exists also resolves the module's Requires
+    if ! @pkgconfig@ --exists --print-errors "$moduleName"; then
       nixErrorLog "pkg-config module $moduleName not found"
       exit 1
     fi
+    moduleVersion="$(@pkgconfig@ --modversion "$moduleName")"
     nixInfoLog "pkg-config module $moduleName has version $moduleVersion"
 
     if [[ -z "${dontPkgConfigCheckVersion-}" && "$moduleVersion" != "$version" ]]; then

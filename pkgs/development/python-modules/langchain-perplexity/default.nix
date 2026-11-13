@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-perplexity";
   version = "1.4.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";

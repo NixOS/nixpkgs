@@ -45,7 +45,6 @@ buildPythonPackage {
   pname = "nvidia-matmul-heuristics";
   inherit version;
   format = "wheel";
-  __structuredAttrs = true;
 
   src =
     srcs.${stdenv.hostPlatform.system}

@@ -17,13 +17,14 @@
   levenshtein,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "panphon";
   version = "0.22.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "panphon";
+    inherit (finalAttrs) version;
     hash = "sha256-OD1HfVh/66HKWoKHjiT+d8FkXW++ngHJ6X1JjYopujU=";
   };
 
@@ -42,9 +43,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "test"
+  unittestFlags = [
+    "--start-directory=test"
   ];
 
   pythonImportsCheck = [
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

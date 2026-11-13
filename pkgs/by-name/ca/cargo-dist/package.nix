@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
+  aws-lc,
   bzip2,
   xz,
   zstd,
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     bzip2
     xz
     zstd

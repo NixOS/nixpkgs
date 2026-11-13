@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # On aarch64-darwin, dev target needs to set panic strategy to abort
   # However this must be set while the flag `-Zpanic_abort_tests` is also set,
   # which could only be done in Rust nightly toolchain.
-  doCheck = !(with stdenv.hostPlatform; isDarwin && isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Modern Embedded SQL Database written in Rust";

@@ -1,5 +1,4 @@
 {
-  stdenvNoCC,
   lib,
   protobuf,
   rustPlatform,
@@ -10,6 +9,8 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  sqlite,
+  sqlcipher,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -36,12 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+    sqlcipher
+  ];
 
   env = {
-    NIX_LDFLAGS = lib.optionalString (
-      with stdenvNoCC.hostPlatform; (isDarwin && isx86_64)
-    ) "-framework AppKit";
     OPENSSL_NO_VENDOR = true;
     PROTOC = "${lib.getExe pkgsBuildHost.protobuf}";
   };

@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
   disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
-    owner = "andrewsayre";
+    owner = "pySmartThings";
     repo = "pysmartthings";
     tag = "v${finalAttrs.version}";
     hash = "sha256-CltBrBmyNfCz0Ogpu2/NAZzH6zEk69mhBbanB4h0Abg=";
@@ -55,8 +55,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python library for interacting with the SmartThings cloud API";
-    homepage = "https://github.com/andrewsayre/pysmartthings";
-    changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/pySmartThings/pysmartthings";
+    changelog = "https://github.com/pySmartThings/pysmartthings/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -1,11 +1,13 @@
 {
   lib,
+  aws-lc,
   rustPlatform,
   fetchFromGitHub,
   openssl,
   pkg-config,
   versionCheckHook,
   nix-update-script,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,7 +23,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-avfTlft8BrFIqzB56Qk9obJRETuIsa6dMZBsyFecQik=";
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    zstd
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

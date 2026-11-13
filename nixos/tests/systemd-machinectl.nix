@@ -154,7 +154,7 @@ in
         profile-host-nspawn
         profile-host-vmspawn
       ];
-
+      nix.enable = true;
       # do not try to access cache.nixos.org
       nix.settings.substituters = lib.mkForce [ ];
 
@@ -168,7 +168,7 @@ in
         vmSharedSystem
       ];
 
-      virtualisation.diskSize = 2048;
+      virtualisation.diskSize = 3072;
 
       systemd.tmpfiles.rules = [
         "d /var/lib/machines/shared-decl 0755 root root - -"

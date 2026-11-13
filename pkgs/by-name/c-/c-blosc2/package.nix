@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   testers,
+  ctestCheckHook,
 
   static ? stdenv.hostPlatform.isStatic,
 
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-blosc2";
-  version = "3.3.5";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "c-blosc2";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-X/LR88pHbCk0TPu0oGPsg9phXmwnHlXCxdxd+Wa69UY=";
+    sha256 = "sha256-Q4HGkPdf1xqIVduaFLXlE5z86gD1OisVYJVdz2huhck=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -55,6 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !static;
   # possibly https://github.com/Blosc/c-blosc2/issues/432
   enableParallelChecking = false;
+
+  # FIXME: This syntax was added to avoid unncessary rebuilds
+  # Can use `lib.optionals` instead, during next bump of c-blosc2
+  ${if (zfp.passthru.bitStreamWordSize != 64) then "disabledTests" else null} = [
+    # This test only supports the default 64-bit bitstream word of zfp
+    "test_plugin_test_zfp_rate_getitem_cells"
+  ];
+  ${if (zfp.passthru.bitStreamWordSize != 64) then "nativeCheckInputs" else null} = [
+    ctestCheckHook
+  ];
 
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

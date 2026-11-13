@@ -10,14 +10,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnst";
-  version = "0.2.0-alpha3";
+  version = "0.3.0-alpha";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "dnst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Sgj2OZptG/bMsuYdGfaaY62qh4uUyxdbit6vpWWm9w=";
+    hash = "sha256-rXrjHxUJI+D6lLCAVEGr4OGE60eKhxvVe56YV0TFqM8=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-8pzf4GeBJbqIZf6KAqROEAvFAqtf6XLODWhS3RVfpAQ=";
+  cargoHash = "sha256-70F8vajZSLkBS1YWFVSXhPwYGM1WHYUaGps4fhtRYkk=";
 
   postInstall = ''
     mkdir -p $out/libexec

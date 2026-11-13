@@ -1,53 +1,73 @@
 {
   lib,
   agate,
-  boto3,
   buildPythonPackage,
+  dbt-adapters,
+  dbt-common,
   dbt-core,
   dbt-postgres,
-  fetchFromGitHub,
+  fetchPypi,
+  hatchling,
+  pytest-mock,
   pytestCheckHook,
   redshift-connector,
-  setuptools,
+  requests,
+  sqlparse,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "1.9.0";
+  version = "1.11.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "dbt-labs";
-    repo = "dbt-redshift";
-    tag = "v${version}";
-    hash = "sha256-ayt5KRH3jAoi7k+0yfk1ZSqG4qsM+zny8tDnWOWO5oA=";
+  # missing tags on GitHub
+  src = fetchPypi {
+    pname = "dbt_redshift";
+    inherit version;
+    hash = "sha256-L3qR/vyXHLN6z0dJurcAn/BbQ7sD95O5epDLCXdn/HA=";
   };
 
   pythonRelaxDeps = [
-    "boto3"
+    "dbt-postgres"
     "redshift-connector"
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     agate
-    boto3
+    dbt-adapters
+    dbt-common
     dbt-core
     dbt-postgres
     redshift-connector
+    requests
+    sqlparse
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   enabledTestPaths = [ "tests/unit" ];
+
+  pytestFlags = [
+    # pyproject.toml specifies -n auto which only pytest-xdist understands
+    "--override-ini=addopts="
+  ];
+
+  disabledTests = [
+    # requires network access
+    "test_profile_idc_token_all_required_fields"
+  ];
 
   pythonImportsCheck = [ "dbt.adapters.redshift" ];
 
   meta = {
     description = "Plugin enabling dbt to work with Amazon Redshift";
-    homepage = "https://github.com/dbt-labs/dbt-redshift";
-    changelog = "https://github.com/dbt-labs/dbt-redshift/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-redshift";
+    changelog = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-redshift/CHANGELOG.md";
     license = lib.licenses.asl20;
   };
 }

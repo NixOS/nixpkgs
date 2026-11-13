@@ -10,12 +10,12 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "radicle-explorer";
-  version = "0-unstable-2026-10-29";
+  version = "0-unstable-2026-11-09";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    rev = "e1f7a40c63053027d92c8820e00307e1f51a471a";
+    rev = "11cf896b903fafc8ff860f8547394d98664ecd99";
     nonConeMode = true;
     sparseCheckout = [
       "/explorer"
@@ -23,10 +23,10 @@ buildNpmPackage (finalAttrs: {
       "/package.json"
       "/shared"
     ];
-    hash = "sha256-kZKTZSzKjSUJ5FqYvQ6pZYjQ2bkxq0mFcpFqvJ0YDU8=";
+    hash = "sha256-aCmK3J+/wnjYFBBXM7vHOPXBnfaqNzC5z9dYIK5+b/4=";
   };
 
-  npmDepsHash = "sha256-656FoOrInxwB7k/ShMvP30banoypxBh3xABN4+03xDA=";
+  npmDepsHash = "sha256-Cz6HoYGzMhVRwPUbw6S7Dh7FwNEO3r2xj7L8k332ZnE=";
 
   npmWorkspace = "explorer";
 

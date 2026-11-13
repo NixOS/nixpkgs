@@ -2,11 +2,10 @@
   lib,
   stdenv,
   rustPlatform,
-  rustc,
   versionCheckHook,
   fetchFromGitHub,
   pkg-config,
-  patchelf,
+  aws-lc,
   vulkan-loader,
   libxkbcommon,
   libx11,
@@ -36,19 +35,27 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pdfcraft";
-  version = "0.14.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "pdfcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UCTQr6j4TqPXQWH410cF6DZC0vK59QFv1FAWzxdDjwA=";
+    hash = "sha256-2X2ixtr7mxHRpfhcGghKUO7ib0SFBruBmQPIlTFZ8Ds=";
   };
 
-  cargoHash = "sha256-L0fC96fLlwTq0Gu0CSL9swKzZe4lcgLFsMsaIk3CxuY=";
+  cargoHash = "sha256-sjnRF9WVDRPrgEgwZEyVIEk3qq3Erkv9cBtlkgb52lc=";
 
-  # rten-gemm uses AVX512-VNNI intrinsics that fail to compile with nixpkgs rustc.
-  postPatch = lib.optionalString stdenv.hostPlatform.isx86_64 ''
+  # [[patch.unused]] egui fork entries in Cargo.toml break cargo --offline in the sandbox.
+  postPatch = ''
+    sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+
+    # Until https://github.com/storytold/craft-libs/issues/492: startup update UI does not work on NixOS.
+    substituteInPlace apps/pdfcraft/src/main.rs \
+      --replace-fail 'app.set_startup_update_check(true);' 'app.set_startup_update_check(false);'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isx86_64 ''
+        # rten-gemm uses AVX512-VNNI intrinsics that fail to compile with nixpkgs rustc.
         substituteInPlace "$cargoDepsCopy"/source-registry-0/rten-gemm-*/src/i8dot.rs \
           --replace-fail \
           '            if let Some(isa) = x86_64::Avx512VnniIsa::new() {
@@ -59,10 +66,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   env = {
-    CRAFT_FONTS_DIR = "${craft-fonts}";
+    CRAFT_FONTS_DIR = craft-fonts;
     CRAFT_FONTS_REQUIRED = "1";
   };
 
@@ -73,8 +79,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    patchelf
   ];
+
+  # aws-lc-sys >= 0.42 is forced onto the system library by the nixpkgs crate
+  # override (AWS_LC_SYS_USE_SYSTEM=1) and does not find it unless it is here.
+  buildInputs = [ aws-lc ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 packaging/linux/ai.storyteller.pdfcraft.desktop \
@@ -92,6 +101,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=pdfcraft-cli"
   ];
 
+  # pdfcraft-cli `ui_control` tests bind loopback TCP (sandbox blocks without this on Darwin).
+  __darwinAllowLocalNetworking = true;
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
@@ -100,7 +112,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Open-source PDF workbench for reading, organizing, and securing documents";
     homepage = "https://github.com/storytold/pdfcraft";
-    changelog = "https://github.com/storytold/pdfcraft/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/storytold/pdfcraft/releases/tag/${finalAttrs.src.tag}";
     license =
       with lib.licenses;
       AND [
@@ -112,6 +124,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     maintainers = with lib.maintainers; [ cleboost ];
     mainProgram = "pdfcraft";
-    platforms = rustc.meta.platforms;
   };
 })

@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Bluetooth-Devices";
     repo = "cached-ipaddress";
     tag = "v${finalAttrs.version}";
     hash = "sha256-+A1kMD1L2K+dAWrZJ96qJpx0udRGMWbWApyWtMrE7lk=";
@@ -41,8 +41,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Cache construction of ipaddress objects";
-    homepage = "https://github.com/bdraco/cached-ipaddress";
-    changelog = "https://github.com/bdraco/cached-ipaddress/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/Bluetooth-Devices/cached-ipaddress";
+    changelog = "https://github.com/Bluetooth-Devices/cached-ipaddress/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  setuptools_80,
   wheel,
   psutil,
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    setuptools_80
     wheel
   ];
 

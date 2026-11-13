@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1a6";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "radix";
     repo = "sumtypes";

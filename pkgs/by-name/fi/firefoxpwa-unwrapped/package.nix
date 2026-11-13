@@ -11,6 +11,7 @@
   nix-update-script,
   nixosTests,
   openssl,
+  zstd,
   pkg-config,
   stdenv,
 }:
@@ -42,7 +43,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
     pkg-config
   ];
-  buildInputs = [ openssl ];
+
+  buildInputs = [
+    openssl
+    zstd
+  ];
 
   env = {
     FFPWA_EXECUTABLES = ""; # .desktop entries generated without any store path references

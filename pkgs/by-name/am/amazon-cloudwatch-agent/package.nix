@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "amazon-cloudwatch-agent";
-  version = "1.300074.0";
+  version = "1.300074.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-cloudwatch-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IgS/gkbxSHIpJ1EVZbWzvU1sYppqUQItPbwN8ASV0G0=";
+    hash = "sha256-HVhs9Mx7yhhN5nDmy/wKNSlAAPk2Aha0vlwnaLADiaE=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch

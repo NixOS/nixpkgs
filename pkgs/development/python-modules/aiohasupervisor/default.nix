@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.6.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-supervisor-client";
     tag = version;
-    hash = "sha256-OAuLee6hbShgEDN/3oD7O6KzxylnfrJoCgMPjluYcG8=";
+    hash = "sha256-i6OyDuC+463DbMmTskrXp24ecftRwrQycsQEh9nRmpo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=68.0,<83.1" "setuptools"
+      --replace-fail "setuptools>=68.0,<84.1" "setuptools"
   '';
 
   nativeBuildInputs = [

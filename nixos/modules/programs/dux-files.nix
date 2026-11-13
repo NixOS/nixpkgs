@@ -53,20 +53,11 @@ in
     services.dbus.packages = [ cfg.package ];
     security.polkit.enable = lib.mkDefault true;
 
+    systemd.packages = lib.mkIf cfg.systemd.enable [ cfg.package ];
+
     systemd.user.services.dfiles = lib.mkIf cfg.systemd.enable {
-      description = "Dux Files";
-      documentation = [ "https://github.com/duxlabs-dev/dux-files" ];
-      after = [ cfg.systemd.target ];
-      partOf = [ cfg.systemd.target ];
       wantedBy = [ cfg.systemd.target ];
       restartIfChanged = cfg.systemd.restartIfChanged;
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${lib.getExe cfg.package} run --session --hidden --keep-running";
-        Restart = "on-failure";
-        RestartSec = 2;
-        Slice = "app.slice";
-      };
     };
 
     xdg.portal = lib.mkIf cfg.portal.enable {

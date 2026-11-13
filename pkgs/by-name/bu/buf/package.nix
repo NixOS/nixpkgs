@@ -12,6 +12,8 @@ buildGoModule (finalAttrs: {
   pname = "buf";
   version = "1.75.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";

@@ -20,6 +20,7 @@
   openssl,
   pciutils,
   pulseaudio,
+  sqlite,
   wl-clipboard,
   wtype,
   which,
@@ -35,6 +36,7 @@
   vulkan-loader,
 
   onnxSupport ? false,
+  oniguruma,
   onnxruntime,
 
   hipSupport ? false,
@@ -109,6 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     alsa-lib
     openssl
+    sqlite
   ]
   ++ lib.optionals hipSupport (
     with rocmPackages;
@@ -123,6 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     vulkan-loader
   ]
   ++ lib.optionals onnxSupport [
+    oniguruma
     onnxruntime
   ];
 

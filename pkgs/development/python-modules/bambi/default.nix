@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "bambi";
   version = "0.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
@@ -133,7 +132,7 @@ buildPythonPackage (finalAttrs: {
     "test_with_groups"
     "test_with_user_values"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Python crash (in matplotlib)
     # Fatal Python error: Aborted
     "test_categorical_response"

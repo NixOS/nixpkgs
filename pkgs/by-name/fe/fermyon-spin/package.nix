@@ -10,6 +10,9 @@
   installShellFiles,
   testers,
   buildPackages,
+  zstd,
+  oniguruma,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,8 +35,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    oniguruma
     openssl
+    sqlite
     zlib
+    zstd
   ];
 
   env = {

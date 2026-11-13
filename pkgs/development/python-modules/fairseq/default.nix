@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pytorch";
+    owner = "facebookresearch";
     repo = "fairseq";
     rev = "v${version}";
     hash = "sha256-XX/grU5ljQCwx33miGoFc/7Uj9fZDtmhm4Fz7L4U+Bc=";
@@ -113,7 +113,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Facebook AI Research Sequence-to-Sequence Toolkit";
-    homepage = "https://github.com/pytorch/fairseq";
+    homepage = "https://github.com/facebookresearch/fairseq";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];

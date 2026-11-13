@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   poetry-core,
-  fetchpatch,
   pytest-cov-stub,
   pytestCheckHook,
   iso3166,
@@ -14,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "iso4217parse";
   version = "0.6.2-unstable-2026-09-08";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tammoippen";
@@ -37,12 +35,14 @@ buildPythonPackage (finalAttrs: {
     iso3166
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Parse currencies (symbols and codes) from and to ISO4217";
     homepage = "https://github.com/tammoippen/iso4217parse";
-    changelog = "https://github.com/tammoippen/iso4217parse/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/tammoippen/iso4217parse/releases/tag/v${lib.head (lib.splitString "-" finalAttrs.version)}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dwoffinden ];
   };

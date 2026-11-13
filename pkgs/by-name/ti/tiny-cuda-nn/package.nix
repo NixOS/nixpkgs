@@ -74,6 +74,13 @@ backendStdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         "m.set_slice3x3(" \
         "m.set_slice_3x3("
+  ''
+  # torch >= 2.14 headers require C++20, while setup.py builds the torch bindings as C++17.
+  + ''
+    substituteInPlace bindings/torch/setup.py \
+      --replace-fail \
+        'base_cflags = [f"-std=c++{cpp_standard}"]' \
+        'base_cflags = ["-std=c++20"]'
   '';
 
   nativeBuildInputs = [

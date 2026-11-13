@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdjson";
-  version = "4.6.11";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "simdjson";
     repo = "simdjson";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JjcvJldWQTTFq9PU1F0IafL7GVoMfVUDz6hVb5Po/A4=";
+    hash = "sha256-smD805QjIwUqTyMC0RmjjRKUX3jJZo/uOHSTvcBzca0=";
   };
 
   outputs = [

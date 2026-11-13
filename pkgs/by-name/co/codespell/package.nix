@@ -36,6 +36,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   disabledTests = [
     # tries to run not fully installed script
     "test_basic"
+    # checks if specific words are in the dicts or not, but they changed with dictionary updates
+    "test_dictionary_formatting"
   ];
 
   pythonImportsCheck = [ "codespell_lib" ];

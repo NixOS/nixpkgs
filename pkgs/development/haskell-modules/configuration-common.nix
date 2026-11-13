@@ -135,7 +135,7 @@ with haskellLib;
             old:
             # Some dead code is not properly eliminated on aarch64-darwin, leading
             # to bogus references to some dependencies.
-            lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+            lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
               postInstall = ''
                 ${old.postInstall or ""}
                 remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
@@ -3211,6 +3211,10 @@ with haskellLib;
   stripe-concepts = doJailbreak super.stripe-concepts;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
+
+  # 2026-11-05: Adapt tests to Botan 3.14, which rejects DSA groups with
+  # q > 256 bits and reports PBKDF2 without a PRF as not implemented
+  botan-low = appendPatch ./patches/botan-low-botan-3.14-tests.patch super.botan-low;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 

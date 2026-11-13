@@ -11,7 +11,9 @@
   direnv,
   git,
   pkg-config,
+  aws-lc,
   openssl,
+  zstd,
   cmake,
   cacert,
   tzdata,
@@ -42,7 +44,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    zstd
+    openssl
+  ];
 
   postPatch = ''
     patchShebangs --build \

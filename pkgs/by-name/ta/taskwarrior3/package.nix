@@ -10,10 +10,12 @@
   rustc,
   cargo,
   installShellFiles,
+  pkg-config,
 
   # buildInputs
   corrosion,
   libuuid,
+  sqlite,
 
   # passthru.tests
   nixosTests,
@@ -39,6 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vNi/gVzIzTXuuPkWNimDwPJG7COWJATzGaT6J4UrrTk=";
   };
   patches = [
+    # Propagate system SQLite through the CMake/Rust bridge.
+    # https://github.com/GothenburgBitFactory/taskwarrior/pull/4223
+    (fetchpatch {
+      url = "https://github.com/GothenburgBitFactory/taskwarrior/commit/bd86de7a6e99b1bc8d1a8f5704a08571afd2cdef.patch";
+      hash = "sha256-6IAQlY5bExL9oCswIfs9D3MrcZKtQcSoNrEnAL46VXA=";
+    })
+
     # Installs properly Bash scripts, just like fish. See:
     # https://github.com/GothenburgBitFactory/taskwarrior/pull/4173
     (fetchpatch {
@@ -83,11 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     cargo
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
     corrosion
     libuuid
+    sqlite
   ];
 
   # The test suite is run as an installCheck instead of a check: since

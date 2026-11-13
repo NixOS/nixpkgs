@@ -15,13 +15,13 @@
 }:
 beamPackages.mixRelease rec {
   pname = "pinchflat-ngx";
-  version = "2026.10.20";
+  version = "2026.11.2";
 
   src = fetchFromGitHub {
     owner = "TheBadFella";
     repo = "Pinchflat-NGX";
     tag = version;
-    hash = "sha256-B48H/7WdURt/YIo4C4NvrHp+TtFuheJ523S5kJlZA9o=";
+    hash = "sha256-mEEaDkrlZCd26lsqjh5xILxVsjtZySpjjf8Sy1OVMu0=";
   };
 
   # force compile exqlite using our version
@@ -34,13 +34,13 @@ beamPackages.mixRelease rec {
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-d6QNGBakyoeOrMZFIUkedacOY4porClARdM5swVX2fc=";
+    hash = "sha256-K+iC2H1O4MI9dJenq9/8jFX6LO/nLV28fbsZ35DjaDw=";
   };
   removeCookie = false;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/assets/yarn.lock";
-    hash = "sha256-m842N1+CcCw8mgyH+zZdIcyAr4tcCrKFwTJwmfHHOyw=";
+    hash = "sha256-pPXESvQCAuvNfCu/9xC90+IUxx2CGlSGPzw7kdQx/Vo=";
   };
 
   nativeBuildInputs = [

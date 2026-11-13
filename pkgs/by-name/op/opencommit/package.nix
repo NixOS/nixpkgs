@@ -30,7 +30,7 @@ buildNpmPackage rec {
     description = "AI-powered commit message generator";
     homepage = "https://www.npmjs.com/package/opencommit";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = [ ];
     mainProgram = "oco";
   };
 

@@ -1,0 +1,50 @@
+diff --git a/crates/app/src/main.rs b/crates/app/src/main.rs
+--- a/crates/app/src/main.rs
++++ b/crates/app/src/main.rs
+@@ -29,35 +29,3 @@
+-/// Written where the desktop looks for them.
+-#[cfg(target_os = "linux")]
+-fn put_among_applications() {
+-    let home = std::env::var_os("XDG_DATA_HOME")
+-        .map(std::path::PathBuf::from)
+-        .or_else(|| Some(std::path::PathBuf::from(std::env::var_os("HOME")?).join(".local/share")));
+-    let (Some(home), Ok(exe)) = (home, std::env::current_exe()) else {
+-        return;
+-    };
+-    let Some(exe) =
+-        rimstack_core::kept::desktop::program_to_list(&exe, |name| std::env::var_os(name))
+-    else {
+-        return;
+-    };
+-    let entry = include_str!("../assets/rimstack.desktop");
+-    let icon = include_bytes!("../assets/rimstack.svg");
+-    match rimstack_core::kept::desktop::install(&home, &exe, entry, icon) {
+-        // KDE reads icons again on this signal; a running desktop holds them otherwise.
+-        Ok(true) => {
+-            let told = std::process::Command::new("dbus-send")
+-                .args(["--session", "--type=signal", "/KIconLoader"])
+-                .args(["org.kde.KIconLoader.iconChanged", "int32:0"])
+-                .status();
+-            if let Err(problem) = told {
+-                rimstack_core::problem!("icons changed, desktop not told: {problem}");
+-            }
+-        }
+-        Ok(false) => {}
+-        Err(problem) => rimstack_core::problem!("desktop entry: {problem}"),
+-    }
+-}
+-
+ /// `rimstack --steamworks=subscribe:1,2`; exits 0 when Steam took the requests.
+ fn steamworks(app: &App, request: &str) -> std::process::ExitCode {
+     use rimstack_core::base::error::Error;
+@@ -123,10 +91,6 @@ fn main() -> std::process::ExitCode {
+             early.library();
+         });
+     }
+-    #[cfg(target_os = "linux")]
+-    if !std::env::args().any(|a| a.starts_with("--shot") || a.starts_with("--check")) {
+-        put_among_applications();
+-    }
+     let mut qt = QGuiApplication::new();
+     hub::use_window_icon();
+     let font = app.settings().get("font").map(String::from);

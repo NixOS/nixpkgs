@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     ./format-security.patch
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   makeFlags = [
     "prefix=${placeholder "out"}"
   ];

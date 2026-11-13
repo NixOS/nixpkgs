@@ -1,14 +1,14 @@
 {
   lib,
-  buildGoLatestModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
 }:
 
-buildGoLatestModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "dux-gop";
-  version = "2.1.0";
+  version = "2.1.1";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoLatestModule (finalAttrs: {
     owner = "duxlabs-dev";
     repo = "dux-gop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NydB/H7I0X7msjRcEqMrFqw+Q299iqOTMp70xySDc5g=";
+    hash = "sha256-cIgKTjylOaShxgTedHywHi4Sk3bzSrooY+E2grlK3WU=";
   };
 
   vendorHash = "sha256-ajtmBCQ4OdIpjOQeiL+hj3e6PL2Np4NLnMAcA1AsW/w=";

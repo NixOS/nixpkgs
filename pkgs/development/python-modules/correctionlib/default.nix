@@ -35,7 +35,6 @@ buildPythonPackage (finalAttrs: {
   pname = "correctionlib";
   version = "2.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cms-nanoAOD";

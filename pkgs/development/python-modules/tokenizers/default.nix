@@ -58,7 +58,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tokenizers";
   version = "0.23.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";

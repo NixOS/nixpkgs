@@ -38,12 +38,11 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.14.1";
+  version = "2.15.0";
   cuda-bindings' = cuda-bindings.override { inherit cudaPackages; };
 in
 buildPythonPackage {
   inherit version;
-  __structuredAttrs = true;
 
   pname = "torch";
   # Don't forget to update torch to the same version.
@@ -83,7 +82,6 @@ buildPythonPackage {
       libcublas
       libcufft
       libcufile
-      libcurand
       libcusolver
       libcusparse
       libcusparse_lt

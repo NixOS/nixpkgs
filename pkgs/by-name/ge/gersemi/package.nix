@@ -5,6 +5,7 @@
   cargo,
   rustPlatform,
   rustc,
+  sqlite,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -31,6 +32,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     rustc
+  ];
+
+  buildInputs = [
+    sqlite
   ];
 
   build-system = with python3Packages; [

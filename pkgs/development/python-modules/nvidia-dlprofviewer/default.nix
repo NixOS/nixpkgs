@@ -15,7 +15,6 @@
 buildPythonPackage (finalAttrs: {
   pname = "nvidia-dlprofviewer";
   version = "1.8.0";
-  __structuredAttrs = true;
   format = "wheel";
 
   src = fetchurl {

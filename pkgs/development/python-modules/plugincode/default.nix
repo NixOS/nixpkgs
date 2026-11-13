@@ -22,6 +22,14 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
+  # pluggy 1.7 rejects the class-based hookspecs, which nothing ever calls: https://github.com/aboutcode-org/plugincode/issues/14
+  postPatch = ''
+    substituteInPlace src/plugincode/__init__.py \
+      --replace-fail "self.manager.add_hookspecs(sys.modules[module_qname])" ""
+    substituteInPlace src/plugincode/location_provider.py \
+      --replace-fail "self.manager.add_hookspecs(sys.modules[project_name])" ""
+  '';
+
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [

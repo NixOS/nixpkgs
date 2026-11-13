@@ -14,14 +14,14 @@
 buildGo127Module (finalAttrs: {
 
   pname = "gocron";
-  version = "0.14.1";
+  version = "0.14.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "flohoss";
     repo = "gocron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kZZVvqKvUPh4K6cfeacHq4/f7mh9Ps46e3xnE1OYFEA=";
+    hash = "sha256-Wd0KJoYMOx/Zi9/W+7/FVlq18GbSu46djzxnOT1HgWU=";
   };
 
   gocron-web = buildNpmPackage (finalAttrsWebassets: {
@@ -43,7 +43,7 @@ buildGo127Module (finalAttrs: {
 
   });
 
-  vendorHash = "sha256-sN3eqSISQ3Zw6siT88cVgz6liDzg2M/aI83f20ZWM6Q=";
+  vendorHash = "sha256-iYSeisqsHKJpJRf0kyweEu4iWVhQuxr2z9cshlEESs4=";
 
   postPatch = ''
     substituteInPlace handlers/web.go \

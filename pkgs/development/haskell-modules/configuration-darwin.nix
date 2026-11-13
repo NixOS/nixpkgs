@@ -466,23 +466,4 @@ self: super:
     tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
 
   }
-  // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {
-    # x86_64-darwin
-
-    # tests appear to be failing to link or something:
-    # https://hydra.nixos.org/build/174540882/nixlog/9
-    regex-rure = dontCheck super.regex-rure;
-    # same
-    # https://hydra.nixos.org/build/174540882/nixlog/9
-    jacinda = dontCheck super.jacinda;
-
-    # Greater floating point error on x86_64-darwin (!) for some reason
-    # https://github.com/ekmett/ad/issues/113
-    ad = overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        "-p"
-        "!/issue-108/"
-      ];
-    }) super.ad;
-  }
 )

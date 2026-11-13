@@ -2,6 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "seednaut";
@@ -15,6 +18,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-1GZ7ZoiGKEQGN2AQFcz/YXpcqg3iYLRSzl2GfTmGk8g=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   __structuredAttrs = true;
 

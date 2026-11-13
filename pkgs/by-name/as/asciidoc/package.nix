@@ -7,7 +7,7 @@
   autoreconfHook,
   installShellFiles,
   enableStandardFeatures ? false,
-  sourceHighlight,
+  source-highlight,
   highlight,
   graphviz,
   texliveMinimal,
@@ -246,7 +246,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
             -e "s|run('convert|run('${lib.getExe' imagemagick "convert"}|g" \
             -i "asciidoc/resources/filters/music/music2png.py"
 
-        sed -e 's|filter="source-highlight|filter="${sourceHighlight}/bin/source-highlight|' \
+        sed -e 's|filter="source-highlight|filter="${source-highlight}/bin/source-highlight|' \
             -e 's|filter="highlight|filter="${highlight}/bin/highlight|' \
             -e 's|filter="pygmentize|filter="${pygments}/bin/pygmentize|' \
             -i "asciidoc/resources/filters/source/source-highlight-filter.conf"
@@ -283,10 +283,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   )
   + ''
     # Fix tests
-    for f in $(grep -R --files-with-matches "2002-11-25") ; do
-      substituteInPlace $f --replace "2002-11-25" "1980-01-02"
-      substituteInPlace $f --replace "00:37:42" "00:00:00"
-    done
+    substituteInPlace $(grep -R --files-with-matches "2002-11-25" tests/data) \
+      --replace-fail "2002-11-25" "1980-01-02"
+    substituteInPlace $(grep -R --files-with-matches "00:37:42" tests/data) \
+      --replace-fail "00:37:42" "00:00:00"
   ''
   + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     # We want to use asciidoc from the build platform to build the documentation.
@@ -316,8 +316,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
     runHook postCheck
   '';
-
-  __structuredAttrs = true;
 
   meta = {
     description = "Text-based document generation system";

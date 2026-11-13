@@ -6,19 +6,21 @@
   pkg-config,
   bzip2,
   libxml2,
+  nix-update-script,
   swig,
+  zlib,
   python ? null,
   withPython ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsbml";
-  version = "5.20.4";
+  version = "5.21.2";
 
   src = fetchFromGitHub {
     owner = "sbmlteam";
     repo = "libsbml";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qWTN033YU4iWzt+mXQaP5W/6IF5nebF4PwNVkyL8wTg=";
+    hash = "sha256-zQzVTC2bWV7cgimu6sRq7IA4Kix8ubxVfVQJUo8Ft2Q=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
 
   buildInputs = [
-    bzip2.dev
+    bzip2
     libxml2
+    zlib
   ]
   ++ lib.optional withPython python;
 
@@ -48,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "libsbml" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Library for manipulating Systems Biology Markup Language (SBML)";

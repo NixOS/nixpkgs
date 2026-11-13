@@ -163,7 +163,6 @@ in
   name = "ocis";
 
   meta.maintainers = with lib.maintainers; [
-    bhankas
     ramblurr
   ];
 

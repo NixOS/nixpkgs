@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pavoni";
+    owner = "maximvelichko";
     repo = "pyvera";
     tag = version;
     hash = "sha256-WLzVOQEykST2BsVRHmcBhrsd/am0jI/f7D0PmpCTbdQ=";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library to control devices via the Vera hub";
-    homepage = "https://github.com/pavoni/pyvera";
+    homepage = "https://github.com/maximvelichko/pyvera";
     changelog = "https://github.com/maximvelichko/pyvera/releases/tag/${version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];

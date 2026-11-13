@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   libgit2,
+  sqlite,
   zlib,
   versionCheckHook,
 }:
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libgit2
+    sqlite
     zlib
   ];
 

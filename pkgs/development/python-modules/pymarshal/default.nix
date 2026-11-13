@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "stargateaudio";
+    owner = "d3v-t00Lz";
     repo = "pymarshal";
     rev = version;
     hash = "sha256-o+eWa3XFDFn+fyVxWOI9LbKqBUVsYR8O7J4sFbSGvEg=";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python data serialization library";
-    homepage = "https://github.com/stargateaudio/pymarshal";
+    homepage = "https://github.com/d3v-t00Lz/pymarshal";
     maintainers = [ ];
     license = lib.licenses.bsd2;
   };

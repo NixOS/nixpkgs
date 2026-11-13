@@ -3,22 +3,28 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-tar";
-  version = "0-unstable-2026-07-22";
+  version = "0-unstable-2026-11-09";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "tar";
-    rev = "982bff5adb70954d24d0c2ce5909de655da83c72";
-    hash = "sha256-WLxM9syVdwtejGnu0b7uQKewch2E+utBtHKqveZXvLw=";
+    rev = "02b9c9469069fa0c4f92acccb093a1c880532faf";
+    hash = "sha256-fxb+NOuqKQ2/asrrrGnxXCDo9rl8tizZoqzjDE6ios8=";
   };
 
-  cargoHash = "sha256-wDBY2yWgQpH4Ps8h3fTQawYVvVx4d8dMSAVj0WSgbzg=";
+  cargoHash = "sha256-yUO4bPRMqyq7EQ6WGCEx/XPxVIpbxOdinS8RjGIjAdg=";
 
   cargoBuildFlags = [ "--workspace" ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

@@ -10,6 +10,7 @@
   libiconv,
   openssl,
   gitMinimal,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libgit2
     openssl
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

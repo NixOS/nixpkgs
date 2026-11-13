@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   pname = "waymo-waymax";
   version = "0.1.0-unstable-2025-10-23";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "waymo-research";

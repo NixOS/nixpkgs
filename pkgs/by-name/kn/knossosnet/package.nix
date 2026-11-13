@@ -1,10 +1,8 @@
 {
   lib,
   fetchFromGitHub,
-  bash,
   buildDotnetModule,
   copyDesktopItems,
-  coreutils,
   dotnetCorePackages,
   makeDesktopItem,
   nix-update-script,
@@ -13,7 +11,7 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "knossosnet";
-  version = "1.3.13";
+  version = "1.3.14";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,17 +20,15 @@ buildDotnetModule (finalAttrs: {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lx7PjqbEnF2xFrUtWJ6g2qSQ++k/hyjGLQ5bl7RqWM0=";
+    hash = "sha256-J/UjIh0Xmj3HpETPO7GN/cNqJdDg0owcGmd92n1ygZ4=";
   };
 
-  patches = [ ./dotnet-8-upgrade.patch ];
-
+  # Build in .NET 10 LTS. Remove when addressed upstream.
   postPatch = ''
-    # Let appimages be executable
-    substituteInPlace Knossos.NET/Classes/KnUtils.cs \
-      --replace-fail "\"/bin/bash\"" "\"${lib.getExe bash}\"" \
-      --replace-fail "\"chmod -R " "\"${lib.getExe' coreutils "chmod"} -R " \
-      --replace-fail "\"chmod {permissions}" "\"${lib.getExe' coreutils "chmod"} {permissions}"
+    substituteInPlace Knossos.NET/Knossos.NET.csproj VP.NET/VP.NET.csproj \
+      --replace-fail '<TargetFramework>net6.0</' '<TargetFramework>net10.0</'
+    substituteInPlace IonKiwi.lz4/IonKiwi.lz4.csproj \
+      --replace-fail '<TargetFrameworks>net60</TargetFrameworks>' '<TargetFramework>net10.0</TargetFramework>'
   '';
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -56,9 +52,7 @@ buildDotnetModule (finalAttrs: {
     })
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  # IO errors in build due to solution building race
-  enableParallelBuilding = false;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   executables = [ "Knossos.NET" ];
   nugetDeps = ./deps.json;
   projectFile = "Knossos.NET/Knossos.NET.csproj";
@@ -74,7 +68,7 @@ buildDotnetModule (finalAttrs: {
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryNativeCode
+      binaryNativeCode # prebuilt innoextract and 7-Zip in Assets/utils
     ];
     maintainers = with lib.maintainers; [ cdombroski ];
     platforms = lib.platforms.unix;

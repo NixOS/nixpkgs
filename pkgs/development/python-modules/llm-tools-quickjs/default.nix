@@ -38,6 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_tools_quickjs" ];
 
+  # both tests expect a tool_call_id==None but get an actual value
+  # https://github.com/simonw/llm-tools-sqlite/issues/4 covers this repo as well
+  doCheck = false;
+
   passthru.tests = llm.mkPluginTest llm-tools-quickjs;
 
   meta = {

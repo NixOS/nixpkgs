@@ -7,6 +7,7 @@
   libxcrypt,
   libisoburn,
   versionCheckHook,
+  zstd,
 }:
 
 let
@@ -58,6 +59,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     libxcrypt
     openssl.dev
+    zstd
   ];
 
   propagatedBuildInputs = [ libisoburn ];

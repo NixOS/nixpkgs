@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.5.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "click-completion";
     inherit (finalAttrs) version;

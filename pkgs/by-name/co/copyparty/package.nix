@@ -97,7 +97,6 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optional withCertgen cfssl
     ++ (lib.optionals withThumbnails [
       pillow
-      pillow-jpls
       pillow-heif
       rawpy
     ])

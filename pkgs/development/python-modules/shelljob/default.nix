@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "shelljob";
   version = "0.6.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mortoray";

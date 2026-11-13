@@ -2,19 +2,24 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "config-store";
-  version = "1.0.0";
+  version = "1.0.1";
+
+  buildInputs = [
+    sqlite
+  ];
 
   src = fetchFromGitHub {
     owner = "DOD-101";
     repo = "config-store";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dmFIB9tVI5/hnI+VKeawFzKi6UJrRis0tpeQE5a5dGU=";
+    hash = "sha256-6axlKQdg0DRe6bAPRO+TOW1tAZ2lXYVKwJG68hEZZMI=";
   };
 
-  cargoHash = "sha256-3KguaKy+4t7txqKEoWhIMvAjtRgVgO7vEGfVlxJp3Ts=";
+  cargoHash = "sha256-cj71M3JLxrrKCBoHuoVvpNL59ZlWh5NCDQaJnZ3xhUA=";
 
   meta = {
     description = "Simple key-value store designed to be used from shell scripts written in Rust";

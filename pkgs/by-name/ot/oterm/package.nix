@@ -21,8 +21,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   version = "0.26.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";

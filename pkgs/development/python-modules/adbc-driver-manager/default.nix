@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-manager";
   version = "1.13.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Updates should be correlated with arrow-adbc top-level attribute, so:
   # nixpkgs-update: no auto update

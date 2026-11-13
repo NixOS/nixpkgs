@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sergiou87/open-supaplex";
     changelog = "https://github.com/sergiou87/open-supaplex/blob/master/changelog/v${finalAttrs.version}.txt";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "opensupaplex";
   };

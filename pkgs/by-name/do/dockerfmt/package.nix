@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dockerfmt";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "reteps";
     repo = "dockerfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j6Y0L6tr7BSoC1RWPE0vzUrIND7CBg3RuGoHzuvJHXI=";
+    hash = "sha256-1MkDS4KQzh3BBWShsqMl1I55bZvZewtgMcFbhTMhPhw=";
   };
 
-  vendorHash = "sha256-r8vmbZ4oyplqIU6R/6hhcyjoR3E/mOFrB69TrfPYxRI=";
+  vendorHash = "sha256-RSVujjyQUSqAg2pXuVNMglxOJ4qk+HF/J+gQEYNDqkg=";
 
   subPackages = [ "." ];
 

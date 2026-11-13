@@ -4,6 +4,7 @@
   fetchCrate,
   pkg-config,
   sqlite,
+  zstd,
   versionCheckHook,
   nix-update-script,
   testers,
@@ -24,7 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   env = {
     BENDSQL_BUILD_INFO = "nixpkgs";

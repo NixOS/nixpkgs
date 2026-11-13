@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Standard X key constants and conversion to/from keycodes";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms";

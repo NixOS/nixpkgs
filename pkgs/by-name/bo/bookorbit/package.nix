@@ -16,7 +16,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bookorbit";
-  version = "3.5.0";
+  version = "3.6.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -24,12 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bookorbit";
     repo = "bookorbit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eaTt8om4thzmfpCrj3+Vfq/rkl0AhqRM/mcNc59b7wI=";
+    hash = "sha256-IVBq4XnXS6AY6YoJanlf2yg7g3d9XMqWIcxA8LMCs4k=";
   };
 
   pnpmWorkspaces = [
     "client..."
     "server..."
+    "@bookorbit/read-aloud-worker"
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-0sKhAlLsIZEEB0Xlt5xs3yvAmgqGSFACHpGir/DYSpM=";
+    hash = "sha256-+xgLRlqOxSCGvEjGT+x6iu+C7n8wrJf7mIc3TqV1iTM=";
   };
 
   nativeBuildInputs = [
@@ -87,6 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm --filter client run build-only
     pnpm --filter server run build
 
+    pnpm --filter @bookorbit/types build
+
+    export ONNXRUNTIME_NODE_INSTALL="skip"
+    pnpm --filter @bookorbit/read-aloud-worker build
+
     runHook postBuild
   '';
 
@@ -94,26 +100,57 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/lib
+
     pnpm --filter server \
          --config.inject-workspace-packages=true \
          --prod \
-         deploy $out/lib
+         deploy $out/lib/bookorbit
 
-    cp -r client/dist $out/lib/public
-    cp -r server/src/db/migrations $out/lib/migrations
-    cp -r koreader-plugin $out/lib/koreader-plugin
+    cp -r client/dist $out/lib/bookorbit/public
+    cp -r server/src/db/migrations $out/lib/bookorbit/migrations
+    cp -r koreader-plugin $out/lib/bookorbit/koreader-plugin
 
     makeWrapper ${nodejs}/bin/node $out/bin/bookorbit \
-      --run "cd $out/lib" \
+      --run "cd $out/lib/bookorbit" \
       --set NODE_ENV production \
       --set APP_VERSION ${finalAttrs.version} \
-      --add-flags "$out/lib/dist/main.js"
+      --add-flags "$out/lib/bookorbit/dist/main.js"
 
     makeWrapper ${nodejs}/bin/node $out/bin/bookorbit-migrate \
       --set NODE_ENV production \
-      --add-flags "$out/lib/dist/scripts/migrate.js"
+      --add-flags "$out/lib/bookorbit/dist/scripts/migrate.js"
+
+
+    pnpm --filter @bookorbit/read-aloud-worker \
+         --config.inject-workspace-packages=true \
+         --prod \
+         deploy $out/lib/bookorbit-read-aloud-worker
+
+    makeWrapper ${nodejs}/bin/node $out/bin/bookorbit-read-aloud-worker \
+      --run "cd $out/lib/bookorbit-read-aloud-worker" \
+      --set NODE_ENV production \
+      --add-flags "$out/lib/bookorbit-read-aloud-worker/dist/main.js"
 
     runHook postInstall
+  '';
+  postInstall = ''
+    rm -rf "$out/lib/bookorbit-read-aloud-worker/node_modules/onnxruntime-node/bin/napi-v6/win32"
+    rm -rf ${
+      lib.concatStringsSep " " (
+        (lib.optional (
+          !stdenv.hostPlatform.isx86_64
+        ) "$out/lib/bookorbit-read-aloud-worker/node_modules/onnxruntime-node/bin/napi-v6/*/x64")
+        ++ (lib.optional (
+          !stdenv.hostPlatform.isAarch64
+        ) "$out/lib/bookorbit-read-aloud-worker/node_modules/onnxruntime-node/bin/napi-v6/*/arm64")
+        ++ (lib.optional (
+          !stdenv.hostPlatform.isDarwin
+        ) "$out/lib/bookorbit-read-aloud-worker/node_modules/onnxruntime-node/bin/napi-v6/darwin")
+        ++ (lib.optional (
+          !stdenv.hostPlatform.isLinux
+        ) "$out/lib/bookorbit-read-aloud-worker/node_modules/onnxruntime-node/bin/napi-v6/linux")
+      )
+    }
   '';
 
   passthru = {

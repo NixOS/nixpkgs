@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Riverside-Healthcare";
+    owner = "djlint";
     repo = "html-tag-names";
     rev = version;
     hash = "sha256-2YywP4/0yocejuJwanC5g9BR7mcy5C+zMhCjNZ9FRH4=";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "List of known HTML tags";
-    homepage = "https://github.com/Riverside-Healthcare/html-tag-names";
+    homepage = "https://github.com/djlint/html-tag-names";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
   };

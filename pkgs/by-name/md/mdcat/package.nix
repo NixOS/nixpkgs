@@ -1,6 +1,7 @@
 {
   lib,
   curl,
+  oniguruma,
   stdenv,
   fetchFromGitHub,
   rustPlatform,
@@ -16,13 +17,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.19.0";
+  version = "2.20.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "BIRSAx2";
     repo = "mdcat";
-    rev = "mdcat-${version}";
-    hash = "sha256-DJa6NPO8P5AjtVh7AuEZSPFN5pGuis3SIZI7rX00Eik=";
+    tag = "mdcat-${version}";
+    hash = "sha256-w/kW6Kf7kb6XENXCxJeXgMNDpB0V9zZms2pnL7ksvHQ=";
   };
 
   nativeBuildInputs = [
@@ -33,10 +36,11 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     curl
+    oniguruma
     openssl
   ];
 
-  cargoHash = "sha256-QU8TNWPN29aFGvwd8DXAfdZPub9aczXBRQ+vUcIBGBM=";
+  cargoHash = "sha256-et8vejUrS4ei6OZG30fBGY9pVS7kdrJpNXHbdWqEioE=";
 
   nativeCheckInputs = [
     # mdpick test pipes through `less -r`

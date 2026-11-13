@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  oniguruma,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
@@ -24,6 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+  ];
+
+  buildInputs = [
+    oniguruma
   ];
 
   postInstall = ''

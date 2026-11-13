@@ -10,18 +10,19 @@
   pytest-cov-stub,
   pytestCheckHook,
   setuptools,
+  yarl,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovitesy";
-  version = "1.4.6";
+  version = "1.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovitesy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3foOe9xv6quyGwWroeaebtHEDuGdS840U6VbJZku/+8=";
+    hash = "sha256-hmxNjZSxBLy+qFnQenuWFb4dvygicbU1s6mybY9J6Zw=";
   };
 
   postPatch = ''
@@ -42,6 +43,7 @@ buildPythonPackage (finalAttrs: {
     aiomqtt
     certifi
     orjson
+    yarl
   ];
 
   nativeCheckInputs = [

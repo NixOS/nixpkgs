@@ -9,21 +9,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "protobuf-py-ext";
-  version = "0.3.0";
+  version = "0.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tag on GitHub for this release: bufbuild/protobuf-py's only tag is v0.2.0.
   # This has to stay in lockstep with protobuf-py, which is held at 0.1.1.
   src = fetchPypi {
     pname = "protobuf_py_ext";
     inherit (finalAttrs) version;
-    hash = "sha256-1qNFh+zrXvZ3f7Pe3Bxh8Rktpx1feQSagCitBjE9LYQ=";
+    hash = "sha256-yhnA9dg1cqF3UjoH9FbiqIsf1JwhfjoY+yI/dM18TWo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-sUW+sCV9abJe7NmTEAT0QUKA4QyN0gwrfN1UR47peHU=";
+    hash = "sha256-yLSkE8nbKHJ8rb1sjKgk5kbgZjX/mIzRXkIWhu8DPw8=";
   };
 
   nativeBuildInputs = [

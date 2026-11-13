@@ -161,7 +161,6 @@ let
   # which will include the backport, is packaged:
   #
   # - 2.34: https://github.com/NixOS/nix/pull/16607
-  # - 2.35: https://github.com/NixOS/nix/pull/16608
   windowsPatches = lib.optionals stdenv.hostPlatform.isWindows [
     (fetchpatch {
       name = "libutil-link-ntdll-on-windows.patch";
@@ -192,17 +191,17 @@ lib.makeExtensible (
 
       nixComponents_2_35 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.35.3";
+          version = "2.35.6";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_35";
           src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-qtlx8ywd1qj2ToZTNBunXE7JUajLtw44ja3r7+d47D4=";
+            hash = "sha256-9Rv764+TAhZ0mNbjkReNOBHraHHNuMgqILvPi4HHS2c=";
           });
         }).appendPatches
-          windowsPatches;
+          [ ];
 
       nix_2_35 = addTests "nix_2_35" self.nixComponents_2_35.nix-everything;
 
@@ -211,12 +210,12 @@ lib.makeExtensible (
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "f3f184834895f45030d69f20a311b2eac99ebf1d";
-            hash = "sha256-TyuLrhxjzHjIYWtpBgSHi8wdKw7ciLiyfrdfJe33uEc=";
+            rev = "16fa212a96192479593620e9b928733aaf7a2a6d";
+            hash = "sha256-htJYfCUGYt+jqedG5ck2BrWAUW1MkSTcqL7mbSPZh4E=";
           };
         in
         (nixDependencies.callPackage ./modular/packages.nix {
-          version = "2.36pre20261020_${lib.substring 0 8 src.rev}";
+          version = "2.36pre20261109_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = removeFunctionalTests commonDisabledTests src;
@@ -228,7 +227,7 @@ lib.makeExtensible (
       latest = self.nix_2_35;
 
       # Read ./README.md before bumping a major release
-      stable = addFallbackPathsCheck self.nix_2_34;
+      stable = addFallbackPathsCheck self.nix_2_35;
     }
     // lib.optionalAttrs config.allowAliases (
       lib.listToAttrs (

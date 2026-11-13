@@ -5,7 +5,7 @@
   uv-build,
   requests,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-responses,
 }:
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-responses
   ];
   pythonImportsCheck = [ "menshen_client" ];

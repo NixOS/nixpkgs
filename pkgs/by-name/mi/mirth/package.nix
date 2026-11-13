@@ -1,24 +1,28 @@
 {
   lib,
-  fetchFromSourcehut,
+  fetchzip,
   buildPackages,
   stdenv,
   makeBinaryWrapper,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mirth";
-  version = "0-unstable-2026-05-28";
+  version = "0-unstable-2026-10-28";
+  gitRev = "966c78fd600ac9b87184c12aec5551ba31233b86";
+  __structuredAttrs = true;
 
-  src = fetchFromSourcehut {
-    owner = "~typeswitch";
-    repo = "mirth";
-    rev = "b180112a547cb803e3bf5720a0bb08f8bffa9742";
-    hash = "sha256-6nd1DrN3sGobmOh+E/8hYUFW2tBSFLdaEPXrViKDVSc=";
+  src = fetchzip {
+    urls = [
+      "https://codeberg.org/typeswitch/mirth/archive/${finalAttrs.gitRev}.tar.gz"
+      "https://github.com/mirth-lang/mirth/archive/${finalAttrs.gitRev}.zip"
+      "https://git.sr.ht/~typeswitch/mirth/archive/${finalAttrs.gitRev}.tar.gz"
+    ];
+    hash = "sha256-ir/dscN1eQmCFyEU8MMUUGgxsa6NGl8pcQ4sQKAAUQo=";
   };
 
   postPatch =
-    # Bug report: https://todo.sr.ht/~typeswitch/mirth/16
+    # Bug report: https://codeberg.org/typeswitch/mirth/issues/1
     lib.optionalString (with stdenv.buildPlatform; isAarch64 && isLinux) ''
       substituteInPlace bin/mirth0.c \
         --replace-fail "WRAP_I63(24LL);" "WRAP_I63(16LL);"
@@ -48,7 +52,6 @@ stdenv.mkDerivation {
   ];
 
   strictDeps = true;
-  __structuredAttrs = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -110,4 +113,4 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})

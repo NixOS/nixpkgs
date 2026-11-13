@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.8";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "HBNetwork";
     repo = "python-decouple";

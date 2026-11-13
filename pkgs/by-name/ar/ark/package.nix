@@ -4,6 +4,8 @@
   fetchFromGitHub,
   cmake,
   makeBinaryWrapper,
+  pkg-config,
+  zstd,
   R,
 }:
 
@@ -26,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cmake
     makeBinaryWrapper
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   # Only build the `ark` binary, not the whole workspace's test/dev crates.
   cargoBuildFlags = [

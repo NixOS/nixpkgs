@@ -11,6 +11,7 @@
   rustPlatform,
   systemdLibs,
   xz,
+  zstd,
   zlib,
 }:
 
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libssh2
     libgit2
     xz
+    zstd
     zlib
   ];
 

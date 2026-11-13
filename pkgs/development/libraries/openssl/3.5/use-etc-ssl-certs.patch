@@ -11,3 +11,26 @@ index 15666f1..d91e25b 100644
  #define X509_PRIVATE_DIR OPENSSLDIR "/private"
  #define CTLOG_FILE OPENSSLDIR "/ct_log_list.cnf"
  #else
+diff --git a/crypto/x509/x509_def.c b/crypto/x509/x509_def.c
+--- a/crypto/x509/x509_def.c
++++ b/crypto/x509/x509_def.c
+@@ -9,4 +9,6 @@
+ #include <stdio.h>
++#include <errno.h>
++#include <sys/stat.h>
+ #include "internal/e_os.h"
+ #include "internal/cryptlib.h"
+ #include "internal/thread_once.h"
+@@ -95,6 +97,12 @@ const char *X509_get_default_cert_file(void)
+     RUN_ONCE(&openssldir_setup_init, do_openssldir_setup);
+     return x509_cert_fileptr;
+ #else
++    struct stat st;
++
++    /* Preserve the system trust policy whenever its bundle exists. */
++    if (stat(X509_CERT_FILE, &st) < 0 && errno == ENOENT)
++        return "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt";
++
+     return X509_CERT_FILE;
+ #endif
+ }

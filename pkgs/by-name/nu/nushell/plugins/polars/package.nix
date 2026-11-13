@@ -2,7 +2,10 @@
   stdenv,
   lib,
   rustPlatform,
+  aws-lc,
+  libgit2,
   openssl,
+  zstd,
   nushell,
   pkg-config,
   nix-update-script,
@@ -17,8 +20,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargoHash
     ;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    libgit2
+    openssl
+    zstd
+  ];
 
   buildAndTestSubdir = "crates/nu_plugin_polars";
 

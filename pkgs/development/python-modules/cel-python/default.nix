@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cel-python";
   version = "0.5.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cloud-custodian";

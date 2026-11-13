@@ -7,6 +7,7 @@
   versionCheckHook,
   pkg-config,
   openssl,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -47,7 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   # crates/weave-driver/tests/public_properties.rs, added after 0.3.6,
   # shells out to git to build a conflicted merge and then abort it.

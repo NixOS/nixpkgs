@@ -6,6 +6,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
 
   makeWrapper,
 
@@ -109,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     nativeBuildInputs = [ pkg-config ];
 
-    buildInputs = [ openssl ];
+    buildInputs = [
+      openssl
+      zstd
+    ];
   };
 
   strictDeps = true;

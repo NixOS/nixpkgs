@@ -35,8 +35,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ]);
 
-  # Needing libgit2 <=1.8.0
-  #env.LIBGIT2_NO_VENDOR = 1;
+  # libgit2-sys 0.16 requires libgit2 1.7.x, older than pkgs.libgit2, so
+  # override cargoSetupHook's LIBGIT2_NO_VENDOR=1 and use the vendored copy.
+  preBuild = ''
+    export LIBGIT2_NO_VENDOR=0
+  '';
 
   # bundled oniguruma failed on gcc15
   env.RUSTONIG_SYSTEM_LIBONIG = 1;

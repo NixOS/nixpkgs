@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   # to package:
   version = "0.2.8-unstable-2025-06-14";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skggm";

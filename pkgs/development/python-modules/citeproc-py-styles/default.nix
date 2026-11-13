@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "citeproc-py-styles";
   version = "0.1.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "inveniosoftware";

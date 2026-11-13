@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   ninja,
   openssl,
@@ -47,6 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
   };
 
+  patches = [
+    # Fix uninitialized terminal width in the unittest progress reporter.
+    # It padded every progress line to a garbage width when stdin is not a TTY and
+    # blew up the build log past Hydra's limit.
+    # Patch is merged upstream and should be in DuckDB >=2.0.1
+    # https://github.com/NixOS/nixpkgs/issues/570642
+    # https://github.com/duckdb/duckdb/pull/27894
+    (fetchpatch2 {
+      url = "https://github.com/duckdb/duckdb/commit/95e44bf80b7306eac421a16b87507bdec5aa3321.patch?full_index=1";
+      hash = "sha256-aDGSpXsvOTz8ywsboSeeDDeKtEUOlt+CPsiJq6jrY70=";
+    })
+  ];
+
   outputs = [
     "out"
     "lib"
@@ -68,10 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!canExecute) [
     (lib.cmakeFeature "DUCKDB_EXPLICIT_PLATFORM" duckdbPlatform)
-  ]
-  ++ lib.optionals stdenv.cc.isGNU [
-    # causes massive amounts of logs, exceeding hydra's limits on some platforms
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-sfinae-incomplete")
   ];
 
   doInstallCheck = canExecute;
@@ -171,12 +181,11 @@ stdenv.mkDerivation (finalAttrs: {
       );
       LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
     in
-    # FIXME: do something about the excessive logging on x86_64-linux (> 250 MiB).
     ''
       runHook preInstallCheck
       (($(ulimit -n) < 1024)) && ulimit -n 1024
 
-      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}${lib.optionalString stdenv.hostPlatform.isx86_64 " >/dev/null"}
+      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}
 
       runHook postInstallCheck
     '';

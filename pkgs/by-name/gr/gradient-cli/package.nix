@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   gradient,
   installShellFiles,
   libgit2,
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optional withEval rustPlatform.bindgenHook;
 
   buildInputs = [
+    aws-lc
     libgit2
     openssl
     zlib

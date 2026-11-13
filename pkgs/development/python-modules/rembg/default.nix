@@ -141,7 +141,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/danielgatis/rembg";
     changelog = "https://github.com/danielgatis/rembg/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
     mainProgram = "rembg";
   };
 })

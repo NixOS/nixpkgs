@@ -4,6 +4,7 @@
   fetchFromGitLab,
   meson,
   ninja,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   alsa-lib,
   dbus,
@@ -28,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # point to /etc/q6voiced/q6voiced.conf at runtime
     "--datadir=/etc"
-  ];
+  ]
+  ++ lib.optionals (!systemdSupport) [ "-Dsystemd=disabled" ];
 
   nativeBuildInputs = [
     meson
@@ -36,11 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    systemd
-    dbus
-    alsa-lib
-  ];
+  buildInputs =
+    lib.optionals systemdSupport [
+      systemd
+    ]
+    ++ [
+      dbus
+      alsa-lib
+    ];
 
   meta = {
     description = "Userspace daemon for the QDSP6 voice call audio driver";

@@ -128,8 +128,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "7c341be73df8a6a5ddccb06124807ac250a32bc1",
-        "resolved-ref": "7c341be73df8a6a5ddccb06124807ac250a32bc1",
+        "ref": "afa3fe68080327cfa87e725a38961bf5d2e35307",
+        "resolved-ref": "afa3fe68080327cfa87e725a38961bf5d2e35307",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",
@@ -1794,7 +1794,7 @@
       "version": "1.1.1"
     },
     "web_socket": {
-      "dependency": "direct dev",
+      "dependency": "direct main",
       "description": {
         "name": "web_socket",
         "sha256": "34d64019aa8e36bf9842ac014bb5d2f5586ca73df5e4d9bf5c936975cae6982c",

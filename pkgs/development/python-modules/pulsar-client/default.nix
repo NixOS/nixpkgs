@@ -22,9 +22,6 @@
   protobuf,
   ratelimit,
 
-  # tests
-  unittestCheckHook,
-
   # for meta.broken
   stdenv,
 }:
@@ -79,15 +76,8 @@ buildPythonPackage (finalAttrs: {
     avro = [ fastavro ];
   };
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ]
-  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
-
-  unittestFlagsArray = [
-    "-s"
-    "test"
-  ];
+  # tests require a running Pulsar broker
+  doCheck = false;
 
   pythonImportsCheck = [ "pulsar" ];
 

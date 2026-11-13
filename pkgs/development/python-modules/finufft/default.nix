@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   inherit (finufft) version src;
   format = "other";
   dontBuild = true;
-  __structuredAttrs = true;
 
   dependencies = [
     numpy

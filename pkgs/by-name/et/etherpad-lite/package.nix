@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
-  version = "2.7.2";
+  version = "3.3.17";
 
   src = fetchFromGitHub {
     owner = "ether";
     repo = "etherpad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8DCgbfp3ttpMTXS9SNkN1R63LZHaklsNHViRhmWVFuk=";
+    hash = "sha256-/idVzI/xjf8b3eoZURYDHRbgDEH/dAbmjLF+0lSK4+s=";
   };
 
   patches = [
@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_12;
     fetcherVersion = 4;
-    hash = "sha256-scJhcZDyqUVdKv/EQvB5+EJN/SvMw220+QOcTUxTFJQ=";
+    hash = "sha256-41iZ/oYVPx8BH+Qx0IJotektW2uwd7osDR71QTLbjpQ=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
     makeWrapper
   ];
 
@@ -52,10 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    # remove unnecessary files
-    rm node_modules/.modules.yaml
-    CI=true pnpm prune --prod --ignore-scripts
-    find -type f \( -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
+    # Remove development dependencies without pnpm prune.
+    rm -rf node_modules
+    CI=true pnpm install --offline --frozen-lockfile --prod --ignore-scripts --config.trust-lockfile=true
+
+    # Remove unnecessary files
+    find -type f \( -name "*.d.ts" -o -name "*.map" \) -delete
   '';
 
   # Upstream scripts uses `pnpm run prod` which is equivalent to
@@ -67,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/etherpad-lite \
       --inherit-argv0 \
       --add-flags "--require tsx/cjs $out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node/server.ts" \
-      --suffix PATH : "${lib.makeBinPath [ pnpm_10 ]}" \
+      --suffix PATH : "${lib.makeBinPath [ pnpm_12 ]}" \
       --set NODE_PATH "$out/lib/node_modules:$out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node_modules" \
       --set-default NODE_ENV production
     find $out/lib -xtype l -delete
@@ -91,19 +93,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "etherpad-lite";
     platforms = lib.platforms.unix;
-    knownVulnerabilities = [
-      "CVE-2026-55090: Stored XSS in HTML export via unescaped attribute-pool values"
-      "GHSA-92hr-gmr6-h8cp: Hardening: weak token RNG, login timing, plugin path handling, API request handling"
-      "CVE-2026-55089: JWT `admin` claim presence-only check lets non-admin OAuth users invoke every Etherpad HTTP API endpoint"
-      "CVE-2026-55088: Device-to-device author-token transfer endpoint is replayable, never expires, and exposes the cleartext author token"
-      "CVE-2026-55087: x-proxy-path header reflected into admin HTML/JS/CSS (cache-poisoning XSS) and concatenated into redirect (open-redirect)"
-      "CVE-2026-55086: Import/export use Math.random() for temp file paths; predictable paths on shared /tmp enable symlink-based file overwrite"
-      "CVE-2026-55085: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') in etherpad-lite"
-      "GHSA-6vx2-3gwr-958v: Stored XSS in HTML diff export via unescaped author color values in getHTMLFromAtext "
-      "GHSA-62cj-9j72-mfrh: OIDC interactive login accepts the literal \"undefined\"/\"null\" as the password for accounts that have none"
-      "GHSA-4mx2-rqx5-2pp6: Forged tag: class token via a space in a start attribute gives stored XSS in appendSpan"
-      "GHSA-38vj-95q4-gwvx: OIDC: a user whose sub matches a configured client_id is treated as client_credentials and gets admin API access"
-      "etherpad-lite is currently outdated within nixpkgs. An update is needed: https://github.com/NixOS/nixpkgs/issues/572875"
-    ];
   };
 })

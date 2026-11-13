@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "alistratov";
     repo = "password-entropy-py";

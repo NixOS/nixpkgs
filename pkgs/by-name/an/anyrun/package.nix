@@ -5,6 +5,7 @@
   pkg-config,
   wrapGAppsHook4,
   anyrun-provider,
+  aws-lc,
   cairo,
   gdk-pixbuf,
   glib,
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     cairo
     gdk-pixbuf
     glib

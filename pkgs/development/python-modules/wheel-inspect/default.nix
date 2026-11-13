@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jwodder";
+    owner = "wheelodex";
     repo = "wheel-inspect";
     tag = "v${version}";
     hash = "sha256-yECgJLShCLiEyZmw9azNP5lwLeas10AfRu/RVMQGejg=";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Extract information from wheels";
-    homepage = "https://github.com/jwodder/wheel-inspect";
+    homepage = "https://github.com/wheelodex/wheel-inspect";
     changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];

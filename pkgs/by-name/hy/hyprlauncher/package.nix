@@ -4,17 +4,12 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  aquamarine,
-  cairo,
-  hyprgraphics,
   hyprlang,
   hyprtoolkit,
-  hyprutils,
   hyprwire,
   libdrm,
   libqalculate,
   libxkbcommon,
-  pixman,
 }:
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
@@ -34,17 +29,12 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    aquamarine
-    cairo
-    hyprgraphics
     hyprlang
     hyprtoolkit
-    hyprutils
     hyprwire
     libdrm
     libqalculate
     libxkbcommon
-    pixman
   ];
 
   meta = {

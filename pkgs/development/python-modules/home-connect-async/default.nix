@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  wheel,
   aiohttp,
   aiohttp-sse-client,
   charset-normalizer,
@@ -11,20 +10,20 @@
   oauth2-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "home-connect-async";
-  version = "0.8.6";
+  version = "0.8.8";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "home_connect_async";
-    inherit version;
-    hash = "sha256-4iF63TqmT47nHGJd9H4D6SnzclToj5S5Z/pm4YxbvQA=";
+  src = fetchFromGitHub {
+    owner = "ekutner";
+    repo = "home-connect-async";
+    tag = finalAttrs.version;
+    hash = "sha256-/Ote8EJ3/reixdpUnMj4cVIJ0wEwGxfkX27X7s+hOoA=";
   };
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
@@ -41,8 +40,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Async SDK for BSH Home Connect API";
-    homepage = "https://pypi.org/project/home-connect-async";
+    homepage = "https://github.com/ekutner/home-connect-async";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };
-}
+})

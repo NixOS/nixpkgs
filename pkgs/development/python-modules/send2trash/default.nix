@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "hsoft";
+    owner = "arsenetar";
     repo = "send2trash";
     tag = version;
     hash = "sha256-dBILb1tz3/X3/MnhSKujVX9pMFrTAyntQ+GQsscklQU=";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     description = "Send file to trash natively under macOS, Windows and Linux";
     mainProgram = "send2trash";
-    homepage = "https://github.com/hsoft/send2trash";
+    homepage = "https://github.com/arsenetar/send2trash";
     changelog = "https://github.com/arsenetar/send2trash/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];

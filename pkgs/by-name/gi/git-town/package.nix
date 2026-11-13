@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-town";
-  version = "24.1.0";
+  version = "24.1.1";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GY/aec9agBahpTUtss+1/PCab4CJSFGd9hG3dSZLWXw=";
+    hash = "sha256-iBqwCfXcKzkdybWc10zZXP5xuZyidOJoSTlocOIbHSY=";
   };
 
   vendorHash = null;

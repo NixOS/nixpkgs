@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
     inherit owner;
     repo = "pirate-weather-ha";
     tag = "v${version}";
-    hash = "sha256-/KgVvITQ8Sqe/PSqWPS0nRm9oNRw9JPsoXlVczTIozg=";
+    hash = "sha256-wxqn6EUpDtkagANYOP/m2R2CMyclSJJ268dXgPBSGVQ=";
   };
 
   nativeCheckInputs = [

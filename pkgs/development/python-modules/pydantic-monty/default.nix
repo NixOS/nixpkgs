@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  zstd,
+  pkg-config,
   pytestCheckHook,
   rustPlatform,
 
@@ -18,8 +20,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.17";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "monty";
@@ -35,9 +35,12 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ typing-extensions ];
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = [ zstd ];
 
   maturinBuildFlags = [
     "-m"

@@ -23,6 +23,7 @@
   procps,
   copyDesktopItems,
   makeDesktopItem,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -62,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     openssl
     libappindicator
+    sqlite
   ];
 
   desktopItems = [

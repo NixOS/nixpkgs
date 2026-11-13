@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "numkong";
-  version = "7.8.6";
+  version = "7.8.7";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ashvardanian";
     repo = "NumKong";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RaItcamGKM69G8nHMBZL8UvJxVaNpTVUHCdIMXN5tmE=";
+    hash = "sha256-mOVb/p3TIRnrIgUJ2qh/r/T4WoiL4feb1khraR3cqBA=";
   };
 
   nativeBuildInputs = [ cmake ];

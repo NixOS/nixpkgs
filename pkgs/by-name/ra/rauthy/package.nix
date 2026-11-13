@@ -7,12 +7,16 @@
   npmHooks,
   nodejs,
   nix-update-script,
-  perl,
+  pkg-config,
   wasm-pack,
   wasm-bindgen-cli_0_2_129,
+  aws-lc,
   binaryen,
   lld,
+  openssl,
   rust-jemalloc-sys-unprefixed,
+  sqlite,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
@@ -30,12 +34,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lld
     nodejs
     npmHooks.npmConfigHook
-    perl
+    pkg-config
     wasm-bindgen-cli_0_2_129
     wasm-pack
   ];
 
-  buildInputs = [ rust-jemalloc-sys-unprefixed ];
+  buildInputs = [
+    aws-lc
+    openssl
+    rust-jemalloc-sys-unprefixed
+    sqlite
+    zstd
+  ];
 
   npmRoot = "frontend";
 

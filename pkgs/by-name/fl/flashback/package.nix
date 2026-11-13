@@ -8,7 +8,6 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flashback";
   version = "2.30.0";
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

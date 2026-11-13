@@ -480,8 +480,10 @@ opts = Slop.parse do |o|
     image://android-wear#2-3
     image://android-wear-cn#2-3
     image://android-automotive#2-3
+    image://aosp_atd#2-3
     image://google_apis#2-3
     image://google_apis_playstore#2-3
+    image://google_atd#2-3
   ]
   o.array '-a', '--addons', 'addon repo XMLs to parse', default: %w[repo://addon#2-3]
   o.string '-I', '--input', 'input JSON file for repo', default: File.join(__dir__, 'repo.json')

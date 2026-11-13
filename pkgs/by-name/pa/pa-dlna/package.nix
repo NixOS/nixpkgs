@@ -14,8 +14,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "1.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitLab {
     owner = "xdegaye";
     repo = "pa-dlna";

@@ -12,13 +12,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "zashboard";
-  version = "3.29.1";
+  version = "3.30.0";
 
   src = fetchFromGitHub {
     owner = "Zephyruso";
     repo = "zashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qV2ohqYErfhnKvPhmeuVb54QHz0FTwbUGRyT2Xhyj+o=";
+    hash = "sha256-HT00+zpeCOWvf9jOpsbQx/R+WYTzkzVnXD6YYc8FyRc=";
   };
 
   npmDeps = null;
@@ -26,7 +26,7 @@ buildNpmPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-rnEAOpiO5Q2MlP7qoEORmbxRJYsbf7LonRzb7a1CeGQ=";
+    hash = "sha256-x0y2r5YtLYkYT/XZtWG7Rr8al4cUCM6wjqfkPnNe3aI=";
   };
 
   nativeBuildInputs = [ pnpm ];

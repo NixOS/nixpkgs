@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nfswolf";
-  version = "1.2.0";
+  version = "1.3.1";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "StrongWind1";
     repo = "NFSWolf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E46Q9tLMuhPbt51MYnK1VcgjVi2v0LoYwC0iUZXoOTk=";
+    hash = "sha256-p33WLhqUYqcwDGDJ9Wxm/5aU4ZKj6YqcCr245Y+1Mo0=";
   };
 
-  cargoHash = "sha256-PfAw8gTRA8HJcNzJczFgDahhgHJ2bCFguTPR+OqzZ2g=";
+  cargoHash = "sha256-vNKglAwJSxNOeMzN7a1lJ6vOIU67ja8BqUTOstqn/T0=";
 
   nativeBuildInputs = [ pkg-config ];
 

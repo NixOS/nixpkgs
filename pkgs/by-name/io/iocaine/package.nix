@@ -2,10 +2,10 @@
   lib,
   fetchFromGitea,
   nftables,
+  zstd,
   nixosTests,
   pkg-config,
   rustPlatform,
-  ...
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iocaine";
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     nftables
+    zstd
   ];
 
   passthru = {

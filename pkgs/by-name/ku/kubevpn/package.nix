@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-X github.com/wencaiwulue/kubevpn/v2/pkg/config.Version=v${finalAttrs.version}"
-    "-X github.com/wencaiwulue/kubevpn/v2/cmd/kubevpn/cmds.OsArch=${go.GOOS}/${go.GOARCH}"
+    "-X github.com/wencaiwulue/kubevpn/v2/cmd/kubevpn/cmds.OsArch=${stdenv.hostPlatform.go.GOOS}/${stdenv.hostPlatform.go.GOARCH}"
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];

@@ -22,13 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "nvtx";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "NVTX";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YyGZlP5rhU6bfViv3tSyXfak6fuE7zEzxVimzwS3IoI=";
+    hash = "sha256-v6if5LMGYNTGHgCx0n3atNV5HNTtIZiFTbgykVlOaas=";
   };
 
   # NOTE: The include output matches the layout of the redistributable.
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # The Python package (python3Packages.nvtx) is built from python/ in the same source. It is versioned independently
     # of the C/C++ API; its version is in python/pyproject.toml.
-    pythonVersion = "0.2.16";
+    pythonVersion = "0.2.17";
 
     tests = {
       upstream = callPackage ./tests/upstream.nix { nvtx = finalAttrs.finalPackage; };

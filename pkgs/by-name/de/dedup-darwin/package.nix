@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Darwin utility to replace duplicate file data with a copy-on-write clone";
     homepage = "https://github.com/ttkb-oss/dedup";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = [ ];
     platforms = lib.platforms.darwin;
     mainProgram = "dedup";
   };

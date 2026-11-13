@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication {
   version = "0-unstable-2022-10-15";
   pyproject = false;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "aress31";
     repo = "jwtcat";

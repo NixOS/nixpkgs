@@ -138,6 +138,18 @@ in
       max-free = cfg.max-free;
 
       trusted-users = [ user ];
+
+      # enable nspawn nixos tests
+      auto-allocate-uids = true;
+      experimental-features = [
+        "auto-allocate-uids"
+        "cgroups"
+      ];
+      extra-system-features = [
+        "uid-range"
+        "devnet"
+      ];
+      extra-sandbox-paths = [ "/dev/net" ];
     };
 
     services = {

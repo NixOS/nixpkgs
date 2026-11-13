@@ -4,7 +4,9 @@
   fetchFromGitHub,
   stdenvNoCC,
   pkg-config,
+  libgit2,
   openssl,
+  sqlite,
   nix-update-script,
 }:
 
@@ -23,7 +25,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+    sqlite
+  ];
 
   passthru.updateScript = nix-update-script { };
 

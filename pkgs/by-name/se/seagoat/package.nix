@@ -19,7 +19,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "seagoat";
   version = "1.6.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kantord";

@@ -19,8 +19,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "google";
-    repo = "generative-ai-python";
+    owner = "google-gemini";
+    repo = "deprecated-generative-ai-python";
     tag = "v${version}";
     hash = "sha256-zUNgQqpGgMyCBhW+Z9EiSJIyuIQh2XhwlCdgrTymCVk=";
   };
@@ -47,8 +47,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python client library for Google's large language model PaLM API";
-    homepage = "https://github.com/google/generative-ai-python";
-    changelog = "https://github.com/google/generative-ai-python/releases/tag/${src.tag}";
+    homepage = "https://github.com/google-gemini/deprecated-generative-ai-python";
+    changelog = "https://github.com/google-gemini/deprecated-generative-ai-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

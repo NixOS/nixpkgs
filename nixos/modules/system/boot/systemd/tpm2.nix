@@ -60,6 +60,10 @@
         # NixOS.
         systemd.services."systemd-pcrlogin@".unitConfig.ConditionPathExists =
           "/run/systemd/nvpcr/login.auth";
+
+        systemd.sockets."systemd-pcrextend" = {
+          wantedBy = [ "sockets.target" ];
+        };
       }
     )
     (
@@ -101,6 +105,10 @@
           "${cfg.package}/lib/systemd/system-generators/systemd-tpm2-generator"
           "${cfg.package}/lib/systemd/systemd-pcrextend"
         ];
+
+        boot.initrd.systemd.sockets."systemd-pcrextend" = {
+          wantedBy = [ "sockets.target" ];
+        };
       }
     )
     (

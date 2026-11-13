@@ -29,7 +29,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   doCheck = lib.versionAtLeast ocaml.version "5.1";
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
   checkInputs = [
     alcotest
     domain-local-await

@@ -67,9 +67,12 @@
     with subtest("Login"):
         state = machine.succeed("curl -fs 'localhost:8080/dex/auth/mock?client_id=oidcclient&response_type=code&redirect_uri=https://example.com/callback&scope=openid' | sed -n 's/.*state=\\(.*\\)\">.*/\\1/p'").strip()
         print(f"Got state {state}")
-        # Login request returns 303 with redirect_url that has code as query parameter:
+        # Login request returns 303 with redirect_url that points back to the auth endpoint:
+        # http://localhost:8080/dex/auth?hmac=svcdQkHhAMIMyfVqiK3CamYG1pwu6AK1MUyu_9hfdyQ&req=vvnr3bdtb3xfr7urbvpqzwhoj
+        auth_url = machine.succeed(f"curl -fs 'localhost:8080/dex/auth/mock/login?back=&state={state}' -d 'login=admin&password=password' -w '%{{redirect_url}}'")
+        # Auth endpoint returns 303 with redirect_url that has code as query parameter:
         # https://example.com/callback?code=kibsamwdupuy2iwqnlbqei3u6&state=
-        code = machine.succeed(f"curl -fs 'localhost:8080/dex/auth/mock/login?back=&state={state}' -d 'login=admin&password=password' -w '%{{redirect_url}}' | sed -n 's/.*code=\\(.*\\)&.*/\\1/p'")
+        code = machine.succeed(f"curl -fs '{auth_url}' -o /dev/null -w '%{{redirect_url}}' | sed -n 's/.*code=\\(.*\\)&.*/\\1/p'")
         print(f"Got approval code {code}")
         bearer = machine.succeed(f"curl -fs localhost:8080/dex/token -u oidcclient:oidcclientsecret -d 'grant_type=authorization_code&redirect_uri=https://example.com/callback&code={code}' | jq .access_token -r").strip()
         print(f"Got access token {bearer}")

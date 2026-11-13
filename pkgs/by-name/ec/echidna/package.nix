@@ -97,7 +97,7 @@ haskellPackages.mkDerivation rec {
   postInstall =
     with haskellPackages;
     # https://github.com/NixOS/nixpkgs/pull/304352
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       remove-references-to -t ${warp.out} "$out/bin/echidna"
       remove-references-to -t ${wreq.out} "$out/bin/echidna"
     ''

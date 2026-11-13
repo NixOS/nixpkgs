@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "naabu";
-  version = "2.6.1";
+  version = "2.7.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "projectdiscovery";
     repo = "naabu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rjGTicUzdFRpJ3VGl/eXLKGdrbuwM3jQbOd0pmknabg=";
+    hash = "sha256-Xd1mFbEogXboTIj3cLj+BM97hZNgWd1sUoWPZHSpp3Q=";
   };
 
-  vendorHash = "sha256-Qay0jAWRnK5oRfOmYLrfWFR5eOT5glcsQ9BgSr2LiS8=";
+  vendorHash = "sha256-lvwzNzGoN92TF+6pPfstszXV+GyhteQK3SHR5YMtCmA=";
 
   buildInputs = [ libpcap ];
 

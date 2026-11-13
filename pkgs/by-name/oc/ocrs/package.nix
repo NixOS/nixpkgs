@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ocrs";
-  version = "0.12.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "robertknight";
     repo = "ocrs";
     tag = "ocrs-v${finalAttrs.version}";
-    hash = "sha256-OJnWFM6EfpcPI2QwdjiNqS1JzfwxvE4YhSyR0ZHpYg4=";
+    hash = "sha256-ZThOqEyuCH+E2U+2OOOC2Ib2jQK7wgIOFnqN/cpcQ/U=";
   };
 
-  cargoHash = "sha256-3p9kFdzv1N+fyTavzu09pyarn5WtMu0IoWNzzm2IalU=";
+  cargoHash = "sha256-q0FRXAMpvqYrR3JDYgH/Gwcr2osz4SxRSWRUP5tLlp0=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

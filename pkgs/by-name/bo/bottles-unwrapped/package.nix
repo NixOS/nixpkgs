@@ -39,13 +39,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "67.5";
+  version = "67.6";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = finalAttrs.version;
-    hash = "sha256-GKKSUwAZoe/4j4KmoT6TKasASZ/ahwfZLMTwK9eVLdM=";
+    hash = "sha256-omRbaEiaLiLzpL8XHCUWn+ST0HVXyHt70cD2PS4k77k=";
   };
 
   patches = [

@@ -21,11 +21,11 @@ let
   defaultMinifyOpts = {
     script = {
       enable = false;
-      target = "es2020";
+      target = "es2022";
     };
     style = {
       enable = false;
-      browserslist = "defaults, Firefox ESR, Firefox 91, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
+      browserslist = "defaults, Firefox ESR, Firefox 141, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
     };
     svg = {
       enable = false;
@@ -62,13 +62,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.35.4";
+  version = "0.35.5";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UKKJQhQeU8kJHCjciH2sSobO12px1BcBDyy6kt+s4mY=";
+    hash = "sha256-YDXEdhtubI0ZGUwiRoCe+Wh4ieHOMmUODs3waE7xb0U=";
   };
 
   php = php.buildEnv (
@@ -127,7 +127,7 @@ php.buildComposerProject2 (finalAttrs: {
     nativeBuildInputs = [ gitMinimal ];
   };
 
-  vendorHash = "sha256-KINOKaBtv0fVNYyihtvRzgCJmh/HFURvhxSJjjMOt74=";
+  vendorHash = "sha256-kExcDTbez7xmnGZQIwcul47JFwiU7A/RjwUj2G4nfwk=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;

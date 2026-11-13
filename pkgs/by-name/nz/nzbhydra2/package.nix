@@ -134,7 +134,6 @@ maven.buildMavenPackage {
     changelog = "https://github.com/theotherp/nzbhydra2/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      matteopacini
       tmarkus
     ];
     platforms = lib.platforms.linux;

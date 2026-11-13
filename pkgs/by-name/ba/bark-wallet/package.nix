@@ -7,6 +7,7 @@
   protobuf,
   openssl,
   sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -56,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     sqlite
+    zstd
   ];
 
   env = {

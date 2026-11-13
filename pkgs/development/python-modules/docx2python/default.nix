@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "docx2python";
-  version = "3.7.1";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ShayHill";
     repo = "docx2python";
     tag = finalAttrs.version;
-    hash = "sha256-ctMx5UpQr8QEzB0+CahmGN2PdbFrEzoJ4Tu8LGi3GMM=";
+    hash = "sha256-mKaRDaVYAeO68Jxz/SklV7hVP+LYd0MPdqyer4LQvGg=";
   };
 
   postPatch = ''

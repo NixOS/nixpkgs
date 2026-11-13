@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Bluetooth-Devices";
     repo = "ulid-transform";
     tag = "v${version}";
     hash = "sha256-S9+vP0frNvA4wWZMyLPYq6L/5PmLcyFNdN8NY+IrlzQ=";
@@ -42,8 +42,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library to create and transform ULIDs";
-    homepage = "https://github.com/bdraco/ulid-transform";
-    changelog = "https://github.com/bdraco/ulid-transform/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/Bluetooth-Devices/ulid-transform";
+    changelog = "https://github.com/Bluetooth-Devices/ulid-transform/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -2,6 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  oniguruma,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +18,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-YcQWgNeT/2dvU1dnieo42z5VXnZRoZK9PMGmV/rFxFk=";
     fetchSubmodules = true;
   };
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    oniguruma
+    zstd
+  ];
+
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   cargoHash = "sha256-obD/QyRliNheBvcj2islxaZ6RgM60l8O69jLUmxlLyc=";
 

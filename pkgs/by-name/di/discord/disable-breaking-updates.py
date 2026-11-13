@@ -14,6 +14,7 @@ This will dramatically improve the experience :
 
 import json
 import os
+import stat
 import sys
 from pathlib import Path
 
@@ -57,6 +58,8 @@ if missing_settings:
     os.makedirs(os.path.dirname(settings_path), exist_ok=True)
 
     with settings_path_temp.open("w", encoding="utf-8") as settings_file_temp:
+        if settings_path.exists():
+            os.fchmod(settings_file_temp.fileno(), stat.S_IMODE(settings_path.stat().st_mode))
         json.dump(settings, settings_file_temp, indent=2)
 
     settings_path_temp.rename(settings_path)

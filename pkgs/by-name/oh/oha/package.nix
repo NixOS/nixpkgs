@@ -8,6 +8,9 @@
   libredirect,
   pkg-config,
   openssl,
+  aws-lc,
+  sqlite,
+  zstd,
   rust-jemalloc-sys,
   versionCheckHook,
 }:
@@ -32,13 +35,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
     openssl
+    aws-lc
+    sqlite
+    zstd
     rust-jemalloc-sys
   ];
 

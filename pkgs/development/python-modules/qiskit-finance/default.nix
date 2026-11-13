@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "qiskit";
+    owner = "qiskit-community";
     repo = "qiskit-finance";
     tag = finalAttrs.version;
     hash = "sha256-zYhYhojCzlENzgYSenwewjeVHUBX2X6eQbbzc9znBsk=";

@@ -101,5 +101,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ ulysseszhan ];
     platforms = lib.platforms.all;
     mainProgram = "pvzge";
+    broken = true; # upstream repo is inaccessible: https://github.com/Gzh0821/pvzg_site/issues/515
   };
 })

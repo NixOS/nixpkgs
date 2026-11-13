@@ -1,13 +1,14 @@
 {
+  lib,
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  lib,
   lxml,
   mocket,
   pytest-asyncio,
   pytestCheckHook,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     lxml
+    yarl
   ];
 
   pythonImportsCheck = [ "pyblu" ];

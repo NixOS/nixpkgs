@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "funsor";
   version = "0.4.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";

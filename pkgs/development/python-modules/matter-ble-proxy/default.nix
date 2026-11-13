@@ -47,8 +47,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "matter_ble_proxy" ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Client library for the OHF Matter Server BLE proxy protocol";
     homepage = "https://github.com/matter-js/matterjs-server/tree/main/python_ble_proxy";

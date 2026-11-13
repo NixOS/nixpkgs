@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "scmrepo";
     tag = finalAttrs.version;
     hash = "sha256-E7BHdLDS57r/UbSA62lfr3z+5sqFTPRzwfFLIITeSs0=";
@@ -53,8 +53,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "SCM wrapper and fsspec filesystem";
-    homepage = "https://github.com/iterative/scmrepo";
-    changelog = "https://github.com/iterative/scmrepo/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/treeverse/scmrepo";
+    changelog = "https://github.com/treeverse/scmrepo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

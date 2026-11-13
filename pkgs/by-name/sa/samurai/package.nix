@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "DESTDIR="
     "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "LDLIBS="
   ];
 
   passthru.updateScript = nix-update-script { };

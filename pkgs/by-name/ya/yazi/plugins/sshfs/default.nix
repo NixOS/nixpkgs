@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin (finalAttrs: {
   pname = "sshfs.yazi";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "uhs-robert";
     repo = "sshfs.yazi";
-    tag = "v2.1.1";
-    hash = "sha256-RYZ0wFkYfR/TfYntRipNPvpSl4gvtmNukLBQONRk1jU=";
+    tag = "v2.1.2";
+    hash = "sha256-409c6MJdzvjymZfM4mNSNi1kCYg/h4SQZAlSrKEyQpc=";
   };
 
   meta = {

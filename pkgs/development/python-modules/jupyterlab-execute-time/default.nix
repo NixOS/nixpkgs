@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyterlab-execute-time";
   version = "3.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deshaw";

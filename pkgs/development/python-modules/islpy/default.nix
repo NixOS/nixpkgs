@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "islpy";
   version = "2026.2.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "inducer";

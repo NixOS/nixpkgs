@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "docling";
   inherit (docling-slim) version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   sourceRoot = "${finalAttrs.src.name}/packages/docling";
 

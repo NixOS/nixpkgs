@@ -23,7 +23,6 @@ in
 
 {
   meta.maintainers = with lib.maintainers; [
-    defelo
     felbinger
   ];
 
@@ -66,9 +65,8 @@ in
             GRANIAN_HOST = "127.0.0.1";
             GRANIAN_PORT = 8000;
             GRANIAN_STATIC_PATH_MOUNT = "''${config.services.glitchtip.package}/lib/glitchtip/static";
-            GRANIAN_WORKERS = 1;
             PYTHONUNBUFFERED = 1;
-            REDIS_URL = lib.mkIf config.services.glitchtip.redis.createLocally "unix://''${config.services.redis.servers.glitchtip.unixSocket}";
+            VALKEY_URL = lib.mkIf config.services.glitchtip.redis.createLocally "unix://''${config.services.redis.servers.glitchtip.unixSocket}";
           }
         '';
         example = {
@@ -205,27 +203,43 @@ in
     // lib.optionalAttrs cfg.database.createLocally { DATABASE_URL = "postgresql://@/glitchtip"; }
     // lib.optionalAttrs cfg.nginx.createLocally { GLITCHTIP_DOMAIN = "https://${cfg.nginx.domain}"; }
     // lib.optionalAttrs cfg.redis.createLocally {
-      REDIS_URL = "unix://${config.services.redis.servers.glitchtip.unixSocket}";
+      VALKEY_URL = "unix://${config.services.redis.servers.glitchtip.unixSocket}";
     };
 
-    systemd.services =
-      let
-        commonService = {
-          wantedBy = [ "multi-user.target" ];
-          wants = [ "network-online.target" ];
-          requires =
-            lib.optional cfg.database.createLocally "postgresql.target"
-            ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
-          after = [
-            "network-online.target"
-          ]
-          ++ lib.optional cfg.database.createLocally "postgresql.target"
+    systemd.services = {
+      glitchtip = {
+        description = "GlitchTip";
+        environment =
+          environment
+          // lib.optionalAttrs (cfg.settings.ENABLE_OBSERVABILITY_API && cfg.settings.GRANIAN_WORKERS > 1) {
+            PROMETHEUS_MULTIPROC_DIR = "/tmp/prometheus_multiproc";
+          };
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
+        requires =
+          lib.optional cfg.database.createLocally "postgresql.target"
           ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
+        after = [
+          "network-online.target"
+        ]
+        ++ lib.optional cfg.database.createLocally "postgresql.target"
+        ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
 
-          inherit environment;
-        };
-
-        commonServiceConfig = {
+        serviceConfig = {
+          ExecStartPre = [
+            "${lib.getExe pkg} migrate"
+            "${lib.getExe pkg} createcachetable"
+            "${lib.getExe pkg} maintain_partitions"
+          ];
+          ExecStart = ''
+            ${lib.getExe python.pkgs.granian} \
+              --interface asgi \
+              glitchtip.asgi:application \
+              --host ${cfg.settings.GRANIAN_HOST} \
+              --port ${toString cfg.settings.GRANIAN_PORT} \
+              --workers ${toString cfg.settings.GRANIAN_WORKERS} \
+              --no-ws
+          '';
           User = cfg.user;
           Group = cfg.group;
           RuntimeDirectory = "glitchtip";
@@ -268,46 +282,8 @@ in
           ];
           UMask = "0077";
         };
-      in
-      {
-        glitchtip = commonService // {
-          description = "GlitchTip";
-          environment =
-            environment
-            // lib.optionalAttrs (cfg.settings.ENABLE_OBSERVABILITY_API && cfg.settings.WORKERS > 1) {
-              PROMETHEUS_MULTIPROC_DIR = "/tmp/prometheus_multiproc";
-            };
-          bindsTo = [ "glitchtip-worker.service" ];
-          before = [ "glitchtip-worker.service" ];
-
-          serviceConfig = commonServiceConfig // {
-            ExecStartPre = [
-              "${lib.getExe pkg} migrate"
-              "${lib.getExe pkg} createcachetable"
-              "${lib.getExe pkg} maintain_partitions"
-            ];
-            ExecStart = ''
-              ${lib.getExe python.pkgs.granian} \
-                --interface ${if cfg.settings.GLITCHTIP_ENABLE_MCP then "asgi" else "asginl"} \
-                glitchtip.asgi:application \
-                --host ${cfg.settings.GRANIAN_HOST} \
-                --port ${toString cfg.settings.GRANIAN_PORT} \
-                --workers ${toString cfg.settings.GRANIAN_WORKERS} \
-                --no-ws
-            '';
-          };
-        };
-
-        glitchtip-worker = commonService // {
-          description = "GlitchTip Job Runner";
-          environment = environment // {
-            IS_WORKER = "1";
-          };
-          serviceConfig = commonServiceConfig // {
-            ExecStart = "${lib.getExe pkg} runworker --scheduler";
-          };
-        };
       };
+    };
 
     services.nginx = lib.mkIf cfg.nginx.createLocally {
       enable = true;

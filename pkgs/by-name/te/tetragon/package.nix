@@ -3,28 +3,30 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  go,
-  llvm,
-  clang_20,
+  go_1_27,
+  llvm_22,
+  clang_22,
   bash,
   writableTmpDirAsHomeHook,
   gitMinimal,
   installShellFiles,
   nix-update-script,
+  versionCheckHook,
 }:
 let
-  # https://github.com/cilium/tetragon/issues/5389
-  clang = clang_20;
+  go = go_1_27;
+  llvm = llvm_22;
+  clang = clang_22;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ls+nEx5pGCpirhXve6taKW/5A1fiLGLMT7KjYPEiWHE=";
+    hash = "sha256-/UnmA3k3NcCEFA+JW19dbQCN9fUYAWkbKV+SGmRmdhw=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
+    VERSION = finalAttrs.version;
     LOCAL_CLANG = 1;
     LOCAL_CLANG_FORMAT = 1;
     NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments -Wno-default-const-init-var-unsafe";
@@ -90,6 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  versionCheckProgram = "${placeholder "out"}/bin/tetra";
+  versionCheckProgramArg = "version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Real-time, eBPF-based Security Observability and Runtime Enforcement tool";

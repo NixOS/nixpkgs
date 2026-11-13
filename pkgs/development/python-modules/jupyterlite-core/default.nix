@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyterlite-core";
   version = "0.8.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlite";

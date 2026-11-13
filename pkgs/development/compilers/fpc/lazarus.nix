@@ -63,9 +63,9 @@ let
     harfbuzz
   ];
 
-  linkerFlags =
+  linkerFlags = toString (
     if stdenv.hostPlatform.isDarwin then
-      [ "-syslibroot $SDKROOT" ] ++ lib.optional withQt "-F${lib.getLib libqtpas}/lib"
+      lib.optional withQt "-F${lib.getLib libqtpas}/lib"
     else
       [
         "-L${lib.getLib stdenv.cc.cc}/lib"
@@ -87,9 +87,10 @@ let
       ++ lib.optionals withQt [
         "-L${lib.getLib libqtpas}/lib"
         "-lQt${qtVersion}Pas"
-      ];
+      ]
+  );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lazarus-${LCL_PLATFORM}";
   inherit version;
 
@@ -130,37 +131,34 @@ stdenv.mkDerivation rec {
     "bigide"
   ];
 
-  env = { inherit LCL_PLATFORM; };
+  env = {
+    inherit LCL_PLATFORM;
+    NIX_LDFLAGS = linkerFlags;
+  };
 
   preBuild = ''
-    # Set here rather than in `env` so the shell expands `$SDKROOT`.
-    export NIX_LDFLAGS="${toString linkerFlags}"
     mkdir -p $out/share "$out/lazarus"
     tar xf ${fpc.src} --strip-components=1 -C $out/share -m
     substituteInPlace ide/packages/ideconfig/include/unix/lazbaseconf.inc \
       --replace '/usr/fpcsrc' "$out/share/fpcsrc"
   '';
 
-  postInstall =
-    let
-      ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g' | sed -re 's/(^ *| *$)//g;')'';
-    in
-    ''
-      wrapProgram $out/bin/startlazarus \
-        --prefix NIX_LDFLAGS ' ' "${ldFlags}" \
-        --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${ldFlags}" \
-        --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
-        --prefix PATH ':' "${
-          lib.makeBinPath (
-            [
-              fpc
-              gnumake
-              binutils
-            ]
-            ++ lib.optional stdenv.hostPlatform.isLinux gdb
-          )
-        }"
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/startlazarus \
+      --prefix NIX_LDFLAGS ' ' "${linkerFlags}" \
+      --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${linkerFlags}" \
+      --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
+      --prefix PATH ':' "${
+        lib.makeBinPath (
+          [
+            fpc
+            gnumake
+            binutils
+          ]
+          ++ lib.optional stdenv.hostPlatform.isLinux gdb
+        )
+      }"
+  '';
 
   meta = {
     description = "Graphical IDE for the FreePascal language";

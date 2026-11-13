@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "XKB keyboard description compiler";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xkbcomp";

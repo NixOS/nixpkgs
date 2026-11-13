@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cifs-utils";
-  version = "7.5";
+  version = "7.9";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-f6zoXj0tXrXnrb0YGt7mdZCX8TWxDW+zC+jgcK9+cFQ=";
+    sha256 = "sha256-nzdQ9AJSCxXCyOtS/Uhd9up35eZv5eOc6KxDhsMsApY=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://wiki.samba.org/index.php/LinuxCIFS_utils";
+    maintainers = with lib.maintainers; [ cdombroski ];
     description = "Tools for managing Linux CIFS client filesystems";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;

@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  rust-jemalloc-sys,
   nix-update-script,
 }:
 
@@ -17,6 +18,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-w1+wdvl4wmxOynsg7SmL5lSASd4Cl4OkMJoIBUmuKGY=";
+
+  buildInputs = [ rust-jemalloc-sys ];
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };

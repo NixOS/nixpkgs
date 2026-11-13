@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torch-ema";
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fadel";

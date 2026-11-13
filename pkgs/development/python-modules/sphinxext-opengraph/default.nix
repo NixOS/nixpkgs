@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "wpilibsuite";
+    owner = "sphinx-doc";
     repo = "sphinxext-opengraph";
     tag = "v${version}";
     hash = "sha256-rdV6XWHfNj+TFgIfqFPWYxn6bGG5w/frUHl9+qMALi4=";
@@ -39,8 +39,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Sphinx extension to generate unique OpenGraph metadata";
-    homepage = "https://github.com/wpilibsuite/sphinxext-opengraph";
-    changelog = "https://github.com/wpilibsuite/sphinxext-opengraph/releases/tag/${src.tag}";
+    homepage = "https://github.com/sphinx-doc/sphinxext-opengraph";
+    changelog = "https://github.com/sphinx-doc/sphinxext-opengraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
   };

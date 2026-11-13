@@ -1,10 +1,11 @@
 {
+  lib,
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
+  hatch-vcs,
+  hatchling,
   mashumaro,
-  poetry-core,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
@@ -12,19 +13,27 @@
 
 buildPythonPackage rec {
   pname = "pyrail";
-  version = "0.4.1";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tjorim";
     repo = "pyrail";
     tag = "v${version}";
-    hash = "sha256-MFsFtspL9cmhwu2oo8wx0Sjx2VpQe92JP9e0M7U8CL8=";
+    hash = "sha256-nQmlZn+F4JzZZf3xmdlwh5vDvhbnw9iTa5BGAJyl7t4=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [
+    "aiohttp"
+    "mashumaro"
+  ];
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     aiohttp

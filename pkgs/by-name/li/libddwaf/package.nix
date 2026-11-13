@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libddwaf";
-  version = "2.1.0";
+  version = "2.2.0";
 
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "DataDog";
     repo = "libddwaf";
     tag = finalAttrs.version;
-    hash = "sha256-QS6nyd4cyKhZ3cL+5WOgqtBBYecxHqrUAZPBO00fy7M=";
+    hash = "sha256-8zFNjHHQvb2C9OKbhhoxX+DizpjzpR14aBnRHrcO1Xs=";
   };
 
   nativeBuildInputs = [ cmake ];

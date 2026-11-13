@@ -6,6 +6,8 @@
   installShellFiles,
   nix-update-script,
   libdrm,
+  pkg-config,
+  aws-lc,
   sqlite,
 }:
 let
@@ -52,7 +54,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoCheckFlags = cargoFlags;
 
-  checkInputs = [ sqlite ];
+  nativeCheckInputs = [ pkg-config ];
+
+  checkInputs = [
+    aws-lc
+    sqlite
+  ];
 
   preCheck = ''
     export XDG_RUNTIME_DIR=$(mktemp -d)

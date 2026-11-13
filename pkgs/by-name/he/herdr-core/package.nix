@@ -14,14 +14,16 @@
   gnused,
   gnutar,
   gzip,
+  jq,
   libarchive,
+  openssl,
   python3,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr-core";
-  version = "0.1.15";
+  version = "0.1.18";
 
   __structuredAttrs = true;
 
@@ -30,10 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "herdr-core";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-v0BFg3FEBkaf8DDIEFCj5GAuiFnNmW2r2vaBa+csWyo=";
+    hash = "sha256-MSq0Tzlv0/aOQvuXkeuVuGx3vpUauxI1YAeLpKy7WG4=";
   };
 
-  cargoHash = "sha256-vd9qS9g9Fx49hadRlXq1y4OnVo+btZdAvynxk8nbC4c=";
+  cargoHash = "sha256-d3dTX5qvikpkIABz0ecDjPu1pA0LsSmPu5j4Oum6R3c=";
 
   # zig.fetchDeps fails in the Darwin sandbox with CertificateBundleLoadFailure:
   # Zig reads its root certificates from the system keychains, which the
@@ -118,10 +120,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # lacks those exact store paths. Every machine gets this version's
       # statically linked release build instead, as other CPUs already do.
       substituteInPlace crates/herdr-core/src/machines.rs \
-        --replace-fail 'let exe = if there == here {' 'let exe = if false {'
+        --replace-fail 'let bin = if there == here && (' 'let bin = if false && ('
 
       # The tests use /var/tmp, which the sandbox lacks.
-      for f in crates/herdr-core/{src/platform/systemd.rs,src/remote/tests.rs,src/runtime/tests.rs,tests/common/mod.rs,tests/m1.rs}; do
+      for f in crates/herdr-core/{src/platform/systemd.rs,src/remote/tests.rs,src/runtime/tests.rs,src/viewers/tests.rs,tests/common/mod.rs,tests/m1.rs,tests/macos_distribution.rs}; do
         substituteInPlace "$f" --replace-fail /var/tmp "$TMPDIR"
       done
 
@@ -148,8 +150,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
+    # One installer test runs install.sh with the build's PATH.
+    curl
     git
     python3
+    # tests/macos_distribution.rs runs the macOS release scripts against
+    # stub tools; the scripts also call these.
+    jq
+    openssl
   ];
 
   # The Darwin sandbox blocks what several tests need, such as localhost

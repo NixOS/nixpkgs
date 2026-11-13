@@ -22,6 +22,7 @@
   libpulseaudio,
   libinput,
   libevdev,
+  libgit2,
   features ? [ ],
   systemdLibs,
   dbus,
@@ -56,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
     systemdLibs
     dbus
+    libgit2
   ]
   ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
   ++ lib.optionals (hasFeature "cairo") [ luajit ]

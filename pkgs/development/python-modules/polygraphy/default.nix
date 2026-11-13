@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   # change. It also fails where cudaPackages uses an older TensorRT, such as with Jetson capabilities.
   version = "0.53.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   # cudaPackages.tensorrt-samples's source, the TensorRT OSS release of cudaPackages.tensorrt, so that Nixpkgs has one
   # TensorRT OSS tree

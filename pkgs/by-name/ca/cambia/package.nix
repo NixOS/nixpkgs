@@ -1,12 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  cargo-tauri,
   fetchpatch,
   nix-update-script,
   openssl,
+  zstd,
   pkg-config,
   rustPlatform,
 }:
@@ -76,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   passthru = {

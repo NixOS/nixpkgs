@@ -6,6 +6,7 @@
   less,
   installShellFiles,
   makeWrapper,
+  oniguruma,
   libgit2,
   zlib,
   versionCheckHook,
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    oniguruma
     libgit2
     zlib
   ];

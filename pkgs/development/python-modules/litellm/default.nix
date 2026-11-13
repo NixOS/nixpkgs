@@ -4,6 +4,7 @@
   aiohttp,
   anthropic,
   apscheduler,
+  aws-lc,
   azure-ai-contentsafety,
   azure-identity,
   azure-keyvault-secrets,
@@ -39,12 +40,14 @@
   litellm-proxy-extras,
   llm-sandbox,
   mcp,
+  oniguruma,
   openai,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
   opentelemetry-sdk,
   orjson,
   packaging,
+  pkg-config,
   polars,
   prisma,
   prometheus-client,
@@ -91,6 +94,12 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    oniguruma
   ];
 
   cargoRoot = "litellm-rust";
@@ -214,6 +223,7 @@ buildPythonPackage (finalAttrs: {
     "boto3"
     "certifi"
     "click"
+    "filelock"
     "huggingface-hub"
     "importlib-metadata"
     "jsonschema"

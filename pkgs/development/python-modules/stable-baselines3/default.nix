@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "stable-baselines3";
   version = "2.9.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";

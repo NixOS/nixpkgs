@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "i3-volume";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "hastinbe";
     repo = "i3-volume";
     rev = "v${version}";
-    hash = "sha256-IuJK03qW/WIK1K2gWJu3V1mVJM1wJx4IAcNKUBxtXf0=";
+    hash = "sha256-PWK26eWl2FDytglCUz/b9dXNOZzO51ci+W0qlfJc4Q8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

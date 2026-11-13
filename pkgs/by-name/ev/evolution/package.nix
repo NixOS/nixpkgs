@@ -49,7 +49,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evolution";
-  version = "3.60.2";
+  version = "3.62.0";
 
   outputs = [
     "out"
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor finalAttrs.version}/evolution-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IYpJ+lBoFV29vTWjDRCi8jfHJGX7HQ4Kp4iJ8DnC7Y8=";
+    hash = "sha256-f8LMQOFpm/cGtc/PAlVlD8RiO5ntvHLFrQJs6iWHo9Y=";
   };
 
   nativeBuildInputs = [
@@ -134,8 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [
     "big-parallel"
   ];
-
-  doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {

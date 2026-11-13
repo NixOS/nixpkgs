@@ -5,7 +5,6 @@
   httpx,
   pydantic-xml,
   pydantic,
-  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-datafiles,
@@ -18,19 +17,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "restfly";
-  version = "2.0.5";
+  version = "2.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "stevemcgrath";
+    owner = "librestfly";
     repo = "restfly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RE1k0orzDAqGSRfGaMrZ2gKXKVYt/lIYm+fn5HP3POA=";
+    hash = "sha256-gAHWVkURgdi4mfHJnr/qq7dlNXMt6+2WjbK73Kaag0c=";
   };
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     httpx
@@ -57,7 +54,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python RESTfly API Library Framework";
-    homepage = "https://github.com/stevemcgrath/restfly";
+    homepage = "https://github.com/librestfly/restfly";
     changelog = "https://github.com/librestfly/restfly/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

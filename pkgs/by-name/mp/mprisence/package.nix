@@ -5,6 +5,7 @@
   pkg-config,
   dbus,
   openssl,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     dbus
     openssl
+    aws-lc
   ];
 
   meta = {

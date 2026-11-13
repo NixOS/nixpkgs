@@ -217,7 +217,7 @@ lib.extendMkDerivation {
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
       env = args.env or { } // {
-        inherit (go) GOOS GOARCH;
+        inherit (stdenv.hostPlatform.go) GOOS GOARCH;
 
         GOTOOLCHAIN = "local";
 
@@ -302,7 +302,7 @@ lib.extendMkDerivation {
 
                 if [ "$cmd" = "test" ]; then
                   flags+=(-vet=off)
-                  flags+=($checkFlags)
+                  concatTo flags checkFlags
                 fi
 
                 local OUT

@@ -10,8 +10,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "3.0.0";
   pyproject = false;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Triotion";
     repo = "WP-Scanner";

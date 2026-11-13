@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.62.3";
+  version = "2.63.0";
 
   outputs = [
     "out"
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-frRJsnIqdoAhNW9m3+4yAsIptU7U5qcM5AwJDpf/FvI=";
+    hash = "sha256-yrf30TJvsAHk6583mQ3mbUV4pfSEZVB0caaTItizJuM=";
   };
 
   # FIXME: This patch should be made unconditional the next time librsvg is
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-9ubfIl9R2BdcAWn7i050KBbb4cMdlakvrKdnjpZCQjA=";
+    hash = "sha256-QJjP4VpIl/0vXjvsOQCkh+0zsKanEva9A1YlkGi3BL4=";
     dontConfigure = true;
   };
 
@@ -187,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
       let
         updateSource = gnome.updateScript {
           packageName = "librsvg";
+          versionPolicy = "ninety-micro-unstable";
         };
 
         updateLockfile = {

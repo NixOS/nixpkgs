@@ -14,11 +14,12 @@
   pkg-config,
   shared-mime-info,
   wrapGAppsHook4,
+  _experimental-update-script-combinators,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crosswords";
-  version = "0.3.18.1";
+  version = "0.3.19.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jrb";
     repo = "crosswords";
     rev = finalAttrs.version;
-    hash = "sha256-d8KwZ06WubqIRq5aPm+W/MfLgNcLP+233gur5pLF/PY=";
+    hash = "sha256-bncC3QXseYMkw3SH+PAqUpXiL0qZy4JASbhFoVvabqA=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "Exec=crosswords-thumbnailer" "Exec=$out/bin/crosswords-thumbnailer"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "libipuz";
+    })
+    (nix-update-script {
+      attrPath = "crosswords";
+    })
+  ];
 
   meta = {
     description = "Crossword player and editor for GNOME";

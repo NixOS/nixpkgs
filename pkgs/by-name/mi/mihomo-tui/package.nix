@@ -1,5 +1,7 @@
 {
   lib,
+  aws-lc,
+  pkg-config,
   rustPlatform,
   fetchFromGitHub,
   cacert,
@@ -21,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-wHuf+dlqAsD63gJH44w6r3+sPMJdFYxSReuqW8NCyng=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   env = {
     # nixpkgs adds target-specific rustflags, which take precedence over

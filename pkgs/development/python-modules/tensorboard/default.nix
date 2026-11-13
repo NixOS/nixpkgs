@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tensorboard";
   version = "2.21.0";
   format = "wheel";
-  __structuredAttrs = true;
 
   # tensorflow/tensorboard is built from a downloaded wheel, because
   # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.

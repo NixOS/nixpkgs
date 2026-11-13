@@ -24,13 +24,13 @@ let
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.41.1";
+  version = "2.42.0";
   sources = {
-    aarch64-linux = fetch "linux_arm64" "sha256-jN6yWqbeNDs70Bu5dTUtZzx81Dghe1QP2HDDTrQ7URA=" "zip";
-    i686-linux = fetch "linux_386" "sha256-IzVxEagIoiJrbXCAcvwJhh5rjCLBgsGOdvHd6/hM/70=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-8vzb3VEV3LUbY+W5nrDnk/ZqEP5sZ27BC29IAWpISsc=" "zip";
+    aarch64-linux = fetch "linux_arm64" "sha256-h6sqoglGsuOo10Mm78SRqHkF9wOqaZWuGoqeKPo/MLw=" "zip";
+    i686-linux = fetch "linux_386" "sha256-C8aPVnFBR5TwtJNFCzXshMg5yqLF40KlJ/vuXgGaBW0=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-RDKl3j74wA4PHjQdXWXfesAVL/C8Vuv9bkfeYCGfGEA=" "zip";
     aarch64-darwin =
-      fetch "apple_universal" "sha256-8UfSuRG7QvHjdEINMYbmUTzjkhna2KzB2ZzAAffcqoI="
+      fetch "apple_universal" "sha256-gGfcsNLfn2B57i6BXv744fkXpcS18SOtEbPtlK7JGfk="
         "pkg";
   };
   platforms = builtins.attrNames sources;

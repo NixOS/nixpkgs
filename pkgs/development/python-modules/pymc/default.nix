@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pymc";
   version = "6.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";

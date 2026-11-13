@@ -1,5 +1,7 @@
 {
   lib,
+  libgit2,
+  pkg-config,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
@@ -18,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-PC35k3vwKP55VKZt1txKVajhfrJpFiEgJYA4lNe/U7U=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   cargoBuildFlags = [ "-p=rsonpath" ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;

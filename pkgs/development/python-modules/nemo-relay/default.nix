@@ -1,46 +1,55 @@
 {
   lib,
+  aws-lc,
   buildPythonPackage,
   fetchFromGitHub,
+  pkg-config,
   rustPlatform,
+  zstd,
 
   # optional-dependencies
   # langchain:
   langchain,
+  langchain-anthropic,
   langchain-core,
   langgraph,
   langgraph-checkpoint,
+  langgraph-sdk,
   langsmith,
+  pydantic,
   # deepagents:
-  langchain-anthropic,
+  cryptography,
+  pyasn1,
   # langchain-nvidia:
   aiohttp,
+  idna,
+  multidict,
+  # google-adk:
+  typing-extensions,
 
   # tests
   cacert,
+  grpcio,
   opentelemetry-proto,
-  pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nemo-relay";
-  version = "0.7.3";
+  version = "0.11.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nemo-relay";
     tag = finalAttrs.version;
-    hash = "sha256-g7xHQOcccuyHIBiVY5GQHpd1vk99RMwuw923OR4+x3E=";
+    hash = "sha256-BwoeCwHbvVNtx4fkR1uIRh95T63UBMbvrJtiE6+/BWY=";
   };
 
   postPatch = ''
     substituteInPlace Cargo.toml \
-      --replace-fail '"0.7.0"' '"${finalAttrs.version}"'
+      --replace-fail '"0.11.0"' '"${finalAttrs.version}"'
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -49,12 +58,18 @@ buildPythonPackage (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-Re/R/0aSxFNNG9jnbSg+3D0OhQV1mPyxmIJT7ExFaP0=";
+    hash = "sha256-xjImAQmLLOzSuO0LMRnoIZ5SoYMv7WBFSkJxgL+AOX4=";
   };
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
   ];
 
   optional-dependencies = {
@@ -63,25 +78,36 @@ buildPythonPackage (finalAttrs: {
     ];
     langchain = [
       langchain
+      langchain-anthropic
       langchain-core
       langgraph
       langgraph-checkpoint
+      langgraph-sdk
       langsmith
+      pydantic
     ];
     langgraph = [
       langgraph
     ]
     ++ finalAttrs.passthru.optional-dependencies.langchain;
     deepagents = [
+      cryptography
       # deepagents # not packaged
       langchain-anthropic
+      pyasn1
     ]
     ++ finalAttrs.passthru.optional-dependencies.langgraph;
     langchain-nvidia = [
-      # langchain-nvidia-ai-endpoints # not packaged
       aiohttp
+      idna
+      # langchain-nvidia-ai-endpoints # not packaged
+      multidict
     ]
     ++ finalAttrs.passthru.optional-dependencies.langchain;
+    google-adk = [
+      # google-adk # not packaged
+      typing-extensions
+    ];
   };
 
   preCheck = ''
@@ -89,12 +115,10 @@ buildPythonPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    cacert
+    grpcio
     opentelemetry-proto
-    pydantic
     pytest-asyncio
     pytestCheckHook
-    typing-extensions
   ]
   ++ finalAttrs.passthru.optional-dependencies.langchain;
 
@@ -104,6 +128,16 @@ buildPythonPackage (finalAttrs: {
     # wants to call cargo
     "python/tests/test_dynamic_plugin_host.py::test_worker_activation_executes_and_releases_callbacks"
     "python/tests/test_dynamic_plugin_host.py::test_worker_activation_finalizer_never_waits_on_python_thread"
+    # nemo_relay_plugin is not packaged
+    "python/tests/plugin/"
+    # re-execs python without PYTHONPATH
+    "python/tests/test_observability_type_contracts.py"
+    "python/tests/test_public_type_contracts.py"
+    # requires some test fixtures to be set up
+    "python/tests/test_dynamic_plugin_host.py"
+    # failed to build the OTLP exporter: tls.certificate/client_certificate/private_key: invalid TLS trust or client identity
+    "python/tests/test_observability_plugin.py"
+    "python/tests/test_types.py"
   ];
 
   pythonImportsCheck = [

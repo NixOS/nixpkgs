@@ -32,6 +32,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-tqwEC4gNpnWPZcF6NpVy9i5zI76NIc0zDCb6E00bE3M=";
   };
 
+  pythonRelaxDeps = [ "aiostream" ];
+
   build-system = [
     setuptools
     setuptools-scm

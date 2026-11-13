@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nvidia-dali";
   inherit (dali) version src patches;
   pyproject = true;
-  __structuredAttrs = true;
 
   postPatch =
     # Replaces the submodules of the header-only libraries with Nixpkgs', as for the C++ libraries.

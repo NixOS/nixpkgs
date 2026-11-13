@@ -13,7 +13,7 @@
   makeWrapper,
   nix-update-script,
 
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
+  metalSupport ? stdenv.hostPlatform.isDarwin,
   coreMLSupport ? stdenv.hostPlatform.isDarwin && true,
 
   config,

@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "chex";
   version = "0.1.92";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";

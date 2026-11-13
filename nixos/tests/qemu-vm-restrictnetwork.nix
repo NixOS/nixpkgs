@@ -1,4 +1,4 @@
-import ./make-test-python.nix {
+{
   name = "qemu-vm-restrictnetwork";
 
   nodes = {

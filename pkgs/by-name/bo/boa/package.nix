@@ -7,6 +7,7 @@
   pkg-config,
   bzip2,
   openssl,
+  rust-jemalloc-sys,
   zstd,
 }:
 
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     openssl
+    rust-jemalloc-sys
     zstd
   ];
 

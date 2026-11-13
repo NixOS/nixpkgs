@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "python-hostlist";
   version = "2.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.nsc.liu.se/~kent/python-hostlist/python_hostlist-${finalAttrs.version}.tar.gz";

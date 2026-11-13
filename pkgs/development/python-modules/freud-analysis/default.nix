@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "freud-analysis";
-  version = "3.5.0";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     repo = "freud";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-NRI3cv3yQxAwkGxh0CFYEERNkjP51Z58vtCV9GlIESY=";
+    hash = "sha256-CkEV8Qd3+bo0a4IxMP6WnTu3FahS9XqPaCMoGOhy5gk=";
   };
 
   # Because we prefer to not `leaveDotGit`, we need to fool upstream into

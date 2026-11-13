@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     "GOLANG=yes"
     "GOCACHE=\${TMPDIR}/go-cache"
     "GOFLAGS=-trimpath"
-    "GOARCH=${pkgsBuildHost.go.GOARCH}"
-    "GOOS=${pkgsBuildHost.go.GOOS}"
+    "GOARCH=${stdenv.hostPlatform.go.GOARCH}"
+    "GOOS=${stdenv.hostPlatform.go.GOOS}"
   ]
   ++ lib.optionals isStatic [
     "SHARED=no"

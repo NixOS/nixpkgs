@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       _0x120581f
       emilytrau
-      matteopacini
     ];
     platforms = lib.platforms.darwin;
   };

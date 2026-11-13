@@ -9,30 +9,31 @@
 
   # dependencies
   aiohttp,
+  aiospinel,
   bellows,
-  coloredlogs,
+  colorlog,
   crc,
   gpiod,
+  pygbl,
   tqdm,
   typing-extensions,
   zigpy,
 
   # tests
-  aioresponses,
   pytestCheckHook,
   pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-niNjHhOwy+5mgs4UY9bIBykmZ+7TifbYnMuG1LAV7PA=";
+    hash = "sha256-xpeq9W88jp7RM+rzy8T3d/PpuGAeF5RPMgm6EwWc2wI=";
   };
 
   postPatch = ''
@@ -45,17 +46,18 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    aiospinel
     bellows
-    coloredlogs
+    colorlog
     crc
+    pygbl
     tqdm
     typing-extensions
     zigpy
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ gpiod ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gpiod ];
 
   nativeCheckInputs = [
-    aioresponses
     pytestCheckHook
     pytest-asyncio
   ];

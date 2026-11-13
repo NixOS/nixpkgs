@@ -36,8 +36,6 @@ buildDunePackage {
   pname = "git-unix";
   inherit (git) version src;
 
-  minimalOCamlVersion = "4.08";
-
   buildInputs = [
     cmdliner
     tcpip

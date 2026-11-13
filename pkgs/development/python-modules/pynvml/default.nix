@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "13.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "gpuopenanalytics";
     repo = "pynvml";

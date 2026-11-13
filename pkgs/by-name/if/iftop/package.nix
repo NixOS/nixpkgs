@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "http://ex-parrot.com/pdw/iftop/";
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     mainProgram = "iftop";
   };
 })

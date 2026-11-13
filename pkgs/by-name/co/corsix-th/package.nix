@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "corsix-th";
-  version = "0.70.1";
+  version = "0.70.2";
 
   src = fetchFromGitHub {
     owner = "CorsixTH";
     repo = "CorsixTH";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yS1SsmCyKOhYyCQxGcMImmYCe8Dv62FFMwAU/jQd2hI=";
+    hash = "sha256-GlCHqnWeF3/qf9ww09oz106X/9ENqUz4//k7PuQDqc0=";
   };
 
   patches = [
@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hughobrien
-      matteopacini
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

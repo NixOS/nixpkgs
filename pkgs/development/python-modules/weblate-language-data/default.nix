@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "weblate-language-data";
   version = "2026.10";
   pyproject = true;
-  __structuredAttrs = true;
 
   # nixpkgs-update: no auto update
   # Only weblate uses this and we want to follow its version constraints

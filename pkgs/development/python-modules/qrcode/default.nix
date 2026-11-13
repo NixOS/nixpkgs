@@ -22,8 +22,6 @@ buildPythonPackage (finalAttrs: {
   version = "8.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "lincolnloop";
     repo = "python-qrcode";

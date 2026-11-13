@@ -1532,45 +1532,45 @@
    "module": "sha256-PYeNuf/U6VnDD5qDZqiMItAB6bMkN419vu2YVo5+xVk=",
    "pom": "sha256-FbSDHoT1ylLdN8HW4XCaKQfi6bwqnD6hPyggMd4MATU="
   },
-  "com/stirling#jpdfium-natives-darwin-arm64/1.1.5": {
-   "jar": "sha256-Q4G2bou+eYXXiTgKQxg8Qp0xbqZ1p4egmJLvEvwsySg=",
-   "module": "sha256-r1AKaTrhNM83bHwBLrhHTTzS9j2D8q+eWIC5avE/e5k=",
-   "pom": "sha256-eFI8UvGqj8pU8KYTMspVfcllzBvrL8uEs/rj3Y8E4ZM="
+  "com/stirling#jpdfium-natives-darwin-arm64/1.1.6": {
+   "jar": "sha256-gQA9oKI+OZnPh/JwF7fiDP68stPumJXCgjyWUCtzwEo=",
+   "module": "sha256-dD0wIPZgPFtGL1xoN8JeaOvH1J8CvRQkviXVftt3u0k=",
+   "pom": "sha256-/Gjz37cLbxmT8jQRCmEn/dzeTyUh0QXQQ9I4UYaFZgY="
   },
-  "com/stirling#jpdfium-natives-darwin-x64/1.1.5": {
-   "jar": "sha256-HPVQCesZHVcxQH9QaDhTOOh41mJLB0mOrDhk3hLTNug=",
-   "module": "sha256-URDGsBL/ZNSDm5a5CmRVeaW9OIrxrTr7aEI65D7REAo=",
-   "pom": "sha256-XP1k7+xOVyUcJfd69+N3HBPjlhg+kebVUemsA7oSt2o="
+  "com/stirling#jpdfium-natives-darwin-x64/1.1.6": {
+   "jar": "sha256-zPva/kGGyKLOucRQve3UHJH4fE/PbJz6dUCz2Jk0YdA=",
+   "module": "sha256-6cIrxhO1dWaLx+DXvsNcnuCG6cBKpfycrJ6kZmLd9gk=",
+   "pom": "sha256-OmlxKsjkYZDzB9Fkw15aDsAC57bmNJpRgnP75e8XBLs="
   },
-  "com/stirling#jpdfium-natives-linux-arm64/1.1.5": {
-   "jar": "sha256-k5SdaPFq8YiWTaw8zPLLESCc6+NY8OuVpzJy661tXpg=",
-   "module": "sha256-hlyV2SpAdCnV3u2rxVrIUFFmhBj80gK26XnIVVL3xjg=",
-   "pom": "sha256-D+NDqa6nh42O10LR72cYuUuXERf7NRiusLYw/IgzVmc="
+  "com/stirling#jpdfium-natives-linux-arm64/1.1.6": {
+   "jar": "sha256-prsvIj6jFkg4Aulju97nIPn2sLq8z9BKIqbIXjuUKXI=",
+   "module": "sha256-ZzcMPOANM4n5js021BIrgkO0/RNkzjV+Mp+j1niNoUY=",
+   "pom": "sha256-Y08IeDmLY7yfmVFnixiETBBBKj1qgWKc6i72A5poofc="
   },
-  "com/stirling#jpdfium-natives-linux-musl-arm64/1.1.5": {
+  "com/stirling#jpdfium-natives-linux-musl-arm64/1.1.6": {
    "jar": "sha256-NfsuYe7/eR2nLYgFZ0scUEbE+acfFHJJTvTmSSodcrA=",
-   "module": "sha256-Qtq+06MutNhEo3wwJduGfuIkcJO6VieXjNfz5rujFtA=",
-   "pom": "sha256-0dhlAA9CLPwBy3bpjJ+F/f1NNgmxyoygm3wggvFKa/0="
+   "module": "sha256-U9jLGXCkPeRfvsvBpAEkJkgKb7D3CQHKIdomoghvMwc=",
+   "pom": "sha256-sGKG2zXuWrfqzI3utym0wO+O+Cjg02ftZ12Z2XwBmmg="
   },
-  "com/stirling#jpdfium-natives-linux-musl-x64/1.1.5": {
+  "com/stirling#jpdfium-natives-linux-musl-x64/1.1.6": {
    "jar": "sha256-fZaVty73NWzmZPZMfdIo5SBhXDs2tqzqUgcqmLpqRsE=",
-   "module": "sha256-ttKHcVOwnCmyVrNAqP6Z6QnO6H7fFtmUDxl6jsnBaP8=",
-   "pom": "sha256-N06BwlDoTAPqeuK/d3hj7vFYjLQ/Wbp7ZuuOvOWKW5c="
+   "module": "sha256-8/0mfU8oTVkbbtXCZdPw+Md7Yv4j2XUkJYXizUT+RVI=",
+   "pom": "sha256-p9hdFSwAbfTPYoJSiUeRosXb/Htc6OH/lrrw1XBkNuA="
   },
-  "com/stirling#jpdfium-natives-linux-x64/1.1.5": {
-   "jar": "sha256-jYLbUKz+9zpTo3ezZ2DgnSbaV02eWlvFJzEPdE+3WoE=",
-   "module": "sha256-2m1HPEALVoNYSzURoxls4u6G1GYa3QQRjGE2uv9m4c8=",
-   "pom": "sha256-o6w9qkKvAJCJJe7JByPBdl95AC5QtlwDqNohFt3PnMU="
+  "com/stirling#jpdfium-natives-linux-x64/1.1.6": {
+   "jar": "sha256-Qqf5CKHR9oFT5Q6aQGtjqSRq35L700G/Evh1ByEDVMs=",
+   "module": "sha256-Xjezabezd2P7ZGVNaEZjbXbaTKFEw33cljearh1k0PQ=",
+   "pom": "sha256-QIb8W1bQmgOx6b370Xgsl5TS8YTr9DPDrzuoTFH8DAs="
   },
-  "com/stirling#jpdfium-natives-windows-x64/1.1.5": {
-   "jar": "sha256-pIJo3FUyYp0aC+GW2itHKK7bRwPg8/5/TNh8fPbidgA=",
-   "module": "sha256-yzq17QfT0PfdAVSzjBQyTbh2c1U7wGG9EEExXheir6w=",
-   "pom": "sha256-nT8T4nlRWqvpKZZ+3PFdUOyXGt6Hk+f4sVFcjWNgsIc="
+  "com/stirling#jpdfium-natives-windows-x64/1.1.6": {
+   "jar": "sha256-sPcDmbsOK2cNg7DCS4T4l2tvzA/yFXfd+mr+5GDysJU=",
+   "module": "sha256-KeA0UT+/w33H0khMfk8OKQADTJJLlQClmSKuW4+FphY=",
+   "pom": "sha256-cYol1U983eJl81a13Dsm3JsKoNkvmakd/YY8BH47dTc="
   },
-  "com/stirling#jpdfium/1.1.5": {
-   "jar": "sha256-ZKX1+QKI3UintEBIcKwNTBaDptX2VZFuenrUy2XW4MU=",
-   "module": "sha256-Ga53+vajqiZToSngdQnZpqOUBXTnN0y974WQ1F67u7w=",
-   "pom": "sha256-KvYcD/OwdddoPSWvRKu4Xb30KQwh1gyVhJuUxGIjJgc="
+  "com/stirling#jpdfium/1.1.6": {
+   "jar": "sha256-FwKdJSOeDFerqVmTi5Jqcyl5UqkyJrBP9ChgNK/UcFI=",
+   "module": "sha256-s4uWWgBi5+Vg0nHuHWQ426vgMX/ho05LEwjgX7fLagA=",
+   "pom": "sha256-2zmRTJhz/8EGVjbQ2X6qNlH/QVz1w1YXZhupvu6jBRA="
   },
   "com/stirling#stirling-office-convert-legacy/0.2.2": {
    "jar": "sha256-9XsXwUyRMY4nwQnkYpVbwE1k/T1nxueaUAc+hjQl/jc=",

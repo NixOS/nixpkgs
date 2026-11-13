@@ -5,6 +5,7 @@
   nix-update-script,
   pkg-config,
   openssl,
+  libsodium,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,10 +31,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # get openssl-sys to use pkg-config
     OPENSSL_NO_VENDOR = true;
     RUSTC_BOOTSTRAP = true;
+    RUSTFLAGS = "--cfg=rustix_use_libc";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    libsodium
+  ];
 
   passthru.updateScript = nix-update-script { };
 

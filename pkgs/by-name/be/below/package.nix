@@ -7,6 +7,7 @@
   elfutils,
   rustfmt,
   zlib,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     elfutils
     zlib
+    zstd
   ];
 
   # needs /sys/fs/cgroup

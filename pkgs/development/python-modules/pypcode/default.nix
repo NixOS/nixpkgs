@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pypcode";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "angr";
     repo = "pypcode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OwnwgN2/MElH7SOwauS/hfVkgwAd0uMH0y00Ydkq+8I=";
+    hash = "sha256-G0RMZJBAhKUVTMqyRBwJ5782uWVCst9RYvzfJLKJAgc=";
   };
 
   build-system = [

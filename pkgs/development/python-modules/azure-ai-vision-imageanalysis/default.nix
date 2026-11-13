@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "azure-ai-vision-imageanalysis";
   version = "1.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Azure";

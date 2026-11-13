@@ -8,7 +8,6 @@
   cairo,
   file,
   hyprutils,
-  lcms2,
   libGL,
   libdrm,
   libjpeg,
@@ -17,18 +16,17 @@
   libspng,
   libwebp,
   pango,
-  pixman,
 }:
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-48DubZbx8PDfuJkksNgi5aWFnX/Rq1OUaLsUvsdf2Bo=";
+    hash = "sha256-SdzBAddYgebEcMI9hnQim4SCgQJrFBi8ezyFXS5yJ40=";
   };
 
   nativeBuildInputs = [
@@ -36,20 +34,21 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     cairo
-    file
     hyprutils
-    lcms2
     libGL
+    pango
+  ];
+
+  buildInputs = [
+    file
     libdrm
     libjpeg
     libjxl
     librsvg
     libspng
     libwebp
-    pango
-    pixman
   ];
 
   outputs = [
@@ -58,6 +57,7 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  strictDeps = true;
 
   cmakeBuildType = "RelWithDebInfo";
   separateDebugInfo = true;

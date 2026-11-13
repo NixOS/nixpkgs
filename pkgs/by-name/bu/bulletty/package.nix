@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
@@ -29,11 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    oniguruma
+  ];
 
   checkInputs = [ cacert ];
-
-  env.OPENSSL_NO_VENDOR = true;
 
   # Upstream test binds a localhost TCP listener
   __darwinAllowLocalNetworking = true;

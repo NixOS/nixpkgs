@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "19.5.3";
+  version = "19.5.4";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -21,10 +21,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-a9bOQMHxHB6BmBXMEN2b80+vs/7Z8saZ/B5ismWBl5k=";
+      hash = "sha256-BLxEVHKmHR2yM/LoHK8o33IwfFsb5niy1SKJwI8UYhA=";
     };
 
-    vendorHash = "sha256-IBO4wW8GqjeLHPHfqVIOHHayHLqETVk8Lqe1COlI7qk=";
+    vendorHash = "sha256-oQwSX0FZ38ahGoaPf3cEL/lkkbXictNP4ZK0AEojfjY=";
 
     ldflags = [
       "-X ${gitaly_package}/internal/version.version=${version}"

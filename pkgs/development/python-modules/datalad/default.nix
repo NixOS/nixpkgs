@@ -48,14 +48,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datalad";
-  version = "1.7.4";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = finalAttrs.version;
-    hash = "sha256-Z29wsWG9+1aNwEezlDBmkUWC5O44CQJOucJxLzIyGng=";
+    hash = "sha256-oQV+6bc8FVbd2HlOKErf4eoCnDZc8KFqWB3AqHdXkQU=";
   };
 
   # Hash variance between Darwin and Linux

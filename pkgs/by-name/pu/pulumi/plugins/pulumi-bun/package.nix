@@ -12,7 +12,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/sdk/nodejs/cmd/pulumi-language-bun";
 
-    vendorHash = null;
+    vendorHash = "sha256-Fps7U7ORVPaOloJCAiz9sxqinZIxQmYxPv7eQoiR4hk=";
 
     ldflags = [
       "-s"

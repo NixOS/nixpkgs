@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mystmd";
-  version = "1.9.1";
+  version = "1.12.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jupyter-book";
     repo = "mystmd";
     tag = "mystmd@${finalAttrs.version}";
-    hash = "sha256-SopL2yIFWWCMm7afjkMrG4Z7Ohxxb5gfCrKNRX5tyo8=";
+    hash = "sha256-iIBjXkObnZ8N6U2QF2jr/ctPxTud1gjxL3I1B6MDEWU=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-      bun install --no-progress --frozen-lockfile --no-cache
+      # only the root node_modules is copied out; upstream defaults to isolated
+      bun install --no-progress --frozen-lockfile --no-cache --linker=hoisted
 
       runHook postBuild
     '';
@@ -57,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHash =
       {
-        x86_64-linux = "sha256-4EQkvsoji9M4VCrdwyHm+ncd4XFjgAf34Kt+YeM3qjs=";
-        aarch64-linux = "sha256-xm4T1BL3AyRsYOERz4LhG4ZJQkSMzspoA+l60OND3E0=";
-        aarch64-darwin = "sha256-ZUx+jF7IcEbUCnUUeW0uOFgEpO9UIJpP3/VpUJ5ulAM=";
+        x86_64-linux = "sha256-mUJZDaFKPTci/Wq3lnXrh3tzfjpsybW/EyRVmftV0HE=";
+        aarch64-linux = "sha256-W/wTX4Yp4a+qnlZfb3Z7UnuXa2BgjcNp/WmI6TSiY5c=";
+        aarch64-darwin = "sha256-RqBSDEnA4M6KFfQXIv6QnrW+TFcEMW00AWQ9XgdnkCc=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
@@ -92,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     chmod -R +w ./node_modules
     bun prune --production
+    # link to the docs workspace, which isn't installed
+    rm node_modules/mystmd-docs
     mkdir -p $out/lib
     cp -r node_modules $out/lib/
     cp -r packages $out/lib/

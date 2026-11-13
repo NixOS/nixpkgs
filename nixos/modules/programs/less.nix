@@ -40,9 +40,14 @@ in
 
     programs.less = {
 
-      # note that environment.nix sets PAGER=less, and
-      # therefore also enables this module
-      enable = lib.mkEnableOption "less, a file pager";
+      enable = lib.mkEnableOption "less, a file pager" // {
+        default = true;
+      };
+
+      defaultPager = lib.mkEnableOption "less as the default pager" // {
+        default = cfg.enable;
+        defaultText = lib.literalExpression "config.programs.less.enable";
+      };
 
       package = lib.mkPackageOption pkgs "less" { };
 
@@ -119,11 +124,12 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable || cfg.defaultPager) {
 
     environment.systemPackages = [ cfg.package ];
 
     environment.variables = {
+      PAGER = lib.mkIf cfg.defaultPager (lib.mkOverride 900 "less");
       LESSKEYIN_SYSTEM = toString lessKey;
     }
     // lib.optionalAttrs (cfg.lessopen != null) {
@@ -132,6 +138,13 @@ in
     // lib.optionalAttrs (cfg.lessclose != null) {
       LESSCLOSE = cfg.lessclose;
     };
+
+    assertions = [
+      {
+        assertion = cfg.defaultPager -> cfg.enable;
+        message = "{option}`programs.less.defaultPager` requires {option}`programs.less.enable` to be set to true.";
+      }
+    ];
 
     warnings =
       lib.optional

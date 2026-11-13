@@ -17,6 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-OzkH1L9bFXf+kK8OPjRXpGz+fPCs67spJfXyV28NWWQ=";
   };
 
+  postPatch = ''
+    substituteInPlace src/pycsdr.cpp \
+      --replace-fail "PyModuleDef_HEAD_INIT," ".m_base = PyModuleDef_HEAD_INIT,"
+  '';
+
   propagatedBuildInputs = [ csdr ];
 
   # has no tests

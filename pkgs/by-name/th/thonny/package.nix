@@ -6,18 +6,19 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "thonny";
-  version = "5.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thonny";
     repo = "thonny";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gvYf42QHoMHvowSb1nk2/VQmVWaXK+Cb89zqw0BWljo=";
+    hash = "sha256-idj/07oAY54bpuQWDTslJ/crE0yw6Th1pZeHq4fFzBU=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +64,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '<0.12.0' '<0.13.0'
+      --replace-fail '>=0.11.6,<0.12.0' '>=0.13'
   '';
 
   preFixup = ''
@@ -79,6 +80,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "thonny" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python IDE for beginners";

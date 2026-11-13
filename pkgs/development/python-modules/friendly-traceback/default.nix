@@ -14,7 +14,6 @@ buildPythonPackage {
   pname = "friendly-traceback";
   version = "0-unstable-2025-04-13";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "friendly-traceback";

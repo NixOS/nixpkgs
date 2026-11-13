@@ -1,7 +1,9 @@
 {
+  aws-lc,
   fetchFromGitHub,
   lib,
   nix-update-script,
+  pkg-config,
   rustPlatform,
 }:
 
@@ -19,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   cargoHash = "sha256-lUxPPykO/U7bVgtw3yGxqD0PbqHng5bIW0krvYW7+Kw=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   meta = {
     description = "Multithreaded client for downloading music for free with lucida";

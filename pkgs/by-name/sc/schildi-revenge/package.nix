@@ -5,11 +5,15 @@
   gradle_9,
   nix-update-script,
   libGL,
-  jdk21,
+  jetbrains,
   git,
   cargo,
   rustc,
   rustPlatform,
+  pkg-config,
+  aws-lc,
+  sqlite,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,12 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    jdk21
+    jetbrains.jdk-no-jcef
     gradle_9
     git
     cargo
     rustc
     rustPlatform.cargoSetupHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
   ];
 
   # Workaround for a Vergen related build failure

@@ -11,14 +11,14 @@
 
 buildOctavePackage rec {
   pname = "control";
-  version = "4.2.3";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "pkg-control";
     tag = "${pname}-${version}";
     fetchSubmodules = true;
-    hash = "sha256-go7ylTl1jitLwVo5ozi2hjUKFjOCnHOasRM4/EqqAaw=";
+    hash = "sha256-ONmQXTZYxRvwIS/qibsAb3BHsEQAinRr43YAbWyDfg4=";
   };
 
   # Running autoreconfHook inside the src directory fixes a compile issue about

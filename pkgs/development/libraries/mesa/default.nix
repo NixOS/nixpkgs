@@ -34,6 +34,7 @@
   stdenv,
   udev,
   valgrind-light,
+  venus-protocol,
   vulkan-loader,
   wayland,
   wayland-protocols,
@@ -105,7 +106,6 @@
     "wayland"
   ],
   vulkanLayers ? [
-    "anti-lag"
     "device-select"
     "intel-nullhw"
     "overlay"
@@ -291,6 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev
+    venus-protocol
     vulkan-loader
     wayland
     wayland-protocols
@@ -355,6 +356,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $opencl/etc/OpenCL/vendors/
     echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
 
+    mkdir -p $spirv2dxil
     moveToOutput bin/spirv2dxil $spirv2dxil
     moveToOutput "lib/libspirv_to_dxil*" $spirv2dxil
   '';

@@ -4,6 +4,8 @@
   rustPlatform,
   makeWrapper,
   nix-update-script,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +21,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-5GpNVcnwWjxYgIXGoFkuf5CFD46kxxQwb3t0/i/2nFM=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [ zstd ];
 
   postInstall = ''
     mkdir -p $out/share/meme-bingo-web

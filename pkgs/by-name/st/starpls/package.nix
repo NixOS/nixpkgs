@@ -9,6 +9,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starpls";
   version = "0.1.22";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "withered-magic";
     repo = "starpls";
@@ -20,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Only build the starpls language server, not the xtask build helper, which
   # would otherwise leak into $out/bin.
-  cargoBuildFlags = [ "-p starpls" ];
+  cargoBuildFlags = [ "--package=starpls" ];
 
   nativeBuildInputs = [
     protobuf

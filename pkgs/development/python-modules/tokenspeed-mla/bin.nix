@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-mla";
   version = "0.2.10";
   format = "wheel";
-  __structuredAttrs = true;
 
   src = fetchPypi {
     format = "wheel";

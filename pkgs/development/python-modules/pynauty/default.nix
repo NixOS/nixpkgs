@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pynauty";
   version = "2.8.8.1";
 
-  __structuredAttrs = true;
-
   pyproject = true;
 
   disabled = pythonOlder "3.8";

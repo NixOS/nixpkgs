@@ -2,6 +2,8 @@
   lib,
   pkgsStatic,
   fetchFromGitHub,
+  aws-lc,
+  pkg-config,
 }:
 
 pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +31,14 @@ pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   # fixtures that mutate process-global admission, congestion, hook and file-descriptor
   # state are only supported under nextest's process isolation or single-threaded libtest
   dontUseCargoParallelTests = true;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
 
   meta = {
     changelog = "https://github.com/wykurz/rcp/releases/tag/v${finalAttrs.version}";

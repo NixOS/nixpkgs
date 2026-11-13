@@ -3,23 +3,23 @@
   stdenv,
   fetchurl,
   cmake,
-  llvmPackages_22,
+  llvmPackages_23,
   python3,
 }:
 
 let
-  llvmPackages = llvmPackages_22;
+  llvmPackages = llvmPackages_23;
 in
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
-  # Make sure to bump `llvmPackages` in "pkgs/top-level/all-packages.nix" to the supported version:
+  # make sure to bump `llvmPackages` to the supported version:
   # https://github.com/include-what-you-use/include-what-you-use?tab=readme-ov-file#clang-compatibility
-  version = "0.26";
+  version = "0.27";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-UkfAyaWd+dFOiqdAj/7EE0xqSu8S9ZCSkRH7/qyTCgg=";
+    hash = "sha256-9oce7qfcl0HNAKrlRtdRSr6EuRyj0fCW8VCV5qwUh18=";
   };
 
   postPatch = ''

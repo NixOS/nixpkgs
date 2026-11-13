@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hepdata-converter";
   version = "0.3.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "HEPData";

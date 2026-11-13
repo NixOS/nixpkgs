@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "alibabacloud_darabonba_map";
     inherit (finalAttrs) version;

@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "drf-standardized-errors";
   version = "0.16.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ghazi-git";

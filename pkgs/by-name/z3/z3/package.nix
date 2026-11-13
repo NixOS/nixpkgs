@@ -28,13 +28,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "5.3.2";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-vKNrsm09LGu8pgkX5Yv0XlY3u/MAawoma3BIeavS8So=";
+    hash = "sha256-ScoCwTMULHhh+xurUzmad4PmdaaPbxT3uqR47t4V+5c=";
   };
 
   strictDeps = true;

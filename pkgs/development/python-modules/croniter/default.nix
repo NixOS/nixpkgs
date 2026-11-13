@@ -30,6 +30,7 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "hatchling==1.30.1" "hatchling>=1.30.1" \
       --replace-fail "packaging==26.2" "packaging" \
+      --replace-fail "pluggy==1.6.0" "pluggy" \
       --replace-fail "trove-classifiers==2026.6.1.19" "trove-classifiers"
   '';
 

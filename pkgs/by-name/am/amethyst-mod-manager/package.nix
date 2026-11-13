@@ -1,14 +1,14 @@
 {
+  lib,
+  fetchFromGitHub,
   _7zz,
   bash,
   bubblewrap,
   cabextract,
   curl,
-  fetchFromGitHub,
   ffmpeg-headless,
   fuse-overlayfs,
   glib,
-  lib,
   libarchive,
   me3,
   meson,
@@ -17,62 +17,30 @@
   python3Packages,
   qt6,
   rustPlatform,
+  sqlite,
   umu-launcher,
   util-linux,
+  versionCheckHook,
   vgmstream,
   winetricks,
-  withLoot ? true,
   xdg-utils,
+  withLoot ? true,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "amethyst-mod-manager";
-  version = "2.6.1";
-  pyproject = false;
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "ChrisDKN";
     repo = "Amethyst-Mod-Manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WBJD122Mff9BTqmSWtVTNAwDLQmnChq/fPNLoJsVZzQ=";
+    hash = "sha256-uF7B/lJIy96d9yKMLP/80FR5LgyX34MnxarMlSvx2Y0=";
   };
 
   patches = [
     ./disable-update-notifications.diff
   ];
-
-  nativeBuildInputs = [
-    meson
-    ninja
-    qt6.wrapQtAppsHook
-  ];
-
-  buildInputs = [
-    qt6.qtbase
-  ];
-
-  dependencies =
-    with python3Packages;
-    [
-      # requirements-vendor.txt
-      py7zr
-      pillow
-      lz4
-      zstandard
-      requests
-      pyyaml
-      keyring
-      jeepney
-      msgpack
-      bsdiff4
-      cryptography
-      secretstorage
-      certifi
-      xxhash
-      # base
-      pyside6
-    ]
-    ++ lib.optional withLoot libloot;
 
   postPatch = ''
     patchShebangs src/version.py
@@ -95,6 +63,73 @@ python3Packages.buildPythonApplication (finalAttrs: {
             "'amethyst-mod-manager --nxm %u'"
   '';
 
+  nativeBuildInputs = [
+    meson
+    ninja
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+  ];
+
+  # no upstream tests; only run the version check
+  nativeCheckInputs = [ versionCheckHook ];
+
+  postFixup = ''
+    makeWrapperArgs+=(
+        --prefix PYTHONPATH : "$program_PYTHONPATH"
+        --suffix PATH : ${lib.escapeShellArg (lib.makeBinPath finalAttrs.runtimeInputs)}
+    )
+    wrapQtApp $out/bin/amethyst-mod-manager "''${makeWrapperArgs[@]}"
+    wrapProgram $out/bin/amethyst-mod-manager-cli "''${makeWrapperArgs[@]}"
+    rm -r $out/share/metainfo
+  '';
+
+  amethyst_filegraph = rustPlatform.buildRustPackage {
+    inherit (finalAttrs) src;
+    pname = "amethyst-filegraph";
+    version = "0.1.0";
+    cargoHash = "sha256-PGyUuwwU44/0lHfHEipgi5TxGyXbdDPar/mDqHLFsgM=";
+    sourceRoot = "${finalAttrs.src.name}/native/amethyst_filegraph";
+    buildInputs = [
+      sqlite
+    ];
+  };
+
+  dependencies =
+    with python3Packages;
+    [
+      # requirements-vendor.txt
+      py7zr
+      rarfile
+      pillow
+      lz4
+      zstandard
+      requests
+      pyyaml
+      keyring
+      jeepney
+      msgpack
+      bsdiff4
+      cryptography
+      secretstorage
+      certifi
+      xxhash
+      # base
+      pyside6
+    ]
+    ++ lib.optional withLoot libloot;
+
+  dontWrapQtApps = true;
+
+  pyproject = false;
+
+  pythonImportsCheck = [
+    "cli"
+    "run_qt"
+  ];
+
   runtimeInputs = [
     _7zz
     bash
@@ -111,35 +146,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     xdg-utils # xdg-open, xdg-mime, xdg-settings
   ];
 
-  dontWrapQtApps = true;
-
-  postFixup = ''
-    makeWrapperArgs+=(
-        --prefix PYTHONPATH : "$program_PYTHONPATH"
-        --suffix PATH : ${lib.escapeShellArg (lib.makeBinPath finalAttrs.runtimeInputs)}
-    )
-    wrapQtApp $out/bin/amethyst-mod-manager "''${makeWrapperArgs[@]}"
-    wrapProgram $out/bin/amethyst-mod-manager-cli "''${makeWrapperArgs[@]}"
-    rm -r $out/share/metainfo
-  '';
-
-  # no tests
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "cli"
-    "run_qt"
-  ];
-
-  __structuredAttrs = true;
-
-  amethyst_filegraph = rustPlatform.buildRustPackage {
-    inherit (finalAttrs) src;
-    pname = "amethyst-filegraph";
-    version = "0.1.0";
-    sourceRoot = "${finalAttrs.src.name}/native/amethyst_filegraph";
-    cargoHash = "sha256-PGyUuwwU44/0lHfHEipgi5TxGyXbdDPar/mDqHLFsgM=";
-  };
+  versionCheckProgram = "${placeholder "out"}/bin/amethyst-mod-manager-cli";
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script {
@@ -155,8 +163,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/ChrisDKN/Amethyst-Mod-Manager";
     changelog = "https://github.com/ChrisDKN/Amethyst-Mod-Manager/blob/${finalAttrs.src.tag}/Changelog.txt";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ RoGreat ];
-    mainProgram = "amethyst-mod-manager";
+    maintainers = with lib.maintainers; [
+      RoGreat
+      keenanweaver
+    ];
     platforms = lib.platforms.linux;
+    mainProgram = "amethyst-mod-manager";
   };
 })

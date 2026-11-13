@@ -38,7 +38,6 @@ buildPythonPackage {
     src + "/python/${distribution}-${version}-${pythonTag}-${abiTag}-${platformTag}.whl";
 
   format = "wheel";
-  __structuredAttrs = true;
 
   nativeBuildInputs = [
     autoPatchelfHook

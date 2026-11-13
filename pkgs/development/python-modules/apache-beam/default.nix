@@ -68,7 +68,6 @@ buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
   version = "2.77.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
@@ -99,12 +98,6 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "  copy_tests_from_docs()" ""
   '';
 
-  pythonRelaxDeps = [
-    "numpy"
-    "objsize"
-    "protobuf"
-  ];
-
   build-system = [
     cython
     distlib
@@ -118,6 +111,12 @@ buildPythonPackage (finalAttrs: {
     yapf
   ];
 
+  pythonRelaxDeps = [
+    "numpy"
+    "objsize"
+    "pillow"
+    "protobuf"
+  ];
   dependencies = [
     beartype
     crcmod

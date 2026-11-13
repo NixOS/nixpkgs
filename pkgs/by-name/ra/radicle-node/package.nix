@@ -6,6 +6,8 @@
   jq,
   lib,
   makeBinaryWrapper,
+  pkg-config,
+  libgit2,
   man-db,
   nixosTests,
   openssh,
@@ -47,8 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     asciidoctor
     installShellFiles
     makeBinaryWrapper
+    pkg-config
   ];
-  nativeCheckInputs = [ gitMinimal ];
+
+  buildInputs = [ libgit2 ];
 
   preBuild = ''
     export GIT_HEAD=$(<$src/.git_head)
@@ -60,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=radicle-cli"
     "--package=radicle-remote-helper"
   ];
+
+  nativeCheckInputs = [ gitMinimal ];
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 

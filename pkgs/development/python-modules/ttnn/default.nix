@@ -25,7 +25,6 @@ buildPythonPackage {
   pname = "ttnn";
   inherit (tt-metal') version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   # nanobind builds _ttnn.so against the stable ABI targeting python 3.12+
   disabled = pythonOlder "3.12";

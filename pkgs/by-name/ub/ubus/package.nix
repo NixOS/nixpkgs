@@ -24,12 +24,6 @@ stdenv.mkDerivation {
   ];
   nativeBuildInputs = [ cmake ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      "-Wno-error=gnu-folding-constant"
-    ]
-  );
-
   meta = {
     description = "OpenWrt system message/RPC bus";
     homepage = "https://git.openwrt.org/?p=project/ubus.git;a=summary";

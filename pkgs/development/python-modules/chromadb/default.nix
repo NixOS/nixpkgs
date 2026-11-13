@@ -12,6 +12,7 @@
   protobuf,
   rustc,
   rustPlatform,
+  rust-jemalloc-sys,
   zstd-c,
 
   # dependencies
@@ -68,7 +69,6 @@ buildPythonPackage (finalAttrs: {
   pname = "chromadb";
   version = "1.5.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
@@ -126,6 +126,8 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
+    rust-jemalloc-sys
     zstd-c
   ];
 

@@ -25,6 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/parisolab/mathmod/commit/ddf9239f10fb0e07603297c06a23b7adeae8e323.patch";
       hash = "sha256-jB9y3xPwlcQYRQTnqcePjAZGycC1BpWhkT1GhgVJims=";
     })
+    (fetchpatch {
+      # gcc16 uses C++20 by default
+      # See: https://github.com/parisolab/mathmod/pull/293
+      name = "fix-c++20-lerp-conflict.patch";
+      url = "https://github.com/parisolab/mathmod/commit/4c0a610690a4e071c0cff31b5f3338baafd654aa.patch";
+      hash = "sha256-By+eoIUxMyVwVGX7gwX40mPlCXpVBWBBQ8xf2LaUs+c=";
+    })
   ];
 
   postPatch = ''

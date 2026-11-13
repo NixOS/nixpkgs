@@ -1,10 +1,11 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4dd2fc36..9db6eeb1 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -35,27 +35,7 @@
- #Needed due to linker error with QtColorWidget
- set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+@@ -35,26 +35,7 @@ if(MSVC)
+   add_link_options(/GUARD:CF)
+ endif()
  
--
 -# Dependency can be fetched via flatpak builder
 -if(EXISTS "${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets/CMakeLists.txt")
 -  add_subdirectory("${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets" EXCLUDE_FROM_ALL)
@@ -29,8 +30,7 @@
  
  # This can be read from ${PROJECT_NAME} after project() is called
  if(APPLE)
-@@ -124,12 +104,7 @@
- # ToDo: Check if this is used anywhere
+@@ -147,12 +128,7 @@ include(cmake/StaticAnalyzers.cmake)
  option(BUILD_STATIC_LIBS ON)
  
  if(WIN32 OR APPLE)

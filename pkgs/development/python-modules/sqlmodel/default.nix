@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "tiangolo";
+    owner = "fastapi";
     repo = "sqlmodel";
     tag = finalAttrs.version;
     hash = "sha256-fhj3mWep7Wdw9AYu9ibIWY5plKe+w6F6PghiUsb6z5o=";

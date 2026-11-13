@@ -4,6 +4,9 @@
   nix-update-script,
   rustPlatform,
   stdenv,
+  pkg-config,
+  sqlite,
+  zstd,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,6 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-1u++FcH6eQV8TEi6OwgA5VZL/7OKKYfplzoQOQWEVCU=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

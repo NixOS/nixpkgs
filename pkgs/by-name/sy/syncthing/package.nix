@@ -54,11 +54,11 @@ buildGoModule (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     (
-      export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
+      export GOOS="${stdenv.buildPlatform.go.GOOS}" GOARCH="${stdenv.buildPlatform.go.GOARCH}" CC=$CC_FOR_BUILD
       go build build.go
       go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/infra/strelaypoolsrv/auto
     )
-    ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${finalAttrs.version} build ${target}
+    ./build -goos ${stdenv.hostPlatform.go.GOOS} -goarch ${stdenv.hostPlatform.go.GOARCH} -no-upgrade -version v${finalAttrs.version} build ${target}
     runHook postBuild
   '';
 

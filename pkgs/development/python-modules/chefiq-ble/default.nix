@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chefiq-ble";
-  version = "1.0.1";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Invader444";
     repo = "chefiq-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aC0v3KtZEnEz90kJPxx0euUM/h6NzLnvI9WggImYQ5c=";
+    hash = "sha256-4zxEUtcsi91lgRU6WFnPMaGR5hjUWHXZyInP3MIoqEo=";
   };
 
   build-system = [ hatchling ];

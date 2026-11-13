@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.0.9";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "DiffSK";
     repo = "configobj";

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   libcosmicAppHook,
   just,
+  aws-lc,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage {
@@ -23,6 +24,10 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     libcosmicAppHook
     just
+  ];
+
+  buildInputs = [
+    aws-lc
   ];
 
   dontUseJustBuild = true;

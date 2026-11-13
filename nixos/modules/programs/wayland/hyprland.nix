@@ -9,6 +9,19 @@ let
   cfg = config.programs.hyprland;
 
   wayland-lib = import ./lib.nix { inherit lib; };
+
+  hyprlandSessionPackage =
+    if cfg.withUWSM then
+      cfg.package
+    else
+      pkgs.symlinkJoin {
+        name = "${cfg.package.name}-no-uwsm";
+        paths = [ cfg.package ];
+        postBuild = ''
+          rm -f "$out/share/wayland-sessions/hyprland-uwsm.desktop"
+        '';
+        passthru.providedSessions = [ "hyprland" ];
+      };
 in
 {
   options.programs.hyprland = {
@@ -30,7 +43,6 @@ in
           p:
           wayland-lib.genFinalPackage p {
             enableXWayland = cfg.xwayland.enable;
-            withUWSM = cfg.withUWSM;
           };
       };
 
@@ -86,7 +98,7 @@ in
         };
 
         # To make the Hyprland session available in DM
-        services.displayManager.sessionPackages = [ cfg.package ];
+        services.displayManager.sessionPackages = [ hyprlandSessionPackage ];
 
         systemd = lib.mkIf cfg.systemd.setPath.enable {
           user.settings.Manager = {

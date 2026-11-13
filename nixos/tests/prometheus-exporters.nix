@@ -2024,13 +2024,13 @@ let
               # testing the NixOS module.
               (pkgs.writeText "allow-running-without-credentials" ''
                 diff --git a/cmd/tailscale-exporter/root.go b/cmd/tailscale-exporter/root.go
-                index 14089f9..2bb9a25 100644
+                index 6a72cc0..cf923dc 100644
                 --- a/cmd/tailscale-exporter/root.go
                 +++ b/cmd/tailscale-exporter/root.go
-                @@ -162,13 +162,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
-                ''\t''\t}
+                @@ -178,13 +178,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
 
                 ''\t''\thttpClient := oauthConfig.Client(context.Background())
+                ''\t''\thttpClient.Transport = newRetryTransport(httpClient.Transport)
                 -''\t''\ttoken, err := oauthConfig.Token(context.Background())
                 -''\t''\tif err != nil {
                 -''\t''\t''\treturn fmt.Errorf("failed to obtain OAuth token: %w", err)

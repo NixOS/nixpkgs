@@ -11,6 +11,9 @@
     version = "0.9.0";
     url = "github:briot/tree-sitter-ada/0a4c27dc1308a9d2742de22e5fcfc0c137b3d3f3";
     hash = "sha256-K5JJjDQwHuHZ6oQaLwJHYJxmFpR+4ENEeiZO2Q0gsk4=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   adl = {
@@ -202,6 +205,9 @@
     version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-c";
     hash = "sha256-Juuf57GQI7OAP6O03KtSzyKJAoXtGKjyYJ+sTM1A4mU=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   c-sharp = {
@@ -1423,7 +1429,7 @@
 
   inko = {
     version = "0.9.0";
-    url = "github:inko-lang/tree-sitter-inko";
+    url = "codeberg:inko-lang/tree-sitter-inko";
     hash = "sha256-thSOSJLxRztyp3krxS2yGUTCof42JotCcFmK08/Lb4M=";
     meta = {
       license = lib.licenses.mpl20;
@@ -1922,6 +1928,7 @@
     rev = "640ee15e4a7b0d09a4bc95dcc71336c28d97999b";
     hash = "sha256-rLIyJZEjMRo8am+ivKCwAESvv6jFtTPYJuuebN3T5Es=";
     meta = {
+      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
         aciceri
       ];
@@ -2021,6 +2028,9 @@
     version = "0.1.0";
     url = "github:nvim-neorg/tree-sitter-norg-meta";
     hash = "sha256-8qSdwHlfnjFuQF4zNdLtU2/tzDRhDZbo9K54Xxgn5+8=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   nu = {
@@ -2090,9 +2100,9 @@
   };
 
   odoc = rec {
-    version = "0.2.0";
+    version = "0.2.1";
     url = "github:tmcgilchrist/tree-sitter-odoc?ref=${version}";
-    hash = "sha256-hLx5spgka2fW7L2yjdDvNxRcEwcZsGGQ9Xd5bFITg8A=";
+    hash = "sha256-wUCXPzr00HuQdT4YEHZaTewqQo5IrL0+fCq3/tjjlkw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2497,6 +2507,9 @@
     version = "0.23.1";
     url = "github:tree-sitter/tree-sitter-ql-dbscheme";
     hash = "sha256-lXHm+I3zzCUOR/HjnhQM3Ga+yZr2F2WN28SmpT9Q6nE=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   qmljs = rec {
@@ -3042,6 +3055,7 @@
     url = "github:xasc/tree-sitter-t32";
     hash = "sha256-tM0xN+boHCJzK16jRZKQYk/KkwEBut7KGZxj8KDHMMg=";
     meta = {
+      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
         aciceri
       ];
@@ -3134,9 +3148,9 @@
   };
 
   tera = {
-    version = "0.1.0";
+    version = "0.1.2";
     url = "github:uncenter/tree-sitter-tera";
-    hash = "sha256-1Gb947YJnEFrCVKAuz06kwJdKD9PMab/alFJtyYjBso=";
+    hash = "sha256-zjD92no4d2aGb4HDR0sbnvV/igwsUbO19QnSnT0QtTg=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -3409,10 +3423,10 @@
   };
 
   vhdl = {
-    version = "2.0.3-unstable-2026-09-14";
+    version = "2.0.3-unstable-2026-10-24";
     url = "github:jpt13653903/tree-sitter-vhdl";
-    rev = "9be8e45c3ae7e7a4373a943a5c81ff92ce3656f8";
-    hash = "sha256-TU1dnMty8+OD24993bb7PB2M0RuzvKElWk4IkTCwGeg=";
+    rev = "0d5d60b269c7f9861c2bada7cef58fe62e6e7879";
+    hash = "sha256-wBmJlUFjK1E2nDdz3S+lm3QzVIStRfV2/LIXPiqsGFY=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

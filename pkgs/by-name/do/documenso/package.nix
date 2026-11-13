@@ -18,10 +18,11 @@
   pango,
   bash,
   openssl,
+  sqlite,
 }:
 
 let
-  skiaCanvasVersion = "3.0.8";
+  skiaCanvasVersion = "3.0.8-documenso.3";
   skiaCanvasTriplet =
     {
       x86_64-linux = "linux-x64-glibc";
@@ -30,24 +31,24 @@ let
     .${stdenv.hostPlatform.system}
       or (throw "unsupported skia-canvas platform ${stdenv.hostPlatform.system}");
   skiaCanvasPrebuild = fetchurl {
-    url = "https://github.com/samizdatco/skia-canvas/releases/download/v${skiaCanvasVersion}/${skiaCanvasTriplet}.gz";
+    url = "https://github.com/documenso/skia-canvas/releases/download/v${skiaCanvasVersion}/${skiaCanvasTriplet}.gz";
     hash =
       {
-        x86_64-linux = "sha256-9FklKQWZ1LfLUhHBI/re4nvImddVZpbi4zPQ76xpN7I=";
-        aarch64-linux = "sha256-BmXQemDAXZEqL9FFmus3cU6wRFwveEhAdjhUbD0uGnA=";
+        x86_64-linux = "sha256-fEmaJ5JM6S/z9pWhhlf8maMVOM9u3/eI7VFmbj/Ns44=";
+        aarch64-linux = "sha256-idJa+u84Cc0SjBcZSOs9sZlAHV81yF8eSOzdP5lmCus=";
       }
       .${stdenv.hostPlatform.system};
   };
 in
 buildNpmPackage (finalAttrs: {
   pname = "documenso";
-  version = "2.14.0";
+  version = "2.21.1";
 
   src = fetchFromGitHub {
     owner = "documenso";
     repo = "documenso";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZVcbOKBqjDnCo2pZKjaAuO3MK7r/S6k4kEHwBteHVGg=";
+    hash = "sha256-Li8tLI995JBCCkCUTY3HCe56Hp7xtGLDVjsS+Dsk98s=";
   };
 
   patches = [
@@ -56,7 +57,7 @@ buildNpmPackage (finalAttrs: {
     ./turbo.json.patch
   ];
 
-  npmDepsHash = "sha256-/Jt1ct/GSumu/pgTrmnVHdMhhg8J2Epvu7wnnCakqGs=";
+  npmDepsHash = "sha256-5cTOY0yZJGBPfY5eRsCvQR3TeoWBLJDHoTDe1+1ZujE=";
   npmDepsFetcherVersion = 2;
 
   nativeBuildInputs = [
@@ -73,6 +74,8 @@ buildNpmPackage (finalAttrs: {
     pixman
     cairo
     pango
+    # libquery_engine.node links against system sqlite
+    sqlite
     stdenv.cc.cc.lib
     vips
   ];
@@ -90,8 +93,8 @@ buildNpmPackage (finalAttrs: {
   };
 
   preBuild = ''
-    mkdir -p node_modules/skia-canvas/lib
-    gzip -dc ${skiaCanvasPrebuild} > node_modules/skia-canvas/lib/skia.node
+    mkdir -p node_modules/@documenso/skia-canvas/lib
+    gzip -dc ${skiaCanvasPrebuild} > node_modules/@documenso/skia-canvas/lib/skia.node
 
     npm exec patch-package
   '';

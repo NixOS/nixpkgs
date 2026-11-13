@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "WSGI application wrapper that handles Transfer-Encoding: chunked";
     homepage = "https://github.com/btimby/uwsgi-chunked";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

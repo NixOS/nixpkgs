@@ -5,6 +5,7 @@
   git,
   go_1_27,
   lib,
+  nix-update-script,
   nlohmann_json,
   stdenv,
   kdePackages,
@@ -12,29 +13,29 @@
 }:
 
 let
-  version = "0.22.3";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     tag = "v${version}";
-    hash = "sha256-HroxzuXBws4Hr5Q0381gf56alm+g50xJiLGcAsO8inY=";
+    hash = "sha256-MZlzzMy1unm3xWtkJhMBy3rE7g1dAUEBPk4CA/VpchM=";
   };
 
-  goDeps =
+  goModules =
     (buildGo127Module {
       pname = "ktailctl-go-wrapper";
       inherit src version;
       modRoot = "src/tailscale/wrapper";
-      vendorHash = "sha256-QaKaYdPuKxb75lFpnR5RqzrgJaWSCmiFUnKDz64TsaI=";
+      vendorHash = "sha256-MnaVaQ2rJDH2EwiuAJms+KdMde4T/js2Q8ktvDNYExg=";
     }).goModules;
 in
 stdenv.mkDerivation {
   pname = "ktailctl";
-  inherit version src;
+  inherit version src goModules;
 
   postPatch = ''
-    cp -r --reflink=auto ${goDeps} src/tailscale/wrapper/vendor
+    cp -r --reflink=auto ${goModules} src/tailscale/wrapper/vendor
   '';
 
   cmakeFlags = [
@@ -68,6 +69,8 @@ stdenv.mkDerivation {
     qtsvg
     qtwayland
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GUI to monitor and manage Tailscale on your Linux desktop";

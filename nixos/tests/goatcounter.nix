@@ -3,7 +3,7 @@
 {
   name = "goatcounter";
 
-  meta.maintainers = with lib.maintainers; [ bhankas ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { config, ... }:

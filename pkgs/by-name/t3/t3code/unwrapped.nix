@@ -4,6 +4,7 @@
   electron_44,
   fetchFromGitHub,
   installShellFiles,
+  jq,
   lib,
   libicns,
   libsecret,
@@ -28,7 +29,7 @@
 stdenv.mkDerivation (
   finalAttrs:
   let
-    appName = "T3 Code (Alpha)";
+    appName = "T3 Code (Beta)";
     electron = electron_44;
     # Upstream package.json requires Node.js 26; the nixpkgs default is still 24.
     nodejs = nodejs_26;
@@ -42,7 +43,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "t3code-unwrapped";
-    version = "0.1.6";
+    version = "0.1.8";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-GWO+/gJWLu9GUwZCbmrBYIVn9Y7N8PwXrjQYFLOtmWk=";
+      hash = "sha256-QPZpT/1zm5sLIDw3AOzUCIrmOFPwUU8jP/q1A8GzLow=";
     };
 
     postPatch = ''
@@ -65,6 +66,7 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = [
       installShellFiles
+      jq
       makeBinaryWrapper
       node-gyp
       nodejs
@@ -107,7 +109,7 @@ stdenv.mkDerivation (
         ;
 
       fetcherVersion = 5;
-      hash = "sha256-ABzAEEFeotEz6cePB3M4EaGrM+tbfjGZScy2BRAyLVc=";
+      hash = "sha256-ir2iMNpT5nA4ieTZT/7v5tawKH137DcfGFuzgxHfJjY=";
     };
 
     preBuild = ''
@@ -147,8 +149,14 @@ stdenv.mkDerivation (
       cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code
       cp --recursive --no-preserve=mode apps/server/{node_modules,dist} "$out"/libexec/t3code/apps/server
       cp --recursive --no-preserve=mode \
-        apps/desktop/{package.json,node_modules,dist-electron} \
+        apps/desktop/{node_modules,dist-electron} \
         "$out"/libexec/t3code/apps/desktop
+
+      # Electron derives the app name, and with it the safeStorage keyring /
+      # Keychain identity, from `productName` or `name`. Use `t3code` like the
+      # official builds so encrypted data stays readable across rebrands.
+      jq '.name = "t3code" | del(.productName)' apps/desktop/package.json \
+        > "$out"/libexec/t3code/apps/desktop/package.json
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
       install --mode=444 ${desktopIcon} \

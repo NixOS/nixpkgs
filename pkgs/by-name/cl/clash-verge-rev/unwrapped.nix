@@ -18,6 +18,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
 
+  aws-lc,
   glib,
   kdePackages,
   libayatana-appindicator,
@@ -97,6 +98,7 @@ rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
+    aws-lc
     libayatana-appindicator
     libsoup_3
     openssl

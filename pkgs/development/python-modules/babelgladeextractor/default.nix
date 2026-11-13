@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.7.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   disabled = (!isPy3k); # uses python3 specific file io in setup.py
 
   src = fetchPypi {

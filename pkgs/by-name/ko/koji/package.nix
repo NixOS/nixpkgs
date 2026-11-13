@@ -6,6 +6,7 @@
   pkg-config,
   perl,
   udev,
+  libgit2,
   openssl,
   gitMinimal,
   writableTmpDirAsHomeHook,
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];

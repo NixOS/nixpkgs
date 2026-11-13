@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  version = "2.14.1";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1e/AgyKLRKDKLA0ETHYEtrqOP4aVE13dY31NrXFTS54=";
+    hash = "sha256-GQNdXGuavDWxUkm6/Xh/jBTF8ZR4PT/eJ6G5UtZQstY=";
   };
 
-  npmDepsHash = "sha256-QF8nm8XwkYrFLSfLbz8hJRxPSJvMQUkpEv7AhYzgqjY=";
+  npmDepsHash = "sha256-MRUetL7rpO7nGzdp1yVTkUo20R5D6fMxv+WvdCaslok=";
 
   postPatch = ''
     # Disable telemetry by default; users can still opt in via enableTelemetry().

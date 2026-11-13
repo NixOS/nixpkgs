@@ -5,10 +5,13 @@ set -eu -o pipefail
 set -x
 
 # Compute the relative dir of the update script
-SCRIPT_DIR="$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"
+SCRIPT_DIR="$(
+  cd -- "$(dirname "$0")" >/dev/null 2>&1
+  pwd -P
+)"
 
 # Update version, src hash, and vendor hash
-nix-update fluxcd
+nix-update fluxcd -f "$SCRIPT_DIR/../../../.."
 
 # Read the potentially updated version from `nix-update fluxcd` using SCRIPT_DIR
 VERSION=$(sed -n 's/.*version = "\(.*\)".*/\1/p' "${SCRIPT_DIR}/package.nix" | head -1)

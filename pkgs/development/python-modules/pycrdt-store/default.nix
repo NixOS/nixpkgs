@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pycrdt-store";
   version = "0.1.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";

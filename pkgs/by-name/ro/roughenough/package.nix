@@ -1,7 +1,9 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   nix-update-script,
+  pkg-config,
   rustPlatform,
 }:
 
@@ -18,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-DxIHrN8MamZ4zq0/cSC2F64cNGQqRoIMt2jZuImlHa4=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   postInstall = ''
     rm $out/bin/roughenough_integration_test $out/bin/roughenough_load_test

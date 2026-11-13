@@ -3,6 +3,7 @@
   lib,
   gpclient,
   glib-networking,
+  makeBinaryWrapper,
   openssl,
   pkg-config,
   perl,
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "apps/gpauth";
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     perl
     pkg-config
   ]
@@ -45,6 +47,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=cli::tests::host_id_arg_sets_profile_host_id_seed"
     "--skip=cli::tests::client_version_arg_sets_profile_client_version"
   ];
+
+  dontWrapGApps = true;
+
+  postFixup = ''
+    wrapProgram "$out/bin/gpauth" \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix PATH : "${lib.makeBinPath [ openssl ]}"
+  '';
 
   passthru = {
     tests.runtime-tls = nixosTests.gpauth-tls;

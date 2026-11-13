@@ -103,11 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129.
     # Cross build is broken due to attempt to execute cert-sync built for the host.
     broken =
-      (
-        stdenv.hostPlatform.isDarwin
-        && stdenv.hostPlatform.isAarch64
-        && lib.versionOlder finalAttrs.version "6.12.0.129"
-      )
+      (stdenv.hostPlatform.isDarwin && lib.versionOlder finalAttrs.version "6.12.0.129")
       || !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     homepage =
       if lib.versionOlder finalAttrs.version "6.14.0" then

@@ -20,6 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-BOLmU4Hj/vL8HUrRJ0mC2s/rPOXI5kqPQPsL7a8rip8=";
   };
 
+  postPatch = ''
+    # tests do not freeze time properly
+    # https://github.com/Brunas/meteo_lt-pkg/issues/62
+    substituteInPlace tests/test_warnings_processor.py \
+      --replace-fail "2026" "2099"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

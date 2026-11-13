@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     "stirling-pdf"
     + lib.optionalString isDesktopVariant "-desktop"
     + lib.optionalString (!isDesktopVariant && !withAdditionalFeatures) "-free";
-  version = "3.1.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
@@ -78,14 +78,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash =
       if withAdditionalFeatures || isDesktopVariant then
-        "sha256-u6/OpRTym9SHZZVi4I/aKoH9hq8YEGbg4rz0/bxmLuo="
+        "sha256-sAt0NGIyxr5WxFo0/AibEQhXr+G91EhIf/gwerpxOAw="
       else
-        "sha256-GKky6Z/cu7NLuEk/f963zg1U5QwzxbqPEXzSdLmvqhA=";
+        "sha256-Fk+VSxC2011/a0XEjNYBu/kIR3YKfZGDnIbYlC4xZlM=";
     # The public cache must not distribute directories under the upstream
     # User License when building the MIT-only server.
     postFetch = lib.optionalString (!withAdditionalFeatures && !isDesktopVariant) ''
       rm -rf "$out/app/proprietary" "$out/app/saas" "$out/engine"
-      rm -rf "$out/frontend/editor/src/"{proprietary,desktop,saas,cloud,prototypes,portal,portal-saas}
+      rm -rf "$out/frontend/src/editor/"{proprietary,desktop,saas,cloud,prototypes,portal,portal-saas}
     '';
   };
 
@@ -104,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Avoid a 280 MiB temporary char array in the oversized-input test.
     ./avoid-oversize-test-oom.patch
+
+    # Keep the staged backend jar when running the desktop jlink tasks.
+    ./desktop-jlink-staged-jar.patch
   ]
   ++ lib.optionals (withAdditionalFeatures || isDesktopVariant) [
     ./skip-proprietary-network-test.patch
@@ -121,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString isDesktopVariant ''
     # Nixpkgs does not produce artifacts for Stirling-PDF's upstream updater
     # and does not have access to upstream's private signing key.
-    substituteInPlace frontend/editor/src-tauri/tauri.conf.json \
+    substituteInPlace frontend/src-tauri/tauri.conf.json \
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false'
   '';
 
@@ -131,10 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     name = "stirling-pdf-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-N3Af1XbFkSnA2xVb+hm08TJiMpas01r+qxFZbMeFmZ8=";
+    hash = "sha256-VtVGLFuRz0iZHqkk9W7ANmH5dwV9gL5nNH/oaYH2tMQ=";
   };
 
-  cargoRoot = "frontend/editor/src-tauri";
+  cargoRoot = "frontend/src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -145,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       cargoRoot
       ;
-    hash = "sha256-HLC1nknDiN4Gzws6cu3lV3zo2vzeoTyqu4qsiq3688c=";
+    hash = "sha256-f8IwPIIIBmvzjH9m/XAUjFNkOtgxfShBUKdnXGzkN8A=";
   };
 
   mitmCache = gradle.fetchDeps {
@@ -217,12 +220,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # this simulates what the desktop:jlink:jar would do
     gradle bootJar
-    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar -t ./frontend/editor/src-tauri/libs
+    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar -t ./frontend/src-tauri/libs
 
     # creates as minimal jre via jlink
     task desktop:jlink:runtime
 
-    substituteInPlace frontend/editor/src-tauri/stirling-pdf.desktop \
+    substituteInPlace frontend/src-tauri/stirling-pdf.desktop \
       --replace-fail 'MimeType=application/pdf;' 'MimeType=application/pdf;x-scheme-handler/stirlingpdf;'
   '';
 
@@ -245,11 +248,11 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withAdditionalFeatures ''
     install -Dm644 app/proprietary/LICENSE $out/share/licenses/stirling-pdf/app-proprietary-LICENSE
-    install -Dm644 frontend/editor/src/proprietary/LICENSE $out/share/licenses/stirling-pdf/frontend-proprietary-LICENSE
+    install -Dm644 frontend/src/editor/proprietary/LICENSE $out/share/licenses/stirling-pdf/frontend-proprietary-LICENSE
   ''
   + lib.optionalString isDesktopVariant ''
-    install -Dm644 frontend/editor/src/desktop/LICENSE $out/share/licenses/stirling-pdf/frontend-desktop-LICENSE
-    install -Dm644 frontend/editor/src/proprietary/LICENSE $out/share/licenses/stirling-pdf/frontend-proprietary-LICENSE
+    install -Dm644 frontend/src/editor/desktop/LICENSE $out/share/licenses/stirling-pdf/frontend-desktop-LICENSE
+    install -Dm644 frontend/src/editor/proprietary/LICENSE $out/share/licenses/stirling-pdf/frontend-proprietary-LICENSE
   ''
   + lib.optionalString (isDesktopVariant && stdenv.hostPlatform.isDarwin) ''
     makeWrapper "$out/Applications/Stirling PDF.app/Contents/MacOS/Stirling-PDF" "$out/bin/stirling-pdf"

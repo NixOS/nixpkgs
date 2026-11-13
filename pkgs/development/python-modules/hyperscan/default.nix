@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hyperscan";
   version = "0.8.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "darvid";

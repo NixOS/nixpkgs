@@ -32,17 +32,25 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/ccpiTctvwVY8msdVa3Ssj/iKV2LiY2+s72o0bUKFw4=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     cmake
     hyprwayland-scanner
     pkg-config
   ];
 
+  propagatedBuildInputs = [
+    hyprutils
+    libdrm
+    wayland
+  ];
+
   buildInputs = [
     hwdata
-    hyprutils
     libdisplay-info
-    libdrm
     libffi
     libGL
     libinput
@@ -50,7 +58,6 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     pixman
     seatd
     udev
-    wayland
     wayland-protocols
     wayland-scanner
   ];

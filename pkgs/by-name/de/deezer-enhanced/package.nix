@@ -130,6 +130,7 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     mainProgram = "deezer-enhanced";
+    knownVulnerabilities = [ "EOL vendored Electron 37.10.3" ];
     maintainers = with lib.maintainers; [ minegameYTB ];
   };
 }

@@ -39,7 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "pipr";
     homepage = "https://github.com/ElKowar/pipr";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ elkowar ];
+    maintainers = with lib.maintainers; [
+      elkowar
+      givikuna
+    ];
     platforms = lib.platforms.all;
   };
 })

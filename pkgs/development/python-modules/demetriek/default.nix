@@ -1,9 +1,8 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   awesomeversion,
-  backoff,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -13,19 +12,20 @@
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
+  tenacity,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "demetriek";
-  version = "1.4.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-demetriek";
     tag = "v${version}";
-    hash = "sha256-dd6BoaUUz84nf3g3v4E78t0mDC+ZhXKe0ld2gCNurZs=";
+    hash = "sha256-35hMOrpyINXOsPA09XnCNOwURLD5dIdhiYSJZDYCWJE=";
   };
 
   postPatch = ''
@@ -39,14 +39,14 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     awesomeversion
-    backoff
     mashumaro
     orjson
+    tenacity
     yarl
   ];
 
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook

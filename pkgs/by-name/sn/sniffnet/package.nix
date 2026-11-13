@@ -10,6 +10,7 @@
   # buildInputs
   libpcap,
   openssl,
+  aws-lc,
   alsa-lib,
   expat,
   fontconfig,
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libpcap
     openssl
+    aws-lc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib

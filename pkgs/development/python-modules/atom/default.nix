@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "atom";
-  version = "0.13.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = "atom";
     tag = finalAttrs.version;
-    hash = "sha256-AwrzCd0kRiEeWnh5ywMYzFmcqzlOpiknfu17gQRU8hg=";
+    hash = "sha256-hktKA57ZT4HSRTtqqnznkGWBJJUPHu4mzlrRFO6FrjI=";
   };
 
   build-system = [ setuptools-scm ];

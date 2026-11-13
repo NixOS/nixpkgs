@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pallets";
+    owner = "pallets-eco";
     repo = "cachelib";
     tag = finalAttrs.version;
     hash = "sha256-egAg0X4xpbvtiAXU6Cu/IIs8/GJAy5i73gLIkdnvOmc=";
@@ -56,7 +56,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Collection of cache libraries in the same API interface";
-    homepage = "https://github.com/pallets/cachelib";
+    homepage = "https://github.com/pallets-eco/cachelib";
     changelog = "https://github.com/pallets-eco/cachelib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];

@@ -16,7 +16,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kotonoha";
   version = "0.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "locez";

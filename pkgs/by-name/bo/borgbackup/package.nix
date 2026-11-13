@@ -33,6 +33,13 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   postPatch = ''
+    # Upstream is very sensible about msgpack versions, but the updates to here did not change any relevant code,
+    # so basically backport the essential changes from the bump commits, instead of relaxing the version freely.
+    substituteInPlace src/borg/helpers/msgpack.py \
+      --replace-fail "(1, 2, 1)" "(1, 2, 4)"
+    substituteInPlace pyproject.toml \
+      --replace-fail "<=1.2.1" "<=1.2.4"
+
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
       --replace-fail "0o4755" "0o0755"
@@ -55,11 +62,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   sphinxBuilders = [
-    # HACK: sphinxBuilders is currently broken with __structuredAttrs = true,
-    # and ignores all but the first array item. for now, pass them as a single
-    # space-separated entry. fixed on staging, but requires a mass-rebuild.
-    # TODO: revert to [ "singlehtml" "man" ] on staging.
-    "singlehtml man"
+    "singlehtml"
+    "man"
   ];
 
   buildInputs = [

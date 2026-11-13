@@ -12,6 +12,7 @@
   libxkbcommon,
   pkg-config,
   qt6,
+  rust-jemalloc-sys,
   wayland,
 
   autoPatchelfHook,
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     qt6.qtsvg
     fontconfig
     libGL
+    rust-jemalloc-sys
   ];
 
   buildFeatures = [ "gettext" ];

@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "portion";
   version = "2.6.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AlexandreDecan";

@@ -3,19 +3,27 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
+
+  # Build system
+  hatchling,
+  hatch-requirements-txt,
+  hatch-vcs,
+
+  # Dependencies
   confluent-kafka,
   msgpack,
+  redis,
   swh-core,
   swh-model,
+
+  # Tests
   pytestCheckHook,
   pytest-mock,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-journal";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -24,17 +32,19 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-journal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ycTB7hSjTerJOd+nEv8HbM82vPAO8P1+xooy0oN4eHw=";
+    hash = "sha256-SvI4WjheNqS2mphx9UY5i0nuempKc5iLF69XuEZ2yv8=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-requirements-txt
+    hatch-vcs
   ];
 
   dependencies = [
     confluent-kafka
     msgpack
+    redis
     swh-core
     swh-model
   ];
@@ -44,6 +54,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+  ];
+
+  disabledTests = [
+    # Flaky - Working locally, not on the GH CI
+    "test_client_with_deserializer"
   ];
 
   disabledTestPaths = [

@@ -192,6 +192,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
     (lib.enableFeature withMysql "mysql")
     (lib.enableFeature withPgsql "pgsql")
     (lib.enableFeature withSqlite "sqlite")
@@ -204,6 +206,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withBootstrap "bootstrap")
   ]
   ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+
+  installFlags = [
+    "ETCDIR=${placeholder "out"}/etc/ejabberd"
+    "SPOOLDIR=$(TMPDIR)/spool"
+    "LOGDIR=$(TMPDIR)/log"
+  ];
 
   enableParallelBuilding = true;
 

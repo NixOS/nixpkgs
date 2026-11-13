@@ -24,6 +24,7 @@
   libxi,
   libxrandr,
   libxcb,
+  oniguruma,
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
   testers,
@@ -64,24 +65,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    pkg-config
     ncurses
     scdoc
     installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     cmake
-    pkg-config
     autoPatchelfHook
     shaderc
   ];
 
   runtimeDependencies = rlinkLibs;
 
-  buildInputs =
-    rlinkLibs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libutil
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ rlinkLibs
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libutil
+  ];
 
   outputs = [
     "out"

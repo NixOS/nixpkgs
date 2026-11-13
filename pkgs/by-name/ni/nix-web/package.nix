@@ -7,6 +7,7 @@
   openssl,
   nixVersions,
   nixPackage ? nixVersions.stable,
+  sqlite,
 }:
 
 let
@@ -29,7 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-PfbDod1vQDnWqbhRgXbOvidxGWIXIe7XIgqiLVbovh0=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) openssl;
+  buildInputs = (lib.optional (!stdenv.hostPlatform.isDarwin) openssl) ++ [
+    sqlite
+  ];
 
   postPatch = ''
     substituteInPlace nix-web/nix-web.service \

@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-domainregistration";
   version = "1.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_domainregistration";

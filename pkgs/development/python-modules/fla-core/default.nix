@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fla-core";
   version = "0.6.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fla-org";

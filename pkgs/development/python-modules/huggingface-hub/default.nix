@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
   version = "2.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";

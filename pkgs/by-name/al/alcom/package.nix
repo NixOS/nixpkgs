@@ -1,4 +1,5 @@
 {
+  aws-lc,
   cargo-about,
   cargo-tauri,
   fetchFromGitHub,
@@ -13,8 +14,8 @@
   pkg-config,
   rustPlatform,
   stdenv,
-  wrapGAppsHook4,
   webkitgtk_4_1,
+  wrapGAppsHook4,
 }:
 let
   subdir = "vrc-get-gui";
@@ -39,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

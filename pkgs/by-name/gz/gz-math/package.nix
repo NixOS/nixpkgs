@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.python
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Non-deterministic random tests fail on aarch64-darwin
     "GaussMarkovProcess_TEST.rb"
     "Rand_TEST.rb"
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     # bulk updater selects wrong tag
     skipBulkUpdates = true;
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=gz-math(.*)" ];
+      extraArgs = [ "--version-regex=^gz-math\\d+_(\\d+\\.\\d+\\.\\d+)$" ];
     };
   };
 

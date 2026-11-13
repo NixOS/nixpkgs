@@ -8,20 +8,24 @@
   perl,
   openssl,
   curl,
+  aws-lc,
+  libgit2,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "release-plz";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "release-plz";
     repo = "release-plz";
     rev = "release-plz-v${finalAttrs.version}";
-    hash = "sha256-DcjWGKs9PUmTojeDUZkvtAMTroSlBL6lNZwOJT8VsiY=";
+    hash = "sha256-lUyhbf4KD9QVUBebgcrfTWkHV4PBxvNZMQlObCU8jwM=";
   };
 
-  cargoHash = "sha256-GYQ+GC0eZ6EzugwyEcZMwt9SZ0aYlQr2BFfUjjyqiB4=";
+  cargoHash = "sha256-wYDAx23ayZCHFTTB3bLHt7ar6FOh+9kIR0WexbvGeyc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,7 +33,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
+  buildInputs = [
+    aws-lc
+    libgit2
+    openssl
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   buildAndTestSubdir = "crates/release_plz";
 

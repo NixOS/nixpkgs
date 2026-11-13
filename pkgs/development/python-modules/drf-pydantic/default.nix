@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "drf-pydantic";
-  version = "2.9.2";
+  version = "2.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "georgebv";
     repo = "drf-pydantic";
     tag = "v${version}";
-    hash = "sha256-e9Zr/8+RO++cvaVWVke03HgWdVTeu7cTcPVNIiXO5AY=";
+    hash = "sha256-2HAMV6yiV3NXbnYKGe8IseKPUv411n6LZBDVI96KC8Q=";
   };
 
   build-system = [

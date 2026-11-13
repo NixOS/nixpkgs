@@ -72,8 +72,8 @@
   withDavs2 ? withFullDeps && withGPL, # AVS2 decoder
   withDc1394 ? withFullDeps && !stdenv.hostPlatform.isDarwin, # IIDC-1394 grabbing (ieee 1394)
   withDrm ? withHeadlessDeps && (with stdenv.hostPlatform; isLinux || isFreeBSD), # libdrm support
-  withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
-  withDvdread ? withFullDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
+  withDvdnav ? withHeadlessDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
+  withDvdread ? withHeadlessDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
   withFdkAac ? withFullDeps && (!withGPL || withUnfree), # Fraunhofer FDK AAC de/encoder
   withNvcodec ?
     withHeadlessDeps

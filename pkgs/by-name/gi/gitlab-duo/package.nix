@@ -5,14 +5,13 @@
   fetchFromGitLab,
   makeBinaryWrapper,
   nix-update-script,
-  nodejs_22,
   ripgrep,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gitlab-duo";
-  version = "9.6.0";
+  version = "10.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "editor-extensions";
     repo = "gitlab-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RhBR/Jpf/utucPvPbjSK7b9Homgqtdu7P1ANFzLJF1I=";
+    hash = "sha256-ufVc46/cWLmK4UDReXF33JirWh9jIlkCzzjNhoqqGG0=";
   };
 
   # Upstream migrated from npm to bun (bun.lock) in v8.90.0. Vendor the fully
@@ -69,14 +68,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required: keeping store paths out of the FOD output keeps the hash stable.
     dontFixup = true;
 
-    outputHash = "sha256-a+E4ApBwIjesq6a1KkFfsTUpdQIPy6f3Nbqi4S0/FeA=";
+    outputHash = "sha256-RsU6zUeXtadjn2T1BS9qVUQJHO8OhsiasFQTGOJ6FUo=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
     bun
-    nodejs_22
     makeBinaryWrapper
     writableTmpDirAsHomeHook
   ];
@@ -103,7 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # from npm, which is blocked by the Nix sandbox. --target=bun uses the
     # running bun binary itself as the standalone-executable template, which is
     # already patchelfd for NixOS.
-    bun build packages/cli/src/index.tsx \
+    bun build packages/cli/app/src/index.tsx \
       --compile \
       --target=bun \
       --minify \

@@ -7,6 +7,8 @@
   stdenv,
   pkg-config,
   cmake,
+  aws-lc,
+  zstd,
   openssl,
   libffi,
   grpc,
@@ -23,8 +25,6 @@ let
     python3Packages.buildPythonApplication {
       pname = "fernet_key";
       inherit version src;
-
-      __structuredAttrs = true;
 
       format = "other";
 
@@ -74,6 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
+    zstd
     openssl
     libffi
     grpc

@@ -90,7 +90,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   __darwinAllowLocalNetworking = true;
-  __structuredAttrs = true;
 
   meta = {
     description = "A next generation HTTP client for Python";

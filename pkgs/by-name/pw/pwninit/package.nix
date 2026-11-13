@@ -7,6 +7,7 @@
   makeBinaryWrapper,
   pkg-config,
   xz,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,6 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     xz
+    zstd
   ];
   nativeBuildInputs = [
     pkg-config

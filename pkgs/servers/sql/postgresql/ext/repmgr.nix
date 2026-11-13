@@ -10,13 +10,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "repmgr";
-  version = "5.5.0";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "repmgr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8G2CzzkWTKEglpUt1Gr7d/DuHJvCIEjsbYDMl3Zt3cs=";
+    hash = "sha256-dyDAJUqEuf57hHUhqJdr2b5BJxjGCbQuH6GtPgtVmE8=";
   };
 
   nativeBuildInputs = [ flex ];

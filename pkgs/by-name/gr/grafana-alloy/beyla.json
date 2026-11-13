@@ -1,10 +1,10 @@
 {
   "amd64": {
-    "url": "https://github.com/grafana/beyla/releases/download/v3.38.0/beyla-linux-amd64-v3.38.0.tar.gz",
-    "hash": "sha256-fXYKankF3Pyf0EaJZLGf4XKPCoPdVBFSQ+c0bI+vN7w="
+    "url": "https://github.com/grafana/beyla/releases/download/v3.38.1/beyla-linux-amd64-v3.38.1.tar.gz",
+    "hash": "sha256-1GpzGW4yg+FBgXvCd7fQKRhRoFvG1nrUyazItwVDwZE="
   },
   "arm64": {
-    "url": "https://github.com/grafana/beyla/releases/download/v3.38.0/beyla-linux-arm64-v3.38.0.tar.gz",
-    "hash": "sha256-pvxuhALS3T33AnEZgTVSkBdYSNa/W0NxoGxCXYv+lYY="
+    "url": "https://github.com/grafana/beyla/releases/download/v3.38.1/beyla-linux-arm64-v3.38.1.tar.gz",
+    "hash": "sha256-tHr1oh1TC6p8zzLEZGKL/WfzHRht2beZXpXMtmhw1XM="
   }
 }

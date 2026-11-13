@@ -37,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mistralai";
   version = "3.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Upstream stopped tagging releases on GitHub after v3.2.0
   src = fetchPypi {

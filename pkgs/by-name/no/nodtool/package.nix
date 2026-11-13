@@ -4,6 +4,8 @@
   fetchFromGitHub,
   rustPlatform,
   cmake,
+  pkg-config,
+  zstd,
   git,
   versionCheckHook,
   nix-update-script,
@@ -25,7 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cmake
     git
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   cargoBuildFlags = [
     "-p"

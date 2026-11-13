@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoLatestModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   makeWrapper,
@@ -12,10 +12,9 @@
   quickshell,
 }:
 
-# Upstream requires Go 1.27, while the default buildGoModule still uses Go 1.26.
-buildGoLatestModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "dux-files";
-  version = "2.1.0";
+  version = "2.1.2";
 
   __structuredAttrs = true;
 
@@ -24,11 +23,11 @@ buildGoLatestModule (finalAttrs: {
     repo = "dux-files";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-6ZXNmYqOJ3i3WvBZkbb7qvCgQ94w3PqKyszl9ZWjr7g=";
+    hash = "sha256-Y1zO6wuqDgP9oUF35F81MruOfCYX1em8veYtV20+5d8=";
   };
 
   modRoot = "core";
-  vendorHash = "sha256-uB4NesNB5JYghElmF8fOns3qa0icZeLBCYhde5AnysE=";
+  vendorHash = "sha256-IEWUzEoOaCpWKIRDJd2JaWQl0J+doeIvrunnbofYZqA=";
 
   subPackages = [ "cmd/dfiles" ];
   tags = [ "withshell" ];

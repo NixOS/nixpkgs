@@ -33,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   pname = "odc-geo";
   version = "0.5.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";

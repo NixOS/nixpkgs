@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "gotop";
   version = "4.2.0";
 
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "man"

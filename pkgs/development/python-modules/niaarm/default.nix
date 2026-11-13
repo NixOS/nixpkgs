@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   # nixpkgs-update: no auto update
   version = "0.13.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
@@ -41,8 +40,10 @@ buildPythonPackage (finalAttrs: {
     "scikit-learn"
   ];
 
-  build-system = [
-    poetry-core
+  build-system = [ poetry-core ];
+
+  # Fix upstream version typo
+  nativeBuildInputs = [
     pyprojectVersionPatchHook
   ];
 
@@ -63,6 +64,7 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Test requires extra nltk data dependency
     "test_text_mining"
+
     # AttributeError: 'Poly3DCollection' object has no attribute '_vec'
     "test_hill_slopes"
   ];

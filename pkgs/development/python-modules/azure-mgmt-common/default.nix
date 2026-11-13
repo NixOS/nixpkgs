@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.20.0";
   pyproject = true;
 
-  __structuredAttrs = true;
   pname = "azure-mgmt-common";
 
   src = fetchPypi {

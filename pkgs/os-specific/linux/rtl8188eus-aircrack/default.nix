@@ -4,8 +4,8 @@
   fetchFromGitHub,
   kernel,
   bc,
+  kernelModuleMakeFlags,
 }:
-
 stdenv.mkDerivation {
   pname = "rtl8188eus-aircrack";
   version = "${kernel.version}-unstable-2026-10-23";
@@ -21,18 +21,21 @@ stdenv.mkDerivation {
     substituteInPlace ./Makefile \
       --replace-fail /lib/modules/ "${kernel.dev}/lib/modules/" \
       --replace-fail /sbin/depmod \# \
-      --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+      --replace-fail 'install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)' \
+        '$(MAKE) -C $(KSRC) M=$(shell pwd) modules_install'
   '';
 
-  hardeningDisable = [ "pic" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=$(out)"
+    "INSTALL_MOD_DIR=kernel/net/wireless"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
+  ];
 
+  hardeningDisable = [ "pic" ];
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-  '';
 
   passthru.updateScript = ./update.sh;
 

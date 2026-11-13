@@ -49,6 +49,7 @@ in
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
             kernelPatches.libbpf_C23_compat
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -57,6 +58,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -65,6 +67,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -73,14 +76,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_7_2 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "7.2";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -126,6 +122,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
         linux_xanmod_stable = xanmodKernels {
@@ -163,6 +160,7 @@ in
         linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
         linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream";
         linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream";
+        linux_7_2 = throw "linux 7.2 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -241,6 +239,8 @@ in
           "KBUILD_OUTPUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
           "DEPMOD=true"
           "INSTALL_MOD_STRIP=1"
+          # Remove kernel.dev references added by rustc from out-of-tree modules
+          "KRUSTFLAGS=--remap-path-prefix=${kernel.dev}/=/kernel/"
         ];
         # Obsolete aliases (these packages do not depend on the kernel).
         inherit (pkgs) odp-dpdk pktgen; # added 2018-05
@@ -301,6 +301,8 @@ in
           withNonBTF = true;
           inherit kernel;
         };
+
+        efa = callPackage ../os-specific/linux/efa { };
 
         ethercat = callPackage pkgs.ethercat.kernelModule { };
 
@@ -387,6 +389,7 @@ in
         nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
         nvidia_x11_legacy470 = nvidiaPackages.legacy_470;
         nvidia_x11_legacy535 = nvidiaPackages.legacy_535;
+        nvidia_x11_legacy580 = nvidiaPackages.legacy_580;
         nvidia_x11_production = nvidiaPackages.production;
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
@@ -626,7 +629,6 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_7_2 = recurseIntoAttrs (packagesFor kernels.linux_7_2);
     linux_7_3 = recurseIntoAttrs (packagesFor kernels.linux_7_3);
   }
   // lib.optionalAttrs config.allowAliases {
@@ -645,6 +647,7 @@ in
     linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
     linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream"; # Added 2026-06-27
     linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream"; # Added 2026-09-02
+    linux_7_2 = throw "linux 7.2 was removed because it has reached its end of life upstream";
   };
 
   packages = recurseIntoAttrs (

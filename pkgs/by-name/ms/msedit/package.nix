@@ -6,6 +6,8 @@
   versionCheckHook,
   nix-update-script,
   icu76,
+  pkg-config,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "msedit";
@@ -23,13 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Requires nightly features
   env = {
     RUSTC_BOOTSTRAP = 1;
-    # Without -headerpad, the following error occurs on x86_64-darwin
-    # error: install_name_tool: changing install names or rpaths can't be redone for: ... because larger updated load commands do not fit (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
-    NIX_LDFLAGS = toString (
-      lib.optionals (with stdenv.hostPlatform; isDarwin && isx86_64) [
-        "-headerpad_max_install_names"
-      ]
-    );
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     # https://github.com/microsoft/edit/releases/tag/v2.0.0
@@ -39,8 +34,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     EDIT_CFG_ICU_RENAMING_VERSION = 76;
   };
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     icu76
+    zstd
   ];
 
   # https://github.com/microsoft/edit/blob/f8bea2be191d00baa2a4551817541ea3f8c5b03e/src/icu.rs#L834
@@ -76,7 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/microsoft/edit";
     changelog = "https://github.com/microsoft/edit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     platforms = lib.platforms.all;
   };
 })

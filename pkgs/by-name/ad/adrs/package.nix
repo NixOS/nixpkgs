@@ -2,11 +2,16 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  oniguruma,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adrs";
   version = "0.13.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "joshrotenberg";
@@ -17,9 +22,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-sdkUYSC2OmVIL8b3u6q0Lv9yWRiijTzI7l7ch3tszsc=";
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Command-line tool for managing Architectural Decision Records";
     homepage = "https://github.com/joshrotenberg/adrs";
+    changelog = "https://github.com/joshrotenberg/adrs/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       mit
       asl20

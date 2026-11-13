@@ -4,7 +4,7 @@
   callPackage,
 }:
 let
-  version = "5.6.285";
+  version = "5.6.287";
   pname = "gdevelop";
   meta = {
     description = "Graphical Game Development Studio";
@@ -14,7 +14,6 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       tombert
-      matteopacini
     ];
     mainProgram = "gdevelop";
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;

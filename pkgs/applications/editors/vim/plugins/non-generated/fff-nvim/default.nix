@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
+  libgit2,
   openssl,
   perl,
   zig_0_16,
@@ -62,6 +63,7 @@ let
     '';
 
     buildInputs = [
+      libgit2
       openssl
     ];
 

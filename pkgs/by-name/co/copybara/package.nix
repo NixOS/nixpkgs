@@ -16,6 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "copybara";
   version = "20261026";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://github.com/google/copybara/releases/download/v${finalAttrs.version}/copybara_deploy.jar";
     hash = "sha256-GWnzQXqnUyJrU4EnBbGrKj+VZOS5ZMCw97a3HHVIiSM=";

@@ -1,8 +1,10 @@
 {
   lib,
+  aws-lc,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
   nixosTests,
   stdenv,
   cacert,
@@ -23,7 +25,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  nativeCheckInputs = [ pkg-config ];
+  checkInputs = [ aws-lc ];
+
   __darwinAllowLocalNetworking = true;
+
+  # The tests pick free ports in a racy way when run in parallel.
+  dontUseCargoParallelTests = true;
 
   preCheck = ''
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt

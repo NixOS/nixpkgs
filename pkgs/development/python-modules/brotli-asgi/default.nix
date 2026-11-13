@@ -14,16 +14,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "brotli-asgi";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fullonic";
     repo = "brotli-asgi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cF7A3mnkQmvtc9DgHiwqYEQQ6QagjoBGTmcBzUm6vvs=";
+    hash = "sha256-GGJIENtxRBJZ/IzHGvDxLwtr63wGPoQ8AqVB3mRmYEY=";
   };
 
   build-system = [ setuptools ];

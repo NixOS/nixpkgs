@@ -3,6 +3,9 @@
   fetchFromGitHub,
   nixosTests,
   rustPlatform,
+  pkg-config,
+  aws-lc,
+  sqlite,
   fetchNextcloudApp,
 }:
 
@@ -23,6 +26,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-skKOCJBtpvtdc594eOxbvSIl+SucaH0jl1gFv9kfvNA=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+  ];
 
   passthru = rec {
     app = fetchNextcloudApp {

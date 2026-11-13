@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "comet-ml";
   version = "3.58.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No GitHub repository
   src = fetchPypi {

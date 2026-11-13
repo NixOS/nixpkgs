@@ -19,6 +19,12 @@ buildPythonPackage (finalAttrs: {
   # https://github.com/data61/python-paillier/issues/51
   disabled = isPyPy || !isPy3k;
 
+  # upstream did not update the version string in 1.5.1
+  postPatch = ''
+    substituteInPlace phe/__about__.py \
+      --replace-fail "1.5.0" "$version"
+  '';
+
   src = fetchFromGitHub {
     owner = "data61";
     repo = "python-paillier";

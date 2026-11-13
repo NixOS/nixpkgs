@@ -134,8 +134,8 @@ packages=(
   types-aiobotocore-es
   types-aiobotocore-events
   # types-aiobotocore-evidently
-  types-aiobotocore-finspace
-  types-aiobotocore-finspace-data
+  # types-aiobotocore-finspace
+  # types-aiobotocore-finspace-data
   types-aiobotocore-firehose
   types-aiobotocore-fis
   types-aiobotocore-fms
@@ -336,7 +336,7 @@ packages=(
   types-aiobotocore-textract
   types-aiobotocore-timestream-query
   types-aiobotocore-timestream-write
-  types-aiobotocore-tnb
+  # types-aiobotocore-tnb
   types-aiobotocore-transcribe
   types-aiobotocore-transfer
   types-aiobotocore-translate

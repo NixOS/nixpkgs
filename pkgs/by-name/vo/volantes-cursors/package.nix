@@ -35,6 +35,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jordanisaacs ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # build timeout
+    broken = stdenv.hostPlatform.isDarwin; # build timeout
   };
 }

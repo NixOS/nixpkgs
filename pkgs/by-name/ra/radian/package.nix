@@ -13,8 +13,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.7.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "radian";
@@ -62,6 +60,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--set"
     "R_HOME"
     "${R}/lib/R"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${placeholder "out"}/${python3Packages.python.sitePackages}:${python3Packages.makePythonPath finalAttrs.propagatedBuildInputs}"
   ];
 
   preCheck = ''

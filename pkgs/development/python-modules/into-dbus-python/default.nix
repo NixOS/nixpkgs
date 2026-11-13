@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   dbus-signature-pyparsing,
   dbus-python,
   pytestCheckHook,
@@ -11,17 +12,21 @@
 
 buildPythonPackage rec {
   pname = "into-dbus-python";
-  version = "0.8.2";
-  format = "setuptools";
+  version = "0.8.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "into-dbus-python";
     rev = "v${version}";
-    hash = "sha256-Ld/DyhVaDiWUXgqmvSmEHqFW2dcoRNM0O4X5DXE3UtM=";
+    hash = "sha256-9sCJM/nQOxZ+0096iCmIzui0jcDNKT9pFfNlRun25HU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     dbus-signature-pyparsing
     dbus-python
   ];

@@ -37,6 +37,11 @@ let
                 devices = [
                   "/dev/random:/dev/random"
                 ];
+                tmpFs."/custom-tmp" = [
+                  "noexec"
+                  "size=1024"
+                  "mode=1777"
+                ];
               };
             };
 
@@ -63,6 +68,9 @@ let
         assert output['HostConfig']['Devices'] == [{'PathOnHost': '/dev/random', 'PathInContainer': '/dev/random', 'CgroupPermissions': '${
           if backend == "docker" then "rwm" else ""
         }'}]
+        assert output['HostConfig']['Tmpfs'] == {'/custom-tmp': 'noexec,size=1024,mode=1777${
+          lib.optionalString (backend == "podman") ",rprivate,nosuid,nodev,tmpcopyup"
+        }'}
       ''
       + lib.strings.optionalString (backend == "podman") ''
         assert output['Config']['Labels']['PODMAN_SYSTEMD_UNIT'] == '${serviceName}.service'

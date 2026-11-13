@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mqattack";
-  version = "0.1.3";
+  version = "0.2.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "affolter-engineering";
     repo = "mqattack";
     tag = finalAttrs.version;
-    hash = "sha256-Pt3RMxx7ljLuz6q0Rpm20BUsN4CbL1CxHUwItB5F2mg=";
+    hash = "sha256-cLUct4ECIbkLqU0U5SJgcvE2E8mlI3ez0dL+EZPWIlk=";
   };
 
-  cargoHash = "sha256-ZZEKx11vivU8XsASXVydO3GVlVblP25MHA//4599jmQ=";
+  cargoHash = "sha256-E16TfqDT6svCGXlPvzOkQSumUQk9MjA8w0QWt6V40XI=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

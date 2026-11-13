@@ -2,11 +2,11 @@
   lib,
   python314,
   fetchFromGitLab,
-  fetchpatch,
   callPackage,
   stdenv,
   makeWrapper,
   nixosTests,
+  zstd,
 }:
 
 let
@@ -15,9 +15,7 @@ let
     packageOverrides = final: prev: {
       django = final.django_6;
       django-allauth-async = final.callPackage ./django-allauth-async.nix { };
-      glitchtip-rust = final.callPackage ./glitchtip-rust.nix { };
-      # Necessary until glitchtip works with mcp 2.x
-      mcp = final.mcp_1;
+      glitchtip-rust = final.callPackage ./glitchtip-rust.nix { inherit zstd; };
     };
   };
 
@@ -29,7 +27,7 @@ let
       arro3-core
       arro3-io
       boto3
-      cxxfilt
+      brotli
       django
       django-allauth-async
       django-anymail
@@ -57,14 +55,12 @@ let
       orjson
       psycopg
       pydantic
+      pyyaml
       sentry-sdk
-      symbolic
+      servestatic
       user-agents
       uuid6
-      uwsgi-chunked
-      whitenoise
     ]
-    ++ django-allauth-async.optional-dependencies.headless-spec
     ++ django-allauth-async.optional-dependencies.mfa
     ++ django-allauth-async.optional-dependencies.socialaccount
     ++ django-storages.optional-dependencies.boto3
@@ -81,27 +77,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "6.2.6";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RGYD6HAFZZTSNJWd8n7/gMy9FkjZno9LO1jGxav5d9M=";
+    hash = "sha256-oqTRlBt7HEaBKvvAX/jZ+kRaeFqe5wy6cq7SyIgZNPY=";
   };
-
-  patches = [
-    # support django-async-backend>=6.1
-    (fetchpatch {
-      url = "https://gitlab.com/glitchtip/glitchtip-backend/-/commit/4cf8c9d1518f5835b71c0692a72b63d8a62bea4a.patch";
-      includes = [
-        "glitchtip/ingest_asgi.py"
-        "glitchtip/settings.py"
-      ];
-      hash = "sha256-FwOJYSsJcJoqUwuHwHPWkzQqVB81Chex4RFTIhl82XM=";
-    })
-  ];
 
   postPatch = ''
     echo 'import os
@@ -155,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/glitchtip/glitchtip-backend/-/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
     mainProgram = "glitchtip-manage";

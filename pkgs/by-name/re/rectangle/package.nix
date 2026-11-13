@@ -7,6 +7,7 @@
   ibtool,
   makeWrapper,
   nix-update-script,
+  open-apple-macros,
   swift,
   stdenv,
 }:
@@ -215,6 +216,8 @@ stdenv.mkDerivation (finalAttrs: {
       -module-name Rectangle \
       -import-objc-header Rectangle/Rectangle-Bridging-Header.h \
       -I "$buildDir" -L "$buildDir" \
+      -external-plugin-path ${open-apple-macros}/lib/swift/host/plugins#${open-apple-macros}/libexec/swift/plugins/OpenAppleMacrosServer \
+      -disable-sandbox \
       -Xcc -fmodule-map-file="$buildDir/MAS_headers/MASShortcut/module.modulemap" \
       -Xcc -I"$buildDir/MAS_headers" \
       -lSparkle -lMASShortcut \

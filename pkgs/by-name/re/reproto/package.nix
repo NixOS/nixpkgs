@@ -18,7 +18,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "reproto";
   version = "0.3.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "douzebis";

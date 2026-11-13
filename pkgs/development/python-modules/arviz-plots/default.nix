@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "arviz-plots";
   inherit (arviz) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";

@@ -27,7 +27,6 @@ fi
 
 if [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
-    echo "structuredAttrs is enabled"
 
     _exportOutputsByName() {
         local outputName

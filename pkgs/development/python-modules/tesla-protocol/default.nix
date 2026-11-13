@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tesla-protocol";
-  version = "3.0.2";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "tesla-protocol";
     tag = "@teslemetry/tesla-protocol@${finalAttrs.version}";
-    hash = "sha256-kYLSBSxqAd0Gj9ZzYgCZkfN0LGdde/zLqX+3nbHV9+8=";
+    hash = "sha256-bW3AHgs/Eacml1FBBWUpTkwxFJqvF352o0O4nxxItLc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/python";
@@ -33,6 +33,11 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # testing dependencies isolated is useless and fails
+    "tests/test_descriptor_namespace.py::DescriptorNamespaceTests"
   ];
 
   meta = {

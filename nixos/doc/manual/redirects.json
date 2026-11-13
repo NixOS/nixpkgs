@@ -1,4 +1,25 @@
 {
+  "module-services-jellystat": [
+    "index.html#module-services-jellystat"
+  ],
+  "module-services-jellystat-configuration": [
+    "index.html#module-services-jellystat-configuration"
+  ],
+  "module-services-jellystat-external-database": [
+    "index.html#module-services-jellystat-external-database"
+  ],
+  "module-services-jellystat-paths": [
+    "index.html#module-services-jellystat-paths"
+  ],
+  "module-services-jellystat-quickstart": [
+    "index.html#module-services-jellystat-quickstart"
+  ],
+  "module-services-jellystat-secrets": [
+    "index.html#module-services-jellystat-secrets"
+  ],
+  "module-services-jellystat-troubleshooting": [
+    "index.html#module-services-jellystat-troubleshooting"
+  ],
   "module-services-netbird-relay": [
     "index.html#module-services-netbird-relay"
   ],
@@ -985,6 +1006,27 @@
   ],
   "module-services-plausible-basic-usage": [
     "index.html#module-services-plausible-basic-usage"
+  ],
+  "module-pelican-wings": [
+    "index.html#module-pelican-wings"
+  ],
+  "module-pelican-wings-setup": [
+    "index.html#module-pelican-wings-setup"
+  ],
+  "module-pelican-wings-traefik": [
+    "index.html#module-pelican-wings-traefik"
+  ],
+  "module-pelican-panel": [
+    "index.html#module-pelican-panel"
+  ],
+  "module-pelican-panel-basic-usage": [
+    "index.html#module-pelican-panel-basic-usage"
+  ],
+  "module-pelican-panel-environment": [
+    "index.html#module-pelican-panel-environment"
+  ],
+  "module-pelican-panel-reverse-proxy": [
+    "index.html#module-pelican-panel-reverse-proxy"
   ],
   "module-services-pict-rs": [
     "index.html#module-services-pict-rs"

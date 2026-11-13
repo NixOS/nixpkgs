@@ -36,7 +36,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
   version = "6.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";

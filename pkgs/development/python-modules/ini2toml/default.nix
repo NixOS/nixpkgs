@@ -23,8 +23,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.16";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "abravalheri";
     repo = "ini2toml";

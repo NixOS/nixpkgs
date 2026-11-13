@@ -12,7 +12,6 @@
 buildPythonPackage {
   inherit (faiss-build) pname version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = "${lib.getOutput "dist" faiss-build}";
 

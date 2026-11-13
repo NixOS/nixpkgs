@@ -84,10 +84,10 @@ runCommand "${name}-vendor"
                         "basedOn": {
                             "basedOn": null,
                             "packageRef": {
-                                "identity": .identity,
+                                "identity": .location | sub("\\.git$"; "") | split("/")[-1],
                                 "kind": .kind,
                                 "location": .location,
-                                "name": .location | sub("\\.git$"; "") | split("/")[-1]
+                                "name": .identity
                             },
                             "state": {
                                 "checkoutState": .state,
@@ -96,10 +96,10 @@ runCommand "${name}-vendor"
                             "subpath": .location | sub("\\.git$"; "") | split("/")[-1]
                         },
                         "packageRef": {
-                            "identity": .identity,
+                            "identity": .location | sub("\\.git$"; "") | split("/")[-1],
                             "kind": .kind,
                             "location": .location,
-                            "name": .location | sub("\\.git$"; "") | split("/")[-1]
+                            "name": .identity
                         },
                         "state": {
                             "name": "edited",

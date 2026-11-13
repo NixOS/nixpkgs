@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "fengsp";
     repo = "color-thief-py";

@@ -104,8 +104,8 @@ let
       fileset = callLibs ./fileset;
       sources = callLibs ./sources.nix;
 
-      # back-compat aliases
-      platforms = self.systems.doubles;
+      # also `lib.systems.doubles`, but aliased for backcompat reasons
+      platforms = callLibs ./platforms;
 
       # linux kernel configuration
       kernel = callLibs ./kernel.nix;

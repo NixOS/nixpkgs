@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "pyrlp";
     rev = "v${version}";
     hash = "sha256-moerdcAJXqhlzDnTlvxL3Nzz485tOzJVCPlGrof80eQ=";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "RLP serialization library";
-    homepage = "https://github.com/ethereum/pyrlp";
+    homepage = "https://github.com/ApeWorX/pyrlp";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

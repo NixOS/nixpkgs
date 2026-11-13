@@ -11,16 +11,16 @@
 # Requires Go 1.27; switch back to buildGoModule once the default is updated.
 buildGo127Module (finalAttrs: {
   pname = "timoni";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "stefanprodan";
     repo = "timoni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Id0qPABQ94kCy6cVSkQC3AjqOJgFH2xVpYnT107dL+o=";
+    hash = "sha256-AO+o65cR697SlA742pzMP3RdVZi8hTNiaENUZhpgwvM=";
   };
 
-  vendorHash = "sha256-NJLFVjG8+FAxBEyuqjTWeUG7jyB1UN7zirl48q1xoDw=";
+  vendorHash = "sha256-iHZPXFFfuP5jsQP89cXiFGQ2Exucf2jqAG3xFogxs98=";
 
   subPackages = [ "cmd/timoni" ];
   nativeBuildInputs = [ installShellFiles ];

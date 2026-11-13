@@ -2,6 +2,10 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  aws-lc,
+  sqlite,
+  zstd,
   versionCheckHook,
   writableTmpDirAsHomeHook,
   nix-update-script,
@@ -9,16 +13,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z+0YKohmgSNnGtw6yDTrLsx4Q5LFOOyIUt0ji0x18BQ=";
+    hash = "sha256-HJb6Lae42XOMm6AEZrDRB7JT3Qr0128MibBfMpUEiAc=";
   };
 
-  cargoHash = "sha256-h/FWi+LmGObU6FEOC0yNRhN8wQS6UzYN7Gxe9YO8fos=";
+  cargoHash = "sha256-ph4z6XLFp8cO8FANFeDmoqaPfPQr5N4g3/Lwr3UrWL4=";
+
+  env = {
+    AWS_LC_SYS_USE_SYSTEM = true;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
+  ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
@@ -33,6 +53,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lens::search::tests::test_build_broker_with_filters"
     "lens::search::tests::test_pagination_logic"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

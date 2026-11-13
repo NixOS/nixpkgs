@@ -60,8 +60,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     )
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Scratchpad inspired by the 'anti-note' philosophy";
     longDescription = ''

@@ -4,19 +4,12 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
-  hyprutils,
-  hyprtoolkit,
-  hyprgraphics,
   hyprlang,
-  aquamarine,
-  pixman,
-  libdrm,
-  sdbus-cpp_2,
-  polkit,
-  systemd,
-  cairo,
-  pango,
+  hyprtoolkit,
   libxkbcommon,
+  polkit,
+  sdbus-cpp_2,
+  systemd,
 }:
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpolkitagent";
@@ -35,19 +28,12 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    hyprutils
-    hyprtoolkit
-    hyprgraphics
     hyprlang
-    aquamarine
-    pixman
-    libdrm
-    sdbus-cpp_2
-    polkit
-    systemd
-    cairo
-    pango
+    hyprtoolkit
     libxkbcommon
+    polkit
+    sdbus-cpp_2
+    systemd
   ];
 
   meta = {

@@ -111,7 +111,6 @@ buildPythonPackage {
   pname = "nvidia-cutlass-dsl-libs-base";
   inherit version;
   format = "wheel";
-  __structuredAttrs = true;
 
   src = fetchLibsWheel "base";
 

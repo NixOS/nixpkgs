@@ -7,6 +7,7 @@
   cargo-c,
   validatePkgConfig,
   buildPackages,
+  aws-lc,
   libiconv,
   curl,
   apacheHttpd,
@@ -28,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     hash = "sha256-kzAvxC1YAlzXJD0ku99ASJ7wbBJ3dI/d8h7VIT+vBSo=";
   };
+
+  buildInputs = [
+    aws-lc
+  ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
