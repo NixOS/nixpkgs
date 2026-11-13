@@ -4,6 +4,8 @@
   fetchFromGitHub,
   rustPlatform,
   buildPackages,
+  pkg-config,
+  zstd,
 
   # build-system
   maturin,
@@ -63,10 +65,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cargo
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     rustc
   ];
+
+  buildInputs = [ zstd ];
 
   pythonRelaxDeps = [
     "protobuf"
