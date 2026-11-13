@@ -100,6 +100,9 @@ mkdir -p .dart_tool && cp --no-preserve=all "$packageConfig" .dart_tool/package_
 
 The function `buildFlutterApplication` builds Flutter applications.
 
+`targetFlutterPlatform` defaults to `"linux"` on Linux and `"macos"` on Darwin.
+It can also be set to `"web"` on either platform.
+
 See the [Dart documentation](#ssec-dart-applications) for more details on required files and arguments.
 
 `flutter` in Nixpkgs always points to `flutterPackages.stable`, which is the latest packaged version. To avoid unforeseen breakage during upgrade, packages in Nixpkgs should use a specific flutter version, such as `flutter335` and `flutter338`, instead of using `flutter` directly.
@@ -129,6 +132,53 @@ flutter335.buildFlutterApplication (finalAttrs: {
   gitHashes.fwupd = "sha256-l/+HrrJk1mE2Mrau+NmoQ7bu9qhHU6wX68+m++9Hjd4=";
 })
 ```
+
+### macOS applications {#ssec-dart-flutter-macos}
+
+Build a macOS application from a source directory containing `pubspec.lock.json`:
+
+```nix
+{ flutter347, lib }:
+
+flutter347.buildFlutterApplication {
+  pname = "example";
+  version = "1.0.0";
+  src = ./.;
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+}
+```
+
+On Darwin, this expression builds for macOS by default, installs the application in `$out/Applications`, and creates `$out/bin/example` to launch it.
+
+To build macOS applications, you need the full Apple Xcode toolchain because Nixpkgs' `xcbuild` does not implement the commands Flutter uses, including Swift package resolution.
+Because Xcode is unfree, [enable unfree packages](#sec-allow-unfree) in your Nixpkgs configuration before building.
+Xcode also requires a manual download from Apple.
+Attempting to build the Xcode package prints a download link and instructions for importing it into the Nix store.
+The builder uses `darwin.xcode_27` by default; override the builder's `xcode` argument to select another version.
+
+For sandboxed builds, set `sandbox = relaxed` in the Nix configuration so the builder can add a sandbox rule for Xcode's access to the LaunchServices file-type database (`com.apple.lsd.mapdb`).
+Nix rejects this custom rule with `sandbox = true`.
+The build otherwise remains sandboxed; the builder does not set `__noChroot`.
+
+As with other Dart applications, supply pub dependencies through `pubspecLock`.
+For native plugin dependencies, Flutter selects CocoaPods, Swift Package Manager, or both according to the SDK and project settings.
+The builder preserves existing Podfiles, local pod declarations, and install hooks, so projects can retain their native dependency setup.
+Shared Dart package source builders connect supported plugins to Nixpkgs libraries, including MDK, mpv, and SQLite.
+For plugins that need additional native dependencies, supply those dependencies through Nix to keep builds offline.
+
+If the application's Xcode project references remote Swift packages, use `swiftPackages` to map their repository URLs to Nix-fetched source directories.
+The builder replaces those remote references with local references while preserving the selected products.
+Provide dependencies of those Swift packages locally too, so Swift Package Manager does not need to download them during the build.
+
+When adding native build steps in `preBuild`, use the Nix compiler and SDK available in that hook.
+The builder switches to the full Xcode toolchain when the Flutter build starts and targets the Nix host architecture.
+To satisfy the toolchain's minimum macOS version, the builder raises deployment targets to the minimum required by Xcode or Nix stdenv while preserving higher project targets.
+Use `flutterMode` to select a build mode other than the default `release`, as on Linux, and `flutterBuildFlags` to select project-specific flavors, such as `production`.
+The builder writes Dart debug information to the `debug` output.
+
+To sign applications without an Apple developer identity, the builder uses ad hoc signing and overrides upstream team and provisioning-profile settings while preserving application sandbox entitlements.
+For hardened applications, helpers, and app extensions, it retains hardened runtime and adds the `com.apple.security.cs.disable-library-validation` entitlement so their ad hoc signed frameworks load without an Apple Team ID.
+Applications that require provisioned Apple capabilities, such as iCloud, need a separate signing setup.
 
 ### Usage with nix-shell {#ssec-dart-flutter-nix-shell}
 

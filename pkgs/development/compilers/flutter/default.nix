@@ -98,6 +98,21 @@ let
           buildFlutterApplication = callPackage ./build-support/build-flutter-application.nix {
             flutter = wrapFlutter (mkCustomFlutter args);
           };
+          tests =
+            lib.optionalAttrs (stdenv.hostPlatform.isDarwin && lib.versions.majorMinor version == "3.47")
+              {
+                macos = callPackage ./tests/macos.nix {
+                  flutter347 = wrapFlutter prev.finalPackage;
+                };
+                macos-cocoapods = callPackage ./tests/macos.nix {
+                  flutter347 = wrapFlutter prev.finalPackage;
+                  pluginIntegration = "cocoapods";
+                };
+                macos-mixed = callPackage ./tests/macos.nix {
+                  flutter347 = wrapFlutter prev.finalPackage;
+                  pluginIntegration = "mixed";
+                };
+              };
         };
       }
     );
