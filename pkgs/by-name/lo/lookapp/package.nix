@@ -4,31 +4,39 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
-  wrapGAppsHook3,
-  webkitgtk_4_1,
-  gtk3,
-  libsoup_3,
-  glib,
-  cairo,
-  pango,
-  gdk-pixbuf,
-  harfbuzz,
+  makeBinaryWrapper,
+  libxkbcommon,
+  libxcb,
+  libxau,
+  libxdmcp,
+  wayland,
+  vulkan-loader,
+  libglvnd,
   alsa-lib,
-  dbus,
-  openssl,
-  libappindicator,
-  xdg-utils,
   fontconfig,
+  freetype,
+  xdg-utils,
   curl,
   procps,
-  copyDesktopItems,
-  makeDesktopItem,
+  glib,
   sqlite,
 }:
 
+let
+  # Opened at runtime, never linked: wgpu loads the Vulkan loader and GL,
+  # gpui's Wayland and X11 clients load the rest. An rpath keeps them out of
+  # the environment of every app Look launches.
+  runtimeLibs = [
+    vulkan-loader
+    libglvnd
+    wayland
+    libxkbcommon
+    libxcb
+  ];
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lookapp";
-  version = "0.7.1";
+  version = "0.7.5";
 
   __structuredAttrs = true;
 
@@ -36,71 +44,57 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kunkka19xx";
     repo = "look";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o0ljBn4b2d+Mcelrx4Zr4RdwozYt3fB1e7kEYCRtmgA=";
+    hash = "sha256-5qQAsNjgBkmhFgdNh40TLBWOcywu4wnE0cE4t2XFbQQ=";
   };
 
-  cargoRoot = "apps/linows/src-tauri";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
+  cargoRoot = "apps/linows";
+  buildAndTestSubdir = "apps/linows/gpui";
 
-  cargoHash = "sha256-dCeeUHbDQUBTTfJrwb7UOdxOdl6z6jSNm7GwH6BrYAQ=";
+  cargoHash = "sha256-HjbaMHNkbCJNNT7HTBt/Wxv8HP1kb92HwPcb82PSq7U=";
+
+  # The workspace version lags the tag; a release takes it from here.
+  env.LOOK_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
-    copyDesktopItems
     pkg-config
-    wrapGAppsHook3
+    makeBinaryWrapper
   ];
 
   buildInputs = [
-    webkitgtk_4_1
-    gtk3
-    libsoup_3
-    glib
-    cairo
-    pango
-    gdk-pixbuf
-    harfbuzz
+    libxkbcommon
+    libxcb
+    libxau
+    libxdmcp
     alsa-lib
-    dbus
-    openssl
-    libappindicator
+    fontconfig
+    freetype
     sqlite
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "lookapp";
-      desktopName = "Look";
-      comment = "Keyboard-first desktop launcher";
-      exec = "lookapp";
-      icon = "look";
-      categories = [ "Utility" ];
-      startupWMClass = "Look";
-    })
-  ];
+  postInstall = ''
+    install -Dm644 $src/packaging/linux/lookapp.desktop \
+      -t $out/share/applications
+    for size in 32 64 128; do
+      install -Dm644 $src/apps/linows/icons/''${size}x''${size}.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/lookapp.png
+    done
+    install -Dm644 $src/apps/linows/icons/128x128@2x.png \
+      $out/share/icons/hicolor/256x256/apps/lookapp.png
+  '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
+  postFixup = ''
+    patchelf --add-rpath ${lib.makeLibraryPath runtimeLibs} $out/bin/lookapp
+    wrapProgram $out/bin/lookapp \
       --prefix PATH : ${
         lib.makeBinPath [
           xdg-utils
           fontconfig
           curl
           procps
+          # gdbus backs the Wayland hotkey registration.
           glib
         ]
       }
-    )
-  '';
-
-  postInstall = ''
-    for size in 32 128 256; do
-      icon="$src/apps/linows/src-tauri/icons/''${size}x''${size}.png"
-      if [ -f "$icon" ]; then
-        mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
-        cp "$icon" \
-          "$out/share/icons/hicolor/''${size}x''${size}/apps/look.png"
-      fi
-    done
   '';
 
   passthru.updateScript = nix-update-script { };
