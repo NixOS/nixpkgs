@@ -196,6 +196,21 @@ buildGoModule (finalAttrs: {
       --replace-fail "runmode = dev" "runmode = prod" \
       --replace-fail 'frontendBaseDir = "../cc_0"' ""
 
+    # The quota is read from the configuration file when the server starts, so
+    # it cannot be set with an environment variable of the same name. The
+    # configuration file refers to the variable "CASDOOR_QUOTA" instead, which
+    # Beego expands when it reads the file and which falls back to the
+    # upstream default when it is not set.
+    sed -i 's@^quota = .*@quota = ''${CASDOOR_QUOTA||{"organization": -1, "user": -1, "application": -1, "provider": -1}}@' \
+      $out/share/casdoor/conf/app.conf
+
+    # The port of the server is read from the configuration file as well, and
+    # the file replaces the configuration that Beego built from the
+    # environment, so the variable that carries the port is expanded there
+    # too.
+    sed -i 's@^httpport = .*@httpport = ''${CASDOOR_HTTP_PORT||8000}@' \
+      $out/share/casdoor/conf/app.conf
+
     # Casdoor resolves the frontend ("web/build"), the Swagger UI ("swagger")
     # and its own configuration ("conf/app.conf") relative to the working
     # directory, and it writes to "logs/", "files/" and "tmp/" there as well.

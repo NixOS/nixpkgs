@@ -199,6 +199,84 @@ whole Casdoor package in the store. The backend can override
 `showCloudPromotion` at runtime through its global settings, in which case the
 runtime value wins over the one set here.
 
+The theme showcase is turned on with
+{option}`services.casdoor.settings.themeShowcase`. It shows a carousel of
+themes in the console, which are loaded from the "casdoor-integrations"
+repository on jsDelivr. The address of that repository can be changed with
+{option}`services.casdoor.settings.marketplaceUrl`:
+
+```nix
+{
+  services.casdoor.settings = {
+    themeShowcase = true;
+    marketplaceUrl = "https://example.com/marketplace";
+  };
+}
+```
+
+## Further settings {#module-services-casdoor-further-settings}
+
+Every key that Casdoor reads through its configuration loader has an option
+under {option}`services.casdoor.settings`. The ones that are worth a closer
+look are described here.
+
+{option}`services.casdoor.settings.quota` limits how many objects the
+instance creates:
+
+```nix
+{
+  services.casdoor.settings.quota = {
+    user = 100;
+    application = 10;
+  };
+}
+```
+
+A negative number, which is the default, means that there is no limit.
+
+{option}`services.casdoor.settings.basePath` is the path prefix the instance is
+served under, for example "/casdoor". It is only needed when the instance does
+not live at the root of its host.
+
+{option}`services.casdoor.settings.trustedProxies` lists the reverse proxies
+whose headers Casdoor believes when it determines the address of the client.
+Without it, the address of the connection is used, which is the address of the
+proxy when there is one.
+
+{option}`services.casdoor.settings.webAuthnRpId` and
+{option}`services.casdoor.settings.webAuthnRpOrigins` configure the WebAuthn
+relying party. The identifier has to be the domain of the address of the
+browser without a scheme and without a path, and every origin has to be that
+domain or a subdomain of it.
+
+{option}`services.casdoor.settings.logConfig` is the configuration of the
+logger, as a JSON object. The value has to be valid JSON, because Casdoor
+refuses to start when it is not.
+
+{option}`services.casdoor.settings.otelEndpoint` sends the traces of the
+server to an OpenTelemetry collector. The headers and the name of the service
+are set with {option}`services.casdoor.settings.otelHeaders` and
+{option}`services.casdoor.settings.otelServiceName`. Tracing is a feature of
+the commercial edition.
+
+{option}`services.casdoor.settings.certLoginPort` opens a second port that
+serves the sign-in with a client certificate. The certificate of the listener
+is set with {option}`services.casdoor.settings.certLoginCert`, and a reverse
+proxy that terminates TLS passes the certificate of the client in the header
+that {option}`services.casdoor.settings.certLoginHeader` names. The sign-in
+with a client certificate is a feature of the enterprise edition.
+
+The settings of the commercial and the enterprise edition, such as
+{option}`services.casdoor.settings.license` and the settings of the hardware
+security module, are only useful with a license.
+
+Two settings are exceptions to the rule that every setting is passed as an
+environment variable of the same name. Casdoor reads the quota and the port of
+the server from its configuration file, and that file replaces the
+configuration that the environment provides. The module passes the two values
+in the variables `CASDOOR_QUOTA` and `CASDOOR_HTTP_PORT`, which the
+configuration file of the package refers to.
+
 ## Additional configuration {#module-services-casdoor-extra-configuration}
 
 Every key that Casdoor reads through its configuration loader can be set

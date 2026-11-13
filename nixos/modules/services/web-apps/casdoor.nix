@@ -47,7 +47,15 @@ let
   #     configuration file, which is the upstream default.
   environment = lib.mapAttrs (
     _: value: if lib.isBool value then lib.boolToString value else toString value
-  ) (lib.filterAttrs (_: value: value != null && value != "") settings);
+  ) (lib.filterAttrs (name: value: name != "quota" && value != null && value != "") settings);
+
+  # The quota is read from the configuration file when the server starts, so it
+  # cannot be passed as an environment variable with the name of the setting.
+  # The package refers to the variable "CASDOOR_QUOTA" in the configuration
+  # file instead, which keeps the setting changeable at runtime.
+  quotaEnvironment = {
+    CASDOOR_QUOTA = builtins.toJSON settings.quota;
+  };
 in
 {
   meta.doc = ./casdoor.md;
@@ -78,7 +86,14 @@ in
     port = lib.mkOption {
       type = lib.types.port;
       default = 8000;
-      description = "The port Casdoor listens on.";
+      description = ''
+        The port Casdoor listens on.
+
+        Casdoor reads the port from its configuration file, which replaces
+        the configuration that the environment provides, so the module passes
+        the port in the variable that the configuration file of the package
+        refers to.
+      '';
     };
 
     createDatabase = lib.mkOption {
@@ -402,6 +417,17 @@ in
               '';
             };
 
+            enableErrorMask2 = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Whether to replace the messages of the errors of the API with
+                a generic text. It hides more than
+                {option}`services.casdoor.settings.enableErrorMask`, which
+                only masks the details of the internal errors.
+              '';
+            };
+
             disableUpgrade = lib.mkOption {
               type = lib.types.bool;
               default = false;
@@ -409,6 +435,289 @@ in
                 Whether to disable the check for a new Casdoor release. The check
                 is enabled by default; set this to true to avoid contacting the
                 update server from every instance.
+              '';
+            };
+
+            disableVersionCheck = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Whether to disable the check for the version of the running
+                release altogether. It is a stricter version of
+                {option}`services.casdoor.settings.disableUpgrade`, which only
+                disables the check for new releases.
+              '';
+            };
+
+            allowVendorUpgrade = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Whether the instance may upgrade itself to a release of the
+                vendor of the licensed edition. It only has an effect on the
+                commercial and enterprise editions.
+              '';
+            };
+
+            releaseDownloadUrl = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The address the releases are downloaded from when the instance
+                upgrades itself. Leave it empty to use the releases on GitHub.
+              '';
+            };
+
+            # Server
+
+            appname = lib.mkOption {
+              type = lib.types.str;
+              default = "casdoor";
+              description = ''
+                The name of the application. It is shown as the display name of
+                the WebAuthn authenticator and used as the name of the log
+                file.
+              '';
+            };
+
+            basePath = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The path prefix the instance is served under, for example
+                "/casdoor". Leave it empty when the instance is served from the
+                root of a host.
+              '';
+            };
+
+            authState = lib.mkOption {
+              type = lib.types.str;
+              default = "casdoor";
+              description = ''
+                The value that the "state" parameter of the sign-in form has
+                to carry. It protects the sign-in against cross-site request
+                forgery.
+              '';
+            };
+
+            batchSize = lib.mkOption {
+              type = lib.types.int;
+              default = 100;
+              description = ''
+                How many objects are read from or written to the database in one
+                operation.
+              '';
+            };
+
+            verificationCodeTimeout = lib.mkOption {
+              type = lib.types.int;
+              default = 10;
+              description = ''
+                How long a verification code stays valid, in minutes.
+              '';
+            };
+
+            initScore = lib.mkOption {
+              type = lib.types.int;
+              default = 0;
+              description = ''
+                The score that new users of an organization get. It is only
+                used when the organization does not define a score of its own.
+              '';
+            };
+
+            isUsernameLowered = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Whether usernames are converted to lower case when they are
+                created and looked up.
+              '';
+            };
+
+            logConfig = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The configuration of the logger, as a JSON object. The default
+                writes the log to the file "logs/casdoor.log" in the state
+                directory of the service.
+
+                The value has to be valid JSON, because Casdoor refuses to start
+                when it is not.
+              '';
+            };
+
+            quota = lib.mkOption {
+              type = lib.types.submodule (
+                { ... }: {
+                  options = {
+                    organization = lib.mkOption {
+                      type = lib.types.int;
+                      default = -1;
+                      description = "The maximum number of organizations.";
+                    };
+
+                    user = lib.mkOption {
+                      type = lib.types.int;
+                      default = -1;
+                      description = "The maximum number of users.";
+                    };
+
+                    application = lib.mkOption {
+                      type = lib.types.int;
+                      default = -1;
+                      description = "The maximum number of applications.";
+                    };
+
+                    provider = lib.mkOption {
+                      type = lib.types.int;
+                      default = -1;
+                      description = "The maximum number of identity providers.";
+                    };
+                  };
+                }
+              );
+              default = { };
+              description = ''
+                The maximum number of objects the instance creates. A negative
+                number means that there is no limit.
+              '';
+            };
+
+            defaultStorageProvider = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The name of the storage provider that is used for the uploads
+                of an organization that does not name one itself.
+              '';
+            };
+
+            isCloudIntranet = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Whether the instance runs in a cloud intranet, where the
+                storage providers are reached through their intranet
+                endpoints.
+              '';
+            };
+
+            socks5Proxy = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The SOCKS5 proxy that outgoing connections of the server use,
+                for example "127.0.0.1:1080". Leave it empty to connect
+                directly.
+              '';
+            };
+
+            trustedProxies = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The addresses of the reverse proxies whose headers are
+                believed when the client address is determined, separated by
+                commas. Leave it empty to use the address of the connection.
+              '';
+            };
+
+            fieldEncryptionKey = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The key that the sensitive fields of the objects in the
+                database are encrypted with. It has to be 32 characters long.
+
+                This value is passed through the systemd environment, which
+                makes it visible in the Nix store and to local users. In
+                production, put `fieldEncryptionKey=...` in a root-readable
+                environment file and set
+                {option}`services.casdoor.environmentFile` instead.
+              '';
+            };
+
+            formCssAllowedUrls = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The addresses the custom sign-in forms may load their
+                stylesheets from, separated by commas. Leave it empty to
+                allow no address at all.
+              '';
+            };
+
+            ipDbFile = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The path of the IP address database in the format of ipip.net,
+                which Casdoor uses to name the place of a sign-in. Without it
+                the place is derived from the network of the address.
+              '';
+            };
+
+            webAuthnRpId = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              example = "example.com";
+              description = ''
+                The identifier of the WebAuthn relying party. It replaces the
+                host of {option}`services.casdoor.settings.origin`, which is
+                used by default.
+
+                The identifier is the domain without a scheme and without a
+                path, and every origin has to be that domain or a subdomain
+                of it.
+              '';
+            };
+
+            webAuthnRpOrigins = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              example = "https://example.com,https://www.example.com";
+              description = ''
+                The addresses the WebAuthn credentials may be used from,
+                separated by commas. They are added to the address of
+                {option}`services.casdoor.settings.origin`, which is used by
+                default.
+
+                Every address has to be within the domain of
+                {option}`services.casdoor.settings.webAuthnRpId`.
+              '';
+            };
+
+            frontendBaseDir = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The directory of a frontend that is served instead of the web
+                console of the package, for example "/srv/casdoor". The
+                directory has to exist on the machine the service runs on.
+
+                Leave it empty to serve the web console of the package.
+              '';
+            };
+
+            # Additional listeners
+
+            gatewayHttpPort = lib.mkOption {
+              type = lib.types.int;
+              default = 80;
+              description = ''
+                The port the site proxy of Casdoor listens on for plain HTTP.
+                The proxy is only started when the instance has sites.
+              '';
+            };
+
+            gatewayHttpsPort = lib.mkOption {
+              type = lib.types.int;
+              default = 443;
+              description = ''
+                The port the site proxy of Casdoor listens on for HTTPS. The
+                proxy is only started when the instance has sites.
               '';
             };
 
@@ -457,6 +766,64 @@ in
               default = false;
               description = ''
                 Whether the web console shows the theme showcase.
+              '';
+            };
+
+            marketplaceUrl = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The URL the web console loads the themes of the theme showcase
+                from. It is used when
+                {option}`services.casdoor.settings.themeShowcase` is enabled
+                and when Casdoor runs in demo mode.
+
+                Leave it empty to use the upstream default, which is the
+                "casdoor-integrations" repository on jsDelivr.
+              '';
+            };
+
+            editionDemoUrls = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The addresses of the demo sites of the commercial and the
+                enterprise edition, as comma-separated pairs of an edition and
+                an address, for example
+                "Commercial=https://demo-commercial.example.com". The address
+                may contain "{domain}", which is replaced with the domain of
+                the host without its first label.
+              '';
+            };
+
+            frontendCdnUrl = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The address the assets of the web console are loaded from, with
+                "{name}" and "{version}" replaced by the name and the version
+                of the frontend package, for example
+                "https://cdn.jsdelivr.net/npm/{name}@{version}". It is only
+                used by a console that was built from the frontend package.
+              '';
+            };
+
+            marketplaceServerUrl = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The address of the marketplace server that the paid
+                integrations are downloaded from. Leave it empty to use the
+                upstream servers.
+              '';
+            };
+
+            maxItemsForFlatMenu = lib.mkOption {
+              type = lib.types.int;
+              default = 7;
+              description = ''
+                How many entries the menu of the web console shows before it
+                switches to a grouped menu.
               '';
             };
 
@@ -517,6 +884,196 @@ in
               description = ''
                 The organization that RADIUS clients are authenticated against
                 when they do not name one.
+              '';
+            };
+
+            # Tracing
+
+            otelEndpoint = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              example = "http://localhost:4318";
+              description = ''
+                The address of the OpenTelemetry collector that the traces of
+                the server are sent to. Leave it empty to not collect traces.
+
+                Tracing is a feature of the commercial edition.
+              '';
+            };
+
+            otelHeaders = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The headers that are sent to the OpenTelemetry collector, as
+                comma-separated pairs of a name and a value, for example
+                "authorization=Bearer token".
+              '';
+            };
+
+            otelServiceName = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The name of the service that the traces are reported for. It
+                defaults to "casdoor".
+              '';
+            };
+
+            # Certificate sign-in
+
+            certLoginPort = lib.mkOption {
+              type = lib.types.port;
+              default = 0;
+              description = ''
+                The port of the listener that serves the sign-in with a client
+                certificate. It is disabled by default.
+
+                The sign-in with a client certificate is a feature of the
+                enterprise edition.
+              '';
+            };
+
+            certLoginCert = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The certificate that the listener for the sign-in with a client
+                certificate uses. It is either the identifier of a certificate
+                in Casdoor, like "admin/cert-login", or the path of a PEM file.
+              '';
+            };
+
+            certLoginKey = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The path of the PEM file with the private key that belongs to
+                {option}`services.casdoor.settings.certLoginCert`, when that
+                option points at a file.
+              '';
+            };
+
+            certLoginHeader = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The header that a reverse proxy puts the certificate of the
+                client in, for example "X-SSL-Client-Cert". Leave it empty to
+                use that header.
+              '';
+            };
+
+            certLoginTrustedProxies = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The addresses of the reverse proxies whose headers are believed
+                when the certificate of the client is read, separated by
+                commas.
+              '';
+            };
+
+            # Licensed editions
+
+            license = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The license of the commercial or the enterprise edition, either
+                as the text of the license or as the path of a file that holds
+                it.
+
+                This value is passed through the systemd environment, which
+                makes it visible in the Nix store and to local users. In
+                production, put `license=...` in a root-readable environment
+                file and set {option}`services.casdoor.environmentFile`
+                instead.
+              '';
+            };
+
+            licenseServer = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              example = "none";
+              description = ''
+                The address of the license server that the instance reports to.
+                Set it to "none" for an instance without Internet access.
+              '';
+            };
+
+            acmeEmail = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The email address of the ACME account that the certificates of
+                the sites are issued for.
+              '';
+            };
+
+            acmePrivateKey = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The private key of the ACME account that the certificates of
+                the sites are issued for.
+
+                This value is passed through the systemd environment, which
+                makes it visible in the Nix store and to local users. In
+                production, put `acmePrivateKey=...` in a root-readable
+                environment file and set
+                {option}`services.casdoor.environmentFile` instead.
+              '';
+            };
+
+            hsmType = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              example = "pkcs11";
+              description = ''
+                The type of the hardware security module that holds the
+                private keys of the certificates. Only "pkcs11" is supported.
+                Leave it empty to not use a hardware security module.
+              '';
+            };
+
+            hsmLibrary = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The path of the library of the hardware security module.
+              '';
+            };
+
+            hsmSlot = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The slot of the token of the hardware security module that
+                holds the keys.
+              '';
+            };
+
+            hsmTokenLabel = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The label of the token of the hardware security module that
+                holds the keys.
+              '';
+            };
+
+            hsmPin = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                The PIN of the token of the hardware security module.
+
+                This value is passed through the systemd environment, which
+                makes it visible in the Nix store and to local users. In
+                production, put `hsmPin=...` in a root-readable environment
+                file and set {option}`services.casdoor.environmentFile`
+                instead.
               '';
             };
           };
@@ -592,9 +1149,14 @@ in
         // {
           CASDOOR_RUNTIME_DIR = "/var/lib/casdoor";
           httpport = toString cfg.port;
+          # Casdoor reads the port from its configuration file, which replaces
+          # the configuration that the environment provides, so the file refers
+          # to this variable instead.
+          CASDOOR_HTTP_PORT = toString cfg.port;
           runmode = "prod";
         }
-        // environment;
+        // environment
+        // quotaEnvironment;
 
       serviceConfig = {
         ExecStart = lib.escapeShellArgs [

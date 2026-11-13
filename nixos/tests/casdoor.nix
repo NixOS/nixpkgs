@@ -87,6 +87,30 @@
           initDataMerge = false;
           sessionCookieLifeTime = 3600;
           inactiveTimeoutMinutes = 15;
+          themeShowcase = true;
+          marketplaceUrl = "https://example.com/marketplace";
+          batchSize = 50;
+          verificationCodeTimeout = 5;
+          quota.user = 10;
+          ldapServerPort = 0;
+          ldapsServerPort = 0;
+        };
+      };
+
+      environment.systemPackages = [ pkgs.curl ];
+    };
+
+  # The port of the server is read from the configuration file of Casdoor, so
+  # the module has to make the port reach the file.
+  nodes.port =
+    { pkgs, ... }:
+    {
+      services.casdoor = {
+        enable = true;
+        port = 8123;
+        settings = {
+          origin = "http://localhost:8123";
+          initAdminPassword = "nixos";
           ldapServerPort = 0;
           ldapsServerPort = 0;
         };
@@ -174,6 +198,43 @@
     settings.succeed(
         "systemctl show casdoor.service -p Environment | grep -q 'inactiveTimeoutMinutes=15'"
     )
+
+    # The theme showcase and the address of the marketplace are passed to the
+    # server, which hands them to the web console.
+    settings.succeed(
+        "systemctl show casdoor.service -p Environment | grep -q 'themeShowcase=true'"
+    )
+    settings.succeed(
+        "systemctl show casdoor.service -p Environment | grep -q 'marketplaceUrl=https://example.com/marketplace'"
+    )
+
+    # The remaining settings are passed as environment variables as well.
+    settings.succeed(
+        "systemctl show casdoor.service -p Environment | grep -q 'batchSize=50'"
+    )
+    settings.succeed(
+        "systemctl show casdoor.service -p Environment | grep -q 'verificationCodeTimeout=5'"
+    )
+
+    # The quota is read from the configuration file, so it is passed in the
+    # variable that the configuration file refers to. The environment of the
+    # running server is read from the process, because systemd escapes the
+    # quotes of the value when it shows the environment of a unit.
+    settings.succeed(
+        "grep -zq 'CASDOOR_QUOTA=.*\"user\":10' /proc/$(systemctl show -p MainPID --value casdoor.service)/environ"
+    )
+    settings.fail(
+        "systemctl show casdoor.service -p Environment | grep -q ' quota='"
+    )
+    settings.succeed(
+        "grep -q 'CASDOOR_QUOTA' /var/lib/casdoor/conf/app.conf"
+    )
+
+    # The server listens on the configured port.
+    port.wait_for_unit("casdoor.service")
+    port.wait_for_open_port(8123)
+    port.succeed("curl --fail http://localhost:8123/api/health")
+    port.fail("curl --fail http://localhost:8000/api/health")
 
     # A setting that was not set is left out of the environment, so that the
     # value from the configuration file stays in effect.
