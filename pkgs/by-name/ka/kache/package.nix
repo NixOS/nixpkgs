@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isUnix ''
     mkdir -p "$shims/bin"
-    for name in cc c++ gcc g++ clang clang++; do
+    for name in cc c++ gcc g++ clang clang++ cargo rustdoc; do
       ln -s "$out/bin/kache" "$shims/bin/$name"
     done
     # Let another kache on PATH recognize and skip this shim directory.
