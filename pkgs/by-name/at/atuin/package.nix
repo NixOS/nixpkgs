@@ -11,6 +11,7 @@
   zstd,
   sqlite,
   pkg-config,
+  python3,
   rustPlatform,
   stdenv,
   writableTmpDirAsHomeHook,
@@ -19,16 +20,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.24.6";
+  version = "18.24.8";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4CBh/FcX5HxGUz2qqIDVstTGy343rX8sZucAzAQ6aqU=";
+    hash = "sha256-JOJ/My4/IaAzSX6NJpFfcf9bAEutuRpbjWx7zS/uzRw=";
   };
 
-  cargoHash = "sha256-eB0HHlrHdttJB7DYo68c6hGeqAiMj/b9zS/9eZLw1hM=";
+  cargoHash = "sha256-+ov43XTWhHJj+/c2XTu3GCXExdg3q+PC4AEqOf2Nun4=";
 
   # crates/atuin-common/src/secrets.rs sets a `REDACT_BUDGET` of 250ms for release builds
   # and 5s (which we increase to 30s here) for debug builds.
@@ -65,10 +66,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # e2e_pty tests drive an interactive bash (needs readline), run `clear`,
   # and create git repositories for workspace filtering
+  # e2e_ai_sessions tests run a fake hermes that imports sessions with a python3 script.
   nativeCheckInputs = [
     bashInteractive
     gitMinimal
     ncurses
+    python3
     writableTmpDirAsHomeHook
   ];
 
