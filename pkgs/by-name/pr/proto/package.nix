@@ -6,12 +6,17 @@
   libiconv,
   makeBinaryWrapper,
   pkg-config,
+  aws-lc,
+  openssl,
+  zstd,
   perl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proto";
   version = "0.63.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "moonrepo";
@@ -22,9 +27,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-01FRY1sNxEgajZPvFk9WIywvJwlKb5pTPQALhSZtZ0s=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    aws-lc
+    openssl
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-
   ];
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -35,8 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Tests requires network access
   doCheck = false;
   cargoBuildFlags = [
-    "--bin proto"
-    "--bin proto-shim"
+    "--bin=proto"
+    "--bin=proto-shim"
   ];
 
   postInstall = ''
