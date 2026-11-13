@@ -1,18 +1,15 @@
 {
   lib,
   stdenv,
-  fetchzip,
   fetchFromGitHub,
   cmake,
+  version,
+  linuxSrc,
 }:
 
-let
-  common = import ./common.nix { inherit fetchzip; };
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "irrlicht-mac";
-  version = common.version;
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "quiark";
@@ -21,8 +18,11 @@ stdenv.mkDerivation {
     hash = "sha256-scV1eiLWG1aTUNwW528hAzCjN+xvDKHh5cTQL3y2UIE=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   postUnpack = ''
-    cp -r ${common.src}/* $sourceRoot/
+    cp -r ${linuxSrc}/* $sourceRoot/
     chmod -R 777 $sourceRoot
   '';
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.darwin;
     broken = true;
   };
-}
+})
