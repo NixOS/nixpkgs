@@ -27,6 +27,7 @@
   libxslt,
   meson,
   ninja,
+  nix-update-script,
   perl,
   pkg-config,
   python3Packages,
@@ -106,6 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "http://fvwm.org";
