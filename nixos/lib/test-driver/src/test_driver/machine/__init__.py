@@ -1915,7 +1915,7 @@ class NspawnMachine(BaseMachine):
 
     def ssh_backdoor_command(self) -> str:
         # documented in systemd-ssh-generator(8) and https://systemd.io/CONTAINER_INTERFACE/
-        socket_path = f"/run/systemd/nspawn/unix-export/{self.name}/ssh"
+        socket_path = f"/run/systemd/nspawn/{self.name}/unix-export/ssh"
         proxy_cmd = f"socat - UNIX-CLIENT:{socket_path}"
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
