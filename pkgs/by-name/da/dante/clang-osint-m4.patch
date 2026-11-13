@@ -1,0 +1,27 @@
+diff -ur a/osdep.m4 b/osdep.m4
+--- a/osdep.m4	2024-11-20 08:07:22.000000000 +1100
++++ b/osdep.m4	2024-12-16 20:39:15.424935602 +1100
+@@ -381,6 +381,7 @@
+ unset have_sa_len
+ AC_MSG_CHECKING([for sa_len in sockaddr])
+ AC_TRY_COMPILE([
++#include <stdint.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ ], [struct sockaddr sa;
+@@ -397,6 +398,7 @@
+    unset sa_len_type_found
+    for type in uint8_t "unsigned char"; do
+        AC_TRY_COMPILE([
++#include <stdint.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <stdio.h>], [
+@@ -640,6 +642,7 @@
+ 		in_port_t, in_addr_t],
+ 		, ,
+ [
++#include <stdint.h>
+ #include <sys/types.h>
+ #include <netinet/in.h>
+ ])

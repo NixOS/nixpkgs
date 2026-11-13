@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 8 Oct 2026 06:59:52 -0400
+Subject: [PATCH] Revert "[lld] Disable ability to link Mach-O for Darwin
+ platforms (but not non-Darwin firmware) in Swift LLVM fork"
+
+This reverts commit 79631f818de615b6ea6655f2f6ccf592fef8cf1b.
+---
+ MachO/InputFiles.cpp | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/MachO/InputFiles.cpp b/MachO/InputFiles.cpp
+index 4e61064afeef..3b3023a94166 100644
+--- a/MachO/InputFiles.cpp
++++ b/MachO/InputFiles.cpp
+@@ -155,11 +155,6 @@ static bool checkCompatibility(const InputFile *input) {
+   if (platformInfos.empty())
+     return true;
+ 
+-  // Swift LLVM fork downstream change start
+-  error("This version of lld does not support linking for platform " + getPlatformName(platformInfos.front().target.Platform));
+-  return false;
+-  // Swift LLVM fork downstream change end
+-
+   auto it = find_if(platformInfos, [&](const PlatformInfo &info) {
+     return removeSimulator(info.target.Platform) ==
+            removeSimulator(config->platform());
+-- 
+2.54.0
+

@@ -1,0 +1,64 @@
+From 08081862400247ed78c45b9ca901f1a57f1be309 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sun, 25 Oct 2026 17:59:00 -0700
+Subject: [PATCH] #4894 - Polygraphy: add the missing pyproject.toml
+
+The TensorRT 11.3 OSS release removed setup.py and setup.cfg from
+tools/Polygraphy and switched the Makefile and install.ps1 to
+`python -m build --wheel`, following the build system's migration to
+pyproject.toml (CHANGELOG, v0.49.34). The pyproject.toml itself was not
+included, so `make install`, install.ps1 and the README's "Building From
+Source" steps fail: with neither file, the directory isn't a Python
+project.
+
+Add a pyproject.toml that reproduces the metadata of the published
+polygraphy 0.53.6 wheel: the version from polygraphy.__version__, the
+description, README.md as the long description, the license, author,
+classifiers and homepage, `Requires-Python: >=3.8`, and the `polygraphy`
+console script. Only the polygraphy package is included, as
+tests/test_packaging.py expects.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Signed-off-by: Connor Baker <ConnorBaker01@gmail.com>
+---
+ pyproject.toml | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 tools/Polygraphy/pyproject.toml
+
+diff --git a/pyproject.toml b/pyproject.toml
+new file mode 100644
+index 0000000..4ea5f0b
+--- /dev/null
++++ b/pyproject.toml
+@@ -0,0 +1,28 @@
++[build-system]
++requires = ["setuptools>=61"]
++build-backend = "setuptools.build_meta"
++
++[project]
++name = "polygraphy"
++dynamic = ["version"]
++description = "Polygraphy: A Deep Learning Inference Prototyping and Debugging Toolkit"
++readme = "README.md"
++license = { text = "Apache 2.0" }
++authors = [{ name = "NVIDIA", email = "svc_tensorrt@nvidia.com" }]
++requires-python = ">=3.8"
++classifiers = [
++    "Intended Audience :: Developers",
++    "Programming Language :: Python :: 3",
++]
++
++[project.urls]
++Homepage = "https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy"
++
++[project.scripts]
++polygraphy = "polygraphy.tools:main"
++
++[tool.setuptools.dynamic]
++version = { attr = "polygraphy.__version__" }
++
++[tool.setuptools.packages.find]
++include = ["polygraphy", "polygraphy.*"]
+-- 
+2.43.0
+

@@ -1,0 +1,13 @@
+diff --git a/speech_to_phrase/train_kaldi.py b/speech_to_phrase/train_kaldi.py
+index 9608407..c1bcb3e 100644
+--- a/speech_to_phrase/train_kaldi.py
++++ b/speech_to_phrase/train_kaldi.py
+@@ -327,7 +327,7 @@ async def _create_fuzzy_fst(fst: Fst, train_dir: Path, tools: SpeechTools) -> No
+             "--keep_isymbols=true",
+             "--keep_osymbols=true",
+             shlex.quote(str(text_fuzzy_fst_path)),
+-            "-",
++            "/dev/stdout",
+         ],
+         [
+             "fstarcsort",

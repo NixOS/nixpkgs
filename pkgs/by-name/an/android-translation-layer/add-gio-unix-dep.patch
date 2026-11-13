@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index ba8027c2..fb21e317 100644
+--- a/meson.build
++++ b/meson.build
+@@ -171,7 +171,7 @@ libtranslationlayer_so = shared_library('translation_layer_main', [
+                                                                         extra_deps,
+                                                                   	dependency('gtk4', version: '>=4.14'), dependency('gl'), dependency('egl'), dependency('wayland-client'), dependency('jni'),
+                                                                   	dependency('libportal'), dependency('sqlite3'), dependency('libavcodec', version: '>=59'), dependency('libdrm'),
+-                                                                  	dependency('gudev-1.0'), dependency('libswscale'), dependency('webkitgtk-6.0'),
++                                                                  	dependency('gudev-1.0'), dependency('libswscale'), dependency('webkitgtk-6.0'), dependency('gio-unix-2.0'),
+                                                                         libart_dep, wayland_protos_dep
+                                                                   ],
+                                                                   link_with: [ libandroid_so ],

@@ -1,0 +1,153 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  jax,
+  jaxlib,
+  multipledispatch,
+  numpy,
+  tqdm,
+
+  # tests
+  dm-haiku,
+  equinox,
+  flax,
+  funsor,
+  graphviz,
+  optax,
+  pyro-api,
+  pytest-xdist,
+  pytestCheckHook,
+  scikit-learn,
+  tensorflow,
+  tensorflow-probability,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "numpyro";
+  version = "0.22.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "pyro-ppl";
+    repo = "numpyro";
+    tag = finalAttrs.version;
+    hash = "sha256-aUd3u/fEMMSTPFyRJgalVTETG561AgJmGhJl2C3lMSw=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    jax
+    jaxlib
+    multipledispatch
+    numpy
+    tqdm
+  ];
+
+  nativeCheckInputs = [
+    dm-haiku
+    equinox
+    flax
+    funsor
+    graphviz
+    optax
+    pyro-api
+    pytest-xdist
+    pytestCheckHook
+    scikit-learn
+  ]
+  # tensorflow (required by tensorflow-probability) is not available for all python versions
+  ++ lib.optionals tensorflow.meta.available [
+    tensorflow-probability
+  ];
+
+  pythonImportsCheck = [ "numpyro" ];
+
+  pytestFlags = [
+    # Tests memory consumption grows significantly with the number of parallel processes (reaches ~200GB with 80 jobs)
+    "--maxprocesses=8"
+
+    # A few tests fail with:
+    # UserWarning: There are not enough devices to run parallel chains: expected 2 but got 1.
+    # Chains will be drawn sequentially. If you are running MCMC in CPU, consider using `numpyro.set_host_device_count(2)` at the beginning of your program.
+    # You can double-check how many devices are available in your system using `jax.local_device_count()`.
+    "-Wignore::UserWarning"
+
+    # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+    "-Wignore::FutureWarning"
+  ];
+
+  disabledTests = [
+    # Failing with jax>=0.9.0
+    # TypeError: Error interpreting argument to closed_call as a JAX value
+    "test_provenance_call"
+    "test_provenance_closed_call"
+    "test_numpyrooptim_no_double_jit"
+
+    # ValueError: Found unexpected Arrays on value of type <class 'list'> in static attribute 'layers'
+    # of Pytree type '<class 'test_module.test_random_nnx_module_mcmc_sequence_params.<locals>.MLP'>'.
+    # This is an error starting from Flax version 0.12.0.
+    "test_random_nnx_module_mcmc_sequence_param"
+
+    # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
+    "test_mcmc_parallel_chain"
+
+    # AssertionError due to tolerance issues
+    "test_bijective_transforms"
+    "test_constrain_fn_two_batch_dims"
+    "test_cpu"
+    "test_entropy_categorical"
+    "test_gaussian_model"
+    "test_zero_inflated_logits_probs_agree"
+
+    # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
+    # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+    # E        Emitted warnings: [].
+    "test_laplace_approximation_warning"
+
+    # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
+    "test_chain"
+
+    # Failed: DID NOT RAISE <class 'UserWarning'>
+    "test_interval_censored_validate_sample"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: Not equal to tolerance rtol=0.06, atol=0
+    "test_functional_map"
+  ]
+  ++ lib.optionals (!tensorflow.meta.available) [
+    # ImportError: Please install `tensorflow_probability>=0.18`
+    "test_cdf_and_icdf"
+    "test_left_truncated_cdf"
+    "test_no_tracer_leak_at_lazy_property_sample"
+    "test_output_is_array"
+    "test_right_truncated_cdf"
+    "test_two_sided_truncated_cdf"
+  ];
+
+  disabledTestPaths = [
+    # Require internet access
+    "test/test_example_utils.py"
+  ]
+  ++ lib.optionals (!tensorflow.meta.available) [
+    # Require tensorflow-probability
+    "test/contrib/hsgp/test_approximation.py"
+    "test/contrib/hsgp/test_spectral_densities.py"
+    "test/contrib/test_tfp.py"
+  ];
+
+  meta = {
+    description = "Library for probabilistic programming with NumPy";
+    homepage = "https://num.pyro.ai/";
+    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

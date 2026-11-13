@@ -1,0 +1,18 @@
+tests: Remove bogus test for unsorted file listing and tests for -u and -c, which fail on apfs.
+
+Minimized from what Debian applies:
+https://git.hadrons.org/cgit/debian/pkgs/inetutils.git/tree/debian/patches/local/0006-tests-Remove-bogus-test-for-unsorted-file-listing.patch?id=8ab7f49fe5cf194e989ae6ae6a78eb65397c5778
+--- a/tests/libls.sh
++++ b/tests/libls.sh
+@@ -94 +93,0 @@ REPLY_C=`$LS -C $LSDIR`
+-REPLY_Cf=`$LS -Cf $LSDIR`
+@@ -108,2 +106,0 @@ REPLY_n=`$LS -n $LSDIR`
+-REPLY_Ccts=`$LS -Ccts $LSDIR`
+-REPLY_Cuts=`$LS -Cuts $LSDIR`
+@@ -133,2 +129,0 @@ test `echo "$diff" | $GREP -c -v '^[.]\{1,2\}$'` -eq 0 ||
+-test x"$REPLY_C" != x"$REPLY_Cf" ||
+-  { errno=1; echo >&2 'Failed to disable sorting with "-f".'; }
+@@ -153,3 +146,0 @@ test x"$REPLY_l" != x"$REPLY_n" ||
+-test x"$REPLY_Ccts" != x"$REPLY_Cuts" ||
+-  { errno=1; echo >&2 'Failed to distinguish "-u" from "-c".'; }
+-

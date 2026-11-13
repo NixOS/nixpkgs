@@ -1,0 +1,73 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pybind11,
+  setuptools,
+  pytestCheckHook,
+  tzdata,
+  python,
+  pkgs,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "pyorc";
+  version = "0.12.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "noirello";
+    repo = "pyorc";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3vplqS05MEjCoSxVanqa3lBk6N11jZEkccTDbIZZ8aY=";
+  };
+
+  build-system = [
+    pybind11
+    setuptools
+  ];
+
+  env = {
+    PYORC_SKIP_ORC_BUILD = "true";
+  };
+
+  buildInputs = [
+    pkgs.lz4
+    pkgs.protobuf
+    pkgs.snappy
+    pkgs.zlib
+    pkgs.zstd
+    pkgs.apache-orc
+  ];
+
+  preCheck = ''
+    # provide timezone data, works only on linux
+    export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+
+    substituteInPlace "tests/compare/test_writer_cmp.py" \
+      --replace-fail "deps/bin/orc-contents" "orc-contents"
+
+    substituteInPlace "tests/compare/test_reader_cmp.py" \
+      --replace-fail "deps/bin/orc-metadata" "orc-metadata"
+
+    mkdir -p deps
+    ln -s "${pkgs.apache-orc.src}/examples" "deps/"
+  '';
+
+  pythonImportsCheck = [
+    "pyorc"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pkgs.apache-orc
+  ];
+
+  meta = {
+    changelog = "https://github.com/noirello/pyorc/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
+    description = "Python module for Apache ORC file format";
+    homepage = "https://github.com/noirello/pyorc";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+  };
+})

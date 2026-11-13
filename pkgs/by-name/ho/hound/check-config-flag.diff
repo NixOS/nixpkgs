@@ -1,0 +1,494 @@
+diff --git a/cmds/hound/main.go b/cmds/hound/main.go
+index 9f947fa..209ed3d 100644
+--- a/cmds/hound/main.go
++++ b/cmds/hound/main.go
+@@ -34,19 +34,24 @@ func newPresenter(likeGrep bool) client.Presenter {
+
+ // Attempt to populate a client.Config from the json found in
+ // filename.
+-func loadConfigFrom(filename string, cfg *client.Config) error {
++func loadConfigFrom(filename string, cfg *client.Config, disallowUnknownFields bool) error {
+ 	r, err := os.Open(filename)
+ 	if err != nil {
+ 		return err
+ 	}
+ 	defer r.Close()
+ 
+-	return json.NewDecoder(r).Decode(cfg)
++	decoder := json.NewDecoder(r)
++	if disallowUnknownFields {
++		decoder.DisallowUnknownFields()
++	}
++
++	return decoder.Decode(cfg)
+ }
+ 
+ // Attempt to populate a client.Config from the json found in
+ // any of the configPaths.
+-func loadConfig(cfg *client.Config) error {
++func loadConfig(cfg *client.Config, disallowUnknownFields bool) error {
+ 	u, err := user.Current()
+ 	if err != nil {
+ 		return err
+@@ -59,7 +64,7 @@ func loadConfig(cfg *client.Config) error {
+ 	for _, path := range configPaths {
+ 		err = loadConfigFrom(os.Expand(path, func(name string) string {
+ 			return env[name]
+-		}), cfg)
++		}), cfg, disallowUnknownFields)
+ 
+ 		if os.IsNotExist(err) {
+ 			continue
+@@ -88,6 +93,7 @@ func main() {
+ 	flagCase := flag.Bool("ignore-case", false, "")
+ 	flagStats := flag.Bool("show-stats", false, "")
+ 	flagGrep := flag.Bool("like-grep", false, "")
++	flagCheckCfg := flag.Bool("check-config", false, "")
+ 
+ 	flag.Parse()
+ 
+@@ -109,10 +115,14 @@ func main() {
+ 		HttpHeaders: nil,
+ 	}
+ 
+-	if err := loadConfig(&cfg); err != nil {
++	if err := loadConfig(&cfg, *flagCheckCfg); err != nil {
+ 		log.Panic(err)
+ 	}
+
++  if *flagCheckCfg {
++    return
++  }
++
+ 	res, repos, err := client.SearchAndLoadRepos(&cfg,
+ 		flag.Arg(0),
+ 		*flagRepos,
+diff --git a/cmds/houndd/main.go b/cmds/houndd/main.go
+index eb8038a2..7e51d776 100644
+--- a/cmds/houndd/main.go
++++ b/cmds/houndd/main.go
+@@ -31,15 +31,17 @@
+ 	basepath   = filepath.Dir(b)
+ )
+ 
+-func makeSearchers(cfg *config.Config) (map[string]*searcher.Searcher, bool, error) {
++func makeSearchers(cfg *config.Config, disallowUnknownFields bool) (map[string]*searcher.Searcher, bool, error) {
+ 	// Ensure we have a dbpath
+-	if _, err := os.Stat(cfg.DbPath); err != nil {
+-		if err := os.MkdirAll(cfg.DbPath, os.ModePerm); err != nil {
+-			return nil, false, err
++	if !disallowUnknownFields {
++		if _, err := os.Stat(cfg.DbPath); err != nil {
++			if err := os.MkdirAll(cfg.DbPath, os.ModePerm); err != nil {
++				return nil, false, err
++			}
+ 		}
+ 	}
+ 
+-	searchers, errs, err := searcher.MakeAll(cfg)
++	searchers, errs, err := searcher.MakeAll(cfg, disallowUnknownFields)
+ 	if err != nil {
+ 		return nil, false, err
+ 	}
+@@ -130,6 +130,7 @@ func main() {
+ 	error_log = log.New(os.Stderr, "", log.LstdFlags)
+ 
+ 	flagConf := flag.String("conf", "config.json", "")
++	flagCheckCfg := flag.Bool("check-config", false, "")
+ 	flagAddr := flag.String("addr", ":6080", "")
+ 	flagDev := flag.Bool("dev", false, "")
+ 	flagVer := flag.Bool("version", false, "Display version and exit")
+@@ -142,7 +143,7 @@ func main() {
+ 	}
+ 
+ 	var cfg config.Config
+-	if err := cfg.LoadFromFile(*flagConf); err != nil {
++	if err := cfg.LoadFromFile(*flagConf, *flagCheckCfg); err != nil {
+ 		panic(err)
+ 	}
+
+@@ -152,12 +152,18 @@ func main() {
+ 	// It's not safe to be killed during makeSearchers, so register the
+ 	// shutdown signal here and defer processing it until we are ready.
+ 	shutdownCh := registerShutdownSignal()
+-	idx, ok, err := makeSearchers(&cfg)
++	idx, ok, err := makeSearchers(&cfg, *flagCheckCfg)
+ 	if err != nil {
+ 		log.Panic(err)
+ 	}
+ 	if !ok {
++		if *flagCheckCfg {
++			log.Panic("Config check failed")
++		}
+ 		info_log.Println("Some repos failed to index, see output above")
+ 	} else {
+ 		info_log.Println("All indexes built!")
++		if *flagCheckCfg {
++			os.Exit(0)
++		}
+ 	}
+diff --git a/config/config.go b/config/config.go
+index c978c009..338e053e 100644
+--- a/config/config.go
++++ b/config/config.go
+@@ -1,6 +1,7 @@
+ package config
+ 
+ import (
++	"bytes"
+ 	"encoding/json"
+ 	"errors"
+ 	"os"
+@@ -123,7 +124,7 @@ func initRepo(r *Repo) {
+ 
+ // Populate missing config values with default values and
+ // merge global VCS configs into repo level configs.
+-func initConfig(c *Config) error {
++func initConfig(c *Config, disallowUnknownFields bool) error {
+ 	if c.MaxConcurrentIndexers == 0 {
+ 		c.MaxConcurrentIndexers = defaultMaxConcurrentIndexers
+ 	}
+@@ -136,10 +137,10 @@ func initConfig(c *Config) error {
+ 		c.ResultLimit = defaultResultLimit
+ 	}
+ 
+-	return mergeVCSConfigs(c)
++	return mergeVCSConfigs(c, disallowUnknownFields)
+ }
+ 
+-func mergeVCSConfigs(cfg *Config) error {
++func mergeVCSConfigs(cfg *Config, disallowUnknownFields bool) error {
+ 	globalConfigLen := len(cfg.VCSConfigMessages)
+ 	if globalConfigLen == 0 {
+ 		return nil
+@@ -148,7 +149,11 @@ func mergeVCSConfigs(cfg *Config) error {
+ 	globalConfigVals := make(map[string]map[string]interface{}, globalConfigLen)
+ 	for vcs, configBytes := range cfg.VCSConfigMessages {
+ 		var configVals map[string]interface{}
+-		if err := json.Unmarshal(*configBytes, &configVals); err != nil {
++		decoder := json.NewDecoder(bytes.NewReader(*configBytes))
++		if disallowUnknownFields {
++			decoder.DisallowUnknownFields()
++		}
++		if err := decoder.Decode(&configVals); err != nil {
+ 			return err
+ 		}
+ 
+@@ -166,8 +171,14 @@ func mergeVCSConfigs(cfg *Config) error {
+ 		var repoVals map[string]interface{}
+ 		if len(repoBytes) == 0 {
+ 			repoVals = make(map[string]interface{}, len(globalVals))
+-		} else if err := json.Unmarshal(repoBytes, &repoVals); err != nil {
+-			return err
++		} else {
++			decoder := json.NewDecoder(bytes.NewReader(repoBytes))
++			if disallowUnknownFields {
++				decoder.DisallowUnknownFields()
++			}
++			if err := decoder.Decode(&repoVals); err != nil {
++				return err
++			}
+ 		}
+ 
+ 		for name, val := range globalVals {
+@@ -188,14 +199,19 @@ func mergeVCSConfigs(cfg *Config) error {
+ 	return nil
+ }
+ 
+-func (c *Config) LoadFromFile(filename string) error {
++func (c *Config) LoadFromFile(filename string, disallowUnknownFields bool) error {
+ 	r, err := os.Open(filename)
+ 	if err != nil {
+ 		return err
+ 	}
+ 	defer r.Close()
+ 
+-	if err := json.NewDecoder(r).Decode(c); err != nil {
++	decoder := json.NewDecoder(r)
++	if disallowUnknownFields {
++		decoder.DisallowUnknownFields()
++	}
++
++	if err := decoder.Decode(c); err != nil {
+ 		return err
+ 	}
+ 
+@@ -216,7 +232,7 @@ func (c *Config) LoadFromFile(filename string) error {
+ 		initRepo(repo)
+ 	}
+ 
+-	return initConfig(c)
++	return initConfig(c, disallowUnknownFields)
+ }
+ 
+ func (c *Config) ToJsonString() (string, error) {
+diff --git a/config/config_test.go b/config/config_test.go
+index 5b3328af..fab21e97 100644
+--- a/config/config_test.go
++++ b/config/config_test.go
+@@ -20,7 +20,7 @@ func rootDir() string {
+ // add examples, we don't muck them up.
+ func TestExampleConfigsAreValid(t *testing.T) {
+ 	var cfg Config
+-	if err := cfg.LoadFromFile(filepath.Join(rootDir(), exampleConfigFile)); err != nil {
++	if err := cfg.LoadFromFile(filepath.Join(rootDir(), exampleConfigFile), true); err != nil {
+ 		t.Fatalf("Unable to parse %s: %s", exampleConfigFile, err)
+ 	}
+ 
+@@ -30,7 +30,7 @@ func TestExampleConfigsAreValid(t *testing.T) {
+ 
+ 	// Ensure that each of the declared vcs's are legit
+ 	for _, repo := range cfg.Repos {
+-		_, err := vcs.New(repo.Vcs, repo.VcsConfig())
++		_, err := vcs.New(repo.Vcs, repo.VcsConfig(), true)
+ 		if err != nil {
+ 			t.Fatal(err)
+ 		}
+@@ -40,7 +40,7 @@ func TestExampleConfigsAreValid(t *testing.T) {
+ 	repo := cfg.Repos["SomeGitRepo"]
+ 	vcsConfigBytes := repo.VcsConfig()
+ 	var vcsConfigVals map[string]interface{}
+-	json.Unmarshal(vcsConfigBytes, &vcsConfigVals)  //nolint
++	json.Unmarshal(vcsConfigBytes, &vcsConfigVals) //nolint
+ 	if detectRef, ok := vcsConfigVals["detect-ref"]; !ok || !detectRef.(bool) {
+ 		t.Error("global detectRef vcs config setting not set for repo")
+ 	}
+@@ -51,9 +51,9 @@ func TestExampleConfigsAreValid(t *testing.T) {
+ 
+ 	repo = cfg.Repos["GitRepoWithDetectRefDisabled"]
+ 	vcsConfigBytes = repo.VcsConfig()
+-	json.Unmarshal(vcsConfigBytes, &vcsConfigVals)  //nolint
++	json.Unmarshal(vcsConfigBytes, &vcsConfigVals) //nolint
+ 	if detectRef, ok := vcsConfigVals["detect-ref"]; !ok || detectRef.(bool) {
+-		t.Error("global detectRef vcs config setting not overriden by repo-level setting")
++		t.Error("global detectRef vcs config setting not overridden by repo-level setting")
+ 	}
+
+ }
+diff --git a/searcher/searcher.go b/searcher/searcher.go
+index 791ce810..12234992 100644
+--- a/searcher/searcher.go
++++ b/searcher/searcher.go
+@@ -264,7 +264,7 @@ func reportOnMemory() {
+ // Utility function for producing a hex encoded sha1 hash for a string.
+ func hashFor(name string) string {
+ 	h := sha1.New()
+-	h.Write([]byte(name))  //nolint
++	h.Write([]byte(name)) //nolint
+ 	return hex.EncodeToString(h.Sum(nil))
+ }
+ 
+@@ -282,7 +282,7 @@ func init() {
+ // occurred and no other return values are valid. If an error occurs that is specific
+ // to a particular searcher, that searcher will not be present in the searcher map and
+ // will have an error entry in the error map.
+-func MakeAll(cfg *config.Config) (map[string]*Searcher, map[string]error, error) {
++func MakeAll(cfg *config.Config, disallowUnknownFields bool) (map[string]*Searcher, map[string]error, error) {
+ 	errs := map[string]error{}
+ 	searchers := map[string]*Searcher{}
+ 
+@@ -300,7 +300,7 @@ func MakeAll(cfg *config.Config) (map[string]*Searcher, map[string]error, error)
+ 	// Start new searchers for all repos in different go routines while
+ 	// respecting cfg.MaxConcurrentIndexers.
+ 	for name, repo := range cfg.Repos {
+-		go newSearcherConcurrent(cfg.DbPath, name, repo, refs, lim, resultCh)
++		go newSearcherConcurrent(cfg.DbPath, name, repo, refs, lim, disallowUnknownFields, resultCh)
+ 	}
+ 
+ 	// Collect the results on resultCh channel for all repos.
+@@ -320,6 +320,9 @@ func MakeAll(cfg *config.Config, disallowUnknownFields bool) (map[string]*Search
+ 
+ 	// after all the repos are in good shape, we start their polling
+ 	for _, s := range searchers {
++		if s == nil {
++			continue
++		}
+ 		s.begin()
+ 	}
+ 
+@@ -328,8 +328,8 @@ func MakeAll(cfg *config.Config) (map[string]*Searcher, map[string]error, error)
+
+ // Creates a new Searcher that is available for searches as soon as this returns.
+ // This will pull or clone the target repo and start watching the repo for changes.
+-func New(dbpath, name string, repo *config.Repo) (*Searcher, error) {
+-	s, err := newSearcher(dbpath, name, repo, &foundRefs{}, makeLimiter(1))
++func New(dbpath, name string, repo *config.Repo, disallowUnknownFields bool) (*Searcher, error) {
++	s, err := newSearcher(dbpath, name, repo, &foundRefs{}, makeLimiter(1), disallowUnknownFields)
+ 	if err != nil {
+ 		return nil, err
+ 	}
+@@ -396,17 +396,21 @@ func newSearcher(
+ 	dbpath, name string,
+ 	repo *config.Repo,
+ 	refs *foundRefs,
+-	lim limiter) (*Searcher, error) {
++	lim limiter,
++	disallowUnknownFields bool) (*Searcher, error) {
+ 
+ 	vcsDir := filepath.Join(dbpath, vcsDirFor(repo))
+ 
+ 	log.Printf("Searcher started for %s", name)
+ 
+-	wd, err := vcs.New(repo.Vcs, repo.VcsConfig())
++	wd, err := vcs.New(repo.Vcs, repo.VcsConfig(), disallowUnknownFields)
+ 	if err != nil {
+ 		return nil, err
+ 	}
+ 
++	if disallowUnknownFields {
++		return nil, nil
++	}
+ 
+ 	rev, err := wd.PullOrClone(vcsDir, repo.Url)
+ 	if err != nil {
+@@ -508,13 +512,14 @@ func newSearcherConcurrent(
+ 	repo *config.Repo,
+ 	refs *foundRefs,
+ 	lim limiter,
++	disallowUnknownFields bool,
+ 	resultCh chan searcherResult) {
+ 
+ 	// acquire a token from the rate limiter
+ 	lim.Acquire()
+ 	defer lim.Release()
+ 
+-	s, err := newSearcher(dbpath, name, repo, refs, lim)
++	s, err := newSearcher(dbpath, name, repo, refs, lim, disallowUnknownFields)
+ 	if err != nil {
+ 		resultCh <- searcherResult{
+ 			name: name,
+diff --git a/vcs/bzr.go b/vcs/bzr.go
+index 1797635d..0ef407c5 100644
+--- a/vcs/bzr.go
++++ b/vcs/bzr.go
+@@ -13,7 +13,7 @@ func init() {
+ 	Register(newBzr, "bzr")
+ }
+ 
+-func newBzr(b []byte) (Driver, error) {
++func newBzr(b []byte, disallowUnknownFields bool) (Driver, error) {
+ 	return &BzrDriver{}, nil
+ }
+ 
+diff --git a/vcs/git.go b/vcs/git.go
+index 54f1dfc5..6fdda644 100644
+--- a/vcs/git.go
++++ b/vcs/git.go
+@@ -34,11 +34,15 @@ type refDetetector interface {
+ type headBranchDetector struct {
+ }
+ 
+-func newGit(b []byte) (Driver, error) {
++func newGit(b []byte, disallowUnknownFields bool) (Driver, error) {
+ 	var d GitDriver
+ 
+ 	if b != nil {
+-		if err := json.Unmarshal(b, &d); err != nil {
++		decoder := json.NewDecoder(bytes.NewReader(b))
++		if disallowUnknownFields {
++			decoder.DisallowUnknownFields()
++		}
++		if err := decoder.Decode(&d); err != nil {
+ 			return nil, err
+ 		}
+ 	}
+diff --git a/vcs/hg.go b/vcs/hg.go
+index ac285836..7a7ec717 100644
+--- a/vcs/hg.go
++++ b/vcs/hg.go
+@@ -15,7 +15,7 @@ func init() {
+ 
+ type MercurialDriver struct{}
+ 
+-func newHg(b []byte) (Driver, error) {
++func newHg(b []byte, disallowUnknownFields bool) (Driver, error) {
+ 	return &MercurialDriver{}, nil
+ }
+
+diff --git a/vcs/svn.go b/vcs/svn.go
+index 0c8571a3..ad0cdced 100644
+--- a/vcs/svn.go
++++ b/vcs/svn.go
+@@ -19,11 +19,15 @@ type SVNDriver struct {
+ 	Password string `json:"password"`
+ }
+ 
+-func newSvn(b []byte) (Driver, error) {
++func newSvn(b []byte, disallowUnknownFields bool) (Driver, error) {
+ 	var d SVNDriver
+ 
+ 	if b != nil {
+-		if err := json.Unmarshal(b, &d); err != nil {
++		decoder := json.NewDecoder(bytes.NewReader(b))
++		if disallowUnknownFields {
++			decoder.DisallowUnknownFields()
++		}
++		if err := decoder.Decode(&d); err != nil {
+ 			return nil, err
+ 		}
+ 	}
+diff --git a/vcs/svn_test.go b/vcs/svn_test.go
+index fe836691..056f29b8 100644
+--- a/vcs/svn_test.go
++++ b/vcs/svn_test.go
+@@ -8,7 +8,7 @@
+ func TestSvnConfig(t *testing.T) {
+ 	cfg := `{"username" : "svn_username", "password" : "svn_password"}`
+ 
+-	d, err := New("svn", []byte(cfg))
++	d, err := New("svn", []byte(cfg), true)
+ 	if err != nil {
+ 		t.Fatal(err)
+ 	}
+diff --git a/vcs/vcs.go b/vcs/vcs.go
+index 26f0d4d8..2c730665 100644
+--- a/vcs/vcs.go
++++ b/vcs/vcs.go
+@@ -9,7 +9,7 @@
+ // A collection that maps vcs names to their underlying
+ // factory. A factory allows the vcs to have unserialized
+ // json config passed in to be parsed.
+-var drivers = make(map[string]func(c []byte) (Driver, error))
++var drivers = make(map[string]func(c []byte, disallowUnknownFields bool) (Driver, error))
+ 
+ // A "plugin" for each vcs that supports the very limited set of vcs
+ // operations that hound needs.
+@@ -39,7 +38,7 @@ type WorkDir struct {
+ }
+ 
+ // Register a new vcs driver under 1 or more names.
+-func Register(fn func(c []byte) (Driver, error), names ...string) {
++func Register(fn func(c []byte, disallowUnknownFields bool) (Driver, error), names ...string) {
+ 	if fn == nil {
+ 		log.Panic("vcs: cannot register nil factory")
+ 	}
+@@ -50,13 +49,13 @@ func Register(fn func(c []byte) (Driver, error), names ...string) {
+ }
+ 
+ // Create a new WorkDir from the name and configuration data.
+-func New(name string, cfg []byte) (*WorkDir, error) {
++func New(name string, cfg []byte, disallowUnknownFields bool) (*WorkDir, error) {
+ 	f := drivers[name]
+ 	if f == nil {
+ 		return nil, fmt.Errorf("vcs: %s is not a valid vcs driver.", name)
+ 	}
+ 
+-	d, err := f(cfg)
++	d, err := f(cfg, disallowUnknownFields)
+ 	if err != nil {
+ 		return nil, err
+ 	}
+diff --git a/vcs/vcs_test.go b/vcs/vcs_test.go
+index 5ef41e6b..009504db 100644
+--- a/vcs/vcs_test.go
++++ b/vcs/vcs_test.go
+@@ -8,8 +8,8 @@
+
+ // Just make sure all drivers are tolerant of nil
+ func TestNilConfigs(t *testing.T) {
+ 	for name, _ := range drivers {  //nolint
+-		d, err := New(name, nil)
++		d, err := New(name, nil, true)
+ 		if err != nil {
+ 			t.Fatal(err)
+ 		}

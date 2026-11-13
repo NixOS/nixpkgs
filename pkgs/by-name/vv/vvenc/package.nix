@@ -1,0 +1,76 @@
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  gitUpdater,
+  testers,
+  cmake,
+  nlohmann_json,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "vvenc";
+  version = "1.14.0";
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "fraunhoferhhi";
+    repo = "vvenc";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MZVXxUXpcZ16de3CZDscLOlnqjHkGZ98muhYCDCcgvs=";
+  };
+
+  patches = [ ./unset-darwin-cmake-flags.patch ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      "-Wno-maybe-uninitialized"
+      "-Wno-uninitialized"
+    ]
+  );
+
+  buildInputs = [ nlohmann_json ];
+
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "VVENC_INSTALL_FULLFEATURE_APP" true)
+    (lib.cmakeBool "VVENC_ENABLE_THIRDPARTY_JSON" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
+
+  postPatch = ''
+    substituteInPlace pkgconfig/libvvenc.pc.in \
+      --replace-fail \
+        'libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@' \
+        'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail \
+        'includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@' \
+        'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "rc";
+    };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
+  meta = {
+    homepage = "https://github.com/fraunhoferhhi/vvenc";
+    description = "Fraunhofer Versatile Video Encoder";
+    license = lib.licenses.bsd3Clear;
+    mainProgram = "vvencapp";
+    pkgConfigModules = [ "libvvenc" ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
+    platforms = lib.platforms.all;
+  };
+})

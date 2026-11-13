@@ -1,0 +1,22 @@
+--- a/lib/flutter_vodozemac.dart
++++ b/lib/flutter_vodozemac.dart
+@@ -5,9 +5,18 @@ import 'dart:io';
+ import 'package:flutter/foundation.dart';
+ import 'package:vodozemac/vodozemac.dart' as vod;
+ 
++String _getLibraryPath() {
++  if (kIsWeb) return './';
++  try {
++    return Platform.resolvedExecutable + '/../lib/libvodozemac_bindings_dart.so';
++  } catch (_) {
++    return './';
++  }
++}
++
+ Future<void> init({String wasmPath = './pkg/'}) => vod.init(
+       wasmPath: wasmPath,
+-      libraryPath: './',
++      libraryPath: _getLibraryPath(),
+       stem: !kIsWeb && (Platform.isIOS || Platform.isMacOS)
+           ? 'flutter_vodozemac'
+           : 'vodozemac_bindings_dart',

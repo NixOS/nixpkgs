@@ -1,0 +1,4 @@
+source 'https://rubygems.org'
+gem 'fastlane'
+
+gem "abbrev", "~> 0.1.2"

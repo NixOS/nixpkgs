@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 34f3094..b161ba8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,7 +4,7 @@ if (VCPKG)
+   include("${CMAKE_SOURCE_DIR}/cmake/vcpkg.cmake")
+ endif ()
+ 
+-project("Easy Audio Sync"
++project("easyaudiosync"
+   VERSION 1.1.2
+   DESCRIPTION "Audio library syncing and conversion utility"
+   HOMEPAGE_URL "https://github.com/complexlogic/EasyAudioSync"

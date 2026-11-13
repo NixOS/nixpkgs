@@ -1,0 +1,24 @@
+From: Bryan Gardiner <bog@khumba.net>
+Date: Sat, 9 Jan 2021 16:51:20 -0800
+Subject: [PATCH] Add NixOS CUPS PPD search path.
+
+---
+ base/g.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/base/g.py b/base/g.py
+index f73e23f..758f339 100644
+--- a/base/g.py
++++ b/base/g.py
+@@ -283,7 +283,7 @@ prop.max_message_len = 8192
+ prop.max_message_read = 65536
+ prop.read_timeout = 90
+ 
+-prop.ppd_search_path = '/usr/share;/usr/local/share;/usr/lib;/usr/local/lib;/usr/libexec;/opt;/usr/lib64'
++prop.ppd_search_path = '/var/lib/cups/path/share;/usr/share;/usr/local/share;/usr/lib;/usr/local/lib;/usr/libexec;/opt;/usr/lib64'
+ prop.ppd_search_pattern = 'HP-*.ppd.*'
+ prop.ppd_download_url = 'http://www.linuxprinting.org/ppd-o-matic.cgi'
+ prop.ppd_file_suffix = '-hpijs.ppd'
+-- 
+2.29.2
+

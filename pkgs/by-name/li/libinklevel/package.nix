@@ -1,0 +1,47 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libusb1,
+  libxml2,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libinklevel";
+  version = "0.9.7";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/libinklevel/libinklevel-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-gZ07tMJXhyLBBXyfPamZoaPrRmKPD+ka61K/zNOIRnU=";
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libusb1
+    libxml2
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  meta = {
+    description = "Library for checking the ink level of your printer";
+    longDescription = ''
+      Libinklevel is a library for checking the ink level of your printer on a
+      system which runs Linux or FreeBSD. It supports printers attached via
+      USB. Currently printers of the following brands are supported: HP, Epson
+      and Canon. Canon BJNP network printers are supported too. This is not
+      official software from the printer manufacturers. The goal of this
+      project is to create a vendor independent API for retrieving the ink
+      level of a printer connected to a Linux or FreeBSD box.
+    '';
+    homepage = "https://libinklevel.sourceforge.net/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [ samb96 ];
+  };
+})

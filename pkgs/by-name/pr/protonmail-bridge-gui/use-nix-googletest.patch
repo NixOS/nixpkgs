@@ -1,0 +1,23 @@
+diff --git a/bridgepp/CMakeLists.txt b/bridgepp/CMakeLists.txt
+index f4a0a553..02d631dc 100644
+--- a/bridgepp/CMakeLists.txt
++++ b/bridgepp/CMakeLists.txt
+@@ -172,16 +172,8 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+     cmake_policy(SET CMP0135 NEW) # avoid warning DOWNLOAD_EXTRACT_TIMESTAMP
+ endif ()
+ 
+-include(FetchContent)
+-FetchContent_Declare(
+-    googletest
+-    URL https://github.com/google/googletest/archive/b796f7d44681514f58a683a3a71ff17c94edb0c1.zip
+-)
+-
+-# For Windows: Prevent overriding the parent project's compiler/linker settings
+-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+-
+-FetchContent_MakeAvailable(googletest)
++# Use find_package to use the gtest package provided by Nix
++find_package(GTest REQUIRED)
+ 
+ enable_testing()
+ 

@@ -1,0 +1,21 @@
+diff --git a/cmake/FindJpegTurbo.cmake b/cmake/FindJpegTurbo.cmake
+index 33b5204..0407a6a 100644
+--- a/cmake/FindJpegTurbo.cmake
++++ b/cmake/FindJpegTurbo.cmake
+@@ -9,14 +9,11 @@
+ 
+ if(LAF_BACKEND STREQUAL "skia")
+ 
+-  find_library(LIBJPEG_TURBO_LIBRARY NAMES libjpeg jpeg
+-    HINTS "${SKIA_LIBRARY_DIR}" NO_DEFAULT_PATH)
+-  set(LIBJPEG_TURBO_INCLUDE_DIRS "${SKIA_DIR}/third_party/externals/libjpeg-turbo")
++  find_library(LIBJPEG_TURBO_LIBRARY NAMES libjpeg jpeg)
+ 
+   add_library(libjpeg-turbo STATIC IMPORTED)
+   set_target_properties(libjpeg-turbo PROPERTIES
+-    IMPORTED_LOCATION "${LIBJPEG_TURBO_LIBRARY}"
+-    INTERFACE_INCLUDE_DIRECTORIES ${LIBJPEG_TURBO_INCLUDE_DIRS})
++    IMPORTED_LOCATION "${LIBJPEG_TURBO_LIBRARY}")
+ 
+ else()
+ 

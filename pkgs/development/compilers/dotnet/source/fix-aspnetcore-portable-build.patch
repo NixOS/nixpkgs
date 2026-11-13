@@ -1,0 +1,25 @@
+From ebc2540f8d0aba2e5ec2f0d5f5889100475ad93e Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Mon, 1 Jan 2024 12:45:41 -0400
+Subject: [PATCH] fix aspnetcore portable build
+
+https://github.com/dotnet/installer/pull/15163#issuecomment-1873396096
+---
+ repo-projects/aspnetcore.proj | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/repo-projects/aspnetcore.proj b/repo-projects/aspnetcore.proj
+index e3f4b1664a..947532add9 100644
+--- a/repo-projects/aspnetcore.proj
++++ b/repo-projects/aspnetcore.proj
+@@ -8,6 +8,7 @@
+     <OverrideTargetRid Condition="'$(TargetOS)' == 'Windows_NT'">win-$(Platform)</OverrideTargetRid>
+     <_portableRidOverridden Condition="'$(TargetRid)' != '$(OverrideTargetRid)'">true</_portableRidOverridden>
+     <_portableRidOverridden Condition="'$(TargetRid)' == '$(OverrideTargetRid)'">false</_portableRidOverridden>
++    <_portableRidOverridden Condition="'$(PortableBuild)' != ''">$(PortableBuild)</_portableRidOverridden>
+ 
+     <!-- StandardSourceBuildArgs include -publish which is not supported by the aspnetcore build script. -->
+     <BuildCommandArgs>$(StandardSourceBuildArgs.Replace('--publish', ''))</BuildCommandArgs>
+-- 
+2.40.1
+

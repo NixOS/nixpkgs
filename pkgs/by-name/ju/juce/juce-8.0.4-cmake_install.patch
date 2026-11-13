@@ -1,0 +1,51 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 019aa86c51..ceb7b2a8e5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -137,10 +137,10 @@
+     VERSION ${JUCE_VERSION}
+     COMPATIBILITY ExactVersion)
+ 
+-set(JUCE_INSTALL_DESTINATION "lib/cmake/JUCE-${JUCE_VERSION}" CACHE STRING
++set(JUCE_INSTALL_DESTINATION "lib/cmake/juce" CACHE STRING
+     "The location, relative to the install prefix, where the JUCE config file will be installed")
+ 
+-set(JUCE_MODULE_PATH "include/JUCE-${JUCE_VERSION}/modules")
++set(JUCE_MODULE_PATH "share/juce/modules")
+ set(UTILS_INSTALL_DIR "${JUCE_INSTALL_DESTINATION}")
+ set(JUCEAIDE_PATH "${JUCE_TOOL_INSTALL_DIR}/${JUCE_JUCEAIDE_NAME}")
+ configure_package_config_file("${JUCE_CMAKE_UTILS_DIR}/JUCEConfig.cmake.in"
+@@ -148,7 +148,6 @@
+     PATH_VARS UTILS_INSTALL_DIR JUCEAIDE_PATH JUCE_MODULE_PATH
+     INSTALL_DESTINATION "${JUCE_INSTALL_DESTINATION}")
+ 
+-set(JUCE_MODULE_PATH "${JUCE_MODULES_DIR}")
+ set(UTILS_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extras/Build/CMake")
+ get_target_property(JUCEAIDE_PATH juceaide IMPORTED_LOCATION)
+ configure_package_config_file("${JUCE_CMAKE_UTILS_DIR}/JUCEConfig.cmake.in"
+diff --git a/extras/Build/juceaide/CMakeLists.txt b/extras/Build/juceaide/CMakeLists.txt
+index 7ef20eddf1..3dfb1f1802 100644
+--- a/extras/Build/juceaide/CMakeLists.txt
++++ b/extras/Build/juceaide/CMakeLists.txt
+@@ -153,7 +153,7 @@
+ 
+     add_executable(juce::juceaide ALIAS juceaide)
+ 
+-    set(JUCE_TOOL_INSTALL_DIR "bin/JUCE-${JUCE_VERSION}" CACHE STRING
++    set(JUCE_TOOL_INSTALL_DIR "bin" CACHE STRING
+         "The location, relative to the install prefix, where juceaide will be installed")
+ 
+     install(PROGRAMS "${imported_location}" DESTINATION "${JUCE_TOOL_INSTALL_DIR}")
+diff --git a/modules/CMakeLists.txt b/modules/CMakeLists.txt
+index 27c987abe2..5b8de75bde 100644
+--- a/modules/CMakeLists.txt
++++ b/modules/CMakeLists.txt
+@@ -31,7 +31,7 @@
+ # ==============================================================================
+ 
+ juce_add_modules(
+-    INSTALL_PATH "include/JUCE-${JUCE_VERSION}/modules"
++    INSTALL_PATH "share/juce/modules"
+     ALIAS_NAMESPACE juce
+     juce_analytics
+     juce_animation

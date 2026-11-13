@@ -1,0 +1,19 @@
+diff --git a/src/cli/tui/screens/setup.rs b/src/cli/tui/screens/setup.rs
+index a432cd1..3c2be77 100644
+--- a/src/cli/tui/screens/setup.rs
++++ b/src/cli/tui/screens/setup.rs
+@@ -1678,6 +1678,14 @@ impl Setup {
+                 text: "the rule is in: log out and back in for the input group".into(),
+                 fix: None,
+             },
++            Uinput::Denied | Uinput::Other(_) if std::path::Path::new("/etc/NIXOS").exists() => CheckRow {
++                label: "uinput",
++                mark: Mark::ToDo,
++                text: "Enable hardware.uinput.enable and add your user to the uinput group \
++                       in your NixOS configuration. Rebuild, then log out and back in."
++                    .into(),
++                fix: None,
++            },
+             Uinput::Denied => CheckRow {
+                 label: "uinput",
+                 mark: Mark::ToDo,

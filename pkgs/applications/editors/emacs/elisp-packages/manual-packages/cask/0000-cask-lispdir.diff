@@ -1,0 +1,43 @@
+diff -Naur cask-source-0.9.0-old/bin/cask cask-source-0.9.0-new/bin/cask
+--- cask-source-0.9.0-old/bin/cask	1969-12-31 21:00:01.000000000 -0300
++++ cask-source-0.9.0-new/bin/cask	2024-09-02 12:46:48.316364621 -0300
+@@ -21,8 +21,6 @@
+ set -euo pipefail
+ CASK=$0
+ EMACS=${CASK_EMACS:-${EMACS:-emacs}}
+-READLINK=${READLINK:-readlink}
+-GREADLINK=${GREADLINK:-greadlink}
+ 
+ if [ "$#" -eq "0" ] ; then
+ 	subcommand=install
+@@ -31,21 +29,10 @@
+ 	shift
+ fi
+ 
+-set +eu
+-SRCDIR__=$($READLINK -f "$CASK" 2>/dev/null)
+-if [ -z "$SRCDIR__" ] ; then
+-    SRCDIR__=$($GREADLINK -f "$CASK" 2>/dev/null)
+-fi
+-set -eu
+-if [ -z "$SRCDIR__" ]; then
+-    SRCDIR__=$(python -c "import os, sys; print(os.path.realpath(sys.argv[1]))" "$CASK")
+-fi
+-SRCDIR_=$(dirname "$SRCDIR__")
+-SRCDIR=$(dirname "$SRCDIR_")
+ case $subcommand in
+ 	emacs)
+ 		EMACS="$EMACS" \
+-                "$EMACS" -Q -L "$SRCDIR" -l "$SRCDIR/cask" \
++                "$EMACS" -Q -L "@lispdir@" -l "@lispdir@/cask" \
+                 --eval "(cask--initialize (expand-file-name default-directory))" \
+                 "$@"
+ 		;;
+@@ -53,6 +40,6 @@
+ 		EMACSLOADPATH="$($CASK load-path)" PATH="$($CASK path)" EMACS="$EMACS" "$@"
+ 		;;
+ 	*)
+-		"$EMACS" -Q --script "$SRCDIR/cask-cli.el" -- $subcommand "$@"
++		"$EMACS" -Q --script "@lispdir@/cask-cli.el" -- $subcommand "$@"
+ 		;;
+ esac

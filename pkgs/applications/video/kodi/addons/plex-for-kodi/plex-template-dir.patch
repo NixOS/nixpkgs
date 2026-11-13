@@ -1,0 +1,79 @@
+diff --git a/lib/_included_packages/plexnet/gdm.py b/lib/_included_packages/plexnet/gdm.py
+index ccc540ae..3dce02a3 100644
+--- a/lib/_included_packages/plexnet/gdm.py
++++ b/lib/_included_packages/plexnet/gdm.py
+@@ -28,7 +28,7 @@ class GDMDiscovery(object):
+         from . import plexapp
+         return util.INTERFACE.getPreference("gdm_discovery", True) and self.thread and self.thread.is_alive()
+
+-    '''
++    r'''
+     def discover(self):
+         # Only allow discovery if enabled and not currently running
+         self._close = False
+diff --git a/lib/templating/core.py b/lib/templating/core.py
+index 30a53392..e0249e1d 100644
+--- a/lib/templating/core.py
++++ b/lib/templating/core.py
+@@ -7,6 +7,7 @@ from kodi_six import xbmcvfs, xbmc
+ from ibis.context import ContextDict
+ from lib.logging import log as LOG, log_error as ERROR
+ from .util import deep_update
++from ..util import PROFILE
+ from lib.os_utils import fast_iglob
+ from .filters import *
+
+@@ -59,11 +60,22 @@ class TemplateEngine(object):
+     TEMPLATES = None
+
+     def init(self, target_dir, template_dir, custom_template_dir):
+-        self.target_dir = target_dir
++        # Redirect template write target_dir to writable addon_data
++        writable_base = os.path.join(PROFILE, "resources/skins/Main/1080i")
++        os.makedirs(writable_base, exist_ok=True)
++        # Link media dir into addon dir, so templates can access it via relative path
++        link_path = os.path.join(PROFILE, "resources/skins/Main/media")
++        if not os.path.exists(link_path):
++            os.symlink(
++                os.path.join(os.path.dirname(target_dir), "media"),
++                link_path,
++                True
++            )
++        self.target_dir = writable_base
+         self.template_dir = template_dir
+         self.custom_template_dir = custom_template_dir
+         self.get_available_templates()
+-        paths = [custom_template_dir, template_dir]
++        paths = [custom_template_dir, self.template_dir]
+
+         LOG("Looking for templates in: {}", paths)
+         self.prepare_loader(paths)
+diff --git a/lib/windows/kodigui.py b/lib/windows/kodigui.py
+index be7ef154..e8cc09b9 100644
+--- a/lib/windows/kodigui.py
++++ b/lib/windows/kodigui.py
+@@ -4,6 +4,7 @@ from __future__ import absolute_import
+ import threading
+ import time
+ import traceback
++import os
+
+ from kodi_six import xbmc
+ from kodi_six import xbmcgui
+@@ -41,13 +42,14 @@ class BaseFunctions(object):
+
+     @classmethod
+     def open(cls, **kwargs):
+-        window = cls(cls.xmlFile, cls.path, cls.theme, cls.res, **kwargs)
++        window = cls(cls.xmlFile, util.PROFILE, cls.theme, cls.res, **kwargs)
+         window.modal()
+         return window
+
+     @classmethod
+     def create(cls, show=True, **kwargs):
+-        window = cls(cls.xmlFile, cls.path, cls.theme, cls.res, **kwargs)
++        window = cls(cls.xmlFile, util.PROFILE, cls.theme, cls.res, **kwargs)
++
+         if show:
+             window.show()
+             if xbmcgui.getCurrentWindowId() < 13000:

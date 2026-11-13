@@ -1,0 +1,131 @@
+From 38ba4e559a38279417719440174df6ca2bc203c5 Mon Sep 17 00:00:00 2001
+From: Priyanshu Tripathi <priyanshu.tripathi@deshaw.com>
+Date: Fri, 16 Jan 2026 06:50:43 -0500
+Subject: [PATCH] fix: migrate away from deprecated `HTTPResponse.getheader()`
+ method
+
+With urllib3 v2.6.0, `HTTPResponse.getheader()` was removed with the alternative
+being `HTTPResponse.headers`, a dictionary that can be queried with `headers.get()`
+
+See: https://github.com/urllib3/urllib3/pull/3622
+---
+ src/etcd/__init__.py                    | 2 +-
+ src/etcd/client.py                      | 2 +-
+ src/etcd/tests/unit/__init__.py         | 2 +-
+ src/etcd/tests/unit/test_client.py      | 6 +++---
+ src/etcd/tests/unit/test_old_request.py | 6 ------
+ src/etcd/tests/unit/test_request.py     | 4 ++--
+ 6 files changed, 8 insertions(+), 14 deletions(-)
+
+diff --git a/src/etcd/__init__.py b/src/etcd/__init__.py
+index d716e9b..e85918e 100644
+--- a/src/etcd/__init__.py
++++ b/src/etcd/__init__.py
+@@ -61,7 +61,7 @@ class EtcdResult(object):
+                 self.dir = True
+ 
+     def parse_headers(self, response):
+-        headers = response.getheaders()
++        headers = response.headers
+         self.etcd_index = int(headers.get("x-etcd-index", 1))
+         self.raft_index = int(headers.get("x-raft-index", 1))
+ 
+diff --git a/src/etcd/client.py b/src/etcd/client.py
+index a011757..5acea07 100644
+--- a/src/etcd/client.py
++++ b/src/etcd/client.py
+@@ -975,7 +975,7 @@ class Client(object):
+         )
+ 
+     def _check_cluster_id(self, response, path):
+-        cluster_id = response.getheader("x-etcd-cluster-id")
++        cluster_id = response.headers.get("x-etcd-cluster-id")
+         if not cluster_id:
+             if self.version_prefix in path:
+                 _log.warning("etcd response did not contain a cluster ID")
+diff --git a/src/etcd/tests/unit/__init__.py b/src/etcd/tests/unit/__init__.py
+index a1b95c4..43bc9b5 100644
+--- a/src/etcd/tests/unit/__init__.py
++++ b/src/etcd/tests/unit/__init__.py
+@@ -22,7 +22,7 @@ class TestClientApiBase(unittest.TestCase):
+         r = mock.create_autospec(urllib3.response.HTTPResponse)()
+         r.status = s
+         r.data = data
+-        r.getheader.return_value = cluster_id or "abcd1234"
++        r.headers = {"x-etcd-cluster-id": cluster_id or "abcd1234"}
+         return r
+ 
+     def _mock_api(self, status, d, cluster_id=None):
+diff --git a/src/etcd/tests/unit/test_client.py b/src/etcd/tests/unit/test_client.py
+index 37cdee1..64b2650 100644
+--- a/src/etcd/tests/unit/test_client.py
++++ b/src/etcd/tests/unit/test_client.py
+@@ -121,7 +121,7 @@ class TestClient(TestClientApiBase):
+         """Verify _set_version_info makes the proper call to the server"""
+         data = {"etcdserver": "2.2.3", "etcdcluster": "2.3.0"}
+         self._mock_api(200, data)
+-        self.client.api_execute.return_value.getheader.return_value = None
++        self.client.api_execute.return_value.headers = {}
+         # Create the client and make the call.
+         self.client._set_version_info()
+ 
+@@ -135,7 +135,7 @@ class TestClient(TestClientApiBase):
+         """Ensure the version property is set on first access."""
+         data = {"etcdserver": "2.2.3", "etcdcluster": "2.3.0"}
+         self._mock_api(200, data)
+-        self.client.api_execute.return_value.getheader.return_value = None
++        self.client.api_execute.return_value.headers = {}
+ 
+         # Verify the version property is set
+         self.assertEqual("2.2.3", self.client.version)
+@@ -144,7 +144,7 @@ class TestClient(TestClientApiBase):
+         """Ensure the cluster version property is set on first access."""
+         data = {"etcdserver": "2.2.3", "etcdcluster": "2.3.0"}
+         self._mock_api(200, data)
+-        self.client.api_execute.return_value.getheader.return_value = None
++        self.client.api_execute.return_value.headers = {}
+         # Verify the cluster_version property is set
+         self.assertEqual("2.3.0", self.client.cluster_version)
+ 
+diff --git a/src/etcd/tests/unit/test_old_request.py b/src/etcd/tests/unit/test_old_request.py
+index b660c24..f2a0410 100644
+--- a/src/etcd/tests/unit/test_old_request.py
++++ b/src/etcd/tests/unit/test_old_request.py
+@@ -17,12 +17,6 @@ class FakeHTTPResponse(object):
+             "x-etcd-cluster-id": "abdef12345",
+         }
+ 
+-    def getheaders(self):
+-        return self.headers
+-
+-    def getheader(self, header):
+-        return self.headers[header]
+-
+ 
+ class TestClientRequest(unittest.TestCase):
+     def test_set(self):
+diff --git a/src/etcd/tests/unit/test_request.py b/src/etcd/tests/unit/test_request.py
+index 7685dca..1cb7fd1 100644
+--- a/src/etcd/tests/unit/test_request.py
++++ b/src/etcd/tests/unit/test_request.py
+@@ -381,7 +381,7 @@ class TestClientRequest(TestClientApiInterface):
+ 
+     def _mock_api(self, status, d, cluster_id=None):
+         resp = self._prepare_response(status, d)
+-        resp.getheader.return_value = cluster_id or "abcdef1234"
++        resp.headers = {"x-etcd-cluster-id": cluster_id or "abcdef1234"}
+         self.client.http.request_encode_body = mock.MagicMock(return_value=resp)
+         self.client.http.request = mock.MagicMock(return_value=resp)
+ 
+@@ -389,7 +389,7 @@ class TestClientRequest(TestClientApiInterface):
+         resp = self._prepare_response(
+             500, {"errorCode": error_code, "message": msg, "cause": cause}
+         )
+-        resp.getheader.return_value = cluster_id or "abcdef1234"
++        resp.headers = {"x-etcd-cluster-id": cluster_id or "abcdef1234"}
+         self.client.http.request_encode_body = mock.create_autospec(
+             self.client.http.request_encode_body, return_value=resp
+         )
+-- 
+2.51.0
+

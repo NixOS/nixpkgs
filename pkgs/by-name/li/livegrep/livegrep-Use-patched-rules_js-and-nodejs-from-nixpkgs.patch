@@ -1,0 +1,53 @@
+Subject: [PATCH] Use patched rules_js and Nix-provided nodejs
+
+By default aspect_rules_js brings a precompiled nodejs which uses a 
+non-nixpkgs dynamic linker. Instead use nodejs from nixpkgs. This
+requires a patched rules_js as specifying npm_path fails otherwise
+(see the rules_js patch).
+
+We also require a patched rules_js because it otherwise generates and
+immediately executes scripts with `#!/usr/bin/env bash`.
+
+---
+ MODULE.bazel                   |  4 ++++
+ nixpkgs-toolchains/BUILD.bazel | 13 +++++++++++++
+ 2 files changed, 17 insertions(+)
+ create mode 100644 nixpkgs-toolchains/BUILD.bazel
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 4df2a500..b7525996 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -35,6 +35,10 @@ use_repo(
+ )
+ 
+ bazel_dep(name = "aspect_rules_js", version = "2.4.0")
++local_path_override(module_name = "aspect_rules_js", path = "@rules_js@")
++
++bazel_dep(name = "rules_nodejs", version = "6.3.0")
++register_toolchains("//nixpkgs-toolchains:nixpkgs_nodejs_toolchain")
+ 
+ npm = use_extension(
+     "@aspect_rules_js//npm:extensions.bzl",
+diff --git a/nixpkgs-toolchains/BUILD.bazel b/nixpkgs-toolchains/BUILD.bazel
+new file mode 100644
+index 00000000..3b8a7940
+--- /dev/null
++++ b/nixpkgs-toolchains/BUILD.bazel
+@@ -0,0 +1,13 @@
++load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
++
++nodejs_toolchain(
++    name = "node_toolchain",
++    node_path = "@nodejs@/bin/node",
++    npm_path = "@nodejs@/bin/npm",
++)
++
++toolchain(
++    name = "nixpkgs_nodejs_toolchain",
++    toolchain = ":node_toolchain",
++    toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
++)
+-- 
+2.53.0
+

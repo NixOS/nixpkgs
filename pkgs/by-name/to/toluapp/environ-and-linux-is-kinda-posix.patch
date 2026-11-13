@@ -1,0 +1,36 @@
+As it turns out, scons doesn't inherit environment variables by
+default. Debugging this was very pleasant. -- oxij
+
+diff --git a/SConstruct b/SConstruct
+index 5c1e774..66aa4c8 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -5,13 +5,11 @@ tools = ['default']
+ if os.name == 'nt':
+ 	tools = ['mingw']
+ 
+-env = Environment(tools = tools)
++env = Environment(tools = tools, ENV = os.environ)
+ 
+ options_file = None
+-if sys.platform == 'linux2':
+-	options_file = "linux"
+ 
+-elif 'msvc' in env['TOOLS']:
++if 'msvc' in env['TOOLS']:
+ 	options_file = "msvc"
+ else:
+ 	options_file = "posix"
+diff --git a/config_posix.py b/config_posix.py
+index 2bb696c..eb4eb9b 100644
+--- a/config_posix.py
++++ b/config_posix.py
+@@ -16,7 +16,7 @@ CCFLAGS = ['-O2', '-ansi', '-Wall']
+ prefix = '/usr/local'
+ 
+ # libraries
+-LIBS = ['lua', 'lualib', 'm']
++LIBS = ['lua', 'liblua', 'm']
+ 
+ 
+ 

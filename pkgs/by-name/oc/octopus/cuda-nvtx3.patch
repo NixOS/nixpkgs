@@ -1,0 +1,36 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -177,7 +177,13 @@
+ if (OCTOPUS_CUDA)
+ 	find_package(CUDAToolkit)
+ 	set(HAVE_CUDA 1)
+-	set(HAVE_NVTX 1)
++	# NVTX profiling relies on the legacy nvToolsExt library, which NVIDIA dropped
++	# from the redistributable cuda_nvtx package in CUDA 12.9. Enable profiling
++	# only when the legacy target is available (CUDA < 12.9); on 12.9+ nvtx_low.cc
++	# falls back to no-op markers (and links the header-only nvtx3 target).
++	if (TARGET CUDA::nvToolsExt)
++		set(HAVE_NVTX 1)
++	endif ()
+ 	set_package_properties(CUDAToolkit PROPERTIES TYPE REQUIRED)
+ 	if (OCTOPUS_MPI)
+ 		include(cmake/GPUawareMPI.cmake)
+--- a/src/basic/CMakeLists.txt
++++ b/src/basic/CMakeLists.txt
+@@ -90,8 +90,14 @@
+ 		CUDA::cuda_driver
+ 		CUDA::cublas
+ 		CUDA::cufft
+-		CUDA::nvrtc
+-		CUDA::nvToolsExt)
++		CUDA::nvrtc)
++	# Legacy nvToolsExt (shared lib) was dropped from cuda_nvtx in CUDA 12.9.
++	# Link it when present; otherwise fall back to the header-only nvtx3.
++	if (TARGET CUDA::nvToolsExt)
++		target_link_libraries(Octopus_lib PRIVATE CUDA::nvToolsExt)
++	elseif (TARGET CUDA::nvtx3)
++		target_link_libraries(Octopus_lib PRIVATE CUDA::nvtx3)
++	endif ()
+ endif ()
+ 
+ if (OCTOPUS_HIP)

@@ -1,0 +1,24 @@
+diff --color -Naur a/html/CharsetConverter.cc b/html/CharsetConverter.cc
+--- a/html/CharsetConverter.cc	2018-12-29 03:13:56.000000000 +0000
++++ b/html/CharsetConverter.cc	2021-05-31 23:03:10.705334580 +0100
+@@ -7,7 +7,7 @@
+ using namespace std;
+ using namespace htmlcxx;
+ 
+-CharsetConverter::CharsetConverter(const string &from, const string &to) throw (Exception)
++CharsetConverter::CharsetConverter(const string &from, const string &to)
+ {
+ 	mIconvDescriptor = iconv_open(to.c_str(), from.c_str());
+ 	if (mIconvDescriptor == (iconv_t)(-1))
+diff --color -Naur a/html/CharsetConverter.h b/html/CharsetConverter.h
+--- a/html/CharsetConverter.h	2018-12-29 03:13:56.000000000 +0000
++++ b/html/CharsetConverter.h	2021-05-31 23:03:19.042574598 +0100
+@@ -17,7 +17,7 @@
+ 						: std::runtime_error(arg) {}
+ 			};
+ 			
+-			CharsetConverter(const std::string &from, const std::string &to) throw (Exception);
++			CharsetConverter(const std::string &from, const std::string &to);
+ 			~CharsetConverter();
+ 			
+ 			std::string convert(const std::string &input);

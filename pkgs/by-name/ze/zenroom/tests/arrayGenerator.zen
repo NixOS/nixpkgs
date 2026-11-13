@@ -1,0 +1,3 @@
+Given nothing
+When I create the random array with '16' elements each of '32' bits
+Then print all data
