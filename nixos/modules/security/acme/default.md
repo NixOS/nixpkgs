@@ -347,35 +347,24 @@ can be applied to any service.
 }
 ```
 
-## Regenerating certificates {#module-security-acme-regenerate}
+## Regenerating accounts and certificates {#module-security-acme-regenerate}
 
-Should you need to regenerate a particular certificate in a hurry, such
-as when a vulnerability is found in Let's Encrypt, there is now a convenient
-mechanism for doing so. Running
-`systemctl clean --what=state acme-example.com.service`
-will remove all certificate files and the account data for the given domain,
-allowing you to then `systemctl start acme-example.com.service`
-to generate fresh ones.
+Certificate and account state can be wiped on demand, which can remediate
+many types of renewal errors (e.g. JWS verification error) or be used
+to force immediate renewals.
 
-## Fixing JWS Verification error {#module-security-acme-fix-jws}
+**Note**: This will remove account data for all certificate configurations
+using the same account settings, as it is shared amongst them.
 
-It is possible that your account credentials file may become corrupt and need
-to be regenerated. In this scenario lego will produce the error `JWS verification error`.
-The solution is to simply delete the associated accounts file and
-re-run the affected service(s).
-
-```shell
-# Find the accounts folder for the certificate
-systemctl cat acme-example.com.service | grep -Po 'accounts/[^:]*'
-export accountdir="$(!!)"
-# Move this folder to some place else
-mv /var/lib/acme/.lego/$accountdir{,.bak}
-# Recreate the folder using systemd-tmpfiles
-systemd-tmpfiles --create
-# Get a new account and reissue certificates
-# Note: Do this for all certs that share the same account email address
-systemctl start acme-example.com.service
+```sh
+# The service must be stopped to be cleaned.
+systemctl stop acme-order-renew-example.com.service
+systemctl clean --what=state acme-order-renew-example.com.service
+systemctl start acme-order-renew-example.com.service
 ```
+
+Upon start, the service will fetch fresh account data and certificates for
+the given domain.
 
 ## Ensuring dependencies for services that need to be reloaded when a certificate changes {#module-security-acme-reload-dependencies}
 
