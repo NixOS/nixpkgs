@@ -7,7 +7,7 @@
 buildNpmPackage (finalAttrs: {
   pname = "${llama-swap.pname}-ui";
   inherit (llama-swap) version src;
-  npmDepsHash = "sha256-lmhRJ8275PIQ+7vHdr9aZ31lYeXUkXrWnlvuwOadjRQ=";
+  npmDepsHash = "sha256-vUYkqIfHE7nbpbDVMk8tCOQOP5c9rdr8dGBBBBKj0rc=";
 
   postPatch = ''
     substituteInPlace vite.config.ts \
