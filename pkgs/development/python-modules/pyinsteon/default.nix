@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.7.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyinsteon";
     repo = "pyinsteon";
     tag = version;
-    hash = "sha256-jzFZpoKd4QAnLZ2p/oy0qZvQtI/2D+rkfoVOWGDo0Fg=";
+    hash = "sha256-76FpayQryjN3vgbmuh87srAgbK3g+ltvP+NbnSNtcb4=";
   };
 
   build-system = [ setuptools ];
