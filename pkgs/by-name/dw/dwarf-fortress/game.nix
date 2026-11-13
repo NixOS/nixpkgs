@@ -31,6 +31,7 @@ let
     optionals
     optionalString
     splitVersion
+    versionAtLeast
     toInt
     ;
 
@@ -136,12 +137,11 @@ stdenv.mkDerivation {
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
     echo "Original MD5: $(<$out/hash.md5.orig)" >&2
   ''
+  # @matthewbauer: My custom unfucked dwarfort.exe for macOS. Can't use
+  # absolute paths because original doesn't have enough
+  # header space. Someone plz break into Tarn's house & put
+  # -headerpad_max_install_names into his LDFLAGS.
   + optionalString stdenv.hostPlatform.isDarwin ''
-    # My custom unfucked dwarfort.exe for macOS. Can't use
-    # absolute paths because original doesn't have enough
-    # header space. Someone plz break into Tarn's house & put
-    # -headerpad_max_install_names into his LDFLAGS.
-
     ln -s ${getLib ncurses}/lib/libncurses.dylib $out/libs
     ln -s ${getLib gcc.cc}/lib/libstdc++.6.dylib $out/libs
     ln -s ${getLib gcc.cc}/lib/libgcc_s.1.dylib $out/libs
@@ -153,6 +153,10 @@ stdenv.mkDerivation {
       -change /usr/local/lib/x86_64/libstdc++.6.dylib \
               @executable_path/libs/libstdc++.6.dylib \
       $exe
+  ''
+  # fmod has the wrong version in 53.17 so autoPatchelf fails
+  + optionalString (versionAtLeast dfVersion "53.17" && stdenv.hostPlatform.isLinux) ''
+    patchelf --replace-needed libfmod.so.13 libfmod.so.14 $out/libfmod_plugin.so
   ''
   + ''
     runHook postInstall
