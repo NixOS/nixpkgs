@@ -3104,6 +3104,14 @@
     github = "axodentally";
     githubId = 24368475;
   };
+  axunes = {
+    name = "axunes";
+    email = "axunes@axunes.net";
+    matrix = "@axunes:matrix.org";
+    github = "axunes";
+    githubId = 55267708;
+    keys = [ { fingerprint = "024A A47E 55D7 FCF6 38BF  2189 46B4 2EE8 C118 DBE9"; } ];
+  };
   ayazhafiz = {
     email = "ayaz.hafiz.1@gmail.com";
     github = "hafiz";
@@ -14980,6 +14988,14 @@
     email = "samuelyongw@gmail.com";
     github = "KangaZero";
     githubId = 107836643;
+  };
+  kanru = {
+    name = "Kan-Ru Chen";
+    github = "kanru";
+    githubId = 17571;
+    email = "kanru@kanru.info";
+    matrix = "@kanru:wara.tw";
+    keys = [ { fingerprint = "374F F2AD 0A12 935F D0B0  C84F 1B13 2E01 CEC6 AD46"; } ];
   };
   kaptcha0 = {
     name = "J'C Kabunga";
@@ -29403,6 +29419,12 @@
     github = "Theaninova";
     githubId = 19289296;
     keys = [ { fingerprint = "6C9E EFC5 1AE0 0131 78DE  B9C8 68FF FB1E C187 88CA"; } ];
+  };
+  thebigjc = {
+    email = "thebigjc@gmail.com";
+    github = "thebigjc";
+    githubId = 311085;
+    name = "Jordan Christensen";
   };
   TheBrainScrambler = {
     email = "esthromeris@riseup.net";

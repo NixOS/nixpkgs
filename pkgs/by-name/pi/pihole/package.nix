@@ -18,6 +18,7 @@
   killall,
   libidn2,
   locale,
+  logrotate,
   ncurses,
   netcat,
   net-tools,
@@ -32,13 +33,13 @@
 
 (resholve.mkDerivation (finalAttrs: {
   pname = "pihole";
-  version = "6.4.2";
+  version = "6.6";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "pi-hole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A34LLXI+hmDNXN4MoLLlC9tW3xx+v/1La/qzFSDW0xQ=";
+    hash = "sha256-qc/RoC1X/ELvZk6sEEY8Hncl2RstzpniZb10Uyzm9Gw=";
   };
 
   patches = [
@@ -115,9 +116,10 @@
         killall
         libidn2
         locale
+        logrotate
         ncurses
-        netcat
         net-tools
+        netcat
         pihole-ftl
         procps
         sqlite
@@ -142,10 +144,10 @@
           # Conditionally used in Docker builds
           "service"
           "lighttpd"
-          # Used in piholeLogFlush.sh
-          "/usr/sbin/logrotate"
           # Used by teleporter in webpage.sh
           "php"
+          # change user in install command
+          "setpriv"
         ];
       };
       fix = {
@@ -185,6 +187,7 @@
         "$PIHOLE_SETUP_VARS_FILE" = true;
         "$PKG_INSTALL" = true; # System package manager, patched out
         "$PKG_MANAGER" = true; # System package manager, patched out
+        "$SUDO_COMMAND" = true;
         "$cmd" = true; # ping or ping6
         "$program_name" = true; # alias for $1
         "$svc" = true; # dynamic restart command
@@ -225,6 +228,7 @@
       execer = [
         "cannot:${pihole-ftl}/bin/pihole-FTL"
         "cannot:${iproute2}/bin/ip"
+        "cannot:${logrotate}/bin/logrotate"
         "cannot:${systemd}/bin/systemctl"
         "cannot:${glibc.bin}/bin/ldd"
         "cannot:${out}/bin/pihole"
@@ -247,9 +251,6 @@
   };
 })).overrideAttrs
   (old: {
-    # fixes nix-update trying to update resholve instead of this package
-    inherit (old) version src;
-
     # Resholve can't fix the hardcoded absolute paths, so substitute them before resholving
     preFixup = ''
       scriptsDir=$out/share/pihole
@@ -259,4 +260,8 @@
         --replace-quiet /opt/pihole $scriptsDir/advanced/Scripts
     ''
     + old.preFixup;
+
+    passthru = {
+      src = old.passthru.originalSrc;
+    };
   })

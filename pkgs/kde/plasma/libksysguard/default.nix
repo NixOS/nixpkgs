@@ -1,7 +1,5 @@
 {
   mkKdeDerivation,
-  qtwebchannel,
-  qtwebengine,
   qttools,
   kitemmodels,
   kquickcharts,
@@ -17,8 +15,6 @@ mkKdeDerivation {
   ];
 
   extraBuildInputs = [
-    qtwebchannel
-    qtwebengine
     qttools
     libpcap
     libnl
