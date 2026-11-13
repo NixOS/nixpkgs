@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   coreutils,
   python313,
   src,
@@ -25,9 +25,11 @@ let
     '';
   };
 in
-buildGoModule {
+buildGo127Module {
   inherit src version;
   pname = "photoprism-backend";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -49,14 +51,14 @@ buildGoModule {
     substituteInPlace internal/commands/passwd.go --replace-fail '/bin/stty' "${coreutils}/bin/stty"
   '';
 
-  vendorHash = "sha256-CJXLK4AYslnlGhbqQkAz2di299xBpkB9L5GwJ0AbVxs=";
+  vendorHash = "sha256-w7QJKGyxVQZZ3xlz9yqS495oYIokR9qiUCgZu/VxXl0=";
 
   subPackages = [ "cmd/photoprism" ];
 
-  # https://github.com/mattn/go-sqlite3/issues/822
-  CGO_CFLAGS = "-Wno-return-local-addr -I${libtensorflow}/include";
-
-  CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
+  env = {
+    CGO_CFLAGS = "-I${libtensorflow}/include";
+    CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
+  };
 
   passthru.updateScript = nix-update-script { };
 
@@ -64,6 +66,7 @@ buildGoModule {
     homepage = "https://photoprism.app";
     description = "Photoprism's backend";
     license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       ipetkov
     ];
