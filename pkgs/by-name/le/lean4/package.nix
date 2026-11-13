@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-1tkhKkYaGGIV4CHo+rMmXL1lIyFR0Zgy/94aMGrgEqU=";
+    rev = "8dba28a9e27426b36f4bccaa72584b2dc2e770dc";
+    hash = "sha256-AJHLPcoK3LtYTwI/zNN77YMqPO3Ij6h4a5/oDMjG9VQ=";
   };
 
   postPatch = ''
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
-    changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.tag}/RELEASES.md";
+    # changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.tag}/RELEASES.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
