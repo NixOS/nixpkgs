@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpwgraph";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "rncbc";
     repo = "qpwgraph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KZXKGujfn6IZff28eMmM+UwH1+T3/mEOiysecwWOO1o=";
+    hash = "sha256-0RqzF67YEhiP94Y1cC7ob1Vv/h3SPFcEqdJh4vmDy0A=";
   };
 
   nativeBuildInputs = [
