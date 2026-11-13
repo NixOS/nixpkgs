@@ -868,13 +868,13 @@
     "vendorHash": "sha256-8xt+vkXl8NSb5fLU9O/Z64azC0MRuo3Zof+zDyl2wuE="
   },
   "loafoe_ssh": {
-    "hash": "sha256-1UN5QJyjCuxs2vQYlSuz2jsu/HgGTxOoWWRcv4qcwow=",
+    "hash": "sha256-aqJ0PoWNd5ncdMKEFgDqow2UlND+BI9m4Pverm8IUyM=",
     "homepage": "https://registry.terraform.io/providers/loafoe/ssh",
     "owner": "loafoe",
     "repo": "terraform-provider-ssh",
-    "rev": "v2.7.0",
+    "rev": "v2.9.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-vcuUt3WIo1TnLApch410JgtyCzliQRYMQQQ2Z9diDZ8="
+    "vendorHash": "sha256-utAxm/WdJ4Gi6kJ0ocsgSAnqdhG9S5mOnkF0NQUdSO4="
   },
   "lxc_incus": {
     "hash": "sha256-q82ntQble46RnPTz1vQvPpK7krb846gXRU1nLBkeyH4=",
