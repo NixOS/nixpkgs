@@ -17,11 +17,17 @@
   xxhash,
   zlib,
   zstd,
+  versionCheckHook,
+  nix-update-script,
+  fuse3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "partclone";
   version = "0.3.53";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
@@ -49,23 +55,25 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    e2fsprogs
-    liburcu
-    libuuid
-    stdenv.cc.libc
-    nilfs-utils
-    ntfs3g
     openssl
     xxhash
     zlib
     zstd
-    (lib.getOutput "static" stdenv.cc.libc)
+    liburcu
+    libuuid
+
+    fuse3
+    e2fsprogs
+    ntfs3g
+    nilfs-utils
   ];
 
   configureFlags = [
+    "--enable-fuse"
     "--enable-xfs"
     "--enable-extfs"
     "--enable-hfsp"
+    "--enable-apfs"
     "--enable-fat"
     "--enable-exfat"
     "--enable-ntfs"
@@ -76,6 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  # partclone has many executables, however testing one should be enough
+  versionCheckProgram = "${placeholder "out"}/bin/partclone.chkimg";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utilities to save and restore used blocks on a partition";
