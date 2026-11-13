@@ -433,6 +433,9 @@ class BaseMachine(ABC):
     def is_up(self) -> bool: ...
 
     @abstractmethod
+    def requires_sync(self) -> bool: ...
+
+    @abstractmethod
     def start(self) -> None:
         """
         Start the machine. This method is asynchronous --- it does
@@ -1168,6 +1171,11 @@ class QemuMachine(BaseMachine):
 
     def is_up(self) -> bool:
         return self.booted and self.connected
+
+    def requires_sync(self) -> bool:
+        # The guest has its own page cache. Without a sync, its dirty pages do
+        # not get to the disk image.
+        return True
 
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
@@ -1935,6 +1943,12 @@ class NspawnMachine(BaseMachine):
 
     def is_up(self) -> bool:
         return self.process is not None
+
+    def requires_sync(self) -> bool:
+        # The container uses the page cache of the host, thus the host sees its
+        # writes without a sync. sync() is not namespaced: it waits for the
+        # writeback of all disks of the host.
+        return False
 
     @staticmethod
     def _parse_sd_notify(data: bytes) -> tuple[bool, int | None]:
