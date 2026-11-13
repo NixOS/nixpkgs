@@ -69,10 +69,6 @@ buildPythonPackage (finalAttrs: {
     "sensors_temperatures"
     "user"
     "test_disk_partitions" # problematic on Hydra's Linux builders, apparently
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # Asserts that glibc holds live mmap'ed chunks, which depends on the allocation pattern.
-    # Fails on aarch64-linux: assert 0 > 0 (mmap_used)
     "test_heap_info"
   ];
 
