@@ -25,7 +25,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-rf";
   version = "1.9.0";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iOKTQOOJTsj6YIQaJVWFcp9HdUEj43aytpo7VzItxr8=";
   };
 
@@ -93,8 +93,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
-    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lugarun ];
   };
-}
+})
