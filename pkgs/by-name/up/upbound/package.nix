@@ -13,7 +13,6 @@ let
       lib.importJSON ./sources-main.json
     else
       lib.importJSON ./sources-stable.json;
-  arch = sources.archMap.${system};
 
 in
 stdenvNoCC.mkDerivation {
@@ -40,10 +39,10 @@ stdenvNoCC.mkDerivation {
 
     mkdir -p $out/bin
 
-    cp ./${arch}/up $out/bin/up
+    cp ./up $out/bin/up
     chmod +x $out/bin/up
 
-    cp ./${arch}/docker-credential-up $out/bin/docker-credential-up
+    cp ./docker-credential-up $out/bin/docker-credential-up
     chmod +x $out/bin/docker-credential-up
 
     runHook postInstall
