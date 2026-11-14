@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "yaegi";
-  version = "0.16.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "yaegi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jpLx2z65KeCPC4AQgFmUUphmmiT4EeHwrYn3/rD4Rzg=";
+    hash = "sha256-avRE+QnkIp5wGtBaHFbCeu9Lq0CEf5VW4ZAzfVy/0n0=";
   };
 
   vendorHash = null;
