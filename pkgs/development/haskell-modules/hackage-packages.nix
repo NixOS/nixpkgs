@@ -311859,8 +311859,8 @@ self: {
         }:
         mkDerivation {
           pname = "haskell-gi";
-          version = "0.26.17";
-          sha256 = "0vg75z5qgf0km59gv6dvpzckyxdli3i5d8lk8xck55smaf9h6f6i";
+          version = "0.26.19";
+          sha256 = "sha256-23BGZ4eZV8NBwnSX1kWoBkQ+NvI9OLmSSPe1dSQBl00=";
           setupHaskellDepends = [
             base
             Cabal
