@@ -2097,6 +2097,8 @@ let
 
       Google.gemini-cli-vscode-ide-companion = callPackage ./Google.gemini-cli-vscode-ide-companion { };
 
+      google.google-antigravity = callPackage ./google.google-antigravity { };
+
       gplane.wasm-language-tools = callPackage ./gplane.wasm-language-tools { };
 
       grafana.grafana-alloy = buildVscodeMarketplaceExtension {
