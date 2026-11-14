@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   gnupg,
   makeWrapper,
   autoPatchelfHook,
@@ -12,21 +13,31 @@
 
 buildGoModule (finalAttrs: {
   pname = "browserpass";
-  version = "3.1.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "browserpass";
     repo = "browserpass-native";
-    tag = finalAttrs.version;
-    sha256 = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-zsp5OrzTNLfYkAdg5Ru5FMXMVSPCLAUBAF6QLM+qU/c=";
   };
+
+  patches = [
+    # The 3.1.2 tag still imports its own packages through the old module
+    # path, so it builds the pinned 3.1.0 sources and reports that version.
+    (fetchpatch {
+      name = "use-v3-module-path-for-local-imports.patch";
+      url = "https://github.com/browserpass/browserpass-native/commit/da47c6a817ed3d6e7302979a6d3088446e4c6e1e.patch";
+      hash = "sha256-TzrzQ6ViKf539HTgYu7DFDOVfjU72+2W0h7VRxjabuE=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  vendorHash = "sha256-CjuH4ANP2bJDeA+o+1j+obbtk5/NVLet/OFS3Rms4r0=";
+  vendorHash = "sha256-Fy1AMCjEVE8+niwmLYVII63qSJLavQRgcK8RXaAkF+s=";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
