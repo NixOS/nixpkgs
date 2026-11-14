@@ -96,6 +96,12 @@
 
     machine.wait_until_succeeds("test -f /tmp/registration-connect")
 
+    # The token copy handed to the registration is readable by the service user only.
+    state_dir = "/var/lib/private/github-runner/test"
+    token_stat = machine.succeed(f"stat -c '%a %u %g' {state_dir}/.new-token").strip()
+    state_stat = machine.succeed(f"stat -c '%u %g' {state_dir}").strip()
+    assert token_stat == f"600 {state_stat}", f"unexpected mode or owner of the new token file: {token_stat}"
+
     # The GitHub App runner unit is generated and wired to the App auth path.
     machine.succeed("systemctl cat github-runner-test-app.service | grep -F unconfigure-github-app")
 
