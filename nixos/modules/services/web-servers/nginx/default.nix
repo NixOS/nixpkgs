@@ -1438,6 +1438,8 @@ in
             "default_server_flag"
             # open_file_cache vs stat syscalls
             "try_files_is_evil_too"
+            # not proxy buffering is sensible for some services
+            "proxy_buffering_off"
           ];
           example = [ "version_disclosure" ];
           description = ''
