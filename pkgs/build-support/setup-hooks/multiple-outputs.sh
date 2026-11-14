@@ -172,11 +172,6 @@ _multioutDevs() {
     moveToOutput lib/cmake "${!outputDev}"
     moveToOutput share/aclocal "${!outputDev}"
     # don't move *.la, as libtool needs them in the directory of the library
-
-    for f in "${!outputDev}"/{lib,share}/pkgconfig/*.pc; do
-        echo "Patching '$f' includedir to output ${!outputInclude}"
-        sed -i "/^includedir=/s,=\${prefix},=${!outputInclude}," "$f"
-    done
 }
 
 # Make the "dev" propagate other outputs needed for development.
