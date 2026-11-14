@@ -22,6 +22,11 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # perf sensitive
+    "test_slow_example"
+  ];
+
   meta = {
     description = "Library to check a subset of python regexes for intersections";
     homepage = "https://github.com/MegaIng/interegular";
