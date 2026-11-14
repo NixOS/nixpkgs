@@ -17,8 +17,10 @@ let
 
   cfg = config.programs.gnupg;
 
-  agentSettingsFormat = pkgs.formats.keyValue {
-    mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
+  gnupgSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue =
+      key: value: if lib.isBool value then lib.optionalString value key else "${key} ${toString value}";
+    listsAsDuplicateKeys = true;
   };
 in
 {
@@ -83,10 +85,11 @@ in
     };
 
     agent.settings = mkOption {
-      type = agentSettingsFormat.type;
+      type = gnupgSettingsFormat.type;
       default = { };
       example = {
         default-cache-ttl = 600;
+        disable-scdaemon = true;
       };
       description = ''
         Configuration for /etc/gnupg/gpg-agent.conf.
@@ -109,7 +112,7 @@ in
     };
 
     environment.etc."gnupg/gpg-agent.conf".source =
-      agentSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
+      gnupgSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
 
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = {
