@@ -1,0 +1,247 @@
+From 8c4c65b6ed079a3a012a895b10d044fd9452dea5 Mon Sep 17 00:00:00 2001
+From: Sharjith Naramparambath <sharjith.com>
+Date: Sun, 4 Jan 2026 14:23:11 +0530
+Subject: [PATCH] Add CMake install support with package configuration
+
+- Add install targets for basisu_encoder library
+- Add install targets for executables (basisu, examples)
+- Add install targets for headers (transcoder, encoder, zstd)
+- Generate CMake package config files for find_package() support
+- Export targets with basisu:: namespace
+- Include GNUInstallDirs for standard installation paths
+---
+ CMakeLists.txt              | 102 ++++++++++++++++++++++++++++++++++++
+ INSTALL_README.md           |  96 +++++++++++++++++++++++++++++++++
+ cmake/basisuConfig.cmake.in |  10 ++++
+ 3 files changed, 208 insertions(+)
+ create mode 100644 INSTALL_README.md
+ create mode 100644 cmake/basisuConfig.cmake.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f1d0abab..f7d8f7b0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -323,3 +323,105 @@ if (MSVC)
+     	)
+ 	endif()
+ endif()
++
++# Installation rules
++include(GNUInstallDirs)
++include(CMakePackageConfigHelpers)
++
++# Install the static library with export
++install(TARGETS basisu_encoder
++    EXPORT basisuTargets
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++)
++
++# Install the basisu executable
++install(TARGETS basisu
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++)
++
++# Install examples executable if built
++if(EXAMPLES)
++    install(TARGETS examples
++        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    )
++endif()
++
++# Install transcoder headers (public API)
++install(FILES
++    transcoder/basisu_transcoder.h
++    transcoder/basisu.h
++    transcoder/basisu_containers.h
++    transcoder/basisu_containers_impl.h
++    transcoder/basisu_file_headers.h
++    transcoder/basisu_transcoder_internal.h
++    transcoder/basisu_transcoder_uastc.h
++    transcoder/basisu_astc_hdr_core.h
++    transcoder/basisu_astc_helpers.h
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/basisu/transcoder
++)
++
++# Install encoder headers (for users who need encoder functionality)
++install(FILES
++    encoder/basisu_enc.h
++    encoder/basisu_comp.h
++    encoder/basisu_backend.h
++    encoder/basisu_frontend.h
++    encoder/basisu_basis_file.h
++    encoder/basisu_gpu_texture.h
++    encoder/basisu_etc.h
++    encoder/basisu_resampler.h
++    encoder/basisu_resampler_filters.h
++    encoder/basisu_kernels_declares.h
++    encoder/basisu_math.h
++    encoder/basisu_miniz.h
++    encoder/basisu_ssim.h
++    encoder/basisu_uastc_enc.h
++    encoder/basisu_uastc_hdr_4x4_enc.h
++    encoder/basisu_astc_hdr_6x6_enc.h
++    encoder/basisu_astc_hdr_common.h
++    encoder/basisu_bc7enc.h
++    encoder/basisu_pvrtc1_4.h
++    encoder/jpgd.h
++    encoder/pvpngreader.h
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/basisu/encoder
++)
++
++# Install zstd header if enabled
++if(ZSTD)
++    install(FILES
++        zstd/zstd.h
++        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/basisu/zstd
++    )
++endif()
++
++# Install CMake package configuration files
++install(EXPORT basisuTargets
++    FILE basisuTargets.cmake
++    NAMESPACE basisu::
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/basisu
++)
++
++# Generate the config file that includes the exports
++configure_package_config_file(
++    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/basisuConfig.cmake.in"
++    "${CMAKE_CURRENT_BINARY_DIR}/basisuConfig.cmake"
++    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/basisu
++    NO_SET_AND_CHECK_MACRO
++    NO_CHECK_REQUIRED_COMPONENTS_MACRO
++)
++
++# Generate the version file for the config file
++write_basic_package_version_file(
++    "${CMAKE_CURRENT_BINARY_DIR}/basisuConfigVersion.cmake"
++    VERSION "1.16.0"
++    COMPATIBILITY AnyNewerVersion
++)
++
++# Install the config and version files
++install(FILES
++    "${CMAKE_CURRENT_BINARY_DIR}/basisuConfig.cmake"
++    "${CMAKE_CURRENT_BINARY_DIR}/basisuConfigVersion.cmake"
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/basisu
++)
+diff --git a/INSTALL_README.md b/INSTALL_README.md
+new file mode 100644
+index 00000000..923c320f
+--- /dev/null
++++ b/INSTALL_README.md
+@@ -0,0 +1,96 @@
++# Basisu CMake Installation
++
++This updated CMakeLists.txt adds proper installation support including CMake package configuration files.
++
++## Files Added
++
++1. **CMakeLists.txt** - Updated with install commands
++2. **cmake/basisuConfig.cmake.in** - Package configuration template
++
++## Installation
++
++### Building and Installing
++
++```bash
++mkdir build
++cd build
++cmake ..
++cmake --build .
++sudo cmake --build . --target install
++```
++
++Or with custom prefix:
++
++```bash
++cmake -DCMAKE_INSTALL_PREFIX=/your/custom/path ..
++cmake --build .
++cmake --build . --target install
++```
++
++## What Gets Installed
++
++### Libraries
++- `basisu_encoder` static library → `lib/`
++
++### Executables
++- `basisu` command-line tool → `bin/`
++- `examples` (if EXAMPLES=TRUE) → `bin/`
++
++### Headers
++- Transcoder headers → `include/basisu/transcoder/`
++- Encoder headers → `include/basisu/encoder/`
++- Zstd header (if ZSTD=TRUE) → `include/basisu/zstd/`
++
++### CMake Package Files
++- `basisuTargets.cmake` - Exported targets
++- `basisuConfig.cmake` - Package configuration
++- `basisuConfigVersion.cmake` - Version info
++
++All installed to: `lib/cmake/basisu/`
++
++## Using in Other CMake Projects
++
++After installation, other CMake projects can find and link against basisu:
++
++```cmake
++cmake_minimum_required(VERSION 3.20)
++project(MyProject)
++
++# Find the installed basisu package
++find_package(basisu REQUIRED)
++
++# Link against basisu
++add_executable(myapp main.cpp)
++target_link_libraries(myapp PRIVATE basisu::basisu_encoder)
++```
++
++The `basisu::basisu_encoder` imported target automatically provides:
++- Include directories
++- Library location
++- Compile definitions (if any)
++- Transitive dependencies
++
++### Available Targets
++
++- `basisu::basisu_encoder` - The static encoder library
++
++### Legacy Variables (for compatibility)
++
++- `basisu_INCLUDE_DIRS` - Include directory path
++- `basisu_LIBRARIES` - Libraries to link against
++
++## Example Usage
++
++```cpp
++#include <basisu/transcoder/basisu_transcoder.h>
++#include <basisu/encoder/basisu_enc.h>
++
++// Your code here
++```
++
++## Notes
++
++- The package follows CMake's `GNUInstallDirs` conventions
++- On Linux/macOS, default install prefix is `/usr/local`
++- On Windows with MSVC, adjust paths as needed
++- Version compatibility is set to `AnyNewerVersion`
+diff --git a/cmake/basisuConfig.cmake.in b/cmake/basisuConfig.cmake.in
+new file mode 100644
+index 00000000..69a214dc
+--- /dev/null
++++ b/cmake/basisuConfig.cmake.in
+@@ -0,0 +1,10 @@
++@PACKAGE_INIT@
++
++# Provide the basisu imported targets
++include("${CMAKE_CURRENT_LIST_DIR}/basisuTargets.cmake")
++
++# Set variables for backwards compatibility
++set(basisu_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/basisu")
++set(basisu_LIBRARIES basisu::basisu_encoder)
++
++check_required_components(basisu)
