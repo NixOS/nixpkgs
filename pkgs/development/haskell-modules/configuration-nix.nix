@@ -1170,13 +1170,13 @@ builtins.intersectAttrs super {
     postPatch = ''
       sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
       sed -i -e 's|"bitwuzla"|"${pkgs.bitwuzla}/bin/bitwuzla"|' Data/SBV/Provers/Bitwuzla.hs
-      sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
       sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|"cvc5"|"${pkgs.cvc5}/bin/cvc5"|' Data/SBV/Provers/CVC5.hs
       sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
 
       # Solvers we don't provide are removed from tests
+      sed -i -e 's|, boolector||' SBVTestSuite/SBVConnectionTest.hs
       sed -i -e 's|, mathSAT||' SBVTestSuite/SBVConnectionTest.hs
       sed -i -e 's|, dReal||' SBVTestSuite/SBVConnectionTest.hs
     '';
