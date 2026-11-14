@@ -13187,6 +13187,12 @@
     githubId = 106266438;
     name = "Jason Crevier";
   };
+  jasonfen = {
+    email = "jasonfen@gmail.com";
+    github = "jasonfen";
+    githubId = 20525926;
+    name = "jasonfen";
+  };
   jasonodoom = {
     email = "jasonodoom@riseup.net";
     github = "jasonodoom";
