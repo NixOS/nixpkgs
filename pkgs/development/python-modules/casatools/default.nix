@@ -79,6 +79,11 @@ buildPythonPackage (finalAttrs: {
     cp ${finalAttrs.xml_jar} scripts/java/${finalAttrs.jarName}
     echo "${finalAttrs.version} ${finalAttrs.version}" > version.txt
     sed -i 's/def compute_version():/def compute_version():\n    return "${finalAttrs.version}"\ndef _compute_version_orig():/' setup.py
+
+    substituteInPlace src/code/CMakeLists.txt src/tools/CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)' \
+      --replace-fail 'set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} -std=c++17")' \
+                     'set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} -std=c++20")'
   '';
 
   # Tests require a full CASA data directory and network access
