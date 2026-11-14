@@ -4,6 +4,7 @@
   fetchFromGitHub,
   boost,
   eigen,
+  fontconfig,
   jrl-cmakemodules,
   assimp,
   octomap,
@@ -23,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
@@ -44,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "COAL_HAS_QHULL" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;
@@ -57,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput share/ament_index "$dev"
     moveToOutput share/coal "$dev"
   '';
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   meta = {
     description = "Collision Detection Library, previously hpp-fcl";
