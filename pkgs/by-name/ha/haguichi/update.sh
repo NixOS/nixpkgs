@@ -5,7 +5,7 @@ set -euo pipefail
 
 version="$(
     curl -s https://api.github.com/repos/ztefn/haguichi/releases |
-    jq '.[] | select(.target_commitish!="elementary") | .tag_name' --raw-output |
+    jq '.[] | select(.target_commitish!="elementary" and (.name | contains("elementary") | not)) | .tag_name' --raw-output |
     sort --version-sort --reverse |
     head -n1
 )"
