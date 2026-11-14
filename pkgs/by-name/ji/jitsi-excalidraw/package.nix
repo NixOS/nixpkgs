@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "jitsi-excalidraw-backend";
-  version = "2026.3.0";
+  version = "2026.10.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "excalidraw-backend";
     rev = version;
-    hash = "sha256-ji5qSnT/FNHEDm6v8Fw9SW3N9RzEr2AbeQq+PNehZGo=";
+    hash = "sha256-fmrhYaagPhJ3bSyH02en+v1yh6KbvjpNLdS1VRs0MXc=";
   };
 
-  npmDepsHash = "sha256-lOytyKRu7kh3UcUkbEEErntqb7aUzULK1SfQrCvvIBw=";
+  npmDepsHash = "sha256-cT8TKqmiWvcf+FPtDyAvJw+89xxyGJgBHE+XnyA+SfE=";
 
   nativeBuildInputs = [ python3 ];
 
