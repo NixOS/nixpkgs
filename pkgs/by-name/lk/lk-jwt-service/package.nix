@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lk-jwt-service";
-  version = "0.9.0";
+  version = "0.10.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "element-hq";
     repo = "lk-jwt-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4e8mPfpP1JRSvzYSEQQZ15y9vxzviVTskR/MDMczoPA=";
+    hash = "sha256-wZCIWkq1dwoj0Se86jHw0EIGAFUkiOZ+Dc94oTr+6a0=";
   };
 
-  cargoHash = "sha256-fWaeKuE9nr+yKT8ZInR79LDwwg1VsA2jdN/wdhtgln8=";
+  cargoHash = "sha256-lUsjLpTYZvPJc3UIxKwiMOiJZb2+w8Ju00gn7wxcVGY=";
 
   buildInputs = [
     aws-lc
