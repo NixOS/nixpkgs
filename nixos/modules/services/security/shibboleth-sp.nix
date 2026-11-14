@@ -52,7 +52,7 @@ in
       ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.shibboleth-sp}/bin/shibd -F -d ${pkgs.shibboleth-sp} -c ${cfg.configFile}";
+        ExecStart = "${lib.getExe' pkgs.shibboleth-sp "shibd"} -F -d ${pkgs.shibboleth-sp} -c ${cfg.configFile}";
       };
     };
 
