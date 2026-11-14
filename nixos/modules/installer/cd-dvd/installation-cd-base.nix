@@ -46,10 +46,14 @@
       esac
     done
   '';
-
-  environment.defaultPackages = with pkgs; [
-    rsync
-  ];
+  environment = {
+    defaultPackages = [
+      # Temporary workaround for #263295/#263289
+    ];
+    systemPackages = with pkgs; [
+      rsync
+    ];
+  };
 
   programs.git.enable = lib.mkDefault true;
 
