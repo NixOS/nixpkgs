@@ -34,15 +34,14 @@ in
         cookie_max_age = 3600;
         cookie_domain = "127.0.0.1";
       };
+      settings.headscale = {
+        api_key_path = headscaleApiKey;
+      };
       settings.oidc = {
         enabled = false;
         issuer = "https://provider.example.com/issuer-url";
         client_id = "your-client-id";
         client_secret_path = oidcClientSecret;
-        headscale_api_key_path = headscaleApiKey;
-        redirect_uri = "http://127.0.0.1:3000/admin/oidc/callback";
-        strict_validation = true;
-        user_storage_file = "/var/lib/headplane/users.json";
       };
     };
   };
