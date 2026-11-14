@@ -1523,6 +1523,7 @@ mapAliases {
   libreoffice-qt-still-unwrapped = libreoffice-qt-stable-unwrapped; # Added 2026-08-11
   libreoffice-still = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-stable` or just `libreoffice`" libreoffice-stable; # Added 2026-08-11
   ###
+  libressl_4_2 = throw "LibreSSL 4.2 is end of life as of 2026-10-22, update to a newer version.";
   librest_1_0 = warnAlias "'librest_1_0' has been renamed to/replaced by 'librest'" librest; # Added 2026-05-30
   librewolf-wayland = throw "'librewolf-wayland' has been renamed to/replaced by 'librewolf'"; # Converted to throw 2025-10-27
   librtlsdr = throw "'librtlsdr' has been renamed to/replaced by 'rtl-sdr'"; # Converted to throw 2025-10-27

@@ -26032,7 +26032,7 @@
     githubId = 12197024;
   };
   ruuda = {
-    email = "dev+nix@veniogames.com";
+    email = "nixpkgs@ruuda.nl";
     github = "ruuda";
     githubId = 506953;
     name = "Ruud van Asseldonk";

@@ -5949,7 +5949,7 @@ with pkgs;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../by-name/li/libressl { })
-    libressl_4_2
+    # When you remove a version here, add a notice in aliases.nix.
     libressl_4_3
     libressl_4_4
     ;
