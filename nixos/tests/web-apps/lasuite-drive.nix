@@ -134,6 +134,7 @@ in
 
   testScript = ''
     import json
+    from urllib.parse import urlparse, parse_qs
 
     with subtest("Wait for units to start"):
       machine.wait_for_unit("dex.service")
@@ -165,25 +166,19 @@ in
         "'${oidcAddr}/dex/auth/mock?client_id=lasuite-drive&response_type=code&redirect_uri=http://${domain}/api/v1.0/callback/&scope=openid'",
         timeout=120)
 
+    def get_queryparam(url, what):
+      parsed = urlparse(url)
+      return parse_qs(parsed.query)[what][0]
+
     with subtest("Login"):
-      state, nonce = machine.succeed("curl -fs -c cjar "
-        "'http://${domain}/api/v1.0/authenticate/' "
-        "-w '%{redirect_url}' "
-        "| sed -n 's/.*state=\\(.*\\)&nonce=\\(.*\\)/\\1 \\2/p'").strip().split(' ')
+      url = machine.succeed("curl -fs -c cjar 'http://${domain}/api/v1.0/authenticate/' -w '%{redirect_url}'").strip()
+      app_state = get_queryparam(url, "state")
 
-      oidc_state = machine.succeed("curl -fs "
-        f"'${oidcAddr}/dex/auth/mock?client_id=lasuite-drive&response_type=code&redirect_uri=http://${domain}/api/v1.0/callback/&scope=openid+email&state={state}&nonce={nonce}' "
-        "| sed -n 's/.*state=\\(.*\\)\">.*/\\1/p'").strip()
-
-      code = machine.succeed("curl -fs "
-        f"'${oidcAddr}/dex/auth/mock/login?back=&state={oidc_state}' "
-        "-d 'login=admin&password=password' "
-        "-w '%{redirect_url}' "
-        "| sed -n 's/.*code=\\(.*\\)&.*/\\1/p'").strip()
-
-      print(f"Got approval code {code}")
-
-      machine.succeed(f"curl -fs -c cjar -b cjar 'http://${domain}/api/v1.0/callback/?code={code}&state={state}'")
+      url_res = machine.succeed(f"curl -fs -b cjar -c cjar '{url}' -o /dev/null -w '%{{redirect_url}}'").strip()
+      oidc_state = get_queryparam(url_res, "state")
+      auth_url = machine.succeed(f"curl -f '${oidcAddr}/dex/auth/mock/login?back=&state={oidc_state}' -d 'login=admin&password=password' -w '%{{redirect_url}}'").strip()
+      code = get_queryparam(machine.succeed(f"curl -fs '{auth_url}' -o /dev/null -w '%{{redirect_url}}'").strip(), "code")
+      machine.succeed(f"curl -f -c cjar -b cjar 'http://${domain}/api/v1.0/callback/?code={code}&state={app_state}'")
 
     with subtest("Upload a document"):
       csrf_token = machine.succeed("grep csrftoken cjar | cut -f 7 | tr -d '\n'")
