@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
-  version = "0.9.9";
+  version = "0.10.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "World";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qmMwlvB8DXNP0SHip1mQoktYFeH/DwfvVtVIny16Ryo=";
+    hash = "sha256-ahcyVcI0h+ZCfSA/3HKuaC3iyeXcwW2O32oxsXF0Pg8=";
   };
 
   nativeBuildInputs = [
