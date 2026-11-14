@@ -1,0 +1,14 @@
+diff --git a/app/Filament/Admin/Widgets/UpdateWidget.php b/app/Filament/Admin/Widgets/UpdateWidget.php
+--- a/app/Filament/Admin/Widgets/UpdateWidget.php
++++ b/app/Filament/Admin/Widgets/UpdateWidget.php
+@@ -91,9 +91,8 @@
+                                     ->markdown(),
+                             ]),
+                     ])
+                     ->headerActions([
+-                        $this->updateAction($latestVersion, $isContainer),
+                         Action::make('db_update')
+                             ->label(trans('admin/dashboard.sections.intro-update-available.button_guide'))
+                             ->icon(TablerIcon::ClipboardText)
+                             ->button()
+

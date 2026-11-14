@@ -15,13 +15,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}";
 
   pname = "pelican-panel";
-  version = "1.0.0-rc.2";
+  version = "1.0.0-rc.3";
 
   src = fetchFromGitHub {
     owner = "pelican";
     repo = "panel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m2WMlQBdH3M1uBXtIzWtYx+60ho3ZFBH9ssHlEOu2vA=";
+    hash = "sha256-/MBgoWFM1PIs+cXz+QIaFkqMr91k4cONRiSsXpDSmAw=";
   };
 
   buildInputs = [ php85 ];
@@ -41,12 +41,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version
       ;
     strictDeps = true;
-    vendorHash = "sha256-5BGQX6dXv8lEIVGi5so71jmbMM5sDYFQFlX67XgkiDs=";
+    vendorHash = "sha256-XDchcBj915MTru1fYB2anxApufnbV2UVtjMic+Gx2Pg=";
   };
+
+  patches = [
+    ./disable-panel-update-button.patch
+  ];
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-EVbyxhZhe6rKYY65HrU0fqE6m/tzKY7mjdgYvDDj8po=";
+    hash = "sha256-SJInvbGjDg3Ook8HDTBoiJqfRN1rN2pi9YBSGgDfv58=";
   };
 
   installPhase = ''
