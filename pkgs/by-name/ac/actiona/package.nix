@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "actiona";
-  version = "3.11.4";
+  version = "3.11.5";
 
   src = fetchFromGitHub {
     owner = "Jmgr";
     repo = "actiona";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PQNbbIErw/fnEyIy80+300g3YC4pEqUB/m9l1dXvORU=";
+    hash = "sha256-eCuMaJTQDuQVfZlXsQiFBrY7wqA3R2V2iS61K71D5Uo=";
     fetchSubmodules = true;
   };
 
