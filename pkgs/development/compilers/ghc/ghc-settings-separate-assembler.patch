@@ -1,0 +1,9 @@
+--- a/compiler/GHC/Settings/IO.hs
++++ b/compiler/GHC/Settings/IO.hs
+@@ -156,1 +156,5 @@
+-  let   as_prog  = cc_prog
++  let   as_prog  =
++          case getRawFilePathSetting (escapeArg top_dir)
++                 settingsFile mySettings "assembler command" of
++            Right v -> v
++            Left _  -> cc_prog
