@@ -60,8 +60,8 @@ rustPlatform.buildRustPackage rec {
       };
     };
     tests =
-      lib.filterAttrs (
-        key: lib.const (lib.hasPrefix "with-postgresql-and-redis" key)
+      lib.mapAttrs' (
+        k: { with-postgresql-and-redis, ... }: lib.nameValuePair k with-postgresql-and-redis
       ) nixosTests.nextcloud
       // {
         inherit test_client;
