@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -21,6 +22,10 @@ stdenv.mkDerivation {
     install -Dm755 macbinfilt $out/bin/macbinfilt
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Create StuffIt archives on Unix systems";

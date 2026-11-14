@@ -4,6 +4,7 @@
   bash,
   buildPackages,
   fetchFromGitHub,
+  nix-update-script,
   makeWrapper,
   pkg-config,
   perl,
@@ -67,6 +68,10 @@ stdenv.mkDerivation {
   #   make: *** [Makefile:149: install-doc] Error 1
   enableParallelInstalling = false;
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://davidepucci.it/doc/vpnc/";
