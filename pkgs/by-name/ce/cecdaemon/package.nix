@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "cecdaemon";
-  version = "1.0.0-unstable-2025-11-12";
+  version = "1.0.0";
   pyproject = true;
   __structuredAttrs = true;
   strictDeps = true;
