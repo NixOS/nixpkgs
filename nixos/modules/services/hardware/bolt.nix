@@ -27,6 +27,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
+    services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
   };

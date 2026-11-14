@@ -16,6 +16,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
+    services.dbus.packages = [ cfg.package ];
 
     systemd.services.powerstation = {
       description = "PowerStation Service";
