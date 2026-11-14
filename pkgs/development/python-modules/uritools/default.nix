@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uritools";
-  version = "6.1.3";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "uritools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pZzsdl/q5Piul1Q2cLPkeRmZbW12ACKuI2OYbnG+rMc=";
+    hash = "sha256-769KIeDIN3HMIIDRgiwBSWdXf0zOEh92jf+fP4wt2xk=";
   };
 
   build-system = [
