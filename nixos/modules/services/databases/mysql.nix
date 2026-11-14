@@ -560,7 +560,7 @@ in
         if isMariaDB then
           ''
             if ! test -e ${cfg.dataDir}/mysql; then
-              ${cfg.package}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${mysqldOptions}
+              ${cfg.package}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${mysqldOptions} --skip-test-db
               touch ${cfg.dataDir}/mysql_init
             fi
           ''
