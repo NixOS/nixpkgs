@@ -13,12 +13,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ganttproject-bin";
-  version = "3.3.3316";
+  version = "3.3.3323";
 
   src = fetchzip {
     url = "https://dl.ganttproject.biz/ganttproject-${finalAttrs.version}/ganttproject-${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-tiEq/xdC0gXiUInLS9xGR/vI/BpdSA+mSf5yukuejc4=";
+    hash = "sha256-tOMx1aYTfD7l7pXYJVdf8GdiXaJkG/qk5xil4sjehcM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
