@@ -56,10 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  postFixup = ''
-    moveToOutput share/doc $dev
-  '';
-
   passthru.updateScript = ./update.sh;
 
   __structuredAttrs = true;
