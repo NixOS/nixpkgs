@@ -3432,6 +3432,8 @@ runTests {
         bootEnableDefaultText = optionDoc.properties.boot.properties.enable.defaultText.text;
         bootEnableHasNoLoc = !(optionDoc.properties.boot.properties.enable ? loc);
         bootEnableHasNoName = !(optionDoc.properties.boot.properties.enable ? name);
+        bootEnableReadOnly = optionDoc.properties.boot.properties.enable.readOnly;
+        bootEnableDeclarations = optionDoc.properties.boot.properties.enable.declarations;
 
         # Submodule nesting via additionalProperties (for attrsOf submodule)
         vhostDescription =
@@ -3451,7 +3453,7 @@ runTests {
         freeformRequired = optionDoc.properties.freeformSub.required;
         freeformOpenAdditionalProps = optionDoc.properties.freeformOpenSub.additionalProperties;
 
-        # Equivalent traversal via optionAttrSetToDocList
+        # Parity check: verify foldOptionSet preserves optionAttrSetToDocList traversal
         docListCount = length docList;
       };
     expected = {
@@ -3466,6 +3468,8 @@ runTests {
       bootEnableDefaultText = "false";
       bootEnableHasNoLoc = true;
       bootEnableHasNoName = true;
+      bootEnableReadOnly = false;
+      bootEnableDeclarations = [ ];
 
       vhostDescription = "Virtual hosts";
       vhostType = "object";
@@ -3565,6 +3569,11 @@ runTests {
                   lib.types.bool
                 ];
               };
+              options.readOnlyOpt = lib.mkOption {
+                type = lib.types.int;
+                default = 42;
+                readOnly = true;
+              };
             }
             {
               nested = _: {
@@ -3617,6 +3626,7 @@ runTests {
 
         plainAttrsAdditionalProps = doc.properties.plainAttrs.additionalProperties;
         noDescHasDescription = doc.properties.noDesc ? description;
+        readOnlyOptIsReadOnly = doc.properties.readOnlyOpt.readOnly;
       };
     expected = {
       hasSchema = true;
@@ -3667,6 +3677,7 @@ runTests {
 
       plainAttrsAdditionalProps = true;
       noDescHasDescription = false;
+      readOnlyOptIsReadOnly = true;
     };
   };
 
