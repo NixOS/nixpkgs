@@ -57,6 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonBuildType = "release";
 
+  postPatch =
+    let
+      x =
+        state:
+        "/usr/share/icons/hicolor/32x32/status/com.dec05eba.gpu_screen_recorder.tray-${state}.png com.dec05eba.gpu_screen_recorder.tray-${state}";
+    in
+    ''
+      substituteInPlace src/main.cpp \
+        --replace-fail ${x "idle"} \
+        --replace-fail ${x "recording"} \
+        --replace-fail ${x "paused"}
+    '';
+
   preFixup =
     let
       gpu-screen-recorder-wrapped = gpu-screen-recorder.override {
