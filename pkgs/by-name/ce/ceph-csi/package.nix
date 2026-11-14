@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ceph-csi";
-  version = "3.18.1";
+  version = "3.18.2";
 
   src = fetchFromGitHub {
     owner = "ceph";
     repo = "ceph-csi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qXoXPxDAU2pLSZr3nCuldhF4IpGPVDeYhhEKqfEZAs8=";
+    hash = "sha256-Mnu0NboDn23NeToeXwSFaiCqLGXXhOZGTEkHvUhZxfE=";
   };
 
   preConfigure = ''
