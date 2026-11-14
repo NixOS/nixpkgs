@@ -387,11 +387,7 @@ let
         };
 
         wakeOnLan = {
-          enable = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Whether to enable wol on this interface.";
-          };
+          enable = lib.mkEnableOption "wol on this interface";
           policy = mkOption {
             type =
               with types;

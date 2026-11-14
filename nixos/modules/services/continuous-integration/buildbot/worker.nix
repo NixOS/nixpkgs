@@ -50,11 +50,7 @@ in
   options = {
     services.buildbot-worker = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the Buildbot Worker.";
-      };
+      enable = lib.mkEnableOption "the Buildbot Worker";
 
       user = lib.mkOption {
         default = "bbworker";

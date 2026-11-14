@@ -24,11 +24,7 @@ in
 
     services.exim = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the Exim mail transfer agent.";
-      };
+      enable = lib.mkEnableOption "the Exim mail transfer agent";
 
       config = mkOption {
         type = types.lines;

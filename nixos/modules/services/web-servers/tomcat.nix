@@ -164,11 +164,7 @@ in
         description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
       };
 
-      logPerVirtualHost = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable logging per virtual host.";
-      };
+      logPerVirtualHost = lib.mkEnableOption "logging per virtual host";
 
       jdk = lib.mkPackageOption pkgs "jdk" { };
 

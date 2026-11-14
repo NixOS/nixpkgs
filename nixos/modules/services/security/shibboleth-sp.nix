@@ -11,11 +11,7 @@ in
 {
   options = {
     services.shibboleth-sp = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the shibboleth service";
-      };
+      enable = lib.mkEnableOption "the shibboleth service";
 
       configFile = lib.mkOption {
         type = lib.types.path;

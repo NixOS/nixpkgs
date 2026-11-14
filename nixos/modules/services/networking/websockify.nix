@@ -13,13 +13,7 @@ in
 {
   options = {
     services.networking.websockify = {
-      enable = mkOption {
-        description = "Whether to enable websockify to forward websocket connections to TCP connections.";
-
-        default = false;
-
-        type = types.bool;
-      };
+      enable = lib.mkEnableOption "websockify to forward websocket connections to TCP connections";
 
       sslCert = mkOption {
         description = "Path to the SSL certificate.";

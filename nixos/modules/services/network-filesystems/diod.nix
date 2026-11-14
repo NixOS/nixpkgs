@@ -13,11 +13,7 @@ in
 {
   options = {
     services.diod = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the diod 9P file server.";
-      };
+      enable = lib.mkEnableOption "the diod 9P file server";
 
       listen = lib.mkOption {
         type = lib.types.listOf lib.types.str;
