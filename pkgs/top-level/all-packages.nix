@@ -1811,7 +1811,8 @@ with pkgs;
     dubCheckHook
     ;
 
-  rocmPackages = recurseIntoAttrs (callPackage ../development/rocm-modules { });
+  rocmPackages = rocmPackages_7;
+  rocmPackages_7 = recurseIntoAttrs (callPackage ../development/rocm-modules/7 { });
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
