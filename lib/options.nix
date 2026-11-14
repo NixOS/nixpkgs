@@ -937,7 +937,37 @@ rec {
     ```
     :::
   */
-  optionToDoc =
+  optionToDoc = optionToDoc' { };
+
+  /**
+    Generate documentation template as a JSON Schema compatible attribute set preserving module option structure,
+    with configurable schema generation parameters.
+
+    # Inputs
+
+    `mode` (optional, default `"input"`)
+
+    : When `"input"`, only options without defaults are marked in `required`.
+      When `"output"`, all evaluated options are marked in `required`.
+
+    `options`
+
+    : Evaluated module options attribute set (e.g. `(evalModules { ... }).options`).
+
+    # Type
+
+    ```
+    optionToDoc' :: { mode ? String } -> (OptionSet | Option) -> AttrSet
+    ```
+  */
+  optionToDoc' =
+    {
+      mode ? "input",
+    }:
+    assert elem mode [
+      "input"
+      "output"
+    ];
     options:
     let
       res = foldOptionSet {
@@ -977,7 +1007,7 @@ rec {
               let
                 opt = clean.${n};
               in
-              isOption opt && !(opt ? default || opt ? defaultText)
+              isOption opt && (if mode == "output" then true else !(opt ? default || opt ? defaultText))
             ) (attrNames clean);
             properties = mapAttrs (_: r: r.schema) childResults;
             defs = foldlAttrs (

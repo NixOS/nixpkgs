@@ -89,6 +89,7 @@ let
     optionalDrvAttr
     optionAttrSetToDocList
     optionToDoc
+    optionToDoc'
     overrideExisting
     packagesFromDirectoryRecursive
     pipe
@@ -3705,6 +3706,37 @@ runTests {
       hasDefs = true;
       treeRef = "#/$defs/JSON value";
       treeNixType = "JSON value";
+    };
+  };
+
+  testOptionToDocMode = {
+    expr =
+      let
+        module = {
+          options = {
+            hasDefault = lib.mkOption {
+              type = lib.types.str;
+              default = "foo";
+            };
+            noDefault = lib.mkOption {
+              type = lib.types.str;
+            };
+          };
+        };
+        eval = lib.evalModules { modules = [ module ]; };
+        inputDoc = optionToDoc eval.options;
+        outputDoc = optionToDoc' { mode = "output"; } eval.options;
+      in
+      {
+        inputRequired = inputDoc.required;
+        outputRequired = outputDoc.required;
+      };
+    expected = {
+      inputRequired = [ "noDefault" ];
+      outputRequired = [
+        "hasDefault"
+        "noDefault"
+      ];
     };
   };
 
