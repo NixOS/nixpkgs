@@ -4356,7 +4356,7 @@ self: super: with self; {
 
   deltachat2 = callPackage ../development/python-modules/deltachat2 { };
 
-  deltalake = callPackage ../development/python-modules/deltalake { };
+  deltalake = callPackage ../development/python-modules/deltalake { inherit (pkgs) zstd; };
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
