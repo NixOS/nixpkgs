@@ -107,7 +107,7 @@ let
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
-    unstable = pkgs.releaseTools.aggregate {
+    tested = pkgs.releaseTools.aggregate {
       name = "nixpkgs-${jobs.tarball.version}";
       meta.description = "Release-critical builds for the Nixpkgs unstable channel";
       constituents = [
