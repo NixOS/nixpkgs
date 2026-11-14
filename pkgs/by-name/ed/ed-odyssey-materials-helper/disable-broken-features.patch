@@ -1,8 +1,8 @@
 diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/EDDNService.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/EDDNService.java
-index e6d0e84d..aeaa32af 100644
+index 7d780a06..a6da3930 100644
 --- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/EDDNService.java
 +++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/EDDNService.java
-@@ -408,7 +408,7 @@ public class EDDNService {
+@@ -444,7 +444,7 @@ public class EDDNService {
      private static void send(final Object message, final Event event, final String schemaName, final int delaySecondsAllowed) {
          final boolean isLive = ApplicationState.getInstance().getGameVersion().equals(GameVersion.LIVE);
          final boolean isNew = isNew(event, delaySecondsAllowed);
@@ -11,14 +11,45 @@ index e6d0e84d..aeaa32af 100644
          if (isLive && isNew && isEnabled) {
              final Runnable run = () -> {
                  try {
+diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/shortlink/ShortLinkService.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/shortlink/ShortLinkService.java
+index 5c222b85..bbfb3d07 100644
+--- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/shortlink/ShortLinkService.java
++++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/shortlink/ShortLinkService.java
+@@ -28,25 +28,6 @@ public class ShortLinkService {
+     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+ 
+     public static String requestShortLink(String edomhUrl) {
+-        ShortLinkRequest shortLinkRequest = new ShortLinkRequest();
+-        shortLinkRequest.setUrl(edomhUrl);
+-        try {
+-            HttpClient httpClient = HttpClientService.getHttpClient();
+-            final String data = OBJECT_MAPPER.writeValueAsString(shortLinkRequest);
+-            final String domainName = DnsHelper.resolveCname(Secrets.getOrDefault("shortlink.host", "localhost"));
+-            final HttpRequest request = HttpRequest.newBuilder()
+-                    .uri(URI.create("https://" + domainName + "/api/links"))
+-                    .header("User-Agent", VersionService.getUserAgent())
+-                    .header("X-API-Key", Secrets.getOrDefault("shortlink.api.key", "none"))
+-                    .header("Content-Type", "application/json")
+-                    .POST(HttpRequest.BodyPublishers.ofString(data))
+-                    .build();
+-            final HttpResponse<String> send = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+-            ShortLinkResponse shortLinkResponse = OBJECT_MAPPER.readValue(send.body(), ShortLinkResponse.class);
+-            return shortLinkResponse.getShortUrl();
+-        } catch (InterruptedException | NamingException | IOException e) {
+-            log.error("Error requesting short link for url {}", edomhUrl, e);
+-            return edomhUrl;
+-        }
++        return edomhUrl;
+     }
+ }
 diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/SettingsTab.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/SettingsTab.java
-index f39a7a17..0dd77370 100644
+index da2a32bd..4d896c56 100644
 --- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/SettingsTab.java
 +++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/SettingsTab.java
-@@ -43,16 +43,13 @@ public class SettingsTab extends MainTab implements DestroyableTemplate {
-                         new HorizonsWishlist(),
+@@ -54,16 +54,13 @@ public class SettingsTab extends MainTab implements DestroyableTemplate {
                          new HorizonsShips(),
-                         new HorizonsColonisation(),
+                         new OtherCommunityGoals(),
+                         new OtherColonisation(),
 -                        new Notifications(),
 -                        new FrontierAPI()
 +                        new Notifications()
