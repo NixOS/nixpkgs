@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   freetype,
   libpng,
@@ -10,7 +11,6 @@
   libGLU,
   freeglut,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "fsnav";
   version = "0.1";
@@ -21,6 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-Bt1QRqtJkVFR1uMzmB3OUyqyzUyJdQyQdbMOfMyWJOc=";
   };
+
+  patches = [
+    # fix build with gcc 16
+    (fetchpatch {
+      url = "https://github.com/jtsiomb/fsnav/commit/9d7f955eb3a0bdc15774162f275036245943cde1.patch";
+      hash = "sha256-7wPoSwP7fQ3Jfs/kk7FVVi+4JxyWhQFnoJ3mgdn2La8=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
