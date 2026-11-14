@@ -2884,6 +2884,10 @@ with haskellLib;
     sha256 = "sha256-0yN22zv8ndc8YJnv+/fiWnFJasrbPgmAPPOrRhfddDw";
   }) super.optparse-generic;
 
+  # Allow QuickCheck >= 2.17
+  # https://github.com/pcapriotti/optparse-applicative/issues/530
+  optparse-applicative = doJailbreak super.optparse-applicative;
+
   # Tests require docker
   testcontainers = dontCheck super.testcontainers;
 
