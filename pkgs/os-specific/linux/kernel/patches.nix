@@ -41,4 +41,12 @@
       hash = "sha256-w6ZnvodW2kS3bqtZVvVN5qDt1Zc7fJvnywki3MBsER0=";
     };
   };
+
+  # Fix for iwd on Linux 7.3. Drop once it is in the 7.3.y stable series.
+  # https://github.com/NixOS/nixpkgs/issues/583203
+  # https://lore.kernel.org/linux-crypto/20261106043459.1169202-1-walt@mckelvie.org/
+  af_alg_allow_gcm_aes = {
+    name = "af-alg-allow-gcm-aes";
+    patch = ./af-alg-allow-gcm-aes.patch;
+  };
 }
