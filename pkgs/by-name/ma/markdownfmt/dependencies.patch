@@ -1,0 +1,38 @@
+diff --git a/go.mod b/go.mod
+index 41afaff..5ecfbd6 100644
+--- a/go.mod
++++ b/go.mod
+@@ -1,3 +1,15 @@
+ module github.com/shurcooL/markdownfmt
+ 
+-require github.com/russross/blackfriday v1.6.0
++go 1.26.7
++
++require (
++	github.com/mattn/go-runewidth v0.0.31
++	github.com/russross/blackfriday v1.6.0
++	github.com/shurcooL/go v0.0.0-20230706063926-5fe729b41b3a
++	golang.org/x/term v0.47.0
++)
++
++require (
++	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
++	golang.org/x/sys v0.49.0 // indirect
++)
+diff --git a/go.sum b/go.sum
+index 270cecf..0032214 100644
+--- a/go.sum
++++ b/go.sum
+@@ -1,2 +1,12 @@
++github.com/clipperhouse/uax29/v2 v2.2.0 h1:ChwIKnQN3kcZteTXMgb1wztSgaU+ZemkgWdohwgs8tY=
++github.com/clipperhouse/uax29/v2 v2.2.0/go.mod h1:EFJ2TJMRUaplDxHKj1qAEhCtQPW2tJSwu5BF98AuoVM=
++github.com/mattn/go-runewidth v0.0.31 h1:1oCV4ReTlosDBc6rYRw5cL8S/4y8iv5oRl4SJ5IBgwo=
++github.com/mattn/go-runewidth v0.0.31/go.mod h1:3qAiGCV4Koz/yuveO58qUefmUTRm8r0IGEXZ9jeHp/8=
+ github.com/russross/blackfriday v1.6.0 h1:KqfZb0pUVN2lYqZUYRddxF4OR8ZMURnJIG5Y3VRLtww=
+ github.com/russross/blackfriday v1.6.0/go.mod h1:ti0ldHuxg49ri4ksnFxlkCfN+hvslNlmVHqNRXXJNAY=
++github.com/shurcooL/go v0.0.0-20230706063926-5fe729b41b3a h1:ZHfoO7ZJhws9NU1kzZhStUnnVQiPtDe1PzpUnc6HirU=
++github.com/shurcooL/go v0.0.0-20230706063926-5fe729b41b3a/go.mod h1:DNrlr0AR9NsHD/aoc2pPeu4uSBZ/71yCHkR42yrzW3M=
++golang.org/x/sys v0.49.0 h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA=
++golang.org/x/sys v0.49.0/go.mod h1:hNLxWAXmnKAxqDtdwIYC4bM9oQPEecfsnNMuSxOs3og=
++golang.org/x/term v0.47.0 h1:cpyOwQkr2Nzxe2p6KnrTG7Ei2wtzjsuSjhpXXepZ/BM=
++golang.org/x/term v0.47.0/go.mod h1:efAfAuG6RKABvg1ArGebRkvX6LXul14SM67o2e4mUCY=
