@@ -179,8 +179,81 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
+  # FIXME: Tombstone. Remove when references have been replaced with `teams.cudaB`.
+  # TODO: Find out why.
   cuda = {
-    github = "cuda-maintainers";
+    # aliases = [ "Nixpkgs CUDA", "NixOS CUDA", "Nix CUDA", "CUDA Team", "@NixOS/cuda-maintainers" ];
+    shortName = "CUDA";
+    members = [ ];
+
+    scope = ''
+      Nixpkgs CUDA Team has acknowledged its split on September 25th, 2026
+      during NixCon Krakow.
+
+      Supporting GPU-Accelerated Scientific Computing.
+      Package CUDA-enabled packages.
+
+      Find out whether non-owner employee maintainers are compatible with volunteer maintainers.
+      Find out whether non-owner employee maintainers are compatible with self-employed maintainers.
+
+      Resolve patchelf exception and NVIDIA ghosting problems.
+      Resolve unfree cache problem.
+      Resolve untested SciComp, HPC, GPGPU, and unfree software problem.
+      Resolve hardware access, SLURM-like resource allocation, scheduling affinity in derivations.
+      Resolve libcuda.problem on NixOS, non-NixOS problem.
+      Resolve cudart-libcuda forward- and backward-compat problem.
+      Resolve stdenv and cc-wrapper compatibility problems, libcuda-libstdc++ problems.
+      Resolve pytorch, tensorflow being unmaintainable.
+      Resolve unaffordable bootstrap problem, rebuild frequency problems.
+      Resolve cudatoolkit and closure size problems.
+      Resolve cmake support problems.
+      Resolve cross problems.
+      Resolve old HPC clusters problems: network fs, no namespaces, no chroot, stat storm.
+      Resolve ld.so "dependency injection"/resolution order, LD_LIBRARY_PATH, RPATH v. RUNPATH, "LD_LIBRARY_OVERRIDE", "LD_LIBRARY_FALLBACK".
+      Et c.
+    '';
+  };
+
+  # Starting late 2024
+  cudaA = {
+    # aliases = [ "SciComp" ];
+    shortName = "cudaA";
+    members = [
+      SomeoneSerge
+    ];
+    scope = ''
+      Currently inactive.
+
+      Supporting GPU-Accelerated Scientific Computing.
+      Towards self-employed maintainership.
+
+      Make it possible for self-employed maintainers derive or combine with running profitable SMEs from Nixpkgs maintainership.
+      Force Nixpkgs CUDA and Nixpkgs to behave as "ruthless capitalist" entities
+      when negotiating with Big Tech, Finance, "AI", or Military consumers.
+      Reduce maintainers' perverse incentives and COIs
+      rooted in their material conditions: employment, sedentism, non-ownership and lack of assets,
+      inability to afford to lose a source of income, inability to cross borders.
+    '';
+  };
+
+  # FIXME: Choose a name.
+  # NOTE: SomeoneSerge suggests: "NV", "NVIDIA". SomeoneSerge asks to avoid
+  # occurrences of "CUDA" in the name so as to avoid the split having been
+  # ignored and forgotten, or creating the impression that `cudaB` is "the one true cuda team".
+  cudaB = {
+    shortName = "cudaB";
+    members = [
+      YorikSar # Starting Autumn 2025
+      GaetanLepage # Starting Winter 2026?
+      connorbaker # Starting Spring 2026?
+      # dhoffer # Starting with Foundation contract
+      # Ron, Flox, Foundation, MODUS, Funders, SC
+    ];
+    scope = ''
+      Package CUDA-enabled packages.
+
+      Make it possible for non-owner employees to participate in maintainership and governance.
+    '';
   };
 
   darwin = {
