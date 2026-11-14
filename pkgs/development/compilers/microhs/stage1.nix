@@ -21,7 +21,6 @@ stdenv.mkDerivation (
 
     makeFlags = [ "PREFIX=${placeholder "out"}" ];
     installTargets = [
-      "targets.conf"
       "oldinstall"
     ];
 
