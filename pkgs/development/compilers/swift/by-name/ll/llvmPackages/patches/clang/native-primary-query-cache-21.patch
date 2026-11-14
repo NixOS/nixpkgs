@@ -1,0 +1,19 @@
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Subject: [PATCH] driver: reject primary-frame cache execution before dispatch
+
+Swift's LLVM 21 fork dispatches clang-cache before selecting DriverMode.
+Retain the primary-frame guard before cache execution at that boundary.
+
+---
+diff --git a/tools/driver/driver.cpp b/tools/driver/driver.cpp
+--- a/tools/driver/driver.cpp
++++ b/tools/driver/driver.cpp
+@@ -448,6 +448,8 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+   const char *ProgName =
+       ToolContext.NeedsPrependArg ? ToolContext.PrependArg : ToolContext.Path;
++  if (PrimaryArgsFD && isClangCache(
++      ToolChain::getTargetAndModeFromProgramName(ProgName).ModeSuffix)) return 1;
+   if (isClangCache(ToolChain::getTargetAndModeFromProgramName(ProgName).ModeSuffix)) {
+     if (std::optional<int> ExitCode = handleClangCacheInvocation(Args, Saver))
+       return *ExitCode;
+     // handleClangCacheInvocation resets the ProgName.

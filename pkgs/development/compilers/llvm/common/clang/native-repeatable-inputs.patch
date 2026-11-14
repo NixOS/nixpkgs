@@ -1,0 +1,119 @@
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Subject: [PATCH] clang: bound repeatable input checks to driver preparation
+
+Driver framing rereads response/configuration inputs and initial toolchain
+metadata. Refuse nonregular inputs before opening them during preparation,
+allowing the empty null device. Queries retain that filesystem throughout.
+Final immediate actions and job construction use the original filesystem:
+their one-time reads must not inherit a preparation-only restriction.
+Frontend/source reads stay native. A speculative probe's resource error
+remains speculative; the selected native lexer still owns its diagnostics.
+
+Assisted-by: Codex
+
+--- a/tools/driver/driver.cpp
++++ b/tools/driver/driver.cpp
+@@ -237,6 +237,39 @@
+   return 1;
+ }
+ 
++// A framed invocation interprets response/configuration inputs more than once.
++// Refuse streams before opening: a query must not consume a FIFO or stdin that
++// a later interpretation would then block on or observe as empty. Keep this
++// filesystem local to driver preparation; actual frontend/source reads stay native.
++class PrimaryInputFileSystem final : public llvm::vfs::ProxyFileSystem {
++  class InputCategory final : public std::error_category {
++  public:
++    const char *name() const noexcept override { return "nix-primary-input"; }
++    std::string message(int) const override {
++      return "Nix compiler framing requires a repeatable regular "
++             "response/configuration file";
++    }
++  };
++
++public:
++  PrimaryInputFileSystem()
++      : ProxyFileSystem(llvm::vfs::getRealFileSystem()) {}
++
++  llvm::ErrorOr<std::unique_ptr<llvm::vfs::File>>
++  openFileForRead(const llvm::Twine &Path) override {
++    auto Status = status(Path);
++    if (Status && !Status->isRegularFile()) {
++      // /dev/null and its aliases are repeatable empty inputs.
++      auto Null = status("/dev/null");
++      if (!Null || Status->getUniqueID() != Null->getUniqueID()) {
++        static InputCategory Category;
++        return std::error_code(1, Category);
++      }
++    }
++    return ProxyFileSystem::openFileForRead(Path);
++  }
++};
++
+ struct PrimarySegments {
+   std::array<SmallVector<const char *, 16>, 4> Args;
+   int CallerDelimiter = -1;
+@@ -457,14 +490,14 @@
+ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request,
+                                    llvm::BumpPtrAllocator &Allocator,
+                                    SmallVectorImpl<const char *> &Args,
+-                                   bool Query) {
++                                   bool Query, llvm::vfs::FileSystem *FS) {
+   llvm::StringSaver Saver(Allocator);
+   // Frontend entry has standalone caller semantics and ignores all policy.
+   // This first pass observes only the native entry, not full option validity.
+   SmallVector<const char *, 256> Caller{Program};
+   llvm::append_range(Caller, Request.Args[1]);
+   auto CallerMode = getDriverMode(Program, ArrayRef(Caller).drop_front());
+-  if (auto Error = expandResponseFiles(Caller, IsClangCL(CallerMode), Allocator)) {
++  if (auto Error = expandResponseFiles(Caller, IsClangCL(CallerMode), Allocator, FS)) {
+     // Native expansion never changes an already visited leading token.
+     // A known frontend owns its error; otherwise this was only a probe.
+     if (Caller.size() > 1 && StringRef(Caller[1]).starts_with("-cc1")) {
+@@ -495,6 +528,7 @@
+     Request.RawCLMode = IsClangCL(Mode);
+     llvm::cl::ExpansionContext Expansion(
+         Allocator, getResponseFileTokenizer(Raw, IsClangCL(Mode)));
++    Expansion.setVFS(FS);
+     Expansion.setMarkEOLs(Request.RawCLMode);
+     auto Expanded = Request.Args;
+     if (!IncludeCPP) Expanded[3].clear();
+@@ -603,6 +637,8 @@
+     PrimaryArgsFD = FD;
+   }
+   if ((PrimaryArgsFD || PrimaryQueryFD) && (!PrimaryArgsFD || Argc != 1)) return 1;
++  llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem> PrimaryFS;
++  if (PrimaryArgsFD) PrimaryFS = new PrimaryInputFileSystem;
+   PrimarySegments Request;
+   noteBottomOfStack();
+   llvm::setBugReportMsg("PLEASE submit a bug report to " BUG_REPORT_URL
+@@ -632,7 +668,7 @@
+   if (PrimaryArgsFD &&
+       (!readPrimarySegments(*PrimaryArgsFD, Saver, Request) ||
+        !preparePrimarySegments(ProgName, Request, A, Args,
+-                               PrimaryQueryFD.has_value()))) return 1;
++                               PrimaryQueryFD.has_value(), PrimaryFS.get()))) return 1;
+   if (PrimaryArgsFD)
+     ClangCLMode = Request.RawCLMode;
+   if (PrimaryQueryFD && Args.size() >= 2 &&
+@@ -756,3 +792,4 @@
+   Driver TheDriver(Path, llvm::sys::getDefaultTargetTriple(), Diags,
+-                   /*Title=*/"clang LLVM compiler", VFS);
++                   /*Title=*/"clang LLVM compiler", PrimaryFS ? PrimaryFS : VFS);
++  if (PrimaryFS) TheDriver.PrimaryExecutionVFS = VFS;
+   auto TargetAndMode = ToolChain::getTargetAndModeFromProgramName(ProgName);
+--- a/include/clang/Driver/Driver.h
++++ b/include/clang/Driver/Driver.h
+@@ -826,2 +826,3 @@
+   std::optional<unsigned> PrimaryQueryFD;
++  IntrusiveRefCntPtr<llvm::vfs::FileSystem> PrimaryExecutionVFS;
+   SmallVector<const char *, 16> NativeTargetDefaults;
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -1841,1 +1841,6 @@
++  // Preparation also runs in a primary query. Final actions and jobs do not:
++  // retain their native file reads after configuration/toolchain discovery.
++  if (!PrimaryQueryFD && PrimaryExecutionVFS)
++    VFS = PrimaryExecutionVFS;
++
+   if (!HandleImmediateArgs(*C)) {

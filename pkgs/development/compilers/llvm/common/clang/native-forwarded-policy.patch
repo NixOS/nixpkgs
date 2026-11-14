@@ -1,0 +1,262 @@
+From 8fb60bb010f98dc5b38ce2e263e37ec1dcf52285 Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Subject: [PATCH] clang: preserve driver modes and caller-owned forwarded policy
+
+Let the native driver validate every supported mode, and use its option
+visibility when parsing CL, DXC and Flang arguments. Keep response expansion
+in the selected mode instead of rejecting otherwise valid CL invocations.
+
+Apply caller purity and no-native policy to scoped Xarch options and the
+native argument streams built by Xclang, Xpreprocessor, Wp, Xclangas and
+/clang:. Retain ownership through each carrier, including option operands
+and comma-joined payloads, without reclassifying toolchain policy as caller
+input. Parse each destination's complete native stream so separate carriers
+can supply an option and its operand without promoting operand text.
+
+---
+diff --git a/tools/driver/driver.cpp b/tools/driver/driver.cpp
+index f123185..a3fa31d 100644
+--- a/tools/driver/driver.cpp
++++ b/tools/driver/driver.cpp
+@@ -292,17 +292,30 @@ static bool readPrimarySegments(unsigned FD, llvm::StringSaver &Saver,
+   return Rest.empty();
+ }
+ 
+-// Apply caller policy using native option ownership and consumed spans.
+-static void filterCallerPolicy(
+-    std::array<SmallVector<const char *, 16>, 4> &Segments,
++// Interpret each forwarding channel with its destination's native option
++// grammar. Keep ownership with the original option, including its operands;
++// an option-shaped macro value or path must never become a policy option.
++struct PolicyArgument {
++  const char *Text;
++  bool Caller;
++  unsigned Source;
++};
++
++static unsigned primaryOptionVisibility(StringRef Mode) {
++  if (Mode == "cl") return options::CLOption;
++  if (Mode == "dxc") return options::DXCOption;
++  if (Mode == "flang") return options::FlangOption;
++  return options::ClangOption;
++}
++
++static void filterNativePolicy(SmallVectorImpl<PolicyArgument> &Arguments,
+     bool Pure, bool NoNative, ArrayRef<const char *> AllowedPrefixes,
+-    StringRef SDK, unsigned Visibility = options::ClangOption) {
+-  if (!Pure && !NoNative) return;
++    StringRef SDK, llvm::StringSaver &Saver, unsigned Visibility) {
++  if (Arguments.empty() || (!Pure && !NoNative)) return;
+   SmallVector<const char *, 256> Joined;
+-  for (const auto &Segment : Segments) llvm::append_range(Joined, Segment);
++  for (const auto &Argument : Arguments) Joined.push_back(Argument.Text);
+   llvm::opt::InputArgList Raw(Joined.data(), Joined.data() + Joined.size());
+   SmallVector<bool, 256> Keep(Joined.size(), true);
+-  const unsigned Begin = Segments[0].size(), End = Begin + Segments[1].size();
+   auto BadPath = [&](StringRef Path) {
+     SmallString<256> SDKPath;
+     if (!SDK.empty()) {
+@@ -316,46 +329,131 @@ static void filterCallerPolicy(
+       return !Prefix.empty() && Path.starts_with(Prefix);
+     });
+   };
+-  for (unsigned I = 0; I < Joined.size();) {
+-    const unsigned Start = I;
+-    auto Arg = getDriverOptTable().ParseOneArg(
+-        Raw, I, llvm::opt::Visibility(Visibility));
+-    if (!Arg || Start < Begin || Start >= End) continue;
+-    const auto &Option = Arg->getOption();
+-    bool Drop = Pure && (Option.matches(options::OPT_I) ||
+-                        Option.matches(options::OPT_L) ||
+-                        Option.matches(options::OPT_isystem)) &&
+-                BadPath(Arg->getValue());
++  auto DropOption = [&](const Arg &Argument) {
++    const auto &Option = Argument.getOption();
++    bool Drop = Pure && Argument.getNumValues() &&
++                (Option.matches(options::OPT_I) ||
++                 Option.matches(options::OPT_L) ||
++                 Option.matches(options::OPT_isystem)) &&
++                BadPath(Argument.getValue());
+     const bool Native = NoNative && Option.matches(options::OPT_m_Group) &&
+-                        Arg->getNumValues() == 1 &&
+-                        StringRef(Arg->getValue()) == "native";
++                        Argument.getNumValues() == 1 &&
++                        StringRef(Argument.getValue()) == "native";
+     if (Native)
+-      llvm::errs() << "warning: Skipping impure flag " << Arg->getAsString(Raw)
++      llvm::errs() << "warning: Skipping impure flag " << Argument.getAsString(Raw)
+                    << " because NIX_ENFORCE_NO_NATIVE is set\n";
+     else if (Drop) {
+       int Debug = 0;
+       if (const char *Value = ::getenv("NIX_DEBUG"))
+         if (StringRef(Value).getAsInteger(10, Debug)) Debug = 0;
+-      if (Debug >= 1) llvm::errs() << "skipping impure path " << Arg->getValue() << '\n';
++      if (Debug >= 1) llvm::errs() << "skipping impure path " << Argument.getValue() << '\n';
++    }
++    return Drop || Native;
++  };
++  // Xclang, preprocessor forwarding, Xclangas, and CL's /clang: each
++  // construct a distinct native argument stream. Options may consume values
++  // supplied by another carrier, so parse the whole stream in native order.
++  std::array<SmallVector<PolicyArgument, 16>, 4> Forwarded;
++  struct Carrier {
++    unsigned Begin, End, Stream;
++    bool Comma, Joined;
++    SmallVector<const char *, 8> Original;
++  };
++  SmallVector<Carrier, 16> Carriers;
++  for (unsigned I = 0; I < Joined.size();) {
++    const unsigned Start = I;
++    auto Argument = getDriverOptTable().ParseOneArg(
++        Raw, I, llvm::opt::Visibility(Visibility));
++    if (!Argument) continue;
++    const auto &Option = Argument->getOption();
++    const bool Caller = Arguments[Start].Caller;
++    bool Drop = Caller && DropOption(*Argument);
++    if (Option.matches(options::OPT_Xarch_host) ||
++        Option.matches(options::OPT_Xarch_device) ||
++        Option.matches(options::OPT_Xarch__)) {
++      // Native Xarch translation permits exactly one non-driver option. Do
++      // not consume another carrier as a missing operand or mask its error.
++      const unsigned Value = Option.matches(options::OPT_Xarch__) ? 1 : 0;
++      const char *Payload = Argument->getValue(Value);
++      llvm::opt::InputArgList Scoped(&Payload, &Payload + 1);
++      unsigned Next = 0;
++      auto ScopedArgument = getDriverOptTable().ParseOneArg(
++          Scoped, Next, llvm::opt::Visibility(options::ClangOption));
++      if (Caller && ScopedArgument && Next == 1 &&
++          !ScopedArgument->getOption().hasFlag(options::NoXarchOption))
++        Drop |= DropOption(*ScopedArgument);
+     }
+-    Drop |= Native;
+-    if (Drop)
++    if (Drop) {
+       for (unsigned J = Start; J < std::min<unsigned>(I, Joined.size()); ++J)
+         Keep[J] = false;
++      continue;
++    }
++    unsigned Stream;
++    if (Option.matches(options::OPT_Xclang)) Stream = 0;
++    else if (Option.matches(options::OPT_Xpreprocessor) ||
++             Option.matches(options::OPT_Wp_COMMA)) Stream = 1;
++    else if (Option.getName() == "Xclangas") Stream = 2;
++    else if (Option.matches(options::OPT__SLASH_clang)) Stream = 3;
++    else continue;
++    SmallVector<const char *, 8> Values;
++    for (const char *Value : Argument->getValues()) {
++      const char *Saved = Saver.save(Value).data();
++      Values.push_back(Saved);
++      Forwarded[Stream].push_back({Saved, Caller, Start});
++    }
++    Carriers.push_back({Start, I, Stream,
++        Option.matches(options::OPT_Wp_COMMA),
++        Option.matches(options::OPT__SLASH_clang), std::move(Values)});
+   }
+-  unsigned Offset = 0;
+-  for (auto &Segment : Segments) {
+-    SmallVector<const char *, 16> Kept;
+-    for (const char *Token : Segment)
+-      if (Keep[Offset++]) Kept.push_back(Token);
+-    Segment = std::move(Kept);
++  for (unsigned Stream = 0; Stream != Forwarded.size(); ++Stream)
++    filterNativePolicy(Forwarded[Stream], Pure, NoNative, AllowedPrefixes,
++                       SDK, Saver, Stream == 3 ? options::ClangOption
++                                  : Stream == 2 ? options::CC1AsOption
++                                                : options::CC1Option);
++  for (const auto &Carrier : Carriers) {
++    SmallVector<const char *, 8> Values;
++    for (const auto &Value : Forwarded[Carrier.Stream])
++      if (Value.Source == Carrier.Begin) Values.push_back(Value.Text);
++    if (Values == Carrier.Original) continue;
++    if (Values.empty()) {
++      for (unsigned J = Carrier.Begin; J < Carrier.End; ++J) Keep[J] = false;
++    } else if (Carrier.Comma) {
++      std::string Replacement = "-Wp";
++      for (const char *Value : Values) { Replacement += ','; Replacement += Value; }
++      Arguments[Carrier.Begin].Text = Saver.save(Replacement).data();
++    } else if (Carrier.Joined) {
++      Arguments[Carrier.Begin].Text = Saver.save(
++          std::string("/clang:") + Values.front()).data();
++    } else {
++      Arguments[Carrier.Begin + 1].Text = Values.front();
++    }
+   }
++  SmallVector<PolicyArgument, 256> Kept;
++  for (unsigned I = 0; I != Arguments.size(); ++I)
++    if (Keep[I]) Kept.push_back(Arguments[I]);
++  Arguments.assign(Kept.begin(), Kept.end());
++}
++
++static void filterCallerPolicy(
++    std::array<SmallVector<const char *, 16>, 4> &Segments,
++    bool Pure, bool NoNative, ArrayRef<const char *> AllowedPrefixes,
++    StringRef SDK, llvm::StringSaver &Saver,
++    unsigned Visibility = options::ClangOption) {
++  SmallVector<PolicyArgument, 256> Arguments;
++  for (unsigned I = 0; I != Segments.size(); ++I)
++    for (const char *Text : Segments[I]) Arguments.push_back({Text, I == 1, I});
++  filterNativePolicy(Arguments, Pure, NoNative, AllowedPrefixes, SDK, Saver,
++                     Visibility);
++  for (auto &Segment : Segments) Segment.clear();
++  for (const auto &Argument : Arguments)
++    Segments[Argument.Source].push_back(Argument.Text);
+ }
+ 
+ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request,
+                                    llvm::BumpPtrAllocator &Allocator,
+                                    SmallVectorImpl<const char *> &Args,
+                                    bool Query) {
++  llvm::StringSaver Saver(Allocator);
+   // Frontend entry has standalone caller semantics and ignores all policy.
+   // This first pass observes only the native entry, not full option validity.
+   SmallVector<const char *, 256> Caller{Program};
+@@ -375,7 +473,7 @@ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request
+     Frontend[1].assign(Caller.begin() + 2, Caller.end());
+     if (StringRef(Caller[1]) == "-cc1" || StringRef(Caller[1]) == "-cc1as")
+       filterCallerPolicy(Frontend, Request.Pure, Request.NoNative,
+-                         Request.AllowedPrefixes, Request.SDK,
++                         Request.AllowedPrefixes, Request.SDK, Saver,
+                          StringRef(Caller[1]) == "-cc1" ? options::CC1Option
+                                                        : options::CC1AsOption);
+     Args.assign({Program, Caller[1]});
+@@ -405,18 +503,17 @@ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request
+     Frontend = !Expanded[1].empty() &&
+                StringRef(Expanded[1][0]).starts_with("-cc1");
+     if (Frontend) return false;
+-    if (!Mode.empty() && Mode != "gcc" && Mode != "g++" && Mode != "cpp")
+-      return false;
+     if (!Expand(0) || !Expand(2) || (IncludeCPP && !Expand(3)))
+       return false;
+     filterCallerPolicy(Expanded, Request.Pure, Request.NoNative,
+-                       Request.AllowedPrefixes, Request.SDK);
++                       Request.AllowedPrefixes, Request.SDK, Saver,
++                       primaryOptionVisibility(Mode));
+     SmallVector<const char *, 256> Joined{Program};
+     for (unsigned I = 0; I != 4; ++I)
+       llvm::append_range(Joined, Expanded[I]);
+     unsigned MissingIndex, MissingCount;
+     auto Parsed = getDriverOptTable().ParseArgs(ArrayRef(Joined).drop_front(),
+-        MissingIndex, MissingCount, llvm::opt::Visibility(options::ClangOption));
++        MissingIndex, MissingCount, llvm::opt::Visibility(primaryOptionVisibility(Mode)));
+     Request.CallerDelimiter = -1;
+     if (Arg *Delimiter = Parsed.getLastArg(options::OPT__DASH_DASH)) {
+       unsigned Index = Delimiter->getIndex(), Begin = Expanded[0].size();
+@@ -443,8 +540,6 @@ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request
+       driver::applyOverrideOptions(Selection, Override, SelectionStrings,
+                                    "CCC_OVERRIDE_OPTIONS", nullptr);
+     StringRef Mode = getDriverMode(Program, ArrayRef(Selection).drop_front());
+-    if (!Mode.empty() && Mode != "gcc" && Mode != "g++" && Mode != "cpp")
+-      return false;
+     Request.CXX = Mode == "g++";
+     if (Request.CXX && !Request.Args[3].empty() &&
+         !Interpret(true, Frontend)) return false;
+@@ -565,9 +660,3 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+   }
+ 
+-  if (PrimaryArgsFD) {
+-    StringRef Mode = getDriverMode(ProgName, ArrayRef(Args).drop_front());
+-    if (!Mode.empty() && Mode != "gcc" && Mode != "g++" && Mode != "cpp")
+-      return 1;
+-  }
+-
+   std::string Path = GetExecutablePath(ToolContext.Path, CanonicalPrefixes);

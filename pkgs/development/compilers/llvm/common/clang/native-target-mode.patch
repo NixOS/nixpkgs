@@ -1,0 +1,83 @@
+diff --git a/lib/Driver/Driver.cpp b/lib/Driver/Driver.cpp
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -1518,36 +1518,3 @@
+-  // Configured defaults yield only to an explicitly requested target. Mode
+-  // options such as -m32 select a variant of the configured target and keep
+-  // them, as the wrapper's own -target prefix did.
+-  if (!NativeDefaultTarget.empty()) {
+-    llvm::Triple Expected(llvm::Triple::normalize(NativeDefaultTarget));
+-    llvm::Triple Requested = Expected;
+-    if (const Arg *A = Args.getLastArg(options::OPT_target))
+-      Requested = llvm::Triple(llvm::Triple::normalize(A->getValue()));
+-    if (Expected.isMacOSX()) Expected.setOS(llvm::Triple::MacOSX);
+-    if (Requested.isMacOSX()) Requested.setOS(llvm::Triple::MacOSX);
+-    if (Expected == Requested) {
+-      bool DefaultsError = false;
+-      SmallVector<const char *, 32> HostDefaults;
+-      for (const char *Flag : NativeTargetDefaults) {
+-        HostDefaults.push_back("-Xarch_host");
+-        HostDefaults.push_back(Flag);
+-      }
+-      InputArgList Defaults = ParseArgStrings(HostDefaults,
+-          /*UseDriverMode=*/false, DefaultsError);
+-      ContainsError |= DefaultsError;
+-      for (auto *A : Args) appendOneArg(Defaults, A);
+-      Args = std::move(Defaults);
+-    } else if (!PrimaryQueryFD) {
+-      int Suppress = 0;
+-      if (const char *Value = ::getenv("NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING"))
+-        if (StringRef(Value).getAsInteger(10, Suppress)) Suppress = 0;
+-      if (Suppress < 1)
+-        llvm::errs() << "warning: configured target defaults omitted for "
+-                     << Requested.str() << " (configured "
+-                     << NativeDefaultTarget << ")\n";
+-    }
+-  }
+-
+   // In CL mode, look for any pass-through arguments
+   if (IsCLMode() && !ContainsError) {
+     SmallVector<const char *, 16> CLModePassThroughArgList;
+@@ -1572,3 +1539,36 @@
++  // Configured defaults yield only to an explicitly requested target. Mode
++  // options such as -m32 select a variant of the configured target and keep
++  // them, as the wrapper's own -target prefix did.
++  if (!NativeDefaultTarget.empty()) {
++    llvm::Triple Expected(llvm::Triple::normalize(NativeDefaultTarget));
++    llvm::Triple Requested = Expected;
++    if (const Arg *A = Args.getLastArg(options::OPT_target))
++      Requested = llvm::Triple(llvm::Triple::normalize(A->getValue()));
++    if (Expected.isMacOSX()) Expected.setOS(llvm::Triple::MacOSX);
++    if (Requested.isMacOSX()) Requested.setOS(llvm::Triple::MacOSX);
++    if (Expected == Requested) {
++      bool DefaultsError = false;
++      SmallVector<const char *, 32> HostDefaults;
++      for (const char *Flag : NativeTargetDefaults) {
++        HostDefaults.push_back("-Xarch_host");
++        HostDefaults.push_back(Flag);
++      }
++      InputArgList Defaults = ParseArgStrings(HostDefaults,
++          /*UseDriverMode=*/false, DefaultsError);
++      ContainsError |= DefaultsError;
++      for (auto *A : Args) appendOneArg(Defaults, A);
++      Args = std::move(Defaults);
++    } else if (!PrimaryQueryFD) {
++      int Suppress = 0;
++      if (const char *Value = ::getenv("NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING"))
++        if (StringRef(Value).getAsInteger(10, Suppress)) Suppress = 0;
++      if (Suppress < 1)
++        llvm::errs() << "warning: configured target defaults omitted for "
++                     << Requested.str() << " (configured "
++                     << NativeDefaultTarget << ")\n";
++    }
++  }
++
+   // Check for working directory option before accessing any files
+   if (Arg *WD = Args.getLastArg(options::OPT_working_directory))
+     if (VFS->setCurrentWorkingDirectory(WD->getValue()))
+@@ -1621,2 +1621,3 @@
+-  if (IsCLMode()) {
+-    // clang-cl targets MSVC-style Win32.
++  if (IsCLMode() && NativeDefaultTarget.empty()) {
++    // clang-cl targets MSVC-style Win32 unless the wrapper supplies a default.
++    // Preserve the configured target as an explicit wrapper -target prefix did.

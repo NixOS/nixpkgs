@@ -1,0 +1,20 @@
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Subject: [PATCH] clang: retain query-only handling for SSAF listings
+
+LLVM 23 adds immediate SSAF listing actions. Keep their native predicates and
+combined-option behavior, returning query metadata before their output effects.
+
+Assisted-by: Codex
+
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -2602,3 +2602,4 @@
+   if (ListExtractors || ListFormats) {
++    if (PrimaryQueryFD) return false;
+     if (ListExtractors)
+       ssaf::printAvailableTUSummaryExtractors(llvm::outs());
+@@ -2610,3 +2611,4 @@
+   if (C.getArgs().hasArg(options::OPT__ssaf_list_formats)) {
++    if (PrimaryQueryFD) return false;
+     ssaf::printAvailableFormats(llvm::outs());
+     return false;

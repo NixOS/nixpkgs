@@ -121,6 +121,14 @@ let
           libclang =
             let
               clangWithLauncher = prev.libclang.overrideAttrs (old: {
+                patches =
+                  (old.patches or [ ])
+                  ++ lib.optional ((old.passthru.nativePrimaryQuery or null) != null) (
+                    if lib.versionOlder llvmVersion "21" then
+                      ./patches/clang/native-primary-query-cache.patch
+                    else
+                      ./patches/clang/native-primary-query-cache-21.patch
+                  );
                 separateDebugInfo = false; # Otherwise, the debug output is huge (too large for Hydra).
                 postInstall = (old.postInstall or "") + ''
                   moveToOutput bin/clang-deps-launcher.py "$python"
