@@ -19042,6 +19042,12 @@
     github = "meenzen";
     githubId = 22305878;
   };
+  megapixel-code = {
+    name = "Ivan";
+    email = "chainemegapixel@gmail.com";
+    github = "megapixel-code";
+    githubId = 77630002;
+  };
   megheaiulian = {
     email = "iulian.meghea@gmail.com";
     github = "megheaiulian";
