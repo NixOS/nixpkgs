@@ -6832,8 +6832,6 @@ with pkgs;
     }
   );
 
-  _surrealdbPackage = ../by-name/su/surrealdb/package.nix;
-
   icingaweb2 = callPackage ../servers/icingaweb2 { };
   icingaweb2Modules = recurseIntoAttrs {
     theme-april = callPackage ../servers/icingaweb2/theme-april { };
