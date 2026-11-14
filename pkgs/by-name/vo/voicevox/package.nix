@@ -22,20 +22,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox";
-  version = "0.25.2";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
     tag = finalAttrs.version;
-    hash = "sha256-AORB6oxvDUNOxnwgIlAKkgtt0+NpU16Fc4qc1aMhxkQ=";
+    hash = "sha256-hy8Nf65bbcjeES21hfrfvPE6KZ7xZyX1hKYegXn5bzs=";
   };
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
       electron_path = lib.getExe electron;
       sevenzip_path = lib.getExe _7zz;
-      voicevox_engine_path = lib.getExe voicevox-engine;
     })
   ];
 
@@ -68,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     fetcherVersion = 3;
-    hash = "sha256-0Z/C4x4ZDPC+3o5i6KJgFqmAhHk9CUhoPB9+6yyLtdE=";
+    hash = "sha256-3HTpSD7lRYQazvRgHPvGNR4cbf484Pn8t6H99YgLsX8=";
   };
 
   nativeBuildInputs = [
@@ -96,12 +95,17 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
+    # Set up vite to use our own voicevox-engine by default
+    export VOICEVOX_ENGINE_PLACEMENT_MODE="none"
+    substitute .env.example .env.production \
+      --replace-fail 'vv-engine/run.exe' '${lib.getExe voicevox-engine}'
+
     # note: we patched out the call to electron-builder in postPatch
     pnpm run electron:build:compile
 
     pnpm exec electron-builder \
       --dir \
-      --config ./build/electronBuilderConfigLoader.cjs \
+      --config ./build/electronBuilderConfig.ts \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version} \
       -c.mac.identity=null
