@@ -1,0 +1,40 @@
+From 306af23df759f3aa7b8ed2dc337c2c7c6c732e48 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stanis=C5=82aw=20Pitucha?= <git@viraptor.info>
+Date: Wed, 7 Oct 2026 14:22:23 +1100
+Subject: [PATCH] More portable mkCertTemplate
+
+---
+ extensions/httpserver/mkCertTemplate.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/extensions/httpserver/mkCertTemplate.sh b/extensions/httpserver/mkCertTemplate.sh
+index 5611e15c..92bd9517 100755
+--- a/extensions/httpserver/mkCertTemplate.sh
++++ b/extensions/httpserver/mkCertTemplate.sh
+@@ -5,12 +5,12 @@ set -o pipefail
+ 
+ echo "== Using /usr/bin/openssl. PATH would use: $(which openssl)"
+ echo "== Generating a private key and using it to sign an x509:"
+-/usr/bin/openssl req -x509 -newkey rsa:2048 -outform DER -out cert.cer -config openssl.conf -set_serial 106 >/dev/null
++openssl req -x509 -newkey rsa:2048 -outform DER -out cert.cer -config openssl.conf -set_serial 106 >/dev/null
+ 
+ echo ""
+ 
+ echo "== Dumping ASN.1 structure of cert.cer:"
+-/usr/bin/openssl asn1parse -inform DER -in cert.cer -dump -i >cert.cer.asn1
++openssl asn1parse -inform DER -in cert.cer -dump -i >cert.cer.asn1
+ 
+ echo ""
+ 
+@@ -37,7 +37,7 @@ echo "#define kCSRLength     ${CSR_LENGTH}u" >>${INCLUDE_FILE}
+ echo "" >>${INCLUDE_FILE}
+ 
+ echo "=== Dumping template certificate bytes..."
+-/usr/bin/openssl x509 -C -inform DER -in cert.cer -noout | sed -n '/XXX_certificate/,$p' | sed -e 's/unsigned char XXX_certificate/static uint8_t const kCertTemplate/' >>${INCLUDE_FILE}
++xxd -i cert.cer | sed '/cert_cer_len/d' | sed -e 's/unsigned char cert_cer/static uint8_t const kCertTemplate/' >>${INCLUDE_FILE}
+ 
+ echo "=== Tidying..."
+ rm -rv cert.cer
+-- 
+2.51.2
+
