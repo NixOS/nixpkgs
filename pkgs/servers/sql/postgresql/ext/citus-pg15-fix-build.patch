@@ -1,0 +1,33 @@
+diff --git a/src/include/pg_version_compat.h b/src/include/pg_version_compat.h
+index a30925e..b53eac6 100644
+--- a/src/include/pg_version_compat.h
++++ b/src/include/pg_version_compat.h
+@@ -600,28 +600,6 @@ object_aclcheck(Oid classid, Oid objectid, Oid roleid, AclMode mode)
+ }
+ 
+ 
+-static inline bool
+-have_createdb_privilege(void)
+-{
+-	bool result = false;
+-	HeapTuple utup;
+-
+-	/* Superusers can always do everything */
+-	if (superuser())
+-	{
+-		return true;
+-	}
+-
+-	utup = SearchSysCache1(AUTHOID, ObjectIdGetDatum(GetUserId()));
+-	if (HeapTupleIsValid(utup))
+-	{
+-		result = ((Form_pg_authid) GETSTRUCT(utup))->rolcreatedb;
+-		ReleaseSysCache(utup);
+-	}
+-	return result;
+-}
+-
+-
+ typedef bool TU_UpdateIndexes;
+ 
+ /*
