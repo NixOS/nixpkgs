@@ -7,10 +7,10 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "arduino-ide";
-  version = "2.3.10";
+  version = "2.3.11";
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${finalAttrs.version}/arduino-ide_${finalAttrs.version}_Linux_64bit.AppImage";
-    hash = "sha256-echZChdEwiDXLL7Q6pHG4qf0WUKSaZsvszZOvXE81WY=";
+    hash = "sha256-8kP4+JTr7FDL3w5N7MTzHdFvIiVCUN5iQ+q4Dtg9OpA=";
   };
 
   extraInstallCommands = ''
