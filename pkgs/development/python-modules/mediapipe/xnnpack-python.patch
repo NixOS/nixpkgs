@@ -1,0 +1,14 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -648,8 +648,8 @@ genrule(
+         ":build_identifier_ukernel_srcs",
+     ],
+     outs = ["src/build_identifier.c"],
+-    cmd = "$(location generate_build_identifier_py) --output $@ --input_file_list $(location :build_identifier_ukernel_srcs_list)",
+-    tools = [":generate_build_identifier_py"],
++    cmd = "@python@ $(location scripts/generate-build-identifier.py) --output $@ --input_file_list $(location :build_identifier_ukernel_srcs_list)",
++    tools = ["scripts/generate-build-identifier.py"],
+ )
+ 
+ xnnpack_cc_library(
