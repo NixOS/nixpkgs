@@ -5,7 +5,7 @@ Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers cre
 
 ## Arguments with finalAttrs {#trivial-builder-finalAttrs}
 
-In parameters that reference this section, you may either pass the value itself,
+In parameters that support `finalAttrs`, you may either pass the value itself,
 or a function that produces it.
 When it's a function the argument value is [`finalAttrs`] from [`mkDerivation`].
 

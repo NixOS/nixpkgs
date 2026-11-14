@@ -146,7 +146,7 @@ mkRocqDerivation {
 
 ## Three ways of overriding Rocq packages {#rocq-overriding-packages}
 
-There are three distinct ways of changing a Rocq package by overriding one of its values: `.override`, `overrideRocqDerivation`, and `.overrideAttrs`.  This section explains what sort of values can be overridden with each of these methods.
+There are three distinct ways of changing a Rocq package by overriding one of its values: `.override`, `overrideRocqDerivation`, and `.overrideAttrs`.  Each method overrides a different sort of value.
 
 ### `.override` {#rocq-override}
 

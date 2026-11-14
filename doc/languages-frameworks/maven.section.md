@@ -316,7 +316,7 @@ with pkgs;
 (buildMaven ./project-info.json).repo
 ```
 
-The benefit over the _double invocation_ as we will see below, is that the _/nix/store_ entry is a _linkFarm_ of every package, so that changes to your dependency set doesn't involve downloading everything from scratch.
+The benefit over the _double invocation_ is that the _/nix/store_ entry is a _linkFarm_ of every package, so that changes to your dependency set doesn't involve downloading everything from scratch.
 
 ```bash
 ❯ tree $(nix-build --no-out-link build-maven-repository.nix) | head

@@ -66,7 +66,7 @@ hash using `nix-hash --to-sri --type sha256 "<original sha256>"`.
 ```
 
 If this method does not work, you can resort to copying the `Cargo.lock` file into Nixpkgs
-and importing it as described in the [next section](#importing-a-cargo.lock-file).
+and importing it as described in [Importing a `Cargo.lock` file](#importing-a-cargo.lock-file).
 
 Both types of hashes are permitted when contributing to Nixpkgs. The
 Cargo hash is obtained by inserting a fake checksum into the
@@ -842,8 +842,8 @@ with import <nixpkgs> { };
 
 ### Options and phases configuration {#options-and-phases-configuration}
 
-Actually, the overrides introduced in the previous section are more
-general. A number of other parameters can be overridden:
+Crate overrides are more general than build-input overrides. A number of other
+parameters can be overridden:
 
 - The version of `rustc` used to compile the crate:
 

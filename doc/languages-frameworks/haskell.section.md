@@ -7,8 +7,7 @@ packaging Haskell-based packages.
 The secondary purpose is to provide support for Haskell development environments
 including prebuilt Haskell libraries. However, in this area sacrifices have been
 made due to self-imposed restrictions in Nixpkgs, to lessen the maintenance
-effort and to improve performance. (More details in the subsection
-[Limitations.](#haskell-limitations))
+effort and to improve performance. See [Limitations](#haskell-limitations) for details.
 
 ## Available packages {#haskell-available-packages}
 
@@ -486,7 +485,7 @@ recommended to use the more accurate ones listed above when possible.
 
 `haskellPackages.mkDerivation` accepts the following attributes as direct
 arguments which are transparently set in `meta` of the resulting derivation. See
-the [Meta-attributes section](#chap-meta) for their documentation.
+[Meta-attributes](#chap-meta) for their documentation.
 
 * These attributes are populated with a default value if omitted:
     * `homepage`: defaults to the Hackage page for `pname`.
@@ -552,11 +551,10 @@ turtle-incremental-build
 In addition to building and installing Haskell software, Nixpkgs can also
 provide development environments for Haskell projects. This has the advantage that you benefit from `cache.nixos.org` and no longer need to compile
 all project dependencies yourself. While it is often very useful, this is not
-the primary use case of our package set. Have a look at the section
-[available package versions](#haskell-available-versions) to learn which
-versions of packages we provide and the section
-[limitations](#haskell-limitations), to judge whether a `haskellPackages`
-based development environment for your project is feasible.
+the primary use case of our package set. Have a look at
+[available package versions](#haskell-available-versions) to learn which versions
+of packages we provide, and [limitations](#haskell-limitations), to judge whether
+a `haskellPackages` based development environment for your project is feasible.
 
 By default, every derivation built using
 [`haskellPackages.mkDerivation`](#haskell-mkderivation) exposes an environment
@@ -851,8 +849,8 @@ in
 installManPage haskellPackages.pnbackup
 ```
 
-In fact, `haskell.lib.compose` already provides lots of useful helpers for common
-tasks, detailed in the next section. They are also structured in such a way that
+In fact, [`haskell.lib.compose`](#haskell-haskell.lib.compose) already provides lots of
+useful helpers for common tasks. They are also structured in such a way that
 they can be combined using `lib.pipe`:
 
 ```nix
@@ -1133,8 +1131,8 @@ from the same package set (`haskellPackages`, `haskell.packages.ghc944` etc.) as
 you are working with or – even better – from the `self`/`final` fix point of your overlay to
 `haskellPackages`.
 
-Note: Some functions like `shellFor` that are not intended for overriding per se, are omitted
-in this section. <!-- TODO(@sternenseemann): note about ifd section -->
+Note: Some functions like `shellFor` that are not intended for overriding per se, are
+omitted. <!-- TODO(@sternenseemann): note about ifd section -->
 
 `cabalSdist { src, name ? ... }`
 : Generates the Cabal sdist tarball for `src`, suitable for uploading to Hackage.
@@ -1253,7 +1251,7 @@ it does for the unstable branches.
 
 ## F.A.Q. {#haskell-faq}
 
-### Why is topic X not covered in this section? Why is section Y missing? {#haskell-why-not-covered}
+### Why is a Haskell topic not documented here? {#haskell-why-not-covered}
 
 We have been working on [moving the nixpkgs Haskell documentation back into the
 nixpkgs manual](https://github.com/NixOS/nixpkgs/issues/121403). <!-- krank:ignore-line -->

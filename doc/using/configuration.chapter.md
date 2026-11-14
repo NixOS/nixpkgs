@@ -344,7 +344,7 @@ To install it into our environment, you can just run `nix-env -iA nixpkgs.myPack
 
 ### Getting documentation {#sec-getting-documentation}
 
-After building that new environment, look through `~/.nix-profile` to make sure everything is there that we wanted. Discerning readers will note that some files are missing. Look inside `~/.nix-profile/share/man/man1/` to verify this. There are no man pages for any of the Nix tools! This is because some packages like Nix have multiple outputs for things like documentation (see section 4). Let's make Nix install those as well.
+After building that new environment, look through `~/.nix-profile` to make sure everything is there that we wanted. Some files are missing. Look inside `~/.nix-profile/share/man/man1/` to verify this: there are no man pages for any of the Nix tools. This is because some packages like Nix have multiple outputs for things like documentation (see [Multiple-output packages](#chap-multiple-output)). Install those as well:
 
 ```nix
 {

@@ -7,14 +7,14 @@ These differences reflect the default assumptions for building software on that 
 In many cases, you can ignore these differences because the software you are packaging is already written with them in mind.
 When you do that, write your derivation as normal. You don’t have to include any Darwin-specific special cases.
 The easiest way to know whether your derivation requires special handling for Darwin is to write it as if it doesn’t and see if it works.
-If it does, you’re done; skip the rest of this.
+If it does, you’re done.
 
 - Darwin uses Clang by default instead of GCC. Packages that refer to `$CC` or `cc` should just work in most cases.
   Some packages may hardcode `gcc` or `g++`. You can usually fix that by setting `makeFlags = [ "CC=cc" "CXX=C++" ]`.
   If that does not work, you will have to patch the build scripts yourself to use the correct compiler for Darwin.
 - Darwin uses the system libc++ by default to avoid ODR violations and potential compatibility issues from mixing LLVM libc++ with the system libc++.
   While mixing the two usually worked, the two implementations are not guaranteed to be ABI compatible and are considered distinct by upstream.
-  See the troubleshooting guide below if you need to use newer C++ library features than those supported by the default deployment target.
+  See [Darwin Issue Troubleshooting](#sec-darwin-troubleshooting) if you need to use newer C++ library features than those supported by the default deployment target.
 - Darwin needs an SDK to build software.
   The SDK provides a default set of frameworks and libraries to build software, most of which are specific to Darwin.
   There are multiple versions of the SDK packages in Nixpkgs, but one is included by default in the `stdenv`.
