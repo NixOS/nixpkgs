@@ -131,6 +131,7 @@
   withLocaled ? true,
   withLogind ? true,
   withMachined ? true,
+  withMan ? !buildLibsOnly,
   withNetworkd ? true,
   withNspawn ? !buildLibsOnly,
   withNss ? !stdenv.hostPlatform.isMusl,
@@ -277,7 +278,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ]
-  ++ (lib.optional (!buildLibsOnly) "man");
+  ++ (lib.optional withMan "man");
   separateDebugInfo = true;
   __structuredAttrs = true;
 
@@ -302,21 +303,23 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     gettext
 
-    libxslt
-    docbook_xsl
-    docbook_xml_dtd_42
-    docbook_xml_dtd_45
     bash
     (buildPackages.python3Packages.python.withPackages (
       ps:
       with ps;
       [
-        lxml
         jinja2
       ]
+      ++ lib.optional withMan ps.lxml
       ++ lib.optional withEfi ps.pyelftools
       ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
+  ]
+  ++ lib.optionals withMan [
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45
   ]
   ++ lib.optionals withLibBPF [
     bpftools
@@ -528,7 +531,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "xenctrl" false)
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
-    (lib.mesonEnable "man" true)
+    (lib.mesonEnable "man" withMan)
     (lib.mesonEnable "nspawn" withNspawn)
 
     (lib.mesonBool "vconsole" withVConsole)
