@@ -5,6 +5,7 @@
   xar,
   cpio,
   pbzx,
+  makeWrapper,
   writeShellApplication,
   cacert,
   curl,
@@ -14,11 +15,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tailscale-gui";
-  version = "1.98.5";
+  version = "1.104.7";
 
   src = fetchurl {
     url = "https://pkgs.tailscale.com/stable/Tailscale-${finalAttrs.version}-macos.pkg";
-    hash = "sha256-r7e8aKNWaX1psI0a3sohTUv8xmUv8oebH/ndjeHLoVA=";
+    hash = "sha256-Dsq2DgmNMfnL0zSGdHQpPcCJeBVGZdp1w/P+H4IV1uc=";
   };
 
   dontUnpack = true;
@@ -27,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     xar
     cpio
     pbzx
+    makeWrapper
   ];
 
   installPhase = ''
@@ -35,11 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cd Distribution.pkg
     pbzx -n Payload | cpio -i
 
-    mkdir -p $out/Applications/Tailscale.app
+    mkdir -p $out/Applications
     mkdir -p $out/bin
 
-    cp -R Contents $out/Applications/Tailscale.app/
-    ln -s "$out/Applications/Tailscale.app/Contents/MacOS/Tailscale" "$out/bin/tailscale"
+    cp -R Tailscale.app $out/Applications/
+    makeWrapper "$out/Applications/Tailscale.app/Contents/MacOS/Tailscale" "$out/bin/tailscale"
 
     runHook postInstall
   '';
