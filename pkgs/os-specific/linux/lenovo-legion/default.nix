@@ -26,6 +26,15 @@ stdenv.mkDerivation {
     "INSTALLDIR=${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/platform/x86"
     "MODDESTDIR=${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/platform/x86"
     "DKMSDIR=${placeholder "out"}/lib/modules/${kernel.modDirVersion}/misc"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "DEPMOD=true"
+  ];
+
+  installTargets = [ "modules_install" ];
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
   ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
