@@ -400,14 +400,12 @@ in
         pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
       ];
 
-      # Restarting this unit terminates the active GNOME session.
-      systemd.user.services.gnome-session-monitor = {
-        restartIfChanged = false;
+      # Suppress restarting some units to avoid terminating active GNOME sessions and windows.
+      systemd.user.services = lib.genAttrs [ "gnome-session-monitor" "gnome-terminal-server" ] (_: {
         overrideStrategy = "asDropin";
-        # No need to add the NixOS default Environment="Path=coreutils:...",
-        # to the gnome-session-monitor service.
-        enableDefaultPath = false;
-      };
+        restartIfChanged = false;
+        enableDefaultPath = false; # No need to add the NixOS default Environment="Path=coreutils:..."
+      });
 
       services.udev.packages = [
         # Force enable KMS modifiers for devices that require them.
