@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rich-rst";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wasi-master";
     repo = "rich-rst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T90U1KC6gg0145t+mGOJhDKFeQmcAczXcRBPQnDQXqs=";
+    hash = "sha256-ADUhGUvipNtOCWCpMpeJ3mQzJUMrgtos8Cg2GaENQPs=";
   };
 
   build-system = [
