@@ -1,0 +1,21 @@
+diff --git a/tests/test_job.py b/tests/test_job.py
+--- a/tests/test_job.py
++++ b/tests/test_job.py
+@@ -373,11 +373,17 @@
+     class FakeSentryTransport:
+         def __init__(self, *args, **kwargs):
+             self.args = args
++            self.parsed_dsn = None
+             self.kwargs = kwargs
+             self.messages_sent = []
+ 
+         def capture_event(self, event_opt):
+             self.messages_sent.append(event_opt)
++
++        def capture_envelope(self, envelope):
++            event = envelope.get_event()
++            if event is not None:
++                self.messages_sent.append(event)
+ 
+         def kill(self):
+             pass
