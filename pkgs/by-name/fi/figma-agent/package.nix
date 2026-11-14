@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "figma-agent";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "neetly";
     repo = "figma-agent-linux";
     tag = finalAttrs.version;
-    hash = "sha256-eP2C/u4CWdf7ABHdxapFcrmI1Un405wIHE0kpvz7y7A=";
+    hash = "sha256-E9Pn00wjvzAEubAfVx4Q9oBaUFtL6TLAVhRGONDq4LA=";
   };
 
-  cargoHash = "sha256-KmoTsriLnYvEI+yOOV9sLQ6qPRKqYRDzaYj7Kp72sP0=";
+  cargoHash = "sha256-OKDrATg8FSQZdyJNo2ns8gpfCv9/3eqZy+muPbkvJ8g=";
 
   nativeBuildInputs = [ pkg-config ];
 
