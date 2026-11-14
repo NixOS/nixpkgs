@@ -79,5 +79,12 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ naxdy ];
+    knownVulnerabilities = [
+      ''
+        bc-mbedtls is a fork of mbedtls 3.6.1, which does not keep up with security fixes in mainline mbedtls.
+        mbedtls 3.6.1 was released 2024-08-30, with the linphone fork receiving a total of 10 commits since, most of which build fixes rather than security fixes.
+        For more information of potential security issues of such ancient mbedtls, see https://nvd.nist.gov/vuln/search?cpeFilterMode=cpe&cpeName=cpe:2.3:a:arm:mbed_tls:3.6.1:*:*:*:*:*:*:*
+      ''
+    ];
   };
 }
