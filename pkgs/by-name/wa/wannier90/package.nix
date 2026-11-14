@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Calculation of maximally localised Wannier functions";
     homepage = "https://github.com/wannier-developers/wannier90";
     license = lib.licenses.lgpl21Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
 })
