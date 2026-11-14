@@ -4,7 +4,6 @@
   fetchurl,
   nixosTests,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "pv";
   version = "1.12.7";
@@ -21,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ivarch.com/programs/pv.shtml";
     description = "Tool for monitoring the progress of data through a pipeline";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      evanwporter
+    ];
     platforms = lib.platforms.all;
     mainProgram = "pv";
   };
