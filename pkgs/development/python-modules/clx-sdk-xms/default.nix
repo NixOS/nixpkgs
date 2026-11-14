@@ -5,7 +5,6 @@
   iso8601,
   requests,
   setuptools,
-  unstableGitUpdater,
 }:
 
 buildPythonPackage {
@@ -16,9 +15,10 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "clxcommunications";
     repo = "sdk-xms-python";
+    # Release 1.0.0. Upstream does not tag releases.
     # https://github.com/clxcommunications/sdk-xms-python/issues/4
-    rev = "8d629cd7bcaf91eaafee265a825e3c52191f1425";
-    hash = "sha256-qMR9OT+QAKZGwDuoZVAtfKD3PQB7rEU/iTRjgACVGBs=";
+    rev = "72cb5e8e449c5b37d7fa2d6a31c988694d1d0e0d";
+    hash = "sha256-m3SCW15U8YSl7k019NKfaygSZKkqTr4CRmLmAodXg6o=";
   };
 
   build-system = [ setuptools ];
@@ -29,8 +29,6 @@ buildPythonPackage {
   ];
 
   pythonImportsCheck = [ "clx.xms" ];
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Python SDK for the CLX Communications REST API (XMS) for sending and receiving SMS";
