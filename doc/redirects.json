@@ -2531,6 +2531,9 @@
   "ex-pkgs-mkProtonBinDerivation-steamDisplayName": [
     "index.html#ex-pkgs-mkProtonBinDerivation-steamDisplayName"
   ],
+  "ex-pkgs-mkProtonBinDerivation-userSettings": [
+    "index.html#ex-pkgs-mkProtonBinDerivation-userSettings"
+  ],
   "sec-redisTestHook": [
     "index.html#sec-redisTestHook"
   ],
