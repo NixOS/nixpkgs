@@ -1,0 +1,26 @@
+--- a/interlude/src/Program.fs
++++ b/interlude/src/Program.fs
+@@ -50,10 +50,12 @@
+ [<EntryPoint>]
+ let main (argv: string array) : int =
+     let executable_location = AppDomain.CurrentDomain.BaseDirectory
+-    Directory.SetCurrentDirectory(executable_location)
++    let game_dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Interlude")
++    Directory.CreateDirectory game_dir |> ignore
++    Directory.SetCurrentDirectory game_dir
+ 
+     let inline detect_temp_folder () : bool =
+-        executable_location.Replace("\\", "/").ToLower().Contains "appdata/local/temp"
++        OperatingSystem.IsWindows() && executable_location.Replace("\\", "/").ToLower().Contains "appdata/local/temp"
+ 
+     let inline detect_missing_libraries () : bool =
+         let missing_bass =
+@@ -62,7 +64,7 @@
+         let missing_bass_fx =
+             not(File.Exists("bass_fx.dll")) && not(File.Exists("libbass_fx.so")) && not(File.Exists("libbass_fx.dylib"))
+ 
+-        missing_bass || missing_bass_fx
++        false
+ 
+     let inline restart_on_exit () : unit =
+         let executable = Path.Combine(executable_location, "Interlude.exe")
