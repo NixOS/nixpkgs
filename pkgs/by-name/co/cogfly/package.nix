@@ -23,13 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-noOe0Jyb53swzloY7e1TWI6oYzOpQclrTU38/R5mvXk=";
   };
 
+  patches = [ ./fix-macos-open-saves.patch ];
+
   nativeBuildInputs = [
     gradle_9
     makeWrapper
     copyDesktopItems
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     zenity
   ];
 
@@ -70,14 +72,24 @@ stdenv.mkDerivation (finalAttrs: {
     cp build/libs/${lib.strings.toSentenceCase finalAttrs.pname}-${finalAttrs.version}.jar $out/bin
 
     makeWrapper ${lib.getExe temurin-jre-bin-25} $out/bin/cogfly \
+      --add-flags "-Xdock:name=Cogfly" \
+      --add-flags "-Xdock:icon=$out/share/icons/hicolor/128x128/apps/cogfly.png" \
       --add-flags "-jar $out/bin/${lib.strings.toSentenceCase finalAttrs.pname}-${finalAttrs.version}.jar" \
-      --prefix PATH : ${lib.makeBinPath [ zenity ]}
+      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [ zenity ])}"
 
     copyDesktopItems
 
     install -m 444 -D resources/icons/icon.png $out/share/icons/cogfly
     install -m 444 -D resources/icons/icon.png $out/share/icons/hicolor/128x128/apps/cogfly.png
-  '';
+  ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p \
+      $out/Applications/Cogfly.app/Contents/MacOS \
+      $out/Applications/Cogfly.app/Contents/Resources
+    cp $out/bin/cogfly $out/Applications/Cogfly.app/Contents/MacOS/cogfly
+    cp resources/mac/Info.plist $out/Applications/Cogfly.app/Contents/Info.plist
+    cp resources/icons/icon.icns $out/Applications/Cogfly.app/Contents/Resources/Cogfly.icns
+  '');
 
   passthru.updateScript = nix-update-script { };
 
@@ -92,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cogfly";
     platforms = [
       "x86_64-linux"
+      "aarch64-darwin"
     ];
   };
 })
