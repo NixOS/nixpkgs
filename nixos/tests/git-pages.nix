@@ -10,7 +10,7 @@
       git-pages = {
         settings.server = {
           pages = "tcp/:3000";
-          caddy = "tcp/:3001";
+          proxy = "tcp/:3001";
           metrics = "tcp/:3002";
         };
       };
