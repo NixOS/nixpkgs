@@ -6088,7 +6088,6 @@ with pkgs;
         makeScopeWithSplicing'
         generateSplicesForMkScope
         pkgsHostTarget
-        kdePackages
         ;
     }
   );
