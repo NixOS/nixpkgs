@@ -5198,6 +5198,11 @@
     githubId = 1689801;
     name = "Mikhail Chekan";
   };
+  Chemaclass = {
+    github = "Chemaclass";
+    githubId = 5256287;
+    name = "Jose M. Valera Reales";
+  };
   chemonke = {
     email = "nixpkgs@chemonke.ch";
     github = "chemonke";
