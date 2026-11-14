@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "squirrel-sql";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
-    sha256 = "sha256-aYwA2TRXI74s1BXfhlatBqPzC1xCfEqTe/yK8DCMo4E=";
+    sha256 = "sha256-wk4jSuZfVMxUy21kd5PF3emA1m479xjjhBB/TFPLjQo=";
   };
 
   nativeBuildInputs = [
