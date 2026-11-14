@@ -277,12 +277,16 @@ with lib;
               });
         in
         ''
-          ${vma}/bin/vma create "${config.image.baseName}.vma" \
+          # Write through a pipe: vma opens regular files with O_DIRECT and 512-byte
+          # aligned writes, which fails with EINVAL on 4K-sector block devices
+          # (e.g. LUKS2 with sector size 4096). The exec: target is a pipe, so no O_DIRECT.
+          ${vma}/bin/vma create "exec:${pkgs.zstd}/bin/zstd -q -o ${config.image.fileName}" \
             -c ${
               cfgFile "qemu-server.conf" (cfg.qemuConf // cfg.qemuExtraConf)
             }/qemu-server.conf drive-virtio0=$diskImage
           rm $diskImage
-          ${pkgs.zstd}/bin/zstd "${config.image.baseName}.vma"
+          # vma ignores the exit status of the exec: command, so check the archive
+          ${pkgs.zstd}/bin/zstd -q -t "${config.image.fileName}"
           mv "${config.image.fileName}" $out/
 
           mkdir -p $out/nix-support
