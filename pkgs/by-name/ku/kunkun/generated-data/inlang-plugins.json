@@ -1,0 +1,22 @@
+{
+  "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@latest/dist/index.js": {
+    "url": "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@1.4.8/dist/index.js",
+    "hash": "sha256-VOo5oZ5HYcF2sLvDXvt8/VcAklPPYUTxvVpId8OBqEw="
+  },
+  "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-missing-translation@latest/dist/index.js": {
+    "url": "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-missing-translation@1.4.8/dist/index.js",
+    "hash": "sha256-Bd/hEphGNMHyx7fyZ2uDIRVVZv1LVwlbPechutsh2ow="
+  },
+  "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-without-source@latest/dist/index.js": {
+    "url": "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-without-source@1.4.8/dist/index.js",
+    "hash": "sha256-aYS8sF5qx7OKN6nHOwI3paabbRa9DpBEhGd4nIJpdQA="
+  },
+  "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@latest/dist/index.js": {
+    "url": "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@4.4.1/dist/index.js",
+    "hash": "sha256-d3b+v9cAAnbkNMoyzPTKgmwA3JS+4fKVwLtxbW6edFE="
+  },
+  "https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@latest/dist/index.js": {
+    "url": "https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@2.2.9/dist/index.js",
+    "hash": "sha256-hYYvYwV5O1a/2a/lNosJbmP7Kuqzi3eZwFFRe+NJnAs="
+  }
+}
