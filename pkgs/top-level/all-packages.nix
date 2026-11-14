@@ -1916,15 +1916,6 @@ with pkgs;
 
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
-  gnupg24 = callPackage ../tools/security/gnupg/24.nix {
-    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gnome3;
-  };
-  gnupg = gnupg24;
-  gnupgMinimal = gnupg.override {
-    enableMinimal = true;
-    guiSupport = false;
-  };
-
   inherit (callPackage ../development/tools/godot { })
     godot3
     godot3-export-templates
