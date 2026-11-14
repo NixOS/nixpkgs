@@ -68,6 +68,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/jech/galene-file-transfer/raw/${finalAttrs.src.rev}/CHANGES";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    inherit (galene.meta) maintainers;
+    inherit (galene.meta) maintainers teams;
   };
 })

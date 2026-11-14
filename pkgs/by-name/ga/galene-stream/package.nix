@@ -95,6 +95,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/erdnaxe/galene-stream/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    inherit (galene.meta) maintainers;
+    inherit (galene.meta) maintainers teams;
   };
 })
