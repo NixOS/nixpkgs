@@ -7,20 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-periphery";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "vsergeev";
     repo = "c-periphery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IqQ9gmbh/bkQ6fwYegPPvqpHPTD9TJDQV7sPxuDNw7k=";
+    hash = "sha256-SojZS/qN+c78wMv8YUhtebDVst18i0qcTJ1WbMY6dbg=";
   };
-
-  outputs = [
-    "dev"
-    "lib"
-    "out"
-  ];
 
   postPatch = ''
     substituteInPlace src/libperiphery.pc.in \
