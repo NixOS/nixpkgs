@@ -14,6 +14,27 @@ let
   toCommandOptionsString =
     options: "${lib.concatStringsSep ":" options}${lib.optionalString (lib.length options != 0) ":"} ";
 
+  escapeCommand =
+    builtins.replaceStrings
+      [
+        "\\\\"
+        "\\:"
+        "\\,"
+        "\\="
+        ":"
+        ","
+        "="
+      ]
+      [
+        "\\\\"
+        "\\:"
+        "\\,"
+        "\\="
+        "\\:"
+        "\\,"
+        "\\="
+      ];
+
   toCommandsString =
     commands:
     lib.concatStringsSep ", " (
@@ -22,7 +43,7 @@ let
         if (lib.isString command) then
           command
         else
-          "${toCommandOptionsString command.options}${command.command}"
+          "${toCommandOptionsString command.options}${escapeCommand command.command}"
       ) commands
     );
 
@@ -163,6 +184,10 @@ in
                           A command being either just a path to a binary to allow any arguments,
                           the full command with arguments pre-set or with `""` used as the argument,
                           not allowing arguments to the command at all.
+
+                          The characters `,`, `:` and `=` are escaped automatically,
+                          so they can be written as is in arguments.
+                          Sequences that are already escaped (`\,`, `\:`, `\=`, `\\`) are kept unchanged.
                         '';
                       };
 

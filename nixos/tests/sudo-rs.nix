@@ -2,6 +2,7 @@
 { pkgs, ... }:
 let
   password = "helloworld";
+  echo = "${pkgs.coreutils}/bin/echo";
 in
 {
   name = "sudo-rs";
@@ -41,6 +42,9 @@ in
           extraGroups = [ "baz" ];
         };
         test5 = {
+          isNormalUser = true;
+        };
+        test6 = {
           isNormalUser = true;
         };
       };
@@ -106,6 +110,27 @@ in
             ];
             runAs = "test1:barfoo";
           }
+
+          # Special characters (`:`, `,`, `=`) in commands must be escaped
+          # in the generated sudoers file.
+          {
+            users = [ "test6" ];
+            commands = [
+              {
+                command = "${echo} flake:nixpkgs";
+                options = [ "NOPASSWD" ];
+              }
+              {
+                command = "${echo} a,b=c";
+                options = [ "NOPASSWD" ];
+              }
+              {
+                # Already escaped by the user, must keep working.
+                command = "${echo} pre\\:escaped";
+                options = [ "NOPASSWD" ];
+              }
+            ];
+          }
         ];
       };
     };
@@ -156,6 +181,14 @@ in
 
       with subtest("test5 user should not be able to run commands under root"):
           machine.fail("sudo -u test5 sudo -n -u root true 2>/dev/null")
+
+      with subtest("commands with special characters should be allowed"):
+          machine.succeed("sudo -u test6 sudo -n ${echo} flake:nixpkgs")
+          machine.succeed("sudo -u test6 sudo -n ${echo} a,b=c")
+          machine.succeed("sudo -u test6 sudo -n ${echo} pre:escaped")
+
+      with subtest("commands with special characters should not match other arguments"):
+          machine.fail("sudo -u test6 sudo -n ${echo} flake:other 2>/dev/null")
 
       with subtest("users in wheel should be able to run sudo despite execWheelOnly"):
           strict.succeed('faketty -- su - admin -c "sudo -u root true"')
