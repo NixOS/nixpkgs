@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-auditlog";
-  version = "3.4.1";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-commons";
     repo = "django-auditlog";
     tag = "v${version}";
-    hash = "sha256-/IOzMGRR8EP/AGP7fcqwP4GeSKXPwE6NF6AZmiF1+lA=";
+    hash = "sha256-DG3eXWjc6N6+tLm6jaD0Vuf5X3kBhBaHcYs4SyI+dy4=";
   };
 
   build-system = [
