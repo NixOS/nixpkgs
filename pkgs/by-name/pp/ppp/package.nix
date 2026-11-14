@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     systemdLibs
   ];
 
+  strictDeps = true;
+
   postPatch = ''
     for file in $(find -name Makefile.linux); do
       substituteInPlace "$file" --replace-fail '-m 4550' '-m 550'
@@ -86,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) pppd;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/ppp-project/ppp/releases/tag/${finalAttrs.src.tag}";
