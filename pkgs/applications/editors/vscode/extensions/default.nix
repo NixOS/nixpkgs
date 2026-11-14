@@ -722,6 +722,8 @@ let
         };
       };
 
+      bierner.lit-html = callPackage ./bierner.lit-html { };
+
       biomejs.biome = callPackage ./biomejs.biome { };
 
       bmalehorn.vscode-fish = buildVscodeMarketplaceExtension {
