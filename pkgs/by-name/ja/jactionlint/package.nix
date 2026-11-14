@@ -11,14 +11,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "jactionlint";
-  version = "2.4.0";
+  version = "2.5.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "jactionlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-biLyemR356UmjpE8ckN922WgF7WxByrfVs79Y8KQTTw=";
+    hash = "sha256-u9qyLHqiccAzLKOS8MPA0Nq/CWLu2GGYConX5xUFXks=";
   };
 
   vendorHash = "sha256-jf7hKPnaSl4iTYT0mtRRAEmgLKAA/lj0vSVoO9+iOvw=";
@@ -58,6 +58,9 @@ buildGoModule (finalAttrs: {
         "TestLinterFormatErrorMessageInSARIF"
         "TestNoFixGoldens"
         "TestOnlineCoverageGoldens"
+        # Golden files list ubuntu-22.04, which GitHub retires on 2027-04-17, and the linter reads the current date
+        "TestLinterLintError/err/runner_label_concatenation"
+        "TestLinterLintError/err/runner_labels_latest_conflict"
         # Needs real internet access, which the build sandbox does not provide
         "TestFetchError/not_found"
         "TestFetchRemoteYAML"
@@ -66,6 +69,7 @@ buildGoModule (finalAttrs: {
         "TestDetectNoRelease/no_new_version.json"
         "TestCouldNotFetch"
         "TestFetchURL"
+        "TestOwnWorkflowsPlanAndDryRun"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
