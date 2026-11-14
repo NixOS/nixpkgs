@@ -3793,6 +3793,12 @@
     githubId = 7346933;
     name = "betaboon";
   };
+  BetterCallJohn = {
+    name = "John Martin";
+    email = "hello@talanoa.email";
+    github = "BetterCallJohn";
+    githubId = 206312;
+  };
   beviu = {
     name = "beviu";
     email = "nixpkgs@beviu.com";
