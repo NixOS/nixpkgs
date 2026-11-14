@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     description = "Patch asyncio to allow nested event loops";
     homepage = "https://github.com/erdewit/nest_asyncio";
     changelog = "https://github.com/erdewit/nest_asyncio/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 })

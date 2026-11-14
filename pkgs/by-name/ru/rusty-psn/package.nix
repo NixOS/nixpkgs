@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  aws-lc,
   makeDesktopItem,
   copyDesktopItems,
   pkg-config,
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
   ]
   ++ lib.optionals withGui [

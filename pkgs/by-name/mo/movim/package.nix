@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   writers,
   dash,
   shellcheck-minimal,
@@ -70,6 +71,17 @@ php.buildComposerProject2 (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-YDXEdhtubI0ZGUwiRoCe+Wh4ieHOMmUODs3waE7xb0U=";
   };
+
+  patches = [
+    # > Remove the cached post display before retrieving it from the XMPP
+    # > network, the whole flow will be refactored later
+    #
+    # fixes CVE-2026-125379
+    (fetchpatch2 {
+      url = "https://github.com/movim/movim/commit/378e0368368d0dd9cb090b78e68a63064d47d512.patch";
+      hash = "sha256-f+rcgwbbNaXNcQ8w4bfBNTkRkcnCNu0/Pvsyv7dK6c0=";
+    })
+  ];
 
   php = php.buildEnv (
     {

@@ -4741,6 +4741,8 @@ self: super: with self; {
 
   django-fsm = callPackage ../development/python-modules/django-fsm { };
 
+  django-fsm-2 = callPackage ../development/python-modules/django-fsm-2 { };
+
   django-google-analytics-app =
     callPackage ../development/python-modules/django-google-analytics-app
       { };
@@ -21151,6 +21153,8 @@ self: super: with self; {
 
   toolz = callPackage ../development/python-modules/toolz { };
 
+  toon-format = callPackage ../development/python-modules/toon-format { };
+
   toonapi = callPackage ../development/python-modules/toonapi { };
 
   toposort = callPackage ../development/python-modules/toposort { };
@@ -22911,8 +22915,6 @@ self: super: with self; {
 
   whodap = callPackage ../development/python-modules/whodap { };
 
-  whois = callPackage ../development/python-modules/whois { };
-
   whois-api = callPackage ../development/python-modules/whois-api { };
 
   whoisdomain = callPackage ../development/python-modules/whoisdomain { };
@@ -23276,10 +23278,6 @@ self: super: with self; {
   youseedee = callPackage ../development/python-modules/youseedee { };
 
   youtokentome = callPackage ../development/python-modules/youtokentome { };
-
-  youtube-dl = callPackage ../development/python-modules/youtube-dl { };
-
-  youtube-dl-light = callPackage ../development/python-modules/youtube-dl { ffmpegSupport = false; };
 
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 

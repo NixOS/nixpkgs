@@ -1462,7 +1462,7 @@ builtins.intersectAttrs super {
     let
       path = pkgs.lib.makeBinPath [
         pkgs.ffmpeg
-        pkgs.youtube-dl
+        pkgs.yt-dlp
       ];
     in
     overrideCabal (_drv: {
