@@ -40,14 +40,16 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '"/bin/sh"' '"${bash}/bin/sh"'
 
     for f in tests/*; do
-      substituteInPlace $f \
-        --replace-quiet '/bin/hostname'   '${hostname}/bin/hostname' \
-        --replace-quiet '/bin/sleep'      'sleep' \
-        --replace-quiet '/bin/echo'       'echo' \
-        --replace-quiet '/bin/uname'      'uname' \
-        --replace-quiet '/bin/false'      'false' \
-        --replace-quiet '/bin/true'       'true' \
-        --replace-quiet '/usr/bin/printf' 'printf'
+      if [ -f $f ]; then
+        substituteInPlace $f \
+          --replace-quiet '/bin/hostname'   '${hostname}/bin/hostname' \
+          --replace-quiet '/bin/sleep'      'sleep' \
+          --replace-quiet '/bin/echo'       'echo' \
+          --replace-quiet '/bin/uname'      'uname' \
+          --replace-quiet '/bin/false'      'false' \
+          --replace-quiet '/bin/true'       'true' \
+          --replace-quiet '/usr/bin/printf' 'printf'
+      fi
     done
   '';
 
