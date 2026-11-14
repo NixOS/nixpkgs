@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-49YpdIh0DxLHfxos4sw1HUkV0XQBqmm4M9b0T4eN2xI=";
   };
 
+  patches = [
+    ./match-wrappers.patch
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
