@@ -14,6 +14,17 @@ in
   options.programs.labwc = {
     enable = lib.mkEnableOption "labwc";
     package = lib.mkPackageOption pkgs "labwc" { };
+
+    withUWSM = lib.mkEnableOption null // {
+      default = false;
+      example = true;
+      description = ''
+        Launch labwc with the UWSM (Universal Wayland Session Manager) session manager.
+        This has improved systemd support and is recommended for most users.
+        This automatically starts appropriate targets like `graphical-session.target`,
+        and `wayland-wm@labwc.service`.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -25,10 +36,26 @@ in
           "wlr"
           "gtk"
         ];
-
-        # To make a labwc session available for certain DMs like SDDM
-        services.displayManager.sessionPackages = [ cfg.package ];
       }
+
+      (lib.mkIf (cfg.withUWSM) {
+        programs.uwsm.enable = true;
+
+        # Configure UWSM to launch labwc from a display manager
+        programs.uwsm.waylandCompositors = {
+          labwc = {
+            prettyName = "labwc";
+            comment = "Lab Wayland Compositor managed by UWSM";
+            binPath = "/run/current-system/sw/bin/labwc";
+          };
+        };
+      })
+
+      (lib.mkIf (!cfg.withUWSM) {
+        # Make a plain labwc session available for display managers
+        services.displayManager.sessionPackages = [ cfg.package ];
+      })
+
       (import ./wayland-session.nix { inherit lib pkgs; })
     ]
   );
