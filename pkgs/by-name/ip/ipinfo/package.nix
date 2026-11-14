@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -17,8 +18,14 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
   # Tests require network access
   doCheck = false;
+
+  versionCheckProgramArg = [ "version" ];
 
   meta = {
     description = "Command Line Interface for the IPinfo API";
