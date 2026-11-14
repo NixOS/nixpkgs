@@ -11,21 +11,11 @@ let
     mkPackageOption
     mkIf
     mkOption
-    recursiveUpdate
-    optionalAttrs
     ;
 
   cfg = config.networking.wireless.iwd;
   ini = pkgs.formats.ini { };
-  defaults =
-    with config.networking.networkmanager;
-    optionalAttrs (enable && (wifi.backend == "iwd")) {
-      # without DefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
-      # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
-      DriverQuirks.DefaultInterface = "?*";
-    };
-  configFile = ini.generate "main.conf" (recursiveUpdate defaults cfg.settings);
-
+  configFile = ini.generate "main.conf" cfg.settings;
 in
 {
   options.networking.wireless.iwd = {
@@ -91,5 +81,5 @@ in
     };
   };
 
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ tmarkus ];
 }
