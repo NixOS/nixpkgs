@@ -18,7 +18,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-WwL/IbR7y916yvFZGdyHlrexqoyr2wDTNalaKMCdnRs=";
   };
 
-  cargoHash = "sha256-uMb45eScPjJV3NXcqr6TMJQZI/IHYY9cXgprG2j4UJA=";
+  cargoPatches = [ ./update-libbpf-sys.patch ];
+
+  cargoHash = "sha256-gVGi1n4xnu1L2ONmm3DtIqNRf0czGmfGZgpRORPWTRI=";
 
   cargoBuildFlags = [
     "--package"
