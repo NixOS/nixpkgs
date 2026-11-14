@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  isFreeThreaded,
 
   # build-system
   cmake,
@@ -47,6 +48,13 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ eigen ];
 
   dontUseCmakeBuildDir = true;
+
+  # The cmake hook configures nanobind as the top-level project, which runs
+  # find_package(Python). FindPython refuses a free-threaded interpreter
+  # unless the fourth field (gil_disabled) of Python_FIND_ABI allows it.
+  cmakeFlags = lib.optionals isFreeThreaded [
+    (lib.cmakeFeature "Python_FIND_ABI" "ANY;ANY;ANY;ON")
+  ];
 
   # nanobind check requires heavy dependencies such as tensorflow
   # which are less than ideal to be imported in children packages that
