@@ -12,9 +12,10 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nxtrace";
     repo = "NTrace-core";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wcS/HgErLkP3YhWeHujtjJU3c/5GrW0vl2IrnYuWAPs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wcS/HgErLkP3YhWeHujtjJU3c/5GrW0vl2IrnYuWAPs=";
   };
+
   vendorHash = "sha256-SRrWYyv8aDOBtGPSHat8umNArrIn+henPwb1l5JRN3s=";
 
   buildInputs = [ libpcap ];
@@ -23,8 +24,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/nxtrace/NTrace-core/config.Version=v${finalAttrs.version}"
+    "-X=github.com/nxtrace/NTrace-core/config.Version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -34,6 +34,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Open source visual route tracking CLI tool";
     homepage = "https://www.nxtrace.org/";
+    changelog = "https://github.com/nxtrace/NTrace-core/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sharzy ];
     mainProgram = "nexttrace";
