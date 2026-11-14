@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "webauthn";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "duo-labs";
     repo = "py_webauthn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rT/B95ILb2cI/HH01IC5b4319zdKnrf4ZLUIpAeC3fM=";
+    hash = "sha256-+2kvnZKmCWIeKQ93vVpzgSUXGnsrXcp4hrKCylGV3Cg=";
   };
 
   build-system = [ setuptools ];
