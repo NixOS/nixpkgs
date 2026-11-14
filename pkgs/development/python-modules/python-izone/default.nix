@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-izone";
-  version = "1.3.12";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Swamp-Ig";
     repo = "pizone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G4Hx3gXIaASZ6SKC+q3Gowc/JKOmTVC0ACUy+DrZegg=";
+    hash = "sha256-s9v8ek0Louxu82oYhJO5xL5fkzHxOQ6dM6HCpCLwCZ8=";
   };
 
   build-system = [
