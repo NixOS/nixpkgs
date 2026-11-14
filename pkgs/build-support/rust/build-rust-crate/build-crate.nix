@@ -271,7 +271,7 @@ in
           "$_i" "$_i" "$_i" "$_en" "$_ep"
         _i=$((_i + 1))
       done
-    } | make --no-print-directory -j"''${NIX_BUILD_CORES:-1}" -f -
+    } | MAKEFLAGS="$CARGO_MAKEFLAGS" make --no-print-directory -f -
   fi
 
   # Remove object files to avoid "wrong ELF type"
