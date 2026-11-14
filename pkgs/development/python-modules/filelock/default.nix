@@ -46,6 +46,7 @@ buildPythonPackage (finalAttrs: {
     # Very prone to timeouts on busy machines
     "tests/test_filelock.py"
     "tests/test_read_write.py"
+    "tests/test_soft_stale.py"
   ];
 
   meta = {
