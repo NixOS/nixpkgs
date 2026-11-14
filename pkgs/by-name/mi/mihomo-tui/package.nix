@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mihomo-tui";
-  version = "0.6.0";
+  version = "0.6.1";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "potoo0";
     repo = "mihomo-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w0W0J/SsEw6go5eRcLzEbGTh4JMxlp4pWjrTddFfpvc=";
+    hash = "sha256-BpPLQVqt/vQGyE0YXbl0dRX6T1U33dz7UKywpflA+V0=";
   };
 
-  cargoHash = "sha256-wHuf+dlqAsD63gJH44w6r3+sPMJdFYxSReuqW8NCyng=";
+  cargoHash = "sha256-cOjvabLwCSNeGSxMT/iSqmeLZ3QpRYXNFLpmW6wmJ+0=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,9 +35,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # build.rs requires Git describe metadata to generate the --version information.
     VERGEN_GIT_DESCRIBE = "v${finalAttrs.version}";
-    VERGEN_BUILD_DATE = "2026-10-31";
+    VERGEN_BUILD_DATE = "2026-11-14";
     VERGEN_DEFAULT_ON_ERROR = "1";
   };
+
+  preBuild = ''
+    # Remap build directory paths for deterministic output.
+    # Must be set in preBuild (not env) because $NIX_BUILD_TOP is a runtime
+    # bash variable that cannot be expanded in Nix string literals, and
+    # __structuredAttrs re-applies env vars between phases.
+    export RUSTFLAGS="--remap-path-prefix=$NIX_BUILD_TOP=/build ''${RUSTFLAGS:-}"
+  '';
 
   __darwinAllowLocalNetworking = true;
 
