@@ -11,16 +11,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "codex-acp";
-  version = "2.1.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "codex-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bSxt9vtFnIrdZDmFJdYAfqkgm4BrGYKe420RamPkZvg=";
+    hash = "sha256-7OK+k81QoS96NgCK1WlMq7lPhfAgwI+AGuv6zomOzf8=";
   };
 
-  npmDepsHash = "sha256-7v7QE0cmYsd3JGu0VoT53yZ1rb9wYB+tXt05G1EEvz8=";
+  npmDepsHash = "sha256-xACNKR04xLfIRdFo+MdO4aOaLVyhzZdD3vBpok67h4w=";
 
   patches = [
     # https://github.com/agentclientprotocol/codex-acp/pull/609
@@ -55,7 +55,9 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     description = "ACP adapter for Codex CLI";
