@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar-free";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "bgermann";
     repo = "unrar-free";
     tag = finalAttrs.version;
-    hash = "sha256-Eg5yGDtmaJLmUHWY5jdvhFtyPxMWWuWBrKR8noZqZw8=";
+    hash = "sha256-XjcwKkPHptIr+hr+kzXhDUzE62gqTXquv0SzRoWBM14=";
   };
 
   nativeBuildInputs = [
