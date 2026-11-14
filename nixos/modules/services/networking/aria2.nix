@@ -49,6 +49,7 @@ in
       [ "services" "aria2" "rpcListenPort" ]
       [ "services" "aria2" "settings" "rpc-listen-port" ]
     )
+    (lib.mkRenamedOptionModule [ "programs" "aria2" "openPorts" ] [ "services" "aria2" "openPorts" ])
   ];
 
   options = {
@@ -169,64 +170,71 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.settings.enable-rpc;
-        message = "RPC has to be enabled, the default module option takes care of that.";
-      }
-      {
-        assertion = !(cfg.settings ? rpc-secret);
-        message = "Set the RPC secret through services.aria2.rpcSecretFile so it will not end up in the world-readable nix store.";
-      }
-    ];
-
-    # Need to open ports for proper functioning
-    networking.firewall = lib.mkIf cfg.openPorts {
-      allowedUDPPortRanges = config.services.aria2.settings.listen-port;
-      allowedTCPPorts = [ config.services.aria2.settings.rpc-listen-port ];
-    };
-
-    users.users.aria2 = {
-      group = "aria2";
-      uid = config.ids.uids.aria2;
-      description = "aria2 user";
-      home = homeDir;
-      createHome = false;
-    };
-
-    users.groups.aria2.gid = config.ids.gids.aria2;
-
-    systemd.tmpfiles.rules = [
-      "d '${homeDir}' 0770 aria2 aria2 - -"
-      "d '${config.services.aria2.settings.dir}' ${config.services.aria2.downloadDirPermission} aria2 aria2 - -"
-    ];
-
-    systemd.services.aria2 = {
-      description = "aria2 Service";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        if [[ ! -e "${cfg.settings.save-session}" ]]
-        then
-          touch "${cfg.settings.save-session}"
-        fi
-        cp -f "${pkgs.writeText "aria2.conf" (customToKeyValue cfg.settings)}" "${cfg.settings.conf-path}"
-        chmod +w "${cfg.settings.conf-path}"
-        echo "rpc-secret=$(cat "$CREDENTIALS_DIRECTORY/rpcSecretFile")" >> "${cfg.settings.conf-path}"
-      '';
-
-      serviceConfig = {
-        Restart = "on-abort";
-        ExecStart = "${pkgs.aria2}/bin/aria2c --conf-path=${cfg.settings.conf-path}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        User = "aria2";
-        Group = "aria2";
-        LoadCredential = "rpcSecretFile:${cfg.rpcSecretFile}";
-        UMask = cfg.serviceUMask;
+  config = lib.mkMerge [
+    ({
+      # Need to open ports for proper functioning
+      # Note: As we do not have a dedicated programs.aria2.openPorts, people may use services.aria2.openPorts even when !cfg.enable,
+      # to allow bittorrent to work with ad-hoc invocations of aria2c.
+      networking.firewall = lib.mkIf cfg.openPorts {
+        allowedUDPPortRanges = config.services.aria2.settings.listen-port;
+        allowedTCPPorts = lib.mkIf config.services.aria2.settings.enable-rpc [
+          config.services.aria2.settings.rpc-listen-port
+        ];
       };
-    };
-  };
+    })
+    (lib.mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = cfg.settings.enable-rpc;
+          message = "RPC has to be enabled, the default module option takes care of that.";
+        }
+        {
+          assertion = !(cfg.settings ? rpc-secret);
+          message = "Set the RPC secret through services.aria2.rpcSecretFile so it will not end up in the world-readable nix store.";
+        }
+      ];
+
+      users.users.aria2 = {
+        group = "aria2";
+        uid = config.ids.uids.aria2;
+        description = "aria2 user";
+        home = homeDir;
+        createHome = false;
+      };
+
+      users.groups.aria2.gid = config.ids.gids.aria2;
+
+      systemd.tmpfiles.rules = [
+        "d '${homeDir}' 0770 aria2 aria2 - -"
+        "d '${config.services.aria2.settings.dir}' ${config.services.aria2.downloadDirPermission} aria2 aria2 - -"
+      ];
+
+      systemd.services.aria2 = {
+        description = "aria2 Service";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        preStart = ''
+          if [[ ! -e "${cfg.settings.save-session}" ]]
+          then
+            touch "${cfg.settings.save-session}"
+          fi
+          cp -f "${pkgs.writeText "aria2.conf" (customToKeyValue cfg.settings)}" "${cfg.settings.conf-path}"
+          chmod +w "${cfg.settings.conf-path}"
+          echo "rpc-secret=$(cat "$CREDENTIALS_DIRECTORY/rpcSecretFile")" >> "${cfg.settings.conf-path}"
+        '';
+
+        serviceConfig = {
+          Restart = "on-abort";
+          ExecStart = "${pkgs.aria2}/bin/aria2c --conf-path=${cfg.settings.conf-path}";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          User = "aria2";
+          Group = "aria2";
+          LoadCredential = "rpcSecretFile:${cfg.rpcSecretFile}";
+          UMask = cfg.serviceUMask;
+        };
+      };
+    })
+  ];
 
   meta.maintainers = [ lib.maintainers.timhae ];
 }
