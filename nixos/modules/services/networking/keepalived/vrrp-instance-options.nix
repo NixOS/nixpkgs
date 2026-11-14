@@ -123,6 +123,13 @@ with lib;
       description = "List of script names to invoke for health tracking.";
     };
 
+    trackFiles = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "maintenance" ];
+      description = "List of track_file names to monitor for health tracking.";
+    };
+
     trackInterfaces = mkOption {
       type = types.listOf types.str;
       default = [ ];

@@ -19,6 +19,7 @@ let
     }
 
     ${vrrpScriptStr}
+    ${vrrpTrackFileStr}
     ${vrrpInstancesStr}
     ${cfg.extraConfig}
   '';
@@ -49,6 +50,19 @@ let
         ${s.extraConfig}
       }
     '') vrrpScripts
+  );
+
+  vrrpTrackFileStr = concatStringsSep "\n" (
+    map (f: ''
+      track_file ${f.name} {
+        file "${f.file}"
+        weight ${toString f.weight}${optionalString f.reverse " reverse"}
+        ${optionalString (f.init.value != null) (
+          "init_file ${toString f.init.value}" + optionalString f.init.overwrite " overwrite"
+        )}
+        ${f.extraConfig}
+      }
+    '') vrrpTrackFiles
   );
 
   vrrpInstancesStr = concatStringsSep "\n" (
@@ -82,6 +96,12 @@ let
           }
         ''}
 
+        ${optionalString (builtins.length i.trackFiles > 0) ''
+          track_file {
+            ${concatStringsSep "\n" i.trackFiles}
+          }
+        ''}
+
         ${optionalString (builtins.length i.trackInterfaces > 0) ''
           track_interface {
             ${concatStringsSep "\n" i.trackInterfaces}
@@ -110,6 +130,14 @@ let
     }
     // config
   ) cfg.vrrpScripts;
+
+  vrrpTrackFiles = mapAttrsToList (
+    name: config:
+    {
+      inherit name;
+    }
+    // config
+  ) cfg.vrrpTrackFiles;
 
   vrrpInstances = mapAttrsToList (
     iName: iConfig:
@@ -144,7 +172,8 @@ let
       }
     ]
     ++ flatten (map (virtualIpAssertions i.name) i.virtualIps)
-    ++ flatten (map (vrrpScriptAssertion i.name) i.trackScripts);
+    ++ flatten (map (vrrpScriptAssertion i.name) i.trackScripts)
+    ++ flatten (map (vrrpTrackFileAssertion i.name) i.trackFiles);
 
   virtualIpAssertions = vrrpName: ip: [
     {
@@ -156,6 +185,16 @@ let
   vrrpScriptAssertion = vrrpName: scriptName: {
     assertion = builtins.hasAttr scriptName cfg.vrrpScripts;
     message = "services.keepalived.vrrpInstances.${vrrpName} trackscript ${scriptName} is not defined in services.keepalived.vrrpScripts.";
+  };
+
+  vrrpTrackFileAssertion = vrrpName: fileName: {
+    assertion = builtins.hasAttr fileName cfg.vrrpTrackFiles;
+    message = "services.keepalived.vrrpInstances.${vrrpName} trackfile ${fileName} is not defined in services.keepalived.vrrpTrackFiles.";
+  };
+
+  vrrpTrackFileOverwriteAssertion = f: {
+    assertion = f.init.overwrite -> f.init.value != null;
+    message = "services.keepalived.vrrpTrackFiles.${f.name}.init.overwrite requires services.keepalived.vrrpTrackFiles.${f.name}.init.value to be set";
   };
 
   pidFile = "/run/keepalived.pid";
@@ -276,6 +315,18 @@ in
         description = "Declarative vrrp script config";
       };
 
+      vrrpTrackFiles = mkOption {
+        type = types.attrsOf (
+          types.submodule (
+            import ./vrrp-file-options.nix {
+              inherit lib;
+            }
+          )
+        );
+        default = { };
+        description = "Declarative vrrp track_file config";
+      };
+
       vrrpInstances = mkOption {
         type = types.attrsOf (
           types.submodule (
@@ -323,7 +374,9 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = flatten (map vrrpInstanceAssertions vrrpInstances);
+    assertions =
+      flatten (map vrrpInstanceAssertions vrrpInstances)
+      ++ map vrrpTrackFileOverwriteAssertion vrrpTrackFiles;
 
     networking.firewall = lib.mkIf cfg.openFirewall (
       if config.networking.nftables.enable then
