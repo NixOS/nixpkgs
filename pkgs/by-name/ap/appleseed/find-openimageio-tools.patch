@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3db287170..d16ca74a5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -401,6 +401,8 @@ if (USE_FIND_PACKAGE_FOR_OIIO)
+     set(OPENIMAGEIO_INCLUDE_DIRS ${OpenImageIO_INCLUDES})
+     set(OPENIMAGEIO_LIBRARIES    ${OpenImageIO_LIB_DIR})
+     # TODO: use these vars (OpenImageIO_INCLUDES, OpenImageIO_LIB_DIR) created by OpenImageIOConfig.cmake itself.
++    find_program(OPENIMAGEIO_OIIOTOOL oiiotool HINTS ${OpenImageIO_LIB_DIR}/../bin ${OpenImageIO_INCLUDE_DIR}/../bin)
++    find_program(OPENIMAGEIO_IDIFF    idiff   HINTS ${OpenImageIO_LIB_DIR}/../bin ${OpenImageIO_INCLUDE_DIR}/../bin)
+ 
+     include_directories (${OPENIMAGEIO_INCLUDE_DIRS})
+     link_directories (${OPENIMAGEIO_LIBRARIES})

@@ -1,0 +1,65 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8108e5564..327ee229b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,18 +42,6 @@ cmake_policy (SET CMP0074 NEW)      # the find_package(<PackageName>) command no
+ 
+ cmake_policy (SET CMP0120 OLD)      # inclusion of the deprecated WriteCompilerDetectionHeader module
+ 
+-if (POLICY CMP0026)
+-    cmake_policy (SET CMP0026 OLD)  # disallow use of the LOCATION target property (CMake 3.0)
+-endif ()
+-
+-if (POLICY CMP0042)
+-    cmake_policy (SET CMP0042 OLD)  # MACOSX_RPATH is enabled by default (CMake 3.0)
+-endif ()
+-
+-if (POLICY CMP0043)
+-    cmake_policy (SET CMP0043 OLD)  # consume the content of the suffixed COMPILE_DEFINITIONS_<CONFIG>
+-endif ()
+-
+ set_property (GLOBAL PROPERTY USE_FOLDERS ON)
+ 
+ include (cmake/utilities.txt)
+diff --git a/cmake/config/linux-gcc-clang.txt b/cmake/config/linux-gcc-clang.txt
+index d28c69843..5f3289aa3 100644
+--- a/cmake/config/linux-gcc-clang.txt
++++ b/cmake/config/linux-gcc-clang.txt
+@@ -232,34 +232,31 @@ macro (get_relative_path_from_module_name path name)
+ endmacro ()
+ 
+ macro (add_copy_target_exe_to_sandbox_command target)
+-    get_target_property (target_path ${target} LOCATION)
+     get_sandbox_bin_path (bin_path)
+ 
+     add_custom_command (TARGET ${target} POST_BUILD
+         COMMAND mkdir -p ${bin_path}
+-        COMMAND cp ${target_path} ${bin_path}
++        COMMAND cp $<TARGET_FILE:${target}> ${bin_path}
+     )
+ endmacro ()
+ 
+ macro (add_copy_target_lib_to_sandbox_command target)
+-    get_target_property (target_path ${target} LOCATION)
+     get_sandbox_lib_path (lib_path)
+ 
+     add_custom_command (TARGET ${target} POST_BUILD
+         COMMAND mkdir -p ${lib_path}
+-        COMMAND cp ${target_path} ${lib_path}
++        COMMAND cp $<TARGET_FILE:${target}> ${lib_path}
+     )
+ endmacro ()
+ 
+ macro (add_copy_target_to_sandbox_py_module_command target module_name)
+-    get_target_property (target_path ${target} LOCATION)
+     get_sandbox_py_path (py_path)
+     get_relative_path_from_module_name (relative_module_path ${module_name})
+     set (module_path "${py_path}/${relative_module_path}")
+ 
+     add_custom_command (TARGET ${target} POST_BUILD
+         COMMAND mkdir -p ${module_path}
+-        COMMAND cp ${target_path} ${module_path}
++        COMMAND cp $<TARGET_FILE:${target}> ${module_path}
+     )
+ endmacro ()
+ 
