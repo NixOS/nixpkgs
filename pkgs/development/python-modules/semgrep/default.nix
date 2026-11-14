@@ -203,6 +203,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = common.meta // {
+    broken = lib.versionAtLeast mcp.version "2";
     description = common.meta.description + " - cli";
     inherit (semgrep-core.meta) platforms;
     mainProgram = "semgrep";
