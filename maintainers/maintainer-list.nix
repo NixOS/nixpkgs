@@ -24152,6 +24152,12 @@
     githubId = 737477;
     name = "Sibi Prabakaran";
   };
+  psionic-k = {
+    name = "Psionic K";
+    email = "psionic-k@positron.solutions";
+    github = "psionic-k";
+    githubId = 73710933;
+  };
   pstn = {
     email = "philipp@xndr.de";
     github = "pstn";
