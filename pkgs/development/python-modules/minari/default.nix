@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "minari";
-  version = "0.5.4";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Minari";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bLOlhc87Ew1tq9bQA9nfTLznXuOogZoE4mcjJeMQbU0=";
+    hash = "sha256-jaChVR3t5xE0gapY9aetrrMTw2wGWRRreCAe1ET8zOM=";
   };
 
   build-system = [
