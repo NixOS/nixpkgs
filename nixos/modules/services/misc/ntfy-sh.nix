@@ -99,6 +99,23 @@ in
   config =
     let
       configuration = settingsFormat.generate "server.yml" cfg.settings;
+
+      # ntfy needs CAP_NET_BIND_SERVICE only to listen on a port below 1024.
+      # Keep it for an address whose port doesn't parse.
+      listenAddresses = lib.filter (address: address != null && address != "") (
+        map (name: cfg.settings.${name} or null) [
+          "listen-http"
+          "listen-https"
+          "smtp-server-listen"
+        ]
+      );
+      isPrivileged =
+        address:
+        let
+          port = if lib.isString address then builtins.match ".*:([0-9]+)" address else null;
+        in
+        port == null || lib.toInt (lib.head port) < 1024;
+      capabilities = lib.optionalString (lib.any isPrivileged listenAddresses) "CAP_NET_BIND_SERVICE";
     in
     lib.mkIf cfg.enable {
       # to configure access control via the cli
@@ -125,12 +142,13 @@ in
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
           StateDirectory = "ntfy-sh";
           RuntimeDirectory = "ntfy-sh";
+          Restart = "on-failure";
 
           DynamicUser = true;
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+          AmbientCapabilities = capabilities;
           PrivateTmp = true;
           NoNewPrivileges = true;
-          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+          CapabilityBoundingSet = capabilities;
           ProtectSystem = "full";
           ProtectKernelTunables = true;
           ProtectKernelModules = true;
