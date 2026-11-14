@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptolyzer";
-  version = "1.6.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptolyzer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wGPxK6yL2g7EPb1hyfenm3Op3xJIpJsaWQJcTXx6O/o=";
+    hash = "sha256-dh+s8h2B3wCoY8qpVZRfJQS8GZGwdytAzvduiOaGt/4=";
   };
 
   build-system = [
