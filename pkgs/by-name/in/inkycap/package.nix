@@ -14,6 +14,9 @@
   tinymist,
   webkitgtk_4_1,
   wrapGAppsHook4,
+  openssl,
+  libgit2,
+  sqlite,
 }:
 
 let
@@ -59,6 +62,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libayatana-appindicator
     libsecret
     webkitgtk_4_1
+    openssl
+    sqlite
+    libgit2
   ];
 
   postPatch = ''
