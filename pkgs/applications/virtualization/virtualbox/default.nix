@@ -109,7 +109,11 @@ let
     ;
 
   base = stdenv.mkDerivation (finalAttrs: {
-    pname = "virtualbox";
+    pname =
+      "virtualbox"
+      + optionalString enableKvm "-kvm"
+      + optionalString headless "-headless"
+      + optionalString enableHardening "-hardened";
     version = "${finalAttrs.virtualboxVersion}${finalAttrs.virtualboxSubVersion}";
 
     inherit
