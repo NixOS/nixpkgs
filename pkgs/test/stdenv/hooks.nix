@@ -131,7 +131,52 @@
       [[ -e $out/bin/foo ]]
     '';
   };
-  # TODO: add multiple-outputs
+  multiple-outputs = stdenv.mkDerivation {
+    name = "test-multiple-outputs-propagation";
+    buildCommand = ''
+      checkPropagation() (
+        local form=$1 expected=$2 output
+        unset outputs
+        if [[ -n $__structuredAttrs ]]; then
+          declare -A outputs=()
+        else
+          outputs="out dev bin include lib"
+        fi
+        for output in out dev bin include lib; do
+          export "$output=$TMPDIR/$form/$output"
+          if [[ -n $__structuredAttrs ]]; then outputs[$output]="''${!output}"; fi
+        done
+        outputDev=dev outputBin=bin outputInclude=include outputLib=lib
+        unset propagatedBuildOutputs
+        case "$form" in
+          unset) ;;
+          declared-unset) declare propagatedBuildOutputs ;;
+          scalar) propagatedBuildOutputs="lib include" ;;
+          scalar-empty) propagatedBuildOutputs="" ;;
+          array) propagatedBuildOutputs=(lib include) ;;
+          array-empty) propagatedBuildOutputs=() ;;
+          self) propagatedBuildOutputs=(dev lib include) ;;
+        esac
+        _multioutPropagateDev
+        local actual=""
+        local -a actualPaths=() expectedPaths=()
+        if [[ -f $dev/nix-support/propagated-build-inputs ]]; then
+          actual="$(< "$dev/nix-support/propagated-build-inputs")"
+        fi
+        concatTo actualPaths actual
+        for output in $expected; do expectedPaths+=("''${!output}"); done
+        [[ "''${actualPaths[*]}" == "''${expectedPaths[*]}" ]]
+      )
+      checkPropagation unset "bin include lib"
+      checkPropagation declared-unset "bin include lib"
+      checkPropagation scalar "lib include"
+      checkPropagation scalar-empty ""
+      checkPropagation array "lib include"
+      checkPropagation array-empty ""
+      checkPropagation self "lib include"
+      touch "$out"
+    '';
+  };
   patch-shebangs = import ./patch-shebangs.nix { inherit stdenv lib pkgs; };
   prune-libtool-files =
     let
