@@ -4986,6 +4986,12 @@
     githubId = 62146989;
     name = "Cédric Barreteau";
   };
+  cbingman = {
+    name = "Christian Bingman";
+    email = "maintainer@christianbingman.com";
+    github = "ChristianBingman";
+    githubId = 42191425;
+  };
   cbleslie = {
     email = "cameronleslie@gmail.com";
     github = "cbleslie";
