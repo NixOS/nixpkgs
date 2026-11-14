@@ -1,0 +1,6 @@
+{
+  "build": {
+    "beforeBuildCommand": "",
+    "frontendDist": "./dist"
+  }
+}
