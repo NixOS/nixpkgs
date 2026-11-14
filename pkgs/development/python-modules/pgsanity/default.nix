@@ -1,6 +1,6 @@
 {
+  fetchFromGitHub,
   lib,
-  fetchPypi,
   buildPythonPackage,
   postgresql,
   unittestCheckHook,
@@ -12,9 +12,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-Po/DPQpk54w1gWOL9aArN6I8dmMb7uRYxuRMI6MIDKU=";
+  src = fetchFromGitHub {
+    owner = "markdrago";
+    repo = "pgsanity";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-58AGU1wWNpARerVKXRPJoRFCbyqCT2Zeo/qEOsSle+8=";
   };
 
   postPatch = ''
