@@ -1,0 +1,66 @@
+Subject: [PATCH] tests: probe openat2 availability in the running sandbox
+
+Retain the symlink-escape regression when RESOLVE_IN_ROOT works. Skip only
+that part when the running kernel or seccomp filter returns ENOSYS; other
+probe failures still fail the test. Check the configured feature value too.
+
+--- a/tests/run-sysroot.sh
++++ b/tests/run-sysroot.sh
+@@ -47,10 +47,19 @@
+ EOF
+ 
+ libc_has_openat2_resolve_in_root() {
+-  grep '^#define HAVE_OPENAT2_RESOLVE_IN_ROOT' ${abs_builddir}/../config.h | awk '{print $3}'
++  grep -q '^#define HAVE_OPENAT2_RESOLVE_IN_ROOT 1$' ${abs_builddir}/../config.h
+ }
+ kernel_has_openat2_resolve_in_root() {
+-  printf "%s\n%s" "5.6.0" "$(uname -r)" | sort -V -C
++  # A new enough kernel can still reject openat2 under a seccomp filter.
++  # CC is supplied by TESTS_ENVIRONMENT for both check and installcheck.
++  $CC "${abs_srcdir}/openat2-probe.c" -o "${tmpdir}/openat2-probe" || exit 1
++  status=0
++  testrun "${tmpdir}/openat2-probe" || status=$?
++  case $status in
++    0) return 0 ;;
++    77) return 1 ;; # ENOSYS: retain the ordinary --sysroot check above.
++    *) exit "$status" ;;
++  esac
+ }
+ 
+ if libc_has_openat2_resolve_in_root && kernel_has_openat2_resolve_in_root; then
+--- /dev/null
++++ b/tests/openat2-probe.c
+@@ -0,0 +1,33 @@
++/* Probe the running kernel and sandbox, not just the build headers. */
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/openat2.h>
++#include <stdio.h>
++#include <sys/syscall.h>
++#include <unistd.h>
++
++int
++main (void)
++{
++  struct open_how how = {
++    .flags = O_RDONLY | O_DIRECTORY,
++    .resolve = RESOLVE_IN_ROOT
++  };
++  int root = open (".", O_PATH | O_DIRECTORY);
++  if (root < 0)
++    return 1;
++  int fd = syscall (SYS_openat2, root, ".", &how, sizeof (how));
++  int error = errno;
++  close (root);
++  if (fd >= 0)
++    {
++      close (fd);
++      return 0;
++    }
++  if (error == ENOSYS)
++    return 77;
++  errno = error;
++  perror ("openat2 (RESOLVE_IN_ROOT)");
++  return 1;
++}

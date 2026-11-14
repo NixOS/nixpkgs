@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./debug-info-from-env.patch
+    ./openat2-runtime-probe.patch
     (fetchpatch {
       name = "fix-aarch64_fregs.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/fix-aarch64_fregs.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
