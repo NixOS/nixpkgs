@@ -17,6 +17,7 @@ pkgs.stdenvNoCC.mkDerivation {
   pname = "a";
   version = "0";
   meta.maintainers = [ "hello" ];
+  meta.license = [ pkgs.lib.licenses.bugroff ];
   meta.description = "Some package";
   meta.problems.removal = {
     message = "Removed because of XYZ.";
