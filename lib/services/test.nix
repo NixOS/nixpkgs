@@ -82,6 +82,11 @@ let
           warnings = [
             "The `bar' service is deprecated and will go away soon!"
           ];
+          services.tail = {
+            process = {
+              argv = [ "tail" ];
+            };
+          };
         };
       };
       # The default `flagFormat`, and one flag of every supported value kind.
@@ -167,13 +172,15 @@ let
     }
     // {
       services = lib.mapAttrs (k: filterEval) config.services;
-    };
+    }
+    // builtins.intersectAttrs { absoluteServicePath = null; } config;
 
   test =
     assert
       filterEval exampleEval.config == {
         services = {
           service1 = {
+            absoluteServicePath = [ "service1" ];
             process = {
               argv = [
                 "/usr/bin/echo"
@@ -194,6 +201,7 @@ let
             ];
           };
           service2 = {
+            absoluteServicePath = [ "service2" ];
             process = {
               argv = [
                 "${dummyPkg "cowsay.sh"}"
@@ -207,12 +215,17 @@ let
             warnings = [ ];
           };
           service3 = {
+            absoluteServicePath = [ "service3" ];
             process = {
               argv = [ "/bin/false" ];
               reloadCommand = null;
               reloadSignal = null;
             };
             services.exclacow = {
+              absoluteServicePath = [
+                "service3"
+                "exclacow"
+              ];
               process = {
                 argv = [
                   "${dummyPkg "cowsay-ng"}/bin/cowsay"
@@ -221,7 +234,21 @@ let
                 reloadCommand = "${dummyPkg "coreutils"}/bin/kill -HUP $MAINPID";
                 reloadSignal = "HUP";
               };
-              services = { };
+              services.tail = {
+                absoluteServicePath = [
+                  "service3"
+                  "exclacow"
+                  "tail"
+                ];
+                assertions = [ ];
+                process = {
+                  argv = [ "tail" ];
+                  reloadCommand = null;
+                  reloadSignal = null;
+                };
+                services = { };
+                warnings = [ ];
+              };
               assertions = [
                 {
                   assertion = false;
@@ -234,6 +261,7 @@ let
             warnings = [ ];
           };
           flagsDefault = {
+            absoluteServicePath = [ "flagsDefault" ];
             process = {
               argv = [
                 "/bin/flagged"
@@ -253,6 +281,7 @@ let
             warnings = [ ];
           };
           flagsCustomFormat = {
+            absoluteServicePath = [ "flagsCustomFormat" ];
             process = {
               argv = [
                 "/bin/flagged"
@@ -268,6 +297,7 @@ let
             warnings = [ ];
           };
           flagsRepeated = {
+            absoluteServicePath = [ "flagsRepeated" ];
             process = {
               argv = [
                 "/bin/flagged"
@@ -284,6 +314,7 @@ let
             warnings = [ ];
           };
           flagsOrdering = {
+            absoluteServicePath = [ "flagsOrdering" ];
             process = {
               argv = [
                 "/bin/gt"
@@ -301,6 +332,33 @@ let
             warnings = [ ];
           };
         };
+      };
+
+    # Portable identity options: the values are requests. Without a service
+    # manager resolving them, unset values stay null and set values are kept.
+    assert
+      (lib.evalModules {
+        modules = [
+          {
+            options.myServices = mkOption {
+              type = types.attrsOf configured.serviceSubmodule;
+            };
+          }
+          {
+            myServices.my-service.identity = {
+              user = "app-account";
+              groups = [ "extra" ];
+            };
+          }
+        ];
+      }).config.myServices.my-service.identity == {
+        gid = null;
+        group = null;
+        gids = null;
+        groups = [ "extra" ];
+        sameUser = null;
+        uid = null;
+        user = "app-account";
       };
 
     assert
