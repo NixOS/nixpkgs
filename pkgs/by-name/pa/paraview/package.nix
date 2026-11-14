@@ -8,6 +8,8 @@
   protobuf,
   vtk-full,
   testers,
+  runCommand,
+  mesa,
 }:
 let
   paraviewFilesUrl = "https://www.paraview.org/files";
@@ -118,6 +120,20 @@ stdenv.mkDerivation (finalAttrs: {
         qt6Packages.wrapQtAppsHook
       ];
     };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # Render offscreen through EGL with Mesa's software rasterizer: no GPU, no X.
+    egl-render =
+      runCommand "paraview-test-egl-render"
+        {
+          nativeBuildInputs = [ mesa.llvmpipeHook ];
+          env.EGL_PLATFORM = "surfaceless";
+        }
+        ''
+          # Automatic window selection (no DISPLAY) must reach EGL.
+          mkdir $out
+          ${finalAttrs.finalPackage}/bin/pvpython --force-offscreen-rendering ${./test-egl-render.py} $out/render.png
+        '';
   };
 
   meta = {
