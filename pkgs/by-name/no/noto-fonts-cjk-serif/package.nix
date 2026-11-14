@@ -2,33 +2,25 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   nixosTests,
   gitUpdater,
   static ? false, # whether to build the static version of the font
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts-cjk-serif";
   version = "2.003";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
-    tag = "Serif${version}";
+    tag = "Serif${finalAttrs.version}";
     hash = "sha256-Bwuu64TAnOnqUgLlBsUw/jnv9emngqFBmVn6zEqySlc=";
-    sparseCheckout = [
-      "Serif/OTC"
-      "Serif/Variable/OTC"
-    ];
+    rootDir = if static then "Serif/OTC" else "Serif/Variable/OTC";
   };
 
-  installPhase =
-    let
-      font-path = if static then "Serif/OTC/*.ttc" else "Serif/Variable/OTC/*.otf.ttc";
-    in
-    ''
-      install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${font-path}
-    '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.tests.noto-fonts = nixosTests.noto-fonts;
 
@@ -59,4 +51,4 @@ stdenvNoCC.mkDerivation rec {
       leana8959
     ];
   };
-}
+})
