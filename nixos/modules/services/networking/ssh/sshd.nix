@@ -920,6 +920,7 @@ in
       system.checks = [
         (pkgs.runCommand "check-sshd-config"
           {
+            preferLocalBuild = true;
             nativeBuildInputs = [ validationPackage.out ];
           }
           ''
