@@ -5,6 +5,7 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
+  fetchpatch,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -237,6 +238,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./0003-add-rootprefix-to-lookup-dir-paths.patch
     ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0005-core-don-t-taint-on-unmerged-usr.patch
+
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/db3bfa0c4cd7f5246ca73d399c8f9e2e337bd313.patch";
+      hash = "sha256-EXg0JV6G4nLc2IrpslooSGzZ9x4dHB+ruX6QsWksUYI=";
+
+      excludes = [
+        "test/units/TEST-72-SYSUPDATE.sh"
+      ];
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
