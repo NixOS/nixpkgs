@@ -18,7 +18,6 @@
 let
   inherit (_cuda.lib) dropDots;
   inherit (cudaPackages)
-    backendStdenv
     cuda_cudart
     cccl
     cuda_crt
@@ -37,20 +36,11 @@ let
     teams
     ;
 
-  # Headers made available to kernels compiled at runtime by pycuda.compiler.
-  runtimeIncludeDirs = map (pkg: "${getInclude pkg}/include") (
-    [
-      cuda_nvcc
-      cuda_cudart
-      cccl
-      cuda_profiler_api
-      libcurand
-    ]
-    # On CUDA 13 and later, crt/host_config.h (included by cuda_runtime.h) is shipped in cuda_crt.
-    ++ optionals cuda_crt.meta.available [ cuda_crt ]
-  );
+  # Installed NVCC runs on HOST independently of the build compiler.
+  jitCompiler = cuda_nvcc.__spliced.hostHost or cuda_nvcc;
+
 in
-buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
+buildPythonPackage (finalAttrs: {
 
   pname = "pycuda";
   version = "2026.1";
@@ -69,31 +59,22 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    cuda_nvcc
+  nativeBuildInputs = [ ];
+
+  patches = [
+    ./runtime-compiler.patch
   ];
 
   prePatch = ''
-    nixLog "removing vendored boost source"
     rm -rf "$PWD/bpl-subset"
+  '';
 
-    nixLog "patching $PWD/pycuda/compiler.py::compile to fix CUDA include paths"
-    substituteInPlace "$PWD/pycuda/compiler.py" \
-      --replace-fail \
-        'include_dirs = [*include_dirs, _find_pycuda_include_path()]' \
-        'include_dirs = [*include_dirs, *${builtins.toJSON runtimeIncludeDirs}, _find_pycuda_include_path()]'
-
-    nixLog "patching $PWD/pycuda/compiler.py::compile to fix NVCC path"
-    substituteInPlace "$PWD/pycuda/compiler.py" \
-      --replace-fail \
-        'nvcc="nvcc"' \
-        'nvcc="${getBin cuda_nvcc}/bin/nvcc"'
-
-    nixLog "patching $PWD/pycuda/compiler.py::DynamicModule.__init__ to fix CUDA runtime library path"
-    substituteInPlace "$PWD/pycuda/compiler.py" \
-      --replace-fail \
-        'cuda_libdir=None,' \
-        'cuda_libdir="${getLib cuda_cudart}/lib",'
+  postPatch = ''
+    substituteInPlace pycuda/compiler.py \
+      --replace-fail 'nvcc="nvcc"' 'nvcc="${lib.getExe' (lib.getOutput jitCompiler.outputBin jitCompiler) "nvcc"}"' \
+      --replace-fail 'include_dirs = [*include_dirs, _find_pycuda_include_path()]' \
+        'include_dirs = [*include_dirs, _find_pycuda_include_path(), "${lib.getOutput libcurand.outputInclude libcurand}/include"]' \
+      --replace-fail '@cudaLibraryDir@' '${lib.getOutput cuda_cudart.outputStatic cuda_cudart}/lib'
   '';
 
   dependencies = [
@@ -107,7 +88,6 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     boost
     cccl
     cuda_cudart
-    cuda_nvcc
     cuda_profiler_api
     libcurand
   ];
@@ -215,6 +195,12 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
           "-k"
           "test_curand_wrappers"
         ];
+      }
+      // lib.optionalAttrs (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) {
+        jit = python.pkgs.callPackage ./jit-test.nix {
+          pycuda = finalAttrs.finalPackage;
+          inherit cudaPackages;
+        };
       };
   };
 
