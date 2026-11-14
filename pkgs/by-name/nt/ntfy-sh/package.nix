@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  cacert,
   fetchFromGitHub,
   buildNpmPackage,
   nixosTests,
@@ -63,6 +64,7 @@ buildGoModule (
     ];
 
     nativeBuildInputs = [
+      cacert
       debianutils
       mkdocs
       python3
