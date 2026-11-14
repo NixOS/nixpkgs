@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Qj+qJvCk77hDw1bNgITETONZPGuFkcVJ+rzmeJGgVAs=";
   };
 
-  nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  nativeBuildInputs = [
     pkg-config
   ];
 
