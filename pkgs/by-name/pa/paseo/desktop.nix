@@ -34,6 +34,8 @@ buildNpmPackage {
   __structuredAttrs = true;
   strictDeps = true;
 
+  patches = [ ./precompile-builtin-plugin-bundles.patch ];
+
   npmRebuildFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
@@ -72,6 +74,9 @@ buildNpmPackage {
       npm rebuild node-pty --workspace @getpaseo/server
 
     npm run build:server
+
+    node scripts/precompile-builtin-plugins.mjs
+
     npm run build --workspace @getpaseo/expo-two-way-audio
     (
       cd packages/app

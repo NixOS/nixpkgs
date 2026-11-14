@@ -26,6 +26,8 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-zqD9MrqYZ6S3O72b5y+7P0iJgIMf4MRq1zgcqBcyhko=";
   };
 
+  patches = [ ./precompile-builtin-plugin-bundles.patch ];
+
   nodejs = nodejs_26;
 
   npmDepsFetcherVersion = 2;
@@ -57,6 +59,9 @@ buildNpmPackage (finalAttrs: {
       npm rebuild node-pty --workspace @getpaseo/server
 
     npm run build:server
+
+    node scripts/precompile-builtin-plugins.mjs
+
     npm run build:daemon-web-ui
 
     runHook postBuild
