@@ -8,7 +8,7 @@
 
 maven.buildMavenPackage (finalAttrs: {
   pname = "opendataloader-pdf";
-  version = "2.5.20";
+  version = "2.5.22";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ maven.buildMavenPackage (finalAttrs: {
     owner = "opendataloader-project";
     repo = "opendataloader-pdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LMeQY+/heCP7s7u6piiWmg/K3XuytVED1Yro00PUQ/o=";
+    hash = "sha256-ew40Va4TKSVaKS77eneW4sX+jI3l7UUOSt0ala5bxkQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/java";
