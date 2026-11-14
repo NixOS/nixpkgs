@@ -6727,8 +6727,6 @@ self: super: with self; {
 
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
 
-  garth = callPackage ../development/python-modules/garth { };
-
   gassist-text = callPackage ../development/python-modules/gassist-text { };
 
   gast = callPackage ../development/python-modules/gast { };

@@ -303,6 +303,7 @@ mapAliases {
   fuse = throw "'fuse-python' was removed, because it is stuck on the old, unmaintained fuse 2.x"; # Added 2026-05-30
   fvs = throw "'fvs' has been removed due to being unused"; # Added 2026-05-23
   garminconnect-ha = throw "'garminconnect-ha' has been renamed to/replaced by 'garminconnect'"; # Converted to throw 2025-10-29
+  garth = throw "'garth' was removed because Garmin changed its authentication flow, breaking new logins, and upstream is no longer maintained. See https://github.com/matin/garth#readme"; # Added 2026-11-09
   GeoIP = throw "'GeoIP' has been renamed to/replaced by 'geoip'"; # Converted to throw 2025-10-29
   gepetto-gui = throw "'gepetto-gui' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
   gepetto-viewer = throw "'gepetto-viewer' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
