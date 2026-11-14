@@ -10,19 +10,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "phonors";
-  version = "0.5.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phonopy";
     repo = "phonors";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XEQcvmZ/eA7k4fBkDz9DleC7mpwQAmaG5WysDRugSlc=";
+    hash = "sha256-iX2w/rwes1uArpVEk6Jpqunm1kqr1dZAHVbucp9js6I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-TjbJpIut6Ag2PI17dgsn4Hc/7xYj8xYj4kNXSV8Akg8=";
+    hash = "sha256-cdBeKA6uVbmqbKASjfBi/fdSFVrWF520YLtY0EHDxsI=";
   };
 
   build-system = [
