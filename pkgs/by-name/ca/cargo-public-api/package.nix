@@ -5,6 +5,7 @@
   pkg-config,
   curl,
   openssl,
+  rustup,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,6 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     curl
     openssl
+    rustup # required when a crate specifies a custom rust toolchain
   ];
 
   # Tests fail
