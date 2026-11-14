@@ -2904,6 +2904,7 @@ mapAliases {
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
   waveterm = throw "'waveterm' has been removed due to EOL Electron and lack of maintainers in nixpkgs"; # Added 2026-09-17
   wavm = throw "wavm has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  wayprompt = throw "wayprompt has been removed because it failed to build and lack of upstream maintenance"; # Added 2026-11-14
   wayv = throw "'wayv' has been removed as it is broken and unmaintained upstream"; # Added 2026-05-05
   wayvr-dashboard = throw "'wayvr-dashboard' and 'wlx-overlay-s' have been merged into a single application. Please switch to 'wayvr'"; # Added 2026-01-09
   wcurl = throw "'wcurl' has been removed due to being bundled with 'curl'"; # Added 2025-07-04
