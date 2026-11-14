@@ -16419,6 +16419,12 @@
     github = "lanovets";
     githubId = 179950869;
   };
+  lapo = {
+    name = "Lapo Luchini";
+    email = "lapo@lapo.it";
+    github = "lapo-luchini";
+    githubId = 420454;
+  };
   larry0x = {
     name = "Larry Engineer";
     email = "nixpkgs@larry.engineer";
