@@ -1,0 +1,47 @@
+diff --git a/cmake/config/aiebu.fp.in b/cmake/config/aiebu.fp.in
+index 63c16ba..81b7bdc 100644
+--- a/src/runtime_src/core/common/aiebu/cmake/config/aiebu.fp.in
++++ b/src/runtime_src/core/common/aiebu/cmake/config/aiebu.fp.in
+@@ -17,7 +17,7 @@
+ @PACKAGE_INIT@
+ 
+ set(@PROJECT_NAME@_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/include")
+-set(@PROJECT_NAME@_LINK_DIRS "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@")
++set(@PROJECT_NAME@_LINK_DIRS "@CMAKE_INSTALL_LIBDIR@")
+ 
+ set(@PROJECT_NAME@_VERSION @AIEBU_VERSION_STRING@)
+ 
+diff --git a/cmake/settings.cmake b/cmake/settings.cmake
+index c2a1916..8463dd4 100644
+--- a/src/runtime_src/core/common/aiebu/cmake/settings.cmake
++++ b/src/runtime_src/core/common/aiebu/cmake/settings.cmake
+@@ -66,7 +66,7 @@ message("-- CMAKE_INSTALL_BINDIR=${CMAKE_INSTALL_BINDIR}")
+ message("-- CMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}")
+ message("-- CMAKE_INSTALL_INCLUDEDIR=${CMAKE_INSTALL_INCLUDEDIR}")
+ 
+-set(AIEBU_INSTALL_DIR ".")
++set(AIEBU_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
+ 
+ if (WIN32)
+   set(AIEBU_INSTALL_BIN_DIR         ${AIEBU_INSTALL_DIR})
+@@ -75,15 +75,15 @@ if (WIN32)
+   # artifacts are staged into Release/ and Debug/ subdirectories
+   set(AIEBU_INSTALL_STAGING_DIR     ${CMAKE_BINARY_DIR}/$<CONFIG>/xilinx/aiebu)
+ else()
+-  set(AIEBU_INSTALL_BIN_DIR         ${AIEBU_INSTALL_DIR}/${CMAKE_INSTALL_BINDIR})
++  set(AIEBU_INSTALL_BIN_DIR         ${CMAKE_INSTALL_BINDIR})
+   # On Linux the build script uses separate binary dir for Release or Debug
+   set(AIEBU_INSTALL_STAGING_DIR     ${CMAKE_BINARY_DIR}/opt/xilinx/aiebu)
+ endif()
+ 
+-set(AIEBU_INSTALL_LIB_DIR           ${AIEBU_INSTALL_DIR}/${CMAKE_INSTALL_LIBDIR})
+-set(AIEBU_INSTALL_INCLUDE_DIR       ${AIEBU_INSTALL_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
+-set(AIEBU_INSTALL_CMAKE_DIR         ${AIEBU_INSTALL_DIR}/share/cmake/${PROJECT_NAME})
+-set(AIEBU_PYTHON_INSTALL_DIR        ${AIEBU_INSTALL_DIR}/${CMAKE_INSTALL_LIBDIR}/python3)
++set(AIEBU_INSTALL_LIB_DIR           ${CMAKE_INSTALL_LIBDIR})
++set(AIEBU_INSTALL_INCLUDE_DIR       ${CMAKE_INSTALL_INCLUDEDIR})
++set(AIEBU_INSTALL_CMAKE_DIR         ${AIEBU_INSTALL_DIR}/lib/cmake/${PROJECT_NAME})
++set(AIEBU_PYTHON_INSTALL_DIR        ${CMAKE_INSTALL_LIBDIR}/python3)
+ set(AIEBU_SPECIFICATION_INSTALL_DIR ${AIEBU_INSTALL_DIR}/share/specification)
+ set(AIEBU_GEN_DIR                   ${AIEBU_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/gen)
+ 
