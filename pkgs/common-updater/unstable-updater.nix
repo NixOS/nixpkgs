@@ -21,6 +21,7 @@
   tagPrefix ? null, # strip this prefix from a tag name
   tagConverter ? null, # A command to convert more complex tag formats. It receives the git tag via stdin and should convert it into x.y.z format to stdout
   shallowClone ? true,
+  vendoredDeps ? [ ], # things like pnpmDeps
 }:
 
 assert lib.asserts.assertMsg (
@@ -40,6 +41,7 @@ let
       set -ex
 
       url=""
+      vendored_deps=""
       branch=""
       hardcode_zero_version=""
       tag_format=""
@@ -54,6 +56,9 @@ let
           case "$flag" in
             --url=*)
               url="''${flag#*=}"
+              ;;
+            --vendored-deps=*)
+              vendored_deps="''${flag#*=}"
               ;;
             --branch=*)
               branch="''${flag#*=}"
@@ -159,6 +164,13 @@ let
           "$new_version" \
           --rev="$commit_sha" \
           --print-changes
+      # update hashes of vendored deps, do not use --print-changes
+      for vendored_dep in $vendored_deps; do
+          update-source-version \
+              "$UPDATE_NIX_ATTR_PATH" \
+              --ignore-same-version \
+              --source-key="$vendored_dep"
+      done
     '';
   };
 
@@ -182,4 +194,7 @@ in
 ]
 ++ lib.optionals shallowClone [
   "--shallow-clone"
+]
+++ lib.optionals (vendoredDeps != [ ]) [
+  "--vendored-deps=${toString vendoredDeps}"
 ]
