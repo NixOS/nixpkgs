@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
   libtool,
@@ -10,6 +12,7 @@
   libcanberra-gtk3,
   libmatemixer,
   libxml2,
+  mate-common,
   mate-desktop,
   mate-panel,
   wayland,
@@ -19,21 +22,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-media";
-  version = "1.28.1";
+  version = "1.28.2";
   outputs = [
     "out"
     "man"
   ];
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-media-${finalAttrs.version}.tar.xz";
-    sha256 = "vNwQLiL2P1XmMWbVxwjpHBE1cOajCodDRaiGCeg6mRI=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-media";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vJGR/9uTzmJM5ZdMhONGbkvCa08hH5LBHo+i6PRgsIw=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
     libtool
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
   ];
 
@@ -53,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/mate-media";
     odd-unstable = true;
     rev-prefix = "v";
   };
