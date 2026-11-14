@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     jinja2
     openai
     requests
+    tqdm
   ];
 
   pythonImportsCheck = [ "sploitscan" ];
