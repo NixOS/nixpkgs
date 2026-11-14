@@ -1,0 +1,10 @@
+--- a/vendor/github.com/sasha-s/go-deadlock/deadlock.go
++++ b/vendor/github.com/sasha-s/go-deadlock/deadlock.go
+@@ -33,6 +33,7 @@ var Opts = struct {
+ 	// Will print deadlock info to log buffer.
+ 	LogBuf io.Writer
+ }{
++	DisableLockOrderDetection: true,
+ 	DeadlockTimeout: time.Second * 30,
+ 	OnPotentialDeadlock: func() {
+ 		os.Exit(2)
