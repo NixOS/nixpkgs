@@ -545,7 +545,6 @@ let
             let
               m = loadModule (elemAt imports i) "${key}:anon-${toString (i + 1)}" _file;
               module = if class == null || m._class == null || m._class == class then m else throwClassMismatch m;
-              collectedImports = collectStructuredModules module;
             in
             if module.imports == [ ] then
               # can't recurse deeper
@@ -561,6 +560,9 @@ let
                 ];
               }
             else
+              let
+                collectedImports = collectStructuredModules module;
+              in
               {
                 key = module.key;
                 module = module;
