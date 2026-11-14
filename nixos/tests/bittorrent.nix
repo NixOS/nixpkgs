@@ -28,6 +28,9 @@ let
         settings = {
           dht-enabled = false;
           message-level = 2;
+          # Avoid binding IPv4 HTTP requests to an automatically selected IPv6 address.
+          # https://github.com/transmission/transmission/issues/7229
+          bind-address-ipv6 = "::";
           inherit download-dir;
         };
       };
@@ -83,6 +86,7 @@ in
         networking.nat.externalInterface = "eth1";
         networking.firewall.enable = true;
         networking.firewall.trustedInterfaces = [ "eth2" ];
+        networking.nftables.enable = true;
         networking.interfaces.eth0.ipv4.addresses = [ ];
         networking.interfaces.eth1.ipv4.addresses = [
           {
@@ -152,6 +156,7 @@ in
       router.wait_for_unit("miniupnpd")
 
       # Create the torrent.
+      tracker.wait_for_unit("transmission.service")
       tracker.succeed("mkdir ${download-dir}/data")
       tracker.succeed(
           "cp ${file} ${download-dir}/data/test.tar.bz2"
@@ -176,6 +181,7 @@ in
       tracker.wait_for_unit("httpd")
       client1.systemctl("start network-online.target")
       client1.wait_for_unit("network-online.target")
+      client1.wait_for_unit("transmission.service")
       client1.succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent >&2 &")
       client1.wait_for_file("${download-dir}/test.tar.bz2")
       client1.succeed(
@@ -189,6 +195,7 @@ in
       # the first client created a NAT hole in the router.
       client2.systemctl("start network-online.target")
       client2.wait_for_unit("network-online.target")
+      client2.wait_for_unit("transmission.service")
       client2.succeed(
           "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht >&2 &"
       )
