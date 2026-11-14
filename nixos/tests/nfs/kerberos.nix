@@ -45,9 +45,8 @@ import ../make-test-python.nix (
           virtualisation.fileSystems = {
             "/data" = {
               device = "server.nfs.test:/";
-              fsType = "nfs";
+              fsType = "nfs4";
               options = [
-                "nfsvers=4"
                 "sec=krb5p"
                 "noauto"
               ];
