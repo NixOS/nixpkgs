@@ -2068,11 +2068,6 @@ with pkgs;
     isl_0_27
     ;
 
-  jamesdsp-pulse = callPackage ../by-name/ja/jamesdsp/package.nix {
-    usePipewire = false;
-    usePulseaudio = true;
-  };
-
   jc = with python3Packages; toPythonApplication jc;
 
   jello = with python3Packages; toPythonApplication jello;
