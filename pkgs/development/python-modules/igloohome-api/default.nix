@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "igloohome-api";
-  version = "0.1.1";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keithle888";
     repo = "igloohome-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BLmmypbvYTgQisT0+9Ym1ZTK6asAP2tWXP2DWhKYM7U=";
+    hash = "sha256-/gPMAqt1Qdsydp1Mv4P4vXFpS8FsZHMYv47Da8QKw8o=";
   };
 
   build-system = [ hatchling ];
