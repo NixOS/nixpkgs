@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc13Stdenv,
   fetchFromCodeberg,
   autoreconfHook,
   fig2dev,
@@ -10,7 +10,7 @@
   SDL2,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc13Stdenv.mkDerivation (finalAttrs: {
   pname = "x11basic";
   version = "1.28-65";
 
