@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
       excludes = [ "code/latte/sqlite/IntegrationDB.h" ];
       hash = "sha256-i7c11y54OLuJ0m7PBnhEoAzJzxC842JU7A6TOtTz06k=";
     })
+    # C++20 compat
+    ./cpp20-char-array.patch
   ];
 
   buildInputs = [
