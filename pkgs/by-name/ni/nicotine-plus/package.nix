@@ -13,7 +13,7 @@
 let
 
   pname = "nicotine-plus";
-  version = "3.3.10";
+  version = "3.3.11";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
     tag = version;
-    hash = "sha256-ic/+Us56UewMjD8vgmxxCisoId96Qtaq8/Ll+CCFR3Y=";
+    hash = "sha256-/+sk5Ur/nfgIFbnCgXtgjNevt3NMbVcgoQni/oD5owo=";
   };
 
   nativeBuildInputs = [
