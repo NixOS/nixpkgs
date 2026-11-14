@@ -97,6 +97,17 @@ buildPythonApplication (finalAttrs: {
     })
   ];
 
+  # PyGObject >= 3.51 turns enums without a registered GType into stdlib enums,
+  # which dropped the `value_name` attribute in favour of `name`.
+  # Upstream commits 7e4ec24 and 1a7c622 only live in the still-open backport
+  # PR mypaint/mypaint#1252, and do not apply to the 2.0.1 tarball, where the
+  # affected lines are formatted differently.
+  # https://github.com/NixOS/nixpkgs/issues/447234
+  postPatch = ''
+    substituteInPlace lib/glib.py gui/device.py gui/inputtestwindow.py \
+      --replace-fail .value_name .name
+  '';
+
   nativeBuildInputs = [
     gettext
     pkg-config
