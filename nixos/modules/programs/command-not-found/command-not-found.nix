@@ -1,8 +1,3 @@
-# This module provides suggestions of packages to install if the user
-# tries to run a missing command in Bash.  This is implemented using a
-# SQLite database that maps program names to Nix package names (e.g.,
-# "pdflatex" is mapped to "tetex").
-
 {
   config,
   lib,
@@ -12,20 +7,6 @@
 
 let
   cfg = config.programs.command-not-found;
-  commandNotFound = pkgs.replaceVarsWith {
-    name = "command-not-found";
-    dir = "bin";
-    src = ./command-not-found.pl;
-    isExecutable = true;
-    replacements = {
-      inherit (cfg) dbPath;
-      perl = pkgs.perl.withPackages (p: [
-        p.DBDSQLite
-        p.StringShellQuote
-      ]);
-    };
-  };
-
 in
 
 {
@@ -44,6 +25,17 @@ in
         See also nix-index and nix-index-database as an alternative for flakes-based systems.
 
         Additionally, having the env var NIX_AUTO_RUN set will automatically run the matching package, and with NIX_AUTO_RUN_INTERACTIVE it will confirm the package before running.
+      '';
+    };
+
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.command-not-found.override { inherit (cfg) dbPath; };
+      defaultText = lib.literalExpression ''
+        pkgs.command-not-found.override { inherit (cfg) dbPath; }
+      '';
+      description = ''
+        You can use a completely different `command-not-found` script here if you wish.
       '';
     };
 
@@ -68,23 +60,23 @@ in
   config = lib.mkIf cfg.enable {
     programs.bash.interactiveShellInit = ''
       command_not_found_handle() {
-        '${commandNotFound}/bin/command-not-found' "$@"
+        '${lib.getExe cfg.package}' "$@"
       }
     '';
 
     programs.zsh.interactiveShellInit = ''
       command_not_found_handler() {
-        '${commandNotFound}/bin/command-not-found' "$@"
+        '${lib.getExe cfg.package}' "$@"
       }
     '';
 
     # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
     programs.fish.interactiveShellInit = ''
       function fish_command_not_found
-         "${commandNotFound}/bin/command-not-found" $argv
+         "${lib.getExe cfg.package}" $argv
       end
     '';
 
-    environment.systemPackages = [ commandNotFound ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
