@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
   libmediainfo,
   pdm-backend,
@@ -13,9 +13,11 @@ buildPythonPackage (finalAttrs: {
   version = "7.0.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-DV31nsxhXiTFbzA7j2UVecasyrcmVxXl1CkYbXuiFRQ=";
+  src = fetchFromGitHub {
+    owner = "sbraz";
+    repo = "pymediainfo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DWw/UUXP8DsaulNX1SrKUEptMR52q1QJRf5xlSP2heg=";
   };
 
   postPatch = ''
