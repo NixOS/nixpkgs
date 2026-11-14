@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./alsa-plugin-conf-multilib.patch
   ];
 
+  # FreeBSD has no CLOCK_MONOTONIC_RAW, which FreeBSD's own port of alsa-lib
+  # replaces with CLOCK_MONOTONIC
+  ${if stdenv.hostPlatform.isFreeBSD then "postPatch" else null} = ''
+    substituteInPlace src/ucm/main.c --replace-fail CLOCK_MONOTONIC_RAW CLOCK_MONOTONIC
+  '';
+
   enableParallelBuilding = true;
 
   postInstall = ''
