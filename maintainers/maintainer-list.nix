@@ -12067,6 +12067,11 @@
     githubId = 2051507;
     name = "Joris Masson";
   };
+  hz2 = {
+    name = "hz2";
+    github = "hz2";
+    githubId = 190673749;
+  };
   hzeller = {
     email = "h.zeller@acm.org";
     github = "hzeller";
