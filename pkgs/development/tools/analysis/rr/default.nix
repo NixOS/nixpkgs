@@ -3,12 +3,14 @@
   gccMultiStdenv,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   bash,
   capnproto,
   cmake,
+  coreutils,
   gdb,
+  jq,
   libpfm,
+  lldb,
   makeWrapper,
   nix-update-script,
   pkg-config,
@@ -22,26 +24,20 @@ let
   stdenv' = if stdenv.hostPlatform.isx86_64 then gccMultiStdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  version = "5.9.0";
+  version = "5.10.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "rr-debugger";
     repo = "rr";
     rev = finalAttrs.version;
-    hash = "sha256-o+HXrgGXdsvjlNh70qsXRtp2yXOiZIT30ejfs1KEaqE=";
+    hash = "sha256-57g50US4WUvpPTKOllzfntHvScUmU5m/lbYqn9j80qY=";
   };
-
-  patches = [
-    # fix build w/ glibc-2.42
-    (fetchpatch {
-      url = "https://github.com/rr-debugger/rr/commit/6251648873b9e1ed23536beebbaa5d6fead3d5be.patch";
-      hash = "sha256-k+jeGUJyybYq3GF2zIhpDF8NT66Buq6nztUbh28qVD8=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
+    substituteInPlace src/test/{checksum_sanity,mremap_after_coalesce,signal_frame}.c \
+      --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
     patchShebangs src
   '';
 
@@ -64,7 +60,7 @@ stdenv'.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     pkg-config
-    python3.pythonOnBuildForHost
+    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pexpect ]))
     which
   ];
 
@@ -79,6 +75,13 @@ stdenv'.mkDerivation (finalAttrs: {
     zstd
   ];
 
+  nativeCheckInputs = [
+    gdb
+    jq
+    lldb
+    procps
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "disable32bit" (!stdenv.hostPlatform.isx86_64))
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
@@ -89,7 +92,9 @@ stdenv'.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "fortify" ];
 
-  # FIXME
+  # FIXME: checks were disabled with rr-5.7.0 (2023-10) and are not expected to
+  # pass since they require hardware support on some machines. The update to
+  # rr-5.10.0 (2026-10) fixed test deps: 60/3316 tests fail on a Zen 4 machine.
   doCheck = false;
 
   preCheck = "export HOME=$TMPDIR";
