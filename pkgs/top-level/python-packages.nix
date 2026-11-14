@@ -23036,7 +23036,7 @@ self: super: with self; {
 
   wtforms-sqlalchemy = callPackage ../development/python-modules/wtforms-sqlalchemy { };
 
-  wtforms_3_3 = callPackage ../development/python-modules/wtforms/3_3.nix { };
+  wtforms_3_2 = callPackage ../development/python-modules/wtforms/3_2.nix { };
 
   wunsen = callPackage ../development/python-modules/wunsen { };
 
