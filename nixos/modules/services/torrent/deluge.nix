@@ -7,7 +7,7 @@
 let
   cfg = config.services.deluge;
   cfg_web = config.services.deluge.web;
-  isDeluge1 = lib.versionOlder cfg.package.version "2.0.0";
+  isDeluge1 = lib.versionOlder package.version "2.0.0";
 
   openFilesLimit = 4096;
   listenPortsDefault = [
@@ -45,6 +45,10 @@ let
           rm ${declarativeLockFile}
         fi
       '';
+
+  package = cfg.package.override {
+    additionalPlugins = cfg.additionalPlugins;
+  };
 in
 {
   options = {
@@ -71,6 +75,7 @@ in
               allow_remote = true;
               daemon_port = 58846;
               listen_ports = [ ${toString listenPortsDefault} ];
+              enabled_plugins = [ "Label" "my_custom_plugin" ];
             }
           '';
           description = ''
@@ -80,6 +85,9 @@ in
             boolean values must not. See
             <https://git.deluge-torrent.org/deluge/tree/deluge/core/preferencesmanager.py#n41>
             for the available options.
+
+            To enable a built-in plugin, just give its name. To enable a custom plugin,
+            you also need to add it to (option)`services.deluge.additionalPlugins`.
           '';
         };
 
@@ -160,6 +168,16 @@ in
           '';
         };
 
+        additionalPlugins = lib.mkOption {
+          type = lib.types.listOf lib.types.package;
+          default = [ ];
+          description = ''
+            Additional plugins to be made available to Deluge. Each plugin can contain
+            one or multiple .egg files which will all be symlinked to into Deluge's
+            plugin folder.
+          '';
+        };
+
         package = lib.mkPackageOption pkgs "deluge-2_x" { };
       };
 
@@ -235,10 +253,10 @@ in
       after = [ "network.target" ];
       description = "Deluge BitTorrent Daemon";
       wantedBy = [ "multi-user.target" ];
-      path = [ cfg.package ] ++ cfg.extraPackages;
+      path = [ package ] ++ cfg.extraPackages;
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package}/bin/deluged \
+          ${package}/bin/deluged \
             --do-not-daemonize \
             --config ${configDir}
         '';
@@ -261,10 +279,10 @@ in
       requires = [ "deluged.service" ];
       description = "Deluge BitTorrent WebUI";
       wantedBy = [ "multi-user.target" ];
-      path = [ cfg.package ];
+      path = [ package ];
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package}/bin/deluge-web \
+          ${package}/bin/deluge-web \
             ${lib.optionalString (!isDeluge1) "--do-not-daemonize"} \
             --config ${configDir} \
             --port ${toString cfg.web.port}
@@ -284,7 +302,7 @@ in
       })
     ];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ package ];
 
     users.users = lib.mkIf (cfg.user == "deluge") {
       deluge = {
