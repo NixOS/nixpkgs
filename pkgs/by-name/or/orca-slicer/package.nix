@@ -50,7 +50,7 @@ let
       withCurl = true;
       withPrivateFonts = true;
       withWebKit = true;
-      withEGL = false;
+      withEGL = true;
     }).overrideAttrs
       (old: {
         buildInputs = old.buildInputs ++ [ libsecret ];
