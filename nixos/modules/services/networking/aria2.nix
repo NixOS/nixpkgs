@@ -66,6 +66,9 @@ in
           accessible to users in the `aria2` group.
         '';
       };
+      package = lib.mkPackageOption pkgs "aria2" {
+        example = "aria2-next";
+      };
       openPorts = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -218,7 +221,7 @@ in
 
       serviceConfig = {
         Restart = "on-abort";
-        ExecStart = "${pkgs.aria2}/bin/aria2c --conf-path=${cfg.settings.conf-path}";
+        ExecStart = "${lib.getExe cfg.package} --conf-path=${cfg.settings.conf-path}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "aria2";
         Group = "aria2";
