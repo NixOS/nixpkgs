@@ -99,13 +99,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2608";
+  version = "2611.1";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-2NdkQpzqDkM/fEW8QYS05KU3JPJeLw4gliryqdOJ3vE=";
+    hash = "sha256-MDn2qprtUXquEBRgu9+sPyBhAw3ulTlQYeWq0Aa/sLM=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -257,7 +257,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^FEX-(\\d+)$"
+      ];
+    };
   };
 
   meta = {
