@@ -55,6 +55,6 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://github.com/cookpete/auto-changelog/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "auto-changelog";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ samirbgno ];
   };
 })
