@@ -4596,8 +4596,8 @@ let
         mktplcRef = {
           name = "vscode-stylelint";
           publisher = "stylelint";
-          version = "2.2.1";
-          hash = "sha256-VnJ2OZe2KPo/QfZquxDZ3SMQncRWnAHBTTtfdJVBlpo=";
+          version = "3.0.0";
+          hash = "sha256-AZ2WvXGGgt6ARKhm1kiBe0pfkIlODrM+uUcRyBayvRA=";
         };
         meta = {
           description = "Official Stylelint extension for Visual Studio Code";
