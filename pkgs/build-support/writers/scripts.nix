@@ -1193,7 +1193,10 @@ rec {
     {
       libraries ? [ ],
       flakeIgnore ? [ ],
+      mypyStrict ? false,
       doCheck ? true,
+      doCheckFlake8 ? doCheck && true,
+      doCheckMypy ? doCheck && true,
       ...
     }@args:
     let
@@ -1205,7 +1208,10 @@ rec {
       (removeAttrs args [
         "libraries"
         "flakeIgnore"
+        "mypyIgnore"
         "doCheck"
+        "doCheckFlake8"
+        "doCheckMypy"
       ])
       // {
         interpreter =
@@ -1214,9 +1220,17 @@ rec {
           else
             (python.withPackages (toFunction libraries)).interpreter;
         check = optionalString (python.isPy3k && doCheck) (
-          writeDash "pythoncheck.sh" ''
-            exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
-          ''
+          writeDash "pythoncheck.sh" (
+            optionalString doCheckFlake8 ''
+              ${lib.getExe buildPythonPackages.flake8} --show-source ${ignoreAttribute} "$1"
+            ''
+            + optionalString doCheckMypy ''
+              ${lib.getExe buildPythonPackages.mypy}      \
+                --show-error-context --no-error-summary   \
+                ${optionalString mypyStrict "--strict"} \
+                "$1"
+            ''
+          )
         );
       }
     ) name;
