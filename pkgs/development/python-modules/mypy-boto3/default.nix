@@ -415,8 +415,8 @@ in
       "sha256-b+SPfOsgHCAF69YkfHDlAsWy40kDjVk8HRfEwz4Gjj0=";
 
   mypy-boto3-docdb =
-    buildMypyBoto3Package "docdb" "1.44.0"
-      "sha256-f/jga3Z/pWLdYEgmLgcxZBRJ6bOSCqvpH/nm/xw2d24=";
+    buildMypyBoto3Package "docdb" "1.44.3"
+      "sha256-fLsW25aUKKQWLWpQJi8nuDIBZuX6eWL2N6OAzueej7s=";
 
   mypy-boto3-docdb-elastic =
     buildMypyBoto3Package "docdb-elastic" "1.44.0"
