@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openstack-rs";
-  version = "0.13.7";
+  version = "0.13.8";
 
   src = fetchFromGitHub {
     owner = "gtema";
     repo = "openstack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cpx35OT/x/2XJD4RzaWX/yKM4nwBgl6/gVrEtgyljEI=";
+    hash = "sha256-KT5W5SA2eUUKWJ0b74zgD0zqI/5wgEeRuPS8RPTMVpw=";
   };
 
-  cargoHash = "sha256-LwN+7LkE/nFbiUlcSjQRxIg0BtO4XLuf/wPS1Vdvx+M=";
+  cargoHash = "sha256-LWoyLRMLoMLxR9wr9YrkIEO9saFvcqni158LABZGpzU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,6 +35,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
   ];
+
+  preBuild = ''
+    # Needed to write data during tests
+    export HOME=$(mktemp -d)
+  '';
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
