@@ -6,6 +6,7 @@
   libopenshot,
   wrapGAppsHook3,
   python3Packages,
+  qt6,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -48,7 +49,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # imports qt_api.py from its own site-packages directory
   postFixup = ''
     wrapProgram $out/bin/openshot-qt \
-      --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}/openshot_qt"
+      --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}/openshot_qt" \
+      --prefix QT_PLUGIN_PATH : "${qt6.qtsvg}/${qt6.qtbase.qtPluginPrefix}"
   '';
 
   passthru = {
