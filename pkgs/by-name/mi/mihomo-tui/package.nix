@@ -39,6 +39,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     VERGEN_DEFAULT_ON_ERROR = "1";
   };
 
+  preBuild = ''
+    # Remap build directory paths for deterministic output.
+    # Must be set in preBuild (not env) because $NIX_BUILD_TOP is a runtime
+    # bash variable that cannot be expanded in Nix string literals, and
+    # __structuredAttrs re-applies env vars between phases.
+    export RUSTFLAGS="--remap-path-prefix=$NIX_BUILD_TOP=/build ''${RUSTFLAGS:-}"
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
