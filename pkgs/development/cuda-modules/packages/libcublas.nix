@@ -84,5 +84,8 @@ buildRedist (finalAttrs: {
     '';
     homepage = "https://developer.nvidia.com/cublas";
     license = lib.licenses.nvidiaCudaRedist;
+    pkgConfigModules = [
+      "cublas"
+    ];
   };
 })

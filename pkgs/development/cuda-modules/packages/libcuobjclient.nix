@@ -31,5 +31,8 @@ buildRedist {
     '';
     homepage = "https://docs.nvidia.com/gpudirect-storage/cuobject/";
     changelog = "https://docs.nvidia.com/gpudirect-storage/cuobject/";
+    pkgConfigModules = [
+      "cuobjclient"
+    ];
   };
 }

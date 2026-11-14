@@ -144,6 +144,7 @@ let
           stdenv
           stdenvNoCC
           zstd
+          pkgConfigCheckHook
           testers
           ;
         inherit (finalCudaPackages)
