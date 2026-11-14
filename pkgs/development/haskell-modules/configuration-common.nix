@@ -417,6 +417,8 @@ with haskellLib;
         "!/taiClock/"
       ])
     ];
+    # Too strict upper bound on QuickCheck (<2.17)
+    jailbreak = true;
   }) super.time-compat;
 
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
