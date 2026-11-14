@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
-  ocaml,
   ocaml-syntax-shims,
   alcotest,
   bigstringaf,
@@ -13,8 +12,6 @@
 buildDunePackage (finalAttrs: {
   pname = "angstrom";
   version = "0.16.1";
-
-  minimalOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
@@ -29,7 +26,7 @@ buildDunePackage (finalAttrs: {
   ];
   buildInputs = [ ocaml-syntax-shims ];
   propagatedBuildInputs = [ bigstringaf ];
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = lib.versionOlder alcotest.version "1.10";
 
   passthru.updateScript = gitUpdater { };
 
