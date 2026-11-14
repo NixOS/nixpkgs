@@ -66,7 +66,7 @@ buildPythonPackage rec {
     description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
     changelog = "https://github.com/venth/aws-adfs/releases/tag/${src.tag}";
-    license = lib.licenses.psfl;
+    license = lib.licenses.mit;
     mainProgram = "aws-adfs";
   };
 }

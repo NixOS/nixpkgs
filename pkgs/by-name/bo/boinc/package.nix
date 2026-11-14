@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free software for distributed and grid computing";
     homepage = "https://boinc.berkeley.edu/";
-    license = lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
