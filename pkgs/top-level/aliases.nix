@@ -2902,6 +2902,7 @@ mapAliases {
   webkitgtk_4_0 = throw "'webkitgtk_4_0' has been removed, port to `libsoup_3` and switch to `webkitgtk_4_1`"; # Added 2025-10-08
   webmacs = throw "webmacs has been removed as it was unmaintained upstream"; # Added 2026-02-03
   welkin = throw "welkin was removed as it is unmaintained upstream"; # Added 2026-01-01
+  wg-access-server = throw "'wg-access-server' was removed as it was unmaintained within nixpkgs"; # Added 2026-11-14
   whalebird = throw "'whalebird' has been removed because it was using an EOL electron version"; # Added 2026-03-20
   whatsapp-for-linux = throw "'whatsapp-for-linux' has been removed because it was unmaintained and archived upstream. Consider using 'karere' instead"; # Converted to throw 2025-10-27
   whisper = throw "'whisper' was removed as it is unmaintained upstream and vendored insecure outdated libraries"; # Added 2026-05-01
