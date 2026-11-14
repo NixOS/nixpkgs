@@ -3,11 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pythonAtLeast,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   numpy,
@@ -15,6 +13,7 @@
   pydantic,
   tqdm,
   toolz,
+  typing-extensions,
 
   # optional dependencies (torch)
   torch,
@@ -33,39 +32,32 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gluonts";
-  version = "0.16.2";
+  version = "0.17.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "gluonts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h0+RYgGMz0gPchiKGIu0/NGcWBky5AWNTJKzoupn/iQ=";
+    hash = "sha256-9X+cTwaoCsAgrjaZtWjDYDjYZO6MNPuBt0oGQUH8/nc=";
   };
 
-  # pydantic.v1.errors.ConfigError: unable to infer type for attribute "target"
-  disabled = pythonAtLeast "3.14";
-
-  patches = [
-    # Fixes _pickle.UnpicklingError: Weights only load failed.
-    # https://github.com/awslabs/gluonts/pull/3269
-    (fetchpatch {
-      name = "fix-torch-load_from_checkpoint";
-      url = "https://github.com/awslabs/gluonts/pull/3269/commits/6420e75cfbeabcd94e2ff09dfed3b2eeb4881710.patch";
-      hash = "sha256-UeLjgKra+Y3uPoTBle+YCxD0a1ahu6d5anrMHn4HH2I=";
-    })
-  ];
-
   build-system = [
-    setuptools
+    hatchling
   ];
 
+  pythonRelaxDeps = [
+    "pandas"
+    "toolz"
+  ];
   dependencies = [
     numpy
     pandas
     pydantic
     tqdm
     toolz
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -75,11 +67,6 @@ buildPythonPackage (finalAttrs: {
       scipy
     ];
   };
-
-  pythonRelaxDeps = [
-    "numpy"
-    "toolz"
-  ];
 
   pythonImportsCheck = [
     "gluonts"
