@@ -1,0 +1,30 @@
+diff --git c/lib/sgchat/CMakeLists.txt i/lib/sgchat/CMakeLists.txt
+--- c/lib/sgchat/CMakeLists.txt
++++ i/lib/sgchat/CMakeLists.txt
+@@ -20,8 +20,8 @@ install(TARGETS sgchat DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ target_common_config(sgchat)
+
+ # Dependency libraries
+-add_subdirectory(go)
+-add_dependencies(sgchat ref-cgosg)
++set(GO_LIBRARIES @libcgosg@/libcgosg.a)
++target_include_directories(sgchat PRIVATE @libcgosg@)
+
+ # Platform specifics
+ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+@@ -45,12 +45,12 @@ set_target_properties(sgchat PROPERTIES COMPILE_FLAGS
+ # Linking
+ message(STATUS "Go libraries: ${GO_LIBRARIES}")
+ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+-  target_link_libraries(sgchat PUBLIC ref-cgosg ncutil ${GO_LIBRARIES}
+-    -Wl,-w -Wl,-force_load,${LIBSIGNAL_FFI_PATH}
++  target_link_libraries(sgchat PUBLIC @libcgosg@/libcgosg.a ncutil ${GO_LIBRARIES}
++    -Wl,-w -Wl,-force_load,@libsignalFfi@/lib/libsignal_ffi.a
+     -lm -lz)
+ else()
+-  target_link_libraries(sgchat PUBLIC ref-cgosg ncutil ${GO_LIBRARIES}
+-    -Wl,--whole-archive ${LIBSIGNAL_FFI_PATH} -Wl,--no-whole-archive
++  target_link_libraries(sgchat PUBLIC @libcgosg@/libcgosg.a ncutil ${GO_LIBRARIES}
++    -Wl,--whole-archive @libsignalFfi@/lib/libsignal_ffi.a -Wl,--no-whole-archive
+     -ldl -lm -lz)
+ endif()
