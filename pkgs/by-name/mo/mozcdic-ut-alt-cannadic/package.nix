@@ -7,19 +7,19 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-alt-cannadic";
-  version = "0-unstable-2024-10-13";
+  version = "0-unstable-2026-09-05";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-alt-cannadic";
-    rev = "7f70e48a63735c781b6453977628e594bdd50d89";
-    hash = "sha256-R7qU2YNdeojuu4VTxH+M5Bvf8XAEvK6N8jPNz9MQqvU=";
+    rev = "e7230d7f6d9b72cb656a1eb23d2ccdb7c70d141f";
+    hash = "sha256-1+JjR8rAKtOa2lhMH3m8GKIz3UC8U7XVWelgXXn7310=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out mozcdic-ut-alt-cannadic.txt.tar.bz2
+    install -Dt $out mozcdic-ut-alt-cannadic.txt.bz2
 
     runHook postInstall
   '';
@@ -40,8 +40,5 @@ stdenvNoCC.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
-    # this does not need to be separately built
-    # it only provides some zip files
-    hydraPlatforms = [ ];
   };
 }
