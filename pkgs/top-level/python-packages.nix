@@ -10348,8 +10348,6 @@ self: super: with self; {
 
   localstack-client = callPackage ../development/python-modules/localstack-client { };
 
-  localstack-ext = callPackage ../development/python-modules/localstack-ext { };
-
   localzone = callPackage ../development/python-modules/localzone { };
 
   locate = callPackage ../development/python-modules/locate { };
