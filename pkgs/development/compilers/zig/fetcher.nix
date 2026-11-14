@@ -14,6 +14,8 @@
 runCommand "${name}-zig-deps"
   {
     inherit src fetchAll;
+    __structuredAttrs = true;
+    strictDeps = true;
 
     nativeBuildInputs = [ zig ];
 
