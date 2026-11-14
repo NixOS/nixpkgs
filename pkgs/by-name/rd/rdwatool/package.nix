@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "rdwatool";
-  version = "1.2-unstable-2023-11-27";
+  version = "1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
