@@ -23,7 +23,7 @@ let
       systemCalls = [ "perf_event_open" ];
     };
     "nvidia-smi" = {
-      package = lib.getBin config.hardware.nvidia.package;
+      package = lib.getBin config.hardware.nvidia.package.driver;
       deviceAllow = [ "char-nvidia* rw" ];
     };
     "nvml" = {
