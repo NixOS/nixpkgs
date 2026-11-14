@@ -77,12 +77,6 @@ let
     WWW="$STATE/www"
     STORE="${cfg.package}"
 
-    # Create persistent state directories
-    mkdir -p \
-      $STATE/storage/{app/public,framework/{cache/data,sessions,views},logs/install} \
-      $STATE/plugins \
-      $STATE/bootstrap-cache
-
     # Rebuild the working webroot when the panel package changes
     if [ "$(cat $WWW/.nix-store-path 2>/dev/null || true)" != "$STORE" ]; then
       rm -rf "$WWW"
@@ -416,6 +410,25 @@ in
             Persistent = true;
           };
         };
+
+        # Create persistent state directories
+        tmpfiles.settings."10-pelican-panel" =
+          let
+            stateDirList =
+              list:
+              lib.attrsets.genAttrs' list (
+                dir: lib.nameValuePair (cfg.stateDir + "/" + dir) { d = { inherit (cfg) user group; }; }
+              );
+          in
+          stateDirList [
+            "plugins"
+            "bootstrap-cache"
+            "storage/app/public"
+            "storage/framework/cache/data"
+            "storage/framework/sessions"
+            "storage/framework/views"
+            "storage/logs/install"
+          ];
       };
 
     networking.firewall = mkIf cfg.openFirewall {
