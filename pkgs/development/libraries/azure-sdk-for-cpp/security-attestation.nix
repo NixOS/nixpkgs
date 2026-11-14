@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   core,
@@ -23,6 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RXCMB7MMIe5x5YgMAqAf306E/1vuRXweAlN5uDHumjA=";
   };
   sourceRoot = "${finalAttrs.src.name}/sdk/attestation/azure-security-attestation";
+
+  patches = [
+    # Fix missing <cstdint> include with GCC 15+
+    (fetchpatch {
+      url = "https://github.com/Azure/azure-sdk-for-cpp/commit/9a4ecb7e1b566872db0ea6c0eba736fd8a1d543c.patch";
+      relative = "sdk/attestation/azure-security-attestation";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-zCujkiOnLUs3PG1vQUBjUvbvwcwPapf4EVjEaLyO1a4=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt
