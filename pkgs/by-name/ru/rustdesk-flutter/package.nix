@@ -20,6 +20,7 @@
   libyuv,
   pam,
   makeDesktopItem,
+  nix-update-script,
   rustPlatform,
   libayatana-appindicator,
   rustc,
@@ -40,7 +41,7 @@
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.5.0/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/{version}/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -70,14 +71,14 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.5.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-1xa7X+swBIb8Lz3c6m8SeNZAiJWNCUpw+UbdSsMkeSk=";
+    hash = "sha256-XeVg8dIIabvQddRxU2Doqj+vQCJTXHwYSHL8G5UlAWc=";
   };
 
   strictDeps = true;
@@ -86,7 +87,7 @@ flutter329.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl -sL https://raw.githubusercontent.com/rustdesk/rustdesk/1.5.0/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl -sL https://raw.githubusercontent.com/rustdesk/rustdesk/{version}/flutter/pubspec.lock | yq > pubspec.lock.json
   # Then add flutter_test, fake_async, leak_tracker*, vm_service SDK deps manually
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
@@ -100,7 +101,7 @@ flutter329.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-Ym4USlB1NJO0bm0cr2l/yZhoUBfxtd2uTkkjrR7iD3o=";
+    hash = "sha256-uFndXuBDn5u7FI/JWeYWam/aiDi4twWeOLwXNvo2HZs=";
   };
 
   dontCargoBuild = true;
@@ -253,6 +254,8 @@ flutter329.buildFlutterApplication rec {
       startupNotify = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Virtual / remote desktop infrastructure for everyone! Open source TeamViewer / Citrix alternative";
