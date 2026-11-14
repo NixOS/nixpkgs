@@ -1,30 +1,25 @@
 {
   stdenv,
   lib,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   cmake,
   qt6,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "speedcrunch";
-  version = "0.12-unstable-2024-12-02";
+  version = "1.1.0";
 
-  src = fetchFromBitbucket {
+  src = fetchFromGitHub {
     owner = "heldercorreia";
     repo = "speedcrunch";
-    rev = "3c1b4c18ccb275eb2891f9d8ff36a9205c0f566b";
-    hash = "sha256-9/id5h+5aBntlcsEUGkyEzMJf7we7hMslnkqKDcbaNY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ynDmrdokW9Lvbd+wmwtFxyUP11W0GGV+3l8UMNq+TrU=";
   };
-
-  sourceRoot = "source/src";
-
-  patches = [
-    ./01-fix-qt6-build.patch
-  ];
 
   nativeBuildInputs = [
     cmake
+    qt6.qttools
     qt6.wrapQtAppsHook
   ];
 
@@ -35,6 +30,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://speedcrunch.org";
+    changelog = "https://github.com/heldercorreia/speedcrunch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     description = "High-precision scientific calculator";
     mainProgram = "speedcrunch";
@@ -53,4 +49,4 @@ stdenv.mkDerivation {
     inherit (qt6.qtbase.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
