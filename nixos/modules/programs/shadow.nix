@@ -178,7 +178,8 @@ in
     {
       assertions = [
         {
-          assertion = config.security.shadow.enable || config.services.greetd.enable;
+          assertion =
+            config.security.shadow.enable || config.services.greetd.enable || config.boot.isContainer;
           message = "You must enable at least one VT login method, either security.shadow.enable or services.greetd.enable";
         }
       ];
