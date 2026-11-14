@@ -3,6 +3,7 @@
   pkgs,
   testBase,
   system,
+  package,
   ...
 }:
 with import ../../lib/testing-python.nix { inherit system pkgs; };
@@ -37,6 +38,7 @@ runTest (
           environment.etc."nextcloud/mail_smtppassword".text = "foobar";
 
           services.nextcloud = {
+            package = package pkgs;
             config.dbtype = "sqlite";
 
             settings = {

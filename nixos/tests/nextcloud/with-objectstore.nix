@@ -3,6 +3,7 @@
   pkgs,
   testBase,
   system,
+  package,
   ...
 }:
 
@@ -40,6 +41,7 @@ runTest (
           ...
         }:
         {
+          services.nextcloud.package = package pkgs;
           services.nextcloud.config.dbtype = "sqlite";
 
           environment.variables.AWS_CONFIG_FILE = awsCfg;

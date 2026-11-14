@@ -8,7 +8,7 @@ with pkgs.lib;
 
 let
   inherit (pkgs) lib;
-  baseModule =
+  testBase =
     { config, ... }:
     {
       imports = [
@@ -109,46 +109,41 @@ let
         '';
     };
 
+  packages = lib.listToAttrs (
+    map
+      (
+        version:
+        let
+          attr = "nextcloud${toString version}";
+        in
+        lib.nameValuePair attr (builtins.getAttr attr)
+      )
+      [
+        33
+        34
+        35
+      ]
+  );
+
   genTests =
-    version:
-    let
-      testBase.imports = [
-        baseModule
-        {
-          nodes.nextcloud =
-            { pkgs, ... }:
-            {
-              services.nextcloud.package = pkgs.${"nextcloud${toString version}"};
-            };
+    attr: package:
+    lib.mapAttrs
+      (
+        name: path:
+        import path {
+          inherit system pkgs testBase package;
+          name = "${attr}-${name}";
         }
-      ];
-    in
-    lib.nameValuePair "nextcloud${toString version}" (
-      lib.mapAttrs
-        (
-          name:
-          path:
-          import path {
-            inherit system pkgs testBase;
-            name = "nextcloud-${name}";
-          }
-        )
-        {
-          basic = ./basic.nix;
-          home-bindmout = ./home-bindmount.nix;
-          home-mount = ./home-mount.nix;
-          with-declarative-redis-and-secrets = ./with-declarative-redis-and-secrets.nix;
-          with-mysql-and-memcached = ./with-mysql-and-memcached.nix;
-          with-postgresql-and-redis = ./with-postgresql-and-redis.nix;
-          with-objectstore = ./with-objectstore.nix;
-          with-mail = ./with-mail.nix;
-        }
-    );
+      )
+      {
+        basic = ./basic.nix;
+        home-bindmout = ./home-bindmount.nix;
+        home-mount = ./home-mount.nix;
+        with-declarative-redis-and-secrets = ./with-declarative-redis-and-secrets.nix;
+        with-mysql-and-memcached = ./with-mysql-and-memcached.nix;
+        with-postgresql-and-redis = ./with-postgresql-and-redis.nix;
+        with-objectstore = ./with-objectstore.nix;
+        with-mail = ./with-mail.nix;
+      };
 in
-listToAttrs (
-  map genTests [
-    33
-    34
-    35
-  ]
-)
+lib.mapAttrs genTests packages

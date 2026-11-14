@@ -3,6 +3,7 @@
   pkgs,
   testBase,
   system,
+  package,
   ...
 }:
 
@@ -55,6 +56,7 @@ runTest (
 
           services.nextcloud = {
             enable = true;
+            package = package pkgs;
             config.dbtype = "sqlite";
             datadir = "/var/lib/nextcloud-data";
             autoUpdateApps = {

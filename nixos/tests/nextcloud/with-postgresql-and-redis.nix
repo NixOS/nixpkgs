@@ -3,6 +3,7 @@
   pkgs,
   testBase,
   system,
+  package,
   ...
 }:
 
@@ -26,6 +27,7 @@ runTest (
         {
           environment.systemPackages = [ pkgs.jq ];
           services.nextcloud = {
+            package = package pkgs;
             caching = {
               apcu = false;
               redis = true;

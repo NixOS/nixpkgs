@@ -3,6 +3,7 @@
   pkgs,
   testBase,
   system,
+  package,
   ...
 }:
 
@@ -22,6 +23,7 @@ runTest (
       };
       services.nextcloud = {
         config.dbtype = "sqlite";
+        package = package pkgs;
         home = "/mnt/nextcloud";
       };
     };

@@ -3,6 +3,7 @@
   pkgs,
   testBase,
   system,
+  package,
   ...
 }:
 
@@ -21,6 +22,7 @@ runTest (
         { config, pkgs, ... }:
         {
           services.nextcloud = {
+            package = package pkgs;
             caching = {
               apcu = true;
               memcached = true;
