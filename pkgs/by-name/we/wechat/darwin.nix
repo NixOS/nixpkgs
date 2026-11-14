@@ -3,6 +3,7 @@
   version,
   src,
   meta,
+  passthru ? { },
   stdenvNoCC,
   _7zz,
 }:
@@ -13,6 +14,7 @@ stdenvNoCC.mkDerivation {
     version
     src
     meta
+    passthru
     ;
 
   # dmg is APFS formatted
