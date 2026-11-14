@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   libpcap,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,6 +21,8 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [ libpcap ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   doCheck = false; # Tests require a network connection.
 
   ldflags = [
@@ -30,6 +33,8 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mv $out/bin/NTrace-core $out/bin/nexttrace
   '';
+
+  doInstallCheck = true;
 
   meta = {
     description = "Open source visual route tracking CLI tool";
