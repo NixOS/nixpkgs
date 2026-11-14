@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "arouteserver";
-  version = "1.23.2";
+  version = "1.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pierky";
     repo = "arouteserver";
     tag = "v${version}";
-    hash = "sha256-qPU1eBEAlF6wcI1KEBtSuf0a+pKsqoCN0mtAPjIr+0c=";
+    hash = "sha256-zZYRs06PogyXKM0mwWIpvQLty4UPKbPeaMQE4sYBb1s=";
   };
 
   postPatch = ''
