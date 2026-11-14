@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -21,6 +22,15 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-mMmHC5zBY1w+Y+NAZJkP7m1CqErwCv2bMNAo1TTNm6E=";
   };
+
+  patches = [
+    # Add PEP 561 py.typed marker; remove when upstreamed in next release.
+    # https://github.com/1Password/onepassword-sdk-python/issues/220
+    (fetchpatch {
+      url = "https://github.com/1Password/onepassword-sdk-python/commit/42c0e2e9e4af861174f70b73ef4bfa138e6a3834.patch";
+      hash = "sha256-twSwe6ShQH0sWxIlzWGuz+dKr+bb4cNVvFKfPHBg2rw=";
+    })
+  ];
 
   build-system = [
     setuptools
