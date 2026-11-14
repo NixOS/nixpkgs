@@ -146,8 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ]
   # https://github.com/OSGeo/gdal/pull/15471#issuecomment-6845965799
-  ++ lib.optional stdenv.hostPlatform.isDarwin ./test_ogr_gml_billion_laugh-expat-2.10-fixup.patch
-  ;
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./test_ogr_gml_billion_laugh-expat-2.10-fixup.patch;
 
   nativeBuildInputs = [
     bison
