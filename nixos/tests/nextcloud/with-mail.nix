@@ -2,12 +2,14 @@
   name,
   testBase,
   package,
+  flavor ? "containers",
   ...
 }:
-{
+args@{
   config,
   lib,
-  pkgs,
+  containers,
+  nodes,
   ...
 }:
 let
@@ -21,19 +23,17 @@ in
 
   imports = [ testBase ];
 
-  nodes = {
+  ${flavor} = {
     nextcloud =
       {
-        config,
         pkgs,
-        nodes,
         ...
       }:
       {
         security.pki.certificateFiles = [ certs.ca.cert ];
 
         networking.extraHosts = ''
-          ${nodes.stalwart.networking.primaryIPAddress} ${domain}
+          ${args.${flavor}.stalwart.networking.primaryIPAddress} ${domain}
         '';
 
         environment.etc."nextcloud/mail_smtppassword".text = "foobar";

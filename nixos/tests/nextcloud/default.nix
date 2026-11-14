@@ -157,15 +157,19 @@ let
         };
         with-mysql-and-memcached = {
           path = ./with-mysql-and-memcached.nix;
+          flavor = "containers";
         };
         with-postgresql-and-redis = {
           path = ./with-postgresql-and-redis.nix;
+          flavor = "containers";
         };
         with-objectstore = {
           path = ./with-objectstore.nix;
+          flavor = "containers";
         };
         with-mail = {
           path = ./with-mail.nix;
+          flavor = "containers";
         };
       };
 in
