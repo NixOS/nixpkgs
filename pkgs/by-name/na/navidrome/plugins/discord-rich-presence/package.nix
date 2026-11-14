@@ -16,6 +16,8 @@ buildNavidromeGoPlugin (finalAttrs: {
 
   vendorHash = "sha256-5ZlqyUa+UcLCBdLQaYAlb818Y8sOENjIFfb2hpRsbpQ=";
 
+  doNativeCheck = true;
+
   meta = {
     changelog = "https://github.com/navidrome/discord-rich-presence-plugin/releases/tag/v${finalAttrs.version}";
     description = "Displays your currently playing track in your Discord status";

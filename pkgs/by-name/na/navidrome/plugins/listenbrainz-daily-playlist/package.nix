@@ -16,6 +16,8 @@ buildNavidromeGoPlugin (finalAttrs: {
 
   vendorHash = "sha256-wvRQjLom1ZmDabsPwin5uiR8ggSDWBrEvaFljuUd/bo=";
 
+  doNativeCheck = true;
+
   meta = {
     changelog = "https://github.com/kgarner7/navidrome-listenbrainz-daily-playlist/releases/tag/v${finalAttrs.version}";
     description = "fetch daily/weekly playlists from ListenBrainz";
