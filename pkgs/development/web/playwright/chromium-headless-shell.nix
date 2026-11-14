@@ -36,8 +36,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-Qiz/wZA9AsYfqsEej5zfNxVcieu20J2m4XVFRA34Bi4=";
-          aarch64-linux = "sha256-I7gSc1J6+KJbRiANE997p34vAQj62bF3CQn0LZFTsqA=";
+          x86_64-linux = "sha256-CJB0HhSaPLj84F9wPn633mn4JzR6IyJcW4QK21YSMnY=";
+          aarch64-linux = "sha256-SqW6vOF+X7XbWVAdmezjL1xPufEF6B69IoDKiB8lql4=";
         }
         .${system} or throwSystem;
     };
@@ -72,7 +72,7 @@ let
     inherit (download) url stripRoot;
     hash =
       {
-        aarch64-darwin = "sha256-47hkERfQBDHWjD6VFwQNVCAXK1a+5uWKmNwialEESso=";
+        aarch64-darwin = "sha256-du/uCxVK8RTqRC+m5rqiVC8J0rX5EZj9YGHAyo7L0Ik=";
       }
       .${system} or throwSystem;
   };
