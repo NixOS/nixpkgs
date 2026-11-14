@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "yarg";
-  version = "0.1.9-unstable-2022-02-06";
+  version = "0.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
