@@ -217,6 +217,10 @@ let
       feature = "set `__structuredAttrs` to true by default";
     };
 
+    disallowCheckInputReferencesByDefault = mkMassRebuild {
+      feature = "set `disallowCheckInputReferences` to true by default";
+    };
+
     enableParallelBuildingByDefault = mkMassRebuild {
       feature = "set `enableParallelBuilding` to true by default";
     };

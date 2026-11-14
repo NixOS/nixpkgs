@@ -171,4 +171,9 @@ self: super: {
       structuredAttrsByDefault = true;
     };
   };
+  pkgsStrictCheckInputs = nixpkgsFun {
+    config = super.config // {
+      disallowCheckInputReferencesByDefault = true;
+    };
+  };
 }
