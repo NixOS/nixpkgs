@@ -543,10 +543,11 @@ let
           modules = genList (
             i:
             let
-              m = loadModule (elemAt imports i) "${key}:anon-${toString (i + 1)}" _file;
-              module = if class == null || m._class == null || m._class == class then m else throwClassMismatch m;
+              module = loadModule (elemAt imports i) "${key}:anon-${toString (i + 1)}" _file;
             in
-            if module.imports == [ ] then
+            if class != null && module._class != null && module._class != class then
+              throwClassMismatch module
+            else if module.imports == [ ] then
               # can't recurse deeper
               {
                 key = module.key;
