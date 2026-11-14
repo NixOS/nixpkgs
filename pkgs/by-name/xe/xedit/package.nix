@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [ Holiu618 ];
     mainProgram = "xedit";
   };
 })
