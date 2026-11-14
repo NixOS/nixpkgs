@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pydsdl";
-  version = "1.22.2";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = "pydsdl";
     tag = version;
-    hash = "sha256-JQE7e735arclu7avLu0Nf/ecULd0wuPmxyO3DtDsxLs=";
+    hash = "sha256-GD842PaOvy6UIgDBujsUmybmBczW2VwUeWOaN7LmFUE=";
   };
 
   build-system = [ setuptools ];
