@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "atlassian-python-api";
-  version = "4.0.7";
+  version = "5.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atlassian-api";
     repo = "atlassian-python-api";
     tag = finalAttrs.version;
-    hash = "sha256-8zfM/3apGMo6sTPA5ESu2SkgVOJUA09Wz/pGR12fA7c=";
+    hash = "sha256-U3QsKYYkEBR5JAkeCns0me2EnHvzjkdUOtz1BTkk2NE=";
   };
 
   build-system = [ setuptools ];
