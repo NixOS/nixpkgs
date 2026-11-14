@@ -1,0 +1,16 @@
+diff --git a/main.js b/main.js
+index 717bc39..0f354cf 100644
+--- a/main.js
++++ b/main.js
+@@ -292,11 +292,6 @@ const getTokenDetails = (e) => jwt.decode(e),
+ 			r.SF_MESSAGING_URL && (e = r.SF_MESSAGING_URL),
+ 				r.SF_CONNECTION_TOKEN && (n = r.SF_CONNECTION_TOKEN),
+ 				r.SF_DISABLE_STARTUP && (o = r.SF_DISABLE_STARTUP);
+-			try {
+-				await fsPromises.unlink(t, { force: !0 });
+-			} catch (e) {
+-				log.error(`failed to delete env file (${t})`, e.toString());
+-			}
+ 			return log.info(`Env vars loaded from file. (${t}) `), { url: e, id: n };
+ 		} catch (e) {
+ 			log.error("failed to read from env file", e.toString());
