@@ -116,6 +116,29 @@
           pname = "python3-minimal";
         });
 
+    # FIXME: introduced for easier testing, but should be merged into python3Minimal
+    python3MinimalForMeson =
+      (callPackage ./cpython (
+        {
+          self = __splicedPackages.python3MinimalForMeson;
+          inherit passthruFun;
+          pythonAttr = "python3MinimalForMeson";
+          # strip down that python version as much as possible
+          withMinimalDeps = true;
+          withZlib = true;
+          allowedReferenceNames = [
+            "bashNonInteractive"
+            "zlib"
+          ];
+        }
+        // sources.python314
+      )).overrideAttrs
+        (old: {
+          # TODO(@Artturin): Add this to the main cpython expr
+          strictDeps = true;
+          pname = "python3-minimal-meson";
+        });
+
     pypy27 = callPackage ./pypy {
       self = __splicedPackages.pypy27;
       sourceVersion = {
