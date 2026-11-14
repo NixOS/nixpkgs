@@ -1,0 +1,13 @@
+diff --git a/lib/wifi_wand/platforms/selection/ubuntu.rb b/lib/wifi_wand/platforms/selection/ubuntu.rb
+index b533cef..f2de5d1 100644
+--- a/lib/wifi_wand/platforms/selection/ubuntu.rb
++++ b/lib/wifi_wand/platforms/selection/ubuntu.rb
+@@ -9,6 +9,8 @@ module WifiWand
+         def initialize = super(:ubuntu, 'Ubuntu Linux')
+ 
+         def current_os_is_this_os?
++          return true
++
+           # Check /etc/os-release for Ubuntu or Ubuntu-based systems
+           if File.exist?('/etc/os-release')
+             content = File.read('/etc/os-release')
