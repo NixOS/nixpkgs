@@ -24,7 +24,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "glueviz";
+  pname = "glue-core";
   version = "1.27.0";
   pyproject = true;
 

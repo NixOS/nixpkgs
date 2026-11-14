@@ -312,6 +312,7 @@ mapAliases {
   github3_py = throw "'github3_py' has been renamed to/replaced by 'github3-py'"; # Converted to throw 2025-10-29
   GitPython = throw "'GitPython' has been renamed to/replaced by 'gitpython'"; # Converted to throw 2025-10-29
   gitterpy = throw "'gitterpy' was removed. The service was migrated to Matrix"; # Added 2026-06-04
+  glueviz = throw "'glueviz' has been renamed to/replaced by 'glue-core'"; # Added 2026-11-14
   google-cloud-iot = throw "google-cloud-iot has been removed, as it has been archived upstream in 2023"; # added 2026-11-07
   google_api_python_client = throw "'google_api_python_client' has been renamed to/replaced by 'google-api-python-client'"; # Converted to throw 2025-10-29
   googleapis_common_protos = throw "'googleapis_common_protos' has been renamed to/replaced by 'googleapis-common-protos'"; # Converted to throw 2025-10-29
