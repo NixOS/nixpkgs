@@ -218,11 +218,23 @@ def copy_closure(
         if to_host is not None:
             host_flags += ["--to", f"{to_host.store_type}://{to_host.host}"]
 
+        # `ssh-ng` copies go through the store protocol, where the destination
+        # `require-sigs` check applies. `nix-copy-closure`, which handles plain
+        # `ssh`, never checked signatures, so mirror that behaviour. Without
+        # this, this result in a very frustrating experience for ssh-ng users.
+        sig_flags = (
+            ["--no-check-sigs"]
+            if (to_host is not None and to_host.store_type == "ssh-ng")
+            or (from_host is not None and from_host.store_type == "ssh-ng")
+            else []
+        )
+
         run_wrapper(
             [
                 "nix",
                 *FLAKE_FLAGS,
                 "copy",
+                *sig_flags,
                 *dict_to_flags(copy_flags),
                 *host_flags,
                 closure,
