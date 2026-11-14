@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
     rev = version;
-    hash = "sha256-6Aw+hy3WCTr3iEiZns7aH82nkVSG/KMqEA2LE0XZ7Zo=";
+    hash = "sha256-w24onP87qtV8/KQkK6iKEOYv4DwR4G8daJQ/PU/yXo4=";
   };
 
   dontWrapQtApps = true;
