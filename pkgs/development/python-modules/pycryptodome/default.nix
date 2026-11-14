@@ -3,12 +3,10 @@
   buildPythonPackage,
   callPackage,
   fetchFromGitHub,
+  pytestCheckHook,
   setuptools,
 }:
 
-let
-  test-vectors = callPackage ./vectors.nix { };
-in
 buildPythonPackage (finalAttrs: {
   pname = "pycryptodome";
   version = "4.4.0";
@@ -23,7 +21,13 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ test-vectors ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PYTHONPATH="test_vectors:$PYTHONPATH"
+  '';
 
   pythonImportsCheck = [ "Crypto" ];
 
