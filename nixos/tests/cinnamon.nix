@@ -22,6 +22,10 @@
       services.xserver.displayManager.lightdm.greeters.slick.extraConfig = ''
         enable-hidpi = on
       '';
+      virtualisation.resolution = {
+        x = 1920;
+        y = 1080;
+      };
     };
 
   enableOCR = true;
@@ -40,6 +44,7 @@
         name: su "gdbus call --session -d org.Cinnamon -o /org/Cinnamon -m org.Cinnamon.Eval ${name}";
     in
     ''
+      import datetime
       machine.wait_for_unit("display-manager.service")
 
       with subtest("Test if we can see username in slick-greeter"):
@@ -82,27 +87,27 @@
           machine.succeed("${su "cinnamon-settings themes >&2 &"}")
           machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'cinnamon-settings'")
           machine.wait_for_text('(Style|Appearance|Color)')
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
           machine.screenshot("cinnamon_settings")
 
       with subtest("Lock the screen"):
           machine.succeed("${su "cinnamon-screensaver-command -l >&2 &"}")
           machine.wait_until_succeeds("${su "cinnamon-screensaver-command -q"} | grep 'The screensaver is active'")
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
           machine.screenshot("cinnamon_screensaver")
           machine.send_chars("${user.password}\n", delay=0.2)
           machine.wait_until_succeeds("${su "cinnamon-screensaver-command -q"} | grep 'The screensaver is inactive'")
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
 
       with subtest("Open GNOME Terminal"):
           machine.succeed("${su "gnome-terminal"}")
           machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'gnome-terminal'")
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
 
       with subtest("Open virtual keyboard"):
           machine.succeed("${su "dbus-send --print-reply --dest=org.Cinnamon /org/Cinnamon org.Cinnamon.ToggleKeyboard"}")
           machine.wait_for_text('(Esc|123)')
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
           machine.screenshot("cinnamon_virtual_keyboard")
 
       # Only can be tested after opening the above apps.

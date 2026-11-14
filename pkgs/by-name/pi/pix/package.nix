@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pix";
-  version = "3.4.11";
+  version = "3.4.12";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "pix";
     rev = finalAttrs.version;
-    hash = "sha256-iiqy/IsQE1o1tv5MjdhCOFQnTGheSSZsC/1UwDt2x24=";
+    hash = "sha256-6mzFnZFbON/kMiUKuAeZWLxKMm9hGXfQUQIgsuL0o18=";
   };
 
   nativeBuildInputs = [
