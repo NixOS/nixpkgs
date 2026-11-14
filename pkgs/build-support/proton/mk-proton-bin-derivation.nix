@@ -38,6 +38,9 @@ lib.extendMkDerivation {
     in
     assert lib.all checkVariant (lib.attrNames variants);
     {
+      __structuredAttrs = true;
+      strictDeps = true;
+
       inherit steamDisplayName;
 
       inherit (variants.${stdenvNoCC.hostPlatform.system}) src toolName;
