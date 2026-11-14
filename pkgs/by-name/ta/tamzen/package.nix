@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   mkfontscale,
+  installFonts,
   lib,
   stdenv,
 }:
@@ -16,11 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-W5Wqsm5rpzzcbJl2lv6ORAznaAwLcmJ2S6Qo2zIoq9I=";
   };
 
-  nativeBuildInputs = [ mkfontscale ];
+  nativeBuildInputs = [
+    installFonts
+    mkfontscale
+  ];
 
-  installPhase = ''
-    install -m 644 -D otb/*.otb pcf/*.pcf -t "$out/share/fonts/misc"
-    install -m 644 -D psf/*.psf -t "$out/share/consolefonts"
+  postInstall = ''
     mkfontdir "$out/share/fonts/misc"
   '';
 
