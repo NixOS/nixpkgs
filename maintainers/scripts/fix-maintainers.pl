@@ -6,8 +6,9 @@ use Path::Tiny;
 use strict;
 use warnings;
 
+my $maintainers_entry_point = "../default.nix";
 my $maintainers_list_nix = "../maintainer-list.nix";
-my $maintainers_json = from_json(`nix-instantiate --json --eval --expr 'builtins.fromJSON (builtins.toJSON (import $maintainers_list_nix))'`);
+my $maintainers_json = from_json(`nix-instantiate --json --eval --expr 'builtins.fromJSON (builtins.toJSON (import $maintainers_entry_point).maintainer-list)'`);
 
 STDOUT->autoflush(1);
 
