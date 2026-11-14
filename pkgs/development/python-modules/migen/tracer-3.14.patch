@@ -1,0 +1,10 @@
+--- a/migen/fhdl/tracer.py
++++ b/migen/fhdl/tracer.py
+@@ -38,6 +38,7 @@ _load_build_opcodes = {
+     "BUILD_LIST" : _bytecode_length_version_guard(3),
+     "CACHE" : _bytecode_length_version_guard(3),
+     "COPY" : _bytecode_length_version_guard(3),
++    "LOAD_FAST_BORROW" : _bytecode_length_version_guard(3),
+ }
+
+

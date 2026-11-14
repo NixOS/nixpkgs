@@ -1,0 +1,16 @@
+{
+  "1.5.2": {
+    "version": "libwebrtc.m144.7559.09",
+    "hashes": {
+      "linux-x64": "sha256-uzS07voCGM1zs663UalYpb8pWiYpkrKMxKt/wB4rcB4=",
+      "linux-arm64": "sha256-nMMU/HrCN4zSB4vO1O4TfJRBtK87OX+zYbxZRq8Q4Us="
+    }
+  },
+  "1.6.2+hotfix.4": {
+    "version": "libwebrtc.m150.7871.03",
+    "hashes": {
+      "linux-x64": "sha256-i7YWInDjoIjtuo7Y19m20zXJpIQCa4Ez4uFT/PtXDCY=",
+      "linux-arm64": "sha256-BHy0RtxoTnnEtoLLFz16+kt1uddwochNlvz2n4FgumU="
+    }
+  }
+}

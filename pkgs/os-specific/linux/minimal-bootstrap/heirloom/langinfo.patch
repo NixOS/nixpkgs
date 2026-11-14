@@ -1,0 +1,99 @@
+--- nawk/main.c
++++ nawk/main.c
+@@ -35,7 +35,6 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <locale.h>
+-#include <langinfo.h>
+ #include <libgen.h>
+ 
+ #define	CMDCLASS	""/*"UX:"*/	/* Command classification */
+--- sort/sort.c
++++ sort/sort.c
+@@ -63,7 +63,6 @@ static const char sccsid[] USED = "@(#)sort.sl	1.37 (gritter) 5/29/05";
+ #include <locale.h>
+ #include <wchar.h>
+ #include <wctype.h>
+-#include <langinfo.h>
+ #include <inttypes.h>
+ #include <errno.h>
+ 
+@@ -287,18 +286,6 @@ main(int argc, char **argv)
+ 	else
+ 		chkblank();
+ 	compare = cmpf = ccoll ? mb_cur_max > 1 ? cmpm : cmpa : cmpl;
+-	setlocale(LC_NUMERIC, "");
+-	arg = nl_langinfo(RADIXCHAR);
+-	if (mb_cur_max > 1)
+-		next(radixchar, arg, i);
+-	else
+-		radixchar = *arg & 0377;
+-	arg = nl_langinfo(THOUSEP);
+-	if (mb_cur_max > 1)
+-		next(thousep, arg, i);
+-	else
+-		thousep = *arg & 0377;
+-	setlocale(LC_TIME, "");
+ 	fields = smalloc(NF * sizeof *fields);
+ 	copyproto();
+ 	eargv = argv;
+@@ -1088,8 +1075,7 @@ cmp(const char *i, const char *j)
+ 		} else {
+ 			sa = elicpy(collba, pa, la, '\n', ignore, code);
+ 			sb = elicpy(collbb, pb, lb, '\n', ignore, code);
+-			n = fp->Mflg ? monthcmp(collba, collbb) :
+-				strcoll(collba, collbb);
++			n = strcmp(collba, collbb);
+ 			if (n)
+ 				return n > 0 ? -fp->rflg : fp->rflg;
+ 			pa = &pa[sa];
+@@ -1570,49 +1556,6 @@ upcdup(const char *s)
+ 	return r;
+ }
+ 
+-static const char	*months[12];
+-
+-#define	COPY_ABMON(m)	months[m-1] = upcdup(nl_langinfo(ABMON_##m))
+-
+-static void
+-fillmonths(void)
+-{
+-	COPY_ABMON(1);
+-	COPY_ABMON(2);
+-	COPY_ABMON(3);
+-	COPY_ABMON(4);
+-	COPY_ABMON(5);
+-	COPY_ABMON(6);
+-	COPY_ABMON(7);
+-	COPY_ABMON(8);
+-	COPY_ABMON(9);
+-	COPY_ABMON(10);
+-	COPY_ABMON(11);
+-	COPY_ABMON(12);
+-}
+-
+-static int
+-monthcoll(const char *s)
+-{
+-	int	i;
+-	char	u[MB_LEN_MAX*3+1];
+-
+-	cpcu3(u, s);
+-	for (i = 0; i < 12; i++)
+-		if (strcmp(u, months[i]) == 0)
+-			return i;
+-	return 0;
+-}
+-
+-
+-static int
+-monthcmp(const char *pa, const char *pb)
+-{
+-	if (months[0] == NULL)
+-		fillmonths();
+-	return monthcoll(pa) - monthcoll(pb);
+-}
+-
+ /*
+  * isblank() consumes half of execution time (in skip()) with
+  * glibc 2.3.1. Check if it contains only space and tab, and

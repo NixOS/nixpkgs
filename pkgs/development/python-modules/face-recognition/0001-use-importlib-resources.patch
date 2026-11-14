@@ -1,0 +1,42 @@
+From c142485d6f34c633d67c5e7ccbbc0baf7a1d695f Mon Sep 17 00:00:00 2001
+From: Erik Janssen <30315129+janssen70@users.noreply.github.com>
+Date: Thu, 6 Nov 2025 22:29:41 +0100
+Subject: [PATCH] Refactor from pkg_resources to importlib.resources
+
+Eliminate startup warning by replacing  pkg_resources with importlib.resources.files() for accessing package data files. Includes fallback to importlib_resources  for Python 3.7-3.8 compatibility.
+---
+ face_recognition_models/__init__.py | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/face_recognition_models/__init__.py b/face_recognition_models/__init__.py
+index 6201432..2f2a29e 100644
+--- a/face_recognition_models/__init__.py
++++ b/face_recognition_models/__init__.py
+@@ -4,17 +4,22 @@
+ __email__ = 'ageitgey@gmail.com'
+ __version__ = '0.1.0'
+ 
+-from pkg_resources import resource_filename
++try:
++    # Python 3.9+
++    from importlib.resources import files
++except ImportError:
++    # Python 3.7-3.8 fallback
++    from importlib_resources import files
+ 
+ def pose_predictor_model_location():
+-    return resource_filename(__name__, "models/shape_predictor_68_face_landmarks.dat")
++    return str(files(__name__).joinpath("models", "shape_predictor_68_face_landmarks.dat"))
+ 
+ def pose_predictor_five_point_model_location():
+-    return resource_filename(__name__, "models/shape_predictor_5_face_landmarks.dat")
++    return str(files(__name__).joinpath("models", "shape_predictor_5_face_landmarks.dat"))
+ 
+ def face_recognition_model_location():
+-    return resource_filename(__name__, "models/dlib_face_recognition_resnet_model_v1.dat")
++    return str(files(__name__).joinpath("models", "dlib_face_recognition_resnet_model_v1.dat"))
+ 
+ def cnn_face_detector_model_location():
+-    return resource_filename(__name__, "models/mmod_human_face_detector.dat")
++    return str(files(__name__).joinpath("models", "mmod_human_face_detector.dat"))
+ 

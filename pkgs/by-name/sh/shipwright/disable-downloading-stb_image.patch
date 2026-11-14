@@ -1,0 +1,49 @@
+Submodule libultraship contains modified content
+diff --git a/libultraship/cmake/dependencies/common.cmake b/libultraship/cmake/dependencies/common.cmake
+index 7e5c4b6a..3ef7c121 100644
+--- a/libultraship/cmake/dependencies/common.cmake
++++ b/libultraship/cmake/dependencies/common.cmake
+@@ -51,43 +51,6 @@ if(INCLUDE_MPQ_SUPPORT)
+ endif()
+ 
+ #=================== STB ===================
+-set(STB_DIR ${CMAKE_BINARY_DIR}/_deps/stb)
+-set(stb_url "https://github.com/nothings/stb/raw/0bc88af4de5fb022db643c2d8e549a0927749354/stb_image.h")
+-set(stb_expected_hash c54b15a689e6a1f32c75e2ec23afa442e3e0e37e894b73c1974d08679b20dd5c)
+-
+-# file(DOWNLOAD) does not report error pages or truncated bodies, so verify the hash and retry.
+-set(stb_verified FALSE)
+-if(EXISTS "${STB_DIR}/stb_image.h")
+-    file(SHA256 "${STB_DIR}/stb_image.h" stb_actual_hash)
+-    if(stb_actual_hash STREQUAL "${stb_expected_hash}")
+-        set(stb_verified TRUE)
+-    endif()
+-endif()
+-
+-foreach(stb_attempt RANGE 1 4)
+-    if(stb_verified)
+-        break()
+-    endif()
+-    if(stb_attempt GREATER 1)
+-        message(STATUS "Retrying stb_image.h download (attempt ${stb_attempt})")
+-        execute_process(COMMAND ${CMAKE_COMMAND} -E sleep 3)
+-    endif()
+-    file(DOWNLOAD "${stb_url}" "${STB_DIR}/stb_image.h" STATUS stb_status)
+-    file(SHA256 "${STB_DIR}/stb_image.h" stb_actual_hash)
+-    if(stb_actual_hash STREQUAL "${stb_expected_hash}")
+-        set(stb_verified TRUE)
+-    else()
+-        list(GET stb_status 1 stb_error)
+-        message(STATUS "stb_image.h download failed: ${stb_error}")
+-    endif()
+-endforeach()
+-
+-if(NOT stb_verified)
+-    message(FATAL_ERROR "Failed to download a valid stb_image.h from ${stb_url}")
+-endif()
+-
+-file(WRITE "${STB_DIR}/stb_impl.c" "#define STB_IMAGE_IMPLEMENTATION\n#include \"stb_image.h\"")
+-
+ add_library(stb STATIC)
+ 
+ target_sources(stb PRIVATE

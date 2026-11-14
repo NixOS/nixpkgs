@@ -1,0 +1,23 @@
+# rustls has two backends enabled when easytier-web is built alongside the CLI;
+# upstream fix for that is EasyTier/EasyTier#2648 (issue #2607).
+
+diff --git a/easytier-core/src/connectivity/manual/discovery/implementation.rs b/easytier-core/src/connectivity/manual/discovery/implementation.rs
+--- a/easytier-core/src/connectivity/manual/discovery/implementation.rs
++++ b/easytier-core/src/connectivity/manual/discovery/implementation.rs
+@@ -187,9 +187,13 @@ where
+         let root_store = rustls::RootCertStore {
+             roots: webpki_roots::TLS_SERVER_ROOTS.to_vec(),
+         };
+-        let tls_config = rustls::ClientConfig::builder()
+-            .with_root_certificates(root_store)
+-            .with_no_client_auth();
++        let tls_config = rustls::ClientConfig::builder_with_provider(Arc::new(
++            rustls::crypto::ring::default_provider(),
++        ))
++        .with_safe_default_protocol_versions()
++        .context("selecting HTTPS protocol versions failed")?
++        .with_root_certificates(root_store)
++        .with_no_client_auth();
+         let stream = TlsConnector::from(Arc::new(tls_config))
+             .connect(server_name, socket)
+             .await

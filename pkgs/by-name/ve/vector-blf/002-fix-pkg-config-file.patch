@@ -1,0 +1,14 @@
+diff --git a/src/Vector/BLF/Vector_BLF.pc.in b/src/Vector/BLF/Vector_BLF.pc.in
+index b3cb36f..0e20bf8 100644
+--- a/src/Vector/BLF/Vector_BLF.pc.in
++++ b/src/Vector/BLF/Vector_BLF.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: @CPACK_PACKAGE_DESCRIPTION_SUMMARY@

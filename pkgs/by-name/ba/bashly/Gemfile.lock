@@ -1,0 +1,70 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bashly (1.4.0)
+      colsole (~> 1.0)
+      completely (~> 0.8.0)
+      gtx (~> 0.1.1)
+      listen (~> 3.9)
+      lp (~> 0.2.0)
+      mister_bin (~> 0.9.0)
+      requires (~> 1.1)
+      tty-markdown (~> 0.7.2)
+    colsole (1.0.1)
+    completely (0.8.0)
+      colsole (~> 1.0.0)
+      erb
+      mister_bin (~> 0.7)
+    docopt_ng (0.7.1)
+    erb (6.0.7)
+    ffi (1.17.4)
+    gtx (0.1.2)
+      erb (>= 4.0, < 7)
+    io-console (0.9.2)
+    kramdown (2.5.2)
+      rexml (>= 3.4.4)
+    listen (3.10.0)
+      logger
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
+    logger (1.7.0)
+    lp (0.2.1)
+    mister_bin (0.9.0)
+      colsole (~> 1.0.0)
+      docopt_ng (~> 0.7.1)
+      reline (~> 0.6)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
+    rb-fsevent (0.11.2)
+    rb-inotify (0.11.1)
+      ffi (~> 1.0)
+    reline (0.7.0)
+      io-console (~> 0.5)
+    requires (1.1.0)
+    rexml (3.4.4)
+    rouge (4.7.0)
+    strings (0.2.1)
+      strings-ansi (~> 0.2)
+      unicode-display_width (>= 1.5, < 3.0)
+      unicode_utils (~> 1.4)
+    strings-ansi (0.2.0)
+    tty-color (0.6.0)
+    tty-markdown (0.7.2)
+      kramdown (>= 1.16.2, < 3.0)
+      pastel (~> 0.8)
+      rouge (>= 3.14, < 5.0)
+      strings (~> 0.2.0)
+      tty-color (~> 0.5)
+      tty-screen (~> 0.8)
+    tty-screen (0.8.2)
+    unicode-display_width (2.6.0)
+    unicode_utils (1.4.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bashly
+
+BUNDLED WITH
+   2.7.2

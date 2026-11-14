@@ -1,0 +1,47 @@
+From 3fa414aa82375648635281924904557cbe4d2d83 Mon Sep 17 00:00:00 2001
+From: sasdf <asdf79852@gmail.com>
+Date: Fri, 18 Oct 2024 00:22:36 +0800
+Subject: [PATCH] Fix pointer wrap around undefined behavior
+
+---
+ zbar/img_scanner.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/zbar/img_scanner.c b/zbar/img_scanner.c
+index d1bf8a3c..58436f16 100644
+--- a/zbar/img_scanner.c
++++ b/zbar/img_scanner.c
+@@ -33,6 +33,7 @@
+ #endif
+ 
+ #include <assert.h>
++#include <stddef.h>
+ #include <stdlib.h> /* malloc, free */
+ #include <string.h> /* memcmp, memset, memcpy */
+ 
+@@ -50,7 +51,7 @@
+ #include "svg.h"
+ 
+ #if 1
+-#define ASSERT_POS assert(p == data + x + y * (intptr_t)w)
++#define ASSERT_POS assert(p == data + x + y * (ptrdiff_t)w)
+ #else
+ #define ASSERT_POS
+ #endif
+@@ -858,11 +859,11 @@ static void zbar_send_code_via_dbus(zbar_image_scanner_t *iscn,
+ }
+ #endif
+ 
+-#define movedelta(dx, dy)                \
+-    do {                                 \
+-	x += (dx);                       \
+-	y += (dy);                       \
+-	p += (dx) + ((uintptr_t)(dy)*w); \
++#define movedelta(dx, dy)                  \
++    do {                                   \
++        x += (dx);                         \
++        y += (dy);                         \
++        p += (dx) + ((dy)*(ptrdiff_t)(w)); \
+     } while (0);
+ 
+ static void *_zbar_scan_image(zbar_image_scanner_t *iscn, zbar_image_t *img)

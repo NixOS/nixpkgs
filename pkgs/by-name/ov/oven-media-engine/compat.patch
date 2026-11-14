@@ -1,0 +1,47 @@
+diff -ruN ome-orig/cmake/Dependencies.cmake ome-test-src/cmake/Dependencies.cmake
+--- a/cmake/Dependencies.cmake	2026-09-29 23:28:36.050374926 +0200
++++ b/cmake/Dependencies.cmake	2026-09-30 18:40:38.410433375 +0200
+@@ -69,7 +69,7 @@
+ 
+     ome_parse_dep_version(${version_var} _FP_VERIFY_VERSION _FP_SOURCE_REF _FP_HAS_OVERRIDE)
+     if(NOT _FP_VERSION_OP)
+-        set(_FP_VERSION_OP "=")
++        set(_FP_VERSION_OP ">=")
+     endif()
+     set(_FP_PKG_STRING "${pkg}${_FP_VERSION_OP}${_FP_VERIFY_VERSION}")
+ 
+@@ -379,7 +379,9 @@
+ # Whisper GGML
+ if(PKG_WHISPER_FOUND)
+     find_library(GGML_CPU_LIB   ggml-cpu        HINTS ${OME_DEP_PREFIX}/lib ${OME_DEP_PREFIX}/lib64)
+-    set_property(TARGET PkgConfig::PKG_WHISPER APPEND PROPERTY INTERFACE_LINK_LIBRARIES "${GGML_CPU_LIB}")
++    if(GGML_CPU_LIB)
++        set_property(TARGET PkgConfig::PKG_WHISPER APPEND PROPERTY INTERFACE_LINK_LIBRARIES "${GGML_CPU_LIB}")
++    endif()
+     set_property(TARGET PkgConfig::PKG_WHISPER APPEND PROPERTY INTERFACE_LINK_LIBRARIES gomp)
+     
+     if(OME_HWACCEL_NVIDIA)  
+diff -ruN ome-orig/src/base/ovlibrary/logger/formatters/common.h ome-test-src/src/base/ovlibrary/logger/formatters/common.h
+--- a/src/base/ovlibrary/logger/formatters/common.h	2026-09-29 23:28:36.074466267 +0200
++++ b/src/base/ovlibrary/logger/formatters/common.h	2026-09-29 23:28:36.115297945 +0200
+@@ -8,7 +8,7 @@
+ //==============================================================================
+ #pragma once
+ 
+-#include <spdlog/fmt/bundled/format.h>
++#include <spdlog/fmt/fmt.h>
+ 
+ #include <functional>
+ #include <iostream>
+diff -ruN ome-orig/src/base/ovlibrary/logger/logger.h ome-test-src/src/base/ovlibrary/logger/logger.h
+--- a/src/base/ovlibrary/logger/logger.h	2026-09-29 23:28:36.074466267 +0200
++++ b/src/base/ovlibrary/logger/logger.h	2026-09-29 23:28:36.114294545 +0200
+@@ -8,7 +8,7 @@
+ //==============================================================================
+ #pragma once
+ 
+-#include <spdlog/fmt/bundled/format.h>
++#include <spdlog/fmt/fmt.h>
+ 
+ #include <cstdarg>
+ #include <map>

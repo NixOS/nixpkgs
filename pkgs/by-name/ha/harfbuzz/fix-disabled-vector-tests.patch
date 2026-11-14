@@ -1,0 +1,11 @@
+diff --git a/test/meson.build b/test/meson.build
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -4,5 +4,7 @@ subdir('threads')
+ if not get_option('utilities').disabled()
+ subdir('subset')
+ subdir('shape')
++if not get_option('vector').disabled()
+ subdir('vector')
+ endif
++endif

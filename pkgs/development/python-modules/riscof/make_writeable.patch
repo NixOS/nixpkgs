@@ -1,0 +1,33 @@
+diff --git a/riscof/cli.py b/riscof/cli.py
+index 26af62e..94051ae 100644
+--- a/riscof/cli.py
++++ b/riscof/cli.py
+@@ -7,6 +7,7 @@ import os
+ import sys
+ import pytz
+ import shutil
++import subprocess
+ import configparser
+ import distutils.dir_util
+
+@@ -502,6 +503,7 @@ def setup(dutname,refname,work_dir):
+         src = os.path.join(constants.root, "Templates/setup/model/")
+         dest = os.path.join(cwd, dutname)
+         distutils.dir_util.copy_tree(src, dest)
++        subprcess.run(["chmod", "+w", "-R", dest])
+ 
+         os.rename(cwd+'/'+dutname+'/model_isa.yaml',
+                 cwd+'/'+dutname+'/'+dutname+'_isa.yaml')
+@@ -525,10 +527,12 @@ def setup(dutname,refname,work_dir):
+             src = os.path.join(constants.root, "Templates/setup/sail_cSim/")
+             dest = os.path.join(cwd, refname)
+             distutils.dir_util.copy_tree(src, dest)
++            subprcess.run(["chmod", "+w", "-R", dest])
+         else:
+             src = os.path.join(constants.root, "Templates/setup/reference/")
+             dest = os.path.join(cwd, refname)
+             distutils.dir_util.copy_tree(src, dest)
++            subprcess.run(["chmod", "+w", "-R", dest])
+             os.rename(cwd+'/'+refname+'/riscof_model.py',
+                 cwd+'/'+refname+'/riscof_'+refname+'.py')
+             with open(cwd+'/'+refname+'/riscof_'+refname+'.py', 'r') as file :

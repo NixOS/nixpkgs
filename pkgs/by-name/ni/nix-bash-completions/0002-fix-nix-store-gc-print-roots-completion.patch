@@ -1,0 +1,45 @@
+From 135798f6dff7cf5167906cecc0e9c86860c70f36 Mon Sep 17 00:00:00 2001
+From: Momi-V <git@volzsys.de>
+Date: Mon, 20 Jun 2026 00:00:00 +0200
+Subject: [PATCH] nix-store --gc: fix exclusion group for --print-roots
+
+The exclusion group for --print-roots used spaces instead of pipe
+separators: '(- --print* --delete)--print-roots'.
+
+Since the spec is expanded unquoted via ${nix_gc_common[*]}, the
+spaces trigger bash word splitting, breaking the single spec string
+into three separate positional arguments:
+
+  (-          --print*      --delete)--print-roots
+
+The _parse() function then creates a bogus options entry for each
+fragment, causing --delete)--print-roots and --print* to appear
+as completion candidates when running:
+
+  $ nix-store --gc --<TAB>
+
+Fix: replace the two spaces with pipe characters to match the other
+three entries in nix_gc_common:
+
+  '(-|--print*|--delete)--print-roots'
+
+https://github.com/NixOS/nix/issues/16069
+---
+ _nix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/_nix b/_nix
+index 6773028..efcf880 100644
+--- a/_nix
++++ b/_nix
+@@ -404,7 +404,7 @@ function _nix_completion () {
+     local nix_dry_run='--dry-run'
+ 
+     local -a nix_gc_common=(
+-        '(- --print* --delete)--print-roots'
++        '(-|--print*|--delete)--print-roots'
+             '(-|--print*|--delete)--print-live'
+             '(-|--print*|--delete)--print-dead'
+             '(-|--print*|--delete)--delete'
+-- 
+2.50.1

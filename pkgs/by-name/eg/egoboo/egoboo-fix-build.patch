@@ -1,0 +1,68 @@
+--- a/src/game/game.c
++++ b/src/game/game.c
+@@ -2052,8 +2052,8 @@
+         if (( CAM_TURN_GOOD == PCamera->turn_mode && 1 == local_numlpla ) ||
+             !control_is_pressed( INPUT_DEVICE_KEYBOARD, CONTROL_CAMERA ) )
+         {
+-            joy_pos.x = ( control_is_pressed( INPUT_DEVICE_KEYBOARD,  CONTROL_RIGHT ) - control_is_pressed( INPUT_DEVICE_KEYBOARD,  CONTROL_LEFT ) );
+-            joy_pos.y = ( control_is_pressed( INPUT_DEVICE_KEYBOARD,  CONTROL_DOWN ) - control_is_pressed( INPUT_DEVICE_KEYBOARD,  CONTROL_UP ) );
++            joy_pos.x = ( (int)control_is_pressed( INPUT_DEVICE_KEYBOARD,  CONTROL_RIGHT ) - (int)control_is_pressed( INPUT_DEVICE_KEYBOARD,  CONTROL_LEFT ) );
++            joy_pos.y = ( (int)control_is_pressed( INPUT_DEVICE_KEYBOARD,  CONTROL_DOWN ) - (int)control_is_pressed( INPUT_DEVICE_KEYBOARD,  CONTROL_UP ) );
+ 
+             if ( CAM_TURN_GOOD == PCamera->turn_mode &&
+                  1 == local_numlpla )  joy_pos.x = 0;
+--- a/src/enet/Makefile
++++ b/src/enet/Makefile
+@@ -4,7 +4,7 @@
+ ENET_SRCLST	:= host.c list.c memory.c packet.c peer.c protocol.c unix.c
+ ENET_OBJLST	:= $(ENET_SRCLST:.c=.o)
+ 
+-CC      := gcc
++CC      := cc
+ OPT     := -Os
+ INC     := -Iinclude
+ CFLAGS  := $(OPT) $(INC)
+--- a/src/game/platform/file_linux.c
++++ b/src/game/platform/file_linux.c
+@@ -34,6 +34,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/dir.h>
++#include <limits.h>
+ #include "egoboo_mem.h"
+ 
+ //--------------------------------------------------------------------------------------------
+@@ -74,9 +75,9 @@
+     // so that the program will compile and install just like any other
+     // .rpm or .deb package.
+ 
+-    strncpy( linux_configPath, PREFIX "/etc/egoboo-2.x",         SDL_arraysize( linux_configPath ) );
+-    strncpy( linux_binaryPath, PREFIX "/games/",                  SDL_arraysize( linux_binaryPath ) );
+-    strncpy( linux_dataPath,   PREFIX "/share/games/egoboo-2.x", SDL_arraysize( linux_dataPath ) );
++    strncpy( linux_configPath, PREFIX "/share/egoboo",         SDL_arraysize( linux_configPath ) );
++    strncpy( linux_binaryPath, PREFIX "/bin/",                  SDL_arraysize( linux_binaryPath ) );
++    strncpy( linux_dataPath,   PREFIX "/share/egoboo", SDL_arraysize( linux_dataPath ) );
+ #else
+     // these are read-only directories
+     strncpy( linux_configPath, "/etc/egoboo-2.x/",         SDL_arraysize( linux_configPath ) );
+--- a/src/game/file_formats/id_md2.c
++++ b/src/game/file_formats/id_md2.c
+@@ -24,7 +24,7 @@
+ #include "id_md2.h"
+ #include "egoboo_vfs.h"
+ 
+-#include <malloc.h>
++#include <stdlib.h>
+ 
+ //--------------------------------------------------------------------------------------------
+ //--------------------------------------------------------------------------------------------
+--- a/src/game/system.h
++++ b/src/game/system.h
+@@ -24,6 +24,7 @@
+ /// use a higher performance timer than SDL provides on Windows machines.
+ 
+ #include <stdlib.h>
++#include <stdarg.h>
+ 
+ //--------------------------------------------------------------------------------------------
+ //--------------------------------------------------------------------------------------------

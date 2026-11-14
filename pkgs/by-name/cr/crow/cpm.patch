@@ -1,0 +1,54 @@
+From 6aa529673a8ad2053e9d3e6c8e04853b27ad817a Mon Sep 17 00:00:00 2001
+From: fliiiix <hi@l33t.name>
+Date: Sun, 25 Oct 2026 11:00:16 +0100
+Subject: [PATCH] Remove CPM for nix build
+
+---
+ CMakeLists.txt       |  6 +++---
+ tests/CMakeLists.txt | 11 +----------
+ 2 files changed, 4 insertions(+), 13 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3ed5bf0da..2dcdcb5cc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -60,9 +60,9 @@ option(CROW_ENABLE_SSL "Enable Crow's SSL feature for supporting https" OFF)
+ option(CROW_ENABLE_COMPRESSION "Enable Crow's Compression feature for supporting compressed http content" OFF)
+ option(CROW_ENABLE_TSAN "Enable ThreadSanitizer" OFF)
+ 
+-if(CROW_GENERATE_SBOM OR CROW_BUILD_TESTS)
+-	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
+-endif ()
++#if(CROW_GENERATE_SBOM OR CROW_BUILD_TESTS)
++#	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
++#endif ()
+ 
+ if(CROW_GENERATE_SBOM)
+   CPMAddPackage(
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 4777ed0c7..afd5de653 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -5,18 +5,9 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 new)
+ set(CMAKE_POLICY_WARNING_CMP0126 new)
+ 
+ include(${CMAKE_SOURCE_DIR}/cmake/compiler_options.cmake)
+-include(${CMAKE_SOURCE_DIR}/cmake/CPM.cmake)
+ 
++find_package(Catch2 REQUIRED)
+ 
+-CPMAddPackage(Catch2
+-  VERSION 3.15.1
+-  GITHUB_REPOSITORY catchorg/Catch2
+-  OPTIONS
+-  "CATCH_INSTALL_DOCS Off"
+-  "CATCH_INSTALL_EXTRAS Off"
+-  "CATCH_ENABLE_REPRODUCIBLE_BUILD Off"
+-)
+-  
+ enable_testing()
+ 
+ # list the test sources
+-- 
+2.56.0
+

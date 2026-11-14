@@ -1,0 +1,60 @@
+Submodule build contains modified content
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 1b53cb1d4..724f867f5 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -1916,7 +1916,6 @@ ubsan_hardening("c_array_bounds") {
+   # the related warning about "unsafe-buffer-usage-in-static-sized-array",
+   # since we know that the array bounds sanitizing will catch any out-of-
+   # bounds accesses.
+-  cflags = [ "-Wno-unsafe-buffer-usage-in-static-sized-array" ]
+ }
+ 
+ # Enable UBSan subset to ensure we always hit `return` statement in non-void
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 1b53cb1d4..51367ceb2 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -601,7 +601,6 @@ config("compiler") {
+     # Flags for diagnostics.
+     cflags += [ "-fcolor-diagnostics" ]
+     if (!is_win) {
+-      cflags += [ "-fdiagnostics-show-inlining-chain" ]
+     } else {
+       # Combine after https://github.com/llvm/llvm-project/pull/192241
+       cflags += [ "/clang:-fdiagnostics-show-inlining-chain" ]
+diff --git a/build/config/sanitizers/sanitizers.gni b/build/config/sanitizers/sanitizers.gni
+index 329a2fc8b..083b635e3 100644
+--- a/build/config/sanitizers/sanitizers.gni
++++ b/build/config/sanitizers/sanitizers.gni
+@@ -535,12 +535,6 @@ template("ubsan_hardening") {
+         "-fsanitize=${invoker.sanitizer}",
+         "-fsanitize-trap=${invoker.sanitizer}",
+ 
+-        # Prevents `__has_feature(undefined_behavior_sanitizer)`
+-        # from evaluating true. Configs defined here are intended to
+-        # be usable even in release builds, i.e. as widely as possible.
+-        # It's important not to have full-on UBSan workarounds activate
+-        # just because we built support for a specific sanitizer.
+-        "-fsanitize-ignore-for-ubsan-feature=${invoker.sanitizer}",
+       ]
+       if (defined(invoker.cflags)) {
+         cflags += invoker.cflags
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index ff8022f04..59699e1d4 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -625,13 +625,6 @@ config("compiler") {
+       ]
+     }
+ 
+-    # The performance improvement does not seem worth the risk. See
+-    # https://crbug.com/484082200 for background and https://crrev.com/c/7593035
+-    # for discussion.
+-    if (!is_wasm) {
+-      cflags += [ "-fno-lifetime-dse" ]
+-    }
+-
+     # TODO(hans): Remove this once Clang generates better optimized debug info
+     # by default. https://crbug.com/765793
+     cflags += [

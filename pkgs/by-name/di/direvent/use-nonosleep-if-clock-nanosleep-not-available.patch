@@ -1,0 +1,89 @@
+commit f6042ca2e240a27a20e405de49755f350ca95e7b
+Author: Sergey Poznyakoff <gray@gnu.org>
+Date:   Sat Jul 25 22:15:56 2026 +0300
+
+    Use nanosleep on systems lacking clock_nanosleep.
+    
+    * configure.ac: Check for clock_nanosleep.
+    * src/progman.c (abswait): New function.
+    (process_drain): Use it to wait till the specified absolute timestamp.
+
+diff --git a/configure.ac b/configure.ac
+index 336aa2a..a4fcedc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -41,7 +41,7 @@ AC_CHECK_HEADERS([sys/inotify.h sys/event.h])
+ # Checks for typedefs, structures, and compiler characteristics.
+ 
+ # Checks for library functions.
+-AC_CHECK_FUNCS([inotify_init kqueue rfork getgrouplist])
++AC_CHECK_FUNCS([inotify_init kqueue rfork getgrouplist clock_nanosleep])
+ 
+ if test "$ac_cv_header_sys_inotify_h/$ac_cv_func_inotify_init" = yes/yes; then
+   iface=inotify
+diff --git a/src/progman.c b/src/progman.c
+index 86c3edf..743b97f 100644
+--- a/src/progman.c
++++ b/src/progman.c
+@@ -244,12 +244,40 @@ timespec_add(struct timespec *a, struct timespec *b)
+ 	}
+ }
+ 
++static inline void
++timespec_sub(struct timespec *a, struct timespec const *b)
++{
++	struct timespec d;
++
++	a->tv_sec -= b->tv_sec;
++	a->tv_nsec -= b->tv_nsec;
++	if (a->tv_nsec < 0) {
++		--a->tv_sec;
++		a->tv_nsec += NANOSEC;
++	}
++}
++
++static int
++abswait(struct timespec const *ts)
++{
++#if HAVE_CLOCK_NANOSLEEP
++	return clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, ts, NULL);
++#else
++	struct timespec now, t = *ts;
++	clock_gettime(CLOCK_MONOTONIC, &now);
++	timespec_sub(&t, &now);
++	if (t.tv_sec < 0)
++		return 0;
++	return nanosleep(&t, NULL);
++#endif
++}
++
+ void
+ process_drain(void)
+ {
+ 	struct process *p;
+ 	struct timespec ts;
+-	
++
+ 	/* Send all processes the TERM signal. */
+ 	for (p = proc_list; p; p = p->next) {
+ 		if (p->type == PROC_HANDLER)
+@@ -257,15 +285,13 @@ process_drain(void)
+ 	}
+ 	/* Wait for all processes to terminate. */
+ 	diag(LOG_INFO, _("waiting for processes to terminate"));
+-		     
++
+ 	clock_gettime (CLOCK_MONOTONIC, &ts);
+ 	timespec_add (&ts, &shutdown_timeout);
+-	
+-	do {		
+-		process_cleanup(1);
+-	} while (proc_list &&
+-		 clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL));
+ 
++	do {
++		process_cleanup(1);
++	} while (proc_list && abswait(&ts));
+ 
+ 	if (proc_list) {
+ 		diag(LOG_INFO,

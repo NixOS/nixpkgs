@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 4 Jul 2026 10:55:52 -0400
+Subject: [PATCH 1/2] gnu-install-dirs
+
+---
+ cmake/modules/FoundationSwiftSupport.cmake | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/cmake/modules/FoundationSwiftSupport.cmake b/cmake/modules/FoundationSwiftSupport.cmake
+index 85868392..706f4b19 100644
+--- a/cmake/modules/FoundationSwiftSupport.cmake
++++ b/cmake/modules/FoundationSwiftSupport.cmake
+@@ -23,8 +23,8 @@ function(_foundation_install_target module)
+   endif()
+ 
+   install(TARGETS ${module}
+-    ARCHIVE DESTINATION lib/${swift}/${swift_os}
+-    LIBRARY DESTINATION lib/${swift}/${swift_os}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+   if(type STREQUAL EXECUTABLE)
+     return()
+@@ -36,10 +36,10 @@ function(_foundation_install_target module)
+   endif()
+ 
+   install(FILES $<TARGET_PROPERTY:${module},Swift_MODULE_DIRECTORY>/${module_name}.swiftdoc
+-    DESTINATION lib/${swift}/${swift_os}/${module_name}.swiftmodule
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/../lib/${swift}/${swift_os}/${module_name}.swiftmodule
+     RENAME ${SwiftFoundation_MODULE_TRIPLE}.swiftdoc)
+   install(FILES $<TARGET_PROPERTY:${module},Swift_MODULE_DIRECTORY>/${module_name}.swiftmodule
+-    DESTINATION lib/${swift}/${swift_os}/${module_name}.swiftmodule
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/../lib/${swift}/${swift_os}/${module_name}.swiftmodule
+     RENAME ${SwiftFoundation_MODULE_TRIPLE}.swiftmodule)
+ 
+ endfunction()
+-- 
+2.54.0
+

@@ -1,0 +1,64 @@
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  pkg-config,
+  ncurses,
+  gzip,
+  sslSupport ? true,
+  openssl,
+  nukeReferences,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "lynx";
+  version = "2.9.3";
+
+  src = fetchurl {
+    urls = [
+      "https://invisible-island.net/archives/lynx/tarballs/lynx${finalAttrs.version}.tar.bz2"
+      "https://invisible-mirror.net/archives/lynx/tarballs/lynx${finalAttrs.version}.tar.bz2"
+    ];
+    hash = "sha256-F0t/KGamDzJHunX1x9uxCxJK7eShNZMS3hXzv+vSBQ8=";
+  };
+
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--enable-default-colors"
+    "--enable-widec"
+    "--enable-ipv6"
+  ]
+  ++ lib.optional sslSupport "--with-ssl";
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ nukeReferences ] ++ lib.optional sslSupport pkg-config;
+
+  buildInputs = [
+    ncurses
+    gzip
+  ]
+  ++ lib.optional sslSupport openssl;
+
+  # cfg_defs.h captures lots of references to build-only dependencies, derived
+  # from config.cache.
+  postConfigure = ''
+    make cfg_defs.h
+    nuke-refs cfg_defs.h
+  '';
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
+  meta = {
+    changelog = "https://lynx.invisible-island.net/lynx${finalAttrs.version}/CHANGES.html";
+    description = "Text-mode web browser";
+    homepage = "https://lynx.invisible-island.net/";
+    mainProgram = "lynx";
+    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+  };
+})

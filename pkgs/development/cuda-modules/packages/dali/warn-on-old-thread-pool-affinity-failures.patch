@@ -1,0 +1,47 @@
+From 5e1262eed055a93fa9c4eea7b3bee8178ca3abd6 Mon Sep 17 00:00:00 2001
+From: Janusz Lisiecki <jlisiecki@nvidia.com>
+Date: Mon, 26 Oct 2026 08:36:47 +0100
+Subject: [PATCH] Warn on CPU affinity failures in the old thread pool
+
+Treat affinity setup as best effort, matching NewThreadPool. This lets
+mixed image decoding continue when NVML cannot report CPU topology.
+
+Add regression tests for affinity failure recovery and task exception
+propagation.
+
+Fixes #6551.
+
+Signed-off-by: Janusz Lisiecki <jlisiecki@nvidia.com>
+---
+ dali/pipeline/util/thread_pool.cc | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dali/pipeline/util/thread_pool.cc b/dali/pipeline/util/thread_pool.cc
+index 5c1bd84..e044cca 100644
+--- a/dali/pipeline/util/thread_pool.cc
++++ b/dali/pipeline/util/thread_pool.cc
+@@ -15,6 +15,7 @@
+ #include <chrono>
+ #include <cstdlib>
+ #include <limits>
++#include <typeinfo>
+ #include <utility>
+ #include "dali/pipeline/util/thread_pool.h"
+ #if NVML_ENABLED
+@@ -153,8 +154,12 @@ void OldThreadPool::ThreadMain(int thread_id, int device_id, bool set_affinity,
+       nvml::SetCPUAffinity(core);
+     }
+ #endif
++  } catch (const std::exception &e) {
++    DALI_WARN("Couldn't set thread affinity in thread ", thread_id, " of thread pool \"",
++              name, "\". Exception ", typeid(e).name(), ": ", e.what());
+   } catch (...) {
+-    tl_errors_[thread_id].push(std::current_exception());
++    DALI_WARN("Couldn't set thread affinity in thread ", thread_id, " of thread pool \"",
++              name, "\". Unknown error.");
+   }
+ 
+   while (running_) {
+-- 
+2.43.0
+

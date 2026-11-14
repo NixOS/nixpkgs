@@ -1,0 +1,26 @@
+--- a/tests/test_client.py
++++ b/tests/test_client.py
+@@ -41,17 +41,17 @@ class TrailBaseFixture:
+         cwd = os.getcwd()
+         prefix = ".." if cwd.endswith("python") else "./client"
+ 
+-        logger.info("Building TrailBase")
+-        build = subprocess.run(["python3", f"{prefix}/runner.py", "build"])
+-        assert build.returncode == 0, f"{build.stderr}"
++        traildepot = os.environ["TRAILBASE_TESTFIXTURE"]
+ 
+         logger.info("Starting TrailBase")
+         self.process = subprocess.Popen(
+             [
+-                "python3",
+-                f"{prefix}/runner.py",
++                os.environ.get("TRAILBASE_BIN", "trail"),
++                "--depot",
++                traildepot,
++                f"--public-url=http://{address}",
+                 "run",
+-                f"--port={port}",
++                f"--address={address}",
+                 "--runtime-threads=1",
+             ]
+         )

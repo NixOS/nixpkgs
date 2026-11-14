@@ -1,0 +1,13 @@
+diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+index aea3d13..8fcbf81 100644
+--- a/net/bridge/br_private.h
++++ b/net/bridge/br_private.h
+@@ -39,7 +39,7 @@
+ #define BR_GROUPFWD_8021AD	0xB801u
+ 
+ /* Path to usermode spanning tree program */
+-#define BR_STP_PROG	"/sbin/bridge-stp"
++#define BR_STP_PROG	"/run/current-system/sw/bin/bridge-stp"
+ 
+ typedef struct bridge_id bridge_id;
+ typedef struct mac_addr mac_addr;

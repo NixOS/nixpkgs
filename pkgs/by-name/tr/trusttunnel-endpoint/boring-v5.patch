@@ -1,0 +1,159 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 620b04d..66ed85b 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -310,9 +310,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "boring"
+-version = "4.22.0"
++version = "5.2.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3b0e3bc837369e9e662d3845c374ac3771b054d4bc2dee5457591198d16d684c"
++checksum = "47bf58283ad1560da95ab8dcbb6c71e18a89df30e6011e3582ddf755abe55c4a"
+ dependencies = [
+  "bitflags 2.13.1",
+  "boring-sys",
+@@ -323,9 +323,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "boring-sys"
+-version = "4.22.0"
++version = "5.2.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "15aad385759d3da2737772aefb391332227bef7cb71fb85c106cadd9d1e63a98"
++checksum = "6993efa9d9f0ebf3b0c02c8e868cfe37d0854cd021d51204480a91ce23d6e444"
+ dependencies = [
+  "bindgen",
+  "cmake",
+@@ -613,6 +613,12 @@ version = "2.11.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "4583a4551df46e2792f82ceeac45e850d2e2d5debba0b91f102385cda5b11f06"
+ 
++[[package]]
++name = "debug_panic"
++version = "0.2.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "9377eb110cece2e9431deb8d7d2ec8c116510b896741f9f2bf02b352147aa2a6"
++
+ [[package]]
+ name = "debugid"
+ version = "0.8.0"
+@@ -1391,12 +1397,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "intrusive-collections"
+-version = "0.9.7"
++version = "0.10.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "189d0897e4cbe8c75efedf3502c18c887b05046e59d28404d4d8e46cbc4d1e86"
+-dependencies = [
+- "memoffset",
+-]
++checksum = "4275b20e6057cd7733fd8df8a5a31701e4fe44497dad0f3fa0e1c4fb971506be"
+ 
+ [[package]]
+ name = "ipnet"
+@@ -1552,15 +1555,6 @@ version = "2.8.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
+ 
+-[[package]]
+-name = "memoffset"
+-version = "0.9.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a"
+-dependencies = [
+- "autocfg",
+-]
+-
+ [[package]]
+ name = "mime"
+ version = "0.3.17"
+@@ -1885,9 +1879,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "octets"
+-version = "0.3.6"
++version = "0.3.7"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "866cb5af6f3aa3c1b44c3c2d79d22165fbb1b102e1b3fb499864bfe34736ec4b"
++checksum = "4d59d30d3ad7f7e1c9a66e51c9cb71ae1c794b28ffe7053fd785defb0d180069"
+ 
+ [[package]]
+ name = "oid-registry"
+@@ -2212,24 +2206,26 @@ dependencies = [
+ 
+ [[package]]
+ name = "qlog"
+-version = "0.15.2"
++version = "0.18.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "0f15b83c59e6b945f2261c95a1dd9faf239187f32ff0a96af1d1d28c4557f919"
++checksum = "c65c0ae39cba4538fd935d376ba17f858046b386dc4597e3fa5c1aedb919ef30"
+ dependencies = [
++ "humantime",
+  "serde",
+  "serde_json",
+  "serde_with",
+- "smallvec",
+ ]
+ 
+ [[package]]
+ name = "quiche"
+-version = "0.24.9"
++version = "0.30.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ba053386c3a3b16441cb8a34574f91a9178fd3d813c0639514fcd8e4f274a44b"
++checksum = "52b35a721a2a56797347929745fa783fc99e680d9484b80324ce40106b75493a"
+ dependencies = [
+  "boring",
+- "cmake",
++ "boring-sys",
++ "bytes",
++ "debug_panic",
+  "either",
+  "enum_dispatch",
+  "foreign-types-shared",
+@@ -2239,6 +2235,9 @@ dependencies = [
+  "log",
+  "octets",
+  "qlog",
++ "serde",
++ "serde_json",
++ "serde_with",
+  "slab",
+  "smallvec",
+  "windows-sys 0.59.0",
+@@ -2988,9 +2987,6 @@ name = "smallvec"
+ version = "1.15.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "8ed6a63f02c8539c91a8685a86f4099661ba3da017932f6ebbea6de3f0fa7c90"
+-dependencies = [
+- "serde",
+-]
+ 
+ [[package]]
+ name = "socket2"
+diff --git a/lib/Cargo.toml b/lib/Cargo.toml
+index a88a0db..1fb47d6 100644
+--- a/lib/Cargo.toml
++++ b/lib/Cargo.toml
+@@ -31,7 +31,7 @@ log = "0.4.19"
+ macros = { version = "0.1.0", path = "../macros", optional = true }
+ once_cell = "1.18.0"
+ prometheus = { version = "0.14", features = ["process"] }
+-quiche = { version = "0.24.5", features = ["qlog", "boringssl-boring-crate"] }
++quiche = { version = "0.30.0", features = ["qlog", "boringssl-boring-crate"] }
+ rand = "0.8"
+ ring = "0.17.12"
+ rustls = { version = "0.23.37", features = ["logging"] }
+@@ -44,7 +44,7 @@ socket2 = "0.5"
+ tokio = { version = "1.42", features = ["net", "rt", "sync", "time", "macros", "rt-multi-thread"] }
+ tokio-rustls = "0.26"
+ toml_edit = "0.19.10"
+-boring = "4"
++boring = "5"
+ trusttunnel-deeplink = { path = "../deeplink" }
+ 
+ [dev-dependencies]
