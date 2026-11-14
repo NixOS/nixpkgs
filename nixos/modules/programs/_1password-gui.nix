@@ -19,6 +19,10 @@ in
     programs._1password-gui = {
       enable = lib.mkEnableOption "the 1Password GUI application";
 
+      mcpServer.enable = lib.mkEnableOption "the 1Password Environments local MCP server" // {
+        default = true;
+      };
+
       polkitPolicyOwners = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
@@ -45,12 +49,32 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     users.groups.onepassword.gid = config.ids.gids.onepassword;
+    # The 1Password Environments MCP server (bundled with the desktop app as
+    # share/1password/1password-mcp) verifies connecting peers via
+    # SO_PEERCRED: the peer's effective GID must be the `onepassword-mcp`
+    # group, which must be in the user range (GID >= 1000). Upstream's
+    # install script creates this group and installs the binary as
+    # root:onepassword-mcp mode 2755; neither happens in the Nix store, so
+    # expose the binary through a setgid wrapper instead. The wrapper is
+    # world-executable, mirroring upstream's mode 2755, so users do not need
+    # to be group members. Disabling mcpServer.enable drops both the group and
+    # the wrapper again.
+    users.groups."onepassword-mcp" = lib.mkIf cfg.mcpServer.enable {
+      gid = config.ids.gids.onepassword-mcp;
+    };
 
     security.wrappers = {
       "1Password-BrowserSupport" = {
         source = "${cfg.package}/share/1password/1Password-BrowserSupport";
         owner = "root";
         group = "onepassword";
+        setuid = false;
+        setgid = true;
+      };
+      "1password-mcp" = lib.mkIf cfg.mcpServer.enable {
+        source = "${cfg.package}/share/1password/1password-mcp";
+        owner = "root";
+        group = "onepassword-mcp";
         setuid = false;
         setgid = true;
       };
