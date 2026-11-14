@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   fetchzip,
+  applyPatches,
   autoconf,
   automake,
   libtool,
@@ -247,33 +248,35 @@ stdenv.mkDerivation (
     version = "21.3";
     kodiReleaseName = "Omega";
 
-    src = fetchFromGitHub {
-      owner = "xbmc";
-      repo = "xbmc";
-      rev = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash = "sha256-36wBAqGEDCRZ4t1ygTg03Pyk7Gg9quUTUGD3SBp6nCk=";
+    src = applyPatches {
+      src = fetchFromGitHub {
+        owner = "xbmc";
+        repo = "xbmc";
+        rev = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
+        hash = "sha256-36wBAqGEDCRZ4t1ygTg03Pyk7Gg9quUTUGD3SBp6nCk=";
+      };
+
+      patches = [
+        # TexturePacker has some conditionals on GIFLIB 5, which break with
+        # GIFLIB 6. This has been extended to support all versions >= 5 upstream,
+        # but has not yet made it into a release.
+        # https://github.com/xbmc/xbmc/pull/28016
+        (fetchpatch {
+          name = "texturepacker-giflib-6.patch";
+          url = "https://github.com/xbmc/xbmc/commit/29492cbd20d4c90a9c00a30ab525d4d0e81a968b.patch";
+          hash = "sha256-WNaODPCtRfn30jVU5HbBnAO2Vl/MQp2CYmKOTTyDGZI=";
+        })
+
+        # Upstream only support pcre-cpp which is deprecated and to be removed
+        # from nixpkgs. This patch moves all usages to pcre2
+        # See https://github.com/xbmc/xbmc/issues/23184
+        (fetchpatch {
+          name = "kodi-21.3-pcre2.patch";
+          url = "https://gitlab.archlinux.org/archlinux/packaging/packages/kodi/-/raw/9fdc116256e7c610e2045d5bc6fb3c234234a88d/kodi-21.3-pcre2.patch";
+          hash = "sha256-PJXfuZl8f4WfTjtL5CFMDEQuB40tlTWu7LvkBUeX5DE=";
+        })
+      ];
     };
-
-    patches = [
-      # TexturePacker has some conditionals on GIFLIB 5, which break with
-      # GIFLIB 6. This has been extended to support all versions >= 5 upstream,
-      # but has not yet made it into a release.
-      # https://github.com/xbmc/xbmc/pull/28016
-      (fetchpatch {
-        name = "texturepacker-giflib-6.patch";
-        url = "https://github.com/xbmc/xbmc/commit/29492cbd20d4c90a9c00a30ab525d4d0e81a968b.patch";
-        hash = "sha256-WNaODPCtRfn30jVU5HbBnAO2Vl/MQp2CYmKOTTyDGZI=";
-      })
-
-      # Upstream only support pcre-cpp which is deprecated and to be removed
-      # from nixpkgs. This patch moves all usages to pcre2
-      # See https://github.com/xbmc/xbmc/issues/23184
-      (fetchpatch {
-        name = "kodi-21.3-pcre2.patch";
-        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/kodi/-/raw/9fdc116256e7c610e2045d5bc6fb3c234234a88d/kodi-21.3-pcre2.patch";
-        hash = "sha256-PJXfuZl8f4WfTjtL5CFMDEQuB40tlTWu7LvkBUeX5DE=";
-      })
-    ];
 
     # make  derivations declared in the let binding available here, so
     # they can be overridden
