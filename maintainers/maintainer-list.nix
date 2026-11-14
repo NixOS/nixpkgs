@@ -26442,6 +26442,13 @@
     githubId = 96694484;
     name = "Sandeep Patel";
   };
+  SandroHc = {
+    name = "SandroHc";
+    github = "SandroHc";
+    githubId = 1098773;
+    email = "me@sandro.dev";
+    matrix = "@sandrohc:matrix.org";
+  };
   sandydoo = {
     name = "Sander";
     github = "sandydoo";
