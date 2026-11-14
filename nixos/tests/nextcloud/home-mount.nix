@@ -2,8 +2,11 @@
   name,
   testBase,
   package,
+  flavor ? "nodes",
   ...
 }:
+
+assert flavor == "nodes";
 
 { config, lib, ... }:
 {
@@ -12,7 +15,7 @@
 
   imports = [ testBase ];
 
-  nodes.nextcloud = { pkgs, ... }: {
+  ${flavor}.nextcloud = { pkgs, ... }: {
     fileSystems."/mnt" = {
       fsType = "tmpfs";
       device = "tmpfs";

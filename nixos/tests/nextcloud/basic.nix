@@ -2,10 +2,20 @@
   name,
   testBase,
   package,
+  flavor ? "nodes",
   ...
 }:
 
-{ config, lib, pkgs, ... }:
+assert flavor == "nodes";
+
+args@{
+  config,
+  lib,
+  pkgs,
+  nodes,
+  containers,
+  ...
+}:
 {
   inherit name;
   meta = {
@@ -14,7 +24,7 @@
 
   imports = [ testBase ];
 
-  nodes = {
+  ${flavor} = {
     # The only thing the client needs to do is download a file.
     client =
       { pkgs, ... }:
@@ -73,7 +83,7 @@
   };
 
   test-helpers.extraTests =
-    { nodes, ... }:
+    { ... }:
     let
       findInClosure =
         what: drv:
@@ -89,13 +99,13 @@
             test -e graph
             grep "$what" graph >$out || true
           '';
-      nexcloudWithImagick = findInClosure "imagick" nodes.nextcloud.system.build.vm;
-      nextcloudWithoutImagick = findInClosure "imagick" nodes.nextcloud.specialisation.withoutMagick.configuration.system.build.vm;
+      nexcloudWithImagick = findInClosure "imagick" args.${flavor}.nextcloud.system.build.vm;
+      nextcloudWithoutImagick = findInClosure "imagick" args.${flavor}.nextcloud.specialisation.withoutMagick.configuration.system.build.vm;
     in
     # python
     ''
       with subtest("File is in proper nextcloud home"):
-          nextcloud.succeed("test -f ${nodes.nextcloud.services.nextcloud.datadir}/data/root/files/test-shared-file")
+          nextcloud.succeed("test -f ${args.${flavor}.nextcloud.services.nextcloud.datadir}/data/root/files/test-shared-file")
 
       with subtest("Closure checks"):
           assert open("${nexcloudWithImagick}").read() != ""

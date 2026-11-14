@@ -2,8 +2,11 @@
   name,
   testBase,
   package,
+  flavor ? "nodes",
   ...
 }:
+
+assert flavor == "nodes";
 
 { pkgs, lib, ... }:
 {
@@ -12,7 +15,7 @@
 
   imports = [ testBase ];
 
-  nodes.nextcloud = { pkgs, ... }: {
+  ${flavor}.nextcloud = { pkgs, ... }: {
     # Make sure that inside our tmpfs mount an actual directory for Nextcloud exists.
     boot.initrd.systemd.tmpfiles.settings."nextcloud"."/sysroot/mnt/nextcloud".d = { };
 
