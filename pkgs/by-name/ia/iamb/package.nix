@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  makeWrapper,
   versionCheckHook,
   nix-update-script,
   aws-lc,
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    makeWrapper
   ];
 
   buildInputs = [
@@ -40,6 +42,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -D $src/docs/iamb.svg -t $out/share/icons/hicolor/scalable/apps
     install -D $src/docs/iamb.metainfo.xml $out/share/appdata/chat.iamb.iamb.appdata.xml
     install -D $src/iamb.desktop -t $out/share/applications
+    install -Dm644 $src/themes/*.toml -t $out/share/iamb/themes
+
+    # iamb finds its themes only in $XDG_DATA_DIRS/iamb/themes, and neither nix-shell,
+    # macOS nor NixOS profiles (share/iamb is not in pathsToLink) put them there
+    wrapProgram $out/bin/iamb --suffix XDG_DATA_DIRS : $out/share
   '';
 
   nativeInstallCheckInputs = [
