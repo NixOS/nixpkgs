@@ -57,6 +57,20 @@ in
           Whether the EC2 instance is using EFI.
         '';
       };
+      bootMode = lib.mkOption {
+        type = types.enum [
+          "legacy-bios"
+          "uefi"
+          "uefi-preferred"
+        ];
+        default = if config.ec2.efi then "uefi" else "legacy-bios";
+        defaultText = literalExpression ''if config.ec2.efi then "uefi" else "legacy-bios"'';
+        description = ''
+          The boot mode the instance uses on EC2. `uefi-preferred` installs GRUB
+          for both UEFI and legacy BIOS, so the instance boots on every instance
+          type.
+        '';
+      };
       hvm = lib.mkOption {
         description = "Unused legacy option. While support for non-hvm has been dropped, we keep this option around so that NixOps remains compatible with a somewhat recent `nixpkgs` and machines with an old `stateVersion`.";
         internal = true;
