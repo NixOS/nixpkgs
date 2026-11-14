@@ -15,12 +15,12 @@
 }:
 let
 
-  version = "1.5.6";
+  version = "1.7.1";
   src = fetchFromGitHub {
     owner = "inventree";
     repo = "inventree";
     tag = "${version}";
-    hash = "sha256-BF7vOp8Rxke+OlvzlVSQSrdsFc/87Ur9MWTKyVeU9FE=";
+    hash = "sha256-rdLNhTTV4tgNgx0O8VtopIjW00lwvxNjk6ym2B13kog=";
     postCheckout = ''
       git -C $out rev-parse HEAD > $out/commit_hash.txt
       git -C $out show -s --format=%cd --date=short HEAD > $out/commit_date.txt
@@ -40,7 +40,7 @@ let
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = finalAttrs.src + "/yarn.lock";
-        hash = "sha256-iJfu2eo8anGDGoPDx68+LyFI6/bmaUms5kkiMpuEC+Y=";
+        hash = "sha256-4jNo6YxHXJhSNhsgTMbYNhMgnHFc0n7Pd7bXvTVpvEY=";
       };
 
       nativeBuildInputs = [
@@ -81,6 +81,7 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       django
+      django-auditlog
       dj-rest-auth
       django-allauth
       django-cleanup
@@ -91,6 +92,7 @@ python3Packages.buildPythonApplication rec {
       django-filter
       django-flags
       django-formtools
+      django-fsm-2
       django-ical
       django-import-export
       django-maintenance-mode
@@ -106,6 +108,7 @@ python3Packages.buildPythonApplication rec {
       django-sslserver
       django-stdimage
       django-storages
+      scim2-models
       django-structlog
       django-taggit
       django-oauth-toolkit
@@ -215,6 +218,10 @@ python3Packages.buildPythonApplication rec {
       # Wall-clock query-time assertions are not deterministic on build machines
       substituteInPlace src/backend/InvenTree/InvenTree/unit_test.py \
         --replace-fail "self.assertLessEqual(dt, max_query_time)" "pass"
+
+      # SCIM conformance tests need scim2_client.engines.wsgi and scim2_tester,
+      # which require newer versions of the scim2 packages than nixpkgs currently ships.
+      rm src/backend/InvenTree/scim/tests.py
     '';
 
   installPhase =
@@ -311,6 +318,7 @@ python3Packages.buildPythonApplication rec {
     coverage
     pdfminer-six
     tblib
+    pydantic
     pytest
   ];
   passthru =
