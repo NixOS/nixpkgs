@@ -21,6 +21,7 @@ buildPythonPackage {
   build-system = [ flit-core ];
 
   doCheck = false; # no tests
+  dontStrip = true; # package consists only of data files
 
   pythonImportsCheck = [
     "ljdata"

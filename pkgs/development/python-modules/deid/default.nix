@@ -19,7 +19,8 @@ let
     build-system = [ setuptools ];
 
     dependencies = [ pydicom ];
-
+    # since the package is primarily data files
+    dontStrip = true;
     src = fetchFromGitHub {
       owner = "pydicom";
       repo = "deid-data";
