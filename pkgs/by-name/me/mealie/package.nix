@@ -3,7 +3,7 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
-  python3,
+  python314,
   nltk-data,
   writeShellScript,
   nix-update-script,
@@ -90,7 +90,7 @@ let
     };
   };
 
-  python = python3;
+  python = python314;
   pythonpkgs = python.pkgs;
 in
 pythonpkgs.buildPythonApplication (finalAttrs: {
