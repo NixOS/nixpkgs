@@ -7202,10 +7202,6 @@ with pkgs;
 
   libffado = ffado;
 
-  freefall = callPackage ../os-specific/linux/freefall {
-    inherit (linuxPackages) kernel;
-  };
-
   fusePackages = dontRecurseIntoAttrs (
     callPackage ../os-specific/linux/fuse {
       util-linux = util-linuxMinimal;
