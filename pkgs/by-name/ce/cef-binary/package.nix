@@ -29,13 +29,13 @@
   libx11,
   libxshmfence,
   libxcb,
-  version ? "151.3.16",
-  gitRevision ? "be1e15d",
-  chromiumVersion ? "151.0.7922.109",
+  version ? "156.0.14",
+  gitRevision ? "4fa4ab5",
+  chromiumVersion ? "156.0.8078.48",
   buildType ? "Release",
   srcHashes ? {
-    aarch64-linux = "sha256-gRYcEylZAUvKTOmV1zw9TyiEkv6FZ0vhVT1mLwne57k=";
-    x86_64-linux = "sha256-6usxPmA53kZIVYk9KHxNXrTscSaXjqg8YWS/SiPcAXo=";
+    aarch64-linux = "sha256-zfzVyvqhJrt+ED47b73vlKObt5E5XrIf5mXr7NAI2ZU=";
+    x86_64-linux = "sha256-QZGskgqRoFLroEr7btgw1HrtRqPiRsQ0ovBiwjWI3Io=";
   },
 }:
 
@@ -100,10 +100,10 @@ stdenv.mkDerivation {
     sed 's/-O0/-O2/' -i cmake/cef_variables.cmake
     patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
     patchelf --add-needed libudev.so --set-rpath "${rpath}" ${buildType}/libcef.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
-    patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
     patchelf --set-rpath "${gl_rpath}" ${buildType}/libvk_swiftshader.so
     patchelf --set-rpath "${gl_rpath}" ${buildType}/libvulkan.so.1
+    [ -f ${buildType}/libEGL.so ] && patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
+    [ -f ${buildType}/libGLESv2.so ] && patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
     cp --recursive . $out
 
     runHook postInstall
