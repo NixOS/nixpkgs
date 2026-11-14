@@ -1414,6 +1414,7 @@ in
   os-prober = handleTestOn [ "x86_64-linux" ] ./os-prober.nix { };
   osquery = handleTestOn [ "x86_64-linux" ] ./osquery.nix { };
   osrm-backend = runTest ./osrm-backend.nix;
+  otelite = runTest ./otelite.nix;
   outline = runTest ./outline.nix;
   overlayfs = runTest ./overlayfs.nix;
   owncast = runTest ./owncast.nix;
