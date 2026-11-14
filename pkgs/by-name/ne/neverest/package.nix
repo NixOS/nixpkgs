@@ -30,6 +30,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-K+LKRokfE8i4Huti0aQm4UrpConTcxVwJ2DyeOLjNKA=";
 
+  # TODO: Remove this once email-lib is moved to 0.27.
+  # Rust 1.89 added inherent
+  #  `File::try_lock and File::unlock`, which take
+  # precedence over the `advisory_lock` trait methods # that email-lib calls.
+  postPatch = ''
+    patch -p1 -d "$cargoDepsCopy"/source-registry-0/email-lib-0.24.0 < ${./email-lib-file-lock.patch}
+  '';
+
   nativeBuildInputs = [
     pkg-config
   ]
