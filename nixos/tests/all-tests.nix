@@ -348,6 +348,10 @@ in
     _module.args.compression = "xz";
   };
   bind = runTest ./bind.nix;
+  binfmt-relocatable = runTestOn [
+    "x86_64-linux"
+    "aarch64-linux"
+  ] ./binfmt-relocatable.nix;
   bird2 = import ./bird.nix {
     inherit (pkgs) lib;
     inherit runTest;
