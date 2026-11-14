@@ -131,41 +131,38 @@
   "module-services-lxmd-quickstart": [
     "index.html#module-services-lxmd-quickstart"
   ],
-  "module-services-mautrix-discord": [
-    "index.html#module-services-mautrix-discord"
+  "module-services-mautrix": [
+    "index.html#module-services-mautrix",
+    "index.html#module-services-mautrix-discord",
+    "index.html#module-services-mautrix-discord-setup",
+    "index.html#module-services-mautrix-discord-troubleshooting",
+    "index.html#module-services-mautrix-signal",
+    "index.html#module-services-mautrix-whatsapp"
   ],
-  "module-services-mautrix-discord-advanced": [
-    "index.html#module-services-mautrix-discord-advanced"
+  "module-services-mautrix-configuration": [
+    "index.html#module-services-mautrix-configuration",
+    "index.html#module-services-mautrix-discord-advanced",
+    "index.html#module-services-mautrix-discord-authentication",
+    "index.html#module-services-mautrix-discord-backfill",
+    "index.html#module-services-mautrix-discord-basic-example",
+    "index.html#module-services-mautrix-discord-basic-usage",
+    "index.html#module-services-mautrix-discord-encryption",
+    "index.html#module-services-mautrix-discord-server-defaults",
+    "index.html#module-services-mautrix-signal-configuration",
+    "index.html#module-services-mautrix-whatsapp-configuration"
   ],
-  "module-services-mautrix-discord-authentication": [
-    "index.html#module-services-mautrix-discord-authentication"
+  "module-services-mautrix-migration": [
+    "index.html#module-services-mautrix-migration",
+    "index.html#module-services-mautrix-signal-migrate-configuration",
+    "index.html#module-services-mautrix-whatsapp-migrate-configuration"
   ],
-  "module-services-mautrix-discord-backfill": [
-    "index.html#module-services-mautrix-discord-backfill"
-  ],
-  "module-services-mautrix-discord-basic-example": [
-    "index.html#module-services-mautrix-discord-basic-example"
-  ],
-  "module-services-mautrix-discord-basic-usage": [
-    "index.html#module-services-mautrix-discord-basic-usage"
-  ],
-  "module-services-mautrix-discord-double-puppet": [
-    "index.html#module-services-mautrix-discord-double-puppet"
-  ],
-  "module-services-mautrix-discord-encryption": [
-    "index.html#module-services-mautrix-discord-encryption"
-  ],
-  "module-services-mautrix-discord-server-defaults": [
-    "index.html#module-services-mautrix-discord-server-defaults"
-  ],
-  "module-services-mautrix-discord-setup": [
-    "index.html#module-services-mautrix-discord-setup"
-  ],
-  "module-services-mautrix-discord-synapse": [
+  "module-services-mautrix-registration": [
+    "index.html#module-services-mautrix-registration",
     "index.html#module-services-mautrix-discord-synapse"
   ],
-  "module-services-mautrix-discord-troubleshooting": [
-    "index.html#module-services-mautrix-discord-troubleshooting"
+  "module-services-mautrix-secrets": [
+    "index.html#module-services-mautrix-secrets",
+    "index.html#module-services-mautrix-discord-double-puppet"
   ],
   "module-services-navidrome": [
     "index.html#module-services-navidrome"
@@ -1628,24 +1625,6 @@
   ],
   "module-services-mjolnir-matrix-synapse-antispam": [
     "index.html#module-services-mjolnir-matrix-synapse-antispam"
-  ],
-  "module-services-mautrix-signal": [
-    "index.html#module-services-mautrix-signal"
-  ],
-  "module-services-mautrix-signal-configuration": [
-    "index.html#module-services-mautrix-signal-configuration"
-  ],
-  "module-services-mautrix-signal-migrate-configuration": [
-    "index.html#module-services-mautrix-signal-migrate-configuration"
-  ],
-  "module-services-mautrix-whatsapp": [
-    "index.html#module-services-mautrix-whatsapp"
-  ],
-  "module-services-mautrix-whatsapp-configuration": [
-    "index.html#module-services-mautrix-whatsapp-configuration"
-  ],
-  "module-services-mautrix-whatsapp-migrate-configuration": [
-    "index.html#module-services-mautrix-whatsapp-migrate-configuration"
   ],
   "module-services-maubot": [
     "index.html#module-services-maubot"
