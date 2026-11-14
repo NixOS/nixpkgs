@@ -9,6 +9,7 @@
   libxkbcommon,
   vulkan-loader,
   wayland,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -77,6 +78,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "$out/share/icons/hicolor/''${size}x''${size}/apps/gg.playit.gui.png"
     done
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) playit;
+  };
 
   meta = {
     mainProgram = "playit-cli";
