@@ -85,6 +85,14 @@ in
       end
     '';
 
+    programs.nushell.interactiveShellInit = ''
+      $env.config.hooks.command_not_found = {
+        |command_name|
+        let result = (command-not-found $command_name | complete)
+        $result.stdout + $result.stderr | str trim
+      }
+    '';
+
     environment.systemPackages = [ commandNotFound ];
   };
 }
