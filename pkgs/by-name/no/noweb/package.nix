@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noweb";
-  version = "2.13";
+  version = "unstable-2026-04-19";
 
   src = fetchFromGitHub {
     owner = "nrnrnr";
     repo = "noweb";
-    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "sha256-COcWyrYkheRaSr2gqreRRsz9SYRTX2PSl7km+g98ljs=";
+    rev = "81fd4b9a7d3fce2bf3e32ceed8eeee26a9bb6b62";
+    sha256 = "sha256-Oj6MhdnK5Nrig4H+Fxt4Th3tK9fIe8LpTjB9WNkMvM4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
