@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unihan-database";
-  version = "17.0.0";
+  version = "18.0.0";
 
   src = fetchurl {
     url = "https://www.unicode.org/Public/${finalAttrs.version}/ucd/Unihan.zip";
-    hash = "sha256-96SLK1Raz6p3stYHrih0dATOArrv7hY5bF0teo7zS14=";
+    hash = "sha256-TJPqnB9jZFFymoQJePFmelOIavN7qFT9zOEJchxj1D4=";
   };
 
   nativeBuildInputs = [
