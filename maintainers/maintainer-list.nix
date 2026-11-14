@@ -14980,6 +14980,11 @@
     github = "Kalitsune";
     githubId = 74075397;
   };
+  kalkaro = {
+    name = "Kalkaro";
+    github = "Kalkaro";
+    githubId = 177581171;
+  };
   kallisti-dev = {
     email = "kallisti.dev@gmail.com";
     github = "kallisti-dev";
