@@ -91,6 +91,7 @@ let
   atLeast21 = atLeast "21";
   atLeast23 = atLeast "23";
   atLeast25 = atLeast "25";
+  atLeast27 = atLeast "27";
 
   allPatches = import ./patches.nix { inherit fetchurl fetchpatch; };
 
@@ -180,7 +181,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchesForVersion
     ++ lib.optionals (!headless && enableGtk) [
       (
-        if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
+        if atLeast27 then
+          ./27/patches/swing-use-gtk-jdk27.patch
+        else if atLeast17 then
+          ./17/patches/swing-use-gtk-jdk13.patch
+        else
+          ./11/patches/swing-use-gtk-jdk10.patch
       )
     ];
 
@@ -559,9 +565,13 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.java ];
     mainProgram = "java";
     platforms = [
-      "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
+    ]
+    # JEP 503 (first appeared in OpenJDK 25) has removed 32-bit x86 support.
+    # Ref: https://openjdk.org/jeps/503
+    ++ lib.optionals (!atLeast25) [
+      "i686-linux"
     ]
     ++ lib.optionals atLeast11 [
       "armv7l-linux"
