@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   makeWrapper,
   makeDesktopItem,
   jdk,
@@ -14,41 +13,17 @@
   libxxf86vm,
   libGL,
   copyDesktopItems,
+  libicns,
 
   pname,
   version,
   src,
   meta,
   patches,
+  passthru,
+  enableJava2dOpenGL,
 }:
 
-let
-
-  # TODO: Should we move this to `lib`? Seems like its would be useful in many cases.
-  extensionOf =
-    filePath: lib.concatStringsSep "." (lib.tail (lib.splitString "." (baseNameOf filePath)));
-
-  installIcons =
-    iconName: icons:
-    lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (size: iconFile: ''
-        mkdir -p "$out/share/icons/hicolor/${size}/apps"
-        ln -s -T "${iconFile}" "$out/share/icons/hicolor/${size}/apps/${iconName}.${extensionOf iconFile}"
-      '') icons
-    );
-
-  icons = {
-    "32x32" = fetchurl {
-      url = "http://sweethome3d.cvs.sourceforge.net/viewvc/sweethome3d/SweetHome3D/deploy/SweetHome3DIcon32x32.png";
-      sha256 = "1r2fhfg27mx00nfv0qj66rhf719s2g1vhdis7bdc9mqk9x0mb0ir";
-    };
-    "48x48" = fetchurl {
-      url = "http://sweethome3d.cvs.sourceforge.net/viewvc/sweethome3d/SweetHome3D/deploy/SweetHome3DIcon48x48.png";
-      sha256 = "1ap6d75dyqqvx21wddvn8vw2apq3v803vmbxdriwd0dw9rq3zn4g";
-    };
-  };
-
-in
 stdenv.mkDerivation {
   inherit
     pname
@@ -56,6 +31,7 @@ stdenv.mkDerivation {
     src
     meta
     patches
+    passthru
     ;
 
   desktopItems = [
@@ -64,7 +40,9 @@ stdenv.mkDerivation {
       desktopName = "Sweet Home 3D";
       icon = "sweethome3d";
       comment = meta.description;
-      exec = meta.mainProgram;
+      exec = "${meta.mainProgram} %f";
+      mimeTypes = [ "application/x-sweet-home-3d" ];
+      startupWMClass = "com-eteks-sweethome3d-SweetHome3DBootstrap";
       genericName = "Computer Aided (Interior) Design";
       categories = [
         "Graphics"
@@ -75,9 +53,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace src/com/eteks/sweethome3d/SweetHome3DBootstrap.java \
-      --replace-fail '"com.eteks.sweethome3d",' \
-        '"com.eteks.sweethome3d", "com.sm.sweethome3d",'
+    rm -r src/com/sm
 
     addAutoPatchelfSearchPath ${jdk}/lib/openjdk/lib/
     autoPatchelf lib
@@ -93,6 +69,7 @@ stdenv.mkDerivation {
     autoPatchelfHook
     stripJavaArchivesHook
     copyDesktopItems
+    libicns
   ];
   buildInputs = [
     ant
@@ -109,9 +86,6 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    ant furniture textures help
-    mkdir -p $out/share/{java,applications}
-    mv "build/"*.jar $out/share/java/.
     ant
 
     runHook postBuild
@@ -120,15 +94,22 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/java
     cp install/SweetHome3D-${version}.jar $out/share/java/.
+    install -Dm644 ${./sweethome3d-mime.xml} $out/share/mime/packages/sweethome3d.xml
 
-    ${installIcons "sweethome3d" icons}
+    mkdir icons
+    icns2png -x -o icons "install/macosx/Sweet Home 3D/Contents/Resources/SweetHome3D.icns"
+    for size in 32 64 128 256 512; do
+      install -Dm644 icons/SweetHome3D_''${size}x''${size}x32.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/sweethome3d.png
+    done
+    install -Dm644 deploy/SweetHome3DIcon48x48.png $out/share/icons/hicolor/48x48/apps/sweethome3d.png
 
     makeWrapper ${jdk}/bin/java $out/bin/${meta.mainProgram} \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --add-flags "-Dsun.java2d.opengl=true -Dcom.eteks.sweethome3d.j3d.useOffScreen3DView=true -jar $out/share/java/SweetHome3D-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
+      --add-flags "${lib.optionalString enableJava2dOpenGL "-Dsun.java2d.opengl=true "}-Dcom.eteks.sweethome3d.j3d.useOffScreen3DView=true -jar $out/share/java/SweetHome3D-${version}.jar"
 
 
     # remember the store paths found inside the .jar libraries. note that

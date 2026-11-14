@@ -11,6 +11,7 @@
   src,
   meta,
   patches,
+  passthru,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     src
     meta
     patches
+    passthru
     ;
 
   nativeBuildInputs = [
