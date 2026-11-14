@@ -299,6 +299,7 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
 
 (define-with-packages-non-batch-ert-test
     with-packages-fonts-of-requested-packages-are-available
+  ;; Darwin is supported, but the test currently needs X11 with xvfb-run
   :expected-result (if (eq system-type 'darwin) :failed :passed)
   :tags '(:font)
   ;; Skip if this Emacs cannot create graphical frames.
