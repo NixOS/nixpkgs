@@ -97,6 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   checkTarget = "check";
+  preCheck = ''
+    # zonenow.tab can contain distinct zones that merge after the release.
+    # Check its release snapshot rather than the build machine's wall clock.
+    checkFlagsArray+=("CHECK_NOW_TIMESTAMP=$(stat -c %Y NEWS)")
+  '';
 
   installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "zic=${buildPackages.tzdata.bin}/bin/zic"
