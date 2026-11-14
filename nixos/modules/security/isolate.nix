@@ -27,11 +27,11 @@ let
     ${cfg.extraConfig}
   '';
   isolate = pkgs.symlinkJoin {
-    name = "isolate-wrapped-${pkgs.isolate.version}";
+    name = "isolate-wrapped-${cfg.package.version}";
 
-    paths = [ pkgs.isolate ];
+    paths = [ cfg.package ];
 
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
 
     postBuild = ''
       wrapProgram $out/bin/isolate \
@@ -40,6 +40,8 @@ let
       wrapProgram $out/bin/isolate-cg-keeper \
         --set ISOLATE_CONFIG_FILE ${configFile}
     '';
+
+    meta = cfg.package.meta;
   };
 in
 {
@@ -48,7 +50,15 @@ in
       Sandbox for securely executing untrusted programs
     '';
 
-    package = mkPackageOption pkgs "isolate-unwrapped" { };
+    package = mkPackageOption pkgs "isolate" { };
+
+    finalPackage = mkOption {
+      type = types.package;
+      readOnly = true;
+      description = ''
+        The final isolate package with the generated configuration applied.
+      '';
+    };
 
     boxRoot = mkOption {
       type = types.path;
@@ -121,8 +131,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    security.isolate.finalPackage = isolate;
+
     environment.systemPackages = [
-      isolate
+      cfg.finalPackage
     ];
 
     systemd.services.isolate = {
@@ -131,7 +143,7 @@ in
       documentation = [ "man:isolate(1)" ];
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${isolate}/bin/isolate-cg-keeper";
+        ExecStart = lib.getExe' cfg.finalPackage "isolate-cg-keeper";
         Slice = "isolate.slice";
         Delegate = true;
       };
@@ -142,5 +154,8 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ virchau13 ];
+  meta.maintainers = with maintainers; [
+    virchau13
+    hey2022
+  ];
 }
