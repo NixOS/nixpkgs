@@ -2,6 +2,7 @@
   lib,
   stdenv,
   callPackage,
+  withSplitTunneling ? false,
 }:
 let
   meta = {
@@ -18,4 +19,6 @@ in
 if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix { inherit meta; }
 else
-  callPackage ./linux.nix { inherit meta; }
+  callPackage ./linux.nix {
+    inherit meta withSplitTunneling;
+  }
