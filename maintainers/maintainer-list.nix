@@ -7679,6 +7679,11 @@
     githubId = 131907205;
     name = "David Thievon";
   };
+  dodry-question = {
+    github = "dodry-question";
+    githubId = 208013669;
+    name = "dodry";
+  };
   dolphindalt = {
     email = "dolphindalt@gmail.com";
     github = "dolphindalt";
