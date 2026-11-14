@@ -6,6 +6,8 @@
   pkg-config,
   bcc,
   dbus,
+
+  useExecsnoop ? true,
 }:
 
 let
@@ -32,7 +34,7 @@ rustPlatform.buildRustPackage {
     pipewire
   ];
 
-  env.EXECSNOOP_PATH = "${bcc}/bin/execsnoop";
+  env.EXECSNOOP_PATH = if useExecsnoop then "${bcc}/bin/execsnoop" else null;
 
   # tests don't build
   doCheck = false;
