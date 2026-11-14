@@ -8,16 +8,16 @@
 
 pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.40.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xAuKhgnH5j5NioXDivwpaZFKkkTzGWJglbmVw5koaqE=";
+    hash = "sha256-3vpIPj376RKrgFKAKE0Y4bhHrc3/UNlth4xq2OnziBg=";
   };
 
-  cargoHash = "sha256-hNZhL+kZgm2pX28mKdCgpGyBexI33idlEfPB8OmgGOY=";
+  cargoHash = "sha256-OtaxWhT9X4stYY/hDYd632YHoQwX2B4FpqYufmlAK3M=";
 
   # Enable upstream's Nix sandbox test filter without replacing nixpkgs'
   # target-specific Rust flags. Keep this config identical in both phases so
