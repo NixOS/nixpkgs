@@ -543,6 +543,10 @@ rec {
       : If this option is true, the output is indented with newlines for attribute sets and lists
     : indent
       : Initial indentation level
+    : maxAttrs
+      : Maximum number of attributes to print per attribute set.
+        If more attributes are present, the remaining attributes are
+        represented by `...`. Defaults to `null`, which prints all attributes.
 
     Value
     : The value to be pretty printed
@@ -560,6 +564,7 @@ rec {
       allowPrettyValues ? false,
       multiline ? true,
       indent ? "",
+      maxAttrs ? null,
     }:
     let
       go =
@@ -623,18 +628,31 @@ rec {
           else if v ? type && v.type == "derivation" then
             "<derivation ${v.name or "???"}>"
           else
-            "{"
-            + introSpace
-            + concatStringsSep introSpace (
-              mapAttrsToList (
-                name: value:
-                "${escapeNixIdentifier name} = ${
-                  addErrorContext "while evaluating an attribute `${name}`" (go (indent + "  ") value)
-                };"
-              ) v
-            )
-            + outroSpace
-            + "}"
+            let
+              entries =
+                if maxAttrs == null then
+                  mapAttrsToList (
+                    name: value:
+                    "${escapeNixIdentifier name} = ${
+                      addErrorContext "while evaluating an attribute `${name}`" (go (indent + "  ") value)
+                    };"
+                  ) v
+                else
+                  let
+                    names = lib.take (maxAttrs + 1) (builtins.attrNames v);
+                    omitted = length names > maxAttrs;
+                  in
+                  map (
+                    name:
+                    "${escapeNixIdentifier name} = ${
+                      addErrorContext "while evaluating an attribute `${name}`" (
+                        go (indent + "  ") (builtins.getAttr name v)
+                      )
+                    };"
+                  ) (lib.take maxAttrs names)
+                  ++ optionals omitted [ "..." ];
+            in
+            "{" + introSpace + concatStringsSep introSpace entries + outroSpace + "}"
         else
           abort "generators.toPretty: should never happen (v = ${v})";
     in
