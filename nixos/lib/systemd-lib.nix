@@ -133,6 +133,30 @@ rec {
       attr ? ${name} && !isByteFormat attr.${name}
     ) "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
 
+  # systemd parses sizes with parse_size() (base 1024, a number and at most one
+  # suffix, so "13G" parses but "13GB" does not) and percentages with
+  # parse_permyriad() (at most two decimal places, capped at 100% everywhere
+  # except CPUQuota). A value it cannot parse is reported and then dropped, so
+  # the unit silently ends up with no limit at all.
+  resourceControlSize = "[0-9]+(\\.[0-9]+)?([KMGTPE]|B)?";
+  resourceControlPercent = "(100(\\.0{1,2})?|[0-9]{1,2}(\\.[0-9]{1,2})?)%";
+  resourceControlSizeDoc = "a size in bytes with an optional K/M/G/T/P/E suffix (base 1024)";
+
+  # An empty assignment unsets the setting, so it is always accepted.
+  assertResourceControlFormat =
+    pattern: expected: name: group: attr:
+    optional (
+      attr ? ${name} && toString attr.${name} != "" && match pattern (toString attr.${name}) == null
+    ) "Systemd ${group} field `${name}' must be ${expected}.";
+
+  assertMemoryFormat = assertResourceControlFormat "(${resourceControlSize})|(${resourceControlPercent})|infinity" ''${resourceControlSizeDoc}, a percentage of physical memory, or "infinity"'';
+
+  assertCPUQuotaFormat = assertResourceControlFormat "[0-9]+(\\.[0-9]{1,2})?%" "a percentage with at most two decimal places, which may exceed 100%";
+
+  assertTasksMaxFormat = assertResourceControlFormat "[0-9]+|(${resourceControlPercent})|infinity" ''an integer, a percentage, or "infinity"'';
+
+  assertRlimitSizeFormat = assertResourceControlFormat "((${resourceControlSize})|infinity)(:((${resourceControlSize})|infinity))?" ''${resourceControlSizeDoc} or "infinity", optionally as a soft:hard pair'';
+
   toIntBaseDetected =
     value:
     assert (match "[0-9]+|0x[0-9a-fA-F]+" value) != null;
