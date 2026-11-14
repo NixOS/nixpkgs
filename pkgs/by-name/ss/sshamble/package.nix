@@ -9,16 +9,16 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "sshamble";
-  version = "0.3.10";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "runZeroInc";
     repo = "sshamble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ptZePWmFIqBftD+QVy9zPatRThxEOCZwk59eVNDFMn0=";
+    hash = "sha256-3MZvCZD4WzyHuGhjoA/fOYJC3LDyjFaUyB7ZeLjqLeE=";
   };
 
-  vendorHash = "sha256-plPV8JZHq2i4Lp1BI5vakOxr9VQJc8MIq8gm3hVTndw=";
+  vendorHash = "sha256-ZQzObWXljkSsjAOnveT6YY+Lzc9oK/JxiFLRKkXHQBc=";
 
   # Disabled because tests rely on network requests
   disabledTests = [

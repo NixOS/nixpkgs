@@ -107,3 +107,15 @@ in
   };
 }
 ```
+
+## Database {#module-pelican-panel-database}
+
+### Type {#module-pelican-panel-database-type}
+It is possible to choose between MariaDB and PostgreSQL as database backend.
+The default is MariaDB, but can be changed by setting [](#opt-services.pelican-panel.database.type) to `pgsql`.
+
+### Remote Database {#module-pelican-panel-database-remote-database}
+If you don't want to create the database locally, you can simply set [](#opt-services.pelican-panel.database.createLocally) to `false` and set the environments
+under [](#opt-services.pelican-panel.environment) accordingly.
+As there is no official documentation from the Pelican team, the database config definition may help, see [here](https://github.com/pelican/panel/blob/main/config/database.php).
+

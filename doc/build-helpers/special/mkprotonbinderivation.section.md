@@ -4,6 +4,9 @@
 
 The tool is installed into the `steamcompattool` output, which is what `programs.steam.extraCompatPackages` adds to Steam.
 The release for the host system is symlinked into it, except for `compatibilitytool.vdf`, which is copied so the name of the tool can be replaced with `steamDisplayName`.
+If the release has a `proton` script, `mkProtonBinDerivation` copies and patches it.
+The patched script makes Wine re-apply `wine.inf` when Proton upgrades a prefix to a new version, for example to register new services.
+Without the patch, Wine skips `wine.inf` on upgrades, because every file in the Nix store has the same modification time.
 
 `mkProtonBinDerivation` supports [fixed-point arguments](#chap-build-helpers-finalAttrs), and accepts all the attributes of `stdenvNoCC.mkDerivation`.
 

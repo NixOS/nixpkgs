@@ -83,6 +83,6 @@ stdenv.mkDerivation {
       publicDomain
     ];
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ olduser101 ];
   };
 }

@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }:
 # This tests that systemd-ssh-proxy and systemd-ssh-generator work correctly with:
@@ -33,6 +32,7 @@ in
       containers.guest = {
         autoStart = true;
         config = {
+          nix.enable = false;
           users.users.root.openssh.authorizedKeys.keys = [ snakeOilEd25519PublicKey ];
           services.openssh = {
             enable = true;
@@ -55,7 +55,7 @@ in
 
     with subtest("ssh into a container with AF_UNIX"):
       virthost.wait_for_unit("container@guest.service")
-      virthost.wait_until_succeeds("ssh -i ~/.ssh/id_ed25519 unix/run/systemd/nspawn/unix-export/guest/ssh echo meow | grep meow")
+      virthost.wait_until_succeeds("ssh -i ~/.ssh/id_ed25519 unix/run/systemd/nspawn/guest/unix-export/ssh echo meow | grep meow")
 
     with subtest("elevate permissions using local ssh socket"):
       virthost.wait_for_unit("sshd-unix-local.socket")

@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.10.9";
+  version = "2.10.11";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -32,6 +32,7 @@
     airplay =
       ps: with ps; [
         pyatv
+        srptools
       ];
     airplay_receiver = ps: [
     ];

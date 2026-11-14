@@ -5,7 +5,9 @@
   pythonAtLeast,
   stdenv,
   rustPlatform,
+  pkg-config,
   rocksdb_9_10,
+  zstd,
   bitstring,
   cachetools,
   cffi,
@@ -38,18 +40,24 @@ buildPythonPackage rec {
     hash = "sha256-/tVuR31T38/xx1+jglSGECAT1GmQEddQp9o6zAqlPyY=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-    bindgenHook
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ iconv ];
+  buildInputs = [
+    iconv
+    zstd
+  ];
 
   env = {
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
   };
+
+  pythonRelaxDeps = [ "cachetools" ];
 
   propagatedBuildInputs = [
     bitstring

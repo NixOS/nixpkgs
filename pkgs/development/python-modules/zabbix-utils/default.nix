@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "zabbix-utils";
-  version = "2.0.4";
+  version = "2.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zabbix";
     repo = "python-zabbix-utils";
     tag = "v${version}";
-    hash = "sha256-/9OTehMGELU70Y3ZU1ZB4/ODkI3UbfIXNQ7H/vTz6JE=";
+    hash = "sha256-B63WtgUMamSVtDJ5TI0uDZgQ3GJTouM3Jnqzg55zn8I=";
   };
 
   build-system = [ setuptools ];

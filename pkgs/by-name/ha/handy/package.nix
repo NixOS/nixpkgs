@@ -40,6 +40,9 @@
   pipewire,
   alsa-plugins,
   wrapGAppsHook4,
+  wtype,
+  dotool,
+  wl-clipboard,
 
   # Cross-platform
   onnxruntime,
@@ -208,6 +211,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set ALSA_PLUGIN_DIR "${finalAttrs.passthru.alsaPluginDirectory}"
       # Disable the in-app updater
       --set HANDY_DISABLE_UPDATER 1
+      # Wayland text injection
+      --suffix PATH : ${
+        lib.makeBinPath [
+          wtype
+          dotool
+          wl-clipboard
+        ]
+      }
     )
   '';
 
@@ -305,6 +316,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       faukah
       philocalyst
+      structix
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
