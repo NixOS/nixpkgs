@@ -158,8 +158,44 @@
   "friction-graphics-wayland": [
     "index.html#friction-graphics-wayland"
   ],
+  "fun-addToSearchPath": [
+    "index.html#fun-addToSearchPath"
+  ],
+  "fun-addToSearchPathWithCustomDelimiter": [
+    "index.html#fun-addToSearchPathWithCustomDelimiter"
+  ],
+  "fun-concatStringsSep": [
+    "index.html#fun-concatStringsSep"
+  ],
+  "fun-concatTo": [
+    "index.html#fun-concatTo"
+  ],
+  "fun-getAllOutputNames": [
+    "index.html#fun-getAllOutputNames"
+  ],
+  "fun-isELF": [
+    "index.html#fun-isELF"
+  ],
+  "fun-isMachO": [
+    "index.html#fun-isMachO"
+  ],
+  "fun-isScript": [
+    "index.html#fun-isScript"
+  ],
+  "fun-printLines": [
+    "index.html#fun-printLines"
+  ],
+  "fun-printWords": [
+    "index.html#fun-printWords"
+  ],
   "getting-started": [
     "index.html#getting-started"
+  ],
+  "fun-echoCmd": [
+    "index.html#fun-echoCmd"
+  ],
+  "fun-runOneHook": [
+    "index.html#fun-runOneHook"
   ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
