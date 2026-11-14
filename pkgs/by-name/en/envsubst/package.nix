@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "envsubst";
   version = "1.4.3";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "a8m";
     repo = "envsubst";
