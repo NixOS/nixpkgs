@@ -499,18 +499,26 @@ propagate the stub RUNPATH cleanup hook automatically. This covers collapsed
 and renamed outputs without requiring a package-level switch.
 
 The deprecated aggregate `cudatoolkit` also follows HOST→TARGET roles, including
-TARGET libraries in its compatibility `lib` output. Build-time compiler users
-must select its BUILD→HOST splice, preferably using `cuda_nvcc` instead.
+TARGET libraries in its compatibility `lib` output using each component’s
+declared `outputLib` (or the conventional `lib` output). Build-time compiler
+users must select its BUILD→HOST splice, preferably using `cuda_nvcc` instead.
 
 #### Installed JIT compilers
 
 An installed application does not activate setup hooks when invoking NVCC.
 The executable wrapper supplies the backend, and its profile supplies TARGET
 CUDART, CRT and CCCL paths on every invocation. Profile accumulators `INCLUDES`,
-`SYSTEM_INCLUDES` and `LIBRARIES` are internal; add dependencies through `-I`,
+`SYSTEM_INCLUDES`, `LIBRARIES` and `NVLINK_FLAGS` are internal; add dependencies through `-I`,
 `-L`, `NVCC_PREPEND_FLAGS` or `NVCC_APPEND_FLAGS`. The caller's PATH and loader
 environment are retained. Propagated inputs do not reconstruct a runtime build
 environment, so applications must provide their other dependencies explicitly.
+
+With a Nix-wrapped backend, host links use that backend's linker policy and
+defaults. NVCC projects caller library search paths from the selected roles'
+`NIX_LDFLAGS_BEFORE`, `NIX_LDFLAGS` and `NIX_LDFLAGS_AFTER`, in that order,
+into its device-only `NVLINK_FLAGS` channel. Native NVCC places these extra paths
+after explicit NVCC paths and SDK defaults. To select an alternative SDK library,
+use an explicit NVCC `-L` option or override the corresponding packaged component.
 
 CUDART's pkg-config metadata and NVCC share a default runtime driver search
 path: the selected compatibility driver, when available, then the NixOS driver

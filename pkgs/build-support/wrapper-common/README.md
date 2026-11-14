@@ -17,10 +17,10 @@ Implementation status:
   [Native capability](#native-capability).
 - A native linker prototype was reviewed and withdrawn; see
   [Consequences for in-progress work](#consequences-for-in-progress-work).
-- The [generic contract](#decision-generic-contract-native-refinement) is
-  accepted. Link-mode refinement uses compiler job observation and final classification
-  in the ld-wrapper. Language and header-suppression interpretation still differ
-  between native-capable and legacy drivers.
+- Role selection and policy transport apply to native-capable and legacy drivers.
+  Native primary interpretation and default-header bindings refine that shared
+  mechanism. Link policy uses primary option metadata and the compatibility
+  scan described under [Link-mode policy](#link-mode-policy).
 
 Implementation status is separate from producer acceptance; the linked CUDA
 integration review records exact builds, bounded controls and pending checks.
@@ -46,7 +46,7 @@ Part of the policy is conditional on the operation:
 Applying that part correctly requires knowing what the invocation does, which is
 defined by each driver's own argument grammar.
 
-The previous design failed in three ways:
+The previous design had two problems addressed here:
 
 1. **It mutated caller inputs.** `add-flags.sh` prepended toolchain defaults to
    the caller's variables and exported `NIX_CC_WRAPPER_FLAGS_SET_<salt>`. A
@@ -55,9 +55,11 @@ The previous design failed in three ways:
 2. **It classified invocations approximately.** A shell `case` scan over the
    arguments misreads option operands (`-o -c`), quoting inside response files,
    forwarded options (`-Wp,-nostdinc`), and driver modes supplied through policy.
-3. **It decided link-mode policy too early.** `-static-pie` inside a response
-   file in `NIX_CFLAGS_LINK` still received a dynamic loader, producing an
-   executable with `PT_INTERP` that crashes.
+
+Link-mode policy has a separate, inherited limit: modes hidden in conditional
+compiler-policy response files or introduced after policy selection can receive
+incompatible loader or RPATH flags. The primary interface does not determine
+final linker output, and this work does not repair that general problem.
 
 ## Constraints
 
@@ -76,7 +78,8 @@ Any design must satisfy all of these:
 - **Valid invocations stay transparent.** Argument order, response-file grammar,
   query output (`-print-*`, `-v`, `-dumpmachine`), exit status and the absence of
   new diagnostics under `-Werror` must match the raw driver, apart from the
-  intended policy.
+  intended policy. Native framing requires repeatable driver inputs as
+  described under [Primary interpretation and execution](#primary-interpretation-and-execution).
 - **Roles are not visible in arguments.** One executable can serve BUILD and
   HOST; invoking it through `CC_FOR_BUILD` does not identify a role.
 - **Delegation must not lose or duplicate policy.** Multi-job drivers (NVCC,
@@ -143,16 +146,19 @@ consumer passes them explicitly.
 
 ### Native capability
 
-A compiler package declares `nativePrimaryQuery = "fd-v3"` when its driver
-implements the primary query. The cc-wrapper constructor then lists the exact
+A compiler package declares `nativePrimaryQuery = "fd-v3-link-policy"` when its driver
+implements the primary query including `link_policy`. The older `fd-v3`
+capability does not guarantee that field. The constructor enables the interface
+only for the exact capability above; other values select the legacy path.
+It lists the exact
 raw executables it wraps in `nix-support/native-primary-programs`, one store
 path per line. Capability is keyed by that path, so an override or launcher
 does not inherit it.
 
 | Compiler | Gate | Native interfaces |
 | --- | --- | --- |
-| GCC | ≥ 14, Unix host | primary query (`fd-v3`); `-fdefault-include-map` default-header binding |
-| Clang | 19–23, Unix host | primary query (`fd-v3`); driver default-header table |
+| GCC | ≥ 14, Unix host | primary query; `-fdefault-include-map` default-header binding |
+| Clang | 19–23, Unix host | primary query; driver default-header table |
 
 The default-header bindings apply on non-Android Linux only. The query uses
 `nix-primary-v3` records over `NIX_CC_PRIMARY_ARGS_FD` and
@@ -169,6 +175,15 @@ A conditional channel or a late hook can still change the final native invocatio
 For example, a C invocation with `NIX_CFLAGS_LINK=--driver-mode=g++` and `NIX_CXXSTDLIB_COMPILE=-c` has no consistent recursive choice: selecting the link channel would select C++ compilation, which would remove the link channel.
 The primary interpretation therefore excludes the conditional link channel.
 This describes the requested host operation, not successful execution or every device-packaging job; an archive or CUDA fatbin is not a host image link.
+The query also reports `link_policy=dynamic|static|static-pie` from the primary
+parsed driver options, selecting `static-pie` when that option is present.
+This metadata preserves interpretation
+of ordinary caller response files without adding job construction or decoding
+job output. GCC's existing primary-operation query still walks driver specs
+with command execution suppressed. Specs that depend on files generated by
+those commands can therefore select a different plan during final execution.
+The metadata does not describe conditional
+link channels or final ELF layout.
 
 The primary request must be parseable before conditional default/link fragments and the late hook are inserted.
 An explicit caller frontend entry bypasses compiler/linker argument contributions (the selected SDK environment is retained); introducing a frontend entry through primary policy is rejected rather than discarding that policy.
@@ -176,8 +191,13 @@ Consequently, supplying an option's missing operand only through such a fragment
 The wrapper retains raw caller arguments through hooks and sends ordered argument groups to the native driver for both primary interpretation and final execution.
 Clang first checks the caller's standalone native frontend entry, including caller response files, without reading policy response files or applying their quoting selectors.
 For an ordinary driver entry it interprets the original groups using the combined native response-file grammar; selected C++ compile arguments participate in the subsequent primary interpretation.
+The native handler selects immediate actions for both queries and execution; queries skip the selected action's body.
 Final execution reads the raw groups again, expands response files natively, and positions suffix arguments before a parser-recognized caller `--` boundary.
 These are separate interpretation epochs, not a promise to read each response file once or freeze its contents across hooks.
+Native framing does not preserve the legacy wrapper's support for one-shot response streams such as FIFOs or piped `@/dev/stdin`; write these arguments to a regular response file first.
+Framed Clang requires repeatable regular response/configuration inputs; `@` response inputs also accept the empty null device and its aliases. This differs from raw Clang as well.
+Its guard covers driver preparation, including initial toolchain discovery; final actions and job construction use the ordinary filesystem. GCC retains its native libiberty response and specs readers; nonregular inputs can fail or block without Clang's explicit guard diagnostic.
+Ordinary source stdin is unaffected, as is `@/dev/stdin` redirected from a regular file.
 Native unresolved `@file` fallback remains unchanged: the token can name a literal file or become a response file before final execution.
 Resources needed to parse the primary request must be available then; later changes can change final native behavior but do not retroactively select wrapper policy.
 Purity and no-native filtering operate at the native expanded-argument boundary, including final hook changes. Clang uses the selected mode's native option visibility, including CL, DXC and Flang, rather than rejecting those modes.
@@ -260,37 +280,13 @@ expanded arguments.
 
 ## Decision: generic contract, native refinement
 
-Accepted direction (2026-10-13); the current legacy path above has not yet been replaced:
+Role selection, executable-carried defaults and fresh/prepared delegation share
+one policy transport. Native capability refines primary argument interpretation
+and default-header lookup for the declared executables; other compilers retain
+the legacy path. These paths still differ in argument grammar, purity filtering
+and header suppression. Generic transport does not establish their equivalence.
 
-1. **The contract is generic.** It is defined by mechanisms that every GCC- or
-   Clang-family driver already provides, including vendor forks, prebuilt
-   releases, older versions and the bootstrap compiler.
-2. **Native capability is a refinement.** It may add exactness for the cases
-   listed under [Limits](#limits-of-the-generic-tier), but ordinary invocations
-   must produce the same result with or without it. A compiler override must not
-   silently change wrapper semantics.
-3. **The shell scan should be a last resort**, retained only for compilers that
-   are neither GCC- nor Clang-like.
-
-Rationale:
-
-- The constraints above make patched compilers the exception rather than the
-  rule.
-- Today an override silently switches between two semantic regimes.
-- The patches span GCC 14–16, Clang 19–23 and Swift's LLVM fork, so each
-  release needs a rebase.
-
-### Generic mechanisms
-
-#### Driver observation
-
-The implemented generic refinement observes GCC/Clang link jobs before rendering
-link-mode policy; it does not replace conditional channels with specs or config
-files. Native queries suppress caller output effects, while legacy drivers use
-a bounded `-###` dry run. This normally costs one additional driver execution
-and parses informal job output; the mechanisms and limits are described below.
-
-#### Link-mode policy at the linker
+### Link-mode policy
 
 The compiler and linker have different argument interfaces.
 The compiler renders main linker inputs for the primary operation and binds a
@@ -298,163 +294,93 @@ The compiler renders main linker inputs for the primary operation and binds a
 selected inputs from rendered arguments: if a linker job appears after primary
 interpretation omitted rendering, the linker renders the selected inputs itself.
 Compiler-only conditional channels remain governed by primary interpretation.
-The linker wrapper retains that policy and performs the remaining work: capability-specific hardening, trailing flags, emulation, RPATH discovery, build IDs, and Darwin version handling.
-For an ordinary link, moving already rendered main flags after compiler-generated arguments would change library resolution; skipping all linker processing would lose the remaining policy.
+The linker wrapper performs the remaining work: capability-specific hardening,
+trailing flags, emulation, RPATH discovery, build IDs and Darwin version handling.
+Moving already rendered main flags after compiler-generated arguments would
+change library resolution; skipping all linker processing would lose this work.
 
-By the time the linker runs, the driver has translated the link mode, whichever
-channel supplied it.
+The native query reports primary driver option policy using GCC's existing spec
+predicates after language and self-spec adjustment, or Clang's parsed argument
+list after configuration loading. Ordinary caller response files use the native
+grammar. This is a bounded part of primary interpretation: the query does not
+construct jobs to inspect lowered linker arguments.
 
-- For `-static-pie`, Clang passes `-static -pie --no-dynamic-linker -z text`.
-- GCC 15.2's built-in spec passes `-Bstatic -pie --no-dynamic-linker -z text`.
-- For `-static`, Clang passes `-static`, and GCC 15.3 and 16.2 for
-  `aarch64-unknown-linux-gnu` pass `-Bstatic`.
+For link-policy rendering, the compiler scans BEFORE linker flags, the primary
+policy marker (or legacy caller arguments), conditional compiler link flags and
+main linker flags in that order. The compatibility scan recognizes literal
+`-static` and `-static-pie` tokens; the last recognized token wins. The legacy
+path uses its existing response-file expansion where available. This scan is
+not an option parser and can mistake an option's operand for a mode.
+A link continuation reuses the mode for which the compiler rendered its flags.
+A fresh linker or an unrendered continuation applies the same literal scan to
+its arguments. The linker does not reinterpret lowered `-Bstatic`/`-pie` modes
+or remove a previously rendered loader or RPATH by matching its value.
 
-The common static-PIE signal is `-pie` together with `--no-dynamic-linker`.
-`-Bstatic` is a per-library toggle, not a property of the entire output. The
-classifier tracks its push/pop state and preceding potentially dynamic library
-inputs; a final `-Bstatic` does not erase a DSO already selected earlier. It
-uses an explicit linker option/operand table and retains the order of output-mode
-and loader selections. The table distinguishes GNU and lld aliases; it does not
-replace either linker's parser.
+Raw linker-policy rendering preserves known operand boundaries. Genuine
+`-L/…` options retain their compiler-visible search channel; another option's
+`-L/…` operand stays in the linker channel. Linker purity filtering and NVCC's
+device-library projection use the same bounded option/operand table.
+Compiler-visible `-L` paths precede the driver's built-in search paths;
+forwarding every path only to the linker would change library precedence.
+The table distinguishes declared BFD, gold and lld aliases; recognized raw
+linker overrides can
+select their flavor at the prepared linker boundary. It does not discover a
+different linker selected inside opaque compiler transformations.
 
-Compiler observation and execution share raw linker-policy rendering. Genuine
-`-L/…` options retain their compiler-visible search channel (including GCC specs
-matching); other options' operands stay in the linker channel. Linker purity
-filtering and NVCC's device-library projection also preserve these known operand
-boundaries. The linker flavor comes from each wrapper's constructor, with
-recognized executable overrides refined at invocation time.
-Selector scans preserve known driver and linker operand boundaries: an output
-filename such as `-fuse-ld=lld` does not select a different linker.
+For a selected `static-pie` policy, raw policy RPATH filtering handles
+`-rpath`/`--rpath`, including their `=value` forms, without consuming another
+option's operand. Ambiguous `-R`/`--just-symbols` forms remain intact: BFD, gold
+and lld differ, and a compiler-selected linker can differ from the declared
+one before the raw linker boundary is reached. These flags retain the native
+linker's symbol-import or RPATH semantics, including errors and RPATHs that can
+make a glibc static PIE fail at startup. The wrapper does not inspect filesystem
+state to reinterpret them. Opaque compiler channels and response files are not
+translated into a complete linker argument stream.
+Compiler link groups retain the historical, narrower filter for a literal
+`-rpath` and its following token; they are not parsed as raw linker options.
+For example, a compiler's `-include -Rheader.h` remains intact. An operand
+spelled `-rpath` can still be consumed by the historical token filter.
+Forwarded or aliased RPATHs in those opaque compiler groups are outside it.
 
-**Accepted inference limit:** a dynamic-mode `-lfoo` followed by `-Bstatic` may
-have selected a DSO, only an archive, or an unused as-needed library. Without
-resolving linker searches/scripts or executing the linker, the wrapper retains
-dynamic policy conservatively. GNU ld ignores a loader on an actual static
-executable; lld can retain it in this ambiguous case. Explicit earlier DSOs keep
-the loader, while explicit `.a` inputs and `-l:*.a` do not create this ambiguity.
+#### Remaining link-policy limits
 
-The linkers agree on precedence but not on static output:
+These limits are not repaired by the role/header changes:
 
-- In both lld (`getDynamicLinker`) and GNU ld (`parse_args` in `ld/lexsup.c`),
-  the last of `-dynamic-linker` and `--no-dynamic-linker` wins.
-- Given a loader, GNU ld omits it from a static executable, but lld records it,
-  and the executable crashes.
-- A glibc static PIE with any RPATH crashes at startup. In a static non-PIE
-  executable an RPATH has no effect.
-- Neither linker records a loader in a shared library.
+- A mode introduced in a conditional `NIX_CFLAGS_LINK` response/configuration,
+  an arbitrary link spec or a late hook can leave earlier loader/RPATH policy
+  unchanged. Response files are not rewritten, and conditional channels do not
+  recursively select primary policy.
+- The scan does not determine final ELF program headers. Linker scripts and
+  final emulation can change output layout or ABI independently of the selected
+  wrapper. A script discarding `.interp` can leave RPATHs in a glibc static PIE,
+  causing startup failure. The wrapper's selected loader need not match a
+  different final emulation.
+- Linkers differ when given a loader for a static executable: GNU ld normally
+  omits it, while lld can retain it. A glibc static PIE with RPATHs can fail at
+  startup. Policy selection, including automatic RPATH discovery, does not
+  establish that every transformed link avoids these conditions.
+- Explicit caller RPATHs and compiler/linker built-in defaults retain their own
+  semantics. The wrapper does not trace their provenance or infer which equal
+  argument belongs to a caller, a driver or a policy producer.
+- Selecting a different or unwrapped linker does not supply its target ABI or
+  alias grammar to the compiler wrapper. Constructor metadata is not a promise
+  about arbitrary executable overrides.
 
-A loader the compiler wrapper passes through `-Wl` reaches the linker after the
-driver's own `--no-dynamic-linker`, so it wins; that is the static-PIE defect.
-The RPATH entries it renders from `NIX_LDFLAGS` have the same problem, and
-stdenv's `setup.sh` adds `-rpath $out/lib` there in every build unless
-`NIX_NO_SELF_RPATH` is set.
+### Native cooperation and future changes
 
-**Implemented in the ld-wrapper.** The ld-wrapper classifies the output from
-the ordered arguments it will pass, ignoring the loader the compiler wrapper
-rendered when inferring the mode. This includes fresh BEFORE/MAIN policy and
-trailing AFTER policy in their execution positions.
+Default-header replacement still requires native cooperation to retain frontend
+suppression, native search groups, system-header classification and
+`#include_next`. A GCC driver spec guarded by `nostdinc` misses forwarded
+`-Wp,-nostdinc`; Clang's driver and frontend apply suppression at different
+stages. Binding the original providers is separate from link-mode policy.
+Native caller ownership also supports filtering through response expansion and
+the supported forwarding streams; it does not establish general provenance
+through arbitrary configurations, specs or plugins.
 
-- On a link continuation, it removes that loader from a static executable, and
-  also the rendered BEFORE/MAIN policy RPATH entries from a static PIE. It
-  matches BEFORE contributions from the front and MAIN contributions from the
-  back, preserving the order of equal caller RPATHs. Alias interpretation
-  follows the declared linker: GNU `-R`/`--just-symbols` denote runtime paths
-  for directories or nonexistent paths, preserving existing symbol files; lld
-  treats `-R` as RPATH even for existing files, and long `--just-symbols` as
-  symbol-file input, retaining missing-file errors. Known `ld.lld`, `ld.bfd`
-  and `ld.gold` overrides select their declared flavor. Unknown explicit linker
-  interfaces skip ambiguous aliases while canonical `-rpath`/`--rpath` policy
-  remains handled. Option-shaped operands remain operands.
-- A fresh invocation, or a continuation without rendered main flags, renders its
-  selected policy for the classified mode.
-- The compiler wrapper's guess (`wrapper_NIX_LINK_TYPE`) now only records what
-  the compiler wrapper rendered.
-
-**Compiler-side observation.** Before rendering the loader and RPATHs, the
-wrapper obtains parsed GCC/Clang link jobs, including modes supplied through
-specs, configurations and response files. This also covers an unwrapped linker.
-Native-capable drivers use the FD-v3 query with private temporary outputs and
-optional `NIX_CC_PRIMARY_SHOW_JOBS=1`; it suppresses caller output effects and
-prints jobs when safe host-only observation is available. Clang declines job
-construction for CUDA/HIP sources and offload, OpenMP or SYCL requests to avoid
-discovery helpers, retaining primary metadata and the compatibility mode scan.
-Older FD-v3 producers without job reporting also retain that scan.
-
-Legacy Clang uses `-###`, redirecting its compilation-database and serialized
-diagnostic outputs into the private observation directory, including options
-hidden in configurations; nonempty `CCC_OVERRIDE_OPTIONS` disables observation
-because it can rewrite away `-###`. Legacy GNU skips observation for known immediate
-logging/truncation effects and opaque response-file inputs. Custom specs can
-have opaque effects which that legacy path cannot sandbox or guarantee equivalent.
-
-The observer decodes complete quoted records, including multiline GCC option
-summaries, without evaluating shell text. For `collect2`, selector recognition
-follows the reported GCC generation, assuming modern behavior if unrecognized,
-while mode classification omits its consumed private
-options; its operand boundaries differ from the final linker's.
-It recognizes link jobs and applies `checkLinkerLinkType` to their lowered arguments. If native
-linker discovery changes the MAIN policy's compiler/linker translation, it
-observes that rendering once more and retains its translation choice for
-execution. This is bounded refinement, not fixed-point iteration: specs can
-make linker selection depend on compiler-visible search paths. For static
-PIE, compiler policy filtering also removes visible forwarded RPATH options in
-`-Wl` and `-Xlinker` forms while retaining unrelated operands and explicit caller arguments.
-
-**Limits.** Unknown drivers, opaque launchers, unsuccessful observations and
-unrecognized job formats retain the compatibility mode scan. Late wrapper hooks
-run after observation and can still change the mode. A wrapped linker sees the
-resulting arguments; an unwrapped linker retains the previously rendered policy.
-This correction does not restore contributions filtered before a hook: changing
-static PIE into another mode requires the hook to supply any newly needed flags.
-An RPATH hidden inside an opaque `NIX_CFLAGS_LINK` `@policy` response file can
-survive even when observation identifies static PIE: the shell sanitizer cannot
-rewrite the raw file using the native response grammar, and the receiving linker
-tracks rendered `NIX_LDFLAGS` contributions rather than that compiler-channel
-file. This limit applies with a wrapped linker too. Response files are not
-rewritten, and explicit caller RPATHs remain the caller's responsibility.
-Observation refines link mode only; it does not replace legacy
-language/header-suppression parsing
-or prove native/legacy equivalence.
-
-### Limits of the generic tier
-
-These still require native cooperation:
-
-- **Replacing the default header providers with native semantics.** This means
-  keeping `-nostdinc` (including `-Wp,-nostdinc`), search-group order,
-  system-header classification and `#include_next` behavior.
-  - Clang has no runtime interface for this.
-  - A GCC spec guarded by `nostdinc` misses `-Wp,-nostdinc`, because the
-    frontend applies that option.
-  - The requirement exists because Nixpkgs selects libc separately from the
-    compiler. Self-contained vendor toolchains find their own headers.
-- **Per-argument provenance through native response-file expansion.** Filtering
-  expanded caller arguments needs native ownership information. Current RPATH
-  cleanup instead matches known rendered policy contributions; it does not track
-  arbitrary provenance through opaque response files or driver transformations.
-
-### Consequences for in-progress work
-
-- **The native linker prototype was withdrawn.** The
-  [pre-rebase design](https://github.com/ConnorBaker/nixpkgs/blob/e58dcdca81f2830a83491cb3f1c9376924d07ddf/pkgs/build-support/wrapper-common/README.md)
-  records its linker/version, multilib and delegation failures. Its all-job origin
-  labels were withdrawn too; current filtering preserves ownership only in the
-  native streams described above.
-- **The legacy shell classification should be replaced** for GCC- and
-  Clang-family drivers by driver-interpreted channels, with or without `-###`.
-- **The native and generic paths must agree on ordinary inputs.** Known
-  divergence: where purity and no-native filtering apply.
-
-### Open questions
-
-- Whether driver-interpreted channels can replace legacy `-###` observation.
-  Nixpkgs' Clang has no driver-conditioned loader, and per-invocation RPATH
-  entries do not fit a packaged specs file; the current implementation uses
-  observation plus the wrapped-linker boundary.
-- How a constructor identifies a GCC- or Clang-family driver. The existing
-  `isGNU` and `isClang` metadata covers Nixpkgs-built compilers; vendor forks
-  need an explicit declaration.
-- Whether each role should get its own executable, so that `CC_FOR_BUILD`
-  selects BUILD policy without relying on the environment.
-- Darwin (ld64) and MinGW, where the native frames' POSIX descriptors are not
-  available.
+The [pre-rebase design](https://github.com/ConnorBaker/nixpkgs/blob/e58dcdca81f2830a83491cb3f1c9376924d07ddf/pkgs/build-support/wrapper-common/README.md)
+records the withdrawn native linker prototype and its linker/version, multilib
+and delegation failures. Compiler job observation and destructive final-link
+reclassification are also excluded from this implementation. A future change
+to linker defaults needs a separate producer/receiver contract that preserves
+contribution order, public overrides, selected libc and unknown-tool fallback;
+the present transport/header changes do not depend on that work.
