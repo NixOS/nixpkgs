@@ -10,6 +10,7 @@
   openssl,
   pam,
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemd,
   systemdLibs,
   update-systemd-resolved,
   pkcs11Support ? false,
@@ -24,6 +25,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
   version = "2.6.23";
+
+  SYSTEMD_ASK_PASSWORD = optionalString useSystemd "${systemd}/bin/systemd-ask-password";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
