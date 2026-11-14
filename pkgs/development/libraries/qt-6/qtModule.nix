@@ -37,6 +37,8 @@ stdenv.mkDerivation (
       (lib.warnIf (args ? qtInputs) "qt6.qtModule's qtInputs argument is deprecated" args.qtInputs or [ ])
       ++ (args.propagatedBuildInputs or [ ]);
 
+    strictDeps = true;
+
     cmakeFlags = [
       # be more verbose
       "--log-level=STATUS"
