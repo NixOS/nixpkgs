@@ -1,0 +1,16 @@
+{
+  "arm64": {
+    "version": "2.52.6-0ubuntu0.24.04.1",
+    "url": "https://ports.ubuntu.com/ubuntu-ports/pool/main/w/webkit2gtk/libwebkit2gtk-4.1-0_2.52.6-0ubuntu0.24.04.1_arm64.deb",
+    "sha256": "508f97ca47c45464c0e43480ebe983a0b4b484dd1a76031272f762662943b7c9",
+    "triplet": "aarch64-linux-gnu",
+    "library_sha256": "86165e97505a6c75d53a571bb595f5890d919c7a34cb9f2e0f27a5281f86e526"
+  },
+  "x64": {
+    "version": "2.52.6-0ubuntu0.24.04.1",
+    "url": "https://security.ubuntu.com/ubuntu/pool/main/w/webkit2gtk/libwebkit2gtk-4.1-0_2.52.6-0ubuntu0.24.04.1_amd64.deb",
+    "sha256": "3b3f7e2c36c679fd60392f6526b8c5659d6c5db324ebe792003831dc8108ac03",
+    "triplet": "x86_64-linux-gnu",
+    "library_sha256": "7ef3b4c0ed13fc66ed405e322af087d91401d2a96aca8f2f4cd34876abdb285d"
+  }
+}
