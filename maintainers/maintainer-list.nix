@@ -27906,6 +27906,12 @@
     githubId = 1437166;
     name = "Xia Bin";
   };
+  socat = {
+    email = "socatlol@proton.me";
+    github = "socatlolmeow";
+    githubId = 337334698;
+    name = "socat";
+  };
   sochotnicky = {
     email = "stanislav+github@ochotnicky.com";
     github = "sochotnicky";
