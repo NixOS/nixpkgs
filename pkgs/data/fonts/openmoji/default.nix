@@ -6,6 +6,7 @@
   nanoemoji,
   woff2,
   xmlstarlet,
+  installFonts,
   # available color formats: ["cbdt" "glyf_colr_0" "glyf_colr_1" "sbix" "picosvgz" "untouchedsvgz"]
   # available black formats: ["glyf"]
   fontFormats ? [
@@ -51,16 +52,28 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-mE34l94C/jc7Fd4v7opMeneFZAou5w9KhjLSVxw0s/0=";
   };
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   patches = [
     # fix paths and variables for nix build and skip generating font demos
     ./build.patch
   ];
+
+  # nanoemoji depends on the python/ninja stub, whose setup hook would
+  # otherwise replace installPhase with "ninja install"; this package has
+  # no build.ninja at the source root, and its install is done entirely
+  # by the installFonts preInstall hook.
+  dontUseNinjaInstall = true;
 
   nativeBuildInputs = [
     fonttools
     nanoemoji
     woff2
     xmlstarlet
+    installFonts
   ];
 
   methods_black = builtins.filter (m: builtins.elem m fontFormats) methods.black;
@@ -72,27 +85,29 @@ stdenvNoCC.mkDerivation rec {
     ++ lib.optional (builtins.elem "glyf_colr_1" fontFormats) "1"
   );
 
-  postPatch = lib.optionalString (buildMaximumColorFonts == "bitmap") ''
-    substituteInPlace helpers/generate-fonts-runner.sh \
-      --replace 'maximum_color' 'maximum_color --bitmaps'
-  '';
+  postPatch =
+    lib.optionalString (buildMaximumColorFonts == "bitmap") ''
+      substituteInPlace helpers/generate-fonts-runner.sh \
+        --replace 'maximum_color' 'maximum_color --bitmaps'
+    ''
+    # remove the pre-built fonts shipped in the repo; this expression
+    # rebuilds them from source, and stale copies of the same file names
+    # would break the installFonts hook ("will not overwrite just-created")
+    + ''
+      rm -rf font
+    '';
 
   buildPhase = ''
     runHook preBuild
 
     bash helpers/generate-fonts-runner.sh "$(pwd)/build" "${version}"
 
+    # drop nanoemoji's raw intermediate fonts in build/{black,color}:
+    # the installable, TTX-processed copies live in build/fonts, and the
+    # intermediate ones would collide with them in the installFonts hook
+    rm -rf build/black build/color
+
     runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype $out/share/fonts/woff2
-    cp build/fonts/*/*.ttf $out/share/fonts/truetype/
-    cp build/fonts/*/*.woff2 $out/share/fonts/woff2/
-
-    runHook postInstall
   '';
 
   meta = {
