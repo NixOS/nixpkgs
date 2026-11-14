@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "2.2.0";
+  version = "2.3.0b0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tarpas";
     repo = "pytest-testmon";
     tag = "v${version}";
-    hash = "sha256-BVQ7rEusbW0G1C6cUeHH7fZWndSErcBQfGNdw0/4eTg=";
+    hash = "sha256-gJ3G24In8cMb6DD8xV1KwcFgYmF7bD6Hkr2/kKZGcTI=";
   };
 
   build-system = [ setuptools ];
