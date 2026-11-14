@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zd+g86cZLyibLhYLal6XzUb9wFu7kHROp0KzRM95Qng=";
   };
 
+  patches = [
+    # Quote every profile value that reaches the pppd `pty` shell command (CVE-2026-91838)
+    ./quote-pty.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     file
@@ -78,9 +83,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NetworkManager's sstp plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
-    knownVulnerabilities = [
-      "CVE-2026-91838"
-    ];
     license = lib.licenses.gpl2Plus;
   };
 }
