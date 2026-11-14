@@ -13,15 +13,6 @@ diff --git a/js/ui/extensionDownloader.js b/js/ui/extensionDownloader.js
 index 53fd92846..89533cedc 100644
 --- a/js/ui/extensionDownloader.js
 +++ b/js/ui/extensionDownloader.js
-@@ -124,7 +124,7 @@ async function extractExtensionArchive(bytes, dir) {
-     stream.close_async(GLib.PRIORITY_DEFAULT, null);
- 
-     const unzip = Gio.Subprocess.new(
--        ['unzip', '-uod', dir.get_path(), '--', file.get_path()],
-+        ['@unzip@', '-uod', dir.get_path(), '--', file.get_path()],
-         Gio.SubprocessFlags.NONE);
-     await unzip.wait_check_async(null);
- 
 @@ -146,7 +146,7 @@ async function extractExtensionArchive(bytes, dir) {
      }
  
