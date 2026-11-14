@@ -76,7 +76,7 @@ buildPythonPackage (finalAttrs: {
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
     changelog = "https://github.com/dask/dask-image/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })

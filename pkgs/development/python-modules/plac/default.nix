@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Parsing the Command Line the Easy Way";
     homepage = "https://github.com/micheles/plac";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "plac_runner.py";
   };

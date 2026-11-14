@@ -1,12 +1,13 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  libiconv,
+  aws-lc,
   makeBinaryWrapper,
+  openssl,
   pkg-config,
   perl,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,10 +23,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-01FRY1sNxEgajZPvFk9WIywvJwlKb5pTPQALhSZtZ0s=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-
+  buildInputs = [
+    aws-lc
+    zstd
+    openssl
   ];
+
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config

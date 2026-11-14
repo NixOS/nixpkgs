@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ xiorcale ];
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "com.github.djaler.formatter";
   };
 })

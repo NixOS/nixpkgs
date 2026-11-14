@@ -9,7 +9,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "npm-groovy-lint";
-  version = "17.0.5";
+  version = "19.0.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -17,10 +17,10 @@ buildNpmPackage (finalAttrs: {
     owner = "nvuillam";
     repo = "npm-groovy-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cq4SPOqR2mb2Foc1jlrA6B7qJBcmgLfcC84iTc4+tcw=";
+    hash = "sha256-yHX3uHNFJXHFumJMbbKsPzWIyaEKZmb+O6JWRyX3PZQ=";
   };
 
-  npmDepsHash = "sha256-XGXiuqA0JmuFVretXDjWejV9HJAK6eWR9/LR3rUI99s=";
+  npmDepsHash = "sha256-OlKSo6Hrh19QYnPGYNi4bv/pJp+QD0QlVGP25RP2KGg=";
 
   passthru.updateScript = nix-update-script { };
 

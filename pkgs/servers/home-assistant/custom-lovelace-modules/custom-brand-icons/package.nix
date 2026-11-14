@@ -38,7 +38,7 @@ buildNpmPackage (finalAttrs: {
     description = "Custom brand icons for Home Assistant";
     homepage = "https://github.com/elax46/custom-brand-icons";
     changelog = "https://github.com/elax46/custom-brand-icons/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.cc-by-nc-sa-40;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.all;
   };
