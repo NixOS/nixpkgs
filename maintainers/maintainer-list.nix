@@ -7109,6 +7109,12 @@
     githubId = 28479139;
     name = "Swastik Baranwal";
   };
+  DeltaCalcium = {
+    name = "DeltaCalcium";
+    email = "git@deltacalcium.dev";
+    github = "DeltaCalcium";
+    githubId = 47009341;
+  };
   deltadelta = {
     email = "contact@libellules.eu";
     name = "Dara Ly";
