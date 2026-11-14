@@ -18,6 +18,18 @@
 let
   node_modules =
     finalAttrs:
+    let
+      # opencode runs on Linux and Darwin only (see meta.platforms), but
+      # "--os=*" installs every other platform's prebuilts as well: 1.53 GiB of
+      # them on Linux (Darwin binaries plus win32/android/freebsd/aix/...) and
+      # 2.49 GiB on Darwin at 2.3.0. That is what put the 2.2.6 output over
+      # Hydra's ~4 GiB limit, which is why it reached no binary cache at all
+      # (NixOS/nixpkgs#585600). Every CPU variant is still installed, so the
+      # output stays byte-identical across architectures of one OS and the
+      # per-OS outputHash below still covers all of them; a cross build of
+      # either OS gets the target's prebuilts from --cpu="*" too.
+      installOs = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
+    in
     stdenv.mkDerivation {
       pname = "${finalAttrs.pname}-node_modules";
       inherit (finalAttrs) version src;
@@ -50,7 +62,7 @@ let
           --frozen-lockfile \
           --ignore-scripts \
           --no-progress \
-          --os="*"
+          --os="${installOs}"
 
         bun --bun ./nix/scripts/canonicalize-node-modules.ts
         bun --bun ./nix/scripts/normalize-bun-binaries.ts
@@ -64,11 +76,12 @@ let
         mkdir -p $out
         find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
-        # opencode targets only Linux and Darwin (see meta.platforms), so the
-        # Windows executables that "bun install --os=*" fetches are never
-        # executed. Dropping them keeps the output reproducible on hosts whose
+        # electron-winstaller and @electron/windows-sign vendor Windows
+        # executables in their tarballs, so --os does not drop them. opencode
+        # targets Linux and Darwin only (see meta.platforms) and never executes
+        # them, so dropping them keeps the output reproducible on hosts whose
         # security endpoint agents scan the store, and removes the vulnerable
-        # bundled 7za.exe that will be quarantined.
+        # 7z-*.exe that will be quarantined.
         find $out -type f -name '*.exe' -delete
 
         runHook postInstall
@@ -79,9 +92,9 @@ let
 
       outputHash =
         if stdenv.hostPlatform.isLinux then
-          "sha256-zaRjXditlZ8C741SeBv8n0ChlfYFrD/l0fKcuo2dxrI="
+          "sha256-E5/i4HtVLVX+S7AxECThwuRDyY/3muNu44L2/2ssrRs="
         else if stdenv.hostPlatform.isDarwin then
-          "sha256-LVqM4EJpSYmAFOJpyXwj0YySJx/ip2aXR8SrufVOHtE="
+          "sha256-n2+2hZ3QAWtKe+Ih3dWnIujx1dY9AhsscS30paDFnlw="
         else
           throw "Unsupported platform";
       outputHashMode = "recursive";
