@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_9,
   jre,
   runtimeShell,
 
@@ -13,31 +13,33 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "simple-binary-encoding";
-  version = "1.39.0";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "aeron-io";
     repo = "simple-binary-encoding";
     tag = finalAttrs.version;
-    hash = "sha256-lIcUYS5WDn/ROLc9kjpPxitYw6E3T6mgHfwelAxh134=";
+    hash = "sha256-vWMZ1wElDvB+rvDYwqJUp1VSHlC9YvlC9tT1ffGfRY4=";
   };
 
   nativeBuildInputs = [
-    gradle
+    gradle_9
     htmlq
     html2text
     txt2man
   ];
 
-  mitmCache = gradle.fetchDeps {
+  mitmCache = gradle_9.fetchDeps {
     pname = "simple-binary-encoding";
     pkg = finalAttrs.finalPackage;
     data = ./deps.json;
   };
 
   gradleBuildTask = "build";
+  enableParallelBuilding = false;
 
   doCheck = true;
+  enableParallelChecking = false;
   gradleCheckTask = "runJavaExamples";
 
   outputs = [
