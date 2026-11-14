@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovban";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wmbest2";
     repo = "aiovban";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yPp4+aQGJISTIFI/OoO7+mAR8daEytxrQn21SsFWEyc=";
+    hash = "sha256-lVjXrAutr7tMgLUMJeHUJMX9iz0KxQHky+P3hwZCjTQ=";
   };
 
   postPatch = ''
