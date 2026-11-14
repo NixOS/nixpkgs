@@ -1,0 +1,29 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -307,7 +307,6 @@
+     ${root}/src/redisearch_rs/headers
+     ${root}/deps/libuv/include
+     ${root}/deps
+-    ${root}/deps/VectorSimilarity/src
+     ${root}/deps/rmalloc
+     ${root}/src/ttl_table
+     ${BOOST_DIR}
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -47,8 +47,6 @@
+     target_compile_options(uv_a PRIVATE $<$<COMPILE_LANGUAGE:C>:-Wno-error=incompatible-pointer-types-discards-qualifiers>)
+ endif()
+ 
+-option(VECSIM_BUILD_TESTS "Build vecsim tests" OFF)
+-add_subdirectory(${root}/deps/VectorSimilarity ${CMAKE_CURRENT_BINARY_DIR}/VectorSimilarity)
+ 
+ # Workaround: fmt 11.2.0 is missing <cstdlib> include, which is needed for clang 21+ on macOS
+ # This was fixed in fmt 12.0.0, but that requires patching several levels upstream.
+@@ -147,7 +145,6 @@
+     ttl_table
+     ${HIREDIS_LIBS})
+ 
+-add_dependencies(redisearch_c VectorSimilarity)
+ add_dependencies(redisearch_c generate_command_info)
+ 
+ #----------------------------------------------------------------------------------------------

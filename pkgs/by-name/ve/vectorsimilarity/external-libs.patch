@@ -1,0 +1,42 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3661cf7a..67fe6dc8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -62,22 +62,13 @@ if(VECSIM_BUILD_TESTS)
+ 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${LLVM_LD_FLAGS}")
+ 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${LLVM_LD_FLAGS}")
+ 
+-	FetchContent_Declare(
+-		googletest
+-		URL https://github.com/google/googletest/archive/refs/tags/v1.16.0.zip
+-	)
+-
+ 	# For Windows: Prevent overriding the parent project's compiler/linker settings
+ 	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+-	FetchContent_MakeAvailable(googletest)
++  find_package(GTest REQUIRED)
+ 
+ 	option(BENCHMARK_ENABLE_GTEST_TESTS "" OFF)
+ 	option(BENCHMARK_ENABLE_TESTING "" OFF)
+-	FetchContent_Declare(
+-		google_benchmark
+-		URL https://github.com/google/benchmark/archive/refs/tags/v1.8.0.zip
+-	)
+-	FetchContent_MakeAvailable(google_benchmark)
++  find_package(benchmark REQUIRED)
+ 
+ 	add_subdirectory(tests/unit unit_tests)
+ 	add_subdirectory(tests/module module_tests)
+diff --git a/cmake/cpu_features.cmake b/cmake/cpu_features.cmake
+index 07f09776..06d20142 100644
+--- a/cmake/cpu_features.cmake
++++ b/cmake/cpu_features.cmake
+@@ -3,7 +3,6 @@ option(BUILD_TESTING "" OFF)
+ option(CMAKE_POSITION_INDEPENDENT_CODE "" ON)
+ FetchContent_Declare(
+ 	cpu_features
+-	GIT_REPOSITORY  https://github.com/google/cpu_features.git
+-	GIT_TAG         v0.10.1
++  URL @cpu_features_src@
+ )
+ FetchContent_MakeAvailable(cpu_features)
