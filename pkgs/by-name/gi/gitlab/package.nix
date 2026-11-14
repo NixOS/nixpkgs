@@ -12,7 +12,7 @@
   net-tools,
   nixosTests,
   nodejs_22,
-  ruby_3_3,
+  ruby_3_4,
   stdenv,
   tzdata,
 
@@ -54,7 +54,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_3;
+    ruby = ruby_3_4;
     gemdir = ./rubyEnv;
     gemset = import (gemdir + "/gemset.nix") src;
     gemConfig = defaultGemConfig // {
