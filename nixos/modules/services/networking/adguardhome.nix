@@ -82,13 +82,13 @@ in
 
     # deprecated in favor of `settings.http.address`
     host = lib.mkOption {
-      type = nullOr str;
-      default = null;
+      type = str;
+      default = defaultHost;
       visible = false;
     };
     port = lib.mkOption {
-      type = nullOr port;
-      default = null;
+      type = port;
+      default = defaultPort;
       visible = false;
     };
 
@@ -144,22 +144,15 @@ in
 
   config = lib.mkIf cfg.enable {
     warnings =
-      lib.concatMap
-        (
-          name:
-          lib.optional (cfg.${name} != null) ''
-            The option `services.adguardhome.${name}' defined in ${
-              lib.showFiles opt.${name}.files
-            } is deprecated, set `services.adguardhome.settings.http.address' instead.
-          ''
-        )
-        [
-          "host"
-          "port"
-        ];
+      (lib.optional (cfg.host != defaultHost) ''
+        The option `services.adguardhome.host' defined in ${lib.showFiles opt.host.files} is deprecated, set `services.adguardhome.settings.http.address' instead.
+      '')
+      ++ (lib.optional (cfg.port != defaultPort) ''
+        The option `services.adguardhome.port' defined in ${lib.showFiles opt.port.files} is deprecated, set `services.adguardhome.settings.http.address' instead.
+      '');
 
-    services.adguardhome.settings = lib.mkIf (cfg.host != null || cfg.port != null) {
-      http.address = "${lib.defaultTo defaultHost cfg.host}:${toString (lib.defaultTo defaultPort cfg.port)}";
+    services.adguardhome.settings = lib.mkIf (cfg.host != defaultHost || cfg.port != defaultPort) {
+      http.address = "${cfg.host}:${toString (cfg.port)}";
     };
 
     assertions = [
