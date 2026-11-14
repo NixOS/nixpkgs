@@ -81,11 +81,20 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  postPatch = lib.optionalString withFluidSynth ''
-    substituteInPlace src/music/fluidsynth.cpp \
-      --replace-fail "/usr/share/soundfonts/default.sf2" \
-                     "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
-  '';
+  postPatch =
+    lib.optionalString withFluidSynth ''
+      substituteInPlace src/music/fluidsynth.cpp \
+        --replace-fail "/usr/share/soundfonts/default.sf2" \
+                       "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
+    ''
+    # bundle is assembled in postInstall, not by fixup_bundle
+    # Info.plist copyright year from the release, not SOURCE_DATE_EPOCH
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cmake/PackageBundle.cmake \
+        --replace-fail "fixup_bundle(" "message(STATUS " \
+        --replace-fail 'string(TIMESTAMP CURRENT_YEAR "%Y")' \
+                       "set(CURRENT_YEAR $(cut -f2 .ottdrev* | head -n1 | cut -c1-4))"
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -113,6 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withFluidSynth fluidsynth;
 
+  # upstream defaults to an app bundle layout on darwin
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "OPTION_INSTALL_FHS" true)
+    (lib.cmakeFeature "GLOBAL_DIR" "${placeholder "out"}/share/games/openttd")
+  ];
+
   doCheck = true;
   # regression tests need a graphics set
   preCheck = ''
@@ -135,6 +150,13 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withOpenMSX ''
     cp -r ${openttd-openmsx}/* $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications/OpenTTD.app/Contents/{MacOS,Resources}
+    substitute Info.plist.in $out/Applications/OpenTTD.app/Contents/Info.plist \
+      --replace-fail "#CPACK_PACKAGE_VERSION#" "${finalAttrs.version}"
+    cp ../os/macosx/openttd.icns $out/Applications/OpenTTD.app/Contents/Resources/OpenTTD.icns
+    ln -s $out/bin/openttd $out/Applications/OpenTTD.app/Contents/MacOS/openttd
   '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence (
@@ -172,8 +194,9 @@ stdenv.mkDerivation (finalAttrs: {
       jcumming
       fpletz
       magicquark
+      iedame
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "openttd";
     downloadPage = "https://www.openttd.org/downloads/openttd-releases/latest";
   };
