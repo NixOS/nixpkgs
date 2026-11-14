@@ -3404,26 +3404,36 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.12.1";
+    version = "1.14.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-OUB6hPlFBB9FRdZgZXSye4lDOg+fbrqKe8ePv2IM7NY=";
+      hash = "sha256-Jby8fR/4VkuPd0bnq3DFK9D5IsfXnyCtW9fzH4F69xg=";
     };
   in
   {
-    cachix-api = overrideSrc {
-      inherit version;
-      src = src + "/cachix-api";
-    } super.cachix-api;
+    cachix-api = lib.pipe super.cachix-api [
+      (overrideSrc {
+        inherit version;
+        src = src + "/cachix-api";
+      })
+      (addBuildDepend self.openapi3)
+    ];
 
     cachix = lib.pipe super.cachix [
       (overrideSrc {
         inherit version;
         src = src + "/cachix";
       })
+      # The test suite spawns the built cachix binary.
+      (overrideCabal (drv: {
+        preCheck = ''
+          export PATH="$PWD/dist/build/cachix:$PATH"
+        ''
+        + (drv.preCheck or "");
+      }))
       (
         drv:
         drv.override {
