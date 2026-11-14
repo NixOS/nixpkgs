@@ -1,16 +1,6 @@
 diff --git a/shells/bash_test.go b/shells/bash_test.go
-index ff4734ede..dd68bb7f0 100644
---- a/shells/bash_test.go
-+++ b/shells/bash_test.go
-@@ -4,7 +4,6 @@ package shells
- 
- import (
- 	"path"
--	"runtime"
- 	"testing"
- 
- 	"github.com/stretchr/testify/assert"
-@@ -78,65 +77,6 @@ func TestBash_CheckForErrors(t *testing.T) {
+index 7c35616..5e761a1 100644
+@@ -123,65 +122,6 @@ func TestBash_CheckForErrors(t *testing.T) {
  	}
  }
  
