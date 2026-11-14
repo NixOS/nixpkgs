@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krill";
-  version = "0.16.1";
+  version = "0.16.2";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "NLnetLabs";
     repo = "krill";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iNDZAMQPsK1+agQDv0TLyPqwt9zoi/Oi1c+BkZGppXs=";
+    hash = "sha256-AID76tOLyn43wVEMXtuaZ1mNJfJWgRSbA5bt1AFAfxI=";
   };
 
-  cargoHash = "sha256-pf5Bu4XGpbnTeRjD03d5/UDejhlGF85I3wChwM4YhmM=";
+  cargoHash = "sha256-LkJdB6Xlx+MVajY3zbXdOgKA1aANmAC+FcW9tE8CAl8=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
