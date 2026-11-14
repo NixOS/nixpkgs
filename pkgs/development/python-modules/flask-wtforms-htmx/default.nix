@@ -5,7 +5,6 @@
   uv-build,
   flask,
   flask-wtf,
-  wtforms_3_3,
   wtforms-htmx,
   pytestCheckHook,
   pytest-xdist,
@@ -36,7 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     flask
-    (flask-wtf.override { wtforms = wtforms_3_3; })
+    flask-wtf
     wtforms-htmx
   ];
 

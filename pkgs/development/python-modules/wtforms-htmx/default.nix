@@ -3,16 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   uv-build,
-  wtforms_3_3,
+  wtforms,
   nix-update-script,
   pytestCheckHook,
   pytest-xdist,
   flask,
 }:
 
-let
-  wtforms = wtforms_3_3;
-in
 buildPythonPackage (finalAttrs: {
   pname = "wtforms-htmx";
   version = "0.1.3";
