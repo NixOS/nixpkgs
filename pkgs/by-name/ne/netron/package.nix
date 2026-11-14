@@ -54,12 +54,8 @@ buildNpmPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-
-    pushd dist/linux-${lib.optionalString stdenv.hostPlatform.isAarch64 "arm64-"}unpacked
     mkdir -p $out/opt/netron
-    cp -r locales resources{,.pak} $out/opt/netron
-    popd
+    cp -r dist/*-unpacked/resources $out/opt/netron
 
     makeWrapper '${lib.getExe electron}' "$out/bin/netron" \
       --add-flags $out/opt/netron/resources/app.asar \

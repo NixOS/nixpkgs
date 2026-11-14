@@ -44,8 +44,8 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/opt
-    cp -r ./dist/*-unpacked $out/opt/VacuumTube
+    mkdir -p $out/opt/VacuumTube
+    cp -r ./dist/*-unpacked/resources $out/opt/VacuumTube
 
     for i in 16 32 48 64 256 512; do
       install -Dm644 "assets/icons/$i"x"$i.png" \
