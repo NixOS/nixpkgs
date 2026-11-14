@@ -18,6 +18,7 @@
   openssl,
   webkitgtk_4_1,
   gst_all_1,
+  zstd,
 
   nix-update-script,
 }:
@@ -48,7 +49,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   postPatch = ''
-    jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+    # disable updater and disable mac codesigning
+    jq '
+      .plugins.updater.endpoints = [ ] |
+      .bundle.createUpdaterArtifacts = false |
+      .bundle.macOS.signingIdentity = null
+    ' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
   cargoRoot = "src-tauri";
@@ -70,7 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
     webkitgtk_4_1
 
@@ -80,10 +89,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gst_all_1.gst-plugins-bad
   ];
 
+  # vite resolves localhost during the frontend build
+  __darwinAllowLocalNetworking = true;
+
   doCheck = false; # many scoring tests fail
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeWrapper "$out"/Applications/pawn-appetit.app/Contents/MacOS/pawn-appetit $out/bin/pawn-appetit
+    makeWrapper "$out/Applications/Pawn Appetit.app/Contents/MacOS/pawn-appetit" $out/bin/pawn-appetit
   '';
 
   passthru.updateScript = nix-update-script { };
