@@ -10,6 +10,8 @@
   dejavu_fonts,
   makeFontsConf,
   pycairo,
+  pkg-config,
+  zstd,
   pytestCheckHook,
 }:
 
@@ -33,7 +35,10 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     cargo
     rustc
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   dependencies = [
     msgpack
