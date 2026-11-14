@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchurl,
   unzip,
-  nix-update-script,
+  directoryListingUpdater,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appcleaner";
@@ -21,12 +21,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/Applications
-    unzip -d $out/Applications $src
+    unzip -d $out/Applications $src -x '__MACOSX/*'
 
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = directoryListingUpdater {
+    # must match the zip filename prefix (case-sensitive)
+    pname = "AppCleaner";
+    url = "https://freemacsoft.net/appcleaner/";
+  };
 
   meta = {
     description = "Uninstall unwanted apps";
