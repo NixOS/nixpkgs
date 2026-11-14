@@ -80,7 +80,7 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       shiryel
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
   };
 }

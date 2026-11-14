@@ -361,7 +361,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
     pkgConfigModules = pkgConfigNames;
   };
 })

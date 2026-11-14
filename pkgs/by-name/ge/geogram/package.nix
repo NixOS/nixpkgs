@@ -104,6 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "riscv64-linux"
     ];
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
   };
 })

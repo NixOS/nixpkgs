@@ -76,7 +76,7 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       zaninime
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
   };
 }
