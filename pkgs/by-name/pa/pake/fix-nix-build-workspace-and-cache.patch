@@ -1,0 +1,67 @@
+diff -uprN a/bin/utils/build-workspace.ts b/bin/utils/build-workspace.ts
+--- a/bin/utils/build-workspace.ts	1970-01-01 05:30:01.000000000 +0530
++++ b/bin/utils/build-workspace.ts	2026-10-01 12:56:41.789623290 +0530
+@@ -41,6 +41,19 @@ export function throwIfBuildCancelled():
+   getBuildCancellationSignal()?.throwIfAborted();
+ }
+ 
++async function makeWritable(dir: string): Promise<void> {
++  const entries = await fs.readdir(dir, { withFileTypes: true });
++  for (const entry of entries) {
++    const fullPath = path.join(dir, entry.name);
++    if (entry.isSymbolicLink()) continue;
++    const stat = await fs.stat(fullPath);
++    await fs.chmod(fullPath, stat.mode | 0o200);
++    if (entry.isDirectory()) {
++      await makeWritable(fullPath);
++    }
++  }
++}
++
+ /** Copy only build inputs; cached or previously generated user content is not a template. */
+ export async function createBuildWorkspace(sourceDirectory: string) {
+   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'pake-build-'));
+@@ -77,6 +90,7 @@ export async function createBuildWorkspa
+         process.platform === 'win32' ? 'junction' : 'dir',
+       );
+     }
++    await makeWritable(directory);
+     return directory;
+   } catch (error) {
+     await fs.remove(directory);
+@@ -155,10 +169,19 @@ export async function acquireBuildCache(
+ 
+ export async function enterBuildWorkspace() {
+   const previousTarget = process.env.CARGO_TARGET_DIR;
+-  const targetDirectory = path.resolve(
+-    packageDirectory,
+-    previousTarget || 'src-tauri/target',
+-  );
++  let defaultTarget = path.resolve(packageDirectory, 'src-tauri/target');
++  try {
++    await fs.access(packageDirectory, fs.constants.W_OK);
++  } catch {
++    defaultTarget = path.join(
++      process.env.XDG_CACHE_HOME || path.join(os.homedir(), '.cache'),
++      'pake',
++      'target',
++    );
++  }
++  const targetDirectory = previousTarget
++    ? path.resolve(previousTarget)
++    : defaultTarget;
+   const directory = await createBuildWorkspace(packageDirectory);
+   let release: (() => Promise<void>) | undefined;
+   setBuildDirectory(directory);
+diff -uprN a/bin/utils/platform.ts b/bin/utils/platform.ts
+--- a/bin/utils/platform.ts	1970-01-01 05:30:01.000000000 +0530
++++ b/bin/utils/platform.ts	2026-10-01 12:56:52.018617423 +0530
+@@ -97,5 +97,8 @@ export function detectLinuxPackageFamily
+ // instead of a .deb their package manager cannot install. AppImage stays as a
+ // universal fallback in both cases.
+ export function getDefaultLinuxTargets(): string {
++  if (process.env.PAKE_DEFAULT_TARGETS) {
++    return process.env.PAKE_DEFAULT_TARGETS;
++  }
+   return detectLinuxPackageFamily() === 'rpm' ? 'rpm,appimage' : 'deb,appimage';
+ }
