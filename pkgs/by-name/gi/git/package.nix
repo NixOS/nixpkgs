@@ -586,6 +586,16 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails reproducibly on ZFS on Linux with formD normalization
     disable_test t0021-conversion
     disable_test t3910-mac-os-precompose
+    if [[ $(stat -f -c %T .) == zfs ]]; then
+      # ZFS normalization can make expected failures pass. Gate the affected
+      # cases on observed normalization, retaining other ZFS coverage.
+      substituteInPlace t/t0050-filesystem.sh \
+        --replace-fail 'test_unicode=test_expect_failure' \
+          'test_unicode="test_expect_success !UTF8_NFD_TO_NFC"'
+      substituteInPlace t/t7527-builtin-fsmonitor.sh \
+        --replace-fail "test_expect_success !UNICODE_COMPOSITION_SENSITIVE 'Unicode nfc/nfd'" \
+          "test_expect_success !UNICODE_COMPOSITION_SENSITIVE,!UTF8_NFD_TO_NFC 'Unicode nfc/nfd'"
+    fi
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
