@@ -1418,6 +1418,7 @@
   ./services/networking/picosnitch.nix
   ./services/networking/pihole-ftl.nix
   ./services/networking/pixiecore.nix
+  ./services/networking/playit.nix
   ./services/networking/pleroma.nix
   ./services/networking/portmaster.nix
   ./services/networking/porxie.nix

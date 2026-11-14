@@ -23125,6 +23125,11 @@
     github = "peat-psuwit";
     githubId = 6771175;
   };
+  pedorich-n = {
+    name = "Nikita Pedorich";
+    github = "pedorich-n";
+    githubId = 15573098;
+  };
   pedrohlc = {
     email = "root@pedrohlc.com";
     github = "PedroHLC";
