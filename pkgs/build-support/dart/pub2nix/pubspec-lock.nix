@@ -65,10 +65,16 @@ let
         sha256 = details.description.sha256;
       };
     in
-    runCommand "pub-${name}-${details.version}" { passthru.packageRoot = "."; } ''
-      mkdir -p "$out"
-      tar xf '${archive}' -C "$out"
-    '';
+    runCommand "pub-${name}-${details.version}"
+      {
+        strictDeps = true;
+        __structuredAttrs = true;
+        passthru.packageRoot = ".";
+      }
+      ''
+        mkdir -p "$out"
+        tar xf '${archive}' -C "$out"
+      '';
 
   mkGitDependencySource =
     name: details:
@@ -101,7 +107,10 @@ let
       if lib.isDerivation src then
         src
       else
-        (runCommand "pub-${name}-${details.version}" { } ''cp -r '${src}' "$out"'')
+        (runCommand "pub-${name}-${details.version}" {
+          strictDeps = true;
+          __structuredAttrs = true;
+        } ''cp -r '${src}' "$out"'')
     ).overrideAttrs
       (
         {

@@ -64,7 +64,7 @@ lib.extendMkDerivation {
           null,
 
       runtimeDependencies ? [ ],
-      extraWrapProgramArgs ? "",
+      extraWrapProgramArgs ? [ ],
 
       autoPubspecLock ? null,
       pubspecLock ?
@@ -75,12 +75,38 @@ lib.extendMkDerivation {
           lib.importJSON (
             runCommand "${lib.getName args}-pubspec-lock-json" {
               nativeBuildInputs = [ yq ];
+              strictDeps = true;
+              __structuredAttrs = true;
             } ''yq . '${autoPubspecLock}' > "$out"''
           ),
+
+      strictDeps ? true,
+
+      __structuredAttrs ? true,
+
       ...
     }:
     let
-      generators = callPackage ./generators.nix { inherit dart; } { buildDrvArgs = args; };
+      extraWrapProgramArgs =
+        if lib.types.str.check extraWrapProgramArgs then
+          lib.warn "Passing a string to extraWrapProgramArgs is deprecated, use a list of arguments instead" (
+            lib.splitStringBy (
+              _prev: cur:
+              builtins.elem cur [
+                " "
+                "\t"
+                "\n"
+              ]
+            ) false (lib.trim extraWrapProgramArgs)
+          )
+        else
+          extraWrapProgramArgs;
+
+      generators = callPackage ./generators.nix { inherit dart; } {
+        buildDrvArgs = args // {
+          inherit extraWrapProgramArgs;
+        };
+      };
 
       pubspecLockFile = builtins.toJSON pubspecLock;
       pubspecLockData = pub2nix.readPubspecLock {
@@ -95,19 +121,25 @@ lib.extendMkDerivation {
           # https://github.com/dart-lang/pub/blob/e1fbda73d1ac597474b82882ee0bf6ecea5df108/lib/src/sdk/dart.dart#L80
           "dart" =
             name:
-            runCommand "dart-sdk-${name}" { passthru.packageRoot = "."; } ''
-              for path in '${dart}/pkg/${name}'; do
-                if [ -d "$path" ]; then
-                  ln -s "$path" "$out"
-                  break
-                fi
-              done
+            runCommand "dart-sdk-${name}"
+              {
+                strictDeps = true;
+                __structuredAttrs = true;
+                passthru.packageRoot = ".";
+              }
+              ''
+                for path in '${dart}/pkg/${name}'; do
+                  if [ -d "$path" ]; then
+                    ln -s "$path" "$out"
+                    break
+                  fi
+                done
 
-              if[ ! -e "$out" ]; then
-                echo 1>&2 'The Dart SDK does not contain the requested package: ${name}!'
-                exit 1
-              fi
-            '';
+                if[ ! -e "$out" ]; then
+                  echo 1>&2 'The Dart SDK does not contain the requested package: ${name}!'
+                  exit 1
+                fi
+              '';
         }
         // sdkSourceBuilders;
       };
@@ -193,15 +225,25 @@ lib.extendMkDerivation {
           # Ensure that we inherit the propagated build inputs from the dependencies.
           builtins.attrValues pubspecLockData.dependencySources;
 
+      __structuredAttrs =
+        if args.__structuredAttrs or false then
+          lib.warn "Explicitly setting `__structuredAttrs = true;` for Dart/Flutter package ${args.pname}-${args.version} is redundant" __structuredAttrs
+        else
+          __structuredAttrs;
+
+      strictDeps =
+        if args.strictDeps or false then
+          lib.warn "Explicitly setting `strictDeps = true;` for Dart/Flutter package ${args.pname}-${args.version} is redundant" strictDeps
+        else
+          strictDeps;
+
       preConfigure = args.preConfigure or "" + ''
-        ln -sf "$pubspecLockFilePath" pubspec.lock
+        printf "%s" "$pubspecLockFile" > pubspec.lock
       '';
 
       # When stripping, it seems some ELF information is lost and the dart VM cli
       # runs instead of the expected program. Don't strip if it's an exe output.
       dontStrip = args.dontStrip or (dartOutputType == "exe");
-
-      passAsFile = [ "pubspecLockFile" ];
 
       passthru = {
         pubspecLock = pubspecLockData;

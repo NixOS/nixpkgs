@@ -18,14 +18,12 @@ dartFixupHook() {
         wrapProgramArgs+=(--suffix LD_LIBRARY_PATH : \"$APPLICATION_LD_LIBRARY_PATH\")
     fi
 
-    if [[ ! -z "$extraWrapProgramArgs" ]]; then
-        wrapProgramArgs+=("$extraWrapProgramArgs")
-    fi
+    wrapProgramArgs+=("${extraWrapProgramArgs[@]}")
 
     if [ ${#wrapProgramArgs[@]} -ne 0 ]; then
         for f in "$out"/bin/*; do
             echo "Wrapping $f..."
-            eval "wrapProgram \"$f\" ${wrapProgramArgs[@]}"
+            wrapProgram "$f" "${wrapProgramArgs[@]}"
         done
     fi
 
