@@ -2,13 +2,13 @@
   config,
   lib,
   pkgs,
-  options,
   ...
 }:
 
 let
   cfg = config.services.prometheus.exporters.node;
   inherit (lib)
+    literalExpression
     mkOption
     types
     concatStringsSep
@@ -22,6 +22,18 @@ in
 {
   port = 9100;
   extraOpts = {
+    listenStream = mkOption {
+      type = types.str;
+      default = "${cfg.listenAddress}:${toString cfg.port}";
+      defaultText = literalExpression ''"''${config.services.prometheus.exporters.node.listenAddress}:''${toString config.services.prometheus.exporters.node.port}"'';
+      example = "/run/prometheus-node-exporter.sock";
+      description = ''
+        The value of `ListenStream=` in the exporter's socket unit.
+        Accepts any value supported by systemd, e.g. an IPv4/IPv6 address
+        with port, a Unix domain socket path (absolute), or an abstract
+        namespace socket prefixed with `@`.
+      '';
+    };
     enabledCollectors = mkOption {
       type = types.listOf types.str;
       default = [ ];
