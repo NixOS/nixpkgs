@@ -5589,6 +5589,11 @@
     githubId = 71959829;
     name = "Cleeyv";
   };
+  clementinator = {
+    github = "CLEMENTINATOR";
+    githubId = 724253;
+    name = "Clement Bouvet";
+  };
   clementpoiret = {
     email = "poiret.clement@outlook.fr";
     github = "clementpoiret";
