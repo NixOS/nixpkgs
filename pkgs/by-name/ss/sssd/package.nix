@@ -67,7 +67,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.13.1";
+  version = "2.13.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -76,27 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "SSSD";
     repo = "sssd";
     tag = finalAttrs.version;
-    hash = "sha256-f4abHqZ8ojNU4dVw1hkfEJC4asE/NamhYmOQyy368eI=";
+    hash = "sha256-dKuPAP4DbPFu5cFNm+hqwBNRNVYETbMqtLJccD1t3JI=";
   };
 
   patches = [
     # Keep in mind to check /src/external/pac_responder.m4 for Kerberos compatibility before update Kerberos !!!
     # Fix Kerberos Support version for PAC responder
     #./fix-kerberos-version.patch
-
-    # Remove once a release containing this upstream fix is packaged.
-    (fetchpatch2 {
-      name = "CVE-2026-14476.patch";
-      url = "https://github.com/SSSD/sssd/commit/ba207eab76ff5253662a763b9b6e9ea42f03d31b.patch?full_index=1";
-      hash = "sha256-55V8RfIcGF49GGebg+pgCLPU9MGY2S/7PaOGIqwNL0w=";
-    })
-
-    # Remove once a release containing this upstream fix is packaged.
-    (fetchpatch2 {
-      name = "CVE-2026-68742.patch";
-      url = "https://github.com/SSSD/sssd/commit/db60088e31d9c0c51c12206f069c305c7f4288a4.patch?full_index=1";
-      hash = "sha256-MOchRnq7/MMEzzGFXsfo3m36ljFTo6AIccjcyPwCb+0=";
-    })
   ];
 
   postPatch = ''
