@@ -3708,12 +3708,36 @@ runTests {
             };
           in
           self;
+        slashRecursiveType =
+          let
+            self = lib.mkOptionType {
+              name = "treeNode";
+              description = "tree/node";
+              check = _: true;
+              nestedTypes.elemType = lib.types.listOf self;
+            };
+          in
+          self;
         eval = evalModules {
           modules = [
             {
               options.tree = lib.mkOption {
                 type = recursiveType;
                 description = "Recursive tree option";
+              };
+              options.slashTree = lib.mkOption {
+                type = slashRecursiveType;
+                description = "Recursive tree option with slash";
+              };
+              options.nullOrUnion = lib.mkOption {
+                type = lib.types.nullOr (lib.types.either lib.types.str lib.types.int);
+              };
+              options.intEnum = lib.mkOption {
+                type = lib.types.enum [
+                  1
+                  2
+                  3
+                ];
               };
             }
           ];
@@ -3722,15 +3746,29 @@ runTests {
       in
       {
         hasSchema = doc ? "$schema";
-        hasDefs = doc ? "$defs" && doc."$defs" ? "JSON value";
+        hasDefs = doc ? "$defs" && doc."$defs" ? "JSON value" && doc."$defs" ? "tree/node";
         treeRef = doc.properties.tree."$ref";
         treeNixType = doc.properties.tree.nixType;
+        slashTreeRef = doc.properties.slashTree."$ref";
+        slashTreeNixType = doc.properties.slashTree.nixType;
+        nullOrUnionLength = length doc.properties.nullOrUnion.anyOf;
+        intEnumType = doc.properties.intEnum.type;
+        intEnumValues = doc.properties.intEnum.enum;
       };
     expected = {
       hasSchema = true;
       hasDefs = true;
       treeRef = "#/$defs/JSON value";
       treeNixType = "JSON value";
+      slashTreeRef = "#/$defs/tree~1node";
+      slashTreeNixType = "tree/node";
+      nullOrUnionLength = 3;
+      intEnumType = "integer";
+      intEnumValues = [
+        1
+        2
+        3
+      ];
     };
   };
 

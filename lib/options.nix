@@ -43,6 +43,7 @@ let
     hasInfix
     hasPrefix
     isStringLike
+    replaceStrings
     toLower
     ;
   inherit (lib.types)
@@ -713,18 +714,23 @@ rec {
 
   flattenAnyOf = list: unique (concatMap (s: if s ? anyOf then flattenAnyOf s.anyOf else [ s ]) list);
 
+  escapeJsonPointer = replaceStrings [ "~" "/" ] [ "~0" "~1" ];
+
   typeToSchema' =
     seen: type: subDocs:
     let
       name = toLower (type.name or "");
       desc = type.description or (type.name or "");
       nested = type.nestedTypes or { };
+      mkRef = desc: {
+        schema = {
+          "$ref" = "#/$defs/${escapeJsonPointer desc}";
+        };
+      };
     in
     if desc != "" && elem type seen then
-      {
-        schema = {
-          "$ref" = "#/$defs/${desc}";
-        };
+      (mkRef desc)
+      // {
         referenced = [ desc ];
         defs = { };
       }
@@ -745,6 +751,14 @@ rec {
           inherit schema;
           referenced = [ ];
           defs = { };
+        };
+
+        combineAnyOf = results: {
+          schema = {
+            anyOf = flattenAnyOf (map (r: r.schema) results);
+          };
+          referenced = concatMap (r: r.referenced) results;
+          defs = foldl' (acc: r: acc // r.defs) { } results;
         };
 
         base =
@@ -772,65 +786,53 @@ rec {
               type = "string";
             }
           else if name == "enum" then
-            mkLeaf {
-              type = "string";
-              enum = type.functor.payload.values or [ ];
-            }
+            let
+              vals = type.functor.payload.values or [ ];
+            in
+            mkLeaf (
+              {
+                enum = vals;
+              }
+              // optionalAttrs (all isString vals) {
+                type = "string";
+              }
+              // optionalAttrs (all isInt vals) {
+                type = "integer";
+              }
+              // optionalAttrs (all isBool vals) {
+                type = "boolean";
+              }
+            )
           else if name == "nullor" then
-            {
-              schema = {
-                anyOf = [
-                  { type = "null"; }
-                  elemRes.schema
-                ];
-              };
-              inherit (elemRes) referenced defs;
-            }
+            combineAnyOf [
+              (mkLeaf { type = "null"; })
+              elemRes
+            ]
           else if name == "either" then
-            let
-              l = typeToSchema' seen' nested.left { };
-              r = typeToSchema' seen' nested.right { };
-            in
-            {
-              schema = {
-                anyOf = flattenAnyOf [
-                  l.schema
-                  r.schema
-                ];
-              };
-              referenced = l.referenced ++ r.referenced;
-              defs = l.defs // r.defs;
-            }
+            combineAnyOf [
+              (typeToSchema' seen' nested.left { })
+              (typeToSchema' seen' nested.right { })
+            ]
           else if name == "coercedto" then
-            let
-              c = typeToSchema' seen' nested.coercedType { };
-              f = typeToSchema' seen' nested.finalType subDocs;
-            in
-            {
-              schema = {
-                anyOf = flattenAnyOf [
-                  c.schema
-                  f.schema
-                ];
-              };
-              referenced = c.referenced ++ f.referenced;
-              defs = c.defs // f.defs;
-            }
+            combineAnyOf [
+              (typeToSchema' seen' nested.coercedType { })
+              (typeToSchema' seen' nested.finalType subDocs)
+            ]
           else if name == "listof" then
-            {
+            elemRes
+            // {
               schema = {
                 type = "array";
                 items = elemRes.schema;
               };
-              inherit (elemRes) referenced defs;
             }
           else if hasInfix "attrsof" name then
-            {
+            elemRes
+            // {
               schema = {
                 type = "object";
                 additionalProperties = elemRes.schema;
               };
-              inherit (elemRes) referenced defs;
             }
           else if name == "attrs" then
             mkLeaf {
@@ -871,10 +873,8 @@ rec {
         isReferenced = desc != "" && elem desc base.referenced;
       in
       if isReferenced then
-        {
-          schema = {
-            "$ref" = "#/$defs/${desc}";
-          };
+        (mkRef desc)
+        // {
           referenced = remove desc base.referenced;
           defs = base.defs // {
             ${desc} = base.schema;
