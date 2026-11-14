@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  loguru,
   mbstrdecoder,
+  pytablewriter,
   setuptools,
   setuptools-scm,
   simplesqlite,
@@ -37,11 +39,20 @@ buildPythonPackage (finalAttrs: {
     typepy
   ];
 
+  optional-dependencies = {
+    cli =
+      finalAttrs.passthru.optional-dependencies.dumps
+      ++ finalAttrs.passthru.optional-dependencies.logging;
+    dumps = [ pytablewriter ];
+    logging = [ loguru ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
     simplesqlite
     sqliteschema
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.cli;
 
   pythonImportsCheck = [ "sqliteschema" ];
 
