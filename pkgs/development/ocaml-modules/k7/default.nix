@@ -23,11 +23,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "k7";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchzip {
     url = "https://github.com/samoht/ocaml-k7/releases/download/${finalAttrs.version}/k7-${finalAttrs.version}.tbz";
-    hash = "sha256-XBbRQxdsgtrLyseGf8TE4A9WCl5OWF4qt3tW+almgU0=";
+    hash = "sha256-dbioJMCIMsklCZOtiI3iwF1luTkzVQVjzVGtB4uIGVQ=";
   };
 
   minimalOCamlVersion = "5.4";

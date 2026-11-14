@@ -1,8 +1,9 @@
 {
   buildDunePackage,
   mosaic,
-  windtrap,
   ppx_windtrap,
+  thumper,
+  windtrap,
 }:
 
 buildDunePackage {
@@ -12,8 +13,9 @@ buildDunePackage {
   minimalOCamlVersion = "5.1";
 
   checkInputs = [
-    windtrap
     ppx_windtrap
+    windtrap
+    thumper
   ];
 
   doCheck = true;

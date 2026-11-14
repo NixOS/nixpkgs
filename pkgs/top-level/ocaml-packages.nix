@@ -2173,6 +2173,8 @@ let
 
         thread-table = callPackage ../development/ocaml-modules/thread-table { };
 
+        thumper = callPackage ../development/ocaml-modules/thumper { };
+
         timed = callPackage ../development/ocaml-modules/timed { };
 
         timedesc = callPackage ../development/ocaml-modules/timedesc { };
