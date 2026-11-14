@@ -341,8 +341,21 @@ in
         {
           imports = [ commonService ];
 
+          services.galene-stt = {
+            enable = true;
+            insecure = true;
+            debug = true;
+            caption = true;
+            chat = true;
+            model = whisperModel;
+            username = galeneTestGroupBotName;
+            passwordFile = "/etc/stt-password";
+            groupUrl = "http://localhost:${toString galenePort}/group/test/";
+          };
+
           environment = {
             # https://galene.org/INSTALL.html
+            etc."stt-password".text = galeneTestGroupBotPassword;
             etc.${galeneTestGroupFile}.source = mkGroupConfigFile pkgs {
               op = [
                 {
@@ -366,7 +379,6 @@ in
             systemPackages = with pkgs; [
               ffmpeg
               galene-stream
-              galene-stt
             ];
           };
         };
@@ -405,26 +417,17 @@ in
             )
 
         with subtest("galene-stt starts and connects"):
-            machine.succeed(
-                "galene-stt "
-                + "-insecure "
-                + "-debug "
-                + "-caption "
-                + "-chat "
-                + "-model '${whisperModel}' "
-                + "-username '${galeneTestGroupBotName}' "
-                + "-password '${galeneTestGroupBotPassword}' "
-                + "'http://localhost:${toString galenePort}/group/test/' "
-                + " > /tmp/galene-stt.log 2>&1 &"
-            )
+            # Restart service to ensure clean connection now that group and stream are publishing
+            machine.systemctl("restart galene-stt")
+            machine.wait_for_unit("galene-stt.service")
 
             # Wait for galene-stt to connect, load the whisper model, and initialize backends without aborting
-            machine.wait_until_succeeds("cat /tmp/galene-stt.log >&2; grep -q 'whisper_backend_init:' /tmp/galene-stt.log", timeout=60)
-            machine.succeed("pgrep galene-stt")
+            machine.wait_until_succeeds("journalctl -u galene-stt | grep -q 'whisper_backend_init:'", timeout=60)
+            machine.succeed("systemctl is-active galene-stt")
 
         with subtest("galene-stt transcribes and displays captions in web UI"):
             # Wait for galene-stt to process audio
-            machine.wait_until_succeeds("cat /tmp/galene-stt.log >&2; grep -q 'Processed ' /tmp/galene-stt.log", timeout=60)
+            machine.wait_until_succeeds("journalctl -u galene-stt | grep -q 'Processed '", timeout=60)
 
             # Wait for caption or chat text to appear on screen in Firefox Web UI
             machine.wait_for_text(r"(this is a test|world|test)")
