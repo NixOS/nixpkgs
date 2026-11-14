@@ -24540,6 +24540,11 @@
     githubId = 100892812;
     name = "Oskar Rochowiak";
   };
+  r0k1s-i = {
+    name = "r0k1s#i";
+    github = "r0k1s-i";
+    githubId = 171756217;
+  };
   r17x = {
     email = "hi@rin.rocks";
     github = "r17x";
