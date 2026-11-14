@@ -1,0 +1,22 @@
+diff --git a/test/explicit_bzero.c b/test/explicit_bzero.c
+--- a/test/explicit_bzero.c
++++ b/test/explicit_bzero.c
+@@ -50,11 +50,16 @@ enum {
+ };
+ 
+ /*
+- * As of glibc 2.34, when _GNU_SOURCE is defined, SIGSTKSZ is no longer
+- * constant on Linux. SIGSTKSZ is redefined to sysconf (_SC_SIGSTKSZ).
++ * Prefer the runtime-recommended signal stack size when available. Some
++ * libc implementations define SIGSTKSZ as a fixed value smaller than the
++ * kernel minimum on CPUs with large signal frames.
+  */
+ static char *altstack;
++#ifdef _SC_SIGSTKSZ
++#define ALTSTACK_SIZE (sysconf(_SC_SIGSTKSZ) + SECRETBYTES)
++#else
+ #define ALTSTACK_SIZE (SIGSTKSZ + SECRETBYTES)
++#endif
+ 
+ static void
+ setup_stack(void)
