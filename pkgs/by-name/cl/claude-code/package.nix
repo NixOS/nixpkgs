@@ -9,6 +9,9 @@
   makeShellWrapper,
   autoPatchelfHook,
   alsa-lib,
+  alsa-plugins,
+  pipewire,
+  symlinkJoin,
   procps,
   ripgrep,
   bubblewrap,
@@ -17,12 +20,25 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
   manifest ? lib.importJSON ./manifest.zst.json,
+  # Voice mode on non-NixOS hosts whose ALSA config routes to PipeWire,
+  # PulseAudio, or JACK needs the matching plugins. Off by default because
+  # pipewire adds ~560 MiB to the closure. Commands run by claude inherit
+  # ALSA_PLUGIN_DIR.
+  withAlsaPlugins ? false,
 }:
 let
   stdenv = stdenvNoCC;
   baseUrl = "https://downloads.claude.ai/claude-code-releases";
   platformKey = "${stdenv.hostPlatform.node.platform}-${stdenv.hostPlatform.node.arch}";
   platformManifestEntry = manifest.platforms.${platformKey};
+  # ALSA_PLUGIN_DIR must reference a single directory.
+  alsaPluginDir = symlinkJoin {
+    name = "claude-code-alsa-plugins";
+    paths = map (pkg: "${pkg}/lib/alsa-lib") [
+      alsa-plugins
+      pipewire
+    ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "claude-code";
@@ -70,7 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       }${lib.optionalString stdenv.hostPlatform.isLinux ''
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
-      ''}--prefix PATH : ${
+      ''}${
+        lib.optionalString (stdenv.hostPlatform.isLinux && withAlsaPlugins) ''
+          --set-default ALSA_PLUGIN_DIR ${alsaPluginDir} \
+        ''
+      }--prefix PATH : ${
         lib.makeBinPath (
           [
             # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
