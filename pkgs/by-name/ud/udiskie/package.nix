@@ -2,6 +2,7 @@
   lib,
   asciidoc,
   fetchFromGitHub,
+  fetchpatch,
   gobject-introspection,
   gtk3,
   installShellFiles,
@@ -31,6 +32,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   patches = [
     ./locale-path.patch
+    # Fix random test failures: keyutils.read_key cut key ID lists at NUL bytes
+    # https://github.com/coldfix/udiskie/pull/362
+    (fetchpatch {
+      url = "https://github.com/coldfix/udiskie/commit/c867015c8e5886de80d7be790d63dc88ff7d535f.patch";
+      hash = "sha256-3+gxvADS9M14HpzF+6MAQCRFxdQwlj0ELSoC/UGoDiA=";
+    })
   ];
 
   postPatch = ''
