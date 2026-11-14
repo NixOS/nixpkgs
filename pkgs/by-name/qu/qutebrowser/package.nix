@@ -162,9 +162,6 @@ python3.pkgs.buildPythonApplication {
     license = lib.licenses.gpl3Plus;
     mainProgram = "qutebrowser";
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
-    knownVulnerabilities = [
-      "Still accepts eMudhra TLS certs."
-    ];
     maintainers = with lib.maintainers; [
       rnhmjoj
       dotlambda
