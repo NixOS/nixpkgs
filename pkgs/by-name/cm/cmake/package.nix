@@ -52,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "4.4.4";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vSTDDYCndEroS4Rf8IDMhFOwbGIu8BBmVkEI6c78RM8=";
+    hash = "sha256-QkNS1hM+hFXgINp4cAjo3GersYggrzUyVyqzVlfkkhM=";
   };
 
   patches = [
@@ -230,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor finalAttrs.version}/release/${lib.versions.majorMinor finalAttrs.version}.html";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.all;
     mainProgram = "cmake";
     broken = (qt5UI && stdenv.hostPlatform.isDarwin);
