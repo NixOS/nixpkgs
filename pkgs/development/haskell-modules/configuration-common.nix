@@ -3641,7 +3641,6 @@ with haskellLib;
         inherit version;
         src = src + "/cachix-api";
       })
-      (drv: drv.override { memory = self.ram; })
       (appendPatches [ ./patches/cachix-api-crypton-1.1-and-ram.patch ])
     ];
 
@@ -3657,7 +3656,6 @@ with haskellLib;
           nix = self.hercules-ci-cnix-store.nixPackage;
           hnix-store-core = self.hnix-store-core_0_8_0_0;
           hnix-store-nar = self.hnix-store-nar;
-          memory = self.ram;
         }
       )
       (appendPatches [ ./patches/cachix-crypton-1.1-and-ram.patch ])
