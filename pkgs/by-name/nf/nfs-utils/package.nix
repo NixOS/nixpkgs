@@ -91,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     substituteInPlace configure \
-      --replace '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
-      --replace '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
+      --replace-fail '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
+      --replace-fail '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
   '';
 
   configureFlags = [
@@ -104,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-libmount-mount"
     "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
     "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
-    "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
     (
       if enableSystemd then
         "--with-systemd=${placeholder "out"}/etc/systemd/system"
@@ -136,10 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
 
     substituteInPlace systemd/nfs-utils.service \
-      --replace "/bin/true" "${coreutils}/bin/true"
+      --replace-fail "/bin/true" "${coreutils}/bin/true"
 
     substituteInPlace tools/nfsrahead/Makefile.in systemd/Makefile.in \
-      --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
+      --replace-fail "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
 
     substituteInPlace utils/mount/Makefile.in \
       --replace-fail "chmod 4711" "chmod 0711"
