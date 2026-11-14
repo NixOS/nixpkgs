@@ -12,6 +12,7 @@
   h5netcdf,
   hatchling,
   httpx2,
+  isochron,
   morecantile,
   numexpr,
   numpy,
@@ -22,19 +23,20 @@
   rasterio,
   rioxarray,
   typing-extensions,
+  xarray,
   zarr,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "rio-tiler";
-  version = "9.4.7";
+  version = "9.4.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
     tag = finalAttrs.version;
-    hash = "sha256-Me5RMVB5ZHokrT5tNROZmXhN16f30f+Y0vPvpj5H4zM=";
+    hash = "sha256-mrTFhZ/1I50Coh3ziOXolwhTm0mEd/7CSdheOxvPqbs=";
   };
 
   build-system = [ hatchling ];
@@ -55,10 +57,16 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     s3 = [ boto3 ];
-    xarray = [ rioxarray ];
+    xarray = [ xarray rioxarray ];
     zarr = [
+      isochron
       obstore
       zarr
+    ];
+    geoarray = [
+      isochron
+      rioxarray
+      xarray
     ];
     geotiff = [
       async-geotiff
