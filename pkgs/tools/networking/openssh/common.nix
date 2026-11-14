@@ -101,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withKerberos krb5
   ++ lib.optional withLdns ldns
   ++ lib.optional withPAM pam
+  ++ lib.optional (!withPAM) libxcrypt
   ++ lib.optional withSelinux libselinux
   ++ lib.optionals withAudit [
     audit
