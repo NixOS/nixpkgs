@@ -12,6 +12,10 @@
       system.etc.overlay.mutable = true;
 
       environment.etc = {
+        declared-filemount = {
+          text = "";
+          mode = "0644";
+        };
         modetest = {
           text = "foo";
           mode = "300";
@@ -115,6 +119,8 @@
         # File
         machine.succeed("touch /etc/filemount")
         machine.succeed("mount --bind /dev/null /etc/filemount")
+        machine.succeed("echo preserved > /run/bind-source")
+        machine.succeed("mount --bind /run/bind-source /etc/declared-filemount")
 
         machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
 
@@ -133,9 +139,13 @@
         print(machine.succeed("findmnt /etc/mountpoint"))
         print(machine.succeed("stat /etc/mountpoint/extra-file"))
         print(machine.succeed("findmnt /etc/filemount"))
+        assert machine.succeed("cat /etc/declared-filemount").strip() == "preserved"
+        machine.succeed("test ! -e /.rw-etc/upper/declared-filemount")
 
         machine.succeed(f"{newergen} switch")
         assert machine.succeed("cat /etc/newergen") == "newergen"
+        assert machine.succeed("cat /etc/declared-filemount").strip() == "preserved"
+        machine.succeed("test ! -e /.rw-etc/upper/declared-filemount")
 
         tmpMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc\\..*'").rstrip()
         print(tmpMounts)
