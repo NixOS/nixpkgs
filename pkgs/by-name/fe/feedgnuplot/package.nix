@@ -46,8 +46,6 @@ perlPackages.buildPerlPackage rec {
     StringShellQuote
   ]);
 
-  strictDeps = true;
-
   # Fontconfig error: Cannot load default config file
   env.FONTCONFIG_FILE = fontsConf;
 
@@ -69,8 +67,6 @@ perlPackages.buildPerlPackage rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  __structuredAttrs = true;
 
   meta = {
     description = "General purpose pipe-oriented plotting tool";

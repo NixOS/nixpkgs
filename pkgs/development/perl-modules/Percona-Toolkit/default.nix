@@ -51,8 +51,6 @@ buildPerlPackage {
     TermReadKey
   ];
 
-  strictDeps = true;
-
   postPatch = ''
     cp -r --reflink=auto ${goDeps} vendor
     chmod -R u+rw vendor
@@ -63,8 +61,6 @@ buildPerlPackage {
   preBuild = ''
     export HOME=$TMPDIR
   '';
-
-  __structuredAttrs = true;
 
   meta = {
     description = "Collection of advanced command-line tools to perform a variety of MySQL and system tasks";

@@ -32,8 +32,6 @@ perlPackages.buildPerlPackage rec {
     TryTiny
   ];
 
-  strictDeps = true;
-
   preConfigure = ''
     touch Makefile.PL
     patchShebangs .
@@ -70,8 +68,6 @@ perlPackages.buildPerlPackage rec {
 
     runHook postInstall
   '';
-
-  __structuredAttrs = true;
 
   meta = {
     changelog = "https://www.awstats.org/docs/awstats_changelog.txt";

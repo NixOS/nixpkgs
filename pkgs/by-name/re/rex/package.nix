@@ -87,8 +87,6 @@ perlPackages.buildPerlPackage rec {
     which
   ];
 
-  strictDeps = true;
-
   outputs = [ "out" ];
 
   postPatch = ''
@@ -103,8 +101,6 @@ perlPackages.buildPerlPackage rec {
     installShellCompletion --name _rex --zsh ./share/rex-tab-completion.zsh
     installShellCompletion --name rex --bash ./share/rex-tab-completion.bash
   '';
-
-  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.rexify.org";
