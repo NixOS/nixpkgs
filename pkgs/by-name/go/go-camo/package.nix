@@ -9,16 +9,16 @@
 
 buildGo127Module rec {
   pname = "go-camo";
-  version = "2.7.7";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "cactus";
     repo = "go-camo";
     tag = "v${version}";
-    hash = "sha256-dDQ+xupAeug9OxftnwhYjcrgIU+knCM9+g38ytoiKF8=";
+    hash = "sha256-teTg0SYgnmZnWmxdYJw0MwZWtV+hUhnYqKHoD5KzAHw=";
   };
 
-  vendorHash = "sha256-KaFVHE5uXnCmYqHt4wgLZKphzDhj+QHQx03jV6+EEwk=";
+  vendorHash = null;
 
   __darwinAllowLocalNetworking = true;
 
