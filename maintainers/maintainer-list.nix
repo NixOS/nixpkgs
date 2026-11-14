@@ -24810,6 +24810,12 @@
     githubId = 25647735;
     name = "Victor Freire";
   };
+  rattboi = {
+    email = "rattboi@gmail.com";
+    github = "rattboi";
+    githubId = 166042;
+    name = "Bradon Kanyid";
+  };
   ravenjoad = {
     email = "raven@hallsby.com";
     github = "ravenjoad";
