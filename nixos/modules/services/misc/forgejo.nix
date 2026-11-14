@@ -236,7 +236,7 @@ in
 
         createDatabase = mkOption {
           type = types.bool;
-          default = true;
+          default = !(lib.versionAtLeast config.system.stateVersion "25.11");
           description = "Whether to create a local database automatically.";
         };
       };
