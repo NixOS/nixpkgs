@@ -20,12 +20,12 @@ in
         type = lib.types.attrsOf (lib.types.nonEmptyListOf lib.types.path);
 
         default = {
-          WORDLIST = [ "${pkgs.scowl}/share/dict/words.txt" ];
+          WORDLIST = [ "${pkgs.esdb}/share/dict/words.txt" ];
         };
 
         defaultText = lib.literalExpression ''
           {
-            WORDLIST = [ "''${pkgs.scowl}/share/dict/words.txt" ];
+            WORDLIST = [ "''${pkgs.esdb}/share/dict/words.txt" ];
           }
         '';
 
@@ -42,10 +42,10 @@ in
 
         example = lib.literalExpression ''
           {
-            WORDLIST = [ "''${pkgs.scowl}/share/dict/words.txt" ];
+            WORDLIST = [ "''${pkgs.esdb}/share/dict/words.txt" ];
             AUGMENTED_WORDLIST = [
-              "''${pkgs.scowl}/share/dict/words.txt"
-              "''${pkgs.scowl}/share/dict/words.variants.txt"
+              "''${pkgs.esdb}/share/dict/words.txt"
+              "''${pkgs.esdb}/share/dict/words.variants.txt"
               (builtins.toFile "extra-words" '''
                 desynchonization
                 oobleck''')

@@ -42,6 +42,11 @@ lib.mapAttrs mkLicense (
       spdxId = "Adobe-Utopia";
     };
 
+    advancedCrypticsDictionary = {
+      fullName = "Advanced Cryptics Dictionary";
+      spdxId = "Advanced-Cryptics-Dictionary";
+    };
+
     afl20 = {
       spdxId = "AFL-2.0";
       fullName = "Academic Free License v2.0";
@@ -283,6 +288,11 @@ lib.mapAttrs mkLicense (
     bsdSourceCode = {
       spdxId = "BSD-Source-Code";
       fullName = "BSD Source Code Attribution";
+    };
+
+    bsdMarkModifications = {
+      spdxId = "BSD-Mark-Modifications";
+      fullName = "BSD Mark Modifications License";
     };
 
     bsl11 = {

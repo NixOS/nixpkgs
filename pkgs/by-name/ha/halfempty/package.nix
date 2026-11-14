@@ -6,7 +6,7 @@
   pkg-config,
   glib,
   hexdump,
-  scowl,
+  esdb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace test/Makefile \
-      --replace '/usr/share/dict/words' '${scowl}/share/dict/words.txt'
+      --replace '/usr/share/dict/words' '${esdb}/share/dict/words.txt'
   '';
 
   installPhase = ''
