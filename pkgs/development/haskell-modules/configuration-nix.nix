@@ -2325,6 +2325,10 @@ builtins.intersectAttrs super {
       "--skip=/Cabal.Paths/paths"
       "--skip=/Cabal.ReplOptions" # >= 0.23
     ];
+
+    # https://github.com/sol/doctest/issues/494
+    editedCabalFile = null;
+    revision = null;
   }) super.doctest;
 
   # tracked upstream: https://github.com/snapframework/openssl-streams/pull/11
