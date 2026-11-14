@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BLAKE2";
     repo = "libb2";
     tag = "v${finalAttrs.version}";
-    sha256 = "0qj8aaqvfcavj1vj5asm4pqm03ap7q8x4c2fy83cqggvky0frgya";
+    hash = "sha256-yr/sgJ/7PcwG8k4w0hE+Vw1Q8SVVqyJ3kFsxt7FSSGI=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   configureFlags = lib.optional stdenv.hostPlatform.isx86 "--enable-fat=yes";
 
   enableParallelBuilding = true;
@@ -32,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "BLAKE2 family of cryptographic hash functions";
