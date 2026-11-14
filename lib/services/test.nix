@@ -124,6 +124,17 @@ let
           ];
         };
       };
+      # `executable` comes before `argv` entries that use `lib.mkBefore`.
+      executable = {
+        process = {
+          executable = ./test.nix;
+          argv = lib.mkMerge [
+            [ "plain" ]
+            (lib.mkBefore [ "before" ])
+          ];
+          flags."--name" = "example";
+        };
+      };
       # `argv` and `flags` share one `lib.mkOrder` space.
       flagsOrdering = {
         process = {
@@ -275,6 +286,22 @@ let
                 "a"
                 "--host"
                 "b"
+              ];
+              reloadCommand = null;
+              reloadSignal = null;
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
+          executable = {
+            process = {
+              argv = [
+                "${./test.nix}"
+                "before"
+                "plain"
+                "--name"
+                "example"
               ];
               reloadCommand = null;
               reloadSignal = null;
