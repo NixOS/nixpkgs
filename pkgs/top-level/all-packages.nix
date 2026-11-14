@@ -2648,7 +2648,6 @@ with pkgs;
   subzerod = with python3Packages; toPythonApplication subzerod;
 
   tartube-yt-dlp = tartube.override {
-    youtube-dl = yt-dlp;
   };
 
   buildTeleport = callPackage ../build-support/teleport { };
