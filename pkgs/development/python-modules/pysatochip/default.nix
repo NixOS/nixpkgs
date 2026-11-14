@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pysatochip";
-  version = "0.18.0";
+  version = "0.18.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "toporin";
     repo = "pysatochip";
     tag = "v${version}";
-    hash = "sha256-Axtxd/Jmdqo6JayCbDNk5wOToXT7/GlEKxWMC12mXyc=";
+    hash = "sha256-J4VGdeC+IowqWnCP8JFWGU8yPEaYCzfVn6F025/mwKY=";
   };
 
   propagatedBuildInputs = [
