@@ -16443,6 +16443,11 @@
     githubId = 5946707;
     name = "Luis Santos";
   };
+  lashakamadadze = {
+    github = "LashaKamadadze";
+    githubId = 254714490;
+    name = "Lasha Kamadadze";
+  };
   lassulus = {
     email = "lassulus@gmail.com";
     matrix = "@lassulus:lassul.us";
