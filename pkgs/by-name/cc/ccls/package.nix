@@ -43,6 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/ccls $out/bin/$wrapped
     substitute ${./wrapper} $out/bin/ccls \
       --replace-fail '@clang@' '${llvmPackages.clang}' \
+      --replace-fail '@defaultArgs@' '${
+        if (llvmPackages.clang.importerFlags.driver or null) != null then
+          "--config=${llvmPackages.clang}/nix-support/${llvmPackages.clang.importerFlags.driver}"
+        else
+          "$(cat ${llvmPackages.clang}/nix-support/${
+            llvmPackages.clang.importerFlags.libc or "libc-cflags"
+          } ${llvmPackages.clang}/nix-support/${llvmPackages.clang.importerFlags.cxx or "libcxx-cxxflags"})"
+      }' \
       --replace-fail '@shell@' '${runtimeShell}' \
       --replace-fail '@wrapped@' "$wrapped" \
       --replace-fail '@out@' "$out"

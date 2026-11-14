@@ -142,11 +142,15 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
     # Add include paths for thunkgen invocation
     substituteInPlace ThunkLibs/HostLibs/CMakeLists.txt \
-      --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libc-cflags) $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) ${
-        lib.concatMapStrings (x: "-isystem " + x + "/include ") libForwardingInputs
-      }"
+      --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/${
+        llvmPackages.stdenv.cc.importerFlags.libc or "libc-cflags"
+      }) $(cat ${llvmPackages.stdenv.cc}/nix-support/${
+        llvmPackages.stdenv.cc.importerFlags.cxx or "libcxx-cxxflags"
+      }) ${lib.concatMapStrings (x: "-isystem " + x + "/include ") libForwardingInputs}"
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt \
-      --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) "
+      --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/${
+        llvmPackages.stdenv.cc.importerFlags.cxx or "libcxx-cxxflags"
+      }) "
 
     # Disable including current date in manpages
     substituteInPlace FEXCore/Scripts/config_generator.py \

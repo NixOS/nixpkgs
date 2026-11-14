@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Align Swift Driver’s subcommand lookup behavior with the legacy/C++ frontend. Nixpkgs needs this because it
     # builds and installs SwiftPM separately from the rest of the Swift toolchain. Otherwise, `swift build` will fail.
     ./patches/0003-Search-PATH-for-subcommands.patch
+    # Preserve the actual compiler job's selected C++ runtime policy.
+    ./patches/0005-Preserve-Cxx-interop-driver-selection.patch
   ];
 
   strictDeps = true;

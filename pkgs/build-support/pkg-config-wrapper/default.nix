@@ -73,7 +73,6 @@ stdenv.mkDerivation {
         # to prepare for structuredAttrs
         # Avoid using a nested derivation since we need to substitute $out
         substitute "$wrapper" "$out/bin/$dst" \
-          --replace-fail "@suffixSalt@" "${suffixSalt}" \
           --replace-fail "@shell@" "${shell}" \
           --replace-fail "@prog@" "$prog" \
           --replace-fail "@out@" "$out" \
@@ -127,8 +126,8 @@ stdenv.mkDerivation {
 
   postFixup =
     let
-      addFlags = replaceVars ./add-flags.sh { inherit suffixSalt; };
       utils = replaceVars ../wrapper-common/utils.bash {
+        bintools_isLLVM = "unknown";
         inherit
           suffixSalt
           wrapperName
@@ -161,7 +160,7 @@ stdenv.mkDerivation {
     )
 
     + ''
-      install -m444 -T ${addFlags} $out/nix-support/add-flags.sh
+      install -m444 -T ${./add-flags.sh} $out/nix-support/add-flags.sh
       install -m444 -T ${utils} $out/nix-support/utils.bash
     ''
 

@@ -132,6 +132,10 @@
     substitutions = {
       libclang = (lib.getLib clang.cc);
       inherit clang;
+      libcFlags = clang.importerFlags.libc or "libc-cflags";
+      cxxFlags = clang.importerFlags.cxx or "libcxx-cxxflags";
+      importerDriverFlags =
+        if (clang.importerFlags.driver or null) == null then "" else clang.importerFlags.driver;
       targetFlag = lib.optionalString (
         !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
       ) "--target=${stdenv.targetPlatform.config}";
