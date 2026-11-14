@@ -86,6 +86,10 @@ let
       license = lib.licenses.asl20;
       mainProgram = "aws";
       maintainers = with lib.maintainers; [ anthonyroussel ];
+      problems.removal = {
+        message = "AWS CLI v1 (`awscli`) is deprecated and will be removed from Nixpkgs 27.05. Please switch to `awscli2`.";
+        urls = [ "https://aws.amazon.com/blogs/developer/cli-v1-maintenance-mode-announcement" ];
+      };
     };
   });
 in
