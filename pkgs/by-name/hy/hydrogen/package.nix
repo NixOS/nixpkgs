@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydrogen";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = "hydrogen";
     tag = finalAttrs.version;
-    hash = "sha256-JK4AAGMby2S2fh9bmgb2mSHBgKfUQ481GDjAvOdSnjs=";
+    hash = "sha256-q+awJeq0wtZDPTLSsvWxxEGwlXo4+AY/fDLoJHff79w=";
   };
 
   nativeBuildInputs = [
