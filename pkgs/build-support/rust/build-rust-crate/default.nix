@@ -639,6 +639,12 @@ lib.makeOverridable
             ];
         outputDev = if buildTests then [ "out" ] else [ "lib" ];
 
+        # The multiple-outputs hook adds `-rpath $lib/lib` to each binary in `$out`.
+        # The `lib` output refers to `out`. The two references make a cycle and the
+        # build fails. No binary loads a file from `$lib/lib`. `patchelf --shrink-rpath`
+        # removes the entry, but the setup hook ignores a patchelf failure.
+        NIX_NO_SELF_RPATH = true;
+
         meta = {
           mainProgram = crateName;
           badPlatforms = [
