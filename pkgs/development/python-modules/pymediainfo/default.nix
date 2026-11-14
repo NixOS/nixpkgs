@@ -5,7 +5,7 @@
   buildPythonPackage,
   libmediainfo,
   pdm-backend,
-  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,12 +31,20 @@ buildPythonPackage rec {
   build-system = [ pdm-backend ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    py.test -k 'not test_parse_url' tests
-  '';
+  disabledTests = [
+    # Disabled upstream due to bug in MediaInfo 26.10
+    # See: https://github.com/sbraz/pymediainfo/blob/master/tests/test_pymediainfo.py#L236
+    # See: https://github.com/MediaArea/MediaInfoLib/pull/2744
+    # TODO: Remove this once MediaInfo 26.10 is no longer used in Nixpkgs
+    "test_parse_cover_data"
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    # Cannot open a socket on darwin
+    "test_parse_url"
+  ];
 
   pythonImportsCheck = [ "pymediainfo" ];
 
