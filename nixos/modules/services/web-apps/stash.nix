@@ -87,7 +87,14 @@ let
   };
 
   settingsFormat = pkgs.formats.yaml { };
-  settingsFile = settingsFormat.generate "config.yml" cfg.settings;
+  settingsFile = settingsFormat.generate "stash-config.yaml" (
+    cfg.settings
+    // {
+      plugins_path = if cfg.mutablePlugins then "${cfg.dataDir}/plugins" else cfg.settings.plugins_path;
+      scrapers_path =
+        if cfg.mutableScrapers then "${cfg.dataDir}/scrapers" else cfg.settings.scrapers_path;
+    }
+  );
   settingsType = types.submodule {
     freeformType = settingsFormat.type;
 
@@ -108,36 +115,23 @@ let
 
       stash = mkOption {
         type = types.listOf stashType;
+        default = [ ];
         description = ''
           Add directories containing your adult videos and images.
           Stash will use these directories to find videos and/or images during scanning.
         '';
-        example = literalExpression ''
-          {
-            stash = [
-              {
-                Path = "/media/drive/videos";
-                ExcludeImage = true;
-              }
-            ];
-          }
-        '';
+        example = {
+          stash = [
+            {
+              path = "/media/drive/videos";
+            }
+          ];
+        };
       };
       stash_boxes = mkOption {
         type = types.listOf stashBoxType;
         default = [ ];
         description = "Stash-box facilitates automated tagging of scenes and performers based on fingerprints and filenames";
-        example = literalExpression ''
-          {
-            stash_boxes = [
-              {
-                name = "StashDB";
-                endpoint = "https://stashdb.org/graphql";
-                apikey = "aaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbb.cccccccccccccc";
-              }
-            ];
-          }
-        '';
       };
       ui.frontPageContent = mkOption {
         description = "Search filters to display on the front page.";
@@ -149,24 +143,6 @@ let
           presets.recentlyAddedPerformers
           presets.recentlyReleasedGalleries
         ];
-        example = literalExpression ''
-          presets: [
-            # To get the savedFilterId, you can query `{ findSavedFilters(mode: <FilterMode>) { id name } }` on localhost:9999/graphql
-            {
-              __typename = "SavedFilter";
-              savedFilterId = 1;
-            }
-            # basic custom filter
-            {
-              __typename = "CustomFilter";
-              title = "Random Scenes";
-              mode = "SCENES";
-              sortBy = "random";
-              direction = "DESC";
-            }
-            presets.recentlyAddedImages
-          ]
-        '';
         apply = type: if lib.isFunction type then (type uiPresets) else type;
       };
       blobs_path = mkOption {
@@ -343,10 +319,10 @@ let
 
               env \
                 plugin_id=$(basename $plugin_file .yml) \
-                plugin_name="$(yq '.name' $plugin_file)" \
-                plugin_description="$(yq '.description' $plugin_file)" \
-                plugin_version="$(yq '.version' $plugin_file)" \
-                plugin_files="$(find -L $out_path -mindepth 1 -type f -printf "%P\n")" \
+                plugin_name="$(yq '.name'$plugin_file)" \
+                plugin_description="$(yq '.description'$plugin_file)" \
+                plugin_version="$(yq '.version'$plugin_file)" \
+                plugin_files="$(find -L$out_path -mindepth 1 -type f -printf "%P\n")" \
                 yq -n '
                   .id = strenv(plugin_id) |
                   .name = strenv(plugin_name) |
@@ -411,9 +387,8 @@ in
           Username for login.
 
           ::: {.warning}
-            This option takes precedence over {option}`services.stash.settings.username`
-          ::
-
+          This option takes precedence over {option}`services.stash.settings.username`
+          :::
         '';
       };
 
@@ -425,30 +400,31 @@ in
           Path to file containing password for login.
 
           ::: {.warning}
-            This option takes precedence over {option}`services.stash.settings.password`
-          ::
-
+          This option takes precedence over {option}`services.stash.settings.password`
+          :::
         '';
       };
 
       jwtSecretKeyFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
         description = "Path to file containing a secret used to sign JWT tokens.";
       };
       sessionStoreKeyFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
         description = "Path to file containing a secret for session store.";
       };
 
       mutableSettings = mkOption {
+        type = types.bool;
+        default = true;
         description = ''
           Whether the Stash config.yml is writeable by Stash.
 
           If `false`, Any config changes done from within Stash UI will be temporary and reset to those defined in {option}`services.stash.settings` upon `Stash.service` restart.
           If `true`, the {option}`services.stash.settings` will only be used to initialize the Stash configuration if it does not exist, and are subsequently ignored.
         '';
-        type = types.bool;
-        default = true;
       };
       mutablePlugins = mkEnableOption "Whether plugins/themes can be installed, updated, uninstalled manually.";
       mutableScrapers = mkEnableOption "Whether scrapers can be installed, updated, uninstalled manually.";
@@ -457,6 +433,7 @@ in
 
       settings = mkOption {
         type = settingsType;
+        default = { };
         description = "Stash configuration";
       };
     };
@@ -489,9 +466,11 @@ in
     users.groups.${cfg.group} = { };
 
     systemd = {
-      tmpfiles.settings."10-stash-datadir".${cfg.dataDir}."d" = {
-        inherit (cfg) user group;
-        mode = "0755";
+      tmpfiles.settings."10-stash" = {
+        "${cfg.dataDir}"."d" = {
+          inherit (cfg) user group;
+          mode = "0755";
+        };
       };
       services.stash = {
         wantedBy = [ "multi-user.target" ];
@@ -501,7 +480,8 @@ in
           python3
           ruby
         ];
-        environment.STASH_CONFIG_FILE = "${cfg.dataDir}/config.yml";
+        environment.STASH_CONFIG_FILE =
+          if cfg.mutableSettings then "${cfg.dataDir}/config.yml" else settingsFile;
         serviceConfig = {
           DynamicUser = false;
           User = cfg.user;
@@ -509,42 +489,42 @@ in
           Restart = "on-failure";
           WorkingDirectory = cfg.dataDir;
           StateDirectory = mkIf (cfg.dataDir == "/var/lib/stash") (baseNameOf cfg.dataDir);
+
           ExecStartPre = pkgs.writers.writeBash "stash-setup.bash" (
             ''
               install -d ${cfg.settings.generated}
-              if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
-                env \
-                  password=$(< ${cfg.passwordFile}) \
-                  jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
-                  sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
-                  ${lib.getExe pkgs.yq-go} '
-                    .jwt_secret_key = strenv(jwtSecretKeyFile) |
-                    .session_store_key = strenv(sessionStoreKeyFile) |
-                    (
-                      strenv(password) as $password |
-                      with(select($password != ""); .password = $password)
-                    )
-                  ' ${settingsFile} > ${cfg.dataDir}/config.yml
+              install -d ${cfg.settings.plugins_path}
+              install -d ${cfg.settings.scrapers_path}
+
+              if [ ! -f ${cfg.dataDir}/config.yml ]; then
+                cp ${settingsFile} ${cfg.dataDir}/config.yml
+                chmod 644 ${cfg.dataDir}/config.yml
               fi
             ''
-            + optionalString cfg.mutablePlugins ''
-              install -d ${cfg.settings.plugins_path}
-              ls ${cfg.plugins} | xargs -I{} ln -sf '${cfg.plugins}/{}' ${cfg.settings.plugins_path}
+            + optionalString (cfg.passwordFile != null) ''
+              password=$(< ${cfg.passwordFile})
+              ${lib.getExe pkgs.yq-go} -i --arg pwd "$password" '.password = $pwd' ${cfg.dataDir}/config.yml
             ''
-            + optionalString cfg.mutableScrapers ''
-              install -d ${cfg.settings.scrapers_path}
-              ls ${cfg.scrapers} | xargs -I{} ln -sf '${cfg.scrapers}/{}' ${cfg.settings.scrapers_path}
+            + optionalString (cfg.jwtSecretKeyFile != null) ''
+              jwtSecretKey=$(< ${cfg.jwtSecretKeyFile})
+              ${lib.getExe pkgs.yq-go} -i --arg key "$jwtSecretKey" '.jwt_secret_key = $key' ${cfg.dataDir}/config.yml
+            ''
+            + optionalString (cfg.sessionStoreKeyFile != null) ''
+              sessionKey=$(< ${cfg.sessionStoreKeyFile})
+              ${lib.getExe pkgs.yq-go} -i --arg key "$sessionKey" '.session_store_key = $key' ${cfg.dataDir}/config.yml
+            ''
+            + optionalString (!cfg.mutablePlugins && cfg.plugins != [ ]) ''
+              ls ${cfg.plugins} | xargs -I{} ln -sf '${cfg.plugins}/{}' ${cfg.settings.plugins_path}/
+            ''
+            + optionalString (!cfg.mutableScrapers && cfg.scrapers != [ ]) ''
+              ls ${cfg.scrapers} | xargs -I{} ln -sf '${cfg.scrapers}/{}' ${cfg.settings.scrapers_path}/
             ''
           );
           ExecStart = getExe cfg.package;
 
-          ProtectHome = "tmpfs";
-          BindReadOnlyPaths = mkIf (cfg.settings != { }) (map (stash: "${stash.path}") cfg.settings.stash);
-
-          # hardening
-
-          DevicePolicy = "auto"; # needed for hardware acceleration
-          PrivateDevices = false; # needed for hardware acceleration
+          BindPaths = map (stash: "${stash.path}") cfg.settings.stash;
+          DevicePolicy = "auto";
+          PrivateDevices = false;
           AmbientCapabilities = [ "" ];
           CapabilityBoundingSet = [ "" ];
           ProtectSystem = "full";
