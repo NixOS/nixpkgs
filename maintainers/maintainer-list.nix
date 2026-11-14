@@ -33250,6 +33250,12 @@
     github = "zfnmxt";
     githubId = 37446532;
   };
+  zh-jq = {
+    name = "Zhang Jingqiang";
+    email = "zh_jq@outlook.com";
+    github = "zh-jq";
+    githubId = 13403151;
+  };
   zh4ngx = {
     github = "zh4ngx";
     githubId = 1329212;
