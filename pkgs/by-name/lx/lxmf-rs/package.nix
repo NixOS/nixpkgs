@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  aws-lc,
   bzip2,
   dbus,
   sqlite,
@@ -13,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lxmf-rs";
-  version = "0.9.8";
+  version = "0.16.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "FreeTAKTeam";
     repo = "LXMF-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yV/SAtpiL5hu5CVcI2dqtIt/gGTCQzaYtG9tV9tM7A0=";
+    hash = "sha256-coav7FViynJVNx2oejup541mGgLVVEQoTzALLtDDYNc=";
   };
 
-  cargoHash = "sha256-RKVHLKjfukNwIXsAz4CnJDy1oOM4McQeE31Ch+WHc5w=";
+  cargoHash = "sha256-RoLKwEkZ5AkLbdmEfZ/qOoCLusNeo/5eRIYrVkqCZhg=";
 
   cargoBuildFlags = [
     "--workspace"
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     bzip2
     dbus
     sqlite
