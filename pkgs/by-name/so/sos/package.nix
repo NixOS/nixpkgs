@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "sos";
-  version = "4.11.2";
+  version = "4.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
     tag = version;
-    hash = "sha256-abMH0s+ZfLAURBJrZtTmDczuS5Id3ko0lTKfvp3OJqU=";
+    hash = "sha256-wLBi+DL2Uy+CY/4M/4lBlNYp9PI71f63xcClyRobtcs=";
   };
 
   build-system = [ python3Packages.setuptools ];
