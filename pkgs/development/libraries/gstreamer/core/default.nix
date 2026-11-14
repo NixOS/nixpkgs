@@ -177,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     identifiers.cpeParts = finalAttrs.passthru.gstreamerCpeParts finalAttrs.version;
   };

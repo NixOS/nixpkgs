@@ -126,6 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
     identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
   };
 })

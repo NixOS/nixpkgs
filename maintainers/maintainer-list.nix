@@ -471,6 +471,12 @@
     githubId = 1339417;
     name = "Alexander Ratajczak";
   };
+  AAAAAASomeThingsFailToEvaluate = {
+    email = "git@miglix.eu";
+    github = "hesiod";
+    githubId = 3159881;
+    name = "Franziska Nord";
+  };
   aacebedo = {
     email = "alexandre@acebedo.fr";
     github = "aacebedo";
@@ -30074,12 +30080,6 @@
     github = "tmarkovski";
     githubId = 1280118;
     name = "Tomislav Markovski";
-  };
-  tmarkus = {
-    email = "tobias@markus-regensburg.de";
-    github = "hesiod";
-    githubId = 3159881;
-    name = "Tobias Markus";
   };
   tmountain = {
     email = "tinymountain@gmail.com";
