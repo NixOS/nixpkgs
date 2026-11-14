@@ -1,0 +1,37 @@
+diff --git a/desktop/build.gradle.kts b/desktop/build.gradle.kts
+index 9f5832e..09662dd 100644
+--- a/desktop/build.gradle.kts
++++ b/desktop/build.gradle.kts
+@@ -19,7 +19,6 @@ val javaVersionEnum: JavaVersion by rootProject.extra
+ kotlin {
+     jvmToolchain {
+         this.languageVersion.set(JavaLanguageVersion.of(javaVersionEnum.toString().toInt()))
+-        this.vendor.set(JvmVendorSpec.MICROSOFT)
+     }
+ 
+     jvm {
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+index 92a760d..9339d03 100644
+--- a/gradle/libs.versions.toml
++++ b/gradle/libs.versions.toml
+@@ -1,5 +1,5 @@
+ [versions]
+-android-gradle = "9.2.1"
++android-gradle = "8.13.2"
+ androidx-activity-compose = "1.13.0"
+ androidx-core = "1.19.0"
+ androidx-documentfile = "1.1.0"
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+index 1a4ee8c..88c8334 100644
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -33,6 +33,8 @@ dependencyResolutionManagement {
+ }
+ 
+ rootProject.name = "SamloaderKotlin"
+-include(":android")
++if (!providers.gradleProperty("skipAndroid").isPresent) {
++    include(":android")
++}
+ include(":desktop")
+ include(":common")
