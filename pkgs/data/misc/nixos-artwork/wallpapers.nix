@@ -2,9 +2,18 @@
   lib,
   stdenv,
   fetchurl,
+  runCommand,
+  resvg,
 }:
 
 let
+  # Renders an SVG source from ./wallpapers to a 5120x2880 PNG.
+  renderSvg =
+    name: svg:
+    runCommand name { nativeBuildInputs = [ resvg ]; } ''
+      resvg --skip-system-fonts --width 5120 --height 2880 ${svg} $out
+    '';
+
   mkNixBackground =
     {
       pname,
@@ -410,26 +419,20 @@ rec {
 
   simple-blue = mkNixBackground {
     pname = "simple-blue";
-    version = "2016-02-19";
+    version = "2026-10-12";
     description = "Simple blue background for Nix";
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-blue.png";
-      hash = "sha256-utrcjzfeJoFOpUbFY2eIUNCKy5rjLt57xIoUUssJmdI=";
-    };
-    dimensions = "1920x1080";
-    license = lib.licenses.cc0;
+    src = renderSvg "nix-wallpaper-simple-blue.png" ./wallpapers/simple-blue.svg;
+    dimensions = "5120x2880";
+    license = lib.licenses.cc-by-40;
   };
 
   simple-dark-gray = mkNixBackground {
     pname = "simple-dark-gray";
-    version = "2016-02-19";
+    version = "2026-10-12";
     description = "Simple dark gray background for Nix";
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-dark-gray.png";
-      hash = "sha256-JaLHdBxwrphKVherDVe5fgh+3zqUtpcwuNbjwrBlAok=";
-    };
-    dimensions = "1920x1080";
-    license = lib.licenses.cc0;
+    src = renderSvg "nix-wallpaper-simple-dark-gray.png" ./wallpapers/simple-dark-gray.svg;
+    dimensions = "5120x2880";
+    license = lib.licenses.cc-by-40;
   };
 
   simple-dark-gray-bootloader = mkNixBackground {
