@@ -15,40 +15,24 @@
 }:
 let
   androidComposition = androidenv.composeAndroidPackages { };
-  version = "1.12.4";
+  version = "1.12.5";
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = "objection";
     tag = version;
-    hash = "sha256-sXMhLwTsksLRFBGEsKSmDaD0+uDugz2U3yn50rHFbnQ=";
+    hash = "sha256-o8NrzSGwFObv1J57BX40xCOB7Q/royU/OpK31KhPEIo=";
   };
 
-  fridaVersion = "17.5.1";
+  fridaVersion = "17.14.0";
 
   supportedPlatforms = {
     x86_64-linux = {
       fridaArch = "linux-x64";
-      fridaHash = "sha256-g7uZs/fUwraIu6SZaU9kGGVuzD/nyqmXHVp0zL3jhdY=";
-    };
-    aarch64-linux = {
-      fridaArch = "linux-arm64";
-      fridaHash = "sha256-BsCgpHS3IFMPciu9hsdu9vWwKu+pon+EtqF10NO1EAc=";
-    };
-    armv7l-linux = {
-      fridaArch = "linux-armv7l";
-      fridaHash = "sha256-mNl+kP+9a4AC2Tf1SM7mYL5b+j4pPz+E9R88JjLgifE=";
-    };
-    i686-linux = {
-      fridaArch = "linux-ia32";
-      fridaHash = "sha256-vLwf+EwWNDLznda8J+xVqp8XmuivdZ0VKgISR9YoQR0=";
+      fridaHash = "sha256-i9IvLg27+HtGuFIA2gcmbrDCVECflpaVU7GbfOx3/LI=";
     };
     aarch64-darwin = {
       fridaArch = "darwin-arm64";
-      fridaHash = "sha256-mR6HM9rmRmXhWqXA0GC4Xkdj9KVSthhtvMAzijE+j5c=";
-    };
-    x86_64-freebsd = {
-      fridaArch = "freebsd-x64";
-      fridaHash = "sha256-ddvUtdZJdVH9O7np04ayB/Nebxq4Raw0eAQJpFAFl6Q=";
+      fridaHash = "sha256-cJw1Gksb0W2bMLTeLPyN6nPyQD4QnrA49Dao9Y8C5Ro=";
     };
   };
 
@@ -73,7 +57,7 @@ let
     inherit version src;
     sourceRoot = "source/agent";
 
-    npmDepsHash = "sha256-oG0uMhy6Gv2lc1SNJwqnvYRdhhqWwPMY0MCDMt2hPf0=";
+    npmDepsHash = "sha256-OPN1sUgDsM+p+mcI1wW0hmIKO/eIzDe0TyMCsf6lpxk=";
 
     npmRebuildFlags = [ "--ignore-scripts" ];
 
