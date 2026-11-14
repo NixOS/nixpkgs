@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "confluent-platform";
-  version = "7.7.0";
+  version = "8.4.1";
 
   src = fetchurl {
     url = "https://packages.confluent.io/archive/${lib.versions.majorMinor finalAttrs.version}/confluent-${finalAttrs.version}.tar.gz";
-    hash = "sha256-w5dazjSZTv/zqNcOcmyUUu8z5wftsJtBeU3bO1WhQ6k=";
+    hash = "sha256-hDR4i0H8+0kQnd1VOku5KhDpS7Ay78MqYihCTi/FP7w=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # allow us the specify logging directory using env
     substituteInPlace $out/bin/kafka-run-class \
-      --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
+      --replace-fail 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
 
     substituteInPlace $out/bin/ksql-run-class \
-      --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
+      --replace-fail 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
 
     for p in $out/bin\/*; do
       wrapProgram $p \
