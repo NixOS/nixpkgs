@@ -1,17 +1,19 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdnsd";
-  version = "1.2.9a-par";
+  version = "1.2.9a";
 
-  src = fetchurl {
-    url = "http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-${finalAttrs.version}.tar.gz";
-    sha256 = "0yragv5zk77a1hfkpnsh17vvsw8b14d6mzfng4bb7i58rb83an5v";
+  src = fetchFromGitHub {
+    owner = "kwarunek";
+    repo = "pdnsd";
+    tag = finalAttrs.version;
+    hash = "sha256-+uJ4qPKH7Hg2SDYsug2gQZ4U8gk7318ibWAdditle6M=";
   };
 
   patches =
