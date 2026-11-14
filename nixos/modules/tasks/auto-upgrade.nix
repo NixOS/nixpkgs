@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -203,6 +204,12 @@ in
         '';
       };
 
+      stateRevision = utils.mkStateRevisionOption {
+        descriptionName = "autoUpgrade";
+        migrations = {
+          "26.11" = "Remove shell escaping for options `channel`, `flags` and `flake`";
+        };
+      };
     };
 
   };
@@ -234,7 +241,8 @@ in
       else
         [
           "--refresh"
-          "--flake ${cfg.flake}"
+          "--flake"
+          cfg.flake
         ]
     );
 
@@ -274,10 +282,11 @@ in
           readlink = "${pkgs.coreutils}/bin/readlink";
           shutdown = "${config.systemd.package}/bin/shutdown";
           upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) "--upgrade";
+          handleShellArgs = if cfg.stateRevision < 1 then toString else lib.escapeShellArgs;
         in
         if cfg.allowReboot then
           ''
-            ${nixos-rebuild} boot ${toString (cfg.flags ++ upgradeFlag)}
+            ${nixos-rebuild} boot ${handleShellArgs (cfg.flags ++ upgradeFlag)}
             booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
             built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
 
@@ -307,7 +316,7 @@ in
             ''}
 
             if [ "''${booted}" = "''${built}" ]; then
-              ${nixos-rebuild} ${cfg.operation} ${toString cfg.flags}
+              ${nixos-rebuild} ${cfg.operation} ${handleShellArgs cfg.flags}
             ${lib.optionalString (cfg.rebootWindow != null) ''
               elif [ "''${do_reboot}" != true ]; then
                 echo "Outside of configured reboot window, skipping."
@@ -318,7 +327,7 @@ in
           ''
         else
           ''
-            ${nixos-rebuild} ${cfg.operation} ${toString (cfg.flags ++ upgradeFlag)}
+            ${nixos-rebuild} ${cfg.operation} ${handleShellArgs (cfg.flags ++ upgradeFlag)}
           '';
 
       startAt = cfg.dates;
@@ -334,6 +343,8 @@ in
         Persistent = cfg.persistent;
       };
     };
+
+    system.moduleStateRevisions."system.autoUpgrade" = cfg.stateRevision;
   };
 
 }
