@@ -3,7 +3,7 @@
   asn1tools,
   bidict,
   buildPythonPackage,
-  cmd2_3,
+  cmd2,
   colorlog,
   construct,
   cryptography,
@@ -47,7 +47,7 @@ buildPythonPackage {
   propagatedBuildInputs = [
     asn1tools
     bidict
-    cmd2_3
+    cmd2
     colorlog
     construct
     cryptography
@@ -78,6 +78,7 @@ buildPythonPackage {
   ];
 
   meta = {
+    broken = lib.versionAtLeast cmd2.version "4";
     description = "Python tool to program SIMs / USIMs / ISIMs";
     homepage = "https://github.com/osmocom/pysim";
     license = lib.licenses.gpl2Plus;
