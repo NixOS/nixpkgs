@@ -9,12 +9,12 @@
   libsodium,
   libtool,
   openssl,
-  systemdMinimal,
+  systemdLibs,
   libxcrypt,
 
   # options
   withModules ? !stdenv.hostPlatform.isStatic,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 
   # passthru
   nixosTests,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
   ]
   ++ lib.optionals withSystemd [
-    systemdMinimal
+    systemdLibs
   ];
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''

@@ -9,7 +9,7 @@
   pkg-config,
   protobuf,
   protobufc,
-  systemdMinimal,
+  systemdLibs,
   nixosTests,
   config,
   # set default options for config values
@@ -27,7 +27,7 @@
   rrtypes ? config.nsd.rrtypes or false,
   zoneStats ? config.nsd.zoneStats or false,
   withDnstap ? true,
-  withSystemd ? config.nsd.withSystemd or (lib.meta.availableOn stdenv.hostPlatform systemdMinimal),
+  withSystemd ? config.nsd.withSystemd or (lib.meta.availableOn stdenv.hostPlatform systemdLibs),
   configFile ? config.nsd.configFile or "/etc/nsd/nsd.conf",
 }:
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libevent
     openssl
   ]
-  ++ lib.optionals withSystemd [ systemdMinimal ]
+  ++ lib.optionals withSystemd [ systemdLibs ]
   ++ lib.optionals withDnstap [
     fstrm
     # NSD links against libprotobuf-c, it's not just a build-time dependency.
