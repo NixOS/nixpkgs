@@ -2891,6 +2891,9 @@ with haskellLib;
   optparse-applicative = doJailbreak super.optparse-applicative;
   # https://github.com/haskellari/strict/issues/52
   strict = doJailbreak super.strict;
+  # Fails to compile with QC 2.17
+  # https://github.com/spl/dlist/issues/132
+  dlist = dontCheck super.dlist;
 
   # Tests require docker
   testcontainers = dontCheck super.testcontainers;
