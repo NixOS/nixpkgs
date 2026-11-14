@@ -6,6 +6,9 @@
 }:
 let
   cfg = config.boot.initrd.clevisLuksAskpass;
+  systemd = config.boot.initrd.systemd.package;
+  # clevis-luks-askpass embeds the path to systemd-reply-password at build time.
+  clevis = cfg.package.override { inherit systemd; };
 in
 {
   options = {
@@ -44,11 +47,11 @@ in
 
     boot.initrd.systemd = {
       # Install upstream clevis-luks-askpass.path and clevis-luks-askpass.service into the initrd
-      packages = [ cfg.package ];
+      packages = [ clevis ];
 
       storePaths = [
-        cfg.package
-        "${config.systemd.package}/lib/systemd/systemd-reply-password"
+        clevis
+        "${systemd}/lib/systemd/systemd-reply-password"
         "${pkgs.jose}/bin/jose"
         "${pkgs.curl}/bin/curl"
         "${pkgs.cryptsetup}/bin/cryptsetup"
