@@ -16,18 +16,14 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-vDlYJSRBVFtEdE/1bN8PniFYkpggIKMcEakphHmaTos=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     asciitree
     requests
   ];
 
-  pythonImportsCheck = [
-    "cansina"
-  ];
+  pythonImportsCheck = [ "cansina" ];
 
   meta = {
     description = "Web Content Discovery Tool";
