@@ -7,9 +7,6 @@
 let
   cfg = config.services.pelican-panel;
 
-  inherit (cfg) package;
-  inherit (package.passthru) php;
-
   inherit (lib)
     mkOption
     mkEnableOption
@@ -27,7 +24,7 @@ let
 
   artisan = pkgs.writeShellScriptBin "pelican-artisan" ''
     cd ${cfg.stateDir}/www
-    exec ${pkgs.sudo}/bin/sudo -u pelican ${php}/bin/php artisan "$@"
+    exec ${pkgs.sudo}/bin/sudo -u pelican ${cfg.phpPackage}/bin/php artisan "$@"
   '';
 
   autoConfig = {
@@ -77,7 +74,7 @@ let
 
     STATE="${cfg.stateDir}"
     WWW="$STATE/www"
-    STORE="${package}"
+    STORE="${cfg.package}"
 
     # Create persistent state directories
     mkdir -p \
@@ -145,6 +142,13 @@ in
     };
 
     package = mkPackageOption pkgs "pelican-panel" { };
+
+    phpPackage = mkOption {
+      type = types.package;
+      default = cfg.package.passthru.php;
+      defaultText = lib.literalExpression "config.services.pelican-panel.package.passthru.php";
+      description = "The php package to use.";
+    };
 
     openFirewall = mkEnableOption "firewall rules for Pelican";
 
@@ -245,7 +249,7 @@ in
       };
 
       phpfpm.pools.pelican = {
-        phpPackage = php;
+        inherit (cfg) phpPackage;
         user = "pelican";
         group = "pelican";
 
@@ -339,7 +343,7 @@ in
               User = "pelican";
               Group = "pelican";
               WorkingDirectory = "${cfg.stateDir}/www";
-              ExecStart = "${php}/bin/php artisan queue:work --tries=3";
+              ExecStart = "${cfg.phpPackage}/bin/php artisan queue:work --tries=3";
               Restart = "on-failure";
               RestartSec = "5s";
             };
@@ -354,7 +358,7 @@ in
               User = "pelican";
               Group = "pelican";
               WorkingDirectory = "${cfg.stateDir}/www";
-              ExecStart = "${php}/bin/php artisan schedule:run";
+              ExecStart = "${cfg.phpPackage}/bin/php artisan schedule:run";
             };
           };
         };
