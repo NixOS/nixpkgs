@@ -9390,6 +9390,12 @@
     githubId = 62179193;
     name = "Francesco Carmelo Capria";
   };
+  fcoury = {
+    email = "felipe.coury@gmail.com";
+    github = "fcoury";
+    githubId = 1371;
+    name = "Felipe Coury";
+  };
   fd = {
     email = "simon.menke@gmail.com";
     github = "fd";
