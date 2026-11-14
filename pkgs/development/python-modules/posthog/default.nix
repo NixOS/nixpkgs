@@ -73,6 +73,7 @@ buildPythonPackage (finalAttrs: {
     "test_excepthook"
     "test_request"
     "test_upload"
+    "test_prepare_tool_result_delivers_into_call_tool_result_models"
   ];
 
   meta = {

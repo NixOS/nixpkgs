@@ -16,6 +16,8 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      mcp = super.mcp_1;
+
       # https://github.com/Davidyz/VectorCode/pull/36
       chromadb = super.chromadb.overridePythonAttrs (old: rec {
         version = "0.6.3";
