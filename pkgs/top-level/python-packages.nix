@@ -4741,6 +4741,8 @@ self: super: with self; {
 
   django-fsm = callPackage ../development/python-modules/django-fsm { };
 
+  django-fsm-2 = callPackage ../development/python-modules/django-fsm-2 { };
+
   django-google-analytics-app =
     callPackage ../development/python-modules/django-google-analytics-app
       { };
