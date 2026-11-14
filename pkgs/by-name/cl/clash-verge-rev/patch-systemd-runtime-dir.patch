@@ -1,0 +1,36 @@
+diff --git a/src/core/server.rs b/src/core/server.rs
+index 81890b8..a9a931b 100644
+--- a/src/core/server.rs
++++ b/src/core/server.rs
+@@ -463,2 +463,7 @@ fn ensure_control_runtime_dir(dir: &std::path::Path) -> std::io::Result<()> {
+-    crate::core::unix_security::ensure_service_directory(dir, 0o755)
+-        .map_err(|error| std::io::Error::other(error.to_string()))
++    use std::os::unix::fs::OpenOptionsExt;
++
++    let _directory = std::fs::OpenOptions::new()
++        .read(true)
++        .custom_flags(platform_lib::O_DIRECTORY | platform_lib::O_NOFOLLOW | platform_lib::O_CLOEXEC)
++        .open(dir)?;
++    Ok(())
+@@ -530 +535 @@ fn create_ipc_server() -> Result<IpcHttpServer> {
+-        use platform_lib::{S_IRGRP, S_IROTH, S_IRUSR, S_IWGRP, S_IWOTH, S_IWUSR, mode_t};
++        use platform_lib::{S_IRGRP, S_IRUSR, S_IWGRP, S_IWUSR, mode_t};
+@@ -532 +537 @@ fn create_ipc_server() -> Result<IpcHttpServer> {
+-        let mode: mode_t = platform_lib::mode_t::from(S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
++        let mode: mode_t = platform_lib::mode_t::from(S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+diff --git a/tests/common/mod.rs b/tests/common/mod.rs
+index 46348ec..60b1dde 100644
+--- a/tests/common/mod.rs
++++ b/tests/common/mod.rs
+@@ -24,0 +25,4 @@ pub async fn start_server() -> Result<tokio::task::JoinHandle<kode_bridge::Resul
++    #[cfg(unix)]
++    if let Some(parent) = std::path::Path::new(clash_verge_service_ipc::IPC_PATH).parent() {
++        std::fs::create_dir_all(parent)?;
++    }
+diff --git a/tests/test_start_and_parse.rs b/tests/test_start_and_parse.rs
+index 61ac041..b86f827 100644
+--- a/tests/test_start_and_parse.rs
++++ b/tests/test_start_and_parse.rs
+@@ -42 +42 @@ async fn running_server_reports_its_protocol_and_status() -> Result<()> {
+-        assert_eq!(std::fs::metadata(socket)?.permissions().mode() & 0o777, 0o666);
++        assert_eq!(std::fs::metadata(socket)?.permissions().mode() & 0o777, 0o660);
