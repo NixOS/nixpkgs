@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.9.0";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tE3GsY8HqLHFZnahn7/bUglBWwRqnOzihrqvqH/z9/E=";
+    hash = "sha256-mm0w5V+Nxj5gUll2ZhEr/wWGuVokdKne2gOvu/gg03o=";
   };
 
   build-system = [ uv-build ];
@@ -46,11 +46,6 @@ buildPythonPackage rec {
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'uv_build>=0.9.21,<0.13.0' "uv_build"
-  '';
 
   # disable network on all builds (including darwin)
   # see https://github.com/NixOS/nixpkgs/issues/356803
