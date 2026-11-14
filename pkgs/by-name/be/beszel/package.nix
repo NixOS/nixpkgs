@@ -52,6 +52,8 @@ buildGo127Module (finalAttrs: {
     npmDepsHash = "sha256-pL4Qmi17CC4t6G/Mw/AgZUPf6cl0UPm75zfHVfrkoKI=";
   };
 
+  tags = [ "no_self_update" ];
+
   vendorHash = "sha256-NStpXYnaVkJxmzT1fIPFqSNbNSJqpnC0LsVQweFOwcI=";
 
   preBuild = ''
@@ -82,7 +84,7 @@ buildGo127Module (finalAttrs: {
     in
     [
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
-      "-tags=testing,no_ui"
+      "-tags=testing,no_ui,no_self_update"
     ];
 
   postInstall = ''
