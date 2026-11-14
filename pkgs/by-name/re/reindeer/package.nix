@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reindeer";
-  version = "2026.10.05.00";
+  version = "2026.10.12.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZaK2T/v7oVwzzQHsHUiM4hEdpmd7g7yRCRqVIwMCL8k=";
+    hash = "sha256-r2BkgXiuFwI7E5cHQjNs9Rl+EaSMLeFOlWyXMSL1zSM=";
   };
 
-  cargoHash = "sha256-C/3mmSDv9g1rrkJxwBIk6Jb5YBxNRXNi6UEgaguOpmc=";
+  cargoHash = "sha256-Ow9cfa/9oRQJU56Nt6812ThNlapn1on+g1wU+uc6s0g=";
+  cargoPatches = [
+    # The 2026.10.12.00 release omits this registry checksum from Cargo.lock,
+    # which Nix's Cargo vendor fetcher requires.
+    ./missing-registry-checksum.patch
+  ];
+  patches = [
+    # Avoid lowering the existing soft limit when increase_nofile_limit clamps
+    # to kern.maxfilesperproc on macOS; also handle limit-query failures without
+    # panicking during startup.
+    ./fix-rlimit-lowering.patch
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
