@@ -2,13 +2,16 @@
   name,
   testBase,
   package,
+  flavor ? "containers",
   ...
 }:
 
-{
+args@{
   config,
   lib,
   pkgs,
+  nodes,
+  containers,
   ...
 }:
 let
@@ -29,11 +32,10 @@ in
 
   imports = [ testBase ];
 
-  nodes = {
+  ${flavor} = {
     nextcloud =
       {
         pkgs,
-        nodes,
         ...
       }:
       {
@@ -65,12 +67,12 @@ in
         # The dummy certs are for acme.test, so we pretend that's the FQDN
         # of the garage VM.
         networking.extraHosts = ''
-          ${nodes.garage.networking.primaryIPAddress} acme.test
+          ${args.${flavor}.garage.networking.primaryIPAddress} acme.test
         '';
       };
 
     client =
-      { pkgs, nodes, ... }:
+      { pkgs, ... }:
       {
         environment.variables.AWS_CONFIG_FILE = awsCfg;
         environment.variables.AWS_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt";
@@ -80,7 +82,7 @@ in
           (builtins.readFile ../common/acme/server/ca.cert.pem)
         ];
         networking.extraHosts = ''
-          ${nodes.garage.networking.primaryIPAddress} acme.test
+          ${args.${flavor}.garage.networking.primaryIPAddress} acme.test
         '';
       };
 
@@ -154,11 +156,11 @@ in
   '';
 
   test-helpers.extraTests =
-    { nodes, ... }:
+    { ... }:
     ''
 
       with subtest("File is not on the filesystem"):
-          nextcloud.succeed("test ! -e ${nodes.nextcloud.services.nextcloud.home}/data/root/files/test-shared-file")
+          nextcloud.succeed("test ! -e ${args.${flavor}.nextcloud.services.nextcloud.home}/data/root/files/test-shared-file")
 
       with subtest("Check if file is in S3"):
           files = [
