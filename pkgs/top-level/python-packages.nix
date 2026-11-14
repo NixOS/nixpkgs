@@ -14248,6 +14248,8 @@ self: super: with self; {
 
   propcache = callPackage ../development/python-modules/propcache { };
 
+  properdocs = callPackage ../development/python-modules/properdocs { };
+
   property-cached = callPackage ../development/python-modules/property-cached { };
 
   property-manager = callPackage ../development/python-modules/property-manager { };
