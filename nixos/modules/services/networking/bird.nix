@@ -7,11 +7,15 @@
 
 let
   inherit (lib)
+    mkBefore
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
+    optional
     optionalString
     types
+    warnIfNot
     ;
 
   cfg = config.services.bird;
@@ -20,6 +24,14 @@ let
     "CAP_NET_BIND_SERVICE"
     "CAP_NET_RAW"
   ];
+  userWrapper = pkgs.writeShellApplication {
+    name = "birdc";
+    text = ''
+      exec ${pkgs.systemd}/bin/run0 -u bird \
+        "${lib.getExe' cfg.package "birdc"}" \
+        "$@"
+    '';
+  };
 in
 {
   ###### interface
@@ -65,6 +77,19 @@ in
           build time checking.
         '';
       };
+      installWrapper = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to install a run0(8) wrapper around `birdc`, ensuring that the
+          command is executed as the `bird` user and not (accidentially) as
+          root.
+
+          An alternative would be to add the respective users to the bird group
+          manually instead of using run0(8), which may or may not be preferred
+          depending on the use case.
+        '';
+      };
     };
   };
 
@@ -76,55 +101,66 @@ in
   ];
 
   ###### implementation
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+  config = mkIf cfg.enable (mkMerge [
+    {
+      environment.systemPackages = [ cfg.package ];
 
-    environment.etc."bird/bird.conf".source = pkgs.writeTextFile {
-      name = "bird";
-      text = cfg.config;
-      derivationArgs.nativeBuildInputs = lib.optional cfg.checkConfig cfg.package;
-      checkPhase = optionalString cfg.checkConfig ''
-        ln -s $out bird.conf
-        ${cfg.preCheckConfig}
-        bird -d -p -c bird.conf || { exit=$?; cat -n bird.conf; exit $exit; }
-      '';
-    };
+      environment.etc."bird/bird.conf".source = pkgs.writeTextFile {
+        name = "bird";
+        text = cfg.config;
+        derivationArgs.nativeBuildInputs = lib.optional cfg.checkConfig cfg.package;
+        checkPhase = optionalString cfg.checkConfig ''
+          ln -s $out bird.conf
+          ${cfg.preCheckConfig}
+          bird -d -p -c bird.conf || { exit=$?; cat -n bird.conf; exit $exit; }
+        '';
+      };
 
-    systemd.services.bird = {
-      description = "BIRD Internet Routing Daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird.conf".source;
-      serviceConfig = {
-        Type = "forking";
-        Restart = "on-failure";
-        User = "bird";
-        Group = "bird";
-        ExecStart = "${lib.getExe' cfg.package "bird"} -c /etc/bird/bird.conf";
-        ExecReload = "${lib.getExe' cfg.package "birdc"} configure";
-        ExecStop = "${lib.getExe' cfg.package "birdc"} down";
-        RuntimeDirectory = "bird";
-        CapabilityBoundingSet = caps;
-        AmbientCapabilities = caps;
-        ProtectSystem = "full";
-        ProtectHome = "yes";
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        SystemCallFilter = "~@cpu-emulation @debug @keyring @module @mount @obsolete @raw-io";
-        MemoryDenyWriteExecute = "yes";
+      systemd.services.bird = {
+        description = "BIRD Internet Routing Daemon";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird.conf".source;
+        serviceConfig = {
+          Type = "forking";
+          Restart = "on-failure";
+          User = "bird";
+          Group = "bird";
+          ExecStart = "${lib.getExe' cfg.package "bird"} -c /etc/bird/bird.conf";
+          ExecReload = "${lib.getExe' cfg.package "birdc"} configure";
+          ExecStop = "${lib.getExe' cfg.package "birdc"} down";
+          RuntimeDirectory = "bird";
+          CapabilityBoundingSet = caps;
+          AmbientCapabilities = caps;
+          ProtectSystem = "full";
+          ProtectHome = "yes";
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          SystemCallFilter = "~@cpu-emulation @debug @keyring @module @mount @obsolete @raw-io";
+          MemoryDenyWriteExecute = "yes";
+        };
       };
-    };
-    users = {
-      users.bird = {
-        description = "BIRD Internet Routing Daemon user";
-        group = "bird";
-        isSystemUser = true;
+      users = {
+        users.bird = {
+          description = "BIRD Internet Routing Daemon user";
+          group = "bird";
+          isSystemUser = true;
+        };
+        groups.bird = { };
       };
-      groups.bird = { };
-    };
-  };
+    }
+
+    (mkIf cfg.installWrapper {
+      environment.systemPackages = mkBefore [ userWrapper ];
+
+      # Do not enable run0 without explicit consent, but warn instead.
+      warnings = optional (
+        !config.security.run0.enable
+      ) "security.run0.enable must be set to true for services.bird.installWrapper to take effect!";
+    })
+  ]);
 
   meta = {
     maintainers = with lib.maintainers; [ herbetom ];
