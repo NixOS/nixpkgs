@@ -3404,6 +3404,11 @@ runTests {
               };
             };
           };
+          options.freeformOpenSub = lib.mkOption {
+            type = lib.types.submodule {
+              freeformType = lib.types.attrs;
+            };
+          };
         };
         options = (evalModules { modules = [ module ]; }).options;
         optionDoc = optionToDoc options;
@@ -3443,6 +3448,7 @@ runTests {
         freeformAdditionalType = optionDoc.properties.freeformSub.additionalProperties.type;
         freeformInnerType = optionDoc.properties.freeformSub.properties.inner.type;
         freeformRequired = optionDoc.properties.freeformSub.required;
+        freeformOpenAdditionalProps = optionDoc.properties.freeformOpenSub.additionalProperties;
 
         # Equivalent traversal via optionAttrSetToDocList
         docListCount = length docList;
@@ -3471,8 +3477,9 @@ runTests {
       freeformAdditionalType = "string";
       freeformInnerType = "string";
       freeformRequired = [ "inner" ];
+      freeformOpenAdditionalProps = true;
 
-      docListCount = 19;
+      docListCount = 24;
     };
   };
 

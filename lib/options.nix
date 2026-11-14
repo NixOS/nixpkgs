@@ -772,10 +772,12 @@ rec {
       subDocs
       // {
         additionalProperties =
-          if nested ? freeformType then
-            typeToSchema (nested.freeformType.nestedTypes.elemType or nested.freeformType) { }
+          if !nested ? freeformType then
+            false
+          else if nested.freeformType.nestedTypes ? elemType then
+            typeToSchema nested.freeformType.nestedTypes.elemType { }
           else
-            false;
+            true;
       }
     else if nested ? elemType then
       elemSchema
