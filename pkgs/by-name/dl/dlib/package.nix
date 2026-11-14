@@ -22,7 +22,7 @@
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation (finalAttrs: {
   pname = "dlib";
-  version = "20.0.1";
+  version = "20.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -31,7 +31,7 @@
     owner = "davisking";
     repo = "dlib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Obu8054M28yoC800+p+O5sYQzm7dd2VfcRtHmitdDIk=";
+    hash = "sha256-zu4su+SCkQJwne19SfS5SlD93okgjmW1/vyhlRI2TXA=";
   };
 
   postPatch = ''
