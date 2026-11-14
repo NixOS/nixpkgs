@@ -419,6 +419,10 @@ in
       "services"
       "winstone"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "wg-access-server"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "auto" ] ''
       The services.xserver.displayManager.auto module has been removed
       because it was only intended for use in internal NixOS tests, and gave the
