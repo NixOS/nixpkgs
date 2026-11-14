@@ -2,6 +2,7 @@
   qtModule,
   lib,
   stdenv,
+  pkgsBuildBuild,
   qtbase,
   qtmultimedia,
   pkg-config,
@@ -21,5 +22,8 @@ qtModule {
   propagatedBuildInputs = [
     qtbase
     qtmultimedia
+  ];
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
   ];
 }
