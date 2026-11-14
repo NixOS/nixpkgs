@@ -4,7 +4,7 @@
   gtksourceview5,
   libspelling,
   fetchFromGitHub,
-  python312Packages,
+  python314Packages,
   mathjax,
   meson,
   ninja,
@@ -20,14 +20,14 @@
 }:
 
 let
-  version = "3.4";
+  version = "3.5";
 
   src = fetchFromGitLab {
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
     tag = "v${version}";
-    hash = "sha256-Sj5Y4QPMYavdXbU+iVv76qOFNhgBjAeX9+/TvQHZzeI=";
+    hash = "sha256-fCAYtKN3O5lOKavhQRWARnGtMScvrsDAazn6NtERhDw=";
   };
 
   reveal-js = fetchFromGitHub {
@@ -36,14 +36,14 @@ let
 
     # keep in sync with upstream shipped version
     # in build-aux/flatpak/org.gnome.gitlab.somas.Apostrophe.json
-    tag = "5.1.0";
-    hash = "sha256-L6KVBw20K67lHT07Ws+ZC2DwdURahqyuyjAaK0kTgN0=";
+    tag = "6.0.2";
+    hash = "sha256-yh9Fwp8PT6fFrbSsih7cD9EzH2wbfd3idjyemOQTqF8=";
   };
 in
 
 # Requires telnetlib, and possibly others
 # Try to remove in subsequent updates
-python312Packages.buildPythonApplication {
+python314Packages.buildPythonApplication {
   inherit version src;
   pname = "apostrophe";
   pyproject = false;
@@ -57,7 +57,7 @@ python312Packages.buildPythonApplication {
   # Use mathjax from nixpkgs to avoid loading from CDN
   + ''
     substituteInPlace apostrophe/preview_converter.py \
-      --replace-fail "--mathjax" "--mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml-full.js"
+      --replace-fail "--math-method=mathjax" "--math-method=mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml-full.js"
   '';
 
   # Should be done in postInstall, but meson checks this eagerly before build
@@ -82,7 +82,7 @@ python312Packages.buildPythonApplication {
     webkitgtk_6_0
   ];
 
-  dependencies = with python312Packages; [
+  dependencies = with python314Packages; [
     pygobject3
     pypandoc
     chardet
