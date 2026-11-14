@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation {
   pname = "xdg-desktop-portal-pantheon";
-  version = "8.2.0-unstable-2026-06-04";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
