@@ -5988,6 +5988,8 @@ self: super: with self; {
 
   fast-colorthief = callPackage ../development/python-modules/fast-colorthief { };
 
+  fast-hdbscan = callPackage ../development/python-modules/fast-hdbscan { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fast-query-parsers = callPackage ../development/python-modules/fast-query-parsers { };
