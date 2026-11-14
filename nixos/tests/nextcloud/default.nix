@@ -7,6 +7,7 @@
 with pkgs.lib;
 
 let
+  inherit (pkgs) lib;
   baseModule =
     { config, ... }:
     {
@@ -121,32 +122,31 @@ let
             };
         }
       ];
-
-      callNextcloudTest =
-        path:
-        let
-          name = "${removeSuffix ".nix" (baseNameOf path)}${toString version}";
-        in
-        nameValuePair name (
+    in
+    lib.nameValuePair "nextcloud${toString version}" (
+      lib.mapAttrs
+        (
+          name:
+          path:
           import path {
             inherit system pkgs testBase;
             name = "nextcloud-${name}";
           }
-        );
-    in
-    map callNextcloudTest [
-      ./basic.nix
-      ./home-bindmount.nix
-      ./home-mount.nix
-      ./with-declarative-redis-and-secrets.nix
-      ./with-mysql-and-memcached.nix
-      ./with-postgresql-and-redis.nix
-      ./with-objectstore.nix
-      ./with-mail.nix
-    ];
+        )
+        {
+          basic = ./basic.nix;
+          home-bindmout = ./home-bindmount.nix;
+          home-mount = ./home-mount.nix;
+          with-declarative-redis-and-secrets = ./with-declarative-redis-and-secrets.nix;
+          with-mysql-and-memcached = ./with-mysql-and-memcached.nix;
+          with-postgresql-and-redis = ./with-postgresql-and-redis.nix;
+          with-objectstore = ./with-objectstore.nix;
+          with-mail = ./with-mail.nix;
+        }
+    );
 in
 listToAttrs (
-  concatMap genTests [
+  map genTests [
     33
     34
     35
