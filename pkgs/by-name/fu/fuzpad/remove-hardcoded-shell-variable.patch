@@ -1,0 +1,12 @@
+diff --git a/bin/fuzpad b/bin/fuzpad
+index 8dd33a6..be90e34 100755
+--- a/bin/fuzpad
++++ b/bin/fuzpad
+@@ -1,7 +1,5 @@
+ #!/bin/bash
+ 
+-SHELL=/bin/bash # Set the SHELL environment variable, fixes POSIX-incompatible shells
+-
+ # Set where notes are stored
+ # By default, will store at $FUZPAD_DIR if the variable is already set
+ # else will try to store under the $XDG_DATA_HOME directory if it is set,
