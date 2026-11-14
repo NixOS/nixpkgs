@@ -10,7 +10,7 @@
   webdriver-manager,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "html2pdf4doc";
   version = "0.0.35";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "html2pdf4doc_python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xq2j39OyBoQPQGpMn7xQiRGq8sBkrqqL8mCjEzSdLAA=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Print HTML to PDF in the Browser – Python Package for HTML2PDF.js";
     homepage = "https://github.com/strictdoc-project/html2pdf4doc_python";
-    changelog = "https://github.com/strictdoc-project/html2pdf4doc_python/releases/tag/${src.tag}";
+    changelog = "https://github.com/strictdoc-project/html2pdf4doc_python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ puzzlewolf ];
   };
-}
+})
