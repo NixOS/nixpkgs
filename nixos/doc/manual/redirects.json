@@ -493,6 +493,30 @@
   "module-services-dump1090-fa-configuration": [
     "index.html#module-services-dump1090-fa-configuration"
   ],
+  "module-services-mitmdump": [
+    "index.html#module-services-mitmdump"
+  ],
+  "module-services-mitmdump-usage": [
+    "index.html#module-services-mitmdump-usage"
+  ],
+  "module-services-mitmdump-usage-filtered-logging": [
+    "index.html#module-services-mitmdump-usage-filtered-logging"
+  ],
+  "module-services-mitmdump-usage-https": [
+    "index.html#module-services-mitmdump-usage-https"
+  ],
+  "module-services-mitmdump-usage-increased-logging": [
+    "index.html#module-services-mitmdump-usage-increased-logging"
+  ],
+  "module-services-mitmdump-usage-open": [
+    "index.html#module-services-mitmdump-usage-open"
+  ],
+  "module-services-mitmdump-usage-remote-host": [
+    "index.html#module-services-mitmdump-usage-remote-host"
+  ],
+  "module-services-mitmdump-addons": [
+    "index.html#module-services-mitmdump-addons"
+  ],
   "preface": [
     "index.html#preface"
   ],
