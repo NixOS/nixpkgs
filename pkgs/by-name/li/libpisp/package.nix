@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpisp";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "libpisp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hzJA8hoOXf2Lswwz9t0StJ9JJP8ICWJlstzSsli4Yqs=";
+    hash = "sha256-hSgA1glObdeqXL2YO3qQhZirDnZW1Ol+D+37178zOxY=";
   };
 
   nativeBuildInputs = [
