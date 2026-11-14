@@ -68,6 +68,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "export GAMDRIVEDIR=\"$PWD\""
   ];
 
+  postFixup = ''
+    rm $out/${python3.sitePackages}/gam/cacerts.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/${python3.sitePackages}/gam/cacerts.pem
+  '';
+
   pythonImportsCheck = [ "gam" ];
 
   passthru.updateScript = nix-update-script { };
