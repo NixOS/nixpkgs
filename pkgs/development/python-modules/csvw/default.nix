@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "csvw";
-  version = "3.7.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cldf";
     repo = "csvw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HftvI4xJy/MX0WTIFNyZqNqIJIlHsWhhURpeQ1XqrT0=";
+    hash = "sha256-+HHYzKfSgcGL1rg4/mHq45nG1RmUK8ikzjOvKKhH6oQ=";
   };
 
   postPatch = ''
