@@ -1575,6 +1575,8 @@ self: super: with self; {
 
   attacut = callPackage ../development/python-modules/attacut { };
 
+  attn-gym = callPackage ../development/python-modules/attn-gym { };
+
   attr = callPackage ../development/python-modules/attr { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
