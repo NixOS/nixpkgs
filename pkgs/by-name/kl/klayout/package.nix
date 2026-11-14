@@ -89,8 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
       installBin $out/lib/klayout
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
+      mkdir -p $out/Applications $out/bin
       mv $out/lib/klayout.app $out/Applications/
+      ln -s $out/Applications/klayout.app/Contents/MacOS/klayout $out/bin/klayout
     '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

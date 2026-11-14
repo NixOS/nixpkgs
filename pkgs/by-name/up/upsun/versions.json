@@ -1,19 +1,19 @@
 {
-  "version": "5.15.2",
+  "version": "5.16.0",
   "darwin-amd64": {
-    "hash": "sha256-kx0Ff4WwwjXfyuP6A/dWjpxXHDrd3qTLdbbh8LeyIgk=",
-    "url": "https://github.com/upsun/cli/releases/download/v5.15.2/upsun_5.15.2_darwin_all.tar.gz"
+    "hash": "sha256-7RemoMLCYhw5mkidGof34qkEstYON+ZUblJNNZhC6ec=",
+    "url": "https://github.com/upsun/cli/releases/download/v5.16.0/upsun_5.16.0_darwin_all.tar.gz"
   },
   "darwin-arm64": {
-    "hash": "sha256-kx0Ff4WwwjXfyuP6A/dWjpxXHDrd3qTLdbbh8LeyIgk=",
-    "url": "https://github.com/upsun/cli/releases/download/v5.15.2/upsun_5.15.2_darwin_all.tar.gz"
+    "hash": "sha256-7RemoMLCYhw5mkidGof34qkEstYON+ZUblJNNZhC6ec=",
+    "url": "https://github.com/upsun/cli/releases/download/v5.16.0/upsun_5.16.0_darwin_all.tar.gz"
   },
   "linux-amd64": {
-    "hash": "sha256-gf9B+rwZCxqLtRUr5VFrjAotfCX4r5FE5WQtkmWjmSo=",
-    "url": "https://github.com/upsun/cli/releases/download/v5.15.2/upsun_5.15.2_linux_amd64.tar.gz"
+    "hash": "sha256-YOQ2Io0aNZbLmyiRsjxjwTKuLtlcs0RJHk2ZRihqzOc=",
+    "url": "https://github.com/upsun/cli/releases/download/v5.16.0/upsun_5.16.0_linux_amd64.tar.gz"
   },
   "linux-arm64": {
-    "hash": "sha256-U4hjtRS0sVNYXC48ocnzLJIv+8ZdNdezyg7A/LRW0uc=",
-    "url": "https://github.com/upsun/cli/releases/download/v5.15.2/upsun_5.15.2_linux_arm64.tar.gz"
+    "hash": "sha256-QQ1idK20WeOGdTz8cD1f8/elA3SN9UJJHnzwjw7Dpws=",
+    "url": "https://github.com/upsun/cli/releases/download/v5.16.0/upsun_5.16.0_linux_arm64.tar.gz"
   }
 }

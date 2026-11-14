@@ -87,6 +87,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "python-ipware"
     "redis"
     "regex"
+    "torch"
     "turbohtml"
     # requested by maintainer
     "imap-tools"

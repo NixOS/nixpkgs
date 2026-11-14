@@ -5,6 +5,7 @@
   dpkg,
   undmg,
   autoPatchelfHook,
+  patchelfUnstable,
   wrapGAppsHook3,
   alsa-lib,
   gtk3,
@@ -51,6 +52,7 @@ stdenv.mkDerivation {
     lib.optionals stdenv.hostPlatform.isLinux [
       dpkg
       autoPatchelfHook
+      patchelfUnstable
       wrapGAppsHook3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

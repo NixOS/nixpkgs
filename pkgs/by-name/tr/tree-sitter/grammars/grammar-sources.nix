@@ -3148,9 +3148,9 @@
   };
 
   tera = {
-    version = "0.1.2";
+    version = "0.1.3";
     url = "github:uncenter/tree-sitter-tera";
-    hash = "sha256-zjD92no4d2aGb4HDR0sbnvV/igwsUbO19QnSnT0QtTg=";
+    hash = "sha256-uBSVxsn36GZAaHDS5z35cScdhOPMFHpCBPtdl20SiAw=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -3239,9 +3239,9 @@
   };
 
   tql = {
-    version = "1.2.0";
+    version = "1.2.1";
     url = "github:tenzir/tree-sitter-tql";
-    hash = "sha256-lfrEKZSHFA4JYjDQ98bVTORPlgSV2veGcGwYbspaYaA=";
+    hash = "sha256-88P6PVKh011Nf1ht9L29cSPRCanlXwHP9r4JE+///Ck=";
     meta.license = lib.licenses.mit;
   };
 

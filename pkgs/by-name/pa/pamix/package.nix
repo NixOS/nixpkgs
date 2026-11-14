@@ -11,24 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pamix";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "patroclos";
     repo = "pamix";
     tag = finalAttrs.version;
-    hash = "sha256-7UPz6YpsnZHpW7sOJdJU2wQ5jyFPWTHxoknago0W+Ss=";
+    hash = "sha256-/57IFzfwmuGT9nBJVcYLk6sKG6Al6XKOlY42E3KdC6Q=";
   };
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace-fail "/etc" "$out/etc/xdg"
   '';
-
-  patches = [
-    # fix for CMake v4
-    # https://github.com/patroclos/PAmix/pull/83
-    ./cmake-v4.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -48,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/patroclos/PAmix/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "pamix";
   };
 })

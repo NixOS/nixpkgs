@@ -18,10 +18,11 @@ logger = logging.getLogger("build-gateware")
 
 BITSTREAMS = ["analyzer", "facedancer", "selftest"]
 
-# Pin the nextpnr placer seed so place-and-route is deterministic. Some
-# bitstreams (e.g. CynthionPlatformRev1D3/analyzer) are marginal on timing, and
-# without a fixed seed a build can non-deterministically miss the constraint.
-NEXTPNR_SEED = 0
+# Pinned nextpnr placer seeds, tried in order, so place-and-route stays
+# deterministic. Some bitstreams are marginal on timing and a toolchain update
+# can push one seed just below the constraint; the first seed that meets
+# timing wins.
+NEXTPNR_SEEDS = range(8)
 
 
 async def build_bitstream(
@@ -31,33 +32,40 @@ async def build_bitstream(
         log = logging.getLogger(f"build-gateware.{platform}.{bitstream}")
         log.info("build started")
 
-        env = os.environ.copy()
-        env["LUNA_PLATFORM"] = f"cynthion.gateware.platform:{platform}"
-        env["AMARANTH_nextpnr_opts"] = f"--seed {NEXTPNR_SEED}"
-
         out_dir = assets_dir / platform
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / f"{bitstream}.bit"
 
-        process = await asyncio.create_subprocess_exec(
-            sys.executable,
-            "-m",
-            f"cynthion.gateware.{bitstream}.top",
-            "--output",
-            str(out_path),
-            env=env,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.STDOUT,
-        )
+        for seed in NEXTPNR_SEEDS:
+            env = os.environ.copy()
+            env["LUNA_PLATFORM"] = f"cynthion.gateware.platform:{platform}"
+            env["AMARANTH_nextpnr_opts"] = f"--seed {seed}"
 
-        stdout, _ = await process.communicate()
-        log.info("\n%s", stdout.decode("utf-8", errors="replace"))
-
-        if process.returncode != 0:
-            raise RuntimeError(
-                f"{platform}/{bitstream} failed with exit code {process.returncode}"
+            process = await asyncio.create_subprocess_exec(
+                sys.executable,
+                "-m",
+                f"cynthion.gateware.{bitstream}.top",
+                "--output",
+                str(out_path),
+                env=env,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.STDOUT,
             )
-        log.info("build complete")
+
+            stdout, _ = await process.communicate()
+            output = stdout.decode("utf-8", errors="replace")
+            log.info("seed %d:\n%s", seed, output)
+
+            if process.returncode == 0:
+                log.info("build complete with seed %d", seed)
+                return
+            if "MHz (FAIL at" not in output:
+                break
+            log.warning("seed %d missed timing, retrying", seed)
+
+        raise RuntimeError(
+            f"{platform}/{bitstream} failed with exit code {process.returncode}"
+        )
 
 
 def collect_platforms() -> set[str]:

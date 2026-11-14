@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyrad";
-  version = "2.5.4";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyradius";
     repo = "pyrad";
     tag = finalAttrs.version;
-    hash = "sha256-94BjJRzCSJu/bVuYYKFlJkBcOVcQjmbDJ8QG+JwVpxY=";
+    hash = "sha256-Mubp4kZ98WTaDQlJiKKL48+fT5rqaHDbg6+MFLMqzb0=";
   };
 
   build-system = [ setuptools ];
@@ -46,6 +46,8 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyrad" ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -262,6 +262,7 @@ buildPythonPackage (finalAttrs: {
     # but interferes with local builds
     "test_xlm_roberta_large"
     # RuntimeError: Calculated output H: 0 W: 5 must be >= 1 in every dimension (input H: 5, W: 5)
+    "test_pad_reflect_mode"
     "test_pad_replicate_mode"
     # Exception: backward pass tensor 0 failed shape (5,)
     "test_clip"

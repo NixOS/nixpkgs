@@ -25,6 +25,10 @@ tcl.mkTclDerivation (finalAttrs: {
     tk
   ];
 
+  postPatch = ''
+    substituteInPlace nagelfar.tcl --replace-fail "exec tclsh" "exec $TCLSH"
+  '';
+
   installPhase = ''
     runHook preInstall
 

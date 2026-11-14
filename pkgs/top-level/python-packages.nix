@@ -2455,6 +2455,8 @@ self: super: with self; {
 
   biocframe = callPackage ../development/python-modules/biocframe { };
 
+  biocommons-seqrepo = callPackage ../development/python-modules/biocommons-seqrepo { };
+
   biocutils = callPackage ../development/python-modules/biocutils { };
 
   biom-format = callPackage ../development/python-modules/biom-format { };
@@ -2466,6 +2468,8 @@ self: super: with self; {
   biosppy = callPackage ../development/python-modules/biosppy { };
 
   biothings-client = callPackage ../development/python-modules/biothings-client { };
+
+  bioutils = callPackage ../development/python-modules/bioutils { };
 
   bip-utils = callPackage ../development/python-modules/bip-utils { };
 
@@ -2707,6 +2711,8 @@ self: super: with self; {
   breathe = callPackage ../development/python-modules/breathe { };
 
   breezy = callPackage ../development/python-modules/breezy { };
+
+  brei = callPackage ../development/python-modules/brei { };
 
   brelpy = callPackage ../development/python-modules/brelpy { };
 
@@ -3003,6 +3009,8 @@ self: super: with self; {
   cddlparser = callPackage ../development/python-modules/cddlparser { };
 
   cdxj-indexer = callPackage ../development/python-modules/cdxj-indexer { };
+
+  cec = callPackage ../development/python-modules/cec { };
 
   cel-python = callPackage ../development/python-modules/cel-python { };
 
@@ -3364,6 +3372,8 @@ self: super: with self; {
   cmd2 = callPackage ../development/python-modules/cmd2 { };
 
   cmd2-ext-test = callPackage ../development/python-modules/cmd2-ext-test { };
+
+  cmd2_3 = callPackage ../development/python-modules/cmd2_3 { };
 
   cmd2_4 = callPackage ../development/python-modules/cmd2_4 { };
 
@@ -5489,6 +5499,8 @@ self: super: with self; {
 
   edalize = callPackage ../development/python-modules/edalize { };
 
+  edgartools = callPackage ../development/python-modules/edgartools { };
+
   edge-tts = callPackage ../development/python-modules/edge-tts { };
 
   editables = callPackage ../development/python-modules/editables { };
@@ -6692,6 +6704,8 @@ self: super: with self; {
 
   g2pkk = callPackage ../development/python-modules/g2pkk { };
 
+  ga4gh = callPackage ../development/python-modules/ga4gh { };
+
   galario = toPythonModule (
     pkgs.galario.override {
       enablePython = true;
@@ -7739,6 +7753,8 @@ self: super: with self; {
 
   hg-git = callPackage ../development/python-modules/hg-git { };
 
+  hgvs = callPackage ../development/python-modules/hgvs { };
+
   hibpwned = callPackage ../development/python-modules/hibpwned { };
 
   hickle = callPackage ../development/python-modules/hickle { };
@@ -7962,6 +7978,8 @@ self: super: with self; {
   httpx2 = callPackage ../development/python-modules/httpx2 { };
 
   httpx2-pytest = callPackage ../development/python-modules/httpx2-pytest { };
+
+  httpxthrottlecache = callPackage ../development/python-modules/httpxthrottlecache { };
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
@@ -13211,6 +13229,10 @@ self: super: with self; {
 
   ourgroceries = callPackage ../development/python-modules/ourgroceries { };
 
+  ouster-sdk = callPackage ../development/python-modules/ouster-sdk {
+    inherit (pkgs) ouster-sdk;
+  };
+
   outcome = callPackage ../development/python-modules/outcome { };
 
   outdated = callPackage ../development/python-modules/outdated { };
@@ -15951,6 +15973,8 @@ self: super: with self; {
 
   pyosf = callPackage ../development/python-modules/pyosf { };
 
+  pyosmocom = callPackage ../development/python-modules/pyosmocom { };
+
   pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
 
   pyotb = callPackage ../development/python-modules/pyotb { };
@@ -18175,6 +18199,8 @@ self: super: with self; {
 
   refery = callPackage ../development/python-modules/refery { };
 
+  refgen-detector = callPackage ../development/python-modules/refgen-detector { };
+
   reflex = callPackage ../development/python-modules/reflex { };
 
   reflex-chakra = callPackage ../development/python-modules/reflex-chakra { };
@@ -18242,6 +18268,8 @@ self: super: with self; {
   repeated-test = callPackage ../development/python-modules/repeated-test { };
 
   repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
+
+  repl-session = callPackage ../development/python-modules/repl-session { };
 
   replicate = callPackage ../development/python-modules/replicate { };
 
@@ -18542,7 +18570,7 @@ self: super: with self; {
 
   rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
 
-  rocksdict = callPackage ../development/python-modules/rocksdict { };
+  rocksdict = callPackage ../development/python-modules/rocksdict { inherit (pkgs) zstd; };
 
   roku = callPackage ../development/python-modules/roku { };
 
@@ -19507,6 +19535,8 @@ self: super: with self; {
 
   smpp-pdu = callPackage ../development/python-modules/smpp-pdu { };
 
+  smpp-twisted3 = callPackage ../development/python-modules/smpp-twisted3 { };
+
   smpplib = callPackage ../development/python-modules/smpplib { };
 
   smtpdfix = callPackage ../development/python-modules/smtpdfix { };
@@ -19693,7 +19723,7 @@ self: super: with self; {
 
   soupsieve = callPackage ../development/python-modules/soupsieve { };
 
-  sourmash = callPackage ../development/python-modules/sourmash { };
+  sourmash = callPackage ../development/python-modules/sourmash { inherit (pkgs) zstd; };
 
   soxr = callPackage ../development/python-modules/soxr { libsoxr = pkgs.soxr; };
 
@@ -20653,7 +20683,7 @@ self: super: with self; {
 
   tblib = callPackage ../development/python-modules/tblib { };
 
-  tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
+  tblite = callPackage ../by-name/tb/tblite/python.nix {
     inherit (pkgs)
       tblite
       meson
@@ -20716,7 +20746,7 @@ self: super: with self; {
 
   tempora = callPackage ../development/python-modules/tempora { };
 
-  temporalio = callPackage ../development/python-modules/temporalio { };
+  temporalio = callPackage ../development/python-modules/temporalio { inherit (pkgs) zstd; };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 

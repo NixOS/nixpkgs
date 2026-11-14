@@ -12,18 +12,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "meta";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-Uid4IpymX9+3TtLlLjl1B1nqAczgfgjphe0cuk0neVE=";
+    hash = "sha256-hzHMT9xZnBT8tYt7JeJd4dglCKmOc/2sfJmPHI2o4uU=";
   };
 
   buildAndTestSubdir = "pyrefly";
 
-  cargoHash = "sha256-snm1x7OKC5Sz12C8MyAf7ph0O01ghFWWlk6lpHujR7c=";
+  cargoHash = "sha256-PQ4O4gBDXouiKaBgH7RFrWSdM9gcBFBGJxcSA+n/BwI=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -45,6 +45,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export TMPDIR=$(mktemp -d)
   '';
 
+  # This test can deadlock
+  checkFlags = [
+    "--skip=test::lsp::lsp_interaction::file_watcher::test_incremental_pattern_addition"
+  ];
+
   # avoid autoupdates for *-dev.* tags
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=^([\\d.]+)$" ];
@@ -59,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       cybardev
       QuiNzX
+      evanwporter
     ];
   };
 })

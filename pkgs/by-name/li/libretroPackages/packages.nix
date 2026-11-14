@@ -169,6 +169,8 @@ lib.makeScope newScope (self: {
 
   same_cdi = self.callPackage ./cores/same_cdi.nix { }; # the name is not a typo
 
+  sameduck = self.callPackage ./cores/sameduck.nix { };
+
   sameboy = self.callPackage ./cores/sameboy.nix { };
 
   scummvm = self.callPackage ./cores/scummvm.nix { };
@@ -230,6 +232,8 @@ lib.makeScope newScope (self: {
   vice-xvic = self.callPackage ./cores/vice.nix { type = "xvic"; };
 
   virtualjaguar = self.callPackage ./cores/virtualjaguar.nix { };
+
+  x1 = self.callPackage ./cores/x1.nix { };
 
   yabause = self.callPackage ./cores/yabause.nix { };
 })
