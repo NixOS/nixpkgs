@@ -23522,6 +23522,13 @@
     githubId = 149434768;
     name = "Ed Thomas";
   };
+  pixelcmnd = {
+    name = "Daniil Svetlichnyi";
+    email = "pixelcmnd+nixpkgs@gmail.com";
+    github = "pixelcmnd";
+    githubId = 214547027;
+    matrix = "@pixelcmnd:matrix.org";
+  };
   pixelsergey = {
     email = "sergey.ichtchenko@gmail.com";
     github = "PixelSergey";
