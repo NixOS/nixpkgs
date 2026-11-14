@@ -33,6 +33,8 @@ let
       patches = [
         # https://github.com/deluge-torrent/deluge/pull/514
         ./replace-pyopenssl-certificate-generation.patch
+        # https://github.com/deluge-torrent/deluge/pull/501
+        ./use-importlib-for-ui-entrypoints.patch
       ];
 
       propagatedBuildInputs =
