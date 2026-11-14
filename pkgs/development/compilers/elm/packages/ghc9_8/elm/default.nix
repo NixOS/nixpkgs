@@ -2,10 +2,12 @@
   mkDerivation,
   ansi-terminal,
   ansi-wl-pprint,
+  array,
   base,
   binary,
   bytestring,
   containers,
+  crypton,
   directory,
   edit-distance,
   fetchgit,
@@ -36,11 +38,11 @@
 }:
 mkDerivation {
   pname = "elm";
-  version = "0.19.2";
+  version = "0.19.3";
   src = fetchgit {
     url = "https://github.com/elm/compiler";
-    sha256 = "0npadfvk5gyiifq4095yg7k8cr3hb28drdh07b77nxzwsqanp4s5";
-    rev = "48befde196cbcbdf459114e36c02b52c49b58050";
+    sha256 = "1phbk2qhki85r3wzs684s7xj2s2scqh3b9phdacgkd3r3bxd5ymi";
+    rev = "fd5a6d68f8e3a85efee13143ff4a73edae6a761b";
     fetchSubmodules = true;
   };
   patches = [ ./ansi-terminal-1.1.patch ];
@@ -49,10 +51,12 @@ mkDerivation {
   executableHaskellDepends = [
     ansi-terminal
     ansi-wl-pprint
+    array
     base
     binary
     bytestring
     containers
+    crypton
     directory
     edit-distance
     filelock
