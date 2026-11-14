@@ -38,7 +38,8 @@
   gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
   buildDocs ? false, # Needs internet because of rocm-docs-core
   buildTests ? false,
-  withComposableKernel ? true,
+  # composable_kernel only works with gfx9* targets
+  withComposableKernel ? !composable_kernel.meta.broken,
 }:
 
 let
