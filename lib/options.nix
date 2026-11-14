@@ -10,6 +10,7 @@ let
     concatLists
     concatMap
     concatMapStringsSep
+    elem
     filter
     foldl'
     head
@@ -29,20 +30,30 @@ let
     ;
   inherit (lib.attrsets)
     attrByPath
+    attrNames
+    attrValues
     catAttrs
+    foldlAttrs
     optionalAttrs
     showAttrPath
     ;
   inherit (lib.strings)
     concatMapStrings
     concatStringsSep
+    hasInfix
+    hasPrefix
+    isStringLike
+    replaceStrings
+    toLower
     ;
   inherit (lib.types)
     mkOptionType
     ;
   inherit (lib.lists)
     last
+    remove
     toList
+    unique
     ;
   prioritySuggestion = ''
     Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
@@ -564,66 +575,459 @@ rec {
   */
   getFiles = catAttrs "file";
 
+  /**
+    Transform a raw module option set into a base documentation attribute set.
+
+    # Inputs
+
+    `opt`
+
+    : An evaluated module option attribute set (e.g. from `evalModules`).
+
+    # Type
+
+    ```
+    optionToDocItem :: Option -> AttrSet
+    ```
+  */
+  optionToDocItem =
+    opt:
+    let
+      name = showOption opt.loc;
+      visible = opt.visible or true;
+    in
+    {
+      description = opt.description or null;
+      declarations = filter (x: x != unknownModule) opt.declarations;
+      internal = opt.internal or false;
+      visible = if isBool visible then visible else visible == "shallow";
+      readOnly = opt.readOnly or false;
+      type = opt.type.description or "unspecified";
+    }
+    // optionalAttrs (opt ? example) {
+      example = lib.addErrorContext "while evaluating the example of option `${name}`" (
+        renderOptionValue opt.example
+      );
+    }
+    //
+      optionalAttrs
+        (
+          opt ? defaultText
+          || opt ? default
+          # Render emptyValue-based defaults, but only for types without
+          # submodules (e.g. types.submodule). Submodules may evaluate to
+          # error without user defs, and their sub-options are documented
+          # individually, so best to skip those here.
+          || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
+        )
+        {
+          default =
+            lib.addErrorContext
+              "while evaluating the ${
+                if opt ? defaultText then "defaultText" else "default value"
+              } of option `${name}`"
+              (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+        }
+    // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+      inherit (opt) relatedPackages;
+    };
+
+  /**
+    Generic traversal algebra over a module option attribute set hierarchy.
+
+    # Inputs
+
+    `handlers`
+
+    : An attribute set containing optional callback handlers (`onOption`, `onAttrSet`, `empty`).
+
+    # Type
+
+    ```
+    foldOptionSet :: AttrSet -> (OptionSet | Option) -> Any
+    ```
+  */
+  foldOptionSet =
+    {
+      onOption ?
+        doc: subDocs: opt:
+        empty,
+      onAttrSet ? recurse: set: empty,
+      empty ? { },
+      ...
+    }:
+    let
+      recurse =
+        tree:
+        if isOption tree then
+          let
+            v = tree.visible or true;
+            subVisible = if isBool v then v else v == "transparent";
+            ss = tree.type.getSubOptions tree.loc;
+            subDocs = if subVisible && ss != { } then recurse ss else empty;
+          in
+          onOption (optionToDocItem tree) subDocs tree
+        else
+          onAttrSet recurse tree;
+    in
+    recurse;
+
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [ ];
 
   optionAttrSetToDocList' =
     _: options:
-    concatMap (
-      opt:
-      let
-        name = showOption opt.loc;
-        visible = opt.visible or true;
-        docOption = {
-          loc = opt.loc;
-          inherit name;
-          description = opt.description or null;
-          declarations = filter (x: x != unknownModule) opt.declarations;
-          internal = opt.internal or false;
-          visible = if isBool visible then visible else visible == "shallow";
-          readOnly = opt.readOnly or false;
-          type = opt.type.description or "unspecified";
-        }
-        // optionalAttrs (opt ? example) {
-          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-            renderOptionValue opt.example
-          );
-        }
-        //
-          optionalAttrs
-            (
-              opt ? defaultText
-              || opt ? default
-              # Render emptyValue-based defaults, but only for types without
-              # submodules (e.g. types.submodule). Submodules may evaluate to
-              # error without user defs, and their sub-options are documented
-              # individually, so best to skip those here.
-              || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
-            )
+    foldOptionSet {
+      onOption =
+        doc: subDocs: opt:
+        [
+          (
             {
-              default =
-                builtins.addErrorContext
-                  "while evaluating the ${
-                    if opt ? defaultText then "defaultText" else "default value"
-                  } of option `${name}`"
-                  (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+              inherit (opt) loc;
+              name = showOption opt.loc;
             }
-        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-          inherit (opt) relatedPackages;
+            // doc
+          )
+        ]
+        ++ subDocs;
+      onAttrSet = recurse: set: concatMap recurse (attrValues set);
+      empty = [ ];
+    } options;
+
+  isJsonValue =
+    v:
+    let
+      t = builtins.typeOf v;
+    in
+    elem t [
+      "null"
+      "bool"
+      "int"
+      "float"
+      "string"
+    ]
+    || (t == "list" && all isJsonValue v)
+    || (
+      t == "set" && !isDerivation v && !isStringLike v && !v ? _type && all isJsonValue (attrValues v)
+    );
+
+  flattenAnyOf = list: unique (concatMap (s: if s ? anyOf then flattenAnyOf s.anyOf else [ s ]) list);
+
+  escapeJsonPointer = replaceStrings [ "~" "/" ] [ "~0" "~1" ];
+
+  typeToSchema' =
+    seen: type: subDocs:
+    let
+      name = toLower (type.name or "");
+      desc = type.description or (type.name or "");
+      nested = type.nestedTypes or { };
+      mkRef = desc: {
+        schema = {
+          "$ref" = "#/$defs/${escapeJsonPointer desc}";
+        };
+      };
+    in
+    if desc != "" && elem type seen then
+      (mkRef desc)
+      // {
+        referenced = [ desc ];
+        defs = { };
+      }
+    else
+      let
+        seen' = seen ++ [ type ];
+        elemRes =
+          if nested ? elemType then
+            typeToSchema' seen' nested.elemType subDocs
+          else
+            {
+              schema = { };
+              referenced = [ ];
+              defs = { };
+            };
+
+        mkLeaf = schema: {
+          inherit schema;
+          referenced = [ ];
+          defs = { };
         };
 
-        subOptions =
-          let
-            ss = opt.type.getSubOptions opt.loc;
-          in
-          if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
-        subOptionsVisible = if isBool visible then visible else visible == "transparent";
+        combineAnyOf = results: {
+          schema = {
+            anyOf = flattenAnyOf (map (r: r.schema) results);
+          };
+          referenced = concatMap (r: r.referenced) results;
+          defs = foldl' (acc: r: acc // r.defs) { } results;
+        };
+
+        base =
+          if hasInfix "int" name then
+            mkLeaf {
+              type = "integer";
+            }
+          else if hasPrefix "bool" name then
+            mkLeaf {
+              type = "boolean";
+            }
+          else if hasInfix "float" name || hasInfix "number" name then
+            mkLeaf {
+              type = "number";
+            }
+          else if
+            hasInfix "str" name
+            || elem name [
+              "lines"
+              "path"
+              "package"
+            ]
+          then
+            mkLeaf {
+              type = "string";
+            }
+          else if name == "enum" then
+            let
+              vals = type.functor.payload.values or [ ];
+            in
+            mkLeaf (
+              {
+                enum = vals;
+              }
+              // optionalAttrs (all isString vals) {
+                type = "string";
+              }
+              // optionalAttrs (all isInt vals) {
+                type = "integer";
+              }
+              // optionalAttrs (all isBool vals) {
+                type = "boolean";
+              }
+            )
+          else if name == "nullor" then
+            combineAnyOf [
+              (mkLeaf { type = "null"; })
+              elemRes
+            ]
+          else if name == "either" then
+            combineAnyOf [
+              (typeToSchema' seen' nested.left { })
+              (typeToSchema' seen' nested.right { })
+            ]
+          else if name == "coercedto" then
+            combineAnyOf [
+              (typeToSchema' seen' nested.coercedType { })
+              (typeToSchema' seen' nested.finalType subDocs)
+            ]
+          else if name == "listof" then
+            elemRes
+            // {
+              schema = {
+                type = "array";
+                items = elemRes.schema;
+              };
+            }
+          else if hasInfix "attrsof" name then
+            elemRes
+            // {
+              schema = {
+                type = "object";
+                additionalProperties = elemRes.schema;
+              };
+            }
+          else if name == "attrs" then
+            mkLeaf {
+              type = "object";
+              additionalProperties = true;
+            }
+          else if name == "submodule" then
+            let
+              ffRes =
+                if nested ? freeformType && nested.freeformType.nestedTypes ? elemType then
+                  typeToSchema' seen' nested.freeformType.nestedTypes.elemType { }
+                else
+                  null;
+              freeform =
+                if !nested ? freeformType then
+                  false
+                else if ffRes != null then
+                  ffRes.schema
+                else
+                  true;
+            in
+            {
+              schema = (subDocs.schema or subDocs) // {
+                additionalProperties = freeform;
+              };
+              defs = (subDocs.defs or { }) // (if ffRes != null then ffRes.defs else { });
+              referenced = (subDocs.referenced or [ ]) ++ (if ffRes != null then ffRes.referenced else [ ]);
+            }
+          else if nested ? elemType then
+            elemRes
+          else
+            {
+              schema = subDocs.schema or subDocs;
+              defs = subDocs.defs or { };
+              referenced = subDocs.referenced or [ ];
+            };
+
+        isReferenced = desc != "" && elem desc base.referenced;
       in
-      # To find infinite recursion in NixOS option docs:
-      # builtins.trace opt.loc
-      [ docOption ] ++ optionals subOptionsVisible subOptions
-    ) (collect isOption options);
+      if isReferenced then
+        (mkRef desc)
+        // {
+          referenced = remove desc base.referenced;
+          defs = base.defs // {
+            ${desc} = base.schema;
+          };
+        }
+      else
+        base;
+
+  typeToSchema = typeToSchema' [ ];
+
+  /**
+    Generate documentation template as a JSON Schema compatible attribute set preserving module option structure.
+
+    # Inputs
+
+    `options`
+
+    : Evaluated module options attribute set (e.g. `(evalModules { ... }).options`).
+
+    # Type
+
+    ```
+    optionToDoc :: (OptionSet | Option) -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## Generate option documentation
+
+    ```nix
+    optionToDoc (evalModules { modules = [ module ]; }).options
+    => {
+      "$schema" = "https://json-schema.org/draft/2020-12/schema";
+      "$defs" = { };
+      type = "object";
+      properties = {
+        boot = {
+          type = "object";
+          properties = {
+            enable = {
+              default = false;
+              defaultText = { _type = "literalExpression"; text = "false"; };
+              description = "Enable boot";
+              nixType = "boolean";
+              readOnly = false;
+              type = "boolean";
+            };
+          };
+        };
+      };
+    }
+    ```
+    :::
+  */
+  optionToDoc = optionToDoc' { };
+
+  /**
+    Generate documentation template as a JSON Schema compatible attribute set preserving module option structure,
+    with configurable schema generation parameters.
+
+    # Inputs
+
+    `mode` (optional, default `"input"`)
+
+    : When `"input"`, only options without defaults are marked in `required`.
+      When `"output"`, all evaluated options are marked in `required`.
+
+    `options`
+
+    : Evaluated module options attribute set (e.g. `(evalModules { ... }).options`).
+
+    # Type
+
+    ```
+    optionToDoc' :: { mode ? String } -> (OptionSet | Option) -> AttrSet
+    ```
+  */
+  optionToDoc' =
+    {
+      mode ? "input",
+    }:
+    assert elem mode [
+      "input"
+      "output"
+    ];
+    options:
+    let
+      res = foldOptionSet {
+        onOption =
+          doc: subDocs: opt:
+          let
+            tRes = typeToSchema' [ ] opt.type subDocs;
+            schema =
+              removeAttrs doc (
+                [
+                  "type"
+                  "default"
+                ]
+                ++ optional (doc.description == null) "description"
+              )
+              // tRes.schema
+              // optionalAttrs (opt ? default && isJsonValue opt.default) { default = opt.default; }
+              // optionalAttrs (doc ? default) { defaultText = doc.default; }
+              // {
+                nixType = doc.type;
+              };
+          in
+          {
+            inherit schema;
+            inherit (tRes) defs;
+          };
+        onAttrSet =
+          recurse: set:
+          let
+            clean = removeAttrs set [
+              "_module"
+              "_freeformOptions"
+            ];
+            childResults = mapAttrs (_: recurse) clean;
+            req = filter (
+              n:
+              let
+                opt = clean.${n};
+              in
+              isOption opt && (if mode == "output" then true else !(opt ? default || opt ? defaultText))
+            ) (attrNames clean);
+            properties = mapAttrs (_: r: r.schema) childResults;
+            defs = foldlAttrs (
+              acc: _: r:
+              acc // r.defs
+            ) { } childResults;
+          in
+          {
+            schema = {
+              type = "object";
+              inherit properties;
+            }
+            // optionalAttrs (req != [ ]) {
+              required = req;
+            };
+            inherit defs;
+          };
+        empty = {
+          schema = { };
+          defs = { };
+        };
+      } options;
+    in
+    {
+      "$schema" = "https://json-schema.org/draft/2020-12/schema";
+      "$defs" = res.defs;
+    }
+    // res.schema;
 
   /**
     This function recursively removes all derivation attributes from
