@@ -5,17 +5,18 @@
   python3,
   cmake,
   ninja,
-  libsForQt5,
+  qt6,
   SDL2,
   fox_1_6,
   replaceVars,
   llvmPackages,
-  dfu-util,
   gtest,
   miniz,
   yaml-cpp,
+  imgui,
   udevCheckHook,
   applyPatches,
+  callPackage,
   # List of targets to build simulators for
   targetsToBuild ? import ./targets.nix,
 }:
@@ -25,9 +26,11 @@ let
   maxlibqt = fetchFromGitHub {
     owner = "edgetx";
     repo = "maxLibQt";
-    rev = "ac1988ffd005cd15a8449b92150ce6c08574a4f1";
-    hash = "sha256-u8e4qseU0+BJyZkV0JE4sUiXaFeIYvadkMTGXXiE2Kg=";
+    rev = "7e433da60d3f2e975d46afc91804a88029cd1b78";
+    hash = "sha256-1Pl8TVBNLE97XJcP68A0+zVCvBlXt+mPFxjM9YbF8CU=";
   };
+
+  rsDfu = callPackage ./rs-dfu.nix { };
 
   pythonEnv = python3.withPackages (
     pyPkgs: with pyPkgs; [
@@ -47,29 +50,29 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edgetx";
-  version = "2.11.5";
+  version = "2.12.4";
 
   src = fetchFromGitHub {
     owner = "EdgeTX";
     repo = "edgetx";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-M0NiHvYZD1Qw2VYRV+TKMI0qTfF5MBdTxsBZRMMrnnk=";
+    hash = "sha256-0YqjhUE1QoFXikvBocgqzqzk+oiUh5zzGt3EP6rDKVI=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pythonEnv
-    libsForQt5.qttools
-    libsForQt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
     udevCheckHook
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtmultimedia
-    libsForQt5.qtserialport
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtserialport
     SDL2
     fox_1_6
   ];
@@ -89,8 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    sed -i companion/src/burnconfigdialog.cpp \
-      -e 's|/usr/.*bin/dfu-util|${dfu-util}/bin/dfu-util|'
     patchShebangs companion/util radio/util
   '';
 
@@ -101,23 +102,23 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MINIZ" "${miniz.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-cppSrc}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RSDFU" "${rsDfu}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui.src}")
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     # Custom library https://github.com/edgetx/maxLibQt.
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MAXLIBQT" "${maxlibqt}")
-    (lib.cmakeFeature "DFU_UTIL_ROOT_DIR" "${lib.getBin dfu-util}/bin")
     # Superbuild machinery is only getting in the way.
     (lib.cmakeBool "EdgeTX_SUPERBUILD" false)
-    # COMMON_OPTIONS from tools/build-companion.sh.
-    (lib.cmakeBool "GVARS" true)
-    (lib.cmakeBool "HELI" true)
-    (lib.cmakeBool "LUA" true)
     # Build companion and not the firmware.
     (lib.cmakeBool "NATIVE_BUILD" true)
     # file RPATH_CHANGE could not write new RPATH.
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+    # Upstream doesn't handle absolute BINDIR paths...
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
   ];
 
   env = {
-    EDGETX_VERSION_SUFFIX = "nixpkgs";
+    EDGETX_VERSION_TAG = "${finalAttrs.version}";
   };
 
   dontUseCmakeConfigure = true;
@@ -164,6 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninjaBuildPhase
 
     runHook postBuild
+  '';
+
+  postInstall = ''
+    # What in god's name is upstreaming doing?
+    rm -rf $out/lib/libcrypto.* $out/lib/libssl.*
   '';
 
   meta = {
