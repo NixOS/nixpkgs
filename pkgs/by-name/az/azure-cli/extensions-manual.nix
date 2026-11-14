@@ -222,6 +222,7 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
     hash = "sha256-Br/cfKFTkqcjGRCXAbHqfwTe4g49F3zbj/tzp/O+giI=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
+    pythonRelaxDeps = [ "kubernetes" ];
     propagatedBuildInputs = with python3Packages; [
       docker
       pycomposefile
