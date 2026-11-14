@@ -50,7 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-boost=${boost.dev}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
+  # Uses C++ features removed from libc++ in C++17 (auto_ptr, binders).
+  # clang rejects -std=c++14 on C sources, so Darwin passes it to C++ only.
+  env =
+    if stdenv.hostPlatform.isDarwin then
+      { CXXFLAGS = "-std=c++14"; }
+    else
+      { NIX_CFLAGS_COMPILE = "-std=c++14"; };
 
   enableParallelBuilding = true;
 
