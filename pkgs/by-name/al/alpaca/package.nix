@@ -88,6 +88,7 @@ pythonPackages.buildPythonApplication rec {
       opencv4
       zstandard
       pythonPackages.ollama
+      pandas
     ]
     ++ markitdown.optional-dependencies.pptx
     ++ markitdown.optional-dependencies.docx
