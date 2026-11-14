@@ -19,18 +19,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agent-browser";
-  version = "0.41.1";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/YPVYdRNhOkW09WF63xhSwELNzv/D1cOvQep5taIlVQ=";
+    hash = "sha256-+hmbSIgTqs5uZW7j0hAhz/9Fd24Np80DfoccqN4fGF4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-LSBCYZtGjWmQRE7AXRpxEwyDZySEkRsPdTZbH8JIdzc=";
+  cargoHash = "sha256-MKTL/1k3gvGB0ylg4iAi2WyZ1sNrEpBJVtvjc7J6maA=";
 
   # Place the pre-built dashboard where RustEmbed expects it
   postUnpack = ''
@@ -60,8 +60,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Some tests use a shared state that makes them flaky when run concurrently.
   dontUseCargoParallelTests = true;
 
+  checkFlags = [
+    # Launches Chrome.
+    "--skip=a_rejected_write_with_stripped_credentials_still_reaches_the_replay"
+  ]
   # https://github.com/vercel-labs/agent-browser/blob/v0.39.1/cli/src/install.rs#L401-L411
-  checkFlags = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     "--skip=install_rejects_an_invalid_explicit_ca_before_network_or_daemon"
   ];
 
@@ -95,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         inherit pnpm;
         pnpmWorkspaces = [ "dashboard" ];
         fetcherVersion = 4;
-        hash = "sha256-9PXr76pm/3QR25tSxP0uqV462UGraSbhCRigpg2kbww=";
+        hash = "sha256-gSxTBHR2Fcaq/hUSiOMK5W+6+fLw/D2sCRurXEP8ApI=";
       };
 
       pnpmWorkspaces = [ "dashboard" ];
