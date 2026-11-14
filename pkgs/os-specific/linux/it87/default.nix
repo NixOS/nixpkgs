@@ -31,7 +31,15 @@ stdenv.mkDerivation rec {
   makeFlags = kernelModuleMakeFlags ++ [
     "TARGET=${kernel.modDirVersion}"
     "KERNEL_MODULES=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
-    "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=updates"
+  ];
+
+  installTargets = [ "modules_install" ];
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
   ];
 
   meta = {
