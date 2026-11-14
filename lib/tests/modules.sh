@@ -282,6 +282,10 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' 
 checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
 checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
 
+# Check that context is printed when mkIf/mkMerge throw
+checkConfigError 'while evaluating definitions from `.*/define-enable-mkIf-throw.nix' config.enable ./declare-enable.nix ./define-enable-mkIf-throw.nix
+checkConfigError 'while evaluating definitions from `.*/define-enable-mkMerge-throw.nix' config.enable ./declare-enable.nix ./define-enable-mkMerge-throw.nix
+
 # Check boolByOr type.
 checkConfigOutput '^false$' config.value.falseFalse ./boolByOr.nix
 checkConfigOutput '^true$' config.value.trueFalse ./boolByOr.nix
