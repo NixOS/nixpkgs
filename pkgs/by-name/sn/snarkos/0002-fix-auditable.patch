@@ -1,0 +1,118 @@
+cargo-auditable evaluates feature names for optional dependencies while
+collecting dependency metadata. snarkOS only exposed snarkos-node-metrics
+through `dep:` entries inside the `metrics` feature, so there was no public
+`snarkos-node-metrics` feature for cargo-auditable to request.
+
+Add explicit aliases that forward `snarkos-node-metrics` to `metrics`.
+Adapted from NixOS/nixpkgs#378092.
+
+diff --git i/cli/Cargo.toml w/cli/Cargo.toml
+--- i/cli/Cargo.toml
++++ w/cli/Cargo.toml
+@@ -27,6 +27,7 @@ locktick = [
+   "snarkvm/locktick"
+ ]
+ metrics = [ "dep:snarkos-node-metrics", "snarkos-node/metrics" ]
++snarkos-node-metrics = [ "metrics" ]
+ cuda = [
+   "snarkvm/cuda",
+   "snarkos-account/cuda",
+diff --git i/node/bft/Cargo.toml w/node/bft/Cargo.toml
+--- i/node/bft/Cargo.toml
++++ w/node/bft/Cargo.toml
+@@ -34,6 +34,7 @@ metrics = [
+   "snarkos-node-bft-ledger-service/metrics",
+   "snarkos-node-network/metrics"
+ ]
++snarkos-node-metrics = [ "metrics" ]
+ cuda = [
+   "snarkvm/cuda",
+   "snarkos-account/cuda",
+diff --git i/node/bft/ledger-service/Cargo.toml w/node/bft/ledger-service/Cargo.toml
+--- i/node/bft/ledger-service/Cargo.toml
++++ w/node/bft/ledger-service/Cargo.toml
+@@ -26,6 +26,7 @@ locktick = [
+   "snarkos-utilities/locktick"
+ ]
+ metrics = [ "dep:snarkos-node-metrics", "snarkvm/metrics" ]
++snarkos-node-metrics = [ "metrics" ]
+ mock = [ "parking_lot", "tracing" ]
+ prover = [ ]
+ cuda = [ "snarkvm/cuda" ]
+diff --git i/node/cdn/Cargo.toml w/node/cdn/Cargo.toml
+--- i/node/cdn/Cargo.toml
++++ w/node/cdn/Cargo.toml
+@@ -30,6 +30,7 @@ locktick = [
+ ]
+ cuda = [ "snarkvm/cuda" ]
+ metrics = [ "dep:snarkos-node-metrics" ]
++snarkos-node-metrics = [ "metrics" ]
+ 
+ [dependencies.anyhow]
+ workspace = true
+diff --git i/node/consensus/Cargo.toml w/node/consensus/Cargo.toml
+--- i/node/consensus/Cargo.toml
++++ w/node/consensus/Cargo.toml
+@@ -27,6 +27,7 @@ locktick = [
+   "snarkvm/locktick"
+ ]
+ metrics = [ "dep:snarkos-node-metrics", "snarkos-node-bft/metrics" ]
++snarkos-node-metrics = [ "metrics" ]
+ cuda = [ "snarkvm/cuda", "snarkos-account/cuda", "snarkos-node-bft-ledger-service/cuda" ]
+ serial = [ 
+   "snarkos-node-bft/serial",
+diff --git i/node/Cargo.toml w/node/Cargo.toml
+--- i/node/Cargo.toml
++++ w/node/Cargo.toml
+@@ -42,6 +42,7 @@ metrics = [
+   "snarkvm/metrics",
+   "snarkvm/rocks"
+ ]
++snarkos-node-metrics = [ "metrics" ]
+ # The compile-time history features no longer select snarkVM code.
+ # The names stay so existing build commands keep resolving.
+ history = []
+diff --git i/node/rest/Cargo.toml w/node/rest/Cargo.toml
+--- i/node/rest/Cargo.toml
++++ w/node/rest/Cargo.toml
+@@ -23,6 +23,7 @@ default = [ ]
+ history = []
+ history-staking-rewards = []
+ metrics = [ "dep:snarkos-node-metrics", "snarkos-node-consensus/metrics" ]
++snarkos-node-metrics = [ "metrics" ]
+ cuda = [ "snarkvm/cuda", "snarkos-node-consensus/cuda", "snarkos-node-router/cuda" ]
+ locktick = [
+   "dep:locktick",
+diff --git i/node/router/Cargo.toml w/node/router/Cargo.toml
+--- i/node/router/Cargo.toml
++++ w/node/router/Cargo.toml
+@@ -28,6 +28,7 @@ locktick = [
+   "snarkos-node-network/locktick"
+ ]
+ metrics = [ "dep:snarkos-node-metrics", "snarkos-node-network/metrics" ]
++snarkos-node-metrics = [ "metrics" ]
+ cuda = [ "snarkvm/cuda", "snarkos-account/cuda" ]
+ serial = [ "snarkos-node-bft-ledger-service/serial" ]
+ 
+diff --git i/node/sync/Cargo.toml w/node/sync/Cargo.toml
+--- i/node/sync/Cargo.toml
++++ w/node/sync/Cargo.toml
+@@ -25,6 +25,7 @@ locktick = [
+ ]
+ serial = ["snarkos-node-bft-ledger-service/serial"]
+ metrics = [ "dep:snarkos-node-metrics", "snarkos-node-network/metrics" ]
++snarkos-node-metrics = [ "metrics" ]
+ cuda = [ "snarkvm/cuda", "snarkos-node-bft-ledger-service/cuda", "snarkos-node-router/cuda" ]
+ test = [ "snarkos-node-sync-locators/test" ]
+ 
+diff --git i/node/tcp/Cargo.toml w/node/tcp/Cargo.toml
+--- i/node/tcp/Cargo.toml
++++ w/node/tcp/Cargo.toml
+@@ -19,6 +19,7 @@ edition = "2024"
+ default = [ ]
+ locktick = [ "dep:locktick", "snarkos-node-metrics/locktick" ]
+ metrics = [ "dep:snarkos-node-metrics" ]
++snarkos-node-metrics = [ "metrics" ]
+ 
+ [dependencies.async-trait]
+ workspace = true
