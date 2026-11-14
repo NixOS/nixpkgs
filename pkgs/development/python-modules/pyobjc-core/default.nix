@@ -6,19 +6,20 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyobjc-core";
-  version = "11.1";
+  version = "12.2.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ronaldoussoren";
     repo = "pyobjc";
-    tag = "v${version}";
-    hash = "sha256-2qPGJ/1hXf3k8AqVLr02fVIM9ziVG9NMrm3hN1de1Us=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jtThPYaKWtIUzcaWxg34QxZc2ejCnSulwsjEUiTfb2Y=";
   };
 
-  sourceRoot = "${src.name}/pyobjc-core";
+  sourceRoot = "${finalAttrs.src.name}/pyobjc-core";
 
   build-system = [ setuptools ];
 
@@ -45,4 +46,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})
