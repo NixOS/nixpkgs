@@ -5,14 +5,17 @@
   nix-update-script,
   cmake,
   pkg-config,
+  apple-sdk_15,
+  freetype,
   fribidi,
   harfbuzz,
+  libjxl,
   libogg,
   libwebp,
   libx11,
   mpg123,
   opusfile,
-  SDL2,
+  sdl3,
   the-foundation,
   zip,
   enableTUI ? false,
@@ -22,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.21.2";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SxAZrbtEc6mKGwNvpEqVXCpvtezvCs+l1AGH88TpPIY=";
+    hash = "sha256-Or4roE4c7PUW9CmItoBSMldW6iM9lR38vsM+nRPPOrY=";
   };
 
   nativeBuildInputs = [
@@ -39,18 +42,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     the-foundation
+    freetype
     fribidi
     harfbuzz
+    libjxl
     libogg
     libwebp
     libx11
     mpg123
     opusfile
-    SDL2
+    sdl3
   ]
   ++ lib.optionals enableTUI [
     ncurses
     sealcurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
   ];
 
   cmakeFlags = [
@@ -61,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
-      mv Lagrange.app $out/Applications
+      mv app/Lagrange.app $out/Applications
     ''
     + lib.optionalString (stdenv.hostPlatform.isDarwin && enableTUI) ''
       # https://github.com/skyjake/lagrange/issues/610
