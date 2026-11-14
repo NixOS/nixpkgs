@@ -16,6 +16,14 @@
   tests,
   pkgsCross,
 }:
+let
+  # See the comment in the hook. Only needed where the builder does not
+  # provide a stable build directory, i.e. on Darwin.
+  rustRemapBuildDirHook = makeSetupHook {
+    name = "rust-remap-build-dir-hook.sh";
+    meta.license = lib.licenses.mit;
+  } ./rust-remap-build-dir-hook.sh;
+in
 {
   cargoBuildHook = makeSetupHook {
     name = "cargo-build-hook.sh";
@@ -75,6 +83,9 @@
 
   cargoSetupHook = makeSetupHook {
     name = "cargo-setup-hook.sh";
+    # The build directory is a property of the machine running rustc, hence
+    # buildPlatform rather than hostPlatform.
+    propagatedBuildInputs = lib.optionals stdenv.buildPlatform.isDarwin [ rustRemapBuildDirHook ];
     substitutions = {
       defaultConfig = ../fetchcargo-default-config.toml;
 
@@ -108,6 +119,7 @@
       test = tests.rust-hooks.cargoSetupHook;
       ${if stdenv.hostPlatform.isLinux then "testCross" else null} =
         pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
+      testRemapBuildDir = tests.rust-hooks.cargoSetupHookRemapBuildDir;
     };
     meta.license = lib.licenses.mit;
   } ./cargo-setup-hook.sh;
