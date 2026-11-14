@@ -5,7 +5,6 @@
   nixosTests,
   python3,
   nltk-data,
-  writeShellScript,
   nix-update-script,
 
   # frontend
@@ -100,8 +99,6 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dontWrapPythonPrograms = true;
-
   pythonRelaxDeps = true;
 
   dependencies =
@@ -164,27 +161,11 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
   '';
 
-  postInstall =
-    let
-      start_script = writeShellScript "start-mealie" ''
-        ${lib.getExe pythonpkgs.gunicorn} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
-      '';
-      init_db = writeShellScript "init-mealie-db" ''
-        ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py
-      '';
-    in
-    ''
-      mkdir -p $out/bin $out/libexec
-      rm -f $out/bin/*
-
-      makeWrapper ${start_script} $out/bin/mealie \
-        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
-        --set STATIC_FILES "${finalAttrs.passthru.frontend}"
-
-      makeWrapper ${init_db} $out/libexec/init_db \
-        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
-        --set OUT "$out"
-    '';
+  makeWrapperArgs = [
+    "--set"
+    "STATIC_FILES"
+    finalAttrs.passthru.frontend
+  ];
 
   nativeCheckInputs = with pythonpkgs; [
     pytestCheckHook
