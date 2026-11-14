@@ -8,13 +8,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flask-swagger-ui";
-  version = "5.34.0";
+  version = "5.34.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flask_swagger_ui";
     inherit (finalAttrs) version;
-    hash = "sha256-btIGcdgDdpj0bgzwJ3Tv7jZsE3vqtSS2RtMagWOAaOs=";
+    hash = "sha256-45wQLT9htNVGe3PGpNLkCE+ALaYt4HPD5WwPIutqU6o=";
   };
 
   build-system = [ setuptools ];

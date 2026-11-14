@@ -8,6 +8,7 @@ mkKdeDerivation {
 
   outputs = [ "out" ];
 
+  # https://invent.kde.org/frameworks/extra-cmake-modules/-/merge_requests/628
   patches = [
     ./search-qml.patch
   ];

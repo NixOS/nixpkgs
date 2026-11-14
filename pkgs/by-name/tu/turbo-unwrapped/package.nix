@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  aws-lc,
+  callPackage,
   capnproto,
   cctools,
   fetchFromGitHub,
@@ -10,24 +12,18 @@
   protobuf,
   rustPlatform,
   xcbuild,
-  zig_0_15,
+  zig_0_17,
   zstd,
 }:
 let
   pname = "turbo-unwrapped";
-  version = "2.11.7";
+  version = "2.11.10";
 
   ghostty-src = fetchFromGitHub {
     owner = "ghostty-org";
     repo = "ghostty";
-    rev = "a887df42c56f6de86c0fe6da9c4eeca37931e083";
-    hash = "sha256-1Zz65SCk3rkJ9+Q0MmyNOTNiDSLBRIHRd3IvFM4iNXw=";
-  };
-  ghostty-deps = zig_0_15.fetchDeps {
-    inherit pname version;
-    src = ghostty-src;
-    fetchAll = true;
-    hash = "sha256-PnM+hZIlLyQwK8vJgd/Bhjt1lNIz06T8FahwliRmMrY=";
+    rev = "5147c0a503cdeed7615cce245cdd815ed7a6b692";
+    hash = "sha256-+x4rn2cqqGfd0MELw3pzythS7egsVxWznirx4yvISSI=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,17 +33,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kxYQLRgHHmlYkLK5X/ohK1pxevG7nXsgbW7Sz6irQus=";
+    hash = "sha256-AK1I+bf0IUFLlcctcyUVmK1XChzC3IUL3noUvXC9Tpc=";
   };
 
-  cargoHash = "sha256-kva0HTfCfapLhda1ppMM7e4dT/fgJzvRYw/t26p9e0s=";
+  patches = [
+    # Zig has removed the ability to use `--global-cache-dir` with
+    # `zig build`. It only allows the global cache dir to be passed
+    # with `ZIG_GLOBAL_CACHE_DIR`.
+    ./fix-zig-global-cache-dir.patch
+  ];
+
+  cargoHash = "sha256-HOzHVpDud/4BIYL2VMiPTFdi4ISz0jdC5U0VLJXnH/U=";
 
   nativeBuildInputs = [
     capnproto
     installShellFiles
     pkg-config
     protobuf
-    zig_0_15.hook
+    zig_0_17
   ]
   # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
   ++ lib.optionals stdenv.hostPlatform.isLinux [ llvmPackages.bintools ]
@@ -57,7 +60,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xcbuild
   ];
 
-  buildInputs = [ zstd ];
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
 
   dontUseZigBuild = true;
   dontUseZigCheck = true;
@@ -66,7 +72,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     # Use vendored ghostty source and dependencies.
     GHOSTTY_SOURCE_DIR = ghostty-src;
-    GHOSTTY_ZIG_SYSTEM_DIR = ghostty-deps;
+    GHOSTTY_ZIG_SYSTEM_DIR = callPackage ./deps.nix {
+      name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
+    };
     # nightly features are used
     RUSTC_BOOTSTRAP = 1;
   };
@@ -87,7 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    inherit ghostty-src ghostty-deps;
+    inherit ghostty-src;
     updateScript = ./update.sh;
   };
 

@@ -5,6 +5,7 @@
   git,
   ninja,
   fetchFromGitHub,
+  fetchpatch2,
   SDL2,
   wget,
   which,
@@ -82,7 +83,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # directory of the script, which is not writable due to being
   # inside the nix store. This patch changes the script to download
   # the models to the current directory of where it is being run from.
-  patches = [ ./download-models.patch ];
+  patches = [
+    ./download-models.patch
+    (fetchpatch2 {
+      name = "llama-cpp-1.0.0";
+      url = "https://github.com/ggml-org/whisper.cpp/commit/63ae1b5f55b5d56622b39b3c01a4710feb57d844.patch?full_index=1";
+      hash = "sha256-PBiyGzbd3zBrvKdLed/Y9ZN4MCGzXvd760H+5r2MN4U=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

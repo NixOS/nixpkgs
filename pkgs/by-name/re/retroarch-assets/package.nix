@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "retroarch-assets";
-  version = "1.22.0-unstable-2026-10-01";
+  version = "1.22.0-unstable-2026-11-09";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "retroarch-assets";
-    rev = "d9f969054dc7fbb6fa89519036d2b971e0855b51";
-    hash = "sha256-y9jkM+Tn5mDzzkY4fvkNq5GKUt33o0nVF8SoLJCKIzY=";
+    rev = "8c918e2872482139273374ef4cc6c7aff34d7585";
+    hash = "sha256-QvhaUhBb8kjhd4AqzhQqFEOAksl13IkiPeOlkdKR630=";
   };
 
   makeFlags = [

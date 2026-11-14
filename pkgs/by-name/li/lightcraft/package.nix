@@ -2,13 +2,9 @@
   lib,
   stdenv,
   rustPlatform,
-  rustc,
   versionCheckHook,
   fetchFromGitHub,
   pkg-config,
-  patchelf,
-  copyDesktopItems,
-  makeDesktopItem,
   vulkan-loader,
   libxkbcommon,
   libx11,
@@ -38,88 +34,56 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lightcraft";
-  version = "0.14.0";
+  version = "0.21.1";
 
   __structuredAttrs = true;
-  strictDeps = true;
-
-  env = {
-    CRAFT_FONTS_DIR = "${craft-fonts}";
-    CRAFT_FONTS_REQUIRED = "1";
-  };
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "lightcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v6UZTeyxzDZ1bFoYGwvwv6tF11qQNXf4ib8siGjpcHU=";
+    hash = "sha256-2iqJCmah1bEVCxQ1VeiPWuhuHcR6U6gj6BYYUu4EcsY=";
   };
 
-  cargoHash = "sha256-dM3yj2Jux7zlk9ycTxY3++D/rKIkEqsyAkM304Ute3k=";
+  cargoHash = "sha256-TU5eFCjfZrpUTn9r/z5EOG5axvVMz5drG8be1GHjTMI=";
 
   cargoBuildFlags = [
     "--package=lightcraft"
     "--package=lightcraft-cli"
   ];
 
+  env = {
+    CRAFT_FONTS_DIR = craft-fonts;
+    CRAFT_FONTS_REQUIRED = "1";
+  };
+
   # The `lightcraft` crate runs live GPU tests; software rendering in CI is too slow.
   cargoTestFlags = [
     "--package=lightcraft-cli"
   ];
 
+  # MCP tests use loopback TCP (see soundcraft/wordcraft).
+  __darwinAllowLocalNetworking = true;
+  # Darwin builders lack AppKit/GPU setup for lightcraft-cli snapshot integration tests (nixpkgs-review aarch64-darwin).
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeBuildInputs = [
     pkg-config
-    patchelf
-    copyDesktopItems
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ai.storyteller.lightcraft";
-      desktopName = "LightCraft";
-      genericName = "Photo Library and Raw Developer";
-      comment = "Organise photos and develop raw files, non-destructively";
-      exec = "lightcraft %F";
-      icon = "ai.storyteller.lightcraft";
-      terminal = false;
-      startupWMClass = "ai.storyteller.lightcraft";
-      keywords = [
-        "photo"
-        "raw"
-        "camera"
-        "library"
-        "develop"
-      ];
-      mimeTypes = [
-        "image/heic"
-        "image/heif"
-        "image/jpeg"
-        "image/png"
-        "image/tiff"
-        "image/webp"
-        "image/x-adobe-dng"
-        "image/x-canon-cr2"
-        "image/x-canon-cr3"
-        "image/x-fuji-raf"
-        "image/x-nikon-nef"
-        "image/x-olympus-orf"
-        "image/x-panasonic-rw"
-        "image/x-panasonic-rw2"
-        "image/x-pentax-pef"
-        "image/x-sony-arw"
-      ];
-      categories = [
-        "Graphics"
-        "2DGraphics"
-        "RasterGraphics"
-        "Photography"
-      ];
-    })
-  ];
+  # Unused egui fork patches break cargo --offline.
+  # Until https://github.com/storytold/craft-libs/issues/492: startup update UI does not work on NixOS.
+  postPatch = ''
+    sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+    substituteInPlace apps/lightcraft/src/main.rs \
+      --replace-fail 'app.set_startup_update_check(true);' 'app.set_startup_update_check(false);'
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/icons
     cp -R assets/app-icon/hicolor $out/share/icons/
+    install -Dm644 packaging/linux/ai.storyteller.lightcraft.desktop \
+      $out/share/applications/ai.storyteller.lightcraft.desktop
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -134,7 +98,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Photo library and raw development, a native Lightroom-style editor";
     homepage = "https://github.com/storytold/lightcraft";
-    changelog = "https://github.com/storytold/lightcraft/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/storytold/lightcraft/releases/tag/${finalAttrs.src.tag}";
     license =
       with lib.licenses;
       AND [
@@ -146,6 +110,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     maintainers = with lib.maintainers; [ cleboost ];
     mainProgram = "lightcraft";
-    platforms = rustc.meta.platforms;
   };
 })

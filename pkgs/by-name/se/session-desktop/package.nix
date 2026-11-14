@@ -95,13 +95,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.18.3";
+  version = "1.18.4";
   src = fetchFromGitHub {
     owner = "session-foundation";
     repo = "session-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-yhiQaqpuglaIoEwJeq4tgyVj5Cz+8xxhMaAmSxI+xdA=";
+    hash = "sha256-sEre5hlz/mNwOXhTk0nJu9tw2wIGxr+Fp4M/Y1zOfkg=";
   };
 
   # This upstream release's lockfile lacks integrity fields required by pnpm >= 10.34.1.
