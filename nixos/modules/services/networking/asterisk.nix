@@ -84,7 +84,7 @@ in
 
       confFiles = lib.mkOption {
         default = { };
-        type = lib.types.attrsOf lib.types.str;
+        type = lib.types.attrsOf lib.types.lines;
         example = lib.literalExpression ''
           {
             "extensions.conf" = '''
