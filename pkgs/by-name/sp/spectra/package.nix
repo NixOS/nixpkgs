@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "yixuan";
     repo = "spectra";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-lfbOwnTP3GrN/1N/tyMXZrtEHIxAq3EjuHS8M+I87to=";
+    hash = "sha256-lfbOwnTP3GrN/1N/tyMXZrtEHIxAq3EjuHS8M+I87to=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "srsran";
     repo = "srsRAN_4G";
     tag = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "sha256-DwQ4u17m8D5RqX3OIYSyeE5+51sLah1qchRcwlX5i0A=";
+    hash = "sha256-DwQ4u17m8D5RqX3OIYSyeE5+51sLah1qchRcwlX5i0A=";
   };
 
   outputs = [

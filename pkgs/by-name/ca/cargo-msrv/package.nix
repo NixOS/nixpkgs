@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "foresterre";
     repo = "cargo-msrv";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-K8IaDPMZg2IxHesZXonM1Wh7XmAQfGjvwD1X5W2TwYc=";
+    hash = "sha256-K8IaDPMZg2IxHesZXonM1Wh7XmAQfGjvwD1X5W2TwYc=";
   };
 
   cargoHash = "sha256-I5X6Mkqy/0cXvpO1NtQrr7Tlpxmp9NIuvVGp3C9/XfU=";

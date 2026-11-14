@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dftlibs";
     repo = "xcfun";
     rev = "v${finalAttrs.version}";
-    sha256 = "1bj70cnhbh6ziy02x988wwl7cbwaq17ld7qwhswqkgnnx8rpgxid";
+    hash = "sha256-LfZ3M+rWvom5hhyfRk/Aii92KOcIpS6Aj9/ABS0DR64=";
   };
 
   nativeBuildInputs = [

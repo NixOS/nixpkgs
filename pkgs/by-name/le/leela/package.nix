@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "TrilbyWhite";
     repo = "Leela";
     rev = "576a60185b191d3a3030fef10492fe32d2125563";
-    sha256 = "1k6n758r9dhjmc1pnpk6qzpg0q7pkq2hf18z3b0s2z198jpkg9s3";
+    hash = "sha256-Q6c3r0QpfKHBGh8FBwWe92Dw7sdmXnsDqxK2lFE51sw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

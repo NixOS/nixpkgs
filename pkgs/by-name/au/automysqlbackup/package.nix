@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sixhop";
     repo = "automysqlbackup";
     tag = finalAttrs.version;
-    sha256 = "sha256-C0p1AY4yIxybQ6a/HsE3ZTHumtvQw5kKM51Ap+Se0ZI=";
+    hash = "sha256-C0p1AY4yIxybQ6a/HsE3ZTHumtvQw5kKM51Ap+Se0ZI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

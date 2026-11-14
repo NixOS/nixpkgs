@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "unoconv";
     repo = "unoconv";
     tag = finalAttrs.version;
-    sha256 = "1akx64686in8j8arl6vsgp2n3bv770q48pfv283c6fz6wf9p8fvr";
+    hash = "sha256-eTt0k+PmO8MGEttdRDA4Z69hxX16G5oVkshGgwwxfao=";
   };
 
   patches = [

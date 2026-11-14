@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "sunaku";
     repo = "dasht";
     rev = "v${version}";
-    sha256 = "08wssmifxi7pnvn9gqrvpzpkc2qpkfbzbhxh0dk1gff2y2211qqk";
+    hash = "sha256-E+MQhPDCuRdmA7DD9ZebFws2778745fstvfE7mLVmiM=";
   };
 
   deps = lib.makeBinPath [

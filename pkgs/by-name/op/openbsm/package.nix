@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openbsm";
     repo = "openbsm";
     rev = lib.toUpper (builtins.replaceStrings [ "." "-" ] [ "_" "_" ] "openbsm-${finalAttrs.version}");
-    sha256 = "0b98359hd8mm585sh145ss828pg2y8vgz38lqrb7nypapiyqdnd1";
+    hash = "sha256-odmGfbzqentWxhSN/zby4l0kkNaFBKgLKrWiBlMZKC0=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./bsm-add-audit_token_to_pid.patch ];

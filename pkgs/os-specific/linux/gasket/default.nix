@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "gasket-driver";
     rev = "5815ee3908a46a415aac616ac7b9aedcb98a504c";
-    sha256 = "O17+msok1fY5tdX1DvqYVw6plkUDF25i8sqwd6mxYf8=";
+    hash = "sha256-O17+msok1fY5tdX1DvqYVw6plkUDF25i8sqwd6mxYf8=";
   };
 
   patches = [

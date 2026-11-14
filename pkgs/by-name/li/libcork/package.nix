@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dcreager";
     repo = "libcork";
     rev = finalAttrs.version;
-    sha256 = "152gqnmr6wfmflf5l6447am4clmg3p69pvy3iw7yhaawjqa797sk";
+    hash = "sha256-U590FJZcKegPj8Pvm8wdr1JGqjqEGFocddVxk6vFT5Q=";
   };
 
   postPatch = ''

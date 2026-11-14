@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lesfurets";
     repo = "git-octopus";
     rev = "v${finalAttrs.version}";
-    sha256 = "14p61xk7jankp6gc26xciag9fnvm7r9vcbhclcy23f4ghf4q4sj1";
+    hash = "sha256-QWqCiYOPuCE8owwutlM+dVuXnoqsG8GeudMqeWYP5pI=";
   };
 
   meta = {

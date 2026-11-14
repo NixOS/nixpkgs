@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "matheusml";
     repo = "zsh-ai";
     rev = "v${version}";
-    sha256 = "sha256-yN2+VmxXzBcJzLc0Ml1omJcUOftYe4CXkAAGUXC7txk=";
+    hash = "sha256-yN2+VmxXzBcJzLc0Ml1omJcUOftYe4CXkAAGUXC7txk=";
   };
 
   installPhase = ''

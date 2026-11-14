@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AntiMicroX";
     repo = "antimicrox";
     rev = finalAttrs.version;
-    sha256 = "sha256-frPXUTbD5Wk0Wo8E9L8Es5GCvWY55Qx0RGSkYDaVs6g=";
+    hash = "sha256-frPXUTbD5Wk0Wo8E9L8Es5GCvWY55Qx0RGSkYDaVs6g=";
   };
 
   nativeBuildInputs = [

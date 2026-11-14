@@ -14,7 +14,7 @@ let
     owner = "lucianodato";
     repo = "speech-denoiser";
     rev = "04cfba929630404f8d4f4ca5bac8d9b09a99152f";
-    sha256 = "189l6lz8sz5vr6bjyzgcsrvksl1w6crqsg0q65r94b5yjsmjnpr4";
+    hash = "sha256-JF8rq5a+LJJyMRg8jTMzPFA9d9bsfS+Xybt8jT41NKE=";
   };
 
   rnnoise-nu = stdenv.mkDerivation {

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dnschneid";
     repo = "mid2key";
     rev = "r${finalAttrs.version}";
-    sha256 = "Zo0mqdBJ1JKD9ZCA8te3f5opyYslFncYcx9iuXq2B9g=";
+    hash = "sha256-Zo0mqdBJ1JKD9ZCA8te3f5opyYslFncYcx9iuXq2B9g=";
   };
 
   buildInputs = [

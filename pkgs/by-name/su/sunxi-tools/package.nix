@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "linux-sunxi";
     repo = "sunxi-tools";
     rev = "34dfa20f8284273085666436e4cac09af19646c8";
-    sha256 = "sha256-HlJ4ApOUnaA8TxDta8Y8qkPCw+cXLJYp4niAPG/a7FA=";
+    hash = "sha256-HlJ4ApOUnaA8TxDta8Y8qkPCw+cXLJYp4niAPG/a7FA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

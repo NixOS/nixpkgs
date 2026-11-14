@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "apache";
     repo = "cloudstack-cloudmonkey";
     rev = finalAttrs.version;
-    sha256 = "sha256-CdqKaKUVqeAujrWh7u0npZ6ON/nmL/8uIBIljAPPUv0=";
+    hash = "sha256-CdqKaKUVqeAujrWh7u0npZ6ON/nmL/8uIBIljAPPUv0=";
   };
 
   vendorHash = null;

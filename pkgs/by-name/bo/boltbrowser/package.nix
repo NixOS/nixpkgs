@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "br0xen";
     repo = "boltbrowser";
     tag = finalAttrs.version;
-    sha256 = "sha256-3t0U1bSJbo3RJZe+PwaUeuzSt23Gs++WRe/uehfa4cA=";
+    hash = "sha256-3t0U1bSJbo3RJZe+PwaUeuzSt23Gs++WRe/uehfa4cA=";
   };
 
   vendorHash = "sha256-lLSjAO0sK2zwl+id/e15XWYbLPCa7qK8J6tdvaBMLPs=";

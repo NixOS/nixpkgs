@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "rembo10";
     repo = "headphones";
     rev = "v${finalAttrs.version}";
-    sha256 = "0gv7rasjbm4rf9izghibgf5fbjykvzv0ibqc2in1naagjivqrpq4";
+    hash = "sha256-BN+Md5RPKRtsFAyvCPbf08vlinsrwvdjcpnUJbXKZz8=";
   };
 
   dontBuild = true;

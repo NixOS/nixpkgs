@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "threerings";
     repo = "openvpn-auth-ldap";
     rev = "auth-ldap-${version}";
-    sha256 = "1j30sygj8nm8wjqxzpb7pfzr3dxqxggswzxd7z5yk7y04c0yp1hb";
+    hash = "sha256-C4brASPAn+nLP61/rt/ruLeRv7tn3d+x5KhaJJ/XYMg=";
   };
 
   patches = [

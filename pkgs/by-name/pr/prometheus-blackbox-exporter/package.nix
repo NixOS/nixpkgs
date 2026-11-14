@@ -14,7 +14,7 @@ buildGoModule rec {
     inherit rev;
     owner = "prometheus";
     repo = "blackbox_exporter";
-    sha256 = "sha256-LbS7lL6GLZuHDtYZspdeIJp/xuZb/RCHpVOyPpb43s4=";
+    hash = "sha256-LbS7lL6GLZuHDtYZspdeIJp/xuZb/RCHpVOyPpb43s4=";
   };
 
   vendorHash = "sha256-R0VbqZ13T+tpH9dRpMoYW7aRg08casYIZeNDdBZvoyc=";

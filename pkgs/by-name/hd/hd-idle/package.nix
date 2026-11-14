@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "adelolmo";
     repo = "hd-idle";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Q9EMRXzJTkPMMvehrIyiowytjKNfovtiSH4sAO6fzIo=";
+    hash = "sha256-Q9EMRXzJTkPMMvehrIyiowytjKNfovtiSH4sAO6fzIo=";
   };
 
   vendorHash = null;

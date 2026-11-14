@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nielssp";
     repo = "ctodo";
     rev = "v${finalAttrs.version}";
-    sha256 = "0mqy5b35cbdwfpbs91ilsgz3wc4cky38xfz9pnr4q88q1vybigna";
+    hash = "sha256-yr64/A4YIUyyvem7joafjDA+/tM0hqTXdbwtVsYqHlc=";
   };
 
   nativeBuildInputs = [ cmake ];

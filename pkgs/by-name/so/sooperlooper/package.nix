@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "essej";
     repo = "sooperlooper";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bPu/VWTJLSIMoJSEQb+/nqtTpkPtCNVuXA17XsnFSP0=";
+    hash = "sha256-bPu/VWTJLSIMoJSEQb+/nqtTpkPtCNVuXA17XsnFSP0=";
   };
 
   autoreconfPhase = ''

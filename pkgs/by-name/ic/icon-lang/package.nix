@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gtownsend";
     repo = "icon";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-COXB03j5keTaRP/ggOU4065NFk3bmK5NTSet4CBGFSM=";
+    hash = "sha256-COXB03j5keTaRP/ggOU4065NFk3bmK5NTSet4CBGFSM=";
   };
 
   buildInputs = lib.optionals withGraphics [

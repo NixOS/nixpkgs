@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nfc-tools";
     repo = "libnfc";
     rev = "libnfc-${finalAttrs.version}";
-    sha256 = "5gMv/HajPrUL/vkegEqHgN2d6Yzf01dTMrx4l34KMrQ=";
+    hash = "sha256-5gMv/HajPrUL/vkegEqHgN2d6Yzf01dTMrx4l34KMrQ=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "Tenchi2xh";
     repo = "Almonds";
     tag = finalAttrs.version;
-    sha256 = "0j8d8jizivnfx8lpc4w6sbqj5hq35nfz0vdg7ld80sc5cs7jr3ws";
+    hash = "sha256-mo8sj2aFaYAaPa9t8J0tA8Mi8dKGE3Yp6s7u+KNEDUk=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

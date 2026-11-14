@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "carlesso";
     repo = "i3minator";
     rev = finalAttrs.version;
-    sha256 = "07dic5d2m0zw0psginpl43xn0mpxw7wilj49d02knz69f7c416lm";
+    hash = "sha256-lZpA2HHJfDsFaIlIGvnh/VZg+yD02vj0BfyDKlphsR0=";
   };
 
   env.LC_ALL = "en_US.UTF-8";

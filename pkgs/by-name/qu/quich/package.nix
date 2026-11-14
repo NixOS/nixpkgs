@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Usbac";
     repo = "quich";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-4gsSjLZ7Z4ErNqe86Fy5IrzLMfvDyY18sE0yBnj9bvM=";
+    hash = "sha256-4gsSjLZ7Z4ErNqe86Fy5IrzLMfvDyY18sE0yBnj9bvM=";
   };
 
   doCheck = true;

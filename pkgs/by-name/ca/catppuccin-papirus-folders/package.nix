@@ -56,7 +56,7 @@ lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ] lib.checkL
       owner = "catppuccin";
       repo = "papirus-folders";
       rev = "f83671d17ea67e335b34f8028a7e6d78bca735d7";
-      sha256 = "sha256-FiZdwzsaMhS+5EYTcVU1LVax2H1FidQw97xZklNH2R4=";
+      hash = "sha256-FiZdwzsaMhS+5EYTcVU1LVax2H1FidQw97xZklNH2R4=";
     };
 
     # This takes a horribly long time, and there's nothing to fixup in

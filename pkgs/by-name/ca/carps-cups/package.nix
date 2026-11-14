@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "ondrej-zary";
     repo = "carps-cups";
     rev = "18d80d1d6f473dd9132e4b6d8b5c592c74982f17";
-    sha256 = "0mjj9hs5lqxi0qamgb4sxfz4fvf7ggi66bxd37bkz3fl0g9xff70";
+    hash = "sha256-4DjX0wPUjT/XGa0vY+J7x21HvuuarFcVBrFjWjRMUlY=";
   };
 
   preBuild = ''

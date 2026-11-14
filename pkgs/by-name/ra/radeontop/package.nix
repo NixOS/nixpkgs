@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4";
 
   src = fetchFromGitHub {
-    sha256 = "0kwqddidr45s1blp0h8r8h1dd1p50l516yb6mb4s6zsc827xzgg3";
+    hash = "sha256-473fj0BMf6PJqmZ5EwoF5YbWAkQZQXDpCrqQ3GJrmE8=";
     rev = "v${finalAttrs.version}";
     repo = "radeontop";
     owner = "clbr";

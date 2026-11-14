@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       owner = "boostorg";
       repo = "build";
       tag = defaultVersion;
-      sha256 = "1r4rwlq87ydmsdqrik4ly5iai796qalvw7603mridg2nwcbbnf54";
+      hash = "sha256-pDi7FuNWvBZzHcAcvqnCJp2oYvGUzJhx07X5gzDlmeQ=";
     });
 
   # b2 is in a subdirectory of boost source tarballs

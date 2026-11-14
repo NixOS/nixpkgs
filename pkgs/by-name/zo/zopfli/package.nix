@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     repo = "zopfli";
     rev = "${pname}-${version}";
     name = "${pname}-${version}-src";
-    sha256 = "0dr8n4j5nj2h9n208jns56wglw59gg4qm3s7c6y3hs75d0nnkhm4";
+    hash = "sha256-pMJpLWjlaDi8YUePisl7qXD6uCnaSgSETVBIWySxKDc=";
   };
 
   nativeBuildInputs = [ cmake ];

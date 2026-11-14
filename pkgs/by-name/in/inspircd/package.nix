@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "inspircd";
     repo = "inspircd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-crIxqqBMwu+lYnftlOdZ/jNvOh0vS7Zr0YDMAR8wlfs=";
+    hash = "sha256-crIxqqBMwu+lYnftlOdZ/jNvOh0vS7Zr0YDMAR8wlfs=";
   };
 
   outputs = [

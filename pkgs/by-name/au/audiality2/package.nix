@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "olofson";
     repo = "audiality2";
     rev = "v${finalAttrs.version}";
-    sha256 = "0ipqna7a9mxqm0fl9ggwhbc7i9yxz3jfyi0w3dymjp40v7jw1n20";
+    hash = "sha256-QNjA5dmAXFl9GxxE7+T43ad42IL8vUQdqLjXpI6y+EY=";
   };
 
   postPatch = ''

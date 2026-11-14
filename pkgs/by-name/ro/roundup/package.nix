@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bmizerany";
     repo = "roundup";
     rev = "v${finalAttrs.version}";
-    sha256 = "0nxaqmbv8mdvq9wcaqxk6k5mr31i68jzxf1wxa6pp7xp4prwdc9z";
+    hash = "sha256-P7HG8yW3n3uN6jy4/iUyMYxcyzSzY8V4wrtVtFfFqls=";
   };
 
   prePatch = ''

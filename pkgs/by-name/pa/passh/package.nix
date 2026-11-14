@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "clarkwang";
     repo = "passh";
     rev = "7112e667fc9e65f41c384f89ff6938d23e86826c";
-    sha256 = "1g0rx94vqg36kp46f8v4x6jcmvdk85ds6bkrpayq772hbdm1b5z5";
+    hash = "sha256-5ZcValtQnIO9unkuo1tBs+3KpOlkI2fInWY8vEnqGbw=";
   };
 
   installPhase = ''

@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage {
     owner = "dmgerman";
     repo = "ninka";
     rev = "b89b59ecd057dfc939d0c75acaddebb58fcd8cba";
-    sha256 = "1grlis1kycbcjvjgqvn7aw81q1qx49ahvxg2k7cgyr79mvgpgi9m";
+    hash = "sha256-NcV3367pZP/YmeL1DVUiHQccEFfHbvzklmwxP4OONL8=";
   };
 
   buildInputs = with perlPackages; [

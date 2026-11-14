@@ -14,7 +14,7 @@ buildGoModule {
     owner = "SRI-CSL";
     repo = "gllvm";
     rev = "154531bdd9c05cd9d01742bc1b35bdf200a487d3";
-    sha256 = "sha256-dxrtJFqEEDKx33+sOm+R7huBwbovlKzL4qFXoco8A4s=";
+    hash = "sha256-dxrtJFqEEDKx33+sOm+R7huBwbovlKzL4qFXoco8A4s=";
   };
 
   vendorHash = null;

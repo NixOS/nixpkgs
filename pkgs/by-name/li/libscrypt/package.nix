@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "technion";
     repo = "libscrypt";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-QWWqC10bENemG5FYEog87tT7IxDaBJUDqu6j/sO3sYE=";
+    hash = "sha256-QWWqC10bENemG5FYEog87tT7IxDaBJUDqu6j/sO3sYE=";
   };
 
   buildFlags = lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS= LDFLAGS_EXTRA= CFLAGS_EXTRA=";

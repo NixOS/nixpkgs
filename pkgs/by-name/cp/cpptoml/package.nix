@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "skystrife";
     repo = "cpptoml";
     rev = "fededad7169e538ca47e11a9ee9251bc361a9a65";
-    sha256 = "0zlgdlk9nsskmr8xc2ajm6mn1x5wz82ssx9w88s02icz71mcihrx";
+    hash = "sha256-PcPIajifRQE0Qjx1rQX6vPRgq6lSCdZRrlNrmyZtj34=";
   };
 
   patches = [

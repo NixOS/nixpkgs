@@ -139,7 +139,7 @@ rec {
       owner = "replayio";
       repo = "replay-node-cli";
       rev = "5269c8b8e7c5c7a9618a68f883d19c11a68be837";
-      sha256 = "04d22q3dvs9vxpb9ps64pdxq9ziwgvnzdgsn6p9p0lzjagh0f5n0";
+      hash = "sha256-wBYH4FPyU3DTNVa/9u1+PP6Ee7vE6JvW7Tvp3QYWohE=";
     };
 
     nativeBuildInputs = [ makeWrapper ];

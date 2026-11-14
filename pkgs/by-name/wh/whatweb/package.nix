@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "urbanadventurer";
     repo = "whatweb";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0oU3DAAwJRGUrrzxZUm8TZ1dlsufzTlonkgdVYsh4mQ=";
+    hash = "sha256-0oU3DAAwJRGUrrzxZUm8TZ1dlsufzTlonkgdVYsh4mQ=";
   };
 
   prePatch = ''

@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "tcnksm";
     repo = "ghr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2qyplduk/fs6Du2ajkBevfUWvKLAj0mOaoNDVFGo3OM=";
+    hash = "sha256-2qyplduk/fs6Du2ajkBevfUWvKLAj0mOaoNDVFGo3OM=";
   };
 
   vendorHash = "sha256-xUjmeB05dktpAplNl1ohzm41d3K7V9cBUuGk1IEx47Q=";

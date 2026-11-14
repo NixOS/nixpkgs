@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "EliasOenal";
     repo = "multimon-ng";
     rev = finalAttrs.version;
-    sha256 = "sha256-OHl9y1Pk/8N4IwKYuiikHoW2sfLWU4G4uyozxHxB0WY=";
+    hash = "sha256-OHl9y1Pk/8N4IwKYuiikHoW2sfLWU4G4uyozxHxB0WY=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [

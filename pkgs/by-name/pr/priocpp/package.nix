@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "Grumbel";
     repo = "priocpp";
     rev = "b2664449adcaed93f609e3ea1fb68f8295390ce9";
-    sha256 = "sha256-tn0UNK+rQQPpSgTexOKyROOvX6ynEHFUj+gk11dlh/8=";
+    hash = "sha256-tn0UNK+rQQPpSgTexOKyROOvX6ynEHFUj+gk11dlh/8=";
   };
 
   nativeBuildInputs = [

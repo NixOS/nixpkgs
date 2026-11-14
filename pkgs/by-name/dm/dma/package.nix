@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "corecode";
     repo = "dma";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-rmgEWkV/ZmOcO1J1uTMMO5tJWq8DTyT7ANRjHyWUGNw=";
+    hash = "sha256-rmgEWkV/ZmOcO1J1uTMMO5tJWq8DTyT7ANRjHyWUGNw=";
   };
 
   nativeBuildInputs = [

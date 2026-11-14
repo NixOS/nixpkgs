@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "lukechilds";
     repo = "zsh-better-npm-completion";
     rev = "0a7cf042415324ec38a186fdcbc9af163f0d7e69";
-    sha256 = "16z7k5n1rcl9i61lrm7i5dsqsmhvdp1y4y5ii6hv2xpp470addgy";
+    hash = "sha256-/rWmwCH3drGhibF44sNtG1aNdSvx1EyDiYmyHGyZ55s=";
   };
 
   strictDeps = true;

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "mahatma-kaganovich";
     repo = "xkbd";
     rev = "${pname}-${version}";
-    sha256 = "05ry6q75jq545kf6p20nhfywaqf2wdkfiyp6iwdpv9jh238hf7m9";
+    hash = "sha256-qR4H0RBQpn0bj+b66GbjwmHFvYMWiGvcLKRgWQ42Phc=";
   };
 
   buildInputs = [

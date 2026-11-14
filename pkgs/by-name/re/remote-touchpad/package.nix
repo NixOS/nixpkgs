@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "unrud";
     repo = "remote-touchpad";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-uCrvVbpFPu7m+1jjYjQPy7iJ1zpqz5YuvO3gbHqBgOo=";
+    hash = "sha256-uCrvVbpFPu7m+1jjYjQPy7iJ1zpqz5YuvO3gbHqBgOo=";
   };
 
   buildInputs = [

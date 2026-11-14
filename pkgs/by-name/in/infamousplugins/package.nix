@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ssj71";
     repo = "infamousPlugins";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-AhW4hLmCxz7yHMdxM6kOvtCXk1jEg/XtyPgt4yk1xqs=";
+    hash = "sha256-AhW4hLmCxz7yHMdxM6kOvtCXk1jEg/XtyPgt4yk1xqs=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "zraorg";
     repo = "zra";
     rev = "57abf2774dfc4624f14a0bc5bba71f044ce54a38";
-    sha256 = "10rlqj6ma02005gdcp57wp48d6cg0vkbv4vl9ai0zlgxyx1g6kc4";
+    hash = "sha256-hE3zQvf90Q+iSnSTveYGj5mGyOWnXNZeAUAAVY3ENIM=";
     fetchSubmodules = true;
   };
 

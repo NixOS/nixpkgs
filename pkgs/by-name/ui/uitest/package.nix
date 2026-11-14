@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "Grumbel";
     repo = "uitest";
     rev = "d845427140cbcbce99bb6c72919199ac5f033784";
-    sha256 = "sha256-xD2Ecs9hW3lcQW6RNcjVhGX/eor2RbCHHXohTafC9y0=";
+    hash = "sha256-xD2Ecs9hW3lcQW6RNcjVhGX/eor2RbCHHXohTafC9y0=";
   };
 
   nativeBuildInputs = [ cmake ];

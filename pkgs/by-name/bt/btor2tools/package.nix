@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "hwmcc";
     repo = "btor2tools";
     rev = "d33c73ff1d173f1bfac8ba6b1c6d68ba62c55f8e";
-    sha256 = "sha256-RVjZ5HM2yQ3eAICFuzwvNeQDXzWzzSiCCslIWMJi6U8=";
+    hash = "sha256-RVjZ5HM2yQ3eAICFuzwvNeQDXzWzzSiCCslIWMJi6U8=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;

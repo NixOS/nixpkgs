@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "liamg";
     repo = "traitor";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-LQfKdjZaTm5z8DUt6He/RJHbOUCUwP3CV3Fyt5rJIfU=";
+    hash = "sha256-LQfKdjZaTm5z8DUt6He/RJHbOUCUwP3CV3Fyt5rJIfU=";
   };
 
   vendorHash = null;

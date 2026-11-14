@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "congma";
     repo = "pass-genphrase";
     rev = version;
-    sha256 = "01dff2jlp111y7vlmp1wbgijzphhlzc19m02fs8nzmn5vxyffanx";
+    hash = "sha256-3SrnfN/F1m+RdgLUFNinEN4v41s83Er38SGES6VwrgU=";
   };
 
   dontBuild = true;

@@ -13,7 +13,7 @@ buildGo126Module (finalAttrs: {
     owner = "knadh";
     repo = "stuffbin";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dOlc/G2IiuMAN0LqiZtbpXLSYaOpe5cl1+cs3YhaAbg=";
+    hash = "sha256-dOlc/G2IiuMAN0LqiZtbpXLSYaOpe5cl1+cs3YhaAbg=";
   };
 
   ldflags = [

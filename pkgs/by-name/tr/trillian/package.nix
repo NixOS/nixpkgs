@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "google";
     repo = "trillian";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5pq2bvTujaxl7W+JswFYP1fbcV5Yd2uOqFRctiIpMv8=";
+    hash = "sha256-5pq2bvTujaxl7W+JswFYP1fbcV5Yd2uOqFRctiIpMv8=";
   };
 
   subPackages = [

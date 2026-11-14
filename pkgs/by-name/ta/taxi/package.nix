@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     owner = "ellie-commons";
     repo = "taxi";
     rev = "b1c81490641f102005d9451a33d21610c0637e22";
-    sha256 = "sha256-boPwRSHzFpbrzRoSmNWf/fgi3cJDEt9qjZHWQWutL+o=";
+    hash = "sha256-boPwRSHzFpbrzRoSmNWf/fgi3cJDEt9qjZHWQWutL+o=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "markqvist";
     repo = "tncattach";
     rev = finalAttrs.version;
-    sha256 = "0n7ad4gqvpgabw2i67s51lfz386wmv0cvnhxq9ygxpsqmx9aynxk";
+    hash = "sha256-s1uvUq9Y3/58wh3azcCu3KDxHQ1FHxMFX+rdjR9p6lg=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

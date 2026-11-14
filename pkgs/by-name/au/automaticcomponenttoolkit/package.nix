@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Autodesk";
     repo = "AutomaticComponentToolkit";
     rev = "v${finalAttrs.version}";
-    sha256 = "1r0sbw82cf9dbcj3vgnbd4sc1lklzvijic2z5wgkvs21azcm0yzh";
+    hash = "sha256-8HtQ2VdB6D0fL1+wKOP+dNLANGnLvj0kWy05JhBfGuQ=";
   };
 
   nativeBuildInputs = [

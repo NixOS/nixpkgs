@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hugegreenbug";
     repo = "libevdevc";
     rev = "v${finalAttrs.version}";
-    sha256 = "0ry30krfizh87yckmmv8n082ad91mqhhbbynx1lfidqzb6gdy2dd";
+    hash = "sha256-rQnfnlkft+ho6NavBSGuITUlELBo1zqZPwj+6PIEw2c=";
   };
 
   postPatch = ''

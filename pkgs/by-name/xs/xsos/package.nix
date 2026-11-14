@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ryran";
     repo = "xsos";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VEOY422/+4veMlN9HOtPB/THDiFLNnRfbUJpKjc/cqE=";
+    hash = "sha256-VEOY422/+4veMlN9HOtPB/THDiFLNnRfbUJpKjc/cqE=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "pluginUtils";
     rev = "V${finalAttrs.version}";
-    sha256 = "1hnr5sp7k6ypf4ks61lnyqx44dkv35yllf3a3xcbrw7yqzagwr1c";
+    hash = "sha256-LGT+1Mf+8LxYH2o4Sn0ZezZCOvaWBqMncdebea4u2cI=";
   };
 
   buildInputs = [

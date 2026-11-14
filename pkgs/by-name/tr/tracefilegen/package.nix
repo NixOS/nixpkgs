@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "GarCoSim";
     repo = "TraceFileGen";
     rev = "0ebfd1fdb54079d4bdeaa81fc9267ecb9f016d60";
-    sha256 = "1gsx18ksgz5gwl3v62vgrmhxc0wc99i74qwhpn0h57zllk41drjc";
+    hash = "sha256-TOYWyKT0nwKBvZBjcmJKjAPWYc1vC7MH5a/8pycKXb8=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "endlessm";
     repo = "eos-installer";
     tag = "Release_${finalAttrs.version}";
-    sha256 = "BqvZglzFJabGXkI8hnLiw1r+CvM7kSKQPj8IKYBB6S4=";
+    hash = "sha256-BqvZglzFJabGXkI8hnLiw1r+CvM7kSKQPj8IKYBB6S4=";
     fetchSubmodules = true;
   };
 

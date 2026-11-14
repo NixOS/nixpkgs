@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gtk-mac-bundler";
     rev = "bundler-${version}";
-    sha256 = "1kyyq2hc217i5vhbfff0ldgv0r3aziwryd1xlck5cw3s6hgskbza";
+    hash = "sha256-6q+pHzR6cFYmoz00n3n8amSwX6PAObfgLvEEwaDA3s8=";
   };
 
   installPhase = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "3DSGuy";
     repo = "Project_CTR";
     rev = "ctrtool-v${finalAttrs.version}";
-    sha256 = "GvEzv97DqCsaDWVqDpajQRWYe+WM8xCYmGE0D3UcSrM=";
+    hash = "sha256-GvEzv97DqCsaDWVqDpajQRWYe+WM8xCYmGE0D3UcSrM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/ctrtool";

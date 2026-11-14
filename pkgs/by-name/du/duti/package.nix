@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "moretension";
     repo = "duti";
     rev = "fe3d3dc411bcea6af7a8cbe53c0e08ed5ecacdb2";
-    sha256 = "1pg4i6ghpib2gy1sqpml7dbnhr1vbr43fs2pqkd09i4w3nmgpic9";
+    hash = "sha256-icX7qh2cxATaxFdoN0heO2RoVzu0XqyDf2LFC5+J5N0=";
   };
 
   patches = [

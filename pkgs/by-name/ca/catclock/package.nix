@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "BarkyTheDog";
     repo = "catclock";
     rev = "b2f277974b5a80667647303cabf8a89d6d6a4290";
-    sha256 = "0ls02j9waqg155rj6whisqm7ppsdabgkrln92n4rmkgnwv25hdbi";
+    hash = "sha256-cTVYxOb2zZqJFcnSPN9STd97KtYRciNzKeFhxZMUQFM=";
   };
 
   preInstall = ''

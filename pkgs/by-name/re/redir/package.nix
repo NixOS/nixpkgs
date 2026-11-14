@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "troglobit";
     repo = "redir";
     rev = "v${finalAttrs.version}";
-    sha256 = "13n401i3q0xwpfgr21y47kgihi057wbh59xlsna8b8zpm973qny1";
+    hash = "sha256-wVs8Tqr3o4WU1bSnAhc/BUQY3zzEB5Gfu7wDPGIAxI4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

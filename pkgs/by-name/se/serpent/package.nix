@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "ethereum";
     repo = "serpent";
     rev = "51ee60857fe53c871fa916ef66fc1b4255bb9433";
-    sha256 = "1bns9wgn5i1ahj19qx7v1wwdy8ca3q3pigxwznm5nywsw7s7lqxs";
+    hash = "sha256-umN69OGae1uq/by/eAceiiHfOA/7dJyChCrEYh9P2q4=";
   };
 
   postPatch = ''

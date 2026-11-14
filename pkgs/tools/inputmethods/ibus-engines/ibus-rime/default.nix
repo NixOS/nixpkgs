@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "rime";
     repo = "ibus-rime";
     rev = version;
-    sha256 = "sha256-7RyCJpgGMqq5s4ijTDA2aq2CtpnQ1HOwO9aPrizSaSo=";
+    hash = "sha256-7RyCJpgGMqq5s4ijTDA2aq2CtpnQ1HOwO9aPrizSaSo=";
   };
 
   buildInputs = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "aktau";
     repo = "hhpc";
     rev = "v${finalAttrs.version}";
-    sha256 = "1djsw1r38mh6zx0rbyn2cfa931hyddib4fl3i27c4z7xinl709ss";
+    hash = "sha256-WidwqI39fMKOiIM6smJrHoaRlGPC+pVB/wZWNHLgWrY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

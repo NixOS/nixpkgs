@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "tryffel";
     repo = "jellycli";
     rev = "v${finalAttrs.version}";
-    sha256 = "1awzcxnf175a794rhzbmqxxjss77mfa1yrr0wgdxaivrlkibxjys";
+    hash = "sha256-2su+4qR5R9Xb4yBnH5Sr52gte8d1fZhJOqqc4Gxnn6s=";
   };
 
   vendorHash = "sha256-3tmNZd1FH1D/1w4gRmaul2epKb70phSUAjUBCbPV3Ak=";

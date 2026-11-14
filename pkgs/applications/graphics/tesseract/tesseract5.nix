@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = finalAttrs.version;
-    sha256 = "sha256-ZeQD4jipvKiiqgG3p9KWjl1QbTP0IEv8VMU1jVtBwA8=";
+    hash = "sha256-ZeQD4jipvKiiqgG3p9KWjl1QbTP0IEv8VMU1jVtBwA8=";
   };
 
   enableParallelBuilding = true;

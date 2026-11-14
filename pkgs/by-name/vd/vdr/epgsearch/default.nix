@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "vdr-plugin-epgsearch";
     owner = "vdr-projects";
-    sha256 = "sha256-+csxlLBSIKiYIjgEPj0IUP8wZX9zuOM26cgA99uZ3EA=";
+    hash = "sha256-+csxlLBSIKiYIjgEPj0IUP8wZX9zuOM26cgA99uZ3EA=";
     rev = "v${version}";
   };
 

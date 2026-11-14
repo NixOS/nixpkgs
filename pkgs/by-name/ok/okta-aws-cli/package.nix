@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "okta";
     repo = "okta-aws-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-NiW0wclSL9QLPiP4zZ9/CohrRBp2rn5CblqrsKVNJK8=";
+    hash = "sha256-NiW0wclSL9QLPiP4zZ9/CohrRBp2rn5CblqrsKVNJK8=";
   };
 
   vendorHash = "sha256-MEtwJZWadQcKAdJS5LhGdIJV2OZKoRJRu87o4J6sruU=";

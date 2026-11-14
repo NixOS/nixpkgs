@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "numixproject";
     repo = "numix-cursor-theme";
     rev = "v${version}";
-    sha256 = "1q3w5i0h3ly6i7s9pqjdrb14kp89i78s0havri7lhiqyxizjvcvh";
+    hash = "sha256-cLMtf+weR0hPzFtBoNGJCd1JwspN4pv0icbTAUEsfOA=";
   };
 
   nativeBuildInputs = [

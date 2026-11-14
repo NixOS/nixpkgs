@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openscad";
     repo = "openscad";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
+    hash = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
   patches = [

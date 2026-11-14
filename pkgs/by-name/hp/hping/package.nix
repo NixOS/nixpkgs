@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "antirez";
     repo = "hping";
     rev = "3547c7691742c6eaa31f8402e0ccbb81387c1b99"; # there are no tags/releases
-    sha256 = "0y0n1ybij3yg9lfgzcwfmjz1sjg913zcqrv391xx83dm0j80sdpb";
+    hash = "sha256-6zYNkAS1DdR7SGNnzP4I6UkdvqyOs/8cTc8PGZcPFng=";
   };
   patches = [
     # Pull patch pending upstream inclusion for -fno-common toolchain

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linbox-team";
     repo = "linbox";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WUSQI9svxbrDTtWBjCF2XMhRFdKwCht8XBmJIJ3DR1E=";
+    hash = "sha256-WUSQI9svxbrDTtWBjCF2XMhRFdKwCht8XBmJIJ3DR1E=";
   };
 
   nativeBuildInputs = [

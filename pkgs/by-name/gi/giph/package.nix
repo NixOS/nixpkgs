@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "phisch";
     repo = "giph";
     rev = version;
-    sha256 = "19l46m1f32b3bagzrhaqsfnl5n3wbrmg3sdy6fdss4y1yf6nqayk";
+    hash = "sha256-0ytsjfPBE62bM77p8WpefNhCrdNYwfyfWmOJ4UI1hKY=";
   };
 
   dontConfigure = true;

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "nawar";
     repo = "kodi-cli";
     rev = version;
-    sha256 = "0f9wdq2fg8hlpk3qbjfkb3imprxkvdrhxfkcvr3dwfma0j2yfwam";
+    hash = "sha256-VXHnhQSqOt5G3my6DnPbs+db41jTyYXHvBSi5wRuPDk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

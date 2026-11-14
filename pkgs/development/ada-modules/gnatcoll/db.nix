@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AdaCore";
     repo = "gnatcoll-db";
     rev = "v${finalAttrs.version}";
-    sha256 = "0q35ii0aa4hh59v768l5cilg1b30a4ckcvlbfy0lkcbp3rcfnbz3";
+    hash = "sha256-4y/rWB53sUmBd4tuNhlRYKzwaGSFInN2KhASpUCMZWA=";
   };
 
   # Link executables dynamically unless specified by the platform,

@@ -24,7 +24,7 @@ let
     owner = "JonathanGiles";
     repo = "scenic-view";
     rev = version;
-    sha256 = "1idfh9hxqs4fchr6gvhblhvjqk4mpl4rnpi84vn1l3yb700z7dwy";
+    hash = "sha256-nrfzATjLDxrsJihemwm9lUwsN6QL7mcyZI5o3GGCrsU=";
   };
 
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kwhat";
     repo = "libuiohook";
     rev = finalAttrs.version;
-    sha256 = "1qlz55fp4i9dd8sdwmy1m8i4i1jy1s09cpmlxzrgf7v34w72ncm7";
+    hash = "sha256-pzIrDidjH/fy77ReloAOXoZIIqrBV940ai1Fcl0pn+I=";
   };
 
   nativeBuildInputs = [

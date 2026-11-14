@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "fcsonline";
     repo = "drill";
     rev = finalAttrs.version;
-    sha256 = "sha256-jBnRVTnrSfEpN7xgMrlAsCwl62kZpHMI4IeT0rPb+zg=";
+    hash = "sha256-jBnRVTnrSfEpN7xgMrlAsCwl62kZpHMI4IeT0rPb+zg=";
   };
 
   cargoHash = "sha256-CfPmTmtCpBgxDH043yIedZk9dngPb5L6z7jQpmvtiEA=";

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "chriskohlhoff";
     repo = "networking-ts-impl";
     rev = "c97570e7ceef436581be3c138868a19ad96e025b";
-    sha256 = "12b5lg989nn1b8v6x9fy3cxsf3hs5hr67bd1mfyh8pjikir7zv6j";
+    hash = "sha256-0ux/cpxRXgS9q6GtYzIsGg6nOxvepW42WsHahNKjZYk=";
   };
 
   installPhase = ''

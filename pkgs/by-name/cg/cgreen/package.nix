@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cgreen-devs";
     repo = "cgreen";
     rev = finalAttrs.version;
-    sha256 = "sha256-YkHhEHr+ZSa2nlLtnTVB5dAdwtGd03mtijiqnnc1914=";
+    hash = "sha256-YkHhEHr+ZSa2nlLtnTVB5dAdwtGd03mtijiqnnc1914=";
   };
 
   postPatch = ''

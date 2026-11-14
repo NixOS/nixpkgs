@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mono";
     repo = "taglib-sharp";
     rev = "taglib-sharp-${finalAttrs.version}";
-    sha256 = "12pk4z6ag8w7kj6vzplrlasq5lwddxrww1w1ya5ivxrfki15h5cp";
+    hash = "sha256-lxVYQpwu9x2L8oEHznNvjdOCtaKZ3r+NnIejp8wn84o=";
   };
 
   nativeBuildInputs = [

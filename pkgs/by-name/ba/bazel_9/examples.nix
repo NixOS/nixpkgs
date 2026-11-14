@@ -16,13 +16,13 @@ let
     owner = "bazelbuild";
     repo = "bazel-central-registry";
     rev = "0e9e0cfdb88577300cc369d0cbe81e678d0fb271";
-    sha256 = "sha256-YAR0tYVUdITfW/2H/LZky88nyoWTsgZf/CX4BtJ/Mwk=";
+    hash = "sha256-YAR0tYVUdITfW/2H/LZky88nyoWTsgZf/CX4BtJ/Mwk=";
   };
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "examples";
     rev = "2a8db5804341036b393ff7e1ba88edb30c8a82c7";
-    sha256 = "sha256-/+rU73WPIKguoEOJDCodE3pUGSGju0VhixIcr0zBVmY=";
+    hash = "sha256-/+rU73WPIKguoEOJDCodE3pUGSGju0VhixIcr0zBVmY=";
   };
   inherit (callPackage ./build-support/patching.nix { }) addFilePatch;
 in

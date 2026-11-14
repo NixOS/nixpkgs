@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ttsiodras";
     repo = "rsbep-backup";
     rev = "v${finalAttrs.version}";
-    sha256 = "0is4jgil3wdqbvx9h66xcyzbqy84ndyydnnay2g9k81a4mcz4dns";
+    hash = "sha256-2jbyWSUqoJme8Mra5n2zBHm8vmfdGJj6XrjxQeOTREc=";
   };
 
   postFixup = ''

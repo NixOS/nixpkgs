@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "neovim";
     repo = "unibilium";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6bFZtR8TUZJembRBj6wUUCyurUdsn3vDGnCzCti/ESc=";
+    hash = "sha256-6bFZtR8TUZJembRBj6wUUCyurUdsn3vDGnCzCti/ESc=";
   };
 
   strictDeps = true;

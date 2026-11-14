@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "Junker";
     repo = "mictray";
     rev = "1f879aeda03fbe87ae5a761f46c042e09912e1c0";
-    sha256 = "0achj6r545c1sigls79c8qdzryz3sgldcyzd3pwak1ymim9i9c74";
+    hash = "sha256-5LAUU43Vh6n4He171ujT4/v8G0YsHU1f1IEVUrKRkCk=";
   };
 
   nativeBuildInputs = [

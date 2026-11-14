@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "liberationfonts";
     repo = "liberation-sans-narrow";
     rev = version;
-    sha256 = "1qw554jbdnqkg6pjjl4cqkgsalq3398kzvww2naw30vykcz752bm";
+    hash = "sha256-dYlyPpt+g8GVFZzvP1EaA1Ol38SMUCmveRPbtiQpheM=";
   };
 
   nativeBuildInputs = [

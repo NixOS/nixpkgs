@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "txthinking";
     repo = "brook";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OIuEJFGOUkvHjxI4FPKWU65VFvgXG0+pu9giGJXYS0w=";
+    hash = "sha256-OIuEJFGOUkvHjxI4FPKWU65VFvgXG0+pu9giGJXYS0w=";
   };
 
   vendorHash = "sha256-974jdNwpQbdTbYjY/6KaicwNclizeIQXfyMZI3v/9aA=";

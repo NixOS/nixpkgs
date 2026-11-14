@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "spotify";
     repo = "git-test";
     rev = "v${finalAttrs.version}";
-    sha256 = "01h3f0andv1p7pwir3k6n01v92hgr5zbjadfwl144yjw9x37fm2f";
+    hash = "sha256-TlR3Rk9cekIC5a4puX7JD4q0A7Bmjhz5PTfsZhVwAwY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

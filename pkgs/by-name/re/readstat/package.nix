@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "WizardMac";
     repo = "ReadStat";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-4lRJgZPB2gfaQ9fQKvDDpGhy1eDNT/nT1QmeZlCmCis=";
+    hash = "sha256-4lRJgZPB2gfaQ9fQKvDDpGhy1eDNT/nT1QmeZlCmCis=";
   };
 
   patches = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "falconindy";
     repo = "ponymix";
     rev = finalAttrs.version;
-    sha256 = "08yp7fprmzm6px5yx2rvzri0l60bra5h59l26pn0k071a37ks1rb";
+    hash = "sha256-Kwc9z1DhgAnsNYKmAovKCxgKYv47i+5Lv6b+mq871yM=";
   };
 
   buildInputs = [

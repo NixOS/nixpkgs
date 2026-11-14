@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hexagonal-sun";
     repo = "ite-backlight";
     rev = "v${finalAttrs.version}";
-    sha256 = "1hany4bn93mac9qyz97r1l858d48zdvvmn3mabzr3441ivqr9j0a";
+    hash = "sha256-CsiU8Y6BkJH/UnXYunf7iDRUEA35pO9xYqqOZBfxVsE=";
   };
 
   nativeBuildInputs = [

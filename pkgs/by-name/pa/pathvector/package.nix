@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "natesales";
     repo = "pathvector";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-TqGasguEAcA5ET2E/uFjgIl7IHI2v9m5EaXpIMG3T8c=";
+    hash = "sha256-TqGasguEAcA5ET2E/uFjgIl7IHI2v9m5EaXpIMG3T8c=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

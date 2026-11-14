@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dsifford";
     repo = "yarn-completion";
     rev = "v${finalAttrs.version}";
-    sha256 = "0xflbrbwskjqv3knvc8jqygpvfxh5ak66q7w22d1ng8gwrfqzcng";
+    hash = "sha256-z7KPXeYPPRuaEPxgY6YqsLt9n8cSsW3n2FhOzVde1HU=";
   };
 
   strictDeps = true;

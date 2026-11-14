@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "namhyung";
     repo = "uftrace";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-4iwb1FQUQy8fFKOPrF6Ts2oOfQofNeMSO+v7G9nxiWo=";
+    hash = "sha256-4iwb1FQUQy8fFKOPrF6Ts2oOfQofNeMSO+v7G9nxiWo=";
   };
 
   nativeBuildInputs = [

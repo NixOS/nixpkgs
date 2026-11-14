@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "twaugh";
     repo = "libieee1284";
     rev = "V${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "0wfv1prmhhpyll9l4g1ij3im7hk9mm96ydw3l9fvhjp3993cdn2x";
+    hash = "sha256-XdjGRkrjSrhdooM3b1KtacJT45AxPEITpf5CWPMN23E=";
   };
 
   patches = [

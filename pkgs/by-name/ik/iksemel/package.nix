@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "timothytylee";
     repo = "iksemel-1.4";
     rev = "v${finalAttrs.version}";
-    sha256 = "1xv302p344hnpxqcgs3z6wwxhrik39ckgfw5cjyrw0dkf316z9yh";
+    hash = "sha256-0KdvwnCzAZ69ZIW7N1kaM2bYOTd/6MdwvxYSMq4AY/c=";
   };
 
   patches = [

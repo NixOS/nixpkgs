@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nullptrlabs";
     repo = "pgmodeler";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-4xXtUnvW8mhUYPsICrXDIMM9+tHdq7qdRdsI7Irjw2E=";
+    hash = "sha256-4xXtUnvW8mhUYPsICrXDIMM9+tHdq7qdRdsI7Irjw2E=";
   };
 
   nativeBuildInputs = [

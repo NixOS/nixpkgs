@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
     owner = "dominikh";
     repo = "gotraceui";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Rforuh9YlTv/mTpQm0+BaY+Ssc4DAiDCzVkIerP5Uz0=";
+    hash = "sha256-Rforuh9YlTv/mTpQm0+BaY+Ssc4DAiDCzVkIerP5Uz0=";
   };
 
   patches = [

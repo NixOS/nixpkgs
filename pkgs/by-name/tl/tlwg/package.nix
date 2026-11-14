@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tlwg";
     repo = "fonts-tlwg";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-suA6jdCgvvWjfHkQhPRE87jm4U/72Acb+U+/O1tDsbI=";
+    hash = "sha256-suA6jdCgvvWjfHkQhPRE87jm4U/72Acb+U+/O1tDsbI=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "fatih";
     repo = "motion";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7vkMhjO4JUAf0sUcKiMjqJ5GzLb//QoHd7Cagerx4/s=";
+    hash = "sha256-7vkMhjO4JUAf0sUcKiMjqJ5GzLb//QoHd7Cagerx4/s=";
   };
 
   vendorHash = null;

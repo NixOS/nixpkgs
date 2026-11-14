@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OCL-dev";
     repo = "ocl-icd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-J7j68KlcwdlwtBo171xZd5iLWeo1suYm43G1JiFs2AE=";
+    hash = "sha256-J7j68KlcwdlwtBo171xZd5iLWeo1suYm43G1JiFs2AE=";
   };
 
   nativeBuildInputs = [

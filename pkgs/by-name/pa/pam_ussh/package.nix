@@ -14,7 +14,7 @@ buildGoModule {
     owner = "uber";
     repo = "pam-ussh";
     rev = "e9524bda90ba19d3b9eb24f49cb63a6a56a19193"; # HEAD as of 2022-03-13
-    sha256 = "0nb9hpqbghgi3zvq41kabydzyc6ffaaw9b4jkc5jrwn1klpw1xk8";
+    hash = "sha256-aPbAL53B8iwLm5KsxJVyzjD/m19qBoL3H/HBt/CFaVk=";
   };
 
   preBuild = ''

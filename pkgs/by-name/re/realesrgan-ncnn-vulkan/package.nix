@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "xinntao";
     repo = "Real-ESRGAN-ncnn-vulkan";
     rev = "v${version}";
-    sha256 = "sha256-F+NfkAbk8UtAKzsF42ppPF2UGjK/M6iFfBsRRBbCmcI=";
+    hash = "sha256-F+NfkAbk8UtAKzsF42ppPF2UGjK/M6iFfBsRRBbCmcI=";
   };
   sourceRoot = "${src.name}/src";
 

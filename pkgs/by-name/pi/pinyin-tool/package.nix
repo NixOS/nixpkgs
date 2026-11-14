@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "briankung";
     repo = "pinyin-tool";
     rev = finalAttrs.version;
-    sha256 = "1gwqwxlvdrm4sdyqkvpvvfi6jh6qqn6qybn0z66wm06k62f8zj5b";
+    hash = "sha256-q8iPnDDTgMqN+cAuj43F2EBpotv77ol906TmtmnnmL8=";
   };
 
   cargoHash = "sha256-SOeyk2uWCdO99ooQc2L1eXlV77lR4DLBK6PnV6Ur49A=";

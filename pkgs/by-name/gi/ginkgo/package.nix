@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-gHbX+ZPAteT9st7/Yv+l/tsn0/Bu6QRZ1S5JIyML6js=";
+    hash = "sha256-gHbX+ZPAteT9st7/Yv+l/tsn0/Bu6QRZ1S5JIyML6js=";
   };
   vendorHash = "sha256-lj8b9f5q9hbPML7uLca74lTCadNOCtGIDmvP+CUwJx4=";
 

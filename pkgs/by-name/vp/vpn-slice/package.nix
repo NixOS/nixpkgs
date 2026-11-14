@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "dlenski";
     repo = "vpn-slice";
     rev = "v${version}";
-    sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
+    hash = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
 
   postPatch =

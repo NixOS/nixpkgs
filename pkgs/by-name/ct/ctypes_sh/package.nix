@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "taviso";
     repo = "ctypes.sh";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ZYsjySJaxyLAiyGaNwngA7ef6vA+fUTCh9hi5g55v+g=";
+    hash = "sha256-ZYsjySJaxyLAiyGaNwngA7ef6vA+fUTCh9hi5g55v+g=";
   };
 
   nativeBuildInputs = [

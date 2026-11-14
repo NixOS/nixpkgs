@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dell";
     repo = "libsmbios";
     rev = "v${finalAttrs.version}";
-    sha256 = "0krwwydyvb9224r884y1mlmzyxhlfrcqw73vi1j8787rl0gl5a2i";
+    hash = "sha256-UahCH6D5oINkiHscjll2FHb/K63BE4QyESKt7ZvnPE8=";
   };
 
   patches = [

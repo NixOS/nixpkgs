@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "clearly-broken-software";
     repo = "ninjas2";
     tag = "v${finalAttrs.version}";
-    sha256 = "1kwp6pmnfar2ip9693gprfbcfscklgri1k1ycimxzlqr61nkd2k9";
+    hash = "sha256-aYo2bTAZ099rZD7MEPOjk2nHlsv3jWTSjSIrZ+s1l88=";
     fetchSubmodules = true;
   };
 

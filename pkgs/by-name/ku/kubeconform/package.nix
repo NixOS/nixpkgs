@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "yannh";
     repo = "kubeconform";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-HcYKmit67ZGABDfpr281FiStMZmM/vkkj9wxXH5H9zc=";
+    hash = "sha256-HcYKmit67ZGABDfpr281FiStMZmM/vkkj9wxXH5H9zc=";
   };
 
   env.CGO_ENABLED = 0;

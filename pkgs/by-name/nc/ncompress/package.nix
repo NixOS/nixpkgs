@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vapier";
     repo = "ncompress";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
+    hash = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
   };
 
   patches = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "intel";
     repo = "thunderbolt-software-user-space";
     rev = "v${finalAttrs.version}";
-    sha256 = "02w1bfm7xvq0dzkhwqiq0camkzz9kvciyhnsis61c8vzp39cwx0x";
+    hash = "sha256-HXTO0rh/IxaMjtpCH9me6f9ZFQM4Yg7nbwDvfqpbgQs=";
   };
 
   nativeBuildInputs = [

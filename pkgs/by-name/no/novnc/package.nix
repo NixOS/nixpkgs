@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "novnc";
     repo = "noVNC";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vObaEjP8ZgA4a4bEYbSBsSTl6CfYa/B7qmghM+iVDnQ=";
+    hash = "sha256-vObaEjP8ZgA4a4bEYbSBsSTl6CfYa/B7qmghM+iVDnQ=";
   };
 
   patches =

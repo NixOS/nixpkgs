@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "flamegraph-rs";
     repo = "flamegraph";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-CNWX1q751yqbrpmNGIfB4/jZk8zMfd0RnkH7GEfo4JA=";
+    hash = "sha256-CNWX1q751yqbrpmNGIfB4/jZk8zMfd0RnkH7GEfo4JA=";
   };
 
   cargoHash = "sha256-yPHWJGGM3EDuoSY1ZZ3+ocLK3RZ97BMbffmOu2bahBM=";

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "rakyll";
     repo = "hey";
     rev = "v${finalAttrs.version}";
-    sha256 = "0gsdksrzlwpba14a43ayyy41l1hxpw4ayjpvqyd4ycakddlkvgzb";
+    hash = "sha256-6789aWtTMU+ax/tKrwi/HQYaiPdeDaJIUOty+rOeTT8=";
   };
 
   vendorHash = null;

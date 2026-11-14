@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "kubernetes-sigs";
     repo = "metrics-server";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1yzX1GkuCA321Z+v4XQqzO6Leuy5DhUUU0l8wlYJ16Y=";
+    hash = "sha256-1yzX1GkuCA321Z+v4XQqzO6Leuy5DhUUU0l8wlYJ16Y=";
   };
 
   vendorHash = "sha256-r1E2ZxLLVcZEZd8iih3SJhkjfUeN48NWuZbxgwxCpYE=";

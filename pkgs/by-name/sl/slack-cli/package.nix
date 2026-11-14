@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rockymadden";
     repo = "slack-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "022yr3cpfg0v7cxi62zzk08vp0l3w851qpfh6amyfgjiynnfyddl";
+    hash = "sha256-tDXvrPVRPuerMtBdHArig4K7EZj/CxM7Oxs8d9nIXgg=";
   };
 
   dontBuild = true;

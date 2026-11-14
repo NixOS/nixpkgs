@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sionescu";
     repo = "libfixposix";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5qA6ytbqE+/05XQGxP9/4vEs9gFcuI3k7eJJYucW7fM=";
+    hash = "sha256-5qA6ytbqE+/05XQGxP9/4vEs9gFcuI3k7eJJYucW7fM=";
   };
 
   nativeBuildInputs = [

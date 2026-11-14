@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Y-Vladimir";
     repo = "SmartDeblur";
     rev = "5af573c7048ac49ef68e638f3405d3a571b96a8b";
-    sha256 = "151vdd5ld0clw0vgp0fvp2gp2ybwpx9g43dad9fvbvwkg60izs87";
+    hash = "sha256-B+kfgXmT77VdaqoN8lK/fHlxn7jbgfs24JSBRktrO5Q=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

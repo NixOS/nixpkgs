@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "paulnasca";
     repo = "paulstretch_cpp";
     rev = "7f5c3993abe420661ea0b808304b0e2b4b0048c5";
-    sha256 = "06dy03dbz1yznhsn0xvsnkpc5drzwrgxbxdx0hfpsjn2xcg0jrnc";
+    hash = "sha256-zGYJHuvCSn0dBL311V/mP7fC7rR6d2A1tN+Hv9oAvhk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

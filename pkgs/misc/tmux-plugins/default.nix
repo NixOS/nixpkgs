@@ -1389,7 +1389,7 @@ in
       owner = "ofirgall";
       repo = "tmux-window-name";
       rev = "34026b6f442ceb07628bf25ae1b04a0cd475e9ae";
-      sha256 = "sha256-BNgxLk/BkaQkGlB4g2WKVs39y4VHL1Y2TdTEoBy7yo0=";
+      hash = "sha256-BNgxLk/BkaQkGlB4g2WKVs39y4VHL1Y2TdTEoBy7yo0=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     rtpFilePath = "tmux_window_name.tmux";

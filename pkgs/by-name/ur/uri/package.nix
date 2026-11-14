@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cpp-netlib";
     repo = "uri";
     rev = "v${finalAttrs.version}";
-    sha256 = "148361pixrm94q6v04k13s1msa04bx9yc3djb0lxpa7dlw19vhcd";
+    hash = "sha256-jcGdAqftqNspWLIN5lNfBChdgx5hErANJqnmHm8wA5E=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString (

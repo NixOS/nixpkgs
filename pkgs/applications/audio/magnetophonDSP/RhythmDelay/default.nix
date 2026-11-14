@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "RhythmDelay";
     rev = "V${finalAttrs.version}";
-    sha256 = "1j0bjl9agz43dcrcrbiqd7fv7xsxgd65s4ahhv5pvcr729y0fxg4";
+    hash = "sha256-5HUHfBIns33LhlARXUx7Xfez3Wk4rswya4P8pxKVC8g=";
   };
 
   buildInputs = [

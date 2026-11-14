@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flexible-collision-library";
     repo = "fcl";
     rev = finalAttrs.version;
-    sha256 = "0f5lhg6f9np7w16s6wz4mb349bycil1irk8z8ylfjwllxi4n6x7a";
+    hash = "sha256-6nRjSeyUcumoRx/NHAONzK9Exqrkc6NN4Ofa5MyDtDg=";
   };
 
   nativeBuildInputs = [ cmake ];

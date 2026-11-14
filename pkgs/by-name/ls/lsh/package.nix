@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
     owner = "latitudesh";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-e+YIl5FjXsDDNUut1cUmQMsL9DPynT/t8rxy3AFpZy4=";
+    hash = "sha256-e+YIl5FjXsDDNUut1cUmQMsL9DPynT/t8rxy3AFpZy4=";
   };
   vendorHash = "sha256-btjvNJ8WuMPzriA1Z1xB64kAvOjoVuzksIbqSLD1ahg=";
   subPackages = [ "." ];

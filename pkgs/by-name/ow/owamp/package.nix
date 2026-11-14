@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "perfsonar";
     repo = "owamp";
     tag = "v${finalAttrs.version}";
-    sha256 = "5o85XSn84nOvNjIzlaZ2R6/TSHpKbWLXTO0FmqWsNMU=";
+    hash = "sha256-5o85XSn84nOvNjIzlaZ2R6/TSHpKbWLXTO0FmqWsNMU=";
     fetchSubmodules = true;
   };
 

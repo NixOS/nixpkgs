@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "SeeLook";
     repo = "nootka";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-lRgFCPeIBefwsHMsE8eHLxT9GQUT0iUCyIrJz+mltp0=";
+    hash = "sha256-lRgFCPeIBefwsHMsE8eHLxT9GQUT0iUCyIrJz+mltp0=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "cpbotha";
     repo = "nvpy";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-guNdLu/bCk89o5M3gQU7J0W4h7eZdLHM0FG5IAPLE7c=";
+    hash = "sha256-guNdLu/bCk89o5M3gQU7J0W4h7eZdLHM0FG5IAPLE7c=";
   };
 
   build-system = with python3Packages; [ setuptools ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Sapd";
     repo = "HeadsetControl";
     rev = finalAttrs.version;
-    sha256 = "sha256-QwgH6w2CFRbH22Dc+MOdbtNZENbjf70XLhQ7D4DnhQc=";
+    hash = "sha256-QwgH6w2CFRbH22Dc+MOdbtNZENbjf70XLhQ7D4DnhQc=";
   };
 
   nativeBuildInputs = [

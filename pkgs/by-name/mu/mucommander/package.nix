@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mucommander";
     repo = "mucommander";
     rev = finalAttrs.version;
-    sha256 = "sha256-J1paBXlAGe2eKMg4wvaXTzMIiSMFIJ1XIAaKrfOwQLc=";
+    hash = "sha256-J1paBXlAGe2eKMg4wvaXTzMIiSMFIJ1XIAaKrfOwQLc=";
   };
 
   postPatch = ''

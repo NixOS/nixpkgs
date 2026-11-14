@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "owfs";
     repo = "owfs";
     rev = "v${finalAttrs.version}";
-    sha256 = "0dln1ar7bxwhpi36sccmpwapy7iz4j097rbf02mgn42lw5vrcg3s";
+    hash = "sha256-ejyWd+FUEPuqAG7lk4AkPx5/Fb+VMW1GvJD3dbIKljY=";
   };
 
   nativeBuildInputs = [

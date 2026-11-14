@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "cshorler";
     repo = "webcam-tools";
     rev = "bee2ef3c9e350fd859f08cd0e6745871e5f55cb9";
-    sha256 = "0s15xxgdx8lnka7vi8llbf6b0j4rhbjl6yp0qxaihysf890xj73s";
+    hash = "sha256-ehzZQUJOexhVx+B6Q+WCmUiwjFuUoriPmpai3l7vJWg=";
   };
 
   nativeBuildInputs = [

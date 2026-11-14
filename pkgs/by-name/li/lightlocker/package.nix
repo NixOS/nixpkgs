@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "the-cavalry";
     repo = "light-locker";
     rev = "v${version}";
-    sha256 = "1z5lcd02gqax65qc14hj5khifg7gr53zy3s5i6apba50lbdlfk46";
+    hash = "sha256-hkxH26KgqHWViUUP/0fJ7zwX4SwSksBwMV3hJ0BjtPw=";
   };
 
   nativeBuildInputs = [

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cornelisnetworks";
     repo = "opa-psm2";
     rev = "PSM2_${finalAttrs.version}";
-    sha256 = "sha256-MzocxY+X2a5rJvTo+gFU0U10YzzazR1IxzgEporJyhI=";
+    hash = "sha256-MzocxY+X2a5rJvTo+gFU0U10YzzazR1IxzgEporJyhI=";
   };
 
   postInstall = ''

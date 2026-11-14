@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "tmountain";
     repo = "uchess";
     rev = "v${finalAttrs.version}";
-    sha256 = "1njl3f41gshdpj431zkvpv2b7zmh4m2m5q6xsijb0c0058dk46mz";
+    hash = "sha256-vxoyGyoAMLBk1N3gUkUlsP6zxL57/jCIvA3qF4gbVNo=";
   };
 
   vendorHash = "sha256-4yEE1AsSChayCBxaMXPsbls7xGmFeWRhfOMHyAAReDY=";

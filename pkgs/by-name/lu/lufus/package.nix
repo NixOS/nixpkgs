@@ -14,7 +14,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     owner = "Hogjects";
     repo = "Lufus";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-3i0CnhGvLTXutz8CQoH5q4PwZ23lAwnUo8H5TRJx+KE=";
+    hash = "sha256-3i0CnhGvLTXutz8CQoH5q4PwZ23lAwnUo8H5TRJx+KE=";
   };
 
   propagatedBuildInputs = with python313Packages; [

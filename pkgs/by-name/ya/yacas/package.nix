@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "grzegorzmazur";
     repo = "yacas";
     rev = "v${finalAttrs.version}";
-    sha256 = "0dqgqvsb6ggr8jb3ngf0jwfkn6xwj2knhmvqyzx3amc74yd3ckqx";
+    hash = "sha256-HU82mieHVTX693hXaKeQvBs7HZfAPTuWRPk9s/TGDzc=";
   };
 
   hardeningDisable = [ "format" ];

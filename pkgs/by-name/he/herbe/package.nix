@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dudik";
     repo = "herbe";
     rev = finalAttrs.version;
-    sha256 = "0358i5jmmlsvy2j85ij7m1k4ar2jr5lsv7y1c58dlf9710h186cv";
+    hash = "sha256-mxkUIAgnOdpQYcGfrWnJUmRFZqhHxoKk8FvTWmWJqAw=";
   };
 
   inherit patches;

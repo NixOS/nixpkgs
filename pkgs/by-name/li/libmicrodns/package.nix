@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "videolabs";
     repo = "libmicrodns";
     rev = finalAttrs.version;
-    sha256 = "05vgka45c1frnv4q7pbz0bggsn5xaykh4xpklh9yb6d6qj7dbx0b";
+    hash = "sha256-C/TVjsSmmeUTpPN2AqdXvVj93gJ/3YPJttkFVoiabxc=";
   };
 
   nativeBuildInputs = [

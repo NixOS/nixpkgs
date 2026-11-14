@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "kvirc";
     repo = "KVIrc";
     rev = "eb3fdd6b1d824f148fd6e582852dcba77fc9a271";
-    sha256 = "sha256-RT5UobpMt/vBLgWur1TkodS3dMyIWQkDPiBYCYx/FI4=";
+    hash = "sha256-RT5UobpMt/vBLgWur1TkodS3dMyIWQkDPiBYCYx/FI4=";
   };
 
   buildInputs = [

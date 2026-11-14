@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
     owner = "nwg-piotr";
     repo = "nwg-menu";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-3fN89HPwobMiijlvGJ80HexCBdsPLsEvAz9VH8dO4qc=";
+    hash = "sha256-3fN89HPwobMiijlvGJ80HexCBdsPLsEvAz9VH8dO4qc=";
   };
 
   vendorHash = "sha256-5gazNUZdPZh21lcnVFKPSDc/JLi8d6tqfP4NKMzPa8U=";

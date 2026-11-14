@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ugtrain";
     repo = "ugtrain";
     rev = "v${finalAttrs.version}";
-    sha256 = "0pw9lm8y83mda7x39874ax2147818h1wcibi83pd2x4rp1hjbkkn";
+    hash = "sha256-ds4lYbiZdNHuQHFFxgNEAR0SRFfkoDT6Ua0O5FGliV8=";
   };
 
   nativeBuildInputs = [

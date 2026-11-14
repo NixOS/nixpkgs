@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lvc";
     repo = "pkgdiff";
     rev = finalAttrs.version;
-    sha256 = "sha256-/xhORi/ZHC4B2z6UYPOvDzfgov1DcozRjX0K1WYrqXM=";
+    hash = "sha256-/xhORi/ZHC4B2z6UYPOvDzfgov1DcozRjX0K1WYrqXM=";
   };
 
   buildInputs = [ perl ];

@@ -14,7 +14,7 @@ buildNpmPackage rec {
     owner = "JarvusInnovations";
     repo = "puppeteer-cli";
     rev = "v${version}";
-    sha256 = "0xrb8r4qc9ds7wmfd30nslnkqylxqfwr4gqf7b30v651sjyds29x";
+    hash = "sha256-PQndvNShmA3GOg4/krnDnXo8LdUWjOYqP7olhklGK3c=";
   };
 
   npmDepsHash = "sha256-R22lXQuYNQ+TQ7U2l4wZeBmAl8AXHUPG/3qVQBi3Ezo=";

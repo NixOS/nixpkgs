@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Duncaen";
     repo = "OpenDoas";
     rev = "v${finalAttrs.version}";
-    sha256 = "9uOQ2Ta5HzEpbCz2vbqZEEksPuIjL8lvmfmynfqxMeM=";
+    hash = "sha256-9uOQ2Ta5HzEpbCz2vbqZEEksPuIjL8lvmfmynfqxMeM=";
   };
 
   # otherwise confuses ./configure

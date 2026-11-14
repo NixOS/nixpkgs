@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ascherer";
     repo = "cwebbin";
     rev = "2016-05-20-22p";
-    sha256 = "0zf93016hm9i74i2v384rwzcw16y3hg5vc2mibzkx1rzvqa50yfr";
+    hash = "sha256-2XlQFN4/hz7/ilWwXR4c3gTOPs8EjS0iOTFVaAIYyX0=";
   };
 
   prePatch = ''

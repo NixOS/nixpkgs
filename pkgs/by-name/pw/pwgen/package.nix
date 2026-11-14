@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tytso";
     repo = "pwgen";
     rev = "v${finalAttrs.version}";
-    sha256 = "1j6c6m9fcy24jn8mk989x49yk765xb26lpr8yhpiaqk206wlss2z";
+    hash = "sha256-X2hNuQFiYhUv9ChfasTqxZzpE+kJpVmRlUR45lI1zMg=";
   };
 
   nativeBuildInputs = [

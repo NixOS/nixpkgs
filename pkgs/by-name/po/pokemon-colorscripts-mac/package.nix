@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "nuke-dash";
     repo = "pokemon-colorscripts-mac";
     rev = "6aa0cd93b255bee35c5716652b8b7dfecb5fcfa2";
-    sha256 = "06b86qy2fpzdd81n2mscc2njkrxx0dyzxpgnm1xk6ldn17c853lc";
+    hash = "sha256-jI6C2Am2UTN7qPbd/n0DvecprWBMV2EDau1fJzw2aBk=";
   };
 
   buildInputs = [ coreutils ];

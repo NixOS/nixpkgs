@@ -15,7 +15,7 @@ let
     owner = "tfc";
     repo = "pandoc-drawio-filter";
     rev = version;
-    sha256 = "sha256-2XJSAfxqEmmamWIAM3vZqi0mZjUUugmR3zWw8Imjadk=";
+    hash = "sha256-2XJSAfxqEmmamWIAM3vZqi0mZjUUugmR3zWw8Imjadk=";
   };
 
   pandoc-drawio-filter = python3Packages.buildPythonApplication {

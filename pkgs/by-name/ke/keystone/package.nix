@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "keystone-engine";
     repo = "keystone";
     rev = finalAttrs.version;
-    sha256 = "020d1l1aqb82g36l8lyfn2j8c660mm6sh1nl4haiykwgdl9xnxfa";
+    hash = "sha256-ynXbE22PTx8VJNQGqE2twBiGpLDOU0TNeAItrAINDQg=";
   };
 
   patches = [

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tedigh";
     repo = "ufiformat";
     rev = "v${finalAttrs.version}";
-    sha256 = "heFETZj9migz2s9kvmw0ZQ1ieNpU4V4Lwfp91ek2cS4=";
+    hash = "sha256-heFETZj9migz2s9kvmw0ZQ1ieNpU4V4Lwfp91ek2cS4=";
   };
 
   meta = {

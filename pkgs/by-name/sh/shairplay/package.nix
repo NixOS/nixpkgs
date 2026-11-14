@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "juhovh";
     repo = "shairplay";
     rev = "096b61ad14c90169f438e690d096e3fcf87e504e";
-    sha256 = "02xkd9al79pbqh8rhzz5w99vv43jg5vqkqg7kxsw8c8sz9di9wsa";
+    hash = "sha256-SvMUW/oaMcR1n+fhiXd5cpC9U+Llf5gRxOumQ1Vqsws=";
   };
 
   nativeBuildInputs = [

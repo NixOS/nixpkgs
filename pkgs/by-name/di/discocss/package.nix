@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "mlvzk";
     repo = "discocss";
     rev = "v${version}";
-    sha256 = "sha256-of7OMgbuwebnFmbefGD1/dOhyTX1Hy7TccnWSRCweW0=";
+    hash = "sha256-of7OMgbuwebnFmbefGD1/dOhyTX1Hy7TccnWSRCweW0=";
   };
 
   dontBuild = true;

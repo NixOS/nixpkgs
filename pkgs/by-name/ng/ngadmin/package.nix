@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "Alkorin";
     repo = "ngadmin";
     rev = "5bf8650ce6d465b8cb1e570548819f0cefe9a87d";
-    sha256 = "15vixhwqcpbjdxlaznans9w63kwl29mdkds6spvbv2i7l33qnhq4";
+    hash = "sha256-BEOLx6Anir321Ua32WoSlM9heNJW2a9ob3JdhjnscZc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withReadline readline;

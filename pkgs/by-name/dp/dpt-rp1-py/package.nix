@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "janten";
     repo = "dpt-rp1-py";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cJ9dc8TRuduIka6T/MQsetDAjIhb+i2U9F8Qm9h29d8=";
+    hash = "sha256-cJ9dc8TRuduIka6T/MQsetDAjIhb+i2U9F8Qm9h29d8=";
   };
 
   doCheck = false;

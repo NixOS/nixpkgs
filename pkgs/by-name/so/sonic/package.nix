@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "waywardgeek";
     repo = "sonic";
     rev = "4a052d9774387a9d9b4af627f6a74e1694419960";
-    sha256 = "0ah54nizb6iwcx277w104wsfnx05vrp4sh56d2pfxhf8xghg54m6";
+    hash = "sha256-ppLy4OvIwe6uaKZATW7eBXTrNCcg8HNEZzya9aMlBSo=";
   };
 
   makeFlags = [

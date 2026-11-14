@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "zeronet-conservancy";
     repo = "zeronet-conservancy";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ZQYdK0B0z0cXTx7ujFngW3wSa/j8sEuwHB+BC5Xqq8o=";
+    hash = "sha256-ZQYdK0B0z0cXTx7ujFngW3wSa/j8sEuwHB+BC5Xqq8o=";
   };
 
   propagatedBuildInputs = with python3Packages; [

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kainjow";
     repo = "Mustache";
     rev = "v${finalAttrs.version}";
-    sha256 = "0r9rbk6v1wpld2ismfsk2lkhbyv3dkf0p03hkjivbj05qkfhvlbb";
+    hash = "sha256-a9EN3cQFyLWjnHCAC9xsY/sFJxVTu6qjaPTysM1cOWU=";
   };
 
   dontBuild = true;

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Caneda";
     repo = "Caneda";
     rev = finalAttrs.version;
-    sha256 = "sha256-oE0cdOwufc7CHEFr3YU8stjg1hBGs4bemhXpNTCTpDQ=";
+    hash = "sha256-oE0cdOwufc7CHEFr3YU8stjg1hBGs4bemhXpNTCTpDQ=";
   };
 
   patches = [

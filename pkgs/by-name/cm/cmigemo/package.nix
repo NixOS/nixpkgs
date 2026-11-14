@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "koron";
     repo = "cmigemo";
     rev = "e0f6145f61e0b7058c3006f344e58571d9fdd83a";
-    sha256 = "00a6kdmxp16b8x0p04ws050y39qspd1bqlfq74bkirc55b77a2m1";
+    hash = "sha256-oQp1ziqF5TgXOdhRvEK7GqfhQQGaE3BBR8uE22ubRgE=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "rakyll";
     repo = "statik";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-GfXYlkzPESu9Szl+g90oB2ldrCS5aAOt9m+WPOOXhIE=";
+    hash = "sha256-GfXYlkzPESu9Szl+g90oB2ldrCS5aAOt9m+WPOOXhIE=";
   };
 
   vendorHash = null;

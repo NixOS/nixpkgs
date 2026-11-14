@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "stark";
     repo = "siji";
     rev = "3cbb7fe938c33aaadbb657803ea5946e5157d6e2";
-    sha256 = "1408g4nxwdd682vjqpmgv0cp0bfnzzzwls62cjs9zrds16xa9dpf";
+    hash = "sha256-7rakugm65Z+0ZMJoyv//1i1wGdivXiy3QKY13i15CJA=";
   };
 
   nativeBuildInputs = [

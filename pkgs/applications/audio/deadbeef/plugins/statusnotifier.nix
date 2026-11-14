@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vovochka404";
     repo = "deadbeef-statusnotifier-plugin";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pDiQn+iHSTNWTO01j/fbEq3P374TMmnUiC5/Jn2hwBI=";
+    hash = "sha256-pDiQn+iHSTNWTO01j/fbEq3P374TMmnUiC5/Jn2hwBI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "electrickery";
     repo = "pd-maxlib";
     rev = "v${finalAttrs.version}";
-    sha256 = "10w9qfgn26lj3zqjksf2r1wsjpf5xy4dx22jay9l6idy9q62mxsn";
+    hash = "sha256-VvcqDE6+RUOTV1KI3ojvxV2pecjC6SnxH5IaYZ/DiYM=";
   };
 
   buildInputs = [ puredata ];

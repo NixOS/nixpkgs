@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kaworu";
     repo = "tagutil";
     rev = "c8b20ef350b1a8a67a747590e2e88b41f802cce4";
-    sha256 = "sha256-sKnBS9kXhJ2atN6A3qcX9A+0A7WfNkOe+nKSblL3i0o=";
+    hash = "sha256-sKnBS9kXhJ2atN6A3qcX9A+0A7WfNkOe+nKSblL3i0o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

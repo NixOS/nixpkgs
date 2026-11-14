@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bderrly";
     repo = "braincurses";
     tag = finalAttrs.version;
-    sha256 = "0gpny9wrb0zj3lr7iarlgn9j4367awj09v3hhxz9r9a6yhk4anf5";
+    hash = "sha256-xVlFJvRGpZx+h3DsBCRXxwwik300q3gyHfKDlXny9j4=";
   };
 
   buildInputs = [ ncurses ];

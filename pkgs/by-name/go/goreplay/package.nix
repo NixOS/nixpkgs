@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "probelabs";
     repo = "goreplay";
     rev = finalAttrs.version;
-    sha256 = "sha256-FiY9e5FgpPu+K8eoO8TsU3xSaSoPPDxYEu0oi/S8Q1w=";
+    hash = "sha256-FiY9e5FgpPu+K8eoO8TsU3xSaSoPPDxYEu0oi/S8Q1w=";
   };
 
   patches = [

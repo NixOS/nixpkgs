@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ebassi";
     repo = "graphene";
     rev = finalAttrs.version;
-    sha256 = "P6JQhSktzvyMHatP/iojNGXPmcsxsFxdYerXzS23ojI=";
+    hash = "sha256-P6JQhSktzvyMHatP/iojNGXPmcsxsFxdYerXzS23ojI=";
   };
 
   patches = [

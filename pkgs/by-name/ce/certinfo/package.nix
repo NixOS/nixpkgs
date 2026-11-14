@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "pete911";
     repo = "certinfo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ieqR/LkjQzKxycLTCIP5mGCrtDZcbqlcXmSzaIVp3zA=";
+    hash = "sha256-ieqR/LkjQzKxycLTCIP5mGCrtDZcbqlcXmSzaIVp3zA=";
   };
 
   ldflags = [

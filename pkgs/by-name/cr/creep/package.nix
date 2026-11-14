@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "romeovs";
     repo = "creep";
     rev = finalAttrs.version;
-    sha256 = "0zs21kznh1q883jfdgz74bb63i4lxlv98hj3ipp0wvsi6zw0vs8n";
+    hash = "sha256-FukN+DdRbw7ujUNClDbtlMRh1iLnv+bkQAgHaP8MQn8=";
   };
 
   nativeBuildInputs = [

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "philj56";
     repo = "tofi";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-lokp6Zmdt7WuAyuRnHBkKD4ydbNiQY7pEVY97Z62U90=";
+    hash = "sha256-lokp6Zmdt7WuAyuRnHBkKD4ydbNiQY7pEVY97Z62U90=";
   };
 
   depsBuildBuild = [ pkg-config ];

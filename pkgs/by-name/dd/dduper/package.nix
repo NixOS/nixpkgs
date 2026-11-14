@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lakshmipathi";
     repo = "dduper";
     rev = "v${finalAttrs.version}";
-    sha256 = "09ncdawxkffldadqhfblqlkdl05q2qmywxyg6p61fv3dr2f2v5wm";
+    hash = "sha256-lZctnMhtbBfMNc937isWuADaJsV0OYibatS52blqzCY=";
   };
 
   buildInputs = [

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "mattn";
     repo = "efm-langserver";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-LWpm5DyHhrSAGxfwEAM0HABPwfsvWEHZ22U93wdldTw=";
+    hash = "sha256-LWpm5DyHhrSAGxfwEAM0HABPwfsvWEHZ22U93wdldTw=";
   };
 
   vendorHash = "sha256-3Rz/9p1moT3rQPY3/lka9HZ16T00+bAWCc950IBTkFE=";

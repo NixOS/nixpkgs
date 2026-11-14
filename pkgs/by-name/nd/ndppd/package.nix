@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "DanielAdolfsson";
     repo = "ndppd";
     rev = finalAttrs.version;
-    sha256 = "sha256-FqOoN7MxewmOxd4SKnOx4W/c3X4Jso/kFdiTzIRqHaw=";
+    hash = "sha256-FqOoN7MxewmOxd4SKnOx4W/c3X4Jso/kFdiTzIRqHaw=";
   };
 
   nativeBuildInputs = [ gzip ];

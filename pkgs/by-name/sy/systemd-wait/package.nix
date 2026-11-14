@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication {
     owner = "Stebalien";
     repo = "systemd-wait";
     rev = "bbb58dd4584cc08ad20c3888edb7628f28aee3c7";
-    sha256 = "1l8rd0wzf3m7fk0g1c8wc0csdisdfac0filhixpgp0ck9ignayq5";
+    hash = "sha256-BXtlX0yTgftuj5BGB5hyTcemGWAcsfDAdKcO9zloGdE=";
   };
 
   build-system = with python3Packages; [ setuptools ];

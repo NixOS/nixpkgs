@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "ebassi";
     repo = "mutest";
     rev = "18a20071773f7c4b75e82a931ef9b916b273b3e5";
-    sha256 = "z0kASte0/I48Fgxhblu24MjGHidWomhfFOhfStGtPn4=";
+    hash = "sha256-z0kASte0/I48Fgxhblu24MjGHidWomhfFOhfStGtPn4=";
   };
 
   nativeBuildInputs = [

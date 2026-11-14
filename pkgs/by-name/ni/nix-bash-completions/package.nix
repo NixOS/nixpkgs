@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hedning";
     repo = "nix-bash-completions";
     rev = "v${finalAttrs.version}";
-    sha256 = "1n5zs6xcnv4bv1hdaypmz7fv4j7dsr4a0ifah99iyj4p5j85i1bc";
+    hash = "sha256-bIVYkCyXSB9TgspFoEjW7Uiy3fn1etVg2Itsy7rRv9g=";
   };
 
   patches = [

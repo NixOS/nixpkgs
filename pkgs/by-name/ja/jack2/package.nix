@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Cslfys5fcZDy0oee9/nM5Bd1+Cg4s/ayXjJJOSQCL4E=";
+    hash = "sha256-Cslfys5fcZDy0oee9/nM5Bd1+Cg4s/ayXjJJOSQCL4E=";
   };
 
   outputs = [

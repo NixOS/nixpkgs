@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     owner = "quassel";
     repo = "quassel";
     rev = "15e764d9bb836f13283be80c8135936f6a1cac72"; # https://github.com/quassel/quassel/pull/631
-    sha256 = "sha256-Ogf2zv6SKnn+UwQ2meDYTk7axYkWTdnKqUhbJVMUBbo=";
+    hash = "sha256-Ogf2zv6SKnn+UwQ2meDYTk7axYkWTdnKqUhbJVMUBbo=";
     # i18n repo
     fetchSubmodules = true;
   };

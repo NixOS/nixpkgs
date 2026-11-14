@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "huertatipografica";
     repo = "Alegreya";
     tag = "v${finalAttrs.version}";
-    sha256 = "1m5xr95y6qxxv2ryvhfck39d6q5hxsr51f530fshg53x48l2mpwr";
+    hash = "sha256-md8qKCJ9lAe1A6O4ULLusGDT0pjMwe2z2L1j40vKvdQ=";
   };
 
   nativeBuildInputs = [ installFonts ];

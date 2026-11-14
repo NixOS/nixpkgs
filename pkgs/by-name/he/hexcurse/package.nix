@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "LonnyGomes";
     repo = "hexcurse";
     rev = "v${finalAttrs.version}";
-    sha256 = "17ckkxfzbqvvfdnh10if4aqdcq98q3vl6dn1v6f4lhr4ifnyjdlk";
+    hash = "sha256-kzbprYskQ0qc2cE2Q/fAKGHWsCIuggBtc3vj9V2fk50=";
   };
   buildInputs = [ ncurses ];
   env.NIX_CFLAGS_COMPILE = toString [

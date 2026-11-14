@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     owner = "GoogleCloudPlatform";
     repo = "berglas";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/0mbhuuHBSCHJ6d5RanCEDmMMQr3Orklax14eyUNDk4=";
+    hash = "sha256-/0mbhuuHBSCHJ6d5RanCEDmMMQr3Orklax14eyUNDk4=";
   };
 
   vendorHash = "sha256-7T7aH9d652BydS3yiMV5lzR6XX0Jn1J89CNq4A/c4CY=";

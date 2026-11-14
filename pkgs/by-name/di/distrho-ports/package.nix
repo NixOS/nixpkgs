@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     owner = "DISTRHO";
     repo = "DISTRHO-Ports";
     rev = "d3b62da2e83c69b0866af5bb2e29ac78dc8014cf";
-    sha256 = "sha256-wlppmRTdgA/9wWqFp75UyDLYJOqzg1aY+w97wTgJ8lk=";
+    hash = "sha256-wlppmRTdgA/9wWqFp75UyDLYJOqzg1aY+w97wTgJ8lk=";
     fetchSubmodules = true;
   };
 

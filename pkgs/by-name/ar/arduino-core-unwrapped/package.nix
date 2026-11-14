@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     owner = "arduino";
     repo = "Arduino";
     rev = version;
-    sha256 = "sha256-I+PvfGc5F8H/NJOGRa18z7dKyKcO8I8Cg7Tj5yxkYAQ=";
+    hash = "sha256-I+PvfGc5F8H/NJOGRa18z7dKyKcO8I8Cg7Tj5yxkYAQ=";
   };
 
   teensyduino_version = "156";

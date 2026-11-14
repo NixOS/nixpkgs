@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "himdel";
     repo = "hsetroot";
     rev = finalAttrs.version;
-    sha256 = "1jbk5hlxm48zmjzkaq5946s58rqwg1v1ds2sdyd2ba029hmvr722";
+    hash = "sha256-Qpy8K0wCqCWab1roFnZ4HGdUtCGpYDW/rB+R2iksc8k=";
   };
 
   nativeBuildInputs = [ pkg-config ];

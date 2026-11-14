@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "adnanh";
     repo = "webhook";
     rev = finalAttrs.version;
-    sha256 = "sha256-P+uLVv0YMlTXrbWVapXRXc+VvQZxUiimLG0EX9tDxpM=";
+    hash = "sha256-P+uLVv0YMlTXrbWVapXRXc+VvQZxUiimLG0EX9tDxpM=";
   };
 
   vendorHash = null;

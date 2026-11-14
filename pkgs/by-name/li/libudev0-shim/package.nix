@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "archlinux";
     repo = "libudev0-shim";
     rev = "v${finalAttrs.version}";
-    sha256 = "1460qm6rp1cqnns39lj24z7191m8sbpvbjabqbzb55dkdd2kw50z";
+    hash = "sha256-HxQ+RWuzlbL+wkvJte/SqIYUzidC0jS0tZiFm03FwJA=";
   };
 
   buildInputs = [ udev ];

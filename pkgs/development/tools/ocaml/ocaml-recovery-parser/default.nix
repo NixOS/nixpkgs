@@ -20,7 +20,7 @@ buildDunePackage rec {
     owner = "serokell";
     repo = pname;
     rev = version;
-    sha256 = "gOKvjmlcHDOgsTllj2sPL/qNtW/rlNlEVIrosahNsAQ=";
+    hash = "sha256-gOKvjmlcHDOgsTllj2sPL/qNtW/rlNlEVIrosahNsAQ=";
   };
 
   propagatedBuildInputs = [

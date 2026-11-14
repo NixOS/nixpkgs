@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "strozfriedberg";
     repo = "padbuster";
     rev = "50e4a3e2bf5dfff5699440b3ebc61ed1b5c49bbe";
-    sha256 = "VIvZ28MVnTSQru6l8flLVVqIIpxxXD8lCqzH81sPe/U=";
+    hash = "sha256-VIvZ28MVnTSQru6l8flLVVqIIpxxXD8lCqzH81sPe/U=";
   };
 
   buildInputs = [

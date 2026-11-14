@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
+    hash = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
   };
 
   patches = [

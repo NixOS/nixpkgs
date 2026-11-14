@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "BIC-MNI";
     repo = "bicgl";
     rev = "61a035751c9244fcca1edf94d6566fa2a709ce90";
-    sha256 = "0lzirdi1mf4yl8srq7vjn746sbydz7h0wjh7wy8gycy6hq04qrg4";
+    hash = "sha256-5GVMAIbGM/+Q5wdKDuD5zS9tyLFyH5w1op64GmLL8VM=";
   };
 
   __structuredAttrs = true;

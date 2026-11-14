@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "POV-Ray";
     repo = "povray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-BsWalXzEnymiRbBfE/gsNyWgAqzbxEzO/EQiJpbwoKs=";
+    hash = "sha256-BsWalXzEnymiRbBfE/gsNyWgAqzbxEzO/EQiJpbwoKs=";
   };
 
   nativeBuildInputs = [

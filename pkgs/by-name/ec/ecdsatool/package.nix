@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "kaniini";
     repo = "ecdsatool";
     rev = "7c0b2c51e2e64d1986ab1dc2c57c2d895cc00ed1";
-    sha256 = "08z9309znkhrjpwqd4ygvm7cd1ha1qbrnlzw64fr8704jrmx762k";
+    hash = "sha256-U5jTa5YEHJQdMfxTmxcOCobGTt3Pk4b5lRlO+xMY6SM=";
   };
 
   configurePhase = ''

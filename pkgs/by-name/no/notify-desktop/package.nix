@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "nowrep";
     repo = "notify-desktop";
     rev = "9863919fb4ce7820810ac14a09a46ee73c3d56cc";
-    sha256 = "1brcvl2fx0yzxj9mc8hzfl32zdka1f1bxpzsclcsjplyakyinr1a";
+    hash = "sha256-KmQb/VSeXqkZZfrfvoILarYvBnUfIlaT7N+D7gTdLK8=";
   };
 
   nativeBuildInputs = [ pkg-config ];

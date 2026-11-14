@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "kudobuilder";
     repo = "kuttl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2BsEKR6qJD5GLASrOh1hPKR3RmoCRzS+h1H58c0zCgA=";
+    hash = "sha256-2BsEKR6qJD5GLASrOh1hPKR3RmoCRzS+h1H58c0zCgA=";
   };
 
   vendorHash = "sha256-fnjgSVefNqfjV5AU7fOWClkcxGv/jRW/iyaNjuXtJSA=";

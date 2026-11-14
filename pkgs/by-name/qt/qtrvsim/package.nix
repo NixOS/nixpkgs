@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cvut";
     repo = "qtrvsim";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-+EpPDA2+mBTdQjq6i9TN11yeXqvJA28JtmdNihM1a/U=";
+    hash = "sha256-+EpPDA2+mBTdQjq6i9TN11yeXqvJA28JtmdNihM1a/U=";
   };
 
   nativeBuildInputs = [

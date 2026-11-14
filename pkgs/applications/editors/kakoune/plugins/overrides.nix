@@ -53,7 +53,7 @@ self: super: {
       owner = "eraserhd";
       repo = "kak-ansi";
       rev = "v${finalAttrs.version}";
-      sha256 = "sha256-Tp+cKZxDESlpks6l+6J0H/1BvHyfQSqCxeutUcsZrEc=";
+      hash = "sha256-Tp+cKZxDESlpks6l+6J0H/1BvHyfQSqCxeutUcsZrEc=";
     };
 
     installPhase = ''
@@ -87,7 +87,7 @@ self: super: {
       owner = "eraserhd";
       repo = "kak-plumb";
       rev = "v${finalAttrs.version}";
-      sha256 = "1rz6pr786slnf1a78m3sj09axr4d2lb5rg7sfa4mfg1zcjh06ps6";
+      hash = "sha256-Rl8DoGQ/PFeJcvq8XBYVjeSuEpB6VHRUcJZqg06+5uc=";
     };
 
     installPhase = ''

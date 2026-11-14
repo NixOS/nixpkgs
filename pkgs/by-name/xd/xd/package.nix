@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "majestrate";
     repo = "XD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PKmkBwVedt/PlGo7gPWrVHbv+RPsA1BczRFR+ima0ZA=";
+    hash = "sha256-PKmkBwVedt/PlGo7gPWrVHbv+RPsA1BczRFR+ima0ZA=";
   };
 
   vendorHash = "sha256-PhZZzB07BNPuBafWwvUD7pVu31awP6NkZxsO89xYPT0=";

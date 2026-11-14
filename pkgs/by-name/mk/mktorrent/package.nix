@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pobrn";
     repo = "mktorrent";
     rev = "v${finalAttrs.version}";
-    sha256 = "17pdc5mandl739f8q26n5is8ga56s83aqcrwhlnnplbxwx2inidr";
+    hash = "sha256-uUUbRed90WsthTwzrAbSpqiHdCzWCIxcGoc2q2ph7Z4=";
   };
 
   makeFlags = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "tweakoz";
     repo = "twilight";
     rev = "43f21d15c2a8923c9d707bdf3789f480bfd4b36d";
-    sha256 = "0mmmi4jj8yd8wnah6kx5na782sjycszgzim33dfalr0ph361m4pz";
+    hash = "sha256-/5IazIAXZKpcG6PG/75mXmqBjrKlTwOV5ah5JCWJtVY=";
   };
 
   buildInputs = [

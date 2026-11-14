@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "robinovitch61";
     repo = "wander";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PBeEb0WJFflhN/DzW5mqnqlvE8BWLEbqkZGfWSbFEFE=";
+    hash = "sha256-PBeEb0WJFflhN/DzW5mqnqlvE8BWLEbqkZGfWSbFEFE=";
   };
 
   vendorHash = "sha256-0S8tzP5yNUrH6fp+v7nbUPTMWzYXyGw+ZNcXkSN+tWY=";

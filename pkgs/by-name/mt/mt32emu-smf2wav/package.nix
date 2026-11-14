@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "munt";
     repo = "munt";
     rev = "mt32emu_smf2wav_${lib.replaceString "." "_" finalAttrs.version}";
-    sha256 = "sha256-QuOQvKNCKl/UypTub9FCoYu3HJrMi6LksKPGaQUWfO8=";
+    hash = "sha256-QuOQvKNCKl/UypTub9FCoYu3HJrMi6LksKPGaQUWfO8=";
   };
 
   postPatch =

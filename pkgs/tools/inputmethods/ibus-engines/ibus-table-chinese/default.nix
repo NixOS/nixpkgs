@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "mike-fabian";
     repo = "ibus-table-chinese";
     rev = "44301450e681c23d60301747856c74b5b9d1312e";
-    sha256 = "sha256-CvODJhQTzqR58IlaL8cIP9Z1gcC8PfkfU0HWdq0Jjms=";
+    hash = "sha256-CvODJhQTzqR58IlaL8cIP9Z1gcC8PfkfU0HWdq0Jjms=";
   };
 
   nativeBuildInputs = [

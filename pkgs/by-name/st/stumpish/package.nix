@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "stumpwm";
     repo = "stumpwm-contrib";
     rev = "9f5f06652c480159ec57d1fd8751b16f02db06dc";
-    sha256 = "1dxzsnir3158p8y2128s08r9ca0ywr9mcznivmhn1lycw8mg4nfl";
+    hash = "sha256-1FnyKuLM02Bh3dF+VlPmHiiWMgIaiSA8uqiEkaPVv7c=";
   };
 
   buildInputs = [

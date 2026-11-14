@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "lanzz";
     repo = "bash-supergenpass";
     rev = "03416ad4d753d825acd0443a01ac13d385d5e048";
-    sha256 = "Q+xmT72UFCc71K87mAzpyTmEIXjR9SqX0xzmQfi5P9k=";
+    hash = "sha256-Q+xmT72UFCc71K87mAzpyTmEIXjR9SqX0xzmQfi5P9k=";
   };
 
   installPhase = ''

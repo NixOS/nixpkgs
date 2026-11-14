@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "kilobyte";
     repo = "compsize";
     rev = "d79eacf77abe3b799387bb8a4e07a18f1f1031e8";
-    sha256 = "sha256-pwHFllwTznhgZAGtGsULoLLBZlCllGt1eBmUKoJ/2wk=";
+    hash = "sha256-pwHFllwTznhgZAGtGsULoLLBZlCllGt1eBmUKoJ/2wk=";
   };
 
   patches = [

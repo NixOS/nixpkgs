@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gammu";
     repo = "gammu";
     rev = finalAttrs.version;
-    sha256 = "sha256-1y49DZMz9avKI2QSuwOLslwrgA76+eaTmpwMLS5O4zk=";
+    hash = "sha256-1y49DZMz9avKI2QSuwOLslwrgA76+eaTmpwMLS5O4zk=";
   };
 
   patches = [

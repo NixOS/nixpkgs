@@ -19,7 +19,7 @@ buildGoModule rec {
     inherit rev;
     owner = "rogpeppe";
     repo = "godef";
-    sha256 = "sha256-0qmKn0TIrRH3B54/7/XB1zjaVA4R3LbbsPzLByfEJuo=";
+    hash = "sha256-0qmKn0TIrRH3B54/7/XB1zjaVA4R3LbbsPzLByfEJuo=";
   };
 
   meta = {

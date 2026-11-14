@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "nix-community";
     repo = "acpi_call";
     rev = "v${version}";
-    sha256 = "1s7h9y3adyfhw7cjldlfmid79lrwz3vqlvziw9nwd6x5qdj4w9vp";
+    hash = "sha256-dydOZMOlm8Zt4vFvivf4PNN0WqyONirZ4dD5poZP8Og=";
   };
 
   hardeningDisable = [ "pic" ];

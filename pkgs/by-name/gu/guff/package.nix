@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "silentbicycle";
     repo = "guff";
     rev = "v${finalAttrs.version}";
-    sha256 = "0n8mc9j3044j4b3vgc94ryd2j9ik6g73fqja54yxfdfrks4ksyds";
+    hash = "sha256-unk9iZ7ZNdc9KUpiN84zMyYpms8ksbfHIpIQMGRiFVk=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

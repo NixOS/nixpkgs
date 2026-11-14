@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     owner = "jpcima";
     repo = "ensemble-chorus";
     rev = "59baeb86b8851f521bc8162e22e3f15061662cc3";
-    sha256 = "0c1y10vyhrihcjvxqpqf6b52yk5yhwh813cfp6nla5ax2w88dbhr";
+    hash = "sha256-Ga6GEBddFUWtuY6NgCCHvkwvyjIOX9y3ZDBm6DcIPjA=";
     fetchSubmodules = true;
   };
 

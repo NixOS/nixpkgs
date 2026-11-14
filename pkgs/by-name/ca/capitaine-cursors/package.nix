@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "keeferrourke";
     repo = "capitaine-cursors";
     rev = "r${version}";
-    sha256 = "0652ydy73x29z7wc6ccyqihmfg4bk0ksl7yryycln6c7i0iqfmc9";
+    hash = "sha256-iVWHI4iHGUuZ99kfqieYizxXYcSeMcP4+Un0cXzzohg=";
   };
 
   patches = [

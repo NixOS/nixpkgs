@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "electrickite";
     repo = "batsignal";
     tag = finalAttrs.version;
-    sha256 = "sha256-yngd2yP6XtRp8y8ZUd0NISdf8+8wJvpLogrQQMdB0lA=";
+    hash = "sha256-yngd2yP6XtRp8y8ZUd0NISdf8+8wJvpLogrQQMdB0lA=";
   };
 
   buildInputs = [

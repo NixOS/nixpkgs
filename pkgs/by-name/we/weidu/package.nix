@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "WeiDUorg";
     repo = "weidu";
     rev = "v${finalAttrs.version}.00";
-    sha256 = "sha256-oVQYESBqp0fJ+ECLGQOPCECnDpGMR8U5ijvTVPc8z4g=";
+    hash = "sha256-oVQYESBqp0fJ+ECLGQOPCECnDpGMR8U5ijvTVPc8z4g=";
   };
 
   postPatch = ''

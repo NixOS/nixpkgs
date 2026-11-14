@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "chubin";
     repo = "cheat.sh";
     rev = "06af0000259bde1a347da368225c5962d7ffed3e";
-    sha256 = "v9NpTSBMAYIt14jSAQJQAUsBUvVjRQDo6VUc2p1lwBE=";
+    hash = "sha256-v9NpTSBMAYIt14jSAQJQAUsBUvVjRQDo6VUc2p1lwBE=";
   };
 
   # Fix ".cht.sh-wrapped" in the help message

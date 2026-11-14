@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "giltene";
     repo = "wrk2";
     rev = "e0109df5b9de09251adb5f5848f223fbee2aa9f5";
-    sha256 = "1aqdwmgdd74wq73f1zp28yqj91gd6p6nf9nbdfibl7mlklbzvak8";
+    hash = "sha256-aKr9F520Hrqia8smZ8017YUksUfi/uDGwZyc1l7lDas=";
   };
 
   buildInputs = [

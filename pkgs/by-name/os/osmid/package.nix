@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "llloret";
     repo = "osmid";
     rev = "v${finalAttrs.version}";
-    sha256 = "1s1wsrp6g6wb0y61xzxvaj59mwycrgy52r4h456086zkz10ls6hw";
+    hash = "sha256-HBpNQfjzGwRMIZBkUfzLzPOailS7/x6MB4ubZ27WPOg=";
   };
 
   postPatch = ''

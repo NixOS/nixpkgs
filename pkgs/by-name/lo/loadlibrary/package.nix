@@ -17,7 +17,7 @@ stdenv_32bit.mkDerivation rec {
     inherit rev;
     owner = "taviso";
     repo = "loadlibrary";
-    sha256 = "01hb7wzfh1s5b8cvmrmr1gqknpq5zpzj9prq3wrpsgg129jpsjkb";
+    hash = "sha256-a0p9ZRLhPX0zHzjfJP/9BV878Qu55roZWkUH6D4/CwY=";
   };
 
   buildInputs = [

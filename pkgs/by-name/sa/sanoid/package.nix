@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jimsalterjrs";
     repo = "sanoid";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-s6MP3x4qSuuiJKq2V2oLAXp6zaMSqKRCs5O9UMSgcvE=";
+    hash = "sha256-s6MP3x4qSuuiJKq2V2oLAXp6zaMSqKRCs5O9UMSgcvE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

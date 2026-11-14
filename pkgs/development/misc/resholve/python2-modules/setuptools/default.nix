@@ -21,7 +21,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0z3q0qinyp1rmnxkw3y5f6nbsxhqlfq5k7skfrqa6ymb3zr009y1";
+      hash = "sha256-wScA8h+reqNwdlOfWbCjGHa9rHHFDz67rTlcbyMGeHw=";
       name = "${pname}-${version}-source";
     };
 

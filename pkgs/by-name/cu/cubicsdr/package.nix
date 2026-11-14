@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cjcliffe";
     repo = "CubicSDR";
     rev = finalAttrs.version;
-    sha256 = "0cyv1vk97x4i3h3hhh7dx8mv6d1ad0fypdbx5fl26bz661sr8j2n";
+    hash = "sha256-VkiUdTDmLyOoK3216x1oKjSzK+rtQAgHHJH0k+YO2zM=";
   };
 
   patches = [

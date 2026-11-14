@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "svetlitski";
     repo = "fcp";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-YupsJRtju9JyGGzSTk+tyEGh4ifpJllXVifsFoZ4Rwc=";
+    hash = "sha256-YupsJRtju9JyGGzSTk+tyEGh4ifpJllXVifsFoZ4Rwc=";
   };
 
   cargoHash = "sha256-PsYmzHwFpgAJ3AClt5buSuAtlXxvKQyz3XeZBtTXsLs=";

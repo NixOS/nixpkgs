@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "swami";
     repo = "libinstpatch";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-4SQi1quUoPnj477HBsfqNt3cbQw0eGVfQTHYSqXEmUU=";
+    hash = "sha256-4SQi1quUoPnj477HBsfqNt3cbQw0eGVfQTHYSqXEmUU=";
   };
 
   nativeBuildInputs = [

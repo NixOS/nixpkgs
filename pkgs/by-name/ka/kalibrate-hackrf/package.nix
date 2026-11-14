@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "scateu";
     repo = "kalibrate-hackrf";
     rev = "2492c20822ca6a49dce97967caf394b1d4b2c43e";
-    sha256 = "1jvn1qx7csgycxpx1k804sm9gk5a0c65z9gh8ybp9awq3pziv0nx";
+    hash = "sha256-3YId/x2Yq3SXR/ClXwwDqsyXqiYAzdBvZ/5pdjoOdss=";
   };
 
   nativeBuildInputs = [

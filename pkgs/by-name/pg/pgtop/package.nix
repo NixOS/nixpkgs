@@ -12,7 +12,7 @@ perlPackages.buildPerlPackage rec {
     owner = "cosimo";
     repo = "pgtop";
     rev = "v${version}";
-    sha256 = "1awyl6ddfihm7dfr5y2z15r1si5cyipnlyyj3m1l19pk98s4x66l";
+    hash = "sha256-1JhONErzpkBDHdJ7am/0rEQdcglf+JJdOxVG15qhnqs=";
   };
 
   outputs = [ "out" ];

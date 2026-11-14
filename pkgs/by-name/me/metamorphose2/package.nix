@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "timinaust";
     repo = "metamorphose2";
     rev = "ba0666dd02e4f3f58c1dadc309e7ec1cc13fe851";
-    sha256 = "0w9l1vyyswdhdwrmi71g23qyslvhg1xym4ksifd42vwf9dxy55qp";
+    hash = "sha256-F5fie0uOb0Gai3qS6nt4cFPt8RAvnFgzb7Bx7f0ONHE=";
     fetchSubmodules = true;
   };
 

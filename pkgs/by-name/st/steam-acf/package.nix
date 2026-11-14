@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "chisui";
     repo = "acf";
     rev = "v${finalAttrs.version}";
-    sha256 = "16q3md7cvdz37pqm1sda81rkjf249xbsrlpdl639r06p7f4nqlc2";
+    hash = "sha256-glFsiTvXgJyGoe3SrFdPRDg5c0Cq6VDxPeO3zU6rA5s=";
   };
 
   cargoHash = "sha256-3BbSTzFcQju0n7pwFqvrJB2sU8RM47Svi4lndlhkYmE=";

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jeffpc";
     repo = "guilt";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7OgRbMGYWtGvrZxKfJe0CkpmU3AUkPebF5NyTsfXeGA=";
+    hash = "sha256-7OgRbMGYWtGvrZxKfJe0CkpmU3AUkPebF5NyTsfXeGA=";
   };
 
   doCheck = true;

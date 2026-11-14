@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jlam55555";
     repo = "veikk-linux-driver";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Nn90s22yrynYFYLSlBN4aRvdISPsxBFr21yiohs5r4Y=";
+    hash = "sha256-Nn90s22yrynYFYLSlBN4aRvdISPsxBFr21yiohs5r4Y=";
   };
 
   patches = [ ./fix-6.12-build.patch ];

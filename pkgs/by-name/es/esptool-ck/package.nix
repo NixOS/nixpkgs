@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "igrr";
     repo = "esptool-ck";
     rev = "0.4.13";
-    sha256 = "1cb81b30a71r7i0gmkh2qagfx9lhq0myq5i37fk881bq6g7i5n2k";
+    hash = "sha256-U9gSzzN4BYSmOyMW7CvAkKbunsICzvpAPDkcBcYKaLE=";
   };
 
   makeFlags = [ "VERSION=${finalAttrs.version}" ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tux4kids";
     repo = "t4kcommon";
     rev = "upstream/${finalAttrs.version}";
-    sha256 = "13q02xpmps9qg8zrzzy2gzv4a6afgi28lxk4z242j780v0gphchp";
+    hash = "sha256-FzJ4H9gAHSmI+GR2ikR8ThlF9n/C/58/ejjpW28XAI8=";
   };
 
   patches = [

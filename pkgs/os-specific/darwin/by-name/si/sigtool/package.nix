@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "nix-community";
     repo = "sigtool";
     rev = "v${version}";
-    sha256 = "sha256-czprDpXy+wflnzqIeCIqxwPewYIYv8xlKzRp6eEhcqw=";
+    hash = "sha256-czprDpXy+wflnzqIeCIqxwPewYIYv8xlKzRp6eEhcqw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

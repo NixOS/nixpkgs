@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "verdammelt";
     repo = "tnef";
     rev = finalAttrs.version;
-    sha256 = "104g48mcm00bgiyzas2vf86331w7bnw7h3bc11ib4lp7rz6zqfck";
+    hash = "sha256-kzn8zc/nUrJiCGwNeLhdh4cxDHJbaPV9fAuAyioij4A=";
   };
 
   patches = [

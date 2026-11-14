@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "wltb";
     repo = "ff_instagram";
     rev = "0366ffb18c4d490c8fbfba2f5f3367a5af23cfe8";
-    sha256 = "0vvzl6wi6jmrqknsfddvckjgsgfizz1d923d1nyrpzjfn6bda1vk";
+    hash = "sha256-cwfVlrFO/pu9DW2I1ML/0T395GS7NaftxLlKE7mhf28=";
   };
 
   installPhase = ''

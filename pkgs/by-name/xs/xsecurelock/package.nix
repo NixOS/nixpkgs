@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "xsecurelock";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OPasi5zmvmcWnVCj/dU2KprzNmar51zDElD23750yk4=";
+    hash = "sha256-OPasi5zmvmcWnVCj/dU2KprzNmar51zDElD23750yk4=";
   };
 
   nativeBuildInputs = [

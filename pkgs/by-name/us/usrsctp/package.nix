@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sctplab";
     repo = "usrsctp";
     rev = finalAttrs.version;
-    sha256 = "10ndzkip8blgkw572n3dicl6mgjaa7kygwn3vls80liq92vf1sa9";
+    hash = "sha256-Sengtkg4UoA03cPy5+dRSr5qKIttWHEKn48udOP8zYI=";
   };
 
   patches = [

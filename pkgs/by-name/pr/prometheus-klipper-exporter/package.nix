@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "scross01";
     repo = "prometheus-klipper-exporter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-gKI39j4YGWRbKAD79QzhLyueDK0yrDviffifQkpeZio=";
+    hash = "sha256-gKI39j4YGWRbKAD79QzhLyueDK0yrDviffifQkpeZio=";
   };
 
   vendorHash = "sha256-VebaCzdPGl0hOHRXvwZb4aDzXlDZ57v/QVYzuagvvOM=";

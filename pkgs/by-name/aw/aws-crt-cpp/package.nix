@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nzhGELzTjQxdxg2jX6hCRs1nRUdhKitk14zUrouJnhE=";
+    hash = "sha256-nzhGELzTjQxdxg2jX6hCRs1nRUdhKitk14zUrouJnhE=";
   };
 
   postPatch = ''

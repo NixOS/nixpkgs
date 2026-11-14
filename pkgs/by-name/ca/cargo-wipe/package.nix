@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mihai-dinculescu";
     repo = "cargo-wipe";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-r+JMM6KUqcqpLi1Js/2RI8FSoaA5f7yXJ1EuCJB1fyE=";
+    hash = "sha256-r+JMM6KUqcqpLi1Js/2RI8FSoaA5f7yXJ1EuCJB1fyE=";
   };
 
   cargoHash = "sha256-fg1QjHSnK3lxim/t7AO/w1eIKfpJmYqGSGTpakUKBfk=";

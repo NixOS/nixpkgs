@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "free-pdk";
     repo = "easy-pdk-programmer-software";
     rev = finalAttrs.version;
-    sha256 = "0hc3gdmn6l01z63hzzwdhbdyy288gh5v219bsfm8fb1498vpnd6f";
+    hash = "sha256-zjR7N0okLIeq0ysFsQt8CAnv24KN/w+H+QFQY2t7g0E=";
   };
 
   nativeBuildInputs = [

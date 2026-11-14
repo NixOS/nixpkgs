@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
     repo = "avell-unofficial-control-center";
     # https://github.com/rodgomesc/avell-unofficial-control-center/issues/58
     rev = "e32e243e31223682a95a719bc58141990eef35e6";
-    sha256 = "1qz1kv7p09nxffndzz9jlkzpfx26ppz66f8603zyamjq9dqdmdin";
+    hash = "sha256-NrbacEtYVuX/AAY5Y/69RnR3/6Qy/d+sc90mcM+e4eM=";
   };
 
   build-system = with python3Packages; [ setuptools ];

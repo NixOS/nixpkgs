@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "johanhaleby";
     repo = "kubetail";
     rev = finalAttrs.version;
-    sha256 = "sha256-iCZoK9is3Zpew0q61ZpG/OK3RLU4Fb6XCh7eVaVrTEY=";
+    hash = "sha256-iCZoK9is3Zpew0q61ZpG/OK3RLU4Fb6XCh7eVaVrTEY=";
   };
 
   nativeBuildInputs = [

@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     owner = "palera1n";
     repo = "palera1n";
     rev = "62e03acf81f7aaa5a7b3d4a25d08d0bef3731a05";
-    sha256 = "sha256-gcU94tZR6pMp37tB5FEK3KVEP3fYjcMQSEPaE8We7Hc=";
+    hash = "sha256-gcU94tZR6pMp37tB5FEK3KVEP3fYjcMQSEPaE8We7Hc=";
   };
 
   nativeBuildInputs = [

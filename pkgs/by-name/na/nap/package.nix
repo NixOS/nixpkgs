@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "maaslalani";
     repo = "nap";
     rev = "v${finalAttrs.version}";
-    sha256 = "0b3sz8zp1nwcjl02b3lli5yjc7vfay1ig6fs8bgxwz22imfx076p";
+    hash = "sha256-1xzQXY1CfN7fQtqZF4NXbh8mfYmUjiUAlYzbcD/6eiw=";
   };
 
   vendorHash = "sha256-puCqql77kvdWTcwp8z6LExBt/HbNRNe0f+wtM0kLoWM=";

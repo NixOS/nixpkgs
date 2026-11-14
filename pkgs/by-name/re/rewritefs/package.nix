@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "sloonz";
     repo = "rewritefs";
     rev = "7a4f971ed4c3e8c838c01c924340a0eed22d3b0f";
-    sha256 = "sha256-Vv9W7zQIILwxfFZmdZcUnJlMYGeHFt9WUXcliACnNoE=";
+    hash = "sha256-Vv9W7zQIILwxfFZmdZcUnJlMYGeHFt9WUXcliACnNoE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

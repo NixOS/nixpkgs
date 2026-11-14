@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "przemoc";
     repo = "metastore";
     rev = "v${finalAttrs.version}";
-    sha256 = "0mb10wfckswqgi0bq25ncgabnd3iwj7s7hhg3wpcyfgckdynwizv";
+    hash = "sha256-+0dufZvsOc8uHw/Co4/kcTS71GO2CLxAfJjryRwHYVU=";
   };
 
   buildInputs = [ libbsd ];

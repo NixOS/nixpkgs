@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "isamert";
     repo = "scli";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-pp3uVABsncXXL2PZvTymHPKGAFvB24tnX+3K+C0VW8g=";
+    hash = "sha256-pp3uVABsncXXL2PZvTymHPKGAFvB24tnX+3K+C0VW8g=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "mrichar1";
     repo = "clipster";
     rev = version;
-    sha256 = "sha256-MLLkFsBBQtb7RFQN+uoEmuCn5bnbkYsqoyWGZtTCI2U=";
+    hash = "sha256-MLLkFsBBQtb7RFQN+uoEmuCn5bnbkYsqoyWGZtTCI2U=";
   };
 
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);

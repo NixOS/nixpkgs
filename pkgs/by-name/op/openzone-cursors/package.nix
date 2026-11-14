@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ducakar";
     repo = "openzone-cursors";
     rev = "v${finalAttrs.version}";
-    sha256 = "02c536mc17ccsrzgma366k3wlm02ivklvr30fafxl981zgghlii4";
+    hash = "sha256-JEYK3/sBJdqdcmDkTeeOAlTKxzRmqPp+1oydwKoZhQk=";
   };
 
   nativeBuildInputs = [

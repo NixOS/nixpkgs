@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
     owner = "13rac1";
     repo = "scfbuild";
     rev = "6d84339512a892972185d894704efa67dd82e87a";
-    sha256 = "0wkyzkhshlax9rvdmn441gv87n9abfr0qqmgs8bkg9kbcjb4bhad";
+    hash = "sha256-TcFFlmRrpjcX0q9iDLJbKtmD9guE2Np2Tl1RqOH8fnI=";
   };
 
   dependencies = with python3Packages; [

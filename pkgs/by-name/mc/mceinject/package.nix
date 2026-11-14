@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "andikleen";
     repo = "mce-inject";
     rev = "4cbe46321b4a81365ff3aafafe63967264dbfec5";
-    sha256 = "0gjapg2hrlxp8ssrnhvc19i3r1xpcnql7xv0zjgbv09zyha08g6z";
+    hash = "sha256-3zwEFPQ/gb2e/GD3Q7Flt4c8YgpsQ5u1RrfTDMW7Sj4=";
   };
 
   nativeBuildInputs = [

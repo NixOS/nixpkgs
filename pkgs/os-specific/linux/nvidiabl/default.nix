@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "yorickvP";
     repo = "nvidiabl";
     rev = "9e21bdcb7efedf29450373a2e9ff2913d1b5e3ab";
-    sha256 = "1z57gbnayjid2jv782rpfpp13qdchmbr1vr35g995jfnj624nlgy";
+    hash = "sha256-/lFLhJHWyZLSKyPvkFeFrOER7nU3C3S2FC1Kr+x6p/w=";
   };
 
   hardeningDisable = [ "pic" ];

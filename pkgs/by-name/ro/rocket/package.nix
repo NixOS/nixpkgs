@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "rocket";
     repo = "rocket";
     rev = "7bc1e9826cad5dbc63e56371c6aa1798b2a7b50b";
-    sha256 = "13bdg2dc6ypk17sz39spqdlb3wai2y085bdb36pls2as2nf22drp";
+    hash = "sha256-NzchnBVaCU2vGautgoAXUfGxaMNXp/H1CfN6w5p4bY0=";
   };
 
   nativeBuildInputs = [

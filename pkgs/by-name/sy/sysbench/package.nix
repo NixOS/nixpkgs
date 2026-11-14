@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "akopytov";
     repo = "sysbench";
     rev = finalAttrs.version;
-    sha256 = "1sanvl2a52ff4shj62nw395zzgdgywplqvwip74ky8q7s6qjf5qy";
+    hash = "sha256-HhcnsdEHIz/JuZFvTC/3r73/SxrcCiOhJs6JogTdVuk=";
   };
 
   enableParallelBuilding = true;

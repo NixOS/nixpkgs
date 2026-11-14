@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Daniel-Liu-c0deb0t";
     repo = "uwu";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-MzXObbxccwEG7egmQMCdhUukGqZS+NgbYwZjTaqME7I=";
+    hash = "sha256-MzXObbxccwEG7egmQMCdhUukGqZS+NgbYwZjTaqME7I=";
   };
 
   cargoHash = "sha256-gR3FL1GeD9Dx5TKeThmPScMCRJQ2THlO4pBViXlI9XM=";

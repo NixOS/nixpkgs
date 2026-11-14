@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "WolframResearch";
     repo = "WolframLanguageForJupyter";
     rev = "v${finalAttrs.version}";
-    sha256 = "19d9dvr0bv7iy0x8mk4f576ha7z7h7id39nyrggwf9cp7gymxf47";
+    hash = "sha256-h7he/TuXJcffy96m0eKB5x8FzSmOzIo68PHsBfJuqaU=";
   };
 
   dontConfigure = true;

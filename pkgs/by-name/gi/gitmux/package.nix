@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "arl";
     repo = "gitmux";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-TObnmV/NiMCcyC9zG0OcCuCqUChQZmpqPptQUDtF85A=";
+    hash = "sha256-TObnmV/NiMCcyC9zG0OcCuCqUChQZmpqPptQUDtF85A=";
   };
 
   vendorHash = "sha256-MvvJGB9KPMYeqYclmAAF6qlU7vrJFMPToogbGDRoCpU=";

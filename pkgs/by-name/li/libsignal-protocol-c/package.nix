@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "signalapp";
     repo = "libsignal-protocol-c";
     rev = "v${finalAttrs.version}";
-    sha256 = "0z5p03vk15i6h870azfjgyfgxhv31q2vq6rfhnybrnkxq2wqzwhk";
+    hash = "sha256-E/KPucB92ry8hS4bvAUOY8P+nH/SfQUOgiaWMPcAt3w=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fanf2";
     repo = "regpg";
     rev = "regpg-${finalAttrs.version}";
-    sha256 = "2ea99950804078190e1cc2a76d4740e3fdd5395a9043db3f3fe86bf2477d3a7d";
+    hash = "sha256-LqmZUIBAeBkOHMKnbUdA4/3VOVqQQ9s/P+hr8kd9On0=";
   };
 
   nativeBuildInputs = [

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "Mindwerks";
     repo = "wildmidi";
     rev = "${pname}-${version}";
-    sha256 = "sha256-KFJW2m7TJ0RExK/C0XHyOefKGFLUszl7Jh6l10NjeHM=";
+    hash = "sha256-KFJW2m7TJ0RExK/C0XHyOefKGFLUszl7Jh6l10NjeHM=";
   };
 
   nativeBuildInputs = [ cmake ];

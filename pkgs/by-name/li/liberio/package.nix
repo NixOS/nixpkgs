@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "EttusResearch";
     repo = "liberio";
     rev = "81777e500d1c3b88d5048d46643fb5553eb5f786";
-    sha256 = "1n40lj5g497mmqh14vahdhy3jwvcry2pkc670p4c9f1pggp6ysgk";
+    hash = "sha256-82lv7ns3uMTIBceweYXPbHM5PGxQbRIgrvUk8oqkgNg=";
   };
 
   nativeBuildInputs = [

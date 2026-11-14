@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "digitalocean";
     repo = "do-agent";
     tag = finalAttrs.version;
-    sha256 = "sha256-P+AirJUMmCIitsHyGbAD8KK4ab/Vk7c8xZG1FhgUDPE=";
+    hash = "sha256-P+AirJUMmCIitsHyGbAD8KK4ab/Vk7c8xZG1FhgUDPE=";
   };
 
   ldflags = [

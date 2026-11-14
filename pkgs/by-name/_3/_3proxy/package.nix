@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "3proxy";
     repo = "3proxy";
     tag = finalAttrs.version;
-    sha256 = "sha256-Q10/2arGQTBmjyGv7w4g38eKeM2LRtX4VOk5frO+1fE=";
+    hash = "sha256-Q10/2arGQTBmjyGv7w4g38eKeM2LRtX4VOk5frO+1fE=";
   };
 
   buildInputs = [

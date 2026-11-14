@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "commonmark";
     repo = "cmark";
     rev = finalAttrs.version;
-    sha256 = "sha256-d7oL7qWUcuEzTAp61iJMvX0VvcoYpHJw2w5UmODmLdo=";
+    hash = "sha256-d7oL7qWUcuEzTAp61iJMvX0VvcoYpHJw2w5UmODmLdo=";
   };
 
   nativeBuildInputs = [ cmake ];

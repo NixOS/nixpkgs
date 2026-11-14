@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "theoremprover-museum";
     repo = "TATL";
     tag = "v${version}";
-    sha256 = "sha256-leP02141kZSUmCDXOfV0TsEn+OQ6WoyM7+9NutLX1qk=";
+    hash = "sha256-leP02141kZSUmCDXOfV0TsEn+OQ6WoyM7+9NutLX1qk=";
   };
 
   nativeBuildInputs = [ ocamlPackages.menhir ];

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zfsnap";
     repo = "zfsnap";
     rev = "v${finalAttrs.version}";
-    sha256 = "0670a5sghvqx32c9gfsird15mg9nqcvwxsrfcjrwc0sj7br9bd2g";
+    hash = "sha256-T7SV8jpSA8azZC7rzjfDNr1aQstRu5eYGB1v+HRR4Bg=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

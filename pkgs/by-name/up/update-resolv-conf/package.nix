@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "alfredopalhares";
     repo = "openvpn-update-resolv-conf";
     rev = "43093c2f970bf84cd374e18ec05ac6d9cae444b8";
-    sha256 = "1lf66bsgv2w6nzg1iqf25zpjf4ckcr45adkpgdq9gvhkfnvlp8av";
+    hash = "sha256-W6FLt3UT7pdwe3c2VUhmkxEn7y/C4Rjet4aL/fQyxtE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

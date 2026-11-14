@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "frogatto";
     repo = "frogatto";
     rev = "5ca339f4b97e5004dc07394407bf1da43fbd6204";
-    sha256 = "sha256-6wqCFc7DlDt0u0JnPg4amVemc9HOjsB/U4s9n7N84QA=";
+    hash = "sha256-6wqCFc7DlDt0u0JnPg4amVemc9HOjsB/U4s9n7N84QA=";
   };
 
   installPhase = ''

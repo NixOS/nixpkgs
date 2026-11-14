@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "tomduck";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eDwAW0nLB4YqrWT3Ajt9bmX1A43wl+tOPm2St5VpCLk=";
+    hash = "sha256-eDwAW0nLB4YqrWT3Ajt9bmX1A43wl+tOPm2St5VpCLk=";
   };
 
   nativeBuildInputs = with python3Packages; [

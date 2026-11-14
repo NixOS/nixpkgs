@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "bradfa";
     repo = "flashbench";
     rev = "d783b1bd2443812c6deadc31b081f043e43e4c1a";
-    sha256 = "045j1kpay6x2ikz8x54ph862ymfy1nzpbmmqpf3nkapiv32fjqw5";
+    hash = "sha256-hWPpxNjxqmmHu7jWdb8N3lUvDIKXlI7+jKIbr+4MshA=";
   };
 
   installPhase = ''

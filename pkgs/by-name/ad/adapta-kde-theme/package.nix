@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "PapirusDevelopmentTeam";
     repo = "adapta-kde";
     tag = finalAttrs.version;
-    sha256 = "1q85678sff8is2kwvgd703ckcns42gdga2c1rqlp61gb6bqf09j8";
+    hash = "sha256-SCbg8DLrBXMpzoEJ9doTRFs22QCnvc2n0BE5p9ExBeE=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

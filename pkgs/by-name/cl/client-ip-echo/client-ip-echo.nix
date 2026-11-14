@@ -13,7 +13,7 @@ mkDerivation {
     owner = "jerith666";
     repo = "client-ip-echo";
     rev = "e81db98d04c13966b2ec114e01f82487962055a7";
-    sha256 = "02rzzbm1mdqh5zx5igd0s7pwkcsk64lx40rclxw3485348brc6ya";
+    hash = "sha256-yhuWFyKjIDJ4pywD0ikxU7PJ79GgvVj6LxC3Gur6Pws=";
   };
   isLibrary = false;
   isExecutable = true;

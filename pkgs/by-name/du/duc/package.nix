@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zevv";
     repo = "duc";
     rev = finalAttrs.version;
-    sha256 = "sha256-hZ8bhPXS/trt6ZePjfuwx8PEfv0xCBqSJxRonLB7Ui0=";
+    hash = "sha256-hZ8bhPXS/trt6ZePjfuwx8PEfv0xCBqSJxRonLB7Ui0=";
   };
 
   nativeBuildInputs = [

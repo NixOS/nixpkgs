@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "rubo77";
     repo = "matrix-dl";
     rev = "b1a86d1421f39ee327284e1023f09dc165e3c8a5";
-    sha256 = "1l8nh8z7kz24v0wcy3ll3w6in2yxwa1yz8lyc3x0blz37d8ss4ql";
+    hash = "sha256-FBOtUTvj0wX6YJ6i74Pi3QsbDR+UDs842ET8eT6CFtE=";
   };
 
   nativeBuildInputs = with python3Packages; [

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "xnd-project";
     repo = "libndtypes";
     rev = "3ce6607c96d8fe67b72cc0c97bf595620cdd274e";
-    sha256 = "18303q0jfar1lmi4krp94plczb455zcgw772f9lb8xa5p0bkhx01";
+    hash = "sha256-AXQ4F7hFdbRocuIc/tgvhazP6CXp5klipSErJwEeYKA=";
   };
 
   # Override linker with cc (symlink to either gcc or clang)

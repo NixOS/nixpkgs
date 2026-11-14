@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KnightOS";
     repo = "patchrom";
     rev = finalAttrs.version;
-    sha256 = "0yc4q7n3k7k6rx3cxq5ddd5r0la8gw1287a74kql6gwkxjq0jmcv";
+    hash = "sha256-m1UJsOyTP0PxJEcdJAJ/SFGQS2ut4M5Gz2aeOezBhHk=";
   };
 
   strictDeps = true;

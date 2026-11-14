@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "catouc";
     repo = "semver-go";
     rev = "v${finalAttrs.version}";
-    sha256 = "0v3j7rw917wnmp4lyjscqzk4qf4azfiz70ynbq3wl4gwp1m783vv";
+    hash = "sha256-ew90arj8EcoHXtaD86P7ijhM5sdMS0/JrZafkHg+cmw=";
   };
 
   vendorHash = null;

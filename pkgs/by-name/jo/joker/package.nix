@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     rev = "v${finalAttrs.version}";
     owner = "candid82";
     repo = "joker";
-    sha256 = "sha256-srBJiCqxNGfLZCxVHH6Mjs3Ht7Boy64qmPjr2+l/l1I=";
+    hash = "sha256-srBJiCqxNGfLZCxVHH6Mjs3Ht7Boy64qmPjr2+l/l1I=";
   };
 
   vendorHash = "sha256-yH8QVzliAFZlOvprfdh/ClCWK2/7F96f0yLWvuAhGY8=";

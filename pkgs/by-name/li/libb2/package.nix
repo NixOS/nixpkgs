@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BLAKE2";
     repo = "libb2";
     tag = "v${finalAttrs.version}";
-    sha256 = "0qj8aaqvfcavj1vj5asm4pqm03ap7q8x4c2fy83cqggvky0frgya";
+    hash = "sha256-yr/sgJ/7PcwG8k4w0hE+Vw1Q8SVVqyJ3kFsxt7FSSGI=";
   };
 
   nativeBuildInputs = [

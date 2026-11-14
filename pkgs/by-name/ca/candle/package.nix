@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Denvi";
     repo = "Candle";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-A53rHlabcuw/nWS7jsCyVrP3CUkmUI/UMRqpogyFOCM=";
+    hash = "sha256-A53rHlabcuw/nWS7jsCyVrP3CUkmUI/UMRqpogyFOCM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

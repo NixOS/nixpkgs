@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "reorx";
     repo = "httpstat";
     rev = finalAttrs.version;
-    sha256 = "sha256-dOHFLw8suvpuZkcKEzq5HktMYBGE7+vtTD609TkAFfw=";
+    hash = "sha256-dOHFLw8suvpuZkcKEzq5HktMYBGE7+vtTD609TkAFfw=";
   };
 
   # python3.8+ changed AST parsing, so until upstream builds against newer versions this has to do

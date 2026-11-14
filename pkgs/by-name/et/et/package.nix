@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oxzi";
     repo = "et";
     rev = finalAttrs.version;
-    sha256 = "sha256-mJDRhi7osW4hsNVx3soLYqN9crwU7+kQUolCjqehQT4=";
+    hash = "sha256-mJDRhi7osW4hsNVx3soLYqN9crwU7+kQUolCjqehQT4=";
   };
 
   buildInputs = [

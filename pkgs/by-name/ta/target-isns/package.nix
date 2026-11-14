@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "open-iscsi";
     repo = "target-isns";
     rev = "v${finalAttrs.version}";
-    sha256 = "1b6jjalvvkkjyjbg1pcgk8vmvc6xzzksyjnh2pfi45bbpya4zxim";
+    hash = "sha256-NfZPlL9rFRLdFdBKr+f/3bBdN5qP3fCW9HLOvamS0qw=";
   };
 
   patches = [

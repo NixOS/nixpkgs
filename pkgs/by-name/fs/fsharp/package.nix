@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fsharp";
     repo = "fsharp";
     rev = finalAttrs.version;
-    sha256 = "sha256-dgTEM2aL8lVjVMuW0+HLc+TUA39IiuBv/RfHYNURh5s=";
+    hash = "sha256-dgTEM2aL8lVjVMuW0+HLc+TUA39IiuBv/RfHYNURh5s=";
   };
 
   nativeBuildInputs = [

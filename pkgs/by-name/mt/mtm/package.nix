@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "deadpixi";
     repo = "mtm";
     rev = finalAttrs.version;
-    sha256 = "0gibrvah059z37jvn1qs4b6kvd4ivk2mfihmcpgx1vz6yg70zghv";
+    hash = "sha256-G74PzvPm79DfZRVGV8XckbQ9zSIaB7vlGT8VANXOKz4=";
   };
 
   buildInputs = [ ncurses ];

@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "kalbasit";
     repo = "ssh-agents";
     rev = "v${version}";
-    sha256 = "1l09zy87033v7hd17lhkxikwikqz5nj9x6c2w80rqpad4lp9ihwz";
+    hash = "sha256-n8OYLiVNXZwB4oKZnqQtH8/IZ+wT0hMaPHsMcJD/CdA=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];

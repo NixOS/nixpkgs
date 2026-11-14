@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mobius3";
     repo = "tweeny";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eQa5jdWBhOzGOmkVTu4ULHxfKeXPKVy/cptVhqZToYo=";
+    hash = "sha256-eQa5jdWBhOzGOmkVTu4ULHxfKeXPKVy/cptVhqZToYo=";
   };
 
   nativeBuildInputs = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpcima";
     repo = "quadrafuzz";
     tag = "v${finalAttrs.version}";
-    sha256 = "1kjsf7il9krihwlrq08gk2xvil4b4q5zd87nnm103hby2w7ws7z1";
+    hash = "sha256-4R/NDxd+wQFCtfag9gsmi9C4u5gPAZwphzHPRONxWs4=";
     fetchSubmodules = true;
   };
 

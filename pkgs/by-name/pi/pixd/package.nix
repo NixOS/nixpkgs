@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "FireyFly";
     repo = "pixd";
     rev = "v${finalAttrs.version}";
-    sha256 = "1vmkbs39mg5vwmkzfcrxqm6p8zr9sj4qdwng9icmyf5k34c34xdg";
+    hash = "sha256-r3UyGBmzOF9ZTM/yhonUKX90TcU9M/dn5bu8moZes+4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

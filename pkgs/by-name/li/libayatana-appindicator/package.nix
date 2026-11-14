@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AyatanaIndicators";
     repo = "libayatana-appindicator";
     rev = finalAttrs.version;
-    sha256 = "sha256-NzaWQBb2Ez1ik23wCgW1ZQh1/rY7GcPlLvaSgV7uXrA=";
+    hash = "sha256-NzaWQBb2Ez1ik23wCgW1ZQh1/rY7GcPlLvaSgV7uXrA=";
   };
 
   nativeBuildInputs = [

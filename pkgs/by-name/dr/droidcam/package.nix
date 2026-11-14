@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dev47apps";
     repo = "droidcam-linux-client";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-W9C6OPv/6KbIINPpSix3XM2rUnaFAcQTucBdZ40Mbx4=";
+    hash = "sha256-W9C6OPv/6KbIINPpSix3XM2rUnaFAcQTucBdZ40Mbx4=";
   };
 
   nativeBuildInputs = [

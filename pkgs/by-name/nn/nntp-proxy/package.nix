@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "nieluj";
     repo = "nntp-proxy";
     rev = "0358e7ad6c4676f90ac5074320b16e1461b0011a";
-    sha256 = "0jwxh71am83fbnq9mn06jl06rq8qybm506js79xmmc3xbk5pqvy4";
+    hash = "sha256-xG98y1x9sFp7OloaUOryGOFsAJUG2JqwXW6gqsKBnUs=";
   };
 
   nativeBuildInputs = [ pkg-config ];

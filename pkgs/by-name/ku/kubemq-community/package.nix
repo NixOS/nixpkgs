@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
     owner = "kubemq-io";
     repo = "kubemq-community";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-oAo/O3T3wtfCumT2kjoyXKfCFHijVzSmxhslaKaeF3Y=";
+    hash = "sha256-oAo/O3T3wtfCumT2kjoyXKfCFHijVzSmxhslaKaeF3Y=";
   };
 
   env.CGO_ENABLED = 0;

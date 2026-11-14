@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hanwen";
     repo = "mftrace";
     rev = "release/${finalAttrs.version}";
-    sha256 = "02ik25aczkbi10jrjlnxby3fmixxrwm2k5r4fkfif3bjfym7nqbc";
+    hash = "sha256-bGF7qndyDRfddCSXKSrPvcfqhl/dUpklCHHNz1QRMwo=";
   };
 
   patches = [

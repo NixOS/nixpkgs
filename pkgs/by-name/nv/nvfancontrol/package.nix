@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "foucault";
     repo = "nvfancontrol";
     rev = version;
-    sha256 = "sha256-0WBQSnTYVc3sNmZf/KFzznMg9AVsyaBgdx/IvG1dZAw=";
+    hash = "sha256-0WBQSnTYVc3sNmZf/KFzznMg9AVsyaBgdx/IvG1dZAw=";
   };
 
   cargoHash = "sha256-nJc1G9R0+o22H1KiBtzfdcIIfKrD+Dksl7HsZ2ICD7U=";

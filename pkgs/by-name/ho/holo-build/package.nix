@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "holocm";
     repo = "holo-build";
     rev = "v${finalAttrs.version}";
-    sha256 = "0lypbgf96bcc4m3968xa4il1zwprsdyc0pw6pl9mqq7djxabikd0";
+    hash = "sha256-oM24VJftYFwTvYZfwHzT+fIfaCSqI5NGJYwtk9xb11M=";
   };
 
   postPatch = ''

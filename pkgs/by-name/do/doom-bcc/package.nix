@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "positively-charged";
     repo = "bcc";
     rev = "d58b44d9f18b28fd732c27113e5607a454506d19";
-    sha256 = "1m83ip40ln61qrvb1fbgaqbld2xip9n3k817lwkk1936pml9zcrq";
+    hash = "sha256-OLOfaL1mpDAnpyegOWy6sYtGF1ZvubB2xsFYCsiNA9U=";
   };
 
   enableParallelBuilding = true;

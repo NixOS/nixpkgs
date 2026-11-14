@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kernc";
     repo = "xsuspender";
     rev = finalAttrs.version;
-    sha256 = "1c6ab1s9bbkjbmcfv2mny273r66dlz7sgxsmzfwi0fm2vcb2lwim";
+    hash = "sha256-NXIqFtuiOhC5+1X3p8+nzZg8jvC2iu1YXXKulXRYyrA=";
   };
 
   outputs = [

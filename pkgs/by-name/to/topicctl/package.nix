@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "segmentio";
     repo = "topicctl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-huP6Irmk4eEhpfJV+h6aqvw+cpPj9StobyfZPXng2VM=";
+    hash = "sha256-huP6Irmk4eEhpfJV+h6aqvw+cpPj9StobyfZPXng2VM=";
   };
 
   vendorHash = "sha256-aoFMYgyZnXmPg3fjwydGm85WKcT+Jez07a4JX1o3Mmo=";

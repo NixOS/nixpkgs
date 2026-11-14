@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "golangci";
     repo = "golines";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-3oLSlwKaJQVtM2INiU56WaCGsEzDVDLxiahBN+3IzkY=";
+    hash = "sha256-3oLSlwKaJQVtM2INiU56WaCGsEzDVDLxiahBN+3IzkY=";
   };
 
   vendorHash = "sha256-MCoRDIG3M+xtgaY6/7W066ZxTarMV5bo/lUtxiHeNfs=";

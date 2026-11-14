@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "DreamSourceLab";
     repo = "DSView";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-d/TfCuJzAM0WObOiBhgfsTirlvdROrlCm+oL1cqUrIs=";
+    hash = "sha256-d/TfCuJzAM0WObOiBhgfsTirlvdROrlCm+oL1cqUrIs=";
   };
 
   patches = [

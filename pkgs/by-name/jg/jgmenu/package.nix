@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jgmenu";
     repo = "jgmenu";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2OqQ20W8wJ848NqXVxnkdQw0ZLc4Iawutv9MA46tgm8=";
+    hash = "sha256-2OqQ20W8wJ848NqXVxnkdQw0ZLc4Iawutv9MA46tgm8=";
   };
 
   nativeBuildInputs = [

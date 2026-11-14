@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "poliva";
     repo = "lightum";
     rev = "123e6babe0669b23d4c1dfa5511088608ff2baa8";
-    sha256 = "sha256-dzWUVY2srgk6BM6jZ7FF+snxnPopz3fx9nq+mVkmogc=";
+    hash = "sha256-dzWUVY2srgk6BM6jZ7FF+snxnPopz3fx9nq+mVkmogc=";
   };
 
   nativeBuildInputs = [ pkg-config ];

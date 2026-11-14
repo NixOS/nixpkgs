@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kupferlauncher";
     repo = "keybinder";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-elL6DZtzCwAtoyGZYP0jAma6tHPks2KAtrziWtBENGU=";
+    hash = "sha256-elL6DZtzCwAtoyGZYP0jAma6tHPks2KAtrziWtBENGU=";
   };
 
   nativeBuildInputs = [

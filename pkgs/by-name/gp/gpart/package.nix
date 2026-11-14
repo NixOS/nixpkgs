@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # GitHub repository 'collating patches for gpart from all distributions':
   src = fetchFromGitHub {
-    sha256 = "1lsd9k876p944k9s6sxqk5yh9yr7m42nbw9vlsllin7pd4djl4ya";
+    hash = "sha256-yhMqG2n32EippjvxZQWpJ/sEfZm4a6PTJCRdc9BMTdM=";
     rev = finalAttrs.version;
     repo = "gpart";
     owner = "baruch";

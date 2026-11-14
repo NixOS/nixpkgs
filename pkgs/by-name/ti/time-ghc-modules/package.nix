@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "codedownio";
     repo = "time-ghc-modules";
     rev = finalAttrs.version;
-    sha256 = "sha256-/PhJAhP3KCWFyeSk8e5JV0cpBueH/eVDwQTMZSnnZCo=";
+    hash = "sha256-/PhJAhP3KCWFyeSk8e5JV0cpBueH/eVDwQTMZSnnZCo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

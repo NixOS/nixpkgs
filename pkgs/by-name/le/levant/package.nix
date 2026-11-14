@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "hashicorp";
     repo = "levant";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-XxdLN/z+mtiaAy6heRbj4kyIOeKbS9yb1xIZnIyfI3s=";
+    hash = "sha256-XxdLN/z+mtiaAy6heRbj4kyIOeKbS9yb1xIZnIyfI3s=";
   };
 
   vendorHash = "sha256-UJuAT02rYid2IESuABTDEAJiIBOfcyvH7ASOZfgTrZs=";

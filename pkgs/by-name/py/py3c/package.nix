@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "encukou";
     repo = "py3c";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
+    hash = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
   };
 
   postPatch = ''

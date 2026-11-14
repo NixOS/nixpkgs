@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "prometheus";
     repo = "snmp_exporter";
     rev = "v${version}";
-    sha256 = "sha256-vpCBDfG5jzxuNUC6iwLiwnP72jLCVGAWFI9jVYbLNAM=";
+    hash = "sha256-vpCBDfG5jzxuNUC6iwLiwnP72jLCVGAWFI9jVYbLNAM=";
   };
 
   vendorHash = "sha256-pt/m/I+cW/JDnfiShYExqcWIb+kBWpxF4c0jAnTVdkY=";

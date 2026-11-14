@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "OpenHantek";
     repo = "OpenHantek6022";
     rev = version;
-    sha256 = "sha256-FT+DyfD5WHBblRXWXFnyB2xwoIgoh84oB+QN32wx78c=";
+    hash = "sha256-FT+DyfD5WHBblRXWXFnyB2xwoIgoh84oB+QN32wx78c=";
   };
 
   nativeBuildInputs = [

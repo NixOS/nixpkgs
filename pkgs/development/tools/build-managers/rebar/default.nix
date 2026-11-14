@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "rebar";
     repo = "rebar";
     rev = version;
-    sha256 = "sha256-okvG7X2uHtZ1p+HUoFOmslrWvYjk0QWBAvAMAW2E40c=";
+    hash = "sha256-okvG7X2uHtZ1p+HUoFOmslrWvYjk0QWBAvAMAW2E40c=";
   };
 
   buildInputs = [ erlang ];

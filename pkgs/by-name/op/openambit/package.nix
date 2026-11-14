@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "openambitproject";
     repo = "openambit";
     rev = version;
-    sha256 = "1074kvkamwnlkwdajsw1799wddcfkjh2ay6l842r0s4cvrxrai85";
+    hash = "sha256-BUWVe96MaJAFQdR4JaCcjrXGUzqBa6kan9Tyquae5IA=";
   };
 
   patches = [

@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "xyproto";
     repo = "elfinfo";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-8axP9DaTiJpQ9OHkqhZHPY5NDIuJfQYyDngMOEG4kkY=";
+    hash = "sha256-8axP9DaTiJpQ9OHkqhZHPY5NDIuJfQYyDngMOEG4kkY=";
   };
 
   vendorHash = null;

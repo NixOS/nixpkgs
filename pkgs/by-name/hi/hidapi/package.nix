@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libusb";
     repo = "hidapi";
     rev = "hidapi-${finalAttrs.version}";
-    sha256 = "sha256-o6IZRG42kTa7EQib9eaV1HGyjaGgeCabk+8fyQTm/0s=";
+    hash = "sha256-o6IZRG42kTa7EQib9eaV1HGyjaGgeCabk+8fyQTm/0s=";
   };
 
   nativeBuildInputs = [

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "martijnvanbrummelen";
     repo = "nwipe";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-gSSOS7hY9/xESJrmU7FBSXwa3O2YloPI7pQ+8KKW2dM=";
+    hash = "sha256-gSSOS7hY9/xESJrmU7FBSXwa3O2YloPI7pQ+8KKW2dM=";
   };
 
   nativeBuildInputs = [

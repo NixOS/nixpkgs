@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "tj";
     repo = "mmake";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JPsVfLIl06PJ8Nsfu7ogwrttB1G93HTKbZFqUTSV9O8=";
+    hash = "sha256-JPsVfLIl06PJ8Nsfu7ogwrttB1G93HTKbZFqUTSV9O8=";
   };
 
   vendorHash = "sha256-0z+sujzzBl/rtzXbhL4Os+jYfLUuO9PlXshUDxAH9DU=";

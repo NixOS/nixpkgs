@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "adriancable";
     repo = "8086tiny";
     rev = "c79ca2a34d96931d55ef724c815b289d0767ae3a";
-    sha256 = "00aydg8f28sgy8l3rd2a7jvp56lx3b63hhak43p7g7vjdikv495w";
+    hash = "sha256-vCSyZ2xyn3fuIFNBOMwanZpytzxKtDwo8k8j4dBrXgE=";
   };
 
   buildInputs = lib.optional localBios nasm ++ lib.optional sdlSupport SDL;

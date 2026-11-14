@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "illiliti";
     repo = "libudev-zero";
     rev = finalAttrs.version;
-    sha256 = "sha256-kHTWoHxORizNF8614E0gfWeJgobDxqtoUpawQmEvtAQ=";
+    hash = "sha256-kHTWoHxORizNF8614E0gfWeJgobDxqtoUpawQmEvtAQ=";
   };
 
   makeFlags = [

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "obfusk";
     repo = "kanjidraw";
     rev = "v${finalAttrs.version}";
-    sha256 = "03ag8vkbf85qww857ii8hcnn8bh5qa7rsmhka0v9vfxk272ifbyq";
+    hash = "sha256-2C8XxRGzu502UBNWnY/CBS5kLYMoxlMQ57ggt+ZGTw0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jimsalterjrs";
     repo = "ioztat";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-8svMijgVxSuquPFO2Q2HeqGLdMkwhiujS1DSxC/LRRk=";
+    hash = "sha256-8svMijgVxSuquPFO2Q2HeqGLdMkwhiujS1DSxC/LRRk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

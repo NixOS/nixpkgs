@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "roddhjav";
     repo = "pass-tomb";
     rev = "v${version}";
-    sha256 = "sha256-kbbMHmYmeyt7HM8YiNhknePm1vUaXWWXPWePKGpbU+o=";
+    hash = "sha256-kbbMHmYmeyt7HM8YiNhknePm1vUaXWWXPWePKGpbU+o=";
   };
 
   buildInputs = [ tomb ];

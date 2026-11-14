@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "NiklasRosenstein";
     repo = "pbzx";
     rev = "v${finalAttrs.version}";
-    sha256 = "0bwd7wmnhpz1n5p39mh6asfyccj4cm06hwigslcwbb3pdwmvxc90";
+    hash = "sha256-ILG+K293rMUZ1S9yaEBlRDLmnVYG1jRuseFfaCs/jS8=";
   };
   patches = [ ./stdin.patch ];
   buildInputs = [

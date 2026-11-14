@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mageta";
     repo = "vcs_query";
     rev = "v${finalAttrs.version}";
-    sha256 = "05va0na9yxkpqhm9v0x3k58148qcf2bbcv5bnmj7vn9r7fwyjrlx";
+    hash = "sha256-nWbpuTs52X1ktatstpZwDCMSUJmjg50qxHd2n5QFahc=";
   };
 
   nativeBuildInputs = [

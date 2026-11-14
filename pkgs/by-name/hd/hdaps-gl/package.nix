@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-thinkpad";
     repo = "hdaps-gl";
     rev = finalAttrs.version;
-    sha256 = "0jywsrcr1wzkjig5cvz014c3r026sbwscbkv7zh1014lkjm0kyyh";
+    hash = "sha256-0PsJqpyUBBDgP3supvnSRoA8GAngb1ZelPPzkFnW3Es=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

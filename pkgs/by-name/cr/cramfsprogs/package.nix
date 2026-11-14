@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "npitre";
     repo = "cramfs-tools";
     rev = "13ad7ee1df5ce42cf9758053186554d7cb15e2cc";
-    sha256 = "sha256-JlDOowJYJJNB1opNabJgYfdt0khQFsdDvzbtY/bJwRI=";
+    hash = "sha256-JlDOowJYJJNB1opNabJgYfdt0khQFsdDvzbtY/bJwRI=";
   };
 
   makeFlags = [

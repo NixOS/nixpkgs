@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "myint";
     repo = "cppclean";
     rev = "v${finalAttrs.version}";
-    sha256 = "081bw7kkl7mh3vwyrmdfrk3fgq8k5laacx7hz8fjpchrvdrkqph0";
+    hash = "sha256-AF48c9sZsisd+vB0phQtE+Hnxsyu1ez5HrAeOufhKyA=";
   };
 
   postUnpack = ''

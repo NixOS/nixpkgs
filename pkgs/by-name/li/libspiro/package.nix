@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fontforge";
     repo = "libspiro";
     rev = finalAttrs.version;
-    sha256 = "sha256-psEF1SWkire6ngEUcMU0xnGYaT8ktqDCBlBckToGUMg=";
+    hash = "sha256-psEF1SWkire6ngEUcMU0xnGYaT8ktqDCBlBckToGUMg=";
   };
 
   nativeBuildInputs = [

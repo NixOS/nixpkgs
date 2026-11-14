@@ -27,7 +27,7 @@ pythonPackages.buildPythonPackage rec {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = version;
-    sha256 = "1ccc8bzcdxp6rh6llk7grcnmyc05fq7dz5w0mifdzjv3a473hsky";
+    hash = "sha256-fmo4DlFjy99crICX3w52BTBfLcvvTEoNzOb2xv5CjLE=";
   };
 
   patches = [

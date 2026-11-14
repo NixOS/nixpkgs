@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "nfc-tools";
     repo = "ifdnfc";
     rev = "0e48e8e107dc42f68fb472bb06d257503ad45b1d";
-    sha256 = "1cxnvhhlcbm8h49rlw5racspb85fmwqqhd3gzzpzy68vrs0b37vg";
+    hash = "sha256-b5+xgM4bGf/v/280iDGvrqB1NVO5cJoTgaguRiHctrM=";
   };
   nativeBuildInputs = [
     pkg-config

@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "liquidmetal-dev";
     repo = "flintlock";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tHq5yikhDsOYw6IOugmRPVs581+inwDrvLPuOOwig3k=";
+    hash = "sha256-tHq5yikhDsOYw6IOugmRPVs581+inwDrvLPuOOwig3k=";
   };
 
   vendorHash = "sha256-cITGlNpWoR78R6DcFsh1mieGeNLhd9L6Ap4XB0orNUk=";

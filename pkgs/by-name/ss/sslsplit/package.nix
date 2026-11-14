@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "droe";
     repo = "sslsplit";
     rev = finalAttrs.version;
-    sha256 = "1p43z9ln5rbc76v0j1k3r4nhvfw71hq8jzsallb54z9hvwfvqp3l";
+    hash = "sha256-dFy8Hd8wfVIWpUp/iTAMh7sNLcljBgm2OWzlYmn6g9w=";
   };
 
   patches = [

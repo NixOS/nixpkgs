@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BioPP";
     repo = "bpp-phyl";
     rev = "v${finalAttrs.version}";
-    sha256 = "192zks6wyk903n06c2lbsscdhkjnfwms8p7jblsmk3lvjhdipb20";
+    hash = "sha256-QKwbG5Sbjlk1XfJcpCt3Vk7YmNaLCmaAHSBNz42eX6Q=";
   };
 
   nativeBuildInputs = [ cmake ];

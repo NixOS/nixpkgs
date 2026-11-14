@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Jafaral";
     repo = "bmon";
     rev = "v${finalAttrs.version}";
-    sha256 = "1ilba872c09mnlvylslv4hqv6c9cz36l76q74rr99jvis1dg69gf";
+    hash = "sha256-7iXzWtBxy5RyJgebQ834LDGzMSSbauo3tTUBJg5Si8Y=";
   };
 
   # The source code defines `__unused__`, which is a reserved name

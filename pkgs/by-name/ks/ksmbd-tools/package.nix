@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cifsd-team";
     repo = "ksmbd-tools";
     rev = finalAttrs.version;
-    sha256 = "sha256-Go9lectXwBVJawKAiJainDCQNDfzMCsuaIMye07yjoc=";
+    hash = "sha256-Go9lectXwBVJawKAiJainDCQNDfzMCsuaIMye07yjoc=";
   };
 
   buildInputs = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gracicot";
     repo = "kangaru";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-30gmNo68cDGmGjS75KySyORC6s1NBI925QuZyOv3Kag=";
+    hash = "sha256-30gmNo68cDGmGjS75KySyORC6s1NBI925QuZyOv3Kag=";
   };
 
   nativeBuildInputs = [

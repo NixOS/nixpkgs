@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "iblech";
     repo = "sshlatex";
     rev = finalAttrs.version;
-    sha256 = "0kaah8is74zba9373xccmsxmnnn6kh0isr4qpg21x3qhdzhlxl7q";
+    hash = "sha256-+NBO4W8Qjx7Eu5hkHQGcxlpbu66M9XFGUuuToyOCSk0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

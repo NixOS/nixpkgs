@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "pseudomuto";
     repo = "protoc-gen-doc";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-19CN62AwqQGq5Gb5kQqVYhs+LKsJ9K2L0VAakwzPD5Y=";
+    hash = "sha256-19CN62AwqQGq5Gb5kQqVYhs+LKsJ9K2L0VAakwzPD5Y=";
   };
 
   vendorHash = "sha256-K0rZBERSKob5ubZW28QpbcPhgFKOOASkd9UyC9f8gyQ=";

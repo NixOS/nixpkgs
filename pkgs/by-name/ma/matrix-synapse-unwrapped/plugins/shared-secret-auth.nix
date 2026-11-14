@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "devture";
     repo = "matrix-synapse-shared-secret-auth";
     rev = version;
-    sha256 = "sha256-ZMEUBC2Y4J1+4tHfsMxqzTO/P1ef3aB81OAhEs+Tdc4=";
+    hash = "sha256-ZMEUBC2Y4J1+4tHfsMxqzTO/P1ef3aB81OAhEs+Tdc4=";
   };
 
   doCheck = false;

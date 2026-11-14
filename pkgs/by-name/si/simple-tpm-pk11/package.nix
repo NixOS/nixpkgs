@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ThomasHabets";
     repo = "simple-tpm-pk11";
     rev = finalAttrs.version;
-    sha256 = "sha256-wJ0U4ZNg60+XJTSAMs9gaMTWVePE5dfv5cZWDqwnSlY=";
+    hash = "sha256-wJ0U4ZNg60+XJTSAMs9gaMTWVePE5dfv5cZWDqwnSlY=";
   };
 
   nativeBuildInputs = [

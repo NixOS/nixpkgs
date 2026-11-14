@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
     owner = "TekWizely";
     repo = "run";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-an5AuRJJEM18IssdLLZC/zzPpsVCCtawRQXK/AfzMN0=";
+    hash = "sha256-an5AuRJJEM18IssdLLZC/zzPpsVCCtawRQXK/AfzMN0=";
   };
 
   vendorHash = "sha256-BAyhuE9hGGDfDGmXQ7dseUvHlK5vC87uLT78lHSvLeg=";

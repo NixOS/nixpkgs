@@ -11,7 +11,7 @@ let
     owner = "euclio";
     repo = "vim-markdown-composer";
     rev = "4f53f1c6e41c8fb916c50b50e18284d923f0f3cd";
-    sha256 = "sha256-QODj8J2d2Qo8/B0rv5HthSidZcBgY11oNKwT8jCO6kI=";
+    hash = "sha256-QODj8J2d2Qo8/B0rv5HthSidZcBgY11oNKwT8jCO6kI=";
   };
 
   vim-markdown-composer-bin = rustPlatform.buildRustPackage {

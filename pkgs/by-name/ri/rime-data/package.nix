@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "rime";
     repo = "plum";
     rev = "b1be1969f914cc005add4090631b855db00c2591";
-    sha256 = "sha256-o16OYMjYrLhoo0H9hw7s/VnXAs+vS0OIY29T1v96WDE=";
+    hash = "sha256-o16OYMjYrLhoo0H9hw7s/VnXAs+vS0OIY29T1v96WDE=";
   };
 
   buildInputs = [ librime ];

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "argoproj-labs";
     repo = "argocd-autopilot";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JLh41ZWiDcDrUtd8d+Ak5TFca4L6VHzUguS55P9lmj0=";
+    hash = "sha256-JLh41ZWiDcDrUtd8d+Ak5TFca4L6VHzUguS55P9lmj0=";
   };
 
   vendorHash = "sha256-Ur0BfIg4lZakjx01UOL4n5/O1yjTJJcGuDxWVDqUOyY=";

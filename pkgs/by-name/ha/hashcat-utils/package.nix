@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hashcat";
     repo = "hashcat-utils";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-S2aRNTJMQO/YXdCHexKQ+gZnZp2vGvsvhD5O7t3tfhw=";
+    hash = "sha256-S2aRNTJMQO/YXdCHexKQ+gZnZp2vGvsvhD5O7t3tfhw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

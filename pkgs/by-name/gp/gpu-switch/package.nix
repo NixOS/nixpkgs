@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "0xbb";
     repo = "gpu-switch";
     rev = "a365f56d435c8ef84c4dd2ab935ede4992359e31";
-    sha256 = "1jnh43nijkqd83h7piq7225ixziggyzaalabgissyxdyz6szcn0r";
+    hash = "sha256-GVj2tfm+da91fEtRpb5/L/4eixAHx3vgQA1PGe0g0Mo=";
   };
   installPhase = ''
     mkdir -p $out/bin

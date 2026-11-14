@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "silica-dev";
     repo = "Bibata_Cursor_Translucent";
     rev = "v${version}";
-    sha256 = "sha256-RroynJfdFpu+Wl9iw9NrAc9wNZsSxWI+heJXUTwEe7s=";
+    hash = "sha256-RroynJfdFpu+Wl9iw9NrAc9wNZsSxWI+heJXUTwEe7s=";
   };
 
   patches = [

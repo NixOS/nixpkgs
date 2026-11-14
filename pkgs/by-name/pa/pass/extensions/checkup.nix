@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "etu";
     repo = pname;
     rev = version;
-    sha256 = "1p65yxr00k35g4bnagszp8i03pmhnrcmipgrdsawps2ba8faqp6r";
+    hash = "sha256-2VysHFJL6MuVbvndWFm2sN4BIrpfP2UXeWVMAHL3xdw=";
   };
 
   nativeBuildInputs = [ shellcheck ];

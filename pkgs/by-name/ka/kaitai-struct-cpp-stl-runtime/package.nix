@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kaitai-io";
     repo = "kaitai_struct_cpp_stl_runtime";
     tag = finalAttrs.version;
-    sha256 = "sha256-2glGPf08bkzvnkLpQIaG2qiy/yO+bZ14hjIaCKou2vU=";
+    hash = "sha256-2glGPf08bkzvnkLpQIaG2qiy/yO+bZ14hjIaCKou2vU=";
   };
 
   doCheck = true;

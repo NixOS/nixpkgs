@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "periklis";
     repo = "lguf-brightness";
     rev = "fcb2bc1738d55c83b6395c24edc27267a520a725";
-    sha256 = "0cf7cn2kpmlvz00qxqj1m5zxmh7i2x75djbj4wqk7if7a0nlrd5m";
+    hash = "sha256-tbRMLVDHxTMxJ3LJVk4X8cDaf6lB4o4B+JvWO4VlxzE=";
   };
 
   nativeBuildInputs = [ cmake ];

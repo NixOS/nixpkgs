@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-on-mac";
     repo = "mbpfan";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-F9IWUcILOuLn5K4zRSU5jn+1Wk1xy0CONSI6JTXU2pA=";
+    hash = "sha256-F9IWUcILOuLn5K4zRSU5jn+1Wk1xy0CONSI6JTXU2pA=";
   };
   installPhase = ''
     mkdir -p $out/bin $out/etc

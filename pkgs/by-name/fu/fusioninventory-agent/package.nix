@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
     owner = "fusioninventory";
     repo = "fusioninventory-agent";
     rev = version;
-    sha256 = "1hbp5a9m03n6a80xc8z640zs71qhqk4ifafr6fp0vvzzvq097ip2";
+    hash = "sha256-4saTAN7/7w2uM9kpF8nEEIejPyDmI9YBUsYOUJMqd8E=";
   };
 
   postPatch = ''

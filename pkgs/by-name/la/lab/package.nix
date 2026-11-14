@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VCvjP/bSd/0ywvNWPsseXn/SPkdp+BsXc/jTvB11EOk=";
+    hash = "sha256-VCvjP/bSd/0ywvNWPsseXn/SPkdp+BsXc/jTvB11EOk=";
   };
 
   subPackages = [ "." ];

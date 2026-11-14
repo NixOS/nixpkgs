@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dmtx";
     repo = "libdmtx";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/sV+t7RAr5dTwfUsGz0KEZYgm0DzQWRdiwrbbEbC1OY=";
+    hash = "sha256-/sV+t7RAr5dTwfUsGz0KEZYgm0DzQWRdiwrbbEbC1OY=";
   };
 
   nativeBuildInputs = [

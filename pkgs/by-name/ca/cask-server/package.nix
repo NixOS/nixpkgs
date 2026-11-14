@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Nitrux";
     repo = "cask-server";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-XUgLtZMcvzGewtUcgu7FbBCn/1zqOjWvw2AI9gUwWkc=";
+    hash = "sha256-XUgLtZMcvzGewtUcgu7FbBCn/1zqOjWvw2AI9gUwWkc=";
   };
 
   nativeBuildInputs = [

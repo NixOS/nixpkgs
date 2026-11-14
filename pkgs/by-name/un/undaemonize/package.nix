@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     repo = "undaemonize";
     owner = "nickstenning";
     rev = "a181cfd900851543ee1f85fe8f76bc8916b446d4";
-    sha256 = "1fkrgj3xfhj820qagh5p0rabl8z2hpad6yp984v92h9pgbfwxs33";
+    hash = "sha256-Y+jO3Xo3QZE2Qel609SF4iO6VAa3wKcwEEhC14d8ebo=";
   };
   installPhase = ''
     install -D undaemonize $out/bin/undaemonize

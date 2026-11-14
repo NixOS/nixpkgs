@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "dalibo";
     repo = "pg_activity";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-W5R521eyJjblCE5NG546ItMZo0CeBAhFLxMHUrbRGms=";
+    hash = "sha256-W5R521eyJjblCE5NG546ItMZo0CeBAhFLxMHUrbRGms=";
   };
 
   build-system = with python3Packages; [ setuptools ];

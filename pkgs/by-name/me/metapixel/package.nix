@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     repo = "metapixel";
     rev = "98ee9daa093b6c334941242e63f90b1c2876eb4f";
     fetchSubmodules = true;
-    sha256 = "0r7n3a6bvcxkbpda4mwmrpicii09iql5z69nkjqygkwxw7ny3309";
+    hash = "sha256-CYzh7eGdz+exnDaZXyiOCcTI4s2VV6LaXbOzvYwa9mQ=";
   };
 
   makeFlags = [ "metapixel" ];

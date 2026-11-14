@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "SciresM";
     repo = "hactool";
     rev = finalAttrs.version;
-    sha256 = "0305ngsnwm8npzgyhyifasi4l802xnfz19r0kbzzniirmcn4082d";
+    hash = "sha256-TSBALKs5Rvv/miCn8J3tAiBKolYueujfvxZVbvWzBQw=";
   };
 
   patches = [ ./musl-compat.patch ];

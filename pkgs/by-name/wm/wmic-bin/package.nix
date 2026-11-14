@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "R-Vision";
     repo = "wmi-client";
     rev = finalAttrs.version;
-    sha256 = "1w1mdbiwz37wzry1q38h8dyjaa6iggmsb9wcyhhlawwm1vj50w48";
+    hash = "sha256-iHBQ5A6Vc0Uh9Iynpet70SglfUMQDRx8/vyMz+NqNfA=";
   };
 
   buildInputs = [

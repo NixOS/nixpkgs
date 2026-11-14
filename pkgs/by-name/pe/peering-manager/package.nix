@@ -22,7 +22,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "peering-manager";
     repo = "peering-manager";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-CsRLMqUgv4av0owZ/pegERcyyHddxyZffbc8/iTOcVA=";
+    hash = "sha256-CsRLMqUgv4av0owZ/pegERcyyHddxyZffbc8/iTOcVA=";
   };
 
   pyproject = false;

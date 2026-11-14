@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "swaggo";
     repo = "swag";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ixeHj+bqskQJOCxnJaU0IG9Qoe4SQk+McNY0Sy1tUwI=";
+    hash = "sha256-ixeHj+bqskQJOCxnJaU0IG9Qoe4SQk+McNY0Sy1tUwI=";
   };
 
   vendorHash = "sha256-P3WH4SrGL4Ejn4U34EEJA21Fne/UlOWg8jiI94Bp7Ms=";

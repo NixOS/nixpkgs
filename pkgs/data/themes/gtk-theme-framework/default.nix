@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "jaxwilko";
     repo = "gtk-theme-framework";
     rev = "v${version}";
-    sha256 = "1z5s5rsgiypanf2z0avaisbflnvwrc8aiy5qskrsvbbaja63jy3s";
+    hash = "sha256-eng5jJJqra3z1Lj4qBDLfFvqlo5qK/CFs+r6+HQuuvw=";
   };
 
   postPatch = ''

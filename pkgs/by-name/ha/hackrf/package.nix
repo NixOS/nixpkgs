@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "greatscottgadgets";
     repo = "hackrf";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/RSZ+jkh4wmb0n8Kiee9Nr5D6LPYdmZVigpsBagAaLg=";
+    hash = "sha256-/RSZ+jkh4wmb0n8Kiee9Nr5D6LPYdmZVigpsBagAaLg=";
   };
 
   nativeBuildInputs = [

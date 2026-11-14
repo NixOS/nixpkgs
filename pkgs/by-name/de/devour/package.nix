@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "salman-abedin";
     repo = "devour";
     rev = finalAttrs.version;
-    sha256 = "1qq5l6d0fn8azg7sj7a4m2jsmhlpswl5793clcxs1p34vy4wb2lp";
+    hash = "sha256-l4rFid9k3KA7o2ykUyjXl8KqpahEHanP+wpZB5qhBeM=";
   };
 
   installPhase = ''

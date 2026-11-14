@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sociomantic-tsunami";
     repo = "git-hub";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fb/WDmBx1Vayu4fLeG+D1nmHJJawgIAAXcQsABsenBo=";
+    hash = "sha256-fb/WDmBx1Vayu4fLeG+D1nmHJJawgIAAXcQsABsenBo=";
   };
 
   nativeBuildInputs = [

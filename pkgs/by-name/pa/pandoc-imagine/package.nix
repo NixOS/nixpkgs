@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     repo = "imagine";
     owner = "hertogp";
     rev = version;
-    sha256 = "sha256-IJAXrJakKjROF2xi9dsLvGzyGIyB+GDnx/Z7BRlwSqc=";
+    hash = "sha256-IJAXrJakKjROF2xi9dsLvGzyGIyB+GDnx/Z7BRlwSqc=";
   };
 
   propagatedBuildInputs = with python3Packages; [

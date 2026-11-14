@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "tikzit";
     repo = "tikzit";
     rev = "v2.1.6";
-    sha256 = "0ba99pgv54pj1xvhrwn9db2w0v4h07vsjajcnhpa2smy88ypg32h";
+    hash = "sha256-UIx3PUK+aqEutEwqqfcBkGzAxWrJ8gx3D/KSst9NSS0=";
   };
 
   nativeBuildInputs = [

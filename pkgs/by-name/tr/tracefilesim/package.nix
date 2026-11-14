@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "GarCoSim";
     repo = "TraceFileSim";
     rev = "368aa6b1d6560e7ecbd16fca47000c8f528f3da2";
-    sha256 = "156m92k38ap4bzidbr8dzl065rni8lrib71ih88myk9z5y1x5nxm";
+    hash = "sha256-tdvSgy8/TV8RgjGcFTNF0eZiAP0N5dXiX+QqNKZI1ZQ=";
   };
 
   hardeningDisable = [ "fortify" ];

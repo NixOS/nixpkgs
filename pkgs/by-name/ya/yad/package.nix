@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v1cont";
     repo = "yad";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-z+t4eG8yXhfs4GfLFDaaOCAxrr5MIoFD6BKF8vr59IY=";
+    hash = "sha256-z+t4eG8yXhfs4GfLFDaaOCAxrr5MIoFD6BKF8vr59IY=";
   };
 
   configureFlags = [

@@ -12,7 +12,7 @@ darwin.sigtool.overrideAttrs (old: {
     owner = "corngood";
     repo = "sigtool";
     rev = "new-commands";
-    sha256 = "sha256-EVM5ZG3sAHrIXuWrnqA9/4pDkJOpWCeBUl5fh0mkK4k=";
+    hash = "sha256-EVM5ZG3sAHrIXuWrnqA9/4pDkJOpWCeBUl5fh0mkK4k=";
   };
 
   nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [

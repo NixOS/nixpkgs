@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "silentbicycle";
     repo = "theft";
     rev = "v${finalAttrs.version}";
-    sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
+    hash = "sha256-DUp85uINe9roE13k3FZZW0pMef+tDs8vaXcJ6riaVdg=";
   };
 
   patches = [ ./disable-failing-test.patch ];

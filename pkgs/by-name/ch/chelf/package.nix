@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Gottox";
     repo = "chelf";
     rev = "v${finalAttrs.version}";
-    sha256 = "0xwd84aynyqsi2kcndbff176vmhrak3jmn3lfcwya59653pppjr6";
+    hash = "sha256-Jst77ygmFeU5c3TYKsdUGdZtTnBuNcumiBp76xVBjXc=";
   };
 
   installPhase = ''

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "manojkarthick";
     repo = "reddsaver";
     rev = "v${finalAttrs.version}";
-    sha256 = "07xsrc0w0z7w2w0q44aqnn1ybf9vqry01v3xr96l1xzzc5mkqdzf";
+    hash = "sha256-7jc8a2H/90BNyn3sAHzGO7nlg7VYEYIBF/x8wAHLuh8=";
   };
 
   cargoHash = "sha256-xYtdGhuieFudfJz+LxUjP7mV8uItaIvLahCH7vBWTtg=";

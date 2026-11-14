@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "zk-org";
     repo = "zk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Nik9qJ3Pe1h99zSSBbv6Va7Rg99CeX3fZSU8UVl4YKo=";
+    hash = "sha256-Nik9qJ3Pe1h99zSSBbv6Va7Rg99CeX3fZSU8UVl4YKo=";
   };
 
   vendorHash = "sha256-Y5KI3o4HYWyqQl/RnOetyIKOI+CbYWSgrbkGkpAKsX4=";

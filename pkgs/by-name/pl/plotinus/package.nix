@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "p-e-w";
     repo = "plotinus";
     rev = "v${finalAttrs.version}";
-    sha256 = "19k6f6ivg4ab57m62g6fkg85q9sv049snmzq1fyqnqijggwshxfz";
+    hash = "sha256-33Wo+XsyYou9C/hXqxMBWydc0JvOPGHqKUuRt6NxZqY=";
   };
 
   postPatch = ''

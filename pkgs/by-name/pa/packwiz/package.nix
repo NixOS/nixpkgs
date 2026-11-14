@@ -15,7 +15,7 @@ buildGoModule {
     owner = "packwiz";
     repo = "packwiz";
     rev = "170b22d785959dda5876b54b7f16e1b807a57fb6";
-    sha256 = "sha256-GGOa5GtoeFNgGzZ4lrNDIp8NHxk9P9P6bze+c2FQC8M=";
+    hash = "sha256-GGOa5GtoeFNgGzZ4lrNDIp8NHxk9P9P6bze+c2FQC8M=";
   };
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

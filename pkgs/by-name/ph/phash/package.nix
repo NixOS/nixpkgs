@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "clearscene";
     repo = "pHash";
     rev = finalAttrs.version;
-    sha256 = "sha256-frISiZ89ei7XfI5F2nJJehfQZsk0Mlb4n91q/AiZ2vA=";
+    hash = "sha256-frISiZ89ei7XfI5F2nJJehfQZsk0Mlb4n91q/AiZ2vA=";
   };
 
   env.NIX_LDFLAGS = "-lfftw3_threads";

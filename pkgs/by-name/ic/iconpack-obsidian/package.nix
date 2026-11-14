@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "madmaxms";
     repo = "iconpack-obsidian";
     rev = "v${version}";
-    sha256 = "1f32isq1xyn9b6p1nx5rssqgg9gw0jp9ld19860xk29fspmlfb8n";
+    hash = "sha256-Fi1H69UuidmBQSk0mq4E/KX3sNa5dBuuWcn6HrCOYrg=";
   };
 
   nativeBuildInputs = [ gtk3 ];
