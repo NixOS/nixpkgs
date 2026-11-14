@@ -1,0 +1,14 @@
+{
+  "rev": "fluxer-release@2026.1025.191336",
+  "version": "0-unstable-2026-10-25",
+  "hash": "sha256-EU0Z3W2K80xdBZwacaOEd/53trDJag0sYR7p8A0q4lo=",
+  "cargo": {
+    "hash": "sha256-mC7Y84XD1GkEPvrQi2sTit3HMRObsDIryfSPmwhf69A=",
+    "libFluxcore": "sha256-n9hA0WaUyYpXV9ply8QwUgq4NvmBERIebrfzz2lCd/A=",
+    "libFluxwebp": "sha256-zz5JD3jiNCx8FOReZmCm4O2F20s7UbMsfZIM2sIcSS0=",
+    "libGuildMemberListNif": "sha256-lECOMdkbdWAeL829MrWPWGQI44P+4VMnLIp9Jd+xJJo=",
+    "libPushMarkdownPlaintext": "sha256-9HDcMd1qfIOJPIw6D9bLR4rSfbz8Zv/wz9zQe3PoZjM="
+  },
+  "pnpm": "sha256-NfBDIaBes9qyqRfdTWYwW1bpSn8gqDnCW7y0ycQ2088=",
+  "rebar": "sha256-rGSvSCUjH+BedJga2Kq2B7diDT5M68l2xmp9hbDD5xI="
+}

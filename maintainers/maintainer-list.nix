@@ -28552,6 +28552,12 @@
     githubId = 62220780;
     email = "git@murphy.science";
   };
+  strangeglyph = {
+    email = "github@mail.apophenic.net";
+    github = "strangeglyph";
+    githubId = 974869;
+    name = "strangeglyph";
+  };
   strawbee = {
     email = "henigingames@gmail.com";
     github = "StillToad";
