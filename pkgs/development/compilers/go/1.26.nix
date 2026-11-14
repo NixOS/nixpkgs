@@ -1,199 +1,22 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
-  tzdata,
-  replaceVars,
-  iana-etc,
-  mailcap,
-  buildPackages,
-  targetPackages,
-  # for testing
   buildGo126Module,
   callPackage,
+  fetchurl,
 }:
 
 let
-  goBootstrap = buildPackages.callPackage ./bootstrap124.nix { };
-
-  isCross = !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "go";
   version = "1.26.11";
-
+in
+callPackage ./generic.nix {
+  inherit version;
   src = fetchurl {
-    url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
+    url = "https://go.dev/dl/go${version}.src.tar.gz";
     hash = "sha256-1EEBsP8n7SpMda1GwXucdDWSCeLrLKfJ32y0/baOGWk=";
   };
-
-  strictDeps = true;
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
-    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads;
-
-  postPatch = ''
-    patchShebangs .
-  '';
-
-  patches = [
-    (replaceVars ./iana-etc-1.25.patch {
-      iana = iana-etc;
-    })
-    # Patch the mimetype database location which is missing on NixOS.
-    # but also allow static binaries built with NixOS to run outside nix
-    (replaceVars ./mailcap-1.17.patch {
-      inherit mailcap;
-    })
-    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
-    # that run outside a nix server
-    (replaceVars ./tzdata-1.19.patch {
-      inherit tzdata;
-    })
-    ./remove-tools-1.11.patch
+  extraPatches = [
     # This patch is never used in tree, and very rarely out-of-tree. The one exception is in
     # gomod2nix. ref. https://github.com/NixOS/nixpkgs/pull/109127 (patchfile in PR has more context)
     ./go_no_vendor_checks-1.26.patch
-    ./go-env-go_ldso.patch
   ];
-
-  env = {
-    # These control the architectures we're building the toolchain itself for in make.bash.
-    # Go's "target architecture" is our host.
-    inherit (stdenv.hostPlatform.go) GOOS GOARCH GOARM;
-    # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
-    # Go will nevertheless build a for host system that we will copy over in
-    # the install phase.
-    GOHOSTOS = stdenv.buildPlatform.go.GOOS;
-    GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
-
-    GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
-    # Wasi does not support CGO
-    # ppc64/linux CGO is incomplete/borked, and will likely not receive any further improvements
-    # https://github.com/golang/go/issues/8912
-    # https://github.com/golang/go/issues/13192
-    CGO_ENABLED =
-      if
-        (
-          stdenv.targetPlatform.isWasi
-          || (stdenv.targetPlatform.isPower64 && stdenv.targetPlatform.isBigEndian)
-        )
-      then
-        0
-      else
-        1;
-
-    GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
-  }
-  // lib.optionalAttrs isCross {
-    # Go's "target architecture" is our host, so these variables are the compilers for
-    # building the toolchain for hostPlatform (passed as GOOS/GOARCH above)
-    CC_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-    CXX_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  }
-  // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.targetPlatform) {
-    # Prefer external linker for cross when CGO is supported, since
-    # we haven't taught go's internal linker to pick the correct ELF
-    # interpreter for cross
-    # When CGO is not supported we rely on static binaries being built
-    # since they don't need an ELF interpreter
-
-    # Without an equivalent, pkgsStatic builds fail. See for some extra context
-    # https://github.com/NixOS/nixpkgs/issues/582185
-
-    # TODO: Clean this up. Out-of-tree users should almost never be hitting this case,
-    # except through buildGoModule, so we have relative freedom in doing so.
-    GO_EXTLINK_ENABLED = finalAttrs.env.CGO_ENABLED;
-  };
-
-  buildPhase = ''
-    runHook preBuild
-    export GOCACHE=$TMPDIR/go-cache
-    if [ -f "$NIX_CC/nix-support/dynamic-linker" ]; then
-      export GO_LDSO=$(cat $NIX_CC/nix-support/dynamic-linker)
-    fi
-
-    export PATH=$(pwd)/bin:$PATH
-
-    ${lib.optionalString isCross ''
-      # "Command line to run to compile C code for GOHOSTARCH."
-      # Go's "host" is our buildPlatform.
-      export CC=${buildPackages.stdenv.cc}/bin/cc
-    ''}
-    ulimit -a
-
-    pushd src
-    ./make.bash
-    popd
-    runHook postBuild
-  '';
-
-  preInstall = ''
-    # Contains the wrong perl shebang when cross compiling,
-    # since it is not used for anything we can deleted as well.
-    rm src/regexp/syntax/make_perl_groups.pl
-  ''
-  + (
-    let
-      inherit (finalAttrs.env)
-        GOHOSTOS
-        GOHOSTARCH
-        GOOS
-        GOARCH
-        ;
-      # Not equivalent to isCross; e.g. x86_64-linux vs. musl64 have the same GOOS/GOARCH
-      # Specifically exclude GOARM; it doesn't appear in the folder output names
-      isCrossGo = GOHOSTOS != GOOS || GOHOSTARCH != GOARCH;
-    in
-    # When we're cross-compiling to another OS or architecture, Go puts our architecture's binaries as bin/go{,fmt},
-    # and their binaries as bin/$goos_$goarch/go{,fmt}. We only want the host binaries, so when build/host GOOS/GOARCH differ,
-    # move the host binaries over the build binaries. Also remove other stuff just for the build platform.
-    lib.optionalString isCrossGo ''
-      mv bin/*_*/* bin
-      rmdir bin/*_*
-      rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
-    ''
-  );
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/go
-    cp -a bin pkg src lib misc api doc go.env VERSION $out/share/go
-    mkdir -p $out/bin
-    ln -s $out/share/go/bin/* $out/bin
-    runHook postInstall
-  '';
-
-  disallowedReferences = [ goBootstrap ];
-
-  passthru = {
-    inherit goBootstrap;
-    tests = callPackage ./tests.nix {
-      go = finalAttrs.finalPackage;
-      buildGoModule = buildGo126Module;
-    };
-  };
-
-  __structuredAttrs = true;
-
-  meta = {
-    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
-    description = "Go Programming language";
-    homepage = "https://go.dev/";
-    license = lib.licenses.bsd3;
-    teams = [ lib.teams.golang ];
-    platforms =
-      lib.platforms.darwin ++ lib.platforms.linux ++ lib.platforms.wasi ++ lib.platforms.freebsd;
-    badPlatforms = [
-      # Support for big-endian POWER < 8 was dropped in 1.9, but POWER8 users have less of a reason to run in big-endian mode than pre-POWER8 ones
-      # So non-LE ppc64 is effectively unsupported, and Go SIGILLs on affordable ppc64 hardware
-      # https://github.com/golang/go/issues/19074 - Dropped support for big-endian POWER < 8, with community pushback
-      # https://github.com/golang/go/issues/73349 - upstream will not accept submissions to fix this
-      "powerpc64-linux"
-    ];
-    mainProgram = "go";
-  };
-})
+  buildGoModule = buildGo126Module;
+}
