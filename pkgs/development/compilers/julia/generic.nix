@@ -146,12 +146,25 @@ stdenv.mkDerivation rec {
     ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/julia/cert.pem
   '';
 
-  # remove forbidden reference to $TMPDIR
-  preFixup = lib.optionalString stdenv.hostPlatform.isElf ''
-    for file in libcurl.so libgmpxx.so libmpfr.so; do
-      patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
-    done
-  '';
+  preFixup =
+    # remove forbidden reference to $TMPDIR
+    lib.optionalString stdenv.hostPlatform.isElf ''
+      for file in libcurl.so libgmpxx.so libmpfr.so; do
+        patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
+      done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # autoSignDarwinBinariesHook re-signs every Mach-O in $out, which rewrites the
+      # pkgimages and invalidates the CRC Julia stored for them in the matching .ji.
+      # Move them out of its reach; the linker already ad-hoc signed them.
+      if [ -d "$out/share/julia/compiled" ]; then
+        mv "$out/share/julia/compiled" "$NIX_BUILD_TOP/julia-pkgimages"
+        restoreJuliaPkgimages() {
+          mv "$NIX_BUILD_TOP/julia-pkgimages" "$out/share/julia/compiled"
+        }
+        postFixupHooks+=(restoreJuliaPkgimages)
+      fi
+    '';
 
   # Code signing is done as part of the build process, but that
   # doesn't quite work so we re-sign it here.
