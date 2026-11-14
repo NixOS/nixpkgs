@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.29.0";
+  version = "0.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
     tag = version;
-    hash = "sha256-xCdCZtbo1AmBeKdY4CeQdK8s+23EfTyQa5o78j1+yVw=";
+    hash = "sha256-lU2h1QcbK4sIbjvM64s4MLcOk3B4I+CF91+IJGCGwQM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
