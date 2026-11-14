@@ -32,6 +32,12 @@ in
         type = lib.types.port;
       };
 
+      listenAddress = lib.mkOption {
+        description = "The address LubeLogger will listen on.";
+        default = "localhost";
+        type = lib.types.str;
+      };
+
       user = lib.mkOption {
         description = "User account under which LubeLogger runs.";
         default = "lubelogger";
@@ -91,7 +97,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        Kestrel__Endpoints__Http__Url = "http://localhost:${toString cfg.port}";
+        Kestrel__Endpoints__Http__Url = "http://${cfg.listenAddress}:${toString cfg.port}";
       }
       // cfg.settings;
 
