@@ -26,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai-core";
-  version = "1.15.18";
+  version = "1.15.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = finalAttrs.version;
-    hash = "sha256-A1nhvn4jdfjTiLfYldXsIUV7lGGqa1FDiSh0KfB5Ssk=";
+    hash = "sha256-3UwEVJ4fiKjYgRzFyVSyaQu3pYCV3MWe3Ig2ItzK6zw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib/crewai-core";
