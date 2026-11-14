@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
 
   meta = {
     description = "Streaming music player that finds free music for you";
-    homepage = "https://nuclear.js.org/";
+    homepage = "https://nuclearplayer.com/";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.NotAShelf ];
     platforms = [ "x86_64-linux" ];
