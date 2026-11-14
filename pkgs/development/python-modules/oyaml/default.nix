@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "oyaml";
-  version = "unstable-2021-12-03";
+  version = "1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
