@@ -66,11 +66,11 @@ rec {
 
     `drv`
 
-    : 1\. Function argument
+    : Derivation to override.
 
     `f`
 
-    : 2\. Function argument
+    : Function receiving the original derivation attributes, returning attributes to override.
 
     # Type
 
@@ -122,7 +122,7 @@ rec {
 
     `f`
 
-    : 1\. Function argument
+    : Function to make overridable through `.override`.
 
     # Type
 
@@ -221,46 +221,84 @@ rec {
       mirrorArgs f';
 
   /**
-    Call the package function in the file `fn` with the required
-    arguments automatically.  The function is called with the
-    arguments `args`, but any missing arguments are obtained from
-    `autoArgs`.  This function is intended to be partially
-    parameterised, e.g.,
+    Calls a package function with its arguments filled in from `autoArgs`.
 
-      ```nix
-      callPackage = callPackageWith pkgs;
+    Arguments in `args` take precedence, and the result is overridable through `.override`. See [](#chap-overrides).
+
+    # Examples
+
+    :::{#ex-callPackageWith-partial .example}
+    # Partially parametrized `callPackageWith`
+    ```nix
+    # bar.nix
+    {
+      stdenv,
+      libfoo, # callPackage will provide this from autoArgs
+    }:
+    stdenv.mkDerivation {
+      ...
+    }
+    ```
+
+    ```nix
+    let
+      callPackage = lib.callPackageWith pkgs; # autoArgs is set to pkgs
       pkgs = {
+        stdenv = ...;
         libfoo = callPackage ./foo.nix { };
         libbar = callPackage ./bar.nix { };
       };
-      ```
+    in
+      pkgs.libbar
+    ```
+    :::
 
-    If the `libbar` function expects an argument named `libfoo`, it is
-    automatically passed as an argument.  Overrides or missing
-    arguments can be supplied in `args`, e.g.
+    :::{#ex-callPackageWith-override .example}
+    # `callPackageWith` overrides and missing arguments in `args`
 
-      ```nix
-      libbar = callPackage ./bar.nix {
-        libfoo = null;
-        enableX11 = true;
+    ```nix
+    # bar.nix
+    {
+      stdenv,
+      libfoo,
+      enableX11 ? false,
+    }:
+    stdenv.mkDerivation {
+      ...
+    }
+    ```
+
+    ```nix
+    let
+      callPackage = lib.callPackageWith pkgs;
+      pkgs = {
+        stdenv = ...;
+        libbar = callPackage ./bar.nix {
+          libfoo = null; # missing argument
+          enableX11 = true; # override
+        };
       };
-      ```
+    in
+      pkgs.libbar
+    ```
 
-    <!-- TODO: Apply "Example:" tag to the examples above -->
+    :::
 
     # Inputs
 
-    `autoArgs`
+    *`autoArgs`* (Attribute set)
 
-    : 1\. Function argument
+    : Arguments to conditionally apply to `fn`.
 
-    `fn`
+      Each argument gets supplied if the function pattern names it. That is, `foo` gets supplied to `{ foo }: ...`.
 
-    : 2\. Function argument
+    *`fn`* (Function or path)
 
-    `args`
+    : Package function, or path to a file containing one, that takes an attribute set as an argument.
 
-    : 3\. Function argument
+    *`args`* (Attribute set)
+
+    : Explicit arguments that take precedence over `autoArgs`.
 
     # Type
 
@@ -334,23 +372,25 @@ rec {
       abort (makeErrorMessage autoArgs fn args fargs unpassedArgs);
 
   /**
-    Like `callPackage`, but for a function that returns an attribute
+    Like `callPackageWith`, but for a function that returns an attribute
     set of derivations. The override function is added to the
     individual attributes.
 
     # Inputs
 
-    `autoArgs`
+    *`autoArgs`* (Attribute set)
 
-    : 1\. Function argument
+    : Arguments to conditionally apply to `fn`.
 
-    `fn`
+      Each argument gets supplied if the function pattern names it. That is, `foo` gets supplied to `{ foo }: ...`.
 
-    : 2\. Function argument
+    *`fn`* (Function or path)
 
-    `args`
+    : Package function, or path to a file containing one, that takes an attribute set as an argument.
 
-    : 3\. Function argument
+    *`args`* (Attribute set)
+
+    : Explicit arguments that take precedence over `autoArgs`.
 
     # Type
 

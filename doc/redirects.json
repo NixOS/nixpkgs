@@ -117,6 +117,12 @@
   "ex-build-helpers-extendMkDerivation-transformDrv-wrapper": [
     "index.html#ex-build-helpers-extendMkDerivation-transformDrv-wrapper"
   ],
+  "ex-callPackageWith-override": [
+    "index.html#ex-callPackageWith-override"
+  ],
+  "ex-callPackageWith-partial": [
+    "index.html#ex-callPackageWith-partial"
+  ],
   "ex-first-package-go": [
     "index.html#ex-first-package-go"
   ],
