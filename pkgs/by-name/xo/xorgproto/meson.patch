@@ -1,0 +1,14 @@
+--- xorgproto-2018.4.orig/include/X11/meson.build	2018-02-28 16:45:07.000000000 +0000
++++ xorgproto-2018.4/include/X11/meson.build	2019-01-26 02:34:52.763165148 +0000
+@@ -10,8 +10,10 @@
+     endif
+ endforeach
+ 
+ # generated headers. try not to make more of these, please.
+-if cc.has_member('fd_set', 'fds_bits', prefix: fd_set_headers)
++if cc.get_define('_WIN32') == '1' and cc.get_define('CYGWIN') != '1'
++    fds_bits = 'dummy'
++elif cc.has_member('fd_set', 'fds_bits', prefix: fd_set_headers)
+     fds_bits = 'fds_bits'
+ elif cc.has_member('fd_set', '__fds_bits', prefix: fd_set_headers)
+     fds_bits = '__fds_bits'

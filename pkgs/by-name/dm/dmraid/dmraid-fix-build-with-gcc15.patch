@@ -1,0 +1,33 @@
+diff --git a/1.0.0.rc16/lib/activate/activate.c b/1.0.0.rc16/lib/activate/activate.c
+index 1d71ea8c0a..0a4ec6afa1 100644
+--- a/1.0.0.rc16/lib/activate/activate.c
++++ b/1.0.0.rc16/lib/activate/activate.c
+@@ -866,7 +866,7 @@
+
+ #define LIB_NAME_LENGTH 255
+ static int
+-do_device(struct lib_context *lc, struct raid_set *rs, int (*f) ())
++do_device(struct lib_context *lc, struct raid_set *rs, int (*f)(char *, char *))
+ {
+        int ret = 0;
+        char lib_name[LIB_NAME_LENGTH];
+diff --git a/1.0.0.rc16/lib/misc/file.c b/1.0.0.rc16/lib/misc/file.c
+index fe74d5c9c2..c060b6e712 100644
+--- a/1.0.0.rc16/lib/misc/file.c
++++ b/1.0.0.rc16/lib/misc/file.c
+@@ -59,12 +59,12 @@
+ 	int fd, ret = 0;
+ 	loff_t o;
+ 	struct {
+-		ssize_t(*func) ();
++		ssize_t(*func)(int, void *, size_t);
+ 		const char *what;
+ 	} rw_spec[] = {
+ 		{
+ 		read, "read"}, {
+-	write, "writ"},}, *rw = rw_spec + ((flags & O_WRONLY) ? 1 : 0);
++	(ssize_t(*)(int, void *, size_t))write, "writ"},}, *rw = rw_spec + ((flags & O_WRONLY) ? 1 : 0);
+ 
+ 	if ((fd = open(path, flags, lc->mode)) == -1)
+ 		LOG_ERR(lc, 0, "opening \"%s\"", path);
+

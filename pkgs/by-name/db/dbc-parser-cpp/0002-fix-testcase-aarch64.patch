@@ -1,0 +1,29 @@
+--- a/test/test_parse_message.cpp
++++ b/test/test_parse_message.cpp
+@@ -50,7 +50,7 @@ TEST_CASE("Parse Message Big Number not aligned little endian") {
+ 		CHECK(refData.size() == 7);
+ 		CHECK(out_values.size() == refData.size());
+ 		for (size_t i = 0; i < refData.size(); i++) {
+-			CHECK(out_values.at(i) == refData.at(i));
++			CHECK(out_values.at(i) == Catch::Approx(refData.at(i)).margin(1e-9));
+ 		}
+ 	}
+ 
+@@ -61,7 +61,7 @@ TEST_CASE("Parse Message Big Number not aligned little endian") {
+ 		CHECK(refData.size() == 7);
+ 		CHECK(out_values.size() == refData.size());
+ 		for (size_t i = 0; i < refData.size(); i++) {
+-			CHECK(out_values.at(i) == refData.at(i));
++			CHECK(out_values.at(i) == Catch::Approx(refData.at(i)).margin(1e-9));
+ 		}
+ 	}
+ 
+@@ -72,7 +72,7 @@ TEST_CASE("Parse Message Big Number not aligned little endian") {
+ 		CHECK(refData.size() == 7);
+ 		CHECK(out_values.size() == refData.size());
+ 		for (size_t i = 0; i < refData.size(); i++) {
+-			CHECK(out_values.at(i) == refData.at(i));
++			CHECK(out_values.at(i) == Catch::Approx(refData.at(i)).margin(1e-9));
+ 		}
+ 	}
+ }

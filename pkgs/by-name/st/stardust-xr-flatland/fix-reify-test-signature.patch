@@ -1,0 +1,26 @@
+diff --git a/src/resize_handles.rs b/src/resize_handles.rs
+index 0fcb071..69d2f2f 100644
+--- a/src/resize_handles.rs
++++ b/src/resize_handles.rs
+@@ -451,7 +451,7 @@ impl<State: ValidState> CustomElement<State> for ResizeHandles<State> {
+ #[tokio::test]
+ async fn test_resize_handles() {
+ 	use serde::{Deserialize, Serialize};
+-	use stardust_xr_asteroids::{client, ClientState, Migrate, Reify, Transformable};
++	use stardust_xr_asteroids::{client, ClientState, Migrate, Reify, Tasker, Transformable};
+ 
+ 	// Simple test state
+ 	#[derive(Debug, Serialize, Deserialize)]
+@@ -474,7 +474,11 @@ async fn test_resize_handles() {
+ 		const APP_ID: &'static str = "org.stardustxr.flatland.ResizeHandles";
+ 	}
+ 	impl Reify for State {
+-		fn reify(&self) -> impl stardust_xr_asteroids::Element<Self> {
++		fn reify(
++			&self,
++			_context: &Context,
++			_tasks: impl Tasker<Self>,
++		) -> impl stardust_xr_asteroids::Element<Self> {
+ 			stardust_xr_asteroids::elements::Spatial::default()
+ 				.rot(Quat::from_rotation_y(self.time / 10.0))
+ 				.build()

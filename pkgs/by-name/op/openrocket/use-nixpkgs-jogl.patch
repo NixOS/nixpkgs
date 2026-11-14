@@ -1,0 +1,39 @@
+diff --git a/swing/build.gradle b/swing/build.gradle
+index 46dee6479..e18bbe7eb 100644
+--- a/swing/build.gradle
++++ b/swing/build.gradle
+@@ -41,11 +41,11 @@ extraJavaModuleInfo {
+     automaticModule('slf4j-api-1.7.25.jar', 'org.slf4j.api')
+     automaticModule('slf4j-api-1.7.32.jar', 'org.slf4j.api')
+     automaticModule('versioncompare-1.5.0.jar', 'versioncompare')
+-    module('gluegen-rt-2.5.0.jar', 'org.jogamp.gluegen.rt', '2.5.0') {
++    module('gluegen-rt.jar', 'org.jogamp.gluegen.rt', '2.5.0') {
+         requires('java.desktop')
+         exportAllPackages()
+     }
+-    module('jogl-all-2.5.0.jar', 'org.jogamp.jogl.all', '2.5.0') {
++    module('jogl-all.jar', 'org.jogamp.jogl.all', '2.5.0') {
+         requires('java.desktop')
+         requires('org.jogamp.gluegen.rt')
+         exportAllPackages()
+@@ -88,8 +88,18 @@ dependencies {
+     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.0'
+     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.0'
+ 
+-    implementation group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version:'2.5.0'
+-    implementation group: 'org.jogamp.jogl', name: 'jogl-all-main', version: '2.5.0'
++    implementation(fileTree("@jogl@/share/java") {
++        include("gluegen-rt.jar")
++        include("jogl-all.jar")
++        
++        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
++            def arch = System.getProperty("os.arch")
++            def classifier = arch == "aarch64" ? "linux-aarch64" : "linux-amd64"
++
++            include("gluegen-rt-natives-${classifier}.jar")
++            include("jogl-all-natives-${classifier}.jar")
++        }
++    })
+ 
+     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.0'
+ }

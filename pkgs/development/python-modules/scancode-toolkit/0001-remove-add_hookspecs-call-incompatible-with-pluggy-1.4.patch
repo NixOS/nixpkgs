@@ -1,0 +1,22 @@
+From: Fabian Affolter <fabian.affolter@gmail.com>
+Date: Thu, 12 Nov 2026 00:00:00 +0000
+Subject: [PATCH] Remove add_hookspecs call incompatible with pluggy >= 1.4
+
+pluggy 1.4 introduced a ValueError when add_hookspecs finds no hook
+specifications in the given module or class. The AdditionalLicensePluginManager
+decorates the plugin base class (not individual methods) with HookspecMarker,
+which pluggy no longer recognises, causing the import to fail.
+
+The plugincode upstream SimplePluginManager (which this class mirrors) never
+called add_hookspecs, so removing this call restores parity with that design.
+
+--- a/src/licensedcode/additional_license_location_provider.py
++++ b/src/licensedcode/additional_license_location_provider.py
+@@ -77,7 +77,6 @@ class AdditionalLicensePluginManager(object):
+         self.manager = PluggyPluginManager(project_name=project_name)
+         self.entrypoint = entrypoint
+         self.plugin_base_class = plugin_base_class
+-        self.manager.add_hookspecs(sys.modules[project_name])
+
+         # set to True once this manager is initialized by running its setup()
+         self.initialized = False

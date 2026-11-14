@@ -1,0 +1,12 @@
+diff -ur a/configure.in b/configure.in
+--- a/configure.in	2008-05-23 04:17:56.000000000 -0400
++++ b/configure.in	2023-06-01 19:16:04.801921924 -0400
+@@ -282,7 +282,7 @@
+ #define memmove(d,s,n) bcopy((s),(d),(n))
+ #endif
+ extern int strcmp();
+-main() {
++int main() {
+   char buf[] = "0123456789";
+   memmove(buf + 1, buf, 9);
+   if (strcmp(buf, "0012345678")) exit(1);

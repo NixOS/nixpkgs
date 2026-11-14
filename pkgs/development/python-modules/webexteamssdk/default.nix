@@ -1,0 +1,58 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  pyjwt,
+  requests,
+  requests-toolbelt,
+  setuptools,
+  versioneer,
+}:
+
+buildPythonPackage rec {
+  pname = "webexteamssdk";
+  version = "1.6.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "WebexCommunity";
+    repo = "WebexPythonSDK";
+    tag = "v${version}";
+    hash = "sha256-BKdeN53sADwBWy+pxdEP3kThj/GPrGoOpLANQw3/Q9Y=";
+  };
+
+  # opsdroid still depends on webexteamssdk but package was renamed
+  # to webexpythonsdk
+  passthru.skipBulkUpdate = true;
+
+  postPatch = ''
+    # Remove vendorized versioneer
+    rm versioneer.py
+  '';
+
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
+    future
+    pyjwt
+    requests
+    requests-toolbelt
+  ];
+
+  # Tests require a Webex Teams test domain
+  doCheck = false;
+
+  pythonImportsCheck = [ "webexteamssdk" ];
+
+  meta = {
+    description = "Python module for Webex Teams APIs";
+    homepage = "https://github.com/WebexCommunity/WebexPythonSDK";
+    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+}

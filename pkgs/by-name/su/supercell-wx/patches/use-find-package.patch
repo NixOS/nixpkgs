@@ -1,0 +1,23 @@
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index 1039e96e..16f2c84a 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -15,7 +15,7 @@ set_property(DIRECTORY
+              units.cmake
+              qt6ct.cmake)
+ 
+-include(aws-sdk-cpp.cmake)
++find_package(AWSSDK CONFIG REQUIRED)
+ include(date.cmake)
+ include(glad.cmake)
+ include(hsluv-c.cmake)
+diff --git a/external/stb.cmake b/external/stb.cmake
+index 570af425..f2e7b2c8 100644
+--- a/external/stb.cmake
++++ b/external/stb.cmake
+@@ -1,4 +1,4 @@
+ cmake_minimum_required(VERSION 3.24)
+ set(PROJECT_NAME scwx-stb)
+ 
+-set(STB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/stb PARENT_SCOPE)
++# Nix: set STB_INCLUDE_DIR in cmake flags

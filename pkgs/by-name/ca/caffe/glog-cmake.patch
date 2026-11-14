@@ -1,0 +1,97 @@
+From 38b81bb53304d7a3f6aed36f7b4e77b6efa78338 Mon Sep 17 00:00:00 2001
+From: uku <hi@uku.moe>
+Date: Wed, 14 May 2025 16:55:15 +0200
+Subject: [PATCH] fix linking against glog 0.7.x
+
+---
+ cmake/Dependencies.cmake     |  2 +-
+ cmake/External/glog.cmake    |  4 +--
+ cmake/Modules/FindGlog.cmake | 48 ------------------------------------
+ 3 files changed, 3 insertions(+), 51 deletions(-)
+ delete mode 100644 cmake/Modules/FindGlog.cmake
+
+diff --git a/cmake/Dependencies.cmake b/cmake/Dependencies.cmake
+index 4a5bac47..88aa123f 100644
+--- a/cmake/Dependencies.cmake
++++ b/cmake/Dependencies.cmake
+@@ -32,7 +32,7 @@ endif()
+ # ---[ Google-glog
+ include("cmake/External/glog.cmake")
+ list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${GLOG_INCLUDE_DIRS})
+-list(APPEND Caffe_LINKER_LIBS PUBLIC ${GLOG_LIBRARIES})
++list(APPEND Caffe_LINKER_LIBS PUBLIC glog::glog)
+ 
+ # ---[ Google-gflags
+ include("cmake/External/gflags.cmake")
+diff --git a/cmake/External/glog.cmake b/cmake/External/glog.cmake
+index f9d0549c..43414544 100644
+--- a/cmake/External/glog.cmake
++++ b/cmake/External/glog.cmake
+@@ -5,8 +5,8 @@ if (NOT __GLOG_INCLUDED)
+   set(__GLOG_INCLUDED TRUE)
+ 
+   # try the system-wide glog first
+-  find_package(Glog)
+-  if (GLOG_FOUND)
++  find_package(glog REQUIRED)
++  if (glog_FOUND)
+       set(GLOG_EXTERNAL FALSE)
+   else()
+     # fetch and build glog from github
+diff --git a/cmake/Modules/FindGlog.cmake b/cmake/Modules/FindGlog.cmake
+deleted file mode 100644
+index 99abbe47..00000000
+--- a/cmake/Modules/FindGlog.cmake
++++ /dev/null
+@@ -1,48 +0,0 @@
+-# - Try to find Glog
+-#
+-# The following variables are optionally searched for defaults
+-#  GLOG_ROOT_DIR:            Base directory where all GLOG components are found
+-#
+-# The following are set after configuration is done:
+-#  GLOG_FOUND
+-#  GLOG_INCLUDE_DIRS
+-#  GLOG_LIBRARIES
+-#  GLOG_LIBRARYRARY_DIRS
+-
+-include(FindPackageHandleStandardArgs)
+-
+-set(GLOG_ROOT_DIR "" CACHE PATH "Folder contains Google glog")
+-
+-if(WIN32)
+-    find_path(GLOG_INCLUDE_DIR glog/logging.h
+-        PATHS ${GLOG_ROOT_DIR}/src/windows)
+-else()
+-    find_path(GLOG_INCLUDE_DIR glog/logging.h
+-        PATHS ${GLOG_ROOT_DIR})
+-endif()
+-
+-if(MSVC)
+-    find_library(GLOG_LIBRARY_RELEASE libglog_static
+-        PATHS ${GLOG_ROOT_DIR}
+-        PATH_SUFFIXES Release)
+-
+-    find_library(GLOG_LIBRARY_DEBUG libglog_static
+-        PATHS ${GLOG_ROOT_DIR}
+-        PATH_SUFFIXES Debug)
+-
+-    set(GLOG_LIBRARY optimized ${GLOG_LIBRARY_RELEASE} debug ${GLOG_LIBRARY_DEBUG})
+-else()
+-    find_library(GLOG_LIBRARY glog
+-        PATHS ${GLOG_ROOT_DIR}
+-        PATH_SUFFIXES lib lib64)
+-endif()
+-
+-find_package_handle_standard_args(Glog DEFAULT_MSG GLOG_INCLUDE_DIR GLOG_LIBRARY)
+-
+-if(GLOG_FOUND)
+-  set(GLOG_INCLUDE_DIRS ${GLOG_INCLUDE_DIR})
+-  set(GLOG_LIBRARIES ${GLOG_LIBRARY})
+-  message(STATUS "Found glog    (include: ${GLOG_INCLUDE_DIR}, library: ${GLOG_LIBRARY})")
+-  mark_as_advanced(GLOG_ROOT_DIR GLOG_LIBRARY_RELEASE GLOG_LIBRARY_DEBUG
+-                                 GLOG_LIBRARY GLOG_INCLUDE_DIR)
+-endif()
+-- 
+2.49.0
+

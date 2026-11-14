@@ -1,0 +1,19 @@
+diff --git a/Linphone/core/App.cpp b/Linphone/core/App.cpp
+index 315632d..78eba8b 100644
+--- a/Linphone/core/App.cpp
++++ b/Linphone/core/App.cpp
+@@ -1567,14 +1567,7 @@ QString App::getApplicationPath() const {
+ }
+ 
+ void App::exportDesktopFile() {
+-	QDir dir(ApplicationsDirectory);
+-	if (!dir.exists() && !dir.mkpath(ApplicationsDirectory)) {
+-		qWarning() << QStringLiteral("Unable to build applications dir path: `%1`.").arg(ApplicationsDirectory);
+-		return;
+-	}
+-
+ 	const QString confPath(ApplicationsDirectory + EXECUTABLE_NAME ".desktop");
+-	if (generateDesktopFile(confPath, true, false)) generateDesktopFile(confPath, false, false);
+ }
+ 
+ bool App::generateDesktopFile(const QString &confPath, bool remove, bool openInBackground) {

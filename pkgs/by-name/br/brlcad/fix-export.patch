@@ -1,0 +1,13 @@
+diff --git a/src/tclscripts/lib/GeometryIO.tcl b/src/tclscripts/lib/GeometryIO.tcl
+index 1ca6898ec1..b8fd8bf9a7 100644
+--- a/src/tclscripts/lib/GeometryIO.tcl
++++ b/src/tclscripts/lib/GeometryIO.tcl
+@@ -176,7 +176,7 @@ proc geom_load {input_file gui_feedback} {
+ # and may only want a subset.
+ proc geom_save {input_file output_file db_component} {
+ 
+-    set binpath [bu_dir bin] ]
++    set binpath [bu_dir bin]
+ 
+     set output_filename [file tail $output_file]
+     set output_dir [file dirname $output_file]

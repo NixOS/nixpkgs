@@ -1,0 +1,579 @@
+{
+  featureVersion,
+
+  lib,
+  stdenv,
+
+  fetchurl,
+  fetchpatch,
+
+  buildPackages,
+  autoPatchelfHook,
+  pkg-config,
+  autoconf,
+  lndir,
+  unzip,
+  ensureNewerSourcesForZipFilesHook,
+  pandoc,
+
+  cpio,
+  file,
+  which,
+  zip,
+  zlib,
+  cups,
+  freetype,
+  harfbuzz,
+  alsa-lib,
+  libjpeg,
+  giflib,
+  libpng,
+  lcms2,
+  libx11,
+  libice,
+  libxext,
+  libxrender,
+  libxtst,
+  libxt,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libxrandr,
+  fontconfig,
+
+  setJavaClassPath,
+
+  versionCheckHook,
+
+  liberation_ttf,
+  cacert,
+
+  nixpkgs-openjdk-updater,
+
+  # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
+  # which should be fixable, this is a no-rebuild workaround for GHC.
+  headless ? lib.versionAtLeast featureVersion "21" && stdenv.targetPlatform.isGhcjs,
+  javaPackages,
+
+  enableJavaFX ? false,
+  openjfx_jdk ?
+    javaPackages."openjfx${featureVersion}"
+      or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
+
+  enableGtk ? true,
+  gtk3,
+  glib,
+
+  jdk-bootstrap ?
+    javaPackages.compiler.temurin-bin."jdk-${featureVersion}".__spliced.buildBuild
+      or javaPackages.compiler.temurin-bin."jdk-${featureVersion}",
+}:
+
+assert lib.assertMsg (enableGtk -> lib.versionAtLeast featureVersion "11")
+  "GTK support in OpenJDK requires version 11.x or newer, because earlier versions would depend on GTK 2.";
+
+let
+  sourceFile = ./. + "/${featureVersion}/source.json";
+  source = nixpkgs-openjdk-updater.openjdkSource {
+    inherit sourceFile;
+    featureVersionPrefix = tagPrefix + featureVersion;
+  };
+
+  # Version comparison functions since we check for versions so often
+  atLeast = lib.versionAtLeast featureVersion;
+  is = major: featureVersion == major;
+  # If a JDK version is between two versions, i.e `between "8" "11"` to match versions between 8 and 11.
+  # Note this is inclusive at low end and exclusive at top end, so 8 would match the above example, but 11 will not.
+  between = old: new: (atLeast old) && (lib.versionOlder featureVersion new);
+
+  atLeast11 = atLeast "11";
+  atLeast17 = atLeast "17";
+  atLeast21 = atLeast "21";
+  atLeast23 = atLeast "23";
+  atLeast25 = atLeast "25";
+
+  allPatches = import ./patches.nix { inherit fetchurl fetchpatch; };
+
+  # Checks if a single patch object is applicable to the featureVersion being called.
+  isPatchApplicable =
+    patch:
+    let
+      a = patch.atLeast or "0";
+      # If this doesn't exist, return a number we assume JDK featureVersions will never reach
+      b = patch.before or "9999";
+    in
+    if patch ? only then (is patch.only) else (between a b);
+
+  # Filters all patches in a patchset(list of patch attrs) to find ones applicable to this version
+  findApplicable =
+    name: patchSet:
+    let
+      # Returns a single patch matching this predicate
+      patch = builtins.filter isPatchApplicable patchSet;
+    in
+    # If no patches, return an empty list.
+    # If there is a patch, construct it from the path and patch name, or function if available.
+    if patch == [ ] then
+      [ ]
+    else
+      let
+        # We only expect a single patch.
+        # Warn if there's more than one patch, as we only expect one from every patchset.
+        p = lib.warnIf (builtins.length patch > 1) "multiple applicable versions of patch '${name}'" (
+          builtins.head patch
+        );
+      in
+      [
+        (p.func or /${p.path}/patches/${name})
+      ];
+
+  # `patches` builder
+  # Does not encode any logic for `headless` or `enableGtk` so any patches relying on that
+  # should concat to this list below instead
+  patchesForVersion = lib.concatAttrValues (builtins.mapAttrs findApplicable allPatches);
+
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+
+  tagPrefix = if atLeast11 then "jdk-" else "jdk";
+  version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
+  versionSplit = builtins.match (if atLeast11 then "(.+)+(.+)" else "(.+)-b(.+)") version;
+  versionBuild = lib.elemAt versionSplit 1;
+
+  # The JRE 8 libraries are in directories that depend on the CPU.
+  architecture =
+    if atLeast11 then
+      ""
+    else
+      {
+        i686-linux = "i386";
+        x86_64-linux = "amd64";
+        aarch64-linux = "aarch64";
+        powerpc64le-linux = "ppc64le";
+      }
+      .${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
+
+  jdk-bootstrap' = jdk-bootstrap.override {
+    # when building a headless jdk, also bootstrap it with a headless jdk
+    gtkSupport = !headless;
+    # its trust store is never used, and regenerating it would rebuild OpenJDK
+    regenerateCacerts = false;
+  };
+in
+
+assert lib.assertMsg (lib.pathExists sourceFile)
+  "OpenJDK ${featureVersion} is not a supported version";
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "openjdk" + lib.optionalString headless "-headless";
+  inherit version;
+
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (!atLeast11) [
+    "jre"
+  ];
+
+  inherit (source) src;
+
+  patches =
+    patchesForVersion
+    ++ lib.optionals (!headless && enableGtk) [
+      (
+        if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
+      )
+    ];
+
+  strictDeps = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    pkg-config
+    unzip
+    zip
+    which
+    # Probably for BUILD_CC but not sure, not in closure.
+    zlib
+  ]
+  ++ lib.optionals atLeast11 [
+    autoconf
+  ]
+  ++ lib.optionals (!atLeast11) [
+    lndir
+  ]
+  ++ lib.optionals atLeast21 [
+    ensureNewerSourcesForZipFilesHook
+  ]
+  ++ lib.optionals atLeast25 [
+    pandoc
+  ];
+
+  buildInputs = [
+    # TODO: Many of these should likely be in `nativeBuildInputs`.
+    cpio
+    # `-lmagic` in NIX_LDFLAGS
+    file
+    cups
+    freetype
+    alsa-lib
+    libjpeg
+    giflib
+    libx11
+    libice
+    libxext
+    libxrender
+    libxtst
+    libxt
+    libxi
+    libxinerama
+    libxcursor
+    libxrandr
+    fontconfig
+  ]
+  ++ lib.optionals (between "11" "21") [
+    harfbuzz
+  ]
+  ++ lib.optionals atLeast11 [
+    libpng
+    zlib # duplicate
+    lcms2
+  ]
+  ++ lib.optionals (!headless && enableGtk) [
+    gtk3
+    glib
+  ];
+
+  propagatedBuildInputs = [ setJavaClassPath ];
+
+  nativeInstallCheckInputs = lib.optionals atLeast23 [
+    versionCheckHook
+  ];
+
+  # JDK's build system attempts to specifically detect
+  # and special-case WSL, and we don't want it to do that,
+  # so pass the correct platform names explicitly
+  configurePlatforms = [
+    "build"
+    "host"
+  ];
+
+  # https://openjdk.org/groups/build/doc/building.html
+  configureFlags = [
+    # https://github.com/openjdk/jdk/blob/471f112bca715d04304cbe35c6ed63df8c7b7fee/make/autoconf/util_paths.m4#L315
+    # Ignoring value of READELF from the environment. Use command line variables instead.
+    "READELF=${stdenv.cc.targetPrefix}readelf"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
+    "NM=${stdenv.cc.targetPrefix}nm"
+    "OBJDUMP=${stdenv.cc.targetPrefix}objdump"
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+    "--with-boot-jdk=${jdk-bootstrap'.home}"
+    "--enable-unlimited-crypto"
+    "--with-native-debug-symbols=internal"
+    "--with-stdc++lib=dynamic"
+    "--with-zlib=system"
+    "--with-giflib=system"
+  ]
+  ++ lib.optional (atLeast11 && isCross) "--with-build-jdk=${jdk-bootstrap'.home}"
+  ++ (
+    if atLeast23 then
+      [
+        "--with-version-string=${version}"
+        "--with-vendor-version-string=(nix)"
+      ]
+    else if atLeast11 then
+      lib.optionals atLeast17 [
+        "--with-version-build=${versionBuild}"
+        "--with-version-opt=nixos"
+      ]
+      ++ [
+        "--with-version-pre="
+      ]
+    else
+      [
+        "--with-update-version=${lib.removePrefix "${featureVersion}u" (lib.elemAt versionSplit 0)}"
+        "--with-build-number=${versionBuild}"
+        "--with-milestone=fcs"
+      ]
+  )
+  ++ lib.optionals (between "11" "21") [
+    "--with-freetype=system"
+    "--with-harfbuzz=system"
+  ]
+  ++ lib.optionals atLeast11 [
+    "--with-libjpeg=system"
+    "--with-libpng=system"
+    "--with-lcms=system"
+  ]
+  ++ lib.optionals (is "11") [
+    "--disable-warnings-as-errors"
+  ]
+  # OpenJDK 11 cannot be built by recent versions of Clang, as far as I can tell (see
+  # https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=260319). Known to
+  # compile with LLVM 12.
+  ++ lib.optionals (atLeast11 && stdenv.cc.isClang) [
+    "--with-toolchain-type=clang"
+    # Explicitly tell Clang to compile C++ files as C++, see
+    # https://github.com/NixOS/nixpkgs/issues/150655#issuecomment-1935304859
+    "--with-extra-cxxflags=-xc++"
+  ]
+  # This probably shouldn’t apply to OpenJDK 21; see
+  # b7e68243306833845cbf92e2ea1e0cf782481a51 which removed it for
+  # versions 15 through 20.
+  ++ lib.optional ((is "11" || is "21") && stdenv.hostPlatform.isx86_64) "--with-jvm-features=zgc"
+  ++ lib.optional headless (if atLeast11 then "--enable-headless-only" else "--disable-headful")
+  ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx_jdk}";
+
+  buildFlags = if atLeast17 then [ "images" ] else [ "all" ];
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  # -j flag is explicitly rejected by the build system:
+  #     Error: 'make -jN' is not supported, use 'make JOBS=N'
+  # Note: it does not make build sequential. Build system
+  # still runs in parallel.
+  enableParallelBuilding = false;
+
+  preConfigure =
+    # Set number of jobs to use when building.
+    ''
+      configureFlags+=("--with-jobs=''${NIX_BUILD_CORES}")
+    ''
+    # Build lib/security/cacerts from cacert instead of the bundled CA list.
+    # JDK 8's keytool writes its default JKS format for this list.
+    # For JDK 11+ it goes into the java.base jmod, so jlink images also get it.
+    # Like upstream it is a PKCS12 store without a password: the JDK opens
+    # cacerts without one, and cannot read password-protected certificates.
+    + ''
+      mkdir "$NIX_BUILD_TOP/cacerts-gen"
+      pushd "$NIX_BUILD_TOP/cacerts-gen"
+      JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+        ${buildPackages.jre-generate-cacerts} ${lib.getExe' jdk-bootstrap' "keytool"} ${cacert}/etc/ssl/certs/ca-bundle.crt
+      popd
+      configureFlags+=("--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts")
+    '';
+
+  env = {
+    NIX_CFLAGS_COMPILE =
+      if atLeast17 then
+        "-Wno-error"
+      else if atLeast11 then
+        lib.concatStringsSep " " (
+          # Workaround for
+          # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
+          # when building jtreg
+          [ "-Wformat" ]
+          ++ lib.optionals (stdenv.cc.isGNU && is "11") [
+            # Fix build with gcc15
+            "-std=gnu17"
+          ]
+        )
+      else
+        lib.concatStringsSep " " (
+          [
+            # glibc 2.24 deprecated readdir_r so we need this
+            # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
+            "-Wno-error=deprecated-declarations"
+          ]
+          ++ lib.optionals stdenv.cc.isGNU [
+            # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
+            # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716
+            "-fno-lifetime-dse"
+            "-fno-delete-null-pointer-checks"
+            "-std=gnu++98"
+            "-Wno-error"
+          ]
+          ++ [
+            # error by default in GCC 14
+            "-Wno-error=int-conversion"
+            "-Wno-error=incompatible-pointer-types"
+          ]
+          ++ lib.optionals (stdenv.cc.isGNU && is "8") [
+            # Fix build with gcc15
+            "-std=gnu17"
+          ]
+        );
+
+    NIX_LDFLAGS = lib.concatStringsSep " " (
+      lib.optionals (!headless) [
+        "-lfontconfig"
+        "-lcups"
+        "-lXinerama"
+        "-lXrandr"
+        "-lmagic"
+      ]
+      ++ lib.optionals (!headless && enableGtk) [
+        (if atLeast11 then "-lgtk-3" else "-lgtk-x11-2.0")
+        "-lgio-2.0"
+      ]
+    );
+  }
+  // lib.optionalAttrs (!atLeast11) {
+    # OpenJDK 8 Hotspot cares about the host(!) version otherwise
+    DISABLE_HOTSPOT_OS_VERSION_CHECK = "ok";
+  };
+
+  versionCheckProgram = lib.optionalString atLeast23 "${placeholder "out"}/bin/java";
+
+  # Fails with "No rule to make target 'y'."
+  doCheck = false;
+
+  doInstallCheck = atLeast23;
+
+  postPatch = ''
+    chmod +x configure
+    patchShebangs --build configure
+  ''
+  + lib.optionalString atLeast25 ''
+    chmod +x make/scripts/*.{template,sh,pl}
+    patchShebangs --build make/scripts
+  '';
+
+  installPhase = ''
+    mkdir -p $out/lib
+    mv build/*/images/${if atLeast11 then "jdk" else "j2sdk-image"} $out/lib/openjdk
+  ''
+  # Remove some broken manpages.
+  + ''
+    rm -rf $out/lib/openjdk/man/ja*
+  ''
+  # Mirror some stuff in top-level.
+  + ''
+    mkdir -p $out/share
+    ln -s $out/lib/openjdk/bin $out/bin
+    ln -s $out/lib/openjdk/include $out/include
+    ln -s $out/lib/openjdk/man $out/share/man
+  ''
+  # IDEs use the provided src.zip to navigate the Java codebase (https://github.com/NixOS/nixpkgs/pull/95081)
+  + lib.optionalString atLeast11 ''
+    ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
+  ''
+  # jni.h expects jni_md.h to be in the header search path.
+  + ''
+    ln -s $out/include/linux/*_md.h $out/include/
+  ''
+  # Remove crap from the installation.
+  + (
+    ''
+      rm -rf $out/lib/openjdk/demo
+    ''
+    + lib.optionalString (!atLeast11) ''
+      rm -rf $out/lib/openjdk/sample
+    ''
+    + lib.optionalString headless (
+      if atLeast11 then
+        ''
+          rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
+        ''
+      else
+        ''
+          rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libfontmanager}.so
+          rm $out/lib/openjdk/jre/bin/policytool
+          rm $out/lib/openjdk/bin/{policytool,appletviewer}
+        ''
+    )
+  )
+  + lib.optionalString (!atLeast11) (
+    # Move the JRE to a separate output
+    ''
+      mkdir -p $jre/lib/openjdk
+      mv $out/lib/openjdk/jre $jre/lib/openjdk/jre
+      mkdir $out/lib/openjdk/jre
+      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
+
+      ln -s $jre/lib/openjdk/jre $out/jre
+      ln -s $jre/lib/openjdk/jre/bin $jre/bin
+    ''
+    # Make sure cmm/*.pf are not symlinks:
+    # https://youtrack.jetbrains.com/issue/IDEA-147272
+    + ''
+      rm -rf $out/lib/openjdk/jre/lib/cmm
+      ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
+    ''
+    # Setup fallback fonts
+    + lib.optionalString (!headless) ''
+      mkdir -p $jre/lib/openjdk/jre/lib/fonts
+      ln -s ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
+    ''
+    # Remove duplicate binaries.
+    + ''
+      for i in $(ls $out/lib/openjdk/bin); do
+        if [ "$i" = java ]; then continue; fi
+        if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
+          ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
+        fi
+      done
+    ''
+  );
+
+  preFixup =
+    # Set JAVA_HOME automatically.
+    ''
+      mkdir -p $out/nix-support
+      cat <<EOF > $out/nix-support/setup-hook
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      EOF
+    ''
+    # Propagate the setJavaClassPath setup hook from the JRE so that
+    # any package that depends on the JRE has $CLASSPATH set up
+    # properly.
+    + lib.optionalString (!atLeast11) ''
+      mkdir -p $jre/nix-support
+      printWords "${setJavaClassPath}" > $jre/nix-support/propagated-build-inputs
+    '';
+
+  # If binaries in the jre output have RPATH dependencies on libraries from the out output, Nix will
+  # detect a cyclic reference and abort the build.
+  # To fix that, we need to patch the binaries from each output in separate auto-patchelf executions.
+  dontAutoPatchelf = true;
+  postFixup = ''
+    autoPatchelf -- $out
+  ''
+  + lib.optionalString (!atLeast11) ''
+    autoPatchelf -- $jre
+  '';
+
+  disallowedReferences = [ jdk-bootstrap' ];
+
+  passthru = {
+    home = "${finalAttrs.finalPackage}/lib/openjdk";
+    # Shouldn't this be `jdk-bootstrap = jdk-bootstrap'`?
+    inherit jdk-bootstrap;
+    inherit (source) updateScript;
+  }
+  // lib.optionalAttrs atLeast11 { inherit gtk3; }
+  // lib.optionalAttrs (!atLeast23) {
+    inherit architecture;
+  };
+
+  meta = {
+    description = "Open-source Java Development Kit";
+    homepage = "https://openjdk.java.net/";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      infinidoge
+    ];
+    teams = [ lib.teams.java ];
+    mainProgram = "java";
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ]
+    ++ lib.optionals atLeast11 [
+      "armv7l-linux"
+      "armv6l-linux"
+      "powerpc64le-linux"
+    ]
+    ++ lib.optionals atLeast17 [
+      "riscv64-linux"
+    ];
+    # OpenJDK 8 was broken for musl at 2024-01-17. Tracking issue:
+    # https://github.com/NixOS/nixpkgs/issues/281618
+    # error: ‘isnanf’ was not declared in this scope
+    broken = !atLeast11 && stdenv.hostPlatform.isMusl;
+  };
+})

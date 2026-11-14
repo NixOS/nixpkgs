@@ -1,0 +1,24 @@
+From da577871393fe65710d2040944e5610507e11dfd Mon Sep 17 00:00:00 2001
+From: liberodark <liberodark@gmail.com>
+Date: Sat, 3 Oct 2026 12:39:45 +0200
+Subject: [PATCH] Link a shared yaml-cpp into baremetal_tests
+
+---
+ tests/baremetal/CMakeLists.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tests/baremetal/CMakeLists.txt b/tests/baremetal/CMakeLists.txt
+index 0971048ecaca13ae2438ca4905dc0d2ccf8ddaa5..6d417739360305c8467b581931cb830d3553b155 100644
+--- a/tests/baremetal/CMakeLists.txt
++++ b/tests/baremetal/CMakeLists.txt
+@@ -33,6 +33,10 @@ target_link_libraries(baremetal_tests PRIVATE test_common)
+ # the library would place a second copy of it in this binary beside the one already inside
+ # libtt-umd.so, which ASan reports as an ODR violation on YAML::Exception's typeinfo.
+ target_include_directories(baremetal_tests PRIVATE $<TARGET_PROPERTY:yaml-cpp::yaml-cpp,INTERFACE_INCLUDE_DIRECTORIES>)
++get_target_property(YAML_CPP_TYPE yaml-cpp::yaml-cpp TYPE)
++if(YAML_CPP_TYPE STREQUAL "SHARED_LIBRARY")
++    target_link_libraries(baremetal_tests PRIVATE yaml-cpp::yaml-cpp)
++endif()
+ if(TT_UMD_BUILD_EMULE)
+     target_sources(baremetal_tests PRIVATE test_sw_emule_chip.cpp)
+     target_link_libraries(baremetal_tests PRIVATE tt-emule::headers)

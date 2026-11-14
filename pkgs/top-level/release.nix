@@ -1,0 +1,267 @@
+/*
+  This file defines the builds that constitute the Nixpkgs.
+  Everything defined here ends up in the Nixpkgs channel.  Individual
+  jobs can be tested by running:
+
+  $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
+
+  e.g.
+
+  $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
+*/
+{
+  nixpkgs ? {
+    outPath = (import ../../lib).cleanSource ../..;
+    revCount = 1234;
+    shortRev = "abcdef";
+    revision = "0000000000000000000000000000000000000000";
+  },
+  system ? builtins.currentSystem,
+  officialRelease ? false,
+  # The platform doubles for which we build Nixpkgs.
+  supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
+  # The platform triples for which we build bootstrap tools.
+  bootstrapConfigs ? [
+    "arm64-apple-darwin"
+    "aarch64-unknown-linux-gnu"
+    "aarch64-unknown-linux-musl"
+    "i686-unknown-linux-gnu"
+    "x86_64-unknown-linux-gnu"
+    "x86_64-unknown-linux-musl"
+    # we can uncomment that once our bootstrap tarballs are fixed
+    #"x86_64-unknown-freebsd"
+  ],
+  # Strip most of attributes when evaluating to spare memory usage
+  scrubJobs ? true,
+  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? {
+    config = {
+      allowAliases = false;
+      allowUnfree = false;
+      inHydra = true;
+      recursionMode = "hydra";
+      # Exceptional unsafe packages that we still build and distribute,
+      # so users choosing to allow don't have to rebuild them every time.
+      permittedInsecurePackages = [
+        "olm-3.2.16" # see PR #347899
+        "kanidm_1_10-1.10.5"
+        "kanidmWithSecretProvisioning_1_10-1.10.5"
+      ];
+    };
+
+    __allowFileset = false;
+  },
+
+  # This flag, if set to true, will inhibit the use of `mapTestOn`
+  # and `release-lib.packagePlatforms`.  Generally, it causes the
+  # resulting tree of attributes to *not* have a ".${system}"
+  # suffixed upon every job name like Hydra expects.
+  #
+  # This flag exists mainly for use by ci/eval/attrpaths.nix; see
+  # that file for full details.  The exact behavior of this flag
+  # may change; it should be considered an internal implementation
+  # detail of ci/eval.
+  attrNamesOnly ? false,
+}:
+
+let
+  release-lib = import ./release-lib.nix {
+    inherit
+      supportedSystems
+      scrubJobs
+      nixpkgsArgs
+      system
+      ;
+  };
+
+  inherit (release-lib) mapTestOn pkgs;
+
+  inherit (release-lib.lib)
+    collect
+    concatLists
+    elem
+    filter
+    genAttrs
+    hasInfix
+    hasSuffix
+    id
+    isDerivation
+    optionals
+    ;
+
+  inherit (release-lib.lib.attrsets) unionOfDisjoint;
+
+  supportDarwin = elem "aarch64-darwin" supportedSystems;
+
+  onSupported = x: map (system: x.${system}) supportedSystems;
+  onSupportedLinux = x: map (system: x.${system}) (filter (hasSuffix "-linux") supportedSystems);
+  onSupportedDarwin = x: map (system: x.${system}) (filter (hasSuffix "-darwin") supportedSystems);
+
+  nonPackageJobs = {
+    tarball = import ./make-tarball.nix {
+      inherit
+        pkgs
+        nixpkgs
+        officialRelease
+        ;
+    };
+
+    release-checks = import ./nixpkgs-basic-release-checks.nix {
+      inherit pkgs nixpkgs supportedSystems;
+    };
+
+    manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
+    metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
+
+    tested = pkgs.releaseTools.aggregate {
+      name = "nixpkgs-${jobs.tarball.version}";
+      meta.description = "Release-critical builds for the Nixpkgs unstable channel";
+      constituents = concatLists [
+        [
+          jobs.tarball
+          jobs.release-checks
+          jobs.metrics
+          jobs.manual
+        ]
+        (collect isDerivation jobs.stdenvBootstrapTools)
+        (onSupported jobs.tests.lib-tests)
+        (onSupported jobs.tests.pkgs-lib.formats-tests)
+        (onSupported jobs.stdenv)
+        (onSupported jobs.cargo)
+        (onSupported jobs.go)
+        (onSupportedLinux jobs.linux)
+        (onSupported jobs.nix)
+        (onSupported jobs.pandoc)
+        (onSupported jobs.python3)
+        # Needed by contributors to test PRs (by inclusion of the PR template)
+        (onSupported jobs.nixpkgs-review)
+        # Needed for support
+        (onSupported jobs.nix-info)
+        (onSupported jobs.nix-info-tested)
+        # Ensure that X11/GTK are in order.
+        (onSupportedLinux jobs.firefox-unwrapped)
+        (onSupported jobs.cachix)
+        (onSupported jobs.devenv)
+        (onSupported jobs.git)
+        (onSupported jobs.mariadb)
+        (onSupported jobs.vim)
+        (onSupported jobs.inkscape)
+        (onSupported jobs.qt5.qtmultimedia)
+        (onSupportedDarwin jobs.darwin.linux-builder)
+
+        /*
+          TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
+
+          jobs.tests.cc-wrapper.default.x86_64-linux
+
+          # broken see issue #40038
+
+          jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
+          jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
+          jobs.tests.cc-multilib-gcc.x86_64-linux
+          jobs.tests.cc-multilib-clang.x86_64-linux
+          jobs.tests.stdenv-inputs.x86_64-linux
+          jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
+        */
+      ];
+    };
+
+    stdenvBootstrapTools = genAttrs bootstrapConfigs (
+      config:
+      if hasInfix "-linux-" config then
+        let
+          bootstrap = import ../stdenv/linux/make-bootstrap-tools.nix {
+            pkgs = import ../.. {
+              localSystem = { inherit config; };
+            };
+          };
+        in
+        {
+          inherit (bootstrap) build test;
+        }
+      else if hasSuffix "-darwin" config then
+        let
+          bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
+            localSystem = { inherit config; };
+          };
+        in
+        {
+          # Lightweight distribution and test
+          inherit (bootstrap) build test;
+          # Test a full stdenv bootstrap from the bootstrap tools definition
+          # TODO: Re-enable once the new bootstrap-tools are in place.
+          #inherit (bootstrap.test-pkgs) stdenv;
+        }
+      else if hasSuffix "-freebsd" config then
+        let
+          bootstrap = import ../stdenv/freebsd/make-bootstrap-tools.nix {
+            pkgs = import ../.. {
+              localSystem = { inherit config; };
+            };
+          };
+        in
+        {
+          inherit (bootstrap) build; # test does't exist yet
+        }
+      else
+        abort "No bootstrap implementation for system: ${config}"
+    );
+  };
+
+  # Do not allow attribute collision between jobs inserted in
+  # 'nonPackageAttrs' and jobs pulled in from 'pkgs'.
+  # Conflicts usually cause silent job drops like in
+  #   https://github.com/NixOS/nixpkgs/pull/182058
+  jobs =
+    let
+      packagePlatforms = release-lib.recursiveMapPackages (
+        if attrNamesOnly then id else release-lib.getPlatforms
+      );
+      packageJobs = packagePlatforms pkgs // {
+        # Build selected packages (HLS) for multiple Haskell compilers to rebuild
+        # the cache after a staging merge
+        haskell = packagePlatforms pkgs.haskell // {
+          packages =
+            genAttrs
+              [
+                "ghc96"
+                "ghc98"
+                "ghc910"
+                "ghc912"
+              ]
+              (compilerName: {
+                inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
+                  haskell-language-server
+                  ;
+              });
+        };
+
+        pkgsLLVM.stdenv = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+        pkgsArocc.stdenv = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+        pkgsZig.stdenv = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+        pkgsMusl.stdenv = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+        pkgsStatic.stdenv = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+
+        pkgsRocm = pkgs.rocmPackages.meta.release-packagePlatforms;
+      };
+      mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
+    in
+    unionOfDisjoint nonPackageJobs mapTestOn-packages;
+
+in
+jobs
