@@ -14,7 +14,12 @@ npmBuildHook() {
         exit 1
     fi
 
-    if ! npm run ${npmWorkspace+--workspace=$npmWorkspace} "$npmBuildScript" $npmBuildFlags "${npmBuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+    local flagsArray=()
+    concatTo flagsArray npmBuildFlags npmBuildFlagsArray npmFlags npmFlagsArray
+
+    echoCmd 'npmBuildHook flags' "${flagsArray[@]}"
+
+    if ! npm run ${npmWorkspace+--workspace=$npmWorkspace} "$npmBuildScript" "${flagsArray[@]}"; then
         echo
         echo "ERROR: \`npm run $npmBuildScript [...]\` failed"
         echo
