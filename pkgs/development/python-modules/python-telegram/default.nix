@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-telegram";
-  version = "0.19.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alexander-akhmetov";
     repo = "python-telegram";
     tag = version;
-    hash = "sha256-JnU59DZXpnaZXIY/apXQ2gBgiwT12rJIeVqzaP0l7Zk=";
+    hash = "sha256-0Bjqb0F6iJcmgHF4aDmNV26ZpkPf18ZbYKIBJfQLnt8=";
   };
 
   postPatch = ''
