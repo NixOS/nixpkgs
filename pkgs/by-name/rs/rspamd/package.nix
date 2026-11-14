@@ -18,7 +18,7 @@
   lapack,
   libarchive,
   libsodium,
-  lua5_2_compat,
+  lua5_5,
   luajit,
   openssl,
   pcre2,
@@ -36,7 +36,7 @@
 }:
 
 let
-  lua = lua5_2_compat;
+  lua = lua5_5;
   inherit (lib)
     cmakeFeature
     ;
