@@ -33,6 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "CHECK_TRAPV" ""
   '';
 
+  # passing --build messes with static builds
+  configurePlatforms = [
+    "host"
+    "target"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
   ];
