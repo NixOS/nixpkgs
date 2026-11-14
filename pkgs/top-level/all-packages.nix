@@ -9379,20 +9379,6 @@ with pkgs;
 
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
-  inherit
-    (callPackages ../applications/misc/redshift {
-      inherit (python3Packages)
-        python
-        pygobject3
-        pyxdg
-        wrapPython
-        ;
-      geoclue = geoclue2;
-    })
-    redshift
-    gammastep
-    ;
-
   ### SCIENCE/CHEMISTY
 
   molbar = with python3Packages; toPythonApplication molbar;
