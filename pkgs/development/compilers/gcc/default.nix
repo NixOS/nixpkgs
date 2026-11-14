@@ -59,6 +59,7 @@
   apple-sdk_14,
   apple-sdk_15,
   darwin,
+  dejagnu,
 }:
 
 let
@@ -136,6 +137,7 @@ let
       cargo
       withoutTargetLibc
       darwin
+      dejagnu
       disableBootstrap
       disableGdbPlugin
       enableDefaultPie
