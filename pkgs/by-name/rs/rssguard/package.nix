@@ -93,7 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/Applications/rssguard.app/Contents/MacOS/{rssguard,rssguard-article-extractor} $out/bin/
   '';
 
-  doCheck = true;
+  # App-level tests segfault on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckKeepEnvironment = "HOME QT_QPA_PLATFORM";
