@@ -50,6 +50,10 @@ let
       # Remove vendored Windows PE binaries
       # Note: These are unused but make the package unreproducible.
       find -type f -name '*.exe' -delete
+
+      # pip trusts its vendored certifi next to the system store; make certifi return the system bundle
+      printf '\n\n' >> src/pip/_vendor/certifi/core.py
+      cat ${../../interpreters/python/pip-certifi-override.py} >> src/pip/_vendor/certifi/core.py
     '';
 
     nativeBuildInputs = [
