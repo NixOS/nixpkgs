@@ -1272,6 +1272,7 @@ mapAliases {
   ibm-sw-tpm2 = throw "ibm-sw-tpm2 has been removed, as it was broken"; # Added 2025-08-25
   icu69 = throw "ICU 69 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
   igvm-tooling = throw "'igvm-tooling' has been removed as it is poorly maintained upstream and a dependency has been marked insecure."; # Added 2025-09-03
+  ikill = throw "'ikill' has been removed as it was unmaintained upstream"; # Added 2026-11-06
   ikos = throw "ikos has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   ilmbase = throw "'ilmbase' has been removed as it was unmaintained upstream and has several known vulnerabilities"; # Added 2026-08-28
   imagemagick6 = throw "'imagemagick6' was removed because it is outdated. Use 'imagemagick' instead."; # added 2026-02-27
