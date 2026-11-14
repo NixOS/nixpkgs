@@ -15208,6 +15208,8 @@ self: super: with self; {
 
   pyflume = callPackage ../development/python-modules/pyflume { };
 
+  pyflyby = callPackage ../development/python-modules/pyflyby { };
+
   pyfma = callPackage ../development/python-modules/pyfma { };
 
   pyfnip = callPackage ../development/python-modules/pyfnip { };
