@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-task";
-  version = "3.53.1";
+  version = "3.54.0";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YVAWNXCcXubMMp0/08q+IRomBvYm0Q6E0qlazjxXe2g=";
+    hash = "sha256-AmfrF+FJ2dLmyT8h/l5zCUveFoOTKW/ZItG7MEwJp9Q=";
   };
 
-  vendorHash = "sha256-R8PmZ40Y+HPM07iBYTLn48d+5Tw6aj7raL49Ow2iCB8=";
+  vendorHash = "sha256-5QJ8W2a+fZG5HJMnHkg+j/OFM8wkiVEd7FjUwydQ+F4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
