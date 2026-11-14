@@ -9,6 +9,8 @@
   libappindicator,
   glib,
   autoPatchelfHook,
+  re-plistbuddy,
+  zstd,
 }:
 let
   cargoFlags = [
@@ -33,12 +35,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-QKvimqfNK9M2FV5ddVhjow0go/NxrQRuHpDYt7UG5zI=";
   doCheck = true;
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib
     libappindicator
     libayatana-appindicator
@@ -68,8 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         chmod +x dist/Impactor.app/Contents/MacOS/Impactor
         strip dist/Impactor.app/Contents/MacOS/Impactor
 
-        /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${finalAttrs.version}" dist/Impactor.app/Contents/Info.plist
-        /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${finalAttrs.version}" dist/Impactor.app/Contents/Info.plist
+        ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Set :CFBundleShortVersionString ${finalAttrs.version}" dist/Impactor.app/Contents/Info.plist
+        ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Set :CFBundleVersion ${finalAttrs.version}" dist/Impactor.app/Contents/Info.plist
 
         mkdir -p $out/Applications
         cp -R dist/Impactor.app $out/Applications/Impactor.app
