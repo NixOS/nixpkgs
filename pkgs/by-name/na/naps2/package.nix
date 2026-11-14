@@ -11,6 +11,7 @@
   sane-backends,
   libnotify,
   libtiff,
+  libappindicator,
 }:
 
 buildDotnetModule rec {
@@ -27,6 +28,7 @@ buildDotnetModule rec {
   patches = [
     ./01-donate-button.patch
     ./02-button-dpi.patch
+    ./03-service-exec-path.patch
   ];
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
@@ -51,10 +53,12 @@ buildDotnetModule rec {
     sane-backends
     libnotify
     libtiff
+    libappindicator
   ];
 
   postInstall = ''
-    install -D NAPS2.Setup/config/linux/com.naps2.Naps2.desktop $out/share/applications/com.naps2.Naps2.desktop
+    install -D NAPS2.Setup/config/linux/com.naps2.Naps2.desktop $out/share/applications/naps2.desktop
+    printf '\nStartupWMClass=naps2\n' >> $out/share/applications/naps2.desktop
     for size in 16 32 48 128; do
       install -D NAPS2.Lib/Icons/scanner_$size.png \
         $out/share/icons/hicolor/"$size"x"$size"/apps/com.naps2.Naps2.png

@@ -1,0 +1,44 @@
+diff --git a/NAPS2.Lib.Gtk/Platform/LinuxServiceManager.cs b/NAPS2.Lib.Gtk/Platform/LinuxServiceManager.cs
+--- a/NAPS2.Lib.Gtk/Platform/LinuxServiceManager.cs
++++ b/NAPS2.Lib.Gtk/Platform/LinuxServiceManager.cs
+@@ -15,6 +15,31 @@
+     
+     public bool IsRegistered => File.Exists(UnitPath);
+ 
++    // The sharing server has to be started through the same wrapper script as
++    // the application itself: on NixOS the wrapper sets LD_LIBRARY_PATH and
++    // the other variables that the bare binary does not get.  The wrapper
++    // lives in <out>/bin, the binary in <out>/lib/<app>, so look for the
++    // wrapper next to the library directory and fall back to the binary.
++    private static string ServiceExecPath
++    {
++        get
++        {
++            var processPath = Environment.ProcessPath;
++            if (string.IsNullOrEmpty(processPath))
++            {
++                return processPath ?? "";
++            }
++            var binaryDir = Path.GetDirectoryName(processPath);
++            var outputDir = binaryDir == null ? null : Path.GetDirectoryName(Path.GetDirectoryName(binaryDir));
++            if (outputDir == null)
++            {
++                return processPath;
++            }
++            var wrapper = Path.Combine(outputDir, "bin", Path.GetFileName(processPath));
++            return File.Exists(wrapper) ? wrapper : processPath;
++        }
++    }
++
+     public bool Register()
+     {
+         var unitDef = $"""
+@@ -25,7 +50,7 @@
+                           Type=simple
+                           Restart=always
+                           RestartSec=1
+-                          ExecStart={Environment.ProcessPath} server
++                          ExecStart={ServiceExecPath} server
+                           KillMode=process
+                           
+                           [Install]
