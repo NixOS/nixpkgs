@@ -210,6 +210,9 @@ in
             # since https://github.com/pnpm/pnpm/releases/tag/v10.27.0
             rm -rf $storePath/{v3,v10,v11}/projects
 
+            # pnpm leaves this folder empty on Darwin only, so the hash would differ by platform
+            rm -rf $storePath/{v3,v10,v11}/links
+
             # Ensure consistent permissions
             # NOTE: For reasons not yet fully understood, pnpm might create files with
             # inconsistent permissions, for example inside the ubuntu-24.04
