@@ -216,6 +216,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://goteleport.com/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
+      andersk
       arianvp
       justinas
       sigma
