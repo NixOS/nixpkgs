@@ -47,7 +47,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "satdump";
-  version = "2.0.0-unstable-2026-08-17";
+  version = "1.2.2-winxp";
 
   src = fetchFromGitHub {
     owner = "SatDump";
