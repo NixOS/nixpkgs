@@ -29637,6 +29637,12 @@
     github = "TheOnlyMrCat";
     githubId = 23222857;
   };
+  theodoreehrenborg = {
+    name = "Theodore Ehrenborg";
+    email = "theodore.ehrenborg@gmail.com";
+    github = "TheodoreEhrenborg";
+    githubId = 46494248;
+  };
   therealansh = {
     email = "tyagiansh23@gmail.com";
     github = "therealansh";
