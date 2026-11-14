@@ -1,6 +1,7 @@
 {
   buildRubyGem,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   lib,
   bundler,
@@ -21,6 +22,15 @@ buildRubyGem rec {
     tag = version;
     hash = "sha256-QnNdseCSwQYhO/ybzWsflMEk68TMgPU3HqXJ7av3SHE=";
   };
+
+  patches = [
+    # Write the licenses of the gemspec to gemset.nix.
+    # https://github.com/nix-community/bundix/pull/124
+    (fetchpatch {
+      url = "https://github.com/nix-community/bundix/commit/0c53f0f192c2646a9e45bc5a819f570aa9bd16fe.patch";
+      hash = "sha256-dXIIEWh319ty5NNpNXu+PXRUOipFOHzMcR3xXIuknHY=";
+    })
+  ];
 
   buildInputs = [
     ruby
