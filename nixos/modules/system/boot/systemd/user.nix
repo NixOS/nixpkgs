@@ -31,8 +31,6 @@ let
     "exit.target"
     "graphical-session-pre.target"
     "graphical-session.target"
-    "machine.slice"
-    "machines.target"
     "paths.target"
     "printer.target"
     "session.slice"
@@ -45,10 +43,6 @@ let
     "systemd-exit.service"
     "systemd-journalctl@.service"
     "systemd-journalctl.socket"
-    "systemd-nspawn@.service"
-    "systemd-storage-fs@.service"
-    "systemd-storage-fs.socket"
-    "systemd-vmspawn@.service"
     "timers.target"
     "xdg-desktop-autostart.target"
   ]
@@ -58,14 +52,26 @@ let
     "systemd-importd.socket"
   ]
   ++ lib.optionals systemd.withMachined [
+    "machine.slice"
+    "machines.target"
     "dbus-org.freedesktop.machine1.service"
     "systemd-machined.service"
     "systemd-machined.socket"
+  ]
+  ++ lib.optionals systemd.withNspawn [
+    "systemd-nspawn@.service"
   ]
   ++ lib.optionals systemd.withPortabled [
     "dbus-org.freedesktop.portable1.service"
     "portable"
     "systemd-portabled.service"
+  ]
+  ++ lib.optionals systemd.withStorage [
+    "systemd-storage-fs@.service"
+    "systemd-storage-fs.socket"
+  ]
+  ++ lib.optionals systemd.withVmspawn [
+    "systemd-vmspawn@.service"
   ]
   ++ config.systemd.additionalUpstreamUserUnits;
 
