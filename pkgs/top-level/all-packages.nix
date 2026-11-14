@@ -1510,7 +1510,6 @@ with pkgs;
   texlive = callPackage ../tools/typesetting/tex/texlive { };
   inherit (texlive.schemes)
     texliveBasic
-    texliveBookPub
     texliveConTeXt
     texliveFull
     texliveGUST

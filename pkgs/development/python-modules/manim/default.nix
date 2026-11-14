@@ -115,7 +115,6 @@ let
       kvdefinekeys
       kvoptions
       kvsetkeys
-      l3backend
       l3kernel
       l3packages
       latex
