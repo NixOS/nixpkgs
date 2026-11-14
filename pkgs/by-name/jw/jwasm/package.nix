@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "MASM-compatible x86 assembler";
     changelog = "https://github.com/Baron-von-Riedesel/JWasm/releases/tag/${finalAttrs.src.rev}";
     mainProgram = "jwasm";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.watcom;
     maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
