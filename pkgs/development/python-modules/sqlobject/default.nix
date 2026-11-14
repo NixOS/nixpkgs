@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sqlobject";
-  version = "3.13.1";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlobject";
     repo = "sqlobject";
     tag = version;
-    hash = "sha256-Qbb48z4DrD/M8e26+5NjPcA0b3gxHeAxj1X/jSrTwx0=";
+    hash = "sha256-M4VnQdNmAunJYXY+oyTEcj3jABPNcMwQvyy7uwX6nOU=";
   };
 
   build-system = [ setuptools ];
