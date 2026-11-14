@@ -11,12 +11,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
-  version = "2.2.12";
+  version = "2.4.0";
   strictDeps = true;
 
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Jjmgal6np/z1ffHn4e9NGyvuWMesm9ANvSqlvqHlpWo=";
+    hash = "sha256-T6AIU7xqyS692STY4s5CUJ0/cI12o//MA04WKI4OAyU=";
   };
 
   buildInputs = [
