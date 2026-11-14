@@ -359,6 +359,8 @@ python3Packages.buildPythonApplication {
     "lib/sane"
   ];
 
+  passthru.saneBackendNames = [ "hpaio" ];
+
   meta = {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";

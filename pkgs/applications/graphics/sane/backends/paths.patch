@@ -1,0 +1,26 @@
+diff --git a/backend/Makefile.am b/backend/Makefile.am
+index 4bf4e6f54..506483bb4 100644
+--- a/backend/Makefile.am
++++ b/backend/Makefile.am
+@@ -5,7 +5,7 @@
+ ##  This file is part of the "Sane" build infra-structure.  See
+ ##  included LICENSE file for license information.
+ 
+-AM_CPPFLAGS += -I. -I$(srcdir) -I$(top_builddir)/include -I$(top_srcdir)/include $(USB_CFLAGS) -DLIBDIR="\"$(libdir)/sane\""
++AM_CPPFLAGS += -I. -I$(srcdir) -I$(top_builddir)/include -I$(top_srcdir)/include $(USB_CFLAGS) -DLIBDIR="\"$(libdir)/sane:/run/current-system/sw/lib/sane\""
+ 
+ AM_LDFLAGS += $(STRICT_LDFLAGS)
+ # The -rpath option is added because we are creating _LTLIBRARIES based
+diff --git a/sanei/sanei_config.c b/sanei/sanei_config.c
+index fc883eee5..4ebac328d 100644
+--- a/sanei/sanei_config.c
++++ b/sanei/sanei_config.c
+@@ -65,7 +65,7 @@
+ # define PATH_SEP	'/'
+ #endif
+ 
+-#define DEFAULT_DIRS	"." DIR_SEP STRINGIFY(PATH_SANE_CONFIG_DIR)
++#define DEFAULT_DIRS	"." DIR_SEP "/etc/sane.d" DIR_SEP STRINGIFY(PATH_SANE_CONFIG_DIR)
+ 
+ #ifdef __BEOS__
+ #include <FindDirectory.h>
