@@ -1057,6 +1057,12 @@ in
   livebook-service = runTest ./livebook-service.nix;
   livekit = runTest ./networking/livekit.nix;
   lix = runTest ./lix.nix;
+  lix-required-mounts = runTest {
+    imports = [ ./nix-required-mounts ];
+    nodes.machine = { pkgs, ... }: {
+      nix.package = pkgs.lix;
+    };
+  };
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   llama-swap = import ./web-servers/llama-swap.nix {
     inherit pkgs runTest;
