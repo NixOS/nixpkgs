@@ -8576,6 +8576,12 @@ with pkgs;
     cinny-unwrapped = sable-unwrapped;
   };
 
+  # cinny's wrapper merges a config.json into the frontend, set it with `sable-next.override { conf = { ... }; }`
+  sable-next = callPackage ../by-name/ci/cinny/package.nix {
+    pname = "sable-next";
+    cinny-unwrapped = sable-next-unwrapped;
+  };
+
   maestral = with python3Packages; toPythonApplication maestral;
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
