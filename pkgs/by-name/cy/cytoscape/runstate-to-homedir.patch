@@ -1,0 +1,59 @@
+Move Cytoscape run-time state out of the (read-only) installation directory:
+
+* cytoscape.sh: the existing gen_vmoptions_to_homedir.patch writes
+  Cytoscape.vmoptions to $HOME/.cytoscape, but the launcher still looked for
+  it next to the script ($out), so every start fell back to hardcoded 1550M
+  heap defaults. Read it from $HOME/.cytoscape instead.
+
+* framework/bin/karaf: karaf records the running instance in
+  ${KARAF_HOME}/instances (= $out/share/framework/instances), which fails on a
+  read-only store path ("Unable to create directory ..."). Use ${KARAF_DATA}
+  (already $HOME/CytoscapeConfiguration/3/karaf_data, created by
+  cytoscape.sh) instead.
+
+--- a/cytoscape.sh
++++ b/cytoscape.sh
+@@ -57,8 +57,7 @@
+ 	export JAVAFX_DIR="linux"
+ fi
+ 
+-#vm_options_path=$HOME/.cytoscape
+-vm_options_path=$script_path
++vm_options_path="$HOME/.cytoscape"
+ 
+ # Attempt to generate Cytoscape.vmoptions if it doesn't exist!
+ if [ ! -e "$vm_options_path/Cytoscape.vmoptions"  -a  -x "$script_path/gen_vmoptions.sh" ]; then
+--- a/framework/bin/karaf
++++ b/framework/bin/karaf
+@@ -108,10 +108,10 @@
+ 
+ checkRootInstance() {
+    ROOT_INSTANCE_RUNNING=false
+-   if [ -f "${KARAF_HOME}/instances/instance.properties" ];
++   if [ -f "${KARAF_DATA}/instances/instance.properties" ];
+    then
+-      ROOT_INSTANCE_PID=`sed -n -e '/item.0.pid/ s/.*\= *//p' "${KARAF_HOME}/instances/instance.properties"`
+-      ROOT_INSTANCE_NAME=`sed -n -e '/item.0.name/ s/.*\= *//p' "${KARAF_HOME}/instances/instance.properties"`
++      ROOT_INSTANCE_PID=`sed -n -e '/item.0.pid/ s/.*\= *//p' "${KARAF_DATA}/instances/instance.properties"`
++      ROOT_INSTANCE_NAME=`sed -n -e '/item.0.name/ s/.*\= *//p' "${KARAF_DATA}/instances/instance.properties"`
+       if [ "${ROOT_INSTANCE_PID}" -ne "0" ]; then
+           if ps -p "${ROOT_INSTANCE_PID}" > /dev/null
+           then
+@@ -324,7 +324,7 @@
+                     --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED \
+                     --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED \
+                     --add-exports=java.security.sasl/com.sun.security.sasl=ALL-UNNAMED \
+-                    -Dkaraf.instances="${KARAF_HOME}/instances" \
++                    -Dkaraf.instances="${KARAF_DATA}/instances" \
+                     -Dkaraf.home="${KARAF_HOME}" \
+                     -Dkaraf.base="${KARAF_BASE}" \
+                     -Dkaraf.data="${KARAF_DATA}" \
+@@ -342,7 +342,7 @@
+                 ${KARAF_EXEC} "${JAVA}" ${JAVA_OPTS} \
+                     -Djava.endorsed.dirs="${JAVA_ENDORSED_DIRS}" \
+                     -Djava.ext.dirs="${JAVA_EXT_DIRS}" \
+-                    -Dkaraf.instances="${KARAF_HOME}/instances" \
++                    -Dkaraf.instances="${KARAF_DATA}/instances" \
+                     -Dkaraf.home="${KARAF_HOME}" \
+                     -Dkaraf.base="${KARAF_BASE}" \
+                     -Dkaraf.data="${KARAF_DATA}" \
