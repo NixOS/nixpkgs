@@ -27,31 +27,32 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "casatools";
-  version = "6.7.5.18";
+  version = "6.7.6.14";
+  pyproject = true;
 
   src = fetchgit {
     url = "https://open-bitbucket.nrao.edu/scm/casa/casa6.git";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-75oIlaNAyu70KWSjz38LoYAvV7RJgzH/X9uBnGpriF4=";
+    hash = "sha256-ZMcowd7EqP5CO6JNbvbOZ3X9boPKKMUwRL2RBCHTo34=";
     fetchSubmodules = false;
   };
 
   sourceRoot = "${finalAttrs.src.name}/casatools";
 
-  format = "pyproject";
-
   nativeBuildInputs = [
     cmake
     pkg-config
     swig
-    flex
-    bison
-    gfortran
+    #flex
+    #bison
+    #gfortran
     jdk
-    grpc
+    #grpc
+  ];
+
+  build-system = [
+    numpy
     setuptools
-    wheel
-    build
   ];
 
   dontConfigure = true;
@@ -59,10 +60,10 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     casacpp
     xercesc
-    readline
+    #readline
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     casaconfig
   ];
