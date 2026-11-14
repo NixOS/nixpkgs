@@ -1,0 +1,61 @@
+diff --git a/tests/test_resolver.py b/tests/test_resolver.py
+index 523216fa..dd581a39 100644
+--- a/tests/test_resolver.py
++++ b/tests/test_resolver.py
+@@ -253,7 +253,7 @@ def test_model_resolver_pickles_are_compatible_across_the_resolver_state_rename(
+             [sys.executable, str(MODEL_RESOLVER_PICKLE_HELPER), direction, str(pickle_path)],
+             check=True,
+             capture_output=True,
+-            env={**os.environ, "PYTHONPATH": str(Path(__file__).parent.parent)},
++            env={**os.environ, "PYTHONPATH": f"{os.environ.get('PYTHONPATH', '')}:{str(Path(__file__).parent.parent)}"},
+             text=True,
+         )
+         outputs.append(result.stdout)
+diff --git a/tests/main/test_main_watch.py b/tests/main/test_main_watch.py
+index 2ad9d5a3..028e78ca 100644
+--- a/tests/main/test_main_watch.py
++++ b/tests/main/test_main_watch.py
+@@ -2376,7 +2376,7 @@ def test_regular_generation_does_not_load_watch_dependency_collector(tmp_path: P
+         WATCH_DATA_PATH.parent / "python/custom_formatters/reloadable_watch.py",
+         formatter_directory / "normal_formatter.py",
+     )
+-    environment = {**os.environ, "PYTHONPATH": f"{formatter_directory}{os.pathsep}{PROJECT_ROOT}"}
++    environment = {**os.environ, "PYTHONPATH": f"{os.environ.get('PYTHONPATH', '')}:{formatter_directory}{os.pathsep}{PROJECT_ROOT}"}
+     formatter_script = """\
+ import sys
+ from datamodel_code_generator.format import CodeFormatter, Formatter, PythonVersionMin
+diff --git a/tests/main/test_inflect_isolation.py b/tests/main/test_inflect_isolation.py
+index e2cb9505..fec013a9 100644
+--- a/tests/main/test_inflect_isolation.py
++++ b/tests/main/test_inflect_isolation.py
+@@ -68,7 +68,7 @@ def test_inflect_independent_callers_preserve_checks_and_names(
+         capture_output=True,
+         text=True,
+         cwd=root,
+-        env={**os.environ, "PYTHONPATH": str(root / "src")},
++        env={**os.environ, "PYTHONPATH": f"{os.environ.get('PYTHONPATH', '')}:{str(root / 'src')}"},
+         timeout=60,
+     )
+     expected_probe = (
+diff --git a/tests/test_http_https.py b/tests/test_http_https.py
+index 7b795148..2c9c559a 100644
+--- a/tests/test_http_https.py
++++ b/tests/test_http_https.py
+@@ -80,7 +80,7 @@ def local_https_server(tmp_path: Path, monkeypatch: MonkeyPatch) -> Iterator[tup
+         "HTTPS_PROXY",
+         "HTTP_PROXY",
+         "SSL_CERT_DIR",
+-        "SSL_CERT_FILE",
++        "NIX_SSL_CERT_FILE",
+         "all_proxy",
+         "https_proxy",
+         "http_proxy",
+@@ -241,7 +241,7 @@ def test_https_trusted_ca_verifies_and_generates_model(
+     """Trust the generated CA and verify a real TLS connection without disabling checks."""
+     server_url, ca_path = local_https_server
+     schema_url = f"{server_url}/pet.json"
+-    monkeypatch.setenv("SSL_CERT_FILE", str(ca_path))
++    monkeypatch.setenv("NIX_SSL_CERT_FILE", str(ca_path))
+     pinned_output_path = tmp_path / "pinned-pet.txt"
+     pinned_output_path.write_text(
+         _get_pinned_https_body(schema_url, verify=True),
