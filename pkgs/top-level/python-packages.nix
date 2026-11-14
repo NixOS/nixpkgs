@@ -23017,9 +23017,9 @@ self: super: with self; {
 
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 
-  zipremove = callPackage ../development/python-modules/zipremove { };
-
   zipp = callPackage ../development/python-modules/zipp { };
+
+  zipremove = callPackage ../development/python-modules/zipremove { };
 
   zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
 
