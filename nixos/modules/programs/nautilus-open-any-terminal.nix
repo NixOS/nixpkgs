@@ -20,6 +20,12 @@ in
         emulators are listed in <https://github.com/Stunkymonkey/nautilus-open-any-terminal#supported-terminal-emulators>.
       '';
     };
+
+    useGenericTerminalName = lib.mkEnableOption null // {
+      description = ''
+        Whether or not to replace the terminal name with a generic "Terminal" in the context menu.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -36,11 +42,16 @@ in
       "/share/nautilus-python/extensions"
     ];
 
-    programs.dconf = lib.optionalAttrs (cfg.terminal != null) {
+    programs.dconf = lib.optionalAttrs (cfg.terminal != null || cfg.useGenericTerminalName) {
       enable = true;
       profiles.user.databases = [
         {
-          settings."com/github/stunkymonkey/nautilus-open-any-terminal".terminal = cfg.terminal;
+          settings."com/github/stunkymonkey/nautilus-open-any-terminal" = (lib.optionalAttrs (cfg.terminal != null) {
+              terminal = cfg.terminal;
+            })
+            // {
+              use-generic-terminal-name = cfg.useGenericTerminalName;
+            };
           lockAll = true;
         }
       ];
