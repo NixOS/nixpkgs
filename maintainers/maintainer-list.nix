@@ -19774,6 +19774,12 @@
     githubId = 34742358;
     name = "Maximilian Kapra";
   };
+  mkenkel = {
+    email = "mattsnoopy2@gmail.com";
+    github = "mkenkel";
+    githubId = 35666729;
+    name = "Matthew Kenkel";
+  };
   mkez = {
     email = "matias+nix@zwinger.fi";
     github = "mk3z";
