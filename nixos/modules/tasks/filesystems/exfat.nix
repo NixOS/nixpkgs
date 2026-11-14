@@ -4,19 +4,14 @@
   pkgs,
   ...
 }:
-
-with lib;
-
+let
+  inInitrd = config.boot.initrd.supportedFilesystems.exfat or false;
+  inSystem = config.boot.supportedFilesystems.exfat or false;
+in
 {
-  config = mkIf (config.boot.supportedFilesystems.exfat or false) {
-    system.fsPackages =
-      if config.boot.kernelPackages.kernelOlder "5.7" then
-        [
-          pkgs.exfat # FUSE
-        ]
-      else
-        [
-          pkgs.exfatprogs # non-FUSE
-        ];
+  config = {
+    system.fsPackages = lib.mkIf (inInitrd || inSystem) [ pkgs.exfatprogs ];
+
+    boot.initrd.availableKernelModules = lib.mkIf inInitrd [ "exfat" ];
   };
 }
