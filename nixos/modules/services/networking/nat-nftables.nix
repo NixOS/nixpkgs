@@ -88,6 +88,7 @@ let
 
         ${optionalString (dmzHost != null) ''
           iifname "${cfg.externalInterface}" dnat ${dmzHost} comment "dmz"
+          iifname { ${ifaceSet} } fib daddr type local dnat ${dmzHost} comment "dmz from other hosts behind NAT"
         ''}
       }
 
