@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budslink";
-  version = "0.2.1";
+  version = "0.2.2";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "maniacx";
     repo = "BudsLink";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bOVymVN9WoGUKvYUZ93OcIu3Avw1ybmAK3W4uViXzQc=";
+    hash = "sha256-FCoLH808hAKGTPwdCHnMzKxlEg8JyNGc9NkqzAfMM4I=";
   };
 
   postPatch = ''
