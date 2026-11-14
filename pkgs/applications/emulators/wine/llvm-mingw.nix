@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-# Used as a workaround for ucrtAarch64.
+# Used as a workaround for mingw-ucrt-aarch64.
 # compiler-rt due to pthread.h not being found during cross-build.
 
 let
