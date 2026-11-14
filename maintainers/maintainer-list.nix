@@ -11580,6 +11580,12 @@
     githubId = 1631166;
     name = "Marcel Müller";
   };
+  hencjo = {
+    email = "henrik@sjostrand.at";
+    github = "hencjo";
+    githubId = 18652;
+    name = "Henrik Sjöstrand";
+  };
   henkery = {
     email = "jim@reupload.nl";
     github = "henkery";
