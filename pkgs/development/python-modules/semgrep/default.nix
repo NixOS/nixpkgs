@@ -20,7 +20,7 @@
   exceptiongroup,
   glom,
   jsonschema,
-  mcp_1,
+  mcp,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
@@ -133,7 +133,7 @@ buildPythonPackage (finalAttrs: {
     exceptiongroup
     glom
     jsonschema
-    mcp_1
+    mcp
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
     opentelemetry-instrumentation-requests
