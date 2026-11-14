@@ -5,6 +5,7 @@
   hatchling,
   jinja2,
   lxml,
+  openpyxl,
   pytestCheckHook,
   python,
   xmlschema,
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.54";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "reqif";
     tag = version;
-    hash = "sha256-42iDfZTlNiYMWz/l5NO4aQ/MqfhNj/RXcv9qOiAaloM=";
+    hash = "sha256-aMjq2x9/aC7HRDL2T2v/yvz+TP+AAKSY3e/TmboKq9Q=";
   };
 
   postPatch = ''
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = [
     lxml
     jinja2
     xmlschema
