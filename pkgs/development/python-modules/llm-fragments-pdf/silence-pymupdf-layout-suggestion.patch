@@ -1,0 +1,14 @@
+--- a/llm_fragments_pdf.py
++++ b/llm_fragments_pdf.py
+@@ -1,4 +1,11 @@
++import os
++
+ import llm
++
++# Importing pymupdf4llm prints a recommendation to install pymupdf_layout on
++# stdout, which corrupts the output of every `llm` command.
++os.environ.setdefault("PYMUPDF_SUGGEST_LAYOUT_ANALYZER", "0")
++
+ import pymupdf4llm
+ 
+ 
