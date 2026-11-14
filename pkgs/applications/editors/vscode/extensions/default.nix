@@ -4755,8 +4755,8 @@ let
         mktplcRef = {
           name = "ayu";
           publisher = "teabyii";
-          version = "1.1.12";
-          sha256 = "sha256-pwLvik3GRMLyr6GeTmZh1MrkgH1MgbyoembNmQxg4I0=";
+          version = "1.6.0";
+          sha256 = "sha256-aVUg+p5g6z5JV09eiG4rOdAfcuQZ9nSxvOuLxoHYq6c=";
         };
         meta = {
           description = "Simple theme with bright colors and comes in three versions — dark, light and mirage for all day long comfortable work";
