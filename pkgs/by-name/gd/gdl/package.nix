@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Gnome docking library";
-    homepage = "https://developer.gnome.org/gdl/";
+    homepage = "https://gitlab.gnome.org/Archive/gdl";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;

@@ -9,7 +9,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "ovhcloud-cli";
-  version = "0.16.0";
+  version = "0.17.1";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGo127Module (finalAttrs: {
     owner = "ovh";
     repo = "ovhcloud-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oo2/OUysEMptnrgqkciKbN/eYbZCf8DU7R+TSsD/m7g=";
+    hash = "sha256-YTJDq+iaw1JY1OtLZ0qOPf6R4qm/EnPnaxEIo3TxUGc=";
   };
 
-  vendorHash = "sha256-DdoWi2Ica8LvHHDLkjJNo+3yeLIYwtvX//YQZpfoVa0=";
+  vendorHash = "sha256-a3RnOhYC2oKV6y3sidHf1KfGAyk1l4Q5grhXzY+JSFc=";
 
   env.CGO_ENABLED = 0;
 

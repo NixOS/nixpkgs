@@ -13,7 +13,7 @@ runCommandCC "${lfortran.pname}-test-fpm"
   }
   ''
     # The same flags upstream uses for fpm in ci/test_third_party_codes.sh.
-    lfortran --cpp --realloc-lhs-arrays --use-loop-variable-after-loop \
+    lfortran --cpp --realloc-lhs-arrays \
       ${fortran-fpm.src} -o fpm 2>/dev/null
     ./fpm --version | grep -F "Version:     ${fortran-fpm.version}"
 

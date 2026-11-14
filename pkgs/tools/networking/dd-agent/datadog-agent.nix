@@ -130,7 +130,10 @@ buildGoModule rec {
       -- v6 new golang implementation.
     '';
     homepage = "https://www.datadoghq.com";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.AND [
+      lib.licenses.asl20
+      lib.licenses.gpl2Only
+    ];
     maintainers = with lib.maintainers; [
       thoughtpolice
     ];

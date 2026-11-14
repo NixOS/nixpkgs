@@ -41,8 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r ./* $server/
 
     find "$server/node_modules/@github" -mindepth 1 -maxdepth 1 \
-      \( -name 'copilot-linux-*' -o -name 'copilot-darwin-*' -o -name 'copilot-win32-*' \) \
-      ! -name "copilot-${platform}-${arch}" -exec rm -rf {} +
+      -name 'copilot-sdk-*' \
+      ! -name "copilot-sdk-${platform}-${arch}" -exec rm -rf {} +
 
     find "$server/bin" "$server/compiled" -mindepth 1 -maxdepth 1 ! -name "${platform}" -exec rm -rf {} +
     find "$server/bin/${platform}" "$server/compiled/${platform}" -mindepth 1 -maxdepth 1 ! -name "${arch}" -exec rm -rf {} +

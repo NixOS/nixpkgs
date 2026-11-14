@@ -10,18 +10,19 @@
   setuptools,
   toml,
   tomli-w,
+  toon-format,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-box";
-  version = "7.3.2";
+  version = "8.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
-    tag = version;
-    hash = "sha256-aVPjIoizqC0OcG5ziy/lvp/JsFSUvcLUqJ03mKViKFs=";
+    tag = finalAttrs.version;
+    hash = "sha256-7/yr4nQHd2SqH8tNoOWbss0weDNPYk5b1XkqjdskDYQ=";
   };
 
   build-system = [
@@ -43,7 +44,11 @@ buildPythonPackage rec {
     msgpack = [ msgpack ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
+  nativeCheckInputs = [
+    pytestCheckHook
+    toon-format
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     # ruamel 8.18.13 update changed white space rules
@@ -55,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python dictionaries with advanced dot notation access";
     homepage = "https://github.com/cdgriffith/Box";
-    changelog = "https://github.com/cdgriffith/Box/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/cdgriffith/Box/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

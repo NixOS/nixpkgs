@@ -2647,10 +2647,6 @@ with pkgs;
 
   subzerod = with python3Packages; toPythonApplication subzerod;
 
-  tartube-yt-dlp = tartube.override {
-    youtube-dl = yt-dlp;
-  };
-
   buildTeleport = callPackage ../build-support/teleport { };
 
   telepresence = callPackage ../tools/networking/telepresence {
@@ -9021,10 +9017,6 @@ with pkgs;
     ;
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
-
-  youtube-dl = with python3Packages; toPythonApplication youtube-dl;
-
-  youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
 
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;

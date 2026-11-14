@@ -6,7 +6,7 @@
   curl,
   bash,
   jq,
-  youtube-dl,
+  yt-dlp,
   zenity,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
         bash
         zenity
         jq
-        youtube-dl
+        yt-dlp
       ]
     }
   '';

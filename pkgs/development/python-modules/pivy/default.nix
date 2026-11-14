@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/coin3d/pivy/";
     description = "Python binding for Coin";
-    license = lib.licenses.bsd0;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

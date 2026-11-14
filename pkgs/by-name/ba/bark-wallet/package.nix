@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bark-wallet";
-  version = "0.7.1";
+  version = "0.8.1";
 
   __structuredAttrs = true;
 
@@ -20,15 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ark-bitcoin";
     repo = "bark";
     tag = "bark-${finalAttrs.version}";
-    hash = "sha256-nHoMhOqAVPjMePqKrJLuZxBIjHstA+AHLc0b/T/pnfQ=";
+    hash = "sha256-Pok3NkMZNyv6AoyVJHPt21lQ+8rB7BDk92NEzexnpqw=";
   };
 
-  cargoHash = "sha256-Wsr4QIjY6HWvIW5y4H4p0rGllP9cQF0kHlw12kPLstM=";
-
-  # Disable barkd's default Swagger UI feature, whose build script downloads
-  # web assets. Re-enable native TLS roots, the other bark-cli default feature.
-  buildNoDefaultFeatures = true;
-  buildFeatures = [ "bark-cli/tls-native-roots" ];
+  cargoHash = "sha256-t+OoOT0qotPQ6AtK8K4cVl2ASnKIIvgsCx2y62BzeuU=";
 
   cargoBuildFlags = [
     "--package=bark-cli"
