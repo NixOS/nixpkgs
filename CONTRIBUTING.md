@@ -936,11 +936,16 @@ As the inner workings of LLM‐based AI tools cannot be sufficiently understood 
 When automation is used to verify output, the verification tooling itself must be disclosed and reviewed in line with this policy.
 
 This policy applies equally to any further discussion of a contribution.
-Comments and reviews must separately satisfy the same requirements of understanding, review, and disclosure.
 Contributors are expected to be able to answer questions about their contribution and respond to feedback appropriately, without simply forwarding messages back and forth to automated tools.
 
 It is not permitted to submit automated contributions without any manual review or intervention, outside of standard community automation.
 Automation without any manual review must not be used as the sole arbiter of whether to merge a change.
+
+## Use of LLM output in prose
+[use-of-llm-output-in-prose]: #use-of-llm-output-in-prose
+
+In general, and subject to the exemptions below, prose in pull request descriptions, comments, and reviews, as well as in commit message bodies (after the first line), must not contain LLM output.
+Manually selected quotes of relevant code, discussion, or documentation (e.g. from an upstream) are exempt from this.
 
 ## Transparency
 
@@ -963,13 +968,21 @@ The following situations are fully or partially exempt:
 * Use of AI tools for research, testing, debugging, or private review is out of scope, if no substantial amount of their output is included in the resulting contribution.
   However, if these tools had a significant technical influence on your contribution, you are still responsible for it per the Accountability section, and are expected to disclose this where relevant.
 
-* Use of machine translation is exempt from the requirement to understand the translated output.
+* Use of machine translation is exempt from the requirement to understand the translated output, and from the ban in the ["Use of LLM output in prose" section above](#use-of-llm-output-in-prose).
   However, the requirements of appropriate confidence in the original text, responsibility, and disclosure still apply, and you are encouraged to additionally include the original untranslated contribution.
 
 * Use of automation in a contribution clearly marked as not being ready for merge (e.g. a draft pull request) is exempt from the requirement for full self‐review, as long as some amount of review has been done and it is expected that the requirements will be met by the time it is marked as ready.
   This does not waive any other requirement.
 
 * Use of automated tools to develop upstream software packaged inside Nixpkgs is not in scope.
+
+* Any form of automation (including LLMs) may be used to generate the summary (first line) or trailers (e.g. `Changelog: ...`, `Assisted-by: ...`) of a commit message.
+  Disclosure of this is not required.
+  Whether automation is used or not, adhering to our [commit conventions](#commit-conventions) remains required.
+
+* Contributors may trigger LLM-based automated reviews on their own draft PRs.
+  Before marking their PR ready for review, they must summarise, in their own words, all issues raised by automated reviews that they judge to be still outstanding.
+  If possible, they must also mark as resolved or hide issues that they consider resolved, irrelevant, or otherwise not worth addressing.
 
 ## Enforcement
 
