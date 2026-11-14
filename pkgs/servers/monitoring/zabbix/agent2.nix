@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchurl,
   autoreconfHook,
@@ -89,6 +90,7 @@ import ./versions.nix (
         bstanderline
       ];
       platforms = lib.platforms.unix;
+      broken = (lib.versions.major version) >= "7" && stdenv.hostPlatform.isDarwin;
     };
   }
 )

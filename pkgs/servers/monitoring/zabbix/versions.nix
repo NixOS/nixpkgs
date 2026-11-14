@@ -1,4 +1,12 @@
 generic: {
+  v80 = generic {
+    version = "8.0.0";
+    hash = "sha256-VUaaxZn9FEM3Ds9CiGVdTWIQmtOmhnEcTz4NQoM4ync=";
+    emberPlusHash = "sha256-1eR3o9VvHmfR3DdanGsj/17Bc1egR4nYD5+hPdHQUUo=";
+    mongodbHash = "sha256-k9UguQTqcLvRoyfsy/yq47KP2u/ZV9OJZB12Vk72CBk=";
+    mssqlHash = "sha256-/xMD3UmoVo9OqK1WsfgFMwT0u6jRPW0WrF1uOC7KdEs=";
+    postgresqlHash = "sha256-I0lXBMSZ2aiXnNwUquCI8EoYK10aEmcCUOT7CM/kBr4=";
+  };
   v74 = generic {
     version = "7.4.16";
     hash = "sha256-Diw5HcGErM6ONCUOcyalHhnIvO4x5nuEl/VSYkfs0mE=";
