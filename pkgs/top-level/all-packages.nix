@@ -5526,6 +5526,10 @@ with pkgs;
     callPackages ../development/libraries/science/astronomy/indilib/indi-3rdparty.nix { }
   );
 
+  intel-media-driver-free = callPackage ../by-name/in/intel-media-driver/package.nix {
+    enableUnfree = false;
+  };
+
   ios-cross-compile = callPackage ../development/compilers/ios-cross-compile/9.2.nix { };
 
   iso-flags-png-320x240 = iso-flags.overrideAttrs (oldAttrs: {

@@ -9,6 +9,7 @@
   libpciaccess,
   intel-gmmlib,
   libdrm,
+  enableUnfree ? true,
   enableX11 ? stdenv.hostPlatform.isLinux,
   libx11,
   nix-update-script,
@@ -19,6 +20,9 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "intel-media-driver";
   version = "26.3.5";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -46,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DINSTALL_DRIVER_SYSCONF=OFF"
     "-DLIBVA_DRIVERS_PATH=${placeholder "out"}/lib/dri"
+    (lib.cmakeBool "ENABLE_NONFREE_KERNELS" enableUnfree)
     # Works only on hosts with suitable CPUs.
     "-DMEDIA_RUN_TEST_SUITE=OFF"
     "-DMEDIA_BUILD_FATAL_WARNINGS=OFF"
@@ -93,10 +98,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/intel/media-driver";
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${finalAttrs.version}";
-    license = with lib.licenses; [
-      bsd3
-      mit
-    ];
+    license =
+      with lib.licenses;
+      [
+        bsd3
+        mit
+      ]
+      # See upstream README on unfree components; we use this license to keep things working
+      ++ lib.optionals enableUnfree [ unfreeRedistributableFirmware ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
