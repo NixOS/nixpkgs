@@ -961,7 +961,7 @@ GEM
       wikicloth (= 0.8.1)
     gitlab-net-dns (0.15.0)
       logger
-    gitlab-orbit-proto (0.137.0)
+    gitlab-orbit-proto (0.156.0)
       grpc (~> 1.0)
     gitlab-rspec-metrics-exporter (0.2.0)
       logger (>= 1.4, < 2.0)
@@ -1525,9 +1525,8 @@ GEM
       plist (~> 3.1)
       train-core
       wmi-lite (~> 1.0)
-    oj (3.17.6)
+    oj (3.17.8)
       bigdecimal (>= 3.0)
-      ostruct (>= 0.2)
     oj-introspect (0.9.0)
       oj (>= 3.16.16)
     omniauth (2.1.4)
@@ -1829,9 +1828,9 @@ GEM
       matrix (~> 0.4.2)
       prawn (>= 0.11.1, < 3)
       rexml (>= 3.3.9, < 4)
-    premailer (1.23.0)
+    premailer (1.27.0)
       addressable
-      css_parser (>= 1.12.0)
+      css_parser (>= 1.19.0)
       htmlentities (>= 4.0.0)
     premailer-rails (1.12.0)
       actionmailer (>= 3)
@@ -2595,7 +2594,7 @@ DEPENDENCIES
   gitlab-markup (~> 2.2.0)
   gitlab-mfe!
   gitlab-net-dns (~> 0.15.0)
-  gitlab-orbit-proto (~> 0.137.0)
+  gitlab-orbit-proto (~> 0.156.0)
   gitlab-policy-store!
   gitlab-rspec!
   gitlab-rspec-metrics-exporter (~> 0.2.0)
@@ -3120,7 +3119,7 @@ CHECKSUMS
   gitlab-markup (2.2.0) sha256=a6f494202983262961e8a68f95018a8f971aaa60f396552337e0fb910f6e68d7
   gitlab-mfe (0.1.0)
   gitlab-net-dns (0.15.0) sha256=d229aae205055b86b2ad166981257eb589ce6d6a146aa79b3ea2b1e5d9741f46
-  gitlab-orbit-proto (0.137.0) sha256=3ac82777ee4915cb45eabf29fbe289d4f4b3d2e17c5e29f0018efa04059e60ba
+  gitlab-orbit-proto (0.156.0) sha256=8698543385380bc4bafb885d71a8d1bb3f31a966bd6f3d54c6c36006672be1ba
   gitlab-policy-store (0.1.0)
   gitlab-rspec (0.1.0)
   gitlab-rspec-metrics-exporter (0.2.0) sha256=9d05ee0437d30cc59d78437e795916e13746f070ea2423e88e9325e96bd09c63
@@ -3332,7 +3331,7 @@ CHECKSUMS
   observer (0.1.2) sha256=d8a3107131ba661138d748e7be3dbafc0d82e732fffba9fccb3d7829880950ac
   octokit (9.2.0) sha256=4fa47ff35ce654127edf2c836ab9269bcc8829f5542dc1e86871f697ce7f4316
   ohai (19.1.40) sha256=ea9ace2ebac2a193061315c39e49f63f3304b8ae56ecbd3daa005149d195ed7b
-  oj (3.17.6) sha256=f511257e01a12030c3ceb8023cd2e96fca924ea9c741f57ea366816f1fd8e68c
+  oj (3.17.8) sha256=6a2d9b93ef289cba6abf8c33173c72920d8dac2799bd89f73c3539947a730306
   oj-introspect (0.9.0) sha256=b7af4974654e8733902bb7707ec96155c1c577d0ba2564eb1d72cd091546834f
   omniauth (2.1.4) sha256=42a05b0496f0d22e1dd85d42aaf602f064e36bb47a6826a27ab55e5ba608763c
   omniauth-alicloud (3.0.0) sha256=9c5c4f3abb40d774b946015f177d503fbde99b2b57c0858284c25cc39369013e
@@ -3438,7 +3437,7 @@ CHECKSUMS
   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
   prawn (2.5.0) sha256=f4e20e3b4f30bf5b9ae37dad15eb421831594553aa930b2391b0fa0a99c43cb6
   prawn-svg (0.37.0) sha256=271bdd032c066777b2e76fe971b570e24cb6f4890d5658588106e8aa5b6e2830
-  premailer (1.23.0) sha256=f0d7f6ba299559c96ddf982aa5263f85e5617c86437c8d8ffff120813b2d7efb
+  premailer (1.27.0) sha256=0fe2348cd82738855c482b31c915a06ecb1d3ad004578c19042905196ddbd1e7
   premailer-rails (1.12.0) sha256=c13815d161b9bc7f7d3d81396b0bb0a61a90fa9bd89931548bf4e537c7710400
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
   prime (0.1.3) sha256=baf031c50d6ce923594913befc8ac86a3251bffb9d6a5e8b03687962054e53e3
