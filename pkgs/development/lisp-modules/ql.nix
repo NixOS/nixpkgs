@@ -236,6 +236,10 @@ let
       md5 = super.md5.overrideLispAttrs (o: {
         lispLibs = [ super.flexi-streams ];
       });
+      zeromq = super.zeromq.overrideLispAttrs (o: {
+        nativeBuildInputs = [ pkgs.zeromq ];
+        nativeLibs = [ pkgs.zeromq ];
+      });
       pzmq = super.pzmq.overrideLispAttrs (o: {
         nativeBuildInputs = [ pkgs.zeromq ];
         nativeLibs = [ pkgs.zeromq ];
