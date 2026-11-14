@@ -79,6 +79,7 @@
   # https://github.com/godotengine/godot/pull/73504
   withWayland ? stdenv.hostPlatform.isLinux,
   withX11 ? stdenv.hostPlatform.isLinux,
+  useDotnetFromEnv ? false,
   wslay,
   zip,
   zstd,
@@ -595,7 +596,7 @@ let
               sdl3
             ]
           )
-          ++ lib.optionals (editor && withMono) dotnet-sdk.packages
+          ++ lib.optionals ((!useDotnetFromEnv) && editor && withMono) dotnet-sdk.packages
           ++ lib.optional withAlsa alsa-lib
           ++ lib.optional (withX11 || withWayland) libxkbcommon
           ++ lib.optionals withX11 [
@@ -757,7 +758,7 @@ let
           inherit updateScript;
           tests =
             mkTests finalAttrs.finalPackage dotnet-sdk
-            // lib.optionalAttrs (editor && withMono) {
+            // lib.optionalAttrs ((!useDotnetFromEnv) && editor && withMono) {
               sdk-override = mkTests finalAttrs.finalPackage dotnet-sdk_alt;
             };
         }
@@ -833,7 +834,7 @@ let
             installPhase = ''
               runHook preInstall
 
-              mkdir -p "$out"/{bin,libexec,share/applications,nix-support}
+              mkdir -p "$out"/{bin,libexec,share/applications}
 
               cp -d "$unwrapped"/bin/* "$out"/bin/
               ln -s "$unwrapped"/libexec/* "$out"/libexec/
@@ -844,13 +845,17 @@ let
               substituteInPlace "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
                 --replace-fail "Exec=$unwrapped/bin/godot${suffix}" "Exec=$out/bin/godot${suffix}"
               ln -s "$unwrapped"/share/icons $out/share/
+            ''
+            + lib.optionalString (!useDotnetFromEnv) ''
+              mkdir -p "$out"/nix-support
 
               # ensure dotnet hooks get run
               echo "${finalAttrs.dotnet-sdk}" >> "$out"/nix-support/propagated-build-inputs
 
               wrapProgram "$out"/libexec/${binary} \
                 --prefix PATH : "${lib.makeBinPath [ finalAttrs.dotnet-sdk ]}"
-
+            ''
+            + ''
               runHook postInstall
             '';
 
