@@ -8193,17 +8193,6 @@ with pkgs;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
-  ikiwiki = callPackage ../applications/misc/ikiwiki {
-    inherit
-      (perlPackages.override {
-        pkgs = pkgs // {
-          imagemagick = imagemagickBig;
-        };
-      })
-      ImageMagick
-      ;
-  };
-
   ikiwiki-full = ikiwiki.override {
     bazaarSupport = false; # tests broken
     cvsSupport = true;
