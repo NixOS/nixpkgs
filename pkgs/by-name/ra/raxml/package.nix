@@ -6,6 +6,10 @@
   mpi,
 }:
 
+let
+  mpi_or_pthreads = if useMpi then "MPI" else "PTHREADS";
+  linux_or_darwin = if stdenv.hostPlatform.isDarwin then "mac" else "gcc";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "RAxML${lib.optionalString useMpi "-mpi"}";
   version = "8.2.13";
@@ -19,38 +23,40 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optionals useMpi [ mpi ];
 
-  # TODO darwin, AVX and AVX2 makefile targets
-  buildPhase =
-    if useMpi then
-      ''
-        make -f Makefile.MPI.gcc
-      ''
-    else
-      ''
-        make -f Makefile.SSE3.PTHREADS.gcc
-      '';
+  buildPhase = ''
+    runHook preBuild
+
+    make -f Makefile.SSE3.${mpi_or_pthreads}.${linux_or_darwin}
+    make -f Makefile.AVX.${mpi_or_pthreads}.${linux_or_darwin}
+    make -f Makefile.AVX2.${mpi_or_pthreads}.${linux_or_darwin}
+
+    runHook postBuild
+  '';
 
   # Fix build with gcc15 (-std=gnu23)
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
-  installPhase =
-    if useMpi then
-      ''
-        mkdir -p $out/bin && cp raxmlHPC-MPI $out/bin
-      ''
-    else
-      ''
-        mkdir -p $out/bin && cp raxmlHPC-PTHREADS-SSE3 $out/bin
-      '';
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp raxmlHPC-${mpi_or_pthreads}-SSE3 $out/bin
+    cp raxmlHPC-${mpi_or_pthreads}-AVX $out/bin
+    cp raxmlHPC-${mpi_or_pthreads}-AVX2 $out/bin
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies";
     license = lib.licenses.gpl3;
     homepage = "https://sco.h-its.org/exelixis/web/software/raxml/";
-    maintainers = [ lib.maintainers.unode ];
+    maintainers = with lib.maintainers; [
+      unode
+    ];
     platforms = [
-      "i686-linux"
       "x86_64-linux"
+      "x86_64-darwin"
     ];
   };
 })
