@@ -1,0 +1,47 @@
+--- a/src/portal_setup.rs
++++ b/src/portal_setup.rs
+@@ -869,7 +869,18 @@
+                 "The Strata executable path must contain only directories",
+             ));
+         }
+-        if !trusted_owner(metadata.uid(), effective_user) {
++        let owner = metadata.uid();
++        // Nix maps the isolated build root to nobody; this exception is test-only.
++        #[cfg(test)]
++        let owner = if component == Path::new("/")
++            && std::env::var_os("NIX_BUILD_TOP").is_some()
++            && owner == 65534
++        {
++            0
++        } else {
++            owner
++        };
++        if !trusted_owner(owner, effective_user) {
+             return Err(crate::i18n::tr(
+                 "The Strata executable path must be owned by the current user or root",
+             ));
+--- a/src/services/file_providers.rs
++++ b/src/services/file_providers.rs
+@@ -43,10 +43,21 @@
+ }
+ fn trusted(path: &Path, directory: bool) -> bool {
+     fs::symlink_metadata(path).is_ok_and(|m| {
++        let owner = m.uid();
++        // Store root is unmapped inside Nix builds; never relax production trust.
++        #[cfg(test)]
++        let owner = if (path.starts_with("/nix/store") || path == Path::new("/bin/sh"))
++            && std::env::var_os("NIX_BUILD_TOP").is_some()
++            && owner == 65534
++        {
++            0
++        } else {
++            owner
++        };
+         !m.file_type().is_symlink()
+             && m.is_dir() == directory
+             && (directory || m.is_file())
+-            && (m.uid() == rustix::process::getuid().as_raw() || m.uid() == 0)
++            && (owner == rustix::process::getuid().as_raw() || owner == 0)
+             && m.mode() & 0o022 == 0
+     })
+ }
