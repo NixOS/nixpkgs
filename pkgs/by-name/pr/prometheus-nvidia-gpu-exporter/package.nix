@@ -8,7 +8,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "prometheus-nvidia-gpu-exporter";
-  version = "1.15.1";
+  version = "1.18.0";
 
   env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then "1" else "0";
 
@@ -16,10 +16,10 @@ buildGo127Module (finalAttrs: {
     owner = "utkuozdemir";
     repo = "nvidia_gpu_exporter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-75azonvsJ9fZSp9ht8ZUj4XmkmfsSRl2pp0jfBSEFiI=";
+    hash = "sha256-k4IZJkzN/4VFU9DMkQ+co24Eyh4qtvxaso4P5wWn6RQ=";
   };
 
-  vendorHash = "sha256-9CPuhBDi8PnYyFYmW5XbutpRrA7ukPDiXCH4+94b9/o=";
+  vendorHash = "sha256-uiOTjThyjBESlMzzOuLZepa8JfwWmBCnBTawVKwWTZo=";
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoAddDriverRunpath;
 
