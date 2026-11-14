@@ -22,26 +22,6 @@
   nix-update-script,
 }:
 
-let
-  # Moonlight-qt 6.2.0's MoltenVK renderer requires libplacebo's scRGB support,
-  # which is not in any release yet.
-  # Reuse the same libplacebo revision as upstream's macOS builds, see
-  # https://github.com/moonlight-stream/moonlight-qt-deps
-  # Remove this override once libplacebo provides PL_COLOR_TRC_SCRGB.
-  libplacebo' =
-    if stdenv.hostPlatform.isDarwin then
-      libplacebo.overrideAttrs (prev: {
-        version = "7.360.1-unstable-2026-10-01";
-        src = prev.src.override {
-          tag = null;
-          rev = "92b5ac6db79f4d680eb656692f7bf51e9606f42a";
-          hash = "sha256-cYX2Hn7I8zWz7yvHyvmlpC+YmoCMqD7ZJQktYp9MJhM=";
-        };
-      })
-    else
-      libplacebo;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight-qt";
   version = "6.2.0";
@@ -72,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_ttf
     ffmpeg
     libopus
-    libplacebo'
+    libplacebo
     qt6.qtdeclarative
     qt6.qtsvg
     openssl
