@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "cinemagoer";
-  version = "2025.12.31";
+  version = "2026.08.20";
   pyproject = true;
 
   src = fetchFromGitHub {
