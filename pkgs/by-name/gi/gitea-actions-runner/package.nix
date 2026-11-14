@@ -1,26 +1,26 @@
 {
   lib,
   fetchFromGitea,
-  buildGoModule,
+  buildGo127Module,
   testers,
   gitea-actions-runner,
   nixosTests,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gitea-actions-runner";
-  version = "3.1.0";
+  version = "5.4.0";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-A9Md5sG1Rswmd8vqwoVqwkNJDVdOo6QGianHnfwGHa0=";
+    hash = "sha256-LtKvsx3+06PfiYI/+m+mNkk4SktiAyCxhOVFvYPIjHM=";
   };
 
-  vendorHash = "sha256-02PGO8py5vjuqhLe9wncVH5f3fOVExJEMVngc0GUR9Y=";
+  vendorHash = "sha256-gYzgsj+3ZvRyN5G8ZY4VvXQYQidQrK7EZjMcuvrXnlk=";
 
   # Tests require network access (artifactcache tests try to determine outbound IP)
   doCheck = false;
