@@ -178,9 +178,12 @@ buildGoModule (finalAttrs: {
   preBuild = ''
     cp -r ${webassets} webassets
   ''
+  # Refer to rdpClient by its store path rather than linking it into the source
+  # tree. Since Go 1.26.11, cmd/go rejects libraries in source-tree -L
+  # directories that contain LTO bitcode, which the Rust staticlib does.
   + lib.optionalString withRdpClient ''
-    ln -s ${rdpClient}/lib/* lib/
-    ln -s ${rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/
+    substituteInPlace lib/srv/desktop/rdp/rdpclient/client.go \
+      --replace-fail @rdpClient@ ${rdpClient}
   '';
 
   # Multiple tests fail in the build sandbox
@@ -213,6 +216,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://goteleport.com/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
+      andersk
       arianvp
       justinas
       sigma
