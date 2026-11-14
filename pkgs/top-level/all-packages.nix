@@ -938,6 +938,8 @@ with pkgs;
       inherit pkgs;
     })
     formats
+    generatedFiles
+    configFiles
     ;
 
   testers = callPackage ../build-support/testers { };
