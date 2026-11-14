@@ -9212,7 +9212,14 @@ self: super: with self; {
 
   kaldi-native-fbank = callPackage ../development/python-modules/kaldi-native-fbank { };
 
-  kaleido = callPackage ../development/python-modules/kaleido { };
+  kaleido = callPackage ../development/python-modules/kaleido {
+    plotly = plotly-bootstrap;
+  };
+
+  kaleido-bootstrap = callPackage ../development/python-modules/kaleido {
+    plotly = null;
+    withPlotly = false;
+  };
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python { };
 
@@ -13923,6 +13930,10 @@ self: super: with self; {
   plotille = callPackage ../development/python-modules/plotille { };
 
   plotly = callPackage ../development/python-modules/plotly { };
+
+  plotly-bootstrap = callPackage ../development/python-modules/plotly {
+    kaleido = kaleido-bootstrap;
+  };
 
   plotnine = callPackage ../development/python-modules/plotnine { };
 

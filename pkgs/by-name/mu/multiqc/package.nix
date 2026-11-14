@@ -46,6 +46,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [ "kaleido" ];
+
   dependencies = with python3Packages; [
     boto3
     click
