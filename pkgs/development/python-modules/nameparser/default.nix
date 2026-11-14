@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nameparser";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "derek73";
     repo = "python-nameparser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MDzw2F9oH6cvvIYxYRv85+e61uGYFDWubfJ+WP8h7mQ=";
+    hash = "sha256-rNd+kVfV6poPXjctYwtBm8nf7QWnUI5LAfEcJLUdBlM=";
   };
 
   build-system = [ setuptools ];
