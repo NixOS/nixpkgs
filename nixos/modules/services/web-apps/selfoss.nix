@@ -251,7 +251,7 @@ in
       virtualHosts.${cfg.nginx.virtualHost} = {
         root = dataDir;
         locations = {
-          "~* \\ (gif|jpg|png)".extraConfig = ''
+          "~* \\.(gif|jpg|png)$".extraConfig = ''
             expires 30d;
           '';
           "~ ^/(favicons|thumbnails)/.*$".tryFiles = "$uri /data/$uri";
@@ -262,7 +262,7 @@ in
             index = "index.php";
             tryFiles = "$uri /public/$uri /index.php$is_args$args";
           };
-          "~ \\.php$".extraConfig = ''
+          "~ ^/.*\\.php$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
             fastcgi_index index.php;
             include ${config.services.nginx.package}/conf/fastcgi.conf;
