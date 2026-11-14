@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/execute_process(COMMAND/,/OUTPUT_VARIABLE CASACPP_VERSION)/c\set(CASACPP_VERSION "${finalAttrs.version}")' CMakeLists.txt
     sed -i 's/string(REGEX MATCH.*CASACPP_VERSION)//' CMakeLists.txt
     substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)' \
       --replace-fail \
         'find_package(gRPC QUIET)' \
         'set(gRPC_FOUND 0)'
