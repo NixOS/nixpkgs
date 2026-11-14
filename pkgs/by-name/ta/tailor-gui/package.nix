@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       src
       sourceRoot
       ;
-    hash = "sha256-9jMy23VD+C87hg/TMXGbzAoqx76dhVOkWcQNudSwsYA=";
+    hash = "sha256-jeI98XnlzPlr6wUSdH1EDcBYLz/ZHBzQ60gviAoxdVM=";
   };
 
   nativeBuildInputs = [
