@@ -2,19 +2,16 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
 
   # build-system
   setuptools,
 
   # dependencies
-  distutils,
   h5py,
   numpy,
   qtpy,
   requests,
-  tomli,
 
   # tests
   pytestCheckHook,
@@ -29,16 +26,16 @@
   pyside2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "guidata";
-  version = "3.14.2";
+  version = "3.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
-    tag = "v${version}";
-    hash = "sha256-iUfZX51Ef1PY7roy9ER8hG34BAhCLs3Sagoasd5BT3E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R9CPpH7rgIBgs1WS7RjxNSfRXeVQi8MJItYRF0WfLUg=";
   };
 
   build-system = [
@@ -46,12 +43,10 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    distutils
     h5py
     numpy
     qtpy
     requests
-    tomli
   ];
 
   nativeCheckInputs = [
@@ -62,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}:${qt6.qtsvg}/${qt6.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
   '';
 
@@ -110,8 +105,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library generating graphical user interfaces for easy dataset editing and display";
     homepage = "https://github.com/PlotPyStack/guidata";
-    changelog = "https://github.com/PlotPyStack/guidata/blob/master/doc/release_notes/release_${lib.versions.major version}.${
-      lib.pipe version [
+    changelog = "https://github.com/PlotPyStack/guidata/blob/master/doc/release_notes/release_${lib.versions.major finalAttrs.version}.${
+      lib.pipe finalAttrs.version [
         lib.versions.minor
         (lib.fixedWidthString 2 "0")
       ]
@@ -119,4 +114,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})
