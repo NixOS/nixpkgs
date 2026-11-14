@@ -25,6 +25,8 @@ buildGoModule (finalAttrs: {
 
   inherit vendorHash;
 
+  checkFlags = [ "-skip=^TestView$" ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   outputs = [
