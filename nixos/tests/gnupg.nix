@@ -43,6 +43,7 @@
 
       programs.gnupg.agent.enable = true;
       programs.gnupg.agent.enableSSHSupport = true;
+      programs.gnupg.scdaemon.settings.disable-ccid = true;
     };
 
   testScript = ''
@@ -61,6 +62,9 @@
 
     with subtest("Wait for the autologin"):
         machine.wait_until_tty_matches("1", "alice@machine")
+
+    with subtest("Can configure scdaemon"):
+        machine.succeed("grep -qx disable-ccid /etc/gnupg/scdaemon.conf")
 
     with subtest("Can generate a PGP key"):
         # Note: this needs a tty because of pinentry
