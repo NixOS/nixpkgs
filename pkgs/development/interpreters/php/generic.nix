@@ -7,6 +7,7 @@ let
       callPackage,
       lib,
       stdenv,
+      buildPackages,
       nixosTests,
       tests,
       fetchurl,
@@ -298,6 +299,11 @@ let
             ++ lib.optionals (!zendSignalsSupport) [ "--disable-zend-signals" ]
             ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
 
+            # Cross
+            ++
+              lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+                "ac_cv_prog_BUILD_CC=${lib.getBin buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+
             # Sendmail
             ++ [ "PROG_SENDMAIL=${system-sendmail}/bin/sendmail" ];
 
@@ -368,6 +374,10 @@ let
               ./fix-paths-php86.patch
             ]
             ++ extraPatches;
+
+          postPatch = lib.optionalString (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) ''
+            substituteInPlace pear/Makefile.frag --replace-fail '$(top_builddir)/sapi/cli/php' "${lib.getExe buildPackages.php}"
+          '';
 
           separateDebugInfo = true;
 

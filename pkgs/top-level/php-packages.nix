@@ -1,5 +1,6 @@
 {
   stdenv,
+  buildPackages,
   config,
   callPackages,
   lib,
@@ -35,7 +36,6 @@
   bison,
   re2c,
   readline,
-  rsync,
   sqlite,
   unixodbc,
   uwimap,
@@ -192,7 +192,7 @@ lib.makeScope pkgs.newScope (
             mkdir -p $out/lib/php/extensions
             cp modules/${extName}.so $out/lib/php/extensions/${extName}.so
             mkdir -p $dev/include
-            ${rsync}/bin/rsync -r --filter="+ */" \
+            ${buildPackages.rsync}/bin/rsync -r --filter="+ */" \
                                   --filter="+ *.h" \
                                   --filter="- *" \
                                   --prune-empty-dirs \
@@ -833,7 +833,11 @@ lib.makeScope pkgs.newScope (
               ++ lib.optional (
                 !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
               ) valgrind.dev;
-              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
+              configureFlags =
+                lib.optional php.ztsSupport "--disable-opcache-jit"
+                ++
+                  lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+                    "ac_cv_prog_BUILD_CC=${lib.getBin buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
               zendExtension = true;
               postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
                 # Tests are flaky on darwin
