@@ -1,0 +1,34 @@
+diff --git a/setup.py b/setup.py
+index c93fc3a..f6ba14c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -5,16 +5,20 @@ Most project configs are in `pyproject.toml` -- prefer to modify
+ """
+ 
+ import setuptools
+-from setuptools import dist
+-
+-
+-class BinaryDistribution(dist.Distribution):
+-  """This class makes 'bdist_wheel' include an ABI tag on the wheel."""
+-
+-  def has_ext_modules(self):
+-    return True
++from pybind11.setup_helpers import Pybind11Extension
+ 
+ 
+ setuptools.setup(
+-    distclass=BinaryDistribution,
++    ext_modules=[
++        Pybind11Extension(
++            "grain._src.python.experimental.index_shuffle.python.index_shuffle_module",
++            [
++                "grain/_src/python/experimental/index_shuffle/index_shuffle.cc",
++                "grain/_src/python/experimental/index_shuffle/python/index_shuffle_module.cc",
++            ],
++            include_dirs=["."],
++            libraries=["absl_strings"],
++            cxx_std=20,
++        ),
++    ],
+ )
