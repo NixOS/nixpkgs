@@ -10241,6 +10241,7 @@ self: super: with self; {
   llguidance = callPackage ../development/python-modules/llguidance { };
 
   llm = callPackage ../development/python-modules/llm { };
+  llm-clip = callPackage ../development/python-modules/llm-clip { };
 
   llm-anthropic = callPackage ../development/python-modules/llm-anthropic { };
 
