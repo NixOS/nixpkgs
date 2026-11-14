@@ -3203,6 +3203,7 @@ with haskellLib;
   # i.e. tests assume existence of .git and also fail for some versions of CVC5,
   # including the current one in nixpkgs.
   liquid-fixpoint = dontCheck super.liquid-fixpoint;
+  liquid-fixpoint_0_9_6_3_2 = dontCheck super.liquid-fixpoint_0_9_6_3_2; # GHC 9.10 LiquidHaskell stack
 
   # 2025-8-26: Too strict bounds on containers and text, see: https://github.com/stackbuilders/inflections-hs/pull/83
   inflections = doJailbreak super.inflections;
