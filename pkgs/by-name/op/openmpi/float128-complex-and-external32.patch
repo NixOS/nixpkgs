@@ -1,0 +1,87 @@
+From 6eab3613ace5d063ef5c0b7ba03fc475bb53c8ee Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:28:46 -0700
+Subject: [PATCH] Preserve stable datatype slots and external32 precision
+
+Apply after the datatype fixes merged in upstream PRs 13714 and 14478.
+The 5.0.x COMPLEX*32 candidate list still misspells __float128. Keep
+existing operation indices unchanged by appending the new complex slot.
+
+FLOAT12 denotes x87 precision even when long double occupies 16 bytes;
+retain its external32 representation conversion. IEEE binary128 complex
+needs only byte-order conversion, not the x87 conversion.
+
+The installed floating regression checks real and complex reductions and
+independently specified external32 bytes for both Fortran quad types and
+C long-double types.
+
+Upstream: https://github.com/open-mpi/ompi/pull/14478
+Upstream-Status: Pending (stable-branch residual and external32 fixes)
+---
+ config/ompi_setup_mpi_fortran.m4                  | 2 +-
+ ompi/mca/op/op.h                                  | 5 +++--
+ opal/datatype/opal_copy_functions_heterogeneous.c | 7 ++++---
+ 3 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/config/ompi_setup_mpi_fortran.m4 b/config/ompi_setup_mpi_fortran.m4
+index e868b5f..ca81f5f 100644
+--- a/config/ompi_setup_mpi_fortran.m4
++++ b/config/ompi_setup_mpi_fortran.m4
+@@ -227,7 +227,7 @@ AC_DEFUN([OMPI_SETUP_MPI_FORTRAN],[
+                    [long double _Complex, double _Complex, float _Complex, short float _Complex, opal_short_float_complex_t],
+                    [16], [no])
+     OMPI_FORTRAN_CHECK([COMPLEX*32], [no],
+-                   [_Float128 _Complex, __float _Complex, long double _Complex, double _Complex, float _Complex, short float _Complex, opal_short_float_complex_t],
++                   [_Float128 _Complex, __float128 _Complex, long double _Complex, double _Complex, float _Complex, short float _Complex, opal_short_float_complex_t],
+                    [32], [no])
+     # Double precision complex types are not standard, but many
+     # compilers support it.  Code should be wrapped with #ifdef
+diff --git a/ompi/mca/op/op.h b/ompi/mca/op/op.h
+index 8157c6b..674d288 100644
+--- a/ompi/mca/op/op.h
++++ b/ompi/mca/op/op.h
+@@ -168,8 +168,6 @@ enum {
+     OMPI_OP_BASE_TYPE_C_DOUBLE_COMPLEX,
+     /* long double complex */
+     OMPI_OP_BASE_TYPE_C_LONG_DOUBLE_COMPLEX,
+-    /* quad precision complex (the C type behind Fortran COMPLEX*32) */
+-    OMPI_OP_BASE_TYPE_C_FLOAT128_COMPLEX,
+ 
+     /** Byte */
+     OMPI_OP_BASE_TYPE_BYTE,
+@@ -202,6 +200,9 @@ enum {
+     /** 2 location C: wchar_t */
+     OMPI_OP_BASE_TYPE_WCHAR,
+ 
++    /* quad precision complex (the C type behind Fortran COMPLEX*32) */
++    OMPI_OP_BASE_TYPE_C_FLOAT128_COMPLEX,
++
+     /** Maximum type */
+     OMPI_OP_BASE_TYPE_MAX
+ };
+diff --git a/opal/datatype/opal_copy_functions_heterogeneous.c b/opal/datatype/opal_copy_functions_heterogeneous.c
+index c62d33b..544198b 100644
+--- a/opal/datatype/opal_copy_functions_heterogeneous.c
++++ b/opal/datatype/opal_copy_functions_heterogeneous.c
+@@ -1020,7 +1020,8 @@ COPY_TYPE_HETEROGENEOUS(float8, opal_short_float_t)
+ #endif
+ 
+ #if SIZEOF_LONG_DOUBLE == OPAL_SIZEOF_FLOAT12
+-COPY_TYPE_HETEROGENEOUS(float12, long double)
++/* FLOAT12 denotes x87 precision even when its storage occupies 16 bytes. */
++COPY_TYPE_HETEROGENEOUS_INTERNAL(float12, long double, 1)
+ #elif SIZEOF_DOUBLE == OPAL_SIZEOF_FLOAT12
+ COPY_TYPE_HETEROGENEOUS(float12, double)
+ #elif SIZEOF_FLOAT == OPAL_SIZEOF_FLOAT12
+@@ -1069,9 +1070,9 @@ COPY_2SAMETYPE_HETEROGENEOUS(double_complex, double)
+ COPY_2SAMETYPE_HETEROGENEOUS_INTERNAL(long_double_complex, long double, 1)
+ 
+ #if defined(HAVE__FLOAT128) && defined(HAVE__FLOAT128__COMPLEX)
+-COPY_2SAMETYPE_HETEROGENEOUS_INTERNAL(float128_complex, _Float128, 1)
++COPY_2SAMETYPE_HETEROGENEOUS(float128_complex, _Float128)
+ #elif defined(HAVE___FLOAT128) && defined(HAVE___FLOAT128__COMPLEX)
+-COPY_2SAMETYPE_HETEROGENEOUS_INTERNAL(float128_complex, __float128, 1)
++COPY_2SAMETYPE_HETEROGENEOUS(float128_complex, __float128)
+ #else
+ /* #error No _Float128 _Complex support available */
+ #    define copy_float128_complex_heterogeneous NULL
