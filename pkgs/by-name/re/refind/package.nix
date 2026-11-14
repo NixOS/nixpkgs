@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  fetchpatch2,
   gnu-efi,
   nixosTests,
   efibootmgr,
@@ -67,6 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/refind/-/raw/0.14.2-2/gnu-efi-4-compat.patch";
       hash = "sha256-F37fCfVhLJBQB8HnNYMN4lSA/+wfuRKUgkT8PBSdkOs=";
+    })
+    # gnu-efi >= 3.0.18 makes SetMem() EFIAPI (ms_abi on x86_64), but rEFInd
+    # calls it with the SysV ABI when built with gnu-efi, so it gets a size of 0
+    # and clears nothing: e.g. `showtools` appends the default tools instead of
+    # replacing them. Route these calls through gBS->SetMem(), as upstream
+    # already does for CopyMem().
+    # https://bugs.gentoo.org/934474
+    (fetchpatch2 {
+      name = "refind-0.14.2-fix-gnu-efi-3.0.18.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-boot/refind/files/refind-0.14.2-fix-gnu-efi-3.0.18.patch?id=7cea90df5543b29b629b40e12235e3cc864bc698";
+      hash = "sha256-j2YFTxvqiXTSDnCYIIbl+UywbJU2DqsvtRntfXK3l5w=";
     })
   ];
 
