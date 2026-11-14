@@ -10,6 +10,16 @@ let
 
   # FIXME: automatically add nativeLibs based on conditions signalled
 
+  # Some systems generate files relative to their ASDF source directory.
+  # Register the unpacked sources first so those writes stay in the build tree.
+  withWritableSources =
+    package:
+    package.overrideLispAttrs (o: {
+      preBuild = (o.preBuild or "") + ''
+        export CL_SOURCE_REGISTRY="$(pwd)//:$CL_SOURCE_REGISTRY"
+      '';
+    });
+
   overrides = (
     self: super: {
       cl_plus_ssl = super.cl_plus_ssl.overrideLispAttrs (o: {
@@ -338,6 +348,19 @@ let
       vk = super.vk.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.vulkan-loader ];
       });
+      cffi-tests = withWritableSources super.cffi-tests;
+      cl-geocode = withWritableSources super.cl-geocode;
+      cl-brewer-ci = withWritableSources super.cl-brewer-ci;
+      _40ants-logging-ci = withWritableSources super._40ants-logging-ci;
+      cl-gendoc-docs = withWritableSources super.cl-gendoc-docs;
+      checkl-docs = withWritableSources super.checkl-docs;
+      _40ants-doc-plantuml-ci = withWritableSources super._40ants-doc-plantuml-ci;
+      _40ants-plantuml-ci = withWritableSources super._40ants-plantuml-ci;
+      _40ants-routes-ci = withWritableSources super._40ants-routes-ci;
+      _40ants-slynk-ci = withWritableSources super._40ants-slynk-ci;
+      cl-info-ci = withWritableSources super.cl-info-ci;
+      cl-prevalence-ci = withWritableSources super.cl-prevalence-ci;
+      cl-plus-ssl-osx-fix-ci = withWritableSources super.cl-plus-ssl-osx-fix-ci;
       _3d-math = super._3d-math.overrideLispAttrs (o: {
         flags = o.flags ++ (if o.program == "sbcl" then [ "--dynamic-space-size 4096" ] else [ ]);
       });
