@@ -1417,6 +1417,7 @@ in
   outline = runTest ./outline.nix;
   overlayfs = runTest ./overlayfs.nix;
   owncast = runTest ./owncast.nix;
+  oxibooru = handleTest ./oxibooru.nix { };
   oxidized = handleTest ./oxidized.nix { };
   oxwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./oxwm.nix;
   pacemaker = runTest ./pacemaker.nix;
