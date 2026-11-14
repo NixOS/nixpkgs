@@ -2,10 +2,20 @@
   lib,
   stdenv,
   fetchurl,
-  gtk2,
+
+  # nativeBuildInputs
   pkg-config,
+  gettext,
+  glib,
+  gobject-introspection,
+  python3,
+  wrapGAppsHook3,
+
+  # buildInputs
+  gtk3,
   fftw,
-  file,
+  libpng,
+  zlib,
   openexrSupport ? true,
   openexr,
   libzipSupport ? true,
@@ -14,61 +24,59 @@
   libxml2,
   libwebpSupport ? true,
   libwebp,
-  libXmuSupport ? false,
-  libxmu,
-  libxsltSupport ? true,
-  libxslt,
+  jsonGlibSupport ? true,
+  json-glib,
   fitsSupport ? true,
   cfitsio,
-  zlibSupport ? true,
-  zlib,
-  libpngSupport ? true,
-  libpng,
+  hdf5Support ? true,
+  hdf5,
+  bzip2Support ? true,
+  bzip2,
+  zstdSupport ? true,
+  zstd,
   openglSupport ? !stdenv.hostPlatform.isDarwin,
-  gtkglext,
-  libGL,
+  libepoxy,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gwyddion";
-  version = "2.71";
+  version = "3.12";
+
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LfchvvzL5NXuK6Vksy5pNB+M4d5jfiBFg4oJotRrXbo=";
+    hash = "sha256-1EWh9LcLO3xe5OnNHT0VPhWhNZIzk3YC/b9HGFx0xYg=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    file
+    gettext
+    glib # glib-mkenums, glib-genmarshal
+    gobject-introspection
+    python3
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gtk2
+    glib
+    gtk3
     fftw
+    libpng
+    zlib
   ]
-  ++ lib.optionals openglSupport [
-    gtkglext
-    libGL
-  ]
+  ++ lib.optional openglSupport libepoxy
   ++ lib.optional openexrSupport openexr
-  ++ lib.optional libXmuSupport libxmu
   ++ lib.optional fitsSupport cfitsio
-  ++ lib.optional libpngSupport libpng
-  ++ lib.optional libxsltSupport libxslt
+  ++ lib.optional hdf5Support hdf5
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional libwebpSupport libwebp
-  ++ lib.optional zlibSupport zlib
+  ++ lib.optional jsonGlibSupport json-glib
+  ++ lib.optional bzip2Support bzip2
+  ++ lib.optional zstdSupport zstd
   ++ lib.optional libzipSupport libzip;
 
-  # This patch corrects problems with python support, but should apply cleanly
-  # regardless of whether python support is enabled, and have no effects if
-  # it is disabled.
-  patches = [ ./codegen.patch ];
   meta = {
     homepage = "http://gwyddion.net/";
-
     description = "Scanning probe microscopy data visualization and analysis";
-
     longDescription = ''
       A modular program for SPM (scanning probe microscopy) data
       visualization and analysis. Primarily it is intended for the
@@ -81,8 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+    ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "gwyddion3";
   };
 })
