@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pikepdf";
-  version = "10.16.0";
+  version = "10.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-6EDwFOs/++LBlAbHcCV42IvQ909B/9IlyV04ahZJqFo=";
+    hash = "sha256-r8r/WZ2mUox+rODGUOFXVgldKw8FwqeD94xKRmOlB1k=";
   };
 
   patches = [
@@ -88,7 +88,8 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     python-dateutil
     python-xmp-toolkit
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   dependencies = [
     deprecated
@@ -106,6 +107,14 @@ buildPythonPackage (finalAttrs: {
   };
 
   pythonImportsCheck = [ "pikepdf" ];
+
+  disabledTests = [
+    # timezone issues in sandbox
+    "test_assume_local_time_zone_for_dates"
+    "test_declare_docinfo_agrees_and_validates"
+    "test_declare_properties"
+    "test_prepare_keeps_partial_docinfo_dates"
+  ];
 
   meta = {
     homepage = "https://github.com/pikepdf/pikepdf";

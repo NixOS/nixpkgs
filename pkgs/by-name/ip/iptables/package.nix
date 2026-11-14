@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # Fix build with linux-headers 7.3
-  patches = lib.optionals stdenv.hostPlatform.isAarch64 [
+  patches = [
     (fetchpatch {
       url = "https://lore.kernel.org/netfilter-devel/20261024135509.4097035-1-yegorslists@googlemail.com/raw";
       hash = "sha256-SYL0oqQObaQz03jriWbSckmGL2LwCUV4our0W4TmCus=";

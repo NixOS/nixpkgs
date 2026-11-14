@@ -121,7 +121,7 @@
   withOpenal ? withFullDeps, # OpenAL 1.1 capture support
   withOpenapv ? withHeadlessDeps && lib.versionAtLeast version "8.0", # APV encoding support
   withOpencl ? withHeadlessDeps,
-  withOpenColorIO ? withFullDeps && lib.versionAtLeast version "8.1", # Color Managment
+  withOpenColorIO ? withFullDeps && lib.versionAtLeast version "8.1", # Color Management
   withOpencoreAmrnb ? withFullDeps && withVersion3, # AMR-NB de/encoder
   withOpencoreAmrwb ? withFullDeps && withVersion3, # AMR-WB decoder
   withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin, # OpenGL rendering
@@ -136,7 +136,7 @@
   withRav1e ? withFullDeps, # AV1 encoder (focused on speed and safety)
   withRist ? withHeadlessDeps, # Reliable Internet Stream Transport (RIST) protocol
   withRtmp ? false, # RTMP[E] support via librtmp
-  withRubberband ? withFullDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
+  withRubberband ? withHeadlessDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
   withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3, # Samba protocol
   withSdl2 ? withSmallDeps,
   withShaderc ?

@@ -115,6 +115,17 @@ stdenv.mkDerivation (finalAttrs: {
     cp tzfile.h "$dev/include/tzfile.h"
   '';
 
+  preCheck = ''
+    # Releases 2026e and 2026f fail if built on or after 2026-11-01
+    # Mitigate this and potential future issues by testing with the release timestamp
+    # See: https://lists.iana.org/hyperkitty/list/tz@iana.org/message/WCIAEEDCPA5HT3LLJK6YQ6FH7ND5ORIK/
+    release_timestamp=$(awk '/^Release /{print $4, $5, $6; exit}' NEWS)
+    release_time_t=$(date -d"$release_timestamp" +%s)
+    checkFlagsArray+=(
+      "CHECK_NOW_TIMESTAMP=$release_time_t"
+    )
+  '';
+
   setupHook = ./tzdata-setup-hook.sh;
 
   # PostgreSQL is sensitive to tzdata updates, because the test-suite often breaks.

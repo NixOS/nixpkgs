@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # Fix build with linux-headers 7.3
-  patches = lib.optionals stdenv.hostPlatform.isAarch64 [
+  patches = [
     (fetchpatch {
       url = "https://lore.kernel.org/netfilter-devel/CAD04=wrZafKknWixGGRZWtYD_ydfdL4Uk39s_RkwZ6WUEVATKg@mail.gmail.com/2-0001-include-drop-bundled-copy-of-linux-types.h.patch";
       hash = "sha256-bEOXZTK557fVfRDrgd0RZX2N3XJxJG78S/MnvdG0UqY=";

@@ -98,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     apparmorRulesFromClosure = callPackage ./apparmorRulesFromClosure.nix { };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://apparmor.net/";
     description = "Mandatory access control system - core library";
