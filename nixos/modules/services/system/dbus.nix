@@ -11,11 +11,22 @@ let
 
   cfg = config.services.dbus;
 
+  # The D-Bus files of all registered packages, merged into one directory.
+  # This also deduplicates packages that several modules register.
+  registeredPackages = pkgs.buildEnv {
+    name = "dbus-registered-packages";
+    paths = cfg.packages;
+    pathsToLink = [
+      "/etc/dbus-1"
+      "/share/dbus-1"
+    ];
+  };
+
   configDir = pkgs.makeDBusConf.override {
     inherit (cfg) apparmor;
     dbus = cfg.dbusPackage;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
-    serviceDirectories = cfg.packages;
+    serviceDirectories = [ registeredPackages ];
   };
 
   inherit (lib)
@@ -81,16 +92,24 @@ in
         type = types.listOf types.path;
         default = [ ];
         description = ''
-          Packages whose D-Bus configuration files should be included in
-          the configuration of the D-Bus system-wide or session-wide
-          message bus.  Specifically, files in the following directories
-          will be included into their respective DBus configuration paths:
+          Packages whose D-Bus configuration files are made available to the
+          D-Bus system-wide and session-wide message bus. The files in the
+          following directories of these packages are merged into one
+          directory that the bus configuration reads:
           {file}`«pkg»/etc/dbus-1/system.d`
           {file}`«pkg»/share/dbus-1/system.d`
           {file}`«pkg»/share/dbus-1/system-services`
           {file}`«pkg»/etc/dbus-1/session.d`
           {file}`«pkg»/share/dbus-1/session.d`
-          {file}`«pkg»/share/dbus-1/services`
+
+          The system bus only reads system services and policies from these
+          packages.
+
+          The session services in {file}`«pkg»/share/dbus-1/services` are
+          linked into the system profile, without the package's binaries.
+          The session bus finds them through {env}`XDG_DATA_DIRS`. Packages
+          installed through {option}`environment.systemPackages` or a user
+          profile expose their session services without being listed here.
         '';
       };
 
@@ -120,10 +139,9 @@ in
 
       environment.etc."dbus-1".source = configDir;
 
-      environment.pathsToLink = [
-        "/etc/dbus-1"
-        "/share/dbus-1"
-      ];
+      # The session bus finds services through XDG_DATA_DIRS, so user
+      # profiles keep working and registered packages need to be linked in.
+      environment.pathsToLink = [ "/share/dbus-1" ];
 
       users.users.messagebus = {
         uid = config.ids.uids.messagebus;
@@ -135,9 +153,11 @@ in
 
       users.groups.messagebus.gid = config.ids.gids.messagebus;
 
-      # Install dbus for dbus tools even when using dbus-broker
       environment.systemPackages = [
+        # Install dbus for dbus tools even when using dbus-broker
         cfg.dbusPackage
+        # Expose the session services of registered packages
+        registeredPackages
       ];
 
       # You still need the dbus reference implementation installed to use dbus-broker
@@ -147,7 +167,6 @@ in
 
       services.dbus.packages = [
         cfg.dbusPackage
-        config.system.path
       ];
 
       systemd.user.sockets.dbus.wantedBy = [
