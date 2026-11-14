@@ -636,7 +636,7 @@ in
                 fastcgi_read_timeout 300;
               '';
             };
-            "~ /\\." = {
+            "~ /\\.[^/]+$" = {
               priority = 800;
               extraConfig = "deny all;";
             };
