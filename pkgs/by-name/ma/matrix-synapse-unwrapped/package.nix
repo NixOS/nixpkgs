@@ -30,6 +30,16 @@ python3Packages.buildPythonApplication rec {
     ./authlib.patch
   ];
 
+  postPatch = ''
+    # the timeout for some tests is too tight, causing the build to fail
+    # if the builder is too contested. the earliest example of these
+    # intermittend failures i could find was
+    # https://hydra.nixos.org/build/349689621/step/1/log/tail
+    # See: https://github.com/element-hq/synapse/pull/20517
+    substituteInPlace tests/server.py tests/unittest.py \
+      --replace-fail "loop_count > 100" "loop_count > 5000"
+  '';
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     hash = "sha256-zs6nvOvCh45GDyEIsqMn9PwqibjEx2f91sXqqmQVZRQ=";
