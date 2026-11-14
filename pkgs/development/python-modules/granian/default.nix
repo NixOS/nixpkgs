@@ -112,9 +112,10 @@ buildPythonPackage rec {
     # overridePythonAttrs is not available in finalAttrs.finalPackage
     pytest = granian.overridePythonAttrs {
       pname = "granian-with-check-phase";
+
+      preBuild = "";
       # skip repeat build
       buildPhase = ''
-        # runHook preBuild
         die() { echo >&2 "$@"; exit 1; }
         [[ ! -d dist ]] || die "ERROR: dist/ found at start of buildPhase"
         cp -r ${granian.dist} dist

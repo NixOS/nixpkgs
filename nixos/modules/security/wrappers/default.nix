@@ -37,6 +37,7 @@ let
             mkdir $out
             cp sysdeps/generic/unsecvars.h $out
           '';
+          postInstall = "";
         }
       );
     };
