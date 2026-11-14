@@ -57,8 +57,7 @@ in
     };
     instance = mkOption {
       type = types.nullOr types.str;
-      default = config.services.varnish.stateDir;
-      defaultText = lib.literalExpression "config.services.varnish.stateDir";
+      default = "/var/run/varnishd";
       description = ''
         varnishstat -n value.
       '';
