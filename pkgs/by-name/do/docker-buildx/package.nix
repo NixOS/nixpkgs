@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "docker-buildx";
-  version = "0.38.1";
+  version = "0.38.2";
 
   subPackages = [ "cmd/buildx" ];
 
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "docker";
     repo = "buildx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-prQ+ab+TMK6vZ5Kk9ozBd8Y5/ek1Ia8HgoBWDSYkdPU=";
+    hash = "sha256-0Cf5dIK6fUVtJtxmdw/OvCu/76CMAyyDlnACEU9zvBs=";
   };
 
   vendorHash = null;
