@@ -18,7 +18,8 @@
       {
         enable = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = lib.versionAtLeast config.system.stateVersion "27.05";
+          defaultText = lib.literalExpression ''lib.versionAtLeast config.system.stateVersion "27.05"'';
           description = ''
             Whether to define environment variables for some directories from
             [XDG Base Directory specification](https://specifications.freedesktop.org/basedir-spec/latest/).
