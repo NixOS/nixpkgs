@@ -1,138 +1,141 @@
 {
   lib,
   stdenv,
+  rustPlatform,
+  callPackage,
   fetchFromGitHub,
-  unstableGitUpdater,
-  fetchurl,
   pkg-config,
-  cmake,
-  libcbor,
-  openssl,
-  zlib,
-  gnugrep,
-  gawk,
-  # Linux only
-  pcsclite,
-  udev,
-  imagemagick,
-  # GUI
-  python3,
-  xterm,
+  wrapGAppsHook3,
   makeDesktopItem,
   copyDesktopItems,
-  # Darwin only
-  libuv,
-  libsolv,
-  libcouchbase,
+  openssl,
+  pcsclite,
+  udev,
+  webkitgtk_4_1,
+  nix-update-script,
+  runCommand,
+  jq,
 }:
-let
-  pythonEnv = python3.withPackages (ps: [ ps.tkinter ]);
-in
-stdenv.mkDerivation rec {
-  pname = "fido2-manage";
-  version = "0-unstable-2025-06-06";
+rustPlatform.buildRustPackage (
+  finalAttrs:
+  let
+    libfido2-token2 = callPackage ./libfido2.nix {
+      inherit (finalAttrs) src;
+    };
+    token2-piv-tool = callPackage ./token2-piv-tool.nix {
+      inherit (finalAttrs) src version;
+    };
+  in
+  {
+    pname = "fido2-manage";
+    version = "0.2.2";
 
-  src = fetchFromGitHub {
-    owner = "token2";
-    repo = "fido2-manage";
-    rev = "4fc6a4e0d905dcc2a7bfee70232a0398e9e4b45d";
-    hash = "sha256-olkEUHJ350FIMUlWG37wqSfO2wyYni4CYspwa4lAO5w=";
-  };
+    src = fetchFromGitHub {
+      owner = "token2";
+      repo = "fido2-manage";
+      tag = finalAttrs.version;
+      hash = "sha256-TGNPXRoxP0J2WiaiVJmNzE1xtbbwNQq3NapoW+Iw8yE=";
+    };
 
-  passthru.updateScript = unstableGitUpdater { };
+    cargoRoot = "token2-piv-gui/src-tauri";
+    buildAndTestSubdir = finalAttrs.cargoRoot;
+    cargoHash = "sha256-X7X23j4HjeorgcmbwJ1ShWvdWZ89DbLuY84q5f9NIAk=";
 
-  icon = fetchurl {
-    url = "https://token2.net/img/icon/logo-white.png";
-    hash = "sha256-UpxRzn24v1vigMFlofVU+YOzKrkxCu2Pk5iktqFgNO8=";
-  };
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wrapGAppsHook3
+      copyDesktopItems
+    ];
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    copyDesktopItems
-    imagemagick
-  ];
+    buildInputs = [
+      libfido2-token2
+      token2-piv-tool
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pcsclite
+      udev
+      webkitgtk_4_1
+    ];
 
-  buildInputs = [
-    libcbor
-    openssl
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xterm
-    udev
-    pcsclite
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libuv
-    libsolv
-    libcouchbase
-  ];
+    env = {
+      FIDO2_LIB_DIR = "${lib.getLib libfido2-token2}/lib";
+      T2PIV_LIB_DIR = "${token2-piv-tool}/lib";
+    };
 
-  postPatch = ''
-    substituteInPlace ./src/libfido2.pc.in \
-      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace ./CMakeLists.txt \
-      --replace-fail "/\''${CMAKE_INSTALL_LIBDIR}" "/lib"
-  '';
+    # select Tauri's production mode for the checked-in frontend
+    buildFeatures = [ "tauri/custom-protocol" ];
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      install $src/fido2-manage.sh $out/bin/fido2-manage
-      magick ${icon} -background none -gravity center -extent 512x512 token2.png
-      install -Dm444 token2.png $out/share/icons/hicolor/512x512/apps/token2.png
-      install $src/gui.py $out/bin/fido2-manage-gui
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install $src/fido2-manage-mac.sh $out/bin/fido2-manage
+    postPatch = ''
+      # Shared libraries are supplied by Nix, not Tauri bundle resources.
+      substituteInPlace token2-piv-gui/src-tauri/tauri.conf.json \
+        --replace-fail '"libs/*"' ""
     '';
 
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem {
-      desktopName = "Fido2 Manager";
-      name = "fido2-manage";
-      exec = "fido2-manage-gui";
-      icon = "token2";
-      comment = meta.description;
-      categories = [
-        "Utility"
+    postInstall = ''
+      for tool in token cred assert; do
+        ln -s ${libfido2-token2}/bin/fido2-$tool $out/bin/token2-fido2-$tool
+      done
+      ln -s ${token2-piv-tool}/bin/token2-piv-tool $out/bin/token2-piv-tool
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 token2-piv-gui/src-tauri/icons/icon.png \
+        $out/share/icons/hicolor/256x256/apps/token2-key-manager.png
+    '';
+
+    # Only the GUI needs the GTK environment, not the CLI tools
+    dontWrapGApps = true;
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapProgram $out/bin/token2-key-manager "''${gappsWrapperArgs[@]}"
+    '';
+
+    desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
+      (makeDesktopItem {
+        name = "token2-key-manager";
+        desktopName = "Token2 Key Manager";
+        comment = finalAttrs.meta.description;
+        exec = "token2-key-manager";
+        icon = "token2-key-manager";
+        categories = [
+          "Utility"
+          "Security"
+        ];
+      })
+    ];
+
+    passthru = {
+      updateScript = nix-update-script { };
+      tests.cli =
+        runCommand "fido2-manage-cli-test"
+          {
+            nativeBuildInputs = [
+              finalAttrs.finalPackage
+              jq
+            ];
+          }
+          ''
+            # The build sandbox has no security keys or PC/SC daemon
+            # The only response we can get is "no devices connected"
+            fido2-manage -list -json | jq -e '. == []'
+            token2-fido2-token -L
+            token2-piv-tool --version
+            touch $out
+          '';
+    };
+
+    meta = {
+      description = "Manage FIDO2 security keys, PIV certificates and OTP accounts";
+      homepage = "https://github.com/token2/fido2-manage";
+      changelog = "https://github.com/token2/fido2-manage/releases/tag/${finalAttrs.version}";
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      license = lib.licenses.bsd2;
+      mainProgram = "fido2-manage";
+      maintainers = with lib.maintainers; [
+        Srylax
+        Cosipa
       ];
-    })
-  ];
-
-  postFixup = ''
-    substituteInPlace $out/bin/fido2-manage \
-      --replace-fail "/usr/local/bin/" "$out/bin/" \
-      --replace-fail "./fido2-manage.sh" "fido2-manage" \
-      --replace-fail "awk" "${gawk}/bin/awk"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $out/bin/fido2-manage-gui \
-      --replace-fail "./fido2-manage.sh" "$out/bin/fido2-manage" \
-      --replace-fail "x-terminal-emulator" "${xterm}/bin/xterm" \
-      --replace-fail "tk.Tk()" "tk.Tk(className='fido2-manage')" \
-      --replace-fail 'root.title("FIDO2.1 Manager - Python version 0.1 - (c) Token2")' "root.title('Fido2 Manager')"
-
-    substituteInPlace $out/bin/fido2-manage \
-      --replace-fail "grep" "${gnugrep}/bin/grep"
-
-    sed -i '1i #!${pythonEnv.interpreter}' $out/bin/fido2-manage-gui
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace $out/bin/fido2-manage \
-      --replace-fail "ggrep" "${gnugrep}/bin/grep"
-  '';
-
-  meta = {
-    description = "Manage FIDO2.1 devices over USB or NFC, including Passkeys";
-    homepage = "https://github.com/token2/fido2-manage";
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd2;
-    mainProgram = "fido2-manage";
-    maintainers = with lib.maintainers; [ Srylax ];
-  };
-}
+    };
+  }
+)
