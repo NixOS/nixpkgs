@@ -2,7 +2,7 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   distutils,
   pyyaml,
@@ -19,10 +19,11 @@ buildPythonPackage (finalAttrs: {
   version = "1.10.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "clustershell";
-    inherit (finalAttrs) version;
-    hash = "sha256-snrwuqnRsQrGonKXALA+WieWyDjLtqrxkCaYImq56oo=";
+  src = fetchFromGitHub {
+    owner = "clustershell";
+    repo = "clustershell";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ePHMyQNO2wig5rolPSQlezcrOJG4ehoRqZG1079EdVM=";
   };
 
   build-system = [
