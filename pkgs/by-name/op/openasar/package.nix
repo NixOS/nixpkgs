@@ -31,6 +31,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Hardcode unzip path
     substituteInPlace ./src/updater/moduleUpdater.js \
       --replace \'unzip\' \'${unzip}/bin/unzip\'
+
+    # Fix for videos and GIFs not playing
+    substituteInPlace src/cmdSwitches.js \
+      --replace-fail 'libopenh264-2.5.1-linux64.7.so' 'libopenh264-2.7.0-linux64.8.so' \
+      --replace-fail 'EnableDrDc,' ""
+
     # Remove auto-update feature
     echo "module.exports = async () => log('AsarUpdate', 'Removed');" > ./src/asarUpdate.js
   '';
