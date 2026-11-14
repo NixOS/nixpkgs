@@ -279,7 +279,7 @@ with lib;
         ''
           ${vma}/bin/vma create "${config.image.baseName}.vma" \
             -c ${
-              cfgFile "qemu-server.conf" (cfg.qemuConf // cfg.qemuExtraConf)
+              cfgFile "qemu-server.conf" (removeAttrs cfg.qemuConf [ "diskSize" ] // cfg.qemuExtraConf)
             }/qemu-server.conf drive-virtio0=$diskImage
           rm $diskImage
           ${pkgs.zstd}/bin/zstd "${config.image.baseName}.vma"
