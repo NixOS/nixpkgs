@@ -1,0 +1,323 @@
+From b0948193a07099c217cb5077db6c17c89821eb84 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Tue, 29 Sep 2026 07:26:03 -0700
+Subject: [PATCH] gcc: bind selected C++ and libc headers within native
+ defaults
+
+---
+ gcc/c-family/c-opts.cc |   4 ++
+ gcc/c-family/c.opt     |   4 ++
+ gcc/common.opt         |   4 ++
+ gcc/fortran/cpp.cc     |   4 ++
+ gcc/fortran/lang.opt   |   4 ++
+ gcc/incpath.cc         | 139 +++++++++++++++++++++++++++++++++++++++--
+ gcc/incpath.h          |   2 +
+ 7 files changed, 155 insertions(+), 6 deletions(-)
+
+diff --git a/gcc/c-family/c-opts.cc b/gcc/c-family/c-opts.cc
+index 108eaab..311baf5 100644
+--- a/gcc/c-family/c-opts.cc
++++ b/gcc/c-family/c-opts.cc
+@@ -615,6 +615,10 @@ c_common_handle_option (size_t scode, const char *arg, HOST_WIDE_INT value,
+       sysroot = arg;
+       break;
+ 
++    case OPT_idefaultsystem:
++      add_default_system_path (arg);
++      break;
++
+     case OPT_isystem:
+       add_path (xstrdup (arg), INC_SYSTEM, 0, true);
+       break;
+diff --git a/gcc/c-family/c.opt b/gcc/c-family/c.opt
+index 75b6531..f373931 100644
+--- a/gcc/c-family/c.opt
++++ b/gcc/c-family/c.opt
+@@ -2498,6 +2498,10 @@ isysroot
+ C ObjC C++ ObjC++ Joined Separate MissingArgError(missing path after %qs)
+ -isysroot <dir>	Set <dir> to be the system root directory.
+ 
++idefaultsystem
++C ObjC C++ ObjC++ Joined Separate MissingArgError(missing path after %qs)
++-idefaultsystem <dir> Add a suppressible toolchain default at this system include position.
++
+ isystem
+ C ObjC C++ ObjC++ Joined Separate MissingArgError(missing path after %qs)
+ -isystem <dir>	Add <dir> to the start of the system include path.
+diff --git a/gcc/common.opt b/gcc/common.opt
+index e3fa0da..19fafb8 100644
+--- a/gcc/common.opt
++++ b/gcc/common.opt
+@@ -1336,6 +1336,10 @@ fdebug-prefix-map=
+ Common Joined RejectNegative Var(common_deferred_options) Defer
+ -fdebug-prefix-map=<old>=<new>	Map one directory name to another in debug information.
+ 
++fdefault-include-map=
++Common Joined RejectNegative Var(flag_default_include_map)
++Bind selected C++ and libc default headers from FILE.
++
+ ffile-prefix-map=
+ Common Joined RejectNegative Var(common_deferred_options) Defer
+ -ffile-prefix-map=<old>=<new>	Map one directory name to another in compilation result.
+diff --git a/gcc/fortran/cpp.cc b/gcc/fortran/cpp.cc
+index 1b70420..34de5a5 100644
+--- a/gcc/fortran/cpp.cc
++++ b/gcc/fortran/cpp.cc
+@@ -346,6 +346,10 @@ gfc_cpp_handle_option (size_t scode, const char *arg, int value ATTRIBUTE_UNUSED
+       gfc_cpp_add_include_path_after (xstrdup(arg), true);
+       break;
+ 
++    case OPT_idefaultsystem:
++      add_default_bracket_path (arg);
++      break;
++
+     case OPT_imultilib:
+       gfc_cpp_option.multilib = arg;
+       break;
+diff --git a/gcc/fortran/lang.opt b/gcc/fortran/lang.opt
+index 7826a1a..46a8535 100644
+--- a/gcc/fortran/lang.opt
++++ b/gcc/fortran/lang.opt
+@@ -878,6 +878,10 @@ idirafter
+ Fortran Joined Separate
+ ; Documented in C
+ 
++idefaultsystem
++Fortran Joined Separate
++; Documented in C
++
+ imultilib
+ Fortran Joined Separate
+ ; Documented in C
+diff --git a/gcc/incpath.cc b/gcc/incpath.cc
+index c1bbfd3..deaff67 100644
+--- a/gcc/incpath.cc
++++ b/gcc/incpath.cc
+@@ -18,6 +18,8 @@
+    <http://www.gnu.org/licenses/>.  */
+ 
+ #include "config.h"
++#define INCLUDE_STRING
++#define INCLUDE_VECTOR
+ #include "system.h"
+ #include "coretypes.h"
+ #include "target.h"
+@@ -26,6 +28,8 @@
+ #include "intl.h"
+ #include "incpath.h"
+ #include "cppdefault.h"
++#include "options.h"
++#include "diagnostic-core.h"
+ 
+ /* Microsoft Windows does not natively support inodes.
+    VMS has non-numeric inodes.  */
+@@ -62,6 +66,8 @@ static struct cpp_dir *remove_duplicates (cpp_reader *, struct cpp_dir *,
+ /* Include chains heads and tails.  */
+ static struct cpp_dir *heads[INC_MAX];
+ static struct cpp_dir *tails[INC_MAX];
++struct default_path { cpp_dir *path; incpath_kind chain; };
++static std::vector<default_path> default_paths;
+ 
+ static bool quote_ignores_source_dir;
+ enum { REASON_QUIET = 0, REASON_NOENT, REASON_DUP, REASON_DUP_SYS };
+@@ -125,11 +131,93 @@ add_env_var_paths (const char *env_var, incpath_kind chain)
+     }
+ }
+ 
++
++/* Bind exact C++ (1 or 2) and libc (0) providers, one per line: kind,
++   tab, absolute path.  A present, empty file removes both provider families.  */
++static void
++read_include_map (const char *file, std::vector<std::string> &paths,
++                  std::vector<default_include> &entries)
++{
++  FILE *stream = fopen (file, "rb");
++  if (!stream)
++    fatal_error (UNKNOWN_LOCATION, "cannot open default include map %qs: %m", file);
++  std::string line;
++  for (int c; (c = fgetc (stream)) != EOF;)
++    {
++      if (c == 0)
++        fatal_error (UNKNOWN_LOCATION, "NUL in default include map %qs", file);
++      if (c == '\n')
++        {
++          paths.push_back (line);
++          line.clear ();
++        }
++      else
++        line.push_back (c);
++    }
++  bool failed = ferror (stream);
++  fclose (stream);
++  if (failed)
++    fatal_error (UNKNOWN_LOCATION, "cannot read default include map %qs", file);
++  if (!line.empty ())
++    paths.push_back (line);
++  entries.reserve (paths.size () + 1);
++  for (const std::string &path : paths)
++    {
++      if (path.size () < 3 || path[0] < '0' || path[0] > '2'
++          || path[1] != '\t' || path[2] != '/'
++          || path.find ('\t', 2) != std::string::npos)
++        fatal_error (UNKNOWN_LOCATION, "invalid default include map entry in %qs", file);
++      char kind = path[0] - '0';
++      entries.push_back ({path.c_str () + 2, nullptr,
++                          kind, char (kind != 0), 0, 0});
++    }
++}
++
+ /* Append the standard include chain defined in cppdefault.cc.  */
+ static void
+ add_standard_paths (const char *sysroot, const char *iprefix,
+ 		    const char *imultilib, int cxx_stdinc)
+ {
++  std::vector<default_include> entries;
++  std::vector<default_include> selected;
++  std::vector<std::string> paths;
++  std::vector<char> bound;
++  const default_include *defaults = cpp_include_defaults;
++  if (flag_default_include_map)
++    {
++      read_include_map (flag_default_include_map, paths, selected);
++      bool libc_done = false;
++      auto append = [&] (default_include entry, bool is_bound) {
++        entries.push_back (entry);
++        bound.push_back (is_bound);
++      };
++      auto select = [&] (bool cxx) {
++        for (const default_include &entry : selected)
++          if ((entry.cplusplus != 0) == cxx)
++            append (entry, true);
++      };
++      /* Linux tables place the C++ family first.  */
++      select (true);
++      for (const default_include *entry = cpp_include_defaults;
++           entry->fname; ++entry)
++        {
++          if (entry->cplusplus != 0)
++            continue;
++          /* Both the usual Linux and musl tables mark their native libc
++             entries as C-only and sysrooted; local includes are C++ aware.  */
++          else if (entry->add_sysroot && !entry->cxx_aware)
++            {
++              if (!libc_done)
++                { select (false); libc_done = true; }
++            }
++          else
++            append (*entry, false);
++        }
++      if (!libc_done)
++        select (false);
++      append ({nullptr, nullptr, 0, 0, 0, 0}, false);
++      defaults = entries.data ();
++    }
+   const struct default_include *p;
+   int relocated = cpp_relocated ();
+   size_t len;
+@@ -139,10 +227,11 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+       /* Look for directories that start with the standard prefix.
+ 	 "Translate" them, i.e. replace /usr/local/lib/gcc... with
+ 	 IPREFIX and search them first.  */
+-      for (p = cpp_include_defaults; p->fname; p++)
++      for (p = defaults; p->fname; p++)
+ 	{
+-	  if (p->cplusplus == 0
+-	      || (cxx_stdinc && (p->cplusplus == flag_stdlib_kind)))
++	  if ((!flag_default_include_map || !bound[p - defaults])
++	      && (p->cplusplus == 0
++	          || (cxx_stdinc && (p->cplusplus == flag_stdlib_kind))))
+ 	    {
+ 	      /* Should we be translating sysrooted dirs too?  Assume
+ 		 that iprefix and sysroot are mutually exclusive, for
+@@ -171,7 +260,7 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+ 	}
+     }
+ 
+-  for (p = cpp_include_defaults; p->fname; p++)
++  for (p = defaults; p->fname; p++)
+     {
+       if (p->cplusplus == 0
+ 	  || (cxx_stdinc && (p->cplusplus == flag_stdlib_kind)))
+@@ -189,7 +278,8 @@ add_standard_paths (const char *sysroot, const char *iprefix,
+ 	      str = concat (sysroot_no_trailing_dir_separator, p->fname, NULL);
+ 	      free (sysroot_no_trailing_dir_separator);
+ 	    }
+-	  else if (!p->add_sysroot && relocated
++	  else if ((!flag_default_include_map || !bound[p - defaults])
++		   && !p->add_sysroot && relocated
+ 		   && !filename_ncmp (p->fname, cpp_PREFIX, cpp_PREFIX_len))
+ 	    {
+  	      static const char *relocated_prefix;
+@@ -444,6 +534,22 @@ add_cpp_dir_path (cpp_dir *p, incpath_kind chain)
+   tails[chain] = p;
+ }
+ 
++/* Mark a toolchain default while retaining its order among -isystem paths.  */
++void
++add_default_system_path (const char *path)
++{
++  add_path (xstrdup (path), INC_SYSTEM, 0, false);
++  default_paths.push_back ({tails[INC_SYSTEM], INC_SYSTEM});
++}
++
++/* Fortran keeps its preprocessor paths in the bracket chain.  */
++void
++add_default_bracket_path (const char *path)
++{
++  add_path (xstrdup (path), INC_BRACKET, 0, true);
++  default_paths.push_back ({tails[INC_BRACKET], INC_BRACKET});
++}
++
+ /* Add PATH to the include chain CHAIN. PATH must be malloc-ed and
+    NUL-terminated.  */
+ void
+@@ -502,6 +608,28 @@ register_include_chains (cpp_reader *pfile, const char *sysroot,
+   else
+     cxx_stdinc = false;
+ 
++  /* Keep position among explicit include options, but suppress these
++     marked defaults after all options, including -Wp,-nostdinc, are known.  */
++  if (!stdinc)
++    for (default_path marked : default_paths)
++      {
++        cpp_dir *before = NULL;
++        cpp_dir **cursor = &heads[marked.chain];
++        while (*cursor && *cursor != marked.path)
++          {
++            before = *cursor;
++            cursor = &(*cursor)->next;
++          }
++        if (*cursor)
++          {
++            *cursor = marked.path->next;
++            if (tails[marked.chain] == marked.path)
++              tails[marked.chain] = before;
++            free_path (marked.path, REASON_QUIET);
++          }
++      }
++  default_paths.clear ();
++
+   /* CPATH and language-dependent environment variables may add to the
+      include chain.  */
+   add_env_var_paths ("CPATH", INC_BRACKET);
+@@ -545,4 +673,3 @@ static void hook_void_charptr_charptr_int (const char *sysroot ATTRIBUTE_UNUSED,
+ #endif
+ 
+ struct target_c_incpath_s target_c_incpath = { TARGET_EXTRA_PRE_INCLUDES, TARGET_EXTRA_INCLUDES };
+-
+diff --git a/gcc/incpath.h b/gcc/incpath.h
+index f7a2b64..5e7ab33 100644
+--- a/gcc/incpath.h
++++ b/gcc/incpath.h
+@@ -30,6 +30,8 @@ enum incpath_kind {
+ 
+ extern void split_quote_chain (void);
+ extern void add_path (char *, incpath_kind, int, bool);
++extern void add_default_system_path (const char *);
++extern void add_default_bracket_path (const char *);
+ extern void register_include_chains (cpp_reader *, const char *,
+ 				     const char *, const char *,
+ 				     int, int, int);
+-- 
+2.43.0
+

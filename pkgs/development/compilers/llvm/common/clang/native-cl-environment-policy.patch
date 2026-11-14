@@ -1,0 +1,151 @@
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Subject: [PATCH] clang: retain caller ownership through native CL environment
+
+Recognize the driver mode selected by a primary frame before native CL/_CL_
+processing. Preserve their native tokenization and position before/after all
+framed arguments, and apply caller policy to the resulting native stream.
+Keep trusted frame arguments distinct even between these caller groups.
+Preserve CL response line markers through ownership and native /link parsing.
+
+---
+diff --git a/tools/driver/driver.cpp b/tools/driver/driver.cpp
+index c760910..f6b0045 100644
+--- a/tools/driver/driver.cpp
++++ b/tools/driver/driver.cpp
+@@ -240,6 +240,8 @@ static int ExecuteCC1Tool(SmallVectorImpl<const char *> &ArgV,
+ struct PrimarySegments {
+   std::array<SmallVector<const char *, 16>, 4> Args;
+   int CallerDelimiter = -1;
++  SmallVector<bool, 256> CallerOwnership;
++  bool RawCLMode = false, DeferredCLPolicy = false;
+   bool CXX = false, Pure = false, NoNative = false;
+   StringRef SDK, DefaultTarget;
+   SmallVector<const char *, 16> TargetDefaults, AllowedPrefixes;
+@@ -361,6 +363,9 @@ static void filterNativePolicy(SmallVectorImpl<PolicyArgument> &Arguments,
+   };
+   SmallVector<Carrier, 16> Carriers;
+   for (unsigned I = 0; I < Joined.size();) {
++    // CL response-file line boundaries belong to /link's native grammar.
++    // ParseArgs skips these sentinels; ParseOneArg requires a real token.
++    if (!Joined[I]) { ++I; continue; }
+     const unsigned Start = I;
+     auto Argument = getDriverOptTable().ParseOneArg(
+         Raw, I, llvm::opt::Visibility(Visibility));
+@@ -487,8 +492,10 @@ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request
+     for (unsigned I = 0; I != (IncludeCPP ? 4u : 3u); ++I)
+       llvm::append_range(Raw, Request.Args[I]);
+     StringRef Mode = getDriverMode(Program, ArrayRef(Raw).drop_front());
++    Request.RawCLMode = IsClangCL(Mode);
+     llvm::cl::ExpansionContext Expansion(
+         Allocator, getResponseFileTokenizer(Raw, IsClangCL(Mode)));
++    Expansion.setMarkEOLs(Request.RawCLMode);
+     auto Expanded = Request.Args;
+     if (!IncludeCPP) Expanded[3].clear();
+     auto Expand = [&](unsigned I) {
+@@ -505,7 +512,15 @@ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request
+     if (Frontend) return false;
+     if (!Expand(0) || !Expand(2) || (IncludeCPP && !Expand(3)))
+       return false;
+-    filterCallerPolicy(Expanded, Request.Pure, Request.NoNative,
++    // Response lexing and CL environment handling use native pre-expansion
++    // mode. Option grammar uses the effective expanded mode, as in the driver.
++    SmallVector<const char *, 256> ExpandedMode{Program};
++    for (const auto &Segment : Expanded) llvm::append_range(ExpandedMode, Segment);
++    Mode = getDriverMode(Program, ArrayRef(ExpandedMode).drop_front());
++    Request.DeferredCLPolicy = Request.RawCLMode || IsClangCL(Mode);
++    // CL environment arguments precede/follow the entire framed command.
++    // Defer policy until those native arguments and their ownership are known.
++    if (!Request.DeferredCLPolicy) filterCallerPolicy(Expanded, Request.Pure, Request.NoNative,
+                        Request.AllowedPrefixes, Request.SDK, Saver,
+                        primaryOptionVisibility(Mode));
+     SmallVector<const char *, 256> Joined{Program};
+@@ -528,6 +543,13 @@ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request
+     llvm::append_range(Args, Expanded[2]);
+     llvm::append_range(Args, Expanded[3]);
+     llvm::append_range(Args, ArrayRef(Expanded[1]).drop_front(Split));
++    Request.CallerOwnership.assign(Args.size(), false);
++    for (size_t I = 1 + Expanded[0].size();
++         I < 1 + Expanded[0].size() + Split; ++I)
++      Request.CallerOwnership[I] = true;
++    for (size_t I = Args.size() - (Expanded[1].size() - Split);
++         I < Args.size(); ++I)
++      Request.CallerOwnership[I] = true;
+     return Args.size() < 2 || !StringRef(Args[1]).starts_with("-cc1");
+   };
+   bool Frontend;
+@@ -535,6 +557,20 @@ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request
+   if (Frontend) return true;
+   if (Query) {
+     SmallVector<const char *, 256> Selection(Args.begin(), Args.end());
++    // CL environment mode switches participate in primary personality
++    // selection, before the conditional C++ policy group is inserted once.
++    if (Request.RawCLMode) {
++      if (auto Value = llvm::sys::Process::GetEnv("CL")) {
++        SmallVector<const char *, 8> Options;
++        getCLEnvVarOptions(*Value, Saver, Options);
++        Selection.insert(Selection.begin() + 1, Options.begin(), Options.end());
++      }
++      if (auto Value = llvm::sys::Process::GetEnv("_CL_")) {
++        SmallVector<const char *, 8> Options;
++        getCLEnvVarOptions(*Value, Saver, Options);
++        llvm::append_range(Selection, Options);
++      }
++    }
+     llvm::StringSet<> SelectionStrings;
+     if (const char *Override = ::getenv("CCC_OVERRIDE_OPTIONS"))
+       driver::applyOverrideOptions(Selection, Override, SelectionStrings,
+@@ -601,6 +637,8 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+       (!readPrimarySegments(*PrimaryArgsFD, Saver, Request) ||
+        !preparePrimarySegments(ProgName, Request, A, Args,
+                                PrimaryQueryFD.has_value()))) return 1;
++  if (PrimaryArgsFD)
++    ClangCLMode = Request.RawCLMode;
+   if (PrimaryQueryFD && Args.size() >= 2 &&
+       StringRef(Args[1]).starts_with("-cc1")) {
+     llvm::raw_fd_ostream OS(*PrimaryQueryFD, false);
+@@ -614,7 +652,10 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+     return Failed;
+   }
+ 
+-  if (PrimaryShowJobs) Args.insert(Args.begin() + 1, "-###");
++  if (PrimaryShowJobs) {
++    Args.insert(Args.begin() + 1, "-###");
++    Request.CallerOwnership.insert(Request.CallerOwnership.begin() + 1, false);
++  }
+ 
+   // Handle -cc1 integrated tools.
+   if (Args.size() >= 2 && StringRef(Args[1]).starts_with("-cc1"))
+@@ -644,6 +685,9 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+ 
+       // Insert right after the program name to prepend to the argument list.
+       Args.insert(Args.begin() + 1, PrependedOpts.begin(), PrependedOpts.end());
++      if (PrimaryArgsFD)
++        Request.CallerOwnership.insert(Request.CallerOwnership.begin() + 1,
++                                      PrependedOpts.size(), true);
+     }
+     // Arguments in "_CL_" are appended.
+     std::optional<std::string> Opt_CL_ = llvm::sys::Process::GetEnv("_CL_");
+@@ -653,9 +697,23 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+ 
+       // Insert at the end of the argument list to append.
+       Args.append(AppendedOpts.begin(), AppendedOpts.end());
++      if (PrimaryArgsFD)
++        Request.CallerOwnership.append(AppendedOpts.size(), true);
+     }
+   }
+ 
++  if (PrimaryArgsFD && Request.DeferredCLPolicy) {
++    SmallVector<PolicyArgument, 256> Owned;
++    for (unsigned I = 0; I != Args.size(); ++I)
++      Owned.push_back({Args[I], Request.CallerOwnership[I], I});
++    filterNativePolicy(Owned, Request.Pure, Request.NoNative,
++                       Request.AllowedPrefixes, Request.SDK, Saver,
++                       primaryOptionVisibility(
++                           getDriverMode(ProgName, ArrayRef(Args).drop_front())));
++    Args.clear();
++    for (const auto &Argument : Owned) Args.push_back(Argument.Text);
++  }
++
+   llvm::StringSet<> SavedStrings;
+   // Handle CCC_OVERRIDE_OPTIONS, used for editing a command line behind the
+   // scenes.

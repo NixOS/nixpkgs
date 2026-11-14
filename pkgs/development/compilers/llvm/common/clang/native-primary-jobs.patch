@@ -1,0 +1,94 @@
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Subject: [PATCH] clang: observe native jobs without query output side effects
+
+Allow an optional job observation during the existing primary query. Keep
+query suppression active while using native dry-run job construction, then
+print the jobs without executing them. Decline optional offload job observation,
+whose discovery can execute helpers even under -###. The metadata is unchanged.
+
+---
+diff --git a/include/clang/Driver/Driver.h b/include/clang/Driver/Driver.h
+index 48ec702..e2b7809 100644
+--- a/include/clang/Driver/Driver.h
++++ b/include/clang/Driver/Driver.h
+@@ -853,6 +853,7 @@ public:
+   static bool getDefaultModuleCachePath(SmallVectorImpl<char> &Result);
+ 
+   std::optional<unsigned> PrimaryQueryFD;
++  bool PrimaryShowJobs = false;
+   SmallVector<const char *, 16> NativeTargetDefaults;
+   std::string NativeDefaultTarget;
+   bool PrimaryCXX = false;
+diff --git a/lib/Driver/Driver.cpp b/lib/Driver/Driver.cpp
+index 90cc887..f79c824 100644
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -1900,7 +1900,20 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
+     for (const auto &Input : Inputs)
+       Link |= getHostLinkDisposition(C->getArgs(), C->getInputArgs(), Input.first) == HostLinkDisposition::Image;
+     EmitQuery(Link);
+-    return C;
++    // Offload toolchain construction can execute caller-selected discovery
++    // helpers even under -###. Job observation is optional: retain metadata
++    // and let the wrapper use its fallback policy for these invocations.
++    const auto &QueryArgs = C->getInputArgs();
++    bool Offloading = llvm::any_of(Inputs, [](const auto &Input) {
++      return types::isCuda(Input.first) || types::isHIP(Input.first);
++    }) || QueryArgs.hasArg(options::OPT_hip_link, options::OPT_hipstdpar,
++#if CLANG_VERSION_MAJOR >= 21
++                           options::OPT_offload_targets_EQ,
++#else
++                           options::OPT_fopenmp_targets_EQ,
++#endif
++                           options::OPT_offload_arch_EQ, options::OPT_fsycl);
++    if (!PrimaryShowJobs || Offloading) return C;
+   }
+ 
+   // Populate the tool chains for the offloading devices, if any.
+diff --git a/tools/driver/driver.cpp b/tools/driver/driver.cpp
+index 84e328d..2a42514 100644
+--- a/tools/driver/driver.cpp
++++ b/tools/driver/driver.cpp
+@@ -567,6 +567,10 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+     PrimaryArgsFD = FD;
+   }
+   if ((PrimaryArgsFD || PrimaryQueryFD) && (!PrimaryArgsFD || Argc != 1)) return 1;
++  bool PrimaryShowJobs = false;
++  if (const char *Value = ::getenv("NIX_CC_PRIMARY_SHOW_JOBS"))
++    PrimaryShowJobs = PrimaryQueryFD && StringRef(Value) == "1";
++  ::unsetenv("NIX_CC_PRIMARY_SHOW_JOBS");
+   PrimarySegments Request;
+   noteBottomOfStack();
+   llvm::setBugReportMsg("PLEASE submit a bug report to " BUG_REPORT_URL
+@@ -610,6 +614,8 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+     return Failed;
+   }
+ 
++  if (PrimaryShowJobs) Args.insert(Args.begin() + 1, "-###");
++
+   // Handle -cc1 integrated tools.
+   if (Args.size() >= 2 && StringRef(Args[1]).starts_with("-cc1"))
+     return ExecuteCC1Tool(Args, ToolContext);
+@@ -725,14 +731,21 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+   }
+ 
+   TheDriver.PrimaryQueryFD = PrimaryQueryFD;
++  TheDriver.PrimaryShowJobs = PrimaryShowJobs;
+   if (PrimaryQueryFD) TheDriver.setCheckInputsExist(false);
+   TheDriver.NativeDefaultTarget = Request.DefaultTarget.str();
+   TheDriver.NativeTargetDefaults = Request.TargetDefaults;
+   TheDriver.PrimaryCXX = Request.CXX;
+   std::unique_ptr<Compilation> C(TheDriver.BuildCompilation(Args));
+ 
+-  if (PrimaryQueryFD)
++  if (PrimaryQueryFD) {
++    if (PrimaryShowJobs && C) {
++      llvm::errs() << "Target: "
++                   << C->getDefaultToolChain().getTripleString() << '\n';
++      C->getJobs().Print(llvm::errs(), "\n", true);
++    }
+     return !C || C->containsError() || Diags.hasErrorOccurred();
++  }
+ 
+   Driver::ReproLevel ReproLevel = Driver::ReproLevel::OnCrash;
+   if (Arg *A = C->getArgs().getLastArg(options::OPT_gen_reproducer_eq)) {

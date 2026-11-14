@@ -1,0 +1,50 @@
+From: Connor Baker <ConnorBaker01@gmail.com>
+Subject: [PATCH] gcc: optionally display jobs during suppressed primary queries
+
+Let the wrapper observe spec-selected linker arguments without using an
+ordinary -### invocation, whose driver construction can affect caller output
+files. Keep all existing query suppression and the fd-v3 response unchanged.
+Older producers can ignore this optional request and retain fallback policy.
+
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -1,2 +1,3 @@
+ static int primary_operation_fd = -1;
++static bool primary_show_jobs;
+ static bool primary_link_requested;
+@@ -1,4 +1,25 @@
+   if (primary_operation_fd >= 0)
+     {
++      if (primary_show_jobs)
++        {
++          const char *argument;
++          for (unsigned int i = 0; argbuf.iterate (i, &argument); ++i)
++            {
++              if (!strcmp (argument, "|"))
++                {
++                  fputc ('\n', stderr);
++                  continue;
++                }
++              fputs (" \"", stderr);
++              for (const char *p = argument; *p; ++p)
++                {
++                  if (*p == '"' || *p == '\\' || *p == '$')
++                    fputc ('\\', stderr);
++                  fputc (*p, stderr);
++                }
++              fputc ('"', stderr);
++            }
++          fputc ('\n', stderr);
++        }
+       execution_count++;
+       return 0;
+@@ -1,4 +1,7 @@
+           primary_operation_fd = result;
++          const char *show_jobs = env.get ("NIX_CC_PRIMARY_SHOW_JOBS");
++          primary_show_jobs = show_jobs && !strcmp (show_jobs, "1");
+         }
+-      if (::unsetenv ("NIX_CC_PRIMARY_QUERY_FD") != 0
++      if (::unsetenv ("NIX_CC_PRIMARY_SHOW_JOBS") != 0
++          || ::unsetenv ("NIX_CC_PRIMARY_QUERY_FD") != 0
+           || ::unsetenv ("NIX_CC_PRIMARY_ARGS_FD") != 0

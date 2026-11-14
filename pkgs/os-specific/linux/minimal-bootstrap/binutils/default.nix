@@ -28,6 +28,7 @@ let
   };
 
   patches = [
+    ../../../../development/compilers/gcc/common/libiberty-writeargv-newlines.patch
     # Make binutils output deterministic by default.
     ./deterministic.patch
     # Fix __attribute__, to fix mmap-related assertion failures.
