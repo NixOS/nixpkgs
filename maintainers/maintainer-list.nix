@@ -20957,6 +20957,11 @@
     githubId = 70575593;
     name = "Nikita Denissov";
   };
+  ndgigliotti = {
+    github = "ndgigliotti";
+    githubId = 12902796;
+    name = "Nicholas Gigliotti";
+  };
   ndl = {
     email = "ndl@endl.ch";
     github = "ndl";
