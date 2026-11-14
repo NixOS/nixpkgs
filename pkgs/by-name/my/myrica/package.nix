@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -16,14 +17,14 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-kx+adbN2DsO81KJFt+FGAPZN+1NpE9xiagKZ4KyaJV0=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    mkdir -p $out/share/fonts/truetype
-    cp product/*.TTC $out/share/fonts/truetype
+  # only collect font collections
 
-    runHook postInstall
-  '';
+  includeFonts = [
+    "Myrica"
+    "MyricaM"
+  ];
 
   meta = {
     homepage = "https://myrica.estable.jp/";
