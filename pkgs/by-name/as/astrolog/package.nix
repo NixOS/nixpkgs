@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation {
   pname = "astrolog";
-  version = "7.70";
+  version = "8.00";
 
   src = fetchzip {
-    url = "https://www.astrolog.org/ftp/ast77src.zip";
-    hash = "sha256-rG7njEtnHwUDqWstj0bQxm2c9CbsOmWOCYs0FtiVoJE=";
+    url = "https://www.astrolog.org/ftp/ast80src.zip";
+    hash = "sha256-3JA4piR4p5fqEn3aXt+j4FLaFfvdmDrlcUJ9ZMErCkA=";
     stripRoot = false;
   };
 
@@ -29,18 +29,18 @@ stdenv.mkDerivation {
   installPhase =
     let
       ephemeris = fetchzip {
-        url = "http://astrolog.org/ftp/ephem/astephem.zip";
-        hash = "sha256-+on9LE27hCPRacHaIo6wz6M3V+G1QpyJ1Rp4wHbycM0=";
+        url = "https://astrolog.org/ftp/ephem/astephem.zip";
+        hash = "sha256-a3K/G8jTYA845nPJPeJSlmFKRMRCCxUNPdhESh7xGsM=";
         stripRoot = false;
       };
       moonsEphemeris = fetchzip {
         url = "https://www.astrolog.org/ftp/ephem/moons/sepm.zip";
-        hash = "sha256-bHJc1yyR2loSOC4QJWsYNtKRYpxN9ZnKK5cWCapAptI=";
+        hash = "sha256-T3jEoW0ICzckzhJqvEQpcRrti79PW01KS2KIipCqRcw=";
         stripRoot = false;
       };
       atlas = fetchurl {
-        url = "http://astrolog.org/ftp/atlas/atlasbig.as";
-        hash = "sha256-sEiuc7azeBA5959QOIo0qllXqHo7LABGV4sB08xNWsM=";
+        url = "https://astrolog.org/ftp/atlas/atlasbig.as";
+        hash = "sha256-P5M2sqJBom9J2dsquIsAOAMuQlh6EYwfETaIOGylAZ0=";
       };
     in
     ''
