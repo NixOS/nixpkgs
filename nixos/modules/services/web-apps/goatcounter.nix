@@ -61,6 +61,7 @@ in
             "serve"
             "-listen"
             "${cfg.address}:${toString cfg.port}"
+            "-automigrate"
           ]
           ++ lib.optionals cfg.proxy [
             "-tls"
