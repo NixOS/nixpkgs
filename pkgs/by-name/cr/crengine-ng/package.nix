@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "crengine-ng";
-  version = "0.9.13";
+  version = "0.9.15";
 
   src = fetchFromGitLab {
     owner = "coolreader-ng";
     repo = "crengine-ng";
     tag = finalAttrs.version;
-    hash = "sha256-0/exAqEs//tUlGpiBqeKkZ4LJeY7u0W4j4V9G5lL5cg=";
+    hash = "sha256-f9C9d8BDIX7EBeZfjxbd1QstPIe58JlkpbstWYUb1hI=";
   };
 
   nativeBuildInputs = [
