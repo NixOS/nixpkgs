@@ -7,6 +7,7 @@
   rustPlatform,
   stdenvNoCC,
   versionCheckHook,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     openssl
+    oniguruma
   ];
 
   env.CODE_VERSION = finalAttrs.version;
