@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   pytestCheckHook,
 
   # large-rebuild downstream dependencies and applications
@@ -11,7 +10,7 @@
   magic-wormhole,
   mitmproxy,
   typer,
-  flit-core,
+  flit-core_3,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -26,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-dG59ZMxp+jV0CT10mZaX4p8lWR7WmIn5WyrBkEnIj4I=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
