@@ -6,15 +6,20 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pysqlrecon";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tw1sm";
     repo = "PySQLRecon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+pme4uOgsh6iZEL73PaR1Y55r+Z/SPEVD2QWBsnMsNs=";
+    hash = "sha256-uHtSxgCBv6NolWqxyJidCUBwNrqOlDztR/hkbvy2TEY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
+  '';
 
   pythonRelaxDeps = [
     "impacket"
@@ -22,9 +27,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "typer"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [ uv-build ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     impacket
     pycryptodome
     rich
