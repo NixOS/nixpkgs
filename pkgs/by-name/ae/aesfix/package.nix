@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Correct bit errors in an AES key schedules";
     mainProgram = "aesfix";
-    homepage = "https://citp.princeton.edu/our-work/memory/";
+    homepage = "https://web.archive.org/web/20260828170444/https://citp.princeton.edu/our-work/memory/";
     maintainers = with lib.maintainers; [ fedx-sudo ];
     license = lib.licenses.bsd3;
   };
