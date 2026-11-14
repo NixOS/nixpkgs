@@ -7,6 +7,7 @@
   libuv,
   makeWrapper,
   nix-update-script,
+  nixosTests,
   nodejs_26,
   python3,
   stdenv,
@@ -113,6 +114,7 @@ buildNpmPackage (finalAttrs: {
         version
         ;
     };
+    tests.nixos = nixosTests.paseo;
     updateScript = nix-update-script { };
   };
 
