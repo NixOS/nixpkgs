@@ -1,35 +1,40 @@
 {
-  runCommandWith,
-  stdenvNoCC,
+  cudaPackages,
+  lib,
+  pkgsHostHost,
   python,
-  writableTmpDirAsHomeHook,
+  torch,
 }:
 let
-  pythonEnv = python.withPackages (ps: [ ps.torch ]);
+  # Installed JIT tools execute on, and generate code for, the package's HOST.
+  runtimePkgs = cudaPackages.pkgs.pkgsHostHost;
+  cc = pkgsHostHost.targetPackages.stdenv.cc;
+  nvcc = runtimePkgs.cudaPackages.cuda_nvcc;
 in
-# No compiler or ninja in the environment: torch.utils.cpp_extension must find them on its own
-runCommandWith
-  {
-    name = "torch-cpp-extension-check";
-    stdenv = stdenvNoCC;
-    derivationArgs.nativeBuildInputs = [ writableTmpDirAsHomeHook ];
-  }
-  ''
-    unset CC CXX
-    export TORCH_EXTENSIONS_DIR="$TMPDIR/torch_extensions"
-
-    ${pythonEnv.interpreter} - <<'EOF'
-    import torch
-    from torch.utils.cpp_extension import load_inline
-
-    ext = load_inline(
-        name="add_one",
-        cpp_sources="torch::Tensor add_one(torch::Tensor x) { return x + 1; }",
-        functions=["add_one"],
-        verbose=True,
-    )
-    assert torch.equal(ext.add_one(torch.zeros(3)), torch.ones(3))
-    EOF
-
-    touch $out
-  ''
+(cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; }) {
+  name = "torch-cpp-extension";
+  libraries = [ torch ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      cc
+      nvcc
+      runtimePkgs.ninja
+      runtimePkgs.bash
+    ])
+    "--set"
+    "CXX"
+    (lib.getExe' cc "${cc.targetPrefix}c++")
+    "--set"
+    "CUDA_HOME"
+    (toString (lib.getBin nvcc))
+    "--set-default"
+    "TORCH_CUDA_ARCH_LIST"
+    "native"
+    "--set-default"
+    "MAX_JOBS"
+    "2"
+  ];
+} (builtins.readFile ./cpp-extension.py)

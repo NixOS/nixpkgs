@@ -49,7 +49,7 @@ in
   inherit tester-compileCpu;
   compileCpu = tester-compileCpu.gpuCheck;
 
-  cpp-extension = callPackage ./cpp-extension.nix { };
+  cpp-extension = callPackage ./cpu-cpp-extension.nix { };
 
   mnist-example = callPackage ./mnist-example { };
 
