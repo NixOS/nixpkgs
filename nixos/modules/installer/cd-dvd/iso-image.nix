@@ -653,6 +653,9 @@ in
       type = lib.types.bool;
       description = ''
         Whether the ISO image should be an EFI-bootable volume.
+        The EFI system partition is appended to the image and recorded in a
+        GPT. UEFI firmware that rejects an overlapping hybrid partition table
+        can boot the result from a USB stick.
       '';
     };
 
@@ -1026,7 +1029,7 @@ in
       }
       // lib.optionalAttrs config.isoImage.makeEfiBootable {
         efiBootable = true;
-        efiBootImage = "boot/efi.img";
+        efiBootImage = efiImg;
       }
     );
 
