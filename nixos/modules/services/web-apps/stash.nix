@@ -1,5 +1,6 @@
 {
   config,
+  options,
   pkgs,
   lib,
   ...
@@ -8,6 +9,7 @@ let
   inherit (lib)
     getExe
     literalExpression
+    mkDefault
     mkEnableOption
     mkIf
     mkOption
@@ -366,6 +368,29 @@ let
             done
           '';
     };
+
+  # Type of the options that take a file secrets contract.
+  secretContractType = types.submodule {
+    imports = [ lib.contracts.fileSecrets.interface ];
+    options.request = mkOption {
+      default = { };
+      type = types.submodule {
+        options = {
+          mode = mkOption { readOnly = true; };
+          owner = mkOption {
+            default = cfg.user;
+            defaultText = literalExpression "config.services.stash.user";
+            readOnly = true;
+          };
+          group = mkOption {
+            default = cfg.group;
+            defaultText = literalExpression "config.services.stash.group";
+            readOnly = true;
+          };
+        };
+      };
+    };
+  };
 in
 {
   meta = {
@@ -431,13 +456,38 @@ in
         '';
       };
 
+      passwordSecret = mkOption {
+        type = types.nullOr secretContractType;
+        default = null;
+        description = ''
+          File secrets contract for the login password.
+          If set, it sets {option}`services.stash.passwordFile` to the path of the secret file.
+        '';
+      };
+
       jwtSecretKeyFile = mkOption {
         type = types.path;
         description = "Path to file containing a secret used to sign JWT tokens.";
       };
+      jwtSecretKeySecret = mkOption {
+        type = types.nullOr secretContractType;
+        default = null;
+        description = ''
+          File secrets contract for the secret used to sign JWT tokens.
+          If set, it sets {option}`services.stash.jwtSecretKeyFile` to the path of the secret file.
+        '';
+      };
       sessionStoreKeyFile = mkOption {
         type = types.path;
         description = "Path to file containing a secret for session store.";
+      };
+      sessionStoreKeySecret = mkOption {
+        type = types.nullOr secretContractType;
+        default = null;
+        description = ''
+          File secrets contract for the secret for the session store.
+          If set, it sets {option}`services.stash.sessionStoreKeyFile` to the path of the secret file.
+        '';
       };
 
       mutableSettings = mkOption {
@@ -463,6 +513,17 @@ in
   };
 
   config = mkIf cfg.enable {
+    # A contract option that is set gives the path of its `*File` option.
+    services.stash.passwordFile = mkIf (cfg.passwordSecret != null) (
+      mkDefault cfg.passwordSecret.response.path
+    );
+    services.stash.jwtSecretKeyFile = mkIf (cfg.jwtSecretKeySecret != null) (
+      mkDefault cfg.jwtSecretKeySecret.response.path
+    );
+    services.stash.sessionStoreKeyFile = mkIf (cfg.sessionStoreKeySecret != null) (
+      mkDefault cfg.sessionStoreKeySecret.response.path
+    );
+
     assertions = [
       {
         assertion =
@@ -471,7 +532,18 @@ in
           );
         message = "You must set either both username and password, or neither.";
       }
-    ];
+    ]
+    ++ lib.forEach [ "password" "jwtSecretKey" "sessionStoreKey" ] (
+      name:
+      let
+        fileOption = options.services.stash."${name}File";
+      in
+      {
+        # A definition with a higher priority than `mkDefault` replaces the path from the contract.
+        assertion = cfg."${name}Secret" == null || fileOption.highestPrio >= (mkDefault null).priority;
+        message = "Set only one of `services.stash.${name}File` and `services.stash.${name}Secret`.";
+      }
+    );
 
     services.stash.settings = {
       username = mkIf (cfg.username != null) cfg.username;
