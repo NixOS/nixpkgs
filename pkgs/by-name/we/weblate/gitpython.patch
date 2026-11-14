@@ -1,0 +1,47 @@
+commit 6bc99067200e9f449f4996e8cd7251b8209c8d96
+Author: Michal Čihař <michal@cihar.com>
+Date:   Wed Aug 26 20:30:33 2026 +0200
+
+    fix: avoid qouting config values
+    
+    GitPython now does this properly.
+    
+    (cherry picked from commit 1e0eacdacc4f3293af42f326f0f5357087022e06)
+
+diff --git a/weblate/vcs/git.py b/weblate/vcs/git.py
+index 2924a0e8011..0a5e037d0d5 100644
+--- a/weblate/vcs/git.py
++++ b/weblate/vcs/git.py
+@@ -659,10 +659,7 @@ class GitRepository(Repository):
+                 'remote "origin"',
+                 "fetch",
+                 (
+-                    dumps(
+-                        f"+refs/heads/{branch}:refs/remotes/origin/{branch}",
+-                        ensure_ascii=False,
+-                    )
++                    f"+refs/heads/{branch}:refs/remotes/origin/{branch}"
+                     if fast
+                     else "+refs/heads/*:refs/remotes/origin/*"
+                 ),
+@@ -674,7 +671,7 @@ class GitRepository(Repository):
+             (
+                 f"branch {escaped_branch}",
+                 "merge",
+-                dumps(f"refs/heads/{branch}", ensure_ascii=False),
++                f"refs/heads/{branch}",
+             ),
+             *self.get_remote_configure(pull_url, push_url, branch, fast),
+         )
+@@ -920,10 +917,7 @@ class GitWithGerritRepository(GitRepository):
+ 
+     def get_gerrit_fetch_refspec(self, branch: str) -> str:
+         branch = self.validate_branch_name(branch)
+-        return dumps(
+-            f"+refs/heads/{branch}:refs/remotes/gerrit/{branch}",
+-            ensure_ascii=False,
+-        )
++        return f"+refs/heads/{branch}:refs/remotes/gerrit/{branch}"
+ 
+     def configure_gerrit_target_branch(self, branch: str) -> None:
+         self.config_update(
