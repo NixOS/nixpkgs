@@ -271,8 +271,6 @@ let
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
-        cil = callPackage ../development/ocaml-modules/cil { };
-
         clap = callPackage ../development/ocaml-modules/clap { };
 
         class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
@@ -1488,10 +1486,6 @@ let
         num = callPackage ../development/ocaml-modules/num { };
 
         ### O ###
-
-        ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
-
-        ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
         ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
