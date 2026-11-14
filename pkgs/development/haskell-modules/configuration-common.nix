@@ -739,11 +739,6 @@ with haskellLib;
     lib.pipe
       (super.git-annex.override {
         file-io = self.filepath-bytestring;
-        # git-annex does not support magic >= 2.0 and doesn't intend to, at least for now.
-        # patching in support is pretty involved and changes in recent versions of magic
-        # are hard to review since it appears to be heavily LLM generated, see git-annex
-        # commits 512f9d6bebd3, ca4bc8f22c417760967b6f.
-        magic = self.magic_1_1;
       })
       [
         (overrideCabal (drv: {
