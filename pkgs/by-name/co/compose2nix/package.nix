@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "compose2nix";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "aksiksi";
     repo = "compose2nix";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ynoKp8VeDeIFUGc3j8sP6gEuoY7dt+NtdyJh53T+mjA=";
+    hash = "sha256-y7uqTrJhK/7wZhwV5N/eeFDUqBZwRm/fqJFfM02Got0=";
   };
 
   vendorHash = "sha256-kSQflAh9QuosJUvw0JhG8hjF/Q3zt3XhlPYQswEs7t4=";

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pkg-resources-backport,
   setuptools,
   websockets,
 }:
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-6/REvY5QxsAPV41Pvg8vrJPYbDrGUrpOPn0vzIcCu0k=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pkg-resources-backport
     setuptools
+  ];
+
+  propagatedBuildInputs = [
     websockets
   ];
 

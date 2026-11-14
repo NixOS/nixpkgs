@@ -10,6 +10,7 @@
   pnpmBuildHook,
   fetchPnpmDeps,
   nodejs,
+  buildPackages,
 }:
 let
   pnpm = pnpm_10;
@@ -95,7 +96,11 @@ buildGoModule (finalAttrs: {
   preBuild = ''
     rm -rf webui
     cp -r ${finalAttrs.webui} webui
-    CC="$CC_FOR_BUILD" LD="$CC_FOR_BUILD" GOOS= GOARCH= go generate
+    (
+        export CC="${lib.getExe buildPackages.stdenv.cc}"
+        export LD="${lib.getExe' buildPackages.stdenv.cc "ld"}"
+        GOOS= GOARCH= go generate
+    )
   '';
 
   checkFlags =

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ginatrapani/todo.txt-cli/releases/download/v${version}/todo.txt_cli-${version}.tar.gz";
+    url = "https://github.com/todotxt/todo.txt-cli/releases/download/v${version}/todo.txt_cli-${version}.tar.gz";
     sha256 = "sha256-07klQ0ApqsISITwQP7ZXOk+WDHTdRno++sm9mv6J0V8=";
   };
 

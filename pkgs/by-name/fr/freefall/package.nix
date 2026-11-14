@@ -1,9 +1,12 @@
 {
   lib,
   stdenv,
-  kernel,
+  linuxPackages,
 }:
 
+let
+  inherit (linuxPackages) kernel;
+in
 stdenv.mkDerivation {
   inherit (kernel) version src;
 

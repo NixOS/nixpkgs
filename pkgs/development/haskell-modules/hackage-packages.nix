@@ -117190,7 +117190,7 @@ self: {
       license = lib.licenses.mit;
       hydraPlatforms = lib.platforms.none;
     }
-  ) { inherit (pkgs) boolector; };
+  ) { boolector = null; };
 
   boolexpr = callPackage (
     {
