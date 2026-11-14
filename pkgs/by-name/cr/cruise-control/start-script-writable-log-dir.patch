@@ -1,0 +1,19 @@
+--- a/kafka-cruise-control-start.sh
++++ b/kafka-cruise-control-start.sh
+@@ -51,7 +51,7 @@ fi
+ 
+ # Log directory to use
+ if [ "x$LOG_DIR" = "x" ]; then
+-  LOG_DIR="$base_dir/logs"
++  LOG_DIR="logs"
+ fi
+ 
+ # Log4j settings
+@@ -163,6 +163,7 @@ fi
+ (( CYGWIN )) && CLASSPATH=$(cygpath --path --mixed "${CLASSPATH}")
+ 
+ # Launch mode
++mkdir -p "$LOG_DIR"
+ if [ "x$DAEMON_MODE" = "xtrue" ]; then
+   nohup $JAVA $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_JMX_OPTS $KAFKA_LOG4J_OPTS -cp "$CLASSPATH" $KAFKA_OPTS com.linkedin.kafka.cruisecontrol.KafkaCruiseControlMain "$@" > "$CONSOLE_OUTPUT_FILE" 2>&1 < /dev/null &
+ else
