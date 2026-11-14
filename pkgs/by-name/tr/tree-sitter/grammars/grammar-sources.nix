@@ -3051,9 +3051,9 @@
   };
 
   t32 = {
-    version = "9.0.3";
+    version = "10.0.0";
     url = "github:xasc/tree-sitter-t32";
-    hash = "sha256-tM0xN+boHCJzK16jRZKQYk/KkwEBut7KGZxj8KDHMMg=";
+    hash = "sha256-2hev+G+wDfrPlSjsgCKAg5/xvHF90ggWEnHICKl30e4=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
