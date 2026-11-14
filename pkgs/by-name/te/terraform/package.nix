@@ -16,17 +16,17 @@
 let
   package = buildGoModule rec {
     pname = "terraform";
-    version = "1.17.1";
+    version = "1.17.2";
 
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "terraform";
       tag = "v${version}";
-      hash = "sha256-/eQWz7J+u7Jt49difHhKqgC60jfLKNFZq25SMKJ16sk=";
+      hash = "sha256-3BAhqhFJISNV4d6tFDim2lx2um/wpfOhCd8+nVtyOsk=";
     };
 
     proxyVendor = true; # darwin/linux hash mismatch
-    vendorHash = "sha256-FkhDbT6wFmWXARMRGkZDR042/m3fkP9T4ZRzQy5oWRE=";
+    vendorHash = "sha256-u+Ydn08/+9xLXVOiUFI5C/XlCk9LUsO668nlR5jVXtQ=";
 
     patches = [
       ./provider-path-0_15.patch
