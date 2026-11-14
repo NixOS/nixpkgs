@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pybalboa";
-  version = "1.1.3";
+  version = "1.1.5b1";
   pyproject = true;
 
   src = fetchFromGitHub {
