@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-leptos";
   version = "0.3.11";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = "cargo-leptos";
@@ -23,10 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  env = {
-    OPENSSL_NO_VENDOR = 1;
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Fix for C++ compiler version on darwin for wasm-opt
     CRATE_CC_NO_DEFAULTS = 1;
   };
