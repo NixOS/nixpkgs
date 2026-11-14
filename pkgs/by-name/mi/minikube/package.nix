@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  kubectl,
   pkg-config,
   which,
   libvirt,
@@ -114,6 +115,10 @@ buildGoModule (finalAttrs: {
     description = "Tool that makes it easy to run Kubernetes locally";
     mainProgram = "minikube";
     license = lib.licenses.asl20;
+    # installPhase symlinks $out/bin/kubectl to minikube, which acts as kubectl when
+    # argv[0] says so. That collides with the kubectl package, and anyone installing
+    # both alongside each other wants the real kubectl to win.
+    priority = (kubectl.meta.priority or lib.meta.defaultPriority) + 1;
     maintainers = with lib.maintainers; [
       vdemeester
       atkinschang
