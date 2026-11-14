@@ -3,16 +3,22 @@
   fetchFromGitHub,
   buildPythonPackage,
   hatchling,
+  pyprojectVersionPatchHook,
 
   # dependencies
   beancount-black,
+  beancount-data,
+  beancount-exporter,
   beancount-parser,
+  beanhub-extract,
   beanhub-forms,
   beanhub-import,
   beanhub-inbox,
   click,
   fastapi,
+  fastapi-mcp,
   jinja2,
+  orjson,
   pydantic-settings,
   pydantic,
   pyyaml,
@@ -39,29 +45,40 @@
 
 buildPythonPackage rec {
   pname = "beanhub-cli";
-  version = "3.0.1";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";
     tag = version;
-    hash = "sha256-hreVGsptCGW6L3rj6Ec8+lefZWpQ4tZtUEJI+NxTO7w=";
+    hash = "sha256-rac2qu9kqiflQjGASnJtoLEAKP4rEtC0yCntrqNa0cs=";
   };
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "httpx"
+    "rich"
+  ];
+
+  # Tag 3.3.1 left pyproject.toml at 3.3.0
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ hatchling ];
 
   dependencies = [
     beancount-black
+    beancount-data
+    beancount-exporter
     beancount-parser
+    beanhub-extract
     beanhub-forms
     beanhub-import
     beanhub-inbox
     click
     fastapi
+    fastapi-mcp
     jinja2
+    orjson
     pydantic
     pydantic-settings
     pyyaml
@@ -98,6 +115,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTestPaths = [
+    # Requires pytest-benchmark
+    "tests/benchmark"
+  ];
 
   pythonImportsCheck = [ "beanhub_cli" ];
 
