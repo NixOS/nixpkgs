@@ -36,8 +36,7 @@ let
           owner = "nginx";
           path = "/var/ssl/${host}-ca.pem";
         };
-        label = "www_ca";
-        profile = "three-month";
+        profile = "default";
         remote = "localhost:8888";
         auth_key_file = toString authKey;
       };
@@ -168,7 +167,12 @@ let
 
             systemd.services.nginx.wantedBy = lib.mkForce [ ];
 
-            systemd.services.certmgr.after = [ "cfssl.service" ];
+            systemd.services.certmgr.after = [
+              "cfssl.service"
+              # make sure nginx starts up first so we can check that certmgr
+              # restarts it
+              "nginx.service"
+            ];
             services.certmgr = {
               enable = true;
               inherit svcManager;
