@@ -338,6 +338,28 @@ let
       vk = super.vk.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.vulkan-loader ];
       });
+      cl-mixed = super.cl-mixed.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libmixed ];
+      });
+      # Harmony only uses these drains on Linux, but Quicklisp lists them everywhere
+      cl-mixed-alsa = super.cl-mixed-alsa.overrideLispAttrs (o: {
+        nativeLibs = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.alsa-lib ];
+      });
+      cl-mixed-pipewire = super.cl-mixed-pipewire.overrideLispAttrs (o: {
+        nativeLibs = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.pipewire ];
+      });
+      cl-mixed-pulse = super.cl-mixed-pulse.overrideLispAttrs (o: {
+        nativeLibs = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libpulseaudio ];
+      });
+      # Quicklisp only lists the Linux drains, and harmony needs OSS on :bsd, which includes macOS
+      harmony = super.harmony.overrideLispAttrs (o: {
+        lispLibs =
+          o.lispLibs
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            self.cl-mixed-coreaudio
+            self.cl-mixed-oss
+          ];
+      });
       _3d-math = super._3d-math.overrideLispAttrs (o: {
         flags = o.flags ++ (if o.program == "sbcl" then [ "--dynamic-space-size 4096" ] else [ ]);
       });
