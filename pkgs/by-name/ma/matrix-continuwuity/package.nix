@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       nyabinary
       snaki
       logn
+      pyrox0
     ];
     # Not a typo, continuwuity is a drop-in replacement for conduwuit.
     mainProgram = "conduwuit";
