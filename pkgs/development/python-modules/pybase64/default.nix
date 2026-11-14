@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "pybase64";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-7cUgvY/RLpkl6EfDCnki299m+KD2EpDLwIt4ut1hs38=";
+    hash = "sha256-Qz5KvqVtm3Fr3cWRrW5DvATA1yBaZ9TC1U461eYZY7c=";
   };
 
   build-system = [ setuptools ];
