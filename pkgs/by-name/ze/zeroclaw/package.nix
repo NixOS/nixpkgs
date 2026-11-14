@@ -19,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeroclaw";
-  version = "0.8.4";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "zeroclaw-labs";
     repo = "zeroclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6WAF826aftGuZjSHM/upWYmmVVjMS+vS+Kg4NetvjJc=";
+    hash = "sha256-ntONOqywlcJXLO4/v+212xUn637ipnw7Fi1ejfpstNo=";
   };
 
-  cargoHash = "sha256-Pycl0MMyxWtfcssoFhvDT4UQJuVVBDNzN536eBFlND4=";
+  cargoHash = "sha256-FY77N8KhBmfm9IwNvpb6G49gj4f8lqGKlb91i6CfeqA=";
 
   # zerocode is a separate workspace member and expects the daemon beside it.
   cargoBuildFlags = [
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/web";
-    hash = "sha256-0CsPPy5a/jTr8nImwvTwStTgHm9wZbFBwCZVHKPZCvE=";
+    hash = "sha256-xwp8rzQeZf51W4c/F//HlpYHi18Z61TeGuKD3DjUltk=";
   };
   npmRoot = "web";
 
