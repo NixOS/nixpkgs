@@ -1,30 +1,37 @@
 {
   stdenv,
+  stdenvNoCC,
   buildGoModule,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   lib,
 
   buf,
   cacert,
+  dart-sass,
   grpc-gateway,
+  protoc-gen-connect-go,
   protoc-gen-go,
   protoc-gen-go-grpc,
   protoc-gen-validate,
-  sass,
   statik,
+  yq-go,
 }:
 
 let
-  version = "2.71.7";
+  version = "4.20.3";
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
-    rev = "v${version}";
-    hash = "sha256-0ZOiwJ/ehDBkbd7iTTyVJzLj6Etph5/oxrDrck30ZL8=";
+    tag = "v${version}";
+    hash = "sha256-gOyMm+6GWItFnoaypmST/RsuurBqy+K4U5mf60d5jyE=";
   };
-  goModulesHash = "sha256-iZCjHSpQ7Gy41Dd4svRLbyEh1N8VE8U0uCOlN9rfJQU=";
+  goModulesHash = "sha256-IZM5DS7SbEgwPinkb/GA0aU9IqnLmPpP6C0Bp4Nh5Vc=";
 
+  # protoc plugins that live inside the ZITADEL repo itself. Upstream installs
+  # them with `go install ./internal/protoc/...` (the `generate-install` target
+  # in apps/api/project.json).
   buildZitadelProtocGen =
     name:
     buildGoModule {
@@ -36,22 +43,95 @@ let
       proxyVendor = true;
       vendorHash = goModulesHash;
 
-      buildPhase = ''
-        go install internal/protoc/protoc-gen-${name}/main.go
-      '';
+      subPackages = [ "internal/protoc/protoc-gen-${name}" ];
 
-      postInstall = ''
-        mv $out/bin/main $out/bin/protoc-gen-${name}
-      '';
+      doCheck = false;
     };
 
   protoc-gen-authoption = buildZitadelProtocGen "authoption";
   protoc-gen-zitadel = buildZitadelProtocGen "zitadel";
 
-  # Buf downloads dependencies from an external repo - there doesn't seem to
-  # really be any good way around it. We'll use a fixed-output derivation so it
-  # can download what it needs, and output the relevant generated code for use
-  # during the main build.
+  # proto/buf.lock pins dependencies that buf resolves from the Buf Schema
+  # Registry. Fetching them is the only step that needs network access, so it
+  # is the only fixed-output derivation: `buf export` writes each locked module
+  # out as plain .proto files, which do not depend on the buf version that
+  # fetches them. Compiling is left to protoImage, because the bytes of a buf
+  # image do change between buf releases.
+  protoDeps = stdenvNoCC.mkDerivation {
+    pname = "zitadel-proto-deps";
+    inherit version;
+
+    src = zitadelRepo;
+
+    nativeBuildInputs = [
+      buf
+      cacert
+      yq-go
+    ];
+
+    dontConfigure = true;
+    dontBuild = true;
+    dontFixup = true;
+
+    # $out/<owner>/<repository> for every dependency in buf.lock
+    installPhase = ''
+      runHook preInstall
+      export HOME=$TMPDIR
+      yq '.deps[] | .remote + "/" + .owner + "/" + .repository + ":" + .commit' proto/buf.lock |
+        while read -r module; do
+          name=''${module%%:*}
+          buf export "$module" -o "$out/''${name#*/}"
+        done
+      runHook postInstall
+    '';
+
+    outputHashMode = "recursive";
+    outputHash = "sha256-rBC6YncTdLSnTlaYKCNPmEAjZYVEM0qogQo9xZdq3SY=";
+  };
+
+  # The proto workspace as a descriptor set, built offline: the exported
+  # dependencies become local workspace modules in place of the BSR ones.
+  #
+  # $out is the image file itself and carries no `.binpb` suffix, so every
+  # `buf generate` below has to name its format explicitly.
+  protoImage = stdenvNoCC.mkDerivation {
+    pname = "zitadel-proto-image";
+    inherit version;
+
+    src = zitadelRepo;
+
+    nativeBuildInputs = [
+      buf
+      yq-go
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      cp -r --no-preserve=mode ${protoDeps} deps
+      yq -i 'del(.deps)' proto/buf.yaml
+      rm proto/buf.lock
+      {
+        echo 'version: v1'
+        echo 'directories:'
+        echo '  - proto'
+        for module in deps/*/*; do
+          echo "  - $module"
+        done
+      } > buf.work.yaml
+
+      HOME=$TMPDIR buf build proto -o image.binpb
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp image.binpb $out
+      runHook postInstall
+    '';
+  };
+
   generateProtobufCode =
     {
       pname,
@@ -60,67 +140,98 @@ let
       bufArgs ? "",
       workDir ? ".",
       outputPath,
-      hash,
     }:
     stdenv.mkDerivation {
       pname = "${pname}-buf-generated";
       inherit version;
 
       src = zitadelRepo;
-      patches = [ ./console-use-local-protobuf-plugins.patch ];
 
-      nativeBuildInputs = nativeBuildInputs ++ [
-        buf
-        cacert
-      ];
+      nativeBuildInputs = nativeBuildInputs ++ [ buf ];
 
       buildPhase = ''
+        runHook preBuild
         cd ${workDir}
-        HOME=$TMPDIR buf generate ${bufArgs}
+        HOME=$TMPDIR buf generate ${protoImage}#format=binpb ${bufArgs}
+        runHook postBuild
       '';
 
       installPhase = ''
+        runHook preInstall
         cp -r ${outputPath} $out
+        runHook postInstall
       '';
-
-      outputHashMode = "recursive";
-      outputHashAlgo = "sha256";
-      outputHash = hash;
     };
 
+  # pnpm store and the protobuf-es codegen for the console
+  jsDeps = callPackage ./javascript.nix { inherit protoImage version zitadelRepo; };
+
+  # Upstream runs `buf generate` from the repository root (the `generate-stubs`
+  # target in apps/api/project.json); here it runs against protoImage.
   protobufGenerated = generateProtobufCode {
     pname = "zitadel";
     inherit version;
     nativeBuildInputs = [
       grpc-gateway
       protoc-gen-authoption
+      protoc-gen-connect-go
       protoc-gen-go
       protoc-gen-go-grpc
       protoc-gen-validate
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-rc5A2bQ2iWkybprQ7IWsQ/LLAQxPqhlxzVvPn8Ec56E=";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zitadel";
   inherit version;
 
   src = zitadelRepo;
 
+  patches = [
+    # `zitadel setup` fails at step 64 with "type eventstore.command2[] does
+    # not exist" on databases that never ran step 64, e.g. every 2.71.x one.
+    # https://github.com/zitadel/zitadel/issues/13039
+    (fetchpatch {
+      name = "setup-64-create-command2-type.patch";
+      url = "https://github.com/zitadel/zitadel/commit/c4ac8a10324a6f4fcbaaf44b5aa4c97ceb2411df.patch";
+      hash = "sha256-v0MzY4CSAjG13IeNppoyWhioNYmUCdDCYOn4j3Rbmug=";
+    })
+  ];
+
   nativeBuildInputs = [
-    sass
+    dart-sass
     statik
   ];
 
+  # The upstream //go:generate directive shells out to `pnpm sass`; we provide
+  # dart-sass directly instead of going through the JS toolchain.
+  postPatch = ''
+    substituteInPlace internal/api/ui/login/static/resources/generate.go \
+      --replace-fail "pnpm sass" "sass"
+  '';
+
   proxyVendor = true;
   vendorHash = goModulesHash;
-  ldflags = [ "-X 'github.com/zitadel/zitadel/cmd/build.version=${version}'" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X 'github.com/zitadel/zitadel/cmd/build.version=${version}'"
+  ];
 
-  # Adapted from Makefile in repo, with dependency fetching and protobuf codegen
-  # bits removed
+  # The repository also contains documentation snippets and test helpers that
+  # are not part of the main module; only the root package is the server.
+  subPackages = [ "." ];
+
+  # Adapted from apps/api/project.json (targets: generate-stubs, generate-statik,
+  # generate-assets, build-console), with dependency fetching and protobuf
+  # codegen bits removed.
   preBuild = ''
+    # ZITADEL warns on every invocation if the build date is unset, so derive a
+    # deterministic one from SOURCE_DATE_EPOCH.
+    ldflags+=" -X github.com/zitadel/zitadel/cmd/build.date=$(date -u -d "@$SOURCE_DATE_EPOCH" +%Y-%m-%dT%H:%M:%SZ)"
+
     mkdir -p pkg/grpc
     cp -r ${protobufGenerated}/grpc/github.com/zitadel/zitadel/pkg/grpc/* pkg/grpc
     mkdir -p openapi/v2/zitadel
@@ -131,23 +242,36 @@ buildGoModule rec {
     go generate internal/notification/statik/generate.go
     go generate internal/statik/generate.go
 
-    mkdir -p docs/apis/assets
-    go run internal/api/assets/generator/asset_generator.go -directory=internal/api/assets/generator/ -assets=docs/apis/assets/assets.md
+    mkdir -p apps/docs/content/apis/assets
+    go run internal/api/assets/generator/asset_generator.go \
+      -directory=internal/api/assets/generator/ \
+      -assets=apps/docs/content/apis/assets/assets.mdx
 
-    cp -r ${passthru.console}/* internal/api/ui/console/static
+    find internal/api/ui/console/static -mindepth 1 ! -name gitkeep -delete
+    cp -r ${finalAttrs.passthru.console}/* internal/api/ui/console/static
   '';
 
   doCheck = false;
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -Dm755 $GOPATH/bin/zitadel $out/bin/
+    runHook preInstall
+    install -Dm755 $GOPATH/bin/zitadel $out/bin/zitadel
+    runHook postInstall
   '';
 
   passthru = {
     console = callPackage (import ./console.nix {
-      inherit generateProtobufCode version zitadelRepo;
+      inherit
+        generateProtobufCode
+        jsDeps
+        version
+        zitadelRepo
+        ;
     }) { };
+
+    # zitadel-login builds from the same source and needs the same generated
+    # packages/zitadel-proto, but neither the API server nor the console.
+    inherit (jsDeps) protoPackageGenerated;
   };
 
   meta = {
@@ -155,8 +279,14 @@ buildGoModule rec {
     homepage = "https://zitadel.com/";
     downloadPage = "https://github.com/zitadel/zitadel/releases";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    license = lib.licenses.asl20;
+    # v2.71.7 was Apache-2.0; v3.0.0 relicensed to AGPL-3.0-only
+    # (LICENSING.md, https://zitadel.com/blog/apache-to-agpl).
+    license = lib.licenses.agpl3Only;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = [ lib.maintainers.nrabulinski ];
+    maintainers = with lib.maintainers; [
+      nrabulinski
+      byteflavour
+    ];
+    mainProgram = "zitadel";
   };
-}
+})
