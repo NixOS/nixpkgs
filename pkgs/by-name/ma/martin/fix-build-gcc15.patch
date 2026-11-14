@@ -1,0 +1,40 @@
+diff --git c/Cargo.lock i/Cargo.lock
+index aefa9cb5..44d51258 100644
+--- c/Cargo.lock
++++ i/Cargo.lock
+@@ -5257,18 +5257,18 @@ checksum = "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
+ 
+ [[package]]
+ name = "libdeflate-sys"
+-version = "1.24.0"
++version = "1.26.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "805824325366c44599dfeb62850fe3c7d7b3e3d75f9ab46785bc7dba3676815c"
++checksum = "d7870e5fbd2766179a937c725fb11f4ca0ef025d982beb61bd3ce755425bd19c"
+ dependencies = [
+  "cc",
+ ]
+ 
+ [[package]]
+ name = "libdeflater"
+-version = "1.24.0"
++version = "1.26.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b270bcc7e9d6dce967a504a55b1b0444f966aa9184e8605b531bc0492abb30bb"
++checksum = "0cbb8285d2e2bd4b8d4155840ae81929354b4ba0d7b3c272c84761ffa2141e1f"
+ dependencies = [
+  "libdeflate-sys",
+ ]
+diff --git c/deny.toml i/deny.toml
+index 4bb3aeb5..57c1c379 100644
+--- c/deny.toml
++++ i/deny.toml
+@@ -70,8 +70,6 @@ skip-tree = []
+ deny = [
+     # The last-known-good versions are pinned in `just update`; ban everything newer
+     # until a release is verified to build on all targets (musl + Windows).
+-    { crate = "libdeflater:>1.24.0", reason = "1.25.x bundles libdeflate 1.25, which does not compile under musl" },
+-    { crate = "libdeflate-sys:>1.24.0", reason = "1.25.x bundles libdeflate 1.25, which does not compile under musl" },
+     { crate = "freetype-sys:>0.20.1", reason = "newer releases bundle a libpng that fails to compile (missing zlib.h) on musl and Windows" },
+     { crate = "freetype-rs:>0.35.0", reason = "newer releases depend on freetype-sys >0.20.1 which fails to compile on musl and Windows" },
+     { crate = "sdf_glyph_renderer:>1.0.2", reason = "newer releases depend on freetype-rs >0.35.0 which fails to compile on musl and Windows" },
