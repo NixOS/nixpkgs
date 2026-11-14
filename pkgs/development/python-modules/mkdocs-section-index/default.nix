@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   mkdocs,
+  properdocs,
   pytestCheckHook,
   mechanicalsoup,
   testfixtures,
@@ -13,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mkdocs-section-index";
-  version = "0.3.10";
+  version = "0.3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oprypin";
     repo = "mkdocs-section-index";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cw/a17xliK68vStC20f+IHI3nQl1/s/lIIj1tyQJti0=";
+    hash = "sha256-gQ3hOEwds8isv96J3dp9iTPJ737z0z8R7Cgxa71tjXw=";
   };
 
   build-system = [
@@ -29,6 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     mkdocs
+    properdocs
   ];
 
   pythonImportsCheck = [
