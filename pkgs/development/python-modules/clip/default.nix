@@ -8,11 +8,12 @@
   torch,
   torchvision,
   tqdm,
+  standard-pkg-resources,
 }:
 
 buildPythonPackage {
   pname = "clip";
-  version = "1.0-unstable-2022-07-27";
+  version = "1.0-unstable-2026-03-25";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -30,6 +31,7 @@ buildPythonPackage {
     torch
     torchvision
     tqdm
+    standard-pkg-resources
   ];
 
   pythonImportsCheck = [ "clip" ];
