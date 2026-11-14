@@ -252,8 +252,10 @@ let
               "--dns"
               data.dnsProvider
             ]
-            ++ lib.optionals (!data.dnsPropagationCheck) [
+            ++ lib.optionals (!data.dnsAuthoritativePropagationCheck) [
               "--dns.propagation.disable-ans"
+            ]
+            ++ lib.optionals (!data.dnsRecursivePropagationCheck) [
               "--dns.propagation.disable-rns"
             ]
             ++ lib.optionals (data.dnsResolver != null) [
@@ -860,12 +862,28 @@ let
           '';
         };
 
-        dnsPropagationCheck = lib.mkOption {
+        dnsAuthoritativePropagationCheck = lib.mkOption {
           type = lib.types.bool;
-          inherit (defaultAndText "dnsPropagationCheck" true) default defaultText;
+          inherit (defaultAndText "dnsAuthoritativePropagationCheck" true) default defaultText;
           description = ''
-            Toggles lego DNS propagation check, which is used alongside DNS-01
-            challenge to ensure the DNS entries required are available.
+            Toggles lego's authoritative DNS propagation check, which is used
+            alongside DNS-01 challenge to ensure the DNS entries required are
+            available.
+          '';
+        };
+
+        dnsRecursivePropagationCheck = lib.mkOption {
+          type = lib.types.bool;
+          inherit (defaultAndText "dnsRecursivePropagationCheck" false) default defaultText;
+          description = ''
+            Toggles lego's recursive DNS propagation check, which is used
+            alongside DNS-01 challenge to ensure the DNS entries required are
+            available.
+
+            :::{.warning}
+            Recursive DNS queries can result in negative caching, which can
+            break the propagation check.
+            :::
           '';
         };
 
@@ -1092,6 +1110,9 @@ in
     )
     (lib.mkRemovedOptionModule [ "security" "acme" "preliminarySelfsigned" ]
       "This option has been removed. Preliminary self-signed certificates are now always generated to simplify the dependency structure."
+    )
+    (lib.mkRemovedOptionModule [ "security" "acme" "defaults" "dnsPropagationCheck" ]
+      "This open has been replaced by `dnsAuthoritativePropagationCheck` and `dnsRecursivePropagationCheck`."
     )
     (lib.mkChangedOptionModule
       [ "security" "acme" "validMin" ]

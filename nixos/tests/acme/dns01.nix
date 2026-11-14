@@ -82,7 +82,7 @@ in
         security.acme.certs."${domain}" = {
           domain = "*.${domain}";
           dnsProvider = "exec";
-          dnsPropagationCheck = false;
+          dnsAuthoritativePropagationCheck = false;
           environmentFile = pkgs.writeText "wildcard.env" ''
             EXEC_PATH=${dnsScript}
             EXEC_POLLING_INTERVAL=1
