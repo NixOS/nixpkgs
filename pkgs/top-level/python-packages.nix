@@ -21153,6 +21153,8 @@ self: super: with self; {
 
   toolz = callPackage ../development/python-modules/toolz { };
 
+  toon-format = callPackage ../development/python-modules/toon-format { };
+
   toonapi = callPackage ../development/python-modules/toonapi { };
 
   toposort = callPackage ../development/python-modules/toposort { };
