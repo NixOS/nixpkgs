@@ -25,11 +25,14 @@ let
 
   inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
   inSystem = config.boot.supportedFilesystems.btrfs or false;
+  kernelVersion = config.boot.kernelPackages.kernel.version;
 
   cfgScrub = config.services.btrfs.autoScrub;
+  cfgReclaim = config.services.btrfs.autoReclaim;
 
   enableAutoScrub = cfgScrub.enable;
-  enableBtrfs = inInitrd || inSystem || enableAutoScrub;
+  enableAutoReclaim = cfgReclaim.enable;
+  enableBtrfs = inInitrd || inSystem || enableAutoScrub || enableAutoReclaim;
 
 in
 
@@ -76,6 +79,78 @@ in
         '';
       };
 
+    };
+
+    services.btrfs.autoReclaim = {
+      enable = mkEnableOption "automatic background reclaim threshold for btrfs filesystems" // {
+        description = ''
+          Whether to enable automatic relocation of mostly-empty btrfs block
+          groups.
+
+          On write-heavy filesystems, freed space gets stranded in small block
+          groups, leading to failures such as "No space left on device" even
+          though plenty of space is free. When enabled, the kernel relocates
+          such block groups in the background as their usage falls below the
+          configured threshold. Filesystems mounted after boot are configured
+          on the next boot.
+
+          For details, see [balance docs](https://btrfs.readthedocs.io/en/latest/Balance.html)
+          and [sysfs docs](https://btrfs.readthedocs.io/en/latest/Administration.html#uuid-allocations-data-metadata-system).
+        '';
+      };
+
+      dataThreshold = mkOption {
+        default = null;
+        defaultText = "10, or null if {option}`services.btrfs.autoReclaim.dynamicReclaim` is enabled";
+        type = types.nullOr (types.ints.between 0 100);
+        example = 75;
+        description = ''
+          Percentage of a data block group's space usage below which the
+          kernel relocates the block group in the background.
+
+          Only available on Linux kernel 5.19 and later. Set to null to leave
+          it at its [kernel default](https://btrfs.readthedocs.io/en/latest/Administration.html#uuid-allocations-data-metadata-system).
+
+          ::: {.warning}
+          Setting this value too high can cause excessive write amplification
+          on SSDs due to frequent block group relocations.
+          :::
+        '';
+      };
+
+      metadataThreshold = mkOption {
+        default = null;
+        defaultText = "50, or null if {option}`services.btrfs.autoReclaim.dynamicReclaim` is enabled";
+        type = types.nullOr (types.ints.between 0 100);
+        example = 75;
+        description = ''
+          Percentage of a metadata block group's space usage below which the
+          kernel relocates the block group in the background.
+
+          Only available on Linux kernel 5.19 and later. Set to null to leave
+          it at its [kernel default](https://btrfs.readthedocs.io/en/latest/Administration.html#uuid-allocations-data-metadata-system).
+
+          ::: {.warning}
+          Setting this value too high can cause excessive write amplification
+          on SSDs due to frequent block group relocations.
+          :::
+        '';
+      };
+
+      dynamicReclaim = mkOption {
+        default = false;
+        defaultText = "true on Linux kernels 6.11 and later";
+        type = types.bool;
+        description = ''
+          Whether to let the kernel compute the reclaim threshold by itself,
+          instead of {option}`dataThreshold` and {option}`metadataThreshold`.
+
+          The kernel reclaims only while the filesystem runs low on
+          unallocated space, keeping write amplification near zero otherwise.
+          Only available on Linux kernel 6.11 and later. See [the kernel's
+          reclaim settings](https://btrfs.readthedocs.io/en/latest/Administration.html#uuid-allocations-data-metadata-system) for details.
+        '';
+      };
     };
   };
 
@@ -254,6 +329,80 @@ in
       systemd.targets.timers.wants = map (
         fs: "btrfs-scrub@${utils.escapeSystemdPath fs}.timer"
       ) cfgScrub.fileSystems;
+    })
+
+    (mkIf enableAutoReclaim {
+      # Let the kernel self-tune on kernels with support for it (6.11 and later),
+      # and fall back to the fixed thresholds otherwise.
+      services.btrfs.autoReclaim.dynamicReclaim = mkDefault (lib.versionAtLeast kernelVersion "6.11");
+      services.btrfs.autoReclaim.dataThreshold = mkDefault (
+        if cfgReclaim.dynamicReclaim then null else 10
+      );
+      services.btrfs.autoReclaim.metadataThreshold = mkDefault (
+        if cfgReclaim.dynamicReclaim then null else 50
+      );
+
+      assertions = [
+        {
+          assertion = lib.versionAtLeast kernelVersion "5.19";
+          message = ''
+            services.btrfs.autoReclaim requires Linux kernel 5.19 or later.
+          '';
+        }
+        {
+          assertion = cfgReclaim.dynamicReclaim -> lib.versionAtLeast kernelVersion "6.11";
+          message = ''
+            services.btrfs.autoReclaim.dynamicReclaim requires Linux kernel 6.11 or later.
+          '';
+        }
+        {
+          # The kernel rejects fixed-threshold writes while dynamic reclaim is on.
+          assertion =
+            cfgReclaim.dynamicReclaim
+            -> cfgReclaim.dataThreshold == null && cfgReclaim.metadataThreshold == null;
+          message = ''
+            services.btrfs.autoReclaim: dynamicReclaim ignores dataThreshold and
+            metadataThreshold because the kernel rejects threshold writes while
+            dynamic reclaim is enabled. Leave both thresholds unset, or disable
+            dynamicReclaim.
+          '';
+        }
+      ];
+
+      # Nothing gets reclaimed with dynamic reclaim off and no thresholds set.
+      warnings =
+        lib.optionals
+          (
+            !cfgReclaim.dynamicReclaim
+            && cfgReclaim.dataThreshold == null
+            && cfgReclaim.metadataThreshold == null
+          )
+          [
+            ''
+              services.btrfs.autoReclaim is enabled with dynamic reclaim off and
+              no thresholds set, so nothing will be reclaimed. Set
+              dataThreshold or metadataThreshold, or enable dynamicReclaim.
+            ''
+          ];
+
+      # udev rules never match the /sys/fs/btrfs entries (they carry no
+      # SUBSYSTEM), so set the attributes at boot via systemd-tmpfiles.
+      # dynamic_reclaim is written unconditionally, since the kernel rejects
+      # threshold writes while it is on; it must be cleared first when toggled off.
+      systemd.tmpfiles.rules = [
+        "w /sys/fs/btrfs/*/allocation/data/dynamic_reclaim - - - - ${
+          if cfgReclaim.dynamicReclaim then "1" else "0"
+        }"
+        "w /sys/fs/btrfs/*/allocation/metadata/dynamic_reclaim - - - - ${
+          if cfgReclaim.dynamicReclaim then "1" else "0"
+        }"
+      ]
+      ++ optionals (cfgReclaim.dataThreshold != null) [
+        "w /sys/fs/btrfs/*/allocation/data/bg_reclaim_threshold - - - - ${toString cfgReclaim.dataThreshold}"
+      ]
+      ++ optionals (cfgReclaim.metadataThreshold != null) [
+        "w /sys/fs/btrfs/*/allocation/metadata/bg_reclaim_threshold - - - - ${toString cfgReclaim.metadataThreshold}"
+      ];
     })
   ];
 }
