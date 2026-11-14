@@ -879,6 +879,8 @@ mapAliases {
   y-py = throw "'y-py' has been removed as it was archived upstream; consider using 'pycrdt' instead"; # Added 2026-01-21
   Yapsy = throw "'Yapsy' has been renamed to/replaced by 'yapsy'"; # Converted to throw 2025-10-29
   yasi = throw "'yasi' has been removed as it is unmaintained upstream"; # Added 2026-01-31
+  youtube-dl = throw "'youtube-dl' has been removed due to lack of maintenace, use `yt-dlp` instead"; # Added 2026-11-14
+  youtube-dl-light = throw "'youtube-dl' has been removed due to lack of maintenace, use `yt-dlp-light` instead"; # Added 2026-11-14
   ypy-websocket = throw "'ypy-websocket' has been removed as it was archived upstream; consider using 'pycrdt-websocket' instead"; # Added 2026-01-21
   z3 = throw "'z3' has been renamed to/replaced by 'z3-solver'"; # Converted to throw 2025-10-29
   zadnegoale = throw "'zadnegoale' has been removed because it was archived upstream"; # Added 2026-07-23

@@ -17,7 +17,7 @@
   fetchFromGitLab,
   wrapGAppsHook4,
   xdg-utils,
-  youtube-dl,
+  yt-dlp,
   ffmpeg,
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${
         lib.makeBinPath [
           xdg-utils
-          youtube-dl
+          yt-dlp
           ffmpeg
         ]
       }"

@@ -23279,10 +23279,6 @@ self: super: with self; {
 
   youtokentome = callPackage ../development/python-modules/youtokentome { };
 
-  youtube-dl = callPackage ../development/python-modules/youtube-dl { };
-
-  youtube-dl-light = callPackage ../development/python-modules/youtube-dl { ffmpegSupport = false; };
-
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 
   youtube-search-python = callPackage ../development/python-modules/youtube-search-python { };
