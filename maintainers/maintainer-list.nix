@@ -4159,6 +4159,12 @@
     github = "boogiewoogit";
     githubId = 27273554;
   };
+  Booker786 = {
+    name = "Booker786";
+    email = "booker786@foxmail.com";
+    github = "Shelton786";
+    githubId = 64291638;
+  };
   booklearner = {
     name = "booklearner";
     email = "booklearner@proton.me";
