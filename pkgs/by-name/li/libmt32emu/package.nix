@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmt32emu";
-  version = "2.8.0";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     tag = "libmt32emu_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-xvPLOpTqKM+hcjwMYgG61sVQ4HDnVHG2S1TwGLIP8zs=";
+    hash = "sha256-QuOQvKNCKl/UypTub9FCoYu3HJrMi6LksKPGaQUWfO8=";
   };
 
   outputs = [

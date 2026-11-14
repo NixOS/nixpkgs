@@ -73,6 +73,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       hash = "sha256-MDzU6cp2SXQU+iS3/wxaPH01fbgRy1DXMMuLfpJn4y0=";
       excludes = [ "docs/changes.rst" ];
     })
+    # GitPython 3.1.60 broke the Weblate tests.
+    # So we use a manual cherry-pick of https://github.com/WeblateOrg/weblate/commit/1e0eacdacc4f3293af42f326f0f5357087022e06
+    ./gitpython.patch
   ];
 
   postPatch = ''

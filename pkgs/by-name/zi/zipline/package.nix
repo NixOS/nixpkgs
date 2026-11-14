@@ -142,5 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      # https://github.com/NixOS/nixpkgs/issues/587349
+      "CVE-2026-126932: Disabled MIME Type Policy Bypass via File Metadata Update"
+      "CVE-2026-126933: Disabled Extensions Upload Filter Bypass via Extension Format Mismatch"
+      "CVE-2026-126934: Rate Limit Bypass via Spoofed X-Forwarded-For"
+      "CVE-2026-126935: maxViews Limit Bypass via Race Condition"
+    ];
   };
 })
