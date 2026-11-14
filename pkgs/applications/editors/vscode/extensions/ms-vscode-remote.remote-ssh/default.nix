@@ -19,7 +19,7 @@ let
     # Use Node from nixpkgs for NixOS hosts
     #
 
-    serverDir="$HOME/.vscode-server/bin/$COMMIT_ID"
+    serverDir="$VSCODE_AGENT_FOLDER/bin/$COMMIT_ID"
     serverNode="$serverDir/node"
     echo "VS Code Node: $serverNode"
 
@@ -67,12 +67,12 @@ let
     ${lib.optionalString useLocalExtensions ''
       # Use local extensions
       if [ -d $HOME/.vscode/extensions ]; then
-        if [ -e $HOME/.vscode-server/extensions ]; then
-          mv $HOME/.vscode-server/extensions $HOME/.vscode-server/extensions.bak
+        if [ -e $VSCODE_AGENT_FOLDER/extensions ]; then
+          mv $VSCODE_AGENT_FOLDER/extensions $VSCODE_AGENT_FOLDER/extensions.bak
         fi
 
-        mkdir -p $HOME/.vscode-server
-        ln -s $HOME/.vscode/extensions $HOME/.vscode-server/extensions
+        mkdir -p $VSCODE_AGENT_FOLDER
+        ln -s $HOME/.vscode/extensions $VSCODE_AGENT_FOLDER/extensions
       fi
     ''}
 
