@@ -99,6 +99,8 @@ in
         ${lib.getExe' pkgs.cloud-utils "growpart"} "$out/${config.image.fileName}" 1
       '';
       configFile = ./azure-config-user.nix;
+      # The image carries a nixpkgs channel only if the machine uses channels.
+      copyChannel = config.nix.channel.enable;
 
       bootSize = "${toString cfg.bootSize}M";
       partitionTableType = if (cfg.vmGeneration == "v2") then "efi" else "legacy";
