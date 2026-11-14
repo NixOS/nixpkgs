@@ -3651,6 +3651,45 @@ runTests {
     };
   };
 
+  testOptionToDocRecursive = {
+    expr =
+      let
+        recursiveType =
+          let
+            self = lib.mkOptionType {
+              name = "jsonValue";
+              description = "JSON value";
+              check = _: true;
+              nestedTypes.elemType = lib.types.nullOr (lib.types.either lib.types.str (lib.types.listOf self));
+            };
+          in
+          self;
+        eval = evalModules {
+          modules = [
+            {
+              options.tree = lib.mkOption {
+                type = recursiveType;
+                description = "Recursive tree option";
+              };
+            }
+          ];
+        };
+        doc = optionToDoc eval.options;
+      in
+      {
+        hasSchema = doc ? "$schema";
+        hasDefs = doc ? "$defs" && doc."$defs" ? "JSON value";
+        treeRef = doc.properties.tree."$ref";
+        treeNixType = doc.properties.tree.nixType;
+      };
+    expected = {
+      hasSchema = true;
+      hasDefs = true;
+      treeRef = "#/$defs/JSON value";
+      treeNixType = "JSON value";
+    };
+  };
+
   testFreeformOptions = {
     expr =
       let

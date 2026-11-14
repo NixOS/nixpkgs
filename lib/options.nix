@@ -33,6 +33,7 @@ let
     attrNames
     attrValues
     catAttrs
+    foldlAttrs
     optionalAttrs
     showAttrPath
     ;
@@ -705,84 +706,190 @@ rec {
     || (t == "list" && all isJsonValue v)
     || (t == "set" && !v ? _type && all isJsonValue (attrValues v));
 
-  typeToSchema =
-    type: subDocs:
+  typeToSchema' =
+    seen: type: subDocs:
     let
       name = toLower (type.name or "");
+      desc = type.description or (type.name or "");
       nested = type.nestedTypes or { };
-      elemSchema = typeToSchema (nested.elemType or { }) subDocs;
     in
-    if hasInfix "int" name then
-      { type = "integer"; }
-    else if hasPrefix "bool" name then
-      { type = "boolean"; }
-    else if hasInfix "float" name || hasInfix "number" name then
-      { type = "number"; }
-    else if
-      hasInfix "str" name
-      || elem name [
-        "lines"
-        "path"
-        "package"
-      ]
-    then
-      { type = "string"; }
-    else if name == "enum" then
+    if desc != "" && elem type seen then
       {
-        type = "string";
-        enum = type.functor.payload.values or [ ];
+        schema = {
+          "$ref" = "#/$defs/${desc}";
+        };
+        referenced = [ desc ];
+        defs = { };
       }
-    else if name == "nullor" then
-      {
-        anyOf = [
-          { type = "null"; }
-          elemSchema
-        ];
-      }
-    else if name == "either" then
-      {
-        anyOf = [
-          (typeToSchema nested.left { })
-          (typeToSchema nested.right { })
-        ];
-      }
-    else if name == "coercedto" then
-      {
-        anyOf = [
-          (typeToSchema nested.coercedType { })
-          (typeToSchema nested.finalType subDocs)
-        ];
-      }
-    else if name == "listof" then
-      {
-        type = "array";
-        items = elemSchema;
-      }
-    else if hasInfix "attrsof" name then
-      {
-        type = "object";
-        additionalProperties = elemSchema;
-      }
-    else if name == "attrs" then
-      {
-        type = "object";
-        additionalProperties = true;
-      }
-    else if name == "submodule" then
-      subDocs
-      // {
-        additionalProperties =
-          if !nested ? freeformType then
-            false
-          else if nested.freeformType.nestedTypes ? elemType then
-            typeToSchema nested.freeformType.nestedTypes.elemType { }
-          else
-            true;
-      }
-    else if nested ? elemType then
-      elemSchema
     else
-      subDocs;
+      let
+        seen' = seen ++ [ type ];
+        elemRes =
+          if nested ? elemType then
+            typeToSchema' seen' nested.elemType subDocs
+          else
+            {
+              schema = { };
+              referenced = [ ];
+              defs = { };
+            };
+
+        base =
+          if hasInfix "int" name then
+            {
+              schema = {
+                type = "integer";
+              };
+              referenced = [ ];
+              defs = { };
+            }
+          else if hasPrefix "bool" name then
+            {
+              schema = {
+                type = "boolean";
+              };
+              referenced = [ ];
+              defs = { };
+            }
+          else if hasInfix "float" name || hasInfix "number" name then
+            {
+              schema = {
+                type = "number";
+              };
+              referenced = [ ];
+              defs = { };
+            }
+          else if
+            hasInfix "str" name
+            || elem name [
+              "lines"
+              "path"
+              "package"
+            ]
+          then
+            {
+              schema = {
+                type = "string";
+              };
+              referenced = [ ];
+              defs = { };
+            }
+          else if name == "enum" then
+            {
+              schema = {
+                type = "string";
+                enum = type.functor.payload.values or [ ];
+              };
+              referenced = [ ];
+              defs = { };
+            }
+          else if name == "nullor" then
+            {
+              schema = {
+                anyOf = [
+                  { type = "null"; }
+                  elemRes.schema
+                ];
+              };
+              inherit (elemRes) referenced defs;
+            }
+          else if name == "either" then
+            let
+              l = typeToSchema' seen' nested.left { };
+              r = typeToSchema' seen' nested.right { };
+            in
+            {
+              schema = {
+                anyOf = [
+                  l.schema
+                  r.schema
+                ];
+              };
+              referenced = l.referenced ++ r.referenced;
+              defs = l.defs // r.defs;
+            }
+          else if name == "coercedto" then
+            let
+              c = typeToSchema' seen' nested.coercedType { };
+              f = typeToSchema' seen' nested.finalType subDocs;
+            in
+            {
+              schema = {
+                anyOf = [
+                  c.schema
+                  f.schema
+                ];
+              };
+              referenced = c.referenced ++ f.referenced;
+              defs = c.defs // f.defs;
+            }
+          else if name == "listof" then
+            {
+              schema = {
+                type = "array";
+                items = elemRes.schema;
+              };
+              inherit (elemRes) referenced defs;
+            }
+          else if hasInfix "attrsof" name then
+            {
+              schema = {
+                type = "object";
+                additionalProperties = elemRes.schema;
+              };
+              inherit (elemRes) referenced defs;
+            }
+          else if name == "attrs" then
+            {
+              schema = {
+                type = "object";
+                additionalProperties = true;
+              };
+              referenced = [ ];
+              defs = { };
+            }
+          else if name == "submodule" then
+            let
+              freeform =
+                if !nested ? freeformType then
+                  false
+                else if nested.freeformType.nestedTypes ? elemType then
+                  (typeToSchema' seen' nested.freeformType.nestedTypes.elemType { }).schema
+                else
+                  true;
+            in
+            {
+              schema = (subDocs.schema or subDocs) // {
+                additionalProperties = freeform;
+              };
+              defs = subDocs.defs or { };
+              referenced = subDocs.referenced or [ ];
+            }
+          else if nested ? elemType then
+            elemRes
+          else
+            {
+              schema = subDocs.schema or subDocs;
+              defs = subDocs.defs or { };
+              referenced = subDocs.referenced or [ ];
+            };
+
+        isReferenced = desc != "" && elem desc base.referenced;
+      in
+      if isReferenced then
+        {
+          schema = {
+            "$ref" = "#/$defs/${desc}";
+          };
+          referenced = filter (d: d != desc) base.referenced;
+          defs = base.defs // {
+            ${desc} = base.schema;
+          };
+        }
+      else
+        base;
+
+  typeToSchema = typeToSchema' [ ];
 
   /**
     Generate documentation template as a JSON Schema compatible attribute set preserving module option structure.
@@ -830,50 +937,73 @@ rec {
   */
   optionToDoc =
     options:
+    let
+      res = foldOptionSet {
+        onOption =
+          doc: subDocs: opt:
+          let
+            tRes = typeToSchema' [ ] opt.type subDocs;
+            schema =
+              removeAttrs doc (
+                [
+                  "type"
+                  "default"
+                ]
+                ++ optional (doc.description == null) "description"
+              )
+              // tRes.schema
+              // optionalAttrs (opt ? default && isJsonValue opt.default) { default = opt.default; }
+              // optionalAttrs (doc ? default) { defaultText = doc.default; }
+              // {
+                nixType = doc.type;
+              };
+          in
+          {
+            inherit schema;
+            inherit (tRes) defs;
+          };
+        onAttrSet =
+          recurse: set:
+          let
+            clean = removeAttrs set [
+              "_module"
+              "_freeformOptions"
+            ];
+            childResults = mapAttrs (_: recurse) clean;
+            req = filter (
+              n:
+              let
+                opt = clean.${n};
+              in
+              isOption opt && !(opt ? default || opt ? defaultText)
+            ) (attrNames clean);
+            properties = mapAttrs (_: r: r.schema) childResults;
+            defs = foldlAttrs (
+              acc: _: r:
+              acc // r.defs
+            ) { } childResults;
+          in
+          {
+            schema = {
+              type = "object";
+              inherit properties;
+            }
+            // optionalAttrs (req != [ ]) {
+              required = req;
+            };
+            inherit defs;
+          };
+        empty = {
+          schema = { };
+          defs = { };
+        };
+      } options;
+    in
     {
       "$schema" = "https://json-schema.org/draft/2020-12/schema";
-      "$defs" = { };
+      "$defs" = res.defs;
     }
-    // foldOptionSet {
-      onOption =
-        doc: subDocs: opt:
-        removeAttrs doc (
-          [
-            "type"
-            "default"
-          ]
-          ++ optional (doc.description == null) "description"
-        )
-        // typeToSchema opt.type subDocs
-        // optionalAttrs (opt ? default && isJsonValue opt.default) { default = opt.default; }
-        // optionalAttrs (doc ? default) { defaultText = doc.default; }
-        // {
-          nixType = doc.type;
-        };
-      onAttrSet =
-        recurse: set:
-        let
-          clean = removeAttrs set [
-            "_module"
-            "_freeformOptions"
-          ];
-          req = filter (
-            n:
-            let
-              opt = clean.${n};
-            in
-            isOption opt && !(opt ? default || opt ? defaultText)
-          ) (attrNames clean);
-        in
-        {
-          type = "object";
-          properties = mapAttrs (_: recurse) clean;
-        }
-        // optionalAttrs (req != [ ]) {
-          required = req;
-        };
-      empty = { };
-    } options;
+    // res.schema;
 
   /**
     This function recursively removes all derivation attributes from
