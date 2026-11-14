@@ -267,6 +267,19 @@ stdenvNoCC.mkDerivation {
       wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}${exeSuffix}
     fi
 
+    ${optionalString (targetPrefix != "" && targetPlatform.config == stdenvNoCC.hostPlatform.config) ''
+      # Pseudo-cross: targetPlatform.config == hostPlatform.config but gcc.arch differs
+      # (e.g. x86_64-unknown-linux-gnu with meteorlake vs generic). GCC's collect2
+      # identifies build==target by config string alone and calls bare `ld`, not the
+      # prefixed one. Symlink bare `ld` -> `${targetPrefix}ld` so collect2 finds it.
+      if [ -e "$out/bin/${targetPrefix}ld${exeSuffix}" ]; then
+        ln -sf "${targetPrefix}ld${exeSuffix}" "$out/bin/ld${exeSuffix}"
+      fi
+      if [ -e "$out/bin/${targetPrefix}ld.bfd${exeSuffix}" ]; then
+        ln -sf "${targetPrefix}ld.bfd${exeSuffix}" "$out/bin/ld.bfd${exeSuffix}"
+      fi
+    ''}
+
     for variant in $ldPath/${targetPrefix}ld.*${exeSuffix}; do
       basename=$(basename "${if exeSuffix != "" then "\${variant%${exeSuffix}}" else "$variant"}")
       wrap $basename ${./ld-wrapper.sh} $variant
