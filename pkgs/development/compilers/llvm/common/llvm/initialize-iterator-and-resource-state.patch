@@ -1,0 +1,30 @@
+From c9cc078e0eb0069672be982264858f19dd8d17e3 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:41 -0700
+Subject: [PATCH] [LLVM] Initialize cached iterator and resource tracker state
+
+Value-initialize cached iterator pointers and displaced resource records
+before memberwise copies or swaps can read their scalar state.
+---
+ include/llvm/ADT/iterator.h                           | 2 +-
+ unittests/ExecutionEngine/Orc/ResourceTrackerTest.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/llvm/ADT/iterator.h b/include/llvm/ADT/iterator.h
+index 6f0c42f..5ef3d1c 100644
+--- a/include/llvm/ADT/iterator.h
++++ b/include/llvm/ADT/iterator.h
+@@ -348,3 +348,3 @@ class pointer_iterator
+           T> {
+-  mutable T Ptr;
++  mutable T Ptr{};
+ 
+diff --git a/unittests/ExecutionEngine/Orc/ResourceTrackerTest.cpp b/unittests/ExecutionEngine/Orc/ResourceTrackerTest.cpp
+index 0e5d151..7f1859c 100644
+--- a/unittests/ExecutionEngine/Orc/ResourceTrackerTest.cpp
++++ b/unittests/ExecutionEngine/Orc/ResourceTrackerTest.cpp
+@@ -80,3 +80,3 @@ public:
+     auto &DstResourceRef = Resources[DstKey];
+-    ResourceT DstResources;
++    ResourceT DstResources{};
+     std::swap(DstResourceRef, DstResources);

@@ -47,6 +47,41 @@ let
   # LLVM rebuild, but overriding doesn’t work when building libc++, libc++abi,
   # and libunwind. It also wants to disable LTO in the first rebuild.
   isDarwinBootstrap = lib.getName stdenv == "bootstrap-stage-xclang-stdenv-darwin";
+
+  # triton-llvm applies these too; see tests/README.md.
+  initializationPatches = [
+    ./initialize-iterator-and-resource-state.patch
+  ]
+  ++ optionals (lib.versionAtLeast release_version "19") [
+    ./initialize-count-copy-and-move.patch
+  ]
+  ++ optionals (lib.versionAtLeast release_version "22") [
+    ./initialize-sframe-cache.patch
+  ];
+
+  # Triton's pinned LLVM also runs the exegesis discovery probes.
+  exegesisProbePatches =
+    optionals (lib.versionAtLeast release_version "19" && lib.versionOlder release_version "24")
+      (
+        [
+          (fetchpatch (
+            {
+              url = "https://github.com/llvm/llvm-project/commit/48d00593530dbfd90c4fdb027ae260868f39925f.patch";
+              stripLen = 1;
+              hash =
+                if lib.versionOlder release_version "21" then
+                  "sha256-qT7llvGZq2EPr7UUtys1Gc8GxICYLqT3Vd+bXg2sWtA="
+                else
+                  "sha256-y63Ei7fSe4HTbHN5GDq7fUWKH8K6UCVIUuvdh62CKs8=";
+            }
+            // lib.optionalAttrs (lib.versionOlder release_version "21") {
+              # LLVM 19/20 use a different probe invocation; adapt that hunk below.
+              excludes = [ "test/tools/llvm-exegesis/lit.local.cfg" ];
+            }
+          ))
+        ]
+        ++ optional (lib.versionOlder release_version "21") ./bound-exegesis-probe.patch
+      );
 in
 
 stdenv.mkDerivation (
@@ -181,6 +216,15 @@ stdenv.mkDerivation (
         # on macOS (nothing about this _seems_ nix specific)..
         (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
       ]
+      ++ lib.optional (lib.versionOlder release_version "23") (
+        # Preserve empty quoted arguments in GNU-style response files.
+        # https://github.com/llvm/llvm-project/pull/187566
+        fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/1c55313f344ff2189500f87c89cec2a3cf2eb5c9.patch";
+          stripLen = 1;
+          hash = "sha256-yMY+sT8qfMUhLwkg/HW1SS2jKMxyxA9ngaa+AeeU/Zo=";
+        }
+      )
       ++
         lib.optional (lib.versionOlder release_version "19")
           # Add missing include headers to build against gcc-15:
@@ -221,6 +265,7 @@ stdenv.mkDerivation (
           stripLen = 1;
         })
       ]
+      ++ exegesisProbePatches
       ++ lib.optionals enablePolly [
         # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
@@ -294,7 +339,8 @@ stdenv.mkDerivation (
         # While ld64 does align them correctly, they are misaligned by LLVM’s `strip`.
         # See: https://github.com/llvm/llvm-project/issues/203678
         (getVersionFile "llvm/align-__linkedit-entries-to-pointer-size.patch")
-      ];
+      ]
+      ++ initializationPatches;
 
     nativeBuildInputs = [
       cmake
@@ -647,14 +693,14 @@ stdenv.mkDerivation (
         !stdenv.hostPlatform.isx86_32 # TODO: why
       )
       && (!stdenv.hostPlatform.isMusl)
-      && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
-      && (stdenv.hostPlatform == stdenv.buildPlatform);
+      && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian);
 
     checkTarget = "check-all";
 
     passthru = {
       # For the update script:
       inherit monorepoSrc;
+      inherit initializationPatches exegesisProbePatches;
       tests.withoutOptionalFeatures = libllvm.override {
         enablePFM = false;
         enablePolly = false;

@@ -20,6 +20,8 @@
   which,
   sysctl,
   python3Packages,
+  # Supplies the repairs shared with LLVM; see tests/README.md.
+  llvmPackages_23,
   buildDocs ? true,
   buildMan ? true,
   buildTests ? true,
@@ -96,6 +98,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "5f07f818b51b786b0a87b4e514882600ecba112f";
     hash = "sha256-1sWaezAmvrPbrYVh2CLgtPEjkDiZBQkNymp18Eosbd0=";
   };
+
+  patches = llvmPackages_23.llvm.initializationPatches;
+
+  patchFlags = [
+    "-p1"
+    "-d"
+    "llvm"
+  ];
 
   nativeBuildInputs = [
     pkg-config
