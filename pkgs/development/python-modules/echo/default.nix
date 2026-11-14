@@ -6,7 +6,7 @@
   setuptools,
   setuptools-scm,
   numpy,
-  qt6,
+  qt5,
   qtpy,
   pyqt6,
   mesa,
