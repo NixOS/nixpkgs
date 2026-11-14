@@ -23,19 +23,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-decoder";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "decoder";
     tag = finalAttrs.version;
-    hash = "sha256-ZYjln/s3WVSacugSK3aB6LeIpaqSy0T2cMqHoV4ge9A=";
+    hash = "sha256-ciyTka7I4hmlMNwKmH7sKixCil/oPx3E6+ukxLl4gTw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0koEJg/VZtFNxfuUaYv6iooHRQ1qxTeJDcTbC4giZhI=";
+    hash = "sha256-+MWXoqTRN2xkOJ9PZvBg+c59H89ug5xxH99MBfvADTc=";
   };
 
   nativeBuildInputs = [
