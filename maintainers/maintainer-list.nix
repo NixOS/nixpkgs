@@ -18424,6 +18424,12 @@
     githubId = 31626748;
     name = "Martin Ramm";
   };
+  marvinvr = {
+    email = "marvin@von-rappard.ch";
+    github = "marvinvr";
+    githubId = 34551962;
+    name = "Marvin von Rappard";
+  };
   marzipankaiser = {
     email = "nixos@gaisseml.de";
     github = "marzipankaiser";
