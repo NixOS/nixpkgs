@@ -2117,9 +2117,9 @@
   ./virtualisation/lxcfs.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix
-  ./virtualisation/oci-options.nix
   ./virtualisation/openstack-options.nix
   ./virtualisation/openvswitch.nix
+  ./virtualisation/oracle-cloud-infra-options.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix
   ./virtualisation/qemu-firmware.nix
