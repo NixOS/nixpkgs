@@ -129,42 +129,48 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontDisableStatic = static;
 
+  __structuredAttrs = true;
+
+  configureFlags = [
+    "--disable-lto"
+    "--with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages"
+    "--with-blas=-L${blas}/lib -lblas"
+    "--with-lapack=-L${lapack}/lib -llapack"
+    "--with-readline"
+    "--with-tcltk"
+    "--with-tcl-config=${tcl}/lib/tclConfig.sh"
+    "--with-tk-config=${tk}/lib/tkConfig.sh"
+    "--with-cairo"
+    "--with-libpng"
+    "--with-jpeglib"
+    "--with-libtiff"
+    "--with-ICU"
+    (if static then "--enable-R-static-lib" else "--enable-R-shlib")
+    "FC=${gfortran}/bin/gfortran"
+    "F77=${gfortran}/bin/gfortran"
+    "CURL_CONFIG=${lib.getExe' (lib.getDev curl) "curl-config"}"
+    "r_cv_have_curl728=yes"
+    "R_SHELL=${stdenv.shell}"
+  ]
+  ++ lib.optional enableStrictBarrier "--enable-strict-barrier"
+  ++ lib.optional enableMemoryProfiling "--enable-memory-profiling"
+  ++ (if enableJava then [ "JAVA_HOME=${jdk}" ] else [ "--disable-java" ])
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-R-framework"
+    "--without-x"
+    "--without-static-cairo"
+    "OBJC=clang"
+    "CPPFLAGS=-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    "LDFLAGS=-L${lib.getLib stdenv.cc.libcxx}/lib"
+  ];
+
+  # Absolute paths, so that R CMD INSTALL finds these tools in R's closure at run time.
   preConfigure = ''
-    configureFlagsArray=(
-      --disable-lto
-      --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
-      --with-blas="-L${blas}/lib -lblas"
-      --with-lapack="-L${lapack}/lib -llapack"
-      --with-readline
-      --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
-      --with-cairo
-      --with-libpng
-      --with-jpeglib
-      --with-libtiff
-      --with-ICU
-      ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
-      ${lib.optionalString enableMemoryProfiling "--enable-memory-profiling"}
-      ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
-      AR=$(type -p ar)
-      AWK=$(type -p gawk)
-      CC=$(type -p cc)
-      CXX=$(type -p c++)
-      FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-      ${if enableJava then "JAVA_HOME='${jdk}'" else "--disable-java"}
-      RANLIB=$(type -p ranlib)
-      CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
-      r_cv_have_curl728=yes
-      R_SHELL="${stdenv.shell}"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    --disable-R-framework
-    --without-x
-    --without-static-cairo
-    OBJC="clang"
-    CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
-    LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
-  ''
-  + ''
+    configureFlags+=(
+      AR=$(type -p $AR)
+      CC=$(type -p $CC)
+      CXX=$(type -p $CXX)
+      RANLIB=$(type -p $RANLIB)
     )
     echo >>etc/Renviron.in 'TCLLIBPATH="${tk}/lib ''${TCLLIBPATH}"'
     echo >>etc/Renviron.in 'TZDIR=${tzdata}/share/zoneinfo'
