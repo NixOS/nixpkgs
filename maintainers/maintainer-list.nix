@@ -14407,6 +14407,11 @@
     githubId = 15893072;
     name = "Josh van Leeuwen";
   };
+  joturk = {
+    github = "JoTurk";
+    githubId = 7750446;
+    name = "Jo Turk";
+  };
   jovandeginste = {
     email = "jo.vandeginste@gmail.com";
     github = "jovandeginste";
