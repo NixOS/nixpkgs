@@ -42,6 +42,7 @@ let
     concatStringsSep
     hasInfix
     hasPrefix
+    isStringLike
     toLower
     ;
   inherit (lib.types)
@@ -49,7 +50,9 @@ let
     ;
   inherit (lib.lists)
     last
+    remove
     toList
+    unique
     ;
   prioritySuggestion = ''
     Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
@@ -687,7 +690,7 @@ rec {
           )
         ]
         ++ subDocs;
-      onAttrSet = recurse: set: concatMap recurse (lib.attrValues set);
+      onAttrSet = recurse: set: concatMap recurse (attrValues set);
       empty = [ ];
     } options;
 
@@ -704,9 +707,11 @@ rec {
       "string"
     ]
     || (t == "list" && all isJsonValue v)
-    || (t == "set" && !v ? _type && all isJsonValue (attrValues v));
+    || (
+      t == "set" && !isDerivation v && !isStringLike v && !v ? _type && all isJsonValue (attrValues v)
+    );
 
-  flattenAnyOf = list: concatMap (s: if s ? anyOf then flattenAnyOf s.anyOf else [ s ]) list;
+  flattenAnyOf = list: unique (concatMap (s: if s ? anyOf then flattenAnyOf s.anyOf else [ s ]) list);
 
   typeToSchema' =
     seen: type: subDocs:
@@ -736,30 +741,24 @@ rec {
               defs = { };
             };
 
+        mkLeaf = schema: {
+          inherit schema;
+          referenced = [ ];
+          defs = { };
+        };
+
         base =
           if hasInfix "int" name then
-            {
-              schema = {
-                type = "integer";
-              };
-              referenced = [ ];
-              defs = { };
+            mkLeaf {
+              type = "integer";
             }
           else if hasPrefix "bool" name then
-            {
-              schema = {
-                type = "boolean";
-              };
-              referenced = [ ];
-              defs = { };
+            mkLeaf {
+              type = "boolean";
             }
           else if hasInfix "float" name || hasInfix "number" name then
-            {
-              schema = {
-                type = "number";
-              };
-              referenced = [ ];
-              defs = { };
+            mkLeaf {
+              type = "number";
             }
           else if
             hasInfix "str" name
@@ -769,21 +768,13 @@ rec {
               "package"
             ]
           then
-            {
-              schema = {
-                type = "string";
-              };
-              referenced = [ ];
-              defs = { };
+            mkLeaf {
+              type = "string";
             }
           else if name == "enum" then
-            {
-              schema = {
-                type = "string";
-                enum = type.functor.payload.values or [ ];
-              };
-              referenced = [ ];
-              defs = { };
+            mkLeaf {
+              type = "string";
+              enum = type.functor.payload.values or [ ];
             }
           else if name == "nullor" then
             {
@@ -842,21 +833,22 @@ rec {
               inherit (elemRes) referenced defs;
             }
           else if name == "attrs" then
-            {
-              schema = {
-                type = "object";
-                additionalProperties = true;
-              };
-              referenced = [ ];
-              defs = { };
+            mkLeaf {
+              type = "object";
+              additionalProperties = true;
             }
           else if name == "submodule" then
             let
+              ffRes =
+                if nested ? freeformType && nested.freeformType.nestedTypes ? elemType then
+                  typeToSchema' seen' nested.freeformType.nestedTypes.elemType { }
+                else
+                  null;
               freeform =
                 if !nested ? freeformType then
                   false
-                else if nested.freeformType.nestedTypes ? elemType then
-                  (typeToSchema' seen' nested.freeformType.nestedTypes.elemType { }).schema
+                else if ffRes != null then
+                  ffRes.schema
                 else
                   true;
             in
@@ -864,8 +856,8 @@ rec {
               schema = (subDocs.schema or subDocs) // {
                 additionalProperties = freeform;
               };
-              defs = subDocs.defs or { };
-              referenced = subDocs.referenced or [ ];
+              defs = (subDocs.defs or { }) // (if ffRes != null then ffRes.defs else { });
+              referenced = (subDocs.referenced or [ ]) ++ (if ffRes != null then ffRes.referenced else [ ]);
             }
           else if nested ? elemType then
             elemRes
@@ -883,7 +875,7 @@ rec {
           schema = {
             "$ref" = "#/$defs/${desc}";
           };
-          referenced = filter (d: d != desc) base.referenced;
+          referenced = remove desc base.referenced;
           defs = base.defs // {
             ${desc} = base.schema;
           };

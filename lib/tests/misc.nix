@@ -3574,6 +3574,14 @@ runTests {
                 default = 42;
                 readOnly = true;
               };
+              options.packageOption = lib.mkOption {
+                type = lib.types.package;
+                default = {
+                  type = "derivation";
+                  name = "dummy";
+                  outPath = "/nix/store/dummy";
+                };
+              };
             }
             {
               nested = _: {
@@ -3627,6 +3635,9 @@ runTests {
         plainAttrsAdditionalProps = doc.properties.plainAttrs.additionalProperties;
         noDescHasDescription = doc.properties.noDesc ? description;
         readOnlyOptIsReadOnly = doc.properties.readOnlyOpt.readOnly;
+        packageHasNoDefault = !(doc.properties.packageOption ? default);
+        packageHasDefaultText = doc.properties.packageOption ? defaultText;
+        packageType = doc.properties.packageOption.type;
       };
     expected = {
       hasSchema = true;
@@ -3678,6 +3689,9 @@ runTests {
       plainAttrsAdditionalProps = true;
       noDescHasDescription = false;
       readOnlyOptIsReadOnly = true;
+      packageHasNoDefault = true;
+      packageHasDefaultText = true;
+      packageType = "string";
     };
   };
 
