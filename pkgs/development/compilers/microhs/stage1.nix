@@ -1,5 +1,4 @@
 {
-  lib,
   args,
   microhs-boot,
   stdenv,
@@ -13,23 +12,18 @@ stdenv.mkDerivation (
   args'
   // {
     pname = "microhs-stage1";
-    patches =
-      (args'.patches or [ ])
-      ++ lib.optionals microhs-boot.usesHugs [
-        patches/simple-unicode.patch
-      ];
 
     makeFlags = [ "PREFIX=${placeholder "out"}" ];
     installTargets = [
-      "targets.conf"
       "oldinstall"
     ];
 
     buildPhase = ''
       runHook preBuild
       mkdir -p bin
+      make $makeFlags mhs.conf
       printf 'Building bin/mhs using ${microhs-boot}/bin/mhs\n'
-      ${microhs-boot}/bin/mhs -l -imhs -isrc -ipaths MicroHs.Main -o bin/mhs
+      MHSDIR=. ${microhs-boot}/bin/mhs -l -imhs -isrc -ipaths MicroHs.Main -o bin/mhs
       runHook postBuild
     '';
   }
