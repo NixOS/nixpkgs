@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  ctestCheckHook,
   python3,
   llvmPackages,
   pkg-config,
@@ -16,17 +17,18 @@
   callPackage,
   nix-update-script,
   testers,
+  libunwind,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lfortran";
-  version = "0.68.0";
+  version = "0.69.0";
 
   src = fetchFromGitHub {
     owner = "lfortran";
     repo = "lfortran";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hwHN/80plK72l3K+C4uI+q8gnu0OAnMLESU3HA4I8VQ=";
+    hash = "sha256-Wx/8u8kKQkXgR29wXTS6xtOR+w7c30ELrqGysx6koOc=";
   };
 
   strictDeps = true;
@@ -45,16 +47,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    ctestCheckHook
     python3.pkgs.tomli
+  ];
+
+  dontUseNinjaCheck = true;
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Sandboxed builds lack access to Metal GPU devices
+    "test_gpu_launch_geometry_metal"
+    "test_gpu_metal_runtime"
+    "test_gpu_metal_memory"
+    # Sandboxed builds lack pseudo-terminal (PTY) access
+    "test_repl"
   ];
 
   buildInputs = [
     llvmPackages.llvm
-    llvmPackages.libunwind
     zstd
     zlib
     # For the shebangs of the DWARF scripts that `lfortran -g` runs.
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libunwind
   ];
 
   cmakeFlags = [

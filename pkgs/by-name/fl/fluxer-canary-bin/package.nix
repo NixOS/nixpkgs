@@ -8,16 +8,16 @@
 
 let
   pname = "fluxer-canary-bin";
-  version = "2026.1113.44516";
+  version = "2026.1113.191451";
 
   sources = {
     x86_64-linux = {
       arch = "x64";
-      hash = "sha256-Y779nmtqoTr4U5qoMT8u9EGqiSFFJVxO9WNWSmLuVrg=";
+      hash = "sha256-vE1uS9h/pqN1af/1lh6RZkAQF0PWp1XwRhBSo8n5kUk=";
     };
     aarch64-linux = {
       arch = "arm64";
-      hash = "sha256-+Y3uppMEjf8cMND5z/nKv1EcYa6MSAfsKGVhOjFbO6Q=";
+      hash = "sha256-/ZtaWi+VmMle/rVwYaJVVUQH/iDuNJnxLDxETa1jjb4=";
     };
   };
 

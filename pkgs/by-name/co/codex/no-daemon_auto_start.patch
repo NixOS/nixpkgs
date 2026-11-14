@@ -1,6 +1,6 @@
 --- a/features/src/lib.rs
 +++ b/features/src/lib.rs
-@@ -1100,7 +1100,7 @@
+@@ -1139,7 +1139,7 @@
          id: Feature::DaemonAutoStart,
          key: "daemon_auto_start",
          stage: Stage::Stable,
@@ -8,4 +8,4 @@
 +        default_enabled: false,
      },
      FeatureSpec {
-         id: Feature::TuiMultiBackend,
+         id: Feature::TuiWorkspace,

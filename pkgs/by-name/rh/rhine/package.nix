@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       atemu
     ];
     license = with lib.licenses; [
-      gpl3Only
+      agpl3Only
     ];
     mainProgram = "rhine";
   };

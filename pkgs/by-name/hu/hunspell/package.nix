@@ -101,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "hunspell";
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "hunspell_project" finalAttrs.version;
     pkgConfigModules = [ "hunspell" ];
   };
 })

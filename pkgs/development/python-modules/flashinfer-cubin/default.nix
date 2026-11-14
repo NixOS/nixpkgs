@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   # Not on PyPI. Listed on https://flashinfer.ai/whl/flashinfer-cubin/ (1.5 GiB, every architecture)
   src = fetchurl {
     url = "https://github.com/flashinfer-ai/flashinfer/releases/download/v${finalAttrs.version}/flashinfer_cubin-${finalAttrs.version}-py3-none-any.whl";
-    hash = "sha256-EVuWBl+i3MFnTHT8sFROwokKb6SoUZsiUdH2qz14AJM=";
+    hash = "sha256-ivYphvUujNKdHq737MY8RBwcIUvTMXUBmo9UihKLwuI=";
   };
 
   pythonImportsCheck = [ "flashinfer_cubin" ];
