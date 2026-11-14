@@ -1,23 +1,12 @@
 # See add-flags.sh in cc-wrapper for comments.
-var_templates_list=(
-    NIX_GNATMAKE_CARGS
-)
-
 accumulateRoles
-
-for var in "${var_templates_list[@]}"; do
-    mangleVarList "$var" ${role_suffixes[@]+"${role_suffixes[@]}"}
-done
+mangleVarList NIX_GNATMAKE_CARGS ${role_suffixes[@]+"${role_suffixes[@]}"}
 
 # `-B@out@/bin' forces cc to use wrapped as instead of the system one.
-NIX_GNATMAKE_CARGS_@suffixSalt@="$NIX_GNATMAKE_CARGS_@suffixSalt@ -B@out@/bin/"
+wrapper_NIX_GNATMAKE_CARGS="$wrapper_NIX_GNATMAKE_CARGS -B@out@/bin/"
 
 # Only add darwin min version flag if a default darwin min version is set,
 # which is a signal that we're targetting darwin.
 if [ "@darwinMinVersion@" ]; then
-    mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
-
-    NIX_GNATMAKE_CARGS_@suffixSalt@="-m@darwinPlatformForCC@-version-min=${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@} $NIX_GNATMAKE_CARGS_@suffixSalt@"
+    wrapper_NIX_GNATMAKE_CARGS="-m@darwinPlatformForCC@-version-min=${wrapper_@darwinMinVersionVariable@:-@darwinMinVersion@} $wrapper_NIX_GNATMAKE_CARGS"
 fi
-
-export NIX_GNAT_WRAPPER_EXTRA_FLAGS_SET_@suffixSalt@=1

@@ -342,6 +342,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit targetPrefix;
     hasGold = enableGold;
+    linkerFlavor = if enableGoldDefault then "gold" else "bfd";
     isGNU = true;
 
     # The plugin API is not a function of any targets. Expose it separately,
