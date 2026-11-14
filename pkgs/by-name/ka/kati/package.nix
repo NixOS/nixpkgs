@@ -3,11 +3,10 @@
   stdenv,
   fetchFromGitHub,
   replaceVars,
+  symlinkJoin,
+  rustPlatform,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "kati-unstable";
-  version = "0-unstable-2026-09-18";
+let
 
   src = fetchFromGitHub {
     owner = "google";
@@ -16,15 +15,41 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-VStvrYUQIBqv9TTbMOzCJYye8BrlIcRz1pmglVAabl4=";
   };
 
-  patches = [
-    (replaceVars ./version.patch {
-      version = finalAttrs.src.rev;
-    })
-  ];
+  version = "0-unstable-2026-09-18";
 
-  installPhase = ''
-    install -D ckati $out/bin/ckati
-  '';
+  rkati = rustPlatform.buildRustPackage {
+    pname = "rkati";
+    inherit src version;
+
+    cargoHash = "sha256-FqfxF2TmjCA1A8xAmI1/ctpECci69ykPaLS6VvxM6Sc=";
+  };
+
+  ckati = stdenv.mkDerivation (finalAttrs: {
+    # pname = "kati-unstable";
+    pname = "ckati";
+
+    inherit src version;
+
+    patches = [
+      (replaceVars ./version.patch {
+        version = finalAttrs.src.rev;
+      })
+    ];
+
+    installPhase = ''
+      install -Dm755 ckati $out/bin/ckati
+    '';
+  });
+
+in
+
+symlinkJoin {
+  name = "kati-unstable-${version}";
+
+  paths = [
+    ckati
+    rkati
+  ];
 
   meta = {
     description = "Experimental GNU make clone";
@@ -37,4 +62,4 @@ stdenv.mkDerivation (finalAttrs: {
       evanwporter
     ];
   };
-})
+}
