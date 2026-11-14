@@ -1,0 +1,40 @@
+diff --git a/rocclr/cmake/ROCclr.cmake b/rocclr/cmake/ROCclr.cmake
+index 3f233b72f..67bdc62ee 100644
+--- a/rocclr/cmake/ROCclr.cmake
++++ b/rocclr/cmake/ROCclr.cmake
+@@ -44,6 +44,19 @@ find_package(Threads REQUIRED)
+ 
+ find_package(AMD_OPENCL)
+ 
++# Find X11 package
++find_package(X11 REQUIRED)
++if(NOT X11_FOUND)
++    message(FATAL_ERROR "X11 libraries not found")
++endif()
++
++# Find OpenGL package
++find_package(OpenGL REQUIRED)
++if(NOT OpenGL_FOUND)
++    message(FATAL_ERROR "OpenGL not found")
++endif()
++
++
+ add_library(rocclr STATIC)
+ 
+ include(ROCclrCompilerOptions)
+@@ -123,9 +136,14 @@ target_include_directories(rocclr PUBLIC
+   ${ROCCLR_SRC_DIR}/device
+   ${ROCCLR_SRC_DIR}/elf
+   ${ROCCLR_SRC_DIR}/include
++  ${X11_INCLUDE_DIR}
++  ${OPENGL_INCLUDE_DIR}
+   ${AMD_OPENCL_INCLUDE_DIRS})
+ 
+-target_link_libraries(rocclr PUBLIC Threads::Threads)
++target_link_libraries(rocclr PUBLIC
++  Threads::Threads
++  ${X11_LIBRARIES}
++  ${OPENGL_LIBRARIES})
+ # IPC on Windows is not supported
+ if(UNIX)
+   target_link_libraries(rocclr PUBLIC rt)
