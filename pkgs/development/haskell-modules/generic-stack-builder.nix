@@ -12,7 +12,7 @@
 {
   buildInputs ? [ ],
   nativeBuildInputs ? [ ],
-  extraArgs ? [ ],
+  extraArgs ? "",
   LD_LIBRARY_PATH ? [ ],
   ghc ? depArgs.ghc,
   stack ? depArgs.stack,
