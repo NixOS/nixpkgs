@@ -29,6 +29,7 @@
   coreutils,
   withQt ? false,
   qt5,
+  emacs,
 }:
 
 let
@@ -44,10 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cyN/N/AzBtaL+uEzqaUNXpNBOE4ZjVqzfuypq1NN7tg=";
   };
 
+  outputs = [
+    "out"
+    "info"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
     texinfo
+    emacs
   ]
   ++ lib.optionals withQt [
     qt5.qttools
@@ -120,6 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  installTargets = [
+    "install"
+    "install-info"
+  ];
 
   meta = {
     homepage = "http://www.gnuplot.info/";
