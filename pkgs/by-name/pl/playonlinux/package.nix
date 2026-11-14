@@ -125,6 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -D -m644 etc/PlayOnLinux.desktop $out/share/applications/playonlinux.desktop
 
+    for size in 16 22 32; do
+      install -D -m644 etc/playonlinux''${size}.png $out/share/icons/hicolor/''${size}x''${size}/apps/playonlinux.png
+    done
+    install -D -m644 etc/playonlinux.png $out/share/icons/hicolor/128x128/apps/playonlinux.png
+
     makeWrapper $out/share/playonlinux/playonlinux{,-wrapper} \
       --prefix PATH : ${binpath} \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/GConf
