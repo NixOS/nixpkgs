@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wtp";
-  version = "2.10.4";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "satococoa";
     repo = "wtp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WayM3a9cCKWaEeo4y2cqYTMFjzUr3vaWis70OPKj8LE=";
+    hash = "sha256-EzfFKv9FFHFldDZCkel/0IoRrrBeCTXEPANqfEp+10E=";
   };
 
-  vendorHash = "sha256-zsSNo1MQgpvH3ZSd3kmvdIpOCVJgSu1/pYLltx/9dZg=";
+  vendorHash = "sha256-46gmkf5LYMivS0h3WeDF/QEJyjWlapJcbki0utBZiKk=";
 
   subPackages = [ "cmd/wtp" ];
   __structuredAttrs = true;
