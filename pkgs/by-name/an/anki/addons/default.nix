@@ -10,6 +10,8 @@
 
   anki-connect = callPackage ./anki-connect { };
 
+  anki-draw = callPackage ./anki-draw { };
+
   anki-quizlet-importer-extended = callPackage ./anki-quizlet-importer-extended { };
 
   crowdanki = callPackage ./crowdanki { };
