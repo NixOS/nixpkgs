@@ -16,14 +16,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "hgvs";
-  version = "1.5.7";
+  version = "2.0.0a0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biocommons";
     repo = "hgvs";
     tag = finalAttrs.version;
-    hash = "sha256-vW/gsLDq2wbvqa3535WLPy/qbSEIhXS/3tBU2CHy4P8=";
+    hash = "sha256-WM/023sNzcn+mwaL3POdfSJ/pkscXNDwZ9NyU0doTd0=";
   };
 
   build-system = [
