@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     install -D PokeFinder $out/bin/PokeFinder
     icoFileToHiColorTheme $src/Form/Images/pokefinder.ico pokefinder $out
+    install -Dm644 $src/Form/io.github.admiral_fish.pokefinder.appdata.xml -t $out/share/metainfo
   ''
   + ''
     runHook postInstall

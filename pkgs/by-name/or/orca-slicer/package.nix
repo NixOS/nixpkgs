@@ -242,6 +242,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     rm $out/LICENSE.txt
+    install -Dm644 ../scripts/flatpak/com.orcaslicer.OrcaSlicer.metainfo.xml -t $out/share/metainfo
   '';
 
   meta = {

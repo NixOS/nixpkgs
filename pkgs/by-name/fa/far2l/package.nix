@@ -8,6 +8,7 @@
   ninja,
   pkg-config,
   perl,
+  python3,
   bash,
   xdg-utils,
   zip,
@@ -61,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     makeWrapper
+    # generates the AppStream metainfo
+    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.markdown ]))
   ];
 
   buildInputs = [

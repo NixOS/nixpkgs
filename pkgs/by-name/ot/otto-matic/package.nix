@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/OttoMatic --chdir "$out/share/OttoMatic"
     install -Dm644 $src/packaging/io.jor.ottomatic.desktop $out/share/applications/io.jor.ottomatic.desktop
     install -Dm644 $src/packaging/io.jor.ottomatic.png $out/share/icons/hicolor/512x512/apps/io.jor.ottomatic.png
+    install -Dm644 $src/packaging/io.jor.ottomatic.appdata.xml -t $out/share/metainfo
 
     runHook postInstall
   '';

@@ -134,6 +134,11 @@ stdenv.mkDerivation (finalAttrs: {
         $src/images/appicons/$size.png \
         $out/share/icons/hicolor/$size/apps/monero.png
     done;
+
+    install -Dm644 $src/share/org.getmonero.Monero.metainfo.xml -t $out/share/metainfo
+    # remove the release template line, which is not valid XML
+    substituteInPlace $out/share/metainfo/org.getmonero.Monero.metainfo.xml \
+      --replace-fail '<release version="<version>" date="<date>"/>' ""
   '';
 
   meta = {

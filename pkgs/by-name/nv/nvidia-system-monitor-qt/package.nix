@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
     install -Dm755 qnvsm $out/bin/qnvsm
     install -Dm644 $src/icon.png $out/share/icons/hicolor/512x512/apps/qnvsm.png
+    install -Dm644 $src/package/flatpak/io.github.congard.qnvsm.metainfo.xml -t $out/share/metainfo
 
     runHook postInstall
   '';

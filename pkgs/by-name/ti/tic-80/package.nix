@@ -68,14 +68,18 @@ stdenv.mkDerivation {
       "BUILD_WITH_ALL"
     ]);
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p "$out"/Applications/TIC-80.app/Contents/{MacOS,Resources}
-    cp bin/tic80 "$out"/Applications/TIC-80.app/Contents/MacOS/tic80
-    cp macosx/tic80.plist "$out"/Applications/TIC-80.app/Contents/Info.plist
-    cp macosx/tic80.icns "$out"/Applications/TIC-80.app/Contents/Resources/tic80.icns
-    mkdir -p "$out"/bin
-    ln -s "$out"/Applications/TIC-80.app/Contents/MacOS/tic80 "$out"/bin/tic80
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 linux/com.tic80.TIC_80.metainfo.xml -t "$out"/share/metainfo
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out"/Applications/TIC-80.app/Contents/{MacOS,Resources}
+      cp bin/tic80 "$out"/Applications/TIC-80.app/Contents/MacOS/tic80
+      cp macosx/tic80.plist "$out"/Applications/TIC-80.app/Contents/Info.plist
+      cp macosx/tic80.icns "$out"/Applications/TIC-80.app/Contents/Resources/tic80.icns
+      mkdir -p "$out"/bin
+      ln -s "$out"/Applications/TIC-80.app/Contents/MacOS/tic80 "$out"/bin/tic80
+    '';
 
   nativeBuildInputs = [
     cmake
