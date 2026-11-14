@@ -9,12 +9,6 @@ let
   cfg = config.services.moonshine;
   tomlFormat = pkgs.formats.toml { };
   configFile = tomlFormat.generate "moonshine-config.toml" cfg.settings;
-
-  runScript = pkgs.writeShellScriptBin "moonshine-server" ''
-    export XDG_RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(${lib.getExe' pkgs.coreutils "id"} -u)}"
-    export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
-    exec ${lib.getExe cfg.package} ${configFile} "$@"
-  '';
 in
 {
   options.services.moonshine = {
@@ -152,27 +146,17 @@ in
 
     services.udev.packages = [ cfg.package ];
 
-    systemd.services.moonshine = {
-      description = "Streaming server using the NVIDIA GameStream / Moonlight protocol.";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ pkgs.xwayland ] ++ cfg.extraPackages;
-      environment = {
-        MOONSHINE_LOG = "moonshine=info";
-      }
-      // cfg.environment;
-      serviceConfig = {
-        User = cfg.user;
-        SupplementaryGroups = [ "moonshine" ];
-        ExecStart = lib.getExe runScript;
-        Restart = "on-failure";
-        RestartSec = 5;
-        DeviceAllow = [
-          "/dev/uinput rw"
-          "/dev/uhid rw"
-          "char-drm rw"
-          "char-nvidia rw"
-          "char-nvidia-uvm rw"
+    systemd = {
+      packages = [ cfg.package ];
+
+      services."moonshine@${cfg.user}" = {
+        overrideStrategy = "asDropin";
+        wantedBy = [ "default.target" ];
+        path = cfg.extraPackages;
+        environment = cfg.environment;
+        serviceConfig.ExecStart = [
+          ""
+          "${lib.getExe' cfg.package "start-moonshine.sh"} ${configFile}"
         ];
       };
     };
