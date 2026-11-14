@@ -8,7 +8,8 @@
   libcbor,
   openssl,
   udev,
-  udevCheckHook,
+  # This package should not depend on udevCheckHook as it's in the systemd
+  # closure and would introduce another systemd build.
   zlib,
   withPcsclite ? true,
   pcsclite,
@@ -27,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    udevCheckHook
   ];
 
   buildInputs = [
