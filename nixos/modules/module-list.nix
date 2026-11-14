@@ -465,6 +465,7 @@
   ./services/audio/jmusicbot.nix
   ./services/audio/lavalink.nix
   ./services/audio/liquidsoap.nix
+  ./services/audio/lms.nix
   ./services/audio/marytts.nix
   ./services/audio/mopidy.nix
   ./services/audio/mpd.nix
