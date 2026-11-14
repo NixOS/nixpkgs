@@ -91,11 +91,27 @@ in
                 "::1 allow"
                 "127.0.0.0/8 allow"
               ];
+              access-control-view = [
+                "192.168.0.0/24 block-restricted"
+                "fd21::/64 block-restricted"
+              ];
               local-data = [
                 ''"example.local. IN A 1.2.3.4"''
                 ''"example.local. IN AAAA abcd::eeff"''
+                ''"restricted.example.local. IN A 1.3.3.7"''
+                ''"restricted.example.local. IN AAAA abcd::1337"''
               ];
             };
+            view = [
+              {
+                name = "block-restricted";
+                local-data = [
+                  ''"restricted.example.local. IN A 127.0.0.1"''
+                  ''"restricted.example.local. IN AAAA ::1"''
+                ];
+                view-first = true;
+              }
+            ];
           };
         };
       };
@@ -287,6 +303,9 @@ in
 
       zone = "example.local."
       records = [("AAAA", "abcd::eeff"), ("A", "1.2.3.4")]
+      zone_restricted = "restricted.example.local."
+      records_restricted = [("AAAA", "abcd::1337"), ("A", "1.3.3.7")]
+      records_restricted_blocked = [("AAAA", "::1"), ("A", "127.0.0.1")]
 
 
       def query(
@@ -355,6 +374,10 @@ in
       with subtest("test the authoritative servers local responses"):
           test(authoritative, ["::1", "127.0.0.1"])
 
+      # verify that we can resolve restricted zone locally
+      with subtest("test the authoritative servers local responses for restricted zone"):
+          test(authoritative, ["::1", "127.0.0.1"], zone=zone_restricted, records=records_restricted)
+
       resolver.wait_for_unit("unbound.service")
 
       with subtest("root is unable to use unbounc-control when the socket is not configured"):
@@ -364,6 +387,11 @@ in
       # verify that the resolver is able to resolve on all the local protocols
       with subtest("test that the resolver resolves on all protocols and transports"):
           test(resolver, ["::1", "127.0.0.1"], doh=True, doq=True)
+
+      # verify that the resolver is NOT able to resolve restricted zone locally
+      with subtest("test the authoritative servers blocks responses for restricted zone"):
+          test(resolver, ["::1", "127.0.0.1"], zone=zone_restricted, records=records_restricted_blocked)
+
 
       resolver.wait_for_unit("multi-user.target")
 
