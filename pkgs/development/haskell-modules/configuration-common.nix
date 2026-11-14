@@ -972,25 +972,18 @@ with haskellLib;
   # 2025-09-13: too strict bound on algebraic-graphs
   hnix-store-core = warnAfterVersion "0.6.1.0" (doJailbreak super.hnix-store-core);
 
-  # hnix doesn't support hnix-store-core >= 0.8: https://github.com/haskell-nix/hnix/pull/1112
+  # hnix doesn't support hnix-store-core >= 0.7: https://github.com/haskell-nix/hnix/pull/1112
   # Switch hnix-store-core from memory to ram to match crypton >= 1.1
-  hnix-store-core_0_8_0_0 = doDistribute (
-    appendPatches [
-      ./patches/hnix-store-core-crypton-1.1-and-ram.patch
-    ] (super.hnix-store-core_0_8_0_0.override { memory = self.ram; })
-  );
-  hnix-store-db = super.hnix-store-db.override { hnix-store-core = self.hnix-store-core_0_8_0_0; };
+  hnix-store-core_0_9_0_0 = doDistribute (super.hnix-store-core_0_9_0_0);
+  hnix-store-db = super.hnix-store-db.override { hnix-store-core = self.hnix-store-core_0_9_0_0; };
   hnix-store-json = super.hnix-store-json.override {
-    hnix-store-core = self.hnix-store-core_0_8_0_0;
+    hnix-store-core = self.hnix-store-core_0_9_0_0;
   };
   hnix-store-readonly = super.hnix-store-readonly.override {
-    hnix-store-core = self.hnix-store-core_0_8_0_0;
+    hnix-store-core = self.hnix-store-core_0_9_0_0;
   };
-  hnix-store-remote_0_7_0_0 = doDistribute (
-    super.hnix-store-remote_0_7_0_0.override { hnix-store-core = self.hnix-store-core_0_8_0_0; }
-  );
   hnix-store-tests = super.hnix-store-tests.override {
-    hnix-store-core = self.hnix-store-core_0_8_0_0;
+    hnix-store-core = self.hnix-store-core_0_9_0_0;
   };
 
   # Fails for non-obvious reasons while attempting to use doctest.
@@ -3676,7 +3669,7 @@ with haskellLib;
         drv:
         drv.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
-          hnix-store-core = self.hnix-store-core_0_8_0_0;
+          hnix-store-core = self.hnix-store-core_0_9_0_0;
           hnix-store-nar = self.hnix-store-nar;
         }
       )
