@@ -10,15 +10,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lln-libparse";
-  version = "0-unstable-2025-08-30";
+  version = "0-unstable-2026-11-03";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "librelane";
     repo = "libparse-python";
-    rev = "ff5b26da3d66affb60696fd6c4af7f8726729c8c";
+    rev = "217cf61bca05dcbb3c1438e29acbc4a16611caf7";
     fetchSubmodules = true;
-    hash = "sha256-H2UHh5RbxJ65yTbLybCEanl5qA4o0e/0rAQKmIhvXeQ=";
+    hash = "sha256-99GSEDj7+dw2O/PFgidVpeRXNlDeAPiXRX3ChweoRS8=";
   };
 
   postPatch = ''
