@@ -4975,12 +4975,6 @@ with pkgs;
 
   gdbHostCpuOnly = gdb.override { hostCpuOnly = true; };
 
-  valgrind-light = (valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
-    meta = oldAttrs.meta // {
-      description = "${oldAttrs.meta.description} (without GDB)";
-    };
-  });
-
   vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
   wild =
