@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "3.1.0";
+  version = "3.2.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Automattic";
     repo = "harper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iwG7MO8LEJAaeEBwzpO47+GqBYu7uF8/5aWJwXEgf/I=";
+    hash = "sha256-WHRF6uu5DGui5gyg73IhnmmFrxzhEtSRWQjecFwbaEg=";
   };
 
-  cargoHash = "sha256-WRagmxLhgOzC07mW6VoySgLOgj7sLmjgmob5UGolC6Y=";
+  cargoHash = "sha256-RgDOkna/7RqSdIivjgfMlctkOvI1B/sBosij9A3LqoQ=";
 
   cargoBuildFlags = [
     "--package=harper-cli"

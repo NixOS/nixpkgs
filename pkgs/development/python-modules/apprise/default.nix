@@ -59,6 +59,9 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  # HTTP tests start local servers.
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     installManPage packaging/man/apprise.1
   '';

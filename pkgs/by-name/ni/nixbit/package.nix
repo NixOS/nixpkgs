@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixbit";
-  version = "1.2.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "pbek";
     repo = "nixbit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pqz5y5ltGFdmX5hmOlxR6klUyVmwK9akLtwjeCwo+m8=";
+    hash = "sha256-5yMvFwHrmKI3XAylBb2RbBcK67HNlNeJOZ6U6bGppqA=";
   };
 
   nativeBuildInputs = [

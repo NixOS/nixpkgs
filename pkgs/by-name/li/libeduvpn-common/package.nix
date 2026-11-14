@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "libeduvpn-common";
   version = "5.0.3";
 
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "eduVPN";
     repo = "eduvpn-common";

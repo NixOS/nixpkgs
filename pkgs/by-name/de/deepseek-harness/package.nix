@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  bubblewrap,
   curl,
   fetchFromGitHub,
   fetchPnpmDeps,
@@ -14,6 +15,11 @@
   testers,
 }:
 
+let
+  runtimePath = lib.makeBinPath (
+    [ pnpm_11 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deepseek-harness";
   version = "0.2.2-rc.1";
@@ -93,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # --expose-internals is required by the HMR service and the loader's internal module loader
     makeBinaryWrapper ${nodejs_24}/bin/node $out/bin/dsh \
-      --prefix PATH : ${lib.makeBinPath [ pnpm_11 ]} \
+      --prefix PATH : ${runtimePath} \
       --add-flags "--expose-internals $out/libexec/dsh/apps/cli/lib/bin.js"
 
     runHook postInstall

@@ -9,6 +9,9 @@
   lib,
   libayatana-appindicator,
   libsoup_3,
+  aws-lc,
+  libgit2,
+  sqlite,
   nodejs,
   openssl,
   perl,
@@ -43,6 +46,9 @@ stdenv.mkDerivation (
         gtk3
         libayatana-appindicator
         webkitgtk_4_1
+        aws-lc
+        libgit2
+        sqlite
       ];
 
       nativeBuildInputs = [
@@ -89,6 +95,9 @@ stdenv.mkDerivation (
       libsoup_3
       webkitgtk_4_1
       libayatana-appindicator
+      aws-lc
+      libgit2
+      sqlite
     ];
 
     nativeBuildInputs = [
