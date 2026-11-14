@@ -35,8 +35,8 @@ jobs:
         include:
           - runner: ubuntu-24.04
             system: x86_64-linux
-            builds: [shell, manual-nixos, lib-tests, lib-tests-lix, tarball]
-            desc: shell, docs, lib, lib-lix, tarball
+            builds: [shell, manual-nixos, lib-tests, lib-tests-lix, tarball, release-checks]
+            desc: shell, docs, lib, lib-lix, tarball, release-checks
           - runner: ubuntu-24.04-arm
             system: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs]
@@ -100,6 +100,10 @@ jobs:
       - name: Build tarball
         if: contains(matrix.builds, 'tarball') && !cancelled()
         run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A tarball
+
+      - name: Build release checks
+        if: contains(matrix.builds, 'release-checks') && !cancelled()
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A release-checks
 
       - name: Upload NixOS manual
         if: |
