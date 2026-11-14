@@ -1,42 +1,40 @@
-From 17e4e901da64971cbbba4fb310a8cc10197f0ca3 Mon Sep 17 00:00:00 2001
-From: eymeric <hatchchien@protonmail.com>
-Date: Sun, 10 May 2026 20:24:17 +0200
-Subject: [PATCH] dggui: fix non-ASCII character rendering in drawText()
-
-Painter::drawText() was passing strings directly to font.render()
-which indexes the glyph bitmap by raw byte value (Latin-1).
-Strings coming from gettext .mo files (charset=ISO-8859-1) or
-embedded resource files (UTF-8) were not converted before rendering,
-causing multi-byte UTF-8 sequences to produce garbled/missing glyphs
-for accented characters (French, etc.).
-
-Fix: convert text to Latin-1 via UTF8::toLatin1() inside drawText()
-so all text rendering paths are correctly handled in one place.
----
- dggui/painter.cc | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/dggui/painter.cc b/dggui/painter.cc
-index c326601..1c4539e 100644
---- a/dggui/painter.cc
-+++ b/dggui/painter.cc
-@@ -29,6 +29,7 @@
- #include <cmath>
- #include <cassert>
+diff --git a/configure.ac b/configure.ac
+index 28c492d4..530bdd78 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -157,6 +157,18 @@ AC_ARG_WITH([nls],
+                    AC_CHECK_PROGS([MSGFMT], [msgfmt])
+                    AS_IF([test "x$MSGFMT" = "x"],
+                          AC_MSG_ERROR([Missing msgfmt tool.]))
++                   AS_IF(
++                       [$MSGFMT --help 2>&1 | grep -q -- '--no-convert'],
++                       [
++                         MSGFMT_EXTRA_FLAGS='--no-convert'
++                         AC_MSG_NOTICE([msgfmt supports --no-convert])
++                       ],
++                       [
++                         MSGFMT_EXTRA_FLAGS=''
++                         AC_MSG_NOTICE([msgfmt does NOT support --no-convert])
++                       ]
++                   )
++                   AC_SUBST([MSGFMT_EXTRA_FLAGS])
+                    AC_DEFINE_UNQUOTED([WITH_NLS], , [Build with nls support])],
+                   [AC_MSG_WARN([*** Building without nls support!])]
+ )
+diff --git a/plugingui/Makefile.am b/plugingui/Makefile.am
+index 706b3c9a..25cccf01 100644
+--- a/plugingui/Makefile.am
++++ b/plugingui/Makefile.am
+@@ -55,10 +55,10 @@ $(top_srcdir)/plugingui/locale/fr.po: $(top_srcdir)/plugingui/locale/drumgizmo.p
+ 	$(MSGMERGE) --update $@ $(top_srcdir)/plugingui/locale/drumgizmo.pot
  
-+#include "utf8.h"
- #include "pixelbuffer.h"
- #include "font.h"
- #include "drawable.h"
-@@ -177,7 +178,8 @@ void Painter::clear()
- void Painter::drawText(int x0, int y0, const Font& font,
-                        const std::string& text, bool nocolour, bool rotate)
- {
--	PixelBufferAlpha* textbuf = font.render(text);
-+	UTF8 utf8conv;
-+	PixelBufferAlpha* textbuf = font.render(utf8conv.toLatin1(text));
+ $(top_builddir)/plugingui/locale/da.mo: $(top_srcdir)/plugingui/locale/da.po
+-	$(MSGFMT) -c -v -o $@ $(top_srcdir)/plugingui/locale/da.po
++	$(MSGFMT) $(MSGFMT_EXTRA_FLAGS) -c -v -o $@ $(top_srcdir)/plugingui/locale/da.po
  
- 	if(!rotate)
- 	{
--- 
-2.53.0
+ $(top_builddir)/plugingui/locale/fr.mo: $(top_srcdir)/plugingui/locale/fr.po
+-	$(MSGFMT) -c -v -o $@ $(top_srcdir)/plugingui/locale/fr.po
++	$(MSGFMT) $(MSGFMT_EXTRA_FLAGS) -c -v -o $@ $(top_srcdir)/plugingui/locale/fr.po
+ 
+ endif
+ 
