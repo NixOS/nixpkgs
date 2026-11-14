@@ -24,6 +24,7 @@ let
     maintainers = with lib.maintainers; [
       mmahut
       prince213
+      tallesCoelho
     ];
     platforms = [
       "x86_64-linux"
