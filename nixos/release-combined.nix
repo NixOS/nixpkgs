@@ -195,7 +195,7 @@ rec {
         (onSystems [ "x86_64-linux" ] "nixpkgs.mesa_i686") # i686 sanity check + useful
         [
           # Include all release-critical jobs from nixpkgs-unstable channel
-          "nixpkgs.unstable"
+          "nixpkgs.tested"
           "nixpkgs.tarball"
           "nixpkgs.release-checks"
         ]
