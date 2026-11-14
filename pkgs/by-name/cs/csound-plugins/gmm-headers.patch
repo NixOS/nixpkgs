@@ -1,0 +1,15 @@
+--- a/src/linear_algebra/linear_algebra.cpp
++++ b/src/linear_algebra/linear_algebra.cpp
+@@ -367,7 +367,11 @@
+ 
+ #include "OpcodeBase.hpp"
+ #include <complex>
+-#include <gmm/gmm.h>
++#include <gmm/gmm_kernel.h>
++#include <gmm/gmm_dense_lu.h>
++#include <gmm/gmm_dense_qr.h>
++#include <gmm/gmm_inoutput.h>
++#include <gmm/gmm_lapack_interface.h>
+ #include <sstream>
+ #include <vector>
+ 

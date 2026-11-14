@@ -2,90 +2,133 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  callPackage,
   cmake,
+  pkg-config,
   libsndfile,
   libsamplerate,
   flex,
   bison,
-  boost,
   gettext,
   portaudio,
-  alsa-lib ? null,
-  libpulseaudio ? null,
-  libjack2 ? null,
-  liblo ? null,
-  ladspa-sdk ? null,
-  fluidsynth ? null,
-  # , gmm ? null  # opcodes don't build with gmm 5.1
-  eigen ? null,
-  curl ? null,
-  tcltk ? null,
-  fltk ? null,
+  alsa-lib,
+  libpulseaudio,
+  libjack2,
+  liblo,
+  curl,
+  python3,
+  csound-plugins,
+  makeBinaryWrapper,
+  symlinkJoin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "csound";
-  version = "7.0.0-beta.10";
-
-  hardeningDisable = [ "format" ];
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "csound";
     repo = "csound";
     tag = finalAttrs.version;
-    hash = "sha256-l3dSVt5rgyj98ZCZltqKAJx/0Afl4R03flLXBcivtwg=";
+    hash = "sha256-EGW7gUmC/R/ABwuyUNPbVdQoGqsmT7gSuH/AOMmybbw=";
   };
 
-  cmakeFlags = [
-    "-DBUILD_CSOUND_AC=0"
-  ] # fails to find Score.hpp
-  ++ lib.optional stdenv.hostPlatform.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
-  # Ignore gettext in CMAKE_PREFIX_PATH on cross to prevent find_program picking up the wrong gettext
-  ++ lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
+  strictDeps = true;
+  hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     flex
     bison
     gettext
   ];
+
   buildInputs = [
     libsndfile
     libsamplerate
-    boost
+    liblo
+    curl
+    gettext
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    portaudio
+  ++ lib.optional stdenv.hostPlatform.isDarwin portaudio
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+    libjack2
+  ];
+
+  cmakeFlags = [
+    # Let stdenv choose CPU flags instead of enabling AVX2 on all x86_64 hosts.
+    (lib.cmakeBool "USE_COMPILER_OPTIMIZATIONS" false)
+    (lib.cmakeBool "USE_AVX2" false)
+    (lib.cmakeBool "USE_APPLE_M1_BASELINE" false)
+    (lib.cmakeBool "FAIL_MISSING" true)
+    (lib.cmakeBool "USE_PORTAUDIO" stdenv.hostPlatform.isDarwin)
+    (lib.cmakeBool "USE_JACK" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "USE_PULSEAUDIO" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "USE_PIPEWIRE" false)
+    (lib.cmakeBool "USE_PORTMIDI" false)
+    (lib.cmakeBool "USE_WASMTIME" false)
+    # Python is needed for tests, but its bindings belong in a Python package.
+    (lib.cmakeBool "INSTALL_PYTHON_INTERFACE" false)
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux (
-    builtins.filter (optional: optional != null) [
-      alsa-lib
-      libpulseaudio
-      libjack2
-      liblo
-      ladspa-sdk
-      fluidsynth
-      eigen
-      curl
-      tcltk
-      fltk
-    ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (
+    lib.cmakeFeature "CS_FRAMEWORK_DEST" "${placeholder "out"}/lib"
+  )
+  # Keep find_program from selecting target gettext binaries when cross compiling.
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) (
+    lib.cmakeFeature "CMAKE_IGNORE_PATH" "${lib.getBin gettext}/bin"
   );
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  nativeCheckInputs = [ python3 ];
+
+  # The OSC server test sends UDP packets over the loopback interface.
+  __darwinAllowLocalNetworking = true;
+
+  checkPhase = ''
+    runHook preCheck
+    cmake --build . --target csdtests
+    runHook postCheck
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Library/Frameworks
     ln -s $out/lib/CsoundLib64.framework $out/Library/Frameworks
   '';
 
+  passthru = {
+    plugins = (csound-plugins.override { csound = finalAttrs.finalPackage; }).plugins;
+
+    withPlugins =
+      selectPlugins:
+      let
+        plugins = selectPlugins finalAttrs.finalPackage.plugins;
+      in
+      symlinkJoin {
+        pname = "csound-with-plugins";
+        inherit (finalAttrs) version meta;
+        paths = [ finalAttrs.finalPackage ] ++ plugins;
+        nativeBuildInputs = [ makeBinaryWrapper ];
+        postBuild = ''
+          for program in "$out"/bin/*; do
+            wrapProgram "$program" \
+              --prefix CS_USER_PLUGINDIR : ${lib.escapeShellArg (lib.makeSearchPath "lib/csound/plugins64-7.0" plugins)}
+          done
+        '';
+      };
+
+    tests = callPackage ./tests.nix { csound = finalAttrs.finalPackage; };
+  };
+
   meta = {
-    description = "Sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
+    description = "Sound synthesis and signal processing system";
     homepage = "https://csound.com/";
+    changelog = "https://github.com/csound/csound/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hlolli ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "csound";
   };
 })
