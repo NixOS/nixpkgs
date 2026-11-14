@@ -39,9 +39,6 @@
 
 let
   sources = callPackage ./sources.nix { };
-  vulkan-headers-qmplay2 = vulkan-headers.overrideAttrs (oldAttrs: {
-    inherit (sources.vulkan-headers-qmplay2) version src;
-  });
 in
 assert lib.elem qtVersion [
   "5"
@@ -82,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     libva
     libxcb
     taglib
-    vulkan-headers-qmplay2
+    vulkan-headers
     vulkan-tools
     deno
     expat
