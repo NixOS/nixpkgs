@@ -330,6 +330,7 @@
   ./programs/screen.nix
   ./programs/seahorse.nix
   ./programs/sedutil.nix
+  ./programs/septabee.nix
   ./programs/shadow.nix
   ./programs/sharing.nix
   ./programs/singularity.nix
