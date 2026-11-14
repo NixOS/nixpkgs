@@ -1103,6 +1103,7 @@
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
+  ./services/monitoring/netvisor.nix
   ./services/monitoring/nezha-agent.nix
   ./services/monitoring/nezha.nix
   ./services/monitoring/ocsinventory-agent.nix
