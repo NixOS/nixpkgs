@@ -42,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-server";
-  version = "6.20.3";
+  version = "6.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "server-${finalAttrs.version}";
-    hash = "sha256-6OoINJu8DoDCZzu/umdINH0UQXh19pQ2e6XQjJpdAYc=";
+    hash = "sha256-QDs3Ue4F5NzkqvB44R9PXctcMh1+2+CNING1l4yG2MU=";
   };
 
   postPatch = ''
