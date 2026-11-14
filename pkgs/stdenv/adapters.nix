@@ -408,15 +408,25 @@ rec {
     Modify a stdenv so that it builds binaries with the specified list of
     compilerFlags appended and passed to the compiler.
 
-    This example would recompile every derivation on the system with
-    -funroll-loops and -O3 passed to each gcc invocation.
+    This example builds a single package with -funroll-loops and -O3
+    passed to each compiler invocation.
 
     Example:
-      nixpkgs.overlays = [
-        (self: super: {
-          stdenv = super.withCFlags [ "-funroll-loops" "-O3" ] super.stdenv;
-        })
-      ];
+      hello.override {
+        stdenv = stdenvAdapters.withCFlags [ "-funroll-loops" "-O3" ] stdenv;
+      }
+
+    To rebuild every package with the flags, use `config.replaceStdenv`
+    rather than overriding `stdenv` in an overlay. Overlays also apply to
+    the stdenv bootstrap stages, so the flags would reach the bootstrap
+    compilers, which may not support them (for example, -flto).
+
+    Example (Nixpkgs config, e.g. `nixpkgs.config` on NixOS):
+      replaceStdenv =
+        { pkgs }: pkgs.stdenvAdapters.withCFlags [ "-funroll-loops" "-O3" ] pkgs.stdenv;
+
+    Cross package sets (pkgsCross, pkgsStatic, ...) ignore
+    `config.replaceStdenv`; use `config.replaceCrossStdenv` for those.
   */
   withCFlags =
     compilerFlags:
