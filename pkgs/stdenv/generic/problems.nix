@@ -96,6 +96,18 @@ rec {
         value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
       };
     };
+    licenseless = {
+      manualAllowed = false;
+      isUnique = false;
+      nixpkgsInternalUseAllowed = true;
+      automatic = {
+        condition =
+          # Just like maintainerless, we detect actual packages by checking for FODs and meta.description.
+          config: attrs:
+          (attrs.meta.license or [ ] == [ ]) && (!attrs ? outputHash) && (attrs ? meta.description);
+        value.message = "This package has no declared license, i.e. an empty `meta.license` attribute.";
+      };
+    };
     broken = {
       manualAllowed = true;
       isUnique = false;

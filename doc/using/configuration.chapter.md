@@ -215,6 +215,7 @@ Currently, the following problem kinds are known (with more reserved to be added
 
 - "removal": The package is planned to be removed some time in the future. Unique.
 - "deprecated": The package relies on software which has reached its end of life.
+- "licenseless": Automatically generated for packages with `meta.license == []`. Unique, not manually specifiable.
 - "maintainerless": Automatically generated for packages with `meta.maintainers == []`. Unique, not manually specifiable.
 - "broken": Automatically generated for packages with `meta.broken = true`.
 
