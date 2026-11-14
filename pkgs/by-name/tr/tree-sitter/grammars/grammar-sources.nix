@@ -574,9 +574,9 @@
   };
 
   drools = {
-    version = "0.1.0";
+    version = "0.2.0";
     url = "github:iByteABit256/tree-sitter-drools";
-    hash = "sha256-TuIJbr5URQJOChsb0OuiLO3A0mUyoZ0zMU4dzquhL58=";
+    hash = "sha256-G1NKHkEKNoiDbHJjddp6MtdyR3oGfsRyv3MSym4DWrQ=";
     excludeBrokenTreeSitterJson = true;
     meta.license = lib.licenses.agpl3Only;
   };
