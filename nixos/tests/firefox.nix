@@ -2,6 +2,7 @@
   lib,
   pkgs,
   firefoxPackage,
+  firefoxModule,
   ...
 }:
 {
@@ -17,7 +18,7 @@
     {
       imports = [ ./common/x11.nix ];
 
-      programs.firefox = {
+      programs.${firefoxModule} = {
         enable = true;
         preferences."media.autoplay.default" = 0;
         package = firefoxPackage;
