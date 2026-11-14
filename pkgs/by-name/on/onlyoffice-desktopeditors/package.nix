@@ -8,27 +8,16 @@
   extraFontPackages ? [ ],
   # Alphabetic ordering below
   alsa-lib,
-  at-spi2-atk,
-  atk,
   autoPatchelfHook,
-  cairo,
   curl,
-  dbus,
-  dconf,
   dpkg,
-  fontconfig,
   gcc-unwrapped,
-  gdk-pixbuf,
-  glib,
   glibc,
-  gsettings-desktop-schemas,
   gst_all_1,
-  gtk3,
   libGL,
   libnotify,
   libpulseaudio,
   libudev0-shim,
-  libdrm,
   makeWrapper,
   libgbm,
   noto-fonts-cjk-sans,
@@ -38,18 +27,7 @@
   qt5,
   wrapGAppsHook3,
   xkeyboard_config,
-  libxtst,
-  libxscrnsaver,
-  libxrender,
-  libxrandr,
-  libxi,
-  libxfixes,
-  libxext,
-  libxdamage,
-  libxcursor,
-  libxcomposite,
   libx11,
-  libxcb,
 }:
 let
 
@@ -110,40 +88,15 @@ let
 
     buildInputs = [
       alsa-lib
-      at-spi2-atk
-      atk
-      cairo
-      dbus
-      dconf
-      fontconfig
-      gdk-pixbuf
-      glib
-      gsettings-desktop-schemas
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
-      gtk3
       libnotify
       libpulseaudio
-      libdrm
       nspr
       nss
       libgbm
       qt5.qtbase
       qt5.qtdeclarative
-      qt5.qtsvg
-      qt5.qtwayland
-      libx11
-      libxcb
-      libxcomposite
-      libxcursor
-      libxdamage
-      libxext
-      libxfixes
-      libxi
-      libxrandr
-      libxrender
-      libxscrnsaver
-      libxtst
     ];
 
     dontWrapQtApps = true;
