@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   fetchurl,
   undmg,
   glib,
@@ -28,30 +29,6 @@ let
       srcData =
         sources.${stdenv.hostPlatform.system}
           or (throw "Unsupported system: ${stdenv.hostPlatform.system} for Charles ${version}. Supported systems are: ${lib.concatStringsSep ", " (builtins.attrNames sources)}");
-
-      desktopItem = makeDesktopItem {
-        categories = [
-          "Network"
-          "Development"
-          "WebDevelopment"
-          "Java"
-        ];
-        desktopName = "Charles";
-        exec = "${mainProgram} %F";
-        genericName = "Web Debugging Proxy";
-        icon = "charles-proxy" + lib.optionalString (lib.versionAtLeast version "5.0") "5";
-        mimeTypes = [
-          "application/x-charles-savedsession"
-          "application/x-charles-savedsession+xml"
-          "application/x-charles-savedsession+json"
-          "application/har+json"
-          "application/vnd.tcpdump.pcap"
-          "application/x-charles-trace"
-        ];
-        name = "Charles";
-        startupNotify = true;
-      };
-
     in
     stdenv.mkDerivation {
       pname = "charles";
@@ -65,7 +42,36 @@ let
         ]; # HTTP 104 otherwise
       };
 
-      nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ undmg ];
+      nativeBuildInputs = [
+        makeWrapper
+        copyDesktopItems
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ undmg ];
+
+      desktopItems = [
+        (makeDesktopItem {
+          categories = [
+            "Network"
+            "Development"
+            "WebDevelopment"
+            "Java"
+          ];
+          desktopName = "Charles";
+          exec = "${mainProgram} %F";
+          genericName = "Web Debugging Proxy";
+          icon = "charles-proxy" + lib.optionalString (lib.versionAtLeast version "5.0") "5";
+          mimeTypes = [
+            "application/x-charles-savedsession"
+            "application/x-charles-savedsession+xml"
+            "application/x-charles-savedsession+json"
+            "application/har+json"
+            "application/vnd.tcpdump.pcap"
+            "application/x-charles-trace"
+          ];
+          name = "Charles";
+          startupNotify = true;
+        })
+      ];
 
       sourceRoot = if stdenv.hostPlatform.isDarwin then "." else null;
 
@@ -96,9 +102,6 @@ let
             for fn in lib/*.jar; do
               install -D -m644 $fn $out/share/java/$(basename $fn)
             done
-
-            mkdir -p $out/share/applications
-            ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
             ${
               if lib.versionOlder version "4.0" then

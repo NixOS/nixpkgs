@@ -11,6 +11,7 @@
   libbass,
   libbass_fx,
   makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    copyDesktopItems
     qt6.qmake
     qt6.wrapQtAppsHook
   ];
@@ -87,17 +89,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm644 ../setup/unix/UltraStar-Creator.png $out/share/icons/hicolor/128x128/apps/ultrastar-creator.png
-    ln -s "$desktopItem/share/applications" "$out/share/"
 
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = finalAttrs.pname;
-    desktopName = "UltraStar-Creator";
-    exec = "UltraStar-Creator";
-    icon = "ultrastar-creator";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      desktopName = "UltraStar-Creator";
+      exec = "UltraStar-Creator";
+      icon = "ultrastar-creator";
+    })
+  ];
 
   meta = {
     mainProgram = "UltraStar-Creator";
