@@ -1470,6 +1470,13 @@ with pkgs;
 
   dune_3 = callPackage ../by-name/du/dune/package.nix { };
 
+  # libunibreak 8.0 removed the incremental line-breaking API and
+  # lb_get_char_class, which naev, coolreader and crengine-ng still use.
+  libunibreak_7 = callPackage ../by-name/li/libunibreak/package.nix {
+    version = "7.0";
+    hash = "sha256-J+/L5pFudppf0l0Gk/6/Rwz5I59p9Aw11cUEPRPGP/8=";
+  };
+
   dvc = with python3.pkgs; toPythonApplication dvc;
 
   dvc-with-remotes = dvc.override {

@@ -6,7 +6,7 @@
   lib,
   qt5,
   fribidi,
-  libunibreak,
+  libunibreak_7,
   zstd,
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qt5.qttools
     fribidi
-    libunibreak
+    libunibreak_7
     zstd
   ];
 
