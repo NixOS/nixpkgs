@@ -105,7 +105,7 @@ in
         inherit (cfg) contents format;
         name = config.image.baseName;
 
-        includeChannel = true;
+        includeChannel = config.nix.channel.enable;
 
         bootSize = 1000; # 1G is the minimum EBS volume
 
@@ -160,6 +160,8 @@ in
         inherit (cfg) contents format;
         inherit (config.image) baseName;
         name = config.image.baseName;
+
+        copyChannel = config.nix.channel.enable;
 
         fsType = "ext4";
         partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
