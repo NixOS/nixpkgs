@@ -24,27 +24,29 @@
   rich,
   scikit-learn,
   tomli-w,
+  torchvision,
   transformers,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "heretic-llm";
-  version = "1.4.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "heretic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jIWvHRsRo4wtos+2oNA8n0kz0GPLb03qEFsOQKTuMo8=";
+    hash = "sha256-rpnIElFd4IIS+6QW7toNyim692eMOcwB2gC1SmSHS9M=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.8.11,<0.9.0" "uv_build"
+    sed -ie 's/requires = \["uv_build[^"]*"]/requires = ["uv_build"]/' pyproject.toml
   '';
 
   pythonRelaxDeps = [
+    "accelerate"
+    "bitsandbytes"
     "datasets"
     "huggingface-hub"
     "peft"
@@ -73,6 +75,7 @@ buildPythonPackage (finalAttrs: {
     questionary
     rich
     tomli-w
+    torchvision
     transformers
   ];
 
