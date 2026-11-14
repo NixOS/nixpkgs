@@ -13,10 +13,10 @@
       keyFile = pkgs.writers.writeYAML "keys.yaml" {
         key = "f6lQGaHtM5HfgZjIcec3cOCRfiDqIine4CpZZnqdT5cE";
       };
+      fullAccessHomeservers = [ "*" ];
       livekitUrl = "wss://127.0.0.1:8100";
       port = 8000;
     };
-    systemd.services.lk-jwt-service.environment.LIVEKIT_FULL_ACCESS_HOMESERVERS = "*";
 
     environment.systemPackages = [ config.services.lk-jwt-service.package ];
   };

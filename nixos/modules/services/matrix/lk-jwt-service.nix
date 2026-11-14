@@ -34,6 +34,16 @@ in
       '';
     };
 
+    fullAccessHomeservers = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      example = "example.com";
+      description = ''
+        List of full-access homeservers.
+        Ignored when serving C-S and S-S endpoints as an application service.
+      '';
+      apply = values: lib.strings.join "," values;
+    };
+
     port = lib.mkOption {
       type = lib.types.port;
       default = 8080;
@@ -52,6 +62,7 @@ in
         LIVEKIT_URL = cfg.livekitUrl;
         LIVEKIT_JWT_BIND = ":${toString cfg.port}";
         LIVEKIT_KEY_FILE = "/run/credentials/lk-jwt-service.service/livekit-secrets";
+        LIVEKIT_FULL_ACCESS_HOMESERVERS = cfg.fullAccessHomeservers;
       };
 
       serviceConfig = {
