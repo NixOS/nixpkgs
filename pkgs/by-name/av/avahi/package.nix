@@ -2,7 +2,6 @@
   fetchurl,
   fetchpatch,
   lib,
-  config,
   stdenv,
   pkg-config,
   libdaemon,
