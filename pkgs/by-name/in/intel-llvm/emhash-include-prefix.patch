@@ -1,0 +1,52 @@
+diff --git a/sycl/source/detail/device_kernel_info.hpp b/sycl/source/detail/device_kernel_info.hpp
+index 9408d906946e..01e08d75e53d 100644
+--- a/sycl/source/detail/device_kernel_info.hpp
++++ b/sycl/source/detail/device_kernel_info.hpp
+@@ -9,7 +9,7 @@
+ 
+ #include <detail/hashers.hpp>
+ #include <detail/kernel_arg_mask.hpp>
+-#include <hash_table8.hpp>
++#include <emhash/hash_table8.hpp>
+ #include <sycl/detail/compile_time_kernel_info.hpp>
+ #include <sycl/detail/spinlock.hpp>
+ #include <sycl/detail/ur.hpp>
+diff --git a/sycl/source/detail/unordered_multimap.hpp b/sycl/source/detail/unordered_multimap.hpp
+index e96d718708d1..4d495ed06540 100644
+--- a/sycl/source/detail/unordered_multimap.hpp
++++ b/sycl/source/detail/unordered_multimap.hpp
+@@ -7,7 +7,7 @@
+ //===--------------------------------------------------------------===//
+ #pragma once
+ #include <detail/hashers.hpp>
+-#include <hash_table8.hpp>
++#include <emhash/hash_table8.hpp>
+ 
+ #include <utility>
+ #include <vector>
+diff --git a/xptifw/include/xpti_string_table.hpp b/xptifw/include/xpti_string_table.hpp
+index 5dac772c1642..86797082b2f5 100644
+--- a/xptifw/include/xpti_string_table.hpp
++++ b/xptifw/include/xpti_string_table.hpp
+@@ -8,7 +8,7 @@
+ #include "parallel_hashmap/phmap.h"
+ #include "spin_lock.hpp"
+ #include "xpti/xpti_data_types.h"
+-#include <hash_table7.hpp>
++#include <emhash/hash_table7.hpp>
+ 
+ #include <atomic>
+ #include <unordered_map>
+diff --git a/xptifw/src/xpti_trace_framework.cpp b/xptifw/src/xpti_trace_framework.cpp
+index 297acc90ae99..7e6197f743e7 100644
+--- a/xptifw/src/xpti_trace_framework.cpp
++++ b/xptifw/src/xpti_trace_framework.cpp
+@@ -20,7 +20,7 @@
+ #include "xpti_int64_hash_table.hpp"
+ #include "xpti_object_table.hpp"
+ #include "xpti_string_table.hpp"
+-#include <hash_table7.hpp>
++#include <emhash/hash_table7.hpp>
+ 
+ #include <algorithm>
+ #include <array>

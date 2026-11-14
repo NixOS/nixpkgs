@@ -171,6 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/intel/llvm/commit/1e92a880fb2d85dfcd0046443cb938ccf4280049.patch";
       hash = "sha256-JH5HUYvJFv2cdyNdDMi+46iR9gWuSij+mvPbdwPWr2E=";
     })
+    # emhash >= 1.2.0 installs its headers under include/emhash/.
+    # Upstream PR: https://github.com/intel/llvm/pull/23801
+    ./emhash-include-prefix.patch
   ];
 
   postPatch = ''

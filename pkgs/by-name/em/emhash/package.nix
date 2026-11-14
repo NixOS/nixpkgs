@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "emhash";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ktprime";
     repo = "emhash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+oJIJvtphPHXPbmRquHRV9KkI61qwuGjJw3O1hpzwIw=";
+    hash = "sha256-qBKAC+bL7WkqihRqDbgScbHedUOIOEDlEhdRaY3mugo=";
   };
 
   strictDeps = true;
@@ -24,9 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    # By default, it will try to build the benchmark suite,
+    # By default, it will try to build various targets,
     # but we only care about the headers copied by the install target.
     "-DWITH_BENCHMARKS=Off"
+    "-DWITH_EXAMPLES=Off"
   ];
 
   passthru.updateScript = nix-update-script { };
