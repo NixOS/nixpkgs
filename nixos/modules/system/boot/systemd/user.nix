@@ -31,8 +31,6 @@ let
     "exit.target"
     "graphical-session-pre.target"
     "graphical-session.target"
-    "machine.slice"
-    "machines.target"
     "paths.target"
     "printer.target"
     "session.slice"
@@ -45,10 +43,8 @@ let
     "systemd-exit.service"
     "systemd-journalctl@.service"
     "systemd-journalctl.socket"
-    "systemd-nspawn@.service"
     "systemd-storage-fs@.service"
     "systemd-storage-fs.socket"
-    "systemd-vmspawn@.service"
     "timers.target"
     "xdg-desktop-autostart.target"
   ]
@@ -59,14 +55,18 @@ let
   ]
   ++ lib.optionals systemd.withMachined [
     "dbus-org.freedesktop.machine1.service"
+    "machine.slice"
+    "machines.target"
     "systemd-machined.service"
     "systemd-machined.socket"
   ]
+  ++ lib.optional systemd.withNspawn "systemd-nspawn@.service"
   ++ lib.optionals systemd.withPortabled [
     "dbus-org.freedesktop.portable1.service"
     "portable"
     "systemd-portabled.service"
   ]
+  ++ lib.optional systemd.withVmspawn "systemd-vmspawn@.service"
   ++ config.systemd.additionalUpstreamUserUnits;
 
   writeTmpfiles =

@@ -725,6 +725,7 @@ stdenv.mkDerivation (finalAttrs: {
       withTimedated
       withTpm2Tss
       withUtmp
+      withVmspawn
       util-linux
       kmod
       kbd
