@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cabextract";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchurl {
     url = "https://www.cabextract.org.uk/cabextract-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-tVRtsRVeTHGP89SyeFc2BPMN1kw8W/1GV80Im4I6OsY=";
+    sha256 = "sha256-jzmtX5wHa5xixn3qT4ZJ513MFomaLYEiyjK6aCYstxM=";
   };
 
   # Remove vendored getopt.h in favor of stdenv's to fix non-gnu builds.
