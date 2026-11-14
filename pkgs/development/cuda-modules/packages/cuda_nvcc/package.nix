@@ -1,90 +1,107 @@
 {
-  _cuda,
-  backendStdenv,
+  backendCC,
   buildRedist,
   callPackage,
   callPackages,
-  setupCudaHook,
   cudaAtLeast,
   cudaOlder,
   cccl,
-  glibc,
   lib,
   libnvvm,
-  makeBinaryWrapper,
+  libnvptxcompiler,
+  cuda_crt,
+  cuda_cudart,
+  cuda_nvcc,
+  replaceVars,
+  runtimeShell,
+  stdenv,
 }:
+let
+  cc = backendCC;
+  # Pass this default through NVCC_CCBIN before NVCC starts. CUDA 13.3 detects
+  # the backend before applying nvcc.profile's compiler-bindir: a Clang profile
+  # can otherwise invoke Clang while configuring the frontend for GCC on PATH.
+  hostCompiler = "${cc}/bin/${cc.targetPrefix}c++";
+  ccSuffixSalt = cc.suffixSalt;
+  bintoolsSuffixSalt = cc.bintools.suffixSalt or cc.bintools.env.suffixSalt;
+  # Carry this wrapper's helpers independently of an overridden backend's age.
+  # Only role/flag projection is used here; NVCC handles response files itself.
+  wrapperUtils = replaceVars ../../../../build-support/wrapper-common/utils.bash {
+    bintools_isLLVM = cc.bintools.bintools.isLLVM or false;
+    wrapperName = "BINTOOLS_WRAPPER";
+    suffixSalt = bintoolsSuffixSalt;
+    darwinMinVersion = "";
+    expandResponseParams = "";
+  };
+  # Interpret a backend's support files with the matching projection helpers,
+  # including when the caller explicitly selects an older wrapped backend.
+  bintoolsFlags = replaceVars ../../../../build-support/bintools-wrapper/add-flags.sh {
+    out = cc.bintools;
+  };
+  # A local HOST override does not override the BUILD-role compiler.
+  buildCudaNvcc =
+    if lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform then
+      null
+    else
+      cuda_nvcc.__spliced.buildHost or cuda_nvcc;
+
+  targetCRT = cuda_crt.__spliced.targetTarget or cuda_crt;
+  targetCCCL = cccl.__spliced.targetTarget or cccl;
+  targetCudart = cuda_cudart.__spliced.targetTarget or cuda_cudart;
+  targetPtxCompiler = libnvptxcompiler.__spliced.targetTarget or libnvptxcompiler;
+
+in
 buildRedist (finalAttrs: {
   redistName = "cuda";
   pname = "cuda_nvcc";
 
-  # NOTE: We restrict cuda_nvcc to a single output to avoid breaking consumers which expect NVCC to be within a single
-  # directory structure. This happens partly because NVCC is also home to NVVM.
+  # Keep NVCC and NVVM together: consumers expect a single compiler prefix.
   outputs = [
     "out"
   ];
+  # Keep compiler activation and TARGET dependencies with the executable.
+  outputDev = finalAttrs.outputBin;
 
   # The nvcc and cicc binaries contain hard-coded references to /usr
   allowFHSReferences = true;
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
+  # The default runtime describes code emitted by NVCC. Its propagation also
+  # supplies CRT and CCCL to consumers, independently of the compiler's HOST.
+  depsTargetTargetPropagated = [ targetCudart ];
+
+  # Resolve this output placeholder in NVCC's derivation, not replaceVars'.
+  env.nvccPrefix = placeholder finalAttrs.outputBin;
+  setupHook = replaceVars ./setup-hook.sh {
+    nvccPrefix = null;
+    inherit cc;
+    bintools = cc.bintools;
+    defaultHardeningFlags = lib.escapeShellArg (toString cc.defaultHardeningFlags);
+  };
+
+  brokenAssertions = [
+    {
+      # This restriction concerns NVCC's selected backend, not the compiler
+      # packaging the headers or the project's ordinary C++ compiler.
+      # cc-wrapper also uses its libcxx argument for a GNU libstdc++ provider.
+      message = "NVCC cannot use libc++ when targeting x86_64-linux";
+      assertion = stdenv.targetPlatform.system == "x86_64-linux" -> !(cc.libcxx.isLLVM or false);
+    }
+    {
+      # The CRT math bridge works, but this frontend cannot parse libc++ 21's
+      # deferred template assertions or dependent aggregate-union initialization.
+      message = "CUDA 12.9 NVCC cannot parse libc++ 21 standard-library headers";
+      assertion =
+        !(
+          stdenv.targetPlatform.system == "aarch64-linux"
+          && lib.versions.majorMinor finalAttrs.version == "12.9"
+          && (cc.libcxx.isLLVM or false)
+          && lib.versions.major cc.libcxx.version == "21"
+        );
+    }
   ];
-
-  # Entries here will be in nativeBuildInputs when cuda_nvcc is in nativeBuildInputs
-  propagatedBuildInputs = [ setupCudaHook ];
-
-  # Patch the nvcc.profile.
-  # Syntax:
-  # - `=` for assignment,
-  # - `?=` for conditional assignment,
-  # - `+=` to "prepend",
-  # - `=+` to "append".
-
-  # Cf. https://web.archive.org/web/20220912081901/https://developer.download.nvidia.com/compute/DevZone/docs/html/C/doc/nvcc.pdf
-
-  # We set all variables with the lowest priority (=+), but we do force
-  # nvcc to use the fixed backend toolchain. Cf. comments in
-  # backend-stdenv.nix
-
-  # As an example, here's the nvcc.profile for CUDA 11.8-12.4 (yes, that is a leading newline):
-
-  #
-  # TOP              = $(_HERE_)/..
-  #
-  # NVVMIR_LIBRARY_DIR = $(TOP)/$(_NVVM_BRANCH_)/libdevice
-  #
-  # LD_LIBRARY_PATH += $(TOP)/lib:
-  # PATH            += $(TOP)/$(_NVVM_BRANCH_)/bin:$(_HERE_):
-  #
-  # INCLUDES        +=  "-I$(TOP)/$(_TARGET_DIR_)/include" $(_SPACE_)
-  #
-  # LIBRARIES        =+ $(_SPACE_) "-L$(TOP)/$(_TARGET_DIR_)/lib$(_TARGET_SIZE_)/stubs" "-L$(TOP)/$(_TARGET_DIR_)/lib$(_TARGET_SIZE_)"
-  #
-  # CUDAFE_FLAGS    +=
-  # PTXAS_FLAGS     +=
-
-  # And here's the nvcc.profile for CUDA 12.5:
-
-  #
-  # TOP              = $(_HERE_)/..
-  #
-  # CICC_PATH        = $(TOP)/nvvm/bin
-  # CICC_NEXT_PATH   = $(TOP)/nvvm-next/bin
-  # NVVMIR_LIBRARY_DIR = $(TOP)/nvvm/libdevice
-  #
-  # LD_LIBRARY_PATH += $(TOP)/lib:
-  # PATH            += $(CICC_PATH):$(_HERE_):
-  #
-  # INCLUDES        +=  "-I$(TOP)/$(_TARGET_DIR_)/include" $(_SPACE_)
-  #
-  # LIBRARIES        =+ $(_SPACE_) "-L$(TOP)/$(_TARGET_DIR_)/lib$(_TARGET_SIZE_)/stubs" "-L$(TOP)/$(_TARGET_DIR_)/lib$(_TARGET_SIZE_)"
-  #
-  # CUDAFE_FLAGS    +=
-  # PTXAS_FLAGS     +=
 
   postInstall =
     let
-      # TODO: Should we also patch the LIBRARIES line's use of $(TOP)/$(_TARGET_DIR_)?
       oldNvvmDir = lib.concatStringsSep "/" (
         [ "$(TOP)" ]
         ++ lib.optionals (cudaOlder "12.5") [ "$(_NVVM_BRANCH_)" ]
@@ -95,178 +112,107 @@ buildRedist (finalAttrs: {
     lib.optionalString finalAttrs.finalPackage.meta.available (
       # From CUDA 13.0, NVVM is available as a separate library and not bundled in the NVCC redist.
       lib.optionalString (cudaOlder "13.0") ''
-        nixLog "moving $PWD/nvvm to ''${!outputBin:?} and renaming lib64 to lib"
-        moveToOutput "nvvm" "''${!outputBin:?}"
+        moveToOutput nvvm "''${!outputBin:?}"
         mv --verbose --no-clobber "${newNvvmDir}/lib64" "${newNvvmDir}/lib"
-        # nvlink loads ../nvvm/lib64/libnvvm.so for device link-time optimization (-dlto).
+        # nvlink loads this legacy path for device LTO.
         ln -sv lib "${newNvvmDir}/lib64"
       ''
       # NVVM is unpacked and made top-level; we cannot make a symlink to it because build systems (like CMake)
       # may take the target and do relative path operations to it.
       + lib.optionalString (cudaAtLeast "13.0") ''
-        nixLog "copying ${libnvvm} to ${newNvvmDir} and fixing permissions"
-        cp -rv "${libnvvm}" "${newNvvmDir}"
+        cp -rv ${libnvvm} "${newNvvmDir}"
         chmod -Rv u+w "${newNvvmDir}"
       ''
-      # Unconditional patching to remove the use of $(_TARGET_SIZE_) since we don't use lib64 in Nixpkgs
-      + ''
-        nixLog 'removing $(_TARGET_SIZE_) from nvcc.profile'
-        substituteInPlace "''${!outputBin:?}/bin/nvcc.profile" \
-          --replace-fail \
-            '$(_TARGET_SIZE_)' \
-            ""
+      # Retain CUDA 12's bundled PTX compiler API, but use its TARGET library
+      # instead of the CPU architecture of the NVCC executable's archive.
+      + lib.optionalString (cudaOlder "13.0") ''
+        ln -sfn ${lib.getOutput targetPtxCompiler.outputInclude targetPtxCompiler}/include/nvPTXCompiler.h "''${!outputInclude:?}/include/nvPTXCompiler.h"
+        ln -sfn ${lib.getOutput targetPtxCompiler.outputStatic targetPtxCompiler}/lib/libnvptxcompiler_static.a "''${!outputLib:?}/lib/libnvptxcompiler_static.a"
       ''
-      # CUDA 13.0+ introduced
-      # SYSTEM_INCLUDES +=  "-isystem" "$(TOP)/$(_TARGET_DIR_)/include/cccl" $(_SPACE_)
-      # so we need to make sure to patch the reference to cccl.
-      + lib.optionalString (cudaAtLeast "13.0") ''
-        nixLog "patching nvcc.profile to include correct path to cccl"
-        substituteInPlace "''${!outputBin:?}/bin/nvcc.profile" \
-          --replace-fail \
-            '$(TOP)/$(_TARGET_DIR_)/include/cccl' \
-            "${lib.getOutput "include" cccl}/include"
-      ''
-      # Unconditional patching to switch to the correct include paths.
-      # NOTE: _TARGET_DIR_ appears to be used for the target architecture, which is relevant for cross-compilation.
+      # These defaults belong beside the executable so they also apply to JIT
+      # invocations. The single-output prefix contains HOST's tools/NVVM and
+      # TARGET's CRT; the remaining TARGET components have direct store paths.
+      # NVIDIA's component archives have no selectable targets/ directory.
       + ''
-        nixLog "patching nvcc.profile to use the correct include paths"
         substituteInPlace "''${!outputBin:?}/bin/nvcc.profile" \
-          --replace-fail \
-            '$(TOP)/$(_TARGET_DIR_)/include' \
-            "''${!outputInclude:?}/include"
-      ''
-      # Fixup the nvcc.profile to use the correct paths for NVVM.
-      # NOTE: In our replacement substitution, we use double quotes to allow for variable expansion.
-      # NOTE: We use a trailing slash only on the NVVM directory replacement to prevent partial matches.
-      + ''
-        nixLog "patching nvcc.profile to use the correct NVVM paths"
-        substituteInPlace "''${!outputBin:?}/bin/nvcc.profile" \
-          --replace-fail \
-            '${oldNvvmDir}/' \
-            "${newNvvmDir}/"
+          --replace-fail '$(_TARGET_SIZE_)' "" \
+          ${lib.optionalString (cudaAtLeast "13.0") "--replace-fail '$(TOP)/$(_TARGET_DIR_)/include/cccl' '${lib.getOutput targetCCCL.outputInclude targetCCCL}/include' "} \
+          --replace-fail '$(TOP)/$(_TARGET_DIR_)/include' "''${!outputInclude:?}/include" \
+          ${
+            lib.optionalString (targetCudart.outputStubs != targetCudart.outputLib)
+              "--replace-fail '$(TOP)/$(_TARGET_DIR_)/lib/stubs' '${lib.getOutput targetCudart.outputStubs targetCudart}/lib/stubs' "
+          }--replace-fail '$(TOP)/$(_TARGET_DIR_)/lib' '${lib.getOutput targetCudart.outputLib targetCudart}/lib' \
+          --replace-fail '${oldNvvmDir}/' "${newNvvmDir}/"
 
-        nixLog "adding ${newNvvmDir} to nvcc.profile"
-        cat << EOF >> "''${!outputBin:?}/bin/nvcc.profile"
-
-        # Expose the split-out nvvm
-        LIBRARIES =+ \$(_SPACE_) "-L${newNvvmDir}/lib"
-        INCLUDES =+ \$(_SPACE_) "-I${newNvvmDir}/include"
-        EOF
+        # FindCUDAToolkit reads the first INCLUDES/LIBRARIES assignments in
+        # nvcc's verbose output, before any CUDA language has been enabled.
+        # Publish complete defaults in those assignments rather than tracing
+        # an empty reset followed by progressively accumulated paths. Keep
+        # NVIDIA's SYSTEM_INCLUDES as well: CCCL remains a system include for
+        # compilers, while CMake can discover it through INCLUDES.
+        local nvccIncludes='"-I${lib.getOutput targetCudart.outputInclude targetCudart}/include" '"\"-I''${!outputInclude:?}/include\""
+        local ccclIncludes='"-I${lib.getOutput targetCCCL.outputInclude targetCCCL}/include"'
+        # CUDA 12 previously prepended CCCL; CUDA 13 also marks it as system.
+        nvccIncludes="${
+          if cudaOlder "13.0" then "$ccclIncludes $nvccIncludes" else "$nvccIncludes $ccclIncludes"
+        }"
+        substituteInPlace "''${!outputBin:?}/bin/nvcc.profile" \
+          --replace-fail "\"-I''${!outputInclude:?}/include\"" "$nvccIncludes"
+        sed -i \
+          -e 's/^INCLUDES[[:space:]]*+=/INCLUDES =/' \
+          -e 's/^LIBRARIES[[:space:]]*=+/LIBRARIES = $(NIX_NVCC_LIBRARIES)/' \
+          "''${!outputBin:?}/bin/nvcc.profile"
       ''
-      # Add the dependency on backendStdenv.cc to the nvcc.profile.
-      # NOTE: NVCC explodes in horrifying fashion if GCC is not on PATH -- it fails even before
-      # reading nvcc.profile!
+      # Keep nvcc.profile beside the real executable; CMake also relies on
+      # finding nvvm relative to the public compiler prefix.
       + ''
-        nixLog "setting compiler-bindir to backendStdenv.cc in nvcc.profile"
-        cat << EOF >> "''${!outputBin:?}/bin/nvcc.profile"
-        # Fix a compatible backend compiler
-        compiler-bindir = ${backendStdenv.cc}/bin
-        EOF
-
-        nixLog "wrapping nvcc to add backendStdenv.cc to its PATH"
-        wrapProgramBinary \
-          "''${!outputBin:?}/bin/nvcc" \
-          --prefix PATH : ${lib.makeBinPath [ backendStdenv.cc ]}
-      ''
-      # nvlink records its command line, including the library and NVVM directories in the Nix store, in the cubins it
-      # writes. See README.md.
-      # NOTE: The wrapper is copied rather than linked, so that cuda_nvcc doesn't refer to it.
-      + ''
-        nixLog "wrapping nvlink to remove references to the Nix store from the command line it records"
+        rm -rf "''${!outputInclude:?}/include/crt"
+        ln -s ${lib.getOutput targetCRT.outputInclude targetCRT}/include/crt "''${!outputInclude:?}/include/crt"
+        mv "''${!outputBin:?}/bin/nvcc" "''${!outputBin:?}/bin/.nvcc-unwrapped"
+        # Use the compiler output's identity, including all overrides, for
+        # role markers. Hashes also count as Nix store references, so using
+        # another output's hash here could introduce an output cycle.
+        local suffixSalt="''${nvccPrefix##*/}"
+        suffixSalt="''${suffixSalt%%-*}"
+        mkdir -p "''${!outputBin:?}/nix-support/bin"
+        # NVCC's --lib phase and host-linker-script generator invoke
+        # unprefixed ar and ld. Keep the backend aliases private to NVCC.
+        ln -s ${cc.bintools}/bin/${cc.targetPrefix}ar "''${!outputBin:?}/nix-support/bin/ar"
+        ln -s ${cc.bintools}/bin/${cc.targetPrefix}ld "''${!outputBin:?}/nix-support/bin/ld"
+        substitute ${../../../../build-support/setup-hooks/role.bash} "''${!outputBin:?}/nix-support/role.bash" \
+          --subst-var-by name nvcc-wrapper \
+          --subst-var-by wrapperName NVCC \
+          --subst-var-by suffixSalt "$suffixSalt"
+        substitute ${./nvcc-wrapper.sh} "''${!outputBin:?}/bin/nvcc" \
+          --subst-var nvccPrefix \
+          --subst-var-by shell ${runtimeShell} \
+          --subst-var-by wrapperUtils ${wrapperUtils} \
+          --subst-var-by bintoolsFlags ${bintoolsFlags} \
+          --subst-var-by suffixSalt "$suffixSalt" \
+          --subst-var-by cc ${cc} \
+          --subst-var-by hostCompiler ${hostCompiler} \
+          --subst-var-by driverRunpath '${targetCudart.driverRunpath}' \
+          --subst-var-by ccSuffixSalt ${ccSuffixSalt} \
+          --subst-var-by bintoolsSuffixSalt ${bintoolsSuffixSalt} \
+          --subst-var-by nvcc "''${!outputBin:?}/bin/.nvcc-unwrapped"
+        chmod +x "''${!outputBin:?}/bin/nvcc"
+        # Copy the HOST wrapper beside nvlink, preserving its relative lookup.
         mv --verbose "''${!outputBin:?}/bin/nvlink" "''${!outputBin:?}/bin/.nvlink-wrapped"
         install --mode=0755 "${finalAttrs.passthru.nvlinkWrapper}/bin/nvlink-wrapper" "''${!outputBin:?}/bin/nvlink"
       ''
-      # Fix compatibility with glibc 2.42:
-      # The cospi|sinpi|rsqrt function signatures in include/common/math_functions.h do not match
-      # glibc 2.42's.
-      # Indeed, there they are declared with noexcept(true) which is not the case in cuda_nvcc.
-      # - In CUDA < 13.0, sinpi/cospi/rsqrt all lack exception specifiers.
-      # - In CUDA >= 13.0, NVIDIA fixed sinpi/cospi (using __NV_IEC_60559_FUNCS_EXCEPTION_SPECIFIER)
-      #   but rsqrt/rsqrtf still lack noexcept, so we only patch those.
-      #   As the CRT headers (including math_functions.h) moved to the cuda_crt package, the glibc
-      #   2.42 compatibility patch is applied there instead.
-      + lib.optionalString (cudaOlder "13.0" && lib.versionAtLeast glibc.version "2.42") ''
-        nixLog "Patching math_functions.h signatures to match glibc's ones"
-        substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.h" \
-          --replace-fail \
-            "sinpi(double x);" \
-            "sinpi(double x) noexcept (true);" \
-          --replace-fail \
-            "sinpif(float x);" \
-            "sinpif(float x) noexcept (true);" \
-          --replace-fail \
-            "cospi(double x);" \
-            "cospi(double x) noexcept (true);" \
-          --replace-fail \
-            "cospif(float x);" \
-            "cospif(float x) noexcept (true);" \
-          --replace-fail \
-            "rsqrt(double x);" \
-            "rsqrt(double x) noexcept (true);" \
-          --replace-fail \
-            "rsqrtf(float x);" \
-            "rsqrtf(float x) noexcept (true);"
 
-        # math_functions.hpp has the same functions wrapped in __func__() macros.
-        # These also need throw() annotations to match glibc 2.42's declarations.
-        nixLog "Patching math_functions.hpp signatures to match glibc's ones"
-        substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.hpp" \
-          --replace-fail \
-            "__func__(double rsqrt(const double a))" \
-            "__func__(double rsqrt(const double a) throw())" \
-          --replace-fail \
-            "__func__(double sinpi(double a))" \
-            "__func__(double sinpi(double a) throw())" \
-          --replace-fail \
-            "__func__(double cospi(double a))" \
-            "__func__(double cospi(double a) throw())" \
-          --replace-fail \
-            "__func__(float rsqrtf(const float a))" \
-            "__func__(float rsqrtf(const float a) throw())" \
-          --replace-fail \
-            "__func__(float sinpif(const float a))" \
-            "__func__(float sinpif(const float a) throw())" \
-          --replace-fail \
-            "__func__(float cospif(const float a))" \
-            "__func__(float cospif(const float a) throw())"
-      ''
-
-      # Fix clang CUDA compilation: host_defines.h redefines __noinline__ as
-      # __attribute__((noinline)), which conflicts with libstdc++ >=12 using
-      # __attribute__((__noinline__)) — the macro expands to
-      # __attribute__((__attribute__((noinline)))) which is invalid.
-      # Clang natively understands __noinline__ as an attribute so the macro
-      # is unnecessary. Skip it when clang is the compiler.
-      + lib.optionalString (cudaOlder "13.0") ''
-        nixLog "Patching host_defines.h to skip __noinline__ macro under clang"
-        substituteInPlace "''${!outputInclude:?}/include/crt/host_defines.h" \
-          --replace-fail \
-            '#if defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)' \
-            '#if (defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)) && !defined(__clang__)'
-      ''
     );
-
-  brokenAssertions = [
-    # TODO(@connorbaker): Build fails on x86 when using pkgsLLVM.
-    #  .../include/crt/host_defines.h:67:2:
-    #  error: "libc++ is not supported on x86 system"
-    #
-    #     67 | #error "libc++ is not supported on x86 system"
-    #        |  ^
-    #
-    #  1 error generated.
-    #
-    #  # --error 0x1 --
-    {
-      message = "cannot use libc++ on x86_64-linux";
-      assertion = backendStdenv.hostNixSystem == "x86_64-linux" -> backendStdenv.cc.libcxx == null;
-    }
-  ];
 
   passthru = {
     nvlinkWrapper = callPackage ./nvlink-wrapper.nix { };
-    gpuCheck = callPackage ./gpu-check.nix { cuda_nvcc = finalAttrs.finalPackage; };
-    tests = callPackages ./tests.nix { cuda_nvcc = finalAttrs.finalPackage; };
+    gpuCheck = callPackage ./gpu-check.nix {
+      cuda_nvcc = finalAttrs.finalPackage;
+      buildCudaNvcc = if buildCudaNvcc == null then finalAttrs.finalPackage else buildCudaNvcc;
+    };
+    tests = callPackages ./tests.nix {
+      cuda_nvcc = finalAttrs.finalPackage;
+      buildCudaNvcc = if buildCudaNvcc == null then finalAttrs.finalPackage else buildCudaNvcc;
+    };
   };
 
   meta = {

@@ -1,5 +1,7 @@
-{
-  backendStdenv,
+args@{
+  redistSystem,
+  stdenv,
+  cuda_cudart,
   buildRedist,
   cuda_nvrtc,
   cudaMajorMinorVersion,
@@ -21,11 +23,14 @@ let
           && lib.versionOlder cudaCublasVersion standaloneVersion
         )
         "libcublas: standalone cuBLAS ${standaloneVersion} is not a newer patch release of CUDA's cuBLAS ${cudaCublasVersion}; drop or update the cublas pin"
-    && manifests.cublas.libcublas ? ${backendStdenv.hostRedistSystem};
+    && manifests.cublas.libcublas ? ${redistSystem};
 in
-buildRedist (finalAttrs: {
+(import ../library.nix args) (finalAttrs: {
   redistName = if isStandalone then "cublas" else "cuda";
   pname = "libcublas";
+
+  # Standalone redistributables need generated link-time stubs.
+  nativeBuildInputs = lib.optional isStandalone stdenv.cc;
 
   # libcublasLt dlopens NVRTC to compile kernels at runtime; absent before 12.8.
   appendRunpaths = lib.optionals (lib.versionAtLeast finalAttrs.version "12.8") [

@@ -1,6 +1,7 @@
 {
   addDriverRunpath,
   backendStdenv,
+  buildCudaNvcc,
   cuda_cudart,
   cuda_nvcc,
   flags,
@@ -19,7 +20,7 @@ backendStdenv.mkDerivation {
     "-arch=${lib.head flags.realArches} -dlto"
   ];
 
-  nativeBuildInputs = [ cuda_nvcc ];
+  nativeBuildInputs = [ buildCudaNvcc ];
 
   buildInputs = [ cuda_cudart ];
 
@@ -30,12 +31,12 @@ backendStdenv.mkDerivation {
     runHook preBuild
     for i in "''${!variants[@]}"; do
       # shellcheck disable=SC2086
-      nvcc -rdc=true ''${variants[$i]} ${./gpu-check.cu} -L${lib.getOutput "static" cuda_cudart}/lib -o "program-$i"
+      nvcc -rdc=true ''${variants[$i]} ${./gpu-check.cu} -L${lib.getOutput cuda_cudart.outputStatic cuda_cudart}/lib -o "program-$i"
     done
     runHook postBuild
   '';
 
-  doCheck = true;
+  doCheck = backendStdenv.buildPlatform.canExecute backendStdenv.hostPlatform;
   checkPhase = ''
     runHook preCheck
     export LD_LIBRARY_PATH="$(readlink -mnv "${addDriverRunpath.driverLink}/lib")"

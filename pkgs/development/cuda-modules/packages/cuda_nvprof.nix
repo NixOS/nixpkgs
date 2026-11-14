@@ -1,8 +1,10 @@
 {
-  backendStdenv,
+  redistSystem,
   buildRedist,
+  cuda_cudart,
   cuda_cupti,
   cudaAtLeast,
+  cudaMajorMinorVersion,
   lib,
 }:
 buildRedist {
@@ -15,7 +17,7 @@ buildRedist {
     "out"
   ]
   # The `bin` and `lib` output are only available on SBSA starting with CUDA 11.8.
-  ++ lib.optionals (backendStdenv.hostRedistSystem != "linux-sbsa" || cudaAtLeast "11.8") [
+  ++ lib.optionals (redistSystem != "linux-sbsa" || cudaAtLeast "11.8") [
     "bin"
     "lib"
   ];
@@ -23,6 +25,19 @@ buildRedist {
   buildInputs = [
     cuda_cupti
   ];
+
+  propagatedBuildInputs = [ cuda_cudart ];
+
+  # These injection libraries have no public headers in the redistributable.
+  postPatch = ''
+    substituteInPlace share/pkgconfig/{cuinj64,accinj64}-${cudaMajorMinorVersion}.pc \
+      --replace-fail "includedir=''${!outputInclude:?}/include" "" \
+      --replace-fail 'Cflags: -I''${includedir}' ""
+    # cuinj64 has unresolved driver symbols; linking its advertised interface
+    # needs the driver stub even when the application calls no CUDA API itself.
+    substituteInPlace share/pkgconfig/cuinj64-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Libs:' $'Requires: cuda-${cudaMajorMinorVersion}\nLibs:'
+  '';
 
   autoPatchelfIgnoreMissingDeps = [
     "libcuda.so.1"

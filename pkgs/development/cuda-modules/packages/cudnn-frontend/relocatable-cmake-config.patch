@@ -1,0 +1,55 @@
+From 224f31d320157ee856a98d05b09bda206d8027d7 Mon Sep 17 00:00:00 2001
+From: Billy Robert O'Neal III <bion@microsoft.com>
+Date: Tue, 4 Aug 2026 16:54:06 -0700
+Subject: [PATCH] Fix absolute paths in installed CMake configs.
+
+In https://github.com/microsoft/vcpkg/pull/53159 GPT 5.6 Sol observes:
+
+> Upstream adds `${CUDAToolkit_INCLUDE_DIRS}` directly to the interface target in [`CMakeLists.txt`](https://github.com/NVIDIA/cudnn-frontend/blob/35fd7b0d0e1d4952b904c79341c5e84e3af0a328/CMakeLists.txt#L38-L47), then exports that target. The generated PR package consequently contains:
+>
+> ```cmake
+> INTERFACE_INCLUDE_DIRECTORIES
+>   "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include;
+>    C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/include/cccl"
+> ```
+
+This makes the resulting packages broken if the configs are used on a system where that absolute path is not the same.
+
+GPT 5.6 Sol wrote this change: Use CMake targets and then let find_dependency find the real location of those dependencies when the config gets used.
+---
+ CMakeLists.txt                 | 6 ++++--
+ cudnn_frontend-config.cmake.in | 4 ++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ee7f4ca..157790f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -40,10 +40,12 @@ target_include_directories(
+ 
+ # Find the cuda compiler
+ find_package(CUDAToolkit REQUIRED)
++find_package(CUDNN REQUIRED)
+ 
+-target_include_directories(
++target_link_libraries(
+     cudnn_frontend INTERFACE
+-    ${CUDAToolkit_INCLUDE_DIRS}
++    CUDA::toolkit
++    CuDNN::CuDNN
+ )
+ 
+ target_compile_features(cudnn_frontend INTERFACE cxx_std_17)
+diff --git a/cudnn_frontend-config.cmake.in b/cudnn_frontend-config.cmake.in
+index c2bfbee..9de9b89 100644
+--- a/cudnn_frontend-config.cmake.in
++++ b/cudnn_frontend-config.cmake.in
+@@ -3,4 +3,8 @@
+ 
+ @PACKAGE_INIT@
+ 
++include(CMakeFindDependencyMacro)
++find_dependency(CUDAToolkit)
++find_dependency(CUDNN)
++
+ include(${CMAKE_CURRENT_LIST_DIR}/cudnn_frontend-targets.cmake)

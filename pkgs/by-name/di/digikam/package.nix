@@ -88,7 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     kdePackages.wrapQtAppsHook
     wrapGAppsHook3
-  ];
+  ]
+  ++ lib.optional enableCuda cudaPackages.cuda_nvcc;
 
   # Based on <https://www.digikam.org/api/index.html#externaldeps>,
   # but it doesn’t have everything, so you also have to check the
@@ -176,7 +177,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_APPSTYLES" true)
   ]
   ++ lib.optionals enableCuda [
-    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" cudaPackages.cuda_nvcc.outPath)
+    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" (
+      cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc
+    ))
   ];
 
   # Tests segfault for some reason…

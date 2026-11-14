@@ -1,7 +1,9 @@
 {
-  backendStdenv,
   buildRedist,
+  callPackage,
   cudaAtLeast,
+  cudaConfig,
+  cuda_cudart,
   cudaMajorVersion,
   lib,
   libcublas,
@@ -10,7 +12,7 @@
 buildRedist (
   finalAttrs:
   let
-    inherit (backendStdenv) cudaCapabilities;
+    inherit (cudaConfig) cudaCapabilities;
     cublasmpAtLeast = lib.versionAtLeast finalAttrs.version;
   in
   {
@@ -26,10 +28,18 @@ buildRedist (
 
     # NOTE: cuBLASMp has not depended on NVSHMEM since 0.8.0:
     # https://docs.nvidia.com/cuda/cublasmp/release_notes/index.html
-    buildInputs = [
+    propagatedBuildInputs = [
       libcublas
       nccl
     ];
+
+    passthru.tests.headers = callPackage ./tests/public-headers.nix {
+      package = finalAttrs.finalPackage;
+      headers = [ "cublasmp.h" ];
+      libraries = [ "cublasmp" ];
+      symbols = [ "cublasMpGetVersion" ];
+      driverLibraries = [ "${lib.getOutput cuda_cudart.outputStubs cuda_cudart}/lib/stubs/libcuda.so" ];
+    };
 
     autoPatchelfIgnoreMissingDeps = [
       "libcuda.so.1"

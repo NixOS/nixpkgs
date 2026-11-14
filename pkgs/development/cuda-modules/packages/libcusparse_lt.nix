@@ -1,10 +1,13 @@
 {
   _cuda,
   buildRedist,
+  callPackage,
+  cuda_cudart,
   cuda_nvrtc,
   cudaAtLeast,
   cudaMajorMinorVersion,
   lib,
+  libcusparse,
 }:
 buildRedist (finalAttrs: {
   redistName = "cusparselt";
@@ -24,6 +27,10 @@ buildRedist (finalAttrs: {
   ];
 
   # NOTE: libcusparseLt does not reference libcublas at all, so it is deliberately not an input.
+  propagatedBuildInputs = [
+    cuda_cudart
+    libcusparse
+  ];
 
   # NOTE: cuSPARSELt documents a minimum supported CUDA compute capability of 8.0:
   # https://docs.nvidia.com/cuda/cusparselt/getting_started.html#prerequisites
@@ -50,6 +57,13 @@ buildRedist (finalAttrs: {
         assertion = cusparseltAtLeast "0.8" -> cudaAtLeast "12.9";
       }
     ];
+
+  passthru.tests.headers = callPackage ./tests/public-headers.nix {
+    package = finalAttrs.finalPackage;
+    headers = [ "cusparseLt.h" ];
+    libraries = [ "cusparseLt" ];
+    symbols = [ "cusparseLtGetVersion" ];
+  };
 
   meta = {
     description = "High-performance CUDA library dedicated to general matrix-matrix operations in which at least one operand is a structured sparse matrix with 50% sparsity ratio";

@@ -1,12 +1,12 @@
 {
-  backendStdenv,
   buildRedist,
+  callPackage,
   cuda_cudart,
   cudaAtLeast,
+  cudaConfig,
   cudaMajorMinorPatchVersion,
   cudaMajorVersion,
   lib,
-  libcublas,
   libcublasmp,
   libcusolver,
   nccl,
@@ -14,7 +14,7 @@
 buildRedist (
   finalAttrs:
   let
-    inherit (backendStdenv) cudaCapabilities;
+    inherit (cudaConfig) cudaCapabilities;
     cusolvermpAtLeast = lib.versionAtLeast finalAttrs.version;
     cusolvermpOlder = lib.versionOlder finalAttrs.version;
   in
@@ -29,14 +29,21 @@ buildRedist (
       "lib"
     ];
 
-    buildInputs = [
-      cuda_cudart
-      libcublas
+    # cuSOLVERMp links against cuBLASMp from 0.9.0.
+    buildInputs = lib.optionals (cusolvermpAtLeast "0.9") [ libcublasmp ];
+
+    propagatedBuildInputs = [
       libcusolver
       nccl
-    ]
-    # cuSOLVERMp links against cuBLASMp from 0.9.0.
-    ++ lib.optionals (cusolvermpAtLeast "0.9") [ libcublasmp ];
+    ];
+
+    passthru.tests.headers = callPackage ./tests/public-headers.nix {
+      package = finalAttrs.finalPackage;
+      headers = [ "cusolverMp.h" ];
+      libraries = [ "cusolverMp" ];
+      symbols = [ "cusolverMpGetVersion" ];
+      driverLibraries = [ "${lib.getOutput cuda_cudart.outputStubs cuda_cudart}/lib/stubs/libcuda.so" ];
+    };
 
     autoPatchelfIgnoreMissingDeps = [
       # Needs to be dynamically loaded as it depends on the hardware
