@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   cmake,
   gtest,
   boost,
@@ -9,28 +9,29 @@
   libsndfile,
   libmad,
   libid3tag,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "audiowaveform";
-  version = "1.10.3";
+  version = "1.11.1";
 
-  src = fetchFromGitHub {
-    owner = "bbc";
+  src = fetchFromCodeberg {
+    owner = "chrisn";
     repo = "audiowaveform";
-    tag = version;
-    sha256 = "sha256-7pcYxl6m7mkoXGawA3gr8NTfkJlkgl+DtK79CA8dRec=";
+    tag = finalAttrs.version;
+    hash = "sha256-n5J7TzA3uRXUzqYR2lGNzHkWeFH2SkghqWMBKWARHzo=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   cmakeFlags = [
-    # gtest no longer supports C++11.
-    "-DCMAKE_CXX_STANDARD=14"
+    # Upstream hardcodes -std=c++11; vendored gtest >= 1.17 requires C++17.
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
   ];
 
-  nativeBuildInputs = [
-    cmake
-    gtest
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost
@@ -40,12 +41,19 @@ stdenv.mkDerivation rec {
     libid3tag
   ];
 
-  preConfigure = ''
-    ln -s ${gtest.src} googletest
+  # Upstream builds googletest from source via add_subdirectory(googletest).
+  postUnpack = ''
+    cp -r ${gtest.src} "$sourceRoot/googletest"
+    chmod -R u+w "$sourceRoot/googletest"
   '';
 
-  # One test is failing, see PR #101947
-  doCheck = false;
+  doCheck = true;
+
+  # One test is failing, see https://codeberg.org/chrisn/audiowaveform/issues/174
+  env.GTEST_FILTER = "-OptionHandlerTest.shouldConvertMp3ToWavAudio";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "C++ program to generate waveform data and render waveform images from audio files";
@@ -53,11 +61,11 @@ stdenv.mkDerivation rec {
       audiowaveform is a C++ command-line application that generates waveform data from either MP3, WAV, FLAC, or Ogg Vorbis format audio files.
       Waveform data can be used to produce a visual rendering of the audio, similar in appearance to audio editing applications.
     '';
-    homepage = "https://github.com/bbc/audiowaveform";
-    changelog = "https://github.com/bbc/audiowaveform/blob/${version}/CHANGELOG.md";
+    homepage = "https://codeberg.org/chrisn/audiowaveform";
+    changelog = "https://codeberg.org/chrisn/audiowaveform/src/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ edbentley ];
     mainProgram = "audiowaveform";
   };
-}
+})
