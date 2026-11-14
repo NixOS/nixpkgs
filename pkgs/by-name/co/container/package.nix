@@ -136,6 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
       xiaoxiangmoe
       Br1ght0ne
     ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
   };
 })

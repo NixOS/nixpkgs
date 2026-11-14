@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/OmniNull/OmniWM";
     license = lib.licenses.gpl2Only;
     mainProgram = "OmniWM";
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       mmfallacy
       samiser

@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
-    badPlatforms = [ "aarch64-darwin" ];
+    badPlatforms = lib.platforms.darwin;
     # the crate `...` requires panic strategy `abort` which is incompatible with this crate's strategy of `unwind`
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "numr";

@@ -1,4 +1,5 @@
 {
+  lib,
   pname,
   version,
   hash,
@@ -32,6 +33,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = metaCommon // {
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
   };
 })

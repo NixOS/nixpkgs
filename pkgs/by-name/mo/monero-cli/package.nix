@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     # segfaults on start after entering the wallet password, when built in release mode.
     # Building the same revision in debug mode to root-cause the above problem doesn't work
     # because of https://github.com/monero-project/monero/issues/9486
-    badPlatforms = [ "aarch64-darwin" ];
+    badPlatforms = lib.platforms.darwin;
 
     maintainers = with lib.maintainers; [
       pmw
