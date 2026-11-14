@@ -107,60 +107,6 @@ let
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
-    darwin-tested =
-      if supportDarwin then
-        pkgs.releaseTools.aggregate {
-          name = "nixpkgs-darwin-${jobs.tarball.version}";
-          meta.description = "Release-critical builds for the Nixpkgs darwin channel";
-          constituents = [
-            jobs.tarball
-            jobs.release-checks
-          ]
-          ++ optionals supportDarwin [
-            jobs.cabal2nix.aarch64-darwin
-            jobs.ghc.aarch64-darwin
-            jobs.git.aarch64-darwin
-            jobs.go.aarch64-darwin
-            jobs.mariadb.aarch64-darwin
-            jobs.nix.aarch64-darwin
-            jobs.nixpkgs-review.aarch64-darwin
-            jobs.nix-info.aarch64-darwin
-            jobs.nix-info-tested.aarch64-darwin
-            jobs.openssh.aarch64-darwin
-            jobs.openssl.aarch64-darwin
-            jobs.pandoc.aarch64-darwin
-            jobs.postgresql.aarch64-darwin
-            jobs.python3.aarch64-darwin
-            jobs.ruby.aarch64-darwin
-            jobs.rustc.aarch64-darwin
-            # blocking ofBorg CI 2020-02-28
-            # jobs.stack.aarch64-darwin
-            jobs.stdenv.aarch64-darwin
-            jobs.vim.aarch64-darwin
-            jobs.cachix.aarch64-darwin
-            jobs.darwin.linux-builder.aarch64-darwin
-
-            # UI apps
-            # jobs.firefox-unwrapped.aarch64-darwin
-            jobs.qt5.qtmultimedia.aarch64-darwin
-            jobs.inkscape.aarch64-darwin
-            jobs.emacs.aarch64-darwin
-            jobs.wireshark.aarch64-darwin
-
-            # Tests
-            /*
-              jobs.tests.cc-wrapper.default.aarch64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.aarch64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin
-              jobs.tests.stdenv-inputs.aarch64-darwin
-              jobs.tests.macOSSierraShared.aarch64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.aarch64-darwin
-            */
-          ];
-        }
-      else
-        null;
-
     unstable = pkgs.releaseTools.aggregate {
       name = "nixpkgs-${jobs.tarball.version}";
       meta.description = "Release-critical builds for the Nixpkgs unstable channel";
