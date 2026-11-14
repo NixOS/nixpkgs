@@ -1835,6 +1835,7 @@
   ./services/web-apps/openvscode-server.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
+  ./services/web-apps/oxicloud.nix
   ./services/web-apps/pairdrop.nix
   ./services/web-apps/papra.nix
   ./services/web-apps/part-db.nix
