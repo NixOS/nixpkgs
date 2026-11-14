@@ -19,6 +19,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-PIqRReT+m5nlq9koD88XJMeUvUsRwrXCqZDTylZGgPg=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_base.py \
+      --replace-fail 'expected = "pluggy._callers"' 'expected = "pluggy._execution"'
+  '';
+
   build-system = [ hatchling ];
 
   nativeCheckInputs = [

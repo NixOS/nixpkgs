@@ -5547,11 +5547,15 @@ self: super: with self; {
 
   elastic-transport = callPackage ../development/python-modules/elastic-transport { };
 
+  elastic-transport_9 = callPackage ../development/python-modules/elastic-transport/9.nix { };
+
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
 
   elasticsearch8 = callPackage ../development/python-modules/elasticsearch8 { };
+
+  elasticsearch9 = callPackage ../development/python-modules/elasticsearch9 { };
 
   elasticsearchdsl = self.elasticsearch-dsl;
 
@@ -5708,6 +5712,8 @@ self: super: with self; {
   error-helper = callPackage ../development/python-modules/error-helper { };
 
   es-client = callPackage ../development/python-modules/es-client { };
+
+  es-client_8 = callPackage ../development/python-modules/es-client/8.nix { };
 
   escapism = callPackage ../development/python-modules/escapism { };
 

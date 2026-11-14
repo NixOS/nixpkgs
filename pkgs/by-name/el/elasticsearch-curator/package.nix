@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     click
     ecs-logging
     elasticsearch8
-    es-client
+    es-client_8
     pyyaml
     six
     voluptuous
