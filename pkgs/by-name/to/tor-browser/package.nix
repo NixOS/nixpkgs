@@ -87,7 +87,6 @@ let
       pango
       pciutils
       stdenv.cc.cc
-      stdenv.cc.libc
       zlib
     ]
     ++ lib.optionals libnotifySupport [ libnotify ]
