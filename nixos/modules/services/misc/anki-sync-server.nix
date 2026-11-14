@@ -8,6 +8,7 @@ with lib;
 let
   cfg = config.services.anki-sync-server;
   name = "anki-sync-server";
+  defaultBaseDirectory = "%S/%N";
   specEscape = replaceStrings [ "%" ] [ "%%" ];
   usersWithIndexes = lists.imap1 (i: user: {
     i = i;
@@ -51,6 +52,18 @@ in
       '';
     };
 
+    user = mkOption {
+      type = types.str;
+      default = "anki";
+      description = "The user to run anki-sync-server as.";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "anki";
+      description = "The group to run anki-sync-server as.";
+    };
+
     port = mkOption {
       type = types.port;
       default = 27701;
@@ -59,8 +72,18 @@ in
 
     baseDirectory = mkOption {
       type = types.str;
-      default = "%S/%N";
-      description = "Base directory where user(s) synchronized data will be stored.";
+      default = defaultBaseDirectory;
+      description = ''
+        Base directory where user(s) synchronized data will be stored.
+
+        See `man systemd.unit` and search for `%S` for more information.
+      '';
+    };
+
+    createBaseDirectory = mkOption {
+      type = types.bool;
+      default = true;
+      description = "If the directory in `config.services.anki-sync-server.baseDirectory` should be created.";
     };
 
     openFirewall = mkOption {
@@ -113,26 +136,78 @@ in
     ];
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    systemd.services.anki-sync-server = {
-      description = "anki-sync-server: Anki sync server built into Anki";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = [ cfg.package ];
-      environment = {
-        SYNC_BASE = cfg.baseDirectory;
-        SYNC_HOST = specEscape cfg.address;
-        SYNC_PORT = toString cfg.port;
+    users = {
+      users.${cfg.user} = {
+        name = cfg.user;
+        description = lib.mkDefault "ank-sync-server user";
+        isSystemUser = true;
+        group = cfg.group;
       };
 
-      serviceConfig = {
-        Type = "simple";
-        DynamicUser = true;
-        StateDirectory = name;
-        ExecStart = anki-sync-server-run;
-        Restart = "always";
-        LoadCredential = map (
-          x: "${specEscape x.user.username}:${specEscape (toString x.user.passwordFile)}"
-        ) usersWithIndexesFile;
+      groups.${cfg.group} = { };
+    };
+
+    systemd = {
+      tmpfiles.settings.anki =
+        optionalAttrs (cfg.baseDirectory != defaultBaseDirectory && cfg.createBaseDirectory)
+          {
+            "${cfg.baseDirectory}".d = {
+              user = cfg.user;
+              group = cfg.group;
+              mode = "0760";
+            };
+          };
+
+      services.anki-sync-server = {
+        description = "anki-sync-server: Anki sync server built into Anki";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        path = [ cfg.package ];
+        environment = {
+          SYNC_BASE = cfg.baseDirectory;
+          SYNC_HOST = specEscape cfg.address;
+          SYNC_PORT = toString cfg.port;
+        };
+
+        serviceConfig = {
+          Type = "simple";
+
+          User = cfg.user;
+          Group = cfg.group;
+          UMask = "0077";
+
+          DynamicUser = true;
+          ProtectHome = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = "strict";
+          ProtectProc = "invisible";
+
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictNamespaces = true;
+
+          SystemCallFilter = [ "@system-service" ];
+          SystemCallErrorNumber = "EPERM";
+          SystemCallArchitectures = "native";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
+
+          ReadWritePaths = optionalString (cfg.baseDirectory != defaultBaseDirectory) cfg.baseDirectory;
+
+          StateDirectory = name;
+          ExecStart = anki-sync-server-run;
+          Restart = "always";
+          LoadCredential = map (
+            x: "${specEscape x.user.username}:${specEscape (toString x.user.passwordFile)}"
+          ) usersWithIndexesFile;
+        };
       };
     };
   };
