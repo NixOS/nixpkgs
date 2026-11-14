@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "4.0.11";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urwid";
     repo = "urwid";
     tag = version;
-    hash = "sha256-wo2UkV+4SpjC9HGiEfoykWrS6dwPQLkVWnDjvqZqktE=";
+    hash = "sha256-8ssLKDYR9NCq6z/OWN/F9tRAJfx7M10Huki+5aXwW3Y=";
   };
 
   postPatch = ''
