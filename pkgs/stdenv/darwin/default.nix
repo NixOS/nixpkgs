@@ -199,7 +199,6 @@ let
       groff
       jq
       kyua
-      libedit
       libtool
       m4
       meson
@@ -264,7 +263,12 @@ let
       ;
   };
 
-  llvmToolsDeps = prevStage: { inherit (prevStage) libffi; };
+  llvmToolsDeps = prevStage: {
+    inherit (prevStage)
+      libedit
+      libffi
+      ;
+  };
 
   # SDK packages include propagated packages and source release packages built during the bootstrap.
   sdkPackages = prevStage: {
@@ -1028,6 +1032,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               gzip
               ld64.lib
               ld64.out
+              libedit.out
               libffi.out
               libxml2.out
               ncurses.dev
