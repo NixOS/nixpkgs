@@ -2,36 +2,94 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
+  inherit (utils)
+    recursiveGetAttrsetWithJqPrefix
+    ;
+
+  inherit (lib)
+    attrNames
+    concatStringsSep
+    escapeShellArg
+    getExe
+    getExe'
+    imap1
+    mapAttrs
+    optionalString
+    ;
+
   cfg = config.services.listmonk;
   tomlFormat = pkgs.formats.toml { };
   cfgFile = tomlFormat.generate "listmonk.toml" cfg.settings;
-  # Escaping is done according to https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-CONSTANTS
-  setDatabaseOption =
-    key: value:
-    "UPDATE settings SET value = '${
-      lib.replaceStrings [ "'" ] [ "''" ] (builtins.toJSON value)
-    }' WHERE key = '${key}';";
-  updateDatabaseConfigSQL = pkgs.writeText "update-database-config.sql" (
-    lib.concatStringsSep "\n" (
-      lib.mapAttrsToList setDatabaseOption (
-        if (cfg.database.settings != null) then cfg.database.settings else { }
-      )
+
+  # Adapted script from genJqSecretsReplacementSnippet
+  updateDatabaseConfig =
+    let
+      set = cfg.database.settings;
+      secretsRaw = recursiveGetAttrsetWithJqPrefix set "_secret";
+      secrets = mapAttrs (
+        _name: set:
+        {
+          quote = true;
+        }
+        // set
+      ) secretsRaw;
+      stringOrDefault = str: def: if str == "" then def else str;
+    in
+    ''
+      inherit_errexit_enabled=0
+      shopt -pq inherit_errexit && inherit_errexit_enabled=1
+      shopt -s inherit_errexit
+    ''
+    + concatStringsSep "\n" (
+      imap1 (index: name: ''
+        secret${toString index}=$(<'${secrets.${name}._secret}')
+        export secret${toString index}
+      '') (attrNames secrets)
     )
-  );
+    + "\n"
+    + "json=$(${getExe pkgs.jq} "
+    + escapeShellArg (
+      stringOrDefault (concatStringsSep " | " (
+        imap1 (
+          index: name:
+          ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})''
+        ) (attrNames secrets)
+      )) "."
+    )
+    + ''
+        <<'EOF'
+      ${builtins.toJSON set}
+      EOF)
+
+      (( ! inherit_errexit_enabled )) && shopt -u inherit_errexit
+
+      ${getExe' pkgs.postgresql "psql"} -d listmonk <<< "SELECT * FROM settings WHERE key='privacy.exportable'"
+
+      echo "$json" | ${getExe pkgs.jq} ". | keys[]" --raw-output | \
+      while IFS= read -r key; do
+        value=$(echo "$json" | ${getExe pkgs.jq} ".$key")
+
+        ${getExe' pkgs.postgresql "psql"} -d listmonk -v key="$key" -v value="$value" <<< "
+          UPDATE settings SET value=:'value' WHERE key=:'key'
+        "
+      done
+    '';
+
   updateDatabaseConfigScript = pkgs.writeShellScriptBin "update-database-config.sh" ''
     ${
       if cfg.database.mutableSettings then
         ''
           if [ ! -f /var/lib/listmonk/.db_settings_initialized ]; then
-            ${pkgs.postgresql}/bin/psql -d listmonk -f ${updateDatabaseConfigSQL} ;
+            ${updateDatabaseConfig}
             touch /var/lib/listmonk/.db_settings_initialized
           fi
         ''
       else
-        "${pkgs.postgresql}/bin/psql -d listmonk -f ${updateDatabaseConfigSQL}"
+        updateDatabaseConfig
     }
   '';
 
@@ -133,8 +191,15 @@ in
         settings = lib.mkOption {
           default = null;
           type = with lib.types; nullOr (submodule databaseSettingsOpts);
-          description = "Dynamic settings in the PostgreSQL database, set by a SQL script, see <https://github.com/knadh/listmonk/blob/master/schema.sql#L177-L230> for details.";
+          description = ''
+            Dynamic settings in the PostgreSQL database, set by a SQL script,
+            see <https://github.com/knadh/listmonk/blob/master/schema.sql#L177-L230> for details.
+
+            Options containing secret data should be set to an attribute set containing the attribute
+            _secret - a string pointing to a file containing the value the option should be set to.
+          '';
         };
+
         mutableSettings = lib.mkOption {
           type = lib.types.bool;
           default = true;
