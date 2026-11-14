@@ -16,8 +16,8 @@ Run wanderer with a local meilisearch instance:
     enable = true;
     settings.ORIGIN = "https://wanderer.example.com";
     secrets = {
-      POCKETBASE_ENCRYPTION_KEY = "/run/secrets/wanderer-encryption-key";
-      POCKETBASE_PROXY_SECRET = "/run/secrets/wanderer-proxy-secret";
+      shared.POCKETBASE_PROXY_SECRET = "/run/secrets/wanderer-proxy-secret";
+      backend.POCKETBASE_ENCRYPTION_KEY = "/run/secrets/wanderer-encryption-key";
     };
   };
 }
@@ -73,14 +73,21 @@ If the link has expired, restart `wanderer.service` to get a new one.
 ## Secrets {#module-services-wanderer-secrets}
 
 Set each attribute of {option}`services.wanderer.secrets` to a file.
-The backend reads the content of each file into the environment variable of the same name.
+The content of each file is read into the environment variable of the same name.
+The secrets are split by who needs them:
+
+- {option}`services.wanderer.secrets.shared` is passed to the backend and the frontend.
+- {option}`services.wanderer.secrets.backend` is passed to the backend only.
+- {option}`services.wanderer.secrets.web` is passed to the frontend only.
+
 wanderer requires the following secrets:
 
-- {env}`MEILI_MASTER_KEY`: defaults to {option}`services.meilisearch.masterKeyFile` if the local meilisearch instance is enabled.
-- {env}`POCKETBASE_ENCRYPTION_KEY`: exactly 32 characters, for example generated with `openssl rand -hex 16`.
-- {env}`POCKETBASE_PROXY_SECRET`: for example generated with `openssl rand -hex 32`. The frontend receives this secret as well.
+- {env}`POCKETBASE_PROXY_SECRET` (`shared`): for example generated with `openssl rand -hex 32`.
+- {env}`MEILI_MASTER_KEY` (`backend`): defaults to {option}`services.meilisearch.masterKeyFile` if the local meilisearch instance is enabled.
+- {env}`POCKETBASE_ENCRYPTION_KEY` (`backend`): exactly 32 characters, for example generated with `openssl rand -hex 16`.
 
-Add further secrets, such as {env}`POCKETBASE_SMTP_PASSWORD`, the same way.
+Add further secrets the same way, to the group that matches where they are read.
+For example, {env}`POCKETBASE_SMTP_PASSWORD` belongs to `backend`.
 
 ## Plugins {#module-services-wanderer-plugins}
 
@@ -107,7 +114,7 @@ Use an existing meilisearch instance instead of a local one:
   services.wanderer = {
     meilisearch.enable = false;
     settings.MEILI_URL = "https://meilisearch.example.com";
-    secrets.MEILI_MASTER_KEY = "/run/secrets/meilisearch-master-key";
+    secrets.backend.MEILI_MASTER_KEY = "/run/secrets/meilisearch-master-key";
   };
 }
 ```
