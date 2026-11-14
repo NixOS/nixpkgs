@@ -1,0 +1,112 @@
+Include a lot more headers and remove a bunch of braindead __linux__ checks
+
+--- a/dump.c
++++ b/dump.c
+@@ -30,10 +30,8 @@
+  */
+ 
+ #include <stdio.h>
+-#ifndef __linux__
+ #include <stdlib.h>
+ #include <unistd.h>
+-#endif
+ #include <string.h>
+ #include <errno.h>
+ #include <fcntl.h>
+--- a/errors.c
++++ b/errors.c
+@@ -26,9 +26,7 @@
+  */
+ 
+ #include <stdio.h>
+-#ifndef __linux__
+ #include <stdlib.h>
+-#endif
+ #include <string.h>
+ #include <stdarg.h>
+ 
+@@ -115,8 +113,8 @@
+     va_end(ap);
+ 
+ #ifdef __linux__
+-    if (value > 0 && value < sys_nerr) {
+-	fprintf(stderr, "  (%s)\n", sys_errlist[value]);
++    if (value > 0) {
++	fprintf(stderr, "  (%s)\n", strerror(value));
+     } else {
+ 	fprintf(stderr, "\n");
+     }
+@@ -144,8 +142,8 @@
+     va_end(ap);
+ 
+ #ifdef __linux__
+-    if (value > 0 && value < sys_nerr) {
+-	fprintf(stderr, "  (%s)\n", sys_errlist[value]);
++    if (value > 0) {
++	fprintf(stderr, "  (%s)\n", strerror(value));
+     } else {
+ 	fprintf(stderr, "\n");
+     }
+--- a/fdisk.c
++++ b/fdisk.c
+@@ -62,6 +62,7 @@
+ #include <unistd.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <fcntl.h>
+ #include <ctype.h>
+ #include <setjmp.h>
+--- a/fdisklabel.c
++++ b/fdisklabel.c
+@@ -38,6 +38,7 @@
+ #include <unistd.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <fcntl.h>
+ #include <ctype.h>
+ #include <setjmp.h>
+--- a/io.c
++++ b/io.c
+@@ -26,9 +26,9 @@
+  */
+ 
+ #include <stdio.h>
+-#ifndef __linux__
+ #include <stdlib.h>
+ #include <fcntl.h>
++#ifndef __linux__
+ #include <SCSI.h>
+ #else
+ #ifdef __GLIBC__
+--- a/partition_map.c
++++ b/partition_map.c
+@@ -26,10 +26,9 @@
+  */
+ 
+ #include <stdio.h>
+-#ifndef __linux__
++#include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+-#endif
+ #include <errno.h>
+ 
+ #include <fcntl.h>
+--- a/pdisk.c
++++ b/pdisk.c
+@@ -32,10 +32,11 @@
+ #include <getopt.h>
+ #include <stddef.h>
+ #else
+-#include <stdlib.h>
+-#include <unistd.h>
+ #include <SIOUX.h>
+ #endif
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
+ #include <errno.h>
+ 
+ #ifdef __linux__

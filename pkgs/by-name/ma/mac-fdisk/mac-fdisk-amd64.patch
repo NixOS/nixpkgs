@@ -1,0 +1,161 @@
+--- a/fdisklabel.c
++++ b/fdisklabel.c
+@@ -72,7 +72,7 @@
+ static int bsd_readlabel  (struct partition *p, struct disklabel *d);
+ static int bsd_writelabel (struct partition *p, struct disklabel *d);
+ static void sync_disks (void);
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+ static int bsd_translate_fstype (int linux_type);
+ static void bsd_link_part (void);
+ #endif
+@@ -99,13 +99,13 @@
+ 	"   n   add a new BSD partition\n"
+ 	"   p   print BSD partition table\n"
+ 	"   q   quit without saving changes\n"
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+ 	"   r   return to main menu\n"
+ #endif
+ 	"   s   show complete disklabel\n"
+ 	"   t   change a partition's filesystem id\n"
+ 	"   w   write disklabel to disk\n"
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+ 	"   x   link BSD partition to non-BSD partition"
+ #endif
+ 	);
+@@ -114,7 +114,7 @@
+ void
+ bselect (void)
+ {
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   int t;
+ 
+   for (t=0; t<4; t++)
+@@ -185,7 +185,7 @@
+       case 'w':
+ 	bsd_write_disklabel ();
+ 	break;
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+       case 'r':
+ 	return;
+       case 'x':
+@@ -223,7 +223,7 @@
+   if (!bsd_check_new_partition (&i))
+     return;
+ 
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   begin = bsd_part -> start_sect;
+   end = begin + bsd_part -> nr_sects - 1;
+ #elif defined (__alpha__) || defined (__powerpc__)
+@@ -257,7 +257,7 @@
+ 
+   if (show_all)
+   {
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+     fprintf(f, "# %s%d:\n", disk_device, bsd_part_index+1);
+ #elif defined (__alpha__) || defined (__powerpc__)
+     fprintf(f, "# %s:\n", disk_device);
+@@ -352,7 +352,7 @@
+ static void
+ bsd_write_disklabel (void)
+ {
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   printf ("Writing disklabel to %s%d.\n", disk_device, bsd_part_index+1);
+   bsd_writelabel (bsd_part, &bsd_dlabel);
+ #elif defined (__alpha__) || defined (__powerpc__)
+@@ -366,7 +366,7 @@
+ {
+   char c;
+ 
+-#if defined (i386)
++#if defined (i386) || defined(__amd64)
+   fprintf (stderr, "%s%d contains no disklabel.\n",
+ 	   disk_device, bsd_part_index+1);
+ #elif defined (__alpha__) || defined (__powerpc__)
+@@ -507,7 +507,7 @@
+ 
+   bcopy (&dl, d, sizeof (struct disklabel));
+ 
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   sector = bsd_part -> start_sect;
+ #elif defined (__powerpc__)
+   sector = 0;
+@@ -521,7 +521,7 @@
+   if (BSD_BBSIZE != write (fd, buffer, BSD_BBSIZE))
+     fatal (unable_to_write);
+ 
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   printf ("Bootstrap installed on %s%d.\n", disk_device, bsd_part_index+1);
+ #elif defined (__alpha__) || defined (__powerpc__)
+   printf ("Bootstrap installed on %s.\n", disk_device);
+@@ -625,7 +625,7 @@
+   d -> d_subtype = BSD_DSTYPE_INDOSPART & pindex;
+ #endif
+ 
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   d -> d_flags = BSD_D_DOSPART;
+ #else
+   d -> d_flags = 0;
+@@ -648,7 +648,7 @@
+   d -> d_bbsize = BSD_BBSIZE;
+   d -> d_sbsize = BSD_SBSIZE;
+ 
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   d -> d_npartitions = 4;
+   pp = &d -> d_partitions[2]; /* Partition C should be the NetBSD partition */
+   pp -> p_offset = p -> start_sect;
+@@ -674,7 +674,7 @@
+ {
+   int t, sector;
+ 
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   sector = p -> start_sect;
+ #elif defined (__alpha__) || defined (__powerpc__)
+   sector = 0;
+@@ -708,7 +708,7 @@
+ {
+   int sector;
+ 
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+   sector = p -> start_sect + BSD_LABELSECTOR;
+ #elif defined (__alpha__) || defined (__powerpc__)
+   sector = BSD_LABELSECTOR;
+@@ -749,7 +749,7 @@
+   sleep (4);
+ }
+ 
+-#if defined (i386)
++#if defined (i386) || defined (__amd64)
+ static int
+ bsd_translate_fstype (int linux_type)
+ {
+--- a/kernel-defs.h
++++ b/kernel-defs.h
+@@ -15,8 +15,14 @@
+ /* from asm/ioctl.h */
+ #define _IOC_NRBITS	8
+ #define _IOC_TYPEBITS	8
++
++#ifndef _IOC_SIZEBITS
+ #define _IOC_SIZEBITS	13
++#endif
++
++#ifndef _IOC_DIRBITS
+ #define _IOC_DIRBITS	3
++#endif
+ 
+ #define _IOC_NRMASK	((1 << _IOC_NRBITS)-1)
+ #define _IOC_TYPEMASK	((1 << _IOC_TYPEBITS)-1)

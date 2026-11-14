@@ -1,0 +1,455 @@
+--- a/bitfield.c
++++ b/bitfield.c
+@@ -67,13 +67,12 @@
+ //
+ // Routines
+ //
+-unsigned long
+-bitfield_set(unsigned long *bf, int base, int length, unsigned long value)
++unsigned int
++bitfield_set(unsigned int *bf, int base, int length, unsigned int value)
+ {
+-    unsigned long t;
+-    unsigned long m;
++    unsigned int t;
++    unsigned int m;
+     int s;
+-    int i;
+ 
+     // compute shift & mask, coerce value to correct number of bits,
+     // zap the old bits and stuff the new value
+@@ -86,12 +85,11 @@
+ }
+ 
+ 
+-unsigned long
+-bitfield_get(unsigned long bf, int base, int length)
++unsigned int
++bitfield_get(unsigned int bf, int base, int length)
+ {
+-    unsigned long m;
++    unsigned int m;
+     int s;
+-    int i;
+ 
+     // compute shift & mask
+     // return the correct number of bits (shifted to low end)
+--- a/bitfield.h
++++ b/bitfield.h
+@@ -63,5 +63,5 @@
+ //
+ // Forward declarations
+ //
+-unsigned long bitfield_set(unsigned long *bf, int base, int length, unsigned long value);
+-unsigned long bitfield_get(unsigned long bf, int base, int length);
++unsigned int bitfield_set(unsigned int *bf, int base, int length, unsigned int value);
++unsigned int bitfield_get(unsigned int bf, int base, int length);
+--- a/dump.c
++++ b/dump.c
+@@ -61,16 +61,16 @@
+ // Global Constants
+ //
+ NAMES plist[] = {
+-    "Drvr", "Apple_Driver",
+-    "Dr43", "Apple_Driver43",
+-    "Free", "Apple_Free",
+-    " HFS", "Apple_HFS",
+-    " MFS", "Apple_MFS",
+-    "PDOS", "Apple_PRODOS",
+-    "junk", "Apple_Scratch",
+-    "unix", "Apple_UNIX_SVR2",
+-    " map", "Apple_partition_map",
+-    0,	0
++    {"Drvr"}, {"Apple_Driver"},
++    {"Dr43"}, {"Apple_Driver43"},
++    {"Free"}, {"Apple_Free"},
++    {" HFS"}, {"Apple_HFS"},
++    {" MFS"}, {"Apple_MFS"},
++    {"PDOS"}, {"Apple_PRODOS"},
++    {"junk"}, {"Apple_Scratch"},
++    {"unix"}, {"Apple_UNIX_SVR2"},
++    {" map"}, {"Apple_partition_map"},
++    {0},	{0}
+ };
+ 
+ const char * kStringEmpty	= "";
+@@ -162,10 +162,10 @@
+     }
+ #ifdef __mc68000__
+     printf("%*s  type name         "
+-	    "%*s   %-*s ( size )  system\n", strlen(map->name)+1, "#", j, "length", j, "base");
++	    "%*s   %-*s ( size )  system\n", (int)strlen(map->name)+1, "#", j, "length", j, "base");
+ #else
+     printf("%*s                    type name               "
+-	    "%*s   %-*s ( size )  system\n", strlen(map->name)+1, "#", j, "length", j, "base");
++	    "%*s   %-*s ( size )  system\n", (int)strlen(map->name)+1, "#", j, "length", j, "base");
+ #endif
+ 
+     /* Grok devfs names. (courtesy Colin Walters)*/
+@@ -199,7 +199,6 @@
+     partition_map_header *map;
+     int j;
+     DPME *p;
+-    BZB *bp;
+     char *s;
+ #ifdef __mc68000__
+     int aflag = 1;
+@@ -222,13 +221,13 @@
+ 	    }
+ 	}
+ #ifdef __mc68000__
+-	printf("%s%-2d %.4s %-12.12s ", dev, entry->disk_address, s, p->dpme_name);
++	printf("%s%-2d %.4s %-12.12s ", dev, (int)entry->disk_address, s, p->dpme_name);
+ #else
+-	printf("%s%-4d  %.4s %-18.32s ", dev, entry->disk_address, s, p->dpme_name);
++	printf("%s%-4d  %.4s %-18.32s ", dev, (int)entry->disk_address, s, p->dpme_name);
+ #endif
+     } else {
+ 	printf("%s%-4d %20.32s %-18.32s ", dev, 
+-		entry->disk_address, p->dpme_type, p->dpme_name);
++		(int)entry->disk_address, p->dpme_type, p->dpme_name);
+     }
+ 
+     if (pflag) {
+@@ -312,7 +311,6 @@
+     int i;
+     int fd;
+     DPME * data;
+-    long t;
+ 
+     data = (DPME *) malloc(PBLOCK_SIZE);
+     if (data == NULL) {
+@@ -380,7 +378,7 @@
+     printf("Header:\n");
+     printf("fd=%d (%s)\n", map->fd, (map->regular_file)?"file":"device");
+     printf("map %d blocks out of %d,  media %u blocks\n",
+-	    map->blocks_in_map, map->maximum_in_map, map->media_size);
++	    map->blocks_in_map, map->maximum_in_map, (unsigned int)map->media_size);
+     printf("Map is%s writeable", (map->writeable)?kStringEmpty:kStringNot);
+     printf(", but%s changed\n", (map->changed)?kStringEmpty:kStringNot);
+     printf("\n");
+@@ -424,7 +422,7 @@
+     for (entry = map->disk_order; entry != NULL; entry = entry->next_on_disk) {
+ 	p = entry->data;
+ 	printf("%2d: %20.32s ",
+-		entry->disk_address, p->dpme_type);
++		(int)entry->disk_address, p->dpme_type);
+ 	printf("%7u @ %-7u ", p->dpme_pblocks, p->dpme_pblock_start);
+ 	printf("%c%c%c%c%c%c%c%c%c%c ",
+ 		(dpme_valid_get(p))?'V':'v',
+@@ -447,7 +445,7 @@
+ 	    "goto_address checksum processor\n");
+     for (entry = map->disk_order; entry != NULL; entry = entry->next_on_disk) {
+ 	p = entry->data;
+-	printf("%2d: ", entry->disk_address);
++	printf("%2d: ", (int)entry->disk_address);
+ 	printf("%7u ", p->dpme_boot_block);
+ 	printf("%7u ", p->dpme_boot_bytes);
+ 	printf("%8x ", p->dpme_load_addr);
+@@ -464,7 +462,7 @@
+ */
+     for (entry = map->disk_order; entry != NULL; entry = entry->next_on_disk) {
+ 	p = entry->data;
+-	printf("%2d: ", entry->disk_address);
++	printf("%2d: ", (int)entry->disk_address);
+ 
+ 	bp = (BZB *) (p->dpme_bzb);
+ 	j = -1;
+--- a/errors.c
++++ b/errors.c
+@@ -30,6 +30,7 @@
+ #include <string.h>
+ #include <stdarg.h>
+ 
++#include <errno.h>
+ #include "errors.h"
+ #include "pdisk.h"
+ 
+@@ -113,7 +114,7 @@
+     va_end(ap);
+ 
+ #ifdef __linux__
+-    if (value > 0) {
++    if (value > 0 && value < errno) {
+ 	fprintf(stderr, "  (%s)\n", strerror(value));
+     } else {
+ 	fprintf(stderr, "\n");
+@@ -142,7 +143,7 @@
+     va_end(ap);
+ 
+ #ifdef __linux__
+-    if (value > 0) {
++    if (value > 0 && value < errno) {
+ 	fprintf(stderr, "  (%s)\n", strerror(value));
+     } else {
+ 	fprintf(stderr, "\n");
+--- a/fdisk.c
++++ b/fdisk.c
+@@ -71,12 +71,65 @@
+ 
+ #include <sys/ioctl.h>
+ 
+-typedef unsigned short kdev_t;	/* BAD hack; kdev_t is not exported */
+-
+ #include "kernel-defs.h"
+ 
+ #include "fdisk.h"
+ 
++/* ----------- */
++#define _PPC64_TYPES_H
++#define BITS_PER_LONG 64
++
++typedef __signed__ char __s8;
++typedef signed char s8;
++typedef unsigned char u8;
++typedef unsigned char __u8;
++
++typedef __signed__ short __s16;
++typedef signed short s16;
++/*typedef unsigned short __u16;*/
++typedef unsigned short u16;
++
++typedef __signed__ int __s32;
++typedef signed int s32;
++/*typedef unsigned int __u32;*/
++typedef unsigned int u32;
++
++typedef __signed__ long __s64;
++typedef signed long s64;
++typedef unsigned long __u64;
++typedef unsigned long u64;
++
++typedef struct {
++        __u32 u[4];
++} __attribute((aligned(16))) __vector128;
++
++typedef __vector128 vector128;
++
++typedef u32 dma_addr_t;
++typedef u64 dma64_addr_t;
++
++typedef struct {
++        unsigned long entry;
++        unsigned long toc;
++        unsigned long env;
++} func_descr_t;
++
++typedef unsigned int umode_t;
++
++#define BITS_TO_LONGS(bits) \
++        (((bits)+BITS_PER_LONG-1)/BITS_PER_LONG)
++#define DECLARE_BITMAP(name,bits) \
++        unsigned long name[BITS_TO_LONGS(bits)]
++#define CLEAR_BITMAP(name,bits) \
++        memset(name, 0, BITS_TO_LONGS(bits)*sizeof(unsigned long))
++
++/* hd/ide ctl's that pass (arg) ptrs to user space are numbered 0x030n/0x031n */
++#define HDIO_GETGEO             0x0301  /* get device geometry */
++
++#define BLKRRPART  _IO(0x12,95) /* re-read partition table */
++
++/* ---------- */
++
+ #define hex_val(c)	({ \
+ 				char _c = (c); \
+ 				isdigit(_c) ? _c - '0' : \
+@@ -1416,7 +1469,7 @@
+ 	}
+ }
+ 
+-void main(int argc, char **argv)
++int main(int argc, char **argv)
+ {
+ 	if (argc > 3)
+ 		fatal(usage);
+--- a/fdisklabel.c
++++ b/fdisklabel.c
+@@ -35,6 +35,7 @@
+    SUCH DAMAGE.
+ */
+ 
++#include <sys/types.h>
+ #include <unistd.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -47,6 +48,8 @@
+ #include <sys/ioctl.h>
+ #include <sys/param.h>
+ 
++#include <asm/types.h>
++
+ #include "kernel-defs.h"
+ 
+ #include "fdisk.h"
+@@ -263,8 +266,8 @@
+       fprintf(f, "type: %s\n", bsd_dktypenames[lp->d_type]);
+     else
+       fprintf(f, "type: %d\n", lp->d_type);
+-    fprintf(f, "disk: %.*s\n", sizeof(lp->d_typename), lp->d_typename);
+-    fprintf(f, "label: %.*s\n", sizeof(lp->d_packname), lp->d_packname);
++    fprintf(f, "disk: %.*s\n", (int)sizeof(lp->d_typename), lp->d_typename);
++    fprintf(f, "label: %.*s\n", (int)sizeof(lp->d_packname), lp->d_packname);
+     fprintf(f, "flags:");
+     if (lp->d_flags & BSD_D_REMOVABLE)
+       fprintf(f, " removable");
+@@ -273,17 +276,17 @@
+     if (lp->d_flags & BSD_D_BADSECT)
+       fprintf(f, " badsect");
+     fprintf(f, "\n");
+-    fprintf(f, "bytes/sector: %d\n", lp->d_secsize);
+-    fprintf(f, "sectors/track: %d\n", lp->d_nsectors);
+-    fprintf(f, "tracks/cylinder: %d\n", lp->d_ntracks);
+-    fprintf(f, "sectors/cylinder: %d\n", lp->d_secpercyl);
+-    fprintf(f, "cylinders: %d\n", lp->d_ncylinders);
++    fprintf(f, "bytes/sector: %d\n", (int)lp->d_secsize);
++    fprintf(f, "sectors/track: %d\n", (int)lp->d_nsectors);
++    fprintf(f, "tracks/cylinder: %d\n", (int)lp->d_ntracks);
++    fprintf(f, "sectors/cylinder: %d\n", (int)lp->d_secpercyl);
++    fprintf(f, "cylinders: %d\n", (int)lp->d_ncylinders);
+     fprintf(f, "rpm: %d\n", lp->d_rpm);
+     fprintf(f, "interleave: %d\n", lp->d_interleave);
+     fprintf(f, "trackskew: %d\n", lp->d_trackskew);
+     fprintf(f, "cylinderskew: %d\n", lp->d_cylskew);
+-    fprintf(f, "headswitch: %d\t\t# milliseconds\n", lp->d_headswitch);
+-    fprintf(f, "track-to-track seek: %d\t# milliseconds\n", lp->d_trkseek);
++    fprintf(f, "headswitch: %d\t\t# milliseconds\n", (int)lp->d_headswitch);
++    fprintf(f, "track-to-track seek: %d\t# milliseconds\n", (int)lp->d_trkseek);
+     fprintf(f, "drivedata: ");
+     for (i = NDDATA - 1; i >= 0; i--)
+       if (lp->d_drivedata[i])
+@@ -291,7 +294,7 @@
+     if (i < 0)
+       i = 0;
+     for (j = 0; j <= i; j++)
+-      fprintf(f, "%d ", lp->d_drivedata[j]);
++      fprintf(f, "%d ", (int)lp->d_drivedata[j]);
+   }
+   fprintf (f, "\n%d partitions:\n", lp->d_npartitions);
+   fprintf (f, "#        size   offset    fstype   [fsize bsize   cpg]\n");
+@@ -299,7 +302,7 @@
+   for (i = 0; i < lp->d_npartitions; i++, pp++) {
+     if (pp->p_size) {
+       fprintf(f, "  %c: %8d %8d  ", 'a' + i,
+-	      pp->p_size, pp->p_offset);
++	      (int)pp->p_size, (int)pp->p_offset);
+       if ((unsigned) pp->p_fstype < BSD_FSMAXTYPES)
+ 	fprintf(f, "%8.8s", bsd_fstypes[pp->p_fstype].name);
+       else
+@@ -308,12 +311,12 @@
+       {
+         case BSD_FS_UNUSED:
+ 	  fprintf(f, "    %5d %5d %5.5s ",
+-		  pp->p_fsize, pp->p_fsize * pp->p_frag, "");
++		  (int)pp->p_fsize, (int)pp->p_fsize * pp->p_frag, "");
+ 	  break;
+ 	  
+ 	case BSD_FS_BSDFFS:
+ 	  fprintf(f, "    %5d %5d %5d ",
+-		  pp->p_fsize, pp->p_fsize * pp->p_frag,
++		  (int)pp->p_fsize, (int)pp->p_fsize * pp->p_frag,
+ 		  pp->p_cpg);
+ 	  break;
+ 	  
+@@ -323,21 +326,21 @@
+       }
+       fprintf(f, "\t# (Cyl. %4d",
+ #if 0
+-	      pp->p_offset / lp->d_secpercyl); /* differs from Linux fdisk */
++	      (int)(pp->p_offset / lp->d_secpercyl)); /* differs from Linux fdisk */
+ #else
+-	      pp->p_offset / lp->d_secpercyl + 1);
++	      (int)(pp->p_offset / lp->d_secpercyl + 1));
+ #endif
+       if (pp->p_offset % lp->d_secpercyl)
+ 	putc('*', f);
+       else
+ 	putc(' ', f);
+       fprintf(f, "- %d",
+-	      (pp->p_offset + 
++	      (int)((pp->p_offset + 
+ 	       pp->p_size + lp->d_secpercyl - 1) /
+ #if 0
+-	      lp->d_secpercyl - 1); /* differs from Linux fdisk */
++	      lp->d_secpercyl - 1)); /* differs from Linux fdisk */
+ #else
+-	      lp->d_secpercyl);
++	      lp->d_secpercyl));
+ #endif
+       if (pp->p_size % lp->d_secpercyl)
+ 	putc('*', f);
+--- a/io.c
++++ b/io.c
+@@ -33,8 +33,10 @@
+ #else
+ #ifdef __GLIBC__
+ #include <sys/types.h>
++#include <sys/stat.h>
+ #endif
+ #endif
++#include <linux/unistd.h>
+ #include <unistd.h>
+ #include <string.h>
+ #include <stdarg.h>
+@@ -466,7 +468,7 @@
+     long t;
+ 
+     if (rflag) {
+-	printf("Can't write block %u to file", num);
++	printf("Can't write block %u to file", (unsigned int)num);
+ 	return 0;
+     }
+ #ifndef __linux__
+--- a/partition_map.c
++++ b/partition_map.c
+@@ -105,7 +105,6 @@
+     int fd;
+     partition_map_header * map;
+     int writeable;
+-    unsigned long length;
+ #ifdef __linux__
+     struct stat info;
+ #endif
+@@ -402,9 +401,7 @@
+ {
+     int fd;
+     partition_map_header * map;
+-    unsigned long length;
+     DPME *data;
+-    int ok;
+     unsigned long number;
+ #ifdef __linux__
+     struct stat info;
+@@ -433,13 +430,13 @@
+     map->maximum_in_map = -1;
+ 
+     number = compute_device_size(fd);
+-    printf("size of 'device' is %u blocks: ", number);
++    printf("size of 'device' is %u blocks: ", (unsigned int)number);
+     flush_to_newline(0);
+     get_number_argument("what should be the size? ", (long *)&number, number);
+     if (number < 4) {
+ 	number = 4;
+     }
+-    printf("new size of 'device' is %u blocks\n", number);
++    printf("new size of 'device' is %u blocks\n", (unsigned int)number);
+     map->media_size = number;
+ 
+ #ifdef __linux__
+--- a/pdisk.c
++++ b/pdisk.c
+@@ -437,7 +437,6 @@
+ {
+     long base;
+     long length;
+-    long mult;
+     char *name;
+     char *type_name;
+ 
+@@ -599,7 +598,6 @@
+ void
+ do_reorder(partition_map_header *map)
+ {
+-    partition_map * cur;
+     long old_index;
+     long index;
+ 
