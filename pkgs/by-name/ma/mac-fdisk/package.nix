@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    # patches from https://git.adelielinux.org/adelie/packages/-/tree/current/user/mac-fdisk
+    # patches from https://git.adelielinux.org/adelie/packages/-/tree/current/user/mac-fdisk, fetchers get rejected with HTTP 429
     # Debian's changeset, extracted into a patch
     ./mac-fdisk-0.1-debian.patch
     # Include a lot more headers and remove a bunch of braindead __linux__ checks
@@ -23,6 +23,7 @@ stdenv.mkDerivation {
     # Add support for more architectures
     ./mac-fdisk-0.1-more-arches.patch
     # From p16 (source?), adjusts some types & fixes PPC64 support
+    # includes changes for glibc 2.44 compat: https://git.adelielinux.org/adelie/packages/-/merge_requests/907
     ./mac-fdisk-0.1_p16-ppc64.patch
     # From p16 (source?), makes some inlines static
     ./mac-fdisk-0.1_p16-proper-inline.patch

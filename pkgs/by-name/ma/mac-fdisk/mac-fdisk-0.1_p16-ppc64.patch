@@ -214,9 +214,9 @@
 +/*typedef unsigned int __u32;*/
 +typedef unsigned int u32;
 +
-+typedef __signed__ long __s64;
++/*typedef __signed__ long __s64;*/
 +typedef signed long s64;
-+typedef unsigned long __u64;
++/*typedef unsigned long __u64;*/
 +typedef unsigned long u64;
 +
 +typedef struct {
