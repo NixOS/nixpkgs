@@ -3,25 +3,24 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
-  testers,
-  discordchatexporter-cli,
+  versionCheckHook,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "discordchatexporter-cli";
-  version = "2.43.3";
+  version = "2.47.3";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
-    rev = version;
-    hash = "sha256-r9bvTgqKQY605BoUlysSz4WJMxn2ibNh3EhoMYCfV3c=";
+    tag = finalAttrs.version;
+    hash = "sha256-B/2krGBYp/6qgINRyX/38tHlEy9JxmQMAIPsDNjZF5k=";
   };
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   dotnetBuildFlags = [
     # workaround for https://github.com/belav/csharpier/pull/1696
@@ -33,21 +32,18 @@ buildDotnetModule rec {
     ln -s $out/bin/DiscordChatExporter.Cli $out/bin/discordchatexporter-cli
   '';
 
-  passthru = {
-    updateScript = ./updater.sh;
-    tests.version = testers.testVersion {
-      package = discordchatexporter-cli;
-      version = "v${version}";
-    };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = ./updater.sh;
 
   meta = {
+    changelog = "https://github.com/Tyrrrz/DiscordChatExporter/releases/tag/${finalAttrs.version}";
     description = "Tool to export Discord chat logs to a file";
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";
-    maintainers = [ ];
-    platforms = lib.platforms.unix;
     mainProgram = "discordchatexporter-cli";
+    maintainers = with lib.maintainers; [ phanirithvij ];
+    platforms = lib.platforms.unix;
   };
-}
+})
