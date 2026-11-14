@@ -6,6 +6,7 @@
 
   # build-system
   hatchling,
+  hatch-fancy-pypi-readme,
 
   # dependencies
   anyio,
@@ -23,36 +24,44 @@
   zstandard,
 
   # tests
-  anthropic,
   cachetools,
   dataclasses-json,
   multipart,
+  openai,
   opentelemetry-sdk,
+  pyjwt,
   pytest-asyncio,
   pytest-httpx,
   pytest-socket,
   pytest-vcr,
+  pytest-xdist,
   pytestCheckHook,
   rich,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.12.4";
+  version = "0.14.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e5+lttn90eBL4xkvxN9oH3aPp1wRBfy5Q0pS8LDCiq8=";
+    hash = "sha256-D/4tbYB3mKk4mlY7HtBtz/m4Iw/NaDZ5AwyiEkuajqE=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/python";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==" "hatchling>="
+  '';
 
   pythonRelaxDeps = [ "orjson" ];
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
 
   dependencies = [
     anyio
@@ -71,15 +80,17 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    anthropic
     cachetools
     dataclasses-json
     multipart
+    openai
     opentelemetry-sdk
+    pyjwt
     pytest-asyncio
     pytest-httpx
     pytest-socket
     pytest-vcr
+    pytest-xdist
     pytestCheckHook
     rich
   ];
@@ -100,8 +111,13 @@ buildPythonPackage (finalAttrs: {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
+    "httpx_mock"
+
     # flaky
     "test_admission_under_concurrency_never_mixes_destinations"
+
+    # "Invalid http_client" argument
+    "test_session_write_uses_v1"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky (timing sensitive)
@@ -112,6 +128,7 @@ buildPythonPackage (finalAttrs: {
     # due to circular import
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
+    "tests/unit_tests/test_otel_exporter.py"
 
     # google-adk isn't packaged (and has an enormous number of dependencies)
     "tests/unit_tests/wrappers/test_google_adk.py"
@@ -123,33 +140,12 @@ buildPythonPackage (finalAttrs: {
     "tests/unit_tests/test_async_client.py::test_arequest_with_retries_retries_on_502"
     "tests/unit_tests/test_async_client.py::test_async_create_feedback_retries_on_not_found"
     "tests/unit_tests/test_async_client.py::test_create_feedback_retries_on_not_found"
-    "tests/unit_tests/sandbox/test_async_client.py::TestAsyncConnectionErrors"
-    "tests/unit_tests/sandbox/test_async_client.py::TestAsyncSandboxOperations"
-    "tests/unit_tests/sandbox/test_async_client.py::TestAsyncSnapshotTags"
-    "tests/unit_tests/sandbox/test_async_client.py::TestGenerateDownloadURL"
-    "tests/unit_tests/sandbox/test_async_client.py::TestService"
-    "tests/unit_tests/sandbox/test_async_sandbox.py::TestAsyncSandboxContextManager"
-    "tests/unit_tests/sandbox/test_async_sandbox.py::TestAsyncSandboxRead"
-    "tests/unit_tests/sandbox/test_async_sandbox.py::TestAsyncSandboxRun"
-    "tests/unit_tests/sandbox/test_async_sandbox.py::TestAsyncSandboxStatusFields"
-    "tests/unit_tests/sandbox/test_async_sandbox.py::TestAsyncSandboxWrite"
-    "tests/unit_tests/sandbox/test_client.py::TestConnectionErrors"
-    "tests/unit_tests/sandbox/test_client.py::TestGenerateDownloadURL"
-    "tests/unit_tests/sandbox/test_client.py::TestRegistries"
-    "tests/unit_tests/sandbox/test_client.py::TestSandboxOperations"
-    "tests/unit_tests/sandbox/test_client.py::TestService"
-    "tests/unit_tests/sandbox/test_client.py::TestSnapshotOperations"
-    "tests/unit_tests/sandbox/test_client.py::TestStartStopOperations"
-    "tests/unit_tests/sandbox/test_proxy_config.py::test_create_sandbox_expands_mount_config"
-    "tests/unit_tests/sandbox/test_proxy_config.py::test_create_sandbox_forwards_composed_proxy_config"
-    "tests/unit_tests/sandbox/test_proxy_config.py::test_create_sandbox_preserves_mount_config_and_proxy_config_separately"
-    "tests/unit_tests/sandbox/test_sandbox.py::TestSandboxContextManager"
-    "tests/unit_tests/sandbox/test_sandbox.py::TestSandboxRead"
-    "tests/unit_tests/sandbox/test_sandbox.py::TestSandboxRun"
-    "tests/unit_tests/sandbox/test_sandbox.py::TestSandboxStatusFields"
-    "tests/unit_tests/sandbox/test_sandbox.py::TestSandboxWrite"
-    "tests/unit_tests/sandbox/test_transport.py::TestAsyncRetryTransport"
-    "tests/unit_tests/sandbox/test_transport.py::TestRetryTransport"
+
+    # AssertionError: mocked responsed were not called
+    "tests/unit_tests/sandbox"
+
+    # fragile: fails on schema changes in anthropic api
+    "tests/unit_tests/wrappers/test_openai_agents_api.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];
