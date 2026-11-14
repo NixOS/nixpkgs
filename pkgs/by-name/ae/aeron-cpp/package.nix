@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchMavenArtifact,
   fixDarwinDylibNames,
-  jdk11,
+  jdk17,
   lib,
   libbsd,
   libuuid,
@@ -18,14 +18,14 @@
 let
   version = aeron.version;
 
-  sbeAll_1_31_1 = fetchMavenArtifact {
+  sbeAll_1_41_0 = fetchMavenArtifact {
     groupId = "uk.co.real-logic";
-    version = "1.31.1";
+    version = "1.41.0";
     artifactId = "sbe-all";
-    hash = "sha512-Ypsk8PbShFOxm49u1L+TTuApaW6ECTSee+hHEhmY/jNi5AymHXBWwDMBMkzC25aowiHLJS5EnzLk6hu9Lea93Q==";
+    hash = "sha256-cptCcb61d/OAOAoXk+YPFW/3WFmwjqYDxOKua16aBMo=";
   };
 
-  sbeAll = sbeAll_1_31_1;
+  sbeAll = sbeAll_1_41_0;
 
 in
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     owner = "aeron-io";
     repo = "aeron";
     tag = version;
-    hash = "sha256-sROEZVOfScrlqMLbfrPtw3LQCQ5TfMcrLiP6j/Z9rSM=";
+    hash = "sha256-TkA/h2vHCUlg2M9u9mnoEGfzR/LNQ8TDiMDNaKw8YXM=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     # Use pre-built aeron-all.jar from Maven repo, avoiding Gradle
 
     ./aeron-archive-sbe.patch
-    # Use SBE tool to generate C++ codecs, avoiding Gradle
+    # Use SBE tool to generate C codecs, avoiding Gradle
   ];
 
   buildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    jdk11
+    jdk17
     makeWrapper
     patchelf
   ]
@@ -97,10 +97,10 @@ stdenv.mkDerivation {
 
       make -j $NIX_BUILD_CORES \
         aeron \
-        aeron_archive_client \
-        aeron_client_shared \
+        aeron_static \
+        aeron_archive_c_client \
+        aeron_archive_c_client_static \
         aeron_driver \
-        aeron_client \
         aeron_driver_static \
         aeronmd
 
