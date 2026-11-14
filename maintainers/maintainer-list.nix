@@ -21567,6 +21567,12 @@
     github = "Nishimara";
     githubId = 59232119;
   };
+  niteshbalusu11 = {
+    email = "niteshbalusu@icloud.com";
+    github = "niteshbalusu11";
+    githubId = 84944042;
+    name = "Nitesh Balusu";
+  };
   nitinbhat972 = {
     email = "nitinbhat972@gmail.com";
     github = "nitinbhat972";
