@@ -9116,6 +9116,8 @@ self: super: with self; {
 
   jupyter-themes = callPackage ../development/python-modules/jupyter-themes { };
 
+  jupyter-threejs-sage = callPackage ../development/python-modules/passagemath/jupyter-threejs-sage/default.nix { };
+
   jupyter-ui-poll = callPackage ../development/python-modules/jupyter-ui-poll { };
 
   jupyter-ydoc = callPackage ../development/python-modules/jupyter-ydoc { };
@@ -13428,6 +13430,122 @@ self: super: with self; {
   parts = callPackage ../development/python-modules/parts { };
 
   parver = callPackage ../development/python-modules/parver { };
+
+  passagemath-brial = callPackage ../development/python-modules/passagemath/passagemath-brial/default.nix { };
+
+  passagemath-categories = callPackage ../development/python-modules/passagemath/passagemath-categories/default.nix { };
+
+  passagemath-cddlib = callPackage ../development/python-modules/passagemath/passagemath-cddlib/default.nix { };
+
+  passagemath-cliquer = callPackage ../development/python-modules/passagemath/passagemath-cliquer/default.nix { };
+
+  passagemath-combinat = callPackage ../development/python-modules/passagemath/passagemath-combinat/default.nix { };
+
+  passagemath-conf-nix = callPackage ../development/python-modules/passagemath/passagemath-conf-nix/default.nix { };
+
+  passagemath-ecl = callPackage ../development/python-modules/passagemath/passagemath-ecl/default.nix { };
+
+  passagemath-eclib = callPackage ../development/python-modules/passagemath/passagemath-eclib/default.nix { };
+
+  passagemath-environment = callPackage ../development/python-modules/passagemath/passagemath-environment/default.nix { };
+
+  passagemath-flint = callPackage ../development/python-modules/passagemath/passagemath-flint/default.nix { };
+
+  passagemath-gap = callPackage ../development/python-modules/passagemath/passagemath-gap/default.nix { };
+
+  passagemath-gap-pkg-ctbllib-data = callPackage ../development/python-modules/passagemath/passagemath-gap-pkg-ctbllib-data/default.nix { };
+
+  passagemath-gap-pkg-factint-data = callPackage ../development/python-modules/passagemath/passagemath-gap-pkg-factint-data/default.nix { };
+
+  passagemath-gap-pkg-irredsol-data = callPackage ../development/python-modules/passagemath/passagemath-gap-pkg-irredsol-data/default.nix { };
+
+  passagemath-gap-pkg-primgrp-data = callPackage ../development/python-modules/passagemath/passagemath-gap-pkg-primgrp-data/default.nix { };
+
+  passagemath-gap-pkg-smallgrp-data = callPackage ../development/python-modules/passagemath/passagemath-gap-pkg-smallgrp-data/default.nix { };
+
+  passagemath-gap-pkg-tomlib-data = callPackage ../development/python-modules/passagemath/passagemath-gap-pkg-tomlib-data/default.nix { };
+
+  passagemath-gap-pkg-transgrp-data = callPackage ../development/python-modules/passagemath/passagemath-gap-pkg-transgrp-data/default.nix { };
+
+  passagemath-glpk = callPackage ../development/python-modules/passagemath/passagemath-glpk/default.nix { };
+
+  passagemath-graphs = callPackage ../development/python-modules/passagemath/passagemath-graphs/default.nix { };
+
+  passagemath-groups = callPackage ../development/python-modules/passagemath/passagemath-groups/default.nix { };
+
+  passagemath-gsl = callPackage ../development/python-modules/passagemath/passagemath-gsl/default.nix { };
+
+  passagemath-highs = callPackage ../development/python-modules/passagemath/passagemath-highs/default.nix { };
+
+  passagemath-homfly = callPackage ../development/python-modules/passagemath/passagemath-homfly/default.nix { };
+
+  passagemath-iml = callPackage ../development/python-modules/passagemath/passagemath-iml/default.nix { };
+
+  passagemath-lcalc = callPackage ../development/python-modules/passagemath/passagemath-lcalc/default.nix { };
+
+  passagemath-libbraiding = callPackage ../development/python-modules/passagemath/passagemath-libbraiding/default.nix { };
+
+  passagemath-libecm = callPackage ../development/python-modules/passagemath/passagemath-libecm/default.nix { };
+
+  passagemath-linbox = callPackage ../development/python-modules/passagemath/passagemath-linbox/default.nix { };
+
+  passagemath-m4ri-m4rie = callPackage ../development/python-modules/passagemath/passagemath-m4ri-m4rie/default.nix { };
+
+  passagemath-maxima = callPackage ../development/python-modules/passagemath/passagemath-maxima/default.nix { };
+
+  passagemath-modules = callPackage ../development/python-modules/passagemath/passagemath-modules/default.nix { };
+
+  passagemath-nauty = callPackage ../development/python-modules/passagemath/passagemath-nauty/default.nix { };
+
+  passagemath-ntl = callPackage ../development/python-modules/passagemath/passagemath-ntl/default.nix { };
+
+  passagemath-objects = callPackage ../development/python-modules/passagemath/passagemath-objects/default.nix { };
+
+  passagemath-palp = callPackage ../development/python-modules/passagemath/passagemath-palp/default.nix { };
+
+  passagemath-pari = callPackage ../development/python-modules/passagemath/passagemath-pari/default.nix { };
+
+  passagemath-pari-galdata = callPackage ../development/python-modules/passagemath/passagemath-pari-galdata/default.nix { };
+
+  passagemath-pari-seadata-small = callPackage ../development/python-modules/passagemath/passagemath-pari-seadata-small/default.nix { };
+
+  passagemath-planarity = callPackage ../development/python-modules/passagemath/passagemath-planarity/default.nix { };
+
+  passagemath-plot = callPackage ../development/python-modules/passagemath/passagemath-plot/default.nix { };
+
+  passagemath-polyhedra = callPackage ../development/python-modules/passagemath/passagemath-polyhedra/default.nix { };
+
+  passagemath-ppl = callPackage ../development/python-modules/passagemath/passagemath-ppl/default.nix { };
+
+  passagemath-primesieve-primecount = callPackage ../development/python-modules/passagemath/passagemath-primesieve-primecount/default.nix { };
+
+  passagemath-repl = callPackage ../development/python-modules/passagemath/passagemath-repl/default.nix { };
+
+  passagemath-runtimes = callPackage ../development/python-modules/passagemath/passagemath-runtimes/default.nix { };
+
+  passagemath-runtime-gap = callPackage ../development/python-modules/passagemath/passagemath-runtime-gap/default.nix { };
+
+  passagemath-runtime-singular = callPackage ../development/python-modules/passagemath/passagemath-runtime-singular/default.nix { };
+
+  passagemath-runtime-fflas-ffpack = callPackage ../development/python-modules/passagemath/passagemath-runtime-fflas-ffpack/default.nix { };
+
+  passagemath-runtime-givaro = callPackage ../development/python-modules/passagemath/passagemath-runtime-givaro/default.nix { };
+
+  passagemath-runtime-linbox = callPackage ../development/python-modules/passagemath/passagemath-runtime-linbox/default.nix { };
+
+  passagemath-schemes = callPackage ../development/python-modules/passagemath/passagemath-schemes/default.nix { };
+
+  passagemath-setup = callPackage ../development/python-modules/passagemath/passagemath-setup/default.nix { };
+
+  passagemath-singular = callPackage ../development/python-modules/passagemath/passagemath-singular/default.nix { };
+
+  passagemath-standard = callPackage ../development/python-modules/passagemath/passagemath-standard/default.nix { };
+
+  passagemath-standard-no-symbolics = callPackage ../development/python-modules/passagemath/passagemath-standard-no-symbolics/default.nix { };
+
+  passagemath-symbolics = callPackage ../development/python-modules/passagemath/passagemath-symbolics/default.nix { };
+
+  passagemath-tachyon = callPackage ../development/python-modules/passagemath/passagemath-tachyon/default.nix { };
 
   pasimple = callPackage ../development/python-modules/pasimple { };
 
