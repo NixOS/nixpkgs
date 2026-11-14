@@ -4,8 +4,8 @@
   fetchurl,
   pkg-config,
   expat,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  systemdMinimal,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   audit,
   libcap_ng,
   libapparmor,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
   ]
-  ++ lib.optional enableSystemd systemdMinimal
+  ++ lib.optional enableSystemd systemdLibs
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     audit
     libapparmor
@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableSystemd [
     "--cross-file=${writeText "crossfile.ini" ''
       [binaries]
-      systemctl = '${systemdMinimal}/bin/systemctl'
+      systemctl = '/run/current-system/sw/bin/systemctl'
     ''}"
   ];
 
