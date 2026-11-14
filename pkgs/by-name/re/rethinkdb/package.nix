@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--with-jemalloc"
+    "--dynamic=jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
 
