@@ -11,6 +11,7 @@
   patchelf,
   python3,
   shaderc,
+  nixosTests,
   rustPlatform,
   spirv-headers,
   vulkan-headers,
@@ -291,6 +292,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     };
     # llama.cpp release number of src (its bNNNNN tag), reported by the library.
     inherit (release) llamaCppBuild;
+
+    # Serves a model with mesh-llm and this runtime.
+    tests = lib.optionalAttrs effectiveStdenv.hostPlatform.isLinux {
+      nixos = nixosTests.mesh-llm;
+    };
   };
 
   meta = {

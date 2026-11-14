@@ -19,6 +19,7 @@
   versionCheckHook,
   skippy-native-runtime,
   rocmPackages,
+  nixosTests,
   runCommand,
 
   config,
@@ -296,6 +297,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
               '';
         }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos = nixosTests.mesh-llm;
       # The GPU runtimes build without a GPU; building them catches packaging breakage
       # in backends that can't run here.
       runtime-vulkan = testRuntime { vulkanSupport = true; };
@@ -320,7 +322,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       bundles the Metal runtime on macOS and the CPU runtime on Linux; GPU
       backends on Linux are enabled with the nixpkgs settings `cudaSupport`
       (unfree) or `rocmSupport` (`rocmGpuTargets` limits the AMD GPUs built
-      for), or by overriding `vulkanSupport = true`.
+      for), or by overriding `vulkanSupport = true`. To run a node on NixOS,
+      use `services.mesh-llm`.
     '';
     homepage = "https://github.com/Mesh-LLM/mesh-llm";
     inherit (runtime.meta) changelog;
