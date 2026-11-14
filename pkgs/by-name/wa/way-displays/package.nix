@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ simoneruffini ];
     platforms = lib.platforms.linux;
     mainProgram = "way-displays";
+    broken = stdenv.hostPlatform.isAarch64;
   };
 })
