@@ -1,0 +1,26 @@
+{
+  "mnn": {
+    "rev": "d407447ed56c4121a11ccbd266dc184ca1ead0c2",
+    "hash": "sha256-Ai8W9Aj462fZVBoV7SbyeO2lAA8J7xTV4RTrT20H6So="
+  },
+  "models": [
+    {
+      "url": "https://github.com/chthollyphile/folia-major/releases/download/models-v1/beat_this-wgsl.bin",
+      "hash": "sha256-Y2WuW6LkKSJ3LaAfv9C96N0gtzYqZ5AY54pfJR/oqWc="
+    },
+    {
+      "url": "https://github.com/chthollyphile/folia-major/releases/download/models-v1/htdemucs-wgsl.bin",
+      "hash": "sha256-J9UzGnSk4jsYFys9WdA3jmmP15vA0P7TMW2nfjo32NE="
+    }
+  ],
+  "windowtolayer": {
+    "version": "0.3.1-unstable-2026-07-29",
+    "rev": "618a482d791e90f4977d643c206417f6aee73936",
+    "hash": "sha256-b2hkhcg+R3QUKw0ghgDb7KEUUPlFIjE7VzZ1Vf2EJag=",
+    "cargoHash": "sha256-MqcutNzorDeYoGKWFbCzIrNuo1w2vwnGEFOuooZwPgk=",
+    "patches": [
+      "windowtolayer-popup-resilience.patch",
+      "windowtolayer-single-layer-window.patch"
+    ]
+  }
+}
