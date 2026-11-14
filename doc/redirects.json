@@ -5224,5 +5224,14 @@
   ],
   "module-system-module-argument-options": [
     "index.html#module-system-module-argument-options"
+  ],
+  "tester-runImageTest": [
+    "index.html#tester-runImageTest"
+  ],
+  "ex-runImageTest-arch": [
+    "index.html#ex-runImageTest-arch"
+  ],
+  "tester-runImageTest-machine": [
+    "index.html#tester-runImageTest-machine"
   ]
 }
