@@ -29,6 +29,11 @@ buildGoModule (finalAttrs: {
     "-X=main.goVersion=${lib.getVersion go}"
   ];
 
+  postInstall = ''
+    mkdir -p $out/share
+    cp -r formats/ $out/share/formats
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   doInstallCheck = true;
