@@ -87,6 +87,62 @@ Download .NET:
   https://aka.ms/dotnet/download
 ```
 
+### SDK workloads {#dotnet-sdk-workloads}
+
+Workloads are optional SDK components for specific development targets.
+`withWorkloads` supports the .NET 10 and 11 SDKs.
+Use `withWorkloads` to install workload packages through Nix:
+
+```nix
+with import <nixpkgs> { };
+
+mkShell {
+  packages = [
+    (dotnetCorePackages.sdk_10_0.withWorkloads [ "wasm-tools" ])
+  ];
+}
+```
+
+The available workloads depend on the SDK's bundled manifests, which describe workload packages and their versions.
+Availability can differ between SDK releases and platforms.
+For example, the .NET 10 SDK does not bundle an Aspire workload.
+
+If you need several SDKs, apply `withWorkloads` before combining them:
+
+```nix
+with import <nixpkgs> { };
+
+dotnetCorePackages.combinePackages [
+  (dotnetCorePackages.sdk_10_0.withWorkloads [ "wasm-tools" ])
+  (dotnetCorePackages.sdk_11_0.withWorkloads [ "wasm-tools" ])
+]
+```
+
+A `global.json` file selects the SDK for each project.
+The Nix store is read-only.
+Change the Nix expression instead of running `dotnet workload install`, `update`, or `restore` to modify this SDK.
+Workload template discovery is not supported by `withWorkloads`.
+
+The workload generator uses the SDK's resolver to select manifest versions.
+SDK variants of the same major/minor release must have compatible manifests before they can share generated data.
+If their manifests differ or a required NuGet package is unavailable, generation fails and preserves the existing workload data.
+
+From the root of a Nixpkgs checkout, regenerate workload data with:
+
+```sh
+./pkgs/development/compilers/dotnet/update-workloads.sh
+```
+
+To regenerate specific releases, pass their major/minor versions:
+
+```sh
+./pkgs/development/compilers/dotnet/update-workloads.sh 10.0 11.0
+```
+
+The SDK update script also runs workload generation after updating the binary and source release metadata.
+Workload generation stages all requested files before replacing existing data.
+A failure in this stage does not undo changes that the SDK release updater already made.
+
 ## dotnet-sdk vs dotnetCorePackages.sdk {#dotnet-sdk-vs-dotnetcorepackages.sdk}
 
 The `dotnetCorePackages.sdk_X_Y` is preferred over the old dotnet-sdk as both major and minor version are very important for a dotnet environment. If a given minor version isn't present (or was changed), then this will likely break your ability to build a project.
