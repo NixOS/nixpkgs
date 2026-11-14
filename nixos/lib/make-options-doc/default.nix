@@ -214,22 +214,22 @@ rec {
           pkgs.brotli
           pkgs.python3
         ];
-        passAsFile = [ "options" ];
-        options = builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix);
+        options = optionsNix;
         # merge with an empty set if baseOptionsJSON is null to run markdown
         # processing on the input options
-        baseJSON = if baseOptionsJSON == null then builtins.toFile "base.json" "{}" else baseOptionsJSON;
+        baseOptionsPath =
+          if baseOptionsJSON == null then builtins.toFile "base.json" "{}" else baseOptionsJSON;
+        __structuredAttrs = true;
       }
       ''
-          # Export list of options in different format.
-          dst=$out/share/doc/nixos
-          mkdir -p $dst
+        # Export list of options in different format.
+        dst=$out/share/doc/nixos
+        mkdir -p $dst
 
-          TOUCH_IF_DB=$dst/.used-docbook \
-          python ${./mergeJSON.py} \
-            ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-            $baseJSON $optionsPath \
-            > $dst/options.json
+        TOUCH_IF_DB=$dst/.used-docbook \
+        python ${./mergeJSON.py} \
+          ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
+          > $dst/options.json
 
         if grep /nixpkgs/nixos/modules $dst/options.json; then
           echo "The manual appears to depend on the location of Nixpkgs, which is bad"
@@ -239,10 +239,10 @@ rec {
           exit 1
         fi
 
-          brotli -9 < $dst/options.json > $dst/options.json.br
+        brotli -9 < $dst/options.json > $dst/options.json.br
 
-          mkdir -p $out/nix-support
-          echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
-          echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
+        mkdir -p $out/nix-support
+        echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
+        echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
       '';
 }
