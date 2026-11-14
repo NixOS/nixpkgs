@@ -79,7 +79,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.70";
+  version = "0.71";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "yosys";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-MVurTpkYol4kqCP5XV+VpRxyEEnNSH63JDNQP6MbeAQ=";
+    hash = "sha256-QURMzxiADHu0FDygmfHYHyS4ueZFyCTnxVjn4a5OSCo=";
   };
 
   postPatch = ''
