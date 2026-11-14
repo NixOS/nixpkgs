@@ -4,9 +4,10 @@
   lib,
   setuptools,
   six,
-  pypblib,
   pytestCheckHook,
   fetchurl,
+  withPbEncodings ? true,
+  pindakaas,
 }:
 let
   kissat404src = fetchurl {
@@ -20,7 +21,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "1.9.dev15";
+  version = "1.9.dev22";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -28,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "python_sat";
-    hash = "sha256-WipYAiJIziz5OVtWBoUYXkdzxFKinrCuhmLWdhEzbNM=";
+    hash = "sha256-yzbUiuY2+VnCzIuFVD6RdeercKEaZZOBW98EigdhGIo=";
   };
 
   # The kissat source archive is not included in the repo and pysat attempts to
@@ -44,8 +45,8 @@ buildPythonPackage (finalAttrs: {
 
   propagatedBuildInputs = [
     six
-    pypblib
-  ];
+  ]
+  ++ lib.optional withPbEncodings pindakaas;
 
   pythonImportsCheck = [
     "pysat"
