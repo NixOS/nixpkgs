@@ -51,7 +51,28 @@ buildPythonPackage (finalAttrs: {
     torchvision
   ];
 
-  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+  # Upstream's pytest.ini turns warnings into errors and only ignores the
+  # warnings its own CI sees, so newer pytest and torch releases break the
+  # test suite.
+  pytestFlags = [
+    # pytest 9.1 deprecated passing a non-Collection iterable to parametrize,
+    # which the tabular dataset tests do, so collection errors out.
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+
+    # FutureWarning: `torch.jit.script` is deprecated. Please switch to
+    # `torch.compile` or `torch.export`.
+    # FutureWarning: optimizer parameters need to be organized in ordered
+    # collections, but the ordering of tensors in sets will change between
+    # runs. Please use a list instead. This will be an error in a future
+    # release.
+    "-Wignore::FutureWarning"
+
+    # UserWarning: Warning: Profiler clears events at the end of each cycle.
+    # Only events from the current cycle will be reported. To keep events
+    # across cycles, set acc_events=True.
+    "-Wignore::UserWarning"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
     # DeprecationWarning: `torch.jit.script` is not supported in Python 3.14+ and may break.
     # Please switch to `torch.compile` or `torch.export`.
     "-Wignore::DeprecationWarning"
