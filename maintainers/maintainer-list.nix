@@ -16432,6 +16432,12 @@
     githubId = 182024;
     name = "Lars Rasmusson";
   };
+  larsartmann = {
+    email = "git@lars.software";
+    github = "LarsArtmann";
+    githubId = 23587853;
+    name = "Lars Artmann";
+  };
   lasandell = {
     email = "lasandell@gmail.com";
     github = "lasandell";
