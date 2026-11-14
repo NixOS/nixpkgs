@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.12.6";
+  version = "1.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "cysignals";
     tag = version;
-    hash = "sha256-uZNKmnn1Jf1pERdG4bywpAUClKMw3og+7Q5B0yPlqEY=";
+    hash = "sha256-jZpeUfNACMCzVeJNBgWcvqPsQX9CCcJPDbPo1Zr54V4=";
   };
 
   build-system = [
