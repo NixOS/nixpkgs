@@ -4613,6 +4613,8 @@ self: super: with self; {
 
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
 
+  django-admin-tools = callPackage ../development/python-modules/django-admin-tools { };
+
   django-agnocomplete = callPackage ../development/python-modules/django-agnocomplete { };
 
   django-allauth = callPackage ../development/python-modules/django-allauth { };
@@ -4628,6 +4630,8 @@ self: super: with self; {
   django-apscheduler = callPackage ../development/python-modules/django-apscheduler { };
 
   django-async-backend = callPackage ../development/python-modules/django-async-backend { };
+
+  django-async-extensions = callPackage ../development/python-modules/django-async-extensions { };
 
   django-auditlog = callPackage ../development/python-modules/django-auditlog { };
 
@@ -4680,6 +4684,8 @@ self: super: with self; {
   django-compressor = callPackage ../development/python-modules/django-compressor { };
 
   django-configurations = callPackage ../development/python-modules/django-configurations { };
+
+  django-constance = callPackage ../development/python-modules/django-constance { };
 
   django-context-decorator = callPackage ../development/python-modules/django-context-decorator { };
 
@@ -4764,6 +4770,8 @@ self: super: with self; {
   django-hierarkey = callPackage ../development/python-modules/django-hierarkey { };
 
   django-hijack = callPackage ../development/python-modules/django-hijack { };
+
+  django-honeypot = callPackage ../development/python-modules/django-honeypot { };
 
   django-htmx = callPackage ../development/python-modules/django-htmx { };
 
@@ -4940,6 +4948,10 @@ self: super: with self; {
   django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
 
   django-simple-history = callPackage ../development/python-modules/django-simple-history { };
+
+  django-simple-math-captcha =
+    callPackage ../development/python-modules/django-simple-math-captcha
+      { };
 
   django-sites = callPackage ../development/python-modules/django-sites { };
 
@@ -5634,6 +5646,8 @@ self: super: with self; {
   energyid-webhooks = callPackage ../development/python-modules/energyid-webhooks { };
 
   energyzero = callPackage ../development/python-modules/energyzero { };
+
+  enforced-permissions = callPackage ../development/python-modules/enforced-permissions { };
 
   enlighten = callPackage ../development/python-modules/enlighten { };
 
@@ -8785,6 +8799,8 @@ self: super: with self; {
   iwlib = callPackage ../development/python-modules/iwlib { };
 
   ixia = callPackage ../development/python-modules/ixia { };
+
+  ixxy-email-logger = callPackage ../development/python-modules/ixxy-email-logger { };
 
   j2lint = callPackage ../development/python-modules/j2lint { };
 

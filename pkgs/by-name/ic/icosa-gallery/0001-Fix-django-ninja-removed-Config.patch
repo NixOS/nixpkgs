@@ -1,0 +1,55 @@
+From 73dd959b5ef31b0077b7c4029a0fae8ee8afd8ac Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Tue, 24 Mar 2026 03:25:06 +0530
+Subject: [PATCH] Fix django-ninja removed Config
+
+See https://github.com/icosa-foundation/icosa-gallery/pull/200
+Removed in django-ninja 1.5.0 https://github.com/vitalik/django-ninja/pull/1528
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ icosa/api/schema.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/icosa/api/schema.py b/icosa/api/schema.py
+index 850f7462..b6bbd3c0 100644
+--- a/icosa/api/schema.py
++++ b/icosa/api/schema.py
+@@ -149,9 +149,9 @@ class AssetSchema(ModelSchema):
+     presentationParams: Optional[dict] = Field(None, alias=("presentation_params"))
+     formats: List[AssetFormat]
+ 
+-    class Config(Schema.Config):
++    class Meta:
+         model = Asset
+-        model_fields = ["url", "license"]
++        fields = ["url", "license"]
+ 
+     @staticmethod
+     def resolve_name(obj, context):
+@@ -238,9 +238,9 @@ class AssetSchemaPrivate(AssetSchema):
+ 
+ 
+ class AssetStateSchema(ModelSchema):
+-    class Config(Schema.Config):
++    class Meta:
+         model = Asset
+-        model_fields = ["state"]
++        fields = ["state"]
+ 
+ 
+ class AssetPatchData(Schema):
+@@ -329,9 +329,9 @@ class AssetCollectionSchema(ModelSchema):
+         root_url = request.build_absolute_uri("/").rstrip("/")
+         return f"{root_url}{reverse_lazy('icosa:api:asset_collection_list')}/{obj.url}"
+ 
+-    class Config(Schema.Config):
++    class Meta:
+         model = AssetCollection
+-        model_fields = [
++        fields = [
+             "url",
+             "name",
+             "description",
+-- 
+2.53.0
