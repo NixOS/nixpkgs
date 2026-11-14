@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-cstruct";
-  version = "4.7";
+  version = "5.0.dev";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cstruct";
     tag = version;
-    hash = "sha256-eEaKGFpArg0p3+/I2dH3mQ+eNIVJ8KsUbRcw4Ecrl7g=";
+    hash = "sha256-hoyY7Yilcv0Xl1Gv/jr158A5Y3dSmZec5Zv+/BpDn+U=";
   };
 
   build-system = [
