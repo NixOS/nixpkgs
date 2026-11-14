@@ -8104,8 +8104,6 @@ with pkgs;
 
   gimpPlugins = recurseIntoAttrs (callPackage ../applications/graphics/gimp/plugins { });
 
-  gtk-pipe-viewer = pipe-viewer.override { withGtk3 = true; };
-
   jetbrains = (
     recurseIntoAttrs (
       callPackages ../applications/editors/jetbrains {
