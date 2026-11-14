@@ -4,10 +4,11 @@ import logging
 import os
 import sys
 from pathlib import Path
+from subprocess import CalledProcessError
 from typing import Final
 
 from . import nix, tmpdir
-from .constants import EXECUTABLE
+from .constants import EXECUTABLE, SYSTEM
 from .models import (
     Action,
     BuildAttr,
@@ -34,8 +35,21 @@ def reexec(
     if os.environ.get(NIXOS_REBUILD_REEXEC_ENV):
         return
 
+    flake = Flake.from_arg(args.flake, Remote.from_arg(args.target_host))
+    build_attr = None if flake else BuildAttr.from_arg(args.attr, args.file)
+
+    if SYSTEM is not None:
+        target_system = _get_config_system(flake, build_attr, grouped_nix_args)
+        if target_system is not None and target_system != SYSTEM:
+            logger.debug(
+                "not re-exec'ing, configuration is for %s but running on %s",
+                target_system,
+                SYSTEM,
+            )
+            return
+
     drv = None
-    if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host)):
+    if flake:
         drv = nix.build_flake(
             NIXOS_REBUILD_ATTR,
             flake,
@@ -44,7 +58,7 @@ def reexec(
             | {"no_link": True},
         )
     else:
-        build_attr = BuildAttr.from_arg(args.attr, args.file)
+        assert build_attr is not None
         drv = nix.build(
             NIXOS_REBUILD_ATTR,
             build_attr,
@@ -78,6 +92,21 @@ def reexec(
                 # We already run clean-up, let's re-exec in the current version
                 # to avoid issues
                 os.execve(current, argv, os.environ | {NIXOS_REBUILD_REEXEC_ENV: "1"})
+
+def _get_config_system(
+    flake: Flake | None,
+    build_attr: BuildAttr | None,
+    grouped_nix_args: GroupedNixArgs,
+) -> str | None:
+    "Get the configuration's Nix system, or None if it can't be determined."
+    try:
+        if flake:
+            return nix.get_system_flake(flake, grouped_nix_args.flake_eval_flags)
+        assert build_attr is not None
+        return nix.get_system(build_attr, grouped_nix_args.common_flags)
+    except (OSError, CalledProcessError, json.JSONDecodeError):
+        logger.debug("could not evaluate the configuration's system", exc_info=True)
+        return None
 
 
 def _validate_image_variant(image_variant: str, variants: ImageVariants) -> None:
