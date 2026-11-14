@@ -1,0 +1,21 @@
+{
+  "version": "0.16.5-1",
+  "tar": {
+    "x86_64-linux": {
+      "url": "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.5-1/zephyr-sdk-0.16.5-1_linux-x86_64.tar.xz",
+      "hash": "sha512-qk6qY7xAenAgbgbf3atHtuzLfph5iZ7L/MB3L+JsfKdfgJBKn2QI5II82AKVnwgM6h0a7vXm1M0P6dPGsOObjA=="
+    },
+    "aarch64-linux": {
+      "url": "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.5-1/zephyr-sdk-0.16.5-1_linux-aarch64.tar.xz",
+      "hash": "sha512-A3eXKM5q/7E+ZiizI7D5jfz1dy96MotLvfhru7FxNvwH6EwuF+vdTbEwEJN8iWzvep1LVOGFmGXxVOs7JIwNPw=="
+    },
+    "x86_64-darwin": {
+      "url": "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.5-1/zephyr-sdk-0.16.5-1_macos-x86_64.tar.xz",
+      "hash": "sha512-yJu/2g2HYl+alpG64jTc1pRzNVqzBL4JB6N4wWeEdFLklmXqLQWgkKkNzjOfHmVQUnl4OyNotFlgkl1ap1XIcg=="
+    },
+    "aarch64-darwin": {
+      "url": "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.5-1/zephyr-sdk-0.16.5-1_macos-aarch64.tar.xz",
+      "hash": "sha512-E9fGPW0MbsWza4hjnZY/u9WjYbUJwsU+/7Nmm5ROvcoo6DRT6ReFldhq9yOPww9LsEDYOlqfcIlQnu5jpOvMbg=="
+    }
+  }
+}
