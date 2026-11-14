@@ -11,18 +11,18 @@
 }:
 
 let
-  version = "3.5.2";
+  version = "3.6";
 
   inherit (stdenv.hostPlatform) system;
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
-      hash = "sha256-4YwcHrFmD9BU2ebeSHHt+LDMXTW1DnFHs8j1SltInAg=";
+      hash = "sha256-bLn88t+ZyVXRwTEij1+FLGjFA8WqBijLMvJTnK48AJU=";
     };
     aarch64-darwin = fetchurl {
       url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.arm64.tar.gz";
-      hash = "sha256-5utHDLdIaNQlnWg/gH4IZc1kBctnsu8KJYkRa/9NTSM=";
+      hash = "sha256-/yHLHYkTFllaV+LCqDA8gf/YyrIK3OPholf1x8Va5Ec=";
     };
   };
 in
