@@ -276,6 +276,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = lib.licenses.bsd2;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "webkitgtk" finalAttrs.version;
     pkgConfigModules =
       if lib.versionAtLeast abiVersion "6.0" then
         [
