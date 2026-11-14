@@ -5270,6 +5270,8 @@ self: super: with self; {
 
   dragonmapper = callPackage ../development/python-modules/dragonmapper { };
 
+  drain3 = callPackage ../development/python-modules/drain3 { };
+
   dramatiq = callPackage ../development/python-modules/dramatiq { };
 
   dramatiq-abort = callPackage ../development/python-modules/dramatiq-abort { };
