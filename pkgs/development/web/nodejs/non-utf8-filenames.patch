@@ -1,0 +1,41 @@
+--- a/test/parallel/test-fileurltopathbuffer.js
++++ b/test/parallel/test-fileurltopathbuffer.js
+@@ -55,15 +55,24 @@
+   name: 'URIError',
+ });
+ 
+-writeFileSync(testPathBuffer, 'test');
+-assert.ok(existsSync(testPathBuffer));
+-
+ // Using fileURLToPath fails because the URL contains non-Unicode
+ // percent-encoded characters.
+ assert.throws(() => existsSync(fileURLToPath(testPath)), {
+   name: 'URIError',
+ });
+ 
++assert.deepStrictEqual(fileURLToPathBuffer(testPath), testPathBuffer);
++
++try {
++  writeFileSync(testPathBuffer, 'test');
++} catch (e) {
++  if (e.code === 'EILSEQ') {
++    common.skip('Filesystem does not support non-UTF8 filenames');
++  }
++  throw e;
++}
++assert.ok(existsSync(testPathBuffer));
++
+ // This variation succeeds because the URL is converted to a buffer
+ // without trying to interpret the percent-encoded characters.
+ assert.ok(existsSync(fileURLToPathBuffer(testPath)));
+--- a/test/parallel/test-fs-readdir-ucs2.js
++++ b/test/parallel/test-fs-readdir-ucs2.js
+@@ -18,7 +18,7 @@
+ try {
+   fs.closeSync(fs.openSync(fullpath, 'w+'));
+ } catch (e) {
+-  if (e.code === 'EINVAL')
++  if (e.code === 'EINVAL' || e.code === 'EILSEQ')
+     common.skip('test requires filesystem that supports UCS2');
+   throw e;
+ }

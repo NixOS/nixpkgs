@@ -49,6 +49,8 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+      # Preserve URL conversion checks on filesystems that reject non-UTF8 names.
+      ./non-utf8-filenames.patch
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
