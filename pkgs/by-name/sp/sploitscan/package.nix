@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sploitscan";
-  version = "0.14.1";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xaitax";
     repo = "SploitScan";
-    tag = "v.${finalAttrs.version}";
-    hash = "sha256-TVxwgYUyFF+W1rMzGffii/vBo3GXCNO5SxuVcYyUgxA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n7KQ0I3eTIbXGP2uLix7lG4IAzlAShsFzlBoaQduoC4=";
   };
 
   pythonRelaxDeps = true;
@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     jinja2
     openai
     requests
+    tqdm
   ];
 
   pythonImportsCheck = [ "sploitscan" ];

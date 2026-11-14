@@ -410,8 +410,8 @@ self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.18";
-    hash = "sha256-pGhSxoB1vnwxx7M/7iM8W1oAyMKBF/UgTRJOTy/Vb6g=";
+    version = "10.11.19";
+    hash = "sha256-uOVD7mnTgPsc/VYyJvSeD+luTWfnt6kEXuUUoWjtIGY=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
