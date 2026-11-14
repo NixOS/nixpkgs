@@ -1,0 +1,12 @@
+# Silicon Motion USB Display (SM76x InstantView), e.g. 090c:0768
+ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", \
+ ATTR{idVendor}=="090c", IMPORT{builtin}="usb_id", \
+ ATTR{bDeviceClass}=="ef", \
+ ENV{SMIUSBDISPLAY_DEVNAME}="$env{DEVNAME}", \
+ ENV{SMIUSBDISPLAY_DEVICE_ID}="$env{ID_BUS}-$env{BUSNUM}-$env{DEVNUM}-$env{ID_SERIAL}", \
+ TAG+="systemd", ENV{SYSTEMD_WANTS}="instantview.service", \
+ RUN+="@smiUdev@ add $root $env{SMIUSBDISPLAY_DEVICE_ID} $env{SMIUSBDISPLAY_DEVNAME}"
+
+ACTION=="remove", ENV{DEVNAME}!="", \
+ ENV{PRODUCT}=="90c/*", \
+ RUN+="@smiUdev@ remove $root $env{DEVNAME}"
