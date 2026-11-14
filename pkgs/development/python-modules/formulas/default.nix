@@ -16,6 +16,7 @@
   dictdiffer,
   ezodf,
   flask,
+  gunicorn,
   lxml,
   numpy,
   numpy-financial,
@@ -72,6 +73,7 @@ buildPythonPackage (finalAttrs: {
     dictdiffer
     ezodf
     flask
+    gunicorn
     lxml
     numpy
     numpy-financial
@@ -123,9 +125,19 @@ buildPythonPackage (finalAttrs: {
     sphinxcontrib-restbuilder
   ];
 
-  # itertools.count is not picklable on 3.14; schedula stores count().__next__
-  # https://github.com/python/cpython/issues/101588
-  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+  # TODO remove once https://github.com/vinci1it2000/formulas/pull/186 is released
+  postPatch = ''
+    touch formulas/gui/__init__.py
+    substituteInPlace formulas/cli.py --replace-fail \
+      "ctx.params['app'] = 'formulas.app:create_app'" \
+      "ctx.params['app'] = 'formulas.app:create_app()'"
+    substituteInPlace setup.py --replace-fail \
+      "'formulas.gui': ['*']" \
+      "'formulas.gui': ['templates/*']"
+  ''
+  + lib.optionalString (pythonAtLeast "3.14") ''
+    # itertools.count is not picklable on 3.14; schedula stores count().__next__
+    # https://github.com/python/cpython/issues/101588
     cat > test/conftest.py << 'EOF'
     import copyreg
     import itertools

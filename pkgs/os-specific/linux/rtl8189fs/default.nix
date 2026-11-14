@@ -9,13 +9,13 @@
 rtl8189es.overrideAttrs (drv: rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "rtl8189fs";
-  version = "2025-09-26";
+  version = "0-unstable-2026-09-11";
 
   src = fetchFromGitHub {
     owner = "jwrdegoede";
     repo = "rtl8189ES_linux";
-    rev = "876e627a5b6a8021700391b4249a4a31edfebe5c";
-    hash = "sha256-3v40I09TDGWdpllS3WfshPkXbT5Q2pWMTalHLUlU3lU=";
+    rev = "13bbdbc750bfaa37ff47dff063edcc857fad0584";
+    hash = "sha256-la8g/5mCkAMiwmfX63ZhrGa+TAmWeAnbICARaDLurLY=";
   };
 
   meta = {

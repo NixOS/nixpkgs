@@ -157,7 +157,6 @@
                       power_level_override={
                           "users": {
                               "@draupnir:homeserver": 100,
-                              "@moderator:homeserver": 100,
                           }
                       }
                   )
@@ -170,7 +169,6 @@
                       power_level_override={
                           "users": {
                               "@draupnir:homeserver": 100,
-                              "@moderator:homeserver": 100,
                           }
                       }
                   )

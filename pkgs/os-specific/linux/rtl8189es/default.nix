@@ -5,26 +5,21 @@
   kernel,
   kernelModuleMakeFlags,
   bc,
-  nukeReferences,
 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "rtl8189es";
-  version = "2025-09-26";
+  version = "0-unstable-2026-11-03";
 
   src = fetchFromGitHub {
     owner = "jwrdegoede";
     repo = "rtl8189ES_linux";
-    rev = "0a5d04114fac3c9f48a343cb905fbb6a3f9f5df5";
-    hash = "sha256-cGPjA5Az0EEbPGG0KfgAqdhbLj54BxoIohWmcR10vPI=";
+    rev = "81e7b8939cf2b4ba0a80da6786055ba0dc740362";
+    hash = "sha256-bNZXeXPS3M7inWEGz3OuIt/6hTMvoqSpQob5cHhj0Xw=";
   };
 
-  nativeBuildInputs = [
-    bc
-    nukeReferences
-  ]
-  ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [
     "pic"
@@ -32,10 +27,14 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
-    substituteInPlace ./Makefile --replace /sbin/depmod \#
-    substituteInPlace ./Makefile --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+    substituteInPlace ./Makefile \
+      --replace-fail /lib/modules/ "${kernel.dev}/lib/modules/" \
+      --replace-fail /sbin/depmod \# \
+      --replace-fail 'install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)' \
+        '$(MAKE) -C $(KSRC) M=$(shell pwd) modules_install'
   '';
+
+  enableParallelBuilding = true;
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -44,15 +43,10 @@ stdenv.mkDerivation rec {
       + (if (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) then "y" else "n")
     )
     ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
+    "INSTALL_MOD_PATH=$(out)"
+    "INSTALL_MOD_DIR=kernel/net/wireless"
+    "DEPMOD=true"
   ];
-
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-  '';
-
-  postInstall = ''
-    nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
-  '';
 
   meta = {
     description = "Driver for Realtek rtl8189es";

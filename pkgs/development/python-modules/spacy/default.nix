@@ -138,6 +138,9 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert 'V' == 'N'
     "test_tok2vec_frozen_overfitting"
+
+    # AttributeError: Can't get local object 'test_doc_retokenize_merge_extension_attrs_invalid.<locals>.<lambda>'
+    "test_entity_ruler_multiprocessing"
   ];
 
   pythonImportsCheck = [ "spacy" ];
