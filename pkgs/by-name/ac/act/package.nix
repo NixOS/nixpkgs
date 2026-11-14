@@ -4,6 +4,7 @@
   buildGoModule,
   testers,
   nix-update-script,
+  nixosTests,
   act,
 }:
 buildGoModule (finalAttrs: {
@@ -28,8 +29,11 @@ buildGoModule (finalAttrs: {
   ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = act;
+    tests = {
+      inherit (nixosTests) act;
+      version = testers.testVersion {
+        package = act;
+      };
     };
 
     updateScript = nix-update-script { };
