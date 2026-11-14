@@ -1,0 +1,14 @@
+diff --git a/settings.gradle b/settings.gradle
+index 1ffaf98dfb..d581cd7a6b 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -10,9 +10,6 @@
+ apply plugin: 'com.palantir.jdks.settings'
+ rootProject.name = 'palantir-java-format-parent'
+ 
+-include ':gradle-palantir-java-format'
+-include ':eclipse_plugin'
+-include ':idea-plugin'
+ include ':palantir-java-format-spi'
+ include ':palantir-java-format'
+ include ':palantir-java-format-jdk-bootstrap'
