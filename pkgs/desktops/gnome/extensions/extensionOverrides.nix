@@ -13,6 +13,7 @@
   gobject-introspection,
   gsound,
   hddtemp,
+  libdbusmenu,
   libgda6,
   libgtop,
   libhandy,
@@ -87,6 +88,12 @@ lib.trivial.pipe super [
       sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${libgda6}/lib/girepository-1.0');\n" lib/database/entryTracker.js
       sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${gsound}/lib/girepository-1.0');\n" lib/common/sound.js
       sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${gsound}/lib/girepository-1.0');\n" lib/preferences/general/feedbackSettings.js
+    '';
+  }))
+
+  (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
+    preInstall = ''
+      sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${libdbusmenu}/lib/girepository-1.0');\n" dbusmenuUtils.js
     '';
   }))
 
