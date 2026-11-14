@@ -32,8 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromRadicle {
-    # seed.radicle.dev currently doesn't update its canonical release tags correctly
-    seed = "oak.radicle.garden";
+    seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
     tag = "releases/desktop/${finalAttrs.version}";
     nonConeMode = true;
