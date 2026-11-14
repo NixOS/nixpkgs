@@ -4,10 +4,13 @@
   installShellFiles,
   lib,
   stdenv,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "srgn";
   version = "0.14.3";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alexpovel";
@@ -26,10 +29,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Code surgeon for precise text and code transplantation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ magistau ];
+    maintainers = with lib.maintainers; [
+      adda
+      magistau
+    ];
     mainProgram = "srgn";
     homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/";
     downloadPage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/releases/tag/${finalAttrs.src.rev}";

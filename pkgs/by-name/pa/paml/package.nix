@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_POSIX_C_SOURCE";
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
   preBuild = ''
     cd ./src/
   '';

@@ -2449,6 +2449,7 @@ mapAliases {
   runCommandNoCC = warnAlias "'runCommandNoCC' has been renamed to/replaced by 'runCommand'" runCommand; # Converted to warning 2025-10-28
   runCommandNoCCLocal = warnAlias "'runCommandNoCCLocal' has been renamed to/replaced by 'runCommandLocal'" runCommandLocal; # Converted to warning 2025-10-28
   runescape = throw "'runescape' was removed due to a lack of maintenance, insecure dependencies, and incompatibility with Jagex accounts. Please consider using 'bolt-launcher' instead."; # Added 2026-02-24
+  runoff = throw "'runoff' has been removed, as it was deleted upstream"; # Added 2026-11-07
   rust-hypervisor-firmware = throw "rust-hypervisor-firmware was removed, as it is no longer needed by Cloud Hypervisor and was broken"; # Added 2026-02-19
   rust-paddle-ocr = throw "'rust-paddle-ocr' has been renamed to/replaced by 'newbee-ocr'"; # Added 2026-10-19
   rust-synapse-state-compress = throw "'rust-synapse-state-compress' has been renamed to/replaced by 'rust-synapse-compress-state'"; # Converted to throw 2025-10-27
@@ -2490,6 +2491,7 @@ mapAliases {
   shadered = throw "shadered has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
   shades-of-gray-theme = throw "'shades-of-gray-theme' has been removed because upstream is a 404"; # Added 2025-12-20
   shared_desktop_ontologies = throw "'shared_desktop_ontologies' has been removed as it had been abandoned upstream"; # Added 2025-11-09
+  sharkey = throw "'sharkey' has been dropped as it has not been updated in a sufficiently timely manner considering its attack surface"; # Added 2026-11-14
   shipyard = throw "'shipyard' has been renamed to/replaced by 'jumppad'"; # Converted to throw 2025-10-27
   shisho = throw "'shisho' has been removed, as it is archived upstream. Consider using 'semgrep', 'opengrep', or 'ast-grep' instead"; # Added 2026-04-28
   sic-image-cli = warnAlias "'sic-image-cli' has been renamed to 'imagineer'" imagineer; # Added 2026-03-29

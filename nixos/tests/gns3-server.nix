@@ -1,4 +1,8 @@
-{ pkgs, lib, ... }:
+{ config, lib, ... }:
+
+let
+  pkgs = config.node.pkgs;
+in
 {
   name = "gns3-server";
   meta.maintainers = [ lib.maintainers.anthonyroussel ];

@@ -1,35 +1,50 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pytest,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ephem";
   version = "4.2.1";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kgyzA2nHn94QiMIGDVVepfilD9yAqSZYMv1b8ZXPFH8=";
+  src = fetchFromGitHub {
+    owner = "brandon-rhodes";
+    repo = "pyephem";
+    tag = finalAttrs.version;
+    hash = "sha256-oUeVpUX9Tcv6fSQku29mgVx0Je2X6TgIzHO8iuM5i+o=";
   };
 
-  nativeCheckInputs = [
-    pytest
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # The unpacked sources shadow the installed extension module.
+  preCheck = ''
+    rm -r ephem
+  '';
+
+  pytestFlags = [
+    "--pyargs"
+    "ephem.tests"
   ];
 
-  # JPLTest uses assets not distributed in package
-  checkPhase = ''
-    pytest --pyargs ephem.tests -k "not JPLTest"
-  '';
+  disabledTests = [
+    # unittest.load_tests() attaches the JPL ephemeris path. Pytest collects
+    # the bare JPLTest class, which has no path.
+    "JPLTest"
+  ];
 
   pythonImportsCheck = [ "ephem" ];
 
   meta = {
-    description = "Compute positions of the planets and stars";
+    description = "Scientific-grade astronomy routines for Python";
     homepage = "https://github.com/brandon-rhodes/pyephem";
+    changelog = "https://github.com/brandon-rhodes/pyephem/blob/${finalAttrs.src.tag}/ephem/doc/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
   };
-}
+})

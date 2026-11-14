@@ -18,6 +18,7 @@
   python3,
   qt6,
   udev,
+  xvfb-run,
 }:
 
 let
@@ -31,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pG+n9KBm+AklRSiDG8BKmq5rmAzqWuM+5dLDNeW2Duc=";
+    hash = "sha256-bV1KtqE03bOPly8IvT/oSNnBFnIwp3uimmBuwSb6fW0=";
   };
 
   passthru = {
@@ -53,8 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  # Provides dbus-run-session for the private-bus regression when checks run.
-  nativeCheckInputs = [ dbus ];
+  nativeCheckInputs = [
+    dbus
+    xvfb-run
+  ];
 
   buildInputs = [
     acl

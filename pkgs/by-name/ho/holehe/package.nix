@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "holehe";
-  version = "0-unstable-2023-05-18";
+  version = "1.61-unstable-2024-09-10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "megadose";
     repo = "holehe";
-    rev = "bec2f582c286a4e32de4dfc1f241297f60bd8713";
-    hash = "sha256-dLfuQew6cqb32r9AMubuo51A7TeaIafEdZs0OrQF7Gg=";
+    rev = "14da70f588538936b20d238783c5e28a0772a2b3";
+    hash = "sha256-d3j2J5FMNwnL4ux05WQKLBtTFg7QM5zAmVbiFackP2M=";
   };
 
   postPatch = ''

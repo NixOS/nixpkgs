@@ -7,13 +7,13 @@
 
 buildGo127Module (finalAttrs: {
   pname = "augustus-go";
-  version = "0.14.35";
+  version = "0.14.37";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "augustus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-inwA0SnaWAD/0Q+hVDizX1jwA7+mp3J2XjsgIYlR1J0=";
+    hash = "sha256-Q9z/pXT3SktdcAkcmDAL4mc8yyX0bLKfMUIV9gXlfcs=";
   };
 
   vendorHash = "sha256-QjO2nzqmE+P20kRea+mHEHTtt6anRdAo8R4go6Kawfc=";
