@@ -39,7 +39,10 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/jasonfen/terminal-space-program/blob/main/docs/version-history.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tomasrivera ];
+    maintainers = with lib.maintainers; [
+      tomasrivera
+      jasonfen
+    ];
     mainProgram = "terminal-space-program";
   };
 })
