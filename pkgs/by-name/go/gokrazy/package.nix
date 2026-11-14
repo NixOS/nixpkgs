@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  installShellFiles,
+  generateShellCompletions,
   nix-update-script,
 }:
 buildGoModule (finalAttrs: {
@@ -26,16 +26,13 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/gok" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ generateShellCompletions ];
+  generateShellCompletionsArgs = [
+    "completion"
+    "{shell}"
+  ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-
-  postInstall = ''
-    installShellCompletion --cmd gok \
-      --bash <($out/bin/gok completion bash) \
-      --fish <($out/bin/gok completion fish) \
-      --zsh <($out/bin/gok completion zsh)
-  '';
 
   meta = {
     description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi 5, Pi Zero 2 W, or amd64 PCs";
