@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm0644 \
       -t "$out/etc/udev/rules.d" \
       files/usr/lib/udev/rules.d/*
+      install -Dm 0644 -t $out/etc/udev/hwdb.d files/usr/lib/udev/hwdb.d/*
+      install -Dm 0644 -t $out/etc/modprobe.d files/usr/lib/modprobe.d/*
   '';
 
   buildInputs = [ pahole ];
