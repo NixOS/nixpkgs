@@ -552,8 +552,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "gregorias";
         repo = "coop.nvim";
-        rev = "26df3be54846ed44b5a9d7749f7780049931b8a8";
-        hash = "sha256-Kntwgxjr1skuxE7rOEeLip4OzOAs+YNx6DcPNkTMUwI=";
+        rev = "ce1b286857412dc15cdac8e7e1637375fd5adddd";
+        hash = "sha256-BifuLUAkDjZOkJag/fqNQMqs+zKaLfVkqudqK6vOjMs=";
       };
 
       disabled = luaOlder "5.1";
@@ -1140,15 +1140,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2774-1";
+      version = "0.0.2776-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2774-1.rockspec";
-          sha256 = "13nqlz72x4mk74v8dk8kbp1wb60445acp6iw34i3r9ylwwi007s9";
+          url = "mirror://luarocks/fzf-lua-0.0.2776-1.rockspec";
+          sha256 = "0kc59a76h5v882rwcdqqx1qwfrhwyq728z0qlxs3gclydxi9shcb";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/22f0bbd3140a8a3b34fec75e5a640513ca6d4ce3.zip";
-        sha256 = "0qjkwq6nmi5jbvqx5y0bvraijv9yv06f6mqqr1z74rgcj23fhfl7";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/ded1c96d3d9d74634287d722431c26690968a4bf.zip";
+        sha256 = "1r8f43dmr674xc09c8kymmdb4777y0j557j1gzwy3a5g8njqn2zj";
       };
 
       disabled = luaOlder "5.1";
@@ -4720,28 +4720,27 @@ final: prev: {
       buildLuarocksPackage,
       fetchFromGitHub,
       fetchurl,
-      luaAtLeast,
       luaOlder,
     }:
     buildLuarocksPackage {
       pname = "markdown";
-      version = "0.33-1";
+      version = "0.34-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/markdown-0.33-1.rockspec";
-          sha256 = "02sixijfi6av8h59kx3ngrhygjn2sx1c85c0qfy20gxiz72wi1pl";
+          url = "mirror://luarocks/markdown-0.34-1.rockspec";
+          sha256 = "15pyy4akcxb2nij5n06cpl5syvr3ficajdhyl3clilhrcqhn635a";
         }).outPath;
       src = fetchFromGitHub {
-        owner = "mpeterv";
+        owner = "lunarmodules";
         repo = "markdown";
-        tag = "0.33";
-        hash = "sha256-PgRGiSwDODSyNSgeN7kNOCZwjLbGf1Qts/jrfLGYKwU=";
+        tag = "0.34";
+        hash = "sha256-WqasJsFVdMppIgF7deHsHjppAJgCcNMF5dD/7WMj/ls=";
       };
 
-      disabled = luaOlder "5.1" || luaAtLeast "5.4";
+      disabled = luaOlder "5.1";
 
       meta = {
-        homepage = "https://github.com/mpeterv/markdown";
+        homepage = "https://github.com/lunarmodules/markdown";
         license = lib.licenses.AND [
           lib.licenses.mit
           lib.licenses.x11
