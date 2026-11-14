@@ -10374,6 +10374,8 @@ self: super: with self; {
 
   logfire-api = callPackage ../development/python-modules/logfire-api { };
 
+  logfire-sdk = callPackage ../development/python-modules/logfire-sdk { };
+
   logfury = callPackage ../development/python-modules/logfury { };
 
   logging-journald = callPackage ../development/python-modules/logging-journald { };
