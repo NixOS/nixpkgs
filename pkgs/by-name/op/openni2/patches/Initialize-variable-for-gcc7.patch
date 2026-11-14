@@ -1,0 +1,21 @@
+From: Jochen Sprickerhof <git@jochen.sprickerhof.de>
+Date: Tue, 8 Aug 2017 22:53:14 +0200
+Subject: Initialize variable for gcc7
+
+---
+ Source/Tools/NiViewer/Device.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Source/Tools/NiViewer/Device.cpp b/Source/Tools/NiViewer/Device.cpp
+index 28cbfee..7037320 100644
+--- a/Source/Tools/NiViewer/Device.cpp
++++ b/Source/Tools/NiViewer/Device.cpp
+@@ -364,7 +364,7 @@ void toggleMirror(int )
+ 
+ void toggleCloseRange(int )
+ {
+-	bool bCloseRange;
++	bool bCloseRange = false;
+ 	g_depthStream.getProperty(XN_STREAM_PROPERTY_CLOSE_RANGE, &bCloseRange);
+ 
+ 	bCloseRange = !bCloseRange;
