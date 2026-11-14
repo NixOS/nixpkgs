@@ -1,0 +1,9 @@
+disallowed-macros = [
+  { path = "std::eprint", reason = "panics if stderr is a closed pipe, use eprintln_lossy!" },
+  { path = "std::eprintln", reason = "panics if stderr is a closed pipe, use eprintln_lossy!" },
+  { path = "std::print", reason = "panics if stdout is a closed pipe, use eprintln_lossy!" },
+  { path = "std::println", reason = "panics if stdout is a closed pipe, use eprintln_lossy!" },
+]
+disallowed-methods = [
+  { path = "std::process::Command::new", reason = "children must ignore SIGPIPE, use child_command" },
+]
