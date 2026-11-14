@@ -12,6 +12,7 @@
   at-spi2-atk,
   libdrm,
   libgbm,
+  libva,
   libxkbcommon,
   libxshmfence,
   libGL,
@@ -35,6 +36,7 @@
   pango,
   systemd,
   pciutils,
+  libkrb5,
   libnotify,
   pipewire,
   libsecret,
@@ -121,10 +123,12 @@ let
     libnotify
     pipewire
     libsecret
+    libkrb5
     libpulseaudio
     speechd-minimal
     libdrm
     libgbm
+    libva
     libxkbcommon
     libxshmfence
     libGL
