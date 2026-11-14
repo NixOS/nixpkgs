@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rhine-music";
   version = "0.4.0-unstable-2026-11-12";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "MikeQu223";
     repo = "Rhine-Music-Database";
