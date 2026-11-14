@@ -1,42 +1,34 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
-  mkfontdir,
-  mkfontscale,
+  fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arphic-uming";
   version = "0.2.20080216.2";
 
-  src = fetchurl {
-    url = "mirror://ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${version}.orig.tar.bz2";
-    hash = "sha256-48GeBOp6VltKz/bx5CSAhNLhB1LjBb991sdugIYNwds=";
+  src = fetchzip {
+    url = "mirror://ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${finalAttrs.version}.orig.tar.bz2";
+    hash = "sha256-icAofajFV1WcgxG+cHu5y8IF5vTtJ8ryx74SYsIVw4I=";
   };
 
   nativeBuildInputs = [
-    mkfontscale
-    mkfontdir
+    installFonts
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -v uming.ttc $out/share/fonts/truetype/arphic-uming.ttc
-    cd $out/share/fonts
-    mkfontdir
-    mkfontscale
-
-    runHook postInstall
-  '';
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "CJK Unicode font Ming style";
     homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
-
     license = lib.licenses.arphicpl;
-    maintainers = [ lib.maintainers.changlinli ];
+    maintainers = with lib.maintainers; [
+      changlinli
+      ccicnce113424
+    ];
     platforms = lib.platforms.all;
   };
-}
+})
