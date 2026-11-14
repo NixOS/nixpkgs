@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drbd";
-  version = "9.3.3";
+  version = "9.3.4";
 
   src = fetchurl {
     url = "https://pkg.linbit.com//downloads/drbd/9/drbd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-p7+wFgcMMd8cc4VpyozF5fwzfdRJFH979i50bYfTjyE=";
+    hash = "sha256-ot5Lf/xD/autAbC/coO5EOtkAbD3iOM6Za6U/AWIVFw=";
   };
 
   hardeningDisable = [ "pic" ];
