@@ -1,0 +1,22 @@
+diff --git a/pkg/udev/udev.go b/pkg/udev/udev.go
+index 61f60e6..84ab30b 100644
+--- a/pkg/udev/udev.go
++++ b/pkg/udev/udev.go
+@@ -42,6 +42,7 @@ import "C"
+ import (
+ 	"errors"
+ 	"fmt"
++	"log/slog"
+ 	"os/exec"
+ 	"strconv"
+ 	"strings"
+@@ -218,7 +219,8 @@ func NewUdev(env map[string]string) (*Udev, error) {
+ 
+ 	if bus, ok := env["ID_BUS"]; ok {
+ 		if err := result.Bus.UnmarshalText([]byte(bus)); err != nil {
+-			return nil, fmt.Errorf("failed to parse bus: %w", err)
++			slog.Debug("ignoring unsupported udev bus", "bus", bus)
++			result.Bus = 0
+ 		}
+ 	}
+ 

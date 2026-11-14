@@ -45,12 +45,27 @@ let
       "0${hex}"
     else
       hex;
+
+  mkFacterAssignment =
+    {
+      moduleName,
+      path,
+      value,
+      facterValue ? value,
+    }:
+    lib.mkMerge [
+      (lib.setAttrByPath (lib.splitString "." path) value)
+      {
+        hardware.facter.changes = lib.setAttrByPath [ path moduleName ] facterValue;
+      }
+    ];
 in
 {
   inherit
     hasCpu
     collectDrivers
     toZeroPaddedHex
+    mkFacterAssignment
     ;
 
   hasAmdCpu = hasCpu "AuthenticAMD";
