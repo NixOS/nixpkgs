@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "driftmusic";
-  version = "1.6.1";
+  version = "1.7.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "socatlolmeow";
     repo = "drift";
-    tag = finalAttrs.version;
-    hash = "sha256-u+/SVApKIcYKXn1m9LKk2PPuajMYiZPd07ZQcaWGyeg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GAKe6EFF5s3i5wkiCLddqxvliKN9IzHghlmpBnUGi5I=";
   };
 
-  cargoHash = "sha256-ssYxPofsQdM1PJtmxNPNdwymjNPk7qlEGokDnnKOU1k=";
+  cargoHash = "sha256-otMU12RyrNCFNcyYox5EVjFLsXiZpbwIX8NXQWI6DIU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
