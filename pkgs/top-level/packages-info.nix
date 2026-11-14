@@ -5,6 +5,9 @@
 let
   pkgs = import ../.. { config = import ./packages-config.nix; };
   inherit (pkgs) lib;
+
+  inherit (import ./desktop-entries.nix { inherit lib; }) entriesOf;
+
   generateInfo =
     path: value:
     let
@@ -12,6 +15,9 @@ let
         if path == [ "AAAAAASomeThingsFailToEvaluate" ] || !(lib.isAttrs value) then
           [ ]
         else if lib.isDerivation value then
+          let
+            entries = entriesOf value;
+          in
           [
             {
               name = lib.showAttrPath path;
@@ -33,6 +39,7 @@ let
                 # the optional pattern from above.
                 pname = value.pname or value.name;
                 version = value.version or "";
+                ${if entries != [ ] then "desktopEntries" else null} = entries;
               };
             }
           ]
