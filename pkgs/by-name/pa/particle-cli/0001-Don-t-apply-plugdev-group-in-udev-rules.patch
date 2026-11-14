@@ -1,0 +1,37 @@
+From 3e25951b7681873f96542a5cec0cbf4f2701680c Mon Sep 17 00:00:00 2001
+From: Jess <jess@jessie.cafe>
+Date: Sun, 25 Jan 2026 18:35:57 +1300
+Subject: [PATCH] Don't apply plugdev group in udev rules
+
+---
+ assets/50-particle.rules | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/assets/50-particle.rules b/assets/50-particle.rules
+index 61092467..66b3d406 100644
+--- a/assets/50-particle.rules
++++ b/assets/50-particle.rules
+@@ -13,15 +13,15 @@
+ # Particle device.
+ #
+ # Core
+-SUBSYSTEMS=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="607[df]", GROUP="plugdev", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
++SUBSYSTEMS=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="607[df]", MODE="0660", TAG+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+ # Gen 2 (Photon/P1/Electron), Gen 3 (Argon/Boron/Xenon, SoM)
+-SUBSYSTEMS=="usb", ATTRS{idVendor}=="2b04", ATTRS{idProduct}=="[cd]0??", GROUP="plugdev", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
++SUBSYSTEMS=="usb", ATTRS{idVendor}=="2b04", ATTRS{idProduct}=="[cd]0??", MODE="0660", TAG+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+ # Particle Programmer Shield v1.0
+-SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", GROUP="plugdev", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
++SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="0660", TAG+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+ # Particle Debugger
+-SUBSYSTEMS=="usb", ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", GROUP="plugdev", MODE="0666", ENV{ID_MM_DEVICE_IGNORE}="1"
++SUBSYSTEMS=="usb", ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", MODE="0660", TAG+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+ # Tachyon in EDL mode
+-SUBSYSTEM=="usb", ATTRS{idProduct}=="9008", ATTRS{idVendor}=="05c6", GROUP="plugdev", MODE="0666"
++SUBSYSTEM=="usb", ATTRS{idProduct}=="9008", ATTRS{idVendor}=="05c6", MODE="0660", TAG+="uaccess"
+ #
+ # If you share your linux system with other users, or just don't like the
+ # idea of write permission for everybody, you can replace MODE:="0666" with
+-- 
+2.52.0
+
