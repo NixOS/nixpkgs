@@ -379,7 +379,8 @@ let
           serviceConfig.RestrictAddressFamilies = [
             "AF_INET"
             "AF_INET6"
-          ];
+          ]
+          ++ lib.optionals config.services.resolved.enable [ "AF_UNIX" ];
           serviceConfig.RestrictNamespaces = true;
           serviceConfig.RestrictRealtime = true;
           serviceConfig.RestrictSUIDSGID = true;
