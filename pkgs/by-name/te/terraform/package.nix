@@ -11,6 +11,7 @@
   writeText,
   terraform-providers,
   installShellFiles,
+  emptyFile,
 }:
 
 let
@@ -68,7 +69,10 @@ let
 
     passthru = {
       inherit plugins;
-      tests = { inherit terraform_plugins_test; };
+      tests = {
+        inherit terraform_plugins_test;
+        eval = evalTests emptyFile;
+      };
     };
 
     meta = {
@@ -92,9 +96,36 @@ let
   terraform_plugins_test =
     let
       mainTf = writeText "main.tf" ''
+        terraform {
+          required_providers {
+            random = {
+              source  = "hashicorp/random"
+            }
+            local = {
+              source  = "hashicorp/local"
+            }
+          }
+        }
+
         resource "random_id" "test" {}
+        resource "local_file" "test2" {}
       '';
-      terraform = (pluggable package).withPlugins (p: [ p.hashicorp_random ]);
+      terraform =
+        ((pluggable package).withPlugins (
+          p:
+          # If hashicorp_random were to be bundled by default and then
+          # null-ed out in the package set, this test would need to switch
+          # to a different provider.
+          assert lib.isDerivation p.hashicorp_random;
+          [ p.hashicorp_random ]
+        )).withPlugins
+          (
+            p:
+            assert lib.isDerivation p.hashicorp_local;
+            [
+              p.hashicorp_local
+            ]
+          );
       test = runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e
         # make it fail outside of sandbox
@@ -105,6 +136,16 @@ let
       '';
     in
     test;
+
+  evalTests =
+    ok:
+    # overrideAttrs works on withPlugins and modifies the unwrapped derivation inside
+    # See https://github.com/NixOS/nixpkgs/issues/158620
+    assert
+      (((pluggable package).withPlugins (p: [ p.hashicorp_random ])).overrideAttrs { name = "squee"; })
+      .unwrapped.name == "squee";
+
+    ok;
 
   pluggable =
     terraform:
@@ -143,9 +184,22 @@ let
             # 3. Specifying overrides on the wrapper is unsupported.
             #
             # See nixpkgs#158620 for details.
-            overrideDerivation = f: (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f: (pluggable (terraform.overrideAttrs f)).withPlugins plugins;
-            override = x: (pluggable (terraform.override x)).withPlugins plugins;
+
+            # It could be supported by getting the terraform attribute through
+            # callPackage instead, but that wouldn't solve the undoing of
+            # overrideAttrs anyway.
+            # Until we have https://github.com/NixOS/nixpkgs/issues/273815, we're
+            # better off requiring override to go first and save the user
+            # potential headaches.
+            override = abort "(terraform.withPlugins ...).override is not supported. Call .override before calling any other attributes.";
+            # Similarly, except overrideDerivation is on the way out.
+            overrideDerivation = abort "(terraform.withPlugins ...).overrideDerivation is not supported. Use overrideAttrs instead.";
+
+            /**
+              The terraform package before pinning the plugins with `withPlugins`
+            */
+            unwrapped = terraform;
           };
         in
         # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
