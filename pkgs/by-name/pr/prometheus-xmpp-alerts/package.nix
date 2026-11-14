@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "prometheus-xmpp-alerts";
     rev = "v${version}";
-    sha256 = "sha256-kXcadJnPPhMKF/1CHMLdGCqWouAKDBFTdvPpn80yK4A=";
+    sha256 = "sha256-Sag0Nm6tWGC03C+2aOMlLCZtlfj+E043tDZxR64K/Ro=";
   };
 
   postPatch = ''
