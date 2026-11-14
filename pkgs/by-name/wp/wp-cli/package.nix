@@ -10,6 +10,7 @@
   writeScript,
   nix-update,
   common-updater-scripts,
+  cacert,
   phpIniFile ? null,
 }:
 
@@ -55,7 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 ${finalAttrs.src} $out/share/wp-cli/wp-cli.phar
+    cp --no-preserve=all ${finalAttrs.src} wp-cli.phar
+    ${lib.getExe php} -d phar.readonly=0 ${./patch.php} \
+      wp-cli.phar \
+      vendor/wp-cli/wp-cli/bundle/rmccue/requests/certificates/cacert.pem \
+      ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt
+
+    install -Dm444 wp-cli.phar       $out/share/wp-cli/wp-cli.phar
     install -Dm444 ${ini}            $out/etc/${ini.name}
     installShellCompletion --bash --name wp ${completion}
 
