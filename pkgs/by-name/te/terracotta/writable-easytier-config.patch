@@ -1,0 +1,168 @@
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -40,6 +40,8 @@
+ hex = "0.4.3"
+ rand_chacha = "0.9.0"
+ parking_lot = "0.12.4"
++tempfile = "3.27.0"
++toml = "0.9.4"
+ 
+ [target.'cfg(target_os = "macos")'.dependencies]
+ objc2 = "0.6.1"
+--- a/src/easytier/executable_impl.rs
++++ b/src/easytier/executable_impl.rs
+@@ -1,8 +1,9 @@
+ use crate::easytier::argument::{Argument, PortForward};
+ use crate::ports::PortRequest;
+ use parking_lot::Mutex;
+-use std::ffi::OsString;
++use serde_json::json;
+ use std::fmt::Write;
++use std::io::Write as _;
+ use std::net::Ipv4Addr;
+ use std::str::FromStr;
+ use std::{
+@@ -32,6 +33,13 @@
+ pub struct EasyTier {
+     process: Arc<Mutex<Child>>,
+     rpc: u16,
++    _config: tempfile::TempPath,
++}
++
++fn create_config(contents: &str) -> std::io::Result<tempfile::TempPath> {
++    let mut file = tempfile::Builder::new().prefix("terracotta-easytier-").suffix(".toml").tempfile()?;
++    file.write_all(contents.as_bytes())?;
++    Ok(file.into_temp_path())
+ }
+ 
+ fn create_factory() -> EasytierFactory {
+@@ -45,49 +53,62 @@
+     EasytierFactory { exe, cli }
+ }
+ 
+-pub fn create(args: Vec<Argument>) -> EasyTier {
+-    let args = {
+-        let mut built: Vec<OsString> = Vec::with_capacity((args.len() as f32 * 1.5).floor() as usize);
+-
+-        macro_rules! push {
+-                ($($item:expr),* $(,)?) => {
+-                    built.extend_from_slice(&[$($item.into()),*])
+-                };
+-            }
+-        for arg in args {
+-            match arg {
+-                Argument::NoTun => push!["--no-tun"],
+-                Argument::Compression(method) => push![format!("--compression={}", method)],
+-                Argument::MultiThread => push!["--multi-thread"],
+-                Argument::LatencyFirst => push!["--latency-first"],
+-                Argument::EnableKcpProxy => push!["--enable-kcp-proxy"],
+-                Argument::PublicServer(server) => push!["-p", server.as_ref()],
+-                Argument::NetworkName(name) => push!["--network-name", name.as_ref()],
+-                Argument::NetworkSecret(secret) => push!["--network-secret", secret.as_ref()],
+-                Argument::Listener { address, proto } => push!["-l", format!("{}://{}", proto.name(), address)],
+-                Argument::PortForward(PortForward { local, remote, proto }) => push![
+-                        format!("--port-forward={}://{}/{}", proto.name(), local, remote)
+-                    ],
+-                Argument::DHCP => push!["-d"],
+-                Argument::HostName(name) => push!["--hostname", name.as_ref()],
+-                Argument::IPv4(address) => push!["--ipv4", address.to_string()],
+-                Argument::TcpWhitelist(port) => push![format!("--tcp-whitelist={}", port)],
+-                Argument::UdpWhitelist(port) => push![format!("--udp-whitelist={}", port)],
+-                Argument::P2POnly => push!["--p2p-only"],
++fn build_config(args: Vec<Argument>) -> String {
++    let mut config = json!({
++        "flags": {},
++        "network_identity": {},
++        "listeners": [],
++        "peer": [],
++        "port_forward": [],
++        "tcp_whitelist": [],
++        "udp_whitelist": [],
++    });
++    for argument in args {
++        match argument {
++            Argument::NoTun => config["flags"]["no_tun"] = json!(true),
++            Argument::Compression(method) => {
++                config["flags"]["data_compress_algo"] = json!(match method.as_ref() {
++                    "none" => 0,
++                    "zstd" => 2,
++                    _ => panic!("Unsupported compression method"),
++                });
+             }
++            Argument::MultiThread => config["flags"]["multi_thread"] = json!(true),
++            Argument::LatencyFirst => config["flags"]["latency_first"] = json!(true),
++            Argument::EnableKcpProxy => config["flags"]["enable_kcp_proxy"] = json!(true),
++            Argument::PublicServer(server) => config["peer"].as_array_mut().unwrap().push(json!({ "uri": server })),
++            Argument::NetworkName(name) => config["network_identity"]["network_name"] = json!(name),
++            Argument::NetworkSecret(secret) => config["network_identity"]["network_secret"] = json!(secret),
++            Argument::Listener { address, proto } => config["listeners"].as_array_mut().unwrap().push(json!(format!("{}://{}", proto.name(), address))),
++            Argument::PortForward(PortForward { local, remote, proto }) => config["port_forward"].as_array_mut().unwrap().push(json!({
++                "bind_addr": local.to_string(),
++                "dst_addr": remote.to_string(),
++                "proto": proto.name(),
++            })),
++            Argument::DHCP => config["dhcp"] = json!(true),
++            Argument::HostName(name) => config["hostname"] = json!(name),
++            Argument::IPv4(address) => config["ipv4"] = json!(address.to_string()),
++            Argument::TcpWhitelist(port) => config["tcp_whitelist"].as_array_mut().unwrap().push(json!(port.to_string())),
++            Argument::UdpWhitelist(port) => config["udp_whitelist"].as_array_mut().unwrap().push(json!(port.to_string())),
++            Argument::P2POnly => config["flags"]["p2p_only"] = json!(true),
+         }
+-        built
+-    };
++    }
++    toml::to_string(&config).unwrap()
++}
+ 
++pub fn create(args: Vec<Argument>) -> EasyTier {
+     fs::metadata(&FACTORY.exe).unwrap();
+ 
++    let config = create_config(&build_config(args)).unwrap();
+     let rpc = PortRequest::EasyTierRPC.request();
+ 
+-    logging!("Easytier", "Starting easytier: {:?}, rpc={}", args, rpc);
++    logging!("Easytier", "Starting easytier with a session configuration, rpc={}", rpc);
+ 
+     let mut process = Command::new(FACTORY.exe.as_path());
+     process
+-        .args(args)
++        .arg("--config-file")
++        .arg(config.as_os_str())
++        .arg("--disable-env-parsing")
+         .args(["-r", &rpc.to_string()])
+         .current_dir(env::temp_dir())
+         .stdout(Stdio::piped())
+@@ -99,7 +120,13 @@
+         process.creation_flags(0x08000000);
+     }
+ 
+-    let mut process = process.spawn().unwrap();
++    let mut process = match process.spawn() {
++        Ok(process) => process,
++        Err(error) => {
++            drop(config);
++            panic!("Cannot start EasyTier: {}", error);
++        }
++    };
+ 
+     let (sender, receiver) = mpsc::channel::<String>();
+     forward_std(&mut process, move |line| {
+@@ -157,7 +184,7 @@
+         logging!("Easytier", "{}", output);
+     });
+ 
+-    EasyTier { process, rpc }
++    EasyTier { process, rpc, _config: config }
+ }
+ 
+ pub fn cleanup() {
+@@ -294,6 +321,8 @@
+ impl Drop for EasyTier {
+     fn drop(&mut self) {
+         logging!("EasyTier", "Killing EasyTier.");
+-        let _ = self.process.lock().kill();
++        let mut process = self.process.lock();
++        let _ = process.kill();
++        let _ = process.wait();
+     }
+ }
