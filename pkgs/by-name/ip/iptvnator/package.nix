@@ -17,26 +17,41 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iptvnator";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "4gray";
     repo = "iptvnator";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WcWvMBpJWrQsqvI40YOocS1seEXyiGkXwH9RiTdTVog=";
+    hash = "sha256-/TN5SQsMVkuJq8YPVnrvN4iD0vMGNK1+Cqem4LJrwTU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-7Z6TyZ0krE/0okcURf8sVVO//4xxMj/11EZKS0IwNns=";
+    hash = "sha256-8lbvagysjaB7YiwQ8lk89Pa0OsHuxiSY9Fp7alTV0CI=";
   };
+
+  patches = [
+    # @swc/core 1.16's native binding cache check rejects the Nix build sandbox
+    # (ancestors owned by the unmapped nobody uid); fixed upstream in swc
+    # >= 1.16.20. Drop once 4gray/iptvnator#2182 lands in a release.
+    ./update-swc-core.patch
+  ];
 
   __structuredAttrs = true;
   strictDeps = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  # @angular/build's sass-embedded dart child can't exec in the Nix sandbox
+  # (glibc binary); force the pure-JS sass compiler instead.
+  env.NG_BUILD_SASS_EMBEDDED = "0";
 
   nativeBuildInputs = [
     nodejs
@@ -84,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     faketty pnpm run build:backend
+    faketty pnpm nx run web-backend:build
+    faketty pnpm nx run web:build-hosted
 
     runHook postBuild
   '';
@@ -96,7 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
         | .linux.target = [{"target": "dir", "arch": ["x64"]}]
         | .afterPack = null
         | (["**/*", "!**/*.map"] as $packFilter
-           | .files = (["package.json"] + (["remote-control-web", "electron-backend", "web"] | map({from: "dist/apps/\(.)", to: ., filter: $packFilter}))))' \
+           | .files = (["package.json"] + (["remote-control-web", "electron-backend", "web"] | map({from: "dist/apps/\(.)", to: ., filter: $packFilter}))
+         + [{from: "dist/apps/web-backend", to: "hosted-backend", filter: $packFilter},
+            {from: "dist/apps/hosted-pwa/browser", to: "hosted-pwa", filter: $packFilter}]))' \
        electron-builder.json > dist/electron-builder.nix.json
 
     npm exec electron-builder -- \
