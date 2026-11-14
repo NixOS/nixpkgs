@@ -126,7 +126,7 @@ import ../../make-test-python.nix (
           environment = {
             etc = {
               "mastodon/password-redis-db".text = redisPassword;
-              "mastodon/password-posgressql-db".text = postgresqlPassword;
+              "mastodon/password-postgresql-db".text = postgresqlPassword;
             };
           };
 
@@ -149,7 +149,6 @@ import ../../make-test-python.nix (
           services.mastodon = {
             enable = true;
             configureNginx = false;
-            localDomain = "mastodon.local";
             enableUnixSocket = false;
             streamingProcesses = 2;
             redis = {
@@ -164,18 +163,19 @@ import ../../make-test-python.nix (
               port = 5432;
               name = "mastodon";
               user = "mastodon";
-              passwordFile = "/etc/mastodon/password-posgressql-db";
             };
             smtp = {
               createLocally = false;
               fromAddress = "mastodon@mastodon.local";
             };
-            extraConfig = {
+            trustedProxy = "192.168.2.103";
+            settings = {
+              LOCAL_DOMAIN = "mastodon.local";
               BIND = "0.0.0.0";
               EMAIL_DOMAIN_ALLOWLIST = "example.com";
               RAILS_SERVE_STATIC_FILES = "true";
-              TRUSTED_PROXY_IP = "192.168.2.103";
             };
+            secrets.DB_PASS = "/etc/mastodon/password-postgresql-db";
           };
         };
 
