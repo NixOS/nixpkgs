@@ -2,6 +2,7 @@
   lib,
   stdenv,
   mpv-unwrapped,
+  targetFlutterPlatform ? null,
 }:
 
 { version, src, ... }:
@@ -13,10 +14,12 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  postPatch = ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux || targetFlutterPlatform == "macos") ''
     pushd '${src.passthru.packageRoot}'
     substituteInPlace lib/src/player/native/core/native_library.dart \
-      --replace-fail "Platform.environment['LIBMPV_LIBRARY_PATH']" '"${lib.getLib mpv-unwrapped}/lib/libmpv.so"'
+      --replace-fail "Platform.environment['LIBMPV_LIBRARY_PATH']" '"${lib.getLib mpv-unwrapped}/lib/libmpv.${
+        if stdenv.hostPlatform.isDarwin then "dylib" else "so"
+      }"'
     popd
   '';
 

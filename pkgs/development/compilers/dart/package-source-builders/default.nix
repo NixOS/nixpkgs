@@ -1,4 +1,7 @@
-{ callPackage }:
+{
+  callPackage,
+  targetFlutterPlatform ? null,
+}:
 
 {
   file_picker = callPackage ./file_picker { };
@@ -7,12 +10,19 @@
   flutter_vodozemac = callPackage ./flutter_vodozemac { };
   flutter_volume_controller = callPackage ./flutter_volume_controller { };
   flutter_webrtc = callPackage ./flutter_webrtc { };
-  fvp = callPackage ./fvp { };
+  fvp = callPackage ./fvp { inherit targetFlutterPlatform; };
   handy_window = callPackage ./handy-window { };
   hotkey_manager_linux = callPackage ./hotkey_manager_linux { };
   matrix = callPackage ./matrix { };
-  media_kit = callPackage ./media_kit { };
+  media_kit = callPackage ./media_kit { inherit targetFlutterPlatform; };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
+  media_kit_libs_macos_video =
+    if targetFlutterPlatform == "macos" then
+      callPackage ./media_kit_libs_macos_video { }
+    else
+      ({ src, ... }: src);
+  media_kit_video =
+    if targetFlutterPlatform == "macos" then callPackage ./media_kit_video { } else ({ src, ... }: src);
   olm = callPackage ./olm { };
   pdfium_dart = callPackage ./pdfium_dart { };
   pdfium_flutter = callPackage ./pdfium_flutter { };
@@ -21,8 +31,8 @@
   rhttp = callPackage ./rhttp { };
   sentry_flutter = callPackage ./sentry_flutter { };
   sqlcipher_flutter_libs = callPackage ./sqlcipher_flutter_libs { };
-  sqlite3 = callPackage ./sqlite3 { };
-  sqlite3_flutter_libs = callPackage ./sqlite3_flutter_libs { };
+  sqlite3 = callPackage ./sqlite3 { inherit targetFlutterPlatform; };
+  sqlite3_flutter_libs = callPackage ./sqlite3_flutter_libs { inherit targetFlutterPlatform; };
   system_tray = callPackage ./system-tray { };
   super_native_extensions = callPackage ./super_native_extensions { };
   volume_controller = callPackage ./volume_controller { };

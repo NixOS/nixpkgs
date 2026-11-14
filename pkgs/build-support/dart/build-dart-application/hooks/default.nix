@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   makeSetupHook,
   dart,
   yq,
@@ -29,6 +30,7 @@
   } ./dart-install-hook.sh;
   dartFixupHook = makeSetupHook {
     name = "dart-fixup-hook";
+    substitutions.isDarwin = lib.boolToString stdenv.hostPlatform.isDarwin;
     meta.license = lib.licenses.mit;
   } ./dart-fixup-hook.sh;
 }

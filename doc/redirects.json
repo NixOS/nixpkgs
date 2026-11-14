@@ -3451,6 +3451,9 @@
   "ssec-dart-flutter": [
     "index.html#ssec-dart-flutter"
   ],
+  "ssec-dart-flutter-macos": [
+    "index.html#ssec-dart-flutter-macos"
+  ],
   "ssec-dart-flutter-nix-shell": [
     "index.html#ssec-dart-flutter-nix-shell"
   ],
