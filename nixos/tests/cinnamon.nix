@@ -22,6 +22,10 @@
       services.xserver.displayManager.lightdm.greeters.slick.extraConfig = ''
         enable-hidpi = on
       '';
+      virtualisation.resolution = {
+        x = 1920;
+        y = 1080;
+      };
     };
 
   enableOCR = true;
