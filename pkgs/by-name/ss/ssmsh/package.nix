@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ssmsh";
-  version = "1.4.9";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "bwhaley";
     repo = "ssmsh";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UmfwDukRVyfX+DmUfRi+KepqFrPtDNImKd22/dI7ytk=";
+    sha256 = "sha256-mRSBMX0pP7joCjd0AJ5qfxRlmrr6OIv1uoB+C+PMvws=";
   };
 
-  vendorHash = "sha256-+7duWRe/haBOZbe18sr2qwg419ieEZwYDb0L3IPLA4A=";
+  vendorHash = "sha256-0hcx1prj6JVgC/Ji/R1wIbGlgqThTylGHyTxKnJ5uWc=";
 
   doCheck = true;
 
