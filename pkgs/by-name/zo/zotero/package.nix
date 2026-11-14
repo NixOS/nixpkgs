@@ -40,15 +40,22 @@ let
     hash = "sha256-FeMoYV5T8cNzdPRFZ/EIr/z4DP3AexANoVmlrtFdm1k=";
   };
 
+  oneCrl = fetchurl {
+    # https://firefox.settings.services.mozilla.com/v1/buckets/security-state/collections/onecrl/changeset?_expected=0 is probably mutable
+    url = "https://web.archive.org/web/20261107133341/https://firefox.settings.services.mozilla.com/v1/buckets/security-state/collections/onecrl/changeset?_expected=0";
+    name = "firefox-onecrl";
+    hash = "sha256-dcYd2cPIGHZKqDBYOQra8i866wh4Owl17k7WYoDKbM4=";
+  };
+
   pname = "zotero";
-  version = "10.0.6";
+  version = "10.0.9";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-x3Y+rDhfhAA54MgTRQeME8eAjfmWKuz7XitdUrCjEoQ=";
+    hash = "sha256-obcPnD+Guryg8i/oI5EpizC20Ev6NNew0abH6yk5KHo=";
   };
 
   pdf-js = buildNpmPackage {
@@ -247,6 +254,9 @@ buildNpmPackage (finalAttrs: {
     chmod -R u+w note-editor
 
     patchShebangs --build app/ test/
+
+    substituteInPlace app/scripts/fetch_onecrl \
+      --replace-fail 'curl -sSf --retry 3 "$URL" -o "$tmp_file"' 'cp "${oneCrl}" "$tmp_file"'
 
     # Skip some flaky/failing tests
     rm test/tests/retractionsTest.js test/tests/debugTest.js
