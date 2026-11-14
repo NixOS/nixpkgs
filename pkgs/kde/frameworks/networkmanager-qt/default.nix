@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  lib,
   qtdeclarative,
   pkg-config,
   networkmanager,
@@ -10,4 +11,6 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [ qtdeclarative ];
   extraPropagatedBuildInputs = [ networkmanager ];
+
+  meta.badPlatforms = lib.platforms.darwin;
 }
