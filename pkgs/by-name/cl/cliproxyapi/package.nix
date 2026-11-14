@@ -11,16 +11,16 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "cliproxyapi";
-  version = "8.0.67";
+  version = "8.0.71";
 
   src = fetchFromGitHub {
     owner = "router-for-me";
     repo = "CLIProxyAPI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-njk9i5JbHvJ3lTB7Bn0wTxFtmcJ5MEokgdOHNhzDPPY=";
+    hash = "sha256-YPv0Dpyd0dH+snScByPaA/84us68BEKSrJ0MYjsuphE=";
   };
 
-  vendorHash = "sha256-02Qqrs9lQ0kE+Tnk/SWvlkLXGSh8RQPxRawFZogRYNc=";
+  vendorHash = "sha256-80mI9hXcDVaCmnbpq9PgfTUmLw/xZ8sWNpPJo5f1YJc=";
 
   subPackages = [ "cmd/server" ];
 
@@ -31,6 +31,8 @@ buildGoModule (finalAttrs: {
     "-X main.Commit=v${finalAttrs.version}"
     "-X main.BuildDate=1970-01-01"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     mv $out/bin/server $out/bin/cliproxyapi
