@@ -1,0 +1,6 @@
+--- a/library.lisp
++++ b/library.lisp
+@@ -12,2 +12,2 @@
+   #+unix
+-  (namestring (or (probe-file "/usr/local/share/tessdata") ; Homebrew
++  (namestring (or (probe-file "@tesseract@/share/tessdata") ; Nixpkgs
