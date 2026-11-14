@@ -19,14 +19,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "metadata-cleaner";
-  version = "4.0.1";
+  version = "4.0.0";
   pyproject = false;
 
   src = fetchFromGitLab {
     owner = "metadatacleaner";
     repo = "metadatacleaner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A8muBAHJUgSjksBWL/wr8WgJFUYyUOj+DE6mmHaKB0E=";
+    hash = "sha256-9e8uH//FtufYUsvule3JirkeHTjDMebruZ3bAYyDVWY=";
   };
 
   nativeBuildInputs = [
