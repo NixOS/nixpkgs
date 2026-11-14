@@ -208,6 +208,15 @@ in
         assertion = (cfg.domain == null || match "https?://.*" cfg.domain != null);
         message = "`services.pelican-panel.domain` must be `null` or a valid URL";
       }
+      {
+        assertion =
+          !(
+            cfg.database.type == "pgsql"
+            && (mergedConfig.DB_USERNAME != mergedConfig.DB_DATABASE)
+            && cfg.database.createLocally
+          );
+        message = "`services.pelican-panel.environment.DB_USERNAME` must match `services.pelican-panel.environment.DB_DATABASE` when using postgresql locally";
+      }
     ];
 
     users = {
