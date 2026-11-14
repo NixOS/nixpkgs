@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
   makeWrapper,
+
+  cmake,
   curl,
   freetype,
   geos,
@@ -12,27 +12,27 @@
   libgeotiff,
   libjpeg,
   libtiff,
+  libuuid,
   proj,
   sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ossim";
-  version = "2.12.0";
+  version = "2.12.1-unstable-2026-07-24";
 
   src = fetchFromGitHub {
     owner = "ossimlabs";
     repo = "ossim";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-nVQN+XnCYpVQSkgKsolqbR3KtPGTkvpym4cDl7IqjUc=";
+    rev = "9efc0b6a21af7e0017fe2a40027026e9f887ed59";
+    hash = "sha256-ExW1tpFe7LAKAj9JqZchJepP648hooF33ue0kDL+q+A=";
   };
 
   patches = [
-    # Fixed build error gcc version 15.0.1
-    (fetchpatch {
-      url = "https://github.com/ossimlabs/ossim/commit/13b9fa9ae54f79a7e7728408de6246e00d38f399.patch";
-      hash = "sha256-AKzOT+JurB/54gvzn2a5amw+uIupaNxssnEhc8CSfPM=";
-    })
+    # Fix incorrect (non-"ossim/"-prefixed) includes that a few files use,
+    # inconsistent with the rest of the tree, causing them to fail to find headers.
+    # https://github.com/ossimlabs/ossim/pull/357
+    ./fix-include-paths.patch
   ];
 
   postPatch = ''
@@ -54,11 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     libgeotiff
     libjpeg
     libtiff
+    libuuid
     proj
     sqlite
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "USE_OSSIM_JSONCPP" false)
     (lib.cmakeBool "BUILD_OSSIM_TESTS" false)
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
