@@ -347,15 +347,21 @@ can be applied to any service.
 }
 ```
 
-## Regenerating certificates {#module-security-acme-regenerate}
+## Regenerating accounts and certificates {#module-security-acme-regenerate}
 
-Should you need to regenerate a particular certificate in a hurry, such
-as when a vulnerability is found in Let's Encrypt, there is now a convenient
-mechanism for doing so. Running
-`systemctl clean --what=state acme-example.com.service`
-will remove all certificate files and the account data for the given domain,
-allowing you to then `systemctl start acme-example.com.service`
-to generate fresh ones.
+Should you encounter an issue with your certificate or account, or need
+to regenerate a particular certificate in a hurry, there is now a convenient
+mechanism for doing so:
+
+```sh
+# The service must be stopped to be cleaned.
+systemctl stop acme-order-renew-example.com.service
+systemctl clean --what=state acme-order-renew-example.com.service
+systemctl start acme-order-renew-example.com.service
+```
+
+This will remove all certificate files and the account data for the given
+domain, and then generate fresh ones.
 
 ## Fixing JWS Verification error {#module-security-acme-fix-jws}
 
