@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "10.6.0";
+  version = "11.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-jRGU37U39wSArJfJxF3UByHPTDJsmQP76ZfbZ6TbYZU=";
+    hash = "sha256-VFAkfMiFrAwlLw16TPkWCPRUN3xviOV5vJ6tQQr1DDY=";
   };
 
   build-system = [ hatchling ];
