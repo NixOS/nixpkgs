@@ -47,6 +47,9 @@ for arg in "$@" $CLANGD_FLAGS; do
 done
 
 if [ "$extendcpath" = true ]; then
+  source @clang@/nix-support/utils.bash
+  source @clang@/nix-support/darwin-sdk-setup.bash
+
   export C_INCLUDE_PATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
                                                           $(<@clang@/nix-support/libc-cflags))
 
