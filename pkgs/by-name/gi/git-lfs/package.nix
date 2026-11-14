@@ -49,6 +49,20 @@ buildGoModule (finalAttrs: {
 
   preCheck = ''
     unset subPackages
+  ''
+  # Explicitly set Git config options that are required for the git-lfs test
+  # suite to the Git v2 defaults.  This will have no impact if the tests are
+  # run using a regular v2 build of `pkgs.git`, but -- at least until there's
+  # an upstream fix -- is necessary for `pkgs.git.override
+  # { withBreakingChanges = true; }`, and will be necessary once Nixpkgs
+  # moves to Git v3.
+  #
+  # https://github.com/git-lfs/git-lfs/issues/6391
+  + ''
+    GIT_CONFIG_GLOBAL="$(mktemp --tmpdir gitconfig.XXX)"
+    export GIT_CONFIG_GLOBAL
+    git config --global init.defaultBranch master
+    git config --global safe.bareRepository all
   '';
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin (
