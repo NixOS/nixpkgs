@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -45,7 +46,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "51.0.1";
+  version = "51.1";
 
   outputs = [
     "out"
@@ -55,12 +56,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-oA25CP1lAmy9XcY04S0YnejrorA/EF0kJTQXaKXukvs=";
+    hash = "sha256-pwO8FS0Y0WHZ2rlX4jkKNuYka7XCTeexXJYk/PovKBY=";
   };
 
   patches = [
     # Allow changing extension directory using environment variable.
     ./extension_dir.patch
+
+    # Required for the next patch to apply
+    (fetchpatch {
+      name = "remove-unused-headers-in-nautilus-file-operations.patch";
+      url = "https://gitlab.gnome.org/GNOME/nautilus/-/commit/d50d83122c512a5b2bbe31f1ca23e1ef2d777182.patch";
+      includes = [ "src/nautilus-file-operations.c" ];
+      hash = "sha256-JFBAg3TQlt048GxatCYJGtd/AXKQBSOBswFW0aPZm+I=";
+    })
+    # https://gitlab.gnome.org/GNOME/nautilus/-/merge_requests/2179
+    (fetchpatch {
+      name = "CVE-2026-111802.patch";
+      url = "https://gitlab.gnome.org/GNOME/nautilus/-/commit/0aa4ddabb73287612c3effa3b84955e0afca2e14.patch";
+      hash = "sha256-mWRAtldofAzIm/OVocFUC2VnlO3k19xhZeHKN/1pEZ4=";
+    })
   ];
 
   nativeBuildInputs = [

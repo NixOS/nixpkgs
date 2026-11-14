@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "51.0";
+  version = "51.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-q68zV2RiAwxlu5Y6VjAKd4bn11g08ckKnf/ahzg1wz0=";
+    hash = "sha256-5F2TSD1ivusms2s5/i+MtVEf/m3czH/t/1Wx48wKXDA=";
   };
 
   nativeBuildInputs = [

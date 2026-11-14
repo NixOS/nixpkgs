@@ -3,6 +3,7 @@
   lib,
   buildPackages,
   fetchurl,
+  fetchpatch,
   pkg-config,
   gnome,
   _experimental-update-script-combinators,
@@ -46,11 +47,12 @@
   protobuf,
   libiconv,
   makeHardcodeGsettingsPatch,
+  evolution,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evolution-data-server";
-  version = "3.62.0";
+  version = "3.62.1";
 
   outputs = [
     "out"
@@ -59,13 +61,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor finalAttrs.version}/evolution-data-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eL6I6aUR9a/n/y42Pq3oS2It0CgmR/xXbtstT/KWLLo=";
+    hash = "sha256-t1yCNEXX0wvKeX7ukpgJ6NOJq7uNRx9orir2CXJ3nyY=";
   };
 
   patches = [
     # Avoid using wrapper function, which the hardcode gsettings
     # patch generator cannot handle.
     ./drop-tentative-settings-constructor.patch
+
+    # Follow-up patch for CVE-2026-110777 fix
+    # https://gitlab.gnome.org/GNOME/evolution-data-server/-/issues/672
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/evolution-data-server/-/commit/15b3c521dd16d6b6f822332291b33f4b4cbb2db9.patch";
+      hash = "sha256-1wicY4s6jyRcLynRSPYHIXLlE2qxHbCQi61rokJKgzU=";
+    })
   ];
 
   prePatch = ''
@@ -180,6 +189,9 @@ stdenv.mkDerivation (finalAttrs: {
         "org.gnome.desktop.interface" = "GDS";
       };
       inherit (finalAttrs) src patches;
+    };
+    tests = {
+      inherit evolution;
     };
     updateScript =
       let
