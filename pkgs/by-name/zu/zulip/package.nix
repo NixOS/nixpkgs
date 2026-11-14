@@ -8,6 +8,7 @@
   pnpmConfigHook,
   python3,
   electron_45,
+  cacert,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7U26LEHueQzNURp8sQuHwzc7zHD0mNXMCxPTeMf0s4Y=";
   };
 
+  env = {
+    npm_package_config_node_gyp_nodedir = "${electron.headers}";
+  };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    cacert
+  ];
+
   nativeBuildInputs = [
     nodejs
     pnpm
@@ -50,10 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    cp -r ${electron.dist} electron-dist
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # on darwin, `electron-dist` needs to be read/writable else encounter `EACCES: permission denied, open ...`
+      chmod -R u+w electron-dist
+    ''}
+
     pnpm exec electron-vite build
-    npm_package_config_node_gyp_nodedir=${electron.headers} \
-      pnpm exec electron-builder --dir \
-      -c.electronDist=${electron.dist} \
+    pnpm exec electron-builder --dir \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -63,14 +77,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/share/lib/zulip"
-    cp -r dist/*-unpacked/resources/app.asar* "$out/share/lib/zulip/"
-
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp -r dist/*-unpacked/resources/app.asar* "$out/share/lib/zulip/"
     makeBinaryWrapper '${lib.getExe electron}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
       --inherit-argv0
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r dist/mac*/Zulip.app $out/Applications
+    makeBinaryWrapper "$out/Applications/Zulip.app/Contents/MacOS/Zulip" "$out/bin/zulip"
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -98,8 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/zulip/zulip-desktop";
     changelog = "https://github.com/zulip/zulip-desktop/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ andersk ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      andersk
+      debtquity
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "zulip";
   };
 })
