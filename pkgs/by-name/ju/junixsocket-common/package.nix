@@ -13,6 +13,9 @@ fetchMavenArtifact {
     description = "Java/JNI library that allows the use of Unix Domain Sockets (AF_UNIX sockets) and other socket types, such as AF_TIPC and AF_VSOCK, from Java, using the standard Socket API";
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    maintainers = [ lib.maintainers.vog ];
+    maintainers = with lib.maintainers; [
+      vog
+      anish
+    ];
   };
 }
