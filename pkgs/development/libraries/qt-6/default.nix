@@ -6,6 +6,7 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
+  fetchFromGitHub,
   fetchpatch2,
   makeSetupHook,
   makeWrapper,
@@ -24,6 +25,19 @@ let
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://qt";
+  }
+  // {
+    # qtpim has no official releases
+    qtpim = rec {
+      version = "6.12.0-beta1-unstable-2026-07-06";
+      src = fetchFromGitHub {
+        owner = "qt";
+        repo = "qtpim";
+        rev = "d03b5f636cd109848eacd8742f972b141805f365";
+        hash = "sha256-AekhLGv8IOaC4cB1sVmorwiEkj1+fBPpQEMu17S3mNo=";
+        name = "qtpim-src-${version}";
+      };
+    };
   };
 
   addPackages =
@@ -93,6 +107,7 @@ let
       };
       qtmqtt = callPackage ./modules/qtmqtt.nix { };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
+      qtpim = callPackage ./modules/qtpim.nix { };
       qtpositioning = callPackage ./modules/qtpositioning.nix { };
       qtsensors = callPackage ./modules/qtsensors.nix { };
       qtserialbus = callPackage ./modules/qtserialbus.nix { };
