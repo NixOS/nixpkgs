@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-DnFmqbGpeACwpib+my1Np4USBA6SBmG6QWmscOSqN5k=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./0001-fix-charconv_compat-fix-ifdef-tests-for-non-apple-cl.patch
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -66,7 +70,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kuflierl
     ];
-    # last successful hydra build on darwin was in 2025
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

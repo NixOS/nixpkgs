@@ -1,0 +1,39 @@
+From 5802167efafd8d8102a4f95a43c7ea0126a4d83a Mon Sep 17 00:00:00 2001
+From: kuflierl <41301536+kuflierl@users.noreply.github.com>
+Date: Thu, 5 Nov 2026 13:37:48 +0100
+Subject: [PATCH] fix(charconv_compat): fix ifdef tests for non-apple clang
+
+Co-authored-by: Francesco Pretto <ceztko@gmail.com>
+---
+ src/podofo/private/charconv_compat.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/podofo/private/charconv_compat.h b/src/podofo/private/charconv_compat.h
+index 3997645..6718a39 100644
+--- a/src/podofo/private/charconv_compat.h
++++ b/src/podofo/private/charconv_compat.h
+@@ -1,17 +1,17 @@
+ #ifndef CHARCONV_COMPAT_H
+ #define CHARCONV_COMPAT_H
+ 
+-// Check for Apple targets runtime checks for std::from_chars availability. CHECK-ME: watchOS, tvOS, visionOS???
++// Check for Apple targets runtime checks for std::from_chars availability. CHECK-ME: visionOS???
+ // Should fix https://github.com/podofo/podofo/issues/290
+-#if defined(__apple_build_version__) && __apple_build_version__ >= 17000000 && ((defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED < 260000) || (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 260000))
++#if defined(__APPLE__) && defined(__clang__) && ((defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ < 260000) || (defined(__ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__) && __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ < 260000) || (defined(__ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__) && __ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__ < 260000) || (defined(__ENVIRONMENT_WATCH_OS_VERSION_MIN_REQUIRED__) && __ENVIRONMENT_WATCH_OS_VERSION_MIN_REQUIRED__ < 260000))
+ // The following avoids including from_chars_floating_point.h
+ #define _LIBCPP___CHARCONV_FROM_CHARS_FLOATING_POINT_H
+ #define FROM_CHARS_APPLE_TARGET_TOO_LOW
+ #endif
+ 
+-// Check for Apple targets runtime checks for std::to_chars availability. CHECK-ME: watchOS, tvOS, visionOS???
++// Check for Apple targets runtime checks for std::to_chars availability. CHECK-ME: visionOS???
+ // Should fix https://github.com/podofo/podofo/issues/295
+-#if defined(__apple_build_version__) && __apple_build_version__ >= 17000000 && ((defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED < 130300) || (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 130300))
++#if defined(__APPLE__) && defined(__clang__) && ((defined(__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__) && __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ < 130300) || (defined(__ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__) && __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ < 160300) || (defined(__ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__) && __ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__ < 160300) || (defined(__ENVIRONMENT_WATCH_OS_VERSION_MIN_REQUIRED__) && __ENVIRONMENT_WATCH_OS_VERSION_MIN_REQUIRED__ < 90300))
+ // The following avoids including to_chars_floating_point.h
+ #define _LIBCPP___CHARCONV_TO_CHARS_FLOATING_POINT_H
+ #define TO_CHARS_APPLE_TARGET_TOO_LOW
+-- 
+2.54.0
+
