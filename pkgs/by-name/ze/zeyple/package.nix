@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "zeyple";
-  version = "unstable-2021-04-10";
+  version = "2.0.0";
 
   pyproject = false;
 
