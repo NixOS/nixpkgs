@@ -5,7 +5,8 @@
 }:
 
 let
-  testBase =
+  mkTestBase =
+    flavor:
     { config, pkgs, ... }:
     {
       imports = [
@@ -33,7 +34,7 @@ let
       # This needs to be a "secure" password, since the password_policy app is enabled after installation and will forbid "simple" passwords.
       adminpass = lib.mkDefault "+CVpTwaOEktxsFc6";
 
-      nodes = {
+      ${flavor} = {
         client = { ... }: { };
         nextcloud =
           { lib, ... }:
@@ -49,7 +50,7 @@ let
       };
 
       testScript =
-        args@{ nodes, ... }:
+        args@{ nodes, containers, ... }:
         let
           inherit (config) test-helpers;
           rclone = "${pkgs.writeShellScript "rclone" ''
@@ -123,27 +124,49 @@ let
     attr: package:
     lib.mapAttrs
       (
-        name: path:
+        name:
+        {
+          path,
+          flavor ? "nodes",
+        }:
         runTest (
           import path {
             inherit
-              testBase
               package
               runTest
+              flavor
               ;
             name = "${attr}-${name}";
+            testBase = mkTestBase flavor;
           }
         )
       )
       {
-        basic = ./basic.nix;
-        home-bindmout = ./home-bindmount.nix;
-        home-mount = ./home-mount.nix;
-        with-declarative-redis-and-secrets = ./with-declarative-redis-and-secrets.nix;
-        with-mysql-and-memcached = ./with-mysql-and-memcached.nix;
-        with-postgresql-and-redis = ./with-postgresql-and-redis.nix;
-        with-objectstore = ./with-objectstore.nix;
-        with-mail = ./with-mail.nix;
+        basic = {
+          path = ./basic.nix;
+        };
+        home-bindmout = {
+          path = ./home-bindmount.nix;
+        };
+        home-mount = {
+          path = ./home-mount.nix;
+        };
+        with-declarative-redis-and-secrets = {
+          path = ./with-declarative-redis-and-secrets.nix;
+          flavor = "containers";
+        };
+        with-mysql-and-memcached = {
+          path = ./with-mysql-and-memcached.nix;
+        };
+        with-postgresql-and-redis = {
+          path = ./with-postgresql-and-redis.nix;
+        };
+        with-objectstore = {
+          path = ./with-objectstore.nix;
+        };
+        with-mail = {
+          path = ./with-mail.nix;
+        };
       };
 in
 lib.mapAttrs genTests packages
