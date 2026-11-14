@@ -11,6 +11,7 @@
   trio,
   uvicorn,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -48,7 +49,10 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
   versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "ddgs" ];
