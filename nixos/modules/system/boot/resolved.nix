@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   utils,
   ...
 }:
@@ -49,6 +50,8 @@ let
     ) (lib.filterAttrs (key: value: value != null) settings);
 
   resolvedConf = settingsToSections { Resolve = transformSettings cfg.settings.Resolve; };
+
+  rrFormat = pkgs.formats.json { };
 in
 {
   imports = [
@@ -155,6 +158,14 @@ in
         );
       };
 
+      rr = mkOption {
+        description = ''
+          Local static DNS resource record definitions.
+          See {manpage}`systemd.rr(5)` for all available options.
+        '';
+        default = { };
+        type = types.attrsOf rrFormat.type;
+      };
     };
 
     boot.initrd.services.resolved.enable = mkOption {
@@ -199,7 +210,10 @@ in
         ]
         ++ mapAttrsToList (
           name: _: config.environment.etc."systemd/dns-delegate.d/${name}.dns-delegate".source
-        ) cfg.dnsDelegates;
+        ) cfg.dnsDelegates
+        ++ mapAttrsToList (
+          name: _: config.environment.etc."systemd/resolve/static.d/${name}.rr".source
+        ) cfg.rr;
         stopIfChanged = false;
       };
 
@@ -218,7 +232,13 @@ in
         nameValuePair "systemd/dns-delegate.d/${name}.dns-delegate" {
           text = settingsToSections (transformSettings value);
         }
-      ) cfg.dnsDelegates;
+      ) cfg.dnsDelegates
+      // mapAttrs' (
+        name: value:
+        nameValuePair "systemd/resolve/static.d/${name}.rr" {
+          source = rrFormat.generate "${name}.rr" value;
+        }
+      ) cfg.rr;
 
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";
