@@ -5,18 +5,18 @@
 }:
 
 let
-  version = "137.3.0";
+  version = "150.4.0";
   hashes = {
-    x86_64-linux = "0rv5nl4gcbvdpk3mdwbqvw180nfx2wk173q1cqrvv2h1agg1ys52";
-    aarch64-linux = "14kci8zl7i5cjrbf2jyky5i9gpa4bsjw8khfk4xc8yf1875x0s73";
-    aarch64-darwin = "0w70ykqip4a84z3cb5vibdqw91lywwahl9pc05mw8lp54ikksl30";
+    x86_64-linux = "0xml6268gjs2pj7xf50gx3ly337c63j5l724b9hgrwfi235651zl";
+    aarch64-linux = "09x5ck4fh3i90dfx1apambmmif0pwm18p19jdxwsb5m32lw2i7jk";
+    aarch64-darwin = "1343g7vh3wa3vjaafif6v5gnb6chn7aq7bvh3nn7j6qcba6zvvss";
   };
 in
 stdenv.mkDerivation {
   name = "librusty_v8-${version}";
 
   src = fetchurl {
-    url = "https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_release_${stdenv.hostPlatform.rust.rustcTarget}.a.gz";
+    url = "https://github.com/denoland/rusty_v8/releases/download/v${version}/librusty_v8_simdutf_release_${stdenv.hostPlatform.rust.rustcTarget}.a.gz";
     sha256 =
       hashes.${stdenv.hostPlatform.system}
         or (throw "librusty_v8: unsupported platform ${stdenv.hostPlatform.system}");
