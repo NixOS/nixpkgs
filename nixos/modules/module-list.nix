@@ -1577,6 +1577,7 @@
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
   ./services/security/crowdsec
+  ./services/security/crowdsec-blocklist-import.nix
   ./services/security/crowdsec-firewall-bouncer.nix
   ./services/security/e-imzo.nix
   ./services/security/endlessh-go.nix
