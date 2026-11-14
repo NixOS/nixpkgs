@@ -30,13 +30,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlp";
-  version = "1.10.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     tag = finalAttrs.version;
-    hash = "sha256-/xTg53eJ+AKrlG++nQGLsosaWzg1JrwGIGB2+h0MZDI=";
+    hash = "sha256-EvE34TlrtUZW4vVkULmTY02WSlO9/znyrMkWUQHm7io=";
   };
 
   # XXX: See patch files for relevant explanations.
