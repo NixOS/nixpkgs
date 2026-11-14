@@ -378,6 +378,11 @@
     github = "7karni";
     githubId = 234714120;
   };
+  _7nzzbzn5dt-art = {
+    name = "7nzzbzn5dt-art";
+    github = "7nzzbzn5dt-art";
+    githubId = 314653343;
+  };
   _8-bit-fox = {
     email = "sebastian@markwaerter.de";
     github = "8-bit-fox";
