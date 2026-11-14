@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   perl,
   xcbuild,
   writableTmpDirAsHomeHook,
@@ -14,31 +13,23 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2026.4.2";
+  version = "2026.10.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-8UDzW93O+AvMGXcVHe1PTvYvmXewl/bXsxIdjoGRtcQ=";
+    hash = "sha256-bSkS7WNIpXaOwkgfld4CtQBKhz1vLeVlWbK6Qeb++T4=";
   };
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
-
-    # Upstream cli-v2026.4.1 bumps @napi-rs/cli to 3.5.1 in the desktop workspace,
-    # but the root lockfile still points that entry at 3.2.0.
-    substituteInPlace package-lock.json \
-      --replace-fail \
-      $'    "apps/desktop/node_modules/@napi-rs/cli": {\n      "version": "3.2.0",\n      "resolved": "https://registry.npmjs.org/@napi-rs/cli/-/cli-3.2.0.tgz",\n      "integrity": "sha512-heyXt/9OBPv/WrTFW2+PxIMzH6MCeqP9ZsvOg0LN6pLngBnszcxFsdhCAh5I6sddzQsvru53zj59GUzvmpWk8Q==",' \
-      $'    "apps/desktop/node_modules/@napi-rs/cli": {\n      "version": "3.5.1",\n      "resolved": "https://registry.npmjs.org/@napi-rs/cli/-/cli-3.5.1.tgz",\n      "integrity": "sha512-XBfLQRDcB3qhu6bazdMJsecWW55kR85l5/k0af9BIBELXQSsCFU0fzug7PX8eQp6vVdm7W/U3z6uP5WmITB2Gw==",'
   '';
 
-  nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
 
-  npmDepsHash = "sha256-3RQ0HRsLQlXMeJIHAPKbZsGi6I/70pSIg8NM/3uJvUo=";
+  npmDepsHash = "sha256-6x1qc8cVuBdvZ2W133ajYOKpUz29qda5cECmNvlS9rg=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     perl
@@ -63,6 +54,11 @@ buildNpmPackage (finalAttrs: {
     "--ignore-scripts"
   ];
 
+  # The default `npm prune`` is scoped to npmWorkspace and leaves root devDependencies behind.
+  # Prune from the repository root before installing node_modules.
+  # Note, this is an issue with npm 11+, see https://github.com/npm/cli/issues/8277
+  dontNpmPrune = true;
+
   postConfigure = ''
     # we want to build everything from source
     shopt -s globstar
@@ -77,6 +73,10 @@ buildNpmPackage (finalAttrs: {
     shopt -s globstar
     rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
     shopt -u globstar
+    # Save closure size by pruning all non-production dependencies before installation
+    npm prune --omit=dev --offline --ignore-scripts --legacy-peer-deps
+    # Delete all JS sourcemaps, since they are unnneeded.
+    find . -type f -name '*.map' -delete
   '';
 
   postInstall = ''
