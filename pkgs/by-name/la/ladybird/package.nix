@@ -2,8 +2,10 @@
   lib,
   stdenv,
   apple-sdk_26,
+  darwin,
   darwinMinVersionHook,
   cacert,
+  callPackage,
   fetchFromGitHub,
   pdfjs,
   chromium-hsts-preload-list,
@@ -17,6 +19,7 @@
   angle, # libEGL
   brotli,
   cpptrace,
+  dbus,
   glib,
   glslang,
   harfbuzz,
@@ -31,7 +34,6 @@
   libwebp,
   mimalloc,
   openssl,
-  perl,
   python3,
   qt6Packages,
   woff2,
@@ -42,7 +44,6 @@
   fontconfig,
   rustPlatform,
   rustc,
-  rcodesign,
   makeWrapper,
   simdutf,
   skia,
@@ -62,20 +63,23 @@
   zmij,
 }:
 
+let
+  llvmLibcHeaders = callPackage ./llvm-libc-headers.nix { };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-11-01";
+  version = "0-unstable-2026-11-11";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "7ec8a4e31c2690dbede396ca5abee52c5050d895";
-    hash = "sha256-DMmHl2bV4aucB8BU9K3IHC/0ecF+JTyQpeqGj6aGWnw=";
+    rev = "7aadc996ffe8973f741e89511e1d5d1086f2618f";
+    hash = "sha256-HHsTErp5sUCg+CD2qdzMn35qExr1PArOqkX17+zBCbo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-o4MoxCSyhKp8jtkyTnTgue0JvVbBqGQshb9+UvppICg=";
+    hash = "sha256-ptdpCwzS72SH9glGd17C7MIVhn796kkR0/4TxfhyCF8=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -98,17 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail libavutil-ladybird libavutil \
       --replace-fail libswresample-ladybird libswresample
 
-    perl -0pi -e \
-      's/find_package\(ICU 78\.[0-9]+ EXACT REQUIRED COMPONENTS data i18n uc\)/find_package(ICU ${icu78.version} EXACT REQUIRED COMPONENTS data i18n uc)/ or die "ICU dependency not found\n"' \
-      Meta/CMake/check_for_dependencies.cmake
-
     # Install the same PDF viewer assets and integration patch as the vcpkg build.
     cp -r ${pdfjs}/share/pdf.js pdfjs
     chmod -R u+w pdfjs
     patch -d pdfjs -p1 < Meta/CMake/vcpkg/overlay-ports/pdfjs/0001-ladybird-embed.patch
-    substituteInPlace UI/cmake/ResourceFiles.cmake \
-      --replace-fail 'if (NOT "''${VCPKG_INSTALLED_DIR}" STREQUAL "" AND NOT "''${VCPKG_TARGET_TRIPLET}" STREQUAL "")' 'if (TRUE)' \
-      --replace-fail '"''${VCPKG_INSTALLED_DIR}/''${VCPKG_TARGET_TRIPLET}/share/pdfjs"' '"''${LADYBIRD_SOURCE_DIR}/pdfjs"'
 
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
@@ -121,6 +118,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preConfigure = ''
+    # Use upstream's PDF.js discovery with our patched distribution.
+    cmakeFlagsArray+=("-DPDFJS_DIR=$PWD/pdfjs")
+
     # HSTS preload data is the only remaining downloaded data cache.
     mkdir -p build/Caches
     cmakeFlagsArray+=("-DLADYBIRD_CACHE_DIR=$PWD/build/Caches")
@@ -134,7 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     gitMinimal
     ninja
-    perl
     pkg-config
     python3
     rustPlatform.cargoSetupHook
@@ -145,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeWrapper
     libicns
-    rcodesign
+    darwin.sigtool
   ];
 
   buildInputs = [
@@ -166,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libedit
     libwebp
+    llvmLibcHeaders
     (mimalloc.overrideAttrs {
       # Ladybird uses heap APIs removed in mimalloc 3.
       version = "2.2.7";
@@ -204,6 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     zmij
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
     libpulseaudio.dev
     glib
     libdrm
@@ -247,10 +248,19 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "$out/Applications/Ladybird.app/Contents/MacOS/Ladybird" "$out/bin/Ladybird"
   '';
 
-  # Sign the complete bundle after stripping and other fixups, preserving entitlements.
+  # Restore per-process entitlements after stripping and other fixups, then seal the bundle.
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    rcodesign sign \
-      --entitlements-xml-file ${finalAttrs.src}/Meta/Entitlements.plist \
+    for entitlements in Services/*/*.entitlements; do
+      case "$entitlements" in
+        *.release.entitlements) continue ;;
+      esac
+      helper=$(basename "$entitlements" .entitlements)
+      codesign --force --sign - --options runtime --entitlements "$entitlements" \
+        "$out/Applications/Ladybird.app/Contents/MacOS/$helper"
+    done
+    codesign --force --sign - --entitlements ${finalAttrs.src}/Meta/Entitlements.plist \
+      "$out/Applications/Ladybird.app/Contents/MacOS/Ladybird"
+    codesign --force --sign - --preserve-metadata=entitlements,flags \
       "$out/Applications/Ladybird.app"
   '';
 

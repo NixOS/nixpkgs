@@ -1,7 +1,6 @@
 Use Nix dependencies instead of searching the host's Homebrew installation.
 
 Defer bundle signing until postFixup, after Nix has finished modifying it.
-Use rcodesign for helper signing during the build.
 Provide a default CA bundle to both curl and the RequestServer sandbox
 when no certificate file was supplied explicitly.
 
@@ -60,16 +59,3 @@ when no certificate file was supplied explicitly.
      // FIXME: Update RequestServer to support multiple custom root certificates.
      if (!certificates.is_empty())
          RequestServer::set_default_certificate_path(certificates.first());
---- a/Meta/CMake/ladybird_helper_processes.cmake
-+++ b/Meta/CMake/ladybird_helper_processes.cmake
-@@ -54,6 +54,8 @@
-     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${target}.release.entitlements" DESTINATION entitlements
-         COMPONENT ladybird_Runtime)
-
--    ladybird_codesign_command(codesign_command "${target}" "${entitlements_file}" -o runtime "$<TARGET_FILE:${target}>")
--    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${codesign_command} VERBATIM)
-+    add_custom_command(TARGET ${target} POST_BUILD
-+        COMMAND rcodesign sign --code-signature-flags runtime --entitlements-xml-file "${entitlements_file}" "$<TARGET_FILE:${target}>"
-+        VERBATIM
-+    )
- endfunction()
