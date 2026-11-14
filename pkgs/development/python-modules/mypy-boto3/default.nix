@@ -223,8 +223,8 @@ in
       "sha256-sxA5hor4KNpFidS/POwwYnN+gC4XdKTCS6DkpPicatg=";
 
   mypy-boto3-cloudformation =
-    buildMypyBoto3Package "cloudformation" "1.44.0"
-      "sha256-ISN4VGZVpUoa3BHSha79iqzSN/W4Vo560nAXLX3+R+8=";
+    buildMypyBoto3Package "cloudformation" "1.44.3"
+      "sha256-4QnccJn7LkSHdfUE6WP8lc8MjieK6JSLdoRZO+8H6SE=";
 
   mypy-boto3-cloudfront =
     buildMypyBoto3Package "cloudfront" "1.44.0"
