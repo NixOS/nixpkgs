@@ -1,0 +1,13 @@
+diff --git a/packages/meteor-tool/.2.7.3.1mjjp3y.wu0o++os.linux.x86_64+web.browser+web.browser.legacy+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/fibers/fibers.js b/packages/meteor-tool/.2.7.3.1mjjp3y.wu0o++os.linux.x86_64+web.browser+web.browser.legacy+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/fibers/fibers.js
+index 96928630..25b6d82b 100644
+--- a/packages/meteor-tool/.2.7.3.1mjjp3y.wu0o++os.linux.x86_64+web.browser+web.browser.legacy+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/fibers/fibers.js
++++ b/packages/meteor-tool/.2.7.3.1mjjp3y.wu0o++os.linux.x86_64+web.browser+web.browser.legacy+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/fibers/fibers.js
+@@ -8,7 +8,7 @@ if (process.fiberLib) {
+ 
+ 	// Look for binary for this platform
+ 	var modPath = path.join(__dirname, 'bin', process.platform+ '-'+ process.arch+ '-'+ process.versions.modules+
+-		((process.platform === 'linux') ? '-'+ detectLibc.family : ''), 'fibers');
++		((process.platform === 'linux') ? '-'+ (detectLibc.family || 'glibc') : ''), 'fibers');
+ 	try {
+ 		// Pull in fibers implementation
+ 		process.fiberLib = module.exports = require(modPath).Fiber;
