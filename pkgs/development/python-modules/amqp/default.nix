@@ -11,12 +11,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "amqp";
-  version = "5.4.1";
+  version = "5.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-eanAq3DnF0VmfxJ/+AZmiUpzTCYja28zFJyWSwlvCyA=";
+    hash = "sha256-k2JmDEoxFQzxjnjK4s6Koekp/GxnOeafbdXb6pw+3II=";
   };
 
   build-system = [ setuptools ];
