@@ -15666,6 +15666,8 @@ self: super: with self; {
 
   pymap3d = callPackage ../development/python-modules/pymap3d { };
 
+  pymarc = callPackage ../development/python-modules/pymarc { };
+
   pymarshal = callPackage ../development/python-modules/pymarshal { };
 
   pymata-express = callPackage ../development/python-modules/pymata-express { };
