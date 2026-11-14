@@ -1,21 +1,23 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "steamback";
-  version = "0.3.6";
+  version = "1.1.2-unstable-2025-11-12";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-hvMPSxIfwwQqo80JCpYhcbVY4kXs5jWtjjafVSMrw6o=";
+  src = fetchFromGitHub {
+    owner = "geeksville";
+    repo = "steamback";
+    rev = "c059ee3a3a0fe7bac8865224392ef6e70f9ea84c";
+    hash = "sha256-APn0KRPIVlhASQofaTtorJrdqiCw+CwzYkORhaRNQ6s=";
   };
 
   build-system = with python3Packages; [
-    setuptools
+    poetry-core
     setuptools-scm
     wheel
   ];
