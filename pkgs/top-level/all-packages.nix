@@ -7163,11 +7163,6 @@ with pkgs;
 
   inherit (libapparmor.passthru) apparmorRulesFromClosure;
 
-  ath9k-htc-blobless-firmware = callPackage ../os-specific/linux/firmware/ath9k { };
-  ath9k-htc-blobless-firmware-unstable = callPackage ../os-specific/linux/firmware/ath9k {
-    enableUnstable = true;
-  };
-
   b43Firmware_6_30_163_46 =
     callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix
       { };
