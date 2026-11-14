@@ -4,12 +4,13 @@
   buildPackages,
   stdenv,
   makeBinaryWrapper,
+  runCommandCC,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mirth";
-  version = "0-unstable-2026-10-28";
-  gitRev = "966c78fd600ac9b87184c12aec5551ba31233b86";
+  version = "0-unstable-2026-11-13";
+  gitRev = "6e2f97ac017be3754671b1945e16e1de49e79f63";
   __structuredAttrs = true;
 
   src = fetchzip {
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://github.com/mirth-lang/mirth/archive/${finalAttrs.gitRev}.zip"
       "https://git.sr.ht/~typeswitch/mirth/archive/${finalAttrs.gitRev}.tar.gz"
     ];
-    hash = "sha256-ir/dscN1eQmCFyEU8MMUUGgxsa6NGl8pcQ4sQKAAUQo=";
+    hash = "sha256-N2X5oLFpF2tgDU4LbSVtFbD+xVJNUCVf7ryNtrfTU7E=";
   };
 
   postPatch =
@@ -46,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "lib"
-    "bin"
     "doc"
     "examples"
   ];
@@ -78,19 +78,41 @@ stdenv.mkDerivation (finalAttrs: {
     bin/mirth2 src/main.mth --docs "$doc/share/doc/mirth" -c
     install -Dm644 LICENSE README.md -t "$doc/share/doc/mirth"
 
-    # stages 0–2 aren’t needed anymore
-    install -Dm755 bin/mirth3 "$bin/bin/mirthc"
+    # stages 0–2 aren’t needed anymore; the unwrapped compiler is kept for
+    # users wrapping Mirth with their own stdlib & other packages
+    install -Dm755 bin/mirth3 "$out/bin/mirth3"
 
     runHook postInstall
   '';
 
-  # The raw binary @ $bin needs wrapping to get the stdlib @ $lib. By wrapping
-  # it here, it will be more flexible towards allowing users to wrap the Mirth
-  # binary with their own stdlib & other packages.
+  # `mirthc` is the wrapped user entry point: the raw compiler + stdlib search
+  # path, so it works from any cwd
   postFixup = ''
-    makeBinaryWrapper "$bin/bin/mirthc" "$out/bin/mirthc" \
+    makeBinaryWrapper "$out/bin/mirth3" "$out/bin/mirthc" \
       --add-flags "-P $lib/lib/mirth"
   '';
+
+  passthru.tests = {
+    hello-world =
+      runCommandCC "${finalAttrs.pname}-hello-world"
+        {
+          src = finalAttrs.finalPackage.examples;
+          buildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          mirthc -o hello.c "$src/share/mirth/examples/hello.mth"
+          cc -o hello hello.c
+          if [ ! -x ./hello ]; then
+            echo "Did not make ./hello executable" >&2
+            exit 1
+          fi
+          if [ "$(./hello)" != "Hello, world!" ]; then
+            echo "Did not print “Hello, world!”" >&2
+            exit 1
+          fi
+          touch "$out"
+        '';
+  };
 
   meta = {
     description = "Concatenative functional programming language with strong static linear types";
