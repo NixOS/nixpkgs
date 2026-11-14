@@ -2889,6 +2889,8 @@ with haskellLib;
   # Allow QuickCheck >= 2.17
   # https://github.com/pcapriotti/optparse-applicative/issues/530
   optparse-applicative = doJailbreak super.optparse-applicative;
+  # https://github.com/haskellari/strict/issues/52
+  strict = doJailbreak super.strict;
 
   # Tests require docker
   testcontainers = dontCheck super.testcontainers;
