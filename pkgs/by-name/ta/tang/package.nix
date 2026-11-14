@@ -1,45 +1,48 @@
 {
-  lib,
-  stdenv,
+  asciidoc,
   fetchFromGitHub,
-  pkg-config,
-  asciidoc-full,
+  gitUpdater,
   jansson,
   jose,
-  http-parser,
-  systemdLibs,
+  lib,
+  llhttp,
+  makeWrapper,
   meson,
   ninja,
-  makeWrapper,
-  testers,
-  tang,
-  gitUpdater,
   nixosTests,
+  pkg-config,
+  stdenv,
+  systemdLibs,
+  tang,
+  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tang";
-  version = "15";
+  version = "16";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "tang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nlC2hdNzQZrfirjS2gX4oFp2OD1OdxmLsN03hfxD3ug=";
+    hash = "sha256-YpRoJ6G7Dj7arHwBrfCkroRd2nz/0ItzFmZPFQKjiYo=";
   };
 
+  patches = [ ./meson-no-dirs-on-native.patch ];
+
   nativeBuildInputs = [
-    asciidoc-full
+    asciidoc
+    makeWrapper
     meson
     ninja
     pkg-config
-    makeWrapper
   ];
 
   buildInputs = [
     jansson
     jose
-    http-parser
+    llhttp
     systemdLibs
   ];
 
@@ -53,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/libexec/tangd-keygen --prefix PATH ":" ${lib.makeBinPath [ jose ]}
     wrapProgram $out/libexec/tangd-rotate-keys --prefix PATH ":" ${lib.makeBinPath [ jose ]}
   '';
+
+  versionCheckProgram = "${placeholder "out"}/libexec/tangd";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
     tests = {
@@ -73,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.gpl3Plus;
     mainProgram = "tangd";
+    platforms = lib.platforms.linux;
   };
 })
