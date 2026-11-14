@@ -1,6 +1,5 @@
 {
-  config,
-  stdenv,
+  stdenv_32bit,
   fetchurl,
   fetchpatch,
   callPackage,
@@ -46,18 +45,20 @@
   vulkan-loader,
   wrapGAppsHook3,
   nixosTests,
-  # If open-watcom-bin is not passed, VirtualBox will fall back to use
-  # the shipped alternative sources (assembly).
+  # Opt out of building the guest BIOS sources with the problematic Open Watcom
+  # toolchain. People who need to build the BIOS from sources (for example to
+  # apply patches) can override this.
+  enableOpenWatcom ? false,
   open-watcom-bin,
   makeself,
   perl,
   javaBindings ? true,
-  jdk, # Almost doesn't affect closure size
+  jdk8, # # VirtualBox uses wsimport, which was removed after JDK 8.
   pythonBindings ? false,
   python3,
   extensionPack ? null,
   fakeroot,
-  pulseSupport ? stdenv.hostPlatform.isLinux,
+  pulseSupport ? stdenv_32bit.hostPlatform.isLinux,
   libpulseaudio,
   enableHardening ? false,
   headless ? false,
@@ -106,7 +107,7 @@ let
     wrapQtAppsHook
     ;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv_32bit.mkDerivation (finalAttrs: {
   pname = "virtualbox";
   version = "${finalAttrs.virtualboxVersion}${finalAttrs.virtualboxSubVersion}";
 
@@ -171,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     xz
     libGL
   ]
-  ++ optional javaBindings jdk
+  ++ optional javaBindings jdk8
   ++ optional pythonBindings python3 # Python is needed even when not building bindings
   ++ optional pulseSupport libpulseaudio
   ++ optionals (!headless) [
@@ -204,8 +205,8 @@ stdenv.mkDerivation (finalAttrs: {
             -e 's@TOOLQT6BIN=.*@TOOLQT6BIN="${getDev qttools}/bin"@' \
           ''
         } -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
+    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2
+    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux-x86-64.so.2
 
     grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
       ${optionalString pulseSupport ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''}'
@@ -271,7 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
   configurePhase = ''
-    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv_32bit.cc.libc}/include,,g')
 
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
@@ -291,7 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
     VBOX_WITH_UPDATE_AGENT :=
 
     ${optionalString javaBindings ''
-      VBOX_JAVA_HOME                 := ${jdk}
+      VBOX_JAVA_HOME                 := ${jdk8}
     ''}
     ${optionalString (!headless) ''
       VBOX_WITH_VBOXSDL              := 1
@@ -316,7 +317,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
-      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      ${optionalString enableOpenWatcom "--with-ow-dir=${open-watcom-bin}"} \
       ${optionalString enableKvm "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
@@ -354,7 +355,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${optionalString (extensionPack != null) ''
       mkdir -p "$share"
-      "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EOF
+      "${fakeroot}/bin/fakeroot" "${stdenv_32bit.shell}" <<EOF
       "$libexec/VBoxExtPackHelperApp" install \
         --base-dir "$share/ExtensionPacks" \
         --cert-dir "$share/ExtPackCertificates" \
@@ -400,7 +401,7 @@ stdenv.mkDerivation (finalAttrs: {
       wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
     '';
 
-  postFixup = optionalString stdenv.hostPlatform.isLinux ''
+  postFixup = optionalString stdenv_32bit.hostPlatform.isLinux ''
     # VBoxDxVk loads Vulkan dynamically; add its path after RPATH shrinking.
     patchelf --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]} \
       "$out/libexec/virtualbox/VBoxDxVk.so"
