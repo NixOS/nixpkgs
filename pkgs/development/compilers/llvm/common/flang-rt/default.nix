@@ -43,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
         cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
         cp -r ${monorepoSrc}/third-party "$out"
 
+        mkdir -p "$out/libc"
+        cp -r ${monorepoSrc}/libc/shared "$out/libc"
+
         cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
         cp -r ${monorepoSrc}/flang "$out"
         cp -r ${monorepoSrc}/runtimes "$out"
