@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p yq jq common-updater-scripts dart
+#!nix-shell -i bash -p common-updater-scripts dart jq nix-update yq
 
 set -o errexit -o nounset -o pipefail
 
@@ -22,3 +22,5 @@ if ! [[ -f pubspec.lock ]]; then
 fi
 
 yq . "${tmpdir}/pubspec.lock" >"${package_dir}/pubspec.lock.json"
+
+nix-update --version=branch unsure
