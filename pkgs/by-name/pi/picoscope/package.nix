@@ -14,7 +14,7 @@
   openssl,
   patchelf,
   stdenv,
-  systemdMinimal,
+  systemdLibs,
   onetbb,
   wrapGAppsHook3,
   writeTextDir,
@@ -36,7 +36,7 @@ let
     libusb1
     openssl
     stdenv.cc.cc.lib
-    systemdMinimal
+    systemdLibs
     onetbb
   ];
 

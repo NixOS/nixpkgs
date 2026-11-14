@@ -6,13 +6,13 @@
   glib,
   glibc,
   libseccomp,
-  systemdMinimal,
+  systemdLibs,
   nixosTests,
   versionCheckHook,
 }:
 
 let
-  withSystemd = lib.meta.availableOn stdenv.hostPlatform systemdMinimal;
+  withSystemd = lib.meta.availableOn stdenv.hostPlatform systemdLibs;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "conmon";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libseccomp
   ]
-  ++ lib.optional withSystemd systemdMinimal
+  ++ lib.optional withSystemd systemdLibs
   ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
     glibc
     glibc.static
