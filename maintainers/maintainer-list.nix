@@ -2124,6 +2124,11 @@
     githubId = 143312793;
     name = "Annin";
   };
+  Annoiiyed = {
+    github = "Annoiiyed";
+    githubId = 97160381;
+    name = "Noï van Mondfrans";
+  };
   annoyingrains = {
     email = "avali@avali.zone";
     matrix = "@avali:avali.zone";
