@@ -875,6 +875,7 @@ let
               !attrs ? outputs
               && !attrs ? outputChecks
               && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
+              && (strictDeps -> !doCheck && !doInstallCheck)
             then
               if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
             else
@@ -886,6 +887,24 @@ let
                       raw = zipAttrsWith (_: concatLists) [
                         attrsOutputChecksFiltered
                         (makeOutputChecks (attrs.outputChecks.${name} or { }))
+                        (
+                          if strictDeps && doCheck then
+                            {
+                              disallowedReferences = map unsafeDerivationToUntrackedOutpath (checkInputs ++ nativeCheckInputs);
+                            }
+                          else
+                            { }
+                        )
+                        (
+                          if strictDeps && doInstallCheck then
+                            {
+                              disallowedReferences = map unsafeDerivationToUntrackedOutpath (
+                                installCheckInputs ++ nativeInstallCheckInputs
+                              );
+                            }
+                          else
+                            { }
+                        )
                       ];
                     in
                     # separateDebugInfo = true will put all sorts of files in
