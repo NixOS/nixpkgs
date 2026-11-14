@@ -1,8 +1,8 @@
 { callPackage }:
 
 callPackage ../common {
-  version = "6.0.0";
-  hash = "sha256-koNVUrG2h60mc35Cm1q6NlEL9Cn4gW7A9tM2yMtB9EM=";
+  version = "6.1.0";
+  hash = "sha256-xq7ppTdBAroxjgz65i3tXhglNGV3E3lS1/sVswlNSdg=";
   binaryVersion = 12;
   attrPath = "chickenPackages_6";
 

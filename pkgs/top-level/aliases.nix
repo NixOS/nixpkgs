@@ -2119,6 +2119,7 @@ mapAliases {
   paper-gtk-theme = throw "'paper-gtk-theme' has been removed because its source is no longer available"; # Added 2026-07-30
   paper-plane = throw "'paper-plane' has been removed as it is unmaintained upstream and depends on vulnerable tdlib version."; # Added 2026-02-26
   paperless-ng = throw "'paperless-ng' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2025-10-27
+  paqet = throw "'paqet' has been removed due to lack of users"; # Added 2026-11-09
   parcellite = throw "'parcellite' was remove due to lack of maintenance and relying on gtk2"; # Added 2025-10-03
   pascube = throw "pascube has been merged into goverlay"; # added 2026-06-29
   patchage = throw "'patchage' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09

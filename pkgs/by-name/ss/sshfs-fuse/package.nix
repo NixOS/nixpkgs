@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sshfs-fuse";
-  version = "3.7.6";
+  version = "3.7.7";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     tag = "sshfs-${finalAttrs.version}";
-    hash = "sha256-BT9qttXyryliR2kV1xVYvcwJhB6gkGf7IEwrTB38SvI=";
+    hash = "sha256-u1DtA1BKZ48bPqIB4nQN6AvX7JcPo7vOpsBsUeshNsw=";
   };
 
   nativeBuildInputs = [

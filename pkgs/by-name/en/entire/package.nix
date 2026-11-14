@@ -11,16 +11,21 @@
 
 buildGo127Module (finalAttrs: {
   pname = "entire";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "entireio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-basmrDcFJe5tfn1xDWO71THHV8oIKWDXK5vF4gYoZXw=";
+    hash = "sha256-qksbXW6//oIsQ5/79BkLv79CGrcfbR/T3gZWbt1uGYk=";
   };
 
-  vendorHash = "sha256-p5d1SU5vCuPf1ETFFy4znU3PVGsdvoUFyM8O74ZChR4=";
+  vendorHash = "sha256-/0dek0VPV2GOC8uGrFXJPFSm+T5eWNr91WaVZOQHl+U=";
+
+  postPatch = ''
+    # Remove when Go in Nixpkgs is updated to 1.27.4.
+    substituteInPlace go.mod --replace-fail 'go 1.27.4' 'go 1.27.3'
+  '';
 
   subPackages = [
     "cmd/entire"
