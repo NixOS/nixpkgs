@@ -32956,6 +32956,13 @@
     githubId = 255085068;
     name = "Yureka (WDZ)";
   };
+  yuri-becker = {
+    name = "Yuri";
+    githubId = 16067917;
+    github = "yuri-becker";
+    email = "hi@yuri.li";
+    matrix = "@yuri:bundestag.gmbh";
+  };
   yurkobb = {
     name = "Yury Bulka";
     email = "setthemfree@privacyrequired.com";
