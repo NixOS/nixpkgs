@@ -217,7 +217,7 @@ in
             };
 
             # deny access to specific files in the root folder
-            "~ /(LICENSE\\.txt|composer\\.lock|composer\\.json|nginx\\.conf|web\\.config|htaccess\\.txt|\\.htaccess)" =
+            "~ ^/(LICENSE\\.txt|composer\\.lock|composer\\.json|nginx\\.conf|web\\.config|htaccess\\.txt|\\.htaccess)" =
               {
                 priority = 300;
                 extraConfig = ''
@@ -226,7 +226,7 @@ in
               };
 
             # deny all files and folder beginning with a dot (hidden files & folders)
-            "~ (^|/)\\." = {
+            "~ ^/?\\." = {
               priority = 300;
               extraConfig = ''
                 return 403;
