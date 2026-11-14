@@ -330,6 +330,13 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   patches = [
     ./clang19-template-warning.patch
     ./cpp-extension-dependency-paths.patch
+    ./nnpack-psimd-array-contracts.patch
+    # Unmerged upstream fix, followed by the remaining reduction repairs below.
+    # https://github.com/pytorch/pytorch/pull/196216
+    ./sparse-csr-empty-values.patch
+    # Resolve reduction dtype before dispatch and keep wider accumulators
+    # separate from explicit result dtypes on both CPU and CUDA.
+    ./sparse-csr-reduction-dtypes.patch
   ]
   ++ lib.optionals (!(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) [
     ./cross-blas-dot.patch
@@ -338,9 +345,15 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # Link What You Use runs ldd on the linked HOST libraries.
     ./disable-cross-lwyu.patch
   ]
+  ++ lib.optionals (cudaSupport || rocmSupport) [
+    ./symmetric-memory-socket-path.patch
+  ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
     ./find-cuda-use-package-paths.patch
+    ./cuda-launch-bounds.patch
+    ./async-mm-eligibility.patch
+    ./cudnn-version-display.patch
 
     # Let CMake find CUPTI through the variables we export in `preConfigure`, so that the
     # `CUDA::cupti` target kineto requires gets defined
@@ -368,7 +381,10 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ./no-bundle-aotriton.patch
   ];
 
-  postPatch =
+  postPatch = ''
+    cp ${../tests/csr-reductions.py} test/csr_reductions.py
+  ''
+  +
     # Publish the same CUDA public interface to installed Python JIT consumers.
     # pkg-config supplies cudart's transitive CRT/CCCL headers without copying
     # stdenv propagation logic into the installed helper.
@@ -863,8 +879,31 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
     tests =
+      let
+        csrTester =
+          feature:
+          (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; }) {
+            name = "torch-csr-reductions" + lib.optionalString (feature == null) "-cpu";
+            inherit feature;
+            libraries = [ finalAttrs.finalPackage ];
+            makeWrapperArgs = lib.optionals (feature == null) [
+              "--add-flags"
+              "--device cpu"
+            ];
+          } (builtins.readFile ../tests/csr-reductions.py);
+      in
       callPackage ../tests {
         inherit rocmSupport cudaSupport;
+      }
+      // {
+        nnpackPSIMD = buildPackages.callPackage ../tests/nnpack-psimd.nix {
+          inherit (finalAttrs) src;
+          nnpackPatch = ./nnpack-psimd-array-contracts.patch;
+        };
+        tester-csrReductionsCpu = csrTester null;
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        csrReductionsCpu = (csrTester null).gpuCheck;
       }
       // lib.optionalAttrs (cudaSupport && cudaPackages.cudaAtLeast "12.9") {
         cudaArchitectures = callPackage ../tests/cuda-architectures.nix {
@@ -877,8 +916,15 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
           inherit cudaPackages python;
           torch = finalAttrs.finalPackage;
         };
+        tester-csrReductions = csrTester "cuda";
       }
-      ;
+      // lib.optionalAttrs (cudaSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        symmetricMemorySocketName = callPackage ../tests/symm-mem-socket-name.nix {
+          inherit (finalAttrs) src;
+          torch = finalAttrs.finalPackage;
+          socketPatch = ./symmetric-memory-socket-path.patch;
+        };
+      };
   };
 
   meta = {
