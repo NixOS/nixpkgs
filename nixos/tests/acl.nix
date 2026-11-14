@@ -8,12 +8,7 @@
 # Can't easily use a standard VM test because we need to have access to intermediate build results
 vmTools.runInLinuxVM (
   acl.overrideAttrs (old: {
-    postPatch = old.postPatch or "" + ''
-      # The runwrapper uses LD_PRELOAD to override available user/groups
-      substituteInPlace Makefile.in --replace-fail \
-        'RUN_LOG_COMPILER = $(srcdir)/test/runwrapper' \
-        'RUN_LOG_COMPILER = $(srcdir)/test/run'
-    '';
+    doCheck = true;
     nativeCheckInputs = old.nativeCheckInputs or [ ] ++ [
       perl
       # By default `ls` would come from bootstrap tools,
@@ -27,7 +22,10 @@ vmTools.runInLinuxVM (
       # since libtool may generate a lt- prefixed binary
       chmod -R 777 .libs
     '';
-    doCheck = true;
+    checkFlags = old.checkFlags or [ ] ++ [
+      # The runwrapper uses LD_PRELOAD to override available user/groups
+      "RUN_LOG_COMPILER=test/run"
+    ];
     outputs = [ "out" ];
     installPhase = ''
       touch $out
