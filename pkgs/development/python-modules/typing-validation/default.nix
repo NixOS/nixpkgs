@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "2.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.14"; # https://github.com/hashberg-io/typing-validation/blob/v2.2.1/pyproject.toml#L7
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "hashberg-io";
