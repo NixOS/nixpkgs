@@ -1334,6 +1334,10 @@ in
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix { };
   octoprint = runTest ./octoprint.nix;
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
+  odhcpd = {
+    dhcp = runTest ./odhcpd/dhcp.nix;
+    ra = runTest ./odhcpd/ra.nix;
+  };
   odoo17 = runTest {
     imports = [ ./odoo/single-process.nix ];
     _module.args.package = pkgs.odoo17;
