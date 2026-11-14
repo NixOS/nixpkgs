@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.lightandmatter.com/when/when.html";
     license = lib.licenses.gpl2Only;
     mainProgram = "when";
-    maintainers = with lib.maintainers; [ vonixxx ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })
