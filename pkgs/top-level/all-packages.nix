@@ -10171,4 +10171,8 @@ with pkgs;
   };
 
   feishin-web = feishin.override { webVersion = true; };
+
+  kak-tree-sitter-complete = kak-tree-sitter.override {
+    bundledParsers = "all";
+  };
 }
