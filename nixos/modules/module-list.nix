@@ -1696,6 +1696,7 @@
   ./services/web-apps/bentopdf.nix
   ./services/web-apps/bluemap.nix
   ./services/web-apps/bluesky-pds.nix
+  ./services/web-apps/bonfire
   ./services/web-apps/bookorbit.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/bulwark.nix

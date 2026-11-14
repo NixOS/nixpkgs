@@ -291,7 +291,7 @@ in
 
     sha256 =
       {
-        cpu.x86_64-linux = "sha256-wbLvzCLpFw4+QF86zIBroAeFrwqUTe31aJV7tcjhSZE=";
+        cpu.x86_64-linux = "sha256-q3GWoWkgGYAEqREX/SJ5lM/RqcUC/eJsCgIA6kIM6vg=";
         # This hash covers the selected manifests, not cudaCapabilities. Alternate
         # manifests need a caller-supplied deps outputHash/outputHashAlgo override.
         cuda.x86_64-linux = cudaHash;
@@ -596,7 +596,7 @@ in
     ++ lib.optionals cudaSupport ([ lib.licenses.nvidiaCudaRedist ] ++ cudaPackages.cudnn.meta.license);
     maintainers = with lib.maintainers; [ samuela ];
     platforms = [ "x86_64-linux" ];
-    problems = lib.optionalAttrs (!(lib.hasAttr cudaManifestHash cudaHashes)) {
+    problems = lib.optionalAttrs (cudaSupport && !(lib.hasAttr cudaManifestHash cudaHashes)) {
       unsupported-cuda-toolkit = {
         message = ''
           Unsupported cuda version for XLA.
