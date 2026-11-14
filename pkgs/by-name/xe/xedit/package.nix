@@ -9,6 +9,7 @@
   libxaw,
   libxmu,
   libxt,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     util-macros
+    makeWrapper
   ];
   buildInputs = [
     libx11
@@ -42,9 +44,13 @@ stdenv.mkDerivation rec {
     libxt
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/xedit \
+      --set-default XAPPLRESDIR $out/share/X11/app-defaults'';
+
   configureFlags = [
-    "--with-lispdir=$out/share/X11/xedit/lisp"
-    "--with-appdefaultdir=$out/share/X11/app-defaults"
+    "--with-lispdir=${placeholder "out"}/share/X11/xedit/lisp"
+    "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
   ];
 
   meta = {
