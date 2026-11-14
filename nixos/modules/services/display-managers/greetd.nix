@@ -76,39 +76,43 @@ in
     services.greetd.settings.terminal.vt = 1;
     services.greetd.settings.default_session.user = lib.mkDefault "greeter";
 
-    security.pam.services.greetd = {
-      useDefaultRules = false;
-      rules = {
-        auth = utils.pam.autoOrderRules [
-          {
-            name = "login";
-            control = "substack";
-            modulePath = "login";
-          }
-        ];
-        account = utils.pam.autoOrderRules [
-          {
-            name = "login";
-            control = "include";
-            modulePath = "login";
-          }
-        ];
-        password = utils.pam.autoOrderRules [
-          {
-            name = "login";
-            control = "substack";
-            modulePath = "login";
-          }
-        ];
-        session = utils.pam.autoOrderRules [
-          {
-            name = "login";
-            control = "include";
-            modulePath = "login";
-          }
-        ];
-      };
-    };
+    security.pam.services.greetd = lib.mkMerge [
+      (lib.mkIf config.security.shadow.enable {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          account = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+          password = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          session = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+        };
+      })
+      # The login PAM service is defined by the shadow module.
+      (lib.mkIf (!config.security.shadow.enable) { startSession = true; })
+    ];
 
     # This prevents nixos-rebuild from killing greetd by activating getty again
     systemd.services."autovt@${tty}".enable = false;
