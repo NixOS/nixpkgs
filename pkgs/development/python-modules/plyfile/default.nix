@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/dranjan/python-plyfile/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    license = lib.licenses.gpl3Only;
   };
 })
