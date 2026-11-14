@@ -6,6 +6,7 @@
   intel-compute-runtime,
   openvino,
   stdenv,
+  testers,
   nix-update-script,
 }:
 
@@ -19,6 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-YX+fE+FXMQlml2H5oGOOJMy9ESM042EvRO/n0QLouWQ=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
     # The loader checks for drivers in fixed directories before dlopen, ignoring RUNPATH
@@ -34,11 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath $out/lib/libze_loader.so
   '';
 
+  postInstall = ''
+    substituteInPlace $out/lib/pkgconfig/*.pc --replace-fail \
+      'prefix=''${pcfiledir}/../../' \
+      'prefix=${placeholder "out"}'
+  '';
+
   setupHook = ./setup-hook.sh;
 
   passthru = {
     tests = {
       inherit intel-compute-runtime openvino;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage.dev;
+        versionCheck = true;
+      };
     };
     updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
   };
@@ -52,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ziguana
       recutita
+    ];
+    pkgConfigModules = [
+      "level-zero"
+      "libze_loader"
     ];
   };
 })
