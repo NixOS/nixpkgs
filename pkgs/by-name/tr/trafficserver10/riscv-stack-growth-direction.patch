@@ -1,0 +1,13 @@
+diff --git a/src/iocore/eventsystem/UnixEventProcessor.cc b/src/iocore/eventsystem/UnixEventProcessor.cc
+index ea527bfab..10616421e 100644
+--- a/src/iocore/eventsystem/UnixEventProcessor.cc
++++ b/src/iocore/eventsystem/UnixEventProcessor.cc
+@@ -172,7 +172,7 @@ void
+ ThreadAffinityInitializer::setup_stack_guard(void *stack, int stackguard_pages)
+ {
+ #if !(defined(__i386__) || defined(__x86_64__) || defined(__arm__) || defined(__arm64__) || defined(__aarch64__) || \
+-      defined(__mips__) || defined(__powerpc64__))
++      defined(__mips__) || defined(__powerpc64__) || defined(__riscv))
+ #error Unknown stack growth direction.  Determine the stack growth direction of your platform.
+ // If your stack grows upwards, you need to change this function and the calculation of stack_begin in do_alloc_stack.
+ #endif
