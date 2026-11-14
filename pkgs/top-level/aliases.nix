@@ -2668,6 +2668,7 @@ mapAliases {
   targetcli = throw "'targetcli' has been renamed to/replaced by 'targetcli-fb'"; # Converted to throw 2025-10-27
   targetPlatform = warnAlias "'targetPlatform' has been renamed to/replaced by 'stdenv.targetPlatform'" stdenv.targetPlatform; # Converted to warning 2025-10-28
   taro = throw "'taro' has been renamed to/replaced by 'taproot-assets'"; # Converted to throw 2025-10-27
+  tartube-yt-dlp = warnAlias "'tartube-yt-dlp' has been removed as 'tartube' uses 'yt-dlp' by default now." tartube; # Added 2026-11-14
   taskwarrior = throw "'taskwarrior' has been renamed to/replaced by 'taskwarrior2'"; # Converted to throw 2025-10-27
   tau-hydrogen = throw "'tau-hydrogen' has been removed because it's unmaintained upstream."; # Added 2026-04-26
   tbb = onetbb; # Added 2025-09-14

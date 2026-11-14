@@ -2647,9 +2647,6 @@ with pkgs;
 
   subzerod = with python3Packages; toPythonApplication subzerod;
 
-  tartube-yt-dlp = tartube.override {
-  };
-
   buildTeleport = callPackage ../build-support/teleport { };
 
   telepresence = callPackage ../tools/networking/telepresence {
