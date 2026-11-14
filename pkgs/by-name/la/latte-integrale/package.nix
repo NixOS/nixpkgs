@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     cddlib
   ];
 
+  env.CXXFLAGS = "-std=gnu++17";
+
   meta = {
     description = "Software for counting lattice points and integration over convex polytopes";
     homepage = "https://www.math.ucdavis.edu/~latte/";
