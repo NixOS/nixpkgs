@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     for shell in bash zsh fish; do
-      ${lib.getExe bash} $out/share/nixdatifier/package/contents/tools/sh/nixdatifier completion $shell > nixdatifier.$shell
+      bash $out/share/nixdatifier/package/contents/tools/sh/nixdatifier completion $shell > nixdatifier.$shell
     done
     installShellCompletion --cmd nixdatifier \
       --bash nixdatifier.bash --zsh nixdatifier.zsh --fish nixdatifier.fish

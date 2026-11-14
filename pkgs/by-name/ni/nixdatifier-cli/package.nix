@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 icon-emblem.svg "$out/share/icons/hicolor/scalable/apps/nixdatifier.svg"
     cp -r contents/tools contents/code contents/icons "$dest/contents/"
     for shell in bash zsh fish; do
-      ${lib.getExe bash} contents/tools/sh/nixdatifier completion $shell > nixdatifier.$shell
+      bash contents/tools/sh/nixdatifier completion $shell > nixdatifier.$shell
     done
     installShellCompletion --cmd nixdatifier \
       --bash nixdatifier.bash --zsh nixdatifier.zsh --fish nixdatifier.fish
