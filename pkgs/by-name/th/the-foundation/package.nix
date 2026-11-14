@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-foundation";
-  version = "1.13.1";
+  version = "1.14.1";
 
   src = fetchFromCodeberg {
     owner = "skyjake";
     repo = "the_Foundation";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-j8AeJdCjGxjsy6R+MFuWqXfYEFISfQqg2SlqiRx6G/k=";
+    hash = "sha256-8hnya1VDEAJjHpJyZIrfAmaRcABFClRgVP5s1GsdfcE=";
   };
 
   nativeBuildInputs = [
