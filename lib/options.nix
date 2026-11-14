@@ -706,6 +706,8 @@ rec {
     || (t == "list" && all isJsonValue v)
     || (t == "set" && !v ? _type && all isJsonValue (attrValues v));
 
+  flattenAnyOf = list: concatMap (s: if s ? anyOf then flattenAnyOf s.anyOf else [ s ]) list;
+
   typeToSchema' =
     seen: type: subDocs:
     let
@@ -800,7 +802,7 @@ rec {
             in
             {
               schema = {
-                anyOf = [
+                anyOf = flattenAnyOf [
                   l.schema
                   r.schema
                 ];
@@ -815,7 +817,7 @@ rec {
             in
             {
               schema = {
-                anyOf = [
+                anyOf = flattenAnyOf [
                   c.schema
                   f.schema
                 ];

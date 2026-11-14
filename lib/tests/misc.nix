@@ -3557,6 +3557,13 @@ runTests {
                 type = lib.types.bool;
                 default = true;
               };
+              options.multiOption = lib.mkOption {
+                type = lib.types.oneOf [
+                  lib.types.int
+                  lib.types.str
+                  lib.types.bool
+                ];
+              };
             }
             {
               nested = _: {
@@ -3604,6 +3611,9 @@ runTests {
         tagsItemType = doc.properties.tags.items.type;
         tagsDefault = doc.properties.tags.default;
 
+        multiOptionAnyOfCount = length doc.properties.multiOption.anyOf;
+        multiOptionTypes = map (s: s.type) doc.properties.multiOption.anyOf;
+
         plainAttrsAdditionalProps = doc.properties.plainAttrs.additionalProperties;
         noDescHasDescription = doc.properties.noDesc ? description;
       };
@@ -3612,6 +3622,7 @@ runTests {
       hasDefs = true;
       rootRequired = [
         "coerced"
+        "multiOption"
         "nested"
       ];
 
@@ -3645,6 +3656,13 @@ runTests {
       tagsType = "array";
       tagsItemType = "string";
       tagsDefault = [ "prod" ];
+
+      multiOptionAnyOfCount = 3;
+      multiOptionTypes = [
+        "integer"
+        "string"
+        "boolean"
+      ];
 
       plainAttrsAdditionalProps = true;
       noDescHasDescription = false;
