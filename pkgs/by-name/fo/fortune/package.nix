@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   recode,
   perl,
@@ -9,6 +9,8 @@
   fortune,
   libxslt,
   docbook-xsl-nons,
+  shlomif-cmake-modules,
+  gitUpdater,
   withOffensive ? false,
 }:
 
@@ -16,12 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fortune-mod";
   version = "3.26.0";
 
-  # We use fetchurl instead of fetchFromGitHub because the release pack has some
-  # special files.
-  src = fetchurl {
-    url = "https://github.com/shlomif/fortune-mod/releases/download/fortune-mod-${finalAttrs.version}/fortune-mod-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-rE0UhsrJuZkEkQcTa5QQb+mKSurADsY1sUTEN2S//kw=";
+  src = fetchFromGitHub {
+    owner = "shlomif";
+    repo = "fortune-mod";
+    tag = "fortune-mod-${finalAttrs.version}";
+    hash = "sha256-9Tbje6nfIk6SJBVngpurbsr/5PjjriqFYkQqVggWj3Y=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/fortune-mod";
+
+  postPatch = ''
+    ln -s ${shlomif-cmake-modules}/lib/cmake/Shlomif_Common.cmake ./cmake/Shlomif_Common.cmake
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -67,6 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString (!withOffensive) ''
     rm $out/share/games/fortunes/men-women*
   '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "fortune-mod-";
+    };
+  };
 
   meta = {
     mainProgram = "fortune";
