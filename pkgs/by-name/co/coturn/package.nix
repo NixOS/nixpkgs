@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coturn";
-  version = "4.17.2";
+  version = "4.19.0";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     tag = finalAttrs.version;
-    hash = "sha256-YbAa3sRYqnREVcI//vIFedScXuvxAhKlej/MnFxgm5c=";
+    hash = "sha256-pygkCeGKYVkOn+ImBO6cYN7eOjzpVBGKauRCWx8pBYE=";
   };
 
   nativeBuildInputs = [
