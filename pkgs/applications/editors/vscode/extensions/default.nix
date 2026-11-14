@@ -4082,6 +4082,8 @@ let
         };
       };
 
+      rogalmic.bash-debug = callPackage ./rogalmic.bash-debug { };
+
       roman.ayu-next = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ayu-next";
