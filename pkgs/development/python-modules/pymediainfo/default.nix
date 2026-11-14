@@ -8,23 +8,23 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymediainfo";
   version = "7.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DV31nsxhXiTFbzA7j2UVecasyrcmVxXl1CkYbXuiFRQ=";
   };
 
   postPatch = ''
     substituteInPlace src/pymediainfo/__init__.py \
-      --replace "libmediainfo.0.dylib" \
+      --replace-fail "libmediainfo.0.dylib" \
                 "${libmediainfo}/lib/libmediainfo.0${stdenv.hostPlatform.extensions.sharedLibrary}" \
-      --replace "libmediainfo.dylib" \
+      --replace-fail "libmediainfo.dylib" \
                 "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}" \
-      --replace "libmediainfo.so.0" \
+      --replace-fail "libmediainfo.so.0" \
                 "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0"
   '';
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the mediainfo library";
     homepage = "https://github.com/sbraz/pymediainfo";
-    changelog = "https://github.com/sbraz/pymediainfo/releases/tag/v${version}";
+    changelog = "https://github.com/sbraz/pymediainfo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ philipdb ];
   };
-}
+})
