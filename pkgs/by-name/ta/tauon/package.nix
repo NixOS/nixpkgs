@@ -169,10 +169,19 @@ python3Packages.buildPythonApplication {
 
   postInstall = ''
     mv $out/bin/tauonmb $out/bin/tauon
+
     mkdir -p $out/share/applications
     install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
+
+    mkdir -p $out/share/metainfo
+    install -Dm644 extra/com.github.taiko2k.tauonmb.metainfo.xml -t $out/share/metainfo
+    # desktop-id launchable tag must match the desktop file path in share/applications.
+    # https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-launchable
+    substituteInPlace $out/share/metainfo/com.github.taiko2k.tauonmb.metainfo.xml --replace-fail com.github.taiko2k.tauonmb.desktop tauonmb.desktop
+
     mkdir -p $out/share/icons/hicolor/scalable/apps
     install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
+
     ln -s ${lib.getExe lrclib-solver} $out/${python3Packages.python.sitePackages}/tauon/lrclib-solver
   '';
 
