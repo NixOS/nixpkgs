@@ -2,6 +2,7 @@
   name,
   testBase,
   package,
+  flavor ? "containers",
   ...
 }:
 
@@ -20,7 +21,7 @@ in
 
   imports = [ testBase ];
 
-  nodes = {
+  ${flavor} = {
     nextcloud =
       { config, pkgs, ... }:
       {
