@@ -1,0 +1,150 @@
+From 9f070bf3585ef06dec3a3b7784d269c7cd6b229a Mon Sep 17 00:00:00 2001
+From: FayBoy <ahmadyasinfikri@gmail.com>
+Date: Mon, 13 Apr 2026 14:08:01 +0800
+Subject: [PATCH 6/6] Implement glfwSetCursorPosWayland via pointer constraints
+
+---
+ src/CMakeLists.txt |  1 -
+ src/wl_init.c      | 12 ------------
+ src/wl_platform.h  |  6 ++++--
+ src/wl_window.c    | 29 +++++++++++++++++++++--------
+ 4 files changed, 25 insertions(+), 23 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 3021a55a..4d1b9ccb 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -101,7 +101,6 @@ if (GLFW_BUILD_WAYLAND)
+         generate_wayland_protocol("viewporter.xml")
+         generate_wayland_protocol("xdg-shell.xml")
+         generate_wayland_protocol("idle-inhibit-unstable-v1.xml")
+-        generate_wayland_protocol("pointer-warp-v1.xml")
+         generate_wayland_protocol("pointer-constraints-unstable-v1.xml")
+         generate_wayland_protocol("relative-pointer-unstable-v1.xml")
+         generate_wayland_protocol("fractional-scale-v1.xml")
+diff --git a/src/wl_init.c b/src/wl_init.c
+index a35ec789..c79cf2b6 100644
+--- a/src/wl_init.c
++++ b/src/wl_init.c
+@@ -52,7 +52,6 @@
+ #include "fractional-scale-v1-client-protocol.h"
+ #include "xdg-activation-v1-client-protocol.h"
+ #include "idle-inhibit-unstable-v1-client-protocol.h"
+-#include "pointer-warp-v1-client-protocol.h"
+ #include "text-input-unstable-v1-client-protocol.h"
+ #include "text-input-unstable-v3-client-protocol.h"
+ 
+@@ -97,10 +96,6 @@
+ #include "idle-inhibit-unstable-v1-client-protocol-code.h"
+ #undef types
+ 
+-#define types _glfw_pointer_warp_types
+-#include "pointer-warp-v1-client-protocol-code.h"
+-#undef types
+-
+ #define types _glfw_text_input_v1_types
+ #include "text-input-unstable-v1-client-protocol-code.h"
+ #undef types
+@@ -219,13 +214,6 @@ static void registryHandleGlobal(void* userData,
+                              &wp_fractional_scale_manager_v1_interface,
+                              1);
+     }
+-    else if (strcmp(interface, "wp_pointer_warp_v1") == 0)
+-    {
+-        _glfw.wl.pointerWarp =
+-            wl_registry_bind(registry, name,
+-                             &wp_pointer_warp_v1_interface,
+-                             1);
+-    }
+     else if (strcmp(interface, "zwp_text_input_manager_v1") == 0)
+     {
+         _glfw.wl.textInputManagerV1 =
+diff --git a/src/wl_platform.h b/src/wl_platform.h
+index 084519d2..95dbac78 100644
+--- a/src/wl_platform.h
++++ b/src/wl_platform.h
+@@ -142,7 +142,6 @@ struct wl_output;
+ #define xdg_activation_token_v1_interface _glfw_xdg_activation_token_v1_interface
+ #define wl_surface_interface _glfw_wl_surface_interface
+ #define wp_fractional_scale_v1_interface _glfw_wp_fractional_scale_v1_interface
+-#define wp_pointer_warp_v1_interface _glfw_pointer_warp_v1_interface
+ 
+ #define GLFW_WAYLAND_WINDOW_STATE         _GLFWwindowWayland  wl;
+ #define GLFW_WAYLAND_LIBRARY_WINDOW_STATE _GLFWlibraryWayland wl;
+@@ -435,6 +434,10 @@ typedef struct _GLFWwindowWayland
+         uint32_t                    buttonPressSerial;
+         const char*                 cursorName;
+     } fallback;
++
++    double                      askedCursorPosX, askedCursorPosY;
++    GLFWbool                    didAskForSetCursorPos;
++
+     struct zwp_text_input_v1* textInputV1;
+     struct zwp_text_input_v3* textInputV3;
+     struct {
+@@ -465,7 +468,6 @@ typedef struct _GLFWlibraryWayland
+     struct zwp_idle_inhibit_manager_v1*     idleInhibitManager;
+     struct xdg_activation_v1*               activationManager;
+     struct wp_fractional_scale_manager_v1*  fractionalScaleManager;
+-    struct wp_pointer_warp_v1*  pointerWarp;
+     struct zwp_text_input_manager_v1*       textInputManagerV1;
+     struct zwp_text_input_manager_v3*       textInputManagerV3;
+ 
+diff --git a/src/wl_window.c b/src/wl_window.c
+index a98cf04f..20b20663 100644
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -53,7 +53,6 @@
+ #include "xdg-activation-v1-client-protocol.h"
+ #include "idle-inhibit-unstable-v1-client-protocol.h"
+ #include "fractional-scale-v1-client-protocol.h"
+-#include "pointer-warp-v1-client-protocol.h"
+ #include "text-input-unstable-v1-client-protocol.h"
+ #include "text-input-unstable-v3-client-protocol.h"
+ 
+@@ -3387,14 +3386,17 @@ void _glfwGetCursorPosWayland(_GLFWwindow* window, double* xpos, double* ypos)
+ 
+ void _glfwSetCursorPosWayland(_GLFWwindow* window, double x, double y)
+ {
+-    if (!_glfw.wl.pointerWarp)
+-    {
+-        _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
+-                    "Wayland: The compositor does not support setting the cursor position");
+-        return;
++    if (window->wl.lockedPointer) {
++        zwp_locked_pointer_v1_set_cursor_position_hint(window->wl.lockedPointer,
++                                                       wl_fixed_from_double(x),
++                                                       wl_fixed_from_double(y));
++        window->wl.cursorPosX = x;
++        window->wl.cursorPosY = y;
++    } else {
++        window->wl.didAskForSetCursorPos = GLFW_TRUE;
++        window->wl.askedCursorPosX = x;
++        window->wl.askedCursorPosY = y;
+     }
+-
+-    wp_pointer_warp_v1_warp_pointer(_glfw.wl.pointerWarp, window->wl.surface, _glfw.wl.pointer, wl_fixed_from_double(x), wl_fixed_from_double(y), _glfw.wl.pointerEnterSerial);
+ }
+ 
+ void _glfwSetCursorModeWayland(_GLFWwindow* window, int mode)
+@@ -3628,6 +3630,17 @@ static const struct zwp_relative_pointer_v1_listener relativePointerListener =
+ static void lockedPointerHandleLocked(void* userData,
+                                       struct zwp_locked_pointer_v1* lockedPointer)
+ {
++    _GLFWwindow* window = userData;
++
++    if (window->wl.didAskForSetCursorPos)
++    {
++        window->wl.didAskForSetCursorPos = GLFW_FALSE;
++        zwp_locked_pointer_v1_set_cursor_position_hint(window->wl.lockedPointer,
++                                                       wl_fixed_from_double(window->wl.askedCursorPosX),
++                                                       wl_fixed_from_double(window->wl.askedCursorPosY));
++        window->wl.cursorPosX = window->wl.askedCursorPosX;
++        window->wl.cursorPosY = window->wl.askedCursorPosY;
++    }
+ }
+ 
+ static void lockedPointerHandleUnlocked(void* userData,
+-- 
+2.53.0
+
