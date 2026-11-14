@@ -1884,11 +1884,6 @@ with pkgs;
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
 
-  inherit (callPackages ../tools/filesystems/garage { })
-    garage_1
-    garage_2
-    ;
-
   gaugePlugins = recurseIntoAttrs (callPackage ../by-name/ga/gauge/plugins { });
 
   gawd = python3Packages.toPythonApplication python3Packages.gawd;
