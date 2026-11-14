@@ -65,10 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/decibels";
     changelog = "https://gitlab.gnome.org/GNOME/decibels/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Only;
-    teams = [
-      lib.teams.gnome
-      lib.teams.gnome-circle
-    ];
+    teams = [ lib.teams.gnome ];
     mainProgram = "org.gnome.Decibels";
     platforms = lib.platforms.linux;
   };
