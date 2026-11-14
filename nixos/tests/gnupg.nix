@@ -43,6 +43,7 @@
 
       programs.gnupg.agent.enable = true;
       programs.gnupg.agent.enableSSHSupport = true;
+      programs.gnupg.agent.settings.disable-scdaemon = true;
     };
 
   testScript = ''
@@ -61,6 +62,9 @@
 
     with subtest("Wait for the autologin"):
         machine.wait_until_tty_matches("1", "alice@machine")
+
+    with subtest("Can configure the agent"):
+        machine.succeed("grep -qx disable-scdaemon /etc/gnupg/gpg-agent.conf")
 
     with subtest("Can generate a PGP key"):
         # Note: this needs a tty because of pinentry
