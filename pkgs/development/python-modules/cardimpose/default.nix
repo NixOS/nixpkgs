@@ -7,7 +7,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "cardimpose";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
 
   # Get source from Pypi as the GitHub repository doesn't have any version
@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   # what the version should be.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-fMI2bvsHGYU7nZ9CdaUtWQkNj2MihMEcBCVy8VbE6F0=";
+    hash = "sha256-NVRk/sDCEeQYx4bwJ268w7oitq9y4FqOo1m1pzPRLiE=";
   };
 
   build-system = [ setuptools ];
