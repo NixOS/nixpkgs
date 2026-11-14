@@ -14,6 +14,7 @@ in
   containers.machine = {
     services.syncthing = {
       enable = true;
+      apiKeyFile = "${pkgs.writeText "syncthing-init-test-apiKeyFile" "theNewCustomApiKey"}";
       settings.devices.testDevice = {
         id = testId;
       };
@@ -29,8 +30,9 @@ in
     machine.wait_for_unit("syncthing-init.service")
     config = machine.succeed("cat /var/lib/syncthing/.config/syncthing/config.xml")
 
-    assert "testFolder" in config
-    assert "${testId}" in config
-    assert "guiUser" in config
+    t.assertIn("testFolder", config, "Test Folder Missing")
+    t.assertIn("${testId}", config, "Test ID Missing")
+    t.assertIn("guiUser", config, "GUI User Missing")
+    t.assertIn("theNewCustomApiKey", config, "Wrong API Key")
   '';
 }
