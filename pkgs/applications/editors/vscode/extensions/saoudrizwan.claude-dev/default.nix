@@ -3,7 +3,7 @@
   vscode-utils,
 }:
 
-vscode-utils.buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
   mktplcRef = {
     name = "claude-dev";
     publisher = "saoudrizwan";
@@ -12,10 +12,16 @@ vscode-utils.buildVscodeMarketplaceExtension {
   };
 
   meta = {
-    description = "Cline - autonomous coding agent VSCode extension, capable of creating/editing files, executing commands, using the browser, and more with your permission every step of the way";
-    downloadPage = "https://github.com/cline/cline";
-    homepage = "https://github.com/cline/cline";
+    description = "Autonomous coding agent for VS Code";
+    longDescription = ''
+      Creates and edits files, runs commands, and uses the browser, asking
+      permission at each step.
+    '';
+    homepage = "https://cline.bot";
+    downloadPage = "https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev";
+    changelog = "https://github.com/cline/cline/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ iamanaws ];
   };
-}
+})
