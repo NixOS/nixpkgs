@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation {
   pname = "weechat-grep";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchurl {
-    url = "https://github.com/weechat/scripts/raw/5ee93d56f371c829d2798a5446a14292c180f70b/python/grep.py";
-    hash = "sha256-EVcoxjTTjXOYD8DppD+IULxpKerEdolmlgphrulFGC0=";
+    url = "https://github.com/weechat/scripts/raw/1e3caac903e0d7873ca76ae7d2451ba5493661de/python/grep.py";
+    hash = "sha256-qxa3HxvoLhGffnfXVCrvRWE5h9vHsXuegPx6hYJ5WV0=";
   };
 
   dontUnpack = true;
