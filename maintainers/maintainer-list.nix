@@ -453,6 +453,12 @@
     githubId = 105471058;
     name = "Andrés D'Infante";
   };
+  a-rustacean = {
+    email = "a-rustacean@outlook.com";
+    github = "a-rustacean";
+    githubId = 98999149;
+    name = "Dilshad";
+  };
   A1ca7raz = {
     email = "aya@wtm.moe";
     github = "A1ca7raz";
