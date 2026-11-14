@@ -2413,6 +2413,8 @@ self: super: with self; {
 
   betterproto-rust-codec = callPackage ../development/python-modules/betterproto-rust-codec { };
 
+  betterproto2 = callPackage ../development/python-modules/betterproto2 { };
+
   bezier = callPackage ../development/python-modules/bezier { };
 
   beziers = callPackage ../development/python-modules/beziers { };
