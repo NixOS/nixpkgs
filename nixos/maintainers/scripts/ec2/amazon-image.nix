@@ -8,6 +8,7 @@
 
 let
   inherit (lib)
+    max
     mkOption
     optionalString
     types
@@ -46,6 +47,16 @@ in
   ];
 
   options.amazonImage = {
+    bootSize = mkOption {
+      type = types.int;
+      default = 256;
+      example = 1024;
+      description = ''
+        Size of the boot partition in MB. With `ec2.zfs.enable` the boot
+        min value is 1000 MB.
+      '';
+    };
+
     contents = mkOption {
       example = literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -107,7 +118,7 @@ in
 
         includeChannel = true;
 
-        bootSize = 1000; # 1G is the minimum EBS volume
+        bootSize = max 1000 cfg.bootSize; # 1G is the minimum EBS volume
 
         rootSize = config.virtualisation.diskSize;
         rootPoolProperties = {
@@ -163,6 +174,7 @@ in
 
         fsType = "ext4";
         partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
+        bootSize = "${toString cfg.bootSize}M";
 
         inherit (config.virtualisation) diskSize;
 
