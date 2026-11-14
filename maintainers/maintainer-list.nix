@@ -11052,6 +11052,12 @@
     github = "grindhold";
     githubId = 2592640;
   };
+  Grizzlywer = {
+    name = "Grizzlywer";
+    github = "Grizzlywer";
+    githubId = 86851727;
+    email = "Grizzlywer@proton.me";
+  };
   grnnja = {
     email = "grnnja@gmail.com";
     github = "grnnja";
