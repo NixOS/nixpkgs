@@ -1,21 +1,13 @@
-{
+args@{
   buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
   cudaAtLeast,
   lib,
   libnvjitlink,
 }:
-buildRedist {
-  redistName = "cuda";
+(import ../library.nix args) {
   pname = "libcusparse";
-
-  outputs = [
-    "out"
-    "dev"
-    "include"
-    "lib"
-    "static"
-    "stubs"
-  ];
 
   # Through 12.6.3.3 libnvJitLink is DT_NEEDED and the buildInputs entry below covers it; from
   # 12.7.3.1 it is dlopen'd instead, so it needs a runpath. Unconditional from 12.0 because the

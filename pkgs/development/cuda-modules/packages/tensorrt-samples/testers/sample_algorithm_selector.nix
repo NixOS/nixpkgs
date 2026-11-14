@@ -1,6 +1,6 @@
 {
   atLeast,
-  backendStdenv,
+  cudaConfig,
   lib,
   mkTester,
   older,
@@ -36,7 +36,7 @@ lib.optionalAttrs (older "10.8") (
     ];
   }
   # Only Xavier and Orin have a DLA
-  // lib.optionalAttrs (lib.subtractLists [ "7.2" "8.7" ] backendStdenv.cudaCapabilities == [ ]) {
+  // lib.optionalAttrs (lib.subtractLists [ "7.2" "8.7" ] cudaConfig.cudaCapabilities == [ ]) {
     dla = mkTester "sample_algorithm_selector-dla" [
       "sample_algorithm_selector"
       "--datadir=${sample-data.outPath + "/mnist"}"

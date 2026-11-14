@@ -1,12 +1,13 @@
-{
+args@{
   buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
   cuda_nvrtc,
   cudaAtLeast,
   lib,
   libnvjitlink,
 }:
-buildRedist {
-  redistName = "cuda";
+(import ../library.nix args) {
   pname = "libcufft";
 
   # dlopen'd for LTO callbacks (cufftXtSetJITCallback, CUFFT_FORCE_LTO). Gated because libnvjitlink
@@ -17,15 +18,6 @@ buildRedist {
       libnvjitlink # libnvJitLink.so.%s
     ]
   );
-
-  outputs = [
-    "out"
-    "dev"
-    "include"
-    "lib"
-    "static"
-    "stubs"
-  ];
 
   meta = {
     description = "High-performance FFT product CUDA library";

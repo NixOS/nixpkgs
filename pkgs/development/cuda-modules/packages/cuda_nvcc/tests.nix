@@ -1,5 +1,7 @@
 {
   backendStdenv,
+  buildCudaNvcc,
+  buildPackages,
   cccl,
   cuda_crt,
   cuda_cudart,
@@ -21,7 +23,7 @@ let
   recordsCommandLine = cudaAtLeast "12.8";
   arch = if recordsCommandLine then "sm_100" else lib.head flags.realArches;
 
-  cudadevrtDir = "${lib.getOutput "static" cuda_cudart}/lib";
+  cudadevrtDir = "${lib.getOutput cuda_cudart.outputStatic cuda_cudart}/lib";
 
   helpers = ''
     # Prints the command line recorded in each note written by nvlink.
@@ -75,7 +77,7 @@ let
 
       nativeBuildInputs = [
         cuda_cuobjdump
-        cuda_nvcc
+        buildCudaNvcc
       ];
 
       buildInputs = [ cuda_cudart ];
@@ -105,7 +107,7 @@ let
 
       # The directories nvlink records must not become runtime dependencies. (Nix doesn't find references in compressed
       # fatbins, e.g. with -Xfatbin -compress-all, so checkNotes is what checks those.)
-      disallowedRequisites = [ cuda_nvcc ] ++ map (output: cuda_cudart.${output}) cuda_cudart.outputs;
+      disallowedRequisites = [ buildCudaNvcc ] ++ map (output: cuda_cudart.${output}) cuda_cudart.outputs;
 
       meta = {
         inherit (cuda_nvcc.meta) badPlatforms platforms teams;
@@ -141,12 +143,12 @@ in
   nvcc-static-executable =
     (mkTest "nvcc-static-executable" ''
       nvcc -arch="$arch" -rdc=true -Xcompiler -static caller.cu answer.cu -L${cudadevrtDir} -o result
-      if readelf --program-headers result | grep -E 'INTERP|DYNAMIC'; then
+      if "$READELF" --program-headers result | grep -E 'INTERP|DYNAMIC'; then
         nixErrorLog "expected result to be a static executable"
         exit 1
       fi
       # cuobjdump doesn't find the device code in a static executable.
-      objcopy --dump-section .nv_fatbin=fatbin result
+      "$OBJCOPY" --dump-section .nv_fatbin=fatbin result
       checkNotes fatbin
     '').overrideAttrs
       (prevAttrs: {
@@ -157,7 +159,7 @@ in
   nvcc-device-link-object = mkTest "nvcc-device-link-object" ''
     nvcc -arch="$arch" -rdc=true -c caller.cu answer.cu
     nvcc -arch="$arch" -dlink caller.o answer.o -L${cudadevrtDir} -o dlink.o
-    ar rcs result caller.o answer.o dlink.o
+    "$AR" rcs result caller.o answer.o dlink.o
     checkNotes result
   '';
 
@@ -176,9 +178,9 @@ in
 
   # The wrapper doesn't depend on setup hooks, as with nix develop or a build system outside stdenv.
   nvcc-empty-environment = mkTest "nvcc-empty-environment" ''
-    env -i TMPDIR="$TMPDIR" ${lib.getExe cuda_nvcc} -arch="$arch" -rdc=true caller.cu answer.cu \
+    env -i TMPDIR="$TMPDIR" ${lib.getExe buildCudaNvcc} -arch="$arch" -rdc=true caller.cu answer.cu \
       ${
-        lib.concatMapStringsSep " " (p: "-I${lib.getInclude p}/include") (
+        lib.concatMapStringsSep " " (p: "-I${lib.getOutput p.outputInclude p}/include") (
           [ cuda_cudart ] ++ lib.optionals (cudaAtLeast "13.0") [ cuda_crt ]
         )
       } \
@@ -211,16 +213,35 @@ in
     link "h i" -optf nested.optf,,escaped.optf
 
     # Only the hashes change, to e's (octal 145): the output is otherwise the same as nvlink's.
-    (exec -a nvlink ${cuda_nvcc}/bin/.nvlink-wrapped --arch="$arch" caller.o answer.o -L ${cudadevrtDir} -o unwrapped)
+    (exec -a nvlink ${buildCudaNvcc}/bin/.nvlink-wrapped --arch="$arch" caller.o answer.o -L ${cudadevrtDir} -o unwrapped)
     [[ $(stat -c %s a) == $(stat -c %s unwrapped) ]]
     cmp -l a unwrapped > differences || true
     awk '$2 != 145 { print "unexpected difference: " $0; exit 1 }' differences
     ${lib.optionalString recordsCommandLine "[[ -s differences ]]"}
 
+    # nvlink's script generator invokes unprefixed ld. Make the test's host
+    # linker available under that name, including in a cross stdenv.
+    mkdir host-linker
+    ln -s "$(command -v "$LD")" host-linker/ld
     # A host linker script is written as-is.
-    nvlink -ghls lcs-abs -o wrapped.ld
-    ${cuda_nvcc}/bin/.nvlink-wrapped -ghls lcs-abs -o unwrapped.ld
+    PATH="$PWD/host-linker:$PATH" nvlink -ghls lcs-abs -o wrapped.ld
+    PATH="$PWD/host-linker:$PATH" ${buildCudaNvcc}/bin/.nvlink-wrapped -ghls lcs-abs -o unwrapped.ld
     cmp wrapped.ld unwrapped.ld
+
+    # NVCC must also resolve its backend linker without an ambient plain ld.
+    ${import ../../test-support.nix {
+      inherit buildPackages lib;
+      extraPath = [
+        buildPackages.gnugrep
+        buildPackages.gnused
+      ];
+    }}
+    runStandalone ${lib.getExe buildCudaNvcc} --host-linker-script gen-lcs -o nvcc.ld
+    # A nonempty script from BUILD's linker would conceal a wrong-CPU alias.
+    "$LD" --verbose | sed -n '/^OUTPUT_ARCH(/p' > expected.arch
+    grep '^OUTPUT_ARCH(' nvcc.ld > nvcc.arch
+    [[ -s expected.arch ]]
+    cmp expected.arch nvcc.arch
 
     nvlink --version
   '';
@@ -231,7 +252,7 @@ in
     nvcc -arch="$arch" -rdc=true -c caller.cu answer.cu
     # NOTE: nvlink only links inputs named *.cubin as cubins, and before CUDA 13, a relocatable link of relocatable
     # device code requires libcudadevrt.
-    (exec -a nvlink ${cuda_nvcc}/bin/.nvlink-wrapped --arch="$arch" -r caller.o answer.o -L ${cudadevrtDir} -lcudadevrt \
+    (exec -a nvlink ${buildCudaNvcc}/bin/.nvlink-wrapped --arch="$arch" -r caller.o answer.o -L ${cudadevrtDir} -lcudadevrt \
       -o input.cubin)
     nvlink --arch="$arch" input.cubin -L ${cudadevrtDir} -o result
     checkNotes result
@@ -264,7 +285,7 @@ in
   # The installed wrapper's handling of nvlink as a process and of its output, with a stand-in for nvlink next to it.
   wrapper =
     (mkTest "wrapper" ''
-      cp ${cuda_nvcc}/bin/nvlink nvlink
+      cp ${buildCudaNvcc}/bin/nvlink nvlink
       cp ${./tests/fake-nvlink} .nvlink-wrapped
       chmod +w nvlink
       chmod +x .nvlink-wrapped
@@ -333,9 +354,9 @@ in
       hash=0123456789abcdfghijklmnpqrsvwxyz
       printf 'nvlink\0-L ${builtins.storeDir}/%s-x/lib\0' "$hash" > note
       echo 'int x;' | "$CC" -c -x c - -o empty.o
-      objcopy --add-section .note.nv.tkinfo=note --add-section .other=note empty.o note.o
+      "$OBJCOPY" --add-section .note.nv.tkinfo=note --add-section .other=note empty.o note.o
       FAKE=write FAKE_CONTENTS=note.o ./nvlink -o scrubbed.o
-      objcopy --dump-section .note.nv.tkinfo=scrubbed --dump-section .other=other scrubbed.o
+      "$OBJCOPY" --dump-section .note.nv.tkinfo=scrubbed --dump-section .other=other scrubbed.o
       sed "s/$hash/$(printf 'e%.0s' {1..32})/" note > expected
       cmp scrubbed expected
       cmp other note
@@ -350,7 +371,7 @@ in
       struct.pack_into("<I", elf, shoff + 0x28, shstrndx)  # sh_link
       open(sys.argv[2], "wb").write(elf)
       ' note.o extended.o
-      readelf --file-header extended.o | grep -F 'Number of section headers:         0 ('
+      "$READELF" --file-header extended.o | grep -F 'Number of section headers:         0 ('
       FAKE=write FAKE_CONTENTS=extended.o ./nvlink -o scrubbed-extended.o
       expect "$(grep -a -o -F "$hash" scrubbed-extended.o | wc -l)" 1 "hashes left in a file with many sections"
       # The output is left as-is if nvlink fails.
@@ -406,26 +427,26 @@ in
       # Clang rejects for the device code.
       clang-gpu-rdc =
         let
-          clang = llvmPackages.clang;
+          clang = llvmPackages.clang.__spliced.buildHost or llvmPackages.clang;
         in
         (mkTest "clang-gpu-rdc" ''
           # A CUDA installation laid out as Clang expects, linking to the wrapper as cudatoolkit does.
           toolkit=$PWD/toolkit
           mkdir -p "$toolkit/bin" "$toolkit/include"
-          ln -s ${cuda_nvcc}/bin/{*,.nvlink-wrapped} "$toolkit/bin/"
-          ln -s ${cuda_nvcc}/nvvm "$toolkit/nvvm"
+          ln -s ${buildCudaNvcc}/bin/{*,.nvlink-wrapped} "$toolkit/bin/"
+          ln -s ${buildCudaNvcc}/nvvm "$toolkit/nvvm"
           ln -s ${lib.getLib cuda_cudart}/lib "$toolkit/lib64"
           for dir in ${
             lib.concatMapStringsSep " " (p: "${lib.getInclude p}/include") [
               cccl
               cuda_cudart
-              cuda_nvcc
+              buildCudaNvcc
               libcurand
             ]
           }; do
             ln -sf "$dir"/* "$toolkit/include/"
           done
-          ${lib.getExe' clang "clang++"} -x cuda --cuda-path="$toolkit" --offload-arch="$arch" --offload-new-driver \
+          ${lib.getExe' clang "${clang.targetPrefix}clang++"} -x cuda --cuda-path="$toolkit" --offload-arch="$arch" --offload-new-driver \
             -fgpu-rdc -Wno-unknown-cuda-version caller.cu answer.cu \
             -L${cudadevrtDir} -lcudart_static -ldl -lrt -lpthread \
             -o result

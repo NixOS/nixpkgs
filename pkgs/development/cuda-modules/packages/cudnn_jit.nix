@@ -1,7 +1,7 @@
 {
-  backendStdenv,
   buildRedist,
   cuda_nvrtc,
+  cudaConfig,
   cudnn-frontend,
   lib,
   runCommand,
@@ -36,8 +36,8 @@ buildRedist (finalAttrs: {
     {
       message =
         "cuDNN JIT (found ${finalAttrs.version})"
-        + " supports CUDA compute capabilities 8.0 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion = lib.all (lib.flip lib.versionAtLeast "8.0") backendStdenv.cudaCapabilities;
+        + " supports CUDA compute capabilities 8.0 and newer (found ${builtins.toJSON cudaConfig.cudaCapabilities})";
+      assertion = lib.all (lib.flip lib.versionAtLeast "8.0") cudaConfig.cudaCapabilities;
     }
   ];
 

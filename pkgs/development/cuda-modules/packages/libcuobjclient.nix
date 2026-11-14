@@ -1,5 +1,8 @@
 {
   buildRedist,
+  cudaAtLeast,
+  cudaMajorMinorVersion,
+  lib,
   libcufile,
   numactl,
   rdma-core,
@@ -16,12 +19,20 @@ buildRedist {
   ];
 
   buildInputs = [
-    libcufile
     numactl
     # NOTE: DT_NEEDED, but until now resolved only because auto-patchelf harvests the runpath of
     # libcufile's libcufile_rdma.so, which happens to point at rdma-core.
     rdma-core # libibverbs.so.1, librdmacm.so.1, libmlx5.so.1
   ];
+
+  # cuobjclient.h includes cufile.h and exposes its types in the public API.
+  # CUDA 13.4 also exposes infiniband/verbs.h through cuobjextrc_types.h.
+  propagatedBuildInputs = [ libcufile ] ++ lib.optionals (cudaAtLeast "13.4") [ rdma-core ];
+
+  postPatch = ''
+    substituteInPlace share/pkgconfig/cuobjclient-${cudaMajorMinorVersion}.pc \
+      --replace-fail 'Cflags:' $'Requires: cufile-${cudaMajorMinorVersion}${lib.optionalString (cudaAtLeast "13.4") " libibverbs"}\nCflags:'
+  '';
 
   meta = {
     description = "CUDA cuObject Client";

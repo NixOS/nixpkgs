@@ -1,0 +1,52 @@
+From c63ced675066cb90bbdddebeb4a0aefc0c78a0fe Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:32:37 -0700
+Subject: [PATCH] cmake: publish the installed CUDA header dependency
+
+Use CUDA::toolkit instead of producer-only include directories. Resolve
+the dependency for installed consumers so split or relocated toolkit
+headers remain available through the exported CUTLASS target.
+---
+ CMakeLists.txt                     | 16 ++--------------
+ cmake/NvidiaCutlassConfig.cmake.in |  1 +
+ 2 files changed, 3 insertions(+), 14 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6b2e290..2efcc47 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -760,20 +760,8 @@ target_include_directories(
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+   )
+ 
+-# Mark CTK headers as system to supress warnings from them
+-target_include_directories(
+-  CUTLASS
+-  SYSTEM INTERFACE
+-  $<BUILD_INTERFACE:${CUDA_TOOLKIT_ROOT_DIR}/include>
+-  )
+-
+-if(CUDA_VERSION VERSION_GREATER_EQUAL 13.0)
+-  target_include_directories(
+-    CUTLASS
+-    SYSTEM INTERFACE
+-    $<BUILD_INTERFACE:${CUTLASS_CUDA_CCCL_INCLUDE_DIR}>
+-    )
+-endif()
++# Toolkit headers are part of the installed C++ interface.
++target_link_libraries(CUTLASS INTERFACE CUDA::toolkit)
+ 
+ install(
+   DIRECTORY
+diff --git a/cmake/NvidiaCutlassConfig.cmake.in b/cmake/NvidiaCutlassConfig.cmake.in
+index 2fe6911..c0acc36 100644
+--- a/cmake/NvidiaCutlassConfig.cmake.in
++++ b/cmake/NvidiaCutlassConfig.cmake.in
+@@ -1,6 +1,7 @@
+ get_filename_component(NvidiaCutlass_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ 
+ include(CMakeFindDependencyMacro)
++find_dependency(CUDAToolkit)
+ 
+ if(TARGET nvidia::cutlass::CUTLASS)
+   return()

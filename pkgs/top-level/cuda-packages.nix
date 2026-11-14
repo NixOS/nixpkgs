@@ -3,13 +3,14 @@
   callPackage,
   config,
   lib,
+  stdenv,
 }:
 let
-  # NOTE: We cannot use backendStdenv.hostPlatform for the same reason we cannot use
-  # backendStdenv.hasJetsonCudaCapability (see below).
-  hostPlatform = callPackage ({ stdenv }: stdenv.hostPlatform) { };
+  # NOTE: We cannot read the host platform from a package set's backendStdenv: it is constructed within the package
+  # set that these manifest versions define, so reading it here would recurse.
+  inherit (stdenv) hostPlatform;
 
-  # NOTE: We cannot use backendStdenv.hasJetsonCudaCapability because backendStdenv asserts the requested capabilities
+  # NOTE: We cannot use cudaConfig.hasJetsonCudaCapability because cudaConfig asserts the requested capabilities
   # are supported by its CUDA version. Doing so would cause evaluation of every package set to fail when any package
   # set does not support the requested capabilities, since the manifests of each package set are compared against
   # those of the default package set. The default capabilities never include Jetson capabilities.

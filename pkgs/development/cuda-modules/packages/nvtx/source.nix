@@ -6,7 +6,6 @@
   fetchFromGitHub,
   gnused,
   lib,
-  markForCudatoolkitRootHook,
   nix,
   nix-update,
   stdenv,
@@ -15,7 +14,7 @@
 let
   inherit (lib.strings) cmakeBool;
 in
-# NOTE: Nothing here depends on the CUDA release (markForCudatoolkitRootHook is the same in every package set), so this
+# NOTE: Nothing here depends on the CUDA release, so this
 # is built with stdenv and without the CUDA name prefix: every CUDA package set from 12.9 on shares the same derivation.
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
@@ -41,10 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputInclude = "include";
 
-  nativeBuildInputs = [
-    cmake
-    markForCudatoolkitRootHook
-  ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ (cmakeBool "NVTX3_INSTALL" true) ];
 

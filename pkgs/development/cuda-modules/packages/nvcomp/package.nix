@@ -4,6 +4,7 @@
   buildRedist,
   cuda_cudart,
   cuda_nvcc,
+  cudaConfig,
   lib,
 }:
 buildRedist (finalAttrs: {
@@ -23,8 +24,8 @@ buildRedist (finalAttrs: {
     {
       message =
         "nvCOMP supports CUDA compute capabilities 7.0 and newer"
-        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion = lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities;
+        + " (found ${builtins.toJSON cudaConfig.cudaCapabilities})";
+      assertion = lib.all (lib.flip lib.versionAtLeast "7.0") cudaConfig.cudaCapabilities;
     }
   ];
 

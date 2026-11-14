@@ -1782,6 +1782,7 @@ with pkgs;
         callPackage
         config
         lib
+        stdenv
         ;
     })
     cudaPackages_12_6
