@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  makeWrapper,
+  go,
 }:
 
 buildGoModule (finalAttrs: {
@@ -16,6 +18,21 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-JixRpxMSi7pEFrR4NyrRIP84qFr9IAHdGmQblAjUUWs=";
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  ldflags = [
+    "-s"
+  ];
+
+  allowGoReference = true;
+
+  postFixup = ''
+    wrapProgram "$out/bin/enumer" \
+      --prefix PATH : ${go}/bin
+  '';
 
   meta = {
     description = "Go tool to auto generate methods for enums";
