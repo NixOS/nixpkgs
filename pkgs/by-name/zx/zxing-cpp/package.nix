@@ -33,10 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
     stb
   ];
 
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "out"
+  ];
+
   cmakeFlags = [
     "-DZXING_BLACKBOX_TESTS=OFF"
     "-DZXING_DEPENDENCIES=LOCAL"
-    "-DZXING_EXAMPLES=OFF"
+    "-DZXING_EXAMPLES=ON"
     "-DZXING_USE_BUNDLED_ZINT=OFF"
     (lib.cmakeFeature "ZXING_WRITERS" "BOTH")
   ];
