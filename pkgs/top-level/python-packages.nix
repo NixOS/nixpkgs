@@ -4061,7 +4061,7 @@ self: super: with self; {
 
   daff = callPackage ../development/python-modules/daff { };
 
-  daft = callPackage ../development/python-modules/daft { };
+  daft = callPackage ../development/python-modules/daft { inherit (pkgs) zstd; };
 
   dahlia = callPackage ../development/python-modules/dahlia { };
 
