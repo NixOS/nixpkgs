@@ -1,15 +1,17 @@
 {
   buildPythonPackage,
-  deprecated,
   googleapis-common-protos,
   hatchling,
+  mocket,
   opentelemetry-api,
+  opentelemetry-exporter-http-transport,
+  opentelemetry-exporter-otlp-common,
   opentelemetry-exporter-otlp-proto-common,
   opentelemetry-proto,
   opentelemetry-sdk,
   opentelemetry-test-utils,
   requests,
-  responses,
+  typing-extensions,
   pytestCheckHook,
 }:
 
@@ -23,19 +25,21 @@ buildPythonPackage {
   build-system = [ hatchling ];
 
   dependencies = [
-    deprecated
     googleapis-common-protos
     opentelemetry-api
+    opentelemetry-exporter-http-transport
+    opentelemetry-exporter-otlp-common
     opentelemetry-exporter-otlp-proto-common
     opentelemetry-proto
     opentelemetry-sdk
     requests
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    mocket
     opentelemetry-test-utils
     pytestCheckHook
-    responses
   ];
 
   pythonImportsCheck = [ "opentelemetry.exporter.otlp.proto.http" ];
