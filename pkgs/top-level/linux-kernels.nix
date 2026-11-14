@@ -276,6 +276,13 @@ in
         # unreleased changes to the module build process.
         bcachefs = callPackage pkgs.bcachefs-tools.kernelModule { };
 
+        # bpf-backed binfmt_misc handlers ('B' entries) arrived in 7.3.
+        binfmt-origin =
+          if lib.versionAtLeast kernel.version "7.3" then
+            callPackage ../os-specific/linux/binfmt-origin { }
+          else
+            null;
+
         ch9344 = callPackage ../os-specific/linux/ch9344 { };
 
         chipsec = callPackage ../by-name/ch/chipsec/package.nix {

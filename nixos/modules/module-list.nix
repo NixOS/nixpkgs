@@ -1995,6 +1995,7 @@
   ./system/activation/specialisation.nix
   ./system/activation/switchable-system.nix
   ./system/activation/top-level.nix
+  ./system/boot/binfmt-relocatable.nix
   ./system/boot/binfmt.nix
   ./system/boot/clevis-luks-askpass.nix
   ./system/boot/clevis.nix
