@@ -97,7 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false;
 
   setupHooks = [
-    ./setup-hook.sh
+    (buildPackages.replaceVars ./setup-hook.sh {
+      GenJSONCollectionRC = "${./GenJSONCollectionRC.cmake}";
+      OperateJSONArray = "${./OperateJSONArray.cmake}";
+      OperateJSONAttr = "${./OperateJSONAttr.cmake}";
+    })
     ./check-pc-files-hook.sh
   ];
 
