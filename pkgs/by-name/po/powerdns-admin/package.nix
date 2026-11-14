@@ -11,12 +11,12 @@
 
 let
   pname = "powerdns-admin";
-  version = "2026.08.1";
+  version = "2026.11.1";
   src = fetchFromGitHub {
     owner = "PowerDNS-Admin";
     repo = "PowerDNS-Admin";
     tag = "v${version}";
-    hash = "sha256-henbXspZfO8n0V0v63/7nOO5s01f5c7QMtcseeBFKVY=";
+    hash = "sha256-sAorZKL1yO1/UWsYDcsKVRstR17Wv3zq7thhM1wswqc=";
   };
 
   inherit (yarn-berry_4-fetcher) fetchYarnBerryDeps yarnBerryConfigHook;
@@ -97,6 +97,7 @@ let
         mv node_modules powerdnsadmin/static/node_modules
       fi
 
+      PDA_ALLOW_INSECURE_SECRETS=1 \
       SESSION_TYPE=filesystem \
       SQLALCHEMY_DATABASE_URI="sqlite:///:memory:" \
       FLASK_APP=./powerdnsadmin/__init__.py \
