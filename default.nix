@@ -30,4 +30,7 @@ if missingFeatures != [ ] then
 
 else
 
-  import ./pkgs/top-level/impure.nix
+  import ./pkgs/abs/default.nix // {
+    /** Legacy Nixpkgs entrypoint */
+    __functor = _: import ./pkgs/top-level/impure.nix;
+  }
