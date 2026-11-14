@@ -9,13 +9,13 @@
 
 mkTclDerivation (finalAttrs: {
   pname = "yajl-tcl";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "yajl-tcl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MKm/cfZxPoxpsHuZf9qSXZXzdFbDb7IGeJgMHGh9bcE=";
+    hash = "sha256-lFnFOODnORNV5+rRgkRM3ZTtS41ZN36MgvGQRDHfHeg=";
   };
 
   nativeBuildInputs = [
