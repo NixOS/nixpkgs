@@ -13,6 +13,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acl";
+
+  # Note: while not part of passthru.tests because doing so resulted in errors,
+  # consider building nixosTests.acl when updating to run the tests
   version = "2.4.0";
 
   src = fetchurl {
