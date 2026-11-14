@@ -143,6 +143,7 @@ let
       ./with-postgresql-and-redis.nix
       ./with-objectstore.nix
       ./with-mail.nix
+      ./with-taskprocessing-worker.nix
     ];
 in
 listToAttrs (
