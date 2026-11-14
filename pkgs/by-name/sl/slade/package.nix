@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slade";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
     tag = finalAttrs.version;
-    hash = "sha256-keh3dkgUovNwMyQRJvrMN2iZSBGrwKSsdeNbxaZQiE8=";
+    hash = "sha256-z8fkNtqts/RVSjsQKX5YGtmDSt8TZw7QXagME1/MgiU=";
   };
 
   patches = [ ./remove-fetchcontent.patch ];
