@@ -8,17 +8,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "windowtolayer";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "windowtolayer";
     tag = "v${version}";
-    hash = "sha256-TUet9DqLMsY34Mb9t4IKr3Z/JxrPgvufzanHI4D9dZg=";
+    hash = "sha256-zoe0rrjoS3h/MnQhUVCRTIifRMUN7JZmdgQ/8cRapJk=";
   };
 
-  cargoHash = "sha256-MqcutNzorDeYoGKWFbCzIrNuo1w2vwnGEFOuooZwPgk=";
+  cargoHash = "sha256-Y+8v7Q9vs3f5MttFED9Ym6+WS1W0RcPTpDMKcESNRtY=";
 
   nativeBuildInputs = [
     python3
