@@ -1,15 +1,28 @@
 {
   lib,
+  stdenvNoCC,
   fetchurl,
+  fetchzip,
+  makeWrapper,
   makeDesktopItem,
   appimageTools,
 }:
 let
   pname = "saleae-logic-2";
   version = "2.4.44";
-  src = fetchurl {
-    url = "https://downloads2.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
-    hash = "sha256-lJp0al4tRqXwb6I8iziCav481XNAuEjASo1ZfUWdYLU=";
+  meta = {
+    homepage = "https://www.saleae.com/";
+    changelog = "https://ideas.saleae.com/f/changelog/";
+    description = "Software for Saleae logic analyzers";
+    license = lib.licenses.unfree;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
+    maintainers = with lib.maintainers; [
+      j-hui
+      newam
+    ];
   };
   desktopItem = makeDesktopItem {
     name = "saleae-logic-2";
@@ -21,65 +34,84 @@ let
     categories = [ "Development" ];
   };
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
+(
+  if stdenvNoCC.hostPlatform.isDarwin then
+    (stdenvNoCC.mkDerivation {
+      inherit pname version meta;
 
-  extraInstallCommands =
-    let
-      appimageContents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      mkdir -p $out/etc/udev/rules.d
-      cp ${appimageContents}/resources/linux-x64/99-SaleaeLogic.rules $out/etc/udev/rules.d/
-      mkdir $out/share
-      ln -s ${desktopItem}/share/applications $out/share/
-      for size in 16 32 48 64 128 256; do
-        install -Dm644 -t $out/share/icons/hicolor/"$size"x"$size"/apps \
-          ${appimageContents}/usr/share/icons/hicolor/"$size"x"$size"/apps/Logic.png
-      done
-    '';
+      src = fetchzip {
+        url = "https://downloads2.saleae.com/logic2/Logic-${version}-macos-arm64.zip";
+        stripRoot = false;
+        hash = "sha256-xWR+S093DgugamWOvwpE/vkgKrN8/02GKUfHm5qFmO0=";
+      };
 
-  extraPkgs =
-    pkgs: with pkgs; [
-      wget
-      unzip
-      glib
-      libx11
-      libxcb
-      libxcomposite
-      libxcursor
-      libxdamage
-      libxext
-      libxfixes
-      libxi
-      libxrender
-      libxtst
-      nss
-      nspr
-      dbus
-      gdk-pixbuf
-      gtk3
-      pango
-      atk
-      cairo
-      expat
-      libxrandr
-      libxscrnsaver
-      alsa-lib
-      at-spi2-core
-      cups
-      libxcrypt-legacy
-    ];
+      nativeBuildInputs = [ makeWrapper ];
 
-  meta = {
-    homepage = "https://www.saleae.com/";
-    changelog = "https://ideas.saleae.com/f/changelog/";
-    description = "Software for Saleae logic analyzers";
-    license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [
-      j-hui
-      newam
-    ];
-  };
-}
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/{Applications,bin}
+        cp -r "Saleae Logic.app" $out/Applications/
+
+        makeWrapper $out/Applications/*.app/Contents/MacOS/Logic $out/bin/Logic
+
+        runHook postInstall
+      '';
+    })
+  else
+    (appimageTools.wrapType2 (finalAttrs: {
+      inherit pname version meta;
+
+      src = fetchurl {
+        url = "https://downloads2.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
+        hash = "sha256-lJp0al4tRqXwb6I8iziCav481XNAuEjASo1ZfUWdYLU=";
+      };
+
+      extraInstallCommands =
+        let
+          appimageContents = appimageTools.extract { inherit (finalAttrs) pname version src; };
+        in
+        ''
+          mkdir -p $out/etc/udev/rules.d
+          cp ${appimageContents}/resources/linux-x64/99-SaleaeLogic.rules $out/etc/udev/rules.d/
+          mkdir $out/share
+          ln -s ${desktopItem}/share/applications $out/share/
+          for size in 16 32 48 64 128 256; do
+            install -Dm644 -t $out/share/icons/hicolor/"$size"x"$size"/apps \
+              ${appimageContents}/usr/share/icons/hicolor/"$size"x"$size"/apps/Logic.png
+          done
+        '';
+
+      extraPkgs =
+        pkgs: with pkgs; [
+          wget
+          unzip
+          glib
+          libx11
+          libxcb
+          libxcomposite
+          libxcursor
+          libxdamage
+          libxext
+          libxfixes
+          libxi
+          libxrender
+          libxtst
+          nss
+          nspr
+          dbus
+          gdk-pixbuf
+          gtk3
+          pango
+          atk
+          cairo
+          expat
+          libxrandr
+          libxscrnsaver
+          alsa-lib
+          at-spi2-core
+          cups
+          libxcrypt-legacy
+        ];
+    }))
+)
