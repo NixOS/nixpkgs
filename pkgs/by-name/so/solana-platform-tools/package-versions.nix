@@ -19,8 +19,8 @@ let
       osx-x86_64 = "sha256-0ctxZYkgB9Ea1y/e0Wx2km5d+p/yhv49mZRAwa80p1g=";
       osx-aarch64 = "sha256-HIs69ehhThxFk5OpXFsZv7zI7ROCKhy1OfrmhHH5v7s=";
     };
-    "1.57" = {
-      linux-x86_64 = "sha256-sPevEErfcm//KmoJ6i6y8tKWXJIpX01ziMCNFA4MKwA=";
+    "1.58" = {
+      linux-x86_64 = "sha256-e4LrQgta69HlWQ2wriXFI+ygZyTUI4rgITlpBTVjbDc=";
       linux-aarch64 = "sha256-8vMckyXLLQAkTfI7ShoJBOUYGc7EnTkjWj7T7iMgN10=";
       osx-x86_64 = "sha256-5vYjGxSeZK1swSYF0PmTQFzlWGKqREBsAjVjFZ+MPK8=";
       osx-aarch64 = "sha256-SMMsLsOsNym1yvH91sQUVJYSXt8EOyZisFhr+8kys0o=";
@@ -96,7 +96,7 @@ let
 in
 {
   solana-platform-tools_154 = mkPlatformTools "1.54";
-  solana-platform-tools_157 = mkPlatformTools "1.57";
+  solana-platform-tools_157 = mkPlatformTools "1.58";
 
-  solana-platform-tools_latest = mkPlatformTools "1.57";
+  solana-platform-tools_latest = mkPlatformTools "1.58";
 }
