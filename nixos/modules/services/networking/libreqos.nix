@@ -22,10 +22,15 @@ in
 
     package = lib.mkPackageOption pkgs "libreqos" { };
 
-    openFirewall = lib.mkEnableOption ''
-      Whether to open the web UI port in the firewall.
-      See {option}`services.libreqos.settings.webserver_listen`.
-    '';
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to open the web UI port in the firewall.
+        See {option}`services.libreqos.settings.webserver_listen`.
+      '';
+    };
 
     settings = lib.mkOption {
       type = lib.types.submodule {

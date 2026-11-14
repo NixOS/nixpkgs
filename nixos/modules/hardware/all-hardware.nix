@@ -15,7 +15,7 @@ in
 {
 
   options = {
-    hardware.enableAllHardware = lib.mkEnableOption "Enable support for most hardware";
+    hardware.enableAllHardware = lib.mkEnableOption "support for most hardware";
   };
 
   config = lib.mkIf config.hardware.enableAllHardware {

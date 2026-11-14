@@ -13,7 +13,7 @@ in
   meta.maintainers = [ lib.maintainers.johnrtitor ];
 
   options.services.lact = {
-    enable = lib.mkEnableOption null // {
+    enable = lib.mkEnableOption "" // {
       description = ''
         Whether to enable LACT, a tool for monitoring, configuring and overclocking GPUs.
 

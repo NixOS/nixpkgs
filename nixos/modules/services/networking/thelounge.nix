@@ -43,7 +43,7 @@ in
   ];
 
   options.services.thelounge = {
-    enable = mkEnableOption "The Lounge web IRC client";
+    enable = mkEnableOption "the Lounge web IRC client";
 
     package = mkPackageOption pkgs "thelounge" { };
 

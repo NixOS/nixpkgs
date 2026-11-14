@@ -189,7 +189,7 @@ in
         {command}`incus` command line tool, among others.
         Users in the "incus" group can also interact with
         the daemon, but with lower permissions
-        (i.e. administrative operations are forbidden).
+        (i.e. administrative operations are forbidden)
       '';
 
       package = lib.mkPackageOption pkgs "incus-lts" { };
@@ -273,7 +273,7 @@ in
 
       socketActivation = lib.mkEnableOption ''
         socket-activation for starting incus.service. Enabling this option
-        will stop incus.service from starting automatically on boot.
+        will stop incus.service from starting automatically on boot
       '';
 
       startTimeout = lib.mkOption {

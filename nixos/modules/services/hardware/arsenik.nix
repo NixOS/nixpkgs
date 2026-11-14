@@ -9,7 +9,7 @@ let
 in
 {
   options.services.arsenik = {
-    enable = lib.mkEnableOption "A 33-key layout that works with all keyboards.";
+    enable = lib.mkEnableOption "a 33-key layout that works with all keyboards";
     package = lib.mkPackageOption pkgs "arsenik" { };
     tap_timeout = lib.mkOption {
       default = 200;

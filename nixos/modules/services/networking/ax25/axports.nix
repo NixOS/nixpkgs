@@ -38,7 +38,7 @@ let
   axportsOpts = {
 
     options = {
-      enable = mkEnableOption "Enables the axport interface";
+      enable = mkEnableOption "the axport interface";
 
       package = mkPackageOption pkgs "ax25-tools" { };
 

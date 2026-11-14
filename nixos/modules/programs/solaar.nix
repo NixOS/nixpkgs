@@ -18,12 +18,12 @@ let
 in
 {
   options.programs.solaar = {
-    enable = mkEnableOption "Solaar, the open source driver for Logitech devices.";
+    enable = mkEnableOption "Solaar, the open source driver for Logitech devices";
 
     package = mkPackageOption pkgs "solaar" { };
 
     userService = {
-      enable = mkEnableOption "Enable the solaar systemd service for each user.";
+      enable = mkEnableOption "the solaar systemd service for each user";
 
       window = mkOption {
         type = types.enum [

@@ -68,13 +68,13 @@ in
 
       openFirewall = mkEnableOption ''
         opening the HTTP server port and, if enabled, the HTTPS redirect server
-        port in the firewall.
+        port in the firewall
       '';
     };
 
     openFirewall = mkEnableOption ''
       opening WebRTC traffic ports in the firewall. Randomly selected ports
-      will not be opened.
+      will not be opened
     '';
 
     settings = mkOption {

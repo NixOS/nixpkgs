@@ -345,7 +345,7 @@ in
             can find a target-architecture agent at
             {file}`<toplevel>/sw/bin/polkit-stdin-agent` after copying the
             closure (which is required for cross-architecture deploys and
-            mismatched nixpkgs revisions to work).
+            mismatched nixpkgs revisions to work)
           '';
 
           config = lib.mkIf config.system.tools.nixos-rebuild.enableRun0Elevation {

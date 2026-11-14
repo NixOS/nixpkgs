@@ -15,7 +15,7 @@ in
   ];
 
   options.services.displayManager.regreet = {
-    enable = lib.mkEnableOption null // {
+    enable = lib.mkEnableOption "" // {
       description = ''
         Enable ReGreet, a clean and customizable greeter for greetd.
 

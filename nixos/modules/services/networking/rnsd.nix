@@ -11,7 +11,7 @@ in
 {
   options = {
     services.rnsd = {
-      enable = lib.mkEnableOption "Enable Reticulum Network Stack Daemon (rnsd)";
+      enable = lib.mkEnableOption "Reticulum Network Stack Daemon (rnsd)";
 
       package = lib.mkPackageOption pkgs "rns" { };
       packageBinaryName = lib.mkOption {

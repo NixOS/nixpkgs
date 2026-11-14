@@ -20,7 +20,7 @@ in
         ddccontrol for controlling displays.
 
         This [enables `hardware.i2c`](#opt-hardware.i2c.enable), so note to add
-        yourself to [`hardware.i2c.group`](#opt-hardware.i2c.group).
+        yourself to [`hardware.i2c.group`](#opt-hardware.i2c.group)
       '';
       package =
         lib.mkPackageOption pkgs

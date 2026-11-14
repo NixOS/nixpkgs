@@ -64,7 +64,7 @@ in
 
               copyChannel = lib.mkEnableOption ''
                 copy channel in test image. disabled by default as it forces image
-                rebuilds excessively. enable to validate channel things.
+                rebuilds excessively. enable to validate channel things
               '';
 
               testScript = lib.mkOption {

@@ -152,7 +152,7 @@ in
 
     enableUnixSocket = mkEnableOption (
       "a UNIX domain socket at `/run/tinyauth/tinyauth.sock`"
-      + " instead of listening on an IP address and port."
+      + " instead of listening on an IP address and port"
     );
   };
 

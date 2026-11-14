@@ -671,7 +671,7 @@ let
             graceful node shutdowns where the kubelet attempts to detect
             node system shutdown and terminates pods running on the node. See the
             [documentation](https://kubernetes.io/docs/concepts/cluster-administration/node-shutdown/#graceful-node-shutdown)
-            for further information.
+            for further information
           '';
 
           shutdownGracePeriod = lib.mkOption {

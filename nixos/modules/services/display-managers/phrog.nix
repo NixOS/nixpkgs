@@ -52,7 +52,7 @@ in
       enable =
         lib.mkEnableOption ''
           Start an on-screen keyboard next to the greeter. Without it there is
-          no way to type a password on a device with no hardware keyboard.
+          no way to type a password on a device with no hardware keyboard
         ''
         // {
           default = true;

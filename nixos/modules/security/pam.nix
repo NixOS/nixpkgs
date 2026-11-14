@@ -654,7 +654,7 @@ let
             pkgsText = "pkgs.kdePackages";
           };
 
-          forceRun = lib.mkEnableOption null // {
+          forceRun = lib.mkEnableOption "" // {
             description = ''
               The `force_run` option is used to tell the PAM module for KWallet
               to forcefully run even if no graphical session (such as a GUI
@@ -688,7 +688,7 @@ let
           enable = lib.mkEnableOption ''
             automatically unlock the user's default Session Keyring using pam_oo7.
             If the user's login password does not match their keyring password,
-            oo7 will prompt separately after login.
+            oo7 will prompt separately after login
           '';
         };
 

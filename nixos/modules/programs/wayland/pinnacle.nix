@@ -19,7 +19,7 @@ in
     xdg-portals.enable = mkEnableOption "enable xdg-portals for pinnacle";
     withUWSM = mkEnableOption ''
       manage the pinnacle session with [UWSM](https://github.com/Vladimir-csp/uwsm) instead
-      of independent systemd services and targets.
+      of independent systemd services and targets
     '';
   };
 
