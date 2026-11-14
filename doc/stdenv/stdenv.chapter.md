@@ -789,6 +789,9 @@ If this is undesirable, set this variable to true.  It is automatically set to t
 
 By default, when cross compiling, the configure script has `--build=...` and `--host=...` passed. Packages can instead pass `[ "build" "host" "target" ]` or a subset to control exactly which platform flags are passed. Compilers and other tools can use this to also pass the target platform. [^footnote-stdenv-build-time-guessing-impurity]
 
+The Meson adapter also uses `"target"` to request distinct `target_machine` metadata.
+Otherwise Meson's target machine defaults to HOST; an ordinary BUILD tool does not enter cross mode merely because its enclosing stage has a different TARGET.
+
 ##### `preConfigure` {#var-stdenv-preConfigure}
 
 Hook executed at the start of the configure phase.
@@ -1523,6 +1526,48 @@ A problem with this final task is that the Bintools Wrapper is honest and define
 The CC Wrapper wraps a C toolchain for a bunch of miscellaneous purposes. Specifically, a C compiler (GCC or Clang), wrapped binary tools, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the CC Wrapper. Packages typically depend on the CC Wrapper, which in turn (at run-time) depends on the Bintools Wrapper.
 
 Dependency finding is undoubtedly the main task of the CC Wrapper. This works just like the Bintools Wrapper, except that any `include` subdirectory of any relevant dependency is added to `NIX_CFLAGS_COMPILE`. The setup hook itself contains elaborate comments describing the exact mechanism by which this is accomplished.
+
+Dependency roles describe uses, even when their platforms are equal. A wrapper activated for several roles combines their inputs in role-major order; invoking the same executable through `CC_FOR_BUILD` instead of `CC` does not select a different role.
+Build systems requiring separate environments must preserve those contexts explicitly. Without `strictDeps`, dependency collection crosses role boundaries for compatibility; later selection cannot undo that mixing.
+
+A public compiler wrapper starts a **fresh invocation**, selecting its own active role inputs and toolchain defaults. A **continuation** reuses an already selected policy and interprets the actual child operation without adding defaults again.
+Caller flag variables, including salted inputs, remain unchanged. Ordered inputs retain their order, boolean inputs combine by disjunction, and singular inputs must agree across active roles, distinguishing unset from explicitly empty values.
+The selected policy uses the private `wrapper_` namespace. Delegation exports it; receivers remove its export attributes before running hooks. A fresh invocation clears inherited policy before hooks run.
+
+Toolchain defaults travel with the executable in `nix-support`, so they also apply outside stdenv, including JIT compilation. Applications must supply their additional dependency paths themselves.
+Libc defaults and C++ header/runtime policy remain separate from explicit caller flags so each compiler job can apply its own suppression and language rules. GNAT compiler jobs deliberately select no C include defaults.
+Opaque `NIX_CXXSTDLIB_COMPILE` and `NIX_CXXSTDLIB_LINK` arguments apply to the C++ driver personality: `gcc -x c++` does not acquire them, while `g++ -x c` retains them.
+Caller flag channels apply to the whole invocation and must be valid for all its jobs; use separate invocations for incompatible per-language options.
+
+For raw executables advertising the native primary-argument interface, the compiler's parser interprets the request before conditional default/link flags and late hooks are inserted. These later additions do not recursively select another policy.
+Options and their operands must therefore be supplied together in a parseable primary request. An explicit caller frontend entry bypasses compiler/linker argument contributions while retaining the selected SDK environment; introducing frontend entry through policy is rejected.
+Native execution retains raw argument groups and native response-file grammar. Response files may be read again after hooks; their contents and unresolved `@file` tokens are not frozen by initial interpretation.
+Capability belongs to the exact raw executables declared by the constructor. External/bootstrap compilers and dynamic launchers such as ccache retain legacy interpretation, including earlier purity and no-native filtering.
+Native filtering operates on expanded caller arguments, including final hook changes. Clang also preserves caller ownership through supported scoped and frontend forwarding channels; arbitrary config/spec/plugin transformations do not acquire a general provenance guarantee. Native option grammar does not translate opaque GNU flag channels for CL, Flang or DXC; callers must supply policy compatible with the selected personality.
+
+Mutable support-file groups are opaque arguments: `-nostdinc` omits the libc group, `-nostdinc`/`-nostdinc++` omit the C++ compile group, and `-nostdlib` omits the C++ link group.
+Other suppression options retain these opaque additions while the native compiler applies its own rules to selected header/runtime providers. Options forwarded as operands do not suppress whole groups accidentally.
+On non-Android Linux, patched GCC 14+ and Clang 19–23 bind selected default-header providers while preserving native language selection, suppression, search ordering, system-header classification and `#include_next` behavior.
+These bindings use original provider paths rather than a synthetic header tree. Compiler-specific details, multilib bindings and the distinction between explicit paths and defaults are described in the [wrapper design](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/wrapper-common/README.md).
+
+Compiler and linker interfaces differ. The compiler delegates a **link continuation** carrying selected linker inputs and the mode for which it rendered main linker flags. The linker renders those inputs if the compiler did not, while applying remaining hardening, trailing flags, emulation, RPATH discovery and platform policy. Compiler-only conditional channels are not selected again.
+Custom launchers starting independent public linker invocations beneath that driver must unset `NIX_WRAPPER_OPERATION` for those invocations, preserving it for the driver's intended linker job. The environment record alone cannot distinguish these jobs.
+For supported GCC/Clang drivers, job observation refines link mode before the wrapper renders the loader and RPATHs, including modes supplied through specs, configs and response files. Native-capable drivers use their output-suppressed query; legacy drivers use a bounded dry run. The wrapped linker also interprets final ordered arguments to correct loader/RPATH policy for inferred static output, preserving equal explicit caller arguments. Ambiguous library selections conservatively retain dynamic policy; see the wrapper design for the remaining linker-specific limit.
+An unwrapped linker can still be selected. Modes introduced by late hooks, or missed when driver observation is unavailable, retain the earlier policy. RPATHs hidden in opaque compiler-policy response files can survive correction even with a wrapped linker; those files are not rewritten. See the wrapper design for these limits and the linked integration review for current validation.
+
+Multi-job drivers delegate through prepared `nix-support/compiler` and `nix-support/linker` entries, supplying selected policy, a raw executable and its arguments. Available response-file helpers expand delegated arguments; bootstrap configurations may omit them.
+An executable path or `orig-cc` does not establish a prepared interface. Opaque executables receive materialized arguments/environment and may apply additional policy of their own.
+GNAT preserves each delegated program's operation. Swift-generated Clang driver jobs start fresh through the adjacent public wrapper; its Clang importer reads the adjacent compiler's provider configuration, while lowered cc1 jobs do not repeat driver interpretation.
+
+The `importerFlags` metadata names files relative to `nix-support`. Its `driver` configuration preserves native default-header suppression and standard-library choice only with matching patched Clang driver APIs; pass it through `--config` so explicit arguments take precedence.
+Its `libc` and `cxx` files expose explicit provider paths for path-based consumers such as `CPATH`; they do not acquire default suppression or switch with an independent `-stdlib` selection.
+These importer files remain customizable; `cc-cflags` is a separate consumer input. Arbitrary compiler-only additions to `libc-cflags` are not translated for other interpreters.
+
+Tools consuming environment variables directly receive effective values at execution, including `PKG_CONFIG_PATH` and the selected Darwin `SDKROOT`. Original caller values are retained separately so later fresh invocations can change roles while preserving intervening edits.
+Assigning the last projected value again is indistinguishable from leaving it unchanged; salted inputs provide an unambiguous override. `SDKROOT` is an output of SDK selection, not its input.
+The SDK environment is installed before hooks; later hook edits reach the tool and post-link hooks. The private prepared-state encoding does not reconstruct inputs from older exported `FLAGS_SET` caches.
+
+See the [compiler and linker wrapper design](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/wrapper-common/README.md) for native capability gates, argument interpretation, resource bindings, delegation details and remaining limits.
 
 Similarly, the CC Wrapper follows the Bintools Wrapper in defining standard environment variables with the names of the tools it wraps, for the same reasons described above. Importantly, while it includes a `cc` symlink to the c compiler for portability, the `CC` will be defined using the compiler’s “real name” (i.e. `gcc` or `clang`). This helps lousy build systems that inspect on the name of the compiler rather than run it.
 
