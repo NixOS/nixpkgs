@@ -27,14 +27,14 @@ let
     NUnit3 = fetchNuGet {
       pname = "NUnit";
       version = "3.0.1";
-      sha256 = "1g3j3kvg9vrapb1vjgq65nvn1vg7bzm66w7yjnaip1iww1yn1b0p";
+      hash = "sha256-6wsVa0QUJiLXzVcwc9bckl+FKfKGBjcyX1r4X5TbQjw=";
       outputFiles = [ "lib/*" ];
     };
 
     NUnit2 = fetchNuGet {
       pname = "NUnit";
       version = "2.6.4";
-      sha256 = "1acwsm7p93b1hzfb83ia33145x0w6fvdsfjm9xflsisljxpdx35y";
+      hash = "sha256-Kkft3QO9T5WwsvyPRNGT2nut7RS7OWArDjIYxvwA8qU=";
       outputFiles = [ "lib/*" ];
     };
 
@@ -43,35 +43,35 @@ let
     NUnitConsole = fetchNuGet {
       pname = "NUnit.Console";
       version = "3.0.1";
-      sha256 = "154bqwm2n95syv8nwd67qh8qsv0b0h5zap60sk64z3kd3a9ffi5p";
+      hash = "sha256-FkzpEk12msmUp5I05ZzlGiG+UInoYhBmar/vB5Gt4H8=";
       outputFiles = [ "tools/*" ];
     };
 
     MaxMindDb = fetchNuGet {
       pname = "MaxMind.Db";
       version = "1.1.0.0";
-      sha256 = "0lixl76f7k3ldiqzg94zh13gn82w5mm5dx72y97fcqvp8g6nj3ds";
+      hash = "sha256-q1t7EAlYavoR7Gl0Q63i1i08yv+6k0xki8lvjUFWNRE=";
       outputFiles = [ "lib/*" ];
     };
 
     MaxMindGeoIP2 = fetchNuGet {
       pname = "MaxMind.GeoIP2";
       version = "2.3.1";
-      sha256 = "1s44dvjnmj1aimbrgkmpj6h5dn1w6acgqjch1axc76yz6hwknqgf";
+      hash = "sha256-InhgU9iugwGzVm0+V89KlGTen9hbAvEI8Fg1ZZgvthM=";
       outputFiles = [ "lib/*" ];
     };
 
     SharpZipLib = fetchNuGet {
       pname = "SharpZipLib";
       version = "1.3.3";
-      sha256 = "sha256-HWEQTKh9Ktwg/zIl079dAiH+ob2ShWFAqLgG6XgIMr4=";
+      hash = "sha256-HWEQTKh9Ktwg/zIl079dAiH+ob2ShWFAqLgG6XgIMr4=";
       outputFiles = [ "lib/*" ];
     };
 
     StyleCopMSBuild = fetchNuGet {
       pname = "StyleCop.MSBuild";
       version = "4.7.49.0";
-      sha256 = "0rpfyvcggm881ynvgr17kbx5hvj7ivlms0bmskmb2zyjlpddx036";
+      hash = "sha256-jXx62X50DwiZYYa/wzzZlbXWuZ7z7TIybkDGcUjWULI=";
       outputFiles = [ "tools/*" ];
       meta.mainProgram = "stylecopsettingseditor";
     };
@@ -79,21 +79,21 @@ let
     StyleCopPlusMSBuild = fetchNuGet {
       pname = "StyleCopPlus.MSBuild";
       version = "4.7.49.5";
-      sha256 = "1hv4lfxw72aql8siyqc4n954vzdz8p6jx9f2wrgzz0jy1k98x2mr";
+      hash = "sha256-yYIlp0RYaQe+12ekyyp1b/Oo0T/zVbQOzEPD4lN2g9k=";
       outputFiles = [ "tools/*" ];
     };
 
     RestSharp = fetchNuGet {
       pname = "RestSharp";
       version = "106.12.0";
-      sha256 = "sha256-NGzveByJvCRtHlI2C8d/mLs3akyMm77NER8TUG6HiD4=";
+      hash = "sha256-NGzveByJvCRtHlI2C8d/mLs3akyMm77NER8TUG6HiD4=";
       outputFiles = [ "lib/*" ];
     };
 
     SharpFont = fetchNuGet {
       pname = "SharpFont";
       version = "4.0.1";
-      sha256 = "1yd3cm4ww0hw2k3aymf792hp6skyg8qn491m2a3fhkzvsl8z7vs8";
+      hash = "sha256-uzgXAi9zBKDNk9fzrLQFeF9RuEgc4cNUMoA/LEX//T4=";
       outputFiles = [
         "lib/*"
         "config/*"
@@ -103,35 +103,35 @@ let
     SmartIrc4net = fetchNuGet {
       pname = "SmartIrc4net";
       version = "0.4.5.1";
-      sha256 = "1d531sj39fvwmj2wgplqfify301y3cwp7kwr9ai5hgrq81jmjn2b";
+      hash = "sha256-NtZhVjY5HPzi6wyAunZiFHGs1PU0rNH9/Ob+zWpAhI8=";
       outputFiles = [ "lib/*" ];
     };
 
     FuzzyLogicLibrary = fetchNuGet {
       pname = "FuzzyLogicLibrary";
       version = "1.2.0";
-      sha256 = "0x518i8d3rw9n51xwawa4sywvqd722adj7kpcgcm63r66s950r5l";
+      hash = "sha256-yoyvM2N65mHf3VeXWJ8DSVDS/LT3GS7oWIMPbiUl3z8=";
       outputFiles = [ "bin/*" ];
     };
 
     OpenNAT = fetchNuGet {
       pname = "Open.NAT";
       version = "2.1.0";
-      sha256 = "1jyd30fwycdwx5ck96zhp2xf20yz0sp7g3pjbqhmay4kd322mfwk";
+      hash = "sha256-xTLe4UeLSn4oqkeXpe/D+CmmvQzAr2RqrAAc4YPw4+I=";
       outputFiles = [ "lib/*" ];
     };
 
     MonoNat = fetchNuGet {
       pname = "Mono.Nat";
       version = "1.2.24";
-      sha256 = "0vfkach11kkcd9rcqz3s38m70d5spyb21gl99iqnkljxj5555wjs";
+      hash = "sha256-Ydr8esuvKPm6y+dHSuUXq2Wsg2VjuL/hhE+yGSr3dZg=";
       outputFiles = [ "lib/*" ];
     };
 
     NUnitRunners = fetchNuGet {
       pname = "NUnit.Runners";
       version = "2.6.4";
-      sha256 = "11nmi7vikn9idz8qcad9z7f73arsh5rw18fc1sri9ywz77mpm1s4";
+      hash = "sha256-yXWs50zuGAtWmtUkxRGNJXCBUQhWoLzSRpyy5NmHepo=";
       outputFiles = [ "tools/*" ];
       preInstall = "mv -v tools/lib/* tools && rmdir -v tools/lib";
     };
@@ -141,7 +141,7 @@ let
     NewtonsoftJson = fetchNuGet {
       pname = "Newtonsoft.Json";
       version = "11.0.2";
-      sha256 = "07na27n4mlw77f3hg5jpayzxll7f4gyna6x7k9cybmxpbs6l77k7";
+      hash = "sha256-YhlAbGfwoxQzxb3Hef4iyV9eGdPQJJNd2GgSR0jsBJ0=";
       outputFiles = [ "*" ];
       postInstall = "rm $target/env-vars"; # fetchNuGet already sets preInstall
     };
@@ -149,7 +149,7 @@ let
     Paket = fetchNuGet {
       pname = "Paket";
       version = "5.179.1";
-      sha256 = "11rzna03i145qj08hwrynya548fwk8xzxmg65swyaf19jd7gzg82";
+      hash = "sha256-Ar3/TpMpOOW5LubV/jua3CFSlLc+c4iAxIWEOICyP4c=";
       outputFiles = [ "*" ];
       postInstall = "rm $target/env-vars"; # fetchNuGet already sets preInstall
     };
