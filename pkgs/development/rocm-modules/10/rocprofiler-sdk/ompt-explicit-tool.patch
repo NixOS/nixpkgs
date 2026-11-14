@@ -1,0 +1,76 @@
+Subject: [PATCH] Avoid unsolicited OMPT initialization
+
+OpenMP calls ompt_start_tool from its own initialization, which can run
+inside a library constructor. Registering clients from there dlopens every
+library that defines rocprofiler_configure; if one of them is still being
+loaded (PyTorch's libtorch_cpu, for Kineto), glibc reruns pending
+constructors and OpenBLAS reenters OpenMP initialization, which livelocks
+on its init lock. Decline the tool unless one was requested through
+ROCP_TOOL_LIBRARIES (as rocprofv3 does) or rocprofiler_force_configure.
+Clients found by symbol still register when the HIP runtime starts; they
+only miss OMPT callbacks.
+
+OpenMP queries ompt_start_tool only once, at startup, so attaching a
+profiler to an already running process cannot enable OMPT tracing; the
+other services are unaffected.
+
+--- a/source/lib/rocprofiler-sdk/ompt.cpp
++++ b/source/lib/rocprofiler-sdk/ompt.cpp
+@@ -265,6 +265,9 @@ ompt_start_tool(unsigned int omp_version, const char* runtime_version) ROCPROFIL
+ ompt_start_tool_result_t*
+ ompt_start_tool(unsigned int omp_version, const char* runtime_version)
+ {
++    // Registering clients during OpenMP startup can reenter it (see above).
++    if(!::rocprofiler::registration::is_tool_requested()) return nullptr;
++
+     ::rocprofiler::registration::init_logging();
+     ::rocprofiler::registration::initialize();
+     return rocprofiler_ompt_start_tool(omp_version, runtime_version);
+--- a/source/lib/rocprofiler-sdk/registration.cpp
++++ b/source/lib/rocprofiler-sdk/registration.cpp
+@@ -86,6 +86,7 @@
+ #include <cctype>
+ #include <cstddef>
+ #include <cstdint>
++#include <cstdlib>
+ #include <fstream>
+ #include <iostream>
+ #include <limits>
+@@ -1039,6 +1040,16 @@ get_client_offset()
+     return _v;
+ }
+ 
++static std::atomic<bool> forced_configure_requested{false};
++
++bool
++is_tool_requested()
++{
++    if(forced_configure_requested.load(std::memory_order_acquire)) return true;
++    const auto* tools = secure_getenv("ROCP_TOOL_LIBRARIES");
++    return tools && *tools;
++}
++
+ int
+ get_init_status()
+ {
+@@ -1235,6 +1246,8 @@ rocprofiler_force_configure(rocprofiler_configure_func_t configure_func)
+ 
+     if(rocprofiler::registration::get_fini_status() != 0) return ROCPROFILER_STATUS_ERROR_FINALIZED;
+ 
++    rocprofiler::registration::forced_configure_requested.store(true, std::memory_order_release);
++
+     ROCP_INFO << "forcing rocprofiler configuration";
+ 
+     auto* forced_configs = rocprofiler::registration::get_forced_configures();
+--- a/source/lib/rocprofiler-sdk/registration.hpp
++++ b/source/lib/rocprofiler-sdk/registration.hpp
+@@ -49,6 +49,9 @@ namespace registration
+ void
+ init_logging();
+ 
++bool
++is_tool_requested();
++
+ // initialize the clients
+ void
+ initialize();
