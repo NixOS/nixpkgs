@@ -56,6 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  # Prune non-production deps before install to save space
+  preInstall = ''
+    yarn install --ignore-scripts --frozen-lockfile --offline --production=true
+  '';
+
   installPhase = ''
     runHook preInstall
 
