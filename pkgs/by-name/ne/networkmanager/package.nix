@@ -79,7 +79,7 @@ let
     mesonOption
     ;
 
-  pythonForDocs = python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+  pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
