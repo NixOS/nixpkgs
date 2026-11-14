@@ -34,7 +34,7 @@
   gitpython,
   greenback,
   hatchling,
-  httpx,
+  httpx2,
   importlib-metadata,
   isoduration,
   itsdangerous,
@@ -49,6 +49,7 @@
   natsort,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
+  opentelemetry-proto,
   packaging,
   pathspec,
   pendulum,
@@ -64,15 +65,11 @@
   python-slugify,
   pyyaml,
   requests,
-  retryhttp,
   rich,
   rich-argparse,
-  rich-click,
   setproctitle,
   smmap,
   sqlalchemy,
-  sqlalchemy-jsonfield,
-  sqlalchemy-utils,
   starlette,
   structlog,
   svcs,
@@ -82,7 +79,7 @@
   tomli,
   tomlkit,
   trove-classifiers,
-  types-requests,
+  truststore,
   typing-extensions,
   universal-pathlib,
   uuid6,
@@ -116,7 +113,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = uiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-+f/AcJSQyvu3YCT6p4wvbNXz/xM0WN8N+MWT7iLlFEk=";
+        hash = "sha256-u49NEcNSlqMYKqWaoJFEhdFXijmCCPHR6Itz+hXCHg0=";
       };
 
       buildPhase = ''
@@ -149,7 +146,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = simpleUiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-jLCTKdBdKQufVWQ1XRzOVN4jVC0YAcP+jnz5R966zUY=";
+        hash = "sha256-9Csd+CHZHEkC+lebFhYBCCEf7pnVrD5useBQONgf6PY=";
       };
 
       buildPhase = ''
@@ -173,6 +170,11 @@ buildPythonPackage (
 
     providers = import ./providers.nix;
 
+    relaxBuildDeps = ''
+      # relax build-system dependencies
+      sed -i -E 's/"(flit_core|gitdb|GitPython|hatchling|packaging|pathspec|pluggy|smmap|tomlkit|trove-classifiers)==[^"]+"/"\1"/' pyproject.toml
+    '';
+
     buildProvider =
       provider:
       buildPythonPackage {
@@ -187,16 +189,7 @@ buildPythonPackage (
         inherit src;
         sourceRoot = "${src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
 
-        postPatch = ''
-          # relax dependencies
-          sed -i -E 's/"flit_core==[^"]+"/"flit_core"/' pyproject.toml
-          sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
-          sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
-          sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
-          sed -i -E 's/"pluggy==[^"]+"/"pluggy"/' pyproject.toml
-          sed -i -E 's/"tomlkit==[^"]+"/"tomlkit"/' pyproject.toml
-          sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
-        '';
+        postPatch = relaxBuildDeps;
 
         build-system = [
           flit-core
@@ -228,17 +221,11 @@ buildPythonPackage (
         # resolve cyclic dependency
         sed -i -E 's/"apache-airflow-core[^"]+",//' pyproject.toml
 
-        # relax dependencies
-        sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
-        sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
-        sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
-        sed -i -E 's/"pluggy==[^"]+"/"pluggy"/' pyproject.toml
-        sed -i -E 's/"tomlkit==[^"]+"/"tomlkit"/' pyproject.toml
-        sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+        ${relaxBuildDeps}
 
-        # task-sdk needs config.yml from core subpackage
+        # task-sdk reads these data files from core relative to its own module
         mkdir -p src/airflow/config_templates
-        cp ../airflow-core/src/airflow/config_templates/* src/airflow/config_templates/
+        cp ../airflow-core/src/airflow/config_templates/{config.yml,provider_config_fallback_defaults.cfg,unit_tests.cfg} src/airflow/config_templates/
       '';
 
       build-system = [
@@ -254,10 +241,11 @@ buildPythonPackage (
         asgiref
         attrs
         babel
+        cadwyn
         colorlog
         fsspec
         greenback
-        httpx
+        httpx2
         isoduration
         jinja2
         jsonschema
@@ -272,13 +260,25 @@ buildPythonPackage (
         pydantic
         pygtrie
         python-dateutil
-        requests
-        retryhttp
+        pyyaml
         structlog
         tenacity
-        types-requests
+        truststore
         typing-extensions
       ];
+
+      # Verify task-sdk's copied config_templates data files are present
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        ${python.interpreter} -c '
+        from airflow.sdk.configuration import _default_config_file_path
+        for name in ("config.yml", "provider_config_fallback_defaults.cfg", "unit_tests.cfg"):
+            _default_config_file_path(name)
+        '
+
+        runHook postInstallCheck
+      '';
     };
 
     airflowCore = buildPythonPackage {
@@ -294,15 +294,7 @@ buildPythonPackage (
         # remove cyclic dependency
         sed -i -E 's/"apache-airflow-task-sdk[^"]+",//' pyproject.toml
 
-        # relax dependencies
-        sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
-        sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
-        sed -i -E 's/"GitPython==[^"]+"/"GitPython"/' pyproject.toml
-        sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
-        sed -i -E 's/"pluggy==[^"]+"/"pluggy"/' pyproject.toml
-        sed -i -E 's/"smmap==[^"]+"/"smmap"/' pyproject.toml
-        sed -i -E 's/"tomlkit==[^"]+"/"tomlkit"/' pyproject.toml
-        sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+        ${relaxBuildDeps}
 
         # Copy built UI assets
         cp -r ${airflowUi}/share/airflow/ui/dist src/airflow/ui/
@@ -338,8 +330,9 @@ buildPythonPackage (
         deprecated
         dill
         fastapi
-        httpx
+        httpx2
         importlib-metadata
+        isoduration
         itsdangerous
         jinja2
         jsonschema
@@ -352,6 +345,7 @@ buildPythonPackage (
         natsort
         opentelemetry-api
         opentelemetry-exporter-otlp
+        opentelemetry-proto
         packaging
         pathspec
         pendulum
@@ -368,11 +362,8 @@ buildPythonPackage (
         requests
         rich
         rich-argparse
-        rich-click
         setproctitle
         sqlalchemy
-        sqlalchemy-jsonfield
-        sqlalchemy-utils
         starlette
         structlog
         svcs
@@ -391,42 +382,35 @@ buildPythonPackage (
         "starlette"
         "fastapi"
       ];
+
+      postInstall = ''
+        # Avoid colliding with apache-airflow's bin/airflow symlink in buildEnv
+        rm -rf $out/bin
+      '';
     };
   in
   {
     pname = "apache-airflow";
-    version = "3.3.2";
+    version = "3.4.0";
 
     src = fetchFromGitHub {
       owner = "apache";
       repo = "airflow";
       tag = finalAttrs.version;
-      hash = "sha256-iWr1LYq+lThZU7b7CmrIWFbg20bFy+SghrBpE6asgrg=";
+      hash = "sha256-kR2IAaldwkA2zzKPX2kUfObUFZ1FyRh+29Rhzb9jNig=";
     };
 
     pyproject = true;
 
-    postPatch = ''
-      # relax dependencies
-      sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
-      sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
-      sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
-      sed -i -E 's/"pluggy==[^"]+"/"pluggy"/' pyproject.toml
-      sed -i -E 's/"tomlkit==[^"]+"/"tomlkit"/' pyproject.toml
-      sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
-    '';
+    postPatch = relaxBuildDeps;
 
     nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
     build-system = [
-      gitdb
-      gitpython
       hatchling
       packaging
       pathspec
       pluggy
-      smmap
-      tomli
       tomlkit
       trove-classifiers
     ];
@@ -438,9 +422,8 @@ buildPythonPackage (
     ++ (map buildProvider enabledProviders);
 
     postInstall = ''
-      # Create a symlink to the airflow-core package
-      mkdir -p $out/bin
-      ln -s ${airflowCore}/bin/airflow $out/bin/airflow
+      # Symlink airflow CLI to the main wrapped application
+      ln -s apache-airflow $out/bin/airflow
     '';
 
     installCheckPhase = ''

@@ -6,7 +6,6 @@
   pytestCheckHook,
   # runtime dependencies
   fastapi,
-  issubclass,
   jinja2,
   pydantic,
   starlette,
@@ -14,11 +13,14 @@
   typing-inspection,
   # test dependencies
   dirty-equals,
+  fastapi-pagination,
   httpx,
   inline-snapshot,
   pydantic-settings,
   pytest-fixture-classes,
   python-multipart,
+  sqlalchemy,
+  sqlmodel,
   svcs,
   typer,
   uvicorn,
@@ -27,21 +29,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cadwyn";
-  version = "7.3.0";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zmievsa";
     repo = "cadwyn";
     tag = finalAttrs.version;
-    hash = "sha256-Ilk+iTvgb/gCn6BOLwbD5YY1FStkQckEz62iyQcM5aw=";
+    hash = "sha256-DPUDgrM4OPv3XU/EJynxP7P1M3M7R+2loVBUlEzQI+A=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     fastapi
-    issubclass
     jinja2
     pydantic
     starlette
@@ -53,15 +54,25 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     dirty-equals
+    fastapi-pagination
     httpx
     inline-snapshot
     pydantic-settings
     pytest-fixture-classes
     pytestCheckHook
     python-multipart
+    sqlalchemy
+    sqlmodel
     svcs
     typer
     uvicorn
+  ];
+
+  disabledTests = [
+    # Tries to find cadwyn executable in sys.executable.parent which does not exist during checkPhase
+    "test__cadwyn_console_script__run_from_directory_with_user_modules__should_import_them_from_that_directory"
+    "test__render_module__from_app_directory__should_print_module_schemas_in_that_version"
+    "test__render_model__from_app_directory__should_print_schema_in_that_version"
   ];
 
   meta = {
