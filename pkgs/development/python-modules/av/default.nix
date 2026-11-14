@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "av";
-  version = "19.0.1";
+  version = "19.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QH/cHXR6Vo/Bg5tiwq2Avjb0ITTBWodgpAgqJGpvzh4=";
+    hash = "sha256-vCrlozqBMevKIszzH9bngyL2i810YJBPrO40kd0Q/vA=";
   };
 
   build-system = [
