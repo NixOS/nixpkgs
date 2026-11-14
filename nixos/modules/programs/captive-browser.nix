@@ -11,6 +11,7 @@ let
   inherit (lib)
     concatStringsSep
     escapeShellArgs
+    optionalAttrs
     optionalString
     literalExpression
     mkEnableOption
@@ -45,6 +46,21 @@ let
       "http://cache.nixos.org/"
     ];
 
+  cfgDrv =
+    let
+      attrs = {
+        inherit (cfg) browser dhcp-dns socks5-addr;
+      }
+      // optionalAttrs cfg.bindInterface {
+        bind-device = cfg.interface;
+      };
+      file = (pkgs.formats.toml { }).generate "captive-browser.toml" attrs;
+
+    in
+    pkgs.runCommandLocal "captive-browser" { } ''
+      install -Dm444 ${file} $out/${file.name}
+    '';
+
   desktopItem = pkgs.makeDesktopItem {
     name = "captive-browser";
     desktopName = "Captive Portal Browser";
@@ -55,14 +71,7 @@ let
 
   captive-browser-configured = pkgs.writeShellScriptBin "captive-browser" ''
     export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
-    export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
-      browser = """${cfg.browser}"""
-      dhcp-dns = """${cfg.dhcp-dns}"""
-      socks5-addr = """${cfg.socks5-addr}"""
-      ${optionalString cfg.bindInterface ''
-        bind-device = """${cfg.interface}"""
-      ''}
-    ''}
+    export XDG_CONFIG_HOME=${cfgDrv}
     exec ${cfg.package}/bin/captive-browser
   '';
 in
