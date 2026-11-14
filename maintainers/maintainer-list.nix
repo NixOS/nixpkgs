@@ -6389,6 +6389,11 @@
     name = "0xda157";
     keys = [ { fingerprint = "5A66 FF95 36DE B501 DDD2  1647 B7AC 1B10 365D 45FF"; } ];
   };
+  daanrs = {
+    name = "daanrs";
+    github = "daanrs";
+    githubId = 26031445;
+  };
   dabao1955 = {
     email = "dabao1955@163.com";
     github = "dabao1955";
