@@ -20,6 +20,7 @@ let
     pipe
     isString
     match
+    optionalAttrs
     ;
 
   artisan = pkgs.writeShellScriptBin "pelican-artisan" ''
@@ -184,6 +185,34 @@ in
       description = "The state directory for Pelican Panel.";
     };
 
+    user = lib.mkOption {
+      default = "pelican";
+      type = types.str;
+      description = ''
+        User account under which the Pelican Panel runs.
+
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise the sysadmin is responsible for
+        ensuring the user exists before the Pelican Panel service starts.
+        :::
+      '';
+    };
+
+    group = lib.mkOption {
+      default = "pelican";
+      type = types.str;
+      description = ''
+        Group under which the Pelican Panel runs.
+
+        ::: {.note}
+        If left as the default value this group will automatically be created
+        on system activation, otherwise the sysadmin is responsible for
+        ensuring the group exists before the Pelican Panel service starts.
+        :::
+      '';
+    };
+
     environment = mkOption {
       type = types.attrsOf (
         types.oneOf [
@@ -217,15 +246,25 @@ in
           );
         message = "`services.pelican-panel.environment.DB_USERNAME` must match `services.pelican-panel.environment.DB_DATABASE` when using postgresql locally";
       }
+      {
+        assertion =
+          !(
+            cfg.database.type == "pgsql" && (mergedConfig.DB_USERNAME != cfg.user) && cfg.database.createLocally
+          );
+        message = "`services.pelican-panel.environment.DB_USERNAME` must match `services.pelican-panel.user` when using postgresql locally";
+      }
     ];
 
-    users = {
-      users.pelican = {
+    users.users = optionalAttrs (cfg.user == "pelican") {
+      pelican = {
         isSystemUser = true;
-        group = "pelican";
+        inherit (cfg) group;
         home = cfg.stateDir;
       };
-      groups.pelican = { };
+    };
+
+    users.groups = optionalAttrs (cfg.group == "pelican") {
+      pelican = { };
     };
 
     services = {
@@ -258,9 +297,7 @@ in
       };
 
       phpfpm.pools.pelican = {
-        inherit (cfg) phpPackage;
-        user = "pelican";
-        group = "pelican";
+        inherit (cfg) phpPackage user group;
 
         settings = mkMerge [
           {
@@ -349,8 +386,8 @@ in
             wantedBy = [ "multi-user.target" ];
 
             serviceConfig = {
-              User = "pelican";
-              Group = "pelican";
+              User = cfg.user;
+              Group = cfg.group;
               WorkingDirectory = "${cfg.stateDir}/www";
               ExecStart = "${cfg.phpPackage}/bin/php artisan queue:work --tries=3";
               Restart = "on-failure";
@@ -364,8 +401,8 @@ in
 
             serviceConfig = {
               Type = "oneshot";
-              User = "pelican";
-              Group = "pelican";
+              User = cfg.user;
+              Group = cfg.group;
               WorkingDirectory = "${cfg.stateDir}/www";
               ExecStart = "${cfg.phpPackage}/bin/php artisan schedule:run";
             };
