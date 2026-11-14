@@ -2592,17 +2592,33 @@ with haskellLib;
     (dontCheckIf pkgs.stdenv.hostPlatform.isBigEndian)
   ];
 
+  # cborg has an incredible amount of useful unreleased changes,
+  # patches without comments are mostly included because we need
+  # them for other patches.
   cborg = appendPatches [
-    # This patch changes CPP macros form gating on the version of ghc-prim to base
-    # since that's where the definitions are imported from. The source commit
-    # also changes the cabal file metadata which we filter out since we are
-    # only interested in this change as a dependency of cborg-i686-support-upstream.patch.
+    (pkgs.fetchpatch {
+      name = "cborg-bump-lower-bounds-1.patch";
+      url = "https://github.com/well-typed/cborg/commit/308afc2795062f847171463958e5e1bbd9c03381.patch";
+      hash = "sha256-v+Yh6IZiFljVxKGbySp6AThQZg26tbjlWX/WtFHxi2M=";
+      relative = "cborg";
+    })
+    (pkgs.fetchpatch {
+      name = "cborg-bump-aeson-lower-bound.patch";
+      url = "https://github.com/well-typed/cborg/commit/062f10a1a539f4cdbf0c43ff4b7dbd012f5202d6.patch";
+      hash = "sha256-YKvpa/IPeUcUS9OyRjmh6JMvzb1UmtWC4jytlkkZqHU=";
+      relative = "cborg";
+    })
+    (pkgs.fetchpatch {
+      name = "cborg-bump-primitive-lower-bound.patch";
+      url = "https://github.com/well-typed/cborg/commit/6c0fd2b2790416d98b14b172a6f5236a09846c3a.patch";
+      hash = "sha256-eRjGvD4XutIlXimbg/+zUdWLaP7B1zdqHyo7o0t+NmI=";
+      relative = "cborg";
+    })
     (pkgs.fetchpatch {
       name = "cborg-no-gate-on-ghc-prim-version.patch";
       url = "https://github.com/well-typed/cborg/commit/a33f94f616f5047e45608a34ca16bfb1304ceaa1.patch";
-      hash = "sha256-30j4Dksh2nnLKAcUF5XJw3Z/UjfV3F+JFnHeXSUs9Rk=";
-      includes = [ "**/Codec/CBOR/**" ];
-      stripLen = 1;
+      hash = "sha256-yvJYOMxOuEYbZrpT9jp4RfV1DeqlDLl9czATQri5NZE=";
+      relative = "cborg";
     })
     # Fixes compilation on 32-bit platforms. Unreleased patch committed to the
     # upstream master branch: https://github.com/well-typed/cborg/pull/351
@@ -2611,6 +2627,19 @@ with haskellLib;
       url = "https://github.com/well-typed/cborg/commit/ecc1360dcf9e9ee27d08de5206b844e075c88ca4.patch";
       hash = "sha256-9m2FlG6ziRxA1Dy22mErBaIjiZHa1dqtkbmFnMMFrTI=";
       stripLen = 1;
+    })
+    (pkgs.fetchpatch {
+      name = "cborg-ghc-9.14.patch";
+      url = "https://github.com/well-typed/cborg/commit/06cdc44be7497fe5be02b62697bc9268c6699134.patch";
+      hash = "sha256-tUSJzePVu4DhZrG+x7J/axwl/qgD+ddTpwvpV2MyPXE=";
+      relative = "cborg";
+    })
+    # e.g. for QuickCheck >= 2.17
+    (pkgs.fetchpatch {
+      name = "cborg-bump-various-bounds.patch";
+      url = "https://github.com/well-typed/cborg/commit/b47b5752a8d79debc98e6c0b5cd1fb147f137b99.patch";
+      hash = "sha256-X9PKb89R6aEZRnvG19gMUf8RKqHjf2mk2kjeDGJigQY=";
+      relative = "cborg";
     })
   ] super.cborg;
 
