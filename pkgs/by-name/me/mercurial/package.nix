@@ -37,7 +37,6 @@ let
     pygments
     setuptools
     setuptools-scm
-    pip
     ;
 
 in
@@ -50,7 +49,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-8uyOfu7wUAWRcG03RVXwzrEYgiBo51+jsyvgfdIYT2w=";
   };
 
-  pyproject = false;
+  pyproject = true;
 
   cargoDeps =
     if rustSupport then
@@ -78,7 +77,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     installShellFiles
     setuptools
     setuptools-scm
-    pip
   ]
   ++ lib.optionals rustSupport [
     rustPlatform.cargoSetupHook
