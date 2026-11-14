@@ -1801,6 +1801,7 @@
   ./services/web-apps/loops-server.nix
   ./services/web-apps/lubelogger.nix
   ./services/web-apps/mainsail.nix
+  ./services/web-apps/manyfold.nix
   ./services/web-apps/mastodon.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/mattermost.nix
