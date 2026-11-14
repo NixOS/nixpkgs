@@ -11,6 +11,7 @@
   plugins ? [ ],
   extraFeatures ? [ ],
   disabledFeatures ? [ ],
+  vaultType ? null,
 }:
 
 let
@@ -22,6 +23,7 @@ let
       disabledFeatures != [ ]
     ) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
   '';
+  vaultSubcommand = lib.optionalString (vaultType != null) "--vault=${vaultType}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keycloak";
@@ -66,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     export KC_HOME_DIR=$(pwd)
     export KC_CONF_DIR=$(pwd)/conf
-    bash bin/kc.sh build ${featuresSubcommand}
+    bash bin/kc.sh build ${vaultSubcommand} ${featuresSubcommand}
 
     runHook postBuild
   '';
