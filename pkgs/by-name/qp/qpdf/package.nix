@@ -7,6 +7,7 @@
   perl,
   zlib,
   bash,
+  zopfli,
   ctestCheckHook,
 
   # for passthru.tests
@@ -42,8 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    zlib
     libjpeg
+    zlib
+    zopfli
   ];
 
   nativeCheckInputs = [
@@ -56,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "SHOW_FAILED_TEST_OUTPUT" true)
+    (lib.cmakeBool "ZOPFLI" true)
   ];
 
   preConfigure = ''
