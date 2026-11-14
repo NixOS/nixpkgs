@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "kool";
-  version = "3.6.0";
+  version = "3.8.1";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "kool-dev";
     repo = "kool";
     tag = finalAttrs.version;
-    hash = "sha256-81UhlEAk8ZNC/G6tV2g8+VZVVrLJVV6Dji2pjmWIYb8=";
+    hash = "sha256-Nc3iwoirIHvbSPDGm7Y9mCbeurDLnCTjUXr4gob9l0I=";
   };
 
-  vendorHash = "sha256-IqUkIf0uk4iUTedTO5xRzjmJwHS+p6apo4E0WEEU6cc=";
+  vendorHash = "sha256-G453DRSMh9fT4SiFtl3PgmT2X8WzGJ0FNRYY4kmV3r0=";
 
   ldflags = [
     "-s"
