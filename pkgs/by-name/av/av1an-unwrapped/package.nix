@@ -10,22 +10,22 @@
   pkg-config,
   rav1e,
   rustPlatform,
-  vapoursynth,
+  python3Packages,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "av1an-unwrapped";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "rust-av";
     repo = "Av1an";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JwYnDl9ZSSE+dD+ZAxuN7ywqFN314Ib/9Flh52kL3do=";
+    hash = "sha256-eNkQdeBksjoJEkNwWEd8LtBSxvdinEhJgK1AaO4BntE=";
   };
 
-  cargoHash = "sha256-mxWYXujwp7tYAj9bM/ZhqbyISMjvX+AYG07otcB67pg=";
+  cargoHash = "sha256-YMLkoG8RFUpUPqmZKOCWymUxmejEzU+3hslclOYMfes=";
 
   nativeBuildInputs = [
     nasm
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     ffmpeg_7
     libgit2
-    vapoursynth
+    python3Packages.vapoursynth
   ];
 
   nativeCheckInputs = [
@@ -55,18 +55,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bins"
   ];
 
-  # libvapoursynth-script spins up an embedded Python and runs
-  # `import vapoursynth`; without this the VSScript API fails to
-  # initialize during unit tests that exercise the vapoursynth code path.
-  preCheck = ''
-    export PYTHONPATH=${vapoursynth}/${vapoursynth.python3.sitePackages}''${PYTHONPATH:+:$PYTHONPATH}
-  '';
-
   # These unit tests load blank_1080p.mkv via core.lsmas.LWLibavSource,
   # which needs the L-SMASH Works plugin.
   checkFlags = [
     "--skip=chunk::tests::apply_photon_noise_args_with_noise"
     "--skip=scenes::tests::validate_zones_target_quality"
+    "--skip=encoder::tests::ffmpeg_probe_uses_fps_mode_passthrough"
   ];
 
   passthru.updateScript = nix-update-script { };

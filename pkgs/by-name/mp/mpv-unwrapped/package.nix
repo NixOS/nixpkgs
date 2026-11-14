@@ -48,12 +48,12 @@
   pipewire,
   pkg-config,
   python3,
+  python3Packages,
   rubberband,
   shaderc, # instead of spirv-cross
   stdenv,
   swift,
   testers,
-  vapoursynth,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -128,6 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
       mv mpv_identify mpv_identify.sh
       popd
     ''
+    # Fix location of vapoursynth libvsscript.so
+    ''
+      substituteInPlace video/filter/vf_vapoursynth.c --replace-fail libvsscript.so \
+        '${python3Packages.vapoursynth}/${python3.sitePackages}/vapoursynth/libvsscript.so'
+    ''
   ];
 
   mesonFlags = [
@@ -200,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals sdl2Support [ SDL2 ]
   ++ lib.optionals sixelSupport [ libsixel ]
   ++ lib.optionals vaapiSupport [ libva ]
-  ++ lib.optionals vapoursynthSupport [ vapoursynth ]
+  ++ lib.optionals vapoursynthSupport [ python3Packages.vapoursynth ]
   ++ lib.optionals vdpauSupport [ libvdpau ]
   ++ lib.optionals vulkanSupport [
     shaderc
@@ -280,13 +285,10 @@ stdenv.mkDerivation (finalAttrs: {
       # The wrapper consults luaEnv and lua.version
       luaEnv
       lua
-      # In the wrapper, we want to reference vapoursynth which has the `python3`
-      # passthru attribute (which has the `sitePrefix` attribute). This way we'll
-      # be sure that in the wrapper we'll use the same python3.sitePrefix used to
-      # build vapoursynth.
       vapoursynthSupport
-      vapoursynth
       ;
+
+    inherit (python3Packages) vapoursynth;
 
     tests = {
       inherit (nixosTests) mpv;

@@ -1,0 +1,89 @@
+commit b50ab527e28e2bc53826c8d3b20c45318c183ab3
+Author: rnhmjoj <rnhmjoj@eurofusion.eu>
+Date:   Sun Nov 8 00:21:12 2026 +0100
+
+    Do not use vapoursynth.toml to discover the python interpreter
+    
+    We use either
+    
+    1. the interpreter the package was built with, hardcoded
+    
+    2. the wrapped interpreter of the current environment,
+       discovered using the NIX_PYTHONEXECUTABLE variable
+
+diff --git a/include/cython/vapoursynth_api.h b/include/cython/vapoursynth_api.h
+index 96aece3a..157a6759 100644
+--- a/include/cython/vapoursynth_api.h
++++ b/include/cython/vapoursynth_api.h
+@@ -18,7 +18,9 @@
+ 
+ 
+ static decltype(_Py_DecRef) *p_Py_DecRef = nullptr;
++static decltype(PyList_Append) *p_PyList_Append = nullptr;
+ static decltype(PyObject_GetAttrString) *p_PyObject_GetAttrString = nullptr;
++static decltype(PyUnicode_FromString) *p_PyUnicode_FromString = nullptr;
+ static decltype(PyDict_GetItemString) *p_PyDict_GetItemString = nullptr;
+ static decltype(PyCapsule_IsValid) *p_PyCapsule_IsValid = nullptr;
+ static decltype(PyCapsule_GetPointer) *p_PyCapsule_GetPointer = nullptr;
+diff --git a/src/vsscript/vsscript.cpp b/src/vsscript/vsscript.cpp
+index 9977ce8d..26cf17a0 100644
+--- a/src/vsscript/vsscript.cpp
++++ b/src/vsscript/vsscript.cpp
+@@ -230,15 +230,16 @@ static void realInit() VS_NOEXCEPT {
+ 
+     std::filesystem::path vsscriptPath = getLibraryPath();
+ 
+-    auto [pythonExePath, pythonSymbolPath] = readEnvConfig(vsscriptPath);
++    std::filesystem::path pythonExePath = "@pythonExePath@";
++    std::filesystem::path pythonSymbolPath = "@pythonSymbolPath@";
+ 
+-    if (pythonExePath.empty() || pythonSymbolPath.empty()) {
+-#ifdef VS_TARGET_OS_WINDOWS
+-        runConfigTool();
+-#else
+-        system("vapoursynth config >/dev/null 2>&1");
+-#endif
+-        std::tie(pythonExePath, pythonSymbolPath) = readEnvConfig(vsscriptPath);
++    char * pythonExe = std::getenv("NIX_PYTHONEXECUTABLE");
++    if (pythonExe && strlen(pythonExe) > 0) {
++      pythonExePath = std::filesystem::path(pythonExe);
++    }
++    pythonExe = std::getenv("NIX_PYTHONEXECUTABLE_COPY");
++    if (pythonExe && strlen(pythonExe) > 0) {
++      pythonExePath = std::filesystem::path(pythonExe);
+     }
+ 
+     if (pythonExePath.empty() || pythonSymbolPath.empty()) {
+@@ -254,6 +255,8 @@ static void realInit() VS_NOEXCEPT {
+ 
+     p_Py_DecRef = reinterpret_cast<decltype(_Py_DecRef) *>(GET_FUNCTION_ADDRESS(libraryHandle, "_Py_DecRef"));
+     p_PyObject_GetAttrString = reinterpret_cast<decltype(PyObject_GetAttrString) *>(GET_FUNCTION_ADDRESS(libraryHandle, "PyObject_GetAttrString"));
++    p_PyUnicode_FromString = reinterpret_cast<decltype(PyUnicode_FromString) *>(GET_FUNCTION_ADDRESS(libraryHandle, "PyUnicode_FromString"));
++    p_PyList_Append = reinterpret_cast<decltype(PyList_Append) *>(GET_FUNCTION_ADDRESS(libraryHandle, "PyList_Append"));
+     p_PyDict_GetItemString = reinterpret_cast<decltype(PyDict_GetItemString) *>(GET_FUNCTION_ADDRESS(libraryHandle, "PyDict_GetItemString"));
+     p_PyCapsule_IsValid = reinterpret_cast<decltype(PyCapsule_IsValid) *>(GET_FUNCTION_ADDRESS(libraryHandle, "PyCapsule_IsValid"));
+     p_PyCapsule_GetPointer = reinterpret_cast<decltype(PyCapsule_GetPointer) *>(GET_FUNCTION_ADDRESS(libraryHandle, "PyCapsule_GetPointer"));
+@@ -279,6 +282,16 @@ static void realInit() VS_NOEXCEPT {
+         p_Py_SetProgramName(pythonExePath.wstring().c_str());
+         p_Py_InitializeEx(0);
+     }
++
++    // Add default search path
++    PyObject *sys = p_PyImport_ImportModule("sys");
++    PyObject *path = p_PyObject_GetAttrString(sys, "path");
++    PyObject *new_dir = p_PyUnicode_FromString("@vapoursynthPath@");
++    p_PyList_Append(path, new_dir);
++    p_Py_DecRef(new_dir);
++    p_Py_DecRef(path);
++    p_Py_DecRef(sys);
++
+     s = p_PyGILState_Ensure();
+     if (import_vapoursynth()) {
+         std::string reason = pendingPythonError();
+@@ -536,4 +549,4 @@ const char *VS_CC getVSScriptAPILastError() VS_NOEXCEPT {
+     if (!extendedErrorMessage.empty())
+         return extendedErrorMessage.c_str();
+     return versionError;
+-}
+\ No newline at end of file
++}

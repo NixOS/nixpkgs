@@ -6137,6 +6137,8 @@ self: super: with self; {
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
+  ffms = toPythonModule (pkgs.ffms.override { python3 = python; });
+
   ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
 
   fhirpy = callPackage ../development/python-modules/fhirpy { };
@@ -22481,7 +22483,15 @@ self: super: with self; {
 
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
 
-  vapoursynth = callPackage ../development/python-modules/vapoursynth { inherit (pkgs) vapoursynth; };
+  vapoursynth = callPackage ../development/python-modules/vapoursynth { };
+
+  vapoursynth-bestsource = callPackage ../development/python-modules/vapoursynth-bestsource { };
+
+  vapoursynth-eedi3 = callPackage ../development/python-modules/vapoursynth-eedi3 { };
+
+  vapoursynth-mvtools = callPackage ../development/python-modules/vapoursynth-mvtools { };
+
+  vapoursynth-znedi3 = callPackage ../development/python-modules/vapoursynth-znedi3 { };
 
   variants = callPackage ../development/python-modules/variants { };
 
