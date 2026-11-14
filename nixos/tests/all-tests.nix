@@ -418,6 +418,7 @@ in
   cgit = runTest ./cgit.nix;
   changedetection-io = runTest ./changedetection-io.nix;
   charliecloud = runTest ./charliecloud.nix;
+  checkmate-capture = runTest ./checkmate-capture.nix;
   chhoto-url = runTest ./chhoto-url.nix;
   chipass = runTest ./chipass.nix;
   chromadb = runTest ./chromadb.nix;
