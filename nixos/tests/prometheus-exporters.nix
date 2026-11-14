@@ -604,6 +604,13 @@ let
         exporterConfig = pkgs.writeText "ipmi-exporter.yml" ''
           modules:
             default:
+              collectors:
+                - bmc
+              custom_args:
+                # Exercise access to a device other than the default /dev/ipmi0.
+                bmc:
+                  - --driver-device=/dev/ipmi1
+            lan:
               user: ipmiusr
               pass: test
               privilege: admin
@@ -615,11 +622,12 @@ let
               collectors:
                 - ipmi
         '';
+        # FreeIPMI treats 127.0.0.1 as in-band, so use another loopback address.
         simulatorConfig = pkgs.writeText "ipmi-simulator.conf" ''
           name "ipmisim1"
 
           startlan 1
-            addr 192.168.1.1 623
+            addr 127.0.0.2 623
             priv_limit admin
             guid a123456789abcdefa123456789abcdef
           endlan
@@ -630,15 +638,24 @@ let
       in
       {
         maintainers = pkgs.freeipmi.meta.maintainers;
+        testBackend = "nodes"; # QEMU must emulate the IPMI hardware for /dev/ipmi0.
         exporterConfig = {
           enable = true;
+          inBandDevices = [
+            "/dev/ipmi0"
+            "/dev/ipmi1"
+          ];
           configFile = exporterConfig;
         };
         metricProvider = {
-          networking.firewall.allowedUDPPorts = [ 623 ];
+          virtualisation.qemu.options = [
+            "-device ipmi-bmc-sim,id=bmc0"
+            "-device pci-ipmi-kcs,bmc=bmc0"
+            "-device ipmi-bmc-sim,id=bmc1"
+            "-device pci-ipmi-kcs,bmc=bmc1"
+          ];
           systemd.services.ipmi-simulator = {
             wantedBy = [ "multi-user.target" ];
-            after = [ "network.target" ];
             preStart = ''
               # ipmi_sim expects specific name for its SDR.
               ${pkgs.coreutils}/bin/install -Dm600 \
@@ -658,15 +675,30 @@ let
         };
         exporterTest = ''
           wait_for_unit("ipmi-simulator.service")
-          wait_until_succeeds("ss -lunp | grep -F '192.168.1.1:623'")
+          wait_until_succeeds("ss -lunp | grep -F '127.0.0.2:623'")
           wait_for_unit("prometheus-ipmi-exporter.service")
+          wait_for_file("/dev/ipmi0")
+
+          # Local monitoring must work when the device interface is initially unloaded.
+          succeed(
+            "systemctl stop prometheus-ipmi-exporter.service",
+            "rmmod ipmi_devintf",
+            "systemctl start prometheus-ipmi-exporter.service",
+          )
           wait_for_open_port(9290)
+          wait_for_file("/dev/ipmi0")
 
           # ipmi_sim command file sets MBTemp = 0x60 (96).
           succeed(
-            "curl -sSf 'http://localhost:9290/ipmi?target=192.168.1.1' > /tmp/ipmi-metrics",
+            "curl -sSf 'http://localhost:9290/ipmi?target=127.0.0.2&module=lan' > /tmp/ipmi-metrics",
             "grep -F 'ipmi_up{collector=\"ipmi\"} 1' /tmp/ipmi-metrics",
             "grep -F 'ipmi_temperature_celsius{id=\"3\",name=\"MBTemp\"} 96' /tmp/ipmi-metrics",
+          )
+
+          succeed(
+            "curl -sSf http://localhost:9290/metrics > /tmp/local-ipmi-metrics",
+            "grep -F 'ipmi_up{collector=\"bmc\"} 1' /tmp/local-ipmi-metrics",
+            "grep -E '^ipmi_bmc_info\\{.*\\} 1$' /tmp/local-ipmi-metrics",
           )
         '';
       };
