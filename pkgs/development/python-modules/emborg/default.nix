@@ -56,6 +56,17 @@ buildPythonPackage rec {
     patchShebangs .
   '';
 
+  # borgbackup >=1.4.5 no longer lists an empty directory (tests/configs/subdir)
+  # among an archive's paths, which these tests assert on; same failures occur
+  # on master since borgbackup was bumped there in #543360.
+  disabledTests = [
+    "test_emborg_api"
+    "test_emborg_with_configs[93]"
+    "test_emborg_with_configs[94]"
+    "test_emborg_with_configs[95]"
+    "test_emborg_with_configs[96]"
+  ];
+
   pythonImportsCheck = [ "emborg" ];
 
   meta = {
