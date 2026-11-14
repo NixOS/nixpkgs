@@ -56,6 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxcb
   ];
 
+  # libgit2-sys 0.17 requires libgit2 1.8.x, older than pkgs.libgit2, so
+  # override cargoSetupHook's LIBGIT2_NO_VENDOR=1 and use the vendored copy.
+  preBuild = ''
+    export LIBGIT2_NO_VENDOR=0
+  '';
+
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in the darwin sandbox with:
     # Attempted to create a NULL object.
