@@ -1,11 +1,11 @@
 {
-  buildGoModule,
+  buildGo127Module,
   authentik,
   apiGoVendorHook,
   vendorHash,
 }:
 
-buildGoModule {
+buildGo127Module {
   pname = "authentik-proxy-outpost";
   inherit (authentik) version src;
   inherit vendorHash;
