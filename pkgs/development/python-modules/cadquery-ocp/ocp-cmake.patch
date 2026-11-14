@@ -1,0 +1,42 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,7 +11,6 @@
+ find_package( VTK REQUIRED
+   COMPONENTS
+     CommonCore
+-    WrappingPythonCore
+     RenderingCore
+     RenderingOpenGL2
+     CommonDataModel
+@@ -106,6 +105,17 @@
+ 
+ set(ENV{PYTHONPATH} ${CMAKE_SOURCE_DIR}/pywrap )
+ 
++
++foreach(inc IN LISTS OPENGL_INCLUDE_DIRS)
++  list(APPEND G_inc_dirs -i ${inc}/)
++endforeach()
++foreach(inc IN LISTS CXX_INCLUDES)
++  list(APPEND G_inc_dirs ${inc})
++endforeach()
++foreach(inc IN LISTS RapidJSON_INCLUDE_DIRS)
++  list(APPEND G_inc_dirs -i ${inc}/)
++endforeach()
++set(CLANG_BUILTIN_DIR "${CLANG_INC_DIR}" CACHE PATH "Path to clang builtin headers")
+ add_custom_command(
+     OUTPUT ${CMAKE_BINARY_DIR}/OCP/CMakeLists.txt
+     COMMAND
+@@ -115,11 +125,9 @@
+         -n ${N_PROC}
+         -l ${LIBCLANG_PATH}
+         -i ${VTK_INCLUDE_DIR}/
+-        -i ${OPENGL_INCLUDE_DIRS}
+-        -i ${RapidJSON_INCLUDE_DIRS}
+-        -i ${CLANG_INSTALL_PREFIX}/lib/clang/${LLVM_VERSION_MAJOR}/include/
++        ${G_inc_dirs}
++        -i ${CLANG_INC_DIR}/
+         -p ${CMAKE_SOURCE_DIR}
+-        ${CXX_INCLUDES}
+         all ${CMAKE_SOURCE_DIR}/ocp.toml ${PLATFORM}
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+     DEPENDS ${CMAKE_SOURCE_DIR}/ocp.toml
