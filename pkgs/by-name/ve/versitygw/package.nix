@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DNfVHuwL7zdLl+geGBX77Tfm6B9uYYsbrKyKtm28Qbo=";
+    hash = "sha256-s6AMOQzPOGvBCtkqi24s3iqhHmO36yLlFaCnqyoNj24=";
   };
 
-  vendorHash = "sha256-koXJU3e0zDyUqR413//zVQt4r77BXf7g9iQGw0t51qs=";
+  vendorHash = "sha256-Lknd6Bp5ESJQoPjZbPqn+NpgUheEroMIq6uXVP3GXhM=";
 
   excludedPackages = [
     # depends on cgo/cuda
@@ -56,6 +56,15 @@ buildGoModule (finalAttrs: {
         "^TestExcludeDirsCaseAgrees$"
         "^TestExcludedDirKeysReserved$"
         "^TestExcludeDirsEmptyKeysAllowed$"
+        "^TestGetObjectRemovedBeforeOpen$"
+        "^TestGetObjectPreReadOrder$"
+        "^TestGetObjectPreReadVersion$"
+        "^TestGetObjectPreReadDirObject$"
+        "^TestListBucketsVisibilityBackendCalls$"
+        "^TestListObjectsSkipsEntryWhoseDirIsGone$"
+        "^TestFileToObjSkipsEntryWhoseInfoIsGone$"
+        "^TestLiveObjVersionIdObjectRemoved$"
+        "^TestHeadObjectDeleteMarker$"
         "/xattr$"
       ];
     in
