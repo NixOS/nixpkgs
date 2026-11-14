@@ -5,7 +5,7 @@
   cmake,
   gfortran,
   gtest,
-  openmp,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ openmp ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   cmakeFlags = [ "-DSPGLIB_WITH_Fortran=On" ];
 
