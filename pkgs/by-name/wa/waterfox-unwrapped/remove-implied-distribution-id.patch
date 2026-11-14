@@ -1,0 +1,10 @@
+--- a/waterfox/moz.configure
++++ b/waterfox/moz.configure
+@@ -6,7 +6,6 @@
+
+ imply_option("MOZ_APP_UA_NAME", "Firefox")
+ imply_option("MOZ_APP_PROFILE", "Waterfox")
+-imply_option("--with-distribution-id", "net.waterfox")
+
+ option(
+     env="MOZ_APPUPDATE_URL",
