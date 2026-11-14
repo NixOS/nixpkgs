@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (
         ./web-ui-package-json.patch
       ];
 
-      npmDepsHash = "sha256-BfmYRfsxdJZuS/c7bGccXXYktsjQ76mjwTFKLvNsGAg=";
+      npmDepsHash = "sha256-jeNoQ884pv3mfigZ7srLSVMFbvE04zXd/2XxqN5t0LI=";
 
       nativeBuildInputs = [ openapi-generator-cli ];
 
@@ -39,16 +39,16 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "warpgate";
-    version = "0.29.0";
+    version = "0.30.4";
 
     src = fetchFromGitHub {
       owner = "warp-tech";
       repo = "warpgate";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-OXVFsscGU+euamUvgyisN2I3kH/SwSo+eag+S+3YW/w=";
+      hash = "sha256-pj2nGp/7QK7es45RKhJAFBdyUQFS/8C58Kag5n7wHNg=";
     };
 
-    cargoHash = "sha256-zlECC2p2hs5w1zkKc8ikoMyVFp/jie2HsqXGDLAEW7E=";
+    cargoHash = "sha256-zq3HwcJZ6PiC716Qdc0aq+yu5XfV09dPXlt415v0xI8=";
 
     patches = [
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
