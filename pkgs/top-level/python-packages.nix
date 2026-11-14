@@ -22915,8 +22915,6 @@ self: super: with self; {
 
   whodap = callPackage ../development/python-modules/whodap { };
 
-  whois = callPackage ../development/python-modules/whois { };
-
   whois-api = callPackage ../development/python-modules/whois-api { };
 
   whoisdomain = callPackage ../development/python-modules/whoisdomain { };
