@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "barracuda";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Zaneham";
     repo = "Booth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WQGnW7fpTIJuUkf9OYWPPWbE4VMhfff32bKGR9e01oQ=";
+    hash = "sha256-+s8zrFInDfnFU1e69XNXzrXWQLD4vWJJjVvL7btDYN0=";
   };
 
   strictDeps = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 barracuda -t $out/bin
+    install -Dm755 kath -t $out/bin
 
     runHook postInstall
   '';
@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ dstremur ];
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    mainProgram = "barracuda";
+    mainProgram = "kath";
   };
 })
