@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
-    repo = "langsmith-sdk";
+    repo = "langsmith-python";
     tag = "v${finalAttrs.version}";
     hash = "sha256-e5+lttn90eBL4xkvxN9oH3aPp1wRBfy5Q0pS8LDCiq8=";
   };
@@ -158,8 +158,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
-    homepage = "https://github.com/langchain-ai/langsmith-sdk";
-    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/langchain-ai/langsmith-python";
+    changelog = "https://github.com/langchain-ai/langsmith-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
