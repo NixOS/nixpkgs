@@ -30,7 +30,7 @@ let
       deviceAllow = [ "char-nvidia* rw" ];
     };
     "nvtop" = {
-      package = lib.getBin pkgs.nvtopPackages.full;
+      package = lib.getBin pkgs.nvtop;
       deviceAllow = [
         "char-nvidia* rw"
         "char-drm rw"
