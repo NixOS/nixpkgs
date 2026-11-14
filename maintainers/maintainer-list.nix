@@ -6024,6 +6024,11 @@
     githubId = 44802527;
     name = "corps-fini";
   };
+  CosmicLatte914 = {
+    github = "CosmicLatte914";
+    name = "CosmicLatte914";
+    githubId = 355100641;
+  };
   costrouc = {
     email = "chris.ostrouchov@gmail.com";
     github = "costrouc";
