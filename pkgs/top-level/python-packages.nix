@@ -17094,6 +17094,8 @@ self: super: with self; {
 
   python-secp256k1-cardano = callPackage ../development/python-modules/python-secp256k1-cardano { };
 
+  python-sbom = callPackage ../development/python-modules/python-sbom { };
+
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
   python-smarttub = callPackage ../development/python-modules/python-smarttub { };
@@ -23014,6 +23016,8 @@ self: super: with self; {
   zipfile-inflate64 = callPackage ../development/python-modules/zipfile-inflate64 { };
 
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
+
+  zipremove = callPackage ../development/python-modules/zipremove { };
 
   zipp = callPackage ../development/python-modules/zipp { };
 

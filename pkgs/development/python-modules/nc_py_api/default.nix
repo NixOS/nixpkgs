@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nc-py-api";
-  version = "0.30.3";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloud-py-api";
     repo = "nc_py_api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MXL8fgMsmZ1UOJoUyeun6WVol1PjsEpfxqDZtofuqZ0=";
+    hash = "sha256-ZS8oTrSu2T7M/57MDII8IBMmD/m1pu9ydYS31g20sXc=";
   };
 
   build-system = [ hatchling ];

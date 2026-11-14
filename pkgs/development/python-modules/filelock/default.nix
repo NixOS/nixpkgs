@@ -2,29 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
   pytest-asyncio,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  python-sbom,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "filelock";
-  version = "3.29.7";
+  version = "4.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "filelock";
     tag = finalAttrs.version;
-    hash = "sha256-sRJQa7vmMf9aWXT5QdYAZQHM0oIFFZM9P2tQ2x5T79Y=";
+    hash = "sha256-T+5mLG4+LZvpKQpdFuqtU9IAnhUWYGf996p60yCvCAk=";
   };
 
   build-system = [
+    hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
+    python-sbom
   ];
 
   nativeCheckInputs = [
