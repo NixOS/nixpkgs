@@ -10,13 +10,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "streamdeck";
-  version = "0.9.8";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "streamdeck";
     inherit (finalAttrs) version;
-    hash = "sha256-rO5K0gekDUzCJW06TCK59ZHjw5DvvlFeQ5zlGLMdASU=";
+    hash = "sha256-+v6pGkro5xDg5fWHjTySPnQNh+Qxavgl/3osqSlI5qQ=";
   };
 
   patches = [
