@@ -30285,6 +30285,12 @@
     githubId = 38566841;
     name = "Anthony Butt";
   };
+  tonyzedginidze = {
+    email = "tony@boringdystopia.ai";
+    github = "tonyzedginidze";
+    githubId = 119799979;
+    name = "Tony Zedginidze";
+  };
   toonn = {
     email = "nixpkgs@toonn.io";
     matrix = "@toonn:matrix.org";
