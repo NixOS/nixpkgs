@@ -6,20 +6,20 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "coc-pairs";
-  version = "1.5.2";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "neoclide";
     repo = "coc-pairs";
     tag = finalAttrs.version;
-    hash = "sha256-CUNnNS8mRjyVyjFw4dLnFpskdZNn/+UjVwOcuZJkeNw=";
+    hash = "sha256-trHjKXkzbYwihDnuxLILZapFnhpbntclW7NgdV+Ok8M=";
   };
 
   patches = [
     ./package-lock-fix.patch
   ];
 
-  npmDepsHash = "sha256-yIMed7x5EzJMMhsA/O08kLpVYMujyJq1qol/KilxxTs=";
+  npmDepsHash = "sha256-h4FecfEDjj5lwPyGz4LWGGHLpPu4EvxcjU69Zd7uvTs=";
 
   passthru.updateScript = ./update.sh;
 
