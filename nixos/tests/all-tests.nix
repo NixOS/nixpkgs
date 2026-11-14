@@ -1742,8 +1742,7 @@ in
   static-web-server = runTest ./web-servers/static-web-server.nix;
   step-ca = handleTestOn [ "x86_64-linux" ] ./step-ca.nix { };
   steve = runTest ./steve;
-  stirling-pdf = runTest ./stirling-pdf.nix;
-  stirling-pdf-desktop = runTest ./stirling-pdf-desktop.nix;
+  stirling-pdf = recurseIntoAttrs pkgs.stirling-pdf.passthru.tests;
   stratis = handleTest ./stratis { };
   strichliste = runTest ./web-apps/strichliste.nix;
   strongswan-swanctl = runTest ./strongswan-swanctl.nix;
