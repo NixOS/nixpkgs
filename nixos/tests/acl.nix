@@ -23,6 +23,9 @@ vmTools.runInLinuxVM (
     preCheck = ''
       cp test/test.passwd /etc/passwd
       cp test/test.group /etc/group
+      # Make sure all users we `su` to can modify the directory
+      # since libtool may generate a lt- prefixed binary
+      chmod -R 777 .libs
     '';
     doCheck = true;
     outputs = [ "out" ];
