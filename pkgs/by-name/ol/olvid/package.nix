@@ -97,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -dm755 "$out/lib"
     tar -xf "$src" -C "$out/lib" --strip-components 4 olvid/lib/runtime/lib/
+    # The app runs on jdk21, not this bundled runtime; drop its stale CA keystore
+    rm "$out/lib/security/cacerts"
 
     install -dm755 "$out/bin"
     makeBinaryWrapper ${jdk21}/bin/java $out/bin/${repo} \
