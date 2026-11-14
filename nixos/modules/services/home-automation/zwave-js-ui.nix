@@ -57,6 +57,12 @@ in
             visible = false;
             readOnly = true;
           };
+
+          NODE_EXTRA_CA_CERTS = mkOption {
+            default = config.security.pki.caBundle;
+            visible = false;
+            readOnly = true;
+          };
         };
       };
 
@@ -75,13 +81,22 @@ in
     systemd.services.zwave-js-ui = {
       environment = cfg.settings;
       wantedBy = [ "multi-user.target" ];
+      after = lib.optionals config.services.resolved.enable [ "systemd-resolved.service" ];
+      wants = lib.optionals config.services.resolved.enable [ "systemd-resolved.service" ];
       serviceConfig = {
         ExecStart = getExe cfg.package;
         RuntimeDirectory = "zwave-js-ui";
         StateDirectory = "zwave-js-ui";
         RootDirectory = "%t/zwave-js-ui";
         BindReadOnlyPaths = [
-          "/nix/store"
+          builtins.storeDir
+          "-/etc/hosts"
+          "-/etc/nsswitch.conf"
+          "-/etc/resolv.conf"
+        ]
+        ++ lib.optionals config.services.resolved.enable [
+          "/run/systemd/resolve/stub-resolv.conf"
+          "/run/systemd/resolve/resolv.conf"
         ];
         DeviceAllow = [ cfg.serialPort ];
         DynamicUser = true;
