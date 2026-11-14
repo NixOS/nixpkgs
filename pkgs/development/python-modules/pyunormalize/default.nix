@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyunormalize";
-  version = "17.0.0";
+  version = "18.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlodewijck";
     repo = "pyunormalize";
     tag = "v${version}";
-    hash = "sha256-JDcMWaA6r8YRZYJseyKUyPAInrqHHYhQXYmw9rr3ls4=";
+    hash = "sha256-CEZUCRszPWXqF1qc9bDukZn+xmV6t7U2jfLWRUpew1c=";
   };
 
   build-system = [ setuptools ];
