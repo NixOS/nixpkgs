@@ -107,16 +107,24 @@ in
       };
 
       logout = lib.mkOption {
+        default = "";
+        description = ''
+          Shell script code called during bash shell logout.
+        '';
+        type = lib.types.lines;
+      };
+
+      interactiveLogout = lib.mkOption {
         # Reset the title bar when logging out.  This protects against a remote
         # NixOS system clobbering your local terminal's title bar when you SSH
         # into the remote NixOS system and then log out.
         #
         # For more details, see: https://superuser.com/a/339946
         default = ''
-          printf '\e]0;\a'
+          printf '\e]0;\a' >&2
         '';
         description = ''
-          Shell script code called during login bash shell logout.
+          Shell script code called during interactive bash shell logout.
         '';
         type = lib.types.lines;
       };
@@ -210,6 +218,10 @@ in
       __ETC_BASHLOGOUT_SOURCED=1
 
       ${cfg.logout}
+
+      if [ -n "$PS1" ]; then
+        ${cfg.interactiveLogout}
+      fi
 
       # Read system-wide modifications.
       if test -f /etc/bash_logout.local; then
