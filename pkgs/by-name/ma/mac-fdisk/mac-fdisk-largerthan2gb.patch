@@ -1,0 +1,14 @@
+--- a/fdisk.h
++++ b/fdisk.h
+@@ -2,6 +2,11 @@
+    fdisk.h
+ */
+ 
++#ifdef __linux__
++#define _FILE_OFFSET_BITS 64
++#define _LARGE_FILES
++#endif
++
+ #define SECTOR_SIZE	512
+ #define NETBSD_PARTITION 0xa5
+ #define cround(n)	(((n) + display_factor * unit_flag) / display_factor)

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchzip,
-  fetchpatch,
   installShellFiles,
 }:
 
@@ -16,61 +15,30 @@ stdenv.mkDerivation {
   };
 
   patches = [
+    # patches from https://git.adelielinux.org/adelie/packages/-/tree/current/user/mac-fdisk, fetchers get rejected with HTTP 429
     # Debian's changeset, extracted into a patch
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1b708c8a90e3548c4954c6367a9376f76f3746bd/user/mac-fdisk/mac-fdisk-0.1-debian.patch";
-      sha256 = "sha256-a9pGF+UsFeZiXgracmT4anqgpmcGcS/W3jGtFzHZtt4=";
-    })
+    ./mac-fdisk-0.1-debian.patch
     # Include a lot more headers and remove a bunch of braindead __linux__ checks
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1fa4c88ee21866eeb0feae8f6b0bf609a04711cc/user/mac-fdisk/mac-fdisk-0.1-headers.patch";
-      sha256 = "sha256-FIk9K+lP+3e1pgmNfymTdpdSoTpBDv29kmwYgqYwWQw=";
-    })
+    ./mac-fdisk-0.1-headers.patch
     # Add support for more architectures
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1b708c8a90e3548c4954c6367a9376f76f3746bd/user/mac-fdisk/mac-fdisk-0.1-more-arches.patch";
-      sha256 = "sha256-HNRmzETUmKfZQFrjg6Y/HPwUnLk0vO5DokfU4umdOm0=";
-    })
+    ./mac-fdisk-0.1-more-arches.patch
     # From p16 (source?), adjusts some types & fixes PPC64 support
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1fa4c88ee21866eeb0feae8f6b0bf609a04711cc/user/mac-fdisk/mac-fdisk-0.1_p16-ppc64.patch";
-      sha256 = "sha256-GK0nfga59nOXotkbKI+2ejA9TtyZUwDIxuXWFGGbeFg=";
-    })
+    # includes changes for glibc 2.44 compat: https://git.adelielinux.org/adelie/packages/-/merge_requests/907
+    ./mac-fdisk-0.1_p16-ppc64.patch
     # From p16 (source?), makes some inlines static
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1fa4c88ee21866eeb0feae8f6b0bf609a04711cc/user/mac-fdisk/mac-fdisk-0.1_p16-proper-inline.patch";
-      sha256 = "sha256-wr2teKpm0FyqNudKYlTD49pTFDis33Fo+0LULNYIJko=";
-    })
+    ./mac-fdisk-0.1_p16-proper-inline.patch
     # Adds x86_64 support
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1b708c8a90e3548c4954c6367a9376f76f3746bd/user/mac-fdisk/mac-fdisk-amd64.patch";
-      sha256 = "sha256-iO4/sY5sGKQyymMmAOb/TlCc9id2qgEDw7E8pFZpsHI=";
-    })
+    ./mac-fdisk-amd64.patch
     # Fix missing header in fdisk.c on musl
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1fa4c88ee21866eeb0feae8f6b0bf609a04711cc/user/mac-fdisk/mac-fdisk-fdisk-header-musl.patch";
-      sha256 = "sha256-mKBVjvLKtxKPADeoPqp17YdJ1QWj2enAYhKKSqTnQ44=";
-    })
+    ./mac-fdisk-fdisk-header-musl.patch
     # Support disks >550GB
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1fa4c88ee21866eeb0feae8f6b0bf609a04711cc/user/mac-fdisk/mac-fdisk-large-disk-support.patch";
-      sha256 = "sha256-IXZZdozqZKyZEz87ZzB8Jof22GgvHf4GaXBqSKn8su8=";
-    })
+    ./mac-fdisk-large-disk-support.patch
     # Enable Large File Support (>2GiB)
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1fa4c88ee21866eeb0feae8f6b0bf609a04711cc/user/mac-fdisk/mac-fdisk-largerthan2gb.patch";
-      sha256 = "sha256-ATK7QYXV7BOk8iIFeXY8g+ZHLuuhww9pcrqOMDn/oLM=";
-    })
+    ./mac-fdisk-largerthan2gb.patch
     # Fix compilation on non-glibc
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/1fa4c88ee21866eeb0feae8f6b0bf609a04711cc/user/mac-fdisk/mac-fdisk-non-glibc-support.patch";
-      sha256 = "sha256-CBZUKf7dPvvpuG5L+SI1FQ4W7/fDgeKXHUMFkJNu/MY=";
-    })
+    ./mac-fdisk-non-glibc-support.patch
     # Flush stdout after printing prompt for better UX
-    (fetchpatch {
-      url = "https://git.adelielinux.org/adelie/packages/-/raw/656ae6bf9f8a64aee95c4797b20bfe713627f1f4/user/mac-fdisk/flush-stdout.patch";
-      sha256 = "sha256-k7+UPiUf/oCQdDhxDcC+FRwkxS89WSsYzFw6fUB/10I=";
-    })
+    ./flush-stdout.patch
   ];
 
   nativeBuildInputs = [
