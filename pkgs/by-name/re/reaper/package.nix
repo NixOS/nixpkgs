@@ -86,6 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontStrip = true;
 
+  # patchelf 0.19 makes reaper segfault with the default 4 KiB page size
+  patchelfFlags = [
+    "--page-size"
+    "65536"
+  ];
+
   installPhase =
     if stdenv.hostPlatform.isDarwin then
       ''
