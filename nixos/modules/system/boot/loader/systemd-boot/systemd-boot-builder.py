@@ -31,6 +31,7 @@ DISTRO_NAME = "@distroName@"
 NIX = "@nix@"
 SYSTEMD = "@systemd@"
 CONFIGURATION_LIMIT = int("@configurationLimit@")
+SYSTEMD_RELAX_ESP_CHECKS = "@relaxEspChecks@"
 REBOOT_FOR_BITLOCKER = bool("@rebootForBitlocker@")
 CAN_TOUCH_EFI_VARIABLES = "@canTouchEfiVariables@" == "1"
 GRACEFUL = "@graceful@" == "1"
@@ -502,6 +503,9 @@ def install_bootloader(args: argparse.Namespace) -> None:
         bootctl_flags.append("--graceful")
 
     if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
+
+        os.environ["SYSTEMD_RELAX_ESP_CHECKS"] = SYSTEMD_RELAX_ESP_CHECKS
+
         # bootctl uses fopen() with modes "wxe" and fails if the file exists.
         LOADER_CONF.unlink(missing_ok=True)
 
