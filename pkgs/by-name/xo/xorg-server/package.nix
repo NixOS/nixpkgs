@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   # `xvfb` inherits `version` and `src` from here, leading to many rebuilds. If
   # necessary, these can be moved out of lockstep in order to merge updates
   # quickly.
-  version = "21.1.25";
+  version = "26.0.99.904";
 
   outputs = [
     "out"
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-atTjx7WaMJsyyS5cFc4SZxEPnhPxrHjaYjYaYo2hoOs=";
+    hash = "sha256-6X5lQcA/5fbi4wh6ljr2ObfK9lFp7mu8b4e/Ypgytwc=";
   };
 
   patches = [
