@@ -25,6 +25,7 @@
   versionsJson ? null,
   username ? "",
   token ? "", # get/reset token at https://factorio.com/profile
+  tokenFile ? null, # Only use this over the one above it if you use flakes, don't want your token in the store (most of the time) AND the file isn't part of your configuration. Afterwards, GC to remove your token off the store.
   experimental ? false, # true means to always use the latest branch
   ...
 }@args:
@@ -34,6 +35,8 @@ assert
   || releaseType == "headless"
   || releaseType == "demo"
   || releaseType == "expansion";
+
+assert lib.typeOf tokenFile == "path" || tokenFile == null;
 
 let
 
@@ -65,6 +68,8 @@ let
           };
         };
       }
+
+      *The correct username associated to the token is also required*
 
       Alternatively, instead of providing the username+token, you may manually
       download the release through https://factorio.com/download , then add it to
@@ -149,7 +154,12 @@ let
 
               # This preHook hides the credentials from /proc
               preHook =
-                if username != "" && token != "" then
+                if username != "" && tokenFile != null then
+                  ''
+                    echo -n "${username}"   >username
+                    echo -n "${(lib.removeSuffix "\n" (lib.readFile tokenFile))}"  >token
+                  ''
+                else if username != "" && token != "" then
                   ''
                     echo -n "${username}" >username
                     echo -n "${token}"    >token
