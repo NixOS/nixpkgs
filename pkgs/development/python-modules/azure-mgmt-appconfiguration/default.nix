@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-appconfiguration";
-  version = "6.0.0b1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_appconfiguration";
     inherit version;
-    hash = "sha256-zBaEyScWadchaKV5fhg1EmVWa/oSPre/gY3h1vNa5d4=";
+    hash = "sha256-+PD4G3kNHtd7vAUuzc97EwkfrYixDB8/RxAA29nCCXc=";
   };
 
   build-system = [ setuptools ];
