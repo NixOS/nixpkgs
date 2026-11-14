@@ -320,7 +320,33 @@ in
           pkgs.kmod
         ]
         ++ optional (cfg.storageDriver == "zfs") config.boot.zfs.package
+        ++ optional config.security.apparmor.enable pkgs.apparmor-parser
         ++ cfg.extraPackages;
+      };
+
+      # containerd's `apparmor.HostSupports()` (used by dockerd to decide whether
+      # to set `process.apparmorProfile` in the OCI spec) requires
+      # `/sbin/apparmor_parser` to exist. NixOS has no /sbin, so without this
+      # dockerd silently never applies any AppArmor profile (containers stay
+      # `unconfined`, and `--security-opt apparmor=<nonexistent>` is accepted).
+      systemd.tmpfiles.settings."10-docker-apparmor" = mkIf config.security.apparmor.enable {
+        "/sbin".d = {
+          mode = "0755";
+          user = "root";
+          group = "root";
+        };
+        "/sbin/apparmor_parser"."L+".argument = "${pkgs.apparmor-parser}/bin/apparmor_parser";
+      };
+
+      # dockerd generates and loads its own `docker-default` profile with
+      # apparmor_parser. It only `#include <tunables/global>` when
+      # /etc/apparmor.d/tunables/global exists, and otherwise falls back to a
+      # definition that breaks <abstractions/base> (@{HOMEDIRS} not declared).
+      security.apparmor = mkIf config.security.apparmor.enable {
+        packages = [ pkgs.apparmor-profiles ];
+        includes."tunables/global" = ''
+          include "${pkgs.apparmor-profiles}/etc/apparmor.d/tunables/global"
+        '';
       };
 
       systemd.sockets.docker = {
