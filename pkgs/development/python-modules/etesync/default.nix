@@ -10,7 +10,7 @@
   idna,
   orderedmultidict,
   packaging,
-  peewee_3,
+  peewee,
   py,
   pyasn1,
   pycparser,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     idna
     orderedmultidict
     packaging
-    peewee_3
+    peewee
     py
     pyasn1
     pycparser
