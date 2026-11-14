@@ -374,7 +374,7 @@ in
               alias = "${cfg.settings.filesystem.data}/media/";
               extraConfig = ''
                 access_log off;
-                more_set_headers 'Content-Disposition: attachment; filename="$1"';
+                more_set_headers 'Content-Disposition: attachment';
                 expires 7d;
                 types {
                   # prevent xss through file uploads

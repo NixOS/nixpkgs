@@ -192,7 +192,7 @@ in
               add_header Cache-Control 'public, max-age=604800, must-revalidate';
             '';
           };
-          locations."~* \\.php(/|$)" = {
+          locations."~* ^.*\\.php(/|$)" = {
             priority = 3130;
             extraConfig = ''
               fastcgi_pass unix:${fpm.socket};

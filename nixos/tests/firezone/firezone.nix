@@ -147,7 +147,7 @@ in
             default = true;
             locations."/".extraConfig = ''
               return 200 'greetings from the resource';
-              add_header Content-Type text/plain;
+              default_type text/plain;
             '';
           };
         };
