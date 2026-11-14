@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
+  removeReferencesTo,
 
   cmake,
 
@@ -119,6 +120,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+    removeReferencesTo
   ]
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
@@ -181,6 +183,15 @@ buildPythonPackage (finalAttrs: {
   preBuild = ''
     make -j $NIX_BUILD_CORES
     cd .. # leave /build/source/build
+  '';
+
+  # nvcc leaves its library and host compiler paths in the device code, see cudaPackages.nccl.
+  postFixup = lib.optionalString cudaSupport ''
+    find "$out" -name 'libbitsandbytes_cuda*.so' -exec remove-references-to \
+      -t ${cuda-native-redist} \
+      -t ${lib.getBin cudaPackages.cuda_nvcc} \
+      -t ${cudaPackages.backendStdenv.cc.cc} \
+      '{}' +
   '';
 
   dependencies = [
