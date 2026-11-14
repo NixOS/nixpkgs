@@ -307,7 +307,17 @@ lib.extendMkDerivation {
 
                 local OUT
                 if ! OUT="$(go $cmd "''${flags[@]}" $dir 2>&1)"; then
-                  if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
+                  # `getGoDirs` gives all directories that have a `.go` file.
+                  # Some of these have no Go files to build on this platform,
+                  # for example only `_windows.go` or `_test.go` files. Then
+                  # `go build` fails with "... Go files in <directory>".
+                  # Skip `$dir` only if <directory> is `$dir`. If it is a
+                  # transitive import, the package cannot build, thus fail.
+                  local absDir
+                  absDir="$(cd "$dir" 2>/dev/null && pwd)"
+                  if ! echo "$OUT" \
+                    | sed -nE 's/.*(no( buildable| non-test)?|build constraints exclude all) Go (source )?files in //p' \
+                    | grep -qxF "$absDir"; then
                     echo "$OUT" >&2
                     return 1
                   fi
