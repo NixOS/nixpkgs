@@ -72,7 +72,7 @@ let
       ];
     }).config.system.build.isoImage;
 
-  sd =
+  sdConfig =
     (import ../lib/eval-config.nix {
       system = null;
       modules = [
@@ -83,7 +83,7 @@ let
           nixpkgs.pkgs = pkgs;
         }
       ];
-    }).config.system.build.sdImage;
+    }).config;
 
   makeBootTest =
     name: config:
@@ -186,7 +186,7 @@ in
 
   ubootExtlinux =
     let
-      sdImage = "${sd}/sd-image/${sd.imageName}";
+      sdImage = "${sdConfig.system.build.sdImage}/${sdConfig.image.filePath}";
       mutableImage = "/tmp/linked-image.qcow2";
 
       startCommand = mkStartCommand {
@@ -231,8 +231,5 @@ in
         machine.succeed("nix store verify -r --no-trust --option experimental-features nix-command /run/current-system")
         machine.shutdown()
       '';
-
-      # kernel can't find rootfs after boot - investigate?
-      meta.broken = true;
     };
 }
