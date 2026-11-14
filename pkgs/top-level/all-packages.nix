@@ -9020,10 +9020,6 @@ with pkgs;
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
-  youtube-dl = with python3Packages; toPythonApplication youtube-dl;
-
-  youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
-
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;
     ffmpegSupport = false;
