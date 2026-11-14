@@ -296,8 +296,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Patched llama.cpp libraries that Skippy and MeshLLM load for inference (${backend} backend)";
     longDescription = ''
-      The inference engine of mesh-llm, which bundles it; install mesh-llm
-      instead. The backend is chosen with `cudaSupport`, `rocmSupport`,
+      The inference engine of skippy and mesh-llm, which bundle it; install
+      those instead. The backend is chosen with `cudaSupport`, `rocmSupport`,
       `vulkanSupport` and `metalSupport` (the default on macOS), otherwise
       it is CPU only.
     '';
