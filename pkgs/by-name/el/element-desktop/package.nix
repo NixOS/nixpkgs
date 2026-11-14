@@ -188,6 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
     "Applications/Element.app/Contents/MacOS"
   ];
 
+  passthru = { inherit electron; };
+
   meta = {
     description = "Matrix client for desktop";
     homepage = "https://element.io/";
