@@ -26,7 +26,7 @@ let
     ;
 
   artisan = pkgs.writeShellScriptBin "pelican-artisan" ''
-    cd /var/lib/pelican/www
+    cd ${cfg.stateDir}/www
     exec ${pkgs.sudo}/bin/sudo -u pelican ${php}/bin/php artisan "$@"
   '';
 
@@ -75,7 +75,7 @@ let
   setupScript = pkgs.writeShellScript "pelican-setup" ''
     set -euo pipefail
 
-    STATE="/var/lib/pelican"
+    STATE="${cfg.stateDir}"
     WWW="$STATE/www"
     STORE="${package}"
 
@@ -174,6 +174,12 @@ in
       example = lib.literalExpression ":\${toString config.pelican-panel.port}";
     };
 
+    stateDir = mkOption {
+      type = types.path;
+      default = "/var/lib/pelican";
+      description = "The state directory for Pelican Panel.";
+    };
+
     environment = mkOption {
       type = types.attrsOf (
         types.oneOf [
@@ -204,7 +210,7 @@ in
       users.pelican = {
         isSystemUser = true;
         group = "pelican";
-        home = "/var/lib/pelican";
+        home = cfg.stateDir;
       };
       groups.pelican = { };
     };
@@ -250,7 +256,7 @@ in
             "pm.start_servers" = 2;
             "pm.min_spare_servers" = 2;
             "pm.max_spare_servers" = 5;
-            "chdir" = "/var/lib/pelican/www";
+            "chdir" = "${cfg.stateDir}/www";
             "catch_workers_output" = "yes";
             "decorate_workers_output" = "no";
             "env[LOG_CHANNEL]" = "stderr";
@@ -275,7 +281,7 @@ in
         enable = true;
 
         virtualHosts."${cfg.caddy.domain}".extraConfig = ''
-          root * /var/lib/pelican/www/public
+          root * ${cfg.stateDir}/www/public
           encode gzip
           file_server
           php_fastcgi unix//run/phpfpm/pelican.sock
@@ -332,7 +338,7 @@ in
             serviceConfig = {
               User = "pelican";
               Group = "pelican";
-              WorkingDirectory = "/var/lib/pelican/www";
+              WorkingDirectory = "${cfg.stateDir}/www";
               ExecStart = "${php}/bin/php artisan queue:work --tries=3";
               Restart = "on-failure";
               RestartSec = "5s";
@@ -347,7 +353,7 @@ in
               Type = "oneshot";
               User = "pelican";
               Group = "pelican";
-              WorkingDirectory = "/var/lib/pelican/www";
+              WorkingDirectory = "${cfg.stateDir}/www";
               ExecStart = "${php}/bin/php artisan schedule:run";
             };
           };
