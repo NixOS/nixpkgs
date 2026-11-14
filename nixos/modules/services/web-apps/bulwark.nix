@@ -351,6 +351,18 @@ in
             default = "https://extensions.bulwarkmail.org";
             description = "URL of the BulwarkMail extension directory for the admin marketplace.";
           };
+
+          pluginSigningKeyFile = mkOption {
+            type = str;
+            description = ''
+              Path to a file containing an Ed25519 private key, which is used for signing plugins, so the browser can verify them.
+
+              Generate with
+              ```
+              openssl genpkey -algorithm ed25519 -out plugin-signing.key
+              ```
+            '';
+          };
         };
       };
       default = { };
@@ -804,6 +816,7 @@ in
         HOSTNAME = cfg.hostname;
         PORT = toString cfg.port;
         PLUGIN_SECRETS_DIR = cfg.plugin_secrets_dir;
+        PLUGIN_SIGNING_KEY_FILE = cfg.settings.pluginSigningKeyFile;
         ADMIN_STATE_DIR = cfg.admin_state_dir;
         VERSION_CHECK_DATA_DIR = cfg.version_check_data_dir;
         # Read (and created) even with telemetry off to resolve consent state;
