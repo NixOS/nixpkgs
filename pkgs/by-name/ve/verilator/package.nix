@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
-  version = "5.052";
+  version = "5.054";
 
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3xeodLkal/crtcB091lthUe/7/wC+sjAYRqNyl7/kv0=";
+    hash = "sha256-YCCcFA7Mq7SjK6yHldT0rpS1FwXc5C8mgzcJD/imbEw=";
   };
   enableParallelBuilding = true;
   buildInputs = [
@@ -74,11 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
     # verilator --gdbbt uses /bin/sh to test if gdb works.
     substituteInPlace bin/verilator --replace-fail "/bin/sh" "${bash}/bin/sh"
-  ''
-  # prevent rewriting the lexer signatures to size_t for macOS 26+; upstream flex's FlexLexer.h uses int.
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/flexfix \
-      --replace-fail 'if platform.system() == "Darwin":' 'if False:'
   '';
   # grep '^#!/' -R . | grep -v /nix/store | less
   # (in nix-shell after patchPhase)
@@ -109,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       thoughtpolice
       karstx
+      evanwporter
     ];
   };
 })
