@@ -16,6 +16,11 @@ def test_option_headings() -> None:
         content='', markup='#', info='', meta={}, block=True, hidden=False
     )
 
+def test_options_manpage_tbl_cookie() -> None:
+    c = nixos_render_docs.options.ManpageConverter('local', None, None)
+    c.add_options({})
+    assert c.finalize().startswith('\'\\" t\n')
+
 def test_options_commonmark() -> None:
     c = nixos_render_docs.options.CommonMarkConverter({}, 'local')
     with Path('tests/sample_options_simple.json').open() as f:

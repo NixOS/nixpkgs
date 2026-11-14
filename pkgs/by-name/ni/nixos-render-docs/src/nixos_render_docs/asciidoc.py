@@ -56,12 +56,14 @@ class AsciiDocRenderer(Renderer):
     _parstack: list[Par]
     _list_stack: list[List]
     _attrspans: list[str]
+    _table_row_has_cell: bool
 
     def __init__(self, manpage_urls: Mapping[str, str]):
         super().__init__(manpage_urls)
         self._parstack = [ Par("\n\n", "====") ]
         self._list_stack = []
         self._attrspans = []
+        self._table_row_has_cell = False
 
     def _enter_block(self, is_list: bool) -> None:
         self._parstack.append(Par("\n+\n" if is_list else "\n\n", self._parstack[-1].block_delim + "="))
@@ -215,3 +217,41 @@ class AsciiDocRenderer(Renderer):
         return self._list_open(token, '.')
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._list_close()
+    def table_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        aligns = []
+        for j in range(i + 1, len(tokens)):
+            if tokens[j].type == 'thead_close':
+                break
+            elif tokens[j].type == 'th_open':
+                style = cast(str, tokens[j].attrs.get('style', 'left')).removeprefix('text-align:')
+                aligns.append({'left': '<', 'center': '^', 'right': '>'}[style])
+        cols = ",".join(aligns)
+        pbreak = self._break(True)
+        return f'{pbreak}[cols="{cols}",options="header"]\n|==='
+    def table_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "\n|===\n"
+    def thead_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def thead_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "\n"
+    def tr_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        self._table_row_has_cell = False
+        return "\n"
+    def tr_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def _table_cell_open(self) -> str:
+        sep = " " if self._table_row_has_cell else ""
+        self._table_row_has_cell = True
+        return f"{sep}| "
+    def th_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return self._table_cell_open()
+    def th_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def tbody_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def tbody_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def td_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return self._table_cell_open()
+    def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""

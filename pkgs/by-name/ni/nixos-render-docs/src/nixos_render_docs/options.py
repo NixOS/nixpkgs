@@ -255,7 +255,7 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
         return []
 
     def finalize(self) -> str:
-        result = []
+        result = ["'\\\" t"]
 
         if self._header is not None:
             result += self._header
