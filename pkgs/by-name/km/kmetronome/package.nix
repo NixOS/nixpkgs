@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmetronome";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/kmetronome/${finalAttrs.version}/kmetronome-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-FJVmSMu0KDoq8DHRxxGyHQQflPCvH1h+WdsV9wcPAPA=";
+    hash = "sha256-ipWDhktU6D1d0A9TZPxB12TFdF8XyPIJtnAw/ULt0So=";
   };
 
   nativeBuildInputs = [
