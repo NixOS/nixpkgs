@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   packaging,
   pytestCheckHook,
   requests,
@@ -11,25 +12,22 @@
 
 buildPythonPackage rec {
   pname = "anybadge";
-  version = "1.16.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jongracecox";
     repo = "anybadge";
     tag = "v${version}";
-    hash = "sha256-9qGmiIGzVdWHMyurMqTqEz+NKYlc/5zt6HPsssCH4Pk=";
+    hash = "sha256-do6W20O0gy421W72/XN2lQ+CTzM+74vq/ImUEMkP7tM=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '=get_version(),' "='$version',"
-  '';
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
   dependencies = [
     packaging
   ];
