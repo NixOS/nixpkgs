@@ -1286,6 +1286,7 @@
   ./services/networking/harmonia.nix
   ./services/networking/headplane.nix
   ./services/networking/headscale.nix
+  ./services/networking/hermes.nix
   ./services/networking/hickory-dns.nix
   ./services/networking/hostapd.nix
   ./services/networking/htpdate.nix
