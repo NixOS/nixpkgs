@@ -149,7 +149,10 @@ let
       version = sources.version;
       src = fetchurl (
         {
-          curlOpts = "-A apt";
+          curlOptsList = [
+            "-H"
+            "User-Agent: Debian APT-HTTP/1.3 (2.2.4)"
+          ];
         }
         // (sources.${stdenv.hostPlatform.system}
           or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
