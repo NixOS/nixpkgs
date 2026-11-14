@@ -66,7 +66,7 @@ let
 
 in
 symlinkJoin {
-  pname = "t3code";
+  pname = "t3code-cli";
   inherit (t3code-unwrapped) version;
   __structuredAttrs = true;
   strictDeps = true;
@@ -76,27 +76,25 @@ symlinkJoin {
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   postBuild = lib.optionalString (wrapperArgs != [ ]) ''
-    for program in "$out/bin"/*; do
-      wrapProgram "$program" ${lib.escapeShellArgs wrapperArgs}
-    done
+    wrapProgram "$out/bin/t3" ${lib.escapeShellArgs wrapperArgs}
   '';
 
   passthru = {
+    inherit wrapperArgs;
     unwrapped = t3code-unwrapped;
     resourceMonitor = t3code-resource-monitor;
   }
   // t3code-unwrapped.passthru;
 
   meta = {
-    # Manually inherit so that pos works
+    description = "Web-based agent harness control surface";
+    mainProgram = "t3";
     inherit (t3code-unwrapped.meta)
-      description
       homepage
       downloadPage
       changelog
       license
       maintainers
-      mainProgram
       platforms
       ;
   };
