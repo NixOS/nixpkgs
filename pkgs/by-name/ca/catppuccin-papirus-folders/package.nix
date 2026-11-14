@@ -62,6 +62,9 @@ lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ] lib.checkL
     # This takes a horribly long time, and there's nothing to fixup in
     # this package.
     dontFixup = true;
+    # Keep the icon-theme.cache files built in installPhase: gtk3's setup
+    # hook removes them in preFixupPhases, which dontFixup does not skip.
+    dontDropIconThemeCache = true;
     nativeBuildInputs = [
       gtk3
       getent
