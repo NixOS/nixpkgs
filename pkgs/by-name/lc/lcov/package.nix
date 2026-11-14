@@ -23,18 +23,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcov";
-  version = "2.4";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "linux-test-project";
     repo = "lcov";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fGuOqo8Bj1kDxx7Isu3aaAIBDjoMBr7WuZ+tlErjR4Y=";
+    hash = "sha256-RPReVaxL8Ug+Vu7DE0yF5wtwgcxzzfxMNPXMO6ye68c=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     perl
+    # builds the man pages and HTML documentation
+    (python3.withPackages (ps: [
+      ps.sphinx
+      ps.sphinx-rtd-theme
+    ]))
   ];
 
   buildInputs = [
@@ -51,11 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
+    # the build of the XS extension loads lcovutil.pm
+    export PERL5LIB="${perlPackages.makeFullPerlPath perlDeps}"
     patchShebangs --build bin/{fix.pl,get_version.sh} tests/*/*
   '';
 
   postInstall = ''
-    for f in "$out"/bin/{gen*,lcov,llvm2lcov,perl2lcov}; do
+    for f in "$out"/bin/{gen*,html2lcov,jacoco2lcov,lcov,llvm2lcov,perl2lcov}; do
       wrapProgram "$f" --set PERL5LIB ${perlPackages.makeFullPerlPath perlDeps}
     done
   '';
@@ -80,7 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/linux-test-project/lcov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
 
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.all;
+    mainProgram = "lcov";
   };
 })
