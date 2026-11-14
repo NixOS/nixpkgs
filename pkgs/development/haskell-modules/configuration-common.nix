@@ -73,15 +73,15 @@ with haskellLib;
         )
       );
 
-  Cabal_3_18_1_0 = doDistribute (
-    super.Cabal_3_18_1_0.override {
-      Cabal-syntax = self.Cabal-syntax_3_18_1_0;
+  Cabal_3_18_2_0 = doDistribute (
+    super.Cabal_3_18_2_0.override {
+      Cabal-syntax = self.Cabal-syntax_3_18_2_0;
     }
   );
 
   # Needs matching version of Cabal
   Cabal-hooks = super.Cabal-hooks.override {
-    Cabal = self.Cabal_3_18_1_0;
+    Cabal = self.Cabal_3_18_2_0;
   };
 
   # Needs Cabal>=3.14
@@ -117,8 +117,8 @@ with haskellLib;
         # TODO(@sternenseemann): make conditional once a GHC release ships Cabal 3.18
         # !!! Use cself/csuper inside for the actual overrides
         cabalInstallOverlay = cself: csuper: {
-          Cabal = cself.Cabal_3_18_1_0;
-          Cabal-syntax = cself.Cabal-syntax_3_18_1_0;
+          Cabal = cself.Cabal_3_18_2_0;
+          Cabal-syntax = cself.Cabal-syntax_3_18_2_0;
 
           # Forbids Cabal >= 3.18
           # https://github.com/sol/hpack/issues/653
