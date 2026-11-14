@@ -1494,6 +1494,7 @@ in
   plantuml-server = runTest ./plantuml-server.nix;
   plasma6 = runTest ./plasma6.nix;
   plausible = import ./plausible.nix { inherit runTest; };
+  playit = runTest ./playit.nix;
   playwright-python = runTest ./playwright-python.nix;
   please = runTest ./please.nix;
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix { };

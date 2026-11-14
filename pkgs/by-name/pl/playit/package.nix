@@ -9,6 +9,7 @@
   libxkbcommon,
   vulkan-loader,
   wayland,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -81,6 +82,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    tests = {
+      inherit (nixosTests) playit;
+    };
   };
 
   meta = {
