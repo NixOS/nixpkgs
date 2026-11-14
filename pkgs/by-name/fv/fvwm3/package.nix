@@ -1,53 +1,64 @@
 {
   lib,
   asciidoctor,
-  autoconf269,
-  autoreconfHook,
   cairo,
   fetchFromGitHub,
   fontconfig,
   freetype,
   fribidi,
+  gettext,
+  go,
   libsm,
   libx11,
   libxcursor,
+  libxext,
   libxft,
   libxi,
   libxinerama,
+  libxkbcommon,
   libxpm,
   libxrandr,
+  libxrender,
   libxt,
   libevent,
   libintl,
   libpng,
   librsvg,
   libxslt,
+  meson,
+  ninja,
   perl,
   pkg-config,
   python3Packages,
   readline,
   sharutils,
   stdenv,
+  writableTmpDirAsHomeHook,
+  xtrans,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fvwm3";
-  version = "1.1.0";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
     repo = "fvwm3";
     rev = finalAttrs.version;
-    hash = "sha256-y1buTWO1vHzloh2e4EK1dkD0uQa7lIFUbNMkEe5x6Vo=";
+    hash = "sha256-ODvQiIunMqzPe4fbA6bCtp2+E7L8Eo4m1peX99ZcglQ=";
   };
 
-  # Build fails with autoconf 2.73
   nativeBuildInputs = [
-    autoconf269
-    autoreconfHook
     asciidoctor
+    gettext
+    go
+    meson
+    ninja
     pkg-config
     python3Packages.wrapPython
+    python3Packages.python
+    perl
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -58,29 +69,34 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libx11
     libxcursor
+    libxext
     libxft
     libxi
     libxinerama
+    libxkbcommon
     libxpm
     libxrandr
+    libxrender
     libxt
     libevent
     libintl
     libpng
     librsvg
     libxslt
-    perl
-    python3Packages.python
     readline
     sharutils
+    xtrans
   ];
 
   pythonPath = [
     python3Packages.pyxdg
   ];
 
-  configureFlags = [
-    (lib.enableFeature true "mandoc")
+  # There is script named `build` in project root, so rename build dir to avoid conflict.
+  mesonBuildDir = "meson-build-dir";
+
+  mesonFlags = [
+    (lib.mesonBool "mandoc" true)
   ];
 
   postFixup = ''
