@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roswell";
-  version = "26.10.117";
+  version = "26.10.119";
 
   src = fetchFromGitHub {
     owner = "roswell";
     repo = "roswell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JPiBhwePHuYRZEPI+Od1rSLnOLyqnSsBFB4qFTHx5QM=";
+    hash = "sha256-TIFH1vL1cTMAUF2tq3I5SxBPF+ry6Pc3Z5QPDOcEL6w=";
   };
 
   patches = [
