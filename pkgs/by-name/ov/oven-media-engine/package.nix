@@ -2,95 +2,92 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
   srt,
-  bc,
   pkg-config,
-  perl,
   openssl,
   zlib,
-  ffmpeg,
   libvpx,
+  libaom,
   libopus,
   libuuid,
   srtp,
   jemalloc,
   pcre2,
   hiredis,
+  spdlog,
+  whisper-cpp,
+  ffmpeg_7,
 }:
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.17.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
-    owner = "AirenSoft";
+    owner = "OvenMediaLabs";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "sha256-fYvP1mk32lrnYxWdpI1WqEUxAfHsQH3Ng0JLC/GbjrY=";
+    sha256 = "sha256-T/ec3Ac9Kwu2GjdszfbXlGroSuDeOuiz/zxoPA3HBlo=";
   };
 
   patches = [
-    # ffmpeg 7.0 Update: Use new channel layout
-    # https://github.com/AirenSoft/OvenMediaEngine/pull/1626
-    ./support-ffmpeg-7.patch
+    ./compat.patch
   ];
 
-  makeFlags = [
-    "release"
-    "CONFIG_LIBRARY_PATHS="
-    "CONFIG_PKG_PATHS="
-    "GLOBAL_CC=$(CC)"
-    "GLOBAL_CXX=$(CXX)"
-    "GLOBAL_LD=$(CXX)"
-    "SHELL=${stdenv.shell}"
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DOME_USE_CLANG=OFF"
+    "-DOME_SKIP_DEPENDENCY_CHECK=ON"
+    "-DOME_BUILD_TESTS=OFF"
+    "-DOME_HWACCEL_NVIDIA=OFF"
+    "-DOME_HWACCEL_XMA=OFF"
   ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    bc
+    cmake
     pkg-config
-    perl
   ];
   buildInputs = [
     openssl
     srt
     zlib
-    ffmpeg
+    ffmpeg_7
     libvpx
+    libaom
     libopus
     srtp
     jemalloc
     pcre2
     libuuid
     hiredis
+    spdlog
+    whisper-cpp
   ];
 
-  preBuild = ''
-    cd src
-
-    patchShebangs core/colorg++
-    patchShebangs core/colorgcc
-    patchShebangs projects/main/update_git_info.sh
-
-    sed -i -e '/^CC =/d' -e '/^CXX =/d' -e '/^AR =/d' projects/third_party/pugixml-1.9/scripts/pugixml.make
-  '';
-
   installPhase = ''
-    install -Dm0755 bin/RELEASE/OvenMediaEngine $out/bin/OvenMediaEngine
+    runHook preInstall
+
+    install -Dm0755 bin/OvenMediaEngine $out/bin/OvenMediaEngine
     install -Dm0644 ../misc/conf_examples/Origin.xml $out/share/examples/origin_conf/Server.xml
     install -Dm0644 ../misc/conf_examples/Logger.xml $out/share/examples/origin_conf/Logger.xml
     install -Dm0644 ../misc/conf_examples/Edge.xml $out/share/examples/edge_conf/Server.xml
     install -Dm0644 ../misc/conf_examples/Logger.xml $out/share/examples/edge_conf/Logger.xml
+
+    runHook postInstall
   '';
 
   meta = {
-    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
-    broken = true;
     description = "Open-source streaming video service with sub-second latency";
     mainProgram = "OvenMediaEngine";
     homepage = "https://ovenmediaengine.com";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [
+      lukegb
+      findus
+    ];
     platforms = lib.platforms.linux;
   };
 }
