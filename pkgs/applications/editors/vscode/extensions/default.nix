@@ -1089,6 +1089,8 @@ let
         };
       };
 
+      colton.inline-html = callPackage ./colton.inline-html { };
+
       congyiwu.vscode-jupytext = callPackage ./congyiwu.vscode-jupytext { };
 
       contextmapper.context-mapper-vscode-extension =
