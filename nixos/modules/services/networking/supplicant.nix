@@ -43,6 +43,18 @@ let
         )
         ++ optional (suppl.bridge != "") (subsystemDevice suppl.bridge);
 
+      fallbackUnits = optionals (iface != "WLAN" && iface != "LAN" && iface != "DBUS") (
+        concatMap (
+          interface:
+          map (fallback: "${serviceName fallback}${utils.escapeSystemdPath interface}.service") (
+            filter (fallback: hasAttr fallback cfg) [
+              "WLAN"
+              "LAN"
+            ]
+          )
+        ) (splitString " " iface)
+      );
+
       ifaceArg = concatStringsSep " -N " (map (i: "-i${i}") (splitString " " iface));
       driverArg = optionalString (suppl.driver != null) "-D${suppl.driver}";
       bridgeArg = optionalString (suppl.bridge != "") "-b${suppl.bridge}";
@@ -63,10 +75,13 @@ let
     in
     {
       description = "Supplicant ${iface}${optionalString (iface == "WLAN" || iface == "LAN") " %I"}";
-      wantedBy = [ "multi-user.target" ] ++ deps;
+      # WLAN and LAN instances are started by the udev rules below.
+      wantedBy = optionals (iface != "WLAN" && iface != "LAN") ([ "multi-user.target" ] ++ deps);
       wants = [ "network.target" ];
       bindsTo = deps;
-      after = deps;
+      # Stop the catch-all for each interface before a named supplicant starts.
+      conflicts = fallbackUnits;
+      after = deps ++ fallbackUnits;
       before = [ "network.target" ];
 
       path = [ pkgs.coreutils ];
@@ -88,6 +103,33 @@ let
       }";
 
     };
+
+  udevRules = pkgs.writeTextFile {
+    name = "99-zzz-60-supplicant.rules";
+    destination = "/etc/udev/rules.d/99-zzz-60-supplicant.rules";
+    text = ''
+      ${flip (concatMapStringsSep "\n")
+        (filter (n: n != "WLAN" && n != "LAN" && n != "DBUS") (attrNames cfg))
+        (
+          iface:
+          flip (concatMapStringsSep "\n") (splitString " " iface) (
+            i:
+            ''ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${
+              replaceStrings [ " " ] [ "-" ] iface
+            }.service", TAG+="SUPPLICANT_ASSIGNED"''
+          )
+        )
+      }
+
+      ${optionalString (hasAttr "WLAN" cfg) ''
+        ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
+      ''}
+      ${optionalString (hasAttr "LAN" cfg) ''
+        # Wired interfaces have no DEVTYPE; the device link excludes virtual ones.
+        ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="1", ENV{DEVTYPE}=="", TEST=="device", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
+      ''}
+    '';
+  };
 
 in
 
@@ -247,35 +289,27 @@ in
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
-    systemd.services = mapAttrs' (n: v: nameValuePair (serviceName n) (supplicantService n v)) cfg;
+    systemd.services =
+      mapAttrs' (n: v: nameValuePair (serviceName n) (supplicantService n v)) cfg
+      // optionalAttrs (hasAttr "WLAN" cfg || hasAttr "LAN" cfg) {
+        # udev only emits "add" when a device appears, and a rebuild does not
+        # replay it for interfaces that are already up. The WLAN and LAN
+        # instances have no other start path, so without this they wait for a
+        # reboot. Starting an instance that is already running is a no-op.
+        supplicant-udev-trigger = {
+          description = "Start supplicant instances for existing interfaces";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "systemd-udevd.service" ];
+          restartTriggers = [ udevRules ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${config.systemd.package}/bin/udevadm trigger --action=add --subsystem-match=net --attr-match=type=1";
+          };
+        };
+      };
 
-    services.udev.packages = [
-      (pkgs.writeTextFile {
-        name = "99-zzz-60-supplicant.rules";
-        destination = "/etc/udev/rules.d/99-zzz-60-supplicant.rules";
-        text = ''
-          ${flip (concatMapStringsSep "\n")
-            (filter (n: n != "WLAN" && n != "LAN" && n != "DBUS") (attrNames cfg))
-            (
-              iface:
-              flip (concatMapStringsSep "\n") (splitString " " iface) (
-                i:
-                ''ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${
-                  replaceStrings [ " " ] [ "-" ] iface
-                }.service", TAG+="SUPPLICANT_ASSIGNED"''
-              )
-            )
-          }
-
-          ${optionalString (hasAttr "WLAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
-          ''}
-          ${optionalString (hasAttr "LAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
-          ''}
-        '';
-      })
-    ];
+    services.udev.packages = [ udevRules ];
 
   };
 
