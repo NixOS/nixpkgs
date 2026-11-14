@@ -30,6 +30,10 @@ while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
         --max-jobs|-j|--cores|-I|--substituters|--log-format)
+            if [ -z "$1" ]; then
+                log "$0: '$i' requires an argument"
+                exit 1
+            fi
             j="$1"; shift 1
             extraBuildFlags+=("$i" "$j")
             ;;
@@ -39,13 +43,25 @@ while [ "$#" -gt 0 ]; do
             extraBuildFlags+=("$i" "$j" "$k")
             ;;
         --root)
+            if [ -z "$1" ]; then
+                log "$0: '$i' requires an argument"
+                exit 1
+            fi
             mountPoint="$1"; shift 1
             ;;
         --system|--closure|--store-path)
+            if [ -z "$1" ]; then
+                log "$0: '$i' requires an argument"
+                exit 1
+            fi
             system="$1"; shift 1
             requestedBuildMethods["system"]=1
             ;;
         --flake)
+            if [ -z "$1" ]; then
+                log "$0: '$i' requires an argument"
+                exit 1
+            fi
           flake="$1"
           flakeFlags=(--extra-experimental-features 'nix-command flakes')
           requestedBuildMethods["flake"]=1
@@ -88,6 +104,10 @@ while [ "$#" -gt 0 ]; do
           lockFlags+=("$i" "$j" "$k")
           ;;
         --channel)
+            if [ -z "$1" ]; then
+                log "$0: '$i' requires an argument"
+                exit 1
+            fi
             channelPath="$1"; shift 1
             ;;
         --no-channel-copy)
