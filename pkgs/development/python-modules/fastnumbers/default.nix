@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "fastnumbers";
-  version = "5.1.1";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SethMMorton";
     repo = "fastnumbers";
     tag = version;
-    hash = "sha256-7UjUkZPGsrtdQhgisI5IA37WvgGGiEXsey9NhATy064=";
+    hash = "sha256-/fSi53b6mO+L31ThkuaLbgVndwzMWEGTmBU9zeuFJvA=";
   };
 
   build-system = [
