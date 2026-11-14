@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "lsoff";
-  version = "0.1.5";
+  version = "0.1.6";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "yutat23";
     repo = "lsoff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YG8p0GcGSc1DprohvAE8iR+k1lExGTl6IXc5bOJThQE=";
+    hash = "sha256-yR3/5wLApZdw8/0JSf49630mMRrLA8AF5YXojxACTaY=";
   };
 
   vendorHash = "sha256-IQJQwWWL7fRbfA+u92yv7oV5LYuhu8BW4DGTlHHwXs4=";
