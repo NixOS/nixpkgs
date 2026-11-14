@@ -15,6 +15,11 @@
   reproducibleBuild ? true,
   profiledCompiler ? false,
   langJit ? false,
+  # The bintools libgccjit's embedded driver runs at run time.  Must be
+  # passed explicitly: the stdenv that builds gcc, and hence this
+  # function's other arguments, belong to the bootstrap stage before the
+  # final one.  See jitDriverFlags in common/configure-flags.nix.
+  jitBintools ? null,
   langRust ? false,
   cargo,
   staticCompiler ? false,
@@ -158,6 +163,7 @@ let
       langFortran
       langGo
       langJit
+      jitBintools
       langObjC
       langObjCpp
       langRust

@@ -3120,6 +3120,7 @@ with pkgs;
     profiledCompiler = false;
     langJit = true;
     enableLTO = false;
+    jitBintools = binutils;
   };
 
   gnat = pkgs."gnat${toString default-gcc-version}"; # When changing this, update also gnatPackages
