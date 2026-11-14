@@ -21,7 +21,7 @@ let
         __structuredAttrs = true;
       }
       ''
-        printf "%s" "$value" | remarshal --from json --to yaml-1.1 > "$out"
+        printf "%s" "$value" | remarshal --from json --to yaml-1.1 --width inf > "$out"
         ${
           # We skip validation if the build platform cannot execute # the binary targeting the host platform.
           lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
