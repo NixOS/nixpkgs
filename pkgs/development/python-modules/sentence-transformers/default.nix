@@ -167,6 +167,9 @@ buildPythonPackage (finalAttrs: {
     # `datasets` still imports `torchvision.io.VideoReader`, removed in torchvision 0.27
     "test_formatted_train_dataset_raises_clear_error"
     "test_max_list_length_truncates_tensor_labels_in_step"
+
+    # AssertionError: Tensor-likes are not close!
+    "test_word_embeddings_encode_empty_tokens_batch_invariance"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # TypeError: Pickler._batch_setitems() takes 2 positional arguments but 3 were given
@@ -203,9 +206,6 @@ buildPythonPackage (finalAttrs: {
     "test_scores_are_float32_for_low_precision_inputs"
     "test_semantic_search_cos_sim_matches_generic_score_function"
     "test_triplet_distance_matches_full_precision"
-
-    # AssertionError: Tensor-likes are not close!
-    "test_word_embeddings_encode_empty_tokens_batch_invariance"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # These sparse tests also time out, on x86_64-darwin.
