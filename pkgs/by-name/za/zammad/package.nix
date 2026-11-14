@@ -18,6 +18,7 @@
   pnpmConfigHook,
   cacert,
   valkey,
+  bash,
   dataDir ? "/var/lib/zammad",
 }:
 
@@ -78,6 +79,7 @@ stdenvNoCC.mkDerivation {
     nodejs
     procps
     cacert
+    bash
   ];
 
   env.RAILS_ENV = "production";
@@ -91,6 +93,8 @@ stdenvNoCC.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir redis-work
     pushd redis-work
     redis-server &
@@ -108,9 +112,14 @@ stdenvNoCC.mkDerivation {
     kill $REDIS_PID
     pg_ctl stop -D postgres-work -m immediate
     rm -r redis-work postgres-work
+    bash ./script/build/cleanup.sh
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
     # dataDir will be set in the module, and the package gets overridden there
@@ -119,6 +128,8 @@ stdenvNoCC.mkDerivation {
     ln -s ${dataDir}/log $out/log
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/tmp $out/tmp
+
+    runHook postInstall
   '';
 
   passthru = {
