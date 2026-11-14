@@ -41,6 +41,9 @@ test('lints real PR history and exempts development merges only within the same 
   git(origin, 'checkout', 'topic')
   git(origin, 'merge', '--no-ff', 'side', '-m', 'example: merge side')
   const merge = git(origin, 'rev-parse', 'HEAD')
+  git(origin, 'checkout', '-b', 'tabbed-subject')
+  git(origin, 'commit', '--amend', '-m', 'example: merge\tside')
+  const tabbedMerge = git(origin, 'rev-parse', 'HEAD')
   git(directory, 'clone', '--depth=1', `file://${origin}`, checkout)
 
   const cases = [
@@ -58,6 +61,14 @@ test('lints real PR history and exempts development merges only within the same 
       commits: 3,
       ref: 'topic',
       repo: 1,
+      fails: true,
+    },
+    {
+      name: 'merge commit with a tab in its subject',
+      sha: tabbedMerge,
+      commits: 3,
+      ref: 'tabbed-subject',
+      repo: 2,
       fails: true,
     },
     {
@@ -107,7 +118,7 @@ test('lints real PR history and exempts development merges only within the same 
       assert.equal(failures.length, fails ? 1 : 0)
       if (fails) {
         assert.equal(failures[0], 'Committers: merging is discouraged.')
-        assert.equal(errors[0], `Commit ${merge} is a merge commit.`)
+        assert.equal(errors[0], `Commit ${sha} is a merge commit.`)
       } else {
         assert.deepEqual(errors, [])
       }

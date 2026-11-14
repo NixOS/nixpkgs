@@ -84,12 +84,12 @@ export async function getCommitDetailsForPR({
   return Promise.all(
     shas.map(async (sha) => {
       // Subject, author name, author email, committer name, committer email,
-      // parents (all tab-separated), then a blank line, then filenames.
+      // parents (all NUL-separated), then a blank line, then filenames.
       const result = (
         await runGit({
           args: [
             'log',
-            '--format=%s\t%aN\t%aE\t%cN\t%cE\t%P',
+            '--format=%s%x00%aN%x00%aE%x00%cN%x00%cE%x00%P',
             '--name-only',
             '-1',
             sha,
@@ -107,7 +107,7 @@ export async function getCommitDetailsForPR({
         committerName,
         committerEmail,
         parents,
-      ] = result[0].split('\t')
+      ] = result[0].split('\0')
 
       const changedPaths = result.slice(2, -1)
 
