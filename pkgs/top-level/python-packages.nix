@@ -13345,6 +13345,8 @@ self: super: with self; {
 
   panel = callPackage ../development/python-modules/panel { };
 
+  panel-material-ui = callPackage ../development/python-modules/panel-material-ui { };
+
   panflute = callPackage ../development/python-modules/panflute { };
 
   panphon = callPackage ../development/python-modules/panphon { };

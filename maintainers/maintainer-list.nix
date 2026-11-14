@@ -5178,6 +5178,14 @@
     githubId = 47758554;
     name = "Charlotte Harludo";
   };
+  charmoniumQ = {
+    name = "Samuel Grayson";
+    github = "charmoniumQ";
+    githubId = 928570;
+    email = "sam+nixpkgs@samgrayson.me";
+    matrix = "@sam:samgrayson.me";
+    keys = [ { fingerprint = "FEF8 61C6 8EC9 08FF 3993  C9F7 41E8 F106 AF3C 2FC6"; } ];
+  };
   chayleaf = {
     email = "chayleaf-nix@pavluk.org";
     github = "chayleaf";
