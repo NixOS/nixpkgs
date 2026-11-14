@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tux-manager";
-  version = "1.0.8";
+  version = "1.1.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "benapetr";
     repo = "TuxManager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l59z4YcXzpXddxbDQhZvQ1QGsXTr2/e7DzPdttsawoc=";
+    hash = "sha256-8YxwoBYjr4KoK3Ri8VJ3vLf84Voyt8UwhBRfL4us8rY=";
   };
 
   nativeBuildInputs = with qt6; [
