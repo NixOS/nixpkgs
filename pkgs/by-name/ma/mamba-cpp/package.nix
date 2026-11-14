@@ -4,7 +4,6 @@
   cmake,
   lib,
   libmamba,
-  makeWrapper,
   msgpack-c,
   nlohmann_json,
   python3,
@@ -15,19 +14,12 @@
   versionCheckHook,
   yaml-cpp,
   zstd,
-  # runtime options
-  defaultEnvPath ? "~/.mamba/envs",
-  defaultPkgPath ? "~/.mamba/pkgs",
-  defaultRootPath ? "~/.mamba",
 }:
 stdenv.mkDerivation {
   pname = "mamba-cpp";
   inherit (libmamba) version src;
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     bzip2
@@ -50,13 +42,6 @@ stdenv.mkDerivation {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  postInstall = ''
-    wrapProgram $out/bin/mamba \
-      --set-default CONDA_ENVS_PATH '${defaultEnvPath}' \
-      --set-default CONDA_PKGS_DIRS '${defaultPkgPath}' \
-      --set-default MAMBA_ROOT_PREFIX '${defaultRootPath}'
-  '';
 
   __structuredAttrs = true;
   strictDeps = true;
