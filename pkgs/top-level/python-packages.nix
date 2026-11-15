@@ -6471,8 +6471,6 @@ self: super: with self; {
 
   flexparser = callPackage ../development/python-modules/flexparser { };
 
-  flickrapi = callPackage ../development/python-modules/flickrapi { };
-
   flightradarapi = callPackage ../development/python-modules/flightradarapi { };
 
   flit = callPackage ../development/python-modules/flit { };
