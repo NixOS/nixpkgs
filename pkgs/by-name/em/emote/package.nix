@@ -1,61 +1,48 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
+  gobject-introspection,
+  gtk4,
+  libadwaita,
   meson,
   ninja,
   pkg-config,
-  wrapGAppsHook3,
-  gobject-introspection,
-  keybinder3,
-  xdotool,
+  python3Packages,
   wl-clipboard,
+  wrapGAppsHook4,
+  xdotool,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "emote";
-  version = "4.1.0";
+  version = "5.2.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "Emote";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-c5EY1Cc3oD8EG1oTChbl10jJlNeAETQbAFGoA9Lw5PY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C5Ycew0Y+G08ItujlqgHIEiC85me9+md9OUzFtJhS3w=";
   };
-
-  postPatch = ''
-    substituteInPlace emote/picker.py \
-      --replace-fail 'os.environ.get("SNAP_VERSION", "dev build")' "'$version'"
-    substituteInPlace emote/config.py \
-      --replace-fail 'is_flatpak = os.environ.get("FLATPAK") is not None' 'is_flatpak = False' \
-      --replace-fail 'os.environ.get("SNAP")' "'$out/share/emote'"
-  '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
     gobject-introspection
   ];
 
   buildInputs = [
     # used by gobject-introspection's setup-hook and only detected at runtime
-    keybinder3
+    libadwaita
+    gtk4
   ];
 
   dependencies = with python3Packages; [
-    dbus-python.out # don't propagate dev output
-    manimpango
     pygobject3.out # don't propagate dev output
     setproctitle
   ];
-
-  postInstall = ''
-    rm $out/share/emote/emote/{emote.in,meson.build}
-    rm $out/share/emote/static/{meson.build,com.tomjwatson.Emote.desktop,prepare-launch}
-  '';
 
   dontWrapGApps = true;
   preFixup = ''
