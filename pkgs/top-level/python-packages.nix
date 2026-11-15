@@ -1587,6 +1587,8 @@ self: super: with self; {
 
   audible = callPackage ../development/python-modules/audible { };
 
+  audio-offset-finder = callPackage ../development/python-modules/audio-offset-finder { };
+
   audio-hotplug = callPackage ../development/python-modules/audio-hotplug { };
 
   audioop-lts =
