@@ -36,6 +36,7 @@
         name: su "gdbus call --session -d org.Cinnamon -o /org/Cinnamon -m org.Cinnamon.Eval ${name}";
     in
     ''
+      import datetime
       machine.wait_for_unit("display-manager.service")
 
       with subtest("Wait for wayland server"):
@@ -71,7 +72,7 @@
           machine.succeed("${su "cinnamon-settings themes >&2 &"}")
           machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'cinnamon-settings'")
           machine.wait_for_text('(Style|Appearance|Color)')
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
           machine.screenshot("cinnamon_settings")
 
       with subtest("Check if screensaver works"):
@@ -83,7 +84,7 @@
       with subtest("Open GNOME Terminal"):
           machine.succeed("${su "dbus-launch gnome-terminal"}")
           machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'gnome-terminal'")
-          machine.sleep(2)
+          machine.sleep(datetime.timedelta(seconds=2))
 
       # Only can be tested after opening the above apps.
       with subtest("Check if x-d-p actually starts"):

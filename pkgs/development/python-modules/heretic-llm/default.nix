@@ -1,11 +1,10 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  uv-build,
   accelerate,
   bitsandbytes,
+  buildPythonPackage,
   datasets,
+  fetchFromGitHub,
   hf-transfer,
   huggingface-hub,
   imageio,
@@ -24,29 +23,34 @@
   rich,
   scikit-learn,
   tomli-w,
+  torchvision,
   transformers,
+  uv-build,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "heretic-llm";
-  version = "1.4.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "heretic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jIWvHRsRo4wtos+2oNA8n0kz0GPLb03qEFsOQKTuMo8=";
+    hash = "sha256-dWrvkB/+rvZGPK4s61xN0t1su7uNR6NN8HBOl8Pl6I8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.8.11,<0.9.0" "uv_build"
+      --replace-fail "uv_build>=0.12.21,<0.13.0" "uv_build"
   '';
 
   pythonRelaxDeps = [
+    "accelerate"
+    "bitsandbytes"
     "datasets"
     "huggingface-hub"
+    "optuna"
     "peft"
     "pydantic-settings"
     "rich"
@@ -73,6 +77,7 @@ buildPythonPackage (finalAttrs: {
     questionary
     rich
     tomli-w
+    torchvision
     transformers
   ];
 

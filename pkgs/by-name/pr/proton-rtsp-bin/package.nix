@@ -10,9 +10,6 @@ mkProtonBinDerivation (finalAttrs: {
   pname = "proton-rtsp-bin";
   version = "11.0-20260609-4";
 
-  strictDeps = true;
-  __structuredAttrs = true;
-
   variants = {
     "x86_64-linux" = {
       toolName = "proton-rtsp-${finalAttrs.version}";

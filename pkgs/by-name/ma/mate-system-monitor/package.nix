@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
   itstool,
@@ -12,27 +14,35 @@
   polkit,
   systemdLibs,
   wrapGAppsHook3,
+  mate-common,
   mate-desktop,
+  yelp-tools,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-system-monitor";
-  version = "1.28.1";
+  version = "1.28.2";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-system-monitor-${finalAttrs.version}.tar.xz";
-    sha256 = "QtZj1rkPtTYevBP2VHmD1vHirHXcKuTxysbqYymWWiU=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-system-monitor";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aGjqpEIj5J9XQJ/XM33ByAS47ev5EW736JzrLERzNIc=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
     itstool
     libxml2 # xmllint
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
@@ -53,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/mate-system-monitor";
     odd-unstable = true;
     rev-prefix = "v";
   };
