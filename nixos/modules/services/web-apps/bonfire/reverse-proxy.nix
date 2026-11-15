@@ -55,29 +55,31 @@ in
     };
   };
 
-  config = lib.mkMerge [
-    (lib.mkIf cfg.nginx.enable {
-      services.nginx = {
-        enable = true;
-        virtualHosts.${cfg.nginx.virtualHost.serverName} = lib.mkMerge [
-          virtualHost
-          cfg.nginx.virtualHost
-          {
-            forceSSL = lib.mkDefault true;
-            enableACME = lib.mkDefault true;
-            locations.${location} = {
-              proxyPass = lib.mkDefault proxyPass;
-              recommendedProxySettings = lib.mkDefault recommendedProxySettings;
-              proxyWebsockets = lib.mkDefault proxyWebsockets;
-            };
-          }
+  config = lib.mkIf cfg.nginx.enable (
+    lib.mkMerge [
+      {
+        services.nginx = {
+          enable = true;
+          virtualHosts.${cfg.nginx.virtualHost.serverName} = lib.mkMerge [
+            virtualHost
+            cfg.nginx.virtualHost
+            {
+              forceSSL = lib.mkDefault true;
+              enableACME = lib.mkDefault true;
+              locations.${location} = {
+                proxyPass = lib.mkDefault proxyPass;
+                recommendedProxySettings = lib.mkDefault recommendedProxySettings;
+                proxyWebsockets = lib.mkDefault proxyWebsockets;
+              };
+            }
+          ];
+        };
+      }
+      (lib.optionalAttrs (options ? systemd) {
+        systemd.services.nginx.serviceConfig.SupplementaryGroups = [
+          group
         ];
-      };
-    })
-    (lib.optionalAttrs (options ? systemd) {
-      systemd.services.nginx.serviceConfig.SupplementaryGroups = [
-        group
-      ];
-    })
-  ];
+      })
+    ]
+  );
 }
