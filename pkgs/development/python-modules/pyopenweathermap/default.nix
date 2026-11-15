@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyopenweathermap";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "freekode";
     repo = "pyopenweathermap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RdzIfiCFMPmaX6tV66JGDELzaHDIYoZBsMKlEfjZWoI=";
+    hash = "sha256-+mfGX9ZsB/NnTE9ChOeM7a7ms4KbxaaqEIJ6SucyrTo=";
   };
 
   build-system = [ poetry-core ];
