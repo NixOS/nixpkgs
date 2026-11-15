@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osdlyrics";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "osdlyrics";
     repo = "osdlyrics";
     tag = finalAttrs.version;
-    hash = "sha256-9/yl7UHd8fx/8IofeGRFQBCTIhKKYFZDV1zoQ6aikDA=";
+    hash = "sha256-POQMCNjVIG4iuOKPteIp0pPmT6MMLyQifoXyn3dav68=";
   };
 
   nativeBuildInputs = [

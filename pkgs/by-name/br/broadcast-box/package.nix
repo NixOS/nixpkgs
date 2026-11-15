@@ -62,7 +62,10 @@ buildGoModule {
     description = "WebRTC broadcast server";
     homepage = "https://github.com/Glimesh/broadcast-box";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ JManch ];
+    maintainers = with lib.maintainers; [
+      JManch
+      joturk
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "broadcast-box";
   };
