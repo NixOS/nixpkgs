@@ -176,6 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Replace the installed copies of `leantar` and `cadical` with symlinks
     ln -sf ${leangz}/bin/leantar $out/bin/leantar
     ln -sf ${cadical'}/bin/cadical $out/bin/cadical
+
+    wrapProgram $out/bin/lake \
+      --set-default LEAN_CC ${stdenv.cc}/bin/cc \
+      --set-default LEAN_AR ${stdenv.cc.bintools.bintools}/bin/ar
   '';
 
   nativeInstallCheckInputs = [
@@ -192,6 +196,9 @@ stdenv.mkDerivation (finalAttrs: {
         example : 1 + 1 = 2 := by decide
         example : ∀ (x y : BitVec 8), x &&& y = y &&& x := by bv_decide
         EOF
+
+        lake new hello
+        lake -d hello --no-ansi exe hello
 
         touch $out
       '';
