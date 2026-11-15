@@ -17,7 +17,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "git-bug";
-  version = "0.11.0";
+  version = "0.12.0";
 
   __structuredAttrs = true;
 
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     owner = "git-bug";
     repo = "git-bug";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lyQy6P929SQcmXZ1GI+5MtXoYD0b0xr69X9/y+1xCUs=";
+    hash = "sha256-hSDCeoowjwMcacYj0hAsKedLpbrfvIzawfZx9MvXAZY=";
   };
 
   webui = stdenvNoCC.mkDerivation {
@@ -42,7 +42,7 @@ buildGoModule (finalAttrs: {
 
       sourceRoot = "${finalAttrs.src.name}/webui";
       fetcherVersion = 4;
-      hash = "sha256-CQC+VWv9HwEiDQlS7t03k8zkqQLMGG7sX8qL3boFlhQ=";
+      hash = "sha256-2pOmDj19c55/fYWns1uKxp0guVJ7yrGhc0h5ehaii+E=";
     };
 
     nativeBuildInputs = [
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-TwAgpdlitF3O68wA+jyagifrLSRG7WCCZvJ1XJjP/pI=";
+  vendorHash = "sha256-5wvgJOph8vTohvfxskpoPK98LuQi9CzN7jDgDATC6Mg=";
 
   overrideModAttrs = _: {
     # prevent `go mod vendor` from finding Go stuff in webui's node_modules

@@ -187,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       citadelcore
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     platforms = lib.platforms.linux;
     badPlatforms = [

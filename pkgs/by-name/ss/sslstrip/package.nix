@@ -6,44 +6,41 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sslstrip";
-  version = "2.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "L1ghtn1ng";
     repo = "sslstrip";
     tag = finalAttrs.version;
-    hash = "sha256-iPWpbRmAUf0Yf5MDlpln1JLBxMIdmr/Ggk2ZGeQzm8s=";
+    hash = "sha256-FB3xebfJS+7gS9aO0+dLHXHofKrTkeILqPIRNq/66RM=";
   };
 
   postPatch = ''
-    # https://github.com/L1ghtn1ng/sslstrip/pull/58
-    substituteInPlace setup.py \
-      --replace-fail "README" "README.md"
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build==0.12.5" "uv_build"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "brotli" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    cryptography
-    pyopenssl
-    service-identity
-    twisted
-  ];
+  build-system = with python3.pkgs; [ uv-build ];
 
-  # Project has no test
-  doCheck = false;
+  dependencies =
+    with python3.pkgs;
+    [
+      brotli
+      twisted
+    ]
+    ++ twisted.optional-dependencies.tls;
 
-  pythonImportsCheck = [
-    "sslstrip"
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "sslstrip" ];
 
   meta = {
     description = "Tool for exploiting SSL stripping attacks";
     homepage = "https://github.com/L1ghtn1ng/sslstrip";
-    changelog = "https://github.com/L1ghtn1ng/sslstrip/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/L1ghtn1ng/sslstrip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sslstrip";
