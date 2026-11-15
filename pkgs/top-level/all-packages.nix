@@ -8982,8 +8982,6 @@ with pkgs;
     gbmSupport = true;
   };
 
-  xpdf = qt6.callPackage ../applications/misc/xpdf { };
-
   xmobar = haskellPackages.xmobar.bin;
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
