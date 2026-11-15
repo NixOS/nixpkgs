@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
     "PREFIX=${placeholder "out"}"
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/man1"

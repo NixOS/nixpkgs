@@ -43,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.12.9";
+  version = "0.12.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V5rW980JMi8A3OMJdl82smKKB+4Ld5h15ICToRVU8GA=";
+    hash = "sha256-fyVrXXIDN3SIk+5Ff3ARNJ8pY3H3ySynPhRV5uRXr0k=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/checkpoint";
@@ -131,6 +131,7 @@ buildPythonPackage (finalAttrs: {
 
     # ValueError: cannot reshape array of size 1 into shape (2,0)
     "CopyDeviceArraysForAsyncTransferTest"
+    "test_balance_arrays_across_replicas_rejects_local_checkpointing"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity

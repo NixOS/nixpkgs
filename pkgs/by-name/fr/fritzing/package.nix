@@ -144,6 +144,7 @@ stdenv.mkDerivation {
       muscaln
     ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "Fritzing";
   };
 }

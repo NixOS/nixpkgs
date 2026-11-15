@@ -174,7 +174,8 @@ let
         hash = "sha256-uDIUHbauAmzCfaqx6aswnkUHcmgJi4X2OdMPyn4NeYU=";
       })
 
-      # add exceptions exported by newer litellm
+      # Map newer litellm exceptions so test_litellm_exceptions (_load(strict=True)) passes;
+      # upstream tracks a non-strict fallback in https://github.com/Aider-AI/aider/pull/5945
       ./add-litellm-exceptions.patch
     ];
 
@@ -194,30 +195,6 @@ let
       "test_cmd_read_only_with_image_file"
       "test_cmd_tokens_output"
       "test_max_context_tokens"
-      "test_choose_fence"
-      "test_gpt_edit_to_dirty_file"
-      "test_gpt_edit_to_existing_file_not_in_repo"
-      "test_keyboard_interrupt_handling"
-      "test_message_sanity_after_partial_response"
-      "test_new_file_edit_one_commit"
-      "test_only_commit_gpt_edited_file"
-      "test_run_with_file_deletion"
-      "test_run_with_file_unicode_error"
-      "test_run_with_file_utf_unicode_error"
-      "test_suggest_shell_commands"
-      "test_token_limit_error_handling"
-      "test_create_new_file_with_other_file_in_chat"
-      "test_full_edit"
-      "test_full_edit_dry_run"
-      "test_litellm_exceptions_load"
-      "test_exceptions_tuple"
-      "test_get_ex_info"
-      "test_rate_limit_error"
-      "test_context_window_error"
-      "test_openrouter_error"
-      "test_basic_scripting"
-      "test_litellm_exceptions"
-      "test_simple_send_attribute_error"
       # FileNotFoundError
       "test_get_commit_message"
       # Expected 'launch_gui' to have been called once
@@ -228,10 +205,6 @@ let
       "test_main_exit_calls_version_check"
       # AssertionError: assert 2 == 1
       "test_simple_send_non_retryable_error"
-      # Upstream tests incompatible with current litellm version
-      "test_max_context_tokens"
-      "test_cmd_tokens_output"
-      "test_cmd_read_only_with_image_file"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Tests fails on darwin
