@@ -5,15 +5,15 @@
   kernel,
   kernelModuleMakeFlags,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nullfsvfs";
-  version = "0.27";
+  version = "0.28";
 
   src = fetchFromGitHub {
     owner = "abbbi";
     repo = "nullfsvfs";
-    rev = "v${version}";
-    sha256 = "sha256-BvixSZN9GqFS4llaiKHfkLb21+qG74YtyNb8bUP0jdU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bKSJRrWpkMvDrsg24ZIDXwed3+rlPyaYkIz4KQ05Q0w=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -39,10 +39,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = kernel.kernelAtLeast "7.4";
     description = "Virtual black hole file system that behaves like /dev/null";
     homepage = "https://github.com/abbbi/nullfsvfs";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ callumio ];
   };
-}
+})
