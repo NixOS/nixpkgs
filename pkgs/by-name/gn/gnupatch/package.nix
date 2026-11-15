@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_func_strnlen_working=yes"
   ];
 
-  doCheck = stdenv.hostPlatform.libc != "musl";
+  doCheck = true;
 
   strictDeps = true;
 
