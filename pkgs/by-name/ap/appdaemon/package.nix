@@ -7,24 +7,20 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "appdaemon";
-  version = "4.5.15";
+  version = "4.5.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AppDaemon";
     repo = "appdaemon";
     tag = finalAttrs.version;
-    hash = "sha256-GoKYaMCwfZ8tKsyrNDQN5OeptkAuct90ziXO9MxU2FA=";
+    hash = "sha256-eXV2tY91HyfiPCmmB9x4RP5sbBqn+85g3ZhG4Cm3szA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.9.26,<0.13.0" "uv_build"
   '';
-
-  nativeBuildInputs = [
-    python3Packages.pyprojectVersionPatchHook
-  ];
 
   build-system = [ python3Packages.uv-build ];
 

@@ -20,9 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-szvRPqj2xarzGTVyycPlSTJkWSxwLO4EKXADS1DpO7Q=";
   };
 
-  flattenPackagesPrefix = "absl_";
-  flattenPcLookupDir = "${abseil-cpp}/lib/pkgconfig";
-
   nativeBuildInputs = [
     cmake
   ];
@@ -52,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jlesquembre ];
     inherit (finalAttrs) pkgConfigModules;
-    mainProgram = "clickhouse-cpp";
     platforms = lib.platforms.all;
   };
 })
