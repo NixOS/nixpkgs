@@ -2,6 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
   cmake,
   ninja,
   pkg-config,
@@ -232,7 +236,42 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
     mv $out/README.md $out/share/BambuStudio/README.md
+
+    mkdir -p $out/share/BambuStudio/web/device_page/dist
+    cp -r ${finalAttrs.passthru.device_page}/dist/* $out/share/BambuStudio/web/device_page/dist/
   '';
+
+  passthru = {
+    device_page = stdenv.mkDerivation (finalAttrs': {
+      pname = "bambu-studio-device-page";
+      inherit (finalAttrs) version src;
+
+      nativeBuildInputs = [
+        nodejs
+        pnpm_10
+        pnpmConfigHook
+      ];
+
+      pnpmDeps = fetchPnpmDeps {
+        inherit (finalAttrs') pname version src;
+        pnpm = pnpm_10;
+        sourceRoot = "${finalAttrs.src.name}/src/slic3r/GUI/DeviceWeb/device_page";
+        fetcherVersion = 4;
+        hash = "sha256-4hpdGeC+SQgGZl0M6KI7Del2TErIU/T6cuza7/GNUE0=";
+      };
+
+      sourceRoot = "${finalAttrs.src.name}/src/slic3r/GUI/DeviceWeb/device_page";
+
+      buildPhase = ''
+        pnpm run build
+      '';
+
+      installPhase = ''
+        mkdir -p $out/dist
+        cp -r dist/* $out/dist/
+      '';
+    });
+  };
 
   meta = {
     description = "PC Software for BambuLab's 3D printers";
