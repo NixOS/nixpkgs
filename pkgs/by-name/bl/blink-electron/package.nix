@@ -18,8 +18,11 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "sylk";
+  pname = "blink-electron";
   version = "4.2.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
