@@ -5,9 +5,10 @@
   folder-color-switcher,
   nemo,
   nemo-emblems,
-  nemo-fileroller,
   nemo-python,
   python3,
+  # Not to be confused with Nemo actions.
+  # External Nemo actions should be added to environment.systemPackages.
   extensions ? [ ],
   useDefaultExtensions ? true,
 }:
@@ -20,7 +21,6 @@ let
       # Right now (only) nemo-share is missing
       folder-color-switcher
       nemo-emblems
-      nemo-fileroller
       nemo-python
     ];
   nemoPythonExtensionsDeps = lib.concatMap (x: x.nemoPythonExtensionDeps or [ ]) selectedExtensions;
