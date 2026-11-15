@@ -2,17 +2,18 @@
   lib,
   python3,
   fetchFromGitHub,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 
   # libs
   gobject-introspection,
-  goocanvas_2,
   unpaper,
   djvulibre,
   libtiff,
   qpdf,
 
   # tests
+  appstream,
+  dejavu_fonts,
   writableTmpDirAsHomeHook,
   xvfb,
   imagemagickBig,
@@ -33,14 +34,14 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "scantpaper";
-  version = "3.0.11";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "carygravel";
     repo = "scantpaper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6zjIEwDHdOIAIucV4T/zY10F80nQNOgnRkA+i2n7Sng=";
+    hash = "sha256-sn8VvMSMyWaEWhEHQrIUlW9BXGG9dnIKwgpsUkPd74s=";
   };
 
   dontWrapGApps = true;
@@ -49,50 +50,66 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   postPatch = ''
-    # disable formatting check, which breaks on Black version change
-    substituteInPlace pyproject.toml \
-      --replace "--black" ""
+    # `test_qbfox_fc_match_fallback` assumes `/usr/share/fonts/truetype/`
+    # exists with a handful of fonts in it. This one font is enough to make
+    # the test happy.
+    substituteInPlace src/scantpaper/tests/test_conftest_helpers.py \
+      --replace-fail "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf" "${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"
   '';
 
   build-system = with python3.pkgs; [
     setuptools
   ];
 
-  dependencies =
-    (with python3.pkgs; [
-      img2pdf
-      ocrmypdf
-      pycairo
-      pygobject3
-      sane
-      tesserocr
-      python-iso639
-    ])
-    ++ [
-      goocanvas_2
-    ];
+  dependencies = with python3.pkgs; [
+    img2pdf
+    ocrmypdf
+    pikepdf
+    pycairo
+    pygobject3
+    python-iso639
+    sane
+    tesserocr
+    typing-extensions
+  ];
 
   nativeBuildInputs = [
-    wrapGAppsHook3
+    wrapGAppsHook4
     gobject-introspection
     writableTmpDirAsHomeHook
   ];
 
+  disabledTestPaths = [
+    # In nixpkgs, we only want to test the functionality of a package,
+    # not coverage, formatting, or type checking.
+    "dev/tests/test_check_test_coverage.py"
+  ];
+
   nativeCheckInputs =
     (with python3.pkgs; [
+      polib
       pytestCheckHook
-      pytest-cov # segfault with pytest-cov-stub
+      pytest-cov-stub
       pytest-mock
       pytest-xvfb
       pytest-timeout
+      tomli
     ])
     ++ [
       xvfb
       imagemagickBig # "big" version needed for text rendering in tests
       poppler-utils
       ghostscript
+      appstream # Provides `appstreamcli` used by `test_appstream_validate`.
     ]
     ++ runtimeExecDeps;
+
+  preInstallCheck = ''
+    # Some tests exercise gtk code that expects to find the relevant gsettings schemas.
+    # This is a simplified version of what wrapGAppsHook4 does. There's no good way to compose
+    # that with pytestCheckHook, though.
+    export XDG_DATA_DIRS=$GSETTINGS_SCHEMAS_PATH:$XDG_DATA_DIRS
+  '';
 
   makeWrapperArgs = [
     "--prefix"
@@ -103,7 +120,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postInstall = ''
     install -Dm644 \
-      icons/hicolor/scalable/apps/scantpaper.svg \
+      src/scantpaper/icons/hicolor/scalable/apps/scantpaper.svg \
       $out/share/icons/hicolor/scalable/apps/scantpaper.svg
 
     install -Dm444 \
