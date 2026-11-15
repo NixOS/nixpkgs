@@ -203,7 +203,6 @@ in
             gnome-online-accounts-gtk
             cinnamon-control-center
             cinnamon-settings-daemon
-            libgnomekbd
 
             # theme
             adwaita-icon-theme
@@ -272,7 +271,10 @@ in
 
     (mkIf serviceCfg.apps.enable {
       programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
-      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
+
+      systemd.packages = utils.removePackagesByName [
+        pkgs.clockenstein
+      ] config.environment.cinnamon.excludePackages;
 
       environment.systemPackages =
         with pkgs;
@@ -282,20 +284,20 @@ in
           warpinator
 
           # cinnamon xapp
+          clockenstein
           xepub
           xviewer
           xreader
           xed-editor
           pix
           superlight
+          unfold
 
           # external apps shipped with linux-mint
           celluloid
           gnome-calculator
-          gnome-calendar
-          gnome-screenshot
-          file-roller
           gucharmap
+          velocitty
         ] config.environment.cinnamon.excludePackages;
     })
   ];
