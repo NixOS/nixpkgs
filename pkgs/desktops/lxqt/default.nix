@@ -67,11 +67,6 @@ let
         lxqt-build-tools = lxqt-build-tools_0_13;
         inherit (pkgs.libsForQt5) qttools qtx11extras;
       };
-      qtermwidget_1_4 = callPackage ./qtermwidget {
-        version = "1.4.0";
-        lxqt-build-tools = lxqt-build-tools_0_13;
-        inherit (pkgs.libsForQt5) qtbase qttools;
-      };
 
       preRequisitePackages = [
         kdePackages.kwindowsystem # provides some QT plugins needed by lxqt-panel
