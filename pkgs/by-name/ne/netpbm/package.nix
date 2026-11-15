@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
   pname = "netpbm";
-  version = "11.15.3";
+  version = "11.16.4";
 
   outputs = [
     "bin"
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "5264";
-    hash = "sha256-5G2OitW25ZNsdBcVkKfLpFJWjTm9VcB3ca0QllOSugI=";
+    rev = "5468";
+    hash = "sha256-1tqKiUgz5w1t1/Cwsl97LktZ1bYWuTR9Rnbad6mBSeM=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Install libnetpbm.so symlink to correct destination
     substituteInPlace lib/Makefile \
       --replace-fail '/sharedlink' '/lib'
+    # Remove vendored libjbig
+    rm -r converter/other/jbig/libjbig
   '';
 
   configurePhase = ''
