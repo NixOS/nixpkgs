@@ -77,7 +77,7 @@ class PollingCondition:
             if condition.__doc__:
                 self.description = condition.__doc__
             else:
-                self.description = condition.__name__  # ty: ignore[unresolved-attribute]
+                self.description = condition.__name__  # ty: ignore[missing-attribute]
         else:
             self.description = str(description)
 
