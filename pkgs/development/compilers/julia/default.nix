@@ -66,11 +66,11 @@ in
   );
   julia_113-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.13.3";
+      version = "1.13.4";
       sha256 = {
-        x86_64-linux = "1r33bkw1657h37nns4d1lk597h6sypi7jxsfa2ivab1k815wnqaw";
-        aarch64-linux = "00yz3lbsz16xzjjh33dcizzvgag3bn9ddbs0pn4q3yvdxqxhbsww";
-        aarch64-darwin = "0r9pmp20lkq8z1z5sw5z65d6d4wrq0gzlhwb7sm95cxw1x2yiw5r";
+        x86_64-linux = "0c21xka08bakf4nhcjagsahlh3js2bbn856laz6wryli7gqmh5ng";
+        aarch64-linux = "1rad4x05xmb6v39fxxail2mxviby4snf9w2zr78fr8a93sslr0fi";
+        aarch64-darwin = "1zm8p63k5s85rh4rcd30hm53cjs89vxfx1x9cakvkbfb7scs2n4f";
       };
     }) { }
   );
