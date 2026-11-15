@@ -119,13 +119,13 @@
     "vendorHash": null
   },
   "bpg_proxmox": {
-    "hash": "sha256-Y9dB9GFq15jel7isS3UYJiwkPrGhQZSZRmNA5ISkOo4=",
+    "hash": "sha256-WyLntlTXncgKFwT2Rx4rU+rEEwUYNMbYnfIYq87XJ38=",
     "homepage": "https://registry.terraform.io/providers/bpg/proxmox",
     "owner": "bpg",
     "repo": "terraform-provider-proxmox",
-    "rev": "v0.120.0",
+    "rev": "v0.122.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-8A2or7Qn2YjExLrp17Xidd5+3AMPKF6UsGg85Emyq9o="
+    "vendorHash": "sha256-l7ez8tCpwaOc18nfwHjMtq/1rirV3OyB4iiI1oix4EM="
   },
   "brightbox_brightbox": {
     "hash": "sha256-bvwdtiwzXElhsXLmftXZQ567ExcC0E0L/5OeqIdp1SQ=",
