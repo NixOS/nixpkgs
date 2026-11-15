@@ -243,12 +243,17 @@ with haskellLib;
   # longer possible since time 1.15 hides Data.Time.Format.Internal.
   # https://github.com/haskell/time/issues/297
   # https://github.com/ygale/timezone-series/issues/41
-  xmobar = disableCabalFlag "with_datezone" (
-    super.xmobar.override {
-      timezone-olson = null;
-      timezone-series = null;
-    }
-  );
+  xmobar = lib.pipe super.xmobar [
+    (
+      pkg:
+      pkg.override {
+        timezone-olson = null;
+        timezone-series = null;
+      }
+    )
+    (disableCabalFlag "with_datezone")
+    doJailbreak # 2026-11-15: base <4.22
+  ];
 
   #
   # Test suite issues
