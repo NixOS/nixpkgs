@@ -144,8 +144,8 @@ in
   # 4.2 was released October 2025 and will become unsupported on October 22,
   # 2026, one year after the release of OpenBSD 7.8.
   libressl_4_2 = generic {
-    version = "4.2.1";
-    hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
+    version = "4.2.3";
+    hash = "sha256-QGPmWbx5VzFG0PqrAa0odi9RQazcOd8pJH/CVarfGHw=";
     patches = [
       common-cmake-install-full-dirs-patch
     ];
