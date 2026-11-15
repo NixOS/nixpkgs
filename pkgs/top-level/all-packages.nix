@@ -2600,10 +2600,6 @@ with pkgs;
 
   specup = haskellPackages.specup.bin;
 
-  spglib = callPackage ../development/libraries/spglib {
-    inherit (llvmPackages) openmp;
-  };
-
   spice-gtk = callPackage ../by-name/sp/spice-glib/package.nix { withGtk = true; };
 
   # to match naming of other package repositories
@@ -7167,10 +7163,6 @@ with pkgs;
     enableUnstable = true;
   };
 
-  b43Firmware_6_30_163_46 =
-    callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix
-      { };
-
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
 
   bluez5 = bluez;
@@ -7200,10 +7192,6 @@ with pkgs;
   error-inject = recurseIntoAttrs (callPackages ../os-specific/linux/error-inject { });
 
   libffado = ffado;
-
-  freefall = callPackage ../os-specific/linux/freefall {
-    inherit (linuxPackages) kernel;
-  };
 
   fusePackages = dontRecurseIntoAttrs (
     callPackage ../os-specific/linux/fuse {

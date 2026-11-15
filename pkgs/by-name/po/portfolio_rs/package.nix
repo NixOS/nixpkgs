@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,7 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-kypFlb+HclafS0ZATzDifbvPOEUMVCieEnKMgGfmlZk=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    aws-lc
+  ];
 
   # Skip network-dependent tests during build
   checkFlags = [

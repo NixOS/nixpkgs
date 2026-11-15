@@ -104,14 +104,14 @@ buildPythonPackage rec {
   # We run these cmake builds and then run the standard
   # buildPythonPackage phases.
   preBuild = ''
-    cmakeFlags="-S native/src -B native/src/build -D CVODE_INSTALL_DIR=${passthru.cvode}"
+    cmakeFlags=(-S native/src -B native/src/build -D CVODE_INSTALL_DIR=${passthru.cvode})
     cmakeConfigurePhase
     cmake --build native/src/build --config Release
   ''
   # reimplementation of native/build_remoting.py
   # 2025-10-25: fix cmake 4 compatibility
   + lib.optionalString (enableRemoting && stdenv.hostPlatform.isLinux) ''
-    cmakeFlags="-S native/remoting -B remoting/linux64 -D RPCLIB=${rpclib} -D CMAKE_POLICY_VERSION_MINIMUM=3.10"
+    cmakeFlags=(-S native/remoting -B remoting/linux64 -D RPCLIB=${rpclib} -D CMAKE_POLICY_VERSION_MINIMUM=3.10)
     cmakeConfigurePhase
     cmake --build remoting/linux64 --config Release
   ''

@@ -6,6 +6,8 @@
   nix-update-script,
   postgresql,
   postgresqlTestExtension,
+  pkg-config,
+  sqlite,
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
@@ -25,6 +27,9 @@ buildPgrxExtension (finalAttrs: {
 
   # pgrx tests try to install the extension into the postgresql nix store
   doCheck = false;
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ sqlite ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -13,17 +13,20 @@
   libxcb,
   libGL,
   libGLU,
+  pkg-config,
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-softhddevice";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "ua0lnj";
     repo = "vdr-plugin-softhddevice";
-    sha256 = "sha256-vicHneEZZHTraffUek77QDZdv/xZGzN102nbr1Bkfzo=";
+    hash = "sha256-MltcTiQ2tnH+wPdPwgOH1qb+aTOdo4zJizZQ3bI1JIU=";
     rev = "v${version}";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     vdr
@@ -38,7 +41,10 @@ stdenv.mkDerivation rec {
     libGLU
   ];
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "INCDIR=${vdr.dev}/include"
+  ];
 
   postPatch = ''
     substituteInPlace softhddev.c \

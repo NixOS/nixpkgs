@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   pytestCheckHook,
 
   # large-rebuild downstream dependencies and applications

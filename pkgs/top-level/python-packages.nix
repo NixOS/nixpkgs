@@ -1575,6 +1575,8 @@ self: super: with self; {
 
   attacut = callPackage ../development/python-modules/attacut { };
 
+  attn-gym = callPackage ../development/python-modules/attn-gym { };
+
   attr = callPackage ../development/python-modules/attr { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
@@ -4061,7 +4063,7 @@ self: super: with self; {
 
   daff = callPackage ../development/python-modules/daff { };
 
-  daft = callPackage ../development/python-modules/daft { };
+  daft = callPackage ../development/python-modules/daft { inherit (pkgs) zstd; };
 
   dahlia = callPackage ../development/python-modules/dahlia { };
 
@@ -4356,7 +4358,7 @@ self: super: with self; {
 
   deltachat2 = callPackage ../development/python-modules/deltachat2 { };
 
-  deltalake = callPackage ../development/python-modules/deltalake { };
+  deltalake = callPackage ../development/python-modules/deltalake { inherit (pkgs) zstd; };
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
@@ -14294,8 +14296,6 @@ self: super: with self; {
   };
 
   protoletariat = callPackage ../development/python-modules/protoletariat { };
-
-  proton-client = callPackage ../development/python-modules/proton-client { };
 
   proton-core = callPackage ../development/python-modules/proton-core { };
 
