@@ -2241,7 +2241,7 @@ The following rules are desired to be respected:
 * Make sure libraries build for all Python interpreters.
   If it fails to build on some Python versions, consider disabling them by setting `disable = pythonAtLeast "3.x"` along with a comment.
 * The two parameters, `pyproject` and `build-system` are set to avoid the legacy setuptools/distutils build.
-* Only unversioned attributes (e.g. `pydantic`, but not `pypdantic_1`) can be included in `dependencies`,
+* Only unversioned attributes (e.g. `pydantic`, but not `pydantic_1`) can be included in `dependencies`,
   since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
   without running into duplicate module name conflicts.
 * The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
