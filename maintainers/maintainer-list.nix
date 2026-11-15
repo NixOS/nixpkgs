@@ -27125,7 +27125,7 @@
   };
   shakhzodkudratov = {
     email = "shakhzodkudratov@gmail.com";
-    github = "shakhzodkudratov";
+    github = "aeshakhzod";
     githubId = 37299109;
     name = "Shakhzod Kudratov";
   };
