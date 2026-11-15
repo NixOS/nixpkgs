@@ -22,8 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # See https://github.com/mrjackwills/oxker/issues/73
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=ui::draw_blocks::help::tests::test_draw_blocks_help_custom_keymap_one_definition"
-    "--skip=ui::draw_blocks::help::tests::test_draw_blocks_help_custom_keymap_two_definitions"
-    "--skip=ui::draw_blocks::help::tests::test_draw_blocks_help_one_and_two_definitions"
+    "--skip=ui::draw_blocks::help::tests::test_draw_blocks_help_custom_keymap_two_definition"
+    "--skip=ui::draw_blocks::help::tests::test_draw_blocks_help_custom_keymap_one_two_definition"
   ];
 
   passthru.updateScript = nix-update-script { };
