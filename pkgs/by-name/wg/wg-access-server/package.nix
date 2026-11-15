@@ -74,5 +74,16 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xanderio ];
     mainProgram = "wg-access-server";
+    knownVulnerabilities = [
+      "GHSA-h44x-pmxc-7mc7"
+      "GHSA-57jm-pfvc-fjfm"
+      "GHSA-j62x-qc44-h6pj"
+      "GHSA-3r9j-j2hq-jqjq"
+      "GHSA-874h-2q53-hqq5"
+      "GHSA-2x34-vgm5-p43r"
+      "GHSA-jq7f-qgpg-h89m"
+      "GHSA-cp28-pjjc-j435"
+      "GHSA-5x2q-699x-3h63"
+    ];
   };
 })
