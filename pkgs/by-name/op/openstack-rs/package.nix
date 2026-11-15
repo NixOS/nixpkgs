@@ -4,6 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  aws-lc,
+  zstd,
   versionCheckHook,
   nix-update-script,
   cacert,
@@ -23,6 +26,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
