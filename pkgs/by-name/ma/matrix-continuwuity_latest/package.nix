@@ -17,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "26.9.3";
+  version = "26.9.4";
 
   __structuredAttrs = true;
 
@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RUZwpdLk7eLtaLoOaoBr5pD3RxG2ifSu8mZWGrs97II=";
+    hash = "sha256-Nr3mwlAMafuJAuRI4vY5dTZEXrcd7mdFI1VJXiMapc0=";
   };
 
-  cargoHash = "sha256-sf9nAFlx+W+4uyjGT76qE/qdxpyoIVlc7pY/Pa+c4JU=";
+  cargoHash = "sha256-7nGl4SQZXheDWifnbIgQGkZtZt2qZCfe+dkFcBPs2vA=";
 
   nativeBuildInputs = [
     pkg-config
