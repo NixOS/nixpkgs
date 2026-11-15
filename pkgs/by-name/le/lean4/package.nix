@@ -15,10 +15,22 @@
   enableMimalloc ? true,
   perl,
   versionCheckHook,
+
+  # Official releases go up to `stage2`.  It should typically be enough to build `stage1`, but
+  # obscure issues can arise if the checked-in `stage0` is not up-to-date.
+  leanStage ? 1,
 }:
+
 let
   cadical' = cadical.override { version = "2.1.3"; };
 in
+
+assert lib.elem leanStage [
+  1
+  2
+  3
+];
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
   version = "4.35.0";
@@ -112,6 +124,16 @@ stdenv.mkDerivation (finalAttrs: {
       export LEAN_NUM_THREADS=$NIX_BUILD_CORES
     fi
   '';
+
+  buildFlags = [
+    "all"
+    "stage${toString leanStage}"
+  ];
+
+  installFlags = [
+    "-C"
+    "stage${toString leanStage}"
+  ];
 
   postFixup = ''
     # Replace the installed copy of `leantar` with a symlink.
