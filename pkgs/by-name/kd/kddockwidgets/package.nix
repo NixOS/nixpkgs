@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       sledgehammervampire
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
   };
 })

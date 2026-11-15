@@ -219,7 +219,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       picnoir
       thanegill
       karlbeecken
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     mainProgram = "esphome";
   };

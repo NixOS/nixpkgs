@@ -336,6 +336,7 @@ mapAliases {
   apacheKafka_3_8 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2025-09-27
   apacheKafka_3_9 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2026-07-07
   apacheKafka_4_0 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2026-07-07
+  apfel-llm = throw "'apfel-llm' has been removed as it is unmaintained upstream."; # Added 2026-11-16
   apmplanner2 = throw "'apmplanner2' has been removed as it depends on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   apparmor-teardown = warnAlias "'apparmor-teardown' has been replaced by 'apparmor-init', which more closely follows intended teardown procedures." apparmor-init; # Added 2026-07-14
   apple-sdk_11 = throw "apple-sdk_11 was removed as Nixpkgs no longer supports macOS 11; see the 25.11 release notes"; # Added 2025-05-10
@@ -1891,6 +1892,7 @@ mapAliases {
   msalsdk-dbusclient = throw "'msalsdk-dbusclient' has been removed, as it is no longer needed by 'intune-portal'"; # Added 2026-02-11
   msgpack = throw "msgpack has been split into msgpack-c and msgpack-cxx"; # Added 2025-09-14
   msp430NewlibCross = throw "'msp430NewlibCross' has been renamed to/replaced by 'msp430Newlib'"; # Converted to throw 2025-10-27
+  mspds = throw "'mspds' has been removed because it hasn't been building in 2 years. 'mspds-bin' is still available"; # Added 2026-11-15
   mtpfs = throw "'mtpfs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-08-05
   mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
   multipass = throw "multipass was dropped since it was unmaintained."; # Added 2025-11-29
@@ -2919,6 +2921,7 @@ mapAliases {
   webkitgtk_4_0 = throw "'webkitgtk_4_0' has been removed, port to `libsoup_3` and switch to `webkitgtk_4_1`"; # Added 2025-10-08
   webmacs = throw "webmacs has been removed as it was unmaintained upstream"; # Added 2026-02-03
   welkin = throw "welkin was removed as it is unmaintained upstream"; # Added 2026-01-01
+  wg-access-server = throw "'wg-access-server' was removed as it was unmaintained within nixpkgs"; # Added 2026-11-14
   whalebird = throw "'whalebird' has been removed because it was using an EOL electron version"; # Added 2026-03-20
   whatsapp-for-linux = throw "'whatsapp-for-linux' has been removed because it was unmaintained and archived upstream. Consider using 'karere' instead"; # Converted to throw 2025-10-27
   whisper = throw "'whisper' was removed as it is unmaintained upstream and vendored insecure outdated libraries"; # Added 2026-05-01
@@ -3036,7 +3039,7 @@ mapAliases {
   xhtml1 = throw "'xhtml1' has been removed because it was superseded in 2018"; # Added 2026-07-24
   xhyve = throw "'xhyve' has been removed because x86_64-darwin is no longer supported"; # Added 2026-10-26
   xinput_calibrator = xinput-calibrator; # Added 2025-08-28
-  xjump = throw "'xjump' has been removed as it is unmaintained"; # Added 2025-08-22
+  xjump = throw "'xjump' has been removed as it is unmaintained, consider using its reimplementation xjump-sdl"; # Added 2025-08-22
   xkeyboardconfig = xkeyboard-config; # Added 2026-02-04
   xkeyboardconfig_custom = xkeyboard-config_custom; # Added 2026-01-19
   xloadimage = throw "'xloadimage' has been removed as it was unmaintained upstream"; # Added 2026-05-05

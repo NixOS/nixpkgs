@@ -4238,6 +4238,8 @@ self: super: with self; {
 
   dbt-snowflake = callPackage ../development/python-modules/dbt-snowflake { };
 
+  dbt-tests-adapter = callPackage ../development/python-modules/dbt-tests-adapter { };
+
   dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
 
   dbus-deviation = callPackage ../development/python-modules/dbus-deviation { };
@@ -14424,6 +14426,8 @@ self: super: with self; {
   pulumi-random = callPackage pkgs.pulumiPackages.pulumi-random.sdks.python.override { };
 
   pulumiverse-talos = callPackage pkgs.pulumiPackages.pulumiverse-talos.sdks.python.override { };
+
+  puppetparser = callPackage ../development/python-modules/puppetparser { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 

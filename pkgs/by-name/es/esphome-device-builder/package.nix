@@ -17,7 +17,7 @@ let
     homepage = "https://esphome.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
       karlbeecken
     ];
     mainProgram = "esphome-device-builder";

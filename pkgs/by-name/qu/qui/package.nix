@@ -111,7 +111,7 @@ buildGo127Module (finalAttrs: {
     changelog = "https://github.com/autobrr/qui/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       pta2002
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     mainProgram = "qui";
     platforms = lib.platforms.unix;

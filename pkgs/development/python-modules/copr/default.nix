@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "copr";
-  version = "2.7";
+  version = "2.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q6qohAA0JcxFb19uZQsTicpqsSrqpvwJ5RChzKfB8SI=";
+    hash = "sha256-YLb6S9WGE2BPD6Dhk5aCRuEgpqen0Ii54UgQgahDz0Y=";
   };
 
   build-system = [ setuptools ];

@@ -31,7 +31,10 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "required_plugins = pytest-cov" ""
   '';
 
-  pythonRelaxDeps = [ "python-dateutil" ];
+  pythonRelaxDeps = [
+    "paho-mqtt"
+    "python-dateutil"
+  ];
 
   build-system = [ setuptools ];
 
