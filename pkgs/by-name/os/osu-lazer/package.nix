@@ -115,6 +115,7 @@ buildDotnetModule (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       gepbird
+      sployt
       thiagokokada
       Guanran928
     ];
