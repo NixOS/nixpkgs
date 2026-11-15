@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchPypi,
   nixosTests,
@@ -7,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "turnstone";
-  version = "1.7.4";
+  version = "1.9.4";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+QKBufoklp4HgNdhFQ7mq0AoBN8P7xUXBjov/hK+LL0=";
+    hash = "sha256-ASnSDPd5aGCYg5X+vMnrN2huxkrRHe97G4g7eN9S6FM=";
   };
 
   nativeBuildInputs = [
@@ -24,18 +25,19 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling>=1.29" "hatchling>=1.28"
-  '';
-
+  # Temporary relaxations for older python package versions on this branch.
+  # On nixpkgs master, these are already updated and this list can be pruned.
   pythonRelaxDeps = [
     "anthropic"
-    "cryptography"
+    "brotli"
+    "croniter"
+    "httpcore2"
+    "httpx2"
     "mcp"
     "openai"
     "pydantic-settings"
     "starlette"
+    "tzdata"
   ];
 
   dependencies = with python3Packages; [
@@ -43,10 +45,12 @@ python3Packages.buildPythonApplication rec {
     altair
     anthropic
     bcrypt
+    brotli
     croniter
     cryptography
-    httpx
-    httpx-sse
+    httpcore2
+    httpx2
+    jsonschema
     lacme
     mcp
     openai
@@ -61,11 +65,32 @@ python3Packages.buildPythonApplication rec {
     sse-starlette
     starlette
     structlog
+    tzdata
     uvicorn
     vl-convert-python
   ];
 
-  doCheck = false; # tests require a running LLM backend
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+
+  disabledTestMarks = [
+    "live"
+    "e2e_recovery"
+    "allow_thread_leak"
+    "allow_lease_outside_slot"
+  ];
+
+  # Python 3.14 on Darwin crashes in libffi trampoline table allocation for ctypes/pypdfium2
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  disabledTests = [
+    # Requires external network / live services
+  ];
+
+  pythonImportsCheck = [
+    "turnstone"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) turnstone;
