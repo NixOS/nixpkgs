@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "smbcrawler";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SySS-Research";
     repo = "smbcrawler";
     tag = finalAttrs.version;
-    hash = "sha256-9hom/4wNCiBp70s0a3K4dq1BOcoVV+yAeiPQlvQ7yUw=";
+    hash = "sha256-xvoeD97mEadsRdBpZlsBXRnyAkWFu+ifFc7FV0tPNwU=";
   };
 
   build-system = with python3.pkgs; [
@@ -21,24 +21,21 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hatchling
   ];
 
-  dependencies = with python3.pkgs; [
-    click
-    impacket
-    lxml
-    peewee
-    python-libnmap
-    python-magic
-    pyyaml
-    xdg-base-dirs
-    zundler
-  ];
-
-  optional-dependencies = with python3.pkgs; {
-    binary-conversion = [
+  dependencies =
+    with python3.pkgs;
+    [
+      click
+      impacket
+      lxml
       markitdown
+      peewee
+      python-libnmap
+      python-magic
+      pyyaml
+      xdg-base-dirs
+      zundler
     ]
     ++ markitdown.optional-dependencies.all;
-  };
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 

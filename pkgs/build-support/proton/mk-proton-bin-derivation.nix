@@ -14,6 +14,7 @@ lib.extendMkDerivation {
       variants,
       meta ? { },
       steamDisplayName ? finalAttrs.pname,
+      userSettings ? { },
       ...
     }@args:
     let
@@ -38,7 +39,10 @@ lib.extendMkDerivation {
     in
     assert lib.all checkVariant (lib.attrNames variants);
     {
-      inherit steamDisplayName;
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      inherit steamDisplayName userSettings;
 
       inherit (variants.${stdenvNoCC.hostPlatform.system}) src toolName;
 
@@ -66,6 +70,17 @@ lib.extendMkDerivation {
           rm $steamcompattool/proton
           cp $src/proton $steamcompattool
         fi
+      ''
+      + lib.optionalString (finalAttrs.userSettings != { }) ''
+        echo "user_settings = "${
+          lib.escapeShellArg (
+            lib.throwIfNot (lib.all lib.isString (lib.attrValues finalAttrs.userSettings))
+              "${finalAttrs.pname}: the values of `userSettings` must be strings"
+              (builtins.toJSON finalAttrs.userSettings)
+          )
+        } > $steamcompattool/user_settings.py
+      ''
+      + ''
 
         runHook postInstall
       '';
