@@ -6,10 +6,6 @@
   kernelModuleMakeFlags,
 }:
 
-let
-  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
-
-in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "r8168";
@@ -38,7 +34,10 @@ stdenv.mkDerivation rec {
   makeFlags = kernelModuleMakeFlags ++ [
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "modules"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/net/wireless/realtek/r8168"
   ];
+
   preBuild = ''
     absSrc=$(realpath src)
     makeFlagsArray+=("M=$absSrc")
@@ -47,11 +46,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir -p ${modDestDir}
-    find . -name '*.ko' -exec cp --parents '{}' ${modDestDir} \;
-    find ${modDestDir} -name '*.ko' -exec xz -f '{}' \;
-  '';
+  installTargets = [ "modules_install" ];
 
   meta = {
     description = "Realtek r8168 driver";
