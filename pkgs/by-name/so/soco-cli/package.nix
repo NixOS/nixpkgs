@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "soco-cli";
-  version = "0.4.85";
+  version = "0.4.90";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avantrec";
     repo = "soco-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g/tUK6S9uk4PxE3xscJag8fPYA2PdsCccfP+7Wi1ji0=";
+    hash = "sha256-CdLMaVtuFP7kgPtKlO9p+AZ5CqCpZOf6wShGHUMODFc=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
