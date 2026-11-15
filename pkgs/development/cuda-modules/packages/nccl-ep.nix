@@ -90,7 +90,10 @@ backendStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NVIDIA/nccl-extensions/tree/main/nccl_ep";
     changelog = "https://github.com/NVIDIA/nccl-extensions/blob/${finalAttrs.src.tag}/nccl_ep/docs/release/RELEASE_NOTES_v${lib.versions.majorMinor finalAttrs.version}.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ thefossguy ];
+    maintainers = with lib.maintainers; [
+      _81reap
+      thefossguy
+    ];
     inherit (nccl.meta) platforms badPlatforms;
   };
 })
