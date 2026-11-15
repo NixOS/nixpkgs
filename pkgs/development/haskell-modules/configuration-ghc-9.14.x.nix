@@ -239,6 +239,17 @@ with haskellLib;
   # 2026-11-15: containers <0.8
   pango = doJailbreak super.pango;
 
+  # timezone-series defines FormatTime and ParseTime instances, which is no
+  # longer possible since time 1.15 hides Data.Time.Format.Internal.
+  # https://github.com/haskell/time/issues/297
+  # https://github.com/ygale/timezone-series/issues/41
+  xmobar = disableCabalFlag "with_datezone" (
+    super.xmobar.override {
+      timezone-olson = null;
+      timezone-series = null;
+    }
+  );
+
   #
   # Test suite issues
   #
