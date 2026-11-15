@@ -14,6 +14,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openstack-rs";
   version = "0.14.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gtema";
