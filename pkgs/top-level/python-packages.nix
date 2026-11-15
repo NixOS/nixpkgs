@@ -14425,6 +14425,8 @@ self: super: with self; {
 
   pulumiverse-talos = callPackage pkgs.pulumiPackages.pulumiverse-talos.sdks.python.override { };
 
+  puppetparser = callPackage ../development/python-modules/puppetparser { };
+
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
   pure-eval = callPackage ../development/python-modules/pure-eval { };
