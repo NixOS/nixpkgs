@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pydantic,
+  fetchPypi,
   pytestCheckHook,
   setuptools,
 }:
@@ -12,27 +11,25 @@ buildPythonPackage (finalAttrs: {
   version = "0.17.6";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "package-url";
-    repo = "packageurl-python";
-    tag = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-jH4zJN3XGPFBnto26pcvADXogpooj3dqpqkWnKXgICY=";
+  src = fetchPypi {
+    pname = "packageurl_python";
+    inherit (finalAttrs) version;
+    hash = "sha256-ElLOOhAjcspvhuuWjhb5AUxLpRHFw32Vp/Aj4spuXCU=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pydantic
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # The specification test data is only available in the Git repository.
+  disabledTestPaths = [ "tests/test_purl_spec.py" ];
 
   pythonImportsCheck = [ "packageurl" ];
 
   meta = {
     description = "Python parser and builder for package URLs";
     homepage = "https://github.com/package-url/packageurl-python";
-    changelog = "https://github.com/package-url/packageurl-python/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/package-url/packageurl-python/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ armijnhemel ];
   };

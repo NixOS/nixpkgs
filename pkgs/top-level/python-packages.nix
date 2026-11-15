@@ -12081,6 +12081,8 @@ self: super: with self; {
 
   nc-dnsapi = callPackage ../development/python-modules/nc-dnsapi { };
 
+  nc_py_api = callPackage ../development/python-modules/nc_py_api { };
+
   nccl4py = callPackage ../development/python-modules/nccl4py { };
 
   ncclient = callPackage ../development/python-modules/ncclient { };
@@ -17419,6 +17421,8 @@ self: super: with self; {
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
+
+  python-sbom = callPackage ../development/python-modules/python-sbom { };
 
   python-secp256k1-cardano = callPackage ../development/python-modules/python-secp256k1-cardano { };
 
@@ -23411,6 +23415,8 @@ self: super: with self; {
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 
   zipp = callPackage ../development/python-modules/zipp { };
+
+  zipremove = callPackage ../development/python-modules/zipremove { };
 
   zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
 
