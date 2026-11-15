@@ -10,28 +10,13 @@ let
   settingsFormat = pkgs.formats.toml { };
   jsonFormat = pkgs.formats.json { };
 
-  serverStateDir = "/var/lib/turnstone";
+  stateDir = "/var/lib/turnstone";
   consoleStateDir = "/var/lib/turnstone-console";
 
-  # Per-model API-key entries that need runtime substitution. Each maps a
-  # unique placeholder (keyed by the model alias, so duplicate `model` strings
-  # can't collide) to a systemd credential id. The credential id is sanitised
-  # to be a valid filename; the placeholder is matched literally by
-  # `replace-secret`, so it may contain any characters.
-  modelKeyEntries =
-    let
-      sanitizeCredId =
-        s: lib.stringAsChars (c: if lib.match "[a-zA-Z0-9._-]" c != null then c else "_") s;
-    in
-    lib.mapAttrsToList (alias: model: {
-      placeholder = "@MODEL_KEY_${alias}@";
-      credId = "model-${sanitizeCredId alias}";
-      file = model.apiKeyFile;
-    }) (lib.filterAttrs (_: m: m.apiKeyFile != null) cfg.server.models);
-
-  # systemd LoadCredential entries. systemd reads each secret as root at unit
-  # start and re-exposes it read-only under $CREDENTIALS_DIRECTORY, so the
-  # source files do not need to be readable by the `turnstone` user.
+  # systemd LoadCredential entries for secrets. systemd reads each secret as
+  # root at unit start and re-exposes it read-only under $CREDENTIALS_DIRECTORY,
+  # so source files do not need to be readable by the `turnstone` user and never
+  # enter the Nix store.
   mkLoadCredentials =
     {
       isServer ? false,
@@ -47,144 +32,34 @@ let
       lib.optional (
         cfg.server.openrouterKeyFile != null
       ) "openrouter-key:${toString cfg.server.openrouterKeyFile}"
-      ++ (map (e: "${e.credId}:${toString e.file}") modelKeyEntries)
     );
 
-  # Build the `replace-secret` invocation lines that substitute the
-  # @PLACEHOLDER@ tokens in a generated config file. `pkgs.replace-secret`
-  # performs a *literal* string replacement (no regex/sed metacharacters) and
-  # reads the secret from a file rather than argv, so secrets are never leaked
-  # through /proc/<pid>/cmdline and secret values can't inject config.
+  # Build replace-secret lines for secrets that must be substituted in config.toml
+  # at runtime (such as mcp_token_encryption_key).
   mkReplaceSecretLines =
-    {
-      isServer ? false,
-      target,
-    }:
-    let
-      common =
-        lib.optional (cfg.mcpEncryptionKeyFile != null)
-          "${lib.getExe pkgs.replace-secret} '@MCP_ENCRYPTION_KEY@' \"$CREDENTIALS_DIRECTORY/mcp-encryption-key\" ${target}";
-      models = lib.optionals isServer (
-        map (
-          e:
-          "${lib.getExe pkgs.replace-secret} '${e.placeholder}' \"$CREDENTIALS_DIRECTORY/${e.credId}\" ${target}"
-        ) modelKeyEntries
-      );
-    in
-    lib.concatLines (common ++ models);
+    { target }:
+    lib.optionalString (cfg.mcpEncryptionKeyFile != null) ''
+      ${lib.getExe pkgs.replace-secret} '@MCP_ENCRYPTION_KEY@' "$CREDENTIALS_DIRECTORY/mcp-encryption-key" ${target}
+    '';
 
-  # Build the full merged settings attrset for a given component.
-  # Secrets are injected as @PLACEHOLDER@ markers; the ExecStartPre script
-  # substitutes them at runtime so they never land in the Nix store.
-  mkMergedSettings =
-    {
-      settings,
-      dbName,
-      extraSettings ? { },
-    }:
-    let
-      filtered = lib.filterAttrsRecursive (_: v: v != null) settings;
-      # Effective PostgreSQL URL: an explicit value wins; otherwise, when
-      # locally provisioning PostgreSQL, default to the Unix socket so peer
-      # auth maps the `turnstone` OS user to its role without a password. For
-      # non-postgresql backends the URL is dropped. Computing this here (rather
-      # than via mkIf on `settings.database.url`) avoids a module-merge
-      # infinite recursion, since the body writes into `settings`.
-      effectiveUrl =
-        if settings.database.backend != "postgresql" then
-          null
-        else if settings.database.url != null then
-          settings.database.url
-        else if cfg.database.createLocally then
-          "postgresql:///${dbName}?host=/run/postgresql"
-        else
-          null;
-      base = lib.filterAttrsRecursive (_: v: v != null) (
-        lib.recursiveUpdate filtered { database.url = effectiveUrl; }
-      );
-      # extraSettings provides defaults (host, port, models); user `settings`
-      # win because they are the second argument to recursiveUpdate.
-      withExtra = lib.recursiveUpdate extraSettings base;
-      # Only MCP token encryption lives in config.toml's [security] section.
-      # The JWT signing secret is NOT read from config.toml — turnstone's
-      # load_jwt_secret() reads TURNSTONE_JWT_SECRET (env) first, then
-      # [auth] jwt_secret — so it is delivered exclusively via the env var
-      # exported in the service script below.
-      withSecurity = lib.recursiveUpdate withExtra (
-        lib.optionalAttrs (cfg.mcpEncryptionKeyFile != null) {
-          security.mcp_token_encryption_key = "@MCP_ENCRYPTION_KEY@";
-        }
-      );
-    in
-    withSecurity;
+  # Compute the effective database URL for PostgreSQL
+  effectivePgUrl =
+    if cfg.database.url != null then
+      cfg.database.url
+    else if cfg.database.createLocally then
+      "postgresql:///${cfg.database.name}?host=/run/postgresql"
+    else
+      null;
 
-  # Model entries written to the [models] section. API keys are placeholder
-  # tokens keyed by the model alias (unique), resolved at runtime.
-  modelEntries = lib.mapAttrs (
-    alias: model:
-    lib.filterAttrs (_: v: v != null) {
-      inherit (model) model provider enabled;
-      base_url = if model.baseUrl != "" then model.baseUrl else null;
-      api_key = if model.apiKeyFile != null then "@MODEL_KEY_${alias}@" else null;
-      context_window = model.contextWindow;
-      capabilities = model.capabilities;
-      temperature = model.temperature;
-      max_tokens = model.maxTokens;
-      reasoning_effort = model.reasoningEffort;
-    }
-  ) cfg.server.models;
+  # Shared database section for bootstrap TOML
+  databaseSettings = lib.filterAttrsRecursive (_: v: v != null) {
+    backend = cfg.database.backend;
+    url = if cfg.database.backend == "postgresql" then effectivePgUrl else null;
+    path = if cfg.database.backend == "sqlite" then cfg.database.path else null;
+    pool_size = cfg.database.poolSize;
+  };
 
-  # Shared, parameterised settings submodule so server and console stay in
-  # sync. Only the default SQLite path differs between the two.
-  mkSettingsOption =
-    {
-      defaultDbPath,
-      configFileName,
-    }:
-    lib.mkOption {
-      type = lib.types.submodule {
-        freeformType = settingsFormat.type;
-        options = {
-          database = {
-            backend = lib.mkOption {
-              type = lib.types.enum [
-                "sqlite"
-                "postgresql"
-              ];
-              default = "sqlite";
-              description = "Database backend to use.";
-            };
-            path = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = defaultDbPath;
-              description = "Path to the SQLite database file.";
-            };
-            url = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-              description = ''
-                PostgreSQL connection URL. Required when backend is postgresql,
-                unless `services.turnstone.database.createLocally` is enabled or
-                the URL is supplied to the service via an environment variable.
-              '';
-            };
-            pool_size = lib.mkOption {
-              type = lib.types.int;
-              default = 5;
-              description = "Database connection pool size.";
-            };
-          };
-        };
-      };
-      default = { };
-      description = ''
-        Turnstone configuration written to ${configFileName}. Any key accepted
-        by Turnstone's TOML config can be set here via the freeform type.
-        Secrets must use the dedicated `*File` options instead.
-      '';
-    };
-
-  # Shared systemd hardening for both server and console services.
+  # Shared systemd hardening for server and console services.
   sharedServiceConfig = {
     Type = "simple";
     Restart = "on-failure";
@@ -210,7 +85,7 @@ let
     ProcSubset = "pid";
     PrivateUsers = true;
     RemoveIPC = true;
-    # Disabled: the Python runtime needs writable+executable memory.
+    # Python runtime / ctypes needs writable+executable memory mappings.
     MemoryDenyWriteExecute = false;
     SystemCallArchitectures = "native";
     SystemCallFilter = [
@@ -227,38 +102,6 @@ let
       "AF_UNIX"
     ];
   };
-
-  # Heuristic check for environment-variable names that look like secrets, used
-  # to warn when MCP server `env` values would leak into the world-readable store.
-  looksSecretish =
-    k:
-    let
-      lk = lib.toLower k;
-    in
-    lib.hasInfix "secret" lk
-    || lib.hasInfix "token" lk
-    || lib.hasInfix "password" lk
-    || lib.hasInfix "passwd" lk
-    || lib.hasInfix "apikey" lk
-    || lib.hasInfix "api_key" lk
-    || lib.hasSuffix "_key" lk
-    || lk == "key";
-
-  leakedMcpKeys = lib.unique (
-    lib.flatten (
-      lib.mapAttrsToList (
-        _n: srv: lib.attrNames (lib.filterAttrs (k: _v: looksSecretish k) srv.env)
-      ) cfg.server.mcpServers
-    )
-  );
-
-  bothComponentsPgLocal =
-    cfg.database.createLocally
-    && cfg.server.enable
-    && cfg.server.settings.database.backend == "postgresql"
-    && cfg.console.enable
-    && cfg.console.settings.database.backend == "postgresql"
-    && cfg.server.database.name == cfg.console.database.name;
 
 in
 {
@@ -334,19 +177,60 @@ in
       '';
     };
 
-    # ── Database provisioning ────────────────────────────────────────
+    # ── Database (Deployment-level shared storage) ───────────────────
 
     database = {
+      backend = lib.mkOption {
+        type = lib.types.enum [
+          "postgresql"
+          "sqlite"
+        ];
+        default = "postgresql";
+        description = "Database backend for Turnstone persistence (shared by server and console).";
+      };
+
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
         description = ''
-          Automatically provision local PostgreSQL databases and connect via
+          Automatically provision local PostgreSQL database and connect via
           the Unix socket (peer auth, no password). Ignored when the backend is
           sqlite. When disabled, the connection URL must be provided via
-          `services.turnstone.<component>.settings.database.url` or an
-          environment variable.
+          `services.turnstone.database.url` or an environment variable.
         '';
+      };
+
+      name = lib.mkOption {
+        type = lib.types.str;
+        default = "turnstone";
+        description = "PostgreSQL database name.";
+      };
+
+      user = lib.mkOption {
+        type = lib.types.str;
+        default = "turnstone";
+        description = "PostgreSQL user name.";
+      };
+
+      url = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          PostgreSQL connection URL. Required when backend is postgresql and
+          `createLocally` is false, unless supplied via an environment variable.
+        '';
+      };
+
+      path = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = "${stateDir}/turnstone.db";
+        description = "Path to the SQLite database file.";
+      };
+
+      poolSize = lib.mkOption {
+        type = lib.types.int;
+        default = 5;
+        description = "Database connection pool size.";
       };
     };
 
@@ -354,19 +238,6 @@ in
 
     server = {
       enable = lib.mkEnableOption "Turnstone API server";
-
-      database = {
-        name = lib.mkOption {
-          type = lib.types.str;
-          default = "turnstone";
-          description = "PostgreSQL database name for the server.";
-        };
-        user = lib.mkOption {
-          type = lib.types.str;
-          default = "turnstone";
-          description = "PostgreSQL user name for the server.";
-        };
-      };
 
       host = lib.mkOption {
         type = lib.types.str;
@@ -413,7 +284,7 @@ in
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "Path to an EnvironmentFile loaded by the systemd service. Useful for providing secrets. The file is not added to the Nix store.";
+        description = "Path to an EnvironmentFile loaded by the systemd service. Useful for providing secrets.";
       };
 
       mcpServers = lib.mkOption {
@@ -436,7 +307,7 @@ in
                   Environment variables for the MCP server process. These are
                   written to `mcp.json`, which lives in the world-readable Nix
                   store, so do not place secrets here — provide them at runtime
-                  (e.g. via `services.turnstone.server.environmentFile`) instead.
+                  via `environmentFile` instead.
                 '';
               };
             };
@@ -446,75 +317,10 @@ in
         description = "MCP server definitions included in mcp.json.";
       };
 
-      models = lib.mkOption {
-        type = lib.types.attrsOf (
-          lib.types.submodule {
-            options = {
-              model = lib.mkOption {
-                type = lib.types.str;
-                description = "Upstream model identifier (e.g. `gpt-4o`, `claude-3.5-sonnet`).";
-              };
-              provider = lib.mkOption {
-                type = lib.types.enum [
-                  "openai"
-                  "anthropic"
-                ];
-                default = "openai";
-                description = "LLM provider backend.";
-              };
-              baseUrl = lib.mkOption {
-                type = lib.types.str;
-                default = "";
-                description = "Custom API base URL. Leave empty to use the provider default.";
-              };
-              apiKeyFile = lib.mkOption {
-                type = lib.types.nullOr lib.types.path;
-                default = null;
-                description = ''
-                  Path to a file containing the API key for this model. Loaded
-                  via systemd `LoadCredential`.
-                '';
-              };
-              contextWindow = lib.mkOption {
-                type = lib.types.int;
-                default = 131072;
-                description = "Maximum context window size in tokens.";
-              };
-              capabilities = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ "tool_call" ];
-                description = "List of model capabilities (e.g. `tool_call`, `tool_search`).";
-              };
-              enabled = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-                description = "Whether this model is active.";
-              };
-              temperature = lib.mkOption {
-                type = lib.types.nullOr lib.types.float;
-                default = null;
-                description = "Sampling temperature override.";
-              };
-              maxTokens = lib.mkOption {
-                type = lib.types.nullOr lib.types.int;
-                default = null;
-                description = "Maximum output tokens override.";
-              };
-              reasoningEffort = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
-                description = "Reasoning effort level (provider-specific).";
-              };
-            };
-          }
-        );
+      extraBootstrapSettings = lib.mkOption {
+        type = settingsFormat.type;
         default = { };
-        description = "Model definitions written to the `[models]` section of config.toml.";
-      };
-
-      settings = mkSettingsOption {
-        defaultDbPath = "${serverStateDir}/turnstone.db";
-        configFileName = "config.toml";
+        description = "Additional bootstrap settings written to server config.toml.";
       };
     };
 
@@ -522,19 +328,6 @@ in
 
     console = {
       enable = lib.mkEnableOption "Turnstone Console (admin dashboard)";
-
-      database = {
-        name = lib.mkOption {
-          type = lib.types.str;
-          default = "turnstone-console";
-          description = "PostgreSQL database name for the console.";
-        };
-        user = lib.mkOption {
-          type = lib.types.str;
-          default = "turnstone-console";
-          description = "PostgreSQL user name for the console.";
-        };
-      };
 
       host = lib.mkOption {
         type = lib.types.str;
@@ -572,12 +365,13 @@ in
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "Path to an EnvironmentFile loaded by the systemd service. Useful for providing secrets. The file is not added to the Nix store.";
+        description = "Path to an EnvironmentFile loaded by the systemd service. Useful for providing secrets.";
       };
 
-      settings = mkSettingsOption {
-        defaultDbPath = "${consoleStateDir}/turnstone-console.db";
-        configFileName = "console-config.toml";
+      extraBootstrapSettings = lib.mkOption {
+        type = settingsFormat.type;
+        default = { };
+        description = "Additional bootstrap settings written to console-config.toml.";
       };
     };
   };
@@ -594,144 +388,64 @@ in
     })
 
     # ── Assertions ─────────────────────────────────────────────────
-    (lib.mkIf cfg.server.enable {
-      assertions = [
-        {
-          assertion =
-            cfg.server.settings.database.backend != "sqlite" || cfg.server.settings.database.path != null;
-          message = "services.turnstone.server.settings.database.path is required when using the SQLite backend.";
-        }
-      ];
-    })
-    (lib.mkIf cfg.console.enable {
-      assertions = [
-        {
-          assertion =
-            cfg.console.settings.database.backend != "sqlite" || cfg.console.settings.database.path != null;
-          message = "services.turnstone.console.settings.database.path is required when using the SQLite backend.";
-        }
-        {
-          assertion =
-            !(
-              cfg.server.enable
-              && cfg.console.enable
-              && cfg.server.settings.database.backend == "sqlite"
-              && cfg.console.settings.database.backend == "sqlite"
-              && cfg.server.settings.database.path == cfg.console.settings.database.path
-            );
-          message = "services.turnstone: server and console must not share the same SQLite database path.";
-        }
-      ];
-    })
-
-    # ── Warnings ───────────────────────────────────────────────────
     (lib.mkIf (cfg.server.enable || cfg.console.enable) {
+      assertions = [
+        {
+          assertion = cfg.database.backend != "sqlite" || cfg.database.path != null;
+          message = "services.turnstone.database.path is required when using the SQLite backend.";
+        }
+        {
+          assertion = !(cfg.server.enable && cfg.console.enable && cfg.server.port == cfg.console.port && cfg.server.host == cfg.console.host);
+          message = "services.turnstone: server and console cannot bind to the same host and port.";
+        }
+      ];
+
       warnings =
         lib.optional
           (
-            cfg.server.enable
-            && cfg.server.settings.database.backend == "postgresql"
-            && cfg.server.settings.database.url == null
+            cfg.database.backend == "postgresql"
+            && cfg.database.url == null
             && !cfg.database.createLocally
           )
-          "services.turnstone.server: PostgreSQL backend is selected but no database.url is set and database.createLocally is false. Provide the connection URL via services.turnstone.server.settings.database.url or an environment file."
+          "services.turnstone: PostgreSQL backend is selected but no database.url is set and database.createLocally is false. Provide the connection URL via services.turnstone.database.url or an environment file."
         ++
           lib.optional
             (
-              cfg.console.enable
-              && cfg.console.settings.database.backend == "postgresql"
-              && cfg.console.settings.database.url == null
-              && !cfg.database.createLocally
-            )
-            "services.turnstone.console: PostgreSQL backend is selected but no database.url is set and database.createLocally is false. Provide the connection URL via services.turnstone.console.settings.database.url or an environment file."
-        ++ lib.optional (cfg.server.enable && leakedMcpKeys != [ ]) (
-          "services.turnstone.server.mcpServers: environment keys that look like secrets ("
-          + lib.concatStringsSep ", " leakedMcpKeys
-          + ") are written to mcp.json in the world-readable Nix store. Provide such values at runtime instead."
-        )
-        ++
-          lib.optional
-            (
-              cfg.server.enable
-              && cfg.server.settings.database.backend == "postgresql"
-              && cfg.server.settings.database.url != null
+              cfg.database.backend == "postgresql"
+              && cfg.database.url != null
               && cfg.database.createLocally
             )
-            "services.turnstone.server: a custom database.url is set but database.createLocally is also true. The locally provisioned database will be created but not used."
-        ++
-          lib.optional
-            (
-              cfg.console.enable
-              && cfg.console.settings.database.backend == "postgresql"
-              && cfg.console.settings.database.url != null
-              && cfg.database.createLocally
-            )
-            "services.turnstone.console: a custom database.url is set but database.createLocally is also true. The locally provisioned database will be created but not used."
-        ++ lib.optional bothComponentsPgLocal (
-          "services.turnstone: both server and console use PostgreSQL with database.createLocally; they share a single database/user ('"
-          + cfg.server.database.name
-          + "'). Ensure their schemas are compatible."
-        );
+            "services.turnstone: a custom database.url is set but database.createLocally is also true. The locally provisioned database will be created but not used.";
     })
 
     # ── PostgreSQL auto-provisioning ───────────────────────────────
-    (lib.mkIf cfg.database.createLocally (
-      lib.mkMerge [
-        (lib.mkIf (cfg.server.enable && cfg.server.settings.database.backend == "postgresql") {
-          assertions = [
-            {
-              assertion = cfg.server.database.user == cfg.server.database.name;
-              message = "services.turnstone.server.database.user must equal database.name when database.createLocally is true.";
-            }
-          ];
-          services.postgresql = {
-            enable = true;
-            ensureDatabases = [ cfg.server.database.name ];
-            ensureUsers = [
-              {
-                name = cfg.server.database.user;
-                ensureDBOwnership = true;
-              }
-            ];
-          };
-        })
-        (lib.mkIf (cfg.console.enable && cfg.console.settings.database.backend == "postgresql") {
-          assertions = [
-            {
-              assertion = cfg.console.database.user == cfg.console.database.name;
-              message = "services.turnstone.console.database.user must equal database.name when database.createLocally is true.";
-            }
-          ];
-          services.postgresql = {
-            enable = true;
-            ensureDatabases = [ cfg.console.database.name ];
-            ensureUsers = [
-              {
-                name = cfg.console.database.user;
-                ensureDBOwnership = true;
-              }
-            ];
-          };
-        })
-      ]
-    ))
+    (lib.mkIf (cfg.database.createLocally && cfg.database.backend == "postgresql" && (cfg.server.enable || cfg.console.enable)) {
+      assertions = [
+        {
+          assertion = cfg.database.user == cfg.database.name;
+          message = "services.turnstone.database.user must equal database.name when database.createLocally is true for peer authentication.";
+        }
+      ];
+      services.postgresql = {
+        enable = true;
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.user;
+            ensureDBOwnership = true;
+          }
+        ];
+      };
+    })
 
     # ── User / group ───────────────────────────────────────────────
-    (lib.mkIf cfg.server.enable {
+    (lib.mkIf (cfg.server.enable || cfg.console.enable) {
       users.users.turnstone = {
         isSystemUser = true;
         group = "turnstone";
-        home = serverStateDir;
+        home = stateDir;
       };
       users.groups.turnstone = { };
-    })
-    (lib.mkIf cfg.console.enable {
-      users.users."turnstone-console" = {
-        isSystemUser = true;
-        group = "turnstone-console";
-        home = consoleStateDir;
-      };
-      users.groups."turnstone-console" = { };
     })
 
     # ── Firewall ───────────────────────────────────────────────────
@@ -750,26 +464,22 @@ in
             }) cfg.server.mcpServers;
           };
 
-          serverSettings = mkMergedSettings {
-            settings = cfg.server.settings;
-            dbName = cfg.server.database.name;
-            extraSettings = {
-              server = {
-                inherit (cfg.server) host port;
-              };
-              models = modelEntries;
+          serverSettings = lib.recursiveUpdate {
+            server = {
+              inherit (cfg.server) host port;
             };
-          };
+            database = databaseSettings;
+            security = lib.optionalAttrs (cfg.mcpEncryptionKeyFile != null) {
+              mcp_token_encryption_key = "@MCP_ENCRYPTION_KEY@";
+            };
+          } cfg.server.extraBootstrapSettings;
 
           serverConfigFile = settingsFormat.generate "turnstone-server-config.toml" serverSettings;
 
           setupScript = pkgs.writeShellScript "turnstone-server-setup" ''
             set -euo pipefail
-            install -m 0600 ${serverConfigFile} ${serverStateDir}/config.toml
-            ${mkReplaceSecretLines {
-              isServer = true;
-              target = "${serverStateDir}/config.toml";
-            }}
+            install -m 0600 ${serverConfigFile} ${stateDir}/config.toml
+            ${mkReplaceSecretLines { target = "${stateDir}/config.toml"; }}
           '';
         in
         {
@@ -778,10 +488,10 @@ in
             "network.target"
           ]
           ++ lib.optional (
-            cfg.server.settings.database.backend == "postgresql" && cfg.database.createLocally
+            cfg.database.backend == "postgresql" && cfg.database.createLocally
           ) "postgresql.service";
           requires = lib.optional (
-            cfg.server.settings.database.backend == "postgresql" && cfg.database.createLocally
+            cfg.database.backend == "postgresql" && cfg.database.createLocally
           ) "postgresql.service";
           wantedBy = [ "multi-user.target" ];
 
@@ -789,7 +499,7 @@ in
             User = "turnstone";
             Group = "turnstone";
             StateDirectory = "turnstone";
-            WorkingDirectory = serverStateDir;
+            WorkingDirectory = stateDir;
             LoadCredential = mkLoadCredentials { isServer = true; };
             ExecStartPre = [ "${setupScript}" ];
             EnvironmentFile = lib.optional (cfg.server.environmentFile != null) cfg.server.environmentFile;
@@ -810,7 +520,7 @@ in
               lib.escapeShellArgs (
                 [
                   "--config"
-                  "${serverStateDir}/config.toml"
+                  "${stateDir}/config.toml"
                   "--log-level"
                   cfg.server.logLevel
                   "--log-format"
@@ -830,25 +540,18 @@ in
     (lib.mkIf cfg.console.enable {
       systemd.services.turnstone-console =
         let
-          consoleSettings = mkMergedSettings {
-            settings = cfg.console.settings;
-            dbName = cfg.console.database.name;
-            extraSettings = {
-              console = {
-                inherit (cfg.console) host port;
-              };
+          consoleSettings = lib.recursiveUpdate {
+            console = {
+              inherit (cfg.console) host port;
             };
-          };
+            database = databaseSettings;
+          } cfg.console.extraBootstrapSettings;
 
           consoleConfigFile = settingsFormat.generate "turnstone-console-config.toml" consoleSettings;
 
           setupScript = pkgs.writeShellScript "turnstone-console-setup" ''
             set -euo pipefail
             install -m 0600 ${consoleConfigFile} ${consoleStateDir}/console-config.toml
-            ${mkReplaceSecretLines {
-              isServer = false;
-              target = "${consoleStateDir}/console-config.toml";
-            }}
           '';
         in
         {
@@ -857,16 +560,16 @@ in
             "network.target"
           ]
           ++ lib.optional (
-            cfg.console.settings.database.backend == "postgresql" && cfg.database.createLocally
+            cfg.database.backend == "postgresql" && cfg.database.createLocally
           ) "postgresql.service";
           requires = lib.optional (
-            cfg.console.settings.database.backend == "postgresql" && cfg.database.createLocally
+            cfg.database.backend == "postgresql" && cfg.database.createLocally
           ) "postgresql.service";
           wantedBy = [ "multi-user.target" ];
 
           serviceConfig = sharedServiceConfig // {
-            User = "turnstone-console";
-            Group = "turnstone-console";
+            User = "turnstone";
+            Group = "turnstone";
             StateDirectory = "turnstone-console";
             WorkingDirectory = consoleStateDir;
             LoadCredential = mkLoadCredentials { isServer = false; };
