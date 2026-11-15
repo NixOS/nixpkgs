@@ -2253,7 +2253,6 @@ The following rules are desired to be respected:
 * `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
 * `meta.platforms` takes the default value in many cases.
   It does not need to be set explicitly unless the package requires a specific platform.
-* The file is formatted correctly (e.g., `nix-shell --run treefmt`).
 * Commit names of Python libraries must reflect that they are Python
   libraries (e.g. `python3Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
   See also [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#commit-conventions).
@@ -2269,8 +2268,6 @@ The following rules are desired to be respected:
   should not use a name that is already used on PyPI. When possible, they should
   use the package repository name prefixed with the owner (e.g. organization) name
   and using a `-` as delimiter.
-* Attribute names in `python-packages.nix` should be sorted alphanumerically to
-  avoid merge conflicts and ease locating attributes.
 * Non-python runtime dependencies should be added via explicit wrapping or
   patching (using e.g. `substituteInPlace`), rather than through propagation via
   `dependencies`/`propagatedBuildInputs`, to reduce clutter in `$PATH`.
