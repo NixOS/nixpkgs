@@ -9,7 +9,7 @@ let
     ver: pkg:
     lib.warnIf (lib.versionOlder ver
       super.${pkg.pname}.version
-    ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed" pkg;
+    ) "override for haskell.packages.ghc914.${pkg.pname} may no longer be needed" pkg;
 
 in
 
