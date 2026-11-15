@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  curl,
   jsoncpp,
   libossp_uuid,
   zlib,
@@ -24,17 +25,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
-  version = "1.9.12";
+  version = "1.9.14";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rx6PpouEXW1J44oK+wCnnGQa0i+H5KSboLLATLMCBBg=";
+    hash = "sha256-hH6uewql77lh8f3807bxKHbl1xGSZvpeoDcGib/ImYI=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    curl
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
@@ -76,6 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
   # this excludes you, pkgsStatic (cmake wants to run built binaries
   # in the buildPhase)
   doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+
+  # The integration tests start a local HTTP server.
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     homepage = "https://github.com/drogonframework/drogon";
