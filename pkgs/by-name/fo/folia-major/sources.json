@@ -3,6 +3,10 @@
     "rev": "d407447ed56c4121a11ccbd266dc184ca1ead0c2",
     "hash": "sha256-Ai8W9Aj462fZVBoV7SbyeO2lAA8J7xTV4RTrT20H6So="
   },
+  "steamAudio": {
+    "version": "4.8.1",
+    "hash": "sha256-Sgql7BF2848LCZOjfCJZ2ehvJ+ItXiT4PsTDy5odVEk="
+  },
   "models": [
     {
       "url": "https://github.com/chthollyphile/folia-major/releases/download/models-v1/beat_this-wgsl.bin",

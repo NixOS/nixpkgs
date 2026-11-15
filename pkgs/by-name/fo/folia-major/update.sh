@@ -25,6 +25,11 @@ prefetch_unpack() {
 mnn_rev=$(grep -oP "MNN_COMMIT = '\K[0-9a-f]{40}" "$src/build/buildMnnRuntime.mjs")
 mnn_hash=$(prefetch_unpack "https://github.com/alibaba/MNN/archive/$mnn_rev.tar.gz")
 
+# Steam Audio, see build/fetchSteamAudio.mjs
+steam_audio_script="$src/build/fetchSteamAudio.mjs"
+steam_audio_version=$(grep -oP "STEAM_AUDIO_VERSION = '\\K[^']+" "$steam_audio_script")
+steam_audio_hash=$(to_sri "$(grep -oP "ZIP_SHA256 = '\\K[0-9a-f]{64}" "$steam_audio_script")")
+
 # Models, see shared/modelManifest.json
 manifest="$src/shared/modelManifest.json"
 mirror=$(jq -r '.mirrors[] | select(startswith("https://github.com/chthollyphile/folia-major/"))' "$manifest")
@@ -60,9 +65,11 @@ w2l=$(jq -c --argjson patches "$w2l_patches" '. + { patches: $patches }' <<<"$w2
 jq -n \
   --arg rev "$mnn_rev" \
   --arg hash "$mnn_hash" \
+  --arg steamAudioVersion "$steam_audio_version" \
+  --arg steamAudioHash "$steam_audio_hash" \
   --argjson models "$models" \
   --argjson windowtolayer "$w2l" \
-  '{ mnn: { rev: $rev, hash: $hash }, models: $models, windowtolayer: $windowtolayer }' >"$sources"
+  '{ mnn: { rev: $rev, hash: $hash }, steamAudio: { version: $steamAudioVersion, hash: $steamAudioHash }, models: $models, windowtolayer: $windowtolayer }' >"$sources"
 
 if [[ -z $(jq -r '.windowtolayer.cargoHash' "$sources") ]]; then
   cargo_hash=$(
