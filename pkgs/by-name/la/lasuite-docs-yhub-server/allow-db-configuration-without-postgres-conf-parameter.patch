@@ -1,4 +1,4 @@
-From 7f5d84ec8e4f6531c4e38db7c850eab86786d068 Mon Sep 17 00:00:00 2001
+From 0fbe7195f5fbcc21bc4ff7c557301cbd17462696 Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Sun, 25 Oct 2026 18:05:42 +0100
 Subject: [PATCH] Allow DB configuration without `postgres` conf parameter
@@ -7,14 +7,16 @@ The postgres library also allows being configured via env-vars, i.e.
 `PGHOST`, `PGPASS` et al.. This is useful since that way one can
 actually configure a DB connection that uses UNIX sockets rather than
 TCP sockets.
+
+Co-authored-by: networkException <git@nwex.de>
 ---
  README.md          |  3 +++
  bin/conf.js        |  6 +++++-
- bin/init-db.js     |  4 ++--
+ bin/init-db.js     |  9 ++++++---
  src/index.js       |  5 +----
  src/persistence.js | 18 +++++++++++++-----
  src/types.js       |  2 +-
- 6 files changed, 25 insertions(+), 13 deletions(-)
+ 6 files changed, 29 insertions(+), 14 deletions(-)
 
 diff --git a/README.md b/README.md
 index 4c4a403..b71c442 100644
@@ -48,7 +50,7 @@ index 930d35e..0308a21 100644
      ? []
      : [
 diff --git a/bin/init-db.js b/bin/init-db.js
-index 0ee6d57..967351a 100755
+index 0ee6d57..b27bf66 100755
 --- a/bin/init-db.js
 +++ b/bin/init-db.js
 @@ -102,7 +102,7 @@ const initTables = async sql => {
@@ -69,6 +71,18 @@ index 0ee6d57..967351a 100755
  }
  
  /**
+@@ -164,7 +164,10 @@ log.info('initializing databases based on environment variables POSTGRES & POSTG
+ 
+ const postgresUrl = env.getConf('postgres')
+ const postgresTestingUrl = env.getConf('postgres-testing')
+-postgresUrl && await init(postgresUrl)
++// NOTE: We make the following unconditional to support missing POSTGRES= with all other
++//       configuration being in individual environment variables (like PGHOST=).
++// postgresUrl && await init(postgresUrl)
++await init(postgresUrl)
+ postgresTestingUrl && await init(postgresTestingUrl)
+ 
+ // Initialize S3 buckets
 diff --git a/src/index.js b/src/index.js
 index 2969d77..a3b56c4 100644
 --- a/src/index.js
@@ -142,3 +156,6 @@ index 90e4704..6cfdb6f 100644
    /**
     * Options passed to the postgres.js client, spread over yhub's `{ connect_timeout: 60 }` - e.g.
     * `{ max: 20, idle_timeout: 60, connection: { statement_timeout: 30000 } }`. See API.md.
+-- 
+2.56.0
+
