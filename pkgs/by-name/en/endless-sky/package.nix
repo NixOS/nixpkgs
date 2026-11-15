@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "endless-sky";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ja8gJK/cgQW7gts4ACEB5G0E619U5fqoDObxH1i7koU=";
+    hash = "sha256-5IvArrgVzYHV2TWVU8dXaT8nytFLg9bOoKKDJmRTzFE=";
   };
 
   __structuredAttrs = true;
