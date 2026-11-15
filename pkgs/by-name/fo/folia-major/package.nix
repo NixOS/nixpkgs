@@ -9,6 +9,7 @@
   windowtolayer,
   jq,
   imagemagick,
+  swift,
   makeWrapper,
   autoPatchelfHook,
   electron,
@@ -29,7 +30,7 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "folia-major";
-  version = "0.7.25";
+  version = "0.7.29";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -43,10 +44,10 @@ buildNpmPackage (finalAttrs: {
       git -C "$out" rev-parse HEAD > "$out/COMMIT"
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
-    hash = "sha256-GcRFIJpBlBdX7cUO9Yzp3oYXEx2QGz5WW4Yv1r0S2G4=";
+    hash = "sha256-myeX8UKdHVMnvqW/wGnMYDU8QpnUCVoyXLomLlU+Jd0=";
   };
 
-  npmDepsHash = "sha256-4T7zzNbG16pt+WniPayEdxQvYJ53Ebq44iODN2csZG4=";
+  npmDepsHash = "sha256-1Jync9j1fFhjexYwIsH6K1ILF6u8cs/LVvD36fyJt6Y=";
 
   nativeBuildInputs = [
     jq
@@ -54,7 +55,10 @@ buildNpmPackage (finalAttrs: {
   ]
   # koffi and node-librespot ship prebuilt addons linking libstdc++, which electron does not load
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ imagemagick ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    swift
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib stdenv.cc.cc) ];
 
@@ -98,6 +102,8 @@ buildNpmPackage (finalAttrs: {
 
     mkdir -p build/mac-helper/darwin-${arch}
     ln -s ${finalAttrs.passthru.folia-click-guard}/lib/* build/mac-helper/darwin-${arch}/
+
+    node -e "require('./electron/appleMusic/macos/prepareBundle.cjs').prepareMacCompanion({ arch: '${arch}', projectRoot: process.cwd() })"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # autoPatchelf cannot satisfy the musl variant
@@ -118,7 +124,13 @@ buildNpmPackage (finalAttrs: {
     '') finalAttrs.passthru.models}
     # verifies the staged models against shared/modelManifest.json
     node build/fetchModels.mjs
-  '';
+  ''
+  +
+    lib.optionalString
+      (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64))
+      ''
+        STEAM_AUDIO_ZIP=${finalAttrs.passthru.steam-audio} node build/fetchSteamAudio.mjs
+      '';
 
   postBuild = ''
     cp -r ${electron.dist} electron-dist
@@ -182,6 +194,10 @@ buildNpmPackage (finalAttrs: {
         ) finalAttrs.passthru.sources.windowtolayer.patches;
     });
     models = map fetchurl finalAttrs.passthru.sources.models;
+    steam-audio = fetchurl {
+      url = "https://github.com/ValveSoftware/steam-audio/releases/download/v${finalAttrs.passthru.sources.steamAudio.version}/steamaudio_${finalAttrs.passthru.sources.steamAudio.version}.zip";
+      inherit (finalAttrs.passthru.sources.steamAudio) hash;
+    };
 
     sources = lib.importJSON ./sources.json;
     updateScript = ./update.sh;
@@ -195,7 +211,7 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      # prebuilt node addons of koffi and node-librespot
+      # prebuilt node addons of koffi and node-librespot, and the Steam Audio SDK
       binaryNativeCode
     ];
     mainProgram = "folia-major";
