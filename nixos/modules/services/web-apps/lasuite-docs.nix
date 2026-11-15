@@ -211,12 +211,9 @@ in
         default = { };
         type = types.submodule {
           freeformType = types.attrsOf types.str;
-          config = {
-            POSTGRES = lib.mkIf (cfg.postgresql.createLocally) (lib.mkOptionDefault "");
-          };
           options = {
             POSTGRES = mkOption {
-              type = types.str;
+              type = types.nullOr types.str;
               description = ''
                 Connection URL to PostgreSQL.
                 See the [upstream docs on the format](https://github.com/suitenumerique/docs/tree/v6.0.0/src/yhub-server#database-schema-yarn-init-db) for more information.
