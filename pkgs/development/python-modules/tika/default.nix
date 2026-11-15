@@ -11,12 +11,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tika";
-  version = "3.3.2";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-RopTAiSRYjUfZc/gVjLThpwDUNcmrvgqdeewT6XKyKs=";
+    hash = "sha256-Xoq88QCmElU6ezFn3QgR39cGHeSLZjtZHpgTH3OHtlM=";
   };
 
   build-system = [ setuptools ];
