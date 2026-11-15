@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtoxcore";
-  version = "0.2.24";
+  version = "0.2.25";
 
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "c-toxcore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ac0nwa8sjqq7XNs0fWVhDGe4Owaw6YX15SgSgSULOgE=";
+    hash = "sha256-Tqv1m6BUDx2vMEwGL8JES7XwIlu09fBZnbKhXUIwThA=";
     fetchSubmodules = true;
   };
 
