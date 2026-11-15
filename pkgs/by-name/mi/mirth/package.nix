@@ -9,8 +9,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mirth";
-  version = "0-unstable-2026-11-14";
-  gitRev = "6787428c12254ed0d548468edcead5d6db784be0";
+  version = "0-unstable-2026-11-15";
+  gitRev = "f7b4b1a9e19c66e01ce16f92b3d64787e7ea26b6";
   __structuredAttrs = true;
 
   src = fetchzip {
@@ -19,30 +19,26 @@ stdenv.mkDerivation (finalAttrs: {
       "https://github.com/mirth-lang/mirth/archive/${finalAttrs.gitRev}.zip"
       "https://git.sr.ht/~typeswitch/mirth/archive/${finalAttrs.gitRev}.tar.gz"
     ];
-    hash = "sha256-JCBAkvilcOYg81twG6YK5WFdvRIxHAIP87VckuNJy5U=";
+    hash = "sha256-S++vkfwOQsAdxnBRm6bGa9u+bJPxrvbPOtkkrqhfvbg=";
   };
 
-  postPatch =
-    # Bug report: https://codeberg.org/typeswitch/mirth/issues/1
-    lib.optionalString (with stdenv.buildPlatform; isAarch64 && isLinux) ''
-      substituteInPlace bin/mirth0.c \
-        --replace-fail "WRAP_I63(24LL);" "WRAP_I63(16LL);"
-      substituteInPlace lib/std/world.mth \
-        --replace-fail "Linux -> 24u," "Linux -> running-arch Arch.ARM64 = if(16u, 24u),"
-    ''
+  postPatch = ''
     # Replace hard-coded GCC with stdenv’s C compiler.
     # NOTE: newer GCC requires optimization level ≥1 to use fortity. -O1 is
     # fast enough as a default for the compiler stages.
-    + ''
-      substituteInPlace Makefile \
-        --replace-fail "-O0" "-O1" \
-        --replace-fail "CC=gcc \$(C99FLAGS)" "CC=${buildPackages.stdenv.cc.targetPrefix}cc \$(C99FLAGS)"
-    ''
+    #
+    # glibc marks write(2) with warn_unused_result, which the generated
+    # bootstrap’s TRACE macro ignores.
+    # noted: https://codeberg.org/typeswitch/mirth/issues/1
+    substituteInPlace Makefile \
+      --replace-fail "-O0" "-O1" \
+      --replace-fail "-Werror" "-Werror -Wno-error=unused-result" \
+      --replace-fail "CC=gcc \$(C99FLAGS)" "CC=${buildPackages.stdenv.cc.targetPrefix}cc \$(C99FLAGS)"
+
     # Override the final binary, mirth3, with the target’s C compiler & -O2
     # optimization for distribution.
-    + ''
-      echo "bin/mirth3: CC := ${stdenv.cc.targetPrefix}cc \$(C99FLAGS) -O2" >>Makefile
-    '';
+    echo "bin/mirth3: CC := ${stdenv.cc.targetPrefix}cc \$(C99FLAGS) -O2" >>Makefile
+  '';
 
   outputs = [
     "out"
@@ -62,8 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     "bin/mirth3"
   ];
 
-  # st_mode substitution intentionally diverges from the pre-generated mirth0.c
-  doCheck = with stdenv.buildPlatform; !(isAarch64 && isLinux);
+  doCheck = true;
 
   installPhase = ''
     runHook preInstall
