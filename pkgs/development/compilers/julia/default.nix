@@ -164,8 +164,8 @@ in
   julia_113 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.13.3";
-        hash = "sha256-E8TNBnli1sgf6mAIGSW+nimSpCBCicww3uPd2Wks8xs=";
+        version = "1.13.4";
+        hash = "sha256-VbtEQsiHo+mfKHtTxGf91eeON2NE6iqEhldC0Ton1xw=";
         patches = [
           # Upstream only sets CMAKE_BUILD_RPATH on Darwin (JuliaLang/julia#63103).
           # On Linux in the Nix sandbox, intermediate build tools like llvm-min-tblgen
