@@ -4,34 +4,29 @@
   fetchPypi,
   hatchling,
   cryptography,
-  acme,
-  httpx,
+  httpx2,
+  idna,
 }:
 
 buildPythonPackage rec {
   pname = "lacme";
-  version = "1.0.5";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1375hprc5fy9lr0crg84y2nd03rp9z8zpmzpk8k1r7wah1kbgkf1";
+    hash = "sha256-FPWcjkt/QRS8fwVbd7FjToOl6xHnyZ/2zEiu2VP12Qw=";
   };
 
   build-system = [ hatchling ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling>=1.29" "hatchling>=1.28"
-  '';
-
   dependencies = [
     cryptography
-    acme
-    httpx
+    httpx2
+    idna
   ];
 
-  doCheck = false;
+  pythonImportsCheck = [ "lacme" ];
 
   meta = {
     description = "A lightweight ACME client for Python";
