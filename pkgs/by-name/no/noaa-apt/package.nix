@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://noaa-apt.mbernardi.com.ar/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     platforms = lib.platforms.all;
     changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${finalAttrs.version}";
