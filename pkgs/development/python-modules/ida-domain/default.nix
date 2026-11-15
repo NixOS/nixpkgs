@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ida-domain";
-  version = "0.5.1-dev.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HexRaysSA";
     repo = "ida-domain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kZvyrke3YYrXg7h0njnLk+vTpqc896tGi+WisYJSrk=";
+    hash = "sha256-1HprtLuVMwlj7bIYgHD0kQHS/nd7l0fPDEzk0o22M7A=";
   };
 
   build-system = [ hatchling ];
