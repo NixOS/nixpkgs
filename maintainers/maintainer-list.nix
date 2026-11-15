@@ -30086,6 +30086,11 @@
     githubId = 3159881;
     name = "Tobias Markus";
   };
+  TMLoew = {
+    github = "TMLoew";
+    githubId = 46111712;
+    name = "Tristan Löw";
+  };
   tmountain = {
     email = "tinymountain@gmail.com";
     github = "tmountain";
