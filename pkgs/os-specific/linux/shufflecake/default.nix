@@ -47,9 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
       $makeFlags \
       modules_install
 
-    install -Dm555 sflc/build/bin/sflc $bin/sflc
+    mkdir -p $bin/bin
+    install -Dm555 sflc/build/bin/sflc $bin/bin/sflc
     # v0.6 provides an alias for pre-v0.6 compatibility
-    ln -s sflc $bin/shufflecake
+    ln -s sflc $bin/bin/shufflecake
   '';
 
   meta = {
