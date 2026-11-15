@@ -410,22 +410,7 @@ let
 
       astral-sh.ty = callPackage ./astral-sh.ty { };
 
-      astro-build.astro-vscode = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "astro-vscode";
-          publisher = "astro-build";
-          version = "2.17.4";
-          hash = "sha256-JRGWsYoJAzACJDcd/RwpP1F9BAs/DJqcsi1rrLNkO4Y=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
-          description = "Astro language support for VS Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode";
-          homepage = "https://github.com/withastro/language-tools";
-          license = lib.licenses.mit;
-          maintainers = [ ];
-        };
-      };
+      astro-build.astro-vscode = callPackage ./astro-build.astro-vscode { };
 
       asvetliakov.vscode-neovim = buildVscodeMarketplaceExtension {
         mktplcRef = {
