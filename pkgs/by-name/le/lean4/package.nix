@@ -116,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       jthulhu
       nadja-y
       niklashh
+      alejo7797
     ];
     mainProgram = "lean";
   };
