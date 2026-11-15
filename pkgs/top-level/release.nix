@@ -79,19 +79,15 @@ let
   inherit (release-lib.lib)
     collect
     concatLists
-    elem
     filter
     genAttrs
     hasInfix
     hasSuffix
     id
     isDerivation
-    optionals
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
-
-  supportDarwin = elem "aarch64-darwin" supportedSystems;
 
   onSupported = x: map (system: x.${system}) supportedSystems;
   onSupportedLinux = x: map (system: x.${system}) (filter (hasSuffix "-linux") supportedSystems);
