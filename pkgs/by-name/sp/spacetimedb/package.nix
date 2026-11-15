@@ -7,6 +7,9 @@
   pkg-config,
   perl,
   openssl,
+  zstd,
+  rust-jemalloc-sys,
+  libgit2,
   versionCheckHook,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
@@ -26,7 +29,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-C007eKzhLcVoLoYvPBzmFe42bKsDhBX8+OaQiwpQRpY=";
   };
 
-  cargoHash = "sha256-MXWtIe7tMLO6To3O90PL6z8OZ+ZSv1mRnBLUNJqeEQg=";
+  cargoPatches = [
+    ./update-git2.patch
+  ];
+
+  cargoHash = "sha256-XUjTuLsbwf8p6xgtYruVzR1rzx+pFbjYVyutgpazuwA=";
 
   postPatch = ''
     substituteInPlace crates/cli/src/schema_extract/tests.rs \
@@ -42,6 +49,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
+    rust-jemalloc-sys
+    libgit2
   ];
 
   cargoBuildFlags = [ "-p spacetimedb-standalone -p spacetimedb-cli" ];
@@ -77,8 +87,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTY_V8_ARCHIVE = librusty_v8;
     # used by crates/cli/build.rs to set GIT_HASH at compile time
     SPACETIMEDB_NIX_BUILD_GIT_COMMIT = finalAttrs.src.rev;
-    # required to make jemalloc_tikv_sys build
-    CFLAGS = "-O";
     RUSTFLAGS = "--cfg tokio_unstable";
   };
 
