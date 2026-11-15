@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "partclone";
-  version = "0.3.53";
+  version = "0.3.54";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = finalAttrs.version;
-    hash = "sha256-Z60piCqbp3oA3mwCZLhy6GXEvN+Sz1GyPcBWEp1ohvA=";
+    hash = "sha256-6ahyj5kGDsnBNDIhCmW0uwySeyh+uvtbf2nljtZ9Dqg=";
   };
 
   nativeBuildInputs = [
