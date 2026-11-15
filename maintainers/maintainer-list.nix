@@ -28434,6 +28434,12 @@
     githubId = 1334474;
     name = "Timothy Stott";
   };
+  timvherpen = {
+    email = "tim@timvherpen.nl";
+    github = "TimvHerpen";
+    githubId = 1236233;
+    name = "Tim van Herpen";
+  };
   tiptenbrink = {
     email = "tip@tenbrinkmeijs.com";
     github = "tiptenbrink";
