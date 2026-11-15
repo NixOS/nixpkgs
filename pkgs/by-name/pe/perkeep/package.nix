@@ -31,6 +31,8 @@ buildGoModule (finalAttrs: {
     "cmd/pk-mount"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
     homepage = "https://perkeep.org";
