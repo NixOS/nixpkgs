@@ -165,7 +165,7 @@ with haskellLib;
           Cabal-syntax = lself.Cabal-syntax_3_16_1_0;
           Cabal = lself.Cabal_3_16_1_0;
           cabal-install = lself.cabal-install_3_16_1_0;
-          # hlint does not support GHC 3.14, yet:
+          # hlint does not support GHC 9.14, yet:
           # https://github.com/ndmitchell/hlint/issues/1672
           apply-refact = null;
           hlint = null;
