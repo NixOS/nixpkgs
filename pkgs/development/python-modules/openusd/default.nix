@@ -52,14 +52,14 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "26.05";
+  version = "26.11.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-LQ5iopxoDtmScYhmMy+xN/Gb5WVdAYXdQGlGhG3vIiA=";
+    hash = "sha256-mNqtPJMHxMJTl1FG6eihkJGjTZ8FB6zBRVPP7u5FjY4=";
   };
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
@@ -71,6 +71,9 @@ buildPythonPackage rec {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/usd/-/raw/41469f20113d3550c5b42e67d1139dedc1062b8c/usd-find-dependency-OpenGL.patch?full_index=1";
       hash = "sha256-aUWGKn365qov0ttGOq5GgNxYGIGZ4DfmeMJfakbOugQ=";
     })
+    # Plugins link the imported targets of OpenImageIO and Embree, but
+    # pxrConfig.cmake doesn't find them, breaking consumers like f3d
+    ./pxrconfig-find-dependencies.patch
   ];
 
   env.OSL_LOCATION = lib.optionalString withOsl "${openshadinglanguage}";
@@ -82,9 +85,11 @@ buildPythonPackage rec {
     "-DPXR_BUILD_EXAMPLES=OFF"
     "-DPXR_BUILD_IMAGING=ON"
     "-DPXR_BUILD_MONOLITHIC=ON" # Seems to be commonly linked to monolithically
+    "-DPXR_BUILD_OPENIMAGEIO_PLUGIN=ON"
     "-DPXR_BUILD_TESTS=OFF"
     "-DPXR_BUILD_TUTORIALS=OFF"
     "-DPXR_BUILD_USD_IMAGING=ON"
+    "-DPXR_PYTHON_INSTALL_DIR=${python.sitePackages}"
     "-DPYSIDE_BIN_DIR=${pyside-tools-uic}/bin"
     (lib.cmakeBool "PXR_BUILD_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
@@ -131,8 +136,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     boost
+    embree
     jinja2
     numpy
+    openimageio
     opensubdiv
     pyopengl
   ]
@@ -150,13 +157,7 @@ buildPythonPackage rec {
     "pxr.Usd"
   ];
 
-  postInstall = ''
-    # Make python lib properly accessible
-    target_dir=$out/${python.sitePackages}
-    mkdir -p $(dirname $target_dir)
-    mv $out/lib/python $target_dir
-  ''
-  + lib.optionalString withDocs ''
+  postInstall = lib.optionalString withDocs ''
     mv $out/docs $doc
   '';
 
