@@ -130,6 +130,8 @@ self: super: with self; {
 
   aerosandbox = callPackage ../development/python-modules/aerosandbox { };
 
+  aerosmart-modbus = callPackage ../development/python-modules/aerosmart-modbus { };
+
   aesedb = callPackage ../development/python-modules/aesedb { };
 
   aetcd = callPackage ../development/python-modules/aetcd { };

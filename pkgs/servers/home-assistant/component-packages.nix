@@ -118,6 +118,7 @@
       ps:
       with ps;
       [
+        aerosmart-modbus
         aiohasupervisor
         aiousbwatcher
         ifaddr
@@ -126,7 +127,7 @@
         serialx
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: aerosmart-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "aftership" =
       ps: with ps; [
         pyaftership
@@ -8827,6 +8828,7 @@
     "adguard"
     "advantage_air"
     "aemet"
+    "aerosmart"
     "aftership"
     "agent_dvr"
     "ai_task"
