@@ -7,6 +7,9 @@
   bc,
 }:
 
+let
+  KDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+in
 stdenv.mkDerivation {
   pname = "rtl8821cu";
   version = "${kernel.version}-unstable-2025-12-15";
@@ -21,7 +24,11 @@ stdenv.mkDerivation {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags;
+
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/net/wireless"
+  ];
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -30,9 +37,13 @@ stdenv.mkDerivation {
       --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-  '';
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${KDIR}"
+    "M=$(PWD)"
+  ];
 
   enableParallelBuilding = true;
 
