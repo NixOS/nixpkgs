@@ -6,21 +6,22 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bypass-url-parser";
-  version = "0.4.4";
+  version = "0.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laluka";
     repo = "bypass-url-parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h9+kM2LmfPaaM7MK6lK/ARrArwvRn6d+3BW+rNTkqzA=";
+    hash = "sha256-wQb1sokcmluWIwUn03T3NhJ4qyrcvOzg8iWwHyjQE9s=";
   };
 
   build-system = with python3.pkgs; [ pdm-backend ];
 
   dependencies = with python3.pkgs; [
+    colorama
     coloredlogs
-    docopt
+    docopt-ng
   ];
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
