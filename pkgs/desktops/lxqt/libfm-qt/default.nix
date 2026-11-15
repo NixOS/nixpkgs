@@ -10,7 +10,6 @@
   libxcb,
   lxqt-build-tools,
   lxqt-menu-data,
-  menu-cache,
   pkg-config,
   qttools,
   wrapQtAppsHook,
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfm-qt";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libfm-qt";
     tag = finalAttrs.version;
-    hash = "sha256-gfyskv/TpAdBES0+O1MrrkQqTDqtAGtDMIwv3NF7pnE=";
+    hash = "sha256-mKn70TQt8/P94EVcHsLBansb0wQqWd4fIyDtI+STCpQ=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpthread-stubs
     libxcb
     lxqt-menu-data
-    menu-cache
   ];
 
   passthru.updateScript = gitUpdater { };

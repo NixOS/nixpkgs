@@ -66,9 +66,6 @@ let
       preRequisitePackages = [
         kdePackages.kwindowsystem # provides some QT plugins needed by lxqt-panel
         kdePackages.libkscreen # provides plugins for screen management software
-        pkgs.libfm
-        pkgs.libfm-extra
-        pkgs.menu-cache
         pkgs.openbox # default window manager
         kdePackages.qtsvg # provides QT plugins for svg icons
       ];
