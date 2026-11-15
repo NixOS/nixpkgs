@@ -3,10 +3,16 @@
   fetchFromGitHub,
   lib,
   sqlite,
+  stdenv,
+  installShellFiles,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "config-store";
   version = "1.0.1";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = [
     sqlite
@@ -20,6 +26,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-cj71M3JLxrrKCBoHuoVvpNL59ZlWh5NCDQaJnZ3xhUA=";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd config-store \
+      --bash <($out/bin/config-store completions bash) \
+      --fish <($out/bin/config-store completions fish) \
+      --zsh  <($out/bin/config-store completions zsh)
+  '';
 
   meta = {
     description = "Simple key-value store designed to be used from shell scripts written in Rust";
