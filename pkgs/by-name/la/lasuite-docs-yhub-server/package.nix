@@ -43,30 +43,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnBuildScript = "build";
 
-  installPhase = let
-    yhubPatches = [
-      ./allow-db-configuration-without-postgres-conf-parameter.patch
-    ];
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      yhubPatches = [
+        ./allow-db-configuration-without-postgres-conf-parameter.patch
+        ./disable-db-creation.patch
+      ];
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/{lib,bin}
-    cp -r dist node_modules $out/lib
+      mkdir -p $out/{lib,bin}
+      cp -r dist node_modules $out/lib
 
-    pushd $out/lib/node_modules/@y/hub
-    ${lib.concatStringsSep "\n" (map (patch: "patch --strip=1 -i ${patch}") yhubPatches)}
-    popd
+      pushd $out/lib/node_modules/@y/hub
+      ${lib.concatStringsSep "\n" (map (patch: "patch --strip=1 -i ${patch}") yhubPatches)}
+      popd
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/yhub-server" \
-      --add-flags "--import $out/lib/dist/sentry.js $out/lib/dist/server.js" \
-      --set NODE_PATH "$out/lib/node_modules"
+      makeWrapper ${lib.getExe nodejs} "$out/bin/yhub-server" \
+        --add-flags "--import $out/lib/dist/sentry.js $out/lib/dist/server.js" \
+        --set NODE_PATH "$out/lib/node_modules"
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/y-init-db \
-      --add-flags "$out/lib/node_modules/@y/hub/bin/init-db.js" \
-      --set NODE_PATH "$out/lib/node_modules"
+      makeWrapper ${lib.getExe nodejs} $out/bin/y-init-db \
+        --add-flags "$out/lib/node_modules/@y/hub/bin/init-db.js" \
+        --set NODE_PATH "$out/lib/node_modules"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = {
     description = "Collaborative note taking, wiki and documentation platform";
