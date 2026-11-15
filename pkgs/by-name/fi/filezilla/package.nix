@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "filezilla";
-  version = "3.71.1";
+  version = "3.72.1";
   __structuredAttrs = true;
 
   src = fetchurl {
     # Upstream download link was made unstable on purpose
     # See https://trac.filezilla-project.org/ticket/13186
     url = "https://sources.archlinux.org/other/filezilla/filezilla-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Pfm5s+Wyw33G2ey4g1VKuhQKAuxHw9a1IzO/FzOvTaQ=";
+    hash = "sha256-5xFqeuj20+TJ4zegsEKYS3xbV/ypImZqw9j8r7qBd2Q=";
   };
 
   # The engine library uses pugixml but doesn't link it, which only works
