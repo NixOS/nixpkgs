@@ -6,6 +6,7 @@
   fetchFromCodeberg,
   libgcrypt,
   lvm2,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
@@ -52,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     # v0.6 provides an alias for pre-v0.6 compatibility
     ln -s sflc $bin/bin/shufflecake
   '';
+
+  passthru.tests = { inherit (nixosTests) shufflecake; };
 
   meta = {
     description = "Plausible deniability (hidden storage) layer for Linux";
