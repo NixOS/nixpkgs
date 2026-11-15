@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     # this part of the test would normally fail because it attempts to configure a CMake project that uses find_package on itself
     # this patch makes drogon and trantor visible to the test
     ./fix_find_package.patch
+    ./ignore-nodiscard-result.patch
   ];
 
   # modifying PATH here makes drogon_ctl visible to the test
