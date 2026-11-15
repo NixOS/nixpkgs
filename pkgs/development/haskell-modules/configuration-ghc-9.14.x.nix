@@ -157,6 +157,11 @@ with haskellLib;
     (
       let
         hls_overlay = lself: lsuper: {
+          # HLS can't use Cabal 3.18 yet: Cabal 3.18 excludes process 1.6.26.1,
+          # so we build it against process 1.6.30.0, but HLS links the ghc
+          # library, which depends on the process 1.6.26.1 bundled with GHC.
+          # Mixing both process versions in one closure fails. Cabal 3.16 still
+          # accepts the bundled process.
           Cabal-syntax = lself.Cabal-syntax_3_16_1_0;
           Cabal = lself.Cabal_3_16_1_0;
           cabal-install = lself.cabal-install_3_16_1_0;
