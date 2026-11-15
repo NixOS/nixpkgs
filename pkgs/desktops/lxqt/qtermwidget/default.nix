@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtermwidget";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "qtermwidget";
     rev = finalAttrs.version;
-    hash = "sha256-fTE39goab0md0koS28gRiQgnEumtR5/vTKgpM/wuCrk=";
+    hash = "sha256-aQdk01vnyFC7J8zEIvIMcNgSM/cAfoX1SeaH/naKbzY=";
   };
 
   nativeBuildInputs = [
