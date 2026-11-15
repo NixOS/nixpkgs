@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-cov";
     changelog = "https://github.com/pytest-dev/pytest-cov/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ jfly ];
   };
 }
