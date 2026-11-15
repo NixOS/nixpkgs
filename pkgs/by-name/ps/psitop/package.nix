@@ -28,5 +28,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ravi-arnan ];
     mainProgram = "psitop";
+    platforms = lib.platforms.linux;
   };
 })
