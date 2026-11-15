@@ -121,7 +121,11 @@ with haskellLib;
         };
       in
       {
-        cabal-install = withNewProcess (super.cabal-install.overrideScope processOverlay);
+        cabal-install = (super.cabal-install.overrideScope processOverlay).override {
+          process = self.process_1_6_30_0;
+          # GHC 9.14 ships semaphore-compat 1.0.0, cabal-install 3.18 needs >= 2.0.1
+          semaphore-compat = self.semaphore-compat_2_0_1;
+        };
         cabal-install-solver = dontCheck (super.cabal-install-solver.overrideScope processOverlay);
       }
     )
