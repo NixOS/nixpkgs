@@ -2241,9 +2241,9 @@ The following rules are desired to be respected:
 * Make sure libraries build for all Python interpreters.
   If it fails to build on some Python versions, consider disabling them by setting `disable = pythonAtLeast "3.x"` along with a comment.
 * The two parameters, `pyproject` and `build-system` are set to avoid the legacy setuptools/distutils build.
-* Only unversioned attributes (e.g. `pydantic`, but not `pydantic_1`) can be included in `dependencies`,
-  since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
-  without running into duplicate module name conflicts.
+* Due to `PYTHONPATH` limitations, we can only ever support a single version for libraries for each package without running into duplicate module name conflicts.
+  Therefore, if possible without breaking the client library, only unversioned attributes (e.g. `pydantic`, but not `pydantic_1`) should be included in its `dependencies`.
+  If this is not possible, all reverse-dependencies of the client library must be checked (e.g. with nixpkgs-review) to ensure that the [`pythonCatchConflictsHook`](#setup-hooks) finds no issues.
 * The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
 * Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
