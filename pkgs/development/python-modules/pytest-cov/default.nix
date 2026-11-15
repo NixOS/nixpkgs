@@ -7,7 +7,6 @@
   hatchling,
   hatch-fancy-pypi-readme,
   toml,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   dependencies = [
     coverage
     toml
-    tomli
   ];
 
   # xdist related tests fail with the following error
