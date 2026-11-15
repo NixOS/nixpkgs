@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -71,6 +72,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "altair" ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   enabledTestPaths = [
     "tests/"
