@@ -319,6 +319,7 @@ mapAliases {
   gpapi = throw "'gpapi' has been superseded by google-api-python-client"; # Added 2025-11-09
   gpgme = gpg; # added 2026-06-26
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
+  gpu-rir = gpurir; # added 2026-11-15
   gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
   gradient = throw "'gradient' has been removed because it was archived upstream. Upstream strongly recommends to migrate to pydo."; # Added 2026-10-15
   gradient-utils = throw "'gradient-utils' has been removed because it was archived upstream and unused in tree."; # Added 2026-10-15
