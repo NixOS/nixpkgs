@@ -116,11 +116,16 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Replace the installed copy of `leantar` with a symlink.
     ln -sf ${leangz}/bin/leantar $out/bin/leantar
+
+    wrapProgram $out/bin/lake \
+      --set-default LEAN_CC ${stdenv.cc}/bin/cc \
+      --set-default LEAN_AR ${stdenv.cc.bintools.bintools}/bin/ar
   '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
   doInstallCheck = true;
 
   meta = {
