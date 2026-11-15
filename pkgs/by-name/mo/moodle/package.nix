@@ -148,5 +148,8 @@ stdenv.mkDerivation rec {
     homepage = "https://moodle.org/";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    knownVulnerabilities = [
+      "Moodle has no listed maintainer and updates are not applied in a reasonable timeframe."
+    ];
   };
 }
