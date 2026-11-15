@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
@@ -8,15 +8,15 @@
   withVlAgent ? false,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.52.1";
+  version = "1.54.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V4TWpv72LJ0FUYruwXvhmCpOLQh5l+7Of7aJS8vF6J0=";
+    hash = "sha256-GyMbmWKBYdTSKdjvTLVI+YbPu/aFcwS1sMFZQ5p3Mec=";
   };
 
   vendorHash = null;
@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = lib.recurseIntoAttrs nixosTests.victorialogs;
-    updateScript = nix-update-script { extraArgs = [ "--version-regex=v(1\\.52\\.[0-9]+)" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
