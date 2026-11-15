@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   writeShellScriptBin,
@@ -11,7 +10,10 @@
 
   # buildInputs
   fontconfig,
+  libgit2,
   openssl,
+  sqlite,
+  zstd,
 
   redis,
   versionCheckHook,
@@ -52,7 +54,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     fontconfig
+    libgit2
     (lib.getDev openssl)
+    sqlite
+    zstd
   ];
 
   cargoHash = "sha256-MmMaeRA+4W78UBtj0G3UW2IgLJW1R5FrrvyGqU/YoCc=";
