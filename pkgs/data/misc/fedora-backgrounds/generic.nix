@@ -18,17 +18,24 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   postPatch = ''
-    for f in default/Makefile extras/Makefile; do
+    for f in ${
+      if lib.versionOlder version "42" then "default/Makefile extras/Makefile" else "Makefile"
+    }; do
       substituteInPlace $f \
         --replace-fail "usr/share" "share" \
         --replace-fail "/usr/bin/" "" \
         --replace-fail "/bin/" ""
     done
 
+    ${lib.optionalString (lib.versions.major version == "42") ''
+      substituteInPlace default/Makefile \
+        --replace-fail '$(MAGICK) $(OUTNAME) -alpha off $@' '$(CP) $(OUTNAME) $@'
+    ''}
+
     for f in $(find . -name '*.xml'); do
       substituteInPlace $f \
         --replace-fail "/usr/share" "$out/share"
-    done;
+    done
   '';
 
   installFlags = [
