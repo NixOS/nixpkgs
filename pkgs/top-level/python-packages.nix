@@ -208,6 +208,8 @@ self: super: with self; {
 
   aio-wattwaechter = callPackage ../development/python-modules/aio-wattwaechter { };
 
+  aioabrp = callPackage ../development/python-modules/aioabrp { };
+
   aioacaia = callPackage ../development/python-modules/aioacaia { };
 
   aioairctrl = callPackage ../development/python-modules/aioairctrl { };
