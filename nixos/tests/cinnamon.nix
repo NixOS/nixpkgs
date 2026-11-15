@@ -9,14 +9,14 @@
     {
       imports = [ ./common/user-account.nix ];
       services.xserver.enable = true;
-      services.xserver.desktopManager.cinnamon.enable = true;
+      services.desktopManager.cinnamon.enable = true;
 
       # We don't ship gnome-text-editor in Cinnamon module, we add this line mainly
       # to catch eval issues related to this option.
       environment.cinnamon.excludePackages = [ pkgs.gnome-text-editor ];
 
       # For the sessionPath subtest.
-      services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
+      services.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
 
       virtualisation.memorySize = 2047;
 

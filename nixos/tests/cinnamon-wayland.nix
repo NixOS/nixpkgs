@@ -9,7 +9,7 @@
     {
       imports = [ ./common/user-account.nix ];
       services.xserver.enable = true;
-      services.xserver.desktopManager.cinnamon.enable = true;
+      services.desktopManager.cinnamon.enable = true;
       services.displayManager = {
         autoLogin.enable = true;
         autoLogin.user = nodes.machine.users.users.alice.name;
@@ -19,7 +19,7 @@
       virtualisation.memorySize = 2047;
 
       # For the sessionPath subtest.
-      services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
+      services.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
     };
 
   enableOCR = true;

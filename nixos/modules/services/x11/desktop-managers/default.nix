@@ -36,7 +36,7 @@ in
     ../../desktop-managers/pantheon.nix
     ./surf-display.nix
     ./cde.nix
-    ./cinnamon.nix
+    ../../desktop-managers/cinnamon.nix
     ../../desktop-managers/budgie.nix
     ../../desktop-managers/lomiri.nix
     ../../desktop-managers/cosmic.nix

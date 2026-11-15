@@ -10,7 +10,7 @@ with lib;
 
 let
 
-  cfg = config.services.xserver.desktopManager.cinnamon;
+  cfg = config.services.desktopManager.cinnamon;
   serviceCfg = config.services.cinnamon;
 
   nixos-gsettings-overrides = pkgs.cinnamon-gsettings-overrides.override {
@@ -22,12 +22,19 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "cinnamon" ]
+      [ "services" "desktopManager" "cinnamon" ]
+    )
+  ];
+
   options = {
     services.cinnamon = {
       apps.enable = mkEnableOption "Cinnamon default applications";
     };
 
-    services.xserver.desktopManager.cinnamon = {
+    services.desktopManager.cinnamon = {
       enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {

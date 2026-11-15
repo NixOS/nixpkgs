@@ -26,7 +26,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - nixos/modules/services/x11/desktop-managers/cinnamon.nix
+              - nixos/modules/services/desktop-managers/cinnamon.nix
               - nixos/tests/cinnamon.nix
               - nixos/tests/cinnamon-wayland.nix
               - pkgs/by-name/ci/cinnamon/**/*

@@ -46,7 +46,7 @@
         # The site claims that it's also used for Xfce4 and MATE; consider adding those to the
         # default in the future.
         xappXdgDesktopPortalSupport =
-          prev.xappXdgDesktopPortalSupport or config.services.xserver.desktopManager.cinnamon.enable;
+          prev.xappXdgDesktopPortalSupport or config.services.desktopManager.cinnamon.enable;
 
         # Finally, if the `xdg.portal.enable` option is set somehow, use the `targetPkgs` function
         # to add those relevant packages in.
