@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "corrode-scanner";
-  version = "0.5.3";
+  version = "0.5.4";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ul0gic";
     repo = "corrode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ucMNdl4TIl4TnGrkQXxO9ZNkYXrDD5Kto8NbWeT3IKI=";
+    hash = "sha256-OMMDD/J1V33DpaNGJooiiCmbU+W11JweGs7fsb0XgR4=";
   };
 
-  cargoHash = "sha256-0iKzigRLfnepGs2DMnYEWA4FwfRUegu+i64EbE881Qs=";
+  cargoHash = "sha256-Pqs/hB2N59W8aiy/btWL1KQ68JPrczLXYX1deI4mdR0=";
 
   nativeBuildInputs = [ pkg-config ];
 
