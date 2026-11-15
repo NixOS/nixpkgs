@@ -9,19 +9,19 @@
   gettext,
   gtk3,
   glib,
-  common-licenses,
+  xapp,
   xapp-symbolic-icons,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bulky";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     tag = finalAttrs.version;
-    hash = "sha256-rUQ4GN8Pj7dXLbQBt99RmFk4rs+mFL/1taFJiTTVC2A=";
+    hash = "sha256-tEOB5K++yeDpGuV/HMVfB5XKq0O9U4OuaP3dsj2s2/Q=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (
       p: with p; [
         pygobject3
+        python-xapp
         setproctitle
         unidecode
       ]
@@ -42,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     gtk3
     glib
+    xapp
   ];
 
   postPatch = ''
     substituteInPlace usr/lib/bulky/bulky.py \
       --replace-fail "/usr/share/locale" "$out/share/locale" \
       --replace-fail /usr/share/bulky "$out/share/bulky" \
-      --replace-fail /usr/share/common-licenses "${common-licenses}/share/common-licenses" \
       --replace-fail __DEB_VERSION__  "${finalAttrs.version}"
   '';
 

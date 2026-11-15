@@ -9,9 +9,6 @@ mkProtonBinDerivation (finalAttrs: {
   pname = "luxtorpeda-bin";
   version = "77.1.0";
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   steamDisplayName = "Luxtorpeda";
 
   variants = {
