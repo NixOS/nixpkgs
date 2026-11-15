@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Clone of Guitar Hero and Rockband-style games";
     homepage = "https://clonehero.net";
+    changelog = "https://clonehero.net/releases/#:~:text=v${finalAttrs.version}%20(,)";
     license = lib.licenses.unfree;
     mainProgram = "clonehero";
     maintainers = with lib.maintainers; [
