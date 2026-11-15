@@ -1,0 +1,55 @@
+From a5cf0666d4c2403381370de563fbd54362757eea Mon Sep 17 00:00:00 2001
+From: kira <67888720+koffydrop@users.noreply.github.com>
+Date: Wed, 23 Sep 2026 12:15:12 -0300
+Subject: [PATCH] fix: replace deprecated obs_properties_add_button
+
+https://docs.obsproject.com/reference-properties#c.obs_properties_add_button
+---
+ CMakeLists.txt    | 8 ++++++++
+ src/plugin-main.c | 5 +++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d2db12c..1c7abf3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,7 @@
+ cmake_minimum_required(VERSION 3.28...3.30)
+ 
+ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/bootstrap.cmake" NO_POLICY_SCOPE)
++include(CheckSymbolExists)
+ 
+ project(${_name} VERSION ${_version})
+ 
+@@ -15,6 +16,13 @@ add_library(${CMAKE_PROJECT_NAME} MODULE)
+ 
+ find_package(libobs REQUIRED)
+ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE OBS::libobs)
++set(CMAKE_REQUIRED_LIBRARIES OBS::libobs)
++
++unset(OBS_PROPERTIES_ADD_BUTTON2 CACHE)
++check_symbol_exists(obs_properties_add_button2 "obs-properties.h" OBS_PROPERTIES_ADD_BUTTON2)
++if(OBS_PROPERTIES_ADD_BUTTON2)
++  target_compile_definitions("${CMAKE_PROJECT_NAME}" PRIVATE OBS_PROPERTIES_ADD_BUTTON2=1)
++endif()
+ 
+ if(ENABLE_FRONTEND_API)
+   find_package(obs-frontend-api REQUIRED)
+diff --git a/src/plugin-main.c b/src/plugin-main.c
+index 233a98b..b78c24b 100644
+--- a/src/plugin-main.c
++++ b/src/plugin-main.c
+@@ -414,8 +414,13 @@ static obs_properties_t *dvd_source_properties(void *data)
+ 							0.10f, 1000.f, 0.25);
+ 			obs_properties_add_float_slider(props, S_SCALE, T_SCALE,
+ 							0.10f, 10.f, 0.25);
++#ifdef OBS_PROPERTIES_ADD_BUTTON2
++			obs_properties_add_button2(props, S_RESET, T_RESET,
++						  reset_logo_position, data);
++#else
+ 			obs_properties_add_button(props, S_RESET, T_RESET,
+ 						  reset_logo_position);
++#endif
+ 			obs_property_set_modified_callback(
+ 				obs_properties_get(props, "file"),
+ 				image_path_changed);
