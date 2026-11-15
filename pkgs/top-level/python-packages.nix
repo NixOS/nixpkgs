@@ -9411,8 +9411,6 @@ self: super: with self; {
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
 
-  kuzu = callPackage ../development/python-modules/kuzu { };
-
   kvf = callPackage ../development/python-modules/kvf { };
 
   l18n = callPackage ../development/python-modules/l18n { };
