@@ -13,6 +13,7 @@
       ];
     "abrp" =
       ps: with ps; [
+        aioabrp
         aiohasupervisor
         aiousbwatcher
         bleak
@@ -38,7 +39,7 @@
         pyturbojpeg
         securetar
         serialx
-      ]; # missing inputs: aioabrp
+      ];
     "acaia" =
       ps: with ps; [
         aioacaia
@@ -8819,6 +8820,7 @@
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
     "abode"
+    "abrp"
     "acaia"
     "accuweather"
     "acmeda"
