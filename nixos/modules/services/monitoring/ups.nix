@@ -603,7 +603,12 @@ in
       {
         enable = cfg.upsmon.enable;
         description = "Uninterruptible Power Supplies (Monitor)";
-        after = [ "network.target" ];
+        after = [
+          "local-fs.target"
+          "network.target"
+          "upsd.service"
+        ];
+        wants = [ "upsd.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "forking";
@@ -627,9 +632,13 @@ in
         enable = cfg.upsd.enable;
         description = "Uninterruptible Power Supplies (Daemon)";
         after = [
+          "local-fs.target"
           "network.target"
-          "upsmon.service"
+          "upsdrv.service"
         ];
+        wants = [ "upsdrv.service" ];
+        requires = [ "network.target" ];
+        before = [ "upsmon.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "forking";
@@ -651,7 +660,7 @@ in
     systemd.services.upsdrv = {
       enable = cfg.upsd.enable;
       description = "Uninterruptible Power Supplies (Register all UPS)";
-      after = [ "upsd.service" ];
+      after = [ "local-fs.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
