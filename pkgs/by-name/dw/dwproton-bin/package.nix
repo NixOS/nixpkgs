@@ -8,14 +8,14 @@ mkProtonBinDerivation (finalAttrs: {
   steamDisplayName = "dwproton";
 
   pname = "dwproton-bin";
-  version = "dwproton-11.0-16";
+  version = "dwproton-11.0-17";
 
   variants = {
     "x86_64-linux" = {
       toolName = "${finalAttrs.version}-x86_64";
       src = fetchzip {
         url = "https://dawn.wine/dawn-winery/dwproton/releases/download/${finalAttrs.version}/${finalAttrs.version}-x86_64.tar.xz";
-        hash = "sha256-fNAT/PRoWE5WcjGmoZYjPXx+wF0rlKuUXWQk0+P7s7U=";
+        hash = "sha256-58pd22pNMz+lyp7xYn/nxE6Kere4gh3OiHUwuGsoXfk=";
       };
     };
   };
