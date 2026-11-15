@@ -28,7 +28,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytator";
-  version = "1.5.1";
+  version = "1.6.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "faetalize";
     repo = "waytator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yzHS4Xy6FgVEqx4zDkr1OXQRz6xht7ILkjKUnsaXm/E=";
+    hash = "sha256-u4YP5zX1pMw5Efa6b/pmcLhXNB5UbCj1gNyCDialTTU=";
   };
 
   depsBuildBuild = [ pkg-config ];
