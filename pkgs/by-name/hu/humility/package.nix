@@ -6,6 +6,7 @@
   libftdi,
   cargo-readme,
   pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage {
@@ -19,6 +20,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     libusb1
     libftdi
+    zstd
   ];
 
   src = fetchFromGitHub {
