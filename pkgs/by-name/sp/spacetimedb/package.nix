@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   callPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -58,28 +57,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
+  __darwinAllowLocalNetworking = true;
+
   checkFlags = [
     # require wasm32-unknown-unknown target
     "--skip=codegen"
     "--skip=publish"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # flakes on darwin in nix build sandbox, timing out waiting for listen addr
-    "--skip=cli_can_ping_spacetimedb_on_disk"
-    "--skip=cli_can_publish_spacetimedb_on_disk"
-    "--skip=cli_can_publish_no_conflict_does_not_delete_data"
-    "--skip=cli_can_publish_no_conflict_with_delete_data_flag"
-    "--skip=cli_can_publish_no_conflict_without_delete_data_flag"
-    "--skip=cli_can_publish_with_automigration_change"
-    "--skip=cli_cannot_publish_automigration_change_without_yes_break_clients"
-    "--skip=cli_can_publish_automigration_change_with_on_conflict_and_yes_break_clients"
-    "--skip=cli_cannot_publish_automigration_change_with_on_conflict_without_yes_break_clients"
-    "--skip=cli_can_publish_automigration_change_with_delete_data_always_without_yes_break_clients"
-    "--skip=cli_can_publish_automigration_change_with_delete_data_always_and_yes_break_clients"
-    "--skip=cli_cannot_publish_breaking_change_without_flag"
-    "--skip=cli_can_publish_breaking_change_with_delete_data_flag"
-    "--skip=cli_can_publish_breaking_change_with_on_conflict_flag"
   ];
+
+  # system-configuration needs configd: "Attempted to create a NULL object."
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
+  '';
 
   doInstallCheck = true;
 
