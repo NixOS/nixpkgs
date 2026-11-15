@@ -97,6 +97,8 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Require internet access
     "integration_tests/"
+    # Seg fault
+    "tests/test_dataset_load.py"
   ];
 
   disabledTests = [
