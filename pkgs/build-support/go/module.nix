@@ -273,12 +273,75 @@ lib.extendMkDerivation {
           ''
         );
 
+      # Both buildPhase and configurePhase use these functions. Defining
+      # it in it's own phase means they will always be available when needed,
+      # without being bound to a specific phase.
+      # (These phases run even if buildPhase is disabled)
+      # The downside is that `nix develop` users will need to run it manually.
+      preBuildPhases = lib.optionals (!(finalAttrs.dontBuild or false) || (finalAttrs.doCheck or true)) [
+        "defineFunctionsPhase"
+      ];
+
+      defineFunctionsPhase = ''
+        buildGoDir() {
+          local cmd="$1" dir="$2"
+
+          declare -a flags
+          flags+=(''${tags:+-tags=$(concatStringsSep "," tags)})
+          flags+=(''${ldflags:+-ldflags="''${ldflags[*]}"})
+          flags+=("-p" "$NIX_BUILD_CORES")
+          if (( "''${NIX_DEBUG:-0}" >= 1 )); then
+            flags+=(-x)
+          fi
+
+          if [ "$cmd" = "test" ]; then
+            flags+=(-vet=off)
+            concatTo flags checkFlags
+          fi
+
+          local OUT
+          if ! OUT="$(go $cmd "''${flags[@]}" $dir 2>&1)"; then
+            if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
+              echo "$OUT" >&2
+              return 1
+            fi
+          fi
+          if [ -n "$OUT" ]; then
+            echo "$OUT" >&2
+          fi
+          return 0
+        }
+
+        getGoDirs() {
+          local -r type="$1"
+
+          # Support structuredAttrs, they are not space separated
+          local -a subPackagesArray
+          concatTo subPackagesArray subPackages
+
+          # Outputs each element prefixed with './' if the array is not empty
+          if [[ ''${#subPackagesArray[@]} -gt 0 ]]; then
+            echo "''${subPackagesArray[*]/#/./}"
+          else
+            find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
+          fi
+        }
+      '';
+
       buildPhase =
         args.buildPhase or (
           lib.warnIf (builtins.elem "-buildid=" ldflags)
             "`-buildid=` is set by default as ldflag by buildGoModule"
             ''
               runHook preBuild
+
+              # Warn `nix develop` users they haven't properly ran defineFunctionsPhase
+              if ! declare -F getGoDirs >/dev/null; then
+                echo "getGoDirs is necessary but not defined."
+                echo "If you're using these phases from the CLI, you most likely need to execute 'runPhase defineFunctionsPhase'."
+                echo "Otherwise, this might be a bug. Consider creating an issue to report it."
+                return 1
+              fi
 
               exclude='\(/_\|examples\|Godeps\|testdata'
               if [[ -n "$excludedPackages" ]]; then
@@ -288,50 +351,6 @@ lib.extendMkDerivation {
                 exclude+='\|'"$excludedAlternates"
               fi
               exclude+='\)'
-
-              buildGoDir() {
-                local cmd="$1" dir="$2"
-
-                declare -a flags
-                flags+=(''${tags:+-tags=$(concatStringsSep "," tags)})
-                flags+=(''${ldflags:+-ldflags="''${ldflags[*]}"})
-                flags+=("-p" "$NIX_BUILD_CORES")
-                if (( "''${NIX_DEBUG:-0}" >= 1 )); then
-                  flags+=(-x)
-                fi
-
-                if [ "$cmd" = "test" ]; then
-                  flags+=(-vet=off)
-                  concatTo flags checkFlags
-                fi
-
-                local OUT
-                if ! OUT="$(go $cmd "''${flags[@]}" $dir 2>&1)"; then
-                  if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
-                    echo "$OUT" >&2
-                    return 1
-                  fi
-                fi
-                if [ -n "$OUT" ]; then
-                  echo "$OUT" >&2
-                fi
-                return 0
-              }
-
-              getGoDirs() {
-                local -r type="$1"
-
-                # Support structuredAttrs, they are not space separated
-                local -a subPackagesArray
-                concatTo subPackagesArray subPackages
-
-                # Outputs each element prefixed with './' if the array is not empty
-                if [[ ''${#subPackagesArray[@]} -gt 0 ]]; then
-                  echo "''${subPackagesArray[*]/#/./}"
-                else
-                  find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
-                fi
-              }
 
               if [ -z "$enableParallelBuilding" ]; then
                   export NIX_BUILD_CORES=1
@@ -372,6 +391,14 @@ lib.extendMkDerivation {
       checkPhase =
         args.checkPhase or ''
           runHook preCheck
+
+          # Warn `nix develop` users they haven't properly ran defineFunctionsPhase
+          if ! declare -F getGoDirs >/dev/null; then
+            echo "getGoDirs is necessary but not defined."
+            echo "If you're using these phases from the CLI, you most likely need to execute 'runPhase defineFunctionsPhase'."
+            return 1
+          fi
+
           # We do not set trimpath for tests, in case they reference test assets
           export GOFLAGS=''${GOFLAGS//-trimpath/}
 
