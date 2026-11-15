@@ -12,6 +12,7 @@
   makeWrapper,
   nix-update-script,
   pkg-config,
+  soundfont-fluid,
   versionCheckHook,
   writableTmpDirAsHomeHook,
   zlib,
@@ -34,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace tools/updaterevision/UpdateRevision.cmake \
       --replace-fail "<unknown version>" "${finalAttrs.src.tag}"
+    substituteInPlace src/id_sd.cpp \
+      --replace-fail "/usr/share/sounds/sf2/FluidR3_GM.sf2" "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
   '';
 
   nativeBuildInputs = [
