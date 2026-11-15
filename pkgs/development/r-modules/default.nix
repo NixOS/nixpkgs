@@ -3065,6 +3065,12 @@ let
       };
     });
 
+    terra = old.terra.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
     tesseract = old.tesseract.overrideAttrs (_: {
       preConfigure = ''
         substituteInPlace configure \
