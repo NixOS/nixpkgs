@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-AyO5XgIicG9zs9RXg6JgrIvqgq7f7LGSWVUk9BCa7EM=";
+  cargoHash = "sha256-2RJ1ZDQJ+j0sUhGaqEisiA3H3wEiz9l4CEYxzO6ktLg=";
 
   buildInputs = [
     hwdata
