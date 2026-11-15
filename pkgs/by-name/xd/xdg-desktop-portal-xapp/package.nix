@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  gettext,
   meson,
   ninja,
   pkg-config,
@@ -17,16 +18,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-xapp";
-  version = "1.1.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xdg-desktop-portal-xapp";
     rev = finalAttrs.version;
-    hash = "sha256-5gJmWj15jUVGhCf8jOl/eXHVisFdegbbx6pqz6btNTM=";
+    hash = "sha256-k3K635j4Et1L+lSmKNHATx0ZAmD8r3Z9K1CpcrBtRNc=";
   };
 
   nativeBuildInputs = [
+    gettext
     meson
     ninja
     pkg-config
