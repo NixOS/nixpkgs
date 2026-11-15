@@ -62,11 +62,6 @@ let
         version = "0.13.0";
         inherit (pkgs.libsForQt5) qtbase;
       };
-      libqtxdg_3_12 = callPackage ./libqtxdg {
-        version = "3.12.0";
-        lxqt-build-tools = lxqt-build-tools_0_13;
-        inherit (pkgs.libsForQt5) qtbase qtsvg;
-      };
       libfm-qt_1_4 = callPackage ./libfm-qt {
         version = "1.4.0";
         lxqt-build-tools = lxqt-build-tools_0_13;
