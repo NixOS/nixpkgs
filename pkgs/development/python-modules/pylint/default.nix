@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylint";
-  version = "4.1.3";
+  version = "4.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
