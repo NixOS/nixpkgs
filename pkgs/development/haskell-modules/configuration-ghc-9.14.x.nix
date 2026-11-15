@@ -101,6 +101,34 @@ with haskellLib;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_14_1_20251220;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_14_2_0;
 
+  # Cabal 3.18 excludes process 1.6.26.1, which ships with GHC 9.14.1.
+  # Use a newer process for Cabal 3.18 and for everything in the
+  # cabal-install closure that depends on process directly.
+  Cabal_3_18_1_0 = super.Cabal_3_18_1_0.override {
+    process = self.process_1_6_30_0;
+  };
+  inherit
+    (
+      let
+        withNewProcess = pkg: pkg.override { process = self.process_1_6_30_0; };
+        processOverlay = cself: csuper: {
+          echo = withNewProcess csuper.echo;
+          edit-distance = withNewProcess csuper.edit-distance;
+          hooks-exe = withNewProcess csuper.hooks-exe;
+          open-browser = withNewProcess csuper.open-browser;
+          # Test suites depend on tasty, which links the GHC-bundled process
+          hackage-security = dontCheck csuper.hackage-security;
+        };
+      in
+      {
+        cabal-install = withNewProcess (super.cabal-install.overrideScope processOverlay);
+        cabal-install-solver = dontCheck (super.cabal-install-solver.overrideScope processOverlay);
+      }
+    )
+    cabal-install
+    cabal-install-solver
+    ;
+
   ormolu = doDistribute self.ormolu_0_9_0_0;
   fourmolu = doDistribute self.fourmolu_0_20_1_0;
 
