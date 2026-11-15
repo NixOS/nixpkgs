@@ -7,6 +7,7 @@
   npmHooks,
   fetchNpmDeps,
   callPackage,
+  dart-sass,
   makeWrapper,
   gcc,
 }:
@@ -41,6 +42,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs = [
     nodejs_26
     nodejs_26.python
+    dart-sass
     gcc
     (npmHooks.override { nodejs = nodejs_26; }).npmConfigHook
     makeWrapper
@@ -56,6 +58,10 @@ buildDotnetModule (finalAttrs: {
 
   preBuild = ''
     cd code/frontend
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail \
+        'compilerCommand = (() => {' \
+        'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
     npm run build
     cd ../..
 
