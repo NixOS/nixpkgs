@@ -3118,6 +3118,12 @@ let
       '';
     });
 
+    vapour = old.vapour.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
     vegan3d = old.vegan3d.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         RGL_USE_NULL = "true";
