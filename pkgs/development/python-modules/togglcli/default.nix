@@ -25,6 +25,7 @@
   pytest-mock,
   pytestCheckHook,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -68,6 +69,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/toggl";
 
