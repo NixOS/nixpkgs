@@ -137,6 +137,19 @@ with haskellLib;
   # https://github.com/ndmitchell/hlint/issues/1672
   hlint = markBroken super.hlint;
 
+  # hoogle only needs the hackage-revdeps library, which works with the
+  # Cabal bundled with GHC. Its executables depend on cabal-install 3.18,
+  # which uses a newer process than optparse-applicative, so drop them.
+  hoogle = super.hoogle.override {
+    hackage-revdeps = overrideCabal (drv: {
+      isExecutable = false;
+      executableHaskellDepends = [ ];
+      postPatch = drv.postPatch or "" + ''
+        sed -i '/^executable /,$d' hackage-revdeps.cabal
+      '';
+    }) super.hackage-revdeps;
+  };
+
   ormolu = doDistribute self.ormolu_0_9_0_0;
   fourmolu = doDistribute self.fourmolu_0_20_1_0;
 
