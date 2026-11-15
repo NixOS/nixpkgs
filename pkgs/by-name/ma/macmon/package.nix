@@ -38,7 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/vladkens/macmon/releases/tag/${finalAttrs.src.tag}";
     platforms = [ "aarch64-darwin" ];
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ schrobingus ];
+    maintainers = with lib.maintainers; [
+      baptiste0928
+      schrobingus
+    ];
     mainProgram = "macmon";
   };
 })
