@@ -38,8 +38,6 @@
   sphinx-design,
   sphinx-gallery,
   sphinx-intl,
-  pytest,
-  pytest-xvfb,
 
   # tests
   pytestCheckHook,
@@ -107,10 +105,6 @@ buildPythonPackage (finalAttrs: {
       plotpy
       pyqt5
       qtpy
-    ];
-    test = [
-      pytest
-      pytest-xvfb
     ];
   };
 
