@@ -184,6 +184,9 @@ with haskellLib;
   # 2026-11-15: base <4.22, containers <0.8
   cabal-plan = doJailbreak super.cabal-plan;
 
+  # 2026-11-15: containers <0.8
+  glib = doJailbreak super.glib;
+
   #
   # Test suite issues
   #
