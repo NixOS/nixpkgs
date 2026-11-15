@@ -33,6 +33,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zcbor" ];
 
   meta = {
+    # upstream requires cbor<6.0.0
+    # patch is unreleased and doesn't apply to 0.9.2
+    # https://github.com/nordicsemi/zcbor/issues/667
+    broken = true;
     description = "Low footprint CBOR library in the C language (C++ compatible), tailored for use in microcontrollers";
     mainProgram = "zcbor";
     homepage = "https://pypi.org/project/zcbor/";
