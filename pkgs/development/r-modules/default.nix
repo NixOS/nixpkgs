@@ -3019,6 +3019,12 @@ let
       '';
     });
 
+    sf = old.sf.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
     slfm = old.slfm.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
