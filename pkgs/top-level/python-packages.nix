@@ -7326,9 +7326,9 @@ self: super: with self; {
 
   gptcache = callPackage ../development/python-modules/gptcache { };
 
-  gpu-rir = callPackage ../development/python-modules/gpu-rir { };
-
   gpuctypes = callPackage ../development/python-modules/gpuctypes { };
+
+  gpurir = callPackage ../development/python-modules/gpurir { };
 
   gpustat = callPackage ../development/python-modules/gpustat { };
 
