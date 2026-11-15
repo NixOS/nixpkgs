@@ -32,7 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/acsandmann/rift";
     changelog = "https://github.com/acsandmann/rift/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ eveeifyeve ];
+    maintainers = with lib.maintainers; [
+      KristijanZic
+      eveeifyeve
+    ];
     mainProgram = "rift";
     platforms = lib.platforms.darwin;
   };
