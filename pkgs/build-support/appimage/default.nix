@@ -155,6 +155,7 @@ rec {
         bzip2
         zlib
         gdk-pixbuf
+        libgpg-error
 
         libxinerama
         libxdamage
