@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarp";
-  version = "4.0.0";
+  version = "4.0.2";
   src = fetchFromGitHub {
     owner = "robotology";
     repo = "yarp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-na823w5nRNbxcmdmaceoTIuUbCBNPIEjWMMMReKRTUg=";
+    hash = "sha256-psXd+7BqK8/OvK459i3m2+0rwYgi0bu7bgaLXgL3xmo=";
   };
 
   nativeBuildInputs = [ cmake ];
