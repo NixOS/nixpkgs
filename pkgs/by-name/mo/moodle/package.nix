@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "5.1.3";
+  version = "5.3.1";
 
   versionParts = lib.take 2 (lib.splitVersion version);
   # 4.2 -> 402, 3.11 -> 311
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.moodle.org/download.php/direct/stable${stableVersion}/${pname}-${version}.tgz";
-    hash = "sha256-7N2aPfPdZu4WXmZeetup7hL/8XdCcH+5NwTdHxvG0qk=";
+    hash = "sha256-gg7ivNiazGuR3yVbIBC7urEI8plSq3iJWnnE/qv1Qec=";
   };
 
   phpConfig = writeText "config.php" ''
@@ -148,5 +148,8 @@ stdenv.mkDerivation rec {
     homepage = "https://moodle.org/";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    knownVulnerabilities = [
+      "Moodle has no listed maintainer and updates are not applied in a reasonable timeframe."
+    ];
   };
 }

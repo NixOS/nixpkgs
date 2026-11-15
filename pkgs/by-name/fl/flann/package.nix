@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     pkgConfigModules = [ "flann" ];
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })

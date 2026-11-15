@@ -1186,11 +1186,14 @@ in
     ];
   };
 
-  rustaceanvim = prev.rustaceanvim.overrideAttrs (old: {
-    postPatch = (old.postPatch or "") + ''
-      substituteInPlace spec/integration/lsp_spec.lua \
-        --replace-fail '#[cfg(target_os = "linux")]' '#[cfg(any(target_os = "linux", target_os = "macos"))]'
-    '';
+  rustaceanvim = prev.rustaceanvim.overrideAttrs {
+    patches = [
+      (fetchpatch {
+        name = "rustaceanvim-macos-tests.patch";
+        url = "https://github.com/mrcjkb/rustaceanvim/commit/1d19d8112db57f376e70b24780fb7d15612f4669.patch";
+        hash = "sha256-7Gw4QgVBm7dIMiznGDejQ+aNq+DQEdsxkJ35T5A/EN4=";
+      })
+    ];
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
@@ -1204,7 +1207,7 @@ in
     preCheck = ''
       LUA_PATH="${vimPlugins.nvim-dap}/lua/?.lua;${vimPlugins.nvim-dap}/lua/?/init.lua;$LUA_PATH"
     '';
-  });
+  };
 
   sofa = prev.sofa.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs ++ [

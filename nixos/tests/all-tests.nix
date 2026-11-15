@@ -2020,7 +2020,6 @@ in
   watt = runTest ./watt.nix;
   webhook = runTest ./webhook.nix;
   weblate = runTest ./web-apps/weblate.nix;
-  wg-access-server = runTest ./wg-access-server.nix;
   whisparr_2 = runTest {
     imports = [ ./whisparr.nix ];
     _module.args.getPackage = pkgs: pkgs.whisparr_2;

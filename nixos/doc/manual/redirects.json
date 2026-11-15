@@ -1013,6 +1013,9 @@
   "module-pelican-wings-setup": [
     "index.html#module-pelican-wings-setup"
   ],
+  "module-pelican-wings-podman": [
+    "index.html#module-pelican-wings-podman"
+  ],
   "module-pelican-wings-traefik": [
     "index.html#module-pelican-wings-traefik"
   ],

@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/Annex-Engineering/klipper_estimator/releases/tag/v${finalAttrs.version}";
     mainProgram = "klipper_estimator";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
   };
 })

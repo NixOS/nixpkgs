@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://build2.org/";
     downloadPage = "https://github.com/build2/libpkg-config";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ AAAAAASomeThingsFailToEvaluate ];
     platforms = lib.platforms.all;
   };
 })

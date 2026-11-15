@@ -135,7 +135,7 @@ let
         license = lib.licenses.agpl3Plus;
         maintainers = with lib.maintainers; [
           cab404
-          tmarkus
+          AAAAAASomeThingsFailToEvaluate
         ];
         mainProgram = "superslicer";
       };
