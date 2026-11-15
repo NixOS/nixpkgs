@@ -52,7 +52,7 @@ let
 in
 {
   jetty_12 = generic {
-    version = "12.1.14";
-    hash = "sha256-8mm3uYaRpIZH5UylvOnRBCwOtfEqCIeHmXT0GPcLqiM=";
+    version = "12.1.15";
+    hash = "sha256-3CBUCJqrlJXMpUjuZ75JHNcQAj2s+TZYcMk6iJM8KmI=";
   };
 }
