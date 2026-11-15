@@ -16,6 +16,7 @@
   pkg-config,
   rustPlatform,
   stdenv,
+  sqlite,
   udev,
   wrapGAppsHook4,
 }:
@@ -50,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
     libxkbcommon.dev
     pixman
+    sqlite
     udev
 
     # for generating libcava bindings
