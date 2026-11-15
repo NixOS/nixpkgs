@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DTEV_DEPLOY=1"
+    "-DTEV_CREATE_METAINFO=1"
   ];
 
   meta = {

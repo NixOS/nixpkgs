@@ -95,6 +95,10 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
+  postInstall = lib.optionalString (stdenv.hostPlatform.isLinux && buildClient) ''
+    install -Dm644 ../data/quassel${lib.optionalString client "client"}.appdata.xml -t $out/share/metainfo
+  '';
+
   postFixup =
     lib.optionalString enableDaemon ''
       wrapProgram "$out/bin/quasselcore" --suffix PATH : "${qt6.qtbase}/bin"

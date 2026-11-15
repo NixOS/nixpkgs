@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
+  postInstall = ''
+    install -Dm644 ../src/data/core/fun.vnote.app.VNote.metainfo.xml -t $out/share/metainfo
+  '';
+
   meta = {
     homepage = "https://vnotex.github.io/vnote";
     description = "Pleasant note-taking platform";

@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     curl
   ];
 
+  postInstall = ''
+    install -Dm644 $src/dist/linux/share/metainfo/org.dhewm3.Dhewm3.metainfo.xml -t $out/share/metainfo
+  '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "dhewm3";
