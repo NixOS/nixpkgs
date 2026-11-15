@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  aws-lc,
   installShellFiles,
   pkg-config,
   openssl,
@@ -50,10 +51,10 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildInputs = [ aws-lc ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   preConfigure = ''
     mkdir -p crates/librqbit/webui/dist
