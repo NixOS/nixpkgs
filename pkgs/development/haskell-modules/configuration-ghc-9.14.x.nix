@@ -223,6 +223,9 @@ with haskellLib;
   # 2026-11-15: containers <0.8
   glib = doJailbreak super.glib;
 
+  # 2026-11-15: containers <0.8
+  pango = doJailbreak super.pango;
+
   #
   # Test suite issues
   #
