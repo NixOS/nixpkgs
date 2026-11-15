@@ -181,6 +181,9 @@ with haskellLib;
   # https://github.com/obsidiansystems/dependent-map/issues/59
   dependent-map = doJailbreak super.dependent-map;
 
+  # 2026-11-15: base <4.22, containers <0.8
+  cabal-plan = doJailbreak super.cabal-plan;
+
   #
   # Test suite issues
   #
