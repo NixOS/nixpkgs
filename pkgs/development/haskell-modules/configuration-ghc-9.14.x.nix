@@ -133,6 +133,10 @@ with haskellLib;
     cabal-install-solver
     ;
 
+  # hlint does not support GHC 9.14 yet, it requires ghc-lib-parser 9.12
+  # https://github.com/ndmitchell/hlint/issues/1672
+  hlint = markBroken super.hlint;
+
   ormolu = doDistribute self.ormolu_0_9_0_0;
   fourmolu = doDistribute self.fourmolu_0_20_1_0;
 
