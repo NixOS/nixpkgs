@@ -7,6 +7,9 @@
   nix-update-script,
 }:
 
+let
+  KDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+in
 stdenv.mkDerivation rec {
   pname = "qc71_laptop";
   version = "0-unstable-2025-01-07";
@@ -22,14 +25,18 @@ stdenv.mkDerivation rec {
 
   makeFlags = kernelModuleMakeFlags ++ [
     "VERSION=${version}"
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "KDIR=${KDIR}"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=extra"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D qc71_laptop.ko -t $out/lib/modules/${kernel.modDirVersion}/extra
-    runHook postInstall
-  '';
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${KDIR}"
+    "M=$(PWD)"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
