@@ -385,6 +385,8 @@ in
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
     services.udev.packages = cfg.drivers;
 
+    services.colord.enable = lib.mkDefault true;
+
     # Allow passwordless printer admin for members of wheel group
     security.polkit.extraConfig = mkIf polkitEnabled ''
       polkit.addRule(function(action, subject) {
