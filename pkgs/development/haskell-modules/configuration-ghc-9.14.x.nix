@@ -102,7 +102,7 @@ with haskellLib;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_14_2_0;
 
   ormolu = doDistribute self.ormolu_0_9_0_0;
-  fourmolu = doDistribute self.fourmolu_0_20_1_0;
+  fourmolu = doDistribute self.fourmolu_0_21_0_0;
 
   inherit
     (
