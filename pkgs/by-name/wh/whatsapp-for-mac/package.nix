@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-mac";
-  version = "2.26.40.20";
+  version = "2.26.45.23";
 
   src = fetchzip {
     extension = "zip";
     name = "WhatsApp.app";
     url = "https://web.whatsapp.com/desktop/mac_native/release/?version=${finalAttrs.version}&extension=zip&configuration=Release&branch=master";
-    hash = "sha256-WN2mOYL/rQgStXIgV4YqC8mGAKdQXPY0a4qeawnnJjA=";
+    hash = "sha256-yuTL87qBBrCIhQdCMQn0us7ajNaNsnWOIOOa2EQLxY8=";
   };
 
   dontConfigure = true;
@@ -51,7 +51,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Native desktop client for WhatsApp";
     homepage = "https://www.whatsapp.com/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ iivusly ];
+    maintainers = with lib.maintainers; [
+      iivusly
+      iamppborah
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
