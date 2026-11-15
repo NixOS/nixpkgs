@@ -2596,6 +2596,12 @@
     githubId = 258112064;
     name = "Arthur Ficial";
   };
+  arthurk = {
+    email = "arthur@arthurkoziel.com";
+    github = "arthurk";
+    githubId = 23406;
+    name = "Arthur Koziel";
+  };
   arthurteisseire = {
     email = "arthurteisseire33@gmail.com";
     github = "arthurteisseire";
