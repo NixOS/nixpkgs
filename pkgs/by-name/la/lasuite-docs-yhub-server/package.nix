@@ -1,6 +1,5 @@
 {
   lib,
-  applyPatches,
   fetchFromGitHub,
   stdenv,
   fetchYarnDeps,
@@ -16,17 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lasuite-docs-yhub-server";
   version = "6.1.0";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "suitenumerique";
-      repo = "docs";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-H43DGVYqUnhi3K7hKZhJBZ5Lfx2RczB7S9yO8Oe19ZQ=";
-    };
-
-    patches = [
-      ./forked-yhub.patch
-    ];
+  src = fetchFromGitHub {
+    owner = "suitenumerique";
+    repo = "docs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H43DGVYqUnhi3K7hKZhJBZ5Lfx2RczB7S9yO8Oe19ZQ=";
   };
 
   strictDeps = true;
@@ -36,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/src/yhub-server/yarn.lock";
-    hash = "sha256-eoQ6LO+vqKd0HZGkI5Q0GU8CHLH+LN3yy2vM3bM4iPI=";
+    hash = "sha256-OSGTfwVnQ8MVV4GRuj9O5zY1/C8LyMbdybj1SqQB/Qg=";
   };
 
   nativeBuildInputs = [
@@ -50,11 +43,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnBuildScript = "build";
 
-  installPhase = ''
+  installPhase = let
+    yhubPatches = [
+      ./allow-db-configuration-without-postgres-conf-parameter.patch
+    ];
+  in ''
     runHook preInstall
 
     mkdir -p $out/{lib,bin}
     cp -r dist node_modules $out/lib
+
+    pushd $out/lib/node_modules/@y/hub
+    ${lib.concatStringsSep "\n" (map (patch: "patch --strip=1 -i ${patch}") yhubPatches)}
+    popd
 
     makeWrapper ${lib.getExe nodejs} "$out/bin/yhub-server" \
       --add-flags "--import $out/lib/dist/sentry.js $out/lib/dist/server.js" \

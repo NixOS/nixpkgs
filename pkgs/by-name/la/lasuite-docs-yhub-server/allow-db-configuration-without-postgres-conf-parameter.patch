@@ -1,0 +1,144 @@
+From 7f5d84ec8e4f6531c4e38db7c850eab86786d068 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sun, 25 Oct 2026 18:05:42 +0100
+Subject: [PATCH] Allow DB configuration without `postgres` conf parameter
+
+The postgres library also allows being configured via env-vars, i.e.
+`PGHOST`, `PGPASS` et al.. This is useful since that way one can
+actually configure a DB connection that uses UNIX sockets rather than
+TCP sockets.
+---
+ README.md          |  3 +++
+ bin/conf.js        |  6 +++++-
+ bin/init-db.js     |  4 ++--
+ src/index.js       |  5 +----
+ src/persistence.js | 18 +++++++++++++-----
+ src/types.js       |  2 +-
+ 6 files changed, 25 insertions(+), 13 deletions(-)
+
+diff --git a/README.md b/README.md
+index 4c4a403..b71c442 100644
+--- a/README.md
++++ b/README.md
+@@ -198,6 +198,9 @@ S3_YHUB_BUCKET=yhub               # Bucket for document storage
+ POSTGRES=postgres://user:pass@localhost:5432/yhub
+ ```
+ 
++For configuration via UNIX domain-socket it's recommended to leave `POSTGRES`
++unset and use the [environment variables from the 'postgres'-library instead.](https://github.com/porsager/postgres#environmental-variables)
++
+ ### Optional Settings
+ 
+ ```bash
+diff --git a/bin/conf.js b/bin/conf.js
+index 930d35e..0308a21 100644
+--- a/bin/conf.js
++++ b/bin/conf.js
+@@ -38,7 +38,11 @@ export const conf = {
+     taskDebounce: number.parseInt(env.getConf('redis-task-debounce') || '10000'),
+     minMessageLifetime: number.parseInt(env.getConf('redis-min-message-lifetime') || '60000')
+   },
+-  postgres: env.ensureConf('postgres'),
++  // Postgres is optional (i.e. no ensureConf) on purpose since it's also
++  // possible to configure the 'postgres' library via environment variables,
++  // i.e. PGHOST et al.. This is relevant for advanced use-cases such as connection
++  // via UNIX domain-socket.
++  postgres: env.getConf('postgres') ?? undefined,
+   persistence: bucket == null
+     ? []
+     : [
+diff --git a/bin/init-db.js b/bin/init-db.js
+index 0ee6d57..967351a 100755
+--- a/bin/init-db.js
++++ b/bin/init-db.js
+@@ -102,7 +102,7 @@ const initTables = async sql => {
+  * @param {string} postgresUrl - postgres://username:password@host:port/database
+  */
+ async function init (postgresUrl) {
+-  log.info({ postgres: describeUrl(postgresUrl) }, 'initializing database')
++  log.info({ postgres: postgresUrl ? describeUrl(postgresUrl) : 'configured from env' }, 'initializing database')
+   // Extract database from URL path
+   const database = new URL(postgresUrl).pathname.slice(1)
+   if (database !== '') {
+@@ -140,7 +140,7 @@ async function init (postgresUrl) {
+   } finally {
+     await sql.end({ timeout: 5 })
+   }
+-  log.info({ postgres: describeUrl(postgresUrl) }, 'initialization done')
++  log.info({ postgres: postgresUrl ? describeUrl(postgresUrl) : 'configured from env' }, 'initialization done')
+ }
+ 
+ /**
+diff --git a/src/index.js b/src/index.js
+index 2969d77..a3b56c4 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -581,9 +581,6 @@ export class YHub {
+  */
+ export const createYHub = async conf => {
+   t.$config.expect(conf)
+-  // parsed here, before the redis client sees the url: node's ERR_INVALID_URL carries the
+-  // offending string - password included - in `err.input`, which pino copies onto the log record
+-  const postgres = describeUrl(conf.postgres)
+   const redis = describeUrl(conf.redis.url)
+   // sanitize conf
+   if (conf.server) {
+@@ -602,7 +599,7 @@ export const createYHub = async conf => {
+   }
+   log.info({
+     redisPrefix: conf.redis.prefix,
+-    postgres,
++    postgres: conf.postgres ? describeUrl(conf.postgres) : 'configured from env',
+     redis,
+     pluginCount: conf.persistence.length,
+     workerConcurrency: conf.worker?.taskConcurrency ?? null,
+diff --git a/src/persistence.js b/src/persistence.js
+index 78bf742..81421da 100644
+--- a/src/persistence.js
++++ b/src/persistence.js
+@@ -17,19 +17,27 @@ import { logger, describeUrl } from './logger.js'
+ const log = logger.child({ module: 'persistence' })
+ 
+ /**
+- * @param {string} postgresUrl - postgres://username:password@host:port/database
++ * @param {string|undefined} postgresUrl - postgres://username:password@host:port/database
+  * @param {t.PersistencePlugin[]} plugins
+  * @param {import('postgres').Options<{}>} [postgresOptions] - spread over the defaults
+  */
+ export const createPersistence = async (postgresUrl, plugins, postgresOptions) => {
+-  // parsed before connecting, so a malformed url fails here rather than inside the catch below
+-  const endpoint = describeUrl(postgresUrl)
+   // If a specific database is requested, ensure it exists
+-  const sql = postgres(postgresUrl, { connect_timeout: 60, ...postgresOptions })
++  const opts = { connect_timeout: 60, ...postgresOptions }
++  const sql = postgresUrl ? postgres(postgresUrl, opts) : postgres(opts)
+   try {
+     await sql`SELECT 1 as connected`
+   } catch (err) {
+-    throw new Error(`Can't connect to postgres at ${endpoint.hostname}:${endpoint.port}/${endpoint.database}.\n${err}`)
++    // Only parse URL if it exists.
++    // It's also possible to configure the `postgres` library with custom
++    // env variables, i.e. `PGHOST` et al.. This is relevant for e.g.
++    // UNIX socket authentication.
++    if (postgresUrl) {
++      const endpoint = describeUrl(postgresUrl)
++      throw new Error(`Can't connect to postgres at ${endpoint.hostname}:${endpoint.port}/${endpoint.database}.\n${err}`)
++    } else {
++      throw new Error('Can\'t connect to postgres. A DB URL couldn\'t be read from env or CLI')
++    }
+   }
+   return new Persistence(sql, plugins)
+ }
+diff --git a/src/types.js b/src/types.js
+index 90e4704..6cfdb6f 100644
+--- a/src/types.js
++++ b/src/types.js
+@@ -614,7 +614,7 @@ export const $config = s.$object({
+      */
+     socket: /** @type {s.$Optional<s.Schema<import('@redis/client').RedisClientOptions['socket']>>} */ (s.$any.optional)
+   }),
+-  postgres: s.$string,
++  postgres: s.$string.optional,
+   /**
+    * Options passed to the postgres.js client, spread over yhub's `{ connect_timeout: 60 }` - e.g.
+    * `{ max: 20, idle_timeout: 60, connection: { statement_timeout: 30000 } }`. See API.md.
