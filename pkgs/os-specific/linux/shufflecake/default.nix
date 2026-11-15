@@ -41,7 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    install -Dm444 dm-sflc/dm-sflc.ko $out/lib/modules/${kernel.modDirVersion}/drivers/md/dm-sflc.ko
+    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \
+      M=$PWD/dm-sflc \
+      INSTALL_MOD_PATH=$out \
+      $makeFlags \
+      modules_install
+
     install -Dm555 sflc/build/bin/sflc $bin/sflc
     # v0.6 provides an alias for pre-v0.6 compatibility
     ln -s sflc $bin/shufflecake
