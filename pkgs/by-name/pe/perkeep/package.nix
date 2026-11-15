@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "perkeep";
-  version = "0.12";
+  version = "0.12-unstable-2026-11-15";
 
   src = fetchFromGitHub {
     owner = "perkeep";
     repo = "perkeep";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mAVzgHDtCCYTds65qKzIJ+oqLbUQhhSdp6Sq0DA8zOA=";
+    rev = "257aaa416e0c99de48b743f08edb36bfe02b833a";
+    hash = "sha256-dzrNRSZaN3/kYL4VPdqqfmnamytJZv1GmBggtaq9F3s=";
   };
 
-  vendorHash = "sha256-FLRfpyYVoZgV5LS2DjLOnc28Z+1v/YAxwWrOPoIzHHk=";
+  vendorHash = "sha256-2aYMoL3tre12GqUFJBwe1xYZyFt40d4S6oRzGPiGCfw=";
 
   ldflags = [
     "-s"
