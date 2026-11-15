@@ -163,7 +163,6 @@ let
     inherit temporal_capi;
   })
   // (lib.optionalAttrs useSharedGtestAndHistogram {
-    inherit gtest;
     hdr-histogram = hdrhistogram_c;
   })
   // (lib.optionalAttrs useSharedFFI {
@@ -182,6 +181,10 @@ let
   // (lib.optionalAttrs useSharedZstd {
     inherit zstd;
   });
+  sharedCheckLibDeps = lib.optionalAttrs useSharedGtestAndHistogram {
+    # Only linked into cctest, so only needed when running checks.
+    inherit gtest;
+  };
 
   sharedLibInputs = [ icu ] ++ builtins.attrValues sharedLibDeps;
 
@@ -228,6 +231,10 @@ let
         the final package fixed point, after potential overrides
       */
       self = finalAttrs.finalPackage;
+
+      allSharedLibDeps = sharedLibDeps // lib.optionalAttrs self.doCheck sharedCheckLibDeps;
+      pkgConfigSystemLibInputs =
+        finalAttrs.buildInputs ++ lib.optionals self.doCheck finalAttrs.checkInputs;
     in
     {
       inherit pname version;
@@ -252,10 +259,10 @@ let
         # in config.gypi, i.e. process.config in bin/node, which would keep the
         # -dev outputs in the runtime closure. The cc wrapper already passes these
         # paths, so have pkgconf treat them as system paths and omit them.
-        PKG_CONFIG_SYSTEM_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" sharedLibInputs;
+        PKG_CONFIG_SYSTEM_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" pkgConfigSystemLibInputs;
         PKG_CONFIG_SYSTEM_LIBRARY_PATH = lib.concatStringsSep ":" [
-          (lib.makeSearchPathOutput "dev" "lib" sharedLibInputs)
-          (lib.makeLibraryPath sharedLibInputs)
+          (lib.makeSearchPathOutput "dev" "lib" pkgConfigSystemLibInputs)
+          (lib.makeLibraryPath pkgConfigSystemLibInputs)
         ];
       }
       // lib.optionalAttrs (!canExecute && !canEmulate) {
@@ -321,7 +328,7 @@ let
       ++ lib.optional useSharedTemporal "--v8-enable-temporal-support"
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
       ++ lib.optionals (lib.versionAtLeast version "22") [ "--use-prefix-to-find-headers" ]
-      ++ map (name: "--shared-${name}") (builtins.attrNames sharedLibDeps);
+      ++ map (name: "--shared-${name}") (builtins.attrNames allSharedLibDeps);
 
       configurePlatforms = [ ];
 
@@ -370,6 +377,7 @@ let
       __structuredAttrs = true; # for outputChecks
 
       doCheck = canExecute;
+      checkInputs = builtins.attrValues sharedCheckLibDeps;
 
       # See https://github.com/nodejs/node/issues/22006
       enableParallelChecking = false;
