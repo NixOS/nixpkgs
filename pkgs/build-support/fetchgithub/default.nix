@@ -56,6 +56,7 @@ let
     sparseCheckout = [ ];
   };
 
+  useFetchGitArgsExcluded = removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames;
   useFetchGitargsDefaultNonNull = useFetchGitArgsDefault // useFetchGitArgsDefaultNullable;
 
   faUseFetchGit = mapAttrs (_: _: true) useFetchGitArgsDefault;
@@ -99,7 +100,7 @@ decorate (
           nonNullDefault
       ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
 
-    useFetchGitArgsWDPassing = overrideExisting (removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames) args;
+    useFetchGitArgsWDPassing = overrideExisting useFetchGitArgsExcluded args;
 
     position = (
       if args.meta.description or null != null then
