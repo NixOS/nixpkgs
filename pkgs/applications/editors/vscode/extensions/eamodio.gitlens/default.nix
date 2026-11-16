@@ -1,9 +1,8 @@
 {
   lib,
-  pkgs,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -12,31 +11,26 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "gitlens-${finalAttrs.version}.vsix";
     pname = "gitlens-vsix";
-    version = "17.11.1";
+    version = "19.6.0";
 
     src = fetchFromGitHub {
       owner = "gitkraken";
       repo = "vscode-gitlens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-BN6qgPYhZ+FuYnwmV0S3y2vOR4ZLC+VGWuEEPqfOqi4=";
+      hash = "sha256-VpHCSWa/XOKe0qxEdjnTManropO77n5YLFBZ647yWXw=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       inherit pnpm;
-      fetcherVersion = 3;
-      hash = "sha256-Yuxuqr1BiviSw+dGNHLs2jAy8ADlBvRks6Kmy7FmCMw=";
+      fetcherVersion = 5;
+      hash = "sha256-DT+Hbj5eL7hd9nmsUAtMcOHCPp7ENIkiCE68oAmfS38=";
     };
-
-    postPatch = ''
-      substituteInPlace scripts/generateLicenses.mjs --replace-fail 'https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/LICENSE.txt' '${pkgs.vscode-json-languageserver.src}/LICENSE.txt'
-      substituteInPlace package.json --replace-fail '"vscode:prepublish": "pnpm run bundle"' '"vscode:prepublish": "pnpm run bundle:turbo"'
-    '';
 
     nativeBuildInputs = [
       nodejs
@@ -45,19 +39,33 @@ let
     ];
 
     strictDeps = true;
+    __structuredAttrs = true;
 
-    env.npm_config_manage_package_manager_versions = "false";
+    postPatch = ''
+      # Skip bundling the unit tests in quick mode: the bundle is not shipped in the vsix, and its esbuild step needs ~4 GiB of memory.
+      substituteInPlace scripts/build.mjs \
+        --replace-fail '`''${baseCmd} --config-name unit-tests`,' \
+          '...(quick ? [] : [`''${baseCmd} --config-name unit-tests`]),'
 
-    # Error: spawn /build/source/node_modules/.pnpm/sass-embedded-linux-x64@1.77.8/node_modules/sass-embedded-linux-x64/dart-sass/src/dart ENOENT
-    # Remove both node_modules/.pnpm/sass-embedded and node_modules/.pnpm/sass-embedded-linux-x64
+      # Run the webpack bundles sequentially: they share the dist/ output directory and race on cleaning it (ENOTEMPTY).
+      substituteInPlace scripts/build.mjs \
+        --replace-fail 'const tasks = bundleCmds.map(c => run(c));' \
+          'const tasks = []; for (const c of bundleCmds) { tasks.push(await run(c)); }'
+    '';
+
+    # Remove sass-embedded from sass-loader's dependency resolution so that it falls back to the pure-JS `sass` implementation.
     preBuild = ''
-      rm -r node_modules/.pnpm/sass-embedded*
+      for link in "$STORE_PATH"/v11/links/@/sass-loader/*/*/node_modules/sass-embedded; do
+        [ -L "$link" ] || continue
+        rm "$link"
+      done
     '';
 
     buildPhase = ''
       runHook preBuild
 
-      node --run package
+      node --run bundle:quick
+      GL_SKIP_BUNDLE=true node --run package
 
       runHook postBuild
     '';
