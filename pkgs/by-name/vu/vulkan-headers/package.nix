@@ -17,17 +17,21 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  strictDeps = true;
+
   # TODO: investigate why <algorithm> isn't found
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "-DVULKAN_HEADERS_ENABLE_MODULE=OFF" ];
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
-    rev = "vulkan-sdk-${finalAttrs.version}";
+    tag = "vulkan-sdk-${finalAttrs.version}";
     hash = "sha256-E/SBlMW1oUeUT0MtWzQp0k+OSZLc9ho7g+1oTd7z7+Y=";
   };
 
   passthru.updateScript = ./update.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Vulkan Header files and API registry";
