@@ -205,7 +205,14 @@ checkout_hash(){
             fetchTargetArgs+=("$refspec")
         fi
     else
-        fetchTargetArgs=(--depth=1 origin "$hash")
+        fetchTargetArgs=(--depth=1 origin)
+        # Name tag "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
+        # but only when not leaving `.git` for hash compatibility.
+        if [[ -z "$leaveDotGit" ]]; then
+            fetchTargetArgs+=("$refspec")
+        else
+            fetchTargetArgs+=("$hash")
+        fi
     fi
     if ! clean_git fetch "${fetchTagsArgs[@]}" ${builder:+--progress} "${fetchTargetArgs[@]}"; then
         echo "ERROR: \`git fetch' failed." >&2
@@ -251,9 +258,16 @@ checkout_ref(){
         ref=$(ref_from_hash "$hash")
     fi
 
+    local refspec
+    if [[ -z "$leaveDotGit" ]] && [[ "$ref" =~ ^refs/tags ]]; then
+        refspec="+$ref:$ref"
+    else
+        refspec="$ref"
+    fi
+
     if test -n "$ref"; then
         # --depth option is ignored on http repository.
-        clean_git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
+        clean_git fetch ${builder:+--progress} --depth 1 origin "$refspec" || return 1
         clean_git checkout -b "$branchName" FETCH_HEAD || return 1
     else
         return 1
