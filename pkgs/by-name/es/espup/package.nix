@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd espup \
       --bash <($out/bin/espup completions bash) \
       --fish <($out/bin/espup completions fish) \
+      --nushell <($out/bin/espup completions nushell) \
       --zsh <($out/bin/espup completions zsh)
   '';
 

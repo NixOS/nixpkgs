@@ -99,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd ty \
         --bash <(${emulator} $out/bin/ty generate-shell-completion bash) \
         --fish <(${emulator} $out/bin/ty generate-shell-completion fish) \
+        --nushell <(${emulator} $out/bin/ty generate-shell-completion nushell) \
         --zsh <(${emulator} $out/bin/ty generate-shell-completion zsh)
     ''
   );

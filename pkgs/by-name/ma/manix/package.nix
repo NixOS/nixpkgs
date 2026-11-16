@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd manix \
       --bash <($out/bin/manix --generate bash "") \
       --fish <($out/bin/manix --generate fish "") \
+      --nushell <($out/bin/manix --generate nu "") \
       --zsh <($out/bin/manix --generate zsh "")
     $out/bin/manix --print-man "" > manix.1
     installManPage manix.1

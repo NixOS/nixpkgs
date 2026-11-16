@@ -40,6 +40,7 @@ buildGoModule (finalAttrs: {
     installShellCompletion --cmd task \
       --bash <($out/bin/task --completion bash) \
       --fish <($out/bin/task --completion fish) \
+      --nushell <($out/bin/task --completion nushell) \
       --zsh <($out/bin/task --completion zsh)
   '';
 
