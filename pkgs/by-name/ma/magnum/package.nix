@@ -28,17 +28,9 @@
   withObjImporter ? true,
   withSdl2Application ? true,
   withTargetGL ? true,
+  withVulkan ? true,
   withWindowlessGlxApplication ? true,
   # keep-sorted end
-
-  # failing
-  #  Starting Magnum::Vk::Test::ShaderTest with 12 test cases...
-  # magnum> Utility::Path::read(): can't open ShaderTestFiles/vert-frag.spv: error 2 (No such file or directory)
-  # magnum>   FAIL [01] spirvPatchSwiftShaderConflictingMultiEntrypointLocations() at /build/source/src/Magnum/Vk/Test/ShaderTest.cpp:78
-  # magnum>         Expression data failed.
-  # magnum>  XFAIL [07] createInfoConstructNoInit() at /build/source/src/Magnum/Vk/Test/ShaderTest.cpp:223
-  # magnum>         GCC 16+ misoptimizes and overwrites the value. info->sType and VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2 failed the comparison.
-  withVulkan ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -95,18 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     export ALSOFT_DRIVERS=null
   '';
 
-  postPatch = ''
-    # Helper function to skip tests in the root-privileged Nix sandbox
-    skip_test() {
-      substituteInPlace "$1" \
-        --replace-fail "void $2() {" "void $2() { CORRADE_SKIP(\"Skipped in Nix sandbox\");"
-    }
-
-    # XPASS [12] createInfoConstructNoInit() at /build/source/src/Magnum/Vk/Test/SamplerTest.cpp:200
-    #       info->sType and VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO were expected to fail the comparison.
-    # skip_test src/Magnum/Vk/Test/SamplerTest.cpp SamplerTest::createInfoConstructNoInit
-  '';
-
   passthru = {
     args = {
       inherit
@@ -125,22 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
         ;
     };
 
-    ## The naive version of withPlugin with symlinkJoin does not propagate propagatedBuildInputs from 'extensions' derivations
-    ## (magnum-plugins, magnum-integration, magnum-extras)
-    #
-    # withPlugins =
-    #   extensions:
-    #   symlinkJoin {
-    #     name = "${finalAttrs.pname}-with-plugins-${finalAttrs.version}";
-    #     paths = [
-    #       finalAttrs.finalPackage
-    #     ]
-    #     ++ extensions;
-    #   };
-    #
-    # So instead try to wrap magnum with plugins into a real derivation
-    # and manually collect all propagatedBuildInputs
-    # It seems to work, but is it a good method?
+    # The naive version of withPlugin with symlinkJoin does not propagate propagatedBuildInputs from 'extensions' derivations
+    # (magnum-plugins, magnum-integration, magnum-extras).
+    # So instead wrap magnum with plugins into a derivation and manually collect all propagatedBuildInputs
     withPlugins =
       extensions:
       let
