@@ -1,4 +1,5 @@
 {
+  autoPatchelfHook,
   cctools,
   copyDesktopItems,
   electron_44,
@@ -17,6 +18,7 @@
   python3,
   spdx-license-list-data,
   stdenv,
+  vulkan-loader,
   writeDarwinBundle,
   xcbuild,
   fetchPnpmDeps,
@@ -77,6 +79,7 @@ stdenv.mkDerivation (
       cacert
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
       copyDesktopItems
       pkg-config
     ]
@@ -87,7 +90,11 @@ stdenv.mkDerivation (
       xcbuild
     ];
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      libsecret
+      stdenv.cc.cc.lib
+      vulkan-loader
+    ];
 
     pnpmWorkspaces = [
       # `...` suffix is used to also include other workspace packages that are
@@ -132,15 +139,15 @@ stdenv.mkDerivation (
       pnpm vp cache clean
     '';
 
-    # Many dependencies vendors many prebuilt native artifacts for non-host
-    # platforms, and some of those binaries are statically linked. Let fixup
-    # handle wrappers, shebangs, and stripping, but skip patchelf on the
-    # vendored tree.
+    # The pnpm tree includes static, musl, and foreign-platform binaries.
+    # Generic RPATH fixups cannot inspect some of these static prebuilds.
     dontPatchELF = true;
-    # The tmpdir audit hook also shells out to patchelf while scanning every
-    # vendored ELF for leaked build paths. That produces spurious warnings on
-    # some dependencies' static foreign-platform binaries.
+    # The tmpdir audit also runs patchelf on every ELF, causing spurious errors.
     noAuditTmpdir = true;
+    # Patch only host modules in postFixup, avoiding unrelated musl dependencies.
+    dontAutoPatchelf = true;
+    # Speech backends load sibling libraries relative to their own directory.
+    autoPatchelfFlags = [ "--preserve-origin" ];
 
     installPhase = ''
       runHook preInstall
@@ -213,10 +220,28 @@ stdenv.mkDerivation (
     '';
 
     postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Electron's Node runtime does not provide libstdc++ for the bundled node-pty prebuild
-      for module in "$out"/libexec/t3code/node_modules/.pnpm/node-pty@*/node_modules/node-pty/prebuilds/linux-${stdenv.hostPlatform.node.arch}/pty.node; do
-        patchelf --add-rpath ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} "$module"
-      done
+      # Resolve libstdc++ and Vulkan through buildInputs, retaining $ORIGIN for
+      # the speech library's sibling ggml libraries.
+      autoPatchelf \
+        "$out"/libexec/t3code/node_modules/.pnpm/node-pty@*/node_modules/node-pty/prebuilds/linux-${stdenv.hostPlatform.node.arch} \
+        "$out"/libexec/t3code/node_modules/.pnpm/@koromix+koffi-linux-${stdenv.hostPlatform.node.arch}@*/node_modules/@koromix/koffi-linux-${stdenv.hostPlatform.node.arch}/linux_${stdenv.hostPlatform.node.arch} \
+        "$out"/libexec/t3code/node_modules/.pnpm/@transcribe-cpp+linux-${stdenv.hostPlatform.node.arch}-cpu-vulkan@*/node_modules/@transcribe-cpp/linux-${stdenv.hostPlatform.node.arch}-cpu-vulkan
+    '';
+
+    doInstallCheck = stdenv.hostPlatform.isLinux && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    installCheckPhase = ''
+      runHook preInstallCheck
+
+      # The standalone Node CLI can mask missing C++ runtime dependencies;
+      # exercise local dictation with the same runtime as the desktop worker.
+      ELECTRON_RUN_AS_NODE=1 ${lib.getExe electron} --input-type=module -e '
+        const speech = await import(process.argv[1]);
+        if (!speech.getAvailableBackends().some(backend => backend.kind === "cpu")) {
+          throw new Error("Native speech CPU backend is unavailable");
+        }
+      ' "$out/libexec/t3code/apps/server/node_modules/transcribe-cpp/dist/index.js"
+
+      runHook postInstallCheck
     '';
 
     desktopItems = [
