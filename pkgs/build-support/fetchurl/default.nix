@@ -245,6 +245,11 @@ lib.extendMkDerivation {
             outputHashAlgo = null;
             outputHash = hash;
           }
+        else if sha256 != "" && (hash == "" && outputHash == "" && sha1 == "" && sha512 == "") then
+          {
+            outputHashAlgo = "sha256";
+            outputHash = sha256;
+          }
         else if outputHash != "" && (hash == "" && sha1 == "" && sha256 == "" && sha512 == "") then
           if outputHashAlgo != "" then
             { inherit outputHashAlgo outputHash; }
@@ -254,11 +259,6 @@ lib.extendMkDerivation {
           {
             outputHashAlgo = "sha512";
             outputHash = sha512;
-          }
-        else if sha256 != "" && (hash == "" && outputHash == "" && sha1 == "" && sha512 == "") then
-          {
-            outputHashAlgo = "sha256";
-            outputHash = sha256;
           }
         else if sha1 != "" && (hash == "" && outputHash == "" && sha256 == "" && sha512 == "") then
           {
