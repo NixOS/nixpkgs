@@ -7,12 +7,13 @@
   npmHooks,
   fetchNpmDeps,
   callPackage,
+  dart-sass,
   makeWrapper,
   gcc,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "cleanuparr";
-  version = "2.10.12";
+  version = "2.11.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -21,7 +22,7 @@ buildDotnetModule (finalAttrs: {
     owner = "Cleanuparr";
     repo = "Cleanuparr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V3KnWvYNJzTCO6alLwAtuXD8e20q8FOf2IeBymBVen4=";
+    hash = "sha256-n0QuwQBPtuDbp+SCfpgv5p38FXDTi2gMCdzjyA0V/Ao=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
@@ -41,6 +42,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs = [
     nodejs_26
     nodejs_26.python
+    dart-sass
     gcc
     (npmHooks.override { nodejs = nodejs_26; }).npmConfigHook
     makeWrapper
@@ -51,11 +53,15 @@ buildDotnetModule (finalAttrs: {
   npmDeps = fetchNpmDeps {
     name = "cleanuparr-npm-deps";
     src = "${finalAttrs.src}/code/frontend";
-    hash = "sha256-Asc1QdoU0xAYmwgOkOycvtjDKsA+DMvy52GDW7VzBnA=";
+    hash = "sha256-dVIrK9dplcG+T49AwlShOHZePbNumDwM94MQ+QMTIK4=";
   };
 
   preBuild = ''
     cd code/frontend
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail \
+        'compilerCommand = (() => {' \
+        'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
     npm run build
     cd ../..
 

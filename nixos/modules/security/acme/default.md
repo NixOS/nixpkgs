@@ -198,7 +198,7 @@ docs, we will provide a fully self-hosted example using bind.
     dnsProvider = "rfc2136";
     environmentFile = "/var/lib/secrets/certs.secret";
     # We don't need to wait for propagation since this is a local DNS server
-    dnsPropagationCheck = false;
+    dnsAuthoritativePropagationCheck = false;
   };
 }
 ```
@@ -275,7 +275,7 @@ you will set them as defaults
     dnsProvider = "rfc2136";
     environmentFile = "/var/lib/secrets/certs.secret";
     # We don't need to wait for propagation since this is a local DNS server
-    dnsPropagationCheck = false;
+    dnsAuthoritativePropagationCheck = false;
   };
 
   # For each virtual host you would like to use DNS-01 validation with,

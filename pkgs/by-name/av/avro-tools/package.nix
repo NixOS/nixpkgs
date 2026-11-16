@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "avro-tools";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchurl {
     url = "mirror://maven/org/apache/avro/avro-tools/${finalAttrs.version}/avro-tools-${finalAttrs.version}.jar";
-    sha256 = "sha256-+OTQ2UWFLcL5HDv4j33LjKvADg/ClbuS6JPlSUXggIU=";
+    sha256 = "sha256-YiDovAiar5F82tTNNYvWUfwDlMDl3bizbaQCASwpSmg=";
   };
   sourceRoot = ".";
 

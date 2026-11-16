@@ -15,13 +15,13 @@
 let
   # SHA256 of the fritzing-parts HEAD on the develop branch,
   # which contains the latest stable parts definitions
-  partsSha = "73bc0559bb8399b2f895d68f032e41d7efc720c0";
+  partsSha = "27535f2fd02097be9bed229b75aa8e9be282a4a0";
 
   parts = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-parts";
     rev = partsSha;
-    hash = "sha256-2aXvSXWjQliEChQGhcCicOVoAqeNdeq69wQVYQsd2ew=";
+    hash = "sha256-+FiJFipMAV1KrAkyifYccmTzPCZkslJYjiYKehR7wdw=";
   };
 
   # Header-only library
@@ -35,19 +35,14 @@ in
 
 stdenv.mkDerivation {
   pname = "fritzing";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-app";
-    rev = "04e5bb0241e8f1de24d0fce9be070041c6d5b68e";
-    hash = "sha256-JlqBdzWscJoD859KMYgT/af41WNWThP65K3zh2PC2jM=";
+    rev = "5aa56a510183c23084990a6b4481708cad24c15b";
+    hash = "sha256-GWHWzQHRprlZzAlPYYaHuvMFg6fdmK7MLuE8FjQeACI=";
   };
-
-  patches = [
-    # Fix build with Qt >= 6.9
-    ./fix-stricter-types.patch
-  ];
 
   nativeBuildInputs = [
     kdePackages.qmake
@@ -84,7 +79,7 @@ stdenv.mkDerivation {
       --replace-fail 'PartsChecker::getSha(dir.absolutePath());' '"${partsSha}";'
 
     substituteInPlace phoenix.pro \
-      --replace-fail "6.5.10" "${qt6.qtbase.version}"
+      --replace-fail "QT_MOST=6.10.10" "QT_MOST=${qt6.qtbase.version}"
 
     substituteInPlace src/simulation/ngspice_simulator.cpp \
       --replace-fail 'path + "/" + libName' '"${
