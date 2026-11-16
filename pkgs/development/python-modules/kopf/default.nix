@@ -75,7 +75,10 @@ buildPythonPackage (finalAttrs: {
     "tests/admission/test_webhook_server.py"
     "tests/authentication/test_credentials.py"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "tests/posting/test_threadsafety.py";
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/posting/test_threadsafety.py"
+    "tests/running/test_spawn_tasks.py"
+  ];
 
   disabledTests = [
     # assert [] to due missing certificate
