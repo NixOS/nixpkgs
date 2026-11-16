@@ -8,11 +8,11 @@
   optgamsFile ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "54.7.0";
   pname = "gams";
   src = fetchurl {
-    url = "https://d37drm4t2jghv5.cloudfront.net/distributions/${version}/linux/linux_x64_64_sfx.exe";
+    url = "https://d37drm4t2jghv5.cloudfront.net/distributions/${finalAttrs.version}/linux/linux_x64_64_sfx.exe";
     hash = "sha256-nLt8EdoLzlGCXD5nmFuxSSFKekFcjELCxjmgkZobS9I=";
   };
   unpackCmd = "unzip $src";
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.Scriptkiddi ];
     platforms = lib.platforms.linux;
   };
-}
+})
