@@ -7,15 +7,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "meowlnir";
   version = "26.11";
-  tag = "v0.2611.0";
 
   src = fetchFromGitHub {
     owner = "maunium";
     repo = "meowlnir";
-    inherit tag;
+    tag = "v0.${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.0";
     hash = "sha256-HOh2+ZXR8289XZdydQtD4UjOHvJ5RsEsrbThu7tfwg0=";
   };
 
@@ -36,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sumnerevans ];
     mainProgram = "meowlnir";
   };
-}
+})
