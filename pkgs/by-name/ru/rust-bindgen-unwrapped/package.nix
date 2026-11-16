@@ -31,8 +31,6 @@ rustPlatform.buildRustPackage rec {
   # Disable the "runtime" feature, so libclang is linked.
   buildNoDefaultFeatures = true;
   buildFeatures = [ "logging" ];
-  checkNoDefaultFeatures = buildNoDefaultFeatures;
-  checkFeatures = buildFeatures;
 
   doCheck = true;
   nativeCheckInputs = [ clang ];
