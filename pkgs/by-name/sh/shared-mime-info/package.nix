@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dbuild-spec=false"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Database of common MIME types";
     homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
