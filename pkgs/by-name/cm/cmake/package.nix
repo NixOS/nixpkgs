@@ -135,8 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   # bootstrap is not autoconf and rejects --enable-static/--disable-shared
-  # FIXME: rebuild avoidance, drop optionalDrvAttr in staging
-  dontAddStaticConfigureFlags = lib.optionalDrvAttr stdenv.hostPlatform.isStatic true;
+  dontAddStaticConfigureFlags = true;
 
   preConfigure = ''
     substituteInPlace Modules/Platform/UnixPaths.cmake \
