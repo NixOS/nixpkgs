@@ -15,7 +15,8 @@
   enableDmeventd ? false,
   udevSupport ? !stdenv.hostPlatform.isStatic,
   udev,
-  udevCheckHook,
+  # This package should not depend on udevCheckHook as it's in the systemd
+  # closure and would introduce another systemd build.
   onlyLib ? stdenv.hostPlatform.isStatic,
   # Otherwise we have an infinite recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals udevSupport [ udevCheckHook ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libaio
     bash

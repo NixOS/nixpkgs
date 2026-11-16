@@ -14,7 +14,8 @@
   pkg-config,
   autoreconfHook,
   runtimeShell,
-  udevCheckHook,
+  # This package should not depend on udevCheckHook as it's in the systemd
+  # closure and would introduce another systemd build.
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,8 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ udevCheckHook ]; # inf rec on musl, so skip
+  ];
 
   outputs = [
     "bin"

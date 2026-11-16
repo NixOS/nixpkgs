@@ -8,7 +8,8 @@
   docutils,
   libnl,
   udev,
-  udevCheckHook,
+  # This package should not depend on udevCheckHook as it's in the systemd
+  # closure and would introduce another systemd build.
   python3,
   perl,
   withManPages ? !stdenv.hostPlatform.isi686,
@@ -40,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     python3
-    udevCheckHook
   ]
   ++ lib.optionals withManPages [
     docutils
