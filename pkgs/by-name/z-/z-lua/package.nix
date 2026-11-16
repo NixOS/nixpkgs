@@ -34,11 +34,24 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+
+  # Generating the shell integration exercises the wrapper and the Lua interpreter
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/z.lua --init bash | grep -F "_zlua()"
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     homepage = "https://github.com/skywind3000/z.lua";
+    changelog = "https://github.com/skywind3000/z.lua/releases/tag/${finalAttrs.version}";
     description = "New cd command that helps you navigate faster by learning your habits";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ naderhaj ];
     mainProgram = "z.lua";
+    platforms = lib.platforms.all;
   };
 })
