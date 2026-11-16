@@ -1,6 +1,7 @@
 {
   lib,
   callPackage,
+  cloudflared,
   symlinkJoin,
   makeBinaryWrapper,
   enableAzureDevOps ? false,
@@ -57,6 +58,12 @@ let
       "PATH"
       ":"
       (lib.makeBinPath runtimePackages)
+    ]
+    # Use nixpkgs cloudflared for T3 Connect instead of downloading a copy at runtime.
+    ++ [
+      "--set-default"
+      "T3CODE_CLOUDFLARED_PATH"
+      (lib.getExe cloudflared)
     ]
     ++ lib.optionals enableResourceMonitor [
       "--set-default"
