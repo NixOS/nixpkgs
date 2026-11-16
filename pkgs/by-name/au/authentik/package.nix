@@ -414,6 +414,7 @@ let
           "test_shell_code_example_rendering"
           "test_unique_together_condition"
           "test_unique_together_with_source"
+          "test_get_encoded_filename"
         ];
 
         pythonImportsCheck = [ "rest_framework" ];

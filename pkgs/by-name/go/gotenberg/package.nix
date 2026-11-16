@@ -1,30 +1,69 @@
 {
   lib,
-  buildGo126Module,
+  buildGo127Module,
   chromium,
   fetchFromGitHub,
   libreoffice,
   makeBinaryWrapper,
   pdftk,
   qpdf,
-  unoconv,
   mktemp,
   makeFontsConf,
   liberation_ttf_v2,
   exiftool,
   pdfcpu,
+  makeWrapper,
   nixosTests,
   nix-update-script,
+  stdenvNoCC,
 }:
 let
   fontsConf = makeFontsConf { fontDirectories = [ liberation_ttf_v2 ]; };
   jre' = libreoffice.unwrapped.jdk;
   libreoffice' = "${libreoffice}/lib/libreoffice/program/soffice.bin";
   inherit (lib) getExe;
+
+  unoconverter = stdenvNoCC.mkDerivation (finalAttrs: {
+    pname = "unoconverter";
+    version = "0.5.0";
+
+    src = fetchFromGitHub {
+      owner = "gotenberg";
+      repo = "unoconverter";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-YxhZjsT/NkuzacQsWxLy5CkM2OMoBrLPR89Njy3Iexg=";
+    };
+
+    postPatch = ''
+      substituteInPlace unoconv \
+        --replace-fail "#!/usr/bin/env python" "#!${libreoffice.unwrapped.python.interpreter}"
+    '';
+
+    nativeBuildInputs = [
+      makeWrapper
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dt $out/bin unoconv
+      wrapProgram "$out/bin/unoconv" \
+        --set-default UNO_PATH "${libreoffice.unwrapped}/lib/libreoffice/program/"
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Python script for interacting with LibreOffice";
+      homepage = "https://github.com/gotenberg/unoconverter";
+      license = lib.licenses.mit;
+      mainProgram = "unoconv";
+    };
+  });
 in
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gotenberg";
-  version = "8.34.0";
+  version = "8.40.0";
 
   outputs = [
     "out"
@@ -35,13 +74,19 @@ buildGo126Module (finalAttrs: {
     owner = "gotenberg";
     repo = "gotenberg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HFRymNfhQOBzXBWZhiujr8sn4m/hpfjcBGg/3/C67DU=";
+    hash = "sha256-51ylEbKMcLiKP4xZGZ7Nnl9dKiH58VqEEbp7ieSEL58=";
   };
 
-  vendorHash = "sha256-njyxP+1S1ebaF9xJ1kBL9HrTWMTdEhu8MwUF6FYKHvs=";
+  vendorHash = "sha256-u31PCNvwFJagJWUZbaSVxHP4+K68jNMvW+hhAt9r0yQ=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${finalAttrs.src}#g' {} \;
+
+    if ! grep -q "https://raw.githubusercontent.com/gotenberg/unoconverter/v${unoconverter.version}/unoconv" build/Dockerfile; then
+      unoconverter_version=$(grep -oP 'https://raw\.githubusercontent\.com/gotenberg/unoconverter/v\K[0-9]+\.[0-9]+\.[0-9]+(?=/unoconv)' build/Dockerfile)
+      echo "Our unoconverter version ${unoconverter.version} does not match upstream's version $unoconverter_version"
+      exit 1
+    fi
   '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -57,7 +102,7 @@ buildGo126Module (finalAttrs: {
     libreoffice
     pdftk
     qpdf
-    unoconv
+    unoconverter
     pdfcpu
     mktemp
     jre'
@@ -67,7 +112,7 @@ buildGo126Module (finalAttrs: {
     export CHROMIUM_BIN_PATH=${getExe chromium}
     export PDFTK_BIN_PATH=${getExe pdftk}
     export QPDF_BIN_PATH=${getExe qpdf}
-    export UNOCONVERTER_BIN_PATH=${getExe unoconv}
+    export UNOCONVERTER_BIN_PATH=${getExe unoconverter}
     export EXIFTOOL_BIN_PATH=${getExe exiftool}
     export PDFCPU_BIN_PATH=${getExe pdfcpu}
     # LibreOffice needs all of these set to work properly
@@ -100,7 +145,7 @@ buildGo126Module (finalAttrs: {
       --set PDFCPU_BIN_PATH "${getExe pdfcpu}" \
       --set PDFTK_BIN_PATH "${getExe pdftk}" \
       --set QPDF_BIN_PATH "${getExe qpdf}" \
-      --set UNOCONVERTER_BIN_PATH "${getExe unoconv}"
+      --set UNOCONVERTER_BIN_PATH "${getExe unoconverter}"
   '';
 
   passthru.updateScript = nix-update-script { };
