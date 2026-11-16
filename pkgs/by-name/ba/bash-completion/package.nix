@@ -7,6 +7,7 @@
   ps,
   python3Packages,
   bashInteractive,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,11 +73,16 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/scop/bash-completion";
     description = "Programmable completion for the bash shell";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ philiptaron ];
+    pkgConfigModules = [ "bash-completion" ];
   };
 })
