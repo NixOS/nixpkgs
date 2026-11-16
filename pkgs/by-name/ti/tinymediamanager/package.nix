@@ -48,15 +48,15 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "tinyMediaManager";
-  version = "5.3.4";
+  version = "5.3.5";
 
-  mvnHash = "sha256-XqRDPSL/6C2cAvi796kSjoQtfmUNLdMONVzw5a1kiuE=";
+  mvnHash = "sha256-M6igPGVeK4OFAV51TQlaRAONxkRgTwaebpqpTFJ44Dg=";
 
   src = fetchFromGitLab {
     owner = "tinyMediaManager";
     repo = "tinyMediaManager";
     tag = "tinyMediaManager-${version}";
-    hash = "sha256-zGR8iHs6zQNV0uwWD3/fFdplwwVrz828kg+w5Un2qVA=";
+    hash = "sha256-yrLaF3XWvo36O1Pe6SN0M+HN88KeM4BPWpJZG4hAl3c=";
   };
 
   # remove other builds from pom.xml to speed up build
