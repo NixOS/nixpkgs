@@ -3372,6 +3372,7 @@ runTests {
           options.boot.enable = lib.mkOption {
             type = lib.types.bool;
             default = false;
+            example = true;
             description = "Enable boot";
           };
           options.services.nginx.virtualHosts = lib.mkOption {
@@ -3448,6 +3449,8 @@ runTests {
         bootEnableHasNoName = !(optionDoc.properties.boot.properties.enable ? name);
         bootEnableReadOnly = optionDoc.properties.boot.properties.enable.readOnly;
         bootEnableDeclarations = optionDoc.properties.boot.properties.enable."x-declarations";
+        bootEnableExamples = optionDoc.properties.boot.properties.enable.examples;
+        bootEnableExample = optionDoc.properties.boot.properties.enable."x-example";
 
         # Submodule nesting via additionalProperties (for attrsOf submodule)
         vhostDescription =
@@ -3497,6 +3500,11 @@ runTests {
       bootEnableHasNoName = true;
       bootEnableReadOnly = false;
       bootEnableDeclarations = [ ];
+      bootEnableExamples = [ true ];
+      bootEnableExample = {
+        _type = "literalExpression";
+        text = "true";
+      };
 
       vhostDescription = "Virtual hosts";
       vhostType = "object";

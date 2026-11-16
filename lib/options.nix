@@ -1045,6 +1045,7 @@ rec {
               removeAttrs doc (nonStandardKeys ++ optional (doc.description == null) "description")
               // tRes.schema
               // optionalAttrs (opt ? default && isJsonValue opt.default) { default = opt.default; }
+              // optionalAttrs (opt ? example && isJsonValue opt.example) { examples = [ opt.example ]; }
               // optionalAttrs (doc ? default) { ${ext "defaultText"} = doc.default; }
               // optionalAttrs (doc ? example) { ${ext "example"} = doc.example; }
               // optionalAttrs (doc ? relatedPackages) { ${ext "relatedPackages"} = doc.relatedPackages; }
