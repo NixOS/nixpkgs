@@ -53,14 +53,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "logfire-sdk";
-  version = "5.5.0";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "logfire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CtYB3Xn89Pjt5G8sTtsybis8KSA/EKj1YyTFXjJniZI=";
+    hash = "sha256-41tNag9kLZDr8CKbc3o+SVBn1msydywRn3ljah8Unrk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/logfire-sdk";
