@@ -29,6 +29,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-tEexJf5fU7Ew76w4xs5MuGETE4gthT/5iouyCK5Tf7s=";
 
+  # Observe reaper completion without assuming a Linux /proc filesystem.
+  patches = [ ./portable-reaper-test.patch ];
+
   postPatch = ''
     # These tests create executable scripts at runtime, after shebang patching.
     substituteInPlace tests/git_response_streaming.rs \

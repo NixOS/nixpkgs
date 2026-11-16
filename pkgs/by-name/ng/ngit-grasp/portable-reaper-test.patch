@@ -1,0 +1,84 @@
+Subject: [PATCH] test(git): observe reaping without a Linux proc filesystem
+
+The process-table assertion fails on Darwin, where /proc is absent. Use a
+cfg(test) completion channel from the existing reaper, and assert the wait
+result reports SIGKILL. The notification is sent only after child.wait()
+completes. The installed binary has no observer or behavioural change.
+
+--- a/src/git/subprocess.rs
++++ b/src/git/subprocess.rs
+@@ -14,6 +14,8 @@
+ pub struct GitSubprocess {
+     /// `None` once the child has been reaped.
+     child: Option<Child>,
++    #[cfg(test)]
++    reaped: Option<tokio::sync::oneshot::Sender<std::io::Result<std::process::ExitStatus>>>,
+ }
+ 
+ impl GitSubprocess {
+@@ -98,7 +100,11 @@
+ 
+         let child = cmd.spawn()?;
+ 
+-        Ok(Self { child: Some(child) })
++        Ok(Self {
++            child: Some(child),
++            #[cfg(test)]
++            reaped: None,
++        })
+     }
+ 
+     /// Get a mutable reference to stdin
+@@ -156,8 +162,16 @@
+             // Blocking tasks cannot be aborted by task cancellation or runtime
+             // shutdown, so the killed child is always reaped.
+             let reaper = runtime.clone();
++            #[cfg(test)]
++            let reaped = self.reaped.take();
+             runtime.spawn_blocking(move || {
+-                let _ = reaper.block_on(child.wait());
++                let result = reaper.block_on(child.wait());
++                #[cfg(test)]
++                if let Some(reaped) = reaped {
++                    let _ = reaped.send(result);
++                }
++                #[cfg(not(test))]
++                let _ = result;
+             });
+         }
+     }
+@@ -182,21 +196,22 @@
+ 
+     #[tokio::test]
+     async fn dropped_subprocess_is_killed_and_reaped() {
++        use std::os::unix::process::ExitStatusExt;
++
+         let repo = create_bare_repo();
+-        let child =
++        let mut child =
+             GitSubprocess::spawn(GitService::ReceivePack, repo.path(), false, None).unwrap();
+-        let pid = child.child.as_ref().unwrap().id().unwrap();
+-        let process = std::path::PathBuf::from(format!("/proc/{pid}"));
+-        assert!(process.exists());
++        assert!(child.child.as_mut().unwrap().try_wait().unwrap().is_none());
++        let (reaped, completion) = tokio::sync::oneshot::channel();
++        child.reaped = Some(reaped);
+         drop(child);
+-        // A killed but unreaped child remains visible as a zombie.
+-        tokio::time::timeout(std::time::Duration::from_secs(5), async {
+-            while process.exists() {
+-                tokio::task::yield_now().await;
+-            }
+-        })
+-        .await
+-        .expect("dropped child was not reaped");
++        // Observe completion of the actual reaper instead of Linux's /proc.
++        let status = tokio::time::timeout(std::time::Duration::from_secs(5), completion)
++            .await
++            .expect("dropped child was not reaped")
++            .expect("reaper did not report completion")
++            .expect("failed to reap child");
++        assert_eq!(status.signal(), Some(libc::SIGKILL));
+     }
+ 
+     #[tokio::test]
