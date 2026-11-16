@@ -29,7 +29,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "comfy-kitchen";
-  version = "0.2.40";
+  version = "0.2.41";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     repo = "comfy-kitchen";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-hpEGSlrfbXm+b//BygmRA5pVSEkV/saUB4c9m4+YoD4=";
+    hash = "sha256-WbpiDqOvRxy5hTw7cpGqxOCBLJo9jnbDN0yJHm7gXEk=";
   };
 
   buildInputs =

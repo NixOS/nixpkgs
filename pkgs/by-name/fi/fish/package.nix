@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildPackages,
   coreutils,
   darwin,
@@ -192,6 +193,13 @@ stdenv.mkDerivation (finalAttrs: {
     # these tests fail, likely due to dumb terminal issues, but setting a TERM
     # doesn't help. Skipping them.
     ./skip-sgr-tests.patch
+
+    # fix build with cmake 4.5.0
+    # FIXME: remove with next update
+    (fetchpatch {
+      url = "https://github.com/fish-shell/fish-shell/commit/95dccbe55eefe73e526563296beded4a8407b8a8.diff";
+      hash = "sha256-iJPTdruRzoq222ILFqhftlQLjgmMP891ys6exiYX/qc=";
+    })
   ];
 
   # Fix FHS paths in tests
