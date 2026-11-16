@@ -40,8 +40,7 @@ in
 
   options.services.privatebin = {
 
-    enable = lib.mkEnableOption "Privatebin: A minimalist, open source online
-      pastebin where the server has zero knowledge of pasted data.";
+    enable = lib.mkEnableOption "PrivateBin, a minimalist, open source online pastebin where the server has zero knowledge of pasted data";
 
     user = lib.mkOption {
       type = lib.types.str;
@@ -51,8 +50,8 @@ in
 
     group = lib.mkOption {
       type = lib.types.str;
-      default = if cfg.enableNginx then "nginx" else defaultGroup;
-      defaultText = lib.literalExpression "if config.services.privatebin.enableNginx then \"nginx\" else \"${defaultGroup}\"";
+      default = if cfg.enableNginx then config.services.nginx.group else defaultGroup;
+      defaultText = lib.literalExpression "if config.services.privatebin.enableNginx then config.services.nginx.group else \"${defaultGroup}\"";
       description = ''
         Group under which privatebin runs. It is best to set this to the group
         of whatever webserver is being used as the frontend.
@@ -68,6 +67,8 @@ in
     };
 
     package = lib.mkPackageOption pkgs "privatebin" { };
+
+    phpPackage = lib.mkPackageOption pkgs "php83" { };
 
     enableNginx = lib.mkOption {
       type = lib.types.bool;
@@ -110,7 +111,7 @@ in
       '';
       default = { };
       description = ''
-        Options for the PrivateBin PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        Options for the PrivateBin PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -127,8 +128,8 @@ in
           main = {
             name = "NixOS Based Privatebin";
             discussion = false;
-            defaultformatter = "plalib.types.intext";
-            qrcode = true
+            defaultformatter = "plaintext";
+            qrcode = true;
           };
           model.class = "Filesystem";
           model_options.dir = "/var/lib/privatebin/data";
@@ -144,15 +145,12 @@ in
       model.class = lib.mkDefault "Filesystem";
       model_options.dir = lib.mkDefault "${cfg.dataDir}/data";
       purge.dir = lib.mkDefault "${cfg.dataDir}/purge";
-      traffic = {
-        dir = lib.mkDefault "${cfg.dataDir}/traffic";
-        header = "X_FORWARDED_FOR";
-      };
+      traffic.dir = lib.mkDefault "${cfg.dataDir}/traffic";
     };
 
     services.phpfpm.pools.privatebin = {
       inherit user group;
-      phpPackage = pkgs.php83;
+      phpPackage = cfg.phpPackage;
       phpOptions = {
         log_errors = "on";
       };
@@ -166,7 +164,8 @@ in
         "pm.min_spare_servers" = lib.mkDefault 2;
         "pm.max_spare_servers" = lib.mkDefault 4;
         "pm.max_requests" = lib.mkDefault 500;
-      };
+      }
+      // cfg.poolConfig;
       phpEnv.CONFIG_PATH = lib.strings.removeSuffix "/conf.php" (toString privatebinSettings);
     };
 
@@ -224,4 +223,6 @@ in
       groups = lib.mkIf (group == defaultGroup) { ${defaultGroup} = { }; };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ savyajha ];
 }
