@@ -38,7 +38,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "unsloth";
-  version = "2026.11.2";
+  version = "2026.11.4";
   pyproject = true;
 
   # Upstream no longer publishes sdists on PyPI.
@@ -46,8 +46,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "unslothai";
     repo = "unsloth";
-    tag = "v0.1.915-beta";
-    hash = "sha256-LUkTs09WKZY4agfGqim4O5ZDCyimJ9HgjEnufyArg4I=";
+    tag = "v0.1.917-beta";
+    hash = "sha256-QyXxumYqUygXOP6PmEsucOUulp40a4yVBmkBCcCHk0I=";
   };
 
   postPatch = ''
@@ -59,6 +59,15 @@ buildPythonPackage (finalAttrs: {
   # The GitHub tag does not match the package version, make sure they agree.
   + ''
     grep -qF '__version__ = "${finalAttrs.version}"' unsloth/_version.py
+  ''
+  # torchvision 0.30 is not released yet, but 0.29 (ABI-stable) works with torch 2.15.
+  # Without this, unsloth infers torchvision>=0.30 and refuses to import.
+  + ''
+    substituteInPlace unsloth/import_fixes.py \
+      --replace-fail \
+        "        (2, 9): (0, 24)," \
+        "        (2, 15): (0, 29),
+            (2, 9): (0, 24),"
   ''
   # The AGPL-licensed CLI and Studio need a separately built web frontend and
   # are not part of the packaged Python library.

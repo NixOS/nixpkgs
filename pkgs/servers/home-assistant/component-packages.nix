@@ -13,6 +13,7 @@
       ];
     "abrp" =
       ps: with ps; [
+        aioabrp
         aiohasupervisor
         aiousbwatcher
         bleak
@@ -38,7 +39,7 @@
         pyturbojpeg
         securetar
         serialx
-      ]; # missing inputs: aioabrp
+      ];
     "acaia" =
       ps: with ps; [
         aioacaia
@@ -118,6 +119,7 @@
       ps:
       with ps;
       [
+        aerosmart-modbus
         aiohasupervisor
         aiousbwatcher
         ifaddr
@@ -126,7 +128,7 @@
         serialx
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: aerosmart-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "aftership" =
       ps: with ps; [
         pyaftership
@@ -8819,6 +8821,7 @@
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
     "abode"
+    "abrp"
     "acaia"
     "accuweather"
     "acmeda"
@@ -8827,6 +8830,7 @@
     "adguard"
     "advantage_air"
     "aemet"
+    "aerosmart"
     "aftership"
     "agent_dvr"
     "ai_task"

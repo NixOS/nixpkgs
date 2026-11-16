@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "lhpapi";
-  version = "1.0.11";
+  version = "1.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stephan192";
     repo = "lhpapi";
     tag = "v${version}";
-    hash = "sha256-tz1/+NTg8wI0mWcPfM1zk7EheUwShv8eCoYA7wAb/lM=";
+    hash = "sha256-a+ehnnBtIQcd9etIQvrLOz2o0wUrNUZkGBoI5nUHKxk=";
   };
 
   dependencies = [

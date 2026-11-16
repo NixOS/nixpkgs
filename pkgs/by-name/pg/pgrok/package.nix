@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pgrok";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uMHeVxAGmAEIOfCK9SEFsL7GZZIUNMYdoV8XeHjXmWc=";
+    hash = "sha256-Ru/YoyzmenLqs23KXT3aiJMzhvWe9Y/mBNs3Okrum78=";
   };
 
   outputs = [
@@ -54,7 +54,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-8CLAtxqNgcVIUw4RKAy6jKlErmkgZYyVYFdrD+jyfAA=";
   };
 
-  vendorHash = "sha256-fhyyyXHUJsIWiCZbqtLZZRuIG9hb0LAkSo7lKW0i8Sk";
+  vendorHash = "sha256-aRQJMUAIVqo3KTiG93inQYAdO07SgVUfAQvKXFYQoMU=";
 
   ldflags = [
     "-s"

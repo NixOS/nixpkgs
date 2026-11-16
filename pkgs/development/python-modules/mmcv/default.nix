@@ -61,6 +61,13 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace setup.py \
         --replace-fail "cpu_use = 4" "cpu_use = $NIX_BUILD_CORES" \
         --replace-fail "return locals()['__version__']" "return '${finalAttrs.version}'"
+    ''
+    # torch >= 2.15 requires C++20
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "-std=c++17" \
+          "-std=c++20"
     '';
 
   nativeBuildInputs = [
