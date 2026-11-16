@@ -112,8 +112,6 @@ decorate (
     );
     baseUrl = "https://${githubBase}/${owner}/${repo}";
     varBase = "NIX${optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-
-    gitRepoUrl = "${baseUrl}.git";
   in
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
@@ -127,7 +125,7 @@ decorate (
         useFetchGitArgsWDPassing
         // {
           inherit tag rev;
-          url = gitRepoUrl;
+          url = "${baseUrl}.git";
           inherit passthru;
           derivationArgs = {
             inherit
@@ -173,7 +171,7 @@ decorate (
             revCustom = rev;
           };
           passthru = {
-            inherit gitRepoUrl;
+            gitRepoUrl = "${baseUrl}.git";
           }
           // passthru;
         }
