@@ -8,7 +8,7 @@
 }:
 
 let
-  tag = "0.3.21-unstable-2025-08-15";
+  tag = "0.3.22";
 in
 stdenv.mkDerivation {
   pname = "apfs";
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "a10279ce663bdbe4d32baef83930e5ba7d69d7df";
-    hash = "sha256-4om16XuBURnOVK4SOrPu1Aj/p5F9/SA4tajo6HMDgI0=";
+    tag = "v${tag}";
+    hash = "sha256-yefZl/QHB5sj0571W6MTxshUxkMvPRbDBcTC8kyMBgk=";
   };
 
   hardeningDisable = [ "pic" ];

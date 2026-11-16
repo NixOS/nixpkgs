@@ -17,7 +17,7 @@
 }:
 
 buildPythonPackage {
-  pname = "gpu-rir";
+  pname = "gpurir";
   version = "0-unstable-2025-01-20";
   pyproject = true;
 

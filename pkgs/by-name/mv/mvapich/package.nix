@@ -136,6 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $benchmarks
     moveToOutput "libexec/osu-micro-benchmarks/" $benchmarks
+
+    # Create a mpi.pc symlink
+    ln -s $dev/lib/pkgconfig/mvapich.pc $dev/lib/pkgconfig/mpi.pc
   '';
 
   # Ensure the default compilers are the ones mvapich was built with

@@ -130,6 +130,8 @@ self: super: with self; {
 
   aerosandbox = callPackage ../development/python-modules/aerosandbox { };
 
+  aerosmart-modbus = callPackage ../development/python-modules/aerosmart-modbus { };
+
   aesedb = callPackage ../development/python-modules/aesedb { };
 
   aetcd = callPackage ../development/python-modules/aetcd { };
@@ -207,6 +209,8 @@ self: super: with self; {
   aio-pika = callPackage ../development/python-modules/aio-pika { };
 
   aio-wattwaechter = callPackage ../development/python-modules/aio-wattwaechter { };
+
+  aioabrp = callPackage ../development/python-modules/aioabrp { };
 
   aioacaia = callPackage ../development/python-modules/aioacaia { };
 
@@ -3377,8 +3381,6 @@ self: super: with self; {
 
   cmd2_3 = callPackage ../development/python-modules/cmd2_3 { };
 
-  cmd2_4 = callPackage ../development/python-modules/cmd2_4 { };
-
   cmdline = callPackage ../development/python-modules/cmdline { };
 
   cmdstanpy = callPackage ../development/python-modules/cmdstanpy { };
@@ -6473,8 +6475,6 @@ self: super: with self; {
 
   flexparser = callPackage ../development/python-modules/flexparser { };
 
-  flickrapi = callPackage ../development/python-modules/flickrapi { };
-
   flightradarapi = callPackage ../development/python-modules/flightradarapi { };
 
   flit = callPackage ../development/python-modules/flit { };
@@ -7328,9 +7328,9 @@ self: super: with self; {
 
   gptcache = callPackage ../development/python-modules/gptcache { };
 
-  gpu-rir = callPackage ../development/python-modules/gpu-rir { };
-
   gpuctypes = callPackage ../development/python-modules/gpuctypes { };
+
+  gpurir = callPackage ../development/python-modules/gpurir { };
 
   gpustat = callPackage ../development/python-modules/gpustat { };
 
@@ -9415,8 +9415,6 @@ self: super: with self; {
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
 
-  kuzu = callPackage ../development/python-modules/kuzu { };
-
   kvf = callPackage ../development/python-modules/kvf { };
 
   l18n = callPackage ../development/python-modules/l18n { };
@@ -11476,6 +11474,8 @@ self: super: with self; {
   msldap = callPackage ../development/python-modules/msldap { };
 
   mslex = callPackage ../development/python-modules/mslex { };
+
+  mslk = callPackage ../development/python-modules/mslk { };
 
   msmart-ng = callPackage ../development/python-modules/msmart-ng { };
 
@@ -21205,6 +21205,8 @@ self: super: with self; {
 
   torch-pitch-shift = callPackage ../development/python-modules/torch-pitch-shift { };
 
+  torch-remat = callPackage ../development/python-modules/torch-remat { };
+
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
 
   torch-tensorrt = callPackage ../development/python-modules/torch-tensorrt {
@@ -23112,9 +23114,7 @@ self: super: with self; {
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 
-  xformers = callPackage ../development/python-modules/xformers {
-    inherit (pkgs.llvmPackages) openmp;
-  };
+  xformers = callPackage ../development/python-modules/xformers { };
 
   xgboost = callPackage ../development/python-modules/xgboost { inherit (pkgs) xgboost; };
 

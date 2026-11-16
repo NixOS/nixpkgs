@@ -229,6 +229,7 @@ rec {
 
         harfbuzz
         e2fsprogs
+        libgpg-error
         keyutils.lib
         libjack2
         fribidi
