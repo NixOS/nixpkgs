@@ -22,11 +22,10 @@
   libfido2,
   numactl,
   cctools,
-  developer_cmds,
   libtirpc,
   rpcsvc-proto,
   curl,
-  DarwinTools,
+  darwin,
   nixosTests,
   coreutils,
   procps,
@@ -45,17 +44,21 @@
   jemalloc,
   gperftools,
 }:
+{
+  version,
+  hash,
+}:
 
 assert !(withJemalloc && withTcmalloc);
 
 let
   # baseline, used for building both client and server
   common = finalAttrs: {
-    version = "8.4.11-11";
+    inherit version;
 
     src = fetchurl {
       url = "https://downloads.percona.com/downloads/Percona-Server-${lib.versions.majorMinor finalAttrs.version}/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-      hash = "sha256-L7kOI1wlGD1zyXLLpIGjLqLZDO/KBmn+B4be/CrN+hg=";
+      inherit hash;
     };
 
     nativeBuildInputs = [
@@ -112,8 +115,8 @@ let
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
-      developer_cmds
-      DarwinTools
+      darwin.developer_cmds
+      darwin.DarwinTools
     ]
     ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) jemalloc
     ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) gperftools;

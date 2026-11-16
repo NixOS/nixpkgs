@@ -1,8 +1,7 @@
-pkgs: {
-  percona-server_8_4 = pkgs.callPackage ./8_4.nix {
-    inherit (pkgs.darwin) developer_cmds DarwinTools;
-    # newer versions cause linking failures against `libabsl_spinlock_wait`
-    protobuf = pkgs.protobuf_21;
+self: {
+  percona-server_8_4 = self.callPackage ./common.nix { } {
+    version = "8.4.11-11";
+    hash = "sha256-L7kOI1wlGD1zyXLLpIGjLqLZDO/KBmn+B4be/CrN+hg=";
   };
-  percona-server = pkgs.percona-server_8_4;
+  percona-server = self.percona-server_8_4;
 }
