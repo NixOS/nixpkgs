@@ -2,16 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
-  opensupaplex,
   SDL2,
   SDL2_mixer,
   desktopToDarwinBundle,
+  nix-update-script,
+  ruby,
+  runCommand,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensupaplex";
   version = "7.2.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "sergiou87";
@@ -21,7 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # LC_UUID is non-deterministic on Darwin
     ./reproducible-build.patch
+    # nixpkgs SDL2_mixer has no framework layout
     ./darwin.patch
   ];
 
@@ -34,21 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ SDL2_mixer ];
 
-  enableParallelBuilding = true;
+  makeFlags = [
+    "-C"
+    "linux"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DFILE_DATA_PATH=${placeholder "out"}/lib/opensupaplex"
     "-DFILE_FHS_XDG_DIRS"
   ];
-
-  preBuild = ''
-    # Makefile is located in this directory
-    pushd linux
-  '';
-
-  postBuild = ''
-    popd
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -63,21 +65,47 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = opensupaplex;
-    command = "opensupaplex --help";
-    version = "v${finalAttrs.version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
+  enableParallelBuilding = true;
   # Strip only the main binary, not the data files which would corrupt them.
   stripExclude = [ "lib/opensupaplex/*" ];
+
+  versionCheckProgramArg = "--help";
+
+  passthru = {
+    tests.demos =
+      runCommand "opensupaplex-demos"
+        {
+          env = {
+            SDL_AUDIODRIVER = "dummy";
+            SDL_VIDEODRIVER = "dummy";
+          };
+          nativeBuildInputs = [
+            ruby
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          cd ${finalAttrs.src}/tests
+          ruby run-tests.rb ${lib.getExe finalAttrs.finalPackage}
+          touch $out
+        '';
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Decompilation of Supaplex in C and SDL";
     homepage = "https://github.com/sergiou87/open-supaplex";
     changelog = "https://github.com/sergiou87/open-supaplex/blob/master/changelog/v${finalAttrs.version}.txt";
-    license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Only
+        mit
+      ];
+    maintainers = with lib.maintainers; [ keenanweaver ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "opensupaplex";
   };
