@@ -5,9 +5,9 @@
                  QTWEBENGINECORE_VERSION_STR=${QT_REPO_MODULE_VERSION}
                  QTWEBENGINEPROCESS_NAME=${qtWebEngineProcessName}
 +                QTWEBENGINE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-                 BUILDING_CHROMIUM
                  "${forwardDeclarationMacro}"
              CXX_COMPILE_OPTIONS
+                 ${gnCxxCompileOptions}
 diff --git a/src/core/api/qtwebenginecoreglobal.h b/src/core/api/qtwebenginecoreglobal.h
 index 334d53d8e..9df9276bb 100644
 --- a/src/core/api/qtwebenginecoreglobal.h

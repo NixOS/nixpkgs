@@ -1,8 +1,6 @@
-diff --git a/src/core/api/CMakeLists.txt b/src/core/api/CMakeLists.txt
-index dbe881ecf..9ba6ceffe 100644
 --- a/src/core/api/CMakeLists.txt
 +++ b/src/core/api/CMakeLists.txt
-@@ -214,7 +214,7 @@ if(QT_FEATURE_framework)
+@@ -227,7 +227,7 @@ if(QT_FEATURE_framework)
      )
  
  else()

@@ -1,5 +1,6 @@
 {
   qtModule,
+  fetchzip,
   qtdeclarative,
   qtwebchannel,
   qtpositioning,
@@ -7,7 +8,6 @@
   buildPackages,
   bison,
   coreutils,
-  fetchpatch2,
   flex,
   gperf,
   ninja,
@@ -53,7 +53,6 @@
   pulseaudio,
   libcap,
   pciutils,
-  systemd,
   pipewire,
   gn,
   ffmpeg,
@@ -75,6 +74,13 @@
 
 qtModule {
   pname = "qtwebengine";
+
+  version = "6.140.0";
+  src = fetchzip {
+    url = "https://download.qt.io/official_releases/qtwebengine/6.140/6.140.0/src/qtwebengine-everywhere-src-6.140.0.tar.xz";
+    hash = "sha256-t8n34Ica4VIfe026Ubk4hvdJvIPMWrm6eKMITd6evJs=";
+  };
+
   nativeBuildInputs = [
     bison
     coreutils
@@ -115,41 +121,31 @@ qtModule {
     # Override locales install path so they go to QtWebEngine's $out
     ./locales-path.patch
 
+    # Look for things in the right places in our split-prefix config
+    ./split-prefix.patch
+
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
 
-    ./split-prefix.patch
+    # Don't require compiler to identify as AppleClang on Darwin
+    ./darwin-compiler.patch
+
+    # Disable Metal shader precompilation, which requires Apple proprietary tools
+    ./darwin-no-metal.patch
+
+    # Generating debug symbols fails the build because it can't find dsymutil
+    # FIXME: figure out how to fix this properly
+    ./darwin-no-debug-symbols.patch
+
+    # Darwin toolchain fixes
+    # FIXME: do we still need these?
+    ./clang-base-path-from-cmake-compiler.patch
+    ./lflags-remove-strip-darwin-isysroot.patch
   ];
 
   postPatch = ''
     # Patch Chromium build tools
-    (
-      cd src/3rdparty/chromium;
-
-      # Manually fix unsupported shebangs
-      substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
-      substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
-        --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
-      patchShebangs .
-    )
-
-    substituteInPlace cmake/Functions.cmake \
-      --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
-
-    substituteInPlace configure.cmake src/gn/CMakeLists.txt \
-      --replace "AppleClang" "Clang"
-
-    # Disable metal shader compilation, Xcode only
-    substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
-      --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-      src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
-
-    sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-      src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
+    (cd src/3rdparty/chromium; patchShebangs .)
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
@@ -170,7 +166,6 @@ qtModule {
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
-    "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -185,7 +180,8 @@ qtModule {
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_CXX_COMPILER=${lib.getExe' stdenv.cc "clang++"}"
   ];
 
   propagatedBuildInputs = [
@@ -277,10 +273,19 @@ qtModule {
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
 
+  # Add dlopen-only dependencies after shrink-rpath, which would remove them.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath "${
+      lib.makeLibraryPath [
+        pipewire
+        pciutils
+      ]
+    }" "$out/lib/libQt6WebEngineCore.so"
+  '';
+
   meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
       "armv7a-linux"
