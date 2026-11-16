@@ -3,31 +3,27 @@
   libretro,
   makeBinaryWrapper,
   retroarch-bare,
-  writeText,
   symlinkJoin,
+  writeText,
   cores ? [ ],
   settings ? { },
 }:
 
 let
-  settingsPath = writeText "declarative-retroarch.cfg" (
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n} = \"${v}\"") settings)
-  );
-
   # All cores should be located in the same path after symlinkJoin,
   # but let's be safe here
   coresPath = lib.lists.unique (map (c: c.libretroCore) cores);
-  wrapperArgs = lib.strings.escapeShellArgs (
-    (lib.lists.flatten (
-      map (p: [
-        "--add-flags"
-        "-L ${placeholder "out" + p}"
-      ]) coresPath
-    ))
-    ++ [
-      "--add-flags"
-      "--appendconfig=${settingsPath}"
-    ]
+  declarativeSettings =
+    lib.optionalAttrs (coresPath != [ ]) {
+      libretro_directory = "@retroarch@" + lib.last coresPath;
+    }
+    // settings;
+  settingsPath = writeText "declarative-retroarch.cfg" (
+    lib.generators.toKeyValue {
+      mkKeyValue = lib.generators.mkKeyValueDefault {
+        mkValueString = v: ''"${v}"'';
+      } " = ";
+    } declarativeSettings
   );
 in
 symlinkJoin {
@@ -48,8 +44,13 @@ symlinkJoin {
     # remove core specific binaries
     find $out/bin -name 'retroarch-*' -type l -delete
 
-    # wrap binary to load cores from the proper location(s)
-    wrapProgram $out/bin/retroarch ${wrapperArgs}
+    # Unlike -L <directory>, appended settings survive configuration reloads
+    # when closing content or unloading core/game overrides.
+    mkdir -p $out/share/retroarch
+    substitute ${settingsPath} $out/share/retroarch/declarative-retroarch.cfg \
+      --subst-var-by retroarch "$out"
+    wrapProgram $out/bin/retroarch \
+      --add-flags "--appendconfig=$out/share/retroarch/declarative-retroarch.cfg"
   '';
 
   meta = {
