@@ -28,6 +28,7 @@
   nixosTests,
   pnpm_10,
   nodejs,
+  version,
 }:
 {
   pname,
@@ -102,8 +103,7 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname;
-  version = "3.06.00";
+  inherit pname version;
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
