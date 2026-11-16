@@ -2,6 +2,7 @@
   lib,
   buildNimPackage,
   fetchFromSourcehut,
+  copyDesktopItems,
   gentium-plus,
   makeDesktopItem,
 }:
@@ -21,17 +22,19 @@ buildNimPackage (finalAttrs: {
 
   env.HOTTEXT_FONT_PATH = "${gentium-plus}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 
-  desktopItem = makeDesktopItem {
-    categories = [ "Utility" ];
-    comment = finalAttrs.meta.description;
-    desktopName = "hottext";
-    exec = "hottext";
-    name = "hottext";
-  };
+  nativeBuildInputs = [
+    copyDesktopItems
+  ];
 
-  postInstall = ''
-    cp -r $desktopItem/* $out
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [ "Utility" ];
+      comment = finalAttrs.meta.description;
+      desktopName = "hottext";
+      exec = "hottext";
+      name = "hottext";
+    })
+  ];
 
   meta = finalAttrs.src.meta // {
     description = "Simple RSVP speed-reading utility";

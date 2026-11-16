@@ -6,6 +6,7 @@
   pkg-config,
   autoconf,
   makeDesktopItem,
+  copyDesktopItems,
   nixosTests,
   vte,
   harfbuzz, # can be replaced with libotf
@@ -124,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     autoconf
+    copyDesktopItems
   ]
   ++ lib.optionals enableTools.mlconfig [
     wrapGAppsHook3
@@ -197,7 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
     install -D contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
-    install -D -t $out/share/applications $desktopItem/share/applications/*
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications/
@@ -205,20 +206,22 @@ stdenv.mkDerivation (finalAttrs: {
     install $out/bin/mlterm -Dt $out/Applications/mlterm.app/Contents/MacOS/
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "mlterm";
-    exec = "${desktopBinary} %U";
-    icon = "mlterm";
-    type = "Application";
-    comment = "Multi Lingual TERMinal emulator";
-    desktopName = "mlterm";
-    genericName = "Terminal emulator";
-    categories = [
-      "System"
-      "TerminalEmulator"
-    ];
-    startupNotify = false;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mlterm";
+      exec = "${desktopBinary} %U";
+      icon = "mlterm";
+      type = "Application";
+      comment = "Multi Lingual TERMinal emulator";
+      desktopName = "mlterm";
+      genericName = "Terminal emulator";
+      categories = [
+        "System"
+        "TerminalEmulator"
+      ];
+      startupNotify = false;
+    })
+  ];
 
   passthru = {
     tests.test = nixosTests.terminal-emulators.mlterm;

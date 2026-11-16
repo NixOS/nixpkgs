@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   unzip,
   jre,
   runtimeShell,
@@ -17,30 +18,35 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/swingsane/swingsane-${finalAttrs.version}-bin.zip";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    unzip
+    copyDesktopItems
+  ];
 
   dontConfigure = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "swingsane";
+      exec = "swingsane";
+      icon = "swingsane";
+      desktopName = "SwingSane";
+      genericName = "Scan from local or remote SANE servers";
+      comment = finalAttrs.meta.description;
+      categories = [ "Office" ];
+    })
+  ];
+
   installPhase =
     let
-
       execWrapper = ''
         #!${runtimeShell}
         exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${finalAttrs.version}.jar "$@"
       '';
-
-      desktopItem = makeDesktopItem {
-        name = "swingsane";
-        exec = "swingsane";
-        icon = "swingsane";
-        desktopName = "SwingSane";
-        genericName = "Scan from local or remote SANE servers";
-        comment = finalAttrs.meta.description;
-        categories = [ "Office" ];
-      };
-
     in
     ''
+      runHook preInstall
+
       install -v -m 755    -d $out/share/java/swingsane/
       install -v -m 644 *.jar $out/share/java/swingsane/
 
@@ -50,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       unzip -j swingsane-${finalAttrs.version}.jar "com/swingsane/images/*.png"
       install -v -D -m 644 swingsane_512x512.png $out/share/icons/hicolor/512x512/apps/swingsane.png
 
-      cp -v -r ${desktopItem}/share/applications $out/share
+      runHook postInstall
     '';
 
   meta = {
