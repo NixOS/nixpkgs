@@ -9,6 +9,7 @@
 
 let
   fontconfig_ = fontconfig;
+  toStringParam = lib.concatStringsSep " ";
 in
 {
   fontconfig ? fontconfig_,
@@ -44,9 +45,15 @@ runCommand "fonts.conf"
   {
     nativeBuildInputs = [ libxslt ];
     buildInputs = [ fontconfig ];
-    inherit fontDirectories includes;
+    strictDeps = true;
+    __structuredAttrs = true;
+    # These values are passed via --stringparam and must be space-separated strings (not arrays).
+    # They are split via 'str:tokenize()' inside the stylesheet so there is nothing to be gained by
+    # trying to keep more structure here (e.g. to allow whitespace in paths).
+    fontDirectories = toStringParam fontDirectories;
+    includes = toStringParam includes;
     # Add a default font for non-nixos systems, <1MB and in nixos defaults.
-    impureFontDirectories = impureFontDirectories ++ [ dejavu_fonts.minimal ];
+    impureFontDirectories = toStringParam (impureFontDirectories ++ [ dejavu_fonts.minimal ]);
   }
   ''
     xsltproc --stringparam fontDirectories "$fontDirectories" \
