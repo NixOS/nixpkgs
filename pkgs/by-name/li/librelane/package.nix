@@ -46,6 +46,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # librelane pins ciel<3; only Family.by_name/get_ciel_home/fetch()
     # (unchanged in ciel 3.0.0) are used, so the pin is safe to relax.
     "ciel"
+    # lln-libparse versions follow yosys; the Python API is unchanged.
+    "lln-libparse"
   ];
 
   dependencies = with python3Packages; [
