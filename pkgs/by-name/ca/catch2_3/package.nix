@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit spdlog;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Modern, C++-native, test framework for unit-tests";
     homepage = "https://github.com/catchorg/Catch2";
