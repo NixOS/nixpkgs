@@ -116,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.teams.pantheon
     ];
     license = lib.licenses.gpl3Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     platforms = lib.platforms.linux;
   };
 })

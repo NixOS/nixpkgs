@@ -145,9 +145,9 @@ let
     });
 in
 {
-  # EOL 2027-03-16
+  # EOL date not announced yet
   vinyl-cache_9 = generic {
-    version = "9.0.2";
-    hash = "sha256-fkgwYphcZ6nykB+iD3Ewl8cAHWl1SfRGfL+BI+tsacc=";
+    version = "9.1.0";
+    hash = "sha256-OECgbdDNIS/R477riwhtvXw1yjHP4ZYv4lhjY6Y0EKo=";
   };
 }

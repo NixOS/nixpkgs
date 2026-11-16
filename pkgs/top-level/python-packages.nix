@@ -4158,6 +4158,8 @@ self: super: with self; {
     protoc = pkgs.protobuf;
   };
 
+  datalab-capsule = callPackage ../development/python-modules/datalab-capsule { };
+
   datalab-platform = callPackage ../development/python-modules/datalab-platform { };
 
   datalad = callPackage ../development/python-modules/datalad { };
@@ -19287,6 +19289,8 @@ self: super: with self; {
   sievelib = callPackage ../development/python-modules/sievelib { };
 
   sigima = callPackage ../development/python-modules/sigima { };
+
+  sigimax = callPackage ../development/python-modules/sigimax { };
 
   signalrcore = callPackage ../development/python-modules/signalrcore { };
 

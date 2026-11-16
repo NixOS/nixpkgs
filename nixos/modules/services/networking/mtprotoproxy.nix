@@ -4,110 +4,98 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    types
+    mkEnableOption
+    mkOption
+    mkIf
+    mkRemovedOptionModule
+    ;
 
   cfg = config.services.mtprotoproxy;
 
-  configOpts = {
-    PORT = cfg.port;
-    USERS = cfg.users;
-    SECURE_ONLY = cfg.secureOnly;
-  }
-  // lib.optionalAttrs (cfg.adTag != null) { AD_TAG = cfg.adTag; }
-  // cfg.extraConfig;
-
-  convertOption =
-    opt:
-    if isString opt || isInt opt then
-      builtins.toJSON opt
-    else if isBool opt then
-      if opt then "True" else "False"
-    else if isList opt then
-      "[" + concatMapStringsSep "," convertOption opt + "]"
-    else if isAttrs opt then
-      "{"
-      + concatStringsSep "," (
-        mapAttrsToList (name: opt: "${builtins.toJSON name}: ${convertOption opt}") opt
-      )
-      + "}"
-    else
-      throw "Invalid option type";
-
-  configFile = pkgs.writeText "config.py" (
-    concatStringsSep "\n" (mapAttrsToList (name: opt: "${name} = ${convertOption opt}") configOpts)
-  );
-
+  settingsFormat = pkgs.formats.pythonVars { };
+  configFile = settingsFormat.generate "config.py" cfg.settings;
 in
-
 {
-
-  ###### interface
+  imports = [
+    (mkRemovedOptionModule [ "services" "mtprotoproxy" "port" ] ''
+      The mtprotoproxy module now uses RFC-42-style settings, please use
+      `services.mtprotoproxy.settings.PORT` instead.
+    '')
+    (mkRemovedOptionModule [ "services" "mtprotoproxy" "adTag" ] ''
+      The mtprotoproxy module now uses RFC-42-style settings, please use
+      `services.mtprotoproxy.settings.AD_TAG` instead.
+    '')
+    (mkRemovedOptionModule [ "services" "mtprotoproxy" "users" ] ''
+      The mtprotoproxy module now uses RFC-42-style settings, please use
+      `services.mtprotoproxy.settings.USERS` instead.
+    '')
+    (mkRemovedOptionModule [ "services" "mtprotoproxy" "secureOnly" ] ''
+      The mtprotoproxy module now uses RFC-42-style settings, please use
+      `services.mtprotoproxy.settings.SECURE_ONLY` instead.
+    '')
+  ];
 
   options = {
-
     services.mtprotoproxy = {
-
       enable = mkEnableOption "mtprotoproxy";
 
-      port = mkOption {
-        type = types.port;
-        default = 3256;
-        description = ''
-          TCP port to accept mtproto connections on.
-        '';
-      };
+      settings = mkOption {
+        type = lib.types.submodule {
+          freeformType = settingsFormat.type;
 
-      users = mkOption {
-        type = types.attrsOf types.str;
-        example = {
-          tg = "00000000000000000000000000000000";
-          tg2 = "0123456789abcdef0123456789abcdef";
+          options = {
+            PORT = mkOption {
+              type = types.port;
+              default = 3256;
+              description = ''
+                TCP port to accept mtproto connections on.
+              '';
+            };
+
+            USERS = mkOption {
+              type = types.attrsOf types.str;
+              example = {
+                tg = "00000000000000000000000000000000";
+                tg2 = "0123456789abcdef0123456789abcdef";
+              };
+              description = ''
+                Allowed users and their secrets. A secret is a 32 characters long hex string.
+              '';
+            };
+
+            SECURE_ONLY = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Don't allow users to connect in non-secure mode (without random padding).
+              '';
+            };
+
+            AD_TAG = mkOption {
+              type = types.str;
+              default = "";
+              # Taken from mtproxyproto's repo.
+              example = "3c09c680b76ee91a4c25ad51f742267d";
+              description = ''
+                Tag for advertising that can be obtained from @MTProxybot.
+              '';
+            };
+          };
         };
+
         description = ''
-          Allowed users and their secrets. A secret is a 32 characters long hex string.
+          Python variables to set for the service.
+
+          Refer to <https://github.com/alexbers/mtprotoproxy/blob/master/config.py> for a example config.
         '';
       };
-
-      secureOnly = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Don't allow users to connect in non-secure mode (without random padding).
-        '';
-      };
-
-      adTag = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        # Taken from mtproxyproto's repo.
-        example = "3c09c680b76ee91a4c25ad51f742267d";
-        description = ''
-          Tag for advertising that can be obtained from @MTProxybot.
-        '';
-      };
-
-      extraConfig = mkOption {
-        type = types.attrs;
-        default = { };
-        example = {
-          STATS_PRINT_PERIOD = 600;
-        };
-        description = ''
-          Extra configuration options for mtprotoproxy.
-        '';
-      };
-
     };
-
   };
 
-  ###### implementation
-
   config = mkIf cfg.enable {
-
     systemd.services.mtprotoproxy = {
       description = "MTProto Proxy Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -116,7 +104,5 @@ in
         DynamicUser = true;
       };
     };
-
   };
-
 }
