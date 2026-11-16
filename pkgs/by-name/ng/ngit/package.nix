@@ -1,5 +1,6 @@
 {
   cacert,
+  dbus,
   fetchgit,
   git,
   lib,
@@ -72,11 +73,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # or newer on PATH.
   propagatedUserEnvPkgs = lib.optionals stdenv.hostPlatform.isUnix [ git ];
 
-  nativeCheckInputs = lib.optionals (canRunChecks && stdenv.hostPlatform.isUnix) [
-    cacert
-    git
-    ngit-grasp
-  ];
+  nativeCheckInputs =
+    lib.optionals (canRunChecks && stdenv.hostPlatform.isUnix) [
+      cacert
+      git
+      ngit-grasp
+    ]
+    ++ lib.optionals (canRunChecks && stdenv.hostPlatform.isLinux) [ dbus ];
 
   # Windows target binaries cannot be executed by the cross-build worker.
   # Upstream CI provides Windows compilation and selected unit-test coverage;
