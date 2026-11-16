@@ -180,6 +180,12 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
+    local refspec="$hash"
+    # If "$ref" is a tag, still fetch that ref so that `git cat-file` won't fail.
+    if [[ "$ref" =~ ^refs/tags ]]; then
+        refspec="+$ref:$ref"
+    fi
+
     local -a fetchTagsArgs=()
     # Avoid fetching all tags at clone time when not leaving .git,
     # but keep/restore the behaviour before
@@ -193,6 +199,11 @@ checkout_hash(){
     local -a fetchTargetArgs
     if [[ -n "$deepClone" ]]; then
         fetchTargetArgs=(origin)
+        # Avoid fetching unspecified branches and tags to enhance hash stability
+        # but only do so when not leaving .git for backward hash compatibility.
+        if [[ -z "$leaveDotGit" ]]; then
+            fetchTargetArgs+=("$refspec")
+        fi
     else
         fetchTargetArgs=(--depth=1 origin "$hash")
     fi
