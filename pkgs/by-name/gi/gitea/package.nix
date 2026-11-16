@@ -17,40 +17,9 @@
   stdenv,
   sqliteSupport ? true,
   nixosTests,
+  nix-update-script,
 }:
 
-let
-  pnpm = pnpm_11;
-
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "gitea-frontend";
-    inherit (gitea) src version;
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      inherit pnpm;
-      fetcherVersion = 4;
-      hash = "sha256-Q8PJfQ5RPKM1upeujKLd5msANQRj+Fjwz/Q+lqov0yI=";
-    };
-
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm
-    ];
-
-    __darwinAllowLocalNetworking = true;
-
-    buildPhase = ''
-      make frontend
-    '';
-
-    installPhase = ''
-      mkdir -p $out
-      cp -R public $out/
-    '';
-  });
-in
 buildGo127Module (finalAttrs: {
   pname = "gitea";
   version = "28.3.0";
@@ -93,9 +62,38 @@ buildGo127Module (finalAttrs: {
     "-X 'main.Tags=${lib.concatStringsSep " " finalAttrs.tags}'"
   ];
 
+  frontend = stdenv.mkDerivation (finalFrontendAttrs: {
+    pname = "${finalAttrs.pname}-frontend";
+    inherit (finalAttrs) src version;
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalFrontendAttrs) pname version src;
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-Q8PJfQ5RPKM1upeujKLd5msANQRj+Fjwz/Q+lqov0yI=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm_11
+    ];
+
+    __darwinAllowLocalNetworking = true;
+
+    buildPhase = ''
+      make frontend
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -R public $out/
+    '';
+  });
+
   postInstall = ''
     mkdir $data
-    ln -s ${frontend}/public $data/public
+    ln -s ${finalAttrs.frontend}/public $data/public
     cp -R ./{templates,options} $data
     mkdir -p $out
     cp -R ./options/locale $out/locale
@@ -120,6 +118,13 @@ buildGo127Module (finalAttrs: {
 
     tests = {
       inherit (nixosTests) gitea gitea-actions-runner;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
     };
   };
 
