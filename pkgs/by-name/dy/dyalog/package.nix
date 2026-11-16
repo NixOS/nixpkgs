@@ -33,7 +33,7 @@
 let
   dyalogHome = "$out/lib/dyalog";
 
-  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.sdk_8_0-source}/share/dotnet";
+  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.runtime_10_0}/share/dotnet";
 
   licenseUrl = "https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf";
 
@@ -59,7 +59,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "20.0.53963";
+  version = "21.0.55109";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
   passthru.sources =
@@ -79,12 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux" = fetchArtifact {
         prefix = "linux_64";
         suffix = "unicode.x86_64.deb";
-        hash = "sha256-4LjB/aHK40HecgZA7YUIoY/CaCnSoMOs9OoIhong8j4=";
+        hash = "sha256-A9ncL6IvpDTqkaYKbTr0dnS5B7ui24wPMLknbIr+UJo=";
       };
       "aarch64-linux" = fetchArtifact {
         prefix = "linux_64";
         suffix = "unicode.aarch64.deb";
-        hash = "sha256-5uVxMK0yowLOARW+PjFDpFiUNc/0cU/5lzY8t5Z6DxY=";
+        hash = "sha256-esJSpOfnLUi/wobVhTk0KaMRD03UiWpGVMzL5VqKdRM=";
       };
     };
 
@@ -130,11 +130,15 @@ stdenv.mkDerivation (finalAttrs: {
     cp aplkeys.sh default.dse dyalog dyalogc dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${dyalogHome}
 
     mkdir ${dyalogHome}/lib
-    cp lib/{conga36_64.so,dyalog64.so,libconga36ssl64.so} ${dyalogHome}/lib
+    cp lib/{conga37_64.so,dyalog64.so,libconga37ssl64.so} ${dyalogHome}/lib
 
     # Only keep the most useful workspaces
     mkdir ${dyalogHome}/ws
     cp ws/{conga,dfns,isolate,loaddata,salt,sharpplot,util}.dws ${dyalogHome}/ws
+  ''
+  # Not shipped on aarch64; dyalog loads it at startup even without the HTMLRenderer
+  + lib.optionalString (!isAarch) ''
+    cp unix_gui.so ${dyalogHome}
   ''
   + lib.optionalString dotnetSupport ''
     cp libnethost.so Dyalog.Net.Bridge.* Lokad.ILPack.dll ${dyalogHome}
@@ -143,10 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r locales ${dyalogHome}
     cp libcef.so libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 ${dyalogHome}
     cp chrome-sandbox icudtl.dat v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
+    cp HtmlRendererPlugin.plugin ${dyalogHome}
     cp lib/htmlrenderer.so ${dyalogHome}/lib
   ''
   + lib.optionalString sqaplSupport ''
-    cp lib/cxdya66u64u.so ${dyalogHome}/lib
+    cp lib/cxdya67u64u.so ${dyalogHome}/lib
     cp ws/sqapl.dws ${dyalogHome}/ws
     cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
   ''
