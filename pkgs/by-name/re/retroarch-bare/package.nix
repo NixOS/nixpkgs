@@ -44,8 +44,8 @@
   retroarch-assets,
   retroarch-bare,
   retroarch-joypad-autoconfig,
-  writeText,
   symlinkJoin,
+  writeText,
   # params
   enableNvidiaCgToolkit ? false,
   withGamemode ? stdenv.hostPlatform.isLinux,
@@ -150,7 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = nixosTests.retroarch;
+    tests = {
+      inherit (nixosTests) retroarch;
+      wrapper = nixosTests.retroarch-wrapper;
+    };
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
@@ -165,8 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
           libretro
           makeBinaryWrapper
           retroarch-bare
-          writeText
           symlinkJoin
+          writeText
           cores
           ;
         settings = {
