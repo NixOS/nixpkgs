@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   nix-update-script,
+  hailo8-firmware,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,10 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-
-  passthru.updateScript = nix-update-script {
-     # 4.x versions track hailo8, later versions track newer hardware
-    extraArgs = [ "--version-regex '^4\\..*$'" ];
+  passthru = {
+    updateScript = nix-update-script {
+      # 4.x versions track hailo8, later versions track newer hardware
+      extraArgs = [ "--version-regex '^4\\..*$'" ];
+    };
+    tests = {
+      inherit hailo8-firmware;
+    };
   };
 
   __structuredAttrs = true;
