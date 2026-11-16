@@ -9,8 +9,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mirth";
-  version = "0-unstable-2026-11-15";
-  gitRev = "f7b4b1a9e19c66e01ce16f92b3d64787e7ea26b6";
+  version = "0-unstable-2026-11-16";
+  gitRev = "e41e5a6002ea867ef397d87ba9bd44c6cdd685ba";
   __structuredAttrs = true;
 
   src = fetchzip {
@@ -19,20 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
       "https://github.com/mirth-lang/mirth/archive/${finalAttrs.gitRev}.zip"
       "https://git.sr.ht/~typeswitch/mirth/archive/${finalAttrs.gitRev}.tar.gz"
     ];
-    hash = "sha256-S++vkfwOQsAdxnBRm6bGa9u+bJPxrvbPOtkkrqhfvbg=";
+    hash = "sha256-ERMVt1fY4f00BHGjtyyZ2xiaFuXi+eq9kWvazeNh/X4=";
   };
 
   postPatch = ''
     # Replace hard-coded GCC with stdenv’s C compiler.
     # NOTE: newer GCC requires optimization level ≥1 to use fortity. -O1 is
     # fast enough as a default for the compiler stages.
-    #
-    # glibc marks write(2) with warn_unused_result, which the generated
-    # bootstrap’s TRACE macro ignores.
     # noted: https://codeberg.org/typeswitch/mirth/issues/1
     substituteInPlace Makefile \
       --replace-fail "-O0" "-O1" \
-      --replace-fail "-Werror" "-Werror -Wno-error=unused-result" \
       --replace-fail "CC=gcc \$(C99FLAGS)" "CC=${buildPackages.stdenv.cc.targetPrefix}cc \$(C99FLAGS)"
 
     # Override the final binary, mirth3, with the target’s C compiler & -O2
