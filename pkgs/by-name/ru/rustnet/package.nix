@@ -63,7 +63,10 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     homepage = "https://github.com/domcyrus/rustnet";
     changelog = "https://github.com/domcyrus/rustnet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dvaerum ];
+    maintainers = with lib.maintainers; [
+      dvaerum
+      isomarcte
+    ];
     mainProgram = "rustnet";
     platforms = lib.platforms.linux;
   };

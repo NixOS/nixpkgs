@@ -12692,6 +12692,13 @@
     githubId = 13622947;
     keys = [ { fingerprint = "1412 816B A9FA F62F D051 1975 D3E1 B013 B463 1293"; } ];
   };
+  isomarcte = {
+    name = "David Strawn";
+    email = "isomarcte@isomarcte.io";
+    github = "isomarcte";
+    githubId = 6734045;
+    keys = [ { fingerprint = "1B71 490A D2B1 3426 19DF  5B6F 8AC6 325F 222B C9D8"; } ];
+  };
   isotoxal = {
     name = "Abhinav Kuruvila Joseph";
     email = "abhinavkuruvila@proton.me";
