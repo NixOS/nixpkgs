@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+  nativeCheckInputs = [ ctestCheckHook ];
 
   cmakeFlags = [
     (lib.cmakeBool "CORRADE_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
@@ -52,10 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     skip_test src/Corrade/Utility/Test/PathTest.cpp PathTest::homeDirectory
     skip_test src/Corrade/PluginManager/Test/ManagerTest.cpp ManagerTest::pluginDirectoryNotReadable
   '';
-  # or instead of the postPatch above, maybe it makes sense to do
-  # preCheck = ''
-  # export HOME=/root
-  # '';
 
   meta = {
     description = "C++11 multiplatform utility library";

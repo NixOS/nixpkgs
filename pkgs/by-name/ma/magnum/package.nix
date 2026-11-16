@@ -43,7 +43,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magnum";
-  version = "2020.06-unstable-2026-10-19";
+  version = "2020.06-unstable-2026-11-07";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mosra";
     repo = "magnum";
-    rev = "369e9620ab22224ae66a376290b9b36e872209ce";
-    hash = "sha256-ld8liF60ImYVNr4qEbcacu/8wtaC7jZEzpamKW380TU=";
+    rev = "d2ef8a037791734eb06e63b1e2685e7cf1db3485";
+    hash = "sha256-MNZJ5+VeE4TkHMSMprbPnA2ekwBYzT7R9PwrvUgxfdU=";
   };
 
   nativeBuildInputs = [
@@ -93,8 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     # Needed for unit tests trying to use Alsa, which is not available in the sandbox
     export ALSOFT_DRIVERS=null
-    ls /build/source/src/Magnum/Vk/Test/ShaderTestFiles/vert-frag.spv
-    ls /build/source/src/Magnum/Vk/Test/ShaderTestFiles
   '';
 
   postPatch = ''
@@ -106,10 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # XPASS [12] createInfoConstructNoInit() at /build/source/src/Magnum/Vk/Test/SamplerTest.cpp:200
     #       info->sType and VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO were expected to fail the comparison.
-    skip_test src/Magnum/Vk/Test/SamplerTest.cpp SamplerTest::createInfoConstructNoInit
+    # skip_test src/Magnum/Vk/Test/SamplerTest.cpp SamplerTest::createInfoConstructNoInit
   '';
-
-  patches = [ ./magnum-fix-vk-test.patch ];
 
   passthru = {
     args = {
@@ -164,12 +160,12 @@ stdenv.mkDerivation (finalAttrs: {
         };
       in
       # Wrap it in a lightweight stdenv.mkDerivation to guarantee propagatedBuildInputs are honored downstream
-      stdenv.mkDerivation rec {
-        name = "${joined.name}-wrapped";
+      stdenv.mkDerivation {
+        name = "${joined.name}";
         src = null;
         dontUnpack = true;
         dontBuild = true;
-        propagatedBuildInputs = builtins.trace "${name} has propagatedBuildInputs: ${toString allPropagated}" allPropagated;
+        propagatedBuildInputs = allPropagated;
         installPhase = ''
           mkdir -p $out
           # Link everything from the joined store path into this derivation output
