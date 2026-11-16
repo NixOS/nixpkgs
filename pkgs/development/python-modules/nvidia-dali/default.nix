@@ -46,8 +46,11 @@ buildPythonPackage (finalAttrs: {
         --replace-fail "@DALI_INSTALL_REQUIRES_NVCOMP@" ""
     '';
 
-  # The bindings are built with the configuration of the C++ libraries, which CMake checks again.
-  inherit (dali) nativeBuildInputs;
+  # The bindings are built with the configuration of the C++ libraries, which CMake checks again. Their stub generator
+  # needs libclang's bindings for this Python.
+  nativeBuildInputs = dali.nativeBuildInputs ++ [
+    (python.pythonOnBuildForHost.withPackages (ps: [ ps.clang ]))
+  ];
 
   buildInputs = dali.buildInputs ++ [
     dali
