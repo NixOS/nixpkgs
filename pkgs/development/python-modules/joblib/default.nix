@@ -77,6 +77,8 @@ buildPythonPackage (finalAttrs: {
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
     homepage = "https://joblib.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [
+      lib.maintainers.Filippo-Galli
+    ];
   };
 })
