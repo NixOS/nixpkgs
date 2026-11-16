@@ -21,6 +21,10 @@ stdenv.mkDerivation {
     hash = "sha256-TFMUqIXJzgpnZ8cDlVb47btPqsCNJil0MN4Tdt83140=";
   };
 
+  # Backport of upstream's yosys 0.71 API changes; newer upstream revisions
+  # need libghdl > 6.0.0.
+  patches = [ ./yosys-0.71.patch ];
+
   buildInputs = [
     yosys
     readline
