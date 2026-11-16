@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   postPatch = ''
     patchShebangs test
   '';
