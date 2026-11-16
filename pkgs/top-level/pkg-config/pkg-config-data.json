@@ -271,31 +271,26 @@
     },
     "gstreamer-audio-1.0": {
       "attrPath": [
-        "gst_all_1",
         "gst-plugins-base"
       ]
     },
     "gstreamer-base-1.0": {
       "attrPath": [
-        "gst_all_1",
         "gst-plugins-base"
       ]
     },
     "gstreamer-controller-1.0": {
       "attrPath": [
-        "gst_all_1",
         "gstreamer"
       ]
     },
     "gstreamer-net-1.0": {
       "attrPath": [
-        "gst_all_1",
         "gst-plugins-base"
       ]
     },
     "gstreamer-video-1.0": {
       "attrPath": [
-        "gst_all_1",
         "gst-plugins-base"
       ]
     },
