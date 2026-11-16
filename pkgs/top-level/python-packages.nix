@@ -11497,6 +11497,8 @@ self: super: with self; {
 
   mtcnn = callPackage ../development/python-modules/mtcnn { };
 
+  mtranslate = callPackage ../development/python-modules/mtranslate { };
+
   mujoco = callPackage ../development/python-modules/mujoco { };
 
   mujoco-core = callPackage ../development/python-modules/mujoco-core { inherit (pkgs) mujoco; };
