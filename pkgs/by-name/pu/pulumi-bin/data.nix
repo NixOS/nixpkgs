@@ -65,10 +65,6 @@
         sha256 = "1smsrj4fpk80kxw0p7l26vnlli9q6dcqv466jmcjzha4m13k5p6f";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-linux-amd64.tar.gz";
-        sha256 = "0hnardid0kbzy65dmn7vz8ddy5hq78nf2871zz6srf2hfyiv7qa4";
-      }
-      {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v12.8.0-linux-amd64.tar.gz";
         sha256 = "01q57p3p7ci70s9cnyp7higmawk87m79wsrks27rj6ka4wy7nx1f";
       }
@@ -223,10 +219,6 @@
         sha256 = "10ki8937wg7qvi1kk33pj73d0033lv0khmsd6rpm0hhf4bjj7f11";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-linux-arm64.tar.gz";
-        sha256 = "111pia2f5xwkwaqs6p90ri29l5b3ivmahsa1bji4fwyyjyp22h4r";
-      }
-      {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v12.8.0-linux-arm64.tar.gz";
         sha256 = "1wg2lygrarkshxqz8jy30jm6asiqvdprkpf9z028xakzs54gqpfd";
       }
@@ -379,10 +371,6 @@
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v5.2.0-darwin-arm64.tar.gz";
         sha256 = "1k1gmpbw0ljc8a75lvvh5v8k5im1zayj1sizj7vrw8r1idjadahv";
-      }
-      {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-darwin-arm64.tar.gz";
-        sha256 = "12bzicm43l7yvh02v5fx3z8v46l9i7a9f677735xi5rjbmd2an4c";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v12.8.0-darwin-arm64.tar.gz";

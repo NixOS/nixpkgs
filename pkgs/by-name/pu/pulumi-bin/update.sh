@@ -36,7 +36,6 @@ pulumi_repos=(
   "datadog"
   "digitalocean"
   "docker"
-  "equinix-metal"
   "fastly"
   "gcp"
   "github"
