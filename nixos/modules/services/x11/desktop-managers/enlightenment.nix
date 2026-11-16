@@ -15,10 +15,10 @@ let
   cfg = xcfg.desktopManager.enlightenment;
 
   GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
-    pkgs.gst_all_1.gst-plugins-base
-    pkgs.gst_all_1.gst-plugins-good
-    pkgs.gst_all_1.gst-plugins-bad
-    pkgs.gst_all_1.gst-libav
+    pkgs.gst-plugins-base
+    pkgs.gst-plugins-good
+    pkgs.gst-plugins-bad
+    pkgs.gst-libav
   ];
 
 in
