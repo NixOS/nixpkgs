@@ -2,56 +2,43 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
-  gcc,
+  aws-lc,
   libseccomp,
-  rust-bindgen,
+  pkg-config,
   rustPlatform,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firecracker";
-  version = "1.17.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-1HL13XL8CvwGTcm8uIJxgW31hUXXLZ8F2+jV7FEgxEY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JA9NjEYOVegrRJqOtyMqB/hrkhRggg3CpcDyXLYlfq0=";
   };
 
-  cargoHash = "sha256-rqKOD/4cqOLAOIRAdHvxurMB7JPQktWb6fr9KTs84RI=";
+  cargoHash = "sha256-H0yQFvaQvmPZsSebO3LO/69n4re55s0BweJHX+FRN80=";
 
-  # For aws-lc-sys@0.22.0: use external bindgen.
-  env.AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
-
-  # For aws-lc-sys@0.22.0: fix gcc error:
-  # In function 'memcpy',
-  #   inlined from 'OPENSSL_memcpy' at aws-lc/crypto/asn1/../internal.h
-  #   inlined from 'aws_lc_0_22_0_i2c_ASN1_BIT_STRING' at aws-lc/crypto/asn1/a_bitstr.c
-  # glibc/.../string_fortified.h: error: '__builtin_memcpy' specified bound exceeds maximum object size [-Werror=stringop-overflow=]
-  #
   # For cpu-template-helper: patch build.rs to use stdenv's cc which ensures the correct compiler is used across all stdenv's.
   #
   # For seccompiler: fix hardcoded /usr/local/lib path to libseccomp.lib, this makes sure rustc can find seccomp across stdenv's(including pkgsStatic).
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/*/aws-lc-sys-*/aws-lc/crypto/asn1/a_bitstr.c \
-      --replace-warn '(len > INT_MAX - 1)' '(len < 0 || len > INT_MAX - 1)'
-
     substituteInPlace src/cpu-template-helper/build.rs \
-      --replace-warn '"gcc"' "\"$CC\""
+      --replace-fail '"gcc"' "\"$CC\""
 
     substituteInPlace src/seccompiler/build.rs \
-      --replace-warn "/usr/local/lib" "${lib.getLib libseccomp}/lib"
+      --replace-fail "/usr/local/lib" "${lib.getLib libseccomp}/lib"
   '';
 
   nativeBuildInputs = [
-    cmake
-    gcc
-    rust-bindgen # for aws-lc-sys@0.22.0
-    rustPlatform.bindgenHook
+    pkg-config
+    rustPlatform.bindgenHook # for userfaultfd-sys
   ];
+
+  buildInputs = [ aws-lc ];
 
   cargoBuildFlags = [ "--workspace" ];
   cargoTestFlags = [
@@ -105,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+      iamanaws
       usertam
       thoughtpolice
       qjoly

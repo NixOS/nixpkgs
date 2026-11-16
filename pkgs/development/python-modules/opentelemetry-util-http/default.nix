@@ -2,6 +2,7 @@
   buildPythonPackage,
   hatchling,
   opentelemetry-instrumentation,
+  opentelemetry-semantic-conventions,
   opentelemetry-test-utils,
   pytestCheckHook,
 }:
@@ -14,6 +15,10 @@ buildPythonPackage {
   sourceRoot = "${opentelemetry-instrumentation.src.name}/util/opentelemetry-util-http";
 
   build-system = [ hatchling ];
+
+  dependencies = [
+    opentelemetry-semantic-conventions
+  ];
 
   nativeCheckInputs = [
     opentelemetry-instrumentation

@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-asyncio";
-  version = "1.4.1";
+  version = "1.4.1.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-asyncio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gXBxFf+DcSTufQxSCZmLWdBKOM5ZtL9OEehp05hS5hc=";
+    hash = "sha256-4/fL+9JPhvOPB8Y5R/3vKOQhH48NiFhylg1c7NYBwcc=";
   };
 
   build-system = [ setuptools-scm ];

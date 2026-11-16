@@ -6,7 +6,7 @@
 
 # Attention: For unknown reasons, the script can't be easily cancelled and needs to be killed manually if it shouldn't run to completion.
 
-use std log
+use std/log
 
 let broken_config = "pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml"
 

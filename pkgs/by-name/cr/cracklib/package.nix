@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cracklib";
-  version = "2.10.3";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "cracklib";
     repo = "cracklib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ORpJje4TGw1STtvRiNEwUwSDbLXdS+WgXGlc1Wtf/gw=";
+    hash = "sha256-d59/7LZfG9GvIYnqXEqInPnBn1x6calLEjwDkFbq96U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -70,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
       static = pkgsStatic.cracklib;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/cracklib/cracklib";

@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "woff2";
-    rev = "v${finalAttrs.version}";
-    sha256 = "13l4g536h0pr84ww4wxs2za439s0xp1va55g6l478rfbb1spp44y";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-npB7dVjLZXQINa8UtcPtQKdB1Be6c8I5QfkCaEZ5hI4=";
   };
 
   outputs = [
@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DCANONICAL_PREFIXES=ON"
@@ -53,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
         'cmake_minimum_required(VERSION 2.8.6)' \
         'cmake_minimum_required(VERSION 3.10)'
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Webfont compression reference code";

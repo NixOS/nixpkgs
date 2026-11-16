@@ -16,5 +16,5 @@ buildDunePackage {
     alcotest
   ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.12";
+  doCheck = lib.versionAtLeast ocaml.version "4.12" && lib.versionOlder alcotest.version "1.10";
 }

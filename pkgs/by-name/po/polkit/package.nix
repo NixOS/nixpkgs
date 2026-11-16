@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "polkit";
-  version = "127";
+  version = "128";
 
   disallowedReferences = lib.optional useConsoleKit systemdLibs;
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "polkit-org";
     repo = "polkit";
     rev = finalAttrs.version;
-    hash = "sha256-YTugETy0rqu/bv53jV1UeGqSK79bRXR52EJNcTblvzo=";
+    hash = "sha256-v9Um2o9/JQQ1LBa/1mtCoiZS3fv8Dif9mdVSwK22EKE=";
   };
 
   patches = [
@@ -169,9 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     # call through $PATH, but that might have security implications.
     substituteInPlace src/polkitagent/polkitagentsession.c \
       --replace-fail 'PACKAGE_PREFIX "/lib/polkit-1/'   '"${setuid}/'
-    substituteInPlace test/data/etc/polkit-1/rules.d/10-testing.rules \
-      --replace-fail /bin/true ${coreutils}/bin/true \
-      --replace-fail /bin/false ${coreutils}/bin/false
   '';
 
   postInstall = ''

@@ -35,7 +35,7 @@ let
     license = lib.licenses.gpl3;
     homepage = "https://tamarin-prover.github.io";
     description = "Security protocol verification in the symbolic model";
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    maintainers = [ ];
     hydraPlatforms = lib.platforms.linux; # maude is broken on darwin
   };
 

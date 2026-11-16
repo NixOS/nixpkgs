@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-pager=less"
+    "--with-sections=1 n l 8 3 0 2 5 4 9 6 7"
   ]
   ++ lib.optionals util-linuxMinimal.hasCol [
     "--with-col=${util-linuxMinimal}/bin/col"
@@ -103,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     ./bootstrap --no-git --gnulib-srcdir=${gnulib} --gen
-    configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
   '';
 
   postInstall = ''
@@ -139,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script { };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://man-db.nongnu.org";

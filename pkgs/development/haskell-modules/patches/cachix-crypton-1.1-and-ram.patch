@@ -1,0 +1,18 @@
+crypton >= 1.1 uses ram, not memory. Both expose Data.ByteArray, so keeping
+memory yields a ByteArrayAccess class distinct from the one Digest has an
+instance for.
+
+---
+
+diff --git a/cachix.cabal b/cachix.cabal
+--- a/cachix.cabal
++++ b/cachix.cabal
+@@ -169,7 +169,7 @@
+     , lukko
+     , lzma-conduit
+     , megaparsec              >=7.0.0
+-    , memory
++    , ram                     >=0.20.1 && <0.23
+     , microlens
+     , netrc
+     , network

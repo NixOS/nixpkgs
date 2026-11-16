@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     libyuv
   ];
 
+  strictDeps = true;
+
   env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = gdkPixbufModuleDir;
 
   doCheck = true;
@@ -109,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $dev/lib/cmake/libavif/libavif-config.cmake \
       --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C implementation of the AV1 Image File Format";

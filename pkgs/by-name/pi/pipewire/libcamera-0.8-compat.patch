@@ -1,0 +1,17 @@
+--- a/spa/plugins/libcamera/libcamera-device.cpp	1970-01-01 01:00:01.000000000 +0100
++++ b/spa/plugins/libcamera/libcamera-device.cpp	2026-11-13 22:48:11.272984696 +0100
+@@ -69,11 +69,11 @@
+ {
+ 	if (auto location = camera.properties().get(properties::Location)) {
+ 		switch (location.value()) {
+-		case properties::CameraLocationFront:
++		case properties::LocationFront:
+ 			return "front";
+-		case properties::CameraLocationBack:
++		case properties::LocationBack:
+ 			return "back";
+-		case properties::CameraLocationExternal:
++		case properties::LocationExternal:
+ 			return "external";
+ 		}
+ 	}

@@ -117,6 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Collection of common network programs";
 

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pyprojectVersionPatchHook,
 
   # build deps
   cython,
@@ -29,10 +28,15 @@ buildPythonPackage rec {
     hash = "sha256-ddBbNAahYK1/+VtCYVqjrhOfRAtZERv7axTHrYlYBfA=";
   };
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-    pkg-config
-  ];
+  # Add missing version file; shapely reports unknown version otherwise
+  postPatch = ''
+    cat > _version.py <<EOF
+    __version__ = "${version}"
+    __git_version__ = "${src.tag}"
+    EOF
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
 
   build-system = [
     meson-python

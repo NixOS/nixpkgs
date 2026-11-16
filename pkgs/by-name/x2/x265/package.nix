@@ -2,11 +2,9 @@
   lib,
   gccStdenv,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   nasm,
-  fetchpatch,
-  fetchpatch2,
 
   # NUMA support enabled by default on NUMA platforms:
   numaSupport ? (
@@ -36,18 +34,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x265";
-  version = "4.2";
+  version = "4.3";
 
   outputs = [
     "out"
     "dev"
   ];
 
-  # Check that x265Version.txt contains the expected version number
-  # whether we fetch a source tarball or a tag from the git repo
-  src = fetchurl {
-    url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${finalAttrs.version}.tar.gz";
-    hash = "sha256-QLHqBFPgMJ8OupNODd9TP49ilZZmeeiJTo8cHI1eEhA=";
+  src = fetchFromGitHub {
+    owner = "Multicorewareinc";
+    repo = "x265";
+    tag = finalAttrs.version;
+    hash = "sha256-3bBggPwHwMNx3Dkfq6QcgITrYir5+rKiKduXoZUVi18=";
   };
 
   patches = [
@@ -55,17 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
     # fix compilation with gcc15
     # https://bitbucket.org/multicoreware/x265_git/pull-requests/36
     ./gcc15-fixes.patch
-    # fix i686-linux build
-    # https://bitbucket.org/multicoreware/x265_git/issues/1030
-    ./fix-plt-rel.patch
   ];
 
-  sourceRoot = "x265_${finalAttrs.version}/source";
+  sourceRoot = "${finalAttrs.src.name}/source";
 
   postPatch = ''
-    substituteInPlace cmake/Version.cmake \
-      --replace-fail "unknown" "${finalAttrs.version}" \
-      --replace-fail "0.0" "${finalAttrs.version}"
+    # x265Version.txt at the Git tag lags behind the release; regenerate it
+    # so cmake reports the correct version (fetchFromGitHub uses the tag
+    # archive, not the release tarball)
+    chmod +w ../x265Version.txt
+    cat > ../x265Version.txt <<EOF
+    releasetag: ${finalAttrs.version}
+    releasetagdistance: 0
+    EOF
   ''
   # There is broken and complicated logic when setting X265_LATEST_TAG for
   # mingwW64 builds. This bypasses the logic by setting it at the end of the

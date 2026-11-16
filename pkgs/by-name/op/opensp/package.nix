@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Suite of SGML/XML processing tools";
     license = lib.licenses.mit;

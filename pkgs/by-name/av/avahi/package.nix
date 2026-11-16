@@ -15,8 +15,10 @@
   autoreconfHook,
   libiconv,
   libevent,
+  libeventSupport ? true,
   nixosTests,
   gtk3Support ? false,
+  glibSupport ? true,
   gtk3,
   qt5,
   qt5Support ? false,
@@ -25,12 +27,12 @@
   withPython ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
   version = "0.8";
 
   src = fetchurl {
-    url = "https://github.com/lathiat/avahi/releases/download/v${version}/avahi-${version}.tar.gz";
+    url = "https://github.com/lathiat/avahi/releases/download/v${finalAttrs.version}/avahi-${finalAttrs.version}.tar.gz";
     sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
@@ -187,6 +189,9 @@ stdenv.mkDerivation rec {
     rm common/acx_pthread.m4
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   depsBuildBuild = [
     pkg-config
   ];
@@ -194,18 +199,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    glib
     autoconf-archive
     autoreconfHook
+  ]
+  ++ lib.optionals glibSupport [
+    glib
   ];
 
   buildInputs = [
     libdaemon
     dbus
-    glib
     expat
     libiconv
-    libevent
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     libpcap
@@ -213,8 +218,14 @@ stdenv.mkDerivation rec {
   ++ lib.optionals gtk3Support [
     gtk3
   ]
+  ++ lib.optionals libeventSupport [
+    libevent
+  ]
   ++ lib.optionals qt5Support [
     qt5
+  ]
+  ++ lib.optionals glibSupport [
+    glib
   ];
 
   propagatedBuildInputs = lib.optionals withPython (
@@ -232,6 +243,8 @@ stdenv.mkDerivation rec {
     # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
     "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
     (lib.enableFeature gtk3Support "gtk3")
+    (lib.enableFeature glibSupport "glib")
+    (lib.enableFeature glibSupport "gobject")
     (lib.enableFeature qt5Support "qt5")
     (lib.enableFeature withPython "python")
     "--localstatedir=/var"
@@ -295,4 +308,4 @@ stdenv.mkDerivation rec {
       # "CVE-2024-52615: Avahi Wide-Area DNS Uses Constant Source Port"
     ];
   };
-}
+})

@@ -10,8 +10,8 @@
   ps,
   getconf,
   python3Packages,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   # dependency ordering is broken at the moment when building with openssl
   tlsSupport ? !stdenv.hostPlatform.isStatic,
   openssl,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optional useSystemJemalloc jemalloc
-    ++ lib.optional withSystemd systemd
+    ++ lib.optional withSystemd systemdLibs
     ++ lib.optional tlsSupport openssl;
 
   strictDeps = true;
