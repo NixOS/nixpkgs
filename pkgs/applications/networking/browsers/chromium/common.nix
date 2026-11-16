@@ -430,7 +430,8 @@ let
     npmDeps =
       (fetchNpmDeps {
         src = chromiumDeps."src";
-        sourceRoot = npmRoot;
+        sourceRoot =
+          lib.optionalString (!chromiumDeps."src".unpack or false) "${chromiumDeps."src".name}/" + npmRoot;
         hash = upstream-info.deps.npmHash;
       }).overrideAttrs
         (p: {
