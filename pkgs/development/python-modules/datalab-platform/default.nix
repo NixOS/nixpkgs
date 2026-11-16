@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-time
-  qt5,
+  qt6,
 
   # build-system
   setuptools,
@@ -47,7 +47,7 @@
   sphinxext-opengraph,
   opencv-python-headless,
   pyinstaller,
-  pyqt5,
+  pyqt6,
 
   # tests
   httpx2,
@@ -74,18 +74,16 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-hbGXTjuSScPgC/nIocIqJWiO5w7DEjCGwh0+iNZTWk0=";
   };
 
-  # NOTE: DataLab is compatible with qt6, but it's apparently not perfect as
-  # the executable segfaults on startup. For now, let's use qt5 which works and
-  # migrate in the future.
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt5.qtbase
+    qt6.qtbase
+    qt6.qtsvg
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qt5.qtwayland
+    qt6.qtwayland
   ];
 
   build-system = [
@@ -147,13 +145,13 @@ buildPythonPackage (finalAttrs: {
     exe = [
       opencv-python-headless
       pyinstaller
-      pyqt5
+      pyqt6
     ];
     opencv = [
       opencv-python-headless
     ];
     qt = [
-      pyqt5
+      pyqt6
     ];
   };
 
@@ -165,6 +163,9 @@ buildPythonPackage (finalAttrs: {
     versionCheckHook
   ];
 
+  preCheck = ''
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}:${qt6.qtsvg}/${qt6.qtbase.qtPluginPrefix}"
+  '';
 
   nativeCheckInputs = [
     httpx2
