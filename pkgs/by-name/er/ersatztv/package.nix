@@ -3,6 +3,7 @@
   fetchFromGitHub,
   dotnetCorePackages,
   buildDotnetModule,
+  ersatztv-next,
   ffmpeg,
   which,
 }:
@@ -46,6 +47,10 @@ buildDotnetModule rec {
       ffmpeg
       which
     ]}"
+    # ETV otherwise looks for ersatztv-channel next to its own executable
+    "--set-default"
+    "ETV_NEXT_FOLDER"
+    "${ersatztv-next}/bin"
   ];
 
   passthru.updateScript = ./update.sh;
