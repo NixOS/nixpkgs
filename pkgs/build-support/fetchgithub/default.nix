@@ -6,7 +6,7 @@
 }@args:
 let
   inherit (lib)
-    any
+    all
     attrNames
     functionArgs
     intersectAttrs
@@ -31,38 +31,37 @@ let
   ];
   # useFetchGitArgsWD to exclude from automatic passing.
   # Other useFetchGitArgsWD will pass down to fetchgit.
-  excludeUseFetchGitArgNames = [
+  excludedFetchGitArgs = [
     "forceFetchGit"
   ];
 
-  removedPassthruFetchGitNames = removedPassthruBaseNames ++ excludeUseFetchGitArgNames;
-  removedPassthruFetchZipNames = removedPassthruBaseNames ++ attrNames useFetchGitArgsDefault;
+  removedPassthruFetchGitNames = removedPassthruBaseNames ++ excludedFetchGitArgs;
+  removedPassthruFetchZipNames = removedPassthruBaseNames ++ attrNames fetchZipDefaults;
 
-  # Here defines fetchFromGitHub arguments that determines useFetchGit,
+  # Here defines fetchFromGitHub arguments that determines useFetchZip,
   # The attribute value is their default values.
   # As fetchFromGitHub prefers fetchzip for hash stability,
-  # `defaultFetchGitArgs` attributes should lead to `useFetchGit = false`.
-  useFetchGitArgsDefault = {
+  # `fetchZipDefaults` attributes should lead to `useFetchGit = true`.
+  fetchZipDefaults = {
     deepClone = false;
     fetchSubmodules = false; # This differs from fetchgit's default
     fetchLFS = false;
     forceFetchGit = false;
-    leaveDotGit = null;
+    leaveDotGit = false;
     postCheckout = "";
     rootDir = "";
-    sparseCheckout = null;
-  };
-  useFetchGitArgsDefaultNullable = {
-    leaveDotGit = false;
     sparseCheckout = [ ];
   };
+  fetchZipNullableArgs = {
+    leaveDotGit = null;
+    sparseCheckout = null;
+  };
+  fetchZipDefaultsNulled = fetchZipDefaults // fetchZipNullableArgs;
 
-  useFetchGitArgsExcluded = removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames;
-  useFetchGitargsDefaultNonNull = useFetchGitArgsDefault // useFetchGitArgsDefaultNullable;
+  fetchGitDefaults = removeAttrs fetchZipDefaultsNulled excludedFetchGitArgs;
+  fetchGitFunctionArgs = mapAttrs (_: _: true) fetchZipDefaults;
 
-  faUseFetchGit = mapAttrs (_: _: true) useFetchGitArgsDefault;
-
-  adjustFunctionArgs = f: setFunctionArgs f (faUseFetchGit // functionArgs f);
+  adjustFunctionArgs = f: setFunctionArgs f (fetchGitFunctionArgs // functionArgs f);
 
   decorate = f: makeOverridable (adjustFunctionArgs f);
 
@@ -92,14 +91,14 @@ decorate (
     || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both).";
 
   let
-    useFetchGit = any (
+    useFetchZip = all (
       arg:
-      # this argument determines whether to use fetchzip
-      useFetchGitargsDefaultNonNull ? ${arg}
-      # it's different from the fetchzip default
-      && useFetchGitargsDefaultNonNull.${arg} != args.${arg}
-      # and it's not a null attribute that's allowed to be null
-      && !(args.${arg} == null && useFetchGitArgsDefaultNullable ? ${arg})
+      # this argument doesn't matter for choosing fetchzip/fetchgit
+      !fetchZipDefaults ? ${arg}
+      # or it's equal to the fetchzip default
+      || fetchZipDefaults.${arg} == args.${arg}
+      # or it's null and therefore ignored
+      || (args.${arg} == null && fetchZipNullableArgs ? ${arg})
     ) (attrNames args);
 
     position = (
@@ -115,28 +114,13 @@ decorate (
   in
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
-  (if useFetchGit then fetchgit else fetchzip) (
+  (if useFetchZip then fetchzip else fetchgit) (
     finalAttrs:
     removeAttrs args (
-      if useFetchGit then removedPassthruFetchGitNames else removedPassthruFetchZipNames
+      if useFetchZip then removedPassthruFetchZipNames else removedPassthruFetchGitNames
     )
     // (
-      if useFetchGit then
-        useFetchGitArgsExcluded
-        // intersectAttrs useFetchGitArgsExcluded args
-        // {
-          inherit tag rev;
-          url = "${baseUrl}.git";
-          inherit passthru;
-          derivationArgs = {
-            inherit
-              githubBase
-              owner
-              repo
-              ;
-          };
-        }
-      else
+      if useFetchZip then
         let
           revWithTag = finalAttrs.rev;
         in
@@ -176,6 +160,21 @@ decorate (
           }
           // passthru;
         }
+      else
+        fetchGitDefaults
+        // intersectAttrs fetchGitDefaults args
+        // {
+          inherit tag rev;
+          url = "${baseUrl}.git";
+          inherit passthru;
+          derivationArgs = {
+            inherit
+              githubBase
+              owner
+              repo
+              ;
+          };
+        }
     )
     // optionalAttrs private {
       netrcPhase =
@@ -183,7 +182,7 @@ decorate (
         # - Fetching with git works using https://github.com but not with the GitHub API endpoint
         # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
         let
-          machineName = if githubBase == "github.com" && !useFetchGit then "api.github.com" else githubBase;
+          machineName = if githubBase == "github.com" && useFetchZip then "api.github.com" else githubBase;
         in
         ''
           if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
