@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ngit-grasp";
-  version = "3.0.4";
+  version = "3.1.1";
 
   __structuredAttrs = true;
 
@@ -24,21 +24,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchgit {
     url = "https://ngit.dev/ngit-grasp.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lb/DdfrMsfYnp+aUVGhpLxnNxPTEukUToDpXIteYZp8=";
+    hash = "sha256-wIVmeNrYPBlPt/c9oZnOfHTAgcZeDxnR5+F8qN/tfZk=";
   };
 
-  cargoHash = "sha256-tbYG9Kr+e+MKA9oFR7lwDCq8PNqJyovSobPUGNoeByY=";
-
-  # Backport upstream test synchronization fixes pending the next release.
-  patches = [
-    ./deterministic-dependency-batching.patch
-    ./reconnect-test-readiness.patch
-  ];
+  cargoHash = "sha256-tEexJf5fU7Ew76w4xs5MuGETE4gthT/5iouyCK5Tf7s=";
 
   postPatch = ''
-    # This test creates its fake Git script at runtime, after shebang patching.
+    # These tests create executable scripts at runtime, after shebang patching.
     substituteInPlace tests/git_response_streaming.rs \
       --replace-fail '#!/usr/bin/env bash' '#!${stdenv.shell}'
+    substituteInPlace tests/git_cruft_concurrency.rs tests/git_push_promotion_race.rs \
+      --replace-fail '#!/bin/sh' '#!${stdenv.shell}'
   '';
 
   cargoBuildFlags = [
