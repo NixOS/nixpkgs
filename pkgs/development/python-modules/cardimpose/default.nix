@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   pymupdf,
+  tkinter,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "cardimpose";
@@ -20,7 +21,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  dependencies = [ pymupdf ];
+  dependencies = [
+    pymupdf
+    tkinter
+  ];
 
   pythonImportsCheck = [ "cardimpose" ];
 
