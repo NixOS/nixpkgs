@@ -7088,6 +7088,8 @@ self: super: with self; {
 
   google = callPackage ../development/python-modules/google { };
 
+  google-adk = callPackage ../development/python-modules/google-adk { };
+
   google-ai-generativelanguage =
     callPackage ../development/python-modules/google-ai-generativelanguage
       { };
