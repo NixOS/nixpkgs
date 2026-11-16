@@ -1,0 +1,9 @@
+diff --git a/hailort/hailortcli/CMakeLists.txt b/hailort/hailortcli/CMakeLists.txt
+index 8b3c0cf..2c1f6f6 100644
+--- a/hailort/hailortcli/CMakeLists.txt
++++ b/hailort/hailortcli/CMakeLists.txt
+@@ -93,4 +93,3 @@ install(TARGETS hailortcli
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    CONFIGURATIONS Release
+ )
+-cli11_install_completion_file(hailortcli)
