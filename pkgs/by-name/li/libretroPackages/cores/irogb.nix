@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "irogb";
-  version = "0-unstable-2026-10-01";
+  version = "0-unstable-2026-10-29";
 
   src = fetchFromGitHub {
     owner = "alexsutila";
     repo = "irogb";
-    rev = "7b6bb9b1f9cbf04e49eea0dc89c54635c2b54056";
-    hash = "sha256-mzWWGRc/NSHTX09GXUvwCJw0oKBXWS40E65KzkgXf5c=";
+    rev = "430917297bbe5d5fdcbcc29aee7e03fc5b670fd9";
+    hash = "sha256-m3O3+9a3fL0CpqVhXCOnSbYQXbW+y0ICsN6y/m3I3T0=";
   };
 
   # Top level makefile invokes `cmake` for each build target
