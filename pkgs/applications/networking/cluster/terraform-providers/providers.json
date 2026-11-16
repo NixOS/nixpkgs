@@ -913,13 +913,13 @@
     "vendorHash": "sha256-Z/Z5TvhAigUDxi7zvrgmmuoPwMoztAidFChmHWQ/Vc4="
   },
   "mongey_kafka": {
-    "hash": "sha256-rTa6c7jAMH027V7h/yUGVGz6TS0PDdObilxU0Vpr6FI=",
+    "hash": "sha256-fmanUq9RtjEw6BEjegtYmI3wFXTB7485G35ykW4QtwI=",
     "homepage": "https://registry.terraform.io/providers/Mongey/kafka",
     "owner": "Mongey",
     "repo": "terraform-provider-kafka",
-    "rev": "v0.13.1",
+    "rev": "v0.13.2",
     "spdx": "MIT",
-    "vendorHash": "sha256-JRqBv5N+i5yhKrC+Eenm1xmwylNF7k/EIJXaklrsFfA="
+    "vendorHash": "sha256-MTmWvZDMOvQHG4Ll9t6p0KtA3bAgOh8aE21xsryNuis="
   },
   "mongey_kafka-connect": {
     "hash": "sha256-A20rLdvunuTU3zZOJ1bj/yIaWs+xsdvSmpDPuxN7XQc=",
