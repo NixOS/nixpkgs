@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "5.20.0";
+  version = "5.29.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge";
     tag = version;
-    hash = "sha256-Cm03PEl99dMhljOvvb7ziXMrsaqsNMVKgvtOUVBBf/E=";
+    hash = "sha256-3Ll3N+dwJpFEAHk4xl0kAknV64TD8jhNV1bwaTUmhbs=";
   };
 
   sourceRoot = "${src.name}/connector/python";
