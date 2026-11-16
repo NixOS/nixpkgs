@@ -6,7 +6,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron_43,
+  electron_45,
   python3Packages,
   pipewire,
   libpulseaudio,
@@ -18,17 +18,17 @@
   withMiddleClickScroll ? false,
 }:
 let
-  electron = electron_43;
+  electron = electron_45;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "3.2.2";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-foKgtyN1jr4+PHwJHTVXrYzWNVYtR1Sq8rLG4VEnujs=";
+    hash = "sha256-wsaVqBYETYFTsG78UInY5Z6VvUr8RLWMC8/eW8lTldY=";
   };
 
   postPatch = ''
@@ -38,10 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     # disable auto updates
     substituteInPlace src/main/updater.ts \
       --replace-fail 'const isOutdated = autoUpdater.checkForUpdates().then(res => Boolean(res?.isUpdateAvailable));' 'const isOutdated = false;'
-
-    # disable auto update for bun
-    substituteInPlace scripts/build/compileArrpc.mts \
-      --replace-fail -baseline ""
 
     # Don't copy arrpc into app.asar
     substituteInPlace package.json \
@@ -96,8 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     bun run build
-
-    bun run compileArrpc
 
     # can't run it via bunx / npx since fixupPhase was skipped for node_modules
     node node_modules/electron-builder/out/cli/cli.js \
