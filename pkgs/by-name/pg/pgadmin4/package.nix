@@ -55,6 +55,7 @@ pythonPackages.buildPythonApplication rec {
 
   # from Dockerfile
   env.CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
+  env.NODE_OPTIONS = "--max-old-space-size=3072";
 
   format = "setuptools";
 
