@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Text-mode videogame inspired by Namco's Pac-Man";
     homepage = "https://myman.sourceforge.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ silverhadch ];
+    maintainers = with lib.maintainers; [ silver-zxy ];
     platforms = lib.platforms.unix;
     mainProgram = "myman";
   };

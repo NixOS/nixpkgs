@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzflag";
-  version = "2.4.30";
+  version = "2.4.32";
 
   src = fetchFromGitHub {
     owner = "BZFlag-Dev";
     repo = "bzflag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6lW3w1n1ZFs+Iw2wd0aJJpSSnymzkNmVLAgreW4l/6k=";
+    hash = "sha256-gy9nRAMk+XGEnCVzweUB8JPzgRyBWflPSAoNAcwrV5k=";
   };
 
   nativeBuildInputs = [
