@@ -29,6 +29,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-xFQObWhONoRBAdEZblBDQeQtq/KmaCWWnCwv3XEmG2k=";
 
+  patches = [
+    # https://github.com/tramhao/termusic/pull/803
+    ./enable-sqlite-foreign-keys.patch
+  ];
+
   useNextest = true;
 
   buildFeatures = [

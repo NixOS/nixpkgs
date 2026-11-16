@@ -1,0 +1,37 @@
+diff --git a/lib/src/new_database/mod.rs b/lib/src/new_database/mod.rs
+--- a/lib/src/new_database/mod.rs
++++ b/lib/src/new_database/mod.rs
+@@ -79,6 +79,8 @@ impl Database {
+ 
+     /// Prepare the given Connection for usage.
+     fn new_from_connection(conn: Connection) -> Result<Self> {
++        conn.pragma_update(None, "foreign_keys", true)
++            .context("enable library database foreign keys")?;
+         migrate::migrate(&conn).context("Database migration")?;
+ 
+         let conn = Arc::new(Mutex::new(conn));
+@@ -326,3 +328,24 @@ mod test_utils {
+         assert_eq!(path, Path::new("C:\\somewhere\\else"));
+     }
+ }
++
++#[cfg(test)]
++mod tests {
++    use rusqlite::Connection;
++
++    use super::Database;
++
++    #[test]
++    fn should_enable_foreign_keys() {
++        let conn = Connection::open_in_memory().unwrap();
++        conn.pragma_update(None, "foreign_keys", false).unwrap();
++
++        let db = Database::new_from_connection(conn).unwrap();
++        let foreign_keys: bool = db
++            .get_connection()
++            .pragma_query_value(None, "foreign_keys", |row| row.get(0))
++            .unwrap();
++
++        assert!(foreign_keys);
++    }
++}
