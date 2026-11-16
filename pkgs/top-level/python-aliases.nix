@@ -174,6 +174,7 @@ mapAliases {
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   claripy = throw "'claripy' has been merged into 'angr'"; # Added 2026-09-27
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
+  cmd2_4 = cmd2; # added 2026-11-14
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
   command_runner = throw "'command_runner' has been renamed to/replaced by 'command-runner'"; # Converted to throw 2025-10-29
   commitizen = throw "commitizen has been promoted to a top-level attribute name: `pkgs.commitizen`"; # added 2025-09-14
@@ -293,6 +294,7 @@ mapAliases {
   flask_testing = throw "'flask_testing' has been renamed to/replaced by 'flask-testing'"; # Converted to throw 2025-10-29
   flask_wtf = throw "'flask_wtf' has been renamed to/replaced by 'flask-wtf'"; # Converted to throw 2025-10-29
   flaskbabel = throw "'flaskbabel' has been renamed to/replaced by 'flask-babel'"; # Converted to throw 2025-10-29
+  flickrapi = throw "'flickrapi' has been removed as the upstream repository is archived"; # Added 2026-11-15
   flipr-api = throw "'flipr-api' has been removed as the upstream repository is archived"; # Added 2026-11-01
   flowlogs_reader = throw "'flowlogs_reader' has been renamed to/replaced by 'flowlogs-reader'"; # Converted to throw 2025-10-29
   flufl_bounce = throw "'flufl_bounce' has been renamed to/replaced by 'flufl-bounce'"; # Converted to throw 2025-10-29
@@ -319,6 +321,7 @@ mapAliases {
   gpapi = throw "'gpapi' has been superseded by google-api-python-client"; # Added 2025-11-09
   gpgme = gpg; # added 2026-06-26
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
+  gpu-rir = gpurir; # added 2026-11-15
   gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
   gradient = throw "'gradient' has been removed because it was archived upstream. Upstream strongly recommends to migrate to pydo."; # Added 2026-10-15
   gradient-utils = throw "'gradient-utils' has been removed because it was archived upstream and unused in tree."; # Added 2026-10-15
@@ -384,6 +387,7 @@ mapAliases {
   keyrings-passwordstore = throw "keyrings-passwordstore has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2025-05-25
   konnected = throw "konnected has been removed, because the home-assistant integration that required it has been deprecated and removed. See https://support.konnected.io/migrating-from-konnected-legacy-home-assistant-integration-to-esphome."; # Added 2026-06-04
+  kuzu = throw "'kuzu' was removed from nixpkgs because it was broken and the upstream repo is archived"; # Added 2026-11-15
   langchain-experimental = throw "'langchain-experimental' has been removed because the upstream repository was archived in 2026-05-26"; # Added 2026-05-27
   langchain-standard-tests = throw "'langchain-standard-tests' has been renamed to/replaced by 'langchain-tests'"; # Converted to throw 2025-10-29
   langchainplus-sdk = throw "'langchainplus-sdk' has been renamed to/replaced by 'langsmith'"; # Converted to throw 2025-10-29

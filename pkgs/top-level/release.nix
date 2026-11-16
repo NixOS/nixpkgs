@@ -79,19 +79,15 @@ let
   inherit (release-lib.lib)
     collect
     concatLists
-    elem
     filter
     genAttrs
     hasInfix
     hasSuffix
     id
     isDerivation
-    optionals
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
-
-  supportDarwin = elem "aarch64-darwin" supportedSystems;
 
   onSupported = x: map (system: x.${system}) supportedSystems;
   onSupportedLinux = x: map (system: x.${system}) (filter (hasSuffix "-linux") supportedSystems);
@@ -118,51 +114,56 @@ let
       meta.description = "Release-critical builds for the Nixpkgs unstable channel";
       constituents = concatLists [
         [
+          # Published nixpkgs
           jobs.tarball
+          # Sanity
           jobs.release-checks
+          # Hydra Debuging
           jobs.metrics
+          # Docs
           jobs.manual
         ]
+        # Bootstrapping
         (collect isDerivation jobs.stdenvBootstrapTools)
+
+        # Lib
         (onSupported jobs.tests.lib-tests)
         (onSupported jobs.tests.pkgs-lib.formats-tests)
+
+        # Core
         (onSupported jobs.stdenv)
+        (onSupported jobs.nix)
+        (onSupported jobs.git)
+
+        # Depends on packages that need to be built on Linux
+        (onSupportedDarwin jobs.darwin.linux-builder)
+
+        # Basic Language support
         (onSupported jobs.cargo)
         (onSupported jobs.go)
-        (onSupportedLinux jobs.linux)
-        (onSupported jobs.nix)
-        (onSupported jobs.pandoc)
         (onSupported jobs.python3)
-        # Needed by contributors to test PRs (by inclusion of the PR template)
-        (onSupported jobs.nixpkgs-review)
+
+        # Linux Kernel
+        (onSupportedLinux jobs.linux)
+
+        # Docs
+        (onSupported jobs.pandoc)
+
         # Needed for support
         (onSupported jobs.nix-info)
         (onSupported jobs.nix-info-tested)
-        # Ensure that X11/GTK are in order.
+
+        # Default Browser
         (onSupportedLinux jobs.firefox-unwrapped)
-        (onSupported jobs.cachix)
-        (onSupported jobs.devenv)
-        (onSupported jobs.git)
-        (onSupported jobs.mariadb)
-        (onSupported jobs.vim)
+
+        # Default Editor
+        (onSupported jobs.nano)
+
+        # Sanity check for GTK
         (onSupported jobs.inkscape)
-        (onSupported jobs.qt5.qtmultimedia)
-        (onSupportedDarwin jobs.darwin.linux-builder)
 
-        /*
-          TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
-
-          jobs.tests.cc-wrapper.default.x86_64-linux
-
-          # broken see issue #40038
-
-          jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
-          jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
-          jobs.tests.cc-multilib-gcc.x86_64-linux
-          jobs.tests.cc-multilib-clang.x86_64-linux
-          jobs.tests.stdenv-inputs.x86_64-linux
-          jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
-        */
+        # Sanity check for QT
+        (onSupported jobs.audacity)
       ];
     };
 
