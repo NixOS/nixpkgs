@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sass";
     repo = "libsass";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-FkLL3OAJXDptRQY6ZkYbss2pcc40f/wasIvEIyHRQFo=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gtk3 gtk4 sassc;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C/C++ implementation of a Sass compiler";
