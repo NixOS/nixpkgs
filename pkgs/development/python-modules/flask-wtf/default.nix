@@ -50,5 +50,6 @@ buildPythonPackage rec {
     ];
     homepage = "https://github.com/pallets-eco/flask-wtf/";
     changelog = "https://github.com/pallets-eco/flask-wtf/releases/tag/v${version}";
+    broken = lib.versionOlder wtforms.version "3.3.0";
   };
 }
