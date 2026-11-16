@@ -32,7 +32,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/maunium/meowlnir";
     description = "Opinionated Matrix moderation bot";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ sumnerevans ];
+    maintainers = with lib.maintainers; [
+      sumnerevans
+      logn
+    ];
     mainProgram = "meowlnir";
   };
 })
