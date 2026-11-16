@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   pname = "cle";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
   # nixpkgs-update: no auto update
-  version = "10.0.5";
+  version = "10.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "angr";
     repo = "cle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sOwZfl77pPqP4Gp07r9Ydw9KO1Mk5T+7jmjMQBiZs34=";
+    hash = "sha256-c8c4cYf8faVbZAWWMTZp3fGxkS6CJeA/VgiSCssKBSY=";
   };
 
   pythonRelaxDeps = [ "arpy" ];
@@ -80,6 +80,9 @@ buildPythonPackage (finalAttrs: {
     "test_debug_symbol_paths_nonexistent_path"
     "test_debug_symbol_paths_symbol_store_layout"
     "test_pdb"
+    # Missing file
+    "test_relocatable_object_empty"
+    "test_arm"
   ];
 
   pythonImportsCheck = [ "cle" ];
