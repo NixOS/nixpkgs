@@ -14,6 +14,10 @@
   glibcLocalesUtf8,
 }:
 
+let
+  inherit (lib) head optionals warn;
+in
+
 lib.extendMkDerivation {
   constructDrv = fetchurl;
 
@@ -30,7 +34,7 @@ lib.extendMkDerivation {
     {
       url ? "",
       urls ? [ ],
-      name ? repoRevToNameMaybe (if url != "" then url else builtins.head urls) null "unpacked",
+      name ? repoRevToNameMaybe (if url != "" then url else head urls) null "unpacked",
       nativeBuildInputs ? [ ],
       postFetch ? "",
       extraPostFetch ? "",
@@ -56,7 +60,7 @@ lib.extendMkDerivation {
         if finalAttrs.extension != null then
           "download.${finalAttrs.extension}"
         else
-          baseNameOf (if url != "" then url else builtins.head urls);
+          baseNameOf (if url != "" then url else head urls);
     in
 
     {
@@ -69,7 +73,7 @@ lib.extendMkDerivation {
       # UTF-8 aware locale:
       #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
       nativeBuildInputs =
-        lib.optionals withUnzip [
+        optionals withUnzip [
           unzip
           glibcLocalesUtf8
         ]
@@ -108,7 +112,7 @@ lib.extendMkDerivation {
         ${postFetch}
         ${
           if extraPostFetch != "" then
-            lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'." extraPostFetch
+            warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'." extraPostFetch
           else
             extraPostFetch
         }
