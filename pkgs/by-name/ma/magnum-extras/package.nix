@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)
+    (lib.cmakeBool "MAGNUM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "MAGNUM_WITH_PLAYER" withPlayer)
     # cmake_dependent_option(MAGNUM_WITH_UI "Build Ui library" OFF "NOT MAGNUM_WITH_PLAYER" ON)
     # cmake_dependent_option(MAGNUM_WITH_UI_GALLERY "Build magnum-ui-gallery executable" OFF "MAGNUM_WITH_UI" OFF)

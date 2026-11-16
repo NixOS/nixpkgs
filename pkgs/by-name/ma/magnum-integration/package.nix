@@ -35,7 +35,7 @@ let
 
 in
 
-stdenv.mkDerivation (_finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magnum-integration";
   version = "2020.06-unstable-2026-10-07";
 
@@ -65,13 +65,15 @@ stdenv.mkDerivation (_finalAttrs: {
   ++ lib.optional withYogaIntegration yoga;
 
   cmakeFlags = [
-    (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)
+    (lib.cmakeBool "MAGNUM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    # keep-sorted start case=no numeric=no block=yes
     (lib.cmakeBool "MAGNUM_WITH_BULLETINTEGRATION" withBulletIntegration)
     (lib.cmakeBool "MAGNUM_WITH_DARTINTEGRATION" withDartIntegration)
     (lib.cmakeBool "MAGNUM_WITH_EIGENINTEGRATION" withEigenIntegration)
     (lib.cmakeBool "MAGNUM_WITH_GLMINTEGRATION" withGlmIntegration)
     (lib.cmakeBool "MAGNUM_WITH_IMGUIINTEGRATION" withImguiIntegration)
     (lib.cmakeBool "MAGNUM_WITH_YOGAINTEGRATION" withYogaIntegration)
+    # keep-sorted end
   ]
   ++ lib.optional withDartIntegration "-DCMAKE_CXX_VERSION=17";
 

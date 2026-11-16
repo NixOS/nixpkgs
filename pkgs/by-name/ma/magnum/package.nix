@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSdl2Application SDL2;
 
   cmakeFlags = [
-    (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)
+    (lib.cmakeBool "MAGNUM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     # (lib.cmakeBool "MAGNUM_BUILD_VK_TESTS" true)
     # keep-sorted start case=no numeric=no block=yes
     (lib.cmakeBool "MAGNUM_TARGET_GL" withTargetGL)

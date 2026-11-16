@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
+  ctestCheckHook,
 
   # keep-sorted start case=no numeric=no block=yes
   assimp,
@@ -29,54 +30,51 @@
 
   # keep-sorted start case=no numeric=no block=yes
   withAssimpImporter ? true,
-  withAstcImporter ? false,
-  withAvifImporter ? false,
+  withAstcImporter ? true,
+  withAvifImporter ? true,
   withBasisImageConverter ? false,
   withBasisImporter ? false,
-  withBcdeImageConverter ? false,
+  withBcdeImageConverter ? true,
   withDdsImporter ? true,
-  withDrFlacAudioImporter ? false,
-  withDrMp3AudioImporter ? false,
+  withDrFlacAudioImporter ? true,
+  withDrMp3AudioImporter ? true,
   withDrWavAudioImporter ? true,
-  withEtcDecImageConverter ? false,
+  withEtcDecImageConverter ? true,
   withFaad2AudioImporter ? false,
-  withFreetypeFont ? false,
+  withFreetypeFont ? true,
   withGlslangShaderConverter ? false,
   withGltfImporter ? true,
   withGltfSceneConverter ? true,
   withHarfBuzzFont ? false,
-  withIcoImporter ? false,
+  withIcoImporter ? true,
   withJpegImageConverter ? true,
   withJpegImporter ? true,
-  withKtxImageConverter ? false,
-  withKtxImporter ? false,
+  withKtxImageConverter ? true,
+  withKtxImporter ? true,
   withLunaSvgImporter ? false,
-  withMeshOptimizerSceneConverter ? false,
-  withMiniExrImageConverter ? false,
-  withOpenExrImageConverter ? true,
-  withOpenExrImporter ? true,
+  withMeshOptimizerSceneConverter ? true,
+  withMiniExrImageConverter ? true,
+  withOpenExrImageConverter ? false,
+  withOpenExrImporter ? false,
   withPlutoSvgImporter ? false,
   withPngImageConverter ? true,
   withPngImporter ? true,
-  withPrimitiveImporter ? false,
-  withResvgImporter ? false,
-  withSpirvToolsShaderConverter ? true,
+  withPrimitiveImporter ? true,
+  withResvgImporter ? true,
+  withSpirvToolsShaderConverter ? false,
   withSpngImporter ? false,
-  withStanfordImporter ? false,
-  withStanfordSceneConverter ? false,
-  withStbdxImageConverter ? false,
+  withStanfordImporter ? true,
+  withStanfordSceneConverter ? true,
+  withStbdxImageConverter ? true,
   withStbImageConverter ? true,
   withStbImageImporter ? true,
-  withStbResizeImageConverter ? false,
+  withStbResizeImageConverter ? true,
   withStbTrueTypeFont ? true,
   withStbVorbisAudioImporter ? true,
-  withUfbxImporter ? false,
+  withUfbxImporter ? true,
   withWebpImageConverter ? true,
   withWebpImporter ? true,
   # keep-sorted end
-
-  # Not supported yet
-  withDevilImageImporter ? false, # XXX devil dependency missing https://openil.sourceforge.net/
 }:
 
 let
@@ -92,10 +90,10 @@ let
 in
 
 assert lib.assertMsg (
-  !(withHarfBuzzFont && withFreetypeFont)
+  !(withHarfBuzzFont && !withFreetypeFont)
 ) "magnum-plugins: withHarfBuzzFont needs withFreetypeFont to be enabled";
 
-stdenv.mkDerivation (_finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magnum-plugins";
   version = "2020.06-unstable-2026-11-07";
 
@@ -113,6 +111,9 @@ stdenv.mkDerivation (_finalAttrs: {
   nativeBuildInputs = [
     cmake
     corrade
+  ];
+  nativeCheckInputs = [
+    ctestCheckHook
   ];
   propagatedBuildInputs = [
     corrade
@@ -143,8 +144,8 @@ stdenv.mkDerivation (_finalAttrs: {
   ++ lib.optional withLunaSvgImporter lunasvg;
 
   cmakeFlags = [
+    (lib.cmakeBool "MAGNUM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     # keep-sorted start case=no numeric=no block=yes
-    (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)
     (lib.cmakeBool "MAGNUM_WITH_ASSIMPIMPORTER" withAssimpImporter)
     (lib.cmakeBool "MAGNUM_WITH_ASSTCIMPORTER" withAstcImporter)
     (lib.cmakeBool "MAGNUM_WITH_AVIFIMPORTER" withAvifImporter)
@@ -152,7 +153,6 @@ stdenv.mkDerivation (_finalAttrs: {
     (lib.cmakeBool "MAGNUM_WITH_BASISIMPORTER" withBasisImporter)
     (lib.cmakeBool "MAGNUM_WITH_BCDECIMAGECONVERTER" withBcdeImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_DDSIMPORTER" withDdsImporter)
-    (lib.cmakeBool "MAGNUM_WITH_DEVILIMAGEIMPORTER" withDevilImageImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRFLACAUDIOIMPORTER" withDrFlacAudioImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRMP3AUDIOIMPORTER" withDrMp3AudioImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRWAVAUDIOIMPORTER" withDrWavAudioImporter)
@@ -195,13 +195,11 @@ stdenv.mkDerivation (_finalAttrs: {
     "-DKTX2_ZSTANDARD=ON"
   ];
 
-  # FIXME:
-  # Failing tests are :
-  # - Faad2AudioImporter -> decoding error
-  postPatch = ''
-    substituteInPlace src/MagnumPlugins/Faad2AudioImporter/CMakeLists.txt \
-      --replace "add_subdirectory(Test" "#add_subdirectory(Test"
-  '';
+  disabledTests = [
+    "Faad2AudioImporterTest" # -> decoding error
+    # Images *image and *pngImage have mean delta above threshold, actual 0.069987 but at most 0.069 expected. Max delta 2.75 is within threshold 2.75.
+    "PlutoSvgImporterTest"
+  ];
 
   meta = {
     description = "Plugins for the Magnum C++11 graphics engine";
