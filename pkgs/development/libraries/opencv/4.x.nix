@@ -63,7 +63,6 @@
   ffmpeg_8-headless,
   enableGStreamer ? true,
   elfutils,
-  gst_all_1,
   gstreamer,
   gst-plugins-good,
   gst-plugins-base,
@@ -646,7 +645,7 @@ effectiveStdenv.mkDerivation {
     cudaSupport = enableCuda;
 
     tests = {
-      inherit (gst_all_1) gst-plugins-bad;
+      inherit gst-plugins-bad;
 
       opencv4-tests = callPackage ./tests.nix {
         inherit

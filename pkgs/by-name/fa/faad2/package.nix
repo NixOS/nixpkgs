@@ -5,7 +5,6 @@
   cmake,
 
   # for passthru.tests
-  gst_all_1,
   gst-plugins-bad,
   mpd,
   ocamlPackages,
@@ -35,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit mpd vlc;
-    inherit (gst_all_1) gst-plugins-bad;
+    inherit gst-plugins-bad;
     ocaml-faad = ocamlPackages.faad;
   };
 

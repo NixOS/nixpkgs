@@ -28,6 +28,9 @@
   libnice,
   gnutls,
   gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   webrtc-audio-processing,
 }:
 
@@ -35,7 +38,7 @@
 # Everything that is disabled per default has to been seen experimental and should not be enabled without strong reasoning.
 # see https://github.com/NixOS/nixpkgs/issues/469614#issuecomment-3649662176
 let
-  inherit (gst_all_1)
+  inherit
     gstreamer
     gst-plugins-base
     ;

@@ -11,7 +11,6 @@
   imagemagick,
   libheif,
   imlib2Full,
-  gst_all_1,
   gst-plugins-bad,
 }:
 
@@ -37,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit imagemagick libheif imlib2Full;
-    inherit (gst_all_1) gst-plugins-bad;
+    inherit gst-plugins-bad;
 
     test-corpus-decode = callPackage ./test-corpus-decode.nix {
       libde265 = finalAttrs.finalPackage;

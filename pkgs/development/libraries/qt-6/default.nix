@@ -10,7 +10,6 @@
   makeSetupHook,
   makeWrapper,
   runCommand,
-  gst_all_1,
   gstreamer,
   gst-plugins-good,
   gst-plugins-base,
@@ -88,7 +87,7 @@ let
       qtlocation = callPackage ./modules/qtlocation.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia {
-        inherit (gst_all_1)
+        inherit
           gstreamer
           gst-plugins-bad
           gst-plugins-base

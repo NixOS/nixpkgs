@@ -16,7 +16,6 @@
   # Optional dependencies
   enableJingle ? true,
   farstream,
-  gst_all_1,
   gstreamer,
   gst-plugins-good,
   gst-plugins-base,
@@ -37,7 +36,7 @@
   extraPythonPackages ? ps: [ ],
 }:
 let
-  inherit (gst_all_1)
+  inherit
     gstreamer
     gst-plugins-base
     gst-libav

@@ -46,7 +46,6 @@
 
   # for passthru.tests
   ffmpeg,
-  gst_all_1,
   gst-plugins-good,
 }:
 
@@ -259,7 +258,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''moveToOutput bin "$bin" '';
 
   passthru.tests = {
-    inherit (gst_all_1) gst-plugins-good;
+    inherit gst-plugins-good;
     ffmpeg = ffmpeg.override { withVpx = true; };
   };
 

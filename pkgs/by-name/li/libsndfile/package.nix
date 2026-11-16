@@ -18,7 +18,6 @@
   # for passthru.tests
   audacity,
   freeswitch,
-  gst_all_1,
   gst-plugins-bad,
   libsamplerate,
   moc,
@@ -130,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       soundfile
       wavefile
       ;
-    inherit (gst_all_1) gst-plugins-bad;
+    inherit gst-plugins-bad;
     lame = (lame.override { sndfileFileIOSupport = true; });
   };
 
