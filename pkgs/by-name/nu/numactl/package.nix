@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   # building ~5% slower until reboot. Ugh!
   doCheck = false; # never ever!
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     homepage = "https://github.com/numactl/numactl";
