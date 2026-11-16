@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "moji";
-  version = "0.8.0";
+  version = "0.8.1";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "Microck";
     repo = "moji";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Of9Os3h7cvJIf3dfj4aD1TX9/4SGsuY4Hjm2Kh4c1rY=";
+    hash = "sha256-ATYzZSqqHAASJ1aMfUH6df/sRoDGbJfeknV824psoxg=";
   };
 
   vendorHash = "sha256-cCCwL7bqn+23YeLMiDEyCv+Gcu0xw068DgJDgaMb2tY=";
