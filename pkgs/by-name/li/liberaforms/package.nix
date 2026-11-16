@@ -16,7 +16,7 @@
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "liberaforms";
-  version = "4.11.1";
+  version = "4.11.2";
   pyproject = false;
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
     owner = "LiberaForms";
     repo = "server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GTV6uivzOuUOlPDOSdFHAk1865e4yUmrO0xNbQlSV4c=";
+    hash = "sha256-ArcvChxTYZ5E0BlAFjO4RF0qnCCY4WwYFJh+/sg+3Ic=";
   };
 
   patches = [
