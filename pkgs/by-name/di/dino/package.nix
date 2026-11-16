@@ -27,7 +27,6 @@
   srtp,
   libnice,
   gnutls,
-  gst_all_1,
   gstreamer,
   gst-plugins-good,
   gst-plugins-base,
@@ -38,11 +37,7 @@
 # Everything that is disabled per default has to been seen experimental and should not be enabled without strong reasoning.
 # see https://github.com/NixOS/nixpkgs/issues/469614#issuecomment-3649662176
 let
-  inherit
-    gstreamer
-    gst-plugins-base
-    ;
-  gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
+  gst-plugins-good' = gst-plugins-good.override { gtkSupport = true; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
@@ -90,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     gstreamer
     gst-plugins-base
-    gst-plugins-good # contains rtpbin, required for VP9
+    gst-plugins-good' # contains rtpbin, required for VP9
     webrtc-audio-processing
   ];
 

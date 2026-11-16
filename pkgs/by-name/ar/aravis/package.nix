@@ -12,7 +12,6 @@
 
   enableGstPlugin ? true,
   enableViewer ? true,
-  gst_all_1,
   gstreamer,
   gst-plugins-good,
   gst-plugins-base,
@@ -29,7 +28,6 @@
   nix-update-script,
 }:
 
-assert enableGstPlugin -> gst_all_1 != null;
 assert enableViewer -> enableGstPlugin;
 assert enableViewer -> gtk3 != null;
 assert enableViewer -> wrapGAppsHook3 != null;

@@ -16,18 +16,15 @@
   rpmSupport ? stdenv.hostPlatform.isLinux,
   rpm,
   gstreamerSupport ? true,
-  gst_all_1,
   gstreamer,
   gst-plugins-good,
   gst-plugins-base,
   # ^ Needed e.g. for proper id3 and FLAC support.
-  #   Set to `false` to decrease package closure size by about 87 MB (53%).
-  gstPlugins ? (
-    gst: [
-      gst.gst-plugins-base
-      gst.gst-plugins-good
-    ]
-  ),
+  #   Set to `[]` to decrease package closure size by about 87 MB (53%).
+  gstPlugins ? [
+    gst-plugins-base
+    gst-plugins-good
+  ],
   # If an application needs additional gstreamer plugins it can also make them
   # available by adding them to the environment variable
   # GST_PLUGIN_SYSTEM_PATH_1_0, e.g. like this:
@@ -65,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./gst-hardcode-plugins.patch {
       load_gst_plugins = lib.concatMapStrings (
         plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");''
-      ) (gstPlugins gst_all_1);
+      ) gstPlugins;
     })
   ];
 
@@ -88,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgsf
   ]
   ++ lib.optionals rpmSupport [ rpm ]
-  ++ lib.optionals gstreamerSupport ([ gstreamer ] ++ gstPlugins gst_all_1)
+  ++ lib.optionals gstreamerSupport ([ gstreamer ] ++ gstPlugins)
   ++ lib.optionals gtkSupport [
     glib
     gtk3

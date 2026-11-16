@@ -12,7 +12,6 @@
   wrapGAppsHook4,
   python3,
   # Not native
-  gst_all_1,
   gstreamer,
   gst-rtsp-server,
   gst-plugins-ugly,
@@ -86,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     21 | #include <gst/rtsp/gstrtspurl.h>
 
     Hence, this is not necessarily an upstream issue, but could be something
-    wrong with how our gst_all_1 depend on each other.
+    wrong with how our gstreamer suff depends on each other.
   */
   env.CFLAGS = "-I${gst-plugins-base.dev}/include/gstreamer-1.0";
 

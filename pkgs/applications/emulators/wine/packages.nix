@@ -112,7 +112,7 @@ in
         # pkgconfig has trouble picking the right architecture
         pkgconfig64remove = lib.makeSearchPathOutput "dev" "lib/pkgconfig" [
           pkgs.glib
-          pkgs.gst_all_1.gstreamer
+          pkgs.gstreamer
         ];
       };
       platforms = [ "x86_64-linux" ];

@@ -50,7 +50,7 @@ let
             libxxf86vm
           ];
         gstreamerDeps =
-          pkgs: with pkgs.gst_all_1; [
+          pkgs: with pkgs; [
             gstreamer
             gst-plugins-base
             gst-plugins-good

@@ -144,9 +144,9 @@ rec {
         libxfixes
         libGL
 
-        gst_all_1.gstreamer
-        gst_all_1.gst-plugins-ugly
-        gst_all_1.gst-plugins-base
+        gstreamer
+        gst-plugins-ugly
+        gst-plugins-base
         libdrm
         xkeyboard-config
         libpciaccess

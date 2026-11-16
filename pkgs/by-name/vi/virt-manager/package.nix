@@ -22,7 +22,8 @@
   xorriso,
   spiceSupport ? true,
   spice-gtk ? null,
-  gst_all_1 ? null,
+  gst-plugins-base,
+  gst-plugins-good,
 }:
 
 let
@@ -75,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     libayatana-appindicator
   ]
   ++ lib.optionals spiceSupport [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-plugins-base
+    gst-plugins-good
     spice-gtk
   ];
 

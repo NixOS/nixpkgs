@@ -195,17 +195,14 @@ stdenv.mkDerivation (
         )
         ++ lib.optional sdlSupport pkgs.SDL2
         ++ lib.optional usbSupport pkgs.libusb1
-        ++ lib.optionals gstreamerSupport (
-          with pkgs.gst_all_1;
-          [
-            gstreamer
-            gst-plugins-base
-            gst-plugins-good
-            gst-plugins-ugly
-            gst-libav
-            gst-plugins-bad
-          ]
-        )
+        ++ lib.optionals gstreamerSupport [
+          pkgs.gstreamer
+          pkgs.gst-plugins-base
+          pkgs.gst-plugins-good
+          pkgs.gst-plugins-ugly
+          pkgs.gst-libav
+          pkgs.gst-plugins-bad
+        ]
         ++ lib.optionals gtkSupport [
           pkgs.gtk3
           pkgs.glib

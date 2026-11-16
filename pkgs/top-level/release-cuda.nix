@@ -98,7 +98,7 @@ let
       freecad = linux;
       gimp = linux;
       gpu-screen-recorder = linux;
-      gst_all_1.gst-plugins-bad = linux;
+      gst-plugins-bad = linux;
       jellyfin-ffmpeg = linux;
       kdePackages.kdenlive = linux;
       krita = linux;
