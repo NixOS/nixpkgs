@@ -3,12 +3,19 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fontconfig,
   installShellFiles,
+  libGL,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
   pkg-config,
   curl,
   libssh2,
   openssl,
   sqlite,
+  wayland,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -79,6 +86,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash <($out/bin/zellij setup --generate-completion bash) \
       --fish <($out/bin/zellij setup --generate-completion fish) \
       --zsh <($out/bin/zellij setup --generate-completion zsh)
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # winit/glutin and system font discovery load these libraries with dlopen.
+    patchelf --add-rpath ${
+      lib.makeLibraryPath [
+        fontconfig
+        libGL
+        libx11
+        libxcursor
+        libxi
+        libxkbcommon
+        wayland
+      ]
+    } $out/bin/zellij
   '';
 
   passthru.updateScript = nix-update-script { };
