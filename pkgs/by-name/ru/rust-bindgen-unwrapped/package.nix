@@ -12,7 +12,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-bindgen-unwrapped";
-  version = "0.72.1";
+  version = "0.73.2";
 
   __structuredAttrs = true;
 
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rust-lang";
     repo = "rust-bindgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cswBbshxTAcZtUk3PxH9jD55X1a/fBAyZyYpzVkt27M=";
+    hash = "sha256-b+0LM4AbngOsOPp0YjLww3EINHJFSbISLbUa2H/HiaA=";
   };
 
-  cargoHash = "sha256-HKhoLKqk0KeQXdSl8L+w2S6RGXbjfoGAryB5zCCeDZ8=";
+  cargoHash = "sha256-eiIw/FcTb+s1Syf7hLnlLyeU1+TEZa8Mz4c1NC1dEN0=";
 
   preConfigure = ''
     export LIBCLANG_PATH="${lib.getLib clang.cc}/lib"
