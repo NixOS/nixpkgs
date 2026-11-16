@@ -4509,10 +4509,10 @@ with self;
 
   CGI = buildPerlPackage {
     pname = "CGI";
-    version = "4.72";
+    version = "5.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.72.tar.gz";
-      hash = "sha256-urwcpy2xiAg6HDgS3r6IxEc7lDsffGYigc1XxYCovdk=";
+      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-5.02.tar.gz";
+      hash = "sha256-R2N60EE8Un4A4SSdFNugwjQHOtS+8JdG+v1z3YXe1mU=";
     };
     buildInputs = [
       TestDeep
