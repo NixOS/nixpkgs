@@ -18637,6 +18637,8 @@ self: super: with self; {
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
 
+  roundtrip = callPackage ../development/python-modules/roundtrip { };
+
   routeros-api = callPackage ../development/python-modules/routeros-api { };
 
   routes = callPackage ../development/python-modules/routes { };
