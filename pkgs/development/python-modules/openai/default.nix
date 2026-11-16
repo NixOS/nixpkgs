@@ -28,9 +28,11 @@
 
   # check deps
   pytestCheckHook,
+  griffe,
   inline-snapshot,
   pytest-asyncio,
   pytest-xdist,
+  trio,
 
   # optional-dependencies toggle
   withAiohttp ? false,
@@ -41,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openai";
-  version = "3.14.1";
+  version = "3.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7oFIiENP5d/TAVbkjtsjcsuin+qJ/tmjSdzXgu/qsCE=";
+    hash = "sha256-Er1kq3JcjHBNHtaOcSbDfOT5Eb6eqRxL5l68pgQCq4k=";
   };
 
   postPatch = ''
@@ -102,9 +104,11 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    griffe
     inline-snapshot
     pytest-asyncio
     pytest-xdist
+    trio
   ]
   # including pandas-stubs would cause infinite recursion
   ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datalib" ]);
@@ -120,6 +124,21 @@ buildPythonPackage (finalAttrs: {
 
     # flaky
     "tests/lib/test_azure_redirects.py::test_sync_redirect_origin"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: 'git'
+    "tests/test_consumer_compatibility.py::test_compatibility_gate_selects_callers"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: 'ps'
+    "tests/test_example_security.py"
+
+    # TimeoutError
+    "tests/lib/test_realtime_example_keepalive.py"
+
+    # Unhandled thread exception
+    "tests/lib/test_beta_realtime_auth_policy.py"
+
+    # Fails to load typing_extensions even when it's in nativeCheckInputs
+    "tests/test_lazy_imports.py"
   ];
 
   meta = {
