@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
-    rev = "vulkan-sdk-${finalAttrs.version}";
+    tag = "vulkan-sdk-${finalAttrs.version}";
     hash = "sha256-hm+e1rynOMa9uBGSzmxaYgzR32ZhWV9VC2q961UoCKo=";
   };
 
@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include"
@@ -72,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "LunarG Vulkan loader";
