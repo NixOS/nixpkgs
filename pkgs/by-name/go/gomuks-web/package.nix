@@ -11,17 +11,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "gomuks-web";
-  version = "26.10";
+  version = "26.11";
 
   src = fetchFromGitHub {
     owner = "gomuks";
     repo = "gomuks";
     tag = "v0.${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.0";
-    hash = "sha256-XxZ2RiwJXM4CxainFwOn5wnEFbCHNAggmUNDdZ4TyiI=";
+    hash = "sha256-2SibQfjc/EaPsOK5k5dZvseqDxuVc3i+kOZsIFj5qJo=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-39av+m9+KSrvksXzTa8iwq77BwwZ8NH/kA1t2DDcE0U=";
+  vendorHash = "sha256-+Kn+ZiK+R8XB41BNhLM2qVhJD5rar6IVCtjqkxMQ0Ek=";
 
   nativeBuildInputs = [
     nodejs
@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
     npmRoot = "web";
     npmDeps = fetchNpmDeps {
       src = "${finalAttrs.src}/web";
-      hash = "sha256-esb/B3tXmPWb3o53/wI63EC587+2Z3KEjJeAlES7Oxo=";
+      hash = "sha256-gwkb3tGhmcbfclJMIO8rTOexzFfUFOmYE93vdgwUK/Y=";
     };
   };
 
