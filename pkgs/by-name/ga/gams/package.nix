@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://d37drm4t2jghv5.cloudfront.net/distributions/${finalAttrs.version}/linux/linux_x64_64_sfx.exe";
     hash = "sha256-nLt8EdoLzlGCXD5nmFuxSSFKekFcjELCxjmgkZobS9I=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   unpackCmd = "unzip $src";
   nativeBuildInputs = [ unzip ];
   buildInputs = [ file ];
