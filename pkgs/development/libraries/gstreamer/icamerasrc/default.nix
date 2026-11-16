@@ -10,7 +10,7 @@
   ipuVariant ? "ipu6",
   libdrm,
   libva,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 let
   ipu-camera-hal =
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libva
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

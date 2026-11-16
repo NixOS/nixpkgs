@@ -24,7 +24,7 @@
   hotdoc,
   directoryListingUpdater,
   gst-plugins-ugly,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     x264
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ];
 
   mesonFlags = [

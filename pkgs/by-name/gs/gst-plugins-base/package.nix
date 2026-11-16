@@ -45,7 +45,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ]
   ++ lib.optionals enableAlsa [
     alsa-lib

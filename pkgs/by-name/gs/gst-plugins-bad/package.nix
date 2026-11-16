@@ -111,7 +111,7 @@
   # causes gtk4 to depend on gtk3 and makes little sense
   guiSupport ? false,
   gst-plugins-bad,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -274,7 +274,7 @@ stdenv.mkDerivation (finalAttrs: {
     webrtc-audio-processing_1
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ];
 
   mesonFlags = [
