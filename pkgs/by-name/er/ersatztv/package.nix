@@ -7,6 +7,7 @@
   bash,
   ffmpeg,
   which,
+  nixosTests,
 }:
 
 buildDotnetModule rec {
@@ -56,7 +57,10 @@ buildDotnetModule rec {
     "${ersatztv-next}/bin"
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) ersatztv; };
+  };
 
   meta = {
     description = "Stream custom live channels using your own media";

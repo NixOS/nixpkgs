@@ -12,6 +12,7 @@
   ocl-icd,
   vulkan-loader,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -65,6 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     runtimeDeps = [ ffmpeg ];
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) ersatztv; };
   };
 
   meta = {
