@@ -4341,15 +4341,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luautf8";
-      version = "0.2.1-1";
+      version = "0.3.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luautf8-0.2.1-1.rockspec";
-          sha256 = "0g4xkcikxd2n9scrlbjbdk9a1bbli6s5yw9l4n4b0ss49wgnmc2y";
+          url = "mirror://luarocks/luautf8-0.3.0-1.rockspec";
+          sha256 = "1lpbf9kj5a4cplm3186bgc9krds7bix5dpnd41kir2vrkwb2yx98";
         }).outPath;
       src = fetchurl {
-        url = "https://github.com/starwing/luautf8/archive/refs/tags/0.2.1.tar.gz";
-        sha256 = "15455lyvjh5f6fgx41458nk7gak6q76k3aqjfp1xibk0v5f0flpa";
+        url = "https://github.com/starwing/luautf8/archive/refs/tags/0.3.0.tar.gz";
+        sha256 = "1hx1m4qlq4hizl4jcggpagyfs6vmn12bgpkfndkq35sil17xkpwh";
       };
 
       disabled = luaOlder "5.1";
