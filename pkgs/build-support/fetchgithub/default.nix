@@ -6,6 +6,7 @@
 }@args:
 let
   inherit (lib)
+    any
     attrNames
     functionArgs
     intersectAttrs
@@ -91,14 +92,15 @@ decorate (
     || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both).";
 
   let
-    useFetchGit =
-      mapAttrs (
-        name: nonNullDefault:
-        if args ? ${name} && (useFetchGitArgsDefaultNullable ? ${name} -> args.${name} != null) then
-          args.${name}
-        else
-          nonNullDefault
-      ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
+    useFetchGit = any (
+      arg:
+      # this argument determines whether to use fetchzip
+      useFetchGitargsDefaultNonNull ? ${arg}
+      # it's different from the fetchzip default
+      && useFetchGitargsDefaultNonNull.${arg} != args.${arg}
+      # and it's not a null attribute that's allowed to be null
+      && !(args.${arg} == null && useFetchGitArgsDefaultNullable ? ${arg})
+    ) (attrNames args);
 
     position = (
       if args.meta.description or null != null then
