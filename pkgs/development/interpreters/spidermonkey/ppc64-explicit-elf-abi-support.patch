@@ -1,0 +1,30 @@
+diff '--color=auto' -ruN a/build/moz.configure/rust.configure b/build/moz.configure/rust.configure
+--- a/build/moz.configure/rust.configure	2026-09-22 21:19:41.000000000 +0200
++++ b/build/moz.configure/rust.configure	2026-11-16 15:03:39.564042893 +0100
+@@ -387,6 +387,26 @@
+                         return c.rust_target
+                 return matches[0].rust_target
+ 
++        # GCC targeting big-endian 64-bit POWER w/ glibc allows specifying an ELF ABI version in the triplet
++        # (powerpc64-unknown-linux-gnuabielfv1, powerpc64-unknown-linux-gnuabielfv2)
++        # rustc uses -gnu for ELFv1, and since 1.98 it supports -gnuelfv2 for ELFv2. convert GCC -> rustc
++        if host_or_target.cpu == "ppc64" and host_or_target.endianness == "big" and host_or_target.raw_os.startswith("linux-gnuabielfv"):
++            matches = [
++                c
++                for c in candidates
++                if c.rust_target.startswith("powerpc64-")
++                and c.rust_target.endswith("-linux-{}".format(
++                    "gnuelfv2"
++                    if host_or_target.raw_os.endswith("-gnuabielfv2")
++                    else "gnu"
++                ))
++            ]
++            # As below, correlate on the (normalized) vendor.
++            for c in matches:
++                if c.target.vendor == vendor:
++                    return c.rust_target
++            return matches[0].rust_target
++
+         # See if we can narrow down on the exact alias.
+         # We use the sub_configure_alias to keep support mingw32 triplets as input.
+         narrowed = [
