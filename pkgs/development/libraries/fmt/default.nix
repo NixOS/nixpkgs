@@ -40,6 +40,8 @@ let
 
       nativeBuildInputs = [ cmake ];
 
+      strictDeps = true;
+
       cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared) ];
 
       doCheck = true;
