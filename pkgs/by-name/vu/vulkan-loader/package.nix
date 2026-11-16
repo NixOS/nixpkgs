@@ -83,7 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ralith ];
-    broken = finalAttrs.version != vulkan-headers.version;
+    problems = lib.optionalAttrs (finalAttrs.version != vulkan-headers.version) {
+      mismatched-headers = {
+        kind = "broken";
+        message = ''
+          vulkan-loader version ${finalAttrs.version} != vulkan-headers version ${vulkan-headers.version}
+        '';
+      };
+    };
     pkgConfigModules = [ "vulkan" ];
   };
 })
