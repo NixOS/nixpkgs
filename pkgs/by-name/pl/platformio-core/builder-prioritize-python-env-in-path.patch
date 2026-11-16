@@ -1,0 +1,11 @@
+--- a/platformio/builder/main.py
++++ b/platformio/builder/main.py
+@@ -46,6 +46,8 @@ clivars.AddVariables(
+     ("PROGRAM_ARGS",),
+ )
+ 
++os.environ["PATH"] = os.pathsep.join([os.path.dirname(get_pythonexe_path()), os.environ.get("PATH")])
++
+ DEFAULT_ENV_OPTIONS = dict(
+     tools=[
+         "ar",

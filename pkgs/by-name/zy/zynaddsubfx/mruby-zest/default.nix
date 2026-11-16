@@ -1,0 +1,76 @@
+{
+  lib,
+  gcc14Stdenv,
+  fetchFromGitHub,
+  bison,
+  pkg-config,
+  rake,
+  ruby,
+  libGL,
+  libuv,
+  libx11,
+}:
+
+# UI becomes unresponsive when built with GCC 15
+# (building with -std=gnu17 does not fix the issue)
+# https://github.com/mruby-zest/mruby-zest-build/issues/127
+gcc14Stdenv.mkDerivation (finalAttrs: {
+  pname = "mruby-zest";
+  version = "3.0.6";
+
+  src = fetchFromGitHub {
+    owner = "mruby-zest";
+    repo = "mruby-zest-build";
+    tag = finalAttrs.version;
+    fetchSubmodules = true;
+    hash = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
+  };
+
+  patches = [
+    ./force-cxx-as-linker.patch
+  ];
+
+  nativeBuildInputs = [
+    bison
+    pkg-config
+    rake
+    ruby
+  ];
+
+  buildInputs = [
+    libGL
+    libuv
+    libx11
+  ];
+
+  # Force optimization to fix:
+  # warning: #warning _FORTIFY_SOURCE requires compiling with optimization (-O)
+  env.NIX_CFLAGS_COMPILE = "-O3";
+
+  # Remove pre-built y.tab.c to generate with nixpkgs bison
+  preBuild = ''
+    rm mruby/mrbgems/mruby-compiler/core/y.tab.c
+  '';
+
+  installTargets = [ "pack" ];
+
+  postInstall = ''
+    ln -s "$out/zest" "$out/zyn-fusion"
+    cp -a package/{font,libzest.so,schema,zest} "$out"
+
+    # mruby-widget-lib/src/api.c requires MainWindow.qml as part of a
+    # sanity check, even though qml files are compiled into the binary
+    # https://github.com/mruby-zest/mruby-zest-build/blob/3.0.6/src/mruby-widget-lib/src/api.c#L107-L124
+    # https://github.com/mruby-zest/mruby-zest-build/blob/3.0.6/linux-pack.sh#L17-L18
+    mkdir -p "$out/qml"
+    touch "$out/qml/MainWindow.qml"
+  '';
+
+  meta = {
+    description = "Zest Framework used in ZynAddSubFX's UI";
+    homepage = "https://github.com/mruby-zest";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.all;
+  };
+})

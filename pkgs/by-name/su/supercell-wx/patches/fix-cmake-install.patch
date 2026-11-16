@@ -1,0 +1,102 @@
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index f5230429..f5961df3 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -892,6 +892,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+                                      Boost::timer
+                                      Boost::atomic
+                                      QMapLibre::Core
++                                     QMapLibre::Widgets
+                                      OpenGL::GLU
+                                      $<$<CXX_COMPILER_ID:MSVC>:opengl32>
+                                      $<$<CXX_COMPILER_ID:MSVC>:SetupAPI>
+@@ -931,29 +932,7 @@ if (WIN32)
+                        COMMENT "Running windeployqt for supercell-wx...")
+ endif()
+ 
+-if (LINUX)
+-    # Set DT_RUNPATH for Linux targets
+-    set_target_properties(MLNQtCore    PROPERTIES INSTALL_RPATH "\$ORIGIN/../lib") # QMapLibre::Core
+-    set_target_properties(supercell-wx PROPERTIES INSTALL_RPATH "\$ORIGIN/../lib")
+-endif()
+-
+-# install(TARGETS RUNTIME_DEPENDENCIES) is rejected when CMAKE_CROSSCOMPILING.
+-# Qt's Windows ARM64 toolchain sets that on x64 hosts; copy imported runtime
+-# DLLs instead. windeployqt still deploys Qt.
+-if (NOT CMAKE_CROSSCOMPILING)
+-    set(_scwx_runtime_dependencies
+-        RUNTIME_DEPENDENCIES
+-          PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-" "qt6"
+-          POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+-                               "^(/usr)?/lib/.*\\.so(\\..*)?"
+-    )
+-else()
+-    set(_scwx_runtime_dependencies)
+-endif()
+-
+ install(TARGETS supercell-wx
+-                MLNQtCore # QMapLibre::Core
+-        ${_scwx_runtime_dependencies}
+         RUNTIME
+           COMPONENT supercell-wx
+         BUNDLE
+@@ -968,59 +947,6 @@ install(TARGETS supercell-wx
+           COMPONENT supercell-wx
+           OPTIONAL)
+ 
+-if (WIN32 AND CMAKE_CROSSCOMPILING)
+-    # TARGET_RUNTIME_DLLS only lists direct link dependencies. Transitive
+-    # runtime DLLs (e.g. iconv-2.dll via fontconfig) are staged next to the
+-    # executable by conanfile.py generate() but are omitted from install
+-    # without RUNTIME_DEPENDENCIES (unsupported when cross-compiling).
+-    install(CODE "
+-        set(_scwx_runtime_dlls
+-            \"$<TARGET_RUNTIME_DLLS:supercell-wx>\"
+-            \"$<TARGET_RUNTIME_DLLS:MLNQtCore>\")
+-        file(GLOB _scwx_staged_dlls \"$<TARGET_FILE_DIR:supercell-wx>/*.dll\")
+-        list(APPEND _scwx_runtime_dlls \${_scwx_staged_dlls})
+-        list(REMOVE_DUPLICATES _scwx_runtime_dlls)
+-        foreach(_scwx_dll IN LISTS _scwx_runtime_dlls)
+-            if(_scwx_dll STREQUAL \"\")
+-                continue()
+-            endif()
+-            get_filename_component(_scwx_dll_name \"\${_scwx_dll}\" NAME)
+-            if(_scwx_dll_name MATCHES \"^[Qq]t6\" OR
+-               _scwx_dll_name MATCHES \"^(api-ms-|ext-ms-)\")
+-                continue()
+-            endif()
+-            file(INSTALL DESTINATION \"\${CMAKE_INSTALL_PREFIX}/bin\"
+-                 TYPE SHARED_LIBRARY
+-                 FILES \"\${_scwx_dll}\")
+-        endforeach()
+-        " COMPONENT supercell-wx)
+-endif()
+-
+-scwx_windeployqt_qtpaths_options(SCWX_DEPLOY_TOOL_OPTIONS)
+-
+-# NO_TRANSLATIONS is needed for Qt 6.5.0 (will be fixed in 6.5.1)
+-# https://bugreports.qt.io/browse/QTBUG-112204
+-# NO_COMPILER_RUNTIME: VC++ redistributable is installed by the NSIS bootstrapper
+-qt_generate_deploy_app_script(TARGET MLNQtCore # QMapLibre::Core
+-                              OUTPUT_SCRIPT deploy_script_qmaplibre_core
+-                              NO_TRANSLATIONS
+-                              NO_COMPILER_RUNTIME
+-                              NO_UNSUPPORTED_PLATFORM_ERROR
+-                              DEPLOY_TOOL_OPTIONS ${SCWX_DEPLOY_TOOL_OPTIONS})
+-
+-qt_generate_deploy_app_script(TARGET supercell-wx
+-                              OUTPUT_SCRIPT deploy_script_scwx
+-                              NO_TRANSLATIONS
+-                              NO_COMPILER_RUNTIME
+-                              NO_UNSUPPORTED_PLATFORM_ERROR
+-                              DEPLOY_TOOL_OPTIONS ${SCWX_DEPLOY_TOOL_OPTIONS})
+-
+-install(SCRIPT ${deploy_script_qmaplibre_core}
+-        COMPONENT supercell-wx)
+-
+-install(SCRIPT ${deploy_script_scwx}
+-        COMPONENT supercell-wx)
+-
+ if (APPLE)
+     # Install additional script to fix up the bundle
+     install(CODE [[

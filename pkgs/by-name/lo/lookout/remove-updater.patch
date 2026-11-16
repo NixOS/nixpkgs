@@ -1,0 +1,13 @@
+diff --git a/clients/native/crates/lookout-native/src/main.rs b/clients/native/crates/lookout-native/src/main.rs
+index da01dbc..1debce5 100644
+--- a/clients/native/crates/lookout-native/src/main.rs
++++ b/clients/native/crates/lookout-native/src/main.rs
+@@ -94,7 +94,7 @@ fn main() {
+     crash::self_test();
+     // Before any window: roll back a version that never became healthy, or
+     // install a staged update and relaunch (exits in both cases).
+-    updater::boot(&initial_urls);
++    // updater::boot(&initial_urls); // removed: Nixpkgs policy
+ 
+     let runtime = tokio::runtime::Builder::new_multi_thread()
+         .worker_threads(4)

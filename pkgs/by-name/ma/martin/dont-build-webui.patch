@@ -1,0 +1,21 @@
+diff --git i/martin/build.rs w/martin/build.rs
+index b463a8c..775a94d 100644
+--- i/martin/build.rs
++++ w/martin/build.rs
+@@ -75,15 +75,11 @@ fn webui() {
+     copy_file_tree(
+         &martin_ui_dir,
+         &out_martin_ui_dir,
+-        &["dist", "node_modules"],
++        &["node_modules"],
+     );
+ 
+     println!("installing and building in {}", out_martin_ui_dir.display());
+     static_files::NpmBuild::new(&out_martin_ui_dir)
+-        .install()
+-        .expect("npm install failed")
+-        .run("build")
+-        .expect("npm run build failed")
+         .target(out_martin_ui_dir.join("dist"))
+         .to_resource_dir()
+         .build()

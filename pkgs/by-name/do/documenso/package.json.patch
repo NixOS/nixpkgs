@@ -1,0 +1,21 @@
+diff --git a/package.json b/package.json
+index 6aef8ce..7d88820 100644
+--- a/package.json
++++ b/package.json
+@@ -82,7 +82,6 @@
+     "esbuild": "^0.28.1",
+     "husky": "^9.1.7",
+     "inngest": "^3.54.0",
+-    "inngest-cli": "^1.44.0",
+     "lint-staged": "^16.2.7",
+     "nanoid": "^5.1.6",
+     "nodemailer": "^9.0.0",
+@@ -97,7 +96,7 @@
+     "rimraf": "^6.1.2",
+     "superjson": "^2.2.5",
+     "syncpack": "^14.0.0-alpha.27",
+-    "turbo": "^2.10.0",
++    "turbo": "^2.10.1",
+     "vite": "^7.2.4",
+     "vite-plugin-static-copy": "^3.1.4",
+     "zod-openapi": "^4.2.4",

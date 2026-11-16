@@ -1,0 +1,28 @@
+diff '--color=auto' -ru factor.orig/basis/alien/libraries/finder/linux/linux.factor factor/basis/alien/libraries/finder/linux/linux.factor
+--- factor.orig/basis/alien/libraries/finder/linux/linux.factor	2026-10-14 13:50:47.453225475 +0200
++++ factor/basis/alien/libraries/finder/linux/linux.factor	2026-10-14 14:03:13.204120995 +0200
+@@ -33,16 +33,14 @@
+     ] map ;
+ 
+ : load-ldconfig-cache ( -- seq )
+-    "ldconfig" find-in-path [
+-        { "/usr/sbin/ldconfig" "/sbin/ldconfig" }
+-        [ dup file-exists? [ file-executable? ] [ drop f ] if ] find nip
+-    ] unless*
+-    [
+-        "-p" 2array <process> swap >>command +closed+ >>stderr
+-        utf8 [ read-lines ] with-process-reader* nip 0 = [
+-            [ "=>" swap subseq? ] filter parse-ldconfig-lines
+-        ] [ drop { } ] if
+-    ] [ { } ] if* ;
++    "FACTOR_LD_SO_CACHE" os-env [
++        utf8 [ read-lines ] with-file-reader
++    ] [
++        { } clone
++    ] if*
++    [ { } ] [
++        [ "=>" swap subseq? ] filter parse-ldconfig-lines
++    ] if-empty ;
+ 
+ ! Inspect, do not dlopen, discovery candidates: loading would execute their
+ ! constructors. Also reject linker scripts and foreign-architecture DSOs.

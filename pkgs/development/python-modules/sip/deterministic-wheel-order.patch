@@ -1,0 +1,12 @@
+diff --git a/sipbuild/builder.py b/sipbuild/builder.py
+--- a/sipbuild/builder.py
++++ b/sipbuild/builder.py
+@@ -200,5 +200,6 @@ class Builder(AbstractBuilder):
+         with ZipFile(wheel_path, 'w') as zf:
+-            for dirpath, _, filenames in os.walk('.'):
+-                for filename in filenames:
++            for dirpath, dirnames, filenames in os.walk('.'):
++                dirnames.sort()
++                for filename in sorted(filenames):
+                     # This will result in a name with no leading '.'.
+                     name = os.path.relpath(os.path.join(dirpath, filename))

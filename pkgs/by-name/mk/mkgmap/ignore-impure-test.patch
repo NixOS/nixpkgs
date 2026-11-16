@@ -1,0 +1,20 @@
+diff --git a/test/uk/me/parabola/imgfmt/app/srt/SrtCollatorTest.java b/test/uk/me/parabola/imgfmt/app/srt/SrtCollatorTest.java
+index e1e4ac7..954b918 100644
+--- a/test/uk/me/parabola/imgfmt/app/srt/SrtCollatorTest.java
++++ b/test/uk/me/parabola/imgfmt/app/srt/SrtCollatorTest.java
+@@ -17,6 +17,7 @@ import java.text.Collator;
+ import uk.me.parabola.mkgmap.srt.SrtTextReader;
+ 
+ import org.junit.Before;
++import org.junit.Ignore;
+ import org.junit.Test;
+ 
+ import static org.junit.Assert.*;
+@@ -111,6 +112,7 @@ public class SrtCollatorTest {
+ 	 * meant to be identical to the java one.
+ 	 */
+ 	@Test
++	@Ignore
+ 	public void testJavaRules() {
+ 		Collator collator = Collator.getInstance();
+ 

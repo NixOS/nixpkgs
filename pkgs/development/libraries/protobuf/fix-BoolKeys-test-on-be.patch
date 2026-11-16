@@ -1,0 +1,32 @@
+From 02774a2aea957c552383cc6cae43076f5436d867 Mon Sep 17 00:00:00 2001
+From: Sai Sindhuri Avulamanda <sai.sindhuri.avulamanda@ibm.com>
+Date: Wed, 11 Feb 2026 11:00:05 +0530
+Subject: [PATCH] Fix BoolKeys test to use integer-to-bool cast
+
+Signed-off-by: saisindhuri91 <Sai.Sindhuri.Avulamanda@ibm.com>
+---
+ upb/hash/test.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/upb/hash/test.cc b/upb/hash/test.cc
+index 546df9d71c1f0..fcb7deaa8e4bc 100644
+--- a/upb/hash/test.cc
++++ b/upb/hash/test.cc
+@@ -336,7 +336,7 @@ TEST(IntTableTest, BoolKeys) {
+   // First element.
+   EXPECT_TRUE(upb_inttable_next(&t, &key, &val, &iter));
+   bool key_bool;
+-  memcpy(&key_bool, &key, sizeof(key_bool));
++  key_bool = static_cast<bool>(key);
+   EXPECT_EQ(key_bool, false);
+   EXPECT_EQ(upb_inttable_iter_key(&t, iter), false);
+   EXPECT_EQ(val.val, true);
+@@ -345,7 +345,7 @@ TEST(IntTableTest, BoolKeys) {
+ 
+   // Second element.
+   EXPECT_TRUE(upb_inttable_next(&t, &key, &val, &iter));
+-  memcpy(&key_bool, &key, sizeof(key_bool));
++  key_bool = static_cast<bool>(key);
+   EXPECT_EQ(key_bool, true);
+   EXPECT_EQ(upb_inttable_iter_key(&t, iter), true);
+   EXPECT_EQ(val.val, false);

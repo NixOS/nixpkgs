@@ -1,0 +1,91 @@
+{
+  lib,
+  stdenv,
+  atk,
+  bison,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  flex,
+  geoip,
+  glib,
+  gtk3,
+  harfbuzz,
+  libmaxminddb,
+  libnet,
+  libpcap,
+  ncurses,
+  openssl,
+  pango,
+  pcre2,
+  pkg-config,
+  zlib,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ettercap";
+  version = "0.8.5.1";
+
+  src = fetchFromGitHub {
+    owner = "Ettercap";
+    repo = "ettercap";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HTHrQTHs3WKQXbfFbtVixACwEaiiYIivdqgaFHKIB3M=";
+  };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    pkg-config
+  ];
+
+  buildInputs = [
+    atk
+    curl
+    geoip
+    glib
+    gtk3
+    harfbuzz
+    libmaxminddb
+    libnet
+    libpcap
+    ncurses
+    openssl
+    pango
+    pcre2
+    zlib
+  ];
+
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail /etc \$\{INSTALL_PREFIX\}/etc \
+      --replace-fail /usr \$\{INSTALL_PREFIX\}
+  '';
+
+  cmakeFlags = [
+    "-DBUNDLED_LIBS=Off"
+    "-DGTK3_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+  ];
+
+  # TODO: Remove after the next release (0.8.4 should work without this):
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+
+  meta = {
+    description = "Comprehensive suite for man in the middle attacks";
+    longDescription = ''
+      Ettercap is a comprehensive suite for man in the middle attacks. It
+      features sniffing of live connections, content filtering on the fly and
+      many other interesting tricks. It supports active and passive dissection
+      of many protocols and includes many features for network and host
+      analysis.
+    '';
+    homepage = "https://www.ettercap-project.org/";
+    changelog = "https://github.com/Ettercap/ettercap/blob/master/CHANGELOG";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
+  };
+})
