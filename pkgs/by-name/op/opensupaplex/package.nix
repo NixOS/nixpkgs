@@ -2,9 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
   testers,
   opensupaplex,
   SDL2,
@@ -12,22 +9,15 @@
   desktopToDarwinBundle,
 }:
 
-let
-  # Doesn't seem to be included in tagged releases, but does exist on master.
-  icon = fetchurl {
-    url = "https://raw.githubusercontent.com/sergiou87/open-supaplex/b102548699cf16910b59559f689ecfad88d2a7d2/open-supaplex.svg";
-    sha256 = "sha256-nKeSBUGjSulbEP7xxc6smsfCRjyc/xsLykH0o3Rq5wo=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensupaplex";
-  version = "7.1.2";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "sergiou87";
     repo = "open-supaplex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hP8dJlLXE5J/oxPhRkrrBl1Y5e9MYbJKi8OApFM3+GU=";
+    hash = "sha256-4q4li0TT/tZkrreRFIVCth9Db6eCKORe2HMK2ETO/CY=";
   };
 
   patches = [
@@ -37,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     SDL2 # For "sdl2-config"
-    copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
@@ -64,11 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib,share/icons/hicolor/scalable/apps}
-
-    install -D ./linux/opensupaplex $out/bin/opensupaplex
-    cp -R ./resources $out/lib/opensupaplex
-    cp ${icon} $out/share/icons/hicolor/scalable/apps/open-supaplex.svg
+    install -Dm755 linux/opensupaplex -t $out/bin
+    mkdir -p $out/lib
+    cp -R resources $out/lib/opensupaplex
+    install -Dm644 linux/assets/io.github.sergiou87.open-supaplex.desktop -t $out/share/applications
+    install -Dm644 linux/assets/io.github.sergiou87.open-supaplex.metainfo.xml -t $out/share/metainfo
+    install -Dm644 linux/assets/io.github.sergiou87.open-supaplex.svg -t $out/share/icons/hicolor/scalable/apps
 
     runHook postInstall
   '';
@@ -78,19 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     command = "opensupaplex --help";
     version = "v${finalAttrs.version}";
   };
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "opensupaplex";
-      exec = finalAttrs.meta.mainProgram;
-      icon = "open-supaplex";
-      desktopName = "OpenSupaplex";
-      comment = finalAttrs.meta.description;
-      categories = [
-        "Game"
-      ];
-    })
-  ];
 
   # Strip only the main binary, not the data files which would corrupt them.
   stripExclude = [ "lib/opensupaplex/*" ];
