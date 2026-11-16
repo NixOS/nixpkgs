@@ -16,7 +16,6 @@ let
     revOrTag
     setFunctionArgs
     unsafeGetAttrPos
-    xor
     ;
 
   removedPassthruBaseNames = [
@@ -86,10 +85,9 @@ decorate (
     ... # For hash agility and additional fetchgit arguments
   }@args:
 
-  assert (
-    xor (tag == null) (rev == null)
-    || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both)."
-  );
+  assert
+    (tag == null) != (rev == null)
+    || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both).";
 
   let
     useFetchGit =
