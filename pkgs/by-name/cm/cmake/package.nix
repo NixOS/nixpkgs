@@ -192,11 +192,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
     (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isStatic [
-    # kwsys's DynamicLoader test is inimical to -static
-    # doCheck is off anyway so just skip building tests
-    (lib.cmakeBool "BUILD_TESTING" false)
+
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   # make install attempts to use the just-built cmake
@@ -207,7 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
 
-  doCheck = false; # fails
+  # NOTE: if you consider enabling this in the future, make sure to check the static build since kwsys's DynamicLoader test is inimical to -static
+  doCheck = false;
 
   passthru.updateScript = gitUpdater {
     url = "https://gitlab.kitware.com/cmake/cmake.git";
