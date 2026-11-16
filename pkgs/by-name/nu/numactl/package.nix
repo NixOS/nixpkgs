@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  versionCheckHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
   # building ~5% slower until reboot. Ugh!
   doCheck = false; # never ever!
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -46,5 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21
     ]; # libnuma is lgpl21
     platforms = lib.platforms.linux;
+    pkgConfigModules = [ "numa" ];
+    mainProgram = "numactl";
   };
 })
