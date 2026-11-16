@@ -5,6 +5,7 @@
   nix-update-script,
 
   asn1crypto,
+  certifi,
   cryptography,
   oscrypto,
   requests,
@@ -19,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko-certvalidator";
-  version = "0.31.4";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
     tag = "pyhanko-certvalidator/v${finalAttrs.version}";
-    hash = "sha256-PyCVebWLtDeYFDxAE2mZ8tGaVQF60czU8ZyVbSyVONo=";
+    hash = "sha256-od9t6OmCYQ+j5HGTPa44VxNqTgT1S53VTBhjqD5/Ynw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko-certvalidator";
@@ -41,19 +42,25 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     asn1crypto
+    certifi
     cryptography
     oscrypto
-    requests
     uritools
   ];
+
+  optional-dependencies = {
+    requests = [ requests ];
+  };
 
   nativeCheckInputs = [
     aiohttp
     freezegun
     pytest-asyncio
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "pyhanko_certvalidator" ];
 
