@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/skywind3000/kcp";
     changelog = "https://github.com/skywind3000/kcp/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ samirbgno ];
     platforms = lib.platforms.all;
   };
 })
