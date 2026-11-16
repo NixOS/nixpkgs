@@ -105,8 +105,8 @@ in
   };
 
   fmt_12 = generic {
-    version = "12.2.0";
-    hash = "sha256-Tc7PmNxUv7ajw6GaHPGEEtrD/fl6is7RB8TPestJa1o=";
+    version = "12.2.1";
+    hash = "sha256-KBksENAI5rkGRup04ni+CGbqb/F2uMGyUqiupHhii5M=";
 
     patches = [
       # fix build on 32-bit targets
