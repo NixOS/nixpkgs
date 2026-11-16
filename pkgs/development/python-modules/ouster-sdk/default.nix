@@ -125,6 +125,15 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
   ];
 
+  # Sensor tests bind loopback UDP sockets in the Darwin sandbox.
+  __darwinAllowLocalNetworking = true;
+
+  # Concurrent Darwin builds can contend for the mDNS port (UDP 5353).
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/documentation/test_cli_commands.py::test_discover"
+    "tests/test_discover.py::test_fleetsw_5814"
+  ];
+
   pythonImportsCheck = [
     "ouster.sdk"
     "ouster.cli.core"
