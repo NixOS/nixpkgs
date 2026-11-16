@@ -50,14 +50,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edgetx";
-  version = "2.12.4";
+  version = "2.12.5";
 
   src = fetchFromGitHub {
     owner = "EdgeTX";
     repo = "edgetx";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-0YqjhUE1QoFXikvBocgqzqzk+oiUh5zzGt3EP6rDKVI=";
+    hash = "sha256-LTvqy9J7isSyyqxUTiy3zxnWl3hgbQDTgVHCz/35l5Y=";
   };
 
   nativeBuildInputs = [
