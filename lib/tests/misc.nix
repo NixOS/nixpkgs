@@ -3781,7 +3781,7 @@ runTests {
     expected = {
       hasSchema = true;
       hasDefs = true;
-      treeRef = "#/$defs/JSON value";
+      treeRef = "#/$defs/JSON%20value";
       treeNixType = "JSON value";
       slashTreeRef = "#/$defs/tree~1node";
       slashTreeNixType = "tree/node";

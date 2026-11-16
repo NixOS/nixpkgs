@@ -41,6 +41,7 @@ let
   inherit (lib.strings)
     concatMapStrings
     concatStringsSep
+    escapeURL
     hasInfix
     hasPrefix
     isStringLike
@@ -715,7 +716,7 @@ rec {
 
   flattenAnyOf = list: unique (concatMap (s: if s ? anyOf then flattenAnyOf s.anyOf else [ s ]) list);
 
-  escapeJsonPointer = replaceStrings [ "~" "/" ] [ "~0" "~1" ];
+  escapeJsonPointer = s: escapeURL (replaceStrings [ "~" "/" ] [ "~0" "~1" ] s);
 
   typeToSchema' =
     seen: type: subDocs:
