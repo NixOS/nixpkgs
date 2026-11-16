@@ -90,6 +90,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # debug builds. Match upstream CI so the account integration tests use it.
   checkType = "debug";
 
+  preCheck = ''
+    # CI rendering tests assert plain text, even when the builder has a terminal.
+    export CLICOLOR=0
+    export CLICOLOR_FORCE=0
+  '';
+
   postInstall = lib.optionalString stdenv.hostPlatform.isUnix ''
     wrapProgram "$out/bin/ngit" \
       --prefix PATH : ${lib.makeBinPath [ git ]} \
