@@ -4,6 +4,7 @@
   dotnetCorePackages,
   buildDotnetModule,
   ersatztv-next,
+  bash,
   ffmpeg,
   which,
 }:
@@ -44,6 +45,8 @@ buildDotnetModule rec {
     "PATH"
     ":"
     "${lib.makeBinPath [
+      # ETV runs MPEG-TS scripts (used for /iptv/channel/*.ts) with bash
+      bash
       ffmpeg
       which
     ]}"
