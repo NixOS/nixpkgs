@@ -1,6 +1,8 @@
 import argparse
 import asyncio
 import logging
+import os
+import re
 import signal
 from contextlib import AsyncExitStack, asynccontextmanager
 from os import environ
@@ -54,6 +56,20 @@ async def virtiofsd(virtiofs_dir: Path, tag: str, source: Path, cache: str, flag
             await proc.communicate()
 
 
+def referenced_fds(args: list[str]) -> list[int]:
+    """Open file descriptors referenced as /dev/fd/N, e.g. from Bash process substitution."""
+    fds = []
+    for fd in sorted(
+        {int(n) for arg in args for n in re.findall(r"/dev/fd/(\d+)", arg)}
+    ):
+        try:
+            os.fstat(fd)
+        except OSError:
+            continue
+        fds.append(fd)
+    return fds
+
+
 def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str]]:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -105,7 +121,9 @@ async def amain():
             )
         )
 
-        proc = await asyncio.create_subprocess_exec(*qemu_args)
+        proc = await asyncio.create_subprocess_exec(
+            *qemu_args, pass_fds=referenced_fds(qemu_args)
+        )
         loop = asyncio.get_running_loop()
         loop.add_signal_handler(signal.SIGTERM, lambda: proc.terminate())
         loop.add_signal_handler(signal.SIGINT, lambda: proc.terminate())
