@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucx";
-  version = "1.22.0";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "openucx";
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Otherwise compilation fails with:
     #   fatal error: gpunetio/common/doca_gpunetio_verbs_def.h: No such file or directory
     fetchSubmodules = true;
-    hash = "sha256-R/uUjkYLPtY9c3vZWrkzKaSgK9Z/cppJCwQ1V1cuwPc=";
+    hash = "sha256-eQFUoVtcLRRnNn5Zyp0FcLTWOLWx5m+fU93YxURg+b0=";
   };
 
   # UCX uses the `#pragma omp master` declaration which is deprecated since
