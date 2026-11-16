@@ -7,7 +7,9 @@
   acceptLicense ? config.dyalog.acceptLicense or false,
 
   autoPatchelfHook,
+  coreutils,
   dpkg,
+  gnused,
   makeWrapper,
   ncurses5,
 
@@ -34,6 +36,15 @@ let
   dyalogHome = "$out/lib/dyalog";
 
   makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.runtime_10_0}/share/dotnet";
+
+  maplWrapperArgs = makeWrapperArgs ++ [
+    "--suffix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnused
+      ]
+    }"
+  ];
 
   licenseUrl = "https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf";
 
@@ -168,14 +179,17 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 dyalog.desktop -t $out/share/applications
     install -Dm644 fonts/*.ttf -t $out/share/fonts/truetype
 
+    # Like upstream's /usr/bin/dyalog: mapl reads ~/.dyalog and the serial, and handles -rt/-bg/-kbd
     for exec in "dyalog" "mapl"; do
-        makeWrapper ${dyalogHome}/$exec $out/bin/$exec ${toString makeWrapperArgs}
+        makeWrapper ${dyalogHome}/mapl $out/bin/$exec ${toString maplWrapperArgs}
     done
 
+    # Upstream's dyalogscript starts the interpreter directly, not through mapl
+    makeWrapper ${dyalogHome}/dyalog $out/libexec/dyalog/dyalog ${toString makeWrapperArgs}
     install -Dm755 scriptbin/dyalogscript $out/bin/dyalogscript
     substituteInPlace $out/bin/dyalogscript \
         --replace-fail 'INSTALLDIR="/opt/mdyalog/${finalAttrs.shortVersion}/64/unicode"' "INSTALLDIR=\"${dyalogHome}\"" \
-        --replace-fail ': ''${SCRIPTDIR:=$INSTALLDIR}' "SCRIPTDIR=\"$out/bin\""
+        --replace-fail ': ''${SCRIPTDIR:=$INSTALLDIR}' "SCRIPTDIR=\"$out/libexec/dyalog\""
 
     runHook postInstall
   '';
@@ -214,6 +228,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     check 55 '⎕←+/⍳10'
     check 0 "'DRC'⎕CY'conga'" "⎕←⊃DRC.Init'''"
+
+    echo '⎕←+/⍳10' > mapl.apls
+    if [[ "$($out/bin/dyalog -script mapl.apls | tr '\r' '\n')" != 55 || ! -s $HOME/.dyalog/dyalog.dcfg ]]; then
+      echo "bin/dyalog did not run through mapl"
+      exit 1
+    fi
   ''
   + lib.optionalString dotnetSupport ''
     check 1 "⎕USING←'System'" '⎕←2000<DateTime.Now.Year'
