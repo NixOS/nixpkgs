@@ -40,7 +40,7 @@
   withDrMp3AudioImporter ? true,
   withDrWavAudioImporter ? true,
   withEtcDecImageConverter ? true,
-  withFaad2AudioImporter ? false,
+  withFaad2AudioImporter ? true,
   withFreetypeFont ? true,
   withGlslangShaderConverter ? false,
   withGltfImporter ? true,
@@ -56,7 +56,7 @@
   withMiniExrImageConverter ? true,
   withOpenExrImageConverter ? false,
   withOpenExrImporter ? false,
-  withPlutoSvgImporter ? false,
+  withPlutoSvgImporter ? true,
   withPngImageConverter ? true,
   withPngImporter ? true,
   withPrimitiveImporter ? true,
@@ -93,9 +93,13 @@ assert lib.assertMsg (
   !(withHarfBuzzFont && !withFreetypeFont)
 ) "magnum-plugins: withHarfBuzzFont needs withFreetypeFont to be enabled";
 
+assert lib.assertMsg (
+  !(withStanfordImporter && !withAssimpImporter)
+) "magnum-plugins: withStanfordImporter needs withAssimpImporter to be enabled";
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "magnum-plugins";
-  version = "2020.06-unstable-2026-11-07";
+  version = "2020.06-unstable-2026-11-16";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -104,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mosra";
     repo = "magnum-plugins";
-    rev = "b99e314c51ed2e47eb408d6b921f802d90102ecb";
-    hash = "sha256-dMCWKFXZHtrX/ybVXXfuC4n0vOruHX1H86osLTlYpWM=";
+    rev = "f15693ae5007b342ef7282de7e655496b5e7bade";
+    hash = "sha256-L86RwzazDBqUOHqS/svmT1/wjjtovN9f2UZXhOdq+SY=";
   };
 
   nativeBuildInputs = [
@@ -193,12 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (withBasisImageConverter || withBasisImporter) [
     "-DBASIS_UNIVERSAL_DIR=${basis-universal-src}"
     "-DKTX2_ZSTANDARD=ON"
-  ];
-
-  disabledTests = [
-    "Faad2AudioImporterTest" # -> decoding error
-    # Images *image and *pngImage have mean delta above threshold, actual 0.069987 but at most 0.069 expected. Max delta 2.75 is within threshold 2.75.
-    "PlutoSvgImporterTest"
   ];
 
   meta = {

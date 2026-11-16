@@ -43,7 +43,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magnum";
-  version = "2020.06-unstable-2026-11-07";
+  version = "2020.06-unstable-2026-11-14";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mosra";
     repo = "magnum";
-    rev = "d2ef8a037791734eb06e63b1e2685e7cf1db3485";
-    hash = "sha256-MNZJ5+VeE4TkHMSMprbPnA2ekwBYzT7R9PwrvUgxfdU=";
+    rev = "f0907f1c1d1247e6b9e2120ccf42971430edf5e0";
+    hash = "sha256-8yGB3dgVdVl6qxDBN65midi2ojLvKv8d/MoU1U81RsE=";
   };
 
   nativeBuildInputs = [
