@@ -1,5 +1,6 @@
 {
   autoPatchelfHook,
+  callPackage,
   cctools,
   copyDesktopItems,
   electron_44,
@@ -36,6 +37,13 @@ stdenv.mkDerivation (
     # Upstream package.json requires Node.js 26; the nixpkgs default is still 24.
     nodejs = nodejs_26;
     pnpm = pnpm_12;
+    captureHelpers = lib.genAttrs [ "kde" "hyprland" ] (
+      backend:
+      callPackage ./capture-helper.nix {
+        inherit backend;
+        inherit (finalAttrs) src version;
+      }
+    );
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
         "assets/prod/black-macos-1024.png"
@@ -173,6 +181,20 @@ stdenv.mkDerivation (
       install -Dm755 \
         native/browser-secret/build/${stdenv.hostPlatform.node.arch}/t3-browser-secret \
         "$out"/libexec/t3code/apps/desktop/prod-resources/browser-secret/t3-browser-secret
+
+      # Shared Electron uses the unpackaged resource paths in DesktopSnapShot.
+      while IFS= read -r file; do
+        install -Dm444 "apps/desktop/gnome-extension/$file" \
+          "$out/libexec/t3code/apps/desktop/gnome-extension/$file"
+      done < <(jq -r '.files[]' apps/desktop/gnome-extension/bundle.json)
+
+      # The setup code rejects symlinks, including for bundled helpers.
+      install -Dm755 ${lib.getExe captureHelpers.kde} \
+        "$out/libexec/t3code/native/kde-snap-shot/target/release/t3-kde-snap-shot"
+      install -Dm755 ${lib.getExe captureHelpers.hyprland} \
+        "$out/libexec/t3code/native/hyprland-snap-shot/target/release/t3-hyprland-snap-shot"
+      cp -r ${captureHelpers.hyprland}/share/t3code/hyprland-capture/protocols \
+        "$out/libexec/t3code/native/hyprland-snap-shot/"
     ''
     + ''
 
@@ -258,6 +280,7 @@ stdenv.mkDerivation (
     ];
 
     passthru = {
+      inherit captureHelpers;
       updateScript = nix-update-script {
         attrPath = "t3code.unwrapped";
         extraArgs = [ "--use-github-releases" ];
