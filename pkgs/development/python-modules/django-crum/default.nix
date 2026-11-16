@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Current Authenticated User Middleware for Django";
     homepage = "https://github.com/ninemoreminutes/django-crum";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ DannyDannyDanny ];
   };
 }

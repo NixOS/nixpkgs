@@ -5,20 +5,20 @@
   fetchPnpmDeps,
   makeWrapper,
   nodejs_22,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   python3,
   nix-update-script,
 }:
 
 let
-  version = "1.3.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "makeplane";
     repo = "plane";
     tag = "v${version}";
-    hash = "sha256-EWd9bw0uHC0KEFwebRBJV1SNM2OHfuq90+QLSr2w3j0=";
+    hash = "sha256-ijq0dtHQJrmZNhzUBq4cIBG1k67WKKupy/m8t7Lqi/U=";
   };
 
   pythonEnv = python3.withPackages (
@@ -39,7 +39,6 @@ let
       # Database
       psycopg
       psycopg.optional-dependencies.c
-      pymongo
 
       # Cache / async
       redis
@@ -74,6 +73,7 @@ let
       python-dateutil
       pytz
       faker
+      requests
       zxcvbn
 
       # Packages added alongside this derivation
@@ -107,13 +107,14 @@ let
         src
         pnpmWorkspaces
         ;
-      fetcherVersion = 3;
-      hash = "sha256-BQNxYWnHlYwwS+JemJPFLLWAgSiEMZIBZ2LIrZjMy88=";
+      pnpm = pnpm_11;
+      fetcherVersion = 5;
+      hash = "sha256-XfV6zcLOnOY7r0ydu9ubB87lYJHjscgXh3R9JBSAcxA=";
     };
 
     nativeBuildInputs = [
       nodejs_22
-      pnpm
+      pnpm_11
       pnpmConfigHook
     ];
 
@@ -181,7 +182,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace plane/settings/production.py \
       --replace-fail \
         'LOG_DIR = os.path.join(BASE_DIR, "logs")' \
-        'LOG_DIR = os.environ.get("PLANE_LOG_DIR", "/var/log/plane")'
+        'LOG_DIR = os.environ.get("PLANE_LOG_DIR", "/var/log/plane")' \
+      --replace-fail \
+        'os.path.join(BASE_DIR, "logs", "plane-debug.log")' \
+        'os.path.join(LOG_DIR, "plane-debug.log")' \
+      --replace-fail \
+        'os.path.join(BASE_DIR, "logs", "plane-error.log")' \
+        'os.path.join(LOG_DIR, "plane-error.log")'
   '';
 
   installPhase = ''

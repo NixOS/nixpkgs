@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Makes it easier for you to deal with structures that are common for models";
     homepage = "https://github.com/jazzband/jsonmodels";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ DannyDannyDanny ];
   };
 }

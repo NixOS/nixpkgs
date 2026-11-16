@@ -23,6 +23,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  # 3.5.3 caps wrapt at <2; nixpkgs ships 2.x and the decorator API still imports.
+  pythonRelaxDeps = [ "wrapt" ];
+
   dependencies = [
     asgiref
     certifi
@@ -40,6 +43,6 @@ buildPythonPackage rec {
     description = "Scout Application Performance Monitoring Agent";
     homepage = "https://github.com/scoutapp/scout_apm_python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ DannyDannyDanny ];
   };
 }
