@@ -5,6 +5,7 @@
   fetchpatch,
   autoreconfHook,
   libunwind,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -64,5 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vcunat ];
+    pkgConfigModules = [
+      "libtcmalloc"
+      "libtcmalloc_debug"
+      "libtcmalloc_minimal"
+      "libtcmalloc_minimal_debug"
+      "libprofiler"
+    ];
   };
 })
