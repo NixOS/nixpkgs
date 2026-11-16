@@ -6,7 +6,8 @@
   meson,
   ninja,
   wrapGAppsHook4,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libadwaita,
   libxml2,
   desktop-file-utils,
@@ -43,10 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libportal-gtk4
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
-  ]);
+  ];
 
   meta = {
     description = "Get what motivates you done, without losing concentration";

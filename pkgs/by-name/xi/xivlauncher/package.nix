@@ -10,7 +10,12 @@
   gnutls,
   aria2,
   steam,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
@@ -37,7 +42,7 @@ buildDotnetModule rec {
     makeWrapper
   ];
 
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     gstreamer
     gst-plugins-base
     gst-plugins-good

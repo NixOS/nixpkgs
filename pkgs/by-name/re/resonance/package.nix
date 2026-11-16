@@ -5,7 +5,12 @@
   desktop-file-utils,
   fetchFromGitHub,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk4,
   libadwaita,
   libxml2,
@@ -59,14 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     sqlite
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-  ]);
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PYTHONPATH : ${

@@ -6,7 +6,10 @@
   nixosTests,
   cmake,
   gettext,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   lomiri-action-api,
   lomiri-content-hub,
   lomiri-ui-toolkit,
@@ -61,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     qtxmlpatterns
   ]
   # QtMultimedia playback support
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-  ]);
+  ];
 
   nativeCheckInputs = [
     mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35

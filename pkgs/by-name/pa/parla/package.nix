@@ -13,7 +13,10 @@
   pkg-config,
   stdenv,
   vala,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   webkitgtk_6_0,
   wrapGAppsHook4,
 }:
@@ -51,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     webkitgtk_6_0
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-  ]);
+  ];
 
   passthru.updateScript = nix-update-script { };
 

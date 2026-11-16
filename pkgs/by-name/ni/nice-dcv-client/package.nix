@@ -13,6 +13,9 @@
   glib,
   glib-networking,
   gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk4,
   libfido2,
   libva,
@@ -58,14 +61,11 @@ stdenv.mkDerivation {
 
   installPhase =
     let
-      gst_plugin_system_path = lib.makeSearchPath "lib/gstreamer-1.0/" (
-        with gst_all_1;
-        [
-          gstreamer
-          gst-plugins-base
-          gst-plugins-good
-        ]
-      );
+      gst_plugin_system_path = lib.makeSearchPath "lib/gstreamer-1.0/" [
+        gstreamer
+        gst-plugins-base
+        gst-plugins-good
+      ];
       fixPathsPatch = replaceVars ./fix-paths.patch {
         basedir = null;
         gio_extra_modules = "${glib-networking}/lib/gio/modules";

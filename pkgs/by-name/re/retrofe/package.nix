@@ -5,6 +5,10 @@
   cmake,
   glib,
   gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-libav,
   makeWrapper,
   pkg-config,
   python3,
@@ -50,11 +54,11 @@ stdenv.mkDerivation {
     sqlite
     zlib
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-libav
     gst-plugins-base
     gst-plugins-good
-  ]);
+  ];
 
   configurePhase = ''
     runHook preConfigure

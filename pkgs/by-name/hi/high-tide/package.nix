@@ -10,7 +10,10 @@
   desktop-file-utils,
   libadwaita,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libsecret,
   libportal,
   alsa-utils,
@@ -45,13 +48,13 @@ python313Packages.buildPythonApplication (finalAttrs: {
     libportal
     pipewire # provides a gstreamer plugin for pipewiresink
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     libsecret
-  ]);
+  ];
 
   dependencies = [
     alsa-utils

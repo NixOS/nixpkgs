@@ -8,7 +8,11 @@
   openssl,
   jsoncpp,
   libxml2,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   boost,
   websocketpp,
   libadwaita,
@@ -50,13 +54,13 @@ stdenv.mkDerivation rec {
     gtkmm4
     libsecret
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-libav
     gst-plugins-base
     (gst-plugins-good.override { gtkSupport = true; })
     gst-plugins-bad
-  ]);
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

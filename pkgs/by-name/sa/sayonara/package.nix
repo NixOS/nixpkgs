@@ -4,6 +4,11 @@
   fetchFromGitLab,
   nix-update-script,
   gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   lib,
   libpulseaudio,
   ninja,
@@ -47,13 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     py
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ]);
+  ];
 
   # we carry the patched taglib 1.11.1 that doesn't break ogg but sayonara just
   # checks for the version

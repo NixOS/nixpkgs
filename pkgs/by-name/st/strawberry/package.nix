@@ -10,7 +10,13 @@
   fftw,
   glib-networking,
   gnutls,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   kdsingleapplication,
   lib,
   libxdmcp,
@@ -95,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
     p11-kit
   ]
-  ++ (with gst_all_1; [
+  ++ [
     glib-networking
     gst-libav
     gst-plugins-bad
@@ -104,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-ugly
     gst-plugins-rs
     gstreamer
-  ]);
+  ];
 
   nativeBuildInputs = [
     cmake

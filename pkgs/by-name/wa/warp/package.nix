@@ -19,6 +19,11 @@
   libcamera,
   pipewire,
   gst_all_1,
+  gstreamer,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   nix-update-script,
 }:
 
@@ -64,13 +69,13 @@ stdenv.mkDerivation rec {
     libcamera
     pipewire
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-bad
     gst-plugins-good # multifilesink
     gst-plugins-rs # gst-plugin-gtk4
-  ]);
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

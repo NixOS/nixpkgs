@@ -16,7 +16,12 @@
   # gupnp,
   gupnp-av,
   gupnp-dlna,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-editing-services,
   libgee,
   # libsoup_2_4,
   gtk3,
@@ -74,14 +79,14 @@ stdenv.mkDerivation rec {
     tinysparql
     shared-mime-info
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-editing-services
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ]);
+  ];
 
   mesonFlags = [
     "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"

@@ -10,7 +10,10 @@
   gitMinimal,
   glib,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   meson,
@@ -75,12 +78,12 @@ stdenv.mkDerivation rec {
     libxml2
     lcms2
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-  ]);
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

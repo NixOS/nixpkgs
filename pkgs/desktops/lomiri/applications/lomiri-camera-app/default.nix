@@ -8,7 +8,11 @@
   ctestCheckHook,
   exiv2,
   gettext,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libusermetrics,
   lomiri-action-api,
   lomiri-content-hub,
@@ -77,14 +81,14 @@ stdenv.mkDerivation (finalAttrs: {
     qtpositioning
     qtsensors
   ]
-  ++ (with gst_all_1; [
+  ++ [
     # cannot create camera service, the 'camerabin' plugin is missing for GStreamer
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ]);
+  ];
 
   nativeCheckInputs = [
     ctestCheckHook

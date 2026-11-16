@@ -8,7 +8,9 @@
   curl,
   libnotify,
   libappindicator,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk3,
   dconf,
   wrapGAppsHook3,
@@ -54,11 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     (lib.getLib dconf)
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
-  ])
+  ]
   ++ (lib.optional aria2Support aria2);
 
   enableParallelBuilding = true;

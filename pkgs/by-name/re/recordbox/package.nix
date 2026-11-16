@@ -9,7 +9,13 @@
   fetchFromCodeberg,
   glib,
   glycin-loaders,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk4,
   hicolor-icon-theme,
   lcms2,
@@ -80,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
     sqlite
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -88,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-rs
     gst-plugins-ugly
     gstreamer
-  ]);
+  ];
 
   mesonBuildType = "release";
 

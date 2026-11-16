@@ -6,7 +6,14 @@
   itstool,
   python3,
   wrapGAppsHook3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
+  gst-editing-services,
+  gst-devtools,
   gtk3,
   gobject-introspection,
   libpeas,
@@ -57,7 +64,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gsettings-desktop-schemas
     libnotify
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-editing-services
     gst-plugins-base
@@ -66,7 +73,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gst-plugins-ugly
     gst-libav
     gst-devtools
-  ]);
+  ];
 
   pythonPath = with python3.pkgs; [
     pygobject3

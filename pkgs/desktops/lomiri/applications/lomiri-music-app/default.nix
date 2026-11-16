@@ -6,7 +6,10 @@
   nixosTests,
   cmake,
   gettext,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libusermetrics,
   lomiri-content-hub,
   lomiri-thumbnailer,
@@ -61,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     qtsystems
   ]
   # QtMultimedia playback support
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-  ]);
+  ];
 
   dontWrapGApps = true;
 

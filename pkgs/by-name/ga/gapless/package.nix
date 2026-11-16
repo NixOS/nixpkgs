@@ -5,7 +5,10 @@
   desktop-file-utils,
   gitUpdater,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   meson,
@@ -40,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gstreamer
-  ]);
+  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

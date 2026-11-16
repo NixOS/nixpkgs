@@ -23,7 +23,11 @@
   taglib_1,
   taglib_extras,
   withHttpStream ? true,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   withReplaygain ? true,
   ffmpeg_6,
   speex,
@@ -55,7 +59,7 @@ let
 
   withUdisks = (withTaglib && withDevices && stdenv.hostPlatform.isLinux);
 
-  gst = with gst_all_1; [
+  gst = [
     gstreamer
     gst-libav
     gst-plugins-base

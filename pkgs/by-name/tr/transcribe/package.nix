@@ -11,7 +11,11 @@
   fontconfig,
   gdk-pixbuf,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk3,
   libsm,
   libx11,
@@ -40,7 +44,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
@@ -49,26 +53,24 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  libPath =
-    with gst_all_1;
-    lib.makeLibraryPath [
-      stdenv.cc.cc
-      glib
-      gtk3
-      atk
-      fontconfig
-      pango
-      cairo
-      gdk-pixbuf
-      alsa-lib
-      libx11
-      libxtst
-      libsm
-      libpng
-      gstreamer
-      gst-plugins-base
-      zlib
-    ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    glib
+    gtk3
+    atk
+    fontconfig
+    pango
+    cairo
+    gdk-pixbuf
+    alsa-lib
+    libx11
+    libxtst
+    libsm
+    libpng
+    gstreamer
+    gst-plugins-base
+    zlib
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/libexec $out/share/doc

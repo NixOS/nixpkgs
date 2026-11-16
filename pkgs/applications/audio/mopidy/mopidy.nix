@@ -4,7 +4,12 @@
   fetchFromGitHub,
   pythonPackages,
   wrapGAppsNoGuiHook,
-  gst_all_1,
+  gst-plugins-ugly,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   glib-networking,
   gobject-introspection,
   pipewire,
@@ -25,18 +30,16 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ wrapGAppsNoGuiHook ];
 
-  buildInputs =
-    with gst_all_1;
-    [
-      glib-networking
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gst-plugins-rs
-      gst-libav
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pipewire ];
+  buildInputs = [
+    glib-networking
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-rs
+    gst-libav
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pipewire ];
 
   propagatedNativeBuildInputs = [ gobject-introspection ];
 

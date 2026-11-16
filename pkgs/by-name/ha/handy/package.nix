@@ -34,7 +34,11 @@
   vulkan-headers,
   spirv-headers,
   shaderc,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   glib-networking,
   libx11,
   pipewire,
@@ -49,16 +53,13 @@
   openssl,
 }:
 let
-  gstPlugins = lib.optionals stdenv.hostPlatform.isLinux (
-    with gst_all_1;
-    [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]
-  );
+  gstPlugins = lib.optionals stdenv.hostPlatform.isLinux [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handy";

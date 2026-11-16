@@ -4,7 +4,11 @@
   fetchFromGitHub,
   SDL2,
   libsForQt5,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   wayland,
   pkg-config,
   nix-update-script,
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
-  gstInputs = with gst_all_1; [
+  gstInputs = [
     gstreamer
     gst-plugins-base
     (gst-plugins-good.override { qt5Support = true; })

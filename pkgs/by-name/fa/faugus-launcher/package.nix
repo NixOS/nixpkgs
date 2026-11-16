@@ -6,7 +6,9 @@
   gawk,
   gnugrep,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   icoextract,
   libadwaita,
   libgudev,
@@ -59,11 +61,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     libmanette
     libgudev
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-plugins-base
     gst-plugins-good
     gstreamer
-  ]);
+  ];
 
   # has no tests
   doCheck = false;

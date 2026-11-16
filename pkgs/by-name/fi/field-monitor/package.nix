@@ -13,7 +13,9 @@
   gtk4,
   libadwaita,
   libvirt,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   desktop-file-utils,
   appstream,
   appstream-glib,
@@ -86,11 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     vte-gtk4
     xdg-desktop-portal
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
-  ]);
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -13,6 +13,9 @@
   gdk-pixbuf,
   glib,
   gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtest,
   libapparmor,
   libexif,
@@ -77,11 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     udisks
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
-  ]);
+  ];
 
   nativeCheckInputs = [ dbus ];
 

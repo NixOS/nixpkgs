@@ -9,6 +9,11 @@
   glib,
   gsm,
   gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   lib,
   libre,
@@ -84,13 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
     srtp
     zlib
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-libav
     gst-plugins-base
     gst-plugins-bad
     gst-plugins-good
-  ]);
+  ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

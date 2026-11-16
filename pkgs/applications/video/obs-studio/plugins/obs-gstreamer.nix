@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-base,
+  gst-plugins-bad,
   pkg-config,
   meson,
   ninja,
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ];
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     gstreamer
     gst-plugins-base
     obs-studio
@@ -46,7 +49,6 @@ stdenv.mkDerivation rec {
       gstreamerHook =
         package: "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : ${lib.getLib package}/lib/gstreamer-1.0";
     in
-    with gst_all_1;
     map gstreamerHook [
       gstreamer
       gst-plugins-base

@@ -7,6 +7,12 @@
   chromaprint,
   gettext,
   gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   qt5,
   libsForQt5,
   taglib_1,
@@ -40,7 +46,7 @@ let
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
 
-  gst_plugins = with gst_all_1; [
+  gst_plugins = [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly

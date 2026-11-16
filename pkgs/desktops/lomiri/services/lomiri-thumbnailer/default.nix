@@ -9,7 +9,10 @@
   cmake,
   cmake-extras,
   doxygen,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gdk-pixbuf,
   gtest,
   makeFontsConf,
@@ -114,13 +117,13 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
     taglib
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     # maybe add ugly to cover all kinds of formats?
-  ]);
+  ];
 
   nativeCheckInputs = [
     shared-mime-info

@@ -16,6 +16,11 @@
   libcddb,
   libcdio,
   gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libsForQt5,
   withGstPlugins ? true,
   glyr,
@@ -64,38 +69,36 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    with gst_all_1;
-    [
-      dbus-glib
-      gstreamer
-      gst-plugins-base
-      gtk3
-      hicolor-icon-theme
-      libpeas
-      libsForQt5.qtbase
-      sqlite
-      taglib
-      zlib
-    ]
-    ++ lib.optionals withGstPlugins [
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]
-    ++ lib.optionals withCD [
-      libcddb
-      libcdio
-      libcdio-paranoia
-    ]
-    ++ lib.optional withGudev libgudev
-    ++ lib.optional withKeybinder keybinder3
-    ++ lib.optional withLibnotify libnotify
-    ++ lib.optional withLastfm liblastfm-vambrose
-    ++ lib.optional withGlyr glyr
-    ++ lib.optional withMtp libmtp
-    ++ lib.optional withXfce4ui libxfce4ui
-    ++ lib.optional withTotemPlParser totem-pl-parser
+  buildInputs = [
+    dbus-glib
+    gstreamer
+    gst-plugins-base
+    gtk3
+    hicolor-icon-theme
+    libpeas
+    libsForQt5.qtbase
+    sqlite
+    taglib
+    zlib
+  ]
+  ++ lib.optionals withGstPlugins [
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]
+  ++ lib.optionals withCD [
+    libcddb
+    libcdio
+    libcdio-paranoia
+  ]
+  ++ lib.optional withGudev libgudev
+  ++ lib.optional withKeybinder keybinder3
+  ++ lib.optional withLibnotify libnotify
+  ++ lib.optional withLastfm liblastfm-vambrose
+  ++ lib.optional withGlyr glyr
+  ++ lib.optional withMtp libmtp
+  ++ lib.optional withXfce4ui libxfce4ui
+  ++ lib.optional withTotemPlParser totem-pl-parser
   # ++ lib.optional withGrilo grilo
   # ++ lib.optional withRygel rygel
   ;

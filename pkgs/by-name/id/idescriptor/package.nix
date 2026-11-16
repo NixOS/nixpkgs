@@ -12,6 +12,12 @@
   fuse3,
   glib,
   gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   ifuse,
   libheif,
   libplist,
@@ -26,7 +32,7 @@ let
   gstPluginsGoodQt6 = gst_all_1.gst-plugins-good.override {
     qt6Support = true;
   };
-  gstPlugins = with gst_all_1; [
+  gstPlugins = [
     gstreamer
     gst-plugins-base
     gstPluginsGoodQt6

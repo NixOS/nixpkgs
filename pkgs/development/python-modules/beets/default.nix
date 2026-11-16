@@ -52,7 +52,10 @@
   gobject-introspection,
 
   # buildInputs
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
 
   # plugin deps
   aacgain,
@@ -158,7 +161,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ extraNativeBuildInputs;
 
-  buildInputs = with gst_all_1; [
+  buildInputs = [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly

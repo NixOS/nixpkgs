@@ -8,7 +8,11 @@
   imagemagick,
   qt5,
   taglib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,13 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qtsvg
     taglib
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ]);
+  ];
 
   prefixKey = "--prefix ";
 

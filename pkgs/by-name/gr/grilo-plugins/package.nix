@@ -22,6 +22,9 @@
   libmediaart,
   grilo,
   gst_all_1,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
   gnome-online-accounts,
   gmime,
   gom,
@@ -51,14 +54,11 @@ stdenv.mkDerivation rec {
       load_plugins =
         lib.concatMapStrings
           (plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");'')
-          (
-            with gst_all_1;
-            [
-              gstreamer
-              gst-plugins-base
-              gst-plugins-bad
-            ]
-          );
+          [
+            gstreamer
+            gst-plugins-base
+            gst-plugins-bad
+          ];
     })
   ];
 

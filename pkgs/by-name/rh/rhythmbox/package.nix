@@ -30,7 +30,13 @@
   wrapGAppsHook3,
   desktop-file-utils,
   gst_all_1,
-  gst_plugins ? with gst_all_1; [
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
+  gst_plugins ? [
     gst-plugins-good
     gst-plugins-ugly
   ],

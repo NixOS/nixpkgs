@@ -9,7 +9,8 @@
   libGL,
   libgbm,
   pkg-config,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
 }:
 
 stdenv.mkDerivation {
@@ -35,10 +36,10 @@ stdenv.mkDerivation {
     libGL
     libgbm
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
-  ]);
+  ];
 
   meta = {
     description = "Example OpenGL app using KMS/GBM";

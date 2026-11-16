@@ -34,7 +34,12 @@
   gnome-desktop,
   dbus,
   texlive,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gi-docgen,
   supportMultimedia ? true, # PDF multimedia
   withLibsecret ? true,
@@ -97,17 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withLibsecret [
     libsecret
   ]
-  ++ lib.optionals supportMultimedia (
-    with gst_all_1;
-    [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]
-  );
+  ++ lib.optionals supportMultimedia [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ];
 
   mesonFlags = [
     "-Dnautilus=false"
