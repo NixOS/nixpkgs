@@ -97,6 +97,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # CI rendering tests assert plain text, even when the builder has a terminal.
     export CLICOLOR=0
     export CLICOLOR_FORCE=0
+    # Let HTTPS fixtures override SSL_CERT_FILE. Nix's OpenSSL otherwise
+    # prioritizes the inherited NIX_SSL_CERT_FILE over their private test CA.
+    unset NIX_SSL_CERT_FILE
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isUnix ''
