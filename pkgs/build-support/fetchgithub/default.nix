@@ -138,9 +138,6 @@ decorate (
         position = "${position.file}:${toString position.line}";
       };
     varBase = "NIX${optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    # We prefer fetchzip in cases we don't need submodules as the hash
-    # is more stable in that case.
-    fetcher = if useFetchGit then fetchgit else fetchzip;
     privateAttrs = optionalAttrs private {
       netrcPhase =
         # When using private repos:
@@ -168,76 +165,77 @@ decorate (
 
     gitRepoUrl = "${baseUrl}.git";
 
-    fetcherArgs =
-      finalAttrs:
-      removeAttrs args (
-        if useFetchGit then removedPassthruFetchGitNames else removedPassthruFetchZipNames
-      )
-      // (
-        if useFetchGit then
-          useFetchGitArgsWDPassing
-          // {
-            inherit tag rev;
-            url = gitRepoUrl;
-            inherit passthru;
-            derivationArgs = {
-              inherit
-                githubBase
-                owner
-                repo
-                ;
-            };
-          }
-        else
-          let
-            revWithTag = finalAttrs.rev;
-          in
-          {
-            # Use the API endpoint for private repos, as the archive URI doesn't
-            # support access with GitHub's fine-grained access tokens.
-            #
-            # Use the archive URI for non-private repos, as the API endpoint has
-            # relatively restrictive rate limits for unauthenticated users.
-            url =
-              if private then
-                let
-                  endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
-                in
-                if githubBase == "github.com" then
-                  "https://api.github.com${endpoint}"
-                else
-                  "https://${githubBase}/api/v3${endpoint}"
-              else
-                "${baseUrl}/archive/${revWithTag}.tar.gz";
-            extension = "tar.gz";
-            derivationArgs = {
-              inherit
-                githubBase
-                owner
-                repo
-                tag
-                ;
-              rev = fetchgit.getRevWithTag {
-                inherit (finalAttrs) tag;
-                rev = finalAttrs.revCustom;
-              };
-              revCustom = rev;
-            };
-            passthru = {
-              inherit gitRepoUrl;
-            }
-            // passthru;
-          }
-      )
-      // privateAttrs
-      // {
-        # TODO(@ShamrockLee): Change back to `inherit name;` after reconstruction with lib.extendMkDerivation
-        name =
-          args.name
-            or (repoRevToNameMaybe finalAttrs.repo (revOrTag finalAttrs.revCustom finalAttrs.tag) "github");
-        meta = newMeta;
-      };
   in
-
-  fetcher fetcherArgs
+  # We prefer fetchzip in cases we don't need submodules as the hash
+  # is more stable in that case.
+  (if useFetchGit then fetchgit else fetchzip) (
+    finalAttrs:
+    removeAttrs args (
+      if useFetchGit then removedPassthruFetchGitNames else removedPassthruFetchZipNames
+    )
+    // (
+      if useFetchGit then
+        useFetchGitArgsWDPassing
+        // {
+          inherit tag rev;
+          url = gitRepoUrl;
+          inherit passthru;
+          derivationArgs = {
+            inherit
+              githubBase
+              owner
+              repo
+              ;
+          };
+        }
+      else
+        let
+          revWithTag = finalAttrs.rev;
+        in
+        {
+          # Use the API endpoint for private repos, as the archive URI doesn't
+          # support access with GitHub's fine-grained access tokens.
+          #
+          # Use the archive URI for non-private repos, as the API endpoint has
+          # relatively restrictive rate limits for unauthenticated users.
+          url =
+            if private then
+              let
+                endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
+              in
+              if githubBase == "github.com" then
+                "https://api.github.com${endpoint}"
+              else
+                "https://${githubBase}/api/v3${endpoint}"
+            else
+              "${baseUrl}/archive/${revWithTag}.tar.gz";
+          extension = "tar.gz";
+          derivationArgs = {
+            inherit
+              githubBase
+              owner
+              repo
+              tag
+              ;
+            rev = fetchgit.getRevWithTag {
+              inherit (finalAttrs) tag;
+              rev = finalAttrs.revCustom;
+            };
+            revCustom = rev;
+          };
+          passthru = {
+            inherit gitRepoUrl;
+          }
+          // passthru;
+        }
+    )
+    // privateAttrs
+    // {
+      # TODO(@ShamrockLee): Change back to `inherit name;` after reconstruction with lib.extendMkDerivation
+      name =
+        args.name
+          or (repoRevToNameMaybe finalAttrs.repo (revOrTag finalAttrs.revCustom finalAttrs.tag) "github");
+      meta = newMeta;
+    }
+  )
 )
