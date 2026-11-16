@@ -145,10 +145,27 @@ let
 
   # Discover configured detectors for acceleration support
   detectors = attrValues cfg.settings.detectors or { };
-  withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
-  withCoralPCI = any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
+
+  hasDetector =
+    {
+      type,
+      devicePrefix ? null,
+    }:
+    any (
+      d: d.type == type && (devicePrefix == null || hasPrefix devicePrefix (d.device or ""))
+    ) detectors;
+
+  withCoralUSB = hasDetector {
+    type = "edgetpu";
+    devicePrefix = "usb";
+  };
+  withCoralPCI = hasDetector {
+    type = "edgetpu";
+    devicePrefix = "pci";
+  };
   withCoral = withCoralPCI || withCoralUSB;
-  withOpenVINO = any (d: d.type == "openvino") detectors;
+  withHailo8l = hasDetector { type = "hailo8l"; };
+  withOpenVINO = hasDetector { type = "openvino"; };
 in
 
 {
@@ -717,6 +734,9 @@ in
       usb.enable = mkDefault withCoralUSB;
       pcie.enable = mkDefault withCoralPCI;
     };
+
+    boot.extraModulePackages = lib.optionals withHailo8l [ config.boot.kernelPackages.hailo8 ];
+    hardware.firmware = lib.optionals withHailo8l [ pkgs.hailo8-firmware ];
 
     users.users.frigate = {
       isSystemUser = true;
