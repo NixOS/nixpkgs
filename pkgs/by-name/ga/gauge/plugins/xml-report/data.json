@@ -1,15 +1,15 @@
 {
-  "version": "0.5.2",
+  "version": "1.0.2",
   "aarch64-darwin": {
-    "url": "https://github.com/getgauge/xml-report/releases/download/v0.5.2/xml-report-0.5.2-darwin.arm64.zip",
-    "hash": "sha256-UW3Axcti8r9dEfiupj2r+mcLGpFBwYQf/7mDNyynReE="
+    "url": "https://github.com/getgauge/xml-report/releases/download/v1.0.2/xml-report-1.0.2-darwin.arm64.zip",
+    "hash": "sha256-XbpRvP5xHCPc3mI+87rgv9Gn37b11lRZXV1aicN0/PA="
   },
   "aarch64-linux": {
-    "url": "https://github.com/getgauge/xml-report/releases/download/v0.5.2/xml-report-0.5.2-linux.arm64.zip",
-    "hash": "sha256-cJ4Pfkmw0ISczvOo/ZOE0bV00gww92S3dscBZtn0G9o="
+    "url": "https://github.com/getgauge/xml-report/releases/download/v1.0.2/xml-report-1.0.2-linux.arm64.zip",
+    "hash": "sha256-bwErX0uvZmLAcmIu9uE2aTkam7Jd+lnR01LX44ITGxk="
   },
   "x86_64-linux": {
-    "url": "https://github.com/getgauge/xml-report/releases/download/v0.5.2/xml-report-0.5.2-linux.x86_64.zip",
-    "hash": "sha256-00F4MIN9P5QL4PApFl6UG4bU3g0G7y/qGNMqJWyelR4="
+    "url": "https://github.com/getgauge/xml-report/releases/download/v1.0.2/xml-report-1.0.2-linux.x86_64.zip",
+    "hash": "sha256-uGj6hfYZPOoV/c9qAxgCQuI36z9k/sTyOZd+7lQt3GA="
   }
 }
