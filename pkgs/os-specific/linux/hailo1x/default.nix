@@ -5,6 +5,7 @@
   kernel,
   kernelModuleMakeFlags,
   nix-update-script,
+  hailo1x-firmware,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     "pcie"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit hailo1x-firmware;
+    };
+  };
 
   __structuredAttrs = true;
 
