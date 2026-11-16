@@ -806,10 +806,26 @@ rec {
               }
             )
           else if name == "nullor" then
-            combineAnyOf [
-              (mkLeaf { type = "null"; })
+            if
+              elemRes.schema ? type
+              && isString elemRes.schema.type
+              && !elemRes.schema ? properties
+              && !elemRes.schema ? items
+            then
               elemRes
-            ]
+              // {
+                schema = elemRes.schema // {
+                  type = [
+                    elemRes.schema.type
+                    "null"
+                  ];
+                };
+              }
+            else
+              combineAnyOf [
+                (mkLeaf { type = "null"; })
+                elemRes
+              ]
           else if name == "either" then
             combineAnyOf [
               (typeToSchema' seen' nested.left { })

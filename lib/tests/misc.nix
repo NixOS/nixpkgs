@@ -3418,6 +3418,9 @@ runTests {
               freeformType = lib.types.nullOr (lib.types.attrsOf lib.types.int);
             };
           };
+          options.nullStr = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+          };
         };
         options = (evalModules { modules = [ module ]; }).options;
         optionDoc = optionToDoc options;
@@ -3461,6 +3464,9 @@ runTests {
         # Function type handling
         funcTestHasNoType = !(optionDoc.properties.funcTest ? type);
 
+        # NullOr primitive handling
+        nullStrType = optionDoc.properties.nullStr.type;
+
         # Freeform submodule additionalProperties & required
         freeformAdditionalType = optionDoc.properties.freeformSub.additionalProperties.type;
         freeformInnerType = optionDoc.properties.freeformSub.properties.inner.type;
@@ -3499,13 +3505,18 @@ runTests {
 
       funcTestHasNoType = true;
 
+      nullStrType = [
+        "string"
+        "null"
+      ];
+
       freeformAdditionalType = "string";
       freeformInnerType = "string";
       freeformRequired = [ "inner" ];
       freeformOpenAdditionalProps = true;
       freeformNullOrType = "integer";
 
-      docListCount = 30;
+      docListCount = 31;
     };
   };
 
