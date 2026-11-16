@@ -3647,22 +3647,24 @@ final: prev: {
       luaAtLeast,
       luaOlder,
       luarocks-build-luke,
+      std-normalize,
     }:
     buildLuarocksPackage {
       pname = "luaposix";
-      version = "38-1";
+      version = "39-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaposix-38-1.rockspec";
-          sha256 = "1p2qm3nqwlgmn0h2r5b38zzs8y763sn61wm3qqyfdwfc4zvwwvay";
+          url = "mirror://luarocks/luaposix-39-1.rockspec";
+          sha256 = "13xpccs6dmix58ij52d9pr2yqbq28hwn8n0kw018xwxdi6fsfjv7";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/luaposix/luaposix/archive/v38.zip";
-        sha256 = "1rrkgng07lrcahjaavlhk03v42hrq4jpj8d1risvcsn0j1mf833z";
+        url = "https://github.com/luaposix/luaposix/archive/v39.zip";
+        sha256 = "1czbv6np1f819wv9kg0nz6l21zmx2hbwsjay81n07ivi3yazysai";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
       nativeBuildInputs = [ luarocks-build-luke ];
+      propagatedBuildInputs = [ std-normalize ];
 
       meta = {
         homepage = "https://github.com/luaposix/luaposix/";
