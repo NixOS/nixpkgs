@@ -8,9 +8,11 @@
   pkg-config,
   protobuf,
   sqlite,
+  aws-lc,
   writableTmpDirAsHomeHook,
   gitMinimal,
   jq,
+  python3,
   versionCheckHook,
   makeBinaryWrapper,
   which,
@@ -19,34 +21,34 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeroclaw";
-  version = "0.8.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "zeroclaw-labs";
     repo = "zeroclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6WAF826aftGuZjSHM/upWYmmVVjMS+vS+Kg4NetvjJc=";
+    hash = "sha256-h5x5+ubEHLS6//Fge30wp2b+MBXSasXC/YNS3uk05bM=";
   };
 
-  cargoHash = "sha256-Pycl0MMyxWtfcssoFhvDT4UQJuVVBDNzN536eBFlND4=";
+  cargoHash = "sha256-w0g8THP4Dg59dMPMVeK3hTQciZ2+1ldRZ8bBmFAIr9I=";
 
   # zerocode is a separate workspace member and expects the daemon beside it.
   cargoBuildFlags = [
     "--package"
-    "zeroclawlabs"
+    "zeroclaw"
     "--package"
     "zerocode"
   ]
   ++ lib.optionals withMatrix [
     "--features"
-    "zeroclawlabs/channel-matrix"
+    "zeroclaw/channel-matrix"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/web";
-    hash = "sha256-0CsPPy5a/jTr8nImwvTwStTgHm9wZbFBwCZVHKPZCvE=";
+    hash = "sha256-xwp8rzQeZf51W4c/F//HlpYHi18Z61TeGuKD3DjUltk=";
   };
   npmRoot = "web";
 
@@ -70,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     sqlite
   ];
 
@@ -85,6 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
     gitMinimal
     jq
+    python3
     which
   ];
 
@@ -99,6 +103,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::gateway_restart_hint_uses_gateway_bind_fallback_for_hostnames"
     "--skip=integration::telegram_attachment_fallback::"
     "--skip=integration::telegram_finalize_draft::"
+    # PTY job-control regression test hangs in the Nix build sandbox
+    "--skip=component::daemon_startup_feedback::daemon_feedback_follows_foreground_job_control_transitions"
+    # runtime-trace.jsonl is not populated in the Nix build sandbox
+    "--skip=component::verifiable_intent_notice_visibility::a_patch_that_does_not_enable_the_section_adds_no_second_record"
+    "--skip=component::verifiable_intent_notice_visibility::enabling_the_section_through_config_patch_records_the_notice_once"
+    "--skip=component::verifiable_intent_notice_visibility::the_withheld_notice_is_recorded_once_per_config_application"
+    "--skip=component::verifiable_intent_notice_visibility::trace_is_the_channel_that_disappears_and_doctor_is_the_one_that_does_not"
+    "--skip=component::verifiable_intent_notice_visibility::traced_notice_is_categorised_and_carries_its_warning_code"
   ];
 
   # The gateway serves the web dashboard from <binary_dir>/web/dist at runtime
