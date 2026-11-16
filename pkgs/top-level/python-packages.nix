@@ -140,9 +140,9 @@ self: super: with self; {
 
   affine = callPackage ../development/python-modules/affine { };
 
-  affine-gaps = callPackage ../development/python-modules/affine-gaps { };
-
   affinegap = callPackage ../development/python-modules/affinegap { };
+
+  affinegaps = callPackage ../development/python-modules/affinegaps { };
 
   afsapi = callPackage ../development/python-modules/afsapi { };
 
