@@ -18559,6 +18559,12 @@
     githubId = 11810057;
     name = "Matt Snider";
   };
+  mattbusel = {
+    name = "Matthew Busel";
+    email = "mattbusel@tensorust.com";
+    github = "Mattbusel";
+    githubId = 183046053;
+  };
   mattchrist = {
     email = "nixpkgs-matt@christ.systems";
     github = "mattchrist";
