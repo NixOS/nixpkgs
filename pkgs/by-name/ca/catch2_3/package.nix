@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  strictDeps = true;
+
   hardeningDisable = [ "trivialautovarinit" ];
 
   cmakeFlags = [
