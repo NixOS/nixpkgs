@@ -237,46 +237,44 @@ lib.extendMkDerivation {
           throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}"
       );
 
+      # If any hash is set, ensure all the others aren't set. Make sure that each
+      # condition includes all 5 hash types!
       hash_ =
-        if
-          length (
-            filter (s: s != "") [
-              hash
-              outputHash
-              sha1
-              sha256
-              sha512
-            ]
-          ) > 1
-        then
-          throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
-        else
-
-        if hash != "" then
+        if hash != "" && (outputHash == "" && sha1 == "" && sha256 == "" && sha512 == "") then
           {
             outputHashAlgo = null;
             outputHash = hash;
           }
-        else if outputHash != "" then
+        else if outputHash != "" && (hash == "" && sha1 == "" && sha256 == "" && sha512 == "") then
           if outputHashAlgo != "" then
             { inherit outputHashAlgo outputHash; }
           else
             throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
-        else if sha512 != "" then
+        else if sha512 != "" && (hash == "" && outputHash == "" && sha1 == "" && sha256 == "") then
           {
             outputHashAlgo = "sha512";
             outputHash = sha512;
           }
-        else if sha256 != "" then
+        else if sha256 != "" && (hash == "" && outputHash == "" && sha1 == "" && sha512 == "") then
           {
             outputHashAlgo = "sha256";
             outputHash = sha256;
           }
-        else if sha1 != "" then
+        else if sha1 != "" && (hash == "" && outputHash == "" && sha256 == "" && sha512 == "") then
           {
             outputHashAlgo = "sha1";
             outputHash = sha1;
           }
+        else if
+          filter (s: s != "") [
+            hash
+            outputHash
+            sha1
+            sha256
+            sha512
+          ] != [ ]
+        then
+          throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
         else if cacert != null then
           {
             outputHashAlgo = null;
