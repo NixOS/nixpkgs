@@ -33,6 +33,18 @@
   watchdog,
   websockets,
 
+  # optional-dependencies
+  gepa,
+  google-cloud-aiplatform,
+  google-cloud-texttospeech,
+  jinja2,
+  nltk,
+  openpyxl,
+  pandas,
+  rouge-score,
+  tabulate,
+  xlrd,
+
   # tests
   a2a-sdk,
   absl-py,
@@ -54,17 +66,14 @@
   google-cloud-speech,
   google-cloud-storage,
   hypothesis,
-  jinja2,
   litellm,
   lxml,
   mcp,
   openai,
-  openpyxl,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-grpc,
   opentelemetry-instrumentation-httpx,
   opentelemetry-resourcedetector-gcp,
-  pandas,
   pyarrow,
   pytest-asyncio,
   pytest-mock,
@@ -72,8 +81,6 @@
   pytestCheckHook,
   python-dateutil,
   sqlalchemy,
-  tabulate,
-  xlrd,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -120,6 +127,22 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ google-auth.optional-dependencies.pyopenssl;
 
+  optional-dependencies = {
+    eval = [
+      gepa
+      google-cloud-aiplatform
+      google-cloud-texttospeech
+      jinja2
+      nltk
+      openpyxl
+      pandas
+      rouge-score
+      tabulate
+      xlrd
+    ]
+    ++ google-cloud-aiplatform.optional-dependencies.evaluation;
+  };
+
   nativeCheckInputs = [
     a2a-sdk
     absl-py
@@ -141,17 +164,14 @@ buildPythonPackage (finalAttrs: {
     google-cloud-speech
     google-cloud-storage
     hypothesis
-    jinja2
     litellm
     lxml
     mcp
     openai
-    openpyxl
     opentelemetry-exporter-otlp-proto-http
     opentelemetry-instrumentation-grpc
     opentelemetry-instrumentation-httpx
     opentelemetry-resourcedetector-gcp
-    pandas
     pyarrow
     pytest-asyncio
     pytest-mock
@@ -159,49 +179,41 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     python-dateutil
     sqlalchemy
-    tabulate
-    xlrd
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.eval;
 
   # integration/ and remote/ need network access and credentials
   enabledTestPaths = [ "tests/unittests" ];
 
   disabledTestPaths = [
-    # optional dependencies not packaged in nixpkgs:
-    # google-cloud-aiplatform (vertexai), google-cloud-agentplatform,
-    # google-antigravity, google-cloud-discoveryengine, daytona, opensandbox.
-    "tests/unittests/agents/test_llm_agent_fields.py"
-    "tests/unittests/code_executors/test_agent_engine_sandbox_code_executor.py"
-    "tests/unittests/code_executors/test_vertex_ai_code_executor.py"
-    "tests/unittests/dependencies/test_vertexai.py"
-    "tests/unittests/evaluation"
-    "tests/unittests/examples/test_vertex_ai_example_store.py"
+    # optional dependencies not packaged in nixpkgs
+    # google-antigravity
+    "tests/unittests/labs/antigravity"
+    # google-cloud-agentidentitycredentials
     "tests/unittests/integrations/agent_identity"
     "tests/unittests/integrations/agent_registry"
+    # google-cloud-dataplex
     "tests/unittests/integrations/bigquery/test_bigquery_client.py"
     "tests/unittests/integrations/bigquery/test_bigquery_search_tool.py"
-    "tests/unittests/integrations/daytona"
+    # google-cloud-discoveryengine
+    "tests/unittests/agents/test_llm_agent_fields.py"
+    "tests/unittests/tools/test_discovery_engine_search_tool.py"
+    # google-cloud-eventarc-publishing
     "tests/unittests/integrations/eventarc"
+    # google-cloud-modelarmor
     "tests/unittests/integrations/model_armor"
+    # daytona, opensandbox
+    "tests/unittests/integrations/daytona"
     "tests/unittests/integrations/opensandbox"
-    "tests/unittests/integrations/vmaas/test_sandbox_computer.py"
-    "tests/unittests/labs/antigravity"
-    "tests/unittests/memory/test_vertex_ai_memory_bank_service.py"
-    "tests/unittests/memory/test_vertex_ai_rag_memory_service.py"
-    "tests/unittests/optimization/local_eval_sampler_test.py"
-    "tests/unittests/sessions/test_vertex_ai_session_service.py"
+    # opentelemetry-instrumentation-google-genai
     "tests/unittests/telemetry/test_functional.py"
     "tests/unittests/telemetry/test_genai_instrumentor_bypass.py"
-    "tests/unittests/telemetry/test_google_cloud.py"
     "tests/unittests/telemetry/test_node_functional.py"
     "tests/unittests/telemetry/test_semconv_conformance.py"
     "tests/unittests/telemetry/test_smoke.py"
     "tests/unittests/telemetry/test_web_ui_functional.py"
+    # llama-index (heavy, left out of nativeCheckInputs)
     "tests/unittests/tools/retrieval/test_files_retrieval.py"
-    "tests/unittests/tools/retrieval/test_vertex_ai_rag_retrieval.py"
-    "tests/unittests/tools/test_discovery_engine_search_tool.py"
-    "tests/unittests/tools/test_google_tool.py"
-    "tests/unittests/tools/test_vertex_ai_load_profiles_tool.py"
     # sample agents use unpackaged integrations
     "tests/unittests/test_samples.py"
     # integrations whose heavy dependencies (langchain-core, docker,
@@ -215,19 +227,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    # google.adk.evaluation needs vertexai (google-cloud-aiplatform)
-    "test_cli_eval"
-    "test_cli_generate_eval_cases"
-    "test_cli_optimize"
-    "test_list_metrics_info"
-    # need google-cloud-agentplatform / iamconnectorcredentials / discoveryengine
-    "reasoning_engine"
+    # google-cloud-iamconnectorcredentials
     "test_finalize_agent_identity_credentials"
-    "test_to_agent_engine_respects_multiple_ignore_files"
-    "test_vertex_ai_session_service_raises_not_implemented_for_get_user_state"
-    "test_use_extra_generate_content_attributes"
+    # google-cloud-discoveryengine
     "test_detect_error_discovery_engine_search_tool"
-    # needs sqlalchemy-spanner
+    # opentelemetry-instrumentation-google-genai
+    "test_use_extra_generate_content_attributes"
+    # sqlalchemy-spanner
     "test_load_dialect_impl_spanner"
   ];
 
