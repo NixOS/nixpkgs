@@ -26,7 +26,7 @@ assert lib.assertMsg (
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ngit";
-  version = "3.0.3";
+  version = "3.1.0";
 
   __structuredAttrs = true;
 
@@ -36,16 +36,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchgit {
     url = "https://ngit.dev/ngit.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EjS0HAsRK8ARl4Km48qAunEY9bLha4DFbaaLax+SS8I=";
+    hash = "sha256-Tze+YFScwxcdBO2wqNLa3golC9vCCeeeq1+IZtJtD9I=";
   };
 
-  cargoHash = "sha256-aDUE2EdL3zL1SIyTgd3Ge5egH2vZh89+ZOVrIkQY4Eg=";
+  cargoHash = "sha256-sCECc3GSvj6+PDAewbvRHKLtf23qa+PxDAd42gUuYbY=";
 
   postPatch = lib.optionalString stdenv.hostPlatform.isUnix ''
     # These fixtures create executable scripts after ordinary shebang patching.
     substituteInPlace src/lib/self_update.rs tests/installer_templates.rs \
       --replace-fail '#!/usr/bin/env bash' '#!${stdenv.shell}'
-    substituteInPlace tests/remote_helper_launcher.rs \
+    substituteInPlace src/lib/install_lookup.rs tests/remote_helper_launcher.rs \
       --replace-fail '#!/bin/sh' '#!${stdenv.shell}'
   '';
 
