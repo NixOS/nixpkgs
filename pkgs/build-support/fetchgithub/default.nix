@@ -8,11 +8,11 @@ let
   inherit (lib)
     attrNames
     functionArgs
+    intersectAttrs
     makeOverridable
     mapAttrs
     optionalAttrs
     optionalString
-    overrideExisting
     revOrTag
     setFunctionArgs
     unsafeGetAttrPos
@@ -100,7 +100,7 @@ decorate (
           nonNullDefault
       ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
 
-    useFetchGitArgsWDPassing = overrideExisting useFetchGitArgsExcluded args;
+    useFetchGitArgsWDPassing = useFetchGitArgsExcluded // intersectAttrs useFetchGitArgsExcluded args;
 
     position = (
       if args.meta.description or null != null then
