@@ -3215,6 +3215,12 @@
     name = "Fabian Möller";
     keys = [ { fingerprint = "6309 E212 29D4 DA30 AF24  BDED 754B 5C09 63C4 2C50"; } ];
   };
+  baairon = {
+    name = "bairon";
+    email = "hi@bairon.dev";
+    github = "baairon";
+    githubId = 97924486;
+  };
   baba = {
     name = "Baba";
     email = "babakinha@proton.me";
