@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     install -Dm644 dyalog.svg -t $out/share/icons/hicolor/scalable/apps
     install -Dm644 dyalog.desktop -t $out/share/applications
+    install -Dm644 fonts/*.ttf -t $out/share/fonts/truetype
 
     for exec in "dyalog" "mapl"; do
         makeWrapper ${dyalogHome}/$exec $out/bin/$exec ${toString makeWrapperArgs}
