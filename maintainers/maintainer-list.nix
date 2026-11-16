@@ -23569,6 +23569,12 @@
     githubId = 14542417;
     name = "Sergey Ichtchenko";
   };
+  piyush-1337 = {
+    email = "piyushkatkar9421@gmail.com";
+    github = "piyush-1337";
+    githubId = 178812011;
+    name = "Piyush";
+  };
   pizzapim = {
     email = "pim@kunis.nl";
     github = "pizzapim";
