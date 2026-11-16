@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   passthru.tests = {
