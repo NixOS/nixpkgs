@@ -1,0 +1,29 @@
+From: John Ericson <git@JohnEricson.me>
+Subject: [PATCH] libgomp: Size the device UID buffer for a negative int
+
+`gomp_get_uid_for_device` allows ten digits for the `%d`, but `device_num`
+is a plain `int`, whose widest rendering is `-2147483648` -- eleven.  With
+the eight-character prefix that is twenty bytes plus the NUL into a
+nineteen-byte buffer, so `snprintf` truncates.  GCC 16 notices, and
+`libgomp` builds with `-Werror`:
+
+    target.c:5956:31: error: 'snprintf' output may be truncated before the
+    last format character [-Werror=format-truncation=]
+
+Allow the sign.
+
+TODO: send upstream.
+---
+diff --git a/libgomp/target.c b/libgomp/target.c
+index d562b0493..526875504 100644
+--- a/libgomp/target.c
++++ b/libgomp/target.c
+@@ -5950,7 +5950,7 @@ gomp_get_uid_for_device (struct gomp_device_descr *devicep, int device_num)
+     devicep->uid = devicep->get_uid_func (devicep->target_id);
+   if (!devicep->uid)
+     {
+-      size_t ln = strlen (STR_OMP_DEV_PREFIX) + 10 + 1;
++      size_t ln = strlen (STR_OMP_DEV_PREFIX) + 11 + 1;
+       char *uid;
+       uid = gomp_malloc (ln);
+       snprintf (uid, ln, "%s%d", STR_OMP_DEV_PREFIX, device_num);

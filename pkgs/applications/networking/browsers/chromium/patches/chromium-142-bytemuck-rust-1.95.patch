@@ -1,0 +1,24 @@
+diff --git a/third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/pod.rs b/third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/pod.rs
+index 330f722b3419b29e0dbb636459508167a61438f4..b0397923c7191e500e8c1590456b574fc3d37f8f 100644
+--- a/third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/pod.rs
++++ b/third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/pod.rs
+@@ -152,7 +152,6 @@ impl_unsafe_marker_for_simd!(
+ unsafe impl<T, const N: usize> Pod for core::simd::Simd<T, N>
+ where
+   T: core::simd::SimdElement + Pod,
+-  core::simd::LaneCount<N>: core::simd::SupportedLaneCount,
+ {
+ }
+ 
+diff --git a/third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/zeroable.rs b/third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/zeroable.rs
+index 186c567fffddb14bc3c3834a1fd13091f37f5d5a..397dddec99ef0be3474315837ab328c2b0c270ca 100644
+--- a/third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/zeroable.rs
++++ b/third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/zeroable.rs
+@@ -231,7 +231,6 @@ impl_unsafe_marker_for_simd!(
+ unsafe impl<T, const N: usize> Zeroable for core::simd::Simd<T, N>
+ where
+   T: core::simd::SimdElement + Zeroable,
+-  core::simd::LaneCount<N>: core::simd::SupportedLaneCount,
+ {
+ }
+ 

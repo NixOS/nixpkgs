@@ -1,0 +1,14 @@
+diff --git a/app/core/src/test/java/stirling/software/SPDF/controller/api/PdfTextEditorCharcodeControllerTest.java b/app/core/src/test/java/stirling/software/SPDF/controller/api/PdfTextEditorCharcodeControllerTest.java
+--- a/app/core/src/test/java/stirling/software/SPDF/controller/api/PdfTextEditorCharcodeControllerTest.java
++++ b/app/core/src/test/java/stirling/software/SPDF/controller/api/PdfTextEditorCharcodeControllerTest.java
+@@ -231,9 +231,7 @@ class PdfTextEditorCharcodeControllerTest {
+         EncodeCharcodesRequest req = new EncodeCharcodesRequest();
+         // A base64 string long enough that length/4*3 exceeds the 100MB cap, without
+         // ever allocating the decoded bytes (the guard runs before decode).
+-        char[] huge = new char[140 * 1024 * 1024];
+-        java.util.Arrays.fill(huge, 'A');
+-        req.setPdfBase64(new String(huge));
++        req.setPdfBase64("A".repeat(140 * 1024 * 1024));
+         req.setLocatorChar("M");
+         req.setText("M");
+         ResponseEntity<EncodeCharcodesResponse> resp = controller().encodeCharcodes(req);

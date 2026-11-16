@@ -1,0 +1,22 @@
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index f5961df3..c5d44dc5 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -28,7 +28,7 @@ find_package(OpenGL REQUIRED)
+ find_package(PNG REQUIRED)
+ find_package(Python COMPONENTS Interpreter)
+ find_package(SQLite3 REQUIRED)
+-find_package(TIFF REQUIRED)
++find_package(Tiff CONFIG REQUIRED)
+ 
+ find_package(QT NAMES Qt6
+              COMPONENTS Gui
+@@ -908,7 +908,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+                                      qt6ct-common
+                                      qt6ct-widgets
+                                      SQLite::SQLite3
+-                                     TIFF::TIFF
++                                     TIFF::tiffxx
+                                      wxdata)
+ 
+ target_link_libraries(scwx-qt INTERFACE Boost::program_options)

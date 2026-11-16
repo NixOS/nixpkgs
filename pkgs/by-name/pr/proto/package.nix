@@ -1,0 +1,63 @@
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  aws-lc,
+  makeBinaryWrapper,
+  openssl,
+  pkg-config,
+  perl,
+  zstd,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "proto";
+  version = "0.63.2";
+
+  src = fetchFromGitHub {
+    owner = "moonrepo";
+    repo = "proto";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tH+lgtFXHswFBxbzX61EOseYNBMB4TM3jJeacaZzYCM=";
+  };
+
+  cargoHash = "sha256-01FRY1sNxEgajZPvFk9WIywvJwlKb5pTPQALhSZtZ0s=";
+
+  buildInputs = [
+    aws-lc
+    zstd
+    openssl
+  ];
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+    perl
+  ];
+
+  # Tests requires network access
+  doCheck = false;
+  cargoBuildFlags = [
+    "--bin proto"
+    "--bin proto-shim"
+  ];
+
+  postInstall = ''
+    # proto looks up a proto-shim executable file in $PROTO_LOOKUP_DIR
+    wrapProgram $out/bin/proto \
+      --set PROTO_LOOKUP_DIR $out/bin
+  '';
+
+  meta = {
+    description = "Pluggable multi-language version manager";
+    longDescription = ''
+      proto is a pluggable next-generation version manager for multiple programming languages. A unified toolchain.
+    '';
+    homepage = "https://moonrepo.dev/proto";
+    changelog = "https://github.com/moonrepo/proto/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nokazn ];
+    mainProgram = "proto";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
+})

@@ -1,0 +1,16 @@
+The libzfs_core and libnvpair shared libraries are not copied into the Python
+package, so dlopen them from the ZFS installation by absolute path.
+
+--- a/contrib/pyzfs/libzfs_core/bindings/__init__.py
++++ b/contrib/pyzfs/libzfs_core/bindings/__init__.py
+@@ -41,7 +41,9 @@ def _setup_cffi():
+             if self._lib is None:
+                 with self._lock:
+                     if self._lib is None:
+-                        self._lib = self._ffi.dlopen(self._libname)
++                        self._lib = self._ffi.dlopen(
++                            "@out@/lib/lib" + self._libname + ".so"
++                        )
+
+             return getattr(self._lib, name)
+

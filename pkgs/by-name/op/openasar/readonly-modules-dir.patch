@@ -1,0 +1,25 @@
+Author: Willy <jemand771@gmx.net>
+Date:   Tue Nov 3 17:21:00 2026 +0100
+
+    don't attempt to purge `modules/pending` if the module updater is disabled anyway
+    
+    if `checkModules()` is never run, there's no point in precreating the dir.
+    fixes installation on readonly filesystems (bwrap from nixpkgs, flatpak, ...)
+
+diff --git a/src/updater/moduleUpdater.js b/src/updater/moduleUpdater.js
+index a59da05..564b911 100644
+--- a/src/updater/moduleUpdater.js
++++ b/src/updater/moduleUpdater.js
+@@ -61,8 +61,10 @@ exports.init = (endpoint, { releaseChannel, version }) => {
+   Module.globalPaths.push(basePath);
+ 
+   // Purge pending
+-  fs.rmSync(downloadPath, { recursive: true, force: true });
+-  mkdir(downloadPath);
++  if (!skipModule) {
++    fs.rmSync(downloadPath, { recursive: true, force: true });
++    mkdir(downloadPath);
++  }
+ 
+   try {
+     installed = JSON.parse(fs.readFileSync(manifestPath));

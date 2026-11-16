@@ -1,0 +1,22 @@
+diff --git a/src/jogl/classes/com/jogamp/opengl/GLBase.java b/src/jogl/classes/com/jogamp/opengl/GLBase.java
+index a2f22a4d4..eaed5d812 100644
+--- a/jogl/src/jogl/classes/com/jogamp/opengl/GLBase.java
++++ b/jogl/src/jogl/classes/com/jogamp/opengl/GLBase.java
+@@ -650,7 +650,7 @@ public interface GLBase {
+ 
+   /**
+    * Returns the default color buffer within the current bound
+-   * {@link #getDefaultReadFramebuffer()}, i.e. GL_READ_FRAMEBUFFER​,
++   * {@link #getDefaultReadFramebuffer()}, i.e. GL_READ_FRAMEBUFFER,
+    * which will be used as the target (output) for (fragment shader) draw commands,
+    * settable via {@link GL2ES2#glDrawBuffers(int, int[], int)} or {@link GL2#glDrawBuffer(int)}.
+    * <p>
+@@ -674,7 +674,7 @@ public interface GLBase {
+ 
+   /**
+    * Returns the default color buffer within the current bound
+-   * {@link #getDefaultReadFramebuffer()}, i.e. GL_READ_FRAMEBUFFER​,
++   * {@link #getDefaultReadFramebuffer()}, i.e. GL_READ_FRAMEBUFFER,
+    * which will be used as the source for pixel reading commands,
+    * like {@link GL#glReadPixels(int, int, int, int, int, int, java.nio.Buffer) glReadPixels} etc.
+    * <p>

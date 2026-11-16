@@ -1,0 +1,49 @@
+diff --git a/src/compress_pptx/__main__.py b/src/compress_pptx/__main__.py
+index 433b6d8..f86c2e2 100644
+--- a/src/compress_pptx/__main__.py
++++ b/src/compress_pptx/__main__.py
+@@ -101,7 +101,7 @@ def main():
+         "--ffmpeg-path",
+         type=str,
+         help="Path to ffmpeg executable",
+-        default="ffmpeg",
++        default="@ffmpeg@",
+     )
+     cli_args = parser.parse_args()
+ 
+diff --git a/src/compress_pptx/compress_pptx.py b/src/compress_pptx/compress_pptx.py
+index 0cb5b42..0845aef 100644
+--- a/src/compress_pptx/compress_pptx.py
++++ b/src/compress_pptx/compress_pptx.py
+@@ -131,7 +131,7 @@ class CompressPptx:
+         ffmpeg_video_codec: Optional[str] = None,
+         ffmpeg_audio_codec: Optional[str] = None,
+         ffmpeg_extra_options: Optional[str] = None,
+-        ffmpeg_path: str = "ffmpeg",
++        ffmpeg_path: str = "@ffmpeg@",
+     ) -> None:
+         """
+         Compress images in a PowerPoint file or extract media.
+@@ -187,19 +187,9 @@ class CompressPptx:
+ 
+         self.file_list: List[FileObj] = []
+ 
+-        # Check for ImageMagick - prefer 'magick' but fall back to 'convert'/'identify'
+-        if which("magick") is not None:
+-            self.magick_cmd = "magick"
+-            self.convert_cmd = ["magick", "convert"]
+-            self.identify_cmd = ["magick", "identify"]
+-        elif which("convert") is not None and which("identify") is not None:
+-            self.magick_cmd = "convert"
+-            self.convert_cmd = ["convert"]
+-            self.identify_cmd = ["identify"]
+-        else:
+-            raise CompressPptxError(
+-                "ImageMagick not found in PATH. Make sure you have installed ImageMagick and that either 'magick' or 'convert'/'identify' commands are available."
+-            )
++        self.magick_cmd = "@magick@"
++        self.convert_cmd = ["@magick@", "convert"]
++        self.identify_cmd = ["@magick@", "identify"]
+ 
+         required_executables = []
+         # add ffmpeg to required executables if user wants media files to be compressed

@@ -1,0 +1,200 @@
+{
+  "name": "pnpm-fixup-state-db",
+  "version": "0.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "pnpm-fixup-state-db",
+      "version": "0.0.0",
+      "license": "MIT",
+      "dependencies": {
+        "@pnpm/store.index": "^1100.0.0"
+      },
+      "devDependencies": {
+        "@types/node": "^25.6.0",
+        "typescript": "^6.0.3"
+      }
+    },
+    "node_modules/@msgpackr-extract/msgpackr-extract-darwin-arm64": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-darwin-arm64/-/msgpackr-extract-darwin-arm64-3.0.3.tgz",
+      "integrity": "sha512-QZHtlVgbAdy2zAqNA9Gu1UpIuI8Xvsd1v8ic6B2pZmeFnFcMWiPLfWXh7TVw4eGEZ/C9TH281KwhVoeQUKbyjw==",
+      "cpu": [
+        "arm64"
+      ],
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ]
+    },
+    "node_modules/@msgpackr-extract/msgpackr-extract-darwin-x64": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-darwin-x64/-/msgpackr-extract-darwin-x64-3.0.3.tgz",
+      "integrity": "sha512-mdzd3AVzYKuUmiWOQ8GNhl64/IoFGol569zNRdkLReh6LRLHOXxU4U8eq0JwaD8iFHdVGqSy4IjFL4reoWCDFw==",
+      "cpu": [
+        "x64"
+      ],
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ]
+    },
+    "node_modules/@msgpackr-extract/msgpackr-extract-linux-arm": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-linux-arm/-/msgpackr-extract-linux-arm-3.0.3.tgz",
+      "integrity": "sha512-fg0uy/dG/nZEXfYilKoRe7yALaNmHoYeIoJuJ7KJ+YyU2bvY8vPv27f7UKhGRpY6euFYqEVhxCFZgAUNQBM3nw==",
+      "cpu": [
+        "arm"
+      ],
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@msgpackr-extract/msgpackr-extract-linux-arm64": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-linux-arm64/-/msgpackr-extract-linux-arm64-3.0.3.tgz",
+      "integrity": "sha512-YxQL+ax0XqBJDZiKimS2XQaf+2wDGVa1enVRGzEvLLVFeqa5kx2bWbtcSXgsxjQB7nRqqIGFIcLteF/sHeVtQg==",
+      "cpu": [
+        "arm64"
+      ],
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@msgpackr-extract/msgpackr-extract-linux-x64": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-linux-x64/-/msgpackr-extract-linux-x64-3.0.3.tgz",
+      "integrity": "sha512-cvwNfbP07pKUfq1uH+S6KJ7dT9K8WOE4ZiAcsrSes+UY55E/0jLYc+vq+DO7jlmqRb5zAggExKm0H7O/CBaesg==",
+      "cpu": [
+        "x64"
+      ],
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@msgpackr-extract/msgpackr-extract-win32-x64": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-win32-x64/-/msgpackr-extract-win32-x64-3.0.3.tgz",
+      "integrity": "sha512-x0fWaQtYp4E6sktbsdAqnehxDgEc/VwM7uLsRCYWaiGu0ykYdZPiS8zCWdnjHwyiumousxfBm4SO31eXqwEZhQ==",
+      "cpu": [
+        "x64"
+      ],
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@pnpm/store.index": {
+      "version": "1100.0.0",
+      "resolved": "https://registry.npmjs.org/@pnpm/store.index/-/store.index-1100.0.0.tgz",
+      "integrity": "sha512-eVd5DHiD6hyr2hrkIlh3z07SOiVqoGvFnPAb+rL6piXd9889trSyUjDXBlkJj7gyipAQoo8xMHHixoPp/sHnFA==",
+      "license": "MIT",
+      "dependencies": {
+        "msgpackr": "1.11.8"
+      },
+      "engines": {
+        "node": ">=22.13"
+      },
+      "funding": {
+        "url": "https://opencollective.com/pnpm"
+      }
+    },
+    "node_modules/@types/node": {
+      "version": "25.6.0",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-25.6.0.tgz",
+      "integrity": "sha512-+qIYRKdNYJwY3vRCZMdJbPLJAtGjQBudzZzdzwQYkEPQd+PJGixUL5QfvCLDaULoLv+RhT3LDkwEfKaAkgSmNQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "undici-types": "~7.19.0"
+      }
+    },
+    "node_modules/detect-libc": {
+      "version": "2.1.2",
+      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz",
+      "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==",
+      "license": "Apache-2.0",
+      "optional": true,
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/msgpackr": {
+      "version": "1.11.8",
+      "resolved": "https://registry.npmjs.org/msgpackr/-/msgpackr-1.11.8.tgz",
+      "integrity": "sha512-bC4UGzHhVvgDNS7kn9tV8fAucIYUBuGojcaLiz7v+P63Lmtm0Xeji8B/8tYKddALXxJLpwIeBmUN3u64C4YkRA==",
+      "license": "MIT",
+      "optionalDependencies": {
+        "msgpackr-extract": "^3.0.2"
+      }
+    },
+    "node_modules/msgpackr-extract": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/msgpackr-extract/-/msgpackr-extract-3.0.3.tgz",
+      "integrity": "sha512-P0efT1C9jIdVRefqjzOQ9Xml57zpOXnIuS+csaB4MdZbTdmGDLo8XhzBG1N7aO11gKDDkJvBLULeFTo46wwreA==",
+      "hasInstallScript": true,
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "node-gyp-build-optional-packages": "5.2.2"
+      },
+      "bin": {
+        "download-msgpackr-prebuilds": "bin/download-prebuilds.js"
+      },
+      "optionalDependencies": {
+        "@msgpackr-extract/msgpackr-extract-darwin-arm64": "3.0.3",
+        "@msgpackr-extract/msgpackr-extract-darwin-x64": "3.0.3",
+        "@msgpackr-extract/msgpackr-extract-linux-arm": "3.0.3",
+        "@msgpackr-extract/msgpackr-extract-linux-arm64": "3.0.3",
+        "@msgpackr-extract/msgpackr-extract-linux-x64": "3.0.3",
+        "@msgpackr-extract/msgpackr-extract-win32-x64": "3.0.3"
+      }
+    },
+    "node_modules/node-gyp-build-optional-packages": {
+      "version": "5.2.2",
+      "resolved": "https://registry.npmjs.org/node-gyp-build-optional-packages/-/node-gyp-build-optional-packages-5.2.2.tgz",
+      "integrity": "sha512-s+w+rBWnpTMwSFbaE0UXsRlg7hU4FjekKU4eyAih5T8nJuNZT1nNsskXpxmeqSK9UzkBl6UgRlnKc8hz8IEqOw==",
+      "license": "MIT",
+      "optional": true,
+      "dependencies": {
+        "detect-libc": "^2.0.1"
+      },
+      "bin": {
+        "node-gyp-build-optional-packages": "bin.js",
+        "node-gyp-build-optional-packages-optional": "optional.js",
+        "node-gyp-build-optional-packages-test": "build-test.js"
+      }
+    },
+    "node_modules/typescript": {
+      "version": "6.0.3",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz",
+      "integrity": "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "bin": {
+        "tsc": "bin/tsc",
+        "tsserver": "bin/tsserver"
+      },
+      "engines": {
+        "node": ">=14.17"
+      }
+    },
+    "node_modules/undici-types": {
+      "version": "7.19.2",
+      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.19.2.tgz",
+      "integrity": "sha512-qYVnV5OEm2AW8cJMCpdV20CDyaN3g0AjDlOGf1OW4iaDEx8MwdtChUp4zu4H0VP3nDRF/8RKWH+IPp9uW0YGZg==",
+      "dev": true,
+      "license": "MIT"
+    }
+  }
+}

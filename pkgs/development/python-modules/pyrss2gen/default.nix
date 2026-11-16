@@ -1,0 +1,27 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
+
+buildPythonPackage rec {
+  pname = "pyrss2gen";
+  version = "1.1";
+  format = "setuptools";
+
+  src = fetchPypi {
+    pname = "PyRSS2Gen";
+    inherit version;
+    hash = "sha256-eWCu1+mY0kgr9YcWwxZQl4b1lkJvh5sF+NhOmLgsbuc=";
+  };
+
+  # No tests in archive
+  doCheck = false;
+
+  meta = {
+    homepage = "http://dalkescientific.com/Python/PyRSS2Gen.html";
+    description = "Library for generating RSS 2.0 feeds";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
+  };
+}

@@ -1,0 +1,65 @@
+diff --git a/.gitignore b/.gitignore
+index 9234e61..f137e88 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -3,3 +3,4 @@ stb_image.h
+ stb_image_write.h
+ qoibench
+ qoiconv
++qoi.pc
+diff --git a/Makefile b/Makefile
+index fb4b4d8..4660180 100644
+--- a/Makefile
++++ b/Makefile
+@@ -7,6 +7,11 @@ LFLAGS_CONV ?= $(LDFLAGS)
+ TARGET_BENCH ?= qoibench
+ TARGET_CONV ?= qoiconv
+ 
++PREFIX ?= /usr/local
++BINDIR ?= $(PREFIX)/bin
++INCLUDEDIR ?= $(PREFIX)/include
++LIBDIR ?= $(PREFIX)/lib
++
+ all: $(TARGET_BENCH) $(TARGET_CONV)
+ 
+ bench: $(TARGET_BENCH)
+@@ -17,6 +22,24 @@ conv: $(TARGET_CONV)
+ $(TARGET_CONV):$(TARGET_CONV).c qoi.h
+ 	$(CC) $(CFLAGS_CONV) $(CFLAGS) $(TARGET_CONV).c -o $(TARGET_CONV) $(LFLAGS_CONV)
+ 
++qoi.pc: qoi.pc.in
++	sed < qoi.pc.in > qoi.pc \
++		-e 's|@PREFIX@|$(PREFIX)|g' \
++		-e 's|@INCLUDEDIR@|$(INCLUDEDIR:$(PREFIX)%=$${prefix}%)|g'
++
++.PHONY: install
++install: install-tools install-header
++
++.PHONY: install-tools
++install-tools: all
++	install -Dm 755 $(TARGET_CONV) $(DESTDIR)$(BINDIR)/$(TARGET_CONV)
++	install -Dm 755 $(TARGET_BENCH) $(DESTDIR)$(BINDIR)/$(TARGET_BENCH)
++
++.PHONY: install-header
++install-header: qoi.h qoi.pc
++	install -Dm 644 qoi.h $(DESTDIR)$(INCLUDEDIR)/qoi.h
++	install -Dm 644 qoi.pc $(DESTDIR)$(LIBDIR)/pkgconfig/qoi.pc
++
+ .PHONY: clean
+ clean:
+ 	$(RM) $(TARGET_BENCH) $(TARGET_CONV)
+diff --git a/qoi.pc.in b/qoi.pc.in
+new file mode 100755
+index 0000000..dd83a36
+--- /dev/null
++++ b/qoi.pc.in
+@@ -0,0 +1,9 @@
++prefix=@PREFIX@
++includedir=@INCLUDEDIR@
++
++Name: qoi
++Description: The "Quite OK Image Format" for fast, lossless image compression
++Version: 0
++URL: https://qoiformat.org/
++License: MIT
++Cflags: -I${includedir}

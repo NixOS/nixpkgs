@@ -1,0 +1,59 @@
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  flit-core,
+  flit-scm,
+  pygments,
+  pytest-cov-stub,
+  pytestCheckHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "ssdp";
+  version = "1.4.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "codingjoe";
+    repo = "ssdp";
+    tag = finalAttrs.version;
+    hash = "sha256-FwauyVDNTgWlXe6Sm6XNoZ6RMLSV6alq+mVCfVs0vLI=";
+  };
+
+  build-system = [
+    flit-core
+    flit-scm
+  ];
+
+  optional-dependencies = {
+    cli = [
+      click
+      pygments
+    ];
+    pygments = [ pygments ];
+  };
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  disabledTests = [
+    "test_call"
+    "test_call_w_search_target"
+  ];
+
+  pythonImportsCheck = [ "ssdp" ];
+
+  meta = {
+    description = "Python asyncio library for Simple Service Discovery Protocol (SSDP)";
+    homepage = "https://github.com/codingjoe/ssdp";
+    changelog = "https://github.com/codingjoe/ssdp/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "ssdp";
+  };
+})

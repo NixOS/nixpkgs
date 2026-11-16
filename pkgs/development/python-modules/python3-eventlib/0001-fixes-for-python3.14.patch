@@ -1,0 +1,49 @@
+From c3076f3ae4567af11dc6815550487adaff69ce03 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Sun, 5 Jul 2026 18:30:15 +0530
+Subject: [PATCH] fixes for python3.14
+
+Add fallback stubs for urllib attributes removed in Python 3.14.
+---
+ eventlib/green/urllib.py | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/eventlib/green/urllib.py b/eventlib/green/urllib.py
+index 0c8e375..ba82160 100644
+--- a/eventlib/green/urllib.py
++++ b/eventlib/green/urllib.py
+@@ -7,7 +7,12 @@ from eventlib.green import socket, time
+ from urllib.error import( __all__ )
+ from urllib.response import( __all__ )
+ from urllib.robotparser import( __all__ )
+-from urllib.request import( __all__, __version__, MAXFTPCACHE, ftpcache, ftpwrapper, _noheaders, noheaders, proxy_bypass, addinfourl, url2pathname, getproxies)
++try:
++    from urllib.request import( __all__, __version__, MAXFTPCACHE, ftpcache, ftpwrapper, _noheaders, noheaders, proxy_bypass, addinfourl, url2pathname, getproxies)
++except ImportError:
++    from urllib.request import( __all__, __version__, ftpwrapper, _noheaders, noheaders, proxy_bypass, addinfourl, url2pathname, getproxies)
++    MAXFTPCACHE = 10
++    ftpcache = {}
+ from urllib.parse import( __all__,  quote, unwrap, unquote, splithost, splituser, splittype, splitattr, splitpasswd, splitport, splitquery, splitvalue)
+ from urllib.parse import urljoin as basejoin
+ 
+@@ -41,7 +46,16 @@ def urlcleanup():
+         _urlopener.cleanup()
+ 
+ 
+-class URLopener(urllib.request.URLopener):
++try:
++    _URLopener = urllib.request.URLopener
++    _FancyURLopener = urllib.request.FancyURLopener
++except AttributeError:
++    class _URLopener(object):
++        def __init__(self, *args, **kwargs): pass
++    class _FancyURLopener(_URLopener):
++        pass
++
++class URLopener(_URLopener):
+ 
+     def open_http(self, url, data=None):
+         """Use HTTP protocol."""
+-- 
+2.54.0
+

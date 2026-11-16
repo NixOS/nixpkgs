@@ -1,0 +1,8 @@
+--- a/Setup.hs	2021-02-04 14:01:09.557970245 +0100
++++ b/Setup.hs	2021-02-04 14:07:45.047443753 +0100
+@@ -3,4 +3,4 @@
+ import           Distribution.Simple
+ 
+ main :: IO ()
+-main = defaultMainWithHooks defaultUserHooks
++main = defaultMainWithHooks autoconfUserHooks

@@ -1,0 +1,109 @@
+--- a/koboldcpp.py
++++ b/koboldcpp.py
+@@ -5080,8 +5080,7 @@
+         if os.name == "posix" and "DISPLAY" in os.environ:  # UNIX-like systems
+             clean_env = os.environ.copy()
+             clean_env.pop("LD_LIBRARY_PATH", None)
+-            clean_env["PATH"] = "/usr/bin:/bin"
+-            result = subprocess.run(["/usr/bin/env", "xdg-open", target_url], check=True, env=clean_env)
++            result = subprocess.run(["xdg-open", target_url], check=True, env=clean_env)
+             if result.returncode == 0:
+                 return  # fallback successful
+         raise RuntimeError("no xdg-open")
+@@ -8181,8 +8180,7 @@
+         try: # Run `zenity --help` and pipe to grep
+             sc_clean_env = os.environ.copy()
+             sc_clean_env.pop("LD_LIBRARY_PATH", None)
+-            sc_clean_env["PATH"] = "/usr/bin:/bin"
+-            scargs = ['/usr/bin/env', zenity_bin, '--help']
++            scargs = [zenity_bin, '--help']
+             result = subprocess.run(scargs, env=sc_clean_env, capture_output=True, text=True, encoding="utf-8", timeout=10)
+ 
+             if result.returncode == 0 and "--file" in result.stdout:
+@@ -8198,7 +8196,7 @@
+         raise Exception("Zenity not working correctly, falling back to TK GUI.")
+ 
+     # Build args based on keywords
+-    args = ['/usr/bin/env', zenity_bin, ('--file' if using_yad else '--file-selection')]
++    args = [zenity_bin, ('--file' if using_yad else '--file-selection')]
+     for k, v in kwargs.items():
+         if v is True:
+             args.append(f'--{k.replace("_", "-").strip("-")}')
+@@ -8227,7 +8225,6 @@
+ 
+     clean_env = os.environ.copy()
+     clean_env.pop("LD_LIBRARY_PATH", None)
+-    clean_env["PATH"] = "/usr/bin:/bin"
+ 
+     procres = subprocess.run(
+         args,
+@@ -9742,7 +9739,7 @@
+             if sys.platform == "linux":
+                 # Create an unnamed pipe, launch a terminal that reads from the read-end FD
+                 r, w = os.pipe()
+-                extra_terminal_process = subprocess.Popen(["xterm", "-hold","-e", f"bash -c 'cat <&{r}'"], pass_fds=[r])
++                extra_terminal_process = subprocess.Popen(["xterm", "-hold", "-e", "@shell@", "-c", f"@cat@ <&{r}"], pass_fds=[r])
+                 writer = os.fdopen(w, "w", buffering=1)
+                 redirector = StdoutRedirector(writer)
+                 sys.stdout = redirector
+@@ -12133,7 +12133,9 @@
+     try:
+         global sslvalid
+         httpsaffix = ("https" if sslvalid else "http")
+-        tunnelbinary = None
++        tunnelbinary = shutil.which("cloudflared")
++        if not tunnelbinary:
++            raise RuntimeError("cloudflared is required for --remotetunnel")
+ 
+         def run_tunnel():
+             tunnelproc = None
+@@ -12158,7 +12160,6 @@
+             if sys.platform == "linux":
+                 clean_env = os.environ.copy()
+                 clean_env.pop("LD_LIBRARY_PATH", None)
+-                clean_env["PATH"] = "/usr/bin:/bin"
+                 tunnelproc = subprocess.Popen(tunnelcmd, text=True, encoding='utf-8', stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, env=clean_env)
+             else:
+                 tunnelproc = subprocess.Popen(tunnelcmd, text=True, encoding='utf-8', stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+@@ -12197,32 +12198,6 @@
+             time.sleep(0.5)
+             tunnelproc.wait()
+ 
+-        if os.name == 'nt':
+-            tunnelbinary = downloader_internal("https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe", "cloudflared.exe", True, 500000)
+-        elif sys.platform == "darwin":
+-            if platform.machine().lower() in ("arm64", "aarch64"):
+-                archive = downloader_internal("https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-arm64.tgz", "cloudflared-darwin-arm64.tgz", True, 500000)
+-            else:
+-                archive = downloader_internal("https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-darwin-amd64.tgz", "cloudflared-darwin-amd64.tgz", True, 500000)
+-            if not archive:
+-                raise RuntimeError("Could not download cloudflared")
+-            tunnel_dir = os.path.dirname(os.path.abspath(archive))
+-            subprocess.run(["tar", "-xzf", archive, "-C", tunnel_dir], check=True)
+-            tunnelbinary = os.path.join(tunnel_dir, "cloudflared")
+-            subprocess.run(["chmod", "+x", tunnelbinary], check=True)
+-        elif sys.platform == "linux" and platform.machine().lower() == "aarch64":
+-            tunnelbinary = downloader_internal("https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64", "cloudflared-linux-arm64", True, 500000)
+-            if tunnelbinary:
+-                subprocess.run(["chmod", "+x", tunnelbinary], check=True)
+-        else:
+-            tunnelbinary = downloader_internal("https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64", "cloudflared-linux-amd64", True, 500000)
+-            if tunnelbinary:
+-                subprocess.run(["chmod", "+x", tunnelbinary], check=True)
+-
+-        if not tunnelbinary:
+-            raise RuntimeError("Could not download cloudflared")
+-
+-        tunnelbinary = os.path.abspath(tunnelbinary)
+         print("Attempting to start tunnel thread...", flush=True)
+         tunnel_thread = threading.Thread(target=run_tunnel)
+         tunnel_thread.start()
+@@ -12612,7 +12593,7 @@
+     if args.onready:
+         def onready_subprocess():
+             print("Starting Post-Load subprocess...")
+-            subprocess.run(args.onready, shell=True)
++            subprocess.run(args.onready, shell=True, executable="@shell@")
+         timer_thread = threading.Timer(1, onready_subprocess) #1 second delay
+         timer_thread.start()
+ 

@@ -1,0 +1,32 @@
+--- a/imageio_ffmpeg/_utils.py
++++ b/imageio_ffmpeg/_utils.py
+@@ -38,28 +38,7 @@ def get_ffmpeg_exe():
+ 
+ @lru_cache()
+ def _get_ffmpeg_exe():
+-    plat = get_platform()
+-
+-    # 2. Try from here
+-    exe = os.path.join(_get_bin_dir(), FNAME_PER_PLATFORM.get(plat, ""))
+-    if exe and os.path.isfile(exe) and _is_valid_exe(exe):
+-        return exe
+-
+-    # 3. Try binary from conda package
+-    # (installed e.g. via `conda install ffmpeg -c conda-forge`)
+-    if plat.startswith("win"):
+-        exe = os.path.join(sys.prefix, "Library", "bin", "ffmpeg.exe")
+-    else:
+-        exe = os.path.join(sys.prefix, "bin", "ffmpeg")
+-    if exe and os.path.isfile(exe) and _is_valid_exe(exe):
+-        return exe
+-
+-    # 4. Try system ffmpeg command
+-    exe = "ffmpeg"
+-    if _is_valid_exe(exe):
+-        return exe
+-
+-    return None
++    return "@ffmpeg@"
+ 
+ 
+ def _get_bin_dir():

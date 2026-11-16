@@ -1,0 +1,16 @@
+diff -aud -U 5 libpar2-0.4-original/par2repairer.h libpar2-0.4-patched/par2repairer.h
+--- libpar2-0.4-original/par2repairer.h	2013-07-18 15:03:10.000000000 +0200
++++ libpar2-0.4-patched/par2repairer.h	2014-08-06 15:52:59.000000000 +0200
+@@ -94,11 +94,11 @@
+   // Perform a sliding window scan of the DiskFile looking for blocks of data that 
+   // might belong to any of the source files (for which a verification packet was
+   // available). If a block of data might be from more than one source file, prefer
+   // the one specified by the "sourcefile" parameter. If the first data block
+   // found is for a different source file then "sourcefile" is changed accordingly.
+-  bool ScanDataFile(DiskFile                *diskfile,   // [in]     The file being scanned
++  virtual bool ScanDataFile(DiskFile                *diskfile,   // [in]     The file being scanned
+                     Par2RepairerSourceFile* &sourcefile, // [in/out] The source file matched
+                     MatchType               &matchtype,  // [out]    The type of match
+                     MD5Hash                 &hashfull,   // [out]    The full hash of the file
+                     MD5Hash                 &hash16k,    // [out]    The hash of the first 16k
+                     u32                     &count);     // [out]    The number of blocks found

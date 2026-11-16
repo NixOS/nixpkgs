@@ -1,0 +1,12 @@
+diff --git a/fang.c b/fang.c
+index cda61bf..52f9659 100755
+--- a/fang.c
++++ b/fang.c
+@@ -45,6 +45,7 @@
+ #include <sys/socket.h>
+ #include <asm/types.h>
+ #include <netinet/in.h>
++#include <pthread.h>
+
+ #include <bluetooth/bluetooth.h>
+ #include <bluetooth/hci.h>

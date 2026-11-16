@@ -1,0 +1,31 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "samplicator";
+  version = "1.3.8rc1";
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  src = fetchFromGitHub {
+    owner = "sleinen";
+    repo = "samplicator";
+    rev = finalAttrs.version;
+    sha256 = "0fv5vldmwd6qrdv2wkk946dk9rn9nrv3c84ldvvqqn1spxfzgirm";
+  };
+
+  # clang rejects old-style function definitions in C23
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
+  meta = {
+    description = "Send copies of (UDP) datagrams to multiple receivers";
+    homepage = "https://github.com/sleinen/samplicator/";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "samplicate";
+    platforms = lib.platforms.unix;
+  };
+})

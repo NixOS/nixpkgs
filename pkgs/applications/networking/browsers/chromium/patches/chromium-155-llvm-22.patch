@@ -1,0 +1,39 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index ccfe9692baf06480f1952ca62a2fbfc64335cf09..16bcc23d7ba25bdaad8e75127943b4786f9ca657 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -590,7 +590,7 @@ config("compiler") {
+     cflags += [ "-fcolor-diagnostics" ]
+     if (!is_wasm) {
+       if (!is_win) {
+-        cflags += [ "-fdiagnostics-show-inlining-chain" ]
++        cflags += [ ]
+       } else {
+         # Combine after https://github.com/llvm/llvm-project/pull/192241
+         cflags += [ "/clang:-fdiagnostics-show-inlining-chain" ]
+@@ -1592,7 +1592,7 @@ config("clang_warning_suppression") {
+ # See also: https://crbug.com/40891132#comment10
+ ubsan_hardening("c_array_bounds") {
+   sanitizer = "array-bounds"
+-  condition = !(is_asan && target_cpu == "x86")
++  condition = false
+ 
+   # Because we've enabled array-bounds sanitizing we also want to suppress
+   # the related warning about "unsafe-buffer-usage-in-static-sized-array",
+@@ -1606,6 +1606,7 @@ ubsan_hardening("c_array_bounds") {
+ # `NOTREACHED()` at the end of such functions.
+ ubsan_hardening("return") {
+   sanitizer = "return"
++  condition = false
+ }
+ 
+ # Enable `-fsanitize=unreachable` to crash deterministically if control
+@@ -1617,7 +1618,7 @@ ubsan_hardening("unreachable") {
+   # 1.  `fuchsia-binary-size` tells us that web_engine and
+   #     chrome_fuchsia both grow 32768 bytes (10x that, uncompressed).
+   # 2.  `headless_shell_wpt_tests` fail on `mac-rel`.
+-  condition = is_debug || !(is_mac || is_fuchsia)
++  condition = false
+ }
+ 
+ config("rustc_revision") {

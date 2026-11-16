@@ -1,0 +1,141 @@
+From f65f27f0051f5dfa7a57d3ac0bb276828261ed73 Mon Sep 17 00:00:00 2001
+From: Michael Daniels <mdaniels5757@gmail.com>
+Date: Thu, 27 Nov 2025 22:10:13 -0500
+Subject: [PATCH] bump nightfall from 0.3.12-rc4 to 878f07edd5d2c
+
+---
+ Cargo.lock          | 27 +++++++++++++--------------
+ dim-core/Cargo.toml |  2 +-
+ dim-web/Cargo.toml  |  2 +-
+ dim/Cargo.toml      |  2 +-
+ 4 files changed, 16 insertions(+), 17 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 51898150..6cb1d29f 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2268,14 +2268,14 @@ dependencies = [
+ [[package]]
+ name = "nightfall"
+ version = "0.3.12-rc4"
+-source = "git+https://github.com/Dusk-Labs/nightfall?tag=0.3.12-rc4#147ea96146b4cae6f666741020cef0622a90d46c"
++source = "git+https://github.com/Dusk-Labs/nightfall?rev=878f07edd5d2c71261c5ae02fe3a6db7cda18be7#878f07edd5d2c71261c5ae02fe3a6db7cda18be7"
+ dependencies = [
+  "async-trait",
+  "cfg-if",
+  "err-derive",
+  "lazy_static",
+  "mp4",
+- "nix 0.20.0",
++ "nix 0.27.1",
+  "ntapi",
+  "once_cell",
+  "psutil",
+@@ -2286,7 +2286,7 @@ dependencies = [
+  "tokio",
+  "tokio-stream",
+  "tracing",
+- "uuid 0.8.2",
++ "uuid 1.18.1",
+  "winapi",
+  "xtra",
+  "xtra_proc",
+@@ -2294,36 +2294,35 @@ dependencies = [
+ 
+ [[package]]
+ name = "nix"
+-version = "0.20.0"
++version = "0.23.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fa9b4819da1bc61c0ea48b63b7bc8604064dd43013e7cc325df098d49cd7c18a"
++checksum = "8f3790c00a0150112de0f4cd161e3d7fc4b2d8a5542ffc35f099a2562aecb35c"
+ dependencies = [
+  "bitflags 1.3.2",
+  "cc",
+  "cfg-if",
+  "libc",
++ "memoffset",
+ ]
+ 
+ [[package]]
+ name = "nix"
+-version = "0.23.2"
++version = "0.24.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8f3790c00a0150112de0f4cd161e3d7fc4b2d8a5542ffc35f099a2562aecb35c"
++checksum = "fa52e972a9a719cecb6864fb88568781eb706bac2cd1d4f04a648542dbf78069"
+ dependencies = [
+  "bitflags 1.3.2",
+- "cc",
+  "cfg-if",
+  "libc",
+- "memoffset",
+ ]
+ 
+ [[package]]
+ name = "nix"
+-version = "0.24.3"
++version = "0.27.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fa52e972a9a719cecb6864fb88568781eb706bac2cd1d4f04a648542dbf78069"
++checksum = "2eb04e9c688eff1c89d72b407f168cf79bb9e867a9d3323ed6c01519eb9cc053"
+ dependencies = [
+- "bitflags 1.3.2",
++ "bitflags 2.9.4",
+  "cfg-if",
+  "libc",
+ ]
+@@ -2370,9 +2369,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "ntapi"
+-version = "0.3.7"
++version = "0.4.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c28774a7fd2fbb4f0babd8237ce554b73af68021b5f695a3cebd6c59bac0980f"
++checksum = "e8a3895c6391c39d7fe7ebc444a87eb2991b2a0bc718fdabd071eec617fc68e4"
+ dependencies = [
+  "winapi",
+ ]
+diff --git a/dim-core/Cargo.toml b/dim-core/Cargo.toml
+index cf30e509..fd460ff2 100644
+--- a/dim-core/Cargo.toml
++++ b/dim-core/Cargo.toml
+@@ -14,7 +14,7 @@ embed_ui = []
+ 
+ [dependencies]
+ # git dependencies
+-nightfall = { git = "https://github.com/Dusk-Labs/nightfall", tag = "0.3.12-rc4", default-features = false, features = [
++nightfall = { git = "https://github.com/Dusk-Labs/nightfall", rev = "878f07edd5d2c71261c5ae02fe3a6db7cda18be7", default-features = false, features = [
+     "cuda",
+     "ssa_transmux",
+ ] }
+diff --git a/dim-web/Cargo.toml b/dim-web/Cargo.toml
+index 1dbb23ce..f3d84933 100644
+--- a/dim-web/Cargo.toml
++++ b/dim-web/Cargo.toml
+@@ -13,7 +13,7 @@ dim-utils = { path = "../dim-utils" }
+ dim-events = { path = "../dim-events" }
+ dim-core = { path = "../dim-core" }
+ 
+-nightfall = { git = "https://github.com/Dusk-Labs/nightfall", tag = "0.3.12-rc4", default-features = false, features = [
++nightfall = { git = "https://github.com/Dusk-Labs/nightfall", rev = "878f07edd5d2c71261c5ae02fe3a6db7cda18be7", default-features = false, features = [
+     "cuda",
+     "ssa_transmux",
+ ] }
+diff --git a/dim/Cargo.toml b/dim/Cargo.toml
+index d0fa7917..ab719bce 100644
+--- a/dim/Cargo.toml
++++ b/dim/Cargo.toml
+@@ -15,7 +15,7 @@ xtra = { version = "0.5.1", features = ["tokio", "with-tokio-1"] }
+ fdlimit = "0.2.1"
+ 
+ # git dependencies
+-nightfall = { git = "https://github.com/Dusk-Labs/nightfall", tag = "0.3.12-rc4", default-features = false, features = [
++nightfall = { git = "https://github.com/Dusk-Labs/nightfall", rev = "878f07edd5d2c71261c5ae02fe3a6db7cda18be7", default-features = false, features = [
+     "cuda",
+     "ssa_transmux",
+ ] }
+-- 
+2.50.1
+
