@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "batmon";
-  version = "0.2.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "6543";
     repo = "batmon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3k788ckEkHi4jlSzKCebFyLJJ+UtkMERuvHInkXvSyQ=";
+    hash = "sha256-rmZ5mgZXLtX+Mx/1wC30pyVcZZK2UUQYbjHvGhMsJKk=";
   };
 
-  cargoHash = "sha256-F0lC7ELvuRCnvTWrtTEedb9j8SF2Al6XXx0PJqa7E98=";
+  cargoHash = "sha256-cpvlMPykWQblLLzQq8+GxC3l5bzz/f4lqcJvBYv5hsc=";
 
   meta = {
     description = "Interactive batteries viewer";
