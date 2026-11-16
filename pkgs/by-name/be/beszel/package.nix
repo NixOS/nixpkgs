@@ -9,13 +9,13 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "beszel";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OB1pbfUKeE+tu/ehhoJhkPBmOBDLiQzGxb74bin2Qmg=";
+    hash = "sha256-O5RtDg6V7RBjV7Pe75YppGz8JSVziwfvLBYDD/l6ZAc=";
   };
 
   webui = buildNpmPackage {
@@ -52,7 +52,7 @@ buildGo127Module (finalAttrs: {
     npmDepsHash = "sha256-pL4Qmi17CC4t6G/Mw/AgZUPf6cl0UPm75zfHVfrkoKI=";
   };
 
-  vendorHash = "sha256-NStpXYnaVkJxmzT1fIPFqSNbNSJqpnC0LsVQweFOwcI=";
+  vendorHash = "sha256-VDFdCoVIB1idUo1Buek6Im4uwYMduYY/PEdSJFgLuFo=";
 
   preBuild = ''
     mkdir -p internal/site/dist
