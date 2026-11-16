@@ -12,16 +12,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.120.0";
+  version = "0.121.3";
 
-  # required for tests
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-95XfeVMOW5mHhW8mF6cvNgH2BrE8//F0DP5Vsm85PV4=";
+    hash = "sha256-iADG1fgB8wskTkNk63AwMJcWvMlGrDSDX4hwzCsLeyc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -36,7 +35,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-ayZna9aaRwlRq5Z2hviM0jxKA+XQkyVUlEFhZ0K1r5U=";
+  vendorHash = "sha256-Um+J7NWQYGoW36sMtQZTOuBiYaMnhw4lw8JgCefvfiM=";
 
   patches = [
     # several test golden files have unstable paths based on the platform
