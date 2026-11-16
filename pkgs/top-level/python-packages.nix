@@ -17436,6 +17436,8 @@ self: super: with self; {
 
   python-sat = callPackage ../development/python-modules/python-sat { };
 
+  python-sbom = callPackage ../development/python-modules/python-sbom { inherit (pkgs) cmake; };
+
   python-secp256k1-cardano = callPackage ../development/python-modules/python-secp256k1-cardano { };
 
   python-slugify = callPackage ../development/python-modules/python-slugify { };
