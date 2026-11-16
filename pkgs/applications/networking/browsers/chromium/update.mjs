@@ -85,7 +85,19 @@ for (const attr_path of Object.keys(lockfile)) {
       delete value.postFetch
 
       if (value.url === 'https://chromium.googlesource.com/chromium/src.git') {
-        value.recompress = true
+        // Tries to vaguely mirror upstream's export_tarball.py to delete some
+        // non-essential files to stay below hydra.nixos.org's max output size.
+        // https://chromium.googlesource.com/chromium/tools/build/+/HEAD/recipes/recipe_modules/chromium/resources/export_tarball.py
+        value.postFetch = [
+          'find',
+          '$out/third_party/blink/{manual_tests,perf_tests,tools,web_tests}',
+          '$out/{chrome,chrome/updater,media,components,content}/test/data',
+          '$out/third_party/sqlite/fuzz',
+          '$out/tools/perf/testdata',
+          '-type f',
+          `! -regex '.*\\.\\(gn\\|gni\\|grd\\|grdp\\|pydeps\\)$'`,
+          '-delete',
+        ].join(" ")
       }
 
       const cache_hit = (() => {
@@ -95,7 +107,7 @@ for (const attr_path of Object.keys(lockfile)) {
             cache !== undefined &&
             value.url === cache.url &&
             value.rev === cache.rev &&
-            value.recompress === cache.recompress &&
+            value.postFetch === cache.postFetch &&
             cache.hash !== undefined &&
             cache.hash !== '' &&
             cache.hash !== dummy_hash
