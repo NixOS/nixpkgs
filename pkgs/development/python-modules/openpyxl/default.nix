@@ -50,6 +50,9 @@ buildPythonPackage rec {
     homepage = "https://openpyxl.pages.heptapod.net/openpyxl/";
     changelog = "https://foss.heptapod.net/openpyxl/openpyxl/-/blob/${version}/doc/changes.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lihop ];
+    maintainers = with lib.maintainers; [
+      lihop
+      colinxu2020
+    ];
   };
 }
