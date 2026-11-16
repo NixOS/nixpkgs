@@ -1,0 +1,17 @@
+diff --git a/testsuite/output-control-chars_test.py b/testsuite/output-control-chars_test.py
+--- a/testsuite/output-control-chars_test.py
++++ b/testsuite/output-control-chars_test.py
+@@ -6,8 +6,11 @@ from rsyncfns import SCRATCHDIR, rmtree, rsync_argv, test_fail
+ 
+ 
+ def available_locales():
+-    proc = subprocess.run(['locale', '-a'], stdout=subprocess.PIPE,
+-                          stderr=subprocess.DEVNULL)
++    try:
++        proc = subprocess.run(['locale', '-a'], stdout=subprocess.PIPE,
++                              stderr=subprocess.DEVNULL)
++    except OSError:
++        return {}
+     if proc.returncode != 0:
+         return {}
+     return {name.lower(): name for name in proc.stdout.decode('ascii', 'ignore').splitlines()}

@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/NLnetLabs/rtrtr";
     changelog = "https://github.com/NLnetLabs/rtrtr/blob/v${finalAttrs.version}/Changelog.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ steamwalker ];
+    maintainers = [ ];
     mainProgram = "rtrtr";
   };
 })
