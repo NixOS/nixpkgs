@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libsass ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   meta = {
