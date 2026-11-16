@@ -901,7 +901,11 @@ rec {
                   true;
             in
             {
-              schema = (subDocs.schema or subDocs) // {
+              schema = {
+                type = "object";
+              }
+              // (subDocs.schema or subDocs)
+              // {
                 additionalProperties = freeform;
               };
               defs = (subDocs.defs or { }) // (if ffRes != null then ffRes.defs else { });
