@@ -19059,6 +19059,12 @@
     githubId = 1788114;
     name = "Meghea Iulian";
   };
+  meillaya = {
+    email = "nathanagbomed@proton.me";
+    github = "meillaya";
+    githubId = 105596849;
+    name = "Meillaya";
+  };
   meisternu = {
     email = "meister@krutt.org";
     github = "meisternu";
