@@ -101,22 +101,15 @@ in
       '';
     };
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.firefly-iii-data-importer;
-      defaultText = lib.literalExpression "pkgs.firefly-iii-data-importer";
-      description = ''
-        The firefly-iii-data-importer package served by php-fpm and the webserver of choice.
-        This option can be used to point the webserver to the correct root. It
-        may also be used to set the package to a different version, say a
-        development version.
-      '';
-      apply =
-        firefly-iii-data-importer:
-        firefly-iii-data-importer.override (prev: {
-          dataDir = cfg.dataDir;
-        });
-    };
+    package =
+      lib.mkPackageOption pkgs "firefly-iii-data-importer" { }
+      // lib.mkOption {
+        apply =
+          firefly-iii-data-importer:
+          firefly-iii-data-importer.override (prev: {
+            dataDir = cfg.dataDir;
+          });
+      };
 
     enableNginx = lib.mkOption {
       type = lib.types.bool;
@@ -162,7 +155,7 @@ in
         }
       '';
       description = ''
-        Options for the Firefly III Data Importer PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        Options for the Firefly III Data Importer PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -182,7 +175,7 @@ in
         {
           APP_ENV = "local";
           LOG_CHANNEL = "syslog";
-          FIREFLY_III_ACCESS_TOKEN= = "/var/secrets/firefly-iii-access-token.txt";
+          FIREFLY_III_ACCESS_TOKEN_FILE = "/var/secrets/firefly-iii-access-token.txt";
         }
       '';
       type = lib.types.submodule {
@@ -193,6 +186,21 @@ in
             lib.types.bool
           ]
         );
+        options = {
+          APP_URL = lib.mkOption {
+            type = lib.types.str;
+            default =
+              if cfg.virtualHost == "localhost" then
+                "http://${cfg.virtualHost}"
+              else
+                "https://${cfg.virtualHost}";
+            defaultText = lib.literalMD "`http://localhost` if {option}`services.firefly-iii-data-importer.virtualHost` is `localhost`, otherwise `https://` followed by it";
+            description = ''
+              The URL at which the data importer is reachable. It is used to
+              generate links.
+            '';
+          };
+        };
       };
     };
   };
@@ -305,4 +313,6 @@ in
       groups = lib.mkIf (group == defaultGroup) { ${defaultGroup} = { }; };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ savyajha ];
 }
