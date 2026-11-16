@@ -16,6 +16,10 @@
 
 let
   inherit (lib) head optionals warn;
+  unzipBuildInputs = [
+    unzip
+    glibcLocalesUtf8
+  ];
 in
 
 lib.extendMkDerivation {
@@ -72,12 +76,7 @@ lib.extendMkDerivation {
       # Have to pull in glibcLocalesUtf8 for unzip in setup-hook.sh to handle
       # UTF-8 aware locale:
       #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
-      nativeBuildInputs =
-        optionals withUnzip [
-          unzip
-          glibcLocalesUtf8
-        ]
-        ++ nativeBuildInputs;
+      nativeBuildInputs = optionals withUnzip unzipBuildInputs ++ nativeBuildInputs;
 
       postFetch = ''
         unpackDir="$TMPDIR/unpack"
