@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchpatch,
   substitute,
   zlib,
   nixosTests,
@@ -54,6 +55,7 @@ pythonPackages.buildPythonApplication rec {
 
   # from Dockerfile
   env.CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
+  env.NODE_OPTIONS = "--max-old-space-size=3072";
 
   format = "setuptools";
 
@@ -62,7 +64,16 @@ pythonPackages.buildPythonApplication rec {
     ./expose-setup.py.patch
     # check for permission of /etc/pgadmin/config_system and don't fail
     ./check-system-config-dir.patch
-
+    # ignore internal column options such as PostgreSQL 18.7's pg_attver in generated SQL
+    # https://github.com/pgadmin-org/pgadmin4/pull/10780
+    (fetchpatch {
+      url = "https://github.com/pgadmin-org/pgadmin4/commit/88c3ac2db15ff8c53fa9b4f8b2d69c8f2b12e611.patch";
+      # 9.18 doesn't select attoptions for index columns
+      excludes = [
+        "web/pgadmin/browser/server_groups/servers/databases/schemas/tables/templates/indexes/sql/default/column_details.sql"
+      ];
+      hash = "sha256-if6GNnACJKiH9PTAPK6f+++96enXgcnujRb0ypH60Uw=";
+    })
   ];
 
   postPatch = ''
