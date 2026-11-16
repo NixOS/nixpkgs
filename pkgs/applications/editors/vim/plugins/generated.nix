@@ -2101,12 +2101,12 @@ final: prev: {
 
   blink-ripgrep-nvim = buildVimPlugin {
     pname = "blink-ripgrep.nvim";
-    version = "2.2.6";
+    version = "2.2.7";
     src = fetchFromGitHub {
       owner = "mikavilpas";
       repo = "blink-ripgrep.nvim";
-      tag = "v2.2.6";
-      hash = "sha256-W8FyG9WlSwp9ta0dsxhhtfJmQrc1OseieVw2k2mwWR8=";
+      tag = "v2.2.7";
+      hash = "sha256-YN3G91dmGGCqa7CGIVadftGscEcE3oIQzN6I3jnw2QQ=";
     };
     meta.homepage = "https://github.com/mikavilpas/blink-ripgrep.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
