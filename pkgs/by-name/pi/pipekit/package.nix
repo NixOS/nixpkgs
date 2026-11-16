@@ -10,7 +10,7 @@ let
   sources = {
     "x86_64-linux" = {
       suffix = "linux_amd64";
-      hash = "sha256-3TTVSCZcsUVfNzC9hWn0OLytMAOxL39f5IlqCReCw7g=";
+      hash = "sha256-pSiV0Ue7HXb2KD0yJx3o2JB1aXXR4lIU1GUUSwbmNew=";
     };
     "aarch64-linux" = {
       suffix = "linux_arm64";
@@ -22,7 +22,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pipekit";
-  version = "6.65.5";
+  version = "8.6.1";
 
   __structuredAttrs = true;
   strictDeps = true;
