@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library to read/write Excel 2010 xlsx/xlsm files";
-    homepage = "https://openpyxl.readthedocs.org";
+    homepage = "https://openpyxl.pages.heptapod.net/openpyxl/";
     changelog = "https://foss.heptapod.net/openpyxl/openpyxl/-/blob/${version}/doc/changes.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lihop ];
