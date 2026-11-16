@@ -139,6 +139,10 @@ stdenv.mkDerivation (
       # Exclude the `@t3tools/monorepo` workspace from the pending rebuild since
       # `vp config` needs git
       pnpm rebuild --pending "''${pnpmInstallFlags[@]}" --filter '!@t3tools/monorepo'
+
+      # pnpmConfigHook only patches root node_modules. Workspace shims must also
+      # use Nix's shell: macOS /bin/sh breaks pnpm's sandbox helper lookup.
+      patchShebangs apps/*/node_modules packages/*/node_modules scripts/node_modules
     '';
 
     pnpmBuildScript = "build:desktop";
@@ -209,6 +213,11 @@ stdenv.mkDerivation (
         --inherit-argv0
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Match upstream's single-architecture bundle exclusions, including objc-js.
+      find "$out/libexec/t3code" -type d \
+        -path '*/prebuilds/darwin-${if stdenv.hostPlatform.isAarch64 then "x64" else "arm64"}' \
+        -prune -exec rm -rf {} +
+
       # node-pty tries to chmod this helper at runtime, but the Nix store is
       # immutable by then.
       find "$out"/libexec/t3code \
@@ -224,6 +233,24 @@ stdenv.mkDerivation (
       # stdenv.shell to avoid Darwin's intermittent ENOEXEC fallback issues.
       ${stdenv.shell} ${lib.getExe writeDarwinBundle} \
         "$out" "${appName}" t3code-desktop t3code
+
+      # Import upstream's usage descriptions without running its packaging CLI.
+      pnpm --dir scripts exec node --input-type=module - \
+        "$out/Applications/${appName}.app/Contents/Info.plist" <<'EOF'
+      import { readFileSync, writeFileSync } from "node:fs";
+      import { Effect, Path } from "effect";
+      import plist from "plist";
+      import { createBuildConfig } from "./build-desktop-artifact.ts";
+
+      const config = createBuildConfig("mac", "dir", "${finalAttrs.version}", false, false);
+      const { mac } = await Effect.runPromise(Effect.provide(config, Path.layer));
+      const file = process.argv[2];
+      const info = plist.parse(readFileSync(file, "utf8"));
+      for (const [key, value] of Object.entries(mac.extendInfo)) {
+        if (/^NS.*UsageDescription$/.test(key)) info[key] = value;
+      }
+      writeFileSync(file, plist.build(info));
+      EOF
     ''
     + ''
       mkdir --parents \
