@@ -100,8 +100,6 @@ decorate (
           nonNullDefault
       ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
 
-    useFetchGitArgsWDPassing = useFetchGitArgsExcluded // intersectAttrs useFetchGitArgsExcluded args;
-
     position = (
       if args.meta.description or null != null then
         unsafeGetAttrPos "description" args.meta
@@ -122,7 +120,8 @@ decorate (
     )
     // (
       if useFetchGit then
-        useFetchGitArgsWDPassing
+        useFetchGitArgsExcluded
+        // intersectAttrs useFetchGitArgsExcluded args
         // {
           inherit tag rev;
           url = "${baseUrl}.git";
