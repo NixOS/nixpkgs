@@ -55,6 +55,8 @@ let
           ;
       };
 
+      __structuredAttrs = true;
+
       meta = {
         # last successful hydra build on darwin was in 2025
         broken = lib.versionOlder version "11" && stdenv.hostPlatform.isDarwin;
