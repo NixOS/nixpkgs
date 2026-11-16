@@ -43,12 +43,17 @@
   opencv-python-headless,
   pyinstaller,
   pyqt5,
-  httpx,
-  pytest,
-  pytest-xvfb,
 
   # tests
+  httpx2,
+  pytest,
+  pytest-xvfb,
   pytestCheckHook,
+  versionCheckHook,
+  websockets,
+
+  fullTestSuite ? false,
+  datalab-platform, # self
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -96,9 +101,14 @@ buildPythonPackage (finalAttrs: {
     sigima
     uvicorn
   ]
+  ++ uvicorn.optional-dependencies.standard
   ++ finalAttrs.passthru.optional-dependencies.qt
-  # required for `bin/datalab-{demo,tests}`
-  ++ finalAttrs.passthru.optional-dependencies.test;
+  ++ lib.optionals fullTestSuite [
+    # test dependencies - required for bin/datalab-tests
+    pytest
+    httpx2
+    pyyaml
+  ];
 
   optional-dependencies = {
     dev = [
@@ -130,11 +140,6 @@ buildPythonPackage (finalAttrs: {
     qt = [
       pyqt5
     ];
-    test = [
-      httpx
-      pytest
-      pytest-xvfb
-    ];
   };
 
   pythonRelaxDeps = [
@@ -148,14 +153,31 @@ buildPythonPackage (finalAttrs: {
     "datalab"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+
   nativeCheckInputs = [
+    httpx2
     pytestCheckHook
   ]
-  ++ finalAttrs.passthru.optional-dependencies.test;
+  ++ lib.optionals fullTestSuite [
+    pytest-xvfb
+    ruff
+    websockets
+  ];
 
-  pytestFlags = [
+  # running the full test suite takes ~20 minutes, moved to passthru.tests
+  pytestFlags = lib.optionals (!fullTestSuite) [
     "--collect-only"
   ];
+
+  passthru.tests.full = datalab-platform.override { fullTestSuite = true; };
+
+  postInstall = lib.optionalString (!fullTestSuite) ''
+    rm $out/bin/datalab-tests
+  '';
 
   dontWrapQtApps = true;
 
