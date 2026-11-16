@@ -17,29 +17,17 @@
   # Each releases of Merlin support a limited range of versions of OCaml.
   version ?
     {
-      "4.12.0" = "4.7-412";
-      "4.12.1" = "4.7-412";
-      "4.13.0" = "4.7.1-413";
-      "4.13.1" = "4.7.1-413";
-      "4.14.0" = "4.19-414";
-      "4.14.1" = "4.19-414";
-      "4.14.2" = "4.19-414";
-      "4.14.3" = "4.19-414";
-      "4.14.4" = "4.19-414";
-      "4.14.5" = "4.19-414";
-      "5.0.0" = "4.14-500";
-      "5.1.0" = "4.17.1-501";
-      "5.1.1" = "4.17.1-501";
-      "5.2.0" = "5.3-502";
-      "5.2.1" = "5.3-502";
-      "5.3.0" = "5.6-503";
-      "5.4.0" = "5.7.1-504";
-      "5.4.1" = "5.7.1-504";
-      "5.5.0" = "5.8-505";
-      "5.5.1" = "5.8-505";
-      "5.5.2" = "5.8-505";
+      "4.12" = "4.7-412";
+      "4.13" = "4.7.1-413";
+      "4.14" = "4.19-414";
+      "5.0" = "4.14-500";
+      "5.1" = "4.17.1-501";
+      "5.2" = "5.3-502";
+      "5.3" = "5.6-503";
+      "5.4" = "5.7.1-504";
+      "5.5" = "5.9.1-505";
     }
-    ."${ocaml.version}",
+    ."${lib.versions.majorMinor ocaml.version}",
 }:
 
 let
@@ -59,6 +47,7 @@ let
     "5.6-504" = "sha256-gtZIpBgNbVqjoIMhjii/GX9OnxR4hN6TArtoEa2Yt38=";
     "5.7.1-504" = "sha256-E5sHPPkUs4tyXFT3W4tkL2VMNJjQpLqM+oMf8CqJcNU=";
     "5.8-505" = "sha256-VkLN6EhqhKrZj6XFkLcOjcxgdNf72zubjEayxbQvZTs=";
+    "5.9.1-505" = "sha256-z5LKc1QMHU3SZaCq2/SlD27iTVHIXMvdy2HoEda/REA=";
   };
 
 in
@@ -69,7 +58,7 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
-    sha256 = hashes."${version}";
+    hash = hashes."${version}";
   };
 
   patches =
