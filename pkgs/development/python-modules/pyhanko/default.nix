@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.36.2";
+  version = "0.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Dv1Pz4ri574vh50ter9TbFSvQ+0Mbbifw8kjjv04qs8=";
+    hash = "sha256-33ESOAlV91ssEBdUamhcCDg2dHJ54FeFgioSsxaFN1s=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
@@ -67,8 +67,8 @@ buildPythonPackage (finalAttrs: {
     cryptography
     lxml
     pyhanko-certvalidator
-    requests
     tzlocal
+    aiohttp
   ];
 
   optional-dependencies = {
@@ -81,12 +81,12 @@ buildPythonPackage (finalAttrs: {
       python-barcode
     ];
     pkcs11 = [ python-pkcs11 ];
-    async-http = [ aiohttp ];
     etsi = [
       xsdata
       signxml
     ];
     qr = [ qrcode ];
+    requests = [ requests ];
   };
 
   nativeCheckInputs = [
@@ -160,6 +160,7 @@ buildPythonPackage (finalAttrs: {
       dependencies = [
         certomancer
         pyhanko-certvalidator
+        requests-mock
       ];
 
       pythonRemoveDeps = [ "pyhanko" ];
