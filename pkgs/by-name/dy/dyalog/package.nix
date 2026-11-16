@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  runCommand,
+  xvfb-run,
 
   config,
   acceptLicense ? config.dyalog.acceptLicense or false,
@@ -17,6 +19,8 @@
   dotnetSupport ? false,
 
   alsa-lib,
+  glib,
+  gsettings-desktop-schemas,
   gtk3,
   libdrm,
   libGL,
@@ -35,7 +39,15 @@
 let
   dyalogHome = "$out/lib/dyalog";
 
-  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.runtime_10_0}/share/dotnet";
+  makeWrapperArgs =
+    lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.runtime_10_0}/share/dotnet"
+    ++ lib.optionals htmlRendererSupport [
+      # libcef.so needs 1504 bytes of initial-exec TLS. With the default static TLS surplus
+      # (1520 bytes) dlopen() fails once our other libraries have taken their share, and
+      # ⎕WC'HTMLRenderer' signals a LIMIT ERROR. Measured: 1536 is too small, 2048 works.
+      "--prefix GLIBC_TUNABLES : glibc.rtld.optional_static_tls=4096"
+      "--prefix XDG_DATA_DIRS : ${glib.getSchemaDataDirPath gtk3}:${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+    ];
 
   maplWrapperArgs = makeWrapperArgs ++ [
     "--suffix PATH : ${
@@ -100,6 +112,29 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests = lib.optionalAttrs htmlRendererSupport {
+    htmlRenderer =
+      runCommand "dyalog-htmlrenderer-test"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            xvfb-run
+          ];
+        }
+        ''
+          export HOME=$(mktemp -d)
+          cat > test.apls <<'EOF'
+          'h'⎕WC'HTMLRenderer'('HTML' '<h1>test</h1>')
+          ⎕←h.Type
+          ⎕EX'h'
+          EOF
+          # Exit status ignored: dyalog sometimes segfaults while tearing down CEF (1 of 20 runs), also on stock Ubuntu
+          timeout -k 5 120 xvfb-run -a dyalog -script test.apls > output 2>&1 || true
+          tr '\r' '\n' < output | grep -qx HTMLRenderer || { cat output; exit 1; }
+          touch $out
+        '';
+  };
 
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
