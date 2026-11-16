@@ -83,7 +83,10 @@ buildGoModule (finalAttrs: {
     description = "Matrix client written in Go";
     homepage = "https://github.com/tulir/gomuks";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.zaphyra ];
+    maintainers = with lib.maintainers; [
+      zaphyra
+      logn
+    ];
     platforms = lib.platforms.unix;
   };
 })
