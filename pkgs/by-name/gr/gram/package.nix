@@ -30,7 +30,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gram";
-  version = "3.4.1";
+  version = "3.5.2";
 
   outputs = [
     "out"
@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "GramEditor";
     repo = "gram";
     tag = finalAttrs.version;
-    hash = "sha256-+arejkex6DnnIVivt4ACuGUUNfePIXC0Y5WRGIBB9Hw=";
+    hash = "sha256-OGjHn8F0jdRwGadB/Rnza4uQEKBF4GOsfmUOCIc4xzM=";
   };
 
-  cargoHash = "sha256-0sTtUSCtjvdJPkpzNgd4Rk0g7Fn3w8uttfuEtl53kbQ=";
+  cargoHash = "sha256-5894jBL/oDkcfnrRyM8s/NZlhWCtrSuAxvad1711uHk=";
 
   __structuredAttrs = true;
 
