@@ -13,7 +13,6 @@
   cryptography,
   python-dateutil,
   pyyaml,
-  tzlocal,
 
   # optional-dependencies
   requests-mock,
@@ -32,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
     tag = "v${version}";
-    hash = "sha256-rsugn1g8iYESrC+IUSbxCAbwnKXWG+ubbUj9QdZB+Ow=";
+    hash = "sha256-vWOpxPxVBkikpyiKRi0qQCNJLC1iIZD/gzvCUhpyeMU=";
   };
 
   build-system = [
@@ -53,7 +52,6 @@ buildPythonPackage rec {
     cryptography
     python-dateutil
     pyyaml
-    tzlocal
   ];
 
   optional-dependencies = {
