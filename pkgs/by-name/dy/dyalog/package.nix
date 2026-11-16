@@ -186,6 +186,40 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf ${dyalogHome}/libcef.so --add-needed libudev.so --add-needed libGL.so
   '';
 
+  # Conga, SQAPL and .NET are loaded at runtime, so autoPatchelfHook cannot notice when they break
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export HOME=$(mktemp -d)
+
+    # usage: check EXPECTED APL-LINE...
+    check() {
+      local expected=$1
+      shift
+      printf '%s\n' "$@" > check.apls
+      # dyalog -script terminates output lines with \r
+      local output=$($out/bin/dyalogscript check.apls | tr '\r' '\n')
+      if [[ "$output" != "$expected" ]]; then
+        echo "dyalogscript check failed for: $*"
+        echo "expected '$expected', got '$output'"
+        exit 1
+      fi
+    }
+
+    check 55 '⎕←+/⍳10'
+    check 0 "'DRC'⎕CY'conga'" "⎕←⊃DRC.Init'''"
+  ''
+  + lib.optionalString dotnetSupport ''
+    check 1 "⎕USING←'System'" '⎕←2000<DateTime.Now.Year'
+  ''
+  + lib.optionalString sqaplSupport ''
+    check 0 "'SQA'⎕CY'sqapl'" "⎕←⊃SQA.Init'''"
+  ''
+  + ''
+    runHook postInstallCheck
+  '';
+
   meta = {
     changelog = "https://dyalog.com/dyalog/dyalog-versions/${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.shortVersion
