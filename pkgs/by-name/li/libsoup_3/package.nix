@@ -118,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "HTTP client/server library for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     changelog = "https://gitlab.gnome.org/GNOME/libsoup/-/blob/${finalAttrs.version}/NEWS";
     inherit (glib.meta) maintainers platforms teams;
   };
