@@ -7,25 +7,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kcp";
-  version = "1.7";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "kcp";
-    rev = finalAttrs.version;
-    hash = "sha256-yW40x4T++4rB7hoabGN8qiSN7octyoUYEfE9oDlLxjU=";
+    tag = finalAttrs.version;
+    hash = "sha256-K0kPQ2YjwwHkbGelo3KNcl+PpDnbk/FxDxYMu+VDARM=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
-  '';
-
   meta = {
     description = "Fast and Reliable ARQ Protocol";
     homepage = "https://github.com/skywind3000/kcp";
+    changelog = "https://github.com/skywind3000/kcp/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
