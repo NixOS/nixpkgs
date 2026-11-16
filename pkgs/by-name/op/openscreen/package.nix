@@ -3,92 +3,101 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  callPackage,
   copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
-  electron_41,
+  electron_43,
   nodejs_22,
+  ffmpeg,
+  ffmpeg-headless,
+  mesa,
+  intel-media-driver,
+  intel-vaapi-driver,
   nix-update-script,
 }:
 let
-  electron = electron_41;
+  electron = electron_43;
   nodejs = nodejs_22;
-in
-buildNpmPackage (finalAttrs: {
-  inherit nodejs;
 
-  pname = "openscreen";
-  version = "1.4.0";
-
+  version = "2.2.2";
   src = fetchFromGitHub {
-    owner = "siddharthvaddem";
+    owner = "getopenscreen";
     repo = "openscreen";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ZBWDQVYDXJ/IQGhlmscmCOMjpl03kVIdMoJXOW8OjUI=";
+    tag = "v${version}";
+    hash = "sha256-t0x5wXtaRS/ZYrHnoGqSP7mgM2GO0psPGTpB3AamGd4=";
   };
 
-  npmDepsHash = "sha256-SMAYgOwlZg9+/KZBUhVviOxEdMeL3Z2YdC8Hx8Q/ioY=";
+  # H.264 through openh264, without GPL x264: the app is MIT and upstream ships an LGPL ffmpeg.
+  ffmpeg-lgpl = ffmpeg.override {
+    withOpenh264 = true;
+    withGPL = false;
+  };
+  native = { inherit version src ffmpeg-lgpl; };
+  compositor-view = callPackage ./compositor-view.nix native;
+  pipewire-helper = callPackage ./pipewire-helper.nix native;
+  whisper-stt = callPackage ./whisper-stt.nix { inherit version src; };
 
-  npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent running `node-gyp build`
+  # The only ffmpeg CLI call decodes audio to raw PCM.
+  ffmpegCli = ffmpeg-headless.override { withGPL = false; };
+
+  vaDriversPath = lib.makeSearchPath "lib/dri" (
+    [ mesa ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      intel-media-driver
+      intel-vaapi-driver
+    ]
+  );
+in
+buildNpmPackage {
+  inherit nodejs version src;
+  pname = "openscreen";
+
+  npmDepsHash = "sha256-kqvXt9uwinx/HQBkwbPG7PMCUtqMgeZKOYFsmwox3cw=";
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  npmFlags = [ "--ignore-scripts" ];
+  makeCacheWritable = true;
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
+  # vite-plugin-electron builds both the renderer (dist/) and the main process (dist-electron/).
   buildPhase = ''
     runHook preBuild
-
-    npm exec tsc
     npm exec vite build
-
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # electronDist needs to be modifiable on Darwin
-      cp -r ${electron.dist} electron-dist
-      chmod -R u+w electron-dist
-
-      # Disable code signing during build on macOS.
-      # https://www.electron.build/code-signing-mac.html#how-to-disable-code-signing-during-the-build-process-on-macos
-      npm exec electron-builder -- \
-        --dir \
-        -c.electronDist=electron-dist \
-        -c.electronVersion=${electron.version} \
-        -c.mac.identity=null
-    ''}
-    ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      npm exec electron-builder -- \
-        --dir \
-        -c.electronDist=${electron.dist} \
-        -c.electronVersion=${electron.version} \
-        -c.npmRebuild=false
-    ''}
-
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/share/openscreen
-      cp -r release/*/*-unpacked/{locales,resources{,.pak}} $out/share/openscreen
+    mkdir -p $out/share/openscreen
+    cp -r dist dist-electron package.json $out/share/openscreen/
+    npm prune --omit=dev --no-save
+    cp -r node_modules $out/share/openscreen/
+    # The app resolves its assets at <appPath>/public; vite copied public/ into dist/.
+    ln -s dist $out/share/openscreen/public
 
-      makeWrapper ${lib.getExe electron} $out/bin/openscreen \
-          --add-flags $out/share/openscreen/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-          --set-default ELECTRON_IS_DEV 0 \
-          --inherit-argv0
+    makeWrapper ${lib.getExe electron} $out/bin/openscreen \
+      --add-flags $out/share/openscreen \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set-default ELECTRON_IS_DEV 0 \
+      --suffix LIBVA_DRIVERS_PATH : "/run/opengl-driver/lib/dri:${vaDriversPath}" \
+      --set OPENSCREEN_FFMPEG_PATH ${lib.getExe ffmpegCli} \
+      --set OPENSCREEN_COMPOSITOR_VIEW_NODE ${compositor-view}/lib/compositor_view.node \
+      --set OPENSCREEN_LINUX_CURSOR_HELPER_EXE ${lib.getExe pipewire-helper} \
+      --set OPENSCREEN_WHISPER_SERVER_EXE ${lib.getExe whisper-stt} \
+      --inherit-argv0
 
-      install -Dm644 icons/icons/png/512x512.png $out/share/icons/hicolor/512x512/apps/openscreen.png
-    ''}
-
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -R release/*/mac*/Openscreen.app $out/Applications/
-      makeWrapper $out/Applications/Openscreen.app/Contents/MacOS/Openscreen $out/bin/openscreen
-    ''}
+    for size in 16 24 32 48 64 128 256 512 1024; do
+      icon=icons/icons/png/''${size}x''${size}.png
+      if [ -f $icon ]; then
+        install -Dm644 $icon $out/share/icons/hicolor/''${size}x''${size}/apps/openscreen.png
+      fi
+    done
 
     runHook postInstall
   '';
@@ -97,28 +106,35 @@ buildNpmPackage (finalAttrs: {
     (makeDesktopItem {
       name = "openscreen";
       desktopName = "OpenScreen";
-      comment = finalAttrs.meta.description;
+      genericName = "Screen Recorder";
+      comment = "Desktop screen recorder with built-in editor";
       icon = "openscreen";
-      exec = "openscreen %u";
+      exec = "openscreen %U";
       categories = [
         "AudioVideo"
         "Video"
-        "Utility"
+        "Recorder"
       ];
+      startupWMClass = "Openscreen";
       terminal = false;
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit compositor-view pipewire-helper whisper-stt;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
-    description = "Free, open-source alternative to Screen Studio (sort of)";
-    homepage = "https://github.com/siddharthvaddem/openscreen";
+    description = "Desktop screen recorder with built-in editor";
+    homepage = "https://github.com/getopenscreen/openscreen";
+    changelog = "https://github.com/getopenscreen/openscreen/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       etiennelescot
     ];
     mainProgram = "openscreen";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # The native parts (compositor addon, PipeWire helper) are packaged for Linux only.
+    platforms = lib.platforms.linux;
   };
-})
+}
