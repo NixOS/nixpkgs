@@ -1,6 +1,6 @@
 {
   lib,
-  fetchCrate,
+  fetchFromGitHub,
   rustPlatform,
   rustc,
   rustfmt,
@@ -10,23 +10,26 @@ let
   rustfmt-nightly = rustfmt.override { asNightly = true; };
   clang = rustc.llvmPackages.clang;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-bindgen-unwrapped";
   version = "0.72.1";
 
   __structuredAttrs = true;
 
-  src = fetchCrate {
-    pname = "bindgen-cli";
-    inherit version;
-    hash = "sha256-rhdQZcnlqVSUqvFDg0Scs1+DHGcKyazeS5H9HH7u8Fk=";
+  src = fetchFromGitHub {
+    owner = "rust-lang";
+    repo = "rust-bindgen";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cswBbshxTAcZtUk3PxH9jD55X1a/fBAyZyYpzVkt27M=";
   };
 
-  cargoHash = "sha256-YNpqVB+zdZ76Av2L+yQuBrxKvNML9+3H7ES4+7mED0E=";
+  cargoHash = "sha256-HKhoLKqk0KeQXdSl8L+w2S6RGXbjfoGAryB5zCCeDZ8=";
 
   preConfigure = ''
     export LIBCLANG_PATH="${lib.getLib clang.cc}/lib"
   '';
+
+  buildAndTestSubdir = "bindgen-cli";
 
   # Disable the "runtime" feature, so libclang is linked.
   buildNoDefaultFeatures = true;
@@ -51,9 +54,10 @@ rustPlatform.buildRustPackage rec {
       rust ffi declarations.
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
+    changelog = "https://github.com/rust-lang/rust-bindgen/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ johntitor ];
     mainProgram = "bindgen";
     platforms = lib.platforms.unix;
   };
-}
+})
