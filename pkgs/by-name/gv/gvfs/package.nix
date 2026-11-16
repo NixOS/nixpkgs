@@ -150,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     description =
       "Virtual Filesystem support library" + lib.optionalString gnomeSupport " (full GNOME support)";
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
   };

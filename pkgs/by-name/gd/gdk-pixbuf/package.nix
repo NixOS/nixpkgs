@@ -171,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
     license = lib.licenses.lgpl21Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
     teams = [ lib.teams.gnome ];
     mainProgram = "gdk-pixbuf-thumbnailer";
     pkgConfigModules = [ "gdk-pixbuf-2.0" ];
