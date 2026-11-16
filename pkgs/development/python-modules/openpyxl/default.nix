@@ -38,9 +38,9 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    # lxml 6.0
-    "test_iterparse"
+  patches = [
+    ./fromstring_not_iterparse.patch
+    ./openpyxl-fix-closed-image-fp.patch
   ];
 
   pythonImportsCheck = [ "openpyxl" ];
