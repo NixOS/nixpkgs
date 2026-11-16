@@ -167,7 +167,10 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/NVIDIA/DALI";
     changelog = "https://github.com/NVIDIA/DALI/releases/tag/${finalAttrs.src.tag}";
     inherit (dali.meta) license platforms;
-    maintainers = with lib.maintainers; [ connorbaker ];
+    maintainers = with lib.maintainers; [
+      _81reap
+      connorbaker
+    ];
     teams = [ lib.teams.cuda ];
   };
 })
