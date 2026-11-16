@@ -23434,6 +23434,8 @@ self: super: with self; {
 
   zipp = callPackage ../development/python-modules/zipp { };
 
+  zipremove = callPackage ../development/python-modules/zipremove { };
+
   zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
 
   zlib-ng = callPackage ../development/python-modules/zlib-ng { inherit (pkgs) zlib-ng; };
