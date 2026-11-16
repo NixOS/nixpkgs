@@ -1,0 +1,104 @@
+diff --git a/hailort/common/logger_macros.hpp b/hailort/common/logger_macros.hpp
+index c57298d..052b36a 100644
+--- a/hailort/common/logger_macros.hpp
++++ b/hailort/common/logger_macros.hpp
+@@ -29,7 +29,7 @@
+ #pragma GCC diagnostic ignored "-Wstringop-overflow"
+ #endif
+ #include <spdlog/spdlog.h>
+-#include <spdlog/fmt/ostr.h>
++#include <fmt/ostream.h>
+ #if defined(__linux__) && !defined(__ANDROID__)
+ #pragma GCC diagnostic pop
+ #endif
+diff --git a/hailort/common/utils.hpp b/hailort/common/utils.hpp
+index b49d374..d1857a8 100644
+--- a/hailort/common/utils.hpp
++++ b/hailort/common/utils.hpp
+@@ -18,7 +18,7 @@
+ 
+ #include "common/file_utils.hpp"
+ #include "common/logger_macros.hpp"
+-#include <spdlog/fmt/bundled/core.h>
++#include <fmt/core.h>
+ 
+ #define XXH_INLINE_ALL 1
+ #include "xxhash.h"
+diff --git a/hailort/hailortcli/run2/measurement_live_track.cpp b/hailort/hailortcli/run2/measurement_live_track.cpp
+index f3ae8bf..bd90b5c 100644
+--- a/hailort/hailortcli/run2/measurement_live_track.cpp
++++ b/hailort/hailortcli/run2/measurement_live_track.cpp
+@@ -14,7 +14,7 @@
+ 
+ #include "measurement_live_track.hpp"
+ 
+-#include <spdlog/fmt/fmt.h>
++#include <fmt/fmt.h>
+ #include <sstream>
+ 
+ using namespace hailort;
+diff --git a/hailort/hailortcli/run2/network_live_track.cpp b/hailort/hailortcli/run2/network_live_track.cpp
+index c6bc871..b05455e 100644
+--- a/hailort/hailortcli/run2/network_live_track.cpp
++++ b/hailort/hailortcli/run2/network_live_track.cpp
+@@ -10,7 +10,7 @@
+ #include "network_live_track.hpp"
+ #include "../infer_stats_printer.hpp"
+ 
+-#include <spdlog/fmt/fmt.h>
++#include <fmt/fmt.h>
+ #include <sstream>
+ 
+ size_t NetworkLiveTrack::max_ng_name = 0;
+diff --git a/hailort/hailortcli/run2/timer_live_track.cpp b/hailort/hailortcli/run2/timer_live_track.cpp
+index 8c95a04..b2bd1bc 100644
+--- a/hailort/hailortcli/run2/timer_live_track.cpp
++++ b/hailort/hailortcli/run2/timer_live_track.cpp
+@@ -9,7 +9,7 @@
+ 
+ #include "timer_live_track.hpp"
+ #include "../common.hpp"
+-#include <spdlog/fmt/fmt.h>
++#include <fmt/fmt.h>
+ #include <sstream>
+ 
+ TimerLiveTrack::TimerLiveTrack(std::chrono::milliseconds duration) :
+diff --git a/hailort/hailortcli/run_command.cpp b/hailort/hailortcli/run_command.cpp
+index 54ebc62..39f9a10 100644
+--- a/hailort/hailortcli/run_command.cpp
++++ b/hailort/hailortcli/run_command.cpp
+@@ -30,7 +30,7 @@
+ #include "hailo/vdevice.hpp"
+ #include "hailo/transform.hpp"
+ 
+-#include "spdlog/fmt/fmt.h"
++#include "fmt/fmt.h"
+ 
+ #include <vector>
+ #include <algorithm>
+diff --git a/hailort/libhailort/src/utils/measurement_utils.hpp b/hailort/libhailort/src/utils/measurement_utils.hpp
+index f677417..edf2817 100644
+--- a/hailort/libhailort/src/utils/measurement_utils.hpp
++++ b/hailort/libhailort/src/utils/measurement_utils.hpp
+@@ -87,7 +87,7 @@
+ #define _HAILO_MEASUREMENT_UTILS_HPP_
+ 
+ #include "measurement_utils_internal.hpp"
+-#include <spdlog/fmt/bundled/format.h>
++#include <fmt/format.h>
+ 
+ namespace hailort {
+ namespace utils {
+diff --git a/hailort/libhailort/src/vdma/channel/channel_id.hpp b/hailort/libhailort/src/vdma/channel/channel_id.hpp
+index e9c8de2..3de125e 100644
+--- a/hailort/libhailort/src/vdma/channel/channel_id.hpp
++++ b/hailort/libhailort/src/vdma/channel/channel_id.hpp
+@@ -12,7 +12,7 @@
+ 
+ #include "hailo/hailort.h"
+ #include "common/logger_macros.hpp"
+-#include <spdlog/fmt/bundled/format.h>
++#include <fmt/format.h>
+ #include <sstream>
+ 
+ 
