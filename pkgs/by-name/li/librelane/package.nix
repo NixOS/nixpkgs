@@ -48,6 +48,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "ciel"
     # yamlcore 0.1 only makes libyaml optional; CCoreLoader is unchanged.
     "yamlcore"
+    # lln-libparse versions follow yosys; the Python API is unchanged.
+    "lln-libparse"
   ];
 
   dependencies = with python3Packages; [
