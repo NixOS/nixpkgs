@@ -8,7 +8,10 @@
   ffmpeg,
   gdk-pixbuf,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk3,
   harfbuzz,
   lib,
@@ -68,10 +71,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ffmpeg
     gdk-pixbuf
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
     gtk3
     harfbuzz
     libgit2

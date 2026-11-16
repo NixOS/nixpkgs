@@ -13,7 +13,7 @@
   libadwaita,
   libgda6,
   gsound,
-  gst_all_1,
+  gst-plugins-base,
   libportal-gtk4,
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     libadwaita
     libgda6
     gsound
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     libportal-gtk4
   ];
 

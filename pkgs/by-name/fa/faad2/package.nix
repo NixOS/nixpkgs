@@ -6,6 +6,7 @@
 
   # for passthru.tests
   gst_all_1,
+  gst-plugins-bad,
   mpd,
   ocamlPackages,
   vlc,

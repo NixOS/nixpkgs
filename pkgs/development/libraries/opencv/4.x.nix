@@ -64,6 +64,10 @@
   enableGStreamer ? true,
   elfutils,
   gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   orc,
   libunwind,
   zstd,
@@ -399,9 +403,9 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     libunwind
     orc
     zstd

@@ -31,7 +31,11 @@
   docbook-xsl-nons,
   docbook_xml_dtd_43,
   docutils,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   shared-mime-info,
   sofia_sip,
   writeShellScriptBin,
@@ -78,11 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     folks
     gom
     gsound
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
     feedbackd
     callaudiod
     gtk4

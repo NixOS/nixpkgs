@@ -5,7 +5,8 @@
   expat,
   fetchFromGitHub,
   gspell,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk3,
   libGL,
   libGLU,
@@ -59,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     libpng
     libtiff
     libjpeg_turbo

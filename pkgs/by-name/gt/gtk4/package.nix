@@ -39,7 +39,8 @@
   libxml2,
   gnome,
   gsettings-desktop-schemas,
-  gst_all_1,
+  gst-plugins-base,
+  gst-plugins-bad,
   sassc,
   trackerSupport ? stdenv.hostPlatform.isLinux,
   tinysparql,
@@ -136,8 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
   ]
   ++ [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-bad
     fribidi
     harfbuzz
     libice

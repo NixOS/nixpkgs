@@ -12,6 +12,7 @@
   libheif,
   imlib2Full,
   gst_all_1,
+  gst-plugins-bad,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

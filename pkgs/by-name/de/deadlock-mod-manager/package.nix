@@ -41,7 +41,10 @@
   autoPatchelfHook,
   webkitgtk_4_1,
   libsoup_3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   # Use upstream's CEF runtime instead of WebKitGTK
   withCef ? false,
 }:
@@ -153,10 +156,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       [
         webkitgtk_4_1
         libsoup_3
-        gst_all_1.gstreamer
-        gst_all_1.gst-plugins-base
-        gst_all_1.gst-plugins-good
-        gst_all_1.gst-plugins-bad
+        gstreamer
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-bad
       ]
   );
 

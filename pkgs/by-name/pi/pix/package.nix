@@ -12,7 +12,11 @@
   libjpeg,
   libjxl,
   libtiff,
-  gst_all_1,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libraw,
   libsecret,
   glib,
@@ -62,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     glib
     gsettings-desktop-schemas
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-ugly
     gtk3
     lcms2
     libheif

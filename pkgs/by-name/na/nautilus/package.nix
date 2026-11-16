@@ -37,7 +37,7 @@
   libcloudproviders,
   gdk-pixbuf,
   gnome-desktop,
-  gst_all_1,
+  gst-plugins-base,
   gsettings-desktop-schemas,
   gnome-user-share,
   gobject-introspection,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     gsettings-desktop-schemas
     gnome-user-share
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     gtk4
     libadwaita
     libportal-gtk4

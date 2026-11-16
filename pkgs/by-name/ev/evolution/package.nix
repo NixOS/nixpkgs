@@ -37,7 +37,8 @@
   geocode-glib_2,
   cmark,
   bogofilter,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   procps,
   p11-kit,
   openldap,
@@ -81,8 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gnome-desktop
     gsettings-desktop-schemas
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     gtk3
     gspell
     highlight

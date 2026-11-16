@@ -11,7 +11,7 @@
   ffmpeg,
   fuse3,
   glib,
-  gst_all_1,
+
   gstreamer,
   gst-plugins-ugly,
   gst-plugins-good,
@@ -29,7 +29,7 @@
 }:
 
 let
-  gstPluginsGoodQt6 = gst_all_1.gst-plugins-good.override {
+  gstPluginsGoodQt6 = gst-plugins-good.override {
     qt6Support = true;
   };
   gstPlugins = [

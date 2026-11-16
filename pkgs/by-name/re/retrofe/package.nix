@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   glib,
-  gst_all_1,
+
   gstreamer,
   gst-plugins-good,
   gst-plugins-base,
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     glib
-    gst_all_1.gstreamer
+    gstreamer
     SDL2
     SDL2_image
     SDL2_mixer

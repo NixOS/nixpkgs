@@ -29,7 +29,8 @@
   gnome,
   gsettings-desktop-schemas,
   gsound,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk3,
   gtk4,
   ibus,
@@ -157,8 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
     udisks
     upower
     # For animations in Mouse panel.
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-plugins-base
+    gst-plugins-good
   ];
 
   nativeCheckInputs = [

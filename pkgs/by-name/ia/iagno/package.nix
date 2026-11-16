@@ -5,7 +5,9 @@
   desktop-file-utils,
   glycin-loaders,
   gnome,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk4,
   itstool,
   libadwaita,
@@ -44,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glycin-loaders
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
     gtk4
     libadwaita
     libglycin

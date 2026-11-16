@@ -18,7 +18,10 @@
   olm,
   re2,
   spdlog,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libnice,
   qt6Packages,
   fetchpatch,
@@ -84,10 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtwayland
   ]
   ++ lib.optionals withVoipSupport [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { qt6Support = true; })
+    gst-plugins-bad
     libnice
   ];
 

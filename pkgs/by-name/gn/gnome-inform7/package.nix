@@ -27,7 +27,10 @@
   goocanvas_2,
   libplist,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 # Neither gnome-inform7 nor its dependencies ratify and chimara have tagged releases in the GTK3 branch yet.
@@ -86,10 +89,10 @@ let
         gtk3
         vala
         gtk-doc
-        gst_all_1.gstreamer
-        gst_all_1.gst-plugins-base
-        gst_all_1.gst-plugins-good
-        gst_all_1.gst-plugins-bad
+        gstreamer
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-bad
         glib
       ];
       preConfigure = ''

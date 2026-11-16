@@ -13,7 +13,8 @@
   aws-lc,
   glib,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   openssl,
   pkg-config,
   webkitgtk_4_1,
@@ -98,8 +99,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     aws-lc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     webkitgtk_4_1
     glib
     glib-networking

@@ -6,7 +6,11 @@
   blueprint-compiler,
   desktop-file-utils,
   gjs,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libadwaita,
   meson,
   ninja,
@@ -37,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gjs
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base # for GstVideo
-    gst_all_1.gst-plugins-bad # for GstPlay
-    gst_all_1.gst-plugins-good # for scaletempo
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base # for GstVideo
+    gst-plugins-bad # for GstPlay
+    gst-plugins-good # for scaletempo
+    gst-libav
     libadwaita
   ];
 

@@ -14,7 +14,11 @@
   libsoup_3,
   webkitgtk_6_0,
   wrapGAppsHook4,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   harfbuzz,
@@ -62,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_6_0
     papers
     fribidi
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+    gst-plugins-ugly
   ];
 
   postPatch = ''

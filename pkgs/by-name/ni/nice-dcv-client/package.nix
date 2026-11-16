@@ -12,7 +12,7 @@
   gdk-pixbuf,
   glib,
   glib-networking,
-  gst_all_1,
+
   gstreamer,
   gst-plugins-good,
   gst-plugins-base,
@@ -55,8 +55,8 @@ stdenv.mkDerivation {
     lz4
     pcsclite
     protobufc
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
   ];
 
   installPhase =
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
       fixPathsPatch = replaceVars ./fix-paths.patch {
         basedir = null;
         gio_extra_modules = "${glib-networking}/lib/gio/modules";
-        gst_plugin_scanner = "${gst_all_1.gstreamer.out}/libexec/gstreamer-1.0/gst-plugin-scanner";
+        gst_plugin_scanner = "${gstreamer.out}/libexec/gstreamer-1.0/gst-plugin-scanner";
         gst_plugin_system_path = gst_plugin_system_path;
         dcv_sasl_plugin_dir = "${cyrus_sasl.out}/lib/sasl2";
       };

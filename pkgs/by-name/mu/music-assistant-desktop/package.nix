@@ -23,7 +23,9 @@
   atk,
   dbus,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   libappindicator,
   llvmPackages,
   pulseaudio,
@@ -86,9 +88,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     atk
     dbus
     glib-networking
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
     libappindicator
     pulseaudio
     gtk3

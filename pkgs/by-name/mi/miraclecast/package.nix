@@ -14,7 +14,11 @@
   bashNonInteractive,
   coreutils,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   iproute2,
   procps,
@@ -55,7 +59,7 @@ stdenv.mkDerivation {
     substituteInPlace res/miracle-gst \
       --replace-fail \
         '/usr/bin/gst-launch-1.0' \
-        '${lib.getExe' gst_all_1.gstreamer "gst-launch-1.0"}'
+        '${lib.getExe' gstreamer "gst-launch-1.0"}'
     substituteInPlace res/uibc-viewer \
       --replace-fail 'ps -o' '${lib.getExe' procps "ps"} -o' \
       --replace-fail 'gstplayer $@' "$out/bin/gstplayer \$@" \
@@ -79,11 +83,11 @@ stdenv.mkDerivation {
   buildInputs = [
     bashNonInteractive
     glib
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     gtk3
     pythonPath
     readline

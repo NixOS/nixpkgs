@@ -9,7 +9,9 @@
   wrapGAppsHook3,
   desktop-file-utils,
   libcanberra,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   vala,
   gtk3,
   gom,
@@ -64,9 +66,9 @@ stdenv.mkDerivation rec {
     glib
     gom
     gsettings-desktop-schemas
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     gtk3
     json-glib
     libcanberra

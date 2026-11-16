@@ -11,7 +11,9 @@
   wrapGAppsHook4,
   desktop-file-utils,
   libadwaita,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libadwaita
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
   ];
 
   # Workaround for the gettext-sys issue

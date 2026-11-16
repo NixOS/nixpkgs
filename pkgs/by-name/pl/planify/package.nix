@@ -12,7 +12,8 @@
   glib,
   glib-networking,
   gnome-online-accounts,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
   gtk4,
   gtksourceview5,
   gxml,
@@ -60,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gnome-online-accounts
     # Needed for GtkMediaStream creation with success.ogg, see #311295.
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-plugins-base
+    gst-plugins-good
     gtk4
     gtksourceview5
     gxml

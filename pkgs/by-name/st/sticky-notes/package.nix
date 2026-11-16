@@ -7,7 +7,9 @@
   gjs,
   glib-networking,
   gobject-introspection,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   libsoup_3,
@@ -47,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gjs
     glib-networking
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
     gtk4
     libadwaita
     libsoup_3

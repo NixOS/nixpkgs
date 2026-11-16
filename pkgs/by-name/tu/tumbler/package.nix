@@ -17,7 +17,7 @@
   libopenraw,
   librsvg,
   poppler,
-  gst_all_1,
+  gst-plugins-base,
   webp-pixbuf-loader,
   libxfce4util,
   gitUpdater,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gdk-pixbuf
     glib
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     libgepub # optional EPUB thumbnailer support
     libgsf
     libopenraw

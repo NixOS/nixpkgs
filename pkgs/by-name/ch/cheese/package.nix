@@ -11,7 +11,10 @@
   glib,
   clutter-gtk,
   clutter-gst,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   itstool,
   vala,
   docbook_xml_dtd_43,
@@ -70,9 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     gnome-desktop
     gnome-video-effects
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
     gtk3
     libcanberra-gtk3
     librsvg
@@ -83,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     clutter-gtk
     gdk-pixbuf
     glib
-    gst_all_1.gstreamer
+    gstreamer
   ];
 
   preFixup = ''
@@ -91,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Effects
       --prefix XDG_DATA_DIRS : "${gnome-video-effects}/share"
       # vp8enc preset
-      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      --prefix GST_PRESET_PATH : "${gst-plugins-good}/share/gstreamer-1.0/presets"
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${totem}/share"

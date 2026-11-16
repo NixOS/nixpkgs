@@ -9,7 +9,11 @@
   cargo-tauri,
   dbus,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   librsvg,
   libsecret,
@@ -57,11 +61,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     dbus
     glib-networking
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     gtk3
     librsvg
     libsecret

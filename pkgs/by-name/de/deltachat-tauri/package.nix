@@ -4,7 +4,11 @@
   darwin,
   fetchFromGitHub,
   fetchPnpmDeps,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   lib,
   libayatana-appindicator,
   nodejs,
@@ -68,11 +72,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gstreamer
+      gst-libav
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gstreamer
       libayatana-appindicator
       openssl
       webkitgtk_4_1

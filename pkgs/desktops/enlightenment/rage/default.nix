@@ -6,7 +6,11 @@
   ninja,
   pkg-config,
   efl,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   wrapGAppsHook3,
   directoryListingUpdater,
 }:
@@ -29,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     efl
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-libav
   ];
 
   passthru.updateScript = directoryListingUpdater { };

@@ -7,7 +7,12 @@
   glib,
   wrapGAppsHook4,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   libseccomp,
@@ -41,12 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     # Very important, so that gstreamer supports TLS
     glib-networking
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-plugins-rs
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-plugins-rs
     gtk4
     libadwaita
     libseccomp

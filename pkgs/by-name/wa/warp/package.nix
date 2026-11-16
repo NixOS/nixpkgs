@@ -18,7 +18,7 @@
   libadwaita,
   libcamera,
   pipewire,
-  gst_all_1,
+
   gstreamer,
   gst-plugins-rs,
   gst-plugins-good,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # vp8enc preset
-      --prefix GST_PRESET_PATH : ${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets
+      --prefix GST_PRESET_PATH : ${gst-plugins-good}/share/gstreamer-1.0/presets
     )
   '';
 

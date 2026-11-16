@@ -6,7 +6,8 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libnotify,
   libayatana-appindicator,
 }:
@@ -40,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     libnotify
     libayatana-appindicator
   ];

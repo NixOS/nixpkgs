@@ -5,7 +5,12 @@
   pkg-config,
   gtk3,
   itstool,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libxml2,
   libnotify,
   libcanberra-gtk3,
@@ -51,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
     libburn
     libisofs
     hicolor-icon-theme
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
   ];
 
   # brasero checks that the applications it uses aren't symlinks, but this

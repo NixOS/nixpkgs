@@ -30,7 +30,7 @@
   modemmanager,
   gobject-introspection,
   appstream,
-  gst_all_1,
+  gst-plugins-base,
 }:
 
 let
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     libyaml
     mobile-broadband-provider-info
     modemmanager
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
   ];
 
   postPatch = ''

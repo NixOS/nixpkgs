@@ -16,6 +16,10 @@
   # for passthru.tests
   gnuradio,
   gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-bad,
   qt6,
   vips,
 }:

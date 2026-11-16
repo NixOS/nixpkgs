@@ -21,7 +21,8 @@
   glib,
   glibc,
   gsettings-desktop-schemas,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk3,
   libGL,
   libdrm,
@@ -124,8 +125,8 @@ let
       gdk-pixbuf
       glib
       gsettings-desktop-schemas
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
+      gst-plugins-base
+      gstreamer
       gtk3
       libdrm
       libgbm

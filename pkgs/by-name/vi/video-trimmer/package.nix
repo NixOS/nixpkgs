@@ -13,7 +13,10 @@
   ninja,
   gtk4,
   libadwaita,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   ffmpeg-headless,
   nix-update-script,
 }:
@@ -60,10 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good # for scaletempo and webm
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good # for scaletempo and webm
+    gst-plugins-bad
   ];
 
   # For https://gitlab.gnome.org/YaLTeR/video-trimmer/-/blob/cf64e8dea345bcd991db29a3f862a9277c71fe81/build-aux/cargo.sh#L19

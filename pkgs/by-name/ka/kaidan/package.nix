@@ -12,7 +12,10 @@
   writableTmpDirAsHomeHook,
 
   # runtime
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   kdsingleapplication,
   qxmpp,
   zxing-cpp,
@@ -39,10 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    (gst-plugins-good.override { qt6Support = true; })
+    gst-plugins-bad
+    gst-plugins-base
+    gstreamer
     kdePackages.kio
     kdePackages.kirigami
     kdePackages.kirigami-addons

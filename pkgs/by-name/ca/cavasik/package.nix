@@ -3,7 +3,7 @@
   desktop-file-utils,
   fetchFromGitHub,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
   gtk4,
   lib,
   libadwaita,
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
+    gstreamer
     gtk4
     libadwaita
   ];

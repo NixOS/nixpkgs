@@ -6,6 +6,12 @@
   pkg-config,
   makeWrapper,
   gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libupnp,
 }:
 

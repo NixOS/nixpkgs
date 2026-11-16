@@ -9,7 +9,10 @@
   cargo,
   rustc,
   wrapGAppsNoGuiHook,
-  gst_all_1,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   fontconfig,
   libglycin,
   glycin-loaders,
@@ -47,10 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
     fontconfig
     libglycin
     glycin-loaders

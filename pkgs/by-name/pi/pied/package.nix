@@ -2,7 +2,9 @@
   lib,
   fetchFromGitHub,
   flutter347,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 flutter347.buildFlutterApplication rec {
@@ -22,9 +24,9 @@ flutter347.buildFlutterApplication rec {
   strictDeps = true;
 
   buildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
   ];
 
   postInstall = ''

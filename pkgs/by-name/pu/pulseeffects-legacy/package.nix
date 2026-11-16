@@ -10,7 +10,10 @@
   libxml2,
   desktop-file-utils,
   wrapGAppsHook3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   pulseaudio,
   gtk3,
   glib,
@@ -74,10 +77,10 @@ stdenv.mkDerivation {
     glibmm_2_4
     gtk3
     gtkmm3
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base # gst-fft
-    gst_all_1.gst-plugins-good # pulsesrc
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base # gst-fft
+    gst-plugins-good # pulsesrc
+    gst-plugins-bad
     lilv
     lv2
     serd

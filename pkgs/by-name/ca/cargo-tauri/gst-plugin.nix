@@ -3,7 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,8 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
   ];
 
   postInstall = ''

@@ -17,6 +17,9 @@
   rpm,
   gstreamerSupport ? true,
   gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   # ^ Needed e.g. for proper id3 and FLAC support.
   #   Set to `false` to decrease package closure size by about 87 MB (53%).
   gstPlugins ? (
@@ -85,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgsf
   ]
   ++ lib.optionals rpmSupport [ rpm ]
-  ++ lib.optionals gstreamerSupport ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
+  ++ lib.optionals gstreamerSupport ([ gstreamer ] ++ gstPlugins gst_all_1)
   ++ lib.optionals gtkSupport [
     glib
     gtk3

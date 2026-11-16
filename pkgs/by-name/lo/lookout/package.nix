@@ -4,7 +4,11 @@
   rustPlatform,
   fetchFromGitHub,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   gdk-pixbuf,
   libayatana-appindicator,
@@ -72,11 +76,11 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-libav
     gtk3
     gdk-pixbuf
     libayatana-appindicator

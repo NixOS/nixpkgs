@@ -6,7 +6,10 @@
   buildNpmPackage,
   cargo-tauri,
   glib-networking,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libayatana-appindicator,
   libsecret,
   perl,
@@ -55,10 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     glib-networking
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-libav
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-libav
     libayatana-appindicator
     libsecret
     webkitgtk_4_1

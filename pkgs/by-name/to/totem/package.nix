@@ -6,7 +6,12 @@
   meson,
   ninja,
   gettext,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   python3Packages,
   shared-mime-info,
   pkg-config,
@@ -60,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     itstool
     gobject-introspection
     wrapGAppsHook3
-    gst_all_1.gstreamer # gst-inspect-1.0
+    gstreamer # gst-inspect-1.0
   ];
 
   buildInputs = [
@@ -69,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     grilo
     totem-pl-parser
     grilo-plugins
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
     libepoxy
     libpeas
     libportal-gtk3

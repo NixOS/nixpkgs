@@ -13,6 +13,8 @@
   libxml2,
   llvmPackages,
   gst_all_1,
+  gstreamer,
+  gst-plugins-base,
 }:
 
 python3Packages.buildPythonApplication rec {

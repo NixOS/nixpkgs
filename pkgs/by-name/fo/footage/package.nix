@@ -10,7 +10,7 @@
   desktop-file-utils,
   gettext,
   glib,
-  gst_all_1,
+
   gstreamer,
   gst-plugins-ugly,
   gst-plugins-rs,
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ gst_all_1.gstreamer ]}"
+      --prefix PATH : "${lib.makeBinPath [ gstreamer ]}"
     )
   '';
 

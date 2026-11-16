@@ -22,7 +22,8 @@
   automake,
   autoconf,
   gstreamerSupport ? false,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   harfbuzz,
 }:
 
@@ -96,8 +97,8 @@ stdenv.mkDerivation rec {
     libxdamage
   ]
   ++ lib.optionals gstreamerSupport [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
   ];
 
   buildInputs = lib.optionals pangoSupport [

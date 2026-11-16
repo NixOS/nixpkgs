@@ -17,7 +17,8 @@
   versionCheckHook,
   nix-update-script,
   libGL,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
   qt6,
   writableTmpDirAsHomeHook,
 }:
@@ -82,8 +83,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     webkitgtk_4_1
     libGL
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-plugins-base
+    gst-plugins-good
     qt6.qtbase
     qt6.qtwebengine
   ];

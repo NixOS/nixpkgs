@@ -11,7 +11,11 @@
   intltool,
   xvfb-run,
   gobject-introspection,
-  gst_all_1,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   fdk-aac-encoder,
 }:
 
@@ -30,11 +34,11 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     fdk-aac-encoder
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-ugly
-    (gst_all_1.gst-plugins-bad.override { inherit faacSupport; })
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    (gst-plugins-bad.override { inherit faacSupport; })
   ];
 
   nativeBuildInputs = [

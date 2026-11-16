@@ -21,7 +21,7 @@
   liboauth,
   libmediaart,
   grilo,
-  gst_all_1,
+
   gstreamer,
   gst-plugins-base,
   gst-plugins-bad,
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     libmediaart
     tinysparql
     dleyna
-    gst_all_1.gstreamer
+    gstreamer
   ];
 
   passthru = {

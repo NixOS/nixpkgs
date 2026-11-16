@@ -47,6 +47,7 @@
   # for passthru.tests
   ffmpeg,
   gst_all_1,
+  gst-plugins-good,
 }:
 
 let

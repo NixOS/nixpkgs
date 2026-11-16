@@ -8,7 +8,8 @@
   ffmpeg,
   x264,
   libva,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libxv,
   libxtst,
   libxrender,
@@ -57,7 +58,7 @@ rustPlatform.buildRustPackage {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     libva
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     libxext
     libxft
     libxinerama
@@ -96,7 +97,7 @@ rustPlatform.buildRustPackage {
   postFixup =
     let
       GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
-        gst_all_1.gst-plugins-base
+        gst-plugins-base
         pipewire
       ];
     in

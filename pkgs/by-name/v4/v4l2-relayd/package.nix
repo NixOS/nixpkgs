@@ -4,7 +4,8 @@
   fetchgit,
   autoreconfHook,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libtool,
   pkg-config,
   which,
@@ -29,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
   ];
 
   preConfigure = "./autogen.sh --prefix=$out";

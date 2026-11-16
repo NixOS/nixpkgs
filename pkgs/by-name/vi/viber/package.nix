@@ -20,7 +20,10 @@
   glib,
   gnutls,
   gsm,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk3,
   harfbuzz,
   jbigkit,
@@ -126,10 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnutls
     gsm
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     gtk3
     harfbuzz
     jbigkit

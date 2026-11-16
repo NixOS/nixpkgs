@@ -9,7 +9,8 @@
   gtk3,
   xdg-user-dirs,
   keybinder3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libgbm,
   lz4,
   vulkan-loader,
@@ -51,8 +52,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     gtk3
     keybinder3
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     libgbm
     lz4
     vulkan-loader

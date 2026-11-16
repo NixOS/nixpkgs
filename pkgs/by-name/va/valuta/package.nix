@@ -8,7 +8,7 @@
   blueprint-compiler,
   desktop-file-utils,
   gtk4,
-  gst_all_1,
+  gstreamer,
   libsoup_3,
   libadwaita,
   wrapGAppsHook4,
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gtk4
-    gst_all_1.gstreamer
+    gstreamer
     libsoup_3
     libadwaita
   ];
