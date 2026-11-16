@@ -115,10 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
       Mirth is inspired by Forth, Joy, Haskell, Lisp, and monoidal category theory.
       Mirth compiles to C99.
     '';
-    homepage = "https://git.sr.ht/~typeswitch/mirth";
+    homepage = "https://codeberg.org/typeswitch/mirth";
     license = lib.licenses.bsd0;
     mainProgram = "mirthc";
-    # https://git.sr.ht/~typeswitch/mirth/tree/main/item/src/mirth.h#L4-22
+    # https://codeberg.org/typeswitch/mirth/src/branch/main/src/mirth.h#L4-L22
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
