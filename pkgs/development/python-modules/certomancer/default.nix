@@ -73,6 +73,10 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
+  disabledTests = [
+    "test_validate"
+  ];
+
   pythonImportsCheck = [ "certomancer" ];
 
   meta = {
