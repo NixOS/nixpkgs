@@ -3413,6 +3413,11 @@ runTests {
           options.funcTest = lib.mkOption {
             type = lib.types.functionTo lib.types.int;
           };
+          options.freeformNullOrSub = lib.mkOption {
+            type = lib.types.submodule {
+              freeformType = lib.types.nullOr (lib.types.attrsOf lib.types.int);
+            };
+          };
         };
         options = (evalModules { modules = [ module ]; }).options;
         optionDoc = optionToDoc options;
@@ -3461,6 +3466,7 @@ runTests {
         freeformInnerType = optionDoc.properties.freeformSub.properties.inner.type;
         freeformRequired = optionDoc.properties.freeformSub.required;
         freeformOpenAdditionalProps = optionDoc.properties.freeformOpenSub.additionalProperties;
+        freeformNullOrType = optionDoc.properties.freeformNullOrSub.additionalProperties.type;
 
         # Parity check: verify foldOptionSet preserves optionAttrSetToDocList traversal
         docListCount = length docList;
@@ -3497,8 +3503,9 @@ runTests {
       freeformInnerType = "string";
       freeformRequired = [ "inner" ];
       freeformOpenAdditionalProps = true;
+      freeformNullOrType = "integer";
 
-      docListCount = 25;
+      docListCount = 30;
     };
   };
 

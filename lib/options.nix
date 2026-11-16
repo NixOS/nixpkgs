@@ -861,11 +861,20 @@ rec {
             }
           else if name == "submodule" then
             let
-              ffRes =
-                if nested ? freeformType && nested.freeformType.nestedTypes ? elemType then
-                  typeToSchema' seen' nested.freeformType.nestedTypes.elemType { }
+              rawFf = nested.freeformType or null;
+              ffType =
+                if rawFf != null && (toLower (rawFf.name or "")) == "nullor" && rawFf.nestedTypes ? elemType then
+                  rawFf.nestedTypes.elemType
+                else
+                  rawFf;
+              ffElemType =
+                if
+                  ffType != null && hasInfix "attrsof" (toLower (ffType.name or "")) && ffType.nestedTypes ? elemType
+                then
+                  ffType.nestedTypes.elemType
                 else
                   null;
+              ffRes = if ffElemType != null then typeToSchema' seen' ffElemType { } else null;
               freeform =
                 if !nested ? freeformType then
                   false
