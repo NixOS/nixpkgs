@@ -21,6 +21,9 @@
   libx11,
   libsm,
   libice,
+  apparmorSupport ? stdenv.hostPlatform.isLinux,
+  libauditSupport ? stdenv.hostPlatform.isLinux,
+  capabilitySupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -86,10 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
   ]
   ++ lib.optional enableSystemd systemdMinimal
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    audit
-    libapparmor
+  ++ lib.optionals capabilitySupport [
     libcap_ng
+  ]
+  ++ lib.optionals apparmorSupport [
+    libapparmor
+  ]
+  ++ lib.optionals libauditSupport [
+    audit
   ];
   # ToDo: optional selinux?
 
@@ -119,10 +126,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd_system_unitdir=${placeholder "out"}/etc/systemd/system"
     "-Dsystemd_user_unitdir=${placeholder "out"}/etc/systemd/user"
     (lib.mesonEnable "x11_autolaunch" x11Support)
-    (lib.mesonEnable "apparmor" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "apparmor" apparmorSupport)
     (lib.mesonEnable "epoll" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "inotify" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "libaudit" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "libaudit" libauditSupport)
     (lib.mesonEnable "kqueue" (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isBSD))
     (lib.mesonEnable "launchd" stdenv.hostPlatform.isDarwin)
     (lib.mesonEnable "systemd" enableSystemd)
