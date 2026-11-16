@@ -1,21 +1,21 @@
 {
-  k3sVersion = "1.35.9+k3s1";
-  k3sCommit = "58877f27435fe86ee292859db3d0df2ca5423991";
-  k3sRepoSha256 = "010wsfxbfpa2fxjhp24fiw5v68y1pvrms1filb9rmyc88k54gs2f";
-  k3sVendorHash = "sha256-5eJPJ+dW4iYgPM1W7/jBBPO7wkMbJKSJroDcwbKb1oE=";
+  k3sVersion = "1.35.10+k3s1";
+  k3sCommit = "6d11235c21acae16300c4aaf996155ac7388277e";
+  k3sRepoSha256 = "18hvjfmw77wa49asr5shzibyfklizmmbj0wdspfs6drr1j1raai0";
+  k3sVendorHash = "sha256-5T/6s2zVL1zFfmSL66YQeKG4aCsR/Kd5M2HFVWCFex0=";
   chartVersions = import ./chart-versions.nix;
   imagesVersions = builtins.fromJSON (builtins.readFile ./images-versions.json);
-  k3sRootVersion = "0.15.2";
-  k3sRootSha256 = "0yxq2jqqb7flm4rs9dl7fqxba3mmwkmjbc8rx7pgai4qa1lzyigy";
+  k3sRootVersion = "0.15.3";
+  k3sRootSha256 = "0w1di4wgcqfnphriq9ln9552z8gmlz5f5lzxipgxqwdzqhqb4fcr";
   k3sCNIVersion = "1.9.1-k3s1";
   k3sCNISha256 = "1ggaz0p1c2k94car9d89a05smz3zx32sxn197b1l5kmjcnzdwadh";
-  containerdVersion = "2.2.7-k3s1";
-  containerdSha256 = "0zn64g6fzv8knan550ydbkgkaxa8qi2l8dw38w9g3hm8lv43nqyv";
+  containerdVersion = "2.2.10-k3s1";
+  containerdSha256 = "03dilymayij81zl6il9hibhyfm56xlx0sxdqjy1r1lanyi6p85yc";
   containerdPackage = "github.com/k3s-io/containerd/v2";
   criCtlVersion = "1.35.0-k3s2";
-  flannelVersion = "v0.28.4";
+  flannelVersion = "v0.28.10";
   flannelPluginVersion = "v1.9.0-flannel1";
-  kubeRouterVersion = "v2.6.3-k3s1";
+  kubeRouterVersion = "v2.11.1-k3s2";
   criDockerdVersion = "v0.3.19-k3s3";
-  helmJobVersion = "v0.13.3-build20260727";
+  helmJobVersion = "v0.13.3-build20261021";
 }
