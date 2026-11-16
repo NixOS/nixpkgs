@@ -18,6 +18,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.4";
   pyproject = true;
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "nfcpy";
     repo = "nfcpy";
