@@ -34,6 +34,7 @@ let
     attrValues
     catAttrs
     foldlAttrs
+    mapAttrsToList
     optionalAttrs
     showAttrPath
     ;
@@ -838,6 +839,25 @@ rec {
             mkLeaf {
               type = "object";
               additionalProperties = true;
+            }
+          else if name == "attrtag" then
+            let
+              props = (subDocs.schema or subDocs).properties or { };
+              choices = mapAttrsToList (tagName: tagSchema: {
+                type = "object";
+                properties = {
+                  ${tagName} = tagSchema;
+                };
+                required = [ tagName ];
+                additionalProperties = false;
+              }) props;
+            in
+            {
+              schema = {
+                oneOf = choices;
+              };
+              defs = subDocs.defs or { };
+              referenced = subDocs.referenced or [ ];
             }
           else if name == "submodule" then
             let

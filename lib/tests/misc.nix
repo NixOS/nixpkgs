@@ -3446,9 +3446,12 @@ runTests {
         vhostSubOptionType =
           optionDoc.properties.services.properties.nginx.properties.virtualHosts.additionalProperties.properties.enableSSL.type;
 
-        # attrTag nesting
+        # attrTag nesting via oneOf
         attrTagDescription = optionDoc.properties.tagTest.description;
-        attrTagSubOptionType = optionDoc.properties.tagTest.properties.tagA.type;
+        attrTagHasOneOf = optionDoc.properties.tagTest ? oneOf;
+        attrTagSubOptionType = (builtins.head optionDoc.properties.tagTest.oneOf).properties.tagA.type;
+        attrTagRequired = (builtins.head optionDoc.properties.tagTest.oneOf).required;
+        attrTagAdditionalProps = (builtins.head optionDoc.properties.tagTest.oneOf).additionalProperties;
 
         # Function type handling
         funcTestHasNoType = !(optionDoc.properties.funcTest ? type);
@@ -3483,7 +3486,10 @@ runTests {
       vhostSubOptionType = "boolean";
 
       attrTagDescription = "AttrTag test option";
+      attrTagHasOneOf = true;
       attrTagSubOptionType = "boolean";
+      attrTagRequired = [ "tagA" ];
+      attrTagAdditionalProps = false;
 
       funcTestHasNoType = true;
 
