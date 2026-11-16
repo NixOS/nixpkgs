@@ -5,6 +5,7 @@
   cmake,
   python3,
   spdlog,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit spdlog;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   __structuredAttrs = true;
@@ -71,5 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = with lib.platforms; unix ++ windows;
+    pkgConfigModules = [
+      "catch2"
+      "catch2-with-main"
+    ];
   };
 })
