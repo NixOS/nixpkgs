@@ -19,6 +19,25 @@ let
     xor
     ;
 
+  removedPassthruBaseNames = [
+    "owner"
+    "repo"
+    "tag"
+    "rev"
+    "functionName"
+    "private"
+    "githubBase"
+    "varPrefix"
+  ];
+  # useFetchGitArgsWD to exclude from automatic passing.
+  # Other useFetchGitArgsWD will pass down to fetchgit.
+  excludeUseFetchGitArgNames = [
+    "forceFetchGit"
+  ];
+
+  removedPassthruFetchGitNames = removedPassthruBaseNames ++ excludeUseFetchGitArgNames;
+  removedPassthruFetchZipNames = removedPassthruBaseNames ++ attrNames useFetchGitArgsDefault;
+
   # Here defines fetchFromGitHub arguments that determines useFetchGit,
   # The attribute value is their default values.
   # As fetchFromGitHub prefers fetchzip for hash stability,
@@ -39,12 +58,6 @@ let
   };
 
   useFetchGitargsDefaultNonNull = useFetchGitArgsDefault // useFetchGitArgsDefaultNullable;
-
-  # useFetchGitArgsWD to exclude from automatic passing.
-  # Other useFetchGitArgsWD will pass down to fetchgit.
-  excludeUseFetchGitArgNames = [
-    "forceFetchGit"
-  ];
 
   faUseFetchGit = mapAttrs (_: _: true) useFetchGitArgsDefault;
 
@@ -125,17 +138,7 @@ decorate (
         position = "${position.file}:${toString position.line}";
       };
     passthruAttrs = removeAttrs args (
-      [
-        "owner"
-        "repo"
-        "tag"
-        "rev"
-        "functionName"
-        "private"
-        "githubBase"
-        "varPrefix"
-      ]
-      ++ (if useFetchGit then excludeUseFetchGitArgNames else attrNames faUseFetchGit)
+      if useFetchGit then removedPassthruFetchGitNames else removedPassthruFetchZipNames
     );
     varBase = "NIX${optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
     # We prefer fetchzip in cases we don't need submodules as the hash
