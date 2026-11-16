@@ -3410,6 +3410,9 @@ runTests {
               freeformType = lib.types.attrs;
             };
           };
+          options.funcTest = lib.mkOption {
+            type = lib.types.functionTo lib.types.int;
+          };
         };
         options = (evalModules { modules = [ module ]; }).options;
         optionDoc = optionToDoc options;
@@ -3447,6 +3450,9 @@ runTests {
         attrTagDescription = optionDoc.properties.tagTest.description;
         attrTagSubOptionType = optionDoc.properties.tagTest.properties.tagA.type;
 
+        # Function type handling
+        funcTestHasNoType = !(optionDoc.properties.funcTest ? type);
+
         # Freeform submodule additionalProperties & required
         freeformAdditionalType = optionDoc.properties.freeformSub.additionalProperties.type;
         freeformInnerType = optionDoc.properties.freeformSub.properties.inner.type;
@@ -3479,12 +3485,14 @@ runTests {
       attrTagDescription = "AttrTag test option";
       attrTagSubOptionType = "boolean";
 
+      funcTestHasNoType = true;
+
       freeformAdditionalType = "string";
       freeformInnerType = "string";
       freeformRequired = [ "inner" ];
       freeformOpenAdditionalProps = true;
 
-      docListCount = 24;
+      docListCount = 25;
     };
   };
 

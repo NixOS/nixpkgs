@@ -861,6 +861,8 @@ rec {
               defs = (subDocs.defs or { }) // (if ffRes != null then ffRes.defs else { });
               referenced = (subDocs.referenced or [ ]) ++ (if ffRes != null then ffRes.referenced else [ ]);
             }
+          else if name == "functionto" then
+            mkLeaf { }
           else if nested ? elemType then
             elemRes
           else
