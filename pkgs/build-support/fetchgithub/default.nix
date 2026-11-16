@@ -137,9 +137,6 @@ decorate (
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
-    passthruAttrs = removeAttrs args (
-      if useFetchGit then removedPassthruFetchGitNames else removedPassthruFetchZipNames
-    );
     varBase = "NIX${optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
@@ -173,7 +170,9 @@ decorate (
 
     fetcherArgs =
       finalAttrs:
-      passthruAttrs
+      removeAttrs args (
+        if useFetchGit then removedPassthruFetchGitNames else removedPassthruFetchZipNames
+      )
       // (
         if useFetchGit then
           useFetchGitArgsWDPassing
