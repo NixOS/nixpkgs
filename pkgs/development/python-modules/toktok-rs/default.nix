@@ -12,19 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "toktok-rs";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vectorize-io";
     repo = "toktok";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cS04wh+Jh5/3ieGoif9R/1EKoQuWqIJtn39Mw0vIoiE=";
+    hash = "sha256-WsxlfYyr+7Tr0tria/cLO956Pvuwqmcy1VOZtUkoSAM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-2MXam95XcTOqBgaVZep/ewmqhV/vq3kMLBGj/4PogSc=";
+    hash = "sha256-08fA8LMUe9ffVNdzXCEdrfTixKZGxb66LyWy+XLPvuU=";
   };
 
   build-system = [
