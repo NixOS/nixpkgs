@@ -6,36 +6,39 @@
   meson,
   vala,
   ninja,
-  gtk3,
+  gtk4,
+  libadwaita,
   poppler,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdftag";
-  version = "1.0.5";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "arrufat";
     repo = "pdftag";
-    rev = "v${finalAttrs.version}";
-    sha256 = "1paj8hs27akzsivn01a30fl3zx5gfn1h89wxg2m72fd806hk0hql";
+    tag = finalAttrs.version;
+    hash = "sha256-vUQ6k0pHhrlrO54x9Yx7we3wbX9NlVY2rIPW30ippj4=";
   };
 
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
-    wrapGAppsHook3
+    wrapGAppsHook4
     vala
   ];
   buildInputs = [
-    gtk3
+    gtk4
+    libadwaita
     poppler
   ];
 
   meta = {
     description = "Edit metadata found in PDFs";
+    changelog = "https://github.com/arrufat/pdftag/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/arrufat/pdftag";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
