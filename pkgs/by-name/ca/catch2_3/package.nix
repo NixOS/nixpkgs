@@ -5,6 +5,7 @@
   cmake,
   python3,
   spdlog,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,28 +28,34 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  strictDeps = true;
+
   hardeningDisable = [ "trivialautovarinit" ];
 
   cmakeFlags = [
-    "-DCATCH_DEVELOPMENT_BUILD=ON"
-    "-DCATCH_BUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}"
-    "-DCATCH_ENABLE_WERROR=OFF"
+    (lib.cmakeBool "CATCH_DEVELOPMENT_BUILD" true)
+    (lib.cmakeBool "CATCH_BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "CATCH_ENABLE_WERROR" false)
   ]
   ++ lib.optionals (stdenv.cc.isClang && finalAttrs.doCheck) [
     # test has a faulty path normalization technique that won't work in
     # our darwin/LLVM build environment https://github.com/catchorg/Catch2/issues/1691
-    "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "-E;ApprovalTests")
   ];
 
-  env =
-    lib.optionalAttrs stdenv.hostPlatform.isx86_32 {
-      # Tests fail on x86_32 if compiled with x87 floats: https://github.com/catchorg/Catch2/issues/2796
-      NIX_CFLAGS_COMPILE = "-msse2 -mfpmath=sse";
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isAarch32) {
-      # Build failure caused by -Werror: https://github.com/catchorg/Catch2/issues/2808
-      NIX_CFLAGS_COMPILE = "-Wno-error=cast-align";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      lib.optionals stdenv.hostPlatform.isx86_32 [
+        # Tests fail on x86_32 if compiled with x87 floats: https://github.com/catchorg/Catch2/issues/2796
+        "-msse2"
+        "-mfpmath=sse"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isAarch32) [
+        # Build failure caused by -Werror: https://github.com/catchorg/Catch2/issues/2808
+        "-Wno-error=cast-align"
+      ]
+    );
+  };
 
   doCheck = true;
 
@@ -58,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit spdlog;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Modern, C++-native, test framework for unit-tests";
@@ -67,5 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = with lib.platforms; unix ++ windows;
+    pkgConfigModules = [
+      "catch2"
+      "catch2-with-main"
+    ];
   };
 })
