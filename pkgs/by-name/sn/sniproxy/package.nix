@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sniproxy";
-  version = "0.25.0";
+  version = "0.26.0";
 
   # Upstream dlundquist/sniproxy stopped releasing at 0.7.0.
   # That version is vulnerable CVE-2026-119760.
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "renaudallard";
     repo = "sniproxy";
     tag = finalAttrs.version;
-    hash = "sha256-1QmhRnVqwJ0a6n6unWF8z4vgDYwMPBMacKXSS+a9yXY=";
+    hash = "sha256-Ze4TuWU7u6EkuW4CxTpxm1IsND4aEZh7sztu7hnLvwk=";
   };
 
   nativeBuildInputs = [
