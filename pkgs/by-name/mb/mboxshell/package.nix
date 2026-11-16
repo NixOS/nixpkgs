@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mboxshell";
-  version = "1.2.2";
+  version = "1.4.1";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dcarrero";
     repo = "mboxshell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8I+3y7Kw743O3eJBqJkIXKkYG7Zo1Z1pcTqA1ffuYcc=";
+    hash = "sha256-XXINn0XxEutliBucSnS+pUPX7mcdFwrvmcQocSxd5Fc=";
   };
 
-  cargoHash = "sha256-8zdNnr2Wi7SLIkWyYOQKd1AzamVfA9kYKqXbkALVBBM=";
+  cargoHash = "sha256-zeXEA4VL4zxhE6sVusmm3Wn50nGoaEpNS9g2nbs1WNk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
