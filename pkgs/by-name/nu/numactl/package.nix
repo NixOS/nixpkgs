@@ -8,22 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "numactl";
-  version = "2.0.18";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
     owner = "numactl";
     repo = "numactl";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ry29RUNa0Hv5gIhy2RTVT94mHhgfdIwb5aqjBycxxj0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-88fxc7u7l7n0WLZ56vDmvdAoh8BaKTXUHWfqCycyoOw=";
   };
-
-  patches = [
-    # Fix for memory corruption in set_nodemask_size
-    (fetchpatch {
-      url = "https://github.com/numactl/numactl/commit/f9deba0c8404529772468d6dd01389f7dbfa5ba9.patch";
-      hash = "sha256-TmWfD99YaSIHA5PSsWHE91GSsdsVgVU+qIow7LOwOGw=";
-    })
-  ];
 
   outputs = [
     "out"
