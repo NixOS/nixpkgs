@@ -24,29 +24,28 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "1.28.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5Q4gWJwouMh0DUGEq5bTh0hAHoBw6vBoiEloeRVIeq4=";
+    hash = "sha256-ZF7hG8ObUby+5FvZt0xpeW0zpGXjW9hoCpn0lX2wc7c=";
   };
 
   patches = [ ./remove-runtime.patch ];
 
-  cargoHash = "sha256-ivDvkTlrxdKRvnqAQGjLODFcMqIHPmm5L+zNIEoJ/0U=";
+  cargoHash = "sha256-mJOPX08G+s6V/6NFwQxRuXTDIDiANE33lqve5uptBTQ=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      patches
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-tbSKI3W/gceZLmv+Ol0MNp2a0gmbKc7imMnTRkFDKHI=";
+    hash = "sha256-nTBLC6nNbXWEQfM6WOabWwQiIC8dyjKF2Hj86PMG/fs=";
   };
 
   pnpmRoot = "frontend";
