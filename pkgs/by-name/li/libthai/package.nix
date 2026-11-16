@@ -5,6 +5,7 @@
   installShellFiles,
   pkg-config,
   libdatrie,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/tlwg/libthai/releases/download/v${finalAttrs.version}/libthai-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-3bqLU9/lhMMlN2YDAhioiCVIilGn3u8EHQlucVr2S90=";
+    hash = "sha256-3bqLU9/lhMMlN2YDAhioiCVIilGn3u8EHQlucVr2S90=";
   };
 
   strictDeps = true;
@@ -34,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     installManPage man/man3/*.3
   '';
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://linux.thai.net/projects/libthai/";
