@@ -552,8 +552,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "gregorias";
         repo = "coop.nvim";
-        rev = "26df3be54846ed44b5a9d7749f7780049931b8a8";
-        hash = "sha256-Kntwgxjr1skuxE7rOEeLip4OzOAs+YNx6DcPNkTMUwI=";
+        rev = "ce1b286857412dc15cdac8e7e1637375fd5adddd";
+        hash = "sha256-BifuLUAkDjZOkJag/fqNQMqs+zKaLfVkqudqK6vOjMs=";
       };
 
       disabled = luaOlder "5.1";
