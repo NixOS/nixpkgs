@@ -81,12 +81,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd zellij \
-      --bash <($out/bin/zellij setup --generate-completion bash) \
-      --fish <($out/bin/zellij setup --generate-completion fish) \
-      --zsh <($out/bin/zellij setup --generate-completion zsh)
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 assets/dev.zellij.Zellij.desktop -t $out/share/applications
+      install -Dm644 assets/dev.zellij.Zellij.metainfo.xml -t $out/share/metainfo
+
+      for size in 128 256 512 1024; do
+        install -Dm644 zellij-utils/assets/icons/logo$size.png \
+          $out/share/icons/hicolor/''${size}x''${size}/apps/dev.zellij.Zellij.png
+      done
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd zellij \
+        --bash <($out/bin/zellij setup --generate-completion bash) \
+        --fish <($out/bin/zellij setup --generate-completion fish) \
+        --zsh <($out/bin/zellij setup --generate-completion zsh)
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     # winit/glutin and system font discovery load these libraries with dlopen.
