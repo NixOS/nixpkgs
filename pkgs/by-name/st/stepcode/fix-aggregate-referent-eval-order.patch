@@ -1,0 +1,24 @@
+Subject: [PATCH] exp2cxx: don't index _aggregates across a call that can grow
+ it
+
+---
+ src/exp2cxx/schema_image.cc | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/exp2cxx/schema_image.cc b/src/exp2cxx/schema_image.cc
+index 22e6278b..e4cf2a0f 100644
+--- a/src/exp2cxx/schema_image.cc
++++ b/src/exp2cxx/schema_image.cc
+@@ -291,7 +291,11 @@ class ImageBuilder {
+         _aggregates.push_back( record );
+ 
+         Type base = TYPEget_body( type )->base;
+-        _aggregates[index].referent = typeReference( base, schema );
++        // typeReference() may recurse into addAggregate() and grow
++        // _aggregates, so resolve it before taking a reference into the
++        // vector: C++11 does not sequence the two sides of the assignment.
++        const PackedRef referent = typeReference( base, schema );
++        _aggregates[index].referent = referent;
+         bound( TYPEget_body( type )->lower,
+                _aggregates[index].bound1Type,
+                _aggregates[index].bound1,
