@@ -42,6 +42,8 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
