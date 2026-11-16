@@ -205,6 +205,7 @@ stdenv.mkDerivation (
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop \
+        --set-default T3CODE_DESKTOP_LAUNCHER_PATH "$out/bin/t3code-desktop" \
         --inherit-argv0
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -276,6 +277,7 @@ stdenv.mkDerivation (
         icon = "t3code";
         startupWMClass = "com.t3tools.T3Code";
         categories = [ "Development" ];
+        mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];
 
