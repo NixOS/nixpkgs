@@ -8,6 +8,11 @@
   yt-dlp,
   lame,
   libopus,
+  libass,
+  harfbuzz,
+  fribidi,
+  freetype,
+  libunibreak,
   x264,
   dav1d,
   zlib,
@@ -19,13 +24,13 @@
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "31.7.2";
+  version = "31.9.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-lbVF0PT48cxnm6hR43ULLx7QWV4nIUPeGUkeOuRr2Y0=";
+    hash = "sha256-F7br3bk0lpzPaIHnXMpGIbla2IriDyc2nyITjqj9O6Q=";
   };
 
   lockFile = ./lock.json;
@@ -33,7 +38,12 @@ buildNimPackage rec {
   buildInputs = [
     ffmpeg-full
     lame # Upstream uses a minimal, unpackaged fork of `lame` named `lamer`.
+    libass
     libopus
+    harfbuzz
+    fribidi
+    freetype
+    libunibreak
     x264
     dav1d
     zlib
