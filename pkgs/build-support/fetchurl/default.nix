@@ -55,6 +55,9 @@ let
   # takes advantage of partial application for performance reasons
   hasAlgoPrefix = lib.genAttrs [ "sha256" "sha1" "sha512" ] hasPrefix;
 
+  matchColonInfix = match ".*:.*";
+  splitOnColon = match "([^:]+)[:](.*)";
+
   /**
     Resolve a URL against the available mirrors.
 
@@ -78,9 +81,12 @@ let
     A list of resolved URLs.
   */
   resolveUrl =
+    let
+      matchMirror = match "mirror://([[:alpha:]]+)/(.+)";
+    in
     url:
     let
-      mirrorSplit = match "mirror://([[:alpha:]]+)/(.+)" url;
+      mirrorSplit = matchMirror url;
       mirrorName = head mirrorSplit;
       mirrorList = mirrors."${mirrorName}" or (throw "unknown mirror:// site ${mirrorName}");
     in
@@ -279,8 +285,8 @@ lib.extendMkDerivation {
         else
           throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
 
-      finalHashHasColon = match ".*:.*" finalAttrs.hash != null;
-      finalHashColonMatch = match "([^:]+)[:](.*)" finalAttrs.hash;
+      finalHashHasColon = matchColonInfix finalAttrs.hash != null;
+      finalHashColonMatch = splitOnColon finalAttrs.hash;
     in
 
     derivationArgs
