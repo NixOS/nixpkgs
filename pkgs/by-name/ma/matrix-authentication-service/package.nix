@@ -42,10 +42,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       pname
       version
       src
+      patches
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-nTBLC6nNbXWEQfM6WOabWwQiIC8dyjKF2Hj86PMG/fs=";
+    hash = "sha256-3p9VzPWxU/Hqw+OeIfehuzhOJ6TZfO9wSMfAjttPxGQ=";
   };
 
   pnpmRoot = "frontend";
