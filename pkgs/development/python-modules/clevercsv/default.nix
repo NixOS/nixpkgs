@@ -7,7 +7,7 @@
   setuptools,
 
   # dependencies
-  chardet_5,
+  chardet,
   regex,
   packaging,
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    chardet_5
+    chardet
     regex
     packaging
   ];
