@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/gperftools/gperftools/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/gperftools/gperftools";
