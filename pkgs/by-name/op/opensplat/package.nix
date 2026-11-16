@@ -146,9 +146,10 @@ stdenv'.mkDerivation (finalAttrs: {
       # vendored+modified gsplat
       lib.licenses.asl20
     ];
-    maintainers = [
-      lib.maintainers.jcaesar
-      lib.maintainers.LunNova
+    maintainers = with lib.maintainers; [
+      _81reap
+      jcaesar
+      LunNova
     ];
     platforms = lib.platforms.linux ++ lib.optionals (!cudaSupport) lib.platforms.darwin;
   };
