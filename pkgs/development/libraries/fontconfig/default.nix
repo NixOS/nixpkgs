@@ -121,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for font customization and configuration";
     homepage = "http://fontconfig.org/";
