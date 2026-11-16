@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
 
+  passthru.updateScript = ./update.sh;
+
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
     assert htmlRendererSupport && isAarch -> throw htmlRendererNotOnAarch;
@@ -98,8 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     sourceRoot=$sourceRoot/opt/mdyalog/${finalAttrs.shortVersion}/64/unicode
   '';
-
-  patches = [ ./dyalogscript.patch ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -168,8 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 scriptbin/dyalogscript $out/bin/dyalogscript
     substituteInPlace $out/bin/dyalogscript \
-        --subst-var-by installdir ${dyalogHome} \
-        --subst-var-by scriptdir $out/bin
+        --replace-fail 'INSTALLDIR="/opt/mdyalog/${finalAttrs.shortVersion}/64/unicode"' "INSTALLDIR=\"${dyalogHome}\"" \
+        --replace-fail ': ''${SCRIPTDIR:=$INSTALLDIR}' "SCRIPTDIR=\"$out/bin\""
 
     runHook postInstall
   '';
