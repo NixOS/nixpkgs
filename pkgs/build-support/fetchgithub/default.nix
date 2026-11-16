@@ -138,33 +138,8 @@ decorate (
         position = "${position.file}:${toString position.line}";
       };
     varBase = "NIX${optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    privateAttrs = optionalAttrs private {
-      netrcPhase =
-        # When using private repos:
-        # - Fetching with git works using https://github.com but not with the GitHub API endpoint
-        # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
-        let
-          machineName = if githubBase == "github.com" && !useFetchGit then "api.github.com" else githubBase;
-        in
-        ''
-          if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
-            echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
-            exit 1
-          fi
-          cat > netrc <<EOF
-          machine ${machineName}
-                  login ''$${varBase}USERNAME
-                  password ''$${varBase}PASSWORD
-          EOF
-        '';
-      netrcImpureEnvVars = [
-        "${varBase}USERNAME"
-        "${varBase}PASSWORD"
-      ];
-    };
 
     gitRepoUrl = "${baseUrl}.git";
-
   in
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
@@ -229,7 +204,30 @@ decorate (
           // passthru;
         }
     )
-    // privateAttrs
+    // optionalAttrs private {
+      netrcPhase =
+        # When using private repos:
+        # - Fetching with git works using https://github.com but not with the GitHub API endpoint
+        # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
+        let
+          machineName = if githubBase == "github.com" && !useFetchGit then "api.github.com" else githubBase;
+        in
+        ''
+          if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
+            echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
+            exit 1
+          fi
+          cat > netrc <<EOF
+          machine ${machineName}
+                  login ''$${varBase}USERNAME
+                  password ''$${varBase}PASSWORD
+          EOF
+        '';
+      netrcImpureEnvVars = [
+        "${varBase}USERNAME"
+        "${varBase}PASSWORD"
+      ];
+    }
     // {
       # TODO(@ShamrockLee): Change back to `inherit name;` after reconstruction with lib.extendMkDerivation
       name =
