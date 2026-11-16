@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
   ];
