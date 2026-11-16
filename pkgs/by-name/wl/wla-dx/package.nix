@@ -27,8 +27,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  doInstallCheck = true;
+
+  # Each assembler prints its banner, including the version, when run without arguments
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    for asm in $out/bin/wla-*; do
+      $asm | grep -F "${finalAttrs.version}"
+    done
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     homepage = "https://www.villehelin.com/wla.html";
+    changelog = "https://github.com/vhelin/wla-dx/releases/tag/v${finalAttrs.version}";
     description = "Yet Another GB-Z80/Z80/6502/65C02/6510/65816/HUC6280/SPC-700 Multi Platform Cross Assembler Package";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ naderhaj ];
