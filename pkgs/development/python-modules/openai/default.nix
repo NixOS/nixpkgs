@@ -52,7 +52,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail "hatchling==1.27.0" "hatchling"
+    sed -i -E 's/hatchling[><=!~]+[0-9a-zA-Z.*,-]+/hatchling/g' pyproject.toml
     substituteInPlace tests/test_uv_workflows.py --replace-fail "/bin/bash" "${lib.getExe bash}"
   '';
 
