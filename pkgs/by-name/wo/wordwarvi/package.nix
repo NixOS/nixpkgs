@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wordwarvi";
-  version = "1.0.4-unstable-2025-09-25";
+  version = "1.0.4-unstable-2025-08-25";
 
   src = fetchFromGitHub {
     owner = "smcameron";
