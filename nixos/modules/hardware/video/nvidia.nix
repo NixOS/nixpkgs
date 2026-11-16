@@ -100,7 +100,7 @@ in
           NVIDIA driver support for kernel suspend notifiers, which allows the driver
           to be notified of suspend and resume events by the kernel, rather than
           relying on systemd services.
-          Requires NVIDIA driver version 595 or newer, and the open source kernel modules.
+          Requires NVIDIA driver version 595 or newer, and the open source kernel modules
         ''
         // {
           default = useOpenModules && lib.versionAtLeast nvidia_x11.version "595";
@@ -126,7 +126,7 @@ in
 
           Enabling this and using version 545 or newer of the proprietary NVIDIA
           driver causes it to provide its own framebuffer device, which can cause
-          Wayland compositors to work when they otherwise wouldn't.
+          Wayland compositors to work when they otherwise wouldn't
         ''
         // {
           default = lib.versionAtLeast cfg.package.version "535";
@@ -225,7 +225,7 @@ in
 
         Example usage: `nvidia-offload sauerbraten_client`
 
-        This script can be renamed with {option}`hardware.nvidia.prime.offload.offloadCmdMainProgram`.
+        This script can be renamed with {option}`hardware.nvidia.prime.offload.offloadCmdMainProgram`
       '';
       prime.offload.offloadCmdMainProgram = lib.mkOption {
         type = lib.types.str;

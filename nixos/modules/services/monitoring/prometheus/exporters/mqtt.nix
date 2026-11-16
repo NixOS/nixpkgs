@@ -9,7 +9,6 @@
 let
   inherit (lib)
     mkIf
-    mkEnableOption
     mkOption
     mkPackageOption
     types
@@ -23,7 +22,12 @@ in
   port = 9000;
   extraOpts = {
     package = mkPackageOption pkgs "mqtt-exporter" { };
-    keepFullTopic = mkEnableOption "Keep entire topic instead of the first two elements only. Usecase: Shelly 3EM";
+    keepFullTopic = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Keep entire topic instead of the first two elements only. Usecase: Shelly 3EM";
+    };
     logLevel = mkOption {
       type = types.enum [
         "CRITICAL"
@@ -36,7 +40,12 @@ in
       example = "DEBUG";
       description = "Logging level";
     };
-    logMqttMessage = mkEnableOption "Log MQTT original message, only if `LOG_LEVEL` is set to DEBUG.";
+    logMqttMessage = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Log MQTT original message, only if `LOG_LEVEL` is set to DEBUG.";
+    };
     mqttIgnoredTopics = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -69,13 +78,23 @@ in
       example = "mqttexporter";
       description = "Username which should be used to authenticate against the MQTT broker.";
     };
-    mqttV5Protocol = mkEnableOption "Force to use MQTT protocol v5 instead of 3.1.1.";
+    mqttV5Protocol = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Force to use MQTT protocol v5 instead of 3.1.1.";
+    };
     mqttClientId = mkOption {
       type = types.nullOr types.str;
       default = null;
       description = "Set client ID manually for MQTT connection";
     };
-    mqttExposeClientId = mkEnableOption "Expose the client ID as a label in Prometheus metrics.";
+    mqttExposeClientId = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Expose the client ID as a label in Prometheus metrics.";
+    };
     prometheusPrefix = mkOption {
       type = types.str;
       default = "mqtt_";
@@ -86,7 +105,12 @@ in
       default = "topic";
       description = "Define the Prometheus label for the topic.";
     };
-    zigbee2MqttAvailability = mkEnableOption "Normalize sensor name for device availability metric added by Zigbee2MQTT.";
+    zigbee2MqttAvailability = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Normalize sensor name for device availability metric added by Zigbee2MQTT.";
+    };
     zwaveTopicPrefix = mkOption {
       type = types.str;
       default = "zwave/";

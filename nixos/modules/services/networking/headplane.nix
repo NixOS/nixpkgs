@@ -272,7 +272,7 @@ in
                 config_strict = mkEnableOption ''
                   Headplane internally validates the Headscale configuration
                   to ensure that it changes the configuration in a safe way.
-                  Disabled by default because it clashes with how the Headplane works in NixOS.
+                  Disabled by default because it clashes with how the Headplane works in NixOS
                 '';
 
                 dns_records_path = mkOption {

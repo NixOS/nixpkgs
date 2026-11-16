@@ -40,8 +40,7 @@ in
 
   options.services.privatebin = {
 
-    enable = lib.mkEnableOption "Privatebin: A minimalist, open source online
-      pastebin where the server has zero knowledge of pasted data.";
+    enable = lib.mkEnableOption "Privatebin: A minimalist, open source online pastebin where the server has zero knowledge of pasted data";
 
     user = lib.mkOption {
       type = lib.types.str;

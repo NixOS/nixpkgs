@@ -9,7 +9,7 @@ let
 in
 {
   options.programs.amnezia-vpn = {
-    enable = lib.mkEnableOption "The AmneziaVPN client";
+    enable = lib.mkEnableOption "the AmneziaVPN client";
     package = lib.mkPackageOption pkgs "amnezia-vpn" { };
   };
 

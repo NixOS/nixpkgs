@@ -12,7 +12,7 @@ in
 {
   options.services.homer = {
     enable = lib.mkEnableOption ''
-      A dead simple static HOMepage for your servER to keep your services on hand, from a simple yaml configuration file.
+      A dead simple static HOMepage for your servER to keep your services on hand, from a simple yaml configuration file
     '';
 
     virtualHost = {

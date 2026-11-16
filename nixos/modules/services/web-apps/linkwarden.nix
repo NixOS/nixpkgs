@@ -165,7 +165,7 @@ in
     };
 
     database = {
-      createLocally = mkEnableOption "the automatic creation of the database for Linkwarden." // {
+      createLocally = mkEnableOption "the automatic creation of the database for Linkwarden" // {
         default = true;
       };
       name = mkOption {

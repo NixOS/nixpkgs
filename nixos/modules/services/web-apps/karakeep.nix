@@ -26,7 +26,7 @@ in
 {
   options = {
     services.karakeep = {
-      enable = lib.mkEnableOption "Enable the Karakeep service";
+      enable = lib.mkEnableOption "the Karakeep service";
       package = lib.mkPackageOption pkgs "karakeep" { };
 
       extraEnvironment = lib.mkOption {

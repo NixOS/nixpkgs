@@ -774,8 +774,7 @@ in
     };
 
     query-frontend = paramsToOptions params.query-frontend // {
-      enable = mkEnableOption "the Thanos query frontend implements a service deployed in front of queriers to
-          improve query parallelization and caching.";
+      enable = mkEnableOption "the Thanos query frontend implements a service deployed in front of queriers to improve query parallelization and caching";
       arguments = mkArgumentsOption "query-frontend";
     };
 

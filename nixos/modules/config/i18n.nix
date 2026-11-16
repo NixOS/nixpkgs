@@ -162,7 +162,7 @@ in
         using `localectl set-locale` and `localectl set-keymap`.
         When disabled (the default), these settings are managed declaratively
         through {option}`i18n.defaultLocale`, {option}`i18n.extraLocaleSettings`,
-        and {option}`console.keyMap`.
+        and {option}`console.keyMap`
       '';
 
     };

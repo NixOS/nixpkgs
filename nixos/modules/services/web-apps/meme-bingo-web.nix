@@ -52,7 +52,7 @@ in
         example = 21035;
       };
       openFirewall = mkEnableOption ''
-        Opens the specified port in the firewall.
+        Opens the specified port in the firewall
       '';
     };
   };

@@ -11,7 +11,7 @@ in
 
   options.services.spoolman = {
 
-    enable = lib.mkEnableOption "Spoolman, a filament spool inventory management system.";
+    enable = lib.mkEnableOption "Spoolman, a filament spool inventory management system";
 
     environment = lib.mkOption {
       type = lib.types.attrs;

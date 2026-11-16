@@ -25,7 +25,7 @@ in
       description = "TCP port the WebSocket API listens on.";
     };
 
-    openFirewall = lib.mkEnableOption null // {
+    openFirewall = lib.mkEnableOption "" // {
       description = "Whether to open the WebSocket API port in the firewall.";
     };
 

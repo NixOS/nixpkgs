@@ -55,7 +55,7 @@ let
 in
 {
   options.services.bulwark = {
-    enable = mkEnableOption "Bulwark, a modern, self-hosted webmail client for Stalwart Mail Server.";
+    enable = mkEnableOption "Bulwark, a modern, self-hosted webmail client for Stalwart Mail Server";
     package = mkPackageOption pkgs "bulwark" { };
 
     hostname = mkOption {

@@ -983,7 +983,7 @@ in
       '';
     };
 
-    virtualisation.useBIOSBoot = mkEnableOption null // {
+    virtualisation.useBIOSBoot = mkEnableOption "" // {
       description = ''
         If enabled for legacy MBR VMs, the VM image will have a separate boot
         partition mounted at /boot.

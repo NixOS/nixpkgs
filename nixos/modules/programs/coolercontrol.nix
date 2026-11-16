@@ -19,7 +19,7 @@ in
         support for CoolerControl service plugins.
 
         Declares the `${pluginUser}` system user and group that unprivileged plugins run
-        as.
+        as
       '';
     };
   };

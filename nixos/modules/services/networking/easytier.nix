@@ -199,7 +199,7 @@ in
 
     allowSystemForward = mkEnableOption ''
       Allow the system to forward packets from easytier. Useful when
-      `proxy_forward_by_system` enabled.
+      `proxy_forward_by_system` enabled
     '';
 
     instances = mkOption {

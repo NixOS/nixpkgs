@@ -43,7 +43,7 @@ let
 in
 {
   options.services.nordvpn = {
-    enable = lib.mkEnableOption "Enable NordVPN";
+    enable = lib.mkEnableOption "NordVPN";
     package = lib.mkPackageOption pkgs "nordvpn" { };
     user = lib.mkOption {
       type = lib.types.str;

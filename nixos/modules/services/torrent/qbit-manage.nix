@@ -261,7 +261,7 @@ in
       default = { };
       type = submodule {
         options = {
-          enable = mkEnableOption "Enable the web server.";
+          enable = mkEnableOption "the web server";
 
           port = mkOption {
             type = port;
@@ -281,7 +281,12 @@ in
             description = "Base URL path for the web UI (e.g., '/qbit-manage').";
           };
 
-          openFirewall = mkEnableOption "Open the firewall for webUI.";
+          openFirewall = mkOption {
+            type = bool;
+            default = false;
+            example = true;
+            description = "Open the firewall for webUI.";
+          };
         };
       };
     };

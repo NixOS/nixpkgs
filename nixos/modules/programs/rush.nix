@@ -20,7 +20,7 @@ in
   meta.maintainers = pkgs.rush.meta.maintainers;
 
   options.programs.rush = with lib.types; {
-    enable = lib.mkEnableOption "Restricted User Shell.";
+    enable = lib.mkEnableOption "Restricted User Shell";
 
     package = lib.mkPackageOption pkgs "rush" { } // {
       type = shellPackage;

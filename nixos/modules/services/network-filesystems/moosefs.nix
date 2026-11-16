@@ -206,7 +206,7 @@ in
         enable = lib.mkEnableOption ''
           MooseFS GUI server (mfsgui) for web interface.
           Warning: The GUI server interface should be properly secured from unauthorized access,
-          as it provides full control over your MooseFS installation.
+          as it provides full control over your MooseFS installation
         '';
 
         openFirewall = lib.mkOption {

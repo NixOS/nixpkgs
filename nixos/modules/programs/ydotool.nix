@@ -15,7 +15,7 @@ in
   options.programs.ydotool = {
     enable = lib.mkEnableOption ''
       ydotoold system service and {command}`ydotool` for members of
-      {option}`programs.ydotool.group`.
+      {option}`programs.ydotool.group`
     '';
     group = lib.mkOption {
       type = lib.types.str;

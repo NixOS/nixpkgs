@@ -22,7 +22,7 @@ in
 {
   options = {
     programs.git-worktree-switcher = {
-      enable = lib.mkEnableOption "git-worktree-switcher, switch between git worktrees with speed.";
+      enable = lib.mkEnableOption "git-worktree-switcher, switch between git worktrees with speed";
       package = lib.mkPackageOption pkgs "git-worktree-switcher" { };
     };
   };

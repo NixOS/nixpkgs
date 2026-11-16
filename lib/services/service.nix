@@ -11,7 +11,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkOption types;
+  inherit (lib) mkOption types;
 
   # Paths are interpolated rather than `toString`ed on purpose: interpolation
   # copies the path into the store, so the resulting argument still resolves on
@@ -193,8 +193,18 @@ in
     notificationProtocol = mkOption {
       type = types.submodule {
         options = {
-          systemd = mkEnableOption "Whether the service supports systemd-notify.";
-          s6 = mkEnableOption "Whether the service supports s6-notify.";
+          systemd = mkOption {
+            type = lib.types.bool;
+            default = false;
+            example = true;
+            description = "Whether the service supports systemd-notify.";
+          };
+          s6 = mkOption {
+            type = lib.types.bool;
+            default = false;
+            example = true;
+            description = "Whether the service supports s6-notify.";
+          };
         };
       };
       description = ''

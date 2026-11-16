@@ -13,7 +13,7 @@ in
 {
   options = {
     networking.netplan = {
-      enable = lib.mkEnableOption "Whether to enable the netplan-configure service at boot";
+      enable = lib.mkEnableOption "the netplan-configure service at boot";
       package = lib.mkPackageOption pkgs "netplan" { };
       configFiles = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;

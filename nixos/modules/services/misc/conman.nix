@@ -9,9 +9,9 @@
   options = {
     services.conman = {
       enable = lib.mkEnableOption ''
-        Enable the conman Console manager.
+        the conman Console manager.
 
-        Either `configFile` or `config` must be specified.
+        Either `configFile` or `config` must be specified
       '';
       package = lib.mkPackageOption pkgs "conman" { };
 

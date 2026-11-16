@@ -11,7 +11,7 @@ in
 {
   options = {
     services.send = {
-      enable = lib.mkEnableOption "Send, a file sharing web sevice for ffsend.";
+      enable = lib.mkEnableOption "Send, a file sharing web sevice for ffsend";
 
       package = lib.mkPackageOption pkgs "send" { };
 

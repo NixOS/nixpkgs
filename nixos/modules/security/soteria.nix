@@ -10,7 +10,7 @@ let
 in
 {
   options.security.soteria = {
-    enable = lib.mkEnableOption null // {
+    enable = lib.mkEnableOption "" // {
       description = ''
         Whether to enable Soteria, a Polkit authentication agent
         for any desktop environment.

@@ -450,8 +450,8 @@ in
         type = types.bool;
         default = true;
       };
-      mutablePlugins = mkEnableOption "Whether plugins/themes can be installed, updated, uninstalled manually.";
-      mutableScrapers = mkEnableOption "Whether scrapers can be installed, updated, uninstalled manually.";
+      mutablePlugins = mkEnableOption "that plugins/themes can be installed, updated, uninstalled manually";
+      mutableScrapers = mkEnableOption "that scrapers can be installed, updated, uninstalled manually";
       plugins = pluginType "plugins";
       scrapers = pluginType "scrapers";
 

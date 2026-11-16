@@ -11,7 +11,7 @@ in
 {
   options = {
     services.lxmd = {
-      enable = lib.mkEnableOption "Enable Reticulum Network Lightweight Extensible Message Format Daemon (lxmd)";
+      enable = lib.mkEnableOption "Reticulum Network Lightweight Extensible Message Format Daemon (lxmd)";
 
       package = lib.mkPackageOption pkgs "lxmf" { };
       packageBinaryName = lib.mkOption {

@@ -52,7 +52,7 @@ in
       default = true;
     };
 
-    withUWSM = lib.mkEnableOption null // {
+    withUWSM = lib.mkEnableOption "" // {
       description = ''
         Launch Hyprland with the UWSM (Universal Wayland Session Manager) session manager.
         This has improved systemd support and is recommended for most users.
@@ -66,7 +66,7 @@ in
       '';
     };
 
-    systemd.setPath.enable = lib.mkEnableOption null // {
+    systemd.setPath.enable = lib.mkEnableOption "" // {
       default = lib.versionOlder cfg.package.version "0.41.2";
       defaultText = lib.literalExpression ''lib.versionOlder cfg.package.version "0.41.2"'';
       example = false;

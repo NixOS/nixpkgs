@@ -82,7 +82,7 @@ in
 
         package = lib.mkPackageOption pkgs "git-lfs" { };
 
-        enablePureSSHTransfer = lib.mkEnableOption "Enable pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
+        enablePureSSHTransfer = lib.mkEnableOption "pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
       };
 
       attributes = lib.mkOption {

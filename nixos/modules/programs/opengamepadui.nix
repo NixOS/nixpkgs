@@ -188,11 +188,11 @@ in
     };
 
     inputplumber.enable = lib.mkEnableOption ''
-      Run InputPlumber service for input management and gamepad configuration.
+      Run InputPlumber service for input management and gamepad configuration
     '';
 
     powerstation.enable = lib.mkEnableOption ''
-      Run PowerStation service for TDP control and performance settings.
+      Run PowerStation service for TDP control and performance settings
     '';
   };
 

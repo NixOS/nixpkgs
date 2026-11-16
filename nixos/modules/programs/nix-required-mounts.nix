@@ -41,7 +41,7 @@ let
         options.unsafeFollowSymlinks = lib.mkEnableOption ''
           Instructs the hook to mount the symlink targets as well, when any of
           the `paths` contain symlinks. This may not work correctly with glob
-          patterns.
+          patterns
         '';
         options.safePrefixes = lib.mkOption {
           default = [ builtins.storeDir ];
@@ -100,7 +100,7 @@ in
       sandbox, but only for derivations that request these special features.
 
       You may extend or override the exposed paths via the
-      `programs.nix-required-mounts.allowedPatterns.nvidia-gpu.paths` option.
+      `programs.nix-required-mounts.allowedPatterns.nvidia-gpu.paths` option
     '';
 
     presets.zluda.enable = lib.mkEnableOption ''
@@ -109,7 +109,7 @@ in
       the ZLUDA translation layer combined with AMD GPUs.
 
       You may extend or override the exposed paths via the
-      `programs.nix-required-mounts.allowedPatterns.zluda.paths` option.
+      `programs.nix-required-mounts.allowedPatterns.zluda.paths` option
     '';
 
     allowedPatterns =

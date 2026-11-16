@@ -91,7 +91,7 @@ in
 
   options = {
     services.postsrsd = {
-      enable = mkEnableOption "the postsrsd SRS server for Postfix.";
+      enable = mkEnableOption "the postsrsd SRS server for Postfix";
 
       package = mkPackageOption pkgs "postsrsd" { };
 

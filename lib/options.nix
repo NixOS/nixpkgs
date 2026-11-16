@@ -186,12 +186,19 @@ rec {
   */
   mkEnableOption =
     name:
-    mkOption {
-      default = false;
-      example = true;
-      description = "Whether to enable ${name}.";
-      type = lib.types.bool;
-    };
+    lib.pipe
+      (mkOption {
+        default = false;
+        example = true;
+        description = "Whether to enable ${name}.";
+        type = lib.types.bool;
+      })
+      [
+        (lib.throwIf (lib.hasSuffix "." name) "lib.mkEnableOption already adds a \".\" to the end of the description.")
+        (lib.throwIf (lib.hasSuffix ".\n" name) "lib.mkEnableOption already adds a \".\" to the end of the description.")
+        (lib.throwIf (lib.hasPrefix "Whether" name) "lib.mkEnableOption already adds a \"Whether to enable \" to the beginning of the description.")
+        (lib.throwIf (lib.hasPrefix "Enable" name) "lib.mkEnableOption already adds a \"Whether to enable \" to the beginning of the description.")
+      ];
 
   /**
     Creates an Option attribute set for an option that specifies the

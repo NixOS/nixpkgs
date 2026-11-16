@@ -73,7 +73,7 @@ in
           specifies the source file.
         '';
       };
-      efiInstallAsRemovable = mkEnableOption null // {
+      efiInstallAsRemovable = mkEnableOption "" // {
         default = !efi.canTouchEfiVariables;
         defaultText = literalExpression "!config.boot.loader.efi.canTouchEfiVariables";
         description = ''
