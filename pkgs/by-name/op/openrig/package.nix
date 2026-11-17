@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchzip,
   nix-update-script,
-  nodejs_22,
+  nodejs_24,
   openssh,
   rsync,
   tmux,
@@ -16,10 +16,12 @@
 }:
 
 buildNpmPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "openrig";
   version = "0.7.16";
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@openrig/cli/-/cli-${finalAttrs.version}.tgz";
@@ -41,7 +43,7 @@ buildNpmPackage (finalAttrs: {
     ":"
     (lib.makeBinPath (
       [
-        nodejs_22
+        nodejs_24
         tmux
         rsync
         git
