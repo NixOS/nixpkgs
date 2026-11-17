@@ -75,6 +75,8 @@ let
       # Set up /nix/var/nix and root's channel the way nixos-install does.
       mkdir -p nix-state/profiles
       ln -s ${toplevel} nix-state/profiles/system-1-link
+      # Limine shows its mtime as the build date.
+      touch -h -d "@$SOURCE_DATE_EPOCH" nix-state/profiles/system-1-link
       ln -s system-1-link nix-state/profiles/system
       ${optionalString config.nix.enable ''
         NIX_STATE_DIR=$PWD/nix-state ${lib.getExe' config.nix.package.out "nix-store"} --load-db \
