@@ -11,7 +11,6 @@ let
   inherit (lib)
     mkDefault
     mkIf
-    mkMerge
     mkOption
     optionalString
     types
@@ -37,10 +36,6 @@ let
       ''}
       ${optionalString (efi.efiSysMountPoint != "/boot") ''
         boot.loader.efi.efiSysMountPoint = "${efi.efiSysMountPoint}";
-      ''}
-      ${optionalString config.ec2.zfs.enable ''
-        ec2.zfs.enable = true;
-        networking.hostId = "${config.networking.hostId}";
       ''}
     }
   '';
@@ -234,139 +229,78 @@ in
     };
   };
 
-  config = mkMerge [
-    {
-      # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
-      # to avoid breaking existing configs using that.
-      virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
-      virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
+  config = {
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
 
-      system.nixos.tags = [ "amazon" ];
-      system.build.image = config.system.build.amazonImage;
-      image.extension = if cfg.format == "vpc" then "vhd" else cfg.format;
-    }
+    system.nixos.tags = [ "amazon" ];
+    system.build.image = config.system.build.amazonImage;
+    image.extension = if cfg.format == "vpc" then "vhd" else cfg.format;
 
-    (mkIf (!config.ec2.zfs.enable) {
-      assertions = [
-        {
-          # systemd-repart skips sources it can't find, so a glob would copy nothing without an error.
-          assertion = lib.all (file: !lib.hasInfix "*" (toString file.source)) cfg.contents;
-          message = "amazonImage.contents does not support glob patterns in `source`.";
-        }
-        {
-          assertion = systemdBoot || limine.enable;
-          message = "The Amazon image boots with systemd-boot or Limine.";
-        }
-      ];
+    assertions = [
+      {
+        # systemd-repart skips sources it can't find, so a glob would copy nothing without an error.
+        assertion = lib.all (file: !lib.hasInfix "*" (toString file.source)) cfg.contents;
+        message = "amazonImage.contents does not support glob patterns in `source`.";
+      }
+      {
+        assertion = systemdBoot || limine.enable;
+        message = "The Amazon image boots with systemd-boot or Limine.";
+      }
+    ];
 
-      ec2.bootMode = mkDefault (if config.ec2.efi then "uefi" else "uefi-preferred");
-      # systemd-boot can't boot legacy BIOS.
-      boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi");
-      boot.loader.limine.enable = mkDefault (bootMode != "uefi");
+    ec2.bootMode = mkDefault (if config.ec2.efi then "uefi" else "uefi-preferred");
+    # systemd-boot can't boot legacy BIOS.
+    boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi");
+    boot.loader.limine.enable = mkDefault (bootMode != "uefi");
 
-      image.repart = {
-        enable = true;
-        # repart derives image.baseName from this; keep its usual default.
-        name = options.image.baseName.default;
-        imageSize = if autoSize then "auto" else "${toString config.virtualisation.diskSize}M";
-        partitions = {
-          # Limine finds its BIOS stage 2 here.
-          bios-boot = mkIf limineBios {
-            repartConfig = {
-              Type = "21686148-6449-6e6f-744e-656564454649";
-              SizeMinBytes = "1M";
-              SizeMaxBytes = "1M";
-            };
+    image.repart = {
+      enable = true;
+      # repart derives image.baseName from this; keep its usual default.
+      name = options.image.baseName.default;
+      imageSize = if autoSize then "auto" else "${toString config.virtualisation.diskSize}M";
+      partitions = {
+        # Limine finds its BIOS stage 2 here.
+        bios-boot = mkIf limineBios {
+          repartConfig = {
+            Type = "21686148-6449-6e6f-744e-656564454649";
+            SizeMinBytes = "1M";
+            SizeMaxBytes = "1M";
           };
-          # Both boot loaders read the kernels from the ESP, also under legacy BIOS.
-          esp.repartConfig = {
-            Type = "esp";
-            Format = "vfat";
-            Label = "ESP";
-            SizeMinBytes = "1G";
-            SizeMaxBytes = "1G";
-          };
-          root = {
-            inherit storePaths;
-            contents = {
-              "/etc/nixos/configuration.nix".source = configFile;
-            }
-            // lib.genAttrs' cfg.contents (
-              { source, target }: lib.nameValuePair "/${lib.removePrefix "/" target}" { inherit source; }
-            );
-            repartConfig = {
-              Type = "root";
-              Format = config.fileSystems."/".fsType;
-              Label = "nixos";
-            }
-            // lib.optionalAttrs autoSize {
-              Minimize = "guess";
-              # Free space for the root partition to grow into on first boot.
-              PaddingMinBytes = "512M";
-            };
+        };
+        # Both boot loaders read the kernels from the ESP, also under legacy BIOS.
+        esp.repartConfig = {
+          Type = "esp";
+          Format = "vfat";
+          Label = "ESP";
+          SizeMinBytes = "1G";
+          SizeMaxBytes = "1G";
+        };
+        root = {
+          inherit storePaths;
+          contents = {
+            "/etc/nixos/configuration.nix".source = configFile;
+          }
+          // lib.genAttrs' cfg.contents (
+            { source, target }: lib.nameValuePair "/${lib.removePrefix "/" target}" { inherit source; }
+          );
+          repartConfig = {
+            Type = "root";
+            Format = config.fileSystems."/".fsType;
+            Label = "nixos";
+          }
+          // lib.optionalAttrs autoSize {
+            Minimize = "guess";
+            # Free space for the root partition to grow into on first boot.
+            PaddingMinBytes = "512M";
           };
         };
       };
+    };
 
-      system.build.amazonImage = amazonImage;
-    })
-
-    (mkIf config.ec2.zfs.enable {
-      system.build.amazonImage = import ../../../lib/make-multi-disk-zfs-image.nix {
-        inherit
-          lib
-          config
-          configFile
-          pkgs
-          ;
-        inherit (cfg) contents format;
-        name = config.image.baseName;
-
-        includeChannel = true;
-
-        bootSize = 1000; # 1G is the minimum EBS volume
-
-        rootSize = config.virtualisation.diskSize;
-        rootPoolProperties = {
-          ashift = 12;
-          autoexpand = "on";
-        };
-
-        datasets = config.ec2.zfs.datasets;
-
-        postVM = ''
-           extension=''${rootDiskImage##*.}
-           friendlyName=$out/${config.image.baseName}
-           rootDisk="$friendlyName.root.$extension"
-           bootDisk="$friendlyName.boot.$extension"
-           mv "$rootDiskImage" "$rootDisk"
-           mv "$bootDiskImage" "$bootDisk"
-
-           mkdir -p $out/nix-support
-           echo "file ${cfg.format} $bootDisk" >> $out/nix-support/hydra-build-products
-           echo "file ${cfg.format} $rootDisk" >> $out/nix-support/hydra-build-products
-
-          ${pkgs.jq}/bin/jq -n \
-            --arg system_version ${lib.escapeShellArg config.system.nixos.version} \
-            --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
-            --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
-            --arg boot_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$bootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
-            --arg boot_mode "${bootMode}" \
-            --arg root "$rootDisk" \
-            --arg boot "$bootDisk" \
-           '{}
-             | .label = $system_version
-             | .boot_mode = $boot_mode
-             | .system = $system
-             | .disks.boot.logical_bytes = $boot_logical_bytes
-             | .disks.boot.file = $boot
-             | .disks.root.logical_bytes = $root_logical_bytes
-             | .disks.root.file = $root
-             ' > $out/nix-support/image-info.json
-        '';
-      };
-    })
-  ];
+    system.build.amazonImage = amazonImage;
+  };
 
   meta.maintainers = with lib.maintainers; [ arianvp ];
 }

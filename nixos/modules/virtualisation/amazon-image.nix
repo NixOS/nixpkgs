@@ -16,8 +16,8 @@ let
   cfg = config.ec2;
   efiBoot = cfg.bootMode != "legacy-bios";
   biosBoot = cfg.bootMode != "uefi";
-  # The ZFS and Limine images have an ESP even when they boot with legacy BIOS.
-  hasEsp = efiBoot || cfg.zfs.enable || config.boot.loader.limine.enable;
+  # The Limine image has an ESP even when it boots with legacy BIOS.
+  hasEsp = efiBoot || config.boot.loader.limine.enable;
 in
 
 {
@@ -42,13 +42,11 @@ in
 
     boot.growPartition = true;
 
-    fileSystems."/" = mkIf (!cfg.zfs.enable) (
-      lib.mkDefault {
-        device = "/dev/disk/by-label/nixos";
-        fsType = "ext4";
-        autoResize = true;
-      }
-    );
+    fileSystems."/" = lib.mkDefault {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
+      autoResize = true;
+    };
 
     fileSystems.${config.boot.loader.efi.efiSysMountPoint} = mkIf hasEsp (
       lib.mkDefault {
@@ -56,10 +54,6 @@ in
         fsType = "vfat";
       }
     );
-
-    services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
-
-    boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
