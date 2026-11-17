@@ -15,10 +15,23 @@ let
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
   amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
+  defaultConfigFile = pkgs.writeText "configuration.nix" ''
+    { modulesPath, ... }: {
+      imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
+      ${optionalString config.ec2.efi ''
+        ec2.efi = true;
+      ''}
+      ${optionalString config.ec2.zfs.enable ''
+        ec2.zfs.enable = true;
+        networking.hostId = "${config.networking.hostId}";
+      ''}
+    }
+  '';
 in
 {
   imports = [
     ../../../modules/virtualisation/amazon-image.nix
+    ../../../modules/image/config-file-option.nix
     ../../../modules/virtualisation/disk-size-option.nix
     ../../../modules/image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
@@ -71,6 +84,8 @@ in
     };
   };
 
+  config.virtualisation.configFile = lib.mkDefault defaultConfigFile;
+
   # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
   # to avoid breaking existing configs using that.
   config.virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
@@ -82,18 +97,7 @@ in
 
   config.system.build.amazonImage =
     let
-      configFile = pkgs.writeText "configuration.nix" ''
-        { modulesPath, ... }: {
-          imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
-          ${optionalString config.ec2.efi ''
-            ec2.efi = true;
-          ''}
-          ${optionalString config.ec2.zfs.enable ''
-            ec2.zfs.enable = true;
-            networking.hostId = "${config.networking.hostId}";
-          ''}
-        }
-      '';
+      configFile = config.virtualisation.configFile;
 
       zfsBuilder = import ../../../lib/make-multi-disk-zfs-image.nix {
         inherit
