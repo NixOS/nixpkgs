@@ -78,6 +78,7 @@ buildGoModule (finalAttrs: {
       pentane
       ma27
       SchweGELBin
+      logn
     ];
     mainProgram = "mautrix-signal";
   };
