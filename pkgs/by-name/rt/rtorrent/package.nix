@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
+    changelog = "https://github.com/rakshasa/rtorrent/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://rakshasa.github.io/rtorrent/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "rtorrent";
