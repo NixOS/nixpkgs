@@ -14,21 +14,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openai-agents";
-  version = "0.22.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "openai_agents";
-    hash = "sha256-bD17njTTykv3Y9RVfQHshEaFKQ8NgMty4QowQCnA1+4=";
+    hash = "sha256-FcMD5q/uYEbxAjDEtLw/pdN0ROwDchSRFuGfQI2psiE=";
   };
 
   build-system = [
     hatchling
-  ];
-
-  pythonRelaxDeps = [
-    "openai"
   ];
 
   dependencies = [
