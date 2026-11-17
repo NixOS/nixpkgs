@@ -65,6 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       pentane
       SchweGELBin
+      logn
     ];
   };
 })
