@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "oauthlib";
-  version = "4.0.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oauthlib";
     repo = "oauthlib";
     tag = "v${version}";
-    hash = "sha256-E1XT1UEfcBA+C2e2t8MrM+RkmXjwSE62QVDKQjVA+3M=";
+    hash = "sha256-0Me+Szy6US7+TV3A22Yb8hhJzMQhv7ZSUEHhDVI0FHw=";
   };
 
   nativeBuildInputs = [ setuptools ];
