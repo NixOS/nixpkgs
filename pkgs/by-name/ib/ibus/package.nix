@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
-  replaceVars,
   fetchFromGitHub,
   fetchpatch,
-  autoreconfHook,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  bash,
   gettext,
-  makeWrapper,
   pkg-config,
   vala,
   wrapGAppsHook3,
@@ -18,9 +19,7 @@
   gobject-introspection,
   gtk3,
   gtk4,
-  gtk-doc,
   libdbusmenu-gtk3,
-  runCommand,
   isocodes,
   cldr-annotations,
   unicode-character-database,
@@ -35,7 +34,6 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  buildPackages,
   runtimeShell,
   nixosTests,
   versionCheckHook,
@@ -46,59 +44,38 @@
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
-  python3BuildEnv = python3.pythonOnBuildForHost.buildEnv.override {
-    # ImportError: No module named site
-    postBuild = ''
-      makeWrapper ${glib.dev}/bin/gdbus-codegen $out/bin/gdbus-codegen --unset PYTHONPATH
-      makeWrapper ${glib.dev}/bin/glib-genmarshal $out/bin/glib-genmarshal --unset PYTHONPATH
-      makeWrapper ${glib.dev}/bin/glib-mkenums $out/bin/glib-mkenums --unset PYTHONPATH
-    '';
-  };
-  # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
-  # it will fail to read /etc/dbus-1/session.conf unless we add this flag
-  dbus-launch =
-    runCommand "sandbox-dbus-launch"
-      {
-        nativeBuildInputs = [ makeWrapper ];
-      }
-      ''
-        makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-          --add-flags --config-file=${dbus}/share/dbus-1/session.conf
-      '';
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibus";
-  version = "1.5.34";
+  version = "1.5.35";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     tag = finalAttrs.version;
-    hash = "sha256-MCxzMnG+g2FC4pZtDOP2c7vSRG5Zk6EfrkGnEyFvBfQ=";
+    hash = "sha256-Wd4z3NMwh9kEu18aLbdF4vGg2gOqBJbpURbinFq6fnM=";
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
-      pythonInterpreter = python3Runtime.interpreter;
-      pythonSitePackages = python3.sitePackages;
-      # patch context
-      prefix = null;
-      datarootdir = null;
-      localedir = null;
-      # removed line only
-      PYTHON = null;
-    })
+    # Nix-specific sandbox workaround: generating schema defaults does not need
+    # a session bus, so avoid the unnecessary dbus-launch invocation.
     ./build-without-dbus-launch.patch
 
-    # Fix crashes in `gtk_im_multicontext_set_delegate` with latest GTK
-    # GTK issue: https://gitlab.gnome.org/GNOME/gtk/-/work_items/8341
-    # Upstream PR: https://github.com/ibus/ibus/pull/2929
+    # Fix configuration summaries when optional bindings are unavailable.
+    # https://github.com/ibus/ibus/pull/2989
     (fetchpatch {
-      name = "fix-gtk-crashes.patch";
-      url = "https://github.com/ibus/ibus/commit/c534999a9dbea2666864250d74e058ecfb46e76f.patch";
-      hash = "sha256-1h48hvdrDh2Qh4+SufL147CxlfiwvP/Jv509X0WnbrA=";
+      name = "ibus-initialize-optional-dependency-variables.patch";
+      url = "https://github.com/ibus/ibus/commit/c289671609d114453a710a12621a7644b120a916.patch";
+      hash = "sha256-+TQ9MW4O8GQ3QAZETPhG4uf17ryFA1QRmA9kPK5RjzM=";
     })
+
+    # Recognize libX11's Nix-store compose files as system compose files.
+    ./system-compose-path.patch
+
+    # Make the test prefix configurable for Nix's separate installedTests output,
+    # keeping test files and their embedded paths out of the runtime output.
+    ./installed-tests-paths.patch
   ];
 
   outputs = [
@@ -111,70 +88,70 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # Maintainer does not want to create separate tarballs for final release candidate and release versions,
-    # so we need to set `ibus_released` to `1` in `configure.ac`. Otherwise, anyone running `ibus version` gets
+    # so we need to set `IBUS_RELEASED` to `1` in `meson.config`. Otherwise, anyone running `ibus version` gets
     # a version with an inaccurate `-rcX` suffix.
     # https://github.com/ibus/ibus/issues/2584
-    substituteInPlace configure.ac --replace "m4_define([ibus_released], [0])" "m4_define([ibus_released], [1])"
+    substituteInPlace meson.config --replace-fail "IBUS_RELEASED=0" "IBUS_RELEASED=1"
 
-    patchShebangs --build data/dconf/make-dconf-override-db.sh
-    cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
-    substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
-    substituteInPlace bus/services/org.freedesktop.IBus.session.generic.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
+    # Use Python with PyGObject at runtime, independently of the build Python.
+    substituteInPlace setup/ibus-setup.in \
+      --replace-fail 'exec ''${PYTHON:-@PYTHON@}' 'exec ${python3Runtime.interpreter}'
+
+    patchShebangs --build data/dconf/make-dconf-override-db.sh src/get_system_langs.py
+    # xkb-latin-layouts needs echo and glib's gsettings command to enumerate layouts.
+    substituteInPlace src/tests/xkb-latin-layouts \
+      --replace-fail '/usr/bin/echo' 'echo' \
+      --replace-fail 'gsettings get' '${lib.getExe' glib "gsettings"} get'
+    substituteInPlace \
+      bus/services/org.freedesktop.IBus.session.GNOME.service.in \
+      bus/services/org.freedesktop.IBus.session.generic.service.in \
+      --replace-fail "ExecStart=sh" "ExecStart=${runtimeShell}"
+
+    # These manual AppIndicator queries must use the host pkg-config, like dependency().
+    substituteInPlace meson.build \
+      --replace-fail "run_command('pkg-config'," "run_command('${stdenv.cc.targetPrefix}pkg-config',"
   '';
 
-  preAutoreconf = "touch ChangeLog";
-
-  configureFlags = [
-    # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
-    # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
-    # https://github.com/NixOS/nixpkgs/issues/21751
-    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-    "CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++"
-    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
-    "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
-    "--disable-memconf"
-    "--disable-gtk2"
-    "--with-python=${python3BuildEnv.interpreter}"
-    (lib.enableFeature (!libOnly && dconf != null) "dconf")
-    (lib.enableFeature (!libOnly && libnotify != null) "libnotify")
-    (lib.enableFeature withWayland "wayland")
-    (lib.enableFeature withSystemd "systemd-services")
-    (lib.enableFeature enableUI "ui")
-    (lib.enableFeature (!libOnly) "gtk3")
-    (lib.enableFeature (!libOnly) "gtk4")
-    (lib.enableFeature (!libOnly) "xim")
-    (lib.enableFeature (!libOnly) "appindicator")
-    (lib.enableFeature (!libOnly) "tests")
-    (lib.enableFeature (!libOnly) "install-tests")
-    (lib.enableFeature (!libOnly) "emoji-dict")
-    (lib.enableFeature (!libOnly) "unicode-dict")
+  mesonFlags = [
+    (lib.mesonBool "gtk-doc" false)
+    (lib.mesonBool "memconf" false)
+    (lib.mesonOption "x11-localedata-dir" "${libx11.out}/share/X11/locale")
+    (lib.mesonEnable "gtk2" false)
+    (lib.mesonOption "python-overrides-dir" "${placeholder "out"}/${python3.sitePackages}/gi/overrides")
+    (lib.mesonEnable "dconf" (!libOnly && dconf != null))
+    (lib.mesonBool "libnotify" (!libOnly && libnotify != null))
+    (lib.mesonEnable "wayland" withWayland)
+    (lib.mesonEnable "systemd-services" withSystemd)
+    (lib.mesonBool "ui" enableUI)
+    (lib.mesonBool "gtk3" (!libOnly))
+    (lib.mesonBool "gtk4" (!libOnly))
+    (lib.mesonEnable "xim" (!libOnly))
+    (lib.mesonBool "appindicator" (!libOnly))
+    (lib.mesonBool "tests" (!libOnly))
+    (lib.mesonBool "install-tests" (!libOnly))
+    (lib.mesonBool "emoji-dict" (!libOnly))
+    (lib.mesonBool "unicode-dict" (!libOnly))
   ]
   ++ lib.optionals (!libOnly) [
-    "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
-    "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
-    "--with-ucd-dir=${unicode-character-database}/share/unicode"
-  ];
-
-  makeFlags = lib.optionals (!libOnly) [
-    "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
-    "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
-  ];
-
-  depsBuildBuild = [
-    pkg-config
+    (lib.mesonOption "installed-tests-prefix" (placeholder "installedTests"))
+    (lib.mesonOption "unicode-emoji-dir" "${unicode-emoji}/share/unicode/emoji")
+    (lib.mesonOption "emoji-annotation-dir" "${cldr-annotations}/share/unicode/cldr/common/annotations")
+    (lib.mesonOption "ucd-dir" "${unicode-character-database}/share/unicode")
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
-    gtk-doc
+    meson
+    ninja
     gettext
-    makeWrapper
     pkg-config
-    python3BuildEnv
-    dbus-launch
-    glib # required to satisfy AM_PATH_GLIB_2_0
+    python3
+    glib
     vala
     gobject-introspection
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # Meson runs the compose, emoji, and Unicode generators built for the host.
+    mesonEmulatorHook
   ]
   ++ lib.optionals (!libOnly) [
     wrapGAppsHook3
@@ -188,14 +165,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bash
     dbus
-    dconf
     isocodes
     json-glib
     libx11
   ]
   ++ lib.optionals withSystemd [
     systemdLibs
+  ]
+  ++ lib.optionals (!libOnly && dconf != null) [
+    dconf
   ]
   ++ lib.optionals (!libOnly) [
     gtk3
@@ -204,17 +184,14 @@ stdenv.mkDerivation (finalAttrs: {
     libdbusmenu-gtk3
     libnotify
     python3.pkgs.pygobject3 # for pygobject overrides
-    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ]
   ++ lib.optionals withWayland [
     libxkbcommon
     wayland
     wayland-protocols
-    wayland-scanner # For cross, build uses $PKG_CONFIG to look for wayland-scanner
   ];
-
-  enableParallelBuilding = true;
   strictDeps = true;
+  __structuredAttrs = true;
 
   doCheck = false; # requires X11 daemon
 
@@ -223,18 +200,11 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "version";
   versionCheckProgram = "${placeholder "out"}/bin/ibus";
 
-  postInstall = lib.optionalString (!libOnly) ''
-    # It has some hardcoded FHS paths and also we do not use it
-    # since we set up the environment in NixOS tests anyway.
-    moveToOutput "bin/ibus-desktop-testing-runner" "$installedTests"
+  postInstall = lib.optionalString (!libOnly && dconf != null) ''
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
-  postFixup = lib.optionalString (!libOnly) ''
-    # set necessary environment also for tests
-    for f in $installedTests/libexec/installed-tests/ibus/*; do
-        wrapGApp $f
-    done
-  '';
+  wrapGAppsInOutputs = [ "out" ] ++ lib.optionals (!libOnly) [ "installedTests" ];
 
   passthru = {
     tests = lib.optionalAttrs (!libOnly) {
