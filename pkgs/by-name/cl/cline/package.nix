@@ -48,6 +48,7 @@ let
           --no-progress \
           --os="*" \
           --cpu="*" \
+          --libc="*" \
           --filter ./ \
           --filter './sdk/packages/*' \
           --filter ./apps/cli \
@@ -70,7 +71,7 @@ let
       # paths from the source it was built from.
       dontFixup = true;
 
-      outputHash = "sha256-dVbQIed8hYhOl+/BTlEZtS+VyfhH3qBsrZgcisWlm0k=";
+      outputHash = "sha256-KJsV3HXT43LuhFikCXyRrKFgpI3NWOckQHT28s9qGZs=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
