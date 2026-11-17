@@ -7286,6 +7286,8 @@ self: super: with self; {
 
   googletrans = callPackage ../development/python-modules/googletrans { };
 
+  googlewifiapi = callPackage ../development/python-modules/googlewifiapi { };
+
   gophish = callPackage ../development/python-modules/gophish { };
 
   gorilla = callPackage ../development/python-modules/gorilla { };
