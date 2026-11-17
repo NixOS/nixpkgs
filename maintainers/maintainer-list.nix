@@ -7575,6 +7575,11 @@
     githubId = 1316469;
     name = "Naomi Morse";
   };
+  dlarochette = {
+    name = "David Larochette";
+    github = "dlarochette";
+    githubId = 376495;
+  };
   dlesl = {
     email = "dlesl@dlesl.com";
     github = "dlesl";
