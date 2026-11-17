@@ -13,7 +13,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "any${anyzigExe}";
-  version = "2026_11_03";
+  version = "2026_11_12";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "marler8997";
     repo = "anyzig";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ripM/SMZNvfRcQyq5hM+kcQH3yQik1WVmACAWhOK/eE=";
+    hash = "sha256-THFys3LpRGtp4Al6nWj+JgIC19mMeQ1Ug9oJDJ0oKE4=";
   };
 
   nativeBuildInputs = [ zig ];
@@ -30,11 +30,18 @@ stdenv.mkDerivation (finalAttrs: {
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) version src;
     pname = "anyzig";
-    hash = "sha256-UHKvzdYb7akR87WucYdCa/hlfo+KQxV8BSug7BbIkHk=";
+    fetchAll = true;
+    hash = "sha256-PXCto7lmw3BgMC1E5GiQqQN1aa98z0xgqkku1UivdSM=";
   };
 
   postConfigure = ''
     ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
+
+    # anyzig's build.zig needs to patch the standard library, so we point
+    # ZIG_LIB_DIR to a writable copy taken from the zig package
+    export ZIG_LIB_DIR="$NIX_BUILD_TOP/zig-lib"
+    cp -r ${zig}/lib/zig "$ZIG_LIB_DIR"
+    chmod -R +w "$ZIG_LIB_DIR"
   '';
 
   zigBuildFlags = lib.optionals (anyzigExe != "zig") [ "install-${anyzigExe}" ];
