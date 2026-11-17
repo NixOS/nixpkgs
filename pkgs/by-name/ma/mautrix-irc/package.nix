@@ -17,18 +17,18 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "mautrix-irc";
-  version = "0-unstable-2026-09-16";
+  version = "0-unstable-2026-11-16";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "irc";
-    rev = "b27a77861ab7b6bb3c01677d27a4818f22f8fe6a";
-    hash = "sha256-t1m60RGN14/YJ3oc2ZCI2YGYj+mo70Fn+JDkj+Nf7h4=";
+    rev = "74b255b83442e15b5f8fc76e22f5b019a6b92109";
+    hash = "sha256-jGRNIVfjMj5Q33rbPLJbr56aTTdMtcQxGp/H8EHNvA4=";
   };
 
-  vendorHash = "sha256-5yZi/BuAPe2q07b0rVH2ls9Cc5VPCVGjZePsnDC3sl4=";
+  vendorHash = "sha256-bwVevusCt1uJYyX65j8bWFji+IG13xa8awfi7eaPO9A=";
 
   buildInputs = (lib.optional (!withGoolm) olm) ++ (lib.optional withGoolm stdenv.cc.cc.lib);
 
