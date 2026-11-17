@@ -11,14 +11,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "jactionlint";
-  version = "2.5.0";
+  version = "2.6.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "jactionlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u9qyLHqiccAzLKOS8MPA0Nq/CWLu2GGYConX5xUFXks=";
+    hash = "sha256-ikUVmurWrKP18XMth0lhnsvF0JT4gVoiNGTN+5AAL3U=";
   };
 
   vendorHash = "sha256-jf7hKPnaSl4iTYT0mtRRAEmgLKAA/lj0vSVoO9+iOvw=";
