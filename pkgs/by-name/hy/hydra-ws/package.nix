@@ -7,17 +7,22 @@
   rust-jemalloc-sys,
   aws-lc,
   nixosTests,
+  withOtel ? false,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hydra-ws";
   inherit (hydra) version src;
   __structuredAttrs = true;
 
-  cargoHash = "sha256-kKQTbnivtC/YzvIHj408b2lZlj4eEUKdMBcdocnXsS0=";
+  cargoHash = "sha256-VzFm7c1QYQ6fUdYu2DQfBUX9fDBMQJesxUHCLGBy4OI=";
 
   cargoBuildFlags = [
     "--package"
     "hydra-ws"
+  ];
+
+  buildFeatures = lib.optionals withOtel [
+    "otel"
   ];
 
   nativeBuildInputs = [

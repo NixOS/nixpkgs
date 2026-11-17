@@ -45,13 +45,13 @@ let
   # Keep in sync with the nix input of https://github.com/NixOS/hydra/blob/master/flake.nix
   nixComponents = nixVersions.nixComponents_2_35;
 
-  version = "0-unstable-2026-11-03";
+  version = "0-unstable-2026-11-16";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "12053f31df077f9d1bbcb2c5907aaf2b69b52ff2";
-    hash = "sha256-eAb1+rQFFxrtQwrghAFV0DISMh0rRQZ40at2ohAk4Gc=";
+    rev = "81c4dd74b7a572ce0b222e58b991f6004f1674f5";
+    hash = "sha256-89qVvzmG2IcMrhLx7CExFJkqLSfrOmFoIZ/fzwC2oPQ=";
   };
 
   nix-perl = callPackage ./nix-perl.nix {
