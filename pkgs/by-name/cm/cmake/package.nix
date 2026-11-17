@@ -65,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./nixpkgs-cmake-prefix-path.patch
 
     # Add the libc paths from the compiler wrapper.
-    ./add-nixpkgs-libc-paths.patch
+    (replaceVars ./add-nixpkgs-libc-paths.patch {
+      libc_dev = lib.getDev stdenv.cc.libc;
+      libc_lib = lib.getLib stdenv.cc.libc;
+    })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-binary-paths.patch {
@@ -138,10 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
   dontAddStaticConfigureFlags = true;
 
   preConfigure = ''
-    substituteInPlace Modules/Platform/UnixPaths.cmake \
-      --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
-      --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
-      --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
     configureFlags=("--parallel=''${NIX_BUILD_CORES:-1}" "CC=$CC_FOR_BUILD" "CXX=$CXX_FOR_BUILD" ''${configureFlags[@]} ''${cmakeFlags[@]})
   ''
