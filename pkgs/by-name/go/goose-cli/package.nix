@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromGitHub,
   rustPlatform,
   aws-lc,
@@ -18,9 +17,6 @@
   nix-update-script,
   llvmPackages,
   makeWrapper,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
 
   # Extension(s) Dependencies
   python3,
@@ -37,16 +33,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.55.0";
+  version = "1.59.2";
 
   src = fetchFromGitHub {
     owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2OoRbVAzo7oVWFbdtRvHAoPCLjPXen89di7dewADXTI=";
+    hash = "sha256-CacWGZMgmV1K2/FImZCVP3bs9svK8DVaU9nekm7VEg4=";
   };
 
-  cargoHash = "sha256-BYmBp4Pb5t331Tu0HGAtIGtl3fheS/s5lcmlZcY71HM=";
+  cargoHash = "sha256-DdSR+Iy4DodOREvnZfB6+F5WYv7FLv8IdZom215Tmco=";
 
   cargoBuildFlags = [
     "--bin"
@@ -73,7 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
-    RUSTY_V8_ARCHIVE = librusty_v8;
   };
 
   postFixup = ''
