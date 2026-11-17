@@ -690,8 +690,8 @@ in
       "sha256-7THMoXcSdmoCWLW1cVCBCi59k/la8NhsCTvCpaPDaPM=";
 
   mypy-boto3-iotwireless =
-    buildMypyBoto3Package "iotwireless" "1.44.0"
-      "sha256-5z0GWM0k3bBKTag312rNkOp1rbfsRV/Ss4C9pC9sRMA=";
+    buildMypyBoto3Package "iotwireless" "1.44.4"
+      "sha256-7pLmZ8z7TcSqkHFRpYD1qFB4nICgLkls05Vk9R1RYyY=";
 
   mypy-boto3-ivs =
     buildMypyBoto3Package "ivs" "1.44.0"
