@@ -297,9 +297,10 @@ class VSCodeExtensionUpdater:
                 engine_version_constraint = self.replace_version_symbol(
                     engine_version_constraint
                 )
-                if Version.parse(self.target_vscode_version).match(
-                    engine_version_constraint
-                ):
+                # vscode.version is X.Y for some releases (see vscode.nix downloadVersion)
+                if Version.parse(
+                    self.target_vscode_version, optional_minor_and_patch=True
+                ).match(engine_version_constraint):
                     logger.info(f"Compatible version found: {candidate_version}")
                     return candidate_version
                 else:
