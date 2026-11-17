@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-ignite";
-  version = "0.5.4";
+  version = "0.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ignite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-taf1T5zSX436Bn2qLL8ba/fXyFtu51uOvYcWerpEQ1E=";
+    hash = "sha256-ifbff0V+5tBkt2r/D4kZs6jpIDxijyboFCfdjeuIhq4=";
   };
 
   build-system = [ hatchling ];
