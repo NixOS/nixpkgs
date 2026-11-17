@@ -214,6 +214,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     maintainers = with lib.maintainers; [
       GaetanLepage
     ];
+    teams = [ lib.teams.cuda ];
     broken = !cudaSupport;
   };
 })
