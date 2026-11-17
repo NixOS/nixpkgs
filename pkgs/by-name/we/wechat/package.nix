@@ -55,6 +55,7 @@ let
 
   passthru = finalAttrs: {
     sources = lib.importJSON ./sources.json;
+    # nixpkgs-update: no auto update
     updateScript = ./update.py;
     source =
       finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}

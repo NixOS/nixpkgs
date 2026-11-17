@@ -64,10 +64,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       touch netrc
 
       url=${lib.escapeShellArg finalAttrs.passthru.source.upstream.url}
-      crc=${lib.escapeShellArg finalAttrs.passthru.source.upstream."x-cos-hash-crc64ecma"}
-      ver=${lib.escapeShellArg finalAttrs.passthru.source.upstream."x-cos-version-id"}
+      crc=${lib.escapeShellArg (finalAttrs.passthru.source.upstream."x-cos-hash-crc64ecma" or "")}
+      ver=${lib.escapeShellArg (finalAttrs.passthru.source.upstream."x-cos-version-id" or "")}
 
-      if actual=$(curl -fsSIL -o /dev/null -w '%header{x-cos-hash-crc64ecma}:%header{x-cos-version-id}' "$url") && [[ "$actual" == "$crc:$ver" ]]; then
+      if [[ -n "$crc" && -n "$ver" ]] && actual=$(curl -fsSIL -o /dev/null -w '%header{x-cos-hash-crc64ecma}:%header{x-cos-version-id}' "$url") && [[ "$actual" == "$crc:$ver" ]]; then
         urls=("$url")
       fi
     '';
