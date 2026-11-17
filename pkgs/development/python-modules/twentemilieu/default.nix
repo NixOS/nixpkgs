@@ -26,6 +26,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-RSUKluCE66oA0QbPlJ3niIuewvBxPmj18ZCUBNCFr4o=";
   };
 
+  patches = [ ./typer-0-27-2.patch ];
+
   postPatch = ''
     # Upstream is creating GitHub releases without version
     substituteInPlace pyproject.toml \
