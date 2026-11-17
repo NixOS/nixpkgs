@@ -42,7 +42,7 @@ assert blas.isILP64 == lapack.isILP64;
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.5.4";
+  version = "2.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-5vOI8VItWGgsks5qDeVuodhHbKa6WC2ZzWYJZICJuwI=";
+    hash = "sha256-I7miNrY1occ/HcT2Ib55kVw3PS2GyfrE3t1M0JEXgv0=";
   };
 
   patches = [
