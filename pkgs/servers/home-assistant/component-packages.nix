@@ -936,7 +936,8 @@
       ];
     "bosch_smart_camera" =
       ps: with ps; [
-      ]; # missing inputs: bosch-shc-camera-client
+        bosch-shc-camera-client
+      ];
     "brands" =
       ps: with ps; [
       ];
@@ -8938,6 +8939,7 @@
     "bond"
     "bosch_alarm"
     "bosch_shc"
+    "bosch_smart_camera"
     "brands"
     "braviatv"
     "bring"
