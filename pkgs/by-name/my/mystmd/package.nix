@@ -41,8 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      # Keep platform-selecting launchers when installing every platform.
+      export BUN_FEATURE_FLAG_DISABLE_NATIVE_DEPENDENCY_LINKER=1
       # only the root node_modules is copied out; upstream defaults to isolated
-      bun install --no-progress --frozen-lockfile --no-cache --linker=hoisted
+      bun install --cpu="*" --os="*" --libc="*" --no-progress --frozen-lockfile --no-cache --linker=hoisted
 
       runHook postBuild
     '';
@@ -56,14 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-    outputHash =
-      {
-        x86_64-linux = "sha256-mUJZDaFKPTci/Wq3lnXrh3tzfjpsybW/EyRVmftV0HE=";
-        aarch64-linux = "sha256-W/wTX4Yp4a+qnlZfb3Z7UnuXa2BgjcNp/WmI6TSiY5c=";
-        aarch64-darwin = "sha256-RqBSDEnA4M6KFfQXIv6QnrW+TFcEMW00AWQ9XgdnkCc=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-
+    outputHash = "sha256-VlJ8p0Haas8mu76bcT4Y0ZZlaHfkZolb67mAkzM7MH8=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
