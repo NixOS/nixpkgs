@@ -1053,10 +1053,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1w3d5dhx4vjd707ihkcmq7fy78p5fgawcjdqw2byxnfw32gzgkbr";
+      sha256 = "1kcqbgxqyb9bidf8ygfcw0f75knqli9sm4f9mavmcfcqis6rvc78";
       type = "gem";
     };
-    version = "0.5.10.1";
+    version = "0.6.2.2";
   };
   CFPropertyList = {
     dependencies = [
@@ -1346,10 +1346,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1rbdzl9n8ppyp38y75hw06s17kp922ybj6jfvhz52p83dg6xpm6m";
+      sha256 = "0higp0ncrbjskq5qbxq1wnidc6i8ifrr3nsfn2ad38mm3b1nd39c";
       type = "gem";
     };
-    version = "1.3.1";
+    version = "1.4.0";
   };
   countries = {
     dependencies = [
@@ -10587,10 +10587,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1z710ndfr9yajywhji8mr5gc3j3wnr0alq754q15nh7k73wgbrlv";
+      sha256 = "07al0ka7vbx0x3g26g7hx7r5g84z06wm1l07xai2m2f2fmbckrxr";
       type = "gem";
     };
-    version = "3.4.3";
+    version = "3.4.4";
   };
   webfinger = {
     dependencies = [
