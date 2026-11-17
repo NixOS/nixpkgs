@@ -40,6 +40,9 @@ buildPythonPackage (finalAttrs: {
     "test_protocol_factory_udp_multicast_ro"
   ];
 
+  # Tests need to resolve localhost and bind local sockets
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "pytak" ];
 
   meta = {
@@ -48,6 +51,5 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/snstac/pytak/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
-    platforms = lib.platforms.linux;
   };
 })
