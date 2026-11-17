@@ -38,10 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     # disable auto updates
     substituteInPlace src/main/updater.ts \
       --replace-fail 'const isOutdated = autoUpdater.checkForUpdates().then(res => Boolean(res?.isUpdateAvailable));' 'const isOutdated = false;'
-
-    # Don't copy arrpc into app.asar
-    substituteInPlace package.json \
-      --replace-fail '"static",' '"static", "!static/dist/arrpc*",'
   '';
 
   node-modules = callPackage ./node-modules.nix { equibop = finalAttrs.finalPackage; }; # helps when the parent package is overidden
