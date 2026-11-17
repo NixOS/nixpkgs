@@ -3,7 +3,7 @@
   asn1tools,
   bidict,
   buildPythonPackage,
-  cmd2_3,
+  cmd2,
   colorlog,
   construct,
   cryptography,
@@ -47,7 +47,7 @@ buildPythonPackage {
   propagatedBuildInputs = [
     asn1tools
     bidict
-    cmd2_3
+    cmd2
     colorlog
     construct
     cryptography
@@ -82,5 +82,11 @@ buildPythonPackage {
     homepage = "https://github.com/osmocom/pysim";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jeyemwey ];
+    problems = lib.optionalAttrs (lib.versionAtLeast cmd2.version "4") {
+      broken.message = ''
+        pySim currently requires cmd2 >= 2.6.2, < 4, see: https://gitea.osmocom.org/sim-card/pysim/src/commit/9aa8934da2415b161eb9726adad2ba7b4f35d1a7/setup.py#L24
+        Tracking issue for updating to cmd2 version 4: https://osmocom.org/issues/7118
+      '';
+    };
   };
 }
