@@ -14,6 +14,8 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hass-bridge";
   version = "0.5.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "konradk";
