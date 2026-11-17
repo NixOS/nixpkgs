@@ -15,11 +15,11 @@
 
 let
   pname = "nori-cli";
-  version = "0.8.1";
+  version = "0.9.4";
 
   src = fetchurl {
     url = "https://github.com/norifm/nori/releases/download/v${version}/nori-cli-${version}-linux-x86_64.tar.gz";
-    hash = "sha256-s0hRm0LEHTifGcJi/ECDajDiExXXdrcyroxZ+qw+iag=";
+    hash = "sha256-Gt8rWrfsuBPjgiWOjUu8rMBvzwgNK2kxh6BJEkiXcnQ=";
   };
 
   unpacked = stdenvNoCC.mkDerivation {
