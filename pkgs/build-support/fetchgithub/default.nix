@@ -121,9 +121,6 @@ decorate (
     )
     // (
       if useFetchZip then
-        let
-          revWithTag = finalAttrs.rev;
-        in
         {
           # Use the API endpoint for private repos, as the archive URI doesn't
           # support access with GitHub's fine-grained access tokens.
@@ -133,14 +130,14 @@ decorate (
           url =
             if private then
               let
-                endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
+                endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${finalAttrs.rev}";
               in
               if githubBase == "github.com" then
                 "https://api.github.com${endpoint}"
               else
                 "https://${githubBase}/api/v3${endpoint}"
             else
-              "${baseUrl}/archive/${revWithTag}.tar.gz";
+              "${baseUrl}/archive/${finalAttrs.rev}.tar.gz";
           extension = "tar.gz";
           derivationArgs = {
             inherit
