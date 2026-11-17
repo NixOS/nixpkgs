@@ -12,7 +12,7 @@
   # any issues they run into.
   withGoolm ? false,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mautrix-slack";
   version = "26.11";
   tag = "v0.2611.0";
@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "slack";
-    inherit tag;
+    inherit (finalAttrs) tag;
     hash = "sha256-g8Tx+dkK+OWqchw1laJC8lInhOQk0d17dr4hwZIAqVQ";
   };
 
@@ -42,7 +42,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "main.Tag=${tag}"
+    "main.Tag=${finalAttrs.tag}"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -50,9 +50,9 @@ buildGoModule rec {
   meta = {
     description = "Matrix-Slack puppeting bridge";
     homepage = "https://github.com/mautrix/slack";
-    changelog = "https://github.com/mautrix/slack/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mautrix/slack/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ BonusPlay ];
     mainProgram = "mautrix-slack";
   };
-}
+})
