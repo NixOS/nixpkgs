@@ -19814,6 +19814,8 @@ self: super: with self; {
 
   sparsediffpy = callPackage ../development/python-modules/sparsediffpy { };
 
+  sparta-solver = callPackage ../development/python-modules/sparta-solver { };
+
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 
   spatialmath-python = callPackage ../development/python-modules/spatialmath-python { };
