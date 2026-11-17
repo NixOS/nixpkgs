@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "affine-gaps";
+  pname = "affinegaps";
   version = "0.2.5";
   pyproject = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     numpy
   ];
 
-  pythonImportsCheck = [ "affine_gaps" ];
+  pythonImportsCheck = [ "affinegaps" ];
 
   nativeCheckInputs = [
     biopython
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/unum-science/AffineGaps/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/unum-science/AffineGaps";
     license = lib.licenses.asl20;
-    mainProgram = "affine-gaps";
+    mainProgram = "affinegaps";
     maintainers = [ lib.maintainers.dotlambda ];
   };
 })
