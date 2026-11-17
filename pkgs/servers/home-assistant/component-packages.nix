@@ -2441,11 +2441,12 @@
       with ps;
       [
         fronius-modbus
+        fronius-solarapi
         modbus-connection
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: fronius-solarapi
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "frontend" =
       ps: with ps; [
         home-assistant-frontend
@@ -9142,6 +9143,7 @@
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
+    "fronius"
     "frontend"
     "frontier_silicon"
     "fuelprices_dk"
