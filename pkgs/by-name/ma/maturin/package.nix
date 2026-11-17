@@ -4,11 +4,10 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
-  testers,
   nix-update-script,
-  maturin,
   python3Packages,
   pkg-config,
+  versionCheckHook,
   zstd,
 }:
 
@@ -36,12 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libiconv
   ];
 
-  # Requires network access, fails in sandbox.
-  doCheck = false;
+  nativeCheckInputs = [ versionCheckHook ];
 
   passthru = {
     tests = {
-      version = testers.testVersion { package = maturin; };
       pyo3 = python3Packages.callPackage ./pyo3-test {
         pyproject = true;
         buildAndTestSubdir = "examples/word-count";
