@@ -4,6 +4,8 @@
   fetchurl,
   setJavaClassPath,
   testers,
+  cacert,
+  jre-generate-cacerts,
   enableJavaFX ? false,
   featureVersion,
   # minimum dependencies
@@ -62,6 +64,10 @@ let
 
   isJdk8 = lib.versions.major dist.jdkVersion == "8";
 
+  # keytool regenerates cacerts at build time, so it must be runnable
+  regenerateCacerts =
+    stdenv.hostPlatform.isLinux && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
   jdk = stdenv.mkDerivation rec {
     pname = "zulu-${javaPackage}";
     version = dist.jdkVersion;
@@ -106,6 +112,9 @@ let
         ]
       else
         null;
+
+    # keytool must already be patched when postFixup regenerates cacerts
+    dontAutoPatchelf = regenerateCacerts;
 
     installPhase = ''
       mkdir -p $out
@@ -162,9 +171,22 @@ let
 
     # fixupPhase is moving the man to share/man which breaks it because it's a
     # relative symlink.
-    postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      ln -nsf $bundle/Contents/Home/man $out/share/man
-    '';
+    postFixup =
+      lib.optionalString stdenv.hostPlatform.isDarwin ''
+        ln -nsf $bundle/Contents/Home/man $out/share/man
+      ''
+      # regenerate cacerts from cacert, as openjdk/generic.nix does
+      + lib.optionalString regenerateCacerts ''
+        autoPatchelf -- "$out"
+
+        pushd "$out/${lib.optionalString isJdk8 "jre/"}lib/security"
+        rm cacerts
+        JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+          ${jre-generate-cacerts} "$out/bin/keytool" ${cacert}/etc/ssl/certs/ca-bundle.crt
+        # jre-generate-cacerts ignores keytool failures
+        [ -s cacerts ] || { echo "failed to generate cacerts" >&2; exit 1; }
+        popd
+      '';
 
     passthru =
       (lib.optionalAttrs isJdk8 {
