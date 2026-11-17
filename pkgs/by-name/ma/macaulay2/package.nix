@@ -46,6 +46,7 @@
   onetbb,
   openssl,
   R,
+  rPackages,
   rWrapper,
   pkg-config,
   python3,
@@ -181,10 +182,18 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-0+ilvDh87Gmwzx0bLhT6nnadcPwgU3uB6pKhP9VqW0Q=";
       };
     in
-    lib.optionalString downloadDocs ''
-      ln -s ${docs} ../tarfiles/${docs.name}
-      make -C libraries all-in-Macaulay2-docs
-    '';
+    if downloadDocs then
+      ''
+        ln -s ${docs} ../tarfiles/${docs.name}
+        make -C libraries all-in-Macaulay2-docs
+      ''
+    else
+      ''
+        # ForeignFunctions documentation
+        export ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=${lib.makeLibraryPath [ mpfr ]}
+        # RInterface documentation
+        export R_LIBS_SITE=${lib.makeSearchPath "library" (with rPackages; [ MASS ])}
+      '';
 
   buildFlags = lib.optionals downloadDocs [
     "MakeDocumentation=false"
