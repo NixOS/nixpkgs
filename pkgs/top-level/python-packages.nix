@@ -7687,6 +7687,8 @@ self: super: with self; {
 
   hatchling = callPackage ../development/python-modules/hatchling { };
 
+  haveniaq = callPackage ../development/python-modules/haveniaq { };
+
   haversine = callPackage ../development/python-modules/haversine { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
