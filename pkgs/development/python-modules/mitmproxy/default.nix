@@ -1,6 +1,6 @@
 {
   lib,
-  aioquic_1_2,
+  aioquic,
   argon2-cffi,
   asgiref,
   backports-zstd,
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    aioquic_1_2
+    aioquic
     argon2-cffi
     asgiref
     brotli
@@ -170,6 +170,7 @@ buildPythonPackage rec {
   };
 
   meta = {
+    broken = lib.versionAtLeast aioquic.version "1.3";
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
