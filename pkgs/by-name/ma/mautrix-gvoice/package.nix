@@ -18,7 +18,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "mautrix-gvoice";
-  version = "26.05";
+  version = "26.11";
   tag = "v0.${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.0";
 
   __structuredAttrs = true;
@@ -27,10 +27,10 @@ buildGoModule (finalAttrs: {
     owner = "mautrix";
     repo = "gvoice";
     tag = finalAttrs.tag;
-    hash = "sha256-nzWrEwA3OVYAV6JIoCfe5NLpjdy7S9bfefAH6iRzOxg=";
+    hash = "sha256-0DUe+MeExB3/wF6IIwoW9iDrn2RRRh6ixm6fKt6jF0o=";
   };
 
-  vendorHash = "sha256-iNOMX7gonvkQSH6r0tCtqD71fyUfQfHmclrWbH11XiU=";
+  vendorHash = "sha256-90g2yajwy3fdDwzftXdoYiLTSeYIK9IApzZ3KWj1k8w=";
 
   buildInputs = (lib.optional (!withGoolm) olm) ++ (lib.optional withGoolm stdenv.cc.cc.lib);
 
