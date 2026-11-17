@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-scopes";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-scopes";
     tag = finalAttrs.version;
-    hash = "sha256-VtZfwWS6qcY1kthJ6qXf/nwxZpJxu5x41xjjR58wCM0=";
+    hash = "sha256-D04SqB+k7XnbkUY4ekrY7sz63DOcJlcaLR9kWhfxMco=";
   };
 
   build-system = [ setuptools ];
