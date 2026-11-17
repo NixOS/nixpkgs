@@ -53,6 +53,7 @@ let
     ;
 
   buildIsHost = lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+  pythonAtLeast33 = python.pythonAtLeast "3.3";
 
   leftPadName =
     name: against:
@@ -405,10 +406,8 @@ lib.extendMkDerivation {
           && pyproject == true
           && !isBootstrapPackage
         ) metadataCheckHooks
-        ++ optionals (
-          # Optionally enforce PEP420 for python3
-          python.pythonAtLeast "3.3"
-        ) namespaceHooks
+        # Optionally enforce PEP420 for python3
+        ++ optionals pythonAtLeast33 namespaceHooks
         ++ optionals withDistOutput withDistHooks
         ++ nativeBuildInputs
         ++ getFinalPassthru "build-system";
