@@ -272,18 +272,20 @@ lib.extendMkDerivation {
 
     let
       getFinalPassthru =
-        let
-          pos = unsafeGetAttrPos "passthru" finalAttrs;
-        in
         attrName:
-        finalAttrs.passthru.${attrName} or (throw (
-          ''
-            ${finalAttrs.name}: passthru.${attrName} missing after overrideAttrs overriding.
-          ''
-          + optionalString (pos != null) ''
-            Last overridden at ${pos.file}:${toString pos.line}
-          ''
-        ));
+        finalAttrs.passthru.${attrName} or (
+          let
+            pos = unsafeGetAttrPos "passthru" finalAttrs;
+          in
+          throw (
+            ''
+              ${finalAttrs.name}: passthru.${attrName} missing after overrideAttrs overriding.
+            ''
+            + optionalString (pos != null) ''
+              Last overridden at ${pos.file}:${toString pos.line}
+            ''
+          )
+        );
 
       format' =
         assert (getFinalPassthru "pyproject" != null) -> (format == null);
