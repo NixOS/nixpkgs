@@ -18061,6 +18061,8 @@ self: super: with self; {
 
   quart-trio = callPackage ../development/python-modules/quart-trio { };
 
+  quartodoc = callPackage ../development/python-modules/quartodoc { };
+
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
