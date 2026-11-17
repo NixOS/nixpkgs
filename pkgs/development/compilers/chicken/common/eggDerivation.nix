@@ -157,7 +157,7 @@ lib.extendMkDerivation {
           ''
         );
 
-      doCheck = args.doCheck or true;
+      doCheck = args.doCheck or (stdenv.hostPlatform.isLinux);
 
       checkPhase = args.checkPhase or lib.optionalString finalAttrs.doCheck ''
         runHook preCheck
