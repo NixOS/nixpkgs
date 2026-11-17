@@ -306,6 +306,8 @@ self: super: with self; {
 
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
+  aioengiebelgium = callPackage ../development/python-modules/aioengiebelgium { };
+
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioextensions = callPackage ../development/python-modules/aioextensions { };
