@@ -112,8 +112,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # subpackages have distinct version numbers, so we can't use nix-update's `--subpackage`
     updateScript = _experimental-update-script-combinators.sequence [
       (nix-update-script { })
-      (nix-update-script { attrPath = "stalwart_1_0.webui"; })
-      (nix-update-script { attrPath = "stalwart_1_0.spam-filter"; })
+      (nix-update-script { attrPath = "stalwart_1.webui"; })
+      (nix-update-script { attrPath = "stalwart_1.spam-filter"; })
     ];
   };
 

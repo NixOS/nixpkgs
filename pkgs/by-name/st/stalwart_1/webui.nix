@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   zip,
-  stalwart_1_0,
+  stalwart_1,
   fetchFromGitHub,
   nix-update-script,
 }:
@@ -63,6 +63,6 @@ buildNpmPackage (finalAttrs: {
         redistributable = false;
       }
     ];
-    inherit (stalwart_1_0.meta) maintainers;
+    inherit (stalwart_1.meta) maintainers;
   };
 })

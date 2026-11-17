@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
-  stalwart_1_0,
+  stalwart_1,
   nix-update-script,
   python3,
 }:
@@ -49,6 +49,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         mit
         asl20
       ];
-    inherit (stalwart_1_0.meta) maintainers;
+    inherit (stalwart_1.meta) maintainers;
   };
 })
