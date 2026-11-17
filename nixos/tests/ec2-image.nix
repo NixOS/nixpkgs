@@ -308,12 +308,13 @@ in
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
 
-          with subtest("Store paths and profiles set up on first boot"):
+          with subtest("Store paths and profiles"):
               machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
+              machine.succeed("nix-store --verify")
               machine.succeed("test $(readlink -f /nix/var/nix/profiles/system) = ${imageCfg.system.build.toplevel}")
               machine.fail("test -e /nix/var/nix/profiles/system-2-link")
               ${lib.optionalString imageCfg.nix.channel.enable ''
-                machine.succeed("test -e /root/.nix-defexpr/channels/nixos/default.nix")
+                machine.succeed("test -e /root/.nix-defexpr/channels/nixos/default.nix", "test $(stat -c %a /root) = 700")
               ''}
 
           with subtest("Decompression of gzip-compressed user-data"):

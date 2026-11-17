@@ -68,6 +68,30 @@ let
       pkgs.buildPackages.jq
       pkgs.buildPackages.qemu-utils
     ];
+    # Set up /nix/var/nix and root's channel the way nixos-install does.
+    postPatch = ''
+      mkdir -p nix-state/profiles
+      ln -s ${toplevel} nix-state/profiles/system-1-link
+      ln -s system-1-link nix-state/profiles/system
+      ${optionalString config.nix.enable ''
+        NIX_STATE_DIR=$PWD/nix-state ${lib.getExe' config.nix.package.out "nix-store"} --load-db \
+          < ${pkgs.closureInfo { rootPaths = storePaths; }}/registration
+        # Keep the image reproducible.
+        ${lib.getExe' pkgs.buildPackages.sqlite "sqlite3"} nix-state/db/db.sqlite \
+          "UPDATE ValidPaths SET registrationTime = $SOURCE_DATE_EPOCH"
+        # Nix recreates its reserved space when it opens the store.
+        rm nix-state/db/reserved
+      ''}
+      ${optionalString (config.nix.enable && config.nix.channel.enable) ''
+        mkdir -p nix-state/profiles/per-user/root root-home/.nix-defexpr
+        ln -s ${channelSources} nix-state/profiles/per-user/root/channels-1-link
+        ln -s channels-1-link nix-state/profiles/per-user/root/channels
+        ln -s /nix/var/nix/profiles/per-user/root/channels root-home/.nix-defexpr/channels
+        chmod 0700 root-home root-home/.nix-defexpr
+        echo "CopyFiles=$PWD/root-home:/root" >> repart.d/root.conf
+      ''}
+      echo "CopyFiles=$PWD/nix-state:/nix/var/nix" >> repart.d/root.conf
+    '';
     # Convert the image to amazonImage.format and write the metadata Hydra and NixOS/amis read.
     installPhase = ''
       runHook preInstall
@@ -106,19 +130,18 @@ let
   # no extra copies of the kernel and initrd.
   systemdBootImage = repartImage.overrideAttrs (previousAttrs: {
     nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [ pkgs.buildPackages.bubblewrap ];
-    postPatch = ''
-      mkdir -p esp root/{etc,tmp,nix/var/nix/profiles}
+    postPatch = previousAttrs.postPatch + ''
+      mkdir -p esp root/{etc,tmp}
       ln -s ${config.environment.etc."os-release".source} root/etc/os-release
       ${optionalString (config.environment.etc ? machine-id) ''
         ln -s ${config.environment.etc.machine-id.source} root/etc/machine-id
       ''}
-      ln -s ${toplevel} root/nix/var/nix/profiles/system-1-link
-      ln -s system-1-link root/nix/var/nix/profiles/system
 
       bwrap \
         --bind "$PWD/root" / \
         --bind "$PWD/esp" ${efi.efiSysMountPoint} \
         --ro-bind ${builtins.storeDir} ${builtins.storeDir} \
+        --bind "$PWD/nix-state" /nix/var/nix \
         --proc /proc \
         --dev /dev \
         --setenv NIXOS_INSTALL_BOOTLOADER 1 \
@@ -152,11 +175,6 @@ let
           mkdir -p $root${efi.efiSysMountPoint}
           mount -L ESP $root${efi.efiSysMountPoint}
         ''}
-        # GRUB lists the generations from the profile links.
-        mkdir -p $root/nix/var/nix/profiles
-        ln -s ${toplevel} $root/nix/var/nix/profiles/system-1-link
-        ln -s system-1-link $root/nix/var/nix/profiles/system
-
         ${lib.concatMapStrings (device: ''
           mkdir -p "$(dirname ${device})"
           ln -s /dev/vda ${device}
@@ -270,45 +288,6 @@ in
       # GRUB reads the root file system, so only its EFI binary goes on the ESP.
       boot.loader.efi.efiSysMountPoint = mkIf (!systemdBoot) (mkDefault "/boot/efi");
 
-      # Nothing runs nixos-install on the image, so register the store paths and
-      # set up the profiles on first boot.
-      systemd.services.register-nix-paths = mkIf config.nix.enable {
-        description = "Register Nix Store Paths";
-        unitConfig = {
-          DefaultDependencies = false;
-          ConditionPathExists = "/nix-path-registration";
-        };
-        wantedBy = [ "sysinit.target" ];
-        before = [
-          "sysinit.target"
-          "shutdown.target"
-          "nix-daemon.socket"
-          "nix-daemon.service"
-        ];
-        after = [ "local-fs.target" ];
-        conflicts = [ "shutdown.target" ];
-        restartIfChanged = false;
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-        script =
-          let
-            nix-env = lib.getExe' config.nix.package.out "nix-env";
-          in
-          ''
-            ${lib.getExe' config.nix.package.out "nix-store"} --load-db < /nix-path-registration
-            ${nix-env} -p /nix/var/nix/profiles/system --set /run/current-system
-            ${optionalString config.nix.channel.enable ''
-              mkdir -p /nix/var/nix/profiles/per-user/root
-              ${nix-env} -p /nix/var/nix/profiles/per-user/root/channels --set ${channelSources}
-              install -m 0700 -d /root/.nix-defexpr
-              ln -sfn /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
-            ''}
-            rm /nix-path-registration
-          '';
-      };
-
       image.repart = {
         enable = true;
         # repart derives image.baseName from this; keep its usual default.
@@ -340,9 +319,6 @@ in
             inherit storePaths;
             contents = {
               "/etc/nixos/configuration.nix".source = configFile;
-            }
-            // lib.optionalAttrs config.nix.enable {
-              "/nix-path-registration".source = "${pkgs.closureInfo { rootPaths = storePaths; }}/registration";
             }
             // lib.genAttrs' cfg.contents (
               { source, target }: lib.nameValuePair "/${lib.removePrefix "/" target}" { inherit source; }
