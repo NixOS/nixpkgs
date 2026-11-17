@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proton-pass-cli";
-  version = "2.7.0";
+  version = "2.7.1";
 
   __structuredAttrs = true;
 
@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "protonpass";
     repo = "pass-cli";
     tag = finalAttrs.version;
-    hash = "sha256-tiOPGgMXY14k9FsTDcF0uYVEQ8pcK2xijz9HSwiLGNo";
+    hash = "sha256-ZhpWbw6vM3j7s5fcYzJ7lC9vI74lcjTSWycXwvidaS0=";
   };
 
-  cargoHash = "sha256-LLzs6VIn6IxPNluzjXtK61FucxPtmi8vgPn09fNwb9k=";
+  cargoHash = "sha256-kih+CY2l89FTaMy/HPar1FxYfi6WKTg6S+90gHH5wSI=";
 
   # pass-uniffi-bindgen generates the Python bindings via maturin; its source
   # directory is not published in the GitHub repo, so it can't be a member
