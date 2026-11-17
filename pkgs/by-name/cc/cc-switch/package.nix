@@ -110,10 +110,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # the previous cargo-only packaging already shipped this combination.
   tauriBuildFlags = [ "--ignore-version-mismatches" ];
 
-  # Proxy startup test binds to a local address, which the darwin sandbox blocks.
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=services::provider::tests::update_current_claude_provider_syncs_live_when_proxy_takeover_detected_without_backup"
-  ];
+  # Proxy tests bind to local addresses
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/bin"
