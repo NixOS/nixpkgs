@@ -46,6 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
       bun install \
         --cpu="*" \
+        --libc="*" \
         --frozen-lockfile \
         --ignore-scripts \
         --no-progress \
@@ -68,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-Defmk7fN49UQtBpmWIFGnUiPlBpJtLp+8QaFFQCAY8k=";
+    outputHash = "sha256-u6zYi7gjD8MOp8b2Uo4fZpx8sBGz6dmbMUbab8Nf14k=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
