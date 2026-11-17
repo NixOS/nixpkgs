@@ -8,6 +8,7 @@
   libmysqlclient,
   libpq,
   openssl,
+  aws-lc,
   makeBinaryWrapper,
   lib,
   nix-update-script,
@@ -51,12 +52,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    lib.optional (dbBackend == "mysql") libmysqlclient
-    ++ lib.optionals (dbBackend == "postgresql") [
-      libpq
-      openssl
-    ];
+  buildInputs = [
+    aws-lc
+  ]
+  ++ lib.optional (dbBackend == "mysql") libmysqlclient
+  ++ lib.optionals (dbBackend == "postgresql") [
+    libpq
+    openssl
+  ];
 
   buildNoDefaultFeatures = true;
   # The syncserver "postgres" feature only enables syncstorage-db/postgres.
