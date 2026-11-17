@@ -7,7 +7,7 @@
   gtk3,
   gobject-introspection,
   copyDesktopItems,
-  sox,
+  sox_ng,
   pulseaudio,
 }:
 
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gtk3
-    sox
+    sox_ng
   ];
 
   dontWrapGApps = true;
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     makeWrapperArgs+=(
       '--prefix' 'PATH' ':' '${
         lib.makeBinPath [
-          sox
+          sox_ng
           pulseaudio
         ]
       }'

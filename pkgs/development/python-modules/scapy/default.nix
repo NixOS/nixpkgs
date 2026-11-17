@@ -10,7 +10,7 @@
   ipython,
   cryptography,
   withVoipSupport ? true,
-  sox,
+  sox_ng,
   matplotlib,
   pyx,
   withManufDb ? false,
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
   '';
 
-  buildInputs = lib.optional withVoipSupport sox;
+  buildInputs = lib.optional withVoipSupport sox_ng;
 
   optional-dependencies = {
     all = [

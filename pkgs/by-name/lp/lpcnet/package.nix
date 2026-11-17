@@ -5,7 +5,7 @@
   fetchurl,
   cmake,
   codec2,
-  sox,
+  sox_ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     # not on aarch64-linux, although the relevant test is not enabled
     # conditionally, see:
     # https://github.com/drowe67/LPCNet/blob/c8e51ac5e2fe674849cb53e7da44689b572cc246/CMakeLists.txt#L220-L225
-    sox
+    sox_ng
   ];
 
   meta = {

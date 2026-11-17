@@ -648649,7 +648649,7 @@ self: {
       license = lib.licenses.bsd3;
       maintainers = [ lib.maintainers.thielema ];
     }
-  ) { inherit (pkgs) sox; };
+  ) { sox = pkgs.sox_ng; };
 
   soyuz = callPackage (
     {
