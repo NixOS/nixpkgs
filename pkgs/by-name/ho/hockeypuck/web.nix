@@ -2,30 +2,36 @@
   stdenv,
   lib,
   hockeypuck,
-  nixosTests,
 }:
 
 stdenv.mkDerivation {
   pname = "hockeypuck-web";
-
   inherit (hockeypuck) version src;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   dontBuild = true; # We should just copy the web templates
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/
 
     cp -vr contrib/webroot $out/share/
     cp -vr contrib/templates $out/share/
+
+    runHook postInstall
   '';
 
-  passthru.tests = nixosTests.hockeypuck;
+  passthru = {
+    inherit (hockeypuck.passthru) tests;
+  };
 
   meta = {
     description = "OpenPGP Key Server web resources";
     homepage = "https://github.com/hockeypuck/hockeypuck";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
-    teams = with lib.teams; [ ngi ];
+    inherit (hockeypuck.meta) teams;
   };
 }
