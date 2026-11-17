@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosendspin";
-  version = "10.2.2";
+  version = "10.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = finalAttrs.version;
-    hash = "sha256-Y8DXmuoQHXA3dtnQVGjp0sQX3R4NYjQVU2JtpsorqRQ=";
+    hash = "sha256-xkEqKMV5j4IIz92s7tEV1Zrto5/wdqxlgzEXt5DMAt4=";
   };
 
   postPatch = ''
@@ -99,11 +99,11 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
+  disabledTestPaths = [
     # This test fails due to our ffmpeg/pyav being build with libsoxr and it automatically being chosen.
     # When forcefully disabling libsoxr, the test passes, but Music Assistant, the primary consumer of this library,
     # builds a custom ffmpeg with libsoxr and then links their PyAV against it, so it cannot be that bad, right?
-    "test_format_change_during_inflight_commit_aborts_old_format_delivery"
+    "tests/server/test_push_stream_behavior.py::test_format_change_during_inflight_commit_aborts_old_format_delivery"
   ];
 
   passthru = {
