@@ -2613,10 +2613,10 @@
   };
 
   rescript = {
-    version = "6.0.0-unstable-2026-09-25";
+    version = "6.0.0-unstable-2026-11-04";
     url = "github:rescript-lang/tree-sitter-rescript";
-    rev = "90643a6302057b969c51e1bf235b8ecf1da49232";
-    hash = "sha256-k510+GOLhputcgoo3l8JyoaI9IAtDw+aEKoPjMjRyWI=";
+    rev = "cc6a15ee6297d493089134cb661a54fc7a13e376";
+    hash = "sha256-4ncL7Wogzd542A0o6ll67R334pCn1rhAjM7fjKR9BGc=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stdman";
-  version = "2024.07.05";
+  version = "2026.11.13";
 
   src = fetchFromGitHub {
     owner = "jeaye";
     repo = "stdman";
     rev = finalAttrs.version;
-    sha256 = "sha256-/yJqKwJHonnBkP6/yQQJT3yPyYO6/nFAf4XFrgl3L0A=";
+    sha256 = "sha256-snogj+hPShT/N/e146lD0iqL2R3I83VoYnoa00M/E4A=";
   };
 
   outputDevdoc = "out";

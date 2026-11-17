@@ -9384,10 +9384,6 @@ with pkgs;
 
   pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
 
-  quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
-    hdf5 = hdf5-fortran;
-  };
-
   siesta-mpi = callPackage ../by-name/si/siesta/package.nix { useMpi = true; };
 
   ### SCIENCE/BIOLOGY

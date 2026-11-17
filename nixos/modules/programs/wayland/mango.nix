@@ -48,8 +48,6 @@ in
       };
     };
 
-    meta.maintainers = with lib.maintainers; [ yvnth ];
-
     # Set up the session for Display Managers (GDM, SDDM, etc.)
     services.displayManager.sessionPackages = [ cfg.package ];
   };
