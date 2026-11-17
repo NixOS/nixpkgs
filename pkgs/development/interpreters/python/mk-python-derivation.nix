@@ -52,6 +52,8 @@ let
     stringLength
     ;
 
+  buildIsHost = lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+
   leftPadName =
     name: against:
     let
@@ -393,7 +395,7 @@ lib.extendMkDerivation {
           if isBootstrapInstallPackage then bootstrappedPypaFormatHooks else pypaFormatHooks
         )
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
-        ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) importsCheckHooks
+        ++ optionals buildIsHost importsCheckHooks
         ++ optionals (
           finalAttrs ? pname
           && finalAttrs ? version
