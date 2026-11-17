@@ -1,9 +1,10 @@
 {
   buildPythonPackage,
   cmake,
+  ninja,
   numpy,
   scipy,
-  hatchling,
+  scikit-build-core,
   python,
   stdenv,
   xgboost,
@@ -19,18 +20,19 @@ buildPythonPackage {
   pyproject = true;
   inherit (xgboost) version src meta;
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    hatchling
+    ninja
+    scikit-build-core
   ];
   buildInputs = [ xgboost ];
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
 
   pythonRemoveDeps = [
-    "nvidia-nccl-cu12"
+    "nvidia-nccl-cu13"
   ];
 
   # Place libxgboost.so where the build will look for it
