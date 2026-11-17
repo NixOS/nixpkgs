@@ -89,13 +89,8 @@ in
 
     environment.systemPackages = [ pkgs.kmod ];
 
-    system.activationScripts.modprobe = stringAfter [ "specialfs" ] ''
-      # Allow the kernel to find our wrapped modprobe (which searches
-      # in the right location in the Nix store for kernel modules).
-      # We need this when the kernel (or some module) auto-loads a
-      # module.
-      echo ${pkgs.kmod}/bin/modprobe > /proc/sys/kernel/modprobe
-    '';
+    # Handled by nixos-init activate, kept as an empty stub for deps compat.
+    system.activationScripts.modprobe = stringAfter [ "specialfs" ] "";
 
   };
 
