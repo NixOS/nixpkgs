@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "antimicrox";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "AntiMicroX";
     repo = "antimicrox";
     rev = finalAttrs.version;
-    sha256 = "sha256-frPXUTbD5Wk0Wo8E9L8Es5GCvWY55Qx0RGSkYDaVs6g=";
+    sha256 = "sha256-Hy0AHg3foZnIbN4Xx8kwYhbg+Z+cjdop6lYdgYPRyts=";
   };
 
   nativeBuildInputs = [
