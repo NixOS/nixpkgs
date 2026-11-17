@@ -5,6 +5,8 @@
   olm,
   nix-update-script,
   versionCheckHook,
+  testers,
+  mautrix-slack,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
   # is not recommended by the mautrix developers, but they are interested in
@@ -45,7 +47,15 @@ buildGoModule (finalAttrs: {
     "main.Tag=${finalAttrs.tag}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = mautrix-slack;
+      version = "v${finalAttrs.version}";
+    };
+  };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Matrix-Slack puppeting bridge";
