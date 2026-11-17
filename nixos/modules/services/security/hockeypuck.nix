@@ -15,6 +15,8 @@ in
   options.services.hockeypuck = {
     enable = lib.mkEnableOption "Hockeypuck OpenPGP Key Server";
 
+    package = lib.mkPackageOption pkgs "hockeypuck" { };
+
     port = lib.mkOption {
       default = 11371;
       type = lib.types.port;
@@ -29,10 +31,10 @@ in
           hockeypuck = {
             loglevel = "INFO";
             logfile = "/var/log/hockeypuck/hockeypuck.log";
-            indexTemplate = "''${pkgs.hockeypuck-web}/share/templates/index.html.tmpl";
-            vindexTemplate = "''${pkgs.hockeypuck-web}/share/templates/index.html.tmpl";
-            statsTemplate = "''${pkgs.hockeypuck-web}/share/templates/stats.html.tmpl";
-            webroot = "''${pkgs.hockeypuck-web}/share/webroot";
+            indexTemplate = "''${cfg.package.passthru.web}/share/templates/index.html.tmpl";
+            vindexTemplate = "''${cfg.package.passthru.web}/share/templates/index.html.tmpl";
+            statsTemplate = "''${cfg.package.passthru.web}/share/templates/stats.html.tmpl";
+            webroot = "''${cfg.package.passthru.web}/share/webroot";
 
             hkp.bind = ":''${toString cfg.port}";
 
@@ -73,10 +75,10 @@ in
     services.hockeypuck.settings.hockeypuck = {
       loglevel = lib.mkDefault "INFO";
       logfile = "/var/log/hockeypuck/hockeypuck.log";
-      indexTemplate = "${pkgs.hockeypuck-web}/share/templates/index.html.tmpl";
-      vindexTemplate = "${pkgs.hockeypuck-web}/share/templates/index.html.tmpl";
-      statsTemplate = "${pkgs.hockeypuck-web}/share/templates/stats.html.tmpl";
-      webroot = "${pkgs.hockeypuck-web}/share/webroot";
+      indexTemplate = "${cfg.package.passthru.web}/share/templates/index.html.tmpl";
+      vindexTemplate = "${cfg.package.passthru.web}/share/templates/index.html.tmpl";
+      statsTemplate = "${cfg.package.passthru.web}/share/templates/stats.html.tmpl";
+      webroot = "${cfg.package.passthru.web}/share/webroot";
 
       hkp.bind = ":${toString cfg.port}";
 
@@ -103,7 +105,7 @@ in
       serviceConfig = {
         WorkingDirectory = "/var/lib/hockeypuck";
         User = "hockeypuck";
-        ExecStart = "${pkgs.hockeypuck}/bin/hockeypuck -config ${settingsFormat.generate "config.toml" cfg.settings}";
+        ExecStart = "${lib.getExe cfg.package} -config ${settingsFormat.generate "config.toml" cfg.settings}";
         Restart = "always";
         RestartSec = "5s";
         LogsDirectory = "hockeypuck";
