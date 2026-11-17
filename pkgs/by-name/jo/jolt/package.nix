@@ -90,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/jolt-lang/jolt";
     changelog = "https://github.com/jolt-lang/jolt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.epl20;
-    maintainers = with lib.maintainers; [ crimeminister ];
+    maintainers = with lib.maintainers; [
+      crimeminister
+      yogthos
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "jolt";
   };
