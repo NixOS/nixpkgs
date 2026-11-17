@@ -1189,9 +1189,14 @@
         chess-com-api
       ];
     "chirpstack" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         chirpstack-api
-      ]; # missing inputs: lorawan-connection lorawan-connection
+        lorawan-connection
+        lorawan-connection
+      ]
+      ++ lorawan-connection.optional-dependencies.chirpstack;
     "cielo_home" =
       ps: with ps; [
         cielo-connect-api
@@ -4345,7 +4350,8 @@
       ];
     "lorawan" =
       ps: with ps; [
-      ]; # missing inputs: lorawan-connection
+        lorawan-connection
+      ];
     "lovelace" =
       ps: with ps; [
       ];
@@ -6655,7 +6661,8 @@
       ];
     "sensecap_lorawan" =
       ps: with ps; [
-      ]; # missing inputs: lorawan-connection sensecap-lorawan
+        lorawan-connection
+      ]; # missing inputs: sensecap-lorawan
     "sensibo" =
       ps: with ps; [
         pysensibo
@@ -7718,8 +7725,13 @@
         ttn-client
       ];
     "thethingsnetwork_lorawan" =
-      ps: with ps; [
-      ]; # missing inputs: lorawan-connection lorawan-connection
+      ps:
+      with ps;
+      [
+        lorawan-connection
+        lorawan-connection
+      ]
+      ++ lorawan-connection.optional-dependencies.tts;
     "thingspeak" =
       ps: with ps; [
         thingspeak
@@ -8963,6 +8975,7 @@
     "chacon_dio"
     "chef_iq"
     "chess_com"
+    "chirpstack"
     "cielo_home"
     "citybikes"
     "clicksend_tts"
@@ -9397,6 +9410,7 @@
     "london_underground"
     "lookin"
     "loqed"
+    "lorawan"
     "lovelace"
     "luci"
     "luftdaten"
@@ -9855,6 +9869,7 @@
     "thermobeacon"
     "thermopro"
     "thethingsnetwork"
+    "thethingsnetwork_lorawan"
     "thread"
     "threema"
     "threshold"
