@@ -21,6 +21,7 @@
   withOpenGFX ? true,
   openttd-opensfx,
   withOpenSFX ? true,
+  openttd-openmsx,
   withOpenMSX ? true,
   withFluidSynth ? true,
   fluidsynth,
@@ -41,11 +42,6 @@
 }:
 
 let
-  openmsx = fetchzip {
-    url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
-    hash = "sha256-ysNFIvo7iaLN8XoaeZuZQFLpBZlYUDLDg7rH6TabaHY=";
-  };
-
   # OpenTTD builds and uses some of its own tools during the build and we need those to be available for cross-compilation.
   # Build the tools for buildPlatform with minimal dependencies, using the "OPTION_TOOLS_ONLY" flag.
   crossTools = buildPackages.openttd.overrideAttrs (oldAttrs: {
@@ -123,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp ${openttd-opensfx}/*.tar $out/share/games/openttd/baseset
     ''
     + lib.optionalString withOpenMSX ''
-      tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
+      cp -r ${openttd-openmsx}/* $out/share/games/openttd/baseset
     '';
 
   meta = {
