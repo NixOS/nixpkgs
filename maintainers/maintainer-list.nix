@@ -11075,6 +11075,12 @@
     githubId = 11212268;
     name = "gruve-p";
   };
+  gruvw = {
+    name = "gruvw";
+    email = "gruvw.dev@gmail.com";
+    github = "gruvw";
+    githubId = 63407038;
+  };
   gs-101 = {
     email = "gabrielsantosdesouza@disroot.org";
     github = "gs-101";
