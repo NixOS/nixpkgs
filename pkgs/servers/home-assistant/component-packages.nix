@@ -936,7 +936,8 @@
       ];
     "bosch_smart_camera" =
       ps: with ps; [
-      ]; # missing inputs: bosch-shc-camera-client
+        bosch-shc-camera-client
+      ];
     "brands" =
       ps: with ps; [
       ];
@@ -1769,7 +1770,8 @@
       ];
     "ecosmart" =
       ps: with ps; [
-      ]; # missing inputs: aioecosmart
+        aioecosmart
+      ];
     "ecospar" =
       ps: with ps; [
       ];
@@ -2100,7 +2102,9 @@
         evohome-async
       ];
     "exicom_spin_ble" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         aioesphomeapi
         aiohasupervisor
         aioruuvigateway
@@ -2126,8 +2130,10 @@
         pysmlight
         pyspeex-noise
         serialx
+        spinev-ble
         zeroconf
-      ]; # missing inputs: spinev-ble
+      ]
+      ++ spinev-ble.optional-dependencies.bleak;
     "ezviz" =
       ps: with ps; [
         ha-ffmpeg
@@ -2441,11 +2447,12 @@
       with ps;
       [
         fronius-modbus
+        fronius-solarapi
         modbus-connection
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: fronius-solarapi
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "frontend" =
       ps: with ps; [
         home-assistant-frontend
@@ -2728,14 +2735,16 @@
       ];
     "google_travel_time" =
       ps: with ps; [
-      ]; # missing inputs: python-google-maps-routing-api
+        python-google-maps-routing-api
+      ];
     "google_weather" =
       ps: with ps; [
         python-google-weather-api
       ];
     "google_wifi" =
       ps: with ps; [
-      ]; # missing inputs: googlewifiapi
+        googlewifiapi
+      ];
     "govee_ble" =
       ps: with ps; [
         aioesphomeapi
@@ -8938,6 +8947,7 @@
     "bond"
     "bosch_alarm"
     "bosch_shc"
+    "bosch_smart_camera"
     "brands"
     "braviatv"
     "bring"
@@ -9049,6 +9059,7 @@
     "ecobee"
     "ecoforest"
     "econet"
+    "ecosmart"
     "ecovacs"
     "ecowitt"
     "edifier_infrared"
@@ -9095,6 +9106,7 @@
     "everlights"
     "evil_genius_labs"
     "evohome"
+    "exicom_spin_ble"
     "ezviz"
     "faa_delays"
     "facebook"
@@ -9142,6 +9154,7 @@
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
+    "fronius"
     "frontend"
     "frontier_silicon"
     "fuelprices_dk"
@@ -9190,7 +9203,9 @@
     "google_sheets"
     "google_tasks"
     "google_translate"
+    "google_travel_time"
     "google_weather"
+    "google_wifi"
     "govee_ble"
     "govee_light_local"
     "gpsd"

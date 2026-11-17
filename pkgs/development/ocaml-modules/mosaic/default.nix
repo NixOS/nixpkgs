@@ -7,18 +7,18 @@
   matrix,
   toffee,
   cmarkit,
-  windtrap,
   ppx_windtrap,
+  thumper,
+  windtrap,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "mosaic";
-  # 0.2.0 too fresh/breaking for downstream deps (k7 & console pin matrix < 0.2.0)
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchzip {
     url = "https://github.com/invariant-hq/mosaic/releases/download/${finalAttrs.version}/mosaic-${finalAttrs.version}.tbz";
-    hash = "sha256-GzCpU24w9QNiBEa9nAtLcqDxfY75XxfoSE5LLYvUCvA=";
+    hash = "sha256-HiOjNCNIFXkQHAQ8d3XZadg95nE231B+4pGVUX3ysUU=";
   };
 
   minimalOCamlVersion = "5.4";
@@ -34,8 +34,9 @@ buildDunePackage (finalAttrs: {
   ];
 
   checkInputs = [
-    windtrap
     ppx_windtrap
+    thumper
+    windtrap
   ];
 
   doCheck = true;

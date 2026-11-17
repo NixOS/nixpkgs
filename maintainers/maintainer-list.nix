@@ -14990,6 +14990,11 @@
     github = "Kalitsune";
     githubId = 74075397;
   };
+  kalkaro = {
+    name = "Kalkaro";
+    github = "Kalkaro";
+    githubId = 177581171;
+  };
   kallisti-dev = {
     email = "kallisti.dev@gmail.com";
     github = "kallisti-dev";
@@ -21578,6 +21583,12 @@
     github = "Nishimara";
     githubId = 59232119;
   };
+  niteshbalusu11 = {
+    email = "niteshbalusu@icloud.com";
+    github = "niteshbalusu11";
+    githubId = 84944042;
+    name = "Nitesh Balusu";
+  };
   nitinbhat972 = {
     email = "nitinbhat972@gmail.com";
     github = "nitinbhat972";
@@ -24676,6 +24687,13 @@
     github = "ragingpastry";
     githubId = 6778250;
     name = "Nick Wilburn";
+  };
+  rahoni = {
+    email = "honisuess@gmail.com";
+    github = "RaHoni";
+    githubId = 53820160;
+    name = "Raoul Honermann";
+    keys = [ { fingerprint = "54D1 1CB3 7C71 3D54 57AC  F0C3 5962 F3E9 516F D551"; } ];
   };
   raitobezarius = {
     email = "ryan@lahfa.xyz";
@@ -27909,6 +27927,12 @@
     github = "snicket2100";
     githubId = 57048005;
     name = "snicket2100";
+  };
+  snifexx = {
+    name = "Matteo Bonesoli";
+    email = "snifex@phnxdev.eu";
+    githubId = 71451061;
+    github = "snifexx";
   };
   sno2wman = {
     name = "SnO2WMaN";

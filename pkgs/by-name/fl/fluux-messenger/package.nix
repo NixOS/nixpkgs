@@ -21,7 +21,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
-  version = "0.18.2";
+  version = "0.18.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -29,13 +29,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "processone";
     repo = "fluux-messenger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AFtf5GIrecR/MKDMq6Mh858TJXow9pNDgqnlQriI1T8=";
+    hash = "sha256-+CkcqoZ6COI0OFsuWtbOpSUeC76ct76UgK0umffyCG0=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-OFJqWMLYPQfkp3pcENkJCwVEM8cv1uZgODOuNB3eFdc=";
+    hash = "sha256-Vzc4EnJFtqh+fDLh4DHtXbt7syIViUHOLnTeIZKOIgs=";
   };
 
   cargoRoot = "apps/fluux/src-tauri";
@@ -49,13 +49,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace ${finalAttrs.cargoRoot}/tauri.macos.conf.json \
-      --replace-fail 'node scripts/tauri-macos-share.mjs' 'node apps/fluux/scripts/tauri-macos-share.mjs'
+      --replace-fail 'node scripts/tauri-macos-share.mjs' 'node apps/fluux/scripts/tauri-macos-share.mjs' \
+      --replace-fail 'node scripts/tauri-macos-widgets.mjs' 'node apps/fluux/scripts/tauri-macos-widgets.mjs'
     substituteInPlace apps/fluux/scripts/tauri-macos-share.mjs \
       --replace-fail "run('/usr/bin/xcrun', ['swiftc'," "run('swiftc', [" \
       --replace-fail "run('/usr/bin/xcrun', ['lipo'," "run('lipo', ["
   '';
 
-  cargoHash = "sha256-7xLyxDMHfU3yBENE+lDTS9TMu3YeXE6B/+TKBYqGeLA=";
+  cargoHash = "sha256-bkNAKJ6a0gMP+Ds02SqnNzG8RHAtzFnoxEcmoFsI6AY=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
