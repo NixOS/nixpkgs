@@ -246,6 +246,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "xgboost" ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      _81reap
       nviets
     ];
   };
