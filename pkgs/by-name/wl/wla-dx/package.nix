@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://www.villehelin.com/wla.html";
