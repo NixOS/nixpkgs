@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   ninja,
   git,
@@ -80,14 +79,10 @@ stdenv.mkDerivation rec {
 
     # Fix a use-after-free in OCLToSPIRVBase::runOCLToSPIRV that can crash kernel
     # compilation. Upstream has not backported this to llvm_release_160.
+    # https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/aea1ac74ed4301df12adbffff535f72f37d0bb13
+    # https://github.com/KhronosGroup/SPIRV-LLVM-Translator/issues/4151
     # https://github.com/NixOS/nixpkgs/issues/583806
-    (fetchpatch2 {
-      name = "fix-ocltospirv-use-after-free.patch";
-      url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/aea1ac74ed4301df12adbffff535f72f37d0bb13.patch?full_index=1";
-      hash = "sha256-g4OfY6TmAkOcl9WeflSyvTtbz6a+88jahWnyeRnhLcU=";
-      stripLen = 1;
-      extraPrefix = "llvm-project/llvm/projects/llvm-spirv/";
-    })
+    ./fix-ocltospirv-use-after-free.patch
   ];
 
   sourceRoot = ".";
