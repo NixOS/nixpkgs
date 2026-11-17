@@ -8381,8 +8381,6 @@ self: super: with self; {
 
   igloohome-api = callPackage ../development/python-modules/igloohome-api { };
 
-  ignite = callPackage ../development/python-modules/ignite { };
-
   ignorant = callPackage ../development/python-modules/ignorant { };
 
   igraph = callPackage ../development/python-modules/igraph { inherit (pkgs) igraph; };
@@ -17676,6 +17674,8 @@ self: super: with self; {
   pytools = callPackage ../development/python-modules/pytools { };
 
   pytorch-bench = callPackage ../development/python-modules/pytorch-bench { };
+
+  pytorch-ignite = callPackage ../development/python-modules/pytorch-ignite { };
 
   pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
 
