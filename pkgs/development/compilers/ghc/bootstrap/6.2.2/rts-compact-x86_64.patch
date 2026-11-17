@@ -1,0 +1,39 @@
+Word-sized mark bits for the compacting collector, as in GHC commit
+0e6d231b8eef0aae3419f1104c98db1f5c25aa99 ("Fix some incorrect use of
+int/nat that breaks x86_64", 2005, for 6.4).  With a 32-bit mask, objects
+at word offsets 32 to 63 of a bitmap word get the wrong mark bit, and a
+program whose heap is compacted (+RTS -c, or near a -M limit) fails with
+"update_fwd: unknown/strange object".
+
+--- a/ghc/rts/GCCompact.h
++++ b/ghc/rts/GCCompact.h
+@@ -13,7 +13,7 @@
+     nat offset_within_block = p - bd->start; // in words
+     StgPtr bitmap_word = (StgPtr)bd->u.bitmap + 
+ 	(offset_within_block / (sizeof(W_)*BITS_PER_BYTE));
+-    nat bit_mask = 1 << (offset_within_block & (sizeof(W_)*BITS_PER_BYTE - 1));
++    StgWord bit_mask = (StgWord)1 << (offset_within_block & (sizeof(W_)*BITS_PER_BYTE - 1));
+     *bitmap_word |= bit_mask;
+ }
+ 
+@@ -23,17 +23,17 @@
+     nat offset_within_block = p - bd->start; // in words
+     StgPtr bitmap_word = (StgPtr)bd->u.bitmap + 
+ 	(offset_within_block / (sizeof(W_)*BITS_PER_BYTE));
+-    nat bit_mask = 1 << (offset_within_block & (sizeof(W_)*BITS_PER_BYTE - 1));
++    StgWord bit_mask = (StgWord)1 << (offset_within_block & (sizeof(W_)*BITS_PER_BYTE - 1));
+     *bitmap_word &= ~bit_mask;
+ }
+ 
+-static inline int
++static inline StgWord
+ is_marked(StgPtr p, bdescr *bd)
+ {
+     nat offset_within_block = p - bd->start; // in words
+     StgPtr bitmap_word = (StgPtr)bd->u.bitmap + 
+ 	(offset_within_block / (sizeof(W_)*BITS_PER_BYTE));
+-    nat bit_mask = 1 << (offset_within_block & (sizeof(W_)*BITS_PER_BYTE - 1));
++    StgWord bit_mask = (StgWord)1 << (offset_within_block & (sizeof(W_)*BITS_PER_BYTE - 1));
+     return (*bitmap_word & bit_mask);
+ }
+ 
