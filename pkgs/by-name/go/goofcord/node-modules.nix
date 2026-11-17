@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     export npm_config_build_from_source=true
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
 
-    bun install \
+    bun install --cpu="*" --os="*" --libc="*" \
       --frozen-lockfile \
       --linker=hoisted \
       --no-progress
@@ -48,12 +48,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  outputHash =
-    {
-      x86_64-linux = "sha256-J26DRSUa/C7lvI8JFPQ92yj4zUVnD+SPkKwRQA9ITB8=";
-      aarch64-linux = "sha256-WIjcl//+OGB5J6Dp4Q2x24MA/cWqdtHYNwBBOgCD/tU=";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
+  outputHash = "sha256-3oNOqvBwx/L6X5ILuJExkpP/59aS4+XpayBiXqfeqmU=";
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
 
