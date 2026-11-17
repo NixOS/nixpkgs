@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gtest,
   meson,
   nasm,
@@ -13,27 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openh264";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "openh264";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tf0lnxATCkoq+xRti6gK6J47HwioAYWnpEsLGSA5Xdg=";
+    hash = "sha256-Elcd//UfC928mFXBwYN3L/+XegZ5aXoa/he/2Qw7YaQ=";
   };
 
   outputs = [
     "out"
     "dev"
-  ];
-
-  patches = [
-    # https://github.com/cisco/openh264/pull/3867
-    (fetchpatch {
-      name = "freebsd-configure.patch";
-      url = "https://github.com/cisco/openh264/commit/ea8a1ad5791ee5c4e2ecf459aec235128d69b35b.patch";
-      hash = "sha256-pJvh9eRxFZQ+ob4WPu/x+jr1CCpgnug1uBViLfAtBDg=";
-    })
   ];
 
   nativeBuildInputs = [
