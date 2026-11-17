@@ -24,7 +24,7 @@ let
       (linkFarm "incus-qemu-libexec" [
         {
           name = "bin";
-          path = "${qemu_kvm}/libexec";
+          path = "${cfg.qemuPackage}/libexec";
         }
       ])
 
@@ -57,7 +57,7 @@ let
       lz4
       nftables
       qemu-utils
-      qemu_kvm
+      cfg.qemuPackage
       rsync
       skopeo
       squashfs-tools-ng
@@ -199,6 +199,33 @@ in
         default = config.virtualisation.lxc.package;
         defaultText = lib.literalExpression "config.virtualisation.lxc.package";
         description = "The lxc package to use.";
+      };
+
+      qemuPackage = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.qemu_kvm.override {
+          alsaSupport = false;
+          pulseSupport = false;
+          pipewireSupport = false;
+          jackSupport = false;
+          sdlSupport = false;
+          gtkSupport = false;
+          # QEMU is run with `-display egl-headless,gl=on`
+          openGLSupport = true;
+        };
+        defaultText = lib.literalExpression ''
+          pkgs.qemu_kvm.override {
+            alsaSupport = false;
+            pulseSupport = false;
+            pipewireSupport = false;
+            jackSupport = false;
+            sdlSupport = false;
+            gtkSupport = false;
+            openGLSupport = true;
+          }
+        '';
+        example = lib.literalExpression "pkgs.qemu_kvm";
+        description = "The QEMU package that runs the VMs.";
       };
 
       clientPackage = lib.mkOption {
@@ -410,8 +437,8 @@ in
         r /nix/store/*-etc-os-release,
 
         # Support use of VM instance
-        mrix ${pkgs.qemu_kvm}/bin/*,
-        r ${pkgs.qemu_kvm}/share/qemu/**,
+        mrix ${cfg.qemuPackage}/bin/*,
+        r ${cfg.qemuPackage}/share/qemu/**,
         rk ${OVMF2MB.fd}/FV/*.fd,
         rk ${pkgs.OVMFFull.fd}/FV/*.fd,
       ''
