@@ -68,6 +68,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       bun install \
         --backend=copyfile \
         --cpu="*" \
+        --libc="*" \
         --frozen-lockfile \
         --ignore-scripts \
         --no-progress \
