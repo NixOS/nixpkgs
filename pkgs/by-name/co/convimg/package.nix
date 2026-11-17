@@ -16,6 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    # As of 2026-11-17, no upstream fix for tinycthread.h colliding with glibc's once_flag/call_once
+    substituteInPlace src/deps/tinycthread/source/tinycthread.h \
+      --replace-fail "#define once_flag pthread_once_t" "" \
+      --replace-fail "#define call_once(flag,func) pthread_once(flag,func)" ""
+  '';
+
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   checkPhase = ''
@@ -42,6 +49,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "convimg";
-    broken = true;
   };
 })
