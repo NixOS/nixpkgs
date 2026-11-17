@@ -228,6 +228,8 @@ self: super: with self; {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  aioanylist = callPackage ../development/python-modules/aioanylist { };
+
   aioapcaccess = callPackage ../development/python-modules/aioapcaccess { };
 
   aioapns = callPackage ../development/python-modules/aioapns { };

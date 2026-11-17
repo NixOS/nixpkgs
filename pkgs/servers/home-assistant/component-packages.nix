@@ -359,7 +359,8 @@
       ];
     "any_list" =
       ps: with ps; [
-      ]; # missing inputs: aioanylist
+        aioanylist
+      ];
     "aosmith" =
       ps: with ps; [
         py-aosmith
@@ -8871,6 +8872,7 @@
     "anova"
     "anthemav"
     "anthropic"
+    "any_list"
     "aosmith"
     "apache_kafka"
     "apcupsd"
