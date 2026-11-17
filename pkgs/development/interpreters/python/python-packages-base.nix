@@ -156,11 +156,15 @@ let
 
   # Get list of required Python modules given a list of derivations.
   requiredPythonModules =
+    let
+      defaultModules = [ python ];
+      getRequiredModules = catAttrs "requiredPythonModules";
+    in
     drvs:
     let
       modules = filter hasPythonModule drvs;
     in
-    unique ([ python ] ++ modules ++ concatLists (catAttrs "requiredPythonModules" modules));
+    unique (defaultModules ++ modules ++ concatLists (getRequiredModules modules));
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
