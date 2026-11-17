@@ -49,6 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       bun install \
         --cpu="*" \
         --os="*" \
+        --libc="*" \
         --frozen-lockfile \
         --ignore-scripts \
         --no-progress
@@ -68,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required: keeping store paths out of the FOD output keeps the hash stable.
     dontFixup = true;
 
-    outputHash = "sha256-6ZKPnnAqfCcAwm29GOWGvk2QNOqPXf5F1sKyW0/bTgM=";
+    outputHash = "sha256-4hrmXZNKq/G9OVeWIuTLiDIw8Hf5G4LWTa+QNnQ3TfU=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
