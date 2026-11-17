@@ -11,7 +11,7 @@
   blas,
   lapack,
   scalapack,
-  hdf5,
+  hdf5-fortran,
   libmbd,
   libxc,
   enableMpi ? true,
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     lapack
     libmbd
     libxc
-    hdf5
+    hdf5-fortran
   ]
   ++ lib.optional enableMpi scalapack;
 

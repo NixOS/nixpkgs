@@ -1,22 +1,26 @@
 {
   lib,
   stdenv,
+  autoreconfHook,
   fetchFromGitHub,
   fixDarwinDylibNames,
   gmp,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "frobby";
-  version = "0.9.9";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "frobby";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LndLfORnypLqFgNMPEJ8jc2Fa2xWWgYS9rZ7gGFbwwo=";
+    hash = "sha256-JBBG3KxDOb10swzeHpk7Cb7wofz7x/Z/zhFObtEuvzo=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  nativeBuildInputs = [
+    autoreconfHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -29,16 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   enableParallelBuilding = true;
-
-  makeFlags = [
-    "MODE=shared"
-    "PREFIX=${placeholder "out"}"
-  ];
-
-  buildFlags = [
-    "all"
-    "library"
-  ];
 
   preCheck = ''
     patchShebangs --build ./test

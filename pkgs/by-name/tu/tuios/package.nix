@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tuios";
-  version = "0.13.2";
+  version = "0.13.3";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "Gaurav-Gosain";
     repo = "tuios";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DonObxi0Cy4vI6vObUEqC4G9E90jTTUT+b+bQGAWcs8=";
+    hash = "sha256-K5HdrurAchfL8OCLTXRej+s7EjYhicoFgKlFdKQaeP0=";
   };
 
-  vendorHash = "sha256-xJivIk6TWHzpcht1srt9ODRHVC+7bHH8KM5Q36MXl/w=";
+  vendorHash = "sha256-6PboUWkjWLZjD0dxfLKmLjK0CV8S2cl2iMxt+3CybfU=";
 
   ldflags = [
     "-s"

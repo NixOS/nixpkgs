@@ -44,12 +44,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "casacpp";
-  version = "6.7.5.18";
+  version = "6.7.6.14";
 
   src = fetchgit {
     url = "https://open-bitbucket.nrao.edu/scm/casa/casa6.git";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-75oIlaNAyu70KWSjz38LoYAvV7RJgzH/X9uBnGpriF4=";
+    hash = "sha256-ZMcowd7EqP5CO6JNbvbOZ3X9boPKKMUwRL2RBCHTo34=";
     fetchSubmodules = false;
   };
 
@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/execute_process(COMMAND/,/OUTPUT_VARIABLE CASACPP_VERSION)/c\set(CASACPP_VERSION "${finalAttrs.version}")' CMakeLists.txt
     sed -i 's/string(REGEX MATCH.*CASACPP_VERSION)//' CMakeLists.txt
     substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)' \
       --replace-fail \
         'find_package(gRPC QUIET)' \
         'set(gRPC_FOUND 0)'
