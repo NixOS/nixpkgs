@@ -10,7 +10,7 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rstcheck";
   version = "6.3.1";
   pyproject = true;
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck";
-    tag = "v${version}";
     hash = "sha256-DvVTgzoLohVmnaLY9UYVILCXL7O474m5m7djvlYPRqE=";
+    tag = "v${finalAttrs.version}";
   };
 
   build-system = [
@@ -48,9 +48,9 @@ buildPythonPackage rec {
   meta = {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
     homepage = "https://github.com/myint/rstcheck";
-    changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rstcheck/rstcheck/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ staccato ];
     mainProgram = "rstcheck";
   };
-}
+})
