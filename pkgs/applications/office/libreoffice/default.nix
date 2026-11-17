@@ -877,6 +877,11 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
+    knownVulnerabilites = lib.optionals (lib.versionOlder version "26.8") [
+      "LibreOffice 26.2 reached its end of life in June 2026."
+      "CVE-2026-104692"
+      "CVE-2026-104007"
+    ];
     changelog = "https://wiki.documentfoundation.org/ReleaseNotes/${lib.versions.majorMinor version}";
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
