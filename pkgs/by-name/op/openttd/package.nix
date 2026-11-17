@@ -19,6 +19,7 @@
   pcre2,
   openttd-opengfx,
   withOpenGFX ? true,
+  openttd-opensfx,
   withOpenSFX ? true,
   withOpenMSX ? true,
   withFluidSynth ? true,
@@ -40,11 +41,6 @@
 }:
 
 let
-  opensfx = fetchzip {
-    url = "https://cdn.openttd.org/opensfx-releases/1.0.3/opensfx-1.0.3-all.zip";
-    hash = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
-  };
-
   openmsx = fetchzip {
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
     hash = "sha256-ysNFIvo7iaLN8XoaeZuZQFLpBZlYUDLDg7rH6TabaHY=";
@@ -124,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r ${openttd-opengfx}/* $out/share/games/openttd/baseset
     ''
     + lib.optionalString withOpenSFX ''
-      cp ${opensfx}/*.tar $out/share/games/openttd/baseset
+      cp ${openttd-opensfx}/*.tar $out/share/games/openttd/baseset
     ''
     + lib.optionalString withOpenMSX ''
       tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
