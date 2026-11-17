@@ -11,7 +11,7 @@
   python3,
   python3Packages,
   xorriso,
-  qemu,
+  buildPackages,
   dosfstools,
   mtools,
   fdSize2MB ? false,
@@ -75,6 +75,12 @@ let
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
   inherit (platformSpecific.${cpuName}) msVarsArgs;
+
+  # Vars generation uses a QEMU headless, so minimal should do
+  varsQemu = buildPackages.qemu.override {
+    minimal = true;
+    hostCpuTargets = [ "${stdenv.hostPlatform.qemuArch}-softmmu" ];
+  };
 
   version = lib.getVersion edk2;
 
@@ -201,7 +207,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     python3
     python3Packages.pexpect
     xorriso
-    qemu
+    varsQemu
     dosfstools
     mtools
   ];
