@@ -3,7 +3,7 @@
   bash,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   ipython,
   matplotlib,
   numpy,
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "/bin/bash" "${lib.getExe bash}"
   '';
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     ipython
