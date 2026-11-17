@@ -10,7 +10,7 @@
   perl,
   pkg-config,
   testers,
-  sox,
+  sox_ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     perl
-    sox
+    sox_ng
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

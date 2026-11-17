@@ -9,7 +9,7 @@
   lame,
   opus-tools,
   procps,
-  sox,
+  sox_ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           bc
           findutils
-          sox
+          sox_ng
           procps
           opus-tools
           lame

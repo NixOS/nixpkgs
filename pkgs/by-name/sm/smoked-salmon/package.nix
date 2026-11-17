@@ -6,7 +6,7 @@
   lame,
   mp3val,
   python3Packages,
-  sox,
+  sox_ng,
 }:
 let
   runtimeDeps = [
@@ -14,7 +14,7 @@ let
     flac
     lame
     mp3val
-    sox
+    sox_ng
   ];
 in
 python3Packages.buildPythonApplication (finalAttrs: {

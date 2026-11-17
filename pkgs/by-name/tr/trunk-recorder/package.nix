@@ -19,7 +19,7 @@
   uhd,
   volk,
   fdk-aac-encoder,
-  sox,
+  sox_ng,
   hackrfSupport ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapProgram $out/bin/trunk-recorder --prefix PATH : ${
       lib.makeBinPath [
-        sox
+        sox_ng
         fdk-aac-encoder
       ]
     }

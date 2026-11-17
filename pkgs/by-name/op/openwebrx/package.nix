@@ -11,7 +11,7 @@
   soapysdr-with-plugins,
   csdr,
   direwolf,
-  sox,
+  sox_ng,
   wsjtx,
   codecserver,
   versionCheckHook,
@@ -111,7 +111,7 @@ python3Packages.buildPythonApplication rec {
       soapysdr-with-plugins
       owrx_connector
       direwolf
-      sox
+      sox_ng
       wsjtx
       codecserver
     ];

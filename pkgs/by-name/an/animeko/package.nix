@@ -59,7 +59,7 @@
   libmtp,
   speexdsp,
   libsamplerate,
-  sox,
+  sox_ng,
   libmad,
   libnotify,
   taglib_1,
@@ -210,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     libspatialaudio
     speexdsp
     libsamplerate
-    sox
+    sox_ng
     libmad
     libnotify
     zvbi

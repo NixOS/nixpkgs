@@ -6,7 +6,7 @@
   unzip,
   portaudio,
   wxwidgets_3_2,
-  sox,
+  sox_ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fixup paths (file names from above espeak-configurable* patches)
     for file in src/compiledata.cpp src/readclause.cpp src/speech.h; do
-        sed -e "s|@sox@|${sox}/bin/sox|" \
+        sed -e "s|@sox@|${sox_ng}/bin/sox|" \
             -e "s|@prefix@|$out|" \
             -i "$file"
     done

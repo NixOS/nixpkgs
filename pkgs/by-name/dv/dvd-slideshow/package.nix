@@ -9,7 +9,7 @@
   imagemagick,
   lame,
   mjpegtools,
-  sox,
+  sox_ng,
   vorbis-tools,
   runtimeShell,
 }:
@@ -22,7 +22,7 @@ let
     imagemagick
     lame
     mjpegtools
-    sox
+    sox_ng
     vorbis-tools
   ];
 

@@ -9,7 +9,7 @@
   nix-update-script,
   nixosTests,
   perlPackages,
-  sox,
+  sox_ng,
   stdenv,
   wavpack,
   zlib,
@@ -22,7 +22,7 @@ let
       lame
       flac
       faad2
-      sox
+      sox_ng
       wavpack
     ]
     ++ (lib.optional stdenv.hostPlatform.isLinux monkeys-audio)

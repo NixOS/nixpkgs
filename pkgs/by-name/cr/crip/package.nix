@@ -12,7 +12,7 @@
   flac,
   gnugrep,
   nano,
-  sox,
+  sox_ng,
   vorbis-tools,
   vorbisgain,
   which,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     eject
     flac
     gnugrep
-    sox
+    sox_ng
     vorbis-tools
     vorbisgain
     which

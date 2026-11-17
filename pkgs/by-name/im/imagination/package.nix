@@ -10,7 +10,7 @@
   intltool,
   libxslt,
   pkg-config,
-  sox,
+  sox_ng,
   wrapGAppsHook3,
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg-full
     glib
     gtk3
-    sox
+    sox_ng
   ];
 
   preBuild = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
        --prefix PATH : "${
          lib.makeBinPath [
            ffmpeg-full
-           sox
+           sox_ng
          ]
        }"
     )

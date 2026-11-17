@@ -4,14 +4,14 @@
   fetchFromGitHub,
   flac2mp3,
   ffmpeg,
-  sox,
+  sox_ng,
 }:
 
 let
   runtimeDeps = [
     ffmpeg
     flac2mp3
-    sox
+    sox_ng
   ];
 in
 buildNpmPackage (finalAttrs: {

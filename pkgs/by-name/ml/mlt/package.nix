@@ -29,7 +29,7 @@
   rnnoise,
   rtaudio,
   rubberband,
-  sox,
+  sox_ng,
   vid-stab,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     rnnoise
     rtaudio
     rubberband
-    sox
+    sox_ng
     vid-stab
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
