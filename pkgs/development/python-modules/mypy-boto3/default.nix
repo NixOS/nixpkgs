@@ -1398,8 +1398,8 @@ in
       "sha256-bkeQFHPnwDm8Mj3RG0JjsFQ9yJjvMSelVInHO09X9lo=";
 
   mypy-boto3-wellarchitected =
-    buildMypyBoto3Package "wellarchitected" "1.44.0"
-      "sha256-uqXHKiqN6TkvMc/Z8E8niRa9LhSeoUyk3BsAU7VwLU8=";
+    buildMypyBoto3Package "wellarchitected" "1.44.4"
+      "sha256-l5ziwk/1qoT3CLsgbBAcbN514k2vsszCFf7kBQpf8jE=";
 
   mypy-boto3-wisdom =
     buildMypyBoto3Package "wisdom" "1.44.0"
