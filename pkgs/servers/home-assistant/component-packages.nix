@@ -2735,7 +2735,8 @@
       ];
     "google_wifi" =
       ps: with ps; [
-      ]; # missing inputs: googlewifiapi
+        googlewifiapi
+      ];
     "govee_ble" =
       ps: with ps; [
         aioesphomeapi
@@ -9191,6 +9192,7 @@
     "google_tasks"
     "google_translate"
     "google_weather"
+    "google_wifi"
     "govee_ble"
     "govee_light_local"
     "gpsd"
