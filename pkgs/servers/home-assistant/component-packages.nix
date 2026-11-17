@@ -2101,7 +2101,9 @@
         evohome-async
       ];
     "exicom_spin_ble" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         aioesphomeapi
         aiohasupervisor
         aioruuvigateway
@@ -2127,8 +2129,10 @@
         pysmlight
         pyspeex-noise
         serialx
+        spinev-ble
         zeroconf
-      ]; # missing inputs: spinev-ble
+      ]
+      ++ spinev-ble.optional-dependencies.bleak;
     "ezviz" =
       ps: with ps; [
         ha-ffmpeg
@@ -9100,6 +9104,7 @@
     "everlights"
     "evil_genius_labs"
     "evohome"
+    "exicom_spin_ble"
     "ezviz"
     "faa_delays"
     "facebook"
