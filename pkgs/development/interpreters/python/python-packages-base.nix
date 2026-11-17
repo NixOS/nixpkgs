@@ -59,33 +59,34 @@ let
           else
             origArgs';
         result = f origArgs;
-        overrideWith =
-          newArgs:
-          # Only build a fixed-point when origArgs or newArgs are functions
-          # or when we need to handle the `disabled` argument taken by `<pkg>.overridePyhtonAttrs`
-          # to reduce allocation/GC.
-          if isFunction origArgs || isFunction newArgs || newArgs ? disabled then
-            # In-lined `lib.extends` with custom filter logic.
-            finalAttrs:
-            let
-              previousArgs = if isFunction origArgs then origArgs finalAttrs else origArgs;
-              updatingArgs = if isFunction newArgs then toExtension newArgs finalAttrs previousArgs else newArgs;
-            in
-            if updatingArgs ? disabled then
-              # Remove disabled from newArgs
-              # and add `meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs`.
-              recursiveUpdate (
-                previousArgs // removeAttrs updatingArgs boilerplateDisabledAttrNames
-              ) boilerplateProblems
-            else
-              previousArgs // updatingArgs
-          else
-            origArgs // newArgs;
       in
       if isAttrs result then
         result
         // {
-          overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          overridePythonAttrs =
+            newArgs:
+            makeOverridablePythonPackage f (
+              # Only build a fixed-point when origArgs or newArgs are functions
+              # or when we need to handle the `disabled` argument taken by `<pkg>.overridePyhtonAttrs`
+              # to reduce allocation/GC.
+              if isFunction origArgs || isFunction newArgs || newArgs ? disabled then
+                # In-lined `lib.extends` with custom filter logic.
+                finalAttrs:
+                let
+                  previousArgs = if isFunction origArgs then origArgs finalAttrs else origArgs;
+                  updatingArgs = if isFunction newArgs then toExtension newArgs finalAttrs previousArgs else newArgs;
+                in
+                if updatingArgs ? disabled then
+                  # Remove disabled from newArgs
+                  # and add `meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs`.
+                  recursiveUpdate (
+                    previousArgs // removeAttrs updatingArgs boilerplateDisabledAttrNames
+                  ) boilerplateProblems
+                else
+                  previousArgs // updatingArgs
+              else
+                origArgs // newArgs
+            );
           overrideAttrs =
             newArgs: makeOverridablePythonPackage (args: (f args).overrideAttrs newArgs) origArgs;
         }
