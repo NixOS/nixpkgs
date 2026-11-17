@@ -61,13 +61,13 @@ let
   variantTable = {
     "normal" = finalAttrs: {
       pname = "dolphin-emu";
-      version = "2609b"; # Please backport to stable for netplay compat
+      version = "2609"; # Please backport to stable for netplay compat
 
       src = fetchFromGitHub {
         owner = "dolphin-emu";
         repo = "dolphin";
         tag = finalAttrs.version;
-        hash = "sha256-7e9wjc0+B25qDKzILz18z0cMMdUczRUDvsh8mKLAM2c=";
+        hash = "sha256-mylUTwDBIOIdGKCdA64RSqioTVc9f6oTP5WHAVtkH9w=";
         fetchSubmodules = true;
         leaveDotGit = true;
         postFetch = ''
