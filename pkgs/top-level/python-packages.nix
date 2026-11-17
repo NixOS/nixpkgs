@@ -10478,6 +10478,8 @@ self: super: with self; {
 
   loqedapi = callPackage ../development/python-modules/loqedapi { };
 
+  lorawan-connection = callPackage ../development/python-modules/lorawan-connection { };
+
   loro = callPackage ../development/python-modules/loro { };
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
