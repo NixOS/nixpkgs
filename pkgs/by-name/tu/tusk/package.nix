@@ -5,24 +5,24 @@
   makeDesktopItem,
 }:
 
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "tusk";
   version = "0.23.0";
 
   desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
+    name = "tusk";
+    exec = "tusk";
     icon = fetchurl {
-      url = "https://raw.githubusercontent.com/klaussinani/tusk/v${version}/static/Icon.png";
+      url = "https://raw.githubusercontent.com/klaussinani/tusk/v${finalAttrs.version}/static/Icon.png";
       sha256 = "1jqclyrjgg6hir45spg75plfmd8k9nrsrzw3plbcg43s5m1qzihb";
     };
-    desktopName = pname;
+    desktopName = "tusk";
     genericName = "Evernote desktop app";
     categories = [ "Application" ];
   };
 
   src = fetchurl {
-    url = "https://github.com/klaussinani/tusk/releases/download/v${version}/tusk-${version}-x86_64.AppImage";
+    url = "https://github.com/klaussinani/tusk/releases/download/v${finalAttrs.version}/tusk-${finalAttrs.version}-x86_64.AppImage";
     sha256 = "02q7wsnhlyq8z74avflrm7805ny8fzlmsmz4bmafp4b4pghjh5ky";
   };
 
@@ -32,7 +32,7 @@ appimageTools.wrapType2 rec {
 
   extraInstallCommands = ''
     mkdir "$out/share"
-    ln -s "${desktopItem}/share/applications" "$out/share/"
+    ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/"
   '';
 
   meta = {
@@ -46,4 +46,4 @@ appimageTools.wrapType2 rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "tusk";
   };
-}
+})
