@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioslimproto";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "aioslimproto";
     tag = finalAttrs.version;
-    hash = "sha256-98GLhv60SaPQIi8OEWTVPz+3TT2rBRuXUKfF/8TG/nU=";
+    hash = "sha256-pp28fcHcpLanHXAfhuml2iUMvkhg4oO8dkuEr8iXd88=";
   };
 
   nativeBuildInputs = [
