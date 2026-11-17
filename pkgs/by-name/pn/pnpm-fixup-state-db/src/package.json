@@ -7,15 +7,21 @@
   "type": "module",
   "main": "index.js",
   "dependencies": {
-    "@pnpm/store.index": "^1101.0.4"
+    "@pnpm/store.index": "^1101.0.4",
+    "semver": "^7.8.6"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
+    "@types/semver": "^7.8.0",
     "typescript": "^7.0.2"
   },
   "scripts": {
     "build": "tsc"
   },
+  "files": [
+    "index.js",
+    "workarounds.js"
+  ],
   "allowScripts": {
     "msgpackr-extract@3.0.7": true
   }

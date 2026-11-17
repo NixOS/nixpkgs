@@ -6,5 +6,5 @@
     "types": ["node"],
     "strict": true
   },
-  "include": ["index.ts"]
+  "include": ["index.ts", "workarounds.ts"]
 }
