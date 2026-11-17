@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "countryinfo";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "porimol";
     repo = "countryinfo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PE9XiVH6XE+OSySL5Lo0MPWyIEX8xgeHQB7MttMfmz8=";
+    hash = "sha256-tfikzmndpLmiph3eq6AEfQtb5w7L/wclLCnrrUFbAxU=";
   };
 
   pythonRelaxDeps = [ "typer" ];
