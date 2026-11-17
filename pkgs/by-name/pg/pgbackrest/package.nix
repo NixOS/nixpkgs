@@ -37,6 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   # depend_files, so keep the build directory outside the source tree.
   mesonBuildDir = "../build";
 
+  # build/build.py is executed directly by meson custom commands and starts
+  # with #!/usr/bin/env python3; the Linux sandbox has no /usr/bin/env, so
+  # rewrite the shebang to the build-time python3.
+  postPatch = ''
+    patchShebangs --build build/build.py
+  '';
+
   nativeBuildInputs = [
     meson
     ninja
