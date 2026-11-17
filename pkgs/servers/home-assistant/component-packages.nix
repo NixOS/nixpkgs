@@ -2729,7 +2729,8 @@
       ];
     "google_travel_time" =
       ps: with ps; [
-      ]; # missing inputs: python-google-maps-routing-api
+        python-google-maps-routing-api
+      ];
     "google_weather" =
       ps: with ps; [
         python-google-weather-api
@@ -9193,6 +9194,7 @@
     "google_sheets"
     "google_tasks"
     "google_translate"
+    "google_travel_time"
     "google_weather"
     "google_wifi"
     "govee_ble"
