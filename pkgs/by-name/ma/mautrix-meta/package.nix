@@ -67,6 +67,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       eyjhb
       sumnerevans
+      logn
     ];
     mainProgram = "mautrix-meta";
   };
