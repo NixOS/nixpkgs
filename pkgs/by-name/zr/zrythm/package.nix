@@ -49,7 +49,7 @@
   sassc,
   serd,
   sord,
-  sox,
+  sox_ng,
   soxr,
   sratom,
   texi2html,
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     rtaudio_6
     rtmidi
     rubberband
-    sox
+    sox_ng
     soxr
     vamp-plugin-sdk
     xdg-utils

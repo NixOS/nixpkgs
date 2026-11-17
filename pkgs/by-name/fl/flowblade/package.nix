@@ -4,7 +4,7 @@
   stdenv,
   ffmpeg,
   frei0r,
-  sox,
+  sox_ng,
   gtk3,
   python3,
   ladspaPlugins,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ffmpeg
     frei0r
-    sox
+    sox_ng
     gtk3
     ladspaPlugins
     (python3.withPackages (

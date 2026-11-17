@@ -17,7 +17,7 @@
   picotts,
   alsa-utils,
   espeak-classic,
-  sox,
+  sox_ng,
   libopus,
   openscad,
   libxcrypt-legacy,
@@ -43,10 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "OPUSARCHIVE=libopus.a" "OPUSARCHIVE=" \
       --replace-fail "-I./opus-1.3.1/include" "-I${libopus.dev}/include/opus"
     substituteInPlace snis_text_to_speech.sh \
-      --replace-fail "pico2wave" "${sox}/bin/pico2wave" \
+      --replace-fail "pico2wave" "${sox_ng}/bin/pico2wave" \
       --replace-fail "espeak" "${espeak-classic}/bin/espeak" \
       --replace-fail "aplay" "${alsa-utils}/bin/aplay" \
-      --replace-fail "play" "${sox}/bin/play" \
+      --replace-fail "play" "${sox_ng}/bin/play" \
       --replace-fail "/bin/rm" "${coreutils}/bin/rm"
   '';
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     openssl
     picotts
-    sox
+    sox_ng
     alsa-utils
     libopus
     libxcrypt-legacy

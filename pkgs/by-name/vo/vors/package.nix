@@ -7,7 +7,7 @@
   # buildInputs
   libogg,
   opusfile,
-  sox,
+  sox_ng,
 
   # nativeBuildInputs
   makeWrapper,
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     libogg
     opusfile
-    sox
+    sox_ng
   ];
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     wrapProgram "$out"/bin/vors-client \
-        --prefix PATH : ${lib.makeBinPath [ sox ]}
+        --prefix PATH : ${lib.makeBinPath [ sox_ng ]}
   '';
 
   enableParallelBuilding = true;

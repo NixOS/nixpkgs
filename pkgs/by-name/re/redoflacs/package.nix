@@ -5,7 +5,7 @@
   makeWrapper,
   installShellFiles,
   flac,
-  sox,
+  sox_ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           flac
-          sox
+          sox_ng
         ]
       }
   '';

@@ -17,7 +17,7 @@
   opensslSupport ? true,
   openssl,
   soxSupport ? true,
-  sox,
+  sox_ng,
   libsndfileSupport ? true,
   libsndfile,
 }:
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional libunwindSupport libunwind
   ++ lib.optional pulseaudioSupport libpulseaudio
   ++ lib.optional opensslSupport openssl
-  ++ lib.optional soxSupport sox
+  ++ lib.optional soxSupport sox_ng
   ++ lib.optional libsndfileSupport libsndfile;
 
   sconsFlags =

@@ -14,17 +14,17 @@ let
 
         makeTestPlay =
           key:
-          { sox, alsa-utils }:
+          { sox_ng, alsa-utils }:
           pkgs.writeScriptBin key ''
             set -euxo pipefail
-            ${sox}/bin/play ${testFile}
-            ${sox}/bin/sox ${testFile} -t wav - | ${alsa-utils}/bin/aplay
+            ${sox_ng}/bin/play ${testFile}
+            ${sox_ng}/bin/sox ${testFile} -t wav - | ${alsa-utils}/bin/aplay
             touch /tmp/${key}_success
           '';
 
         testers = builtins.mapAttrs makeTestPlay {
-          testPlay = { inherit (pkgs) sox alsa-utils; };
-          testPlay32 = { inherit (pkgs.pkgsi686Linux) sox alsa-utils; };
+          testPlay = { inherit (pkgs) sox_ng alsa-utils; };
+          testPlay32 = { inherit (pkgs.pkgsi686Linux) sox_ng alsa-utils; };
         };
       in
       {
