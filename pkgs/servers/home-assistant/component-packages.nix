@@ -1769,7 +1769,8 @@
       ];
     "ecosmart" =
       ps: with ps; [
-      ]; # missing inputs: aioecosmart
+        aioecosmart
+      ];
     "ecospar" =
       ps: with ps; [
       ];
@@ -9052,6 +9053,7 @@
     "ecobee"
     "ecoforest"
     "econet"
+    "ecosmart"
     "ecovacs"
     "ecowitt"
     "edifier_infrared"

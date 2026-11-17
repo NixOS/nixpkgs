@@ -300,6 +300,8 @@ self: super: with self; {
 
   aioeagle = callPackage ../development/python-modules/aioeagle { };
 
+  aioecosmart = callPackage ../development/python-modules/aioecosmart { };
+
   aioecowitt = callPackage ../development/python-modules/aioecowitt { };
 
   aioelectricitymaps = callPackage ../development/python-modules/aioelectricitymaps { };
