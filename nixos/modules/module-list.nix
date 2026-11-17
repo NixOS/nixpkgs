@@ -258,6 +258,7 @@
   ./programs/iotop.nix
   ./programs/jai-jail.nix
   ./programs/java.nix
+  ./programs/jolt.nix
   ./programs/joycond-cemuhook.nix
   ./programs/k3b.nix
   ./programs/k40-whisperer.nix

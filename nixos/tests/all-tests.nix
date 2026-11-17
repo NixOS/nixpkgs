@@ -933,6 +933,7 @@ in
   jibri = runTest ./jibri.nix;
   jirafeau = runTest ./jirafeau.nix;
   jitsi-meet = runTest ./jitsi-meet.nix;
+  jolt = runTest ./jolt.nix;
   jool = import ./jool.nix {
     pkgs = pkgsLinux;
     inherit runTest;
