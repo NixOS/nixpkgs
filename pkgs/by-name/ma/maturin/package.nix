@@ -7,7 +7,7 @@
   testers,
   nix-update-script,
   maturin,
-  python3,
+  python3Packages,
   pkg-config,
   zstd,
 }:
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     tests = {
       version = testers.testVersion { package = maturin; };
-      pyo3 = python3.pkgs.callPackage ./pyo3-test {
+      pyo3 = python3Packages.callPackage ./pyo3-test {
         pyproject = true;
         buildAndTestSubdir = "examples/word-count";
         preConfigure = "";
