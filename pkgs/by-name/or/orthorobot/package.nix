@@ -12,12 +12,6 @@
   zip,
 }:
 
-let
-  icon = fetchurl {
-    url = "https://stabyourself.net/images/screenshots/orthorobot-5.png";
-    sha256 = "13fa4divdqz4vpdij1lcs5kf6w2c4jm3cc9q6bz5h7lkng31jzi6";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthorobot";
   version = "1.1.1";
@@ -33,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     (makeDesktopItem {
       name = "orthorobot";
       exec = "orthorobot";
-      icon = icon;
+      icon = fetchurl {
+        url = "https://stabyourself.net/images/screenshots/orthorobot-5.png";
+        sha256 = "13fa4divdqz4vpdij1lcs5kf6w2c4jm3cc9q6bz5h7lkng31jzi6";
+      };
       comment = "A perspective based puzzle game, where you flatten the view to move across gaps";
       desktopName = "Orthorobot";
       genericName = "Perspective puzzle game";
