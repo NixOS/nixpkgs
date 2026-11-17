@@ -136,6 +136,13 @@ buildPythonPackage (finalAttrs: {
     # langchain.mcp requires fastmcp>=4 (nixpkgs has 3.x) and jsonschema
     "test_import_all"
     "test_import_all_using_dir"
+    # Mermaid graph snapshots drifted vs langgraph 1.2.22's rendering
+    "test_create_agent_jump"
+    "test_simple_agent_graph"
+    "test_agent_graph_with_jump_to_end_as_after_agent"
+    "test_agent_graph_with_return_direct_tool"
+    "test_agent_graph_with_mixed_tools"
+    "test_agent_graph_without_return_direct_tools"
   ];
 
   disabledTestPaths = [
