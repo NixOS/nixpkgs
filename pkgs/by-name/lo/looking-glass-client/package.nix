@@ -13,6 +13,8 @@
   expat,
   libGL,
   nanosvg,
+  fuse3,
+  usbredir,
 
   libx11,
   libxkbcommon,
@@ -33,21 +35,27 @@
   pulseaudio,
   libsamplerate,
 
-  openGLSupport ? true,
+  libunwind,
+  elfutils,
+  libdecor,
+
   xorgSupport ? true,
   waylandSupport ? true,
   pipewireSupport ? true,
   pulseSupport ? true,
+  backtraceSupport ? true,
+  libdecorSupport ? true,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "looking-glass-client";
-  version = "B7";
+  version = "B8-rc1";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = finalAttrs.version;
-    hash = "sha256-I84oVLeS63mnR19vTalgvLvA5RzCPTXV+tSsw+ImDwQ=";
+    hash = "sha256-ropEJC9+Gg85DS9XRuTb2IRGNNmUcA09Sy/cN6DTvZE=";
     fetchSubmodules = true;
   };
 
@@ -62,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libx11
+    libxkbcommon
     libGL
     freefont_ttf
     spice-protocol
@@ -72,9 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libffi
     nanosvg
+    fuse3
+    usbredir
   ]
   ++ lib.optionals xorgSupport [
-    libxkbcommon
+    libx11
     libxi
     libxscrnsaver
     libxinerama
@@ -85,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
   ]
   ++ lib.optionals waylandSupport [
-    libxkbcommon
     wayland
     wayland-protocols
   ]
@@ -96,16 +105,29 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals pulseSupport [
     pulseaudio
     libsamplerate
+  ]
+  ++ lib.optionals backtraceSupport [
+    libunwind
+    elfutils
+  ]
+  ++ lib.optionals libdecorSupport [
+    libdecor
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
-    "-DOPTIMIZE_FOR_NATIVE=OFF"
-  ]
-  ++ lib.optionals (!openGLSupport) [ "-DENABLE_OPENGL=no" ]
-  ++ lib.optionals (!xorgSupport) [ "-DENABLE_X11=no" ]
-  ++ lib.optionals (!waylandSupport) [ "-DENABLE_WAYLAND=no" ]
-  ++ lib.optionals (!pulseSupport) [ "-DENABLE_PULSEAUDIO=no" ]
-  ++ lib.optionals (!pipewireSupport) [ "-DENABLE_PIPEWIRE=no" ];
+    (lib.cmakeFeature "OPTIMIZE_FOR_NATIVE" "OFF")
+    (lib.cmakeBool "ENABLE_EGL" true)
+    (lib.cmakeBool "ENABLE_OPENGL" false) # "legacy"
+    (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
+    (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseSupport)
+    (lib.cmakeBool "ENABLE_X11" xorgSupport)
+    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_BACKTRACE" backtraceSupport)
+    (lib.cmakeBool "ENABLE_USB_AUDIO" true)
+    (lib.cmakeBool "ENABLE_LIBDECOR" libdecorSupport)
+  ];
 
   postUnpack = ''
     echo ${finalAttrs.src.rev} > source/VERSION
