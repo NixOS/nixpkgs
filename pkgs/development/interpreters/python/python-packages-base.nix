@@ -7,9 +7,18 @@
 
 let
   inherit (lib)
+    addErrorContext
+    catAttrs
+    concatLists
+    filter
+    isAttrs
     isFunction
+    makeSearchPath
+    mirrorFunctionArgs
     recursiveUpdate
+    removePrefix
     toExtension
+    unique
     ;
 in
 
@@ -34,7 +43,7 @@ let
       boilerplateDisabledAttrNames = [ "disabled" ];
     in
     f:
-    lib.mirrorFunctionArgs f (
+    mirrorFunctionArgs f (
       origArgs':
       let
         # Transparently transition `disabled` -> `meta.problems.unsupportedPython`
@@ -73,7 +82,7 @@ let
           else
             origArgs // newArgs;
       in
-      if lib.isAttrs result then
+      if isAttrs result then
         result
         // {
           overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
@@ -86,7 +95,7 @@ let
     // {
       # Support overriding `f` itself, e.g. `buildPythonPackage.override { }`.
       # Ensure `makeOverridablePythonPackage` is applied to the result.
-      override = lib.mirrorFunctionArgs f.override (
+      override = mirrorFunctionArgs f.override (
         newArgs: makeOverridablePythonPackage (f.override newArgs)
       );
     };
@@ -148,17 +157,15 @@ let
   requiredPythonModules =
     drvs:
     let
-      modules = lib.filter hasPythonModule drvs;
+      modules = filter hasPythonModule drvs;
     in
-    lib.unique (
-      [ python ] ++ modules ++ lib.concatLists (lib.catAttrs "requiredPythonModules" modules)
-    );
+    unique ([ python ] ++ modules ++ concatLists (catAttrs "requiredPythonModules" modules));
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
-  makePythonPath = drvs: lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
+  makePythonPath = drvs: makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
-  removePythonPrefix = lib.removePrefix namePrefix;
+  removePythonPrefix = removePrefix namePrefix;
 
   mkPythonEditablePackage = callPackage ./editable.nix { };
 
@@ -172,7 +179,7 @@ let
       passthru = (oldAttrs.passthru or { }) // {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
-        requiredPythonModules = builtins.addErrorContext "while calculating requiredPythonModules for ${drv.name or drv.pname}:" (
+        requiredPythonModules = addErrorContext "while calculating requiredPythonModules for ${drv.name or drv.pname}:" (
           requiredPythonModules drv.propagatedBuildInputs
         );
       };
