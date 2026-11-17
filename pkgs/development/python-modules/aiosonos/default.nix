@@ -1,12 +1,13 @@
 {
   lib,
-  aiohttp,
-  orjson,
-  faust-cchardet,
   aiodns,
+  aiohttp,
   brotli,
   buildPythonPackage,
+  faust-cchardet,
   fetchFromGitHub,
+  orjson,
+  pyprojectVersionPatchHook,
   setuptools,
 }:
 
@@ -22,12 +23,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-J2ebWBAEW/kzSdUv5Nl3TOdNNS9nOiW1hOLaEZrjqxA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-  '';
-
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
