@@ -11,8 +11,6 @@ let
 
   toml = pkgs.formats.toml { };
 
-  otel = import ./otel.nix { inherit lib; };
-
   baseDir = "/var/lib/hydra";
 
   hydraConf = pkgs.writeScript "hydra.conf" cfg.extraConfig;
@@ -47,6 +45,7 @@ let
   serverEnv =
     env
     // {
+      HYDRA_TRACKER = cfg.tracker;
       XDG_CACHE_HOME = "${baseDir}/www/.cache";
       COLUMNS = "80";
       PGPASSFILE = "${baseDir}/pgpass-www"; # grrr
@@ -242,17 +241,7 @@ in
           '';
         };
 
-        package = otel.mkPackageOption {
-          inherit pkgs;
-          name = "hydra-ad-hoc";
-          otelCfg = cfg.adHoc.otel;
-          otelPath = "services.hydra.adHoc.otel";
-        };
-
-        otel = otel.mkOtelOption {
-          component = "hydra-ad-hoc";
-          binary = "hydra-ad-hoc";
-        };
+        package = lib.mkPackageOption pkgs "hydra-ad-hoc" { };
 
         socketPath = lib.mkOption {
           type = lib.types.path;
@@ -439,17 +428,7 @@ in
       };
 
       queueRunner = {
-        package = otel.mkPackageOption {
-          inherit pkgs;
-          name = "hydra-queue-runner";
-          otelCfg = queueRunnerCfg.otel;
-          otelPath = "services.hydra.queueRunner.otel";
-        };
-
-        otel = otel.mkOtelOption {
-          component = "the queue runner";
-          binary = "hydra-queue-runner";
-        };
+        package = lib.mkPackageOption pkgs "hydra-queue-runner" { };
 
         settings = lib.mkOption {
           description = ''
@@ -854,11 +833,6 @@ in
       gc_roots_dir = ${cfg.gcRootsDir}
       use-substitutes = ${if cfg.useSubstitutes then "1" else "0"}
       queue_runner_endpoint = http://${queueRunnerCfg.rest.address}:${toString queueRunnerCfg.rest.port}
-      ${lib.optionalString (cfg.tracker != "") ''
-        tracker = <<TRACKER
-        ${cfg.tracker}
-        TRACKER
-      ''}
     '';
 
     environment.systemPackages = [ hydra-package ];
@@ -1003,8 +977,7 @@ in
       }
       // lib.optionalAttrs (queueRunnerCfg.awsCredentialsFile != null) {
         AWS_SHARED_CREDENTIALS_FILE = queueRunnerCfg.awsCredentialsFile;
-      }
-      // otel.otelEnv queueRunnerCfg.otel;
+      };
 
       serviceConfig = {
         Type = "notify";
@@ -1201,10 +1174,7 @@ in
       # The daemon cannot reload its configuration.
       restartTriggers = [ config.environment.etc."hydra/ad-hoc.toml".source ];
 
-      environment = {
-        RUST_BACKTRACE = "1";
-      }
-      // otel.otelEnv cfg.adHoc.otel;
+      environment.RUST_BACKTRACE = "1";
 
       serviceConfig = {
         Type = "notify";
@@ -1375,33 +1345,18 @@ in
       };
     };
 
-    # If there is less than a certain amount of free disk space, stop the
-    # queue runner/evaluator to prevent builds from failing or aborting.
-    # A tag file records this, so that the service is started again once
-    # there is 10 GiB more than the threshold.
+    # If there is less than a certain amount of free disk space, stop
+    # the queue/evaluator to prevent builds from failing or aborting.
     systemd.services.hydra-check-space = {
       script = ''
-        spaceleft=$(($(stat -f -c '%a' /nix/store) * $(stat -f -c '%S' /nix/store)))
-        spacestopstart() {
-          service=$1
-          minFreeGB=$2
-          if [ $spaceleft -lt $(($minFreeGB * 1024**3)) ]; then
-            if [ "$(systemctl is-active $service)" == active ]; then
-              echo "stopping $service due to lack of free space..."
-              systemctl stop $service
-              date > ${baseDir}/.$service-stopped-minspace
-            fi
-          else
-            if [ $spaceleft -gt $((($minFreeGB + 10) * 1024**3)) -a \
-                 -r ${baseDir}/.$service-stopped-minspace ]; then
-              rm ${baseDir}/.$service-stopped-minspace
-              echo "restarting $service due to newly available free space..."
-              systemctl start $service
-            fi
-          fi
-        }
-        spacestopstart hydra-queue-runner ${toString cfg.minimumDiskFree}
-        spacestopstart hydra-evaluator ${toString cfg.minimumDiskFreeEvaluator}
+        if [ $(($(stat -f -c '%a' /nix/store) * $(stat -f -c '%S' /nix/store))) -lt $((${toString cfg.minimumDiskFree} * 1024**3)) ]; then
+            echo "stopping Hydra queue runner due to lack of free space..."
+            systemctl stop hydra-queue-runner
+        fi
+        if [ $(($(stat -f -c '%a' /nix/store) * $(stat -f -c '%S' /nix/store))) -lt $((${toString cfg.minimumDiskFreeEvaluator} * 1024**3)) ]; then
+            echo "stopping Hydra evaluator due to lack of free space..."
+            systemctl stop hydra-evaluator
+        fi
       '';
       startAt = "*:0/5";
       serviceConfig.Slice = "system-hydra.slice";
