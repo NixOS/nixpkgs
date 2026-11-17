@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Stabyourself";
     repo = "orthorobot";
     tag = "v${finalAttrs.version}";
-    sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
+    hash = "sha256-t2ijgtG6vqWmWRLGScna+tkS+MfR6aqrqn2ChNqGRrE=";
   };
 
   desktopItems = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "orthorobot";
       icon = fetchurl {
         url = "https://stabyourself.net/images/screenshots/orthorobot-5.png";
-        sha256 = "13fa4divdqz4vpdij1lcs5kf6w2c4jm3cc9q6bz5h7lkng31jzi6";
+        hash = "sha256-Jn4ZxrOTHlj+MjgxNqokTHDjZtGMBhnb3eTjtmMjyo0=";
       };
       comment = "A perspective based puzzle game, where you flatten the view to move across gaps";
       desktopName = "Orthorobot";
