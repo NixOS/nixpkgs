@@ -1,5 +1,5 @@
 import ./common-hadrian.nix {
-  url = "https://downloads.haskell.org/~ghc/9.14.2-rc2/ghc-9.14.1.20260916-src.tar.xz";
-  version = "9.14.1.20260916";
-  sha256 = "a840ed12d17399963ed2aa0c67c58507a7a8d333fab52f43314edd789106b475";
+  url = "https://downloads.haskell.org/ghc/9.14.2-rc3/ghc-9.14.1.20261110-src.tar.xz";
+  version = "9.14.1.20261110";
+  sha256 = "4ca6887c737423038d890330529968ba671bdbe7b7d0c539c5760ddb0cd32450";
 }
