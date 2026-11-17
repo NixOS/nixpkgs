@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -28,13 +29,9 @@ buildPythonPackage (finalAttrs: {
 
   patches = [ ./typer-0-27-2.patch ];
 
-  postPatch = ''
-    # Upstream is creating GitHub releases without version
-    substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${finalAttrs.version}"'
-  '';
-
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
