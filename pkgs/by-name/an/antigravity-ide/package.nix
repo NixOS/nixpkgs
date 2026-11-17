@@ -3,6 +3,8 @@
   stdenv,
   buildVscode,
   fetchurl,
+  applyPatches,
+  antigravity-cli,
   writeShellScript,
   coreutils,
   commandLineArgs ? "",
@@ -15,6 +17,7 @@ let
   source =
     information.sources."${hostPlatform.system}"
       or (throw "antigravity-ide: unsupported system ${hostPlatform.system}");
+  src = fetchurl { inherit (source) url sha256; };
 in
 buildVscode {
   inherit commandLineArgs useVSCodeRipgrep;
@@ -27,9 +30,29 @@ buildVscode {
   libraryName = "antigravity-ide";
   iconName = "antigravity-ide";
 
-  src = fetchurl { inherit (source) url sha256; };
+  src =
+    if hostPlatform.isLinux then
+      applyPatches {
+        name = "source";
+        inherit src;
+        sourceRoot = "Antigravity IDE";
+        postPatch = ''
+          # Use packaged agy instead of downloading an unpatched binary.
+          substituteInPlace resources/app/extensions/agy/vscode/extension.js \
+            --replace-fail 'getInstalledTargetPath(){return ec()}' \
+              'getInstalledTargetPath(){return "${lib.getExe antigravity-cli}"}' \
+            --replace-fail 'this.binaryAcquirer=Oc;' \
+              'this.binaryAcquirer=async(options)=>{
+              options.outputChannel.appendLine("[INSTALL] Using Nix-packaged agy at ${lib.getExe antigravity-cli}");
+              options.onBinaryCheck?.({cacheHit:true,downloadReason:"up_to_date",cliVersion:"${antigravity-cli.version}"});
+              return this.getInstalledTargetPath();
+            };'
+        '';
+      }
+    else
+      src;
 
-  sourceRoot = if hostPlatform.isDarwin then "Antigravity IDE.app" else "Antigravity IDE";
+  sourceRoot = if hostPlatform.isDarwin then "Antigravity IDE.app" else "source";
 
   tests = { };
   updateScript = ./update.js;
