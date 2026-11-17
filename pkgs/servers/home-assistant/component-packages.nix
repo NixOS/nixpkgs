@@ -2367,7 +2367,8 @@
       ];
     "foreca" =
       ps: with ps; [
-      ]; # missing inputs: pyforeca
+        pyforeca
+      ];
     "forecast_solar" =
       ps: with ps; [
         forecast-solar
@@ -9131,6 +9132,7 @@
     "folder"
     "folder_watcher"
     "foobot"
+    "foreca"
     "forecast_solar"
     "forked_daapd"
     "foscam"
