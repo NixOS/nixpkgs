@@ -109,13 +109,16 @@ decorate (
       else
         unsafeGetAttrPos "rev" args
     );
-    baseUrl = "https://${githubBase}/${owner}/${repo}";
     varBase = "NIX${optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
   in
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
   (if useFetchZip then fetchzip else fetchgit) (
     finalAttrs:
+    let
+      # Follow `overrideAttrs` on `githubBase`, `owner` and `repo`.
+      baseUrl = "https://${finalAttrs.githubBase}/${finalAttrs.owner}/${finalAttrs.repo}";
+    in
     removeAttrs args (
       if useFetchZip then removedPassthruFetchZipNames else removedPassthruFetchGitNames
     )
@@ -132,10 +135,10 @@ decorate (
               let
                 endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${finalAttrs.rev}";
               in
-              if githubBase == "github.com" then
+              if finalAttrs.githubBase == "github.com" then
                 "https://api.github.com${endpoint}"
               else
-                "https://${githubBase}/api/v3${endpoint}"
+                "https://${finalAttrs.githubBase}/api/v3${endpoint}"
             else
               "${baseUrl}/archive/${finalAttrs.rev}.tar.gz";
           extension = "tar.gz";
@@ -179,7 +182,11 @@ decorate (
         # - Fetching with git works using https://github.com but not with the GitHub API endpoint
         # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
         let
-          machineName = if githubBase == "github.com" && useFetchZip then "api.github.com" else githubBase;
+          machineName =
+            if finalAttrs.githubBase == "github.com" && useFetchZip then
+              "api.github.com"
+            else
+              finalAttrs.githubBase;
         in
         ''
           if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then

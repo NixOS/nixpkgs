@@ -160,4 +160,32 @@
         rev = "0000000000000000000000000000000000000000";
         hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
       };
+
+  # `overrideAttrs` on `owner` must reach the fetchzip URL.
+  # The original owner doesn't exist, so this **only** builds if the override is respected.
+  overrideAttrs-owner =
+    testers.invalidateFetcherByDrvHash (args: (fetchFromGitHub args).overrideAttrs { owner = "NixOS"; })
+      {
+        name = "fetchFromGitHub-overrideAttrs-owner";
+        owner = "this-owner-does-not-exist";
+        repo = "nix";
+        rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+        hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+      };
+
+  # `overrideAttrs` on `owner` must reach the fetchgit URL.
+  # The original owner doesn't exist, so this **only** builds if the override is respected.
+  overrideAttrs-owner-fetchgit =
+    testers.invalidateFetcherByDrvHash (args: (fetchFromGitHub args).overrideAttrs { owner = "NixOS"; })
+      {
+        name = "fetchFromGitHub-overrideAttrs-owner-fetchgit";
+        owner = "this-owner-does-not-exist";
+        repo = "nix";
+        rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+        sparseCheckout = [
+          "src"
+          "tests"
+        ];
+        hash = "sha256-g1PHGTWgAcd/+sXHo1o6AjVWCvC6HiocOfMbMh873LQ=";
+      };
 }
