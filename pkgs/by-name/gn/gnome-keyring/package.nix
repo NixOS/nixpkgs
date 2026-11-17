@@ -126,6 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
       # Some stragglers
       lib.licenses.gpl2Plus
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version // {
+      product = "gnome_keyring";
+    };
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };

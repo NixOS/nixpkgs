@@ -5,13 +5,16 @@
 }:
 
 let
-  server = callPackage ./server.nix { };
-  node = callPackage ./node.nix { };
+  version = "3.06.00";
+
+  mkTdarr = callPackage ./mktdarr.nix { inherit version; };
+  server = callPackage ./server.nix { inherit mkTdarr; };
+  node = callPackage ./node.nix { inherit mkTdarr; };
 in
 symlinkJoin {
-  name = "tdarr-${server.version}";
+  name = "tdarr-${version}";
   pname = "tdarr";
-  inherit (server) version;
+  inherit version;
 
   paths = [
     server

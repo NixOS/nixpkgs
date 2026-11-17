@@ -3,25 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  httpx2,
   llm,
   llm-venice,
 }:
 
 buildPythonPackage rec {
   pname = "llm-venice";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ar-jan";
     repo = "llm-venice";
     tag = version;
-    hash = "sha256-jshOfbZUccmK6sRCDTzkE7tOKX2ILue93Jp2GFoGTxY=";
+    hash = "sha256-7tkPmp/+A4cDouHMSY9AzemXB+jwOW3FwL0OsD/mZl8=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ llm ];
+  dependencies = [
+    httpx2
+    llm
+  ];
 
   # Reaches out to the real API
   doCheck = false;

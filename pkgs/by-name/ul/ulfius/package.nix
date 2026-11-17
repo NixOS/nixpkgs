@@ -40,8 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  # Fix build w/ glibc-2.44
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  env.NIX_CFLAGS_COMPILE = builtins.toString (
+    lib.optionals stdenv.cc.isGNU [
+      "-Wno-error=discarded-qualifiers"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=incompatible-pointer-types-discards-qualifiers"
+      "-Wno-error=attribute-warning"
+    ]
+  );
 
   propagatedBuildInputs = [
     libmicrohttpd

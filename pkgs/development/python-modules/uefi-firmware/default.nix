@@ -11,14 +11,14 @@ buildPythonPackage (finalAttrs: {
   # The distribution is published as `uefi_firmware`; the project and its
   # binary are `uefi-firmware-parser`.
   pname = "uefi_firmware";
-  version = "1.16";
+  version = "1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theopolis";
     repo = "uefi-firmware-parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2vYTOC7cOiQXPMhYM+hqmFyCJeXCkx6RSxgaTIZqbds=";
+    hash = "sha256-6iOJ4Si6pD6QPnfv7Q7aR+nDgHovqcZL6Wp/Dkb64Uo=";
   };
 
   build-system = [

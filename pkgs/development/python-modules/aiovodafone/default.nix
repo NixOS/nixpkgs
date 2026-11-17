@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovodafone";
-  version = "3.3.11";
+  version = "3.3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k8DaYuff0rZYVLppVagPphUu/WCoza0IOSp+uoD5oCI=";
+    hash = "sha256-bM6DLHTkwNEXgLHAZsSwrIhgxoJ0RhUc4K+ilczJaV0=";
   };
 
   postPatch = ''

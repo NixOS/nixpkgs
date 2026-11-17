@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unifi-controller";
-  version = "10.6.109";
+  version = "10.6.111";
 
   # See https://community.ui.com/releases or https://www.ui.com/download/unifi.
   #
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   # as well.
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${finalAttrs.version}/unifi_sysvinit_all.deb";
-    hash = "sha256-u71RS3hsJ7/BPC4HXg7NOyedqxKqgAd7SzUcNQFmK/I=";
+    hash = "sha256-eUhUGo4SRh1M0G6AT2O2HcwF8cJGe0pioXuL22auA2I=";
   };
 
   nativeBuildInputs = [

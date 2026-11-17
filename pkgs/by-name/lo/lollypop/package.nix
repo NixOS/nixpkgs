@@ -28,7 +28,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lollypop";
-  version = "1.4.40";
+  version = "1.4.48";
 
   pyproject = false;
 
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     repo = "lollypop";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-hdReviNgcigXuNqJns6aPW+kixlpmRXtqrLlm/LGHBo=";
+    hash = "sha256-rfZtP7KQRLLph76YDYV/64HhR0w4nB8Yf5wqGwL2swQ=";
   };
 
   nativeBuildInputs = [
@@ -113,7 +113,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Modern music player for GNOME";
     homepage = "https://gitlab.gnome.org/World/lollypop";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lovesegfault ];
+    maintainers = with lib.maintainers; [
+      choco98
+      lovesegfault
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "lollypop";
   };

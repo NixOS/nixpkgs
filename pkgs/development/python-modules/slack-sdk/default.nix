@@ -64,6 +64,8 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
     # ConnectionResetError in webhook test server
     "test_send_dict"
+    "test_ratelimited"
+    "test_run_on_returns_callback"
   ];
 
   disabledTestPaths = [

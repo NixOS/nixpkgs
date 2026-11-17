@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wstunnel";
   version = "11.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "erebe";
     repo = "wstunnel";
@@ -22,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-K6AQlANNkAm/vZhsQQZrN/QInF9AkAJkVFGoE9he3q4=";
 
-  cargoBuildFlags = [ "--package wstunnel-cli" ];
+  cargoBuildFlags = [ "--package=wstunnel-cli" ];
 
   nativeBuildInputs = [
     pkg-config
