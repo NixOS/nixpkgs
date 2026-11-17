@@ -64,7 +64,7 @@ let
   isPythonModule =
     drv:
     # all pythonModules have the pythonModule attribute
-    drv ? "pythonModule"
+    drv ? pythonModule
     # Some pythonModules are turned in to a pythonApplication by setting the field to false
     && (!isBool drv.pythonModule);
 
@@ -242,7 +242,7 @@ lib.extendMkDerivation {
               theirName = "'${drv.name}'";
               optionalLocation =
                 let
-                  pos = unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+                  pos = unsafeGetAttrPos (if attrs ? pname then "pname" else "name") attrs;
                 in
                 optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
             in
@@ -350,8 +350,8 @@ lib.extendMkDerivation {
       ++
         optionals
           (
-            finalAttrs ? "pname"
-            && finalAttrs ? "version"
+            finalAttrs ? pname
+            && finalAttrs ? version
             # We don't care about the METADATA of Python applications.
             && isPythonModule finalAttrs.passthru
             # METADATA is unlikely to be correct if pyproject is false or null.
