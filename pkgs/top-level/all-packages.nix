@@ -1458,10 +1458,6 @@ with pkgs;
 
   datasette = with python3Packages; toPythonApplication datasette;
 
-  discourseAllPlugins = discourse.override {
-    plugins = lib.filter (p: p ? pluginName) (builtins.attrValues discourse.plugins);
-  };
-
   inherit (ocamlPackages) dot-merlin-reader;
 
   inherit (ocamlPackages) dune-release;
