@@ -8,6 +8,9 @@
   fetchFromGitHub,
   orjson,
   pyprojectVersionPatchHook,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
   setuptools,
 }:
 
@@ -35,7 +38,11 @@ buildPythonPackage (finalAttrs: {
     brotli
   ];
 
-  doCheck = false; # no tests
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "aiosonos"
