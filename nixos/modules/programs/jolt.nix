@@ -40,5 +40,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ crimeminister ];
+  meta.maintainers = with lib.maintainers; [
+    crimeminister
+    yogthos
+  ];
 }
