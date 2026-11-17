@@ -14,17 +14,17 @@
 }:
 buildGoModule rec {
   pname = "mautrix-slack";
-  version = "26.10";
-  tag = "v0.2610.0";
+  version = "26.11";
+  tag = "v0.2611.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "slack";
     inherit tag;
-    hash = "sha256-NYTYamZsPIvVZpqUZ5d8EMMDMsIlEBfpHbXANdDQtgs=";
+    hash = "sha256-g8Tx+dkK+OWqchw1laJC8lInhOQk0d17dr4hwZIAqVQ";
   };
 
-  vendorHash = "sha256-FtEjVcWBcgX9cFZn6oSFpW4Y7rQaHbivD30aoAhgY0o=";
+  vendorHash = "sha256-1B4e4Ka+IYO1/d0GpGhR85hth3tnPCN7LVuWzyk/x9s=";
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
