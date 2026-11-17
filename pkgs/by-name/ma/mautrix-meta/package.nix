@@ -5,6 +5,8 @@
   lib,
   nixosTests,
   olm,
+  testers,
+  mautrix-meta,
   # This option enables the use of an experimental pure-Go implementation of the
   # Olm protocol instead of libolm for end-to-end encryption. Using goolm is not
   # recommended by the mautrix developers, but they are interested in people
@@ -48,6 +50,11 @@ buildGoModule (finalAttrs: {
         mautrix-meta-postgres
         mautrix-meta-sqlite
         ;
+
+      version = testers.testVersion {
+        package = mautrix-meta;
+        version = "v${finalAttrs.version}";
+      };
     };
 
     updateScript = nix-update-script { };
