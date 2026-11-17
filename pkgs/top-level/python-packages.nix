@@ -15250,6 +15250,8 @@ self: super: with self; {
 
   pyflic = callPackage ../development/python-modules/pyflic { };
 
+  pyflic-ble = callPackage ../development/python-modules/pyflic-ble { };
+
   pyflipper = callPackage ../development/python-modules/pyflipper { };
 
   pyfluidsynth = callPackage ../development/python-modules/pyfluidsynth { };
