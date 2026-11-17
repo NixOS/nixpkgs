@@ -1,0 +1,12 @@
+diff --git a/src/pretix/_build_settings.py b/src/pretix/_build_settings.py
+index 859a7f912..f717d76b4 100644
+--- a/src/pretix/_build_settings.py
++++ b/src/pretix/_build_settings.py
+@@ -49,3 +49,7 @@ HAS_GEOIP = False
+ SENTRY_ENABLED = False
+ VITE_DEV_MODE = False
+ VITE_IGNORE = False
++
++from importlib_metadata import entry_points
++for entry_point in entry_points(group='pretix.plugin'):
++    INSTALLED_APPS.append(entry_point.module) # noqa: F405

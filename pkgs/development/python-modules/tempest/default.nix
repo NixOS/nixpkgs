@@ -1,0 +1,116 @@
+{
+  lib,
+  bash,
+  buildPythonPackage,
+  cliff,
+  debtcollector,
+  defusedxml,
+  fetchPypi,
+  fixtures,
+  hacking,
+  jsonschema,
+  netaddr,
+  oslo-concurrency,
+  oslo-config,
+  oslo-log,
+  oslo-serialization,
+  oslo-utils,
+  oslotest,
+  paramiko,
+  pbr,
+  prettytable,
+  python,
+  pyyaml,
+  setuptools,
+  stestr,
+  stestrCheckHook,
+  stevedore,
+  python-subunit,
+  testscenarios,
+  testtools,
+  urllib3,
+}:
+
+buildPythonPackage rec {
+  pname = "tempest";
+  version = "46.3.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-z/WtY/wqhxaqhudHHy0nA8jbwoSzBJE/5DNxKVp1cRg=";
+  };
+
+  postPatch = ''
+    substituteInPlace tempest/lib/common/http.py \
+      --replace-fail 'getheaders()' 'headers'
+  '';
+
+  pythonRelaxDeps = [ "defusedxml" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    cliff
+    debtcollector
+    defusedxml
+    fixtures
+    jsonschema
+    netaddr
+    oslo-concurrency
+    oslo-config
+    oslo-log
+    oslo-serialization
+    oslo-utils
+    paramiko
+    pbr
+    prettytable
+    pyyaml
+    stestr
+    stevedore
+    python-subunit
+    testscenarios
+    testtools
+    urllib3
+  ];
+
+  nativeCheckInputs = [
+    hacking
+    oslotest
+    stestrCheckHook
+  ];
+
+  preCheck = ''
+    # Tests expect these applications available as such.
+    mkdir -p bin
+    export PATH="$PWD/bin:$PATH"
+    printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.main "$@"\n' > bin/tempest
+    printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.subunit_describe_calls "$@"\n' > bin/subunit-describe-calls
+    chmod +x bin/*
+  '';
+
+  stestrFlags = [
+    "--test-path"
+    "tempest/tests"
+  ];
+
+  disabledTests = [
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_dict_return_values"
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_multiple_workers"
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_single_process"
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_success"
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_with_exception"
+    "tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix"
+    "tempest.tests.lib.common.test_rest_client.TestRestClientServiceToken.test_log_request_full_omits_service_token"
+  ];
+
+  pythonImportsCheck = [ "tempest" ];
+
+  meta = {
+    description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
+    homepage = "https://github.com/openstack/tempest";
+    license = lib.licenses.asl20;
+    mainProgram = "tempest";
+    teams = [ lib.teams.openstack ];
+  };
+}

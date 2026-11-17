@@ -1,0 +1,65 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e1944f4564..f360948c1b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -45,7 +45,7 @@
+ add_library(${PROJECT_NAME} lzf_c.c lzf_d.c lzf.h lzfP.h)
+ target_include_directories(${PROJECT_NAME} PUBLIC
+ 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+-	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>
++	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+ )
+ set_target_properties(${PROJECT_NAME} PROPERTIES
+ 	VERSION ${API_VERSION}
+@@ -57,7 +57,7 @@
+ add_library(embed INTERFACE)
+ target_include_directories(embed INTERFACE
+ 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+-	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>
++	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+ )
+ target_sources(embed INTERFACE
+ 	$<BUILD_INTERFACE:lzf_c.c> $<BUILD_INTERFACE:lzf_d.c>
+@@ -95,3 +95,21 @@
+ 	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
+ 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+ )
++
++include(CheckIncludeFile)
++include(CheckFunctionExists)
++
++check_include_file(getopt.h HAVE_GETOPT_H)
++check_function_exists(getopt_long HAVE_GETOPT_LONG)
++
++configure_file(config.h.cmake.in config.h)
++
++add_executable(lzf-bin lzf.c)
++set_target_properties(lzf-bin PROPERTIES OUTPUT_NAME lzf)
++target_include_directories(lzf-bin PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
++target_link_libraries(lzf-bin PRIVATE liblzf)
++
++install(
++  TARGETS lzf-bin
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++)
+diff --git a/config.h.cmake.in b/config.h.cmake.in
+new file mode 100644
+index 0000000000..854a88f142
+--- /dev/null
++++ b/config.h.cmake.in
+@@ -0,0 +1,2 @@
++#cmakedefine HAVE_GETOPT_H 1
++#cmakedefine HAVE_GETOPT_LONG 1
+diff --git a/liblzf.pc.in b/liblzf.pc.in
+index 1da19e3eeb..619287c82f 100644
+--- a/liblzf.pc.in
++++ b/liblzf.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@PROJECT_NAME@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: A very small data compression library

@@ -1,0 +1,11 @@
+--- a/src/plugins/http/gfal_http_plugin.h
++++ b/src/plugins/http/gfal_http_plugin.h
+@@ -95,8 +95,6 @@
+         std::string sitename;
+         std::string uri;
+         std::string version;
+-
+-        tape_endpoint_info() = default;
+     } tape_endpoint_info_t;
+
+     typedef std::map<std::string, bool> TokenAccessMap;

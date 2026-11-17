@@ -1,0 +1,139 @@
+{
+    "release_date": "2024-03-15",
+    "release_label": "8.9.5",
+    "release_product": "cudnn",
+    "cudnn": {
+        "name": "NVIDIA CUDA Deep Neural Network library",
+        "license": "cudnn",
+        "license_path": "cudnn/LICENSE.txt",
+        "version": "8.9.5.30",
+        "cuda_variant": [
+            "11",
+            "12"
+        ],
+        "linux-x86_64": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-8.9.5.30_cuda11-archive.tar.xz",
+                "sha256": "bbe10e3c08cd7e4aea1012213781e4fe270e1c908263444f567cafefb2cc6525",
+                "md5": "300aaaa05ca6d12b3ac058fd0bd70c6b",
+                "size": "857471712"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-8.9.5.30_cuda12-archive.tar.xz",
+                "sha256": "2a2eb89a2ab51071151c6082f1e816c702167a711a9372f9f73a7b5c4b06e01a",
+                "md5": "afb13f2d7377f4a16b54a6acc373bbd9",
+                "size": "861488496"
+            }
+        },
+        "linux-ppc64le": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-ppc64le/cudnn-linux-ppc64le-8.9.5.30_cuda11-archive.tar.xz",
+                "sha256": "d678f8b2903b95de7eeaef38890c5674705864ea049b2b63e90565f2c0ea682f",
+                "md5": "daed75ed0c9f4dcc5b9521d2a833be3d",
+                "size": "860245008"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/linux-ppc64le/cudnn-linux-ppc64le-8.9.5.30_cuda12-archive.tar.xz",
+                "sha256": "38388ec3c99c6646aaf5c707985cd35e25c67f653d780c4081c2df5557ab665f",
+                "md5": "8893605a415202937ad9f2587e7a16ce",
+                "size": "862346664"
+            }
+        },
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-8.9.5.30_cuda11-archive.tar.xz",
+                "sha256": "50e3d38cb70a53bb059da0aefc60e1460729c6988e2697200c43b80d218e556c",
+                "md5": "3479f3fdbda83cd6df104851dc1f940a",
+                "size": "857816268"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-8.9.5.30_cuda12-archive.tar.xz",
+                "sha256": "107d3dbec6345e1a3879a151cf3cbf6a2d96162c7b8eeb2ff85b84a67e79e2d1",
+                "md5": "90715ef0e48f6f153587ee59df7c1a87",
+                "size": "859978180"
+            }
+        },
+        "windows-x86_64": {
+            "cuda11": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-8.9.5.30_cuda11-archive.zip",
+                "sha256": "e42aaa92203cc101a1619656ae50852a0d818a06ca99684c5f51ba95bd7a7cf9",
+                "md5": "d2f4fbc710da61253570306ed2e63ac4",
+                "size": "701179425"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-8.9.5.30_cuda12-archive.zip",
+                "sha256": "be76d407ce0e609f94688aa45bfd5648fd21a4d9f84a588fad10aa4802ca1301",
+                "md5": "54146d8da6df9da3ef125171da959dcf",
+                "size": "705347747"
+            }
+        },
+        "linux-aarch64": {
+            "cuda12": {
+                "relative_path": "cudnn/linux-aarch64/cudnn-linux-aarch64-8.9.5.30_cuda12-archive.tar.xz",
+                "sha256": "0491f7b02f55c22077eb678bf314c1f917524bd507cf5b658239bf98a47233a1",
+                "md5": "fffd4a177c3e2ebaaceb83131d69e4e3",
+                "size": "891432124"
+            }
+        }
+    },
+    "cudnn_samples": {
+        "name": "NVIDIA cuDNN samples",
+        "license": "cudnn",
+        "license_path": "cudnn_samples/LICENSE.txt",
+        "version": "8.9.5.30",
+        "cuda_variant": [
+            "11",
+            "12"
+        ],
+        "linux-x86_64": {
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-x86_64/cudnn_samples-linux-x86_64-8.9.5.30_cuda11-archive.tar.xz",
+                "sha256": "9c0d951788461f6e9e000209cf4b100839effd1fd300371dfa6929552c8b1d4e",
+                "md5": "dcbdaaa0171aa6b8331fcd6218558953",
+                "size": "1665468"
+            },
+            "cuda12": {
+                "relative_path": "cudnn_samples/linux-x86_64/cudnn_samples-linux-x86_64-8.9.5.30_cuda12-archive.tar.xz",
+                "sha256": "441d262d82888c6ca5a02c8ad0f07c3a876be7b473bc2ec2638d86ea2e80a884",
+                "md5": "a2ca6bf77b610024aff5c1a7ee53ea01",
+                "size": "1664272"
+            }
+        },
+        "linux-ppc64le": {
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-ppc64le/cudnn_samples-linux-ppc64le-8.9.5.30_cuda11-archive.tar.xz",
+                "sha256": "ded84be373031ff843c0b7118e9fdb48b06ec763eae3c76cb9c57e121b47c228",
+                "md5": "d4d76362cf7ba0a0711088c38a3e17a7",
+                "size": "1666372"
+            },
+            "cuda12": {
+                "relative_path": "cudnn_samples/linux-ppc64le/cudnn_samples-linux-ppc64le-8.9.5.30_cuda12-archive.tar.xz",
+                "sha256": "275d6a6671c210d4c4a92240de24cba0c5ca17e9007f91656b18bbff81621f81",
+                "md5": "b13c3befd24473ad536ef6ea3f4dc939",
+                "size": "1666788"
+            }
+        },
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "cudnn_samples/linux-sbsa/cudnn_samples-linux-sbsa-8.9.5.30_cuda11-archive.tar.xz",
+                "sha256": "fa2150dff6f574fb2927bfd2d10b5c2e2e90603f59d3d3371eaa41f2e9528c74",
+                "md5": "80783b38089b6573943959e873693f0a",
+                "size": "1665660"
+            },
+            "cuda12": {
+                "relative_path": "cudnn_samples/linux-sbsa/cudnn_samples-linux-sbsa-8.9.5.30_cuda12-archive.tar.xz",
+                "sha256": "af98dec9cf613cb7f67e27f5a5da24fc183996fc25a875aa0a7dc2914c986fe3",
+                "md5": "5f5b67f5d2862190ae9440ca7041b7a5",
+                "size": "1668336"
+            }
+        },
+        "linux-aarch64": {
+            "cuda12": {
+                "relative_path": "cudnn_samples/linux-aarch64/cudnn_samples-linux-aarch64-8.9.5.30_cuda12-archive.tar.xz",
+                "sha256": "044c0d4436e1ecff6785a8bacf45cf2b5d504eb1c04bb9617aed86bfea77e45f",
+                "md5": "ad2c201cf63561b5f0ddf505706eed97",
+                "size": "1663868"
+            }
+        }
+    }
+}

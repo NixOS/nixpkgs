@@ -1,0 +1,10 @@
+--- a/include/dieharder/libdieharder.h	2011-10-14 15:41:37.000000000 +0200
++++ b/include/dieharder/libdieharder.h	2015-03-27 16:34:40.978860858 +0100
+@@ -13,6 +13,7 @@
+ #include <stdlib.h>
+ #include <stdarg.h>
+ #include <string.h>
++#include <stdint.h>
+ #include <sys/time.h>
+ 
+ /* This turns on uint macro in c99 */

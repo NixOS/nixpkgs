@@ -1,0 +1,22 @@
+diff --git a/src/podcast/ffmpeg/UBFFmpegVideoEncoder.cpp b/src/podcast/ffmpeg/UBFFmpegVideoEncoder.cpp
+index 24451f27..50e06801 100644
+--- a/src/podcast/ffmpeg/UBFFmpegVideoEncoder.cpp
++++ b/src/podcast/ffmpeg/UBFFmpegVideoEncoder.cpp
+@@ -448,9 +448,17 @@ bool UBFFmpegVideoEncoder::init()
+         }
+ 
+         c->bit_rate = 96000;
++#if LIBAVCODEC_VERSION_MAJOR >= 61
++        const AVSampleFormat *sampleFormats = nullptr;
++        int nbSampleFormats = 0;
++        avcodec_get_supported_config(c, audioCodec, AV_CODEC_CONFIG_SAMPLE_FORMAT, 0, (const void **)&sampleFormats, &nbSampleFormats);
++        c->sample_fmt  = (sampleFormats && nbSampleFormats) ? sampleFormats[0] : AV_SAMPLE_FMT_FLTP;
++#else
+         c->sample_fmt  = audioCodec->sample_fmts ? audioCodec->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;// FLTP by default for AAC
++#endif
+         c->sample_rate = mAudioSampleRate;
+ 
++
+ #if LIBAVUTIL_VERSION_INT < AV_VERSION_INT(57, 25, 100)
+         c->channel_layout = AV_CH_LAYOUT_STEREO;
+         c->channels  = av_get_channel_layout_nb_channels(c->channel_layout);

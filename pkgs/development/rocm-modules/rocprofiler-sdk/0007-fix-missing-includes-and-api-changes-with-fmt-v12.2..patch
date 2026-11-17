@@ -1,0 +1,260 @@
+From eb68d5d6dcdb085dc3d8d18576fee7cf998f6512 Mon Sep 17 00:00:00 2001
+From: Anund <anundm@gmail.com>
+Date: Sun, 11 Oct 2026 16:59:59 +1100
+Subject: [PATCH 7/8] fix missing includes and api changes with fmt v12.2.0
+
+---
+ source/lib/common/logging.cpp                                 | 1 +
+ source/lib/output/generateRocpd.cpp                           | 1 +
+ source/lib/output/generateStats.cpp                           | 1 +
+ source/lib/output/metadata.cpp                                | 1 -
+ source/lib/output/metadata.hpp                                | 2 +-
+ source/lib/output/sql/common.hpp                              | 1 +
+ source/lib/python/rocpd/libpyrocpd.cpp                        | 1 +
+ source/lib/python/rocpd/source/serialization/sql.cpp          | 3 +++
+ source/lib/python/rocpd/source/sql_generator.hpp              | 3 +++
+ source/lib/rocprofiler-sdk-tool/tool.cpp                      | 3 ++-
+ source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp | 1 +
+ source/lib/rocprofiler-sdk/counters/tests/dimension.cpp       | 1 +
+ source/lib/rocprofiler-sdk/hip/details/format.hpp             | 4 ++--
+ source/lib/rocprofiler-sdk/hsa/aql_packet.cpp                 | 2 +-
+ source/lib/rocprofiler-sdk/hsa/details/fmt.hpp                | 3 +++
+ source/lib/rocprofiler-sdk/ompt.cpp                           | 2 +-
+ .../pc_sampling/parser/pc_record_interface.cpp                | 2 ++
+ source/lib/tests/common/parse.cpp                             | 1 +
+ 18 files changed, 26 insertions(+), 7 deletions(-)
+
+diff --git a/source/lib/common/logging.cpp b/source/lib/common/logging.cpp
+index 6c07322b06..24aecbc23d 100644
+--- a/source/lib/common/logging.cpp
++++ b/source/lib/common/logging.cpp
+@@ -25,6 +25,7 @@
+ #include "lib/common/filesystem.hpp"
+ 
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <glog/logging.h>
+ #include <glog/vlog_is_on.h>
+ 
+diff --git a/source/lib/output/generateRocpd.cpp b/source/lib/output/generateRocpd.cpp
+index 564a9bd45f..65d9a5d7cf 100644
+--- a/source/lib/output/generateRocpd.cpp
++++ b/source/lib/output/generateRocpd.cpp
+@@ -56,6 +56,7 @@
+ #include <rocprofiler-sdk-rocpd/types.h>
+ 
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <sqlite3.h>
+ #include <unistd.h>
+ 
+diff --git a/source/lib/output/generateStats.cpp b/source/lib/output/generateStats.cpp
+index 22c1a7f425..3860be129b 100644
+--- a/source/lib/output/generateStats.cpp
++++ b/source/lib/output/generateStats.cpp
+@@ -33,6 +33,7 @@
+ #include <rocprofiler-sdk/marker/api_id.h>
+ 
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ 
+ #include <unistd.h>
+ #include <cstdint>
+diff --git a/source/lib/output/metadata.cpp b/source/lib/output/metadata.cpp
+index abe9e00b50..f68d46de5b 100644
+--- a/source/lib/output/metadata.cpp
++++ b/source/lib/output/metadata.cpp
+@@ -41,7 +41,6 @@
+ #include <rocprofiler-sdk/rocprofiler.h>
+ #include <rocprofiler-sdk/cxx/details/tokenize.hpp>
+ 
+-#include <fmt/core.h>
+ #include <fmt/format.h>
+ 
+ #include <dlfcn.h>
+diff --git a/source/lib/output/metadata.hpp b/source/lib/output/metadata.hpp
+index 069401f962..a283896f29 100644
+--- a/source/lib/output/metadata.hpp
++++ b/source/lib/output/metadata.hpp
+@@ -45,7 +45,7 @@
+ #include <rocprofiler-sdk/cxx/name_info.hpp>
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include <cstdint>
+ #include <map>
+diff --git a/source/lib/output/sql/common.hpp b/source/lib/output/sql/common.hpp
+index 40fb8df9a8..97f96e06c4 100644
+--- a/source/lib/output/sql/common.hpp
++++ b/source/lib/output/sql/common.hpp
+@@ -29,6 +29,7 @@
+ #include "lib/common/units.hpp"
+ 
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <sqlite3.h>
+ 
+ #include <chrono>
+diff --git a/source/lib/python/rocpd/libpyrocpd.cpp b/source/lib/python/rocpd/libpyrocpd.cpp
+index 009afd694b..8ad4eb3458 100644
+--- a/source/lib/python/rocpd/libpyrocpd.cpp
++++ b/source/lib/python/rocpd/libpyrocpd.cpp
+@@ -55,6 +55,7 @@
+ #include <rocprofiler-sdk-rocpd/sql.h>
+ 
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <gotcha/gotcha.h>
+ #include <pybind11/detail/common.h>
+ #include <pybind11/pybind11.h>
+diff --git a/source/lib/python/rocpd/source/serialization/sql.cpp b/source/lib/python/rocpd/source/serialization/sql.cpp
+index d10e878be5..9192abc45b 100644
+--- a/source/lib/python/rocpd/source/serialization/sql.cpp
++++ b/source/lib/python/rocpd/source/serialization/sql.cpp
+@@ -23,6 +23,9 @@
+ #include "lib/python/rocpd/source/serialization/sql.hpp"
+ #include "lib/output/sql/common.hpp"
+ 
++#include <fmt/format.h>
++#include <fmt/ranges.h>
++
+ namespace cereal
+ {
+ SQLite3InputArchive::SQLite3InputArchive(sqlite3*         conn,
+diff --git a/source/lib/python/rocpd/source/sql_generator.hpp b/source/lib/python/rocpd/source/sql_generator.hpp
+index 6284857afb..881ad23a72 100644
+--- a/source/lib/python/rocpd/source/sql_generator.hpp
++++ b/source/lib/python/rocpd/source/sql_generator.hpp
+@@ -38,6 +38,9 @@
+ #include <string_view>
+ #include <type_traits>
+ 
++#include <fmt/format.h>
++#include <fmt/ranges.h>
++
+ namespace rocpd
+ {
+ namespace tool = ::rocprofiler::tool;
+diff --git a/source/lib/rocprofiler-sdk-tool/tool.cpp b/source/lib/rocprofiler-sdk-tool/tool.cpp
+index 7b03fa3eb8..6ddb2274e5 100644
+--- a/source/lib/rocprofiler-sdk-tool/tool.cpp
++++ b/source/lib/rocprofiler-sdk-tool/tool.cpp
+@@ -78,7 +78,8 @@
+ #include <rocprofiler-sdk/cxx/hash.hpp>
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
++#include <fmt/ranges.h>
+ 
+ #include <time.h>
+ #include <unistd.h>
+diff --git a/source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp b/source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp
+index 9587b219f3..d82a6ec40b 100644
+--- a/source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp
++++ b/source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp
+@@ -39,6 +39,7 @@
+ #include <rocprofiler-sdk/rocprofiler.h>
+ 
+ #include <fmt/core.h>
++#include <fmt/ranges.h>
+ #include <gtest/gtest.h>
+ #include <hsa/hsa.h>
+ #include <hsa/hsa_api_trace.h>
+diff --git a/source/lib/rocprofiler-sdk/counters/tests/dimension.cpp b/source/lib/rocprofiler-sdk/counters/tests/dimension.cpp
+index 387c167bd0..22fcda9bf7 100644
+--- a/source/lib/rocprofiler-sdk/counters/tests/dimension.cpp
++++ b/source/lib/rocprofiler-sdk/counters/tests/dimension.cpp
+@@ -39,6 +39,7 @@
+ #include <rocprofiler-sdk/rocprofiler.h>
+ 
+ #include <fmt/core.h>
++#include <fmt/ranges.h>
+ #include <gtest/gtest.h>
+ #include <hsa/hsa.h>
+ #include <hsa/hsa_api_trace.h>
+diff --git a/source/lib/rocprofiler-sdk/hip/details/format.hpp b/source/lib/rocprofiler-sdk/hip/details/format.hpp
+index f65cf016a6..46f734d65d 100644
+--- a/source/lib/rocprofiler-sdk/hip/details/format.hpp
++++ b/source/lib/rocprofiler-sdk/hip/details/format.hpp
+@@ -31,8 +31,8 @@
+ #include <hip/hip_deprecated.h>
+ #include <hip/hip_version.h>
+ 
+-#include "fmt/core.h"
+-#include "fmt/ranges.h"
++#include <fmt/core.h>
++#include <fmt/ranges.h>
+ 
+ #define ROCP_SDK_HIP_FORMATTER(TYPE, ...)                                                          \
+     template <>                                                                                    \
+diff --git a/source/lib/rocprofiler-sdk/hsa/aql_packet.cpp b/source/lib/rocprofiler-sdk/hsa/aql_packet.cpp
+index f1c0c3a56e..389a182e9d 100644
+--- a/source/lib/rocprofiler-sdk/hsa/aql_packet.cpp
++++ b/source/lib/rocprofiler-sdk/hsa/aql_packet.cpp
+@@ -21,7 +21,7 @@
+ // THE SOFTWARE.
+ 
+ #include "lib/rocprofiler-sdk/hsa/aql_packet.hpp"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <cstdlib>
+ #include <iostream>
+ #include "lib/common/logging.hpp"
+diff --git a/source/lib/rocprofiler-sdk/hsa/details/fmt.hpp b/source/lib/rocprofiler-sdk/hsa/details/fmt.hpp
+index c136a2739c..f0d7d9e94f 100644
+--- a/source/lib/rocprofiler-sdk/hsa/details/fmt.hpp
++++ b/source/lib/rocprofiler-sdk/hsa/details/fmt.hpp
+@@ -22,6 +22,9 @@
+ 
+ #include "lib/rocprofiler-sdk/hsa/queue.hpp"
+ 
++#include <fmt/format.h>
++#include <fmt/ranges.h>
++
+ namespace fmt
+ {
+ template <>
+diff --git a/source/lib/rocprofiler-sdk/ompt.cpp b/source/lib/rocprofiler-sdk/ompt.cpp
+index a9ccc571c8..0d7166465a 100644
+--- a/source/lib/rocprofiler-sdk/ompt.cpp
++++ b/source/lib/rocprofiler-sdk/ompt.cpp
+@@ -31,7 +31,7 @@
+ #include <rocprofiler-sdk/ompt/api_args.h>
+ #include <rocprofiler-sdk/ompt/omp-tools.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <cstdint>
+ #include <iostream>
+ 
+diff --git a/source/lib/rocprofiler-sdk/pc_sampling/parser/pc_record_interface.cpp b/source/lib/rocprofiler-sdk/pc_sampling/parser/pc_record_interface.cpp
+index 8d418df50e..a4163529c1 100644
+--- a/source/lib/rocprofiler-sdk/pc_sampling/parser/pc_record_interface.cpp
++++ b/source/lib/rocprofiler-sdk/pc_sampling/parser/pc_record_interface.cpp
+@@ -24,6 +24,8 @@
+ 
+ #include "lib/common/utility.hpp"
+ 
++#include <fmt/format.h>
++
+ template <>
+ uint64_t
+ PCSamplingParserContext::alloc<rocprofiler_pc_sampling_record_host_trap_v0_t>(
+diff --git a/source/lib/tests/common/parse.cpp b/source/lib/tests/common/parse.cpp
+index 5e3b63c85f..ccfc0912bc 100644
+--- a/source/lib/tests/common/parse.cpp
++++ b/source/lib/tests/common/parse.cpp
+@@ -23,6 +23,7 @@
+ #include <rocprofiler-sdk/cxx/details/tokenize.hpp>
+ 
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <gtest/gtest.h>
+ 
+ #include <cstddef>
+-- 
+2.55.0
+

@@ -1,0 +1,18 @@
+diff --git a/test/parallel/test-macos-app-sandbox.js b/test/parallel/test-macos-app-sandbox.js
+index 60ad67b3db..b6ac0dcef4 100644
+--- a/test/parallel/test-macos-app-sandbox.js
++++ b/test/parallel/test-macos-app-sandbox.js
+@@ -45,11 +45,11 @@ fs.copyFileSync(
+ 
+ // Sign the app bundle with sandbox entitlements:
+ assert.strictEqual(
+-  child_process.spawnSync('/usr/bin/codesign', [
++  child_process.spawnSync('@codesign@', [
+     '--entitlements', fixtures.path(
+       'macos-app-sandbox', 'node_sandboxed.entitlements'),
+     '--force', '-s', '-',
+-    appBundlePath,
++    appExecutablePath,
+   ]).status,
+   0);
+ 

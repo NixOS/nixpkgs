@@ -1,0 +1,19 @@
+diff --git a/setup.py b/setup.py
+index 513b435..2178018 100644
+--- a/setup.py
++++ b/setup.py
+@@ -133,13 +133,7 @@ ext_modules.append(
+     )
+ )
+ 
+-try:
+-    cmd = ['git', 'rev-parse', '--short', 'HEAD']
+-    rev = '+' + subprocess.check_output(cmd).decode('ascii').rstrip()
+-except Exception as _:
+-    now = datetime.now()
+-    date_time_str = now.strftime("%Y-%m-%d-%H-%M-%S")
+-    rev = '+' + date_time_str
++rev = "@git_rev@"
+ 
+ 
+ setup(

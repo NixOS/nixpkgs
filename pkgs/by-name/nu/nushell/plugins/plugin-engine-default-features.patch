@@ -1,0 +1,13 @@
+diff --git a/crates/nu-parser/Cargo.toml b/crates/nu-parser/Cargo.toml
+index c8bd13f3e0..d215f9887d 100644
+--- a/crates/nu-parser/Cargo.toml
++++ b/crates/nu-parser/Cargo.toml
+@@ -18,7 +18,7 @@
+ [dependencies]
+ nu-engine.workspace = true
+ nu-path.workspace = true
+-nu-plugin-engine = { workspace = true, optional = true }
++nu-plugin-engine = { workspace = true, optional = true, default-features = true }
+ nu-protocol.workspace = true
+ nu-utils.workspace = true
+ nu-experimental.workspace = true

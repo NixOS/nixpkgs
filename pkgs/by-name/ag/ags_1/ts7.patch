@@ -1,0 +1,27 @@
+diff --git a/tsconfig.json b/tsconfig.json
+index 7f3406d..f03a43a 100644
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -9,11 +9,20 @@
+         "checkJs": false,
+         "outDir": "_build/tsc-out",
+         "strict": true,
+-        "moduleResolution": "node",
+-        "baseUrl": ".",
++        "rootDir": "./src",
+         "typeRoots": [
+             "./node_modules/@girs"
+         ],
++        "types": [
++            "cairo-1.0",
++            "dbusmenugtk3-0.4",
++            "gjs",
++            "gtk-3.0",
++            "gvc-1.0",
++            "nm-1.0",
++            "notify-0.7",
++            "soup-3.0"
++        ],
+         "skipLibCheck": true,
+         "forceConsistentCasingInFileNames": true
+     },

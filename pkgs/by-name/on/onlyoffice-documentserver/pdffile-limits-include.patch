@@ -1,0 +1,12 @@
+diff --git a/PdfFile/SrcWriter/Utils.cpp b/PdfFile/SrcWriter/Utils.cpp
+index f4fcd884c6..0454c2a75a 100644
+--- a/PdfFile/SrcWriter/Utils.cpp
++++ b/PdfFile/SrcWriter/Utils.cpp
+@@ -33,6 +33,7 @@
+ #include <vector>
+ #include <ctime>
+ #include <cwctype>
++#include <limits>
+ 
+ namespace PdfWriter
+ {

@@ -1,0 +1,44 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  numpy,
+  torch,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "torchsummary";
+  version = "1.5.1";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  # No tags on GitHub
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-mBv2ieIuDPf5XHRgAvIKJK0mqmudhhE0oUvGzpIjBZA=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    numpy
+    torch
+  ];
+
+  # no tests in pypi tarball
+  doCheck = false;
+
+  pythonImportsCheck = [ "torchsummary" ];
+
+  meta = {
+    description = "Model summary in PyTorch similar to `model.summary()` in Keras";
+    homepage = "https://github.com/sksq96/pytorch-summary";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomasajt ];
+  };
+})

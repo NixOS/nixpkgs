@@ -1,0 +1,24 @@
+diff --git a/xen/Makefile b/xen/Makefile
+index 725f220ee6..b73a623b23 100644
+--- a/xen/Makefile
++++ b/xen/Makefile
+@@ -537,8 +537,8 @@
+ 		if [ -n '$(EFI_MOUNTPOINT)' -a -n '$(EFI_VENDOR)' ]; then \
+ 			$(if $(efi-strip-opt), \
+ 			     $(STRIP) $(efi-strip-opt) -p -o $(TARGET).efi.stripped $(TARGET).efi && \
+-			     $(INSTALL_DATA) $(TARGET).efi.stripped $(D)$(EFI_MOUNTPOINT)/efi/$(EFI_VENDOR)/$(T)-$(XEN_FULLVERSION).efi ||) \
+-			$(INSTALL_DATA) $(TARGET).efi $(D)$(EFI_MOUNTPOINT)/efi/$(EFI_VENDOR)/$(T)-$(XEN_FULLVERSION).efi; \
++			     $(INSTALL_DATA) $(TARGET).efi.stripped $(D)$(BOOT_DIR)/$(T)-$(XEN_FULLVERSION).efi ||) \
++			$(INSTALL_DATA) $(TARGET).efi $(D)$(BOOT_DIR)/$(T)-$(XEN_FULLVERSION).efi; \
+ 		elif [ "$(D)" = "$(patsubst $(shell cd $(XEN_ROOT) && pwd)/%,%,$(D))" ]; then \
+ 			echo 'EFI installation only partially done (EFI_VENDOR not set)' >&2; \
+ 		fi; \
+@@ -570,7 +570,7 @@
+ 	rm -f $(D)$(EFI_DIR)/$(T)-$(XEN_VERSION).efi
+ 	rm -f $(D)$(EFI_DIR)/$(T).efi
+ 	if [ -n '$(EFI_MOUNTPOINT)' -a -n '$(EFI_VENDOR)' ]; then \
+-		rm -f $(D)$(EFI_MOUNTPOINT)/efi/$(EFI_VENDOR)/$(T)-$(XEN_FULLVERSION).efi; \
++		rm -f $(D)$(BOOT_DIR)/$(T)-$(XEN_FULLVERSION).efi; \
+ 	fi
+ 
+ .PHONY: _debug
