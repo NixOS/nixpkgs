@@ -4,6 +4,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  iana-etc,
+  libredirect,
   pkgsBuildBuild,
 }:
 
@@ -28,7 +30,8 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-  ];
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [ libredirect.hook ];
 
   preBuild = ''
     mkdir -p ui/dist/app
@@ -49,17 +52,25 @@ buildGoModule (finalAttrs: {
     "-X github.com/argoproj/argo-workflows/v4.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
-    for shell in bash zsh fish; do
-      ${
-        if (stdenv.buildPlatform == stdenv.hostPlatform) then
-          "$out/bin/argo"
-        else
-          "${pkgsBuildBuild.argo-workflows}/bin/argo"
-      } completion $shell > argo.$shell
-      installShellCompletion argo.$shell
-    done
-  '';
+  # modernc.org/libc reads /etc/protocols and /etc/services during package
+  # init. It falls back to a built-in table when they do not exist, but panics
+  # when they exist and are unreadable, which is what the Darwin sandbox
+  # produces. Redirect them so the completion generation below can run.
+  postInstall =
+    lib.optionalString stdenv.buildPlatform.isDarwin ''
+      export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
+    ''
+    + ''
+      for shell in bash zsh fish; do
+        ${
+          if (stdenv.buildPlatform == stdenv.hostPlatform) then
+            "$out/bin/argo"
+          else
+            "${pkgsBuildBuild.argo-workflows}/bin/argo"
+        } completion $shell > argo.$shell
+        installShellCompletion argo.$shell
+      done
+    '';
 
   meta = {
     description = "Container native workflow engine for Kubernetes";
