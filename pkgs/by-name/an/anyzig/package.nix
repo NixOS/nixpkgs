@@ -44,12 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R +w "$ZIG_LIB_DIR"
   '';
 
-  zigBuildFlags = lib.optionals (anyzigExe != "zig") [ "install-${anyzigExe}" ];
+  zigBuildFlags = [
+    "-Dforce-version=v${finalAttrs.version}"
+  ]
+  ++ lib.optionals (anyzigExe != "zig") [ "install-${anyzigExe}" ];
 
   installPhase = ''
     runHook preInstall
     install -Dt $out/bin zig-out/bin/${anyzigExe}
     runHook postInstall
+  '';
+
+  # versionCheckHook doesn't support multiple arguments
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/${anyzigExe} any version | grep -F 'v${finalAttrs.version}'
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = nix-update-script { };
