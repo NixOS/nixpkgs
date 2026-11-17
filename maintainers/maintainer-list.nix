@@ -24677,6 +24677,13 @@
     githubId = 6778250;
     name = "Nick Wilburn";
   };
+  rahoni = {
+    email = "honisuess@gmail.com";
+    github = "RaHoni";
+    githubId = 53820160;
+    name = "Raoul Honermann";
+    keys = [ { fingerprint = "54D1 1CB3 7C71 3D54 57AC  F0C3 5962 F3E9 516F D551"; } ];
+  };
   raitobezarius = {
     email = "ryan@lahfa.xyz";
     matrix = "@raitobezarius:matrix.org";
