@@ -16,14 +16,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "4.5.0";
+  version = "4.5.1";
   pname = "libdigidocpp";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "libdigidocpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/RCRYF3G7/0J6oHT4mfapI4tlYLdWlQ2HTVqJGuDm3A=";
+    hash = "sha256-LT2JQwrliec3/tttu0SehhOnO+IL+IOLyk9L1tLsuuw=";
   };
 
   nativeBuildInputs = [
