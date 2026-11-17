@@ -17,6 +17,7 @@
   expat,
   glib,
   pcre2,
+  openttd-opengfx,
   withOpenGFX ? true,
   withOpenSFX ? true,
   withOpenMSX ? true,
@@ -39,11 +40,6 @@
 }:
 
 let
-  opengfx = fetchzip {
-    url = "https://cdn.openttd.org/opengfx-releases/8.0/opengfx-8.0-all.zip";
-    hash = "sha256-aqLEZ3EptxBZrYQd1IG6B1rSRJJTGIijKu2NIqpAYRA=";
-  };
-
   opensfx = fetchzip {
     url = "https://cdn.openttd.org/opensfx-releases/1.0.3/opensfx-1.0.3-all.zip";
     hash = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
@@ -125,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     lib.optionalString withOpenGFX ''
-      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
+      cp -r ${openttd-opengfx}/* $out/share/games/openttd/baseset
     ''
     + lib.optionalString withOpenSFX ''
       cp ${opensfx}/*.tar $out/share/games/openttd/baseset
