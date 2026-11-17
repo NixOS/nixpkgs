@@ -18,19 +18,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pip-tools";
-  version = "7.6.1";
+  version = "7.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pip-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gh1oe4Ghz492LofyT2ZLRBuQ9DKn+tYVc2EpkWJ4bfc=";
+    hash = "sha256-O3W8exoRz7PHockhcxHGV7RtCjpF7mkdz34tzlBjBlg=";
   };
-
-  patches = [
-    ./fix-setup-py-bad-syntax-detection.patch
-  ];
 
   build-system = [ setuptools-scm ];
 
