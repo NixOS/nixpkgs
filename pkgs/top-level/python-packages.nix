@@ -17208,6 +17208,10 @@ self: super: with self; {
 
   python-google-drive-api = callPackage ../development/python-modules/python-google-drive-api { };
 
+  python-google-maps-routing-api =
+    callPackage ../development/python-modules/python-google-maps-routing-api
+      { };
+
   python-google-nest = callPackage ../development/python-modules/python-google-nest { };
 
   python-google-weather-api = callPackage ../development/python-modules/python-google-weather-api { };
