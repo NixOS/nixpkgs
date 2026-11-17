@@ -15406,6 +15406,8 @@ self: super: with self; {
 
   pyhanko-certvalidator = callPackage ../development/python-modules/pyhanko-certvalidator { };
 
+  pyhaseiq = callPackage ../development/python-modules/pyhaseiq { };
+
   pyhaversion = callPackage ../development/python-modules/pyhaversion { };
 
   pyhcl = callPackage ../development/python-modules/pyhcl { };

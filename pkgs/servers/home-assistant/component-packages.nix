@@ -2878,7 +2878,8 @@
       ];
     "hase_iq" =
       ps: with ps; [
-      ]; # missing inputs: pyhaseiq
+        pyhaseiq
+      ];
     "hassio" =
       ps: with ps; [
         aiohasupervisor
@@ -9228,6 +9229,7 @@
     "hardware"
     "harman_luxury"
     "harmony"
+    "hase_iq"
     "hassio"
     "hddtemp"
     "hdfury"
