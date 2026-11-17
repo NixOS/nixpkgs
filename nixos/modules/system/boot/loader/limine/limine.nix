@@ -50,8 +50,12 @@ let
       inherit (config.system.nixos) distroName;
       inherit globalConfig;
       inherit (cfg.style) wallpapers;
-      nixPath = config.nix.package;
-      efiBootMgrPath = if cfg.efiSupport then pkgs.efibootmgr else null;
+      nixPath = if cfg.enableNg then null else config.nix.package;
+      efiBootMgrPath =
+        if cfg.efiSupport && efi.canTouchEfiVariables && !cfg.efiInstallAsRemovable then
+          pkgs.efibootmgr
+        else
+          null;
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
@@ -59,7 +63,11 @@ let
       canTouchEfiVariables = efi.canTouchEfiVariables;
       efiSupport = cfg.efiSupport;
       efiRemovable = cfg.efiInstallAsRemovable;
-      secureBoot = cfg.secureBoot;
+      efiBootFile =
+        if cfg.efiSupport then "BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI" else null;
+      secureBoot = cfg.secureBoot // {
+        sbctl = if cfg.secureBoot.enable then cfg.secureBoot.sbctl else null;
+      };
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
@@ -90,6 +98,16 @@ in
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
     package = lib.mkPackageOption pkgs "limine" { };
+
+    enableNg = lib.mkEnableOption null // {
+      description = ''
+        Whether to install Limine with `limine-install-ng`, a Rust rewrite of
+        the Python installer that does not need Python at install time.
+
+        The Python installer is deprecated and will be removed once
+        `limine-install-ng` becomes the default.
+      '';
+    };
 
     enableEditor = lib.mkEnableOption null // {
       description = ''
@@ -517,6 +535,10 @@ in
           assertion = cfg.efiSupport || cfg.biosSupport;
           message = "Both UEFI support and BIOS support for Limine are disabled, this will result in an unbootable system";
         }
+        {
+          assertion = cfg.biosSupport -> pkgs.stdenv.hostPlatform.isx86;
+          message = "Limine BIOS support is only available on x86 platforms";
+        }
       ];
 
       boot.loader.grub.enable = lib.mkDefault false;
@@ -527,14 +549,18 @@ in
         boot.loader.id = "limine";
         build.installBootLoader =
           let
-            install = pkgs.replaceVarsWith {
-              src = ./limine-install.py;
-              isExecutable = true;
-              replacements = {
-                python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
-                configPath = limineInstallConfig;
-              };
-            };
+            install =
+              if cfg.enableNg then
+                "${lib.getExe pkgs.limine-install-ng} ${limineInstallConfig}"
+              else
+                pkgs.replaceVarsWith {
+                  src = ./limine-install.py;
+                  isExecutable = true;
+                  replacements = {
+                    python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
+                    configPath = limineInstallConfig;
+                  };
+                };
 
             final = pkgs.writeScript "limine-install.sh" ''
               #!${pkgs.runtimeShell}
