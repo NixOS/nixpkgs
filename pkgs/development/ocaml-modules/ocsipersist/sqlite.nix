@@ -3,7 +3,6 @@
   ocsipersist,
   logs,
   sqlite3,
-  ocsigen_server,
 }:
 
 buildDunePackage {

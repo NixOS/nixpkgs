@@ -25,7 +25,7 @@
   cryptokit,
   xml-light,
   ipaddr,
-  camlzip,
+  bytesrw,
   makeWrapper,
 }:
 
@@ -50,7 +50,7 @@ let
 in
 
 buildDunePackage (finalAttrs: {
-  version = "7.0.0";
+  version = "8.0.0";
   pname = "ocsigenserver";
 
   # ocsigenserver dynamically loads its extensions from its library directory,
@@ -61,7 +61,7 @@ buildDunePackage (finalAttrs: {
     owner = "ocsigen";
     repo = "ocsigenserver";
     tag = finalAttrs.version;
-    hash = "sha256-J2XBelpRWJGeIF9RdC9+icJI1hc6Oe0k1w25QHZz0zs=";
+    hash = "sha256-uS5pX3zgIEM60kQD2vgMGw6MfAZAWPbOeUS4ou54VJg=";
   };
 
   nativeBuildInputs = [
@@ -70,11 +70,11 @@ buildDunePackage (finalAttrs: {
   ];
   buildInputs = [
     lwt_react
-    camlzip
     findlib
   ];
 
   propagatedBuildInputs = [
+    bytesrw
     cohttp
     cohttp-lwt-unix
     cryptokit
