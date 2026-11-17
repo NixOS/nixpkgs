@@ -19,7 +19,7 @@
 
 let
   pname = "codexbar";
-  version = "0.76.0";
+  version = "0.84.0";
 
   passthru.updateScript = writeShellScript "update-codexbar" ''
     set -euo pipefail
@@ -54,7 +54,7 @@ if stdenvNoCC.hostPlatform.isDarwin then
 
     src = fetchurl {
       url = "https://github.com/steipete/CodexBar/releases/download/v${finalAttrs.version}/CodexBar-macos-universal-${finalAttrs.version}.zip";
-      hash = "sha256-abKC78odg8FNhK1nzsW55PmM/qHORuAO+QJ5LsWCp6Q=";
+      hash = "sha256-wdovqqlgj4eYMGwwCATTcgeCZW+VXXNtGLysR2t37Sw=";
     };
 
     sourceRoot = ".";
@@ -88,12 +88,12 @@ else
       owner = "steipete";
       repo = "CodexBar";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-8zRvGTtxMxzz3Pkj4FWtJWAIAPV3auCKxaWC9ITqwhI=";
+      hash = "sha256-tfx6eCGbUpmswA4AxMfx8mbrw//lyhNRthx9zHjzSQQ=";
     };
 
     swiftpmDeps = fetchSwiftPMDeps {
       inherit (finalAttrs) pname version src;
-      hash = "sha256-VqleMLzhrt/1zNcx29YpRx1746zJJScW6Wnx3B+xors=";
+      hash = "sha256-R5cEV+dsLo0tR/asknINSFSQDUHl1rSsS/JfG/ciWj4=";
     };
 
     postPatch = ''
