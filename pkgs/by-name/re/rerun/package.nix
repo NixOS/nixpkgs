@@ -42,7 +42,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.43.1";
+  version = "0.43.2";
 
   __structuredAttrs = true;
 
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-EPeP9wQbodf+iX9FXYN+kWFhx2hCXmmdWbjfmvDwaPI=";
+    hash = "sha256-8rxmqpOZm8VS8sky71sh2eoUMrnlN8Ck/+g4PKJBGf4=";
   };
 
   postPatch =
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           'f"--config={WORKSPACE_ROOT / '"'"'.cargo/config.toml'"'"'}",'
     '';
 
-  cargoHash = "sha256-OLmTjnG7F8iCh8Me7i3bg9ql311uyCdhGE2CeDTXkyg=";
+  cargoHash = "sha256-qRBf5F5cse4s+Hd4uh+A2AEoQ11tQArpgcvRwkeRdmw=";
 
   cargoBuildFlags = [
     "--package"

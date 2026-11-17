@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "faketty";
-  version = "1.0.20";
+  version = "1.0.21";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-1AX2DBFOSUcORSQCo/5Vd8puE4hJU9VDfVqxcZDKrrY=";
+    hash = "sha256-IDikuswaa8QZovwoks31hrmsFDtcniiaIddSXrU5pjI=";
   };
 
-  cargoHash = "sha256-2MVWtCezrCd+uDAkYLzwDNobrc7TQEu1H2eUHlOcpVE=";
+  cargoHash = "sha256-D72i5v/sVCC9bBOMmi62IFy9jPMSnmNcYLTyOaANVM0=";
 
   postPatch = ''
     patchShebangs tests/test.sh

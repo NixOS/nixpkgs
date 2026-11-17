@@ -8,6 +8,7 @@
   hatch-vcs,
 
   # dependencies
+  fake-useragent,
   httpx,
   pydantic,
   truststore,
@@ -15,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "atopile-easyeda2kicad";
-  version = "0.9.7";
+  version = "0.9.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "easyeda2kicad.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l5ecNNu9vu073aK85F+tOSodEHk2wso95RYXk9DyTFo=";
+    hash = "sha256-63y8bbb5x0QatCB1z0WYjqis3FA45Q2DRtkXOnBvhqc=";
   };
 
   build-system = [
@@ -31,6 +32,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    fake-useragent
     httpx
     pydantic
     truststore

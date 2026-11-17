@@ -5,7 +5,8 @@
   home-assistant,
   pytestCheckHook,
   pytest-cov-stub,
-  pytest-homeassistant-custom-component,
+  pytest-homeassistant,
+  homeassistant,
 
   # dependency
   moonraker-api,
@@ -14,13 +15,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "marcolivierarsenault";
   domain = "moonraker";
-  version = "1.14.0b0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "marcolivierarsenault";
     repo = "moonraker-home-assistant";
     tag = finalAttrs.version;
-    hash = "sha256-+UlrhAi5QGqXgxfxCTzvVgkuhyDbh1e5ltYbPhXGkN8=";
+    hash = "sha256-6UvTQx5pjq/99I0ptw4chQlMqQZwo0xpD2Mc0L077eI=";
   };
 
   dependencies = [
@@ -28,7 +29,8 @@ buildHomeAssistantComponent (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    pytest-homeassistant-custom-component
+    homeassistant
+    pytest-homeassistant
     pytest-cov-stub
     pytestCheckHook
   ]

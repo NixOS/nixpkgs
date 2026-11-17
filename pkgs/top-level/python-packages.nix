@@ -140,9 +140,9 @@ self: super: with self; {
 
   affine = callPackage ../development/python-modules/affine { };
 
-  affine-gaps = callPackage ../development/python-modules/affine-gaps { };
-
   affinegap = callPackage ../development/python-modules/affinegap { };
+
+  affinegaps = callPackage ../development/python-modules/affinegaps { };
 
   afsapi = callPackage ../development/python-modules/afsapi { };
 
@@ -227,6 +227,8 @@ self: super: with self; {
   aioambient = callPackage ../development/python-modules/aioambient { };
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
+
+  aioanylist = callPackage ../development/python-modules/aioanylist { };
 
   aioapcaccess = callPackage ../development/python-modules/aioapcaccess { };
 
@@ -1570,6 +1572,8 @@ self: super: with self; {
   atopile = callPackage ../development/python-modules/atopile { };
 
   atopile-easyeda2kicad = callPackage ../development/python-modules/atopile-easyeda2kicad { };
+
+  atopile-kicad-python = callPackage ../development/python-modules/atopile-kicad-python { };
 
   atproto = callPackage ../development/python-modules/atproto { };
 
@@ -4157,6 +4161,8 @@ self: super: with self; {
   datafusion = callPackage ../development/python-modules/datafusion {
     protoc = pkgs.protobuf;
   };
+
+  datalab-capsule = callPackage ../development/python-modules/datalab-capsule { };
 
   datalab-platform = callPackage ../development/python-modules/datalab-platform { };
 
@@ -10254,9 +10260,13 @@ self: super: with self; {
 
   llm = callPackage ../development/python-modules/llm { };
 
+  llm-all-models-async = callPackage ../development/python-modules/llm-all-models-async { };
+
   llm-anthropic = callPackage ../development/python-modules/llm-anthropic { };
 
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
+
+  llm-cmd-comp = callPackage ../development/python-modules/llm-cmd-comp { };
 
   llm-command-r = callPackage ../development/python-modules/llm-command-r { };
 
@@ -10268,9 +10278,13 @@ self: super: with self; {
 
   llm-fragments-github = callPackage ../development/python-modules/llm-fragments-github { };
 
+  llm-fragments-pdf = callPackage ../development/python-modules/llm-fragments-pdf { };
+
   llm-fragments-pypi = callPackage ../development/python-modules/llm-fragments-pypi { };
 
   llm-fragments-reader = callPackage ../development/python-modules/llm-fragments-reader { };
+
+  llm-fragments-site-text = callPackage ../development/python-modules/llm-fragments-site-text { };
 
   llm-fragments-symbex = callPackage ../development/python-modules/llm-fragments-symbex { };
 
@@ -10290,13 +10304,21 @@ self: super: with self; {
 
   llm-jq = callPackage ../development/python-modules/llm-jq { };
 
+  llm-keys-ui = callPackage ../development/python-modules/llm-keys-ui { };
+
   llm-llama-server = callPackage ../development/python-modules/llm-llama-server { };
 
   llm-lmstudio = callPackage ../development/python-modules/llm-lmstudio { };
 
+  llm-mcp-client = callPackage ../development/python-modules/llm-mcp-client { };
+
+  llm-meta-ai = callPackage ../development/python-modules/llm-meta-ai { };
+
   llm-mistral = callPackage ../development/python-modules/llm-mistral { };
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
+
+  llm-openai-decisions = callPackage ../development/python-modules/llm-openai-decisions { };
 
   llm-openai-plugin = callPackage ../development/python-modules/llm-openai-plugin { };
 
@@ -10305,6 +10327,8 @@ self: super: with self; {
   llm-pdf-to-images = callPackage ../development/python-modules/llm-pdf-to-images { };
 
   llm-perplexity = callPackage ../development/python-modules/llm-perplexity { };
+
+  llm-public-ai = callPackage ../development/python-modules/llm-public-ai { };
 
   llm-sandbox = callPackage ../development/python-modules/llm-sandbox { };
 
@@ -10316,7 +10340,13 @@ self: super: with self; {
 
   llm-tools-datasette = callPackage ../development/python-modules/llm-tools-datasette { };
 
+  llm-tools-edit = callPackage ../development/python-modules/llm-tools-edit { };
+
+  llm-tools-exa = callPackage ../development/python-modules/llm-tools-exa { };
+
   llm-tools-quickjs = callPackage ../development/python-modules/llm-tools-quickjs { };
+
+  llm-tools-rag = callPackage ../development/python-modules/llm-tools-rag { };
 
   llm-tools-simpleeval = callPackage ../development/python-modules/llm-tools-simpleeval { };
 
@@ -14632,6 +14662,8 @@ self: super: with self; {
   py65 = callPackage ../development/python-modules/py65 { };
 
   py7zr = callPackage ../development/python-modules/py7zr { };
+
+  pyaaf2 = callPackage ../development/python-modules/pyaaf2 { };
 
   pyabpoa = toPythonModule (
     pkgs.abpoa.override {
@@ -19287,6 +19319,8 @@ self: super: with self; {
   sievelib = callPackage ../development/python-modules/sievelib { };
 
   sigima = callPackage ../development/python-modules/sigima { };
+
+  sigimax = callPackage ../development/python-modules/sigimax { };
 
   signalrcore = callPackage ../development/python-modules/signalrcore { };
 

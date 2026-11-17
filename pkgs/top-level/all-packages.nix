@@ -1741,6 +1741,8 @@ with pkgs;
 
   blacken-docs = with python3Packages; toPythonApplication blacken-docs;
 
+  cfait-gui = lib.addMetaAttrs { mainProgram = "cfait-gui"; } cfait.gui;
+
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
   aiovban-pyaudio = python3Packages.toPythonApplication python3Packages.aiovban-pyaudio;
@@ -2589,7 +2591,6 @@ with pkgs;
 
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
 
-  semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
   inherit (semgrep.passthru) semgrep-core;
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
@@ -9383,10 +9384,6 @@ with pkgs;
   molbar = with python3Packages; toPythonApplication molbar;
 
   pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
-
-  quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
-    hdf5 = hdf5-fortran;
-  };
 
   siesta-mpi = callPackage ../by-name/si/siesta/package.nix { useMpi = true; };
 
