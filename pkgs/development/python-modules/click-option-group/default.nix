@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.9";
+  version = "0.5.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-option-group";
     tag = "v${version}";
-    hash = "sha256-ASzX80aZB3SQqz8AgDTJTE1jgY+MgA0P5yTW9m6+Ovk=";
+    hash = "sha256-NfKQNF1YMz5YeEB8ypgscq7LLAc6LgCZ4PLe8EGOfZI=";
   };
 
   build-system = [
