@@ -1416,8 +1416,6 @@ with pkgs;
       '';
     });
 
-  clevercsv = with python3Packages; toPythonApplication clevercsv;
-
   cleanit = with python3Packages; toPythonApplication cleanit;
 
   clickgen = with python3Packages; toPythonApplication clickgen;
