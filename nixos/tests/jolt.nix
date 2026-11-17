@@ -2,7 +2,10 @@
 
 {
   name = "jolt";
-  meta.maintainers = with lib.maintainers; [ crimeminister ];
+  meta.maintainers = with lib.maintainers; [
+    crimeminister
+    yogthos
+  ];
 
   nodes.machine =
     { pkgs, ... }:
