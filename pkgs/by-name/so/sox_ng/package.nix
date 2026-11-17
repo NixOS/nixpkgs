@@ -113,5 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    mainProgram = "sox";
   };
 })

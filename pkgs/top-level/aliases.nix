@@ -1432,6 +1432,7 @@ mapAliases {
   ldash = throw "'ldash' has been removed due to lack of maintenance"; # Add 2026-10-26
   leaf = throw "'leaf' has been removed as it is unmaintained. Consider using 'fastfetch' instead"; # Added 2026-04-24
   leafnode = throw "'leafnode' has been removed as it is unmaintained and depends on EOL library PCRE. Consider using leafnode1 instead"; # Added 2026-07-30
+  lean2 = throw "'lean2' has been removed, as it has been unmaintained upstream since October 2018 and archived upstream since June 2026. Consider using 'lean4' instead."; # Added 2026-11-17
   ledger-agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
   ledger-autosync = throw "ledger-autosync has been removed because ofxclient was dropped"; # Added 2026-08-14
   ledger_agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11

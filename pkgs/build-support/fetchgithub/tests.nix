@@ -135,4 +135,29 @@
     rootDir = "misc/systemd";
     hash = "sha256-UhxHk4SrXYq7ZDMtXLig5SigpbITrVgkpFTmryuvpcM=";
   };
+
+  # `overrideAttrs` on `tag` must reach the fetchzip URL.
+  # The original tag doesn't exist, so this **only** builds if the override is respected.
+  overrideAttrs-tag =
+    testers.invalidateFetcherByDrvHash (args: (fetchFromGitHub args).overrideAttrs { tag = "2.3.15"; })
+      {
+        name = "fetchFromGitHub-overrideAttrs-tag";
+        owner = "NixOS";
+        repo = "nix";
+        tag = "this-tag-does-not-exist";
+        hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+      };
+
+  # `overrideAttrs` on `rev` must reach the fetchzip URL.
+  # The original rev doesn't exist, so this **only** builds if the override is respected.
+  overrideAttrs-rev =
+    testers.invalidateFetcherByDrvHash
+      (args: (fetchFromGitHub args).overrideAttrs { rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a"; })
+      {
+        name = "fetchFromGitHub-overrideAttrs-rev";
+        owner = "NixOS";
+        repo = "nix";
+        rev = "0000000000000000000000000000000000000000";
+        hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+      };
 }
