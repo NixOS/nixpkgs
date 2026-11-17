@@ -12,17 +12,17 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "slipshow";
-  version = "0.9.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "panglesd";
     repo = "slipshow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6i7zbfk0uBgwoXlg5fLvC+onZMYKBJwUd74FUakt3jc=";
+    hash = "sha256-BkGxclOb8QcLQCsGdBR+lPuuPcawTRb/RmQvDdsBSjs=";
   };
 
   postPatch = ''
-    substituteInPlace ./src/cli/main.ml \
+    substituteInPlace ./src/version/slipshow_version.ml \
       --replace-fail '%%VERSION%%' '${finalAttrs.version}'
   '';
 
@@ -31,27 +31,25 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   ];
 
   buildInputs = with ocamlPackages; [
+    ansi
     base64
     bos
     cmdliner
     dream
     fmt
     fpath
-    irmin-watcher
+    grace
     js_of_ocaml-lwt
+    linol
+    linol-lwt
     logs
     lwt
     magic-mime
     ppx_blob
     ppx_deriving_yojson
-    ppx_sexp_value
+    ppx_sexp_conv
     sexplib
   ];
-
-  # This check fails with cmdliner ≥ 2.0
-  preCheck = ''
-    rm -f test/compiler/dimension.t/run.t
-  '';
 
   doCheck = true;
 
@@ -104,12 +102,13 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/panglesd/slipshow/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Engine for displaying slips, the next-gen version of slides";
+    downloadPage = "https://github.com/panglesd/slipshow";
     homepage = "https://slipshow.readthedocs.io/en/latest/index.html";
     license = lib.licenses.gpl3Only;
-    downloadPage = "https://github.com/panglesd/slipshow";
+    mainProgram = "slipshow";
     maintainers = [ lib.maintainers.ethancedwards8 ];
     teams = [ lib.teams.ngi ];
-    mainProgram = "slipshow";
   };
 })

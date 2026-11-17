@@ -744,6 +744,8 @@ self: super: with self; {
     callPackage ../development/python-modules/alibabacloud-gateway-oss-util
       { };
 
+  alibabacloud-gateway-pop = callPackage ../development/python-modules/alibabacloud-gateway-pop { };
+
   alibabacloud-gateway-sls = callPackage ../development/python-modules/alibabacloud-gateway-sls { };
 
   alibabacloud-gateway-sls-util =
