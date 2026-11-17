@@ -50,6 +50,7 @@ let
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.server.settings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.client.settings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unix.settings);
+  mailConfigFile = cfg.mail-sender.secretConfigFile;
 
   entryManagementDir = pkgs.linkFarm "kanidm-entry-management" (
     mapAttrsToList (name: value: {
@@ -484,6 +485,19 @@ in
       '';
     };
 
+    mail-sender = {
+      enable = mkEnableOption "the Kanidm Mail Sender service";
+      secretConfigFile = mkOption {
+        description = ''
+          Path to a file containing the configuration file (and thus secrets) for the Kanidm Mail Sender. Do NOT use a file from the nix store here!
+          See [the documentation](https://kanidm.github.io/kanidm/stable/email_setup.html#configuration) for example configuration.
+        '';
+        example = "/run/secrets/kanidm-mail-sender-config";
+        default = null;
+        type = types.nullOr types.path;
+      };
+    };
+
     provision = {
       enable = mkEnableOption "provisioning of groups, users and oauth2 resource servers";
 
@@ -767,7 +781,7 @@ in
     };
   };
 
-  config = mkIf (cfg.client.enable || cfg.server.enable || cfg.unix.enable) {
+  config = mkIf (cfg.client.enable || cfg.server.enable || cfg.unix.enable || cfg.mail-sender.enable) {
     warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
     services.kanidm = {
       unix.settings.version = "2";
@@ -1087,6 +1101,35 @@ in
         Restart = "on-failure";
       };
       environment.RUST_LOG = "info";
+    };
+
+    systemd.services.kanidm-mail-sender = mkIf cfg.mail-sender.enable {
+      description = "Kanidm Mail Sender daemon";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      restartTriggers = [
+        clientConfigFile
+        mailConfigFile
+      ];
+
+      serviceConfig = lib.mkMerge [
+        defaultServiceConfig
+        {
+          # kanidm-mail-sender doesn't seem to work with the notify service type
+          Type = mkForce "simple";
+          LoadCredential = "mail-sender-config:${mailConfigFile}";
+          ExecStart = "${cfg.package}/bin/kanidm-mail-sender --client-config ${clientConfigFile} --mail-sender-config %d/mail-sender-config";
+          DynamicUser = true;
+          # Needs to connect to kanidmd
+          PrivateNetwork = mkForce false;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          Restart = "on-failure";
+        }
+      ];
     };
 
     # These paths are hardcoded
