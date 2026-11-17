@@ -17,6 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.2.0";
 
   __darwinAllowLocalNetworking = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     owner = "ipcalc";
