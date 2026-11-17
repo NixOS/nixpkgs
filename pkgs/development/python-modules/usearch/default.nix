@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  cmake,
   numba,
   numpy,
   numkong,
@@ -37,7 +36,6 @@ buildPythonPackage {
   ];
 
   build-system = [
-    cmake
     pybind11
     setuptools
   ];
@@ -47,8 +45,6 @@ buildPythonPackage {
     numpy
     tqdm
   ];
-
-  dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "usearch" ];
 
