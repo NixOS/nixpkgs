@@ -912,11 +912,12 @@
       ps:
       with ps;
       [
+        bluetti-modbus
         modbus-connection
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: bluetti-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "bmw_connected_drive" =
       ps: with ps; [
       ];
@@ -8934,6 +8935,7 @@
     "bluetooth"
     "bluetooth_adapters"
     "bluetooth_le_tracker"
+    "bluetti_modbus"
     "bmw_connected_drive"
     "bond"
     "bosch_alarm"
