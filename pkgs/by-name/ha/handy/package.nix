@@ -258,7 +258,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       buildPhase = ''
         runHook preBuild
         export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-        bun install --linker=isolated --force --frozen-lockfile \
+        bun install --cpu="*" --os="*" --libc="*" --linker=isolated --force --frozen-lockfile \
           --ignore-scripts --no-progress
         bun --bun "$PWD/.nix/scripts/normalize-install.ts"
         runHook postBuild
@@ -273,14 +273,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       dontFixup = true;
 
-      outputHash =
-        {
-          "x86_64-linux" = "sha256-2RCuoJpQeg3JN4JqlKvzO4KMz6n7rNXnsb9IyWt9law=";
-          "aarch64-linux" = "sha256-HY3VLb3jt6OwPe8Cai7udn9qb1U6XoSxM/cenALEykk=";
-          "aarch64-darwin" = "sha256-p1a02DsBfFzmwjq8GYaU4Z2IpbzLtkDOzLnrUk++KSw=";
-        }
-        .${stdenv.hostPlatform.system};
-
+      outputHash = "sha256-sFvJLixXU1ZP79C44sQnPlR7ff1c2RmcDENzSTWMWi4=";
       outputHashMode = "recursive";
     };
 
