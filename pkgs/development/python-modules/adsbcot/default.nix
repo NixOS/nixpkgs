@@ -51,6 +51,5 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/snstac/adsbcot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
-    platforms = lib.platforms.linux;
   };
 })
