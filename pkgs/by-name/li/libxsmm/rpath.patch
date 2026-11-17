@@ -1,0 +1,13 @@
+diff --git a/Makefile.inc b/Makefile.inc
+index 424d7b2e4..87934fee0 100644
+--- a/Makefile.inc
++++ b/Makefile.inc
+@@ -918,7 +918,7 @@ ifneq (Darwin,$(UNAME))
+   XLNKVERBOSE := --verbose
+   linkopt = $(if $1,$(XLNKOPT)$(if $2,$1=$(call quote,$2),$1))
+   abslibrpath = $(strip $(if $(findstring .$(ILIBEXT),$1)$(wildcard $1/), \
+-    $(call linkopt,--rpath,$(call qxdir,$(call qapath,$1)))))
++    $(call linkopt,--rpath,$(PREFIX)/lib)))
+   XGROUP_BEGIN := $(call linkopt,--start-group)
+   XGROUP_END := $(call linkopt,--end-group)
+   ifneq (0,$(ASNEEDED))

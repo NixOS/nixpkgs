@@ -1,0 +1,13 @@
+diff --git a/muse_deps/recipes/wxwidgets/meta.cmake b/muse_deps/recipes/wxwidgets/meta.cmake
+index b30de19..3d18391 100644
+--- a/muse_deps/recipes/wxwidgets/meta.cmake
++++ b/muse_deps/recipes/wxwidgets/meta.cmake
+@@ -35,6 +35,8 @@
+     endif()
+     separate_arguments(wx_cxx_list NATIVE_COMMAND "${wx_cxx}")
+     separate_arguments(wx_libs_list NATIVE_COMMAND "${wx_libs}")
++    # Keep framework flags and names together as a single CMake link item.
++    string(REGEX REPLACE "-framework;([^;]+)" "-framework \\1" wx_libs_list "${wx_libs_list}")
+ 
+     set(incs "")
+     set(opts "")

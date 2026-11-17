@@ -1,0 +1,11 @@
+--- javalib-2.3-orig/configure.sh	2013-10-30 08:35:30.000000000 +0100
++++ javalib-2.3/configure.sh	2014-07-06 17:28:39.025066199 +0200
+@@ -44,7 +44,7 @@
+ DESTDIR=
+ # The ocamlpath variable for the compiler to locate the locally-installed
+ # packages (depends on LOCALDEST)
+-OCAMLPATH=
++#OCAMLPATH=
+ # The packages that need to be made in addition to Savalib / Sawja
+ MAKEDEP=
+ # The packages that need to be made in addition to Savalib / Sawja

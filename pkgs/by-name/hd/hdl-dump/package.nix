@@ -1,0 +1,37 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
+
+stdenv.mkDerivation {
+  pname = "hdl-dump";
+  version = "47-unstable-2022-09-19";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "ps2homebrew";
+    repo = "hdl-dump";
+    rev = "87d3099d2ba39a15e86ebc7dc725e8eaa49f2d5f";
+    hash = "sha256-eBqF4OGEaLQXQ4JMtD/Yn+f97RzKVsnC+4oyiEhLTUM=";
+  };
+
+  makeFlags = [ "RELEASE=yes" ];
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 hdl_dump -t $out/bin
+    runHook postInstall
+  '';
+
+  meta = {
+    homepage = "https://github.com/ps2homebrew/hdl-dump";
+    description = "PlayStation 2 HDLoader image dump/install utility";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ makefu ];
+    mainProgram = "hdl_dump";
+  };
+}

@@ -1,0 +1,14 @@
+diff --git a/core/build.gradle.kts b/core/build.gradle.kts
+index 8f7211b13..82c229f76 100644
+--- a/core/build.gradle.kts
++++ b/core/build.gradle.kts
+@@ -29,8 +29,7 @@ sourceSets{
+ }
+ 
+ dependencies {
+-    implementation(libs.jogl)
+-    implementation(libs.gluegen)
++    implementation(fileTree("@@joglPath@@/share/java") { include("*.jar") })
+
+     testImplementation(libs.junit)
+ }

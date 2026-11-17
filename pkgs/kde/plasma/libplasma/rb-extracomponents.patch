@@ -1,0 +1,27 @@
+commit fd5e1a04b024a9b955d6942e52295582144fbea7
+Author: Arnout Engelen <arnout@bzzt.net>
+Date:   Sun Dec 14 10:43:57 2025 +0100
+
+    reproducible builds: make qml dependency explicit
+    
+    Similar to https://qt-project.atlassian.net/browse/QTBUG-137440
+    
+    To fix https://bugs.kde.org/show_bug.cgi?id=512868
+    
+    I'll admit I don't quite know what I'm doing here, I'm mostly guessing and mimicking, but it does seem to remove the nondeterminism :)
+
+diff --git a/src/declarativeimports/plasmaextracomponents/CMakeLists.txt b/src/declarativeimports/plasmaextracomponents/CMakeLists.txt
+index 1a7827819..989318c80 100644
+--- a/src/declarativeimports/plasmaextracomponents/CMakeLists.txt
++++ b/src/declarativeimports/plasmaextracomponents/CMakeLists.txt
+@@ -44,6 +44,10 @@ target_link_libraries(plasmaextracomponentsplugin PRIVATE
+         KF6::WidgetsAddons
+         Plasma::Plasma)
+ 
++add_dependencies(plasmaextracomponentsplugin
++    org_kde_plasmacomponents3
++)
++
+ ecm_finalize_qml_module(plasmaextracomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR})
+ 
+ ecm_generate_qdoc(plasmaextracomponentsplugin plasmaextras.qdocconf)

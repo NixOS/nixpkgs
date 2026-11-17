@@ -1,0 +1,70 @@
+GIT
+  remote: https://github.com/inukshuk/anystyle.git
+  revision: c6f5fb2fa6e8ce9456ad1e1e88d6bba5f3d7731d
+  specs:
+    anystyle (1.6.0)
+      anystyle-data (~> 1.3)
+      bibtex-ruby (~> 6.0)
+      namae (~> 1.0)
+      wapiti (~> 2.1)
+
+PATH
+  remote: .
+  specs:
+    anystyle-cli (1.5.0)
+      anystyle (~> 1.6)
+      gli (~> 2.17)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    anystyle-data (1.3.0)
+    bibtex-ruby (6.1.0)
+      latex-decode (~> 0.0)
+      racc (~> 1.7)
+    builder (3.3.0)
+    date (3.4.1)
+    debug (1.10.0)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
+    erb (5.0.1)
+    gli (2.22.2)
+      ostruct
+    io-console (0.8.0)
+    irb (1.15.2)
+      pp (>= 0.6.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
+    latex-decode (0.4.0)
+    namae (1.2.0)
+      racc (~> 1.7)
+    ostruct (0.6.1)
+    pp (0.6.2)
+      prettyprint
+    prettyprint (0.2.0)
+    psych (5.2.6)
+      date
+      stringio
+    racc (1.8.1)
+    rdoc (6.14.0)
+      erb
+      psych (>= 4.0.0)
+    reline (0.6.1)
+      io-console (~> 0.5)
+    rexml (3.4.1)
+    stringio (3.1.7)
+    wapiti (2.1.0)
+      builder (~> 3.2)
+      rexml (~> 3.0)
+
+PLATFORMS
+  arm64-darwin-24
+  ruby
+
+DEPENDENCIES
+  anystyle!
+  anystyle-cli!
+  debug
+
+BUNDLED WITH
+   2.5.22

@@ -1,0 +1,20 @@
+commit 0a258effd3492d7e4c11b4d175538c619699fbd6
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Wed Oct 1 09:43:45 2025 +0200
+
+    Fix assets path on NixOS
+
+diff --git a/common/assets/src/lib.rs b/common/assets/src/lib.rs
+index 13102e8..898b23b 100644
+--- a/common/assets/src/lib.rs
++++ b/common/assets/src/lib.rs
+@@ -381,6 +381,9 @@ lazy_static! {
+             }
+         }
+ 
++        // 5. NixOS path
++        paths.push("@out@/share/veloren/".into());
++
+         tracing::trace!("Possible asset locations paths={:?}", paths);
+ 
+         for mut path in paths.clone() {

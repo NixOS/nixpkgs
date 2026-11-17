@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6c17703..70896f7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -21,7 +21,7 @@ add_executable(csol ${SRC_LIST} csolrc)
+ target_link_libraries(csol ${CURSES_LIBRARIES})
+ 
+ install(TARGETS csol DESTINATION bin COMPONENT binaries)
+-install(FILES "${CMAKE_BINARY_DIR}/csolrc" DESTINATION /etc/xdg/csol COMPONENT config)
+-install(DIRECTORY "${CMAKE_BINARY_DIR}/themes" DESTINATION /etc/xdg/csol COMPONENT config)
+-install(DIRECTORY "${CMAKE_BINARY_DIR}/games" DESTINATION /etc/xdg/csol COMPONENT config)
++install(FILES "${CMAKE_BINARY_DIR}/csolrc" DESTINATION etc/xdg/csol COMPONENT config)
++install(DIRECTORY "${CMAKE_BINARY_DIR}/themes" DESTINATION etc/xdg/csol COMPONENT config)
++install(DIRECTORY "${CMAKE_BINARY_DIR}/games" DESTINATION etc/xdg/csol COMPONENT config)
+ install(FILES "${PROJECT_SOURCE_DIR}/doc/csol.6" DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man6)

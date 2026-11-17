@@ -1,0 +1,25 @@
+From 4952ceece60ff2e7eabec45411b8824da6673bff Mon Sep 17 00:00:00 2001
+From: m <m@linuxistsuper.de>
+Date: Sun, 5 Mar 2023 11:25:40 +0100
+Subject: [PATCH] update version in lock file
+
+---
+ Cargo.lock | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index d571155..ca28bef 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1554,7 +1554,7 @@ checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
+ 
+ [[package]]
+ name = "udict"
+-version = "0.1.1"
++version = "0.1.2"
+ dependencies = [
+  "reqwest",
+  "scraper",
+-- 
+2.38.4
+

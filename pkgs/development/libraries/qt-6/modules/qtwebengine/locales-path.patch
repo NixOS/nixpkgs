@@ -1,0 +1,11 @@
+--- a/src/core/api/CMakeLists.txt
++++ b/src/core/api/CMakeLists.txt
+@@ -227,7 +227,7 @@ if(QT_FEATURE_framework)
+     )
+ 
+ else()
+-    set(locale_install_path "${INSTALL_TRANSLATIONSDIR}/qtwebengine_locales")
++    set(locale_install_path "${INSTALL_DATADIR}/qtwebengine_locales")
+     install(FILES ${localeFiles}
+         DESTINATION ${locale_install_path}
+         CONFIGURATIONS ${config}
