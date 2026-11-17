@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  nix-update-script,
   fonts ? [ ],
 }:
 
@@ -72,6 +73,13 @@ stdenvNoCC.mkDerivation {
   + ''
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=(0-unstable-.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://fonts.google.com";
