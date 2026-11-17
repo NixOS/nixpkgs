@@ -3,6 +3,8 @@
   nix-update-script,
   buildGoModule,
   fetchFromGitHub,
+  testers,
+  mautrix-whatsapp,
   olm,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
@@ -36,7 +38,13 @@ buildGoModule (finalAttrs: {
     "main.Tag=${finalAttrs.tag}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = mautrix-whatsapp;
+      version = "v${finalAttrs.version}";
+    };
+  };
 
   meta = {
     homepage = "https://github.com/mautrix/whatsapp";
