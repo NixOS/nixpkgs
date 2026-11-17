@@ -2894,7 +2894,8 @@
       ];
     "haven_iaq" =
       ps: with ps; [
-      ]; # missing inputs: haveniaq
+        haveniaq
+      ];
     "hddtemp" =
       ps: with ps; [
       ];
@@ -9234,6 +9235,7 @@
     "harmony"
     "hase_iq"
     "hassio"
+    "haven_iaq"
     "hddtemp"
     "hdfury"
     "hdmi_cec"
