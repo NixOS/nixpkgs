@@ -29,10 +29,8 @@ let
     runCommand "aws-lc-symbols"
       {
         inherit (aws-lc) src;
-        nativeBuildInputs = [
-          writableTmpDirAsHomeHook
-          go
-        ];
+        depsBuildBuild = [ go ];
+        nativeBuildInputs = [ writableTmpDirAsHomeHook ];
       }
       ''
         cd "$src"
@@ -67,11 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  depsBuildBuild = [ go ];
+
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
     cmake
     ninja
-    go
     perl
   ]
   ++ lib.optionals withRustBindings [
