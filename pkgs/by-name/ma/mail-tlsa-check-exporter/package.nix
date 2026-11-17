@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/libexec
-    cp $src/index.mjs $out/libexec
+    cp index.mjs $out/libexec
 
     makeWrapper ${lib.getExe nodejs} $out/bin/mail-tlsa-check-exporter \
       --append-flag $out/libexec/index.mjs

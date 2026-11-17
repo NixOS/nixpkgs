@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aerogramme";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "deuxfleurs-org";
     repo = "aerogramme";
     tag = finalAttrs.version;
-    hash = "sha256-YNCTrEH7/p//q8HmWJZ1smtWJVcisVmlC/Eh7AOlU2M=";
+    hash = "sha256-Ec3EaBnrdL1gU2oKSfNmJyRJwxv4AH74q+Qv/wZlaBc=";
   };
 
   # git.deuxfleurs.fr is not letting shallow clones of commits and getting timedout
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "https://git.deuxfleurs.fr/Deuxfleurs/garage.git" "https://github.com/deuxfleurs-org/garage.git"
   '';
 
-  cargoHash = "sha256-6saVYAUoIs1gI2JCXLUZjEQru4o+D4TzD3SY/Tnaf2c=";
+  cargoHash = "sha256-oJS/OCDcjW9eLprr43uQByNv/p8z3Dh+D2ItgazP74g=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

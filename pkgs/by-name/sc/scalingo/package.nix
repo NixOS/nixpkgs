@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "scalingo";
-  version = "1.51.0";
+  version = "1.52.0";
 
   src = fetchFromGitHub {
     owner = "scalingo";
     repo = "cli";
     rev = version;
-    hash = "sha256-5E8ktzM2Bds+FHU6HNGcczC/Aefp7asPNBtxYQCiEIg=";
+    hash = "sha256-1AMXMt7Bs5Nxm8ajwa3QSPHH+1BoOvPQurjlva/VA2A=";
   };
 
   vendorHash = null;
