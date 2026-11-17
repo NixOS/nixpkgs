@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usblog";
-  version = "0.2.0";
+  version = "0.3.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "inradii";
     repo = "usblog";
     tag = finalAttrs.version;
-    hash = "sha256-86OiIfSy+KVD96OKEk2CrQCGWrrhqnIeUeSDP/I9OBA=";
+    hash = "sha256-Ddkd6ViHrtmAwtUuhKBF3kNAARYS4935LqfkZhoeQP8=";
   };
 
-  cargoHash = "sha256-JhH+BrHqFtMWXvRtMau+YyAj0N7hZfUfc3eZa9DHM5s=";
+  cargoHash = "sha256-OwGCNo+lWM+YObyNu04Q36fKHYmwCcsd7I3nlg0eDU8=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
