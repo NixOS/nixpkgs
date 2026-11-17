@@ -39,6 +39,8 @@
   makeWrapper,
   buildPackages,
   versionCheckHook,
+  nix-update-script,
+  _experimental-update-script-combinators,
 }:
 
 let
@@ -141,6 +143,22 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString withOpenMSX ''
       cp -r ${openttd-openmsx}/* $out/share/games/openttd/baseset
     '';
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence (
+    map
+      (
+        pkg:
+        (nix-update-script {
+          attrPath = pkg;
+        })
+      )
+      [
+        "openttd-opengfx"
+        "openttd-opensfx"
+        "openttd-openmsx"
+        "openttd"
+      ]
+  );
 
   meta = {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
