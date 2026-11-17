@@ -205,31 +205,27 @@ decorate (
       name =
         args.name
           or (repoRevToNameMaybe finalAttrs.repo (revOrTag finalAttrs.revCustom finalAttrs.tag) "github");
-      meta =
-        meta
-        // {
-          homepage = meta.homepage or baseUrl;
-          identifiers = {
-            purlParts =
-              if githubBase == "github.com" then
-                {
-                  type = "github";
-                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
-                  spec = "${owner}/${repo}@${(revOrTag rev tag)}";
-                }
-              else
-                {
-                  type = "generic";
-                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
-                  spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(revOrTag rev tag)}";
-                };
-          }
-          // meta.identifiers or { };
+      meta = meta // {
+        homepage = meta.homepage or baseUrl;
+        identifiers = {
+          purlParts =
+            if githubBase == "github.com" then
+              {
+                type = "github";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
+                spec = "${owner}/${repo}@${(revOrTag rev tag)}";
+              }
+            else
+              {
+                type = "generic";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+                spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(revOrTag rev tag)}";
+              };
         }
-        // optionalAttrs (position != null) {
-          # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
-          position = "${position.file}:${toString position.line}";
-        };
+        // meta.identifiers or { };
+        # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
+        ${if position != null then "position" else null} = "${position.file}:${toString position.line}";
+      };
     }
   )
 )
