@@ -63,7 +63,12 @@ stdenv.mkDerivation rec {
     moltenvk.dev
   ];
 
-  libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
+  libraryPath = lib.strings.makeLibraryPath [
+    vulkan-loader
+    libx11
+    libxcb
+    wayland
+  ];
 
   dontPatchELF = true;
 
