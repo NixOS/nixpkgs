@@ -5,27 +5,21 @@
   makeDesktopItem,
 }:
 
-let
+appimageTools.wrapType2 rec {
   pname = "tusk";
   version = "0.23.0";
-
-  icon = fetchurl {
-    url = "https://raw.githubusercontent.com/klaussinani/tusk/v${version}/static/Icon.png";
-    sha256 = "1jqclyrjgg6hir45spg75plfmd8k9nrsrzw3plbcg43s5m1qzihb";
-  };
 
   desktopItem = makeDesktopItem {
     name = pname;
     exec = pname;
-    icon = icon;
+    icon = fetchurl {
+      url = "https://raw.githubusercontent.com/klaussinani/tusk/v${version}/static/Icon.png";
+      sha256 = "1jqclyrjgg6hir45spg75plfmd8k9nrsrzw3plbcg43s5m1qzihb";
+    };
     desktopName = pname;
     genericName = "Evernote desktop app";
     categories = [ "Application" ];
   };
-
-in
-appimageTools.wrapType2 rec {
-  inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/klaussinani/tusk/releases/download/v${version}/tusk-${version}-x86_64.AppImage";
