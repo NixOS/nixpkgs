@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchurl,
+  aws-lc,
   cmake,
   makeWrapper,
   nix-update-script,
@@ -13,6 +14,7 @@
   writableTmpDirAsHomeHook,
   leptonica,
   tesseract,
+  zstd,
 }:
 
 let
@@ -102,8 +104,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     tesseract
+    zstd
   ];
 
   cargoHash = "sha256-YjSQDsbvq5tCBi/tO6WhYiqTlkrhztw/X8mWkhLyey8=";
