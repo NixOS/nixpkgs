@@ -2780,7 +2780,8 @@
       ];
     "grandstream_home" =
       ps: with ps; [
-      ]; # missing inputs: grandstream-home-api
+        grandstream-home-api
+      ];
     "graphite" =
       ps: with ps; [
       ];
@@ -9195,6 +9196,7 @@
     "govee_light_local"
     "gpsd"
     "gpslogger"
+    "grandstream_home"
     "graphite"
     "gree"
     "gree_infrared"
