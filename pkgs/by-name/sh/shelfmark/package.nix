@@ -69,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "shelfmark";
   inherit version src;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     python3Packages.wrapPython
     makeWrapper
