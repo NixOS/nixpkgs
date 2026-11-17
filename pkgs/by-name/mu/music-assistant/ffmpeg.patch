@@ -77,37 +77,27 @@ index e7c85738c..3287fee6e 100644
      except FileNotFoundError:
          raise AudioError(
              "FFmpeg binary is missing from system. "
-@@ -858,7 +858,7 @@ async def check_ffmpeg_version() -> None:
-     # which builds from git report as e.g. "N-121037-g1234567". A probe that fails reads as
-     # "not blocked", so the check stays in place. Drop this once every supported build
-     # whitelists CMAF.
--    returncode, hls_options = await check_output("ffmpeg", "-hide_banner", "-h", "demuxer=hls")
-+    returncode, hls_options = await check_output("@ffmpeg@", "-hide_banner", "-h", "demuxer=hls")
-     cmaf_blocked = (
-         returncode == 0 and b"extension_picky" in hls_options and b"cmfa" not in hls_options
-     )
 diff --git a/music_assistant/helpers/tags.py b/music_assistant/helpers/tags.py
 index 83f352718..2a7d8f868 100644
 --- a/music_assistant/helpers/tags.py
 +++ b/music_assistant/helpers/tags.py
-@@ -793,7 +793,7 @@ def parse_tags(
-     source = input_file if fd is None else descriptor_path(fd)
+@@ -777,6 +777,6 @@ async def async_parse_tags(
      pass_fds = () if fd is None else (fd,)
-     args = (
+     args = [
 -        "ffprobe",
 +        "@ffprobe@",
          "-hide_banner",
          "-loglevel",
          "error",
-@@ -875,7 +875,7 @@ def get_file_duration(
-     :param verify_ssl: Whether the certificate of an https source must be verified.
-     """
-     args = (
--        "ffmpeg",
-+        "@ffmpeg@",
-         "-hide_banner",
-         "-loglevel",
-         "info",
+@@ -827,7 +827,7 @@ async def async_parse_tags(
+         del res
+         if not tags.duration and require_duration:
+             duration_args = [
+-                "ffmpeg",
++                "@ffmpeg@",
+                 "-hide_banner",
+                 "-loglevel",
+                 "info",
 @@ -1765,7 +1765,7 @@ async def _get_embedded_image(
  
      # Use FFmpeg for all other cases (URLs, ID3 tags, Vorbis comments, etc.)
@@ -325,20 +315,33 @@ index 09a0433e5..3d9f7db62 100644
              "-y",
              "-hide_banner",
              "-loglevel",
+diff --git a/tests/providers/filesystem_local/test_checked_playback.py b/tests/providers/filesystem_local/test_checked_playback.py
+index a8ad79fb5..78d39ff35 100644
+--- a/tests/providers/filesystem_local/test_checked_playback.py
++++ b/tests/providers/filesystem_local/test_checked_playback.py
+@@ -34,7 +34,7 @@
+ def _make_flac(path: Path, source: str, rate: int, channels: int, seconds: int = 1) -> None:
+     subprocess.run(  # noqa: S603
+         [  # noqa: S607
+-            "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
++            "@ffmpeg@", "-hide_banner", "-loglevel", "error", "-y",
+             "-f", "lavfi", "-i", f"{source}:d={seconds}",
+              "-ar", str(rate), "-ac", str(channels), str(path),
+          ],
 diff --git a/tests/helpers/test_tags.py b/tests/helpers/test_tags.py
 index a5321c6a2..1e7700e13 100644
 --- a/tests/helpers/test_tags.py
 +++ b/tests/helpers/test_tags.py
-@@ -61,7 +61,7 @@ def test_parse_tags_reports_actionable_ffprobe_error(
-     """Test that tag parsing reports a useful FFprobe failure."""
-     process_error = subprocess.CalledProcessError(
-         returncode=1,
--        cmd=("ffprobe",),
-+        cmd=("@ffprobe@",),
-         output=b'{"error":{"code":-1,"string":"Unknown error occurred"}}',
-         stderr=stderr,
-     )
-@@ -1415,7 +1415,7 @@ async def test_get_embedded_image_refuses_non_file_input(input_file: str) -> Non
+@@ -150,7 +150,7 @@
+ 
+     assert result.duration == 201.25
+     decoder_args = factory.call_args.args[0]
+-    assert decoder_args[0] == "ffmpeg"
++    assert decoder_args[0] == "@ffmpeg@"
+     assert decoder_args[decoder_args.index("-rw_timeout") + 1] == "10000000"
+     assert decoder_args.index("-rw_timeout") < decoder_args.index("-i")
+     processes[1].communicate.assert_awaited_once_with(timeout=tags.FFMPEG_DURATION_TIMEOUT)
+@@ -1415,7 +1415,7 @@ async def test_get_embedded_image_refuses_non_file_input(input_file: str) -> None:
      mock_process.assert_not_called()
  
  
@@ -356,16 +359,3 @@ index a5321c6a2..1e7700e13 100644
              "-y",
              "-hide_banner",
              "-loglevel",
-diff --git a/tests/providers/filesystem_local/test_checked_playback.py b/tests/providers/filesystem_local/test_checked_playback.py
-index a8ad79fb5..78d39ff35 100644
---- a/tests/providers/filesystem_local/test_checked_playback.py
-+++ b/tests/providers/filesystem_local/test_checked_playback.py
-@@ -34,7 +34,7 @@
- def _make_flac(path: Path, source: str, rate: int, channels: int, seconds: int = 1) -> None:
-     subprocess.run(  # noqa: S603
-         [  # noqa: S607
--            "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-+            "@ffmpeg@", "-hide_banner", "-loglevel", "error", "-y",
-             "-f", "lavfi", "-i", f"{source}:d={seconds}",
-             "-ar", str(rate), "-ac", str(channels), str(path),
-         ],

@@ -2,10 +2,8 @@ diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
 index fffd13139..3b66b1972 100644
 --- a/music_assistant/helpers/util.py
 +++ b/music_assistant/helpers/util.py
-@@ -1514,35 +1514,11 @@ async def _get_provider_module() -> ProviderModuleType:
-         module = await import_module_in_thread(f".{domain}", "music_assistant.providers")
-         return cast("ProviderModuleType", module)
- 
+@@ -1545,30 +1545,5 @@ async def load_provider_module(manifest: ProviderManifest) -> ProviderModuleType:
+-    requirements = manifest.requirements
 -    # ensure module requirements are met
 -    for requirement in requirements:
 -        if requirement in _checked_requirements:
@@ -35,10 +33,8 @@ index fffd13139..3b66b1972 100644
 -    # try loading the provider again to be safe
 -    # this will fail if something else is wrong (as it should)
 -    return await _get_provider_module()
-+        raise RuntimeError(f"Configure {domain} in `services.music-assistant.providers` to install the required dependencies.")
- 
- 
- async def has_tmpfs_mount() -> bool:
++        raise RuntimeError(f"Configure {manifest.domain} in `services.music-assistant.providers` to install the required dependencies.")
+
 diff --git a/music_assistant/providers/ytmusic/__init__.py b/music_assistant/providers/ytmusic/__init__.py
 index 6d6758b58..1b3710434 100644
 --- a/music_assistant/providers/ytmusic/__init__.py
@@ -61,10 +57,7 @@ index 6d6758b58..1b3710434 100644
          self._cookie = str(self.get_setup_value(CONF_COOKIE))
          self._po_token_server_url = (
              self.get_setup_value(CONF_PO_TOKEN_SERVER_URL) or DEFAULT_PO_TOKEN_SERVER_URL
-@@ -1540,19 +1537,6 @@ def _parse_thumbnails(self, thumbnails_obj: list[dict[str, Any]]) -> UniqueList[
-             )
-         return result
- 
+@@ -1697,13 +1697,0 @@ async def _install_packages(self) -> None:
 -    async def _install_packages(self) -> None:
 -        """Install frequently changing packages dynamically."""
 -        # NOTE: Google breaks things quite often which requires us to update
@@ -78,9 +71,6 @@ index 6d6758b58..1b3710434 100644
 -        except ImportError:
 -            raise SetupFailedError("Package yt_dlp failed to install")
 -
- 
- def _favorite_from_like_status(item: dict[str, Any]) -> bool | None:
-     """Translate the like status YouTube Music reports on an item to a favorite state."""
 diff --git a/tests/providers/ytmusic/test_ytmusic.py b/tests/providers/ytmusic/test_ytmusic.py
 index 08dc7697e..078fcb445 100644
 --- a/tests/providers/ytmusic/test_ytmusic.py
@@ -93,11 +83,27 @@ index 08dc7697e..078fcb445 100644
          patch.object(provider, "get_setup_value", return_value=""),
          pytest.raises(SetupFailedError) as exc_info,
      ):
-@@ -155,7 +154,6 @@ def build_format_selector(self, spec: str) -> Any:
+@@ -163,7 +162,6 @@
          CONF_PO_TOKEN_SERVER_URL: "",
      }
      with (
 -        patch.object(provider, "_install_packages", AsyncMock()),
          patch.object(provider, "_verify_po_token_url", AsyncMock(return_value=True)),
          patch.object(provider, "get_setup_value", side_effect=setup_values.get),
-         patch.object(provider, "_rotate_cookies", AsyncMock()),
+         patch.object(provider, "_update_setup_data") as update_setup_data,
+@@ -196,7 +194,6 @@
+         CONF_PO_TOKEN_SERVER_URL: "",
+     }
+     with (
+-        patch.object(provider, "_install_packages", AsyncMock()),
+         patch.object(provider, "_verify_po_token_url", AsyncMock(return_value=True)),
+         patch.object(provider, "_user_has_ytm_premium", AsyncMock(return_value=True)),
+         patch.object(provider, "get_setup_value", side_effect=setup_values.get),
+@@ -220,7 +217,6 @@
+         CONF_PO_TOKEN_SERVER_URL: "",
+     }
+     with (
+-        patch.object(provider, "_install_packages", AsyncMock()),
+         patch.object(provider, "_verify_po_token_url", AsyncMock(return_value=True)),
+         patch.object(provider, "get_setup_value", side_effect=setup_values.get),
+         patch.object(requests.Session, "get", side_effect=requests.ConnectionError("no route")),

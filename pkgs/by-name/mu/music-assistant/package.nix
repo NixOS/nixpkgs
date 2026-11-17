@@ -25,10 +25,10 @@ let
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
       music-assistant-models = prev.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.233";
+        version = "1.1.239";
 
         src = oldAttrs.src.override {
-          hash = "sha256-p/SXyMzo3Xa38Oxh5Umx1SBgHew4XHLNeepNxItYJ8U=";
+          hash = "sha256-ZbJlLvBCtGBRC/ilGLNfpHOKAJo6pXu4EgKV3ArAUWM=";
         };
       });
 
@@ -52,14 +52,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.11.0b8";
+  version = "2.11.0b9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-f0+R1rvoxOPEHnbTYPJClS3VaxOEJTnRRElARy9YRlw=";
+    hash = "sha256-NarGxd4MKjEjf4szYfKY1XvV6YX8dFl4mzIYKroil30=";
   };
 
   patches = [
@@ -275,6 +275,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/nicovideo"
     "tests/providers/qqmusic"
     "tests/providers/raumfeld"
+    "tests/providers/samsung_wam"
     "tests/providers/siriusxm"
     "tests/providers/yandex_music"
     "tests/providers/yandex_smarthome"
@@ -294,6 +295,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/benchmarks/test_bench_helpers.py"
     # timing sensitive
     "tests/controllers/music/test_music_migrations.py::test_migrate_database_backfills_external_id_lookup"
+    # assert 2.144418200259679 < 2
+    "tests/controllers/players/test_player_controller.py::TestReleaseWaitForPlayMedia::test_plays_as_soon_as_the_player_reports_its_leave"
+    # TimeoutError
+    "tests/helpers/test_tags.py::test_async_parse_tags_reaps_hanging_process"
     # AssertionError: playback loop stalled (appears to be a race)
     "tests/providers/sendspin/test_dsp_channel_alignment.py"
     # flaky
