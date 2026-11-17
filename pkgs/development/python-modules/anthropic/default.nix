@@ -27,6 +27,8 @@
 
   # tests
   dirty-equals,
+  gitMinimal,
+  griffe,
   http-snapshot,
   inline-snapshot,
   nest-asyncio,
@@ -40,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "2.3.0";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w/hQKC74BvWah8bDRgeNsmipk95p36K3J3fQPe/Jj4E=";
+    hash = "sha256-ihwLKg5jUaN7v5DPqUcPV4C/hsiafqRcyl0w6KxuJRA=";
   };
 
   postPatch = ''
@@ -85,6 +87,8 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     dirty-equals
+    gitMinimal
+    griffe
     http-snapshot
     inline-snapshot
     nest-asyncio
@@ -111,6 +115,8 @@ buildPythonPackage (finalAttrs: {
     "test_bash_stdin_redirect"
     "test_bash_session_closed_property"
     "test_bash_outer_cancel_closes_subprocess_no_stale_state"
+    # assert 'traceparent' in ['accept', 'accept-encoding', 'content-length', 'content-type', 'host', 'x-amz-date', ...]
+    "test_signed_request_without_propagation_keeps_a_valid_signature"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs
