@@ -62,7 +62,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/mautrix/slack";
     changelog = "https://github.com/mautrix/slack/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ BonusPlay ];
+    maintainers = with lib.maintainers; [
+      BonusPlay
+      logn
+    ];
     mainProgram = "mautrix-slack";
   };
 })
