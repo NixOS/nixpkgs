@@ -42,8 +42,8 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
-  # https://github.com/echemdb/svgdigitizer/issues/298
   pythonRelaxDeps = [
+    # https://github.com/echemdb/svgdigitizer/issues/298
     "astropy"
   ];
 
