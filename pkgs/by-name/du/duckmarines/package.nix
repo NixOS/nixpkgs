@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     exec = "duckmarines";
     icon = fetchurl {
       url = "http://tangramgames.dk/img/thumb/duckmarines.png";
-      sha256 = "07ypbwqcgqc5f117yxy9icix76wlybp1cmykc8f3ivdps66hl0k5";
+      hash = "sha256-ZQIKjdG37TgcYtNXFu7ylJvTI4vJd39CcIXhxzBf1x8=";
     };
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
