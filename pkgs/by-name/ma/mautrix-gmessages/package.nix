@@ -53,7 +53,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/mautrix/gmessages";
     changelog = "https://github.com/mautrix/gmessages/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ sumnerevans ];
+    maintainers = with lib.maintainers; [
+      sumnerevans
+      logn
+    ];
     mainProgram = "mautrix-gmessages";
   };
 })
