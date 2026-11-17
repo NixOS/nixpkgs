@@ -20,12 +20,12 @@ let
         {
           # Hack to make the partition resizing work in QEMU.
           boot.initrd.services.udev.rules = ''
-            KERNEL==vda, SYMLINK+=xvda
-            KERNEL==vda1, SYMLINK+=xvda1
+            KERNEL=="vda", SYMLINK+="xvda"
+            KERNEL=="vda1", SYMLINK+="xvda1"
           '';
           services.udev.extraRules = ''
-            KERNEL==vda, SYMLINK+=xvda
-            KERNEL==vda1, SYMLINK+=xvda1
+            KERNEL=="vda", SYMLINK+="xvda"
+            KERNEL=="vda1", SYMLINK+="xvda1"
           '';
 
           amazonImage.format = "qcow2";
