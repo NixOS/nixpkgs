@@ -35,6 +35,7 @@ let
     optional
     optionals
     optionalString
+    recursiveUpdate
     splitString
     types
     unique
@@ -50,6 +51,12 @@ let
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.server.settings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.client.settings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unix.settings);
+  mailConfigFile = settingsFormat.generate "kanidm-mail-sender.toml" (
+    recursiveUpdate (filterConfig cfg.mail-sender.settings) {
+      token = "\${TOKEN}";
+      mail_password = "\${MAIL_PASSWORD}";
+    }
+  );
 
   entryManagementDir = pkgs.linkFarm "kanidm-entry-management" (
     mapAttrsToList (name: value: {
@@ -66,11 +73,16 @@ let
     ++ optional (cfg.provision.extraJsonFile != null) cfg.provision.extraJsonFile
     ++ mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
   );
+  mailSenderSecretFiles = [
+    cfg.mail-sender.tokenFile
+    cfg.mail-sender.mailPasswordFile
+  ];
   secretPaths = [
     cfg.server.settings.tls_chain
     cfg.server.settings.tls_key
   ]
-  ++ optionals cfg.provision.enable provisionSecretFiles;
+  ++ (optionals cfg.provision.enable provisionSecretFiles)
+  ++ (optionals cfg.mail-sender.enable mailSenderSecretFiles);
   enableServerBackup = cfg.server.enable && (cfg.server.settings.online_backup.versions != 0);
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
@@ -484,6 +496,80 @@ in
       '';
     };
 
+    mail-sender = {
+      enable = mkEnableOption "the Kanidm Mail Sender service";
+      tokenFile = mkOption {
+        description = "Path to a file containing the API token for the Kanidm Mail Sender. Do NOT use a file from the nix store here!";
+        example = "/run/secrets/kanidm-mail-sender-token";
+        type = types.path;
+      };
+      mailPasswordFile = mkOption {
+        description = "Path to a file containing the mail_password for the Kanidm Mail Sender. Do NOT use a file from the nix store here!";
+        example = "/run/secrets/kanidm-mail-sender-password";
+        type = types.path;
+      };
+    };
+    mail-sender.settings = mkOption {
+      type = types.submodule {
+        freeformType = settingsFormat.type;
+        options = {
+          schedule = mkOption {
+            description = "A cron expression for how frequently the mail sender should check the mail queue for new messages. Defaults to every 5 seconds if not specified.";
+            default = null;
+            example = "*/5 * * * * * *";
+            type = with types; nullOr str;
+          };
+          instance_display_name = mkOption {
+            description = "The display name of your Kanidm instance. This is used in subject lines of messages to help identify the content to your users.";
+            example = "Kanidm Localhost";
+            type = types.str;
+          };
+          instance_url = mkOption {
+            description = ''
+              The url of your Kanidm instance. This is distinct to the client uri
+              that the mail sender uses to connect to Kanidm. This is so that you
+              can configure your mail sender to connect to a *specific* Kanidm
+              instance, while still presenting a generic uri to users.
+            '';
+            example = "https://localhost:8443";
+            type = types.str;
+          };
+          mail_from_address = mkOption {
+            description = "The address that messages should be sent from.";
+            example = "kanidm@example.com";
+            type = types.str;
+          };
+          mail_reply_to_address = mkOption {
+            description = "The reply-to address that will be set in messages.";
+            example = "tobias@example.com";
+            type = types.str;
+          };
+          mail_relay = mkOption {
+            description = "The hostname/address of the outgoing SMTP relay. This must support TLS. You can specify the port as well if it is not the default (465).";
+            example = "smtps://smtp.example.com:12345";
+            type = types.str;
+          };
+          mail_username = mkOption {
+            description = "The username to authenticate to the SMTP relay as.";
+            example = "kanidm@example.com";
+            type = types.str;
+          };
+          mail_connect_timeout_seconds = mkOption {
+            description = "The timeout in seconds for connecting to the SMTP relay. Defaults to 15 seconds if not specified.";
+            default = null;
+            example = 15;
+            type = with types; nullOr int;
+          };
+        };
+      };
+      description = ''
+        Configure Kanidm Mail Sender.
+        See [the documentation](https://kanidm.github.io/kanidm/stable/email_setup.html)
+        and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/mail_sender.toml)
+        for possible values.
+      '';
+    };
+
     provision = {
       enable = mkEnableOption "provisioning of groups, users and oauth2 resource servers";
 
@@ -767,7 +853,7 @@ in
     };
   };
 
-  config = mkIf (cfg.client.enable || cfg.server.enable || cfg.unix.enable) {
+  config = mkIf (cfg.client.enable || cfg.server.enable || cfg.unix.enable || cfg.mail-sender.enable) {
     warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
     services.kanidm = {
       unix.settings.version = "2";
@@ -1088,6 +1174,54 @@ in
       };
       environment.RUST_LOG = "info";
     };
+
+    systemd.services.kanidm-mail-sender =
+      let
+        finalConfig = "\${RUNTIME_DIRECTORY}/mail-sender.toml";
+
+        secretScript = pkgs.writeShellScriptBin "mail-sender-secrets-script" ''
+          # Ensures created files are only readable by the user
+          umask 0377
+
+          export MAIL_PASSWORD="$(cat "''${CREDENTIALS_DIRECTORY}/mail-password-file")"
+          export TOKEN="$(cat "''${CREDENTIALS_DIRECTORY}/token-file")"
+
+          ${getExe pkgs.envsubst} -i "${mailConfigFile}" -o "${finalConfig}"
+        '';
+      in
+      mkIf cfg.mail-sender.enable {
+        description = "Kanidm Mail Sender daemon";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        restartTriggers = [
+          clientConfigFile
+          mailConfigFile
+        ];
+
+        serviceConfig = lib.mkMerge [
+          defaultServiceConfig
+          {
+            # kanidm-mail-sender doesn't seem to work with the notify service type
+            Type = mkForce "simple";
+            LoadCredential = [
+              "token-file:${cfg.mail-sender.tokenFile}"
+              "mail-password-file:${cfg.mail-sender.mailPasswordFile}"
+            ];
+            ExecStartPre = getExe secretScript;
+            ExecStart = "${cfg.package}/bin/kanidm-mail-sender --client-config ${clientConfigFile} --mail-sender-config ${finalConfig}";
+            DynamicUser = true;
+            RuntimeDirectory = "kanidm-mail-sender";
+            # Needs to connect to kanidmd
+            PrivateNetwork = mkForce false;
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_UNIX"
+            ];
+            Restart = "on-failure";
+          }
+        ];
+      };
 
     # These paths are hardcoded
     environment.etc = mkMerge [
