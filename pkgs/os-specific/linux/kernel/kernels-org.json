@@ -35,8 +35,8 @@
         "lts": true
     },
     "7.3": {
-        "version": "7.3.4",
-        "hash": "sha256:07zx81c5n6bzj29b1di3m9fbba4l96m1mds0y0grk3jy57w6s6xi",
+        "version": "7.3.5",
+        "hash": "sha256:1409kzrpxs9baxffajhbaczdfygawk2ynqv8wndpn2sgsn1kyacg",
         "lts": false
     }
 }
