@@ -14584,6 +14584,12 @@
     name = "Joshua Suskalo";
     githubId = 27734541;
   };
+  jt1tor = {
+    name = "john titor";
+    email = "contact@titor.xyz";
+    github = "jt1tor";
+    githubId = 180606722;
+  };
   jtamagnan = {
     email = "jtamagnan@gmail.com";
     github = "jtamagnan";
