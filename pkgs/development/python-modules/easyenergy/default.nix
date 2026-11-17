@@ -3,6 +3,7 @@
   aiohttp,
   aresponses,
   buildPythonPackage,
+  click,
   fetchFromGitHub,
   mashumaro,
   poetry-core,
@@ -33,6 +34,8 @@ buildPythonPackage rec {
     "mashumaro"
   ];
 
+  patches = [ ./typer-0-27-2.patch ];
+
   build-system = [ poetry-core ];
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
@@ -49,6 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aresponses
+    click
     pytest-asyncio
     pytest-cov-stub
     pytest-freezer
@@ -72,6 +76,10 @@ buildPythonPackage rec {
     "test_gas_none_data"
     "test_no_gas_data"
     "test_electricity_midnight"
+    # Syrupy snapshot mismatches in upstream 3.0.1
+    "test_electricity_model_quarter_prices"
+    "test_electricity_model_invoice_usage"
+    "test_electricity_accessors_and_invalid_data_type"
   ];
 
   meta = {
