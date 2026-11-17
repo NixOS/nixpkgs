@@ -29,8 +29,8 @@ let
     "githubBase"
     "varPrefix"
   ];
-  # useFetchGitArgsWD to exclude from automatic passing.
-  # Other useFetchGitArgsWD will pass down to fetchgit.
+  # fetchZipDefaults to exclude from automatic passing.
+  # Other fetchZipDefaults will pass down to fetchgit.
   excludedFetchGitArgs = [
     "forceFetchGit"
   ];
@@ -41,7 +41,7 @@ let
   # Here defines fetchFromGitHub arguments that determines useFetchZip,
   # The attribute value is their default values.
   # As fetchFromGitHub prefers fetchzip for hash stability,
-  # `fetchZipDefaults` attributes should lead to `useFetchGit = true`.
+  # `fetchZipDefaults` attributes should lead to `useFetchZip = true`.
   fetchZipDefaults = {
     deepClone = false;
     fetchSubmodules = false; # This differs from fetchgit's default
