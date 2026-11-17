@@ -15420,6 +15420,8 @@ self: super: with self; {
 
   pyhelty = callPackage ../development/python-modules/pyhelty { };
 
+  pyheltycloud = callPackage ../development/python-modules/pyheltycloud { };
+
   pyheos = callPackage ../development/python-modules/pyheos { };
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
