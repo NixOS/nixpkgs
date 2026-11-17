@@ -103,6 +103,69 @@ let
   bootstrappedRuntimeDepsCheckHook = pythonRuntimeDepsCheckHook.override {
     inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
   };
+
+  # By creating these lists in a higher scope, we prevent the need to allocate
+  # them for every individual python package
+  defaultNativeBuildInputs = [
+    python
+    wrapPython
+    ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+    pythonRemoveTestsDirHook
+  ];
+  catchConflictHooks = [
+    pythonCatchConflictsHook
+  ];
+  relaxDepsHooks = [
+    pythonRelaxDepsHook
+  ];
+  removeBytecodeHooks = [
+    pythonRemoveBinBytecodeHook
+  ];
+  zipInputs = [
+    unzip
+  ];
+  pyprojectFormatHooks = [
+    pypaBuildHook
+    pythonRuntimeDepsCheckHook
+  ];
+  bootstrappedPyprojectFormatHooks = [
+    bootstrappedPypaBuildHook
+    bootstrappedRuntimeDepsCheckHook
+  ];
+  wheelFormatHooks = [
+    wheelUnpackHook
+    pythonRuntimeDepsCheckHook
+  ];
+  bootstrappedWheelFormatHooks = [
+    wheelUnpackHook
+    bootstrappedRuntimeDepsCheckHook
+  ];
+  setupToolsFormatHooks = [
+    setuptoolsBuildHook
+  ];
+  eggFormatHooks = [
+    eggUnpackHook
+    eggBuildHook
+    eggInstallHook
+  ];
+  pypaFormatHooks = [
+    pypaInstallHook
+  ];
+  bootstrappedPypaFormatHooks = [
+    bootstrappedPypaInstallHook
+  ];
+  importsCheckHooks = [
+    pythonImportsCheckHook
+  ];
+  metadataCheckHooks = [
+    pythonMetadataCheckHook
+  ];
+  namespaceHooks = [
+    pythonNamespacesHook
+  ];
+  withDistHooks = [
+    pythonOutputDistHook
+  ];
 in
 
 lib.extendMkDerivation {
@@ -287,89 +350,57 @@ lib.extendMkDerivation {
       isSetuptoolsDependency = isSetuptoolsDependency' (finalAttrs.pname or null);
 
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
-
-      runtimeDepsCheckHook =
-        if isBootstrapPackage then bootstrappedRuntimeDepsCheckHook else pythonRuntimeDepsCheckHook;
     in
     {
       inherit name;
 
       inherit catchConflicts;
 
-      nativeBuildInputs = [
-        python
-        wrapPython
-        ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
-        pythonRemoveTestsDirHook
-      ]
-      ++ optionals (finalAttrs.catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
-        #
-        # 1. When building a package that is also part of the bootstrap chain, we
-        #    must ignore conflicts after installation, because there will be one with
-        #    the package in the bootstrap.
-        #
-        # 2. When a package is a dependency of setuptools, we must ignore conflicts
-        #    because the hook that checks for conflicts uses setuptools.
-        #
-        pythonCatchConflictsHook
-      ]
-      ++
-        optionals (finalAttrs.pythonRelaxDeps or [ ] != [ ] || finalAttrs.pythonRemoveDeps or [ ] != [ ])
-          [
-            pythonRelaxDepsHook
-          ]
-      ++ optionals removeBinBytecode [
-        pythonRemoveBinBytecodeHook
-      ]
-      ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) [
-        unzip
-      ]
-      ++ optionals (format' == "setuptools") [
-        setuptoolsBuildHook
-      ]
-      ++ optionals (format' == "pyproject") [
-        (if isBootstrapPackage then bootstrappedPypaBuildHook else pypaBuildHook)
-        runtimeDepsCheckHook
-      ]
-      ++ optionals (format' == "wheel") [
-        wheelUnpackHook
-        runtimeDepsCheckHook
-      ]
-      ++ optionals (format' == "egg") [
-        eggUnpackHook
-        eggBuildHook
-        eggInstallHook
-      ]
-      ++ optionals (format' != "other") [
-        (if isBootstrapInstallPackage then bootstrappedPypaInstallHook else pypaInstallHook)
-      ]
-      ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+      nativeBuildInputs =
+        defaultNativeBuildInputs
+        ++ optionals (
+          # 1. When building a package that is also part of the bootstrap chain, we
+          #    must ignore conflicts after installation, because there will be one with
+          #    the package in the bootstrap.
+          #
+          # 2. When a package is a dependency of setuptools, we must ignore conflicts
+          #    because the hook that checks for conflicts uses setuptools.
+          finalAttrs.catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency
+        ) catchConflictHooks
+        ++ optionals (
+          finalAttrs.pythonRelaxDeps or [ ] != [ ] || finalAttrs.pythonRemoveDeps or [ ] != [ ]
+        ) relaxDepsHooks
+        ++ optionals removeBinBytecode removeBytecodeHooks
+        ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) zipInputs
+        ++ optionals (format' == "setuptools") setupToolsFormatHooks
+        ++ optionals (format' == "pyproject") (
+          if isBootstrapPackage then bootstrappedPyprojectFormatHooks else pyprojectFormatHooks
+        )
+        ++ optionals (format' == "wheel") (
+          if isBootstrapPackage then bootstrappedWheelFormatHooks else wheelFormatHooks
+        )
+        ++ optionals (format' == "egg") eggFormatHooks
+        ++ optionals (format' != "other") (
+          if isBootstrapInstallPackage then bootstrappedPypaFormatHooks else pypaFormatHooks
+        )
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
-        pythonImportsCheckHook
-      ]
-      ++
-        optionals
-          (
-            finalAttrs ? pname
-            && finalAttrs ? version
-            # We don't care about the METADATA of Python applications.
-            && isPythonModule finalAttrs.passthru
-            # METADATA is unlikely to be correct if pyproject is false or null.
-            && pyproject == true
-            && !isBootstrapPackage
-          )
-          [
-            pythonMetadataCheckHook
-          ]
-      ++ optionals (python.pythonAtLeast "3.3") [
-        # Optionally enforce PEP420 for python3
-        pythonNamespacesHook
-      ]
-      ++ optionals withDistOutput [
-        pythonOutputDistHook
-      ]
-      ++ nativeBuildInputs
-      ++ getFinalPassthru "build-system";
+        ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) importsCheckHooks
+        ++ optionals (
+          finalAttrs ? pname
+          && finalAttrs ? version
+          # We don't care about the METADATA of Python applications.
+          && isPythonModule finalAttrs.passthru
+          # METADATA is unlikely to be correct if pyproject is false or null.
+          && pyproject == true
+          && !isBootstrapPackage
+        ) metadataCheckHooks
+        ++ optionals (
+          # Optionally enforce PEP420 for python3
+          python.pythonAtLeast "3.3"
+        ) namespaceHooks
+        ++ optionals withDistOutput withDistHooks
+        ++ nativeBuildInputs
+        ++ getFinalPassthru "build-system";
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
