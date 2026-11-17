@@ -16,8 +16,7 @@
   pytest-asyncio_0,
   pytest-httpserver,
   pytest-timeout,
-  pytestCheckHook,
-  pythonAtLeast,
+  pytest9_1CheckHook,
   requests,
   setuptools,
   srptools,
@@ -79,11 +78,14 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     deepdiff
     pyfakefs
-    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    (pytest-aiohttp.override {
+      pytest-asyncio = pytest-asyncio_0;
+      pytestCheckHook = pytest9_1CheckHook;
+    })
     pytest-asyncio_0
     pytest-httpserver
     pytest-timeout
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
