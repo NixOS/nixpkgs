@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-errorlint";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromCodeberg {
     owner = "polyfloyd";
     repo = "go-errorlint";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-79hbXvLnlry2j1mmeHoEx1PRIRd0iRbzN6BDnUyFV+4=";
+    hash = "sha256-QqPyb5APhrEjI4VGQ4VYmkcKE56H33f+m3A01lnURvo=";
   };
 
-  vendorHash = "sha256-U/19X5iY7IHOHkbTADT4ueCJBPh/ryI4PCfg8ZbMLzU=";
+  vendorHash = "sha256-/MuY4Dsr2SMYdXHcQf08uPviu3S4VDDiIPjWiD71ZIM=";
 
   ldflags = [
     "-s"

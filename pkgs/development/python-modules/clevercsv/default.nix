@@ -7,7 +7,7 @@
   setuptools,
 
   # dependencies
-  chardet_5,
+  chardet,
   regex,
   packaging,
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    chardet_5
+    chardet
     regex
     packaging
   ];
@@ -84,6 +84,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/alan-turing-institute/CleverCSV";
     changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+    broken = lib.versionAtLeast chardet.version "6";
     maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -14990,6 +14990,11 @@
     github = "Kalitsune";
     githubId = 74075397;
   };
+  kalkaro = {
+    name = "Kalkaro";
+    github = "Kalkaro";
+    githubId = 177581171;
+  };
   kallisti-dev = {
     email = "kallisti.dev@gmail.com";
     github = "kallisti-dev";
@@ -24676,6 +24681,13 @@
     github = "ragingpastry";
     githubId = 6778250;
     name = "Nick Wilburn";
+  };
+  rahoni = {
+    email = "honisuess@gmail.com";
+    github = "RaHoni";
+    githubId = 53820160;
+    name = "Raoul Honermann";
+    keys = [ { fingerprint = "54D1 1CB3 7C71 3D54 57AC  F0C3 5962 F3E9 516F D551"; } ];
   };
   raitobezarius = {
     email = "ryan@lahfa.xyz";
