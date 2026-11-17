@@ -480,7 +480,7 @@ lib.extendMkDerivation {
 
           # Unsupported Python interpreter
           ${if meta ? problems.unsupportedPython then "unsupportedPython" else null} =
-            meta.problems.unsupportedPython or { }
+            meta.problems.unsupportedPython
             // {
               kind = "broken";
               message =
