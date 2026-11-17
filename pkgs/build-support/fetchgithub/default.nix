@@ -154,6 +154,7 @@ decorate (
               rev = finalAttrs.revCustom;
             };
             revCustom = rev;
+            ${if position != null then "pos" else null} = position;
           };
           passthru = {
             gitRepoUrl = "${baseUrl}.git";
@@ -173,6 +174,7 @@ decorate (
               owner
               repo
               ;
+            ${if position != null then "pos" else null} = position;
           };
         }
     )
@@ -232,8 +234,6 @@ decorate (
               };
         }
         // meta.identifiers or { };
-        # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
-        ${if position != null then "position" else null} = "${position.file}:${toString position.line}";
       };
     }
   )
