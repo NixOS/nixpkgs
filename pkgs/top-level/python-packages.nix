@@ -6650,6 +6650,8 @@ self: super: with self; {
 
   fronius-modbus = callPackage ../development/python-modules/fronius-modbus { };
 
+  fronius-solarapi = callPackage ../development/python-modules/fronius-solarapi { };
+
   frozendict = callPackage ../development/python-modules/frozendict { };
 
   frozenlist = callPackage ../development/python-modules/frozenlist { };
