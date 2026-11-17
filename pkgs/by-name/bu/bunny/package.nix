@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-      bun install --no-progress --frozen-lockfile --no-cache
+      bun install --cpu="*" --os="*" --libc="*" --ignore-scripts --no-progress --frozen-lockfile --no-cache
+
+      # Optional host-built ssh2 optimization; use its pure-JS fallback.
+      rm -rf node_modules/cpu-features
 
       runHook postBuild
     '';
@@ -52,14 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-    outputHash =
-      {
-        x86_64-linux = "sha256-KvLlAVwL1tvt0vsW7QIaZKDmUkw3ejbo3zN9qmT6ou8=";
-        aarch64-linux = "sha256-ojB0CwU1vyuewNXeC+g9y8O90EjeAFfnbfhRcSskSsE=";
-        aarch64-darwin = "sha256-p8zVVP2AFpCU0xzxEzixCsKPDddMaqTeoW0yTG2iWw8=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-
+    outputHash = "sha256-nLrbb5oS1G0RGVNXhFuavdJcC0UYUIxYtWfjr7wUGh4=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
