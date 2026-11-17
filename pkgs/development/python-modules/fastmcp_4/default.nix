@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "4.1.0";
+  version = "4.1.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "PrefectHQ";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2T/BwHX+1lBgNZr0PIyqnodItDnduu9CeoIRbJzKxPc=";
+    hash = "sha256-33EHBcZmyWgl+DZLIkVviz5CV2zaexs2lGZVdmsl2nI=";
   };
 
   postPatch = ''
@@ -139,11 +139,14 @@ buildPythonPackage (finalAttrs: {
     # Requires prefab-ui (optional dependency)
     "tests/apps"
     "tests/cli/test_apps_dev_server.py"
+    "tests/server/test_session_scope.py"
     "tests/test_apps.py"
     "tests/test_apps_prefab.py"
     "tests/test_fastmcp_app.py"
     # Our anthropic version is to new
     "tests/client/sampling/handlers/test_anthropic_handler.py"
+    # asserts exact openai patch version
+    "tests/utilities/openapi/test_parser.py::TestOpenAPIParser::test_parse_every_openapi31_patch_version"
   ];
 
   __darwinAllowLocalNetworking = true;

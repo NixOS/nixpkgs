@@ -13,6 +13,7 @@
   authlib,
   azure-identity,
   beartype,
+  certifi,
   cyclopts,
   exceptiongroup,
   google-genai,
@@ -72,12 +73,16 @@ buildPythonPackage (finalAttrs: {
   ++ pydantic.optional-dependencies.email;
 
   optional-dependencies = {
-    anthropic = [ anthropic ];
+    anthropic = [
+      anthropic
+      certifi
+    ];
     apps = [
       # unpackaged prefab-ui
     ];
     azure = [
       azure-identity
+      certifi
       pyjwt
     ];
     client = [
@@ -95,6 +100,7 @@ buildPythonPackage (finalAttrs: {
       # typesafe-sdk
     ];
     gemini = [
+      certifi
       google-genai
       jsonref
     ];
@@ -105,7 +111,10 @@ buildPythonPackage (finalAttrs: {
       opentelemetry-api
       starlette
     ];
-    openai = [ openai ];
+    openai = [
+      certifi
+      openai
+    ];
     server = [
       authlib
       cyclopts
