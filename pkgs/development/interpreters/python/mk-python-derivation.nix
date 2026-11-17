@@ -112,6 +112,9 @@ let
     ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
     pythonRemoveTestsDirHook
   ];
+  repropagatedPython = [
+    python
+  ];
   catchConflictHooks = [
     pythonCatchConflictsHook
   ];
@@ -414,12 +417,10 @@ lib.extendMkDerivation {
         validatePythonMatches "propagatedBuildInputs" (
           propagatedBuildInputs ++ getFinalPassthru "dependencies"
         )
-        ++ [
-          # we propagate python even for packages transformed with 'toPythonApplication'
-          # this pollutes the PATH but avoids rebuilds
-          # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
-          python
-        ];
+        # we propagate python even for packages transformed with 'toPythonApplication'
+        # this pollutes the PATH but avoids rebuilds
+        # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
+        ++ repropagatedPython;
 
       inherit __structuredAttrs strictDeps;
 
