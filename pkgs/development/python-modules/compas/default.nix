@@ -33,6 +33,11 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
   ];
 
+  pytestFlags = [
+    "-vv"
+    "--tb=long"
+  ];
+
   disabledTests = [
     "test_xml_from_url"
     "test_open_file_url_image"
