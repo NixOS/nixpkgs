@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clboss";
-  version = "0.17.2";
+  version = "0.17.3";
 
   # The release tarball includes the pre-generated file `commit_hash.h` that is required for building
   src = fetchzip {
     url = "https://github.com/ksedgwic/clboss/releases/download/v${finalAttrs.version}/clboss-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-o9JZKyrMk9hT9qpnpvTDgmYofL3tEp1bfx1kgxjR6nM=";
+    hash = "sha256-KAe9E1C68afnwKYyvPJubcKHNhJiIAqPH4/hQxk9Ugw=";
   };
 
   nativeBuildInputs = [
