@@ -43,6 +43,7 @@ let
         export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
         bun install \
           --cpu="*" \
+          --libc="*" \
           --filter './' \
           --filter './packages/cli' \
           --filter './packages/desktop' \
@@ -77,13 +78,7 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash =
-        if stdenv.hostPlatform.isLinux then
-          "sha256-4PJINKZ1f5syNHT3xGezCX78GECIiCgKZG8BXm0Ethw="
-        else if stdenv.hostPlatform.isDarwin then
-          "sha256-nhJXzJ6Q8UNz10goMO2qwRxRl+72qzndacuL4WJNgNQ="
-        else
-          throw "Unsupported platform";
+      outputHash = "sha256-nhJXzJ6Q8UNz10goMO2qwRxRl+72qzndacuL4WJNgNQ=";
       outputHashMode = "recursive";
     };
 in
