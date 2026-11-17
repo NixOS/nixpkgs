@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
-    configureFlags=("--parallel=''${NIX_BUILD_CORES:-1}" "CC=$CC_FOR_BUILD" "CXX=$CXX_FOR_BUILD" ''${configureFlags[@]} ''${cmakeFlags[@]})
+    configureFlags=("--parallel=''${NIX_BUILD_CORES:-1}" "CC=$CC_FOR_BUILD" "CXX=$CXX_FOR_BUILD" ''${configureFlags[@]} -- ''${cmakeFlags[@]})
   ''
   + lib.optionalString (stdenv.hostPlatform.isStatic && useSharedLibraries) ''
     # FindLibArchive ignores libarchive.pc's Libs.private
@@ -174,9 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--sphinx-build=${sphinx}/bin/sphinx-build"
     "--sphinx-info"
     "--sphinx-man"
-  ]
-  ++ [
-    "--"
+  ];
+
+  cmakeFlags = [
     # We should set the proper `CMAKE_SYSTEM_NAME`.
     # http://www.cmake.org/Wiki/CMake_Cross_Compiling
     #
