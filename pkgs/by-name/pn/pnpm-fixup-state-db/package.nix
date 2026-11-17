@@ -14,7 +14,7 @@ buildNpmPackage {
   nodejs = nodejs-slim;
   nativeBuildInputs = lib.optional (builtins.hasAttr "npm" nodejs-slim) nodejs-slim.npm;
 
-  npmDepsHash = "sha256-um6a4pEtPtdxHBRq9g5ZW20wIQAMjWJ3qF96XuxJg8o=";
+  npmDepsHash = "sha256-d0Z7JBHIrrmXtr2Fn6krksAL4JhdCK68dkVM4ZASus8=";
 
   postInstall = ''
     makeWrapper ${lib.getExe nodejs-slim} $out/bin/pnpm-fixup-state-db \
