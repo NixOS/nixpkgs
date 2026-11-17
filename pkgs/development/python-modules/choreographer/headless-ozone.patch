@@ -1,0 +1,11 @@
+--- a/src/choreographer/browsers/chromium.py
++++ b/src/choreographer/browsers/chromium.py
+@@ -255,6 +255,8 @@
+             cli.append("--disable-gpu")
+         if self.headless:
+             cli.append("--headless")
++            if platform.system() == "Linux":
++                cli.append("--ozone-platform=headless")
+         if self.proxy_server:
+             cli.append(f"--proxy-server={self.proxy_server}")
+         if not self.sandbox_enabled:

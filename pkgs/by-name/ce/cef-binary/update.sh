@@ -32,3 +32,5 @@ update_nix_value chromiumVersion "$chromium_version"
 
 nix-update pkgsCross.gnu64.cef-binary --version skip
 nix-update pkgsCross.aarch64-multiplatform.cef-binary --version skip
+nix-update pkgsCross.aarch64-darwin.cef-binary --version skip
+nix-update cefsimple --version skip
