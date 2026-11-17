@@ -3241,6 +3241,12 @@
     githubId = 333807;
     name = "Pascal Bach";
   };
+  backspace-phill = {
+    name = "backspace-phill";
+    email = "mail@backspace-phill.de";
+    github = "backspace-phill";
+    githubId = 87976190;
+  };
   backtail = {
     name = "Max Genson";
     email = "mail@maxgenson.de";

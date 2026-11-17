@@ -196,6 +196,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       niklaskorz
+      backspace-phill
     ];
     mainProgram = "gram";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
