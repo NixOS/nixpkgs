@@ -372,14 +372,18 @@ lib.extendMkDerivation {
         ) relaxDepsHooks
         ++ optionals removeBinBytecode removeBytecodeHooks
         ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) zipInputs
-        ++ optionals (format' == "setuptools") setupToolsFormatHooks
-        ++ optionals (format' == "pyproject") (
-          if isBootstrapPackage then bootstrappedPyprojectFormatHooks else pyprojectFormatHooks
+        ++ (
+          if format' == "setuptools" then
+            setupToolsFormatHooks
+          else if format' == "pyproject" then
+            (if isBootstrapPackage then bootstrappedPyprojectFormatHooks else pyprojectFormatHooks)
+          else if format' == "wheel" then
+            (if isBootstrapPackage then bootstrappedWheelFormatHooks else wheelFormatHooks)
+          else if format' == "egg" then
+            eggFormatHooks
+          else
+            [ ]
         )
-        ++ optionals (format' == "wheel") (
-          if isBootstrapPackage then bootstrappedWheelFormatHooks else wheelFormatHooks
-        )
-        ++ optionals (format' == "egg") eggFormatHooks
         ++ optionals (format' != "other") (
           if isBootstrapInstallPackage then bootstrappedPypaFormatHooks else pypaFormatHooks
         )
