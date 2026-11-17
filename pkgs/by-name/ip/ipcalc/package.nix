@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
+    changelog = "https://gitlab.com/ipcalc/ipcalc/-/blob/master/NEWS";
     description = "Simple IP network calculator";
     homepage = "https://gitlab.com/ipcalc/ipcalc";
     license = lib.licenses.gpl2Plus;
