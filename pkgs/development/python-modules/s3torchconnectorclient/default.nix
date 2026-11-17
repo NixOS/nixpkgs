@@ -6,9 +6,12 @@
   pytestCheckHook,
   cmake,
   hypothesis,
+  libgit2,
+  pkg-config,
   rustPackages,
   setuptools-rust,
   torch,
+  zlib,
 }:
 
 let
@@ -37,10 +40,16 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cargo
     cmake
+    pkg-config
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
     setuptools-rust
+  ];
+
+  buildInputs = [
+    libgit2
+    zlib
   ];
 
   # Patch metrics-0.24.1 to fix E0521 borrow-checker error under newer rustc.
@@ -53,7 +62,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   env = {
-    CFLAGS = "-Wno-stringop-overflow -Wno-array-bounds -Wno-restrict";
+    CFLAGS = "-Wno-stringop-overflow -Wno-array-bounds -Wno-restrict -Wno-discarded-qualifiers";
     # pyo3-0.24.1 declares support only up to Python 3.13; use stable ABI for forward compat
     PYO3_USE_ABI3_FORWARD_COMPATIBILITY = "1";
   };
