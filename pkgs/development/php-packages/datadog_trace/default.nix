@@ -4,7 +4,6 @@
   stdenv,
   buildPecl,
   cargo,
-  cmake,
   rustc,
   fetchFromGitHub,
   rustPlatform,
@@ -12,36 +11,44 @@
   pcre2,
   valgrind,
   libiconv,
+  libddwaf,
+  llvmPackages,
   pkg-config,
   zstd,
 }:
 
 buildPecl rec {
   pname = "ddtrace";
-  version = "1.26.2";
+  version = "1.27.2";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-35Pb68wFg/HwuN3qrxRFo/rN9rOdnx30vUScWPQGQ5s=";
+    hash = "sha256-g3aqntLmvO6H1UH81zKsFV+a8TT0rcXZjRCm5aAQ4WM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-IcyygiMLiaKkb+4W+YtTQuRrunego6KtbISw5u1egoI=";
+    hash = "sha256-hOICGQJshjW90c9Vv5kVDocD7Itlqk4dQcJGTCGOuW0=";
   };
 
-  env.NIX_CFLAGS_COMPILE = "-O2";
+  env = {
+    NIX_CFLAGS_COMPILE = "-O2";
+    LIBDDWAF_PREFIX = libddwaf;
+    DDTRACE_SHARED_LIBADD = "-lddwaf";
+  };
 
-  configureFlags = [ "--enable-ddtrace-libddwaf-source" ];
-
-  dontUseCmakeConfigure = true;
+  # Use the packaged shared library instead of building or downloading libddwaf.
+  postPatch = ''
+    substituteInPlace appsec/helper-rust/Cargo.toml \
+      --replace-fail 'features = ["ring"]' 'features = ["ring", "dynamic-link"]'
+  '';
 
   nativeBuildInputs = [
     cargo
-    cmake
+    llvmPackages.llvm
     pkg-config
     rustc
     rustPlatform.bindgenHook
@@ -50,6 +57,7 @@ buildPecl rec {
 
   buildInputs = [
     curl
+    libddwaf
     pcre2
     zstd
   ]
