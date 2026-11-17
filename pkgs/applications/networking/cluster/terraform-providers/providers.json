@@ -399,13 +399,13 @@
     "vendorHash": null
   },
   "fastly_fastly": {
-    "hash": "sha256-wIfYmi91iDIUlL0Pgoa0+tZ15FHTMKC0/R8ZkzOeO+A=",
+    "hash": "sha256-+ga5aZnUN1Olr4FTMZcZAwILXsbJmTN9BW1waFiyejA=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v10.1.0",
+    "rev": "v10.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-laWQiUwbXMpbORiNZQTLo7XtDezo6QPoQVg3+z5i8h8="
+    "vendorHash": "sha256-kg/n4k1nFukCwICYVqKQcoqzXBNol/5RHIOSM/7b4CI="
   },
   "flexibleenginecloud_flexibleengine": {
     "hash": "sha256-yEZ9JiUSqFFbfqzOOD59ZBv4yFCeUBBKlp6aiUqDqiM=",
