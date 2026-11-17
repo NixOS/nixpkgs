@@ -237,6 +237,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "ORCA_BUNDLED_UV_EXECUTABLE" (lib.getExe uv))
     (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include")
     (lib.cmakeFeature "LIBNOISE_LIBRARY_RELEASE" "${libnoise}/lib/libnoise-static.a")
+    (lib.cmakeFeature "wxWidgets_CONFIG_EXECUTABLE" (lib.getExe' wxGTK' "wx-config"))
     "-Wno-dev"
   ];
 
