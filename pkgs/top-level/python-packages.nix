@@ -20072,6 +20072,8 @@ self: super: with self; {
 
   sphinxfeed-lsaffre = callPackage ../development/python-modules/sphinxfeed-lsaffre { };
 
+  sphobjinv = callPackage ../development/python-modules/sphobjinv { };
+
   spidev = callPackage ../development/python-modules/spidev { };
 
   spinev-ble = callPackage ../development/python-modules/spinev-ble { };
