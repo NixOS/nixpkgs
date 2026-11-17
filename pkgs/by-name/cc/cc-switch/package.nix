@@ -19,7 +19,9 @@
   libayatana-appindicator,
   libsoup_3,
   openssl,
+  sqlite,
   webkitgtk_4_1,
+  zstd,
 
   nix-update-script,
 }:
@@ -74,18 +76,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     jq
     moreutils
     nodejs
+    pkg-config
     pnpmConfigHook
     pnpm_10
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     libayatana-appindicator
     libsoup_3
