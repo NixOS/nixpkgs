@@ -7,7 +7,6 @@
 let
 
   cfg = config.services.bitlbee;
-  bitlbeeUid = config.ids.uids.bitlbee;
 
   bitlbeePkg = pkgs.bitlbee.override {
     enableLibPurple = cfg.libpurple_plugins != [ ];

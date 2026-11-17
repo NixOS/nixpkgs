@@ -3,10 +3,6 @@
   breseq,
 }:
 
-let
-  inherit (breseq) pname version;
-in
-
 runCommand "breseq-tests" { meta.timeout = 60; } ''
   echo "Testing breseq - gdtools executable"
   export TESTBINPREFIX=${breseq}/bin

@@ -128,11 +128,11 @@ let
 
   adminUsername = "admin";
   adminPassword = "secretadminpassword";
-  aliceUsername = "alice";
+
   alicePassword = "secretalicepassword";
-  bobUsername = "bob";
+
   bobPassword = "secretbobpassword";
-  eveUsername = "eve";
+
   evePassword = "secretevepassword";
   sharedFolderName = "shared";
 

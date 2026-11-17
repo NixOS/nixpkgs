@@ -12,7 +12,6 @@ let
   inherit (pkgs)
     stdenv
     fetchurl
-    fetchpatch
     pkg-config
     intltool
     glib

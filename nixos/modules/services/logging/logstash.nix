@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.services.logstash;
-  ops = lib.optionalString;
+
   verbosityFlag = "--log.level " + cfg.logLevel;
 
   logstashConf = pkgs.writeText "logstash.conf" ''

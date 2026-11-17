@@ -48,7 +48,7 @@ in
 
   testScript =
     let
-      file = "/tmp/msg";
+
     in
     ''
       def nats_cmd(*args):

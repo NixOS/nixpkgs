@@ -28,7 +28,6 @@
 }@attrs:
 
 let
-  debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "+debug_info";
 
   shell =
     drv:

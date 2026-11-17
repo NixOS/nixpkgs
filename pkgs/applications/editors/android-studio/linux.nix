@@ -82,7 +82,7 @@
 }:
 
 let
-  filename = "android-studio-${version}-linux.tar.gz";
+
   source = sources.${stdenv.hostPlatform.system};
 
   androidStudio = stdenv.mkDerivation {

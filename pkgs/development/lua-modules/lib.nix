@@ -4,7 +4,6 @@
   lua,
 }:
 let
-  inherit (lib.generators) toLua;
   requiredLuaModules =
     drvs:
     let

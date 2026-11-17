@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.teeworlds;
-  register = cfg.register;
 
   bool = b: if b != null && b then "1" else "0";
   optionalSetting = s: setting: lib.optionalString (s != null) "${setting} ${s}";

@@ -17,7 +17,6 @@
 let
   inherit (lib)
     licenses
-    maintainers
     platforms
     ;
 in

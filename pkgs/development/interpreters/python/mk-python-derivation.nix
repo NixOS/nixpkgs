@@ -37,7 +37,6 @@ let
   inherit (lib)
     concatMapStrings
     elem
-    extendDerivation
     fixedWidthString
     flip
     getName
@@ -45,7 +44,6 @@ let
     isBool
     max
     optional
-    optionalAttrs
     optionals
     optionalString
     removePrefix

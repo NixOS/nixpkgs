@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 let
-  dmcfg = config.services.xserver.displayManager;
+
   cfg = config.test-support.displayManager.auto;
 in
 {

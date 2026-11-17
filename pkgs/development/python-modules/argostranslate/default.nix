@@ -29,7 +29,7 @@ let
     };
   };
 
-  inherit (stdenv.hostPlatform) isDarwin isLinux isAarch64;
+  inherit (stdenv.hostPlatform) isLinux isAarch64;
   isAarch64Linux = isLinux && isAarch64;
 in
 buildPythonPackage (finalAttrs: {

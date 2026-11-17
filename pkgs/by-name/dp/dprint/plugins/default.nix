@@ -58,7 +58,6 @@ let
     });
   inherit (lib)
     filterAttrs
-    isDerivation
     mapAttrs'
     nameValuePair
     removeSuffix

@@ -8,9 +8,6 @@ let
 
   cfg = config.services.libreswan;
 
-  libexec = "${pkgs.libreswan}/libexec/ipsec";
-  ipsec = "${pkgs.libreswan}/sbin/ipsec";
-
   trim =
     chars: str:
     let

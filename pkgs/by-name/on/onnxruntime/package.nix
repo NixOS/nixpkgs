@@ -35,7 +35,7 @@
 }@inputs:
 
 let
-  stdenv = throw "Use effectiveStdenv instead";
+
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
   inherit (cudaPackages) cuda_nvcc;
 

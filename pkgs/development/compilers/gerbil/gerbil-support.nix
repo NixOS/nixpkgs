@@ -184,7 +184,6 @@ in
         git-version
         meta
         softwareName
-        gerbil-package
         version-path
         gerbil
         gambit-params

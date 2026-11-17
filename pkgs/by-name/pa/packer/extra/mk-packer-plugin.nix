@@ -47,9 +47,7 @@ lib.extendMkDerivation {
     # 2. Configuration Source: When declaring the plugin in a Packer template, the `source`
     #    attribute must match this GitHub address format (e.g.: "github.com/$OWNER/$TYPE")
     let
-      _ = lib.assertMsg (
-        src ? repo && src ? owner && src ? githubBase
-      ) "mk-packer-plugin: fetchFromGitHub is currently the only supported fetcher";
+
       suffix =
         platformSuffix."${stdenv.hostPlatform.system}"
           or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

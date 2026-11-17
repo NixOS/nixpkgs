@@ -169,62 +169,6 @@ let
     buildDict buildArgs;
 
   # Function to compile txt dict files into Aspell dictionaries.
-  buildTxtDict =
-    {
-      langInputs ? [ ],
-      ...
-    }@args:
-    buildDict (
-      {
-        propagatedUserEnvPackages = langInputs;
-
-        preBuild = ''
-          # Aspell can't handle multiple data-dirs
-          # Copy everything we might possibly need
-          ${lib.concatMapStringsSep "\n" (p: ''
-            cp -a ${p}/lib/aspell/* .
-          '') ([ aspell ] ++ langInputs)}
-          export ASPELL_CONF="data-dir $(pwd)"
-
-          aspell-create() {
-            target=$1
-            shift
-            echo building $target
-            aspell create "$@" master ./$target.rws
-          }
-
-          words-only() {
-            awk -F'\t' '{print $1}' | sort | uniq
-          }
-
-          # drop comments
-          aspell-affix() {
-            words-only \
-              | grep -a -v '#' \
-              | aspell-create "$@"
-          }
-
-          # Hack: drop comments and words with affixes
-          aspell-plain() {
-            words-only \
-              | grep -a -v '#' \
-              | grep -a -v '/' \
-              | aspell-create "$@"
-          }
-
-          aspell-install() {
-            install -d $out/lib/aspell
-            for a in "$@"; do
-              echo installing $a
-              install -t $out/lib/aspell $a.rws
-            done
-          }
-        '';
-
-        dontUnpack = true;
-      }
-      // args
-    );
 
 in
 {

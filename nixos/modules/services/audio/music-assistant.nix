@@ -12,7 +12,6 @@ let
     mkEnableOption
     mkOption
     mkPackageOption
-    mkDefault
     types
     ;
 

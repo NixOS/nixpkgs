@@ -32,7 +32,6 @@ let
     qttools
     qtmultimedia
     qtwebengine
-    qmake
     wrapQtAppsHook
     quazip
     ;

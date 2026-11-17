@@ -8,7 +8,7 @@
 let
   cfg = config.services.moonraker;
   pkg = cfg.package;
-  opt = options.services.moonraker;
+
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue =

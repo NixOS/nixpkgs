@@ -6,8 +6,6 @@
 }:
 
 let
-  inherit (lib) fileset;
-
   packageLock = builtins.fromJSON (builtins.readFile ./manifests/package-lock.json);
 
   pname = "purescm";

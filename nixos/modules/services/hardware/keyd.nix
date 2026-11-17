@@ -8,7 +8,7 @@ let
   inherit (lib) types;
   inherit (lib.attrsets) mapAttrs' mapAttrsToList nameValuePair;
   inherit (lib.generators) toINI;
-  inherit (lib.modules) mkDefault mkIf mkRemovedOptionModule;
+  inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.strings) concatStringsSep;
 

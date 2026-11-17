@@ -188,7 +188,7 @@ in
 
   search-guard =
     let
-      majorVersion = lib.head (builtins.splitVersion esVersion);
+
     in
     esPlugin rec {
       pluginName = "search-guard";

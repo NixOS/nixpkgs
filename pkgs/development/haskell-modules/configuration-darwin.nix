@@ -3,7 +3,7 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) lib darwin;
+  inherit (pkgs) lib;
 in
 
 with haskellLib;

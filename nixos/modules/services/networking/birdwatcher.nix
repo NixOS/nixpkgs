@@ -78,7 +78,7 @@ in
 
   config =
     let
-      flagsStr = lib.escapeShellArgs cfg.flags;
+
     in
     lib.mkIf cfg.enable {
       environment.etc."birdwatcher/birdwatcher.conf".source = pkgs.writeTextFile {

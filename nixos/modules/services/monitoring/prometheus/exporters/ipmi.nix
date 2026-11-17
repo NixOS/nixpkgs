@@ -7,7 +7,7 @@
 }:
 
 let
-  logPrefix = "services.prometheus.exporter.ipmi";
+
   cfg = config.services.prometheus.exporters.ipmi;
   inherit (lib)
     mkOption

@@ -6,7 +6,6 @@
   installShellFiles,
 }:
 let
-  inherit (stdenvNoCC.hostPlatform) system;
   version = "2.2.4-21120";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {

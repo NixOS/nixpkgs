@@ -27,8 +27,6 @@ lib.fetchers.withNormalizedHash { } (
 
   let
     inherit (lib)
-      concatMapStringsSep
-      concatStringsSep
       fetchers
       optional
       ;

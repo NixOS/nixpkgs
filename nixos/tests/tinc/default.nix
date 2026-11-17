@@ -3,8 +3,6 @@ import ../make-test-python.nix (
   let
     snakeoil-keys = import ./snakeoil-keys.nix;
 
-    hosts = lib.attrNames snakeoil-keys;
-
     subnetOf =
       name: config:
       let

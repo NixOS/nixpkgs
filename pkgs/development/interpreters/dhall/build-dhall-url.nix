@@ -75,11 +75,7 @@ let
 
   cache = ".cache";
 
-  data = ".local/share";
-
   cacheDhall = "${cache}/dhall";
-
-  dataDhall = "${data}/dhall";
 
   sourceFile = "source.dhall";
 
