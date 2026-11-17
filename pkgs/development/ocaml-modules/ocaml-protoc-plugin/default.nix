@@ -10,17 +10,20 @@
   re,
   dune-site,
   ppx_expect,
+  ptime,
+  base64,
+  omd,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "ocaml-protoc-plugin";
-  version = "4.5.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
-    owner = "issuu";
+    owner = "andersfugmann";
     repo = "ocaml-protoc-plugin";
     rev = finalAttrs.version;
-    hash = "sha256-ZHeOi3y2X11MmkRuthmYFSjPLoGlGTO1pnRfk/XmgPU=";
+    hash = "sha256-FGECg2RUejTmJNi2BSZnuP78ctDEWOiVwCAcazhnoOw=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +38,16 @@ buildDunePackage (finalAttrs: {
     dune-site
     ppx_expect
     protobuf
+    ptime
+    base64
+    omd
   ];
   doCheck = true;
   nativeCheckInputs = [ protobuf ];
 
   meta = {
     description = "Maps google protobuf compiler to Ocaml types";
-    homepage = "https://github.com/issuu/ocaml-protoc-plugin";
+    homepage = "https://github.com/andersfugmann/ocaml-protoc-plugin";
     license = lib.licenses.asl20;
     longDescription = ''
       The goal of Ocaml protoc plugin is to create an
