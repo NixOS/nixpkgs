@@ -213,17 +213,22 @@ decorate (
         homepage = meta.homepage or baseUrl;
         identifiers = {
           purlParts =
-            if githubBase == "github.com" then
+            let
+              # Follow `overrideAttrs` like the URLs do. Prefer the tag, since
+              # finalAttrs.rev is `refs/tags/<tag>` on the fetchzip path.
+              version = revOrTag finalAttrs.rev finalAttrs.tag;
+            in
+            if finalAttrs.githubBase == "github.com" then
               {
                 type = "github";
                 # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
-                spec = "${owner}/${repo}@${(revOrTag rev tag)}";
+                spec = "${finalAttrs.owner}/${finalAttrs.repo}@${version}";
               }
             else
               {
                 type = "generic";
                 # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
-                spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(revOrTag rev tag)}";
+                spec = "${finalAttrs.repo}?vcs_url=${baseUrl}@${version}";
               };
         }
         // meta.identifiers or { };
