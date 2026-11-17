@@ -55,6 +55,7 @@ buildGoModule (finalAttrs: {
       ma27
       chvp
       SchweGELBin
+      logn
     ];
     mainProgram = "mautrix-whatsapp";
   };
