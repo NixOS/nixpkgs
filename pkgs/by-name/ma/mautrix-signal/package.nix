@@ -18,7 +18,7 @@
 let
   cppStdLib = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mautrix-signal";
   version = "26.11";
   tag = "v0.2611.0";
@@ -26,7 +26,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    inherit tag;
+    inherit (finalAttrs) tag;
     hash = "sha256-/Jr2cRjccNPmIXQQdI2Mt1izeSxTLkSTldSW/5W/9yo=";
   };
 
@@ -50,7 +50,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X"
-    "main.Tag=${tag}"
+    "main.Tag=${finalAttrs.tag}"
   ];
 
   doCheck = true;
@@ -81,4 +81,4 @@ buildGoModule rec {
     ];
     mainProgram = "mautrix-signal";
   };
-}
+})
