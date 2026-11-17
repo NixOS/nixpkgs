@@ -8,13 +8,13 @@
 
 php83.buildComposerProject2 (finalAttrs: {
   pname = "agorakit";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "agorakit";
     repo = "agorakit";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-YCHszRi+atEkaM9bHncpRtQsuiS6P22yKSqYzXq8flk=";
+    sha256 = "sha256-ymVYm549sqxpteBw1OnQ+59lDhVnJzA5U2BoQnbeXbI=";
   };
 
   installPhase = ''
@@ -27,7 +27,7 @@ php83.buildComposerProject2 (finalAttrs: {
     runHook postInstall
   '';
 
-  vendorHash = "sha256-3Kxuvmb3eZN3ChW59b5rITgCe4NqPHIBHau1PBmxPis=";
+  vendorHash = "sha256-lagv6XMi6Qn5OC2bSEkAQyQgbzcMjLTpJljtiiAtLQo=";
   composerStrictValidation = false;
 
   passthru.updateScript = nix-update-script { };
