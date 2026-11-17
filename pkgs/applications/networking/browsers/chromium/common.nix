@@ -233,6 +233,12 @@ let
         hash = "sha256-rfqmDsqdABuUIDHOu+pLjExbWMbhdvB5U82oxvCTBHA=";
         cargoHash = "sha256-oTuGEb0NK+pC9X6kwt6C6qFW6sIWp6j+m5ySv3VXgVA=";
       };
+      "158" = {
+        version = "0-unstable-2026-10-15";
+        rev = "d757594f6f7ac27c0cf9c8ea63d9136f8e1f77ae";
+        hash = "sha256-0I3zO0Kit6Cu2AuEXJ7Gr1wa5tVlvS+b8kw3NUBfvns=";
+        cargoHash = "sha256-yp57PHbCMy4YDXfsqdt9ZPSL5ZDYylM2DQxQYJng7fA=";
+      };
     }
     .${lib.versions.major upstream-info.version};
 
@@ -300,28 +306,15 @@ let
 
   # esbuild binary needs to match the version in the vendored node_modules:
   # https://chromium.googlesource.com/devtools/devtools-frontend/+/66df492aaa0129d090937e933dd44c5389ab24d2/package.json#57
-  _esbuild =
-    {
-      "156" = {
-        version = "0.28.2";
-        hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
-      };
-      "157" = {
-        version = "0.28.2";
-        hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
-      };
-    }
-    .${lib.versions.major upstream-info.version};
-
   esbuild = buildGoModule (finalAttrs: {
     pname = "esbuild";
-    inherit (_esbuild) version;
+    version = "0.28.2";
 
     src = fetchFromGitHub {
       owner = "evanw";
       repo = "esbuild";
       tag = "v${finalAttrs.version}";
-      inherit (_esbuild) hash;
+      hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
     };
 
     vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
@@ -402,14 +395,28 @@ let
     ) chromiumDeps
   );
 
-  bidi = fetchzip {
-    # https://chromium.googlesource.com/chromium/src/+/157.0.8103.38/third_party/chromium-bidi/DEPS#64
-    # FIXME: We cannot use fetchNpmDeps here because the package-lock.json uses airlock-proxy.uplink.goog:999 a bunch of times
-    # EDIT: We could probably use the same string replace we use for fetchNpmDeps in third_party/node
-    url = "https://commondatastorage.googleapis.com/chromium-nodejs/chromium-bidi/7da310bf46956828c164237a912a201d21f51220dfbe60df454188dbad75889c";
+  npmDeps_chromium-bidi =
+    (fetchNpmDeps {
+      src = chromiumDeps."src";
+      sourceRoot = "${chromiumDeps."src".name}/third_party/chromium-bidi";
+      hash = "sha256-VSIoits97mKHHhLRxh7zVLn8p3ZN9LGL8jRQsKmCyEE=";
+    }).overrideAttrs
+      (_: {
+        # TODO: npmRegistryOverridesString does not appear to work for airlock-proxy.uplink.goog:999
+        postPatch = ''
+          substituteInPlace package-lock.json \
+            --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
+        '';
+      });
+
+  # FIXME: We can't use fetchNpmDeps for third_party/devtools-frontend because of:
+  # "warning: 755 out of 759 packages (99.5%) are missing 'resolved' URLs and will not be cached."
+  npmDeps_devtools-frontend = fetchzip {
+    # https://chromium.googlesource.com/devtools/devtools-frontend/+/047c90eca37c7170d826d72245d5df9281989cf3/DEPS#273
+    url = "https://commondatastorage.googleapis.com/chromium-nodejs/devtools-frontend/c67f72622077f8d20a0d641e63f95772120577b846ace3e3d434db9f13188350";
     extension = "tar.gz";
     stripRoot = false;
-    hash = "sha256-1g+AkeY+7SbP6ex0/dSVsg+ZE2K7G2m+ZiDVDM84ylg=";
+    hash = "sha256-mNnTa+1IcJzCDV7rrpgQ2XabvcO6b/ltr8o09UXeZhY=";
   };
 
   base = rec {
@@ -780,7 +787,7 @@ let
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=unreachable'
       ./patches/chromium-155-llvm-22.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "149" && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals (versionRange "149" "158" && stdenv.hostPlatform.isAarch64) [
       # [43731/56364] CXX obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
       # FAILED: [code=1] obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
       # clang++ -MD -MF obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o.d [...]
@@ -1070,12 +1077,16 @@ let
 
         ${lib.getExe buildPackages.rustc} -V > third_party/rust-toolchain/VERSION
       ''
-      + lib.optionalString (packageName == "chromedriver") ''
-        cp -r ${bidi} third_party/chromium-bidi/node_modules
-        patchShebangs third_party/chromium-bidi/node_modules
+      + lib.optionalString (chromiumVersionAtLeast "158") ''
+        cp -r ${npmDeps_devtools-frontend} third_party/devtools-frontend/src/node_modules
+        patchShebangs third_party/devtools-frontend/src/node_modules
       ''
       + lib.optionalString (!isElectron && chromiumVersionAtLeast "157") ''
         substituteInPlace third_party/node/package-lock.json \
+          --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
+      ''
+      + lib.optionalString (packageName == "chromedriver") ''
+        substituteInPlace third_party/chromium-bidi/package-lock.json \
           --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
       ''
       +
@@ -1266,6 +1277,9 @@ let
       # error TS2352: Conversion of type 'Node[]' to type 'TSPropertySignature[]' [...]
       + lib.optionalString (chromiumVersionAtLeast "148") ''
         rm -r third_party/node/node_modules/@types/estree
+      ''
+      + lib.optionalString (packageName == "chromedriver") ''
+        npmRoot=third_party/chromium-bidi npmDeps=${npmDeps_chromium-bidi} npmConfigHook
       ''
       + lib.optionalString (chromiumVersionAtLeast "154") ''
         ${lib.getExe gnrt} gen --for-std "third_party/rust-toolchain/lib/rustlib/src/rust"
