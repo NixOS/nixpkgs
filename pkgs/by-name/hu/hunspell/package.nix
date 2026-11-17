@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hunspell";
-  version = "1.7.5";
+  version = "1.7.6";
 
   outputs = [
     "bin"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hunspell";
     repo = "hunspell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K7r7t1ZIy1/LD1c24hpPEG8/+M9lmuwo2yVJ08I3YPE=";
+    hash = "sha256-eDe1ID/PKN3UJOHj+27RJgbnGQnCZ5KKz5NaHVYrffw=";
   };
 
   postPatch = ''
