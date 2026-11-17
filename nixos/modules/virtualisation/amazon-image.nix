@@ -16,6 +16,8 @@ let
   cfg = config.ec2;
   efiBoot = cfg.bootMode != "legacy-bios";
   biosBoot = cfg.bootMode != "uefi";
+  # The ZFS and Limine images have an ESP even when they boot with legacy BIOS.
+  hasEsp = efiBoot || cfg.zfs.enable || config.boot.loader.limine.enable;
 in
 
 {
@@ -48,10 +50,8 @@ in
       }
     );
 
-    fileSystems.${config.boot.loader.efi.efiSysMountPoint} = mkIf (efiBoot || cfg.zfs.enable) (
+    fileSystems.${config.boot.loader.efi.efiSysMountPoint} = mkIf hasEsp (
       lib.mkDefault {
-        # The ZFS image uses a partition labeled ESP whether or not we're
-        # booting with EFI.
         device = "/dev/disk/by-label/ESP";
         fsType = "vfat";
       }
@@ -101,6 +101,13 @@ in
       terminal_output console serial
       terminal_input console serial
     '';
+    boot.loader.limine = {
+      efiSupport = efiBoot;
+      efiInstallAsRemovable = efiBoot;
+      biosSupport = biosBoot;
+      biosDevice = if biosBoot then "/dev/xvda" else "nodev";
+      extraConfig = "serial: yes";
+    };
 
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];

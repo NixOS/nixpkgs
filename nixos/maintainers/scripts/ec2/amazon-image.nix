@@ -19,11 +19,10 @@ let
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
   inherit (config.ec2) bootMode;
-  efiBoot = bootMode != "legacy-bios";
-  biosBoot = bootMode != "uefi";
-  inherit (config.boot.loader) efi;
+  inherit (config.boot.loader) efi limine;
   systemdBoot = config.boot.loader.systemd-boot.enable;
-  grubDevices = lib.remove "nodev" config.boot.loader.grub.devices;
+  # The Limine installer writes the BIOS stages to biosDevice.
+  limineBios = limine.enable && limine.biosSupport && limine.biosDevice != "nodev";
   inherit (config.system.build) toplevel;
 
   configFile = pkgs.writeText "configuration.nix" ''
@@ -33,7 +32,10 @@ let
       ${optionalString systemdBoot ''
         boot.loader.systemd-boot.enable = true;
       ''}
-      ${optionalString (efiBoot && efi.efiSysMountPoint != "/boot") ''
+      ${optionalString limine.enable ''
+        boot.loader.limine.enable = true;
+      ''}
+      ${optionalString (efi.efiSysMountPoint != "/boot") ''
         boot.loader.efi.efiSysMountPoint = "${efi.efiSysMountPoint}";
       ''}
       ${optionalString config.ec2.zfs.enable ''
@@ -63,13 +65,14 @@ let
 
   autoSize = config.virtualisation.diskSize == "auto";
 
-  repartImage = config.image.repart.image.overrideAttrs (previousAttrs: {
+  amazonImage = config.image.repart.image.overrideAttrs (previousAttrs: {
     nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
+      pkgs.buildPackages.bubblewrap
       pkgs.buildPackages.jq
       pkgs.buildPackages.qemu-utils
     ];
-    # Set up /nix/var/nix and root's channel the way nixos-install does.
     postPatch = ''
+      # Set up /nix/var/nix and root's channel the way nixos-install does.
       mkdir -p nix-state/profiles
       ln -s ${toplevel} nix-state/profiles/system-1-link
       ln -s system-1-link nix-state/profiles/system
@@ -91,6 +94,42 @@ let
         echo "CopyFiles=$PWD/root-home:/root" >> repart.d/root.conf
       ''}
       echo "CopyFiles=$PWD/nix-state:/nix/var/nix" >> repart.d/root.conf
+
+      # Install the boot loader into the build directory, so the store holds no
+      # extra copies of the kernel and initrd.
+      mkdir -p esp root/{etc,tmp}
+      ln -s ${config.environment.etc."os-release".source} root/etc/os-release
+      ${optionalString (config.environment.etc ? machine-id) ''
+        ln -s ${config.environment.etc.machine-id.source} root/etc/machine-id
+      ''}
+      bwrapArgs=()
+      ${optionalString limineBios ''
+        # postBuild installs the BIOS stages into the image, so give the
+        # installer a scratch disk.
+        truncate -s 2M bios-scratch.raw
+        echo "type=21686148-6449-6E6F-744E-656564454649" | sfdisk -q -X gpt bios-scratch.raw
+        bwrapArgs+=(--bind "$PWD/bios-scratch.raw" ${limine.biosDevice})
+      ''}
+      bwrap \
+        --bind "$PWD/root" / \
+        --bind "$PWD/esp" ${efi.efiSysMountPoint} \
+        --ro-bind ${builtins.storeDir} ${builtins.storeDir} \
+        --bind "$PWD/nix-state" /nix/var/nix \
+        --proc /proc \
+        --dev /dev \
+        "''${bwrapArgs[@]}" \
+        --setenv NIXOS_INSTALL_BOOTLOADER 1 \
+        --setenv SYSTEMD_RELAX_ESP_CHECKS 1 \
+        --setenv NIX_REMOTE "dummy://" \
+        --setenv TMPDIR /tmp \
+        -- ${config.system.build.installBootLoader} ${toplevel}
+
+      # systemd-boot-random-seed.service writes a seed for each instance on first boot.
+      rm -f esp/loader/random-seed
+      echo "CopyFiles=$PWD/esp:/" >> repart.d/esp.conf
+    '';
+    postBuild = optionalString limineBios ''
+      ${lib.getExe' limine.package "limine"} bios-install ${config.image.baseName}.raw
     '';
     # Convert the image to amazonImage.format and write the metadata Hydra and NixOS/amis read.
     installPhase = ''
@@ -125,74 +164,6 @@ let
       runHook postInstall
     '';
   });
-
-  # Run the systemd-boot installer into the build directory, so the store holds
-  # no extra copies of the kernel and initrd.
-  systemdBootImage = repartImage.overrideAttrs (previousAttrs: {
-    nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [ pkgs.buildPackages.bubblewrap ];
-    postPatch = previousAttrs.postPatch + ''
-      mkdir -p esp root/{etc,tmp}
-      ln -s ${config.environment.etc."os-release".source} root/etc/os-release
-      ${optionalString (config.environment.etc ? machine-id) ''
-        ln -s ${config.environment.etc.machine-id.source} root/etc/machine-id
-      ''}
-
-      bwrap \
-        --bind "$PWD/root" / \
-        --bind "$PWD/esp" ${efi.efiSysMountPoint} \
-        --ro-bind ${builtins.storeDir} ${builtins.storeDir} \
-        --bind "$PWD/nix-state" /nix/var/nix \
-        --proc /proc \
-        --dev /dev \
-        --setenv NIXOS_INSTALL_BOOTLOADER 1 \
-        --setenv SYSTEMD_RELAX_ESP_CHECKS 1 \
-        --setenv NIX_REMOTE "dummy://" \
-        --setenv TMPDIR /tmp \
-        -- ${config.system.build.installBootLoader} ${toplevel}
-
-      # systemd-boot-random-seed.service writes a seed for each instance on first boot.
-      rm -f esp/loader/random-seed
-      echo "CopyFiles=$PWD/esp:/" >> repart.d/esp.conf
-    '';
-  });
-
-  # GRUB only installs onto a mounted disk, so this runs in a VM. This derivation
-  # also builds the raw image, so the store never holds an intermediate copy.
-  grubImage = pkgs.vmTools.runInLinuxVM (
-    repartImage.overrideAttrs {
-      memSize = 1024;
-      preVM = ''
-        runPhase patchPhase
-        runPhase buildPhase
-        diskImage=$PWD/${config.image.baseName}.raw
-      '';
-      postVM = "runPhase installPhase";
-      buildCommand = ''
-        root=/mnt
-        mkdir -p $root
-        mount -L nixos $root
-        ${optionalString efiBoot ''
-          mkdir -p $root${efi.efiSysMountPoint}
-          mount -L ESP $root${efi.efiSysMountPoint}
-        ''}
-        ${lib.concatMapStrings (device: ''
-          mkdir -p "$(dirname ${device})"
-          ln -s /dev/vda ${device}
-        '') grubDevices}
-        for dir in dev proc sys; do
-          mkdir -p $root/$dir
-          mount --rbind /$dir $root/$dir
-        done
-        mkdir -p $root/tmp
-        mount -t tmpfs tmpfs $root/tmp
-        # GRUB needs an mtab.
-        ln -s /proc/mounts $root/etc/mtab
-        NIXOS_INSTALL_BOOTLOADER=1 chroot $root ${config.system.build.installBootLoader} ${toplevel}
-        rm $root/etc/mtab
-        umount -R $root
-      '';
-    }
-  );
 in
 {
   imports = [
@@ -280,13 +251,16 @@ in
           assertion = lib.all (file: !lib.hasInfix "*" (toString file.source)) cfg.contents;
           message = "amazonImage.contents does not support glob patterns in `source`.";
         }
+        {
+          assertion = systemdBoot || limine.enable;
+          message = "The Amazon image boots with systemd-boot or Limine.";
+        }
       ];
 
       ec2.bootMode = mkDefault (if config.ec2.efi then "uefi" else "uefi-preferred");
-      # Only legacy BIOS needs GRUB, and systemd-boot installs without a VM.
+      # systemd-boot can't boot legacy BIOS.
       boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi");
-      # GRUB reads the root file system, so only its EFI binary goes on the ESP.
-      boot.loader.efi.efiSysMountPoint = mkIf (!systemdBoot) (mkDefault "/boot/efi");
+      boot.loader.limine.enable = mkDefault (bootMode != "uefi");
 
       image.repart = {
         enable = true;
@@ -294,26 +268,21 @@ in
         name = options.image.baseName.default;
         imageSize = if autoSize then "auto" else "${toString config.virtualisation.diskSize}M";
         partitions = {
-          bios-boot = mkIf biosBoot {
+          # Limine finds its BIOS stage 2 here.
+          bios-boot = mkIf limineBios {
             repartConfig = {
               Type = "21686148-6449-6e6f-744e-656564454649";
               SizeMinBytes = "1M";
               SizeMaxBytes = "1M";
             };
           };
-          esp = mkIf efiBoot {
-            repartConfig =
-              let
-                # systemd-boot keeps kernels on the ESP, while GRUB only puts its EFI binary there.
-                size = if systemdBoot then "1G" else "128M";
-              in
-              {
-                Type = "esp";
-                Format = "vfat";
-                Label = "ESP";
-                SizeMinBytes = size;
-                SizeMaxBytes = size;
-              };
+          # Both boot loaders read the kernels from the ESP, also under legacy BIOS.
+          esp.repartConfig = {
+            Type = "esp";
+            Format = "vfat";
+            Label = "ESP";
+            SizeMinBytes = "1G";
+            SizeMaxBytes = "1G";
           };
           root = {
             inherit storePaths;
@@ -337,7 +306,7 @@ in
         };
       };
 
-      system.build.amazonImage = if systemdBoot then systemdBootImage else grubImage;
+      system.build.amazonImage = amazonImage;
     })
 
     (mkIf config.ec2.zfs.enable {

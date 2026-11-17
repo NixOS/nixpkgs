@@ -66,9 +66,9 @@ in
         default = if config.ec2.efi then "uefi" else "legacy-bios";
         defaultText = literalExpression ''if config.ec2.efi then "uefi" else "legacy-bios"'';
         description = ''
-          The boot mode the instance uses on EC2. `uefi-preferred` installs GRUB
-          for both UEFI and legacy BIOS, so the instance boots on every instance
-          type.
+          The boot mode the instance uses on EC2. `uefi-preferred` installs the
+          boot loader for both UEFI and legacy BIOS, so the instance boots on
+          every instance type.
         '';
       };
       hvm = lib.mkOption {
