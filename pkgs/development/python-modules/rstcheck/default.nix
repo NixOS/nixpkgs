@@ -18,8 +18,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck";
-    hash = "sha256-DvVTgzoLohVmnaLY9UYVILCXL7O474m5m7djvlYPRqE=";
     tag = "v${finalAttrs.version}";
+    hash = "sha256-GAo0JAlpUqdlyZoUMtloHYcI5kDviTDJtZkAmZqUPBQ=";
   };
 
   build-system = [
