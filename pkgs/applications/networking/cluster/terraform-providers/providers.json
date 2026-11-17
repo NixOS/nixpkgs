@@ -1282,13 +1282,13 @@
     "vendorHash": "sha256-ZIuZL4RFktH3646w1o2YSFAWEQQsDVQdGINcGpTU04c="
   },
   "sysdiglabs_sysdig": {
-    "hash": "sha256-uRsitd0GGeDLONVWae7WZAy8YivMDgJ5FMYPmHIEAnU=",
+    "hash": "sha256-HTHoMX0pK8j9Uw8K/cxHHRpkMs5vFsCBAxCa1MU1+a8=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v3.9.2",
+    "rev": "v3.11.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-HjrB7C0KaLJz9NVLfZdq5EZbNbF9lJPxSkQwnWUF978="
+    "vendorHash": "sha256-lknT9bDZKTKn/IY2KIdMj854IMk7cT5U0glKL7wMIa8="
   },
   "tailscale_tailscale": {
     "hash": "sha256-XuYXf/6pKK7MJazZ1+yelWAbRv8gclkzfmC7PzbXPaY=",
@@ -1318,13 +1318,13 @@
     "vendorHash": "sha256-MySaED4kj+F2rYaYu1rpw5qUQFBx9u2Prpn+nqvqqA0="
   },
   "temporalio_temporalcloud": {
-    "hash": "sha256-nPStiYzPrZo7Gy0XJmEoSmCcZJ2ItkAfACxT8VV4q7c=",
+    "hash": "sha256-owlhBCFpLU5Pl+aNVHXP4H04W5mQJu3KltBKi01C6EM=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v1.10.0",
+    "rev": "v1.12.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-t799EW0oXtzzHVjbOv5dPQ5V070wg7Y8MZohQ1O70Pk="
+    "vendorHash": "sha256-vAq4WDTP4JKjz/5PO0CBeWrkEUaYPGcUuPpE4ZUI+0c="
   },
   "tencentcloudstack_tencentcloud": {
     "hash": "sha256-pqysSGWUdVoDyp5+14lnTFRFQcBRILJNf6M/h8Bo/kc=",
