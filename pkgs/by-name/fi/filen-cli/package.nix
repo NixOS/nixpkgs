@@ -34,7 +34,7 @@ let
 
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-      bun install \
+      bun install --cpu="*" --os="*" --libc="*" \
         --force \
         --frozen-lockfile \
         --ignore-scripts \
@@ -55,15 +55,7 @@ let
 
     dontFixup = true;
 
-    outputHash =
-      {
-        aarch64-darwin = "sha256-+nTCiCEXsEz7YqRZkHlP3CWL7e7OPdds33BTwfqTL5c=";
-        aarch64-linux = "sha256-uvL498mHFXwoZpeCwsup4Iyh4l5buVnqLRBMyGVRIlA=";
-        x86_64-linux = "sha256-Ky+ewpdd5nKvRzXwEAUgT7P/OW3v6fdb2r6SGxZ/JEc=";
-      }
-      .${stdenv.hostPlatform.system}
-        or (throw "${pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet.");
-
+    outputHash = "sha256-Wcy9/D+unLXMwlQrK+7pqicPETUW2VqiVZxZl/dEuwY=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
