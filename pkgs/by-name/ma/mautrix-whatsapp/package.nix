@@ -12,7 +12,7 @@
   withGoolm ? false,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mautrix-whatsapp";
   version = "26.11";
   tag = "v0.2611.0";
@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "whatsapp";
-    inherit tag;
+    inherit (finalAttrs) tag;
     hash = "sha256-mu2ZnyPHf5ej+lsDnxfa+kYGoBWmV1Oju0E1yLerkI8=";
   };
 
@@ -33,7 +33,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "main.Tag=${tag}"
+    "main.Tag=${finalAttrs.tag}"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -50,4 +50,4 @@ buildGoModule rec {
     ];
     mainProgram = "mautrix-whatsapp";
   };
-}
+})
