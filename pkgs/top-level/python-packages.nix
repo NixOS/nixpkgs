@@ -7366,6 +7366,8 @@ self: super: with self; {
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
+  grandstream-home-api = callPackage ../development/python-modules/grandstream-home-api { };
+
   granian = callPackage ../development/python-modules/granian { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal; };
