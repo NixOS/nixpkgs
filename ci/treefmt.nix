@@ -128,7 +128,6 @@
           "--ignore=sema-unused-def-lambda-noarg-formal"
           "--ignore=sema-unused-def-lambda-witharg-arg"
           "--ignore=sema-unused-def-lambda-witharg-formal"
-          "--ignore=sema-unused-def-let"
           # TODO: remove after outstanding prelude diagnostics issues are fixed:
           # https://github.com/nix-community/nixd/issues/761
           # https://github.com/nix-community/nixd/issues/762
