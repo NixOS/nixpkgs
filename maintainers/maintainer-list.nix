@@ -10364,6 +10364,11 @@
     githubId = 4065244;
     name = "Gary Guo";
   };
+  gaupee = {
+    github = "ZeikoFr";
+    githubId = 54892453;
+    name = "Gwendal Aupee";
+  };
   gauravghodinde = {
     email = "gauravghodinde@gmail.com";
     github = "gauravghodinde";
@@ -24471,6 +24476,12 @@
     githubId = 125415641;
     name = "Quinn Edenfield";
   };
+  quinnputer = {
+    name = "Quinn Heyman";
+    email = "quinn@emo.gay";
+    github = "quinnputer";
+    githubId = 337308300;
+  };
   QuiNzX = {
     name = "QuiNz-";
     github = "QuiNzX";
@@ -27050,6 +27061,11 @@
     github = "yueneiqi";
     githubId = 26707756;
   };
+  severindupouy = {
+    name = "sdupouy";
+    github = "severindupouy";
+    githubId = 32488190;
+  };
   seylerius = {
     name = "Sable Seyler";
     email = "sable@seyleri.us";
@@ -27504,12 +27520,12 @@
     github = "Silver-Golden";
     githubId = 7858375;
   };
-  silverhadch = {
+  silver-zxy = {
     email = "hadichokr@icloud.com";
-    matrix = "@silverhadch07:matrix.org";
+    matrix = "@sillygober:matrix.org";
     name = "Hadi Chokr";
-    github = "silverhadch";
-    githubId = 158838697;
+    github = "silver-zxy";
+    githubId = 352581001;
   };
   simarra = {
     name = "simarra";
@@ -29534,6 +29550,12 @@
     github = "theCapypara";
     githubId = 3512122;
     keys = [ { fingerprint = "5F29 132D EFA8 5DA0 B598  5BF2 5941 754C 1CDE 33BB"; } ];
+  };
+  thecodedkid = {
+    email = "samuel.raumin@gmail.com";
+    github = "TheCodedKid";
+    githubId = 15819181;
+    name = "Samuel";
   };
   TheColorman = {
     name = "colorman";

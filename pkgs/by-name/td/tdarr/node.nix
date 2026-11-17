@@ -1,6 +1,6 @@
-{ callPackage, ccextractor }:
+{ mkTdarr, ccextractor }:
 
-callPackage ./common.nix { } {
+mkTdarr {
   pname = "tdarr-node";
   component = "node";
 

@@ -1621,6 +1621,7 @@ in
   restic = runTest ./restic.nix;
   restic-rest-server = runTest ./restic-rest-server.nix;
   retroarch = runTest ./retroarch.nix;
+  retroarch-wrapper = runTest ./retroarch-wrapper.nix;
   ringboard = runTest ./ringboard.nix;
   rke2 = import ./rancher {
     inherit lib pkgs;
@@ -1699,7 +1700,6 @@ in
   sing-box = runTest ./sing-box.nix;
   sks = runTest ./sks.nix;
   slimserver = runTest ./slimserver.nix;
-  slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
   slurm-pam = runTest ./slurm-pam.nix;
   smokeping = runTest ./smokeping.nix;

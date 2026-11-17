@@ -114,6 +114,7 @@ let
         description = "Compiler for GObject type system";
         homepage = "https://vala.dev";
         license = lib.licenses.lgpl21Plus;
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" version;
         platforms = lib.platforms.unix;
         maintainers = with lib.maintainers; [
           antono
