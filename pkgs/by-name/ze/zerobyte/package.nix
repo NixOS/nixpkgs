@@ -40,6 +40,7 @@ let
         bun install \
           --cpu="*" \
           --os="*" \
+          --libc="*" \
           --frozen-lockfile \
           --ignore-scripts \
           --no-progress
@@ -68,7 +69,7 @@ let
       # Required, otherwise the fixed-output derivation references store paths.
       dontFixup = true;
 
-      outputHash = "sha256-4MuYKmi4Vit50g5kUQhHuTTyz7aL73igFcD0yaLRckw=";
+      outputHash = "sha256-5y91ocK1+whyyEExnb9D58rq6RFCjL2g71etI+LXIsQ=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
