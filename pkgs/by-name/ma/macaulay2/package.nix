@@ -59,8 +59,13 @@
   xz,
   llvmPackages,
 
-  downloadDocs ? true,
+  disableDocs ? false,
+  downloadDocs ? !disableDocs,
 }:
+assert disableDocs -> !downloadDocs;
+let
+  generateDocs = !(disableDocs || downloadDocs);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macaulay2";
   version = "1.26.06";
@@ -188,14 +193,14 @@ stdenv.mkDerivation (finalAttrs: {
         make -C libraries all-in-Macaulay2-docs
       ''
     else
-      ''
+      lib.optionalString generateDocs ''
         # ForeignFunctions documentation
         export ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=${lib.makeLibraryPath [ mpfr ]}
         # RInterface documentation
         export R_LIBS_SITE=${lib.makeSearchPath "library" (with rPackages; [ MASS ])}
       '';
 
-  buildFlags = lib.optionals downloadDocs [
+  buildFlags = lib.optionals (!generateDocs) [
     "MakeDocumentation=false"
   ];
 
