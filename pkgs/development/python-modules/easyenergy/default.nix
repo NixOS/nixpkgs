@@ -6,6 +6,7 @@
   fetchFromGitHub,
   mashumaro,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-freezer,
@@ -27,17 +28,14 @@ buildPythonPackage rec {
     hash = "sha256-GzsTAm5D0DVQ7OHfsCwn7Jdv1K1rEhz3KGuERRlTEmI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"'
-  '';
-
-  build-system = [ poetry-core ];
-
   pythonRelaxDeps = [
     "aiohttp"
     "mashumaro"
   ];
+
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
