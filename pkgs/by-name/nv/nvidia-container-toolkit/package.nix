@@ -12,7 +12,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
-  version = "1.20.1";
+  version = "1.20.2";
 
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DGu2T9RU4D9y7EfGe/7NxHUzV5b672ql1fdqXf185Dk=";
+    hash = "sha256-/aiDppChkLJwt8uEkpdatCjN30K9uuxFdX5KZMRGO70=";
   };
 
   outputs = [
