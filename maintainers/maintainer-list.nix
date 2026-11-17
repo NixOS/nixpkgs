@@ -21731,6 +21731,12 @@
     githubId = 56077132;
     name = "Noderyos";
   };
+  noi0103 = {
+    name = "Noi0103";
+    email = "noi0103@proton.me";
+    github = "Noi0103";
+    githubId = 81962614;
+  };
   noiioiu = {
     github = "noiioiu";
     githubId = 151288161;
