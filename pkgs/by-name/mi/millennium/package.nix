@@ -70,11 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     buildPhase = ''
-      bun install  --frozen-lockfile \
+      bun install --frozen-lockfile \
         --ignore-scripts \
         --no-progress \
         --os="*" \
-        --cpu="*"
+        --cpu="*" \
+        --libc="*"
 
       (cd ttc && bun node_modules/.bin/rollup -c)
     '';
