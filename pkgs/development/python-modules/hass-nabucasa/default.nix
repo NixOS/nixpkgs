@@ -14,6 +14,7 @@
   josepy,
   pycognito,
   pyjwt,
+  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytest-socket,
   pytest-timeout,
@@ -45,15 +46,14 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${finalAttrs.version}" \
       --replace-fail "timeout = 5" "timeout = 30"
   '';
 
+  pythonRelaxDeps = [ "acme" ];
+
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "acme"
-  ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     acme
