@@ -13,7 +13,7 @@
   withGoolm ? false,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mautrix-meta";
   version = "26.11";
   tag = "v0.2611.0";
@@ -26,7 +26,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "meta";
-    inherit tag;
+    inherit (finalAttrs) tag;
     hash = "sha256-cyA8zi+jrOC6SCRXSb2RNmqpZkpVzXShrHnCCoxPwJs=";
   };
 
@@ -39,7 +39,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "main.Tag=${tag}"
+    "main.Tag=${finalAttrs.tag}"
   ];
 
   passthru = {
@@ -63,4 +63,4 @@ buildGoModule rec {
     ];
     mainProgram = "mautrix-meta";
   };
-}
+})
