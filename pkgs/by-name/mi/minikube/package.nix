@@ -13,6 +13,7 @@
   withVfkit ? false,
   vfkit,
   makeWrapper,
+  nix-update-script,
   writableTmpDirAsHomeHook,
   OVMF,
   versionCheckHook,
@@ -108,6 +109,8 @@ buildGoModule (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgramArg = "version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://minikube.sigs.k8s.io";
