@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-protocol";
-  version = "0.0.20";
+  version = "0.0.21";
   pyproject = true;
 
   # Not available vis Github yet; required by langchain-core
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "agent-protocol";
     tag = "langchain-protocol==${finalAttrs.version}";
-    hash = "sha256-7NGpgDIgD2nOqCQHvYTZYwfJWrlIev8p18KZdg1qTkM=";
+    hash = "sha256-r+pD5szWXzcVVIEHo9cA4IHFXU6yEVcbBdBO2NFDQjQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/streaming/py";
