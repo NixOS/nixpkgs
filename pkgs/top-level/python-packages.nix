@@ -20068,6 +20068,8 @@ self: super: with self; {
 
   spidev = callPackage ../development/python-modules/spidev { };
 
+  spinev-ble = callPackage ../development/python-modules/spinev-ble { };
+
   spinners = callPackage ../development/python-modules/spinners { };
 
   splines = callPackage ../development/python-modules/splines { };
