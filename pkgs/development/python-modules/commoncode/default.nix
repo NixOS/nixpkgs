@@ -8,6 +8,7 @@
   fetchFromGitHub,
   pytest-xdist,
   pytestCheckHook,
+  pythonAtLeast,
   requests,
   saneyaml,
   setuptools-scm,
@@ -54,6 +55,10 @@ buildPythonPackage (finalAttrs: {
     "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
     "test_walk_can_walk_non_utf8_path_from_unicode_path"
     "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.15") [
+    # tarfile.SpecialFileError: '6-FIFOTYPE' is a special file
+    "test_get_type"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # expected result is tailored towards the quirks of upstream's
