@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapybladerf";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyBladeRF";
     tag = "soapy-bladerf-${finalAttrs.version}";
-    hash = "sha256-kKt13/jMjb+CKmopasNFIMEgS+jOR2vB+OU5BFp10wc=";
+    hash = "sha256-+7udRpQ3mdNiXlfzqc50p/fcjBvFcEYLRXCpDDYVmXs=";
   };
 
   strictDeps = true;
