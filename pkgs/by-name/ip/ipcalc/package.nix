@@ -5,37 +5,28 @@
   meson,
   ninja,
   pkg-config,
+  libmaxminddb,
   ronn,
-  withGeo ? true,
-  geoip,
+  jq,
+  withGeo ? null,
 }:
-
-# In order for the geoip part to work, you need to set up a link from
-# geoip.dataDir to a directory containing the data files This would typically be
-# /var/lib/geoip-databases pointing to geoip-legacy/share/GeoIP
-
+assert
+  withGeo == null || throw "withGeo is no longer supported as libGeoIP support was removed upstream"; # Added v1.2.0
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipcalc";
-  version = "1.0.3";
+  version = "1.2.0";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitLab {
     owner = "ipcalc";
     repo = "ipcalc";
     rev = finalAttrs.version;
-    hash = "sha256-9eaR1zG8tjSGlkpyY1zTHAVgN5ypuyRfeRq6ct6zsLU=";
+    hash = "sha256-MiXdqgW5yGQWY0bPYQzAfWB6KN5KjXCJCT5PB/+o3NM=";
   };
 
-  patches = [
-    # disable tests which fail in NixOS sandbox (trying to access the network)
-    ./sandbox_tests.patch
-  ];
-
-  # technically not needed as we do not support the paid maxmind databases, but
-  # keep it around if someone wants to add support and /usr/share/GeoIP is
-  # broken anyway
   postPatch = ''
-    substituteInPlace ipcalc-maxmind.c \
-      --replace /usr/share/GeoIP /var/lib/GeoIP
+    patchShebangs tests/ipcalc-testrunner.sh
   '';
 
   nativeBuildInputs = [
@@ -45,11 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
     ronn
   ];
 
-  buildInputs = [ geoip ];
+  nativeCheckInputs = [
+    jq
+  ];
+
+  buildInputs = [
+    libmaxminddb
+  ];
 
   mesonFlags = [
-    "-Duse_geoip=${if withGeo then "en" else "dis"}abled"
-    "-Duse_maxminddb=disabled"
     # runtime linking doesn't work on NixOS anyway
     "-Duse_runtime_linking=disabled"
   ];
