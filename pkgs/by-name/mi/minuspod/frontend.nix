@@ -14,7 +14,7 @@ buildNpmPackage {
 
   nodejs = nodejs_26;
 
-  npmDepsHash = "sha256-MR9ehQ5sVWip/G4tELxl4ybt4qA+YhfbVKTT5ImU3tc=";
+  npmDepsHash = "sha256-DaThu7TLwgdjq6LmrjmP328k5FNy3XCLqYPZB2H7BWk=";
 
   npmBuildScript = "build";
 
