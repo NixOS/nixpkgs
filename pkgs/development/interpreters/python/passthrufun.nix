@@ -8,6 +8,24 @@
   ...
 }:
 
+let
+  inherit (lib)
+    attrByPath
+    composeExtensions
+    composeManyExtensions
+    elem
+    extendDerivation
+    extends
+    hasInfix
+    isDerivation
+    mapAttrs
+    optionalAttrs
+    optionals
+    substring
+    versionAtLeast
+    versionOlder
+    ;
+in
 {
   implementation,
   libPrefix,
@@ -35,20 +53,20 @@ let
           exceptions = [
             stdenv
           ];
-          providesSetupHook = lib.attrByPath [ "provides" "setupHook" ] false;
+          providesSetupHook = attrByPath [ "provides" "setupHook" ] false;
           valid =
-            value: pythonPackages.hasPythonModule value || providesSetupHook value || lib.elem value exceptions;
+            value: pythonPackages.hasPythonModule value || providesSetupHook value || elem value exceptions;
           func =
             name: value:
-            if lib.isDerivation value then
-              lib.extendDerivation (
+            if isDerivation value then
+              extendDerivation (
                 valid value
                 || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set."
               ) { } value
             else
               value;
         in
-        lib.mapAttrs func items;
+        mapAttrs func items;
     in
     ensurePythonModules (
       callPackage
@@ -77,10 +95,10 @@ let
             };
             hooks = import ./hooks/default.nix;
             keep = self: hooks self { };
-            optionalExtensions = cond: as: lib.optionals cond as;
+            optionalExtensions = cond: as: optionals cond as;
             pythonExtension = import ../../../top-level/python-packages.nix;
             python2Extension = import ../../misc/resholve/python2-packages.nix;
-            extensions = lib.composeManyExtensions (
+            extensions = composeManyExtensions (
               [
                 hooks
                 pythonExtension
@@ -95,11 +113,11 @@ let
             );
             aliases =
               self: super:
-              lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
+              optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
           in
           makeScopeWithSplicing' {
             inherit otherSplices keep;
-            f = lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun;
+            f = extends (composeExtensions aliases extensions) pythonPackagesFun;
           }
         )
         {
@@ -113,9 +131,9 @@ rec {
   isPy312 = pythonVersion == "3.12";
   isPy313 = pythonVersion == "3.13";
   isPy314 = pythonVersion == "3.14";
-  isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
+  isPy3 = substring 0 1 pythonVersion == "3";
   isPy3k = isPy3;
-  isPyPy = lib.hasInfix "pypy" interpreter;
+  isPyPy = hasInfix "pypy" interpreter;
 
   buildEnv = callPackage ./wrapper.nix {
     python = self;
@@ -132,8 +150,8 @@ rec {
     sitePackages
     ;
   inherit sourceVersion;
-  pythonAtLeast = lib.versionAtLeast pythonVersion;
-  pythonOlder = lib.versionOlder pythonVersion;
+  pythonAtLeast = versionAtLeast pythonVersion;
+  pythonOlder = versionOlder pythonVersion;
   inherit hasDistutilsCxxPatch;
   inherit
     pythonOnBuildForBuild
