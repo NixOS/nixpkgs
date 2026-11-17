@@ -9,6 +9,7 @@
   libglvnd,
   libxkbcommon,
   openssl,
+  zstd,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
@@ -38,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libglvnd
     libxkbcommon
     openssl
+    zstd
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
@@ -51,6 +53,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-lxkbcommon"
     "--pop-state"
   ];
+
+  # Force zarchive to dynamically link zstd
+  postPatch = ''
+    substituteInPlace ../ukmm-*-vendor/*/zarchive-*/build.rs \
+      --replace-fail cargo:rustc-link-lib=static=zstd cargo:rustc-link-lib=zstd
+  '';
 
   cargoTestFlags = [
     "--all"
