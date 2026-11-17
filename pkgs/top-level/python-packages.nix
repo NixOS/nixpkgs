@@ -2668,6 +2668,8 @@ self: super: with self; {
 
   bosch-alarm-mode2 = callPackage ../development/python-modules/bosch-alarm-mode2 { };
 
+  bosch-shc-camera-client = callPackage ../development/python-modules/bosch-shc-camera-client { };
+
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
   bot-safe-agents = callPackage ../development/python-modules/bot-safe-agents { };
