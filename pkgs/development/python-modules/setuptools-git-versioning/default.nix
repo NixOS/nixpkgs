@@ -30,6 +30,8 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
+  patches = [ ./fix-flaky-dev-template-test.patch ];
+
   build-system = [
     packaging
     setuptools

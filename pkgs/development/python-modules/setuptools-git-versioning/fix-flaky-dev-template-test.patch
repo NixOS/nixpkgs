@@ -1,0 +1,39 @@
+PEP 440 strips leading zeroes from numeric local version segments, so a short
+SHA such as 07243313 is rendered as 7243313.  The fixed-length regexp in this
+test therefore fails whenever the generated commit hash starts with zero.
+
+Compare against the normalized short SHA instead, which keeps the assertion
+deterministic while still checking that the dev template is used.
+
+--- a/tests/test_integration/test_scikit_build_metadata.py
++++ b/tests/test_integration/test_scikit_build_metadata.py
+@@ -1,15 +1,15 @@
+ from __future__ import annotations
+ 
+-import re
+ import sys
+ import textwrap
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+ import tomli_w
++from packaging.version import Version
+ 
+ from setuptools_git_versioning import scikit_metadata as metadata
+-from tests.lib.util import create_file, create_tag, execute
++from tests.lib.util import create_file, create_tag, execute, get_sha
+ 
+ if TYPE_CHECKING:
+     from pathlib import Path
+@@ -47,7 +47,10 @@
+     monkeypatch.chdir(repo)
+ 
+     result = metadata.dynamic_metadata("version")
+-    assert re.fullmatch(r"1\.2\.3\.post1\+git\.[0-9a-f]{8}", result), result
++    # PEP 440 strips leading zeroes from numeric local version segments, so
++    # compare against the normalized short SHA instead of a fixed length.
++    expected = Version(f"1.2.3.post1+git.{get_sha(repo)}")
++    assert Version(result) == expected, result
+ 
+ 
+ def test_reads_project_name_from_pyproject(repo, monkeypatch):
