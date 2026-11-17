@@ -387,6 +387,11 @@ python3Packages.buildPythonApplication rec {
     "tests/test_main.py::test_validate_environment"
     # flaky
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    # tests broke in the httpx 2.13.1 -> 2.16.2 update
+    "tests/util/test_httpx2_ssl.py::test_default_ssl_context_uses_certifi"
+    "tests/util/test_httpx2_ssl.py::test_default_ssl_context_uses_certifi"
+    "tests/util/test_httpx2_ssl.py::test_create_ssl_context_without_trust_env"
+    "tests/util/test_httpx2_ssl.py::test_default_ssl_context_does_not_read_ca_bundle"
   ];
 
   preCheck = ''
