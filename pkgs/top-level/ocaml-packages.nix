@@ -1613,6 +1613,8 @@ let
 
         ocplib_stuff = callPackage ../development/ocaml-modules/ocplib_stuff { };
 
+        ocsigen-dune-rules = callPackage ../development/ocaml-modules/ocsigen-dune-rules { };
+
         ocsigen-ppx-rpc = callPackage ../development/ocaml-modules/ocsigen-ppx-rpc { };
 
         ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
