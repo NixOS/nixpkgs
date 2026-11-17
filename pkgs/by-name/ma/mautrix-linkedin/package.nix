@@ -18,7 +18,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "mautrix-linkedin";
-  version = "26.09";
+  version = "26.11";
   tag = "v0.${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.0";
 
   __structuredAttrs = true;
@@ -27,10 +27,10 @@ buildGoModule (finalAttrs: {
     owner = "mautrix";
     repo = "linkedin";
     tag = finalAttrs.tag;
-    hash = "sha256-tGgxlcDq5BfGOmabukfDqZ88lcCLx4/WXHOYHuSxO04=";
+    hash = "sha256-If4IipwjrFEfAy84Ea2QWnynlbAHalX2vf3CszQaPYg=";
   };
 
-  vendorHash = "sha256-6WaikDU5tIMdZdBiAqMPOaiG+mmptTi7GFgPMxB/04E=";
+  vendorHash = "sha256-mjL+Dyq/f1A1nShVXo0TH5VxuVFNvsG45OnUSfpW6O0=";
 
   buildInputs = (lib.optional (!withGoolm) olm) ++ (lib.optional withGoolm stdenv.cc.cc.lib);
 
