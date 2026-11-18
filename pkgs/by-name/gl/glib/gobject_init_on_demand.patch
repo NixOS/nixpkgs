@@ -1,0 +1,87 @@
+--- glib-source/gobject/gtype.c	2016-08-17 17:20:47.000000000 +0200
++++ glib-source/gobject/gtype.c	2016-09-01 21:56:31.777406646 +0200
+@@ -209,6 +209,9 @@
+ static gboolean				type_node_is_a_L		(TypeNode		*node,
+ 									 TypeNode		*iface_node);
+ 
++#if !defined(__GLIBC__)
++static void gobject_init (void);
++#endif
+ 
+ /* --- enumeration --- */
+ 
+@@ -2631,7 +2634,10 @@
+ 			     GTypeFlags			 flags)
+ {
+   TypeNode *node;
+-  
++ 
++#if !defined(__GLIBC__)
++  gobject_init();
++#endif 
+   g_assert_type_system_initialized ();
+   g_return_val_if_fail (type_id > 0, 0);
+   g_return_val_if_fail (type_name != NULL, 0);
+@@ -2749,6 +2755,9 @@
+   TypeNode *pnode, *node;
+   GType type = 0;
+   
++#if !defined(__GLIBC__)
++  gobject_init();
++#endif 
+   g_assert_type_system_initialized ();
+   g_return_val_if_fail (parent_type > 0, 0);
+   g_return_val_if_fail (type_name != NULL, 0);
+@@ -2804,6 +2813,9 @@
+   TypeNode *pnode, *node;
+   GType type;
+   
++#if !defined(__GLIBC__)
++  gobject_init();
++#endif 
+   g_assert_type_system_initialized ();
+   g_return_val_if_fail (parent_type > 0, 0);
+   g_return_val_if_fail (type_name != NULL, 0);
+@@ -3319,6 +3331,9 @@
+ {
+   TypeNode *node;
+   
++#if !defined(__GLIBC__)
++  gobject_init();
++#endif 
+   g_assert_type_system_initialized ();
+   
+   node = lookup_type_node_I (type);
+@@ -4343,6 +4358,9 @@
+ void
+ g_type_init_with_debug_flags (GTypeDebugFlags debug_flags)
+ {
++#if !defined(__GLIBC__)
++  gobject_init();
++#endif 
+   g_assert_type_system_initialized ();
+ 
+   if (debug_flags)
+@@ -4361,6 +4379,9 @@
+ void
+ g_type_init (void)
+ {
++#if !defined(__GLIBC__)
++  gobject_init();
++#endif 
+   g_assert_type_system_initialized ();
+ }
+ 
+@@ -4372,6 +4393,12 @@
+   TypeNode *node;
+   GType type;
+ 
++#if !defined(__GLIBC__)
++  static int gobject_initialized = 0;
++  if (gobject_initialized)
++    return;
++  gobject_initialized = 1;
++#endif
+   /* Ensure GLib is initialized first, see
+    * https://bugzilla.gnome.org/show_bug.cgi?id=756139
+    */

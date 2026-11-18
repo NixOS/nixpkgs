@@ -1,0 +1,13 @@
+diff --git a/Makefile.in b/Makefile.in
+index 61c47fc..e08ffac 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -27,7 +27,7 @@ INSTALL=@INSTALL@
+ OBJCOPY=@OBJCOPY@
+ LD=@LD@
+ BUILDINFO_ARCH_NAME=$(shell $(GCC) -dumpmachine)
+-BUILDINFO_BUILD_DATE=$(shell date)
++BUILDINFO_BUILD_DATE=$(shell date -d @${SOURCE_DATE_EPOCH})
+ 
+ top_srcdir ?= .
+ INCF=-I$(top_srcdir)/

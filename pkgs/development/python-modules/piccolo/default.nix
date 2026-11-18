@@ -1,0 +1,108 @@
+{
+  lib,
+  aiosqlite,
+  asyncpg,
+  black,
+  buildPythonPackage,
+  colorama,
+  email-validator,
+  fetchFromGitHub,
+  httpx,
+  inflection,
+  jinja2,
+  orjson,
+  postgresql,
+  postgresqlTestHook,
+  pydantic,
+  pytestCheckHook,
+  python-dateutil,
+  setuptools,
+  targ,
+  typing-extensions,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "piccolo";
+  version = "1.39.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "piccolo-orm";
+    repo = "piccolo";
+    tag = finalAttrs.version;
+    hash = "sha256-uF/OyJCFdVcC8GEaEq4cYRfU3tMAg5P3XioVakjLaIA=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    black
+    colorama
+    inflection
+    jinja2
+    pydantic
+    targ
+    typing-extensions
+  ];
+
+  optional-dependencies = {
+    orjson = [ orjson ];
+    postgres = [ asyncpg ];
+    sqlite = [ aiosqlite ];
+  };
+
+  nativeCheckInputs = [
+    email-validator
+    httpx
+    postgresql
+    postgresqlTestHook
+    pytestCheckHook
+    python-dateutil
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  pythonImportsCheck = [ "piccolo" ];
+
+  disabledTests = [
+    # Timing issues
+    "test_add_and_drop_identity"
+    "test_add_column"
+    "test_altering_table_in_schema"
+    "test_auto_all"
+    "test_auto"
+    "test_clean"
+    "test_column_name_correct"
+    "test_create_table"
+    "test_get_table_classes"
+    "test_integer_to_bigint"
+    "test_integer_to_varchar"
+    "test_lazy_reference_to_app"
+    "test_lazy_table_reference"
+    "test_new"
+    "test_on_conflict"
+    "test_psql"
+    "test_run"
+    "test_set_digits"
+    "test_set_identity"
+    "test_set_length"
+    "test_set_null"
+    "test_shared"
+    "test_show_all"
+    "test_warn_if_are_conflicting_objects"
+    "test_warn_if_is_conflicting"
+    "TestDumpLoad"
+    "TestForwardsBackwards"
+    "TestGraph"
+    "TestMigrationManager"
+    "TestMigrations"
+    "TestTableStorage"
+  ];
+
+  meta = {
+    description = "ORM and query builder which supports asyncio";
+    homepage = "https://github.com/piccolo-orm/piccolo";
+    changelog = "https://github.com/piccolo-orm/piccolo/blob/${finalAttrs.src.tag}/CHANGES.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

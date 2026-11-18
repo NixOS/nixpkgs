@@ -1,0 +1,13 @@
+diff --git a/src/Makevars.in b/src/Makevars.in
+index e20c4eb..1013e21 100644
+--- a/src/Makevars.in
++++ b/src/Makevars.in
+@@ -14,8 +14,6 @@ server:	$(SERVER_SRC) $(SERVER_H)
+ 	$(CC) -DSTANDALONE_RSERVE -DRSERV_DEBUG -DNODAEMON -I. -Iinclude $(ALL_CPPFLAGS) $(ALL_CFLAGS) $(PKG_CPPFLAGS) $(EMBED_CPPFLAGS) $(PKG_CFLAGS) -o Rserve.dbg $(SERVER_SRC) $(LDFLAGS) $(ALL_LIBS) $(PKG_LIBS)
+ 
+ # merging to bin/Rserve works only if installed from sources, won't work for binary
+-	-./mergefat Rserve "$(R_HOME)/bin/Rserve"
+-	-./mergefat Rserve.dbg "$(R_HOME)/bin/Rserve.dbg"
+ 
+ client: config.h
+ 	cp config.h client/cxx/

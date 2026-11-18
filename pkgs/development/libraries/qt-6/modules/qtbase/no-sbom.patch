@@ -1,0 +1,13 @@
+diff --git a/cmake/QtPublicSbomHelpers.cmake b/cmake/QtPublicSbomHelpers.cmake
+index 45342c2efb6..74bf58e6246 100644
+--- a/cmake/QtPublicSbomHelpers.cmake
++++ b/cmake/QtPublicSbomHelpers.cmake
+@@ -538,7 +538,7 @@ function(_qt_internal_setup_sbom)
+     # Main SBOM toggle. Used to be the toggle for SPDX v2.3 only, but now would also enable Cyclone
+     # DX as well.
+     set(sbom_help_string "Generate SBOM.")
+-    option(QT_GENERATE_SBOM "${sbom_help_string}" "${default_value}")
++    option(QT_GENERATE_SBOM "${sbom_help_string}" OFF)
+ 
+ 
+     # Toggle for SPDX V2.3 generation.

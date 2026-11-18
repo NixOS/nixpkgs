@@ -1,0 +1,95 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  love,
+  lua5_2_compat,
+  makeWrapper,
+  makeDesktopItem,
+  strip-nondeterminism,
+  zip,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "duckmarines";
+  version = "1.0c";
+
+  desktopItem = makeDesktopItem {
+    name = "duckmarines";
+    exec = "duckmarines";
+    icon = fetchurl {
+      url = "http://tangramgames.dk/img/thumb/duckmarines.png";
+      hash = "sha256-ZQIKjdG37TgcYtNXFu7ylJvTI4vJd39CcIXhxzBf1x8=";
+    };
+    comment = "Duck-themed action puzzle video game";
+    desktopName = "Duck Marines";
+    genericName = "duckmarines";
+    categories = [ "Game" ];
+  };
+
+  src = fetchFromGitHub {
+    owner = "SimonLarsen";
+    repo = "duckmarines";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0WzqYbK18IL8VY7NsVONwJCI5+me5SPulfkkLCifLvY=";
+  };
+
+  patches = [
+    # https://github.com/SimonLarsen/duckmarines/pull/18
+    ./love-11-support.patch
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    strip-nondeterminism
+    zip
+  ];
+  buildInputs = [
+    lua5_2_compat
+    love
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    zip -9 -r duckmarines.love ./*
+    strip-nondeterminism --type zip duckmarines.love
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+    mkdir -p $out/share/games/lovegames
+
+    cp -v duckmarines.love $out/share/games/lovegames/duckmarines.love
+
+    makeWrapper ${lib.getExe love} $out/bin/duckmarines --add-flags $out/share/games/lovegames/duckmarines.love
+
+    chmod +x $out/bin/duckmarines
+    mkdir -p $out/share/applications
+    ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
+  '';
+
+  meta = {
+    description = "Duck-themed action puzzle video game";
+    homepage = "https://github.com/SimonLarsen/duckmarines";
+    platforms = love.meta.platforms;
+    hydraPlatforms = [ ];
+    license = with lib.licenses; [
+      # code
+      zlib
+
+      # assets
+      cc-by-sa-40
+      cc-by-nc-nd-40
+
+      # slam
+      mit
+
+      # tserial
+      unfree
+    ];
+    downloadPage = "http://tangramgames.dk/games/duckmarines";
+  };
+
+})

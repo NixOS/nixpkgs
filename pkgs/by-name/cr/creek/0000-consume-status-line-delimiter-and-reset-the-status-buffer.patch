@@ -1,0 +1,30 @@
+From 037d2d0a3b382743e5fd0a1a913b9c7df0921b81 Mon Sep 17 00:00:00 2001
+From: Alexandru Tocar <alexandru.tocar@outlook.com>
+Date: Tue, 28 Jul 2026 04:35:04 +0200
+Subject: [PATCH] fix: consume the status-line delimiter and reset the status
+ buffer
+
+---
+ src/Loop.zig | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/src/Loop.zig b/src/Loop.zig
+index e0cbd19..c3dce52 100644
+--- a/src/Loop.zig
++++ b/src/Loop.zig
+@@ -85,9 +85,12 @@ pub fn run(self: *Loop) !void {
+         if (fds[2].revents & posix.POLL.IN != 0) {
+             if (state.wayland.river_seat) |seat| {
+                 if (seat.focusedBar()) |bar| {
+-                    try seat.status_text.flush();
+-                    _ = try reader.interface.streamDelimiter(&seat.status_text, '\n');
+-                    try seat.status_text.flush();
++                    seat.status_text.end = 0;
++                    _ = reader.interface.streamDelimiter(&seat.status_text, '\n') catch |err| switch (err) {
++                        error.EndOfStream => return,
++                        else => |e| return e,
++                    };
++                    reader.interface.toss(1);
+ 
+                     render.renderText(bar, seat.status_text.buffered()) catch |err| {
+                         log.err("renderText failed for monitor {}: {s}", .{ bar.monitor.globalName, @errorName(err) });

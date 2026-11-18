@@ -1,0 +1,28 @@
+From 8f76b32946430737f97f2702afd828b09536afd2 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sun, 15 Mar 2020 20:10:11 +0100
+Subject: [PATCH 2/2] Fix audit.bash setup
+
+This sets PASSWORD_STORE_DIR (needed by the python-code) to
+PASSWORD_STORE_DIR and properly falls back to `~/.password-store` if
+it's not set.
+---
+ audit.bash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/audit.bash b/audit.bash
+index 7a973dc..c40ff76 100755
+--- a/audit.bash
++++ b/audit.bash
+@@ -17,7 +17,7 @@
+ #
+ 
+ cmd_audit() {
+-	export PASSWORD_STORE_DIR=$PREFIX GIT_DIR PASSWORD_STORE_GPG_OPTS
++	export PASSWORD_STORE_DIR=${PASSWORD_STORE_DIR:-$HOME/.password-store} GIT_DIR PASSWORD_STORE_GPG_OPTS
+ 	export X_SELECTION CLIP_TIME PASSWORD_STORE_UMASK GENERATED_LENGTH
+ 	export CHARACTER_SET CHARACTER_SET_NO_SYMBOLS EXTENSIONS PASSWORD_STORE_KEY
+ 	export PASSWORD_STORE_ENABLE_EXTENSIONS PASSWORD_STORE_SIGNING_KEY
+-- 
+2.25.0
+

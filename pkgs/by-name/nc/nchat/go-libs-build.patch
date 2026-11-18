@@ -1,0 +1,55 @@
+diff --git c/CMakeLists.txt i/CMakeLists.txt
+index a7bb124..c64a319 100644
+--- c/CMakeLists.txt
++++ i/CMakeLists.txt
+@@ -281,10 +281,6 @@ message(STATUS "Combined Go library: ${HAS_COMBINED_GOLIB}")
+ 
+ # Check Golang version for whatsmeow minimum requirement
+ set(GO_VERSION_MIN 1.23)
+-execute_process(COMMAND bash "-c" "go version 2> /dev/null | cut -c14- | cut -d' ' -f1 | tr -d '\n'" OUTPUT_VARIABLE GO_VERSION)
+-if((HAS_WHATSAPP OR HAS_SIGNAL) AND (NOT GO_VERSION VERSION_GREATER_EQUAL GO_VERSION_MIN))
+-  message(FATAL_ERROR "Go version ${GO_VERSION} (need >= ${GO_VERSION_MIN} to build WhatsApp or Signal)")
+-endif()
+ 
+ # Check Little/Big Endian for tdlib requirement
+ test_big_endian(IS_BIG_ENDIAN)
+diff --git c/lib/tgchat/ext/td/CMakeLists.txt i/lib/tgchat/ext/td/CMakeLists.txt
+index e54124c..28ff754 100644
+--- c/lib/tgchat/ext/td/CMakeLists.txt
++++ i/lib/tgchat/ext/td/CMakeLists.txt
+@@ -140,7 +140,6 @@ if (CLANG OR GCC)
+ endif()
+ 
+ include(GetGitRevisionDescription)
+-get_git_head_revision(TD_GIT_REFSPEC TD_GIT_COMMIT_HASH)
+ message(STATUS "Git state: ${TD_GIT_COMMIT_HASH}")
+ 
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/td/telegram/GitCommitHash.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/td/telegram/GitCommitHash.cpp" @ONLY)
+diff --git c/lib/wmchat/CMakeLists.txt i/lib/wmchat/CMakeLists.txt
+index e6e43d6..090a9f5 100644
+--- c/lib/wmchat/CMakeLists.txt
++++ i/lib/wmchat/CMakeLists.txt
+@@ -20,15 +20,8 @@ install(TARGETS wmchat DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ target_common_config(wmchat)
+ 
+ # Dependency libraries
+-if(HAS_COMBINED_GOLIB)
+-  # Combined WhatsApp+Signal c-archive built in lib/gostat; the per-protocol Go
+-  # library is not built in this configuration.
+-  set(WMCHAT_GOLIB ref-cgogostat)
+-else()
+-  add_subdirectory(go)
+-  set(WMCHAT_GOLIB ref-cgowm)
+-endif()
+-add_dependencies(wmchat ${WMCHAT_GOLIB})
++set(GO_LIBRARIES @libcgowm@/libcgowm.a)
++target_include_directories(wmchat PRIVATE @libcgowm@)
+ 
+ # Platform specifics
+ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+@@ -57,4 +50,4 @@ set_target_properties(wmchat PROPERTIES COMPILE_FLAGS
+ 
+ # Linking
+ message(STATUS "Go libraries: ${GO_LIBRARIES}")
+-target_link_libraries(wmchat PUBLIC ${WMCHAT_GOLIB} ncutil ${GO_LIBRARIES})
++target_link_libraries(wmchat PUBLIC @libcgowm@/libcgowm.a ncutil ${GO_LIBRARIES})

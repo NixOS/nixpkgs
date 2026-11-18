@@ -1,0 +1,78 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  numpy,
+  pandas,
+  pyannote-core,
+  pyannote-database,
+  scikit-learn,
+  scipy,
+  # undeclared cli dependencies
+  docopt,
+  tabulate,
+  typing-extensions,
+
+  # tests
+  pytestCheckHook,
+  versionCheckHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "pyannote-metrics";
+  version = "4.2.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "pyannote";
+    repo = "pyannote-metrics";
+    tag = finalAttrs.version;
+    hash = "sha256-q2ScNFy0D2XZAri5xWPpBmBZswicUOtzIokBAxTuu9M=";
+  };
+
+  postPatch = ''
+    substituteInPlace src/pyannote/metrics/cli.py \
+      --replace-fail 'version="Evaluation"' 'version="${finalAttrs.version}"'
+  '';
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
+    numpy
+    pandas
+    pyannote-core
+    pyannote-database
+    scikit-learn
+    scipy
+    # Imported in pyannote/metrics/cli.py
+    docopt
+    tabulate
+    # Imporrted in pyannote/metrics/types.py
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [ "pyannote.metrics" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    versionCheckHook
+  ];
+
+  meta = {
+    description = "Toolkit for reproducible evaluation, diagnostic, and error analysis of speaker diarization systems";
+    homepage = "https://github.com/pyannote/pyannote-metrics";
+    changelog = "http://pyannote.github.io/pyannote-metrics/changelog.html";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    mainProgram = "pyannote-metrics";
+  };
+})

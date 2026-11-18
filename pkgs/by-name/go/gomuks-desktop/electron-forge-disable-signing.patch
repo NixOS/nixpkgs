@@ -1,0 +1,25 @@
+diff --git a/forge.config.ts b/forge.config.ts
+index d7271ed0..9ff769a9 100644
+--- a/forge.config.ts
++++ b/forge.config.ts
+@@ -53,12 +53,6 @@ const config: ForgeConfig = {
+ 		],
+ 		appVersion,
+ 		icon: "icon",
+-		osxSign: {},
+-		osxNotarize: process.env.APPLE_API_KEY_PATH ? {
+-			appleApiKey: process.env.APPLE_API_KEY_PATH,
+-			appleApiKeyId: process.env.APPLE_API_KEY_ID!,
+-			appleApiIssuer: process.env.APPLE_API_ISSUER!,
+-		} : undefined,
+ 		appBundleId: "app.gomuks.desktop",
+ 		appCategoryType: "public.app-category.social-networking",
+ 		extraResource: ["tray@2x.png", "trayTemplate@2x.png", "icon.png"],
+@@ -153,6 +147,7 @@ const config: ForgeConfig = {
+ 		}),
+ 		new FusesPlugin({
+ 			version: FuseVersion.V1,
++			resetAdHocDarwinSignature: false,
+ 			[FuseV1Options.RunAsNode]: false,
+ 			[FuseV1Options.EnableCookieEncryption]: true,
+ 			[FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,

@@ -1,0 +1,57 @@
+diff --git a/core/Main.cc b/core/Main.cc
+index fd8fca1..37d2ed5 100644
+--- a/core/Main.cc
++++ b/core/Main.cc
+@@ -95,9 +95,13 @@ int main(int argc, char** argv)
+         setUsageHelp("c USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
+         // printf("This is MiniSat 2.0 beta\n");
+ 
+-#if defined(__linux__)
+-        fpu_control_t oldcw, newcw;
+-        _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
++#if defined(__linux__) && defined(__x86_64__)
++        fenv_t fenv;
++
++        fegetenv(&fenv);
++        fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
++        fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
++        fesetenv(&fenv);
+         printf("c WARNING: for repeatability, setting FPU to use double precision\n");
+ #endif
+         // Extra options:
+diff --git a/simp/Main.cc b/simp/Main.cc
+index 4f4772d..c605f6e 100644
+--- a/simp/Main.cc
++++ b/simp/Main.cc
+@@ -96,9 +96,13 @@ int main(int argc, char** argv)
+       setUsageHelp("c USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
+         
+         
+-#if defined(__linux__)
+-        fpu_control_t oldcw, newcw;
+-        _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
++#if defined(__linux__) && defined(__x86_64__)
++        fenv_t fenv;
++
++        fegetenv(&fenv);
++        fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
++        fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
++        fesetenv(&fenv);
+         printf("WARNING: for repeatability, setting FPU to use double precision\n");
+ #endif
+         // Extra options:
+diff --git a/utils/System.h b/utils/System.h
+index 004d498..2f6d922 100644
+--- a/utils/System.h
++++ b/utils/System.h
+@@ -21,8 +21,8 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
+ #ifndef Glucose_System_h
+ #define Glucose_System_h
+ 
+-#if defined(__linux__)
+-#include <fpu_control.h>
++#if defined(__linux__) && defined(__x86_64__)
++#include <fenv.h>
+ #endif
+ 
+ #include "glucose/mtl/IntTypes.h"

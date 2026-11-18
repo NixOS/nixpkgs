@@ -1,0 +1,23 @@
+diff --git a/src/cmake/modules/FindLLVM.cmake b/src/cmake/modules/FindLLVM.cmake
+--- a/src/cmake/modules/FindLLVM.cmake
++++ b/src/cmake/modules/FindLLVM.cmake
+@@ -103,19 +103,6 @@
+     set (LLVM_LIBRARY "${LLVM_LIBRARIES}")
+ endif ()
+ 
+-execute_process (COMMAND ${LLVM_CONFIG} --shared-mode
+-       OUTPUT_VARIABLE LLVM_SHARED_MODE
+-       OUTPUT_STRIP_TRAILING_WHITESPACE)
+-if (LLVM_SHARED_MODE STREQUAL "shared")
+-    find_library ( _CLANG_CPP_LIBRARY
+-                   NAMES "clang-cpp"
+-                   PATHS ${LLVM_LIB_DIR}
+-                   NO_DEFAULT_PATH)
+-    if (_CLANG_CPP_LIBRARY)
+-        list (APPEND CLANG_LIBRARIES ${_CLANG_CPP_LIBRARY})
+-    endif ()
+-endif ()
+-
+ # libclang-cpp contains all the clang components we need, so the separate
+ # static archives are only a fallback for when it isn't present (such as an
+ # LLVM built with LLVM_LINK_LLVM_DYLIB=OFF). Linking both is redundant, and

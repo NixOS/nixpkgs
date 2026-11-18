@@ -1,0 +1,13 @@
+diff --git a/tests/test_llm_tools_sqlite.py b/tests/test_llm_tools_sqlite.py
+index a676007..4d653b6 100644
+--- a/tests/test_llm_tools_sqlite.py
++++ b/tests/test_llm_tools_sqlite.py
+@@ -47,7 +47,7 @@ def test_tool(monkeypatch, tmpdir):
+         {"name": "SQLite_query", "output": '[{"n": 3}]', "tool_call_id": None},
+         {
+             "name": "SQLite_schema",
+-            "output": "CREATE TABLE [pelicans] (\n   [name] TEXT\n);",
++            "output": "CREATE TABLE \"pelicans\" (\n   \"name\" TEXT\n);",
+             "tool_call_id": None,
+         },
+         {

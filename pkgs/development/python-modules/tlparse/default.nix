@@ -1,0 +1,62 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  oniguruma,
+  pytestCheckHook,
+  versionCheckHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "tlparse";
+  version = "0.4.8";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "meta-pytorch";
+    repo = "tlparse";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qqMhuMM9P32HqPzdTYeRwvmh3zpBOPdxNy/p1RQizVE=";
+  };
+
+  cargoHash = "sha256-q5JaOacChdg57dBL5vQjYd1ht2fBBYnw6+RFIWXYfkY=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = finalAttrs.cargoHash;
+  };
+
+  build-system = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # Run `cargo check` as integration test
+  passthru.tests.integration = rustPlatform.buildRustPackage {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoHash
+      nativeBuildInputs
+      buildInputs
+      ;
+  };
+
+  meta = {
+    description = "Top-level parser for PyTorch profiler and autograd traces";
+    homepage = "https://github.com/meta-pytorch/tlparse";
+    changelog = "https://github.com/meta-pytorch/tlparse/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jherland ];
+    mainProgram = "tlparse";
+  };
+})

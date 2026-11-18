@@ -1,0 +1,26 @@
+diff --git a/src/jack.py b/src/jack.py
+index e309214..d12f30e 100644
+--- a/src/jack.py
++++ b/src/jack.py
+@@ -38,7 +38,20 @@ if _platform.system() == 'Windows':
+     else:
+         _libname = _find_library('libjack')
+ else:
+-    _libname = _find_library('jack')
++    # Ideally we would just stick the default after the current LD_LIBRARY_PATH
++    # and let dlopen find the implementation, but the dynamic loader won't
++    # respect any changes after starting the process.
++    # Instead we resolve the library manually to its absolute path.
++    import os
++    _relativepath = '/libjack@ext@'
++    _libname = '@jack@/lib' + _relativepath
++    libpath = os.environ.get('@libenv@')
++    if libpath:
++        for d in libpath.split(':'):
++            candidate = d + _relativepath
++            if os.path.isfile(candidate):
++                _libname = candidate
++                break
+ 
+ if _libname is None:
+     if _platform.system() == 'Darwin' and _platform.machine() == 'arm64':

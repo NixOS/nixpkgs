@@ -1,0 +1,13 @@
+diff --git a/lib/plugin/instance.rb b/lib/plugin/instance.rb
+index 8482ff0210..826d111d65 100644
+--- a/lib/plugin/instance.rb
++++ b/lib/plugin/instance.rb
+@@ -455,7 +455,7 @@ class Plugin::Instance
+   end
+ 
+   def auto_generated_path
+-    File.dirname(path) << "/auto_generated"
++    "#{Rails.root}/public/assets/auto_generated_plugin_assets/#{name}"
+   end
+ 
+   def after_initialize(&block)

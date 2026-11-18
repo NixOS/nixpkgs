@@ -1,0 +1,12 @@
+diff --git a/warpgate-common/src/version.rs b/warpgate-common/src/version.rs
+index 31104706..ec201419 100644
+--- a/warpgate-common/src/version.rs
++++ b/warpgate-common/src/version.rs
+@@ -9,6 +9,6 @@ pub const fn warpgate_version() -> &'static str {
+             "--match",
+             "v[0-9]*"
+         ],
+-        fallback = "unknown"
++        fallback = "v@version@"
+     )
+ }

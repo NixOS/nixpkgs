@@ -1,0 +1,93 @@
+From 87c28a017c7ae3d7512456951228df04c72394c9 Mon Sep 17 00:00:00 2001
+From: Chris Moultrie <tebriel@frodux.in>
+Date: Fri, 4 Sep 2026 17:11:17 -0400
+Subject: [PATCH 1/2] Define configs with env vars
+
+---
+ app.php                               | 8 ++++----
+ controllers/Api/BaseApiController.php | 2 +-
+ services/DatabaseService.php          | 2 +-
+ services/FilesService.php             | 2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/app.php b/app.php
+index 73515c75..59d6397a 100644
+--- a/app.php
++++ b/app.php
+@@ -11,7 +11,7 @@ use Slim\Factory\AppFactory;
+ require_once __DIR__ . '/packages/autoload.php';
+ 
+ // Load config files
+-require_once GROCY_DATAPATH . '/config.php';
++require_once getenv('GROCY_CONFIG_FILE');
+ require_once __DIR__ . '/config-dist.php'; // For not in own config defined values we use the default ones
+ 
+ // Error reporting definitions
+@@ -51,7 +51,7 @@ catch (\Grocy\Helpers\EInvalidConfig $ex)
+ }
+ 
+ // Create data/viewcache folder if it doesn't exist
+-$viewcachePath = GROCY_DATAPATH . '/viewcache';
++$viewcachePath = getenv('GROCY_CACHE_DIR');
+ if (!file_exists($viewcachePath))
+ {
+ 	mkdir($viewcachePath);
+@@ -89,7 +89,7 @@ $app = AppFactory::create();
+ $container = $app->getContainer();
+ $container->set('view', function (Container $container)
+ {
+-	return new SlimBladeView(__DIR__ . '/views', GROCY_DATAPATH . '/viewcache');
++	return new SlimBladeView(__DIR__ . '/views', getenv('GROCY_CACHE_DIR'));
+ });
+ 
+ $container->set('UrlManager', function (Container $container)
+@@ -121,7 +121,7 @@ $app->addRoutingMiddleware();
+ $errorMiddleware = $app->addErrorMiddleware(true, false, false);
+ $errorMiddleware->setDefaultErrorHandler(new ExceptionController($container, $app->getResponseFactory()));
+ 
+-$app->getRouteCollector()->setCacheFile(GROCY_DATAPATH . '/viewcache/route_cache.php');
++$app->getRouteCollector()->setCacheFile(getenv('GROCY_CACHE_DIR') . '/route_cache.php');
+ 
+ ob_clean(); // No response output before here
+ $app->run();
+diff --git a/controllers/Api/BaseApiController.php b/controllers/Api/BaseApiController.php
+index 5513cbff..a6f6f3ba 100644
+--- a/controllers/Api/BaseApiController.php
++++ b/controllers/Api/BaseApiController.php
+@@ -165,7 +165,7 @@ class BaseApiController extends BaseController
+ 		if (self::$htmlPurifierInstance == null)
+ 		{
+ 			$htmlPurifierConfig = \HTMLPurifier_Config::createDefault();
+-			$htmlPurifierConfig->set('Cache.SerializerPath', GROCY_DATAPATH . '/viewcache');
++			$htmlPurifierConfig->set('Cache.SerializerPath', getenv('GROCY_CACHE_DIR'));
+ 			$htmlPurifierConfig->set('HTML.Allowed', 'div,b,strong,i,em,u,a[href|title|target],iframe[src|width|height|frameborder],ul,ol,li,p[style],br,span[style],img[style|width|height|alt|src],table[border|width|style],tbody,tr,td,th,blockquote,*[style|class|id],h1,h2,h3,h4,h5,h6');
+ 			$htmlPurifierConfig->set('Attr.EnableID', true);
+ 			$htmlPurifierConfig->set('HTML.SafeIframe', true);
+diff --git a/services/DatabaseService.php b/services/DatabaseService.php
+index 6e116568..3e35d542 100644
+--- a/services/DatabaseService.php
++++ b/services/DatabaseService.php
+@@ -150,6 +150,6 @@ class DatabaseService
+ 			return GROCY_DATAPATH . '/grocy_' . $dbSuffix . '.db';
+ 		}
+ 
+-		return GROCY_DATAPATH . '/grocy.db';
++		return getenv('GROCY_DB_FILE');
+ 	}
+ }
+diff --git a/services/FilesService.php b/services/FilesService.php
+index b9e6dc6d..26795be3 100644
+--- a/services/FilesService.php
++++ b/services/FilesService.php
+@@ -12,7 +12,7 @@ class FilesService extends BaseService
+ 	{
+ 		parent::__construct();
+ 
+-		$this->StoragePath = GROCY_DATAPATH . '/storage';
++		$this->StoragePath = getenv('GROCY_STORAGE_DIR');
+ 		if (!file_exists($this->StoragePath))
+ 		{
+ 			mkdir($this->StoragePath);
+-- 
+2.54.0
+

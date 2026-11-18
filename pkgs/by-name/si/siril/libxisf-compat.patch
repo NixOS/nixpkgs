@@ -1,0 +1,22 @@
+diff --git a/src/io/SirilXISFReader.cpp b/src/io/SirilXISFReader.cpp
+index 895425943..ef968da93 100644
+--- a/src/io/SirilXISFReader.cpp
++++ b/src/io/SirilXISFReader.cpp
+@@ -45,7 +45,7 @@ extern "C" {
+ int siril_get_xisf_buffer(const char *filename, struct xisf_data *xdata) {
+ 	try {
+ 		LibXISF::XISFReader xisfReader;
+-		xisfReader.open(filename);
++		xisfReader.open(LibXISF::String(filename));
+ 
+ 		if (xisfReader.imagesCount() == 0) {
+ 			xisfReader.close();
+@@ -166,7 +166,7 @@ GdkPixbuf* get_thumbnail_from_xisf(char *filename, gchar **descr) {
+ 	gchar *description = NULL;
+ 	try {
+ 		LibXISF::XISFReader xisfReader;
+-		xisfReader.open(filename);
++		xisfReader.open(LibXISF::String(filename));
+ 
+ 		if (xisfReader.imagesCount() == 0) {
+ 			xisfReader.close();

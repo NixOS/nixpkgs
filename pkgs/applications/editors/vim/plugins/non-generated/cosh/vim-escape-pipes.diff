@@ -1,0 +1,13 @@
+--- a/syntax/cosh.vim
++++ b/syntax/cosh.vim
+@@ -211,8 +211,8 @@
+ syn keyword coshOperators values;
+ syn keyword coshOperators write;
+ syn keyword coshOperators writeline;
+-syn keyword coshOperators |;
+-syn keyword coshOperators ||;
++syn keyword coshOperators \|;
++syn keyword coshOperators \|\|;
+ 
+ syn keyword coshOperators var;
+ syn keyword coshOperators var!;
