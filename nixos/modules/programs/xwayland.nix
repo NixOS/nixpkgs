@@ -17,9 +17,9 @@ in
 
     defaultFontPath = lib.mkOption {
       type = lib.types.str;
-      default = lib.optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts";
+      default = "";
       defaultText = lib.literalExpression ''
-        optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts"
+        ""
       '';
       description = ''
         Default font path. Setting this option causes Xwayland to be rebuilt.
@@ -28,13 +28,20 @@ in
 
     package = lib.mkOption {
       type = lib.types.path;
-      default = pkgs.xwayland.override (oldArgs: {
-        inherit (cfg) defaultFontPath;
-      });
+      default =
+        if cfg.defaultFontPath == "" then
+          if config.fonts.fontDir.enable then pkgs.xwayland-with-font-dir else pkgs.xwayland
+        else
+          pkgs.xwayland.override (oldArgs: {
+            inherit (cfg) defaultFontPath;
+          });
       defaultText = lib.literalExpression ''
-        pkgs.xwayland.override (oldArgs: {
-          inherit (config.programs.xwayland) defaultFontPath;
-        })
+        if config.programs.xwayland.defaultFontPath == "" then
+          if config.fonts.fontDir.enable then pkgs.xwayland-with-font-dir else pkgs.xwayland
+        else
+          pkgs.xwayland.override (oldArgs: {
+            inherit (config.programs.xwayland) defaultFontPath;
+          });
       '';
       description = "The Xwayland package to use.";
     };
