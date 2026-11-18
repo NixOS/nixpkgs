@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "icm";
-  version = "0.10.63";
+  version = "0.11.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rtk-ai";
     repo = "icm";
     tag = "icm-v${finalAttrs.version}";
-    hash = "sha256-gj0zqfJWrn9LyYTSi2IdIP01yDs6aQvlsFUZQ9pBokI=";
+    hash = "sha256-u8EQraSq3U3jL3W2LEJwpucXphoPSSgJBGnhAu+HZJU=";
   };
 
-  cargoHash = "sha256-f+j9SmxI046GFscyBwuZxwMZOtUk3cTePlCI6QIa+xw=";
+  cargoHash = "sha256-Vu/I7z/sD0nE6qjyKFsUz9swa8N4w+TY6dtU342pnQQ=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -55,6 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Use system OpenSSL instead of vendoring it
     OPENSSL_NO_VENDOR = "1";
     ORT_LIB_LOCATION = "${lib.getLib onnxruntime}/lib";
+    # ort-sys 2.0.0-rc.13 links statically unless told otherwise
+    ORT_PREFER_DYNAMIC_LINK = "1";
   };
 
   nativeInstallCheckInputs = [
