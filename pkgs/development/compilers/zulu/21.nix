@@ -8,6 +8,9 @@ let
   # JDK FX can potentially be different version than regular JDK
   zuluVersion = if enableJavaFX then "21.50.19" else "21.50.19";
   jdkVersion = "21.0.11";
+  # The November security update is available for the plain Linux JDK.
+  linuxZuluVersion = if enableJavaFX then zuluVersion else "21.54.201";
+  linuxJdkVersion = if enableJavaFX then jdkVersion else "21.0.13.1";
 in
 callPackage ./common.nix (
   {
@@ -15,21 +18,23 @@ callPackage ./common.nix (
     # Note that the latest build may differ by platform
     dists = {
       x86_64-linux = {
-        inherit zuluVersion jdkVersion;
+        zuluVersion = linuxZuluVersion;
+        jdkVersion = linuxJdkVersion;
         hash =
           if enableJavaFX then
             "sha256-YG9T25gv8n+LQ5yHPCNnpcv5D5/YVXj6jrB8AWqzbY4="
           else
-            "sha256-vF4zg0Mct/Hc6MJi3UdFAe6b11afHFmotv5cFYmqSlg=";
+            "sha256-UQaW99p5Xgi0hDImgXOwYKSaajsFQwaQ53a1893srF4=";
       };
 
       aarch64-linux = {
-        inherit zuluVersion jdkVersion;
+        zuluVersion = linuxZuluVersion;
+        jdkVersion = linuxJdkVersion;
         hash =
           if enableJavaFX then
             "sha256-yIcj1OeL2mGJwF0SYGYnuc03OvhpIupo/BC8qINnIUs="
           else
-            "sha256-zUvl6u1Q0rgUhd/iYOL6t+LJCoVL8Rt7+07raTZ1fEo=";
+            "sha256-ekaDQS9e7ukCYax+2o16lgdteUZWy1B42PD7OL8ttVQ=";
       };
 
       x86_64-darwin = {
