@@ -23,6 +23,8 @@
 let
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+  inherit (effectiveStdenv) hostPlatform;
+  libraryExtension = hostPlatform.extensions.sharedLibrary or hostPlatform.extensions.staticLibrary;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
@@ -109,8 +111,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SUITESPARSE_USE_FORTRAN" effectiveStdenv.cc.isGNU)
   ]
   ++ lib.optionals (!enableAccelerate) [
-    (lib.cmakeFeature "BLAS_LIBRARIES" "${lib.getLib blas}/lib/libblas${effectiveStdenv.hostPlatform.extensions.sharedLibrary}")
-    (lib.cmakeFeature "LAPACK_LIBRARIES" "${lib.getLib lapack}/lib/liblapack${effectiveStdenv.hostPlatform.extensions.sharedLibrary}")
+    (lib.cmakeFeature "BLAS_LIBRARIES" "${lib.getLib blas}/lib/libblas${libraryExtension}")
+    (lib.cmakeFeature "LAPACK_LIBRARIES" "${lib.getLib lapack}/lib/liblapack${libraryExtension}")
   ]
   ++ lib.optionals (effectiveStdenv.hostPlatform != effectiveStdenv.buildPlatform) [
     # GraphBLAS JIT builds a native helper binary (grb_jitpackage) but uses
