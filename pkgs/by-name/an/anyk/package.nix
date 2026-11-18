@@ -55,7 +55,7 @@ let
         cd $out
         unzip ${src}/application/abevjava.jar \
           hu/piller/enykp/niszws/ClientStubBuilder.class
-        shopt -s globstar; ${python3}/bin/python ${./patch_paths.py} **/*.class
+        shopt -s globstar; ${python3}/bin/python -P ${./patch_paths.py} **/*.class
       '';
 
   # This script can be used to run template installation jars (or use the Szervíz -> Telepítés menu)

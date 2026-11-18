@@ -2,22 +2,22 @@
   lib,
   buildNpmPackage,
   zip,
-  stalwart_1_0,
+  stalwart_1,
   fetchFromGitHub,
   nix-update-script,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "webui";
-  version = "2.0.0";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aV88bOi9zInbxm0dttDWW+2R44QvqeG/NnNwlurbZjY=";
+    hash = "sha256-3kOGg3RGSJeGK4/hX/yxSPcpOs7VhyYCtC7HwuKlk/U=";
   };
 
-  npmDepsHash = "sha256-OUnppxKgBmTmzwc4VKuzcYQR7K3aLE3hTbl3zEPyr9Q=";
+  npmDepsHash = "sha256-AOgnRg8lcNvQUm7kAgdPKgttBj78pUz0oFU26C/7Z6A=";
   __structuredAttrs = true;
 
   env = {
@@ -63,6 +63,6 @@ buildNpmPackage (finalAttrs: {
         redistributable = false;
       }
     ];
-    inherit (stalwart_1_0.meta) maintainers;
+    inherit (stalwart_1.meta) maintainers;
   };
 })

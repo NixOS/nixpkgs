@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -26,14 +27,11 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
-  '';
-
   pythonRelaxDeps = [ "pytz" ];
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp

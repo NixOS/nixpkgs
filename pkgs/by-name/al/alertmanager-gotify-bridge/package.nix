@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "alertmanager-gotify-bridge";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "DRuggeri";
     repo = "alertmanager_gotify_bridge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jG4SC+go6ZxdV1RtLJjZdL4I8jLayY5JKK8mlMDD2pE=";
+    hash = "sha256-gE2S4acervLsZauhkadWTbXjrdz5VhleedgPVxvvLps=";
   };
 
-  vendorHash = "sha256-EjsfY8Ys0Fd99sx7OsZ2jcstdVloqDQQj5xfoIVSX9E=";
+  vendorHash = "sha256-84eYyrEnkEfl3JRQhsTympMOJ6apKEaWQMAWzkaHDXE=";
 
   ldflags = [
     "-s"
