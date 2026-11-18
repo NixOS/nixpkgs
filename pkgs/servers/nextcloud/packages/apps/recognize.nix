@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   lib,
-  nodejs_22,
+  nodejs_26,
   node-pre-gyp,
   node-gyp,
   python3,
@@ -15,7 +15,7 @@
   ncVersion,
 }:
 let
-  nodejs = nodejs_22;
+  nodejs = nodejs_26;
   latestVersionForNc = {
     "32" = {
       version = "10.0.7";
