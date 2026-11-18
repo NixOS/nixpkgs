@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "node-red";
-  version = "4.1.17";
+  version = "4.1.18";
 
   src = fetchFromGitHub {
     owner = "node-red";
     repo = "node-red";
     tag = version;
-    hash = "sha256-l6/HghHdxEekBVjUSiGYB1ooDf5S6/qEyyUKyuC9eGE=";
+    hash = "sha256-x1wiP0kXtys24Iaduv8PcDdoGeyHbiWP+d3YMGeg9Pk=";
   };
 
-  npmDepsHash = "sha256-TjZNp0pCgO9MBq5LyVHspBhYwnwhDAMPczyUa9mTRzc=";
+  npmDepsHash = "sha256-NcyH/zU6Qkd6senonpoUf6Gd7vDMDrAxg+gZs5PIarU=";
 
   postPatch =
     let
