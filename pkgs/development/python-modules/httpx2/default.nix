@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   isPyPy,
   pythonOlder,
 
@@ -54,8 +55,11 @@ buildPythonPackage (finalAttrs: {
   };
 
   patches = [
-    # https://github.com/pydantic/httpx2/discussions/1309
-    ./anyio-4.16-compat.patch
+    (fetchpatch {
+      name = "anyio-4.16-compat.patch";
+      url = "https://github.com/pydantic/httpx2/commit/cabbaca8888c32f33371fc85fb86c46cfb571559.patch";
+      hash = "sha256-1X66DVHgQB3Ef1iyU2gg95qOR0n0gdTQUbbCWZd6tCU=";
+    })
   ];
 
   postPatch = ''
