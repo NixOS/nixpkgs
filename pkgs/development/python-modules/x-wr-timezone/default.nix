@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCalendar/x-wr-timezone";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
+    teams = with lib.teams; [ ngi ];
   };
 }
