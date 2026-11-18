@@ -40,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit mpi;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://gitlab.com/api/v4/projects/siesta-project%2Fsiesta/repository/archive.tar.gz?sha=HEAD"
+      ];
+    };
   };
 
   nativeBuildInputs = [
