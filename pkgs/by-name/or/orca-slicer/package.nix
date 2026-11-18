@@ -73,13 +73,13 @@ in
 # with --cores 32 on clang).
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "OrcaSlicer";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WL3tXUkj/XIltcUSSnHGbOXWWLuYZ/hEeZ6L94w72c0=";
+    hash = "sha256-jT6kD8vdHkdwdzomrOG2q5s39Wme894lGPZvS7P+Pkw=";
   };
 
   __structuredAttrs = true;
@@ -238,6 +238,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include")
     (lib.cmakeFeature "LIBNOISE_LIBRARY_RELEASE" "${libnoise}/lib/libnoise-static.a")
     (lib.cmakeFeature "wxWidgets_CONFIG_EXECUTABLE" (lib.getExe' wxGTK' "wx-config"))
+    (lib.cmakeOptionType "PATH" "EXPAT_INCLUDE_DIR" "${lib.getDev expat}/include")
+    (lib.cmakeOptionType "FILEPATH" "EXPAT_LIBRARY" "${lib.getLib expat}/lib/libexpat.so")
     "-Wno-dev"
   ];
 
