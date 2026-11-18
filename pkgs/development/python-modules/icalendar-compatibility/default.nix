@@ -48,9 +48,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://icalendar-compatibility.readthedocs.io/en/latest/";
-    changelog = "https://icalendar-compatibility.readthedocs.io/en/latest/changes.html";
+    changelog = "https://github.com/PyCalendar/icalendar_compatibility/blob/${src.rev}/docs/changes.rst";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ erictapen ];
+    teams = with lib.teams; [ ngi ];
   };
 
 }
