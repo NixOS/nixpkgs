@@ -44,5 +44,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mergecal/python-mergecal/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ erictapen ];
+    teams = with lib.teams; [ ngi ];
   };
 }
