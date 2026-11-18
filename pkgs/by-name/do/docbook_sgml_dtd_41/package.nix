@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   unzip,
 }:
@@ -19,13 +19,15 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "docbook-sgml";
   version = "4.1";
 
   dontUnpack = true;
 
   nativeBuildInputs = [ unzip ];
+
+  strictDeps = true;
 
   installPhase = ''
     o=$out/sgml/dtd/docbook-4.1
@@ -35,6 +37,8 @@ stdenv.mkDerivation {
     unzip ${isoents}
     sed -e "s/iso-/ISO/" -e "s/.gml//" -i docbook.cat
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     platforms = lib.platforms.unix;
