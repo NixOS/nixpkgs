@@ -22,6 +22,7 @@
   pipewire,
   glib-networking,
   bash,
+  withOptionalDependencies ? true,
 }:
 
 let
@@ -95,18 +96,24 @@ pythonPackages.buildPythonApplication rec {
     ++ markitdown.optional-dependencies.youtube-transcription
     ++ lib.concatAttrValues optional-dependencies;
 
-  optional-dependencies = with pythonPackages; {
-    speech-to-text = [
-      openai-whisper
-      pyaudio
-    ];
-    text-to-speech = [
-      kokoro
-      sounddevice
-      spacy-models.en_core_web_sm
-    ];
-    image-tools = [ rembg ];
-  };
+  # Speech-to-text, text-to-speech and background removal pull in several GiB
+  # (torch, spaCy, whisper). Alpaca hides these features via
+  # importlib.util.find_spec if the modules are absent.
+  optional-dependencies = lib.optionalAttrs withOptionalDependencies (
+    with pythonPackages;
+    {
+      speech-to-text = [
+        openai-whisper
+        pyaudio
+      ];
+      text-to-speech = [
+        kokoro
+        sounddevice
+        spacy-models.en_core_web_sm
+      ];
+      image-tools = [ rembg ];
+    }
+  );
 
   dontWrapGApps = true;
 
