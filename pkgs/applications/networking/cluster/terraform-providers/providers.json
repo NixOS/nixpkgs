@@ -173,11 +173,11 @@
     "vendorHash": "sha256-SO3CX7pZ+q7ytz/55cxTPlW7ByY1zKhxkQxMiqAvm8o="
   },
   "charpand_openprovider": {
-    "hash": "sha256-QoqUSSqbrXsLXifQuVHr6WP+SzqxUE3G6udVyzs2zAI=",
+    "hash": "sha256-g0G/+N8nzhMrtEwpsp1s9P8t0cVBDjqHcnJTZfeEBa0=",
     "homepage": "https://registry.terraform.io/providers/charpand/openprovider",
     "owner": "charpand",
     "repo": "terraform-provider-openprovider",
-    "rev": "v1.3.0",
+    "rev": "v1.3.1",
     "spdx": "MIT",
     "vendorHash": "sha256-ZY8eGdyHnyOgG6LNOlPbD+4KH5sC0tnmMLri0zPUwi0="
   },
