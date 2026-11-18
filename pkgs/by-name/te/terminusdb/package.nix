@@ -10,6 +10,8 @@
   gmp,
   mpfr,
   libmpc,
+  jemalloc,
+  rust-jemalloc-sys,
   protobuf,
   pkg-config,
   callPackage,
@@ -19,6 +21,12 @@
 let
   tusVersion = "0.0.16";
   jwt_ioVersion = "1.0.4";
+
+  # The Rust library is dlopen()ed by SWI-Prolog, which fails with initial-exec TLS:
+  # "libjemalloc.so.2: cannot allocate memory in static TLS block"
+  rust-jemalloc-sys' = rust-jemalloc-sys.override {
+    jemalloc = jemalloc.override { disableInitExecTls = true; };
+  };
 
   tus = fetchFromGitHub {
     owner = "terminusdb";
@@ -94,13 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    # Fix MAKEFLAGS order in vendored tikv-jemalloc-sys
-    # TODO: remove when tikv-jemalloc-sys 0.6.2+ is released
-    # equivalent to https://github.com/tikv/jemallocator/pull/152
-    substituteInPlace $cargoDepsCopy/*/tikv-jemalloc-sys-*/build.rs \
-      --replace-fail 'format!("{orig_makeflags} {makeflags}")' \
-                     'format!("{makeflags} {orig_makeflags}")'
-
     # Hardcode terminus_home to a Nix store path that will exist both
     # at compile time (via the symlink in preBuild) and at runtime.
     substituteInPlace src/load_paths.pl \
@@ -124,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     mpfr
     libmpc
+    rust-jemalloc-sys'
   ];
 
   env = {
