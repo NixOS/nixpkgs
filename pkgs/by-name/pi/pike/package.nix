@@ -190,7 +190,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "INSTALLARGS=--traditional" ];
 
-  passthru.updateScript = gitUpdater { allowedVersions = "^9\\..*"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^9\\..*";
+  };
 
   meta = {
     description = "Pike programming language";
