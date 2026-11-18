@@ -174,6 +174,7 @@ mapAliases {
   chromeprint = throw "'chromaprint' was removed as it depended on m2r which was removed."; # Added 2026-05-27
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   claripy = throw "'claripy' has been merged into 'angr'"; # Added 2026-09-27
+  class-doc = throw "'class-doc' has been removed as its no longer used and no longer updated '"; # Added 2026-11-18
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
   cmd2_4 = cmd2; # added 2026-11-14
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
