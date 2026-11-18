@@ -3376,6 +3376,7 @@ mapAliases {
   zfsStable = throw "'zfsStable' has been renamed to/replaced by 'zfs'"; # Converted to throw 2025-10-27
   zfsUnstable = throw "'zfsUnstable' has been renamed to/replaced by 'zfs_unstable'"; # Converted to throw 2025-10-27
   zig_0_12 = throw "zig 0.12 has been removed, upgrade to a newer version instead"; # Added 2025-08-18
+  zig_0_13 = throw "zig 0.13 has been removed, upgrade to a newer version instead"; # Added 2026-11-18
   zigbee2mqtt_1 = throw "Zigbee2MQTT 1.x has been removed, upgrade to the unversioned attribute."; # Added 2025-08-11
   zigbee2mqtt_2 = zigbee2mqtt; # Added 2025-08-11
   zinc = throw "'zinc' has been renamed to/replaced by 'zincsearch'"; # Converted to throw 2025-10-27
