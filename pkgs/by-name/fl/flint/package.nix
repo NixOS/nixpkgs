@@ -17,6 +17,7 @@
   withBlas ? true,
   withNtl ? !ntl.meta.broken,
   withGc ? false,
+  withStatic ? false,
 }:
 
 assert
@@ -79,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withGc [
     "--with-gc=${boehmgc}"
+  ]
+  ++ lib.optionals withStatic [
+    "--enable-static"
+    "--disable-shared"
   ];
 
   enableParallelBuilding = true;
