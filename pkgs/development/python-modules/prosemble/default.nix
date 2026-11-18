@@ -9,7 +9,6 @@
   numpy,
   scikit-learn,
   matplotlib,
-  # Optional (JAX)
   jax,
   jaxlib,
   chex,
@@ -20,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prosemble";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "naotoo1";
     repo = "prosemble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mZ5I4OWatAbE0/fVUefT47NsRnBgonvPUF5oyeV2Dfg=";
+    hash = "sha256-Y/poU2k89Qkw3G1CyGpX1D+O8MeBrs8Afp2J/3ym9y8=";
   };
 
   build-system = [
@@ -39,6 +38,10 @@ buildPythonPackage (finalAttrs: {
     numpy
     scikit-learn
     matplotlib
+    jax
+    jaxlib
+    chex
+    optax
   ];
 
   optional-dependencies = {
@@ -50,18 +53,7 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    jax
-    jaxlib
-    chex
-    optax
-  ];
-
-  disabledTestPaths = [
-    # Requires geomstats which is not packaged
-    "tests/test_riemannian_neural_gas.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "prosemble"
