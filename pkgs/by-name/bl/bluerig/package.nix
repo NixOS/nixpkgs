@@ -11,6 +11,8 @@
   slang,
   gpm,
   lua5_4,
+  libpq,
+  aspell,
   check,
   versionCheckHook,
   nix-update-script,
@@ -26,6 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+
+  # These libraries are loaded with g_module_open rather than linked.
+  postPatch = ''
+    substituteInPlace src/plugins/query/query-pq.c \
+      --replace-fail '"libpq.so.5"' '"${lib.getLib libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}"'
+    substituteInPlace src/plugins/spell/spell.c \
+      --replace-fail '"libaspell"' '"${lib.getLib aspell}/lib/libaspell${stdenv.hostPlatform.extensions.sharedLibrary}"'
+  '';
 
   nativeBuildInputs = [
     meson
@@ -48,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "screen" "slang")
     (lib.mesonEnable "gpm" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "lua" true)
+    (lib.mesonEnable "spell" true)
     (lib.mesonEnable "nls" true)
     (lib.mesonEnable "x11" false)
     (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
