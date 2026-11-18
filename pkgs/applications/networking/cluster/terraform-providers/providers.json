@@ -1300,13 +1300,13 @@
     "vendorHash": "sha256-hXdv+K2nM99L3uVI+tkOvS4HAjzEJEGHBrXEU+QLqpU="
   },
   "tasansga_lldap": {
-    "hash": "sha256-GvdSuVeVIEbimFU2Mt/ENe4AlmHgGLnox7RGhjTC7Gw=",
+    "hash": "sha256-esRIRh4l3PxRrzx+CPbaf4XhBQTKwPLK+ZU4VlHP7UE=",
     "homepage": "https://registry.terraform.io/providers/tasansga/lldap",
     "owner": "tasansga",
     "repo": "terraform-provider-lldap",
-    "rev": "v0.4.5",
+    "rev": "v0.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-5kRtjoxe0p3kt4/nNqR///jMm4x6PdoRUOdciqhp58s="
+    "vendorHash": "sha256-WdAdIWie7VIe/DCP9Jmyui6cmaC6l4duEmt4X/ZkNi0="
   },
   "telmate_proxmox": {
     "hash": "sha256-uZxq/vrvhqvi897G/rxFK89dV+zsvcks9oZf1V28NwA=",
