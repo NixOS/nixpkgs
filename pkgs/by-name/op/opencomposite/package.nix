@@ -54,7 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--url=https://gitlab.com/api/v4/projects/znixian%2FOpenOVR/repository/archive.tar.gz?sha=HEAD"
+    ];
+  };
 
   meta = {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";
