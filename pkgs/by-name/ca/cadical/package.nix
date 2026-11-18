@@ -67,9 +67,18 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   # Racy/flaky tests that sometimes spontaneously combust on darwin.
   +
-    lib.optionalString (stdenv.hostPlatform.isDarwin && (lib.versionAtLeast finalAttrs.version "2.1.1"))
+    lib.optionalString
+      (
+        stdenv.hostPlatform.isDarwin
+        && (lib.versionAtLeast finalAttrs.version "2.1.1")
+        && !(lib.versionAtLeast finalAttrs.version "3.1.0")
+      )
       ''
         substituteInPlace test/api/run.sh --replace-fail 'run parcompwrite' ""
+      ''
+  +
+    lib.optionalString (stdenv.hostPlatform.isDarwin && (lib.versionAtLeast finalAttrs.version "2.1.1"))
+      ''
         substituteInPlace test/api/run.sh --replace-fail 'run example_tracer' ""
       '';
 
