@@ -62,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    tagFormat = "v[0-9]*";
+  };
 
   meta = {
     description = "Graphical processor simulator and assembly editor for the RISC-V ISA";
