@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     # copyPkgconfigItems will substitute these in the pkg-config file
     includedir = "${placeholder "dev"}/include";
     libdir = "${placeholder "lib"}/lib";
+
+    # do not include build information (for reproducibility)
+    CXXFLAGS = toString [ "-DNBUILD" ];
   };
 
   enableParallelBuilding = true;
