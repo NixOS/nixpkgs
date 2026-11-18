@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Using File Manager DBus Interface to open file manager and hover over file(s)/folder(s)";
