@@ -1087,6 +1087,7 @@ in
   loops-server = runTest ./loops-server.nix;
   lorri = runTest ./lorri/default.nix;
   luks-suspend = runTest ./luks-suspend.nix;
+  lumo-desktop = runTest ./lumo-desktop.nix;
   lvm2 = import ./lvm2 { inherit pkgs runTest; };
   lxc = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./lxc;
   lxd-image-server = runTest ./lxd-image-server.nix;
