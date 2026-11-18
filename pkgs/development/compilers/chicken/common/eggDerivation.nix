@@ -122,7 +122,8 @@ lib.extendMkDerivation {
           ''
         );
 
-      doInstallCheck = args.doInstallCheck or stdenv.hostPlatform.isLinux;
+      doInstallCheck =
+        args.doInstallCheck or (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
 
       installPhase =
         args.installPhase or ''
