@@ -25,7 +25,7 @@ buildLua {
     (lib.makeBinPath [ biliass ])
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Mpv plugin to correctly display Bilibili danmaku, powered by biliass";
