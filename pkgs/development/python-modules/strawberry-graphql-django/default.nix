@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyprojectVersionPatchHook,
 
   # build-system
   hatchling,
@@ -34,24 +33,20 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql-django";
-  version = "0.86.5";
+  version = "0.96.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry-django";
     tag = version;
-    hash = "sha256-eksnTz6o9bj6LcmflwVEnnBkjLj3GyNG9NAX/IietmI=";
+    hash = "sha256-0nuULQTTyRZMqQzcZu8D8JJIc2vjdPWMhI+EkKcVPlE=";
   };
 
   postPatch = ''
     # django.core.exceptions.ImproperlyConfigured: You're using the staticfiles app without having set the required STATIC_URL setting.
     echo 'STATIC_URL = "static/"' >> tests/django_settings.py
   '';
-
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
 
   build-system = [
     hatchling
