@@ -9,7 +9,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "confluent-cli";
-  version = "4.82.0";
+  version = "4.82.1";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -30,9 +30,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/confluent-cli/archives/${finalAttrs.version}/confluent_${finalAttrs.version}_${system}.tar.gz";
       hash = selectSystem {
-        x86_64-linux = "sha256-Lc1aRoTgqiyLlvaIbPRUt5ANJubfnZ9dv81VJCjUGOI=";
-        aarch64-linux = "sha256-Z7AHZLAc6UlRT6+v5R4MvfOKEulZKxHLwtMBPA0fm1U=";
-        aarch64-darwin = "sha256-CSzVA0qPFiYnMsUEp1d8WuxDlq1Sey5yMvcgSbHEGeQ=";
+        x86_64-linux = "sha256-848Pfq2BQFAqs5Mw37KbNslfkAdvqW91cqv/I5o23RI=";
+        aarch64-linux = "sha256-njrH3fitkRIazmqDOklR/hw+vr5rEK+CjHa/4m7/tsw=";
+        aarch64-darwin = "sha256-S/6oQzJkHxvFhFqpKI9HmsoPXYf9psAMPL718H90i+I=";
       };
     };
 
