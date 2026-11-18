@@ -577,6 +577,12 @@
     githubId = 15805292;
     name = "Abdirahman Osman";
   };
+  abhi-kr-2100 = {
+    email = "abhi.kr.2100@gmail.com";
+    github = "abhi-kr-2100";
+    githubId = 66527624;
+    name = "Abhishek Kumar";
+  };
   abhi18av = {
     email = "abhi18av@gmail.com";
     github = "abhi18av";
@@ -3246,6 +3252,12 @@
     github = "bachp";
     githubId = 333807;
     name = "Pascal Bach";
+  };
+  backspace-phill = {
+    name = "backspace-phill";
+    email = "mail@backspace-phill.de";
+    github = "backspace-phill";
+    githubId = 87976190;
   };
   backtail = {
     name = "Max Genson";
@@ -15058,6 +15070,12 @@
     email = "kanru@kanru.info";
     matrix = "@kanru:wara.tw";
     keys = [ { fingerprint = "374F F2AD 0A12 935F D0B0  C84F 1B13 2E01 CEC6 AD46"; } ];
+  };
+  kanywst = {
+    email = "niwatakuma@icloud.com";
+    github = "kanywst";
+    githubId = 45947799;
+    name = "kt";
   };
   kaptcha0 = {
     name = "J'C Kabunga";

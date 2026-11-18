@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-http";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-http-v${finalAttrs.version}";
-    hash = "sha256-e2BJoovCVw9ye7a6kOFCpVuUjKCkGimZyVT4e/oM7W8=";
+    hash = "sha256-r7svcJmv9amLzJQn0qb75DA2efGLAhrC6AIEH/dxy3A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/http/httpx/";

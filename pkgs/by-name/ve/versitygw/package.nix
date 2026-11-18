@@ -45,6 +45,9 @@ buildGoModule (finalAttrs: {
         # requires real s3
         "^TestIntegration$"
 
+        # filesystem dependent
+        "^TestFallocSkipsCachedBucket$"
+
         # requires extended attributes
         "^TestObjectPublishLockHonorsContextWhileWaiting$"
         "^TestFsyncPutObject"
@@ -65,6 +68,8 @@ buildGoModule (finalAttrs: {
         "^TestFileToObjSkipsEntryWhoseInfoIsGone$"
         "^TestLiveObjVersionIdObjectRemoved$"
         "^TestHeadObjectDeleteMarker$"
+
+        # any skips after this will be ignored
         "/xattr$"
       ];
     in
