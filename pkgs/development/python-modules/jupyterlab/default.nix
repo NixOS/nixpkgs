@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
 
   # nativeBuildInputs
@@ -111,6 +112,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "jupyterlab" ];
 
   nativeCheckInputs = [
+    cacert
     pytest-jupyter
     pytestCheckHook
     versionCheckHook

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  cacert,
   certifi,
   cryptography,
   fetchPypi,
@@ -35,7 +36,10 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    cacert
+    pytestCheckHook
+  ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # QUIC needs UDP/multicast not available in sandbox.

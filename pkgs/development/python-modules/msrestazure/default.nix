@@ -2,6 +2,7 @@
   lib,
   adal,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   httpretty,
   mock,
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cacert
     httpretty
     mock
     pytest-asyncio

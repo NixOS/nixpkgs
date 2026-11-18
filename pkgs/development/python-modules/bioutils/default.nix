@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   setuptools-scm,
   lib,
@@ -39,6 +40,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     pytestCheckHook
     pytest-cov-stub
     vcrpy

@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
@@ -99,6 +100,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    cacert
     defusedxml
     pytestCheckHook
     pytest-xdist

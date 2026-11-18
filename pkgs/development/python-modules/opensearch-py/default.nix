@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   fetchpatch,
 
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   optional-dependencies.async = [ aiohttp ];
 
   nativeCheckInputs = [
+    cacert
     botocore
     mock
     pytest-asyncio

@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   buildPythonPackage,
+  cacert,
   certifi,
   fetchFromGitHub,
   fetchpatch,
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cacert
     aiohttp
     mock
     opentelemetry-api

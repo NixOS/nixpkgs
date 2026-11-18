@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   ipython,
   numpy,
@@ -40,6 +41,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     pytestCheckHook
     responses
   ];

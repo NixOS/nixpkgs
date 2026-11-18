@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cacert
     pillow
     pytest-asyncio
     pytest-httpserver
