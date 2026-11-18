@@ -1,115 +1,55 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config, # needed to find minizip
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_net,
-  SDL2_ttf,
-  cmake,
-  curl,
-  doxygen,
-  gettext,
-  glew,
-  graphviz,
-  icu,
-  installShellFiles,
-  libpng,
-  lua5_2_compat,
-  python3,
-  zlib,
-  minizip,
-  asio,
-  libsm,
-  libice,
-  libxext,
-  libx11,
+  stdenvNoCC,
+  makeBinaryWrapper,
+  widelands-unwrapped,
 }:
-let
-  lua = lua5_2_compat;
-in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "widelands";
-  version = "1.3.1";
+  inherit (widelands-unwrapped) version;
 
-  src = fetchFromGitHub {
-    owner = "widelands";
-    repo = "widelands";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-nNciOfE9fqd1CfljrELy2/I7+o1BLcpdngE3XGPQaSk=";
+  dontUnpack = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  # Copy ~600 MiB of data/ locally rather than caching on Hydra, without
+  # retaining a reference to src.
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/bin" "$out/share/widelands"
+
+    makeWrapper "${widelands-unwrapped}/bin/widelands" "$out/bin/widelands" \
+      --add-flags "--datadir=$out/share/widelands"
+
+    ln -s "${widelands-unwrapped}"/share/widelands/* "$out/share/widelands/"
+    cp -r --no-preserve=mode "${widelands-unwrapped.src}"/data/* "$out/share/widelands/"
+    printf '%s\n' "${widelands-unwrapped.version}" > "$out/share/widelands/datadirversion"
+
+    ln -s "${widelands-unwrapped}/share/man" "$out/share/man"
+    ${lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      ln -s "${widelands-unwrapped}/share/icons" "$out/share/icons"
+      ln -s "${widelands-unwrapped}/share/metainfo" "$out/share/metainfo"
+      mkdir -p "$out/share/applications"
+      substitute "${widelands-unwrapped}/share/applications/org.widelands.Widelands.desktop" \
+        "$out/share/applications/org.widelands.Widelands.desktop" \
+        --replace-fail "Exec=widelands" "Exec=$out/bin/widelands"
+    ''}
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    unwrapped = widelands-unwrapped;
   };
 
-  postPatch = ''
-    substituteInPlace xdg/org.widelands.Widelands.desktop \
-      --replace-fail 'Exec=widelands' "Exec=$out/bin/widelands"
-  '';
-
-  cmakeFlags = [
-    "-Wno-dev" # dev warnings are only needed for upstream development
-    "-DWL_INSTALL_BASEDIR=${placeholder "out"}/share/widelands" # for COPYING, Changelog, etc.
-    "-DWL_INSTALL_DATADIR=${placeholder "out"}/share/widelands" # for game data
-    "-DWL_INSTALL_BINDIR=${placeholder "out"}/bin"
-    "-DOPTION_BUILD_WEBSITE_TOOLS=OFF"
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    gettext
-    graphviz
-    installShellFiles
-    pkg-config
-    python3
-  ];
-
-  strictDeps = true;
-  __structuredAttrs = true;
-  enableParallelBuilding = true;
-
-  buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_net
-    SDL2_ttf
-    curl
-    glew
-    icu
-    libpng
-    lua
-    zlib
-    minizip
-    asio
-    libsm # XXX: these should be propagated by SDL2?
-    libice
-    libx11
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libxext;
-
-  # xdg/CMakeLists.txt is only added on non-Apple Unix platforms.
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    installManPage ../xdg/widelands.6
-  '';
-
-  meta = {
+  meta = widelands-unwrapped.meta // {
     description = "RTS with multiple-goods economy";
-    homepage = "https://widelands.org/";
-    longDescription = ''
-      Widelands is a real time strategy game based on "The Settlers" and "The
-      Settlers II". It has a single player campaign mode, as well as a networked
-      multiplayer mode.
-    '';
-    changelog = "https://github.com/widelands/widelands/releases/tag/v${finalAttrs.version}";
-    mainProgram = "widelands";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-      jcumming
-    ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     hydraPlatforms = [ ];
   };
-})
+}
