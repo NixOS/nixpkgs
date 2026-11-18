@@ -11,29 +11,33 @@
 
 buildDunePackage (finalAttrs: {
   pname = "omd";
-  version = "2.0.0.alpha4";
-
-  minimalOCamlVersion = "4.13";
-
+  version = "1.3.2";
+  minimalOCamlVersion = "4.03";
   src = fetchFromGitHub {
     repo = "omd";
     owner = "ocaml-community";
-    sha256 = "sha256-5eZitDaNKSkLOsyPf5g5v9wdZZ3iVQGu8Ot4FHZZ3AI=";
+    sha256 =
+      {
+        "2.0.0.alpha4" = "sha256-5eZitDaNKSkLOsyPf5g5v9wdZZ3iVQGu8Ot4FHZZ3AI=";
+        "1.3.2" = "sha256-PeEWqHgdajSxoi5G4TfyV1S3RRfilYlcttTxQ0xhyE4=";
+      }
+      ."${finalAttrs.version}";
+
     rev = finalAttrs.version;
   };
 
-  preBuild = ''
+  preBuild = lib.optionalString (!lib.versionAtLeast finalAttrs.version "2.0.0.alpha4") ''
     substituteInPlace src/dune --replace "bytes)" ")"
   '';
 
-  buildInputs = [
+  buildInputs = lib.optionals (lib.versionAtLeast finalAttrs.version "2.0.0.alpha4") [
     dune-build-info
     uunf
     uucp
     uutf
   ];
-  doCheck = true;
-  checkInputs = [ ppx_expect ];
+  doCheck = lib.versionAtLeast finalAttrs.version "2.0.0.alpha4";
+  checkInputs = lib.optionals (lib.versionAtLeast finalAttrs.version "2.0.0.alpha4") [ ppx_expect ];
 
   meta = {
     description = "Extensible Markdown library and tool in OCaml";
