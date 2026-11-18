@@ -28,7 +28,6 @@ buildPythonPackage (finalAttr: {
     opencv-python
   ];
 
-  doCheck = false;
   pythonImportsCheck = [ "imagecorruptions" ];
 
   meta = {
