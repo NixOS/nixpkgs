@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "elastic-transport";
-  version = "9.2.1";
+  version = "9.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "elastic-transport-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bbqLpVRgWAaK27Uy0ch1f1Y2T0C+zFjqyH7TsuIdQUs=";
+    hash = "sha256-1f42rBLJH/buHop4BfnlbwpQBJ0D5FSDo4ltIrUN+xA=";
   };
 
   build-system = [ setuptools ];
