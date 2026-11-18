@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  aws-lc,
   openssl,
   tpm2-tss,
   nix-update-script,
@@ -10,25 +11,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nitrotpm-tools";
-  version = "1.1.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "NitroTPM-Tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SL0I1bMh9QmBo4aBv1ZL3M5ZaVeJ0K3kZCMStma6bG0=";
+    hash = "sha256-+1uR2c5Xv+Y7IUGGbseXnRvc5TaZdf9RYB8X0EB9ZGg=";
   };
 
-  cargoHash = "sha256-/2Lo5/CCv12PJocUYjZiRD4uBxrcKWA5RelLnU4TpcQ=";
+  cargoHash = "sha256-ZVZT/It9k3yjLKTEffN9+VjEf/JSiY+1MXjLmvkGXfc=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
-    openssl
+    aws-lc
     tpm2-tss
   ];
+
+  checkInputs = [ openssl ];
 
   passthru.updateScript = nix-update-script { };
 
