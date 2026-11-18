@@ -6,18 +6,21 @@
   # dependencies
   bokeh,
   linkify-it-py,
-  markdown,
   markdown-it-py,
+  markdown,
   mdit-py-plugins,
   narwhals,
   nh3,
   packaging,
   pandas,
+  panel-material-ui,
   param,
   pyviz-comms,
   requests,
   tqdm,
   typing-extensions,
+
+  withMaterialUi ? true,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -37,7 +40,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [ "bokeh" ];
 
-  pythonRemoveDeps = [ "panel-material-ui" ];
+  pythonRemoveDeps = lib.optionals (!withMaterialUi) [ "panel-material-ui" ];
 
   dependencies = [
     bokeh
@@ -54,7 +57,8 @@ buildPythonPackage (finalAttrs: {
     requests
     tqdm
     typing-extensions
-  ];
+  ]
+  ++ lib.optionals withMaterialUi [ panel-material-ui ];
 
   pythonImportsCheck = [ "panel" ];
 
