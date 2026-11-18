@@ -34,6 +34,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://ejs.co";
     license = lib.licenses.asl20;
     mainProgram = "ejs";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.samirbgno ];
   };
 })
