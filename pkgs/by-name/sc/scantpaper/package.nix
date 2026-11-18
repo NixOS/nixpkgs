@@ -10,6 +10,11 @@
   djvulibre,
   libtiff,
   qpdf,
+  imagemagick,
+  jbig2enc,
+  poppler-utils,
+  ghostscript_headless,
+  xdg-utils,
 
   # tests
   appstream,
@@ -17,8 +22,6 @@
   writableTmpDirAsHomeHook,
   xvfb,
   imagemagickBig,
-  poppler-utils,
-  ghostscript,
   tesseract,
 }:
 
@@ -29,6 +32,11 @@ let
     djvulibre
     libtiff
     qpdf
+    ghostscript_headless
+    imagemagick
+    jbig2enc
+    poppler-utils
+    xdg-utils
   ];
 
 in
@@ -98,8 +106,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ++ [
       xvfb
       imagemagickBig # "big" version needed for text rendering in tests
-      poppler-utils
-      ghostscript
       appstream # Provides `appstreamcli` used by `test_appstream_validate`.
     ]
     ++ runtimeExecDeps;
