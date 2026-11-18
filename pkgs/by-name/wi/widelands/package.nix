@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config, # needed to find minizip
   SDL2,
   SDL2_image,
@@ -32,20 +31,20 @@ let
   lua = lua5_2_compat;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "widelands";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "widelands";
     repo = "widelands";
-    rev = "v${version}";
-    sha256 = "sha256-nNciOfE9fqd1CfljrELy2/I7+o1BLcpdngE3XGPQaSk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nNciOfE9fqd1CfljrELy2/I7+o1BLcpdngE3XGPQaSk=";
   };
 
   postPatch = ''
     substituteInPlace xdg/org.widelands.Widelands.desktop \
-      --replace 'Exec=widelands' "Exec=$out/bin/widelands"
+      --replace-fail 'Exec=widelands' "Exec=$out/bin/widelands"
   '';
 
   cmakeFlags = [
@@ -63,8 +62,11 @@ stdenv.mkDerivation rec {
     graphviz
     installShellFiles
     pkg-config
+    python3
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
   enableParallelBuilding = true;
 
   buildInputs = [
@@ -78,7 +80,6 @@ stdenv.mkDerivation rec {
     icu
     libpng
     lua
-    python3
     zlib
     minizip
     asio
@@ -108,7 +109,7 @@ stdenv.mkDerivation rec {
       Settlers II". It has a single player campaign mode, as well as a networked
       multiplayer mode.
     '';
-    changelog = "https://github.com/widelands/widelands/releases/tag/v${version}";
+    changelog = "https://github.com/widelands/widelands/releases/tag/v${finalAttrs.version}";
     mainProgram = "widelands";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
@@ -118,4 +119,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     hydraPlatforms = [ ];
   };
-}
+})
