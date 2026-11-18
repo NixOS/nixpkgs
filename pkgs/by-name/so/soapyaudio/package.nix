@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapyaudio";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyAudio";
     tag = "soapy-audio-${finalAttrs.version}";
-    hash = "sha256-0o1HxqzYhZY2qbG/YG7VbWvXqDHBs0hkpw/xRDm5AdM=";
+    hash = "sha256-zpEniDwjHFA/pk2hv4iuFpo5ae8JhXD5qcGGL9RDR2s=";
   };
 
   strictDeps = true;

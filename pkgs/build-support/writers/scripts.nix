@@ -857,6 +857,8 @@ rec {
 
     Can be called with or without extra arguments.
 
+    The contents of the script are checked using the `nu-check` built-in.
+
     # Examples
     :::{.example}
     ## `pkgs.writers.writeNu` without arguments
@@ -886,12 +888,27 @@ rec {
   */
   writeNu =
     name: argsOrScript:
+    let
+      # Separate the shebang from doc comments attached to `main`.
+      interpreter = "${lib.getExe pkgs.nushell} --no-config-file\n";
+
+      # The only tool that can serve this purpose seems to be the Nushell
+      # built-in `nu-check`. Since that is a built-in, a Nushell script that
+      # invokes it is created here and used as the check. `writeNu` is not
+      # used in the creation of this wrapper, because that would be infinitely
+      # recursive.
+      check = makeScriptWriter {
+        inherit interpreter;
+      } "nu-check-wrapper" "def main [path] { nu-check --debug $path }";
+    in
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
       makeScriptWriter (
-        argsOrScript
+        {
+          inherit check;
+        }
+        // argsOrScript
         // {
-          # Separate the shebang from doc comments attached to `main`.
-          interpreter = "${lib.getExe pkgs.nushell} --no-config-file\n";
+          inherit interpreter;
         }
       ) name
     else

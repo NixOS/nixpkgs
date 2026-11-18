@@ -198,7 +198,7 @@ let
     pkgs.pkgsCross.s390.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
-    pkgs.pkgsCross.mingwW64.stdenv
+    pkgs.pkgsCross.mingw-msvcrt-x86_64.stdenv
     # Uses the expression that is used by the most cross-compiled GHCs
     pkgs.pkgsCross.riscv64.haskell.compiler.native-bignum.ghc948
 

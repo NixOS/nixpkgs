@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ml-dtypes";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     # the attempts to use the nixpkgs packaged eigen dependency have failed.
     # Hence, we rely on the bundled eigen library.
     fetchSubmodules = true;
-    hash = "sha256-NvsZrSiXfJMEVdpxBD3JmyAy5inEKSZVeLvI7YiGBy0=";
+    hash = "sha256-J2FoIhMO4dxcD/cnyv3mJ6oAGU75D5OtRNiiJZ9xXi4=";
   };
 
   build-system = [

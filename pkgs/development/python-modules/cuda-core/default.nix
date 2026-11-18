@@ -4,7 +4,6 @@
   buildPythonPackage,
   cudaPackages,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   pythonOlder,
 
@@ -36,50 +35,40 @@
 }:
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "cuda-core";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "cuda-core-v${finalAttrs.version}";
-    # GitHub expands the export-subst'd .git_archival.txt when generating the tarball. Its ref-names line lists every
-    # branch pointing at the tagged commit, so the hash changes when e.g. a release branch moves on, even though the tag
-    # did not. Keep only the tag, which setuptools-scm still resolves to the right version.
-    postFetch = ''
-      sed -i 's/^ref-names: .*$/ref-names: tag: cuda-core-v${finalAttrs.version}/' "$out/.git_archival.txt"
-      grep -qx 'ref-names: tag: cuda-core-v${finalAttrs.version}' "$out/.git_archival.txt"
-    '';
-    hash = "sha256-UH5fw08Y6a8uUtAuxxoahyVH6W58xdlWfrSsB4mMvPc=";
+    # The build requires the pinned CCCL submodule (cuda_core/third_party/cccl)
+    fetchSubmodules = true;
+    hash = "sha256-6flY8rPwBH+t9KuCkQsulfXDX1ZPY/kxe1uxN0IjbQ0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cuda_core";
 
-  # The build reads the CUDA major version from $CUDA_HOME/include/cuda.h and adds $CUDA_HOME/include to the include
-  # path; every other header comes from buildInputs.
-  env.CUDA_HOME = lib.getInclude cudaPackages.cuda_cudart;
+  env = {
+    # The build reads the CUDA major version from $CUDA_HOME/include/cuda.h and adds $CUDA_HOME/include to the include
+    # path; every other header comes from buildInputs.
+    CUDA_HOME = lib.getInclude cudaPackages.cuda_cudart;
+    # fetchgit (needed for fetchSubmodules) does not expand .git_archival.txt
+    SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
+    # clang-tidy only lints the handwritten C++ sources
+    CUDA_PYTHON_SKIP_CLANG_TIDY = "1";
+  };
 
-  patches = [
-    # Compile out the CCCL-based TMA descriptor path. It's used whenever <cuda/tma> is found at build time, which upstream's
-    # own builds never do, and doesn't work: it references cudart symbols the extension doesn't link, so with CCCL on the
-    # include path importing cuda.core fails with "undefined symbol: cudaGetErrorString".
-    # https://github.com/NVIDIA/cuda-python/pull/2777
-    (fetchpatch {
-      name = "cuda-core-disable-cccl-tma.patch";
-      url = "https://github.com/NVIDIA/cuda-python/commit/c2fc72bf083564511f33ae94448665693d189b14.patch";
-      relative = "cuda_core";
-      hash = "sha256-bfy+CFp8PCu383qobuEb9undcMFmnW+WlkYHhloip3k=";
-    })
-  ]
-  # Tests and examples compile code with NVRTC against $CUDA_HOME/include and its cccl/ subdirectory, which assumes one
-  # CUDA Toolkit root. Point them at the separate CCCL and runtime header prefixes instead. Only when testing, so that
-  # the package itself doesn't depend on CCCL.
-  ++ lib.optionals finalAttrs.doInstallCheck [
-    (replaceVars ./cuda-include-paths.patch {
-      cccl = "${lib.getInclude cudaPackages.cccl}/include";
-      cudartInclude = "${lib.getInclude cudaPackages.cuda_cudart}/include";
-    })
-  ];
+  patches =
+    # Tests compile code with NVRTC against $CUDA_HOME/include and its cccl/ subdirectory, which assumes one CUDA Toolkit
+    # root. Point them at the separate CCCL and runtime header prefixes instead. Only when testing, so that the package
+    # itself doesn't depend on CCCL.
+    lib.optionals finalAttrs.doInstallCheck [
+      (replaceVars ./cuda-include-paths.patch {
+        cccl = "${lib.getInclude cudaPackages.cccl}/include";
+        cudartInclude = "${lib.getInclude cudaPackages.cuda_cudart}/include";
+      })
+    ];
 
   postPatch =
     # Relax cython constraint: https://github.com/NVIDIA/cuda-python/pull/2771
@@ -88,6 +77,10 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
         --replace-fail \
           '"Cython>=3.2.5,<3.3",' \
           '"Cython>=3.2.5",'
+    ''
+    # clang-tidy is only used for linting, which we skip (see CUDA_PYTHON_SKIP_CLANG_TIDY)
+    + ''
+      sed -i '/"clang-tidy==/d' pyproject.toml
     ''
     # Cython 3.3 warns that some attribute accesses are not usefully protected by critical_section
     # (only relevant for free-threaded builds), which fails the build with python 3.13.
@@ -112,6 +105,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   ];
 
   buildInputs = [
+    cudaPackages.cuda_crt # crt/host_defines.h, included by cuda_runtime_api.h via the vendored CCCL
     cudaPackages.cuda_nvrtc # nvrtc.h
     cudaPackages.cuda_profiler_api # cudaProfiler.h
   ]
@@ -220,6 +214,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     maintainers = with lib.maintainers; [
       GaetanLepage
     ];
+    teams = [ lib.teams.cuda ];
     broken = !cudaSupport;
   };
 })

@@ -13,6 +13,7 @@
   npapi_sdk,
   bash,
   bc,
+  makeWrapper,
 }:
 let
   jdk = jdk8;
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     bc
+    makeWrapper
   ];
   buildInputs = [
     cargo
@@ -78,6 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/applications
     cp javaws.desktop itweb-settings.desktop policyeditor.desktop $out/share/applications
+    for p in javaws itweb-settings policyeditor; do
+      wrapProgram "$out/bin/$p" --set JAVA_HOME ${jdk.home}
+    done
   '';
 
   meta = {

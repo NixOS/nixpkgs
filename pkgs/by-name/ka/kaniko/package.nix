@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kaniko";
-  version = "1.25.20";
+  version = "1.25.22";
 
   src = fetchFromGitHub {
     owner = "chainguard-forks";
     repo = "kaniko";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z2k5jx7FU1Zv3uSg7pMIn992eP4SOzg6TCJ3uvzaCxQ=";
+    hash = "sha256-pwZMHTH5HL3bZacR7u3MEynwQQne+hM0L6qTFXyXnLM=";
   };
 
   vendorHash = null;

@@ -146,6 +146,7 @@
   withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
+  withStorage ? true,
   withSysinstall ? true,
   withSysusers ? true,
   withSysupdate ? true,
@@ -199,6 +200,7 @@ assert withImportd -> withOpenSSL;
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
+assert withStorage; # installed by default in 262, meson option in 263
 
 let
   wantCurl = withRemote || withImportd || withImds;
@@ -725,10 +727,12 @@ stdenv.mkDerivation (finalAttrs: {
       withNspawn
       withRepart
       withPortabled
+      withStorage
       withSysupdate
       withTimedated
       withTpm2Tss
       withUtmp
+      withVmspawn
       util-linux
       kmod
       kbd

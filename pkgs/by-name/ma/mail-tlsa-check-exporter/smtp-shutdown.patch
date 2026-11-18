@@ -1,0 +1,26 @@
+From 9a227d17e23017d9019a2a129f26c855d9b697bf Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Mon, 16 Nov 2026 20:23:25 +0100
+Subject: [PATCH] fix: terminate SMTP session gracefully in happy path
+
+Ensures SMTP sessions are properly terminated over TLS, preventing
+Postfix from logging unexpected connection losses and TLS shutdown
+errors.
+---
+ index.mjs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/index.mjs b/index.mjs
+index 115229c..0898e08 100644
+--- a/index.mjs
++++ b/index.mjs
+@@ -115,7 +115,8 @@ async function validateSMTP (ipFamily = 4, expectedHashes) {
+             console.info('-> TLS connected.')
+             const cert = clientTls.getPeerCertificate(true)
+             clearTimeout(clientTimer)
+-            client.end()
++            clientTls.write('QUIT\n')
++            clientTls.end()
+             performance.mark('smtp_end')
+ 
+             // -> Validate expiration
