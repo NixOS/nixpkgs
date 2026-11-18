@@ -397,7 +397,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
-
+  ]
+  ++ lib.optionals (variant != "fresh") [
     # Fix build with Poppler 26.02
     (fetchpatch2 {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.02.0.patch";
@@ -418,8 +419,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-3/fix_build_with_poppler_26.06.0.patch";
       hash = "sha256-j66IsrzaqQ55MRVzhlw25guuoDtxx1D4XeJsBhgWP2c=";
     })
-  ]
-  ++ lib.optionals (variant != "fresh") [
     # Fix build with Poppler 26.01
     (fetchpatch2 {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.01.0.patch";
@@ -877,7 +876,7 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    knownVulnerabilities = lib.optionals (lib.versionOlder version "26.8") [
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "26.2.7.3") [
       "LibreOffice 26.2 reached its end of life in June 2026."
       "CVE-2026-104692"
       "CVE-2026-104007"
