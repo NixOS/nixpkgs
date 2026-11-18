@@ -15,11 +15,11 @@ let
   addToPropagatedBuildInputs = pkg: old: {
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ lib.toList pkg;
   };
-  addToCheckInputs = pkg: old: {
-    checkInputs = (old.checkInputs or [ ]) ++ lib.toList pkg;
+  addToInstallCheckInputs = pkg: old: {
+    installCheckInputs = (old.installCheckInputs or [ ]) ++ lib.toList pkg;
   };
-  addToNativeCheckInputs = pkg: old: {
-    nativeCheckInputs = (old.nativeCheckInputs or [ ]) ++ lib.toList pkg;
+  addToNativeInstallCheckInputs = pkg: old: {
+    nativeInstallCheckInputs = (old.nativeInstallCheckInputs or [ ]) ++ lib.toList pkg;
   };
   addPkgConfig = old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
@@ -47,7 +47,7 @@ in
 
   address-info = {
     # Tests require internet access
-    doCheck = false;
+    doInstallCheck = false;
   };
   # Eggs binding to a native library.
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
@@ -94,7 +94,7 @@ in
     };
   crunch = {
     # Tests fail
-    doCheck = false;
+    doInstallCheck = false;
   };
   egg-tarballs = {
     # To make tests look for the compiled program in PATH instead of at the same directory as csi
@@ -108,17 +108,16 @@ in
   # The egg bundles the leptonica headers it needs, but not the library.
   leptonic = addToBuildInputs pkgs.leptonica;
   leveldb = addToBuildInputs pkgs.leveldb;
-  lowdown = addToNativeCheckInputs [
+  lowdown = addToNativeInstallCheckInputs [
     pkgs.perl
     pkgs.html-tidy
   ];
-  memcached = addToNativeCheckInputs pkgs.memcached;
+  memcached = addToNativeInstallCheckInputs pkgs.memcached;
   mpi =
     old:
     (addToBuildInputs pkgs.openmpi old)
-    // (addToNativeCheckInputs pkgs.openmpi old)
+    // (addToNativeInstallCheckInputs pkgs.openmpi old)
     // {
-
       preBuild = ''
         mkdir -p $NIX_BUILD_TOP/mpi-dir
         ln -sf ${lib.getDev pkgs.openmpi}/include $NIX_BUILD_TOP/mpi-dir/include
@@ -128,33 +127,33 @@ in
       env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
       # Some tests fail due to number parsing precision changes in CHICKEN 6.1.0
-      doCheck = false;
+      doInstallCheck = false;
     };
   openssl =
     old:
     (addToBuildInputsWithPkgConfig pkgs.openssl old)
-    // (addToNativeCheckInputs pkgs.openssl old)
+    // (addToNativeInstallCheckInputs pkgs.openssl old)
     // {
-      preCheck = ''
+      preInstallCheck = ''
         export TMPDIR=$NIX_BUILD_TOP/tmp
         mkdir -p $TMPDIR
       '';
       # Tests fail due to a bug in C6.
       # Error: (file-mkstemps) cannot create temporary file - Invalid argument: "/build/tmp/tempXXXXXX.conf"
-      doCheck = false;
+      doInstallCheck = false;
     };
   pdfa = {
     # Warning: error in group outside of tests
     #
     # Error: (write-pdfa-document) document does not conform to PDF/A-1b:
     #   no output intent: call set-output-intent! with an ICC profile (6.2.2)
-    doCheck = false;
+    doInstallCheck = false;
   };
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
   raylib = addToBuildInputsWithPkgConfig pkgs.raylib;
   salt = {
     # Tests reference deprecated chicken-home
-    doCheck = false;
+    doInstallCheck = false;
   };
   sqlite3 = addToBuildInputs pkgs.sqlite;
   uuid-lib = addToBuildInputs pkgs.libuuid;
@@ -197,10 +196,10 @@ in
     # nutils calls mempcpy, which is a GNU extension that Darwin's libc does not provide, and tkgui
     # depends on nutils.
     (brokenOnDarwin old)
-    // (addToCheckInputs chickenEggs.test old)
+    // (addToInstallCheckInputs chickenEggs.test old)
     // {
       # Tests currently broken
-      doCheck = false;
+      doInstallCheck = false;
     };
 
   # pdf-font.scm imports srfi-69, which is no longer a builtin unit in CHICKEN 6.
@@ -216,17 +215,17 @@ in
 
   srfi-19 = {
     # Some tests fail for unknown reasons
-    doCheck = false;
+    doInstallCheck = false;
   };
 
   srfi-69-weak = {
     # Some tests fail for unknown reasons
-    doCheck = false;
+    doInstallCheck = false;
   };
 
   srfi-160 = {
     # Some tests fail for unknown reasons
-    doCheck = false;
+    doInstallCheck = false;
   };
 
   srfi-180 = {
@@ -238,14 +237,14 @@ in
 
   srfi-253 = {
     # Tests cannot be run with chicken-install -test (breaks the same way in salmonella)
-    doCheck = false;
+    doInstallCheck = false;
   };
 
   tick =
     old:
-    (addToNativeCheckInputs pkgs.git old)
+    (addToNativeInstallCheckInputs pkgs.git old)
     // {
-      preCheck = ''
+      preInstallCheck = ''
         export GIT_CONFIG_GLOBAL="$NIX_BUILD_TOP/.gitconfig"
         git config --global user.email "nix@example.com"
         git config --global user.name "Nix Build"
@@ -256,7 +255,7 @@ in
       '';
     };
 
-  utf8 = addToCheckInputs chickenEggs.test;
+  utf8 = addToInstallCheckInputs chickenEggs.test;
 
   # Transitively broken via nutils
   tkgui = brokenOnDarwin;

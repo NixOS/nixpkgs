@@ -12,11 +12,11 @@ let
   addToBuildInputs = pkg: old: {
     buildInputs = (old.buildInputs or [ ]) ++ lib.toList pkg;
   };
-  addToCheckInputs = pkg: old: {
-    checkInputs = (old.checkInputs or [ ]) ++ lib.toList pkg;
+  addToInstallCheckInputs = pkg: old: {
+    installCheckInputs = (old.installCheckInputs or [ ]) ++ lib.toList pkg;
   };
-  addToNativeCheckInputs = pkg: old: {
-    nativeCheckInputs = (old.nativeCheckInputs or [ ]) ++ lib.toList pkg;
+  addToNativeInstallCheckInputs = pkg: old: {
+    nativeInstallCheckInputs = (old.nativeInstallCheckInputs or [ ]) ++ lib.toList pkg;
   };
   addToPropagatedBuildInputs = pkg: old: {
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ lib.toList pkg;
@@ -57,7 +57,7 @@ in
     };
   address-info = {
     # Tests require internet access
-    doCheck = false;
+    doInstallCheck = false;
   };
   awful-static-pages = {
     # To make tests look for the compiled program in PATH instead of at the same directory as csi
@@ -111,7 +111,7 @@ in
     }
     // {
       # Tests seem to be slightly incompatible with libxcrypt
-      doCheck = false;
+      doInstallCheck = false;
     };
   epoxy =
     old:
@@ -134,15 +134,15 @@ in
     (addToBuildInputs pkgs.libnova old)
     // {
       # Some tests fail due to slightly off results - probably caused by changes in libnova
-      doCheck = false;
+      doInstallCheck = false;
     };
   envsubst = {
     # Tests broken
-    doCheck = false;
+    doInstallCheck = false;
   };
   estraier-client = {
     # Tests require Hyper Estraier which isn't part of nixpkgs
-    doCheck = false;
+    doInstallCheck = false;
   };
   exif = addToBuildInputsWithPkgConfig pkgs.libexif;
   expat =
@@ -169,7 +169,7 @@ in
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   # requires fuse2
   fuse = broken;
-  ggplot = addToCheckInputs chickenEggs.test;
+  ggplot = addToInstallCheckInputs chickenEggs.test;
   isaac =
     old:
     (addToBuildInputsWithPkgConfig pkgs.libffi old)
@@ -199,7 +199,7 @@ in
       ] old
     )
     // (addToBuildInputs pkgs.libglut old);
-  gnuplot-pipe = addToNativeCheckInputs pkgs.gnuplot;
+  gnuplot-pipe = addToNativeInstallCheckInputs pkgs.gnuplot;
   hypergiant = addPkgConfig;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
@@ -215,7 +215,7 @@ in
     };
   };
   lmdb-ht = addToBuildInputs pkgs.lmdb;
-  lowdown = addToNativeCheckInputs [
+  lowdown = addToNativeInstallCheckInputs [
     pkgs.perl
     pkgs.html-tidy
   ];
@@ -228,7 +228,7 @@ in
   mpi =
     old:
     (addToBuildInputs pkgs.openmpi old)
-    // (addToNativeCheckInputs pkgs.openmpi old)
+    // (addToNativeInstallCheckInputs pkgs.openmpi old)
     // {
       preBuild = ''
         mkdir -p $NIX_BUILD_TOP/mpi-dir
@@ -257,10 +257,12 @@ in
     ] old)
     // {
       # Tests don't work in the build sandbox
-      doCheck = false;
+      doInstallCheck = false;
     };
   openssl =
-    old: (addToBuildInputsWithPkgConfig pkgs.openssl old) // (addToNativeCheckInputs pkgs.openssl old);
+    old:
+    (addToBuildInputsWithPkgConfig pkgs.openssl old)
+    // (addToNativeInstallCheckInputs pkgs.openssl old);
   orm-db-rqlite = removeBundledEggs "orm-db-rqlite";
   orm-db-sqlite = removeBundledEggs "orm-db-sqlite";
   orm = removeBundledEggs "orm";
@@ -289,7 +291,7 @@ in
   scheme2c-compatibility = addPkgConfig;
   s48-modules = {
     # Some tests fail
-    doCheck = false;
+    doInstallCheck = false;
   };
   sdl-base =
     old:
@@ -308,7 +310,7 @@ in
         (addToNativeBuildInputs pkgs.SDL2 old)
       // {
         # Tests don't work in the build sandbox
-        doCheck = false;
+        doInstallCheck = false;
       }
     );
   sdl2-image =
@@ -320,7 +322,7 @@ in
         (addToNativeBuildInputs pkgs.SDL2 old)
       // {
         # Tests broken
-        doCheck = false;
+        doInstallCheck = false;
       }
     );
   sdl2-ttf =
@@ -334,11 +336,11 @@ in
   soil = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
   spock = {
     # Tests broken
-    doCheck = false;
+    doInstallCheck = false;
   };
   sqlite3 = addToBuildInputs pkgs.sqlite;
   sqlite3pth = {
-    doCheck = false;
+    doInstallCheck = false;
   };
   stemmer = old: (addToBuildInputs pkgs.libstemmer old) // (addToCscOptions "-L -lstemmer" old);
   stfl =
@@ -370,9 +372,9 @@ in
     );
   tick =
     old:
-    (addToNativeCheckInputs pkgs.git old)
+    (addToNativeInstallCheckInputs pkgs.git old)
     // {
-      preCheck = ''
+      preInstallCheck = ''
         export GIT_CONFIG_GLOBAL="$NIX_BUILD_TOP/.gitconfig"
         git config --global user.email "nix@example.com"
         git config --global user.name "Nix Build"
@@ -411,7 +413,7 @@ in
     (addToBuildInputs pkgs.zstd old)
     // {
       # Test fails due to change in zstd behavior
-      doCheck = false;
+      doInstallCheck = false;
     };
 
   # less trivial fixes, should be upstreamed
@@ -449,7 +451,7 @@ in
     (addToBuildInputsWithPkgConfig [ pkgs.dbus ] old)
     // {
       # Tests require a running dbus daemon
-      doCheck = false;
+      doInstallCheck = false;
       # backticks in compiler options
       # aren't supported anymore as of chicken 5.4, it seems.
       preBuild = ''
@@ -472,7 +474,7 @@ in
         --replace-quiet 'only chicken.base' 'only chicken.base define-values'
     '';
   };
-  memcached = addToNativeCheckInputs pkgs.memcached;
+  memcached = addToNativeInstallCheckInputs pkgs.memcached;
   socket = old: {
     # chicken-do checks for changes to a file that doesn't exist
     preBuild = ''
@@ -481,11 +483,11 @@ in
   };
   srfi-19 = {
     # Some tests fail for unknown reasons
-    doCheck = false;
+    doInstallCheck = false;
   };
   srfi-253 = {
     # Tests cannot be run with chicken-install -test (breaks the same way in salmonella)
-    doCheck = false;
+    doInstallCheck = false;
   };
 
   # mark broken

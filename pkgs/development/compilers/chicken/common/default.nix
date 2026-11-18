@@ -124,7 +124,7 @@ makeScope {
             self.eggDerivation {
               inherit pname version;
               src = self.fetchegg (eggData // { inherit pname; });
-              checkInputs = resolveDeps testDependencies;
+              installCheckInputs = resolveDeps testDependencies;
               propagatedBuildInputs = resolveDeps dependencies;
               # When cross-compiling, this egg built for the build platform.
               buildPlatformEgg = if isCross then eggSplices.selfBuildHost.${pname} else null;
