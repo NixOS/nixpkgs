@@ -187,10 +187,7 @@ lib.extendMkDerivation {
             addChickenRepositoryPath "$out"
             addChickenRepositoryPath "$dev"
             export PATH="$out/bin:$PATH"
-            (
-              cd tests
-              csi -s run.scm ${eggName} "${version}"
-            )
+            (cd tests && csi -s run.scm ${eggName} ${lib.escapeShellArg version})
           fi
 
           runHook postInstallCheck
