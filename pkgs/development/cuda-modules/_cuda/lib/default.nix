@@ -15,13 +15,11 @@
     _cudaCapabilitiesIncludeArchitectureSpecific
     _cudaCapabilitiesIncludeFamilySpecific
     _cudaCapabilitiesIncludeJetson
-    _cudaCapabilitiesIncludeJetsonArch
     _cudaCapabilityIsDefault
     _cudaCapabilityIsSupported
     _mkCudaVariants
     allowUnfreeCudaPredicate
     getJetsonCudaCapabilities
-    getJetsonCudaCapabilitiesForArch
     ;
 
   # See ./meta.nix for documentation.
