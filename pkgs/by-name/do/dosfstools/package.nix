@@ -8,11 +8,15 @@
   libiconv,
   gettext,
   xxd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosfstools";
   version = "4.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dosfstools";
@@ -39,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dosfstools/dosfstools/commit/8da7bc93315cb0c32ad868f17808468b81fa76ec.patch";
       sha256 = "sha256-Quegj5uYZgACgjSZef6cjrWQ64SToGQxbxyqCdl8C7o=";
     })
-    ./gettext-0.25.patch
   ];
 
   nativeBuildInputs = [
@@ -60,12 +63,18 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ xxd ];
   doCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
     homepage = "https://github.com/dosfstools/dosfstools";
+    changelog = "https://github.com/dosfstools/dosfstools/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.quantenzitrone ];
+    maintainers = [
+      lib.maintainers.quantenzitrone
+      lib.maintainers.thunze
+    ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "dosfstools_project" finalAttrs.version;
   };
 })
