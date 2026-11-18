@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   ncurses,
   perl,
   help2man,
@@ -12,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "inetutils";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchurl {
     url = "mirror://gnu/inetutils/inetutils-${finalAttrs.version}.tar.gz";
-    hash = "sha256-oVa+HN48XA/+/CYhgNk2mmBIQIeQeqVUxieH0vQOwIY=";
+    hash = "sha256-V7PPT3dVWZKIHluioJpjsFqixWNCpg7UMFtfRZODkLU=";
   };
 
   outputs = [
@@ -29,37 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
-
-    (if stdenv.hostPlatform.isDarwin then ./tests-libls-2.sh.patch else ./tests-libls.sh.patch)
-
-    (fetchpatch {
-      name = "CVE-2026-24061_1.patch";
-      url = "https://codeberg.org/inetutils/inetutils/commit/fd702c02497b2f398e739e3119bed0b23dd7aa7b.patch";
-      hash = "sha256-d/FdQyLD0gYr+erFqKDr8Okf04DFXknFaN03ls2aonQ=";
-    })
-    (fetchpatch {
-      name = "CVE-2026-24061_2.patch";
-      url = "https://codeberg.org/inetutils/inetutils/commit/ccba9f748aa8d50a38d7748e2e60362edd6a32cc.patch";
-      hash = "sha256-ws+ed5vb7kVMHEbqK7yj6FUT355pTv2RZEYuXs5M7Io=";
-    })
-    (fetchpatch {
-      name = "CVE-2026-28372.patch";
-      url = "https://codeberg.org/inetutils/inetutils/commit/4db2f19f4caac03c7f4da6363c140bd70df31386.patch";
-      excludes = [
-        "NEWS.md"
-        "THANKS"
-      ];
-      hash = "sha256-ASgcaNC+yo3Hth4M32IVbD3jFt8mxcGtLfl+ULNt4Ag=";
-    })
-    (fetchpatch {
-      name = "CVE-2026-32746.patch";
-      url = "https://codeberg.org/inetutils/inetutils/commit/6864598a29b652a6b69a958f5cd1318aa2b258af.patch";
-      excludes = [ "NEWS.md" ];
-      hash = "sha256-gQH4BZG9rkyGtOQjBqItx+fEBda/Wgg9f46VYPV8HLw=";
-    })
   ];
 
   strictDeps = true;
+  # Without this the build fails with
+  # > cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
+  # > cc1: some warnings being treated as errors
+  env.NIX_CFLAGS_COMPILE = "-Wformat";
   nativeBuildInputs = [
     help2man
     perl # for `whois'
