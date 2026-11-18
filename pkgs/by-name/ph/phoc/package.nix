@@ -107,7 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
     tests.dependency-versions = callPackage ./test-dependency-versions.nix { inherit gvdb; };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://gitlab.gnome.org/api/v4/projects/World%2FPhosh%2Fphoc/repository/archive.tar.gz?sha=HEAD"
+      ];
+    };
   };
 
   meta = {
