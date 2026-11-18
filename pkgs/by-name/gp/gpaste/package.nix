@@ -2,18 +2,32 @@
   stdenv,
   lib,
   fetchurl,
-  gjs,
+  at-spi2-core,
+  gcr_4,
   glib,
   gobject-introspection,
-  gtk3,
+  graphene,
+  gsettings-desktop-schemas,
   gtk4,
-  gcr_4,
+  lcms2,
+  libGL,
   libadwaita,
+  libpwquality,
+  libsecret,
+  libsodium,
+  libx11,
+  libxfixes,
+  libxkbcommon,
+  libxi,
   meson,
+  mutter,
   ninja,
   pango,
+  pixman,
   pkg-config,
+  sqlite,
   vala,
+  wayland,
   desktop-file-utils,
   directoryListingUpdater,
   wrapGAppsHook3,
@@ -21,23 +35,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpaste";
-  version = "45.5";
+  version = "51.3";
 
   src = fetchurl {
     url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-seoPqmec9F4/zwmLjpAOUBBIVvLbFRMVPZ3jcloRrZE=";
+    hash = "sha256-rHtmsbojSPCfgwPhA+5VvSa9nf9y7YJWTEXd+eGJI+U=";
   };
-
-  patches = [
-    ./fix-paths.patch
-  ];
-
-  # TODO: switch to substituteAll with placeholder
-  # https://github.com/NixOS/nix/issues/1846
-  postPatch = ''
-    substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
-      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${finalAttrs.pname}-${finalAttrs.version}"}
-  '';
 
   nativeBuildInputs = [
     gobject-introspection
@@ -50,18 +53,41 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gjs
-    glib
-    gtk3
-    gtk4
     gcr_4
+    glib
+    gtk4
     libadwaita
     pango
+
+    # The meson setup hook builds with -Dauto_features=enabled, so the optional
+    # features (history encryption, the SQLite storage backend, remembering the
+    # passphrase in the keyring and the password strength rating) need their
+    # dependencies present.
+    libpwquality
+    libsecret
+    libsodium
+    sqlite
+
+    # The GNOME Shell extension also builds the opt-in in-shell daemon, which
+    # links libmutter; these satisfy libmutter's pkg-config cflags.
+    at-spi2-core # atk
+    graphene
+    gsettings-desktop-schemas
+    lcms2 # required by mutter-clutter
+    libGL # for gl, egl and glesv2
+    libx11
+    libxfixes
+    libxkbcommon
+    libxi
+    mutter
+    pixman
+    wayland # wayland-server
   ];
 
   mesonFlags = [
     (lib.mesonOption "control-center-keybindings-dir" "${placeholder "out"}/share/gnome-control-center/keybindings")
     (lib.mesonOption "dbus-services-dir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.mesonOption "dbus-interfaces-dir" "${placeholder "out"}/share/dbus-1/interfaces")
     (lib.mesonOption "systemd-user-unit-dir" "${placeholder "out"}/etc/systemd/user")
   ];
 
