@@ -52,6 +52,10 @@ in
       lib.mkDefault {
         device = "/dev/disk/by-label/ESP";
         fsType = "vfat";
+        options = [
+          "fmask=0077"
+          "dmask=0077"
+        ];
       }
     );
 

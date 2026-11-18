@@ -306,6 +306,7 @@ in
           with subtest("Basic EC2 functionality"):
               machine.succeed("test -d /sys/firmware/efi")
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
+              machine.succeed("test $(stat -c %a ${imageCfg.boot.loader.efi.efiSysMountPoint}) = 700")
               machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
 
           with subtest("Store paths and profiles"):
