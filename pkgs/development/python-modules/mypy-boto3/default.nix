@@ -1218,8 +1218,8 @@ in
       "sha256-KYvP/b/4W/Xb4C/3tETyr/RhEODX/+VynOii8zxWz6U=";
 
   mypy-boto3-securityhub =
-    buildMypyBoto3Package "securityhub" "1.44.3"
-      "sha256-OmTaZsfviziqKtloLLi7KEHglUPjKecBAynV6jvNWdI=";
+    buildMypyBoto3Package "securityhub" "1.44.5"
+      "sha256-IWctq/wvc1OjSYb8xjd1/Jz+4kBJO8wExOJs8lFT84U=";
 
   mypy-boto3-securitylake =
     buildMypyBoto3Package "securitylake" "1.44.0"
