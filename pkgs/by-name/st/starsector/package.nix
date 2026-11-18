@@ -108,6 +108,7 @@ stdenv.mkDerivation rec {
       bbigras
       rafaelrc
       sigmasquadron
+      twstagg
     ];
   };
 }
