@@ -58,6 +58,8 @@ setupMpiCheck() {
       export HWLOC_XMLFILE="@topology@"
       # Use the network model ob1 instead of ucx.
       export OMPI_MCA_pml=ob1
+      # Silence warning about missing HIP device. Warning causes build failures.
+      export OMPI_MCA_accelerator=^rocm
       ;;
     MPICH)
       # Fix to make mpich run in a sandbox
