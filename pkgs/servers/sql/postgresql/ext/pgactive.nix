@@ -45,6 +45,9 @@ postgresqlBuildExtension (finalAttrs: {
   };
 
   meta = {
+    broken =
+      lib.versionOlder finalAttrs.version "2.1.10"
+      && lib.versionAtLeast (lib.versions.major postgresql.version) "19";
     description = "Active-active Replication Extension for PostgreSQL";
     homepage = "https://github.com/aws/pgactive";
     changelog = "https://github.com/aws/pgactive/releases/tag/v${finalAttrs.version}";
