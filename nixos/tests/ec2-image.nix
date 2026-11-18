@@ -64,6 +64,9 @@ let
 
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
+  # Hashing the store takes a while, so one variant covers it.
+  verifyFlags = lib.optionalString (bootMode == "uefi") " --check-contents";
+
 in
 {
   _module.args.bootMode = lib.mkDefault null;
@@ -311,7 +314,7 @@ in
 
           with subtest("Store paths and profiles"):
               machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
-              machine.succeed("nix-store --verify")
+              machine.succeed("nix-store --verify${verifyFlags}")
               machine.succeed("test $(readlink -f /nix/var/nix/profiles/system) = ${imageCfg.system.build.toplevel}")
               machine.fail("test -e /nix/var/nix/profiles/system-2-link")
               ${lib.optionalString imageCfg.nix.channel.enable ''
