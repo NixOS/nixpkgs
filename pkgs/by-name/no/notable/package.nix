@@ -5,23 +5,15 @@
   lib,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
+
   pname = "notable";
   version = "1.8.4";
-  sha256 = "0rvz8zwsi62kiq89pv8n2wh9h5yb030kvdr1vf65xwqkhqcrzrby";
 
   src = fetchurl {
-    url = "https://github.com/notable/notable/releases/download/v${version}/Notable-${version}.AppImage";
-    inherit sha256;
+    url = "https://github.com/notable/notable/releases/download/v${finalAttrs.version}/Notable-${finalAttrs.version}.AppImage";
+    sha256 = "0rvz8zwsi62kiq89pv8n2wh9h5yb030kvdr1vf65xwqkhqcrzrby";
   };
-
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in
-appimageTools.wrapType2 {
-
-  inherit pname version src;
 
   profile = ''
     export LC_ALL=C.UTF-8
@@ -35,12 +27,12 @@ appimageTools.wrapType2 {
   ];
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/notable.desktop $out/share/applications/notable.desktop
+    install -m 444 -D ${finalAttrs.contents}/notable.desktop $out/share/applications/notable.desktop
     for size in 16 32 48 64 128 256 512; do
-      install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/''${size}x''${size}/apps/notable.png \
+      install -m 444 -D ${finalAttrs.contents}/usr/share/icons/hicolor/''${size}x''${size}/apps/notable.png \
         $out/share/icons/hicolor/''${size}x''${size}/apps/notable.png
     done
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/1024x1024/apps/notable.png \
+    install -m 444 -D ${finalAttrs.contents}/usr/share/icons/hicolor/1024x1024/apps/notable.png \
       $out/share/icons/notable.png
     substituteInPlace $out/share/applications/notable.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=notable'
@@ -55,4 +47,4 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };
-}
+})
