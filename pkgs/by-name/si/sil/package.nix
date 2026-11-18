@@ -42,18 +42,18 @@ stdenv.mkDerivation (finalAttrs: {
     libxmu
   ];
 
+  strictDeps = true;
+
   sourceRoot = "${finalAttrs.src.name}/Sil/src";
 
   makefile = "Makefile.std";
 
   postPatch = ''
     # Allow usage of ANGBAND_PATH
-    substituteInPlace config.h --replace "#define FIXED_PATHS" ""
+    substituteInPlace config.h --replace-fail "#define FIXED_PATHS" ""
   '';
 
-  preConfigure = ''
-    buildFlagsArray+=("LIBS=-lXaw -lXext -lSM -lICE -lXmu -lXt -lX11 -lncurses")
-  '';
+  buildFlags = [ "LIBS=-lXaw -lXext -lSM -lICE -lXmu -lXt -lX11 -lncurses" ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -84,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
       test -d .sil && touch $out
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Rogue-like game set in the First Age of Middle-earth";
