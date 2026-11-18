@@ -11,17 +11,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "gomuks-web";
-  version = "26.11";
+  version = "26.11.1";
+  tag = "v0.2611.1";
 
   src = fetchFromGitHub {
     owner = "gomuks";
     repo = "gomuks";
-    tag = "v0.${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.0";
-    hash = "sha256-2SibQfjc/EaPsOK5k5dZvseqDxuVc3i+kOZsIFj5qJo=";
+    inherit (finalAttrs) tag;
+    hash = "sha256-ZW8syNxvEx02ytoWJWVu4jfLzGjUaUE98CKW40+EvUc=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-+Kn+ZiK+R8XB41BNhLM2qVhJD5rar6IVCtjqkxMQ0Ek=";
+  vendorHash = "sha256-ymC5YmC8eNlorZ1AWfduMG/gcU21KiesNP0JNEKtAbA=";
 
   nativeBuildInputs = [
     nodejs
@@ -50,7 +51,6 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   tags = [
-    "goolm"
     "libheif"
     "sqlite_fts5"
   ];
