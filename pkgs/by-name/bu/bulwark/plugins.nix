@@ -242,10 +242,10 @@ in
   });
   spam-score = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-spam-score";
-    version = "1.0.0";
+    version = "1.1.2";
     src = fetchzip {
       url = "https://extensions.bulwarkmail.org/api/v1/bundle/spam-score/${finalAttrs.version}";
-      hash = "sha256-JmT/r4Xhn9NiiAnPfya6EqWvpW3wpJFXjNpzmznMDcE=";
+      hash = "sha256-1+uWAfP/zqyTsOd6xnEnhlT07mjSdsS6wUBSPyYScB8=";
       extension = "zip";
       stripRoot = false;
     };
