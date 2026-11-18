@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   hatchling,
@@ -42,6 +43,13 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "jupyterlite_core"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=^v(\\d+).(\\d+).(\\d+)$"
+      "--use-github-releases"
+    ];
+  };
 
   meta = {
     description = "Wasm powered Jupyter running in the browser";
