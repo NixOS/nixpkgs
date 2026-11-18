@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "The CEL Python runtime";
     homepage = "https://github.com/cel-expr/cel-python";
-    changelog = "https://github.com/cel-expr/cel-python/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/cel-expr/cel-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
