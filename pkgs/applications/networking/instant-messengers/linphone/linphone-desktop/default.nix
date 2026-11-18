@@ -9,7 +9,7 @@
   boost,
   cmake,
   doxygen,
-  fetchFromGitLab,
+  fetchFromGitHub,
   lib,
   liblinphone,
   lime,
@@ -42,15 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linphone-desktop";
-  version = "6.2.0";
+  version = "6.2.4";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.linphone.org";
-    owner = "public";
-    group = "BC";
+  src = fetchFromGitHub {
+    owner = "BelledonneCommunications";
     repo = "linphone-desktop";
     tag = finalAttrs.version;
-    hash = "sha256-JtNYeMu174afzuWSVIuLyI5M16iC5XGr2qTcTsixRg8=";
+    hash = "sha256-cWwnMmrLsN0R7hxwhuIosuSeIZL9vi68F/5ImwObuDM=";
   };
 
   patches = [
