@@ -39,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistral-common";
-  version = "1.12.0";
+  version = "1.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-common";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XrSlPG7t1BJ+kcoMlZMwVRnKfNS656GlnatebgapRMY=";
+    hash = "sha256-BUX9ZkitJnqaFipMozFPOYvxhuxj9eOmemYyrYUD+Hg=";
   };
 
   build-system = [
@@ -61,51 +61,40 @@ buildPythonPackage (finalAttrs: {
     pydantic-extra-types
     requests
     tiktoken
+    # Dropped from pyproject.toml but still imported by mistral_common.guidance
     typing-extensions
   ];
 
-  optional-dependencies =
-    let
-      self = finalAttrs.finalPackage.optional-dependencies;
-    in
-    {
-      opencv = [
-        opencv-python-headless
-      ];
-      sentencepiece = [
-        sentencepiece
-      ];
-      soundfile = [
-        soundfile
-      ];
-      soxr = [
-        soxr
-      ];
-      audio = self.soundfile ++ self.soxr;
-      image = self.opencv;
-      guidance = [
-        jinja2
-        llguidance
-      ];
-      hf-hub = [
-        huggingface-hub
-      ];
-      server = [
-        click
-        fastapi
-        pydantic-settings
-        uvloop
-      ]
-      ++ fastapi.optional-dependencies.standard;
-      all =
-        self.opencv
-        ++ self.sentencepiece
-        ++ self.audio
-        ++ self.image
-        ++ self.guidance
-        ++ self.hf-hub
-        ++ self.server;
-    };
+  optional-dependencies = lib.fix (self: {
+    opencv = [
+      opencv-python-headless
+    ];
+    sentencepiece = [
+      sentencepiece
+    ];
+    soundfile = [
+      soundfile
+    ];
+    soxr = [
+      soxr
+    ];
+    audio = self.soundfile ++ self.soxr;
+    image = self.opencv;
+    guidance = [
+      jinja2
+      llguidance
+    ];
+    hf-hub = [
+      huggingface-hub
+    ];
+    server = [
+      click
+      fastapi
+      pydantic-settings
+      uvloop
+    ]
+    ++ fastapi.optional-dependencies.standard;
+  });
 
   pythonImportsCheck = [ "mistral_common" ];
 
@@ -116,12 +105,9 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     uvicorn
   ]
-  ++ finalAttrs.finalPackage.optional-dependencies.all;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
-    # AssertionError, Extra items in the right set
-    "test_openai_chat_fields"
-
     # AssertionError: assert 0.028677442591911916 < 0.005
     "test_audio_base64"
   ];

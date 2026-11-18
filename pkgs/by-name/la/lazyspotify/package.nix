@@ -8,7 +8,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lazyspotify";
-  version = "0.5.2";
+  version = "0.6.1";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "dubeyKartikay";
     repo = "lazyspotify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P7Zon1O3YlD6Rga53DJA0Dap7qAcj8G6RaBi/3XWjAI=";
+    hash = "sha256-HLmaWIRYBJ5ErugKbg7ndW7Pf5Dozh6K1J2lSP8rTvE=";
   };
 
   vendorHash = "sha256-Axdt3/3ZOZY9Z5VUI6Wh77oIREOO26ODMyEgtscTmn8=";

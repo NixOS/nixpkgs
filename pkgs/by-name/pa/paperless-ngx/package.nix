@@ -59,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.4.2";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ODKumKcCaV2aljZhgdAQcWqw8qoG8uqaaP55gQ6Dfzw=";
+    hash = "sha256-Kde7tDWs2W1M3VD0/pHu/0vPraSODvpplLj8PVWAJug=";
   };
 
   postPatch = ''
@@ -117,7 +117,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       django-multiselectfield
       django-rich
       django-soft-delete
-      django-treenode
       djangorestframework
       drf-spectacular
       drf-spectacular-sidecar

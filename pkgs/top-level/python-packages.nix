@@ -8387,8 +8387,6 @@ self: super: with self; {
 
   igloohome-api = callPackage ../development/python-modules/igloohome-api { };
 
-  ignite = callPackage ../development/python-modules/ignite { };
-
   ignorant = callPackage ../development/python-modules/ignorant { };
 
   igraph = callPackage ../development/python-modules/igraph { inherit (pkgs) igraph; };
@@ -11534,6 +11532,8 @@ self: super: with self; {
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
   mtcnn = callPackage ../development/python-modules/mtcnn { };
+
+  mtranslate = callPackage ../development/python-modules/mtranslate { };
 
   mujoco = callPackage ../development/python-modules/mujoco { };
 
@@ -17691,6 +17691,8 @@ self: super: with self; {
 
   pytorch-bench = callPackage ../development/python-modules/pytorch-bench { };
 
+  pytorch-ignite = callPackage ../development/python-modules/pytorch-ignite { };
+
   pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
 
   pytorch-memlab = callPackage ../development/python-modules/pytorch-memlab { };
@@ -18684,6 +18686,8 @@ self: super: with self; {
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
+
+  roundtrip = callPackage ../development/python-modules/roundtrip { };
 
   routeros-api = callPackage ../development/python-modules/routeros-api { };
 

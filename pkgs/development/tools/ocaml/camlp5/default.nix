@@ -22,7 +22,7 @@ stdenv.mkDerivation (
   in
   {
 
-    version = if lib.versionAtLeast ocaml.version "4.12" && !legacy then "8.05.03" else "7.14";
+    version = if lib.versionAtLeast ocaml.version "4.12" && !legacy then "8.05.04" else "7.14";
 
     pname = "ocaml${ocaml.version}-camlp5";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (
           "rel${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
       hash =
         {
-          "8.05.03" = "sha256-NzlNX5AYP/BgDowQj65aZUlGrJACrV05GUUIblxRdu0=";
+          "8.05.04" = "sha256-Jen8Mlg8g90hzhFrI6dHOWeC7KVIaWUZy8y9Cmal1hE=";
           "8.03.2" = "sha256-nz+VfGR/6FdBvMzPPpVpviAXXBWNqM3Ora96Yzx964o=";
           "7.14" = "sha256-/ORtS0uc/GN+g3y6N5ftjL4OBSqV6iswLRbfpeNCprU=";
         }

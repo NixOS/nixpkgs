@@ -12,16 +12,16 @@
   torch,
 }:
 
-buildPythonPackage rec {
-  pname = "ignite";
-  version = "0.5.4";
+buildPythonPackage (finalAttrs: {
+  pname = "pytorch-ignite";
+  version = "0.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ignite";
-    tag = "v${version}";
-    hash = "sha256-taf1T5zSX436Bn2qLL8ba/fXyFtu51uOvYcWerpEQ1E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ifbff0V+5tBkt2r/D4kZs6jpIDxijyboFCfdjeuIhq4=";
   };
 
   build-system = [ hatchling ];
@@ -92,8 +92,8 @@ buildPythonPackage rec {
   meta = {
     description = "High-level training library for PyTorch";
     homepage = "https://pytorch-ignite.ai";
-    changelog = "https://github.com/pytorch/ignite/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytorch/ignite/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.bcdarwin ];
   };
-}
+})
