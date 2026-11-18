@@ -24,7 +24,9 @@ let
     mkOption
     mkPackageOption
     nameValuePair
+    optional
     optionalAttrs
+    pathIsRegularFile
     recursiveUpdate
     trivial
     ;
@@ -600,7 +602,12 @@ in
           };
           forceEnabledThemes = mkOption {
             type = listOf str;
-            default = [ ];
+            default = map (theme: theme.package.themeName) (filter (theme: theme.forceEnabled) cfg.themes);
+            defaultText = literalExpression ''
+              map (theme: theme.package.themeName) (
+                filter (theme: theme.forceEnabled) config.services.bulwark.themes
+              );
+            '';
             description = "Force-enabled Themes";
           };
         };
@@ -660,6 +667,52 @@ in
         ]
       '';
       description = "Additional plugins to be used.";
+    };
+
+    themes = mkOption {
+      type = listOf (submodule {
+        options = {
+          package = mkOption {
+            type = package;
+            description = "Theme package";
+          };
+          forceEnabled = mkOption {
+            type = bool;
+            default = false;
+            description = "Whether this theme is force-enabled (users cannot disable).";
+          };
+          config = mkOption {
+            type = submodule {
+              freeformType = format.type;
+            };
+            default = { };
+            description = "Theme configuration";
+          };
+        };
+      });
+      default = [ ];
+      example = literalExpression ''
+        with pkgs.bulwark-themes; [
+          {
+            package = bolt;
+            forceEnabled = true;
+          }
+        ] ++ [
+          {
+            package = mkBulwarkTheme (finalAttrs: {
+              pname = "bolt";
+              version = "1.0.0";
+              src = fetchzip {
+                url = "https://extensions.bulwarkmail.org/api/v1/bundle/bolt/$${finalAttrs.version}";
+                hash = "sha256-KeaUzCQfL6Bnv4qzzts3KM41NdvcepBLSL0PD3U0PCo=";
+                extension = "zip";
+                stripRoot = false;
+              };
+            });
+          }
+        ]
+      '';
+      description = "Additional themes to be used.";
     };
   };
 
