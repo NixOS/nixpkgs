@@ -781,415 +781,417 @@ in
     };
   };
 
-  config = mkIf (cfg.client.enable || cfg.server.enable || cfg.unix.enable || cfg.mail-sender.enable) {
-    warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
-    services.kanidm = {
-      unix.settings.version = "2";
-      server.settings.version = "2";
-      server.settings.migration_path = "${entryManagementDir}";
-    };
+  config =
+    mkIf (cfg.client.enable || cfg.server.enable || cfg.unix.enable || cfg.mail-sender.enable)
+      {
+        warnings = lib.optionals (cfg.package.eolMessage != "") [ cfg.package.eolMessage ];
+        services.kanidm = {
+          unix.settings.version = "2";
+          server.settings.version = "2";
+          server.settings.migration_path = "${entryManagementDir}";
+        };
 
-    assertions =
-      let
-        entityList =
-          type: attrs: flip mapAttrsToList (filterPresent attrs) (name: _: { inherit type name; });
-        entities =
-          entityList "group" cfg.provision.groups
-          ++ entityList "person" cfg.provision.persons
-          ++ entityList "oauth2" cfg.provision.systems.oauth2;
+        assertions =
+          let
+            entityList =
+              type: attrs: flip mapAttrsToList (filterPresent attrs) (name: _: { inherit type name; });
+            entities =
+              entityList "group" cfg.provision.groups
+              ++ entityList "person" cfg.provision.persons
+              ++ entityList "oauth2" cfg.provision.systems.oauth2;
 
-        # Accumulate entities by name. Track corresponding entity types for later duplicate check.
-        entitiesByName = foldl' (
-          acc: { type, name }: acc // { ${name} = (acc.${name} or [ ]) ++ [ type ]; }
-        ) { } entities;
+            # Accumulate entities by name. Track corresponding entity types for later duplicate check.
+            entitiesByName = foldl' (
+              acc: { type, name }: acc // { ${name} = (acc.${name} or [ ]) ++ [ type ]; }
+            ) { } entities;
 
-        invalidEntryManagementNames = filter (name: builtins.match "[0-9]{2}-.+" name == null) (
-          attrNames cfg.server.entryManagement.migrations
-        );
-      in
-      [
-        {
-          assertion = cfg.unix.enable -> !(cfg.unix.settings ? pam_allowed_login_groups);
-          message = ''
-            <option>services.kanidm.unix.settings.pam_allowed_login_groups</option> has been renamed
-            to <option>services.kanidm.unix.settings.kanidm.pam_allowed_login_groups</option>.
-            Please change your usage.
-          '';
-        }
-        {
-          assertion =
-            !cfg.server.enable
-            || ((cfg.server.settings.tls_chain or null) == null)
-            || (!isStorePath cfg.server.settings.tls_chain);
-          message = ''
-            <option>services.kanidm.server.settings.tls_chain</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
-        }
-        {
-          assertion =
-            !cfg.server.enable
-            || ((cfg.server.settings.tls_key or null) == null)
-            || (!isStorePath cfg.server.settings.tls_key);
-          message = ''
-            <option>services.kanidm.server.settings.tls_key</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
-        }
-        {
-          assertion = !cfg.client.enable || options.services.kanidm.client.settings.isDefined;
-          message = ''
-            <option>services.kanidm.client.settings</option> needs to be configured
-            if the client is enabled.
-          '';
-        }
-        {
-          assertion = !cfg.unix.enable || options.services.kanidm.client.settings.isDefined;
-          message = ''
-            <option>services.kanidm.client.settings</option> needs to be configured
-            for the PAM daemon to connect to the Kanidm server.
-          '';
-        }
-        {
-          assertion =
-            !cfg.server.enable
-            || (
-              cfg.server.settings.domain == null
-              -> cfg.server.settings.role == "WriteReplica" || cfg.server.settings.role == "WriteReplicaNoUI"
+            invalidEntryManagementNames = filter (name: builtins.match "[0-9]{2}-.+" name == null) (
+              attrNames cfg.server.entryManagement.migrations
             );
-          message = ''
-            <option>services.kanidm.server.settings.domain</option> can only be set if this instance
-            is not a ReadOnlyReplica. Otherwise the db would inherit it from
-            the instance it follows.
-          '';
-        }
-        {
-          assertion = cfg.provision.enable -> cfg.server.enable;
-          message = "<option>services.kanidm.provision</option> requires <option>services.kanidm.server.enable</option> to be true";
-        }
-        # If any secret is provisioned, the kanidm package must have some required patches applied to it
-        {
-          assertion =
+          in
+          [
+            {
+              assertion = cfg.unix.enable -> !(cfg.unix.settings ? pam_allowed_login_groups);
+              message = ''
+                <option>services.kanidm.unix.settings.pam_allowed_login_groups</option> has been renamed
+                to <option>services.kanidm.unix.settings.kanidm.pam_allowed_login_groups</option>.
+                Please change your usage.
+              '';
+            }
+            {
+              assertion =
+                !cfg.server.enable
+                || ((cfg.server.settings.tls_chain or null) == null)
+                || (!isStorePath cfg.server.settings.tls_chain);
+              message = ''
+                <option>services.kanidm.server.settings.tls_chain</option> points to
+                a file in the Nix store. You should use a quoted absolute path to
+                prevent this.
+              '';
+            }
+            {
+              assertion =
+                !cfg.server.enable
+                || ((cfg.server.settings.tls_key or null) == null)
+                || (!isStorePath cfg.server.settings.tls_key);
+              message = ''
+                <option>services.kanidm.server.settings.tls_key</option> points to
+                a file in the Nix store. You should use a quoted absolute path to
+                prevent this.
+              '';
+            }
+            {
+              assertion = !cfg.client.enable || options.services.kanidm.client.settings.isDefined;
+              message = ''
+                <option>services.kanidm.client.settings</option> needs to be configured
+                if the client is enabled.
+              '';
+            }
+            {
+              assertion = !cfg.unix.enable || options.services.kanidm.client.settings.isDefined;
+              message = ''
+                <option>services.kanidm.client.settings</option> needs to be configured
+                for the PAM daemon to connect to the Kanidm server.
+              '';
+            }
+            {
+              assertion =
+                !cfg.server.enable
+                || (
+                  cfg.server.settings.domain == null
+                  -> cfg.server.settings.role == "WriteReplica" || cfg.server.settings.role == "WriteReplicaNoUI"
+                );
+              message = ''
+                <option>services.kanidm.server.settings.domain</option> can only be set if this instance
+                is not a ReadOnlyReplica. Otherwise the db would inherit it from
+                the instance it follows.
+              '';
+            }
+            {
+              assertion = cfg.provision.enable -> cfg.server.enable;
+              message = "<option>services.kanidm.provision</option> requires <option>services.kanidm.server.enable</option> to be true";
+            }
+            # If any secret is provisioned, the kanidm package must have some required patches applied to it
+            {
+              assertion =
+                (
+                  cfg.provision.enable
+                  && (
+                    cfg.provision.adminPasswordFile != null
+                    || cfg.provision.idmAdminPasswordFile != null
+                    || any (x: x.basicSecretFile != null) (attrValues (filterPresent cfg.provision.systems.oauth2))
+                  )
+                )
+                -> cfg.package.enableSecretProvisioning;
+              message = ''
+                Specifying an admin account password or oauth2 basicSecretFile requires kanidm to be built with the secret provisioning patches.
+                You may want to set `services.kanidm.package = pkgs.kanidm.withSecretProvisioning;`.
+              '';
+            }
+            # Entry Management file name validation
+            {
+              assertion = invalidEntryManagementNames == [ ];
+              message = ''
+                The keys in <option>services.kanidm.server.entryManagement.migrations</option> must follow the pattern `XX-<name>` where `XX` is a two-digit number (e.g., "00-base", "99-accounts").
+                Invalid keys found: ${toString invalidEntryManagementNames}
+              '';
+            }
+            # Entity names must be globally unique:
             (
-              cfg.provision.enable
-              && (
-                cfg.provision.adminPasswordFile != null
-                || cfg.provision.idmAdminPasswordFile != null
-                || any (x: x.basicSecretFile != null) (attrValues (filterPresent cfg.provision.systems.oauth2))
+              let
+                # Filter all names that occurred in more than one entity type.
+                duplicateNames = filterAttrs (_: v: builtins.length v > 1) entitiesByName;
+              in
+              {
+                assertion = cfg.provision.enable -> duplicateNames == { };
+                message = ''
+                  services.kanidm.provision requires all entity names (group, person, oauth2, ...) to be unique!
+                  ${concatLines (mapAttrsToList (name: xs: "  - '${name}' used as:${toString xs}") duplicateNames)}'';
+              }
+            )
+          ]
+          ++ concatLists (
+            flip mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
+              oauth2: oauth2Cfg:
+              concatLists (
+                flip mapAttrsToList oauth2Cfg.claimMaps (
+                  claim: claimCfg: [
+                    # At least one group must map to a value in each claim map
+                    (mkIf (cfg.provision.extraJsonFile == null) {
+                      assertion =
+                        (cfg.provision.enable && cfg.server.enable)
+                        -> any (xs: xs != [ ]) (attrValues claimCfg.valuesByGroup);
+                      message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
+                    })
+                    # Public clients cannot define a basic secret
+                    {
+                      assertion =
+                        (cfg.provision.enable && cfg.server.enable && oauth2Cfg.public)
+                        -> oauth2Cfg.basicSecretFile == null;
+                      message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot specify a basic secret";
+                    }
+                    # Public clients cannot disable PKCE
+                    {
+                      assertion =
+                        (cfg.provision.enable && cfg.server.enable && oauth2Cfg.public)
+                        -> !oauth2Cfg.allowInsecureClientDisablePkce;
+                      message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot disable PKCE";
+                    }
+                    # Non-public clients cannot enable localhost redirects
+                    {
+                      assertion =
+                        (cfg.provision.enable && cfg.server.enable && !oauth2Cfg.public)
+                        -> !oauth2Cfg.enableLocalhostRedirects;
+                      message = "services.kanidm.provision.systems.oauth2.${oauth2} is a non-public client and thus cannot enable localhost redirects";
+                    }
+                  ]
+                )
               )
             )
-            -> cfg.package.enableSecretProvisioning;
-          message = ''
-            Specifying an admin account password or oauth2 basicSecretFile requires kanidm to be built with the secret provisioning patches.
-            You may want to set `services.kanidm.package = pkgs.kanidm.withSecretProvisioning;`.
-          '';
-        }
-        # Entry Management file name validation
-        {
-          assertion = invalidEntryManagementNames == [ ];
-          message = ''
-            The keys in <option>services.kanidm.server.entryManagement.migrations</option> must follow the pattern `XX-<name>` where `XX` is a two-digit number (e.g., "00-base", "99-accounts").
-            Invalid keys found: ${toString invalidEntryManagementNames}
-          '';
-        }
-        # Entity names must be globally unique:
-        (
-          let
-            # Filter all names that occurred in more than one entity type.
-            duplicateNames = filterAttrs (_: v: builtins.length v > 1) entitiesByName;
-          in
-          {
-            assertion = cfg.provision.enable -> duplicateNames == { };
-            message = ''
-              services.kanidm.provision requires all entity names (group, person, oauth2, ...) to be unique!
-              ${concatLines (mapAttrsToList (name: xs: "  - '${name}' used as:${toString xs}") duplicateNames)}'';
-          }
-        )
-      ]
-      ++ concatLists (
-        flip mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
-          oauth2: oauth2Cfg:
-          concatLists (
-            flip mapAttrsToList oauth2Cfg.claimMaps (
-              claim: claimCfg: [
-                # At least one group must map to a value in each claim map
-                (mkIf (cfg.provision.extraJsonFile == null) {
-                  assertion =
-                    (cfg.provision.enable && cfg.server.enable)
-                    -> any (xs: xs != [ ]) (attrValues claimCfg.valuesByGroup);
-                  message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
-                })
-                # Public clients cannot define a basic secret
-                {
-                  assertion =
-                    (cfg.provision.enable && cfg.server.enable && oauth2Cfg.public)
-                    -> oauth2Cfg.basicSecretFile == null;
-                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot specify a basic secret";
-                }
-                # Public clients cannot disable PKCE
-                {
-                  assertion =
-                    (cfg.provision.enable && cfg.server.enable && oauth2Cfg.public)
-                    -> !oauth2Cfg.allowInsecureClientDisablePkce;
-                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot disable PKCE";
-                }
-                # Non-public clients cannot enable localhost redirects
-                {
-                  assertion =
-                    (cfg.provision.enable && cfg.server.enable && !oauth2Cfg.public)
-                    -> !oauth2Cfg.enableLocalhostRedirects;
-                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a non-public client and thus cannot enable localhost redirects";
-                }
-              ]
+          );
+
+        environment.systemPackages = mkIf cfg.client.enable [ cfg.package ];
+
+        systemd.tmpfiles.settings."10-kanidm" = mkIf enableServerBackup {
+          ${cfg.server.settings.online_backup.path}.d = {
+            mode = "0700";
+            user = "kanidm";
+            group = "kanidm";
+          };
+        };
+
+        systemd.services.kanidm = mkIf cfg.server.enable {
+          description = "kanidm identity management daemon";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          serviceConfig = mkMerge [
+            # Merge paths and ignore existing prefixes needs to sidestep mkMerge
+            (
+              defaultServiceConfig
+              // {
+                BindReadOnlyPaths = mergePaths (
+                  defaultServiceConfig.BindReadOnlyPaths
+                  ++ secretPaths
+                  ++ (lib.optionals (cfg.provision.enable && !cfg.provision.acceptInvalidCerts) [
+                    "-/etc/ssl"
+                    "-/etc/static/ssl"
+                  ])
+                );
+              }
             )
-          )
-        )
-      );
+            {
+              StateDirectory = "kanidm";
+              StateDirectoryMode = "0700";
+              RuntimeDirectory = "kanidmd";
+              ExecStartPre = "${cfg.package}/bin/kanidmd domain rename -c ${serverConfigFile}";
+              ExecStart = "${cfg.package}/bin/kanidmd server -c ${serverConfigFile}";
+              ExecStartPost = mkIf cfg.provision.enable postStartScript;
+              User = "kanidm";
+              Group = "kanidm";
 
-    environment.systemPackages = mkIf cfg.client.enable [ cfg.package ];
+              BindPaths =
+                [ ]
+                # To store backups
+                ++ optional enableServerBackup cfg.server.settings.online_backup.path
+                ++ optional (
+                  cfg.unix.enable && cfg.unix.settings ? home_mount_prefix
+                ) cfg.unix.settings.home_mount_prefix;
 
-    systemd.tmpfiles.settings."10-kanidm" = mkIf enableServerBackup {
-      ${cfg.server.settings.online_backup.path}.d = {
-        mode = "0700";
-        user = "kanidm";
-        group = "kanidm";
-      };
-    };
+              AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+              CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+              # This would otherwise override the CAP_NET_BIND_SERVICE capability.
+              PrivateUsers = mkForce false;
+              # Port needs to be exposed to the host network
+              PrivateNetwork = mkForce false;
+              RestrictAddressFamilies = [
+                "AF_INET"
+                "AF_INET6"
+                "AF_UNIX"
+              ];
+            }
+          ];
+        };
 
-    systemd.services.kanidm = mkIf cfg.server.enable {
-      description = "kanidm identity management daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      serviceConfig = mkMerge [
-        # Merge paths and ignore existing prefixes needs to sidestep mkMerge
-        (
-          defaultServiceConfig
-          // {
-            BindReadOnlyPaths = mergePaths (
-              defaultServiceConfig.BindReadOnlyPaths
-              ++ secretPaths
-              ++ (lib.optionals (cfg.provision.enable && !cfg.provision.acceptInvalidCerts) [
+        systemd.services.kanidm-unixd = mkIf cfg.unix.enable {
+          description = "Kanidm PAM daemon";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          restartTriggers = [
+            unixConfigFile
+            clientConfigFile
+          ];
+          serviceConfig = mkMerge [
+            defaultServiceConfig
+            {
+              CacheDirectory = "kanidm-unixd";
+              CacheDirectoryMode = "0700";
+              RuntimeDirectory = "kanidm-unixd";
+              ExecStart = "${cfg.package}/bin/kanidm_unixd";
+              User = "kanidm-unixd";
+              Group = "kanidm-unixd";
+
+              BindReadOnlyPaths = [
+                "-/etc/kanidm"
+                "-/etc/static/kanidm"
                 "-/etc/ssl"
                 "-/etc/static/ssl"
-              ])
-            );
-          }
-        )
-        {
-          StateDirectory = "kanidm";
-          StateDirectoryMode = "0700";
-          RuntimeDirectory = "kanidmd";
-          ExecStartPre = "${cfg.package}/bin/kanidmd domain rename -c ${serverConfigFile}";
-          ExecStart = "${cfg.package}/bin/kanidmd server -c ${serverConfigFile}";
-          ExecStartPost = mkIf cfg.provision.enable postStartScript;
-          User = "kanidm";
-          Group = "kanidm";
-
-          BindPaths =
-            [ ]
-            # To store backups
-            ++ optional enableServerBackup cfg.server.settings.online_backup.path
-            ++ optional (
-              cfg.unix.enable && cfg.unix.settings ? home_mount_prefix
-            ) cfg.unix.settings.home_mount_prefix;
-
-          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-          # This would otherwise override the CAP_NET_BIND_SERVICE capability.
-          PrivateUsers = mkForce false;
-          # Port needs to be exposed to the host network
-          PrivateNetwork = mkForce false;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
+                "-/etc/passwd"
+                "-/etc/group"
+              ];
+              BindPaths = [
+                # To create the socket
+                "/run/kanidm-unixd:/var/run/kanidm-unixd"
+              ];
+              # Needs to connect to kanidmd
+              PrivateNetwork = mkForce false;
+              RestrictAddressFamilies = [
+                "AF_INET"
+                "AF_INET6"
+                "AF_UNIX"
+              ];
+            }
           ];
-        }
-      ];
-    };
+          environment.RUST_LOG = "info";
+        };
 
-    systemd.services.kanidm-unixd = mkIf cfg.unix.enable {
-      description = "Kanidm PAM daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      restartTriggers = [
-        unixConfigFile
-        clientConfigFile
-      ];
-      serviceConfig = mkMerge [
-        defaultServiceConfig
-        {
-          CacheDirectory = "kanidm-unixd";
-          CacheDirectoryMode = "0700";
-          RuntimeDirectory = "kanidm-unixd";
-          ExecStart = "${cfg.package}/bin/kanidm_unixd";
-          User = "kanidm-unixd";
-          Group = "kanidm-unixd";
-
-          BindReadOnlyPaths = [
-            "-/etc/kanidm"
-            "-/etc/static/kanidm"
-            "-/etc/ssl"
-            "-/etc/static/ssl"
-            "-/etc/passwd"
-            "-/etc/group"
+        systemd.services.kanidm-unixd-tasks = mkIf cfg.unix.enable {
+          description = "Kanidm PAM home management daemon";
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "kanidm-unixd.service"
           ];
-          BindPaths = [
-            # To create the socket
-            "/run/kanidm-unixd:/var/run/kanidm-unixd"
+          partOf = [ "kanidm-unixd.service" ];
+          restartTriggers = [
+            unixConfigFile
+            clientConfigFile
           ];
-          # Needs to connect to kanidmd
-          PrivateNetwork = mkForce false;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
+          serviceConfig = {
+            ExecStart = "${cfg.package}/bin/kanidm_unixd_tasks";
+
+            BindReadOnlyPaths = [
+              "/nix/store"
+              "-/etc/resolv.conf"
+              "-/etc/nsswitch.conf"
+              "-/etc/hosts"
+              "-/etc/passwd"
+              "-/etc/group"
+              "-/etc/shadow"
+              "-/etc/localtime"
+              "-/etc/kanidm"
+              "-/etc/static/kanidm"
+            ];
+            BindPaths = [
+              # To manage home directories
+              "/home"
+              # To connect to kanidm-unixd
+              "/run/kanidm-unixd:/var/run/kanidm-unixd"
+            ];
+            # CAP_DAC_OVERRIDE is needed to ignore ownership of unixd socket
+            CapabilityBoundingSet = [
+              "CAP_CHOWN"
+              "CAP_FOWNER"
+              "CAP_DAC_OVERRIDE"
+              "CAP_DAC_READ_SEARCH"
+            ];
+            IPAddressDeny = "any";
+            # Need access to users
+            PrivateUsers = false;
+            # Need access to home directories
+            ProtectHome = false;
+            RestrictAddressFamilies = [ "AF_UNIX" ];
+            Restart = "on-failure";
+          };
+          environment.RUST_LOG = "info";
+        };
+
+        systemd.services.kanidm-mail-sender = mkIf cfg.mail-sender.enable {
+          description = "Kanidm Mail Sender daemon";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          restartTriggers = [
+            clientConfigFile
+            mailConfigFile
           ];
-        }
-      ];
-      environment.RUST_LOG = "info";
-    };
 
-    systemd.services.kanidm-unixd-tasks = mkIf cfg.unix.enable {
-      description = "Kanidm PAM home management daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-        "kanidm-unixd.service"
-      ];
-      partOf = [ "kanidm-unixd.service" ];
-      restartTriggers = [
-        unixConfigFile
-        clientConfigFile
-      ];
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/kanidm_unixd_tasks";
+          serviceConfig = lib.mkMerge [
+            defaultServiceConfig
+            {
+              # kanidm-mail-sender doesn't seem to work with the notify service type
+              Type = mkForce "simple";
+              LoadCredential = "mail-sender-config:${mailConfigFile}";
+              ExecStart = "${cfg.package}/bin/kanidm-mail-sender --client-config ${clientConfigFile} --mail-sender-config %d/mail-sender-config";
+              DynamicUser = true;
+              # Needs to connect to kanidmd
+              PrivateNetwork = mkForce false;
+              RestrictAddressFamilies = [
+                "AF_INET"
+                "AF_INET6"
+                "AF_UNIX"
+              ];
+              Restart = "on-failure";
+            }
+          ];
+        };
 
-        BindReadOnlyPaths = [
-          "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
-          "-/etc/hosts"
-          "-/etc/passwd"
-          "-/etc/group"
-          "-/etc/shadow"
-          "-/etc/localtime"
-          "-/etc/kanidm"
-          "-/etc/static/kanidm"
+        # These paths are hardcoded
+        environment.etc = mkMerge [
+          (mkIf cfg.server.enable { "kanidm/server.toml".source = serverConfigFile; })
+          (mkIf options.services.kanidm.client.settings.isDefined {
+            "kanidm/config".source = clientConfigFile;
+          })
+          (mkIf cfg.unix.enable { "kanidm/unixd".source = unixConfigFile; })
         ];
-        BindPaths = [
-          # To manage home directories
-          "/home"
-          # To connect to kanidm-unixd
-          "/run/kanidm-unixd:/var/run/kanidm-unixd"
+
+        system.nssModules = mkIf cfg.unix.enable [ cfg.package ];
+
+        # Needs to be before "files" which is `mkBefore`
+        system.nssDatabases.group = mkOrder 490 (optional cfg.unix.enable "kanidm");
+        system.nssDatabases.passwd = mkOrder 490 (optional cfg.unix.enable "kanidm");
+
+        users.groups = mkMerge [
+          (mkIf cfg.server.enable { kanidm = { }; })
+          (mkIf cfg.unix.enable { kanidm-unixd = { }; })
+          (mkIf addKaniSshKeys { kanidm-authorized-keys = { }; })
         ];
-        # CAP_DAC_OVERRIDE is needed to ignore ownership of unixd socket
-        CapabilityBoundingSet = [
-          "CAP_CHOWN"
-          "CAP_FOWNER"
-          "CAP_DAC_OVERRIDE"
-          "CAP_DAC_READ_SEARCH"
+        users.users = mkMerge [
+          (mkIf cfg.server.enable {
+            kanidm = {
+              description = "Kanidm server";
+              isSystemUser = true;
+              group = "kanidm";
+              packages = [ cfg.package ];
+            };
+          })
+          (mkIf cfg.unix.enable {
+            kanidm-unixd = {
+              description = "Kanidm PAM daemon";
+              isSystemUser = true;
+              group = "kanidm-unixd";
+            };
+          })
+          (mkIf addKaniSshKeys {
+            kanidm-authorized-keys = {
+              description = "Kanidm authorized keys delegate";
+              isSystemUser = true;
+              group = "kanidm-authorized-keys";
+            };
+          })
         ];
-        IPAddressDeny = "any";
-        # Need access to users
-        PrivateUsers = false;
-        # Need access to home directories
-        ProtectHome = false;
-        RestrictAddressFamilies = [ "AF_UNIX" ];
-        Restart = "on-failure";
+
+        # AuthorizedKeysCommand is displeased with `/nix/store` permissions
+        services.openssh.settings = mkIf addKaniSshKeys {
+          AuthorizedKeysCommand = "${config.security.wrapperDir}/kanidm_ssh_authorizedkeys %u";
+          AuthorizedKeysCommandUser = "kanidm-authorized-keys";
+        };
+
+        security.wrappers.kanidm_ssh_authorizedkeys = mkIf addKaniSshKeys {
+          owner = "root";
+          group = "root";
+          permissions = "a+rx";
+          source = "${cfg.package}/bin/kanidm_ssh_authorizedkeys";
+        };
       };
-      environment.RUST_LOG = "info";
-    };
-
-    systemd.services.kanidm-mail-sender = mkIf cfg.mail-sender.enable {
-      description = "Kanidm Mail Sender daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      restartTriggers = [
-        clientConfigFile
-        mailConfigFile
-      ];
-
-      serviceConfig = lib.mkMerge [
-        defaultServiceConfig
-        {
-          # kanidm-mail-sender doesn't seem to work with the notify service type
-          Type = mkForce "simple";
-          LoadCredential = "mail-sender-config:${mailConfigFile}";
-          ExecStart = "${cfg.package}/bin/kanidm-mail-sender --client-config ${clientConfigFile} --mail-sender-config %d/mail-sender-config";
-          DynamicUser = true;
-          # Needs to connect to kanidmd
-          PrivateNetwork = mkForce false;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ];
-          Restart = "on-failure";
-        }
-      ];
-    };
-
-    # These paths are hardcoded
-    environment.etc = mkMerge [
-      (mkIf cfg.server.enable { "kanidm/server.toml".source = serverConfigFile; })
-      (mkIf options.services.kanidm.client.settings.isDefined {
-        "kanidm/config".source = clientConfigFile;
-      })
-      (mkIf cfg.unix.enable { "kanidm/unixd".source = unixConfigFile; })
-    ];
-
-    system.nssModules = mkIf cfg.unix.enable [ cfg.package ];
-
-    # Needs to be before "files" which is `mkBefore`
-    system.nssDatabases.group = mkOrder 490 (optional cfg.unix.enable "kanidm");
-    system.nssDatabases.passwd = mkOrder 490 (optional cfg.unix.enable "kanidm");
-
-    users.groups = mkMerge [
-      (mkIf cfg.server.enable { kanidm = { }; })
-      (mkIf cfg.unix.enable { kanidm-unixd = { }; })
-      (mkIf addKaniSshKeys { kanidm-authorized-keys = { }; })
-    ];
-    users.users = mkMerge [
-      (mkIf cfg.server.enable {
-        kanidm = {
-          description = "Kanidm server";
-          isSystemUser = true;
-          group = "kanidm";
-          packages = [ cfg.package ];
-        };
-      })
-      (mkIf cfg.unix.enable {
-        kanidm-unixd = {
-          description = "Kanidm PAM daemon";
-          isSystemUser = true;
-          group = "kanidm-unixd";
-        };
-      })
-      (mkIf addKaniSshKeys {
-        kanidm-authorized-keys = {
-          description = "Kanidm authorized keys delegate";
-          isSystemUser = true;
-          group = "kanidm-authorized-keys";
-        };
-      })
-    ];
-
-    # AuthorizedKeysCommand is displeased with `/nix/store` permissions
-    services.openssh.settings = mkIf addKaniSshKeys {
-      AuthorizedKeysCommand = "${config.security.wrapperDir}/kanidm_ssh_authorizedkeys %u";
-      AuthorizedKeysCommandUser = "kanidm-authorized-keys";
-    };
-
-    security.wrappers.kanidm_ssh_authorizedkeys = mkIf addKaniSshKeys {
-      owner = "root";
-      group = "root";
-      permissions = "a+rx";
-      source = "${cfg.package}/bin/kanidm_ssh_authorizedkeys";
-    };
-  };
 
   meta.maintainers = with lib.maintainers; [
     adamcstephens
