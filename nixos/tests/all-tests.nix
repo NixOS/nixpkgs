@@ -603,6 +603,10 @@ in
   easytier-modular = runTest ./easytier-modular.nix;
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
   ec2-image = runTest ./ec2-image.nix;
+  ec2-image-systemd-boot = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args.bootMode = "uefi";
+  };
   ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
   echoip = runTest ./echoip.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
@@ -653,6 +657,7 @@ in
   ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
   fider = runTest ./fider.nix;
   filebrowser = runTest ./filebrowser.nix;
+  filesender = import ./filesender { inherit runTest; };
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = runTest ./firefly-iii.nix;
   firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
@@ -1032,7 +1037,7 @@ in
   libinput = runTest ./libinput.nix;
   librechat = runTest ./librechat.nix;
   librenms = runTest ./librenms.nix;
-  libreqos = runTestOn [ "x86_64-linux" ] ./libreqos.nix;
+  libreqos = runTest ./libreqos.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;

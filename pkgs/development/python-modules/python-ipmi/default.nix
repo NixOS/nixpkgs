@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -10,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   pname = "python-ipmi";
   version = "0.6.1";
   pyproject = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "kontron";
@@ -28,6 +31,10 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyipmi" ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/interfaces/test_ipmbdev.py"
+  ];
 
   meta = {
     description = "Python IPMI Library";

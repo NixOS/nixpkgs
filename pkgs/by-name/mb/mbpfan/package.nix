@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mbpfan";
-  version = "2.4.0";
+  version = "2.5.0";
   src = fetchFromGitHub {
     owner = "linux-on-mac";
     repo = "mbpfan";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-F9IWUcILOuLn5K4zRSU5jn+1Wk1xy0CONSI6JTXU2pA=";
+    sha256 = "sha256-ep3JFFZD2l6gynUohXPtl7VJmfm6sAU5k5SWPPjUcSE=";
   };
   installPhase = ''
     mkdir -p $out/bin $out/etc

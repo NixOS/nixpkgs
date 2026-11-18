@@ -106,10 +106,13 @@ buildPythonPackage (finalAttrs: {
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
-    # flaky
+    # Timing sensitive TOTP codes
+    "allauth_async/tests/mfa/test_recovery_codes.py::test_generate_view_and_use_code"
     "allauth_async/tests/mfa/test_totp.py::test_activate_authenticate_deactivate"
     "allauth_async/tests/mfa/test_totp.py::test_signals_on_activate_and_deactivate"
     "allauth_async/tests/mfa/test_trust.py::test_trust_stage_parity"
+    # Racy because HMAC keys include the current second
+    "allauth_async/tests/test_email_verification.py::test_asend_confirmation_hmac"
   ];
 
   meta = {

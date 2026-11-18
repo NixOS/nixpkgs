@@ -348,7 +348,19 @@ let
           type = types.nullOr types.str;
           description = ''
             In case of a virtual device, the user who owns it.
-            `null` will not set owner, allowing access to any user.
+            `null` will not set owner. If neither an owner nor a group is
+            set, Linux >= 7.3.3 only allows processes with `CAP_NET_ADMIN`
+            to attach to the device, older kernels allow any user.
+          '';
+        };
+
+        virtualGroup = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          description = ''
+            In case of a virtual device, the group that owns it.
+            `null` will not set a group. See
+            [](#opt-networking.interfaces._name_.virtualOwner).
           '';
         };
 
