@@ -22,13 +22,7 @@
 }:
 
 let
-  pythonPackages = python3Packages.overrideScope (
-    final: prev: {
-      mcp = final.mcp_1;
-    }
-  );
-
-  dependencies = with pythonPackages; [
+  dependencies = with python3Packages; [
     anthropic
     ast-grep-cli
     click
@@ -52,6 +46,7 @@ let
     orjson
     pillow
     pydantic
+    python-socks
     pyyaml
     rapidocr
     rich
@@ -111,26 +106,31 @@ let
     }
   ];
 in
-pythonPackages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "headroom";
-  version = "0.42.0";
+  version = "0.44.0";
   pyproject = true;
+
+  # Many tests bind local sockets
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "headroomlabs-ai";
     repo = "headroom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QtC+51i9SOH/Ny87yaO1glI0VM1ryeBKysDV2lnwcUw=";
+    hash = "sha256-t3hBnXKRzzMOFPFTyFu6+uV0QVGKJH4ZjIXQVG/4I5U=";
   };
 
   patches = [
     ./restore-cli-main-before-offline-check.patch
     ./preserve-sandbox-proxy-environment.patch
+    # torch.mps.empty_cache() segfaults when no Metal device is available (e.g. Darwin sandbox)
+    ./skip-mps-empty-cache-without-device.patch
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-BaKBsURxgXkdkIr9OwObm6J10Rd7YjhTXA4D9QHNLpE=";
+    hash = "sha256-hhfYzkv7N/7L1Gv9I9RcnLRsrTjcRkBroo5ei5VbuHU=";
   };
 
   build-system = [
@@ -140,6 +140,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     rustPlatform.maturinBuildHook
   ];
 
+  pythonRelaxDeps = [
+    # Upstream only raised these floors for CVE fixes
+    "click"
+    "opentelemetry-api"
+  ];
   inherit dependencies;
 
   nativeBuildInputs = [ pkg-config ];
@@ -153,7 +158,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "--prefix"
     "PYTHONPATH"
     ":"
-    "${placeholder "out"}/${python3.sitePackages}:${pythonPackages.makePythonPath dependencies}"
+    "${placeholder "out"}/${python3.sitePackages}:${python3Packages.makePythonPath dependencies}"
 
     "--prefix"
     "PATH"
@@ -171,6 +176,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   # Counts refer to test functions (some are parametrized).
   disabledTests = [
     # These tests cover service/process management or platform behavior untestable in the sandbox.
+
+    # tests/test_cache_optimizer_example_cleanup.py: 1/1 disabled
+    # This subprocess replaces PYTHONPATH, losing Nix's dependencies.
+    "test_cache_optimizer_example_keeps_ccr_in_memory"
 
     # tests/test_cli/test_mcp_reconcile.py: 1/18 disabled
     "test_ordinary_install_does_not_adopt_serena"
@@ -194,6 +203,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "test_seized_gil_is_dumped_and_exited"
     "test_swapped_stderr_does_not_kill_the_heartbeat"
 
+    # tests/test_image_compression_isolation.py: 2/14 disabled
+    # Spawned workers do not start within the tight timeouts in the sandbox.
+    "test_abandoned_queued_job_never_runs_while_peer_completes"
+    "test_one_timeout_does_not_destroy_a_concurrent_request"
+
     # tests/test_install/test_native_installers.py: 2/10 disabled
     "test_bash_native_installer_supports_persistent_docker_lifecycle"
     "test_bash_native_wrapper_supports_opencode"
@@ -204,8 +218,22 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # tests/test_install/test_supervisors.py: 1/50 disabled
     "test_install_supervisor_darwin_windows_and_unsupported"
 
+    # tests/test_install_git_hooks_script.py: 5/7 disabled
+    # The fake pre-commit script uses a /usr/bin/env shebang, unavailable in the sandbox.
+    "test_installs_hooks_in_an_ordinary_checkout"
+    "test_installs_shared_hooks_from_a_linked_worktree"
+    "test_pre_push_runs_ci_precheck_for_a_branch_update"
+    "test_pre_push_runs_ci_precheck_when_a_push_mixes_a_delete_and_an_update"
+    "test_pre_push_skips_ci_precheck_for_a_delete_only_push"
+
     # tests/test_package_init_lazy.py: 1/13 disabled
     "test_dynamic_detector_import_skips_optional_ml_dependencies"
+
+    # tests/test_proxy/test_cc_switch_reconciler.py: 3/16 disabled
+    # Consecutive writes can share an mtime in the sandbox, so the change is not detected.
+    "test_ipv6_proxy_address_is_self_only_for_ipv6_bind"
+    "test_official_resets_a_captured_third_party_upstream"
+    "test_switching_provider_recaptures"
 
     # tests/test_proxy_scalability.py: 1/18 disabled
     "test_run_server_uses_selector_loop_on_windows"
@@ -268,6 +296,12 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # This test is also sensitive to Darwin sandbox scheduling latency.
     "test_single_cache_miss_deadline_starts_before_kompress_load"
 
+    # tests/test_corporate_tls.py: 4/32 disabled
+    # truststore's macOS certificate verification is unavailable in the sandbox (OSStatus -26276).
+    "test_default_policy_plus_corporate_root_succeeds"
+    "test_doctor_endpoint_probe_reports_vendor"
+    "test_websocket_context_trusts_corporate_root"
+
     # tests/test_proxy_uds.py: 11/24 disabled
     # Darwin has a 104-byte UNIX socket path limit, which Nix's pytest temporary-directory paths exceed.
     "test_prepare_accepts_a_sticky_world_writable_parent"
@@ -283,8 +317,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "test_run_server_removes_the_socket_on_exit"
   ];
 
+  disabledTestPaths = [
+    # Setting the setuid bit (0o4600) is not permitted in the sandbox.
+    "tests/test_private_state_files.py::TestEnsurePrivateFile::test_non_0600_mode_is_narrowed_once_then_skipped[2432]"
+  ];
+
   nativeCheckInputs =
-    with pythonPackages;
+    with python3Packages;
     [
       cryptography
       gitMinimal
@@ -303,31 +342,35 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ]
     ++ bundledTools;
 
-  versionCheckProgram = "${placeholder "out"}/bin/headroom";
-
-  preCheck = ''
+  preCheck =
     # Fail fast for optional Hugging Face models, which cannot be downloaded in the test sandbox.
-    export HF_HUB_OFFLINE=1
-    export TRANSFORMERS_OFFLINE=1
-
+    ''
+      export HF_HUB_OFFLINE=1
+      export TRANSFORMERS_OFFLINE=1
+    ''
     # Tiktoken lazily downloads its OpenAI encoding files. Use Nix-fetched copies in the test sandbox.
-    export TIKTOKEN_CACHE_DIR=${tiktokenEncodings}
-
+    + ''
+      export TIKTOKEN_CACHE_DIR=${tiktokenEncodings}
+    ''
     # The upstream health probe and SSRF guard cannot reach the mock upstream hosts in the test sandbox.
-    export HEADROOM_SKIP_UPSTREAM_CHECK=1
-    export HEADROOM_ALLOWED_BASE_URLS=httpbin.org,api.deepseek.com,opencode.ai,api.githubcopilot.com
-
+    + ''
+      export HEADROOM_SKIP_UPSTREAM_CHECK=1
+      export HEADROOM_ALLOWED_BASE_URLS=httpbin.org,api.deepseek.com,opencode.ai,api.githubcopilot.com
+    ''
     # Use LiteLLM's bundled price map; the test sandbox has no network access.
-    export LITELLM_LOCAL_MODEL_COST_MAP=True
-
+    + ''
+      export LITELLM_LOCAL_MODEL_COST_MAP=True
+    ''
     # The source package is needed by tests that load files directly by path.
     # Extract only maturin's platform-specific native module from the wheel.
-    unzip -j "$dist"/*.whl 'headroom/_core.*' -d headroom
-  '';
+    + ''
+      unzip -j "$dist"/*.whl 'headroom/_core.*' -d headroom
+    '';
 
   meta = {
     description = "Context optimization layer for LLM applications";
     homepage = "https://github.com/headroomlabs-ai/headroom";
+    changelog = "https://github.com/headroomlabs-ai/headroom/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "headroom";
     maintainers = with lib.maintainers; [ attila ];
