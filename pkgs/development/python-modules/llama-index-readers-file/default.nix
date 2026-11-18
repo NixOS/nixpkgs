@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-readers-file";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_file";
     inherit (finalAttrs) version;
-    hash = "sha256-Mo4/5dptphcuPXG2C1x2wWdnB7IgyPxH7fqnlfmu/RY=";
+    hash = "sha256-OcJuQDKy2zxYYZHM34bPRQI5ZBh6Z8cq9L8TSVZbCBs=";
   };
 
   pythonRelaxDeps = [

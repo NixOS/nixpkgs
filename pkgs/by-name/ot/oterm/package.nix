@@ -18,14 +18,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "oterm";
-  version = "0.26.0";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = finalAttrs.version;
-    hash = "sha256-WlUgwOpXX4/AkCzWY+NYMSNVIXZyfpOEaXKYuXpBSJg=";
+    hash = "sha256-ZabbEkTAMrF0EoRuRRdpfB/BX0r0H7jyauoQW4TNXdc=";
   };
 
   pythonRelaxDeps = true;

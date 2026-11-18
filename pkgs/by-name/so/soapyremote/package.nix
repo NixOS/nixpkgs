@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapyremote";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyRemote";
     tag = "soapy-remote-${finalAttrs.version}";
-    hash = "sha256-+/EhkPJa6IctQ1T82AO0l1Y47YOMRjAoL/QEXnVHOd4=";
+    hash = "sha256-ZXNxXqQeVkq2UMyk5Icy4K1LXxNvr7q+21203Q5K7sA=";
   };
 
   strictDeps = true;

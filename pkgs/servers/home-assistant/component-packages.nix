@@ -1190,9 +1190,14 @@
         chess-com-api
       ];
     "chirpstack" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         chirpstack-api
-      ]; # missing inputs: lorawan-connection lorawan-connection
+        lorawan-connection
+        lorawan-connection
+      ]
+      ++ lorawan-connection.optional-dependencies.chirpstack;
     "cielo_home" =
       ps: with ps; [
         cielo-connect-api
@@ -2373,7 +2378,8 @@
       ];
     "foreca" =
       ps: with ps; [
-      ]; # missing inputs: pyforeca
+        pyforeca
+      ];
     "forecast_solar" =
       ps: with ps; [
         forecast-solar
@@ -2789,7 +2795,8 @@
       ];
     "grandstream_home" =
       ps: with ps; [
-      ]; # missing inputs: grandstream-home-api
+        grandstream-home-api
+      ];
     "graphite" =
       ps: with ps; [
       ];
@@ -2878,7 +2885,8 @@
       ];
     "hase_iq" =
       ps: with ps; [
-      ]; # missing inputs: pyhaseiq
+        pyhaseiq
+      ];
     "hassio" =
       ps: with ps; [
         aiohasupervisor
@@ -2892,7 +2900,8 @@
       ];
     "haven_iaq" =
       ps: with ps; [
-      ]; # missing inputs: haveniaq
+        haveniaq
+      ];
     "hddtemp" =
       ps: with ps; [
       ];
@@ -2924,7 +2933,8 @@
       ];
     "helty_cloud" =
       ps: with ps; [
-      ]; # missing inputs: pyheltycloud
+        pyheltycloud
+      ];
     "heos" =
       ps: with ps; [
         pyheos
@@ -4354,7 +4364,8 @@
       ];
     "lorawan" =
       ps: with ps; [
-      ]; # missing inputs: lorawan-connection
+        lorawan-connection
+      ];
     "lovelace" =
       ps: with ps; [
       ];
@@ -6664,7 +6675,8 @@
       ];
     "sensecap_lorawan" =
       ps: with ps; [
-      ]; # missing inputs: lorawan-connection sensecap-lorawan
+        lorawan-connection
+      ]; # missing inputs: sensecap-lorawan
     "sensibo" =
       ps: with ps; [
         pysensibo
@@ -7727,8 +7739,13 @@
         ttn-client
       ];
     "thethingsnetwork_lorawan" =
-      ps: with ps; [
-      ]; # missing inputs: lorawan-connection lorawan-connection
+      ps:
+      with ps;
+      [
+        lorawan-connection
+        lorawan-connection
+      ]
+      ++ lorawan-connection.optional-dependencies.tts;
     "thingspeak" =
       ps: with ps; [
         thingspeak
@@ -8973,6 +8990,7 @@
     "chacon_dio"
     "chef_iq"
     "chess_com"
+    "chirpstack"
     "cielo_home"
     "citybikes"
     "clicksend_tts"
@@ -9143,6 +9161,7 @@
     "folder"
     "folder_watcher"
     "foobot"
+    "foreca"
     "forecast_solar"
     "forked_daapd"
     "foscam"
@@ -9210,6 +9229,7 @@
     "govee_light_local"
     "gpsd"
     "gpslogger"
+    "grandstream_home"
     "graphite"
     "gree"
     "gree_infrared"
@@ -9228,12 +9248,15 @@
     "hardware"
     "harman_luxury"
     "harmony"
+    "hase_iq"
     "hassio"
+    "haven_iaq"
     "hddtemp"
     "hdfury"
     "hdmi_cec"
     "hegel"
     "helty"
+    "helty_cloud"
     "heos"
     "here_travel_time"
     "hikvision"
@@ -9412,6 +9435,7 @@
     "london_underground"
     "lookin"
     "loqed"
+    "lorawan"
     "lovelace"
     "luci"
     "luftdaten"
@@ -9870,6 +9894,7 @@
     "thermobeacon"
     "thermopro"
     "thethingsnetwork"
+    "thethingsnetwork_lorawan"
     "thread"
     "threema"
     "threshold"
