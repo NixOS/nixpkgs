@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   # tests
+  nixosTests,
   xandikos,
 }:
 
@@ -58,6 +59,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     xandikos
   ];
+
+  passthru.tests = nixosTests.plann;
 
   meta = {
     description = "Command-line interface to calendars";
