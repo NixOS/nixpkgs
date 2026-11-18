@@ -1,16 +1,12 @@
 {
   lib,
-  stdenv,
   aiohttp,
   buildPythonPackage,
+  cython,
   fetchFromGitHub,
-  isPyPy,
-  ast-serialize,
-  mypy,
   pytestCheckHook,
   requests,
   setuptools,
-  withMypyc ? !isPyPy && !stdenv.hostPlatform.isStatic,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -31,14 +27,11 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
+    cython
     setuptools
-  ]
-  ++ lib.optionals withMypyc [
-    ast-serialize
-    mypy
   ];
 
-  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString withMypyc "1";
+  env.CHARSET_NORMALIZER_USE_CYTHON = "1";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
