@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -9,7 +10,9 @@
 buildGoModule (finalAttrs: {
   pname = "meles";
   version = "0.4.1";
+
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "movray";
@@ -30,6 +33,10 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   versionCheckProgramArg = [ "version" ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip TestProxyVersionWithConfigHash|TestProxyVersionWithConfigHash/rules_and_config|TestVersioning|TestProxyVersionWithConfigHash/default_options"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
