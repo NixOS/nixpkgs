@@ -5,6 +5,7 @@
   fetchurl,
   gettext,
   libgpg-error,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir --ignore-fail-on-non-empty $out/bin
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   __structuredAttrs = true;
 
   meta = {
@@ -47,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = [ ];
     license = lib.licenses.lgpl3;
+    pkgConfigModules = [ "ksba" ];
   };
 })
