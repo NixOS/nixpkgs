@@ -646,11 +646,16 @@ in
           }
         ] ++ [
           {
-            package = mkBulwarkPlugin {
-              name = "gravatar";
+            package = mkBulwarkPlugin (finalAttrs: {
+              pname = "gravatar";
               version = "1.3.1";
-              hash = "sha256-Rz+xgBw4mfQcdGvQnPLrrW5i4nDQYwMt5Y37gZ2WxyE=";
-            };
+              src = fetchzip {
+                url = "https://extensions.bulwarkmail.org/api/v1/bundle/$${finalAttrs.pname}/$${finalAttrs.version}";
+                hash = "sha256-Rz+xgBw4mfQcdGvQnPLrrW5i4nDQYwMt5Y37gZ2WxyE=";
+                extension = "zip";
+                stripRoot = false;
+              };
+            });
           }
         ]
       '';
