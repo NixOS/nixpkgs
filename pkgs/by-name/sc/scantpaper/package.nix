@@ -23,6 +23,7 @@
   xvfb,
   imagemagickBig,
   tesseract,
+  adwaita-icon-theme,
 }:
 
 let
@@ -42,14 +43,14 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "scantpaper";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "carygravel";
     repo = "scantpaper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sn8VvMSMyWaEWhEHQrIUlW9BXGG9dnIKwgpsUkPd74s=";
+    hash = "sha256-kr5Bwc06+B7PPFd9JLitFVB/vpC5ucjdtYz4gwCcUPY=";
   };
 
   dontWrapGApps = true;
@@ -116,6 +117,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # This is a simplified version of what wrapGAppsHook4 does. There's no good way to compose
     # that with pytestCheckHook, though.
     export XDG_DATA_DIRS=$GSETTINGS_SCHEMAS_PATH:$XDG_DATA_DIRS
+
+    # test_document_properties_icon_resolves and test_audited_icon_names_resolve without Adwaita's symbolic icons
+    export XDG_DATA_DIRS=${adwaita-icon-theme}/share:$XDG_DATA_DIRS
   '';
 
   makeWrapperArgs = [
