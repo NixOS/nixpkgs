@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   nixosTests,
   pkg-config,
   systemd,
@@ -57,6 +58,13 @@ stdenv.mkDerivation rec {
     url = "https://download.libreswan.org/libreswan-${version}.tar.gz";
     hash = "sha256-v1q7QgIbXBvnqgUyMWOTyY2xeUGg9dr78DDGNxLdCvg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://libreswan.org/security/CVE-2026-110339/CVE-2026-110339.patch";
+      hash = "sha256-6j9KOMKg6wQ2UMDP7cq5t/crnAbPMTQmGkMUXFolZKk=";
+    })
+  ];
 
   strictDeps = true;
 
