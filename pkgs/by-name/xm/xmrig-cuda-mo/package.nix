@@ -27,6 +27,11 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/xmrig/xmrig-cuda/commit/d0065c315779b28f12944a74694f81e13fb01ece.patch";
       hash = "sha256-8lU3s2b1eh7fvcMze/FIiaURFrkypVGJisrE7w0aDM4=";
     })
+    # CUDA 13 support, on the dev branch after v6.22.1
+    (fetchpatch {
+      url = "https://github.com/xmrig/xmrig-cuda/commit/ac1556cb6b0bd3c78f8bd92d87e9b0be9171804f.patch";
+      hash = "sha256-oZsZyMCEM5GqefPRJgiZru6qQgEv2sRA7X/NMB3n7eY=";
+    })
   ];
   postPatch = ''
     substituteInPlace cmake/flags.cmake \
@@ -40,6 +45,7 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DLIBCUDA_LIBRARY_DIR=${lib.getLib cudaPackages.cuda_cudart}/lib/stubs/"
+    (lib.cmakeFeature "CUDA_ARCH" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
   nativeBuildInputs = [
