@@ -21,25 +21,22 @@
   xcbuild,
   zip,
 
-  electron_39,
+  electron_43,
   git,
 }:
 
 let
-  # upstream bumped the electron version in the used unstable revision to electron_41
-  # however, plugin loading was not actually fixed
-  # See: https://github.com/logseq/og/issues/32
-  electron = electron_39;
+  electron = electron_43;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq-og";
-  version = "1.0.0-unstable-2026-05-28";
+  version = "1.0.0-unstable-2026-11-18";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "og";
-    rev = "6e7afa8eb040686ff057156ee877193b581dd369";
-    hash = "sha256-LJuZDyfGQW28ARn9RTqQ1bRI1htfoqt8zhb6UuJLek0=";
+    rev = "321a8c607715a331becaf76b9cdb62331c7bbf82";
+    hash = "sha256-Ubrqto1Y9AQe+9ypty0RRHY3+bKcZA+bswz/OgLqIEE=";
   };
 
   patches = [
@@ -60,9 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./electron-forge-package-instead-of-make.patch
     ./electron-forge-disable-signing.patch
-
-    # zip extraction fails on newer nodejs versions without this fix
-    ./bump-yauzl.patch
   ];
 
   mavenRepo = stdenv.mkDerivation {
@@ -108,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-og-${finalAttrs.version}-yarn-deps-root";
     inherit (finalAttrs) src patches;
-    hash = "sha256-dYzozo2wo4lZRi3R7S/f5yqVlLlF/TmrwkD4/xsGQAE=";
+    hash = "sha256-KH5/KQ9LBlp6VHahURxun9jcIMGFRl4YcI6mK0RX71c=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
@@ -117,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "logseq-og-${finalAttrs.version}-yarn-deps-static-resources";
     inherit (finalAttrs) src patches;
     postPatch = "cd ./static";
-    hash = "sha256-aqQwKwRxR8OPI/EnKVy9HgpuQx5MQGvXwoTCyWwrB7U=";
+    hash = "sha256-mbzUXa3kUSdCZzIZXaYr0onz17BEW3eW9/iuR57qp5o=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
