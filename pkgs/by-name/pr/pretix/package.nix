@@ -386,5 +386,8 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pretix-manage";
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "CVE-2026-127174: https://github.com/advisories/GHSA-cvm5-63v7-9qvf"
+    ];
   };
 }
