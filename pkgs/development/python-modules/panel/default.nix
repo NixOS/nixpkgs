@@ -9,6 +9,8 @@
   markdown-it-py,
   mdit-py-plugins,
   narwhals,
+  nh3,
+  packaging,
   pandas,
   param,
   pyviz-comms,
@@ -21,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "1.9.4";
+  version = "1.10.0";
 
   format = "wheel";
 
@@ -31,12 +33,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    hash = "sha256-yJxMHnKCl9rwYo6lBw+w2orXd4HioxQtMCR5U3wd5qQ=";
+    hash = "sha256-Fcnyu1hWep42oiOWyzh3bfd+sMxSzZqZzrt4QksDY8A=";
     dist = "py3";
     python = "py3";
   };
-
-  pythonRelaxDeps = [ "bokeh" ];
 
   propagatedBuildInputs = [
     bleach
@@ -46,6 +46,8 @@ buildPythonPackage rec {
     markdown-it-py
     mdit-py-plugins
     narwhals
+    nh3
+    packaging
     pandas
     param
     pyct
@@ -55,6 +57,9 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
   ];
+
+  # panel-material-ui depends on panel
+  pythonRemoveDeps = [ "panel-material-ui" ];
 
   pythonImportsCheck = [ "panel" ];
 
