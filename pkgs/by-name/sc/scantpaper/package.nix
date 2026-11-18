@@ -73,6 +73,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     img2pdf
     ocrmypdf
     pikepdf
+    pillow
     pycairo
     pygobject3
     python-iso639
