@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir --ignore-fail-on-non-empty $out/bin
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
