@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
+  fetchFromGitHub,
   stdenv,
 
   # sets various thread limit env vars for packages
@@ -16,7 +15,9 @@
   # build-system
   setuptools,
 
-  # propagates (optional, but unspecified)
+  # dependencies
+  cloudpickle,
+
   # https://github.com/joblib/joblib#dependencies
   lz4,
   psutil,
@@ -26,19 +27,22 @@
   threadpoolctl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "joblib";
-  version = "1.5.3";
+  version = "1.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hWGjJp5oARBoY/0NbYS7c3vp52MeM6rtP7nOWVNojaM=";
+  src = fetchFromGitHub {
+    owner = "joblib";
+    repo = "joblib";
+    tag = finalAttrs.version;
+    hash = "sha256-z8zXp6fDz7BMraQiN/6OJUayc5ONNzieutFrjvauYQA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    cloudpickle
     lz4
     psutil
   ];
@@ -69,10 +73,12 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/joblib/joblib/releases/tag/${version}";
+    changelog = "https://github.com/joblib/joblib/releases/tag/${finalAttrs.src.tag}";
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
     homepage = "https://joblib.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [
+      lib.maintainers.Filippo-Galli
+    ];
   };
-}
+})
