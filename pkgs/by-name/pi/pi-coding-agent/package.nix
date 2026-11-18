@@ -56,7 +56,7 @@ buildNpmPackage (finalAttrs: {
   # resulting in a cold recompile each time.
   postPatch = ''
     substituteInPlace packages/coding-agent/src/core/extensions/loader.ts \
-      --replace-fail 'moduleCache: false,' 'moduleCache: false, fsCache: path.join(process.env.XDG_CACHE_HOME || path.join(process.env.HOME || "", ".cache"), "pi", "jiti"),'
+      --replace-fail 'moduleCache: false,' 'moduleCache: false, fsCache: process.env.JITI_FS_CACHE !== "false" && path.join(process.env.XDG_CACHE_HOME || path.join(require("node:os").homedir(), ".cache"), "pi", "jiti"),'
   '';
 
   # Build workspace dependencies in order, then the coding-agent, using the
