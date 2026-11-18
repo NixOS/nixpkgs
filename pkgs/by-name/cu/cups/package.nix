@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   # AR has to be an absolute path
   preConfigure = ''
     export AR="${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
-    configureFlagsArray+=(
+    configureFlags+=(
       # Put just lib/* and locale into $lib; this didn't work directly.
       # lib/cups is moved back to $out in postInstall.
       # Beware: some parts of cups probably don't fully respect these.
