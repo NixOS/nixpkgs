@@ -8,13 +8,13 @@
 
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "fsrs4anki-helper";
-  version = "26.06.12-unstable-2026-06-08";
+  version = "26.11.10-unstable-2026-11-10";
 
   src = fetchFromGitHub {
     owner = "open-spaced-repetition";
     repo = "fsrs4anki-helper";
-    rev = "29208f220f21ff994c199712a6aaac47636773bf";
-    hash = "sha256-qoOV6cxA+oidHaKtBPVJpoc+/hitoihMRp15+IYcRnw=";
+    rev = "b59775666804e90e11296037886a6c7872a4a93b";
+    hash = "sha256-Tyr7pHEU65nIW19NlykXXbhUO4luoT6RTOHdLdAE1aQ=";
   };
 
   postFixup = ''
