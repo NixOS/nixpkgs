@@ -2,18 +2,23 @@
   lib,
   fetchFromGitHub,
   mkTclDerivation,
+  autoreconfHook,
 }:
 
 mkTclDerivation (finalAttrs: {
   pname = "tclx";
-  version = "8.6.3";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bzLF6qOF9o24joWnGR7B4S+Doj7zv9iTh/mo50iFbUs=";
+    hash = "sha256-GK/8/tjwGdXVB1HNO2GqPwxnQKYSW0pbZvAYLp5QTqw=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   # required in order for tclx to properly detect tclx.tcl at runtime
   postInstall =
@@ -23,6 +28,8 @@ mkTclDerivation (finalAttrs: {
     ''
       ln -s $prefix/lib/tclx${majorMinorVersion} $prefix/lib/tclx${majorMinorVersion}/tclx${majorMinorVersion}
     '';
+
+  tclRequiresCheck = [ "Tclx" ];
 
   meta = {
     homepage = "https://github.com/flightaware/tclx";

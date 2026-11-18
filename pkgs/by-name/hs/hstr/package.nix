@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hstr";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "dvorka";
     repo = "hstr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c+YUpry96OGJ7nmBw180W2r0z4EBd2Cl3SyOQrNxP+o=";
+    hash = "sha256-kjTFZTvHX6snftKSqx6Kt5TLk+r2nK7ZaxrZoKVdjm0=";
   };
 
   nativeBuildInputs = [

@@ -196,7 +196,7 @@ in
           else
             "${unifiedConfigDir}/moonraker-temp.cfg"
         }
-        mkdir -p $(dirname "$config_path")
+        mkdir -p "$(dirname "$config_path")"
         cp /etc/moonraker.cfg "$config_path"
         chmod u+w "$config_path"
         exec ${pkg}/bin/moonraker -d ${cfg.stateDir} -c "$config_path"

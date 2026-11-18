@@ -137,13 +137,13 @@
     "vendorHash": "sha256-TLNHhSyMw0rKFtd9EChg7zSGoxe57rh36nAPqu1j8w8="
   },
   "buildkite_buildkite": {
-    "hash": "sha256-wEB8P4ICw0Zh9tXKq3EDQMlHJ6TNc1ITB5dge798n2o=",
+    "hash": "sha256-PFMISQI4t9C5U/bzr0iIF/Jb4HZq35y9lotsLWS9FuE=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "repo": "terraform-provider-buildkite",
-    "rev": "v1.46.0",
+    "rev": "v1.47.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-tkNxTSKxfTXCnRgid6i0YPCgHYCvjdcfeY8nz9VWZmk="
+    "vendorHash": "sha256-MyTPHDvD8/Piv9+jmg0oNmBv5up3e04+XPy4iLqh/xM="
   },
   "bunnyway_bunnynet": {
     "hash": "sha256-jFTtV5MNBvDV69UP61t8zAAIeVxn97gsUOoR07xz+KA=",
@@ -399,13 +399,13 @@
     "vendorHash": null
   },
   "fastly_fastly": {
-    "hash": "sha256-wIfYmi91iDIUlL0Pgoa0+tZ15FHTMKC0/R8ZkzOeO+A=",
+    "hash": "sha256-+ga5aZnUN1Olr4FTMZcZAwILXsbJmTN9BW1waFiyejA=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v10.1.0",
+    "rev": "v10.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-laWQiUwbXMpbORiNZQTLo7XtDezo6QPoQVg3+z5i8h8="
+    "vendorHash": "sha256-kg/n4k1nFukCwICYVqKQcoqzXBNol/5RHIOSM/7b4CI="
   },
   "flexibleenginecloud_flexibleengine": {
     "hash": "sha256-yEZ9JiUSqFFbfqzOOD59ZBv4yFCeUBBKlp6aiUqDqiM=",

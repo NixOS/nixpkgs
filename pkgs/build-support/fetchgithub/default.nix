@@ -29,8 +29,8 @@ let
     "githubBase"
     "varPrefix"
   ];
-  # useFetchGitArgsWD to exclude from automatic passing.
-  # Other useFetchGitArgsWD will pass down to fetchgit.
+  # fetchZipDefaults to exclude from automatic passing.
+  # Other fetchZipDefaults will pass down to fetchgit.
   excludedFetchGitArgs = [
     "forceFetchGit"
   ];
@@ -41,7 +41,7 @@ let
   # Here defines fetchFromGitHub arguments that determines useFetchZip,
   # The attribute value is their default values.
   # As fetchFromGitHub prefers fetchzip for hash stability,
-  # `fetchZipDefaults` attributes should lead to `useFetchGit = true`.
+  # `fetchZipDefaults` attributes should lead to `useFetchZip = true`.
   fetchZipDefaults = {
     deepClone = false;
     fetchSubmodules = false; # This differs from fetchgit's default
@@ -109,21 +109,21 @@ decorate (
       else
         unsafeGetAttrPos "rev" args
     );
-    baseUrl = "https://${githubBase}/${owner}/${repo}";
     varBase = "NIX${optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
   in
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
   (if useFetchZip then fetchzip else fetchgit) (
     finalAttrs:
+    let
+      # Follow `overrideAttrs` on `githubBase`, `owner` and `repo`.
+      baseUrl = "https://${finalAttrs.githubBase}/${finalAttrs.owner}/${finalAttrs.repo}";
+    in
     removeAttrs args (
       if useFetchZip then removedPassthruFetchZipNames else removedPassthruFetchGitNames
     )
     // (
       if useFetchZip then
-        let
-          revWithTag = finalAttrs.rev;
-        in
         {
           # Use the API endpoint for private repos, as the archive URI doesn't
           # support access with GitHub's fine-grained access tokens.
@@ -133,14 +133,14 @@ decorate (
           url =
             if private then
               let
-                endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
+                endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${finalAttrs.rev}";
               in
-              if githubBase == "github.com" then
+              if finalAttrs.githubBase == "github.com" then
                 "https://api.github.com${endpoint}"
               else
-                "https://${githubBase}/api/v3${endpoint}"
+                "https://${finalAttrs.githubBase}/api/v3${endpoint}"
             else
-              "${baseUrl}/archive/${revWithTag}.tar.gz";
+              "${baseUrl}/archive/${finalAttrs.rev}.tar.gz";
           extension = "tar.gz";
           derivationArgs = {
             inherit
@@ -154,6 +154,7 @@ decorate (
               rev = finalAttrs.revCustom;
             };
             revCustom = rev;
+            ${if position != null then "pos" else null} = position;
           };
           passthru = {
             gitRepoUrl = "${baseUrl}.git";
@@ -173,6 +174,7 @@ decorate (
               owner
               repo
               ;
+            ${if position != null then "pos" else null} = position;
           };
         }
     )
@@ -182,7 +184,11 @@ decorate (
         # - Fetching with git works using https://github.com but not with the GitHub API endpoint
         # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
         let
-          machineName = if githubBase == "github.com" && useFetchZip then "api.github.com" else githubBase;
+          machineName =
+            if finalAttrs.githubBase == "github.com" && useFetchZip then
+              "api.github.com"
+            else
+              finalAttrs.githubBase;
         in
         ''
           if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -209,22 +215,25 @@ decorate (
         homepage = meta.homepage or baseUrl;
         identifiers = {
           purlParts =
-            if githubBase == "github.com" then
+            let
+              # Follow `overrideAttrs` like the URLs do. Prefer the tag, since
+              # finalAttrs.rev is `refs/tags/<tag>` on the fetchzip path.
+              version = revOrTag finalAttrs.rev finalAttrs.tag;
+            in
+            if finalAttrs.githubBase == "github.com" then
               {
                 type = "github";
                 # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
-                spec = "${owner}/${repo}@${(revOrTag rev tag)}";
+                spec = "${finalAttrs.owner}/${finalAttrs.repo}@${version}";
               }
             else
               {
                 type = "generic";
                 # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
-                spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(revOrTag rev tag)}";
+                spec = "${finalAttrs.repo}?vcs_url=${baseUrl}@${version}";
               };
         }
         // meta.identifiers or { };
-        # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
-        ${if position != null then "position" else null} = "${position.file}:${toString position.line}";
       };
     }
   )

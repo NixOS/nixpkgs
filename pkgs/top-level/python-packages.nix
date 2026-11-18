@@ -6187,6 +6187,8 @@ self: super: with self; {
 
   files-to-prompt = callPackage ../development/python-modules/files-to-prompt { };
 
+  fileseq = callPackage ../development/python-modules/fileseq { };
+
   filetype = callPackage ../development/python-modules/filetype { };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
@@ -7368,6 +7370,8 @@ self: super: with self; {
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
+  grandstream-home-api = callPackage ../development/python-modules/grandstream-home-api { };
+
   granian = callPackage ../development/python-modules/granian { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal; };
@@ -7686,6 +7690,8 @@ self: super: with self; {
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   hatchling = callPackage ../development/python-modules/hatchling { };
+
+  haveniaq = callPackage ../development/python-modules/haveniaq { };
 
   haversine = callPackage ../development/python-modules/haversine { };
 
@@ -10473,6 +10479,8 @@ self: super: with self; {
   looseversion = callPackage ../development/python-modules/looseversion { };
 
   loqedapi = callPackage ../development/python-modules/loqedapi { };
+
+  lorawan-connection = callPackage ../development/python-modules/lorawan-connection { };
 
   loro = callPackage ../development/python-modules/loro { };
 
@@ -15262,6 +15270,8 @@ self: super: with self; {
 
   pyfnip = callPackage ../development/python-modules/pyfnip { };
 
+  pyforeca = callPackage ../development/python-modules/pyforeca { };
+
   pyforked-daapd = callPackage ../development/python-modules/pyforked-daapd { };
 
   pyformlang = callPackage ../development/python-modules/pyformlang { };
@@ -15404,6 +15414,8 @@ self: super: with self; {
 
   pyhanko-certvalidator = callPackage ../development/python-modules/pyhanko-certvalidator { };
 
+  pyhaseiq = callPackage ../development/python-modules/pyhaseiq { };
+
   pyhaversion = callPackage ../development/python-modules/pyhaversion { };
 
   pyhcl = callPackage ../development/python-modules/pyhcl { };
@@ -15413,6 +15425,8 @@ self: super: with self; {
   pyheck = callPackage ../development/python-modules/pyheck { };
 
   pyhelty = callPackage ../development/python-modules/pyhelty { };
+
+  pyheltycloud = callPackage ../development/python-modules/pyheltycloud { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
 
