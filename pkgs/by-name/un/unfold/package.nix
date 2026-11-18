@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unfold";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "unfold";
     tag = finalAttrs.version;
-    hash = "sha256-PPJ7jbmTgHtX817YvqhumWcPeuY8eIQRvJ3Yi8Gez8s=";
+    hash = "sha256-IxlLMShhIICQvMEmCaFOl/v6zHJLTjtsSsiNyyyMe0o=";
   };
 
   strictDeps = true;
