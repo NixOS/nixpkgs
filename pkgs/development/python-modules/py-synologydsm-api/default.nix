@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "2.11.1";
+  version = "2.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "py-synologydsm-api";
     tag = "v${version}";
-    hash = "sha256-6rLfH5s2QrRsIDvqWuikzXGeEGkzykkvx72OU0MAe8k=";
+    hash = "sha256-YLR3q5pJKrrYlLBCHLcd21Y3xh8eHoFe0+pCF3ABAaU=";
   };
 
   build-system = [ setuptools ];
