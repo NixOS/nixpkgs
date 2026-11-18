@@ -10,11 +10,14 @@
   meson,
   meson-python,
   ninja,
+  patchelf,
   pyperf,
   pyprojectVersionPatchHook,
   pytest-codspeed,
   pytest-mock,
   pytestCheckHook,
+  python-sbom,
+  stdenv,
   tenacity,
   tinycss2,
 }:
@@ -29,14 +32,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "turbohtml";
-  version = "1.15.10";
+  version = "1.15.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "turbohtml";
     tag = finalAttrs.version;
-    hash = "sha256-LWc0DMrK/JTsBZnDfhR54xL33fRmcIz45qAnTxAyQNA=";
+    hash = "sha256-9aJJQFvyKfrfGLpN3719AttWfysfuloi1Ldz/iezPE0=";
   };
 
   postPatch = ''
@@ -58,6 +61,10 @@ buildPythonPackage (finalAttrs: {
     meson
     meson-python
     ninja
+    python-sbom
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    patchelf
   ];
 
   pythonImportsCheck = [ "turbohtml" ];
