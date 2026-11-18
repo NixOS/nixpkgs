@@ -133,6 +133,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     install -Dm444 \
       org.scantpaper.desktop \
       $out/share/applications/org.scantpaper.desktop
+
+    install -Dm644 org.scantpaper.desktop.metainfo.xml -t $out/share/metainfo
   '';
 
   meta = {
