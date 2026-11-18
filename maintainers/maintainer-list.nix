@@ -14067,6 +14067,13 @@
     githubId = 123136424;
     name = "Joachim Susatiyo";
   };
+  jocraft2010 = {
+    email = "jocraft2010@gmail.com";
+    matrix = "@jocraft2010:matrix.org";
+    github = "JoCraft2010";
+    githubId = 73117032;
+    name = "Johannes Preiser";
+  };
   joedevivo = {
     github = "joedevivo";
     githubId = 55951;
