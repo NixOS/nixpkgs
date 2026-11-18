@@ -6,6 +6,7 @@
   scikit-image,
   lib,
   opencv-python,
+  standard-pkg-resources,
 }:
 
 buildPythonPackage (finalAttr: {
@@ -26,6 +27,7 @@ buildPythonPackage (finalAttr: {
     numpy
     scikit-image
     opencv-python
+    standard-pkg-resources
   ];
 
   pythonImportsCheck = [ "imagecorruptions" ];
