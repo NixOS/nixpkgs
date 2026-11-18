@@ -7,7 +7,7 @@
   adwaita-icon-theme,
   hicolor-icon-theme,
   numix-icon-theme-circle,
-  gitUpdater,
+  unstableGitUpdater,
   colorVariants ? [ ],
 }:
 
@@ -85,7 +85,7 @@ lib.checkListOfEnum "${pname}: color variants"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
     meta = {
       description = "Colorful Design Rectangle icon theme";
