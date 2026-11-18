@@ -85,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   # causes random build failures
   enableParallelBuilding = false;
 
