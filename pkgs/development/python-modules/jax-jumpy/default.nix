@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
+  jax,
+  jaxlib,
   setuptools,
 }:
 
@@ -24,6 +26,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "jumpy" ];
+
+  optional-dependencies = {
+    jax = [
+      jax
+      jaxlib
+    ];
+  };
 
   meta = {
     description = "Jumpy is a common backend for NumPy and optionally JAX";
