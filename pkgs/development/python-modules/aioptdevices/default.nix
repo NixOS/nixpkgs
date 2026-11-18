@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioptdevices";
-  version = "2026.07.1";
+  version = "2026.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ParemTech-Inc";
     repo = "aioptdevices";
-    tag = "v2026.07.1";
-    hash = "sha256-6vF64lmPSU95YpkrqNh5jAWnoUHZqXn7WK9xtc4sKs8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/w/tbqPqGWTm4OX9mkkqsn3XaL0ocd380JDNo6z1PKQ=";
   };
 
   postPatch = ''
