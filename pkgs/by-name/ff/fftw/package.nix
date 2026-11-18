@@ -9,6 +9,7 @@
   enableMpi ? false,
   mpi,
   withDoc ? stdenv.cc.isGNU,
+  withStatic ? false,
   testers,
 }:
 
@@ -79,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://github.com/FFTW/fftw3/issues/274
     #   https://github.com/spack/spack/pull/29279
     "MPILIBS=-lmpi"
+  ]
+  ++ lib.optionals withStatic [
+    "--enable-static"
+    "--disable-shared"
   ]
   # doc generation causes Fortran wrapper generation which hard-codes gcc
   ++ lib.optional (!withDoc) "--disable-doc";
