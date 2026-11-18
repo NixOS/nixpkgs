@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (
 
         # Generates a list of all licenses' spdx ids, if available.
         # Note that this currently ignores any license provided in plain text (e.g. "LICENSE.txt")
-        python ${./extract-licenses-from-nupkgs.py} $out/lib > $out/share/licenses
+        python -P ${./extract-licenses-from-nupkgs.py} $out/lib > $out/share/licenses
       '';
 
       meta.description = description;
