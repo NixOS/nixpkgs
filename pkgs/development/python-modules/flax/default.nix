@@ -80,6 +80,11 @@ buildPythonPackage (finalAttrs: {
     tensorflow
   ];
 
+  pytestFlags = [
+    # orbax-checkpoint still uses the deprecated jax.sharding.SingleDeviceSharding (jax>=0.12.1)
+    "-Wignore:jax.sharding.SingleDeviceSharding is deprecated:DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
