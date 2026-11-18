@@ -53,7 +53,7 @@ xla.overrideAttrs {
       build --subcommands --curses=no "''${bazelFlagsArray[@]}" \
       ${lib.optionalString expectSelectedOutput "--copt=-DXLA_TEST_SELECTED_OUTPUT"} \
       //build_tools/configure:assert_nvcc
-    ${lib.getExe pkgs.python3} ${./cuda-configure-check.py} \
+    ${lib.getExe pkgs.python3} -P ${./cuda-configure-check.py} \
       "$bazelOut/external/local_config_cuda/cuda" ${expected}
     runHook postBuild
   '';

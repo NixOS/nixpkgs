@@ -26,7 +26,7 @@ in
             strictDeps = true;
           }
           ''
-            python3 ${./generate.py} > "$out"
+            python3 -P ${./generate.py} > "$out"
           '';
     };
 }
