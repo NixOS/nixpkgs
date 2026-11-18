@@ -41,6 +41,9 @@ buildPythonPackage {
   passthru = {
     inherit (faiss-build) cudaSupport cudaPackages pythonSupport;
 
+    # The version and src come from faiss-build, nix-update on this package cannot update them
+    updateScript = null;
+
     tests = {
       pytest = callPackage ./pytest.nix { inherit faiss-build; };
     };
