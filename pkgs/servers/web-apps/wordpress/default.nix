@@ -2,8 +2,8 @@
 builtins.mapAttrs (_: callPackage ./generic.nix) rec {
   wordpress = wordpress_7_1;
   wordpress_6_9 = {
-    version = "6.9.11";
-    hash = "sha256-uHDQc9FdRXM3O87pYbnuzsixBjqr8mM1vZZImLDXcQo=";
+    version = "6.9.12";
+    hash = "sha256-mjwLBMsFGG9rLK2VW9aw1wnqIZhUdsis5CX/0zb8tRM=";
   };
   wordpress_7_0 = {
     version = "7.0.9";
