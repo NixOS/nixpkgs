@@ -21,6 +21,7 @@
   pythonMetadataCheckHook,
   pythonNamespacesHook,
   pythonOutputDistHook,
+  pythonRelaxBuildSystemHook,
   pythonRelaxDepsHook,
   pythonRemoveBinBytecodeHook,
   pythonRemoveTestsDirHook,
@@ -315,6 +316,14 @@ lib.extendMkDerivation {
         #
         pythonCatchConflictsHook
       ]
+      ++
+        optionals
+          (
+            finalAttrs.pythonRelaxBuildSystem or [ ] != [ ] || finalAttrs.pythonRemoveBuildSystem or [ ] != [ ]
+          )
+          [
+            pythonRelaxBuildSystemHook
+          ]
       ++
         optionals (finalAttrs.pythonRelaxDeps or [ ] != [ ] || finalAttrs.pythonRemoveDeps or [ ] != [ ])
           [
