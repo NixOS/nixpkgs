@@ -16,9 +16,10 @@
   nodejs,
   electron,
   gnum4,
-  pkgsStatic,
   blas,
   darwin,
+  flint,
+  fftwFloat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -134,8 +135,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     # The dependencies of graphest-fftw-sys and graphest-arb-sys need to be static.
-    fftwFloatStatic = pkgsStatic.fftwFloat;
-    flintStatic = pkgsStatic.flint.override {
+    fftwFloatStatic = fftwFloat.override {
+      withStatic = true;
+    };
+    flintStatic = flint.override {
+      withStatic = true;
       withBlas = true; # Some functions used by Graphest require BLAS
     };
 
