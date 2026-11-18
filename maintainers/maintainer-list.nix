@@ -12343,6 +12343,12 @@
     githubId = 16514431;
     name = "Ilham AM";
   };
+  ilia-maslakov = {
+    email = "il.smind@gmail.com";
+    github = "ilia-maslakov";
+    githubId = 566156;
+    name = "Ilia Maslakov";
+  };
   ilian = {
     email = "nixos@ilian.dev";
     github = "ilian";
