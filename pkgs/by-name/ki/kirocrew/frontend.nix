@@ -13,7 +13,7 @@ buildNpmPackage (finalAttrs: {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-gcG8pYQnBied9VR6ChCndli/F1iAcnWyhZu9Pu9QMI4=";
+  npmDepsHash = "sha256-rWq+CFxnx58NSapnfiohmmJmcVMVVmk58S6ifXb9goY=";
 
   installPhase = ''
     runHook preInstall
