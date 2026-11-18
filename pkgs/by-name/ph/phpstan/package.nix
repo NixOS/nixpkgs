@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phpstan";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "phpstan";
     repo = "phpstan";
     tag = finalAttrs.version;
-    hash = "sha256-dNP2jqiY9JD2+foto61gTim8bmjqa5ab0GPxbBOgMys=";
+    hash = "sha256-9ewU9PfMPxcZo34hvtzOIfrNoWuQ/InDylvH/r6B3xk=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "phpstan";
       repo = "turbo-ext";
       tag = finalAttrs.version;
-      hash = "sha256-5pF3XK4NyjOltAQvHFK4rhghpaxoNwbAmwrd26FA8jY=";
+      hash = "sha256-uTLP2GcVSw7yJh1hwkf9qJ0DB/D3p1xDY9F+6HUJmbY=";
     };
 
     turbo = php.buildPecl {
