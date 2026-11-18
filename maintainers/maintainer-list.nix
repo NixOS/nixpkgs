@@ -533,6 +533,12 @@
     githubId = 806876;
     name = "Aaron Jheng";
   };
+  aaronwuerth = {
+    email = "aaron.wuerth@posteo.de";
+    github = "aaronwuerth";
+    githubId = 24791405;
+    name = "Aaron Würth";
+  };
   aaschmid = {
     email = "service@aaschmid.de";
     github = "aaschmid";
@@ -12983,6 +12989,12 @@
     github = "jackrosenberg";
     githubId = 56937175;
   };
+  jackrhoa = {
+    name = "Jack Rhoa";
+    email = "dev@jackrhoa.com";
+    github = "jackrhoa";
+    githubId = 180098632;
+  };
   jacobkoziej = {
     name = "Jacob Koziej";
     email = "jacobkoziej@gmail.com";
@@ -21730,6 +21742,12 @@
     github = "Noderyos";
     githubId = 56077132;
     name = "Noderyos";
+  };
+  noi0103 = {
+    name = "Noi0103";
+    email = "noi0103@proton.me";
+    github = "Noi0103";
+    githubId = 81962614;
   };
   noiioiu = {
     github = "noiioiu";

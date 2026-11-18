@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfilezilla";
-  version = "0.58.0";
+  version = "0.59.0";
   __structuredAttrs = true;
 
   src = fetchurl {
     # Upstream download link was made unstable on purpose
     # See https://trac.filezilla-project.org/ticket/13186
     url = "https://sources.archlinux.org/other/libfilezilla/libfilezilla-${finalAttrs.version}.tar.xz";
-    hash = "sha256-J216cgr1Opdn3kiCvZkplsVDCwsTvgWRO9emQAUtbs4=";
+    hash = "sha256-kLqFg/xt+Kt9/AaQXmwSqOmGQZD3WqlMJdHaiRRb/ak=";
   };
 
   nativeBuildInputs = [

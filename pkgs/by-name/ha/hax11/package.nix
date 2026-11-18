@@ -10,13 +10,13 @@
 
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "hax11";
-  version = "0-unstable-2025-04-29";
+  version = "0-unstable-2026-11-12";
 
   src = fetchFromGitHub {
     owner = "CyberShadow";
     repo = "hax11";
-    rev = "d82bf3ba655c1a823b77a9a47f30657c9a32c1fe";
-    hash = "sha256-Ykl/RdGRHmM+xko5a9tR2G1yFaY/Xq+BEoeXaLd39RQ=";
+    rev = "ab1e1e07f19284b4999e0eaab638a0f2c7daccc9";
+    hash = "sha256-o4pMBzS/W7NI+P5ihIFHuClCZuHoa0+mmjxjTGa4m+g=";
   };
 
   outputs = [
