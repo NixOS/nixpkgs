@@ -5,10 +5,10 @@
 }:
 
 buildPecl rec {
-  version = "3.0.0";
+  version = "3.0.1";
   pname = "msgpack";
 
-  sha256 = "sha256-VTBqhHl9OZxrJpGB7EhGNPGL6hMwu9nXQFBDxZfeac0=";
+  sha256 = "sha256-4wvjVat5qupFaGkvvWBz/Xx/UOqNPPEu3OQPwMkh2Gg=";
 
   meta = {
     broken = lib.versionAtLeast php.version "8.6";

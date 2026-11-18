@@ -164,10 +164,13 @@ in
       }
     ];
 
+    users.groups.tayga-tun = { };
+
     networking.interfaces."${cfg.tunDevice}" = {
       virtual = true;
       virtualType = "tun";
       virtualOwner = null;
+      virtualGroup = config.users.groups.tayga-tun.name;
       ipv4 = {
         addresses = [
           {
@@ -222,6 +225,7 @@ in
         ];
         StateDirectory = "tayga";
         DynamicUser = true;
+        SupplementaryGroups = [ config.users.groups.tayga-tun.name ];
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

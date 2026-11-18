@@ -455,8 +455,8 @@ let
               };
             };
 
-        mingw-ucrt-x86_64.haskell.packages.ghc912 = {
-          inherit (packagePlatforms pkgs.pkgsCross.mingw-ucrt-x86_64.haskell.packages.ghc912)
+        ucrt64.haskell.packages.ghc912 = {
+          inherit (packagePlatforms pkgs.pkgsCross.ucrt64.haskell.packages.ghc912)
             ghc
             # hello # executables don't build yet
             microlens
