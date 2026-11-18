@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "paperless-ngx-erechnung";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitbetterde";
     repo = "paperless-ngx-erechnung";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cdi3dFloqN1XvMaojdrU39Z9kskEabxMgK5KklBazsU=";
+    hash = "sha256-ArQwZlAYOtlSdGzSanRo4tCT1DKrGaL/PLEJsWYRMq4=";
   };
 
   postPatch = ''
