@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     "-DWL_INSTALL_BASEDIR=${placeholder "out"}/share/widelands" # for COPYING, Changelog, etc.
     "-DWL_INSTALL_DATADIR=${placeholder "out"}/share/widelands" # for game data
     "-DWL_INSTALL_BINDIR=${placeholder "out"}/bin"
+    "-DOPTION_BUILD_WEBSITE_TOOLS=OFF"
   ];
 
   nativeBuildInputs = [
