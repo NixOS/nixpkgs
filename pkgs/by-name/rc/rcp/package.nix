@@ -40,6 +40,14 @@ pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
     aws-lc
   ];
 
+  # pkgsStatic propagates build inputs for libraries, but this package only installs executables.
+  postFixup = ''
+    rm -f "$out/nix-support/propagated-build-inputs"
+  '';
+
+  # Keep the static executable package free of runtime dependencies.
+  allowedReferences = [ ];
+
   meta = {
     changelog = "https://github.com/wykurz/rcp/releases/tag/v${finalAttrs.version}";
     description = "Tools to efficiently copy, remove and link large filesets";
