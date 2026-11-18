@@ -3,6 +3,7 @@
   gccStdenv,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   nasm,
 
@@ -53,6 +54,16 @@ stdenv.mkDerivation (finalAttrs: {
     # fix compilation with gcc15
     # https://bitbucket.org/multicoreware/x265_git/pull-requests/36
     ./gcc15-fixes.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    # fix build on loongarch64-linux
+    # https://github.com/Multicorewareinc/x265/pull/941
+    (fetchpatch2 {
+      url = "https://github.com/Multicorewareinc/x265/commit/af35fda1b45bd575b713aef979eed9352e7be1ec.patch?full_index=1";
+      stripLen = 2;
+      extraPrefix = "";
+      hash = "sha256-9S/AXFCXx24GK3vK6prKfuSSqAS0DWDN+rCydU8ES2M=";
+    })
   ];
 
   sourceRoot = "${finalAttrs.src.name}/source";
