@@ -114,7 +114,7 @@ buildPythonPackage (finalAttrs: {
       chronic py3dtiles convert --out test1 ./tests/fixtures/simple.xyz
       chronic py3dtiles convert --out test2 ./tests/fixtures/with_srs_3857.las
       chronic py3dtiles convert tests/fixtures/simple.ply
-      chronic python ${testScript}
+      chronic python -P ${testScript}
       runHook pytestCheckPhase
       runHook postInstallCheck
     '';

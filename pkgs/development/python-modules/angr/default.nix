@@ -168,7 +168,7 @@ buildPythonPackage (finalAttrs: {
       }
       ''
         cc -O1 ${./tests/fixture.c} -o fixture
-        python ${./tests/smoke.py} "$PWD/fixture" ${finalAttrs.version}
+        python -P ${./tests/smoke.py} "$PWD/fixture" ${finalAttrs.version}
         touch "$out"
       '';
 

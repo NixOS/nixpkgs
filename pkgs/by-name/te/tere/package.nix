@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage {
           exit(1)
       '';
     in
-    "${python-with-toml}/bin/python3 ${script}";
+    "${python-with-toml}/bin/python3 -P ${script}";
 
   meta = {
     description = "Faster alternative to cd + ls";

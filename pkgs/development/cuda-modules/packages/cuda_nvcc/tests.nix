@@ -274,7 +274,7 @@ in
       export FAKE_LOG=$PWD/log
 
       status() { "$@" && echo 0 || echo $?; }
-      signal() { python3 ${./tests/signal.py} "$@"; }
+      signal() { python3 -P ${./tests/signal.py} "$@"; }
       expect() {
         if [[ $1 != "$2" ]]; then
           nixErrorLog "$3: expected $2, got $1"

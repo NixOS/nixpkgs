@@ -33,7 +33,7 @@ class CudaConfigureCheckTest(unittest.TestCase):
                 )
             )
             result = subprocess.run(
-                [sys.executable, str(CHECKER), str(root), str(expected)],
+                [sys.executable, "-P", str(CHECKER), str(root), str(expected)],
                 capture_output=True,
                 text=True,
                 check=False,
