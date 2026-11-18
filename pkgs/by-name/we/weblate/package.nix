@@ -349,9 +349,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "weblate/vcs/tests/test_apps.py::VCSChecksTest::test_builtin_required_commands"
     "weblate/vcs/tests/test_vcs.py::RepositoryTest::test_popen_retry_does_not_duplicate_command"
 
-    # djangosaml2idp2 is not packaged yet
-    "weblate/utils/tests/test_djangosaml2idp.py"
-
     # Some issue related to presumably misconfigured data directory. See #565921 for details.
     "weblate/fonts/tests/test_models.py::FontModelTest::test_cleanup"
 
