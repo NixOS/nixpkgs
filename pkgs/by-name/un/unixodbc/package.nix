@@ -2,6 +2,7 @@
   lib,
   stdenv,
   autoreconfHook,
+  libtool,
   fetchFromGitHub,
 }:
 
@@ -19,6 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
   ];
+
+  buildInputs = [
+    libtool
+  ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--disable-gui"
