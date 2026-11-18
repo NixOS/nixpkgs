@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   # These libraries are loaded with g_module_open rather than linked.
   postPatch = ''
