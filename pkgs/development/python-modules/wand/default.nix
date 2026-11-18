@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   imagemagickBig,
   pytestCheckHook,
   setuptools,
@@ -19,6 +20,18 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-SigXdX4sfw0nKYvIu/Jsoj+RBmcoHAGCFRA8t7gc+3s=";
   };
+
+  patches = [
+    # https://github.com/emcconville/wand/issues/691
+    (fetchpatch {
+      url = "https://github.com/emcconville/wand/commit/e194860e5264d8202d4ecb31002a001b3b386bd5.patch";
+      excludes = [
+        "pyproject.toml"
+        "wand/version.py"
+      ];
+      hash = "sha256-BvoIlAatTNrvJoE6y7kiuh7yXaKneuIzBHSF3nuEZWs=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace wand/api.py --replace-fail \
