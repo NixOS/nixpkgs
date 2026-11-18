@@ -3,21 +3,23 @@
   buildNpmPackage,
   fetchFromGitHub,
 }:
-let
-  version = "3.1.10";
-in
-buildNpmPackage {
+
+buildNpmPackage (finalAttrs: {
   pname = "ejs";
-  inherit version;
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "mde";
     repo = "ejs";
-    rev = "v${version}";
-    hash = "sha256-3Rq+7oiYJlIY7sGPasx728sz2zj0ndAvKpHGsQX4tlc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jD19NEdSGnULGMMdM1lU8Pr3lZvfSvC1/Fa4LU2guqM=";
   };
 
-  npmDepsHash = "sha256-829eWfJiMw9KRlhdmzD0ha//bgUQ5nPEzO+ayUPLxXY=";
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+  '';
+
+  npmDepsHash = "sha256-1WTWEPaRgimw2bqHoWy1oFTTn7N3TQsSD5g0LPaZy+4=";
 
   buildPhase = ''
     runHook preBuild
@@ -34,4 +36,4 @@ buildNpmPackage {
     mainProgram = "ejs";
     maintainers = [ ];
   };
-}
+})
