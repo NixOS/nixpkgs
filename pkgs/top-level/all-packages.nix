@@ -2147,6 +2147,8 @@ with pkgs;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
+  buildComfyUICustomNode = callPackage ../by-name/co/comfyui/build-custom-node.nix { };
+
   buildNavidromeGoPlugin = callPackage ../by-name/na/navidrome/plugins/build-go-plugin.nix { };
 
   buildNavidromeRustPlugin = callPackage ../by-name/na/navidrome/plugins/build-rust-plugin.nix { };

@@ -10,8 +10,17 @@ let
   # By default a StateDirectory is used; anything else needs its own directory and a hole in the unit's mount namespace.
   isDefaultDataDir = cfg.dataDir == "/var/lib/comfyui";
 
+  # Resolve custom node dependencies against the final ComfyUI Python set.
+  # This keeps e.g. torch and cudaPackages consistent with the server rather
+  # than pulling a second copy from a separate `python3Packages` instance.
   package = cfg.package.override (oldArgs: {
-    extraPackages = ps: (oldArgs.extraPackages or (_: [ ]) ps) ++ cfg.extraPackages ps;
+    extraPackages =
+      ps:
+      lib.unique (
+        (oldArgs.extraPackages or (_: [ ])) ps
+        ++ cfg.extraPackages ps
+        ++ lib.concatMap (node: (node.passthru.comfyui.pythonDeps or (_: [ ])) ps) cfg.customNodes
+      );
   });
 
   modelDrvs = map (m: {
@@ -26,6 +35,31 @@ let
       ln -sn ${lib.escapeShellArg "${x.drv}"} ${lib.escapeShellArg "${cfg.dataDir}/models/${p}/${x.m.name}"}
     '') x.m.installPaths
   ) modelDrvs;
+
+  customNodeName =
+    node:
+    let
+      name = node.passthru.comfyui.installName or null;
+    in
+    if name == null then node.pname else name;
+
+  customNodeNames = map customNodeName cfg.customNodes;
+
+  customNodeSymlinks = lib.concatMapStringsSep "\n" (
+    node:
+    let
+      name = customNodeName node;
+      target = "${cfg.dataDir}/custom_nodes/${name}";
+    in
+    ''
+      target=${lib.escapeShellArg target}
+      if [[ -e "$target" || -L "$target" ]]; then
+        echo "ComfyUI custom node name collision: $target" >&2
+        exit 1
+      fi
+      ln -sn -- ${lib.escapeShellArg (toString node)} "$target"
+    ''
+  ) cfg.customNodes;
 in
 {
   options = {
@@ -151,6 +185,31 @@ in
         '';
       };
 
+      customNodes = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.addCheck lib.types.package (p: p.passthru.comfyui.isCustomNode or false)
+          // {
+            name = "comfyui-custom-node";
+            description = "package with passthru.comfyui.isCustomNode = true";
+          }
+        );
+        default = [ ];
+        example = lib.literalExpression ''
+          with pkgs.comfyui-custom-nodes; [ comfyui-crystools ]
+        '';
+        description = ''
+          ComfyUI custom node packages to link into `''${services.comfyui.dataDir}/custom_nodes`.
+
+          Each package is expected to provide `passthru.comfyui.isCustomNode = true` and a source tree at its output root.
+          The optional `passthru.comfyui.installName` controls the directory name below `custom_nodes`;
+          it defaults to the package's `pname`.
+          Python dependencies declared through `passthru.comfyui.pythonDeps` are added to ComfyUI's Python environment.
+
+          Manually installed custom nodes are left untouched.
+          If a declared node would overwrite an existing file, directory or symlink, the service refuses to start.
+        '';
+      };
+
       extraPackages = lib.mkOption {
         type = lib.types.functionTo (lib.types.listOf lib.types.package);
         default = _: [ ];
@@ -161,14 +220,28 @@ in
         description = ''
           List of packages to add to ComfyUI's Python environment.
 
-          A popular example is `python3Packages.comfyui-manager` for installing and
-          managing custom nodes from within ComfyUI.
+          A popular example is `python3Packages.comfyui-manager` for installing and managing custom nodes from within ComfyUI.
+          Add `--enable-manager` to `services.comfyui.extraArgs` to load it.
         '';
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = lib.all (
+          name:
+          lib.isString name && builtins.match "[A-Za-z0-9._-]+" name != null && name != "." && name != ".."
+        ) customNodeNames;
+        message = "services.comfyui.customNodes: installName must be a single path component (letters, digits, '.', '_' or '-').";
+      }
+      {
+        assertion = lib.length customNodeNames == lib.length (lib.unique customNodeNames);
+        message = "services.comfyui.customNodes: installName values must be unique.";
+      }
+    ];
+
     services.comfyui.extraArgs = lib.mkBefore [
       "--base-directory=${cfg.dataDir}"
       "--database-url=sqlite:///${cfg.dataDir}/user/comfyui.db"
@@ -207,6 +280,19 @@ in
 
         # Rebuild model symlinks
         ${modelSymlinks}
+
+        mkdir -p "${cfg.dataDir}/custom_nodes"
+
+        # Remove only the links managed by this module, and only at the top level.
+        # A manual node may contain its own symlinks into the store, so do not recurse.
+        while IFS= read -r -d "" link; do
+          if [[ "$(readlink "$link")" == ${lib.escapeShellArg builtins.storeDir}/* ]]; then
+            rm "$link"
+          fi
+        done < <(find "${cfg.dataDir}/custom_nodes" -mindepth 1 -maxdepth 1 -type l -print0)
+
+        # Rebuild custom node symlinks; refuse to overwrite manually installed nodes.
+        ${customNodeSymlinks}
       '';
 
       serviceConfig = {
