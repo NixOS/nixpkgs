@@ -9408,10 +9408,10 @@ with pkgs;
 
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };
 
-  libreoffice = hiPrio libreoffice-still;
+  libreoffice = hiPrio libreoffice-fresh;
   libreoffice-unwrapped = libreoffice.unwrapped;
 
-  libreoffice-qt = hiPrio libreoffice-qt-still;
+  libreoffice-qt = hiPrio libreoffice-qt-fresh;
   libreoffice-qt-unwrapped = libreoffice-qt.unwrapped;
 
   libreoffice-qt-fresh = lowPrio (
