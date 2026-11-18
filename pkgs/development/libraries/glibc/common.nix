@@ -51,7 +51,7 @@
 
 let
   version = "2.44";
-  patchSuffix = "-57";
+  patchSuffix = "-79";
   sha256 = "sha256-N/YA8r7zxegwAUcFlWiyouQKetbMxlzpQlVtSUKcxmc=";
 in
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation (
     patches = [
       /*
         No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-         $ git fetch --all -p && git checkout origin/release/2.42/master && git describe
+         $ git fetch --all -p && git checkout origin/release/2.44/master && git describe
          glibc-2.44-57-g34106fee69
          $ git show --minimal --reverse glibc-2.44.. ':!ADVISORIES' > 2.44-master.patch
 
