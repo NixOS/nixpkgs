@@ -31,7 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "-(alpha|beta|rc)";
+    };
     scriptName = "uosc_danmaku";
   };
 
