@@ -3,22 +3,20 @@
   asn1crypto,
   asysocks,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   kerbad,
   setuptools,
   unicrypto,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "badauth";
-  version = "0.1.4-unstable-2025-10-09";
+  version = "0.1.7";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "CravateRouge";
-    repo = "badauth";
-    rev = "86d6091470c98e1a5f6dc4b8749053189372bb53"; # no tag available
-    hash = "sha256-p7V5WkQ48b1IqCPwmJfbCiyqekfp9zW41J81JHyZNUQ=";
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-kv+U0sUveJsSrLondCpVy/G+EAVnTEl/rGC7Z27qCKc=";
   };
 
   build-system = [ setuptools ];
@@ -41,4 +39,4 @@ buildPythonPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
