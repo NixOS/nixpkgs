@@ -117,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
 
     "-DUSE_GITHASH=OFF"
-    "-DINSTALL_CADICAL=OFF"
     "-DINSTALL_LICENSE=OFF"
 
     # Better log output with a "dumb" terminal
@@ -175,8 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    # Replace the installed copy of `leantar` with a symlink.
+    # Replace copies of `cadical` and leantar` with symlinks
     ln -sf ${leangz}/bin/leantar $out/bin/leantar
+    ln -sf ${cadical'}/bin/cadical $out/bin/cadical
 
     wrapProgram $out/bin/lake \
       --set-default LEAN_CC ${stdenv.cc}/bin/cc \
@@ -186,6 +186,18 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/lean --stdin <<EOF
+    import Std
+    example : 1 + 1 = 2 := by decide
+    example : ∀ (x y : BitVec 8), x &&& y = y &&& x := by bv_decide
+    EOF
+
+    runHook postInstallCheck
+  '';
 
   doInstallCheck = true;
 
