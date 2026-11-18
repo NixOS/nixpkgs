@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/lurcher/unixODBC/releases/tag/v${finalAttrs.version}";
     description = "ODBC driver manager for Unix";
