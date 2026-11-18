@@ -2149,6 +2149,13 @@ with pkgs;
 
   buildComfyUICustomNode = callPackage ../by-name/co/comfyui/build-custom-node.nix { };
 
+  comfyui-custom-nodes = recurseIntoAttrs (
+    lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ../by-name/co/comfyui/custom-nodes;
+    }
+  );
+
   buildNavidromeGoPlugin = callPackage ../by-name/na/navidrome/plugins/build-go-plugin.nix { };
 
   buildNavidromeRustPlugin = callPackage ../by-name/na/navidrome/plugins/build-rust-plugin.nix { };
