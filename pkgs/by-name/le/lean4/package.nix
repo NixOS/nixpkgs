@@ -21,6 +21,7 @@
   python3,
   tzdata,
   versionCheckHook,
+  runCommand,
 
   # Official releases go up to `stage2`.  It should typically be enough to build `stage1`, but
   # obscure issues can arise if the checked-in `stage0` is not up-to-date.
@@ -116,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
 
     "-DUSE_GITHASH=OFF"
-    "-DINSTALL_CADICAL=OFF"
     "-DINSTALL_LICENSE=OFF"
 
     # Better log output with a "dumb" terminal
@@ -173,14 +173,28 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    # Replace the installed copy of `leantar` with a symlink.
+    # Replace the installed copies of `leantar` and `cadical` with symlinks
     ln -sf ${leangz}/bin/leantar $out/bin/leantar
+    ln -sf ${cadical'}/bin/cadical $out/bin/cadical
   '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
   doInstallCheck = true;
+
+  passthru.tests.smoke =
+    runCommand "lean4-smoke-test" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+      ''
+        lean --stdin <<EOF
+        import Std
+        example : 1 + 1 = 2 := by decide
+        example : ∀ (x y : BitVec 8), x &&& y = y &&& x := by bv_decide
+        EOF
+
+        touch $out
+      '';
 
   meta = {
     description = "Automatic and interactive theorem prover";
