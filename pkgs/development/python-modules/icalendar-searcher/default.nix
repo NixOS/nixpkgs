@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCalendar/icalendar-searcher";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.dotlambda ];
+    teams = [ lib.teams.ngi ];
   };
 }
