@@ -5,6 +5,7 @@
   fetchurl,
   gettext,
   libgpg-error,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ libgpg-error ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  strictDeps = true;
+
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ];
@@ -36,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir --ignore-fail-on-non-empty $out/bin
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
@@ -43,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = [ ];
     license = lib.licenses.lgpl3;
+    pkgConfigModules = [ "ksba" ];
   };
 })
