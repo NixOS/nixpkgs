@@ -35,6 +35,7 @@ let
     ;
 
   cfg = config.services.bulwark;
+
   format = pkgs.formats.json { };
 
   flattenAttrSet =
@@ -643,12 +644,6 @@ in
       }
     ];
 
-    users.users.bulwark = {
-      isSystemUser = true;
-      group = "bulwark";
-    };
-    users.groups.bulwark = { };
-
     systemd.services.bulwark = {
       description = "bulwark service";
       wantedBy = [ "multi-user.target" ];
@@ -660,8 +655,6 @@ in
       ];
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
-        User = "bulwark";
-        Group = "bulwark";
         DynamicUser = true;
 
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
@@ -670,15 +663,14 @@ in
           "/nix/store"
         ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        DevicePolicy = "closed";
         LockPersonality = true;
-        NoNewPrivileges = true;
-        PrivateUsers = true;
+        MemoryDenyWriteExecute = false; # Does not work with node
+        PrivateDevices = true;
+        PrivateUsers = false; # Incompatible with CAP_NET_BIND_SERVICE
         PrivateMounts = true;
         PrivateTmp = true;
-        PrivateDevices = true;
-        DevicePolicy = "closed";
         ProcSubset = "pid";
-        ProtectSystem = "strict";
         ProtectClock = true;
         ProtectHome = true;
         ProtectHostname = true;
@@ -689,7 +681,6 @@ in
         ProtectProc = "invisible";
         RemoveIPC = true;
         RestrictAddressFamilies = [
-          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
         ];
@@ -699,6 +690,8 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
+          "~@privileged"
+          "~@resources"
         ];
       };
 
