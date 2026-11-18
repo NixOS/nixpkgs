@@ -16989,7 +16989,9 @@ self: super: with self; {
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
-  pytest-services = callPackage ../development/python-modules/pytest-services { };
+  pytest-services = callPackage ../development/python-modules/pytest-services {
+    inherit (pkgs) memcached;
+  };
 
   pytest-shared-session-scope =
     callPackage ../development/python-modules/pytest-shared-session-scope
