@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usblog";
-  version = "0.3.0";
+  version = "0.4.0";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "inradii";
     repo = "usblog";
     tag = finalAttrs.version;
-    hash = "sha256-Ddkd6ViHrtmAwtUuhKBF3kNAARYS4935LqfkZhoeQP8=";
+    hash = "sha256-lCB6q2GDGTTUCUA1rjBVgCupCHcBb4VGRi2DDewAwrQ=";
   };
 
   cargoHash = "sha256-OwGCNo+lWM+YObyNu04Q36fKHYmwCcsd7I3nlg0eDU8=";
