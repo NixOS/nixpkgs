@@ -12,9 +12,8 @@
 let
   src = fetchurl { inherit url hash; };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
 in
-appimageTools.wrapType2 {
+appimageTools.wrapType2 (finalAttrs: {
   inherit
     meta
     pname
@@ -28,9 +27,9 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     # upstream ships pre-rendered icons for every hicolor size
     mkdir -p $out/share/icons
-    cp -r ${appimageContents}/usr/share/icons/hicolor $out/share/icons/
+    cp -r ${finalAttrs.contents}/usr/share/icons/hicolor $out/share/icons/
 
-    install -m 444 -D ${appimageContents}/ai.elementlabs.lmstudio.desktop \
+    install -m 444 -D ${finalAttrs.contents}/ai.elementlabs.lmstudio.desktop \
       -t $out/share/applications
 
     # Rename the main executable from lmstudio to lm-studio
@@ -40,8 +39,8 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun %U' 'Exec=lm-studio %U'
 
     # lms cli tool
-    install -m 755 ${appimageContents}/resources/app/.webpack/lms $out/bin/
+    install -m 755 ${finalAttrs.contents}/resources/app/.webpack/lms $out/bin/
 
     patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/bin/lms
   '';
-}
+})

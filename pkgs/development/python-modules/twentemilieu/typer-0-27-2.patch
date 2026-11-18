@@ -1,0 +1,33 @@
+From 6e7b02d54641aefcaa78633476bd50eeb7da9733 Mon Sep 17 00:00:00 2001
+From: Fabian Affolter <mail@fabian-affolter.ch>
+Date: Wed, 18 Nov 2026 00:47:55 +0100
+Subject: [PATCH] Fix CLI tests with Typer 0.27.2
+
+---
+ tests/cli/test_cli.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/cli/test_cli.py b/tests/cli/test_cli.py
+index a6ec5b7..4b9a1e4 100644
+--- a/tests/cli/test_cli.py
++++ b/tests/cli/test_cli.py
+@@ -6,7 +6,7 @@ from __future__ import annotations
+ from typing import TYPE_CHECKING
+ from unittest.mock import AsyncMock, MagicMock, patch
+
+-import click
++from typer.core import TyperGroup
+ import pytest
+ from typer.main import get_command
+ from typer.testing import CliRunner
+@@ -73,7 +73,7 @@ def test_cli_structure(snapshot: SnapshotAssertion) -> None:
+     detection and is therefore environment-sensitive).
+     """
+     group = get_command(cli)
+-    assert isinstance(group, click.Group)
++    assert isinstance(group, TyperGroup)
+     structure = {
+         name: sorted(param.name for param in subcommand.params)
+         for name, subcommand in sorted(group.commands.items())
+--
+2.55.0

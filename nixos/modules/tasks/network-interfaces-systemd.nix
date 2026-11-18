@@ -92,9 +92,13 @@ let
             Name = i.name;
             Kind = i.virtualType;
           };
-          "${i.virtualType}Config" = optionalAttrs (i.virtualOwner != null) {
-            User = i.virtualOwner;
-          };
+          "${i.virtualType}Config" =
+            optionalAttrs (i.virtualOwner != null) {
+              User = i.virtualOwner;
+            }
+            // optionalAttrs (i.virtualGroup != null) {
+              Group = i.virtualGroup;
+            };
         };
       };
       networks."40-${i.name}" = {
