@@ -22,10 +22,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-srLi8RzEqbV2Qre78d2QvGXXaqzuirhBOAT0wJkPzZE=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "wheel>=0.48.0,<1.0.0" "wheel"
-  '';
+  pythonRelaxBuildSystem = true;
 
   build-system = [ setuptools ];
 
