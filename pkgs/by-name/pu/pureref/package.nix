@@ -32,7 +32,9 @@ let
       }
       ''
         key="$(${downloadKeyCmd})"
-        curl -L "${archiveUrl version "$key"}" --output $out
+        redirect="$(${kindCurl} -o /dev/null -w '%{redirect_url}' "${archiveUrl version "$key"}")"
+        cdnKey="$(echo "$redirect" | sed 's/.*key=//')"
+        ${kindCurl} --fail -L "https://cdn.pureref.dev/build.php?build=LINUX64.Appimage&version=${version}&key=$cdnKey" --output $out
       '';
 
   archive = appimageTools.extract { inherit pname version src; };
