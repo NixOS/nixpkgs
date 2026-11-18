@@ -28,7 +28,7 @@ buildLua (finalAttrs: {
     cp sub-select.json '${placeholder "out"}/share/mpv/script-opts'
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "An advanced conditional subtitle track selector for mpv player";
