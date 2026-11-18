@@ -213,7 +213,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail 'set(_bundled_python_version "3.12.13")' 'set(_bundled_python_version "${python.version}")' \
       --replace-fail 'set(_bundled_python_root "''${CMAKE_PREFIX_PATH}/libpython")' 'set(_bundled_python_root "${python}")' \
-      --replace-fail 'install(FILES ''${LIBRARY_FILES} DESTINATION "''${CMAKE_INSTALL_PREFIX}/bin")' ""
+      --replace-fail 'install(FILES ''${LIBRARY_FILES} DESTINATION "''${CMAKE_INSTALL_PREFIX}/bin")' "" \
+      --replace-fail 'find_package(EXPAT 2.10.0 REQUIRED)' 'find_package(EXPAT 2.9.0 REQUIRED)'
+
     substituteInPlace src/CMakeLists.txt \
       --replace-fail 'COMMAND ''${CMAKE_COMMAND} -E copy_directory "''${CMAKE_PREFIX_PATH}/libpython" "''${BIN_DIR}/python"' "" \
       --replace-fail 'orcaslicer_copy_sos(OrcaSlicerSosCopy "Release" "" output_sos_Release)' ""
