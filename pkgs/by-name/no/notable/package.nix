@@ -12,7 +12,7 @@ appimageTools.wrapType2 (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/notable/notable/releases/download/v${finalAttrs.version}/Notable-${finalAttrs.version}.AppImage";
-    sha256 = "0rvz8zwsi62kiq89pv8n2wh9h5yb030kvdr1vf65xwqkhqcrzrby";
+    hash = "sha256-fuWfGYYT816M2yG3PcEAyxeYIBcW7ZsQjlOYqPlHf2c=";
   };
 
   profile = ''
