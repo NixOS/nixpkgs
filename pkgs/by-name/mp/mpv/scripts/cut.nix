@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  ffmpeg,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -20,6 +21,9 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
+
+    # Make ffmpeg binary available to script
+    substituteInPlace main.lua --replace-fail "\"ffmpeg\"" "\"${lib.getExe ffmpeg}\""
 
     install -Dm644 main.lua $out/share/mpv/scripts/cut.lua
     install -Dm644 utils $out/share/mpv/scripts/cut/utils
