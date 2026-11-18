@@ -62,7 +62,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "panel" ];
 
-  # infinite recursion in test dependencies (hvplot)
+  # No tests in wheel
   doCheck = false;
 
   meta = {
