@@ -6,13 +6,24 @@
 
 let
 
-  testedSystems = lib.filterAttrs (
-    name: value:
-    let
-      platform = lib.systems.elaborate value;
-    in
-    platform.isLinux || platform.isWindows
-  ) lib.systems.examples;
+  # TODO(27.05): remove the remove attrs once aliases are deprecated
+  testedSystems =
+    lib.filterAttrs
+      (
+        name: value:
+        let
+          platform = lib.systems.elaborate value;
+        in
+        platform.isLinux || platform.isWindows
+      )
+      (
+        lib.removeAttrs (lib.systems.examples) [
+          "mingw32"
+          "mingwW64"
+          "ucrt64"
+          "ucrtAarch64"
+        ]
+      );
 
   getExecutable =
     pkgs: pkgFun: exec:
@@ -198,7 +209,7 @@ let
     pkgs.pkgsCross.s390.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
-    pkgs.pkgsCross.mingwW64.stdenv
+    pkgs.pkgsCross.mingw-msvcrt-x86_64.stdenv
     # Uses the expression that is used by the most cross-compiled GHCs
     pkgs.pkgsCross.riscv64.haskell.compiler.native-bignum.ghc948
 

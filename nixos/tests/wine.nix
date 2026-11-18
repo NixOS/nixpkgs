@@ -12,8 +12,8 @@ let
     optionalString
     ;
 
-  hello32 = "${pkgs.pkgsCross.mingw32.hello}/bin/hello.exe";
-  hello64 = "${pkgs.pkgsCross.mingwW64.hello}/bin/hello.exe";
+  hello32 = "${pkgs.pkgsCross.mingw-msvcrt-i686.hello}/bin/hello.exe";
+  hello64 = "${pkgs.pkgsCross.mingw-msvcrt-x86_64.hello}/bin/hello.exe";
 
   makeWineTest = packageSet: exes: variant: rec {
     name = "${packageSet}-${variant}";
