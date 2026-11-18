@@ -370,7 +370,7 @@ rec {
   crystal_1_22 = generic {
     version = "1.22.3";
     sha256 = "sha256-UvuuJ18FZm7PGJ0mLskdrOxgRnlVDSl/QL5rQTu7Guc=";
-    binary = binaryCrystal_1_10;
+    binary = crystal_1_21;
     llvmPackages = llvmPackages_23;
     doCheck = false;
   };
