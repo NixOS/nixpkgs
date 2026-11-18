@@ -26,10 +26,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
-    # and https://github.com/Flexget/Flexget/blob/develop/requirements.txt
     apscheduler
     beautifulsoup4
     colorama
+    cryptography
     curl-cffi
     feedparser
     guessit
