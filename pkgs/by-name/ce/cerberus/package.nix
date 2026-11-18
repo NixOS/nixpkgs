@@ -109,7 +109,10 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater { branch = "master"; };
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+      branch = "master";
+    };
 
     # Ensure it still runs after outside the container
     tests.version = testers.testVersion {
