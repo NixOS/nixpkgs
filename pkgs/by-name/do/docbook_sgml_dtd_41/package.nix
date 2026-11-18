@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   unzip,
 }:
@@ -19,7 +19,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "docbook-sgml";
   version = "4.1";
 
