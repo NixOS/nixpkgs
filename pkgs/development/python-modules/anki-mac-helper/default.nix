@@ -4,7 +4,6 @@
   stdenv,
   anki,
   hatchling,
-  pyprojectVersionPatchHook,
   swift,
 }:
 
@@ -17,11 +16,7 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/qt/mac";
 
   build-system = [ hatchling ];
-  nativeBuildInputs = [
-    # Rewrite upstream version to match main Anki version
-    pyprojectVersionPatchHook
-    swift
-  ];
+  nativeBuildInputs = [ swift ];
 
   # This is intended to emulate github:ankitects/anki/qt/mac/helper_build.py,
   # but targets the platform directly instead of universal binary + lipo.
@@ -36,6 +31,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "anki_mac_helper" ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Small support library for Anki on Macs";
