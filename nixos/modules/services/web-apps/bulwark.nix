@@ -7,10 +7,18 @@
 let
   inherit (lib)
     attrsToList
+    concatMapAttrs
+    concatStringsSep
     elem
     filter
+    filterAttrsRecursive
+    hasSuffix
+    isAttrs
     length
     literalExpression
+    mapAttrs'
+    mapAttrsRecursive
+    mapAttrsToList
     mkEnableOption
     mkIf
     mkOption
@@ -43,9 +51,37 @@ let
     nameValuePair key (map (it: { "${keyName}" = it.name; } // it.value) (attrsToList value));
   renameOptions =
     parent:
-    lib.mapAttrs' (
-      name: value: lib.nameValuePair (lib.strings.toCamelCase "${parent}_${name}") value
+    mapAttrs' (
+      name: value: nameValuePair (lib.strings.toCamelCase "${parent}_${name}") value
     ) cfg.settings."${parent}";
+
+  filterSecrets = filterAttrsRecursive (k: v: !(hasSuffix "File" k));
+
+  loadCredentials = credentials: mapAttrsToList (n: path: "${n}:${path}") credentials;
+
+  merge_level =
+    parent_name: v:
+    mapAttrs' (child_name: child_value: nameValuePair "${parent_name}_${child_name}" child_value) v;
+  flatten =
+    attrs: concatMapAttrs (n: v: if isAttrs v then flatten (merge_level n v) else { ${n} = v; }) attrs;
+
+  credentials = filterAttrsRecursive (n: v: isAttrs v || (hasSuffix "File" n && v != null)) {
+    settings =
+      removeAttrs
+        (
+          cfg.settings
+          // cfg.settings.branding
+          // optionalAttrs cfg.settings.oauth.enabled (renameOptions "oauth")
+        )
+        [
+          "branding"
+          "oauth"
+        ];
+    admin = cfg.admin;
+  };
+  credentials_systemd = mapAttrsRecursive (
+    path: _: "/run/credentials/bulwark.service/${concatStringsSep "_" path}"
+  ) credentials;
 
   brandingModule = {
     appName = mkOption {
@@ -664,6 +700,7 @@ in
         ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DevicePolicy = "closed";
+        LoadCredential = loadCredentials (flatten credentials);
         LockPersonality = true;
         MemoryDenyWriteExecute = false; # Does not work with node
         PrivateDevices = true;
@@ -701,33 +738,35 @@ in
             [
               {
                 name = "config.json";
-                path = format.generate "config.json" (
-                  lib.mapAttrs'
-                    (
-                      name: value:
-                      if name == "jmapServers" then
-                        flattenAttrSet name "id" value
-                      else if name == "domainBranding" then
-                        flattenAttrSet name "host" value
-                      else
-                        nameValuePair name value
-                    )
-                    (
-                      removeAttrs
-                        (
-                          cfg.settings
-                          // cfg.settings.branding
-                          // optionalAttrs cfg.settings.oauth.enabled (renameOptions "oauth")
-                        )
-                        [
-                          "branding"
-                          "oauth"
-                        ]
-                    )
+                path = format.generate "config.json" filterSecrets (
+                  recursiveUpdate (
+                    lib.mapAttrs'
+                      (
+                        name: value:
+                        if name == "jmapServers" then
+                          flattenAttrSet name "id" value
+                        else if name == "domainBranding" then
+                          flattenAttrSet name "host" value
+                        else
+                          nameValuePair name value
+                      )
+                      (
+                        removeAttrs
+                          (
+                            cfg.settings
+                            // cfg.settings.branding
+                            // optionalAttrs cfg.settings.oauth.enabled (renameOptions "oauth")
+                          )
+                          [
+                            "branding"
+                            "oauth"
+                          ]
+                      )
 
-                  // {
-                    setupComplete = true;
-                  }
+                    // {
+                      setupComplete = true;
+                    }
+                  ) credentials_systemd
                 );
               }
               {
