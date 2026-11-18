@@ -202,6 +202,17 @@ let
           internal = true;
         };
 
+        zeroize = mkOption {
+          default = true;
+          example = false;
+          type = types.bool;
+          description = ''
+            Whether the device should be initialized with zeros. If `false` and the device is a
+            non-btrfs swapfile, it will use {manpage}`fallocate(1)` instead of {manpage}`dd(1)`
+            to create the file.
+          '';
+        };
+
       };
 
       config = {
@@ -311,9 +322,19 @@ in
                     truncate --size 0 "$DEVICE"
                     chattr +C "$DEVICE" 2>/dev/null || true
 
-                    echo "Creating swap file using dd and mkswap."
                     mkdir -p "$(dirname "$DEVICE")"
-                    dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size} status=progress
+                    ${
+                      if sw.isDevice || sw.zeroize then
+                        ''
+                          echo "Creating swap file using dd and mkswap."
+                          dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size} status=progress
+                        ''
+                      else
+                        ''
+                          echo "Creating swap file using fallocate and mkswap."
+                          fallocate -l ${toString sw.size}M "$DEVICE"
+                        ''
+                    }
                     ${lib.optionalString (!sw.randomEncryption.enable) "mkswap \"${sw.realDevice}\""}
                   fi
                 fi
