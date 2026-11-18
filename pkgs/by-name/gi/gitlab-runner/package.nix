@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "19.0.0";
+  version = "19.5.3";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uScTzj4pSRtSFCMxoOR5KqipCbPknwnydPYG6xU5dOo=";
+    hash = "sha256-O7HAmoF3b3RdWgfxN+R6zgyvyidTwqzpV7xZd+CIBpU=";
   };
 
-  vendorHash = "sha256-QqqTkIgR9ca1dYQ32SG7C+SpEIA07Hlf8x3lVhZ5vRQ=";
+  vendorHash = "sha256-Op1yK76t/v6zNn0D7hAf8QDdRPK0VcQP0Voy8Zt8J7c=";
 
   # For patchShebangs
   buildInputs = [ bash ];
@@ -44,17 +44,14 @@ buildGoModule (finalAttrs: {
     rm common/build_test.go
     rm executors/custom/custom_test.go
 
-    # Timing-dependent test causes spurious failures on Hydra.
-    # Might be fixed upstream in this MR: https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/6623
-    # Try dropping it on next major version bump
-    rm executors/kubernetes/internal/watchers/pod_test.go
-  ''
-  + lib.optionalString (!stdenv.buildPlatform.isx86_64) ''
-    # Kubernetes tests actually work fine inside the network sandbox (they don't
-    # expect real Kubernetes), but they fail on aarch64-linux because their
-    # mocks expect x86_64
-    rm executors/kubernetes/kubernetes_test.go
-    rm executors/kubernetes/overwrites_test.go
+    # Needs DNS
+    rm commands/helpers/probe_url_test.go
+
+    # Use bash from PATH instead of absolute paths
+    substituteInPlace executors/kubernetes/kubernetes_test.go \
+      --replace-fail \
+        '[]byte(shells.BashDetectShellScript)' \
+        '[]byte("exec bash \"$@\"\n")'
   ''
   + lib.optionalString stdenv.buildPlatform.isDarwin ''
     # Darwin's sandbox blocks sendfile(2) during local HTTP PUT uploads
@@ -73,7 +70,7 @@ buildGoModule (finalAttrs: {
   '';
 
   postPatch = ''
-    patchShebangs --build helpers/docker/auth/testdata/docker-credential-bin.sh
+    patchShebangs --build helpers/docker/auth/testdata/
   '';
 
   excludedPackages = [
@@ -98,6 +95,12 @@ buildGoModule (finalAttrs: {
   nativeCheckInputs = [
     gitMinimal
     writableTmpDirAsHomeHook
+  ];
+
+  # Expects the x86_64 helper image on every platform, while autoset picks the
+  # build platform's architecture
+  checkFlags = lib.optionals (!stdenv.buildPlatform.isx86_64) [
+    "-skip=^TestPrepare/autoset_helper_arch_and_os_on_non_windows_does_not_need_windows_kernel_version$"
   ];
 
   preCheck = ''
