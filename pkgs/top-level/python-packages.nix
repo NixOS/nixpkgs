@@ -16373,6 +16373,7 @@ self: super: with self; {
 
   pysail = callPackage ../development/python-modules/pysail {
     protoc = pkgs.protobuf;
+    inherit (pkgs) zstd;
   };
 
   pysam = callPackage ../development/python-modules/pysam { };
