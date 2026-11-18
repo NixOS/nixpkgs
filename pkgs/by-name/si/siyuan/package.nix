@@ -43,6 +43,12 @@ let
 
   platformId = platformIds.${system} or (throw "Unsupported platform: ${system}");
 
+  # SiYuan's OCR only ever uses onnxruntime's default CPU execution provider
+  # (kernel/ocr/runtime.c never appends another one), but nixpkgs enables the
+  # OpenVINO provider on Linux by default. That drags OpenVINO, oneTBB and
+  # level-zero (~200 MiB) into the closure for nothing.
+  onnxruntimeMinimal = onnxruntime.override { openvinoSupport = false; };
+
   # The name electron-builder's extraResources expects for the current platform.
   # The archive we build is a placeholder: afterPack only checks that bin/pandoc
   # is a non-empty regular file, and the kernel uses the Nix pandoc directly via
@@ -113,7 +119,7 @@ let
   dedupeOnnxruntime = resourcesDir: ''
     ocrRuntimeDir=${resourcesDir}/stage/ocr/runtime/${ocrTarget}
     mkdir -p "$ocrRuntimeDir"
-    ortLib=${lib.getLib onnxruntime}/lib/libonnxruntime.${if isDarwin then "dylib" else "so"}
+    ortLib=${lib.getLib onnxruntimeMinimal}/lib/libonnxruntime.${if isDarwin then "dylib" else "so"}
     test -e "$ortLib" || {
       echo "onnxruntime library missing: $ortLib"
       exit 1
