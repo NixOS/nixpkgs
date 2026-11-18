@@ -133,6 +133,7 @@ buildPythonApplication rec {
     "terminfo"
     "shell_integration"
     "kitten"
+    "xdg_portal"
   ];
 
   patches = [
@@ -329,6 +330,13 @@ buildPythonApplication rec {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
     cp -r 'shell-integration' "$shell_integration"
+
+    mkdir -p "$xdg_portal/share"
+    export XDG_DATA_DIRS="$xdg_portal/share"
+    export XDG_DATA_HOME="$xdg_portal/share"
+    export XDG_CONFIG_HOME="$xdg_portal/share"
+    export XDG_CURRENT_DESKTOP=common
+    "$kitten/bin/kitten" desktop-ui enable-portal
 
     runHook postInstall
   '';
