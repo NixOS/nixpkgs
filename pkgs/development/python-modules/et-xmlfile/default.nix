@@ -5,6 +5,7 @@
   fetchpatch,
   lxml,
   pytestCheckHook,
+  pythonAtLeast,
   setuptools,
 }:
 
@@ -34,6 +35,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     lxml
     pytestCheckHook
+  ];
+
+  # https://foss.heptapod.net/openpyxl/et_xmlfile/-/work_items/10
+  disabledTests = lib.optionals (pythonAtLeast "3.15") [
+    # Unclosed iterparse iterator produces a ResourceWarning
+    "test_iterparse"
+    # Different ValueError message from Element.remove()
+    "test_simpleops"
+    # Different TypeError message from Element()
+    "test_issue14818"
   ];
 
   pythonImportsCheck = [ "et_xmlfile" ];
