@@ -220,6 +220,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     mainProgram = "ibus";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.pineapplehunter ];
   };
 })
