@@ -48,6 +48,9 @@ let
 
   format = pkgs.formats.json { };
 
+  # Remove null values
+  filterConfig = lib.converge (filterAttrsRecursive (k: v: v != null));
+
   flattenAttrSet =
     key: keyName: value:
     nameValuePair key (map (it: { "${keyName}" = it.name; } // it.value) (attrsToList value));
@@ -56,8 +59,6 @@ let
     mapAttrs' (
       name: value: nameValuePair (lib.strings.toCamelCase "${parent}_${name}") value
     ) cfg.settings."${parent}";
-
-  filterSecrets = filterAttrsRecursive (k: v: !(hasSuffix "File" k));
 
   loadCredentials = credentials: mapAttrsToList (n: path: "${n}:${path}") credentials;
 
@@ -118,6 +119,13 @@ in
       type = str;
       default = "/var/lib/bulwark/plugin-secrets";
       description = "Directory for credentials users save for plugins, encrypted.";
+    };
+    admin_config_dir = mkOption {
+      type = str;
+      default = "/var/lib/bulwark/admin";
+      description = ''
+        Admin config dir. Everything inside is replaced when the service starts.
+      '';
     };
     admin_state_dir = mkOption {
       type = str;
@@ -764,6 +772,136 @@ in
       wants = [
         "network-online.target"
       ];
+
+      preStart =
+        let
+          config-json = format.generate "config.json" (
+            recursiveUpdate (filterConfig (
+              lib.mapAttrs'
+                (
+                  n: v:
+                  if n == "jmapServers" then
+                    flattenAttrSet n "id" v
+                  else if n == "domainBranding" then
+                    flattenAttrSet n "host" v
+                  else
+                    nameValuePair n v
+                )
+                (
+                  removeAttrs
+                    (
+                      cfg.settings
+                      // cfg.settings.branding
+                      // optionalAttrs cfg.settings.oauth.enabled (renameOptions "oauth")
+                    )
+                    [
+                      "branding"
+                      "oauth"
+                    ]
+                )
+              // {
+                setupComplete = true;
+              }
+            )) credentials_systemd.settings
+          );
+          policy-json = format.generate "policy.json" (
+            recursiveUpdate cfg.policies {
+              features.pluginsEnabled = length cfg.plugins != 0;
+              features.pluginsUploadEnabled = false;
+              features.requirePluginApproval = true;
+              features.userThemesEnabled = false;
+            }
+          );
+          plugins = toString (
+            pkgs.linkFarm "bulwark-plugins" (
+              [
+                {
+                  name = "registry.json";
+                  path = format.generate "registry.json" {
+                    plugins = map (
+                      plugin:
+                      (trivial.importJSON "${plugin.package.outPath}/manifest.json")
+                      // {
+                        enabled = true;
+                        forceEnabled = plugin.forceEnabled;
+                      }
+                    ) cfg.plugins;
+                  };
+                }
+              ]
+              ++ (map (plugin: {
+                name = "${plugin.package.pluginName}.js";
+                path = "${plugin.package.outPath}/index.js";
+              }) cfg.plugins)
+            )
+          );
+          plugin-config = toString (
+            pkgs.linkFarm "bulwark-plugin-config" (
+              map (plugin: {
+                name = "${plugin.package.pluginName}.json";
+                path = format.generate "${plugin.package.pluginName}.json" plugin.config;
+              }) (filter (plugin: plugin.config != { }) cfg.plugins)
+            )
+          );
+          themes = toString (
+            pkgs.linkFarm "bulwark-themes" (
+              [
+                {
+                  name = "registry.json";
+                  path = format.generate "registry.json" {
+                    themes = map (
+                      theme:
+                      (trivial.importJSON "${theme.package.outPath}/manifest.json")
+                      // {
+                        enabled = true;
+                        forceEnabled = theme.forceEnabled;
+                      }
+                    ) cfg.themes;
+                  };
+                }
+              ]
+              ++ lib.lists.flatten (
+                map (
+                  theme:
+                  [
+                    {
+                      name = "${theme.package.themeName}.css";
+                      path = "${theme.package.outPath}/theme.css";
+                    }
+                  ]
+                  ++ (optional (pathIsRegularFile "${theme.package.outPath}/skin.css") {
+                    name = "${theme.package.themeName}.skin.css";
+                    path = "${theme.package.outPath}/skin.css";
+                  })
+                ) cfg.themes
+              )
+            )
+          );
+          admin-json = format.generate "admin.json" (recursiveUpdate cfg.admin credentials_systemd.admin);
+        in
+        ''
+          ${pkgs.coreutils}/bin/rm -rf ${cfg.admin_config_dir}
+          ${pkgs.coreutils}/bin/mkdir ${cfg.admin_config_dir}
+          cd ${cfg.admin_config_dir}
+
+          ${pkgs.coreutils}/bin/cp ${config-json} config.json
+          ${pkgs.coreutils}/bin/cp ${policy-json} policy.json
+          ${pkgs.coreutils}/bin/cp -r ${plugins} plugins
+          ${pkgs.coreutils}/bin/chmod u+w plugins
+          ${pkgs.coreutils}/bin/cp -r ${plugin-config} plugin-config
+          ${pkgs.coreutils}/bin/cp -r ${themes} themes
+          ${if (cfg.admin != null) then "${pkgs.coreutils}/bin/cp ${admin-json} admin.json" else ""}
+
+          # Create plugin signatures
+          cd plugins
+          ${concatStringsSep "\n" (
+            map (
+              plugin:
+              "${pkgs.openssl}/bin/openssl pkeyutl -sign -inkey ${cfg.settings.pluginSigningKeyFile} -out - -rawin -in ${plugin.package.pluginName}.js | ${pkgs.openssl}/bin/openssl enc -base64 > ${plugin.package.pluginName}.sig"
+            ) cfg.plugins
+          )}
+        '';
+
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
         DynamicUser = true;
@@ -808,99 +946,7 @@ in
       };
 
       environment = {
-        ADMIN_CONFIG_DIR = toString (
-          pkgs.linkFarm "bulwark-admin-config-dir" (
-            [
-              {
-                name = "config.json";
-                path = format.generate "config.json" filterSecrets (
-                  recursiveUpdate (
-                    lib.mapAttrs'
-                      (
-                        name: value:
-                        if name == "jmapServers" then
-                          flattenAttrSet name "id" value
-                        else if name == "domainBranding" then
-                          flattenAttrSet name "host" value
-                        else
-                          nameValuePair name value
-                      )
-                      (
-                        removeAttrs
-                          (
-                            cfg.settings
-                            // cfg.settings.branding
-                            // optionalAttrs cfg.settings.oauth.enabled (renameOptions "oauth")
-                          )
-                          [
-                            "branding"
-                            "oauth"
-                          ]
-                      )
-
-                    // {
-                      setupComplete = true;
-                    }
-                  ) credentials_systemd
-                );
-              }
-              {
-                name = "policy.json";
-                path = format.generate "policy.json" (
-                  recursiveUpdate cfg.policies {
-                    features.pluginsEnabled = length cfg.plugins != 0;
-                    features.pluginsUploadEnabled = false;
-                    features.requirePluginApproval = true;
-                    features.userThemesEnabled = false;
-                  }
-                );
-              }
-              {
-                name = "plugins";
-                path = toString (
-                  pkgs.linkFarm "bulwark-plugins" (
-                    [
-                      {
-                        name = "registry.json";
-                        path = format.generate "registry.json" {
-                          plugins = map (
-                            plugin:
-                            (trivial.importJSON "${plugin.package.outPath}/manifest.json")
-                            // {
-                              enabled = true;
-                              forceEnabled = plugin.forceEnabled;
-                            }
-                          ) cfg.plugins;
-                        };
-                      }
-                    ]
-                    ++ (map (plugin: {
-                      name = "${plugin.package.pluginName}.js";
-                      path = "${plugin.package.outPath}/index.js";
-                    }) cfg.plugins)
-                  )
-                );
-              }
-              {
-                name = "plugin-config";
-                path = toString (
-                  pkgs.linkFarm "bulwark-plugin-config" (
-                    map (plugin: {
-                      name = "${plugin.package.pluginName}.json";
-                      path = format.generate "${plugin.package.pluginName}.json" plugin.config;
-                    }) (filter (plugin: plugin.config != { }) cfg.plugins)
-                  )
-                );
-              }
-            ]
-            ++ lib.optionals (cfg.admin != null) [
-              {
-                name = "admin.json";
-                path = format.generate "admin.json" cfg.admin;
-              }
-            ]
-          )
-        );
+        ADMIN_CONFIG_DIR = cfg.admin_config_dir;
         ADMIN_CONFIG_READONLY = "true";
 
         HOSTNAME = cfg.hostname;

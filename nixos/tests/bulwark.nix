@@ -10,7 +10,17 @@
   nodes.machine = {
     services.bulwark = {
       enable = true;
-      settings.allowCustomJmapEndpoint = true;
+      settings = {
+        allowCustomJmapEndpoint = true;
+        pluginSigningKeyFile = toString (
+          pkgs.writeText "plugin-signing-key" ''
+            # This key is not in real usage
+            -----BEGIN PRIVATE KEY-----
+            MC4CAQAwBQYDK2VwBCIEIADUMKAlwfzqFzRz9aguN16j1qguCIvUPY7dsoXX8ork
+            -----END PRIVATE KEY-----
+          ''
+        );
+      };
     };
   };
 
