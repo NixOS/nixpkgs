@@ -154,6 +154,12 @@ stdenv.mkDerivation (finalAttrs: {
       "sqlcipher"
     ];
 
+    # `go build ./...` also produces `apigen` (a 34 MiB code-generation tool)
+    # and `harmony` (a 145 MiB HarmonyOS bundle). Nothing installs or runs
+    # either one, but both end up in $out/bin and therefore in every closure
+    # that references the kernel. Build just the kernel package.
+    subPackages = [ "." ];
+
     env.CGO_ENABLED = "1";
 
     # Tests are skipped here because many upstream tests make assumptions that
