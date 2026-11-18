@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "css-inline";
-  version = "0.23.1";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "css-inline";
     rev = "python-v${version}";
-    hash = "sha256-X59hCKncYNBEKbbAzDR6r68C2OXtkTgkQ77G6Bqk/Y8=";
+    hash = "sha256-IyIzh+VrE9tcB604PSgLCENzAtLBX2Klr+r8klGI324=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
       cd crates/css-inline-python
       ln -s ${./Cargo.lock} Cargo.lock
     '';
-    hash = "sha256-HCUgK0gqzfKKunjd+B0IwypocRoiuka+Xd/C1uhga7M=";
+    hash = "sha256-EMOdx8jpXkYaZUlJXPVLHB7WsUGnguqjXBv4U5u5OEA=";
   };
 
   nativeBuildInputs = [
