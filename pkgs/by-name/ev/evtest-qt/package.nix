@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libsForQt5.qtbase ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     description = "Simple input device tester for linux with Qt GUI";
