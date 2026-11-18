@@ -11535,6 +11535,8 @@ self: super: with self; {
 
   mtcnn = callPackage ../development/python-modules/mtcnn { };
 
+  mtranslate = callPackage ../development/python-modules/mtranslate { };
+
   mujoco = callPackage ../development/python-modules/mujoco { };
 
   mujoco-core = callPackage ../development/python-modules/mujoco-core { inherit (pkgs) mujoco; };
@@ -18684,6 +18686,8 @@ self: super: with self; {
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
+
+  roundtrip = callPackage ../development/python-modules/roundtrip { };
 
   routeros-api = callPackage ../development/python-modules/routeros-api { };
 
