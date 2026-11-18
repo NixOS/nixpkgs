@@ -51,12 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.optionalString (conf != null) "cp ${configFile} config.def.h"}
     '';
 
-  preConfigure = ''
-    makeFlagsArray+=(
-      PREFIX="$out"
-      CC="$CC"
-    )
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "CC:=$(CC)"
+  ];
 
   passthru.updateScript = gitUpdater { url = "git://git.suckless.org/dmenu"; };
 
