@@ -15071,6 +15071,12 @@
     matrix = "@kanru:wara.tw";
     keys = [ { fingerprint = "374F F2AD 0A12 935F D0B0  C84F 1B13 2E01 CEC6 AD46"; } ];
   };
+  kanywst = {
+    email = "niwatakuma@icloud.com";
+    github = "kanywst";
+    githubId = 45947799;
+    name = "kt";
+  };
   kaptcha0 = {
     name = "J'C Kabunga";
     github = "kaptcha0";
