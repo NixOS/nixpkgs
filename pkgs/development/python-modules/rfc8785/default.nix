@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   nativeCheckInputs = [
