@@ -1035,6 +1035,9 @@
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
   ],
+  "using-pythonrelaxbuildsystemhook": [
+    "index.html#using-pythonrelaxbuildsystemhook"
+  ],
   "using-tclrequirescheck": [
     "index.html#using-tclrequirescheck"
   ],
