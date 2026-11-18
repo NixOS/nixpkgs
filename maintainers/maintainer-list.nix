@@ -2376,6 +2376,13 @@
     githubId = 59250656;
     matrix = "@vegardbm:matrix.org";
   };
+  aras14hd = {
+    email = "aras@aras14.dev";
+    name = "Aras";
+    github = "Aras14HD";
+    githubId = 40068291;
+    matrix = "@aras:beeper.com";
+  };
   arbel-arad = {
     email = "arbel@spacetime.technology";
     github = "arbel-arad";
