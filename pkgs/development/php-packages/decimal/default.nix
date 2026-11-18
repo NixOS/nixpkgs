@@ -5,13 +5,13 @@
   php,
 }:
 let
-  version = "1.5.0";
+  version = "2.0.1";
 in
 buildPecl {
   pname = "decimal";
 
   version = version;
-  hash = "sha256-it8w8hOLYwtCZoDYhaP5k5TD/pQLtj37K2lSESF80ok=";
+  hash = "sha256-Am4w9xAW0l8mf5s4q4CpS+1HeeBen/X0jZsIvxwY0gQ=";
 
   # The source is a PECL tarball and PECL lacks releases that GitHub tags have (2.0.2)
   passthru.updateScript = null;
