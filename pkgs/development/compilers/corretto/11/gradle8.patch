@@ -1,5 +1,5 @@
 diff --git a/build.gradle b/build.gradle
-index a589bb568..6e0164562 100644
+index e5d6981..6425c6b 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -240,7 +240,7 @@ project(':prebuild') {
@@ -43,10 +43,10 @@ index a589bb568..6e0164562 100644
              include 'LICENSE',
                      'ADDITIONAL_LICENSE_INFO',
 diff --git a/installers/linux/al2/spec/build.gradle b/installers/linux/al2/spec/build.gradle
-index 598d658de..b99e94d83 100644
+index 62c240d..e477bcd 100644
 --- a/installers/linux/al2/spec/build.gradle
 +++ b/installers/linux/al2/spec/build.gradle
-@@ -62,8 +62,8 @@ task inflateRpmSpec {
+@@ -65,8 +65,8 @@ task inflateRpmSpec {
  
  task copySourceTar(type: Tar) {
      dependsOn project.configurations.compile, inflateRpmSpec
@@ -57,7 +57,7 @@ index 598d658de..b99e94d83 100644
      from("$buildDir") {
          include "java-${project.version.major}-amazon-corretto.spec"
          into 'rpm'
-@@ -121,8 +121,8 @@ task inflateRpmSpecModular {
+@@ -126,8 +126,8 @@ task inflateRpmSpecModular {
  
  task copySourceTarModular(type: Tar) {
      dependsOn project.configurations.compile, inflateRpmSpecModular
@@ -69,7 +69,7 @@ index 598d658de..b99e94d83 100644
          include "java-${project.version.major}-amazon-corretto-modular.spec"
          into 'rpm'
 diff --git a/installers/linux/alpine/tar/build.gradle b/installers/linux/alpine/tar/build.gradle
-index 4867205e5..0c850d15f 100644
+index a843e59..1774b62 100644
 --- a/installers/linux/alpine/tar/build.gradle
 +++ b/installers/linux/alpine/tar/build.gradle
 @@ -143,9 +143,9 @@ task createTestImage(type: Exec) {
@@ -124,7 +124,7 @@ index 4867205e5..0c850d15f 100644
      into "amazon-corretto-${project.version.full}-alpine-linux-${arch_alias}"
  }
 diff --git a/installers/linux/universal/deb/build.gradle b/installers/linux/universal/deb/build.gradle
-index 565cd7c2b..f2cc09982 100644
+index e212ddd..1cbd004 100644
 --- a/installers/linux/universal/deb/build.gradle
 +++ b/installers/linux/universal/deb/build.gradle
 @@ -20,7 +20,7 @@
@@ -136,13 +136,10 @@ index 565cd7c2b..f2cc09982 100644
  }
  
  dependencies {
-@@ -57,22 +57,22 @@ def jinfoName = ".${jdkInstallationDirName}.jinfo"
- ospackage {
-     // Valid version must start with a digit and only contain [A-Za-z0-9.+:~-]
-     // See http://manpages.ubuntu.com/manpages/artful/en/man5/deb-version.5.html
--    version project.version.upstream
--    release project.version.revision
--
+@@ -60,19 +60,19 @@ ospackage {
+     version = project.version.full
+     release = project.version.revision
+ 
 -    url "${packageInfo.url}"
 -    vendor "${packageInfo.vendor}"
 -    packager "${packageInfo.packager}"
@@ -156,9 +153,6 @@ index 565cd7c2b..f2cc09982 100644
 -    epoch 1
 -    arch arch_deb
 -    multiArch SAME
-+    version = project.version.upstream
-+    release = project.version.revision
-+
 +    url = "${packageInfo.url}"
 +    vendor = "${packageInfo.vendor}"
 +    packager = "${packageInfo.packager}"
@@ -194,7 +188,7 @@ index 565cd7c2b..f2cc09982 100644
      postInstall file("$buildRoot/scripts/postin_jdk.sh")
      preUninstall file("$buildRoot/scripts/preun_jdk.sh")
 diff --git a/installers/linux/universal/rpm/build.gradle b/installers/linux/universal/rpm/build.gradle
-index c309c8ddb..346bcc21e 100644
+index 5c9b671..a09a97e 100644
 --- a/installers/linux/universal/rpm/build.gradle
 +++ b/installers/linux/universal/rpm/build.gradle
 @@ -20,7 +20,7 @@
@@ -206,13 +200,10 @@ index c309c8ddb..346bcc21e 100644
  }
  
  dependencies {
-@@ -51,20 +51,20 @@ def jdkBinaryDir = "${buildRoot}/${project.correttoJdkArchiveName}"
- def jdkPackageName = "java-${project.version.major}-amazon-corretto-devel"
+@@ -54,17 +54,17 @@ ospackage {
+     version = project.version.full
+     release = project.version.revision
  
- ospackage {
--    version project.version.upstream
--    release project.version.revision
--
 -    url "${packageInfo.url}"
 -    vendor "${packageInfo.vendor}"
 -    packager "${packageInfo.packager}"
@@ -224,9 +215,6 @@ index c309c8ddb..346bcc21e 100644
 -    arch arch_redline
 -    os LINUX
 -    type BINARY
-+    version = project.version.upstream
-+    release = project.version.revision
-+
 +    url = "${packageInfo.url}"
 +    vendor = "${packageInfo.vendor}"
 +    packager = "${packageInfo.packager}"
@@ -241,7 +229,7 @@ index c309c8ddb..346bcc21e 100644
  }
  
  /**
-@@ -101,14 +101,14 @@ task inflateRpmScriptTemplate(type: Copy) {
+@@ -101,12 +101,12 @@ task inflateRpmScriptTemplate(type: Copy) {
   * distributions folder.
   */
  task generateJdkRpm(type: Rpm) {
@@ -257,13 +245,10 @@ index c309c8ddb..346bcc21e 100644
 +    summary = "Amazon Corretto ${project.version.major} development environment"
 +    packageGroup = 'Development/Tools'
      // Remove after https://github.com/nebula-plugins/gradle-ospackage-plugin/issues/401 is merged and released
--    sourcePackage "${jdkPackageName}-${project.version.major}.${project.version.minor}.${project.version.security}.${project.version.build}-${project.version.revision}.src.rpm"
-+    sourcePackage = "${jdkPackageName}-${project.version.major}.${project.version.minor}.${project.version.security}.${project.version.build}-${project.version.revision}.src.rpm"
+     sourcePackage = "${jdkPackageName}-${project.version.full}-${project.version.revision}.src.rpm"
  
-     prefix(jdkHome)
-     postInstall file("$buildRoot/scripts/postin_java.sh")
 diff --git a/installers/linux/universal/tar/build.gradle b/installers/linux/universal/tar/build.gradle
-index 72236d92c..e825a7594 100644
+index 4e2031a..7a732f8 100644
 --- a/installers/linux/universal/tar/build.gradle
 +++ b/installers/linux/universal/tar/build.gradle
 @@ -85,7 +85,7 @@ task copySource(type: Exec) {
