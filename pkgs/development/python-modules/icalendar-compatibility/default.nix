@@ -9,7 +9,7 @@
   git,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "icalendar-compatibility";
   version = "0.1.5";
   pyproject = true;
@@ -17,14 +17,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCalendar";
     repo = "icalendar_compatibility";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rHx4wuLKSBI3/3ShxtpyyuK+iWULpbzfDN8DCNUryHg=";
   };
 
   # hatch-vcs tries to read the current git commit hash
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["urls", "version"]' 'version = "${version}"'
+      --replace 'dynamic = ["urls", "version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -48,10 +48,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://icalendar-compatibility.readthedocs.io/en/latest/";
-    changelog = "https://github.com/PyCalendar/icalendar_compatibility/blob/${src.rev}/docs/changes.rst";
+    changelog = "https://github.com/PyCalendar/icalendar_compatibility/blob/${finalAttrs.src.rev}/docs/changes.rst";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ erictapen ];
     teams = with lib.teams; [ ngi ];
   };
 
-}
+})
