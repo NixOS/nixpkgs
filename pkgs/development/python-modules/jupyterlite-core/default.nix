@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterlite-core";
-  version = "0.8.7";
+  version = "0.9.0b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlite";
     repo = "jupyterlite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NhEASYiPdu/lkBUCiH4nVI6iEBb9v3Djs/9N+BovfgA=";
+    hash = "sha256-XdsnRCQw1aX52PAXiLQpTUdnMNPK/GNJL9dgjQ/lIAs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/py/jupyterlite-core";
