@@ -59,6 +59,8 @@ let
           })
           # typing.Union is types.UnionType since Python 3.14
           ./robotframework-python3.14-type-name.patch
+          # Fix `isatty` with detached buffers on Python 3.14+
+          ./robotframework-python3.14-isatty.patch
         ];
       }))
     ];

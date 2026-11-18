@@ -1,0 +1,23 @@
+Backport of https://github.com/robotframework/robotframework/commit/ca249542582f
+("Fix `isatty` utility with detached buffers") to robotframework 6.1.
+
+Since Python 3.14, accessing `buffer` on a detached TextIOWrapper raises
+ValueError instead of returning None.
+
+--- a/src/robot/utils/misc.py
++++ b/src/robot/utils/misc.py
+@@ -114,13 +114,10 @@
+ 
+ 
+ def isatty(stream):
+-    # first check if buffer was detached
+-    if hasattr(stream, 'buffer') and stream.buffer is None:
+-        return False
+     if not hasattr(stream, 'isatty'):
+         return False
+     try:
+         return stream.isatty()
+-    except ValueError:    # Occurs if file is closed.
++    except ValueError:    # Occurs if stream is closed or its buffer is detached.
+         return False
+ 
