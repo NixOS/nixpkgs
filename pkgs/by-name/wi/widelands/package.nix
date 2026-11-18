@@ -89,17 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libxext;
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm444 -t $out/share/applications ../xdg/org.widelands.Widelands.desktop
-
-      for s in 16 32 48 64 128; do
-        install -Dm444 ../data/images/logos/wl-ico-''${s}.png $out/share/icons/hicolor/''${s}x''${s}/org.widelands.Widelands.png
-      done
-    ''
-    + ''
-      installManPage ../xdg/widelands.6
-    '';
+  # xdg/CMakeLists.txt is only added on non-Apple Unix platforms.
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    installManPage ../xdg/widelands.6
+  '';
 
   meta = {
     description = "RTS with multiple-goods economy";
