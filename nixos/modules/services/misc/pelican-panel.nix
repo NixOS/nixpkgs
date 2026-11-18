@@ -380,10 +380,23 @@ in
             requires = [ "pelican-setup.service" ];
             wantedBy = [ "multi-user.target" ];
 
+            path = with pkgs; [
+              php
+              php.packages.composer
+              git
+              unzip
+            ];
+
+            environment = {
+              COMPOSER_HOME = "${cfg.stateDir}/.composer";
+              COMPOSER_CACHE_DIR = "/var/cache/pelican/composer";
+            };
+
             serviceConfig = {
               User = cfg.user;
               Group = cfg.group;
               WorkingDirectory = "${cfg.stateDir}/www";
+              CacheDirectory = "pelican/composer";
               ExecStart = "${getExe cfg.phpPackage} artisan queue:work --tries=3";
               Restart = "on-failure";
               RestartSec = "5s";
