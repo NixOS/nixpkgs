@@ -122,6 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Better log output with a "dumb" terminal
     "-DLEAN_EXTRA_LAKE_OPTS=--no-ansi"
+
+    # Fix `System.Platform.target` not being set
+    "-DLEAN_PLATFORM_TARGET=${stdenv.hostPlatform.config}"
   ];
 
   preBuild = ''
