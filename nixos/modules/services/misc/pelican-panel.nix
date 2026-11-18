@@ -21,11 +21,12 @@ let
     isString
     match
     optionalAttrs
+    getExe
     ;
 
   artisan = pkgs.writeShellScriptBin "pelican-artisan" ''
     cd ${cfg.stateDir}/www
-    exec ${pkgs.sudo}/bin/sudo -u pelican ${cfg.phpPackage}/bin/php artisan "$@"
+    exec ${getExe pkgs.sudo} -u pelican ${getExe cfg.phpPackage} artisan "$@"
   '';
 
   autoConfig = {
@@ -98,8 +99,8 @@ let
     chmod -R o+rX "$WWW/public"
     chown -R pelican:pelican "$STATE"
 
-    ${artisan}/bin/pelican-artisan migrate --force
-    ${artisan}/bin/pelican-artisan filament:optimize
+    ${getExe artisan} migrate --force
+    ${getExe artisan} filament:optimize
   '';
 in
 {
@@ -383,7 +384,7 @@ in
               User = cfg.user;
               Group = cfg.group;
               WorkingDirectory = "${cfg.stateDir}/www";
-              ExecStart = "${cfg.phpPackage}/bin/php artisan queue:work --tries=3";
+              ExecStart = "${getExe cfg.phpPackage} artisan queue:work --tries=3";
               Restart = "on-failure";
               RestartSec = "5s";
             };
@@ -398,7 +399,7 @@ in
               User = cfg.user;
               Group = cfg.group;
               WorkingDirectory = "${cfg.stateDir}/www";
-              ExecStart = "${cfg.phpPackage}/bin/php artisan schedule:run";
+              ExecStart = "${getExe cfg.phpPackage} artisan schedule:run";
             };
           };
         };
