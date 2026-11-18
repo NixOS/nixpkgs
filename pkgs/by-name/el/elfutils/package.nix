@@ -156,7 +156,10 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Plus
       gpl3Plus
     ];
-    maintainers = with lib.maintainers; [ r-burns ];
+    maintainers = with lib.maintainers; [
+      philiptaron
+      r-burns
+    ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "elfutils_project" finalAttrs.version;
   };
 })
