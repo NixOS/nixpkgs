@@ -13,7 +13,7 @@
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-django,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   python-multipart,
   quart,
   sanic-testing,
@@ -66,7 +66,8 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-django
-    pytestCheckHook
+    # pytest.PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+    pytest9_1CheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
