@@ -7,12 +7,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "geist-font";
-  version = "1.7.0";
+  version = "1.9.2";
 
   srcs = [
     (fetchzip {
-      url = "https://github.com/vercel/geist-font/releases/download/${finalAttrs.version}/geist-font-${finalAttrs.version}.zip";
-      hash = "sha256-BeS7QkBkRjqozrqzOm2lbc/vTG25OCoCgQr96T8ica4=";
+      url = "https://github.com/vercel/geist-font/releases/download/v${finalAttrs.version}/geist-font-v${finalAttrs.version}.zip";
+      hash = "sha256-BRx+tfFs9lurWWRBeyxe2voO8hnzJUOrLweqb4o4cM8=";
     })
   ];
 
