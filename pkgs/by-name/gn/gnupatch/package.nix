@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     sed -E -i -e '/bad-filenames/d' tests/Makefile.am
   '';
 
+  # patch spawns ed at runtime for in-place edits, so it cannot be a
+  # nativeCheckInput. It must be a target-platform input (buildInputs)
+  # so cross builds bake the ed for the target, not for the build machine.
+  buildInputs = [ ed ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -29,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.hostPlatform.libc != "musl";
-  nativeCheckInputs = [ ed ];
 
   strictDeps = true;
 
