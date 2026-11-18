@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchurl,
+  aws-lc,
   pkg-config,
   protobuf,
   bzip2,
@@ -171,6 +172,7 @@ else
       ];
 
       buildInputs = [
+        aws-lc
         bzip2
         oniguruma
         sqlite
