@@ -133,7 +133,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interface with the Telegram Bot API";
     homepage = "https://python-telegram-bot.org";
-    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/releases/tag/${src.tag}";
     license =
       with lib.licenses;
       OR [
