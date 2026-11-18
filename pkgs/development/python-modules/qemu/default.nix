@@ -48,6 +48,9 @@ buildPythonPackage {
     ''
   );
 
+  # The version and src come from qemu, nix-update on this package cannot update them
+  passthru.updateScript = null;
+
   meta = {
     homepage = "https://www.qemu.org/";
     description = "Python tooling used by the QEMU project to build, configure, and test QEMU";
