@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-s" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Go implementation of Revanity, a Reticulum/LXMF vanity address generator";
