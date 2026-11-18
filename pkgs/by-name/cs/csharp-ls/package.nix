@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 let
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_11_0;
 in
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "csharp-ls";
-  version = "0.28.0";
+  version = "0.29.0";
 
-  nugetHash = "sha256-j4FeTyJnQQaoJEvroH5LSwYuMVKOQEqoSJMS7/uMDgw=";
+  nugetHash = "sha256-RhvzBw2WViVNH4gfZIRQKJF46geyYvWqOe8OdE6RxUM=";
 
   inherit dotnet-sdk;
   dotnet-runtime = dotnet-sdk;
