@@ -5,17 +5,18 @@
   cmake,
   fetchpatch,
   static ? stdenv.hostPlatform.isStatic,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snappy";
-  version = "1.2.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
     rev = finalAttrs.version;
-    hash = "sha256-bMZD8EI9dvDGupfos4hi/0ShBkrJlI5Np9FxE6FfrNE=";
+    hash = "sha256-QVBzdVdQAHOBD7wwbOncYNbA4unRgTLI2Xac9RjERM4=";
   };
 
   patches = [
@@ -33,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     # For a different revision (in case nixpkgs is behind or something) you can go through the full revision history.
     # Should the patch not be available for the nixpkgs version, ideally wait until the patch becomes available before bumping, or vendor it if necessary.
     (fetchpatch {
-      url = "https://build.opensuse.org/public/source/openSUSE:Factory/snappy/reenable-rtti.patch?rev=e3449869b466869fc6b8a03a1a528fa6";
-      hash = "sha256-JhVhkHh7XPx1Bzf5xnOgWLgwh1oihX3O+emQWzE4Dho=";
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/snappy/reenable-rtti.patch?rev=26dd9a294fdef957239de93ca330c878";
+      hash = "sha256-ao/pWrDNJdtDCfWBEmeUV3tPWRS8l95X9o+hTaSjiVk=";
     })
   ];
 
@@ -52,9 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    substituteInPlace "$out"/lib/cmake/Snappy/SnappyTargets.cmake \
-      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES "'$dev'"'
-
     mkdir -p $dev/lib/pkgconfig
     cat <<EOF > $dev/lib/pkgconfig/snappy.pc
       Name: snappy
@@ -64,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       Cflags: -I$dev/include
     EOF
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   #checkTarget = "test";
 
