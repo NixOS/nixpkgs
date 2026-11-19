@@ -81,15 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./use-system-dependencies.patch
-    ./boost-process-v1.patch
-    ./missing-unordered-map-include.patch
   ];
 
   passthru.updateScript = ./update.sh;
 
   postPatch = ''
-    substituteInPlace src/MaaCore/Config/OnnxSessions.cpp \
-      --replace-fail '#if __has_include(<onnxruntime/coreml_provider_factory.h>)' '#if defined(__APPLE__) && __has_include(<onnxruntime/coreml_provider_factory.h>)'
     substituteInPlace src/MaaUtils/cmake/config.cmake \
       --replace-fail '-Werror;' ""
     cp ${fastdeploy.cmake}/Findonnxruntime.cmake src/MaaUtils/cmake/modules/

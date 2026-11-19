@@ -1,8 +1,8 @@
 {
-  "version": "6.20.0",
-  "hash": "sha256-zZH4c/tuFyK5UsSKkJxbRalYsnjzfYXPzau0FC6RDKk=",
+  "version": "6.22.0",
+  "hash": "sha256-hWgJu5fjHfG450cRqUmh0iUIKZFb6zKZwB2gsUmZl3U=",
   "maaUtils": {
-    "rev": "6e9ba33f6ad835418097d9324c01c44a82825a2b",
-    "hash": "sha256-g6FoqD3EBldHwgULILmxxR9rJajBP5fm6YJynUA8TFY="
+    "rev": "f093a19d07db89f2a03bf0ec50c2061a49758783",
+    "hash": "sha256-zu8KDAo+VuJ2O6UIAAjgn6PIEV2uQwfXWVDpzw/Oj54="
   }
 }
