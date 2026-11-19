@@ -439,6 +439,20 @@ in
                 machine.succeed("test -e /root/.nix-defexpr/channels/nixos/default.nix", "test $(stat -c %a /root) = 700")
               ''}
 
+          if not nix_enabled:
+              with subtest("amazon-init without Nix"):
+                  def run_amazon_init(user_data):
+                      with open(user_data_path, "w") as f:
+                          f.write(user_data)
+                      machine.succeed("systemctl reset-failed fetch-ec2-metadata; systemctl restart fetch-ec2-metadata")
+                      machine.succeed("systemctl restart amazon-init")
+                      return machine.succeed("journalctl -u amazon-init -b --no-pager")
+
+                  journal = run_amazon_init("{ ... }: { }\n")
+                  assert "can't rebuild itself; ignoring" in journal, journal
+                  run_amazon_init("#!/bin/sh\ntouch /run/user-data-ran\n")
+                  machine.succeed("test -e /run/user-data-ran")
+
           with subtest("Decompression of gzip-compressed user-data"):
               import gzip as gzip_mod
               test_data = b"#!/bin/bash\necho gzip-decompression-test\n"
