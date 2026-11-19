@@ -9916,6 +9916,12 @@
     githubId = 189939;
     name = "Santhosh Raju";
   };
+  frai3mega = {
+    email = "frai3mega@213742.xyz";
+    github = "FraI3mega";
+    githubId = 69040313;
+    name = "Franciszek Sośniak";
+  };
   fraioveio = {
     email = "francesco@vecchia.lol";
     github = "FraioVeio";

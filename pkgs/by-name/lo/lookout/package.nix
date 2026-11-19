@@ -120,6 +120,7 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       cloudglides
+      frai3mega
     ];
     platforms = lib.platforms.linux;
     mainProgram = "lookout";
