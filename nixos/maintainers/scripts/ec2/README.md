@@ -46,6 +46,10 @@ images and partition 4 otherwise. Find partitions by `label`, or read their
 
 `partitions.root.size` is the root partition's size in the image. Instances grow
 the partition and its file system to fill the volume on first boot.
+
+With `amazonImage.root = "first-boot"`, the image has no root partition and
+`partitions.root` is absent. Don't expect it.
+
 ## Root partition growth
 
 On first boot, and after the EBS volume grows, systemd-repart grows the root
@@ -61,6 +65,32 @@ Without a `root` definition, growpart stays on even with initrd systemd-repart
 enabled. `boot.growPartition` refuses to run alongside systemd-repart, so such a
 configuration fails to evaluate until you add `root` back or set
 `boot.growPartition = false`.
+
+## Creating root on first boot
+
+With `amazonImage.store = "erofs"` and `nix.enable = false`, the image needs no
+root partition. `amazonImage.root = "first-boot"` leaves it out, and
+systemd-repart creates it in the initrd on first boot, filling the volume, with
+`amazonImage.rootFsType` (ext4 or xfs).
+
+systemd-repart creates root on the disk that has the `nix-store` partition. See
+[Volumes cloned from the image](#volumes-cloned-from-the-image) for what happens
+when more than one disk has one.
+
+## Volumes cloned from the image
+
+Don't attach a volume cloned from this image's volume, or from a running
+instance's root volume, to an instance that boots this image, at first boot or
+later.
+
+* With `amazonImage.root = "first-boot"`, the initrd checks on every boot
+  whether more than one disk has a `nix-store` partition. If so, it stops in
+  emergency mode before systemd-repart runs, and writes to neither disk. Detach
+  the volume and reboot.
+* With `amazonImage.store = "erofs"` or `"erofs-overlay"` and
+  `amazonImage.root = "image"`, there is no such check. The initrd mounts the
+  store by its partition label and root by its file system label, so it can
+  mount either of them from the clone.
 
 ## Roadmap
 
