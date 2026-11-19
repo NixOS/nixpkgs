@@ -35,6 +35,8 @@ buildPythonPackage (finalAttrs: {
     requests
   ];
 
+  pythonRelaxDeps = [ "python-dateutil" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "scaleway_core" ];
