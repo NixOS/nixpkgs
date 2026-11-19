@@ -44,6 +44,8 @@ let
   #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support for CUDA 12 after 9.20.0, so we keep 9.20.0 for Jetson with
   #     CUDA 12, and use the latest release everywhere else.
   #   - Jetson Orin is supported with CUDA 13 only from CUDA 13.2, when it moved to linux-sbsa.
+  # - cusolvermp: cuTensorNet 26.11 checks for cuSOLVERMp >= 0.9.1 and < 0.10.0 at runtime. Both versions use
+  #   libcusolverMp.so.0, so use 0.9.1 throughout each package set.
   # - cusparselt:
   #   - 0.7.0 requires CUDA 12.8 or newer, so we keep 0.6.3 for CUDA 12.6.
   #   - 0.8.x supports CUDA 12.9 and newer, so we keep 0.7.1 for CUDA 12.8.
@@ -58,7 +60,7 @@ let
     cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.6.3";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -83,7 +85,7 @@ let
     cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.7.1";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -108,7 +110,7 @@ let
     cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.8.1";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -133,7 +135,7 @@ let
     cudnn = "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -151,7 +153,7 @@ let
     cudnn = "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -170,7 +172,7 @@ let
     cudnn = "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -189,7 +191,7 @@ let
     cudnn = "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -208,7 +210,7 @@ let
     cudnn = "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -228,7 +230,7 @@ let
     cudnn = "9.28.1";
     cudss = "1.0.0";
     cuquantum = "26.11.0";
-    cusolvermp = "0.10.0";
+    cusolvermp = "0.9.1";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";

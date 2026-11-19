@@ -10,7 +10,6 @@
   libcublasmp,
   libcusolver,
   nccl,
-  release ? null,
 }:
 buildRedist (
   finalAttrs:
@@ -96,5 +95,4 @@ buildRedist (
       changelog = "https://docs.nvidia.com/cuda/cusolvermp/release_notes";
     };
   }
-  // lib.optionalAttrs (release != null) { inherit release; }
 )
