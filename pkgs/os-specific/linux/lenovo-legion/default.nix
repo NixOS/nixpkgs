@@ -45,6 +45,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.ulrikstrid ];
-    broken = kernel.kernelOlder "5.15";
+    broken = kernel.kernelOlder "6.5";
   };
 }
