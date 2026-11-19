@@ -8,18 +8,29 @@
   python3,
   qt6,
   iconConvTools,
+  nlohmann_json,
+  zstd,
   gitUpdater,
 }:
 
+let
+  # Upstream downloads the moving "current" release, built from this commit
+  gf2-src = fetchFromGitHub {
+    owner = "nessan";
+    repo = "gf2";
+    rev = "0b09e44fd2c6615a6a1958c480650e207703b84c";
+    hash = "sha256-stxWvAEM1NRSD84AL6R8ruHZ0BzqJTn07souA0Y24Nc=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pokefinder";
-  version = "4.3.2";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "Admiral-Fish";
     repo = "PokeFinder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-viObYX9W1bUzwGyf7rI1gQeB9OHlLfj5Uny0js/1f6M=";
+    hash = "sha256-SPU+p49I6ts6D+pokQ/FAj2YD6t65jrGa/LSQFko8Vo=";
     fetchSubmodules = true;
   };
 
@@ -28,28 +39,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-        substituteInPlace CMakeLists.txt \
-          --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")' ""
-        substituteInPlace Core/CMakeLists.txt \
-          --replace-fail 'if (APPLE)' 'if (FALSE)'
-        substituteInPlace Core/RNG/SHA1.cpp \
-          --replace-fail '#include "SHA1.hpp"' '#include "SHA1.hpp"
-    #include <algorithm>'
-
-        mkdir -p Core/Resources/compression
-        touch Core/Resources/compression/__init__.py
-        cat <<EOF > Core/Resources/compression/zstd.py
-    import zstandard as zstd
-
-    def compress(data, level=3):
-        cctx = zstd.ZstdCompressor(level=level)
-        return cctx.compress(data)
-
-    def decompress(data):
-        dctx = zstd.ZstdDecompressor()
-        return dctx.decompress(data)
-    EOF
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")' ""
+    substituteInPlace Core/CMakeLists.txt \
+      --replace-fail 'if (APPLE)' 'if (FALSE)'
+    # target("sha") is an x86 extension; GCC rejects it on aarch64
+    substituteInPlace Core/RNG/SHA1.cpp \
+      --replace-fail '#if defined(__GNUC__) || defined(__clang__)' \
+        '#if (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))'
   '';
+
+  # Dependencies upstream downloads with FetchContent
+  cmakeFlags = [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GF2" "${gf2-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZSTD" "${zstd.src}")
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch "-flax-vector-conversions";
 
@@ -71,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
-    (python3.withPackages (ps: [ ps.zstandard ]))
+    python3
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
