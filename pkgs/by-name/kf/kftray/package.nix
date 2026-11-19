@@ -1,10 +1,13 @@
 {
+  cacert,
   cargo-nextest,
   cargo-tauri,
   fetchFromGitHub,
   fetchPnpmDeps,
+  git,
   glib,
   gtk3,
+  iproute2,
   jq,
   lib,
   libayatana-appindicator,
@@ -29,7 +32,11 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   let
-    cargoHash = finalAttrs.cargoDeps.hash or "sha256-NGGeUQUN8+2IZD6F5//G6E2XKG/zeqADr5ek75r7Puk=";
+    patchCommon = lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace crates/kftray-helper/src/network.rs \
+        --replace-fail '"/sbin/ip"' '"${lib.getExe' iproute2 "ip"}"'
+    '';
+    cargoHash = finalAttrs.cargoDeps.hash or "sha256-5XLxYcdInGOMWzx0x8NM6wZdliv64xsuLI9qdxLjhpk=";
     kftrayBinaries = rustPlatform.buildRustPackage {
       pname = "kftray-binaries";
       cargoBuildFlags = [
@@ -40,6 +47,7 @@ stdenv.mkDerivation (
       ];
       inherit (finalAttrs) src version;
       cargoHash = cargoHash;
+      postPatch = patchCommon;
       buildInputs = [
         openssl
         glib
@@ -61,13 +69,13 @@ stdenv.mkDerivation (
   in
   {
     pname = "kftray";
-    version = "0.29.1";
+    version = "0.35.2";
 
     src = fetchFromGitHub {
       owner = "hcavarsan";
       repo = "kftray";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-s8FRd6JiJXfIYy2PpHOFO6t1CTHFHGI4sLmq2loXxpo=";
+      hash = "sha256-COOxLWgJE2qSdxdVW9oQsbjpEsK05dumgosvXBchTtU=";
     };
 
     cargoRoot = "./";
@@ -85,7 +93,7 @@ stdenv.mkDerivation (
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-efs6j56aIb5ze/CbuwFumklwK1FeQ2Y1qmmdC55BnM4=";
+      hash = "sha256-AVzeVI4KLarlVuYvF6WbW3gDUrv3wHw2JrJDoByASLA=";
     };
 
     buildInputs = [
@@ -111,7 +119,7 @@ stdenv.mkDerivation (
       nodejs
     ];
 
-    postPatch = ''
+    postPatch = patchCommon + ''
       # kftray is using the updater plugin. We override the key pair since we
       # want to update with nix. The following is an random generated key pair
       # that holds no significance. Should we able to be simplified once
@@ -142,7 +150,9 @@ stdenv.mkDerivation (
     '';
 
     nativeCheckInputs = [
+      cacert
       cargo-nextest
+      git
     ];
 
     # The below is equivalent to running the mise test:back task. The mise

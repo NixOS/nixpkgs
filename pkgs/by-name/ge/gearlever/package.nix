@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  stdenv,
   meson,
   ninja,
   pkg-config,
@@ -11,6 +10,7 @@
   desktop-file-utils,
   libadwaita,
   file,
+  procps,
   _7zz,
   which,
   appimage-run,
@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gearlever";
-  version = "3.4.7";
+  version = "4.6.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
     tag = finalAttrs.version;
-    hash = "sha256-GW1jCZIr9oMAny7QKPkuYJxhGKDWxvoRviqr8q7GtdM=";
+    hash = "sha256-OeQd7ksozppCHlREWn546TjHsgz2H/Azd65E1FtS9ZE=";
   };
 
   postPatch =
@@ -44,13 +44,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     + ''
       substituteInPlace src/providers/AppImageProvider.py \
         --replace-fail "gtk-launch" "gtk4-launch"
-    ''
-    # We don't have `arch` in coreutils, so just return a string in advance
-    + ''
-      substituteInPlace src/AppDetails.py \
-        --replace-fail "sandbox_sh(['arch'])" '"${stdenv.hostPlatform.uname.processor}"'
-      substituteInPlace src/models/UpdateManager.py \
-        --replace-fail "terminal.sandbox_sh(['arch'])" '"${stdenv.hostPlatform.uname.processor}"'
     '';
 
   nativeBuildInputs = [
@@ -69,6 +62,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     dbus-python
     pyxdg
     requests
+    ftputil
+    desktop-entry-lib
   ];
 
   dontWrapGApps = true;
@@ -83,6 +78,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ":"
     (lib.makeBinPath [
       file
+      procps # ps
       _7zz # 7zz
       which
       appimage-run

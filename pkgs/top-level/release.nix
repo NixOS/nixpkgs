@@ -33,6 +33,8 @@
   ],
   # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true,
+  # Prefix to prepend for the aggregated channel blockers
+  jobsetPrefix ? null,
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
@@ -77,21 +79,25 @@ let
   inherit (release-lib) mapTestOn pkgs;
 
   inherit (release-lib.lib)
-    collect
     concatLists
+    concatMap
     filter
     genAttrs
     hasInfix
     hasSuffix
     id
-    isDerivation
     ;
+
+  inherit (builtins) isNull;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
 
-  onSupported = x: map (system: x.${system}) supportedSystems;
-  onSupportedLinux = x: map (system: x.${system}) (filter (hasSuffix "-linux") supportedSystems);
-  onSupportedDarwin = x: map (system: x.${system}) (filter (hasSuffix "-darwin") supportedSystems);
+  prefixJob = x: "${if isNull jobsetPrefix then "" else "${jobsetPrefix}."}${x}";
+  onSupported = x: map (system: prefixJob "${x}.${system}") supportedSystems;
+  onSupportedLinux =
+    x: map (system: prefixJob "${x}.${system}") (filter (hasSuffix "-linux") supportedSystems);
+  onSupportedDarwin =
+    x: map (system: prefixJob "${x}.${system}") (filter (hasSuffix "-darwin") supportedSystems);
 
   nonPackageJobs = {
     tarball = import ./make-tarball.nix {
@@ -115,55 +121,58 @@ let
       constituents = concatLists [
         [
           # Published nixpkgs
-          jobs.tarball
+          (prefixJob "tarball")
           # Sanity
-          jobs.release-checks
+          (prefixJob "release-checks")
           # Hydra Debuging
-          jobs.metrics
+          (prefixJob "metrics")
           # Docs
-          jobs.manual
+          (prefixJob "manual")
         ]
         # Bootstrapping
-        (collect isDerivation jobs.stdenvBootstrapTools)
+        (concatMap (config: [
+          (prefixJob "stdenvBootstrapTools.${config}.build")
+          (prefixJob "stdenvBootstrapTools.${config}.test")
+        ]) bootstrapConfigs)
 
         # Lib
-        (onSupported jobs.tests.lib-tests)
-        (onSupported jobs.tests.pkgs-lib.formats-tests)
+        (onSupported "tests.lib-tests")
+        (onSupported "tests.pkgs-lib.formats-tests")
 
         # Core
-        (onSupported jobs.stdenv)
-        (onSupported jobs.nix)
-        (onSupported jobs.git)
+        (onSupported "stdenv")
+        (onSupported "nix")
+        (onSupported "git")
 
         # Depends on packages that need to be built on Linux
-        (onSupportedDarwin jobs.darwin.linux-builder)
+        (onSupportedDarwin "darwin.linux-builder")
 
         # Basic Language support
-        (onSupported jobs.cargo)
-        (onSupported jobs.go)
-        (onSupported jobs.python3)
+        (onSupported "cargo")
+        (onSupported "go")
+        (onSupported "python3")
 
         # Linux Kernel
-        (onSupportedLinux jobs.linux)
+        (onSupportedLinux "linux")
 
         # Docs
-        (onSupported jobs.pandoc)
+        (onSupported "pandoc")
 
         # Needed for support
-        (onSupported jobs.nix-info)
-        (onSupported jobs.nix-info-tested)
+        (onSupported "nix-info")
+        (onSupported "nix-info-tested")
 
         # Default Browser
-        (onSupportedLinux jobs.firefox-unwrapped)
+        (onSupportedLinux "firefox-unwrapped")
 
         # Default Editor
-        (onSupported jobs.nano)
+        (onSupported "nano")
 
         # Sanity check for GTK
-        (onSupported jobs.inkscape)
+        (onSupported "inkscape")
 
         # Sanity check for QT
-        (onSupported jobs.audacity)
+        (onSupported "audacity")
       ];
     };
 

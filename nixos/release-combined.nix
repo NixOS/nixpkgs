@@ -48,6 +48,7 @@ rec {
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
+      jobsetPrefix = "nixpkgs";
     }
   );
 
