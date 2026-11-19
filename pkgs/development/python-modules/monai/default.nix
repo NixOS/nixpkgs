@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.6.1";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
     tag = version;
-    hash = "sha256-htzrk6ernF5LI9c1qKb1qrsHyzOTVz6nZ+msfDCmqN4=";
+    hash = "sha256-5olIY480Dl8yxRnSBk55tRS3iDI8jZlonZqUaIjvFgQ=";
     # fix source non-reproducibility due to versioneer + git-archive, as with Numba, Pytensor etc. derivations:
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/monai/_version.py
