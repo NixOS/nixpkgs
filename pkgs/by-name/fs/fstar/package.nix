@@ -27,7 +27,7 @@ let
 in
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "fstar";
-  version = "2026.10.25";
+  version = "2026.11.15";
 
   # The custom installPhase installs everything into $out.
   outputs = [ "out" ];
@@ -36,7 +36,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AT7CVTGaosh7fdVpB0jgBeaHzz8z+MVi23rOYdltu7o=";
+    hash = "sha256-2+Gvr4QRXaGc57Vmx3zxadp0inV8HGZ9J8Ijv7pTyeU=";
   };
 
   nativeBuildInputs = [
