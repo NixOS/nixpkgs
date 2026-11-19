@@ -19,7 +19,7 @@ melpaBuild {
 
   nativeBuildInputs = [ git ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     homepage = "https://github.com/progfolio/elpaca";
