@@ -334,10 +334,6 @@ in
   };
 
   config = {
-    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
-    # to avoid breaking existing configs using that.
-    virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
-
     system.nixos.tags = [ "amazon" ];
     system.build.image = config.system.build.amazonImage;
     image.extension = if cfg.format == "vpc" then "vhd" else cfg.format;
@@ -413,11 +409,7 @@ in
             Format = config.fileSystems."/".fsType;
             Label = "nixos";
           }
-          // lib.optionalAttrs autoSize {
-            Minimize = "guess";
-            # Free space for the root partition to grow into on first boot.
-            PaddingMinBytes = "512M";
-          };
+          // lib.optionalAttrs autoSize { Minimize = "guess"; };
         };
       };
     };

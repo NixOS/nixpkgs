@@ -329,7 +329,9 @@ in
               machine.succeed("test -d /sys/firmware/efi")
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("test $(stat -c %a ${imageCfg.boot.loader.efi.efiSysMountPoint}) = 700")
-              machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
+              # The test resizes the disk to 10G, so the root file system must grow past the image.
+              root_bytes = int(machine.succeed("findmnt / -n -b -o SIZE"))
+              assert root_bytes > 8 * 1024**3, f"root file system did not grow: {root_bytes} bytes"
 
           with subtest("Image metadata"):
               nix_support = "${imageCfg.system.build.amazonImage}/nix-support"
