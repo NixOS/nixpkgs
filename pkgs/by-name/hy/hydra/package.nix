@@ -270,5 +270,8 @@ stdenv.mkDerivation (finalAttrs: {
       helsinki-Jo
       mindavi
     ];
+    knownVulnerabilities = [
+      "GHSA-rqvm-hhh5-vrx7"
+    ];
   };
 })
