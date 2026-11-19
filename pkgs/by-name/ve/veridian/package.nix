@@ -31,6 +31,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-qJQD9HjSrrHdppbLNgLnXCycgzbmPePydZve3A8zGtU=";
 
+  postPatch = ''
+    substituteInPlace "$cargoDepsCopy"/source-registry-0/sv-parser-parser-0.8.3/src/general/compiler_directives.rs \
+      --replace-fail 'IResult<Span, VersionSpecifier>' 'IResult<Span, sv_parser_syntaxtree::VersionSpecifier>' \
+      --replace-fail 'Ok((s, VersionSpecifier { nodes: (a,) }))' 'Ok((s, sv_parser_syntaxtree::VersionSpecifier { nodes: (a,) }))'
+  '';
+
   buildFeatures = [ "slang" ];
 
   nativeBuildInputs = [
