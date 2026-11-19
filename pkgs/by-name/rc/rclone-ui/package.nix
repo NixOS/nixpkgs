@@ -10,7 +10,9 @@
 
   pkg-config,
   wrapGAppsHook3,
+  cacert,
 
+  aws-lc,
   openssl,
   webkitgtk_4_1,
   glib-networking,
@@ -20,26 +22,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rclone-ui";
-  version = "3.7.5";
+  version = "3.7.7";
 
   src = fetchFromGitHub {
     owner = "rclone";
     repo = "rclone-ui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7rNFJDx1Gsr9EywnRaToOdbZOhL4Yyz6Xpv+0Qhh638=";
+    hash = "sha256-a/SM6mMTrfOJm13A+TJQ7CkB+48GmK+k0nIiohyHlUs=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     forceGitDeps = true;
-    hash = "sha256-fROZloUIz0Lqtu2oNSjhWtySAJO8ayp+6bLIVkYy/Ko=";
+    hash = "sha256-/Cto3uKKmcBG8H39HpqThWnMbGMgDgLQ6wswEQTwc/8=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-Mr+CMJ00a75J2bXGxoz9cj5cKgRG2pN45NnaIDbYA7g=";
+  cargoHash = "sha256-C6Ule6iDoPRtHpx+MYX0Flg8SHOOrOlTQfcKUXHR32E=";
 
   # Disable tauri bundle updater, can be removed when #389107 is merged
   patches = [ ./remove_updater.patch ];
@@ -62,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     webkitgtk_4_1
     glib-networking
@@ -75,11 +78,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libappindicator ]}
   '';
 
-  checkFlags = [
-    # don't have internet access
-    "--skip=notifications::webhooks::tests::dispatch_posts_and_records_outcomes_end_to_end"
-    "--skip=notifications::webhooks::tests::dispatch_records_last_error_on_unreachable_endpoint"
-  ];
+  # reqwest cannot build its client without a CA bundle:                                                                                                                             │
+  # "No CA certificates were loaded from the system"                                                                                                                                 │
+  nativeCheckInputs = [ cacert ];
 
   passthru.updateScript = nix-update-script { };
 
