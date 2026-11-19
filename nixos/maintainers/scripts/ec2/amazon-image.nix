@@ -429,7 +429,11 @@ in
               ];
               default = bootMode;
               defaultText = literalExpression "config.ec2.bootMode";
-              description = "How instances boot the image.";
+              description = ''
+                How instances boot the image. Only an image built with
+                `ec2.bootMode = "uefi-preferred"` can be registered with another
+                `BootMode`.
+              '';
             };
 
             VirtualizationType = mkOption {
@@ -464,7 +468,7 @@ in
               default = null;
               description = ''
                 Set to `"v2.0"` to give instances a NitroTPM. Requires
-                `ec2.bootMode = "uefi"`.
+                `BootMode = "uefi"`.
               '';
             };
           };
@@ -526,8 +530,20 @@ in
         message = "The Amazon image boots with systemd-boot or Limine.";
       }
       {
-        assertion = cfg.registerImage.TpmSupport != null -> bootMode == "uefi";
-        message = "amazonImage.registerImage.TpmSupport requires ec2.bootMode = \"uefi\".";
+        assertion = cfg.registerImage.TpmSupport != null -> cfg.registerImage.BootMode == "uefi";
+        message = "amazonImage.registerImage.TpmSupport requires amazonImage.registerImage.BootMode = \"uefi\".";
+      }
+      {
+        # A hybrid image boots either way. The others boot only their own way.
+        assertion =
+          cfg.registerImage.BootMode == bootMode
+          ||
+            bootMode == "uefi-preferred"
+            && lib.elem cfg.registerImage.BootMode [
+              "legacy-bios"
+              "uefi"
+            ];
+        message = "amazonImage.registerImage.BootMode = \"${toString cfg.registerImage.BootMode}\" can't boot an image built with ec2.bootMode = \"${bootMode}\".";
       }
       {
         assertion =
