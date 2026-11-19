@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oo7";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "linux-credentials";
     repo = "oo7";
     tag = finalAttrs.version;
-    hash = "sha256-mwmMCr3qmkMnm0L0W5XDJawM2GtM4SIXqtJSfaW/pgY=";
+    hash = "sha256-SwE1UdSARKi3o0rnUa9jVbDOr88Vw6jDgcqeqHjWpSU=";
   };
 
   # TODO: this won't cover tests from the client crate
   # Additionally cargo-credential will also not be built here
   buildAndTestSubdir = "cli";
 
-  cargoHash = "sha256-K0S3J6i3tf/yeu8dkrIvoKlImyFq+JipDrLz5bFy8q4=";
+  cargoHash = "sha256-WTK3FbXHvF2+yD4gmsHGHNMgwkArjB2YxelYkuvEA0g=";
 
   nativeBuildInputs = [ pkg-config ];
 
