@@ -9,20 +9,20 @@
   nix-update-script,
 }:
 let
-  version = "1.20.2";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "skyhook-io";
     repo = "radar";
     tag = "v${version}";
-    hash = "sha256-QspUiCQXun+e/uBn/ortXwIN/G1omi4HZ11MjOm2tdU=";
+    hash = "sha256-ph5BlKowY4KFs7sbr41UoJKkVb7AbftdGE8uGYaJk2s=";
   };
 
   frontend = buildNpmPackage {
     pname = "radar-web";
     inherit version src;
 
-    npmDepsHash = "sha256-JX2Zzz2Lbwp5Td2EjR3o4SFfBWf2ulvA0d03LJG5zf4=";
+    npmDepsHash = "sha256-rjYw5mveqCmxUoce4d/6gt3q9AlSxeSGpjuHsaWGAdk=";
     npmDepsFetcherVersion = 2;
 
     npmWorkspace = "web";
@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-hO1eNsT7GytccPr9mI3ZXihe3Es1jzml/Gmx/FOhDas=";
+  vendorHash = "sha256-GsOiggDPrTkDfh7JOmzTRr0oEigUSbH7WKPY5VVH8gU=";
 
   subPackages = [ "cmd/explorer" ];
 
