@@ -3765,6 +3765,8 @@ self: super: with self; {
 
   corsair-scan = callPackage ../development/python-modules/corsair-scan { };
 
+  corvid-solver = callPackage ../development/python-modules/corvid-solver { };
+
   cose = callPackage ../development/python-modules/cose { };
 
   cot = callPackage ../development/python-modules/cot { inherit (pkgs) qemu; };
