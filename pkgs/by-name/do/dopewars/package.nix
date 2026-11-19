@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dopewars";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "benmwebb";
     repo = "dopewars";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CpgqRYmrfOFxhC7yAS2OqRBi4r3Vesq3+7a0q5rc3vM=";
+    hash = "sha256-SDrYkASLqr/wXyRmu449OeBCBsZSHZCrIO0MUnND+Ho=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # remove the denied setting of setuid bit permission
     ./0001-remove_setuid.patch
-    # fix compilation errors with gcc15
-    ./0002-fix_gcc15.patch
   ];
 
   preConfigure = ''
