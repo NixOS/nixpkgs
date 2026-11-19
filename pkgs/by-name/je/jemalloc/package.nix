@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       avoidance and scalable concurrency support.
     '';
     license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ daniel-fahey ];
     platforms = lib.platforms.all;
   };
 })
