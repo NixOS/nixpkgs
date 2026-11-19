@@ -11,24 +11,25 @@
   sentencepiece,
 }:
 
+# nixpkgs-update: no auto update
+# version needs to stay in sync with openvino
+
 let
   inherit (lib) cmakeBool cmakeFeature;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-tokenizers";
-  version = "2026.4.0.0";
+  version = "2026.4.1.0";
 
   __structuredAttrs = true;
 
-  src =
-    assert lib.hasPrefix openvino.version finalAttrs.version;
-    fetchFromGitHub {
-      owner = "openvinotoolkit";
-      repo = "openvino_tokenizers";
-      tag = finalAttrs.version;
-      hash = "sha256-M+HPqxwCZCBxSmpcnaIPBtEniRD9H1lCFgOrqH/eAFQ=";
-    };
+  src = fetchFromGitHub {
+    owner = "openvinotoolkit";
+    repo = "openvino_tokenizers";
+    tag = finalAttrs.version;
+    hash = "sha256-1mTW25PAAC81kAUgdnIrXH011imSxD+RyWIcrwoqq6g=";
+  };
 
   nativeBuildInputs = [
     cmake
