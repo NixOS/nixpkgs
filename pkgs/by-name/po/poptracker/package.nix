@@ -37,6 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  # brew_prefix is only printed
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace meson.build \
+      --replace-fail "run_command('brew', '--prefix', check : true).stdout().strip()" "'''"
+  '';
+
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
@@ -59,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # LTO objects in the bundled static liblua are not indexed by the plain `ar` meson uses here
     (lib.mesonBool "auto-lto" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.mesonOption "macos-deplyment-target" stdenv.hostPlatform.darwinMinVersion)
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
@@ -87,10 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/poptracker/assets/cacert.pem
     wrapProgram $out/bin/poptracker --prefix PATH : ${
-      lib.makeBinPath [
-        which
-        kdePackages.kdialog
-      ]
+      lib.makeBinPath ([ which ] ++ lib.optionals stdenv.hostPlatform.isLinux [ kdePackages.kdialog ])
     }
     mkdir -p $out/share/icons/hicolor/{64x64,512x512}/apps
     ln -s $out/share/poptracker/assets/icon.png $out/share/icons/hicolor/64x64/apps/poptracker.png
