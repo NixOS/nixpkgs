@@ -18981,6 +18981,8 @@ self: super: with self; {
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
+  scikit-umfpack = callPackage ../development/python-modules/scikit-umfpack { };
+
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
   scikits-odes-core = callPackage ../development/python-modules/scikits-odes-core { };
