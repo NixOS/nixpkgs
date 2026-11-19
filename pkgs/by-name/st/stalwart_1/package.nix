@@ -18,6 +18,8 @@
 
   withFoundationdb ? false,
   stalwartEnterprise ? false,
+  withBundledWebui ? true,
+  withBundledSpamFilter ? false,
 }:
 let
   rocksdb = rocksdb_11_8;
@@ -36,6 +38,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-Wdqv6GAsQZNlt6xdiM/iEyP8WBYK26z0d3fA7iedVoU=";
+
+  # use static web interface and spam filter rules
+  postPatch =
+    lib.optionalString withBundledWebui ''
+      substituteInPlace crates/common/src/manager/defaults.rs \
+        --replace-fail \
+          '"https://github.com/stalwartlabs/webui/releases/download/v2/webui.zip"' \
+          '"file://${finalAttrs.passthru.webui}/webui.zip"'
+    ''
+    + lib.optionalString withBundledSpamFilter ''
+      substituteInPlace crates/registry/src/schema/structs_impl.rs \
+        --replace-fail \
+          '"https://github.com/stalwartlabs/spam-filter/releases/latest/download/spam-filter-rules.json.gz"' \
+          '"file://${finalAttrs.passthru.spam-filter}/spam-filter-rules.json.gz"'
+    '';
 
   env = {
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
