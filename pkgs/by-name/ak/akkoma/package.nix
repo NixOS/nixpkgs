@@ -9,9 +9,9 @@
 }:
 
 let
-  beamPackages = beam_minimal.packages.erlang_27.overrideScope (
+  beamPackages = beam_minimal.packages.erlang_29.overrideScope (
     final: prev: {
-      elixir = final.elixir_1_17;
+      elixir = final.elixir_1_20;
       rebar3 = final.rebar3WithPlugins {
         plugins = with final; [ pc ];
       };
