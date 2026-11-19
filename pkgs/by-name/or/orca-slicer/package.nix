@@ -56,6 +56,12 @@ let
       withEGL = true;
     }).overrideAttrs
       (old: {
+        # Workaround wxWidgets #27215: reused modal dialogs stop appearing after their
+        # first use. Reported upstream in 3.3.5, but also observed with wxWidgets 3.3.4
+        # https://github.com/wxWidgets/wxWidgets/issues/27215
+        patches = (old.patches or [ ]) ++ [
+          ./patches/wxwidgets-dialog-returncode.patch
+        ];
         buildInputs = old.buildInputs ++ [ libsecret ];
         configureFlags = old.configureFlags ++ [
           # Disable noisy debug dialogs
