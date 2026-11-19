@@ -77,9 +77,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     ./nvcomp-6.patch
     ./nvcomp-6-batch-staging-copies.patch
     # Support nvImageCodec 0.10: DALI 2.4.0 requires nvImageCodec older than 0.10 and uses MAKE_SEMANTIC_VERSION, which
-    # 0.10 renamed to NVIMGCODEC_MAKE_SEMANTIC_VERSION. The first commit of https://github.com/NVIDIA/DALI/pull/6608,
-    # 39ad05eb58dde6e493d3e811dea3d6bcd68e1039, which applies to 2.4.0 as it is. The PR is open, so it is vendored with
-    # `git format-patch`.
+    # 0.10 renamed to NVIMGCODEC_MAKE_SEMANTIC_VERSION. Backport the nvImageCodec integration from
+    # https://github.com/NVIDIA/DALI/pull/6608, merged after 2.4.0.
     ./nvimgcodec-0.10.patch
     # Find the headers of the CUDA libraries DALI generates dlopen stubs from (the driver, cuFile, cuFFT, NPP and NVML)
     # with find_path, instead of expecting them in CUDAToolkit_TARGET_DIR/include, which is cuda_nvcc's.
