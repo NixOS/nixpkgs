@@ -567,6 +567,11 @@ in
     ];
 
     ec2.bootMode = mkDefault (if config.ec2.efi then "uefi" else "uefi-preferred");
+
+    # Grow root, the last partition, in the initrd instead of with growpart.
+    boot.initrd.systemd.repart.enable = mkDefault true;
+    systemd.repart.partitions.root.Type = "root";
+
     # systemd-boot can't boot legacy BIOS.
     boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi");
     boot.loader.limine.enable = mkDefault (bootMode != "uefi");

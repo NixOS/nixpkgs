@@ -46,6 +46,21 @@ images and partition 4 otherwise. Find partitions by `label`, or read their
 
 `partitions.root.size` is the root partition's size in the image. Instances grow
 the partition and its file system to fill the volume on first boot.
+## Root partition growth
+
+On first boot, and after the EBS volume grows, systemd-repart grows the root
+partition in the initrd and systemd-growfs grows its file system. The image
+defines that partition as `systemd.repart.partitions.root`. To use growpart
+after boot instead, set:
+
+```nix
+{ boot.initrd.systemd.repart.enable = false; }
+```
+
+Without a `root` definition, growpart stays on even with initrd systemd-repart
+enabled. `boot.growPartition` refuses to run alongside systemd-repart, so such a
+configuration fails to evaluate until you add `root` back or set
+`boot.growPartition = false`.
 
 ## Roadmap
 

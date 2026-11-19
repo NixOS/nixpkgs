@@ -165,6 +165,27 @@ in
       import subprocess
       import tempfile
 
+      QEMU_IMG = "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img"
+
+      def partition_number(node):
+          match = re.search(r"\d+$", node)
+          assert match, node
+          return int(match.group())
+
+      def partitions(table):
+          """sfdisk's partitions by number, without their device nodes"""
+          return {partition_number(p.pop("node")): p for p in table["partitions"]}
+
+      def image_partitions():
+          """The partition table as built, read from the image's primary GPT"""
+          with tempfile.TemporaryDirectory() as d:
+              head = os.path.join(d, "head.raw")
+              subprocess.check_call([QEMU_IMG, "dd", "-f", "qcow2", "-O", "raw", "bs=1M", "count=1", "if=${image}", f"of={head}"])
+              info = json.loads(subprocess.check_output([QEMU_IMG, "info", "--output=json", "${image}"]))
+              os.truncate(head, info["virtual-size"])
+              table = json.loads(subprocess.check_output(["${hostPkgs.util-linux}/bin/sfdisk", "-J", head]))
+          return partitions(table["partitiontable"])
+
       # Instance Metadata Service (IMDSv2 with 1.0 metadata version)
       # TODO: Use 'latest' metadata version instead of '1.0'
       # TODO: [Test matrix] also test providing the host key through IMDS
@@ -243,7 +264,6 @@ in
           os.makedirs(image_dir, mode=0o700, exist_ok=True)
           disk_image = os.path.join(image_dir, "machine.qcow2")
           QEMU = "${nodes.machine.virtualisation.qemu.package}"
-          QEMU_IMG = f"{QEMU}/bin/qemu-img"
           subprocess.check_call([
               QEMU_IMG, "create", "-f", "qcow2", "-F", "qcow2",
               "-o", "backing_file=${image}", disk_image
@@ -435,6 +455,30 @@ in
                   machine.succeed(f"grep -qx hello {path}", f"test -e /nix/.rw-store/upper/{os.path.basename(path)}")
                   machine.succeed("NIX_REMOTE=daemon nix-store --gc")
                   machine.fail(f"test -e {path}")
+
+          with subtest("Root partition growth"):
+              machine.fail("systemctl cat growpart.service")
+              root = machine.succeed("readlink -f /dev/disk/by-label/nixos").strip()
+              machine.succeed(f"test $(findmnt -no SOURCE /) = {root}")
+              root_number = partition_number(root)
+              disk = "/dev/" + machine.succeed(f"lsblk -no PKNAME {root}").strip()
+              built = image_partitions()
+
+              def check_growth():
+                  """systemd-repart grew root in the initrd, and every other partition is as built."""
+                  machine.succeed("journalctl -b --identifier systemd-repart --grep 'Growing existing partition'")
+                  table = json.loads(machine.succeed(f"sfdisk -J {disk}"))["partitiontable"]
+                  now = partitions(table)
+                  grown = now[root_number]
+                  assert now == built | {root_number: built[root_number] | {"size": grown["size"]}}, (now, built)
+                  assert grown["size"] > built[root_number]["size"], (grown, built)
+                  # Within the 1 MiB alignment of the end of the disk.
+                  assert table["lastlba"] + 1 - (grown["start"] + grown["size"]) < 2048, (grown, table)
+                  fs_size = int(machine.succeed("df --output=size -B1 / | tail -1"))
+                  assert fs_size > grown["size"] * 512 * 0.9, (fs_size, grown)
+                  return fs_size
+
+              check_growth()
 
           with subtest("Store paths and profiles"):
               if nix_enabled:
