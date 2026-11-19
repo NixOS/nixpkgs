@@ -289,8 +289,8 @@ let
              if [ -L $i ]; then
                continue
              fi
-             sed -i '/zfs-import-scan.service/d' $i
-             substituteInPlace $i --replace-warn "zfs-import-cache.service" "zfs-import.target"
+             sed -i -e '/zfs-import-scan[.]service/d' \
+               -e 's/zfs-import-cache[.]service/zfs-import.target/g' "$i"
           done
 
           # Remove tests because they add a runtime dependency on gcc
