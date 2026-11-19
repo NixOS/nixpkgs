@@ -12,6 +12,7 @@
   espSize,
   firmware,
   perlless,
+  resize,
   ...
 }:
 
@@ -122,6 +123,7 @@ in
   _module.args.espSize = lib.mkDefault null;
   _module.args.firmware = lib.mkDefault "uefi";
   _module.args.perlless = lib.mkDefault false;
+  _module.args.resize = lib.mkDefault false;
 
   name =
     "ec2-image"
@@ -130,7 +132,8 @@ in
     + lib.optionalString (!withNix) "-nonix"
     + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
     + lib.optionalString (firmware == "bios") "-bios"
-    + lib.optionalString perlless "-perlless";
+    + lib.optionalString perlless "-perlless"
+    + lib.optionalString resize "-resize";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -165,6 +168,7 @@ in
       import subprocess
       import tempfile
 
+      RESIZE = ${if resize then "True" else "False"}
       QEMU_IMG = "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img"
 
       def partition_number(node):
@@ -292,7 +296,7 @@ in
               + " $QEMU_OPTS"
           )
 
-          return create_machine(start_command), metadata_dir
+          return create_machine(start_command), metadata_dir, disk_image
 
       store = "${store}"
       nix_enabled = ${if imageCfg.nix.enable then "True" else "False"}
@@ -318,7 +322,7 @@ in
       client_pubkey, client_private_key = generate_client_ssh_key()
 
       # Set up machine with client's public key in metadata service
-      machine, metadata_dir = setup_machine(temp_dir, client_pubkey)
+      machine, metadata_dir, disk_image = setup_machine(temp_dir, client_pubkey)
       user_data_path = os.path.join(metadata_dir, "1.0", "user-data")
 
       try:
@@ -478,7 +482,16 @@ in
                   assert fs_size > grown["size"] * 512 * 0.9, (fs_size, grown)
                   return fs_size
 
-              check_growth()
+              fs_size = check_growth()
+
+              if RESIZE:
+                  # As after growing the EBS volume and rebooting.
+                  machine.shutdown()
+                  subprocess.check_call([QEMU_IMG, "resize", disk_image, "12G"])
+                  machine.start()
+                  machine.wait_for_unit("multi-user.target")
+                  grown = check_growth()
+                  assert grown > fs_size + 1024**3, (fs_size, grown)
 
           with subtest("Store paths and profiles"):
               if nix_enabled:

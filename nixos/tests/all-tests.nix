@@ -640,6 +640,10 @@ in
       perlless = true;
     };
   };
+  ec2-image-resize = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args.resize = true;
+  };
   ec2-image-root-growth = pkgs.callPackage ./ec2-image-root-growth.nix { };
   ec2-image-store-compression = pkgs.callPackage ./ec2-image-store-compression.nix { };
   ec2-image-systemd-boot = runTest {
