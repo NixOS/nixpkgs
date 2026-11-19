@@ -1,13 +1,15 @@
 {
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   lib,
   nix-update-script,
-  go,
+  go_1_26,
 }:
 
-buildGoModule rec {
+# The vendored kube-openapi aliases json/v2, whose API changed in Go 1.27
+# https://github.com/kubernetes/kube-openapi/pull/616
+buildGo126Module rec {
   pname = "jx";
   version = "3.17.80";
 
@@ -28,7 +30,7 @@ buildGoModule rec {
     "-s"
     "-X github.com/jenkins-x/jx/pkg/cmd/version.Version=${version}"
     "-X github.com/jenkins-x/jx/pkg/cmd/version.Revision=${src.rev}"
-    "-X github.com/jenkins-x/jx/pkg/cmd/version.GoVersion=${go.version}"
+    "-X github.com/jenkins-x/jx/pkg/cmd/version.GoVersion=${go_1_26.version}"
     "-X github.com/jenkins-x/jx/pkg/cmd/version.GitTreeState=clean"
     "-X github.com/jenkins-x/jx/pkg/cmd/version.BuildDate=''"
   ];
