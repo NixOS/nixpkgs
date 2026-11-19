@@ -3,47 +3,46 @@
   stdenv,
   fetchFromGitHub,
   cacert,
-  util-linux,
   SDL2,
   SDL2_ttf,
   SDL2_image,
+  gtest,
   libx11,
   openssl,
   zlib,
   which,
   kdePackages,
-  makeWrapper,
+  makeBinaryWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  meson,
+  ninja,
+  pkg-config,
   nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.35.4";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ilnBVwzd/tdolchgjz5EsMou7fMWT0xU/gTC+HBnDjU=";
+    hash = "sha256-1zLWY+/qQ8/YH/Ts6HqgyRuQWmW03S1ruxI3ZDtUBtY=";
     fetchSubmodules = true;
   };
 
   passthru.updateScript = nix-update-script { };
 
-  patches = [ ./assets-path.diff ];
-
-  postPatch = ''
-    substituteInPlace src/poptracker.cpp --replace "@assets@" "$out/share/poptracker/"
-  '';
-
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
-    util-linux
-    makeWrapper
     copyDesktopItems
+    makeBinaryWrapper
+    meson
+    ninja
+    pkg-config
   ];
 
   buildInputs = [
@@ -55,18 +54,38 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  buildFlags = [
-    "native"
-    "CONF=RELEASE"
-    "VERSION=v${finalAttrs.version}"
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    # LTO objects in the bundled static liblua are not indexed by the plain `ar` meson uses here
+    (lib.mesonBool "auto-lto" false)
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -m555 -Dt $out/bin build/*/poptracker
-    install -m444 -Dt $out/share/poptracker assets/*
-    rm $out/share/poptracker/cacert.pem
-    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/poptracker/cacert.pem
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  checkInputs = [ gtest ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  env.GTEST_FILTER =
+    "-"
+    + lib.concatStringsSep ":" [
+      # Require network access
+      "HTTP.SyncGet200"
+      "HTTP.GetCached*Redirect"
+      # SDL2_image uses the stb_image backend in nixpkgs, which can't load this JPEG and
+      # accepts these corrupt PNGs
+      "GoodImageFiles/GoodImageFileSuite.*/jpeg_jpg"
+      "BadImageFiles/BadImageFileSuite.LoadImage/corrupt1_png"
+      "BadImageFiles/BadImageFileSuite.LoadImage/corrupt3_png"
+    ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  postInstall = ''
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/poptracker/assets/cacert.pem
     wrapProgram $out/bin/poptracker --prefix PATH : ${
       lib.makeBinPath [
         which
@@ -74,9 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }
     mkdir -p $out/share/icons/hicolor/{64x64,512x512}/apps
-    ln -s $out/share/poptracker/icon.png  $out/share/icons/hicolor/64x64/apps/poptracker.png
-    ln -s $out/share/poptracker/icon512.png  $out/share/icons/hicolor/512x512/apps/poptracker.png
-    runHook postInstall
+    ln -s $out/share/poptracker/assets/icon.png $out/share/icons/hicolor/64x64/apps/poptracker.png
+    ln -s $out/share/poptracker/assets/icon512.png $out/share/icons/hicolor/512x512/apps/poptracker.png
   '';
 
   desktopItems = [
