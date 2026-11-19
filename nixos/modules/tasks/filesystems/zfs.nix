@@ -362,6 +362,9 @@ in
           It is highly recommended to keep this option disabled as it bypasses ZFS
           safeguard that protect your pools.
 
+          If you regularly need to to force import, consider setting
+          {option}`boot.zfs.exportOnShutdown` instead.
+
           If NixOS fails to boot because it cannot import the root pool, you
           should boot with the `zfs_force=1` option as a kernel parameter (e.g.
           by manually editing the kernel params via your bootloader). You
@@ -380,6 +383,16 @@ in
           safeguard that protect your pools.
 
           See {option}`boot.zfs.forceImportRoot` for details.
+        '';
+      };
+
+      exportOnShutdown = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to export all imported ZFS pools on shutdown.
+
+          See {manpage}`zpool-export(1)` for details.
         '';
       };
 
@@ -756,10 +769,16 @@ in
       };
 
       systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/zpool".source =
-        pkgs.writeShellScript "zpool-sync-shutdown" ''
-          exec ${cfgZfs.package}/bin/zpool sync
-        '';
-      systemd.shutdownRamfs.storePaths = [ "${cfgZfs.package}/bin/zpool" ];
+        pkgs.writeShellScript "zpool-sync-shutdown"
+          (
+            ''
+              ${lib.getExe' cfgZfs.package "zpool"} sync
+            ''
+            + lib.optionalString cfgZfs.exportOnShutdown ''
+              ${lib.getExe' cfgZfs.package "zpool"} export -a
+            ''
+          );
+      systemd.shutdownRamfs.storePaths = [ (lib.getExe' cfgZfs.package "zpool") ];
 
       # TODO FIXME See https://github.com/NixOS/nixpkgs/pull/99386#issuecomment-798813567. To not break people's bootloader and as probably not everybody would read release notes that thoroughly add inSystem.
       boot.loader.grub = lib.mkIf (inInitrd || inSystem) {
