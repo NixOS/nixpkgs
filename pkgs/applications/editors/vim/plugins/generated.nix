@@ -13833,12 +13833,12 @@ final: prev: {
 
   nvim-scrollbar = buildVimPlugin {
     pname = "nvim-scrollbar";
-    version = "1.0.0";
+    version = "2.0.0";
     src = fetchFromGitHub {
       owner = "petertriho";
       repo = "nvim-scrollbar";
-      tag = "v1.0.0";
-      hash = "sha256-g+gJp7noNdLKfvp+QbnTFE++PI3FcJG7reDenkg15k0=";
+      tag = "v2.0.0";
+      hash = "sha256-im421cmziqiCrQteLbxeDFZOVZk8eN38cXHkA1DbR2U=";
     };
     meta.homepage = "https://github.com/petertriho/nvim-scrollbar/";
     meta.license = getLicenseFromSpdxId "MIT";
