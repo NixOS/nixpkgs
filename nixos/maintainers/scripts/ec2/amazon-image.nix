@@ -64,6 +64,21 @@ let
 
   autoSize = config.virtualisation.diskSize == "auto";
   erofsStore = cfg.store != "root";
+  inherit (config.boot.kernelPackages) kernel;
+  # Kernels built from a config file list their options in `config`. nixpkgs
+  # kernels declare theirs in the structured configuration.
+  kernelOption =
+    option:
+    if (kernel.config.isSet or (_: false)) option then
+      kernel.config.getValue option
+    else
+      kernel.configfile.structuredConfig.${option}.tristate or null;
+  erofsZstd = lib.elem (kernelOption "EROFS_FS_ZIP_ZSTD") [
+    "y"
+    "m"
+  ];
+  # EROFS_FS_ZIP, which includes LZ4, is on unless something turns it off.
+  erofsLz4 = kernelOption "EROFS_FS_ZIP" != "n";
   readOnlyStore = cfg.store == "erofs";
   # systemd-repart doesn't label erofs file systems.
   storeDevice = "/dev/disk/by-partlabel/nix-store";
@@ -343,10 +358,12 @@ in
         "zstd"
         "lz4hc"
       ];
-      default = "zstd";
+      default = if erofsZstd then "zstd" else "lz4hc";
+      defaultText = lib.literalMD ''`"zstd"` if the kernel enables `EROFS_FS_ZIP_ZSTD`, otherwise `"lz4hc"`'';
       description = ''
-        Compression of an erofs Nix store. `"zstd"` makes a smaller image and
-        needs Linux 6.10 or later. `"lz4hc"` also works on older kernels.
+        Compression of an erofs Nix store. `"zstd"` makes a smaller image but
+        needs a kernel with `EROFS_FS_ZIP_ZSTD`. `"lz4hc"` only needs
+        `EROFS_FS_ZIP`, which kernels enable by default.
       '';
     };
 
@@ -492,10 +509,12 @@ in
         message = "amazonImage.store = \"${cfg.store}\" mounts the Nix store in the initrd, which needs boot.initrd.supportedFilesystems.erofs.";
       }
       {
-        assertion =
-          erofsStore && cfg.storeCompression == "zstd"
-          -> lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.10";
-        message = "amazonImage.storeCompression = \"zstd\" needs Linux 6.10 or later; use \"lz4hc\" with older kernels.";
+        assertion = erofsStore && cfg.storeCompression == "zstd" -> erofsZstd;
+        message = "amazonImage.storeCompression = \"zstd\" needs a kernel with EROFS_FS_ZIP_ZSTD. Enable it or use \"lz4hc\".";
+      }
+      {
+        assertion = erofsStore && cfg.storeCompression == "lz4hc" -> erofsLz4;
+        message = "amazonImage.storeCompression = \"lz4hc\" needs a kernel with EROFS_FS_ZIP.";
       }
       {
         # systemd-repart skips sources it can't find, so a glob would copy nothing without an error.
