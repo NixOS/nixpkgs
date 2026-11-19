@@ -54,6 +54,9 @@ buildPythonPackage rec {
       url = "https://github.com/valkey-io/valkey-py/commit/046c7fb9e8260c2d69d05141b1519903c4e40efe.patch";
       hash = "sha256-/yN1y0hbmBR6o6ab4h0qkn/qhU6jASOIeqWhxUi5w/I=";
     })
+    # valkey 9.2 compat, backport of
+    # https://github.com/valkey-io/valkey-py/commit/e87c922292a3d199ef6a2a1502a0607e14fe8b39
+    ./valkey-9.2-module-load-error.patch
   ];
 
   build-system = [ setuptools ];
@@ -101,6 +104,9 @@ buildPythonPackage rec {
     "test_cache_decode_response"
     # Expects another valkey instance on port 6380 *shrug*
     "test_psync"
+    # valkey 9.2 reports the stream length as lag for a group positioned
+    # before the first entry (valkey-io/valkey#4983), the test expects -6
+    "test_xgroup_create_entries_read"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     #  OSError: AF_UNIX path too long
