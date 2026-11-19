@@ -370,10 +370,10 @@
           },
           "vmType": "hotspot",
           "x86_64": {
-            "build": "1",
-            "sha256": "dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e",
-            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_linux_hotspot_25.0.4.1_1.tar.gz",
-            "version": "25.0.4"
+            "build": "2",
+            "sha256": "760f91b22c3efc9bd1b64ff950598231be82928cc807e30691a0e7a2995a62c0",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5.1%2B2/OpenJDK25U-jdk_x64_linux_hotspot_25.0.5.1_2.tar.gz",
+            "version": "25.0.5.1"
           }
         },
         "openjdk26": {
@@ -484,10 +484,10 @@
           },
           "vmType": "hotspot",
           "x86_64": {
-            "build": "1",
-            "sha256": "c51cb1900283b00e7f9b1db1c6e430cc168d43ed240f496eb34b4d5796fdb81d",
-            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_x64_linux_hotspot_25.0.4.1_1.tar.gz",
-            "version": "25.0.4"
+            "build": "2",
+            "sha256": "dc3ddb2debedd571473622a77e847dc6627959e7031f0a8ff17ad88b8f4f7f20",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5.1%2B2/OpenJDK25U-jmods_x64_linux_hotspot_25.0.5.1_2.tar.gz",
+            "version": "25.0.5.1"
           }
         },
         "openjdk26": {
@@ -666,10 +666,10 @@
           },
           "vmType": "hotspot",
           "x86_64": {
-            "build": "1",
-            "sha256": "1731a34baadec5479258ea0202e4d5d865d2efeee60cb0c7d7eb056fe96ca219",
-            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_x64_linux_hotspot_25.0.4.1_1.tar.gz",
-            "version": "25.0.4"
+            "build": "2",
+            "sha256": "2edef9e4f81ec5ee426d023336d4cfbd7b4644e99884e7a73a6a867b70b17acf",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5.1%2B2/OpenJDK25U-jre_x64_linux_hotspot_25.0.5.1_2.tar.gz",
+            "version": "25.0.5.1"
           }
         },
         "openjdk26": {
@@ -810,10 +810,10 @@
         },
         "openjdk25": {
           "aarch64": {
-            "build": "1",
-            "sha256": "61979887f7506a24a57439ff99adb8b3a7fc89977d9cfe3b8984f58a981b7b9d",
-            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.4.1_1.tar.gz",
-            "version": "25.0.4"
+            "build": "2",
+            "sha256": "248353ea41be39d5d2c1c67c7ce0ae4d1668966aacd0c5308464bc1be42f677b",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5.1%2B2/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.5.1_2.tar.gz",
+            "version": "25.0.5.1"
           },
           "packageType": "jdk",
           "vmType": "hotspot",
@@ -864,10 +864,10 @@
       "jmods": {
         "openjdk25": {
           "aarch64": {
-            "build": "1",
-            "sha256": "182f3c09df135883f3800bfd5e1e5b65a2cd44172863be8e7db48bb3d8233bd9",
-            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_aarch64_mac_hotspot_25.0.4.1_1.tar.gz",
-            "version": "25.0.4"
+            "build": "2",
+            "sha256": "a0ed7960eb9c59bdbebfdb11597760ef76de4a2ac45487fa9cbeabf58ebe4e1a",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5.1%2B2/OpenJDK25U-jmods_aarch64_mac_hotspot_25.0.5.1_2.tar.gz",
+            "version": "25.0.5.1"
           },
           "packageType": "jmods",
           "vmType": "hotspot",
@@ -956,10 +956,10 @@
         },
         "openjdk25": {
           "aarch64": {
-            "build": "1",
-            "sha256": "5b02bcc908da092e7e00b9772d4f9bbb87f44a60b7c90f7cf5a91a1d98f37e1b",
-            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_aarch64_mac_hotspot_25.0.4.1_1.tar.gz",
-            "version": "25.0.4"
+            "build": "2",
+            "sha256": "70adbb3ce5cf924c8b60dd84272fdd5fba6d021014aa0c1f5cf66a198bd270c5",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5.1%2B2/OpenJDK25U-jre_aarch64_mac_hotspot_25.0.5.1_2.tar.gz",
+            "version": "25.0.5.1"
           },
           "packageType": "jre",
           "vmType": "hotspot",
