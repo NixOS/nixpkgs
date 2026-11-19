@@ -6271,31 +6271,29 @@ final: prev: {
       fetchurl,
       ltreesitter,
       lua-cjson,
-      luafilesystem,
       lusc_luv,
       luv,
       tl,
     }:
     buildLuarocksPackage {
       pname = "teal-language-server";
-      version = "0.2.1-1";
+      version = "0.3.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/teal-language-server-0.2.1-1.rockspec";
-          sha256 = "0dfqalvzsmvspmxp54pp9z4icx6k7ah6xz99lrnkhx01f798kf8z";
+          url = "mirror://luarocks/teal-language-server-0.3.0-1.rockspec";
+          sha256 = "04grndx65d0r07m290basw56vn0z98lfb0qkrr77ld0nwb9ph20a";
         }).outPath;
       src = fetchFromGitHub {
         owner = "teal-language";
         repo = "teal-language-server";
-        tag = "0.2.1";
-        hash = "sha256-nrgop5L9RARx64ZbyIWzW3/8n9Vm4YSugLHgOnznVSs=";
+        tag = "0.3.0";
+        hash = "sha256-xv15ljjXQuopZxuLItIQ1g5jVrcu+4lrxbmn9aa3qJk=";
       };
 
       propagatedBuildInputs = [
         argparse
         ltreesitter
         lua-cjson
-        luafilesystem
         lusc_luv
         luv
         tl
