@@ -4,8 +4,10 @@ from pathlib import Path
 
 from .args import SecretsArgs
 from .deploy import deploy
+from .edit import edit_secret
 from .error import SecretsError
 from .eval import evaluate_config
+from .from_file import import_from_file
 from .gc import collect_garbage
 from .generate import generate_secrets
 
@@ -74,8 +76,8 @@ def main() -> None:
     subparsers = parser.add_subparsers(title="commands", dest="command", required=True)
 
     eval_parser = subparsers.add_parser("evaluate")
-
     common_args(eval_parser)
+
     gen_parser = subparsers.add_parser("generate", help="(Re)generate secrets")
     common_args(gen_parser)
     gen_parser.add_argument(
@@ -89,16 +91,6 @@ def main() -> None:
         help="Generator(s) to force the regeneration of.",
     )
     gen_parser.add_argument(
-        "-s",
-        "--set",
-        dest="set",
-        metavar="<generator=path>",
-        type=str,
-        default=[],
-        action="append",
-        help="Generator(s) to import from external files.",
-    )
-    gen_parser.add_argument(
         "-t",
         "--timeout",
         metavar="<seconds>",
@@ -108,8 +100,8 @@ def main() -> None:
     )
 
     gc_parser = subparsers.add_parser("collect-garbage", help="Delete stale secrets")
-
     common_args(gc_parser)
+
     deploy_parser = subparsers.add_parser("deploy", help="Deploy secrets")
     common_args(deploy_parser)
     deploy_parser.add_argument(
@@ -119,6 +111,17 @@ def main() -> None:
         metavar="<sytem-root>",
         help="Deploy to a locally attached filesystem",
     )
+
+    from_file_parser = subparsers.add_parser("from-file", help="Import a secret from an existing file")
+    common_args(from_file_parser)
+    from_file_parser.add_argument("secret_name", metavar="<secret>", type=str, help="The name of the secret")
+    from_file_parser.add_argument("secret_file", metavar="<file>", type=str, help="The name of the secret's file")
+    from_file_parser.add_argument("secret_path", metavar="<path>", type=Path, help="The path to import")
+
+    edit_parser = subparsers.add_parser("edit", help="Open a secret file in $SECRETEDITOR")
+    common_args(edit_parser)
+    edit_parser.add_argument("secret_name", metavar="<secret>", type=str, help="The name of the secret")
+    edit_parser.add_argument("secret_file", metavar="<file>", type=str, help="The name of the secret's file")
 
     raw_args = parser.parse_args()
     args = SecretsArgs.from_dict(vars(raw_args))
@@ -133,6 +136,10 @@ def main() -> None:
             collect_garbage(args, config)
         elif args.command == "deploy":
             deploy(args, config)
+        elif args.command == "edit":
+            edit_secret(args, config)
+        elif args.command == "from-file":
+            import_from_file(args, config)
         else:
             raise SecretsError(f"Command '{args.command}' is not implemented :(")
     except SecretsError as e:

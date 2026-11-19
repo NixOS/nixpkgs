@@ -21,16 +21,10 @@ from .meta import SecretsMetadata, VersionID, get_meta, set_meta
 
 
 def generate_secrets(args: SecretsArgs, config: SecretsConfig):
-    forced_regens = set(args.generators + list(args.set.keys()))
+    forced_regens = set(args.generators)
     for gen_name in forced_regens:
         if gen_name not in config.generators:
             raise SecretsError(f"Invalid secret name '{gen_name}'.")
-    for gen_name in args.set:
-        generator = config.generators[gen_name]
-        if generator.dependencies:
-            raise SecretsError(
-                f"The --set flag cannot be used on secrets that have dependencies, and yet '{generator}' does."
-            )
 
     order = execution_order(config)
     files = build_file_list(args, config)
@@ -66,12 +60,20 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
     with tempfile.TemporaryDirectory() as temp_str:
         temp = Path(temp_str)
 
+        sandbox_fake_root_dir = temp / "sandbox"
+        os.makedirs(sandbox_fake_root_dir)
+
+        # We generate this such that ssh-keygen works inside the sandbox
+        os.makedirs(sandbox_fake_root_dir / "etc")
+        with (sandbox_fake_root_dir / "etc" / "passwd").open("w") as f:
+          f.write("root:x:0:0:System Administrator:/var/empty:/run/current-system/sw/bin/nologin")
+
         up_to_date_meta: dict[str, SecretsMetadata] = {}
         for entry in order:
             generator = config.generators[entry]
 
             # The regeneration logic goes as follows:
-            # - we regenerate if the user tells us to (via --set or --generate)...
+            # - we regenerate if the user tells us to (via -generate)...
             # - ...or if any dependencies were added/removed...
             # - ...or if any of the dependencies have themselves changed...
             # - ...or if any of the files are missing
@@ -129,27 +131,20 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
             prompt_in_dir = temp / "generators" / entry / "prompts"
             os.makedirs(prompt_in_dir)
 
-            if generator.prompts and entry not in args.set:
-                print(f"Evaluating prompts for '{entry}':")
-                for prompt in generator.prompts.values():
-                    print(f"- '{prompt.name}'")
-                    if not args.dry_run:
-                        run_prompt(
-                            args,
-                            config,
-                            generator,
-                            prompt,
-                            prompt_in_dir / prompt.name,
-                        )
+            if generator.generate is not None:
+                if generator.prompts:
+                  print(f"Evaluating prompts for '{entry}':")
+                  for prompt in generator.prompts.values():
+                      print(f"- '{prompt.name}'")
+                      if not args.dry_run:
+                          run_prompt(
+                              args,
+                              config,
+                              generator,
+                              prompt,
+                              prompt_in_dir / prompt.name,
+                          )
 
-            if entry in args.set:
-                print(f"Importing '{entry}' from disk")
-
-                if args.dry_run:
-                    continue
-
-                set_files_from_path(args, config, generator, args.set[entry])
-            elif generator.generate is not None:
                 binary = build_binary(generator.generate)
 
                 print(f"Generating '{entry}'")
@@ -195,6 +190,10 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                                 "bwrap",
                                 "--unshare-all",
                                 "--die-with-parent",
+                                "--overlay-src",
+                                sandbox_fake_root_dir,
+                                "--tmp-overlay",
+                                "/",
                                 "--ro-bind",
                                 "/nix/store",
                                 "/nix/store",
@@ -205,9 +204,6 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                                 "/usr/bin",
                                 "/usr/bin",
                                 # Required by ssh-keygen
-                                "--ro-bind",
-                                "/etc/passwd",
-                                "/etc/passwd",
                                 "--dev-bind",
                                 "/dev/null",
                                 "/dev/null",
@@ -248,7 +244,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 set_files_from_path(args, config, generator, out_dir)
             else:
                 raise SecretsError(
-                    f"Secret '{entry}' has no generator script, nor a corresponding --set argument, and hence can not be updated."
+                    f"Secret '{entry}' has no generator script and hence can not be updated."
                 )
 
             new_id = str(uuid4())

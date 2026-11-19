@@ -15,35 +15,29 @@ class SecretsArgs:
     dry_run: bool
     local: str | None  # "deploy" only
     generators: list[str]  # "generate" only
-    set: dict[str, Path]  # "generate" only
     timeout: float | None  # "generate" only
     command: str  # gotta figure out how to type this properly
+    secret_name: str | None  # "from-file"/"edit" only
+    secret_file: str | None # "from-file"/"edit" only
+    secret_path: Path | None  # "from-file" only
     verbose: str
 
     @staticmethod
     def from_dict(d: dict[str, Any]) -> "SecretsArgs":
-        # This one is only in the dict when the "generate" command is used.
-        # I wish we had proper sum types...
+        # I really wish I had some kind of proper sum types for this ugh...
+        # Having all the fields in a flat struct feels kinda bad :/
         if "generators" not in d:
             d["generators"] = []
         if "local" not in d:
             d["local"] = None
         if "timeout" not in d:
             d["timeout"] = None
-
-        setArgDict = {}
-        if "set" in d:
-            for arg in d["set"]:
-                try:
-                    key, value = arg.split("=")
-                    if key in setArgDict:
-                        raise SecretsError(
-                            f"Multiple --set arguments received for generator '{key}'"
-                        )
-                    setArgDict[key] = Path(value)
-                except ValueError:
-                    raise SecretsError(f"--set expects key=value pairs: '{arg}' given")
-        d["set"] = setArgDict
+        if "secret_name" not in d:
+            d["secret_name"] = None
+        if "secret_file" not in d:
+            d["secret_file"] = None
+        if "secret_path" not in d:
+            d["secret_path"] = None
 
         args = SecretsArgs(**d)
 
@@ -62,14 +56,5 @@ class SecretsArgs:
 
         if args.attr and not args.file:
             raise SecretsError("--attr is only supported for --file")
-
-        setGenerators = set(args.set.keys())
-        forcedGenerators = set(args.generators)
-
-        if overlappingGenerators := setGenerators.intersection(forcedGenerators):
-            overlappingList = ", ".join(sorted(overlappingGenerators))
-            raise SecretsError(
-                f"A generator cannot be passed to both --generate and --set, yet the following have been: {overlappingList}"
-            )
 
         return args
