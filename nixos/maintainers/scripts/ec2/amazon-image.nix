@@ -61,6 +61,15 @@ let
 
   autoSize = config.virtualisation.diskSize == "auto";
 
+  # The format name that AWS ImportSnapshot uses.
+  diskFormat =
+    {
+      raw = "RAW";
+      vpc = "VHD";
+      qcow2 = "QCOW2";
+    }
+    .${cfg.format};
+
   amazonImage = config.image.repart.image.overrideAttrs (previousAttrs: {
     nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
       pkgs.buildPackages.bubblewrap
@@ -157,12 +166,14 @@ let
         --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
         --arg logical_bytes "$logicalBytes" \
         --arg boot_mode "${bootMode}" \
+        --arg format ${diskFormat} \
         --arg file "$image" \
         '{}
          | .label = $system_version
          | .boot_mode = $boot_mode
          | .system = $system
          | .logical_bytes = $logical_bytes
+         | .format = $format
          | .file = $file
          | .disks.root.logical_bytes = $logical_bytes
          | .disks.root.file = $file
