@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "screengrab";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "screengrab";
     tag = finalAttrs.version;
-    hash = "sha256-WgQWFNAu+cws442o1HubuaANsg0Hxg0XLyZ/CeA3abM=";
+    hash = "sha256-ASPYvFKwl7ewPtXU4vjfeC98+CNniOy2ZbkvDY6lls8=";
   };
 
   nativeBuildInputs = [

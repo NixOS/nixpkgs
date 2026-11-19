@@ -3,8 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  nix-update,
+  nix,
   rustPlatform,
   versionCheckHook,
+  writeShellApplication,
+  yq-go,
 
   # dependencies
   click,
@@ -20,19 +24,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zensical";
-  version = "0.1.1";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zensical";
     repo = "zensical";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ssdnmg1bvRxcNfjKCleKDA4XOuOru1nLuVVX+B5qMls=";
+    hash = "sha256-UH9iuQUCUB6Y1N/p2/c+71PftgWgd/nJNypLkaxnhsg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-bse528U80zjZSXcGNpzJtJGlujCFhpPiBTcJ/vzoneg=";
+    hash = "sha256-/cAzZFcv9pp3fC9vUZVqK2TMuCwzFWX1QxdqtTo3Yo8=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -70,6 +74,21 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "zensical-update";
+    runtimeInputs = [
+      nix
+      nix-update
+      yq-go
+    ];
+    text = ''
+      nix-update zensical
+      toml=$(nix-instantiate --eval -A zensical.src.outPath --json | yq -r)/pyproject.toml
+      version=$(yq -r '.project.dependencies[] | select(test("^zensical-ui==")) | sub("^zensical-ui=="; "")' "$toml")
+      nix-update zensical.ui --version "$version"
+    '';
+  });
 
   meta = {
     description = "Static site generator for documentation";
