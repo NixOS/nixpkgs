@@ -29,11 +29,11 @@
 let
   common = finalAttrs: {
 
-    version = "8.4.11";
+    version = "8.4.13";
 
     src = fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-      hash = "sha256-6zBRFk1iXdNGqCA/duDV1dmuxR2+nVF4jjnsaz8TlMI=";
+      hash = "sha256-9t3H9/tkYrq4tTOxPAavP/9X+pyhIlm4GrE82ZMLnVg=";
     };
 
     patches = [
