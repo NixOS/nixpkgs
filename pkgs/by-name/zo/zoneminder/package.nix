@@ -6,6 +6,7 @@
   cmake,
   makeWrapper,
   pkg-config,
+  cacert,
   curl,
   ffmpeg,
   glib,
@@ -238,6 +239,9 @@ stdenv.mkDerivation {
     done
 
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
+
+    rm $out/share/zoneminder/www/api/lib/Cake/Config/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/zoneminder/www/api/lib/Cake/Config/cacert.pem
   '';
 
   meta = {
