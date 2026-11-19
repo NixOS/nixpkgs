@@ -4436,6 +4436,8 @@ self: super: with self; {
 
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
+  dfir-ntfs = callPackage ../development/python-modules/dfir_ntfs { };
+
   dftd4 = callPackage ../by-name/df/dftd4/python.nix {
     inherit (pkgs) dftd4;
   };
@@ -7363,6 +7365,8 @@ self: super: with self; {
   gradio-pdf = callPackage ../development/python-modules/gradio-pdf { };
 
   grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
+
+  grain = callPackage ../development/python-modules/grain { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
