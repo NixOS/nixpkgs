@@ -24,6 +24,8 @@ let
     writeBashBin
     writeBabashka
     writeBabashkaBin
+    writeCosh
+    writeCoshBin
     writeDash
     writeDashBin
     writeFish
@@ -99,6 +101,12 @@ recurseIntoAttrs {
     dash = expectSuccessBin (
       writeDashBin "test-writers-dash-bin" ''
         test '~' = '~' && echo 'success'
+      ''
+    );
+
+    cosh = expectSuccessBin (
+      writeCoshBin "test-writers-cosh-bin" ''
+        5 range; sum; str; 10 =; if; "success" println; then
       ''
     );
 
@@ -240,6 +248,12 @@ recurseIntoAttrs {
     dash = expectSuccess (
       writeDash "test-writers-dash" ''
         test '~' = '~' && echo 'success'
+      ''
+    );
+
+    cosh = expectSuccess (
+      writeCosh "test-writers-cosh" ''
+        5 range; sum; str; 10 =; if; "success" println; then;
       ''
     );
 

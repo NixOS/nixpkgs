@@ -2,18 +2,20 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-server-git";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-edwibnJdNuOAF31FbZQ/CVDxM5WyIxl0ycmebTkWroE=";
+    hash = "sha256-yYfNwuNwzgguvErZRzc+M7cDt/05pU7iZuiF1L3c4hE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/git/";
@@ -30,6 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3Packages; [
+    gitMinimal
     pytestCheckHook
     pytest-asyncio
   ];
