@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  flit-core_3,
   iocapture,
   mock,
   pytestCheckHook,
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ./pr240-699568ad-06-01-2025-test_integration.patch
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   nativeCheckInputs = [
     iocapture
