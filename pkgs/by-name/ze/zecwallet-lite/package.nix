@@ -4,25 +4,21 @@
   appimageTools,
 }:
 
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "zecwallet-lite";
   version = "1.8.8";
 
   src = fetchurl {
-    url = "https://github.com/adityapk00/zecwallet-lite/releases/download/v${version}/Zecwallet.Lite-${version}.AppImage";
+    url = "https://github.com/adityapk00/zecwallet-lite/releases/download/v${finalAttrs.version}/Zecwallet.Lite-${finalAttrs.version}.AppImage";
     hash = "sha256-6jppP3V7R8tCR5Wv5UWfbWKkAdsgrCjSiO/bbpLNcw4=";
   };
 
-  extraInstallCommands =
-    let
-      contents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      install -m 444 -D ${contents}/zecwallet-lite.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/zecwallet-lite.desktop \
-        --replace 'Exec=AppRun' "Exec=$out/bin/zecwallet-lite"
-      cp -r ${contents}/usr/share/icons $out/share
-    '';
+  extraInstallCommands = ''
+    install -m 444 -D ${finalAttrs.contents}/zecwallet-lite.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/zecwallet-lite.desktop \
+      --replace 'Exec=AppRun' "Exec=$out/bin/zecwallet-lite"
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
+  '';
 
   meta = {
     description = "Fully featured shielded wallet for Zcash";
@@ -32,4 +28,4 @@ appimageTools.wrapType2 rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "zecwallet-lite";
   };
-}
+})
