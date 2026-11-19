@@ -73,15 +73,15 @@ with haskellLib;
         )
       );
 
-  Cabal_3_18_1_0 = doDistribute (
-    super.Cabal_3_18_1_0.override {
-      Cabal-syntax = self.Cabal-syntax_3_18_1_0;
+  Cabal_3_18_2_0 = doDistribute (
+    super.Cabal_3_18_2_0.override {
+      Cabal-syntax = self.Cabal-syntax_3_18_2_0;
     }
   );
 
   # Needs matching version of Cabal
   Cabal-hooks = super.Cabal-hooks.override {
-    Cabal = self.Cabal_3_18_1_0;
+    Cabal = self.Cabal_3_18_2_0;
   };
 
   # Needs Cabal>=3.14
@@ -117,8 +117,8 @@ with haskellLib;
         # TODO(@sternenseemann): make conditional once a GHC release ships Cabal 3.18
         # !!! Use cself/csuper inside for the actual overrides
         cabalInstallOverlay = cself: csuper: {
-          Cabal = cself.Cabal_3_18_1_0;
-          Cabal-syntax = cself.Cabal-syntax_3_18_1_0;
+          Cabal = cself.Cabal_3_18_2_0;
+          Cabal-syntax = cself.Cabal-syntax_3_18_2_0;
 
           # Forbids Cabal >= 3.18
           # https://github.com/sol/hpack/issues/653
@@ -232,19 +232,6 @@ with haskellLib;
       "func-test"
     ];
   }) super.lsp-test;
-
-  haskell-debugger = lib.pipe super.haskell-debugger [
-    (warnAfterVersion "0.13.1.0")
-    (overrideSrc {
-      version = "0.14.0.0";
-      src = pkgs.fetchFromGitHub {
-        owner = "well-typed";
-        repo = "haskell-debugger";
-        rev = "v0.14.0.0";
-        hash = "sha256-2rnFKNogbFJzos3oKfMCI2IFEP3adCb5XFj2nw/BECc";
-      };
-    })
-  ];
 
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
@@ -417,6 +404,8 @@ with haskellLib;
         "!/taiClock/"
       ])
     ];
+    # Too strict upper bound on QuickCheck (<2.17)
+    jailbreak = true;
   }) super.time-compat;
 
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
@@ -739,11 +728,6 @@ with haskellLib;
     lib.pipe
       (super.git-annex.override {
         file-io = self.filepath-bytestring;
-        # git-annex does not support magic >= 2.0 and doesn't intend to, at least for now.
-        # patching in support is pretty involved and changes in recent versions of magic
-        # are hard to review since it appears to be heavily LLM generated, see git-annex
-        # commits 512f9d6bebd3, ca4bc8f22c417760967b6f.
-        magic = self.magic_1_1;
       })
       [
         (overrideCabal (drv: {
@@ -988,25 +972,18 @@ with haskellLib;
   # 2025-09-13: too strict bound on algebraic-graphs
   hnix-store-core = warnAfterVersion "0.6.1.0" (doJailbreak super.hnix-store-core);
 
-  # hnix doesn't support hnix-store-core >= 0.8: https://github.com/haskell-nix/hnix/pull/1112
+  # hnix doesn't support hnix-store-core >= 0.7: https://github.com/haskell-nix/hnix/pull/1112
   # Switch hnix-store-core from memory to ram to match crypton >= 1.1
-  hnix-store-core_0_8_0_0 = doDistribute (
-    appendPatches [
-      ./patches/hnix-store-core-crypton-1.1-and-ram.patch
-    ] (super.hnix-store-core_0_8_0_0.override { memory = self.ram; })
-  );
-  hnix-store-db = super.hnix-store-db.override { hnix-store-core = self.hnix-store-core_0_8_0_0; };
+  hnix-store-core_0_9_0_0 = doDistribute (super.hnix-store-core_0_9_0_0);
+  hnix-store-db = super.hnix-store-db.override { hnix-store-core = self.hnix-store-core_0_9_0_0; };
   hnix-store-json = super.hnix-store-json.override {
-    hnix-store-core = self.hnix-store-core_0_8_0_0;
+    hnix-store-core = self.hnix-store-core_0_9_0_0;
   };
   hnix-store-readonly = super.hnix-store-readonly.override {
-    hnix-store-core = self.hnix-store-core_0_8_0_0;
+    hnix-store-core = self.hnix-store-core_0_9_0_0;
   };
-  hnix-store-remote_0_7_0_0 = doDistribute (
-    super.hnix-store-remote_0_7_0_0.override { hnix-store-core = self.hnix-store-core_0_8_0_0; }
-  );
   hnix-store-tests = super.hnix-store-tests.override {
-    hnix-store-core = self.hnix-store-core_0_8_0_0;
+    hnix-store-core = self.hnix-store-core_0_9_0_0;
   };
 
   # Fails for non-obvious reasons while attempting to use doctest.
@@ -2595,17 +2572,33 @@ with haskellLib;
     (dontCheckIf pkgs.stdenv.hostPlatform.isBigEndian)
   ];
 
+  # cborg has an incredible amount of useful unreleased changes,
+  # patches without comments are mostly included because we need
+  # them for other patches.
   cborg = appendPatches [
-    # This patch changes CPP macros form gating on the version of ghc-prim to base
-    # since that's where the definitions are imported from. The source commit
-    # also changes the cabal file metadata which we filter out since we are
-    # only interested in this change as a dependency of cborg-i686-support-upstream.patch.
+    (pkgs.fetchpatch {
+      name = "cborg-bump-lower-bounds-1.patch";
+      url = "https://github.com/well-typed/cborg/commit/308afc2795062f847171463958e5e1bbd9c03381.patch";
+      hash = "sha256-v+Yh6IZiFljVxKGbySp6AThQZg26tbjlWX/WtFHxi2M=";
+      relative = "cborg";
+    })
+    (pkgs.fetchpatch {
+      name = "cborg-bump-aeson-lower-bound.patch";
+      url = "https://github.com/well-typed/cborg/commit/062f10a1a539f4cdbf0c43ff4b7dbd012f5202d6.patch";
+      hash = "sha256-YKvpa/IPeUcUS9OyRjmh6JMvzb1UmtWC4jytlkkZqHU=";
+      relative = "cborg";
+    })
+    (pkgs.fetchpatch {
+      name = "cborg-bump-primitive-lower-bound.patch";
+      url = "https://github.com/well-typed/cborg/commit/6c0fd2b2790416d98b14b172a6f5236a09846c3a.patch";
+      hash = "sha256-eRjGvD4XutIlXimbg/+zUdWLaP7B1zdqHyo7o0t+NmI=";
+      relative = "cborg";
+    })
     (pkgs.fetchpatch {
       name = "cborg-no-gate-on-ghc-prim-version.patch";
       url = "https://github.com/well-typed/cborg/commit/a33f94f616f5047e45608a34ca16bfb1304ceaa1.patch";
-      hash = "sha256-30j4Dksh2nnLKAcUF5XJw3Z/UjfV3F+JFnHeXSUs9Rk=";
-      includes = [ "**/Codec/CBOR/**" ];
-      stripLen = 1;
+      hash = "sha256-yvJYOMxOuEYbZrpT9jp4RfV1DeqlDLl9czATQri5NZE=";
+      relative = "cborg";
     })
     # Fixes compilation on 32-bit platforms. Unreleased patch committed to the
     # upstream master branch: https://github.com/well-typed/cborg/pull/351
@@ -2614,6 +2607,19 @@ with haskellLib;
       url = "https://github.com/well-typed/cborg/commit/ecc1360dcf9e9ee27d08de5206b844e075c88ca4.patch";
       hash = "sha256-9m2FlG6ziRxA1Dy22mErBaIjiZHa1dqtkbmFnMMFrTI=";
       stripLen = 1;
+    })
+    (pkgs.fetchpatch {
+      name = "cborg-ghc-9.14.patch";
+      url = "https://github.com/well-typed/cborg/commit/06cdc44be7497fe5be02b62697bc9268c6699134.patch";
+      hash = "sha256-tUSJzePVu4DhZrG+x7J/axwl/qgD+ddTpwvpV2MyPXE=";
+      relative = "cborg";
+    })
+    # e.g. for QuickCheck >= 2.17
+    (pkgs.fetchpatch {
+      name = "cborg-bump-various-bounds.patch";
+      url = "https://github.com/well-typed/cborg/commit/b47b5752a8d79debc98e6c0b5cd1fb147f137b99.patch";
+      hash = "sha256-X9PKb89R6aEZRnvG19gMUf8RKqHjf2mk2kjeDGJigQY=";
+      relative = "cborg";
     })
   ] super.cborg;
 
@@ -2888,6 +2894,15 @@ with haskellLib;
     url = "https://github.com/Gabriella439/optparse-generic/commit/e59394937d43b09cf612e7bac67a390b94215b40.patch";
     sha256 = "sha256-0yN22zv8ndc8YJnv+/fiWnFJasrbPgmAPPOrRhfddDw";
   }) super.optparse-generic;
+
+  # Allow QuickCheck >= 2.17
+  # https://github.com/pcapriotti/optparse-applicative/issues/530
+  optparse-applicative = doJailbreak super.optparse-applicative;
+  # https://github.com/haskellari/strict/issues/52
+  strict = doJailbreak super.strict;
+  # Fails to compile with QC 2.17
+  # https://github.com/spl/dlist/issues/132
+  dlist = dontCheck super.dlist;
 
   # Tests require docker
   testcontainers = dontCheck super.testcontainers;
@@ -3641,7 +3656,6 @@ with haskellLib;
         inherit version;
         src = src + "/cachix-api";
       })
-      (drv: drv.override { memory = self.ram; })
       (appendPatches [ ./patches/cachix-api-crypton-1.1-and-ram.patch ])
     ];
 
@@ -3655,9 +3669,8 @@ with haskellLib;
         drv:
         drv.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
-          hnix-store-core = self.hnix-store-core_0_8_0_0;
+          hnix-store-core = self.hnix-store-core_0_9_0_0;
           hnix-store-nar = self.hnix-store-nar;
-          memory = self.ram;
         }
       )
       (appendPatches [ ./patches/cachix-crypton-1.1-and-ram.patch ])

@@ -84,7 +84,7 @@ with haskellLib;
   # Version upgrades
   #
 
-  ghc-exactprint_1_14_1_0 = addBuildDepends [
+  ghc-exactprint_1_14_3_0 = addBuildDepends [
     # cabal2nix drops conditional block: impl (ghc >= 9.14)
     self.containers
     self.Diff
@@ -94,9 +94,9 @@ with haskellLib;
     self.silently
     self.syb
     self.HUnit
-  ] super.ghc-exactprint_1_14_1_0;
+  ] super.ghc-exactprint_1_14_3_0;
 
-  ghc-exactprint = doDistribute self.ghc-exactprint_1_14_1_0;
+  ghc-exactprint = doDistribute self.ghc-exactprint_1_14_3_0;
   ghc-lib = doDistribute self.ghc-lib_9_14_1_20251220;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_14_1_20251220;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_14_2_0;
@@ -151,7 +151,7 @@ with haskellLib;
   };
 
   ormolu = doDistribute self.ormolu_0_9_0_0;
-  fourmolu = doDistribute self.fourmolu_0_20_1_0;
+  fourmolu = doDistribute self.fourmolu_0_21_0_0;
 
   inherit
     (

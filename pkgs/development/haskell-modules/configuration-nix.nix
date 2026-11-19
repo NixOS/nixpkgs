@@ -1070,6 +1070,9 @@ builtins.intersectAttrs super {
   splitmix = dontCheck super.splitmix;
   splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
 
+  # Break infinite recursion cycle between QuickCheck and split
+  split = dontCheck super.split;
+
   # Break infinite recursion
   # hedgehog (dep)→ async (dep)→ unordered-containers (test)→ nothunks (test)→ hedgehog
   nothunks = dontCheck super.nothunks;
@@ -2322,6 +2325,10 @@ builtins.intersectAttrs super {
       "--skip=/Cabal.Paths/paths"
       "--skip=/Cabal.ReplOptions" # >= 0.23
     ];
+
+    # https://github.com/sol/doctest/issues/494
+    editedCabalFile = null;
+    revision = null;
   }) super.doctest;
 
   # tracked upstream: https://github.com/snapframework/openssl-streams/pull/11
