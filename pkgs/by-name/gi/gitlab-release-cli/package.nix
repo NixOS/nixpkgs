@@ -29,5 +29,9 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kilimnik ];
     mainProgram = "release-cli";
+    problems.removal = {
+      message = "`gitlab-release-cli` is deprecated upstream and will be removed from Nixpkgs 27.05. Please switch to `glab`.";
+      urls = [ "https://gitlab.com/gitlab-org/cli" ];
+    };
   };
 })
