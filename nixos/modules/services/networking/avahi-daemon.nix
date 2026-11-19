@@ -285,13 +285,13 @@ in
           publish = {
             disable-publishing = lib.mkOption {
               type = lib.types.bool;
-              default = true;
+              default = false;
               description = "Whether to disable publishing in general.";
             };
 
             disable-user-service-publishing = lib.mkOption {
               type = lib.types.bool;
-              default = true;
+              default = false;
               description = "Whether to disable publishing user services.";
             };
 
