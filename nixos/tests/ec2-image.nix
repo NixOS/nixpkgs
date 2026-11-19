@@ -12,6 +12,7 @@
   espSize,
   firmware,
   perlless,
+  verity,
   ...
 }:
 
@@ -47,6 +48,7 @@ let
           amazonImage.store = store;
           nix.enable = withNix;
           amazonImage.espSize = lib.mkIf (espSize != null) espSize;
+          amazonImage.verity = verity;
           # The default variant already covers the channel.
           nix.channel.enable = lib.mkIf (bootMode == "uefi") false;
           amazonImage.format = "qcow2";
@@ -124,16 +126,18 @@ in
   _module.args.espSize = lib.mkDefault null;
   _module.args.firmware = lib.mkDefault "uefi";
   _module.args.perlless = lib.mkDefault false;
+  _module.args.verity = lib.mkDefault false;
 
   name =
     "ec2-image"
     + lib.optionalString imageCfg.boot.loader.systemd-boot.enable "-systemd-boot"
-    + lib.optionalString ukiBoot "-uki"
+    + lib.optionalString (ukiBoot && !verity) "-uki"
     + lib.optionalString (store != "root") "-${store}"
     + lib.optionalString (!withNix) "-nonix"
     + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
     + lib.optionalString (firmware == "bios") "-bios"
-    + lib.optionalString perlless "-perlless";
+    + lib.optionalString perlless "-perlless"
+    + lib.optionalString verity "-verity";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -279,6 +283,7 @@ in
 
       store = "${store}"
       nix_enabled = ${if imageCfg.nix.enable then "True" else "False"}
+      verity = ${if verity then "True" else "False"}
       uki_boot = ${if ukiBoot then "True" else "False"}
 
       def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
@@ -391,6 +396,8 @@ in
               labels = {"esp": "ESP", "root": "nixos"}
               if store != "root":
                   labels["store"] = "nix-store"
+              if verity:
+                  labels["store-verity"] = "nix-store-verity"
               assert {key: p["label"] for key, p in image_info["partitions"].items()} == labels, image_info
               for key, label in labels.items():
                   partition = image_info["partitions"][key]
@@ -423,6 +430,13 @@ in
               if store == "erofs-overlay":
                   machine.succeed("findmnt -n -o FSTYPE /nix/.ro-store | grep -qx erofs")
                   machine.succeed("test -x /run/current-system/bin/switch-to-configuration")
+
+          if verity:
+              with subtest("dm-verity"):
+                  roothash = image_info["partitions"]["store"]["roothash"]
+                  status = machine.succeed("veritysetup status nix-store")
+                  assert re.search(rf"^\s*root hash:\s+{roothash}$", status, re.M), (status, image_info)
+                  machine.succeed("findmnt -n -o SOURCE /nix/store | tail -n1 | grep -qx /dev/mapper/nix-store")
 
           if uki_boot:
               with subtest("UKI boot"):

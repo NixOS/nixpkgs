@@ -90,13 +90,15 @@ let
   readOnlyStore = cfg.store == "erofs";
   # A read-only store has one generation, so the firmware boots its UKI directly.
   ukiBoot = readOnlyStore && bootMode == "uefi";
+  # The UKI's command line, as system.build.uki builds it.
+  ukiCmdline = config.boot.uki.settings.UKI.Cmdline;
   # systemd-repart doesn't label erofs file systems.
   storeDevice = "/dev/disk/by-partlabel/nix-store";
   storeFileSystems =
     {
       root = { };
       erofs."/nix/store" = {
-        device = storeDevice;
+        device = if cfg.verity then "/dev/mapper/nix-store" else storeDevice;
         fsType = "erofs";
       };
       erofs-overlay = {
@@ -123,7 +125,10 @@ let
     }
     .${cfg.format};
 
-  amazonImage = config.image.repart.image.overrideAttrs (previousAttrs: {
+  # With verity, the first systemd-repart run in preBuild creates the image.
+  repartImage = config.image.repart.image.override { createEmpty = !cfg.verity; };
+
+  amazonImage = repartImage.overrideAttrs (previousAttrs: {
     nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
       pkgs.buildPackages.bubblewrap
       pkgs.buildPackages.jq
@@ -199,12 +204,29 @@ let
       ''}
     '';
     preBuild =
-      optionalString ukiBoot ''
+      optionalString cfg.verity ''
+        # The UKI's command line needs the store's root hash, so the ESP comes in a second run.
+        unshare --map-root-user fakeroot systemd-repart ''${systemdRepartFlags[@]} \
+          --empty=create --defer-partitions=esp ${config.image.baseName}.raw > repart-store.json
+        storehash=$(jq -r '.[] | select(.label == "nix-store") | .roothash' repart-store.json)
+      ''
+      + optionalString ukiBoot ''
         # With no boot loader, the firmware loads the UKI from the removable-media path.
         mkdir -p esp/EFI/BOOT
-        install -m 644 ${config.system.build.uki}/${config.system.boot.loader.ukiFile} \
-          esp/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI
+        uki=esp/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI
       ''
+      + (
+        if cfg.verity then
+          ''
+            # system.build.uki lacks the root hash, and patching it would break .pcrsig and Secure Boot signatures.
+            ${lib.getExe' pkgs.buildPackages.systemdUkify "ukify"} build --config=${config.boot.uki.configFile} \
+              --cmdline="${ukiCmdline} storehash=$storehash" --output="$uki"
+          ''
+        else
+          optionalString ukiBoot ''
+            install -m 644 ${config.system.build.uki}/${config.system.boot.loader.ukiFile} "$uki"
+          ''
+      )
       + ''
         # Leave room for the FAT and, with a writable store, a second generation.
         espBytes=$(numfmt --from=iec ${cfg.espSize})
@@ -241,7 +263,7 @@ let
         --arg logical_bytes "$logicalBytes" \
         --arg boot_mode "${bootMode}" \
         --arg format ${diskFormat} \
-        --arg store ${cfg.store} \
+        --arg store ${cfg.store} ${optionalString cfg.verity ''--arg roothash "$storehash"''} \
         --slurpfile repart repart-output.json \
         --arg file "$image" \
         '{}
@@ -251,10 +273,11 @@ let
          | .logical_bytes = $logical_bytes
          | .format = $format
          | .store = $store
-         | { "ESP": "esp", "nixos": "root", "nix-store": "store" } as $keys
+         | { "ESP": "esp", "nixos": "root", "nix-store": "store", "nix-store-verity": "store-verity" } as $keys
          | .partitions = ([ $repart[0][]
              | { key: $keys[.label], value: { label, number: (.partno + 1), size: .raw_size } }
              | select(.key) ] | from_entries)
+         ${optionalString cfg.verity "| .partitions.store.roothash = $roothash"}
          | .file = $file
          | .disks.root.logical_bytes = $logical_bytes
          | .disks.root.file = $file
@@ -373,6 +396,16 @@ in
         kernel and initrd of each generation. The image build fails if they
         don't fit. Unless the store is read-only, it also needs room for a
         second generation.
+      '';
+    };
+
+    verity = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to protect the read-only Nix store with dm-verity. The store's
+        root hash goes on the unified kernel image's command line. Requires
+        `store = "erofs"` and `ec2.bootMode = "uefi"`.
       '';
     };
 
@@ -557,6 +590,10 @@ in
         message = "The Amazon image boots with systemd-boot or Limine.";
       }
       {
+        assertion = cfg.verity -> ukiBoot;
+        message = "amazonImage.verity requires amazonImage.store = \"erofs\" and ec2.bootMode = \"uefi\".";
+      }
+      {
         assertion = cfg.registerImage.TpmSupport != null -> cfg.registerImage.BootMode == "uefi";
         message = "amazonImage.registerImage.TpmSupport requires amazonImage.registerImage.BootMode = \"uefi\".";
       }
@@ -587,6 +624,8 @@ in
     boot.loader.limine.enable = mkDefault (bootMode != "uefi");
 
     boot.loader.grub.enable = mkIf ukiBoot (mkDefault false);
+    boot.initrd.systemd.dmVerity.enable = mkIf cfg.verity true;
+    boot.initrd.nix-store-veritysetup.enable = mkIf cfg.verity true;
 
     fileSystems = storeFileSystems;
     # Instances can't update channels on a read-only store.
@@ -633,8 +672,21 @@ in
             # Nix creates it on start, which fails on a read-only store.
             MakeDirectories = "/.links";
           }
+          // lib.optionalAttrs cfg.verity {
+            Verity = "data";
+            VerityMatchKey = "nix-store";
+          }
           # Higher levels take several times as long and save a few percent.
           // lib.optionalAttrs (cfg.storeCompression == "zstd") { CompressionLevel = 9; };
+        };
+        nix-store-verity = mkIf cfg.verity {
+          repartConfig = {
+            Type = "linux-generic";
+            Label = "nix-store-verity";
+            Verity = "hash";
+            VerityMatchKey = "nix-store";
+            Minimize = "best";
+          };
         };
         root = {
           storePaths = lib.optionals (!erofsStore) storePaths;
