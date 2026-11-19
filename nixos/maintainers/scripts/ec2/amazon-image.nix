@@ -88,6 +88,8 @@ let
   # EROFS_FS_ZIP, which includes LZ4, is on unless something turns it off.
   erofsLz4 = kernelOption "EROFS_FS_ZIP" != "n";
   readOnlyStore = cfg.store == "erofs";
+  # A read-only store has one generation, so the firmware boots its UKI directly.
+  ukiBoot = readOnlyStore && bootMode == "uefi";
   # systemd-repart doesn't label erofs file systems.
   storeDevice = "/dev/disk/by-partlabel/nix-store";
   storeFileSystems =
@@ -155,9 +157,13 @@ let
       ''}
       echo "CopyFiles=$PWD/nix-state:/nix/var/nix" >> repart.d/root.conf
 
+      mkdir -p esp
+      echo "CopyFiles=$PWD/esp:/" >> repart.d/esp.conf
+    ''
+    + optionalString (!ukiBoot) ''
       # Install the boot loader into the build directory, so the store holds no
       # extra copies of the kernel and initrd.
-      mkdir -p esp root/tmp
+      mkdir -p root/tmp
       bwrapArgs=()
       ${optionalString systemdBoot ''
         # bootctl reads os-release.
@@ -191,17 +197,25 @@ let
         # systemd-boot-random-seed.service writes a seed for each instance on first boot.
         rm -f esp/loader/random-seed
       ''}
-      # Leave room for the FAT and, with a writable store, a second generation.
-      espBytes=$(numfmt --from=iec ${cfg.espSize})
-      bootBytes=$(du -sb esp | cut -f1)
-      if (( bootBytes * ${if readOnlyStore then "1" else "2"} + espBytes / 20 > espBytes )); then
-        echo "amazonImage.espSize = ${cfg.espSize} is too small for $bootBytes bytes of boot files${
-          optionalString (!readOnlyStore) ", plus as much again for a second generation"
-        }." >&2
-        exit 1
-      fi
-      echo "CopyFiles=$PWD/esp:/" >> repart.d/esp.conf
     '';
+    preBuild =
+      optionalString ukiBoot ''
+        # With no boot loader, the firmware loads the UKI from the removable-media path.
+        mkdir -p esp/EFI/BOOT
+        install -m 644 ${config.system.build.uki}/${config.system.boot.loader.ukiFile} \
+          esp/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI
+      ''
+      + ''
+        # Leave room for the FAT and, with a writable store, a second generation.
+        espBytes=$(numfmt --from=iec ${cfg.espSize})
+        bootBytes=$(du -sb esp | cut -f1)
+        if (( bootBytes * ${if readOnlyStore then "1" else "2"} + espBytes / 20 > espBytes )); then
+          echo "amazonImage.espSize = ${cfg.espSize} is too small for $bootBytes bytes of boot files${
+            optionalString (!readOnlyStore) ", plus as much again for a second generation"
+          }." >&2
+          exit 1
+        fi
+      '';
     postBuild = optionalString limineBios ''
       ${lib.getExe' limine.package "limine"} bios-install ${config.image.baseName}.raw
     '';
@@ -341,7 +355,8 @@ in
         - `"erofs"` puts it on its own compressed, read-only partition.
           Instances can use and verify the store but can't add to it, so
           `nixos-rebuild`, channels and garbage collection don't work on them.
-          The image has no channel.
+          The image has no channel. With `ec2.bootMode = "uefi"`, the firmware
+          boots a unified kernel image directly, without a boot loader.
         - `"erofs-overlay"` adds a writable overlay on the root file system,
           so Nix, `nixos-rebuild` and the channel work as with `"root"`.
           Garbage collection hides paths from the image but can't free their
@@ -538,7 +553,7 @@ in
         message = "amazonImage.contents does not support glob patterns in `source`.";
       }
       {
-        assertion = systemdBoot || limine.enable;
+        assertion = systemdBoot || limine.enable || ukiBoot;
         message = "The Amazon image boots with systemd-boot or Limine.";
       }
       {
@@ -568,8 +583,10 @@ in
 
     ec2.bootMode = mkDefault (if config.ec2.efi then "uefi" else "uefi-preferred");
     # systemd-boot can't boot legacy BIOS.
-    boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi");
+    boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi" && !ukiBoot);
     boot.loader.limine.enable = mkDefault (bootMode != "uefi");
+
+    boot.loader.grub.enable = mkIf ukiBoot (mkDefault false);
 
     fileSystems = storeFileSystems;
     # Instances can't update channels on a read-only store.
