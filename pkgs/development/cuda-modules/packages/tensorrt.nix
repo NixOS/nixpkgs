@@ -165,7 +165,7 @@ buildRedist (
       mv --verbose "''${!outputDev:?}/cmake" "''${!outputDev:?}/lib/cmake/TensorRT-Enterprise"
 
       nixLog "patching CMake package configuration files to use absolute paths to outputs"
-      for cmakeFile in "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-EnterpriseTargets*.cmake; do
+      for cmakeFile in "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-Enterprise*Targets*.cmake; do
         substituteInPlace "$cmakeFile" \
           --replace-quiet '${"$"}{_IMPORT_PREFIX}/bin' "''${!outputBin:?}/bin" \
           --replace-quiet '${"$"}{_IMPORT_PREFIX}/include' "''${!outputInclude:?}/include" \
@@ -177,8 +177,13 @@ buildRedist (
       done
       unset -v cmakeFile
     ''
-    # We remove the Windows libraries in postInstall; drop the checks CMake performs to ensure they exist.
-    + optionalString (tensorrtAtLeast "11.2.1") ''
+    # In 11.5, the Windows libraries have their own optional component. Remove its targets along with the libraries.
+    + optionalString (tensorrtAtLeast "11.5") ''
+      nixLog "removing CMake targets for Windows libraries"
+      rm --verbose "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-Enterprise-WinBuilderResourceTargets*.cmake
+    ''
+    # Earlier versions put the Windows libraries in the main export. Drop its checks for the removed files.
+    + optionalString (tensorrtAtLeast "11.2.1" && tensorrtOlder "11.5") ''
       nixLog "removing CMake import checks for Windows libraries"
       sed -i '/_cmake_import_check_.*TRT::[A-Za-z_]*_win_/d' \
         "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-EnterpriseTargets-*.cmake
