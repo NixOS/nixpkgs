@@ -173,12 +173,16 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
       lib.optionalAttrs
         (
           !torch.cudaSupport
+          || cudaPackages.cudaMajorVersion != "13"
           || lib.versions.majorMinor torch.version != lib.versions.majorMinor finalAttrs.version
         )
         {
           broken.message =
-            "torch-tensorrt ${finalAttrs.version} needs a CUDA build of torch ${lib.versions.majorMinor finalAttrs.version}.x;"
-            + " got torch ${torch.version}${lib.optionalString (!torch.cudaSupport) " without CUDA"}.";
+            "torch-tensorrt ${finalAttrs.version} requires torch ${lib.versions.majorMinor finalAttrs.version}.x with CUDA 13."
+            + " Found torch ${torch.version}"
+            + (
+              if torch.cudaSupport then " with CUDA ${cudaPackages.cudaMajorMinorVersion}." else " without CUDA."
+            );
         };
     maintainers = with lib.maintainers; [ connorbaker ];
     teams = [ lib.teams.cuda ];
