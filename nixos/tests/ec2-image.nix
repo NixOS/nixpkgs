@@ -9,6 +9,8 @@
   bootMode,
   store,
   withNix,
+  espSize,
+  firmware,
   ...
 }:
 
@@ -43,6 +45,7 @@ let
           };
           amazonImage.store = store;
           nix.enable = withNix;
+          amazonImage.espSize = lib.mkIf (espSize != null) espSize;
           # The default variant already covers the channel.
           nix.channel.enable = lib.mkIf (bootMode == "uefi") false;
           amazonImage.format = "qcow2";
@@ -81,8 +84,16 @@ let
 
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
-  # Hashing the store takes a while, so one variant covers it.
-  verifyFlags = lib.optionalString (bootMode == "uefi" || store != "root") " --check-contents";
+  # Hashing the store takes a while, so cover each store layout once.
+  verifyFlags = lib.optionalString (
+    espSize == null && (bootMode == "uefi" || store != "root")
+  ) " --check-contents";
+
+  # Without OVMF, QEMU boots with SeaBIOS.
+  firmwareArgs = lib.optionalString (firmware == "uefi") (
+    " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
+    + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
+  );
 
   storeFsType = (imageCfg.fileSystems."/nix/store" or imageCfg.fileSystems."/").fsType;
 
@@ -106,12 +117,16 @@ in
   _module.args.bootMode = lib.mkDefault null;
   _module.args.store = lib.mkDefault "root";
   _module.args.withNix = lib.mkDefault true;
+  _module.args.espSize = lib.mkDefault null;
+  _module.args.firmware = lib.mkDefault "uefi";
 
   name =
     "ec2-image"
     + lib.optionalString (bootMode == "uefi") "-systemd-boot"
     + lib.optionalString (store != "root") "-${store}"
-    + lib.optionalString (!withNix) "-nonix";
+    + lib.optionalString (!withNix) "-nonix"
+    + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
+    + lib.optionalString (firmware == "bios") "-bios";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -244,11 +259,9 @@ in
               + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
           )
 
-          # nixosTests.ec2-nixops covers the BIOS boot of the same image.
           start_command = (
               f"{QEMU}/bin/qemu-kvm -m 1024"
-              + " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
-              + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
+              + "${firmwareArgs}"
               + f" -drive file={disk_image},if=virtio,werror=report"
               + vlan_net
               + metadata_net
@@ -351,7 +364,7 @@ in
               assert "Hello from test-instance" in ssh_result, f"Unexpected SSH result: {ssh_result}"
 
           with subtest("Basic EC2 functionality"):
-              machine.succeed("test -d /sys/firmware/efi")
+              machine.succeed("test ${if firmware == "uefi" then "-d" else "! -e"} /sys/firmware/efi")
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("test $(stat -c %a ${imageCfg.boot.loader.efi.efiSysMountPoint}) = 700")
               # The test resizes the disk to 10G, so the root file system must grow past the image.
@@ -367,7 +380,7 @@ in
               assert image_info["format"] == "QCOW2", image_info
               assert image_info["store"] == store, image_info
               disk = {p["partlabel"]: p for p in json.loads(machine.succeed("lsblk -J -b -l -o PARTLABEL,PARTN,SIZE"))["blockdevices"]}
-              labels = {"root": "nixos"}
+              labels = {"esp": "ESP", "root": "nixos"}
               if store != "root":
                   labels["store"] = "nix-store"
               assert {key: p["label"] for key, p in image_info["partitions"].items()} == labels, image_info
@@ -377,6 +390,7 @@ in
                   # Root has grown since.
                   if key != "root":
                       assert partition["size"] == disk[label]["size"], (key, partition)
+              assert image_info["partitions"]["esp"]["size"] == int(machine.succeed("numfmt --from=iec ${imageCfg.amazonImage.espSize}")), image_info
               with open(f"{nix_support}/register-image.json") as f:
                   args = json.load(f)
               expected = json.loads('${builtins.toJSON expectedRegisterImage}')

@@ -168,6 +168,15 @@ let
         # systemd-boot-random-seed.service writes a seed for each instance on first boot.
         rm -f esp/loader/random-seed
       ''}
+      # Leave room for the FAT and, with a writable store, a second generation.
+      espBytes=$(numfmt --from=iec ${cfg.espSize})
+      bootBytes=$(du -sb esp | cut -f1)
+      if (( bootBytes * ${if readOnlyStore then "1" else "2"} + espBytes / 20 > espBytes )); then
+        echo "amazonImage.espSize = ${cfg.espSize} is too small for $bootBytes bytes of boot files${
+          optionalString (!readOnlyStore) ", plus as much again for a second generation"
+        }." >&2
+        exit 1
+      fi
       echo "CopyFiles=$PWD/esp:/" >> repart.d/esp.conf
     '';
     postBuild = optionalString limineBios ''
@@ -205,7 +214,7 @@ let
          | .logical_bytes = $logical_bytes
          | .format = $format
          | .store = $store
-         | { "nixos": "root", "nix-store": "store" } as $keys
+         | { "ESP": "esp", "nixos": "root", "nix-store": "store" } as $keys
          | .partitions = ([ $repart[0][]
              | { key: $keys[.label], value: { label, number: (.partno + 1), size: .raw_size } }
              | select(.key) ] | from_entries)
@@ -314,6 +323,18 @@ in
           so Nix, `nixos-rebuild` and the channel work as with `"root"`.
           Garbage collection hides paths from the image but can't free their
           space.
+      '';
+    };
+
+    espSize = mkOption {
+      type = types.str;
+      default = "1G";
+      example = "256M";
+      description = ''
+        Size of the EFI system partition, which holds the boot loader and the
+        kernel and initrd of each generation. The image build fails if they
+        don't fit. Unless the store is read-only, it also needs room for a
+        second generation.
       '';
     };
 
@@ -530,8 +551,8 @@ in
           Type = "esp";
           Format = "vfat";
           Label = "ESP";
-          SizeMinBytes = "1G";
-          SizeMaxBytes = "1G";
+          SizeMinBytes = cfg.espSize;
+          SizeMaxBytes = cfg.espSize;
         };
         # It comes before root, so root stays last and can grow.
         nix-store = mkIf erofsStore {

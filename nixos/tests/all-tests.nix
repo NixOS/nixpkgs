@@ -607,6 +607,21 @@ in
     imports = [ ./ec2-image.nix ];
     _module.args.store = "erofs";
   };
+  ec2-image-erofs-esp-256m = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      store = "erofs";
+      espSize = "256M";
+    };
+  };
+  ec2-image-erofs-esp-256m-bios = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      store = "erofs";
+      espSize = "256M";
+      firmware = "bios";
+    };
+  };
   ec2-image-erofs-nonix = runTest {
     imports = [ ./ec2-image.nix ];
     _module.args = {
@@ -621,6 +636,14 @@ in
   ec2-image-systemd-boot = runTest {
     imports = [ ./ec2-image.nix ];
     _module.args.bootMode = "uefi";
+  };
+  ec2-image-systemd-boot-erofs-esp-256m = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      bootMode = "uefi";
+      store = "erofs";
+      espSize = "256M";
+    };
   };
   ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
   echoip = runTest ./echoip.nix;
