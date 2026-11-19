@@ -339,6 +339,7 @@ in
                   image_info = json.load(f)
               assert isinstance(image_info["logical_bytes"], str), image_info
               assert image_info["disks"]["root"]["logical_bytes"] == image_info["logical_bytes"], image_info
+              assert image_info["format"] == "QCOW2", image_info
               with open(f"{nix_support}/register-image.json") as f:
                   args = json.load(f)
               expected = json.loads('${builtins.toJSON expectedRegisterImage}')
