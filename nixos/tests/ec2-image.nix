@@ -97,6 +97,8 @@ let
     + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
   );
 
+  ukiBoot = bootMode == "uefi" && store == "erofs";
+
   storeFsType = (imageCfg.fileSystems."/nix/store" or imageCfg.fileSystems."/").fsType;
 
   # Built in the VM to check that Nix can add to the store.
@@ -125,7 +127,8 @@ in
 
   name =
     "ec2-image"
-    + lib.optionalString (bootMode == "uefi") "-systemd-boot"
+    + lib.optionalString imageCfg.boot.loader.systemd-boot.enable "-systemd-boot"
+    + lib.optionalString ukiBoot "-uki"
     + lib.optionalString (store != "root") "-${store}"
     + lib.optionalString (!withNix) "-nonix"
     + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
@@ -276,6 +279,7 @@ in
 
       store = "${store}"
       nix_enabled = ${if imageCfg.nix.enable then "True" else "False"}
+      uki_boot = ${if ukiBoot then "True" else "False"}
 
       def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
           """Test that compressed user-data is decompressed by fetch-ec2-metadata"""
@@ -419,6 +423,14 @@ in
               if store == "erofs-overlay":
                   machine.succeed("findmnt -n -o FSTYPE /nix/.ro-store | grep -qx erofs")
                   machine.succeed("test -x /run/current-system/bin/switch-to-configuration")
+
+          if uki_boot:
+              with subtest("UKI boot"):
+                  esp = "${imageCfg.boot.loader.efi.efiSysMountPoint}"
+                  machine.succeed(f"test -f {esp}/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI")
+                  machine.fail(f"test -e {esp}/loader/entries")
+                  # systemd-stub, the UKI's EFI stub, sets this.
+                  machine.succeed("test -e /sys/firmware/efi/efivars/StubInfo-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
 
           with subtest("Clean boot"):
               failed = machine.succeed("systemctl list-units --failed --no-legend --plain").strip()

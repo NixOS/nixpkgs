@@ -645,7 +645,7 @@ in
     imports = [ ./ec2-image.nix ];
     _module.args.bootMode = "uefi";
   };
-  ec2-image-systemd-boot-erofs-esp-256m = runTest {
+  ec2-image-uki-erofs-esp-256m = runTest {
     imports = [ ./ec2-image.nix ];
     _module.args = {
       bootMode = "uefi";
