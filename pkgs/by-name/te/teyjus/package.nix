@@ -1,12 +1,16 @@
 {
   lib,
   fetchFromGitHub,
-  buildDunePackage,
-  stdenv,
+  ocaml-ng,
+  gcc14Stdenv,
   flex,
   bison,
 }:
 
+let
+  inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
+  stdenv = gcc14Stdenv;
+in
 (buildDunePackage.override { inherit stdenv; }) (finalAttrs: {
   pname = "teyjus";
   version = "2.1.1";

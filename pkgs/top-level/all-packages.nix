@@ -3795,11 +3795,6 @@ with pkgs;
 
   swi-prolog-gui = swi-prolog.override { withGui = true; };
 
-  teyjus = callPackage ../development/compilers/teyjus {
-    inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
-    stdenv = gcc14Stdenv;
-  };
-
   vcard = python3Packages.toPythonApplication python3Packages.vcard;
 
   inherit (callPackage ../development/compilers/vala { })
