@@ -10,10 +10,10 @@
   socat,
   jq,
   kdePackages,
+  python3Packages,
   ffmpeg,
   libmediainfo,
   libusb1,
-  vapoursynth,
   libx11,
   systemdLibs,
   openssl,
@@ -52,7 +52,7 @@ let
     ffmpeg.bin
     libmediainfo
     libusb1
-    vapoursynth
+    python3Packages.vapoursynth
     libx11
     systemdLibs
     openssl

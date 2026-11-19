@@ -1,19 +1,25 @@
 {
   lib,
-  stdenv,
+  pkgs,
+  buildPythonPackage,
   fetchFromGitHub,
-  meson,
+  meson-python,
   ninja,
   pkg-config,
   vapoursynth,
   ffmpeg,
   xxhash,
+  libp2p,
   gitUpdater,
+  vulkan-headers,
+  avisynthplus,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "vapoursynth-bestsource";
-  version = "13";
+  version = "23";
+
+  pyproject = true;
 
   outputs = [
     "out"
@@ -25,11 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vapoursynth";
     repo = "bestsource";
     tag = "R${finalAttrs.version}";
-    hash = "sha256-c+FMFWICDS8Plj6GE2vvhWPmf56Vk10j41HUK1q20/U=";
+    hash = "sha256-ID0s4eIcRC0RKx6i15vufjq+AdSvSnaaUFjdvsvMzBc=";
   };
 
+  postPatch = ''
+    substituteInPlace meson.build --replace-fail avisynthplus avisynth
+  '';
+
+  build-system = [ meson-python ];
+
   nativeBuildInputs = [
-    meson
     ninja
     pkg-config
   ];
@@ -37,13 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     vapoursynth
     (ffmpeg.override { withLcms2 = true; })
-    xxhash
+    pkgs.xxhash
+    libp2p
+    vulkan-headers
+    avisynthplus.dev
   ];
-
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace-fail "vapoursynth_dep.get_variable(pkgconfig: 'libdir')" "get_option('libdir')"
-  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "R";
