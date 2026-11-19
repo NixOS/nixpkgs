@@ -8,16 +8,16 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "installer";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "installer";
-    rev = version;
-    hash = "sha256-GkHLZfzHfTcBL8wQmIGlNkVodEw9Pih4i1SS36mSfBo=";
+    tag = finalAttrs.version;
+    hash = "sha256-l2jxC2UJOmWGpCOUWU/2x2QSuYo7GjGxj9Yeu6V2uh0=";
   };
 
   patches = [
@@ -28,33 +28,30 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
+  pythonImportsCheck = [ "installer" ];
+
   # We need to disable tests because this package is part of the bootstrap chain
   # and its test dependencies cannot be built yet when this is being built.
   doCheck = false;
 
   passthru.tests = {
-    pytest = buildPythonPackage {
-      pname = "${pname}-pytest";
-      inherit version;
-      pyproject = false;
-
-      dontBuild = true;
-      dontInstall = true;
-
-      nativeCheckInputs = [
-        installer
-        mock
-        pytestCheckHook
-      ];
+    pytest = finalAttrs.finalPackage.overrideAttrs {
+      doInstallCheck = true;
     };
   };
+
+  nativeCheckInputs = [
+    installer
+    mock
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Low-level library for installing a Python package from a wheel distribution";
     homepage = "https://github.com/pypa/installer";
-    changelog = "https://github.com/pypa/installer/blob/${src.rev}/docs/changelog.md";
+    changelog = "https://github.com/pypa/installer/blob/${finalAttrs.src.tag}/docs/changelog.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cpcloud ];
     teams = [ lib.teams.python ];
   };
-}
+})
