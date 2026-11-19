@@ -3404,13 +3404,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.14.0";
+    version = "1.15.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-Jby8fR/4VkuPd0bnq3DFK9D5IsfXnyCtW9fzH4F69xg=";
+      hash = "sha256-ftyytmVYzl0oUnMTmCBNS7TTMSjqCsHNlnGbswGxYY8=";
     };
   in
   {
