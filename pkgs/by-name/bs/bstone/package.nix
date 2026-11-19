@@ -3,6 +3,9 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  copyDesktopItems,
+  icoutils,
+  makeDesktopItem,
   nix-update-script,
   openal,
   sdl2-compat,
@@ -34,7 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'register_destroy_at();' ""
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+    icoutils
+  ];
 
   buildInputs = [
     openal
@@ -61,6 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share/doc/bstone}
     mv $out/bstone $out/bin
     mv $out/*.txt $out/share/doc/bstone
+
+    icotool -x $src/src/bstone/src/resources/win32/bstone_icon.ico
+    for f in bstone_icon_*.png; do
+      res=$(basename "$f" .png | cut -d_ -f4 | cut -dx -f1-2)
+      install -Dm644 "$f" "$out/share/icons/hicolor/$res/apps/bstone.png"
+    done
   '';
 
   doInstallCheck = true;
@@ -68,6 +81,20 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
     writableTmpDirAsHomeHook
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "bstone";
+      categories = [
+        "Game"
+        "ActionGame"
+      ];
+      comment = finalAttrs.meta.description;
+      desktopName = "BStone";
+      exec = "bstone";
+      icon = "bstone";
+    })
   ];
 
   preVersionCheck = ''
