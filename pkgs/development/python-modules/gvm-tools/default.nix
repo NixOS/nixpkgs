@@ -2,26 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
   python-gvm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "gvm-tools";
-  version = "25.4.9";
+  version = "26.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dt7njGUqi6zfwUz0gSdOHWnSUJ+yJ7qJ3RttoPweR3c=";
+    hash = "sha256-Pqhgfo0TaGZk9dz5yCQ3CP208rMKx/DxSIQdQ3I/Nvc=";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [ python-gvm ];
 
