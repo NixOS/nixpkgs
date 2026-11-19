@@ -5448,8 +5448,6 @@ self: super: with self; {
 
   e3-core = callPackage ../development/python-modules/e3-core { };
 
-  e3-testsuite = callPackage ../development/python-modules/e3-testsuite { };
-
   e3nn = callPackage ../development/python-modules/e3nn { };
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
@@ -10009,6 +10007,8 @@ self: super: with self; {
         inherit (self) libxml2;
       }
     )).py;
+
+  libzfs = callPackage ../development/python-modules/libzfs { };
 
   liccheck = callPackage ../development/python-modules/liccheck { };
 
@@ -14570,8 +14570,6 @@ self: super: with self; {
   py-key-value-aio = callPackage ../development/python-modules/py-key-value-aio { };
 
   py-libnuma = callPackage ../development/python-modules/py-libnuma { };
-
-  py-libzfs = callPackage ../development/python-modules/py-libzfs { };
 
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
