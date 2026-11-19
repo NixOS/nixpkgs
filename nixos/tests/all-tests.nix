@@ -640,6 +640,14 @@ in
       perlless = true;
     };
   };
+  ec2-image-erofs-verity = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      bootMode = "uefi";
+      store = "erofs";
+      verity = true;
+    };
+  };
   ec2-image-store-compression = pkgs.callPackage ./ec2-image-store-compression.nix { };
   ec2-image-systemd-boot = runTest {
     imports = [ ./ec2-image.nix ];
