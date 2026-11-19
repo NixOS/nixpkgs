@@ -76,6 +76,25 @@ buildRedist (
       '';
       homepage = "https://developer.nvidia.com/cuquantum-sdk";
       changelog = "https://docs.nvidia.com/cuda/cuquantum/latest/cuquantum-sdk-release-notes.html";
+      # https://docs.nvidia.com/cuda/cuquantum/26.11.0/getting-started/index.html#distributed-tensor-decomposition-additional-requirements
+      problems =
+        lib.optionalAttrs
+          (
+            cuquantumAtLeast "26.09"
+            && libcusolvermp.meta.available
+            && (
+              lib.versionOlder libcusolvermp.version "0.9.1" || lib.versionAtLeast libcusolvermp.version "0.10.0"
+            )
+          )
+          {
+            incompatible-cusolvermp = {
+              kind = "broken";
+              message = ''
+                cuTensorNet distributed QR and SVD require cuSOLVERMp >= 0.9.1 and < 0.10.0.
+                This CUDA package set supplies cuSOLVERMp ${libcusolvermp.version}.
+              '';
+            };
+          };
     };
   }
 )
