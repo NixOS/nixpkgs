@@ -6,15 +6,15 @@
 
 buildDartApplication (finalAttrs: {
   pname = "unsure";
-  version = "0.4.0-unstable-2025-04-15";
+  version = "0.5.0-unstable-2026-11-12";
 
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "filiph";
     repo = "unsure";
-    rev = "123712482b7053974cbef9ffa7ba46c1cdfb765f";
-    hash = "sha256-rn10vy6l12ToiqO4vGVT4N7WNlj6PY/r+xVzjmYqILw=";
+    rev = "9e2da5ef67fd084891e1962185643064e4ca0f8b";
+    hash = "sha256-gDzNaYFvulK2Fdz86SWYMxFvD+edHK1MJosFvtVkeNE=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
