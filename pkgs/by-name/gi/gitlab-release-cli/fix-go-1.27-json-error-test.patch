@@ -1,0 +1,19 @@
+Go 1.27 implements encoding/json's v1 API on top of encoding/json/v2,
+which changed UnmarshalTypeError: the error now carries a JSON pointer
+path ("... into .0 of type gitlab.Link") instead of
+"... into Go value of type gitlab.Link".
+
+Assert on the part of the message that is stable across both
+implementations.
+
+--- a/internal/gitlab/asset_marshaller_test.go
++++ b/internal/gitlab/asset_marshaller_test.go
+@@ -98,7 +98,7 @@
+ 			assetLink:             []string{`["fake_asset", "another_fake_asset"]`},
+ 			expectedAssetLength:   0,
+ 			expectedErrorMessage:  `invalid array of assets: "[\"fake_asset\", \"another_fake_asset\"]"`,
+-			expectedOriginalError: "json: cannot unmarshal string into Go value of type gitlab.Link",
++			expectedOriginalError: "of type gitlab.Link",
+ 		},
+ 		"single_and_array_of_assets": {
+ 			assetLink:           []string{`{"name":"asset1", "url":"https://gitlab.com"}`, `[{"name":"asset2", "url":"https://gitlab.com/gitlab-org"}, {"name":"asset3", "url":"https://gitlab.com/gitlab-org/gitlab"}]`, `{"name":"asset4", "url":"https://gitlab.com/gitlab-org/release-cli"}`},

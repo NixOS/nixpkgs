@@ -18,6 +18,8 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-UwDMRsWbk8rEv2d5FssIzCLby68YZULoxd3/JGLsCQU=";
 
+  patches = [ ./fix-go-1.27-json-error-test.patch ];
+
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip failing test
     "-skip TestHTTPSCustomCA"
