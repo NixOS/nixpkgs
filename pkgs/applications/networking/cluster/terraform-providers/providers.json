@@ -1174,13 +1174,13 @@
     "vendorHash": "sha256-1vSryOQ1ndiJLLwlztqNN5cgq3xu0VHddff7Jlp+RKE="
   },
   "scaleway_scaleway": {
-    "hash": "sha256-1edAhzB1XYPtkn3O55/QPm39zcbH18YG0+oaAxW+e8M=",
+    "hash": "sha256-7RxgYxXzz/ozdWQFvwr7eSwBTktcyLLx3i4BKlAgxCE=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.82.0",
+    "rev": "v2.92.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-YhbEC+0wjtCWcMDlrEWiOYDvPdnWhctCPa+mUY1ui10="
+    "vendorHash": "sha256-C02qejgYzr9+xw81FHuzOgQaOcS0I2LCtiIO5+eNYRw="
   },
   "scottwinkler_shell": {
     "hash": "sha256-LTWEdXxi13sC09jh+EFZ6pOi1mzuvgBz5vceIkNE/JY=",
