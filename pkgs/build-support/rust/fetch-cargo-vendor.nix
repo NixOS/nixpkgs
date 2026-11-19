@@ -3,7 +3,7 @@
   stdenvNoCC,
   runCommand,
   writers,
-  python3,
+  python3Packages,
   cargo,
   gitMinimal,
   nix-prefetch-git,
@@ -11,14 +11,6 @@
 }:
 
 let
-  python3Packages = python3.pkgs // {
-    # Break the requests -> charset-normalizer -> mypy -> ast-serialize ->
-    # fetchCargoVendor bootstrap cycle without overriding the whole Python scope.
-    requests = python3.pkgs.requests.override {
-      charset-normalizer = python3.pkgs.charset-normalizer.override { withMypyc = false; };
-    };
-  };
-
   replaceWorkspaceValues = writers.writePython3Bin "replace-workspace-values" {
     libraries = with python3Packages; [
       tomli
