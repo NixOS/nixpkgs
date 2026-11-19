@@ -142,10 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withDevDoc (lib.mesonBool "docs" true)
   ++ lib.optional (imagemagick == null) (lib.mesonEnable "magick" false);
 
-  postFixup = ''
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     tests = {
       pkg-config = testers.hasPkgConfigModules {

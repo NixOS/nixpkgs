@@ -57,11 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
       "'test-dbus': {'extra-sources': dbus_foo, 'disable': true, 'is_parallel': false},"
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru.updateScript = gnome.updateScript {
     packageName = "libdex";
     versionPolicy = "odd-unstable";
