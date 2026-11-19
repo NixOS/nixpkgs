@@ -203,6 +203,7 @@ assert withStorage; # installed by default in 262, meson option in 263
 
 let
   wantCurl = withRemote || withImportd || withImds;
+  bpfClang = lib.getExe' buildPackages.llvmPackages.clang-unwrapped "clang";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -255,7 +256,9 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withLibBPF ''
     substituteInPlace src/bpf/meson.build \
-      --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+      --replace-fail "find_program('clang'" "find_program('${bpfClang}'" \
+      --replace-fail 'clang = cc.cmd_array()' "clang = '${bpfClang}'" \
+      --replace-fail 'bpf_clang_flags = [' "bpf_clang_flags = ['-isystem', '${lib.getDev stdenv.cc.libc}/include',"
   ''
   + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
@@ -321,7 +324,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withLibBPF [
     bpftools
-    buildPackages.llvmPackages.clang
     buildPackages.llvmPackages.libllvm
   ];
 
