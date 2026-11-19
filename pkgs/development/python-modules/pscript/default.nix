@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
   nodejs,
 }:
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "ast.Ellipsis" "ast.Constant"
   '';
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   nativeCheckInputs = [
     pytestCheckHook
