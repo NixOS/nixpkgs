@@ -40,17 +40,17 @@
 
 stdenv.mkDerivation {
   pname = "pcp";
-  version = "7.1.1-unstable-2026-03-28";
+  version = "7.2.2";
 
-  # Upstream does not tag releases consistently, so we pin to a specific commit.
+  # Upstream now tags releases consistently.
   # NOTE: upstream has a flake.nix with package and NixOS module definitions:
   # https://github.com/performancecopilot/pcp/blob/main/flake.nix
   # For standalone use, `nix run github:performancecopilot/pcp` may be simpler.
   src = fetchFromGitHub {
     owner = "performancecopilot";
     repo = "pcp";
-    rev = "fd1045aabffa72f9ad2ff3aa3372993ab767a7a3";
-    hash = "sha256-N+W+WqJTYqffFIEWOzWqF5Qz3picu1OPcxb3SHpqlfA=";
+    rev = "87fc51f5ea667b1b532a03752b1a9091b5d6b3de";
+    hash = "sha256-3AO8O6Ux2HkjiMEQg7GC6K/0q/c2GJGepmSlZt/a19c=";
   };
 
   outputs = [
@@ -276,6 +276,9 @@ stdenv.mkDerivation {
       mkdir -p $man/share
       mv $out/share/man $man/share/
     fi
+    # Remove broken pmtop.1.gz symlink (points to non-existent pcp-htop.1.gz)
+    # htop subdirectory is not built in current build system
+    rm -f "$man/share/man/man1/pmtop.1.gz" 2>/dev/null || true
     for docdir in $out/share/doc/pcp*; do
       if [ -d "$docdir" ]; then
         mkdir -p $doc/share/doc
