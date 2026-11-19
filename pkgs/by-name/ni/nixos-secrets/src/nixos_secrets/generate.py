@@ -2,7 +2,6 @@ import os
 import subprocess
 import tempfile
 from pathlib import Path
-from uuid import uuid4
 
 from .args import SecretsArgs
 from .config import SecretsConfig, SecretsSecret
@@ -253,11 +252,10 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                     f"Secret '{entry}' has no generator script and hence can not be updated."
                 )
 
-            new_id = str(uuid4())
             dep_ids: dict[str, VersionID] = {}
             for dep_name in generator.dependencies:
                 dep_ids[dep_name] = up_to_date_meta[dep_name].id
-            meta = SecretsMetadata(new_id, dep_ids)
+            meta = SecretsMetadata.fresh(dep_ids)
 
             set_meta(args, config, generator, meta)
             up_to_date_meta[entry] = meta

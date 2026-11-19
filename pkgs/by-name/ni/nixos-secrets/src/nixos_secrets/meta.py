@@ -3,6 +3,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Self
+from uuid import uuid4
 
 from .args import SecretsArgs
 from .config import (
@@ -33,6 +34,12 @@ class SecretsMetadata:
             "id": self.id,
             "dependencies": self.dependencies,
         }
+
+    # Generates a metadata instance containing a new ID
+    @staticmethod
+    def fresh(dependencies: dict[str, VersionID]) -> "SecretsMetadata":
+        return SecretsMetadata(dependencies = dependencies, id=str(uuid4()))
+
 
 
 def get_meta(

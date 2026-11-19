@@ -2,6 +2,8 @@ from .args import SecretsArgs
 from .config import SecretsConfig
 from .error import SecretsError
 from .exec import set_secret
+from .list import build_file_list
+from .meta import SecretsMetadata, get_meta, set_meta
 
 
 def import_from_file(args: SecretsArgs, config: SecretsConfig):
@@ -16,7 +18,14 @@ def import_from_file(args: SecretsArgs, config: SecretsConfig):
     if args.dry_run:
         return
 
-    # Will not trigger (argparse would error out beforehand), but this keeps
+    files = build_file_list(args, config)
+    meta = get_meta(args, config, files, secret) or SecretsMetadata.fresh({})
+
+    # Will never trigger (argparse would error out beforehand), but it keeps
     # mypy happy...
     assert args.secret_path is not None
     set_secret(args, config, secret, file, args.secret_path)
+
+    meta = SecretsMetadata.fresh(meta.dependencies)
+    set_meta(args, config, secret, meta)
+    print(f"Updated '{args.secret_name}'/'{args.secret_file}'")

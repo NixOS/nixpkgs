@@ -8,6 +8,7 @@ from .config import SecretsConfig
 from .error import SecretsError
 from .exec import get_secret, set_secret
 from .list import build_file_list
+from .meta import SecretsMetadata, get_meta, set_meta
 
 secret_editor = os.getenv("SECRETEDITOR", "nano")
 
@@ -24,10 +25,18 @@ def edit_secret(args: SecretsArgs, config: SecretsConfig):
     if args.dry_run:
         return
 
+    meta = get_meta(args, config, files, secret) or SecretsMetadata.fresh({})
+
     with tempfile.TemporaryDirectory() as temp_str:
         temp = Path(temp_str) / "temp_secret"
+
         if files.has(file.backend, secret.name, file.name):
             get_secret(args, config, secret, file, temp)
+
         subprocess.run([secret_editor, temp], check=True)
         set_secret(args, config, secret, file, temp)
-        print(f"Updated '{args.secret_name}'/'{args.secret_file}'.")
+
+    meta = SecretsMetadata.fresh(meta.dependencies)
+    set_meta(args, config, secret, meta)
+
+    print(f"Updated '{args.secret_name}'/'{args.secret_file}'")
