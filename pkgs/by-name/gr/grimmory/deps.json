@@ -1136,6 +1136,9 @@
    "module": "sha256-5z5nlODZiUjJIuFuQwt+6ue5zsH/Ys4urEsuVEnOfFA=",
    "pom": "sha256-uQjq5e1ta7oh+Wuk6CEZyBd/RTnT7eGV+LGnSyi7kak="
   },
+  "org/grimmory#pdfium4j/1.2.0/natives-linux-arm64": {
+   "jar": "sha256-DrpGkFkhGm69HW0OiFEFr3b7oZluyCE42O0gbd5Flzw="
+  },
   "org/grimmory#pdfium4j/1.2.0/natives-linux-x64": {
    "jar": "sha256-jFbwg3eizyiXyvg5mOG2JzaROqVjhVDjlBH3E2mF6iI="
   },
