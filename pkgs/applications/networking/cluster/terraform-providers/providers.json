@@ -146,13 +146,13 @@
     "vendorHash": "sha256-MyTPHDvD8/Piv9+jmg0oNmBv5up3e04+XPy4iLqh/xM="
   },
   "bunnyway_bunnynet": {
-    "hash": "sha256-jFTtV5MNBvDV69UP61t8zAAIeVxn97gsUOoR07xz+KA=",
+    "hash": "sha256-9DUoLAlowuEXpBp22yoGTH2OR46nTNKU5moX61+34Us=",
     "homepage": "https://registry.terraform.io/providers/BunnyWay/bunnynet",
     "owner": "BunnyWay",
     "repo": "terraform-provider-bunnynet",
-    "rev": "v0.20.1",
+    "rev": "v0.20.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-8hKnunwXJbI2SdwcyqLPWAHIZGu0m7IEKpqBsIiqaJs="
+    "vendorHash": "sha256-aMUl+aWlzyTwW6nxIbSgkliQDFtCTELuHS9a63fkfH0="
   },
   "camptocamp_pass": {
     "hash": "sha256-GQ2g7VyK+eeBqW3LMR4U0gMYsvQnG3y+KEKKkvnmfsk=",
