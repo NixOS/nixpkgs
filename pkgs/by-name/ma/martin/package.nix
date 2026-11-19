@@ -6,10 +6,15 @@
   buildNpmPackage,
   rustPlatform,
   pkg-config,
+
+  aws-lc,
   curl,
   libuv,
   libz,
   openssl,
+  sqlite,
+  zstd,
+
   postgresql,
   postgresqlTestHook,
   nix-update-script,
@@ -58,7 +63,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   patches = [ ./dont-build-webui.patch ];
 
-  cargoHash = "sha256-p5sAkmMTirMdmXnVb2aqGKhPYpX/uluvzq0uw4W1Bt8=";
+  cargoPatches = [ ./fix-build-gcc15.patch ];
+
+  cargoHash = "sha256-yZFVK6BaaGutxDWu0WFa6HZtdoIhgSADYclz+ULAy0s=";
 
   webui = buildNpmPackage {
     pname = "martin-ui";
@@ -99,10 +106,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    aws-lc
     curl
     libuv
     libz
     openssl
+    sqlite
+    zstd
   ];
 
   nativeCheckInputs = [
