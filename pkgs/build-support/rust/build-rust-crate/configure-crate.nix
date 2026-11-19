@@ -72,15 +72,53 @@ in
 
   runHook preConfigure
 
-  symlink_dependency() {
-    # $1 is the nix-store path of a dependency
-    # $2 is the target path
+  # Adds the libraries and link flags of the dependency at nix-store
+  # path $1 to dependencyLibs and dependencyLinks. Libraries are keyed
+  # by file name so that a later dependency wins, as `ln -f` did when
+  # each dependency was linked on its own.
+  collect_dependency() {
     i=$1
-    ln -s -f $i/lib/*.rlib $2 #*/
-    ln -s -f $i/lib/*.so $i/lib/*.dylib $2 #*/
+    local lib
+    for lib in $i/lib/*.rlib $i/lib/*.so $i/lib/*.dylib; do
+      if [ -e "$lib" ]; then
+        dependencyLibs[''${lib##*/}]=$lib
+      fi
+    done
+    if [ -e "$i/lib/link" ]; then
+      dependencyLinks+=("$i/lib/link")
+    fi
     if [ -e $i/env ]; then
         source $i/env
     fi
+  }
+
+  # Dependencies are linked with one ln and cat per batch instead of
+  # one per dependency, because spawning processes is slow on Darwin.
+  # A batch of 256 paths is about 50 KiB of arguments, far below
+  # ARG_MAX (1 MiB on Darwin, 2 MiB by default on Linux, shared with
+  # the environment), while already cutting process spawns 256-fold.
+  # If ln or cat fails with "Argument list too long" (E2BIG), lower
+  # this number.
+  dependencyBatchSize=256
+
+  # Usage: link_dependency_libs <directory> <library>...
+  link_dependency_libs() {
+    local dir=$1
+    shift
+    while (( $# )); do
+      ln -s -f "''${@:1:dependencyBatchSize}" "$dir"
+      shift $(( $# < dependencyBatchSize ? $# : dependencyBatchSize ))
+    done
+  }
+
+  # Usage: append_dependency_links <file> <link file>...
+  append_dependency_links() {
+    local file=$1
+    shift
+    while (( $# )); do
+      cat "''${@:1:dependencyBatchSize}" >> "$file"
+      shift $(( $# < dependencyBatchSize ? $# : dependencyBatchSize ))
+    done
   }
 
   # The following steps set up the dependencies of the crate. Two
@@ -106,21 +144,23 @@ in
   echo ${extraLinkFlags} > target/link.final
 
   # Prepare crate dependencies
+  declare -A dependencyLibs=()
+  dependencyLinks=()
   for i in ${completeDepsDir}; do
-    symlink_dependency $i target/deps
-    if [ -e "$i/lib/link" ]; then
-      cat $i/lib/link >> target/link
-      cat $i/lib/link >> target/link.final
-    fi
+    collect_dependency $i
   done
+  link_dependency_libs target/deps "''${dependencyLibs[@]}"
+  append_dependency_links target/link "''${dependencyLinks[@]}"
+  append_dependency_links target/link.final "''${dependencyLinks[@]}"
 
   # Prepare crate build dependencies that are used for the build script.
+  dependencyLibs=()
+  dependencyLinks=()
   for i in ${completeBuildDepsDir}; do
-    symlink_dependency $i target/buildDeps
-    if [ -e "$i/lib/link" ]; then
-      cat $i/lib/link >> target/link.build
-    fi
+    collect_dependency $i
   done
+  link_dependency_libs target/buildDeps "''${dependencyLibs[@]}"
+  append_dependency_links target/link.build "''${dependencyLinks[@]}"
 
   # Remove duplicate linker flags from the build dependencies.
   if [[ -e target/link.build ]]; then
