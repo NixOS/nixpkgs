@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protonup-rs";
-  version = "0.15.1";
+  version = "0.16.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "auyer";
     repo = "protonup-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b4ZYHoJoGayt2jTFMBaLP8UrVqKQDNXzM9/kLbkSgaA=";
+    hash = "sha256-FqquDQjjff4cETJPEX4Io0KBk7eTbx0uJ1An+sRWmLk=";
   };
 
-  cargoHash = "sha256-j4eWSQUIsH4E45NgMLIWA+IpyBLh3IJwLoXIr8wSEaY=";
+  cargoHash = "sha256-yF9/1Qk1iLVJ0/giecDW4J+0Sa8Vnz7xq/69uIKyLyg=";
 
   nativeBuildInputs = [ pkg-config ];
 
