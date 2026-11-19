@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   poetry-core,
   pytestCheckHook,
   cryptography,
@@ -19,23 +18,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nitrokey";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-sdk-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ACKszYvOD0kt+ws+upxanvv11lKOix59dg25Fzs6Q80=";
+    hash = "sha256-zzdm1A1zlxuMVqAd/KwKFvrDGGyCyHN52OY5iezAr9k=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "compatibility-with-pytest.patch";
-      url = "https://github.com/Nitrokey/nitrokey-sdk-py/commit/c9b2516aa10027d238665ab7718fb474d80a2753.patch?full_index=1";
-      hash = "sha256-3qYlV0RFLM2aJKfnO9WoQkXZuMisdaGuutmkRp33bWc=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "protobuf"

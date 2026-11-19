@@ -2575,6 +2575,12 @@
     githubId = 1291396;
     name = "Arnar Ingason";
   };
+  arne-zillhardt = {
+    email = "arne@zillhardt.com";
+    github = "Arne-Zillhardt";
+    githubId = 94059017;
+    name = "Arne Zillhardt";
+  };
   arnoutkroeze = {
     email = "nixpkgs@arnoutkroeze.nl";
     github = "ArnoutKroeze";
@@ -8006,6 +8012,13 @@
     github = "dtvillafana";
     githubId = 82293276;
     name = "David Villafaña";
+  };
+  duckysocks22 = {
+    email = "code@olympus.moe";
+    github = "duckysocks22";
+    githubId = 175066341;
+    name = "Jaiden Jones";
+    keys = [ { fingerprint = "zfetx2opVnPHgBgEycfTBbFMwjC46kVXQgZsckFozQM"; } ];
   };
   dudeofawesome = {
     email = "tourist-04.iced@icloud.com";

@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "boring";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "alebeck";
     repo = "boring";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lz5t3zLrswNqeASZKkMftVWKLTVHk/VJ7T+6rNY3oVQ=";
+    hash = "sha256-Ljx2EtDN3UcyNfrnLH3RGKvyB+SQRLGLhYrbFJYIHtY=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/boring" ];
 
-  vendorHash = "sha256-lEh2cE8IRZ5/oPRhfwvDySjm3Jlof/chaO3C39ouAnk=";
+  vendorHash = "sha256-xMRax6+bXjdWdqF4k3yV4CpXlaYyZ/BL6qIMnEp8n1k=";
 
   ldflags = [
     "-s"
