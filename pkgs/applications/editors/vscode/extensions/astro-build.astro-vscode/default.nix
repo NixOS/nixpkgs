@@ -15,6 +15,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode";
     homepage = "https://github.com/withastro/language-tools";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      frontear
+    ];
   };
 }
