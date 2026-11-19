@@ -38,6 +38,9 @@ let
       ${optionalString (efi.efiSysMountPoint != "/boot") ''
         boot.loader.efi.efiSysMountPoint = "${efi.efiSysMountPoint}";
       ''}
+      ${optionalString erofsStore ''
+        fileSystems = ${lib.generators.toPretty { indent = "  "; } storeFileSystems};
+      ''}
     }
   '';
 
@@ -60,6 +63,31 @@ let
   ++ lib.optional (config.nix.enable && config.nix.channel.enable) channelSources;
 
   autoSize = config.virtualisation.diskSize == "auto";
+  erofsStore = cfg.store != "root";
+  readOnlyStore = cfg.store == "erofs";
+  # systemd-repart doesn't label erofs file systems.
+  storeDevice = "/dev/disk/by-partlabel/nix-store";
+  storeFileSystems =
+    {
+      root = { };
+      erofs."/nix/store" = {
+        device = storeDevice;
+        fsType = "erofs";
+      };
+      erofs-overlay = {
+        "/nix/.ro-store" = {
+          device = storeDevice;
+          fsType = "erofs";
+          neededForBoot = true;
+        };
+        "/nix/store".overlay = {
+          lowerdir = [ "/nix/.ro-store" ];
+          upperdir = "/nix/.rw-store/upper";
+          workdir = "/nix/.rw-store/work";
+        };
+      };
+    }
+    .${cfg.store};
 
   # The format name that AWS ImportSnapshot uses.
   diskFormat =
@@ -167,6 +195,8 @@ let
         --arg logical_bytes "$logicalBytes" \
         --arg boot_mode "${bootMode}" \
         --arg format ${diskFormat} \
+        --arg store ${cfg.store} \
+        --slurpfile repart repart-output.json \
         --arg file "$image" \
         '{}
          | .label = $system_version
@@ -174,6 +204,11 @@ let
          | .system = $system
          | .logical_bytes = $logical_bytes
          | .format = $format
+         | .store = $store
+         | { "nixos": "root", "nix-store": "store" } as $keys
+         | .partitions = ([ $repart[0][]
+             | { key: $keys[.label], value: { label, number: (.partno + 1), size: .raw_size } }
+             | select(.key) ] | from_entries)
          | .file = $file
          | .disks.root.logical_bytes = $logical_bytes
          | .disks.root.file = $file
@@ -258,6 +293,28 @@ in
       ];
       default = "vpc";
       description = "The image format to output";
+    };
+
+    store = mkOption {
+      type = types.enum [
+        "root"
+        "erofs"
+        "erofs-overlay"
+      ];
+      default = "root";
+      description = ''
+        Where the Nix store lives.
+
+        - `"root"` keeps it on the root file system.
+        - `"erofs"` puts it on its own compressed, read-only partition.
+          Instances can use and verify the store but can't add to it, so
+          `nixos-rebuild`, channels and garbage collection don't work on them.
+          The image has no channel.
+        - `"erofs-overlay"` adds a writable overlay on the root file system,
+          so Nix, `nixos-rebuild` and the channel work as with `"root"`.
+          Garbage collection hides paths from the image but can't free their
+          space.
+      '';
     };
 
     registerImage = mkOption {
@@ -394,6 +451,18 @@ in
 
     assertions = [
       {
+        assertion = readOnlyStore -> !(config.nix.gc.automatic || config.nix.optimise.automatic);
+        message = "nix.gc.automatic and nix.optimise.automatic need a writable Nix store, but amazonImage.store = \"erofs\" makes it read-only.";
+      }
+      {
+        assertion = erofsStore -> config.boot.initrd.supportedFilesystems.erofs or false;
+        message = "amazonImage.store = \"${cfg.store}\" mounts the Nix store in the initrd, which needs boot.initrd.supportedFilesystems.erofs.";
+      }
+      {
+        assertion = erofsStore -> lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.10";
+        message = "amazonImage.store = \"${cfg.store}\" compresses the Nix store with zstd, which needs Linux 6.10 or later.";
+      }
+      {
         # systemd-repart skips sources it can't find, so a glob would copy nothing without an error.
         assertion = lib.all (file: !lib.hasInfix "*" (toString file.source)) cfg.contents;
         message = "amazonImage.contents does not support glob patterns in `source`.";
@@ -420,7 +489,15 @@ in
     boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi");
     boot.loader.limine.enable = mkDefault (bootMode != "uefi");
 
+    fileSystems = storeFileSystems;
+    # Instances can't update channels on a read-only store.
+    nix.channel.enable = mkIf readOnlyStore (mkDefault false);
+    # Nix chowns the store to its build group on start, which fails on a read-only store.
+    nix.settings.build-users-group = mkIf readOnlyStore (mkDefault "");
+
     image.repart = {
+      # Larger compression clusters make the image about 6% smaller.
+      mkfsOptions.erofs = mkIf erofsStore [ "-C65536" ];
       enable = true;
       # repart derives image.baseName from this; keep its usual default.
       name = options.image.baseName.default;
@@ -442,8 +519,24 @@ in
           SizeMinBytes = "1G";
           SizeMaxBytes = "1G";
         };
-        root = {
+        # It comes before root, so root stays last and can grow.
+        nix-store = mkIf erofsStore {
           inherit storePaths;
+          nixStorePrefix = "/";
+          repartConfig = {
+            Type = "linux-generic";
+            Format = "erofs";
+            Label = "nix-store";
+            Minimize = "best";
+            Compression = "zstd";
+            # Higher levels take several times as long and save a few percent.
+            CompressionLevel = 9;
+            # Nix creates it on start, which fails on a read-only store.
+            MakeDirectories = "/.links";
+          };
+        };
+        root = {
+          storePaths = lib.optionals (!erofsStore) storePaths;
           contents = {
             "/etc/nixos/configuration.nix".source = configFile;
           }

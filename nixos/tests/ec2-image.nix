@@ -7,6 +7,8 @@
   lib,
   hostPkgs,
   bootMode,
+  store,
+  withNix,
   ...
 }:
 
@@ -39,8 +41,10 @@ let
               }
             ];
           };
+          amazonImage.store = store;
+          nix.enable = withNix;
           # The default variant already covers the channel.
-          nix.channel.enable = bootMode != "uefi";
+          nix.channel.enable = lib.mkIf (bootMode == "uefi") false;
           amazonImage.format = "qcow2";
 
           # In a NixOS test the serial console is occupied by the "backdoor"
@@ -78,7 +82,19 @@ let
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
   # Hashing the store takes a while, so one variant covers it.
-  verifyFlags = lib.optionalString (bootMode == "uefi") " --check-contents";
+  verifyFlags = lib.optionalString (bootMode == "uefi" || store != "root") " --check-contents";
+
+  storeFsType = (imageCfg.fileSystems."/nix/store" or imageCfg.fileSystems."/").fsType;
+
+  # Built in the VM to check that Nix can add to the store.
+  gcTest = ''
+    derivation {
+      name = "gc-test";
+      system = builtins.currentSystem;
+      builder = "''${builtins.storePath "${pkgs.runtimeShellPackage}"}/bin/sh";
+      args = [ "-c" "echo hello > $out" ];
+    }
+  '';
 
   registerImage = imageCfg.amazonImage.registerImage;
   expectedRegisterImage = lib.filterAttrs (
@@ -88,8 +104,14 @@ let
 in
 {
   _module.args.bootMode = lib.mkDefault null;
+  _module.args.store = lib.mkDefault "root";
+  _module.args.withNix = lib.mkDefault true;
 
-  name = "ec2-image" + lib.optionalString (bootMode == "uefi") "-systemd-boot";
+  name =
+    "ec2-image"
+    + lib.optionalString (bootMode == "uefi") "-systemd-boot"
+    + lib.optionalString (store != "root") "-${store}"
+    + lib.optionalString (!withNix) "-nonix";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -235,6 +257,9 @@ in
 
           return create_machine(start_command), metadata_dir
 
+      store = "${store}"
+      nix_enabled = ${if imageCfg.nix.enable then "True" else "False"}
+
       def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
           """Test that compressed user-data is decompressed by fetch-ec2-metadata"""
           test_marker = f"{format_name}-decompression-test"
@@ -340,6 +365,18 @@ in
               assert isinstance(image_info["logical_bytes"], str), image_info
               assert image_info["disks"]["root"]["logical_bytes"] == image_info["logical_bytes"], image_info
               assert image_info["format"] == "QCOW2", image_info
+              assert image_info["store"] == store, image_info
+              disk = {p["partlabel"]: p for p in json.loads(machine.succeed("lsblk -J -b -l -o PARTLABEL,PARTN,SIZE"))["blockdevices"]}
+              labels = {"root": "nixos"}
+              if store != "root":
+                  labels["store"] = "nix-store"
+              assert {key: p["label"] for key, p in image_info["partitions"].items()} == labels, image_info
+              for key, label in labels.items():
+                  partition = image_info["partitions"][key]
+                  assert partition["number"] == disk[label]["partn"], (key, partition)
+                  # Root has grown since.
+                  if key != "root":
+                      assert partition["size"] == disk[label]["size"], (key, partition)
               with open(f"{nix_support}/register-image.json") as f:
                   args = json.load(f)
               expected = json.loads('${builtins.toJSON expectedRegisterImage}')
@@ -351,12 +388,40 @@ in
               assert size_gib * 1024**3 >= int(image_info["logical_bytes"]), args
               assert size_gib >= ${toString (lib.head registerImage.BlockDeviceMappings).Ebs.VolumeSize}, args
 
+          with subtest("Nix store file system"):
+              fstype, options = machine.succeed("findmnt -n -o FSTYPE,OPTIONS /nix/store | tail -n1").split()
+              assert fstype == "${storeFsType}", fstype
+              assert "ro" in options.split(","), options
+              if store == "erofs" and nix_enabled:
+                  machine.succeed("echo test > /tmp/store-test")
+                  error = machine.fail("nix-store --add /tmp/store-test 2>&1")
+                  assert "Read-only file system" in error, error
+              if store == "erofs-overlay":
+                  machine.succeed("findmnt -n -o FSTYPE /nix/.ro-store | grep -qx erofs")
+
+          with subtest("Clean boot"):
+              failed = machine.succeed("systemctl list-units --failed --no-legend --plain").strip()
+              assert failed == "", failed
+              if not nix_enabled:
+                  units = machine.succeed("systemctl list-units --all --no-legend --plain --type=service,socket,timer 'nix-*'").strip()
+                  assert units == "", units
+
+          if store == "erofs-overlay":
+              with subtest("Writable store overlay"):
+                  machine.succeed("""cat > /tmp/gc-test.nix <<'EOF'
+          ${gcTest}EOF""")
+                  path = machine.succeed("NIX_REMOTE=daemon nix-build --no-out-link /tmp/gc-test.nix").strip()
+                  machine.succeed(f"grep -qx hello {path}", f"test -e /nix/.rw-store/upper/{os.path.basename(path)}")
+                  machine.succeed("NIX_REMOTE=daemon nix-store --gc")
+                  machine.fail(f"test -e {path}")
+
           with subtest("Store paths and profiles"):
-              machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
-              machine.succeed("nix-store --verify${verifyFlags}")
+              if nix_enabled:
+                  machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
+                  machine.succeed("nix-store --verify${verifyFlags}")
               machine.succeed("test $(readlink -f /nix/var/nix/profiles/system) = ${imageCfg.system.build.toplevel}")
               machine.fail("test -e /nix/var/nix/profiles/system-2-link")
-              ${lib.optionalString imageCfg.nix.channel.enable ''
+              ${lib.optionalString (imageCfg.nix.enable && imageCfg.nix.channel.enable) ''
                 machine.succeed("test -e /root/.nix-defexpr/channels/nixos/default.nix", "test $(stat -c %a /root) = 700")
               ''}
 
