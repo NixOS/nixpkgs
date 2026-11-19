@@ -76,6 +76,8 @@ let
     );
 in
 {
+  # NOTE TO all contributors: from 2026-11 we no longer accept release candidates.
+
   php83 = mkPhp {
     version = "8.3.37";
     hash = "sha256-eDe0PNThjbXerCHubwCGbkd5pwXy5U+uqDyKbPVv0dg=";
