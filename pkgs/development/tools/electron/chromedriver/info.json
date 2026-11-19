@@ -77,12 +77,12 @@
     },
     "45": {
         "hashes": {
-            "aarch64-darwin": "ed92292bfb707271a97f08eb02d0be6dc9ef5b818258c748835b61e8507c151e",
-            "aarch64-linux": "3071caff462c5e74ac395cda0958caa72a298a608f07b009d3293fb13c06e589",
-            "headers": "0jpkayhvf7779fch0z85cwkpkx0x6vddbixlx6cch3xfj2xfvkqx",
-            "x86_64-darwin": "5882356a2c1b77e5eb57b7deda137c219391085d8cc03bac1b996898640056d4",
-            "x86_64-linux": "1e7f0daab7475009bca51a584d2e0fdf51084076c83678636239dd01d85518a9"
+            "aarch64-darwin": "7c228de6adab862187e6c134d5b9da6d887aad3e21c230388ff51cf95c849f0c",
+            "aarch64-linux": "61256e9c154a83232289f2993b85bc279b08080c332f5eeae6da8d6565183c57",
+            "headers": "00xi69gfpgiwg9x10gnbv07fzbvzw6vjmyi124w092cng8pwgr8n",
+            "x86_64-darwin": "632df76cf9b727323685413a9cea1456dd312023ab95273ffafcba8be4095bea",
+            "x86_64-linux": "6d46447609d5ede261ba068ecacca87ed40ae4a8aa6cc50445cd9ea341e260d1"
         },
-        "version": "45.2.3"
+        "version": "45.4.1"
     }
 }
