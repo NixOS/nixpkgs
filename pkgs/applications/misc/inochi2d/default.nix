@@ -40,6 +40,9 @@ in
       })
       # Change how duplicate locales differentiate themselves (the store paths were too long)
       ./translations.patch
+
+      # fixes built with ldc 1.42+
+      ./creator-fix-ternary-cast.patch
     ];
 
     meta = {
