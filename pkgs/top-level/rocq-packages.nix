@@ -18,14 +18,10 @@ let
   mkRocqPackages' =
     self: rocq-core:
     let
-      callPackage = self.callPackage;
+      callPackage = self.newScope { rocqPackages = self; };
     in
     {
       inherit lib;
-      rocqPackages = self // {
-        __attrsFailEvaluation = true;
-        recurseForDerivations = false;
-      };
 
       metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
@@ -196,7 +192,7 @@ let
       metarocq = callPackage ../development/rocq-modules/metarocq { };
       metarocq-utils = self.metarocq.utils;
       metarocq-common = self.metarocq.common;
-      metarocq-template-rocq = self.metarocq.template-rocq;
+      metarocq-template = self.metarocq.template;
       metarocq-pcuic = self.metarocq.pcuic;
       metarocq-safechecker = self.metarocq.safechecker;
       metarocq-template-pcuic = self.metarocq.template-pcuic;

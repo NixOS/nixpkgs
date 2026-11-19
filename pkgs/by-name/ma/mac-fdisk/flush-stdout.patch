@@ -1,0 +1,59 @@
+--- mac-fdisk-0.1.orig/io.c.old	2017-12-17 20:36:23.277115889 -0600
++++ mac-fdisk-0.1.orig/io.c	2017-12-17 20:46:59.295011785 -0600
+@@ -148,6 +148,7 @@
+ 
+     flush_to_newline(0);
+     printf(prompt);
++    fflush(stdout);
+ 
+     for (;;) {
+ 	c = getch();
+@@ -166,6 +167,7 @@
+ 	} else {
+ 	    flush_to_newline(0);
+ 	    printf(prompt);
++	    fflush(stdout);
+ 	}
+     }
+     return -1;
+@@ -179,6 +181,7 @@
+ 
+     if (promptBeforeGet) {
+ 	printf(prompt);
++	fflush(stdout);
+     }	
+     for (;;) {
+ 	c = getch();
+@@ -189,6 +192,7 @@
+ 	    // skip blanks and tabs
+ 	} else if (c == '\n') {
+ 	    printf(prompt);
++	    fflush(stdout);
+ 	} else {
+ 	    *command = c;
+ 	    return 1;
+@@ -214,6 +218,7 @@
+ 	} else if (c == '\n') {
+ 	    if (default_value < 0) {
+ 		printf(prompt);
++		fflush(stdout);
+ 	    } else {
+ 		ungetch(c);
+ 		*number = default_value;
+@@ -292,6 +297,7 @@
+ 	} else if (c == '\n') {
+ 	    if (reprompt) {
+ 		printf(prompt);
++		fflush(stdout);
+ 	    } else {
+ 		ungetch(c);
+ 		*string = NULL;
+@@ -466,7 +472,7 @@
+     long t;
+ 
+     if (rflag) {
+-	printf("Can't write block %u to file", (unsigned int)num);
++	printf("Can't write block %u to file\n", (unsigned int)num);
+ 	return 0;
+     }
+ #ifndef __linux__

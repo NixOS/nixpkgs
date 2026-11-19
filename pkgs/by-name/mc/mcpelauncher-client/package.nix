@@ -56,6 +56,11 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace file-picker/src/file_picker_zenity.cpp \
       --replace-fail 'EXECUTABLE_NAME = "zenity"' 'EXECUTABLE_NAME = "${lib.getExe zenity}"'
+
+    # The bundled linux/types.h stub shadows the kernel's and lacks __u128,
+    # which asm/sigcontext.h uses on aarch64 since Linux 7 headers
+    echo 'typedef unsigned __int128 __u128 __attribute__((aligned(16)));' \
+      >> mcpelauncher-linker/include/linux/types.h
   '';
 
   # FORTIFY_SOURCE breaks libc_shim and the project will fail to compile

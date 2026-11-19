@@ -1,0 +1,1455 @@
+--- mac-fdisk-0.1.orig/dpme.h
++++ mac-fdisk-0.1/dpme.h
+@@ -61,7 +61,7 @@
+ //
+ typedef	unsigned char	u8;
+ typedef	unsigned short	u16;
+-typedef	unsigned long	u32;
++typedef	unsigned int	u32;
+ 
+ 
+ // Physical block zero of the disk has this format
+@@ -113,10 +113,17 @@
+ #endif
+     u32     dpme_boot_block         ;
+     u32     dpme_boot_bytes         ;
++#ifdef __linux__
++    u32     dpme_load_addr          ;
++    u32     dpme_load_addr_2        ;
++    u32     dpme_goto_addr          ;
++    u32     dpme_goto_addr_2        ;
++#else
+     u8     *dpme_load_addr          ;
+     u8     *dpme_load_addr_2        ;
+     u8     *dpme_goto_addr          ;
+     u8     *dpme_goto_addr_2        ;
++#endif
+     u32     dpme_checksum           ;
+     char    dpme_process_id[16]     ;
+     u32     dpme_boot_args[32]      ;
+@@ -124,6 +131,7 @@
+ };
+ typedef struct dpme DPME;
+ 
++#define	dpme_automount_set(p, v)	bitfield_set(&p->dpme_flags, 30, 1, v) /* MSch */
+ #define	dpme_os_specific_1_set(p, v)	bitfield_set(&p->dpme_flags, 8, 1, v)
+ #define	dpme_os_specific_2_set(p, v)	bitfield_set(&p->dpme_flags, 7, 1, v)
+ #define	dpme_os_pic_code_set(p, v)	bitfield_set(&p->dpme_flags, 6, 1, v)
+@@ -134,6 +142,7 @@
+ #define	dpme_allocated_set(p, v)	bitfield_set(&p->dpme_flags, 1, 1, v)
+ #define	dpme_valid_set(p, v)		bitfield_set(&p->dpme_flags, 0, 1, v)
+ 
++#define	dpme_automount_get(p)		bitfield_get(p->dpme_flags, 30, 1)	/* MSch */
+ #define	dpme_os_specific_1_get(p)	bitfield_get(p->dpme_flags, 8, 1)
+ #define	dpme_os_specific_2_get(p)	bitfield_get(p->dpme_flags, 7, 1)
+ #define	dpme_os_pic_code_get(p)		bitfield_get(p->dpme_flags, 6, 1)
+--- mac-fdisk-0.1.orig/pdisk.c
++++ mac-fdisk-0.1/pdisk.c
+@@ -30,18 +30,17 @@
+ #include <stdio.h>
+ #ifdef __linux__
+ #include <getopt.h>
++#include <stddef.h>
+ #else
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <SIOUX.h>
+ #endif
+-#include <string.h>
+ #include <errno.h>
+ 
+ #ifdef __linux__
+ #include <sys/ioctl.h>
+-#include <linux/fs.h>
+-#include <linux/hdreg.h>
++#include "kernel-defs.h"
+ #endif
+ 
+ #include "pdisk.h"
+@@ -94,6 +93,7 @@
+ void do_add_intel_partition(partition_map_header *map);
+ void do_change_map_size(partition_map_header *map);
+ void do_create_partition(partition_map_header *map, int get_type);
++void do_create_bootstrap_partition(partition_map_header *map);
+ void do_delete_partition(partition_map_header *map);
+ int do_expert(partition_map_header *map);
+ void do_reorder(partition_map_header *map);
+@@ -114,6 +114,7 @@
+ main(int argc, char **argv)
+ {
+     int name_index;
++    int err=0;
+ 
+     if (sizeof(DPME) != PBLOCK_SIZE) {
+ 	fatal(-1, "Size of partion map entry (%d) "
+@@ -150,7 +151,9 @@
+     } else if (!vflag) {
+ 	usage("no device argument");
+  	do_help();
++	err=-EINVAL;	// debatable
+     }
++    exit(err);
+ }
+ #else
+ main()
+@@ -351,7 +354,8 @@
+ 	    printf("  P    (print ordered by base address)\n");
+ 	    printf("  i    initialize partition map\n");
+ 	    printf("  s    change size of partition map\n");
+-	    printf("  c    create new partition\n");
++	    printf("  b    create new 800K bootstrap partition\n");
++	    printf("  c    create new Linux partition\n");
+ 	    printf("  C    (create with type also specified)\n");
+ 	    printf("  d    delete a partition\n");
+ 	    printf("  r    reorder partition entry in map\n");
+@@ -378,6 +382,10 @@
+ 	case 'i':
+ 	    map = init_partition_map(name, map);
+ 	    break;
++	case 'B':
++	case 'b':
++	    do_create_bootstrap_partition(map);
++	    break;
+ 	case 'C':
+ 	    get_type = 1;
+ 	    // fall through
+@@ -471,6 +479,30 @@
+ }
+ 
+ 
++void
++do_create_bootstrap_partition(partition_map_header *map)
++{
++    long base;
++
++    if (map == NULL) {
++	bad_input("No partition map exists");
++	return;
++    }
++ 
++    if (!rflag && map->writeable == 0) {
++	printf("The map is not writeable.\n");
++    }
++
++    // XXX add help feature (i.e. '?' in any argument routine prints help string)
++    if (get_base_argument(&base, map) == 0) {
++	return;
++    }
++
++    // create 800K type Apple_Bootstrap partition named `bootstrap'
++    add_partition_to_map(kBootstrapName, kBootstrapType, base, 1600, map);
++}
++
++
+ int
+ get_base_argument(long *number, partition_map_header *map)
+ {
+@@ -508,7 +540,7 @@
+     int result = 0;
+     long multiple;
+ 
+-    if (get_number_argument("Length in blocks: ", number, kDefault) == 0) {
++    if (get_number_argument("Length (in blocks, kB (k), MB (M) or GB (G)): ", number, kDefault) == 0) {
+ 	bad_input("Bad length");
+     } else {
+ 	result = 1;
+@@ -605,13 +637,22 @@
+ 	bad_input("The map is not writeable.");
+ 	return;
+     }
+-    printf("Writing the map destroys what was there before. ");
+-    if (get_okay("Is that okay? [n/y]: ", 0) != 1) {
++//    printf("Writing the map destroys what was there before. ");
++    printf("IMPORTANT: You are about to write a changed partition map to disk. \n");
++    printf("For any partition you changed the start or size of, writing out \n");
++    printf("the map causes all data on that partition to be LOST FOREVER. \n");
++    printf("Make sure you have a backup of any data on such partitions you \n");
++    printf("want to keep before answering 'yes' to the question below! \n\n");
++    if (get_okay("Write partition map? [n/y]: ", 0) != 1) {
+ 	return;
+     }
+ 
+     write_partition_map(map);
+ 
++    printf("\nPartition map written to disk. If any partitions on this disk \n");
++    printf("were still in use by the system (see messages above), you will need \n");
++    printf("to reboot in order to utilize the new partition map.\n\n");
++
+     // exit(0);
+ }
+ 
+--- mac-fdisk-0.1.orig/pmac-fdisk.8.in
++++ mac-fdisk-0.1/pmac-fdisk.8.in
+@@ -0,0 +1,222 @@
++.\" Copyright 1992, 1993 Rickard E. Faith (faith@cs.unc.edu)
++.\" Copyright 1998 Andries E. Brouwer (aeb@cwi.nl)
++.\" Copyright 2000 Michael Schmitz (schmitz@biophys.uni-duesseldorf.de)
++.\" May be distributed under the GNU General Public License
++.TH PMAC-FDISK 8 "11 June 1998" "Linux 2.0" "Linux Programmer's Manual"
++.SH NAME
++pmac-fdisk \- Partition table manipulator for Linux
++.SH SYNOPSIS
++.BI "pmac-fdisk [\-u] " device
++.sp
++.BI "pmac-fdisk \-l [\-u] " "device ..."
++.sp
++.BI "pmac-fdisk \-s " "partition ..."
++.sp
++.BI "pmac-fdisk \-v
++.SH DESCRIPTION
++Hard disks can be divided into one or more logical disks called
++.IR partitions .
++This division is described in the
++.I "partition table"
++found in sector 0 of the disk.
++
++In the BSD world one talks about `disk slices' and a `disklabel'.
++
++Linux needs at least one partition, namely for its root file system.
++It can use swap files and/or swap partitions, but the latter are more
++efficient. So, usually one will want a second Linux partition
++dedicated as swap partition.
++On Intel compatible hardware, the BIOS that boots the system
++can often only access the first 1024 cylinders of the disk.
++For this reason people with large disks often create a third partition,
++just a few MB large, typically mounted on
++.IR /boot ,
++to store the kernel image and a few auxiliary files needed at boot time,
++so as to make sure that this stuff is accessible to the BIOS.
++There may be reasons of security, ease of administration and backup,
++or testing, to use more than the minimum number of partitions.
++
++.B pmac-fdisk
++(in the first form of invocation)
++is a menu driven program for creation and manipulation of
++partition tables.
++It understands DOS type partition tables and BSD or SUN type disklabels.
++
++The
++.I device
++is usually one of the following:
++.br
++.nf
++.RS
++/dev/hda
++/dev/hdb
++/dev/sda
++/dev/sdb
++.RE
++.fi
++(/dev/hd[a-h] for IDE disks, /dev/sd[a-p] for SCSI disks).
++A device name refers to the entire disk.
++
++The
++.I partition
++is a
++.I device
++name followed by a partition number.  For example,
++.B /dev/hda1
++is the first partition on the first IDE hard disk in the system.
++IDE disks can have up to 63 partitions, SCSI disks up to 15.
++See also
++.IR /usr/src/linux/Documentation/devices.txt .
++
++A BSD/SUN type disklabel can describe 8 partitions,
++the third of which should be a `whole disk' partition.
++Do not start a partition that actually uses its first sector
++(like a swap partition) at cylinder 0, since that will
++destroy the disklabel.
++
++An IRIX/SGI type disklabel can describe 16 partitions,
++the eleventh of which should be an entire `volume' partition,
++while the ninth should be labeled `volume header'.
++The volume header will also cover the partition table, i.e.,
++it starts at block zero and extends by default over five cylinders.
++The remaining space in the volume header may be used by header
++directory entries.  No partitions may overlap with the volume header.
++Also do not change its type and make some file system on it, since
++you will lose the partition table.  Use this type of label only when
++working with Linux on IRIX/SGI machines or IRIX/SGI disks under Linux.
++
++A DOS type partition table can describe an unlimited number
++of partitions. In sector 0 there is room for the description
++of 4 partitions (called `primary'). One of these may be an
++extended partition; this is a box holding logical partitions,
++with descriptors found in a linked list of sectors, each
++preceding the corresponding logical partitions.
++The four primary partitions, present or not, get numbers 1-4.
++Logical partitions start numbering from 5.
++
++In a DOS type partition table the starting offset and the size
++of each partition is stored in two ways: as an absolute number
++of sectors (given in 32 bits) and as a Cylinders/Heads/Sectors
++triple (given in 10+8+6 bits). The former is OK - with 512-byte
++sectors this will work up to 2 TB. The latter has two different
++problems. First of all, these C/H/S fields can be filled only
++when the number of heads and the number of sectors per track
++are known. Secondly, even if we know what these numbers should be,
++the 24 bits that are available do not suffice.
++DOS uses C/H/S only, Windows uses both, Linux never uses C/H/S.
++
++If possible,
++.B pmac-fdisk
++will obtain the disk geometry automatically.  This is not
++necessarily the physical disk geometry (indeed, modern disks do not
++really have anything like a physical geometry, certainly not something
++that can be described in simplistic Cylinders/Heads/Sectors form),
++but is the disk geometry that MS-DOS uses for the partition table.
++
++Usually all goes well by default, and there are no problems if
++Linux is the only system on the disk. However, if the disk has
++to be shared with other operating systems, it is often a good idea
++to let an fdisk from another operating system make at least one
++partition. When Linux boots it looks at the partition table, and
++tries to deduce what (fake) geometry is required for good
++cooperation with other systems.
++
++Whenever a partition table is printed out, a consistency check is performed
++on the partition table entries.  This check verifies that the physical and
++logical start and end points are identical, and that the partition starts
++and ends on a cylinder boundary (except for the first partition).
++
++Some versions of MS-DOS create a first partition which does not begin
++on a cylinder boundary, but on sector 2 of the first cylinder.
++Partitions beginning in cylinder 1 cannot begin on a cylinder boundary, but
++this is unlikely to cause difficulty unless you have OS/2 on your machine.
++
++A sync() and a BLKRRPART ioctl() (reread partition table from disk)
++are performed before exiting when the partition table has been updated.
++Long ago it used to be necessary to reboot after the use of pmac-fdisk.
++I do not think this is the case anymore - indeed, rebooting too quickly
++might cause loss of not-yet-written data. Note that both the kernel
++and the disk hardware may buffer data.
++
++.SH "DOS 6.x WARNING"
++
++The DOS 6.x FORMAT command looks for some information in the first
++sector of the data area of the partition, and treats this information
++as more reliable than the information in the partition table.  DOS
++FORMAT expects DOS FDISK to clear the first 512 bytes of the data area
++of a partition whenever a size change occurs.  DOS FORMAT will look at
++this extra information even if the /U flag is given -- we consider
++this a bug in DOS FORMAT and DOS FDISK.
++
++The bottom line is that if you use pmac-fdisk to change the size of a
++DOS partition table entry, then you must also use
++.B dd
++to zero the first 512 bytes of that partition before using DOS FORMAT to
++format the partition.  For example, if you were using pmac-fdisk to make a 
++DOS partition table entry for /dev/hda1, then (after exiting pmac-fdisk 
++and rebooting Linux so that the partition table information is valid) you
++would use the command "dd if=/dev/zero of=/dev/hda1 bs=512 count=1" to zero
++the first 512 bytes of the partition.
++
++.B BE EXTREMELY CAREFUL
++if you use the
++.B dd
++command, since a small typo can make all of the data on your disk useless.
++
++For best results, you should always use an OS-specific partition table
++program.  For example, you should make DOS partitions with the DOS FDISK
++program and Linux partitions with the Linux pmac-fdisk program.
++
++.SH OPTIONS
++.TP
++.B \-v
++Print version number of
++.B pmac-fdisk
++program and exit.
++.TP
++.B \-l
++List the partition tables for
++.BR /dev/hd[a-d] ,
++.BR /dev/sd[a-h] ,
++and then exit.
++.TP
++.B \-u
++When listing partition tables, give sizes in sectors instead
++of cylinders.
++.TP
++.BI "\-s " partition
++The
++.I size
++of the partition (in blocks) is printed on the standard output.
++.SH BUGS
++There are several *fdisk programs around.
++Each has its problems and strengths.
++Try them in the order
++.BR cfdisk ,
++.BR pmac-fdisk ,
++.BR sfdisk .
++(Indeed,
++.B cfdisk
++is a beautiful program that has strict requirements on
++the partition tables it accepts, and produces high quality partition
++tables. Use it if you can. 
++.B pmac-fdisk
++is a buggy program that does fuzzy things - usually it happens to
++produce reasonable results. Its single advantage is that it has
++some support for BSD disk labels and other non-DOS partition tables.
++Avoid it if you can.
++.B sfdisk
++is for hackers only - the user interface is terrible, but it is
++more correct than pmac-fdisk and more powerful than both pmac-fdisk and cfdisk.
++Moreover, it can be used noninteractively.)
++.PP
++The IRIX/SGI type disklabel is currently not supported by the kernel.
++Moreover, IRIX/SGI header directories are not fully supported yet.
++.PP
++The option `dump partition table to file' is missing.
++.\" .SH AUTHORS
++.\" A. V. Le Blanc (LeBlanc@mcc.ac.uk)
++.\" Bernhard Fastenrath (fasten@informatik.uni-bonn.de)
++.\" Jakub Jelinek (jj@sunsite.mff.cuni.cz)
++.\" Andreas Neuper (ANeuper@GUUG.de)
++.\" and many others.
+--- mac-fdisk-0.1.orig/fdisk.c
++++ mac-fdisk-0.1/fdisk.c
+@@ -62,7 +62,6 @@
+ #include <unistd.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <string.h>
+ #include <fcntl.h>
+ #include <ctype.h>
+ #include <setjmp.h>
+@@ -71,9 +70,9 @@
+ 
+ #include <sys/ioctl.h>
+ 
+-#include <linux/genhd.h>
+-#include <linux/hdreg.h>
+-#include <linux/fs.h>
++typedef unsigned short kdev_t;	/* BAD hack; kdev_t is not exported */
++
++#include "kernel-defs.h"
+ 
+ #include "fdisk.h"
+ 
+@@ -428,7 +427,7 @@
+ 		offsets[partitions] = extended_offset + SWAP32(p->start_sect);
+ 		if (!extended_offset)
+ 			extended_offset = SWAP32(p->start_sect);
+-		if (llseek(fd, (loff_t)offsets[partitions]
++		if (lseek64(fd, (loff_t)offsets[partitions]
+ 			       * SECTOR_SIZE, SEEK_SET) < 0)
+ 			fatal(unable_to_seek);
+ 		if (!(buffers[partitions] = (char *) malloc(SECTOR_SIZE)))
+@@ -438,14 +437,14 @@
+ 		part_table[partitions] = ext_pointers[partitions] = NULL;
+ 		q = p = offset(buffers[partitions], 0);
+ 		for (i = 0; i < 4; i++, p++) {
+-			if (p->sys_ind == EXTENDED)
++			if (p->sys_ind == EXTENDED) {
+ 				if (ext_pointers[partitions])
+ 					fprintf(stderr, "Warning: extra link "
+ 						"pointer in partition table "
+ 						"%d\n", partitions + 1);
+ 				else
+ 					ext_pointers[partitions] = p;
+-			else if (p->sys_ind)
++			} else if (p->sys_ind) {
+ 				if (part_table[partitions])
+ 					fprintf(stderr,
+ 						"Warning: ignoring extra data "
+@@ -453,15 +452,18 @@
+ 						partitions + 1);
+ 				else
+ 					part_table[partitions] = p;
++			}
+ 		}
+-		if (!part_table[partitions])
++		if (!part_table[partitions]) {
+ 			if (q != ext_pointers[partitions])
+ 				part_table[partitions] = q;
+ 			else part_table[partitions] = q + 1;
+-		if (!ext_pointers[partitions])
++		}
++		if (!ext_pointers[partitions]) {
+ 			if (q != part_table[partitions])
+ 				ext_pointers[partitions] = q;
+ 			else ext_pointers[partitions] = q + 1;
++		}
+ 		p = ext_pointers[partitions++];
+ 	}
+ }
+@@ -497,11 +499,12 @@
+ 	warn_geometry();
+ 
+ 	for (i = 0; i < 4; i++)
+-		if(part_table[i]->sys_ind == EXTENDED)
++		if(part_table[i]->sys_ind == EXTENDED) {
+ 			if (partitions != 4)
+ 				fprintf(stderr, "Ignoring extra extended "
+ 					"partition %d\n", i + 1);
+ 			else read_extended(part_table[ext_index = i]);
++		}
+ 
+ 	for (i = 3; i < partitions; i++)
+ 		if (SWAP16(*table_check(buffers[i])) != PART_TABLE_FLAG) {
+@@ -621,6 +624,7 @@
+ 			case lower: i += low; break;
+ 			case upper: i += high; break;
+ 			case deflt: i += dflt; break;
++			default: break;
+ 			}
+ 		}
+ 		else
+@@ -844,12 +848,12 @@
+ 		return;		/* do not check extended partitions */
+ 
+ /* physical beginning c, h, s */
+-	pbc = p->cyl & 0xff | (p->sector << 2) & 0x300;
++	pbc = (p->cyl & 0xff) | ((p->sector << 2) & 0x300);
+ 	pbh = p->head;
+ 	pbs = p->sector & 0x3f;
+ 
+ /* physical ending c, h, s */
+-	pec = p->end_cyl & 0xff | (p->end_sector << 2) & 0x300;
++	pec = (p->end_cyl & 0xff) | ((p->end_sector << 2) & 0x300);
+ 	peh = p->end_head;
+ 	pes = p->end_sector & 0x3f;
+ 
+@@ -941,7 +945,7 @@
+ 		disk_device, heads, sectors, cylinders);
+         printf("Nr AF  Hd Sec  Cyl  Hd Sec  Cyl   Start    Size ID\n");
+ 	for (i = 0 ; i < partitions; i++)
+-		if (p = q[i]) {
++		if ((p = q[i])) {
+                         printf("%2d %02x%4d%4d%5d%4d%4d%5d%8d%8d %02x\n",
+ 				i + 1, p->boot_ind, p->head,
+ 				sector(p->sector),
+@@ -1026,7 +1030,7 @@
+ 				last[i]);
+ 			total += last[i] + 1 - first[i];
+ 			for (j = 0; j < i; j++)
+-			if (first[i] >= first[j] && first[i] <= last[j]
++			if ((first[i] >= first[j] && first[i] <= last[j])
+ 					|| (last[i] <= last[j] &&
+ 					last[i] >= first[j])) {
+ 				printf("Warning: partition %d overlaps "
+@@ -1060,11 +1064,11 @@
+ 	if (total > heads * sectors * cylinders)
+ 		printf("Total allocated sectors %d greater than the maximum "
+ 			"%d\n", total, heads * sectors * cylinders);
+-	else if (total = heads * sectors * cylinders - total)
++	else if ((total = heads * sectors * cylinders - total))
+ 		printf("%d unallocated sectors\n", total);
+ }
+ 
+-void add_partition(int n, int sys)
++static void add_partition(int n, int sys)
+ {
+ 	char mesg[48];
+ 	int i, read = 0;
+@@ -1100,11 +1104,12 @@
+ 		for (i = 0; i < partitions; i++) {
+ 			if (start == offsets[i])
+ 				start += sector_offset;
+-			if (start >= first[i] && start <= last[i])
++			if (start >= first[i] && start <= last[i]) {
+ 				if (n < 4)
+ 					start = last[i] + 1;
+ 				else
+ 					start = last[i] + sector_offset;
++			}
+ 		}
+ 		if (start > limit)
+ 			break;
+@@ -1249,7 +1254,7 @@
+ 	for (i = 3; i < partitions; i++)
+ 		if (changed[i]) {
+ 			*table_check(buffers[i]) = SWAP16(PART_TABLE_FLAG);
+-			if (llseek(fd, (loff_t)offsets[i]
++			if (lseek64(fd, (loff_t)offsets[i]
+ 					* SECTOR_SIZE, SEEK_SET) < 0)
+ 				fatal(unable_to_seek);
+ 			if (write(fd, buffers[i], SECTOR_SIZE) != SECTOR_SIZE)
+@@ -1262,7 +1267,7 @@
+ 	       "(Reboot to ensure the partition table has been updated.)\n");
+ 	sync();
+ 	sleep(2);
+-	if (i = ioctl(fd, BLKRRPART)) {
++	if ((i = ioctl(fd, BLKRRPART))) {
+                 error = errno;
+         } else {
+                 /* some kernel versions (1.2.x) seem to have trouble
+@@ -1270,7 +1275,7 @@
+ 		   twice, the second time works. - biro@yggdrasil.com */
+                 sync();
+                 sleep(2);
+-                if(i = ioctl(fd, BLKRRPART))
++                if((i = ioctl(fd, BLKRRPART)))
+                         error = errno;
+         }
+ 
+@@ -1391,7 +1396,7 @@
+ void try(char *device)
+ {
+ 	disk_device = device;
+-	if (!setjmp(listingbuf))
++	if (!setjmp(listingbuf)) {
+ 		if ((fd = open(disk_device, type_open)) >= 0) {
+ 			close(fd);
+ 			get_boot();
+@@ -1407,6 +1412,7 @@
+ 		    exit(1);
+ 		 }
+ 	      }
++	}
+ }
+ 
+ void main(int argc, char **argv)
+--- mac-fdisk-0.1.orig/dump.c
++++ mac-fdisk-0.1/dump.c
+@@ -3,7 +3,11 @@
+ //
+ // Written by Eryk Vershen (eryk@apple.com)
+ //
+-
++/*
++ * Linux/m68k version by Christiaan Welvaart
++ * minor fixes and glibc change by Michael Schmitz
++ */
++ 
+ /*
+  * Copyright 1996,1997 by Apple Computer, Inc.
+  *              All Rights Reserved 
+@@ -60,6 +64,7 @@
+ //
+ NAMES plist[] = {
+     "Drvr", "Apple_Driver",
++    "Dr43", "Apple_Driver43",
+     "Free", "Apple_Free",
+     " HFS", "Apple_HFS",
+     " MFS", "Apple_MFS",
+@@ -83,7 +88,7 @@
+ // Forward declarations
+ //
+ void dump_block_zero(partition_map_header *map);
+-void dump_partition_entry(partition_map *entry, int digits);
++void dump_partition_entry(partition_map *entry, int digits, char *dev);
+ 
+ 
+ //
+@@ -119,6 +124,7 @@
+     }
+     printf("\nBlock size=%u, Number of Blocks=%u\n",
+ 	    p->sbBlkSize, p->sbBlkCount);
++#ifndef __mc68000__
+     printf("DeviceType=0x%x, DeviceId=0x%x\n",
+ 	    p->sbDevType, p->sbDevId);
+     if (p->sbDrvrCount > 0) {
+@@ -130,6 +136,7 @@
+ 	}
+     }
+     printf("\n");
++#endif
+ }
+ 
+ 
+@@ -138,31 +145,50 @@
+ {
+     partition_map * entry;
+     int j;
++    size_t len;
++    char *buf;
+ 
+     if (map == NULL) {
+ 	bad_input("No partition map exists");
+ 	return;
+     }
++#ifdef __mc68000__
++    printf("Disk %s\n", map->name);
++#else
+     printf("%s\n", map->name);
++#endif
+ 
+     j = number_of_digits(map->media_size);
+     if (j < 7) {
+ 	j = 7;
+     }
+-    printf("   #:                 type name               "
+-	    "%*s   %-*s ( size )\n", j, "length", j, "base");
++#ifdef __mc68000__
++    printf("%*s  type name         "
++	    "%*s   %-*s ( size )  system\n", strlen(map->name)+1, "#", j, "length", j, "base");
++#else
++    printf("%*s                    type name               "
++	    "%*s   %-*s ( size )  system\n", strlen(map->name)+1, "#", j, "length", j, "base");
++#endif
++
++    /* Grok devfs names. (courtesy Colin Walters)*/
++
++    len = strlen(map->name);
++    buf = strdup(map->name);
++    if (len >= 4 && !strcmp(buf+len-4, "disc")) {
++	strcpy(buf+len-4, "part");
++    }
+ 
+     if (disk_order) {
+ 	for (entry = map->disk_order; entry != NULL;
+ 		entry = entry->next_on_disk) {
+ 
+-	    dump_partition_entry(entry, j);
++	    dump_partition_entry(entry, j, buf);
+ 	}
+     } else {
+ 	for (entry = map->base_order; entry != NULL;
+ 		entry = entry->next_by_base) {
+ 
+-	    dump_partition_entry(entry, j);
++	    dump_partition_entry(entry, j, buf);
+ 	}
+     }
+     dump_block_zero(map);
+@@ -170,18 +196,23 @@
+ 
+ 
+ void
+-dump_partition_entry(partition_map *entry, int digits)
++dump_partition_entry(partition_map *entry, int digits, char *dev)
+ {
+     partition_map_header *map;
+     int j;
+     DPME *p;
+     BZB *bp;
+     char *s;
++#ifdef __mc68000__
++    int aflag = 1;
++#else
+     int aflag = 0;
++#endif
+     int pflag = 1;
+     u32 size;
+     double bytes;
+ 
++
+     map = entry->the_map;
+     p = entry->data;
+     if (aflag) {
+@@ -192,9 +223,13 @@
+ 		break;
+ 	    }
+ 	}
+-	printf("%4d: %.4s %-18.32s ", entry->disk_address, s, p->dpme_name);
++#ifdef __mc68000__
++	printf("%s%-2d %.4s %-12.12s ", dev, entry->disk_address, s, p->dpme_name);
++#else
++	printf("%s%-4d  %.4s %-18.32s ", dev, entry->disk_address, s, p->dpme_name);
++#endif
+     } else {
+-	printf("%4d: %20.32s %-18.32s ",
++	printf("%s%-4d %20.32s %-18.32s ", dev, 
+ 		entry->disk_address, p->dpme_type, p->dpme_name);
+     }
+ 
+@@ -217,7 +252,10 @@
+ 	printf("@~%-*u", digits, p->dpme_pblock_start + p->dpme_lblock_start);
+     }
+     
++    j = 's';
++
+     bytes = size / ONE_KILOBYTE_IN_BLOCKS;
++    j = 'k';
+     if (bytes >= 1024.0) {
+ 	bytes = bytes / 1024.0;
+ 	if (bytes < 1024.0) {
+@@ -226,58 +264,45 @@
+ 	    bytes = bytes / 1024.0;
+ 	    j = 'G';
+ 	}
+-	printf(" (%#5.1f%c)", bytes, j);
+     }
++    printf(" (%#5.1f%c)  ", bytes, j);
+ 
+-#if 0
+-    // Old A/UX fields that no one pays attention to anymore.
+-    bp = (BZB *) (p->dpme_bzb);
+-    j = -1;
+-    if (bp->bzb_magic == BZBMAGIC) {
+-	switch (bp->bzb_type) {
+-	case FSTEFS:
+-	    s = "EFS";
+-	    break;
+-	case FSTSFS:
+-	    s = "SFS";
+-	    j = 1;
+-	    break;
+-	case FST:
+-	default:
+-	    if (bzb_root_get(bp) != 0) {
+-		if (bzb_usr_get(bp) != 0) {
+-		    s = "RUFS";
+-		} else {
+-		    s = "RFS";
+-		}
+-		j = 0;
+-	    } else if (bzb_usr_get(bp) != 0) {
+-		s = "UFS";
+-		j = 2;
+-	    } else {
+-		s = "FS";
+-	    }
+-	    break;
+-	}
+-	if (bzb_slice_get(bp) != 0) {
+-	    printf(" s%1d %4s", bzb_slice_get(bp)-1, s);
+-	} else if (j >= 0) {
+-	    printf(" S%1d %4s", j, s);
+-	} else {
+-	    printf("    %4s", s);
+-	}
+-	if (bzb_crit_get(bp) != 0) {
+-	    printf(" K%1d", bp->bzb_cluster);
+-	} else if (j < 0) {
+-	    printf("   ");
+-	} else {
+-	    printf(" k%1d", bp->bzb_cluster);
+-	}
+-	if (bp->bzb_mount_point[0] != 0) {
+-	    printf("  %.64s", bp->bzb_mount_point);
+-	}
+-    }
+-#endif
++    if (!strcmp(p->dpme_type, "Apple_UNIX_SVR2"))
++    {
++         if (!strcmp(p->dpme_name, "Swap") || !strcmp(p->dpme_name, "swap"))
++            printf("Linux swap");
++         else
++            printf("Linux native");
++    }
++    else
++    if (!strcmp(p->dpme_type, "Apple_Bootstrap"))
++         printf("NewWorld bootblock");
++    else
++    if (!strcmp(p->dpme_type, "Apple_Scratch"))
++         printf("Linux swap");  //not just linux, but who cares
++    else
++    if (!strcmp(p->dpme_type, "Apple_HFS"))
++         printf("HFS");
++    else
++    if (!strcmp(p->dpme_type, "Apple_MFS"))
++        printf("MFS");
++    else
++    if (!strcmp(p->dpme_type, "Apple_Driver"))
++        printf("Driver");
++    else
++    if (!strcmp(p->dpme_type, "Apple_Driver43"))
++        printf("Driver 4.3");
++    else
++    if (!strcmp(p->dpme_type, "Apple_partition_map"))
++        printf("Partition map");
++    else
++    if (!strcmp(p->dpme_type, "Apple_PRODOS"))
++        printf("ProDOS");
++    else
++    if (!strcmp(p->dpme_type, "Apple_Free"))
++        printf("Free space");
++    else
++        printf("Unknown");
+     printf("\n");
+ }
+ 
+@@ -316,6 +341,24 @@
+ 
+ 	dump(name);
+     }
++#ifdef __linux__
++    for (i = 0; i < 4; i++) {
++	sprintf(name, "/dev/hd%c", 'a'+i);
++	if ((fd = open_device(name, O_RDONLY)) < 0) {
++	    if (errno == EACCES) {
++		error(errno, "can't open file '%s'", name);
++	    }
++	    continue;
++	}
++	if (read_block(fd, 1, (char *)data, 1) == 0) {
++	    close_device(fd);
++	    continue;
++	}
++	close_device(fd);
++
++	dump(name);
++    }
++#endif
+     free(data);
+ }
+ 
+@@ -385,7 +428,7 @@
+ 	printf("%2d: %20.32s ",
+ 		entry->disk_address, p->dpme_type);
+ 	printf("%7u @ %-7u ", p->dpme_pblocks, p->dpme_pblock_start);
+-	printf("%c%c%c%c%c%c%c%c%c ",
++	printf("%c%c%c%c%c%c%c%c%c%c ",
+ 		(dpme_valid_get(p))?'V':'v',
+ 		(dpme_allocated_get(p))?'A':'a',
+ 		(dpme_in_use_get(p))?'I':'i',
+@@ -394,7 +437,8 @@
+ 		(dpme_writable_get(p))?'W':'w',
+ 		(dpme_os_pic_code_get(p))?'P':'p',
+ 		(dpme_os_specific_1_get(p))?'1':'.',
+-		(dpme_os_specific_2_get(p))?'2':'.');
++		(dpme_os_specific_2_get(p))?'2':'.',
++		(dpme_automount_get(p))?'M':'m');
+ 	if (p->dpme_lblock_start != 0 || p->dpme_pblocks != p->dpme_lblocks) {
+ 	    printf("(%u @ %u)", p->dpme_lblocks, p->dpme_lblock_start);
+ 	}
+--- mac-fdisk-0.1.orig/mac-fdisk.8.in
++++ mac-fdisk-0.1/mac-fdisk.8.in
+@@ -0,0 +1,262 @@
++.TH MAC-FDISK 8 "1 December 2001" "Debian" "Apple Disk Partitioning Manual"
++.SH NAME
++mac-fdisk \- Apple partition table editor for Linux
++.SH SYNOPSIS
++.B mac-fdisk
++.B "[ \-h | \--help ] [ \-v | \--version ] [ \-l | \--list device ... ]"
++.br
++.B mac-fdisk
++.B "[ \-r | \--readonly ] device ... "
++.SH DESCRIPTION
++.B mac-fdisk
++is a command line type program which partitions disks using the standard Apple
++disk partitioning scheme described in "Inside Macintosh: Devices".
++The
++.I device
++is usually one of the following:
++
++.nf
++.RS
++/dev/sda
++/dev/sdb
++/dev/sdc
++/dev/sdd
++/dev/sde
++/dev/sdf
++/dev/sdg
++/dev/hda
++/dev/hdb
++
++.RE
++.fi
++/dev/sda is the first hard disk on the SCSI bus (i.e. the
++one with the lowest id), /dev/sdb is the second hard disk, and so on.
++The
++.I partition
++is a
++.I device
++name followed by a partition number.
++The partition number is the index (starting from one) of the partition
++map entry in the partition map (and the partition map itself occupies the
++first entry).
++For example,
++.B /dev/sda2
++is the partition described by the second entry in the partiton map on /dev/sda.
++
++.SH OPTIONS
++.TP
++.B \-v | \--version
++Prints version number of the
++.B mac-fdisk
++program.
++.TP
++.B \-h | \--help
++Prints a list of available commands for the
++.B mac-fdisk
++program.
++.TP
++.B \-l | \--list
++Lists the partition tables for the specified
++.IR device(s).
++With no 
++.IR device(s)
++given, lists all SCSI and IDE devices found in the system.
++.TP
++.B \-r | \--readonly
++Prevents
++.B mac-fdisk
++from writing to the device.
++.SH "Editing Partition Tables"
++An argument which is simply the name of a
++.I device
++indicates that
++.B mac-fdisk
++should edit the partition table of that device. Once started, 
++.B mac-fdisk 
++presents an interactive command prompt to edit the partition table. 
++The partition editing commands are:
++
++.nf
++.RS
++h    list available commands
++p    print (list) the current edited partition table status
++P    print ordered by base address
++i    initialize the partition map
++s    change size of partition map
++b    create new 800K Apple_Bootstrap partition (used by yaboot)
++c    create new standard Linux type partition
++C    create new partition, specifying the partition type
++d    delete a partition
++r    reorder partition entry
++w    write the partition table to disk
++q    quit 
++
++.RE
++.fi
++Commands which take arguments prompt for each argument in turn.
++You can also type the arguments separated by spaces
++and those prompts will be skipped. The
++.B i
++and
++.B w
++commands will prompt for confirmation. None of the editing you do will 
++actually affect the state of the disk you are partitioning until the 
++.B w 
++command is issued. Then the map in its edited state will be 
++permanently written to the disk.
++
++Partitions are always specified by their number, the index of the
++partition entry in the partition map.  Many commands will change the
++index numbers of partitions which follow the affected partition; you are
++encouraged to use the 
++.B p
++command to print the partition table as frequently as necessary. For SCSI
++disks, the partition table should not contain more than fifteen partitions 
++(partition map excluded). IDE disks have a limit of 31 partitions.
++
++Here is a more-or-less typical output for the print command:
++
++.nf
++.RS
++Command (? for help): p
++/dev/sdb
++        #                type name              length   base    ( size )  system
++/dev/sdb1 Apple_partition_map Apple                 63 @ 1       ( 31.5k)  Partition map
++/dev/sdb2      Apple_Driver43 Macintosh             54 @ 64      ( 27.0k)  Driver 4.3
++/dev/sdb3      Apple_Driver43 Macintosh             74 @ 118     ( 37.0k)  Driver 4.3
++/dev/sdb4  Apple_Driver_IOKit Macintosh            512 @ 192     (256.0k)  Unknown
++/dev/sdb5       Apple_Patches Patch Partition      512 @ 704     (256.0k)  Unknown
++/dev/sdb6           Apple_HFS untitled         3072000 @ 1216    (  1.5G)  HFS
++/dev/sdb7           Apple_HFS untitled 2        333026 @ 3073216 (162.6M)  HFS
++/dev/sdb8          Apple_Free Extra                 10 @ 3406242 (  5.0k)  Free space
++
++Block size=512, Number of Blocks=3406252
++DeviceType=0x0, DeviceId=0x0
++Drivers-
++1: @ 64 for 22, type=0x1
++2: @ 118 for 36, type=0xffff
++
++.RE
++.fi
++
++The
++.B i
++(initialize) command prompts for the size of the device.  You can just
++type Return to accept the offered size, which should be correct.
++
++The
++.B b
++command is a shortcut to create the bootstrap partition used on PowerPC
++NewWorld machines. It is equivalent to creating an 800k
++.B Apple_Bootstrap
++type partition using the 
++.B C
++command described below. The sole purpose of this partition is to
++store the boot loader. In multiboot environments, the first bootable
++partition found on the disk takes precedence unless a specific boot
++partition is set in OpenFirmware, so it's best to create the bootstrap
++partition first, or move it to a position before any
++.B Apple_HFS 
++or 
++.B Apple_Boot
++partitions using the 
++.B r
++command described below. Then you will still able to boot Linux after
++the occasional OpenFirmware reset.
++
++The
++.B c
++(create new partition) command has three arguments. As mentioned
++above you can type the arguments following the command, separated by
++spaces, or respond to prompts for each argument:
++
++  1) The base address of the start of the partition.
++
++     You can specify a number in blocks (most likely reading from the
++     existing partition map) or you can also type a partition number
++     followed by the letter 'p' to indicate that the new partition
++     should take the place of that existing free space partition.
++
++  2) The length of the partition.
++
++     Again, you can specify a number in blocks or type a partition
++     number followed by the letter 'p' to indicate use of the entire
++     partition. You can also type a number followed by 'k', 'm', or
++     'g' to indicate the size in kilobytes, megabytes, or gigabytes
++     respectively. (These are powers of 1024, of course, not powers
++     of 1000.)
++
++  3) The name of the partition.
++
++     This can be a single word without quotes, or a string surrounded
++     by single or double quotes. It is best to name any swap partition
++     you create `swap'; other partition names are up to you. The names
++     are not visible to Linux.
++
++The
++.B C
++command is identical to the
++.B c
++command, with the addition of a partition type argument after the
++other arguments. The partition type used for Linux swap and data partitons
++is 
++.B APPLE_UNIX_SVR2
++(this is the partition type created by the 
++.B c
++command). Under normal circumstances, you should not need to use this
++command.
++
++The
++.B d
++command deletes the partition number specified, replacing that partition 
++with partitionable free space.
++
++The
++.B r
++(reorder) command allows the index number of partitions to be changed.
++The index numbers are constrained to be a contiguous sequence. 
++.B mac-fdisk
++will enforce this constraint by recalculating the partition numbers
++after each insert, delete or reorder operation. OpenFirmware looks for
++bootable partitions in the order specified by the index. The
++partitions are not moved on the disk. This command takes two
++arguments, the number of the partition to be moved and the partition
++number it should become.
++
++The
++.B w
++command writes the partition map out to disk. Note that partition
++maps for disks with mounted partitions cannot immediately be
++reinterpreted by the kernel. In order to use the new partition map you
++must reboot. Within the Debian installer system, 
++.B mac-fdisk 
++is normally invoked before any partitions are mounted, thus a reboot is not 
++necessary before continuing the installation.
++
++The
++.B q
++command terminates the program. If there was no 
++.B w
++command issued during the program run, then there will be no effect on the disk.
++
++.SH BUGS
++Some people believe there should really be just one disk partitioning utility.
++
++.B mac-fdisk
++should be able to create HFS partitions that work. Currently, if a
++pre-existing HFS partition is resized, MacOS will continue to use the
++partition size stored in the HFS 'superblock' instead of using the size from
++the partition table (the MacOS volume on the partition remains valid even
++though the sizes don't match anymore). This can have undesired side effects
++especially when creating a smaller HFS partition followed by a few Linux 
++partitions in place of the previous HFS partition space. To avoid this 
++issue, create MacOS partitions within MacOS and then don't resize them 
++in 
++.B mac-fdisk.
++
++.SH "SEE ALSO"
++.BR fdisk (8), 
++.BR mkswap (8),
++.BR mkfs (8)
++.SH AUTHOR
++Eryk Vershen (eryk@apple.com), man page revised by Chris Tillman (tillman@azstarnet.com)
+--- mac-fdisk-0.1.orig/io.c
++++ mac-fdisk-0.1/io.c
+@@ -30,6 +30,10 @@
+ #include <stdlib.h>
+ #include <fcntl.h>
+ #include <SCSI.h>
++#else
++#ifdef __GLIBC__
++#include <sys/types.h>
++#endif
+ #endif
+ #include <unistd.h>
+ #include <string.h>
+@@ -51,6 +55,8 @@
+ #define SCSI_FD 8
+ #define loff_t long
+ #define llseek lseek
++#else
++#define llseek lseek64
+ #endif
+ 
+ 
+@@ -435,8 +441,8 @@
+ #else
+     {
+ #endif
+-	x = num * PBLOCK_SIZE;
+-	if ((x = llseek(fd, x, 0)) < 0) {
++	x = ((long long) num * PBLOCK_SIZE); /* cast to ll to work around compiler bug */
++	if ((x = lseek64(fd, x, 0)) < 0) {
+ 	    if (quiet == 0) {
+ 		error(errno, "Can't seek on file");
+ 	    }
+--- mac-fdisk-0.1.orig/partition_map.c
++++ mac-fdisk-0.1/partition_map.c
+@@ -30,14 +30,12 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #endif
+-#include <string.h>
+ #include <errno.h>
+ 
+ #include <fcntl.h>
+ #ifdef __linux__
+ #include <sys/ioctl.h>
+-#include <linux/fs.h>
+-#include <linux/hdreg.h>
++#include "kernel-defs.h"
+ #include <sys/stat.h>
+ #endif
+ 
+@@ -65,6 +63,8 @@
+ const char * kFreeType	= "Apple_Free";
+ const char * kMapType	= "Apple_partition_map";
+ const char * kUnixType	= "Apple_UNIX_SVR2";
++const char * kBootstrapType = "Apple_Bootstrap";
++const char * kBootstrapName = "bootstrap";
+ 
+ const char * kFreeName = "Extra";
+ 
+@@ -288,15 +288,17 @@
+ 	    free(block);
+ 	}
+     }
+-    printf("The partition table has been altered!\n\n");
++    printf("The partition map has been saved successfully!\n\n");
+ 
+ #ifdef __linux__
+     if (map->regular_file) {
+ 	close_device(map->fd);
+     } else {
+-	// printf("Calling ioctl() to re-read partition table.\n"
+-	//       "(Reboot to ensure the partition table has been updated.)\n");
+-	sync();
++	// printf("Calling ioctl() to re-read partition table.\n");
++	if ((i = ioctl(fd, BLKFLSBUF)) != 0) {
++	    perror("ioctl(BLKFLSBUF)");
++	    sync();
++	}
+ 	sleep(2);
+ 	if ((i = ioctl(fd, BLKRRPART)) != 0) {
+ 	    saved_errno = errno;
+@@ -304,20 +306,26 @@
+ 	    // some kernel versions (1.2.x) seem to have trouble
+ 	    // rereading the partition table, but if asked to do it
+ 	    // twice, the second time works. - biro@yggdrasil.com */
+-	    sync();
++	    // printf("Again calling ioctl() to re-read partition table.\n");
++	    if ((i = ioctl(fd, BLKFLSBUF)) != 0) {
++	    	perror("ioctl(BLKFLSBUF)");
++		sync();
++	    }
+ 	    sleep(2);
+ 	    if ((i = ioctl(fd, BLKRRPART)) != 0) {
+ 		saved_errno = errno;
+ 	    }
+ 	}
++	printf("Syncing disks.\n");
++	if ((i = ioctl(fd, BLKFLSBUF)) != 0) {
++	    perror("ioctl(BLKFLSBUF)");
++	    sync();
++	}
+ 	close_device(map->fd);
+-
+-	// printf("Syncing disks.\n");
+-	sync();
+ 	sleep(4);		/* for sync() */
+ 
+ 	if (i < 0) {
+-	    error(saved_errno, "Re-read of partition table failed");
++	    error(saved_errno, "Re-read of partition map failed");
+ 	    printf("Reboot your system to ensure the "
+ 		    "partition table is updated.\n");
+ 	}
+@@ -692,9 +700,9 @@
+ 		geometry.heads*geometry.sectors*geometry.cylinders);
+     }
+ 
+-    if ((pos = llseek(fd, 0, SEEK_END)) < 0) {
++    if ((pos = lseek64(fd, 0, SEEK_END)) < 0) {
+ 	printf("llseek to end of device failed\n");
+-    } else if ((pos = llseek(fd, 0, SEEK_CUR)) < 0) {
++    } else if ((pos = lseek64(fd, 0, SEEK_CUR)) < 0) {
+ 	printf("llseek to end of device failed on second try\n");
+     } else {
+ 	printf("llseek: pos = %d, blocks=%d\n", pos, pos/PBLOCK_SIZE);
+@@ -895,6 +903,7 @@
+ 	printf("No such partition\n");
+     } else {
+ 	remove_from_disk_order(cur);
++	if (old_index < index) index++; /* renumber_disk_addresses(map); */
+ 	cur->disk_address = index;
+ 	insert_in_disk_order(cur);
+ 	renumber_disk_addresses(map);
+--- mac-fdisk-0.1.orig/partition_map.h
++++ mac-fdisk-0.1/partition_map.h
+@@ -69,6 +69,8 @@
+ extern const char * kFreeType;
+ extern const char * kMapType;
+ extern const char * kUnixType;
++extern const char * kBootstrapType;
++extern const char * kBootstrapName;
+ 
+ extern const char * kFreeName;
+ 
+--- mac-fdisk-0.1.orig/kernel-defs.h
++++ mac-fdisk-0.1/kernel-defs.h
+@@ -0,0 +1,64 @@
++/* from asm/types.h */
++typedef unsigned short __u16;
++typedef unsigned int __u32;
++
++/* from linux/hdreg.h */
++#define HDIO_GETGEO		0x0301	/* get device geometry */
++
++struct hd_geometry {
++      unsigned char heads;
++      unsigned char sectors;
++      unsigned short cylinders;
++      unsigned long start;
++};
++
++/* from asm/ioctl.h */
++#define _IOC_NRBITS	8
++#define _IOC_TYPEBITS	8
++#define _IOC_SIZEBITS	13
++#define _IOC_DIRBITS	3
++
++#define _IOC_NRMASK	((1 << _IOC_NRBITS)-1)
++#define _IOC_TYPEMASK	((1 << _IOC_TYPEBITS)-1)
++#define _IOC_SIZEMASK	((1 << _IOC_SIZEBITS)-1)
++#define _IOC_DIRMASK	((1 << _IOC_DIRBITS)-1)
++
++#define _IOC_NRSHIFT	0
++#define _IOC_TYPESHIFT	(_IOC_NRSHIFT+_IOC_NRBITS)
++#define _IOC_SIZESHIFT	(_IOC_TYPESHIFT+_IOC_TYPEBITS)
++#define _IOC_DIRSHIFT	(_IOC_SIZESHIFT+_IOC_SIZEBITS)
++
++#ifdef __powerpc__
++#define _IOC_NONE	1U
++#define _IOC_READ	2U
++#define _IOC_WRITE	4U
++#else
++#define _IOC_NONE	0U
++#define _IOC_READ	2U
++#define _IOC_WRITE	1U
++#endif
++
++#define _IOC(dir,type,nr,size) \
++	(((dir)  << _IOC_DIRSHIFT) | \
++	 ((type) << _IOC_TYPESHIFT) | \
++	 ((nr)   << _IOC_NRSHIFT) | \
++	 ((size) << _IOC_SIZESHIFT))
++#define _IO(type,nr)		_IOC(_IOC_NONE,(type),(nr),0)
++
++/* from linux/fs.h */
++#define BLKRRPART  _IO(0x12,95)      /* re-read partition table */
++#define BLKFLSBUF  _IO(0x12,97)      /* flush buffer cache */
++
++/* from linux/genhd.h */
++struct partition {
++	unsigned char boot_ind;		/* 0x80 - active */
++	unsigned char head;		/* starting head */
++	unsigned char sector;		/* starting sector */
++	unsigned char cyl;		/* starting cylinder */
++	unsigned char sys_ind;		/* What partition type */
++	unsigned char end_head;		/* end head */
++	unsigned char end_sector;	/* end sector */
++	unsigned char end_cyl;		/* end cylinder */
++	unsigned int start_sect;	/* starting sector counting from 0 */
++	unsigned int nr_sects;		/* nr of sectors in partition */
++} __attribute__((packed));
+--- mac-fdisk-0.1.orig/Makefile
++++ mac-fdisk-0.1/Makefile
+@@ -5,7 +5,14 @@
+ fdisk: fdisk.o fdisklabel.o
+ 
+ clean:
+-	rm -f *.o pdisk fdisk
++	rm -f *.o pdisk fdisk mac-fdisk pmac-fdisk
++
++install: pdisk fdisk
++	-rm -f pmac-fdisk mac-fdisk
++	ln pdisk mac-fdisk
++	ln fdisk pmac-fdisk
++	install -o root -g root -m 0755 mac-fdisk ${DESTDIR}/sbin
++	install -o root -g root -m 0755 pmac-fdisk ${DESTDIR}/sbin
+ 
+ distribution:
+ 	cd ..; tar cvf pdisk.src.tar.`date +%y%m%d` --files-from pdisk/list.src
+--- mac-fdisk-0.1.orig/fdisklabel.c
++++ mac-fdisk-0.1/fdisklabel.c
+@@ -38,7 +38,6 @@
+ #include <unistd.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <string.h>
+ #include <fcntl.h>
+ #include <ctype.h>
+ #include <setjmp.h>
+@@ -47,9 +46,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/param.h>
+ 
+-#include <linux/genhd.h>
+-#include <linux/hdreg.h>
+-#include <linux/fs.h>
++#include "kernel-defs.h"
+ 
+ #include "fdisk.h"
+ #define DKTYPENAMES
+@@ -377,7 +374,7 @@
+     {
+ #if defined (i386)
+       if (bsd_initlabel (bsd_part, &bsd_dlabel, bsd_part_index) == 1)
+-#elif defined (__alpha__) || defined (__powerpc__)
++#elif defined (__alpha__) || defined (__powerpc__) || defined (__mc68000__)
+       if (bsd_initlabel (NULL, &bsd_dlabel, 0) == 1)
+ #endif
+       {
+@@ -515,7 +512,7 @@
+   alpha_bootblock_checksum (buffer);
+ #endif
+ 
+-  if (llseek (fd, sector * SECTOR_SIZE, SEEK_SET) == -1)
++  if (lseek64 (fd, sector * SECTOR_SIZE, SEEK_SET) == -1)
+     fatal (unable_to_seek);
+   if (BSD_BBSIZE != write (fd, buffer, BSD_BBSIZE))
+     fatal (unable_to_write);
+@@ -679,7 +676,7 @@
+   sector = 0;
+ #endif
+ 
+-  if (llseek (fd, sector * SECTOR_SIZE, SEEK_SET) == -1)
++  if (lseek64 (fd, sector * SECTOR_SIZE, SEEK_SET) == -1)
+     fatal (unable_to_seek);
+   if (BSD_BBSIZE != read (fd, buffer, BSD_BBSIZE))
+     fatal (unable_to_read);
+@@ -724,12 +721,12 @@
+ 
+ #if defined (__alpha__) && BSD_LABELSECTOR == 0
+   alpha_bootblock_checksum (buffer);
+-  if (llseek (fd, 0, SEEK_SET) == -1)
++  if (lseek64 (fd, 0, SEEK_SET) == -1)
+     fatal (unable_to_seek);
+   if (BSD_BBSIZE != write (fd, buffer, BSD_BBSIZE))
+     fatal (unable_to_write);
+ #else
+-  if (llseek (fd, sector * SECTOR_SIZE + BSD_LABELOFFSET, SEEK_SET) == -1)
++  if (lseek64 (fd, sector * SECTOR_SIZE + BSD_LABELOFFSET, SEEK_SET) == -1)
+     fatal (unable_to_seek);
+   if (sizeof (struct disklabel) != write (fd, d, sizeof (struct disklabel)))
+     fatal (unable_to_write);

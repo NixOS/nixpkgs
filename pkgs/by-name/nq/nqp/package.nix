@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nqp";
-  version = "2026.07";
+  version = "2026.09";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "nqp";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Uw6oOqMKf36iVANC0wjG75ry/L9iNNyvGu3+pOAM+z8=";
+    hash = "sha256-TrzmnDQf+t6T+x7wB4mMyKDrQQqeUo6CyFJXHdVzlzA=";
   };
 
   configureScript = "${lib.getExe perl} ./Configure.pl";

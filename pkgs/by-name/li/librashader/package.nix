@@ -8,24 +8,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "librashader";
-  version = "0.11.2";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "SnowflakePowered";
     repo = "librashader";
     tag = "librashader-v${finalAttrs.version}";
-    hash = "sha256-MdValg4bCyvrZJ4527N1eMeTE7Qo8EsxI/mMjZcVj7c=";
+    hash = "sha256-QaXKR1lIIWG5ZzE9ygZ3ZcUILO5iZ0cmfifnmFZsVZk=";
   };
 
   patches = [
     ./patches/fix-optional-dep-syntax.patch
   ];
 
-  cargoHash = "sha256-cc9C8IzCLkepJNvL1UNAfuHUUBeXkgrATQBOX9DPijM=";
+  cargoHash = "sha256-WRY4vdbeK8GohTFIwax8E13v8Su2m3B09XlTGyh7mWU=";
 
   buildPhase = ''
     runHook preBuild
-    cargo run -p librashader-build-script -- --profile optimized --stable
+    cargo run -p librashader-build-script -- --profile optimized
     runHook postBuild
   '';
 
