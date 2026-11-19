@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "modelscope";
     maintainers = with lib.maintainers; [
       kyehn
-      doronbehar
       ryan4yin
     ];
     knownVulnerabilities = [
