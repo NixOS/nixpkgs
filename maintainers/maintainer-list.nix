@@ -10584,6 +10584,12 @@
     githubId = 23199375;
     name = "Gernot Feichter";
   };
+  gerrydoro = {
+    email = "gerrydoro97@gmail.com";
+    github = "gerrydoro";
+    githubId = 10131418;
+    name = "Gerardo Doro";
+  };
   gerschtli = {
     email = "tobias.happ@gmx.de";
     github = "Gerschtli";
