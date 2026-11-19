@@ -53,6 +53,8 @@ buildPythonPackage (finalAttrs: {
     trustme
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/jquast/telnetlib3/blob/${finalAttrs.src.tag}/docs/history.rst";
     description = "Feature-rich Telnet Server, Client, and Protocol library for Python";
