@@ -29,7 +29,8 @@ let
   #     CUDA 12 with 10.13.2 (there is no 10.13.1), so we use 10.13.0 for all CUDA 12 releases.
   #   - linux-aarch64 (pre-Thor Jetson) is historically least supported; we use the latest release available.
   #   - TensorRT 11.x has no linux-sbsa build for CUDA 12. Jetson devices use TensorRT 10.x with CUDA 12 and CUDA 13.0
-  #     and 13.1, 11.1.0 with CUDA 13.2 and 13.3, and the JetPack 7.2.2+ release 11.4.1 with CUDA 13.4 and later.
+  #     and 13.1, 11.1.0 with CUDA 13.3, and the JetPack 7.2.2+ release 11.4.1 with CUDA 13.2 Update 2
+  #     and CUDA 13.4 Update 1 or later.
   # - cublas: a package set selects a standalone release only when it is a newer patch release of the cuBLAS shipped
   #   with its CUDA release (same major and minor version); evaluation fails otherwise, so drop or update the pin when
   #   updating CUDA. libcublas uses it on every platform with a build: standalone releases have no linux-aarch64
@@ -177,7 +178,7 @@ let
     nvjpeg2000 = "0.12.0";
     nvpl = "26.10";
     nvtiff = "0.9.0";
-    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.5.0";
+    tensorrt = if hasJetsonCudaCapability then "11.4.1" else "11.5.0";
   };
 
   cudaPackages_13_3 = mkCudaPackages {
