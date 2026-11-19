@@ -406,12 +406,15 @@ in
               fstype, options = machine.succeed("findmnt -n -o FSTYPE,OPTIONS /nix/store | tail -n1").split()
               assert fstype == "${storeFsType}", fstype
               assert "ro" in options.split(","), options
-              if store == "erofs" and nix_enabled:
-                  machine.succeed("echo test > /tmp/store-test")
-                  error = machine.fail("nix-store --add /tmp/store-test 2>&1")
-                  assert "Read-only file system" in error, error
+              if store == "erofs":
+                  machine.fail("test -e /run/current-system/bin/switch-to-configuration")
+                  if nix_enabled:
+                      machine.succeed("echo test > /tmp/store-test")
+                      error = machine.fail("nix-store --add /tmp/store-test 2>&1")
+                      assert "Read-only file system" in error, error
               if store == "erofs-overlay":
                   machine.succeed("findmnt -n -o FSTYPE /nix/.ro-store | grep -qx erofs")
+                  machine.succeed("test -x /run/current-system/bin/switch-to-configuration")
 
           with subtest("Clean boot"):
               failed = machine.succeed("systemctl list-units --failed --no-legend --plain").strip()
