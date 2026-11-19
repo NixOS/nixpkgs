@@ -14,6 +14,7 @@
       ];
 
       image.repart = {
+        enable = true;
         name = "nix-store";
         partitions = {
           "nix-store" = {
