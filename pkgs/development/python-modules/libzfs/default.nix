@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cython,
   setuptools,
-  zfs_2_3,
+  zfs,
 }:
 
 buildPythonPackage rec {
@@ -36,14 +36,14 @@ buildPythonPackage rec {
   # and we don't actually use the generated install phase, so we can
   # just lie to it in this stupid way.
   configureFlags = [
-    "--prefix=${zfs_2_3.dev}"
+    "--prefix=${zfs.dev}"
   ];
 
   # The configure script also expects the compiler to just know where all the libraries are,
   # so we have to help it. Also Wno-error away some constness errors.
   env = {
-    NIX_CFLAGS_COMPILE = "-I${zfs_2_3.dev}/include/libzfs -I${zfs_2_3.dev}/include/libspl -Wno-error=incompatible-pointer-types";
-    NIX_CFLAGS_LINK = "-L${zfs_2_3}/lib";
+    NIX_CFLAGS_COMPILE = "-I${zfs.dev}/include/libzfs -I${zfs.dev}/include/libspl -Wno-error=incompatible-pointer-types";
+    NIX_CFLAGS_LINK = "-L${zfs}/lib";
   };
 
   pythonImportsCheck = [ "libzfs" ];

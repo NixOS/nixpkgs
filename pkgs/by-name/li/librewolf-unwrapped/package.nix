@@ -14,13 +14,16 @@ in
   applicationName = "LibreWolf";
   binaryName = "librewolf";
   version = librewolf-src.packageVersion;
-  src = librewolf-src.firefox;
   branding = "browser/branding/librewolf";
+  dontMakeSourcesWritable = true;
   inherit (librewolf-src)
+    extraPostUnpack
     extraConfigureFlags
     extraPreConfigure
     extraPostPatch
     extraPassthru
+    srcs
+    sourceRoot
     ;
 
   meta = {

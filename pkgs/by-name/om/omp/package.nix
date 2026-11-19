@@ -34,7 +34,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "omp";
-  version = "18.22.2";
+  version = "19.0.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "can1357";
     repo = "oh-my-pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kTiPoeS3hYBrjnzTvDRfWeWkqI8ruKslaDcARjEZPeE=";
+    hash = "sha256-/yL4l34pfboulZOlsnetYFQHtJk3jPNbVluWtZXNbOY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-EHWsc+MBqqd6ynnLFAupBpBC8dS83KYLgV3MDxuLIeU=";
+    hash = "sha256-LZanuUcT1xHqNZ+1MIFmTEB+oOFZFmOefn/uKMLxMwM=";
   };
 
   postPatch = ''
@@ -60,10 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Cargo.toml \
       --replace-fail 'rust-version = "1.101"' 'rust-version = "1.99"'
 
-    substituteInPlace crates/pi-shell/src/bash/vm/proc.rs \
+    substituteInPlace crates/shell/src/bash/vm/proc.rs \
       --replace-fail 'pub const fn has_work(&self)' 'pub fn has_work(&self)'
 
-    substituteInPlace crates/pi-natives/src/desktop/macos/session.rs \
+    substituteInPlace crates/natives/src/desktop/macos/session.rs \
       --replace-fail \
         'displays_asleep(selector, &online_displays(), CGDisplayIsAsleep)' \
         'displays_asleep(selector, &online_displays(), |id| CGDisplayIsAsleep(id))'
@@ -131,8 +131,15 @@ stdenv.mkDerivation (finalAttrs: {
     oniguruma
     zstd
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
-  ++ lib.optionals pipewireSupport [ pipewire ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux (
+    [
+      "${lib.getLib libpulseaudio}/lib"
+      "${lib.getLib alsa-lib}/lib"
+    ]
+    ++ lib.optionals pipewireSupport [ "${lib.getLib pipewire}/lib" ]
+  );
 
   dontStrip = true;
 
@@ -152,8 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    echo "Building pi-natives"
-    cargo build --release -p pi-natives ${lib.optionalString pipewireSupport "--features wayland-pipewire"}
+    echo "Building omp-natives"
+    cargo build --release -p omp-natives
     install -Dm755 "target/release/libpi_natives${stdenv.hostPlatform.extensions.sharedLibrary}" \
       "packages/natives/native/${addonName}"
     bun scripts/stamp-native-version.ts \
@@ -163,13 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       autoPatchelf -- "packages/natives/native/${addonName}"
-      patchelf --add-rpath "${
-        lib.makeLibraryPath [
-          libpulseaudio
-          alsa-lib
-        ]
-      }" \
-        "packages/natives/native/${addonName}"
     ''}
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       signIfRequired "packages/natives/native/${addonName}"
