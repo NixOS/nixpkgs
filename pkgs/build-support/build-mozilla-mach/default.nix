@@ -10,9 +10,13 @@
   branding ? null,
   requireSigning ? true,
   allowAddonSideload ? false,
-  src,
+  src ? null,
+  srcs ? null,
+  sourceRoot ? null,
   unpackPhase ? null,
+  dontMakeSourcesWritable ? null,
   extraPatches ? [ ],
+  extraPostUnpack ? null,
   extraPostPatch ? "",
   extraNativeBuildInputs ? [ ],
   extraConfigureFlags ? [ ],
@@ -302,7 +306,15 @@ buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
   version = packageVersion;
 
-  inherit src unpackPhase;
+  inherit
+    unpackPhase
+    src
+    srcs
+    dontMakeSourcesWritable
+    sourceRoot
+    ;
+
+  postUnpack = extraPostUnpack;
 
   __structuredAttrs = true;
   strictDeps = true;
