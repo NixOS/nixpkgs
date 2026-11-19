@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   openssl,
   pkg-config,
   alsa-lib,
@@ -11,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chess-tui";
-  version = "2.8.0";
+  version = "2.8.1";
 
   __structuredAttrs = true;
 
@@ -19,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "thomas-mauran";
     repo = "chess-tui";
     tag = finalAttrs.version;
-    hash = "sha256-KHFWg51m6duUGx4eo28OST5+s16WHI7y0Fbw++nOwVE=";
+    hash = "sha256-J+9/rxPaAZJ1Rl9d+53Ej2l+dbad1O2jv0NWAxciPo8=";
   };
 
-  cargoHash = "sha256-xAOYxfk8SrTIKtc2l7sLINfOOg4P2vsrp2x0Fh7rqCg=";
+  cargoHash = "sha256-qZSrse1R5wfZY43P5tp9RWTjH1PtFJE0K6aIsdj+zN4=";
 
   checkFlags = [
     # assertion failed: result.is_ok()
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
   ]
   # alsa-lib is required for the alsa-sys. alsa-lib does not compile on darwin
