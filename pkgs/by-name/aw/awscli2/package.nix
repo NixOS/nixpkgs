@@ -54,14 +54,14 @@ let
 in
 py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awscli2";
-  version = "2.36.31"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.39.3"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = finalAttrs.version;
-    hash = "sha256-OTLezXSBAlgyrd7O8MGWsylBSOYxb01ljINbpLhLWDE=";
+    hash = "sha256-HEQ73GYAi/MS24mNYoC3Cth4fZcLw5Q8hV7/ZF0GByU=";
   };
 
   postPatch = ''
@@ -165,6 +165,9 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     # Integration tests require networking
     "tests/integration"
 
+    # Needs localstub, a mock server that is not packaged
+    "tests/blackbox"
+
     # Disable slow tests (only run unit tests)
     "tests/backends"
     "tests/functional"
@@ -174,6 +177,9 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     # Requires networking (socket binding not possible in sandbox)
     "test_is_socket"
     "test_is_special_file_warning"
+
+    # Creates an awscrt S3 client, which needs the system trust store
+    "test_upper_bound_matches_what_awscrt_accepts"
 
     # Disable slow tests
     "test_details_disabled_for_choice_wo_details"
@@ -189,7 +195,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
       # Excludes 1.x versions from the Github tags list
       extraArgs = [
         "--version-regex"
-        "^(2\\.(.*))"
+        "^(2\\..*)"
       ];
     };
   };
