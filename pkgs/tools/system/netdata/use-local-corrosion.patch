@@ -1,11 +1,10 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 34b1f55ad..3960ffea0 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -287,13 +287,7 @@ cmake_dependent_option(ENABLE_NETDATA_JOURNAL_FILE_READER "Enable netdata's jour
+diff --git a/packaging/cmake/Modules/NetdataRust.cmake b/packaging/cmake/Modules/NetdataRust.cmake
+--- a/packaging/cmake/Modules/NetdataRust.cmake
++++ b/packaging/cmake/Modules/NetdataRust.cmake
+@@ -44,13 +44,7 @@
+     unset(_nd_rustc_result)
+     unset(_nd_rustc_version)
  
- # Setup Rust/Corrosion for plugins that need it
- if(ENABLE_NETDATA_JOURNAL_FILE_READER OR ENABLE_PLUGIN_OTEL OR ENABLE_PLUGIN_NETFLOW)
 -    include(FetchContent)
 -    FetchContent_Declare(
 -        Corrosion
