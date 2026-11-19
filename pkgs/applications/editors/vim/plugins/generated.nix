@@ -1289,12 +1289,12 @@ final: prev: {
 
   atlas-nvim = buildVimPlugin {
     pname = "atlas.nvim";
-    version = "0.8.16";
+    version = "0.8.17";
     src = fetchFromGitHub {
       owner = "emrearmagan";
       repo = "atlas.nvim";
-      tag = "0.8.16";
-      hash = "sha256-N5ncUF1WWBzPv000MgoYZrvhWCOgezAGfV94kwthFoY=";
+      tag = "0.8.17";
+      hash = "sha256-xAfzitwvuOAVETperPwAbGJh9uokmy17eBcNZ7uuXr0=";
     };
     meta.homepage = "https://github.com/emrearmagan/atlas.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
