@@ -6,8 +6,8 @@
 fetchMavenArtifact {
   groupId = "com.kohlschutter.junixsocket";
   artifactId = "junixsocket-common";
-  version = "2.10.1";
-  hash = "sha256-GeX3YVrSKT81Mrw/mRsxOWwRYYNOidmmqgx975OcZyk=";
+  version = "2.11.1";
+  hash = "sha256-FSaAWJo1ms1zdz4+fZ2YQgB7e4bY+OD4KOH4eoGtXWo=";
   passthru.updateScript = ./update.sh;
 
   meta = {
