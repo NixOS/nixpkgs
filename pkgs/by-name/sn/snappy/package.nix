@@ -5,17 +5,18 @@
   cmake,
   fetchpatch,
   static ? stdenv.hostPlatform.isStatic,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snappy";
-  version = "1.2.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
     rev = finalAttrs.version;
-    hash = "sha256-bMZD8EI9dvDGupfos4hi/0ShBkrJlI5Np9FxE6FfrNE=";
+    hash = "sha256-QVBzdVdQAHOBD7wwbOncYNbA4unRgTLI2Xac9RjERM4=";
   };
 
   patches = [
@@ -64,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       Cflags: -I$dev/include
     EOF
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   #checkTarget = "test";
 
