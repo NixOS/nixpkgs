@@ -317,6 +317,18 @@ in
       '';
     };
 
+    storeCompression = mkOption {
+      type = types.enum [
+        "zstd"
+        "lz4hc"
+      ];
+      default = "zstd";
+      description = ''
+        Compression of an erofs Nix store. `"zstd"` makes a smaller image and
+        needs Linux 6.10 or later. `"lz4hc"` also works on older kernels.
+      '';
+    };
+
     registerImage = mkOption {
       type = types.submodule (
         { config, ... }:
@@ -459,8 +471,10 @@ in
         message = "amazonImage.store = \"${cfg.store}\" mounts the Nix store in the initrd, which needs boot.initrd.supportedFilesystems.erofs.";
       }
       {
-        assertion = erofsStore -> lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.10";
-        message = "amazonImage.store = \"${cfg.store}\" compresses the Nix store with zstd, which needs Linux 6.10 or later.";
+        assertion =
+          erofsStore && cfg.storeCompression == "zstd"
+          -> lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.10";
+        message = "amazonImage.storeCompression = \"zstd\" needs Linux 6.10 or later; use \"lz4hc\" with older kernels.";
       }
       {
         # systemd-repart skips sources it can't find, so a glob would copy nothing without an error.
@@ -528,12 +542,12 @@ in
             Format = "erofs";
             Label = "nix-store";
             Minimize = "best";
-            Compression = "zstd";
-            # Higher levels take several times as long and save a few percent.
-            CompressionLevel = 9;
+            Compression = cfg.storeCompression;
             # Nix creates it on start, which fails on a read-only store.
             MakeDirectories = "/.links";
-          };
+          }
+          # Higher levels take several times as long and save a few percent.
+          // lib.optionalAttrs (cfg.storeCompression == "zstd") { CompressionLevel = 9; };
         };
         root = {
           storePaths = lib.optionals (!erofsStore) storePaths;
