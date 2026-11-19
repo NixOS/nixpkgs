@@ -22,6 +22,7 @@
   enableXWayland ? true,
   # Configurable options
   configH ? null,
+  patches ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-PYBOi/A9n1611XBEaZW9PolSfjwe1KWoI2VbVrS2s0Q=";
   };
+
+  inherit patches;
 
   postPatch =
     let
@@ -121,4 +124,3 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dwl";
   };
 })
-# TODO: custom patches from upstream website
