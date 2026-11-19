@@ -23189,6 +23189,8 @@ self: super: with self; {
 
   xiaomi-ble = callPackage ../development/python-modules/xiaomi-ble { };
 
+  xiaomi-weather = callPackage ../development/python-modules/xiaomi-weather { };
+
   xkbcommon = callPackage ../development/python-modules/xkbcommon { };
 
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
