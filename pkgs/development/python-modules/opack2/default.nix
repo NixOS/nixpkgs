@@ -1,7 +1,7 @@
 {
   arrow,
   buildPythonPackage,
-  construct,
+  bytestruct,
   fetchFromGitHub,
   lib,
   pytestCheckHook,
@@ -10,21 +10,21 @@
 
 buildPythonPackage rec {
   pname = "opack2";
-  version = "0.0.1";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "opack2";
     tag = "v${version}";
-    hash = "sha256-7kRR4KOR3Wrya2YE8nL5laXrsnI1lSVZMBEij44J+T0=";
+    hash = "sha256-JOcfchR3ga2QyvtVEWhfIplP1BwwB0SaFY1qe869wuk=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     arrow
-    construct
+    bytestruct
   ];
 
   pythonImportsCheck = [ "opack2" ];
