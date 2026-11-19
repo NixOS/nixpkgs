@@ -12,6 +12,8 @@ buildPythonPackage (finalAttrs: {
   version = "26.1.2";
   pyproject = true;
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-tools";
@@ -19,13 +21,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Pqhgfo0TaGZk9dz5yCQ3CP208rMKx/DxSIQdQ3I/Nvc=";
   };
 
-  __darwinAllowLocalNetworking = true;
-
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   propagatedBuildInputs = [ python-gvm ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [ pytestCheckHook ];
 
   disabledTests = [
     # Don't test sending
