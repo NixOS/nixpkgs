@@ -56,33 +56,33 @@
     },
     "43": {
         "hashes": {
-            "aarch64-darwin": "23609fcd0adf12b6e496b30d318c1ca7e24b8c5ecebc5309f1910e2bd658b148",
-            "aarch64-linux": "e5a1ee853c7903b0b7dbfe1e25d0af5d8cf9f24e1c6b9fa5c006b3d3f6842425",
-            "armv7l-linux": "82020fd76a4ca530d8f576aafdbbd5adf7946717263d788b28d67f06b1b5daeb",
-            "headers": "1sw96vz2y7n1kzazh0228j1pz0z8jhk24yp1m1ls6lwxjcixiwvi",
-            "x86_64-darwin": "237db0babc978adc1426f1765c8652c1e59df9c25f6dfa8aa53c4d22673b2643",
-            "x86_64-linux": "6470f7532e45f6cfdc1b8f18cb29c780585d6791cad4b21161b3c8d37c75d74a"
+            "aarch64-darwin": "a9817b6b1bce10815f9992a8aefffcf078bc8697961cd242d64043e15d632f0a",
+            "aarch64-linux": "0a4ef4c5db8dce629087c28e0746fecd3cc6502ef837590bd6be45c217ef32a6",
+            "armv7l-linux": "20fd6a053d758cd401eff3b36d51ff25aa956c1298e98d7e69d6e8e720adcfc4",
+            "headers": "0l9b3mbr75y5vk6sr6czir26qz3vh2avrhjhmqxqrwfbifvvd16a",
+            "x86_64-darwin": "9f4249e30b2bf1338413165493dcfc4d699d592342680bb51ba80a039bae8837",
+            "x86_64-linux": "7a8fe807de110d18bbde8dbd16810eb34cd40d22e8535002b079c1abff4ed56f"
         },
-        "version": "43.8.7"
+        "version": "43.8.12"
     },
     "44": {
         "hashes": {
-            "aarch64-darwin": "7567ec090a90b8e3eb5766c13243c92211792ebb5f70ad29d3277736c7f06326",
-            "aarch64-linux": "9500d2a8cfcfe0f7a4a80e0c6c99690652488f737daf34f0b7ef0c72002831c2",
-            "headers": "07nhjq46jq4xrgwcq9yl8xcijp2swp3vzml74ryhlz9kcvnjmm8v",
-            "x86_64-darwin": "e63da018b88fe48f1f4c03fd79b54dec9da19b1a3aaf084aae31291dee777997",
-            "x86_64-linux": "f230f6c64d2a4f4f018386c0ef0180bcbf7f30baf2cb509e6620db4759f6d353"
+            "aarch64-darwin": "1010089a543f7a5d73f4fb2e7c2338cbb434972ad6c1ca55723d89f7491f9bb1",
+            "aarch64-linux": "28bcb3e83239ef924d574e432ad9209814ba129bca421c7d0ddc908626448ff4",
+            "headers": "0vglfs8rjswbyl31fskf8i0m30ivfnvaq20k2gwfn008a4jnd5xs",
+            "x86_64-darwin": "0e72beab558d0db342e8a24a3d70f8a3f98ae9e5a93ace2471ff32a207af7639",
+            "x86_64-linux": "bfb98b69abe09bc5cf6db6d35d4380415b4328f0fef294ff526408addaf7a471"
         },
-        "version": "44.10.2"
+        "version": "44.11.5"
     },
     "45": {
         "hashes": {
-            "aarch64-darwin": "ed92292bfb707271a97f08eb02d0be6dc9ef5b818258c748835b61e8507c151e",
-            "aarch64-linux": "3071caff462c5e74ac395cda0958caa72a298a608f07b009d3293fb13c06e589",
-            "headers": "0jpkayhvf7779fch0z85cwkpkx0x6vddbixlx6cch3xfj2xfvkqx",
-            "x86_64-darwin": "5882356a2c1b77e5eb57b7deda137c219391085d8cc03bac1b996898640056d4",
-            "x86_64-linux": "1e7f0daab7475009bca51a584d2e0fdf51084076c83678636239dd01d85518a9"
+            "aarch64-darwin": "7c228de6adab862187e6c134d5b9da6d887aad3e21c230388ff51cf95c849f0c",
+            "aarch64-linux": "61256e9c154a83232289f2993b85bc279b08080c332f5eeae6da8d6565183c57",
+            "headers": "00xi69gfpgiwg9x10gnbv07fzbvzw6vjmyi124w092cng8pwgr8n",
+            "x86_64-darwin": "632df76cf9b727323685413a9cea1456dd312023ab95273ffafcba8be4095bea",
+            "x86_64-linux": "6d46447609d5ede261ba068ecacca87ed40ae4a8aa6cc50445cd9ea341e260d1"
         },
-        "version": "45.2.3"
+        "version": "45.4.1"
     }
 }
