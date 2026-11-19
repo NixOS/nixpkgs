@@ -31,7 +31,7 @@ buildNpmPackage {
       --replace-fail "/tmp/cache" "/var/cache/frigate"
   '';
 
-  npmDepsHash = "sha256-k21UBr4agbJDZD0PYVjylRcyuRCFeBE2YBqZzE8v+jU=";
+  npmDepsHash = "sha256-pTR1Jq9VJumSjb/q7TQoDGimBeoPjhPxCSWUcR4216Y=";
 
   installPhase = ''
     cp -rv dist/ $out
