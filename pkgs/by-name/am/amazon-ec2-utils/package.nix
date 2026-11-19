@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "tools"
     "man"
   ];
 
@@ -63,8 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin ebsnvme ec2-metadata ec2nvme-nsid ec2udev-vbd
-    cp -P ebsnvme-id $out/bin/
+    install -Dm755 -t $out/bin ec2-metadata ec2nvme-nsid ec2udev-vbd
     install -Dm755 ${
       replaceVars ./ebsnvme-bdev.sh {
         logger = lib.getExe' util-linux "logger";
@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
         timeout = lib.getExe' coreutils "timeout";
       }
     } $out/bin/ebsnvme-bdev
+    install -Dm755 -t $tools/bin ebsnvme
+    cp -P ebsnvme-id $tools/bin/
 
     install -Dm644 -t $out/lib/udev/rules.d *.rules
 
@@ -106,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/ebsnvme --help
-    $out/bin/ebsnvme-id --help 2>&1 | grep -q 'usage: ebsnvme-id id'
+    $tools/bin/ebsnvme --help
+    $tools/bin/ebsnvme-id --help 2>&1 | grep -q 'usage: ebsnvme-id id'
 
     ${lib.optionalString buildPackages.shellcheck-minimal.compiler.bootstrapAvailable "${lib.getExe buildPackages.shellcheck-minimal} $out/bin/ebsnvme-bdev"}
 
@@ -148,6 +150,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    outputsToInstall = [
+      "out"
+      "tools"
+      "man"
+    ];
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
     homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
     license = lib.licenses.mit;
