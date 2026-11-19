@@ -21,44 +21,41 @@
   sqlite,
 
   # Read from config.profanity, falling back to true
-  autoAwaySupport ? config.profanity.autoAwaySupport or true,
-  libxscrnsaver,
-  libx11,
-
   notifySupport ? config.profanity.notifySupport or true,
-  libnotify,
-  gdk-pixbuf,
+  terminal-notifier,
 
   omemoSupport ? config.profanity.omemoSupport or true,
   libsignal-protocol-c,
   libgcrypt,
   qrencode,
 
+  traySupport ? config.profanity.traySupport or true,
+
   pgpSupport ? config.profanity.pgpSupport or true,
   gpgme,
 
-  pythonPluginSupport ? config.profanity.pythonPluginSupport or true,
-  python3,
+  pluginSupport ? config.profanity.pluginSupport or true,
+  lua5_5,
 
-  traySupport ? config.profanity.traySupport or true,
-  terminal-notifier,
-  gtk3,
   otrSupport ? true,
   libotr,
   avatarScalingSupport ? true,
+  gdk-pixbuf,
   spellcheckSupport ? true,
   enchant,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "profanity";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     tag = finalAttrs.version;
-    hash = "sha256-3mVUlWnDyP7yHsKowhWSz/eHpSsjGa2ZlUfY+O9IWpY=";
+    hash = "sha256-jULbL2BaqCUizD5muUAwglOn3rryAjnqrBmDIbGBza0=";
   };
 
   enableParallelBuilding = true;
@@ -82,13 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     sqlite
   ]
-  ++ lib.optionals autoAwaySupport [
-    libxscrnsaver
-    libx11
-  ]
   ++ lib.optionals notifySupport [
-    libnotify
     gdk-pixbuf
+  ]
+  ++ lib.optionals pluginSupport [
+    lua5_5
   ]
   ++ lib.optionals (notifySupport && stdenv.hostPlatform.isDarwin) [
     terminal-notifier
@@ -99,8 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     qrencode
   ]
   ++ lib.optionals pgpSupport [ gpgme ]
-  ++ lib.optionals pythonPluginSupport [ python3 ]
-  ++ lib.optionals traySupport [ gtk3 ]
   ++ lib.optionals otrSupport [ libotr ]
   ++ lib.optionals spellcheckSupport [ enchant ]
   ++ lib.optionals avatarScalingSupport [ gdk-pixbuf ];
@@ -109,15 +102,13 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "notifications" notifySupport)
-    (lib.mesonEnable "python-plugins" pythonPluginSupport)
-    (lib.mesonEnable "c-plugins" true)
+    (lib.mesonEnable "plugins" pluginSupport)
     (lib.mesonEnable "otr" otrSupport)
     (lib.mesonEnable "pgp" pgpSupport)
     (lib.mesonEnable "omemo" omemoSupport)
     (lib.mesonEnable "omemo-qrcode" omemoSupport)
-    (lib.mesonEnable "icons-and-clipboard" traySupport)
+    (lib.mesonEnable "tray" traySupport)
     (lib.mesonEnable "gdk-pixbuf" avatarScalingSupport)
-    (lib.mesonEnable "xscreensaver" autoAwaySupport)
     (lib.mesonEnable "spellcheck" spellcheckSupport)
   ];
 
@@ -132,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     # when stabber is found, functional tests are enabled which take a very long time
     # stabber
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://profanity-im.github.io";
