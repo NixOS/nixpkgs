@@ -3,8 +3,12 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
   openal,
   sdl2-compat,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  xdg-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # dlopen'd
+  # test segfaults
   postPatch = ''
     substituteInPlace src/bstone/src/bstone_oal_audio_mixer.cpp \
       --replace-fail '"libopenal.so"' '"${lib.getLib openal}/lib/libopenal${stdenv.hostPlatform.extensions.sharedLibrary}"'
+    substituteInPlace src/tests/src/tests/src/bstone_tests_memory.cpp \
+      --replace-fail 'register_destroy_at();' ""
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -34,22 +41,55 @@ stdenv.mkDerivation (finalAttrs: {
     sdl2-compat
   ];
 
-  postInstall = ''
-    mkdir -p $out/{bin,share/bibendovsky/bstone}
-    mv $out/bstone $out/bin
-    mv $out/*.txt $out/share/bibendovsky/bstone
+  cmakeFlags = [ (lib.cmakeBool "BSTONE_TESTS" finalAttrs.finalPackage.doCheck) ];
+
+  doCheck = true;
+  # process::open_file_or_url test
+  nativeCheckInputs = [ xdg-utils ];
+
+  checkPhase = ''
+    runHook preCheck
+    cmake --install . --prefix "$NIX_BUILD_TOP/tests"
+    pushd "$NIX_BUILD_TOP/tests/bstone_tests"
+    ./bstone_tests
+    popd
+    runHook postCheck
   '';
+
+  postInstall = ''
+    rm -rf $out/bstone_tests
+    mkdir -p $out/{bin,share/doc/bstone}
+    mv $out/bstone $out/bin
+    mv $out/*.txt $out/share/doc/bstone
+  '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  preVersionCheck = ''
+    export SDL_VIDEODRIVER=dummy
+  '';
+
+  versionCheckKeepEnvironment = "HOME SDL_VIDEODRIVER";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unofficial source port for the Blake Stone series";
     homepage = "https://bibendovsky.github.io/bstone";
     changelog = "https://github.com/bibendovsky/bstone/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [
-      gpl2Plus # Original game source code
-      mit # BStone
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl2Plus
+        mit
+      ];
     maintainers = with lib.maintainers; [ keenanweaver ];
-    platforms = lib.platforms.linux; # TODO: macOS / Darwin support
+    platforms = lib.platforms.unix;
     mainProgram = "bstone";
   };
 })
