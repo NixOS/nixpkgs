@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ClassiCube";
-  version = "1.3.9";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "ClassiCube";
     repo = "ClassiCube";
     tag = finalAttrs.version;
-    hash = "sha256-UIqYo2nyrt89fv0/aBRLtowrvXMt1H7F66sF/Xf4iNY=";
+    hash = "sha256-C/MkYARtMNQSmiEZBxBFE1goCRzboy/hGNjL2QIhxBY=";
   };
 
   nativeBuildInputs = [
