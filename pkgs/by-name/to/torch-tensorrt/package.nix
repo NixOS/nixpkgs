@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   nix-update-script,
 
   # nativeBuildInputs
@@ -25,32 +24,23 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
 
   pname = "torch-tensorrt";
   # Releases track PyTorch minor versions (each requires torch>=X.Y,<X.(Y+1)); keep this in step with torch.
-  version = "2.14.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "TensorRT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zBnEy/BMwweEt9V41i2WnT3oJxqrrKLHZLXpclAvcwc=";
+    hash = "sha256-/OAn52yAYy8gY8nlFn2D9RcIO+ref1AlPgpXh/+c31s=";
   };
 
   patches = [
-    # Don't query the CUDA device on import (`import torch_tensorrt` fails without a GPU, as in pythonImportsCheck).
-    # https://github.com/pytorch/TensorRT/pull/4504, merged after 2.14.0; remove when updating to 2.15.
-    (fetchpatch2 {
-      name = "fix-cpu-only-import.patch";
-      url = "https://github.com/pytorch/TensorRT/commit/1caa73d0748391700d53ef4c3c66d1a78650766f.patch?full_index=1";
-      hash = "sha256-QNNjuaF2OHk1V1wo0w17zWlFpyJDfAsS2sC0Qp8v2EI=";
-    })
-
     # Upstream builds the libraries with Bazel, which uses the installed torch but downloads TensorRT and its Bazel
     # module dependencies. Its CMake build, used here instead, builds with C++17, which PyTorch's headers no longer
     # compile with, and lacks sources and a define the Bazel build has: the runtime settings and runtime config (without
     # which linking torchtrtc fails with undefined references), TRT_HAS_IRUNTIME_CONFIG, three TorchScript converters,
     # and the plugins in libtorchtrt. Upstream's main branch (154a1bd) still lacks them. Not submitted upstream:
     # upstream's CI builds libtorchtrt and torchtrtc only with Bazel and never configures this CMake build (its CMake
-    # jobs build only the ExecuTorch backend and examples), so this patch is checked here, against each release. Made
-    # with `git format-patch` from a commit on top of v2.14.0.
+    # jobs build only the ExecuTorch backend and examples), so this patch is checked here against each release.
     ./cmake-build-bazel-sources.patch
 
     # torch_tensorrt._C allocates TRTEngine objects that libtorchtrt's constructor initializes. TRTEngine's layout
@@ -58,7 +48,7 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
     # (TRT_HAS_IRUNTIME_CONFIG, and USE_C10D_NCCL when torch has NCCL), so the extension allocates less memory than the
     # constructor writes: an engine made by torch._C._jit_to_backend corrupts the heap, and glibc aborts. Upstream's
     # wheels have the same mismatch. Declare the members those macros add whatever the macros; this also re-enables
-    # upstream's test of that path, tests/py/ts/integrations/test_to_backend_api.py. A backport to v2.14.0 of
+    # upstream's test of that path, tests/py/ts/integrations/test_to_backend_api.py. A backport of
     # https://github.com/pytorch/TensorRT/pull/4940, which is not merged, made with `git format-patch`; remove when
     # updating to a release that contains it.
     ./trtengine-layout-independent-of-macros.patch
@@ -90,12 +80,11 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
           'f"{tensorrt_linux_external_dir()}/include"' \
           '"${getInclude cudaPackages.tensorrt}/include"'
     ''
-    # Upstream builds 2.14.0 with TensorRT 11.1; this uses cudaPackages' default TensorRT (11.4 when written), with
-    # which python3Packages.torch-tensorrt's GPU checks pass. Record it in torch_tensorrt._version instead of 11.1.0.
+    # Record the TensorRT version from the package set used for the build.
     + ''
       substituteInPlace dev_dep_versions.yml \
         --replace-fail \
-          '__tensorrt_version__: "11.1.0"' \
+          '__tensorrt_version__: "11.4.0"' \
           '__tensorrt_version__: "${cudaPackages.tensorrt.version}"'
     '';
 

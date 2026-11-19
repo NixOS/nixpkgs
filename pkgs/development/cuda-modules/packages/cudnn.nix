@@ -75,7 +75,7 @@ buildRedist (
     #   to do static linking against some odd combination of CUDA 11 and cuDNN, that's on them.
     #
     #   From 9.23.0, the forward compatibility promise covers only the dynamic build: the static build supports linking
-    #   only against the CUDA release it was built with (12.9 and 13.4.1 for 9.27.0).
+    #   only against the CUDA release it was built with (12.9 and 13.5 for 9.28.1).
     #
     # NOTE:
     #

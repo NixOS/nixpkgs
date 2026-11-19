@@ -28,16 +28,16 @@ let
   #   - linux-sbsa (server ARM, Jetson Thor, and Jetson Orin from CUDA 13.2) comes in second; NVIDIA dropped support for
   #     CUDA 12 with 10.13.2 (there is no 10.13.1), so we use 10.13.0 for all CUDA 12 releases.
   #   - linux-aarch64 (pre-Thor Jetson) is historically least supported; we use the latest release available.
-  #   - TensorRT 11.x has no linux-sbsa build for CUDA 12 and dropped JetPack support with 11.2.1, so Jetson devices use
-  #     TensorRT 10.x with CUDA 12 and CUDA 13.0 and 13.1, and TensorRT 11.1.0 (which supports Orin and Thor with
-  #     CUDA 13.2 and later) with CUDA 13.2 and later.
+  #   - TensorRT 11.x has no linux-sbsa build for CUDA 12. Jetson devices use TensorRT 10.x with CUDA 12 and CUDA 13.0
+  #     and 13.1, 11.1.0 with CUDA 13.2 and 13.3, and the JetPack 7.2.2+ release 11.4.1 with CUDA 13.4 and later.
   # - cublas: a package set selects a standalone release only when it is a newer patch release of the cuBLAS shipped
   #   with its CUDA release (same major and minor version); evaluation fails otherwise, so drop or update the pin when
   #   updating CUDA. libcublas uses it on every platform with a build: standalone releases have no linux-aarch64
   #   (pre-Thor Jetson) builds, so those use CUDA's. As of writing:
   #   - CUDA 12.8 (cuBLAS 12.8.5.5), 12.9 (12.9.2.10), 13.0 (13.1.1.3), 13.2 (13.4.1.3), 13.3 (13.6.0.2), and 13.4
   #     (13.8.0.4): standalone 12.8.5.7, 12.9.3.13, 13.1.2.11, 13.4.3.11, 13.6.3.23, and 13.8.2.12.
-  #   - CUDA 12.6, 13.1, and 13.5 (13.10.0.20): no newer standalone release (13.2.2.2 is the same as CUDA 13.1's).
+  #   - CUDA 13.5 (13.10.0.20): standalone 13.10.1.6.
+  #   - CUDA 12.6 and 13.1: no newer standalone release (13.2.2.2 is the same as CUDA 13.1's).
   # - cublasdx (MathDx): 25.06.1 is the last release for CUDA 12, and 26.x requires CUDA 13.
   # - cudnn:
   #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support for CUDA 12 after 9.20.0, so we keep 9.20.0 for Jetson with
@@ -54,10 +54,10 @@ let
     cublasdx = "25.06.1";
     cublasmp = "0.11.0";
     cuda = "12.6.3";
-    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
+    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.6.3";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -71,7 +71,7 @@ let
       else if hostPlatform.isAarch64 then
         "10.13.0"
       else
-        "11.4.0";
+        "11.5.0";
   };
 
   cudaPackages_12_8 = mkCudaPackages {
@@ -79,10 +79,10 @@ let
     cublasdx = "25.06.1";
     cublasmp = "0.11.0";
     cuda = "12.8.2";
-    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
+    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.7.1";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -96,7 +96,7 @@ let
       else if hostPlatform.isAarch64 then
         "10.13.0"
       else
-        "11.4.0";
+        "11.5.0";
   };
 
   cudaPackages_12_9 = mkCudaPackages {
@@ -104,10 +104,10 @@ let
     cublasdx = "25.06.1";
     cublasmp = "0.11.0";
     cuda = "12.9.2";
-    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
+    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.8.1";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -121,7 +121,7 @@ let
       else if hostPlatform.isAarch64 then
         "10.13.0"
       else
-        "11.4.0";
+        "11.5.0";
   };
 
   cudaPackages_13_0 = mkCudaPackages {
@@ -129,10 +129,10 @@ let
     cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.0.3";
-    cudnn = "9.27.0";
+    cudnn = "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -140,17 +140,17 @@ let
     nvjpeg2000 = "0.12.0";
     nvpl = "26.10";
     nvtiff = "0.9.0";
-    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.4.0";
+    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.5.0";
   };
 
   cudaPackages_13_1 = mkCudaPackages {
     cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.1.2";
-    cudnn = "9.27.0";
+    cudnn = "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -158,7 +158,7 @@ let
     nvjpeg2000 = "0.12.0";
     nvpl = "26.10";
     nvtiff = "0.9.0";
-    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.4.0";
+    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.5.0";
   };
 
   cudaPackages_13_2 = mkCudaPackages {
@@ -166,10 +166,10 @@ let
     cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.2.2";
-    cudnn = "9.27.0";
+    cudnn = "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -177,7 +177,7 @@ let
     nvjpeg2000 = "0.12.0";
     nvpl = "26.10";
     nvtiff = "0.9.0";
-    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
+    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.5.0";
   };
 
   cudaPackages_13_3 = mkCudaPackages {
@@ -185,10 +185,10 @@ let
     cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.3.1";
-    cudnn = "9.27.0";
+    cudnn = "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -196,7 +196,7 @@ let
     nvjpeg2000 = "0.12.0";
     nvpl = "26.10";
     nvtiff = "0.9.0";
-    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
+    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.5.0";
   };
 
   cudaPackages_13_4 = mkCudaPackages {
@@ -204,10 +204,10 @@ let
     cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.4.3";
-    cudnn = "9.27.0";
+    cudnn = "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -216,17 +216,18 @@ let
     nvjpeg2000 = "0.12.0";
     nvpl = "26.10";
     nvtiff = "0.9.0";
-    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
+    tensorrt = if hasJetsonCudaCapability then "11.4.1" else "11.5.0";
   };
 
   cudaPackages_13_5 = mkCudaPackages {
+    cublas = "13.10.1";
     cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.5.0";
-    cudnn = "9.27.0";
+    cudnn = "9.28.1";
     cudss = "1.0.0";
-    cuquantum = "26.09.0";
-    cusolvermp = "0.9.1";
+    cuquantum = "26.11.0";
+    cusolvermp = "0.10.0";
     cusparselt = "0.10.0";
     cutensor = "2.8.1";
     nppplus = "0.10.0";
@@ -235,7 +236,7 @@ let
     nvjpeg2000 = "0.12.0";
     nvpl = "26.10";
     nvtiff = "0.9.0";
-    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
+    tensorrt = if hasJetsonCudaCapability then "11.4.1" else "11.5.0";
   };
 in
 {

@@ -38,7 +38,9 @@ in
           "11.0.0" = sample-data_11_0_0;
           "11.1.0" = sample-data_11_0_0;
           "11.3.0" = sample-data_11_0_0;
-          "11.4.0" = sample-data_11_0_0; # Releases 11.1 through 11.4 are missing sample data
+          "11.4.0" = sample-data_11_0_0;
+          "11.4.1" = sample-data_11_0_0;
+          "11.5.0" = sample-data_11_0_0; # Releases 11.1 through 11.5 are missing sample data
         }
     );
 

@@ -1,4 +1,5 @@
 {
+  _cuda,
   backendStdenv,
   buildRedist,
   cuda_cudart,
@@ -15,6 +16,15 @@ buildRedist (
   let
     inherit (backendStdenv) cudaCapabilities;
     cuquantumAtLeast = lib.versionAtLeast finalAttrs.version;
+    # cuTensorNet in cuQuantum 26.11 requires cuSOLVERMp >= 0.9.1 and < 0.10.0 for distributed decompositions.
+    # https://docs.nvidia.com/cuda/cuquantum/26.11.0/getting-started/index.html#dependencies
+    libcusolvermpForCuTensorNet =
+      if lib.versionAtLeast libcusolvermp.version "0.10" then
+        libcusolvermp.override {
+          release = _cuda.manifests.cusolvermp."0.9.1".libcusolvermp;
+        }
+      else
+        libcusolvermp;
   in
   {
     redistName = "cuquantum";
@@ -41,7 +51,7 @@ buildRedist (
     # https://docs.nvidia.com/cuda/cuquantum/latest/getting-started/index.html#dependencies
     appendRunpaths =
       lib.optionals (cuquantumAtLeast "26.09" && libcusolvermp.meta.available) [
-        "${lib.getLib libcusolvermp}/lib" # libcusolverMp.so.%s
+        "${lib.getLib libcusolvermpForCuTensorNet}/lib" # libcusolverMp.so.%s
       ]
       ++ lib.optionals (cuquantumAtLeast "26.09" && nccl.meta.available) [
         "${lib.getLib nccl}/lib" # libnccl.so.%s
