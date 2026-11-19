@@ -19,19 +19,19 @@
 
 buildPecl (finalAttrs: {
   pname = "ddtrace";
-  version = "1.27.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-g3aqntLmvO6H1UH81zKsFV+a8TT0rcXZjRCm5aAQ4WM=";
+    hash = "sha256-9MTIbbV/JnSTSerHpJIReeTZtW1lxIIeXCGR9RaCZG4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-hOICGQJshjW90c9Vv5kVDocD7Itlqk4dQcJGTCGOuW0=";
+    hash = "sha256-97PlYf9KY0C+J1HYkJM/oqAjxwz+c8cYtF53L4EvE5I=";
   };
 
   env = {
