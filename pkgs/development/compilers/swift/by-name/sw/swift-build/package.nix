@@ -7,6 +7,7 @@
   darwin,
   diffutils,
   fetchFromGitHub,
+  fetchpatch2,
   gnumake,
   gnused,
   iconv,
@@ -112,6 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
     # We don’t have the XCTest frameworks from Xcode on Darwin, so link against what we do have.
     (replaceVars ./patches/0006-Link-against-XCTest-from-swift-corelibs-xctest-even-.patch {
       inherit swift-corelibs-xctest;
+    })
+    # Swift Build 6.4.2 started using `--strip-disallowed-xattrs` when code-signing, which `sigtool` does not support.
+    (fetchpatch2 {
+      url = "https://github.com/swiftlang/swift-build/commit/0b7017c164f0d4efc44c19175b7f7e5ac7296dcd.patch?full_index=1";
+      revert = true;
+      hash = "sha256-kO3ouwJ1nXmLsWXIw+5+Y6bMlvV5pYLB67VrnJKXuBk=";
     })
   ];
 
