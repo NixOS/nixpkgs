@@ -8,9 +8,9 @@ let
   games = {
     ctf = {
       id = "ctf";
-      version = "1.07";
+      version = "1.13";
       description = "'Capture The Flag' for Yamagi Quake II";
-      sha256 = "0i9bwhjvq6yhalrsbzjambh27fdzrzgswqz3jgfn9qw6k1kjvlin";
+      sha256 = "sha256-4obmF/GkR+JDEPKCo45B8d/vjA6qpJ4y7YMFSo2lvjM=";
     };
 
     ground-zero = {
