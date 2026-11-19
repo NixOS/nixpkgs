@@ -317,8 +317,9 @@ stdenv.mkDerivation (finalAttrs: {
     ${dedupePandoc "$out/share/siyuan/resources"}
     ${lib.optionalString hasOCR (dedupeOnnxruntime "$out/share/siyuan/resources")}
 
+    # Keep the caller's cwd: the desktop entry passes Markdown paths, which
+    # may be relative, and SiYuan resolves them from process.cwd().
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
-        --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
