@@ -5627,6 +5627,8 @@ self: super: with self; {
 
   embreex = callPackage ../development/python-modules/embreex { };
 
+  emcad = callPackage ../development/python-modules/emcad { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   emerge = callPackage ../development/python-modules/emerge { };
