@@ -7,14 +7,14 @@
   libthai,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   pname = "wikidiff2";
   version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "wikimedia";
     repo = "mediawiki-php-wikidiff2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rBVwqeNioLXOd6Tr2I/Jw8phL7nYsWseYwk+lZDH2tw=";
   };
 
@@ -28,4 +28,4 @@ buildPecl rec {
     homepage = "https://www.mediawiki.org/wiki/Wikidiff2";
     maintainers = with lib.maintainers; [ georgyo ];
   };
-}
+})
