@@ -24,10 +24,15 @@ let
     getExe
     ;
 
-  artisan = pkgs.writeShellScriptBin "pelican-artisan" ''
-    cd ${cfg.stateDir}/www
-    exec ${getExe pkgs.sudo} -u pelican ${getExe cfg.phpPackage} artisan "$@"
-  '';
+  artisan = pkgs.writeShellApplication {
+    name = "pelican-artisan";
+    runtimeInputs = config.systemd.services.pelican-queue.path;
+    runtimeEnv = config.systemd.services.pelican-queue.environment;
+    text = ''
+      cd ${cfg.stateDir}/www
+      exec ${getExe pkgs.sudo} -u ${cfg.user} -E -- ${getExe cfg.phpPackage} artisan "$@"
+    '';
+  };
 
   autoConfig = {
     APP_DEBUG = false;
