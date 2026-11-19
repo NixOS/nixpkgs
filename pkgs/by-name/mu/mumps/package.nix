@@ -50,10 +50,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mumps";
   version = "5.9.1";
-  # makeFlags contain space and one should use makeFlagsArray+
-  # Setting this magic var is an optional solution
-  __structuredAttrs = true;
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchzip {

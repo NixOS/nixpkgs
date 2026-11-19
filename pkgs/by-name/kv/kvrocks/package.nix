@@ -313,7 +313,7 @@ stdenv.mkDerivation (finalAttrs: {
     # LuaJIT defaults to gcc, which may be unavailable (e.g. Darwin stdenv).
     substituteInPlace $TMPDIR/luajit/src/Makefile \
       --replace-fail "DEFAULT_CC = gcc" "DEFAULT_CC = $CC"
-    cmakeFlagsArray+=("-DFETCHCONTENT_SOURCE_DIR_LUAJIT=$TMPDIR/luajit")
+    cmakeFlags+=("-DFETCHCONTENT_SOURCE_DIR_LUAJIT=$TMPDIR/luajit")
   '';
 
   cmakeFlags = [

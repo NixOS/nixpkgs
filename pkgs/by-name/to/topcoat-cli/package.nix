@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topcoat-cli";
-  version = "0.12.0";
+  version = "0.12.1";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tokio-rs";
     repo = "topcoat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1hdoCBRelS6FZV5qv/zYV64MpovCeAK1G/XezVFFfqs=";
+    hash = "sha256-Ti6ucFYtH/zcN9xORM40jw7PaZgJX7GTlVuk6BFJz6Q=";
   };
 
-  cargoHash = "sha256-Dew2dgqeAOmnf0TkwRMMrdWuSS8o2KU05bb9O07C45E=";
+  cargoHash = "sha256-1J8lg7/yoH4nhOJ+tvHT45nIfeJAenmePjFuZDC9Tts=";
 
   cargoBuildFlags = [
     "-p"

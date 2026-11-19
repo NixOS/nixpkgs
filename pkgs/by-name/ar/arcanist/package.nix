@@ -59,21 +59,28 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     substituteInPlace support/xhpast/Makefile \
-      --replace "-minline-all-stringops" ""
+      --replace-fail "-minline-all-stringops" ""
   '';
 
-  buildPhase = ''
-    runHook preBuild
-    make cleanall -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
-    make xhpast   -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
-    runHook postBuild
+  makeFlags = [
+    "-C"
+    "support/xhpast"
+  ];
+
+  buildFlags = [
+    "xhpast"
+  ];
+
+  preBuild = ''
+    make "''${makeFlags[@]}" -j $NIX_BUILD_CORES cleanall
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin $out/libexec
-    make install  -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
-    make cleanall -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
+  preInstall = ''
+    mkdir -p "$out/bin" "$out/libexec"
+  '';
+
+  postInstall = ''
+    make "''${makeFlags[@]}" -j $NIX_BUILD_CORES cleanall
     cp -R . $out/libexec/arcanist
     ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt $out/libexec/arcanist/resources/ssl/default.pem
 
@@ -83,7 +90,6 @@ stdenv.mkDerivation {
     $out/bin/arc shell-complete --generate --
     installShellCompletion --cmd arc --bash $out/libexec/arcanist/support/shell/rules/bash-rules.sh
     installShellCompletion --cmd phage --bash $out/libexec/arcanist/support/shell/rules/bash-rules.sh
-    runHook postInstall
   '';
 
   doInstallCheck = true;
