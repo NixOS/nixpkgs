@@ -32971,6 +32971,12 @@
     github = "youhaveme9";
     githubId = 58213083;
   };
+  YoumingXK = {
+    email = "an032601@hotmail.com";
+    github = "YoumingXK";
+    githubId = 144023890;
+    name = "Yancey";
+  };
   youwen5 = {
     name = "Youwen Wu";
     email = "youwenw@gmail.com";
