@@ -381,8 +381,9 @@ in
             wantedBy = [ "multi-user.target" ];
 
             path = with pkgs; [
-              php
-              php.packages.composer
+              phpPackages
+              phpPackages.packages.composer
+              yarn-berry
               git
               unzip
             ];
