@@ -14,18 +14,18 @@
   pipewire,
   pkg-config,
   wrapGAppsHook4,
+  librsvg,
 }:
-
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cobang";
-  version = "2.8.0";
+  version = "2.11.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NU7APm3N3vkUHvsjLnjdn25yf2sslEvB+XzPxhYedQY=";
+    hash = "sha256-NfcXuDFgWhafOII+gCmgVL41ItwcIeF8LKG9U8VBSM4=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ninja
     pkg-config
     wrapGAppsHook4
+    librsvg
   ];
 
   buildInputs = [
