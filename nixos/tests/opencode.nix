@@ -1,8 +1,5 @@
 { lib, ... }:
 let
-  # Both of these are written to /etc like an agenix or sops secret would be.
-  # What the test cares about is that a path, and not a literal, is what reaches
-  # the unit.
   filePassword = "sekrit";
   literalPassword = "hunter2";
 in
@@ -23,10 +20,6 @@ in
             authentication.passwordFile = "/etc/opencode-default-password";
           };
 
-          # A second instance, to show the module is per-instance rather than
-          # global: same package, different port, unit, user and password. This
-          # one takes the password literally, which is the mode that bakes the
-          # secret into a store path.
           plain = {
             enable = true;
             port = 4097;
@@ -42,8 +35,6 @@ in
         };
       };
 
-    # The identity rule: naming a user hands both the user and the group back
-    # to the caller, so the module creates neither.
     customUser =
       { ... }:
       {
@@ -88,8 +79,7 @@ in
             "grep -q 'LoadCredential=opencode-password:/etc/opencode-default-password'"
             " /etc/systemd/system/opencode-default.service"
         )
-        # A literal password needs no credential: the wrapper reads it from the
-        # store path it is baked into.
+        # Literal password needs no credential: wrapper reads from store path.
         server.succeed("grep -qv LoadCredential /etc/systemd/system/opencode-plain.service")
 
     with subtest("the server is protected by basic auth"):
@@ -104,7 +94,7 @@ in
         )
         assert code == "200", f"authenticated request got {code}, expected 200"
 
-        # The username is not configurable: opencode 2.x fixed it to "opencode".
+        # Username is hardcoded to "opencode" in 2.x.
         code = server.succeed(
             "curl -s -o /dev/null -w '%{http_code}' -u alice:${filePassword}"
             " http://127.0.0.1:4096/api/session"
@@ -127,14 +117,12 @@ in
         config = server.succeed("cat /etc/opencode-default/opencode/opencode.jsonc")
         assert "claude-sonnet-4-20250514" in config, config
 
-        # With no settings there is nothing to place, so no file and no
-        # XDG_CONFIG_HOME override appear for that instance.
+        # With no settings there is nothing to place.
         server.fail("test -f /etc/opencode-plain/opencode/opencode.jsonc")
         server.succeed("grep -qv XDG_CONFIG_HOME /etc/systemd/system/opencode-plain.service")
 
     with subtest("the argument list reaches the unit verbatim"):
-        # ExecStart points at the credential wrapper; the command line it runs
-        # is inside that script, so read it there. 2.x vocabulary, lower case.
+        # ExecStart points at credential wrapper; command is inside that script.
         unit = server.succeed("cat /etc/systemd/system/opencode-default.service")
         wrapper = [
             line
@@ -153,7 +141,7 @@ in
 
     with subtest("a named user disables the module's identity management"):
         customUser.succeed("id opencode-user")
-        # The module must not have created a user or a group of its own.
+        # Module must not have created its own user/group.
         customUser.fail("getent passwd opencode-custom")
         customUser.fail("getent group opencode-custom")
         assert (

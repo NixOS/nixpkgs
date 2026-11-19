@@ -26,24 +26,8 @@ let
   # generator both come from the same format declaration.
   settingsFormat = pkgs.formats.json { };
 
-  # ---------------------------------------------------------------------------
-  # The service plan.
-  #
-  # Everything that decides *what* a server instance runs, expressed as plain
-  # data: the identity it runs under, the argument list, the environment, the
-  # credential delivery mode and the assertions that must hold.  It mentions
-  # neither systemd, nor the package, nor the module system, so the unit and a
-  # test can be driven by the same functions.
-  #
-  # The plan is written against opencode 2.x.  There is no compatibility layer
-  # for 1.x: it took a different --log-level vocabulary and still accepted
-  # --mdns, so a spelling only 1.x understood is an error here rather than
-  # something to translate.  An older package is refused at evaluation.
-  # ---------------------------------------------------------------------------
-
-  # Who the instance runs as, and whether this module owns that identity.  One
-  # rule, stated once: the unit, users.users and users.groups all read it from
-  # here instead of restating it.
+  # Who the instance runs as, and whether this module owns that identity.
+  # One rule, stated once: the unit, users.users and users.groups all read it from here.
   identityOf =
     name: server:
     let
@@ -51,8 +35,6 @@ let
       managedUser = server.user == null;
     in
     {
-      # A user the module names is a user the module creates.  Naming one
-      # yourself hands both the user and the group back to the caller.
       user = if managedUser then serviceName else server.user;
 
       group =
@@ -61,22 +43,15 @@ let
         else if managedUser then
           serviceName
         else
-          # The caller named a user; their group is that user's own.
           server.user;
 
       managedUser = managedUser;
-      # The module only creates the group it names.  Supplying `group`
-      # explicitly means the caller already has one.
       managedGroup = managedUser && server.group == null;
 
-      # Everything the server writes -- the SQLite database, the logs, the
-      # session cache -- lives under the state directory, so the instance has a
-      # home that is not the project it works on.
       stateDir = "/var/lib/opencode-${name}";
     };
 
-  # opencode 2.x accepts exactly these, in lower case.  null means "omit the
-  # flag" and leaves opencode at its own default.
+  # opencode 2.x accepts exactly these, in lower case. null means "omit the flag".
   logLevels = [
     "all"
     "trace"
@@ -98,47 +73,24 @@ let
         normalised = lib.toLower level;
       in
       if builtins.elem normalised logLevels then
-        [
-          "--log-level"
-          normalised
-        ]
+        [ "--log-level" normalised ]
       else
-        # opencode rejects anything else with an InvalidValue error, which
-        # crash-loops the unit.  Fail here instead, where the message can name
-        # the instance and the accepted values.
         builtins.throw
           "services.opencode.servers.${name}.logLevel: \"${level}\" is not a log level opencode 2.x accepts. Use one of ${toString logLevels}, case-insensitively, or null for opencode's default.";
 
-  # The argument list, in the order the unit must see it.  Every element is a
-  # separate entry, so joining with escapeShellArgs keeps a CORS origin that
-  # contains a space one argument.
-  #
-  # opencode 2.x's `serve` takes --hostname, --port and --cors (repeatable).
-  # The mDNS flags of 1.x are gone: passing either exits 1 with
-  # "Unrecognized flag", so they are not emitted.
   mkArgv =
     name: server:
     [
       "serve"
-      "--port"
-      (toString server.port)
-      "--hostname"
-      server.bindHost
+      "--port" (toString server.port)
+      "--hostname" server.bindHost
     ]
     ++ mkLogLevelArg name server.logLevel
     ++ optional server.printLogs "--print-logs"
-    ++ concatMap (origin: [
-      "--cors"
-      origin
-    ]) server.corsOrigins;
+    ++ concatMap (origin: [ "--cors" origin ]) server.corsOrigins;
 
-  # How the password reaches opencode: it reads OPENCODE_PASSWORD and has no
-  # way to read a file itself, so one of the two sources always has to be
-  # turned into that variable before the process starts.
-  #
-  # There is no username here, and no way to turn authentication off:
-  # opencode 2.x fixed the username to "opencode", removed
-  # OPENCODE_SERVER_USERNAME, and has no unauthenticated mode at all.
+  # opencode reads OPENCODE_PASSWORD and has no way to read a file itself.
+  # One of the two sources must be turned into that variable before the process starts.
   mkSecret =
     server:
     let
@@ -146,21 +98,15 @@ let
     in
     if auth.passwordFile != null then
       {
-        # Read on every start, from the credential systemd mounts for us.
         export = "OPENCODE_PASSWORD";
         from.file = "$CREDENTIALS_DIRECTORY/opencode-password";
       }
     else
       {
-        # Baked into a store path.  Prefer passwordFile.
         export = "OPENCODE_PASSWORD";
         from.literal = auth.password;
       };
 
-  # The credential, if any, that systemd must hand to the process.  A
-  # passwordFile is delivered through LoadCredential, so the service needs no
-  # read access to the secret itself and the secret never reaches the unit
-  # file.
   mkCredential =
     server:
     if server.authentication.passwordFile != null then
@@ -171,13 +117,8 @@ let
     else
       null;
 
-  # Credential delivery.  One seam with two adapters, so the unit never has to
-  # know which mode is in play and a third mode adds an adapter rather than an
-  # edit in several places.  Every adapter sees the same inputs and returns the
-  # same shape, which is what makes the seam real.
-  #
-  # `command` is the complete command line, composed by the module from the
-  # package the caller chose, so no adapter picks a package of its own.
+  # Credential delivery: one seam with two adapters chosen by precedence.
+  # The unit never has to know which mode is in play.
   mkDelivery =
     name: command: secret: credential:
     let
@@ -192,9 +133,7 @@ let
         }
         {
           accepts = secret ? from.literal;
-          # escapeShellArg rather than a quoted interpolation: a password
-          # containing a single quote used to end the assignment early and run
-          # the remainder of the line.
+          # escapeShellArg prevents a single quote in the password from breaking the assignment.
           run = pkgs.writeShellScript "opencode-${name}" ''
             export ${secret.export}=${escapeShellArg secret.from.literal}
             exec ${command}
@@ -209,25 +148,13 @@ let
       loadCredential = chosen.credential;
     };
 
-  # The environment, as an ordered list, so PATH can be guaranteed last.
-  #
-  # PATH=/run/current-system/sw/bin is what lets MCP servers the user
-  # configures find `nix`; it comes after everything the caller sets, so it
-  # cannot be shadowed.
-  #
-  # HOME is the state directory rather than the user's own: opencode makes a
-  # cache and a config directory under it, and a system user's home is not
-  # always writable -- /var/empty is the usual case, and the server then dies
-  # with EPERM. The state directory always is, because systemd creates it as
-  # the service user at activation. The cost is that the operator's own
-  # ~/.config/opencode/opencode.jsonc is not read by the service; use
-  # `settings` for what the server should know.
+  # Environment as an ordered list so PATH is guaranteed last.
+  # PATH=/run/current-system/sw/bin lets MCP servers find `nix`; it cannot be shadowed.
+  # HOME is the state directory: opencode creates cache/config there, and a system
+  # user's home (/var/empty) is not writable. The state directory is created by systemd.
   mkEnv =
     name: server: identity:
     let
-      # opencode discovers its configuration at $XDG_CONFIG_HOME/opencode, not
-      # through the environment, so the generated file has to be placed where
-      # it will be looked for.  With no settings there is nothing to place.
       configDir = "/etc/opencode-${name}";
     in
     [ "XDG_DATA_HOME=${identity.stateDir}" ]
@@ -236,9 +163,8 @@ let
     ++ concatMap (k: [ "${k}=${server.extraEnv.${k}}" ]) (builtins.attrNames server.extraEnv)
     ++ [ "PATH=/run/current-system/sw/bin" ];
 
-  # Failing loudly beats a unit that starts and quietly serves nothing: without
-  # a password opencode 2.x invents a random one and never prints it, so the
-  # server then answers every request with 401.
+  # Failing loudly beats a unit that starts and quietly serves nothing:
+  # without a password opencode 2.x invents a random one and never prints it.
   mkAssertions = name: server: [
     {
       assertion = server.authentication.password != null || server.authentication.passwordFile != null;
@@ -250,12 +176,8 @@ in
 {
   options.services.opencode =
     let
-      # Defaults for every option that is a fact about the install rather than
-      # about one instance.  An instance that does not set an option inherits
-      # it from here, which keeps "one rule for shared defaults" true across
-      # the whole interface instead of the few options that reach through to
-      # it.  `enable`, `user`, `group`, `authentication` and `settings` are
-      # deliberately not shareable: they describe a single server.
+      # Defaults for options that are facts about the install, not about one instance.
+      # enable, user, group, authentication, settings are deliberately not shareable.
       shared = {
         workspaceDir = mkOption {
           type = types.path;
@@ -528,13 +450,8 @@ in
     let
       enabled = filterAttrs (_: server: server.enable) cfg.servers;
 
-      # This module is written for opencode 2.x and nothing else, so a package
-      # that cannot parse the command line below is refused here rather than
-      # allowed to exit 1 on every start. The failure is at evaluation, where
-      # the message can name the offending package.
-      #
-      # opencode 1.x took a different --log-level vocabulary (upper case, four
-      # levels) and still supported --mdns; both changed incompatibly in 2.x.
+      # Refuse packages older than 2.x at evaluation time.
+      # opencode 1.x used a different --log-level vocabulary and still supported --mdns.
       isOpenCode2 =
         package:
         package == null
@@ -543,7 +460,6 @@ in
             version = package.version or null;
           in
           version == null
-          # A version that cannot be read cannot be shown to be 2.x.
           || lib.toInt (lib.versions.major version) >= 2
         );
     in
@@ -559,9 +475,7 @@ in
         })
         ++ lib.concatLists (lib.mapAttrsToList mkAssertions enabled);
 
-      # The generated configuration is placed where opencode looks for it,
-      # under a per-instance XDG config directory, and is read-only: the
-      # service never writes its configuration back.
+      # Generated configuration is placed where opencode looks for it.
       environment.etc = lib.mapAttrs' (
         name: server:
         lib.nameValuePair "opencode-${name}/opencode/opencode.jsonc" {
@@ -582,8 +496,7 @@ in
           isSystemUser = true;
           group = identity.group;
           home = identity.stateDir;
-          # systemd's StateDirectory creates it with the right ownership at
-          # activation; the module does not.
+          # systemd's StateDirectory creates it with the right ownership at activation.
           createHome = false;
         }
       ) (filterAttrs (n: s: (identityOf n s).managedUser) enabled);
@@ -601,8 +514,6 @@ in
         let
           identity = identityOf name server;
           argv = mkArgv name server;
-          # The command line is composed here, from the package the caller
-          # chose, so the credential adapters never pick one of their own.
           command = "${lib.getExe cfg.package} ${escapeShellArgs argv}";
           delivered = mkDelivery name command (mkSecret server) (mkCredential server);
         in
@@ -614,25 +525,18 @@ in
 
           serviceConfig = {
             Type = "exec";
-            # A default, not a forced directive: setting Restart yourself in
-            # systemd.services."opencode-<name>".serviceConfig overrides it.
+            # A default, not forced: caller can override in systemd.services."opencode-<name>".serviceConfig
             Restart = lib.mkDefault "on-failure";
             User = identity.user;
             Group = identity.group;
             ExecStart = delivered.execStart;
 
-            # A passwordFile is mounted here rather than left for the service
-            # to read, so the secret never has to be made readable to the
-            # service user.
             LoadCredential = lib.optional (
               delivered.loadCredential != null
             ) "${delivered.loadCredential.name}:${toString delivered.loadCredential.path}";
 
             WorkingDirectory = toString server.workspaceDir;
 
-            # The database, the logs and the configuration all live under the
-            # state directory; the service needs no access outside it except to
-            # the project it serves.
             StateDirectory = "opencode-${name}";
             PrivateTmp = lib.mkDefault true;
 
