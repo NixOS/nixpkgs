@@ -39,6 +39,7 @@ let
     listOf
     nullOr
     package
+    path
     port
     str
     submodule
@@ -263,7 +264,7 @@ in
                   description = "OAuth client ID registered with your identity provider.";
                 };
                 clientSecretFile = mkOption {
-                  type = nullOr str;
+                  type = nullOr path;
                   description = "Path to a file containing the OAuth client secret (server-side only, never exposed to the browser).";
                 };
                 issuerUrl = mkOption {
@@ -311,7 +312,7 @@ in
           };
 
           sessionSecretFile = mkOption {
-            type = nullOr str;
+            type = nullOr path;
             description = ''
               Path to a file containing the secret key for encrypting "Remember me" sessions and settings sync data.
               Required for both "Remember me" and settings sync features.
@@ -400,7 +401,7 @@ in
           };
 
           pluginSigningKeyFile = mkOption {
-            type = str;
+            type = path;
             description = ''
               Path to a file containing an Ed25519 private key, which is used for signing plugins, so the browser can verify them.
 
@@ -422,7 +423,7 @@ in
 
         options = {
           passwordHashFile = mkOption {
-            type = str;
+            type = path;
             description = ''
               File containing the admin password hash
 
