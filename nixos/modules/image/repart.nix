@@ -375,7 +375,17 @@ in
             format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
 
             definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
-              lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions
+              lib.mapAttrs (_n: v: {
+                Partition =
+                  # systemd-repart formats erofs with the image's sector size as its
+                  # block size, and libblkid can't identify erofs with 512-byte blocks.
+                  # Drop once util-linux has
+                  # https://github.com/util-linux/util-linux/commit/4f4105ea201eb069a96a3c983ae1e83afb0d8558
+                  lib.optionalAttrs ((v.repartConfig.Format or null) == "erofs") {
+                    FileSystemSectorSize = 4096;
+                  }
+                  // v.repartConfig;
+              }) cfg.finalPartitions
             );
 
             mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
