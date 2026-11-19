@@ -10,6 +10,7 @@
   help2man,
   libxcb,
   libxt,
+  makeWrapper,
   onetbb,
   opencascade-occt,
   openusd,
@@ -45,7 +46,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isElf [
     # https://github.com/f3d-app/f3d/pull/1217
     autoPatchelfHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   buildInputs = [
     assimp
@@ -85,11 +87,17 @@ stdenv.mkDerivation rec {
     "-DF3D_PLUGIN_BUILD_USD=ON"
   ];
 
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace $out/share/thumbnailers/f3d-plugin-*.thumbnailer \
-      --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
-      --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications $out/bin
+      mv $out/f3d.app $out/Applications/
+      makeWrapper $out/Applications/f3d.app/Contents/MacOS/f3d $out/bin/f3d
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      substituteInPlace $out/share/thumbnailers/f3d-plugin-*.thumbnailer \
+        --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
+        --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
+    '';
 
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";
