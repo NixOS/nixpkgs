@@ -36,6 +36,8 @@ let
     APP_INSTALLED = true;
     APP_URL = cfg.domain;
 
+    PANEL_DASHBOARD_UPDATE_ENABLED = false;
+
     DB_DATABASE = "pelican";
     DB_USERNAME = "pelican";
     DB_CONNECTION = cfg.database.type;
