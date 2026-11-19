@@ -105,18 +105,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # https://github.com/Mesh-LLM/mesh-llm/issues/2740).
     "--exclude"
     "xtask"
+    # Never loads the runtime, so it only works linked against llama.cpp. As in
+    # upstream's just/ci.just, it's tested on its own build: skippy-tools.
+    "--exclude"
+    "skippy-package-builder"
   ];
-  checkFlags = [
-    # Runs the skippy-package-builder binary, which never loads the runtime:
-    # upstream builds and tests it statically, but the workspace-wide test run
-    # gives it the dynamic one
-    # (https://github.com/Mesh-LLM/mesh-llm/issues/2740). This package doesn't
-    # install it.
-    "--skip=inspect_local_gguf_does_not_prepare_download_caches"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Spawns the setuid /usr/bin/top, which the darwin sandbox refuses to run
-    # (https://github.com/Mesh-LLM/mesh-llm/issues/2740).
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Spawns the setuid /usr/bin/top, which the Nix sandbox on darwin refuses to run.
     "--skip=macos_group_membership_inspects_setuid_member_without_eperm"
   ];
 
@@ -159,7 +154,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # curl and python3 run the QA harnesses in scripts/, and runner-cleanup's
   # tests create git worktrees. The analytics tests need a CA bundle: their
   # HTTP client can't be built without roots
-  # (https://github.com/Mesh-LLM/mesh-llm/issues/2740).
+  # (https://github.com/Mesh-LLM/mesh-llm/pull/3138).
   nativeCheckInputs = [
     cacert
     curl
