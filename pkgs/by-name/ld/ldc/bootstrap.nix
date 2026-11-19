@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc-bootstrap";
-  version = "1.42.0";
+  version = "1.43.0";
 
   passthru.tarballs =
     let
@@ -25,15 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
     {
       "x86_64-linux" = fetchPrebuilt {
         platform = "linux-x86_64";
-        hash = "sha256-p7yclWE49VjK35yWI1L1nUHIDfbrOuP4A58lvhSmkwM=";
+        hash = "sha256-NYBdtg9H/RoWKyA12oTZa+7Dfm0eex7fYEmKkKz67c4=";
       };
       "aarch64-linux" = fetchPrebuilt {
         platform = "linux-aarch64";
-        hash = "sha256-aHcHw+IP+RBSjrLZLyepjLCWAoTeOwJua/IChKwchRE=";
+        hash = "sha256-8rJO3CVNS5lEI09kHePEs6NtV1JjnsMMsrvhIpMbIoM=";
       };
       "aarch64-darwin" = fetchPrebuilt {
         platform = "osx-arm64";
-        hash = "sha256-emjiHFMFdmp09HNsyJGnlC23hCqSJmIyCVBLyFxwE4I=";
+        hash = "sha256-XjMjSceE1OCxxGIihIA4gPidl+8e+XxrJapNawlMX+0=";
       };
     };
 
