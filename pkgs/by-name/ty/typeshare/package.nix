@@ -25,6 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [ "go" ];
 
+  # Doctests with dangling doc comments fail since rust 1.99
+  preCheck = ''
+    substituteInPlace core/src/language/mod.rs \
+      --replace-fail '/// ```rust' '/// ```ignore'
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd typeshare \
       --bash <($out/bin/typeshare completions bash) \
