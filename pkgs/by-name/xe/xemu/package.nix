@@ -30,19 +30,20 @@
   cacert,
   darwin,
   desktopToDarwinBundle,
+  dsp56300,
   xxhash,
   tomlplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.8.136";
+  version = "0.8.139";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eZRv3GImEkT/zM0m8gnLF8hhPSbbUA5yPR7lr+fzHOI=";
+    hash = "sha256-/oOUjR7Yc6JkTW4Mia49g1jjOtaku/s0fS/cG8wvZws=";
 
     nativeBuildInputs = [
       git
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       meson subprojects download \
         SPIRV-Reflect VulkanMemoryAllocator berkeley-softfloat-3 berkeley-testfloat-3 genconfig glslang imgui \
-        implot json keycodemapdb nv2a_vsh_cpu volk || true
+        implot keycodemapdb nlohmann_json nv2a_vsh_cpu volk || true
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
   };
@@ -86,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     curl
+    dsp56300
     libepoxy
     libpcap
     libsamplerate
