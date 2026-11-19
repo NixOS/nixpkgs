@@ -22105,8 +22105,6 @@ self: super: with self; {
 
   types-dataclasses = callPackage ../development/python-modules/types-dataclasses { };
 
-  types-dateutil = callPackage ../development/python-modules/types-dateutil { };
-
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
   types-deprecated = callPackage ../development/python-modules/types-deprecated { };
