@@ -68,6 +68,11 @@ buildPythonPackage (finalAttrs: {
     "test_async_lock"
     # behavior change in latest valkey
     "test_zinterstore_nan_to_zero"
+    # valkey 9.2 adds a pathhash ACL category that fakeredis does not know
+    "test_acl_cat[Strict"
+    # valkey 9.2 lets EXEC take arguments, so a bad argument outside MULTI
+    # yields "EXEC without MULTI" instead of EXECABORT
+    "test_exec_bad_arguments[Strict"
   ];
 
   preCheck = ''
