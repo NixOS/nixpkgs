@@ -7,6 +7,7 @@
   pkg-config,
   sqlite,
   nix-update-script,
+  mesh-llm,
 }:
 
 let
@@ -69,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # The name the plugin reports to the host, which must match its [[plugin]] entry.
     pluginName = "capsules";
     updateScript = nix-update-script { };
+    tests.starts = mesh-llm.tests.plugins;
   };
 
   meta = {
