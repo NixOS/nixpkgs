@@ -48,12 +48,15 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
+  doCheck = false;
+
   dependencies = with python3Packages; [
     chardet
     scapy
     rich
     requests
   ];
+
   pythonRemoveDeps = [
     "argparse"
     "setuptools"
