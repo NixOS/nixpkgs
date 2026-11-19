@@ -603,6 +603,10 @@ in
   easytier-modular = runTest ./easytier-modular.nix;
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
   ec2-image = runTest ./ec2-image.nix;
+  ec2-image-resize = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args.resize = true;
+  };
   ec2-image-root-growth = pkgs.callPackage ./ec2-image-root-growth.nix { };
   ec2-image-systemd-boot = runTest {
     imports = [ ./ec2-image.nix ];
