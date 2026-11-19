@@ -1,0 +1,160 @@
+diff -ru a/crates/common/src/manager/application.rs d/crates/common/src/manager/application.rs
+--- a/crates/common/src/manager/application.rs	2026-11-26 09:58:15.182639192 +0100
++++ d/crates/common/src/manager/application.rs	2026-11-26 09:58:15.218640286 +0100
+@@ -374,7 +374,8 @@
+         force_refresh: bool,
+         sweep_orphans: bool,
+     ) -> trc::Result<AppRoutes> {
+-        let mut cached = if force_refresh {
++        // Nixpkgs: always reread from the store
++        let mut cached = if force_refresh || self.url.starts_with("file://@storeDir@/") {
+             None
+         } else {
+             match server
+diff -ru a/crates/common/src/manager/defaults.rs d/crates/common/src/manager/defaults.rs
+--- a/crates/common/src/manager/defaults.rs	2026-11-26 09:58:15.167638736 +0100
++++ d/crates/common/src/manager/defaults.rs	2026-11-26 09:58:58.456570134 +0100
+@@ -35,6 +35,24 @@
+ pub const GEO_IPV6: &str =
+     "https://github.com/sapics/ip-location-db/releases/download/latest/user-country-ipv6.csv";
+ 
++const UPSTREAM_WEBUI_URL: &str =
++    "https://github.com/stalwartlabs/webui/releases/download/v2/webui.zip";
++
++const UPSTREAM_SPAM_FILTER_URL: &str =
++    "https://github.com/stalwartlabs/spam-filter/releases/latest/download/spam-filter-rules.json.gz";
++
++// Nixpkgs: get a URL from an environment variable
++#[cfg(not(stalwart_tests))]
++fn env_url(name: &str) -> Option<String> {
++    std::env::var(name).ok().filter(|url| !url.is_empty())
++}
++
++// Nixpkgs: find the URL of a file in the Nix store
++#[cfg(not(stalwart_tests))]
++fn is_nix_store_url(url: &str, file_name: &str) -> bool {
++    url.starts_with("file://@storeDir@/") && url.ends_with(file_name)
++}
++
+ pub trait BootstrapDefaults {
+     fn insert_safe_defaults(&mut self) -> impl Future<Output = ()> + Send;
+ }
+@@ -62,9 +80,8 @@
+                     description: "Stalwart Web Interface".to_string(),
+                     enable: true,
+                     #[cfg(not(feature = "dev_mode"))]
+-                    resource_url:
+-                        "https://github.com/stalwartlabs/webui/releases/download/v2/webui.zip"
+-                            .into(),
++                    resource_url: env_url("STALWART_WEBUI_URL")
++                        .unwrap_or_else(|| UPSTREAM_WEBUI_URL.into()),
+                     #[cfg(feature = "dev_mode")]
+                     resource_url: "file://../webui/.ignore/webui.zip".into(),
+                     url_prefix: Map::new(vec!["/admin".into(), "/account".into()]),
+@@ -75,6 +92,42 @@
+             .await?;
+     }
+ 
++    // Nixpkgs: replace the upstream or Nix store web interface URL in the
++    // database with the URL in `STALWART_WEBUI_URL`
++    #[cfg(not(any(feature = "dev_mode", stalwart_tests)))]
++    if let Some(nix_url) = env_url("STALWART_WEBUI_URL") {
++        for app in bp.registry.list::<Application>().await? {
++            let url = app.object.resource_url.as_str();
++            if url == nix_url
++                || !(url == UPSTREAM_WEBUI_URL || is_nix_store_url(url, "/webui.zip"))
++            {
++                continue;
++            }
++            let old_object = Object {
++                inner: app.object.clone().into(),
++                revision: app.revision,
++            };
++            let new_object = Object {
++                inner: Application {
++                    resource_url: nix_url.clone(),
++                    ..app.object
++                }
++                .into(),
++                revision: app.revision,
++            };
++            let result = bp
++                .registry
++                .write(RegistryWrite::update(app.id.id(), &new_object, &old_object))
++                .await?;
++            if !matches!(result, RegistryWriteResult::Success(_)) {
++                bp.build_warning(
++                    app.id,
++                    format!("Failed to update the web interface URL: {result}"),
++                );
++            }
++        }
++    }
++
+     if is_bootstrap_mode {
+         #[cfg(not(any(feature = "dev_mode", stalwart_tests)))]
+         if bp.registry.count_object(ObjectType::SystemSettings).await? == 0 {
+@@ -553,6 +606,44 @@
+             .await?;
+     }
+ 
++    // Nixpkgs: replace the upstream or Nix store spam filter rules URL in the
++    // database with the URL in `STALWART_SPAM_FILTER_URL`
++    #[cfg(not(stalwart_tests))]
++    {
++        let object_id = ObjectType::SpamSettings.singleton();
++        if let Some(old_object) = bp.registry.get(object_id).await?
++            && let spam = SpamSettings::from(old_object.clone())
++            && let Some(url) = spam.spam_filter_rules_url.as_deref()
++            && let Some(nix_url) = env_url("STALWART_SPAM_FILTER_URL")
++            && url != nix_url
++            && (url == UPSTREAM_SPAM_FILTER_URL
++                || is_nix_store_url(url, "/spam-filter-rules.json.gz"))
++        {
++            let new_object = Object {
++                inner: SpamSettings {
++                    spam_filter_rules_url: Some(nix_url),
++                    ..spam
++                }
++                .into(),
++                revision: old_object.revision,
++            };
++            let result = bp
++                .registry
++                .write(RegistryWrite::update(
++                    object_id.id(),
++                    &new_object,
++                    &old_object,
++                ))
++                .await?;
++            if !matches!(result, RegistryWriteResult::Success(_)) {
++                bp.build_warning(
++                    object_id,
++                    format!("Failed to update the spam filter rules URL: {result}"),
++                );
++            }
++        }
++    }
++
+     #[cfg(not(stalwart_tests))]
+     {
+         use store::write::BatchBuilder;
+Only in d/crates/common/src/manager: defaults.rs.orig
+diff -ru a/crates/registry/src/schema/structs_impl.rs d/crates/registry/src/schema/structs_impl.rs
+--- a/crates/registry/src/schema/structs_impl.rs	2026-11-26 09:58:15.197639648 +0100
++++ d/crates/registry/src/schema/structs_impl.rs	2026-11-26 09:58:58.468252969 +0100
+@@ -67958,7 +67958,13 @@
+             score_reject: Float::new(0.0f64),
+             score_spam: Float::new(5.0f64),
+             trust_replies: true,
+-            spam_filter_rules_url: Some("https://github.com/stalwartlabs/spam-filter/releases/latest/download/spam-filter-rules.json.gz".to_string()),
++            // Nixpkgs: get the default URL from `STALWART_SPAM_FILTER_URL`
++            spam_filter_rules_url: Some(
++                std::env::var("STALWART_SPAM_FILTER_URL")
++                    .ok()
++                    .filter(|url| !url.is_empty())
++                    .unwrap_or_else(|| "https://github.com/stalwartlabs/spam-filter/releases/latest/download/spam-filter-rules.json.gz".to_string()),
++            ),
+             max_body_text: 262144u64,
+             max_attachment_text: 65536u64,
+             max_message_text: 1048576u64,
