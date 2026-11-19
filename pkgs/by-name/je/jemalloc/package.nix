@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   # see the comment on stripPrefix
   ++ lib.optional stripPrefix "--with-jemalloc-prefix="
   ++ lib.optional disableInitExecTls "--disable-initial-exec-tls"
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-dss"
   # The upstream default is dependent on the builders' page size
   # https://github.com/jemalloc/jemalloc/issues/467
   # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
