@@ -43,6 +43,12 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  # Relax overly-tight pins
+  pythonRelaxDeps = [
+    "google-genai"
+    "langchain-core"
+  ];
+
   dependencies = [
     filetype
     google-api-core
