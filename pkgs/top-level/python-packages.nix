@@ -11627,6 +11627,8 @@ self: super: with self; {
 
   my-pv = callPackage ../development/python-modules/my-pv { };
 
+  mycelium-map = callPackage ../development/python-modules/mycelium-map { };
+
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   mygene = callPackage ../development/python-modules/mygene { };
