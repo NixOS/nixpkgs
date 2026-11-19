@@ -2,35 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xmod";
-  version = "1.8.1";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rec";
     repo = "xmod";
-    rev = "v${version}";
-    hash = "sha256-pfFxtDQ4kaBrx4XzYMQO1vE4dUr2zs8jgGUQUdXB798=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YHzBmmrIw30+dqseMHjtSYBkdo49PeWDxopooBzlXig=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [ "test_partial_function" ];
+  disabledTests = lib.optionals (pythonAtLeast "3.15")[
+    "test_dir"
+    "test_dir2"
+  ];
 
   pythonImportsCheck = [ "xmod" ];
 
   meta = {
     description = "Turn any object into a module";
     homepage = "https://github.com/rec/xmod";
-    changelog = "https://github.com/rec/xmod/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/rec/xmod/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
