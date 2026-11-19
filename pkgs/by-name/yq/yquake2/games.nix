@@ -22,9 +22,9 @@ let
 
     the-reckoning = {
       id = "xatrix";
-      version = "2.08";
+      version = "2.17";
       description = "'The Reckoning' for Yamagi Quake II";
-      sha256 = "1wp9fg1q8nly2r9hh4394r1h4dxyni3lvdy7g419cz5s8hhn5msr";
+      sha256 = "sha256-sva8sAX5NP5zekutAVjM1pMBJcgUXcDOMjXEBQ4BCwQ=";
     };
   };
 
