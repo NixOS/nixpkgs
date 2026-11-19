@@ -2805,6 +2805,7 @@ mapAliases {
   trojita = throw "'trojita' has been dropped as it depends on KDE Gear 5, and is unmaintained"; # Added 2025-08-20
   trust-dns = throw "'trust-dns' has been renamed to/replaced by 'hickory-dns'"; # Converted to throw 2025-10-27
   ttf_bitstream_vera = throw "'ttf_bitstream_vera' has been renamed to 'ttf-bitstream-vera'"; # Added 2026-09-29
+  tuatara = throw "'tuatara' has been removed because it relied on Zig 0.13"; # Added 2026-11-18
   turses = throw "'turses' has been removed because it was archived upstream on 2025-01-11"; # Added 2026-10-08
   tvbrowser-bin = throw "'tvbrowser-bin' has been renamed to/replaced by 'tvbrowser'"; # Converted to throw 2025-10-27
   twitterBootstrap = warnAlias "'twitterBootstrap' has been renamed to 'twitter-bootstrap'"; # Added 2026-02-12
@@ -3376,6 +3377,7 @@ mapAliases {
   zfsStable = throw "'zfsStable' has been renamed to/replaced by 'zfs'"; # Converted to throw 2025-10-27
   zfsUnstable = throw "'zfsUnstable' has been renamed to/replaced by 'zfs_unstable'"; # Converted to throw 2025-10-27
   zig_0_12 = throw "zig 0.12 has been removed, upgrade to a newer version instead"; # Added 2025-08-18
+  zig_0_13 = throw "zig 0.13 has been removed, upgrade to a newer version instead"; # Added 2026-11-18
   zigbee2mqtt_1 = throw "Zigbee2MQTT 1.x has been removed, upgrade to the unversioned attribute."; # Added 2025-08-11
   zigbee2mqtt_2 = zigbee2mqtt; # Added 2025-08-11
   zinc = throw "'zinc' has been renamed to/replaced by 'zincsearch'"; # Converted to throw 2025-10-27

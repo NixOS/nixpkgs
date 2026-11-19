@@ -6239,14 +6239,12 @@ with pkgs;
     (rec {
       zigPackages = recurseIntoAttrs (callPackage ../development/compilers/zig { });
 
-      zig_0_13 = zigPackages."0.13";
       zig_0_14 = zigPackages."0.14";
       zig_0_15 = zigPackages."0.15";
       zig_0_16 = zigPackages."0.16";
       zig_0_17 = zigPackages."0.17";
     })
     zigPackages
-    zig_0_13
     zig_0_14
     zig_0_15
     zig_0_16
