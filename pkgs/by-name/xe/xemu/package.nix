@@ -184,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "xemu";
     maintainers = with lib.maintainers; [
+      iedame
       marcin-serwin
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
