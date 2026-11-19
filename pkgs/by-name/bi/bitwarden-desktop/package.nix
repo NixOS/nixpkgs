@@ -27,13 +27,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2026.10.4";
+  version = "2026.11.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "desktop-v${finalAttrs.version}";
-    hash = "sha256-SwUuUNhn1bOg9+xAA3UTxci+jcvGJdVsNwZI1doft4M=";
+    hash = "sha256-l/YdVJveeQC0dNCCzeM5ns19QKyOcSohUgA2RNP/VMU=";
   };
 
   patches = [
@@ -74,7 +74,7 @@ buildNpmPackage (finalAttrs: {
 
   npmWorkspace = "apps/desktop";
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-PRa68CQEg734mHoqU42KMlopEQaADsd9LRwEaTzfQLY=";
+  npmDepsHash = "sha256-I+8QA5r2cDhmGg8YxNmVurhyVU8vCwU4qXTDg4VelRQ=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
@@ -84,7 +84,7 @@ buildNpmPackage (finalAttrs: {
       cargoRoot
       patches
       ;
-    hash = "sha256-q7fDejVEE5Q0rzGP6ATeljatuC9GWqX3yCx+As1TjmA=";
+    hash = "sha256-fUMCzkAUCiCdH0FdiyEQZIvcHJUGPv1YASwLOHEwN4E=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -158,7 +158,7 @@ buildNpmPackage (finalAttrs: {
 
   checkFlags = [
     # fails in zbus
-    "--skip=password::password::tests::test"
+    "--skip=password::os::tests::test"
     # requires some debug feature to be enabled
     "--skip=storage::serialization::tests::test_keydata_from_corrupted_bytes"
     "--skip=storage::serialization::tests::test_keydata_from_empty_bytes"
