@@ -4,12 +4,14 @@
   options,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
 let
   inherit (lib)
     mkDefault
+    mkMerge
     mkIf
     mkOption
     optionalString
@@ -117,6 +119,16 @@ let
           "limine";
     }
     // lib.optionalAttrs biosBootPartition { legacy-bios = "limine"; };
+  firstBootRoot = cfg.root == "first-boot";
+  rootLabel = "nixos";
+  # The disk with the store partition.
+  bootDisk = "/dev/disk/amazon-image-boot";
+  isBootDisk = pkgs.writeShellScript "amazon-image-is-boot-disk" ''
+    while read -r name; do
+      [[ $name == nix-store ]] && exit 0
+    done < <(${lib.getExe' pkgs.util-linux "partx"} --show --noheadings --output NAME "$1" 2> /dev/null)
+    exit 1
+  '';
   # systemd-repart doesn't label erofs file systems.
   storeDevice = "/dev/disk/by-partlabel/nix-store";
   storeFileSystems =
@@ -185,7 +197,9 @@ let
         chmod 0700 root-home root-home/.nix-defexpr
         echo "CopyFiles=$PWD/root-home:/root" >> repart.d/root.conf
       ''}
-      echo "CopyFiles=$PWD/nix-state:/nix/var/nix" >> repart.d/root.conf
+      ${optionalString (!firstBootRoot) ''
+        echo "CopyFiles=$PWD/nix-state:/nix/var/nix" >> repart.d/root.conf
+      ''}
 
       mkdir -p esp
       echo "CopyFiles=$PWD/esp:/" >> repart.d/esp.conf
@@ -362,6 +376,35 @@ in
   ];
 
   options.amazonImage = {
+    root = mkOption {
+      type = types.enum [
+        "image"
+        "first-boot"
+      ];
+      default = "image";
+      description = ''
+        Where the root file system comes from.
+
+        - `"image"` ships it in the image, and instances grow it to fill the
+          volume.
+        - `"first-boot"` leaves it out. systemd-repart creates it in the initrd
+          on first boot, at the volume's full size. Needs `store = "erofs"` and
+          `nix.enable = false`. {file}`image-info.json` then has no
+          `partitions.root`.
+      '';
+    };
+
+    rootFsType = mkOption {
+      type = types.enum [
+        "ext4"
+        "xfs"
+      ];
+      default = "ext4";
+      description = ''
+        File system of the root partition that `root = "first-boot"` creates.
+      '';
+    };
+
     contents = mkOption {
       type = types.listOf (
         types.submodule {
@@ -384,7 +427,11 @@ in
         ]
       '';
       default = [ ];
-      description = "Files to copy to fixed locations in the root file system of the image.";
+      description = ''
+        Files to copy to fixed locations in the root file system of the image.
+        With `root = "first-boot"`, systemd-tmpfiles copies them on every boot
+        where they are missing, so a deleted file comes back.
+      '';
     };
 
     format = mkOption {
@@ -619,6 +666,18 @@ in
         message = "amazonImage.contents does not support glob patterns in `source`.";
       }
       {
+        assertion = firstBootRoot -> readOnlyStore;
+        message = "amazonImage.root = \"first-boot\" needs amazonImage.store = \"erofs\", so that the image holds the whole system without a root partition.";
+      }
+      {
+        assertion = firstBootRoot -> !config.nix.enable;
+        message = "amazonImage.root = \"first-boot\" needs nix.enable = false. Nix keeps its database on the root file system, which the image doesn't have.";
+      }
+      {
+        assertion = cfg.rootFsType != "ext4" -> firstBootRoot;
+        message = "amazonImage.rootFsType only applies to amazonImage.root = \"first-boot\".";
+      }
+      {
         assertion = systemdBoot || limine.enable || ukiBoot;
         message = "The Amazon image boots with systemd-boot or Limine.";
       }
@@ -655,7 +714,66 @@ in
 
     # Grow root, the last partition, in the initrd instead of with growpart.
     boot.initrd.systemd.repart.enable = mkDefault true;
-    systemd.repart.partitions.root.Type = "root";
+    systemd.repart.partitions.root = {
+      Type = "root";
+    }
+    # With root = "first-boot", systemd-repart creates root instead.
+    // lib.optionalAttrs firstBootRoot {
+      Format = cfg.rootFsType;
+      Label = rootLabel;
+    };
+    # There is no root yet to find the disk by.
+    boot.initrd.systemd.repart.device = mkIf firstBootRoot bootDisk;
+    # A new EBS volume already reads as zeros.
+    boot.initrd.systemd.repart.discard = mkIf firstBootRoot (mkDefault false);
+    boot.initrd.supportedFilesystems = mkIf firstBootRoot { ${cfg.rootFsType} = true; };
+    boot.initrd.systemd.storePaths = mkIf firstBootRoot [
+      isBootDisk
+      (lib.getExe' pkgs.util-linux "partx")
+    ];
+    boot.initrd.services.udev.rules = mkIf firstBootRoot ''
+      SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ENV{ID_PART_TABLE_TYPE}=="gpt", PROGRAM="${isBootDisk} $devnode", SYMLINK+="${lib.removePrefix "/dev/" bootDisk}"
+    '';
+    boot.initrd.systemd.services = mkIf firstBootRoot {
+      # A clone of the volume has a store partition too, and could get root.
+      amazon-image-boot-disk = {
+        description = "Check that one disk holds the Nix store";
+        requiredBy = [ "systemd-repart.service" ];
+        after = [ "${utils.escapeSystemdPath bootDisk}.device" ];
+        before = [
+          "systemd-repart.service"
+          "initrd-switch-root.target"
+          "shutdown.target"
+        ];
+        conflicts = [
+          "initrd-switch-root.target"
+          "shutdown.target"
+        ];
+        unitConfig = {
+          DefaultDependencies = false;
+          OnFailure = "emergency.target";
+          OnFailureJobMode = "replace-irreversibly";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          StandardError = "journal+console";
+        };
+        script = ''
+          disks=()
+          for dev in /sys/block/*; do
+            (( $(< "$dev/size") > 0 )) || continue
+            if ${isBootDisk} "/dev/''${dev##*/}"; then
+              disks+=("/dev/''${dev##*/}")
+            fi
+          done
+          if (( ''${#disks[@]} > 1 )); then
+            echo "''${disks[*]} all have a nix-store partition. Not creating root on any of them." >&2
+            exit 1
+          fi
+        '';
+      };
+    };
 
     # systemd-boot can't boot legacy BIOS.
     boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi" && !ukiBoot);
@@ -665,13 +783,34 @@ in
     boot.initrd.systemd.dmVerity.enable = mkIf cfg.verity true;
     boot.initrd.nix-store-veritysetup.enable = mkIf cfg.verity true;
 
-    fileSystems = storeFileSystems;
+    fileSystems = mkMerge [
+      storeFileSystems
+      (mkIf firstBootRoot {
+        "/" = {
+          device = "/dev/disk/by-partlabel/${rootLabel}";
+          fsType = cfg.rootFsType;
+          autoResize = true;
+          options = [ "x-systemd.after=systemd-repart.service" ];
+        };
+      })
+    ];
     # Instances can't update channels on a read-only store.
     nix.channel.enable = mkIf readOnlyStore (mkDefault false);
     # Nix chowns the store to its build group on start, which fails on a read-only store.
     nix.settings.build-users-group = mkIf readOnlyStore (mkDefault "");
     # switch-to-configuration and the boot loader installer need a writable store.
     system.switch.enable = mkIf readOnlyStore (mkDefault false);
+
+    # What the image would otherwise copy into root.
+    systemd.tmpfiles.settings.amazon-image = mkIf firstBootRoot (
+      {
+        "/nix/var/nix/profiles/system".L.argument = "/run/booted-system";
+      }
+      // lib.genAttrs' cfg.contents (
+        { source, target }:
+        lib.nameValuePair "/${lib.removePrefix "/" target}" { C.argument = "${source}"; }
+      )
+    );
 
     image.repart = {
       # Larger compression clusters make the image about 6% smaller.
@@ -724,7 +863,7 @@ in
             Minimize = "best";
           };
         };
-        root = {
+        root = mkIf (!firstBootRoot) {
           storePaths = lib.optionals (!erofsStore) storePaths;
           contents = {
             "/etc/nixos/configuration.nix".source = configFile;
@@ -735,7 +874,7 @@ in
           repartConfig = {
             Type = "root";
             Format = config.fileSystems."/".fsType;
-            Label = "nixos";
+            Label = rootLabel;
           }
           // lib.optionalAttrs autoSize { Minimize = "guess"; };
         };
