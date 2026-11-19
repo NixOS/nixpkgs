@@ -45,5 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/awslabs/git-remote-codecommit";
     license = lib.licenses.asl20;
     mainProgram = "git-remote-codecommit";
+    problems.removal.message = "git-remote-codecommit depends on AWS CLI v1 (`awscli`), which is deprecated and will be removed from Nixpkgs 27.05.";
   };
 })
