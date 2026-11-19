@@ -8,6 +8,7 @@ import ./make-test-python.nix (
       { pkgs, ... }:
       {
         services.mailhog.enable = true;
+        services.mailhog.setSendmail = false;
         services.listmonk = {
           enable = true;
           database = {
