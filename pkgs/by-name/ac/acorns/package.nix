@@ -9,20 +9,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "acorns";
-  version = "1.2.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "redhat-documentation";
     repo = "acorns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TqLfEiq4FYrc88aJK047n+pjMNkz7/H9AQZ6wxb1dI0=";
+    hash = "sha256-f8JEySpICsek4P05DbA605VFM84Bede0R4XlFPGsIOA=";
   };
 
-  cargoHash = "sha256-q+XDKVNH1FLggfHlThck3yGDyFL9N7vHlj5cxPCnkdU=";
+  cargoHash = "sha256-n5zhRw795RS+KPU8haa4PtdSxXOM0sfxmPTqcfcvDQw=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Generate an AsciiDoc release notes document from tracking tickets";
