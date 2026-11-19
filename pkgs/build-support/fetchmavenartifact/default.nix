@@ -33,6 +33,7 @@ args@{
   urls ? [ ],
   # Metadata
   meta ? { },
+  passthru ? { },
   # The rest of the arguments are just forwarded to `fetchurl`.
   ...
 }:
@@ -74,6 +75,7 @@ let
       "repos"
       "url"
       "meta"
+      "passthru"
     ]
     // {
       urls = urls_;
@@ -96,5 +98,7 @@ stdenv.mkDerivation {
   '';
   # We also add a `jar` attribute that can be used to easily obtain the path
   # to the downloaded jar file.
-  passthru.jar = jar;
+  passthru = passthru // {
+    inherit jar;
+  };
 }
