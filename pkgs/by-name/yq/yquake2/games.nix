@@ -15,9 +15,9 @@ let
 
     ground-zero = {
       id = "rogue";
-      version = "2.07";
+      version = "2.16";
       description = "'Ground Zero' for Yamagi Quake II";
-      sha256 = "1m2r4vgfdxpsi0lkf32liwf1433mdhhmjxiicjwzqjlkncjyfcb1";
+      sha256 = "sha256-jmqnc/qEzsh+aoM62y8EKQa6dYQ9KE4vxschID50+PA=";
     };
 
     the-reckoning = {
