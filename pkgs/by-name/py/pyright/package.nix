@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pyright";
-  version = "1.1.414";
+  version = "1.1.415";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Microsoft";
     repo = "pyright";
     tag = finalAttrs.version;
-    hash = "sha256-rNlRQSkKgIGcHje1YonWsX5oXAAmFxfwq3aA1R5p7HA=";
+    hash = "sha256-C8JTkD2Co4sd7pzabBe45sWLgL/rowBpfGrHgxVXvLs=";
   };
 
   pnpmWorkspaces = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-FZl5XSiA0uEH3lZxOxzLpD0ZY8vmZuxLIxAxh7kqPKo=";
+    hash = "sha256-juei/EB2z5h2t1l2aocxuWY8WLfh/gxNKDI5ZB3h9PM=";
   };
 
   nativeBuildInputs = [
