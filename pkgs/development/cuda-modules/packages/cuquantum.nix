@@ -80,7 +80,10 @@ buildRedist (
       problems =
         lib.optionalAttrs
           (
-            cuquantumAtLeast "26.09"
+            lib.elem (lib.versions.majorMinor finalAttrs.version) [
+              "26.09"
+              "26.11"
+            ]
             && libcusolvermp.meta.available
             && (
               lib.versionOlder libcusolvermp.version "0.9.1" || lib.versionAtLeast libcusolvermp.version "0.10.0"
