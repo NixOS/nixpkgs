@@ -277,6 +277,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         borgbackup-integration = withThisSsh nixosTests.borgbackup;
         nixosTest = withThisSsh nixosTests.openssh;
+        nixosTest-jemalloc = withThisSsh nixosTests.openssh-jemalloc;
         initrd-network-openssh = withThisSsh nixosTests.systemd-initrd-networkd-ssh;
         openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
           pname = previousAttrs.pname + "-test";

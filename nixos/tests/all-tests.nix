@@ -1402,7 +1402,15 @@ in
   opensmtpd = handleTest ./opensmtpd.nix { };
   opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix { };
   opensnitch = runTest ./opensnitch.nix;
-  openssh = runTest ./openssh.nix;
+  openssh = runTest {
+    imports = [ ./openssh.nix ];
+    _module.args.testName = "openssh";
+  };
+  openssh-jemalloc = runTest {
+    imports = [ ./openssh.nix ];
+    _module.args.testName = "openssh-jemalloc";
+    defaults.environment.memoryAllocator.provider = "jemalloc";
+  };
   openstack-image-metadata =
     (handleTestOn [ "x86_64-linux" ] ./openstack-image.nix { }).metadata or { };
   openstack-image-userdata =
