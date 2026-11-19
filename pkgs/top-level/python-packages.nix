@@ -22146,6 +22146,8 @@ self: super: with self; {
 
   types-psycopg2 = callPackage ../development/python-modules/types-psycopg2 { };
 
+  types-pyasn1 = callPackage ../development/python-modules/types-pyasn1 { };
+
   types-pyopenssl = callPackage ../development/python-modules/types-pyopenssl { };
 
   types-python-dateutil = callPackage ../development/python-modules/types-python-dateutil { };
