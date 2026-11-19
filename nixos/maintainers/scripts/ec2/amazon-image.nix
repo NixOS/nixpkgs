@@ -17,6 +17,7 @@ let
     ;
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
+  jsonFormat = pkgs.formats.json { };
   inherit (config.ec2) bootMode;
   inherit (config.boot.loader) efi limine;
   systemdBoot = config.boot.loader.systemd-boot.enable;
@@ -149,10 +150,12 @@ let
       }
       echo "file ${cfg.format} $image" >> "$out/nix-support/hydra-build-products"
 
+      logicalBytes=$(qemu-img info --output json "$image" | jq '."virtual-size"')
+      # logical_bytes stays a string in image-info.json for compatibility.
       jq -n \
         --arg system_version ${lib.escapeShellArg config.system.nixos.version} \
         --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
-        --arg logical_bytes "$(qemu-img info --output json "$image" | jq '."virtual-size"')" \
+        --arg logical_bytes "$logicalBytes" \
         --arg boot_mode "${bootMode}" \
         --arg file "$image" \
         '{}
@@ -164,6 +167,17 @@ let
          | .disks.root.logical_bytes = $logical_bytes
          | .disks.root.file = $file
          ' > "$out/nix-support/image-info.json"
+
+      # RegisterImage rejects a root volume smaller than the snapshot.
+      jq --argjson logical_bytes "$logicalBytes" '
+        ($logical_bytes / (1024 * 1024 * 1024) | ceil) as $image_gib
+        | .RootDeviceName as $root
+        | .BlockDeviceMappings |= map(
+            if .DeviceName == $root then .Ebs.VolumeSize |= ([., $image_gib] | max) else . end
+          )
+        | del(.. | nulls)
+        ' ${jsonFormat.generate "register-image.json" cfg.registerImage} \
+        > "$out/nix-support/register-image.json"
 
       runHook postInstall
     '';
@@ -234,6 +248,89 @@ in
       default = "vpc";
       description = "The image format to output";
     };
+
+    registerImage = mkOption {
+      type = types.submodule (
+        { config, ... }:
+        {
+          freeformType = jsonFormat.type;
+          options = {
+            RootDeviceName = mkOption {
+              type = types.str;
+              default = "/dev/xvda";
+              description = "Device name of the root volume.";
+            };
+
+            BlockDeviceMappings = mkOption {
+              type = types.listOf jsonFormat.type;
+              default = [
+                {
+                  DeviceName = config.RootDeviceName;
+                  Ebs = {
+                    VolumeType = "gp3";
+                    VolumeSize = 4;
+                  };
+                }
+              ];
+              defaultText = literalExpression ''
+                [
+                  {
+                    DeviceName = config.amazonImage.registerImage.RootDeviceName;
+                    Ebs = {
+                      VolumeType = "gp3";
+                      VolumeSize = 4;
+                    };
+                  }
+                ]
+              '';
+              description = ''
+                Volumes of instances launched from the AMI. The uploader attaches the
+                image's snapshot to the mapping for `RootDeviceName`, whose
+                `Ebs.VolumeSize` in GiB is raised to fit the image.
+              '';
+            };
+
+            ImdsSupport = mkOption {
+              type = types.nullOr (types.enum [ "v2.0" ]);
+              default = "v2.0";
+              description = "Set to `null` to let instances also use IMDSv1.";
+            };
+
+            TpmSupport = mkOption {
+              type = types.nullOr (types.enum [ "v2.0" ]);
+              default = null;
+              description = ''
+                Set to `"v2.0"` to give instances a NitroTPM. Requires
+                `ec2.bootMode = "uefi"` or `"uefi-preferred"`.
+              '';
+            };
+          };
+        }
+      );
+      default = { };
+      description = ''
+        Arguments to [RegisterImage](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RegisterImage.html)
+        for AMI uploaders such as [NixOS/amis](https://github.com/NixOS/amis),
+        written to {file}`nix-support/register-image.json`. The uploader adds
+        `Name`, the image's snapshot and tags. The module sets `Architecture`,
+        `BootMode`, `VirtualizationType`, `EnaSupport` and `SriovNetSupport` to
+        match the image. `null` leaves an argument out.
+      '';
+      example = literalExpression ''
+        {
+          TpmSupport = "v2.0";
+          BlockDeviceMappings = [
+            {
+              DeviceName = "/dev/xvda";
+              Ebs = {
+                VolumeType = "gp3";
+                VolumeSize = 8;
+              };
+            }
+          ];
+        }
+      '';
+    };
   };
 
   config = {
@@ -255,7 +352,26 @@ in
         assertion = systemdBoot || limine.enable;
         message = "The Amazon image boots with systemd-boot or Limine.";
       }
+      {
+        assertion = cfg.registerImage.TpmSupport != null -> bootMode != "legacy-bios";
+        message = "amazonImage.registerImage.TpmSupport requires ec2.bootMode = \"uefi\" or \"uefi-preferred\".";
+      }
+      {
+        assertion =
+          lib.count (
+            mapping: (mapping.DeviceName or null) == cfg.registerImage.RootDeviceName
+          ) cfg.registerImage.BlockDeviceMappings == 1;
+        message = "amazonImage.registerImage.BlockDeviceMappings needs exactly one mapping for RootDeviceName.";
+      }
     ];
+
+    amazonImage.registerImage = {
+      Architecture = pkgs.stdenv.hostPlatform.linuxArch;
+      BootMode = bootMode;
+      VirtualizationType = "hvm";
+      EnaSupport = true;
+      SriovNetSupport = "simple";
+    };
 
     ec2.bootMode = mkDefault (if config.ec2.efi then "uefi" else "uefi-preferred");
     # systemd-boot can't boot legacy BIOS.
