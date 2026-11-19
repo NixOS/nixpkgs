@@ -94,6 +94,14 @@ python.pkgs.buildPythonApplication rec {
       url = "https://github.com/pretix/pretix/commit/a86f6f295d1e02f8f228f00e0892b5c8d56c481e.patch";
       hash = "sha256-bbQ/+Xq43nDABEuRy0RQojCS96l3+qjNdVeoD3c9+wc=";
     })
+    # Follow-up to the CVE-2026-101266 fix, which made checkout validate every step before the
+    # selected one, so completing a step could bounce back with "please enter your name" or an
+    # empty cart. Upstream shipped it with that fix in 2026.5.6, 2026.6.3, 2026.7.2 and 2026.8.0.
+    (fetchpatch {
+      name = "CVE-2026-101266-hotfix.patch";
+      url = "https://github.com/pretix/pretix/commit/d339e1d594db4511233cb238f15eee902d664454.patch";
+      hash = "sha256-YorWv3P62Iot/wR1SuK7KCNk0KFSjUW7ZQlWCb/n7gw=";
+    })
     (fetchpatch {
       name = "CVE-2026-101267.patch";
       url = "https://github.com/pretix/pretix/commit/afe87dcda1a25a8bded9e21dc55e817d6f23ad24.patch";
@@ -378,5 +386,8 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pretix-manage";
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "CVE-2026-127174: https://github.com/advisories/GHSA-cvm5-63v7-9qvf"
+    ];
   };
 }

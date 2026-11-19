@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_97,
   anki,
 
   openssl,
@@ -8,7 +8,8 @@
   buildPackages,
 }:
 
-rustPlatform.buildRustPackage {
+# Upstream requires Rust 1.97
+rustPackages_1_97.rustPlatform.buildRustPackage {
   pname = "anki-sync-server";
   inherit (anki)
     version
