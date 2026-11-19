@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "e2b";
-  version = "2.63.0";
+  version = "2.64.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "e2b-dev";
     repo = "E2B";
     tag = "@e2b/python-sdk@${finalAttrs.version}";
-    hash = "sha256-+phem2IV9lc+V5j5wEpAcH4364wjX8bzOjjWGuvsA0Q=";
+    hash = "sha256-JgC2QBL9CE6qH1xfNpdJuBsPeGOEU1C4pUBMB1Xvlaw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/python-sdk";

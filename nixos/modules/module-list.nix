@@ -575,6 +575,7 @@
   ./services/databases/kvrocks.nix
   ./services/databases/lldap.nix
   ./services/databases/memcached.nix
+  ./services/databases/memgraph.nix
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
@@ -881,6 +882,7 @@
   ./services/misc/beanstalkd.nix
   ./services/misc/bees.nix
   ./services/misc/bepasty.nix
+  ./services/misc/bifrost.nix
   ./services/misc/blenderfarm.nix
   ./services/misc/calibre-server.nix
   ./services/misc/canto-daemon.nix

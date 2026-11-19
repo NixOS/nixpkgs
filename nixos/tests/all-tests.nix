@@ -335,6 +335,7 @@ in
   benchexec = runTest ./benchexec.nix;
   bentopdf = handleTest ./bentopdf { };
   beszel = runTest ./beszel.nix;
+  bifrost = runTest ./bifrost.nix;
   binary-cache = runTest {
     imports = [ ./binary-cache.nix ];
     _module.args.compression = "zstd";
@@ -1132,6 +1133,7 @@ in
   };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
+  memgraph = runTest ./memgraph.nix;
   merecat = runTest ./merecat.nix;
   meshtasticd = runTest ./networking/meshtasticd.nix;
   metabase = runTest ./metabase.nix;
