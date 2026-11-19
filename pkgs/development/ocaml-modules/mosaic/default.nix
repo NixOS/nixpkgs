@@ -14,11 +14,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "mosaic";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchzip {
     url = "https://github.com/invariant-hq/mosaic/releases/download/${finalAttrs.version}/mosaic-${finalAttrs.version}.tbz";
-    hash = "sha256-HiOjNCNIFXkQHAQ8d3XZadg95nE231B+4pGVUX3ysUU=";
+    hash = "sha256-2Fclww3eUpm/jqyq1S8Q7Di1/HFxD+AB69RZF5MTeo8=";
   };
 
   minimalOCamlVersion = "5.4";
