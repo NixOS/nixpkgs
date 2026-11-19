@@ -17,6 +17,7 @@
   notmuch,
   file,
   charm-freeze,
+  codediff,
   code-minimap,
   dailies,
   dasht,
@@ -936,6 +937,15 @@ assertNoAdditions {
       "minimal"
     ];
   };
+
+  codediff-nvim = super.codediff-nvim.overrideAttrs (old: {
+    passthru = old.passthru // {
+      initLua = ''
+        vim.env.CODEDIFF_WATCHER_NO_AUTO_INSTALL = 1
+        vim.env.CODEDIFF_WATCHER_PATH = "${lib.getExe' codediff "codediff-watcher"}"
+      '';
+    };
+  });
 
   codesettings-nvim = super.codesettings-nvim.overrideAttrs {
     # This module is a build CLI and should not be `require`d directly!
