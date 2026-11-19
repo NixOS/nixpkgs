@@ -1,24 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  python,
+  fetchPypi,
   setuptools,
   jinja2,
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "tiptapy";
-  # github repository does not have version tags
-  version = "0.20.0-unstable-2024-06-14";
-
+  # upstream only publishes versions on PyPI, the github repository has no tags
+  version = "0.21.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "stckme";
-    repo = "tiptapy";
-    rev = "f34ed358b1b3448721b791150f4f104347a416bf";
-    hash = "sha256-y43/901tznZ9N9A4wH3z8FW0mHzNrA8pC+0d1CxdqJM=";
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-G5lVXVZe8ULsBRJLrmUt8qA2dK+yUS7pi7JyaTyTq/Y=";
   };
 
   build-system = [
@@ -26,9 +24,38 @@ buildPythonPackage {
   ];
 
   dependencies = [ jinja2 ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  # test data (tests/data) is not included in the PyPI sdist
+  disabledTestPaths = [ "tests/test_transform.py" ];
+
+  # smoke test for the json to html conversion covered by the disabled tests
+  postCheck = ''
+    ${python.interpreter} -c '
+    import tiptapy
+
+    class config:
+        DOMAIN = "example.com"
+
+    doc = {
+      "type": "doc",
+      "content": [{
+          "type": "paragraph",
+          "content": [
+            {"type": "text", "text": "Hello "},
+            {"type": "text", "marks": [{"type": "bold"}], "text": "<world>"},
+          ]
+      }]
+    }
+
+    html = tiptapy.BaseDoc(config).render(doc)
+
+    assert html == "<p>Hello <strong>&lt;world&gt;</strong></p>", html
+    '
+  '';
 
   pythonImportsCheck = [ "tiptapy" ];
 
@@ -42,4 +69,4 @@ buildPythonPackage {
       friedow
     ];
   };
-}
+})
