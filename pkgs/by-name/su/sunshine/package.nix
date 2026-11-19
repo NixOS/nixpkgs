@@ -8,6 +8,8 @@
   makeWrapper,
   buildNpmPackage,
   nixosTests,
+  nix-update-script,
+  _experimental-update-script-combinators,
   cmake,
   avahi,
   libevdev,
@@ -314,8 +316,18 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = lib.optionals isLinux [ udevCheckHook ];
 
   passthru = {
+    inherit ffmpegPrebuilt;
     tests = { inherit (nixosTests) sunshine; };
-    updateScript = ./updater.sh;
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--use-github-releases"
+          "--subpackage"
+          "ui"
+        ];
+      })
+      ./updater.sh
+    ];
   };
 
   meta = {
