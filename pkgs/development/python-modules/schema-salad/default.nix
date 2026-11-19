@@ -34,6 +34,10 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "cachecontrol"
+  ];
+
   dependencies = [
     cachecontrol
     mistune
