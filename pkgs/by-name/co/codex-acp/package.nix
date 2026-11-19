@@ -11,21 +11,22 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "codex-acp";
-  version = "2.1.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "codex-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bSxt9vtFnIrdZDmFJdYAfqkgm4BrGYKe420RamPkZvg=";
+    hash = "sha256-e5EcyiQrayZ+FRUrVq0GC0XrSNn4BAM9lGVeroZyjIQ=";
   };
 
-  npmDepsHash = "sha256-7v7QE0cmYsd3JGu0VoT53yZ1rb9wYB+tXt05G1EEvz8=";
+  npmDepsHash = "sha256-osqAy2cjtBbWNEZcMeVZxi2pVbCTReZY8Nd+KPJJRAo=";
 
-  patches = [
-    # https://github.com/agentclientprotocol/codex-acp/pull/609
-    ./test-codex-path.patch
-  ];
+  postPatch = ''
+    # Leave enough stack for native serialization after the JavaScript walk.
+    substituteInPlace src/JsonSnapshot.ts \
+      --replace-fail 'const MAX_DEPTH = 256;' 'const MAX_DEPTH = 32;'
+  '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
