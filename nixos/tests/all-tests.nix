@@ -648,6 +648,10 @@ in
       verity = true;
     };
   };
+  ec2-image-nvme = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args.nvme = true;
+  };
   ec2-image-resize = runTest {
     imports = [ ./ec2-image.nix ];
     _module.args.resize = true;

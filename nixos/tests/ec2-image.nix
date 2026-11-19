@@ -17,6 +17,7 @@
   root,
   rootFsType,
   twoDisks,
+  nvme,
   ...
 }:
 
@@ -150,6 +151,7 @@ in
   _module.args.root = lib.mkDefault "image";
   _module.args.rootFsType = lib.mkDefault "ext4";
   _module.args.twoDisks = lib.mkDefault false;
+  _module.args.nvme = lib.mkDefault false;
 
   name =
     "ec2-image"
@@ -164,7 +166,8 @@ in
     + lib.optionalString resize "-resize"
     + lib.optionalString (root == "first-boot") "-root-first-boot"
     + lib.optionalString (rootFsType != "ext4") "-${rootFsType}"
-    + lib.optionalString twoDisks "-two-disks";
+    + lib.optionalString twoDisks "-two-disks"
+    + lib.optionalString nvme "-nvme";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -222,6 +225,8 @@ in
               os.truncate(head, info["virtual-size"])
               table = json.loads(subprocess.check_output(["${hostPkgs.util-linux}/bin/sfdisk", "-J", head]))
           return partitions(table["partitiontable"])
+      NVME = ${if nvme then "True" else "False"}
+      EBS_MODEL = "Amazon Elastic Block Store"
 
       # Instance Metadata Service (IMDSv2 with 1.0 metadata version)
       # TODO: Use 'latest' metadata version instead of '1.0'
@@ -312,6 +317,16 @@ in
               other_image = os.path.join(image_dir, "other.qcow2")
               subprocess.check_call([QEMU_IMG, "create", "-f", "qcow2", other_image, "2G"])
               drives = f" -drive file={other_image},if=virtio,werror=report" + drives
+          if NVME:
+              # Attach the disks as Nitro does, as EBS NVMe controllers.
+              data_image = os.path.join(image_dir, "data.qcow2")
+              subprocess.check_call([QEMU_IMG, "create", "-f", "qcow2", data_image, "1G"])
+              drives = (
+                  f" -drive file={disk_image},if=none,id=root,werror=report"
+                  + f" -device 'nvme,drive=root,serial=vol0123456789abcdef0,model={EBS_MODEL}'"
+                  + f" -drive file={data_image},if=none,id=data,werror=report"
+                  + f" -device 'nvme,drive=data,serial=vol0fedcba9876543210,model={EBS_MODEL}'"
+              )
 
           # Create fake EC2 metadata in temporary directory with client's public key
           metadata_dir = create_ec2_metadata_dir(temp_dir, client_pubkey)
@@ -601,6 +616,26 @@ in
                       machine.wait_for_unit("multi-user.target")
                       grown = check_growth()
                       assert grown > fs_size + 1024**3, (fs_size, grown)
+
+          if NVME:
+              with subtest("EBS NVMe device names"):
+                  machine.succeed("udevadm settle")
+                  # The kernel numbers NVMe controllers in probe order, so go by serial.
+                  by_id = "/dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_"
+                  devs = machine.succeed(
+                      f"readlink -f {by_id}vol0123456789abcdef0 {by_id}vol0123456789abcdef0-part1 {by_id}vol0fedcba9876543210"
+                  ).split()
+                  for dev in devs:
+                      # udevd ran ebsnvme-bdev at boot, and nvme-cli read QEMU's vendor ID.
+                      machine.succeed(
+                          f"journalctl -b -t ebsnvme-bdev _SYSTEMD_UNIT=systemd-udevd.service --grep '^{dev}: vid=0x1b36 bdev=$'"
+                      )
+                      # QEMU can't set the vendor-specific device name, so nothing gets an xvd or sd name.
+                      ctrl = machine.succeed(f"${lib.getExe pkgs.nvme-cli} amzn id-ctrl {dev}")
+                      assert re.search(r"^bdev +: *$", ctrl, re.M), ctrl
+                  machine.fail("ls /dev/xvd* /dev/sd*")
+                  failed = machine.succeed("systemctl list-units --failed --plain --no-legend")
+                  assert not failed.strip(), failed
 
           with subtest("Store paths and profiles"):
               if nix_enabled:
