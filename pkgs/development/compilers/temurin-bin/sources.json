@@ -329,10 +329,10 @@
           },
           "packageType": "jdk",
           "powerpc64le": {
-            "build": "1",
-            "sha256": "042482fa372f12741ceb721397e277b4e69672182aaa45a1bf7af55d9ba876d6",
-            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_ppc64le_linux_hotspot_21.0.12.1_1.tar.gz",
-            "version": "21.0.12"
+            "build": "2",
+            "sha256": "4d3d75690785cf593002446005427bb3c61de163f2469343572cdcb0d258ed62",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13.1%2B2/OpenJDK21U-jdk_ppc64le_linux_hotspot_21.0.13.1_2.tar.gz",
+            "version": "21.0.13.1"
           },
           "riscv64": {
             "build": "1",
@@ -342,10 +342,10 @@
           },
           "vmType": "hotspot",
           "x86_64": {
-            "build": "1",
-            "sha256": "ce79869e1307ed8ee1e2baa86a412b1eb5b75d10a01006d788a6f968bcfaee94",
-            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_x64_linux_hotspot_21.0.12.1_1.tar.gz",
-            "version": "21.0.12"
+            "build": "2",
+            "sha256": "bb8a93f9ae6e7a693b2b721e85dbeff26ae1a77447985a8d7afcdd9c7cf6222e",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13.1%2B2/OpenJDK21U-jdk_x64_linux_hotspot_21.0.13.1_2.tar.gz",
+            "version": "21.0.13.1"
           }
         },
         "openjdk25": {
@@ -625,10 +625,10 @@
           },
           "packageType": "jre",
           "powerpc64le": {
-            "build": "1",
-            "sha256": "d2f07f1d97faab23b3add1af92db402b721b5b251cedab7144fdd4b2bf2e2f13",
-            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_ppc64le_linux_hotspot_21.0.12.1_1.tar.gz",
-            "version": "21.0.12"
+            "build": "2",
+            "sha256": "7fbeba1a2ba03533657bf16655e642de7b32c1bf074a3e2eb406f7cfc0f29a14",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13.1%2B2/OpenJDK21U-jre_ppc64le_linux_hotspot_21.0.13.1_2.tar.gz",
+            "version": "21.0.13.1"
           },
           "riscv64": {
             "build": "1",
@@ -638,10 +638,10 @@
           },
           "vmType": "hotspot",
           "x86_64": {
-            "build": "1",
-            "sha256": "2413149700df0f7d440500a84a8f764c535f21e5a5e87d38328b64eec2c5b500",
-            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_x64_linux_hotspot_21.0.12.1_1.tar.gz",
-            "version": "21.0.12"
+            "build": "2",
+            "sha256": "18f44fab9065217f3ba61d0eef8a7b5f3c3713aa7293001b0d4ac10ede3850f0",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13.1%2B2/OpenJDK21U-jre_x64_linux_hotspot_21.0.13.1_2.tar.gz",
+            "version": "21.0.13.1"
           }
         },
         "openjdk25": {
@@ -794,10 +794,10 @@
         },
         "openjdk21": {
           "aarch64": {
-            "build": "1",
-            "sha256": "3623232f33a9c3baadf304480b2535f9a3cba8a58d42ecbb438ba267315d9998",
-            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_aarch64_mac_hotspot_21.0.12.1_1.tar.gz",
-            "version": "21.0.12"
+            "build": "2",
+            "sha256": "48067f2b7c958ed104a9d8a5749be7d25220b0a356b4d2d1bcfaab3e16ad0b14",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13.1%2B2/OpenJDK21U-jdk_aarch64_mac_hotspot_21.0.13.1_2.tar.gz",
+            "version": "21.0.13.1"
           },
           "packageType": "jdk",
           "vmType": "hotspot",
@@ -940,10 +940,10 @@
         },
         "openjdk21": {
           "aarch64": {
-            "build": "1",
-            "sha256": "dec50fc6f9fcd4fe3ae8cabf5a5fa68f6afc48841f7698e468e9aa5d54beed84",
-            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_aarch64_mac_hotspot_21.0.12.1_1.tar.gz",
-            "version": "21.0.12"
+            "build": "2",
+            "sha256": "848feb1906c7de79de4f8391636042193fbd46eff86e26299506c4656f62c260",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13.1%2B2/OpenJDK21U-jre_aarch64_mac_hotspot_21.0.13.1_2.tar.gz",
+            "version": "21.0.13.1"
           },
           "packageType": "jre",
           "vmType": "hotspot",

@@ -16340,6 +16340,12 @@
     github = "Kynson";
     githubId = 46522440;
   };
+  kyubai = {
+    name = "Matthias Riegel";
+    email = "nixpkgs@verriegelt.net";
+    github = "kyubai";
+    githubId = 34755366;
+  };
   l0b0 = {
     email = "victor@engmark.name";
     github = "l0b0";
