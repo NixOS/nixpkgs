@@ -98,7 +98,12 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit frontend;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
   };
 
   meta = {
