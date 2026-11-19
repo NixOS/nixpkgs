@@ -13,6 +13,9 @@
   firmware,
   perlless,
   resize,
+  root,
+  rootFsType,
+  twoDisks,
   ...
 }:
 
@@ -46,6 +49,8 @@ let
             ];
           };
           amazonImage.store = store;
+          amazonImage.root = root;
+          amazonImage.rootFsType = rootFsType;
           nix.enable = withNix;
           amazonImage.espSize = lib.mkIf (espSize != null) espSize;
           # The default variant already covers the channel.
@@ -124,6 +129,9 @@ in
   _module.args.firmware = lib.mkDefault "uefi";
   _module.args.perlless = lib.mkDefault false;
   _module.args.resize = lib.mkDefault false;
+  _module.args.root = lib.mkDefault "image";
+  _module.args.rootFsType = lib.mkDefault "ext4";
+  _module.args.twoDisks = lib.mkDefault false;
 
   name =
     "ec2-image"
@@ -133,7 +141,10 @@ in
     + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
     + lib.optionalString (firmware == "bios") "-bios"
     + lib.optionalString perlless "-perlless"
-    + lib.optionalString resize "-resize";
+    + lib.optionalString resize "-resize"
+    + lib.optionalString (root == "first-boot") "-root-first-boot"
+    + lib.optionalString (rootFsType != "ext4") "-${rootFsType}"
+    + lib.optionalString twoDisks "-two-disks";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -169,6 +180,8 @@ in
       import tempfile
 
       RESIZE = ${if resize then "True" else "False"}
+      ROOT_FIRST_BOOT = ${if root == "first-boot" then "True" else "False"}
+      TWO_DISKS = ${if twoDisks then "True" else "False"}
       QEMU_IMG = "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img"
 
       def partition_number(node):
@@ -273,6 +286,12 @@ in
               "-o", "backing_file=${image}", disk_image
           ])
           subprocess.check_call([QEMU_IMG, "resize", disk_image, "10G"])
+          drives = f" -drive file={disk_image},if=virtio,werror=report"
+          if TWO_DISKS:
+              # An empty disk that enumerates first, as vda.
+              other_image = os.path.join(image_dir, "other.qcow2")
+              subprocess.check_call([QEMU_IMG, "create", "-f", "qcow2", other_image, "2G"])
+              drives = f" -drive file={other_image},if=virtio,werror=report" + drives
 
           # Create fake EC2 metadata in temporary directory with client's public key
           metadata_dir = create_ec2_metadata_dir(temp_dir, client_pubkey)
@@ -290,7 +309,7 @@ in
           start_command = (
               f"{QEMU}/bin/qemu-kvm -m 1024"
               + "${firmwareArgs}"
-              + f" -drive file={disk_image},if=virtio,werror=report"
+              + drives
               + vlan_net
               + metadata_net
               + " $QEMU_OPTS"
@@ -408,7 +427,7 @@ in
               assert image_info["format"] == "QCOW2", image_info
               assert image_info["store"] == store, image_info
               disk = {p["partlabel"]: p for p in json.loads(machine.succeed("lsblk -J -b -l -o PARTLABEL,PARTN,SIZE"))["blockdevices"]}
-              labels = {"esp": "ESP", "root": "nixos"}
+              labels = {"esp": "ESP"} | ({} if ROOT_FIRST_BOOT else {"root": "nixos"})
               if store != "root":
                   labels["store"] = "nix-store"
               assert {key: p["label"] for key, p in image_info["partitions"].items()} == labels, image_info
@@ -460,38 +479,75 @@ in
                   machine.succeed("NIX_REMOTE=daemon nix-store --gc")
                   machine.fail(f"test -e {path}")
 
-          with subtest("Root partition growth"):
-              machine.fail("systemctl cat growpart.service")
-              root = machine.succeed("readlink -f /dev/disk/by-label/nixos").strip()
-              machine.succeed(f"test $(findmnt -no SOURCE /) = {root}")
-              root_number = partition_number(root)
-              disk = "/dev/" + machine.succeed(f"lsblk -no PKNAME {root}").strip()
-              built = image_partitions()
+          if ROOT_FIRST_BOOT:
+              with subtest("Root created on first boot"):
+                  built = image_partitions()
+                  assert all(p["name"] != "nixos" for p in built.values()), built
+                  root = machine.succeed("readlink -f /dev/disk/by-partlabel/nixos").strip()
+                  machine.succeed(f"test $(findmnt -no SOURCE /) = {root}")
+                  assert machine.succeed("findmnt -no FSTYPE,LABEL /").split() == ["${rootFsType}", "nixos"]
+                  disk = "/dev/" + machine.succeed(f"lsblk -no PKNAME {root}").strip()
+                  machine.succeed(f"test $(readlink -f /dev/disk/amazon-image-boot) = {disk}")
+                  machine.succeed("journalctl -b --identifier systemd-repart --grep 'Adding new partition'")
+                  machine.fail("journalctl -b --identifier systemd-repart --grep discarded")
 
-              def check_growth():
-                  """systemd-repart grew root in the initrd, and every other partition is as built."""
-                  machine.succeed("journalctl -b --identifier systemd-repart --grep 'Growing existing partition'")
-                  table = json.loads(machine.succeed(f"sfdisk -J {disk}"))["partitiontable"]
-                  now = partitions(table)
-                  grown = now[root_number]
-                  assert now == built | {root_number: built[root_number] | {"size": grown["size"]}}, (now, built)
-                  assert grown["size"] > built[root_number]["size"], (grown, built)
-                  # Within the 1 MiB alignment of the end of the disk.
-                  assert table["lastlba"] + 1 - (grown["start"] + grown["size"]) < 2048, (grown, table)
-                  fs_size = int(machine.succeed("df --output=size -B1 / | tail -1"))
-                  assert fs_size > grown["size"] * 512 * 0.9, (fs_size, grown)
-                  return fs_size
+                  def check_root():
+                      """Root is new and fills the disk, and every other partition is as built."""
+                      table = json.loads(machine.succeed(f"sfdisk -J {disk}"))["partitiontable"]
+                      now = partitions(table)
+                      assert {n: now[n] for n in built} == built, (now, built)
+                      [new] = [now[n] for n in now if n not in built]
+                      assert new["name"] == "nixos" and partition_number(root) not in built, (new, built)
+                      # Within the 1 MiB alignment of the end of the disk.
+                      assert table["lastlba"] + 1 - (new["start"] + new["size"]) < 2048, (new, table)
+                      return new
 
-              fs_size = check_growth()
-
-              if RESIZE:
-                  # As after growing the EBS volume and rebooting.
+                  created = check_root()
+                  fs_uuid = machine.succeed("findmnt -no UUID /").strip()
                   machine.shutdown()
-                  subprocess.check_call([QEMU_IMG, "resize", disk_image, "12G"])
                   machine.start()
                   machine.wait_for_unit("multi-user.target")
-                  grown = check_growth()
-                  assert grown > fs_size + 1024**3, (fs_size, grown)
+                  assert check_root() == created
+                  assert machine.succeed("findmnt -no UUID /").strip() == fs_uuid
+                  # Later boots find root and leave it alone.
+                  machine.fail("journalctl -b --identifier systemd-repart --grep 'Adding new partition|Formatting|Growing'")
+                  if TWO_DISKS:
+                      assert disk == "/dev/vdb", disk
+                      machine.fail("blkid -p /dev/vda")
+                      machine.succeed("cmp -n 1048576 /dev/vda /dev/zero")
+          else:
+              with subtest("Root partition growth"):
+                  machine.fail("systemctl cat growpart.service")
+                  root = machine.succeed("readlink -f /dev/disk/by-label/nixos").strip()
+                  machine.succeed(f"test $(findmnt -no SOURCE /) = {root}")
+                  root_number = partition_number(root)
+                  disk = "/dev/" + machine.succeed(f"lsblk -no PKNAME {root}").strip()
+                  built = image_partitions()
+
+                  def check_growth():
+                      """systemd-repart grew root in the initrd, and every other partition is as built."""
+                      machine.succeed("journalctl -b --identifier systemd-repart --grep 'Growing existing partition'")
+                      table = json.loads(machine.succeed(f"sfdisk -J {disk}"))["partitiontable"]
+                      now = partitions(table)
+                      grown = now[root_number]
+                      assert now == built | {root_number: built[root_number] | {"size": grown["size"]}}, (now, built)
+                      assert grown["size"] > built[root_number]["size"], (grown, built)
+                      # Within the 1 MiB alignment of the end of the disk.
+                      assert table["lastlba"] + 1 - (grown["start"] + grown["size"]) < 2048, (grown, table)
+                      fs_size = int(machine.succeed("df --output=size -B1 / | tail -1"))
+                      assert fs_size > grown["size"] * 512 * 0.9, (fs_size, grown)
+                      return fs_size
+
+                  fs_size = check_growth()
+
+                  if RESIZE:
+                      # As after growing the EBS volume and rebooting.
+                      machine.shutdown()
+                      subprocess.check_call([QEMU_IMG, "resize", disk_image, "12G"])
+                      machine.start()
+                      machine.wait_for_unit("multi-user.target")
+                      grown = check_growth()
+                      assert grown > fs_size + 1024**3, (fs_size, grown)
 
           with subtest("Store paths and profiles"):
               if nix_enabled:

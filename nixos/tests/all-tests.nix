@@ -644,6 +644,43 @@ in
     imports = [ ./ec2-image.nix ];
     _module.args.resize = true;
   };
+  ec2-image-root-first-boot = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      store = "erofs";
+      withNix = false;
+      root = "first-boot";
+    };
+  };
+  ec2-image-root-first-boot-bios = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      store = "erofs";
+      withNix = false;
+      root = "first-boot";
+      firmware = "bios";
+    };
+  };
+  ec2-image-root-first-boot-clone = runTest ./ec2-image-root-first-boot-clone.nix;
+  ec2-image-root-first-boot-two-disks = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      bootMode = "uefi";
+      store = "erofs";
+      withNix = false;
+      root = "first-boot";
+      twoDisks = true;
+    };
+  };
+  ec2-image-root-first-boot-xfs = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      store = "erofs";
+      withNix = false;
+      root = "first-boot";
+      rootFsType = "xfs";
+    };
+  };
   ec2-image-root-growth = pkgs.callPackage ./ec2-image-root-growth.nix { };
   ec2-image-store-compression = pkgs.callPackage ./ec2-image-store-compression.nix { };
   ec2-image-systemd-boot = runTest {
