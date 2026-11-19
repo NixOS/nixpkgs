@@ -2595,17 +2595,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-resty-openssl";
-      version = "1.9.0-1";
+      version = "1.10.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-resty-openssl-1.9.0-1.rockspec";
-          sha256 = "0sjxc1h1ys148h6al6jrh40yj0si68a8hka1y7616i5ljm9kbwya";
+          url = "mirror://luarocks/lua-resty-openssl-1.10.0-1.rockspec";
+          sha256 = "160zgcjvchn805n8nrdr1a7nlxgp9pb4y7fvi8320byydd4ipdk1";
         }).outPath;
       src = fetchFromGitHub {
         owner = "fffonion";
         repo = "lua-resty-openssl";
-        tag = "1.9.0";
-        hash = "sha256-zMJw0lHbiPaTRh4zMw6Hwo5EMEwznQtTWEUfCaNy+lk=";
+        tag = "1.10.0";
+        hash = "sha256-mW00UE0M23nZ34Q9zp+XxH6O+BegWQ/xquUs846zzOw=";
       };
 
       meta = {
