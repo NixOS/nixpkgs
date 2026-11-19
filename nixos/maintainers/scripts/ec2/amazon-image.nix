@@ -17,6 +17,14 @@ let
     ;
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
+  # RegisterImage's names for the architectures EC2 runs.
+  architecture =
+    if pkgs.stdenv.hostPlatform.isx86_64 then
+      "x86_64"
+    else if pkgs.stdenv.hostPlatform.isAarch64 then
+      "arm64"
+    else
+      null;
   jsonFormat = pkgs.formats.json { };
   inherit (config.ec2) bootMode;
   inherit (config.boot.loader) efi limine;
@@ -416,8 +424,8 @@ in
                 "x86_64_mac"
                 "arm64_mac"
               ];
-              default = pkgs.stdenv.hostPlatform.linuxArch;
-              defaultText = literalExpression "pkgs.stdenv.hostPlatform.linuxArch";
+              default = architecture;
+              defaultText = lib.literalMD ''`"x86_64"` or `"arm64"`, matching the image'';
               description = "Architecture of the image.";
             };
 
@@ -504,6 +512,10 @@ in
     image.extension = if cfg.format == "vpc" then "vhd" else cfg.format;
 
     assertions = [
+      {
+        assertion = architecture != null;
+        message = "amazonImage only builds x86_64 and aarch64 images, not ${pkgs.stdenv.hostPlatform.system}. RegisterImage rejects some other architecture names, such as riscv64's \"riscv\".";
+      }
       {
         assertion = readOnlyStore -> !(config.nix.gc.automatic || config.nix.optimise.automatic);
         message = "nix.gc.automatic and nix.optimise.automatic need a writable Nix store, but amazonImage.store = \"erofs\" makes it read-only.";
