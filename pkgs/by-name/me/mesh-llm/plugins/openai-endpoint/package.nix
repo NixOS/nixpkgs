@@ -7,6 +7,7 @@
   pkg-config,
   openssl,
   nix-update-script,
+  mesh-llm,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -43,6 +44,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # The name the plugin reports to the host, which must match its [[plugin]] entry.
     pluginName = "openai-endpoint";
     updateScript = nix-update-script { };
+    # Without a server URL the plugin has nothing to attach and the test node has no server.
+    testSettings.url = "http://127.0.0.1:8000/v1";
+    tests.starts = mesh-llm.tests.plugins;
   };
 
   meta = {
