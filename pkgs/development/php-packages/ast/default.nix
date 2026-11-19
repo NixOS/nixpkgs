@@ -2,11 +2,10 @@
   buildPecl,
   lib,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
 let
-  version = "1.1.3";
+  version = "1.1.4";
 in
 buildPecl {
   inherit version;
@@ -16,21 +15,8 @@ buildPecl {
     owner = "nikic";
     repo = "php-ast";
     tag = "v${version}";
-    hash = "sha256-TGMZA3Qe+/TwG+FIevrcQzy/ufCyN8sXKjsPrnz3K1Q=";
+    hash = "sha256-Kg1ukY4Ysw6/2yqv4oV9NEavvSZaiE6UZNE5BSBW7vw=";
   };
-
-  patches = [
-    # Support PHP 8.6, backported from upstream master
-    (fetchpatch {
-      name = "php86-support.patch";
-      url = "https://github.com/nikic/php-ast/commit/64ea7276bcd9cf8e503b719aafbec4d802c9eacc.patch";
-      excludes = [
-        ".github/*"
-        "ci/*"
-      ];
-      hash = "sha256-fCZk4cGrJIG66MO7CKb9aJzpvpCSskcc2ZdlFEMtb5U=";
-    })
-  ];
 
   meta = {
     changelog = "https://github.com/nikic/php-ast/releases/tag/v${version}";
