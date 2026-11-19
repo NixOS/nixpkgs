@@ -11,6 +11,7 @@
   withNix,
   espSize,
   firmware,
+  perlless,
   ...
 }:
 
@@ -79,14 +80,15 @@ let
 
           nixpkgs.pkgs = pkgs;
         }
-      ];
+      ]
+      ++ lib.optional perlless ../modules/profiles/perlless.nix;
     }).config;
 
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
   # Hashing the store takes a while, so cover each store layout once.
   verifyFlags = lib.optionalString (
-    espSize == null && (bootMode == "uefi" || store != "root")
+    espSize == null && !perlless && (bootMode == "uefi" || store != "root")
   ) " --check-contents";
 
   # Without OVMF, QEMU boots with SeaBIOS.
@@ -119,6 +121,7 @@ in
   _module.args.withNix = lib.mkDefault true;
   _module.args.espSize = lib.mkDefault null;
   _module.args.firmware = lib.mkDefault "uefi";
+  _module.args.perlless = lib.mkDefault false;
 
   name =
     "ec2-image"
@@ -126,7 +129,8 @@ in
     + lib.optionalString (store != "root") "-${store}"
     + lib.optionalString (!withNix) "-nonix"
     + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
-    + lib.optionalString (firmware == "bios") "-bios";
+    + lib.optionalString (firmware == "bios") "-bios"
+    + lib.optionalString perlless "-perlless";
   meta = {
     maintainers = with lib.maintainers; [
       roberth

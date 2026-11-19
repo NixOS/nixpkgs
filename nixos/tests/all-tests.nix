@@ -633,6 +633,13 @@ in
     imports = [ ./ec2-image.nix ];
     _module.args.store = "erofs-overlay";
   };
+  ec2-image-erofs-perlless = runTest {
+    imports = [ ./ec2-image.nix ];
+    _module.args = {
+      store = "erofs";
+      perlless = true;
+    };
+  };
   ec2-image-store-compression = pkgs.callPackage ./ec2-image-store-compression.nix { };
   ec2-image-systemd-boot = runTest {
     imports = [ ./ec2-image.nix ];
