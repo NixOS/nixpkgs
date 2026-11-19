@@ -209,6 +209,8 @@ package-maintainers:
     - tlynx
   erictapen:
     - hakyll
+  galabovaa:
+    - highs-lp
   gridaphobe:
     - located-base
   iblech:
@@ -481,6 +483,7 @@ package-maintainers:
     - gnuplot
     - group-by-date
     - guarded-allocation
+    - highs-lp
     - iff
     - interpolation
     - jack
