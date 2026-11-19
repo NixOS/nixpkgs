@@ -2991,10 +2991,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-d4tlK8gW1zduVaP8jr1/kVgLgdh5tP5VeNJl6dRj3yc=",
+                    "hash": "sha256-YJ8ZzGHAxbxsObw/+J2D48/qQwiQRRCrot6z+Gx3F9s=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v45.3.4"
+                    "tag": "v45.4.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -4342,7 +4342,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-Gtjd/IhN4+idrjsvaoRCdEJ0VLeNhFw/qFu6UYKBPBA=",
+            "hash": "sha256-5iPN4a4IdGVhebiW5Z33OlbNA9auRPTKVUB8OjEqfy8=",
             "missing_hashes": {
                 "@napi-rs/canvas-android-arm64@npm:0.1.100": "6f6f512ab503625ec24466fe12d71f621629a0fe905d0f5e7732a566305d08b34f1e8eee00a5f0da52782c9bafed8a791d79f4c486e9aba4e6c4d83525827681",
                 "@napi-rs/canvas-darwin-arm64@npm:0.1.100": "4e0b54bc7f01970de7f41063d219a9e72da96ab7974975e0e80a914593794417e85f83499cd0d3459ab417483df47931696274d5dafcd6299e3d1a569d2af192",
@@ -4458,6 +4458,6 @@
         },
         "modules": "150",
         "node": "24.22.3",
-        "version": "45.3.4"
+        "version": "45.4.1"
     }
 }
