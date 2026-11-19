@@ -9,36 +9,46 @@
   libxml2,
 }:
 
-let
-  inherit (stdenv) hostPlatform;
-  OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
-  ARCH = if hostPlatform.isDarwin then hostPlatform.darwinArch else hostPlatform.parsed.cpu.name;
-  version = "1.42.0";
-  hashes = {
-    # Get these from `nix store prefetch-file https://github.com/ldc-developers/ldc/releases/download/v1.19.0/ldc2-1.19.0-osx-x86_64.tar.xz` etc..
-    linux-x86_64 = "sha256-p7yclWE49VjK35yWI1L1nUHIDfbrOuP4A58lvhSmkwM=";
-    linux-aarch64 = "sha256-aHcHw+IP+RBSjrLZLyepjLCWAoTeOwJua/IChKwchRE=";
-    osx-arm64 = "sha256-emjiHFMFdmp09HNsyJGnlC23hCqSJmIyCVBLyFxwE4I=";
-  };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldc-bootstrap";
-  inherit version;
+  version = "1.42.0";
 
-  src = fetchurl rec {
-    name = "ldc2-${version}-${OS}-${ARCH}.tar.xz";
-    url = "https://github.com/ldc-developers/ldc/releases/download/v${version}/${name}";
-    hash = hashes."${OS}-${ARCH}" or (throw "missing bootstrap hash for ${OS}-${ARCH}");
-  };
+  passthru.tarballs =
+    let
+      fetchPrebuilt =
+        { platform, hash }:
+        fetchurl {
+          url = "https://github.com/ldc-developers/ldc/releases/download/v${finalAttrs.version}/ldc2-${finalAttrs.version}-${platform}.tar.xz";
+          inherit hash;
+        };
+    in
+    {
+      "x86_64-linux" = fetchPrebuilt {
+        platform = "linux-x86_64";
+        hash = "sha256-p7yclWE49VjK35yWI1L1nUHIDfbrOuP4A58lvhSmkwM=";
+      };
+      "aarch64-linux" = fetchPrebuilt {
+        platform = "linux-aarch64";
+        hash = "sha256-aHcHw+IP+RBSjrLZLyepjLCWAoTeOwJua/IChKwchRE=";
+      };
+      "aarch64-darwin" = fetchPrebuilt {
+        platform = "osx-arm64";
+        hash = "sha256-emjiHFMFdmp09HNsyJGnlC23hCqSJmIyCVBLyFxwE4I=";
+      };
+    };
+
+  src =
+    finalAttrs.passthru.tarballs.${stdenv.hostPlatform.system}
+      or (throw "missing prebuilt bootstrap tarball for ${stdenv.hostPlatform.system}");
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs =
-    lib.optionals hostPlatform.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
     ]
-    ++ lib.optional hostPlatform.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxml2
@@ -74,4 +84,4 @@ stdenv.mkDerivation {
       "aarch64-darwin"
     ];
   };
-}
+})
