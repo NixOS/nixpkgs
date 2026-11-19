@@ -1,46 +1,37 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
-  cmake,
-  pkg-config,
   SDL2,
-  libpng,
-  zlib,
-  xz,
-  freetype,
-  fontconfig,
-  curl,
-  icu,
-  harfbuzz,
-  expat,
-  glib,
-  pcre2,
-  openttd-opengfx,
-  withOpenGFX ? true,
-  openttd-opensfx,
-  withOpenSFX ? true,
-  openttd-openmsx,
-  withOpenMSX ? true,
-  withFluidSynth ? true,
-  fluidsynth,
-  soundfont-fluid,
-  soundfont-name ? "FluidR3_GM2-2",
-  libsndfile,
-  flac,
-  libogg,
-  libvorbis,
-  libopus,
-  libmpg123,
-  pulseaudio,
-  alsa-lib,
-  libjack2,
-  makeWrapper,
-  buildPackages,
-  versionCheckHook,
-  nix-update-script,
   _experimental-update-script-combinators,
+  buildPackages,
+  cmake,
+  curl,
+  fluidsynth,
+  fontconfig,
+  freetype,
+  harfbuzz,
+  icu,
+  libGL,
+  libogg,
+  libopus,
+  libpng,
+  lzo,
+  nix-update-script,
+  openttd-opengfx,
+  openttd-openmsx,
+  openttd-opensfx,
+  opusfile,
+  pkg-config,
+  soundfont-fluid,
+  versionCheckHook,
+  xz,
+  zlib,
+  soundfont-name ? "FluidR3_GM2-2",
+  withFluidSynth ? true,
+  withOpenGFX ? true,
+  withOpenMSX ? true,
+  withOpenSFX ? true,
 }:
 
 let
@@ -50,15 +41,20 @@ let
     pname = "openttd-tools";
     buildInputs = [ ];
     cmakeFlags = oldAttrs.cmakeFlags or [ ] ++ [ (lib.cmakeBool "OPTION_TOOLS_ONLY" true) ];
+    doCheck = false;
     installPhase = ''
       install -Dm555 src/strgen/strgen -t $out/bin
       install -Dm555 src/settingsgen/settingsgen -t $out/bin
     '';
+    doInstallCheck = false;
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
   version = "15.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
@@ -85,10 +81,24 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  postPatch =
+    lib.optionalString withFluidSynth ''
+      substituteInPlace src/music/fluidsynth.cpp \
+        --replace-fail "/usr/share/soundfonts/default.sf2" \
+                       "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
+    ''
+    # bundle is assembled in postInstall, not by fixup_bundle
+    # Info.plist copyright year from the release, not SOURCE_DATE_EPOCH
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cmake/PackageBundle.cmake \
+        --replace-fail "fixup_bundle(" "message(STATUS " \
+        --replace-fail 'string(TIMESTAMP CURRENT_YEAR "%Y")' \
+                       "set(CURRENT_YEAR $(cut -f2 .ottdrev* | head -n1 | cut -c1-4))"
+    '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     crossTools
@@ -96,53 +106,58 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
+    curl
+    fontconfig
+    freetype
+    harfbuzz
+    icu
+    libGL
+    libogg
+    libopus
     libpng
+    lzo
+    opusfile
     xz
     zlib
-    freetype
-    fontconfig
-    curl
-    icu
-    harfbuzz
-    expat
-    glib
-    pcre2
   ]
-  ++ lib.optionals withFluidSynth [
-    fluidsynth
-    soundfont-fluid
-    libsndfile
-    flac
-    libogg
-    libvorbis
-    libopus
-    libmpg123
-    pulseaudio
-    alsa-lib
-    libjack2
+  ++ lib.optional withFluidSynth fluidsynth;
+
+  # upstream defaults to an app bundle layout on darwin
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "OPTION_INSTALL_FHS" true)
+    (lib.cmakeFeature "GLOBAL_DIR" "${placeholder "out"}/share/games/openttd")
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
-
-  strictDeps = true;
-
-  postPatch = ''
-    substituteInPlace src/music/fluidsynth.cpp \
-      --replace-fail "/usr/share/soundfonts/default.sf2" \
-                     "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
+  doCheck = true;
+  # regression tests need a graphics set
+  preCheck = ''
+    ln -s ${openttd-opengfx}/* baseset
   '';
+  postCheck = ''
+    rm baseset/opengfx-*
+  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  postInstall =
-    lib.optionalString withOpenGFX ''
-      cp -r ${openttd-opengfx}/* $out/share/games/openttd/baseset
-    ''
-    + lib.optionalString withOpenSFX ''
-      cp ${openttd-opensfx}/*.tar $out/share/games/openttd/baseset
-    ''
-    + lib.optionalString withOpenMSX ''
-      cp -r ${openttd-openmsx}/* $out/share/games/openttd/baseset
-    '';
+  postInstall = ''
+    ln -s $out/share/doc/${finalAttrs.pname}/* $out/share/games/openttd
+  ''
+  + lib.optionalString withOpenGFX ''
+    cp -r ${openttd-opengfx}/* $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenSFX ''
+    cp ${openttd-opensfx}/*.tar $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenMSX ''
+    cp -r ${openttd-openmsx}/* $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications/OpenTTD.app/Contents/{MacOS,Resources}
+    substitute Info.plist.in $out/Applications/OpenTTD.app/Contents/Info.plist \
+      --replace-fail "#CPACK_PACKAGE_VERSION#" "${finalAttrs.version}"
+    cp ../os/macosx/openttd.icns $out/Applications/OpenTTD.app/Contents/Resources/OpenTTD.icns
+    ln -s $out/bin/openttd $out/Applications/OpenTTD.app/Contents/MacOS/openttd
+  '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence (
     map
@@ -162,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
-    mainProgram = "openttd";
     longDescription = ''
       OpenTTD is a transportation economics simulator. In single player mode,
       players control a transportation business, and use rail, road, sea, and air
@@ -176,11 +190,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.openttd.org/";
     changelog = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       jcumming
       fpletz
       magicquark
+      iedame
     ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "openttd";
+    downloadPage = "https://www.openttd.org/downloads/openttd-releases/latest";
   };
 })
