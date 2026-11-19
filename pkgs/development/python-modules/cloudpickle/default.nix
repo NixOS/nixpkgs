@@ -41,6 +41,8 @@ buildPythonPackage rec {
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [
+      lib.maintainers.Filippo-Galli
+    ];
   };
 }
