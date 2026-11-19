@@ -301,6 +301,51 @@ in
               '';
             };
 
+            Architecture = mkOption {
+              type = types.enum [
+                "i386"
+                "x86_64"
+                "arm64"
+                "x86_64_mac"
+                "arm64_mac"
+              ];
+              default = pkgs.stdenv.hostPlatform.linuxArch;
+              defaultText = literalExpression "pkgs.stdenv.hostPlatform.linuxArch";
+              description = "Architecture of the image.";
+            };
+
+            BootMode = mkOption {
+              type = types.enum [
+                "legacy-bios"
+                "uefi"
+                "uefi-preferred"
+              ];
+              default = bootMode;
+              defaultText = literalExpression "config.ec2.bootMode";
+              description = "How instances boot the image.";
+            };
+
+            VirtualizationType = mkOption {
+              type = types.enum [
+                "hvm"
+                "paravirtual"
+              ];
+              default = "hvm";
+              description = "Virtualization type of instances.";
+            };
+
+            EnaSupport = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Whether instances use the Elastic Network Adapter.";
+            };
+
+            SriovNetSupport = mkOption {
+              type = types.nullOr (types.enum [ "simple" ]);
+              default = "simple";
+              description = "Set to `null` to turn off enhanced networking with the Intel 82599 VF interface.";
+            };
+
             ImdsSupport = mkOption {
               type = types.nullOr (types.enum [ "v2.0" ]);
               default = "v2.0";
@@ -323,9 +368,7 @@ in
         Arguments to [RegisterImage](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RegisterImage.html)
         for AMI uploaders such as [NixOS/amis](https://github.com/NixOS/amis),
         written to {file}`nix-support/register-image.json`. The uploader adds
-        `Name`, the image's snapshot and tags. The module sets `Architecture`,
-        `BootMode`, `VirtualizationType`, `EnaSupport` and `SriovNetSupport` to
-        match the image. `null` leaves an argument out.
+        `Name`, the image's snapshot and tags. `null` leaves an argument out.
       '';
       example = literalExpression ''
         {
@@ -371,14 +414,6 @@ in
         message = "amazonImage.registerImage.BlockDeviceMappings needs exactly one mapping for RootDeviceName.";
       }
     ];
-
-    amazonImage.registerImage = {
-      Architecture = pkgs.stdenv.hostPlatform.linuxArch;
-      BootMode = bootMode;
-      VirtualizationType = "hvm";
-      EnaSupport = true;
-      SriovNetSupport = "simple";
-    };
 
     ec2.bootMode = mkDefault (if config.ec2.efi then "uefi" else "uefi-preferred");
     # systemd-boot can't boot legacy BIOS.
