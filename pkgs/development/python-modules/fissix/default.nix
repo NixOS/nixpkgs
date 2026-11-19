@@ -2,30 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
-  appdirs,
+  flit-core_3,
+  platformdirs,
   pytestCheckHook,
 }:
 
-let
-  version = "24.4.24";
-in
-
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "fissix";
-  inherit version;
+  version = "26.10.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amyreese";
     repo = "fissix";
-    rev = "v${version}";
-    hash = "sha256-geGctke+1PWFqJyiH1pQ0zWj9wVIjV/SQ5njOOk9gOw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q1Du3o6VStqrsQkPKaVgcFhrk7PW4C3ctm6VRccoxzA=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
-  dependencies = [ appdirs ];
+  dependencies = [ platformdirs ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -42,4 +38,4 @@ buildPythonPackage {
     license = lib.licenses.psfl;
     maintainers = [ lib.maintainers.emily ];
   };
-}
+})
