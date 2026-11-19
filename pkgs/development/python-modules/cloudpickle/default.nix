@@ -7,37 +7,40 @@
   flit-core,
 
   # tests
+  psutil,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cloudpickle";
-  version = "3.1.2";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudpipe";
     repo = "cloudpickle";
-    tag = "v${version}";
-    hash = "sha256-BsCOEpNCNqq8PS+SdbzF1wq0LXEmtcHJs0pdt2qFw/w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3GEmsJ/tFaVCcXsldYrItZJ2gE7Z2tPYrzdk+zVzlnU=";
   };
 
   build-system = [ flit-core ];
 
+  # Needed to avoid "ModuleNotFoundError: No module named 'psutil'" in tests
+  # not using only pythonpath but appending it env["PYTHONPATH"]
+  postPatch = ''
+    substituteInPlace tests/testutils.py \
+      --replace-fail 'env["PYTHONPATH"] = pythonpath' 'env["PYTHONPATH"] = ":".join(filter(None, [pythonpath, env.get("PYTHONPATH")]))'
+  '';
+
   nativeCheckInputs = [
+    psutil
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "cloudpickle" ];
 
-  disabledTestPaths = [
-    # ModuleNotFoundError: No module named 'psutil'
-    # (because _make_cwd_env() overwrites $PYTHONPATH)
-    "tests/cloudpickle_test.py"
-  ];
-
   meta = {
-    changelog = "https://github.com/cloudpipe/cloudpickle/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/cloudpipe/cloudpickle/blob/v${finalAttrs.version}/CHANGES.md";
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = lib.licenses.bsd3;
@@ -45,4 +48,4 @@ buildPythonPackage rec {
       lib.maintainers.Filippo-Galli
     ];
   };
-}
+})
