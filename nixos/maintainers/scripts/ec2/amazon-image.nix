@@ -529,6 +529,8 @@ in
     nix.channel.enable = mkIf readOnlyStore (mkDefault false);
     # Nix chowns the store to its build group on start, which fails on a read-only store.
     nix.settings.build-users-group = mkIf readOnlyStore (mkDefault "");
+    # switch-to-configuration and the boot loader installer need a writable store.
+    system.switch.enable = mkIf readOnlyStore (mkDefault false);
 
     image.repart = {
       # Larger compression clusters make the image about 6% smaller.
