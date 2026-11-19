@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spinev-ble";
-  version = "0.5.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Dr-Blank";
     repo = "spinev-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xQtSoFN5jktW5M+ZIwdRQCcHe4ocLH4YiSogviz4v1E=";
+    hash = "sha256-qHvM82AXY0zqZ53fbb2ZITeoqmhs3z8+D2jHDPGyg+w=";
   };
 
   build-system = [ hatchling ];
