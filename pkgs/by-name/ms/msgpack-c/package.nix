@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   gtest,
   zlib,
@@ -17,6 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "c-${finalAttrs.version}";
     hash = "sha256-yL1+6w9l1Ccgrh8WXqvHv2yrb9QH+TrHIAFLXGoVuT0=";
   };
+
+  patches = [
+    # check destination capacity in msgpack_vrefbuffer_migrate
+    # fixes CVE-2026-130065
+    (fetchpatch {
+      url = "https://github.com/msgpack/msgpack-c/commit/1c47ce020a019a3d4246e6394176779ecdf9d502.patch";
+      hash = "sha256-ZtsCzg/E/qQJ8RqbCKLljCvqYveKhAqQED53kJTREjk=";
+    })
+  ];
 
   strictDeps = true;
 
