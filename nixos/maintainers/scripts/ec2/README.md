@@ -28,6 +28,25 @@ export AWS_PROFILE=my-profile
 nix run github:NixOS/amis#upload-ami -- --image-info ./result/nix-support/image-info.json
 ```
 
+## image-info.json
+
+`nix-support/image-info.json` describes the built image for uploaders. Besides
+the image `file` and its `format` (`RAW`, `VHD` or `QCOW2`), it records:
+
+* `store`: the `amazonImage.store` setting.
+* `partitions`: the ESP (`esp`), the root file system (`root`) and, with an erofs
+  store, the Nix store (`store`), each with its GPT `label`, partition `number`
+  and `size` in bytes.
+
+Partition numbers depend on the boot mode. Images that can also boot with legacy
+BIOS have Limine's BIOS boot partition first, which moves every other partition
+up by one. With an erofs store, for example, root is partition 3 on UEFI-only
+images and partition 4 otherwise. Find partitions by `label`, or read their
+`number` from this file, instead of hard-coding it.
+
+`partitions.root.size` is the root partition's size in the image. Instances grow
+the partition and its file system to fill the volume on first boot.
+
 ## Roadmap
 
 * @arianvp is planning to perhaps rewrite `upload-ami` to use coldnsap
