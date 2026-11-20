@@ -1130,8 +1130,8 @@ in
       "sha256-E/c+vAgBQob2r/MbhFktuVoMnQkz8IIggiv0mlXUH2Q=";
 
   mypy-boto3-route53 =
-    buildMypyBoto3Package "route53" "1.44.2"
-      "sha256-WAoy6QRNuVBAilxWaDrAVbQWfacyTb9Dync/zWr+42w=";
+    buildMypyBoto3Package "route53" "1.44.7"
+      "sha256-69o79dB5vx5JFsCjiKrNJPq6OPyyUlO2ispVw8np0Xc=";
 
   mypy-boto3-route53-recovery-cluster =
     buildMypyBoto3Package "route53-recovery-cluster" "1.44.0"
