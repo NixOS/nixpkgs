@@ -86,7 +86,7 @@ buildDotnetModule (finalAttrs: {
   executables = [ "Whisparr" ];
 
   dotnetFlags = [
-    "--property:AssemblyConfiguration=release"
+    "--property:AssemblyConfiguration=eros"
     "--property:AssemblyVersion=${finalAttrs.versionForDotnet}"
     "--property:Copyright=Copyright whisparr.com (${finalAttrs.meta.license.fullName})"
     "--property:EnableAnalyzers=false"
