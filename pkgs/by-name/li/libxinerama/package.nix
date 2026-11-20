@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for Xinerama extension to X11 Protocol";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxinerama";
