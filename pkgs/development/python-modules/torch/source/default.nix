@@ -365,6 +365,16 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
+
+    # Inductor's loop merging can substitute an integer into an index holding `Identity(p)` (cat wraps its inputs'
+    # offsets in Identity), leaving e.g. `-1 + Identity(-1)`, which SymPy can't compare, so Min/Max raise
+    # "The argument ... is not comparable": https://github.com/pytorch/pytorch/issues/200379
+    # https://github.com/pytorch/pytorch/pull/202487 (unmerged)
+    (fetchpatch {
+      name = "inductor-identity-integer.patch";
+      url = "https://github.com/pytorch/pytorch/commit/2e2fae835f1c0b67085c9765bc6c6b888fc0c27b.patch";
+      hash = "sha256-TVBhRKfhymXWV5+AZGrDw21s0jr+N3sIAMx71wxSHds=";
+    })
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
