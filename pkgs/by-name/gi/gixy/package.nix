@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/MegaManSec/Gixy-Next";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.mpl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.hexa ];
     mainProgram = "gixy";
     platforms = lib.platforms.unix;
   };
