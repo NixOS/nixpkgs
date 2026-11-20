@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libytnef";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "Yeraze";
     repo = "ytnef";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kQb45Da0T7wWi1IivA8Whk+ECL2nyFf7Gc0gK1HKj2c=";
+    hash = "sha256-DzHJjxsSEgVx6iqVzsiQ1v4hf0pu+hJueEJGWhfkX9o=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
