@@ -2158,12 +2158,9 @@ self: {
     };
   };
 
-  org-nvim = {
-    version = "2.0.4";
-    url = "github:nvim-orgmode/tree-sitter-org";
-    hash = "sha256-76ImC8GMW+yAKG++AHryUi+MYTmtJ5ogygC+bgNMErA=";
-    meta = {
-      license = lib.licenses.mit;
+  org-nvim = self.org // {
+    meta = self.org.meta // {
+      maintainers = [ ];
     };
   };
 
