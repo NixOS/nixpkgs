@@ -6,7 +6,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  flit-core,
+  flit-core_3,
   mock,
   prawcore,
   pytestCheckHook,
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     mock
