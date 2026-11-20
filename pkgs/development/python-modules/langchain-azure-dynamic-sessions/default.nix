@@ -49,6 +49,8 @@ buildPythonPackage rec {
 
   build-system = [ uv-build ];
 
+  pythonRelaxDeps = [ "langchain-core" ];
+
   dependencies = [
     azure-core
     azure-identity
