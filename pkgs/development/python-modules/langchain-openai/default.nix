@@ -48,7 +48,10 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   # The python3Packages.openai update has to go through staging, so be open to newer versions
-  pythonRelaxDeps = [ "openai" ];
+  pythonRelaxDeps = [
+    "langchain-core"
+    "openai"
+  ];
 
   dependencies = [
     langchain-core
