@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "vmware-modules";
-  version = "workstation-25h2-20251015-${kernel.version}";
+  pname = "vmware-host-modules";
+  version = "workstation-26h1-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "philipl";
     repo = "vmware-host-modules";
-    rev = "5c80f597017882f76e9c7ffd48a292a4b7c860fe";
-    hash = "sha256-EFOkzwul1QCaKUBwFqH8uIsIUcvtEmxYVaE/OdoHdZI=";
+    rev = "445dd811f354405e40ab59edc3c531c0535a5b83";
+    hash = "sha256-dDw0XnvfDGzQ5/lYyDja8xUuarvXllE+xJOdTDt8E5M=";
   };
 
   hardeningDisable = [ "pic" ];
