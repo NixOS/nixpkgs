@@ -18,8 +18,7 @@
   parameterized,
   pytest-asyncio,
   pytest-bdd,
-  pytestCheckHook,
-  pythonAtLeast,
+  pytest9_1CheckHook,
   requests,
   setuptools,
   typing-extensions,
@@ -62,7 +61,7 @@ buildPythonPackage (finalAttrs: {
     parameterized
     pytest-asyncio
     pytest-bdd
-    pytestCheckHook
+    pytest9_1CheckHook
     zstandard
   ];
 
