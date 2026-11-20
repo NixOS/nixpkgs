@@ -36,6 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace BuildConfs.cmake \
       --replace-fail 'set(CMAKE_C_COMPILER /usr/bin/clang)' "" \
       --replace-fail 'set(CMAKE_CXX_COMPILER /usr/bin/clang++)' ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace DefaultPaths.cmake \
+      --replace-fail 'set(PGSQL_INC /Library/PostgreSQL/17/include)' "" \
+      --replace-fail 'set(PGSQL_LIBS /Library/PostgreSQL/17/lib/libpq.dylib)' "" \
+      --replace-fail 'set(XML2_INC ''${CMAKE_OSX_SYSROOT}/usr/include/libxml2)' "" \
+      --replace-fail 'set(XML2_LIBS ''${CMAKE_OSX_SYSROOT}/usr/lib/libxml2.tbd)' ""
   '';
 
   cmakeFlags = [

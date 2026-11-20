@@ -516,6 +516,7 @@ mapAliases {
   orderedset = throw "orderedset has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   otr = warnAlias "otr has been renamed to python3-otr" python3-otr; # Added 2026-07-26
+  paho-mqtt_1 = throw "'paho-mqtt_1' has been removed, as it was unused"; # Added 2026-11-19
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
   pam = throw "'pam' has been renamed to/replaced by 'python-pam'"; # Converted to throw 2025-10-29
   pandas-ta = throw "pandas-ta has been removed: abandoned upstream"; # added 2026-07-20

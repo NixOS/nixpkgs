@@ -1,7 +1,6 @@
 {
   lib,
   callPackage,
-  fetchurl,
   stdenv,
   llvmPackages,
   pcre2,
@@ -90,11 +89,8 @@ in
     version = "8.5.13";
     hash = "sha256-R9UMNgFnhKSnHwGc17+inDHkvg3iLT+gYJWygKYpni8=";
   };
-  php86 = mkPhp rec {
-    version = "8.6.0RC4";
-    phpSrc = fetchurl {
-      url = "https://downloads.php.net/~mbeccati/php-${version}.tar.xz";
-      hash = "sha256-k/II2prgWb9oY7Dh0QHmxkdaew8Ky/bAhJUKtSL1FNg=";
-    };
+  php86 = mkPhp {
+    version = "8.6.0";
+    hash = "sha256-niM+OJmaifNRozrmpydtHK9a3cuhHgnju+Oo0l9BH/E=";
   };
 }

@@ -30,7 +30,7 @@ makeScopeWithSplicing' {
         in
         version:
         import version {
-          inherit fetchNupkg;
+          fetchNupkg = fetchNupkg.override { allowSdkPackages = true; };
           buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
           buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
           buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });

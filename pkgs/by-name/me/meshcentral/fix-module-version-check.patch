@@ -1,0 +1,10 @@
+--- a/meshcentral.js
++++ b/meshcentral.js
+@@ -4280,6 +4280,7 @@
+                             if ((__dirname.endsWith('/node_modules/meshcentral')) || (__dirname.endsWith('\\node_modules\\meshcentral')) || (__dirname.endsWith('/node_modules/meshcentral/')) || (__dirname.endsWith('\\node_modules\\meshcentral\\'))) { rootPath = require('path').join(__dirname, '../..'); }
+                             var pkgPath = require('path').join(rootPath, 'node_modules', moduleName, 'package.json');
+                             if (require('fs').existsSync(pkgPath)) { modulePath = pkgPath; }
++                            if (modulePath == null) { pkgPath = require('path').join(__dirname, 'node_modules', moduleName, 'package.json'); if (require('fs').existsSync(pkgPath)) { modulePath = pkgPath; } }
+                         } else { throw new Error(); }
+                     }
+                     // If the module is not installed, but we get the ERR_PACKAGE_PATH_NOT_EXPORTED error, try a second way.
