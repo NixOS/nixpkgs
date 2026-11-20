@@ -842,8 +842,8 @@ in
       "sha256-3JN60coiVuF9QxziPv4QpSGpPCvZywiP6TnL1ent6BI=";
 
   mypy-boto3-marketplace-catalog =
-    buildMypyBoto3Package "marketplace-catalog" "1.44.0"
-      "sha256-NmSJDiccNcTY1OXin9aoDVa8eOTi9u8ix9njQ84gP2U=";
+    buildMypyBoto3Package "marketplace-catalog" "1.44.7"
+      "sha256-Bnnww8Gx8vpwbi8RsX3fs9Bhk9PVJf9/EMksVNHwq1E=";
 
   mypy-boto3-marketplace-entitlement =
     buildMypyBoto3Package "marketplace-entitlement" "1.44.0"
