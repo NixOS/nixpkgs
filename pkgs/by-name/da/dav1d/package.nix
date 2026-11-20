@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Denable_tools=${lib.boolToString withTools}"
     "-Denable_examples=${lib.boolToString withExamples}"
