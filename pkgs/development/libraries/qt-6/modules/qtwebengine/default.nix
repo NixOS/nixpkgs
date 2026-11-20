@@ -119,6 +119,21 @@ qtModule {
     ./gn-object-sorted.patch
 
     ./split-prefix.patch
+
+    # Distrust eMudhra certificates
+    (fetchpatch2 {
+      url = "https://github.com/qt/qtwebengine-chromium/commit/b7849cb032f0c5f760454da257f405cef85ffa7e.patch";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+      hash = "sha256-lFoIMflwVOtJBpqaDA4jawtB1Hm0lCHA3UCz6I1MWJM=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/qt/qtwebengine-chromium/commit/dfe972d1d0a64f68e06954d7b4023700fff8c4b5.patch";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+      hash = "sha256-VTReNHbULVy6205f8PprIpXtPrjIG6Gh8nyIsaZdBxY=";
+    })
+
   ];
 
   postPatch = ''
