@@ -44,7 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [
     # server including all features
-    "--package bbox-server"
+    "--package"
+    "bbox-server"
   ];
 
   cargoTestFlags = [ "--workspace" ];
