@@ -1,0 +1,23 @@
+diff --git a/cmake/manual.cmake b/cmake/manual.cmake
+index abc562b7ba..0a8e29df95 100644
+--- a/cmake/manual.cmake
++++ b/cmake/manual.cmake
+@@ -4,18 +4,6 @@
+
+ find_program(TRACY_PANDOC pandoc)
+ if(TRACY_PANDOC)
+-    execute_process(
+-        COMMAND ${TRACY_PANDOC} --version
+-        OUTPUT_VARIABLE _pandoc_version
+-        OUTPUT_STRIP_TRAILING_WHITESPACE
+-        RESULT_VARIABLE _pandoc_rc
+-        ERROR_QUIET)
+-    string(REGEX MATCH "pandoc [0-9.]+" _pandoc_version "${_pandoc_version}")
+-    if(NOT _pandoc_rc EQUAL 0 OR NOT _pandoc_version STREQUAL "pandoc ${PANDOC_VERSION}")
+-        set(TRACY_PANDOC "")
+-    endif()
+-endif()
+-if(TRACY_PANDOC)
+     message(STATUS "Using system pandoc ${PANDOC_VERSION}: ${TRACY_PANDOC}")
+ else()
+     if(WIN32)
