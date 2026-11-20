@@ -15,6 +15,8 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "textcompare";
   version = "0.1.12";
 
