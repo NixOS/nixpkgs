@@ -205,14 +205,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # Since 3.8.11 upstream's afterPack hook compiles a Quick Look extension
-  # with Xcode's swiftc. The sandbox has no Xcode, so skip the compilation
-  # and ship the app without the Finder preview extension.
+  # Upstream 3.8.11 builds an optional Quick Look appex in its afterPack hook.
+  # This package has never shipped that Finder integration, and we don't want
+  # to maintain a Darwin-only Swift build path for it. Leave it out until
+  # there is demand.
   postPatch = lib.optionalString isDarwin ''
     substituteInPlace scripts/quicklook.js \
       --replace-fail \
         'const compileQuickLook = async (appPath, version, run = execFileSync) => {' \
-        'const compileQuickLook = async (appPath, version, run = execFileSync) => { return; // needs Xcode'
+        'const compileQuickLook = async (appPath, version, run = execFileSync) => { return; // not shipped'
   '';
 
   postConfigure = ''
