@@ -12,19 +12,15 @@
   ];
   "clang/purity.patch" = [
     {
-      path = ../18;
+      path = ../19;
     }
   ];
   "lld/gnu-install-dirs.patch" = [
     {
-      path = ../18;
+      path = ../19;
     }
   ];
   "lld/initialize-symbol-fields.patch" = [
-    {
-      before = "19";
-      path = ../18;
-    }
     {
       after = "19";
       before = "20";
@@ -39,7 +35,7 @@
   "lldb/backport-ParseTrieEntries-fixes.patch" = [
     {
       before = "22";
-      path = ../18;
+      path = ../19;
     }
     {
       after = "22";
@@ -50,7 +46,7 @@
   "lldb/gnu-install-dirs.patch" = [
     {
       before = "23";
-      path = ../18;
+      path = ../19;
     }
     {
       after = "23";
@@ -60,7 +56,7 @@
   "llvm/align-__linkedit-entries-to-pointer-size.patch" = [
     {
       before = "22";
-      path = ../18;
+      path = ../19;
     }
     {
       after = "22";
@@ -70,9 +66,8 @@
   ];
   "llvm/backport-darwin-triple-parsing.patch" = [
     {
-      after = "18";
       before = "21";
-      path = ../18;
+      path = ../19;
     }
     {
       after = "21";
@@ -80,11 +75,6 @@
     }
   ];
   "llvm/backport-minimal-arm64e_x1-support.patch" = [
-    {
-      after = "18";
-      before = "19";
-      path = ../18;
-    }
     {
       after = "19";
       before = "20";
@@ -103,7 +93,7 @@
   "llvm/get-rid-of-incorrect-std-template-specializations.patch" = [
     {
       before = "22";
-      path = ../18;
+      path = ../19;
     }
   ];
   "llvm/gnu-install-dirs.patch" = [
@@ -128,7 +118,7 @@
     }
     {
       before = "20";
-      path = ../18;
+      path = ../19;
     }
   ];
   "llvm/gnu-install-dirs-polly.patch" = [
@@ -138,7 +128,7 @@
     }
     {
       before = "20";
-      path = ../18;
+      path = ../19;
     }
   ];
   "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
@@ -148,13 +138,13 @@
     }
     {
       before = "24";
-      path = ../18;
+      path = ../19;
     }
   ];
   "llvm/llvm-textapi-separate-arch-name-enum-label.patch" = [
     {
       before = "22";
-      path = ../18;
+      path = ../19;
     }
   ];
   "llvm/lit-shell-script-runner-set-dyld-library-path.patch" = [
@@ -163,65 +153,43 @@
       path = ../22;
     }
     {
-      path = ../18;
+      path = ../19;
       before = "22";
     }
   ];
   "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
-      path = ../18;
+      path = ../19;
     }
   ];
   "compiler-rt/X86-support-extension.patch" = [
     {
-      path = ../18;
+      path = ../19;
     }
   ];
   "compiler-rt/armv6-scudo-libatomic.patch" = [
     {
-      after = "19";
       path = ../19;
-    }
-    {
-      before = "19";
-      path = ../18;
     }
   ];
   "compiler-rt/normalize-var.patch" = [
     {
-      path = ../18;
-    }
-  ];
-  "openmp/fix-find-tool.patch" = [
-    {
-      before = "19";
-      path = ../18;
+      path = ../19;
     }
   ];
   "openmp/run-lit-directly.patch" = [
     {
-      path = ../18;
+      path = ../19;
     }
   ];
   "mlir/mlir-add-include-cstdint.patch" = [
     {
-      after = "18";
-      before = "19";
-      path = ../18;
-    }
-    {
-      after = "19";
       before = "20";
       path = ../19;
     }
   ];
   "mlir/mlir-tablegen-imported-target.patch" = [
     {
-      before = "19";
-      path = ../18;
-    }
-    {
-      after = "19";
       before = "21";
       path = ../19;
     }

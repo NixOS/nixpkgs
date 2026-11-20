@@ -244,7 +244,6 @@ mapAliases {
   llvmPackages_latest = llvmPackages_23;
   llvmPackages_git = (callPackages ../development/compilers/llvm { }).git;
   # these are for convenience, not for backward compat., and shouldn't expire until the package is deprecated.
-  clang18Stdenv = lib.lowPrio llvmPackages_18.stdenv;
   clang19Stdenv = lib.lowPrio llvmPackages_19.stdenv;
 
   lua = lua5; # Added 2026-10-03 preserve, reason: convenience
@@ -578,6 +577,7 @@ mapAliases {
   clang15Stdenv = throw "clang15Stdenv has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   clang16Stdenv = throw "clang16Stdenv has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   clang17Stdenv = throw "clang17Stdenv has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  clang18Stdenv = throw "clang18Stdenv has been removed, as it is unmaintained and obsolete"; # Added 2026-11-20
   clang-tools_12 = throw "clang-tools_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   clang-tools_13 = throw "clang-tools_13 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   clang-tools_14 = throw "clang-tools_14 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
@@ -592,6 +592,7 @@ mapAliases {
   clang_15 = throw "clang_15 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   clang_16 = throw "clang_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   clang_17 = throw "clang_17 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  clang_18 = throw "clang_18 has been removed, as it is unmaintained and obsolete"; # Added 2026-11-20
   clashmi = throw "'clashmi' has been removed, as it is unmaintained in nixpkgs"; # Added 2026-01-31
   clasp = throw "'clasp' has been renamed to/replaced by 'clingo'"; # Converted to throw 2025-10-27
   classads = throw "'classads' has been removed, as it is unmaintained both upstream and in nixpkgs"; # Added 2026-06-27
@@ -1702,24 +1703,28 @@ mapAliases {
   lld_15 = throw "lld_15 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   lld_16 = throw "lld_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   lld_17 = throw "lld_17 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  lld_18 = throw "lld_18 has been removed, as it is unmaintained and obsolete"; # Added 2026-11-20
   lldb_12 = throw "lldb_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   lldb_13 = throw "lldb_13 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   lldb_14 = throw "lldb_14 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   lldb_15 = throw "lldb_15 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   lldb_16 = throw "lldb_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   lldb_17 = throw "lldb_17 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  lldb_18 = throw "lldb_18 has been removed, as it is unmaintained and obsolete"; # Added 2026-11-20
   llvm_12 = throw "llvm_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   llvm_13 = throw "llvm_13 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   llvm_14 = throw "llvm_14 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   llvm_15 = throw "llvm_15 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   llvm_16 = throw "llvm_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   llvm_17 = throw "llvm_17 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  llvm_18 = throw "llvm_18 has been removed, as it is unmaintained and obsolete"; # Added 2026-11-20
   llvmPackages_12 = throw "llvmPackages_12 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   llvmPackages_13 = throw "llvmPackages_13 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   llvmPackages_14 = throw "llvmPackages_14 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-10
   llvmPackages_15 = throw "llvmPackages_15 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-12
   llvmPackages_16 = throw "llvmPackages_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
   llvmPackages_17 = throw "llvmPackages_17 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
+  llvmPackages_18 = throw "llvmPackages_18 has been removed, as it is unmaintained and obsolete"; # Added 2026-11-20
   lnreader = warnAlias "'lnreader' has been renamed to 'pdf-cli'" pdf-cli; # Added 2026-03-18
   lockfileProgs = warnAlias "'lockfileProgs' has been renamed to 'lockfile-progs'" lockfile-progs; # Added 2026-02-08
   loco-cli = throw "'loco-cli' has been renamed to/replaced by 'loco'"; # Converted to throw 2025-10-27

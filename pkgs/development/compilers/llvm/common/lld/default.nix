@@ -14,7 +14,6 @@
   version,
   devExtraCmakeFlags ? [ ],
   getVersionFile,
-  fetchpatch,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lld";
@@ -45,18 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     (getVersionFile "lld/gnu-install-dirs.patch")
   ]
   # https://github.com/llvm/llvm-project/pull/198129, which is fixed in 22.1.8
-  ++ lib.optional (lib.versionOlder release_version "22") (
-    getVersionFile "lld/initialize-symbol-fields.patch"
-  )
-  ++ lib.optional (lib.versions.major release_version == "18") (
-    # https://github.com/llvm/llvm-project/pull/97122
-    fetchpatch {
-      name = "more-openbsd-program-headers.patch";
-      url = "https://github.com/llvm/llvm-project/commit/d7fd8b19e560fbb613159625acd8046d0df75115.patch";
-      stripLen = 1;
-      hash = "sha256-7wTy7XDTx0+fhWQpW1KEuz7xJvpl42qMTUfd20KGOfA=";
-    }
-  );
+  ++ lib.optionals (lib.versionOlder release_version "22") [
+    (getVersionFile "lld/initialize-symbol-fields.patch")
+  ];
 
   nativeBuildInputs = [
     cmake

@@ -3558,7 +3558,6 @@ with pkgs;
     (rec {
       llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
 
-      llvmPackages_18 = llvmPackagesSet."18";
       llvmPackages_19 = llvmPackagesSet."19";
       llvmPackages_20 = llvmPackagesSet."20";
       llvmPackages_21 = llvmPackagesSet."21";
@@ -3567,7 +3566,6 @@ with pkgs;
 
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
-    llvmPackages_18
     llvmPackages_19
     llvmPackages_20
     llvmPackages_21
@@ -3575,11 +3573,6 @@ with pkgs;
     llvmPackages_23
     mkLLVMPackages
     ;
-
-  clang_18 = llvmPackages_18.clang;
-  lld_18 = llvmPackages_18.lld;
-  lldb_18 = llvmPackages_18.lldb;
-  llvm_18 = llvmPackages_18.llvm;
 
   clang_19 = llvmPackages_19.clang;
   lld_19 = llvmPackages_19.lld;
