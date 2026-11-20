@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dep-logic";
-  version = "0.7.2";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "dep-logic";
     tag = finalAttrs.version;
-    hash = "sha256-PozbYtR3glvmYYQUbLiwD9humrt9+Cbc6Yv58qOs+2s=";
+    hash = "sha256-cYgbjqumiIPsYEeJy+I3i909GtNmptNX4Upl1Y6KPGs=";
   };
 
   nativeBuildInputs = [ pdm-backend ];
