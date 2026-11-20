@@ -10,6 +10,8 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "mongo-tools";
   version = "100.20.1";
 
