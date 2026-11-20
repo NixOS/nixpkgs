@@ -78,6 +78,8 @@ stdenv.mkDerivation (
     ++ optionals xcbSupport [ libxcb ]
     ++ optional gobjectSupport glib; # TODO: maybe liblzo but what would it be for here?
 
+    strictDeps = true;
+
     mesonFlags = [
       "-Dgtk_doc=true"
 
