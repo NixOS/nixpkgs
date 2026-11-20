@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Portable command-line driven graphing utility for many platforms";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gnuplot;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ wentasah ];
     mainProgram = "gnuplot";
   };
 })
