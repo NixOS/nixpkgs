@@ -43,4 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
+
+  __structuredAttrs = true;
 })
