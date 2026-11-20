@@ -1394,6 +1394,7 @@ in
     _module.args.opencloudPackage = pkgs.opencloud-production;
     _module.args.name = "opencloud-production";
   };
+  opencode = runTest ./opencode.nix;
   openldap = runTest ./openldap.nix;
   openresty = import ./openresty.nix { inherit lib runTest; };
   openresty-lua = runTest ./openresty-lua.nix;
