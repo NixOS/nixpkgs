@@ -2030,14 +2030,8 @@ self: {
     };
   };
 
-  ocaml-interface = {
+  ocaml-interface = self.ocaml // {
     language = "ocaml_interface";
-    version = "0.24.2";
-    url = "github:tree-sitter/tree-sitter-ocaml";
-    hash = "sha256-fRC7sd/INCESwYCiRsuOJkOnqWnNUpjwrNoEzlaOscA=";
-    meta = {
-      license = lib.licenses.mit;
-    };
   };
 
   ocamllex = {
