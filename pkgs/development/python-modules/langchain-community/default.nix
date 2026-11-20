@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   # Only needed for mixed python 3.12/3.13 builds
   pythonRelaxDeps = [
+    "langchain-core"
     "numpy"
   ];
 
