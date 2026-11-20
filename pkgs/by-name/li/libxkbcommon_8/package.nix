@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library to handle keyboard descriptions";
     longDescription = ''
