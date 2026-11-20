@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   certs = import ../common/acme/server/snakeoil-certs.nix;
@@ -9,6 +9,7 @@ in
 
   services.stalwart = {
     enable = true;
+    package = pkgs.stalwart_0_15;
 
     stateVersion = lib.trivial.release; # Only for the test; please don't do in production
 
