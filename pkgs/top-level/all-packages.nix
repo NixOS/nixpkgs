@@ -1354,6 +1354,7 @@ with pkgs;
   androidndkPkgs_27 = (callPackage ../development/androidndk-pkgs { })."27";
   androidndkPkgs_28 = (callPackage ../development/androidndk-pkgs { })."28";
   androidndkPkgs_29 = (callPackage ../development/androidndk-pkgs { })."29";
+  androidndkPkgs_30 = (callPackage ../development/androidndk-pkgs { })."30";
 
   androidsdk = androidenv.androidPkgs.androidsdk;
 
