@@ -58,6 +58,7 @@ in
     systemd.user.services.dfiles = lib.mkIf cfg.systemd.enable {
       wantedBy = [ cfg.systemd.target ];
       restartIfChanged = cfg.systemd.restartIfChanged;
+      enableDefaultPath = false;
     };
 
     xdg.portal = lib.mkIf cfg.portal.enable {
