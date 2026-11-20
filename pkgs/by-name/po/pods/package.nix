@@ -22,6 +22,9 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "pods";
   version = "3.3.0";
 
