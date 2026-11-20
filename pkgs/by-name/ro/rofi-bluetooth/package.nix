@@ -9,6 +9,9 @@
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "rofi-bluetooth";
   version = "0-unstable-2025-04-14";
 
