@@ -1825,7 +1825,7 @@ class NspawnMachine(BaseMachine):
         self.notify_thread = None
         # State maintained by the notify-socket drainer thread (see
         # `_drain_notify_socket`). Guarded by `_notify_lock`.
-        self._notify_lock = threading.Lock()
+        self._notify_lock = threading.Condition()
         self._notify_ready = False
         self._notify_leader_pid: int | None = None
 
@@ -2011,6 +2011,7 @@ class NspawnMachine(BaseMachine):
                         self._notify_ready = True
                     if leader_pid is not None:
                         self._notify_leader_pid = leader_pid
+                    self._notify_lock.notify_all()
 
     @cached_property
     def get_systemd_process(self) -> int:
@@ -2024,21 +2025,13 @@ class NspawnMachine(BaseMachine):
 
         start_time = time.monotonic()
         last_warning = start_time
-        delay = 0.01
-        max_delay = 0.5
 
-        # Poll the socket until we have the container leader PID
+        # Wait for the notify thread to record the container leader PID
         while True:
             if self.process.poll() is not None:
                 raise MachineError(
                     f"{self.name}: systemd-nspawn process exited unexpectedly"
                 )
-
-            with self._notify_lock:
-                is_ready = self._notify_ready
-                container_pid = self._notify_leader_pid
-            if is_ready and container_pid is not None:
-                return container_pid
 
             # Print periodic warnings every 10s so the user knows we aren't deadlocked
             now = time.monotonic()
@@ -2048,8 +2041,13 @@ class NspawnMachine(BaseMachine):
                 )
                 last_warning = now
 
-            time.sleep(delay)
-            delay = min(delay * 2, max_delay)
+            with self._notify_lock:
+                is_ready = self._notify_ready
+                container_pid = self._notify_leader_pid
+                if is_ready and container_pid is not None:
+                    return container_pid
+                # Wake on notify, keeping the exit check
+                self._notify_lock.wait(timeout=0.5)
 
     def _execute(
         self,
