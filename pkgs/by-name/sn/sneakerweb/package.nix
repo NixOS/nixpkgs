@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sneakerweb";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromCodeberg {
     owner = "worm-blossom";
     repo = "sneakerweb";
     tag = finalAttrs.version;
-    hash = "sha256-Fh3nVoHMJmsbJmG1Ps4u1bNKdbYKrPgF7GhrCOXamVw=";
+    hash = "sha256-mCPh9MmVKGujpYdGXFjvLJUN21r/roByqbTC/JnbWMQ=";
   };
 
-  cargoHash = "sha256-DC/Oiu/hP1wthBIGA7saUHIhnOQOqiOhBd0G+KWzNqY=";
+  cargoHash = "sha256-+JaD+0DgVZgORtlz8TIKtOMieQ1W+JKChmDZIW0m/vk=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
