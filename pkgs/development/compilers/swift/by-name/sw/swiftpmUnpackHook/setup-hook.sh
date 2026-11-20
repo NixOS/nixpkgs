@@ -1,18 +1,28 @@
 # shellcheck shell=bash
 
+swiftpmDumpLocalPackages() {
+    local manifest dependency
+    manifest=$(swift package --disable-sandbox dump-package --package-path "$1")
+    echo "$manifest"
+    @jq@ --raw-output '.dependencies[] | select(.fileSystem) | .fileSystem[].path' <<< "$manifest" | while read -r dependency; do
+        swiftpmDumpLocalPackages "$dependency"
+    done
+}
+
 swiftpmUnpackDeps() {
     if [ -n "$swiftpmDeps" ]; then
        echo "Unpacking SwiftPM dependencies"
 
        # Set up `workspace-state.json`. Local packages must be added now, or SwiftPM will try to fetch their dependencies.
        mkdir -p "$NIX_BUILD_TOP/$sourceRoot/.build"
-       @jq@ -s --sort-keys --arg build "$NIX_BUILD_TOP/$sourceRoot/.build" '
+       @jq@ --sort-keys --arg build "$NIX_BUILD_TOP/$sourceRoot/.build" \
+         --slurpfile manifests <(swiftpmDumpLocalPackages "$NIX_BUILD_TOP/$sourceRoot") '
            {
                "object": {
-                   "artifacts": (.[0] | .object.artifacts | map(.path = $build + "/" + .path)),
+                   "artifacts": (.object.artifacts | map(.path = $build + "/" + .path)),
                    "dependencies": (
-                       (.[0] | .object.dependencies)
-                       + [ .[1] | .dependencies[] | select(.fileSystem) | .[][] |
+                       .object.dependencies
+                       + ([ $manifests[] | .dependencies[] | select(.fileSystem) | .[][] |
                            {
                                "basedOn": null,
                                "packageRef": {
@@ -27,13 +37,13 @@ swiftpmUnpackDeps() {
                                },
                                "subpath": .identity
                            }
-                       ]
+                       ] | unique_by(.packageRef.identity))
                    ),
                "prebuilts": [ ],
            },
            "version": 7
          }
-       ' "$swiftpmDeps/workspace-state.json" <(swift package --disable-sandbox dump-package --package-path "$NIX_BUILD_TOP/$sourceRoot") \
+       ' "$swiftpmDeps/workspace-state.json" \
          > "$NIX_BUILD_TOP/$sourceRoot/.build/workspace-state.json~"
        mv "$NIX_BUILD_TOP/$sourceRoot/.build/workspace-state.json~" "$NIX_BUILD_TOP/$sourceRoot/.build/workspace-state.json"
 
