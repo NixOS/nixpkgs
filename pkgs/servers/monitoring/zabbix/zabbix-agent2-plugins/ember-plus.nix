@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchurl,
-  gnumake,
   bash,
   cmake,
 }:
@@ -17,10 +16,6 @@ import ../versions.nix (
       url = "https://cdn.zabbix.com/zabbix-agent2-plugins/sources/ember-plus/zabbix-agent2-plugin-ember-plus-${finalAttrs.version}.tar.gz";
       hash = emberPlusHash;
     };
-
-    buildInputs = [
-      gnumake
-    ];
 
     nativeBuildInputs = [
       cmake
