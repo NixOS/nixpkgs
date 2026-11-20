@@ -250,7 +250,8 @@ in
 
       hostName = lib.mkOption {
         type = lib.types.str;
-        default = cfg.rpId;
+        default = "localhost";
+        defaultText = lib.literalExpression "config.services.opengym.rpId";
         description = "Server name the nginx virtualHost listens on (defaults to rpId).";
       };
 
