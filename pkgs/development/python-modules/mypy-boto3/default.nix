@@ -762,8 +762,8 @@ in
       "sha256-q+hkT2/GaD7JdzDaVBc67zqeMCYPC07Az3X4BcL8S8c=";
 
   mypy-boto3-lakeformation =
-    buildMypyBoto3Package "lakeformation" "1.44.0"
-      "sha256-kE1xY1aY4Z1DKIV6qflz1Jl+P0oDSQTJReIKzq/+fus=";
+    buildMypyBoto3Package "lakeformation" "1.44.7"
+      "sha256-IytP+f9XtuPCNPro23hL+6ecgpTv2Jk/plZS3dm6DUo=";
 
   mypy-boto3-lambda =
     buildMypyBoto3Package "lambda" "1.44.5"
