@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
+  strictDeps = true;
+
   buildPhase = ''
     make -f Makefile.cmdline
   ''
