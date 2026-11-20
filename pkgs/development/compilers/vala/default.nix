@@ -19,6 +19,7 @@
   replaceVars,
   vala,
   gobject-introspection,
+  testers,
 }:
 
 let
@@ -112,6 +113,7 @@ let
           packageName = "vala";
           freeze = true;
         };
+        tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       };
 
       __structuredAttrs = true;
@@ -129,6 +131,12 @@ let
         teams = [
           lib.teams.gnome
           lib.teams.pantheon
+        ];
+        pkgConfigModules = [
+          "vapigen"
+          "libvala-${lib.versions.majorMinor finalAttrs.version}"
+          "valadoc-${lib.versions.majorMinor finalAttrs.version}"
+          "vapigen-${lib.versions.majorMinor finalAttrs.version}"
         ];
       };
     })
