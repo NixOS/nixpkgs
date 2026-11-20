@@ -9,7 +9,7 @@
   pkg-config,
 }:
 let
-  version = "1.1.11";
+  version = "1.1.12";
 in
 rustPlatform.buildRustPackage {
   pname = "committed";
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage {
     owner = "crate-ci";
     repo = "committed";
     tag = "v${version}";
-    hash = "sha256-6uWiZRvR7QszZQbGwo+fPbKtr+wsIHVl6iomODz2cu0=";
+    hash = "sha256-giIBcqS5n2SKs8Pc9GInzZakq4uMTrR9nNussDLuPqE=";
   };
 
-  cargoHash = "sha256-qV5WaszJ/VeC6XkgBim3IRmDCU7ieAIGl7Vr5t1F8Ow=";
+  cargoHash = "sha256-YQh8MacpfMCNV4ipwTV/eJ4pn9+TMvc3eZrPFoD+66s=";
 
   nativeBuildInputs = [ pkg-config ];
 
