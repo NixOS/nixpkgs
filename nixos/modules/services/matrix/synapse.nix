@@ -1170,9 +1170,6 @@ in
                   default = [
                     {
                       server_name = "matrix.org";
-                      verify_keys = {
-                        "ed25519:auto" = "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw";
-                      };
                     }
                   ];
                   description = ''
