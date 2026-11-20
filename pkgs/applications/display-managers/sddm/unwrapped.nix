@@ -17,6 +17,7 @@
   xkeyboard-config,
   nixosTests,
   docutils,
+  buildSddmThemePackage,
 }:
 let
   isQt6 = lib.versions.major qtbase.version == "6";
@@ -119,7 +120,63 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.tests = { inherit (nixosTests) sddm; };
+  passthru = {
+    tests = { inherit (nixosTests) sddm; };
+
+    themes =
+      let
+        mkTheme =
+          {
+            name,
+            src,
+            license,
+          }:
+          buildSddmThemePackage {
+            pname = "sddm-theme-${name}";
+            inherit (finalAttrs) version;
+
+            inherit src;
+            configPath = "theme.conf";
+
+            # Without a QtVersion, sddm starts the Qt5 greeter for these themes
+            postPatch = ''
+              sed -i '/^\[SddmGreeterTheme\]/a QtVersion=${lib.versions.major qtbase.version}' metadata.desktop
+            '';
+
+            meta = {
+              description = "${name} theme for SDDM";
+              inherit (finalAttrs.meta) homepage maintainers;
+              inherit license;
+            };
+          };
+      in
+      {
+        elarun = mkTheme {
+          name = "elarun";
+          src = "${finalAttrs.finalPackage}/share/sddm/themes/elarun";
+          license = lib.licenses.gpl2Plus;
+        };
+        maldives = mkTheme {
+          name = "maldives";
+          src = "${finalAttrs.finalPackage}/share/sddm/themes/maldives";
+          license = lib.licenses.cc-by-sa-30;
+        };
+        maya = mkTheme {
+          name = "maya";
+          src = "${finalAttrs.finalPackage}/share/sddm/themes/maya";
+          license = with lib.licenses; [
+            mit
+            cc-by-40
+            asl20
+          ];
+        };
+        maui = mkTheme {
+          name = "maui";
+          src = "${finalAttrs.src}/src/greeter/theme";
+          license = lib.licenses.cc-by-sa-30;
+        };
+      };
+  };
 
   meta = {
     description = "QML based X11 display manager";

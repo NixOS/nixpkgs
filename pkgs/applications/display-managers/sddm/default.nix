@@ -18,7 +18,7 @@ runCommand "sddm-wrapped"
 
     passthru = {
       unwrapped = sddm-unwrapped;
-      inherit (sddm-unwrapped.passthru) tests;
+      inherit (sddm-unwrapped.passthru) tests themes;
     };
 
     meta = sddm-unwrapped.meta;
