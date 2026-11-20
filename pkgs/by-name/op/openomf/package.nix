@@ -28,7 +28,7 @@ let
   };
   icons = fetchurl {
     url = "https://www.omf2097.com/pub/files/omf/openomf-icons.zip";
-    hash = "sha256-8LWmrkY3ZiXcuVe0Zj90RQFUTwM27dJ4ev9TiBGoVk0=";
+    hash = "sha256-nsmM1daT2IKh8DIai9EzulhPFXTOCedXpKt4qvbR3w4=";
   };
   musicRemixes = fetchurl {
     url = "https://github.com/omf2097/openomf-music-mod/releases/download/1.0/openomf-mods-1.0.zip";
