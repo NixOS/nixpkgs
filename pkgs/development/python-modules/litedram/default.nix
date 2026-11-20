@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   litex,
   pyyaml,
@@ -19,6 +20,14 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-AsySWooAyTV1L6ottZqOXklq6hp6MO8ZQ5Cg/rPi3t0=";
   };
+
+  patches = [
+    # A DDR3/DDR4 rtt_nom setting was stored where the init sequence does not read it.
+    (fetchpatch {
+      url = "https://github.com/enjoy-digital/litedram/commit/e7c7fc5ea61422b83ed236e12450417d97a1b69f.patch";
+      hash = "sha256-8PJAEBvnVmQx4ID8iu5ERTMAvBIRdfKKwaSA7h1Vl/E=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
