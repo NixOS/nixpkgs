@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   python3Packages,
 }:
@@ -18,6 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-KrPYNm8ooh49WGiJOqZD1dYgptUYNRP/jKU9C4gvgiw=";
   };
+
+  patches = [
+    # bitread used the bitstream after unmapping it and crashed on every input.
+    (fetchpatch {
+      url = "https://github.com/openXC7/prjxray/commit/89cad4ca985af22411604a6a65ec8d2a5395afa2.patch";
+      hash = "sha256-e+IXqWdNzvYV0W9D4uiwz6u1yyPbFqw/JSassFrcbAU=";
+    })
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;
