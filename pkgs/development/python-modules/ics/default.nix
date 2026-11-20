@@ -7,33 +7,32 @@
   pytest-flakes,
   pytestCheckHook,
   setuptools,
+  six,
   tatsu,
 }:
 
 buildPythonPackage rec {
   pname = "ics";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ics-py";
     repo = "ics-py";
     tag = "v${version}";
-    hash = "sha256-hdtnET7YfSb85+TGwpwzoxOfxPT7VSj9eKSiV6AXUS8=";
+    hash = "sha256-pKjYUkaU1mYVdDdT/NCIKTF9KiWkK3cyiqNFZINbUmA=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--pep8" ""
-  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     attrs
     arrow
+    six
     tatsu
   ];
+
+  pythonRelaxDeps = [ "tatsu" ];
 
   nativeCheckInputs = [
     pytest-flakes
