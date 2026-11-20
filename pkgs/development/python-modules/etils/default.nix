@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # optional-dependencies
   jupyter,
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-TjIjswW+r5LCjv6mzLngKrAXm2uq1Scbus3Rdu/n7MU=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   optional-dependencies = lib.fix (self: {
     array-types = self.enp;
