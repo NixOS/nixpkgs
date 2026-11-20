@@ -95,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional graphicsSupport imlib2
   ++ lib.optional x11Support libx11;
 
+  strictDeps = true;
+
   postInstall = lib.optionalString graphicsSupport ''
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin
   '';
