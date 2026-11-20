@@ -20,7 +20,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.100";
+  version = "0.0.107";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-yluvKdY42utNPpF0is+t2CbR027i7DwiYc3uRnTzFF4=";
+    hash = "sha256-mh1USHmGUnN08IK30lyrDizCX+rYtCm9yrg2+8rVmaQ=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-BMu3CWvArrBryIJAUlGOnp17b3lBPhkEwiWQ43g4exU=";
+  cargoHash = "sha256-lm/RKP0vi7H4aAAugUbc0toQ+2EIpzUj+tCJkavLDTs=";
 
   nativeBuildInputs = [
     installShellFiles
