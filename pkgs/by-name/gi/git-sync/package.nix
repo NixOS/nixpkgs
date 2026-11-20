@@ -69,7 +69,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Script to automatically synchronize a git repository";
     homepage = "https://github.com/simonthum/git-sync";
-    maintainers = with lib.maintainers; [ imalison ];
+    maintainers = with lib.maintainers; [
+      tomodachi94
+      imalison
+    ];
     license = lib.licenses.cc0;
     platforms = with lib.platforms; unix;
   };
