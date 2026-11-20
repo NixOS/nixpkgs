@@ -34,6 +34,10 @@
   withTensorboard ? false,
   MPISupport ? false,
   mpi,
+  # c10d's UCC process group (ProcessGroupUCC)
+  uccSupport ? false,
+  ucc,
+  ucx,
   buildDocs ? false,
   targetPackages,
 
@@ -264,6 +268,8 @@ let
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
     "NVPL is not available on the host platform" =
       nvplSupport && !lib.meta.availableOn stdenv.hostPlatform cudaPackages.nvpl_blas;
+    "UCC is not available on the host platform" =
+      uccSupport && !lib.meta.availableOn stdenv.hostPlatform ucc;
     "Unsupported CUDA version" =
       cudaSupport
       && !(builtins.elem cudaPackages.cudaMajorVersion [
@@ -577,6 +583,11 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   // lib.optionalAttrs vulkanSupport {
     VULKAN_SDK = shaderc.bin;
   }
+  // lib.optionalAttrs uccSupport {
+    # cmake/External/ucc.cmake only supports a system UCC.
+    USE_UCC = setBool true;
+    USE_SYSTEM_UCC = setBool true;
+  }
   // lib.optionalAttrs nvplSupport {
     # cmake/Dependencies.cmake links nvpl::blas_lp64_omp from find_package(NVPL_BLAS);
     # cmake/Modules/FindLAPACK.cmake then uses nvpl::lapack_lp64_omp from find_package(NVPL_LAPACK).
@@ -700,6 +711,10 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_26 ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals MPISupport [ mpi ]
+  ++ lib.optionals uccSupport [
+    ucc
+    ucx
+  ]
   ++ lib.optionals rocmSupport [
     rocmtoolkit_joined
     rocmPackages.clr # Added separately so setup hook applies
@@ -730,7 +745,13 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ];
 
   propagatedCxxBuildInputs =
-    [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+    [ ]
+    ++ lib.optionals MPISupport [ mpi ]
+    ++ lib.optionals uccSupport [
+      ucc
+      ucx
+    ]
+    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;
