@@ -210,8 +210,8 @@ def retry(
     timeout_seconds: int | dt.timedelta | None = None,
     timeout: dt.timedelta | None = None,
 ) -> None:
-    """Call the given function repeatedly, with a one second interval between
-    retries, until it returns True or a timeout is reached.
+    """Call the given function until it returns True or a timeout is reached,
+    at intervals doubling from 0.1 second to one second between retries.
 
     Note that the timeout shown will include the time of the last attempted run.
 
@@ -236,10 +236,12 @@ def retry(
     def elapsed() -> dt.timedelta:
         return dt.timedelta(seconds=time.monotonic() - start_time)
 
+    delay = 0.1
     while elapsed() < timeout:
         if fn(False):
             return
-        time.sleep(1)
+        time.sleep(delay)
+        delay = min(delay * 2, 1.0)
 
     if not fn(True):
         raise RequestedAssertionFailed(
