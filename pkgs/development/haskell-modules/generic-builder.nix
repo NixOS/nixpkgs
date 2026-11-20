@@ -295,7 +295,7 @@ let
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
 
-  binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
+  binDir = "${placeholder (if enableSeparateBinOutput then "bin" else "out")}/bin";
 
   newCabalFileUrl = "mirror://hackage/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
@@ -377,12 +377,12 @@ let
 
   defaultConfigureFlags = [
     "--verbose"
-    "--prefix=$out"
+    "--prefix=${placeholder "out"}"
     # Note: This must be kept in sync manually with mkGhcLibdir
     ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
     "--libsubdir=\\$abi/\\$libname"
-    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
-    (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
+    (optionalString enableSeparateDataOutput "--datadir=${placeholder "data"}/share/${ghcNameWithPrefix}")
+    (optionalString enableSeparateDocOutput "--docdir=${docdir (placeholder "doc")}")
   ]
   ++ optionals stdenv.hasCC [
     "--with-gcc=${lib.getExe stdenv.cc}" # Clang won't work without that extra information.
@@ -391,7 +391,7 @@ let
     "--package-db=$packageConfDir"
     (optionalString (
       enableSharedExecutables && stdenv.hostPlatform.isLinux
-    ) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
+    ) "--ghc-option=-optl=-Wl,-rpath=${placeholder "out"}/${ghcLibdir}/${pname}-${version}")
     (optionalString (
       enableSharedExecutables && stdenv.hostPlatform.isDarwin
     ) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
