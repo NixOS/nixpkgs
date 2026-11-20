@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication rec {
     icalendar
     jinja2
     multidict
+    systemd
     vobject
   ];
 
