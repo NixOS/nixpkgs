@@ -10,6 +10,7 @@
 let
   cfg = config.services.prometheus.exporters."exportarr-${type}";
   exportarrEnvironment = (lib.mapAttrs (_: toString) cfg.environment) // {
+    INTERFACE = cfg.listenAddress;
     PORT = toString cfg.port;
     URL = cfg.url;
     API_KEY_FILE = lib.mkIf (cfg.apiKeyFile != null) "%d/api-key";
