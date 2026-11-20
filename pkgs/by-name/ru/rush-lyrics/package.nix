@@ -35,24 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "rush-lyrics";
-  version = "7.2.0";
+  version = "7.5.1";
 
   src = fetchFromGitHub {
     owner = "shub39";
     repo = "Rush";
     tag = finalAttrs.version;
-    hash = "sha256-pCcf2TmTTiHA/cTy2RD9Y1s7c3TEje7wgPIH5XzmzOg=";
+    hash = "sha256-nstiiamUqvH7usKo5JCLPDfWGEqUvXnPelqN9NxBFAs=";
   };
 
   patches = [
     ./remove-android.patch
   ];
-
-  postPatch = ''
-    substituteInPlace desktopApp/build.gradle.kts \
-      --replace-fail 'implementation(compose.desktop.currentOs)' \
-                     $'implementation(compose.desktop.linux_x64)\n            implementation(compose.desktop.linux_arm64)'
-  '';
 
   nativeBuildInputs = [
     gradle_9
