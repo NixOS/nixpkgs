@@ -600,6 +600,10 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # CMake defaults USE_MPI to ON and silently disables it when MPI isn't found; make the choice explicit.
     USE_MPI = setBool MPISupport;
 
+    # CMake defaults USE_LLVM_BOLT to ON for aarch64-linux CUDA builds whenever an llvm-bolt >= 21 is on PATH, and then
+    # BOLTs the libraries with the profiles in cmake/bolt_profiles; keep it off rather than dependent on PATH.
+    USE_LLVM_BOLT = setBool false;
+
     # Set the correct Python library path, broken since
     # https://github.com/pytorch/pytorch/commit/3d617333e
     PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
