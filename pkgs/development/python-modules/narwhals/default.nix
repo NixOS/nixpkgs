@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "narwhals";
-  version = "2.25.0";
+  version = "2.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zw45xT54D8LeaJRyMxWhFGUBzSmDmLTzpISk2zPSbLY=";
+    hash = "sha256-kjxjX2ehznyFBt5GwDX+9iRBV41jekySs5Z4gRh6TXY=";
   };
 
   postPatch = ''
