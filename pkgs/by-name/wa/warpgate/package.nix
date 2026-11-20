@@ -33,6 +33,8 @@ rustPlatform.buildRustPackage (
 
       nativeBuildInputs = [ openapi-generator-cli ];
 
+      __structuredAttrs = true;
+
       preBuild = "rm node_modules/.bin/openapi-generator-cli";
 
       installPhase = ''
@@ -83,6 +85,8 @@ rustPlatform.buildRustPackage (
       "sqlite"
     ]
     ++ lib.optional withRDPLegacyTLSBackend "rdp-openssl-tls";
+
+    __structuredAttrs = true;
 
     preBuild = ''
       rm -rf .cargo/
