@@ -168,6 +168,8 @@ in
 
   kernel-config = callPackage ./kernel.nix { };
 
+  nvidia-component-versions = callPackage ./nvidia-component-versions.nix { };
+
   ld-library-path = callPackage ./ld-library-path { };
 
   cross = recurseIntoAttrs (callPackage ./cross { });
