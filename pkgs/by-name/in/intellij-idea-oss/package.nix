@@ -50,7 +50,6 @@ jetbrains.mkJetBrainsProduct {
     '';
     maintainers = with lib.maintainers; [
       charlieprm88
-      gytis-ivaskevicius
       tymscar
     ];
     teams = [ lib.teams.jetbrains ];
