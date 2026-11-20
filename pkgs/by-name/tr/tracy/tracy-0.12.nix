@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  fetchFromGitLab,
 
   zstd,
   nativefiledialog-extended,

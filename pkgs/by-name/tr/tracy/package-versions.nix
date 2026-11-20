@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchFromGitLab,
   fetchpatch,
-  fetchurl,
-  callPackage,
 
   coreutils,
   cmake,
@@ -36,6 +33,8 @@
   nlohmann_json,
   nativefiledialog-extended,
   html-tidy,
+  python3,
+  pandoc,
 }:
 
 assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
@@ -48,6 +47,7 @@ let
       cpmSrcs ? [ ],
       patches ? [ ],
       extraBuildInputs ? [ ],
+      extraNativeBuildInputs ? [ ],
     }:
     stdenv.mkDerivation {
       patches =
@@ -95,6 +95,7 @@ let
         ninja
         pkg-config
       ]
+      ++ extraNativeBuildInputs
       ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ]
       ++ lib.optionals stdenv.cc.isClang [ stdenv.cc.cc.libllvm ];
 
@@ -172,8 +173,10 @@ let
         install -D -m 0555 update/build/tracy-update -t $out/bin
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
-        substituteInPlace extra/desktop/tracy.desktop \
-          --replace-fail Exec=/usr/bin/tracy Exec=tracy
+        ${lib.optionalString (lib.versionOlder version "0.14.0") ''
+          substituteInPlace extra/desktop/tracy.desktop \
+            --replace-fail Exec=/usr/bin/tracy Exec=tracy
+        ''}
 
         install -D -m 0444 extra/desktop/application-tracy.xml $out/share/mime/packages/application-tracy.xml
         install -D -m 0444 extra/desktop/tracy.desktop $out/share/applications/tracy.desktop
@@ -211,7 +214,6 @@ rec {
     import ./tracy-0.12.nix {
       inherit
         fetchFromGitHub
-        fetchFromGitLab
         zstd
         nativefiledialog-extended
         ;
@@ -234,5 +236,35 @@ rec {
     }
   );
 
-  tracy_latest = tracy_0_13;
+  tracy_0_14 = mkTracyPackage (
+    import ./tracy-0.14.nix {
+      inherit
+        fetchFromGitHub
+
+        pugixml
+        curl
+        zstd
+        nlohmann_json
+        html-tidy
+        ;
+    }
+  );
+
+  tracy_0_15 = mkTracyPackage (
+    import ./tracy-0.15.nix {
+      inherit
+        fetchFromGitHub
+
+        pugixml
+        curl
+        zstd
+        nlohmann_json
+        html-tidy
+        python3
+        pandoc
+        ;
+    }
+  );
+
+  tracy_latest = tracy_0_15;
 }

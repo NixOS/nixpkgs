@@ -79,6 +79,44 @@ to provide dependencies to upstream's cmake build environment.
 | wayland-protocols    | 1.37             | 1.46        | nixpkgs               | XML protocol files only        |
 | zstd                 | 1.5.6            | 1.5.7       | nixpkgs FindPackage   | `Findzstd.cmake` alias         |
 
+### Tracy 0.14.x
+
+| Dependency           | Tracy Ver       | nixpkgs Ver | Strategy            | Notes                                   |
+|----------------------|-----------------|-------------|---------------------|-----------------------------------------|
+| base64               | 0.5.2           | -           | vendored            | Not in nixpkgs                          |
+| capstone             | 6.0.0-Alpha5    | 5.0.9       | vendored            | Needs v6 alpha                          |
+| curl                 | 8.21.0          | 8.23.0      | nixpkgs             |                                         |
+| ImGui                | 1.92.9b-docking | 1.91.4      | vendored            | Needs docking branch                    |
+| html-tidy            | 5.8.0           | 5.8.0       | nixpkgs FindPackage | `Findtidy.cmake` shim                   |
+| md4c                 | 65c6c9d         | 0.5.3       | vendored            | Needs footnote reference support        |
+| nfd                  | 3cd252a patched | 1.3.0       | vendored            | Tracy applies patch                     |
+| nlohmann_json        | 3.12.0          | 3.12.0      | nixpkgs FindPackage | `Findjson.cmake` shim                   |
+| PackageProject.cmake | 1.11.1          | -           | vendored            | Transitive dep of PPQSort               |
+| PPQSort              | 1.0.6           | -           | vendored            | Not in nixpkgs                          |
+| pugixml              | 1.16            | 1.16        | nixpkgs             |                                         |
+| usearch              | 2.26.0          | 2.26.0      | vendored            | Nixpkgs version doesn't provide headers |
+| zstd                 | 1.5.7           | 1.5.7       | nixpkgs FindPackage | `Findusearch.cmake` alias               |
+
+### Tracy 0.15.x
+
+| Dependency           | Tracy Ver      | nixpkgs Ver | Strategy            | Notes                                   |
+|----------------------|----------------|-------------|---------------------|-----------------------------------------|
+| base64               | 0.5.2          | -           | vendored            | Not in nixpkgs                          |
+| capstone             | 6.0.0-Alpha11  | 5.0.9       | vendored            | Needs v6 alpha                          |
+| curl                 | 8.23.0         | 8.23.0      | nixpkgs             |                                         |
+| ImGui                | 1.93.0-docking | 1.91.4      | vendored            | Needs docking branch                    |
+| html-tidy            | 5.8.0          | 5.8.0       | nixpkgs FindPackage | `Findtidy.cmake` shim                   |
+| md4c                 | 60e8065        | 0.5.3       | vendored            | Needs footnote reference support        |
+| nfd                  | 1.4.1 patched  | 1.3.0       | vendored            |                                         |
+| nlohmann_json        | 3.12.0         | 3.12.0      | nixpkgs FindPackage | `Findjson.cmake` shim                   |
+| PackageProject.cmake | 1.11.1         | -           | vendored            | Transitive dep of PPQSort               |
+| PPQSort              | 1.0.6 patched  | -           | vendored            | Not in nixpkgs                          |
+| pugixml              | 1.16           | 1.16        | nixpkgs             |                                         |
+| usearch              | 2.26.4         | 2.26.0      | vendored            | Nixpkgs version doesn't provide headers |
+| pandoc               | 3.12.1         | 3.7.0.2     | nixpkgs             |                                         |
+| python3              | -              | 3.14.10     | nixpkgs             |                                         |
+| zstd                 | 1.5.7          | 1.5.7       | nixpkgs FindPackage | `Findusearch.cmake` alias               |
+
 ## Devendoring Strategies
 
 ## Strategy: nixpkgs

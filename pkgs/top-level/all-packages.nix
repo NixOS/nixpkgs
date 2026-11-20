@@ -1825,6 +1825,8 @@ with pkgs;
     tracy_0_11
     tracy_0_12
     tracy_0_13
+    tracy_0_14
+    tracy_0_15
     ;
 
   inherit (callPackages ../by-name/so/solana-platform-tools/package-versions.nix { })
