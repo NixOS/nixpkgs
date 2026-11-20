@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Build tool for spade";
-    homepage = "https://codeberg.com/spade-lang/swim";
+    homepage = "https://codeberg.org/spade-lang/swim";
     changelog = "https://codeberg.org/spade-lang/swim/src/branch/main/CHANGELOG.md";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ pbsds ];
