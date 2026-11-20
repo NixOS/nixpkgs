@@ -6,10 +6,10 @@ swiftpmUnpackDeps() {
 
        # Set up `workspace-state.json`. Local packages must be added now, or SwiftPM will try to fetch their dependencies.
        mkdir -p "$NIX_BUILD_TOP/$sourceRoot/.build"
-       @jq@ -s --sort-keys '
+       @jq@ -s --sort-keys --arg build "$NIX_BUILD_TOP/$sourceRoot/.build" '
            {
                "object": {
-                   "artifacts": [ ],
+                   "artifacts": (.[0] | .object.artifacts | map(.path = $build + "/" + .path)),
                    "dependencies": (
                        (.[0] | .object.dependencies)
                        + [ .[1] | .dependencies[] | select(.fileSystem) | .[][] |
@@ -39,6 +39,11 @@ swiftpmUnpackDeps() {
 
        # The closest thing to vendoring SwiftPM supports is setting up a dependencies as edited at `Packages`.
        ln -s "$swiftpmDeps/Packages" "$NIX_BUILD_TOP/$sourceRoot/Packages"
+
+       # SwiftPM writes to `.build/artifacts`
+       if [ -d "$swiftpmDeps/artifacts" ]; then
+           cp -rL --no-preserve=mode "$swiftpmDeps/artifacts" "$NIX_BUILD_TOP/$sourceRoot/.build/artifacts"
+       fi
     fi
 }
 

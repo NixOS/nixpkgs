@@ -7,6 +7,7 @@
   prefetch-swiftpm-deps,
   runCommand,
   stdenvNoCC,
+  swift,
 }:
 
 {
@@ -38,6 +39,8 @@ let
         jq
         prefetch-swiftpm-deps
       ]
+      # prefetch-swiftpm-deps runs `swift package dump-package`, which needs the SDK on Darwin
+      ++ lib.optional stdenvNoCC.hostPlatform.isDarwin swift
       ++ nativeBuildInputs;
 
       buildPhase = ''
@@ -73,12 +76,18 @@ runCommand "${name}-vendor"
   ''
     mkdir -p "$out"
 
+    artifacts='[ ]'
+    if [ -d "$vendorStaging/artifacts" ]; then
+      artifacts=$(jq --slurp . < "$vendorStaging/artifacts.jsonl")
+      ln -s "$vendorStaging/artifacts" "$out/artifacts"
+    fi
+
     # SwiftPM uses workspace-state.json to determine whether it needs to fetch dependencies.
     # Generate it to prevent that from happening.
-    jq --compact-output --sort-keys '
+    jq --compact-output --sort-keys --argjson artifacts "$artifacts" '
         {
             "object": {
-                "artifacts": [ ],
+                "artifacts": $artifacts,
                 "dependencies": [ .pins[] |
                     {
                         "basedOn": {
