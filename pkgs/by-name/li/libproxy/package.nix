@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     # Prevent installing commit hook.
     "-Drelease=true"
@@ -127,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
         updatePatch
       ];
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library that provides automatic proxy configuration management";
