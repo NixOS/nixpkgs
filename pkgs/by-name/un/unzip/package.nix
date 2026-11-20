@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     ./CVE-2015-7696.diff
     ./CVE-2015-7697.diff
     (fetchDebianPatch {
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "cve-2014-9913-unzip-buffer-overflow.patch";
       hash = "sha256-UV0n33iLzTd7irfOZIm1GsHpIHj8OFQOyMRgpla0vy4=";
     })
     (fetchDebianPatch {
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "cve-2016-9844-zipinfo-buffer-overflow.patch";
       hash = "sha256-9POOO+jJpa4yF2ovBN42UeGdRSoKLAXqQJeb6CR1wQQ=";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ./CVE-2018-18384.patch
     ./dont-hardcode-cc.patch
     (fetchDebianPatch {
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "cve-2018-1000035-unzip-buffer-overflow.patch";
       hash = "sha256-d6kewEGQZXzKftFqN5MoqVhM6g1uTM5knzukcZCGY28=";
@@ -70,13 +70,13 @@ stdenv.mkDerivation rec {
       sha256 = "1jvs7dkdqs97qnsqc6hk088alhv8j4c638k65dbib9chh40jd7pf";
     })
     (fetchDebianPatch {
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "initialize-the-symlink-flag.patch";
       hash = "sha256-C+QiqxKRK9xehfDMCrMrZRJsI3ycF1jdv+vYTITUzNI=";
     })
     (fetchDebianPatch {
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "cve-2022-0529-and-cve-2022-0530.patch";
       hash = "sha256-s9q/GDbaq6gkKFUwBoBShgQHp/N3I0LV0ePNtodKJd8=";
@@ -89,14 +89,14 @@ stdenv.mkDerivation rec {
     # also useful in their own right.
     (fetchDebianPatch {
       # https://bugs.debian.org/689212
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "fix-uid-gid-handling.patch";
       hash = "sha256-jMLUyZcEdGxiz/RmhJbHKaZgH6MNno2WHCAx14aRTDM=";
     })
     (fetchDebianPatch {
       # https://bugs.debian.org/842993
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "restore-unix-timestamps-accurately.patch";
       hash = "sha256-nD3CZkz2+DoOIBCngyK5Aw1UHPfZwxIzMxA+ouAe6gE=";
@@ -105,21 +105,21 @@ stdenv.mkDerivation rec {
     # https://www.debian.org/security/2026/dsa-6440
     (fetchDebianPatch {
       # https://bugs.debian.org/1142904
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "can-2026-2034440.patch";
       hash = "sha256-PrJ5DhVFTIUDTEtF5UC+x2a847oM5SwYz6OdlG95fZw=";
     })
     (fetchDebianPatch {
       # https://bugs.debian.org/1142905
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "can-2026-2034443.patch";
       hash = "sha256-lMrngOnBLGFJEzI0oTdYwWX+AMxL7d9951vpjQUpvLc=";
     })
     (fetchDebianPatch {
       # https://bugs.debian.org/1142906
-      inherit (finalAttrs) pname version;
+      inherit pname version;
       debianRevision = "31";
       patch = "can-2026-2034442.patch";
       hash = "sha256-3rXixqyb0WmUnBIoejXa2J/xodxoe9B87ql6E6K8r3s=";
