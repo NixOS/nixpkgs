@@ -48,6 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "rogue";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })
