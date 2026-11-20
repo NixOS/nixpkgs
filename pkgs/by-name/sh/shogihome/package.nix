@@ -20,16 +20,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.29.1";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F13rgUdquKJHz41Gz2ou8cAk3FmZF/FjA19DKtkJr2E=";
+    hash = "sha256-h9cXoSuzVgWEY8asbWuzs5TNSE+ApzPtgVgp0EKS9SQ=";
   };
 
-  npmDepsHash = "sha256-9pitop6ZGw4JlN/iUfQ7xqY7jN5PyffTSH2Tc/coi+c=";
+  npmDepsHash = "sha256-uH+eXMbEcdpmzqHW6Vix5SfxAEdLRcDEzakmhsYsgio=";
 
   postPatch = ''
     substituteInPlace package.json \
