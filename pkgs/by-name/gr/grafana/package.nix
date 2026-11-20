@@ -46,6 +46,10 @@ buildGo127Module (finalAttrs: {
     CYPRESS_INSTALL_BINARY = 0;
     PUPPETEER_SKIP_DOWNLOAD = 1;
 
+    # If this isn't turned off, a grafana build leaves behind a daemon
+    # monitoring for additional file changes.
+    NX_DAEMON = "false";
+
     # The build OOMs on memory constrained aarch64 without this
     NODE_OPTIONS = "--max_old_space_size=4096";
   };
