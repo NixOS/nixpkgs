@@ -17,6 +17,7 @@
   dbus,
   glib,
   dconf,
+  bashNonInteractive,
   libx11,
   libxml2,
   libxtst,
@@ -25,6 +26,7 @@
   gnome,
   systemdLibs,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     libx11
     libxml2
     # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
@@ -74,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     glib
   ];
+
+  strictDeps = true;
 
   # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
   doCheck = false;
@@ -104,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "at-spi2-core";
       versionPolicy = "odd-unstable";
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   postFixup = ''
@@ -120,11 +126,18 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/libexec/at-spi-bus-launcher" "''${busLauncherWrapperArgs[@]}"
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "atk"
+      "atk-bridge-2.0"
+      "atspi-2"
+    ];
   };
 })
