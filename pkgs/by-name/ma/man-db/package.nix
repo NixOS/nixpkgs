@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "man-db";
-  version = "2.13.1";
+  version = "2.13.3";
 
   src = fetchFromGitLab {
     owner = "man-db";
     repo = "man-db";
     tag = finalAttrs.version;
-    hash = "sha256-o85IJCsP5NA4AUhr6SNLOSnAoIEWoEejVG8w08jfyqQ=";
+    hash = "sha256-D1exPmBR/EOxOxrZ3g2FLnvvGJkn9RashixddqWKgfM=";
   };
 
   outputs = [
