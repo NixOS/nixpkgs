@@ -100,7 +100,10 @@ buildGo127Module (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "https://autobrr.com/";
     changelog = "https://autobrr.com/release-notes/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ av-gal ];
+    maintainers = with lib.maintainers; [
+      av-gal
+      connor-grady
+    ];
     mainProgram = "autobrr";
     platforms = with lib.platforms; darwin ++ freebsd ++ linux;
   };
