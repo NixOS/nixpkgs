@@ -33,6 +33,9 @@
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "aseprite";
   version = "1.3.18.6";
 
