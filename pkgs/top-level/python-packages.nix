@@ -8253,6 +8253,8 @@ self: super: with self; {
 
   hydrogram = callPackage ../development/python-modules/hydrogram { };
 
+  hydropeak-opendata = callPackage ../development/python-modules/hydropeak-opendata { };
+
   hydrus-api = callPackage ../development/python-modules/hydrus-api { };
 
   hypchat = callPackage ../development/python-modules/hypchat { };
