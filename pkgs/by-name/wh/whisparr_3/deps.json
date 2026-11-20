@@ -581,11 +581,6 @@
     "hash": "sha256-qAFidvqAlWs9PqIkCRzqLntyQb6JP5dV74iEjxvoByk="
   },
   {
-    "pname": "Openur.FFprobeStatic",
-    "version": "9.0.2.508",
-    "hash": "sha256-t0Wt2qnASgd8sL116Gl9qRW3TNTsB7mD6TAwvdTdEEE="
-  },
-  {
     "pname": "Polly",
     "version": "8.8.0",
     "hash": "sha256-ZV7xox4nUTjMLoHDWFJQuGs6pffDhsefkwHkmGSZwr4="

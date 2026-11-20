@@ -8,13 +8,16 @@
   nix-update-script,
   nixosTests,
   nodejs-slim_24,
-  servarr-ffmpeg,
+  openur-ffmpeg,
   stdenvNoCC,
-  withFFmpeg ? true,
   writeText,
   yarnBuildHook,
   yarnConfigHook,
 }:
+let
+  ffprobe = lib.getExe' openur-ffmpeg "ffprobe";
+  rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
+in
 buildDotnetModule (finalAttrs: {
   pname = "whisparr";
   version = "3.6.5-release.1886";
@@ -42,16 +45,18 @@ buildDotnetModule (finalAttrs: {
     })
   ];
 
-  postPatch = "mv src/NuGet.config NuGet.Config";
+  postPatch = ''
+    dotnet package remove Openur.FFprobeStatic --project src/NzbDrone.Core/Whisparr.Core.csproj
+    dotnet package remove Openur.FFprobeStatic --project src/NzbDrone.Test.Common/Whisparr.Test.Common.csproj
+    mv src/NuGet.config NuGet.Config
+  '';
 
   installPath = "${placeholder "out"}/lib/whisparr/bin";
 
   postInstall = ''
     cp -a ${finalAttrs.passthru.frontend} $dotnetInstallPath/UI
     cp ${finalAttrs.passthru.package_info} $dotnetInstallPath/../package_info
-  ''
-  + lib.optionalString withFFmpeg ''
-    ln -sf ${lib.getExe' servarr-ffmpeg "ffprobe"} $dotnetInstallPath/ffprobe
+    ln -s ${ffprobe} "$dotnetInstallPath"/ffprobe
   '';
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0_1xx;
@@ -71,13 +76,17 @@ buildDotnetModule (finalAttrs: {
     "--property:AssemblyVersion=${finalAttrs.versionForDotnet}"
     "--property:Copyright=Copyright whisparr.com (${finalAttrs.meta.license.fullName})"
     "--property:EnableAnalyzers=false"
+    "--property:RuntimeIdentifier=${rid}"
     "--property:TargetFramework=net10.0"
   ];
 
   __darwinAllowLocalNetworking = true;
   doCheck = true;
 
-  preCheck = lib.optionalString stdenvNoCC.buildPlatform.isDarwin ''
+  preCheck = ''
+    ln -s ${ffprobe} _tests/net10.0/${rid}/ffprobe
+  ''
+  + lib.optionalString stdenvNoCC.buildPlatform.isDarwin ''
     export CFFIXED_USER_HOME="$HOME"
   '';
 
