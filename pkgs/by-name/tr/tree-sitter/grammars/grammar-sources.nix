@@ -3464,21 +3464,8 @@ self: {
     };
   };
 
-  wat = {
-    version = "0-unstable-2022-05-17";
-    url = "github:wasm-lsp/tree-sitter-wasm";
-    rev = "2ca28a9f9d709847bf7a3de0942a84e912f59088";
-    hash = "sha256-a1l4RsGpRQfUxEjwewyKiV0G7J2DHZW6+y1HnjREYAs=";
+  wat = self.wast // {
     location = "wat";
-    meta = {
-      license = with lib.licenses; [
-        asl20
-        llvm-exception
-      ];
-      maintainers = with lib.maintainers; [
-        aciceri
-      ];
-    };
   };
 
   werk = {
