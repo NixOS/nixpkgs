@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     # Prevent installing commit hook.
     "-Drelease=true"
