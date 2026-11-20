@@ -7,18 +7,16 @@
   slurm,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pyslurm";
-  version = "25.11.2-unstable-2026-11-02";
+  version = "26.05.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    #tag = "v${version}";
-    # https://github.com/PySlurm/pyslurm/pull/427
-    rev = "9d9a80365d158021d4dc87cbdc4ead7ecfbbec55";
-    hash = "sha256-zHPO/WqnqUA8iBc+J+uJxf+wzpDKzHf8AEd+9jiXS74=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0RiQrK+NO85MyF7nCsSMbAnbHFl7Zi+hqNrdGYDyaLw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -42,4 +40,4 @@ buildPythonPackage {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})
