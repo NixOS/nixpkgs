@@ -187,6 +187,7 @@ let
         maintainers = with lib.maintainers; [
           mpickering
           nagisa
+          davidkern
         ];
         platforms = lib.platforms.linux ++ lib.optionals (!withWayland) lib.platforms.darwin;
       };
