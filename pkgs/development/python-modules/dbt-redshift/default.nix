@@ -30,6 +30,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "dbt-postgres"
     "redshift-connector"
+    "sqlparse"
   ];
 
   build-system = [ hatchling ];
