@@ -10,6 +10,8 @@
 }:
 
 buildGo127Module (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "entire";
   version = "0.13.3";
 
