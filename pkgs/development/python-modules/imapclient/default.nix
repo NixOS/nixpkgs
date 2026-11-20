@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "imapclient";
-  version = "4.1.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjs";
     repo = "imapclient";
     tag = finalAttrs.version;
-    hash = "sha256-ISlu27FRFHNvPaMyvtCY3izwYDx9Vd5BXTWjklZ5+ZE=";
+    hash = "sha256-tKlqzUHvvC27Nbv1Go2MJd424JDLUpg5PAnYryl2G+o=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +28,11 @@ buildPythonPackage (finalAttrs: {
     # results in the tests relying on modifying SSL_CERT_FILE failing.
     unset NIX_SSL_CERT_FILE
   '';
+
+  disabledTests = [
+    # only works on Python < 3.11
+    "test_python_38_rejects_connect_timeout"
+  ];
 
   pythonImportsCheck = [
     "imapclient"

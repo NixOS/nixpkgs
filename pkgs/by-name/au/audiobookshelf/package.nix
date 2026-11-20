@@ -18,16 +18,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "audiobookshelf";
-  version = "2.37.2";
+  version = "2.38.0";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = "audiobookshelf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GnXWG+8tb/clX6rpw4x1c5Usl28jKLEhuMFiAG+fCec=";
+    hash = "sha256-A7kJ2P0v/CplAZVt1O9BdEWLiZOTf8RKTrD7vMMSOaM=";
   };
 
-  npmDepsHash = "sha256-wF3PMYN+nymE6VktHtKcdLhSkeE4e04nGcRQJhYHG4c=";
+  npmDepsHash = "sha256-wM/l/CUcf7ajyHG623VpJlte68I/6Vhwbr4L90K+ORM=";
 
   nodejs = nodejs_24;
 

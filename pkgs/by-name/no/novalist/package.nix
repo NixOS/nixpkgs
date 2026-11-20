@@ -17,7 +17,7 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "novalist";
-  version = "3.7.0";
+  version = "3.7.2";
 
   __structuredAttrs = true;
 
@@ -25,13 +25,13 @@ buildNpmPackage (finalAttrs: {
     owner = "Drommedhar";
     repo = "novalist-official";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kJgV+/LZYzsdV0KuZXnNUYIw/kVho2opASTZrnNDja8=";
+    hash = "sha256-eqz+I1Z1qFvzQspeTaoZ/si+mzcT1UaJZPH0aPapuGk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
 
   nodejs = nodejs_24;
-  npmDepsHash = "sha256-Pl1RI3sKWnx4vsu/93Rhf+SP/D/oZNfYxAjWrHBJ5OU=";
+  npmDepsHash = "sha256-MOBqi/lJ4ysb3/A9pYVlZ6nrLEe9+8XmWqKesSrdq+8=";
   npmFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
 

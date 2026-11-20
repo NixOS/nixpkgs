@@ -1,7 +1,7 @@
 {
   lib,
   copyDesktopItems,
-  electron_44,
+  electron_45,
   fetchFromGitHub,
   deltachat-rpc-server,
   makeDesktopItem,
@@ -34,25 +34,25 @@ let
       hash = "sha256-g0V81l7FQFyQloHJ3hQAp3p+2QPjbIa/zBJEarrPU4g=";
     };
   };
-  electron = electron_44;
+  electron = electron_45;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "2.69.0";
+  version = "2.69.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dWkZgGiKr+iz8/jnY43GwW0fLeik4noX08UB+cVlq4M=";
+    hash = "sha256-XAHOFCQGkTBsuWTGimxyIU1BAKo44myvj+0jYNPkezQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-3EV+aHZHWYL2F35YqdOEY6x54ewSJwgb7NbuPQgbI/I=";
+    hash = "sha256-hWv0PnU/4qM3/u1XkCSNHu77+pgIOkx9L/f9U8e5Ugw=";
   };
 
   strictDeps = true;

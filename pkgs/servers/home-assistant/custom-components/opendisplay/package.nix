@@ -67,6 +67,12 @@ buildHomeAssistantComponent (finalAttrs: {
   ]
   ++ (home-assistant.getPackages "usb" home-assistant.python3Packages);
 
+  disabledTests = [
+    # new `compat_name` attribute in entity registry since 2026.11.0
+    "test_sensor_entities_usb_device"
+    "test_sensor_entities_battery_device"
+  ];
+
   disabledTestPaths = [
     # Probably mismatch in fontconfig priorities
     "tests/drawcustom/text_multiline_test.py::test_text_multiline_delimiter" # AssertionError: Multiline text with delimiter rendering failed

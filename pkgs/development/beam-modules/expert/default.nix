@@ -9,13 +9,13 @@
 
 mixRelease (finalAttrs: {
   pname = "expert";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "expert-lsp";
     repo = "expert";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5vdVEdL3/ZPIjdhSsm/ZXHYOxglb2V+uNT9LzJntR/Q=";
+    hash = "sha256-AV1s6RhG54D4Juij7uRa/zeGgoa2t0MdaA73hrkL2QE=";
   };
 
   mixFodDeps = fetchMixDeps {

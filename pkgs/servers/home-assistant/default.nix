@@ -142,7 +142,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.11.1";
+  hassVersion = "2026.11.2";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -163,13 +163,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-8/BtkmYAs4yYphZ6ERjGzb24MhM39h9yAwCSMNSYsJY=";
+    hash = "sha256-mzF/j5Do5WNgYZy7yIKcECl6x+GOQ60XqHGFqP4JDpI=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-M8rGVNtQnkJPrbB7YIXIwpObCQhzJHl/Dk6lNi6tyYw=";
+    hash = "sha256-PYNYfHdwvBywcfZTiOmGRzKAnVB34GkeN82c5MpKnKU=";
   };
 
   build-system = with python3Packages; [
@@ -217,6 +217,17 @@ python3Packages.buildPythonApplication rec {
       name = "aiobotocore-3.10-compat.patch";
       url = "https://github.com/home-assistant/core/commit/6d28a711aff72057de63bb1094cc8edea5cf5057.patch";
       hash = "sha256-J23tSnOxIvjaMq4UoVnHo1q/AeJwXJpjpp5PAYq/nqo=";
+    })
+
+    (fetchpatch {
+      name = "anthropic-translation-entry_name.patch";
+      url = "https://github.com/home-assistant/core/commit/267390cae8efbe587312e092b8eb755634c72743.patch";
+      hash = "sha256-a5BLoiIvlfHXFyPlGeouDLpmfzcY7j5HcJ6NZ/Lg9bA=";
+    })
+    (fetchpatch {
+      name = "lamarzocco-translation_name.patch";
+      url = "https://github.com/home-assistant/core/commit/adfc64b934f9bc206134abc84bea40c683185365.patch";
+      hash = "sha256-DogsbOmzvJnVD+ewcwr0ZmP4+RWujMWtcT4fFPaICYo=";
     })
   ];
 

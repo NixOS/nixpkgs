@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spmd-types";
-  version = "0.2.5";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "spmd_types";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5N3EcZu9MsQM9Gzow+zt9GY89zd10Y8mpAgS/agGdpM=";
+    hash = "sha256-1A9WrU4ssx08hj2MJVgl9tD6gJmIbwck+unEADxIqXo=";
   };
 
   postPatch = ''
