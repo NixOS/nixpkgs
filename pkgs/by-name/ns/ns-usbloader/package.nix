@@ -15,8 +15,6 @@
   librsvg,
 }:
 let
-  pkgDescription = "All-in-one tool for managing Nintendo Switch homebrew";
-
   selectSystem =
     attrs:
     attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -25,15 +23,15 @@ let
   jdk = zulu25.override { enableJavaFX = true; };
 
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "ns-usbloader";
   version = "7.4";
 
   src = fetchFromGitHub {
     owner = "developersu";
     repo = "ns-usbloader";
-    rev = "v${version}";
-    sha256 = "sha256-5ZsJHDKtoRhXBmvjH2jwJaHtR1FuVA4A3YOWUEBC3P4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5ZsJHDKtoRhXBmvjH2jwJaHtR1FuVA4A3YOWUEBC3P4=";
   };
 
   patches = [
@@ -101,7 +99,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/share/java
-    install -Dm644 target/ns-usbloader-${version}${lib.optionalString stdenv.hostPlatform.isAarch64 "-mac+linux-aarch64"}.jar $out/share/java/ns-usbloader.jar
+    install -Dm644 target/ns-usbloader-${finalAttrs.version}${lib.optionalString stdenv.hostPlatform.isAarch64 "-mac+linux-aarch64"}.jar $out/share/java/ns-usbloader.jar
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/lib/udev/rules.d
@@ -144,7 +142,7 @@ maven.buildMavenPackage rec {
       type = "Application";
       name = "ns-usbloader";
       desktopName = "NS-USBLoader";
-      comment = pkgDescription;
+      comment = finalAttrs.meta.description;
       exec = "ns-usbloader";
       icon = "ns-usbloader";
       categories = [ "Game" ];
@@ -157,11 +155,11 @@ maven.buildMavenPackage rec {
   ];
 
   meta = {
-    description = pkgDescription;
+    description = "All-in-one tool for managing Nintendo Switch homebrew";
     homepage = "https://github.com/developersu/ns-usbloader";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ soupglasses ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "ns-usbloader";
   };
-}
+})
