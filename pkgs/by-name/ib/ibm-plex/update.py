@@ -22,7 +22,7 @@ for font in fonts_data.keys():
     current_version = fonts_data.get(font, {}).get("version")
 
     latest_release = next(
-        (r for r in releases if r["tag_name"].lower().startswith(font_tag)), None
+        (r for r in releases if r["tag_name"].lower().startswith(font_tag) or r["name"].lower().startswith(font_tag)), None
     )
 
     if latest_release is None:
