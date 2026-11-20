@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gav";
     homepage = "https://github.com/ctrl-z-bg/gav";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ iedame ];
     platforms = lib.platforms.linux;
   };
 })
