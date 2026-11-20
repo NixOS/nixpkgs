@@ -23,6 +23,8 @@
   # test dependencies
   freezegun,
   pytestCheckHook,
+
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -81,6 +83,8 @@ buildPythonPackage (finalAttrs: {
   sphinxRoot = "docs";
 
   pythonImportsCheck = [ "reuse" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for compliance with the REUSE Initiative recommendations";
