@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     CXXFLAGS = finalAttrs.env.CFLAGS;
     TRITON_STORE_BINARY_ONLY = 1; # reduce triton disk space usage
     AOTRITON_GIT_TREESHA1 = "35bfbd0ebe2fd774e97cdc12421592c23f59abfe"; # git rev-parse 'HEAD^{tree}'
+    TRITON_DEFAULT_FP_FUSION = "1"; # Silence warning introduced in triton 3.9 https://github.com/triton-lang/triton/pull/12479
   };
 
   nativeBuildInputs = [
