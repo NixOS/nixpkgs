@@ -23,20 +23,21 @@
   # test dependencies
   freezegun,
   pytestCheckHook,
+  pytest-lazy-fixtures,
 
   nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "reuse";
-  version = "6.2.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "fsfe";
     repo = "reuse-tool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J49RIt7MxnsMJqJAaGvYgUzXMHAT9/frMmrkhWXe5tQ=";
+    hash = "sha256-VxWPEKIJzLhW9l4sP9yl2+sg5kA/p7mlFXkloV1S/hM=";
   };
 
   outputs = [
@@ -69,6 +70,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     freezegun
+    pytest-lazy-fixtures
   ];
 
   disabledTestPaths = [
