@@ -78,6 +78,29 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/sqlite/raw/faea37529752d0134154f3678443e2822a105834/f/sqlite-3.53.3-fix-fts3corrupt4-test.patch";
       hash = "sha256-cfwBOomIjm8szInOqKZfg2lmRM9K663ujKR3wVmAtrE=";
     })
+
+    # CVE-2026-119586, backported by openSUSE
+    # https://sqlite.org/src/info/d684ccc9ec4e41d8
+    (fetchpatch {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-recover-strip-trailing-sql.patch?rev=180";
+      excludes = [ "test/shellB.test" ];
+      hash = "sha256-GQW79CPLqL8JzoUgx44rr2nrze4505hFnAoUvd2DlKU=";
+    })
+    # https://sqlite.org/src/info/f2be7c2a98f2dc65
+    (fetchurl {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-recover-safe-mode.patch?rev=180";
+      hash = "sha256-WH3oOdvDqr379IjP9c7+eW5rKvo9YuJ8cMEIbQVHQlY=";
+    })
+    # https://sqlite.org/src/info/d486e997908bbd1b
+    (fetchurl {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-safe-mode-hardening.patch?rev=180";
+      hash = "sha256-4tk8k1JWVY8v0lQ2Vj/zPiScShvob+6NmgP3jn0JqQQ=";
+    })
+    # https://sqlite.org/src/info/8981033053d69c0a
+    (fetchurl {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-dump-recover-hardening.patch?rev=180";
+      hash = "sha256-mzTIhEfZY0U1UPcw+1We4mfxBhwOUoMEd33tr9Q5ZLE=";
+    })
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Add a missing `-DBUILD_sqlite` to one place in the makefile
