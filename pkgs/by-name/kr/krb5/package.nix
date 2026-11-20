@@ -43,21 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/pCvhEGtn6mwZLjlMHfO+3gqlvimgnawMdxUrxeJ/ws=";
   };
 
-  patches =
-    lib.optionals stdenv.hostPlatform.isFreeBSD [
-      (fetchpatch {
-        name = "fix-missing-ENODATA.patch";
-        url = "https://cgit.freebsd.org/ports/plain/security/krb5-122/files/patch-lib_krad_packet.c?id=0501f716c4aff7880fde56e42d641ef504593b7d";
-        extraPrefix = "";
-        hash = "sha256-l8ev+WrDKbTqwgBRYhfJGELkCCE8mJTqVHFBvvCPvgE=";
-      })
-    ]
-    # Conditional to avoid causing mass rebuilds on Linux. Both glibc and Musl support `secure_getenv`.
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      # krb5 1.22.3 uses `secure_getenv` if available and falls back when it’s not. Unfortunately, this fallback is not
-      # linked everywhere it’s needed in the build. See: https://github.com/krb5/krb5/pull/1564.
-      ./rpc-add-libkrb5support-to-shared-library-dependencies.patch
-    ];
+  patches = [
+    # krb5 1.22.3 uses `secure_getenv` if available and falls back when it’s not. Unfortunately, this fallback is not
+    # linked everywhere it’s needed in the build. See: https://github.com/krb5/krb5/pull/1564.
+    # vendored: https://github.com/krb5/krb5/commit/76d5e90c8a686235b27c6b3934f8295a9c619e5e
+    ./add-libkrb5support-to-gssrpc-library-dependencies.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    (fetchpatch {
+      name = "fix-missing-ENODATA.patch";
+      url = "https://cgit.freebsd.org/ports/plain/security/krb5-122/files/patch-lib_krad_packet.c?id=0501f716c4aff7880fde56e42d641ef504593b7d";
+      extraPrefix = "";
+      hash = "sha256-l8ev+WrDKbTqwgBRYhfJGELkCCE8mJTqVHFBvvCPvgE=";
+    })
+  ];
 
   outputs = [
     "out"
