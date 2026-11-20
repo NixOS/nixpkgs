@@ -62,6 +62,8 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
     # in the Nix build sandbox.
     "--skip=terminal::"
   ];
+  
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Terminal reviewer for Git changes";
