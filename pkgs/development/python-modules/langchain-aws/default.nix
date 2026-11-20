@@ -61,6 +61,7 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     # Boto3 spec has outstripped the version requirement
     "boto3"
+    "langchain-core"
   ];
 
   optional-dependencies = {
