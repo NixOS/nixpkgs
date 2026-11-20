@@ -5,11 +5,15 @@
   nodes.machine =
     { lib, pkgs, ... }:
     {
-      virtualisation.memorySize = 1536;
+      virtualisation.memorySize = 2048;
 
       services.dawarich = {
         enable = true;
         localDomain = "localhost";
+        environment = {
+          # Dawarich 1.22.0: test that we set ARCHIVE_ENCRYPTION_KEY correctly.
+          ARCHIVE_RAW_DATA = "true";
+        };
       };
 
       environment.etc.geojson.text =
@@ -108,5 +112,9 @@
     # job runs in the background so doesn't update immediately
     res = machine.wait_until_succeeds(f"curl -f -H 'Authorization: Bearer {api_key}' http://localhost/api/v1/points | grep '\"id\":2'")
     assert len(json.loads(res)) == 11
+
+    # Check that ARCHIVE_ENCRYPTION_KEY is correctly set
+    res = machine.succeed('dawarich-rails runner "Points::RawData::ArchiveJob.perform_now"')
+    assert "Encryption::KeyNotConfigured" not in res
   '';
 }
