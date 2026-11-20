@@ -8,6 +8,7 @@
   libxslt,
   autoconf,
   autoreconfHook,
+  bashNonInteractive,
   gnome,
   graphviz,
   glib,
@@ -87,12 +88,15 @@ let
       ++ extraNativeBuildInputs;
 
       buildInputs = [
+        bashNonInteractive
         glib
         libiconv
         libintl
       ]
       ++ lib.optional withGraphviz graphviz
       ++ extraBuildInputs;
+
+      strictDeps = true;
 
       enableParallelBuilding = true;
 
