@@ -3255,14 +3255,7 @@ self: {
     };
   };
 
-  tsx = {
-    version = "0.23.2";
-    url = "github:tree-sitter/tree-sitter-typescript";
-    hash = "sha256-CU55+YoFJb6zWbJnbd38B7iEGkhukSVpBN7sli6GkGY=";
-    meta = {
-      license = lib.licenses.mit;
-    };
-  };
+  tsx = self.typescript;
 
   turtle = {
     version = "0.1.0-unstable-2024-07-02";
