@@ -59,6 +59,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/lakehq/langchain-sail";
     changelog = "https://github.com/lakehq/langchain-sail/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.davidlghellin ];
+    maintainers = with lib.maintainers; [
+      davidlghellin
+      sarahec
+    ];
   };
 })
