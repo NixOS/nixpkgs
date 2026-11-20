@@ -16,6 +16,7 @@
   pkg-config,
   qt6Packages,
   sdl3,
+  sdl3-net,
   speexdsp,
   vulkan-headers,
   vulkan-loader,
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmg";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7ULpuecg8n5AEpWEYIln2SQV6CsGKMyO9ZHT71bDcIg=";
+    hash = "sha256-Fp9++r5Z3UgvrR6Ts0ysSNsXPOetYn5vPIYuKx2T8g0=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     minizip
     sdl3
+    sdl3-net
     speexdsp
     vulkan-headers
     vulkan-loader
