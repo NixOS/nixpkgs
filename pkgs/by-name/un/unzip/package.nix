@@ -86,6 +86,45 @@ stdenv.mkDerivation (finalAttrs: {
     # configure script to fail to detect errno and the directory libraries on Darwin.
     ./implicit-declarations-fix.patch
     ./CVE-2021-4217.patch
+    # The next two patches are prerequisites for can-2026-2034440.patch, but are
+    # also useful in their own right.
+    (fetchDebianPatch {
+      # https://bugs.debian.org/689212
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "fix-uid-gid-handling.patch";
+      hash = "sha256-jMLUyZcEdGxiz/RmhJbHKaZgH6MNno2WHCAx14aRTDM=";
+    })
+    (fetchDebianPatch {
+      # https://bugs.debian.org/842993
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "restore-unix-timestamps-accurately.patch";
+      hash = "sha256-nD3CZkz2+DoOIBCngyK5Aw1UHPfZwxIzMxA+ouAe6gE=";
+    })
+    # The three patches below patch this vulnerability:
+    # https://www.debian.org/security/2026/dsa-6440
+    (fetchDebianPatch {
+      # https://bugs.debian.org/1142904
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "can-2026-2034440.patch";
+      hash = "sha256-PrJ5DhVFTIUDTEtF5UC+x2a847oM5SwYz6OdlG95fZw=";
+    })
+    (fetchDebianPatch {
+      # https://bugs.debian.org/1142905
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "can-2026-2034443.patch";
+      hash = "sha256-lMrngOnBLGFJEzI0oTdYwWX+AMxL7d9951vpjQUpvLc=";
+    })
+    (fetchDebianPatch {
+      # https://bugs.debian.org/1142906
+      inherit (finalAttrs) pname version;
+      debianRevision = "31";
+      patch = "can-2026-2034442.patch";
+      hash = "sha256-3rXixqyb0WmUnBIoejXa2J/xodxoe9B87ql6E6K8r3s=";
+    })
   ]
   ++ lib.optional enableNLS (fetchurl {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
