@@ -67,6 +67,7 @@
     # Clang for our ppc64 targets needs cc-wrapper to work
     && !(stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isBigEndian),
   withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport,
+  withCurl ? withHeadlessDeps && lib.versionAtLeast version "9.1", # remote fetching via curl
   withCuvid ? withHeadlessDeps && withNvcodec,
   withDav1d ? withHeadlessDeps, # AV1 decoder (focused on speed and correctness)
   withDavs2 ? withFullDeps && withGPL, # AVS2 decoder
@@ -75,6 +76,7 @@
   withDvdnav ? withHeadlessDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
   withDvdread ? withHeadlessDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
   withFdkAac ? withFullDeps && (!withGPL || withUnfree), # Fraunhofer FDK AAC de/encoder
+  withFdkXheAac ? withFullDeps && (!withGPL || withUnfree) && lib.versionAtLeast version "9.1", # Fraunhofer FDK XHE AAC de/encoder
   withNvcodec ?
     withHeadlessDeps
     && (
@@ -124,7 +126,7 @@
   withOpenColorIO ? withFullDeps && lib.versionAtLeast version "8.1", # Color Management
   withOpencoreAmrnb ? withFullDeps && withVersion3, # AMR-NB de/encoder
   withOpencoreAmrwb ? withFullDeps && withVersion3, # AMR-WB decoder
-  withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin, # OpenGL rendering
+  withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin && lib.versionOlder version "9.1", # OpenGL rendering
   withOpenh264 ? withFullDeps, # H.264/AVC encoder
   withOpenjpeg ? withHeadlessDeps, # JPEG 2000 de/encoder
   withOpenmpt ? withHeadlessDeps, # Tracked music files decoder
@@ -264,6 +266,7 @@
   celt,
   chromaprint,
   codec2,
+  curl,
   dav1d,
   davs2,
   fdk_aac,
@@ -517,7 +520,7 @@ stdenv.mkDerivation (
           hash = "sha256-peIXXU5+5DRQc3Xdpz5V+xIN7Vohs0Dlal6mHiMryXc=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "8") [
+      ++ optionals (lib.versionAtLeast version "8" && lib.versionOlder version "9.1") [
         # compatibility with openapv 1.1. remove when >8.1.3 and >9.0.2
         # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24663
         (fetchpatch2 {
@@ -646,6 +649,11 @@ stdenv.mkDerivation (
       (enableFeature withCuda "cuda")
       (enableFeature withCudaLLVM "cuda-llvm")
       (enableFeature withCudaNVCC "cuda-nvcc")
+    ]
+    ++ optionals (versionAtLeast version "9.1") [
+      (enableFeature withCurl "libcurl")
+    ]
+    ++ [
       (enableFeature withCuvid "cuvid")
       (enableFeature withDav1d "libdav1d")
       (enableFeature withDavs2 "libdavs2")
@@ -658,6 +666,11 @@ stdenv.mkDerivation (
     ]
     ++ [
       (enableFeature withFdkAac "libfdk-aac")
+    ]
+    ++ optionals (versionAtLeast version "9.1") [
+      (enableFeature withFdkXheAac "libfdk_xhe_aac")
+    ]
+    ++ [
       (enableFeature withNvcodec "ffnvcodec")
       (enableFeature withFlite "libflite")
       (enableFeature withFontconfig "fontconfig")
@@ -725,7 +738,11 @@ stdenv.mkDerivation (
     ++ [
       (enableFeature withOpencoreAmrnb "libopencore-amrnb")
       (enableFeature withOpencoreAmrwb "libopencore-amrwb")
+    ]
+    ++ optionals (lib.versionOlder version "9.1") [
       (enableFeature withOpengl "opengl")
+    ]
+    ++ [
       (enableFeature withOpenh264 "libopenh264")
       (enableFeature withOpenjpeg "libopenjpeg")
       (enableFeature withOpenmpt "libopenmpt")
@@ -909,13 +926,14 @@ stdenv.mkDerivation (
         cuda_cudart
         cuda_nvcc
       ]
+      ++ optionals withCurl [ curl ]
       ++ optionals withDav1d [ dav1d ]
       ++ optionals withDavs2 [ davs2 ]
       ++ optionals withDc1394 ([ libdc1394 ] ++ (lib.optional stdenv.hostPlatform.isLinux libraw1394))
       ++ optionals withDrm [ libdrm ]
       ++ optionals withDvdnav [ libdvdnav ]
       ++ optionals withDvdread [ libdvdread ]
-      ++ optionals withFdkAac [ fdk_aac ]
+      ++ optionals (withFdkAac || withFdkXheAac) [ fdk_aac ]
       ++ optionals withNvcodec [
         (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers)
       ]
