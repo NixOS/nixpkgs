@@ -29,6 +29,16 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
+  # These build boards from litex-boards, which depends on litedram; a deselect would also drop
+  # test_ddr3_dll_off and test_ddr3_electrical_settings, whose names start the same.
+  postPatch = ''
+    for t in sdr ddr3 ddr4; do
+      substituteInPlace test/test_init.py \
+        --replace-fail "    def test_$t(self):" "    @unittest.skip('needs litex-boards')
+        def test_$t(self):"
+    done
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -39,11 +49,8 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
-    # Need a VexRiscv CPU package, litex-boards, or Verilator and pexpect.
+    # Need a VexRiscv CPU package, or Verilator and pexpect.
     "test/test_examples.py"
-    "test/test_init.py::TestInit::test_ddr3"
-    "test/test_init.py::TestInit::test_ddr4"
-    "test/test_init.py::TestInit::test_sdr"
     "test/test_lpddr4.py::VerilatorLPDDR4Tests"
     "test/test_lpddr5.py::VerilatorLPDDR5Tests"
   ];
