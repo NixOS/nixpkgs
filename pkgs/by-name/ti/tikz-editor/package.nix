@@ -17,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tikz-editor";
-  version = "1.2.0";
+  version = "1.3.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -25,16 +25,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "DominikPeters";
     repo = "tikz-editor";
     tag = "app-v${finalAttrs.version}";
-    hash = "sha256-8WJ7SPxuMmx0LL/sEOmvhCUtf2qz3utA72gj1m0B520=";
+    hash = "sha256-Y9EGNvjh+3eGm7ynxC05QH1jfS3pipAjmP2Mnd/xMFs=";
   };
 
   cargoRoot = "apps/desktop/src-tauri";
-  cargoHash = "sha256-runsvD87qUKjhCI7YV3oBE1Slz4AFi0DbC18h+bZH7s=";
+  cargoHash = "sha256-lvxkEEMGJeo3wiIa94qp+A9JBuYDPwkKhsDn9p/yRy4=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-NLLbJbi0jDOzcMeV3JSNUpfI6EvD+LVYAyZtAhc9A2g=";
+    hash = "sha256-ZlsxWDXYCvuvDi2Nr41eM4Z4UQ97V5QI8VHhPNIqCPI=";
   };
 
   preBuild = ''

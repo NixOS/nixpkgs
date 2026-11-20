@@ -8,12 +8,12 @@
 
 mixRelease (finalAttrs: {
   pname = "ex_doc";
-  version = "0.40.4";
+  version = "0.40.5";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${finalAttrs.pname}";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wDdBjq62TX8m50LeszMx4f8nlUeMgElpKZ3imHNq7Hs=";
+    hash = "sha256-1TDR90T+PhGlZls31r9HvUTuZwZJZhAJaTQC29l65C4=";
   };
 
   escriptBinName = "ex_doc";
