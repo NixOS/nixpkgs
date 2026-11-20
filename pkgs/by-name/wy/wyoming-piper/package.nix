@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-piper";
-  version = "2.5.2";
+  version = "2.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "wyoming-piper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gz/Pxf4GUZLCBsRW6ML/6l+rdcb17V4rZ7ltvjcN694=";
+    hash = "sha256-6IQdcB8d2arKZx4Un9+arOU/cVYmRpNHEXRGFB7rQtA=";
   };
 
   build-system = with python3Packages; [
