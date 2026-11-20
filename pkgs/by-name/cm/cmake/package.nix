@@ -65,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./nixpkgs-cmake-prefix-path.patch
 
     # Add the libc paths from the compiler wrapper.
-    ./add-nixpkgs-libc-paths.patch
+    (replaceVars ./add-nixpkgs-libc-paths.patch {
+      libc_dev = lib.getDev stdenv.cc.libc;
+      libc_lib = lib.getLib stdenv.cc.libc;
+    })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-binary-paths.patch {
@@ -135,16 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   # bootstrap is not autoconf and rejects --enable-static/--disable-shared
-  # FIXME: rebuild avoidance, drop optionalDrvAttr in staging
-  dontAddStaticConfigureFlags = lib.optionalDrvAttr stdenv.hostPlatform.isStatic true;
+  dontAddStaticConfigureFlags = true;
 
   preConfigure = ''
-    substituteInPlace Modules/Platform/UnixPaths.cmake \
-      --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
-      --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
-      --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
-    configureFlags=("--parallel=''${NIX_BUILD_CORES:-1}" "CC=$CC_FOR_BUILD" "CXX=$CXX_FOR_BUILD" ''${configureFlags[@]} ''${cmakeFlags[@]})
+    configureFlags=("--parallel=''${NIX_BUILD_CORES:-1}" "CC=$CC_FOR_BUILD" "CXX=$CXX_FOR_BUILD" ''${configureFlags[@]} -- ''${cmakeFlags[@]})
   ''
   + lib.optionalString (stdenv.hostPlatform.isStatic && useSharedLibraries) ''
     # FindLibArchive ignores libarchive.pc's Libs.private
@@ -176,9 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--sphinx-build=${sphinx}/bin/sphinx-build"
     "--sphinx-info"
     "--sphinx-man"
-  ]
-  ++ [
-    "--"
+  ];
+
+  cmakeFlags = [
     # We should set the proper `CMAKE_SYSTEM_NAME`.
     # http://www.cmake.org/Wiki/CMake_Cross_Compiling
     #
@@ -193,11 +191,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
     (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isStatic [
-    # kwsys's DynamicLoader test is inimical to -static
-    # doCheck is off anyway so just skip building tests
-    (lib.cmakeBool "BUILD_TESTING" false)
+
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   # make install attempts to use the just-built cmake
@@ -208,7 +203,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
 
-  doCheck = false; # fails
+  # NOTE: if you consider enabling this in the future, make sure to check the static build since kwsys's DynamicLoader test is inimical to -static
+  doCheck = false;
 
   passthru.updateScript = gitUpdater {
     url = "https://gitlab.kitware.com/cmake/cmake.git";
