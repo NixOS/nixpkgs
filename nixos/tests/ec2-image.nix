@@ -99,7 +99,20 @@ let
     + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
   );
 
-  ukiBoot = bootMode == "uefi" && store == "erofs";
+  # Read-only UEFI and hybrid images boot a UKI under UEFI.
+  ukiImage = store == "erofs" && imageCfg.ec2.bootMode != "legacy-bios";
+  hybrid = imageCfg.ec2.bootMode == "uefi-preferred";
+  expectedBootLoaders =
+    lib.optionalAttrs (imageCfg.ec2.bootMode != "legacy-bios") {
+      uefi =
+        if ukiImage then
+          "uki"
+        else if imageCfg.boot.loader.systemd-boot.enable then
+          "systemd-boot"
+        else
+          "limine";
+    }
+    // lib.optionalAttrs (imageCfg.ec2.bootMode != "uefi") { legacy-bios = "limine"; };
 
   storeFsType = (imageCfg.fileSystems."/nix/store" or imageCfg.fileSystems."/").fsType;
 
@@ -131,7 +144,7 @@ in
   name =
     "ec2-image"
     + lib.optionalString imageCfg.boot.loader.systemd-boot.enable "-systemd-boot"
-    + lib.optionalString (ukiBoot && !verity) "-uki"
+    + lib.optionalString (bootMode == "uefi" && store == "erofs" && !verity) "-uki"
     + lib.optionalString (store != "root") "-${store}"
     + lib.optionalString (!withNix) "-nonix"
     + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
@@ -284,7 +297,9 @@ in
       store = "${store}"
       nix_enabled = ${if imageCfg.nix.enable then "True" else "False"}
       verity = ${if verity then "True" else "False"}
-      uki_boot = ${if ukiBoot then "True" else "False"}
+      uki_image = ${if ukiImage then "True" else "False"}
+      hybrid = ${if hybrid then "True" else "False"}
+      firmware = "${firmware}"
 
       def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
           """Test that compressed user-data is decompressed by fetch-ec2-metadata"""
@@ -392,6 +407,7 @@ in
               assert image_info["disks"]["root"]["logical_bytes"] == image_info["logical_bytes"], image_info
               assert image_info["format"] == "QCOW2", image_info
               assert image_info["store"] == store, image_info
+              assert image_info["boot_loaders"] == json.loads('${builtins.toJSON expectedBootLoaders}'), image_info
               disk = {p["partlabel"]: p for p in json.loads(machine.succeed("lsblk -J -b -l -o PARTLABEL,PARTN,SIZE"))["blockdevices"]}
               labels = {"esp": "ESP", "root": "nixos"}
               if store != "root":
@@ -438,13 +454,24 @@ in
                   assert re.search(rf"^\s*root hash:\s+{roothash}$", status, re.M), (status, image_info)
                   machine.succeed("findmnt -n -o SOURCE /nix/store | tail -n1 | grep -qx /dev/mapper/nix-store")
 
-          if uki_boot:
+          if uki_image:
               with subtest("UKI boot"):
                   esp = "${imageCfg.boot.loader.efi.efiSysMountPoint}"
-                  machine.succeed(f"test -f {esp}/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI")
+                  efi_binaries = machine.succeed(f"find {esp} -iname '*.efi'").split()
+                  assert efi_binaries == [f"{esp}/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI"], efi_binaries
                   machine.fail(f"test -e {esp}/loader/entries")
-                  # systemd-stub, the UKI's EFI stub, sets this.
-                  machine.succeed("test -e /sys/firmware/efi/efivars/StubInfo-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+                  # Under BIOS, Limine reads the same command line from its own config.
+                  expected = "${imageCfg.boot.uki.settings.UKI.Cmdline}"
+                  if verity:
+                      expected += f" storehash={image_info['partitions']['store']['roothash']}"
+                  cmdline = machine.succeed("cat /proc/cmdline").strip()
+                  assert cmdline == expected, cmdline
+                  if firmware == "uefi":
+                      # systemd-stub, the UKI's EFI stub, sets StubInfo. Limine and systemd-boot set LoaderInfo.
+                      machine.succeed("test -e /sys/firmware/efi/efivars/StubInfo-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+                      machine.fail("test -e /sys/firmware/efi/efivars/LoaderInfo-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+                  if hybrid:
+                      machine.succeed(f"test -f {esp}/limine/limine-bios.sys")
 
           with subtest("Clean boot"):
               failed = machine.succeed("systemctl list-units --failed --no-legend --plain").strip()

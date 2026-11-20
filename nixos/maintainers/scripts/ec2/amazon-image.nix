@@ -89,9 +89,34 @@ let
   erofsLz4 = kernelOption "EROFS_FS_ZIP" != "n";
   readOnlyStore = cfg.store == "erofs";
   # A read-only store has one generation, so the firmware boots its UKI directly.
-  ukiBoot = readOnlyStore && bootMode == "uefi";
-  # The UKI's command line, as system.build.uki builds it.
+  ukiBoot = readOnlyStore && bootMode != "legacy-bios";
+  # Legacy BIOS can't load a UKI, so Limine boots the UKI's kernel and initrd.
+  ukiLimineBios = ukiBoot && bootMode == "uefi-preferred";
+  biosBootPartition = limineBios || ukiLimineBios;
+  # The UKI's command line, as system.build.uki builds it. Limine's BIOS entry uses it too.
   ukiCmdline = config.boot.uki.settings.UKI.Cmdline;
+  limineBiosConfig = pkgs.writeText "limine.conf" ''
+    serial: yes
+    timeout: 0
+
+    /${config.system.nixos.distroName}
+        protocol: linux
+        kernel_path: boot():/limine/kernel
+        module_path: boot():/limine/initrd
+        cmdline: ${ukiCmdline}
+  '';
+  # Recorded in image-info.json.
+  bootLoaders =
+    lib.optionalAttrs (bootMode != "legacy-bios") {
+      uefi =
+        if ukiBoot then
+          "uki"
+        else if systemdBoot then
+          "systemd-boot"
+        else
+          "limine";
+    }
+    // lib.optionalAttrs biosBootPartition { legacy-bios = "limine"; };
   # systemd-repart doesn't label erofs file systems.
   storeDevice = "/dev/disk/by-partlabel/nix-store";
   storeFileSystems =
@@ -202,6 +227,12 @@ let
         # systemd-boot-random-seed.service writes a seed for each instance on first boot.
         rm -f esp/loader/random-seed
       ''}
+    ''
+    + optionalString ukiLimineBios ''
+      install -D -m 644 -t esp/limine ${limine.package}/share/limine/limine-bios.sys
+      install -m 644 ${config.boot.uki.settings.UKI.Linux} esp/limine/kernel
+      install -m 644 ${config.boot.uki.settings.UKI.Initrd} esp/limine/initrd
+      install -m 644 ${limineBiosConfig} esp/limine/limine.conf
     '';
     preBuild =
       optionalString cfg.verity ''
@@ -238,7 +269,7 @@ let
           exit 1
         fi
       '';
-    postBuild = optionalString limineBios ''
+    postBuild = optionalString biosBootPartition ''
       ${lib.getExe' limine.package "limine"} bios-install ${config.image.baseName}.raw
     '';
     # Convert the image to amazonImage.format and write the metadata Hydra and NixOS/amis read.
@@ -262,6 +293,7 @@ let
         --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
         --arg logical_bytes "$logicalBytes" \
         --arg boot_mode "${bootMode}" \
+        --argjson boot_loaders ${lib.escapeShellArg (builtins.toJSON bootLoaders)} \
         --arg format ${diskFormat} \
         --arg store ${cfg.store} ${optionalString cfg.verity ''--arg roothash "$storehash"''} \
         --slurpfile repart repart-output.json \
@@ -269,6 +301,7 @@ let
         '{}
          | .label = $system_version
          | .boot_mode = $boot_mode
+         | .boot_loaders = $boot_loaders
          | .system = $system
          | .logical_bytes = $logical_bytes
          | .format = $format
@@ -378,8 +411,8 @@ in
         - `"erofs"` puts it on its own compressed, read-only partition.
           Instances can use and verify the store but can't add to it, so
           `nixos-rebuild`, channels and garbage collection don't work on them.
-          The image has no channel. With `ec2.bootMode = "uefi"`, the firmware
-          boots a unified kernel image directly, without a boot loader.
+          The image has no channel. UEFI firmware boots a unified kernel image
+          directly, without a boot loader. Legacy BIOS still boots with Limine.
         - `"erofs-overlay"` adds a writable overlay on the root file system,
           so Nix, `nixos-rebuild` and the channel work as with `"root"`.
           Garbage collection hides paths from the image but can't free their
@@ -590,7 +623,7 @@ in
         message = "The Amazon image boots with systemd-boot or Limine.";
       }
       {
-        assertion = cfg.verity -> ukiBoot;
+        assertion = cfg.verity -> ukiBoot && bootMode == "uefi";
         message = "amazonImage.verity requires amazonImage.store = \"erofs\" and ec2.bootMode = \"uefi\".";
       }
       {
@@ -621,7 +654,7 @@ in
     ec2.bootMode = mkDefault (if config.ec2.efi then "uefi" else "uefi-preferred");
     # systemd-boot can't boot legacy BIOS.
     boot.loader.systemd-boot.enable = mkDefault (bootMode == "uefi" && !ukiBoot);
-    boot.loader.limine.enable = mkDefault (bootMode != "uefi");
+    boot.loader.limine.enable = mkDefault (bootMode != "uefi" && !ukiBoot);
 
     boot.loader.grub.enable = mkIf ukiBoot (mkDefault false);
     boot.initrd.systemd.dmVerity.enable = mkIf cfg.verity true;
@@ -644,7 +677,7 @@ in
       imageSize = if autoSize then "auto" else "${toString config.virtualisation.diskSize}M";
       partitions = {
         # Limine finds its BIOS stage 2 here.
-        bios-boot = mkIf limineBios {
+        bios-boot = mkIf biosBootPartition {
           repartConfig = {
             Type = "21686148-6449-6e6f-744e-656564454649";
             SizeMinBytes = "1M";
