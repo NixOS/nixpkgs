@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     xkbcomp
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
