@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Xlib Resize, Rotate and Reflection (RandR) extension library";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxrandr";
