@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonBool "documentation" withIntrospection)
     (lib.mesonBool "man-pages" true)
@@ -92,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: send upstream
   postPatch = ''
     substituteInPlace docs/meson.build \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+      --replace-fail "'gi-docgen', req" "'gi-docgen', native:true, req"
   '';
 
   doCheck = false; # test-font: FAIL
@@ -114,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for laying out and rendering of text, with an emphasis on internationalization";
