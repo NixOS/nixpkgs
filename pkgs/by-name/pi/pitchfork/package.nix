@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "pitchfork";
-    version = "2.32.2";
+    version = "2.35.0";
 
     __structuredAttrs = true;
 
@@ -60,10 +60,10 @@ rustPlatform.buildRustPackage (
       owner = "jdx";
       repo = "pitchfork";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-uWyhsGCr3vSdy8EwLj0Orb8br+pQEH19r1+CbvVTrQw=";
+      hash = "sha256-SH56vOVNY7So5+9D3ua4h59obm7cXtCA3FZ7vZNBXl8=";
     };
 
-    cargoHash = "sha256-0UBgpmDFUouT9vtw0G/StZBgICCQiP5jfEUqtac5kM8=";
+    cargoHash = "sha256-7qHMYaCugXLoGhv1a8TO7qjiqgW9R8Y6haRiD0WQIzg=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) pname src version;
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (
       inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/ui";
       fetcherVersion = 3;
-      hash = "sha256-/XbMChPNLO9aHly6PATVRpaMTpvQz01fNQbG7vsraMo=";
+      hash = "sha256-9BlYgqms+apXzsvHROJVoPn1Rf4cc4AS/LarLTvvRSk=";
     };
 
     nativeBuildInputs = [ pkg-config ];
