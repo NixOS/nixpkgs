@@ -2904,11 +2904,10 @@ self: {
     };
   };
 
-  ssh-client-config = rec {
-    version = "2026.8.20";
-    url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-uwiDL2Rc2kW7TiRqtjmAocceLJOFT/9yDtR4c1IU7PI=";
-    meta.license = lib.licenses.cc0;
+  ssh-client-config = self.sshclientconfig // {
+    meta = self.sshclientconfig.meta // {
+      maintainers = [ ];
+    };
   };
 
   strace = {
