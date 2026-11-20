@@ -3,11 +3,11 @@
   dotnetCorePackages,
   fetchFromGitHub,
   fetchYarnDeps,
-  ffmpeg-headless,
   lib,
   nix-update-script,
   nixosTests,
   nodejs-slim_24,
+  openur-ffmpeg,
   sqlite,
   stdenvNoCC,
   writeText,
@@ -16,7 +16,7 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform.extensions) sharedLibrary;
-  ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
+  ffprobe = lib.getExe' openur-ffmpeg "ffprobe";
   libsqlite3 = "${lib.getLib sqlite}/lib/libsqlite3${sharedLibrary}";
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
