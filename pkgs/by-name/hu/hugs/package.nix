@@ -25,6 +25,14 @@ stdenv.mkDerivation {
 
   postUnpack = "find -type f -exec sed -i 's@/bin/cp@cp@' {} +";
 
+  # hsc2hs under Hugs runs a C compiler named gcc, which the Darwin stdenv
+  # does not have.  The library build then skips base, unix and network,
+  # and the installed Hugs has no Prelude.
+  postPatch = ''
+    substituteInPlace hsc2hs/Main.hs \
+      --replace-fail 'default_compiler = "gcc"' 'default_compiler = "cc"'
+  '';
+
   preConfigure = "unset STRIP";
 
   configureFlags = [
@@ -42,6 +50,28 @@ stdenv.mkDerivation {
     "--enable-ffi"
     "--enable-pthreads" # build Hugs using POSIX threads C library
   ];
+
+  doInstallCheck = true;
+
+  # A library package that fails to build is skipped without failing the
+  # build, so load the Prelude and modules of base and unix that hsc2hs makes
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    cat > check.hs <<'EOF'
+    import System.CPUTime (getCPUTime)
+    import System.Posix.Files (fileExist)
+
+    main :: IO ()
+    main = do
+      t <- getCPUTime
+      e <- fileExist "check.hs"
+      print (sum [1 .. 10 :: Int], t >= 0, e)
+    EOF
+    [ "$("$out/bin/runhugs" check.hs)" = "(55,True,True)" ]
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     mainProgram = "hugs";
