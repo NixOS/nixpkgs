@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxft
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonBool "documentation" withIntrospection)
     (lib.mesonBool "man-pages" true)
