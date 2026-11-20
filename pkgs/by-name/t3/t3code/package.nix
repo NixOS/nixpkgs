@@ -87,15 +87,17 @@ symlinkJoin {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  postBuild =
-    lib.optionalString (wrapperArgs != [ ]) ''
-      for program in "$out/bin"/*; do
-        wrapProgram "$program" ${lib.escapeShellArgs wrapperArgs}
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram "$out/bin/t3code-desktop" --set T3CODE_DESKTOP_LAUNCHER_PATH "$out/bin/t3code-desktop"
-    '';
+  postBuild = lib.optionalString (wrapperArgs != [ ]) ''
+    for program in "$out/bin"/*; do
+      args=( ${lib.escapeShellArgs wrapperArgs} )
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        if [[ "$program" == "$out/bin/t3code-desktop" ]]; then
+          args+=( --set-default T3CODE_DESKTOP_LAUNCHER_PATH "$program" )
+        fi
+      ''}
+      wrapProgram "$program" "''${args[@]}"
+    done
+  '';
 
   passthru = {
     unwrapped = t3code-unwrapped;
