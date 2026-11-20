@@ -10128,6 +10128,8 @@ self: super: with self; {
 
   litecli = callPackage ../development/python-modules/litecli { };
 
+  litedram = callPackage ../development/python-modules/litedram { };
+
   litellm = callPackage ../development/python-modules/litellm { };
 
   litellm-proxy-extras = callPackage ../development/python-modules/litellm-proxy-extras { };
