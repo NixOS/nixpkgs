@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.164.2";
+  version = "1.165.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-66wozKGD2/C2zypRWCw3NyiSC0K1RB7XqzSV84b5l54=";
+    hash = "sha256-9ued/q+FbdXyf/P41Mx/JkKNrpyPSAvmGLydOn8F2ig=";
   };
 
   patches = [

@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gradle,
+  gradle_9,
   jre,
   makeWrapper,
   nix-update-script,
@@ -13,27 +13,33 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "smithy-cli";
-  version = "1.72.1";
+  version = "1.75.0";
 
   src = fetchFromGitHub {
     owner = "smithy-lang";
     repo = "smithy";
     tag = finalAttrs.version;
-    hash = "sha256-IBqh2ATKi5MfaCjvXz7KE2p3lGJa8Sn3YhOuwaW1/sk=";
+    hash = "sha256-o7hGzMiLqu1qKUyUV81egrS1LDv4lIjfwG1xK7mBzVg=";
   };
 
   strictDeps = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [
-    gradle
+    gradle_9
     makeWrapper
   ];
 
   # Required on Darwin to avoid SocketException during Gradle operations
   __darwinAllowLocalNetworking = true;
 
-  mitmCache = gradle.fetchDeps {
+  # Java's dual-stack sockets prevent Gradle from connecting to its daemon
+  # inside the Darwin sandbox.
+  env = lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+  };
+
+  mitmCache = gradle_9.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };
@@ -101,7 +107,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "CLI for the Smithy interface definition language (IDL)";
-    homepage = "https://smithy.io/";
+    homepage = "https://smithy.io";
     changelog = "https://github.com/smithy-lang/smithy/releases/tag/${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
