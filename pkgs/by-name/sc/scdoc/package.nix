@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "scdoc";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Tjafa7m+YcUTryYHnW2EF0yaXPRc3uNzWdeEucCdEso=";
   };
 
@@ -33,10 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Simple man page generator written in C99 for POSIX systems";
     homepage = "https://git.sr.ht/~sircmpwn/scdoc";
-    changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${finalAttrs.src.rev}";
+    changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "scdoc";
     maintainers = [ ];
