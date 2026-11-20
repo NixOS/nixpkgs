@@ -2,7 +2,7 @@
   lib,
   cmake,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   python3,
   stdenv,
   libzint,
@@ -52,9 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (python3.pkgs) zxing-cpp;
     };
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
