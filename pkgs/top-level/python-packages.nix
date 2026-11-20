@@ -10014,6 +10014,8 @@ self: super: with self; {
 
   libzfs = callPackage ../development/python-modules/libzfs { };
 
+  libzim = callPackage ../development/python-modules/libzim { inherit (pkgs) libzim; };
+
   liccheck = callPackage ../development/python-modules/liccheck { };
 
   license-expression = callPackage ../development/python-modules/license-expression { };
