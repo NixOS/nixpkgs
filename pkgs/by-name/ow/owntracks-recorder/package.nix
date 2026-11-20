@@ -13,6 +13,7 @@
   libconfig,
   testers,
   owntracks-recorder,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,10 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = owntracks-recorder;
-    command = "ocat --version";
-    version = finalAttrs.version;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = owntracks-recorder;
+      command = "ocat --version";
+      version = finalAttrs.version;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
