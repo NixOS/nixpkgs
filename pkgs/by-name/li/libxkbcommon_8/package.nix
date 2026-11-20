@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     xkbcomp
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
@@ -85,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library to handle keyboard descriptions";
