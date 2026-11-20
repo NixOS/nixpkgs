@@ -75,8 +75,8 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rust.rustcTarget = "armv7-linux-androideabi";
-    androidSdkVersion = "35";
-    androidNdkVersion = "27";
+    androidSdkVersion = "37";
+    androidNdkVersion = "30";
     useAndroidPrebuilt = true;
   }
   // platforms.armv7a-android;
@@ -84,15 +84,15 @@ rec {
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rust.rustcTarget = "aarch64-linux-android";
-    androidSdkVersion = "35";
-    androidNdkVersion = "27";
+    androidSdkVersion = "37";
+    androidNdkVersion = "30";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    androidSdkVersion = "35";
-    androidNdkVersion = "27";
+    androidSdkVersion = "37";
+    androidNdkVersion = "30";
     useAndroidPrebuilt = false;
     useLLVM = true;
   };
