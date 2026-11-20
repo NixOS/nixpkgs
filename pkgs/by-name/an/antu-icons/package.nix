@@ -6,6 +6,9 @@
 }:
 
 stdenvNoCC.mkDerivation {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "antu-icons";
   version = "2.0"; # https://www.opendesktop.org/p/1188266/
 
