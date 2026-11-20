@@ -34,6 +34,9 @@ nix run github:NixOS/amis#upload-ami -- --image-info ./result/nix-support/image-
 the image `file` and its `format` (`RAW`, `VHD` or `QCOW2`), it records:
 
 * `store`: the `amazonImage.store` setting.
+* `boot_loaders`: what the image boots with under `uefi` and `legacy-bios`, for
+  the boot modes it supports. `uki` means the firmware loads a unified kernel
+  image directly, without `systemd-boot` or `limine`.
 * `partitions`: the ESP (`esp`), the root file system (`root`) and, with an erofs
   store, the Nix store (`store`), each with its GPT `label`, partition `number`
   and `size` in bytes.
