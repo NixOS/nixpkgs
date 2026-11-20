@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_44,
+  electron_45,
   python3,
   rustPackages_1_97,
   makeWrapper,
@@ -35,7 +35,7 @@ assert lib.warnIf (commandLineArgs != "")
 let
   nodejs = nodejs_24;
   pnpm = pnpm_11;
-  electron = electron_44;
+  electron = electron_45;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
@@ -47,13 +47,13 @@ let
   webrtc = callPackage ./webrtc.nix { ringrtcSrc = ringrtc.src; };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.32.0";
+  version = "8.35.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-6eh+Cuz/OAJP8gs0kOsfRb+trT7IpgQ5d/isr9x0kQg=";
+    hash = "sha256-REvgZ3xp/29kokMB/ThR3ZdPjqJfRC8PH7dJ5F+mrPQ=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -71,6 +71,9 @@ let
     pname = "signal-desktop-sticker-creator";
     inherit src version;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     pnpmRoot = "sticker-creator";
     pnpmWorkspaces = [ "signal-art-creator" ];
 
@@ -85,11 +88,10 @@ let
       prePnpmInstall = ''
         pnpm config set fetch-timeout 300000
       '';
-      fetcherVersion = 4;
-      hash = "sha256-uL6fTAoKwSy7sQmvKuQheAYP8tmCnZnfBUK1Ijxinhk=";
+      fetcherVersion = 5;
+      hash = "sha256-QTtGgkRFQMiOs+g/enYq5Kt3sytiUiAHnFy/vibA/qE=";
     };
 
-    strictDeps = true;
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
@@ -108,7 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop";
   inherit src version;
 
+  __structuredAttrs = true;
   strictDeps = true;
+
   nativeBuildInputs = [
     actool
     node-gyp
@@ -192,8 +196,8 @@ stdenv.mkDerivation (finalAttrs: {
     prePnpmInstall = ''
       pnpm config set fetch-timeout 300000
     '';
-    fetcherVersion = 4;
-    hash = "sha256-uL6fTAoKwSy7sQmvKuQheAYP8tmCnZnfBUK1Ijxinhk=";
+    fetcherVersion = 5;
+    hash = "sha256-QTtGgkRFQMiOs+g/enYq5Kt3sytiUiAHnFy/vibA/qE=";
   };
 
   env = {
@@ -201,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
     SIGNAL_ENV = "production";
     # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
     # We set the source-changed date to match the corresponding upstream release date.
-    SOURCE_DATE_EPOCH = 1792514633;
+    SOURCE_DATE_EPOCH = 1794438623;
   }
   // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-darwin") {
     # Test Node's legacy async-context implementation for the Rolldown
