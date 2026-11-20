@@ -1859,15 +1859,9 @@ self: {
     };
   };
 
-  markdown-inline = {
+  markdown-inline = self.markdown // {
     language = "markdown_inline";
-    version = "0.5.3";
-    url = "github:tree-sitter-grammars/tree-sitter-markdown";
-    hash = "sha256-WUVN7+lzDI+VC5PuJjhHiS4JpVr1x0Ic30i2tVrI6W8=";
     location = "tree-sitter-markdown-inline";
-    meta = {
-      license = lib.licenses.mit;
-    };
   };
 
   matlab = {
