@@ -130,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library that provides automatic proxy configuration management";
     homepage = "https://libproxy.github.io/libproxy/";
