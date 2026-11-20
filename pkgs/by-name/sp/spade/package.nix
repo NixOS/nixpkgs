@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Better hardware description language";
-    homepage = "https://codeberg/spade-lang/spade";
+    homepage = "https://codeberg.org/spade-lang/spade";
     changelog = "https://codeberg.org/spade-lang/spade/src/branch/main/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
     license = with lib.licenses; [

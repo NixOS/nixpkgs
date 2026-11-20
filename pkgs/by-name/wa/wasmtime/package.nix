@@ -24,9 +24,9 @@ let
       cargoHash = "sha256-V9ZZdO9piR2Cn5MjND0N78G+dPQhiIGxFl9lVAtTT50=";
     };
     lts-48 = {
-      version = "48.0.6";
-      hash = "sha256-UysbVNsE9OVYF3e2+JVIedrKEn34NprLL1S8IUuWgF8=";
-      cargoHash = "sha256-W40zAZKKKEIOZaSDq8jgv2dz3LVHS0+2l2Hwt/zsMo0=";
+      version = "48.0.10";
+      hash = "sha256-Pub0pqEMxmIxED/QEyz8mvyqTR7e0r40TnkZLETn8X0=";
+      cargoHash = "sha256-wLU/Y2rrOGW3pucBlhgShc1/pkN1Pm9L1u7x2alFUNE=";
     };
     main = {
       version = "50.0.1";

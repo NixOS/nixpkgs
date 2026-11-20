@@ -15,13 +15,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}";
 
   pname = "pelican-panel";
-  version = "1.0.0-rc.3";
+  version = "1.0.0-rc.4";
 
   src = fetchFromGitHub {
     owner = "pelican";
     repo = "panel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/MBgoWFM1PIs+cXz+QIaFkqMr91k4cONRiSsXpDSmAw=";
+    hash = "sha256-Ic3ldf0W2FLGFA9v2Oq+1NVj/m7tcnnZyhoo0MYCq7U=";
   };
 
   buildInputs = [ php85 ];
@@ -41,13 +41,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version
       ;
     strictDeps = true;
-    vendorHash = "sha256-XDchcBj915MTru1fYB2anxApufnbV2UVtjMic+Gx2Pg=";
+    vendorHash = "sha256-dljZJ800563NHufyXrJfD/TLGRtyVrc0LYQp1Cr7eRY=";
   };
 
   patches = [
-    # Disable panel one-click update button as it is not possible within NixOS
-    ./disable-panel-update-button.patch
-
     # Disable plugin page until support was added in NixOS module
     ./disable-plugin-page.patch
   ];
