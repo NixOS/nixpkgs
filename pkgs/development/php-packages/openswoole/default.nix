@@ -8,24 +8,21 @@
   php,
 }:
 
-let
-  version = "26.11.0";
-in
-buildPecl {
-  inherit version;
+buildPecl (finalAttrs: {
   pname = "openswoole";
+  version = "26.11.0";
 
   src = fetchFromGitHub {
     owner = "openswoole";
     repo = "swoole-src";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EGCAqlgFRVGBYNXxwK9qPFC4OcgUX/9hYSNyAX2CjLM=";
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
 
   meta = {
-    changelog = "https://github.com/openswoole/swoole-src/releases/tag/v${version}";
+    changelog = "https://github.com/openswoole/swoole-src/releases/tag/v${finalAttrs.version}";
     description = "Coroutine-based concurrency library and high performance programmatic server for PHP";
     homepage = "https://www.openswoole.com/";
     license = lib.licenses.asl20;
@@ -37,4 +34,4 @@ buildPecl {
     teams = [ lib.teams.php ];
     broken = lib.versionOlder php.version "8.3";
   };
-}
+})

@@ -19,6 +19,7 @@
   vulkan-loader,
   aws-lc,
   sqlite,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -91,18 +92,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonshine";
-  version = "0.17.2";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "hgaiser";
     repo = "moonshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qxq+Xcq5It5NWwtmluUd0EiHqp5uuMndEc/UnBbWm0E=";
+    hash = "sha256-bg32tFTJCNkihOvTEOsVyUt91OgEAAmL+IpRptTasNk=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-bAgFVFBtSuoUk7hImOUCUZc05sCb4J3oUxKCFjHwYX4=";
+  cargoHash = "sha256-hLjJMtEtmCEtZxDSu9TpETtoYMZiQ6yutAaK5k1RpLQ=";
 
   cargoBuildFlags = [
     "-p"
@@ -165,6 +166,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     } "$out/bin/moonshine"
   '';
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
@@ -185,7 +188,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       can play games remotely as if you were sitting in front of it.
     '';
     homepage = "https://github.com/hgaiser/moonshine";
-    changelog = "https://github.com/hgaiser/moonshine/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/hgaiser/moonshine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       neobrain

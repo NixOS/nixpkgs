@@ -17,21 +17,21 @@
   zstd,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   pname = "ddtrace";
-  version = "1.27.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-g3aqntLmvO6H1UH81zKsFV+a8TT0rcXZjRCm5aAQ4WM=";
+    hash = "sha256-9MTIbbV/JnSTSerHpJIReeTZtW1lxIIeXCGR9RaCZG4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-hOICGQJshjW90c9Vv5kVDocD7Itlqk4dQcJGTCGOuW0=";
+    inherit (finalAttrs) src;
+    hash = "sha256-97PlYf9KY0C+J1HYkJM/oqAjxwz+c8cYtF53L4EvE5I=";
   };
 
   env = {
@@ -70,7 +70,7 @@ buildPecl rec {
 
   meta = {
     broken = lib.versionAtLeast php.version "8.6";
-    changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/DataDog/dd-trace-php/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Datadog Tracing PHP Client";
     homepage = "https://github.com/DataDog/dd-trace-php";
     license = with lib.licenses; [
@@ -79,4 +79,4 @@ buildPecl rec {
     ];
     teams = [ lib.teams.php ];
   };
-}
+})

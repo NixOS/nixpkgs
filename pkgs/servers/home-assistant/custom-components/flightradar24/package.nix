@@ -12,13 +12,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "AlexandrErohin";
   domain = "flightradar24";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "AlexandrErohin";
     repo = "home-assistant-flightradar24";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5FJngWHghZW8xvL6ZkkEJDqHVLHGgHUG/gappayuEsE=";
+    hash = "sha256-4tFzzNoh6iFfAqp+MEqYa7wMFvDGK6eiLQGjU/NSuXM=";
   };
 
   ignoreVersionRequirement = [

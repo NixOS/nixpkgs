@@ -18,18 +18,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pinentry-egui";
-  version = "0-unstable-2026-07-10";
+  version = "0.2.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dsociative";
     repo = "pinentry-egui";
-    rev = "c81bf237048f5b296488751467bb2975982d05af";
-    hash = "sha256-xUhPaXiysXbOctM3FO6WgafVPUOQ+9lP2d4U9PBxCvk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rQqJRhsZXQc7DlpzjAF+r/979bjx1vksPzpjHOYfbjU=";
   };
 
-  __structuredAttrs = true;
+  cargoHash = "sha256-UufCu0MIYEN0ezn7y4OSuutiYwkbiCfx0xAHWnMEm3A=";
 
-  cargoHash = "sha256-81W3NOQ6EOV3bMt7SYtg3AjAgmdHZ81gEtQkaOYVFIk=";
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
@@ -44,6 +46,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxi
     libxrandr
   ];
+
+  postInstall = ''
+    # This is a requirement for gpg-agent and yubikey-agent.
+    ln -s $out/bin/pinentry-egui $out/bin/pinentry
+  '';
 
   postFixup = ''
     patchelf $out/bin/pinentry-egui \

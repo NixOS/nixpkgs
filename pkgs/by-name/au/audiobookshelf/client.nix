@@ -12,7 +12,7 @@ buildNpmPackage {
 
   sourceRoot = "${src.name}/client";
 
-  npmDepsHash = "sha256-mQSppjp21z+xqLZekI/0qJ1gtLhX3L2CyC6e/l9COL4=";
+  npmDepsHash = "sha256-mx2THzujOqlHtQhX4xYOguDiL7ld6oQMWyTOaYyvw6A=";
 
   env.ROUTER_BASE_PATH = routerBasePath;
 

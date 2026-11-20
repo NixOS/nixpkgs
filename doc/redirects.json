@@ -108,6 +108,9 @@
   "cuda-writing-tests": [
     "index.html#cuda-writing-tests"
   ],
+  "dependencies-on-sdk-packages": [
+    "index.html#dependencies-on-sdk-packages"
+  ],
   "dev-environments": [
     "index.html#dev-environments"
   ],

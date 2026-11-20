@@ -91,7 +91,10 @@ buildPythonPackage rec {
   ++ pbs-installer.optional-dependencies.download
   ++ pbs-installer.optional-dependencies.install;
 
-  pythonRelaxDeps = [ "installer" ];
+  pythonRelaxDeps = [
+    "cachecontrol"
+    "installer"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd poetry \
