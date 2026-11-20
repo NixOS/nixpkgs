@@ -5305,6 +5305,12 @@
     matrix = "@chito:nichijou.dev";
     name = "Chito";
   };
+  chitvs = {
+    email = "alessandro.chitarrini51@gmail.com";
+    github = "chitvs";
+    githubId = 140112899;
+    name = "Alessandro Chitarrini";
+  };
   chivay = {
     email = "hubert.jasudowicz@gmail.com";
     github = "chivay";
