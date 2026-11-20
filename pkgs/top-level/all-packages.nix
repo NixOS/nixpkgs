@@ -2404,6 +2404,7 @@ with pkgs;
   patchutils_0_4_2 = callPackage ../tools/text/patchutils/0.4.2.nix { };
 
   inherit (import ../servers/sql/percona-server pkgs)
+    percona-server_9_7
     percona-server_8_4
     percona-server
     ;
