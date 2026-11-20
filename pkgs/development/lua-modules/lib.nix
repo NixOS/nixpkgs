@@ -76,13 +76,16 @@ rec {
   */
   toLuaModule =
     drv:
-    drv.overrideAttrs (oldAttrs: {
-      # Use passthru in order to prevent rebuilds when possible.
-      passthru = (oldAttrs.passthru or { }) // {
-        luaModule = lua;
-        requiredLuaModules = requiredLuaModules drv.propagatedBuildInputs;
-      };
-    });
+    drv.overrideAttrs (
+      finalAttrs: oldAttrs: {
+        # Use passthru in order to prevent rebuilds when possible.
+        passthru = (oldAttrs.passthru or { }) // {
+          luaModule = lua;
+          # Use finalAttrs so dependencies added via overrideAttrs show up in Lua environments.
+          requiredLuaModules = requiredLuaModules (finalAttrs.propagatedBuildInputs or [ ]);
+        };
+      }
+    );
 
   /*
     generate a luarocks config conforming to:

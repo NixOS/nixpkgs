@@ -4,23 +4,25 @@
   fetchFromGitHub,
   cmake,
   qtbase,
+  lxqt-build-tools,
   wrapQtAppsHook,
   gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdbusmenu-lxqt";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libdbusmenu-lxqt";
     rev = version;
-    hash = "sha256-5X73kRUtOYeqBEIw2ctUnwXnWKPHDaoT489yT5nugZw=";
+    hash = "sha256-2e/mARad8VeRPr8juJNtETDyOB9ftHAh0oX4rv0Bf5o=";
   };
 
   nativeBuildInputs = [
     cmake
+    lxqt-build-tools
     wrapQtAppsHook
   ];
 

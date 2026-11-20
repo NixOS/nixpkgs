@@ -2,19 +2,20 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  openssl,
   python3,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "radicale";
-  version = "3.9.1";
+  version = "3.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L47fNYeMwTj39baHE+eM6vQp5DFHU00eGsJ+L8qhaDU=";
+    hash = "sha256-fu9ITFgxEOc/P9PicK3OPV+UD/ZLNuv1RZbktAtggOg=";
   };
 
   build-system = with python3.pkgs; [
@@ -41,10 +42,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
+    openssl
+  ]
+  ++ (with python3.pkgs; [
     pytestCheckHook
     waitress
-  ];
+  ]);
 
   # skip tests which try to measure how long something takes; makes the build fail sometimes
   disabledTests = [ "delay" ];

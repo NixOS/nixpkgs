@@ -4,11 +4,10 @@
   fetchFromGitHub,
   lib,
   versionCheckHook,
-  customKeyring ? null,
 }:
 buildGoModule (finalAttrs: {
   pname = "lazyspotify";
-  version = "0.5.2";
+  version = "0.6.1";
 
   __structuredAttrs = true;
 
@@ -16,20 +15,12 @@ buildGoModule (finalAttrs: {
     owner = "dubeyKartikay";
     repo = "lazyspotify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P7Zon1O3YlD6Rga53DJA0Dap7qAcj8G6RaBi/3XWjAI=";
+    hash = "sha256-HLmaWIRYBJ5ErugKbg7ndW7Pf5Dozh6K1J2lSP8rTvE=";
   };
 
   vendorHash = "sha256-Axdt3/3ZOZY9Z5VUI6Wh77oIREOO26ODMyEgtscTmn8=";
 
   subPackages = [ "cmd/lazyspotify" ];
-
-  # lets me use oo7 with /org/freedesktop/secrets/collection/Login
-  # unsure why its needed tbh but fails without
-  preBuild = lib.optionalString (customKeyring != null) ''
-    chmod -R u+w vendor/github.com/zalando/go-keyring
-    substituteInPlace vendor/github.com/zalando/go-keyring/secret_service/secret_service.go \
-      --replace-fail '/org/freedesktop/secrets/aliases/default' '${customKeyring}'
-  '';
 
   ldflags = [
     "-s"

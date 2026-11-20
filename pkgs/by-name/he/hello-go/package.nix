@@ -12,11 +12,6 @@ buildGoModule {
 
   env.CGO_ENABLED = 0;
 
-  # go installs binary into $out/bin/$GOOS_$GOARCH/hello-go in cross compilation
-  postInstall = ''
-    [[ -f "$out/bin/hello-go" ]] || ln -s ./''${GOOS}_''${GOARCH}/hello-go $out/bin/hello-go
-  '';
-
   meta = {
     description = "Simple program printing hello world in Go";
     longDescription = ''

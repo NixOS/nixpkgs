@@ -8,7 +8,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
-  nodejs_22, # TODO: move back to 24
+  nodejs_24,
   vips,
   pkg-config,
   nixosTests,
@@ -19,7 +19,7 @@
 
 let
   # upstream bluesky-social/pds uses nodejs 22+ (aims for LTS)
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
   pnpm = pnpm_10;

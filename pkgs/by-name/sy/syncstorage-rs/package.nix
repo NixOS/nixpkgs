@@ -8,6 +8,7 @@
   libmysqlclient,
   libpq,
   openssl,
+  aws-lc,
   makeBinaryWrapper,
   lib,
   nix-update-script,
@@ -33,7 +34,7 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syncstorage-rs";
-  version = "0.23.3";
+  version = "0.24.0";
 
   __structuredAttrs = true;
 
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mozilla-services";
     repo = "syncstorage-rs";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-d0rA/bWuo4gXvqI2inlvRI9NBP6ZRNSwLPkszNIkmhE=";
+    hash = "sha256-VPU1opX2Bv1BqMBbXfQgEq0pCTC9vOkBFNWdiw24CTg=";
   };
 
   nativeBuildInputs = [
@@ -51,12 +52,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    lib.optional (dbBackend == "mysql") libmysqlclient
-    ++ lib.optionals (dbBackend == "postgresql") [
-      libpq
-      openssl
-    ];
+  buildInputs = [
+    aws-lc
+  ]
+  ++ lib.optional (dbBackend == "mysql") libmysqlclient
+  ++ lib.optionals (dbBackend == "postgresql") [
+    libpq
+    openssl
+  ];
 
   buildNoDefaultFeatures = true;
   # The syncserver "postgres" feature only enables syncstorage-db/postgres.
@@ -81,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoHash = "sha256-BJ5+6o57WlwsTerKCmOPXATPHQfjr5cRYMbqC8CIPg0=";
+  cargoHash = "sha256-8SxJ1K3fk+gWqt8xZsk/8L1cv1G1uDssYK0wcSzF7cA=";
 
   # almost all tests need a DB to test against
   doCheck = false;

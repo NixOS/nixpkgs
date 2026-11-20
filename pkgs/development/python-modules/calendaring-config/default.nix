@@ -52,5 +52,6 @@ buildPythonPackage (finalAttrs: {
         gpl3Plus
       ];
     maintainers = [ lib.maintainers.dotlambda ];
+    teams = [ lib.teams.ngi ];
   };
 })

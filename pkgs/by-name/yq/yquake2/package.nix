@@ -4,7 +4,8 @@
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
-  SDL2,
+  pkg-config,
+  sdl3,
   libGL,
   curl,
   openalSupport ? true,
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yquake2";
-  version = "8.60";
+  version = "8.70";
 
   src = fetchFromGitHub {
     owner = "yquake2";
     repo = "yquake2";
     rev = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-XD0Fnx3TZwZUvjLOpzM5oWoIQFykDuBOddQXudkiyB0=";
+    sha256 = "sha256-JsLkgQs0xM394B9x8UaddlQFIAD2dKHVnCyqv4UZQ+A=";
   };
 
   postPatch = ''
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    SDL2
+    sdl3
     libGL
     curl
   ]
@@ -44,7 +45,10 @@ stdenv.mkDerivation rec {
     "WITH_SYSTEMDIR=\${out}/share/games/quake2"
   ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
 

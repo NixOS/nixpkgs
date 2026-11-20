@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dns-collector";
-  version = "3.3.5";
+  version = "3.3.7";
 
   src = fetchFromGitHub {
     owner = "dmachard";
     repo = "dns-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4NtipFqza+KUJ8JDErkrhip22eR5UAc0ZjlWCBWGB1g=";
+    hash = "sha256-JtxJmhJ52di+JfXQXnE09au0NPn/TaINvxtqIdGpyH8=";
   };
 
   subPackages = [ "." ];

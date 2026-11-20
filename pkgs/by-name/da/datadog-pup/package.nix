@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "datadog-pup";
-  version = "2.3.3";
+  version = "2.5.1";
 
   __structuredAttrs = true;
 
@@ -22,10 +22,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "DataDog";
     repo = "pup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pk/ak21mY+k0TNoH7SaVVWysdGmhwfSvaNFJFoGSbFU=";
+    hash = "sha256-eGYpg560f3o9/I8TckjW4JgfJfV/6vi1exx/TQr5+Yg=";
   };
 
-  cargoHash = "sha256-8OEL9r+yKBjfEeaenQ1B14NvLJeq5alnmZIoD1v5e4Y=";
+  cargoHash = "sha256-2LcuZ8dFzdr24d7ySuba7HvEkoryzDgufvpD2whcgPs=";
+
+  postPatch = ''
+    # Set SSL_CERT_FILE again after clearing the environment in this test, otherwise it fails
+    substituteInPlace tests/governance_cli.rs \
+      --replace-fail '.env_clear()' '.env_clear().env("SSL_CERT_FILE", std::env::var("SSL_CERT_FILE").unwrap_or_default())'
+  '';
 
   checkType = "debug";
   dontUseCargoParallelTests = true;
@@ -41,6 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     writableTmpDirAsHomeHook
   ];
 
@@ -62,10 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doInstallCheck = true;
-
-  preCheck = ''
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
 
   passthru.updateScript = nix-update-script { };
 

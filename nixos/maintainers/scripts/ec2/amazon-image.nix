@@ -70,8 +70,10 @@ let
       # Set up /nix/var/nix and root's channel the way nixos-install does.
       mkdir -p nix-state/profiles
       ln -s ${toplevel} nix-state/profiles/system-1-link
-      # Limine shows its mtime as the build date.
-      touch -h -d "@$SOURCE_DATE_EPOCH" nix-state/profiles/system-1-link
+      ${optionalString limine.enable ''
+        # Limine shows its mtime as the build date.
+        touch -h -d "@$SOURCE_DATE_EPOCH" nix-state/profiles/system-1-link
+      ''}
       ln -s system-1-link nix-state/profiles/system
       ${optionalString config.nix.enable ''
         NIX_STATE_DIR=$PWD/nix-state ${lib.getExe' config.nix.package.out "nix-store"} --load-db \
@@ -94,12 +96,17 @@ let
 
       # Install the boot loader into the build directory, so the store holds no
       # extra copies of the kernel and initrd.
-      mkdir -p esp root/{etc,tmp}
-      ln -s ${config.environment.etc."os-release".source} root/etc/os-release
-      ${optionalString (config.environment.etc ? machine-id) ''
-        ln -s ${config.environment.etc.machine-id.source} root/etc/machine-id
-      ''}
+      mkdir -p esp root/tmp
       bwrapArgs=()
+      ${optionalString systemdBoot ''
+        # bootctl reads os-release.
+        mkdir -p root/etc
+        ln -s ${config.environment.etc."os-release".source} root/etc/os-release
+        ${optionalString (config.environment.etc ? machine-id) ''
+          ln -s ${config.environment.etc.machine-id.source} root/etc/machine-id
+        ''}
+        bwrapArgs+=(--setenv NIXOS_INSTALL_BOOTLOADER 1 --setenv SYSTEMD_RELAX_ESP_CHECKS 1)
+      ''}
       ${optionalString limineBios ''
         # postBuild installs the BIOS stages into the image, so give the
         # installer a scratch disk.
@@ -115,14 +122,14 @@ let
         --proc /proc \
         --dev /dev \
         "''${bwrapArgs[@]}" \
-        --setenv NIXOS_INSTALL_BOOTLOADER 1 \
-        --setenv SYSTEMD_RELAX_ESP_CHECKS 1 \
         --setenv NIX_REMOTE "dummy://" \
         --setenv TMPDIR /tmp \
         -- ${config.system.build.installBootLoader} ${toplevel}
 
-      # systemd-boot-random-seed.service writes a seed for each instance on first boot.
-      rm -f esp/loader/random-seed
+      ${optionalString systemdBoot ''
+        # systemd-boot-random-seed.service writes a seed for each instance on first boot.
+        rm -f esp/loader/random-seed
+      ''}
       echo "CopyFiles=$PWD/esp:/" >> repart.d/esp.conf
     '';
     postBuild = optionalString limineBios ''

@@ -1,8 +1,8 @@
 {
     "26.3": {
-        "hash": "sha256-lgH5omoqUqDyyAfPGr9pH5buT7KHh4MTtgHOvCxR6r8=",
-        "version": "26.3-244",
-        "url": "https://fill-data.papermc.io/v1/objects/9601f9a26a2a52a0f2c807cf1abf691f96ee4fb287878313b601cebc2c51eabf/paper-26.3-244.jar",
+        "hash": "sha256-yGuvg7H7DrDVcvOUhMJCIQiWxq35zJNC1cFsTecMm9w=",
+        "version": "26.3-256",
+        "url": "https://fill-data.papermc.io/v1/objects/c86baf83b1fb0eb0d572f39484c242210896c6adf9cc9342d5c16c4de70c9bdc/paper-26.3-256.jar",
         "javaVersion": 25
     },
     "26.2": {

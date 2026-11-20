@@ -115,6 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
                       --replace "which %s" "${which}/bin/which %s"
     substituteInPlace CMakeLists.txt \
       --replace-fail "CONFIGURE_WZ_COMPILER_WARNINGS()" ""
+    # abseil (via protobuf) requires the C++ standard it was built with (C++20)
+    substituteInPlace 3rdparty/GameNetworkingSockets/src/CMakeLists.txt \
+      --replace-fail "PRIVATE cxx_std_17" "PRIVATE cxx_std_20"
   '';
 
   cmakeFlags = [
