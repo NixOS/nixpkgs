@@ -8,16 +8,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "toolhive";
-  version = "0.56.0";
+  version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "stacklok";
     repo = "toolhive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rssF9ODeL/ISfJSqzD40RhOz1AeX+gMs+ruf5XRT6iM=";
+    hash = "sha256-i9fqsdlTE2rzXFvdwA8mDkk9LvdG80xQCN1tsbKxk1w=";
   };
 
-  vendorHash = "sha256-37Eq3KDt6pMFTLL2MgkD0F1WvEGUhtA8fTOuxPVcgyA=";
+  vendorHash = "sha256-cQmGWythKkXAlxVuHs9DBftoiu5vI3wfg1DwQ3gL0bU=";
 
   ldflags = [
     "-s"
