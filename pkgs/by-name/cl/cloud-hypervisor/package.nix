@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       qyliss
       phip1611
+      adamcstephens
     ];
     platforms = [
       "aarch64-linux"
