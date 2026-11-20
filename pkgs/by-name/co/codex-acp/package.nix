@@ -3,29 +3,27 @@
   buildNpmPackage,
   codex,
   fetchFromGitHub,
+  jq,
   makeBinaryWrapper,
   nix-update-script,
+  runCommand,
   stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "codex-acp";
-  version = "2.1.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "codex-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bSxt9vtFnIrdZDmFJdYAfqkgm4BrGYKe420RamPkZvg=";
+    hash = "sha256-e5EcyiQrayZ+FRUrVq0GC0XrSNn4BAM9lGVeroZyjIQ=";
   };
 
-  npmDepsHash = "sha256-7v7QE0cmYsd3JGu0VoT53yZ1rb9wYB+tXt05G1EEvz8=";
-
-  patches = [
-    # https://github.com/agentclientprotocol/codex-acp/pull/609
-    ./test-codex-path.patch
-  ];
+  npmDepsHash = "sha256-osqAy2cjtBbWNEZcMeVZxi2pVbCTReZY8Nd+KPJJRAo=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -39,7 +37,8 @@ buildNpmPackage (finalAttrs: {
       --set-default CODEX_PATH ${lib.getExe codex}
   '';
 
-  # Codex's managed preferences sync fails in the Darwin sandbox.
+  # Codex's managed preferences sync fails for Darwin build users with /var/empty homes.
+  # https://github.com/openai/codex/issues/50072
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
@@ -55,7 +54,42 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
+    tests.e2e =
+      runCommand "check-codex-acp"
+        {
+          nativeBuildInputs = [
+            jq
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          coproc ACP { timeout 30s ${lib.getExe finalAttrs.finalPackage}; }
+          acpPid=$ACP_PID
+          acpInput=''${ACP[1]}
+
+          printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1,"clientCapabilities":{}}}' >&"$acpInput"
+          while IFS= read -r line; do
+            printf '%s\n' "$line" >> "$out"
+            if jq --exit-status '.id == 1' <<< "$line" > /dev/null; then
+              break
+            fi
+          done <&"''${ACP[0]}"
+          exec {acpInput}>&-
+          wait "$acpPid"
+
+          jq --exit-status --slurp '
+            any(.[];
+              .id == 1 and
+              .result.protocolVersion == 1 and
+              .result.agentInfo.name == "@agentclientprotocol/codex-acp"
+            )
+          ' "$out"
+        '';
+  };
 
   meta = {
     description = "ACP adapter for Codex CLI";
