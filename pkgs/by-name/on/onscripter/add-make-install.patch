@@ -1,0 +1,12 @@
+diff --git a/Makefile.onscripter b/Makefile.onscripter
+index 0522dd0..6eede0d 100644
+--- a/Makefile.onscripter
++++ b/Makefile.onscripter
+@@ -130,3 +130,7 @@ FontInfo$(OBJSUFFIX): FontInfo.h Encoding.h
+ DirtyRect$(OBJSUFFIX) : DirtyRect.h
+ AVIWrapper$(OBJSUFFIX): AVIWrapper.h
+ LUAHandler$(OBJSUFFIX): $(ONSCRIPTER_HEADER) LUAHandler.h
++
++.PHONY: install
++install:
++	install -Dm755 -t $(out)/bin $(TARGET)

@@ -1,0 +1,21 @@
+diff --git a/source/main.c b/source/main.c
+index 2d817e5..9dfeb3d 100644
+--- a/source/main.c
++++ b/source/main.c
+@@ -28,6 +28,7 @@
+ #include <unistd.h>
+ #include <errno.h>
+ #include <libgen.h>
++#include <stdbool.h>
+ #ifndef _WIN32
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+@@ -62,8 +63,6 @@ typedef signed short s16;
+ typedef signed int s32;
+ typedef signed long long s64;
+
+-typedef enum { false, true } bool;
+-
+ #ifndef __WIN32__
+ static const char *desc_export = "export";
+ #ifndef __APPLE__

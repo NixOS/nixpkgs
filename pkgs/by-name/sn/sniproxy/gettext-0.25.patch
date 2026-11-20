@@ -1,0 +1,14 @@
+diff --git a/configure.ac b/configure.ac
+index cac74f1..a6bc935 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -9,6 +9,9 @@ AM_INIT_AUTOMAKE([subdir-objects])
+ AM_SILENT_RULES([yes])
+ AC_GNU_SOURCE
+ 
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
++
+ # Checks for programs.
+ AC_PROG_CC_C99
+ # Required by automake < 1.14

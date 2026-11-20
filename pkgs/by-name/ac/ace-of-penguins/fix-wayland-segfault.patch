@@ -1,0 +1,16 @@
+diff --git a/lib/help.c b/lib/help.c
+--- a/lib/help.c
++++ b/lib/help.c
+@@ -177,8 +177,12 @@
+   for (i=0; i<17; i++)
+   {
+     if (!fonts[i])
+       fonts[i] = XLoadQueryFont(display, i & STYLE_TT ? "fixed" : "variable");
++    if (!fonts[i])
++      fonts[i] = XLoadQueryFont(display, "fixed");
++    if (!fonts[i])
++      return;
+     thin_space[i] = XTextWidth(fonts[i], " ", 1);
+   }
+   for (i=0; i<NTAGS; i++)
+     tags[i].taglen = strlen(tags[i].tag);

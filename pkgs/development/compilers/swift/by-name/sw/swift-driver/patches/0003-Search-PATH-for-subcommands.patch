@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 7 Sep 2026 19:24:08 -0400
+Subject: [PATCH 3/4] Search PATH for subcommands
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This aligns Swift Driver with the legacy/C++ frontend’s behavior when
+searching for subcommands.
+---
+ Sources/swift-driver/main.swift | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/Sources/swift-driver/main.swift b/Sources/swift-driver/main.swift
+index d34ee811..ea3f5607 100644
+--- a/Sources/swift-driver/main.swift
++++ b/Sources/swift-driver/main.swift
+@@ -120,15 +120,12 @@ do {
+   if case .subcommand(let subcommand) = mode {
+     // We are running as a subcommand, try to find the subcommand adjacent to the executable we are running as.
+     // If we didn't find the tool there, let the OS search for it.
+-    let subcommandPath: AbsolutePath?
+-    if let executablePath = Process.findExecutable(CommandLine.arguments[0]) {
++    let executablePath = try Process.findExecutable(ProcessInfo.processInfo.arguments[0]).map {
+       // Attempt to resolve the executable symlink in order to be able to
+       // resolve compiler-adjacent library locations.
+-      subcommandPath = try TSCBasic.resolveSymlinks(executablePath).parentDirectory.appending(component: subcommand)
+-    } else {
+-      subcommandPath = Process.findExecutable(subcommand)
++      try TSCBasic.resolveSymlinks($0).parentDirectory
+     }
+-
++    let subcommandPath = Process.findExecutable(subcommand, workingDirectory: executablePath)
+     guard let subcommandPath = subcommandPath,
+           localFileSystem.exists(subcommandPath) else {
+       throw Driver.Error.unknownOrMissingSubcommand(subcommand, nil)
+-- 
+2.54.0
+

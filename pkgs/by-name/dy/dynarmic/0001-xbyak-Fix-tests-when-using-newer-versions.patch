@@ -1,0 +1,27 @@
+From 40e8205b3efd126b9676a783c8306793e61d3f00 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sun, 6 Jul 2025 10:08:26 +0200
+Subject: [PATCH] xbyak: Fix tests when using newer versions
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ src/dynarmic/CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/dynarmic/CMakeLists.txt b/src/dynarmic/CMakeLists.txt
+index 6f0813ca..21a5576c 100644
+--- a/src/dynarmic/CMakeLists.txt
++++ b/src/dynarmic/CMakeLists.txt
+@@ -267,6 +267,9 @@ if ("x86_64" IN_LIST ARCHITECTURE)
+             xbyak::xbyak
+             Zydis::Zydis
+     )
++    # Newer versions of xbyak (>= 7.25.0) have stricter checks that currently
++    # fail in dynarmic
++    target_compile_definitions(dynarmic PRIVATE XBYAK_STRICT_CHECK_MEM_REG_SIZE=0)
+ 
+     target_architecture_specific_sources(dynarmic "x86_64"
+         backend/x64/abi.cpp
+-- 
+2.49.0
+

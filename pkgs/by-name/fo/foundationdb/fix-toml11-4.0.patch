@@ -1,0 +1,39 @@
+From d4b022955e049793a5eac573f6eb2931686a81ab Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Mon, 15 Sep 2025 22:09:00 +0100
+Subject: [PATCH] Fix the build with toml11 4.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+In toml11 3.0, comments were discarded by default, so this declaration
+was redundant. In toml11 ≥ 4.0, they are preserved by default,
+but opting out is more baroque. It doesn’t seem clear to me why
+discarding comments is specifically relevant here, so I’ve opted
+to simplify the code by using the default uniformly, but a version
+conditional would be possible if this is important.
+
+Many major Linux distributions have already moved to toml11 ≥ 4.0,
+so this simplifies packaging.
+
+(cherry picked from commit 432a9562573828cc45e3475e53feba48c79a8342)
+---
+ fdbserver/SimulatedCluster.actor.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fdbserver/SimulatedCluster.actor.cpp b/fdbserver/SimulatedCluster.actor.cpp
+index 89d4508ad..4cc11a7bf 100644
+--- a/fdbserver/SimulatedCluster.actor.cpp
++++ b/fdbserver/SimulatedCluster.actor.cpp
+@@ -116,7 +116,7 @@ bool destructed = false;
+ // environment details
+ class TestConfig : public BasicTestConfig {
+ 	class ConfigBuilder {
+-		using value_type = toml::basic_value<toml::discard_comments>;
++		using value_type = toml::value;
+ 		using base_variant = std::
+ 		    variant<int, float, double, bool, std::string, std::vector<int>, std::vector<std::string>, ConfigDBType>;
+ 		using types =
+-- 
+2.51.0
+

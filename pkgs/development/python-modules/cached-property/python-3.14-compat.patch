@@ -1,0 +1,60 @@
+From cb1f82b160e053819f41c87fcb41a48d4d44b0ea Mon Sep 17 00:00:00 2001
+From: Petr Viktorin <encukou@gmail.com>
+Date: Thu, 2 Dec 2021 11:26:20 +0100
+Subject: [PATCH] Use iscoroutinefunction from inspect not asyncio
+
+Python 3.14 will deprecate asyncio.iscoroutinefunction:
+https://github.com/python/cpython/pull/122875
+
+inspect.iscoroutinefunction exists since 3.5 and our baseline
+is 3.8, so we can just use it unconditionally.
+
+Using a wrapper with @asyncio.coroutine in __get__ wasn't
+necessary (the future from asyncio.ensure_future is awaitable,
+and the wrapper doesn't do anything asynchronous), so the
+logic can be simplified to just call asyncio.ensure_future
+(to schedule the task and store the result when it's
+available).
+---
+ cached_property.py | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/cached_property.py b/cached_property.py
+index e83ecca..fe06b34 100644
+--- a/cached_property.py
++++ b/cached_property.py
+@@ -4,6 +4,7 @@
+ __license__ = "BSD"
+ 
+ from functools import wraps
++from inspect import iscoroutinefunction
+ from time import time
+ import threading
+ import asyncio
+@@ -24,21 +25,14 @@ def __get__(self, obj, cls):
+         if obj is None:
+             return self
+ 
+-        if asyncio.iscoroutinefunction(self.func):
+-            return self._wrap_in_coroutine(obj)
++        if iscoroutinefunction(self.func):
++            value = asyncio.ensure_future(self.func(obj))
++        else:
++            value = self.func(obj)
+ 
+-        value = obj.__dict__[self.func.__name__] = self.func(obj)
++        obj.__dict__[self.func.__name__] = value
+         return value
+ 
+-    def _wrap_in_coroutine(self, obj):
+-        @wraps(obj)
+-        def wrapper():
+-            future = asyncio.ensure_future(self.func(obj))
+-            obj.__dict__[self.func.__name__] = future
+-            return future
+-
+-        return wrapper()
+-
+ 
+ class threaded_cached_property:
+     """

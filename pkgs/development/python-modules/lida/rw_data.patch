@@ -1,0 +1,16 @@
+diff --git a/lida/web/app.py b/lida/web/app.py
+index 32046a3..599ae07 100644
+--- a/lida/web/app.py
++++ b/lida/web/app.py
+@@ -34,8 +34,9 @@ app.mount("/api", api)
+ 
+ root_file_path = os.path.dirname(os.path.abspath(__file__))
+ static_folder_root = os.path.join(root_file_path, "ui")
+-files_static_root = os.path.join(root_file_path, "files/")
+-data_folder = os.path.join(root_file_path, "files/data")
++home_dir = os.path.expanduser("~")
++files_static_root = os.path.join(home_dir, ".lida/files")
++data_folder = os.path.join(files_static_root, "data")
+ os.makedirs(data_folder, exist_ok=True)
+ os.makedirs(files_static_root, exist_ok=True)
+ os.makedirs(static_folder_root, exist_ok=True)

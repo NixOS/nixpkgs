@@ -1,0 +1,58 @@
+--- a/src/contour/CMakeLists.txt
++++ b/src/contour/CMakeLists.txt
+@@ -24,6 +24,8 @@
+     set(CONTOUR_MACOS_APP_BUNDLE ON)
+ endif()
+ 
++option(CONTOUR_MACOS_DEPLOY "Run macdeployqt + prune/verify/sign on the macOS app bundle" ON)
++
+ NumberToHex(${PROJECT_VERSION_MAJOR} HEX_MAJOR)
+ NumberToHex(${PROJECT_VERSION_MINOR} HEX_MINOR)
+ NumberToHex(${PROJECT_VERSION_PATCH} HEX_PATCH)
+@@ -174,7 +176,7 @@
+     add_subdirectory(display)
+ endif()
+ 
+-if(CONTOUR_MACOS_APP_BUNDLE)
++if(CONTOUR_MACOS_APP_BUNDLE AND CONTOUR_MACOS_DEPLOY)
+     #set(CMAKE_INSTALL_RPATH "@executable_path")
+     set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+     # vcpkg gives its dylibs an `@rpath/libfoo.dylib` install name, and macdeployqt expands
+@@ -930,7 +932,9 @@
+     # verifies, signs and notarizes the bundle, so without an interpreter there is no way
+     # to produce a distributable artifact at all. Failing at configure time beats failing
+     # halfway through an install.
+-    find_package(Python3 COMPONENTS Interpreter REQUIRED)
++    if(CONTOUR_MACOS_DEPLOY)
++        find_package(Python3 COMPONENTS Interpreter REQUIRED)
++    endif()
+ endif()
+ # }}}
+ 
+@@ -975,7 +979,7 @@
+     set(CPACK_WIX_PATCH_FILE "${CMAKE_CURRENT_SOURCE_DIR}/packaging/wix_patch.xml")
+     set(CPACK_WIX_PROPERTY_WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT "Launch Contour")
+ endif()
+-if(CONTOUR_MACOS_APP_BUNDLE)
++if(CONTOUR_MACOS_APP_BUNDLE AND CONTOUR_MACOS_DEPLOY)
+     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/res/images/contour-logo.icns")
+     set(CPACK_DMG_VOLUME_NAME "Contour")
+ 
+@@ -1054,7 +1058,8 @@
+         RUNTIME DESTINATION "${INSTALL_RUNTIME_DIR}" COMPONENT Runtime
+     )
+ 
+-    include(DeployQt)  # Just to get access to ${MACDEPLOYQT_EXECUTABLE}
++    if(CONTOUR_MACOS_DEPLOY)
++    include(DeployQt)
+     get_filename_component(_macdeployqt_path "${MACDEPLOYQT_EXECUTABLE}" PATH)
+     message(STATUS "macdeployqt location: ${MACDEPLOYQT_EXECUTABLE}")
+ 
+@@ -1130,6 +1135,7 @@
+             COMMAND_ERROR_IS_FATAL ANY
+         )
+     ")
++    endif()
+ else()
+     # Any other Unix -- and, since the branch above now takes only bundle builds, a GUI-less macOS
+     # build too. That one produces a plain command-line binary, so it installs like any other Unix

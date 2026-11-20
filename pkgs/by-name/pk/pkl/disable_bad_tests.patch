@@ -1,0 +1,11 @@
+diff --git a/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt b/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
+--- a/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
++++ b/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
+@@ -1632,6 +1632,7 @@
+     verify(getRequestedFor(urlEqualTo("/foo.pkl")).withHeader("X-Foo", equalTo("Foo")))
+   }
+ 
++  @Disabled
+   @Test
+   fun `eval file with non-ASCII name`() {
+     val tempDirUri = tempDir.toUri()

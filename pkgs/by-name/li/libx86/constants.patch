@@ -1,0 +1,20 @@
+--- libx86/lrmi.c	2008-09-06 12:24:36.070136428 +0200
++++ libx86/lrmi.c	2008-09-06 12:28:10.584287458 +0200
+@@ -56,5 +56,17 @@
+ 
+ #if defined(__linux__)
++#ifndef TF_MASK
++#define TF_MASK X86_EFLAGS_TF
++#endif
++#ifndef IF_MASK
++#define IF_MASK X86_EFLAGS_IF
++#endif
++#ifndef IOPL_MASK
++#define IOPL_MASK X86_EFLAGS_IOPL
++#endif
++#ifndef VIF_MASK
++#define VIF_MASK X86_EFLAGS_VIF
++#endif
+ #define DEFAULT_VM86_FLAGS 	(IF_MASK | IOPL_MASK)
+ #elif defined(__NetBSD__) || defined(__FreeBSD__)
+ #define DEFAULT_VM86_FLAGS  (PSL_I | PSL_IOPL)

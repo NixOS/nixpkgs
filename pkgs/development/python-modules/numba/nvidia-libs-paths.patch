@@ -1,0 +1,43 @@
+diff --git a/numba/cuda/cuda_paths.py b/numba/cuda/cuda_paths.py
+index 8ff96640d..7eb262a22 100644
+--- a/numba/cuda/cuda_paths.py
++++ b/numba/cuda/cuda_paths.py
+@@ -235,12 +235,20 @@ def get_cuda_paths():
+     if hasattr(get_cuda_paths, '_cached_result'):
+         return get_cuda_paths._cached_result
+     else:
+-        # Not in cache
++        # Not in cache.
++        # The CUDA libraries are installed at fixed, known locations in the Nix
++        # store, so the discovery heuristics above (conda environment,
++        # CUDA_HOME, /usr/local/cuda, ...) are bypassed entirely. Note that
++        # `find_file` also accepts a list of directories, which is needed since
++        # each library lives in its own store path.
+         d = {
+-            'nvvm': _get_nvvm_path(),
+-            'libdevice': _get_libdevice_paths(),
+-            'cudalib_dir': _get_cudalib_dir(),
+-            'static_cudalib_dir': _get_static_cudalib_dir(),
++            'nvvm': _env_path_tuple('Nix store', '@libnvvm@/lib/libnvvm.so'),
++            'libdevice': _env_path_tuple(
++                'Nix store', '@libnvvm@/libdevice/libdevice.10.bc'),
++            'cudalib_dir': _env_path_tuple(
++                'Nix store', ['@libcudart@/lib', '@libnvrtc@/lib']),
++            'static_cudalib_dir': _env_path_tuple(
++                'Nix store', '@libcudart_static@/lib'),
+         }
+         # Cache result
+         get_cuda_paths._cached_result = d
+diff --git a/numba/cuda/cudadrv/driver.py b/numba/cuda/cudadrv/driver.py
+index bea271fce..79312f1ae 100644
+--- a/numba/cuda/cudadrv/driver.py
++++ b/numba/cuda/cudadrv/driver.py
+@@ -118,7 +118,7 @@ def locate_driver_and_loader():
+     else:
+         # Assume to be *nix like
+         dlloader = ctypes.CDLL
+-        dldir = ['/usr/lib', '/usr/lib64']
++        dldir = ['@libcuda@/lib']
+         dlnames = ['libcuda.so', 'libcuda.so.1']
+ 
+     if envpath:

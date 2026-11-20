@@ -1,0 +1,12 @@
+diff --git a/build/apu-conf.m4 b/build/apu-conf.m4
+index 8943f10..aa44305 100644
+--- a/build/apu-conf.m4
++++ b/build/apu-conf.m4
+@@ -279,6 +279,7 @@ AC_ARG_WITH(ldap,[  --with-ldap=library     ldap library to use],
+         APU_FIND_LDAPLIB("ldap", "-llber -lresolv -lsocket -lnsl")
+         APU_FIND_LDAPLIB("ldap", "-ldl -lpthread")
+       else
++        APU_FIND_LDAPLIB($LIBLDAP, "-llber -lcrypto -lssl -lsasl2")
+         APU_FIND_LDAPLIB($LIBLDAP)
+         APU_FIND_LDAPLIB($LIBLDAP, "-lresolv")
+         APU_FIND_LDAPLIB($LIBLDAP, "-lresolv -lsocket -lnsl")

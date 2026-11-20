@@ -1,0 +1,11 @@
+diff --git a/aider/exceptions.py b/aider/exceptions.py
+--- a/aider/exceptions.py
++++ b/aider/exceptions.py
+@@ -49,6 +49,7 @@
+     ExInfo("ServiceUnavailableError", True, "The API provider's servers are down or overloaded."),
+     ExInfo("UnprocessableEntityError", True, None),
+     ExInfo("UnsupportedParamsError", True, None),
++    ExInfo("VectorStoreSearchError", False, None),
+     ExInfo(
+         "Timeout",
+         True,

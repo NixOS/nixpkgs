@@ -1,0 +1,73 @@
+diff --git a/prpr-avc/Cargo.toml b/prpr-avc/Cargo.toml
+--- a/prpr-avc/Cargo.toml
++++ b/prpr-avc/Cargo.toml
+@@ -9,6 +9,9 @@
+ thiserror = "2.0.18"
+ tracing = { workspace = true }
+ 
++[build-dependencies]
++pkg-config = "0.3"
++
+ [target.'cfg(target_env = "ohos")'.dependencies]
+ sasa = { workspace = true, default-features = false, features = ["ohos"] }
+ 
+diff --git a/prpr-avc/build.rs b/prpr-avc/build.rs
+--- a/prpr-avc/build.rs
++++ b/prpr-avc/build.rs
+@@ -1,10 +1,5 @@
+-use std::path::Path;
+-
+ fn main() {
+-    let libs_dir = std::env::var("PRPR_AVC_LIBS").unwrap_or_else(|_| format!("{}/static-lib", std::env::var("CARGO_MANIFEST_DIR").unwrap()));
+-    let libs_path = Path::new(&libs_dir).join(std::env::var("TARGET").unwrap());
+-    let libs_path = libs_path.display();
+-    println!("cargo:rustc-link-search={libs_path}");
+-    println!("cargo:rustc-link-lib=z");
+-    println!("cargo:rerun-if-changed={libs_path}");
++    for lib in ["libavformat", "libavcodec", "libavutil", "libswscale", "libswresample"] {
++        pkg_config::Config::new().statik(false).probe(lib).unwrap();
++    }
+ }
+diff --git a/prpr-avc/src/ffi.rs b/prpr-avc/src/ffi.rs
+--- a/prpr-avc/src/ffi.rs
++++ b/prpr-avc/src/ffi.rs
+@@ -17,7 +17,6 @@
+ 
+ pub const AVSEEK_FLAG_BACKWARD: i32 = 1;
+ 
+-#[link(name = "avformat", kind = "static")]
+ extern "C" {
+     pub fn avformat_alloc_context() -> *mut AVFormatContext;
+     pub fn avformat_free_context(s: *mut AVFormatContext);
+@@ -37,7 +36,6 @@
+     ) -> ::std::os::raw::c_int;
+ }
+ 
+-#[link(name = "avutil", kind = "static")]
+ extern "C" {
+     pub fn av_strerror(errnum: ::std::os::raw::c_int, errbuf: *mut ::std::os::raw::c_char, errbuf_size: usize) -> ::std::os::raw::c_int;
+     pub fn av_frame_alloc() -> *mut AVFrame;
+@@ -46,7 +44,6 @@
+     pub fn av_rescale_rnd(a: i64, b: i64, c: i64, r: AVRounding) -> i64;
+ }
+ 
+-#[link(name = "avcodec", kind = "static")]
+ extern "C" {
+     pub fn avcodec_find_decoder(id: AVCodecID) -> *mut AVCodec;
+     pub fn avcodec_alloc_context3(codec: *const AVCodec) -> *mut AVCodecContext;
+@@ -61,7 +58,6 @@
+     pub fn avcodec_flush_buffers(avctx: *mut AVCodecContext);
+ }
+ 
+-#[link(name = "swscale", kind = "static")]
+ extern "C" {
+     pub fn sws_getContext(
+         srcW: ::std::os::raw::c_int,
+@@ -86,7 +82,6 @@
+     ) -> ::std::os::raw::c_int;
+ }
+ 
+-#[link(name = "swresample", kind = "static")]
+ extern "C" {
+     pub fn swr_alloc_set_opts2(
+         ps: *mut *mut SwrContext,

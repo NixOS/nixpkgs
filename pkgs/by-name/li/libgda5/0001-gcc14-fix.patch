@@ -1,0 +1,118 @@
+From 37f30a35bea94a86a37fe22adf8e99c20bc6e18b Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Tue, 21 Jan 2025 12:26:24 +0800
+Subject: [PATCH] fix gcc14
+
+---
+ m4/bdb.m4        | 1 +
+ m4/firebird.m4   | 2 ++
+ m4/ldap.m4       | 1 +
+ m4/mdbtools.m4   | 1 +
+ m4/mysql.m4      | 2 ++
+ m4/oracle.m4     | 1 +
+ m4/postgresql.m4 | 1 +
+ 7 files changed, 9 insertions(+)
+
+diff --git a/m4/bdb.m4 b/m4/bdb.m4
+index 3f577960a..b7d58b8ea 100644
+--- a/m4/bdb.m4
++++ b/m4/bdb.m4
+@@ -168,6 +168,7 @@ m4_define([_BDB_CHECK_INTERNAL],
+ 	                LIBS="$LIBS -L$d/$bdb_loclibdir $db_lib"
+    	                AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <${db_hdr}>
++#include <stdio.h>
+ int main() {
+     printf("%p", db_create);
+     return 0;
+diff --git a/m4/firebird.m4 b/m4/firebird.m4
+index 933962dc8..6d2370a41 100644
+--- a/m4/firebird.m4
++++ b/m4/firebird.m4
+@@ -154,6 +154,7 @@ m4_define([_FIREBIRD_CHECK_INTERNAL],
+ 	        LIBS="$LIBS -L$d/$firebird_loclibdir -lfbclient"
+    	        AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <ibase.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", isc_open);
+     return 0;
+@@ -196,6 +197,7 @@ int main() {
+ 	        LIBS="$LIBS -L$d/$firebird_loclibdir -lfbembed"
+    	        AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <ibase.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", isc_open);
+     return 0;
+diff --git a/m4/ldap.m4 b/m4/ldap.m4
+index 032533192..77e3b34dd 100644
+--- a/m4/ldap.m4
++++ b/m4/ldap.m4
+@@ -124,6 +124,7 @@ m4_define([_LDAP_CHECK_INTERNAL],
+ #include <ldap.h>
+ #include <lber.h>
+ #include <ldap_schema.h>
++#include <stdio.h>
+ int main() {
+     printf("%p,%p", ldap_initialize, ldap_str2attributetype);
+     printf("%p", ber_free);
+diff --git a/m4/mdbtools.m4 b/m4/mdbtools.m4
+index 7ca5b40c5..054498f7b 100644
+--- a/m4/mdbtools.m4
++++ b/m4/mdbtools.m4
+@@ -141,6 +141,7 @@ m4_define([_MDBTOOLS_CHECK_INTERNAL],
+ 	            LIBS="$LIBS -L$d/$mdb_loclibdir -lmdb $mdb_glib_libs"
+    	            AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <mdbtools.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", mdb_open);
+     return 0;
+diff --git a/m4/mysql.m4 b/m4/mysql.m4
+index 535a081a9..5bd9e49b3 100644
+--- a/m4/mysql.m4
++++ b/m4/mysql.m4
+@@ -134,6 +134,7 @@ m4_define([_MYSQL_CHECK_INTERNAL],
+    	                AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <winsock.h>
+ #include <mysql.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", mysql_real_connect);
+     return 0;
+@@ -177,6 +178,7 @@ int main() {
+ 
+             AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <mysql.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", mysql_real_connect);
+     return 0;
+diff --git a/m4/oracle.m4 b/m4/oracle.m4
+index 2d9003e41..cf5ba8ebd 100644
+--- a/m4/oracle.m4
++++ b/m4/oracle.m4
+@@ -140,6 +140,7 @@ m4_define([_ORACLE_CHECK_INTERNAL],
+ 		fi
+    	        AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <oci.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", OCIInitialize);
+     return 0;
+diff --git a/m4/postgresql.m4 b/m4/postgresql.m4
+index 252d9053d..a7e308d1a 100644
+--- a/m4/postgresql.m4
++++ b/m4/postgresql.m4
+@@ -133,6 +133,7 @@ m4_define([_POSTGRES_CHECK_INTERNAL],
+ 	                LIBS="$LIBS -L$d/$pg_loclibdir -lpq"
+    	                AC_LINK_IFELSE([AC_LANG_SOURCE([
+ #include <libpq-fe.h>
++#include <stdio.h>
+ int main() {
+     printf("%p", PQconnectdb);
+     return 0;
+-- 
+2.47.0
+

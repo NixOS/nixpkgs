@@ -1,0 +1,45 @@
+diff --git a/music_assistant/providers/airplay/helpers.py b/music_assistant/providers/airplay/helpers.py
+index e7f38aae7..ec81fe539 100644
+--- a/music_assistant/providers/airplay/helpers.py
++++ b/music_assistant/providers/airplay/helpers.py
+@@ -8,6 +8,7 @@
+ import plistlib
+ import re
+ from fnmatch import fnmatchcase
++from shutil import which
+ from typing import TYPE_CHECKING, Any
+ 
+ from aiohttp import ClientError, ClientTimeout
+@@ -291,14 +292,7 @@ async def get_cli_binary() -> str:
+ 
+     :raises RuntimeError: If the binary cannot be found.
+     """
+-    system = platform.system()
+-    architecture = platform.machine()
+-    binary_name = _get_cli_binary_name(system, architecture)
+-    if binary_name is None:
+-        msg = f"Unsupported cliairplay platform: {system.lower()}/{architecture.lower()}"
+-        raise RuntimeError(msg)
+-    base_path = os.path.join(os.path.dirname(__file__), "bin")
+-    binary_path = os.path.join(base_path, binary_name)
++    binary_path = which("cliairplay")
+ 
+     try:
+         returncode, output = await check_output(
+@@ -309,14 +303,14 @@ async def get_cli_binary() -> str:
+             return binary_path
+     except TimeoutError:
+         msg = (
+-            f"{binary_name} did not respond to --check within "
++            f"cliairplay did not respond to --check within "
+             f"{_CLI_BINARY_CHECK_TIMEOUT:.0f}s (first-run verification or a wedged binary)"
+         )
+         raise RuntimeError(msg) from None
+     except OSError:
+         pass
+ 
+-    msg = f"Unable to locate {binary_name} for {system.lower()}/{architecture.lower()}"
++    msg = "Unable to locate cliairplay"
+     raise RuntimeError(msg)
+ 
+ 

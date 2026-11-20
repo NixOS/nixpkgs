@@ -1,0 +1,51 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -75,7 +75,7 @@
+ 		set(DLIB_USE_MKL_FFT OFF)
+ 		set(DLIB_USE_FFMPEG OFF)
+ 		set(CMAKE_CXX_STANDARD 17) # dlib must be compiled with C++17
+-		FetchContent_MakeAvailable(dlib)
++		add_subdirectory(dlib)
+ 		set(CMAKE_CXX_STANDARD 20) # continue with C++20
+ 	endif()
+ 	add_compile_definitions("DLIB_AVAILABLE")
+@@ -106,7 +106,6 @@
+ 		thread_pool
+ 		GIT_REPOSITORY https://github.com/bshoshany/thread-pool
+ 	)
+-	FetchContent_MakeAvailable(thread_pool)
+ 	set(BS_THREAD_POOL_INCLUDE_DIR ${thread_pool_SOURCE_DIR}/include)
+ endif()
+ 
+@@ -121,7 +120,6 @@
+ 		gcem
+ 		GIT_REPOSITORY https://github.com/klytje/gcem
+ 	)
+-	FetchContent_MakeAvailable(GCEM)
+ 	set(GCEM_INCLUDE_DIR ${gcem_SOURCE_DIR}/include)
+ endif()
+ 
+@@ -131,7 +129,9 @@
+ )
+ unset(compile_options)
+ 
+-include_directories(${BS_THREAD_POOL_INCLUDE_DIR} ${GCEM_INCLUDE_DIR} ${BACKWARD_INCLUDE_DIR})
++include_directories(${BACKWARD_INCLUDE_DIR})
++add_subdirectory(gcem)
++include_directories(thread_pool/include gcem/include)
+ 
+ ############################################
+ ##           Find and link CURL           ##
+--- a/executable/gui/CMakeLists.txt
++++ b/executable/gui/CMakeLists.txt
+@@ -6,7 +6,9 @@
+ 	nfd
+ 	GIT_REPOSITORY https://github.com/btzy/nativefiledialog-extended.git
+ )
+-FetchContent_MakeAvailable(elements CLI11 nfd)
++find_package(CLI11 CONFIG REQUIRED)
++add_subdirectory(${CMAKE_SOURCE_DIR}/elements elements_build)
++add_subdirectory(${CMAKE_SOURCE_DIR}/nfd nfd_build)
+ 
+ # set the path to the elements root & module path
+ set(ELEMENTS_ROOT "${elements_SOURCE_DIR}")

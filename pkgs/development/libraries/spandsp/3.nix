@@ -1,0 +1,27 @@
+{
+  fetchFromGitHub,
+  callPackage,
+  libjpeg,
+}:
+
+((callPackage ./common.nix { }) {
+  version = "3.0.0";
+  src = fetchFromGitHub {
+    owner = "freeswitch";
+    repo = "spandsp";
+    rev = "6ec23e5a7e411a22d59e5678d12c4d2942c4a4b6"; # upstream does not seem to believe in tags
+    sha256 = "03w0s99y3zibi5fnvn8lk92dggfgrr0mz5255745jfbz28b2d5y7";
+  };
+
+  patches = [
+    # https://github.com/freeswitch/spandsp/pull/120
+    ./Fix-buffer-overrun-in-t85-tests.patch
+  ];
+}).overrideAttrs
+  (
+    finalAttrs: previousAttrs: {
+      propagatedBuildInputs = previousAttrs.propagatedBuildInputs or [ ] ++ [
+        libjpeg
+      ];
+    }
+  )

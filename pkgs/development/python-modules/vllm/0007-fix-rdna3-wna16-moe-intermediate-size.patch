@@ -1,0 +1,12 @@
+diff --git a/vllm/model_executor/layers/fused_moe/routed_experts.py b/vllm/model_executor/layers/fused_moe/routed_experts.py
+index 59562ed..d2ed01c 100644
+--- a/vllm/model_executor/layers/fused_moe/routed_experts.py
++++ b/vllm/model_executor/layers/fused_moe/routed_experts.py
+@@ -210,6 +210,7 @@ class RoutedExperts(PluggableLayer):
+         return quant_method.__class__.__name__ in (
+             "AutoGPTQMoEMethod",
+             "CompressedTensorsWNA16MoEMethod",
++            "CompressedTensorsWNA16RDNA3MoEMethod",
+             "CompressedTensorsW4A16FlydslMoEMethod",
+         )
+ 

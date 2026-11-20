@@ -1,0 +1,12 @@
+--- a/build.rs
++++ b/build.rs
+@@ -155,8 +155,8 @@
+     simd_build.flag("-flto=thin");
+     retroachievements_build.flag("-flto=thin");
+ 
+-    volk_build.compile("volk");
+     rdp_build.compile("parallel-rdp");
++    volk_build.compile("volk");
+     retroachievements_build.compile("retroachievements");
+ 
+     let out_path = std::path::PathBuf::from(std::env::var("OUT_DIR").unwrap());
