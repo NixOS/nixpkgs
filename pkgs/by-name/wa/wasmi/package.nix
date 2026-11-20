@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmi";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "wasmi-labs";
     repo = "wasmi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oGuw8//jsmeTxwHli7EAy4+W/iB/kSW40DFLjObA4hg=";
+    hash = "sha256-b9Fuh07wRgfo+FYFbbH4y0DYw83ScZlhwUV5c4qkPYw=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-QhSY6VGtpy2s7Dmp+cm65PCkM4zoeJ/ZrjjEGVWLgm4=";
+  cargoHash = "sha256-op4QB2akkeO2MJHo25gPS5ZFYEYzqSAfcPkPrKA653s=";
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
