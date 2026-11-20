@@ -7,28 +7,38 @@
   libsodium,
   installShellFiles,
 
-  # Build MySQL variant instead of PostgreSQL
+  # Build the MySQL variant instead of the PostgreSQL one
   mysql ? false,
 }:
 
 let
-  # Shared attributes for wal-g packages
+  # Attributes shared by all wal-g variants
   wal-g-common = finalAttrs: {
-    version = "3.0.8";
+    version = "3.0.9";
+
     src = fetchFromGitHub {
       owner = "wal-g";
       repo = "wal-g";
-      tag = "v${finalAttrs.version}";
-      sha256 = "1ssavyxf4kv135fvfdbvgk747h7qjaanqm6sm6n5jlvz6zfw4cl8";
+      rev = "v${finalAttrs.version}";
+      sha256 = "sha256-QTPgJuCuLxlBqa2QAhV91qX4XTQHIvzAQDntchGpxrQ=";
     };
-    vendorHash = "sha256-K2J/Hi8TQs+UhudgTWsAmPUHKnwKP3cmx21CvDTjs6M=";
+
+    vendorHash = "sha256-Emk6H+nd22/hE/BXwchtz1xD35KztJ8yBeE28jqzTMA=";
+
     nativeBuildInputs = [ installShellFiles ];
+
     buildInputs = [
       brotli
       libsodium
     ];
 
-    # Enable JSON v2 experiment required by wal-g 3.0.8
+    tags = [
+      "brotli"
+      "libsodium"
+    ];
+
+    # wal-g uses the encoding/json/v2 package, which is still gated behind a
+    # Go build experiment.
     env.GOEXPERIMENT = "jsonv2";
   };
 
@@ -38,6 +48,9 @@ let
     wal-g-common finalAttrs
     // {
       pname = "wal-g-pg";
+
+      __structuredAttrs = true;
+
       subPackages = [ "main/pg" ];
 
       ldflags = [
@@ -72,6 +85,9 @@ let
     wal-g-common finalAttrs
     // {
       pname = "wal-g-mysql";
+
+      __structuredAttrs = true;
+
       subPackages = [ "main/mysql" ];
 
       ldflags = [
@@ -83,11 +99,11 @@ let
 
       postInstall = ''
         mv $out/bin/mysql $out/bin/wal-g-mysql
-      ''
-      + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-        installShellCompletion --cmd wal-g-mysql \
-          --bash <($out/bin/wal-g-mysql completion bash) \
-          --zsh <($out/bin/wal-g-mysql completion zsh)
+        ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+          installShellCompletion --cmd wal-g-mysql \
+            --bash <($out/bin/wal-g-mysql completion bash) \
+            --zsh <($out/bin/wal-g-mysql completion zsh)
+        ''}
       '';
 
       meta = {
