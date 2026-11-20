@@ -69,11 +69,13 @@ let
   ocrManifest = builtins.fromJSON (builtins.readFile ./ocr-assets.json);
 
   # Where upstream's prepare-ocr.py expects the runtime library, per platform.
-  ocrTarget = {
-    "linux" = "linux-amd64";
-    "linux-arm64" = "linux-arm64";
-    "darwin-arm64" = "darwin-arm64";
-  }.${platformId};
+  ocrTarget =
+    {
+      "linux" = "linux-amd64";
+      "linux-arm64" = "linux-arm64";
+      "darwin-arm64" = "darwin-arm64";
+    }
+    .${platformId};
 
   # Model data files only (onnx weights and yml): loaded, never executed.
   ocrModels = map (entry: {
