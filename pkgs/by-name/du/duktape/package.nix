@@ -4,6 +4,7 @@
   fetchurl,
   fixDarwinDylibNames,
   validatePkgConfig,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.tests = lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   __structuredAttrs = true;
 
   meta = {
@@ -54,5 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.fgaz ];
     mainProgram = "duk";
     platforms = lib.platforms.all;
+  }
+  // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
+    pkgConfigModules = [ "duktape" ];
   };
 })
