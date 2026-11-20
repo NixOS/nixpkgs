@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   SDL,
   SDL_image,
   SDL_mixer,
@@ -10,11 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gav";
-  version = "0.9.0";
+  version = "0.9.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gav/gav-${finalAttrs.version}.tar.gz";
-    sha256 = "8f0deb8b2cd775b339229054f4f282583a4cfbcba9d27a6213cf910bab944f3e";
+  src = fetchFromGitHub {
+    owner = "ctrl-z-bg";
+    repo = "gav";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-79V5ILPndYu1xZ6YTUU/HtenE7pj+Y+hhVnDF2VStM4=";
   };
 
   prePatch = ''
@@ -23,7 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e "s@/usr@$out@" -i Theme.h
   '';
 
-  patches = [ ./gcc.patch ];
   buildInputs = [
     SDL
     SDL_image
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Remake of AV Arcade Volleyball";
     mainProgram = "gav";
-    homepage = "https://gav.sourceforge.net/";
+    homepage = "https://github.com/ctrl-z-bg/gav";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
