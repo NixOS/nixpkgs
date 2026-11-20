@@ -167,6 +167,8 @@ stdenv.mkDerivation (finalAttrs: {
     moduleDir = "${finalAttrs.passthru.binaryDir}/loaders";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
