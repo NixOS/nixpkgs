@@ -97,6 +97,8 @@
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
   blas,
+  # Use the NVIDIA Performance Libraries for BLAS and LAPACK instead of `blas`.
+  nvplSupport ? false,
 
   # dependencies for torch.utils.tensorboard
   pillow,
@@ -126,6 +128,8 @@ let
   triton = throw "python3Packages.torch: use _tritonEffective instead of triton to avoid divergence";
 
   setBool = v: if v then "1" else "0";
+
+  blasProvider = if nvplSupport then cudaPackages.nvpl_blas else blas.provider;
 
   # Compiler and build tool used at runtime by torch.compile and torch.utils.cpp_extension
   cxx = lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++";
@@ -258,6 +262,8 @@ let
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
+    "NVPL is not available on the host platform" =
+      nvplSupport && !lib.meta.availableOn stdenv.hostPlatform cudaPackages.nvpl_blas;
     "Unsupported CUDA version" =
       cudaSupport
       && !(builtins.elem cudaPackages.cudaMajorVersion [
@@ -342,7 +348,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       hash = "sha256-PFj8RihqeKTAogoCt59ikTbQ8wwpPJvUXGFlpBs8gE0=";
     })
   ]
-  ++ lib.optionals (lib.getName blas.provider == "mkl") [
+  ++ lib.optionals (lib.getName blasProvider == "mkl") [
     # The CMake install tries to add some hardcoded rpaths, incompatible
     # with the Nix store, which fails. Simply remove this step to get
     # rpaths that point to the Nix store.
@@ -571,6 +577,11 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   // lib.optionalAttrs vulkanSupport {
     VULKAN_SDK = shaderc.bin;
   }
+  // lib.optionalAttrs nvplSupport {
+    # cmake/Dependencies.cmake links nvpl::blas_lp64_omp from find_package(NVPL_BLAS);
+    # cmake/Modules/FindLAPACK.cmake then uses nvpl::lapack_lp64_omp from find_package(NVPL_LAPACK).
+    BLAS = "NVPL";
+  }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
     # Don't copy AOTriton to output, load from AOTriton package
@@ -645,8 +656,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs = [
-    blas
-    blas.provider
+    (if nvplSupport then cudaPackages.nvpl_blas else blas)
+    (if nvplSupport then cudaPackages.nvpl_lapack else blas.provider)
   ]
   # Including openmp leads to two copies being used on ARM, which segfaults.
   # https://github.com/pytorch/pytorch/issues/149201#issuecomment-2776842320
@@ -846,7 +857,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       ;
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
-    blasProvider = blas.provider;
+    inherit blasProvider;
     triton = _tritonEffective;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
