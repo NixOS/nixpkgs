@@ -41,6 +41,8 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [ "langchain-core" ];
+
   dependencies = [
     langchain-core
     ormsgpack
