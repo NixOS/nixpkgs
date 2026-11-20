@@ -40,7 +40,9 @@ buildNpmPackage (finalAttrs: {
     frontend = callPackage ./frontend.nix {
       inherit (finalAttrs) src version;
     };
-    mcp = callPackage ./mcp.nix { };
+    mcp = callPackage ./mcp.nix {
+      inherit (finalAttrs) src version;
+    };
     updateScript = ./update.sh;
   };
 
