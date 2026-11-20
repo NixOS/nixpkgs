@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "owntracks-recorder";
-  version = "1.0.1";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "owntracks";
     repo = "recorder";
     rev = finalAttrs.version;
-    hash = "sha256-/nLt8R8s3k6MQhtMXOLUDluuU7eNwZGYh5/km8tXtiE=";
+    hash = "sha256-kob2hKz8sgMhJbZP7kE7Seo4n2+TAw0a8Pd2c73ptJs=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getDev lua)
     (lib.getDev libsodium)
   ];
+
+  # Upstream only links in `libm` when `WITH_LUA = no`, and otherwise expects lua's pkg-config to provide it.
+  # The lua pkg-config in nixpkgs doesn't provide it, so we have to link it in explictily.
+  makeFlags = [ "LIBLM=yes" ];
 
   configurePhase = ''
     runHook preConfigure
