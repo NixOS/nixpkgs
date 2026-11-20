@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    # every upstream release is tagged vX.Y.Z-alpha, which nix-update skips as unstable
+    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
   };
 
   meta = {
