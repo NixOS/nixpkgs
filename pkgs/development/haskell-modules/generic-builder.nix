@@ -71,11 +71,11 @@ let
   # https://github.com/haskell/cabal/issues/6466 for details.
   cc =
     if stdenv.hasCC then
-      "$CC"
+      lib.getExe stdenv.cc
     else if stdenv.hostPlatform.isGhcjs then
       "${emscripten}/bin/emcc"
     else
-      "$CC_FOR_BUILD";
+      lib.getExe buildPackages.stdenv.cc;
 
   inherit (buildPackages)
     fetchurl
@@ -385,7 +385,7 @@ let
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
   ]
   ++ optionals stdenv.hasCC [
-    "--with-gcc=$CC" # Clang won't work without that extra information.
+    "--with-gcc=${lib.getExe stdenv.cc}" # Clang won't work without that extra information.
   ]
   ++ [
     "--package-db=$packageConfDir"
@@ -509,7 +509,7 @@ let
   depsBuildBuild = [
     nativeGhc
   ]
-  # CC_FOR_BUILD may be necessary if we have no C preprocessor for the host
+  # buildPackages.stdenv.cc may be necessary if we have no C preprocessor for the host
   # platform. See crossCabalFlags above for more details.
   ++ lib.optionals (!stdenv.hasCC) [ buildPackages.stdenv.cc ];
   collectedToolDepends =
