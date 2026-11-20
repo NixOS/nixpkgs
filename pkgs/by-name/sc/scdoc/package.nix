@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  strictDeps = true;
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ]
