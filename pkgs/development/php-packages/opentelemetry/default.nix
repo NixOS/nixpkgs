@@ -6,13 +6,13 @@
 
 buildPecl (finalAttrs: {
   pname = "opentelemetry";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-php-instrumentation";
     tag = finalAttrs.version;
-    hash = "sha256-5ixWposR7ES2UN4fapCTizQgqHzcbdCHTgXjFAzlxyM=";
+    hash = "sha256-axQfDn9usqmvdOaRacsXZND1zOMpbOFxHSKPt9F4t3M=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/ext";
