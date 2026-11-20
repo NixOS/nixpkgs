@@ -19,9 +19,10 @@
   libxslt,
   fixDarwinDylibNames,
   gnome,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "json-glib";
   version = "1.10.8";
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/json-glib/${lib.versions.majorMinor version}/json-glib-${version}.tar.xz";
+    url = "mirror://gnome/sources/json-glib/${lib.versions.majorMinor finalAttrs.version}/json-glib-${finalAttrs.version}.tar.xz";
     hash = "sha256-VcXBQaVkJFuPj752mGY8h6RaczPCosVvBvgRq3OyEt0=";
   };
 
@@ -94,13 +95,16 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.json-glib;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "json-glib";
       versionPolicy = "odd-unstable";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library providing (de)serialization support for the JavaScript Object Notation (JSON) format";
@@ -108,5 +112,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = with lib.platforms; unix;
+    pkgConfigModules = [ "json-glib-1.0" ];
   };
-}
+})
