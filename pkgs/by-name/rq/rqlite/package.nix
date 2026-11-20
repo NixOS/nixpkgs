@@ -11,6 +11,8 @@ buildGo127Module (
     cmdPackage = "github.com/rqlite/rqlite/v${lib.versions.major finalAttrs.version}/cmd";
   in
   {
+    __structuredAttrs = true;
+
     pname = "rqlite";
     version = "10.7.3";
 
