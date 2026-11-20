@@ -396,16 +396,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.9.1";
-    hash = "sha256-2KGKeoQd1d+CXTWmhfrW8tfxKsDCgOV7Z8J7SlILoig=";
+    version = "9.9.2";
+    hash = "sha256-lx/NcVDKS6BIUsCyyg0tCrlGjhSwNHPqsZUogJkUx2s=";
     defaultJava = jdk25;
     updateScriptMajorVersion = "9";
     extraNativePlatformJars =
       if stdenv.hostPlatform.isRiscV64 then gradle-native-platform-m29 else null;
   };
   gradle_8 = mkGradle {
-    version = "8.14.7";
-    hash = "sha256-kDv8S8diIyMSQFTBD1CSRiEqGQKUi9rybDecyoc16FY=";
+    version = "8.14.8";
+    hash = "sha256-lNqJaS/Dym0tDOa7SFSHYuoPGJe6REKG9cfzdZx69lE=";
     defaultJava = jdk21;
     updateScriptMajorVersion = "8";
     extraNativePlatformJars = if stdenv.hostPlatform.isRiscV64 then gradle-native-platform else null;
