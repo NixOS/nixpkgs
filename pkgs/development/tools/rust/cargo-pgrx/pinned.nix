@@ -29,4 +29,10 @@
     hash = "sha256-1OTE+mPtR9vaJhVGvq9X3fNd1nRoedoABUaVGQvFwNU=";
     cargoHash = "sha256-dTfbgc6pGLP3s9y3zfIk97XUkPiLngdIoilIX7UM4W8=";
   };
+
+  cargo-pgrx_0_19_1 = {
+    version = "0.19.1";
+    hash = "sha256-D4rkD+Koetd5dc91RxO+R1v2km/DVb4HMhowK2hdyNY=";
+    cargoHash = "sha256-qUCQRbzA4me1lkNNO2kQtW4DOjiHTTrhmUnLkJ91QrY=";
+  };
 }
