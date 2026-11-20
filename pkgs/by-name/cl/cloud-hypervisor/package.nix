@@ -8,6 +8,8 @@
   openssl,
   zstd,
   versionCheckHook,
+  fwCfgSupport ? stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64,
+  sevSnpSupport ? stdenv.hostPlatform.isx86_64,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
+
+  buildFeatures = lib.optional fwCfgSupport "fw_cfg" ++ lib.optional sevSnpSupport "sev_snp";
 
   cargoTestFlags = [
     "--workspace"
