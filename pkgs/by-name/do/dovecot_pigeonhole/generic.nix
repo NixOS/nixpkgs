@@ -3,6 +3,7 @@
   url,
   hash,
   patches ? _: [ ],
+  knownVulnerabilities ? [ ],
 }:
 {
   lib,
@@ -93,5 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
       prince213
     ];
     platforms = lib.platforms.unix;
+    inherit knownVulnerabilities;
   };
 })
