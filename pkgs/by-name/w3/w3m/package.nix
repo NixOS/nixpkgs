@@ -117,8 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
 
   preConfigure = ''
-    substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
-    substituteInPlace ./configure --replace /usr /no-such-path
+    substituteInPlace ./configure --replace-fail "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
+    substituteInPlace ./configure --replace-fail /usr /no-such-path
   '';
 
   outputs = [
@@ -133,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     package = w3m;
     command = "w3m -version";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://git.sr.ht/~rkta/w3m";
