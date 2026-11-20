@@ -29,8 +29,12 @@ let
     inherit (w3m) src;
     nativeBuildInputs = [
       pkg-config
-      boehmgc
     ];
+    buildInputs = [
+      buildPackages.boehmgc
+    ];
+    strictDeps = true;
+    __structuredAttrs = true;
     makeFlags = [ "mktable" ];
     installPhase = ''
       install -D mktable $out/bin/mktable
