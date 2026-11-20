@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "videolan";
     repo = "dav1d";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-E3da/LJ8HNy1osExmupovqnL8JHgVNzPUCG5F8TJKXQ=";
   };
 
@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       libheif
       ;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Cross-platform AV1 decoder focused on speed and correctness";
