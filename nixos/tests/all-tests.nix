@@ -1135,6 +1135,7 @@ in
   memcached = runTest ./memcached.nix;
   memgraph = runTest ./memgraph.nix;
   merecat = runTest ./merecat.nix;
+  mesh-llm = runTest ./mesh-llm.nix;
   meshtasticd = runTest ./networking/meshtasticd.nix;
   metabase = runTest ./metabase.nix;
   mihomo = runTest ./mihomo.nix;
@@ -1498,6 +1499,7 @@ in
   pihole-ftl = import ./pihole-ftl { inherit runTest; };
   pinnwand = runTest ./pinnwand.nix;
   pixelfed = import ./web-apps/pixelfed { inherit runTestOn; };
+  plann = import ./plann.nix { inherit pkgs lib; };
   plantuml-server = runTest ./plantuml-server.nix;
   plasma6 = runTest ./plasma6.nix;
   plausible = import ./plausible.nix { inherit runTest; };

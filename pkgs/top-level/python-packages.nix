@@ -21634,8 +21634,6 @@ self: super: with self; {
 
   tuf = callPackage ../development/python-modules/tuf { };
 
-  tunigo = callPackage ../development/python-modules/tunigo { };
-
   tunit = callPackage ../development/python-modules/tunit { };
 
   turbohtml = callPackage ../development/python-modules/turbohtml { };
