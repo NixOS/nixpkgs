@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "X Damage Extension library";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxdamage";

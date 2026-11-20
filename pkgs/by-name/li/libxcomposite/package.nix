@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Client library for the Composite extension to the X11 protocol";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcomposite";
