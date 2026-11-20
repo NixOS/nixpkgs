@@ -180,6 +180,7 @@ buildNpmPackage (finalAttrs: {
         asl20 # for icons
       ];
     maintainers = with lib.maintainers; [
+      iedame
       kachick
     ];
     mainProgram = "shogihome";
