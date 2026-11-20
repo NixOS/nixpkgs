@@ -17,6 +17,7 @@
   dbus,
   glib,
   dconf,
+  bashNonInteractive,
   libx11,
   libxml2,
   libxtst,
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     libx11
     libxml2
     # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
@@ -74,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     glib
   ];
+
+  strictDeps = true;
 
   # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
   doCheck = false;
