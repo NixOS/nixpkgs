@@ -3113,10 +3113,10 @@
   };
 
   tcl = {
-    version = "0-unstable-2026-08-05";
+    version = "0-unstable-2026-11-09";
     url = "github:tree-sitter-grammars/tree-sitter-tcl";
-    rev = "850a72ab6436e06645b33b11cfa60cbdb04b1f01";
-    hash = "sha256-ay0MMCB4MRzS8eV+ZnpD37udkiL6GVDLgI90Q+2gjdM=";
+    rev = "90e87ed495a04fd0bf18db4be12b7033cd7402f6";
+    hash = "sha256-ZKGomeCp1skvj7ES0LWuGvcnjTwTCLcSLMoKHFhygzs=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
