@@ -3,12 +3,12 @@
   appimageTools,
   fetchurl,
 }:
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "railway-wallet";
   version = "5.24.21";
 
   src = fetchurl {
-    url = "https://github.com/Railway-Wallet/Railway-Wallet/releases/download/v${version}/Railway.linux.x86_64.AppImage";
+    url = "https://github.com/Railway-Wallet/Railway-Wallet/releases/download/v${finalAttrs.version}/Railway.linux.x86_64.AppImage";
     hash = "sha256-21Z9ulzYGIjntAHuA3t7Bl5yIqM7y39jALM4tDBa0Qw=";
   };
 
@@ -19,4 +19,4 @@ appimageTools.wrapType2 rec {
     maintainers = with lib.maintainers; [ mitchmindtree ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
