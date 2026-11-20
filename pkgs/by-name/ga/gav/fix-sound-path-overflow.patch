@@ -1,0 +1,54 @@
+From 7908378841e5deb09ed1ed9f8a0f5b3a736240a4 Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Tue, 26 Apr 2022 23:49:26 +0100
+Subject: [PATCH] SoundMgr.cpp: give more bytes to theme path
+
+On NixOS package prefixes are a bit longer than usual /usr.
+This causes stack overflow at path creation time:
+
+```
+(gdb) bt
+0  0x00007ffff7a7fadf in __pthread_kill_implementation () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+1  0x00007ffff7a35062 in raise () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+2  0x00007ffff7a2045c in abort () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+3  0x00007ffff7a74418 in __libc_message () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+4  0x00007ffff7b0e532 in __fortify_fail () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+5  0x00007ffff7b0d060 in __chk_fail () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+6  0x00007ffff7a6d849 in _IO_str_chk_overflow () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+7  0x00007ffff7a78141 in _IO_default_xsputn () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+8  0x00007ffff7a63828 in __vfprintf_internal () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+9  0x00007ffff7a6d8de in __vsprintf_internal () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+10 0x00007ffff7b0cc09 in __sprintf_chk () from /nix/store/ayrsyv7npr0lcbann4k9lxr19x813f0z-glibc-2.34-115/lib/libc.so.6
+11 0x0000000000410e32 in sprintf (__fmt=0x42330d "%s/%s", __s=0x7fffffffca20 "/nix/store/vc5ayghmfk04mzsxaz1w2dh2w31g70nv-gav-0.9.1/share/games/gav/themes/../sounds/partialnet.w")
+   at /nix/store/pvn23vycg674bj6nypjcfyhqbr85rqxa-glibc-2.34-115-dev/include/bits/stdio2.h:38
+12 SoundMgr::SoundMgr (this=this@entry=0x479b80, dir=dir@entry=0x4bc340 "/nix/store/vc5ayghmfk04mzsxaz1w2dh2w31g70nv-gav-0.9.1/share/games/gav/themes/classic/sounds",
+   defdir=defdir@entry=0x4bc400 "/nix/store/vc5ayghmfk04mzsxaz1w2dh2w31g70nv-gav-0.9.1/share/games/gav/themes/../sounds") at SoundMgr.cpp:59
+13 0x0000000000417801 in Theme::Theme (this=0x48f7a0, name=...) at /build/gav/Theme.h:187
+14 0x000000000041398a in applyConfiguration () at main.cpp:138
+15 0x00000000004057b3 in main (argc=<optimized out>, argv=<optimized out>) at main.cpp:215
+```
+
+The change uses gav constant to specify expected path.
+---
+ SoundMgr.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/SoundMgr.cpp b/SoundMgr.cpp
+index 9d7a588..e20b09a 100644
+--- a/SoundMgr.cpp
++++ b/SoundMgr.cpp
+@@ -51,12 +51,12 @@ SoundMgr::SoundMgr(const char *dir, const char *defdir)
+   if ( dir && stat(dir, &sbuf) )
+     actualdir = defdir;
+ 
+-  char fname[100];
++  char fname[MAXPATHLENGTH];
+ 
+   int sndidx = 0;
+   for ( sndidx = SND_BOUNCE; sound_fnames[sndidx] && (sndidx <= SND_BACKGROUND_MENU);
+ 	sndidx++ ) {
+-    sprintf(fname, "%s/%s", actualdir, sound_fnames[sndidx]);
++    snprintf(fname, MAXPATHLENGTH, "%s/%s", actualdir, sound_fnames[sndidx]);
+     FILE *fp = fopen(fname, "r");
+     if ( !fp ) continue;
+     printf("sound: %s\n", fname);

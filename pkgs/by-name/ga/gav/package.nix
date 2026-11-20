@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e "s@/usr@$out@" -i Theme.h
   '';
 
+  patches = [
+    # Fix crash at startup: theme sound paths in the Nix store overflow a 100-byte buffer
+    # https://github.com/ctrl-z-bg/gav/pull/1
+    ./fix-sound-path-overflow.patch
+  ];
+
   buildInputs = [
     SDL
     SDL_image
