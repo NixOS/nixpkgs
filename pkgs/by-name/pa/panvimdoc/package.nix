@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "panvimdoc";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "panvimdoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a0Yom5YW/3jENySjIrkupsPSssYFm8KX7sC93IALnQc=";
+    hash = "sha256-fr7OEeVNhxbNAMJYlyhMnle+HPPPv7HVRWMadkyi4z4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
