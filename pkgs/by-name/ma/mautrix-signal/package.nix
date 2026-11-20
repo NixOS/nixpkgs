@@ -7,6 +7,7 @@
   libsignal-ffi,
   zlib,
   versionCheckHook,
+  nixosTests,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
   # is not recommended by the mautrix developers, but they are interested in
@@ -68,6 +69,7 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
+  passthru.tests.mautrix-signal = nixosTests.mautrix-signal;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {

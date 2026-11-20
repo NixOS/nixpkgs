@@ -41,7 +41,8 @@ in
           };
         };
 
-        services.mautrix-discord = {
+        services.mautrix.bridges.discord = {
+          type = "discord";
           enable = true;
           registerToSynapse = true; # Enable automatic registration
 

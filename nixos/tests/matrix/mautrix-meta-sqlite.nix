@@ -48,7 +48,8 @@ in
           };
         };
 
-        services.mautrix-meta.instances.facebook = {
+        services.mautrix.bridges.meta-facebook = {
+          type = "facebook";
           enable = true;
 
           settings = {
@@ -76,7 +77,8 @@ in
           };
         };
 
-        services.mautrix-meta.instances.instagram = {
+        services.mautrix.bridges.meta-instagram = {
+          type = "instagram";
           enable = true;
 
           settings = {
