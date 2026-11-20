@@ -9,6 +9,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "hwatch";
   version = "0.4.2";
 
