@@ -24,7 +24,7 @@
 }:
 
 let
-  version = "0.1.916-beta";
+  version = "0.1.921-beta";
 
   unsloth-desktop-unwrapped = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "unsloth-desktop-unwrapped";
@@ -34,19 +34,19 @@ let
       owner = "unslothai";
       repo = "unsloth";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-/vrAV950EfvCnZlG6rW/y40S1jL3RDGkVicun2HCyp0=";
+      hash = "sha256-ZL5cieatcnGdBdQUW79E8Jub4NAahd0nfUDvA4okY2I=";
     };
 
     cargoRoot = "studio/src-tauri";
     buildAndTestSubdir = finalAttrs.cargoRoot;
-    cargoHash = "sha256-LxEmOwuXJEQpUzixaD3z43ZoIiyinjnMn/s0Ksr9VGY=";
+    cargoHash = "sha256-1LzuiDSCOE8t0gAeOwoR0pby5P2X+4b9hv4Ori5aHzY=";
 
     npmRoot = "studio/frontend";
     npmDeps = fetchNpmDeps {
       name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
       inherit (finalAttrs) src;
       sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-      hash = "sha256-W+yBYFeW5Tm+aMiF+hWjWwq7J15pv8nZ7tgzizpBTYg=";
+      hash = "sha256-65LFAlJTKWoT15K2JvJVjZOtY2ECuqJlvy/G4YCWB0U=";
     };
 
     cargoBuildFlags = [
