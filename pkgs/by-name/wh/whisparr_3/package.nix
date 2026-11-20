@@ -9,13 +9,16 @@
   nixosTests,
   nodejs-slim_24,
   openur-ffmpeg,
+  sqlite,
   stdenvNoCC,
   writeText,
   yarnBuildHook,
   yarnConfigHook,
 }:
 let
+  inherit (stdenvNoCC.hostPlatform.extensions) sharedLibrary;
   ffprobe = lib.getExe' openur-ffmpeg "ffprobe";
+  libsqlite3 = "${lib.getLib sqlite}/lib/libsqlite3${sharedLibrary}";
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
 buildDotnetModule (finalAttrs: {
@@ -48,6 +51,7 @@ buildDotnetModule (finalAttrs: {
   postPatch = ''
     dotnet package remove Openur.FFprobeStatic --project src/NzbDrone.Core/Whisparr.Core.csproj
     dotnet package remove Openur.FFprobeStatic --project src/NzbDrone.Test.Common/Whisparr.Test.Common.csproj
+    dotnet package remove SourceGear.sqlite3 --project src/NzbDrone.Common/Whisparr.Common.csproj
     mv src/NuGet.config NuGet.Config
   '';
 
@@ -57,6 +61,7 @@ buildDotnetModule (finalAttrs: {
     cp -a ${finalAttrs.passthru.frontend} $dotnetInstallPath/UI
     cp ${finalAttrs.passthru.package_info} $dotnetInstallPath/../package_info
     ln -s ${ffprobe} "$dotnetInstallPath"/ffprobe
+    ln -s ${libsqlite3} "$dotnetInstallPath"/libe_sqlite3${sharedLibrary}
   '';
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0_1xx;
@@ -85,6 +90,7 @@ buildDotnetModule (finalAttrs: {
 
   preCheck = ''
     ln -s ${ffprobe} _tests/net10.0/${rid}/ffprobe
+    ln -s ${libsqlite3} _tests/net10.0/${rid}/libe_sqlite3${sharedLibrary}
   ''
   + lib.optionalString stdenvNoCC.buildPlatform.isDarwin ''
     export CFFIXED_USER_HOME="$HOME"

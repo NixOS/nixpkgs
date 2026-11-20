@@ -621,11 +621,6 @@
     "hash": "sha256-/giVqikworG2XKqfN9uLyjUSXr35zBuZ2FX2r8X/WUY="
   },
   {
-    "pname": "SourceGear.sqlite3",
-    "version": "3.53.4",
-    "hash": "sha256-PrKw/AkB++CbeDloscGwAurHh4BT/kfTCed9ImgBDZo="
-  },
-  {
     "pname": "Swashbuckle.AspNetCore.Annotations",
     "version": "10.3.0",
     "hash": "sha256-6C0wnsda7SyAS4/OTwuCpeGvGNfF7DPul8gHHiCBEvo="
