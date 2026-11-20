@@ -938,8 +938,8 @@ in
       "sha256-/LpodSUS6Ry7zrh0Uk8sT48gMi8LH3CH0LcS3NFNzjg=";
 
   mypy-boto3-neptune =
-    buildMypyBoto3Package "neptune" "1.44.0"
-      "sha256-IfWfeGzVJrmEl2hF5vy9ZThiStDVh2hGJ+LuQR6KWnY=";
+    buildMypyBoto3Package "neptune" "1.44.6"
+      "sha256-U3BERcEfQE2ITy1xmIB9xnhLvPscKHoetnIRk5Ib6uA=";
 
   mypy-boto3-neptunedata =
     buildMypyBoto3Package "neptunedata" "1.44.0"
