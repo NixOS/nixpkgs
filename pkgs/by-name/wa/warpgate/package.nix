@@ -39,16 +39,16 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "warpgate";
-    version = "0.30.4";
+    version = "0.30.6";
 
     src = fetchFromGitHub {
       owner = "warp-tech";
       repo = "warpgate";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-pj2nGp/7QK7es45RKhJAFBdyUQFS/8C58Kag5n7wHNg=";
+      hash = "sha256-XZr/Ikqhr7j27aJlIWp6J7PWxHb9MuIPM/KzoudI51g=";
     };
 
-    cargoHash = "sha256-zq3HwcJZ6PiC716Qdc0aq+yu5XfV09dPXlt415v0xI8=";
+    cargoHash = "sha256-ok5cIjoVlUEm0aMvFoiXaFFkegtlQfOusgQxyEv0R5E=";
 
     patches = [
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
