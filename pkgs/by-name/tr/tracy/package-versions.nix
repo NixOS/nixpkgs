@@ -116,6 +116,9 @@ let
         glfw
       ];
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       cmakeFlags = [
         (lib.cmakeBool "DOWNLOAD_CAPSTONE" false)
         (lib.cmakeBool "TRACY_STATIC" false)
@@ -143,14 +146,14 @@ let
         # The workaround is to first configure the profiler since it includes all of the
         # dependencies and then short-circuit the patch command for the remaining projects.
         ''
-          cmake -B profiler/build -S profiler $cmakeFlags
+          cmake -B profiler/build -S profiler ''${cmakeFlags[@]}
 
           appendToVar cmakeFlags -DPATCH_EXECUTABLE=${coreutils}/bin/true
 
-          cmake -B capture/build -S capture $cmakeFlags
-          cmake -B csvexport/build -S csvexport $cmakeFlags
-          cmake -B import/build -S import $cmakeFlags
-          cmake -B update/build -S update $cmakeFlags
+          cmake -B capture/build -S capture ''${cmakeFlags[@]}
+          cmake -B csvexport/build -S csvexport ''${cmakeFlags[@]}
+          cmake -B import/build -S import ''${cmakeFlags[@]}
+          cmake -B update/build -S update ''${cmakeFlags[@]}
         '';
 
       postBuild = ''
