@@ -68,7 +68,7 @@ let
       # so add the build vala in nativeBuildInputs
       preBuild = lib.optionalString (
         disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)
-      ) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+      ) "buildFlags+=(\"VALAC=$(pwd)/compiler/valac\")";
 
       outputs = [
         "out"
@@ -113,6 +113,8 @@ let
           freeze = true;
         };
       };
+
+      __structuredAttrs = true;
 
       meta = {
         description = "Compiler for GObject type system";
