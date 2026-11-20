@@ -3,10 +3,13 @@
   buildNpmPackage,
   codex,
   fetchFromGitHub,
+  jq,
   makeBinaryWrapper,
   nix-update-script,
+  runCommand,
   stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -51,8 +54,41 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--use-github-releases" ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
+    tests.e2e =
+      runCommand "check-codex-acp"
+        {
+          nativeBuildInputs = [
+            jq
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          coproc ACP { timeout 30s ${lib.getExe finalAttrs.finalPackage}; }
+          acpPid=$ACP_PID
+          acpInput=''${ACP[1]}
+
+          printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1,"clientCapabilities":{}}}' >&"$acpInput"
+          while IFS= read -r line; do
+            printf '%s\n' "$line" >> "$out"
+            if jq --exit-status '.id == 1' <<< "$line" > /dev/null; then
+              break
+            fi
+          done <&"''${ACP[0]}"
+          exec {acpInput}>&-
+          wait "$acpPid"
+
+          jq --exit-status --slurp '
+            any(.[];
+              .id == 1 and
+              .result.protocolVersion == 1 and
+              .result.agentInfo.name == "@agentclientprotocol/codex-acp"
+            )
+          ' "$out"
+        '';
   };
 
   meta = {
