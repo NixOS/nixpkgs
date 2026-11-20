@@ -18,18 +18,19 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "autobrr";
-  version = "1.90.0";
+  version = "1.91.1";
 
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Her0vuexuxzeW/cVLLQUMSTQVbMnOP0tkJRfqg0ZkL0=";
+    hash = "sha256-L5fo77TFnanhIgTQQDQH27W88lIoanj1b6lL/7k+U5o=";
   };
 
-  vendorHash = "sha256-97U3ZOJK/3klKxV8L68Ul6DvFQN1Ow/igtUE94DAfD0=";
+  vendorHash = "sha256-tHcO0+ZlXxZfqygsoDqORuYRyGsvvqQFNfRfmH23Gx4=";
 
   excludedPackages = [
+    "cmd/autobrr-desktop"
     "test/mockdiscord"
     "test/mockindexer"
   ];
