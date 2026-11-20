@@ -660,6 +660,7 @@ in
   filebrowser = runTest ./filebrowser.nix;
   filesender = import ./filesender { inherit runTest; };
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
+  fingerd = runTest ./fingerd.nix;
   firefly-iii = runTest ./firefly-iii.nix;
   firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
   firefox = runTest {
