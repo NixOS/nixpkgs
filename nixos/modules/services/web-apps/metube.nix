@@ -67,9 +67,11 @@ in
       TEMP_DIR = "/tmp";
     };
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.settings.DOWNLOAD_DIR} 0755 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-metube".${cfg.settings.DOWNLOAD_DIR}.d = {
+      mode = "0755";
+      user = cfg.user;
+      group = cfg.group;
+    };
 
     users.users = lib.optionalAttrs (cfg.user == "metube") {
       metube = {
