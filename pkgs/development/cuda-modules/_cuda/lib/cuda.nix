@@ -109,6 +109,86 @@
     ];
 
   /**
+    Returns whether a list of CUDA capabilities includes any architecture-specific capability.
+
+    NOTE: No guarantees are made about this function's stability. You may use it at your own risk.
+
+    # Type
+
+    ```
+    _cudaCapabilitiesIncludeArchitectureSpecific :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  _cudaCapabilitiesIncludeArchitectureSpecific =
+    cudaCapabilities:
+    lib.intersectLists _cuda.db.architectureSpecificCudaCapabilities cudaCapabilities != [ ];
+
+  /**
+    Returns whether a list of CUDA capabilities includes any family-specific capability.
+
+    NOTE: No guarantees are made about this function's stability. You may use it at your own risk.
+
+    # Type
+
+    ```
+    _cudaCapabilitiesIncludeFamilySpecific :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  _cudaCapabilitiesIncludeFamilySpecific =
+    cudaCapabilities:
+    lib.intersectLists _cuda.db.familySpecificCudaCapabilities cudaCapabilities != [ ];
+
+  /**
+    Returns whether a list of CUDA capabilities includes any Jetson capability.
+
+    NOTE: No guarantees are made about this function's stability. You may use it at your own risk.
+
+    # Type
+
+    ```
+    _cudaCapabilitiesIncludeJetson :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  _cudaCapabilitiesIncludeJetson =
+    cudaCapabilities: _cuda.lib.getJetsonCudaCapabilities cudaCapabilities != [ ];
+
+  /**
+    Returns the Jetson capabilities within a list of CUDA capabilities.
+
+    # Type
+
+    ```
+    getJetsonCudaCapabilities :: (cudaCapabilities :: [CudaCapability]) -> [CudaCapability]
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to filter
+  */
+  getJetsonCudaCapabilities =
+    cudaCapabilities: lib.intersectLists _cuda.db.jetsonCudaCapabilities cudaCapabilities;
+
+  /**
     A predicate which, given a package, returns true if the package has a free license or one of NVIDIA's licenses.
 
     This function is intended to be provided as `config.allowUnfreePredicate` when `import`-ing Nixpkgs.

@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir falco-rules
     tar -xzf ${rules} -C falco-rules
 
-    cmakeFlagsArray+=(
+    cmakeFlags+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs-src"
       "-DDRIVER_SOURCE_DIR=$(pwd)/libs-src/driver"
       "-DFALCOSECURITY_RULES_FALCO_PATH=$(pwd)/falco-rules/falco_rules.yaml"

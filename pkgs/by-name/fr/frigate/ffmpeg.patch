@@ -1,5 +1,5 @@
 diff --git a/frigate/api/classification.py b/frigate/api/classification.py
-index 6caa745..8b7483a 100644
+index 6caa74525..8b7483ada 100644
 --- a/frigate/api/classification.py
 +++ b/frigate/api/classification.py
 @@ -1269,7 +1269,7 @@ async def generate_state_examples(request: Request, body: GenerateStateExamplesB
@@ -12,10 +12,10 @@ index 6caa745..8b7483a 100644
      return JSONResponse(
          content={"success": True, "message": "Example generation completed"},
 diff --git a/frigate/api/media.py b/frigate/api/media.py
-index d6e2a7f..4fdc8da 100644
+index cd287f166..cd1e1d414 100644
 --- a/frigate/api/media.py
 +++ b/frigate/api/media.py
-@@ -564,6 +564,7 @@ async def recording_clip(
+@@ -576,6 +576,7 @@ async def recording_clip(
      description="Returns an HLS playlist for the specified timestamp-range on the specified camera. Append /master.m3u8 or /index.m3u8 for HLS playback.",
  )
  async def vod_ts(
@@ -23,7 +23,7 @@ index d6e2a7f..4fdc8da 100644
      camera_name: str,
      start_ts: float,
      end_ts: float,
-@@ -631,7 +632,7 @@ async def vod_ts(
+@@ -643,7 +644,7 @@ async def vod_ts(
          # segment. Snap clipFrom back to the preceding keyframe so the
          # segment always starts with a decodable frame.
          if "clipFrom" in clip:
@@ -32,7 +32,7 @@ index d6e2a7f..4fdc8da 100644
              if keyframe_ms is not None:
                  gained = clip["clipFrom"] - keyframe_ms
                  clip["clipFrom"] = keyframe_ms
-@@ -705,10 +706,10 @@ async def vod_ts(
+@@ -717,10 +718,10 @@ async def vod_ts(
      dependencies=[Depends(require_camera_access)],
      description="Returns an HLS playlist for the specified date-time on the specified camera. Append /master.m3u8 or /index.m3u8 for HLS playback.",
  )
@@ -45,7 +45,7 @@ index d6e2a7f..4fdc8da 100644
      )
  
  
-@@ -718,7 +719,7 @@ async def vod_hour_no_timezone(year_month: str, day: int, hour: int, camera_name
+@@ -730,7 +731,7 @@ async def vod_hour_no_timezone(year_month: str, day: int, hour: int, camera_name
      description="Returns an HLS playlist for the specified date-time (with timezone) on the specified camera. Append /master.m3u8 or /index.m3u8 for HLS playback.",
  )
  async def vod_hour(
@@ -54,7 +54,7 @@ index d6e2a7f..4fdc8da 100644
  ):
      parts = year_month.split("-")
      start_date = (
-@@ -729,7 +730,7 @@ async def vod_hour(
+@@ -741,7 +742,7 @@ async def vod_hour(
      start_ts = start_date.timestamp()
      end_ts = end_date.timestamp()
  
@@ -63,7 +63,7 @@ index d6e2a7f..4fdc8da 100644
  
  
  @router.get(
-@@ -761,7 +762,7 @@ async def vod_event(
+@@ -773,7 +774,7 @@ async def vod_event(
          if event.end_time is None
          else (event.end_time + padding)
      )
@@ -72,7 +72,7 @@ index d6e2a7f..4fdc8da 100644
  
      # If the recordings are not found and the event started more than 5 minutes ago, set has_clip to false
      if (
-@@ -781,11 +782,12 @@ async def vod_event(
+@@ -793,11 +794,12 @@ async def vod_event(
      description="Returns an HLS playlist for a timestamp range with HLS discontinuity enabled. Append /master.m3u8 or /index.m3u8 for HLS playback.",
  )
  async def vod_clip(
@@ -87,7 +87,7 @@ index d6e2a7f..4fdc8da 100644
  
  @router.get(
 diff --git a/frigate/record/export.py b/frigate/record/export.py
-index 00addda..795043a 100644
+index 00addda12..795043af9 100644
 --- a/frigate/record/export.py
 +++ b/frigate/record/export.py
 @@ -623,7 +623,7 @@ class RecordingExporter(threading.Thread):
@@ -100,7 +100,7 @@ index 00addda..795043a 100644
                  "-loglevel",
                  "warning",
 diff --git a/frigate/util/classification.py b/frigate/util/classification.py
-index a9345bb..0bdff6a 100644
+index a9345bbc5..0bdff6aa2 100644
 --- a/frigate/util/classification.py
 +++ b/frigate/util/classification.py
 @@ -353,7 +353,7 @@ def kickoff_model_training(
@@ -151,10 +151,10 @@ index a9345bb..0bdff6a 100644
                  relative_time,
                  codec="mjpeg",
 diff --git a/frigate/util/config.py b/frigate/util/config.py
-index 3c7f0ca..86d4d03 100644
+index 4a48c2b6f..a959758ff 100644
 --- a/frigate/util/config.py
 +++ b/frigate/util/config.py
-@@ -10,9 +10,7 @@ from ruamel.yaml import YAML
+@@ -11,9 +11,7 @@ from ruamel.yaml import YAML
  
  from frigate.const import (
      CONFIG_DIR,
@@ -164,12 +164,14 @@ index 3c7f0ca..86d4d03 100644
      REDACTED_CREDENTIAL_SENTINEL,
  )
  from frigate.util.builtin import deep_merge
-@@ -32,16 +30,7 @@ def resolve_ffmpeg_path(path: str, binary: str = "ffmpeg") -> str:
-     bundled version so existing configs keep working across an upgrade or a
-     revert. Custom install paths (anything absolute) are used as-is.
+@@ -43,18 +41,7 @@ def resolve_ffmpeg_path(path: str, binary: str = "ffmpeg") -> str:
+     revert. Custom install paths (anything absolute) are used as-is, unless
+     they fail `is_valid_ffmpeg_path`, which also falls back to the default.
      """
--    if path == "default" or (
--        not path.startswith("/") and path not in INCLUDED_FFMPEG_VERSIONS
+-    if (
+-        path == "default"
+-        or not is_valid_ffmpeg_path(path)
+-        or (not path.startswith("/") and path not in INCLUDED_FFMPEG_VERSIONS)
 -    ):
 -        version = DEFAULT_FFMPEG_VERSION
 -    elif path in INCLUDED_FFMPEG_VERSIONS:
@@ -183,7 +185,7 @@ index 3c7f0ca..86d4d03 100644
  
  def redact_credential(obj: dict[str, Any], key: str) -> None:
 diff --git a/frigate/util/media.py b/frigate/util/media.py
-index e4e84e9..1bf6780 100644
+index e4e84e914..1bf6780e0 100644
 --- a/frigate/util/media.py
 +++ b/frigate/util/media.py
 @@ -13,7 +13,6 @@ from peewee import DatabaseError, chunked

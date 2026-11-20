@@ -8,23 +8,23 @@ let
   games = {
     ctf = {
       id = "ctf";
-      version = "1.07";
+      version = "1.13";
       description = "'Capture The Flag' for Yamagi Quake II";
-      sha256 = "0i9bwhjvq6yhalrsbzjambh27fdzrzgswqz3jgfn9qw6k1kjvlin";
+      sha256 = "sha256-4obmF/GkR+JDEPKCo45B8d/vjA6qpJ4y7YMFSo2lvjM=";
     };
 
     ground-zero = {
       id = "rogue";
-      version = "2.07";
+      version = "2.16";
       description = "'Ground Zero' for Yamagi Quake II";
-      sha256 = "1m2r4vgfdxpsi0lkf32liwf1433mdhhmjxiicjwzqjlkncjyfcb1";
+      sha256 = "sha256-jmqnc/qEzsh+aoM62y8EKQa6dYQ9KE4vxschID50+PA=";
     };
 
     the-reckoning = {
       id = "xatrix";
-      version = "2.08";
+      version = "2.17";
       description = "'The Reckoning' for Yamagi Quake II";
-      sha256 = "1wp9fg1q8nly2r9hh4394r1h4dxyni3lvdy7g419cz5s8hhn5msr";
+      sha256 = "sha256-sva8sAX5NP5zekutAVjM1pMBJcgUXcDOMjXEBQ4BCwQ=";
     };
   };
 

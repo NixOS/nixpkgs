@@ -66,7 +66,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "heidisql";
-    version = "12.20";
+    version = "12.22";
 
     strictDeps = true;
     __structuredAttrs = true;
@@ -75,7 +75,7 @@ stdenv.mkDerivation (
       owner = "HeidiSQL";
       repo = "HeidiSQL";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-Ol5JPf1+R47+tennlFsCk/XExH3lQbtQ3dVsxaU6kpU=";
+      hash = "sha256-gc8RFN7dpTYDIDT9w9iGA2SJ3t6vzhjyPxsMjVwrDEs=";
     };
 
     nativeBuildInputs = [
@@ -140,8 +140,8 @@ stdenv.mkDerivation (
     ];
 
     passthru.updateScript = gitUpdater {
-      ignoredVersions = "[v0-9.]*-Windows$";
-      allowedVersions = "v[0-9]*.[0-9]*";
+      allowedVersions = "^[v0-9]*.[0-9]*$";
+      ignoredVersions = "^[v0-9]*.[0-9]*-Windows$";
       rev-prefix = "v";
     };
 

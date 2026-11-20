@@ -18,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "raphael-xiv";
-  version = "0.29.2";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "KonaeAkira";
     repo = "raphael-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NYxm/Yzjk25wDs+BniknOjT4g5E9hEcH3C3PLYzWHtM=";
+    hash = "sha256-Xo/2aYuOhyPGOOlTnfSq0VrynyTOg6JtT36e44R1J8U=";
   };
 
-  cargoHash = "sha256-FjmKmC6yggzSXGY9ykojFoat9jd5ZPXDoM9uOEC3gTg=";
+  cargoHash = "sha256-5U59PuVnJZgDokVJB9WNhImCCmXaj3ca8jB+m4v2SFo=";
 
   nativeBuildInputs = [
     copyDesktopItems

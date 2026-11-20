@@ -2213,53 +2213,6 @@ with pkgs;
     ;
   lerna = lerna_8;
 
-  libintPsi4 = libint.override {
-    enableFortran = false;
-    enableSSE = false;
-    maxAm = 6;
-    eriDeriv = 2;
-    eri3Deriv = 2;
-    eri2Deriv = 2;
-    eriAm = [
-      6
-      5
-      4
-    ];
-    eri3Am = [
-      6
-      5
-      4
-    ];
-    eri2Am = [
-      6
-      5
-      4
-    ];
-    eriOptAm = [
-      3
-      2
-      2
-    ];
-    eri3OptAm = [
-      3
-      2
-      2
-    ];
-    eri2OptAm = [
-      3
-      2
-      2
-    ];
-    enableOneBody = true;
-    oneBodyDerivOrd = 2;
-    enableGeneric = false;
-    enableContracted = false;
-    cartGaussOrd = "standard";
-    shGaussOrd = "gaussian";
-    eri2PureSh = false;
-    eri3PureSh = false;
-  };
-
   libportal-gtk3 = libportal.override { variant = "gtk3"; };
   libportal-gtk4 = libportal.override { variant = "gtk4"; };
   libportal-qt5 = libportal.override { variant = "qt5"; };
@@ -2451,6 +2404,7 @@ with pkgs;
   patchutils_0_4_2 = callPackage ../tools/text/patchutils/0.4.2.nix { };
 
   inherit (import ../servers/sql/percona-server pkgs)
+    percona-server_9_7
     percona-server_8_4
     percona-server
     ;
@@ -6285,14 +6239,12 @@ with pkgs;
     (rec {
       zigPackages = recurseIntoAttrs (callPackage ../development/compilers/zig { });
 
-      zig_0_13 = zigPackages."0.13";
       zig_0_14 = zigPackages."0.14";
       zig_0_15 = zigPackages."0.15";
       zig_0_16 = zigPackages."0.16";
       zig_0_17 = zigPackages."0.17";
     })
     zigPackages
-    zig_0_13
     zig_0_14
     zig_0_15
     zig_0_16

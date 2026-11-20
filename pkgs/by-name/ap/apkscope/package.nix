@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "apkscope";
-  version = "0.9.2";
+  version = "0.10.0";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "suffixing";
     repo = "apkscope";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mwVCiR9qn3rXmh4z/s199KO2v7uZL+Dr0rs88XmRV4o=";
+    hash = "sha256-QdxF7V33eJN8KtsvQhF5C4EAs+ZEuKz6uQIPqkZpqQw=";
   };
 
-  cargoHash = "sha256-mHpaRapaGzfXUUpAWdxt/9SimNEAq80vGYo7rcZRndE=";
+  cargoHash = "sha256-DwVcYu02yEvOCIi0c9w4k5eI71rU4W7RkU87SVaIr7A=";
 
   # The upstream vendor was generated on a non-Linux platform
   buildNoDefaultFeatures = true;

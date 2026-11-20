@@ -23,7 +23,7 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "osu-lazer";
-  version = "2026.1115.0";
+  version = "2026.1117.0";
 
   src = fetchFromGitHub {
     owner = "ppy";

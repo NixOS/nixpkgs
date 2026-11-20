@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "impacket-rs";
-  version = "0.2.1";
+  version = "0.6.0";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nestho";
     repo = "impacket-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eStw3Pg+Y+q7FfWLC1EEW/tC3B436Ejf9AgR6OQvJhY=";
+    hash = "sha256-bu98N2Egw3/Y0iWQawif8RXHD0ewSI3z/Jf/JHWdj3k=";
   };
 
-  cargoHash = "sha256-TCD5LmVPAotGrAzaRjOHXZnL9CVYIkq1xPy7bOsEaCY=";
+  cargoHash = "sha256-Dctpo0iml4zSLn3ZBdCCWTji+LS4CH2E3eFQp7JGrfI=";
 
   passthru.updateScript = nix-update-script { };
 

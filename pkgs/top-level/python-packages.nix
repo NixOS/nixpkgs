@@ -4436,6 +4436,8 @@ self: super: with self; {
 
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
+  dfir-ntfs = callPackage ../development/python-modules/dfir_ntfs { };
+
   dftd4 = callPackage ../by-name/df/dftd4/python.nix {
     inherit (pkgs) dftd4;
   };
@@ -5447,8 +5449,6 @@ self: super: with self; {
   e2b-dockerfile-utils = callPackage ../development/python-modules/e2b-dockerfile-utils { };
 
   e3-core = callPackage ../development/python-modules/e3-core { };
-
-  e3-testsuite = callPackage ../development/python-modules/e3-testsuite { };
 
   e3nn = callPackage ../development/python-modules/e3nn { };
 
@@ -7366,6 +7366,8 @@ self: super: with self; {
 
   grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
 
+  grain = callPackage ../development/python-modules/grain { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
@@ -8387,8 +8389,6 @@ self: super: with self; {
 
   igloohome-api = callPackage ../development/python-modules/igloohome-api { };
 
-  ignite = callPackage ../development/python-modules/ignite { };
-
   ignorant = callPackage ../development/python-modules/ignorant { };
 
   igraph = callPackage ../development/python-modules/igraph { inherit (pkgs) igraph; };
@@ -8869,8 +8869,6 @@ self: super: with self; {
   jax-cuda13-pjrt = callPackage ../development/python-modules/jax-cuda13-pjrt { };
 
   jax-cuda13-plugin = callPackage ../development/python-modules/jax-cuda13-plugin { };
-
-  jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
 
   jax-tap = callPackage ../development/python-modules/jax-tap { };
 
@@ -10013,6 +10011,8 @@ self: super: with self; {
         inherit (self) libxml2;
       }
     )).py;
+
+  libzfs = callPackage ../development/python-modules/libzfs { };
 
   liccheck = callPackage ../development/python-modules/liccheck { };
 
@@ -11534,6 +11534,8 @@ self: super: with self; {
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
   mtcnn = callPackage ../development/python-modules/mtcnn { };
+
+  mtranslate = callPackage ../development/python-modules/mtranslate { };
 
   mujoco = callPackage ../development/python-modules/mujoco { };
 
@@ -13353,8 +13355,6 @@ self: super: with self; {
 
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt/default.nix { };
 
-  paho-mqtt_1 = callPackage ../development/python-modules/paho-mqtt/1.nix { };
-
   paintcompiler = callPackage ../development/python-modules/paintcompiler { };
 
   pajgps-api = callPackage ../development/python-modules/pajgps-api { };
@@ -13398,6 +13398,8 @@ self: super: with self; {
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
 
   panel = callPackage ../development/python-modules/panel { };
+
+  panel-material-ui = callPackage ../development/python-modules/panel-material-ui { };
 
   panflute = callPackage ../development/python-modules/panflute { };
 
@@ -14571,8 +14573,6 @@ self: super: with self; {
 
   py-libnuma = callPackage ../development/python-modules/py-libnuma { };
 
-  py-libzfs = callPackage ../development/python-modules/py-libzfs { };
-
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
   py-machineid = callPackage ../development/python-modules/py-machineid { };
@@ -14975,6 +14975,8 @@ self: super: with self; {
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
   pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
+
+  pycryptotools = callPackage ../development/python-modules/pycryptotools { };
 
   pycsdr = callPackage ../development/python-modules/pycsdr { };
 
@@ -16373,6 +16375,7 @@ self: super: with self; {
 
   pysail = callPackage ../development/python-modules/pysail {
     protoc = pkgs.protobuf;
+    inherit (pkgs) zstd;
   };
 
   pysam = callPackage ../development/python-modules/pysam { };
@@ -16988,7 +16991,9 @@ self: super: with self; {
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
-  pytest-services = callPackage ../development/python-modules/pytest-services { };
+  pytest-services = callPackage ../development/python-modules/pytest-services {
+    inherit (pkgs) memcached;
+  };
 
   pytest-shared-session-scope =
     callPackage ../development/python-modules/pytest-shared-session-scope
@@ -17690,6 +17695,8 @@ self: super: with self; {
   pytools = callPackage ../development/python-modules/pytools { };
 
   pytorch-bench = callPackage ../development/python-modules/pytorch-bench { };
+
+  pytorch-ignite = callPackage ../development/python-modules/pytorch-ignite { };
 
   pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
 
@@ -18684,6 +18691,8 @@ self: super: with self; {
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
+
+  roundtrip = callPackage ../development/python-modules/roundtrip { };
 
   routeros-api = callPackage ../development/python-modules/routeros-api { };
 
