@@ -155,6 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
@@ -166,8 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
       "harfbuzz"
       "harfbuzz-gobject"
       "harfbuzz-subset"
-      "harfbuzz-vector"
     ]
+    ++ (lib.optional withVector "harfbuzz-vector")
     ++ (lib.optional withIcu "harfbuzz-icu")
     ++ (lib.optional withRaster "harfbuzz-raster")
     ++ (lib.optional withCairo "harfbuzz-cairo");
