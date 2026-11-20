@@ -2,11 +2,15 @@
   lib,
   buildNpmPackage,
   codex,
+  codex-acp,
   fetchFromGitHub,
+  jq,
   makeBinaryWrapper,
   nix-update-script,
+  runCommand,
   stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -56,7 +60,33 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.e2e =
+      runCommand "check-codex-acp"
+        {
+          nativeBuildInputs = [
+            jq
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          set -o pipefail
+
+          {
+            printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1,"clientCapabilities":{}}}'
+            sleep 3
+          } | timeout 10s ${lib.getExe codex-acp} > $out
+
+          jq --exit-status --slurp '
+            any(.[];
+              .id == 1 and
+              .result.protocolVersion == 1 and
+              .result.agentInfo.name == "@agentclientprotocol/codex-acp"
+            )
+          ' "$out"
+        '';
+  };
 
   meta = {
     description = "ACP adapter for Codex CLI";
