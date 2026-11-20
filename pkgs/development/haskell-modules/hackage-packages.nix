@@ -345013,6 +345013,10 @@ self: {
       ];
       description = "Linear Programming using HiGHS and comfort-array";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      maintainers = [
+        lib.maintainers.galabovaa
+        lib.maintainers.thielema
+      ];
     }
   ) { inherit (pkgs) highs; };
 
