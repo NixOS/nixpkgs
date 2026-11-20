@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "9.0.2.508";
-  ffmpegVersion = "9.0.2";
+  version = "9.1.0.534";
+  ffmpegVersion = "9.1";
 in
 
 (ffmpeg-headless.override {
   version = ffmpegVersion;
-  hash = "sha256-/c6cVfMSF6JJxCuJs58bxBlmBXDJ+jbnC4pELB97Qb0=";
+  hash = "sha256-XK9nk9wqoINbMqjTE6dWm4E5b3wmke4vsqeHshgu6UQ=";
 
   buildFfmpeg = false;
   buildFfplay = false;
@@ -28,6 +28,7 @@ in
   withBluray = false;
   withBzlib = false;
   withCudaLLVM = false;
+  withCurl = false;
   withCuvid = false;
   withDrm = false;
   withDvdnav = false;
@@ -49,6 +50,7 @@ in
   withOpenmpt = false;
   withOpus = false;
   withRist = false;
+  withRubberband = false;
   withSoxr = false;
   withSpeex = false;
   withSrt = false;
@@ -77,14 +79,14 @@ in
 
     patches = old.patches ++ [
       (fetchpatch2 {
-        name = "v8.0_dts_es_audio.patch";
-        url = "https://github.com/Openur/ffprobe-static-build/raw/refs/tags/v${version}/patches/v8.0_dts_es_audio.patch";
+        name = "v9.1_dts_es_audio.patch";
+        url = "https://github.com/Openur/ffprobe-static-build/raw/refs/tags/v${version}/patches/v9.1_dts_es_audio.patch";
         hash = "sha256-w7aV2u9N44mKswzzP2bW8CtRa3F/iNMeeiYBM+Bq2XQ=";
       })
       (fetchpatch2 {
-        name = "v8.0_x2645_codec_tag.patch";
-        url = "https://github.com/Openur/ffprobe-static-build/raw/refs/tags/v${version}/patches/v8.0_x2645_codec_tag.patch";
-        hash = "sha256-Bg2cuVedA6zW95VO39UTpATkhWf22Moek9FhdQmYvvM=";
+        name = "v9.1_x2645_codec_tag.patch";
+        url = "https://github.com/Openur/ffprobe-static-build/raw/refs/tags/v${version}/patches/v9.1_x2645_codec_tag.patch";
+        hash = "sha256-oNdmwD4y/vj/XyhZawkFYQcZebB31XKdA0V45mRADMk=";
       })
     ];
 
