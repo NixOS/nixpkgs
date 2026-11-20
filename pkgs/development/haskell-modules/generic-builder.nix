@@ -388,7 +388,6 @@ let
     "--with-gcc=${lib.getExe stdenv.cc}" # Clang won't work without that extra information.
   ]
   ++ [
-    "--package-db=$packageConfDir"
     (optionalString (
       enableSharedExecutables && stdenv.hostPlatform.isLinux
     ) "--ghc-option=-optl=-Wl,-rpath=${placeholder "out"}/${ghcLibdir}/${pname}-${version}")
@@ -396,7 +395,6 @@ let
       enableSharedExecutables && stdenv.hostPlatform.isDarwin
     ) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding (makeGhcOptions [
-      "-j$NIX_BUILD_CORES"
       "+RTS"
       "-A64M"
       "-RTS"
@@ -717,7 +715,13 @@ lib.fix (
         mkdir -p $packageConfDir
 
         setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
+
         configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
+        # Pass in configure flags that are only known at this phase
+        prependToVar configureFlags "--package-db=$packageConfDir"
+        ${optionalString enableParallelBuilding ''
+          prependToVar configureFlags "--ghc-option=-j$NIX_BUILD_CORES"
+        ''}
       ''
       # We build the Setup.hs on the *build* machine, and as such should only add
       # dependencies for the build machine.
