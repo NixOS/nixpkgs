@@ -19,6 +19,7 @@
   libxslt,
   fixDarwinDylibNames,
   gnome,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -94,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.json-glib;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
     updateScript = gnome.updateScript {
@@ -110,5 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = with lib.platforms; unix;
+    pkgConfigModules = [ "json-glib-1.0" ];
   };
 })
