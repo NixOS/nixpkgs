@@ -22,7 +22,8 @@ buildPythonPackage (finalAttrs: {
   format = "wheel";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    pname = "aerosandbox";
+    inherit (finalAttrs) version;
     format = "wheel";
 
     python = "py3";
