@@ -33051,6 +33051,12 @@
     githubId = 193895068;
     name = "Yureka";
   };
+  Yukkku = {
+    name = "Ikemoto Yu";
+    github = "Yukkku";
+    githubId = 76182771;
+    email = "yukku.scratcher@gmail.com";
+  };
   Yumasi = {
     email = "gpagnoux@gmail.com";
     github = "Yumasi";
