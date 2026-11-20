@@ -177,7 +177,7 @@ class GitilesRepo(Repo):
             self.args["postFetch"] += "rm -r $out/content/test/data; "
             self.args["postFetch"] += "rm -rf $out/courgette/testdata; "
             self.args["postFetch"] += "rm -r $out/extensions/test/data; "
-            self.args["postFetch"] += "rm -r $out/media/test/data; "
+            self.args["postFetch"] += "rm -r $(find $out/media/test/data -mindepth 1 -maxdepth 1 ! -name README.md ! -name trun_overflow.mp4); "
 
     def get_file(self, filepath: str) -> str:
         rev_or_tag = self.args['rev'] if 'rev' in self.args else f"refs/tags/{self.args['tag']}"
