@@ -1,15 +1,17 @@
 {
-  ffmpeg_9-headless,
+  ffmpeg-headless,
   fetchpatch2,
   lib,
 }:
 
 let
   version = "9.0.2.508";
+  ffmpegVersion = "9.0.2";
 in
 
-(ffmpeg_9-headless.override {
-  inherit version;
+(ffmpeg-headless.override {
+  version = ffmpegVersion;
+  hash = "sha256-/c6cVfMSF6JJxCuJs58bxBlmBXDJ+jbnC4pELB97Qb0=";
 
   buildFfmpeg = false;
   buildFfplay = false;
@@ -70,6 +72,8 @@ in
 }).overrideAttrs
   (old: {
     pname = "openur-ffmpeg";
+    inherit version;
+    __intentionallyOverridingVersion = true;
 
     patches = old.patches ++ [
       (fetchpatch2 {
