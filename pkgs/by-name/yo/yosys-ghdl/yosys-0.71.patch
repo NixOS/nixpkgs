@@ -1,0 +1,155 @@
+From 7acbcf907173b288eee71e15531f6d4cf728c98e Mon Sep 17 00:00:00 2001
+From: Andreas Wendleder <andreas.wendleder@proton.me>
+Date: Thu, 12 Nov 2026 20:23:07 +0100
+Subject: [PATCH] ghdl.cc: fix build with yosys 0.71
+
+Backport of the interned IdString API changes from upstream commits
+6a14589 and cc0b1e8 onto this older revision.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_015nagR3thVVbRLcqE9rSr6w
+---
+ src/ghdl.cc | 46 +++++++++++++++++++++-------------------------
+ 1 file changed, 21 insertions(+), 25 deletions(-)
+
+diff --git a/src/ghdl.cc b/src/ghdl.cc
+index 74ac8f1..c717b0e 100644
+--- a/src/ghdl.cc
++++ b/src/ghdl.cc
+@@ -381,15 +381,15 @@ static RTLIL::Const build_attribute_val(Attribute attr)
+ }
+ 
+ //  Create the identifier of an attribute
+-static IdString build_attribute_id(Attribute attr)
++static IdString build_attribute_id(Design *design, Attribute attr)
+ {
+-	return IdString('\\' + string(get_cstr(get_attribute_name(attr))));
++	return design->twines().add('\\' + string(get_cstr(get_attribute_name(attr))));
+ }
+ 
+-static void add_attributes_chain(RTLIL::AttrObject &obj, Attribute attr)
++static void add_attributes_chain(Design *design, RTLIL::AttrObject &obj, Attribute attr)
+ {
+ 	while (attr.id != 0) {
+-		IdString id = build_attribute_id(attr);
++		IdString id = build_attribute_id(design, attr);
+ 		obj.attributes[id] = build_attribute_val(attr);
+ 
+ 		attr = get_attribute_next(attr);
+@@ -397,9 +397,9 @@ static void add_attributes_chain(RTLIL::AttrObject &obj, Attribute attr)
+ }
+ 
+ //  Convert attributes of INST to OBJ.
+-static void add_attributes_from_instance(RTLIL::AttrObject &obj, Instance inst)
++static void add_attributes_from_instance(Design *design, RTLIL::AttrObject &obj, Instance inst)
+ {
+-	add_attributes_chain(obj, get_instance_first_attribute (inst));
++	add_attributes_chain(design, obj, get_instance_first_attribute (inst));
+ }
+ 
+ //  Extract the polarity from net N (output of an edge gate).
+@@ -482,15 +482,13 @@ static void import_memory(RTLIL::Module *module, std::vector<RTLIL::Wire *> &net
+ 	unsigned size = get_width(mem_o) / width;
+ 
+ 	//  Create the memory.
+-	RTLIL::Memory *mem1 = new RTLIL::Memory;
+-	mem1->width = width;
+-	mem1->start_offset = 0;
+-	mem1->size = size;
+-	RTLIL::Memory *mem = module->addMemory(mem_str, mem1);
+-	delete mem1;
++	RTLIL::Memory *mem = module->addMemory(mem_str);
++	mem->width = width;
++	mem->start_offset = 0;
++	mem->size = size;
+ 
+ 	//  Set attributes.
+-	add_attributes_from_instance(*mem, inst);
++	add_attributes_from_instance(module->design, *mem, inst);
+ 
+ 	//  Initial value
+ 	if (get_id(inst) == Id_Memory_Init) {
+@@ -670,11 +668,9 @@ static void import_module(RTLIL::Design *design, GhdlSynth::Module m)
+ 		return;
+ 	}
+ 
+-	RTLIL::Module *module = new RTLIL::Module;
+-	module->name = module_name;
+-	design->add(module);
++	RTLIL::Module *module = design->addModule(design->twines().add(module_name));
+ 
+-	log("Importing module %s.\n", RTLIL::id2cstr(module->name));
++	log("Importing module %s.\n", module_name.c_str());
+ 
+ 	//  TODO: support submodules (currently they aren't generated)
+ 	if (is_valid(get_first_sub_module(m))) {
+@@ -694,7 +690,7 @@ static void import_module(RTLIL::Design *design, GhdlSynth::Module m)
+ 				to_str(get_input_name(m, idx)),
+ 				get_input_width(m, idx));
+ 			wire->port_input = true;
+-                        add_attributes_chain(*wire, get_input_port_first_attribute(m, idx));
++                        add_attributes_chain(design, *wire, get_input_port_first_attribute(m, idx));
+ 		}
+ 		Port_Idx nbr_outputs = get_nbr_outputs(m);
+ 		for (Port_Idx idx = 0; idx < nbr_outputs; idx++) {
+@@ -704,11 +700,11 @@ static void import_module(RTLIL::Design *design, GhdlSynth::Module m)
+ 			if (get_inout_flag(m, idx))
+ 				wire->port_input = true;
+ 			wire->port_output = true;
+-                        add_attributes_chain(*wire, get_output_port_first_attribute(m, idx));
++                        add_attributes_chain(design, *wire, get_output_port_first_attribute(m, idx));
+                 }
+ 		Param_Idx nbr_params = get_nbr_params(m);
+ 		for (Param_Idx idx = 0; idx < nbr_params; idx++) {
+-			module->avail_parameters(to_str(get_param_name(m, idx)));
++			module->avail_parameters(design->twines().add(to_str(get_param_name(m, idx))));
+ 		}
+ 
+ 		module->fixup_ports();
+@@ -727,7 +723,7 @@ static void import_module(RTLIL::Design *design, GhdlSynth::Module m)
+ 		wire->port_input = true;
+ 		wire->width = get_width(port);
+ 		set_src(net_map, port, wire);
+-                add_attributes_chain(*wire, get_input_port_first_attribute(m, idx));
++                add_attributes_chain(design, *wire, get_input_port_first_attribute(m, idx));
+ 	}
+ 	//  Create inout ports, so that they can be read.
+ 	Port_Idx nbr_outputs = get_nbr_outputs(m);
+@@ -744,7 +740,7 @@ static void import_module(RTLIL::Design *design, GhdlSynth::Module m)
+ 		wire->port_output = true;
+ 		wire->port_input = true;
+ 		wire->width = get_width(output_out);
+-                add_attributes_chain(*wire, get_output_port_first_attribute(m, idx));
++                add_attributes_chain(design, *wire, get_output_port_first_attribute(m, idx));
+ 
+ 		Instance inout_inst = get_net_parent(output_out);
+ 		Net inout_rd = get_output(inout_inst, 0);
+@@ -839,7 +835,7 @@ static void import_module(RTLIL::Design *design, GhdlSynth::Module m)
+ 			set_src(net_map, s, wire);
+ 
+ 			//  Attributes
+-			add_attributes_from_instance(*wire, inst);
++			add_attributes_from_instance(design, *wire, inst);
+ 			break;
+ 		}
+ 		case Id_Output:
+@@ -1246,14 +1242,14 @@ static void import_module(RTLIL::Design *design, GhdlSynth::Module m)
+ 		wire->port_id = nbr_inputs + idx + 1;
+ 		wire->port_output = true;
+ 		wire->width = get_width(output_out);
+-                add_attributes_chain(*wire, get_output_port_first_attribute(m, idx));
++                add_attributes_chain(design, *wire, get_output_port_first_attribute(m, idx));
+ 
+ 		module->connect(wire, get_src(net_map, output_out));
+ 
+ 		Instance inst = get_net_parent(output_out);
+ 		switch(get_id(inst)) {
+ 		case Id_Output:
+-			add_attributes_from_instance(*wire, inst);
++			add_attributes_from_instance(design, *wire, inst);
+ 			break;
+ 		default:
+ 			break;
+-- 
+2.56.0
+

@@ -1,0 +1,15 @@
+--- /build.xml
++++ /build.xml
+@@ -1134,6 +1134,12 @@
+       <arg value="${javaHome_macosx_arm64}/legal"/>
+       <arg value="install/macosx/SweetHome3D-${version}/Sweet Home 3D.app/Contents/runtime/Contents/Home"/>
+     </exec>
++    <!-- Fix permissions -->
++    <exec executable="chmod" failonerror="yes">
++      <arg value="-R"/>
++      <arg value="u+w"/>
++      <arg value="install/macosx/SweetHome3D-${version}/Sweet Home 3D.app/Contents/runtime/Contents/Home/legal"/>
++    </exec>
+     <!-- Remove legal files not exported by jpackage -->
+     <delete dir="install/macosx/SweetHome3D-${version}/Sweet Home 3D.app/Contents/runtime/Contents/Home/legal/jdk.jcmd"/>
+     <delete dir="install/macosx/SweetHome3D-${version}/Sweet Home 3D.app/Contents/runtime/Contents/Home/legal/jdk.internal.vm.compiler"/>

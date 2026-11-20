@@ -1,0 +1,27 @@
+From 55f41ab4ff15cca5791c107d504780a09f065eb7 Mon Sep 17 00:00:00 2001
+From: Tom van Dijk <18gatenmaker6@gmail.com>
+Date: Mon, 12 Jan 2026 21:51:31 +0100
+Subject: [PATCH 4/4] fix build with C23
+
+---
+ src/types.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/types.h b/src/types.h
+index b5b46a0..eea255b 100644
+--- a/src/types.h
++++ b/src/types.h
+@@ -22,9 +22,7 @@
+ #define TYPES_H
+ 
+ #ifndef __cplusplus
+-#ifndef bool
+-typedef char bool;
+-#endif
++#include <stdbool.h>
+ #endif
+ 
+ #define FALSE 0
+-- 
+2.51.2
+

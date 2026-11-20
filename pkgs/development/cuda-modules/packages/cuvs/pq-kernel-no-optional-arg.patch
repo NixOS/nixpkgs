@@ -1,0 +1,41 @@
+Pass vq_labels to reconstruct_vectors_kernel as a plain view instead of std::optional.
+
+With CUDA 13.4's nvcc and GCC 16's libstdc++ (which reworked <optional> for C++26),
+cicc fails with "Stored value type does not match pointer operand type!" when the
+kernel-selecting lambda in reconstruct_vectors() returns pointers to two
+instantiations of a kernel that takes std::optional<device_vector_view> by value.
+Use the same null-view convention the file already uses for the other kernel.
+Workaround for the compiler defect; not upstream.
+
+--- a/src/preprocessing/quantize/detail/pq.cuh
++++ b/src/preprocessing/quantize/detail/pq.cuh
+@@ -254,7 +254,7 @@
+   raft::device_matrix_view<DataT, IdxT, raft::row_major> dataset,
+   raft::device_matrix_view<const MathT, uint32_t, raft::row_major> pq_centers,
+   raft::device_matrix_view<const DataT, uint32_t, raft::row_major> vq_centers,
+-  std::optional<raft::device_vector_view<const uint32_t, int64_t>> vq_labels,
++  raft::device_vector_view<const uint32_t, int64_t> vq_labels,
+   const uint32_t pq_bits,
+   bool use_subspaces)
+ {
+@@ -266,7 +266,7 @@
+   const uint32_t pq_len = raft::div_rounding_up_unsafe(dataset.extent(1), pq_centers.extent(1));
+ 
+   LabelT vq_label = 0;
+-  if (vq_labels.has_value()) { vq_label = vq_labels.value()(row_ix); }
++  if (vq_labels.data_handle() != nullptr) { vq_label = vq_labels(row_ix); }
+   cuvs::preprocessing::quantize::detail::bitfield_view_t code_view{&codes(row_ix, 0), pq_bits};
+   for (uint32_t j = lane_id; j < pq_len; j += SubWarpSize) {
+     const CodeT code = code_view[j];
+@@ -328,8 +328,10 @@
+     }
+   }(pq_bits);
+   dim3 blocks(raft::div_rounding_up_safe<IdxT>(n_rows, kBlockSize / threads_per_vec), 1, 1);
++  auto vq_labels_view = raft::make_device_vector_view<const uint32_t, int64_t>(nullptr, 0);
++  if (vq_labels.has_value()) { vq_labels_view = vq_labels.value(); }
+   kernel<<<blocks, threads, 0, stream>>>(
+-    codes, out_vectors, pq_centers, vq_centers, vq_labels, pq_bits, use_subspaces);
++    codes, out_vectors, pq_centers, vq_centers, vq_labels_view, pq_bits, use_subspaces);
+   RAFT_CUDA_TRY(cudaPeekAtLastError());
+ 
+   return codes;

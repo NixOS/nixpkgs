@@ -1,0 +1,57 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  icalendar,
+  pytestCheckHook,
+  git,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "icalendar-compatibility";
+  version = "0.1.5";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "PyCalendar";
+    repo = "icalendar_compatibility";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rHx4wuLKSBI3/3ShxtpyyuK+iWULpbzfDN8DCNUryHg=";
+  };
+
+  # hatch-vcs tries to read the current git commit hash
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["urls", "version"]' 'version = "${finalAttrs.version}"'
+  '';
+
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [ icalendar ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    git
+  ];
+
+  disabledTests = [
+    # https://github.com/PyCalendar/icalendar_compatibility/issues/5
+    "test_geo_location_is_also_escaped"
+  ];
+
+  pythonImportsCheck = [ "icalendar_compatibility" ];
+
+  meta = {
+    homepage = "https://icalendar-compatibility.readthedocs.io/en/latest/";
+    changelog = "https://github.com/PyCalendar/icalendar_compatibility/blob/${finalAttrs.src.rev}/docs/changes.rst";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ erictapen ];
+    teams = with lib.teams; [ ngi ];
+  };
+
+})

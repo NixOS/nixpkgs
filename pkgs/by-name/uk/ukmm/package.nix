@@ -1,0 +1,115 @@
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  aws-lc,
+  libglvnd,
+  libxkbcommon,
+  openssl,
+  zstd,
+  makeDesktopItem,
+  copyDesktopItems,
+  nix-update-script,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "ukmm";
+  version = "0.17.3";
+
+  src = fetchFromGitHub {
+    owner = "NiceneNerd";
+    repo = "ukmm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6oScJDuxEfYNfrWL2kakTs3wKNju8mcGb7SozR9berc=";
+  };
+
+  cargoHash = "sha256-L55bxQLoeaPELhDhxyYSQBtNs4IYlNPebryhy6SgH6E=";
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustPlatform.bindgenHook
+    wrapGAppsHook3
+    copyDesktopItems
+  ];
+
+  buildInputs = [
+    aws-lc
+    libglvnd
+    libxkbcommon
+    openssl
+    zstd
+  ];
+
+  # Force linking to libEGL, which is always dlopen()ed, and to
+  # libwayland-client & libxkbcommon, which is dlopen()ed based on the
+  # winit backend.
+  env.NIX_LDFLAGS = toString [
+    "--push-state"
+    "--no-as-needed"
+    "-lEGL"
+    "-lwayland-client"
+    "-lxkbcommon"
+    "--pop-state"
+  ];
+
+  # Force zarchive to dynamically link zstd
+  postPatch = ''
+    substituteInPlace ../ukmm-*-vendor/*/zarchive-*/build.rs \
+      --replace-fail cargo:rustc-link-lib=static=zstd cargo:rustc-link-lib=zstd
+  '';
+
+  cargoTestFlags = [
+    "--all"
+  ];
+
+  checkFlags = [
+    # Requires a game dump of Breath of the Wild
+    "--skip=gui::tasks::tests::remerge"
+    "--skip=pack::tests::pack_mod"
+    "--skip=project::tests::project_from_mod"
+    "--skip=tests::read_meta"
+    "--skip=unpack::tests::read_mod"
+    "--skip=unpack::tests::unpack_mod"
+    "--skip=unpack::tests::unzip_mod"
+
+    # Requires Clear Camera mod
+    "--skip=bnp::test_convert"
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    install -Dm444 assets/ukmm.png  $out/share/icons/hicolor/256x256/apps/ukmm.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ukmm";
+      exec = "ukmm %u";
+      mimeTypes = [ "x-scheme-handler/bcml" ];
+      icon = "ukmm";
+      desktopName = "UKMM";
+      categories = [
+        "Game"
+        "Utility"
+      ];
+      comment = "Breath of the Wild Mod Manager";
+    })
+  ];
+
+  meta = {
+    description = "New mod manager for The Legend of Zelda: Breath of the Wild";
+    homepage = "https://github.com/NiceneNerd/ukmm";
+    changelog = "https://github.com/NiceneNerd/ukmm/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.linux;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+    mainProgram = "ukmm";
+  };
+})

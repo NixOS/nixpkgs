@@ -1,0 +1,274 @@
+diff a/clickhouse_sqlalchemy/drivers/base.py b/clickhouse_sqlalchemy/drivers/base.py
+--- a/clickhouse_sqlalchemy/drivers/base.py
++++ b/clickhouse_sqlalchemy/drivers/base.py
+@@ -53,1 +53,1 @@
+-    'Object(\'json\')': types.JSON,
++    'JSON': types.JSON,
+diff --git a/clickhouse_sqlalchemy/drivers/asynch/base.py b/clickhouse_sqlalchemy/drivers/asynch/base.py
+index 5a28ea6e..b80646c8 100644
+--- a/clickhouse_sqlalchemy/drivers/asynch/base.py
++++ b/clickhouse_sqlalchemy/drivers/asynch/base.py
+@@ -4,12 +4,36 @@
+ from sqlalchemy.pool import AsyncAdaptedQueuePool
+ 
+ from .connector import AsyncAdapt_asynch_dbapi
+-from ..native.base import ClickHouseDialect_native, ClickHouseExecutionContext
++from ..native.base import (
++    ClickHouseDialect_native,
++    ClickHouseExecutionContext,
++    ClickHouseNativeSQLCompiler,
++)
+ 
+ # Export connector version
+ VERSION = (0, 0, 1, None)
+ 
+ 
++try:
++    from importlib.metadata import version
++    _asynch_version_raw = version('asynch')
++except Exception:
++    _asynch_version_raw = getattr(asynch, '__version__', None) or '0'
++_asynch_use_format_placeholders = tuple(
++    int(x) if x.isdigit() else 0 for x in str(_asynch_version_raw).split('.')[:3]
++) == (0, 3, 1)
++
++
++class ClickHouseAsynchSQLCompiler(ClickHouseNativeSQLCompiler):
++    """Emit {name} for asynch 0.3.1 (.format() param style)."""
++
++    def visit_bindparam(self, bindparam, **kw):
++        return "{%s}" % self._truncate_bindparam(bindparam)
++
++    def post_process_text(self, text):
++        return text
++
++
+ class ClickHouseAsynchExecutionContext(ClickHouseExecutionContext):
+     def create_server_side_cursor(self):
+         return self.create_default_cursor()
+@@ -18,6 +42,10 @@ def create_server_side_cursor(self):
+ class ClickHouseDialect_asynch(ClickHouseDialect_native):
+     driver = 'asynch'
+     execution_ctx_cls = ClickHouseAsynchExecutionContext
++    statement_compiler = (
++        ClickHouseAsynchSQLCompiler if _asynch_use_format_placeholders
++        else ClickHouseNativeSQLCompiler
++    )
+ 
+     is_async = True
+     supports_statement_cache = True
+diff --git a/clickhouse_sqlalchemy/drivers/asynch/connector.py b/clickhouse_sqlalchemy/drivers/asynch/connector.py
+index 99d211a9..32d754c3 100644
+--- a/clickhouse_sqlalchemy/drivers/asynch/connector.py
++++ b/clickhouse_sqlalchemy/drivers/asynch/connector.py
+@@ -107,6 +107,9 @@ def fetchall(self):
+         self._rows[:] = []
+         return retval
+ 
++    async def _async_soft_close(self) -> None:
++        return
++
+ 
+ class AsyncAdapt_asynch_dbapi:
+     def __init__(self, asynch):
+@@ -176,10 +179,10 @@ def cursor(self, server_side=False):
+         return AsyncAdapt_asynch_cursor(self)
+ 
+     def rollback(self):
+-        self.await_(self._connection.rollback())
++        pass
+ 
+     def commit(self):
+-        self.await_(self._connection.commit())
++        pass
+ 
+     def close(self):
+         self.await_(self._connection.close())
+
+diff --git a/clickhouse_sqlalchemy/alembic/comparators.py b/clickhouse_sqlalchemy/alembic/comparators.py
+index 6743bea9..a454766e 100644
+--- a/clickhouse_sqlalchemy/alembic/comparators.py
++++ b/clickhouse_sqlalchemy/alembic/comparators.py
+@@ -2,9 +2,7 @@
+ 
+ from alembic import __version__ as alembic_version
+ from alembic.autogenerate import comparators
+-from alembic.autogenerate.compare import _compare_columns
+ from alembic.operations.ops import ModifyTableOps
+-from alembic.util.sqla_compat import _reflect_table as _alembic_reflect_table
+ from sqlalchemy import schema as sa_schema
+ from sqlalchemy import text
+ 
+@@ -16,6 +14,12 @@
+ alembic_version = tuple(
+     (int(x) if x.isdigit() else x) for x in alembic_version.split('.')
+ )
++_alembic_118 = alembic_version >= (1, 18, 0)
++
++if _alembic_118:
++    from alembic.autogenerate.compare.tables import _compare_columns
++else:
++    from alembic.autogenerate.compare import _compare_columns
+ 
+ 
+ def _extract_to_table_name(create_table_query):
+@@ -28,20 +32,21 @@ def _extract_to_table_name(create_table_query):
+ 
+ # Direct call .dispatch_for('schema', 'clickhouse') override an Alembic
+ # default ('schema', 'default') comparator. To avoid it (as we have own
+-# implementation only for a materialized views ) register default "schema"
++# implementation only for a materialized views) register default "schema"
+ # comparators as "clickhouse" comparators too.
+-for default_comparator in comparators._registry[('schema', 'default')]:
+-    comparators.dispatch_for('schema', 'clickhouse')(default_comparator)
+-
+-
+-def _reflect_table(inspector, table):
+-    if alembic_version >= (1, 11, 0):
+-        return _alembic_reflect_table(inspector, table)
+-    else:
+-        return _alembic_reflect_table(inspector, table, None)
+-
+-
+-@comparators.dispatch_for('schema', 'clickhouse')
++if _alembic_118:
++    for (target, qualifier, priority), fns in comparators._registry.items():
++        if target == 'schema' and qualifier == 'default':
++            for fn, _ in fns:
++                comparators.dispatch_for(
++                    'schema', qualifier='clickhouse', priority=priority
++                )(fn)
++else:
++    for fn in comparators._registry[('schema', 'default')]:
++        comparators.dispatch_for('schema', qualifier='clickhouse')(fn)
++
++
++@comparators.dispatch_for('schema', qualifier='clickhouse')
+ def compare_mat_view(autogen_context, upgrade_ops, schemas):
+     connection = autogen_context.connection
+     dialect = autogen_context.dialect
+@@ -127,7 +132,7 @@ def compare_mat_view(autogen_context, upgrade_ops, schemas):
+             )
+         else:
+             table = Table(name, existing_metadata)
+-            _reflect_table(inspector, table)
++            inspector.reflect_table(table, include_columns=None)
+ 
+             drop = operations.DropMatViewOp(
+                 name, params.as_select, params.engine_full, *table.columns
+@@ -144,7 +149,7 @@ def compare_mat_view(autogen_context, upgrade_ops, schemas):
+             inner_name = '.inner.' + name
+ 
+         conn_table = Table(inner_name, existing_metadata)
+-        _reflect_table(inspector, conn_table)
++        inspector.reflect_table(conn_table, include_columns=None)
+ 
+         if not autogen_context.run_object_filters(
+             view, name, 'mat_view', False, conn_table
+diff --git a/docs/installation.rst b/docs/installation.rst
+index b67e9a12..dec7cc64 100644
+--- a/docs/installation.rst
++++ b/docs/installation.rst
+@@ -6,7 +6,7 @@ Installation
+ Python Version
+ --------------
+ 
+-Clickhouse-sqlalchemy supports Python 2.7 and newer.
++Clickhouse-sqlalchemy supports Python 3.8 and newer.
+ 
+ Dependencies
+ ------------
+@@ -16,12 +16,10 @@ clickhouse-sqlalchemy:
+ 
+ * `clickhouse-driver`_ ClickHouse Python Driver with native (TCP) interface support.
+ * `requests`_ a simple and elegant HTTP library.
+-* `ipaddress`_ backport ipaddress module.
+ * `asynch`_ An asyncio ClickHouse Python Driver with native (TCP) interface support.
+ 
+ .. _clickhouse-driver: https://pypi.org/project/clickhouse-driver/
+ .. _requests: https://pypi.org/project/requests/
+-.. _ipaddress: https://pypi.org/project/ipaddress/
+ .. _asynch: https://pypi.org/project/asynch/
+ 
+ If you are planning to use ``clickhouse-driver`` with compression you should
+diff --git a/setup.py b/setup.py
+index b7471071..50414982 100644
+--- a/setup.py
++++ b/setup.py
+@@ -71,13 +71,12 @@ def read_version():
+ 
+         'Programming Language :: SQL',
+         'Programming Language :: Python :: 3',
+-        'Programming Language :: Python :: 3.6',
+-        'Programming Language :: Python :: 3.7',
+         'Programming Language :: Python :: 3.8',
+         'Programming Language :: Python :: 3.9',
+         'Programming Language :: Python :: 3.10',
+         'Programming Language :: Python :: 3.11',
+         'Programming Language :: Python :: 3.12',
++        'Programming Language :: Python :: 3.13',
+ 
+         'Topic :: Database',
+         'Topic :: Software Development',
+@@ -94,12 +93,12 @@ def read_version():
+         'Changes': github_url + '/blob/master/CHANGELOG.md'
+     },
+     packages=find_packages('.', exclude=["tests*"]),
+-    python_requires='>=3.7, <4',
++    python_requires='>=3.8, <4',
+     install_requires=[
+         'sqlalchemy>=2.0.0,<2.1.0',
+         'requests',
+-        'clickhouse-driver>=0.1.2',
+-        'asynch>=0.2.5',
++        'clickhouse-driver',
++        'asynch',
+     ],
+     # Registering `clickhouse` as dialect.
+     entry_points={
+diff --git a/setup.py b/setup.py
+index 50414982..364c2015 100644
+--- a/setup.py
++++ b/setup.py
+@@ -77,6 +77,7 @@ def read_version():
+         'Programming Language :: Python :: 3.11',
+         'Programming Language :: Python :: 3.12',
+         'Programming Language :: Python :: 3.13',
++        'Programming Language :: Python :: 3.14',
+ 
+         'Topic :: Database',
+         'Topic :: Software Development',
+diff --git a/tests/util.py b/tests/util.py
+index f2dc6a35..a09cc160 100644
+--- a/tests/util.py
++++ b/tests/util.py
+@@ -7,6 +7,8 @@
+ 
+ from tests.session import http_session, native_session
+ 
++_async_test_loop = None
++
+ 
+ def skip_by_server_version(testcase, version_required):
+     testcase.skipTest(
+@@ -88,15 +90,15 @@ def run_async(f):
+     """
+     @wraps(f)
+     def g(*args, **kwargs):
++        global _async_test_loop
+         coro = f(*args, **kwargs)
+         try:
+             loop = asyncio.get_running_loop()
+         except RuntimeError:
+-            try:
+-                loop = asyncio.get_event_loop_policy().get_event_loop()
+-            except DeprecationWarning:
+-                loop = asyncio.new_event_loop()
+-                asyncio.set_event_loop(loop)
++            if _async_test_loop is None or _async_test_loop.is_closed():
++                _async_test_loop = asyncio.new_event_loop()
++            loop = _async_test_loop
++            asyncio.set_event_loop(loop)
+ 
+         return loop.run_until_complete(coro)
+     return g

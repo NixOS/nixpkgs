@@ -1,0 +1,50 @@
+Commit ID: eaef466931b704cbded48be8c51f7a8fa75ca6e0
+Change ID: yxsyyzwrzkrtqvksxqsurozmktvqsssw
+Author   : Marie Ramlow <marie@marie.cologne> (2026-11-01 13:28:50)
+Committer: Marie Ramlow <marie@marie.cologne> (2026-11-01 13:29:10)
+
+    Fix OpenSSL-compat shim symlinks
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index aa64e1aa22..005dc11c58 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1844,12 +1844,12 @@
+     endif()
+     install(CODE "
+       execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink
+-        lib${CRYPTO_LIB_NAME}.${SHIM_LIB_EXT} \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libcrypto.${SHIM_LIB_EXT}\")
++        lib${CRYPTO_LIB_NAME}.${SHIM_LIB_EXT} \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/libcrypto.${SHIM_LIB_EXT}\")
+     " ${SHIM_LINK_COMPONENT})
+     if(BUILD_LIBSSL)
+       install(CODE "
+         execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink
+-          lib${SSL_LIB_NAME}.${SHIM_LIB_EXT} \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libssl.${SHIM_LIB_EXT}\")
++          lib${SSL_LIB_NAME}.${SHIM_LIB_EXT} \"\$ENV{DESTDIR}/${CMAKE_INSTALL_FULL_LIBDIR}/libssl.${SHIM_LIB_EXT}\")
+       " ${SHIM_LINK_COMPONENT})
+     endif()
+   endif()
+@@ -1858,7 +1858,7 @@
+     # Always create the include directory symlink for OpenSSL compatibility
+     install(CODE "
+       execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink
+-        aws-lc/openssl \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/openssl\")
++        aws-lc/openssl \"\$ENV{DESTDIR}/${CMAKE_INSTALL_FULL_INCLUDEDIR}/openssl\")
+     " COMPONENT Development)
+   endif()
+ endif()
+diff --git a/tool-openssl/CMakeLists.txt b/tool-openssl/CMakeLists.txt
+index 262b42aa00..6f16cfa198 100644
+--- a/tool-openssl/CMakeLists.txt
++++ b/tool-openssl/CMakeLists.txt
+@@ -191,8 +191,8 @@
+ if(INSTALL_OPENSSL_SHIM AND COHABITANT_BINARIES)
+   install(CODE "
+     execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink
+-      \"${AWSLC_BIN_PREFIX}openssl\" \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/openssl\")
++      \"${AWSLC_BIN_PREFIX}openssl\" \"\$ENV{DESTDIR}/${CMAKE_INSTALL_FULL_BINDIR}/openssl\")
+     execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink
+-      \"${AWSLC_BIN_PREFIX}c_rehash\" \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/c_rehash\")
++      \"${AWSLC_BIN_PREFIX}c_rehash\" \"\$ENV{DESTDIR}/${CMAKE_INSTALL_FULL_BINDIR}/c_rehash\")
+   ")
+ endif()

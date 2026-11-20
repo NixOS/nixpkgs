@@ -1,0 +1,63 @@
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  versionCheckHook,
+  coreutils,
+}:
+
+python3.pkgs.buildPythonApplication (finalAttrs: {
+  pname = "getmail6";
+  version = "6.21.02";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "getmail6";
+    repo = "getmail6";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0e2HE1E6k70zEkYhG6s+jkP6mznPXp8SuRrrT/ZhuIc=";
+  };
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  pythonImportsCheck = [ "getmailcore" ];
+
+  postPatch = ''
+    # getmail spends a lot of effort to build an absolute path for
+    # documentation installation; too bad it is counterproductive now
+    sed -e '/datadir or prefix,/d' -i setup.py
+    sed -e 's,/usr/bin/getmail,$(dirname $0)/getmail,' -i getmails
+
+    substituteInPlace test/test_mock_servers.py \
+      --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
+  '';
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # incompatible with sandbox
+    "test_full_imap"
+    "test_idle_expunge_abort_imap"
+    "test_imap_ssl_parameters"
+  ];
+
+  meta = {
+    description = "Program for retrieving mail";
+    homepage = "https://getmail6.org";
+    changelog = "https://github.com/getmail6/getmail6/blob/${finalAttrs.src.tag}/docs/CHANGELOG";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "getmail";
+    maintainers = with lib.maintainers; [
+      abbe
+      dotlambda
+    ];
+  };
+})

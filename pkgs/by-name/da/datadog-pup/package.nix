@@ -1,0 +1,84 @@
+{
+  lib,
+  aws-lc,
+  cacert,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  zstd,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "datadog-pup";
+  version = "2.5.1";
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "DataDog";
+    repo = "pup";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eGYpg560f3o9/I8TckjW4JgfJfV/6vi1exx/TQr5+Yg=";
+  };
+
+  cargoHash = "sha256-2LcuZ8dFzdr24d7ySuba7HvEkoryzDgufvpD2whcgPs=";
+
+  postPatch = ''
+    # Set SSL_CERT_FILE again after clearing the environment in this test, otherwise it fails
+    substituteInPlace tests/governance_cli.rs \
+      --replace-fail '.env_clear()' '.env_clear().env("SSL_CERT_FILE", std::env::var("SSL_CERT_FILE").unwrap_or_default())'
+  '';
+
+  checkType = "debug";
+  dontUseCargoParallelTests = true;
+  __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
+
+  nativeCheckInputs = [
+    cacert
+    writableTmpDirAsHomeHook
+  ];
+
+  checkFlags = [
+    # These tests fail when stdout is a tty, due to ANSI color codes from comfy-table
+    "--skip=output::tests::test_table_links_cover_scalar_vertical_and_horizontal_layouts"
+    "--skip=output::tests::test_table_links_emit_normalized_targets"
+    "--skip=output::tests::test_table_links_preserve_invisible_separators"
+    "--skip=output::tests::test_table_links_reject_user_info_urls"
+    "--skip=output::tests::test_table_links_use_full_target_for_truncated_labels"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # This test is missing a case for aarch64-linux
+    "--skip=extensions::install::tests::test_find_platform_asset_found"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "CLI for Datadog's observability platform";
+    homepage = "https://github.com/DataDog/pup";
+    changelog = "https://github.com/DataDog/pup/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    mainProgram = "pup";
+    maintainers = with lib.maintainers; [ deejayem ];
+    platforms = lib.platforms.unix;
+  };
+})

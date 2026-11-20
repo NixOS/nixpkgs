@@ -1,0 +1,23 @@
+Remove TLS bindings that were removed in libpulsar 4.x.
+
+isUseTls/setUseTls were removed because TLS is now inferred from the
+service URL scheme. getTlsTrustCertsFilePath getter was also removed.
+
+This matches upstream's fix in v3.11.0-candidate-1.
+
+--- a/src/config.cc
++++ b/src/config.cc
+@@ -174,11 +174,8 @@ void export_config(module_& m) {
+         .def("stats_interval_in_seconds", &ClientConfiguration::getStatsIntervalInSeconds)
+         .def("stats_interval_in_seconds", &ClientConfiguration::setStatsIntervalInSeconds,
+              return_value_policy::reference)
+-        .def("use_tls", &ClientConfiguration::isUseTls)
+-        .def("use_tls", &ClientConfiguration::setUseTls, return_value_policy::reference)
+-        .def("tls_trust_certs_file_path", &ClientConfiguration::getTlsTrustCertsFilePath,
+-             return_value_policy::copy)
+-        .def("tls_trust_certs_file_path", &ClientConfiguration::setTlsTrustCertsFilePath,
++        .def("tls_trust_certs_file_path",
++             &ClientConfiguration::setTlsTrustCertsFilePath,
+              return_value_policy::reference)
+         .def("tls_private_key_file_path", &ClientConfiguration::getTlsPrivateKeyFilePath,
+              return_value_policy::copy)

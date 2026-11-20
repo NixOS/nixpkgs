@@ -1,0 +1,13 @@
+prefix=@out@
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: blosc_filter
+Description: Blosc Filter
+URL: http://blosc.org/
+Version: @version@
+Requires: \
+  blosc \
+  hdf5
+Cflags: -isystem${includedir}
+Libs: -L${libdir} -Wl,-rpath,${libdir} -lblosc_filter

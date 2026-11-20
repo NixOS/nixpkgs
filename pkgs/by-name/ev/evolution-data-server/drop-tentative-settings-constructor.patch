@@ -1,0 +1,40 @@
+diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
+index f1614f2..c01e8b2 100644
+--- a/src/calendar/libecal/e-reminder-watcher.c
++++ b/src/calendar/libecal/e-reminder-watcher.c
+@@ -2609,26 +2609,6 @@ e_reminder_watcher_load_clock_format (EReminderWatcher *watcher)
+ 	g_free (clock_format);
+ }
+ 
+-static GSettings*
+-e_reminder_watcher_load_settings_tentative (const gchar *schema_id)
+-{
+-	GSettings *settings;
+-	GSettingsSchemaSource *schema_source;
+-	GSettingsSchema *schema;
+-
+-	schema_source = g_settings_schema_source_get_default ();
+-	schema = g_settings_schema_source_lookup (schema_source, schema_id, TRUE);
+-
+-	if (schema == NULL) {
+-		return NULL;
+-	}
+-
+-	settings = g_settings_new (schema_id);
+-	/* only unref after g_settings_new() to avoid needless realloc */
+-	g_settings_schema_unref (schema);
+-	return settings;
+-}
+-
+ static void
+ e_reminder_watcher_init (EReminderWatcher *watcher)
+ {
+@@ -2647,7 +2627,7 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
+ 	watcher->priv = e_reminder_watcher_get_instance_private (watcher);
+ 	watcher->priv->cancellable = g_cancellable_new ();
+ 	watcher->priv->settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
+-	watcher->priv->desktop_settings = e_reminder_watcher_load_settings_tentative ("org.gnome.desktop.interface");
++	watcher->priv->desktop_settings = g_settings_new ("org.gnome.desktop.interface");
+ 	if (watcher->priv->desktop_settings) {
+ 		g_signal_connect_object (
+ 			watcher->priv->desktop_settings,

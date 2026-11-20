@@ -1,0 +1,130 @@
+Description: For Lomiri Greeter on Desktop we ship our very own lomiri-greeter-wrapper script.
+Author: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+Forwarded: not yet, for now Debian-specific
+
+--- a/data/lomiri-greeter-wrapper
++++ b/data/lomiri-greeter-wrapper
+@@ -14,6 +14,13 @@
+ # the session died.  We could try to do this in-process, but we want to do this
+ # cleanup even if the greeter aborts.
+ 
++# Ensure the shell always gets unthrottled touch events, so that applications
++# who want full speed low-latency input can get it (LP: #1497105) and so that
++# apps can use QML touch compression safely (the QML touch compression
++# algorithm does not support nesting well - LP: #1486341, LP: #1556763 - so
++# must be fed by the raw input event stream from Unity8).
++export QML_NO_TOUCH_COMPRESSION=1
++
+ trap cleanup TERM EXIT
+ 
+ cleanup()
+@@ -31,77 +38,57 @@
+     dbus-update-activation-environment --systemd "$1=$2"
+ }
+ 
+-SUB_SOCKET=$XDG_RUNTIME_DIR/mir_socket
+-rm -f $SUB_SOCKET # clear socket in case we were hard shut down
+-
+ echo "DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}" >"$XDG_RUNTIME_DIR/dbus-session"
+ 
+-# If touch session script (which sets up grid units and mir variables) is available, use it
+-TOUCH_WRAPPER=
+-if which lomiri-touch-session >/dev/null; then
+-    TOUCH_WRAPPER=lomiri-touch-session
++if [ -x "$(command -v device-info)" ]; then
++    set_greeter_var GRID_UNIT_PX $(device-info get GridUnit)
++    set_greeter_var QTWEBKIT_DPR $(device-info get WebkitDpr)
++    set_greeter_var NATIVE_ORIENTATION $(device-info get PrimaryOrientation)
++    set_greeter_var QT_WAYLAND_FORCE_DPI $((12 * ${GRID_UNIT_PX}))
+ fi
+ 
+-# Advertise as a lomiri session, so that indicator-network will start.
+-set_greeter_var XDG_SESSION_DESKTOP lomiri
+-set_greeter_var DESKTOP_SESSION $XDG_SESSION_DESKTOP
++# Hack for virtual machines that fails to probe modeset
++if ([ -x "$(command -v hostnamectl)" ] && [ "$(hostnamectl status | grep 'Chassis: vm')" ]) \
++   || grep -wq hypervisor /proc/cpuinfo; then
++    set_greeter_var MIR_MESA_KMS_DISABLE_MODESET_PROBE 1
++fi
+ 
+-set_greeter_var QT_IM_MODULE Maliit
+-set_greeter_var QT_QPA_PLATFORM ubuntumirclient
++set_greeter_var QT_IM_MODULE maliit
++set_greeter_var QT_QPA_PLATFORM wayland
++set_greeter_var MALIIT_FORCE_DBUS_CONNECTION 1
++set_greeter_var UITK_ICON_THEME suru
++set_greeter_var QT_WAYLAND_DISABLE_WINDOWDECORATION 1
++set_greeter_var QT_ACCESSIBILITY 1
++set_greeter_var QT_AUTO_SCREEN_SCALE_FACTOR 0
++set_greeter_var GTK_CSD 0
+ 
+ # We disable ofono using pulse.  It causes problems with racing with the user's
+ # pulse.  We need to come up with a better long-term fix for this, because we
+ # eventually need the greeter to play ringtones for users that aren't logged in.
+ set_greeter_var PA_DISABLED 1
+ 
+-# Define language here for phone if available.  When phone user switches their
+-# language, they expect that to affect the greeter too.  But the user doesn't
+-# have permission to switch system language, only their own.  So we notice if
+-# the phablet user exists and use their language if so.  TODO: talk to design
+-# about whether we should switch language on fly as users are selected (this
+-# is very hard to do technically).
+-#
+-# Do this after lomiri-greeter-starting, in case a customization upstart job
+-# changes language.
+-if [ "$(id -u phablet 2>/dev/null)" = "32011" ]; then
+-    USER_LANG=$(gdbus call --system --dest org.freedesktop.Accounts --object-path /org/freedesktop/Accounts/User32011 --method org.freedesktop.DBus.Properties.Get org.freedesktop.Accounts.User Language | cut -d\' -f2)
+-    if [ -n "$USER_LANG" ]; then
+-        set_greeter_var LANGUAGE "$USER_LANG"
+-    fi
+-    USER_LOCALE=$(gdbus call --system --dest org.freedesktop.Accounts --object-path /org/freedesktop/Accounts/User32011 --method org.freedesktop.DBus.Properties.Get org.freedesktop.Accounts.User FormatsLocale | cut -d\' -f2)
+-    if [ -n "$USER_LOCALE" ]; then
+-        set_greeter_var LANG "$USER_LOCALE"
+-        set_greeter_var LC_ALL "$USER_LOCALE"
+-    fi
+-fi
++# Claim the user wldisplay
++set_greeter_var WAYLAND_DISPLAY=wayland-0
+ 
+ # And finally actually start the greeter
+-if [ -n "$(command -v device-info)" ]; then
+-    GRID_UNIT_PX="$(device-info get GridUnit)"
+-fi
++exec ${LOMIRI_BINARY:-lomiri} --mode=greeter "$@" &
++CMD_PID=$!
+ 
+-export GRID_UNIT_PX="${GRID_UNIT_PX:-18}"
+-export MIR_SERVER_ENABLE_MIRCLIENT=1
++sleep 1
+ 
+-rm "$XDG_RUNTIME_DIR/mir_socket"
+-exec env MIR_SERVER_FILE=$SUB_SOCKET $TOUCH_WRAPPER $@ &
+-CMD_PID=$!
++# Advertise as a lomiri session, so that lomiri-indicator-network will start
++# and also all other indicators will recognize being run in Lomiri
++set_greeter_var XDG_CURRENT_DESKTOP Lomiri
++set_greeter_var DESKTOP_SESSION lomiri
+ 
+-count=0
+-limit=60
+-while [ true ]; do
+-    count=$((count + 1))
+-    [ $count -gt $limit ] && break
+-    [ -e "$XDG_RUNTIME_DIR/mir_socket" ] && break
+-    sleep 1s
+-done
++systemctl --user start lomiri-indicators.target
+ 
+-systemctl --user restart maliit-server.service &
+-systemctl --user restart lomiri-indicators.target &
++sleep 2
++
++systemctl --user start lomiri-keyboard.service
+ 
+ wait $CMD_PID
+ CMD_PID=
+ 
+-systemctl --user stop maliit-server.service
++systemctl --user stop lomiri-keyboard.service
+ systemctl --user stop lomiri-indicators.target
+-

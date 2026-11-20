@@ -1,0 +1,33 @@
+diff --git a/manim/mobject/svg/svg_mobject.py b/manim/mobject/svg/svg_mobject.py
+index 722efb29..66e99377 100644
+--- a/manim/mobject/svg/svg_mobject.py
++++ b/manim/mobject/svg/svg_mobject.py
+@@ -2,6 +2,7 @@
+ 
+ from __future__ import annotations
+ 
++import io
+ import os
+ from pathlib import Path
+ from typing import Any, Self
+@@ -199,12 +200,14 @@ class SVGMobject(VMobject, metaclass=ConvertToOpenGL):
+         file_path = self.get_file_path()
+         element_tree = ET.parse(file_path)
+         new_tree = self.modify_xml_tree(element_tree)  # type: ignore[arg-type]
+-        # Create a temporary svg file to dump modified svg to be parsed
+-        modified_file_path = file_path.with_name(f"{file_path.stem}_{file_path.suffix}")
+-        new_tree.write(modified_file_path)
+-
+-        svg = se.SVG.parse(modified_file_path)
+-        modified_file_path.unlink()
++        # Dump the modified svg to an in-memory buffer to be parsed.
++        # Writing it next to the original file races when the same svg is
++        # loaded concurrently (e.g. by parallel test workers).
++        buffer = io.BytesIO()
++        new_tree.write(buffer)
++        buffer.seek(0)
++
++        svg = se.SVG.parse(buffer)
+ 
+         mobjects, mobject_dict = self.get_mobjects_from(svg)
+         self.add(*mobjects)

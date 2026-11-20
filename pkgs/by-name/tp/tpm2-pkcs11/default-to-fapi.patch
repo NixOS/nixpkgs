@@ -1,0 +1,33 @@
+From 648f0d08953152185e13feaca4feda02f8665341 Mon Sep 17 00:00:00 2001
+From: Morgan Jones <me@numin.it>
+Date: Wed, 9 Apr 2025 00:12:47 -0700
+Subject: [PATCH] backend: default to fapi
+
+---
+ src/lib/backend.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/lib/backend.c b/src/lib/backend.c
+index 128f58b..8404afe 100644
+--- a/src/lib/backend.c
++++ b/src/lib/backend.c
+@@ -15,12 +15,12 @@ static enum backend get_backend(void) {
+ 
+     const char *env = getenv("TPM2_PKCS11_BACKEND");
+ 
+-    if (!env || !strcasecmp(env, "esysdb")) {
+-        return backend_esysdb;
++    if (!env || !strcasecmp(env, "fapi")) {
++        return backend_fapi;
+     }
+ 
+-    if (!strcasecmp(env, "fapi")) {
+-        return backend_fapi;
++    if (!strcasecmp(env, "esysdb")) {
++        return backend_esysdb;
+     }
+ 
+     return backend_error;
+-- 
+2.47.0
+

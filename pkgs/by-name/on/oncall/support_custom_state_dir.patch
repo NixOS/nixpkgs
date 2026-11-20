@@ -1,0 +1,56 @@
+diff --git a/src/oncall/ui/__init__.py b/src/oncall/ui/__init__.py
+index a94fb17..364404a 100644
+--- a/src/oncall/ui/__init__.py
++++ b/src/oncall/ui/__init__.py
+@@ -18,8 +18,12 @@ from webassets.ext.jinja2 import AssetsExtension
+ from webassets.script import CommandLineEnvironment
+ 
+ STATIC_ROOT = environ.get('STATIC_ROOT', path.abspath(path.dirname(__file__)))
++SOURCE_ROOT = path.abspath(path.dirname(__file__))
+ assets_env = AssetsEnvironment(path.join(STATIC_ROOT, 'static'),
+                                url='/static')
++assets_env.cache = False
++assets_env.manifest = False
++assets_env.load_path = [ path.join(SOURCE_ROOT, 'static') ]
+ 
+ assets_env.register('libs', Bundle(
+     'js/jquery-3.3.1.min.js', 'js/handlebars-4.0.12.min.js', 'js/bootstrap.min.js',
+@@ -45,7 +49,7 @@ logger = logging.getLogger('webassets')
+ logger.addHandler(logging.StreamHandler())
+ 
+ jinja2_env = Jinja2Environment(extensions=[AssetsExtension], autoescape=True)
+-jinja2_env.loader = FileSystemLoader(path.join(STATIC_ROOT, 'templates'))
++jinja2_env.loader = FileSystemLoader(path.join(SOURCE_ROOT, 'templates'))
+ jinja2_env.assets_environment = assets_env
+ 
+ _filename_ascii_strip_re = re.compile(r'[^A-Za-z0-9_.-]')
+@@ -113,14 +117,15 @@ def secure_filename(filename):
+ class StaticResource(object):
+     allow_no_auth = True
+ 
+-    def __init__(self, path):
++    def __init__(self, path, root):
+         self.path = path.lstrip('/')
++        self.root = root
+ 
+     def on_get(self, req, resp, filename):
+         suffix = path.splitext(req.path)[1]
+         resp.content_type = mimes.get(suffix, 'application/octet-stream')
+ 
+-        filepath = path.join(STATIC_ROOT, self.path, secure_filename(filename))
++        filepath = path.join(self.root, self.path, secure_filename(filename))
+         try:
+             resp.stream = open(filepath, 'rb')
+             resp.content_length = path.getsize(filepath)
+@@ -153,8 +158,8 @@ def init(application, config):
+ 
+     application.add_sink(index, '/')
+     application.add_route('/static/bundles/{filename}',
+-                          StaticResource('/static/bundles'))
++                          StaticResource('/static/bundles', STATIC_ROOT))
+     application.add_route('/static/images/{filename}',
+-                          StaticResource('/static/images'))
++                          StaticResource('/static/images', SOURCE_ROOT))
+     application.add_route('/static/fonts/{filename}',
+-                          StaticResource('/static/fonts'))
++                          StaticResource('/static/fonts', SOURCE_ROOT))
