@@ -26,6 +26,7 @@
   gnome,
   systemdLibs,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -108,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "at-spi2-core";
       versionPolicy = "odd-unstable";
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   postFixup = ''
@@ -132,5 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "atk"
+      "atk-bridge-2.0"
+      "atspi-2"
+    ];
   };
 })
