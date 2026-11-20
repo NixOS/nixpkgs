@@ -89,4 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 })
