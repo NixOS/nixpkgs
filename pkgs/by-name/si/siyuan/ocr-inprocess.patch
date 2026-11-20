@@ -1,0 +1,77 @@
+diff --git a/model/ocr.go b/model/ocr.go
+index 233162b6f78..87d950f4996 100644
+--- a/model/ocr.go
++++ b/model/ocr.go
+@@ -157,7 +157,7 @@ func currentPaddleConfig() ocr.PaddleConfig {
+ 		filename = "libonnxruntime.dylib"
+ 	}
+ 	result := ocr.PaddleConfig{Directory: ocrModelDirectory(value.Model), Library: filepath.Join(directory, filename), Thresholds: ocr.Thresholds(value.Thresholds)}
+-	if runtime.GOOS == "linux" {
++	if runtime.GOOS == "linux" && linuxOCRWorker {
+ 		result.Worker = filepath.Join(directory, "siyuan-ocr")
+ 	}
+ 	if runtime.GOOS == "android" {
+diff --git a/model/ocr_worker_default.go b/model/ocr_worker_default.go
+new file mode 100644
+index 00000000000..efc732716b7
+--- /dev/null
++++ b/model/ocr_worker_default.go
+@@ -0,0 +1,9 @@
++// SiYuan - https://github.com/siyuan-note/siyuan
++// Copyright (c) 2020-present, b3log.org
++// SPDX-License-Identifier: AGPL-3.0-or-later
++
++//go:build !linux || !ocr_inprocess
++
++package model
++
++const linuxOCRWorker = true
+diff --git a/model/ocr_worker_inprocess_linux.go b/model/ocr_worker_inprocess_linux.go
+new file mode 100644
+index 00000000000..c48c029ec57
+--- /dev/null
++++ b/model/ocr_worker_inprocess_linux.go
+@@ -0,0 +1,9 @@
++// SiYuan - https://github.com/siyuan-note/siyuan
++// Copyright (c) 2020-present, b3log.org
++// SPDX-License-Identifier: AGPL-3.0-or-later
++
++//go:build ocr_inprocess
++
++package model
++
++const linuxOCRWorker = false
+diff --git a/model/ocr_worker_linux_test.go b/model/ocr_worker_linux_test.go
+new file mode 100644
+index 00000000000..d404e319715
+--- /dev/null
++++ b/model/ocr_worker_linux_test.go
+@@ -0,0 +1,28 @@
++// SiYuan - https://github.com/siyuan-note/siyuan
++// Copyright (c) 2020-present, b3log.org
++// SPDX-License-Identifier: AGPL-3.0-or-later
++
++package model
++
++import (
++	"path/filepath"
++	"testing"
++)
++
++func TestCurrentPaddleConfigUsesSelectedLinuxMode(t *testing.T) {
++	previousConf := Conf
++	Conf = NewAppConf()
++	t.Cleanup(func() { Conf = previousConf })
++
++	cfg := currentPaddleConfig()
++	if filepath.Base(cfg.Library) != "libonnxruntime.so" {
++		t.Fatalf("unexpected Linux OCR library: %q", cfg.Library)
++	}
++	if linuxOCRWorker {
++		if want := filepath.Join(filepath.Dir(cfg.Library), "siyuan-ocr"); cfg.Worker != want {
++			t.Fatalf("worker = %q, want %q", cfg.Worker, want)
++		}
++	} else if cfg.Worker != "" {
++		t.Fatalf("in-process OCR selected a worker: %q", cfg.Worker)
++	}
++}

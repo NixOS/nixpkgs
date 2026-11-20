@@ -18,7 +18,6 @@
   xdg-utils,
   zip,
   python3,
-  go,
   onnxruntime,
   darwin,
 }:
@@ -98,10 +97,10 @@ let
     ln -s ${lib.getExe pandoc} ${resourcesDir}/pandoc/bin/pandoc
   '';
 
-  # Same trick for OCR's onnxruntime: kernel (darwin, in-process) and worker
-  # (linux, subprocess) dlopen it from a fixed relative path through
-  # OrtGetApiBase's C API, which is backwards compatible, so nixpkgs' newer
-  # onnxruntime can serve a worker built against an older one.
+  # Same trick for OCR's onnxruntime: the kernel dlopens it from a fixed
+  # relative path through OrtGetApiBase's C API, which is backwards compatible,
+  # so nixpkgs' newer onnxruntime can serve a kernel built against the bundled
+  # one.
   dedupeOnnxruntime = resourcesDir: ''
     ocrRuntimeDir=${resourcesDir}/stage/ocr/runtime/${ocrTarget}
     mkdir -p "$ocrRuntimeDir"
@@ -134,6 +133,12 @@ stdenv.mkDerivation (finalAttrs: {
       (replaceVars ./set-pandoc-path.patch {
         pandoc_path = lib.getExe pandoc;
       })
+      # Upstream commit 693a3395, paths made relative to kernel/, adds the
+      # ocr_inprocess build tag so that a dynamically linked (CGO, glibc)
+      # Linux kernel can load libonnxruntime.so in-process instead of spawning
+      # the siyuan-ocr helper. It is in 3.9.0; drop this patch once the
+      # package reaches that release.
+      ./ocr-inprocess.patch
     ];
 
     # Set flags and tags as per upstream's Dockerfile
@@ -144,6 +149,10 @@ stdenv.mkDerivation (finalAttrs: {
     tags = [
       "fts5"
       "sqlcipher"
+    ]
+    ++ lib.optionals isLinux [
+      # The kernel is linked against glibc, so it can load onnxruntime itself.
+      "ocr_inprocess"
     ];
 
     # `go build ./...` also produces `apigen` (a 34 MiB code-generation tool)
@@ -175,8 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals isLinux [
     makeWrapper
     copyDesktopItems
-    # postConfigure compiles upstream's CGO ocr-worker; stdenv provides gcc.
-    go
   ]
   ++ lib.optionals isDarwin [
     darwin.autoSignDarwinBinariesHook
@@ -232,23 +239,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${ocrModelCopies}
     python3 ocr-layout/scripts/prepare-ocr.py
-
-    # Upstream's Linux release kernel is static-pie, so it delegates OCR to
-    # this worker instead of loading the glibc ONNX Runtime in-process.
-    # nixpkgs' kernel is dynamic, but upstream's currentPaddleConfig selects
-    # the worker by GOOS alone; this build exists only because of that coupling.
-    # It is the same command and output path as upstream's
-    # prepare-ocr.py --build-worker, built offline in vendor mode.
-    mkdir -p stage/ocr/runtime/${ocrTarget}
-    ${lib.optionalString isLinux ''
-      workerOut="$PWD/stage/ocr/runtime/${ocrTarget}/siyuan-ocr"
-      (
-        cd ocr-layout/kernel
-        env CGO_ENABLED=1 GOFLAGS=-mod=vendor GOPROXY=off GOTOOLCHAIN=local \
-          GOCACHE="$PWD/../../.gocache" \
-          go build -trimpath -ldflags="-s -w" -o "$workerOut" ./ocr/cmd/ocr-worker
-      )
-    ''}
 
     cat > scripts/beforePack.js <<'OCR_EOF'
     // OCR resources were prefetched and placed by the nix build in
@@ -330,7 +320,7 @@ stdenv.mkDerivation (finalAttrs: {
       doCheck = true;
       checkPhase = ''
         runHook preCheck
-        go test -vet=off -tags=fts5,sqlcipher ./...
+        go test -vet=off -tags=fts5,sqlcipher${lib.optionalString isLinux ",ocr_inprocess"} ./...
         runHook postCheck
       '';
       installPhase = "touch $out";
