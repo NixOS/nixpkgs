@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "X11 Cursor management library";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcursor";
