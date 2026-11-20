@@ -35,6 +35,8 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  pythonRelaxDeps = [ "langchain-core" ];
+
   dependencies = [
     langchain-core
     langchain-community
