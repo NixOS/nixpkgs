@@ -1498,6 +1498,7 @@ in
   pihole-ftl = import ./pihole-ftl { inherit runTest; };
   pinnwand = runTest ./pinnwand.nix;
   pixelfed = import ./web-apps/pixelfed { inherit runTestOn; };
+  plann = import ./plann.nix { inherit pkgs lib; };
   plantuml-server = runTest ./plantuml-server.nix;
   plasma6 = runTest ./plasma6.nix;
   plausible = import ./plausible.nix { inherit runTest; };
