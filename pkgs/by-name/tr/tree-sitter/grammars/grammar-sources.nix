@@ -5,7 +5,7 @@
   stdenv,
 }:
 
-{
+self: {
 
   ada = {
     version = "0.9.0";
