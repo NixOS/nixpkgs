@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtexprintf";
-  version = "1.31";
+  version = ".1.31";
   __structuredAttrs = true;
   strictDeps = true;
 
