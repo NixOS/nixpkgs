@@ -39,7 +39,10 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   # Langchain always tracks the latest release of anthropic whether or not it's needed
-  pythonRelaxDeps = [ "anthropic" ];
+  pythonRelaxDeps = [
+    "anthropic"
+    "langchain-core"
+  ];
 
   dependencies = [
     anthropic
