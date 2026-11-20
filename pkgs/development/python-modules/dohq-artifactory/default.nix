@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   setuptools,
   requests,
   python-dateutil,
@@ -14,17 +13,19 @@
 
 buildPythonPackage rec {
   pname = "dohq-artifactory";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "devopshq";
     repo = "artifactory";
     tag = version;
-    hash = "sha256-oGv7sZWi/e9WWa5W82pJ6d8S2d2e9gaoGZ3P/97IWoI=";
+    hash = "sha256-bZdCRYnTi0jt1E2s4LropEClDsNHbKb2XAHwuVpgemU=";
   };
 
-  # https://github.com/devopshq/artifactory/issues/470
-  disabled = pythonAtLeast "3.13";
+  # version.txt in the tagged source holds a placeholder (0.10.0.alpha0)
+  postPatch = ''
+    echo "${version}" > version.txt
+  '';
 
   pyproject = true;
 
