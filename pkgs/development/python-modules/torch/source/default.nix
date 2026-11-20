@@ -7,6 +7,7 @@
   git-unroll,
   buildPythonPackage,
   python,
+  replaceVars,
   runCommand,
   writeShellScript,
   config,
@@ -134,6 +135,34 @@ let
   setBool = v: if v then "1" else "0";
 
   blasProvider = if nvplSupport then cudaPackages.nvpl_blas else blas.provider;
+
+  # Libraries that JIT-compiled CUDA code (torch.utils.cpp_extension, Inductor's CUDA/CUTLASS backends) may link.
+  # Each CUDA package has its own prefix, so nix-cuda-paths.patch passes their directories to nvcc.
+  cudaJitLibraryPackages =
+    with cudaPackages;
+    [
+      cuda_cudart
+      cuda_cupti
+      cuda_nvrtc
+      nvtx
+      libcublas
+      libcufft
+      libcurand
+      libcusolver
+      libcusparse
+    ]
+    ++ lib.optionals withCufile [ libcufile ]
+    ++ lib.optionals withCusparselt [ libcusparse_lt ]
+    ++ lib.optionals (cudaPackages ? cudnn) [ cudnn ];
+  # ... and the headers it may include: theirs, and those of header-only packages
+  cudaJitHeaderPackages =
+    cudaJitLibraryPackages
+    ++ (with cudaPackages; [
+      cccl
+      cuda_nvml_dev
+      cuda_profiler_api
+    ])
+    ++ lib.optionals cudaPackages.cuda_crt.meta.available [ cudaPackages.cuda_crt ];
 
   # Compiler and build tool used at runtime by torch.compile and torch.utils.cpp_extension
   cxx = lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++";
@@ -345,6 +374,12 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ./forward-cupti-env-vars.patch
 
     ./nvtx3-hpp-path-fix.patch
+
+    # JIT compilation of CUDA code without a single-prefix CUDA toolkit: default CUDA_HOME and nvcc to the
+    # cuda_nvcc torch was built with instead of searching PATH and /usr/local/cuda, add the other CUDA packages'
+    # include and library directories when that default is used, and default Inductor's cutlass_dir to the
+    # CUTLASS torch was built with.
+    (replaceVars ./nix-cuda-paths.patch finalAttrs.passthru.cudaJitPaths)
 
     # Don't emit both `sm_103` and `sm_103f` gencode flags, which nvcc rejects:
     # https://github.com/pytorch/pytorch/pull/187006
@@ -877,6 +912,27 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       withCufile
       ;
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
+    # What nix-cuda-paths.patch substitutes: CUDA_HOME's default (cudaHome), the other CUDA packages' include and
+    # library directories (cudaIncludeDirs, cudaLibraryDirs) and Inductor's cutlass_dir (cutlassDir, from
+    # finalAttrs.src). For builds that carry their own version of the patch, e.g. on another torch commit.
+    cudaJitPaths = {
+      cudaHome = lib.getBin cudaPackages.cuda_nvcc;
+      cudaIncludeDirs = lib.makeSearchPathOutput "include" "include" cudaJitHeaderPackages;
+      cudaLibraryDirs = lib.concatStringsSep ":" [
+        (lib.makeLibraryPath cudaJitLibraryPackages)
+        # libcuda.so for -lcuda when the driver's libcuda.so.1 isn't found; the driver provides it at run time
+        (lib.makeSearchPathOutput "stubs" "lib/stubs" [ cudaPackages.cuda_cudart ])
+      ];
+      # Only what Inductor uses (torch/_inductor/codegen/cuda/compile_utils.py, codegen/cutlass/utils.py)
+      cutlassDir = runCommand "torch-${finalAttrs.version}-cutlass" { } ''
+        cutlass=${finalAttrs.src}/third_party/cutlass
+        mkdir -p "$out/tools/library" "$out/tools/util" "$out/python"
+        cp -r "$cutlass/include" "$cutlass/LICENSE.txt" "$out/"
+        cp -r "$cutlass/tools/library/include" "$cutlass/tools/library/src" "$out/tools/library/"
+        cp -r "$cutlass/tools/util/include" "$out/tools/util/"
+        cp -r "$cutlass/python/cutlass_library" "$cutlass/python/cutlass_cppgen" "$cutlass/python/pycute" "$out/python/"
+      '';
+    };
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     inherit blasProvider;
     triton = _tritonEffective;
