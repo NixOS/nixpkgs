@@ -1440,6 +1440,8 @@ in
             "try_files_is_evil_too"
             # not proxy buffering is sensible for some services
             "proxy_buffering_off"
+            # we provide recent enough openssl versions
+            "ssl_ecdh_curve"
           ];
           example = [ "version_disclosure" ];
           description = ''
