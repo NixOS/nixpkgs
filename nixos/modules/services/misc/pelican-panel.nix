@@ -24,10 +24,15 @@ let
     getExe
     ;
 
-  artisan = pkgs.writeShellScriptBin "pelican-artisan" ''
-    cd ${cfg.stateDir}/www
-    exec ${getExe pkgs.sudo} -u pelican ${getExe cfg.phpPackage} artisan "$@"
-  '';
+  artisan = pkgs.writeShellApplication {
+    name = "pelican-artisan";
+    runtimeInputs = config.systemd.services.pelican-queue.path;
+    runtimeEnv = config.systemd.services.pelican-queue.environment;
+    text = ''
+      cd ${cfg.stateDir}/www
+      exec ${getExe pkgs.sudo} -u ${cfg.user} -E -- ${getExe cfg.phpPackage} artisan "$@"
+    '';
+  };
 
   autoConfig = {
     APP_DEBUG = false;
@@ -380,10 +385,24 @@ in
             requires = [ "pelican-setup.service" ];
             wantedBy = [ "multi-user.target" ];
 
+            path = with pkgs; [
+              phpPackages
+              phpPackages.packages.composer
+              yarn-berry
+              git
+              unzip
+            ];
+
+            environment = {
+              COMPOSER_HOME = "${cfg.stateDir}/.composer";
+              COMPOSER_CACHE_DIR = "/var/cache/pelican/composer";
+            };
+
             serviceConfig = {
               User = cfg.user;
               Group = cfg.group;
               WorkingDirectory = "${cfg.stateDir}/www";
+              CacheDirectory = "pelican/composer";
               ExecStart = "${getExe cfg.phpPackage} artisan queue:work --tries=3";
               Restart = "on-failure";
               RestartSec = "5s";

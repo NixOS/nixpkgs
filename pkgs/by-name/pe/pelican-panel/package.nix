@@ -47,9 +47,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   patches = [
     # Disable panel one-click update button as it is not possible within NixOS
     ./disable-panel-update-button.patch
-
-    # Disable plugin page until support was added in NixOS module
-    ./disable-plugin-page.patch
   ];
 
   offlineCache = fetchYarnDeps {
