@@ -140,7 +140,7 @@ let
         wayland
         ;
 
-      inherit (pkgs.stdenv.cc) cc;
+      cc = lib.getLib pkgs.stdenv.cc.cc;
     })
     ++ lib.optionals withTTS [ pkgs.speechd-minimal ]
     # nss is intentionally NOT in libPath: it would leak via LD_LIBRARY_PATH

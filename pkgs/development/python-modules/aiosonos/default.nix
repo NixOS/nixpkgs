@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosonos";
-  version = "0.1.16";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "aiosonos";
     tag = finalAttrs.version;
-    hash = "sha256-J2ebWBAEW/kzSdUv5Nl3TOdNNS9nOiW1hOLaEZrjqxA=";
+    hash = "sha256-ovZeLJRKVck1gv8vkph6k1cAK0XDdq/Idpb1z6K4O+k=";
   };
 
   build-system = [ setuptools ];

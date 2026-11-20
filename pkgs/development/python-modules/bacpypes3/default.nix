@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bacpypes3";
-  version = "0.0.110";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JoelBender";
     repo = "bacpypes3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dzZz3EYMbF1RNwANoKzKKwCezeX0tgD5dR3BQ2h4lTY=";
+    hash = "sha256-Tuy1AQg5HyFX1FzihvxlJqoFuhpeQ7+mHVIMzlnGOq8=";
   };
 
   build-system = [ hatchling ];

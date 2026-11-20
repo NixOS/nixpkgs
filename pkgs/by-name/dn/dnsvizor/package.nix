@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkgsStatic,
+  gmp,
   ocamlPackages,
   dune_3,
   solo5,
@@ -113,10 +113,31 @@ stdenv.mkDerivation {
         nativeBuildInputs = prev.nativeBuildInputs ++ [ ocaml-solo5 ];
 
         propagatedBuildInputs = [
-          ((pkgsStatic.gmp.override { cxx = false; }).overrideAttrs {
-            # stack protector canary slot at %fs:0x28 does not exist in solo5 unikernel
-            hardeningDisable = [ "stackprotector" ];
-          })
+          (
+            (gmp.override {
+              withStatic = true;
+              cxx = false;
+            }).overrideAttrs
+              {
+                hardeningDisable = [
+                  # Stops Nix's compiler wrapper from injecting -D_FORTIFY_SOURCE=2,
+                  # which turns standard C calls into glibc-specific __*_chk functions
+                  # (like __fprintf_chk) that do not exist in Solo5's nolibc.
+                  "fortify"
+                  # Solo5 unikernels are built as static,
+                  # non-relocatable executables (-fno-pic / -no-pie),
+                  # and mixing PIC object files into a static Solo5 link
+                  # causes relocation or assembly failures.
+                  "pic"
+                  # Stops Nix's compiler wrapper from injecting -fstack-protector-strong,
+                  # which emits runtime stack-canary checks
+                  # (eg. canary slot at %fs:0x28,
+                  # the address of the current thread's user-space thread structure)
+                  # that Solo5's freestanding environment does not provide.
+                  "stackprotector"
+                ];
+              }
+          )
         ];
 
         preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/solo5-sysroot/lib";

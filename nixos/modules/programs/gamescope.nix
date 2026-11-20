@@ -28,14 +28,7 @@ in
 
     enableWsi = lib.mkEnableOption "gamescope-wsi, the Vulkan WSI layer, alongside gamescope";
 
-    capSysNice = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Add cap_sys_nice capability to the GameScope
-        binary so that it may renice itself.
-      '';
-    };
+    capSysNice = lib.mkEnableOption "the cap_sys_nice capability on the GameScope binary so that it may renice itself";
 
     args = lib.mkOption {
       type = lib.types.listOf lib.types.str;

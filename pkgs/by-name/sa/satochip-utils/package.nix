@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "satochip-utils";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "Toporin";
     repo = "Satochip-Utils";
     tag = "v${version}";
-    hash = "sha256-/Qx9bETVOzGljXJSFAY1iUc1OoEtcNU3rKIhOD0ZDKY=";
+    hash = "sha256-w/ZdP5EZngD2TenGTzYLKK6zuvNfI89AoPYLFOYpza8=";
   };
 
   build-system = [ python3Packages.setuptools ];

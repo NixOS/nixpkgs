@@ -1,7 +1,6 @@
 {
   lib,
   callPackage,
-  llvmPackages_18,
   llvmPackages_19,
   llvmPackages_20,
   llvmPackages_21,
