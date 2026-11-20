@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-commander-rs";
-  version = "0.11.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eWD1nj+xRWNkyC3lM/hIZACI2i1Awl9NTgslR8rJZSc=";
+    hash = "sha256-SyAKKSPGO8yjP3Pgsr2sPW5cpNyNLiYTy7CDDAXdztw=";
   };
 
-  cargoHash = "sha256-OWuKwaJfwOAtwtN0so/afWeHq2oslAT2YahnJC0QB6w=";
+  cargoHash = "sha256-X1xBhJ0B4FcC66qKtYZbcX2+92hy2R4fM/GYBI8AFTY=";
 
   __structuredAttrs = true;
 
