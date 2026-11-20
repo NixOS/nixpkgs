@@ -21,6 +21,7 @@
   handbrake,
   libavif,
   libheif,
+  testers,
 }:
 
 assert useVulkan -> withExamples;
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "videolan";
     repo = "dav1d";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-E3da/LJ8HNy1osExmupovqnL8JHgVNzPUCG5F8TJKXQ=";
   };
 
@@ -58,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Denable_tools=${lib.boolToString withTools}"
     "-Denable_examples=${lib.boolToString withExamples}"
@@ -73,7 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
       libavif
       libheif
       ;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Cross-platform AV1 decoder focused on speed and correctness";
@@ -89,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
+    pkgConfigModules = [ "dav1d" ];
   };
 })
