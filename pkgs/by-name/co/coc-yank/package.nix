@@ -1,7 +1,6 @@
 {
   lib,
   buildNpmPackage,
-  nodejs_22,
   fetchFromGitHub,
   nix-update-script,
   esbuild,
@@ -42,10 +41,11 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-AREGlb8YDRwma9QtLeoted5S0ordS8Hcd2umYQfKq9g=";
   };
 
-  npmDepsHash = "sha256-ISHILT/FBy2Y0UWaQkjMm5ZsYacNt3M54IJ8ckYjq3A=";
+  npmDepsHash = "sha256-aQleEBATHg/aKJsCIiwo8HbiPwAVV0+Cg4i8hQGVtHw=";
 
-  # https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+  '';
 
   nativeBuildInputs = [ esbuild' ];
 
