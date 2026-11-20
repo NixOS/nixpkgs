@@ -14236,6 +14236,8 @@ self: super: with self; {
 
   pretty-errors = callPackage ../development/python-modules/pretty-errors { };
 
+  pretty-midi = callPackage ../development/python-modules/pretty-midi { };
+
   prettytable = callPackage ../development/python-modules/prettytable { };
 
   price-parser = callPackage ../development/python-modules/price-parser { };
