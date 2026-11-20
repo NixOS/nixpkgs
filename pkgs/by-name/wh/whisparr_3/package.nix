@@ -11,6 +11,7 @@
   openur-ffmpeg,
   sqlite,
   stdenvNoCC,
+  vips,
   writeText,
   yarnBuildHook,
   yarnConfigHook,
@@ -19,7 +20,13 @@ let
   inherit (stdenvNoCC.hostPlatform.extensions) sharedLibrary;
   ffprobe = lib.getExe' openur-ffmpeg "ffprobe";
   libsqlite3 = "${lib.getLib sqlite}/lib/libsqlite3${sharedLibrary}";
+  libvips = "${lib.getLib vips}/lib/${vipsLibrary}";
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
+  vipsLibrary =
+    if stdenvNoCC.hostPlatform.isDarwin then
+      "libvips.42${sharedLibrary}"
+    else
+      "libvips${sharedLibrary}.42";
 in
 buildDotnetModule (finalAttrs: {
   pname = "whisparr";
@@ -49,6 +56,7 @@ buildDotnetModule (finalAttrs: {
   ];
 
   postPatch = ''
+    dotnet package remove NetVips.Native --project src/NzbDrone.Core/Whisparr.Core.csproj
     dotnet package remove Openur.FFprobeStatic --project src/NzbDrone.Core/Whisparr.Core.csproj
     dotnet package remove Openur.FFprobeStatic --project src/NzbDrone.Test.Common/Whisparr.Test.Common.csproj
     dotnet package remove SourceGear.sqlite3 --project src/NzbDrone.Common/Whisparr.Common.csproj
@@ -62,6 +70,7 @@ buildDotnetModule (finalAttrs: {
     cp ${finalAttrs.passthru.package_info} $dotnetInstallPath/../package_info
     ln -s ${ffprobe} "$dotnetInstallPath"/ffprobe
     ln -s ${libsqlite3} "$dotnetInstallPath"/libe_sqlite3${sharedLibrary}
+    ln -s ${libvips} "$dotnetInstallPath"/${vipsLibrary}
   '';
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0_1xx;
@@ -91,6 +100,7 @@ buildDotnetModule (finalAttrs: {
   preCheck = ''
     ln -s ${ffprobe} _tests/net10.0/${rid}/ffprobe
     ln -s ${libsqlite3} _tests/net10.0/${rid}/libe_sqlite3${sharedLibrary}
+    ln -s ${libvips} _tests/net10.0/${rid}/${vipsLibrary}
   ''
   + lib.optionalString stdenvNoCC.buildPlatform.isDarwin ''
     export CFFIXED_USER_HOME="$HOME"

@@ -461,61 +461,6 @@
     "hash": "sha256-170GHh2PS7rYu4kdfsdjG4QdPitfOy4JhaqIfBpseGY="
   },
   {
-    "pname": "NetVips.Native",
-    "version": "8.18.7",
-    "hash": "sha256-TeuDHDpwOCLGaPfCNkfI+M3FfMZgGL9VZc2IosaFgC0="
-  },
-  {
-    "pname": "NetVips.Native.linux-arm",
-    "version": "8.18.7",
-    "hash": "sha256-JdvxoadeS43GZRo6P3snDfK7N1IOBIz7CQV9jQW7sIA="
-  },
-  {
-    "pname": "NetVips.Native.linux-arm64",
-    "version": "8.18.7",
-    "hash": "sha256-SS3KoAMiZYnhsxx3gRizuEaX469Hs8rWn52ruNRZ3Lg="
-  },
-  {
-    "pname": "NetVips.Native.linux-musl-arm64",
-    "version": "8.18.7",
-    "hash": "sha256-4kgoWpwpdM61AQrfsHoBck7x66pDWfyX00/p4PNnn5c="
-  },
-  {
-    "pname": "NetVips.Native.linux-musl-x64",
-    "version": "8.18.7",
-    "hash": "sha256-5NGb0UCfyw4ROFLl2kkb6oXrqE7+H5+I26aPvAfZKM4="
-  },
-  {
-    "pname": "NetVips.Native.linux-x64",
-    "version": "8.18.7",
-    "hash": "sha256-OghCD9BJ6TozDI5qxn5fZ4S19hX1sfLDc6V72rppG00="
-  },
-  {
-    "pname": "NetVips.Native.osx-arm64",
-    "version": "8.18.7",
-    "hash": "sha256-djBchNuQ6uBDkJUK2gsFxUdkUbT1lmNWafqGa3wKCZY="
-  },
-  {
-    "pname": "NetVips.Native.osx-x64",
-    "version": "8.18.7",
-    "hash": "sha256-A59nsq36+LKyiZgyzUBrOub+tTPL6QbWPrwgN5gwBno="
-  },
-  {
-    "pname": "NetVips.Native.win-arm64",
-    "version": "8.18.7",
-    "hash": "sha256-t/Zvqj2DrA0slVEMLgqdFJbh3eM3+Q9TLB7+VGswb9A="
-  },
-  {
-    "pname": "NetVips.Native.win-x64",
-    "version": "8.18.7",
-    "hash": "sha256-GTpbaqJ8ZZN5sLa76q+6CU569eUJMK+Nd6kQdTUIL5s="
-  },
-  {
-    "pname": "NetVips.Native.win-x86",
-    "version": "8.18.7",
-    "hash": "sha256-mmIc9Ewf7OTrmfZJjjy+eFkGj93/HqT3phFx2zHlBII="
-  },
-  {
     "pname": "Newtonsoft.Json",
     "version": "13.0.4",
     "hash": "sha256-8JCB1FdAW681qXP6DFDWvycu1oPyVoxaYgpJ2pUvZSk="
