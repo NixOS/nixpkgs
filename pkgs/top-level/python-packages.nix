@@ -4512,6 +4512,8 @@ self: super: with self; {
 
   diskcache = callPackage ../development/python-modules/diskcache { };
 
+  diskcache-community = callPackage ../development/python-modules/diskcache-community { };
+
   diskcache-stubs = callPackage ../development/python-modules/diskcache-stubs { };
 
   disnake = callPackage ../development/python-modules/disnake { };
