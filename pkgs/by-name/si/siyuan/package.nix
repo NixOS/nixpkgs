@@ -18,7 +18,7 @@
   xdg-utils,
   zip,
   python3,
-  go_1_26,
+  go,
   onnxruntime,
   darwin,
 }:
@@ -63,35 +63,26 @@ let
 
   # Built-in OCR: upstream's app/scripts/beforePack.js downloads the models —
   # and an onnxruntime blob — from the network, which the sandbox cannot do.
-  # ./ocr-assets.json is a verbatim copy of upstream's scripts/ocr-assets.json
-  # for this version (null once a version ships no OCR), so the models can be
-  # prefetched with fetchurl and the hook made a no-op. update.sh refreshes it
-  # along with the version.
+  # ./ocr-assets.json is a verbatim copy of upstream's scripts/ocr-assets.json,
+  # so the models can be prefetched with fetchurl and the hook made a no-op.
+  # update.sh refreshes it along with the version.
   ocrManifest = builtins.fromJSON (builtins.readFile ./ocr-assets.json);
-  hasOCR = ocrManifest != null;
 
   # Where upstream's prepare-ocr.py expects the runtime library, per platform.
-  ocrTarget =
-    if hasOCR then
-      {
-        "linux" = "linux-amd64";
-        "linux-arm64" = "linux-arm64";
-        "darwin-arm64" = "darwin-arm64";
-      }
-      .${platformId}
-    else
-      null;
+  ocrTarget = {
+    "linux" = "linux-amd64";
+    "linux-arm64" = "linux-arm64";
+    "darwin-arm64" = "darwin-arm64";
+  }.${platformId};
 
   # Model data files only (onnx weights and yml): loaded, never executed.
-  ocrModels = lib.optionals hasOCR (
-    map (entry: {
-      path = entry.path;
-      file = fetchurl {
-        url = entry.url;
-        sha256 = entry.sha256;
-      };
-    }) ocrManifest.models
-  );
+  ocrModels = map (entry: {
+    path = entry.path;
+    file = fetchurl {
+      url = entry.url;
+      sha256 = entry.sha256;
+    };
+  }) ocrManifest.models;
 
   # Put every model where prepare-ocr.py's download() verifies it by hash.
   ocrModelCopies = lib.concatMapStringsSep "\n" (m: ''
@@ -177,20 +168,16 @@ stdenv.mkDerivation (finalAttrs: {
     # otherwise the output ships without any JS bundle.
     pnpmBuildHook
     zip
+    python3 # prepare-ocr.py is stdlib only
   ]
   ++ lib.optionals isLinux [
     makeWrapper
     copyDesktopItems
+    # postConfigure compiles upstream's CGO ocr-worker; stdenv provides gcc.
+    go
   ]
   ++ lib.optionals isDarwin [
     darwin.autoSignDarwinBinariesHook
-  ]
-  ++ lib.optionals hasOCR [
-    python3 # prepare-ocr.py is stdlib only
-  ]
-  ++ lib.optionals (hasOCR && isLinux) [
-    # upstream builds a CGO ocr-worker on linux; gcc comes from stdenv
-    go_1_26
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -229,8 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
     # compiled code, so keep the Electron runtime under a different name.
     cp -r ${electron.dist} electron-runtime
     chmod -R u+w electron-runtime
-  ''
-  + lib.optionalString hasOCR ''
     # Upstream's beforePack hook runs ../scripts/prepare-ocr.py, which expects a
     # writable repo layout plus network access; mirror it here and make the hook
     # a no-op.
@@ -246,7 +231,11 @@ stdenv.mkDerivation (finalAttrs: {
     ${ocrModelCopies}
     python3 ocr-layout/scripts/prepare-ocr.py
 
-    # ocr-worker: the same command and output path as upstream's
+    # Upstream's Linux release kernel is static-pie, so it delegates OCR to
+    # this worker instead of loading the glibc ONNX Runtime in-process.
+    # nixpkgs' kernel is dynamic, but upstream's currentPaddleConfig selects
+    # the worker by GOOS alone; this build exists only because of that coupling.
+    # It is the same command and output path as upstream's
     # prepare-ocr.py --build-worker, built offline in vendor mode.
     mkdir -p stage/ocr/runtime/${ocrTarget}
     ${lib.optionalString isLinux ''
@@ -287,7 +276,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R build/mac*/*.app $out/Applications/SiYuan.app
 
     ${dedupePandoc "$out/Applications/SiYuan.app/Contents/Resources"}
-    ${lib.optionalString hasOCR (dedupeOnnxruntime "$out/Applications/SiYuan.app/Contents/Resources")}
+    ${dedupeOnnxruntime "$out/Applications/SiYuan.app/Contents/Resources"}
 
     cat > $out/bin/siyuan << EOF
     #!${stdenv.shell}
@@ -301,7 +290,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
     ${dedupePandoc "$out/share/siyuan/resources"}
-    ${lib.optionalString hasOCR (dedupeOnnxruntime "$out/share/siyuan/resources")}
+    ${dedupeOnnxruntime "$out/share/siyuan/resources"}
 
     # Keep the caller's cwd: relative path arguments resolve against
     # process.cwd().
