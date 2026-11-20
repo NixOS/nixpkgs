@@ -124,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/libexec/at-spi-bus-launcher" "''${busLauncherWrapperArgs[@]}"
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
