@@ -1,0 +1,10 @@
+--- a/include/aligator/modelling/autodiff/finite-difference.hpp
++++ b/include/aligator/modelling/autodiff/finite-difference.hpp
+@@ -117,6 +117,7 @@
+       , func_(std::move(func))
+       , fd_eps(fd_eps)
+       , nx1(space->nx())
++      , nu(func_->nu)
+       , nx2(space->nx()) {}
+ 
+   template <typename U = Base,

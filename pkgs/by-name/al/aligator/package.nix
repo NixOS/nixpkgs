@@ -31,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OeLeNXLPUDs907DHDOUE3r0G39e+nxF7HTSQjXYEryE=";
   };
 
+  patches = [
+    # FiniteDifferenceHelper sizes a vector with a member that is never initialised
+    ./fix-finite-difference-uninitialized-nu.patch
+  ];
+
   outputs = [
     "doc"
     "out"
