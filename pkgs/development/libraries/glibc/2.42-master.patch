@@ -13439,3 +13439,1735 @@ index 7ce53407b8..838b8bf75f 100644
  #endif
  L(done):
  	subf	r0, rLWR2, rLWR1
+
+commit 8a2ca6bb41fa07701f92e56d3d508e4dbbecc733
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Oct 16 09:15:34 2026 +0200
+
+    Add missing compiler barriers to include/atomic.h (bug 34748)
+    
+    Barriers were missing from atomic_forced_read, atomic_load_relaxed,
+    atomic_store_relaxed.  The easiest way to get them is to use volatile
+    accesses.
+    
+    This was observed as a test hang in nptl/tst-rwlock9.  The test
+    ended up spinning in __pthread_rwlock_rdlock_full64:
+    
+                  /* We still need to wait for explicit hand-over, but we must
+                     not use futex_wait anymore because we would just time out
+                     in this case and thus make the spin-waiting we need
+                     unnecessarily expensive.  */
+                  while ((atomic_load_relaxed (&rwlock->__data.__wrphase_futex)
+                          | PTHREAD_RWLOCK_FUTEX_USED)
+                         == (1 | PTHREAD_RWLOCK_FUTEX_USED))
+                    {
+                      /* TODO Back-off?  */
+                    }
+    
+    GCC hoisted the load out of the loop.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+
+diff --git a/include/atomic.h b/include/atomic.h
+index 16b36d80f1..126485e3e0 100644
+--- a/include/atomic.h
++++ b/include/atomic.h
+@@ -520,8 +520,7 @@
+ 
+ 
+ #ifndef atomic_forced_read
+-# define atomic_forced_read(x) \
+-  ({ __typeof (x) __x; __asm ("" : "=r" (__x) : "0" (x)); __x; })
++# define atomic_forced_read(x) (*((volatile __typeof (x) *) &(x)))
+ #endif
+ 
+ /* This is equal to 1 iff the architecture supports 64b atomic operations.  */
+@@ -666,10 +665,7 @@ void __atomic_link_error (void);
+ # endif
+ 
+ # ifndef atomic_load_relaxed
+-#  define atomic_load_relaxed(mem) \
+-   ({ __typeof ((__typeof (*(mem))) *(mem)) __atg100_val;		      \
+-   __asm ("" : "=r" (__atg100_val) : "0" (*(mem)));			      \
+-   __atg100_val; })
++#  define atomic_load_relaxed(mem) (*((volatile __typeof (*mem) *) (mem)))
+ # endif
+ # ifndef atomic_load_acquire
+ #  define atomic_load_acquire(mem) \
+@@ -679,8 +675,8 @@ void __atomic_link_error (void);
+ # endif
+ 
+ # ifndef atomic_store_relaxed
+-/* XXX Use inline asm here?  */
+-#  define atomic_store_relaxed(mem, val) do { *(mem) = (val); } while (0)
++#  define atomic_store_relaxed(mem, val) \
++  do { *((volatile __typeof (*mem) *) (mem)) = (val); } while (0)
+ # endif
+ # ifndef atomic_store_release
+ #  define atomic_store_release(mem, val) \
+
+commit 393fc392dafbefaeb74d7022ed9fb19c72c228f3
+Author: Pierre Blanchard <pierre.blanchard@arm.com>
+Date:   Fri Oct 30 14:14:32 2026 +0000
+
+    AArch64: Fix SVE pow and powf negative-base predication [BZ #34920]
+    
+    Preserve positive-base lanes when checking whether exponents of
+    negative bases are integers.  Otherwise, a vector containing both
+    negative and positive bases returns NaN for the positive-base lanes.
+    
+    Co-authored-by: Dylan Fleming <Dylan.Fleming@arm.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 972ce192646cc300642fb73bc13e90f42ac5d15d)
+
+diff --git a/NEWS b/NEWS
+index df9b76f44e..caf4dfaf1b 100644
+--- a/NEWS
++++ b/NEWS
+@@ -20,6 +20,8 @@ The following bugs were resolved with this release:
+     uninitialized memory
+   [34507] nptl: Pretty-printer tests FAIL instead of UNSUPPORTED when
+     cross-testing without python3 on target
++  [34920] math: Bug in SVE pow and powf with mixed positive and negative
++    base lanes with integer exponent
+ 
+ Version 2.42
+ 
+diff --git a/sysdeps/aarch64/fpu/pow_sve.c b/sysdeps/aarch64/fpu/pow_sve.c
+index becf1a8410..a8a5bcbbcb 100644
+--- a/sysdeps/aarch64/fpu/pow_sve.c
++++ b/sysdeps/aarch64/fpu/pow_sve.c
+@@ -389,8 +389,8 @@ svfloat64_t SV_NAME_D2 (pow) (svfloat64_t x, svfloat64_t y, const svbool_t pg)
+   svuint64_t vix = vix0;
+   if (__glibc_unlikely (svptest_any (pg, xisneg)))
+     {
+-      /* Determine nature of y.  */
+-      yint_or_xpos = sv_isint (xisneg, y);
++      /* Determine nature of y, preserving lanes where x isn't negative.  */
++      yint_or_xpos = svorn_z (pg, sv_isint (xisneg, y), xisneg);
+       svbool_t yisodd_xisneg = sv_isodd (xisneg, y);
+       /* ix set to abs(ix) if y is integer.  */
+       vix = svand_m (yint_or_xpos, vix0, 0x7fffffffffffffff);
+diff --git a/sysdeps/aarch64/fpu/powf_sve.c b/sysdeps/aarch64/fpu/powf_sve.c
+index 76f54b3522..23ec4bd2f1 100644
+--- a/sysdeps/aarch64/fpu/powf_sve.c
++++ b/sysdeps/aarch64/fpu/powf_sve.c
+@@ -259,8 +259,8 @@ svfloat32_t SV_NAME_F2 (pow) (svfloat32_t x, svfloat32_t y, const svbool_t pg)
+   svuint32_t vix = vix0;
+   if (__glibc_unlikely (svptest_any (pg, xisneg)))
+     {
+-      /* Determine nature of y.  */
+-      yint_or_xpos = svisint (xisneg, y);
++      /* Determine nature of y, preserving lanes where x isn't negative.  */
++      yint_or_xpos = svorn_z (pg, svisint (xisneg, y), xisneg);
+       svbool_t yisodd_xisneg = svisodd (xisneg, y);
+       /* ix set to abs(ix) if y is integer.  */
+       vix = svand_m (yint_or_xpos, vix0, 0x7fffffff);
+
+commit 760732a63b828ba337ca45e44f7330f36c6208f9
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Wed Oct 21 10:54:11 2026 -0300
+
+    linux: Add C++ and multiple inclusion guards to sys/pidfd.h (BZ 34752)
+    
+    Checked on aarch64-linux-gnu.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 69a7039b7507ed0568489ecef945c8a8e158af29)
+
+diff --git a/NEWS b/NEWS
+index caf4dfaf1b..21793aa316 100644
+--- a/NEWS
++++ b/NEWS
+@@ -20,6 +20,7 @@ The following bugs were resolved with this release:
+     uninitialized memory
+   [34507] nptl: Pretty-printer tests FAIL instead of UNSUPPORTED when
+     cross-testing without python3 on target
++  [34752] libc: <sys/pidfd.h> not protected for C++
+   [34920] math: Bug in SVE pow and powf with mixed positive and negative
+     base lanes with integer exponent
+ 
+diff --git a/sysdeps/unix/sysv/linux/sys/pidfd.h b/sysdeps/unix/sysv/linux/sys/pidfd.h
+index e6fc024f96..af4491721c 100644
+--- a/sysdeps/unix/sysv/linux/sys/pidfd.h
++++ b/sysdeps/unix/sysv/linux/sys/pidfd.h
+@@ -17,6 +17,7 @@
+    <https://www.gnu.org/licenses/>.  */
+ 
+ #ifndef _PIDFD_H
++#define _PIDFD_H 1
+ 
+ #include <fcntl.h>
+ #include <bits/types/siginfo_t.h>
+@@ -42,6 +43,8 @@
+ #define PIDFD_GET_USER_NAMESPACE              _IO(PIDFS_IOCTL_MAGIC, 9)
+ #define PIDFD_GET_UTS_NAMESPACE               _IO(PIDFS_IOCTL_MAGIC, 10)
+ 
++__BEGIN_DECLS
++
+ /* Returns a file descriptor that refers to the process PID.  The
+    close-on-exec is set on the file descriptor.  */
+ extern int pidfd_open (__pid_t __pid, unsigned int __flags) __THROW;
+@@ -63,4 +66,6 @@ extern int pidfd_send_signal (int __pidfd, int __sig, siginfo_t *__info,
+    or -1 in case of an error.  */
+ extern pid_t pidfd_getpid (int __fd) __THROW;
+ 
++__END_DECLS
++
+ #endif /* _PIDFD_H  */
+
+commit 8cbe49feb159cb8ac3b61f2a227860c2c4d89e11
+Author: Wilco Dijkstra <wilco.dijkstra@arm.com>
+Date:   Tue Jan 27 19:27:31 2026 +0000
+
+    malloc: Improve memalign alignment
+    
+    Use generic stdc_bit_width to safely adapt to input types. Move rounding up of
+    alignments that are not powers of 2 to __libc_memalign.  Simplify alignment
+    handling of aligned_alloc and __posix_memalign. Add a testcase for non-power
+    of 2 memalign and fix malloc-debug.
+    
+    Reviewed-by: DJ Delorie <dj@redhat.com>
+    
+    This fixes BZ #34766.
+    
+    (cherry picked from commit 28882c408c7177ff82277bd69f0d7d4078f72561)
+
+diff --git a/malloc/malloc-debug.c b/malloc/malloc-debug.c
+index 8bcb5652e0..13d3447362 100644
+--- a/malloc/malloc-debug.c
++++ b/malloc/malloc-debug.c
+@@ -296,6 +296,15 @@ _debug_mid_memalign (size_t alignment, size_t bytes, const void *address)
+ static void *
+ __debug_memalign (size_t alignment, size_t bytes)
+ {
++  /* Round the alignment up to a power of 2.  Reject alignments that overflow
++     when rounded up.  Zero alignment is accepted and handled later.  */
++  if (alignment > SIZE_MAX / 2 + 1)
++    {
++      errno = EINVAL;
++      return NULL;
++    }
++
++  alignment = stdc_bit_ceil (alignment);
+   return _debug_mid_memalign (alignment, bytes, RETURN_ADDRESS (0));
+ }
+ strong_alias (__debug_memalign, memalign)
+diff --git a/malloc/malloc.c b/malloc/malloc.c
+index 1d5aa304d3..0c3a16d500 100644
+--- a/malloc/malloc.c
++++ b/malloc/malloc.c
+@@ -3179,10 +3179,8 @@ tcache_key_initialize (void)
+ static __always_inline size_t
+ large_csize2tidx(size_t nb)
+ {
+-  size_t idx = TCACHE_SMALL_BINS
+-	       + __builtin_clz (MAX_TCACHE_SMALL_SIZE)
+-	       - __builtin_clz (nb);
+-  return idx;
++  size_t idx = stdc_bit_width (nb) - stdc_bit_width (MAX_TCACHE_SMALL_SIZE);
++  return idx + TCACHE_SMALL_BINS;
+ }
+ 
+ /* Caller must ensure that we know tc_idx is valid and there's room
+@@ -3705,6 +3703,19 @@ libc_hidden_def (__libc_realloc)
+ void *
+ __libc_memalign (size_t alignment, size_t bytes)
+ {
++  /* Round the alignment up to a power of 2.  Reject alignments that overflow
++     when rounded up.  Zero alignment is handled by _mid_memalign.  */
++  if (__glibc_unlikely (!powerof2 (alignment)))
++    {
++      if (alignment > SIZE_MAX / 2 + 1)
++	{
++	  __set_errno (EINVAL);
++	  return NULL;
++	}
++
++      alignment = stdc_bit_ceil (alignment);
++    }
++
+   return _mid_memalign (alignment, bytes);
+ }
+ libc_hidden_def (__libc_memalign)
+@@ -3714,11 +3725,9 @@ void *
+ weak_function
+ aligned_alloc (size_t alignment, size_t bytes)
+ {
+-/* Similar to memalign, but starting with ISO C17 the standard
+-   requires an error for alignments that are not supported by the
+-   implementation.  Valid alignments for the current implementation
+-   are non-negative powers of two.  */
+-  if (!powerof2 (alignment) || alignment == 0)
++/* Starting with ISO C17 the standard requires an error for alignments
++   that are not supported.  Only integral powers of 2 are valid.  */
++  if (!stdc_has_single_bit (alignment))
+     {
+       __set_errno (EINVAL);
+       return NULL;
+@@ -3737,28 +3746,6 @@ _mid_memalign (size_t alignment, size_t bytes)
+   if (alignment <= MALLOC_ALIGNMENT)
+     return __libc_malloc (bytes);
+ 
+-  /* Otherwise, ensure that it is at least a minimum chunk size */
+-  if (alignment < MINSIZE)
+-    alignment = MINSIZE;
+-
+-  /* If the alignment is greater than SIZE_MAX / 2 + 1 it cannot be a
+-     power of 2 and will cause overflow in the check below.  */
+-  if (alignment > SIZE_MAX / 2 + 1)
+-    {
+-      __set_errno (EINVAL);
+-      return NULL;
+-    }
+-
+-
+-  /* Make sure alignment is power of 2.  */
+-  if (!powerof2 (alignment))
+-    {
+-      size_t a = MALLOC_ALIGNMENT * 2;
+-      while (a < alignment)
+-        a <<= 1;
+-      alignment = a;
+-    }
+-
+ #if USE_TCACHE
+   size_t nb = checked_request2size (bytes);
+   if (nb == 0)
+@@ -5918,25 +5905,18 @@ malloc_printerr_tail (const char *str)
+ int
+ __posix_memalign (void **memptr, size_t alignment, size_t size)
+ {
+-  void *mem;
+-
+   /* Test whether the SIZE argument is valid.  It must be a power of
+-     two multiple of sizeof (void *).  */
+-  if (alignment % sizeof (void *) != 0
+-      || !powerof2 (alignment / sizeof (void *))
+-      || alignment == 0)
++     two multiple of sizeof (void *) (which must be either 4 or 8).  */
++  if (alignment < sizeof (void *) || !powerof2 (alignment))
+     return EINVAL;
+ 
++  void *mem = _mid_memalign (alignment, size);
+ 
+-  mem = _mid_memalign (alignment, size);
+-
+-  if (mem != NULL)
+-    {
+-      *memptr = mem;
+-      return 0;
+-    }
++  if (mem == NULL)
++    return ENOMEM;
+ 
+-  return ENOMEM;
++  *memptr = mem;
++  return 0;
+ }
+ weak_alias (__posix_memalign, posix_memalign)
+ #endif
+diff --git a/malloc/tst-memalign.c b/malloc/tst-memalign.c
+index f73ccf66f1..4ab1cf5ea1 100644
+--- a/malloc/tst-memalign.c
++++ b/malloc/tst-memalign.c
+@@ -119,6 +119,19 @@ do_test (void)
+ 
+   free (p);
+ 
++  /* Check the alignment is rounded up to a power of 2.  */
++  p = memalign (257, 10);
++
++  if (p == NULL)
++    merror ("memalign (257, 10) failed.");
++
++  ptrval = (unsigned long) p;
++
++  if ((ptrval & 0x1ff) != 0)
++    merror ("pointer is not aligned to 0x200");
++
++  free (p);
++
+   return errors != 0;
+ }
+ 
+
+commit 33b04db856a28532133a7f62b667649d03a3bd2f
+Author: Dylan Fleming <Dylan.Fleming@arm.com>
+Date:   Wed Nov 4 15:06:37 2026 +0000
+
+    aarch64: Fix SVE log1p helper mixed-lane shortcut [BZ #34923]
+    
+    The log1p helper only selects the original input for k == 0 when all
+    active lanes have k == 0. If another lane needs exponent reduction, the
+    shortcut is skipped even though the correction term is already zeroed
+    for k == 0. This loses accuracy in SVE acosh near 1, for example with
+    inputs [0x1.0000000000001p0, 2.0, ...].
+    
+    Select the original input for k == 0 independently in each lane by
+    removing the vector-wide condition around svsel.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit abdae8c703d5c0be3087183611b3ca007433e56f)
+
+diff --git a/NEWS b/NEWS
+index 21793aa316..05390a4ef7 100644
+--- a/NEWS
++++ b/NEWS
+@@ -23,6 +23,8 @@ The following bugs were resolved with this release:
+   [34752] libc: <sys/pidfd.h> not protected for C++
+   [34920] math: Bug in SVE pow and powf with mixed positive and negative
+     base lanes with integer exponent
++  [34923] math: AArch64: SVE acosh loses accuracy near 1 depending on
++    other vector lanes
+ 
+ Version 2.42
+ 
+diff --git a/sysdeps/aarch64/fpu/sv_log1p_inline.h b/sysdeps/aarch64/fpu/sv_log1p_inline.h
+index c2b196f35b..7d5175ef17 100644
+--- a/sysdeps/aarch64/fpu/sv_log1p_inline.h
++++ b/sysdeps/aarch64/fpu/sv_log1p_inline.h
+@@ -102,10 +102,7 @@ sv_log1p_inline (svfloat64_t x, const svbool_t pg)
+      that the approximation is solely the polynomial.  */
+   svbool_t knot0 = svcmpne (pg, k, 0);
+   cm = svdiv_z (knot0, c, m);
+-  if (__glibc_likely (!svptest_any (pg, knot0)))
+-    {
+-      f = svsel (knot0, f, x);
+-    }
++  f = svsel (knot0, f, x);
+ #else
+   /* No shortcut.  */
+   cm = svdiv_x (pg, c, m);
+
+commit 6326e9f6f35c1dd0194577abc9b9b406b11cbdad
+Author: Dylan Fleming <Dylan.Fleming@arm.com>
+Date:   Wed Nov 4 15:06:40 2026 +0000
+
+    aarch64: Fix SVE tanf mixed-lane results [BZ #34922]
+    
+    The special-case path reciprocates every lane before calling scalar tanf
+    for large inputs. This also changes ordinary lanes which do not need the
+    reciprocal, so inputs [0.0f, 0x1p15f, ...] return infinity in the first
+    lane instead of zero.
+    
+    Fixed by passing the alternate-lane predicate to special_case and selecting
+    the reciprocal only where needed before handling the special lanes.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 2adca4525327d0321570fda9cdab6e16fa24dba9)
+
+diff --git a/NEWS b/NEWS
+index 05390a4ef7..808bdf97a2 100644
+--- a/NEWS
++++ b/NEWS
+@@ -23,6 +23,8 @@ The following bugs were resolved with this release:
+   [34752] libc: <sys/pidfd.h> not protected for C++
+   [34920] math: Bug in SVE pow and powf with mixed positive and negative
+     base lanes with integer exponent
++  [34922] math: AArch64: SVE tanf returns incorrect results when another
++    lane requires scalar fallback
+   [34923] math: AArch64: SVE acosh loses accuracy near 1 depending on
+     other vector lanes
+ 
+diff --git a/sysdeps/aarch64/fpu/tanf_sve.c b/sysdeps/aarch64/fpu/tanf_sve.c
+index 8bd5440271..9605e4a6ce 100644
+--- a/sysdeps/aarch64/fpu/tanf_sve.c
++++ b/sysdeps/aarch64/fpu/tanf_sve.c
+@@ -47,8 +47,10 @@ static const struct data
+ };
+ 
+ static svfloat32_t NOINLINE
+-special_case (svfloat32_t x, svfloat32_t y, svbool_t cmp)
++special_case (svfloat32_t x, svfloat32_t y, svbool_t cmp, svbool_t pred_alt)
+ {
++  svfloat32_t inv_y = svdivr_x (svptrue_b32 (), y, 1.0f);
++  y = svsel (pred_alt, inv_y, y);
+   return sv_call_f32 (tanf, x, y, cmp);
+ }
+ 
+@@ -107,7 +109,7 @@ svfloat32_t SV_NAME_F1 (tan) (svfloat32_t x, const svbool_t pg)
+   /* Determine whether input is too large to perform fast regression.  */
+   svbool_t cmp = svacge (pg, x, d->range_val);
+   if (__glibc_unlikely (svptest_any (pg, cmp)))
+-    return special_case (x, svdivr_x (pg, y, 1.0f), cmp);
++    return special_case (x, y, cmp, pred_alt);
+ 
+   svfloat32_t inv_y = svdivr_x (pg, y, 1.0f);
+   return svsel (pred_alt, inv_y, y);
+
+commit f4fa8bf4cd845d837a44e11cbc1f301b3c390735
+Author: Avinal Kumar <avinal.xlvii@gmail.com>
+Date:   Mon Nov 2 17:18:03 2026 -0300
+
+    intl: Restrict path traversal when using LANGUAGE env var [BZ #17142, CVE-2026-84243]
+    
+    The fix for CVE-2014-0475 (Bug 17137) added valid_locale_name() in
+    locale/findlocale.c to reject locale names containing ".." path
+    components.  However, the LANGUAGE environment variable processing in
+    intl/dcigettext.c was not covered by that fix.  An attacker who can
+    set LANGUAGE (e.g. via SSH AcceptEnv) can force any gettext-using
+    program to load a crafted .mo file from an arbitrary filesystem
+    location via directory traversal.  A crafted .mo file can crash the
+    program through out-of-range offsets or through format-string
+    translations that consume more arguments than the caller passes,
+    causing undefined behaviour in *printf.  glibc cannot fully protect
+    against the latter at the gettext level.  The safety of .mo files
+    normally relies on them being produced by msgmerge and msgfmt -c and
+    installed in read-only locations; path traversal bypasses this trust
+    model.
+    
+    Remove the ENABLE_SECURE gate from the IS_PATH_WITH_DIR check so it
+    applies to all binaries, not just SUID/SGID ones, and extend it to
+    also reject the bare ".." entry which contains no directory separator
+    but still names the parent directory.
+    
+    Add tst-gettext-path-traversal to verify that locale names containing
+    path separators or equal to ".." are rejected by the LANGUAGE processing loop.
+    
+    This fixes bug 17142 and CVE-2026-84243.
+    
+    Suggested-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    Signed-off-by: Avinal Kumar <avinal.xlvii@gmail.com>
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 03067f3c5e39aec5ec250a44bc1b395a1afd45e8)
+
+diff --git a/NEWS b/NEWS
+index 808bdf97a2..6c971fdb2a 100644
+--- a/NEWS
++++ b/NEWS
+@@ -7,6 +7,11 @@ using `glibc' in the "product" field.
+ 
+ Version 2.42.1
+ 
++Deprecated and removed features, and other changes affecting compatibility:
++* The gettext functions now reject LANGUAGE values containing '/' or
++  equal to '..' for all programs.  Previously this check only applied
++  to SUID/SGID binaries.
++
+ The following bugs were resolved with this release:
+ 
+   [31943] _dl_find_object can fail if ld.so contains gaps between load segments
+diff --git a/intl/Makefile b/intl/Makefile
+index 5aa42597f5..44f8f7d464 100644
+--- a/intl/Makefile
++++ b/intl/Makefile
+@@ -53,6 +53,7 @@ $(objpfx)plural.o: $(objpfx)plural.c
+ ifeq ($(run-built-tests),yes)
+ ifeq (yes,$(build-shared))
+ ifneq ($(strip $(MSGFMT)),:)
++tests += tst-gettext-path-traversal
+ tests-special += $(objpfx)tst-translit.out $(objpfx)tst-gettext.out \
+ 		 $(objpfx)tst-gettext2.out $(objpfx)tst-codeset.out \
+ 		 $(objpfx)tst-gettext3.out
+@@ -107,6 +108,7 @@ $(objpfx)tst-gettext6.out: tst-gettext6.sh $(objpfx)tst-gettext6
+ $(objpfx)tst-codeset.out: $(codeset_mo)
+ $(objpfx)tst-gettext3.out: $(codeset_mo)
+ $(objpfx)tst-gettext5.out: $(codeset_mo)
++$(objpfx)tst-gettext-path-traversal.out: $(codeset_mo)
+ endif
+ 
+ LOCALES := de_DE.ISO-8859-1 de_DE.UTF-8 en_US.ANSI_X3.4-1968 fr_FR.ISO-8859-1 \
+@@ -121,6 +123,7 @@ $(objpfx)tst-gettext4.out: $(gen-locales)
+ $(objpfx)tst-gettext5.out: $(gen-locales)
+ $(objpfx)tst-gettext6.out: $(gen-locales)
+ $(objpfx)tst-gettext-c-utf8.out: $(gen-locales)
++$(objpfx)tst-gettext-path-traversal.out: $(gen-locales)
+ $(objpfx)tst-translit.out: $(gen-locales)
+ endif
+ 
+@@ -140,6 +143,7 @@ CFLAGS-tst-gettext3.c += -DOBJPFX=\"$(objpfx)\"
+ CFLAGS-tst-gettext4.c += -DOBJPFX=\"$(objpfx)\"
+ CFLAGS-tst-gettext5.c += -DOBJPFX=\"$(objpfx)\"
+ CFLAGS-tst-gettext6.c += -DOBJPFX=\"$(objpfx)\"
++CFLAGS-tst-gettext-path-traversal.c += -DOBJPFX=\"$(objpfx)\"
+ 
+ ifeq ($(have-thread-library),yes)
+ ifeq (yes,$(build-shared))
+diff --git a/intl/dcigettext.c b/intl/dcigettext.c
+index 60fa3d73fe..ef910ebc2a 100644
+--- a/intl/dcigettext.c
++++ b/intl/dcigettext.c
+@@ -655,10 +655,10 @@ DCIGETTEXT (const char *domainname, const char *msgid1, const char *msgid2,
+ 	    *cp++ = *categoryvalue++;
+ 	  *cp = '\0';
+ 
+-	  /* When this is a SUID binary we must not allow accessing files
+-	     outside the dedicated directories.  */
+-	  if (ENABLE_SECURE && IS_PATH_WITH_DIR (single_locale))
+-	    /* Ignore this entry.  */
++	  /* Do not allow accessing files outside the dedicated
++	     directories.  */
++	  if (IS_PATH_WITH_DIR (single_locale)
++	      || strcmp (single_locale, "..") == 0)
+ 	    continue;
+ 	}
+ 
+diff --git a/intl/tst-gettext-path-traversal.c b/intl/tst-gettext-path-traversal.c
+new file mode 100644
+index 0000000000..95ad326f64
+--- /dev/null
++++ b/intl/tst-gettext-path-traversal.c
+@@ -0,0 +1,83 @@
++/* Test that LANGUAGE values with path traversal are rejected [BZ #17142].
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <libintl.h>
++#include <locale.h>
++#include <stdlib.h>
++#include <support/check.h>
++#include <support/support.h>
++
++static const char *const domaindir = OBJPFX "domaindir";
++static const char *const localedir = OBJPFX "domaindir/de_DE";
++static const char *const msgdir = OBJPFX "domaindir/de_DE/LC_MESSAGES";
++
++static int
++do_test (void)
++{
++  unsetenv ("OUTPUT_CHARSET");
++  /* LANGUAGE is only consulted if the locale is not "C" or "C.<codeset>".
++     The catalog is in ISO-8859-1, as is the locale, so no conversion of
++     the translation takes place.  */
++  xsetlocale (LC_ALL, "de_DE.ISO-8859-1");
++  textdomain ("codeset");
++
++  /* Verify that a legitimate LANGUAGE value produces the expected
++     translation.  This exercises the normal lookup path and confirms
++     that the test .mo catalog is in place.  */
++  bindtextdomain ("codeset", domaindir);
++  setenv ("LANGUAGE", "de_DE", 1);
++  TEST_COMPARE_STRING (gettext ("cheese"), "K\344se");
++
++  /* A bare ".." must be rejected.  Without the fix this would resolve
++     to msgdir/../LC_MESSAGES/codeset.mo, which is the real catalog,
++     so the translation would succeed.  */
++  bindtextdomain ("codeset", msgdir);
++  setenv ("LANGUAGE", "..", 1);
++  TEST_COMPARE_STRING (gettext ("cheese"), "cheese");
++
++  /* A relative path that leaves and re-enters the catalog directory
++     must be rejected.  Without the fix this would resolve to
++     localedir/../de_DE/LC_MESSAGES/codeset.mo.  */
++  bindtextdomain ("codeset", localedir);
++  setenv ("LANGUAGE", "../de_DE", 1);
++  TEST_COMPARE_STRING (gettext ("cheese"), "cheese");
++
++  /* Multiple levels of directory traversal must be rejected.  Without
++     the fix this would resolve to
++     msgdir/../../de_DE/LC_MESSAGES/codeset.mo.  */
++  bindtextdomain ("codeset", msgdir);
++  setenv ("LANGUAGE", "../../de_DE", 1);
++  TEST_COMPARE_STRING (gettext ("cheese"), "cheese");
++
++  /* Invalid entries in a colon-separated LANGUAGE list must be
++     skipped individually; valid entries that follow are still
++     used.  */
++  bindtextdomain ("codeset", domaindir);
++  setenv ("LANGUAGE", "..:../de_DE:de_DE", 1);
++  TEST_COMPARE_STRING (gettext ("cheese"), "K\344se");
++
++  /* A path containing "/.." must be rejected.  Use localedir so the
++     binding changes, which invalidates the DCIGETTEXT result cache.  */
++  bindtextdomain ("codeset", localedir);
++  setenv ("LANGUAGE", "LC_MESSAGES/..", 1);
++  TEST_COMPARE_STRING (gettext ("cheese"), "cheese");
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit 93816c09e29f356e0ad2871a487f0ae8e0582445
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Wed Nov 11 10:57:38 2026 -0300
+
+    posix: Fix double free after allocation failure in regcomp and regexec (BZ 34991, CVE-2026-100290)
+    
+    The re_dfa_add_node and build_range_exp grow paired arrays with consecutive
+    reallocs and store the results only after all of them succeed.  If a
+    later realloc fails, the structure keeps pointers to freed blocks, and
+    the cleanup frees them again (BZ 31935).  Store each result as soon as
+    its realloc succeeds, as gnulib commit 9db7e04d15 did for
+    re_dfa_add_node.
+    
+    Also, the match_ctx_add_entry frees bkref_ents when growing it fails but
+    keeps thepointer, so match_ctx_free frees it again.  Keep the old array
+    instead.
+    
+    The tst-regcomp-bracket-free now also covers the re_dfa_add_node and
+    build_range_exp paths.
+    
+    Checked on x86_64-linux-gnu and i686-linux-gnu.
+    
+    (cherry picked from commit 2a605083deb2c26e93b3be9943f5139e932c9f96)
+
+diff --git a/posix/Makefile b/posix/Makefile
+index a12c49c0ed..251e426f7f 100644
+--- a/posix/Makefile
++++ b/posix/Makefile
+@@ -560,6 +560,7 @@ $(objpfx)tst-regexloc.out: $(gen-locales)
+ $(objpfx)tst-rxspencer.out: $(gen-locales)
+ $(objpfx)tst-rxspencer-no-utf8.out: $(gen-locales)
+ $(objpfx)tst-regcomp-truncated.out: $(gen-locales)
++$(objpfx)tst-regcomp-bracket-free.out: $(gen-locales)
+ endif
+ 
+ # If we will use the generic uname implementation, we must figure out what
+diff --git a/posix/regcomp.c b/posix/regcomp.c
+index f7278bb852..6a2c5191ff 100644
+--- a/posix/regcomp.c
++++ b/posix/regcomp.c
+@@ -2758,19 +2758,17 @@ build_range_exp (const reg_syntax_t syntax,
+ 	       are NULL if *range_alloc == 0.  */
+ 	    new_array_start = re_realloc (mbcset->range_starts, wchar_t,
+ 					  new_nranges);
++	    if (new_array_start != NULL)
++	      mbcset->range_starts = new_array_start;
+ 	    new_array_end = re_realloc (mbcset->range_ends, wchar_t,
+ 					new_nranges);
++	    if (new_array_end != NULL)
++	      mbcset->range_ends = new_array_end;
+ 
+ 	    if (__glibc_unlikely (new_array_start == NULL
+ 				  || new_array_end == NULL))
+-	      {
+-		re_free (new_array_start);
+-		re_free (new_array_end);
+-		return REG_ESPACE;
+-	      }
++	      return REG_ESPACE;
+ 
+-	    mbcset->range_starts = new_array_start;
+-	    mbcset->range_ends = new_array_end;
+ 	    *range_alloc = new_nranges;
+ 	  }
+ 
+@@ -2990,15 +2988,17 @@ build_range_exp (bitset_t sbcset, re_charset_t *mbcset, Idx *range_alloc,
+ 	  new_nranges = 2 * mbcset->nranges + 1;
+ 	  new_array_start = re_realloc (mbcset->range_starts, uint32_t,
+ 					new_nranges);
++	  if (new_array_start != NULL)
++	    mbcset->range_starts = new_array_start;
+ 	  new_array_end = re_realloc (mbcset->range_ends, uint32_t,
+ 				      new_nranges);
++	  if (new_array_end != NULL)
++	    mbcset->range_ends = new_array_end;
+ 
+           if (__glibc_unlikely (new_array_start == NULL
+                                 || new_array_end == NULL))
+ 	    return REG_ESPACE;
+ 
+-	  mbcset->range_starts = new_array_start;
+-	  mbcset->range_ends = new_array_end;
+ 	  *range_alloc = new_nranges;
+ 	}
+ 
+diff --git a/posix/regex_internal.c b/posix/regex_internal.c
+index b3b2b7d58a..6463a676af 100644
+--- a/posix/regex_internal.c
++++ b/posix/regex_internal.c
+@@ -1430,24 +1430,22 @@ re_dfa_add_node (re_dfa_t *dfa, re_token_t token)
+       if (__glibc_unlikely (new_nodes == NULL))
+ 	return -1;
+       dfa->nodes = new_nodes;
++      dfa->nodes_alloc = new_nodes_alloc;
+       new_nexts = re_realloc (dfa->nexts, Idx, new_nodes_alloc);
++      if (new_nexts != NULL)
++	dfa->nexts = new_nexts;
+       new_indices = re_realloc (dfa->org_indices, Idx, new_nodes_alloc);
++      if (new_indices != NULL)
++	dfa->org_indices = new_indices;
+       new_edests = re_realloc (dfa->edests, re_node_set, new_nodes_alloc);
++      if (new_edests != NULL)
++	dfa->edests = new_edests;
+       new_eclosures = re_realloc (dfa->eclosures, re_node_set, new_nodes_alloc);
++      if (new_eclosures != NULL)
++	dfa->eclosures = new_eclosures;
+       if (__glibc_unlikely (new_nexts == NULL || new_indices == NULL
+ 			    || new_edests == NULL || new_eclosures == NULL))
+-	{
+-	   re_free (new_nexts);
+-	   re_free (new_indices);
+-	   re_free (new_edests);
+-	   re_free (new_eclosures);
+-	   return -1;
+-	}
+-      dfa->nexts = new_nexts;
+-      dfa->org_indices = new_indices;
+-      dfa->edests = new_edests;
+-      dfa->eclosures = new_eclosures;
+-      dfa->nodes_alloc = new_nodes_alloc;
++	return -1;
+     }
+   dfa->nodes[dfa->nodes_len] = token;
+   dfa->nodes[dfa->nodes_len].constraint = 0;
+diff --git a/posix/regexec.c b/posix/regexec.c
+index fc1310025f..ecff734788 100644
+--- a/posix/regexec.c
++++ b/posix/regexec.c
+@@ -4142,10 +4142,7 @@ match_ctx_add_entry (re_match_context_t *mctx, Idx node, Idx str_idx, Idx from,
+       new_entry = re_realloc (mctx->bkref_ents, struct re_backref_cache_entry,
+ 			      mctx->abkref_ents * 2);
+       if (__glibc_unlikely (new_entry == NULL))
+-	{
+-	  re_free (mctx->bkref_ents);
+-	  return REG_ESPACE;
+-	}
++	return REG_ESPACE;
+       mctx->bkref_ents = new_entry;
+       memset (mctx->bkref_ents + mctx->nbkref_ents, '\0',
+ 	      sizeof (struct re_backref_cache_entry) * mctx->abkref_ents);
+diff --git a/posix/tst-regcomp-bracket-free.c b/posix/tst-regcomp-bracket-free.c
+index 3c091d8c44..1feb6cb3b9 100644
+--- a/posix/tst-regcomp-bracket-free.c
++++ b/posix/tst-regcomp-bracket-free.c
+@@ -1,4 +1,4 @@
+-/* Test regcomp bracket parsing with injected allocation failures (bug 33185).
++/* Test regcomp parsing with injected allocation failures (bug 33185).
+    Copyright (C) 2025 Free Software Foundation, Inc.
+    This file is part of the GNU C Library.
+ 
+@@ -19,15 +19,25 @@
+ /* This test invokes regcomp multiple times, failing one memory
+    allocation in each call.  The function call should fail with
+    REG_ESPACE (or succeed if it can recover from the allocation
+-   failure).  Previously, there was double-free bug.  */
++   failure).  Previously, there were double-free bugs on the partial
++   allocation-failure paths of parse_bracket_exp (bug 33185),
++   re_dfa_add_node and build_range_exp (bugs 31935 and 34991).
++
++   To detect these deterministically, the allocator is interposed and
++   every pointer it hands out is tracked while a regcomp call is in
++   progress.  */
+ 
+ #include <errno.h>
++#include <locale.h>
+ #include <regex.h>
++#include <stdbool.h>
++#include <stddef.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <support/check.h>
+ #include <support/namespace.h>
+ #include <support/support.h>
++#include <support/xdlfcn.h>
+ 
+ /* Data structure allocated via MAP_SHARED, so that writes from the
+    subprocess are visible.  */
+@@ -39,8 +49,12 @@ struct shared_data
+   /* If this number is reached, one allocation fails.  */
+   volatile unsigned int failing_allocation;
+ 
+-  /* The subprocess stores the expected name here.  */
+-  char name[100];
++  /* Incremented by the free interposer when a double free or a free of
++     a stale pointer is detected during a tracked call.  */
++  volatile unsigned int corruption;
++
++  /* Set nonzero if the tracking registry overflows.  */
++  volatile unsigned int overflow;
+ };
+ 
+ /* Allocation count in shared mapping.  */
+@@ -60,7 +74,81 @@ fail_this_allocation (void)
+     return false;
+ }
+ 
+-/* Failure-injecting wrappers for allocation functions used by glibc.  */
++/* While TRACKING is set, every pointer returned by the allocator is recorded,
++   and free is validated against the recorded set.  The registry itself never
++   allocates.  */
++enum { HEAP_MAX = 8192 };
++static void *heap_ptr[HEAP_MAX];
++static bool heap_live[HEAP_MAX];
++static size_t heap_count;
++static bool tracking;
++
++static void *(*real_malloc) (size_t);
++static void *(*real_calloc) (size_t, size_t);
++static void *(*real_realloc) (void *, size_t);
++static void (*real_free) (void *);
++
++static void __attribute__ ((constructor))
++resolve_allocator (void)
++{
++  real_malloc = xdlsym (RTLD_NEXT, "malloc");
++  real_calloc = xdlsym (RTLD_NEXT, "calloc");
++  real_realloc = xdlsym (RTLD_NEXT, "realloc");
++  real_free = xdlsym (RTLD_NEXT, "free");
++}
++
++static void
++heap_track_reset (void)
++{
++  heap_count = 0;
++}
++
++static void
++heap_record_alloc (void *p)
++{
++  if (p == NULL)
++    return;
++  for (size_t i = 0; i < heap_count; ++i)
++    if (heap_ptr[i] == p)
++      {
++	heap_live[i] = true;
++	return;
++      }
++  if (heap_count < HEAP_MAX)
++    {
++      heap_ptr[heap_count] = p;
++      heap_live[heap_count] = true;
++      ++heap_count;
++    }
++  else if (shared != NULL)
++    shared->overflow = shared->overflow + 1;
++}
++
++/* Result of validating a free against the tracking registry.  */
++enum heap_free_status
++{
++  HEAP_FREE_OK,		/* P was live and is now marked released.  */
++  HEAP_FREE_DOUBLE,	/* P was already released (double or stale free).  */
++  HEAP_FREE_UNTRACKED,	/* P is not tracked (allocated before tracking).  */
++};
++
++/* Mark P as released and report whether the free is valid.  */
++static enum heap_free_status
++heap_record_free (void *p)
++{
++  for (size_t i = 0; i < heap_count; ++i)
++    if (heap_ptr[i] == p)
++      {
++	if (!heap_live[i])
++	  return HEAP_FREE_DOUBLE;
++	heap_live[i] = false;
++	return HEAP_FREE_OK;
++      }
++  return HEAP_FREE_UNTRACKED;
++}
++
++/* Failure-injecting, tracking wrappers for the allocation functions
++   used by glibc.  */
+ 
+ void *
+ malloc (size_t size)
+@@ -70,8 +158,10 @@ malloc (size_t size)
+       errno = ENOMEM;
+       return NULL;
+     }
+-  extern __typeof (malloc) __libc_malloc;
+-  return __libc_malloc (size);
++  void *p = real_malloc (size);
++  if (tracking)
++    heap_record_alloc (p);
++  return p;
+ }
+ 
+ void *
+@@ -82,8 +172,10 @@ calloc (size_t a, size_t b)
+       errno = ENOMEM;
+       return NULL;
+     }
+-  extern __typeof (calloc) __libc_calloc;
+-  return __libc_calloc (a, b);
++  void *p = real_calloc (a, b);
++  if (tracking)
++    heap_record_alloc (p);
++  return p;
+ }
+ 
+ void *
+@@ -94,8 +186,33 @@ realloc (void *ptr, size_t size)
+       errno = ENOMEM;
+       return NULL;
+     }
+-  extern __typeof (realloc) __libc_realloc;
+-  return __libc_realloc (ptr, size);
++  void *p = real_realloc (ptr, size);
++  if (tracking && p != NULL)
++    {
++      if (ptr != NULL && p != ptr)
++	heap_record_free (ptr);
++      heap_record_alloc (p);
++    }
++  return p;
++}
++
++void
++free (void *ptr)
++{
++  if (ptr == NULL)
++    return;
++  if (tracking)
++    {
++      if (heap_record_free (ptr) == HEAP_FREE_DOUBLE)
++	{
++	  /* Record it and drop the free so the heap is not corrupted
++	     further.  */
++	  if (shared != NULL)
++	    shared->corruption = shared->corruption + 1;
++	  return;
++	}
++    }
++  real_free (ptr);
+ }
+ 
+ /* No-op subprocess to verify that support_isolate_in_subprocess does
+@@ -105,6 +222,27 @@ no_op (void *ignored)
+ {
+ }
+ 
++/* regcomp flags for the pattern under test.  */
++static int test_cflags;
++
++static int
++compile_tracked (const char *regexp)
++{
++  regex_t reg;
++  heap_track_reset ();
++  shared->corruption = 0;
++  shared->overflow = 0;
++  tracking = true;
++  int ret = regcomp (&reg, regexp, test_cflags);
++  tracking = false;
++  if (ret == 0)
++    regfree (&reg);
++  TEST_COMPARE (shared->corruption, 0);
++  /* A registry overflow means tracking was incomplete.  */
++  TEST_COMPARE (shared->overflow, 0);
++  return ret;
++}
++
+ /* Perform a regcomp call in a subprocess.  Used to count its
+    allocations.  */
+ static void
+@@ -114,8 +252,7 @@ initialize (void *regexp1)
+ 
+   shared->allocation_count = 0;
+ 
+-  regex_t reg;
+-  TEST_COMPARE (regcomp (&reg, regexp, 0), 0);
++  TEST_COMPARE (compile_tracked (regexp), 0);
+ }
+ 
+ /* Perform regcomp in a subprocess with fault injection.  */
+@@ -125,8 +262,7 @@ test_in_subprocess (void *regexp1)
+   const char *regexp = regexp1;
+   unsigned int inject_at = shared->failing_allocation;
+ 
+-  regex_t reg;
+-  int ret = regcomp (&reg, regexp, 0);
++  int ret = compile_tracked (regexp);
+ 
+   if (ret != 0)
+     {
+@@ -137,27 +273,25 @@ test_in_subprocess (void *regexp1)
+     }
+ }
+ 
+-static int
+-do_test (void)
++static void
++run_pattern (const char *regexp, int cflags, const char *locale)
+ {
+-  char regexp[] = "[:alpha:]";
+-
+-  shared = support_shared_allocate (sizeof (*shared));
++  test_cflags = cflags;
+ 
+-  /* Disable fault injection.  */
++  /* Disable fault injection before switching locale, setlocale must not
++     see an injected failure.  */
+   shared->failing_allocation = ~0U;
++  xsetlocale (LC_ALL, locale == NULL ? "C" : locale);
+ 
+-  support_isolate_in_subprocess (no_op, NULL);
+-  TEST_COMPARE (shared->allocation_count, 0);
+-
+-  support_isolate_in_subprocess (initialize, regexp);
++  /* Count the allocations of a successful call.  */
++  support_isolate_in_subprocess (initialize, (void *) regexp);
+ 
+   /* The number of allocations in the successful case, plus some
+      slack.  Once the number of expected allocations is exceeded,
+      injecting further failures does not make a difference.  */
+   unsigned int maximum_allocation_count = shared->allocation_count;
+-  printf ("info: successful call performs %u allocations\n",
+-          maximum_allocation_count);
++  printf ("info: pattern \"%s\" (locale %s) performs %u allocations\n",
++	  regexp, locale == NULL ? "C" : locale, maximum_allocation_count);
+   maximum_allocation_count += 10;
+ 
+   for (unsigned int inject_at = 0; inject_at <= maximum_allocation_count;
+@@ -165,8 +299,33 @@ do_test (void)
+     {
+       shared->allocation_count = 0;
+       shared->failing_allocation = inject_at;
+-      support_isolate_in_subprocess (test_in_subprocess, regexp);
++      support_isolate_in_subprocess (test_in_subprocess, (void *) regexp);
+     }
++}
++
++static int
++do_test (void)
++{
++  shared = support_shared_allocate (sizeof (*shared));
++
++  /* Disable fault injection.  */
++  shared->failing_allocation = ~0U;
++
++  support_isolate_in_subprocess (no_op, NULL);
++  TEST_COMPARE (shared->allocation_count, 0);
++
++  /* Bracket expression parsing (parse_bracket_exp, bug 33185).  */
++  run_pattern ("[:alpha:]", 0, NULL);
++
++  /* NFA node array growth in re_dfa_add_node (bug 34991).  The initial
++     nodes_alloc is the pattern length + 1; the interval duplicates the
++     'a' node 64 times, so the node arrays are grown several times.  */
++  run_pattern ("a{64}", REG_EXTENDED, NULL);
++
++  /* Range array growth in build_range_exp (bugs 31935 and 34991).  A
++     multibyte locale stores the ranges in the mbcset arrays, and
++     multiple ranges force the growth realloc.  */
++  run_pattern ("[a-bc-de-fg-hi-jk-lm-no-pq-rs-t]", 0, "en_US.UTF-8");
+ 
+   support_shared_free (shared);
+ 
+
+commit f30ac9a9b85be387052f2eb3899fcda52f9f77a1
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Fri Oct 9 13:18:07 2026 -0300
+
+    stdio-common: Fix double null terminator in wide scanf %s and %[ (BZ 34989, CVE-2026-115819)
+    
+    For %s and %[ without the 'l' modifier, the wide scanf functions
+    convert the input into the char array with __wcrtomb.  To emit the
+    sequence that returns to the initial shift state, the conversion is
+    finished with __wcrtomb (buf, L'\0', &state), which also stores the
+    terminating null byte, and the N bytes are copied to the output.  The
+    code then appends another null byte, so two are written.
+    
+    If the input fills the field width, an array sized for the converted
+    string plus its terminator (as C requires) is written one byte past
+    its end, for instance:
+    
+      char buf[5];
+      swscanf (L"abcd", L"%4s", buf);
+    
+    stores "abcd\0\0".  The 'm' modifier allocated one extra byte for it,
+    which was later trimmed.
+    
+    Only append the null byte explicitly for the narrow scanf, and size
+    the 'm' buffer for the N bytes from __wcrtomb.
+    
+    The new test checks swscanf and fwscanf with the destination placed
+    right before a PROT_NONE page, in the C and a UTF-8 locale, and the
+    'm' modifier allocation for a range of string lengths.
+    
+    Checked on x86_64-linux-gnu.
+    
+    Reported-by: Russell Miller <rmiller@duskglow.com>
+    (cherry picked from commit 3ccbe46830772e17c460a1d28a884a7c59b03d35)
+
+diff --git a/NEWS b/NEWS
+index 6c971fdb2a..b511ab7ee6 100644
+--- a/NEWS
++++ b/NEWS
+@@ -32,6 +32,8 @@ The following bugs were resolved with this release:
+     lane requires scalar fallback
+   [34923] math: AArch64: SVE acosh loses accuracy near 1 depending on
+     other vector lanes
++  [34989] stdio: Wide scanf %s and %[ write an extra null byte past the
++    destination (CVE-2026-115819)
+ 
+ Version 2.42
+ 
+diff --git a/stdio-common/Makefile b/stdio-common/Makefile
+index 27e7ea20f0..3eaa0fb895 100644
+--- a/stdio-common/Makefile
++++ b/stdio-common/Makefile
+@@ -351,6 +351,7 @@ tests := \
+   tst-vfprintf-width-prec-alloc \
+   tst-vfscanf-bz34008 \
+   tst-wc-printf \
++  tst-wscanf-nul \
+   tstdiomisc \
+   tstgetln \
+   tstscanf \
+@@ -558,6 +559,7 @@ $(objpfx)tst-vfprintf-mbs-prec.out: $(gen-locales)
+ $(objpfx)tst-vfprintf-width-i18n.out: $(gen-locales)
+ $(objpfx)tst-grouping3.out: $(gen-locales)
+ $(objpfx)tst-scanf-to_inpunct.out: $(gen-locales)
++$(objpfx)tst-wscanf-nul.out: $(gen-locales)
+ endif
+ 
+ tst-printf-bz18872-ENV = MALLOC_TRACE=$(objpfx)tst-printf-bz18872.mtrace \
+diff --git a/stdio-common/tst-wscanf-nul.c b/stdio-common/tst-wscanf-nul.c
+new file mode 100644
+index 0000000000..bda1bcd7ed
+--- /dev/null
++++ b/stdio-common/tst-wscanf-nul.c
+@@ -0,0 +1,169 @@
++/* Test that wide scanf %s and %[ store a single null terminator.
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <array_length.h>
++#include <limits.h>
++#include <locale.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <wchar.h>
++#include <support/check.h>
++#include <support/next_to_fault.h>
++#include <support/support.h>
++#include <support/test-driver.h>
++#include <support/xstdio.h>
++
++struct test
++{
++  const wchar_t *input;
++  const wchar_t *format;
++  /* The same conversion with the 'm' modifier.  */
++  const wchar_t *mformat;
++  /* Multibyte result, without the terminating null byte.  */
++  const char *expected;
++};
++
++static const struct test tests_c[] =
++  {
++    { L"abcd", L"%4s", L"%4ms", "abcd" },
++    { L"abcdef", L"%4s", L"%4ms", "abcd" },
++    { L"ab", L"%4s", L"%4ms", "ab" },
++    { L"abcd", L"%s", L"%ms", "abcd" },
++    { L"a", L"%1s", L"%1ms", "a" },
++    { L"abcd", L"%4[a-z]", L"%4m[a-z]", "abcd" },
++    { L"abcdef", L"%4[a-z]", L"%4m[a-z]", "abcd" },
++    { L"abcd", L"%[^x]", L"%m[^x]", "abcd" },
++  };
++
++static const struct test tests_utf8[] =
++  {
++    { L"\u00e4\u00f6\u00fc", L"%3s", L"%3ms", "\xc3\xa4\xc3\xb6\xc3\xbc" },
++    { L"\u00e4\u00f6\u00fcx", L"%3s", L"%3ms", "\xc3\xa4\xc3\xb6\xc3\xbc" },
++    { L"\u00e4\u00f6\u00fc", L"%s", L"%ms", "\xc3\xa4\xc3\xb6\xc3\xbc" },
++    { L"\u00e4\u00f6\u00fc", L"%3[^x]", L"%3m[^x]",
++      "\xc3\xa4\xc3\xb6\xc3\xbc" },
++    { L"\u00e4\u00f6\u00fcx", L"%[^x]", L"%m[^x]",
++      "\xc3\xa4\xc3\xb6\xc3\xbc" },
++  };
++
++/* Store the conversion into a buffer of exactly the size required for
++   the expected result and its terminator, followed by an inaccessible
++   page, so a write past the terminator faults.  */
++static void
++check_buffer (const struct test *t, FILE *fp)
++{
++  size_t size = strlen (t->expected) + 1;
++  struct support_next_to_fault ntf = support_next_to_fault_allocate (size);
++  memset (ntf.buffer, 0xff, size);
++
++  int r = fp == NULL
++	  ? swscanf (t->input, t->format, ntf.buffer)
++	  : fwscanf (fp, t->format, ntf.buffer);
++  TEST_COMPARE (r, 1);
++  TEST_COMPARE_BLOB (ntf.buffer, size, t->expected, size);
++
++  support_next_to_fault_free (&ntf);
++}
++
++/* Same as check_buffer, but with the 'm' modifier allocating the
++   result.  */
++static void
++check_malloc (const struct test *t, FILE *fp)
++{
++  char *p = NULL;
++  int r = fp == NULL
++	  ? swscanf (t->input, t->mformat, &p)
++	  : fwscanf (fp, t->mformat, &p);
++  TEST_COMPARE (r, 1);
++  TEST_COMPARE_STRING (p, t->expected);
++  free (p);
++}
++
++static void
++check_test (const struct test *t)
++{
++  if (test_verbose > 0)
++    printf ("info: input \"%ls\" format \"%ls\"\n", t->input, t->format);
++
++  check_buffer (t, NULL);
++  check_malloc (t, NULL);
++
++  /* fmemopen streams can not be wide oriented, so use a temporary
++     file instead.  */
++  FILE *fp = tmpfile ();
++  TEST_VERIFY_EXIT (fp != NULL);
++  TEST_VERIFY_EXIT (fputws (t->input, fp) >= 0);
++  rewind (fp);
++  check_buffer (t, fp);
++  rewind (fp);
++  check_malloc (t, fp);
++  xfclose (fp);
++}
++
++/* Exercise the 'm' modifier buffer growth for a range of input
++   lengths, where each input character converts to CHARLEN bytes.  */
++static void
++check_alloc (wchar_t wc, const char *mb, size_t charlen)
++{
++  enum { maxlen = 300 };
++  wchar_t input[maxlen + 1];
++  char expected[maxlen * MB_LEN_MAX + 1];
++
++  for (size_t len = 1; len <= maxlen; len++)
++    {
++      for (size_t i = 0; i < len; i++)
++	{
++	  input[i] = wc;
++	  memcpy (expected + i * charlen, mb, charlen);
++	}
++      input[len] = L'\0';
++      expected[len * charlen] = '\0';
++
++      char *p = NULL;
++      TEST_COMPARE (swscanf (input, L"%ms", &p), 1);
++      TEST_COMPARE_STRING (p, expected);
++      free (p);
++
++      p = NULL;
++      TEST_COMPARE (swscanf (input, L"%m[^x]", &p), 1);
++      TEST_COMPARE_STRING (p, expected);
++      free (p);
++    }
++}
++
++static int
++do_test (void)
++{
++  for (size_t i = 0; i < array_length (tests_c); i++)
++    check_test (&tests_c[i]);
++  check_alloc (L'a', "a", 1);
++
++  xsetlocale (LC_ALL, "de_DE.UTF-8");
++  for (size_t i = 0; i < array_length (tests_c); i++)
++    check_test (&tests_c[i]);
++  for (size_t i = 0; i < array_length (tests_utf8); i++)
++    check_test (&tests_utf8[i]);
++  check_alloc (L'a', "a", 1);
++  check_alloc (L'\u00e4', "\xc3\xa4", 2);
++  check_alloc (L'\u20ac', "\xe2\x82\xac", 3);
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/stdio-common/vfscanf-internal.c b/stdio-common/vfscanf-internal.c
+index 90a1886951..94e7336ac8 100644
+--- a/stdio-common/vfscanf-internal.c
++++ b/stdio-common/vfscanf-internal.c
+@@ -1204,17 +1204,19 @@ __vfscanf_internal (FILE *s, const char *format, va_list argptr,
+ 		{
+ #ifdef COMPILE_WSCANF
+ 		  /* We have to emit the code to get into the initial
+-		     state.  */
++		     state.  __wcrtomb also stores the terminating null
++		     byte, which is included in N.  */
+ 		  char buf[MB_LEN_MAX];
+ 		  size_t n = __wcrtomb (buf, L'\0', &state);
+-		  if (n > 0 && (flags & MALLOC)
+-		      && str + n >= *strptr + strsize)
++		  if (__glibc_unlikely (n == (size_t) -1))
++		    encode_error ();
++		  if ((flags & MALLOC) && str - *strptr + n > strsize)
+ 		    {
+ 		      /* Enlarge the buffer.  */
+ 		      size_t strleng = str - *strptr;
+ 		      char *newstr;
+ 
+-		      newstr = (char *) realloc (*strptr, strleng + n + 1);
++		      newstr = (char *) realloc (*strptr, strleng + n);
+ 		      if (newstr == NULL)
+ 			{
+ 			  if (flags & POSIX_MALLOC)
+@@ -1234,13 +1236,14 @@ __vfscanf_internal (FILE *s, const char *format, va_list argptr,
+ 			{
+ 			  *strptr = newstr;
+ 			  str = newstr + strleng;
+-			  strsize = strleng + n + 1;
++			  strsize = strleng + n;
+ 			}
+ 		    }
+ 
+ 		  str = __mempcpy (str, buf, n);
+-#endif
++#else
+ 		  *str++ = '\0';
++#endif
+ 
+ 		  if ((flags & MALLOC) && str - *strptr != strsize)
+ 		    {
+@@ -3101,17 +3104,19 @@ digits_extended_fail:
+ 		{
+ #ifdef COMPILE_WSCANF
+ 		  /* We have to emit the code to get into the initial
+-		     state.  */
++		     state.  __wcrtomb also stores the terminating null
++		     byte, which is included in N.  */
+ 		  char buf[MB_LEN_MAX];
+ 		  size_t n = __wcrtomb (buf, L'\0', &state);
+-		  if (n > 0 && (flags & MALLOC)
+-		      && str + n >= *strptr + strsize)
++		  if (__glibc_unlikely (n == (size_t) -1))
++		    encode_error ();
++		  if ((flags & MALLOC) && str - *strptr + n > strsize)
+ 		    {
+ 		      /* Enlarge the buffer.  */
+ 		      size_t strleng = str - *strptr;
+ 		      char *newstr;
+ 
+-		      newstr = (char *) realloc (*strptr, strleng + n + 1);
++		      newstr = (char *) realloc (*strptr, strleng + n);
+ 		      if (newstr == NULL)
+ 			{
+ 			  if (flags & POSIX_MALLOC)
+@@ -3131,13 +3136,14 @@ digits_extended_fail:
+ 			{
+ 			  *strptr = newstr;
+ 			  str = newstr + strleng;
+-			  strsize = strleng + n + 1;
++			  strsize = strleng + n;
+ 			}
+ 		    }
+ 
+ 		  str = __mempcpy (str, buf, n);
+-#endif
++#else
+ 		  *str++ = '\0';
++#endif
+ 
+ 		  if ((flags & MALLOC) && str - *strptr != strsize)
+ 		    {
+
+commit 85a0a0562a51c7778918f77ae4bf82e3459eefc0
+Author: JT Wang <skyman-wftw@hotmail.com>
+Date:   Thu Nov 12 05:08:42 2026 +0000
+
+    iconv: ISO-2022-CN-EXT: fix SO handling without a designation (bug 34774)
+    
+    In the FROM loop, the SO (0x0e) handler advances inptr before
+    checking whether an SO designation had been announced.  Without a
+    designation the SO byte is an error, but by the time the error is
+    reported the byte has already been consumed.  Consequences:
+    
+    * With //IGNORE, STANDARD_FROM_LOOP_ERR_HANDLER skips one more byte
+      after the already-consumed SO.  If the SO is the last input byte,
+      inptr ends up one past inend; the loop condition inptr != inend
+      then no longer terminates the loop, and the converter keeps
+      reading past the end of the input buffer and may convert
+      out-of-bounds bytes into the output, in addition to the
+      *inbytesleft wraparound described in the report.  This is also
+      the path taken by iconv -c, which sets the ignore flag for the
+      conversion.  If the SO is not the last byte, the byte following
+      it is silently dropped.
+    * Without //IGNORE there is no out-of-bounds access, but iconv()
+      returns EILSEQ with the SO already consumed, so *inbuf does not
+      point at the offending byte and the reported remaining length is
+      one byte short (or exhausted when the SO is the last byte).  A
+      caller that skips the offending byte on EILSEQ and calls iconv()
+      again then decrements an already-exhausted length.
+    
+    Move the increment after the error handler: the ignore path skips
+    the SO exactly once, and the non-ignore path leaves the input
+    pointer on the SO byte as POSIX expects.  Sequences with an
+    announced designation are unaffected.
+    
+    Also update the stale comment in that branch, and extend
+    tst-iconv-iso-2022-cn-ext with FROM-direction regressions covering
+    the error paths, a trailing SO with //IGNORE placed next to an
+    inaccessible page, and a designated-SO positive case.
+    
+    Signed-off-by: JT Wang <skyman-wftw@hotmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 170ee485fa89b95c3bb7d5606c9812c6c100c9be)
+
+diff --git a/NEWS b/NEWS
+index b511ab7ee6..c7b23df206 100644
+--- a/NEWS
++++ b/NEWS
+@@ -26,6 +26,9 @@ The following bugs were resolved with this release:
+   [34507] nptl: Pretty-printer tests FAIL instead of UNSUPPORTED when
+     cross-testing without python3 on target
+   [34752] libc: <sys/pidfd.h> not protected for C++
++  [34774] locale: ISO-2022-CN-EXT iconv decoder: SO byte without a
++    designation advances the input pointer out of bounds
++    (CVE-2026-121758)
+   [34920] math: Bug in SVE pow and powf with mixed positive and negative
+     base lanes with integer exponent
+   [34922] math: AArch64: SVE tanf returns incorrect results when another
+diff --git a/iconvdata/iso-2022-cn-ext.c b/iconvdata/iso-2022-cn-ext.c
+index 47ec58f16e..8a05b55be9 100644
+--- a/iconvdata/iso-2022-cn-ext.c
++++ b/iconvdata/iso-2022-cn-ext.c
+@@ -248,12 +248,9 @@ enum
+       }									      \
+     else if (ch == SO)							      \
+       {									      \
+-	/* Switch to use GB2312, GB12345, CNS 11643 plane 1, or ISO-IR-165,   \
+-	   depending on which S0 designation came last.  The only problem     \
+-	   is what to do with faulty input files where no designator came.    \
+-	   XXX For now I'll default to use GB2312.  If this is not the	      \
+-	   best behavior (e.g., we should flag an error) let me know.  */     \
+-	++inptr;							      \
++	/* Switch to the character set designated last for SO.  A faulty      \
++	   input file may contain an SO byte without a prior SO               \
++	   designation; treat such a lone SO as an illegal sequence.  */      \
+ 	if ((ann & SO_ann) != 0)					      \
+ 	  switch (ann & SO_ann)						      \
+ 	    {								      \
+@@ -276,6 +273,7 @@ enum
+ 	  {								      \
+ 	    STANDARD_FROM_LOOP_ERR_HANDLER (1);				      \
+ 	  }								      \
++	++inptr;							      \
+ 	continue;							      \
+       }									      \
+     else if (ch == SI)							      \
+diff --git a/iconvdata/tst-iconv-iso-2022-cn-ext.c b/iconvdata/tst-iconv-iso-2022-cn-ext.c
+index 7491e47ee6..53ea1a8863 100644
+--- a/iconvdata/tst-iconv-iso-2022-cn-ext.c
++++ b/iconvdata/tst-iconv-iso-2022-cn-ext.c
+@@ -25,6 +25,7 @@
+ 
+ #include <support/xunistd.h>
+ #include <support/check.h>
++#include <support/next_to_fault.h>
+ #include <support/support.h>
+ 
+ /* The test sets up a two memory page buffer with the second page marked
+@@ -37,6 +38,177 @@
+    character sets and may run out of buffer space while doing the
+    operation.  */
+ 
++/* FROM-direction regression tests for bug 34774: a lone SO (0x0e)
++   without any announced SO designation.  The error paths must leave
++   the input pointer on the offending SO byte, and //IGNORE must skip
++   it exactly once.  */
++
++static void
++test_lone_so_plain (void)
++{
++  iconv_t cd = iconv_open ("UTF-8", "ISO-2022-CN-EXT");
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++  char in[] = { 0x0e };
++  char out[8];
++  char *ip = in, *op = out;
++  size_t il = sizeof in, ol = sizeof out;
++  errno = 0;
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) -1);
++  TEST_COMPARE (errno, EILSEQ);
++  TEST_VERIFY (ip == in);
++  TEST_COMPARE (il, (size_t) 1);
++  TEST_COMPARE (iconv_close (cd), 0);
++}
++
++static void
++test_so_after_ascii (void)
++{
++  iconv_t cd = iconv_open ("UTF-8", "ISO-2022-CN-EXT");
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++  char in[] = { 'A', 0x0e, 'B' };
++  char out[8];
++  char *ip = in, *op = out;
++  size_t il = sizeof in, ol = sizeof out;
++  errno = 0;
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) -1);
++  TEST_COMPARE (errno, EILSEQ);
++  TEST_VERIFY (ip == in + 1);
++  TEST_COMPARE (il, (size_t) 2);
++  TEST_VERIFY (op == out + 1);
++  TEST_COMPARE_BLOB (out, op - out, "A", 1);
++  TEST_COMPARE (iconv_close (cd), 0);
++}
++
++static void
++test_lone_so_ignore (void)
++{
++  iconv_t cd = iconv_open ("UTF-8//IGNORE", "ISO-2022-CN-EXT");
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++  char in[] = { 0x0e, 'A', 'B' };
++  char out[8];
++  char *ip = in, *op = out;
++  size_t il = sizeof in, ol = sizeof out;
++  errno = 0;
++  /* With //IGNORE the offending SO must be skipped exactly once and the
++     following ASCII must be converted.  Note that glibc still reports
++     EILSEQ here: the ignore arm of STANDARD_FROM_LOOP_ERR_HANDLER does
++     not reset result, which stays __GCONV_ILLEGAL_INPUT, and the
++     iconv() wrapper maps that status to -1 plus EILSEQ
++     unconditionally (iconv/iconv.c).  */
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) -1);
++  TEST_COMPARE (errno, EILSEQ);
++  TEST_VERIFY (ip == in + 3);
++  TEST_COMPARE (il, (size_t) 0);
++  TEST_COMPARE_BLOB (out, op - out, "AB", 2);
++  TEST_COMPARE (iconv_close (cd), 0);
++}
++
++static void
++test_caller_skip_no_underflow (void)
++{
++  /* A caller that skips the offending byte on EILSEQ and calls
++     iconv() again.  With the fix, the first call reports the SO as
++     unconsumed input, so the skip drops the SO itself and the rest of
++     the input still converts.  */
++  iconv_t cd = iconv_open ("UTF-8", "ISO-2022-CN-EXT");
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++  char in[] = { 0x0e, 'A' };
++  char out[8];
++  char *ip = in, *op = out;
++  size_t il = sizeof in, ol = sizeof out;
++  errno = 0;
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) -1);
++  TEST_COMPARE (errno, EILSEQ);
++  /* The SO is the offending byte and must still be unconsumed; do not
++     run the caller-side skip unless this precondition holds, or the
++     test itself would advance past the end of the input.  */
++  TEST_VERIFY_EXIT (ip == in);
++  TEST_VERIFY_EXIT (il == 2);
++  ++ip;
++  --il;
++  op = out;
++  ol = sizeof out;
++  errno = 0;
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) 0);
++  TEST_COMPARE (il, (size_t) 0);
++  TEST_COMPARE ((size_t) (op - out), (size_t) 1);
++  TEST_COMPARE_BLOB (out, op - out, "A", 1);
++  TEST_COMPARE (iconv_close (cd), 0);
++}
++
++static void
++test_lone_so_tail_caller_skip (void)
++{
++  /* A lone SO at the end of the input.  Before the fix the first call
++     consumed the SO and left the remaining length at 0, so a caller
++     skipping the offending byte decremented that length to
++     (size_t) -1.  */
++  iconv_t cd = iconv_open ("UTF-8", "ISO-2022-CN-EXT");
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++  char in[] = { 'A', 0x0e };
++  char out[8];
++  char *ip = in, *op = out;
++  size_t il = sizeof in, ol = sizeof out;
++  errno = 0;
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) -1);
++  TEST_COMPARE (errno, EILSEQ);
++  TEST_VERIFY_EXIT (ip == in + 1);
++  TEST_VERIFY_EXIT (il == 1);
++  ++ip;
++  --il;
++  op = out;
++  ol = sizeof out;
++  errno = 0;
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) 0);
++  TEST_COMPARE (il, (size_t) 0);
++  TEST_COMPARE (iconv_close (cd), 0);
++}
++
++static void
++test_designated_so (void)
++{
++  /* Positive case: with an announced designation the SO switches to
++     the designated set, consumes exactly one byte, and the following
++     7-bit GB2312 pair converts.  ESC $ ) A designates GB2312;
++     0x52 0x3b is the 7-bit form of the GB2312 code for U+4E00.  */
++  iconv_t cd = iconv_open ("UTF-8", "ISO-2022-CN-EXT");
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++  char in[] = { 0x1b, '$', ')', 'A', 0x0e, 0x52, 0x3b, 0x0f, 'Z' };
++  char out[16];
++  char *ip = in, *op = out;
++  size_t il = sizeof in, ol = sizeof out;
++  errno = 0;
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) 0);
++  TEST_COMPARE (il, (size_t) 0);
++  TEST_COMPARE ((size_t) (op - out), (size_t) 4);
++  TEST_COMPARE_BLOB (out, 4, "\xe4\xb8\x80Z", 4);
++  TEST_COMPARE (iconv_close (cd), 0);
++}
++
++static void
++test_trailing_so_ignore (void)
++{
++  /* The shape from bug 34774: a lone SO as the last input byte with
++     //IGNORE.  Place the input right before an inaccessible page so
++     that a read past the end faults.  */
++  struct support_next_to_fault ntf = support_next_to_fault_allocate (2);
++  ntf.buffer[0] = 'A';
++  ntf.buffer[1] = 0x0e;
++  iconv_t cd = iconv_open ("UTF-8//IGNORE", "ISO-2022-CN-EXT");
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++  char out[8];
++  char *ip = ntf.buffer, *op = out;
++  size_t il = 2, ol = sizeof out;
++  errno = 0;
++  TEST_COMPARE (iconv (cd, &ip, &il, &op, &ol), (size_t) -1);
++  TEST_COMPARE (errno, EILSEQ);
++  TEST_VERIFY (ip == ntf.buffer + 2);
++  TEST_COMPARE (il, (size_t) 0);
++  TEST_COMPARE_BLOB (out, op - out, "A", 1);
++  TEST_COMPARE (iconv_close (cd), 0);
++  support_next_to_fault_free (&ntf);
++}
++
+ static int
+ do_test (void)
+ {
+@@ -122,6 +294,14 @@ do_test (void)
+ 
+   xmunmap (ntf, ntfsize);
+ 
++  test_trailing_so_ignore ();
++  test_lone_so_plain ();
++  test_so_after_ascii ();
++  test_lone_so_ignore ();
++  test_caller_skip_no_underflow ();
++  test_lone_so_tail_caller_skip ();
++  test_designated_so ();
++
+   return 0;
+ }
+ 
