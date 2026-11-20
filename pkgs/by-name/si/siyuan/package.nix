@@ -26,9 +26,8 @@
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
 
-  # Upstream pins pnpm@12 in app/package.json. pnpm 12 materializes its global virtual
-  # store under v11/links, where package JSONC files (tsconfig.json) break fetchPnpmDeps'
-  # jq normalization on aarch64-darwin; fetcherVersion 5 stops archiving that tree.
+  # Upstream pins pnpm 12; fetcherVersion 5 keeps its JSONC links tree out of
+  # fetchPnpmDeps' jq normalization on aarch64-darwin.
   pnpm = pnpm_12;
 
   # Upstream's app/package.json pins Electron 44; nixpkgs' default electron (43)
@@ -49,12 +48,11 @@ let
   # level-zero (~200 MiB) into the closure for nothing.
   onnxruntimeMinimal = onnxruntime.override { openvinoSupport = false; };
 
-  # The name electron-builder's extraResources expects for the current platform.
-  # The archive we build is a placeholder: afterPack only checks that bin/pandoc
-  # is a non-empty regular file, and the kernel uses the Nix pandoc directly via
-  # set-pandoc-path.patch. installPhase replaces what gets unpacked with a store
-  # symlink — shipping the real archive makes the client's own store path 347 MiB
-  # instead of ~138 MiB.
+  # The archive name electron-builder's extraResources expects per platform. It
+  # is a placeholder: afterPack only checks that bin/pandoc is a non-empty
+  # regular file, and the kernel uses the Nix pandoc via set-pandoc-path.patch.
+  # installPhase swaps in a store symlink; shipping the real archive would put
+  # 347 MiB into the client's store path.
   pandocArchives = {
     "linux" = "pandoc-linux-amd64.zip";
     "linux-arm64" = "pandoc-linux-arm64.zip";
@@ -63,13 +61,12 @@ let
 
   pandocArchive = pandocArchives.${platformId};
 
-  # Built-in OCR (since v3.8.7): upstream's app/scripts/beforePack.js downloads
-  # the models — and an onnxruntime blob — from the network, which the sandbox
-  # cannot do. ./ocr-assets.json is a verbatim copy of upstream's
-  # scripts/ocr-assets.json for this version (null once a version ships no OCR),
-  # so the models can be prefetched with fetchurl and the hook made a no-op.
-  # update.sh refreshes it along with the version; prepare-ocr.py fails the build
-  # on a hash mismatch rather than silently skipping.
+  # Built-in OCR: upstream's app/scripts/beforePack.js downloads the models —
+  # and an onnxruntime blob — from the network, which the sandbox cannot do.
+  # ./ocr-assets.json is a verbatim copy of upstream's scripts/ocr-assets.json
+  # for this version (null once a version ships no OCR), so the models can be
+  # prefetched with fetchurl and the hook made a no-op. update.sh refreshes it
+  # along with the version.
   ocrManifest = builtins.fromJSON (builtins.readFile ./ocr-assets.json);
   hasOCR = ocrManifest != null;
 
@@ -85,8 +82,7 @@ let
     else
       null;
 
-  # Model data files only (onnx weights and yml): loaded, never executed. The
-  # prebuilt onnxruntime is not fetched — see dedupeOnnxruntime.
+  # Model data files only (onnx weights and yml): loaded, never executed.
   ocrModels = lib.optionals hasOCR (
     map (entry: {
       path = entry.path;
@@ -97,15 +93,12 @@ let
     }) ocrManifest.models
   );
 
-  # Put every model where prepare-ocr.py's download() verifies it: matching bytes
-  # skip the download, mismatches fail right there.
+  # Put every model where prepare-ocr.py's download() verifies it by hash.
   ocrModelCopies = lib.concatMapStringsSep "\n" (m: ''
     mkdir -p "$(dirname "stage/ocr/models/${m.path}")"
     cp -f ${m.file} "stage/ocr/models/${m.path}"
   '') ocrModels;
 
-  # What afterPack extracted is our placeholder; the kernel uses the Nix pandoc.
-  # Replace the directory with a single store symlink.
   dedupePandoc = resourcesDir: ''
     rm -rf ${resourcesDir}/pandoc
     mkdir -p ${resourcesDir}/pandoc/bin
@@ -163,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     # `go build ./...` also produces `apigen` (a 34 MiB code-generation tool)
     # and `harmony` (a 145 MiB HarmonyOS bundle). Nothing installs or runs
     # either one, but both end up in $out/bin and therefore in every closure
-    # that references the kernel. Build just the kernel package.
+    # that references the kernel.
     subPackages = [ "." ];
 
     env.CGO_ENABLED = "1";
@@ -180,9 +173,8 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     pnpm
     # The webpack bundle lands in app/stage/build, which is gitignored upstream
-    # and absent from the tarball, so every platform has to run the build —
-    # otherwise the output ships without any JS bundle. nixpkgs limited this to
-    # linux, leaving the darwin build incomplete.
+    # and absent from the tarball, so every platform has to run the build;
+    # otherwise the output ships without any JS bundle.
     pnpmBuildHook
     zip
   ]
@@ -218,10 +210,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   postConfigure = ''
-    # Do not consume upstream's prebuilt pandoc archives: drop them and build a
-    # placeholder zip under the name electron-builder's extraResources expects.
-    # Nothing unaudited is unpacked or chmod +x'ed, and installPhase replaces
-    # what afterPack extracted with a store symlink (dedupePandoc).
+    # Drop upstream's prebuilt archives (untrusted, and replaced by a store
+    # symlink anyway) and ship the placeholder.
     rm -f pandoc/pandoc-*.zip
     mkdir -p pandoc/bin
     printf 'placeholder: replaced by a store symlink in installPhase\n' > pandoc/bin/pandoc
@@ -231,22 +221,19 @@ stdenv.mkDerivation (finalAttrs: {
     )
     rm -rf pandoc/bin
 
-    # link kernel into the correct starting place so that electron-builder can copy it to it's final location
+    # link kernel into the correct starting place so that electron-builder can copy it to its final location
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
 
-    # Since 3.8.10, build:electron deletes and recreates electron-dist for the
-    # app's own compiled code. Keep the Electron runtime under a different name
-    # so the build hook cannot remove it.
+    # build:electron deletes and recreates electron-dist for the app's own
+    # compiled code, so keep the Electron runtime under a different name.
     cp -r ${electron.dist} electron-runtime
     chmod -R u+w electron-runtime
   ''
   + lib.optionalString hasOCR ''
-    # ---- offline built-in OCR resources (since v3.8.7) ----
     # Upstream's beforePack hook runs ../scripts/prepare-ocr.py, which expects a
-    # writable repo layout plus network access. Mirror that layout inside the
-    # build directory, place the resources, do the hook's work here and make the
-    # hook a no-op.
+    # writable repo layout plus network access; mirror it here and make the hook
+    # a no-op.
     mkdir -p ocr-layout/scripts
     cp -r ${finalAttrs.src}/scripts/. ocr-layout/scripts/
     ln -s "$PWD" ocr-layout/app
@@ -272,7 +259,6 @@ stdenv.mkDerivation (finalAttrs: {
       )
     ''}
 
-    # Resources are in place, so the hook has nothing left to do.
     cat > scripts/beforePack.js <<'OCR_EOF'
     // OCR resources were prefetched and placed by the nix build in
     // postConfigure; no-op so electron-builder does not redo any of it.
@@ -317,8 +303,8 @@ stdenv.mkDerivation (finalAttrs: {
     ${dedupePandoc "$out/share/siyuan/resources"}
     ${lib.optionalString hasOCR (dedupeOnnxruntime "$out/share/siyuan/resources")}
 
-    # Keep the caller's cwd: the desktop entry passes Markdown paths, which
-    # may be relative, and SiYuan resolves them from process.cwd().
+    # Keep the caller's cwd: relative path arguments resolve against
+    # process.cwd().
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
@@ -347,11 +333,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Updates the version, the hashes and ocr-assets.json; see update.sh.
     updateScript = ./update.sh;
 
-    # Upstream kernel tests require model.Conf initialization, system fonts,
-    # pandoc, and other assumptions that do not hold in the Nix sandbox during
-    # the main build. Run them as a separate derivation so the package build
-    # stays reliable while test results remain available via
-    # nix-build -A siyuan.passthru.tests.kernel.
+    # Upstream's kernel tests, exported so they stay runnable outside the
+    # main build: nix-build -A siyuan.passthru.tests.kernel.
     tests.kernel = finalAttrs.kernel.overrideAttrs {
       pname = "${finalAttrs.pname}-kernel-test";
       doCheck = true;

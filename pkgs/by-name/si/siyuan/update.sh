@@ -39,9 +39,7 @@ if [ -z "$version" ]; then
   exit 1
 fi
 
-# ocr-assets.json is a verbatim copy of upstream's scripts/ocr-assets.json. prepare-ocr.py
-# verifies the models by hash, so a release that changes them fails the build until this is
-# refreshed -- which is why it is part of the update rather than a manual step.
+# Keep ocr-assets.json in sync with the tag; prepare-ocr.py checks the models by hash.
 url="https://raw.githubusercontent.com/siyuan-note/siyuan/v${version}/scripts/ocr-assets.json"
 tmp="$(mktemp)"
 trap 'rm -f "$tmp"' EXIT
