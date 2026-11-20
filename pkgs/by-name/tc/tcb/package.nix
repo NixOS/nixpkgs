@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "openwall";
     repo = "tcb";
     rev = "070cf4aa784de13c52788ac22ff611d7cbca0854";
-    sha256 = "sha256-Sp5u7iTEZZnAqKQXoPO8eWpSkZeBzQqZI82wRQmgU9A=";
+    hash = "sha256-Sp5u7iTEZZnAqKQXoPO8eWpSkZeBzQqZI82wRQmgU9A=";
   };
 
   outputs = [
@@ -32,17 +32,21 @@ stdenv.mkDerivation {
     libxcrypt
   ];
 
+  strictDeps = true;
+
   patches = [ ./fix-makefiles.patch ];
 
   postPatch = ''
     substituteInPlace Make.defs \
-      --replace "PREFIX = /usr" "PREFIX = $out" \
-      --replace "SBINDIR = /sbin" "SBINDIR = $bin/bin" \
-      --replace "INCLUDEDIR = \$(PREFIX)/include" "INCLUDEDIR = $dev/include"
+      --replace-fail "PREFIX = /usr" "PREFIX = $out" \
+      --replace-fail "SBINDIR = /sbin" "SBINDIR = $bin/bin" \
+      --replace-fail "INCLUDEDIR = \$(PREFIX)/include" "INCLUDEDIR = $dev/include"
 
     # Override default 'CC=gcc'
-    makeFlagsArray+=("CC=$CC")
+    makeFlags+=("CC=$CC")
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Alternative password shadowing scheme";
