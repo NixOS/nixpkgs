@@ -21,6 +21,7 @@
   handbrake,
   libavif,
   libheif,
+  testers,
 }:
 
 assert useVulkan -> withExamples;
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       libavif
       libheif
       ;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   __structuredAttrs = true;
@@ -93,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
+    pkgConfigModules = [ "dav1d" ];
   };
 })
