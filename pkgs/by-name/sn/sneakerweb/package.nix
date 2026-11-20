@@ -4,6 +4,7 @@
   fetchFromCodeberg,
   stdenv,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,6 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   __structuredAttrs = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A parallel web transported by physical media";
