@@ -10584,6 +10584,12 @@
     githubId = 23199375;
     name = "Gernot Feichter";
   };
+  gerrydoro = {
+    email = "gerrydoro97@gmail.com";
+    github = "gerrydoro";
+    githubId = 10131418;
+    name = "Gerardo Doro";
+  };
   gerschtli = {
     email = "tobias.happ@gmx.de";
     github = "Gerschtli";
@@ -16750,7 +16756,7 @@
     keys = [ { fingerprint = "5BE4 98D5 1C24 2CCD C21A  4604 AC6F 4BA0 78E6 7833"; } ];
   };
   leoflo = {
-    email = "leonardo@leoflo.net";
+    email = "noreply@leoflo.me";
     github = "le0flo";
     githubId = 128467278;
     name = "Leonardo";
