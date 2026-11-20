@@ -106,12 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
   ]
-  ++ lib.optional withIntrospection gobject-introspection
-  ++ lib.optional withCairo cairo;
+  ++ lib.optional withIntrospection gobject-introspection;
 
   buildInputs = [
     glib
     freetype
+  ]
+  ++ lib.optionals withCairo [
+    cairo
   ];
 
   propagatedBuildInputs =
@@ -120,6 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
       icu
       harfbuzz
     ];
+
+  strictDeps = true;
 
   doCheck = true;
 
