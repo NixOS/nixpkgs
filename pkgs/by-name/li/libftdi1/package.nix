@@ -21,25 +21,17 @@ let
   inherit (lib) optionals optionalString;
   onOff = a: if a then "ON" else "OFF";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libftdi";
-  version = "1.5-unstable-2023-12-21";
+  version = "1.6.rc1";
 
   src = fetchgit {
     url = "git://developer.intra2net.com/libftdi";
-    rev = "de9f01ece34d2fe6e842e0250a38f4b16eda2429";
-    hash = "sha256-U37M5P7itTF1262oW+txbKxcw2lhYHAwy1ML51SDVMs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-StXZE82teeMV7wmWh9pp9PA+5/tOSjBIzqVRSaxHt4k=";
   };
 
-  patches = [
-    (fetchpatch {
-      # http://developer.intra2net.com/mailarchive/html/libftdi/2024/msg00024.html
-      # https://bugzilla.redhat.com/show_bug.cgi?id=2319133
-      name = "swig-4.3.0-fix.patch";
-      url = "https://src.fedoraproject.org/rpms/libftdi/raw/9051ea9ea767eced58b69d855a5d700a5d4602cc/f/libftdi-1.5-swig-4.3.patch";
-      hash = "sha256-X5tqiPewnyAyvLzR6s0VbNpZKLd0idtPGU4ro36CZHI=";
-    })
-  ];
+  patches = [ ./swig-4.5-compat.patch ];
 
   strictDeps = true;
 
@@ -65,8 +57,8 @@ stdenv.mkDerivation {
     "-DDOCUMENTATION=${onOff docSupport}"
   ]
   ++ lib.optionals pythonSupport [
-    "-DPYTHON_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
-    "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DPython3_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
+    "-DPython3_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   propagatedBuildInputs = [ libusb1 ];
@@ -96,10 +88,11 @@ stdenv.mkDerivation {
     description = "Library to talk to FTDI chips using libusb";
     homepage = "https://www.intra2net.com/en/developer/libftdi/";
     license = with lib.licenses; [
-      lgpl2Only
-      gpl2Only
+      # clarified in 92d657bcb543a9622947d984d4a8e725fb680e8c
+      lgpl2Only # libftdi
+      gpl2Only # ftdi_eeprom
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})
