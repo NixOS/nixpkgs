@@ -766,8 +766,8 @@ in
       "sha256-IytP+f9XtuPCNPro23hL+6ecgpTv2Jk/plZS3dm6DUo=";
 
   mypy-boto3-lambda =
-    buildMypyBoto3Package "lambda" "1.44.5"
-      "sha256-phh+41YSxcJxz/2MeGg/A1IV/vw6bbvpIm0uAMzHvxU=";
+    buildMypyBoto3Package "lambda" "1.44.7"
+      "sha256-7Ycaz/di79e/hTp4BFDx56DyEi7dtbrO6qKya39v4a0=";
 
   mypy-boto3-lex-models =
     buildMypyBoto3Package "lex-models" "1.44.0"
