@@ -4412,6 +4412,8 @@ self: super: with self; {
 
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
 
+  dettato = callPackage ../development/python-modules/dettato { };
+
   developer-disk-image = callPackage ../development/python-modules/developer-disk-image { };
 
   devgoldyutils = callPackage ../development/python-modules/devgoldyutils { };
