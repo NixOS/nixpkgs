@@ -180,7 +180,7 @@ buildRedist (
     # In 11.5, the Windows libraries have their own optional component. Remove its targets along with the libraries.
     + optionalString (tensorrtAtLeast "11.5") ''
       nixLog "removing CMake targets for Windows libraries"
-      rm --verbose "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-Enterprise-WinBuilderResourceTargets*.cmake
+      rm --force --verbose "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-Enterprise-WinBuilderResourceTargets*.cmake
     ''
     # Earlier versions put the Windows libraries in the main export. Drop its checks for the removed files.
     + optionalString (tensorrtAtLeast "11.2.1" && tensorrtOlder "11.5") ''
