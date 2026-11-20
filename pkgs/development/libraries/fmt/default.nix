@@ -11,6 +11,7 @@
   openimageio,
   fcitx5,
   spdlog,
+  testers,
 }:
 
 let
@@ -20,7 +21,7 @@ let
       hash,
       patches ? [ ],
     }:
-    stdenv.mkDerivation {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "fmt";
       inherit version;
 
@@ -32,13 +33,15 @@ let
       src = fetchFromGitHub {
         owner = "fmtlib";
         repo = "fmt";
-        rev = version;
+        tag = finalAttrs.version;
         inherit hash;
       };
 
       inherit patches;
 
       nativeBuildInputs = [ cmake ];
+
+      strictDeps = true;
 
       cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared) ];
 
@@ -51,11 +54,14 @@ let
           fcitx5
           spdlog
           ;
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       };
+
+      __structuredAttrs = true;
 
       meta = {
         # last successful hydra build on darwin was in 2025
-        broken = lib.versionOlder version "11" && stdenv.hostPlatform.isDarwin;
+        broken = lib.versionOlder finalAttrs.version "11" && stdenv.hostPlatform.isDarwin;
         description = "Small, safe and fast formatting library";
         longDescription = ''
           fmt (formerly cppformat) is an open-source formatting library. It can be
@@ -64,15 +70,16 @@ let
         homepage = "https://fmt.dev/";
         changelog =
           let
-            ext = if lib.versionOlder version "10" then "rst" else "md";
+            ext = if lib.versionOlder finalAttrs.version "10" then "rst" else "md";
           in
-          "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.${ext}";
+          "https://github.com/fmtlib/fmt/blob/${finalAttrs.version}/ChangeLog.${ext}";
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ ];
         license = lib.licenses.mit;
         platforms = lib.platforms.all;
+        pkgConfigModules = [ "fmt" ];
       };
-    };
+    });
 in
 {
   fmt_9 = generic {
