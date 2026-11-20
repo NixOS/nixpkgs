@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchFromGitHub,
   hypothesis,
   pytestCheckHook,
   setuptools,
@@ -12,9 +13,11 @@ buildPythonPackage (finalAttrs: {
   version = "5.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-Gztv9HmoxBS8P6LAhSmVaVxKAm3NbQYzst0JLKOcHPc=";
+  src = fetchFromGitHub {
+    owner = "chardet";
+    repo = "chardet";
+    tag = finalAttrs.version;
+    hash = "sha256-vRIUGREjCSjy+zaxwCn95fAEg6/KV6/DSkGLgfcmmOo=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +40,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "chardetect";
     homepage = "https://github.com/chardet/chardet";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ cktiel ];
   };
 })

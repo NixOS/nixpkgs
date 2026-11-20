@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chardet";
-  version = "6.0.0.post1";
+  version = "7.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
     description = "Universal encoding detector";
     mainProgram = "chardetect";
     homepage = "https://github.com/chardet/chardet";
-    license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ cktiel ];
   };
 })
