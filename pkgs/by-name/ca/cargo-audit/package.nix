@@ -4,19 +4,20 @@
   fetchCrate,
   pkg-config,
   openssl,
+  aws-lc,
   zlib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-audit";
-  version = "0.22.2";
+  version = "0.23.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-hrkkDRJvXe2fltWjEW2A0/uKVFWq+9O+wRphsJjT1tE=";
+    hash = "sha256-SePgSuYYc/5ZNgC8iKNW2wfEi9kejpOkIqVCyBWbgs4=";
   };
 
-  cargoHash = "sha256-pdFoawDRzJ8gPYAAQHwrCVYeaa1ShSqYA8nwpCAnS1s=";
+  cargoHash = "sha256-2zKR/8BbzvRCExknD2zaJJTCRhnxzgJzKdhk6fbvtZg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -25,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     zlib
+    aws-lc
   ];
 
   buildFeatures = [ "fix" ];
