@@ -211,6 +211,21 @@ resolveLibDir() {
     resolvedPath="${resolvedPath:-/}"
 }
 
+# Wrap the argument in double quotes and escape all backslashes and double
+# quotes. This is used by CC wrappers to construct a response file to pass
+# many arguments to the compiler.
+#
+# The conversion is done manually instead of `printf "%q\n"` or alike as
+# they tend to produce locale-dependent output while the argument parsing of
+# CC binaries is locale-independent (Clang and GCC checked).
+# E.g. with LC_ALL=C, `printf "%q\n"` escapes non-ascii characters using
+# octal notation, but the CC binaries do not correctly de-escape them.
+function escapeResponseArgs() {
+    for i in "$@"; do
+        echo '"'"${i//[\\\"]/\\&}"'"'
+    done
+}
+
 checkLinkType() {
     local arg
     type="dynamic"
