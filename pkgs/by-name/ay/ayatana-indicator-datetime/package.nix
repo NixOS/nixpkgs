@@ -19,9 +19,9 @@
   libical,
   mkcal,
   libnotify,
-  libsForQt5,
+  qt6Packages,
   libuuid,
-  lomiri,
+  lomiri-qt6,
   pkg-config,
   properties-cpp,
   python3,
@@ -46,17 +46,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zjAQjd5kFho8YfcoWRGbQbzzAJT0id5nh7zQoZXB1Uk=";
   };
 
-  postPatch = ''
+  postPatch =
     # Override systemd prefix
-    substituteInPlace data/CMakeLists.txt \
-      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
-      --replace-fail 'XDG_AUTOSTART_DIR "/etc' 'XDG_AUTOSTART_DIR "''${CMAKE_INSTALL_FULL_SYSCONFDIR}'
-  ''
-  + lib.optionalString enableLomiriFeatures ''
+    ''
+      substituteInPlace data/CMakeLists.txt \
+        --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+        --replace-fail 'XDG_AUTOSTART_DIR "/etc' 'XDG_AUTOSTART_DIR "''${CMAKE_INSTALL_FULL_SYSCONFDIR}'
+    ''
+    # *Have* to use KF6
     # Looking for Lomiri schemas for code generation
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail '/usr/share/accountsservice' '${lomiri.lomiri-schemas}/share/accountsservice'
-  '';
+    + lib.optionalString enableLomiriFeatures ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'libmkcal-qt5' 'libmkcal-qt6'
+
+      substituteInPlace CMakeLists.txt src/CMakeLists.txt \
+        --replace-fail 'KF5' 'KF6'
+
+      substituteInPlace src/CMakeLists.txt \
+        --replace-fail '/usr/share/accountsservice' '${lomiri-qt6.lomiri-schemas}/share/accountsservice'
+    '';
 
   strictDeps = true;
 
@@ -68,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ]
   ++ lib.optionals enableLomiriFeatures [
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -86,21 +94,23 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-base
     gst-plugins-good
   ])
-  ++ (with lomiri; [
+  ++ (with lomiri-qt6; [
     cmake-extras
   ])
   ++ (
     if enableLomiriFeatures then
       (
         [
-          kdePackages.extra-cmake-modules
           mkcal
         ]
-        ++ (with libsForQt5; [
-          __internalKF5.kcalendarcore
+        ++ (with kdePackages; [
+          extra-cmake-modules
+          kcalendarcore
+        ])
+        ++ (with qt6Packages; [
           qtbase
         ])
-        ++ (with lomiri; [
+        ++ (with lomiri-qt6; [
           lomiri-schemas
           lomiri-sounds
           lomiri-url-dispatcher
