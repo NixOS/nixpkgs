@@ -9,28 +9,28 @@
   writeShellScript,
   nix-update,
 }:
-let
+
+appimageTools.wrapType2 (finalAttrs: {
+  pname = "xnviewmp";
+  version = "1.12.2";
+
+  src = fetchurl {
+    url = "https://download.xnview.com/old_versions/XnView_MP/XnView_MP-${finalAttrs.version}.glibc2.34-x86_64.AppImage";
+    hash = "sha256-K7S5cdwATPdaiLzQBLgn2kzEmrYRTqAfizpQKg30qCE=";
+  };
+
   icon =
     runCommand "xnviewmp-icon.png"
       {
         nativeBuildInputs = [ imagemagick ];
-        src = fetchurl {
+        sc = fetchurl {
           url = "https://www.xnview.com/img/app-xnsoft-360.webp";
           hash = "sha256-wIzF/WOsPcrYFYC/kGZi6FSJFuErci5EMONjrx1VCdQ=";
         };
       }
       ''
-        magick $src -resize 512x512 $out
+        magick $sc -resize 512x512 $out
       '';
-in
-appimageTools.wrapType2 rec {
-  pname = "xnviewmp";
-  version = "1.12.2";
-
-  src = fetchurl {
-    url = "https://download.xnview.com/old_versions/XnView_MP/XnView_MP-${version}.glibc2.34-x86_64.AppImage";
-    hash = "sha256-K7S5cdwATPdaiLzQBLgn2kzEmrYRTqAfizpQKg30qCE=";
-  };
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -52,11 +52,11 @@ appimageTools.wrapType2 rec {
   ];
 
   extraInstallCommands = ''
-    install -m 444 -D ${icon} $out/share/icons/hicolor/512x512/apps/xnviewmp.png
+    install -m 444 -D ${finalAttrs.icon} $out/share/icons/hicolor/512x512/apps/xnviewmp.png
   '';
 
   passthru = {
-    inherit src;
+    inherit (finalAttrs) src;
     updateScript = writeShellScript "update-xnviewmp" ''
       latestVersion=$(curl --fail --silent "http://www.xnview.com/update.txt" | awk -F= '/\[XnViewMP\]/{getline; if($1=="version") print $2}')
       ${lib.getExe nix-update} xnviewmp --version $latestVersion
@@ -74,4 +74,4 @@ appimageTools.wrapType2 rec {
     maintainers = with lib.maintainers; [ oddlama ];
     platforms = lib.platforms.linux;
   };
-}
+})
