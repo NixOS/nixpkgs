@@ -9,7 +9,7 @@
 
 buildOpenSCADPackage (finalAttrs: {
   pname = "bosl2";
-  version = "2.0.779";
+  version = "2.0.785";
   libName = "BOSL2";
 
   installTargets = [ "*.scad" ];
@@ -18,7 +18,7 @@ buildOpenSCADPackage (finalAttrs: {
     owner = "BelfrySCAD";
     repo = "BOSL2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b2MWqKYiqjaaG/u6dcUpVszfGlASZ/04+qlVP9W5Swc=";
+    hash = "sha256-4e35TPZf69svMUGEf2el6Vs2KYMQFU9WwMkHSB+pp6I=";
   };
 
   passthru = {
