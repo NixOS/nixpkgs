@@ -11,13 +11,15 @@
 
   # dependencies
   clarabel,
-  cvxopt,
   highspy,
   osqp,
   qdldl,
   scipy,
   scs,
   sparsediffpy,
+
+  # optional-dependencies
+  cvxopt,
 
   # tests
   hypothesis,
@@ -58,7 +60,6 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     clarabel
-    cvxopt
     highspy
     numpy
     osqp
@@ -68,10 +69,17 @@ buildPythonPackage (finalAttrs: {
     sparsediffpy
   ];
 
+  optional-dependencies = {
+    CVXOPT = [ cvxopt ];
+    GLPK = [ cvxopt ];
+    GLPK_MI = [ cvxopt ];
+  };
+
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # Required flags from https://github.com/cvxpy/cvxpy/releases/tag/v1.1.11
   preBuild = lib.optionalString useOpenmp ''
