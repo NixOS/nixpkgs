@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1ddc";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "waydabber";
     repo = "m1ddc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-obs2qQvSkIDsWhCXJOF1Geiqqy19KDf0InyxRVod4hk=";
+    hash = "sha256-nBCtPHGM1nCQQkMqLg/zJZ4BaOxSsipxm8kCiElceSI=";
   };
 
   postPatch = ''
