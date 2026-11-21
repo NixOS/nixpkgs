@@ -8,13 +8,13 @@
 }:
 buildFishPlugin (finalAttrs: {
   pname = "pure";
-  version = "4.19.0";
+  version = "4.19.2";
 
   src = fetchFromGitHub {
     owner = "pure-fish";
     repo = "pure";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8rxCmKu1pvBMm+/Ski7q3ikNnnX3gAqQ0jo0f2mIXrI=";
+    hash = "sha256-H+PZZCP2ZHOLJ+IhFXeq2J/AsNk1cO4p0wcwJjN2Fr0=";
   };
 
   nativeCheckInputs = [ git ];
