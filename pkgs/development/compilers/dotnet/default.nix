@@ -110,11 +110,11 @@ makeScopeWithSplicing' {
       in
       lib.optionalAttrs config.allowAliases {
         # EOL
-        sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-        sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-        sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-        sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-        sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+        sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 10.0 (LTS) or 11.0 (Current)";
+        sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 10.0 (LTS) or 11.0 (Current)";
+        sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 10.0 (LTS) or 11.0 (Current)";
+        sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 10.0 (LTS) or 11.0 (Current)";
+        sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 10.0 (LTS) or 11.0 (Current)";
       }
       // lib.mergeAttrsList [
         dotnet_6
