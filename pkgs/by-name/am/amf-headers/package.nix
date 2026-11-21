@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r amf/public/include/* $out/include/AMF
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Headers for The Advanced Media Framework (AMF)";
     homepage = "https://github.com/GPUOpen-LibrariesAndSDKs/AMF";
