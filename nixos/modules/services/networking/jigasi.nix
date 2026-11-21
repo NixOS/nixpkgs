@@ -232,7 +232,7 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           StateDirectory = baseNameOf stateDir;
-          EnvironmentFile = cfg.environmentFile;
+          EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         };
       };
 

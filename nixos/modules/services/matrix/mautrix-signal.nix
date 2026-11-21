@@ -232,7 +232,7 @@ in
       serviceConfig = {
         User = "mautrix-signal";
         Group = "mautrix-signal";
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         StateDirectory = baseNameOf dataDir;
         WorkingDirectory = dataDir;
         ExecStart = ''
