@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "luit";
-  version = "20250912";
+  version = "20260907";
 
   src = fetchurl {
     url = "https://invisible-mirror.net/archives/luit/luit-${finalAttrs.version}.tgz";
-    hash = "sha256-RpWAYOZvNby4pRuiLaHBPXJtKKhsHPUgURvPeRS+854=";
+    hash = "sha256-l70T2j46pZeF1kUE03OJYSoyeVO7dYFQjF/qUYL59WE=";
   };
   hardeningDisable = [
     "bindnow"
