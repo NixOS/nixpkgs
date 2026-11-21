@@ -9,14 +9,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "kaldi-native-fbank";
-  version = "1.22.4";
+  version = "1.22.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "csukuangfj";
     repo = "kaldi-native-fbank";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dHXlGQ3/v68lXub5XDI5VuFd7Ij/qO92dP4czdITrx0=";
+    hash = "sha256-xcJvM4gsBv5K5ZZNQdV3AfdBRSyVFPoemjejrY8yoNM=";
   };
 
   build-system = [
