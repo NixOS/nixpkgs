@@ -4,7 +4,7 @@
   name = "privatebin";
   meta.maintainers = [ lib.maintainers.savyajha ];
 
-  nodes.dataImporter =
+  nodes.privatebin =
     { ... }:
     {
       services.privatebin = {
@@ -14,8 +14,8 @@
     };
 
   testScript = ''
-    dataImporter.wait_for_unit("phpfpm-privatebin.service")
-    dataImporter.wait_for_unit("nginx.service")
-    dataImporter.succeed("curl -fvvv -Ls http://localhost/ | grep 'PrivateBin'")
+    privatebin.wait_for_unit("phpfpm-privatebin.service")
+    privatebin.wait_for_unit("nginx.service")
+    privatebin.succeed("curl -fvvv -Ls http://localhost/ | grep 'PrivateBin'")
   '';
 }
