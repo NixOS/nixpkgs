@@ -21,6 +21,13 @@ let
           freetype
         ];
     }).run-free;
+
+  winetricks' = winetricks.overrideAttrs (attrs: {
+    patches = (attrs.patches or [ ]) ++ [
+      # Ignore expected popups for steam wine prefix (but still log to stderr)
+      ./ignore-expected-popups.patch
+    ];
+  });
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "protontricks";
@@ -65,10 +72,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "PATH"
     ":"
     (lib.makeBinPath [
-      winetricks
+      winetricks'
       yad
-    ]) # Steam Runtime does not work outside of steam-run, so don't use it
+    ])
 
+    # Steam Runtime does not work outside of steam-run, so don't use it
     "--set"
     "STEAM_RUNTIME"
     "0"
