@@ -26,6 +26,7 @@ let
     # DejaVu changes are in public domain
     # See http://dejavu-fonts.org/wiki/License for details
     license = lib.licenses.free;
+    maintainers = [ lib.maintainers.kamadorueda ];
 
     platforms = lib.platforms.all;
   };
