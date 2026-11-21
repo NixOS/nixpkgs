@@ -35,6 +35,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/bitnami/sealed-secrets";
     changelog = "https://github.com/bitnami/sealed-secrets/blob/v${finalAttrs.version}/RELEASE-NOTES.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ groodt ];
+    maintainers = with lib.maintainers; [
+      groodt
+      gaupee
+    ];
   };
 })
