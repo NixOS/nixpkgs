@@ -187,7 +187,7 @@ in
                             "MAIL"
                             "NOMAIL"
                             "FOLLOW"
-                            "NOFLLOW"
+                            "NOFOLLOW"
                             "INTERCEPT"
                             "NOINTERCEPT"
                           ]);
