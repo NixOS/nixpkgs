@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "graphinder";
-  version = "2.0.0b4";
+  version = ".1.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Escape-Technologies";
     repo = "graphinder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-emBWhEJxYRAw3WTd8t+lurnHX8SeCcLBHGH9B+Owuag=";
+    hash = "sha256-H4UFcgLgFU/0D96aiKNRwclQ1g75FZZv6gscTEltJLk=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];
