@@ -281,6 +281,9 @@ stdenv.mkDerivation (
       libjpeg8.out
       pipewire
       libei
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLoongArch64 [
+      libpulseaudio
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
