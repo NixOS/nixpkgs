@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  libgit2,
   openssl,
   zlib,
   makeWrapper,
@@ -11,6 +10,7 @@
   stdenv,
   libiconv,
   nix-update-script,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,15 +33,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    libgit2
     openssl
     zlib
+    oniguruma
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
+
+  # libgit2-sys 0.17 needs libgit2 1.8, nixpkgs has 1.9: use the bundled copy
+  preBuild = ''
+    export LIBGIT2_NO_VENDOR=0
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/keifu \
