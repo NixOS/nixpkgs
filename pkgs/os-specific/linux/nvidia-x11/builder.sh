@@ -207,8 +207,8 @@ installPhase() {
             fi
         done
         substituteInPlace nvidia-bug-report.sh \
-          --replace /bin/grep grep \
-          --replace /bin/ls ls
+          --replace-warn /bin/grep grep \
+          --replace-warn /bin/ls ls
         install -Dm755 nvidia-bug-report.sh $bin/bin/nvidia-bug-report.sh
     fi
 
