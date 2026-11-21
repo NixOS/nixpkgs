@@ -19826,6 +19826,11 @@
     githubId = 168955383;
     name = "Tommy B";
   };
+  mjliiii = {
+    name = "Mingjia Li";
+    github = "MJLiiii";
+    githubId = 80585797;
+  };
   mjm = {
     email = "matt@mattmoriarity.com";
     github = "mjm";
