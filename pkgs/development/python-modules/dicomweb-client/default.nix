@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   hatchling,
   uv-dynamic-versioning,
   pytestCheckHook,
@@ -24,6 +25,15 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-zFOnj8rzr2MUqcRFv9j7gXQHi9I7HwCmS1oNOKIkS5k=";
   };
+
+  patches = [
+    # https://github.com/ImagingDataCommons/dicomweb-client/pull/131
+    (fetchpatch2 {
+      name = "pillow-13-compat";
+      url = "https://github.com/ImagingDataCommons/dicomweb-client/commit/b442dc9d65bdf99a4d0c7969ccbcd8dd21df52d6.patch";
+      hash = "sha256-JV9QOO1mQQ8FvVdB7bav+Fqcu3GZSHkiH/eVoAJLSoY=";
+    })
+  ];
 
   build-system = [
     hatchling
