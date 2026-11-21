@@ -2581,6 +2581,7 @@ mapAliases {
   sourceHanSerifPackages.traditional-chinese = throw "'sourceHanSerifPackages.traditional-chinese' has been renamed to/replaced by 'source-han-serif'"; # Converted to throw 2025-10-27
   sourceHighlight = warnAlias "'sourceHighlight' has been renamed to/replaced by 'source-highlight'" source-highlight; # Added 2026-10-14
   sourcehut = throw "'sourcehut.*' has been removed due to being broken and unmaintained"; # Added 2025-06-15
+  sox = sox_ng; # Added 2026-11-17
   SP800-90B_EntropyAssessment = throw "'SP800-90B_EntropyAssessment' has been renamed to/replaced by 'sp800-90b-entropyassessment'"; # Converted to throw 2025-10-27
   space-orbit = throw "'space-orbit' has been removed because it is unmaintained; Debian upstream stopped tracking it in 2011."; # Added 2025-06-08
   space-station-14-launcher = warnAlias "'space-station-14-launcher' has been renamed to 'ss14-launcher'" ss14-launcher; # Added 2026-10-21

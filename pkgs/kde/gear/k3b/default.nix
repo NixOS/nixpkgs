@@ -18,7 +18,7 @@
   libburn,
   libdvdcss,
   normalize,
-  sox,
+  sox_ng,
   vcdimager,
 }:
 mkKdeDerivation {
@@ -52,7 +52,7 @@ mkKdeDerivation {
         dvdplusrwtools
         libburn
         normalize
-        sox
+        sox_ng
         vcdimager
         flac
       ]

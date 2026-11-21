@@ -13,7 +13,7 @@
   libtool,
   libxml2,
   netpbm,
-  sox,
+  sox_ng,
   util-linux,
   which,
 }:
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     libtiff
     netpbm
-    sox
+    sox_ng
   ];
 
   checkInputs = [
