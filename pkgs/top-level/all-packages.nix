@@ -6573,7 +6573,6 @@ with pkgs;
     recurseIntoAttrsWith
       {
         hydra = false;
-        eval = false;
       }
       (
         callPackage ../development/r-modules {
@@ -7863,7 +7862,6 @@ with pkgs;
   # We want emacsPackages to be visible in search but not be build on hydra
   emacsPackages = recurseIntoAttrsWith {
     hydra = false;
-    eval = false;
   } emacs.pkgs;
 
   espeak = espeak-ng;
