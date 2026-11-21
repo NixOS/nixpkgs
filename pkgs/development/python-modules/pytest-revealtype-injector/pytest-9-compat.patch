@@ -1,0 +1,48 @@
+From 9f01ed9458bd5a47b7a7541758db6ba1385732a2 Mon Sep 17 00:00:00 2001
+From: Nixpkgs <nixpkgs@localhost>
+Date: Wed, 7 Oct 2026 01:08:32 +0200
+Subject: [PATCH] Fix compatibility with pytest 9 and Python 3.14
+
+---
+ src/pytest_revealtype_injector/main.py   | 2 +-
+ src/pytest_revealtype_injector/models.py | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/pytest_revealtype_injector/main.py b/src/pytest_revealtype_injector/main.py
+index 8aaf895..c59af8a 100644
+--- a/src/pytest_revealtype_injector/main.py
++++ b/src/pytest_revealtype_injector/main.py
+@@ -128,7 +128,7 @@ def revealtype_injector(
+             ) from e
+ 
+         if tc_result.var:  # Only pyright has this extra protection
+-            if tc_result.var != var_name:
++            if ast.dump(ast.parse(tc_result.var)) != ast.dump(ast.parse(var_name)):
+                 raise TypeCheckerError(
+                     f'Variable name should be "{tc_result.var}", but got "{var_name}"',
+                     pos.file,
+diff --git a/src/pytest_revealtype_injector/models.py b/src/pytest_revealtype_injector/models.py
+index 8c297de..a4e0ee2 100644
+--- a/src/pytest_revealtype_injector/models.py
++++ b/src/pytest_revealtype_injector/models.py
+@@ -16,7 +16,7 @@ from typing import (
+ )
+ 
+ import pytest
+-from _pytest.config import Notset  # pyright: ignore[reportPrivateImportUsage]
++from _pytest.compat import NOTSET  # pyright: ignore[reportPrivateImportUsage]
+ from schema import Schema
+ 
+ from .log import get_logger
+@@ -168,7 +168,7 @@ class TypeCheckerAdapter:
+         path_str = config.getoption(self.longopt_for_config())
+         # pytest addoption() should have set default value
+         # to None even when option is not specified
+-        assert not isinstance(path_str, Notset)
++        assert path_str is not NOTSET
+ 
+         if path_str is None:
+             self._logger.info(f"({self.id}) Using default configuration")
+-- 
+2.55.0
+
