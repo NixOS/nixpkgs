@@ -39,6 +39,11 @@ stdenv.mkDerivation {
       url = "https://src.fedoraproject.org/rpms/libftdi/raw/9051ea9ea767eced58b69d855a5d700a5d4602cc/f/libftdi-1.5-swig-4.3.patch";
       hash = "sha256-X5tqiPewnyAyvLzR6s0VbNpZKLd0idtPGU4ro36CZHI=";
     })
+    (fetchpatch {
+      name = "libftdi-swig45.patch";
+      url = "https://src.fedoraproject.org/rpms/libftdi/raw/7a90b25c6115d7cfdd2ea317d6f3a3c8bcbdf58f/f/libftdi-swig45.patch";
+      hash = "sha256-gtciLyny80IdZ3YsXpkZcbKbs5TEnkXca5/s6E4TRBI=";
+    })
   ];
 
   strictDeps = true;
