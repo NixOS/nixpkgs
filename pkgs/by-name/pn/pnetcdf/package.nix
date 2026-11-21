@@ -7,18 +7,19 @@
   perl,
   mpi,
   mpiCheckPhaseHook,
+  bc,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pnetcdf";
-  version = "1.14.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "Parallel-NetCDF";
     repo = "PnetCDF";
     tag = "checkpoint.${finalAttrs.version}";
-    hash = "sha256-nz40Ji9qh6UatlLOuChsWYvHwfVNacJI87usGBcYyFk=";
+    hash = "sha256-IIUM2NloEgy/Lf6KQqKxsibEEbAJEVpWdofXOxgFfds=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  nativeCheckInputs = [ mpiCheckPhaseHook ];
+  nativeCheckInputs = [
+    mpiCheckPhaseHook
+    # benchmarks/parallel_run.sh computes timings with bc
+    bc
+  ];
 
   checkTarget = lib.concatStringsSep " " [
     # build all test programs (build only, no run)
