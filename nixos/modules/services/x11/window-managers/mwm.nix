@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.mwm;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.mwm.enable = mkEnableOption "mwm";
+  options.services.xserver.windowManager.mwm = {
+    enable = lib.mkEnableOption "mwm";
+    package = lib.mkPackageOption pkgs "motif" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "mwm";
       start = ''
-        ${pkgs.motif}/bin/mwm &
+        ${cfg.package}/bin/mwm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.motif ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
