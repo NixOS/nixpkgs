@@ -125,6 +125,11 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  pythonRelaxDeps = [
+    "python-slugify"
+    "websockets"
+  ];
+
   build-system = [
     hatchling
     versioningit
