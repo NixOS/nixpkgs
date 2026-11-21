@@ -17,15 +17,12 @@ let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gawk";
 
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/gawk-${version}.tar.gz";
-    hash = "sha256-izsOqDkwMRo/MJBdPOiY0yxhA8L+INapC0A0EXGxdN4=";
+    hash = "sha256-ecRvXeFEAWY8Y8jfT8RcO9p29jKdc7ITUjp8cfMvckM=";
   };
-  patches = [
-    ./node-struct-without-gmp-mpfr.patch
-  ];
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -33,7 +30,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       tinycc.compiler
-      gnupatch
       gnumake
       gnused
       gnugrep
@@ -53,9 +49,6 @@ bash.runCommand "${pname}-${version}"
     # Unpack
     tar xzf ${src}
     cd gawk-${version}
-
-    # Patch
-    ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
