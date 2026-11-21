@@ -118,12 +118,12 @@
     };
   });
 
-  sqlite = stdenv.mkDerivation rec {
+  sqlite = stdenv.mkDerivation (finalAttrs: {
     pname = "sqlite-connector-odbc";
     version = "0.99991";
 
     src = fetchurl {
-      url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
+      url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${finalAttrs.version}.tar.gz";
       hash = "sha256-TZStuNPN4fqUoorrDfzHvnMUW8383z1eIlQ02zHcilw=";
     };
 
@@ -142,6 +142,8 @@
       zlib
       libxml2
     ];
+
+    strictDeps = true;
 
     configureFlags = [
       "--with-odbc=${unixodbc}"
@@ -163,6 +165,8 @@
       driver = "lib/libsqlite3odbc.so";
     };
 
+    __structuredAttrs = true;
+
     meta = {
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
@@ -171,7 +175,7 @@
       platforms = lib.platforms.unix;
       maintainers = [ ];
     };
-  };
+  });
 
   msodbcsql17 = stdenv.mkDerivation rec {
     pname = "msodbcsql17";
