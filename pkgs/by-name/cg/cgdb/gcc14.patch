@@ -1,8 +1,8 @@
-diff --git a/configure b/configure
-index c564dc1..e13c67c 100755
---- a/configure
-+++ b/configure
-@@ -6512,7 +6512,7 @@ else
+diff --git a/config/readline_check_version.m4 b/config/readline_check_version.m4
+index 01e61c2..71fccf1 100644
+--- a/config/readline_check_version.m4
++++ b/config/readline_check_version.m4
+@@ -86,7 +86,7 @@ AC_CACHE_VAL(ac_cv_rl_version,
  #include <stdlib.h>
  #include <readline/readline.h>
  

@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  autoreconfHook,
+  fetchFromGitHub,
   flex,
   ncurses,
   readline,
@@ -12,14 +13,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "cgdb";
   version = "0.8.0";
 
-  src = fetchurl {
-    url = "https://cgdb.me/files/cgdb-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-DTi1JNN3JXsQa61thW2K4zBBQOHuJAhTQ+bd8bZYEfE=";
+  src = fetchFromGitHub {
+    owner = "cgdb";
+    repo = "cgdb";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-tkm4TmH4sl0ujerSdlt+jhRD6mNFsYMdqtiLh0r1BWo=";
   };
 
-  patches = [
-    ./gcc14.patch
-  ];
+  patches = lib.optional (lib.versionOlder finalAttrs.version "0.8.1") ./gcc14.patch;
 
   buildInputs = [
     ncurses
@@ -27,9 +28,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     flex
     texinfo
   ];
+
+  # Use autoreconfHook to replicate the steps ./autogen.sh takes
+  autoreconfFlags = [
+    "-I config"
+    "--install"
+    "--warnings=no-portability"
+  ];
+
+  # VERSION file must exist with the cgdb version
+  preAutoreconf = ''
+    export AUTOMAKE_FLAGS="--foreign --add-missing --copy"
+    echo ${finalAttrs.version} > VERSION
+  '';
 
   strictDeps = true;
 
