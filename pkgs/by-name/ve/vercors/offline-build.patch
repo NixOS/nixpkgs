@@ -1,0 +1,68 @@
+diff --git a/build.sc b/build.sc
+index 8debd30..dfa4806 100644
+--- a/build.sc
++++ b/build.sc
+@@ -21,7 +21,7 @@ object external extends Module {
+     def url = T { "https://www.sosy-lab.org/ivy/org.sosy_lab/javasmt-solver-z3/com.microsoft.z3-4.8.7.jar" }
+ 
+     def classPath = T {
+-      os.write(T.dest / "z3.jar", requests.get.stream(url()))
++      os.copy(os.Path(sys.env("VERCORS_Z3_JAR")), T.dest / "z3.jar", createFolders = true, replaceExisting = true)
+       PathRef(T.dest / "z3.jar")
+     }
+   }
+@@ -32,7 +32,7 @@ object external extends Module {
+     }
+ 
+     def classPath = T {
+-      os.write(T.dest / "antlr.jar", requests.get.stream(url()))
++      os.copy(os.Path(sys.env("VERCORS_ANTLR_JAR")), T.dest / "antlr.jar", createFolders = true, replaceExisting = true)
+       PathRef(T.dest / "antlr.jar")
+     }
+   }
+@@ -613,10 +613,10 @@ object vercors extends Module {
+       def gitIsPrerelease = T.input { gitVersionTag().contains("dev-prerelease") }
+ 
+       def gitVersion = T.input {
+-        gitVersionTag() match {
++        sys.env.get("VERCORS_VERSION").getOrElse(gitVersionTag() match {
+           case Some(tag) if tag.startsWith("v") => tag.substring(1)
+           case _ => "9999.9.9-SNAPSHOT"
+-        }
++        })
+       }
+ 
+       def gitDockerVersion: T[String] = T.input {
+diff --git a/mill-build/util/src/util/GitModule.scala b/mill-build/util/src/util/GitModule.scala
+index c8322d3..58a3650 100644
+--- a/mill-build/util/src/util/GitModule.scala
++++ b/mill-build/util/src/util/GitModule.scala
+@@ -10,15 +10,8 @@ trait GitModule extends Module {
+   def fetchSubmodulesRecursively: T[Boolean] = false
+ 
+   def repo = T {
+-    os.proc("git", "init", "-q").call(cwd = T.dest)
+-    os.proc("git", "remote", "add", "origin", url()).call(cwd = T.dest)
+-    os.proc("git", "fetch", "--depth", "1", "origin", commitish()).call(cwd = T.dest)
+-    os.proc("git", "config", "advice.detachedHead", "false").call(cwd = T.dest)
+-    os.proc("git", "checkout", "FETCH_HEAD").call(cwd = T.dest)
+-    if(fetchSubmodulesRecursively())
+-      os.proc("git", "submodule", "update", "--init", "--recursive").call(cwd = T.dest)
++    os.proc("cp", "-r", "--no-preserve=mode", sys.env("VERCORS_GIT_" + commitish().replaceAll("[^A-Za-z0-9]", "_").toUpperCase) + "/.", T.dest.toString).call()
+     os.walk(T.dest).foreach(_.toIO.setWritable(true))
+-    os.remove.all(T.dest / ".git")
+     T.dest
+   }
+ }
+\ No newline at end of file
+diff --git a/mill-build/util/src/util/ScalaPBModule.scala b/mill-build/util/src/util/ScalaPBModule.scala
+index 528def8..40ace70 100644
+--- a/mill-build/util/src/util/ScalaPBModule.scala
++++ b/mill-build/util/src/util/ScalaPBModule.scala
+@@ -6,4 +6,5 @@ trait ScalaPBModule extends BaseScalaPBModule with ScalaModule {
+   def scalaPBVersion = "0.11.11"
+   override def scalaPBFlatPackage = true
+   override def scalaPBSearchDeps = true
++  override def scalaPBProtocPath = Some(sys.env.getOrElse("PROTOC", "protoc"))
+ }
+\ No newline at end of file
