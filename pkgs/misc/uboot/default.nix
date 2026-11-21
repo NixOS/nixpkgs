@@ -848,6 +848,8 @@ in
 
   ubootRock64 = buildUBoot {
     defconfig = "rock64-rk3328_defconfig";
+    # Leave room for large NixOS kernels below the initrd load address.
+    extraPatches = [ ./rock64-load-addresses.patch ];
     extraMeta.platforms = [ "aarch64-linux" ];
     env.BL31 = "${armTrustedFirmwareRK3328}/bl31.elf";
     filesToInstall = [
@@ -858,6 +860,7 @@ in
   };
 
   ubootRock64v2 = buildUBoot {
+    extraPatches = [ ./rock64-load-addresses.patch ];
     extraMeta.longDescription = ''
       Boot loader for the Pine64 Rock64 V2.
 
