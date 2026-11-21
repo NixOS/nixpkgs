@@ -1,5 +1,5 @@
 diff --git a/pyproj/datadir.py b/pyproj/datadir.py
-index df625fee..a2beb06c 100644
+index df625fee..85357f74 100644
 --- a/pyproj/datadir.py
 +++ b/pyproj/datadir.py
 @@ -70,7 +70,7 @@ def get_data_dir() -> str:
@@ -11,20 +11,33 @@ index df625fee..a2beb06c 100644
      proj_lib_dirs = os.environ.get("PROJ_DATA", os.environ.get("PROJ_LIB", ""))
      prefix_datadir = Path(sys.prefix, "share", "proj")
      conda_windows_prefix_datadir = Path(sys.prefix, "Library", "share", "proj")
+@@ -93,10 +93,10 @@ def get_data_dir() -> str:
+ 
+     if valid_data_dirs(_USER_PROJ_DATA):
+         _VALIDATED_PROJ_DATA = _USER_PROJ_DATA
+-    elif valid_data_dir(internal_datadir):
+-        _VALIDATED_PROJ_DATA = str(internal_datadir)
+     elif valid_data_dirs(proj_lib_dirs):
+         _VALIDATED_PROJ_DATA = proj_lib_dirs
++    elif valid_data_dir(internal_datadir):
++        _VALIDATED_PROJ_DATA = str(internal_datadir)
+     elif valid_data_dir(prefix_datadir):
+         _VALIDATED_PROJ_DATA = str(prefix_datadir)
+     elif valid_data_dir(conda_windows_prefix_datadir):
 diff --git a/setup.py b/setup.py
-index 71fb52cd..7984a68a 100644
+index 86ff1ff6..eb9eab2d 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -13,7 +13,7 @@ from setuptools import Extension, setup
- PROJ_MIN_VERSION = parse_version("8.2.0")
+@@ -12,7 +12,7 @@ from setuptools import Extension, setup
+ PROJ_MIN_VERSION = (9, 0, 0)
  CURRENT_FILE_PATH = Path(__file__).absolute().parent
  BASE_INTERNAL_PROJ_DIR = Path("proj_dir")
 -INTERNAL_PROJ_DIR = CURRENT_FILE_PATH / "pyproj" / BASE_INTERNAL_PROJ_DIR
 +INTERNAL_PROJ_DIR = Path("@proj@")
  PROJ_VERSION_SEARCH = re.compile(r".*Rel\.\s+(?P<version>\d+\.\d+\.\d+).*")
+ VERSION_SEARCH = re.compile(r".*(?P<version>\d+\.\d+\.\d+).*")
  
- 
-@@ -163,7 +163,7 @@ def get_extension_modules():
+@@ -184,7 +184,7 @@ def get_extension_modules():
      # By default we'll try to get options PROJ_DIR or the local version of proj
      proj_dir = get_proj_dir()
      library_dirs = get_proj_libdirs(proj_dir)
