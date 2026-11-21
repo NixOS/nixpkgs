@@ -1,4 +1,8 @@
-{ mkDerivation, make-rules }:
+{
+  lib,
+  mkDerivation,
+  make-rules,
+}:
 
 mkDerivation {
   path = "usr.bin/make";
@@ -12,4 +16,6 @@ mkDerivation {
     make -C $BSDSRCDIR/share/mk FILESDIR=$out/share/mk install
   '';
   extraPaths = [ "share/mk" ];
+
+  meta.platforms = lib.platforms.netbsd;
 }
