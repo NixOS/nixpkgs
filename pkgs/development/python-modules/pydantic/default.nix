@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   hatchling,
@@ -27,26 +26,17 @@
   pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydantic";
-  version = "2.13.4";
+  version = "2.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    tag = "v${version}";
-    hash = "sha256-G4Xo6BF6tOn4g/qG3RNDP3/+lYnCOuw3AB1OrVOGcSA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q5dvfgbbYw3QeB1nY+eUIBoVsUpxgLKE8jTX6CJV+Zs=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "pytest-9.1-compat.patch";
-      url = "https://github.com/pydantic/pydantic/commit/f257d0155c6643fbda9516af6b2c4ca082ed7651.patch";
-      excludes = [ "uv.lock" ];
-      hash = "sha256-azclSDYY/H8RcerNvI07njwLzr8fyIZ17nM18y/edVo=";
-    })
-  ];
 
   postPatch = ''
     sed -i "/--benchmark/d" pyproject.toml
@@ -79,13 +69,14 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     "tests/benchmarks"
     "tests/pydantic_core/benchmarks"
 
     # avoid cyclic dependency
+    "tests/pydantic_core/test_docstrings.py"
     "tests/test_docs.py"
   ];
 
@@ -99,11 +90,11 @@ buildPythonPackage rec {
   meta = {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
-    changelog = "https://github.com/pydantic/pydantic/blob/${src.tag}/HISTORY.md";
+    changelog = "https://github.com/pydantic/pydantic/blob/${finalAttrs.src.tag}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       booxter
       wd15
     ];
   };
-}
+})
