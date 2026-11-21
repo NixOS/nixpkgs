@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhangul";
-  version = "0.2.0";
+  version = "0.2.0-unstable-2026-10-11";
 
   src = fetchFromGitHub {
     owner = "libhangul";
     repo = "libhangul";
-    hash = "sha256-1cTDsRJpT5TLdJN8D2LfOISWeAOlSO6zKZOaCrTxooM=";
-    tag = "libhangul-${finalAttrs.version}";
+    rev = "23d2cd9d10d516d523d60c562dbcc7ea08139a09";
+    hash = "sha256-OOf2+A7pS74tz9qH4aLwMWjNjvGE2LHA++EQT/G8w0k=";
   };
 
   preAutoreconf = "./autogen.sh";
