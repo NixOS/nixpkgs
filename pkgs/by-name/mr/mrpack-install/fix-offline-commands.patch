@@ -1,0 +1,50 @@
+From 7faaaf01e6fb0d2eb2d781260a97717a6c0251a1 Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Sat, 21 Nov 2026 05:37:16 -0300
+Subject: [PATCH] fix: look up latest version only for server
+
+---
+ cmd/server.go | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
+
+diff --git a/cmd/server.go b/cmd/server.go
+index 32706dc..d82cb10 100644
+--- a/cmd/server.go
++++ b/cmd/server.go
+@@ -27,17 +27,6 @@ func init() {
+ 	// TODO: --start-server
+ 
+ 	RootCmd.AddCommand(serverCmd)
+-
+-	cobra.OnInitialize(func() {
+-		// --minecraft-version
+-		if minecraftVersion == "" || minecraftVersion == "latest" {
+-			latestMinecraftVersion, err := mojang.LatestRelease()
+-			if err != nil {
+-				log.Fatalln(err)
+-			}
+-			minecraftVersion = latestMinecraftVersion
+-		}
+-	})
+ }
+ 
+ var serverCmd = &cobra.Command{
+@@ -53,6 +42,15 @@ Examples: https://github.com/nothub/mrpack-install/blob/main/USAGE.md`,
+ 	Args:      cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+ 	ValidArgs: server.FlavorNames(),
+ 	Run: func(cmd *cobra.Command, args []string) {
++		// --minecraft-version
++		if minecraftVersion == "" || minecraftVersion == "latest" {
++			latestMinecraftVersion, err := mojang.LatestRelease()
++			if err != nil {
++				log.Fatalln(err)
++			}
++			minecraftVersion = latestMinecraftVersion
++		}
++
+ 		err := os.MkdirAll(serverDir, 0755)
+ 		if err != nil {
+ 			log.Fatalln(err)
+-- 
+2.56.0
+
