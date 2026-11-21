@@ -58,10 +58,6 @@ def config(*path: str) -> Optional[Any]:
     return result
 
 
-def bool_to_yes_no(value: bool) -> str:
-    return "yes" if value else "no"
-
-
 def get_system_path(
     profile: str = "system", gen: Optional[str] = None, spec: Optional[str] = None
 ) -> str:
@@ -500,15 +496,6 @@ def is_pe_coff_image(path: str) -> bool:
         return False
 
 
-def option_from_config(name: str, config_path: List[str]) -> str:
-    value = config(*config_path)
-    if value is None:
-        return ""
-    if isinstance(value, bool):
-        value = bool_to_yes_no(value)
-    return f"{name}: {value}\n"
-
-
 def install_bootloader() -> None:
     global limine_install_dir
 
@@ -578,81 +565,16 @@ def install_bootloader() -> None:
     for profile in get_profiles():
         profiles += [(profile, get_gens(profile))]
 
-    timeout = config("timeout")
-    editor_enabled = bool_to_yes_no(config("enableEditor"))
-    hash_mismatch_panic = bool_to_yes_no(config("panicOnChecksumMismatch"))
-    graphics = bool_to_yes_no(config("style", "graphicalTerminal", "enable"))
-
     current_system = sys.argv[1]
     with open(os.path.join(current_system, "boot.json"), "r") as file:
         current_system_json = json.load(file)
     current_system_boot_spec = bootjson_to_bootspec(current_system_json)
 
-    config_file = str(config("extraConfig")) + "\n"
-    config_file += textwrap.dedent(f"""
-        timeout: {timeout}
-        editor_enabled: {editor_enabled}
-        hash_mismatch_panic: {hash_mismatch_panic}
-        graphics: {graphics}
-        default_entry: 1
-    """)
+    config_file = str(config("globalConfig"))
 
-    for wallpaper in config("style", "wallpapers"):
+    for wallpaper in config("wallpapers"):
         config_file += (
             f"""wallpaper: {get_copied_path_uri(wallpaper, "wallpapers")}\n"""
-        )
-
-    config_file += option_from_config("wallpaper_style", ["style", "wallpaperStyle"])
-    config_file += option_from_config("backdrop", ["style", "backdrop"])
-
-    config_file += option_from_config(
-        "interface_resolution", ["style", "interface", "resolution"]
-    )
-    config_file += option_from_config(
-        "interface_branding", ["style", "interface", "branding"]
-    )
-    config_file += option_from_config(
-        "interface_branding_colour", ["style", "interface", "brandingColor"]
-    )
-    config_file += option_from_config(
-        "interface_help_colour", ["style", "interface", "helpColor"]
-    )
-    config_file += option_from_config(
-        "interface_help_colour_bright", ["style", "interface", "helpColorBright"]
-    )
-    config_file += option_from_config(
-        "interface_help_hidden", ["style", "interface", "helpHidden"]
-    )
-    if config("style", "graphicalTerminal", "enable"):
-        config_file += option_from_config(
-            "term_font_scale", ["style", "graphicalTerminal", "font", "scale"]
-        )
-        config_file += option_from_config(
-            "term_font_spacing", ["style", "graphicalTerminal", "font", "spacing"]
-        )
-        config_file += option_from_config(
-            "term_palette", ["style", "graphicalTerminal", "palette"]
-        )
-        config_file += option_from_config(
-            "term_palette_bright", ["style", "graphicalTerminal", "brightPalette"]
-        )
-        config_file += option_from_config(
-            "term_foreground", ["style", "graphicalTerminal", "foreground"]
-        )
-        config_file += option_from_config(
-            "term_background", ["style", "graphicalTerminal", "background"]
-        )
-        config_file += option_from_config(
-            "term_foreground_bright", ["style", "graphicalTerminal", "brightForeground"]
-        )
-        config_file += option_from_config(
-            "term_background_bright", ["style", "graphicalTerminal", "brightBackground"]
-        )
-        config_file += option_from_config(
-            "term_margin", ["style", "graphicalTerminal", "margin"]
-        )
-        config_file += option_from_config(
-            "term_margin_gradient", ["style", "graphicalTerminal", "marginGradient"]
         )
 
     config_file += textwrap.dedent(f"""
