@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "stratis-cli";
-  version = "3.9.2";
+  version = "3.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratis-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OxqzJO8iNdqx3IP00DIO40WmTsg8CV4kRemDoT4IIJA=";
+    hash = "sha256-ZvEjU93h35R6+oDZhQaHfkWrR6d/zVxRcjC33cnbkJI=";
   };
 
   build-system = with python3Packages; [
