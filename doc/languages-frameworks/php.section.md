@@ -23,7 +23,7 @@ NixOS - not necessarily the latest major release from upstream.
 All available PHP attributes are wrappers around their respective
 binary PHP package and provide commonly used extensions this way. The
 real PHP 8.4 package, i.e. the unwrapped one, is available as
-`php84.unwrapped`; see the next section for more details.
+`php84.unwrapped`.
 
 Interactive tools built on PHP are put in `php.packages`; composer is
 for example available at `php.packages.composer`.

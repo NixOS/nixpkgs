@@ -374,8 +374,7 @@ androidenv.buildApp {
 
 Aside from the app-specific build parameters (`name`, `src`, `release` and
 keystore parameters), the `buildApp {}` function supports all the function
-parameters that the SDK composition function (the function shown in the
-previous section) supports.
+parameters that the SDK composition function supports.
 
 This build function is particularly useful when it is desired to use
 [Hydra](https://nixos.org/hydra): the Nix-based continuous integration solution

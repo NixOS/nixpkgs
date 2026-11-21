@@ -2,7 +2,7 @@
 
 ## Packaging GNOME applications {#ssec-gnome-packaging}
 
-Programs in the GNOME universe are written in various languages but they all use GObject-based libraries like GLib, GTK or GStreamer. These libraries are often modular, relying on looking into certain directories to find their modules. However, due to Nix’s specific file system organization, this will fail without our intervention. Fortunately, the libraries usually allow overriding the directories through environment variables, either natively or thanks to a patch in nixpkgs. [Wrapping](#fun-wrapProgram) the executables to ensure correct paths are available to the application constitutes a significant part of packaging a modern desktop application. In this section, we will describe various modules needed by such applications, environment variables needed to make the modules load, and finally a script that will do the work for us.
+Programs in the GNOME universe are written in various languages but they all use GObject-based libraries like GLib, GTK or GStreamer. These libraries are often modular, relying on looking into certain directories to find their modules. However, due to Nix’s specific file system organization, this will fail without our intervention. Fortunately, the libraries usually allow overriding the directories through environment variables, either natively or thanks to a patch in nixpkgs. [Wrapping](#fun-wrapProgram) the executables to ensure correct paths are available to the application constitutes a significant part of packaging a modern desktop application.
 
 ### Settings {#ssec-gnome-settings}
 
@@ -36,9 +36,9 @@ To allow software to use various virtual file systems, `gvfs` package can be als
 
 GTK applications typically use [GdkPixbuf](https://gitlab.gnome.org/GNOME/gdk-pixbuf/) to load images. But `gdk-pixbuf` package only supports basic bitmap formats like JPEG, PNG or TIFF, requiring to use third-party loader modules for other formats. This is especially painful since GTK itself includes SVG icons, which cannot be rendered without a loader provided by `librsvg`.
 
-Unlike other libraries mentioned in this section, GdkPixbuf only supports a single value in its controlling environment variable `GDK_PIXBUF_MODULE_FILE`. It is supposed to point to a cache file containing information about the available loaders. Each loader package will contain a `lib/gdk-pixbuf-2.0/2.10.0/loaders.cache` file describing the default loaders in `gdk-pixbuf` package plus the loader contained in the package itself. If you want to use multiple third-party loaders, you will need to create your own cache file manually. Fortunately, this is pretty rare as [not many loaders exist](https://gitlab.gnome.org/federico/gdk-pixbuf-survey/blob/master/src/modules.md).
+Unlike the other GNOME libraries, GdkPixbuf only supports a single value in its controlling environment variable `GDK_PIXBUF_MODULE_FILE`. It is supposed to point to a cache file containing information about the available loaders. Each loader package will contain a `lib/gdk-pixbuf-2.0/2.10.0/loaders.cache` file describing the default loaders in `gdk-pixbuf` package plus the loader contained in the package itself. If you want to use multiple third-party loaders, you will need to create your own cache file manually. Fortunately, this is pretty rare as [not many loaders exist](https://gitlab.gnome.org/federico/gdk-pixbuf-survey/blob/master/src/modules.md).
 
-`gdk-pixbuf` contains [a setup hook](#ssec-gnome-hooks-gdk-pixbuf) that sets `GDK_PIXBUF_MODULE_FILE` from dependencies but as mentioned in further section, it is pretty limited. Loaders should propagate this setup hook.
+`gdk-pixbuf` contains [a setup hook](#ssec-gnome-hooks-gdk-pixbuf) that sets `GDK_PIXBUF_MODULE_FILE` from dependencies, but the hook is pretty limited. Loaders should propagate this setup hook.
 
 ### Icons {#ssec-gnome-icons}
 

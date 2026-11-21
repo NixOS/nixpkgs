@@ -144,11 +144,9 @@ The Lua interpreter has the attribute `pkgs` which contains all Lua libraries fo
 
 ## Developing with lua {#lua-developing}
 
-Now that you know how to get a working Lua environment with Nix, it is time
-to go forward and start actually developing with Lua. There are two ways to
-package lua software, either it is on luarocks and most of it can be taken care
-of by the luarocks2nix converter or the packaging has to be done manually.
-Let's present the luarocks way first and the manual one in a second time.
+There are two ways to package Lua software: either it is on luarocks and most of
+it can be taken care of by the luarocks2nix converter, or the packaging has to be
+done manually.
 
 ### Packaging a library on luarocks {#packaging-a-library-on-luarocks}
 

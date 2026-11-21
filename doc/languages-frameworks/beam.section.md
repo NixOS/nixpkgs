@@ -2,7 +2,7 @@
 
 ## Introduction {#beam-introduction}
 
-In this document and related Nix expressions, we use the term, _BEAM_, to describe the environment. BEAM is the name of the Erlang Virtual Machine and, as far as we're concerned, from a packaging perspective, all languages that run on the BEAM are interchangeable. That which varies, like the build system, is transparent to users of any given BEAM package, so we make no distinction.
+Nixpkgs uses the term _BEAM_ to describe the environment. BEAM is the name of the Erlang Virtual Machine and, as far as we're concerned, from a packaging perspective, all languages that run on the BEAM are interchangeable. That which varies, like the build system, is transparent to users of any given BEAM package, so we make no distinction.
 
 ## Available versions and deprecations schedule {#available-versions-and-deprecations-schedule}
 

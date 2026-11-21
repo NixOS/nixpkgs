@@ -190,7 +190,7 @@ On Linux, `stdenv` also includes the `patchelf` utility.
 
 ## Specifying dependencies {#ssec-stdenv-dependencies}
 
-Build systems often require more dependencies than just what `stdenv` provides. This section describes attributes accepted by `stdenv.mkDerivation` that can be used to make these dependencies available to the build system.
+Build systems often require more dependencies than just what `stdenv` provides. `stdenv.mkDerivation` accepts attributes that make these dependencies available to the build system.
 
 ### Overview {#ssec-stdenv-dependencies-overview}
 
@@ -587,7 +587,7 @@ pkg
 
 Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
 
-See also the section about [`passthru.tests`](#var-passthru-tests).
+See also [`passthru.tests`](#var-passthru-tests).
 
 ## Phases {#sec-stdenv-phases}
 
