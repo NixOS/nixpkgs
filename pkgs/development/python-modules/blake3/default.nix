@@ -12,22 +12,19 @@
 
 buildPythonPackage rec {
   pname = "blake3";
-  version = "1.0.8";
+  version = "1.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oconnor663";
     repo = "blake3-py";
     tag = version;
-    hash = "sha256-gwPGSah9qzApDwsBNABRLPZGrpaO3WArHoK6Jj6WJzo=";
+    hash = "sha256-k2F/Ep2lryui850yNGIix7tZqMjvpEbh+q8OKy4GiBk=";
   };
 
-  postPatch = ''
-    ln -s '${./Cargo.lock}' Cargo.lock
-  '';
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    hash = "sha256-Slz0F4K8CZIshg/EvFCAoyu0Wp7DysLhoi5U+V25S90=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -45,12 +42,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "blake3" ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--generate-lockfile"
-    ];
-  };
 
   meta = {
     description = "Python bindings for the BLAKE3 cryptographic hash function";
