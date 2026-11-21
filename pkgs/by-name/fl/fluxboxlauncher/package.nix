@@ -15,7 +15,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "fluxboxlauncher";
-  version = "0.2.3";
+  version = "primtux-0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
