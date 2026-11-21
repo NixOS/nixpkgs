@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   aiohttp,
@@ -97,7 +97,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   dependencies = [
