@@ -31,7 +31,7 @@
   dosfstools,
   e2fsprogs,
   btrfs-progs,
-  exfat,
+  exfatprogs,
   nilfs-utils,
   ntfs3g,
   nixosTests,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
         coreutils
         dosfstools
         e2fsprogs
-        exfat
+        exfatprogs
         f2fs-tools
         nilfs-utils
         xfsprogs

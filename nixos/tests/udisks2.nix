@@ -67,6 +67,22 @@ in
     machine.send_monitor_command("device_del stick")
     machine.wait_until_fails("udisksctl info -b /dev/sda1")
     machine.fail("[ -e /dev/sda ]")
+
+    # Format a blank disk as exFAT and relabel it, which needs tune.exfat.
+    machine.succeed("truncate -s 64M /tmp/exfat.img")
+    loop = machine.succeed("losetup --find --show /tmp/exfat.img").strip()
+    loop_object = "/org/freedesktop/UDisks2/block_devices/" + loop.removeprefix("/dev/")
+    machine.wait_until_succeeds(f"udisksctl info -b {loop}")
+    machine.succeed(
+        f"busctl call org.freedesktop.UDisks2 {loop_object}"
+        " org.freedesktop.UDisks2.Block Format 'sa{sv}' exfat 1 label s EXFAT"
+    )
+    machine.wait_until_succeeds(f"udisksctl info -b {loop} | grep 'IdLabel:.*EXFAT'")
+    machine.succeed(
+        f"busctl call org.freedesktop.UDisks2 {loop_object}"
+        " org.freedesktop.UDisks2.Filesystem SetLabel 'sa{sv}' RENAMED 0"
+    )
+    machine.wait_until_succeeds(f"udisksctl info -b {loop} | grep 'IdLabel:.*RENAMED'")
   '';
 
 }
