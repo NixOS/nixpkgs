@@ -9,10 +9,13 @@
   version ? "9.0.1",
 }:
 
-let
-  appimage = stdenvNoCC.mkDerivation {
+appimageTools.wrapType2 (finalAttrs: {
+  pname = "cisco-packet-tracer";
+  inherit version;
+
+  src = stdenvNoCC.mkDerivation {
     pname = "cisco-packet-tracer-appimage";
-    inherit version;
+    inherit (finalAttrs) version;
 
     src =
       let
@@ -24,7 +27,7 @@ let
         };
       in
       requireFile {
-        inherit (sources."${version}") name hash;
+        inherit (sources."${finalAttrs.version}") name hash;
         url = "https://www.netacad.com/resources/lab-downloads";
       };
 
@@ -41,13 +44,6 @@ let
     '';
   };
 
-in
-appimageTools.wrapType2 rec {
-  pname = "cisco-packet-tracer";
-  inherit version;
-
-  src = appimage;
-
   extraPkgs = _: [
     libpng
     libxkbfile
@@ -59,28 +55,24 @@ appimageTools.wrapType2 rec {
     "--setenv QT_QPA_PLATFORM xcb"
   ];
 
-  extraInstallCommands =
-    let
-      contents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      mv $out/bin/${pname} $out/bin/packettracer9
+  extraInstallCommands = ''
+    mv $out/bin/cisco-packet-tracer $out/bin/packettracer9
 
-      install -Dm444 ${contents}/CiscoPacketTracer-9.0.1.desktop $out/share/applications/cisco-packet-tracer-9.desktop
-      install -Dm444 ${contents}/CiscoPacketTracerPtsa-9.0.1.desktop $out/share/applications/cisco-packet-tracer-ptsa-9.desktop
-      substituteInPlace $out/share/applications/* \
-        --replace-fail "Exec=@EXEC_PATH@" "Exec=packettracer9" \
-        --replace-fail "Icon=app" "Icon=cisco-packet-tracer-9"
+    install -Dm444 ${finalAttrs.contents}/CiscoPacketTracer-9.0.1.desktop $out/share/applications/cisco-packet-tracer-9.desktop
+    install -Dm444 ${finalAttrs.contents}/CiscoPacketTracerPtsa-9.0.1.desktop $out/share/applications/cisco-packet-tracer-ptsa-9.desktop
+    substituteInPlace $out/share/applications/* \
+      --replace-fail "Exec=@EXEC_PATH@" "Exec=packettracer9" \
+      --replace-fail "Icon=app" "Icon=cisco-packet-tracer-9"
 
-      install -Dm444 ${contents}/usr/share/icons/hicolor/48x48/apps/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer-9.png
-      cp -r ${contents}/usr/share/icons/gnome/48x48/mimetypes $out/share/icons/hicolor/48x48/
+    install -Dm444 ${finalAttrs.contents}/usr/share/icons/hicolor/48x48/apps/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer-9.png
+    cp -r ${finalAttrs.contents}/usr/share/icons/gnome/48x48/mimetypes $out/share/icons/hicolor/48x48/
 
-      cp -r ${contents}/usr/share/mime $out/share/
+    cp -r ${finalAttrs.contents}/usr/share/mime $out/share/
 
-      for desktop in $out/share/applications/*.desktop; do
-        sed -i '/^\[Desktop Entry\]/a StartupWMClass=PacketTracer' "$desktop"
-      done
-    '';
+    for desktop in $out/share/applications/*.desktop; do
+      sed -i '/^\[Desktop Entry\]/a StartupWMClass=PacketTracer' "$desktop"
+    done
+  '';
 
   meta = {
     description = "Network simulation tool from Cisco";
@@ -93,4 +85,4 @@ appimageTools.wrapType2 rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
