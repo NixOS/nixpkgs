@@ -239,15 +239,27 @@ mkWrapper type (
         binaryBytecode
         binaryNativeCode
       ];
-      knownVulnerabilities =
-        lib.optionals
-          (lib.elem (lib.head (lib.splitVersion version)) [
-            "6"
-            "7"
-          ])
-          [
-            "Dotnet SDK ${version} is EOL, please use 8.0 (LTS) or 9.0 (Current)"
-          ];
-    };
+    }
+    //
+      lib.optionalAttrs
+        (lib.elem (lib.head (lib.splitVersion version)) [
+          "6"
+          "7"
+          "8"
+          "9"
+        ])
+        (
+          let
+            message = "Dotnet SDK ${version} is EOL, please use 10.0 (LTS) or 11.0 (Current)";
+          in
+          {
+            problems.deprecated = {
+              inherit message;
+            };
+            knownVulnerabilities = [
+              message
+            ];
+          }
+        );
   })
 )
