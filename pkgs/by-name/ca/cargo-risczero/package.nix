@@ -21,18 +21,18 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-risczero";
-  version = "3.0.6";
+  version = "3.1.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-yhYD2wtkR5ZSZGuFuOEiMYw1xH9e/I17EYFiTaSKZcA=";
+    hash = "sha256-ZZLa3G0s5Iil+pbkX6FaypNNmjnbuwOhkSTirH6T0/g=";
   };
 
   env = {
     RECURSION_SRC_PATH = src-recursion;
   };
 
-  cargoHash = "sha256-D2TtmGvjffWDesHm1/lnNTZHRB3INfNp2RI/PfHMo2o=";
+  cargoHash = "sha256-u8tib5NnffhS8oYel+PICjYxM0K5aRNglmBCXAxLcSw=";
 
   nativeBuildInputs = [
     pkg-config
