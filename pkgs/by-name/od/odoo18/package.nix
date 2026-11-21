@@ -1,7 +1,7 @@
 {
   lib,
   fetchzip,
-  python312,
+  python3,
   rtlcss,
   wkhtmltopdf,
   nixosTests,
@@ -10,7 +10,7 @@
 let
   odoo_version = "18.0";
   odoo_release = "20260420";
-  python = python312.override {
+  python = python3.override {
     self = python;
   };
 in
