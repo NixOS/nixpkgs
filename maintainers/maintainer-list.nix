@@ -6618,6 +6618,11 @@
     name = "Dan Nixon";
     matrix = "@dannixon:matrix.org";
   };
+  danny19862025 = {
+    name = "danny19862025";
+    github = "danny19862025";
+    githubId = 225082087;
+  };
   dansbandit = {
     github = "dansbandit";
     githubId = 4530687;
@@ -19970,6 +19975,11 @@
     github = "mmkaram";
     githubId = 64036912;
     matrix = "@mmkaram:matrix.org";
+  };
+  mmknisali = {
+    name = "Ali Alalialhammor";
+    github = "mmknisali";
+    githubId = 96299863;
   };
   mmlb = {
     email = "i@m.mmlb.dev";
