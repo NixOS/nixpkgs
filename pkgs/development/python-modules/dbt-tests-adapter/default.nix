@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-tests-adapter";
-  version = "1.20.0";
+  version = "1.17.3";
   pyproject = true;
 
   src = fetchFromGitHub {
