@@ -289,6 +289,9 @@ stdenvNoCC.mkDerivation {
       ''
         touch "$out/nix-support/libc-ldflags"
         echo "-L${libc_lib}${libc.libdir or "/lib"}" >> $out/nix-support/libc-ldflags
+        ${lib.optionalString (
+          targetPlatform.isStatic && libc ? static
+        ) "echo -L${libc.static}/lib >> $out/nix-support/libc-ldflags"}
 
         echo "${libc_lib}" > $out/nix-support/orig-libc
         echo "${libc_dev}" > $out/nix-support/orig-libc-dev
