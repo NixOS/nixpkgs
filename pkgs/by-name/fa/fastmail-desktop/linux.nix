@@ -11,11 +11,13 @@
   makeWrapper,
   electron,
 }:
-let
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
+
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version passthru;
+
+  contents = appimageTools.extract {
+    inherit pname version src;
+  };
 
   dontUnpack = true;
   dontBuild = true;
@@ -31,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/opt"
-    cp -r --no-preserve=mode "${appimageContents}/resources" "$out/opt/fastmail"
+    cp -r --no-preserve=mode "${finalAttrs.contents}/resources" "$out/opt/fastmail"
     asar extract "$out/opt/fastmail/app.asar" "$out/opt/fastmail/app.asar.unpacked"
     rm "$out/opt/fastmail/app.asar"
 
-    install -Dt "$out/share/applications" "${appimageContents}/fastmail.desktop"
+    install -Dt "$out/share/applications" "${finalAttrs.contents}/fastmail.desktop"
     substituteInPlace "$out/share/applications/fastmail.desktop" \
       --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=fastmail %U" \
       --replace-fail "Name=com.fastmail.Fastmail" "Name=Fastmail"
@@ -44,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       resdir="''${res}x''${res}"
       mkdir -p "$out/share/icons/hicolor/$resdir/apps"
       cp -r --no-preserve=mode \
-        "${appimageContents}/usr/share/icons/hicolor/$resdir/apps/fastmail.png" \
+        "${finalAttrs.contents}/usr/share/icons/hicolor/$resdir/apps/fastmail.png" \
         "$out/share/icons/hicolor/$resdir/apps/fastmail.png"
     done
 
