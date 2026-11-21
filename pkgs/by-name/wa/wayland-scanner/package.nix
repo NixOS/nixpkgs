@@ -42,12 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       versionCheck = true;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     inherit (wayland.meta) homepage license maintainers;
