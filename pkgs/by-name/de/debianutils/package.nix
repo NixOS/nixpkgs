@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "debianutils";
-  version = "5.23.2";
+  version = "5.24";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "debianutils";
     rev = "debian/${finalAttrs.version}";
-    hash = "sha256-28pl0uua4gX65uZP1td87HfojKLvkjJbo8KPqpgg/0g=";
+    hash = "sha256-3DESjuPtG5NZ3cjE3sqiH55enK0dXzIkPn/k5/aLp40=";
   };
 
   nativeBuildInputs = [
