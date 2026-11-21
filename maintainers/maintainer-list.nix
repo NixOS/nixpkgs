@@ -26156,6 +26156,12 @@
     github = "rutherther";
     githubId = 12197024;
   };
+  rutwik1221 = {
+    email = "rutwik1221@gmail.com";
+    github = "rutwik1221";
+    githubId = 69115402;
+    name = "Rutwik D";
+  };
   ruuda = {
     email = "dev+nix@veniogames.com";
     github = "ruuda";
