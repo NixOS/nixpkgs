@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   pkgsCross,
+  pkgsStatic,
 }:
 let
   inherit (pkgsCross.musl64) rustPlatform;
@@ -18,6 +19,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-p3BbXKrTo3ggNGXorVwhANcm6NRzik69jHwn7cM5S1s=";
+
+  # Musl jemalloc, linked statically like the vendored copy was
+  buildInputs = [ pkgsStatic.rust-jemalloc-sys ];
 
   meta = {
     description = "Debugger for Linux";
