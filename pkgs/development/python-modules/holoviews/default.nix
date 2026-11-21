@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "holoviews";
-  version = "1.23.1";
+  version = "1.24.0a2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "holoviews";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+s7AzER7ipiqjiZL9vmno16MmhSK8Sz9LYLQ2cxNM6Y=";
+    hash = "sha256-9/mzYQDw5hO2Zz5d57Ii9MZtg8hG2k8ddAq7grAHhq8=";
   };
 
   postPatch = ''
