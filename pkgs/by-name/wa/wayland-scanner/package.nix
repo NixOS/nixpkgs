@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     inherit (wayland.meta) homepage license maintainers;
     mainProgram = "wayland-scanner";
