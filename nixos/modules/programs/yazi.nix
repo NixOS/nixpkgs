@@ -23,6 +23,21 @@ in
 
     package = lib.mkPackageOption pkgs "yazi" { };
 
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      default = cfg.package.override {
+        inherit (cfg)
+          settings
+          initLua
+          plugins
+          flavors
+          ;
+      };
+      visible = false;
+      readOnly = true;
+      description = "The resulting yazi package, bundled with settings, initLua, plugins and flavors";
+    };
+
     settings = lib.mkOption {
       type =
         with lib.types;
@@ -100,16 +115,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      (cfg.package.override {
-        inherit (cfg)
-          settings
-          initLua
-          plugins
-          flavors
-          ;
-      })
-    ];
+    environment.systemPackages = [ cfg.finalPackage ];
   };
 
   meta = {
