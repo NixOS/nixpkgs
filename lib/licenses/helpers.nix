@@ -154,6 +154,32 @@ rec {
   isRedistributable = evaluateNamedProperty "redistributable" true;
 
   /**
+    Check if a license needs a patent license to use the software,
+    as per their `needsPatentGrant` (default: false).
+
+    # Inputs
+
+    `license`
+    : License expression to evaluate
+
+    # Type
+
+    ```
+    needsPatentGrant :: AttrSet -> Bool
+    ```
+
+    # Example
+    :::{.example}
+    ## `lib.licenses.needsPatentGrant` usage example
+
+    ```nix
+    needsPatentGrant (with lib.licenses; AND [ mit fraunhofer-fdk ])
+    => true
+    ```
+  */
+  needsPatentGrant = evaluateProperty (x: x.needsPatentGrant or false) false;
+
+  /**
     Check whether any of the given licenses is required in the license expression.
 
     # Inputs
@@ -242,7 +268,7 @@ rec {
 
     ```nix
     mkLicense { shortName = "my-license"; }
-    => { shortName = "my-license"; free = true; deprecated = false; redistributable = true; licenseType = "simple"; }
+    => { shortName = "my-license"; free = true; deprecated = false; redistributable = true; needsPatentGrant = false; licenseType = "simple"; }
     ```
   */
   mkLicense =
@@ -255,6 +281,7 @@ rec {
       url ? null,
       fullName ? null,
       redistributable ? free,
+      needsPatentGrant ? false,
     }@attrs:
     {
       inherit
@@ -262,6 +289,7 @@ rec {
         free
         deprecated
         redistributable
+        needsPatentGrant
         ;
       licenseType = "simple";
     }

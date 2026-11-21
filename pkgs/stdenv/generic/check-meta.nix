@@ -50,6 +50,7 @@ let
   inherit (lib.licenses)
     containsLicenses
     isFree
+    needsPatentGrant
     ;
 
   inherit (builtins)
@@ -82,6 +83,12 @@ let
       envVar = getEnv "NIXPKGS_ALLOW_NONSOURCE";
     in
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
+
+  allowPatentEncumbered =
+    let
+      envVar = getEnv "NIXPKGS_ALLOW_PATENT_ENCUMBERED";
+    in
+    if envVar != "" then envVar != "0" else config.allowPatentEncumbered or true;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
   nonEmptyAllowList = allowlist != [ ];
@@ -136,6 +143,25 @@ let
       any (l: !l.free or false) licenses;
 
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
+
+  licenseNeedsPatentGrant =
+    licenses:
+    if licenses ? licenseType then
+      needsPatentGrant licenses
+    else if isAttrs licenses then
+      licenses.needsPatentGrant or false
+    else if isList licenses then
+      # for lists check if any license needs a patent grant
+      any (l: l.needsPatentGrant or false) licenses
+    else
+      false;
+
+  # A package is patent-encumbered if it sets `meta.needsPatentGrant`,
+  # or its license needs a patent grant (`.needsPatentGrant`).
+  isPatentEncumbered =
+    attrs:
+    attrs.meta.needsPatentGrant or false
+    || (attrs ? meta.license && licenseNeedsPatentGrant attrs.meta.license);
 
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
@@ -235,6 +261,30 @@ let
     && any (t: !t.isSource) attrs.meta.sourceProvenance
     && !allowNonSourcePredicate attrs;
 
+  # Check whether patent-encumbered packages are allowed and if not, whether the
+  # package is patent encumbered and is not explicitly allowed by the
+  # `allowPatentEncumberedPredicate` function.
+  # The config is read one time, and the result is a function of the package.
+  #
+  # Example:
+  # { pkgs, ... }:
+  # {
+  #   allowPatentEncumbered = false;
+  #   allowPatentEncumberedPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "fdk-aac" ];
+  # }
+  hasDeniedPatentEncumbrance =
+    if allowPatentEncumbered then
+      _: false
+    else
+      let
+        explicitPredicate = config.allowPatentEncumberedPredicate;
+        definedExplicitPredicate = isFunction (config.allowPatentEncumberedPredicate or null);
+      in
+      if definedExplicitPredicate then
+        attrs: isPatentEncumbered attrs && !explicitPredicate attrs
+      else
+        isPatentEncumbered;
+
   showLicenseOrSourceType =
     value: toString (map (v: v.shortName or v.fullName or "unknown") (toList value));
   showLicense = showLicenseOrSourceType;
@@ -278,6 +328,7 @@ let
         in
         either licenseType (listOf licenseType);
       sourceProvenance = listOf attrs;
+      needsPatentGrant = bool;
       maintainers = listOf attrs; # TODO use the maintainer type from lib/tests/maintainer-module.nix
       nonTeamMaintainers = listOf attrs; # TODO use the maintainer type from lib/tests/maintainer-module.nix
       teams = listOf attrs; # TODO similar to maintainers, use a teams type
@@ -389,6 +440,14 @@ let
         reason = "non-source";
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
         remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate" attrs);
+      }
+    else if hasDeniedPatentEncumbrance attrs then
+      {
+        reason = "patent-encumbered";
+        msg = "is patent encumbered";
+        remediation = remediate_allowlist "PatentEncumbered" (
+          remediate_predicate "allowPatentEncumberedPredicate" attrs
+        );
       }
     else if hasUnsupportedPlatform' attrs then
       let
@@ -608,6 +667,7 @@ let
 
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
+      needsPatentGrant = isPatentEncumbered attrs;
       broken = hasProblemKind "broken";
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;

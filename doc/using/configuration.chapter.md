@@ -205,6 +205,34 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     Note that `permittedInsecurePackages` is only checked if `allowInsecurePredicate` is not specified.
 
+## Installing patent-encumbered packages {#sec-allow-patent-encumbered}
+
+Some packages contain software you can only use with a patent license, like patented codecs.
+Such a package has `meta.needsPatentGrant = true`, or a license with `needsPatentGrant = true`.
+The license of such a package can be free.
+
+By default, Nixpkgs allows patent-encumbered packages.
+To refuse them, set `allowPatentEncumbered` to `false` in your Nixpkgs configuration:
+
+```nix
+{ allowPatentEncumbered = false; }
+```
+
+-   To temporarily allow all patent-encumbered packages when using nix tools, set this environment variable:
+
+    ```ShellSession
+    $ export NIXPKGS_ALLOW_PATENT_ENCUMBERED=1
+    ```
+
+-   To allow specific patent-encumbered packages, set `allowPatentEncumberedPredicate` to a function that returns `true` for these packages:
+
+    ```nix
+    {
+      allowPatentEncumbered = false;
+      allowPatentEncumberedPredicate = pkg: builtins.elem (lib.getName pkg) [ "fdk-aac" ];
+    }
+    ```
+
 ## Packages with problems {#sec-problems}
 
 A package may have several problems associated with it.
