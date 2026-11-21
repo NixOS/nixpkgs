@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jm5905938 ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
