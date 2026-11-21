@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iottack";
-  version = "0.3.0";
+  version = "0.4.0";
 
   __structuredAttrs = true;
 
@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "inradii";
     repo = "iottack";
     tag = finalAttrs.version;
-    hash = "sha256-cCSBkSTKjey2mpINbdM/hFUe3wGRo/N4apBQji9bRvc=";
+    hash = "sha256-TkkFvrDLqPIjX4FDnoHZwFiAUxHTaNDzVk1kJXqFNvc=";
   };
 
-  cargoHash = "sha256-lV1Q386TW2Y8n3nZFcX0kxujyLjJBRfRsWmZs/xswq0=";
+  cargoHash = "sha256-Z1ojN1de/f4xTIjAlYK1nlp5uL+hH7oPFY3emq13epc=";
 
   nativeBuildInputs = [
     pkg-config
