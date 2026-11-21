@@ -46,21 +46,30 @@ in
   ###### implementation
   config = lib.mkIf cfg.enable {
     services.dbus.packages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     systemd.services.thermald = {
-      description = "Thermal Daemon Service";
       documentation = [ "man:thermald(8)" ];
       wantedBy = [ "multi-user.target" ];
+      aliases = [ "dbus-org.freedesktop.thermald.service" ];
+      startLimitBurst = 25;
+      startLimitIntervalSec = 150;
       serviceConfig = {
         PrivateNetwork = true;
-        ExecStart = ''
-          ${cfg.package}/sbin/thermald \
-            --no-daemon \
-            ${lib.optionalString cfg.debug "--loglevel=debug"} \
-            ${lib.optionalString cfg.ignoreCpuidCheck "--ignore-cpuid-check"} \
-            ${if cfg.configFile != null then "--config-file ${cfg.configFile}" else "--adaptive"} \
-            --dbus-enable
-        '';
+        RestartSec = "5s";
+        ExecStart = [
+          ""
+          (lib.concatStringsSep " " (
+            [
+              "${cfg.package}/sbin/thermald"
+              "--systemd"
+              "--dbus-enable"
+              (if cfg.configFile != null then "--config-file ${cfg.configFile}" else "--adaptive")
+            ]
+            ++ lib.optional cfg.debug "--loglevel=debug"
+            ++ lib.optional cfg.ignoreCpuidCheck "--ignore-cpuid-check"
+          ))
+        ];
       };
     };
   };
