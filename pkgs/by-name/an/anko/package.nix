@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "anko";
   version = "0.1.9";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "anko";
@@ -21,6 +23,10 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
   ];
+
+  postInstall = ''
+    rm "$out/bin/anko_test.log"
+  '';
 
   __darwinAllowLocalNetworking = true;
 
