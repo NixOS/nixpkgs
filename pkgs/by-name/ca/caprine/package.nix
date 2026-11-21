@@ -46,7 +46,7 @@ buildNpmPackage rec {
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/caprine
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/caprine
+      cp -r dist/*-unpacked/resources $out/share/caprine
 
       makeWrapper ${lib.getExe electron} $out/bin/caprine \
           --add-flags $out/share/caprine/resources/app.asar \

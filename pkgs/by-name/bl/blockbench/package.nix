@@ -70,7 +70,7 @@ buildNpmPackage rec {
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/share/blockbench
-    cp -r dist-electron/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
+    cp -r dist-electron/*-unpacked/resources $out/share/blockbench
 
     for size in 16 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps

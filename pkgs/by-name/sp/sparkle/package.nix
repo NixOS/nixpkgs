@@ -114,7 +114,7 @@ buildNpmPackage (finalAttrs: {
         ''
           mkdir -p $out/share/sparkle
           install -D resources/icon.png $out/share/icons/hicolor/512x512/apps/sparkle.png
-          cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/sparkle/
+          cp -r dist/*-unpacked/resources $out/share/sparkle/
           makeWrapper ${lib.getExe electron} $out/bin/sparkle \
             --add-flags $out/share/sparkle/resources/app.asar \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
