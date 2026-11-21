@@ -34,6 +34,12 @@ buildPythonPackage rec {
       url = "https://github.com/agronholm/exceptiongroup/commit/0c6cfbf677f6b50df17311cfdad01e9ff17310aa.patch";
       hash = "sha256-EeYu1/JKYRDwdq8+n38RrdogipNzX0ate1trDs1Z3c0=";
     })
+
+    (fetchpatch {
+      name = "fix-for-py3.patch";
+      url = "https://github.com/agronholm/exceptiongroup/commit/0cc03ebe0b9490092723deabbc012e7be8ca1192.patch";
+      hash = "sha256-iVTnMAcgC9QwsoveENc4AXMesfxFhzd8gwY5ZA02Do8=";
+    })
   ];
 
   build-system = [ flit-scm ];
