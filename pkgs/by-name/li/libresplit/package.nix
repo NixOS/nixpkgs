@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libresplit";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "LibreSplit";
     repo = "LibreSplit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OgEWqVD/uXIKIM/OH63EyWIn1lJvPhr2xEgJNOBvGRc=";
+    hash = "sha256-JQrfeojxlcJ2AiWRX/xuXPDpRUGAA/j1Xb5nRFscmkg=";
   };
 
   nativeBuildInputs = [
