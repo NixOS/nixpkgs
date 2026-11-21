@@ -196,12 +196,13 @@ EOF
     write_file($nixosConfigFile, $nixosConfig);
 }
 
+# Build the flake's system straight into the container's profile. This needs
+# no out-link, so concurrent runs for different containers cannot read each
+# other's build, and the result is rooted by the profile as soon as it exists.
 sub buildFlake {
-    system("nix", "build", "-o", "$systemPath.tmp", @nixFlags, "--",
-           "$flake#nixosConfigurations.\"$flakeAttr\".config.system.build.toplevel") == 0
-        or die "$0: failed to build container from flake '$flake'\n";
-    $systemPath = readlink("$systemPath.tmp") or die;
-    unlink("$systemPath.tmp");
+    my ($profileDir) = @_;
+    return system("nix", "build", "--no-link", "--profile", "$profileDir/system", @nixFlags, "--",
+                  "$flake#nixosConfigurations.\"$flakeAttr\".config.system.build.toplevel") == 0;
 }
 
 sub clearContainerState {
@@ -297,10 +298,12 @@ if ($action eq "create") {
 
     # Build/set the initial configuration.
     if (defined $flake) {
-        buildFlake();
-    }
-
-    if (defined $systemPath) {
+        buildFlake($profileDir)
+            or do {
+                clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
+                die "$0: failed to build container from flake '$flake'\n";
+            };
+    } elsif (defined $systemPath) {
         system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
             or do {
                 clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
@@ -480,9 +483,8 @@ elsif ($action eq "update") {
         if (isAtLeast2511($nixpkgsVersion) && evalAttributeFlake("config.boot.isNspawnContainer") ne "true") {
             die "$0: on 25.11 and newer, containers require boot.isNspawnContainer=true. Please set this in $flake";
         }
-        buildFlake();
-        system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
-            or die "$0: failed to set container configuration\n";
+        buildFlake($profileDir)
+            or die "$0: failed to build container from flake '$flake'\n";
     } else {
 
         my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
