@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schismtracker";
-  version = "20260524";
+  version = "20261102";
 
   src = fetchFromGitHub {
     owner = "schismtracker";
     repo = "schismtracker";
     tag = finalAttrs.version;
-    hash = "sha256-BohXd4AafM2odrAO/d25B7ZBKDLrmdzOtshlIJeYtZI=";
+    hash = "sha256-ijNyNGxTFEQQP+EaaGjvuqTfvGZVjVA4103mZMk63u4=";
   };
 
   # If we let it try to get the version from git, it will fail and fall back
