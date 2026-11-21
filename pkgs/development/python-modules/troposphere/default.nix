@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "troposphere";
-  version = "4.10.2";
+  version = "4.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudtools";
     repo = "troposphere";
     tag = finalAttrs.version;
-    hash = "sha256-o8Wq1kRBg4yFozQo02jlR5huBtpuLGZLTkLG5LuoI8s=";
+    hash = "sha256-QdynToUT9qZ0aOmydtIgTMq0K7aCmeIY1HFL+IZ8IlI=";
   };
 
   build-system = [ setuptools ];
