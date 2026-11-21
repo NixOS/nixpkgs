@@ -43,8 +43,12 @@
     # $debugdir:$datadir/auto-load are whitelisted by default by GDB
     "$debugdir"
     "$datadir/auto-load"
-    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
-    (lib.getLib targetPackages.stdenv.cc.cc)
+    # The libstdc++ that the debugged programs link against. For buildPackages.gdb that comes
+    # from targetPackages; for a gdb that runs on its target, it is the one stdenv.cc uses.
+    # targetPackages.stdenv.cc.cc there would be an extra gcc built to run on the target.
+    (lib.getLib (
+      if stdenv.hostPlatform == stdenv.targetPlatform then stdenv.cc.cc else targetPackages.stdenv.cc.cc
+    ))
   ],
   writeScript,
   versionCheckHook,
