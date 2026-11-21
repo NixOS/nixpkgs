@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   apple-sdk,
-  darwin,
+  rcodesign,
   xcbuildHook,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     xcbuildHook
-    darwin.autoSignDarwinBinariesHook
+    rcodesign
   ];
 
   buildInputs = [
@@ -49,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r Products/Release/Caffeine.app $out/Applications
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    ${lib.getExe rcodesign} sign "$out/Applications/Caffeine.app"
   '';
 
   meta = {
