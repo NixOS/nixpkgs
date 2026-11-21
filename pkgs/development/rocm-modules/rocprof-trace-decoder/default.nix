@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rocmPackages,
+  rocm-comgr,
+  rocm-runtime,
   cmake,
   python3,
   nlohmann_json,
@@ -38,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    rocmPackages.rocm-comgr
-    rocmPackages.rocm-runtime
+    rocm-comgr
+    rocm-runtime
   ];
 
   cmakeFlags = [
