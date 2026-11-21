@@ -1,0 +1,64 @@
+diff --git a/package.json b/package.json
+index c12e765..4cc2f53 100644
+--- a/package.json
++++ b/package.json
+@@ -36,7 +36,6 @@
+     "classnames": "^2.5.1",
+     "codemirror": "^5.65.2",
+     "color": "^4.2.3",
+-    "cypress-plugin-tab": "^1.0.5",
+     "detect-browser": "^5.3.0",
+     "events": "^3.3.0",
+     "file-saver": "^2.0.5",
+@@ -96,10 +95,8 @@
+     }
+   },
+   "devDependencies": {
+-    "@cypress/code-coverage": "^3.12.30",
+     "@istanbuljs/nyc-config-typescript": "^1.0.2",
+     "@rollup/plugin-replace": "^5.0.5",
+-    "@shellygo/cypress-test-utils": "^2.1.9",
+     "@types/codemirror": "^5.60.15",
+     "@types/color": "^3.0.6",
+     "@types/cors": "^2.8.17",
+@@ -127,7 +124,6 @@
+     "@types/uuid": "^9.0.8",
+     "@vitejs/plugin-react": "^4.2.1",
+     "cors": "^2.8.5",
+-    "cypress": "^13.13.0",
+     "eslint": "^8.57.0",
+     "eslint-plugin-react": "^7.34.1",
+     "eslint-plugin-react-hooks": "^4.6.0",
+diff --git a/tsconfig.json b/tsconfig.json
+index 24f3388..8b2ed4f 100644
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -21,7 +21,7 @@
+       "noUnusedParameters": true,
+       "noFallthroughCasesInSwitch": true
+     },
+-    "include": ["src", "cypress/e2e"],
++    "include": ["src"],
+     "references": [{ "path": "./tsconfig.node.json" }],
+     // TODO: Remove when issue is resolved https://github.com/cypress-io/cypress/issues/27448
+     "ts-node": {
+@@ -30,4 +30,4 @@
+         "moduleResolution": "Node"
+       }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/vite.config.ts b/vite.config.ts
+index e1ca3e8..7fd6380 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -21,7 +21,7 @@ export default defineConfig({
+     }) as any,
+     react(),
+     istanbul({
+-      cypress: true,
++      cypress: false,
+       requireEnv: false,
+       nycrcPath: "./.nycrc.json",
+       forceBuildInstrument: true, //Instrument the source code for cypress runs
