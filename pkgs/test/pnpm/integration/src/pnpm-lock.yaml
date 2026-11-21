@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      tinydate:
+        specifier: github:lukeed/tinydate#v1.3.0
+        version: https://codeload.github.com/lukeed/tinydate/tar.gz/d4c65e0f67dc94cdffd1328e42ea2effcb973db0
     devDependencies:
       '@pnpm/npm-conf':
         specifier: 3.0.3
@@ -73,6 +77,11 @@ packages:
   proto-list@1.2.4:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
 
+  tinydate@https://codeload.github.com/lukeed/tinydate/tar.gz/d4c65e0f67dc94cdffd1328e42ea2effcb973db0:
+    resolution: {gitHosted: true, integrity: sha512-tS3tIXXohaPqpzT4bXRUcDrs4Lw4udqoUI63YUE59plixx/JRtNhFKJHwHtLsd8EF/SlsLpoGFumRN+e3G/aog==, tarball: https://codeload.github.com/lukeed/tinydate/tar.gz/d4c65e0f67dc94cdffd1328e42ea2effcb973db0}
+    version: 1.3.0
+    engines: {node: '>=4'}
+
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
@@ -118,6 +127,8 @@ snapshots:
   ini@1.3.8: {}
 
   proto-list@1.2.4: {}
+
+  tinydate@https://codeload.github.com/lukeed/tinydate/tar.gz/d4c65e0f67dc94cdffd1328e42ea2effcb973db0: {}
 
   typescript@6.0.3: {}
 

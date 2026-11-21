@@ -94,6 +94,8 @@ in
           impureEnvVars =
             lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_REGISTRY" ] ++ args.impureEnvVars or [ ];
 
+          env.NIXPKGS_PNPM_FETCHER_VERSION = fetcherVersion;
+
           installPhase = ''
             runHook preInstall
 
@@ -115,6 +117,7 @@ in
 
             pushd "$HOME"
             pnpmVersion=$(pnpm --version)
+            export NIXPKGS_PNPM_VERSION="$pnpmVersion"
 
             if versionAtLeast "$pnpmVersion" "11"; then
               # pnpm 11 uses a different mechanism to manage package manager versions
@@ -139,7 +142,7 @@ in
             # Run any additional pnpm configuration commands that users provide.
             ${prePnpmInstall}
 
-            if [[ ${toString fetcherVersion} -ge 5 ]]; then
+            if [[ "$NIXPKGS_PNPM_FETCHER_VERSION" -ge 5 ]]; then
               # The virtual store is a derived installation artifact. Keep it
               # outside the content-addressable store archived by this fetcher.
               virtualStorePath=$(mktemp -d)
@@ -174,7 +177,7 @@ in
                 "''${installFlagsArray[@]}"
 
             # Record the fetcherVersion in the output for introspection.
-            echo ${toString fetcherVersion} > $out/.fetcher-version
+            echo "$NIXPKGS_PNPM_FETCHER_VERSION" > $out/.fetcher-version
 
             runHook postInstall
           '';
@@ -190,10 +193,17 @@ in
 
             if [ -f "$storePath/v11/index.db" ]; then
               pnpm-fixup-state-db "$storePath/v11";
+              # pnpm 12.15 introduced pinning packages using other hashes? This
+              # breaks reproducibility across versions, so let's drop it for
+              # now. See
+              # https://github.com/pnpm/pnpm/commit/7b0d6873a68ff10862e1f0fa03c728af4bc7b56a
+              # TODO: Next time we introduce a new fetcher version, this should
+              # probably be skipped?
+              sqlite3 "$storePath/v11/index.db" "DROP TABLE IF EXISTS package_index_alias"
               # Dump the SQLite database to a SQL text file for reproducibility.
               # SQLite's binary format is non-deterministic (version-valid-for number, etc),
               # so we store the logical contents as SQL statements and reconstruct during build.
-              if [[ ${toString fetcherVersion} -ge 4 ]]; then
+              if [[ "$NIXPKGS_PNPM_FETCHER_VERSION" -ge 4 ]]; then
                 sqlite3 "$storePath/v11/index.db" .dump > "$storePath/v11/index.db.sql"
                 rm "$storePath/v11/index.db"
                 ${lib.optionalString (lib.versionAtLeast sqlite.version "3.53.0") ''
