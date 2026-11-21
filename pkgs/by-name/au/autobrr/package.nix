@@ -1,106 +1,106 @@
 {
-  lib,
-  stdenv,
-  buildGo127Module,
+  buildGoModule,
   fetchFromGitHub,
-  stdenvNoCC,
+  fetchPnpmDeps,
+  lib,
   nix-update-script,
   nixosTests,
-  nodejs,
-  pnpm_11,
-  fetchPnpmDeps,
+  nodejs-slim_24,
+  pnpmBuildHook,
   pnpmConfigHook,
+  pnpm_11,
+  stdenvNoCC,
   versionCheckHook,
 }:
-
 let
+  nodejs-slim = nodejs-slim_24;
+  pnpm = pnpm_11.override { inherit nodejs-slim; };
+in
+buildGoModule (finalAttrs: {
   pname = "autobrr";
-  version = "1.90.0";
+  version = "1.91.1";
+
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
-    tag = "v${version}";
-    hash = "sha256-Her0vuexuxzeW/cVLLQUMSTQVbMnOP0tkJRfqg0ZkL0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L5fo77TFnanhIgTQQDQH27W88lIoanj1b6lL/7k+U5o=";
   };
 
-  autobrr-web = stdenvNoCC.mkDerivation {
-    pname = "${pname}-web";
-    inherit src version;
+  vendorHash = "sha256-tHcO0+ZlXxZfqygsoDqORuYRyGsvvqQFNfRfmH23Gx4=";
 
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm_11
-    ];
-
-    sourceRoot = "${src.name}/web";
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (autobrr-web)
-        pname
-        version
-        src
-        sourceRoot
-        ;
-      pnpm = pnpm_11;
-      fetcherVersion = 4;
-      hash = "sha256-W9AyLENbaWICgEwWGsgYGWxkXl6eBw1NmgeghVR207c=";
-    };
-
-    postBuild = ''
-      pnpm run build
-    '';
-
-    installPhase = ''
-      cp -r dist $out
-    '';
-  };
-in
-buildGo127Module (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    ;
-
-  vendorHash = "sha256-97U3ZOJK/3klKxV8L68Ul6DvFQN1Ow/igtUE94DAfD0=";
+  excludedPackages = [
+    "cmd/autobrr-desktop"
+    "test/mockdiscord"
+    "test/mockindexer"
+  ];
 
   preBuild = ''
-    cp -r ${finalAttrs.passthru.autobrr-web}/* web/dist
+    cp -rT ${finalAttrs.passthru.web} web/dist
   '';
 
   ldflags = [
+    "-s"
     "-X main.version=${finalAttrs.version}"
-    "-X main.commit=${src.tag}"
   ];
 
-  # In darwin, tests try to access /etc/protocols, which is not permitted.
-  doCheck = !stdenv.hostPlatform.isDarwin;
-  doInstallCheck = !stdenv.hostPlatform.isDarwin;
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
+  checkFlags = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    # stats /etc/passwd, which the darwin sandbox denies
+    "-skip=^TestIsOwnedByCurrentUser_OtherUser$"
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/autobrrctl";
+
+  __darwinAllowLocalNetworking = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
   passthru = {
-    inherit autobrr-web;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "autobrr-web"
+    tests = { inherit (nixosTests) autobrr; };
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=web" ]; };
+    web = stdenvNoCC.mkDerivation (finalAttrs': {
+      pname = "${finalAttrs.pname}-web";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "${finalAttrs'.src.name}/web";
+
+      nativeBuildInputs = [
+        nodejs-slim
+        pnpm
+        pnpmBuildHook
+        pnpmConfigHook
       ];
-    };
-    tests.testService = nixosTests.autobrr;
+
+      pnpmDeps = fetchPnpmDeps {
+        inherit (finalAttrs')
+          pname
+          version
+          src
+          sourceRoot
+          ;
+        inherit pnpm;
+        fetcherVersion = 5;
+        hash = "sha256-JYD+zmxx/kWijYjwHpjLeMgH/Lk61R/3xpgxVtjN+EI=";
+      };
+
+      installPhase = ''
+        runHook preInstall
+        cp -r dist "$out"
+        runHook postInstall
+      '';
+    });
   };
 
   meta = {
-    description = "Modern, easy to use download automation for torrents and usenet";
-    license = lib.licenses.gpl2Plus;
+    description = "Download automation for torrents and usenet";
     homepage = "https://autobrr.com/";
-    changelog = "https://autobrr.com/release-notes/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ av-gal ];
+    changelog = "https://github.com/autobrr/autobrr/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Plus;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    maintainers = with lib.maintainers; [
+      av-gal
+      connor-grady
+    ];
     mainProgram = "autobrr";
     platforms = with lib.platforms; darwin ++ freebsd ++ linux;
   };
