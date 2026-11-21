@@ -3,55 +3,48 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  makeBinaryWrapper,
   pkg-config,
   openssl,
   rust-jemalloc-sys-unprefixed,
   sqlite,
-  bash,
-  coreutils,
   iproute2,
-  iptables,
+  nftables,
+  shadow,
+  systemd,
   nix-update-script,
 }:
-let
-  binPath = lib.makeBinPath [
-    bash
-    coreutils
-    iproute2
-    iptables
-  ];
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.102";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "geph-official";
-    repo = "geph5";
-    rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-E3msw4yG5RxKapHBvhGEVlsJiLgysCgjAtOrJ8fGES0=";
+    repo = "gephgui-pkg";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GP9kLtC3OrwHIfNena/wLDeWLkLGIOtvE5UpNUiSoco=";
+    fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-w+1JLxvflb8PQqNi5MnxoEcWctuaC6Ux3oNYJzB6oaE=";
+  sourceRoot = "${finalAttrs.src.name}/geph5";
+
+  cargoHash = "sha256-5krILNIoc9xtDfSP37xVB+GEegvBGOOPETvMxA9GAVI=";
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace binaries/geph5-client/src/vpn/*.sh \
-      --replace-fail 'PATH=' 'PATH=${binPath}:'
+    substituteInPlace binaries/geph5-app/src/platform.rs \
+      --replace-fail 'run_status("systemctl"' 'run_status("${lib.getExe' systemd "systemctl"}"' \
+      --replace-fail '"useradd",' '"${lib.getExe' shadow "useradd"}",' \
+      --replace-fail '"/usr/sbin/nologin"' '"${shadow}/sbin/nologin"'
 
-    substituteInPlace binaries/geph5-client/src/vpn/linux.rs \
-      --replace-fail 'Command::new("sh")' 'Command::new("${bash}/bin/sh")' \
-      --replace-fail '/usr/bin/env ' '${lib.getExe' coreutils "env"} '
+    substituteInPlace binaries/geph5-app/src/vpn/linux.rs \
+      --replace-fail 'Command::new("nft")' 'Command::new("${lib.getExe nftables}")' \
+      --replace-fail 'run("ip"' 'run("${lib.getExe' iproute2 "ip"}"'
   '';
 
   postInstall = ''
     rm -rf "$out/lib"
   '';
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
@@ -64,47 +57,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
   };
 
-  buildFeatures = [
-    "aws_lambda"
-    # "windivert" # Only on Windows
-  ];
+  __darwinAllowLocalNetworking = true;
 
   checkFlags = [
-    # Wrong test
-    "--skip=traffcount::tests::test_traffic_count_basic"
-    # Requires network
+    # Need a broker or a peer
+    "--skip=china::tests::resolve_baidu_via_alidns"
     "--skip=dns::tests::resolve_google"
     "--skip=tests::test_clib"
     # Never finish
     "--skip=tests::test_blind_sign"
     "--skip=tests::test_generate_secret_key"
-    "--skip=tests::ping_pong"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Cannot connect to the internet within the macOS sandbox
-    "--skip=tests::test_successful_ping"
-    "--skip=tests::test_failed_ping"
+    "--skip=vpn::macos::discovery::tests::live_physical_service_v4"
+    "--skip=vpn::macos::discovery::tests::live_primary_v4"
   ];
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    for program in $out/bin/*; do
-      wrapProgram "$program" --prefix PATH : ${binPath}
-    done
-  '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "geph5-client-v(.*)"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
-    homepage = "https://github.com/geph-official/geph5";
-    changelog = "https://github.com/geph-official/geph5/releases/tag/geph5-client-v${finalAttrs.version}";
+    homepage = "https://geph.io";
+    changelog = "https://github.com/geph-official/gephgui-pkg/releases/tag/v${finalAttrs.version}";
     mainProgram = "geph5-client";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin; # VPN mode is not yet available on macOS.
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       penalty1083

@@ -3,78 +3,38 @@
   rustPlatform,
   webkitgtk_4_1,
   pkg-config,
-  openssl,
+  geph,
   buildNpmPackage,
   makeDesktopItem,
   fetchFromGitHub,
   nix-update-script,
-  perl,
-  stdenv,
-  glib,
+  gtk3,
+  libayatana-appindicator,
+  xdotool,
   copyDesktopItems,
   wrapGAppsHook4,
 }:
 let
-  pac-cmd = stdenv.mkDerivation {
-    pname = "pac-cmd";
-    version = "0-unstable-2020-01-07";
-
-    src = fetchFromGitHub {
-      owner = "getlantern";
-      repo = "pac-cmd";
-      rev = "495bad48b8601385daa8205ec4db504166dff18b";
-      hash = "sha256-T4g0FR20sOxJ20H4LTmhrA2EsRe8JYXj6MB2ImkbPsY=";
-    };
-
-    postPatch = ''
-      rm binaries/*/pac
-       substituteInPlace Makefile \
-        --replace-fail 'uname -p' 'uname -m' \
-        --replace-fail 'ifneq ($(filter arm%,$(UNAME_P)),)' 'ifneq ($(filter aarch64 arm%,$(UNAME_P)),)'
-    '';
-
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ glib ];
-
-    preBuild = ''
-      mkdir -p binaries/linux_arm
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      install -Dm755 -t $out/bin binaries/*/pac
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "Change proxy auto-config settings of operation system";
-      homepage = "https://github.com/getlantern/pac-cmd";
-      license = lib.licenses.asl20;
-      mainProgram = "pac";
-      platforms = lib.platforms.all;
-    };
-  };
-in
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "gephgui-wry";
-  version = "5.7.2";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "gephgui-pkg";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-uY2m4TXy4+efRC6WzGjB5Vushgj8zkCp0ctnCJAR+FE=";
+    tag = "v${version}";
+    hash = "sha256-GP9kLtC3OrwHIfNena/wLDeWLkLGIOtvE5UpNUiSoco=";
     fetchSubmodules = true;
   };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "gephgui-wry";
+  inherit version src;
 
   gephgui = buildNpmPackage {
     pname = "gephgui";
-    inherit (finalAttrs) version src;
+    inherit version src;
 
-    sourceRoot = "${finalAttrs.src.name}/gephgui-wry/gephgui";
-    npmDepsHash = "sha256-GFeHowIv+TiejSNK6kAGAgYcwc2DHu3c4UBEeTScIPk=";
+    sourceRoot = "${src.name}/gephgui-wry/gephgui";
+    npmDepsHash = "sha256-sSnQ5gsg8LRY8De1jWtZqjxioJW8YSKCPGohCide6eE=";
 
     installPhase = ''
       runHook preInstall
@@ -86,45 +46,45 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
-  cargoHash = "sha256-Ekl03CvM32E3Q86YZL8eBFYAzDcpAXq8yVi2Fg3t5yc=";
+  sourceRoot = "${src.name}/gephgui-wry";
+  cargoHash = "sha256-+hnZAioFP2eRj5U0F190VESK7tyrdbzIsqERMupdssU=";
+
+  postPatch = ''
+    substituteInPlace src/main.rs \
+      --replace-fail 'std::env::var("FLATPAK_ID").is_err()' 'false'
+  '';
+
+  env.VERSION = version;
 
   nativeBuildInputs = [
-    pkg-config
-    perl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
+    pkg-config
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ webkitgtk_4_1 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
+  buildInputs = [
+    gtk3
+    libayatana-appindicator
+    webkitgtk_4_1
+    xdotool
+  ];
 
   preBuild = ''
     cp -r ${finalAttrs.gephgui}/ gephgui/dist/
   '';
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -m 444 -D gephgui/public/gephlogo.png $out/share/icons/hicolor/512x512/apps/geph.png
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      cp -a ../macos/template.app "$out/Applications/Geph.app"
-      chmod -R u+w "$out/Applications/Geph.app"
-      install -Dm755 "$out/bin/gephgui-wry" "$out/Applications/Geph.app/Contents/MacOS/bin/gephgui-wry"
-      ln -s "$out/Applications/Geph.app/Contents/MacOS/entrypoint" "$out/bin/Geph"
-    '';
+  postInstall = ''
+    install -m 444 -D gephgui/public/gephlogo.png $out/share/icons/hicolor/512x512/apps/geph.png
+  '';
 
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  preFixup = ''
     gappsWrapperArgs+=(
-      --suffix PATH : ${lib.makeBinPath [ pac-cmd ]}
+      --prefix PATH : ${lib.makeBinPath [ geph ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libayatana-appindicator ]}
     )
   '';
 
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
+  desktopItems = [
     (makeDesktopItem {
       name = "Geph";
       desktopName = "Geph";
@@ -137,7 +97,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    inherit pac-cmd;
     inherit (finalAttrs) gephgui;
     updateScript = nix-update-script {
       extraArgs = [
@@ -149,8 +108,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
     homepage = "https://github.com/geph-official/gephgui-wry";
-    mainProgram = if stdenv.hostPlatform.isDarwin then "Geph" else "gephgui-wry";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "gephgui-wry";
+    platforms = lib.platforms.linux;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       penalty1083
