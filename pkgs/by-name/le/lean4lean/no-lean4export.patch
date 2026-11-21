@@ -1,0 +1,38 @@
+diff --git a/Main.lean b/Main.lean
+index cb36926..c591061 100644
+--- a/Main.lean
++++ b/Main.lean
+@@ -5,7 +5,7 @@ Authors: Scott Morrison
+ -/
+ import Lean4Lean.Replay
+ import Lake.Load.Manifest
+-import Export.Parse
++import LeanExport.Parse
+ 
+ open Lean hiding Environment Exception
+ open Kernel Lean4Lean.Replay
+@@ -107,7 +107,7 @@ unsafe def main (args : List String) : IO UInt32 := do
+     let [inputPath] := args |
+       throw <| IO.userError s!"--import expect a single file"
+     let handle ← IO.FS.Handle.mk inputPath .read
+-    let solution ← Export.parseStream (.ofHandle handle)
++    let solution ← LeanExport.parseStream (.ofHandle handle)
+     let mut constMap := solution.constMap
+     -- Lean's kernel interprets just the addition of `Quot as adding all of these so adding them
+     -- multiple times leads to errors.
+diff --git a/lakefile.toml b/lakefile.toml
+index 82dfbdc..5e04ade 100644
+--- a/lakefile.toml
++++ b/lakefile.toml
+@@ -6,11 +6,6 @@ name = "batteries"
+ git = "https://github.com/leanprover-community/batteries"
+ rev = "nightly-testing"
+ 
+-[[require]]
+-name = "lean4export"
+-git = "https://github.com/leanprover/lean4export"
+-rev = "master"
+-
+ [[lean_lib]]
+ name = "Lean4Lean"
+ 
