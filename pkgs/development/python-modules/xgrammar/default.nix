@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xgrammar";
-  version = "0.2.8";
+  version = "0.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     repo = "xgrammar";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Ff/CLdSjq8ammfci+Eu9hY4433e7csf8EeGu2X9B2rI=";
+    hash = "sha256-XqNH4UU76Obk9p/KjoUOT9EKKsiJoSCQRuJ7vFBud5s=";
   };
 
   build-system = [
