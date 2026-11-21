@@ -62,7 +62,10 @@ stdenv.mkDerivation {
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    # The latest tag is too old to be found by deepening a shallow clone
+    shallowClone = false;
+  };
 
   meta = {
     description = "Source Port of the Descent 1 and 2 engines";
