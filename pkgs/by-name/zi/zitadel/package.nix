@@ -4,10 +4,10 @@
   callPackage,
   fetchFromGitHub,
   lib,
-
   buf,
   cacert,
   grpc-gateway,
+  protoc-gen-connect-go,
   protoc-gen-go,
   protoc-gen-go-grpc,
   protoc-gen-validate,
@@ -16,14 +16,23 @@
 }:
 
 let
-  version = "2.71.7";
+  version = "4.3.0";
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
     rev = "v${version}";
-    hash = "sha256-0ZOiwJ/ehDBkbd7iTTyVJzLj6Etph5/oxrDrck30ZL8=";
+    hash = "sha256-4jtSxdgXnSqtp7lvNg63TiPHrviWTxb+U9olRufBz5w=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      TZ=utc date -d @$(git log -1 --format=%ct) --iso-8601=s > $out/DATE
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
-  goModulesHash = "sha256-iZCjHSpQ7Gy41Dd4svRLbyEh1N8VE8U0uCOlN9rfJQU=";
+  goModulesHash = "sha256-IiI8le1u4+Rm534lX0X9Qdb8zr6TX6AwX70WOX24oA0=";
 
   buildZitadelProtocGen =
     name:
@@ -94,13 +103,14 @@ let
     nativeBuildInputs = [
       grpc-gateway
       protoc-gen-authoption
+      protoc-gen-connect-go
       protoc-gen-go
       protoc-gen-go-grpc
       protoc-gen-validate
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-rc5A2bQ2iWkybprQ7IWsQ/LLAQxPqhlxzVvPn8Ec56E=";
+    hash = "sha256-iNJPJ8Z+POI0Vnd5DjYEvxVtip9Xu1TUIYzgZqiILKs=";
   };
 in
 buildGoModule rec {
@@ -116,11 +126,18 @@ buildGoModule rec {
 
   proxyVendor = true;
   vendorHash = goModulesHash;
-  ldflags = [ "-X 'github.com/zitadel/zitadel/cmd/build.version=${version}'" ];
+  ldflags = [
+    "-X 'github.com/zitadel/zitadel/cmd/build.version=${version}'"
+  ];
+
+  # Exclude the login app, which contains separate go acceptance tests
+  excludedPackages = [ "apps/login" ];
 
   # Adapted from Makefile in repo, with dependency fetching and protobuf codegen
   # bits removed
   preBuild = ''
+    # ldflags based on metadata from git and source
+    ldflags+=" -X github.com/zitadel/zitadel/cmd/build.commit=$(cat COMMIT) -X github.com/zitadel/zitadel/cmd/build.date=$(cat DATE)"
     mkdir -p pkg/grpc
     cp -r ${protobufGenerated}/grpc/github.com/zitadel/zitadel/pkg/grpc/* pkg/grpc
     mkdir -p openapi/v2/zitadel
