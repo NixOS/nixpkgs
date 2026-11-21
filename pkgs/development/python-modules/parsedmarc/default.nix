@@ -38,7 +38,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "parsedmarc";
-  version = "11.0.4";
+  version = "11.0.5";
   pyproject = true;
 
   outputs = [
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "domainaware";
     repo = "parsedmarc";
     tag = finalAttrs.version;
-    hash = "sha256-jRPOg1bQgNCpb7uLUjYkxvh2ELnS1VGlFQRzuRgJ4Sw=";
+    hash = "sha256-R5zflb4XUExirHFvH9vr9jpRMlb2HWcbS+lujyBX3hE=";
   };
 
   postPatch = ''
