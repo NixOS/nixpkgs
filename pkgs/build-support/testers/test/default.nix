@@ -86,6 +86,8 @@ lib.recurseIntoAttrs {
 
   inherit runNixOSTest-example;
 
+  runImageTest-arch = pkgs.callPackage ./image-test/arch.nix { };
+
   runNixOSTest-extendNixOS =
     let
       t = runNixOSTest-example.extendNixOS {

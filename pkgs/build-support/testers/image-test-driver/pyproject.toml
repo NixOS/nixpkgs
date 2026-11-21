@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "image-test-driver"
+version = "0.1.0"
+description = "Async test driver for virtual machine images"
+requires-python = ">= 3.12"
+authors = [
+  { name = "Raito Bezarius", email = "masterancpp@gmail.com" }
+]
+
+[project.scripts]
+image-test-driver = "image_test_driver.cli:main"
+
+[tool.setuptools]
+packages = [
+  "image_test_driver",
+  "image_test_driver.machine",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.ty.src]
+include = ["image_test_driver"]
