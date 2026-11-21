@@ -49,7 +49,7 @@ jetbrains.mkJetBrainsProduct {
       Also known as IntelliJ.
     '';
     maintainers = with lib.maintainers; [
-      gytis-ivaskevicius
+      charlieprm88
       tymscar
     ];
     teams = [ lib.teams.jetbrains ];

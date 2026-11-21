@@ -5203,6 +5203,11 @@
     githubId = 1774239;
     name = "Charlie Egan";
   };
+  charlieprm88 = {
+    github = "CharliePrm88";
+    githubId = 8375868;
+    name = "Stefano Ponzi";
+  };
   charludo = {
     email = "github@charlotteharludo.com";
     github = "charludo";
