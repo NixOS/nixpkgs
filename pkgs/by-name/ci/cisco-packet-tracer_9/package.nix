@@ -58,8 +58,8 @@ appimageTools.wrapType2 (finalAttrs: {
   extraInstallCommands = ''
     mv $out/bin/cisco-packet-tracer $out/bin/packettracer9
 
-    install -Dm444 ${finalAttrs.contents}/CiscoPacketTracer-9.0.1.desktop $out/share/applications/cisco-packet-tracer-9.desktop
-    install -Dm444 ${finalAttrs.contents}/CiscoPacketTracerPtsa-9.0.1.desktop $out/share/applications/cisco-packet-tracer-ptsa-9.desktop
+    install -Dm444 ${finalAttrs.contents}/CiscoPacketTracer-${finalAttrs.version}.desktop $out/share/applications/cisco-packet-tracer-9.desktop
+    install -Dm444 ${finalAttrs.contents}/CiscoPacketTracerPtsa-${finalAttrs.version}.desktop $out/share/applications/cisco-packet-tracer-ptsa-9.desktop
     substituteInPlace $out/share/applications/* \
       --replace-fail "Exec=@EXEC_PATH@" "Exec=packettracer9" \
       --replace-fail "Icon=app" "Icon=cisco-packet-tracer-9"
