@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtklock-powerbar-module";
-  version = "4.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
     repo = "gtklock-powerbar-module";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Zakdta1i0o7S2AbHydlonnh5OMGVgGjB2H/AiHgQT9A=";
+    hash = "sha256-Bz7peVkxNi1vn5uPCpB7nT5J30WAAm22WWYuAhXkNlI=";
   };
 
   nativeBuildInputs = [
