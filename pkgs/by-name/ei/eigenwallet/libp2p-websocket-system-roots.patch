@@ -1,0 +1,24 @@
+--- a/src/tls.rs
++++ b/src/tls.rs
+@@ -100,14 +100,14 @@
+ 
+ /// Setup the rustls client configuration.
+ fn client_root_store() -> rustls::RootCertStore {
++    use rustls::pki_types::{pem::PemObject, CertificateDer};
++
+     let mut client_root_store = rustls::RootCertStore::empty();
+-    client_root_store.extend(webpki_roots::TLS_SERVER_ROOTS.iter().map(|ta| {
+-        rustls::pki_types::TrustAnchor {
+-            subject: ta.subject.into(),
+-            subject_public_key_info: ta.spki.into(),
+-            name_constraints: ta.name_constraints.map(|v| v.into()),
+-        }
+-    }));
++    let bundle = std::env::var_os("SSL_CERT_FILE")
++        .unwrap_or_else(|| "/etc/ssl/certs/ca-certificates.crt".into());
++    if let Ok(certs) = CertificateDer::pem_file_iter(bundle) {
++        client_root_store.add_parsable_certificates(certs.flatten());
++    }
+     client_root_store
+ }
+ 
