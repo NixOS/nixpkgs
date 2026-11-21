@@ -3,7 +3,7 @@
   bison,
   buildPackages,
   flex,
-  meson,
+  mesonMinimal,
   mkAppleDerivation,
   sourceRelease,
   replaceVars,
@@ -28,7 +28,7 @@ let
   # bootstrap_cmds is used to build libkrb5, which is a transitive dependency of Meson due to OpenLDAP.
   # This causes an infinite recursion unless Meson’s tests are disabled.
   mkAppleDerivation' = mkAppleDerivation.override {
-    meson = meson.overrideAttrs { doInstallCheck = false; };
+    mesonMinimal = mesonMinimal.overrideAttrs { doInstallCheck = false; };
   };
 in
 mkAppleDerivation' {

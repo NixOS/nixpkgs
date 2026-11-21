@@ -6,7 +6,7 @@
   libpng,
   libxml2,
   makeBinaryWrapper,
-  ninja,
+  ninjaMinimal,
   stdenv,
   # xcbuild is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv
   stdenv' ? if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv,
@@ -136,7 +136,7 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     makeBinaryWrapper
-    ninja
+    ninjaMinimal
   ];
 
   buildInputs = [
