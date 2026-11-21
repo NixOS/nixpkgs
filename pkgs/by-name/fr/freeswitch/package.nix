@@ -161,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     NIX_CFLAGS_COMPILE = toString [
+      # Make ldns use stdbool.h instead of redefining _Bool, breaking glibc's assert.h.
+      # https://github.com/NLnetLabs/ldns/blob/1.9.2/ldns/common.h.in
+      "-DHAVE_STDBOOL_H=1"
       "-Wno-error"
       # https://github.com/signalwire/freeswitch/issues/2495
       "-Wno-incompatible-pointer-types"
