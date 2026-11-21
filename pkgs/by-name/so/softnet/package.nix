@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/openai/softnet";
     license = lib.licenses.fsl11Asl20;
     maintainers = with lib.maintainers; [ emilytrau ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
     # Source build will be possible after darwin SDK 12.0 bump
     # https://github.com/NixOS/nixpkgs/pull/229210
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

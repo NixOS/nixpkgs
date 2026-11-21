@@ -43,6 +43,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = meta // {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "localsend";
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
   };
 })

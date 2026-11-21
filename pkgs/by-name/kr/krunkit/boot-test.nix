@@ -69,7 +69,7 @@ runCommand "krunkit-nixos-boot-test"
   {
     requiredSystemFeatures = [ "apple-virt" ];
 
-    meta.platforms = [ "aarch64-darwin" ];
+    meta.platforms = lib.platforms.darwin;
   }
   ''
     image=${image}/krunkit-nixos.img

@@ -121,7 +121,7 @@ let
           if lib.elem "gnome3" buildFlavors then
             lib.platforms.linux
           else if (lib.elem "qt5" buildFlavors || lib.elem "qt" buildFlavors) then
-            (lib.remove "aarch64-darwin" lib.platforms.all)
+            (lib.subtractLists lib.platforms.darwin lib.platforms.all)
           else
             lib.platforms.all;
         longDescription = ''

@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       NotAShelf
     ];
     mainProgram = "microfetch";
-    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

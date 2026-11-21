@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Launch configurable virtual machines with libkrun";
     homepage = "https://github.com/libkrun/krunkit";
     license = lib.licenses.asl20;
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ quinneden ];
   };
 })

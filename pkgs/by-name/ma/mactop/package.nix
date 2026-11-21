@@ -40,6 +40,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "mactop";
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
   };
 }
