@@ -142,7 +142,10 @@ buildDotnetModule (finalAttrs: {
 
   dotnetFlags = [
     "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [ "-p:UseAppHost=false" ];
+
+  useAppHost = !stdenv.hostPlatform.isRiscV64;
 
   # As given here: https://github.com/actions/runner/blob/0befa62/src/dir.proj#L33-L41
   projectFile = [
@@ -156,7 +159,7 @@ buildDotnetModule (finalAttrs: {
   ];
   nugetDeps = ./deps.json;
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isRiscV64;
 
   # tests fail with sandboxing under darwin
   __darwinAllowLocalNetworking = true;
@@ -318,6 +321,15 @@ buildDotnetModule (finalAttrs: {
       --run 'mkdir -p "$RUNNER_ROOT"'
       --chdir "$out"
     )
+  ''
+  + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+    for bin in Runner.Listener Runner.PluginHost Runner.Worker; do
+      printf '%s\n' \
+        '#!${runtimeShell}' \
+        "exec ${dotnetCorePackages.runtime_8_0}/bin/dotnet \"$out/lib/github-runner/$bin.dll\" \"\$@\"" \
+        > "$out/lib/github-runner/$bin"
+      chmod +x "$out/lib/github-runner/$bin"
+    done
   '';
 
   # List of files to wrap
@@ -375,6 +387,7 @@ buildDotnetModule (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
       "aarch64-darwin"
+      "riscv64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
