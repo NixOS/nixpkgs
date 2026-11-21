@@ -1,0 +1,18 @@
+Allow building the Vulkan decoder against an unpatched FFmpeg. Use the
+NVIDIA AV1 workaround when the FFmpeg headers expose the custom flag.
+
+--- a/Libraries/LibMediaCodecs/FFmpeg/FFmpegVulkanVideoDecoder.cpp
++++ b/Libraries/LibMediaCodecs/FFmpeg/FFmpegVulkanVideoDecoder.cpp
+@@ -483,9 +483,11 @@
+     codec_context->get_format = negotiate_pixel_format;
+     codec_context->get_buffer2 = get_buffer;
+     codec_context->opaque = this;
+-    // Only the bundled FFmpeg decodes AV1, and it is patched to know this flag.
++#ifdef AV_HWACCEL_FLAG_LADYBIRD_CLEAR_UNUSED_REF_FRAME_MVS
++    // Ladybird's bundled FFmpeg provides this workaround.
+     if (m_codec_id == CodecID::AV1 && !PlatformFeatures::ProcessFeatures::the().is_enabled(PlatformFeatures::Feature::VulkanVideoBundledFFmpegAV1KeepSequenceHeaderEnableRefMVsFlag))
+         codec_context->hwaccel_flags |= AV_HWACCEL_FLAG_LADYBIRD_CLEAR_UNUSED_REF_FRAME_MVS;
++#endif
+ 
+     if (m_functions.avcodec_open2(codec_context, codec, nullptr) < 0)
+         return DecoderError::format(DecoderErrorCategory::Unknown, "Unknown error occurred when opening FFmpeg codec {}", m_codec_id);
