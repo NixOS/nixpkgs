@@ -14,6 +14,7 @@
   cbor2,
   httpx,
   msgpack,
+  msgspec,
   mujson,
   orjson,
   pytest7CheckHook,
@@ -39,16 +40,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
 
+  # Required by WSGI server tests that bind to localhost.
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''
-    export HOME=$TMPDIR
-    cp -R tests examples $TMPDIR
-    pushd $TMPDIR
-  '';
-
-  postCheck = ''
-    popd
+    # Prevent python -m pytest from importing Falcon from the source tree.
+    export PYTHONSAFEPATH=1
   '';
 
   nativeCheckInputs = [
@@ -70,7 +67,9 @@ buildPythonPackage rec {
     msgpack
     mujson
     ujson
-  ];
+  ]
+  # msgspec does not support PyPy or Python 3.15+.
+  ++ lib.optionals (!isPyPy && !pythonAtLeast "3.15") [ msgspec ];
 
   enabledTestPaths = [ "tests" ];
 
@@ -88,5 +87,6 @@ buildPythonPackage rec {
     description = "Ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale";
     homepage = "https://falconframework.org/";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hoh ];
   };
 }
