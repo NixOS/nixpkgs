@@ -117,6 +117,19 @@ let
         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
         ln -s "${lib.getLib self.unwrapped}/lib/clang/${self.llvmMajorVersion}/include" "$rsrc"
         ln -s "${lib.getLib self.unwrapped}/lib/clang/${self.llvmMajorVersion}/lib" "$rsrc"
+        # C++ only. stl_wrappers #include_next <cstdlib> and others, so that
+        # directory has to come before libstdc++. The rest of dev/include stays
+        # after it, or llvm/ and clang/ would be searched ahead of buildInputs.
+        # sycl/detail/cl.h includes <CL/cl.h>.
+        prior=$(mktemp)
+        cat $out/nix-support/libcxx-cxxflags > "$prior"
+        {
+          include -cxx-isystem "${self.unwrapped.dev}/include/sycl/stl_wrappers"
+          cat "$prior"
+        } > $out/nix-support/libcxx-cxxflags
+        rm "$prior"
+        include -cxx-isystem "${self.unwrapped.dev}/include" >> $out/nix-support/libcxx-cxxflags
+        include -cxx-isystem "${self.unwrapped.opencl-headers}/include" >> $out/nix-support/libcxx-cxxflags
       ''
       + (lib.concatStrings (
         lib.mapAttrsToList (k: v: ''
@@ -133,7 +146,7 @@ let
       '');
 
       extraPackages =
-        # We need to explicitly link to the dev package to get headers like sycl.hpp
+        # SYCL runtime for stdenv. The headers are on libcxx-cxxflags above.
         [ self.unwrapped.dev ] # TODO: This needs to be from targetPackages once the package gets cross support
         # OpenCL and such need to be passed through
         ++ self.unwrapped.propagatedBuildInputs;

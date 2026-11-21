@@ -357,6 +357,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     inherit unified-runtime;
 
+    # The wrapper's -cxx-isystem must use the same opencl-headers this build
+    # propagated. A second argument on the wrapper can be overridden apart from it.
+    inherit opencl-headers;
+
     # This is for easily referencing version-compatible LLVM libraries
     # and tools that aren't built in this derivation,
     # as well as nix tooling, such as the stdenv.
