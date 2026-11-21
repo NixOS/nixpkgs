@@ -73,6 +73,9 @@ in
         Restart = "always";
         RestartSec = 5;
         LogsDirectory = "displaylink";
+        # DisplayLinkManager ignores SIGTERM and has no state to flush, so
+        # systemd waits out the default 90s stop timeout before SIGKILLing it.
+        TimeoutStopSec = 5;
       };
     };
 
