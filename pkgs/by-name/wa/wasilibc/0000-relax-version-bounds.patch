@@ -8,30 +8,30 @@ Committer: Sam Pointon <sampointon@gmail.com> (2026-06-17 09:27:26)
     Nixpkgs has more recent versions of these, and they work fine.
 
 diff --git a/cmake/bindings.cmake b/cmake/bindings.cmake
-index a629ecd006..14fdb8aed3 100644
+index edc5d02ec9cbab89a5be934046b2f32a540e98c3..39b99b52ada15ff4ad715b44844735eea5564c8d 100644
 --- a/cmake/bindings.cmake
 +++ b/cmake/bindings.cmake
-@@ -15,10 +15,6 @@
+@@ -15,10 +15,6 @@ if(WIT_BINDGEN_EXECUTABLE)
      OUTPUT_VARIABLE WIT_BINDGEN_VERSION
      OUTPUT_STRIP_TRAILING_WHITESPACE)
  
--  if (NOT (WIT_BINDGEN_VERSION MATCHES "0\\.53\\.1"))
--    message(WARNING "wit-bindgen version 0.53.1 is required, found: ${WIT_BINDGEN_VERSION}")
+-  if (NOT (WIT_BINDGEN_VERSION MATCHES "0\\.60\\.0"))
+-    message(WARNING "wit-bindgen version 0.60.0 is required, found: ${WIT_BINDGEN_VERSION}")
 -    set(WIT_BINDGEN_EXECUTABLE "")
 -  endif()
  endif()
  
  if (NOT WIT_BINDGEN_EXECUTABLE)
 diff --git a/cmake/wasi-wits.cmake b/cmake/wasi-wits.cmake
-index e21ab0258d..d72ed9bcc2 100644
+index 18cc127f251e65bc5cd2c130a6a86f36909b3ce7..9b25cdbc8dde20ab8f57811364af1c0e333bd083 100644
 --- a/cmake/wasi-wits.cmake
 +++ b/cmake/wasi-wits.cmake
-@@ -12,10 +12,6 @@
+@@ -12,10 +12,6 @@ if(WKG_EXECUTABLE)
      OUTPUT_VARIABLE WKG_VERSION
      OUTPUT_STRIP_TRAILING_WHITESPACE)
  
--  if (NOT (WKG_VERSION MATCHES "0\\.13\\.0"))
--    message(WARNING "wkg version 0.13.0 is required, found: ${WKG_VERSION}")
+-  if (NOT (WKG_VERSION MATCHES "0\\.15\\.0"))
+-    message(WARNING "wkg version 0.15.0 is required, found: ${WKG_VERSION}")
 -    set(WKG_EXECUTABLE "")
 -  endif()
  endif()
