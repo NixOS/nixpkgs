@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "AMF";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-DykkYTMfCkXUmq3kM/z0jA6027yAlezsc4KBcKGvlOc=";
+    hash = "sha256-A2zO8XE8ndMzjSlbM1QWOvrhFOzfO6x9JTjMVtW2h/g=";
     sparseCheckout = [ "amf/public/include" ];
   };
 
