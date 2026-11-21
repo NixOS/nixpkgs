@@ -3,6 +3,7 @@
   cacert,
   fetchFromGitHub,
   lib,
+  lsof,
   nix-update-script,
   pkg-config,
   runCommand,
@@ -15,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # The CLI crates have no releases of their own (their crate version stays
   # 0.1.0 in every release): Buzz releases ship them with the desktop app, so
   # this follows Buzz Desktop releases (desktop-v* tags).
-  version = "0.5.28";
+  version = "0.5.30";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
@@ -23,23 +24,39 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "block";
     repo = "buzz";
     tag = "desktop-v${finalAttrs.version}";
-    hash = "sha256-NEsLQwcoQ2zTgznFgGFGNgYPnoclicNVycSEjl7I0Wo=";
+    hash = "sha256-Ay6zUeHHYO92/Fs4FGHm1+QQUoUEQjYyOC3dDg5+7Ss=";
   };
 
-  cargoHash = "sha256-UQ8qNqoeDwkwhmVZebi++gb2GP61dr1Zv2QU9mJ6KJ8=";
+  cargoHash = "sha256-pYCis8LXLUKU3iPaUkeR/hH3XmBljCjVZQ7EDD2cqrs=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ aws-lc ];
 
   cargoBuildFlags = [ "--package=buzz-cli" ];
-  cargoTestFlags = [ "--package=buzz-cli" ];
+  # The workspace crates linked into `buzz`.
+  cargoTestFlags = [
+    "--package=buzz-cli"
+    "--package=buzz-core"
+    "--package=buzz-persona"
+    "--package=buzz-sdk"
+    "--package=buzz-ws-client"
+  ];
+  checkFlags = [
+    # Polls the child with /bin/kill, which the build sandbox doesn't have.
+    # upstream: block/buzz#9530
+    "--skip=desktop_provider::ownership::tests::proof_timeout_and_cancellation_close_the_socket_and_kill_lsof"
+  ];
 
   # reqwest initializes its rustls client in tests and needs a CA bundle.
   nativeCheckInputs = [ cacert ];
 
-  # Make darwin builds reproducible by disabling debug symbols in ring.
-  # See: https://github.com/briansmith/ring/pull/2881
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The macOS socket ownership check runs /usr/sbin/lsof, which the darwin
+    # build sandbox can't execute; use nixpkgs' lsof instead.
+    substituteInPlace crates/buzz-cli/src/desktop_provider/ownership.rs \
+      --replace-fail '"/usr/sbin/lsof"' '"${lsof}/bin/lsof"'
+    # Make darwin builds reproducible by disabling debug symbols in ring.
+    # See: https://github.com/briansmith/ring/pull/2881
     substituteInPlace "$cargoDepsCopy"/source-registry-*/ring-0.17.14/build.rs \
       --replace-fail 'c.flag("-gfull")' 'c.flag("-g0")'
   '';
