@@ -53,14 +53,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "weston";
-  version = "16.0.0";
+  version = "16.0.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wayland";
     repo = "weston";
     rev = finalAttrs.version;
-    hash = "sha256-0TBVyqnfd7GMGPAzbYOmDZgv4gF5kxiqaA8+A0+sEqU=";
+    hash = "sha256-6PPicEjiZCaVZmtJAuZInJGjzBc+6ZWFGmgCTk2Qt8c=";
   };
 
   depsBuildBuild = [ pkg-config ];
