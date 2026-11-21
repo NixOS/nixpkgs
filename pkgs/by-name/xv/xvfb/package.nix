@@ -103,6 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dxquartz=false"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "X virtual framebuffer";
     longDescription = ''
