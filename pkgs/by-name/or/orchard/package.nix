@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "orchard";
-  version = "0.56.1";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "orchard";
     rev = version;
-    hash = "sha256-axzEWud7hY321RkbaFtVKhSn7WFHeYOFHDdKRh25zaY=";
+    hash = "sha256-14trpwIFIZEqmRGz4d3FsfzCb21s77P4eVw90Civyro=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-yFqYNfBHvUiBQ6OZlNq4aUBg48g8VnuIBYEAKKrb6Y4=";
+  vendorHash = "sha256-LjvLaegHmx1frWy+VzIkX9uH/sp/O2NS5dxjUD5Vihs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
