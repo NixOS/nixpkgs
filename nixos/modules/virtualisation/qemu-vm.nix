@@ -300,41 +300,12 @@ let
       (builtins.concatStringsSep "")
     ]}
 
-    ${lib.optionalString cfg.qemu.forceAccel (
-      if hostPkgs.stdenv.hostPlatform.isLinux then
-        ''
-          # Check for hardware-accelerated virtualisation support (KVM)
-          if [ ! -e /dev/kvm ]; then
-            echo "forceAccel is enabled but /dev/kvm does not exist." >&2
-            echo "Hardware-accelerated virtualisation (KVM) is not available on this system." >&2
-            exit 1
-          elif [ ! -r /dev/kvm ] || [ ! -w /dev/kvm ]; then
-            echo "forceAccel is enabled but /dev/kvm is not accessible (permission denied)." >&2
-            echo "Check that the nix build user is in the 'kvm' group or that /dev/kvm has the correct permissions." >&2
-            exit 1
-          fi
-        ''
-      else if hostPkgs.stdenv.hostPlatform.isDarwin then
-        ''
-          # Check for hardware-accelerated virtualisation support (HVF)
-          if ! sysctl -n kern.hv_support 2>/dev/null | grep -q 1; then
-            echo "forceAccel is enabled but Hypervisor.framework is not available on this system." >&2
-            exit 1
-          fi
-        ''
-      else
-        ''
-          echo "forceAccel is enabled but no known accelerator is available for this platform." >&2
-          exit 1
-        ''
-    )}
-
     ${lib.optionalString needsVirtiofs ''
       export NIX_VIRTIOFS_DIR=$(mktemp -d)
     ''}
 
     # Start QEMU.
-    exec ${lib.getExe runScript} \
+    exec ${lib.getExe runScript} ${lib.optionalString cfg.qemu.forceAccel "--force-accel"} \
       ${lib.optionalString needsVirtiofs ''
         --virtiofs-paths ${
           lib.concatStringsSep " " (

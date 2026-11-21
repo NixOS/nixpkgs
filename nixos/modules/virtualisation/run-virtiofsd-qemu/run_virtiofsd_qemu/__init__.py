@@ -1,7 +1,9 @@
 import argparse
 import asyncio
 import logging
+import os
 import signal
+import subprocess
 from contextlib import AsyncExitStack, asynccontextmanager
 from os import environ
 from pathlib import Path
@@ -54,13 +56,55 @@ async def virtiofsd(virtiofs_dir: Path, tag: str, source: Path, cache: str, flag
             await proc.communicate()
 
 
-def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str]]:
+async def assert_accelerator_available():
+    if platform == "linux":
+        devkvm = Path("/dev/kvm")
+        if not devkvm.exists():
+            logger.error("forceAccel is enabled but /dev/kvm does not exist.")
+            fatal_error(
+                "Hardware-accelerated virtualisation (KVM) is not available on this system."
+            )
+
+        if not (os.access(devkvm, os.W_OK) and os.access(devkvm, os.R_OK)):
+            logger.error(
+                "forceAccel is enabled but /dev/kvm is not accessible (permission denied)."
+            )
+            fatal_error(
+                "Check that the nix build user is in the 'kvm' group or that /dev/kvm has the correct permissions."
+            )
+    elif platform == "darwin":
+        proc = await asyncio.create_subprocess_exec(
+            "sysctl",
+            "-n",
+            "kern.hv_support",
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+        )
+        exitcode = await proc.wait()
+        if exitcode == 0 and await proc.stdout.read().strip() == "1":
+            return
+        fatal_error(
+            "forceAccel is enabled but Hypervisor.framework is not available on this system."
+        )
+    else:
+        fatal_error(
+            "forceAccel is enabled but no known accelerator is available for this platform."
+        )
+
+
+def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str], bool]:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--virtiofs-paths",
         nargs="+",
         default=[],
         help="Paths to be exposed with virtiofsd in the format 'tag:source:cache:mode'",
+    )
+    parser.add_argument(
+        "--force-accel",
+        action="store_true",
+        help="Whether it's intended to run with an accelerator.",
     )
 
     args, qemu_args = parser.parse_known_args()
@@ -79,19 +123,22 @@ def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str]]:
 
     defs = []
     for defin in args.virtiofs_paths:
-        args = defin.split(":")
-        if len(args) != 4:
+        inner = defin.split(":")
+        if len(inner) != 4:
             fatal_error(
                 f"--virtiofs-paths definition '{defin}' doesn't have four params separated by ':'!"
             )
-        defs.append((args[0], Path(args[1]), args[2], args[3]))
+        defs.append((inner[0], Path(inner[1]), inner[2], inner[3]))
 
-    return defs, qemu_args
+    return defs, qemu_args, args.force_accel
 
 
 async def amain():
     logging.basicConfig(format="%(levelname)s: %(funcName)s: %(message)s")
-    args, qemu_args = extract_arguments()
+    args, qemu_args, force_accel = extract_arguments()
+
+    if force_accel:
+        await assert_accelerator_available()
 
     if args:
         if platform != "linux":
