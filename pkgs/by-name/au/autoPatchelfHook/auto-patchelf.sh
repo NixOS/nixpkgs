@@ -28,14 +28,16 @@ addAutoPatchelfSearchPath() {
         esac
     done
 
-    local dir=
+    local root dir
     while IFS= read -r -d '' dir; do
         extraAutoPatchelfLibs+=("$dir")
-    done <  <(find "$@" "${findOpts[@]}" \! -type d \
-            \( -name '*.so' -o -name '*.so.*' \) -print0 \
-            | sed -z 's#/[^/]*$##' \
-            | uniq -z
-        )
+    done <  <(for root in "$@"; do
+            find "$root" "${findOpts[@]}" \! -type d \
+                \( -name '*.so' -o -name '*.so.*' \) -print0 |
+                sed -z 's#/[^/]*$##' |
+                # find's order is not reproducible.
+                LC_ALL=C sort -z -u
+        done)
 }
 
 
