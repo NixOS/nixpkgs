@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mchprs";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "MCHPR";
     repo = "MCHPRS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aNzHk2oaULADTr76ANjpKy0+aiP87MPkXmeiF9s57WE=";
+    hash = "sha256-glAJtm0hIQHBdm0O70DVVM/RjdMOGNsD3Zytin8Uxa8=";
   };
 
-  cargoHash = "sha256-AklIFznwlY52CTDCcQwuedcoEOq3eegZfM37sAGwaOw=";
+  cargoHash = "sha256-n7LWU76nz8c69XBUa38gRfS6/t9bBcGHtf+hDAAweAg=";
 
   nativeBuildInputs = [
     pkg-config
