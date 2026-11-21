@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "little_boxes";
-  version = "1.12.1";
+  version = "1.13.0";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "giodamelio";
     repo = "little_boxes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ejFo+BYoXf889G/iLuKITwY3ephkEMS6nLtfi3PozHQ=";
+    hash = "sha256-RRjIB5P159snYV9WbwBw67qAHEEkPXKoP7s0m9JkTe4=";
   };
 
   cargoVendorDir = "vendor";
