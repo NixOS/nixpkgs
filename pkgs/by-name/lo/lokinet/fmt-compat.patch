@@ -1,0 +1,152 @@
+--- a/llarp/util/aligned.hpp
++++ b/llarp/util/aligned.hpp
+@@ -319,7 +319,7 @@
+   {
+     template <typename FormatContext>
+     auto
+-    format(const T& val, FormatContext& ctx)
++    format(const T& val, FormatContext& ctx) const
+     {
+       auto it = oxenc::hex_encoder{val.begin(), val.end()};
+       return std::copy(it, it.end(), ctx.out());
+--- a/external/oxen-mq/oxenmq/fmt.h
++++ b/external/oxen-mq/oxenmq/fmt.h
+@@ -7,21 +7,21 @@
+
+ template <>
+ struct fmt::formatter<oxenmq::AuthLevel> : fmt::formatter<std::string> {
+-  auto format(oxenmq::AuthLevel v, format_context& ctx) {
++  auto format(oxenmq::AuthLevel v, format_context& ctx) const {
+     return formatter<std::string>::format(
+         fmt::format("{}", to_string(v)), ctx);
+   }
+ };
+ template <>
+ struct fmt::formatter<oxenmq::ConnectionID> : fmt::formatter<std::string> {
+-  auto format(oxenmq::ConnectionID conn, format_context& ctx) {
++  auto format(oxenmq::ConnectionID conn, format_context& ctx) const {
+     return formatter<std::string>::format(
+         fmt::format("{}", conn.to_string()), ctx);
+   }
+ };
+ template <>
+ struct fmt::formatter<oxenmq::address> : fmt::formatter<std::string> {
+-  auto format(oxenmq::address addr, format_context& ctx) {
++  auto format(oxenmq::address addr, format_context& ctx) const {
+     return formatter<std::string>::format(
+         fmt::format("{}", addr.full_address()), ctx);
+   }
+--- a/external/oxen-logging/include/oxen/log/color.hpp
++++ b/external/oxen-logging/include/oxen/log/color.hpp
+@@ -30,7 +30,7 @@
+     constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
+
+     template <typename FormatContext>
+-    auto format(const oxen::log::detail::text_style_wrapper<T...>& f, FormatContext& ctx) {
++    auto format(const oxen::log::detail::text_style_wrapper<T...>& f, FormatContext& ctx) const {
+         auto out = ctx.out();
+         return std::apply(
+                 [&](const auto&... args) { return fmt::format_to(out, f.sty, f.fmt, args...); },
+--- a/llarp/util/str.hpp
++++ b/llarp/util/str.hpp
+@@ -101,7 +101,14 @@
+   std::string
+   join(std::string_view delimiter, It begin, It end)
+   {
+-    return fmt::format("{}", fmt::join(delimiter, begin, end));
++    std::string s;
++    for (auto it = begin; it != end; ++it)
++    {
++      if (it != begin)
++        s += delimiter;
++      s += fmt::format("{}", *it);
++    }
++    return s;
+   }
+
+   /// Wrapper around the above that takes a container and passes c.begin(), c.end() to the above.
+--- a/llarp/net/interface_info.cpp
++++ b/llarp/net/interface_info.cpp
+@@ -1,4 +1,5 @@
+ #include "interface_info.hpp"
++#include <llarp/util/str.hpp>
+
+ namespace llarp::net
+ {
+@@ -9,7 +10,7 @@
+         "{}[i={}; addrs={}; gw={}]",
+         name,
+         index,
+-        fmt::join(addrs, ","),
++        llarp::join(",", addrs),
+         gateway ? net::ToString(*gateway) : "none");
+   }
+ }  // namespace llarp::net
+--- a/llarp/service/intro_set.cpp
++++ b/llarp/service/intro_set.cpp
+@@ -1,4 +1,5 @@
+ #include "intro_set.hpp"
++#include <llarp/util/str.hpp>
+ #include <llarp/crypto/crypto.hpp>
+ #include <llarp/path/path.hpp>
+
+@@ -425,7 +426,7 @@
+     return fmt::format(
+         "[IntroSet addressKeys={} intros={{{}}} sntrupKey={} topic={} signedAt={} v={} sig={}]",
+         addressKeys,
+-        fmt::format("{}", fmt::join(intros, ",")),
++        fmt::format("{}", llarp::join(",", intros)),
+         sntrupKey,
+         topic,
+         timestampSignedAt.count(),
+--- a/llarp/router_contact.cpp
++++ b/llarp/router_contact.cpp
+@@ -1,4 +1,5 @@
+ #include "router_contact.hpp"
++#include <llarp/util/str.hpp>
+
+ #include "constants/version.hpp"
+ #include "crypto/crypto.hpp"
+@@ -604,7 +605,7 @@
+         last_updated.count(),
+         netID,
+         version,
+-        fmt::format("{}", fmt::join(addrs, ",")),
++        fmt::format("{}", llarp::join(",", addrs)),
+         enckey,
+         signature);
+   }
+--- a/llarp/dns/message.cpp
++++ b/llarp/dns/message.cpp
+@@ -1,4 +1,5 @@
+ #include "message.hpp"
++#include <llarp/util/str.hpp>
+ #include <oxenc/endian.h>
+
+ #include "dns.hpp"
+@@ -412,10 +413,10 @@
+           "additional={{{}}}]",
+           hdr_id,
+           hdr_fields,
+-          fmt::format("{}", fmt::join(questions, ",")),
+-          fmt::format("{}", fmt::join(answers, ",")),
+-          fmt::format("{}", fmt::join(authorities, ",")),
+-          fmt::format("{}", fmt::join(additional, ",")));
++          fmt::format("{}", llarp::join(",", questions)),
++          fmt::format("{}", llarp::join(",", answers)),
++          fmt::format("{}", llarp::join(",", authorities)),
++          fmt::format("{}", llarp::join(",", additional)));
+     }
+
+     std::optional<Message>
+--- a/llarp/router/router.cpp
++++ b/llarp/router/router.cpp
+@@ -879,7 +879,7 @@
+   {
+     std::string status;
+     auto out = std::back_inserter(status);
+-    fmt::format_to(out, "v{}", fmt::join(llarp::VERSION, "."));
++    fmt::format_to(out, "v{}.{}.{}", llarp::VERSION[0], llarp::VERSION[1], llarp::VERSION[2]);
+     if (IsServiceNode())
+     {
+       fmt::format_to(
