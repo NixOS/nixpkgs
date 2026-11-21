@@ -14,7 +14,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  version = "0.3.12";
+  version = "0.5.3";
   pname = "incus-spawn";
 
   src =
@@ -66,21 +66,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-linux-amd64";
-        hash = "sha256-2gJnH6cfQzL1BVDD80yHtWBiJ5p95SjcVshbEF1mIPo=";
+        hash = "sha256-AmfPSsC0yjVFzCfT7Mau0uTzrQ0hJSU0fLzUmGaBK/8=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-linux-aarch64";
-        hash = "sha256-Iwg71OUhJNdZc7/z1lVa87CMSKzvVisaat7W1Poxl2c=";
+        hash = "sha256-Yrpjzli+sEODacWKoRwP/8JKT0em6c72Ig232dJv4ik=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/incus-spawn-macos-aarch64";
-        hash = "sha256-sfEY1AQYJKTEFBOX91QTpQtCgCrd/++eXWLZIgtXE/s=";
+        hash = "sha256-GQpi2vWd7Ic+DifLI7OfOp0XB42Dpt4exWyc2YPd5iU=";
       };
     };
 
     git-remote-isx = fetchurl {
       url = "https://github.com/Sanne/incus-spawn/releases/download/v${finalAttrs.version}/git-remote-isx";
-      hash = "sha256-I9zmdLzO7VcfLHdgFD2Lvwiq4fkDw885j1JWsL8c+hA=";
+      hash = "sha256-Og1xfxjG01/CcmbikeO5H3Jc3Beyctt7KZWr5Lcs9LY=";
     };
 
     tests.version = testers.testVersion {
