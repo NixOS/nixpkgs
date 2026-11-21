@@ -1,22 +1,22 @@
 {
   "charles5": {
-    "version": "5.2.2",
+    "version": "5.2.3",
     "sources": {
       "x86_64-linux": {
-        "url": "https://www.charlesproxy.com/assets/release/5.2.2/charles-proxy-5.2.2_x86_64.tar.gz",
-        "hash": "sha256-oj6yCojocVHUzia8Hy+D36r8OB+cESUYHfAqMIniUok="
+        "url": "https://www.charlesproxy.com/assets/release/5.2.3/charles-proxy-5.2.3_x86_64.tar.gz",
+        "hash": "sha256-r+IuJxwcc13+8sSnbikaXMtzY0saD344cAmRGKxd6qk="
       },
       "aarch64-linux": {
-        "url": "https://www.charlesproxy.com/assets/release/5.2.2/charles-proxy-5.2.2_aarch64.tar.gz",
-        "hash": "sha256-d3+s6+p/oRFPKj11opZSNWQjHns5Lm+Zb2zlhLzMc1I="
+        "url": "https://www.charlesproxy.com/assets/release/5.2.3/charles-proxy-5.2.3_aarch64.tar.gz",
+        "hash": "sha256-l4EDigFGbjeNNfgdDSkLqFUkuqDt5am5zBLi/edoXPQ="
       },
       "x86_64-darwin": {
-        "url": "https://www.charlesproxy.com/assets/release/5.2.2/charles-proxy-5.2.2.dmg",
-        "hash": "sha256-Vg4Qwxuy5oC5udrfD7ZkUCib0itKaLysWhOozOUtnwU="
+        "url": "https://www.charlesproxy.com/assets/release/5.2.3/charles-proxy-5.2.3.dmg",
+        "hash": "sha256-xvCNQNOfyGWw1OSYn4nEKPQ7olsOVATHlDvZgTF/8NI="
       },
       "aarch64-darwin": {
-        "url": "https://www.charlesproxy.com/assets/release/5.2.2/charles-proxy-5.2.2.dmg",
-        "hash": "sha256-Vg4Qwxuy5oC5udrfD7ZkUCib0itKaLysWhOozOUtnwU="
+        "url": "https://www.charlesproxy.com/assets/release/5.2.3/charles-proxy-5.2.3.dmg",
+        "hash": "sha256-xvCNQNOfyGWw1OSYn4nEKPQ7olsOVATHlDvZgTF/8NI="
       }
     }
   },
