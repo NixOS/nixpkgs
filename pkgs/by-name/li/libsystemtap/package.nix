@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "git://sourceware.org/git/systemtap.git";
-    rev = "release-${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-olN98hjIYZmQvI7Fn1v5ZwRl7yaCAPRGr2g33oMq7VQ=";
   };
 
@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ elfutils ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Statically defined probes development files";
