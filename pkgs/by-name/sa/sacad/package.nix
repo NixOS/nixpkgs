@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sacad";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "sacad";
     tag = finalAttrs.version;
-    hash = "sha256-ViiIDkew1C2leADGbGldtKfAenafABP2UUlMzaj4ixA=";
+    hash = "sha256-h4XefWw1f13uw77JnUVlQ+w5CeBcMcqCk6eXn5LTc+c=";
   };
 
-  cargoHash = "sha256-39xtrZbTZPsNQ7rvgftaH6kSPF/qjQMzwuAmbj47j08=";
+  cargoHash = "sha256-euPVf/CORH7dqH0+H8Q/Grg6hARlY5N/hhWFdn8BSUg=";
 
   nativeBuildInputs = [
     pkg-config
