@@ -3,6 +3,7 @@
   qttools,
   pkg-config,
   xz,
+  bzip2,
 }:
 mkKdeDerivation {
   pname = "karchive";
@@ -11,5 +12,8 @@ mkKdeDerivation {
     qttools
     pkg-config
   ];
-  extraBuildInputs = [ xz ];
+  extraBuildInputs = [
+    xz
+    bzip2
+  ];
 }

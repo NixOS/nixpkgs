@@ -1,5 +1,12 @@
-{ mkKdeDerivation }:
+{
+  mkKdeDerivation,
+  lib,
+}:
 mkKdeDerivation {
   pname = "kded";
-  meta.mainProgram = "kded6";
+
+  meta = {
+    mainProgram = "kded6";
+    badPlatforms = lib.platforms.darwin;
+  };
 }
