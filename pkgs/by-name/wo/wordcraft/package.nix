@@ -21,6 +21,8 @@
   craft-i18n,
 
   nix-update-script,
+  xcbuild,
+  rcodesign,
 }:
 
 let
@@ -71,6 +73,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--package=wordcraft-cli"
+  ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # tests are broken in Darwin (see https://github.com/storytold/wordcraft/issues/6630#issuecomment-6888749626)
+    "--skip=strict::a_character_in_a_metafile_pictures_text_fails_strict_like_the_pages_own"
+    "--skip=strict::an_uncovered_code_point_fails_strict_with_a_report_and_no_file"
+    "--skip=strict::render_strict_refuses_an_uncovered_character_on_the_page_with_no_stdout_or_file"
   ];
 
   # The wordcraft-zotero tests talk to a fake Zotero over a loopback TCP socket.
