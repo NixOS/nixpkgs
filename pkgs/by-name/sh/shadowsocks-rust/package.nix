@@ -18,7 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-wqZh+JQDUbH7ZYT4vNzSI3JwRRYDgS5/RjrDaKCxgLc=";
   };
 
-  cargoHash = "sha256-ZLgHDJ4kP+Ohw1OgC/0wHAPnTEc5bN0JQMmgms1Gih4=";
+  cargoPatches = [
+    ./update-webpki-roots.patch
+  ];
+
+  cargoHash = "sha256-tpW/yJb/qxoS1nM7d0GI/9FOJCA3UlslNOKCJ/zXWcM=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
