@@ -3226,8 +3226,6 @@ self: super: with self; {
 
   clarifai-protocol = callPackage ../development/python-modules/clarifai-protocol { };
 
-  class-doc = callPackage ../development/python-modules/class-doc { };
-
   classify-imports = callPackage ../development/python-modules/classify-imports { };
 
   claude-agent-sdk = callPackage ../development/python-modules/claude-agent-sdk { };
@@ -4434,6 +4432,8 @@ self: super: with self; {
 
   devtools = callPackage ../development/python-modules/devtools { };
 
+  dextrace = callPackage ../development/python-modules/dextrace { };
+
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
   dfir-ntfs = callPackage ../development/python-modules/dfir_ntfs { };
@@ -4511,6 +4511,8 @@ self: super: with self; {
   discum = callPackage ../development/python-modules/discum { };
 
   diskcache = callPackage ../development/python-modules/diskcache { };
+
+  diskcache-community = callPackage ../development/python-modules/diskcache-community { };
 
   diskcache-stubs = callPackage ../development/python-modules/diskcache-stubs { };
 
@@ -22152,6 +22154,8 @@ self: super: with self; {
   types-psutil = callPackage ../development/python-modules/types-psutil { };
 
   types-psycopg2 = callPackage ../development/python-modules/types-psycopg2 { };
+
+  types-pyasn1 = callPackage ../development/python-modules/types-pyasn1 { };
 
   types-pyopenssl = callPackage ../development/python-modules/types-pyopenssl { };
 

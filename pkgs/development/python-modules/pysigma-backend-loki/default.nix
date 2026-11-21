@@ -34,6 +34,11 @@ buildPythonPackage (finalAttrs: {
     "tests/test_backend_loki_field_modifiers.py"
   ];
 
+  disabledTests = [
+    # Tests are out-dated
+    "test_loki_temporal_correlation_nested"
+  ];
+
   meta = {
     description = "Library to support the loki backend for pySigma";
     homepage = "https://github.com/grafana/pySigma-backend-loki";

@@ -179,7 +179,7 @@ $ nix-shell -p qemu --run 'qemu-aarch64 ./result/bin/hello'
 Hello, world!
 ```
 
-The same pattern works for other targets by substituting the `pkgsCross.*` attribute and the emulator package (e.g. `wine` for `pkgsCross.mingwW64`).
+The same pattern works for other targets by substituting the `pkgsCross.*` attribute and the emulator package (e.g. `wine` for `pkgsCross.mingw-msvcrt-x86_64`).
 
 #### My package fails to find a binutils command (`cc`/`ar`/`ld` etc.) {#cross-qa-fails-to-find-binutils}
 Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
