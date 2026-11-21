@@ -134,167 +134,125 @@ stdenv.mkDerivation (
       "shadowstack"
     ];
 
-    patches =
+    patches = [
       # Support custom installation dirs
       # Originally based off https://reviews.llvm.org/D99484
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
-      [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
-      ++ [
-        # Running the tests involves invoking binaries (like `opt`) that depend on
-        # the LLVM dylibs and reference them by absolute install path (i.e. their
-        # nix store path).
-        #
-        # Because we have not yet run the install phase (we're running these tests
-        # as part of `checkPhase` instead of `installCheckPhase`) these absolute
-        # paths do not exist yet; to work around this we point the loader (`ld` on
-        # unix, `dyld` on macOS) at the `lib` directory which will later become this
-        # package's `lib` output.
-        #
-        # Previously we would just set `LD_LIBRARY_PATH` to include the build `lib`
-        # dir but:
-        #   - this doesn't generalize well to other platforms; `lit` doesn't forward
-        #     `DYLD_LIBRARY_PATH` (macOS):
-        #     + https://github.com/llvm/llvm-project/blob/0d89963df354ee309c15f67dc47c8ab3cb5d0fb2/llvm/utils/lit/lit/TestingConfig.py#L26
-        #   - even if `lit` forwarded this env var, we actually cannot set
-        #     `DYLD_LIBRARY_PATH` in the child processes `lit` launches because
-        #     `DYLD_LIBRARY_PATH` (and `DYLD_FALLBACK_LIBRARY_PATH`) is cleared for
-        #     "protected processes" (i.e. the python interpreter that runs `lit`):
-        #     https://stackoverflow.com/a/35570229
-        #   - other LLVM subprojects deal with this issue by having their `lit`
-        #     configuration set these env vars for us; it makes sense to do the same
-        #     for LLVM:
-        #     + https://github.com/llvm/llvm-project/blob/4c106cfdf7cf7eec861ad3983a3dd9a9e8f3a8ae/clang-tools-extra/test/Unit/lit.cfg.py#L22-L31
-        #
-        # !!! TODO: look into upstreaming this patch
-        (getVersionFile "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch")
+      (getVersionFile "llvm/gnu-install-dirs.patch")
 
-        # `lit` has a mode where it executes run lines as a shell script which is
-        # constructs; this is problematic for macOS because it means that there's
-        # another process in between `lit` and the binaries being tested. As noted
-        # above, this means that `DYLD_LIBRARY_PATH` is cleared which means that our
-        # tests fail with dyld errors.
-        #
-        # To get around this we patch `lit` to reintroduce `DYLD_LIBRARY_PATH`, when
-        # present in the test configuration.
-        #
-        # It's not clear to me why this isn't an issue for LLVM developers running
-        # on macOS (nothing about this _seems_ nix specific)..
-        (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
-      ]
-      ++
-        lib.optional (lib.versionOlder release_version "19")
-          # Add missing include headers to build against gcc-15:
-          #   https://github.com/llvm/llvm-project/pull/101761
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
-              hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
-              stripLen = 1;
-            }
-          )
-      ++ lib.optionals (lib.versions.major release_version == "18") [
-        # Reorgs one test so the next patch applies
-        (fetchpatch {
-          name = "osabi-test-reorg.patch";
-          url = "https://github.com/llvm/llvm-project/commit/06cecdc60ec9ebfdd4d8cdb2586d201272bdf6bd.patch";
-          stripLen = 1;
-          hash = "sha256-s9GZTNgzLS511Pzh6Wb1hEV68lxhmLWXjlybHBDMhvM=";
-        })
-        # Sets the OSABI for OpenBSD, needed for an LLD patch for OpenBSD.
-        # https://github.com/llvm/llvm-project/pull/98553
-        (fetchpatch {
-          name = "mc-set-openbsd-osabi.patch";
-          url = "https://github.com/llvm/llvm-project/commit/b64c1de714c50bec7493530446ebf5e540d5f96a.patch";
-          stripLen = 1;
-          hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
-        })
-        # Fix build with gcc15
-        # https://github.com/llvm/llvm-project/commit/8f39502b85d34998752193e85f36c408d3c99248
-        # https://github.com/llvm/llvm-project/commit/7abf44069aec61eee147ca67a6333fc34583b524
-        ./llvm-add-include-cstdint.patch
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "19") [
-        # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
-        (fetchpatch {
-          url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
-          hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
-          stripLen = 1;
-        })
-      ]
-      ++ lib.optionals enablePolly [
-        # Just like the `gnu-install-dirs` patch, but for `polly`.
-        (getVersionFile "llvm/gnu-install-dirs-polly.patch")
-        # Just like the `llvm-lit-cfg` patch, but for `polly`.
-        (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
-      ]
-      ++
-        lib.optional (lib.versions.major release_version == "20")
-          # Test failure on riscv64, fixed in llvm 21
-          # https://github.com/llvm/llvm-project/issues/150818
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
-              hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
-              stripLen = 1;
-            }
-          )
-      ++ lib.optionals (lib.versions.major release_version == "21") [
-        # Several LLVM versions have a bug in SelectionDAG that causes
-        # miscompilations around conditional poisions. This was exposed due to
-        # Rust 1.97.0 exercising the involved code path heavily and generating
-        # segfaulting code. The patch was made to LLVM 23, but the tests have
-        # many conflicts, so we vendor a version-specific modified version.
-        #
-        # This should be backported to older LLVM versions as well, but this
-        # has not yet been done in order to ship the more important fixes
-        # quickly.
-        #
-        # Rust issue: https://github.com/rust-lang/rust/issues/159035
-        # LLVM issue: https://github.com/llvm/llvm-project/issues/208611
-        # LLVM PR: https://github.com/llvm/llvm-project/pull/208683
-        (getVersionFile "llvm/sdag-freeze-condition-in-select-of-load-fold.patch")
-      ]
-      ++ lib.optionals (lib.versions.major release_version == "22") [
-        # Same issue and fix as above, for LLVM 22. While LLVM 22 was EOL at
-        # the time of the LLVM PR, and was thus not backported upstream, the
-        # backport was made to Rust's LLVM fork on LLVM 22.1. Accordingly, we
-        # fetch the patch from there.
-        (fetchpatch {
-          name = "llvm-22-sdag-freeze-condition-in-select-of-load-fold.patch";
-          url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch";
-          stripLen = 1;
-          hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
-        })
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "22") [
-        # Fixes incorrect template specializations that cause building LLVM to fail to build after Darwin bumps its
-        # system libc++ headers to 22.1.6+apple-sdk-27.0. These definitions were also UB apparently.
-        # See: https://github.com/llvm/llvm-project/pull/160804
-        (getVersionFile "llvm/get-rid-of-incorrect-std-template-specializations.patch")
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "23") [
-        # As of macOS 27 (and iOS 27, etc), the Darwin version number is the same as the OS version number.
-        # This change breaks target parsing because `darwin27` is incorrectly interpreted as macOS 28.
-        # This patch is a backport of the target parsing changes in LLVM 23, which fixes the problem.
-        # Hopefully, Apple does not change the version number scheme again any time soon.
-        (getVersionFile "llvm/backport-darwin-triple-parsing.patch")
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "22") [
-        # Needed to add arm64e.x1 support, as the enum name differs from the architecture name
-        (getVersionFile "llvm/llvm-textapi-separate-arch-name-enum-label.patch")
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "23") [
-        # Needed to link with the macOS 27 sdk, as it has libraries linked for arm64e.x1
-        # a new arm64 subtype that gives more pointer authentication machinery.
-        # Vendored backport of the patch for LLVM 23
-        (getVersionFile "llvm/backport-minimal-arm64e_x1-support.patch")
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "23") [
-        # macOS 27 requires the string pool to be pointer-aligned when dylibs are linked against the 27.0 SDK.
-        # While ld64 does align them correctly, they are misaligned by LLVM’s `strip`.
-        # See: https://github.com/llvm/llvm-project/issues/203678
-        (getVersionFile "llvm/align-__linkedit-entries-to-pointer-size.patch")
-      ];
+      # Running the tests involves invoking binaries (like `opt`) that depend on
+      # the LLVM dylibs and reference them by absolute install path (i.e. their
+      # nix store path).
+      #
+      # Because we have not yet run the install phase (we're running these tests
+      # as part of `checkPhase` instead of `installCheckPhase`) these absolute
+      # paths do not exist yet; to work around this we point the loader (`ld` on
+      # unix, `dyld` on macOS) at the `lib` directory which will later become this
+      # package's `lib` output.
+      #
+      # Previously we would just set `LD_LIBRARY_PATH` to include the build `lib`
+      # dir but:
+      #   - this doesn't generalize well to other platforms; `lit` doesn't forward
+      #     `DYLD_LIBRARY_PATH` (macOS):
+      #     + https://github.com/llvm/llvm-project/blob/0d89963df354ee309c15f67dc47c8ab3cb5d0fb2/llvm/utils/lit/lit/TestingConfig.py#L26
+      #   - even if `lit` forwarded this env var, we actually cannot set
+      #     `DYLD_LIBRARY_PATH` in the child processes `lit` launches because
+      #     `DYLD_LIBRARY_PATH` (and `DYLD_FALLBACK_LIBRARY_PATH`) is cleared for
+      #     "protected processes" (i.e. the python interpreter that runs `lit`):
+      #     https://stackoverflow.com/a/35570229
+      #   - other LLVM subprojects deal with this issue by having their `lit`
+      #     configuration set these env vars for us; it makes sense to do the same
+      #     for LLVM:
+      #     + https://github.com/llvm/llvm-project/blob/4c106cfdf7cf7eec861ad3983a3dd9a9e8f3a8ae/clang-tools-extra/test/Unit/lit.cfg.py#L22-L31
+      #
+      # !!! TODO: look into upstreaming this patch
+      (getVersionFile "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch")
+
+      # `lit` has a mode where it executes run lines as a shell script which is
+      # constructs; this is problematic for macOS because it means that there's
+      # another process in between `lit` and the binaries being tested. As noted
+      # above, this means that `DYLD_LIBRARY_PATH` is cleared which means that our
+      # tests fail with dyld errors.
+      #
+      # To get around this we patch `lit` to reintroduce `DYLD_LIBRARY_PATH`, when
+      # present in the test configuration.
+      #
+      # It's not clear to me why this isn't an issue for LLVM developers running
+      # on macOS (nothing about this _seems_ nix specific)..
+      (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
+    ]
+    ++ lib.optionals enablePolly [
+      # Just like the `gnu-install-dirs` patch, but for `polly`.
+      (getVersionFile "llvm/gnu-install-dirs-polly.patch")
+      # Just like the `llvm-lit-cfg` patch, but for `polly`.
+      (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
+    ]
+    ++ lib.optionals (lib.versions.major release_version == "20") [
+      # Test failure on riscv64, fixed in llvm 21
+      # https://github.com/llvm/llvm-project/issues/150818
+      (fetchpatch {
+        url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
+        hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
+        stripLen = 1;
+      })
+    ]
+    ++ lib.optionals (lib.versions.major release_version == "21") [
+      # Several LLVM versions have a bug in SelectionDAG that causes
+      # miscompilations around conditional poisions. This was exposed due to
+      # Rust 1.97.0 exercising the involved code path heavily and generating
+      # segfaulting code. The patch was made to LLVM 23, but the tests have
+      # many conflicts, so we vendor a version-specific modified version.
+      #
+      # This should be backported to older LLVM versions as well, but this
+      # has not yet been done in order to ship the more important fixes
+      # quickly.
+      #
+      # Rust issue: https://github.com/rust-lang/rust/issues/159035
+      # LLVM issue: https://github.com/llvm/llvm-project/issues/208611
+      # LLVM PR: https://github.com/llvm/llvm-project/pull/208683
+      (getVersionFile "llvm/sdag-freeze-condition-in-select-of-load-fold.patch")
+    ]
+    ++ lib.optionals (lib.versions.major release_version == "22") [
+      # Same issue and fix as above, for LLVM 22. While LLVM 22 was EOL at
+      # the time of the LLVM PR, and was thus not backported upstream, the
+      # backport was made to Rust's LLVM fork on LLVM 22.1. Accordingly, we
+      # fetch the patch from there.
+      (fetchpatch {
+        name = "llvm-22-sdag-freeze-condition-in-select-of-load-fold.patch";
+        url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch";
+        stripLen = 1;
+        hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
+      })
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "22") [
+      # Fixes incorrect template specializations that cause building LLVM to fail to build after Darwin bumps its
+      # system libc++ headers to 22.1.6+apple-sdk-27.0. These definitions were also UB apparently.
+      # See: https://github.com/llvm/llvm-project/pull/160804
+      (getVersionFile "llvm/get-rid-of-incorrect-std-template-specializations.patch")
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "23") [
+      # As of macOS 27 (and iOS 27, etc), the Darwin version number is the same as the OS version number.
+      # This change breaks target parsing because `darwin27` is incorrectly interpreted as macOS 28.
+      # This patch is a backport of the target parsing changes in LLVM 23, which fixes the problem.
+      # Hopefully, Apple does not change the version number scheme again any time soon.
+      (getVersionFile "llvm/backport-darwin-triple-parsing.patch")
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "22") [
+      # Needed to add arm64e.x1 support, as the enum name differs from the architecture name
+      (getVersionFile "llvm/llvm-textapi-separate-arch-name-enum-label.patch")
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "23") [
+      # Needed to link with the macOS 27 sdk, as it has libraries linked for arm64e.x1
+      # a new arm64 subtype that gives more pointer authentication machinery.
+      # Vendored backport of the patch for LLVM 23
+      (getVersionFile "llvm/backport-minimal-arm64e_x1-support.patch")
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "23") [
+      # macOS 27 requires the string pool to be pointer-aligned when dylibs are linked against the 27.0 SDK.
+      # While ld64 does align them correctly, they are misaligned by LLVM’s `strip`.
+      # See: https://github.com/llvm/llvm-project/issues/203678
+      (getVersionFile "llvm/align-__linkedit-entries-to-pointer-size.patch")
+    ];
 
     nativeBuildInputs = [
       cmake
@@ -371,12 +329,6 @@ stdenv.mkDerivation (
           ''
             substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-          ''
-        +
-          # This test fails with a `dysmutil` crash; have not yet dug into what's
-          # going on here (TODO(@rrbutani)).
-          lib.optionalString (stdenv.hostPlatform.isx86 && lib.versionOlder release_version "19") ''
-            rm test/tools/dsymutil/ARM/obfuscated.test
           ''
         +
           # Requires a version of `codesign` that supports signing bundles, which sigtool does not support.

@@ -36,8 +36,7 @@
   # implementation of the routines instead of the implementation
   # using ad-hoc mutexes (which doesn't depend on libc at all).
   # Use of pthreads helps code play better with sanitizers.
-  withAtomicsPthread ?
-    lib.versionAtLeast release_version "19" && stdenv.cc.libc != null && !stdenv.hostPlatform.isMinGW,
+  withAtomicsPthread ? stdenv.cc.libc != null && !stdenv.hostPlatform.isMinGW,
 
   # In recent releases, the compiler-rt build seems to produce
   # many `libclang_rt*` libraries, but not a single unified
@@ -185,28 +184,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals noSanitizers [
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
   ]
-  ++
-    lib.optionals
-      (
-        (useLLVM && !haveLibcxx)
-        || !haveLibc
-        || bareMetal
-        || isMusl
-        || isDarwinStatic
-        # On Darwin, `darwin.libcxx` is the libcxx shipped inside the Apple SDK,
-        # so it is bumped together with the SDK. In libcxx 21 (Apple SDK 26.4+),
-        # the fallbacks for `__builtin_ctzg`/`__builtin_clzg` were removed because
-        # clang 18 support was dropped: https://github.com/llvm/llvm-project/pull/133920
-        # Clang 18 itself doesn't recognize those builtins, so the C++ components
-        # of compiler-rt 18 (which include `<algorithm>` etc.) fail to compile.
-        || (lib.versions.major release_version == "18" && stdenv.hostPlatform.isDarwin)
-      )
-      [
-        (lib.cmakeBool "COMPILER_RT_BUILD_XRAY" false)
-        (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
-        (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
-        (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false) # may be possible to build with musl if necessary
-      ]
+  ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
+    (lib.cmakeBool "COMPILER_RT_BUILD_XRAY" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false) # may be possible to build with musl if necessary
+  ]
   ++ lib.optionals (!haveLibc || bareMetal) [
     (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" false)
     (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
@@ -246,7 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "COMPILER_RT_ENABLE_IOS" false)
     ]
   )
-  ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
+  ++ lib.optionals noSanitizers [
     (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
   ]
   ++
@@ -271,11 +254,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
     ''
     + lib.optionalString (!haveLibc) (
-      (lib.optionalString (lib.versions.major release_version == "18") ''
-        substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
-          --replace-fail "<stdlib.h>" "<stddef.h>"
-      '')
-      + ''
+      ''
         substituteInPlace lib/builtins/int_util.c \
           --replace-fail "#include <stdlib.h>" ""
       ''
@@ -308,15 +287,13 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       )
     )
-    +
-      lib.optionalString (lib.versionAtLeast release_version "19")
-        # codesign in sigtool doesn't support the various options used by the build
-        # and is present in the bootstrap-tools. Removing find_program prevents the
-        # build from trying to use it and failing.
-        ''
-          substituteInPlace cmake/Modules/AddCompilerRT.cmake \
-            --replace-fail 'find_program(CODESIGN codesign)' ""
-        '';
+    # codesign in sigtool doesn't support the various options used by the build
+    # and is present in the bootstrap-tools. Removing find_program prevents the
+    # build from trying to use it and failing.
+    + ''
+      substituteInPlace cmake/Modules/AddCompilerRT.cmake \
+        --replace-fail 'find_program(CODESIGN codesign)' ""
+    '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cmakeFlagsArray+=(

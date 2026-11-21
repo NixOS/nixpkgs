@@ -185,6 +185,8 @@ makeScopeWithSplicing' {
 
       libclang = callPackage ./clang { };
 
+      bolt = callPackage ./bolt { };
+
       clang-unwrapped = self.libclang;
 
       llvm-manpages = lib.lowPrio (
@@ -474,9 +476,6 @@ makeScopeWithSplicing' {
       openmp = callPackage ./openmp { };
 
       mlir = callPackage ./mlir { };
-    }
-    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
-      bolt = callPackage ./bolt { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") (
       let
