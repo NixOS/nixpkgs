@@ -160,6 +160,10 @@ lib.makeOverridable (
 
     withRust = ((configfile.moduleStructuredConfig.settings.RUST or { }).tristate or null) == "y";
 
+    # `CONFIG_MODULES` is enabled by almost all `*defconfig`s, so unless
+    # explicitly disabled, assume that it is enabled.
+    withModules = ((configfile.moduleStructuredConfig.settings.MODULES or { }).tristate or null) != "n";
+
     configfile = stdenv.mkDerivation {
       inherit
         autoModules
@@ -292,7 +296,7 @@ lib.makeOverridable (
         pos = builtins.unsafeGetAttrPos "version" args;
 
         config = {
-          CONFIG_MODULES = "y";
+          CONFIG_MODULES = if withModules then "y" else "n";
           CONFIG_FW_LOADER = "y";
           CONFIG_RUST = if withRust then "y" else "n";
         };

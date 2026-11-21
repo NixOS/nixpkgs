@@ -19,7 +19,7 @@ buildEnv {
   postBuild = ''
     source ${stdenvNoCC}/setup
 
-    if ! test -d "$out/lib/modules"; then
+    if [ -z "$(ls -A "$out/lib/modules")" ]; then
       echo "No modules found."
       # To support a kernel without modules
       exit 0
