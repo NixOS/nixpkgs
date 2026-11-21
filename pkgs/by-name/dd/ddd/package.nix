@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchurl,
+  fontconfig,
   imagemagick,
+  libxaw,
   desktopToDarwinBundle,
   motif,
   ncurses,
@@ -13,15 +15,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ddd";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchurl {
     url = "mirror://gnu/ddd/ddd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XUy8iguwRYVDhm1nkwjFOj7wZuQC/loZGOGWmKPTWA8=";
+    hash = "sha256-uHUXpsP5YRVmNH4oOiz5Mfo2mRm1U1NqIjXmNAL07ok=";
   };
 
   postPatch = ''
-    substituteInPlace ddd/Ddd.in \
+    substituteInPlace ddd/x11/Ddd.in \
       --replace-fail 'debuggerCommand:' 'debuggerCommand: ${gdb}/bin/gdb'
   '';
 
@@ -31,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
+    fontconfig
+    libxaw
     motif
     ncurses
     libx11
@@ -64,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/ddd";
     license = lib.licenses.gpl3Only;
     mainProgram = "ddd";
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      evanwporter
+    ];
     platforms = lib.platforms.unix;
   };
 })
