@@ -27,7 +27,7 @@
   libxml2,
   libxslt,
   minizip,
-  ffmpeg_8,
+  ffmpeg_9,
   libepoxy,
   libgbm,
   libGL,
@@ -74,7 +74,7 @@ let
       libxml2
       libxslt
       minizip
-      ffmpeg_8
+      ffmpeg_9
       ;
   };
 in
