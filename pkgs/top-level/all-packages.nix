@@ -2881,6 +2881,7 @@ with pkgs;
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
+  flutter350 = flutterPackages.v3_50;
   flutter347 = flutterPackages.v3_47;
   flutter344 = flutterPackages.v3_44;
   flutter341 = flutterPackages.v3_41;
@@ -3750,6 +3751,7 @@ with pkgs;
     cargo-pgrx_0_17_0
     cargo-pgrx_0_18_0
     cargo-pgrx_0_19_0
+    cargo-pgrx_0_19_1
     cargo-pgrx
     ;
 

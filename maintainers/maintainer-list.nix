@@ -23870,6 +23870,12 @@
     name = "Kevin Mullins";
     keys = [ { fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A"; } ];
   };
+  poacher = {
+    email = "poacher@poacher.dev";
+    github = "poach3r";
+    githubId = 58641438;
+    name = "Henry Matonis";
+  };
   podium868909 = {
     email = "89096245@proton.me";
     github = "podium868909";
@@ -33037,6 +33043,12 @@
     github = "yuannan";
     githubId = 8006928;
     name = "Yuannan (Brandon) Lin";
+  };
+  yueyinqiu = {
+    email = "me@yueyinqiu.top";
+    github = "yueyinqiu";
+    githubId = 18749772;
+    name = "yueyinqiu";
   };
   yujonpradhananga = {
     email = "yujonpradhan123@gmail.com";

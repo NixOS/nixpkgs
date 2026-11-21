@@ -6749,8 +6749,6 @@ self: super: with self; {
 
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
 
-  garth = callPackage ../development/python-modules/garth { };
-
   gassist-text = callPackage ../development/python-modules/gassist-text { };
 
   gast = callPackage ../development/python-modules/gast { };
@@ -15261,6 +15259,8 @@ self: super: with self; {
   pyflexit = callPackage ../development/python-modules/pyflexit { };
 
   pyflic = callPackage ../development/python-modules/pyflic { };
+
+  pyflic-ble = callPackage ../development/python-modules/pyflic-ble { };
 
   pyflipper = callPackage ../development/python-modules/pyflipper { };
 

@@ -302,6 +302,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_doctor_endpoint_probe_reports_vendor"
     "test_websocket_context_trusts_corporate_root"
 
+    # tests/test_storage_backends.py: 1/15 disabled
+    # Flaky on Darwin: sqlite3.OperationalError "attempt to write a readonly database".
+    "test_create_storage_builtin_entrypoint_and_fallback"
+
     # tests/test_proxy_uds.py: 11/24 disabled
     # Darwin has a 104-byte UNIX socket path limit, which Nix's pytest temporary-directory paths exceed.
     "test_prepare_accepts_a_sticky_world_writable_parent"
