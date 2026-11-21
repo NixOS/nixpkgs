@@ -124,7 +124,7 @@ stdenv.mkDerivation {
 
   buildCommand =
     let
-      browserBinary = "${chromiumWV}/libexec/chromium/chromium";
+      browserBinary = "${chromiumWV}/libexec/chromium/chrome";
       libPath = lib.makeLibraryPath [
         libva
         pipewire
