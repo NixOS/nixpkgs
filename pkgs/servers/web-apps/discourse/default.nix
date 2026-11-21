@@ -101,6 +101,7 @@ let
   runtimeEnv = {
     HOME = "/run/discourse/home";
     RAILS_ENV = "production";
+    RAILS_LOG_TO_STDOUT = "1";
     UNICORN_LISTENER = "/run/discourse/sockets/unicorn.sock";
   };
 
