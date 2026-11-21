@@ -46,6 +46,40 @@ let
       # cursor size and theme; like xwayland, it is looked up on $PATH.
       xrdb
     ];
+
+  cosmicPackages = utils.removePackagesByName (
+    corePkgs
+    ++ (
+      with pkgs;
+      [
+        adwaita-icon-theme
+        alsa-utils
+        cosmic-edit
+        cosmic-icons
+        cosmic-monitor
+        cosmic-player
+        cosmic-randr
+        cosmic-reader
+        cosmic-screenshot
+        cosmic-term
+        cosmic-viewer
+        cosmic-wallpapers
+        cosmic-sound-theme
+        glib
+        hicolor-icon-theme
+        networkmanagerapplet
+        playerctl
+        pop-icon-theme
+        pop-launcher
+        pulseaudio
+        xdg-user-dirs
+      ]
+      ++ lib.optionals config.services.flatpak.enable [
+        # User may have Flatpaks enabled but might not want the `cosmic-store` package.
+        cosmic-store
+      ]
+    )
+  ) config.environment.cosmic.excludePackages;
 in
 {
   meta.teams = [ lib.teams.cosmic ];
@@ -79,39 +113,7 @@ in
       "/share/cosmic-layouts"
       "/share/cosmic-themes"
     ];
-    environment.systemPackages = utils.removePackagesByName (
-      corePkgs
-      ++ (
-        with pkgs;
-        [
-          adwaita-icon-theme
-          alsa-utils
-          cosmic-edit
-          cosmic-icons
-          cosmic-monitor
-          cosmic-player
-          cosmic-randr
-          cosmic-reader
-          cosmic-screenshot
-          cosmic-term
-          cosmic-viewer
-          cosmic-wallpapers
-          cosmic-sound-theme
-          glib
-          hicolor-icon-theme
-          networkmanagerapplet
-          playerctl
-          pop-icon-theme
-          pop-launcher
-          pulseaudio
-          xdg-user-dirs
-        ]
-        ++ lib.optionals config.services.flatpak.enable [
-          # User may have Flatpaks enabled but might not want the `cosmic-store` package.
-          cosmic-store
-        ]
-      )
-    ) config.environment.cosmic.excludePackages;
+    environment.systemPackages = cosmicPackages;
 
     # Distro-wide defaults for graphical sessions
     services.graphical-desktop.enable = true;
@@ -132,6 +134,8 @@ in
     };
 
     systemd.packages = [ pkgs.cosmic-session ];
+
+    services.dbus.packages = cosmicPackages;
 
     fonts.packages = with pkgs; [
       fira
