@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "rootlesskit";
-  version = "2.3.6";
+  version = "3.1.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "rootless-containers";
     repo = "rootlesskit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Y4ZuHddLisLjiftqprDdORDwM9/lSyrinWsMYtUzmco=";
+    hash = "sha256-kqEXut8z5AQsJM6f+paXmqbWao/knQFgLlrghzQHvds=";
   };
 
-  vendorHash = "sha256-sEKneHvQjVBido+Z5k1XjW7qWuqGOZQQX9BMX4DGb6M=";
+  vendorHash = "sha256-IQ+sgqmyAuInIcSNsFisRqjr+9wKobi5+zk/C0aPbKI=";
 
   passthru = {
     updateScript = nix-update-script { };
