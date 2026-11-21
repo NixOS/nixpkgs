@@ -39,7 +39,7 @@
         {
           # we 'disable' facter by overriding the report and setting it to empty with one caveat: hostPlatform
           config.hardware.facter.report = lib.mkForce {
-            system = config.nixpkgs.hostPlatform;
+            inherit (config.nixpkgs.hostPlatform) system;
           };
         }
       ];
