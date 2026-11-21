@@ -6,7 +6,6 @@
   unstableGitUpdater,
   hailort_4,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "dotwriter";
   version = "0-unstable-2022-01-10";
@@ -31,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
+
+  postInstall = ''
+    install -Dm 444 -t $out/include $src/lib/*.h
+  '';
 
   passthru.updateScript = unstableGitUpdater { };
 

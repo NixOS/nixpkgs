@@ -215,6 +215,38 @@ index 1503920..e7f86cf 100644
 -
 -
 +set(PROTOC_EXE "${Protobuf_PROTOC_EXECUTABLE}")
+diff --git a/hailort/cmake/external/readerwriterqueue.cmake b/hailort/cmake/external/readerwriterqueue.cmake
+index 403b1bc..7f8c90e 100644
+--- a/hailort/cmake/external/readerwriterqueue.cmake
++++ b/hailort/cmake/external/readerwriterqueue.cmake
+@@ -1,23 +1,7 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
++find_package(readerwriterqueue CONFIG REQUIRED)
+ 
+-FetchContent_Declare(
+-    readerwriterqueue
+-    GIT_REPOSITORY https://github.com/cameron314/readerwriterqueue
+-    GIT_TAG 435e36540e306cac40fcfeab8cc0a22d48464509 # Version 1.0.3
+-    GIT_SHALLOW TRUE
+-    SOURCE_DIR ${HAILO_EXTERNAL_DIR}/readerwriterqueue-src
+-    SUBBUILD_DIR ${HAILO_EXTERNAL_DIR}/readerwriterqueue-subbuild
+-)
+-
+-# https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+-FetchContent_GetProperties(readerwriterqueue)
+-if(NOT readerwriterqueue_POPULATED)
+-    FetchContent_Populate(readerwriterqueue)
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        # Add readerwriterqueue as a header-only library
+-        add_library(readerwriterqueue INTERFACE)
+-        target_include_directories(readerwriterqueue INTERFACE ${readerwriterqueue_SOURCE_DIR})
+-    endif()
++if(NOT TARGET readerwriterqueue)
++    add_library(readerwriterqueue ALIAS readerwriterqueue::readerwriterqueue)
+ endif()
+\ No newline at end of file
 diff --git a/hailort/cmake/external/spdlog.cmake b/hailort/cmake/external/spdlog.cmake
 index 14a0949..587079e 100644
 --- a/hailort/cmake/external/spdlog.cmake
