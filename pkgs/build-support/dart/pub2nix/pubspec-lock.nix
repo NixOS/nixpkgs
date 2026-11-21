@@ -32,6 +32,9 @@
   #
   # The passthru of the source derivation should be propagated.
   customSourceBuilders ? { },
+
+  # Flutter plugins can have additional native dependencies for their target.
+  targetFlutterPlatform ? null,
 }:
 
 let
@@ -134,7 +137,10 @@ let
     );
 
   sourceBuilders =
-    callPackage ../../../development/compilers/dart/package-source-builders { } // customSourceBuilders;
+    callPackage ../../../development/compilers/dart/package-source-builders {
+      inherit targetFlutterPlatform;
+    }
+    // customSourceBuilders;
 
   dependencySources = lib.filterAttrs (name: src: src != null) (
     builtins.mapAttrs (
