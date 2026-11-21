@@ -47,11 +47,13 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "agate"
+    "deepdiff"
     # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
     # https://pypi.org/project/isodate/0.7.2/
     "isodate"
     "pathspec"
     "protobuf"
+    "python-dateutil"
   ];
 
   dependencies = [
