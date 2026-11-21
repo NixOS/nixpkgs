@@ -109,5 +109,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cosmic-initial-setup";
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
   };
 })

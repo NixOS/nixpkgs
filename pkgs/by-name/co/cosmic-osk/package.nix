@@ -72,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cosmic-osk";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
     platforms = lib.platforms.linux;
   };
 })

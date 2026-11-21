@@ -51,5 +51,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cc-by-sa-40
     ];
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
   };
 })
