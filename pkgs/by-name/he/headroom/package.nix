@@ -143,7 +143,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     # Upstream only raised these floors for CVE fixes
     "click"
-    "opentelemetry-api"
   ];
   inherit dependencies;
 

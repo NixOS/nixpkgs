@@ -17,6 +17,7 @@
   # tests
   httpretty,
   mocket,
+  pytest-benchmark,
   opentelemetry-test-utils,
   pytestCheckHook,
   respx,
@@ -51,6 +52,7 @@ buildPythonPackage {
     httpretty
     mocket
     opentelemetry-test-utils
+    pytest-benchmark
     pytestCheckHook
     respx
     urllib3
