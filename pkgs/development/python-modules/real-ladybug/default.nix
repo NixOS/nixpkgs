@@ -35,6 +35,10 @@ buildPythonPackage (finalAttrs: {
     [tool.setuptools.package-data]
     real_ladybug = ["*.so", "*.dylib", "*.pyd"]
     TOML
+
+        # GCC 16 no longer includes <cstdint> transitively
+        # https://github.com/LadybugDB/ladybug/pull/373
+        sed -i '1i #include <cstdint>' ../../src/include/common/in_mem_overflow_buffer.h ../../third_party/thrift/Thrift.h
   '';
 
   build-system = [ setuptools ];
