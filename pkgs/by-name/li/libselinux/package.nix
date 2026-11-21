@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enablePython [ python3 ];
 
+  strictDeps = true;
+
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
