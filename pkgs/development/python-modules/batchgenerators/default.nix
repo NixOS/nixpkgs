@@ -4,8 +4,8 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  future,
   numpy,
+  pandas,
   pillow,
   scipy,
   scikit-learn,
@@ -13,23 +13,23 @@
   threadpoolctl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "batchgenerators";
-  version = "0.25.1";
+  version = "0.25.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "batchgenerators";
-    tag = "v${version}";
-    hash = "sha256-lvsen2AFRwFjLMgxXBQ9/xxmCOBx2D2PBIl0KpOzR70=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z4zeqFtYMB0l+kEtzQh++RvpAd6WSxXSzJOJ9NWPqnQ=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    future
     numpy
+    pandas
     pillow
     scipy
     scikit-learn
@@ -37,13 +37,7 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  # see https://github.com/MIC-DKFZ/batchgenerators/pull/78
-  pythonRemoveDeps = [ "unittest2" ];
-
   nativeCheckInputs = [ pytestCheckHook ];
-
-  # see https://github.com/MIC-DKFZ/batchgenerators/pull/78
-  disabledTestPaths = [ "tests/test_axis_mirroring.py" ];
 
   pythonImportsCheck = [
     "batchgenerators"
@@ -57,7 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "2D and 3D image data augmentation for deep learning";
     homepage = "https://github.com/MIC-DKFZ/batchgenerators";
+    changelog = "https://github.com/MIC-DKFZ/batchgenerators/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})
