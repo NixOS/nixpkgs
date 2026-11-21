@@ -21,12 +21,29 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    ./strlcpy-glibc-2.38-fix.patch
+    # Fixes the feature checks, which all failed as stdenv sets make's SHELL; drop once kvmtool has it
+    (fetchpatch {
+      name = "fix-feature-checks-with-shell-set.patch";
+      url = "https://lore.kernel.org/kvm/20261030004422.33732-1-mikatammi@gmail.com/raw";
+      hash = "sha256-46yK/TzPGvZFggvV3DEJ9CEPK5qgsD06yoUzoL+Zr0w=";
+    })
     # Fixes FDT_ERR_ALIGNMENT on riscv32; drop once kvmtool has it
     (fetchpatch {
       name = "align-fdt-staging-buffer.patch";
       url = "https://lore.kernel.org/kvm/20261028190531.48302-1-mikatammi@gmail.com/raw";
       hash = "sha256-RO1Ael0mkxIMA4F2pGKkzhhMz3Bq9faL+VSII03S26Q=";
+    })
+    # Fixes cross builds for x86_64, which ran the build platform's nm; drop once kvmtool has it
+    (fetchpatch {
+      name = "x86-cross-nm.patch";
+      url = "https://lore.kernel.org/kvm/20261030104018.71809-1-mikatammi@gmail.com/raw";
+      hash = "sha256-uWSmpbKJ0pmh8kVsFcd06c+j2tppn0+RjP9TVbPHi0E=";
+    })
+    # Fixes lkvm on x86 with musl, whose fortify-headers trapped on the BIOS copy; drop once kvmtool has it
+    (fetchpatch {
+      name = "x86-bios-rom-unsized.patch";
+      url = "https://lore.kernel.org/kvm/20261030142643.89313-1-mikatammi@gmail.com/raw";
+      hash = "sha256-yiKjAWQmTIPVJEmtWZrqjHsH0jLDcwvh/Qz6+/mBG5E=";
     })
   ];
 
