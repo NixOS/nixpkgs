@@ -3,26 +3,29 @@
   rustPlatform,
   fetchFromGitLab,
   protobuf,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bark-ffi-go";
-  version = "0.2.3";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     owner = "ark-bitcoin";
     repo = "bark-ffi-bindings";
-    rev = "3c626a43d7523c4d19e867bd453ec80c541780c7";
-    hash = "sha256-PbGTbVMO2L+gQpZQewkR0uo6fxqrVUjT/eAsnz2o/u4=";
+    rev = "66d047f7ee08c2bca3675605ea7a88bc8b50adb3";
+    hash = "sha256-Dq4DfRYb5kVmdBJ6J909Z8zXOTzv6JhUBJ3yE/jXN24=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/golang/rust";
 
-  cargoHash = "sha256-OED+NqNt71771UDZ1M8Ks/Yfx8YNjfL246FKMeLFfLg=";
+  cargoHash = "sha256-K4/9rp9ktZU67TzaHYO655CgzasUG+iH3vfiK7ccVto=";
 
   cargoBuildFlags = [ "--lib" ];
 
   doCheck = false;
+
+  buildInputs = [ sqlite ];
 
   nativeBuildInputs = [
     protobuf
