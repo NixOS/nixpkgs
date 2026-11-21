@@ -115,6 +115,22 @@ stdenv.mkDerivation (finalAttrs: {
       stripLen = 1;
       extraPrefix = "src/sta/";
     })
+    # Fix that strtof fallback, which rejects every valid float, so no
+    # liberty number parses on darwin.
+    # https://github.com/The-OpenROAD-Project/OpenSTA/commit/48febcf78
+    (fetchpatch {
+      url = "https://github.com/The-OpenROAD-Project/OpenSTA/commit/48febcf78552ffedb97816a556ca2226f4879a48.patch";
+      hash = "sha256-If8imik2+cKPhkmn03cvsfNKyvs3cYn4kkKiyJlvqiA=";
+      stripLen = 1;
+      extraPrefix = "src/sta/";
+    })
+    # https://github.com/The-OpenROAD-Project/OpenSTA/pull/426
+    (fetchpatch {
+      url = "https://github.com/The-OpenROAD-Project/OpenSTA/commit/ee5021dffcc65a9fe22e420ee15655e76362b03a.patch";
+      hash = "sha256-cCjRbD0Ti7NverJebyUojZd5C03GhQgbG+yzIsylU8g=";
+      stripLen = 1;
+      extraPrefix = "src/sta/";
+    })
     # Replace deprecated sprintf with snprintf in Logger::error.
     # macOS Apple SDK 14.4+ marks sprintf as deprecated, breaking -Werror builds.
     # https://github.com/The-OpenROAD-Project/OpenROAD/pull/10127
