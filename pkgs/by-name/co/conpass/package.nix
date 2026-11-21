@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "conpass";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "login-securite";
     repo = "conpass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EXmmLL2z/jG3ThIyOXnJbYoorOg40HRhJ/74hN44NO4=";
+    hash = "sha256-DFEB38oMvguYe3BNPidSl+HmZ3jZ1oy0XnwOqoNOd/Y=";
   };
 
   build-system = with python3.pkgs; [ hatchling ];
