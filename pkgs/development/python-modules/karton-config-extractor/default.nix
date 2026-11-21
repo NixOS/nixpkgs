@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
-  version = "2.3.2";
+  version = "3.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-config-extractor";
     tag = "v${version}";
-    hash = "sha256-JtR4Vwm0Qd6SNf2h872+fPTB4cegpuh1QH0wYSVGRgY=";
+    hash = "sha256-EhvMPlwrKlh5M1R0mVBiSdFhPQiYjWSUKEMt200o3mI=";
   };
 
   propagatedBuildInputs = [
