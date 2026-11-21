@@ -4,8 +4,8 @@
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
+  nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "little_boxes";
   version = "1.12.1";
@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Add boxes are input text";
