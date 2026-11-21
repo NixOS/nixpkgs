@@ -315,19 +315,19 @@ in
         }
       ];
       services.davis.config = {
-        APP_ENV = "prod";
-        APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
-        APP_LOG_DIR = "${cfg.dataDir}/var/log";
-        LOG_FILE_PATH = "%kernel.logs_dir%/%kernel.environment%.log";
-        DATABASE_DRIVER = db.driver;
-        INVITE_FROM_ADDRESS = mail.inviteFromAddress;
-        APP_SECRET._secret = cfg.appSecretFile;
-        ADMIN_LOGIN = cfg.adminLogin;
-        ADMIN_PASSWORD._secret = cfg.adminPasswordFile;
-        APP_TIMEZONE = config.time.timeZone;
-        WEBDAV_ENABLED = false;
-        CALDAV_ENABLED = true;
-        CARDDAV_ENABLED = true;
+        APP_ENV = lib.mkDefault "prod";
+        APP_CACHE_DIR = lib.mkDefault "${cfg.dataDir}/var/cache";
+        APP_LOG_DIR = lib.mkDefault "${cfg.dataDir}/var/log";
+        LOG_FILE_PATH = lib.mkDefault "%kernel.logs_dir%/%kernel.environment%.log";
+        DATABASE_DRIVER = lib.mkDefault db.driver;
+        INVITE_FROM_ADDRESS = lib.mkDefault mail.inviteFromAddress;
+        APP_SECRET._secret = lib.mkDefault cfg.appSecretFile;
+        ADMIN_LOGIN = lib.mkDefault cfg.adminLogin;
+        ADMIN_PASSWORD._secret = lib.mkDefault cfg.adminPasswordFile;
+        APP_TIMEZONE = lib.mkDefault config.time.timeZone;
+        WEBDAV_ENABLED = lib.mkDefault false;
+        CALDAV_ENABLED = lib.mkDefault true;
+        CARDDAV_ENABLED = lib.mkDefault true;
       }
       // (
         if mail.dsn != null then
