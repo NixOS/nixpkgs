@@ -20,6 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-B+EmVkj/UdojjJr3oYs/HcewxmtPIacvJ8dLOWzTM20=";
   };
 
+  patches = [
+    (fetchurl {
+      url = "https://src.fedoraproject.org/rpms/gpgmepy/raw/e9a499ec29dace6e5942e9b58b406920f3d7b8b4/f/0001-Drop-Python-2-compatibility.patch";
+      hash = "sha256-qJ8hDTghRmRSV9qe1CkLWtk1ZMx1NdUqe4D2hWhzYak=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail ', "swig"' ""
