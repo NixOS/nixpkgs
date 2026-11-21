@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gtest,
   meson,
   nasm,
@@ -9,31 +8,23 @@
   pkg-config,
   stdenv,
   windows,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openh264";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "openh264";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-tf0lnxATCkoq+xRti6gK6J47HwioAYWnpEsLGSA5Xdg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Elcd//UfC928mFXBwYN3L/+XegZ5aXoa/he/2Qw7YaQ=";
   };
 
   outputs = [
     "out"
     "dev"
-  ];
-
-  patches = [
-    # https://github.com/cisco/openh264/pull/3867
-    (fetchpatch {
-      name = "freebsd-configure.patch";
-      url = "https://github.com/cisco/openh264/commit/ea8a1ad5791ee5c4e2ecf459aec235128d69b35b.patch";
-      hash = "sha256-pJvh9eRxFZQ+ob4WPu/x+jr1CCpgnug1uBViLfAtBDg=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -43,21 +34,25 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    gtest
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isWindows [
-    windows.pthreads
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isWindows [ windows.pthreads ];
+
+  mesonFlags = [ (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck) ];
+
+  doCheck = true;
+  checkInputs = [ gtest ];
 
   strictDeps = true;
+  __structuredAttrs = true;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
     homepage = "https://www.openh264.org";
     description = "Codec library which supports H.264 encoding and decoding";
-    changelog = "https://github.com/cisco/openh264/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/cisco/openh264/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    pkgConfigModules = [ "openh264" ];
     # See meson.build
     platforms =
       lib.platforms.windows
