@@ -105,11 +105,15 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
   ''
-  + lib.optionalString (lib.versionAtLeast version "1.11") ''
-    substituteInPlace deps/curl.mk \
-      --replace-fail 'jxf $(notdir $<)' \
-                     'jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
-  ''
+  +
+    # curl's cd2nroff script is invoked with a `#!/usr/bin/env perl` shebang after
+    # its source is extracted, so `patchShebangs` can't reach it; fix it up during
+    # the extraction step itself.
+    ''
+      substituteInPlace deps/curl.mk \
+        --replace-fail 'jxf $(notdir $<)' \
+                       'jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
+    ''
   + lib.optionalString (lib.versionOlder version "1.12") ''
     substituteInPlace deps/tools/common.mk \
       --replace-fail "CMAKE_COMMON := " "CMAKE_COMMON := ${lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10"} "
