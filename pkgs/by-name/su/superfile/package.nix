@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "superfile";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JETdQ42vGPnpviCAR29BSdBTG+huWRr5syN5NysnAlo=";
+    hash = "sha256-YZXCowWe0R9LiNcBPWZiznnLWyPnjBnROsE2wUjJowY=";
   };
 
-  vendorHash = "sha256-d2Yo8fWJ2fj7RJrnktljY6TkEPq6Tnbdh2BM4DIAr0E=";
+  vendorHash = "sha256-L4lA3TnsPpFxcEw+lzJE6WkFSBzUCrw7WTNAZNB7OGU=";
 
   ldflags = [
     "-s"
@@ -56,7 +56,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Pretty fancy and modern terminal file manager";
     homepage = "https://github.com/yorukot/superfile";
-    changelog = "https://github.com/yorukot/superfile/blob/${finalAttrs.src.tag}/changelog.md";
+    changelog = "https://github.com/yorukot/superfile/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       redyf
