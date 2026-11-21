@@ -23,7 +23,9 @@
     machine.succeed("echo '<!DOCTYPE html><html><body><h1>Hello world</h1></body></html>' > page.html")
     machine.execute("Ladybird file://$(pwd)/page.html >&2 &")
     machine.wait_for_window("Ladybird")
-    machine.sleep(5)
+    # On first launch, the welcome tab is selected before the requested page.
+    machine.wait_for_text("Welcome to Ladybird")
+    machine.send_key("ctrl-tab")
     machine.wait_for_text("Hello world")
     machine.screenshot("screen")
   '';
