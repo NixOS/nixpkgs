@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blink1";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "todbot";
     repo = "blink1-tool";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-i3DtDPAKvJ53HTgNnnf2iSGmayxg/++Kk3/4cEnD+Sk=";
+    hash = "sha256-jcx6cvq9fpwkHa6qTOOiXgzl09vVw23kXo8IYeAx9TI=";
   };
 
   postPatch = ''
