@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lavacli";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "lava";
     repo = "lavacli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-llvJGiUWeXuwia7KkeQgGBunFMNuNughYAEj7KTlIjM=";
+    hash = "sha256-+H/IFNVExuRZzKqEV/roFGDczgHetNxjsXUzS9LCIIg=";
   };
 
   build-system = with python3Packages; [
