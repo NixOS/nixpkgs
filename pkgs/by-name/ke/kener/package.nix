@@ -11,16 +11,16 @@ buildNpmPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "kener";
-  version = "4.1.10";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "rajnandan1";
     repo = "kener";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-93g27YDXaMD9typWyJzPSP9QbH00OH/jrbU0cAdPELw=";
+    hash = "sha256-h1K2rScB6t49WNKxvtg8tBVJhE5HtDIHl3UlaLLdgIA=";
   };
 
-  npmDepsHash = "sha256-ihUpG+AGR8PVnqv8ao0VAn3j78W6eUxY8Zxca5Xnp+s=";
+  npmDepsHash = "sha256-pZBbusB5o+oZc88t7FL5lireM2Z5xmJeyKqMB8zbMn0=";
   postFixup = ''
     makeWrapper ${nodejs}/bin/node $out/bin/kener-server \
       --add-flags $out/lib/node_modules/kener/build/main.js \
