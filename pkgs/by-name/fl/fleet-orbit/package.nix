@@ -1,24 +1,25 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "fleet-orbit";
-  version = "1.55.0";
+  version = "1.63.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fleetdm";
     repo = "fleet";
-    tag = "orbit-v${finalAttrs.version}";
-    hash = "sha256-gaS6A9Zfpb/VMQMAO5qI0lIaohD8jj4KWFRTU0OeqMo=";
+    rev = "5e2f9163460ac8246bbace9192bcb99e8a2989e3";
+    hash = "sha256-cKF1nE9kK22EfB0Ky+vp8QaBDYcZ00mwWNU9BJwWAx8=";
   };
 
-  vendorHash = "sha256-fhACxmzJY0PEQmMbjQxlfQh5ZJ+7a4um0s8xFQq+57w=";
+  vendorHash = "sha256-mnjllTf4m8Kirx0TKKWzr0haA/zwiZMWYEYRifVeFpQ=";
 
   env.CGO_ENABLED = "1";
 
@@ -30,23 +31,25 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X=github.com/fleetdm/fleet/v4/orbit/pkg/build.Version=${finalAttrs.version}"
-    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/build.Commit=0000000000000000000000000000000000000000"
+    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/build.Commit=${finalAttrs.src.rev}"
     "-X=github.com/fleetdm/fleet/v4/orbit/pkg/build.Date=1970-01-01T00:00:00Z"
-  ];
-
-  patches = [
-    ./0001-orbit-nixos.patch
-    ./0002-osqueryd-path-override.patch
-    ./0003-osquery-log-path.patch
-    ./0004-scripts-nixos.patch
   ];
 
   doInstallCheck = true;
   versionCheckProgramArg = "version";
   nativeInstallCheckInputs = [ versionCheckHook ];
+  postInstallCheck = ''
+    "$out/bin/orbit" version | grep -Fqx "commit - ${finalAttrs.src.rev}"
+  '';
 
-  passthru.tests = {
-    inherit (nixosTests) orbit;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^orbit-v([0-9.]+)$" ];
+    };
+
+    tests = {
+      inherit (nixosTests) orbit;
+    };
   };
 
   meta = {
@@ -58,7 +61,7 @@ buildGoModule (finalAttrs: {
       (lib.licenses.mkLicense {
         shortName = "fleet-ee";
         fullName = "Fleet Enterprise Edition License";
-        url = "https://github.com/fleetdm/fleet/blob/orbit-v${finalAttrs.version}/ee/LICENSE";
+        url = "https://github.com/fleetdm/fleet/blob/${finalAttrs.src.rev}/ee/LICENSE";
         free = false;
       })
     ];
