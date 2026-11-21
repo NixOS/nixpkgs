@@ -2607,6 +2607,8 @@ self: super: with self; {
     callPackage ../development/python-modules/bluetooth-sensor-state-data
       { };
 
+  bluetti-modbus = callPackage ../development/python-modules/bluetti-modbus { };
+
   bluezero = callPackage ../development/python-modules/bluezero { };
 
   blurhash = callPackage ../development/python-modules/blurhash { };
