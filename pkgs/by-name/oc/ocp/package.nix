@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  buildPackages,
   pkg-config,
   xa,
   perl,
@@ -47,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
     pkg-config
