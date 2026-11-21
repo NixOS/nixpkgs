@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pygithub";
-  version = "2.8.1";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
     tag = "v${version}";
-    hash = "sha256-36taxa95WrpQw0UUlmnWX4XFslAAuuoousxNh5O5uDA=";
+    hash = "sha256-pMk9SvUdqXr5L/cIbJhljE+XY5B/Mwu7xulDYGARrfc=";
   };
 
   build-system = [
