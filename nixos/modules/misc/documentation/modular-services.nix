@@ -29,6 +29,7 @@ let
       "<imports = [ pkgs.php.services.default ]>" = fakeSubmodule pkgs.php.services.default;
       "<imports = [ pkgs.snid.services.default ]>" = fakeSubmodule pkgs.snid.services.default;
       "<imports = [ pkgs.trailbase.services.default ]>" = fakeSubmodule pkgs.trailbase.services.default;
+      "<imports = [ pkgs.vllm.services.default ]>" = fakeSubmodule pkgs.vllm.services.default;
     };
   };
 in
