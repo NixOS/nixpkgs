@@ -9,12 +9,12 @@
   vimUtils,
 }:
 let
-  version = "1.1.0-unstable-2025-01-21";
+  version = "1.1.0-unstable-2026-11-11";
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "sg.nvim";
-    rev = "775f22b75a9826eabf69b0094dd1d51d619fe552";
-    hash = "sha256-i5g+pzxB8pAORLbr1wlYWUTsrJJmVj9UwlCg8pU3Suw=";
+    rev = "ee5b5aaec0444ba2de057654b706208fca93f40e";
+    hash = "sha256-WrPrFBeM2e5akE6aOh/MVfYdBcVgfDPkRTDdOFmy9c4=";
   };
 
   sg-nvim-rust = rustPlatform.buildRustPackage {
@@ -59,7 +59,7 @@ vimUtils.buildVimPlugin {
     # Dependent on active fuzzy search state
     "sg.cody.fuzzy"
     # Invokes a request that fails in the check hook
-    # https://github.com/sourcegraph/sg.nvim/blob/775f22b75a9826eabf69b0094dd1d51d619fe552/lua/sg/health.lua#L2
+    # https://github.com/sourcegraph/sg.nvim/blob/ee5b5aaec0444ba2de057654b706208fca93f40e/lua/sg/health.lua#L2
     "sg.health"
   ];
 
