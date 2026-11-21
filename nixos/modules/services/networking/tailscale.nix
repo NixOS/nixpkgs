@@ -203,6 +203,7 @@ in
       after = [ "tailscaled.service" ];
       wants = [ "tailscaled.service" ];
       wantedBy = [ "tailscaled.service" ];
+      partOf = [ "tailscaled.service" ];
       serviceConfig = {
         Type = "notify";
       };
@@ -223,12 +224,22 @@ in
         in
         # bash
         ''
+          # With a netmap cached on disk, tailscaled reports Running before the
+          # control server has accepted the node, and stays Running if control
+          # then asks for a login. Self.Online is only true while a map poll to
+          # control is live, and AuthURL is set once control asks for a login.
           getState() {
-            tailscale status --json --peers=false | jq -r '.BackendState'
+            tailscale status --json --peers=false | jq -r '
+              if (.AuthURL // "") != "" then "NeedsLogin"
+              elif .BackendState == "Running" and (.Self.Online | not) then "RunningFromCache"
+              else .BackendState end'
           }
 
           lastState=""
-          while state="$(getState)"; do
+          while true; do
+            # `tailscale status` fails while tailscaled restarts. Keep polling:
+            # the unit may already be ready and is then not started again.
+            state="$(getState)" || state="Unavailable"
             if [[ "$state" != "$lastState" ]]; then
               # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
               case "$state" in
@@ -240,6 +251,12 @@ in
                   echo "Tailscale is running"
                   systemd-notify --ready
                   exit 0
+                  ;;
+                RunningFromCache)
+                  # Ready, so offline boots are not held up, but keep watching
+                  # until control confirms the node or asks for a login.
+                  echo "Tailscale is running from cached state, waiting for the control server"
+                  systemd-notify --ready
                   ;;
                 *)
                   echo "Waiting for Tailscale State = Running or systemd timeout"
