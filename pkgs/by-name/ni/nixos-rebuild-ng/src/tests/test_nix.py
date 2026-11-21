@@ -255,8 +255,27 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
                 "--extra-experimental-features",
                 "nix-command flakes",
                 "copy",
+                "--no-check-sigs",
                 "--to",
                 "ssh-ng://user@target.host",
+                closure,
+            ],
+            append_local_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+        )
+
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host, target_host_ng)
+        mock_run.assert_called_with(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "copy",
+                "--no-check-sigs",
+                "--from",
+                "ssh-ng://user@target.host",
+                "--to",
+                "ssh://user@target.host",
                 closure,
             ],
             append_local_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
@@ -298,6 +317,25 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
                 "ssh://user@build.host",
                 "--to",
                 "ssh://user@target.host",
+                closure,
+            ],
+            append_local_env=env,
+        )
+
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host_ng, build_host, {"copy_flag": True})
+        mock_run.assert_called_with(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "copy",
+                "--no-check-sigs",
+                "--copy-flag",
+                "--from",
+                "ssh://user@build.host",
+                "--to",
+                "ssh-ng://user@target.host",
                 closure,
             ],
             append_local_env=env,
