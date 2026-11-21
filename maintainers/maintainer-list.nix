@@ -29481,6 +29481,12 @@
     githubId = 280235;
     name = "Terje Larsen";
   };
+  termozour = {
+    email = "stefanpruneanu@gmail.com";
+    github = "TermoZour";
+    githubId = 16005294;
+    name = "Stefan Pruneanu";
+  };
   terrorjack = {
     email = "astrohavoc@gmail.com";
     github = "TerrorJack";
