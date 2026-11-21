@@ -7,6 +7,11 @@
   lib,
   hostPkgs,
   bootMode,
+  store,
+  withNix,
+  espSize,
+  firmware,
+  perlless,
   ...
 }:
 
@@ -26,8 +31,24 @@ let
         ../modules/profiles/qemu-guest.nix
         {
           ec2.bootMode = lib.mkIf (bootMode != null) bootMode;
+          amazonImage.registerImage = lib.mkIf (bootMode == "uefi") {
+            TpmSupport = "v2.0";
+            # Smaller than the image, so register-image.json has to raise it.
+            BlockDeviceMappings = [
+              {
+                DeviceName = "/dev/xvda";
+                Ebs = {
+                  VolumeType = "gp3";
+                  VolumeSize = 1;
+                };
+              }
+            ];
+          };
+          amazonImage.store = store;
+          nix.enable = withNix;
+          amazonImage.espSize = lib.mkIf (espSize != null) espSize;
           # The default variant already covers the channel.
-          nix.channel.enable = bootMode != "uefi";
+          nix.channel.enable = lib.mkIf (bootMode == "uefi") false;
           amazonImage.format = "qcow2";
 
           # In a NixOS test the serial console is occupied by the "backdoor"
@@ -59,16 +80,57 @@ let
 
           nixpkgs.pkgs = pkgs;
         }
-      ];
+      ]
+      ++ lib.optional perlless ../modules/profiles/perlless.nix;
     }).config;
 
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
+  # Hashing the store takes a while, so cover each store layout once.
+  verifyFlags = lib.optionalString (
+    espSize == null && !perlless && (bootMode == "uefi" || store != "root")
+  ) " --check-contents";
+
+  # Without OVMF, QEMU boots with SeaBIOS.
+  firmwareArgs = lib.optionalString (firmware == "uefi") (
+    " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
+    + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
+  );
+
+  storeFsType = (imageCfg.fileSystems."/nix/store" or imageCfg.fileSystems."/").fsType;
+
+  # Built in the VM to check that Nix can add to the store.
+  gcTest = ''
+    derivation {
+      name = "gc-test";
+      system = builtins.currentSystem;
+      builder = "''${builtins.storePath "${pkgs.runtimeShellPackage}"}/bin/sh";
+      args = [ "-c" "echo hello > $out" ];
+    }
+  '';
+
+  registerImage = imageCfg.amazonImage.registerImage;
+  expectedRegisterImage = lib.filterAttrs (
+    name: value: value != null && name != "BlockDeviceMappings"
+  ) registerImage;
+
 in
 {
   _module.args.bootMode = lib.mkDefault null;
+  _module.args.store = lib.mkDefault "root";
+  _module.args.withNix = lib.mkDefault true;
+  _module.args.espSize = lib.mkDefault null;
+  _module.args.firmware = lib.mkDefault "uefi";
+  _module.args.perlless = lib.mkDefault false;
 
-  name = "ec2-image" + lib.optionalString (bootMode == "uefi") "-systemd-boot";
+  name =
+    "ec2-image"
+    + lib.optionalString (bootMode == "uefi") "-systemd-boot"
+    + lib.optionalString (store != "root") "-${store}"
+    + lib.optionalString (!withNix) "-nonix"
+    + lib.optionalString (espSize != null) "-esp-${lib.toLower espSize}"
+    + lib.optionalString (firmware == "bios") "-bios"
+    + lib.optionalString perlless "-perlless";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -97,6 +159,7 @@ in
   testScript =
     { nodes, ... }:
     ''
+      import json
       import os
       import re
       import subprocess
@@ -200,11 +263,9 @@ in
               + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
           )
 
-          # nixosTests.ec2-nixops covers the BIOS boot of the same image.
           start_command = (
               f"{QEMU}/bin/qemu-kvm -m 1024"
-              + " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
-              + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
+              + "${firmwareArgs}"
               + f" -drive file={disk_image},if=virtio,werror=report"
               + vlan_net
               + metadata_net
@@ -212,6 +273,9 @@ in
           )
 
           return create_machine(start_command), metadata_dir
+
+      store = "${store}"
+      nix_enabled = ${if imageCfg.nix.enable then "True" else "False"}
 
       def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
           """Test that compressed user-data is decompressed by fetch-ec2-metadata"""
@@ -304,19 +368,97 @@ in
               assert "Hello from test-instance" in ssh_result, f"Unexpected SSH result: {ssh_result}"
 
           with subtest("Basic EC2 functionality"):
-              machine.succeed("test -d /sys/firmware/efi")
+              machine.succeed("test ${if firmware == "uefi" then "-d" else "! -e"} /sys/firmware/efi")
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("test $(stat -c %a ${imageCfg.boot.loader.efi.efiSysMountPoint}) = 700")
-              machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
+              # The test resizes the disk to 10G, so the root file system must grow past the image.
+              root_bytes = int(machine.succeed("findmnt / -n -b -o SIZE"))
+              assert root_bytes > 8 * 1024**3, f"root file system did not grow: {root_bytes} bytes"
+
+          with subtest("Image metadata"):
+              nix_support = "${imageCfg.system.build.amazonImage}/nix-support"
+              with open(f"{nix_support}/image-info.json") as f:
+                  image_info = json.load(f)
+              assert isinstance(image_info["logical_bytes"], str), image_info
+              assert image_info["disks"]["root"]["logical_bytes"] == image_info["logical_bytes"], image_info
+              assert image_info["format"] == "QCOW2", image_info
+              assert image_info["store"] == store, image_info
+              disk = {p["partlabel"]: p for p in json.loads(machine.succeed("lsblk -J -b -l -o PARTLABEL,PARTN,SIZE"))["blockdevices"]}
+              labels = {"esp": "ESP", "root": "nixos"}
+              if store != "root":
+                  labels["store"] = "nix-store"
+              assert {key: p["label"] for key, p in image_info["partitions"].items()} == labels, image_info
+              for key, label in labels.items():
+                  partition = image_info["partitions"][key]
+                  assert partition["number"] == disk[label]["partn"], (key, partition)
+                  # Root has grown since.
+                  if key != "root":
+                      assert partition["size"] == disk[label]["size"], (key, partition)
+              assert image_info["partitions"]["esp"]["size"] == int(machine.succeed("numfmt --from=iec ${imageCfg.amazonImage.espSize}")), image_info
+              with open(f"{nix_support}/register-image.json") as f:
+                  args = json.load(f)
+              expected = json.loads('${builtins.toJSON expectedRegisterImage}')
+              assert expected.items() <= args.items(), args
+              assert None not in args.values(), args
+              [root] = [m for m in args["BlockDeviceMappings"] if m["DeviceName"] == args["RootDeviceName"]]
+              size_gib = root["Ebs"]["VolumeSize"]
+              # RegisterImage rejects a root volume smaller than the snapshot.
+              assert size_gib * 1024**3 >= int(image_info["logical_bytes"]), args
+              assert size_gib >= ${toString (lib.head registerImage.BlockDeviceMappings).Ebs.VolumeSize}, args
+
+          with subtest("Nix store file system"):
+              fstype, options = machine.succeed("findmnt -n -o FSTYPE,OPTIONS /nix/store | tail -n1").split()
+              assert fstype == "${storeFsType}", fstype
+              assert "ro" in options.split(","), options
+              if store == "erofs":
+                  machine.fail("test -e /run/current-system/bin/switch-to-configuration")
+                  if nix_enabled:
+                      machine.succeed("echo test > /tmp/store-test")
+                      error = machine.fail("nix-store --add /tmp/store-test 2>&1")
+                      assert "Read-only file system" in error, error
+              if store == "erofs-overlay":
+                  machine.succeed("findmnt -n -o FSTYPE /nix/.ro-store | grep -qx erofs")
+                  machine.succeed("test -x /run/current-system/bin/switch-to-configuration")
+
+          with subtest("Clean boot"):
+              failed = machine.succeed("systemctl list-units --failed --no-legend --plain").strip()
+              assert failed == "", failed
+              if not nix_enabled:
+                  units = machine.succeed("systemctl list-units --all --no-legend --plain --type=service,socket,timer 'nix-*'").strip()
+                  assert units == "", units
+
+          if store == "erofs-overlay":
+              with subtest("Writable store overlay"):
+                  machine.succeed("""cat > /tmp/gc-test.nix <<'EOF'
+          ${gcTest}EOF""")
+                  path = machine.succeed("NIX_REMOTE=daemon nix-build --no-out-link /tmp/gc-test.nix").strip()
+                  machine.succeed(f"grep -qx hello {path}", f"test -e /nix/.rw-store/upper/{os.path.basename(path)}")
+                  machine.succeed("NIX_REMOTE=daemon nix-store --gc")
+                  machine.fail(f"test -e {path}")
 
           with subtest("Store paths and profiles"):
-              machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
-              machine.succeed("nix-store --verify")
+              if nix_enabled:
+                  machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
+                  machine.succeed("nix-store --verify${verifyFlags}")
               machine.succeed("test $(readlink -f /nix/var/nix/profiles/system) = ${imageCfg.system.build.toplevel}")
               machine.fail("test -e /nix/var/nix/profiles/system-2-link")
-              ${lib.optionalString imageCfg.nix.channel.enable ''
+              ${lib.optionalString (imageCfg.nix.enable && imageCfg.nix.channel.enable) ''
                 machine.succeed("test -e /root/.nix-defexpr/channels/nixos/default.nix", "test $(stat -c %a /root) = 700")
               ''}
+
+          if not nix_enabled:
+              with subtest("amazon-init without Nix"):
+                  def run_amazon_init(user_data):
+                      with open(user_data_path, "w") as f:
+                          f.write(user_data)
+                      machine.succeed("systemctl reset-failed fetch-ec2-metadata; systemctl restart fetch-ec2-metadata")
+                      machine.succeed("systemctl restart amazon-init")
+                      return machine.succeed("journalctl -u amazon-init -b --no-pager")
+
+                  journal = run_amazon_init("{ ... }: { }\n")
+                  assert "can't rebuild itself; ignoring" in journal, journal
+                  run_amazon_init("#!/bin/sh\ntouch /run/user-data-ran\n")
+                  machine.succeed("test -e /run/user-data-ran")
 
           with subtest("Decompression of gzip-compressed user-data"):
               import gzip as gzip_mod
