@@ -1,0 +1,17 @@
+{
+  "version": "1.8.4",
+  "connect-api": {
+    "digest": "sha256:0f74924c55c9156b8116f59f485223b2c2d30a5148d362562aa27838159bdffa",
+    "hashes": {
+      "amd64": "sha256-fpQX8dH6aPH9WYd1sOb9aNx0+dt/uCeJpIH8sOPwpiE=",
+      "arm64": "sha256-E9fqsZAkmWcb3rX0GrsdnxKfiW6vCVYFzmMRRZSXoaA="
+    }
+  },
+  "connect-sync": {
+    "digest": "sha256:ca34850f2a20ca302e688a9347cdb696f29ce3bfc011d2554eff338e315c9089",
+    "hashes": {
+      "amd64": "sha256-4AFkNv5TDCS1GtDMMOD024hV7KCYIhmkt4QuLxw5Zs0=",
+      "arm64": "sha256-fK+zDPlxqFZHBf4mImGt9DYjBzgx8S+GAKmP0/IOvoo="
+    }
+  }
+}
