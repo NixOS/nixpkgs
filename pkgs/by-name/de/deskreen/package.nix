@@ -4,7 +4,7 @@
   fetchurl,
   appimageTools,
 }:
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "deskreen";
   version = "3.2.16";
 
@@ -23,20 +23,16 @@ appimageTools.wrapType2 rec {
       inherit (stdenvNoCC.hostPlatform) system;
     in
     fetchurl {
-      url = "https://github.com/pavlobu/deskreen/releases/download/v${version}/deskreen-ce-${version}-${sources.${system}.arch}.AppImage";
+      url = "https://github.com/pavlobu/deskreen/releases/download/v${finalAttrs.version}/deskreen-ce-${finalAttrs.version}-${sources.${system}.arch}.AppImage";
       inherit (sources.${system}) hash;
     };
-  extraInstallCommands =
-    let
-      contents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      install -m 444 -D ${contents}/deskreen-ce.desktop $out/share/applications/deskreen-ce.desktop
-      install -m 444 -D ${contents}/usr/share/icons/hicolor/256x256/apps/deskreen-ce.png \
-        $out/share/icons/hicolor/512x512/apps/deskreen-ce.png
-      substituteInPlace $out/share/applications/deskreen-ce.desktop \
-        --replace-fail 'Exec=AppRun' 'Exec=deskreen'
-    '';
+  extraInstallCommands = ''
+    install -m 444 -D ${finalAttrs.contents}/deskreen-ce.desktop $out/share/applications/deskreen-ce.desktop
+    install -m 444 -D ${finalAttrs.contents}/usr/share/icons/hicolor/256x256/apps/deskreen-ce.png \
+      $out/share/icons/hicolor/512x512/apps/deskreen-ce.png
+    substituteInPlace $out/share/applications/deskreen-ce.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=deskreen'
+  '';
 
   meta = {
     description = "Turn any device into a secondary screen for your computer";
@@ -51,4 +47,4 @@ appimageTools.wrapType2 rec {
       "aarch64-linux"
     ];
   };
-}
+})
