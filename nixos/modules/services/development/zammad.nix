@@ -275,7 +275,7 @@ in
       nginx = lib.mkIf cfg.nginx.configure {
         enable = true;
         virtualHosts."${cfg.nginx.domain}" = {
-          forceSSL = true;
+          forceSSL = lib.mkDefault true;
           locations = {
             "/" = {
               proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
@@ -339,6 +339,9 @@ in
       serviceConfig = serviceConfig // {
         # loading all the gems takes time
         TimeoutStartSec = 1200;
+        Type = "notify";
+        NotifyAccess = "all";
+        WatchdogSec = 30;
       };
       after = [
         "network.target"
@@ -411,21 +414,25 @@ in
     ];
 
     systemd.services.zammad-websocket = {
-      inherit serviceConfig environment;
+      inherit environment;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad websocket";
       wantedBy = [ "multi-user.target" ];
-      script = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
+      serviceConfig = serviceConfig // {
+        ExecStart = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
+      };
     };
 
     systemd.services.zammad-worker = {
-      inherit serviceConfig environment;
+      inherit environment;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad background worker";
       wantedBy = [ "multi-user.target" ];
-      script = "./script/background-worker.rb start";
+      serviceConfig = serviceConfig // {
+        ExecStart = "./script/background-worker.rb start";
+      };
     };
   };
 
