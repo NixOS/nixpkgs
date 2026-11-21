@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libksba";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "mirror://gnupg/libksba/libksba-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-wvhDkwEYJyGa4RcTHbqOdoTCvtCWHu0RsGQsKsukQLU=";
+    hash = "sha256-sHDz2pET3zgEN59V4QzQDwvEmT1TkhV/7LX9F0pdWM4=";
   };
 
   outputs = [
