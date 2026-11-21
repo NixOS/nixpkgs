@@ -1,0 +1,156 @@
+--- a/src/core/AuthMicrosoft.c	2023-06-23 04:57:40
++++ b/src/core/AuthMicrosoft.c	2026-07-08 00:00:00
+@@ -34,7 +34,9 @@
+ 
+ void bc_auth_microsoft_handle_device_flow(const bc_auth_microsoftDeviceResponse* device_res) {
+     bc_auth_microsoftResponse* microsoft = bc_auth_microsoft_device_token(device_res);
+-    bc_auth_microsoft(microsoft->refresh_token);
++    if (microsoft->refresh_token[0] != '\0') {
++        bc_auth_microsoft(microsoft->refresh_token);
++    }
+     free(microsoft);
+ }
+ 
+@@ -112,6 +114,7 @@
+ 
+ bc_auth_microsoftDeviceResponse* bc_auth_microsoft_device() {
+     bc_auth_microsoftDeviceResponse* res = malloc(sizeof(bc_auth_microsoftDeviceResponse));
++    memset(res, 0, sizeof(*res));
+ 
+     char data[100];
+     snprintf(data, sizeof(data), "client_id=%s&scope=XboxLive.signin offline_access", API_MICROSOFT_CLIENT_ID);
+@@ -126,15 +129,23 @@
+     res->expires_in = jext_get_int(json, "expires_in");
+     res->interval = jext_get_int(json, "interval");
+ 
+-    json_object_put(json);
+-
+-    return res;
+-}
+-
+-int bc_auth_microsoft_check_token(const char* data, const bc_auth_microsoftResponse* res) {
++    if (json != NULL) {
++        json_object_put(json);
++    }
++
++    return res;
++}
++
++int bc_auth_microsoft_check_token(const char* data, bc_auth_microsoftResponse* res) {
+     char* response = bc_network_post(API_MICROSOFT_TOKEN, data, "Content-Type: application/x-www-form-urlencoded");
+     json_object* json = json_tokener_parse(response);
+     free(response);
++
++    if (json == NULL) {
++        res->access_token[0] = '\0';
++        res->refresh_token[0] = '\0';
++        return 0;
++    }
+ 
+     char* error = jext_get_string_dummy(json, "error");
+ 
+@@ -144,7 +155,12 @@
+         return 0;
+     } else if (strcmp(error, "authorization_pending") == 0) {
+         return 1;
+-    }
++    } else if (strcmp(error, "slow_down") == 0) {
++        return 1;
++    }
++
++    res->access_token[0] = '\0';
++    res->refresh_token[0] = '\0';
+ 
+     bc_log("Error: bc_auth_microsoft_check_token - \n\"%s\"\n", error);
+     return 0;
+@@ -168,9 +184,10 @@
+ 
+ bc_auth_microsoftResponse* bc_auth_microsoft_device_token(const bc_auth_microsoftDeviceResponse* dev) {
+     bc_auth_microsoftResponse* res = malloc(sizeof(bc_auth_microsoftResponse));
++    memset(res, 0, sizeof(*res));
+ 
+     char* error;
+-    char data[2048];
++    char data[8192];
+     snprintf(data, sizeof(data), "grant_type=urn:ietf:params:oauth:grant-type:device_code&client_id=%s&device_code=%s",
+              API_MICROSOFT_CLIENT_ID, dev->device_code);
+ 
+@@ -204,15 +221,18 @@
+     json_object* tmp;
+     free(response);
+ 
+-    snprintf(res->token, sizeof(res->token), "%s", jext_get_string_dummy(json, "Token"));
+-
+-    json_object_object_get_ex(json, "DisplayClaims", &tmp);
+-    json_object_object_get_ex(tmp, "xui", &tmp);
+-
+-    json_object* uhs = json_object_array_get_idx(tmp, 0);
+-    snprintf(res->uhs, sizeof(res->uhs), "%s", jext_get_string_dummy(uhs, "uhs"));
+-
+-    json_object_put(json);
++    if (json != NULL) {
++        snprintf(res->token, sizeof(res->token), "%s", jext_get_string_dummy(json, "Token"));
++
++        if (json_object_object_get_ex(json, "DisplayClaims", &tmp)
++            && json_object_object_get_ex(tmp, "xui", &tmp)
++            && json_object_array_length(tmp) > 0) {
++            json_object* uhs = json_object_array_get_idx(tmp, 0);
++            snprintf(res->uhs, sizeof(res->uhs), "%s", jext_get_string_dummy(uhs, "uhs"));
++        }
++
++        json_object_put(json);
++    }
+     json_object_put(data);
+ 
+     return res;
+--- a/src/core/AuthMicrosoft.h	2023-06-23 04:57:40
++++ b/src/core/AuthMicrosoft.h	2026-07-08 00:00:00
+@@ -5,7 +5,7 @@
+ 
+ typedef struct bc_auth_microsoftDeviceResponse {
+     char user_code[512];
+-    char device_code[1024];
++    char device_code[4096];
+     char verification_uri[128];
+     int expires_in;
+     int interval;
+@@ -31,7 +31,7 @@
+ 
+ bc_auth_microsoftResponse* bc_auth_microsoft_device_token(const bc_auth_microsoftDeviceResponse* res);
+ bc_auth_XBLResponse* bc_auth_microsoft_xbl(const char* access_token);
+-int bc_auth_microsoft_check_token(const char* data, const bc_auth_microsoftResponse* res);
++int bc_auth_microsoft_check_token(const char* data, bc_auth_microsoftResponse* res);
+ char* bc_auth_microsoft_xsts(const char* xbl_token);
+ void bc_auth_microsoft(const char* refresh_token);
+ char* bc_auth_minecraft(const char* uhs, const char* xsts_token);
+--- a/src/core/JsonExtension.c	2023-06-23 04:57:40
++++ b/src/core/JsonExtension.c	2026-07-08 00:00:00
+@@ -39,12 +39,18 @@
+ }
+ 
+ char* jext_get_string(json_object* json, const char* section) {
++    if (json == NULL) {
++        return NULL;
++    }
+     json_object* tmp;
+     json_object_object_get_ex(json, section, &tmp);
+     return jext_alloc_string(tmp);
+ }
+ 
+ const char* jext_get_string_dummy(json_object* json, const char* section) {
++    if (json == NULL) {
++        return "";
++    }
+     json_object* tmp;
+     json_object_object_get_ex(json, section, &tmp);
+ 
+@@ -53,6 +59,9 @@
+ }
+ 
+ int jext_get_int(json_object* json, const char* section) {
++    if (json == NULL) {
++        return 0;
++    }
+     json_object* tmp;
+     json_object_object_get_ex(json, section, &tmp);
+     return json_object_get_int(tmp);
