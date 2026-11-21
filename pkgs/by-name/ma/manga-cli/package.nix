@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "manga-cli";
-  version = "unstable-2022-04-11";
+  version = "unstable-2022-02-08";
 
   src = fetchFromGitHub {
-    owner = "7USTIN";
+    owner = "stl3";
     repo = "manga-cli";
-    rev = "a69fe935341eaf96618a6b2064d4dcb36c8690b5";
-    sha256 = "sha256-AnpOEgOBt2a9jtPNvfBnETGtc5Q1WBmSRFDvQB7uBE4=";
+    rev = "75c061f4a3b4fd76c289348fb04a4b4894eb251c";
+    sha256 = "sha256-o3C84w9MhE16YHzbFzzlozhirqNS2RhBHRCRyWoxU3w=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
