@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yices";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "SRI-CSL";
     repo = "yices2";
     tag = "yices-${finalAttrs.version}";
-    hash = "sha256-siyepgxqKWRyO4+SB95lmhJ98iDubk0R0ErEJdSsM8o=";
+    hash = "sha256-HEsLe/7tXzidBx/1Dfj6uZbu6jZWO7RMB26oMA19iuI=";
   };
 
   postPatch = ''
