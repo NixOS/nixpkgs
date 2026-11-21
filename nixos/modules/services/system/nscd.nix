@@ -57,7 +57,13 @@ in
 
       config = lib.mkOption {
         type = lib.types.lines;
-        default = builtins.readFile ./nscd.conf;
+        default = ''
+          server-user             ${cfg.user}
+        ''
+        + builtins.readFile ./nscd.conf;
+        defaultText = lib.literalExpression ''
+          "server-user ''${config.services.nscd.user}\n" + builtins.readFile ./nscd.conf
+        '';
         description = ''
           Configuration to use for Name Service Cache Daemon.
           Only used in case glibc-nscd is used.
