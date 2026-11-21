@@ -4,7 +4,11 @@
   runCommand,
   stdenv,
   clang_20,
-  buildNpmPackage,
+  nodejs,
+  pnpm_11,
+  pnpmConfigHook,
+  fetchPnpmDeps,
+  makeWrapper,
   docify,
   testers,
   writeText,
@@ -16,27 +20,41 @@
   versionCheckHook,
 }:
 
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "basedpyright";
-  version = "1.39.8";
+  version = "1.40.2";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
-    tag = "v${version}";
-    hash = "sha256-8S83CTd/td7USKxfCI0cXd2gPBMivi4QMRQwVgxhs6w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HiF6TaZWuRisPBJ8a39SwnTGL+ghv4LQ0v5zuq/RPaA=";
   };
 
-  npmDepsHash = "sha256-humpJB+fv3+PITcPCz3uY2jNANb3P7sXy0lFP8Eg58I=";
-  npmWorkspace = "packages/pyright";
+  # packages/pyright bundles ../pyright-internal, so both workspaces' deps are needed.
+  # names must match "name" in packages/pyright/package.json and packages/pyright-internal/package.json
+  pnpmWorkspaces = [
+    "basedpyright"
+    "pyright-internal"
+  ];
 
-  preBuild = ''
-    # Build the docstubs
-    cp -r packages/pyright-internal/typeshed-fallback docstubs
-    docify docstubs/stdlib --builtins-only --in-place
-  '';
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmWorkspaces
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 5;
+    hash = "sha256-/81bd9hAeNQweWk8UOTDZHewbCT55Sa2GbYGYYvMR5c=";
+  };
 
   nativeBuildInputs = [
+    nodejs
+    pnpm_11
+    pnpmConfigHook
+    makeWrapper
     docify
     pkg-config
   ]
@@ -44,12 +62,31 @@ buildNpmPackage rec {
 
   buildInputs = [ libsecret ];
 
-  postInstall = ''
-    mv "$out/bin/pyright" "$out/bin/basedpyright"
-    mv "$out/bin/pyright-langserver" "$out/bin/basedpyright-langserver"
-    # dist/ is a bundle whose only non-builtin require is the optional, darwin-only fsevents;
-    # the rest of node_modules is monorepo tooling that npm prune leaves behind
-    find "$out/lib/node_modules/pyright-root/node_modules" -mindepth 1 -maxdepth 1 ! -name fsevents -exec rm -rf {} +
+  buildPhase = ''
+    runHook preBuild
+
+    # Build the docstubs
+    cp -r packages/pyright-internal/typeshed-fallback docstubs
+    docify docstubs/stdlib --builtins-only --in-place
+
+    pnpm --filter basedpyright run build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    pkg=$out/lib/node_modules/basedpyright
+    mkdir -p $pkg $out/bin
+    cp -r packages/pyright/{dist,index.js,langserver.index.js,package.json} $pkg/
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/basedpyright \
+      --add-flags $pkg/index.js
+    makeWrapper ${lib.getExe nodejs} $out/bin/basedpyright-langserver \
+      --add-flags $pkg/langserver.index.js
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -99,7 +136,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/detachhead/basedpyright/releases/tag/${src.tag}";
+    changelog = "https://github.com/detachhead/basedpyright/releases/tag/${finalAttrs.src.tag}";
     description = "Type checker for the Python language";
     homepage = "https://github.com/detachhead/basedpyright";
     license = lib.licenses.mit;
@@ -107,6 +144,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       kiike
       misilelab
+      sachin-sankar
     ];
   };
-}
+})
