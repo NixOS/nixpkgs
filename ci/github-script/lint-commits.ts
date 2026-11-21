@@ -55,6 +55,7 @@ export default async function lintCommits({
 
   const commits = await getCommitDetailsForPR({ core, pr, repoPath })
 
+  await checkMergeCommits({ commits, core })
   await checkCommitMessages({ commits, core })
   await checkCommitMetadata({ commits, core })
 }
@@ -62,6 +63,22 @@ export default async function lintCommits({
 interface CheckCommitMessagesProps {
   commits: Commit[]
   core: Core
+}
+
+async function checkMergeCommits({ commits, core }: CheckCommitMessagesProps) {
+  const merges = commits.filter((commit) => commit.parents.length > 1)
+  if (merges.length === 0) {
+    return
+  }
+
+  for (const commit of merges) {
+    core.error(`Commit ${commit.sha} is a merge commit.`)
+  }
+
+  core.error(
+    'This PR contains merge commits. Please rebase your branch onto the target branch to keep the history linear.',
+  )
+  core.setFailed('Committers: merging is discouraged.')
 }
 
 async function checkCommitMessages({
