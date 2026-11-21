@@ -77,10 +77,7 @@ symlinkJoin {
     description = "NordVPN client and GUI for Linux";
     longDescription = ''
       NordVPN CLI and GUI applications for Linux.
-      This package currently does not support meshnet.
-      Additionally, if `networking.firewall.enable = true;`,
-      then also set `networking.firewall.checkReversePath = "loose";`.
-      The closed-source nordwhisper protocol is also not supported.
+      This package does not support the closed-source nordwhisper protocol.
     '';
   };
 }
