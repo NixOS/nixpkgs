@@ -367,7 +367,9 @@ let
           {
             haskell.compiler = packagePlatforms (
               # hugs doesn't build on musl yet
-              lib.filterAttrs (name: _: !(lib.hasPrefix "microhs" name)) pkgs.pkgsMusl.haskell.compiler
+              lib.filterAttrs (
+                name: _: !(lib.hasPrefix "microhs" name || name == "ghc622Bootstrap")
+              ) pkgs.pkgsMusl.haskell.compiler
             );
 
             # Get some cache going for MUSL-enabled GHC.
