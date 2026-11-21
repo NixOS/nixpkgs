@@ -7,6 +7,7 @@
   lib,
   libsoup_3,
   makeBinaryWrapper,
+  nix-update-script,
   nodejs,
   npmHooks,
   openssl,
@@ -66,6 +67,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-flWM2ctaGak/KaTZ5sCj3Z28vIqOeiX8VJMTaIxg2fw=";
   };
   npmRoot = subdir;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^gui-v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Experimental GUI application to manage VRChat Unity Projects";
