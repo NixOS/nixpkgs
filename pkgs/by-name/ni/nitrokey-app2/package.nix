@@ -77,5 +77,14 @@ python3Packages.buildPythonApplication rec {
       panicgh
     ];
     mainProgram = "nitrokeyapp";
+    # nitrokey-app2 2.5.2 up to the latest available release 2.7.1 is
+    # incompatible with current releases of dependencies by the same vendor.
+    #
+    # We have to mark nitrokey-app2 as broken until upstream makes a new
+    # release for it.
+    #
+    # https://github.com/NixOS/nixpkgs/pull/539029#issuecomment-5918451143
+    # https://github.com/Nitrokey/nitrokey-app2/issues/504
+    broken = true;
   };
 }
