@@ -22,7 +22,7 @@ async def virtiofsd(virtiofs_dir: Path, tag: str, source: Path, cache: str, flag
         "@virtiofsd@",
         f"--socket-path={socket_path}",
         f"--shared-dir={source.resolve()}",
-        f"--{flag}",
+        *([] if flag == "readwrite" else [f"--{flag}"]),
         "--sandbox=none",
         "--seccomp=none",
         f"--cache={cache}",
