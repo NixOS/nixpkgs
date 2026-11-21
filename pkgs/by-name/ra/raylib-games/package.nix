@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Collection of games made with raylib";

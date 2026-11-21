@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     vulkan-loader
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Linux Wi-Fi assessment tool for WPA/WPA2 handshake capture and password auditing";

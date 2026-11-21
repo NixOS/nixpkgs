@@ -127,7 +127,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.phosh = nixosTests.phosh;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://gitlab.gnome.org/api/v4/projects/World%2FPhosh%2Fphosh-mobile-settings/repository/archive.tar.gz?sha=HEAD"
+      ];
+    };
   };
 
   meta = {

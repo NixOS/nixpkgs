@@ -2,6 +2,7 @@
   buildPythonPackage,
   distro-info-data,
   fetchurl,
+  gitUpdater,
   lib,
   setuptools,
   unittestCheckHook,
@@ -33,6 +34,12 @@ buildPythonPackage rec {
     cd python
     rm distro_info_test/test_flake8.py distro_info_test/test_pylint.py
   '';
+
+  # The src is a fetchurl, so the default nix-update script cannot find the tags
+  passthru.updateScript = gitUpdater {
+    url = "https://salsa.debian.org/debian/distro-info.git";
+    rev-prefix = "debian/";
+  };
 
   meta = {
     description = "Information about Debian and Ubuntu releases";

@@ -13,6 +13,9 @@ buildPythonPackage {
 
   preConfigure = "cd py-smbus";
 
+  # The version and src come from i2c-tools, nix-update on this package cannot update them
+  passthru.updateScript = null;
+
   meta = {
     inherit (i2c-tools.meta) homepage platforms;
 

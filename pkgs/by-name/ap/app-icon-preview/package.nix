@@ -49,7 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--url=https://gitlab.gnome.org/api/v4/projects/World%2Fdesign%2Fapp-icon-preview/repository/archive.tar.gz?sha=HEAD"
+    ];
+  };
 
   meta = {
     description = "Tool for designing applications icons";

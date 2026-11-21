@@ -103,6 +103,9 @@ buildPythonPackage {
       --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"'
   '';
 
+  # The version and src come from inkscape, nix-update on this package cannot update them
+  passthru.updateScript = null;
+
   meta = {
     description = "Library for manipulating SVG documents which is the basis for Inkscape extensions";
     homepage = "https://gitlab.com/inkscape/extensions";
