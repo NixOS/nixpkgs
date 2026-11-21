@@ -78,11 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Free & open-source 2D sprite editor, made with the Godot Engine";
     changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     maintainers = with lib.maintainers; [ felschr ];
     mainProgram = "pixelorama";
   };
