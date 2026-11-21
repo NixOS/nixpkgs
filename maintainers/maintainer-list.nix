@@ -23831,6 +23831,12 @@
     githubId = 178496;
     name = "Philipp Middendorf";
   };
+  pmoust = {
+    email = "pmoust@nofire.ai";
+    github = "pmoust";
+    githubId = 2493339;
+    name = "Panagiotis Moustafellos";
+  };
   pmw = {
     email = "philip@mailworks.org";
     matrix = "@philip4g:matrix.org";
