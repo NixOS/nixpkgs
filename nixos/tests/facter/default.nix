@@ -5,6 +5,8 @@
     maintainers = [ mic92 ];
   };
 
+  node.pkgsReadOnly = false;
+
   nodes.machine = {
     hardware.facter.reportPath = ./facter.json;
     environment.systemPackages = [ pkgs.nixos-facter ];
