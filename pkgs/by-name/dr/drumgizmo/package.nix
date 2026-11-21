@@ -4,6 +4,7 @@
   fetchurl,
   fetchDebianPatch,
   alsa-lib,
+  autoreconfHook,
   expat,
   glib,
   libjack2,
@@ -40,7 +41,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-lv2" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     alsa-lib
