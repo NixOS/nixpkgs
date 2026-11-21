@@ -1,0 +1,11 @@
+diff -ura web.a/package.json web.b/package.json
+--- web.a/package.json	2025-05-25 19:44:59.060428306 -0700
++++ web.b/package.json	2025-05-25 19:44:52.834495715 -0700
+@@ -16,7 +16,6 @@
+     "lint": "eslint src --fix"
+   },
+   "dependencies": {
+-    "@wasm4/web-devtools": "file:../../devtools/web",
+     "lit": "^3.1.2"
+   },
+   "devDependencies": {
