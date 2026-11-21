@@ -20,6 +20,12 @@ let
   agentSettingsFormat = pkgs.formats.keyValue {
     mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
   };
+
+  gnupgSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue =
+      key: value: if lib.isBool value then lib.optionalString value key else "${key} ${toString value}";
+    listsAsDuplicateKeys = true;
+  };
 in
 {
   imports = [
@@ -94,6 +100,18 @@ in
       '';
     };
 
+    scdaemon.settings = mkOption {
+      type = gnupgSettingsFormat.type;
+      default = { };
+      example = {
+        disable-ccid = true;
+      };
+      description = ''
+        Configuration for /etc/gnupg/scdaemon.conf.
+        See {manpage}`scdaemon(1)` for supported options.
+      '';
+    };
+
     dirmngr.enable = mkOption {
       type = types.bool;
       default = false;
@@ -110,6 +128,10 @@ in
 
     environment.etc."gnupg/gpg-agent.conf".source =
       agentSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
+
+    environment.etc."gnupg/scdaemon.conf" = mkIf (cfg.scdaemon.settings != { }) {
+      source = gnupgSettingsFormat.generate "scdaemon.conf" cfg.scdaemon.settings;
+    };
 
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = {
