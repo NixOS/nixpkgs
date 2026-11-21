@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  makeWrapper,
   boehmgc,
   bison,
   flex,
@@ -13,6 +14,8 @@
   python3,
   doxygen,
   graphviz,
+  makeFontsConf,
+  writableTmpDirAsHomeHook,
   libbpf,
   libllvm,
   enableDocumentation ? true,
@@ -47,12 +50,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/p4lang/p4c/commit/6756816100b7c51e3bf717ec55114a8e8575ba1d.patch";
       hash = "sha256-wWM1qjgQCNMPdrhQF38jzFgODUsAcaHTajdbV7L3y8o=";
     })
+    # Fix gcc-15 build by including cstdint directly.
+    ./gcc-15.patch
   ];
 
   postFetch = ''
     rm -rf backends/ebpf/runtime/contrib/libbpf
     rm -rf control-plane/p4runtime
   '';
+
+  env = lib.optionalAttrs enableDocumentation {
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  };
 
   cmakeFlags = [
     "-DENABLE_BMV2=${toCMakeBoolean enableBMV2}"
@@ -77,12 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     cmake
+    makeWrapper
     protobuf
     python3
   ]
   ++ lib.optionals enableDocumentation [
     doxygen
     graphviz
+    writableTmpDirAsHomeHook
   ]
   ++ lib.optionals enableBPF [
     libllvm
@@ -96,6 +107,16 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     flex
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/p4c \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          python3
+          stdenv.cc
+        ]
+      }
+  '';
 
   meta = {
     changelog = "https://github.com/p4lang/p4c/releases";
