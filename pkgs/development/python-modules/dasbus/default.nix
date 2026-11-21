@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "dasbus";
-  version = "unstable-11-10-2022";
+  version = "1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
