@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pocket-libre";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shahcolate";
     repo = "pocket-libre";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j/172DS91CxX4wnRwnim8VyDRfONg7R/EtSXw2kvpFc=";
+    hash = "sha256-NrWR0Zd6b2IY+lBEmNsNcUtanf7mswwrXzQI31sw5Bc=";
   };
 
   build-system = with python3Packages; [
