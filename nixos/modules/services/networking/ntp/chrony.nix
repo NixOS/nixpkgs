@@ -196,10 +196,11 @@ in
         };
 
         limit = lib.mkOption {
-          type = lib.types.ints.positive;
+          type = lib.types.int;
           default = 3;
           description = ''
             The maximum number of times the system clock will be stepped.
+            A negative value disables the limit.
           '';
         };
       };
