@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "arouteserver";
-  version = "1.23.2";
+  version = "1.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pierky";
     repo = "arouteserver";
     tag = "v${version}";
-    hash = "sha256-qPU1eBEAlF6wcI1KEBtSuf0a+pKsqoCN0mtAPjIr+0c=";
+    hash = "sha256-Z7d/g1Nn8nn48puCm4OpehtfzE44k7mvTej+ERJlVo4=";
   };
 
   postPatch = ''
@@ -53,6 +53,8 @@ python3Packages.buildPythonPackage rec {
   disabledTests = [
     # disable copyright year check of files
     "current_year"
+    # tries to connect to mock.codes/429 over the network
+    "test_peeringdb_429_handling"
   ];
 
   meta = {
