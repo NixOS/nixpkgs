@@ -13,6 +13,7 @@
 
   atk,
   cairo,
+  cups,
   dbus,
   dbus-glib,
   fontconfig,
@@ -70,6 +71,7 @@ let
       alsa-lib
       atk
       cairo
+      cups
       dbus
       dbus-glib
       fontconfig
