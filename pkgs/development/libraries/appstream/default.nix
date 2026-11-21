@@ -145,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "appstreamcli";
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "appstream" ];
+    maintainers = with lib.maintainers; [ eclairevoyant ];
   };
 })
