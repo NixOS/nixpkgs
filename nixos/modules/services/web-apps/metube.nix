@@ -65,6 +65,7 @@ in
       PORT = lib.mkDefault "8081";
       STATE_DIR = "/var/lib/metube";
       TEMP_DIR = "/tmp";
+      XDG_CACHE_HOME = "/var/cache/metube";
     };
 
     systemd.tmpfiles.settings."10-metube".${cfg.settings.DOWNLOAD_DIR}.d = {
@@ -95,6 +96,8 @@ in
         Type = "simple";
         StateDirectory = "metube";
         StateDirectoryMode = "750";
+        CacheDirectory = "metube";
+        CacheDirectoryMode = "750";
         ReadWritePaths = [ cfg.settings.DOWNLOAD_DIR ];
         User = cfg.user;
         Group = cfg.group;
