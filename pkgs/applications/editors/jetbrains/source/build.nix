@@ -31,6 +31,16 @@
   mvnDeps,
   repositories,
   kotlin-jps-plugin,
+  # PyCharm's 2025.3 source build still needs JBR 21; idea-oss 2026.2 needs 25.
+  jbr ? jetbrains.jdk-no-jcef-21,
+  # IDEA 2026.2 cannot be compiled with nixpkgs Kotlin 2.2.20.
+  kotlinHome ? null,
+  extraPatches ? [ ],
+  extraPostPatch ? "",
+  jpsBootstrapPatches ? [ ],
+  jpsBootstrapJavaFlags ? [ ],
+  copyM2Repo ? false,
+  noDownloadPatch ? ../patches/no-download.patch,
 }:
 let
   kotlin' = kotlin.overrideAttrs (oldAttrs: {
@@ -41,7 +51,7 @@ let
     };
   });
 
-  jbr = jetbrains.jdk-no-jcef-21;
+  kotlinc = if kotlinHome == null then kotlin' else kotlinHome;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -99,8 +109,10 @@ let
       makeWrapper
       # keep-sorted end
     ];
-    patches = [ ../patches/kotlinc-path.patch ];
-    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
+    patches = [ ../patches/kotlinc-path.patch ] ++ jpsBootstrapPatches;
+    postPatch = ''
+      sed -i 's|KOTLIN_PATH_HERE|${kotlinc}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt
+    '';
     buildPhase = ''
       runHook preBuild
 
@@ -116,6 +128,7 @@ let
       cp "$BUILD_HOME/jps-bootstrap.classes.jar" $out/share/java/jps-bootstrap.jar
       cp -r "$BUILD_HOME/jps-bootstrap.out.lib" $out/share/java/jps-bootstrap-classpath
       makeWrapper ${jbr}/bin/java $out/bin/jps-bootstrap \
+        ${lib.concatMapStringsSep " " (flag: "--add-flags ${lib.escapeShellArg flag}") jpsBootstrapJavaFlags} \
         --add-flags "-cp $out/share/java/jps-bootstrap-classpath/'*' org.jetbrains.jpsBootstrap.JpsBootstrapMain"
 
       runHook postInstall
@@ -198,10 +211,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   repo = mvnRepo;
 
   patches = [
-    ../patches/no-download.patch
+    noDownloadPatch
     ../patches/disable-sbom-generation.patch
     ../patches/bump-jackson-core-in-source.patch
-  ];
+  ]
+  ++ extraPatches;
 
   # Regarding brokenPlugins.json:
   #  We provide an empty brokenPlugins.json because the original file is 2.8 MB in size and can't be reliably
@@ -214,7 +228,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt \
       --replace-fail 'JPS_PLUGIN_CLASSPATH_HERE' '${kotlin-jps-plugin-classpath}' \
-      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin'}'
+      --replace-fail 'KOTLIN_PATH_HERE' '${kotlinc}'
     substituteInPlace \
       platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt \
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
@@ -230,16 +244,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail 'MAVEN_PATH_HERE' '${maven}/maven'
 
     echo '${buildNumber}.SNAPSHOT' > build.txt
+    ${extraPostPatch}
   '';
 
   configurePhase = ''
     runHook preConfigure
 
-    ln -s "$repo"/.m2 ../.m2
+    ${
+      if copyM2Repo then
+        ''
+          cp -r "$repo"/.m2 ../.m2
+          chmod -R +w ../.m2
+        ''
+      else
+        ''
+          ln -s "$repo"/.m2 ../.m2
+        ''
+    }
     export JPS_BOOTSTRAP_COMMUNITY_HOME="$PWD"
     jps-bootstrap \
       -Dbuild.number=${buildNumber} \
-      -Djps.kotlin.home=${kotlin'} \
+      -Djps.kotlin.home=${kotlinc} \
       -Dintellij.build.target.os=linux \
       -Dintellij.build.target.arch=x64 \
       -Dintellij.build.skip.build.steps=mac_artifacts,mac_dmg,mac_sit,windows_exe_installer,windows_sign,repair_utility_bundle_step,sources_archive \
@@ -255,7 +280,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preBuild
 
     java \
-      -Djps.kotlin.home=${kotlin'} \
+      -Djps.kotlin.home=${kotlinc} \
       "@java_argfile"
 
     runHook postBuild
