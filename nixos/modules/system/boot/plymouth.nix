@@ -81,7 +81,7 @@ let
     fi
   '';
 
-  # 'emergency.serivce' and 'rescue.service' have
+  # 'emergency.service' and 'rescue.service' have
   # 'ExecStartPre=-plymouth quit --wait', but 'plymouth' is not on
   # their 'ExecSearchPath'. We could set 'ExecSearchPath', but it
   # overrides 'DefaultEnvironment=PATH=...', which is trouble for the
@@ -224,7 +224,7 @@ in
     systemd.services.plymouth-start.restartIfChanged = false;
 
     systemd.services.rescue = preStartQuitFixup;
-    systemd.services.emergency = preStartQuitFixup;
+    systemd.services.emergency = lib.mkIf config.systemd.enableEmergencyMode preStartQuitFixup;
 
     boot.initrd.systemd = {
       extraBin.plymouth = getExe' cfg.package "plymouth"; # for the recovery shell
