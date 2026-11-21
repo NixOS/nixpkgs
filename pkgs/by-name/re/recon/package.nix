@@ -9,13 +9,13 @@
 
 flutter347.buildFlutterApplication (finalAttrs: {
   pname = "recon";
-  version = "0.13.1-beta";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "Nutcake";
     repo = "Recon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6bNqfdAYfiWEsbS5cIOui4Xacl/qcXv9BAfA7smcins=";
+    hash = "sha256-smXV3F8+WzjWXx6KMUS4IhNH6sluCCEQIOkB3eysbPQ=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
