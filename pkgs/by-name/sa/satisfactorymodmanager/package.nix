@@ -17,19 +17,16 @@ let
 in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "satisfactorymodding";
     repo = "SatisfactoryModManager";
     tag = "v${version}";
-    hash = "sha256-X8uky9+FhtaAHMY6XrvTZTo3mILcWnlrjq/1SJ9UBkw=";
+    hash = "sha256-J2sFYcEeOY1m5U0lPHO4JZKjvUO4P7fDYmX1MLotKiQ=";
   };
 
   patches = [
-    # disable postcss-import-url
-    ./dont-vendor-remote-fonts.patch
-
     # populates the lib/generated directory
     ./add-generated-files.patch
   ];
@@ -64,7 +61,7 @@ buildGoModule rec {
         ;
       sourceRoot = "${src.name}/frontend";
       fetcherVersion = 3;
-      hash = "sha256-p0PFIqnIDZPffKaACWWDUvdBN+a0aMbZTUvz9wRTY+k=";
+      hash = "sha256-PiB72Lp/1vaCdPFSADmTkqdDWyHJUa0bG8YE2XaPVc4=";
     };
 
     pnpmRoot = "frontend";
@@ -79,7 +76,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-a8o69vrW6TfrYmBRlSNE4NqemJUBFQilsVj+qwLYcbo=";
+  vendorHash = "sha256-Z9ttTB9Djluxu0idASNeJq1mRF1VdBFybizc0j65ERc=";
 
   buildPhase = ''
     runHook preBuild
