@@ -7,6 +7,9 @@ let
     snakeOilEd25519PrivateKey
     snakeOilEd25519PublicKey
     ;
+
+  testPassword = "openssh-test-password";
+  testPasswordHash = "$y$j9T$.FxT3KO939TJ/kuAtMf6M0$bMq1RYjIyWisM2B1TcYQll2I6xRHcZqupu.u.jssa4C";
 in
 {
   name = "openssh";
@@ -244,6 +247,10 @@ in
         users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
+        users.users.passworduser = {
+          isNormalUser = true;
+          hashedPassword = testPasswordHash;
+        };
       };
 
     server-null-pam =
@@ -299,8 +306,9 @@ in
       };
 
     client =
-      { ... }:
+      { pkgs, ... }:
       {
+        environment.systemPackages = [ pkgs.sshpass ];
         virtualisation.vlans = [
           1
           2
@@ -451,6 +459,15 @@ in
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
+            timeout=30
+        )
+
+        client.succeed(
+            "sshpass -p ${testPassword} ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no passworduser@server-no-pam true",
+            timeout=30
+        )
+        client.fail(
+            "sshpass -p wrong-password ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no passworduser@server-no-pam true",
             timeout=30
         )
 
