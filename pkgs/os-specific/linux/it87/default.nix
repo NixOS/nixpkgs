@@ -6,6 +6,9 @@
   kernelModuleMakeFlags,
 }:
 
+let
+  KDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}";
+in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "it87";
@@ -30,8 +33,18 @@ stdenv.mkDerivation rec {
 
   makeFlags = kernelModuleMakeFlags ++ [
     "TARGET=${kernel.modDirVersion}"
-    "KERNEL_MODULES=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
+    "KERNEL_MODULES=${KDIR}"
     "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/hwmon"
+  ];
+
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${KDIR}/build"
+    "M=$(PWD)"
   ];
 
   meta = {
