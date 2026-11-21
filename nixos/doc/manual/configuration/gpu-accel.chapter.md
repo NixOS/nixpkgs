@@ -146,6 +146,20 @@ Modern Intel GPUs use the iHD driver, which can be installed with:
 { hardware.graphics.extraPackages = [ intel-media-driver ]; }
 ```
 
+Note that this package includes nonfree render kernels by default. If you
+prefer, and you're willing to forgo any extra functionality provided by these
+render kernels for your hardware, you can install the version with only free
+software render kernels. Consult [the upstream
+README](https://github.com/intel/media-driver#components-and-features) for
+more information on which feature/hardware combinations require unfree render
+kernels.
+
+The free version of the iHD driver can be installed with:
+
+```nix
+{ hardware.graphics.extraPackages = [ intel-media-driver-free ]; }
+```
+
 Older Intel GPUs use the i965 driver, which can be installed with:
 
 ```nix
