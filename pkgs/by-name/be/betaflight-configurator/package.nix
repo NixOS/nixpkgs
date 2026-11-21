@@ -1,75 +1,83 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  makeDesktopItem,
-  copyDesktopItems,
-  nwjs,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  cargo-tauri,
+  nodejs,
+  npmHooks,
+  pkg-config,
   wrapGAppsHook3,
-  gsettings-desktop-schemas,
-  gtk3,
+  webkitgtk_4_1,
+  glib-networking,
+  udev,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "betaflight-configurator";
-  version = "10.10.0";
-  src = fetchurl {
-    url = "https://github.com/betaflight/${finalAttrs.pname}/releases/download/${finalAttrs.version}/${finalAttrs.pname}_${finalAttrs.version}_linux64-portable.zip";
-    sha256 = "sha256-UB5Vr5wyCUZbOaQNckJQ1tAXwh8VSLNI1IgTiJzxV08=";
+  version = "2026.6.2";
+  src = fetchFromGitHub {
+    owner = "betaflight";
+    repo = "betaflight-configurator";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-vh95IiGBaMLtmn87f/fsvP5qM+DgU7CP1+19t3oi5rs=";
   };
 
-  # remove large unneeded files
-  postUnpack = ''
-    find -name "lib*.so" -delete
-  '';
+  cargoHash = "sha256-UNrUFmGfnryO4RWnst64C0AQN2cR+ioTtybtl6azMcA=";
+  cargoRoot = "src-tauri";
+
+  buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-M6k/wXnLgmt2HyfnDW0XcOY/zfngjaDRHoASGkngfX0=";
+    fetcherVersion = 2;
+  };
 
   nativeBuildInputs = [
+    cargo-tauri.hook
+    nodejs
+    npmHooks.npmConfigHook
+    pkg-config
     wrapGAppsHook3
-    unzip
-    copyDesktopItems
   ];
 
   buildInputs = [
-    gsettings-desktop-schemas
-    gtk3
+    webkitgtk_4_1
+    glib-networking
+    udev
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = finalAttrs.pname;
-      exec = finalAttrs.pname;
-      icon = finalAttrs.pname;
-      comment = "Betaflight configuration tool";
-      desktopName = "Betaflight Configurator";
-      genericName = "Flight controller configuration tool";
-    })
-  ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin \
-             $out/opt/${finalAttrs.pname}
-
-    cp -r . $out/opt/${finalAttrs.pname}/
-    install -m 444 -D icon/bf_icon_128.png $out/share/icons/hicolor/128x128/apps/${finalAttrs.pname}.png
-
-    makeWrapper ${nwjs}/bin/nw $out/bin/${finalAttrs.pname} --add-flags $out/opt/${finalAttrs.pname}
-    runHook postInstall
+  postPatch = ''
+    # Replace commitHash used by the app
+    substituteInPlace vite.config.js \
+      --replace-fail 'child.execSync("git rev-parse --short HEAD").toString().trim()' '"${finalAttrs.src.rev}"'
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    npx vitest run
+    runHook postCheck
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Betaflight flight control system configuration tool";
-    mainProgram = "betaflight-configurator";
+    description = "Cross platform configuration and management application for the Betaflight firmware";
+    mainProgram = "betaflight-app";
     longDescription = ''
-      A crossplatform configuration tool for the Betaflight flight control system.
-      Various types of aircraft are supported by the tool and by Betaflight, e.g.
-      quadcopters, hexacopters, octocopters and fixed-wing aircraft.
+      A crossplatform configuration and management application for the Betaflight flight control system.
+
+      Various types of aircraft are supported by the tool and by Betaflight, e.g. quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
-    homepage = "https://github.com/betaflight/betaflight/wiki";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    homepage = "https://github.com/betaflight/betaflight-configurator";
+    changelog = "https://betaflight.com/docs/category/release-notes";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ wucke13 ];
+    maintainers = with lib.maintainers; [
+      wucke13
+      issai
+    ];
     platforms = lib.platforms.linux;
   };
 })
