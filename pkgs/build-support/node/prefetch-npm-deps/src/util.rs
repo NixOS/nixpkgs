@@ -1,4 +1,4 @@
-use anyhow::bail;
+use anyhow::{Context, bail};
 use backoff::{ExponentialBackoff, retry};
 use data_encoding::BASE64;
 use digest::Digest;
@@ -17,21 +17,35 @@ use std::{
 };
 use url::Url;
 
+/// Rewrite a registry URL to use an `NIX_NPM_REGISTRY_OVERRIDES` mirror.
+fn apply_registry_mirror(url: &Url, mirror: &str) -> anyhow::Result<Url> {
+    let mut mirrored =
+        Url::parse(mirror).with_context(|| format!("invalid registry mirror `{mirror}`"))?;
+    if mirrored.host_str().is_none() {
+        bail!("registry mirror `{mirror}` has no host");
+    }
+
+    // Bare-host mirrors have path `/`; trim trailing slashes before joining.
+    let mut path = mirrored.path().trim_end_matches('/').to_owned();
+    path.push_str(url.path());
+    mirrored.set_path(&path);
+    mirrored.set_query(url.query());
+    mirrored.set_fragment(url.fragment());
+
+    Ok(mirrored)
+}
+
 pub fn get_url(url: &Url) -> Result<Body, anyhow::Error> {
     let url_ = url.clone();
     let mut url = url.clone();
-    // Respect NIX_NPM_REGISTRY_OVERRIDES environment variable, which should be a JSON mapping in the shape of:
-    // `{ "registry.example.com": "my-registry.local", ... }`
+    // NIX_NPM_REGISTRY_OVERRIDES maps registry hosts to mirror URL prefixes, e.g.
+    // `{"registry.npmjs.org": "https://mirror.example.com/npm"}`.
     if let Some(host) = url.host_str()
         && let Ok(npm_mirrors) = env::var("NIX_NPM_REGISTRY_OVERRIDES")
         && let Ok(mirrors) = serde_json::from_str::<Map<String, Value>>(&npm_mirrors)
         && let Some(mirror) = mirrors.get(host).and_then(serde_json::Value::as_str)
     {
-        let mirror_url = Url::parse(mirror)?;
-        url.set_path(&(mirror_url.path().to_owned() + url.path()));
-        url.set_host(Some(mirror_url.host_str().unwrap_or_else(|| {
-            panic!("Mirror URL without host part: {mirror_url}")
-        })))?;
+        url = apply_registry_mirror(&url, mirror)?;
         eprintln!("Replaced URL {url_} with {url}");
     }
 
@@ -111,4 +125,64 @@ pub fn make_sri_hash(path: &Path) -> Result<String, NarError> {
     io::copy(&mut encoder, &mut hasher)?;
 
     Ok(format!("sha256-{}", BASE64.encode(&hasher.finalize())))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::apply_registry_mirror;
+    use url::Url;
+
+    fn rewrite(url: &str, mirror: &str) -> String {
+        apply_registry_mirror(&Url::parse(url).unwrap(), mirror)
+            .unwrap()
+            .to_string()
+    }
+
+    const TARBALL: &str = "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz";
+
+    #[test]
+    fn bare_host_mirror_keeps_one_slash() {
+        assert_eq!(
+            rewrite(TARBALL, "https://registry.npmmirror.com"),
+            "https://registry.npmmirror.com/esbuild/-/esbuild-0.28.2.tgz"
+        );
+    }
+
+    #[test]
+    fn mirror_path_prefix_is_joined_with_one_slash() {
+        assert_eq!(
+            rewrite(TARBALL, "https://mirror.example/npm//"),
+            "https://mirror.example/npm/esbuild/-/esbuild-0.28.2.tgz"
+        );
+    }
+
+    #[test]
+    fn mirror_scheme_host_and_port_are_used() {
+        assert_eq!(
+            rewrite(TARBALL, "http://[::1]:4873"),
+            "http://[::1]:4873/esbuild/-/esbuild-0.28.2.tgz"
+        );
+    }
+
+    #[test]
+    fn request_path_query_and_fragment_are_preserved() {
+        assert_eq!(
+            rewrite(
+                "https://registry.npmjs.org/@scope%2fpkg/-/pkg-1.0.0.tgz?write=true#integrity",
+                "https://registry.npmmirror.com/"
+            ),
+            "https://registry.npmmirror.com/@scope%2fpkg/-/pkg-1.0.0.tgz?write=true#integrity"
+        );
+    }
+
+    #[test]
+    fn invalid_mirrors_are_rejected() {
+        let url = Url::parse(TARBALL).unwrap();
+        for mirror in ["not a url", "file:///tmp/npm"] {
+            assert!(
+                apply_registry_mirror(&url, mirror).is_err(),
+                "mirror should have been rejected: {mirror}"
+            );
+        }
+    }
 }
