@@ -8630,7 +8630,8 @@
       ];
     "xiaomi_weather" =
       ps: with ps; [
-      ]; # missing inputs: xiaomi-weather
+        xiaomi-weather
+      ];
     "xmpp" =
       ps: with ps; [
         emoji
@@ -10045,6 +10046,7 @@
     "xiaomi_aqara"
     "xiaomi_ble"
     "xiaomi_miio"
+    "xiaomi_weather"
     "xthings_cloud"
     "yale"
     "yale_smart_alarm"

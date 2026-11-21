@@ -27409,6 +27409,12 @@
     github = "Shiphan";
     githubId = 140245703;
   };
+  shirok1 = {
+    email = "me@shirok1.dev";
+    name = "Shiroki Satsuki";
+    github = "shirok1";
+    githubId = 12044683;
+  };
   shiryel = {
     email = "contact@shiryel.com";
     name = "Shiryel";
