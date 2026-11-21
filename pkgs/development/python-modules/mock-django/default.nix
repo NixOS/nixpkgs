@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "mock-django";
-  version = "0.6.10";
+  version = "0.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
