@@ -22,7 +22,7 @@ in
 php.buildComposerProject2 (finalAttrs: {
   pname = "invoiceplane";
   # unstable-2026-09-28 version syntax not supported here
-  version = "1.7.2.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "InvoicePlane";
@@ -34,7 +34,7 @@ php.buildComposerProject2 (finalAttrs: {
   # Composer.lock validation currently fails for unknown reason
   composerStrictValidation = true;
 
-  vendorHash = "sha256-bkPoUd+u1wKM+CpbrbmD8lT6zyMKf/vx6km5kzo9s5Q=";
+  vendorHash = "sha256-BRNglvJMREFD9iHPqXycw1WYlxuV9fL8/Zoba2Z3p8w=";
 
   nativeBuildInputs = [
     yarnConfigHook
