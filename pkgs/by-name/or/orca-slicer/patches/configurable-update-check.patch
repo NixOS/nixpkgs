@@ -1,0 +1,119 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Shelvacu <git@shelvacu.com>
+Date: Sat, 30 Nov 2024 15:02:01 -0800
+Subject: [PATCH] Add runtime and compiletime option to disable version checks
+ in gui (#7291)
+
+This only partially addresses #7291. There is still no option in the gui for this.
+---
+ CMakeLists.txt                     |  7 +++++++
+ README.md                          |  4 ++++
+ src/libslic3r/AppConfig.cpp        |  6 ++++++
+ src/slic3r/GUI/GUI_App.cpp         | 12 +++++++-----
+ src/slic3r/Utils/PresetUpdater.cpp |  2 +-
+ 5 files changed, 25 insertions(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6a3405b01..5234983d5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -319,6 +319,13 @@ endif ()
+ option(SLIC3R_BUILD_SANDBOXES   "Build development sandboxes" OFF)
+ option(BUILD_TESTS       "Build unit tests" OFF)
+ option(ORCA_TOOLS       "Build Orca tools" OFF)
++option(ORCA_VERSION_CHECK_DEFAULT "Whether to check for new versions on startup by default" ON)
++
++if (ORCA_VERSION_CHECK_DEFAULT)
++  add_definitions(-DORCA_VERSION_CHECK_DEFAULT=true)
++else ()
++  add_definitions(-DORCA_VERSION_CHECK_DEFAULT=false)
++endif ()
+ 
+ if (FLATPAK)
+     set(SLIC3R_FHS ON CACHE BOOL "" FORCE)
+diff --git a/README.md b/README.md
+index c14ff19a7..7c8f69ff9 100644
+--- a/README.md
++++ b/README.md
+@@ -204,6 +204,10 @@ If you're running Klipper, it's recommended to add the following configuration t
+ resolution: 0.1
+ ```
+ 
++# Note if building for a package manager
++
++If you're building this as a package for a package manager (`apt`, `brew`, `pacman`, `nix`, `chocolatey`, etc.) where the user is not going to be manually updating the software, you should disable the version check with `-DORCA_VERSION_CHECK_DEFAULT=OFF` flag to cmake
++
+ # Supports
+ 
+ **OrcaSlicer** is an open-source project, and we're deeply grateful to all our sponsors and backers.  
+diff --git a/src/libslic3r/AppConfig.cpp b/src/libslic3r/AppConfig.cpp
+index e7041eb52..7c45850ef 100644
+--- a/src/libslic3r/AppConfig.cpp
++++ b/src/libslic3r/AppConfig.cpp
+@@ -687,6 +687,12 @@ void AppConfig::set_defaults()
+     if (get("print", "timelapse").empty()) {
+         set_str("print", "timelapse", "1");
+     }
++    if (get("do_version_check").empty()) {
++#ifndef ORCA_VERSION_CHECK_DEFAULT
++#define ORCA_VERSION_CHECK_DEFAULT true
++#endif
++      set_bool("do_version_check", ORCA_VERSION_CHECK_DEFAULT);
++    }
+ 
+     if (get("enable_step_mesh_setting").empty()) {
+         set_bool("enable_step_mesh_setting", true);
+diff --git a/src/slic3r/GUI/GUI_App.cpp b/src/slic3r/GUI/GUI_App.cpp
+index 819e06adf..125e09385 100644
+--- a/src/slic3r/GUI/GUI_App.cpp
++++ b/src/slic3r/GUI/GUI_App.cpp
+@@ -1140,7 +1140,9 @@ void GUI_App::post_init()
+                 this->preset_updater->sync(http_url, language, network_ver, sys_preset ? preset_bundle : nullptr);
+             }
+ 
+-            this->check_new_version_sf();
++            if (this->preset_updater->version_check_enabled()) {
++                this->check_new_version_sf();
++            }
+             if (!cw_showed)
+                 this->check_legacy_user_filament_presets(false);
+             const auto cloud_provider = get_printer_cloud_provider();
+@@ -2814,14 +2816,14 @@ void GUI_App::init_app_config()
+     BOOST_LOG_TRIVIAL(info) << boost::format("gui mode, Current OrcaSlicer Version %1% build %2%") % SoftFever_VERSION % build_commit_label;
+ 
+     //BBS: remove GCodeViewer as seperate APP logic
+-	if (!app_config)
++    if (!app_config)
+         app_config = new AppConfig();
+         //app_config = new AppConfig(is_editor() ? AppConfig::EAppMode::Editor : AppConfig::EAppMode::GCodeViewer);
+ 
+     m_config_corrupted = false;
+-	// load settings
+-	m_app_conf_exists = app_config->exists();
+-	if (m_app_conf_exists) {
++    // load settings
++    m_app_conf_exists = app_config->exists();
++    if (m_app_conf_exists) {
+         std::string error = app_config->load();
+         if (!error.empty()) {
+             // Orca: if the config file is corrupted, we will show a error dialog and create a default config file.
+diff --git a/src/slic3r/Utils/PresetUpdater.cpp b/src/slic3r/Utils/PresetUpdater.cpp
+index c1af3b4ba..63e50f45e 100644
+--- a/src/slic3r/Utils/PresetUpdater.cpp
++++ b/src/slic3r/Utils/PresetUpdater.cpp
+@@ -288,7 +288,6 @@ PresetUpdater::priv::priv()
+ 	, cancel(false)
+ {
+ 	//BBS: refine preset updater logic
+-	enabled_version_check = true;
+ 	set_download_prefs(GUI::wxGetApp().app_config);
+ 	// Install indicies from resources. Only installs those that are either missing or older than in resources.
+ 	check_installed_vendor_profiles();
+@@ -301,6 +300,7 @@ PresetUpdater::priv::priv()
+ void PresetUpdater::priv::set_download_prefs(AppConfig *app_config)
+ {
+ 	version_check_url = app_config->version_check_url();
++	enabled_version_check = app_config->get_bool("do_version_check");
+ 
+ 	auto profile_update_url = app_config->profile_update_url();
+ 	// Dev builds keep the profiles from their own source tree; an over-the-air bundle would replace them.

@@ -1,0 +1,10 @@
+--- a/src/gtk/dialog.cpp
++++ b/src/gtk/dialog.cpp
+@@ -159,6 +159,7 @@
+
+     m_modalShowing = true;
+
++    SetReturnCode(0);
+     Show( true );
+
+     // Prevent the widget from being destroyed if the user closes the window.
