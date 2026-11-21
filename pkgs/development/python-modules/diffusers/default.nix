@@ -42,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "diffusers";
-  version = "0.42.1";
+  version = "0.43.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "diffusers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IVenXKmO+vOkYjkKnkHbm6LQ+4+ywqaCzzAAbdnmdyk=";
+    hash = "sha256-T2z00R1JEFa2y9f90DbXUqoCyh0YhqMHHuNNC2EX/oM=";
   };
 
   build-system = [ setuptools ];
