@@ -220,11 +220,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # See https://github.com/NixOS/nixpkgs/issues/132259
     substituteInPlace meson.build \
-      --replace "x11_enabled = false" ""
+      --replace-fail "x11_enabled = false" ""
 
     # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
     substituteInPlace meson.build \
-      --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
+      --replace-fail 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
 
     files=(
       build-aux/meson/post-install.py
@@ -282,6 +282,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Multi-platform toolkit for creating graphical user interfaces";
