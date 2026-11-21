@@ -14,6 +14,7 @@
   vulkan-headers,
   vulkan-loader,
   imgui,
+  nix-update-script,
 
   # NOTE: Not coming from vcpkg
   IMGUI_LINK_GLVND ?
@@ -72,7 +73,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imgui";
-  version = "1.91.4";
+  version = "1.93.0";
   outputs = [
     # Note: no "dev" because vcpkg installs include/ and imgui-config.cmake
     # into different prefixes but expects the merged layout at import time
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ocornut";
     repo = "imgui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
+    hash = "sha256-NCD0li4ECPSFhhU0egSWMiYNBKSJDoB80rSOUiRAQ6c=";
   };
 
   cmakeRules = "${vcpkgSource}/ports/imgui";
@@ -134,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       demo = callPackage ./demo { };
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -155,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit; # vcpkg licensed as MIT too
     maintainers = with lib.maintainers; [
       SomeoneSerge
+      evanwporter
     ];
     platforms = lib.platforms.all;
   };
