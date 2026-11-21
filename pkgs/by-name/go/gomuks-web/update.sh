@@ -17,4 +17,4 @@ VERSION="${RELEASE#v}"
 # Debug
 echo "Release ${RELEASE} -> Version ${VERSION}"
 
-nix-update --build --commit --version "${VERSION}" gomuks-web
+nix-update --build --version "${VERSION}" gomuks-web
