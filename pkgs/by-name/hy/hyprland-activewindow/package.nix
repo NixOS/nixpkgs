@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-activewindow";
-  version = "1.0.5";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "FieldOfClay";
     repo = "hyprland-activewindow";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oH3BsS0KqnNdYe7HWHlfRSiUJx+vC3IveN+mcEgwZLs=";
+    hash = "sha256-8bwZHagwROdIF6jvEf9AGhsXHgSypfldqxhVCaPlnY0=";
   };
 
-  cargoHash = "sha256-mvmjXzHyCegZhZYVod7Hb7Ot0Vwen78fujMCRvWv/uA=";
+  cargoHash = "sha256-20unJ0aZ2KnT74dvgs/oiXZ6mZET0aFfxRjDhzG/1Gk=";
 
   meta = {
     description = "Multi-monitor-aware Hyprland workspace widget helper";
