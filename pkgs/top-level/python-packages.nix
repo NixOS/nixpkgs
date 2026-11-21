@@ -8568,6 +8568,8 @@ self: super: with self; {
 
   insightface = callPackage ../development/python-modules/insightface { };
 
+  inspect-ai = callPackage ../development/python-modules/inspect-ai { };
+
   installer = callPackage ../development/python-modules/installer { };
 
   insteon-frontend-home-assistant =
