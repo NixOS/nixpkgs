@@ -8,13 +8,27 @@
   nix-update-script,
   nixosTests,
   nodejs-slim_24,
-  servarr-ffmpeg,
+  openur-ffmpeg,
+  sqlite,
   stdenvNoCC,
-  withFFmpeg ? true,
+  vips,
   writeText,
   yarnBuildHook,
   yarnConfigHook,
 }:
+let
+  inherit (stdenvNoCC.hostPlatform.extensions) sharedLibrary;
+  ffprobe = lib.getExe' openur-ffmpeg "ffprobe";
+  libsqlite3 = "${lib.getLib sqlite}/lib/libsqlite3${sharedLibrary}";
+  libvips = "${lib.getLib vips}/lib/${vipsLibrary}";
+  nodejs-slim = nodejs-slim_24;
+  rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
+  vipsLibrary =
+    if stdenvNoCC.hostPlatform.isDarwin then
+      "libvips.42${sharedLibrary}"
+    else
+      "libvips${sharedLibrary}.42";
+in
 buildDotnetModule (finalAttrs: {
   pname = "whisparr";
   version = "3.6.5-release.1886";
@@ -42,16 +56,22 @@ buildDotnetModule (finalAttrs: {
     })
   ];
 
-  postPatch = "mv src/NuGet.config NuGet.Config";
+  postPatch = ''
+    dotnet package remove NetVips.Native --project src/NzbDrone.Core/Whisparr.Core.csproj
+    dotnet package remove Openur.FFprobeStatic --project src/NzbDrone.Core/Whisparr.Core.csproj
+    dotnet package remove Openur.FFprobeStatic --project src/NzbDrone.Test.Common/Whisparr.Test.Common.csproj
+    dotnet package remove SourceGear.sqlite3 --project src/NzbDrone.Common/Whisparr.Common.csproj
+    mv src/NuGet.config NuGet.Config
+  '';
 
   installPath = "${placeholder "out"}/lib/whisparr/bin";
 
   postInstall = ''
-    cp -a ${finalAttrs.passthru.frontend} $dotnetInstallPath/UI
-    cp ${finalAttrs.passthru.package_info} $dotnetInstallPath/../package_info
-  ''
-  + lib.optionalString withFFmpeg ''
-    ln -sf ${lib.getExe' servarr-ffmpeg "ffprobe"} $dotnetInstallPath/ffprobe
+    cp -a ${finalAttrs.passthru.frontend} "$dotnetInstallPath"/UI
+    cp ${finalAttrs.passthru.package_info} "$dotnetInstallPath"/../package_info
+    ln -s ${ffprobe} "$dotnetInstallPath"/ffprobe
+    ln -s ${libsqlite3} "$dotnetInstallPath"/libe_sqlite3${sharedLibrary}
+    ln -s ${libvips} "$dotnetInstallPath"/${vipsLibrary}
   '';
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0_1xx;
@@ -67,17 +87,23 @@ buildDotnetModule (finalAttrs: {
   executables = [ "Whisparr" ];
 
   dotnetFlags = [
-    "--property:AssemblyConfiguration=release"
+    "--property:AssemblyConfiguration=eros"
     "--property:AssemblyVersion=${finalAttrs.versionForDotnet}"
     "--property:Copyright=Copyright whisparr.com (${finalAttrs.meta.license.fullName})"
     "--property:EnableAnalyzers=false"
+    "--property:RuntimeIdentifier=${rid}"
     "--property:TargetFramework=net10.0"
   ];
 
   __darwinAllowLocalNetworking = true;
   doCheck = true;
 
-  preCheck = lib.optionalString stdenvNoCC.buildPlatform.isDarwin ''
+  preCheck = ''
+    ln -s ${ffprobe} _tests/net10.0/${rid}/ffprobe
+    ln -s ${libsqlite3} _tests/net10.0/${rid}/libe_sqlite3${sharedLibrary}
+    ln -s ${libvips} _tests/net10.0/${rid}/${vipsLibrary}
+  ''
+  + lib.optionalString stdenvNoCC.buildPlatform.isDarwin ''
     export CFFIXED_USER_HOME="$HOME"
   '';
 
@@ -116,7 +142,7 @@ buildDotnetModule (finalAttrs: {
       strictDeps = true;
 
       nativeBuildInputs = [
-        nodejs-slim_24
+        nodejs-slim
         yarnBuildHook
         yarnConfigHook
       ];
@@ -128,7 +154,7 @@ buildDotnetModule (finalAttrs: {
 
       installPhase = ''
         runHook preInstall
-        mv _output/UI $out
+        mv _output/UI "$out"
         runHook postInstall
       '';
     };
@@ -160,11 +186,11 @@ buildDotnetModule (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "Whisparr";
     maintainers = with lib.maintainers; [ connor-grady ];
+    platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
       fromSource
     ];
-    platforms = lib.platforms.unix;
   };
 })
