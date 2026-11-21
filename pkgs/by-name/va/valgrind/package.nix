@@ -6,6 +6,7 @@
   autoreconfHook,
   perl,
   gdb,
+  bashNonInteractive,
   writeScript,
 }:
 
@@ -58,15 +59,18 @@ stdenv.mkDerivation rec {
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
   buildInputs = [
-    gdb
     perl
+    bashNonInteractive
   ];
 
   # Perl is also a native build input.
   nativeBuildInputs = [
     autoreconfHook
     perl
+    gdb
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.hostPlatform.isLinux;
@@ -102,6 +106,8 @@ stdenv.mkDerivation rec {
       update-source-version ${pname} "$new_version"
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://valgrind.org/";
