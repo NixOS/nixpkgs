@@ -1,25 +1,29 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  zlib,
-  bzip2,
-  libjpeg,
   SDL2,
-  SDL2_net,
   SDL2_mixer,
+  SDL2_net,
+  bzip2,
+  cmake,
   gtk3,
-  writers,
-  python3Packages,
-  nix-update,
+  libjpeg,
+  makeWrapper,
+  nix-update-script,
+  pkg-config,
+  soundfont-fluid,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ecwolf";
   version = "1.4.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "ECWolfEngine";
@@ -28,20 +32,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-T5K6B2fWMKMLB/662p/YLEv0Od9n0vUakznyoOnr0kI=";
   };
 
+  postPatch = ''
+    substituteInPlace tools/updaterevision/UpdateRevision.cmake \
+      --replace-fail "<unknown version>" "${finalAttrs.src.tag}"
+    substituteInPlace src/id_sd.cpp \
+      --replace-fail "/usr/share/sounds/sf2/FluidR3_GM.sf2" "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+
   buildInputs = [
-    zlib
     bzip2
     libjpeg
     SDL2
-    SDL2_net
     SDL2_mixer
-    gtk3
-  ];
+    SDL2_net
+    zlib
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gtk3 ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = toString [
@@ -50,61 +62,36 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  # ECWolf installs its binary to the games/ directory, but Nix only adds bin/
-  # directories to the PATH.
+  doCheck = false;
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     cp -R ecwolf.app $out/Applications
     makeWrapper $out/{Applications/ecwolf.app/Contents/MacOS,bin}/ecwolf
   '';
 
-  passthru.updateScript =
-    let
-      updateScriptPkg =
-        writers.writePython3 "ecwolf_update_script"
-          {
-            libraries = with python3Packages; [
-              debian-inspector
-              requests
-            ];
-          }
-          ''
-            from os import execl
-            from sys import argv
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
 
-            from debian_inspector.debcon import get_paragraphs_data
-            from requests import get
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-            # The debian.drdteam.org repo is a primary source of information. It’s
-            # run by Blzut3, the creator and primary developer of ECWolf. It’s also
-            # listed on ECWolf’s download page:
-            # <https://maniacsvault.net/ecwolf/download.php>.
-            url = 'https://debian.drdteam.org/dists/stable/multiverse/binary-amd64/Packages'  # noqa: E501
-            response = get(url)
-            packages = get_paragraphs_data(response.text)
-            for package in packages:
-                if package['package'] == 'ecwolf':
-                    latest_version = package['version']
-                    break
-            nix_update_path = argv[1]
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--help";
 
-            execl(nix_update_path, nix_update_path, '--version', latest_version)
-          '';
-    in
-    [
-      updateScriptPkg
-      (lib.getExe nix-update)
-    ];
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
-    description = "Advanced source port for Wolfenstein 3D, Spear of Destiny, and Super 3D Noah's Ark";
-    mainProgram = "ecwolf";
+    description = "Advanced source port of the Wolfenstein 3D engine";
     homepage = "https://maniacsvault.net/ecwolf/";
+    changelog = "https://github.com/ECWolfEngine/ECWolf/blob/${finalAttrs.src.tag}/docs/changelog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       jayman2000
       keenanweaver
     ];
     platforms = lib.platforms.all;
+    mainProgram = "ecwolf";
   };
 })
