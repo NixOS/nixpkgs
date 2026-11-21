@@ -47,36 +47,35 @@ CNIPLUGINS_SHA256=$(nix-prefetch-url --quiet --unpack \
 CONTAINERD_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/k3s-io/containerd/archive/refs/tags/${VERSION_CONTAINERD}.tar.gz")
 
-CHART_FILES=( $(yq eval --no-doc .spec.chart "${K3S_STORE_PATH}/manifests/traefik.yaml" | xargs -n1 basename) )
-# These files are:
-#   1. traefik-crd-20.3.1+up20.3.0.tgz
-#   2. traefik-20.3.1+up20.3.0.tgz
-# at the time of writing
+# Every chart referenced by a HelmChart manifest must be embedded as a static
+# file, otherwise its helm-install job fails with a 404. Discovery mirrors
+# k3s's own scripts/download.
+CHART_FILES=( $(grep -rlF HelmChart "${K3S_STORE_PATH}/manifests/" | xargs yq eval --no-doc .spec.chart | xargs -n1 basename) )
 
-if [[ "${#CHART_FILES[@]}" != "2" ]]; then
-    echo "New manifest charts added, the packaging scripts will need to be updated: ${CHART_FILES}"
+if [[ "${#CHART_FILES[@]}" == "0" ]]; then
+    echo "No HelmChart manifests found in ${K3S_STORE_PATH}/manifests"
     exit 1
 fi
 
 cd "${NIXPKGS_K3S_PATH}/${MAJOR_VERSION}_${MINOR_VERSION}"
 
 CHARTS_URL=https://k3s.io/k3s-charts/assets
-TRAEFIK_CRD_CHART_SHA256=$(nix-hash --type sha256 --base32 --flat <(curl -o - "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}"))
-TRAEFIK_CHART_SHA256=$(nix-hash --type sha256 --base32 --flat <(curl -o - "${CHARTS_URL}/traefik/${CHART_FILES[1]}"))
-# Get metadata for both files
 rm -f chart-versions.nix.update
-cat > chart-versions.nix.update <<EOF
 {
-  traefik-crd = {
-    url = "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}";
-    sha256 = "$TRAEFIK_CRD_CHART_SHA256";
+    echo "{"
+    for CHART_FILE in "${CHART_FILES[@]}"; do
+        CHART_NAME=$(echo "${CHART_FILE}" | grep -oE '^(-*[a-z])+')
+        CHART_URL="${CHARTS_URL}/${CHART_NAME}/${CHART_FILE}"
+        CHART_SHA256=$(nix-prefetch-url --quiet "${CHART_URL}")
+        cat <<EOF
+  ${CHART_NAME} = {
+    url = "${CHART_URL}";
+    sha256 = "${CHART_SHA256}";
   };
-  traefik = {
-    url = "${CHARTS_URL}/traefik/${CHART_FILES[1]}";
-    sha256 = "$TRAEFIK_CHART_SHA256";
-  };
-}
 EOF
+    done
+    echo "}"
+} > chart-versions.nix.update
 mv chart-versions.nix.update chart-versions.nix
 
 # Concatenate all sha256sums, one entry per line
