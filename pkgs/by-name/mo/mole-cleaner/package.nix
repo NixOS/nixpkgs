@@ -35,16 +35,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "mole-cleaner";
-  version = "1.58.0";
+  version = "1.73.0";
 
   src = fetchFromGitHub {
     owner = "tw93";
     repo = "Mole";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-fk77PqWiRQu1q5c7VFpyS0HdfGhhfuPVOjPjmg2m+Xs=";
+    hash = "sha256-3TJL45ggnN8DWv+uOhSUdbrRp3QLm8laT84lBT+rt50=";
   };
 
-  vendorHash = "sha256-iGwtKV6mJfSgZ5rMB5ASXzdKTPBy9RqoysM4JRh0dts=";
+  vendorHash = "sha256-OQ7QTSuulopAS+2Jet2roZVGPMXgJUav73du+MJlt6o=";
 
   __structuredAttrs = true;
 
@@ -79,15 +79,33 @@ buildGoModule (finalAttrs: {
     duForTests
   ];
 
-  # No usable ps in the build sandbox: /usr/bin is not mounted and nixpkgs'
-  # ps (adv_cmds) lacks entitlements, so %mem/rss are empty for foreign
-  # processes and exit 1. Upstream CI runs these against the system ps.
-  #
-  # No /Users in the build sandbox either: account-root protection compares a
-  # path's parent against an existing /Users directory, so that assertion
-  # cannot hold while sandboxed.
   checkFlags = [
-    "-skip=AcceptsCurrentDarwinOutput|CollectProcessesUnderCommaLocale|TestValidateTrashTargetRejectsCriticalRoots"
+    "-skip=${
+      lib.concatStringsSep "|" [
+        # No usable ps in the build sandbox: /usr/bin is not mounted and
+        # nixpkgs' ps (adv_cmds) lacks entitlements, so %mem/rss are empty for
+        # foreign processes and exit 1. Upstream CI runs these against the
+        # system ps.
+        "AcceptsCurrentDarwinOutput"
+        "CollectProcessesUnderCommaLocale"
+
+        # No /Users in the build sandbox either: account-root protection
+        # compares a path's parent against an existing /Users directory, so
+        # that assertion cannot hold while sandboxed.
+        "TestValidateTrashTargetRejectsCriticalRoots"
+
+        # The disk-usage probe always runs the system /usr/bin/du (it relies on
+        # BSD du's -I), and some tests also call /usr/bin/du or /usr/bin/plutil
+        # directly. /usr/bin is not available in the build sandbox.
+        "TestOldDownloadsStopsAtMountPoints"
+        "TestGetDirectorySizeFromDuMeasuresUserLibraryInOneTraversal"
+        "TestGetDirectorySizeFromDuWithIgnoresSkipsCloudPlaceholderTree"
+        "TestDuIgnoresUseSystemDuWhenGNUDuIsFirstInPath"
+        "TestUserLibraryOverviewDeduplicatesHardlinks"
+        "TestHomeOverviewDeduplicatesHardlinks"
+        "TestSimulatorMetadataXMLAndBinary"
+      ]
+    }"
   ];
 
   installPhase = ''
