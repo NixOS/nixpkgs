@@ -4,7 +4,7 @@
     import ../../../pkgs/servers/sql/mariadb pkgs
   );
   mysqlPackages = {
-    inherit (pkgs) mysql84;
+    inherit (pkgs) mysql84 mysql97;
   };
   perconaPackages = {
     inherit (pkgs) percona-server_8_4;
