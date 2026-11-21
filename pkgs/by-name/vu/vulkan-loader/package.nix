@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   libx11,
@@ -26,7 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hm+e1rynOMa9uBGSzmxaYgzR32ZhWV9VC2q961UoCKo=";
   };
 
-  patches = [ ./fix-pkgconfig.patch ];
+  patches = [
+    ./fix-pkgconfig.patch
+    # Remove when included in a Vulkan SDK release.
+    # https://github.com/KhronosGroup/Vulkan-Loader/pull/2026
+    (fetchpatch {
+      name = "vulkan-loader-layer-negotiation.patch";
+      url = "https://github.com/KhronosGroup/Vulkan-Loader/compare/b8b96a2862bff1eed468e602d43f706beae89cf1...463abc54b4f43c1fa9cf505c4094565f51fc0391.diff";
+      hash = "sha256-LUQqX3Mb1nfh8JofZ0NVAv6Id3qvRtDznS1/lgHBa+E=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
