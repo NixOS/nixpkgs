@@ -18,25 +18,25 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "wtforms";
-  version = "3.3.1";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "wtforms";
+    owner = "pallets-eco";
     repo = "wtforms";
-    tag = finalAttrs.version;
-    hash = "sha256-4UmvzAcEt+dsXLGfAHgG/uN4QEh9uQvMgrjWJn65wIE=";
+    tag = version;
+    hash = "sha256-jwjP/wkk8MdNJbPE8MlkrH4DyR304Ju41nN4lMo3jFs=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     babel
     hatchling
     setuptools
   ];
 
-  dependencies = [ markupsafe ];
+  propagatedBuildInputs = [ markupsafe ];
 
   optional-dependencies = {
     email = [ email-validator ];
@@ -45,14 +45,14 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "wtforms" ];
 
   meta = {
     description = "Flexible forms validation and rendering library for Python";
-    homepage = "https://github.com/wtforms/wtforms";
-    changelog = "https://github.com/wtforms/wtforms/blob/${finalAttrs.src.tag}/CHANGES.rst";
+    homepage = "https://github.com/pallets-eco/wtforms";
+    changelog = "https://github.com/pallets-eco/wtforms/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
   };
-})
+}
