@@ -58,18 +58,10 @@ in
 
     virtualisation.lxc.enable = true;
 
-    systemd.services.waydroid-container = {
-      description = "Waydroid Container";
+    systemd.packages = [ cfg.package ];
 
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        Type = "dbus";
-        UMask = "0022";
-        ExecStart = "${cfg.package}/bin/waydroid container start";
-        BusName = "id.waydro.Container";
-      };
-    };
+    # [Install] sections from systemd.packages aren't applied
+    systemd.services.waydroid-container.wantedBy = [ "multi-user.target" ];
 
     systemd.tmpfiles.rules = [
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
