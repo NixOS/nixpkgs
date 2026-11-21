@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "containerlab";
-  version = "0.78.2";
+  version = "0.81.1";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dDIG3Hfx24H9AkzSFgwzPeNeoX89kO2RzW8iNyKyrC0=";
+    hash = "sha256-rIOSfaQA3+whl4gL+ARCRxXjzpVdl9TdgJKBNz6BPVk=";
   };
 
-  vendorHash = "sha256-kRBYjxirApj91hNBz3a+NyRm8SqRTVeQQCz+JFsKY0U=";
+  vendorHash = "sha256-LtLRsSgYnKqJECJkY8PJsO/AxPWzvLjXaW1x9QsjFmE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,9 +39,9 @@ buildGoModule (finalAttrs: {
 
   checkFlags = [
     # Not available in sandbox:
-    # - docker.sock needed for TestVerifyLinks
+    # - docker.sock needed for TestVerifyLinks and TestResolveNetemNodeFromTopology
     # - /proc/modules needed for KernelModulesLoaded
-    "-skip=^TestVerifyLinks$|^TestIsKernelModuleLoaded$"
+    "-skip=^TestVerifyLinks$|^TestIsKernelModuleLoaded$|^TestResolveNetemNodeFromTopology$"
   ];
 
   postInstall = ''
