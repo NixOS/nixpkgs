@@ -57,7 +57,7 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # assert (1560791320562868035 == 1560791320562868035) == False
     "test_eq"
-
+    #tests use bash scripting
     "test_docusaurus_standard"
     "test_dependency_audit_workflow"
 
