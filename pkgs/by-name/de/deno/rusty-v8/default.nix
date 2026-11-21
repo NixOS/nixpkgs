@@ -73,6 +73,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-v8";
   version = "150.4.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "rusty_v8";
