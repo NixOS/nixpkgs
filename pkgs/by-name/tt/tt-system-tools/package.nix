@@ -5,6 +5,10 @@
   makeWrapper,
   tt-smi,
   pstree,
+  pciutils,
+  gawk,
+  coreutils,
+  nixosTests,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tt-system-tools";
@@ -24,6 +28,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  # make the override file selectable, and don't divide by zero when the
+  # override is set but no card is present
+  postPatch = ''
+    substituteInPlace hugepages-setup/hugepages-setup.sh \
+      --replace-fail 'file_path="/opt/tenstorrent/bin/hugepages-override.txt"' \
+        'file_path="''${TT_HUGEPAGES_OVERRIDE_FILE:-/opt/tenstorrent/bin/hugepages-override.txt}"' \
+      --replace-fail 'HP_COUNT=$((HP_OVERRIDE / TT_COUNT))' \
+        'HP_COUNT=$((TT_COUNT ? HP_OVERRIDE / TT_COUNT : 0))'
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -36,8 +50,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       }
 
+    install -Dm755 hugepages-setup/hugepages-setup.sh $out/libexec/tt-system-tools/hugepages-setup
+    wrapProgram "$out/libexec/tt-system-tools/hugepages-setup" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          pciutils
+          gawk
+          coreutils
+        ]
+      }
+
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) tenstorrent;
+  };
 
   meta = {
     description = "System tools for Tenstorrent cards";
