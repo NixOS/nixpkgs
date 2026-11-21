@@ -11,7 +11,7 @@
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.10.5",
+  version ? "2026.11.3",
 }:
 let
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_24; };
@@ -24,10 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+Bqk2u4hDiyqK1upJ96tc6Zu5dDNjIl/yhKtMB1XUZw=";
+    hash = "sha256-wBHvOpO6Si9ZkymTI5VCSJrMMnJgjpyXrMY7MATP+Js=";
   };
 
-  pnpmDepsHash = "sha256-wOuGt0xrVC5MUJ2xn4erfkkl20TsMqIsjuLAMOSMAes=";
+  pnpmDepsHash = "sha256-6DadDokhfKoMo/xqkXO7NHvOuVdeiJSQPfOpOcHEzMY=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -90,6 +90,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       $libdir/node_modules/.pnpm/node_modules/moltbot \
       $libdir/node_modules/.pnpm/node_modules/openclaw-control-ui \
       $libdir/node_modules/.pnpm/node_modules/@openclaw/example-ai-chat
+      $libdir/node_modules/.pnpm/node_modules/@openclaw/solid-lint
 
     # Remove broken symlinks created by pnpm workspace linking in extensions
     find $libdir/extensions $libdir/packages -xtype l -delete
