@@ -839,7 +839,7 @@ rec {
       let
         # Pretty print the value for display, if successful
         prettyEval = builtins.tryEval (
-          lib.generators.toPretty { } (
+          lib.generators.toPretty { maxAttrs = 8; } (
             lib.generators.withRecursion {
               depthLimit = 10;
               throwOnDepthLimit = false;

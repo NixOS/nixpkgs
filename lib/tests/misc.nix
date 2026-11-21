@@ -3072,6 +3072,79 @@ runTests {
         .success;
       expected = false;
     };
+  testToPrettyMaxAttrs = {
+    expr =
+      generators.toPretty
+        {
+          maxAttrs = 2;
+          multiline = false;
+        }
+        {
+          a = 1;
+          b = 2;
+          c = 3;
+        };
+    expected = "{ a = 1; b = 2; ... }";
+  };
+
+  testToPrettyMaxAttrsExact = {
+    expr =
+      generators.toPretty
+        {
+          maxAttrs = 2;
+          multiline = false;
+        }
+        {
+          a = 1;
+          b = 2;
+        };
+    expected = "{ a = 1; b = 2; }";
+  };
+
+  testToPrettyMaxAttrsZero = {
+    expr =
+      generators.toPretty
+        {
+          maxAttrs = 0;
+          multiline = false;
+        }
+        {
+          a = 1;
+          b = 2;
+        };
+    expected = "{ ... }";
+  };
+
+  testToPrettyMaxAttrsNested = {
+    expr =
+      generators.toPretty
+        {
+          maxAttrs = 2;
+          multiline = false;
+        }
+        {
+          outer = {
+            a = 1;
+            b = 2;
+            c = 3;
+          };
+        };
+    expected = "{ outer = { a = 1; b = 2; ... }; }";
+  };
+
+  testToPrettyMaxAttrsLazy = {
+    expr =
+      generators.toPretty
+        {
+          maxAttrs = 1;
+          multiline = false;
+        }
+        {
+          a = 1;
+          b = throw "This attribute should not be evaluated";
+        };
+    expected = "{ a = 1; ... }";
+  };
 
   testWithRecursionDealsWithFunctors =
     let
