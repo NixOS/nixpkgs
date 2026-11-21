@@ -312,6 +312,8 @@ let
         postPatch = ''
           substituteInPlace scripts/galera_new_cluster.sh \
             --replace ":-mariadb" ":-mysql"
+          substituteInPlace plugin/auth_pam/testing/CMakeLists.txt \
+            --replace-fail "IF(INSTALL_MYSQLTESTDIR)" "IF(TRUE)"
         '';
 
         cmakeFlags =
@@ -410,8 +412,8 @@ self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.19";
-    hash = "sha256-uOVD7mnTgPsc/VYyJvSeD+luTWfnt6kEXuUUoWjtIGY=";
+    version = "10.11.20";
+    hash = "sha256-rFwAP3JZUKTL+YKb2bGRtz+KsPJjDW28YpL8UkTTx8s=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
