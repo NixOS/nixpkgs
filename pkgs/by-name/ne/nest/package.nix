@@ -10,6 +10,7 @@
   llvmPackages,
   mpi,
   nest,
+  nix-update-script,
   pkg-config,
   boost,
   python3,
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nest";
-  version = "3.9";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "nest";
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.version = testers.testVersion {
     package = nest;
     command = "nest --version";
+    updateScript = nix-update-script { };
   };
 
   meta = {
