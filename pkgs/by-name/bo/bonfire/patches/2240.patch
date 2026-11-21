@@ -1,0 +1,52 @@
+From 1a7cc7deb97d955f14ccf45f1f50bc75e2e51ad5 Mon Sep 17 00:00:00 2001
+From: Matt Van Horn <mvanhorn@gmail.com>
+Date: Thu, 27 Aug 2026 23:30:45 -0700
+Subject: [PATCH] fix: resolve bumblebee against the pinned axon and nx
+ versions
+
+The umbrella pins axon ~> 0.8 and nx ~> 0.13 as overrides, but bumblebee was
+requested at ~> 0.7 without one. Resolution settled on bumblebee 0.6.3, which
+requires axon ~> 0.7.0 and nx ~> 0.9/0.10, so the lock contradicted the pins.
+
+Request bumblebee ~> 0.7.1 with override: true, which depends on axon ~> 0.8.0
+and nx ~> 0.12/0.13 and therefore agrees with the existing pins, and add the
+same entry to the non-AI branch so both paths resolve identically.
+---
+ mix.exs  | 3 ++-
+ mix.lock | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/mix.exs b/mix.exs
+index 388f3c6c99..f97d5f7db3 100644
+--- a/mix.exs
++++ b/mix.exs
+@@ -95,7 +95,7 @@ defmodule Bonfire.Umbrella.MixProject do
+   maybe_ai_deps =
+     if(with_ai?,
+       do: [
+-        {:bumblebee, "~> 0.7"},
++        {:bumblebee, "~> 0.7.1", override: true},
+         {:axon, "~> 0.8", override: true},
+         {:table_rex, "~> 4.1", override: true},
+         {:nx, "~> 0.13"},
+@@ -105,6 +105,7 @@ defmodule Bonfire.Umbrella.MixProject do
+         # {:nx, github: "elixir-nx/nx", sparse: "nx", override: true}
+       ],
+       else: [
++        {:bumblebee, "~> 0.7.1", override: true},
+         {:axon, "~> 0.8", override: true},
+         {:nx, "~> 0.13", override: true},
+         {:table_rex, "~> 4.1", override: true}
+diff --git a/mix.lock b/mix.lock
+index 4327cd78da..ef3615a2d1 100644
+--- a/mix.lock
++++ b/mix.lock
+@@ -88,7 +88,7 @@
+   "boruta": {:git, "https://github.com/malach-it/boruta_auth", "cfdb52d742f37bfc146df659bb9f651018197ad0", [ref: "cfdb52d742f37bfc146df659bb9f651018197ad0"]},
+   "bovenjan": {:git, "https://github.com/bonfire-networks/bovenjan", "02e8b80469a0f09eb9606e67ac4f07dd2881cda7", []},
+   "brex_result": {:hex, :brex_result, "0.4.0", "c4f2a4a5b487c3d4cd0c94cef5df596eeae986c1dc7cfe08755efc7e766610eb", [:mix], [], "hexpm", "c221aac71c48727ef55dc56cf845772a54e1db538564280c868eb0595e1e44f8"},
+-  "bumblebee": {:hex, :bumblebee, "0.6.3", "c0028643c92de93258a9804da1d4d48797eaf7911b702464b3b3dd2cc7f938f1", [:mix], [{:axon, "~> 0.7.0", [hex: :axon, repo: "hexpm", optional: false]}, {:jason, "~> 1.4.0", [hex: :jason, repo: "hexpm", optional: false]}, {:nx, "~> 0.9.0 or ~> 0.10.0", [hex: :nx, repo: "hexpm", optional: false]}, {:nx_image, "~> 0.1.0", [hex: :nx_image, repo: "hexpm", optional: false]}, {:nx_signal, "~> 0.2.0", [hex: :nx_signal, repo: "hexpm", optional: false]}, {:progress_bar, "~> 3.0", [hex: :progress_bar, repo: "hexpm", optional: false]}, {:safetensors, "~> 0.1.3", [hex: :safetensors, repo: "hexpm", optional: false]}, {:tokenizers, "~> 0.4", [hex: :tokenizers, repo: "hexpm", optional: false]}, {:unpickler, "~> 0.1.0", [hex: :unpickler, repo: "hexpm", optional: false]}, {:unzip, "~> 0.12.0", [hex: :unzip, repo: "hexpm", optional: false]}], "hexpm", "c619197787561f8e5fb2ffba269c341654accaec9d591999b7fddd55761dd079"},
++  "bumblebee": {:hex, :bumblebee, "0.7.1", "0d6a757f955671a379ebcf4ed07565513fa767b1869169b989f65ba7958a80f4", [:mix], [{:axon, "~> 0.8.0", [hex: :axon, repo: "hexpm", optional: false]}, {:jason, "~> 1.4.0", [hex: :jason, repo: "hexpm", optional: false]}, {:nx, "~> 0.12.0 or ~> 0.13.0", [hex: :nx, repo: "hexpm", optional: false]}, {:nx_image, "~> 0.1.0", [hex: :nx_image, repo: "hexpm", optional: false]}, {:nx_signal, "~> 0.2.0", [hex: :nx_signal, repo: "hexpm", optional: false]}, {:safetensors, "~> 0.1.3", [hex: :safetensors, repo: "hexpm", optional: false]}, {:tokenizers, "~> 0.4", [hex: :tokenizers, repo: "hexpm", optional: false]}, {:unpickler, "~> 0.1.0", [hex: :unpickler, repo: "hexpm", optional: false]}, {:unzip, "~> 0.12.0 or ~> 0.13.0", [hex: :unzip, repo: "hexpm", optional: false]}], "hexpm", "f26b3355700e3c7580014d41ce477d87d9fd71a60b76d5b64701dacb07830a58"},
+   "bunt": {:hex, :bunt, "1.0.0", "081c2c665f086849e6d57900292b3a161727ab40431219529f13c4ddcf3e7a44", [:mix], [], "hexpm", "dc5f86aa08a5f6fa6b8096f0735c4e76d54ae5c9fa2c143e5a1fc7c1cd9bb6b5"},
+   "bypass": {:hex, :bypass, "2.1.0", "909782781bf8e20ee86a9cabde36b259d44af8b9f38756173e8f5e2e1fabb9b1", [:mix], [{:plug, "~> 1.7", [hex: :plug, repo: "hexpm", optional: false]}, {:plug_cowboy, "~> 2.0", [hex: :plug_cowboy, repo: "hexpm", optional: false]}, {:ranch, "~> 1.3", [hex: :ranch, repo: "hexpm", optional: false]}], "hexpm", "d9b5df8fa5b7a6efa08384e9bbecfe4ce61c77d28a4282f79e02f1ef78d96b80"},
+   "cachex": {:hex, :cachex, "4.1.1", "574c5cd28473db313a0a76aac8c945fe44191659538ca6a1e8946ec300b1a19f", [:mix], [{:eternal, "~> 1.2", [hex: :eternal, repo: "hexpm", optional: false]}, {:ex_hash_ring, "~> 6.0", [hex: :ex_hash_ring, repo: "hexpm", optional: false]}, {:jumper, "~> 1.0", [hex: :jumper, repo: "hexpm", optional: false]}, {:sleeplocks, "~> 1.1", [hex: :sleeplocks, repo: "hexpm", optional: false]}, {:unsafe, "~> 1.0", [hex: :unsafe, repo: "hexpm", optional: false]}], "hexpm", "d6b7449ff98d6bb92dda58bd4fc3189cae9f99e7042054d669596f56dc503cd8"},
