@@ -238,8 +238,16 @@ lib.extendMkDerivation {
 
       inherit enableParallelBuilding;
 
-      # If not set to an explicit value, set the buildid empty for reproducibility.
-      ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";
+      ldflags =
+        ldflags
+        # If not set to an explicit value, set the buildid empty for reproducibility.
+        ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid="
+        ++ lib.optional (
+          # pkgsStatic builds fail without external linking while CGO is enabled
+          (!lib.any (lib.hasPrefix "-linkmode=") ldflags)
+          && stdenv.hostPlatform.isStatic
+          && finalAttrs.env.CGO_ENABLED == 1
+        ) "-linkmode=external";
 
       configurePhase =
         args.configurePhase or (
