@@ -156,6 +156,8 @@ buildPythonPackage (finalAttrs: {
     "test_test_socket_get_cert"
     # Missing .wiremock/wiremock-standalone.jar
     "test_wiremock"
+    # Timing-sensitive, flaky on busy builders
+    "test_get_application_path_is_fast_on_deep_call_stacks"
   ];
 
   __darwinAllowLocalNetworking = true;
