@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ansible-lint";
-  version = "25.8.2";
+  version = "26.11.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "ansible_lint";
-    hash = "sha256-Nd093RLYBjh2kVvy8GuaG4D9J6fLHKTOUcjOu4RpCSI=";
+    hash = "sha256-dIEyA6pUUNcgw9hrnQ1N3FHTDjasaeHw2fdlD1o7XdM=";
   };
 
   postPatch = ''
@@ -29,23 +29,24 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
-    # https://github.com/ansible/ansible-lint/blob/master/.config/requirements.in
+    # https://github.com/ansible/ansible-lint/blob/main/pyproject.toml
     ansible-core
     ansible-compat
     black
+    cffi
+    cryptography
+    distro
     filelock
-    importlib-metadata
     jsonschema
     packaging
+    pathspec
     pyyaml
-    rich
+    referencing
     ruamel-yaml
     subprocess-tee
     wcmatch
     yamllint
   ];
-
-  pythonRelaxDeps = [ "ruamel.yaml" ];
 
   # tests can't be easily run without installing things from ansible-galaxy
   doCheck = false;
