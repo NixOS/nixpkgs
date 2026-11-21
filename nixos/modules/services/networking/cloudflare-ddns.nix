@@ -24,7 +24,7 @@ in
         The file content should be in the format `CLOUDFLARE_API_TOKEN=YOUR_SECRET_TOKEN`.
         The service user needs read access to this file.
         Ensure permissions are secure (e.g., `0400` or `0440`) and ownership is appropriate.
-        Using `CLOUDFLARE_API_TOKEN` is preferred over the deprecated `CF_API_TOKEN`.
+        Using {env}`CLOUDFLARE_API_TOKEN` is preferred over the deprecated {env}`CF_API_TOKEN`.
       '';
       example = "/run/secrets/cloudflare-ddns-token";
     };
@@ -35,8 +35,8 @@ in
       description = ''
         List of domain names (FQDNs) to manage for both IPv4 (`A`) and IPv6 (`AAAA`) records.
         Wildcards like `*.example.com` are supported.
-        These are combined with (not overridden by) `ip4Domains` and `ip6Domains`.
-        This corresponds to the `DOMAINS` environment variable.
+        These are combined with (not overridden by) {option}`ip4Domains` and {option}`ip6Domains`.
+        This corresponds to the {env}`DOMAINS` environment variable.
       '';
       example = [
         "home.example.com"
@@ -49,8 +49,8 @@ in
       default = [ ];
       description = ''
         Additional list of domains to manage only for IPv4 (`A` records).
-        These are combined with domains listed in `domains`.
-        Corresponds to the `IP4_DOMAINS` environment variable.
+        These are combined with domains listed in {option}`domains`.
+        Corresponds to the {env}`IP4_DOMAINS` environment variable.
       '';
       example = [ "ipv4.example.com" ];
     };
@@ -60,8 +60,8 @@ in
       default = [ ];
       description = ''
         Additional list of domains to manage only for IPv6 (`AAAA` records).
-        These are combined with domains listed in `domains`.
-        Corresponds to the `IP6_DOMAINS` environment variable.
+        These are combined with domains listed in {option}`domains`.
+        Corresponds to the {env}`IP6_DOMAINS` environment variable.
       '';
       example = [ "ipv6.example.com" ];
     };
@@ -74,7 +74,7 @@ in
         Matched records are updated or deleted as needed; new records are created with comments that match.
         Uses RE2 syntax (the Go `regexp` syntax, not Perl/PCRE).
         When empty, the updater manages all DNS records for the configured domains.
-        Corresponds to the `MANAGED_RECORDS_COMMENT_REGEX` environment variable.
+        Corresponds to the {env}`MANAGED_RECORDS_COMMENT_REGEX` environment variable.
       '';
       example = "^managed-by-ddns$";
     };
@@ -98,7 +98,7 @@ in
         This lets multiple updater instances share one WAF list safely.
         Uses RE2 syntax (the Go `regexp` syntax, not Perl/PCRE).
         When empty, the updater manages all WAF list items.
-        Corresponds to the `MANAGED_WAF_LIST_ITEMS_COMMENT_REGEX` environment variable.
+        Corresponds to the {env}`MANAGED_WAF_LIST_ITEMS_COMMENT_REGEX` environment variable.
       '';
       example = "^managed-by-ddns$";
     };
@@ -131,7 +131,7 @@ in
         Default CIDR prefix length for detected bare IPv4 addresses.
         WAF lists use this to determine the stored range (e.g., 24 stores each detection as a /24 range).
         Valid range: 8–32.
-        Corresponds to the `IP4_DEFAULT_PREFIX_LEN` environment variable.
+        Corresponds to the {env}`IP4_DEFAULT_PREFIX_LEN` environment variable.
         (Experimental feature as of cloudflare-ddns 1.16.0).
       '';
     };
@@ -143,7 +143,7 @@ in
         Default CIDR prefix length for detected bare IPv6 addresses.
         WAF lists use this to determine the stored range (e.g., 48 stores each detection as a /48 range).
         Valid range: 12–128.
-        Corresponds to the `IP6_DEFAULT_PREFIX_LEN` environment variable.
+        Corresponds to the {env}`IP6_DEFAULT_PREFIX_LEN` environment variable.
         (Experimental feature as of cloudflare-ddns 1.16.0).
       '';
     };
@@ -163,11 +163,11 @@ in
       default = lib.defaultTo "UTC" config.time.timeZone;
       defaultText = lib.literalMD "The system time zone, or UTC if unset.";
       description = ''
-        Time zone used for log messages and the schedule in `updateCron`.
-        By default, this follows the system time zone set in `time.timeZone`,
+        Time zone used for log messages and the schedule in {option}`updateCron`.
+        By default, this follows the system time zone set in {option}`time.timeZone`,
         using UTC if no system time zone is configured.
         Accepts any IANA time zone name.
-        Corresponds to the `TZ` environment variable.
+        Corresponds to the {env}`TZ` environment variable.
       '';
       example = "Asia/Kathmandu";
     };
