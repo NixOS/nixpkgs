@@ -172,7 +172,9 @@ Users learn the NixOS module system by seeing patterns first.
 
 - Abbreviate keys like `ssh-ed25519 AAAAC3NzaC…`
 - Abbreviate IP addresses like `192.168.XXX.XXX`
-- Variables are capitalized and start with `$`, e.g. `$YOUR_HOSTNAME`
+- Variables start with `$`, e.g. `$INDEX`, `$index`
+- Exported variables are capitalized, e.g., `$PATH`
+- Script-scoped variables are lowercase, e.g., `$hostname`
 - Variables should be directly usable during copy-paste
 - Do **not** describe missing code parts (`#elided`, `#omitted`)
 - **Machine vs Host**: use "machine" for the NixOS system identity, "host" for the physical or virtual hardware
