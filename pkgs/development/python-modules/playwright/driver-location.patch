@@ -1,20 +1,24 @@
 diff --git a/playwright/_impl/_driver.py b/playwright/_impl/_driver.py
-index 22b53b8..43fdbd5 100644
 --- a/playwright/_impl/_driver.py
 +++ b/playwright/_impl/_driver.py
-@@ -23,14 +23,7 @@ from playwright._repo_version import version
+@@ -23,19 +23,7 @@ from playwright._repo_version import version
  
  
  def compute_driver_executable() -> Tuple[str, str]:
 -    driver_path = Path(inspect.getfile(playwright)).parent / "driver"
 -    cli_path = str(driver_path / "package" / "cli.js")
--    if sys.platform == "win32":
--        return (
--            os.getenv("PLAYWRIGHT_NODEJS_PATH", str(driver_path / "node.exe")),
--            cli_path,
+-    node_path = os.getenv("PLAYWRIGHT_NODEJS_PATH")
+-    if node_path:
+-        return (node_path, cli_path)
+-    bundled_node = driver_path / ("node.exe" if sys.platform == "win32" else "node")
+-    if not bundled_node.is_file():
+-        # The source distribution ships the driver without Node.js.
+-        raise Error(
+-            "This installation of Playwright does not include Node.js. "
+-            "Set PLAYWRIGHT_NODEJS_PATH pointing to Node.js executable."
 -        )
--    return (os.getenv("PLAYWRIGHT_NODEJS_PATH", str(driver_path / "node")), cli_path)
+-    return (str(bundled_node), cli_path)
 +    return "@nodejs@", "@driver@"
  
  
- def get_driver_env() -> dict:
+ def node_launch_error(executable: str, error: OSError) -> Error:
