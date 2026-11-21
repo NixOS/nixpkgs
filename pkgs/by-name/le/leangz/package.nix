@@ -9,16 +9,16 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leangz";
   # nixpkgs-update: no auto update
-  version = "0.1.19"; # Should match LEANTAR_VERSION in leanprover/lean4/CMakeLists.txt
+  version = "0.1.20"; # Should match LEANTAR_VERSION in leanprover/lean4/CMakeLists.txt
 
   src = fetchFromGitHub {
     owner = "digama0";
     repo = "leangz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kDvaydStWiJYCmKjoU39tuOQHNw5Zo577GeAvlENO2o=";
+    hash = "sha256-EDei1ykLtjj8Qd9soL2p0h8lL+wQOgi5vQGWDbf1NK4=";
   };
 
-  cargoHash = "sha256-n3iqdRbXcSsCL+8/vDcdOXwnbU9k7DTSKR14gZ4Zlxg=";
+  cargoHash = "sha256-h0cbvqmX5p0/Me6kPKpcuMUcVivII2n4Z0D/DNyAVDI=";
 
   __structuredAttrs = true;
 

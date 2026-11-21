@@ -1,15 +1,15 @@
-# Lean 4 package set with its own toolchain (independent of pkgs.lean4).
+# Lean 4 package set
 #
 # Override the toolchain for the entire set:
 #   leanPackages.overrideScope (self: super: { lean4 = lean4-custom; })
 {
   lib,
   newScope,
+  lean4,
 }:
 
 lib.makeScope newScope (self: {
-  lean4 = self.callPackage ../development/lean-modules/lean4 { };
-
+  inherit lean4;
   buildLakePackage = self.callPackage ../build-support/lake { };
 
   batteries = self.callPackage ../development/lean-modules/batteries { };
