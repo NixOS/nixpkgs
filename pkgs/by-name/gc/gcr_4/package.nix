@@ -10,7 +10,7 @@
   gnupg,
   p11-kit,
   glib,
-  libgcrypt,
+  gnutls,
   libtasn1,
   gtk4,
   pango,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libgcrypt
+    gnutls
     libtasn1
     pango
     libsecret
@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
+    "-Dcrypto=gnutls"
     (lib.mesonEnable "systemd" systemdSupport)
     "--cross-file=${
       ini.generate "cross-file.conf" {
