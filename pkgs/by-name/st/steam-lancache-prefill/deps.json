@@ -5,9 +5,9 @@
     "hash": "sha256-8MWfDkTyotnouLwZASK27lM32NoGCLPLr4sBBqPkJFI="
   },
   {
-    "pname": "AutoMapper",
-    "version": "11.0.1",
-    "hash": "sha256-47l2b8IWIyaOKl5KTpVAPeEL6ZMGlzoFCWby2QIrPfw="
+    "pname": "BepInEx.AssemblyPublicizer.MSBuild",
+    "version": "0.4.2",
+    "hash": "sha256-Q1TGgv3Nm1Q6QTqw8a96KLkk9XUgjpTxiaBHZsj2aDk="
   },
   {
     "pname": "ByteSize",
