@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "lib"
     "dev"
+    "static"
   ];
 
   nativeBuildInputs = [
@@ -189,6 +190,11 @@ stdenv.mkDerivation (finalAttrs: {
 
       runHook postInstallCheck
     '';
+
+  postFixup = ''
+    moveToOutput "lib/*.a" "$static"
+    sed -i "s|$lib/lib/\(lib[[:alnum:]_]*\.a\)|$static/lib/\1|g" "$dev"/lib/cmake/DuckDB/*.cmake
+  '';
 
   passthru.updateScript = ./update.sh;
   passthru.pythonHash = versions.python_hash;
