@@ -30,6 +30,9 @@ __pycache__
 /AGENTS.md
 /CLAUDE.md
 
+# linked by importNpmLock's hook when a shell like ci/github-script/shell.nix is entered from the root
+/node_modules
+
 /pkgs/development/libraries/qt-5/*/tmp/
 /pkgs/desktops/kde-5/*/tmp/
 /pkgs/development/mobile/androidenv/xml/*
