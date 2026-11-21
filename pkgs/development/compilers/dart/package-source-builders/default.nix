@@ -13,6 +13,7 @@
   matrix = callPackage ./matrix { };
   media_kit = callPackage ./media_kit { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
+  native_natural_sort = callPackage ./native_natural_sort { };
   olm = callPackage ./olm { };
   pdfium_dart = callPackage ./pdfium_dart { };
   pdfium_flutter = callPackage ./pdfium_flutter { };
