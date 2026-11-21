@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "emsutil";
-  version = "0.8.3-unstable-2026-08-03";
+  version = "1.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FennisRobert";
     repo = "emsutil";
-    rev = "18449659ca374ba84f02709a0d245b6bebb8ddb6";
-    hash = "sha256-9kyEBNKKP9Dz6s1svzq6C3ow27jV+zwz2M82gJndZsg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Kj2GtnHYItM0HQnWOaxtReo49a/fQs00J9u145+BsZY=";
   };
 
   build-system = [
@@ -51,10 +51,7 @@ buildPythonPackage (finalAttrs: {
     "emsutil"
   ];
 
-  # TODO: remove after new release (>0.8.3)
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utilities for the EMerge software suite";

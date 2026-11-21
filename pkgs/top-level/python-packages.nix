@@ -3767,6 +3767,8 @@ self: super: with self; {
 
   corsair-scan = callPackage ../development/python-modules/corsair-scan { };
 
+  corvid-solver = callPackage ../development/python-modules/corvid-solver { };
+
   cose = callPackage ../development/python-modules/cose { };
 
   cot = callPackage ../development/python-modules/cot { inherit (pkgs) qemu; };
@@ -5611,9 +5613,13 @@ self: super: with self; {
 
   embreex = callPackage ../development/python-modules/embreex { };
 
+  emcad = callPackage ../development/python-modules/emcad { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   emerge = callPackage ../development/python-modules/emerge { };
+
+  emerge-aasds = callPackage ../development/python-modules/emerge-aasds { };
 
   emmiai-noether = callPackage ../development/python-modules/emmiai-noether { };
 
@@ -19016,6 +19022,8 @@ self: super: with self; {
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
+  scikit-umfpack = callPackage ../development/python-modules/scikit-umfpack { };
+
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
   scikits-odes-core = callPackage ../development/python-modules/scikits-odes-core { };
@@ -19850,6 +19858,8 @@ self: super: with self; {
   sparse = callPackage ../development/python-modules/sparse { };
 
   sparsediffpy = callPackage ../development/python-modules/sparsediffpy { };
+
+  sparta-solver = callPackage ../development/python-modules/sparta-solver { };
 
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 

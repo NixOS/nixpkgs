@@ -4,16 +4,15 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+  rustPlatform,
   writableTmpDirAsHomeHook,
-  nix-update-script,
+  writeShellScriptBin,
 
   cudaPackages,
 
-  # build-system
-  hatchling,
-
   # dependencies
   emsutil,
+  emerge-aasds,
   gmsh,
   joblib,
   loguru,
@@ -21,66 +20,58 @@
   mkl,
   msgpack,
   msgpack-numpy,
-  numba,
   numpy,
   psutil,
   pyvista,
   scipy,
+  sparta-solver,
 
   # optional-dependencies
+  corvid-solver,
   cupy,
-  nvmath-python,
+  emcad,
   ezdxf,
+  nvmath-python,
   pygerber,
-  #scikit-umfpack,
+  scikit-umfpack,
 
   # tests
   callPackage,
+  pytestCheckHook,
 
   cudaSupport ? config.cudaSupport,
   withMkl ? stdenv.hostPlatform.isx86_64 && config.allowUnfree,
+  fullTestSuite ? false,
+  emerge,
 }:
-
-let
-  # NOTE:
-  # `nvmath.bindings.cudss.AlgType` has been removed in newer versions of
-  # `nvmath-python`, but `emerge` still uses it. See:
-  #   - https://docs.nvidia.com/cuda/nvmath-python/latest/bindings/generated/nvmath.bindings.cudss.AlgType.html
-  #   - https://docs.nvidia.com/cuda/nvmath-python/1.0.0/release-notes.html
-  nvmath-python' = nvmath-python.overrideAttrs rec {
-    version = "0.9.0";
-    src = fetchFromGitHub {
-      owner = "NVIDIA";
-      repo = "nvmath-python";
-      tag = "v${version}";
-      hash = "sha256-sIVvehCmkPvpPbHxhUPbKZ1cHnHTSlrgBHKSsHbUJPg=";
-    };
-    pythonRelaxDeps = [
-      "cuda-core"
-    ];
-  };
-in
 
 buildPythonPackage (finalAttrs: {
   pname = "emerge";
-  version = "2.8.9";
+  version = "3.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FennisRobert";
     repo = "EMerge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2w6PZUT0gE50nZ9MfpFkGjx1UQJEqYso9Mm2rfJK08w=";
+    hash = "sha256-XdcXRJYPWLIdsUUqkbZuIlae8QsgNHYZx5tPng0L6Z4=";
   };
 
-  postPatch = ''
-    # TODO: get from pypi?
-    # https://pypi.org/project/mkl
-    sed -i '/mkl!=2024.0;/d' pyproject.toml
-  '';
+  cargoRoot = "emr";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-NL8P73B9rjZ4X3KvvRq+1evRIu56vRYuuGIBMa1WrPs=";
+  };
 
   build-system = [
-    hatchling
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
 
   dependencies = [
@@ -91,11 +82,14 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     msgpack
     msgpack-numpy
-    numba
     numpy
     psutil
     pyvista
     scipy
+    sparta-solver
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    emerge-aasds
   ]
   ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cudss;
 
@@ -112,19 +106,23 @@ buildPythonPackage (finalAttrs: {
     ];
 
   optional-dependencies = {
+    cad = [
+      emcad
+      pygerber
+    ];
+    corvid = [
+      corvid-solver
+    ];
     cudss = [
       cupy
       cudaPackages.libcudss
-      nvmath-python'
+      nvmath-python
     ];
     dxf = [
       ezdxf
     ];
-    gerber = [
-      pygerber
-    ];
     umfpack = [
-      #scikit-umfpack # TODO: package
+      scikit-umfpack
     ];
   };
 
@@ -133,29 +131,52 @@ buildPythonPackage (finalAttrs: {
     "numpy"
   ];
 
+  pythonRemoveDeps = [
+    "mkl"
+  ];
+
   pythonImportsCheck = [
     "emerge"
   ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.optionals fullTestSuite [
+    scikit-umfpack
+  ]
+  ++ lib.optionals (fullTestSuite && stdenv.hostPlatform.isDarwin) [
+    # pyvista runs `pgrep -qx Finder` on Darwin to detect headless/GUI sessions
+    (writeShellScriptBin "pgrep" "exit 1")
+  ];
+
+  # Running the full test suite takes ~4 minutes; moved to passthru.tests.full
+  pytestFlags = lib.optionals (!fullTestSuite) [
+    "--collect-only"
+  ];
+
+  disabledTests = lib.optionals fullTestSuite [
+    # requires unfree `mkl`
+    "test_pardiso_non_symmetric_csc"
+    # AASDS parallel frequency sweep consumes >10 GB RAM, exceeding runner memory
+    "test_wg1"
+    "test_wg2"
+  ];
+
+  # Cocoa VTK requires WindowServer / GPU access for OpenGL context creation
+  __noChroot = fullTestSuite && stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    inherit
-      cudaSupport
-      ;
+    inherit cudaSupport;
 
-    tests = callPackage ./tests { };
-
-    updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=^v(2\\.[0-9].*)$" ];
+    tests = (callPackage ./tests { }) // {
+      full = emerge.override { fullTestSuite = true; };
     };
   };
 
   meta = {
     description = "Electromagnetic field computation program";
     homepage = "https://github.com/FennisRobert/EMerge";
-    mainProgram = "emerge";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ eljamm ];
     teams = with lib.teams; [ ngi ];
