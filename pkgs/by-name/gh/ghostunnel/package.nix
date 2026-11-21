@@ -3,8 +3,15 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  path,
 }:
 
+let
+  # In `modules`, not in this directory, so that the sandbox that builds the
+  # option documentation contains it. See "Modules of a package" in the Nixpkgs
+  # manual.
+  commands = path + "/modules/generic/pkgs/by-name/gh/ghostunnel/commands";
+in
 buildGo127Module (finalAttrs: {
   pname = "ghostunnel";
   version = "1.11.5";
@@ -38,9 +45,14 @@ buildGo127Module (finalAttrs: {
 
   passthru.services.default = {
     imports = [
-      (lib.modules.importApply ./service.nix { })
+      (lib.modules.importApply ./service.nix { command = commands + "/ghostunnel/server.nix"; })
     ];
     ghostunnel.package = finalAttrs.finalPackage;
+  };
+
+  passthru.commandModules = lib.modules.commandTree {
+    directory = commands;
+    package = finalAttrs.finalPackage;
   };
 
   meta = {
