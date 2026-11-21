@@ -3,13 +3,11 @@
   buildFeatures ? [ ],
   buildNoDefaultFeatures ? false,
   buildPackages,
-  dbus,
   fetchFromGitHub,
   installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installShellFiles,
   lib,
-  libgit2,
   openssl,
   pkg-config,
   rustPlatform,
@@ -18,20 +16,7 @@
 
 let
   nativeTls = builtins.elem "native-tls" buildFeatures;
-  notify = builtins.elem "notify" buildFeatures;
-
-  # dbus calls libgcc outline atomics that the static aarch64 link cannot
-  # resolve (__aarch64_ldset4_sync & co), so inline them instead.
-  dbus' =
-    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 then
-      dbus.overrideAttrs (old: {
-        env = (old.env or { }) // {
-          NIX_CFLAGS_COMPILE = (old.env.NIX_CFLAGS_COMPILE or "") + " -mno-outline-atomics";
-        };
-      })
-    else
-      dbus;
-
+  rustlsAws = builtins.elem "rustls-aws" buildFeatures;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
@@ -39,23 +24,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit buildNoDefaultFeatures;
 
   pname = "ortie";
-  version = "2.1.0";
-  cargoHash = "sha256-ZAW+Coyv1DVmF2HWr7CmFMtQT9hNaS+1koWoZCJ+Wsc=";
+  version = "3.0.0";
+  cargoHash = "sha256-AOKGfH+oCe62cjZhfwr0F2AXRZFq9xrX9OqsZUOB2Cc=";
 
   src = fetchFromGitHub {
     owner = "pimalaya";
     repo = "ortie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5KRXPIDYBfF/2fNnrJur8WdfLYvgtJWlTWA7YD8yYWg=";
+    hash = "sha256-AX13jg8wVlDNABDe8IcdCEOEdoNm6Twr2HZ/CHaqOdI=";
   };
 
   env = {
-    # pkg-config hands the linker libdbus but no rpath, leaving a binary that
-    # cannot find it: not in postInstall, which runs it, nor once installed.
-    NIX_LDFLAGS = lib.optionalString (notify && !stdenv.hostPlatform.isWindows) (
-      "-rpath " + lib.getLib dbus' + "/lib"
-    );
-
     # openssl should not be provided by vendors, not even on windows
     OPENSSL_NO_VENDOR = 1;
   };
@@ -65,18 +44,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [
-    aws-lc
-    libgit2
-  ]
-  ++ lib.optional nativeTls openssl
-  # dbus is provided by vendors on windows
-  ++ lib.optional (notify && !stdenv.hostPlatform.isWindows) dbus';
+  buildInputs = lib.optional nativeTls openssl ++ lib.optional rustlsAws aws-lc;
 
-  buildFeatures =
-    buildFeatures
-    # dbus is provided by vendors on windows
-    ++ lib.optional (notify && stdenv.hostPlatform.isWindows) "vendored";
+  inherit buildFeatures;
 
   postInstall =
     let
@@ -87,9 +57,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
           lib.getExe buildPackages.ortie;
     in
     ''
-      mkdir -p $out/share/{completions,man}
-      ${exe} manuals "$out"/share/man
-      ${exe} completions -d "$out"/share/completions bash elvish fish powershell zsh
+      mkdir -p $out/share/{completions,man,schemas}
+      install -Dm644 config.sample.toml "$out"/share/doc/ortie/config.sample.toml
+      ${exe} manual -d "$out"/share/man
+      ${exe} completion -d "$out"/share/completions bash elvish fish powershell zsh
+      ${exe} json-schema -d "$out"/share/schemas
     ''
     + lib.optionalString installManPages ''
       installManPage "$out"/share/man/*
@@ -101,11 +73,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --zsh "$out"/share/completions/_ortie
     '';
 
-  # disable impure integration tests
+  # disable impure integration tests: they bind sockets and spawn processes
   cargoTestFlags = [ "--bins" ];
 
+  # two unit tests of 3.0.0 bind a loopback socket
+  __darwinAllowLocalNetworking = true;
+
   meta = {
-    description = "CLI to manage OAuth 2.0 tokens";
+    description = "CLI to manage OAuth tokens";
     mainProgram = "ortie";
     homepage = "https://github.com/pimalaya/ortie";
     changelog = "https://github.com/pimalaya/ortie/releases/tag/${finalAttrs.src.tag}";
