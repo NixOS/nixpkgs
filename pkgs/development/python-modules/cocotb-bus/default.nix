@@ -1,19 +1,18 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "cocotb-bus";
-  version = "unstable-2025-11-03";
+  version = "0.3.0";
   format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "cocotb";
-    repo = "cocotb-bus";
-    rev = "f72b989bde036e677d5e9ebab3a6a21bdfe43d09";
-    hash = "sha256-4j63kOjBd+iLA2EYqLTM0oKzKksOjH2UqNgDNFvWgYw=";
+  src = fetchPypi {
+    pname = "cocotb_bus";
+    inherit version;
+    sha256 = "sha256-l2KyknP/Bi9SFg5XJ048sQbRTn53ZRXeE3LB1zVGsAU=";
   };
 
   # tests require cocotb, disable for now to avoid circular dependency
