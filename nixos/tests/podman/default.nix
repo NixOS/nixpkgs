@@ -45,6 +45,7 @@ import ../make-test-python.nix (
 
           users.users.alice = {
             isNormalUser = true;
+            uid = 1000;
           };
         };
       docker =
@@ -86,17 +87,14 @@ import ../make-test-python.nix (
           return f"su {user} -l -c {cmd}"
 
 
-      rootful.wait_for_unit("sockets.target")
-      rootful_norunc.wait_for_unit("sockets.target")
-      rootless.wait_for_unit("sockets.target")
-      docker.wait_for_unit("sockets.target")
-      docker_compat.wait_for_unit("sockets.target")
       start_all()
+      for machine in machines:
+          machine.wait_for_unit("sockets.target")
 
       with subtest("Run container as root with runc"):
           rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           rootful.succeed(
-              "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+              "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
           rootful.succeed("podman ps | grep sleeping")
           rootful.succeed("podman stop sleeping")
@@ -105,7 +103,7 @@ import ../make-test-python.nix (
       with subtest("Run container as root with crun"):
           rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           rootful.succeed(
-              "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+              "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
           rootful.succeed("podman ps | grep sleeping")
           rootful.succeed("podman stop sleeping")
@@ -114,7 +112,7 @@ import ../make-test-python.nix (
       with subtest("Run container as root with the default backend"):
           rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           rootful.succeed(
-              "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+              "podman run -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
           rootful.succeed("podman ps | grep sleeping")
           rootful.succeed("podman stop sleeping")
@@ -124,13 +122,13 @@ import ../make-test-python.nix (
       with subtest("Run runc-less container as root with runc"):
           rootful_norunc.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           rootful_norunc.fail(
-              "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+              "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
 
       with subtest("Run runc-less container as root with crun"):
           rootful_norunc.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           rootful_norunc.succeed(
-              "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+              "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
           rootful_norunc.succeed("podman ps | grep sleeping")
           rootful_norunc.succeed("podman stop sleeping")
@@ -139,7 +137,7 @@ import ../make-test-python.nix (
       with subtest("Run runc-less container as root with the default backend"):
           rootful_norunc.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           rootful_norunc.succeed(
-              "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+              "podman run -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
           rootful_norunc.succeed("podman ps | grep sleeping")
           rootful_norunc.succeed("podman stop sleeping")
@@ -148,13 +146,13 @@ import ../make-test-python.nix (
       # start systemd session for rootless
       rootless.succeed("loginctl enable-linger alice")
       rootless.succeed(su_cmd("whoami"))
-      rootless.sleep(1)
+      rootless.wait_for_unit("user@1000.service")
 
       with subtest("Run container rootless with runc"):
           rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           rootless.succeed(
               su_cmd(
-                  "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+                  "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
               )
           )
           rootless.succeed(su_cmd("podman ps | grep sleeping"))
@@ -165,7 +163,7 @@ import ../make-test-python.nix (
           rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           rootless.succeed(
               su_cmd(
-                  "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+                  "podman run --runtime=crun -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
               )
           )
           rootless.succeed(su_cmd("podman ps | grep sleeping"))
@@ -176,7 +174,7 @@ import ../make-test-python.nix (
           rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           rootless.succeed(
               su_cmd(
-                  "podman run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+                  "podman run -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
               )
           )
           rootless.succeed(su_cmd("podman ps | grep sleeping"))
@@ -187,7 +185,7 @@ import ../make-test-python.nix (
           rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           rootless.succeed(
               su_cmd(
-                  "podman run -d -p 9000:8888 --name=rootlessport -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -w ${pkgs.writeTextDir "index.html" "<h1>Testing</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8888"
+                  "podman run -d -p 9000:8888 --stop-signal=SIGINT --name=rootlessport -v /nix/store:/nix/store -w ${pkgs.writeTextDir "index.html" "<h1>Testing</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8888"
               )
           )
           rootless.succeed(su_cmd("podman ps | grep rootlessport"))
@@ -219,7 +217,7 @@ import ../make-test-python.nix (
       with subtest("Run container via docker cli"):
           docker.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           docker.succeed(
-            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
+            "docker run -d --name=sleeping -v /nix/store:/nix/store localhost/scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
           docker.succeed("docker ps | grep sleeping")
           docker.succeed("podman ps | grep sleeping")
@@ -243,7 +241,7 @@ import ../make-test-python.nix (
       with subtest("Docker compat works"):
           docker_compat.succeed("tar cv --files-from /dev/null | docker import - scratchimg")
           docker_compat.succeed(
-            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
+            "docker run -d --name=sleeping -v /nix/store:/nix/store localhost/scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
           docker_compat.succeed("docker ps | grep sleeping")
           docker_compat.succeed("podman ps | grep sleeping")

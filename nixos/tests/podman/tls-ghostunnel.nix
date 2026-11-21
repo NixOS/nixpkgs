@@ -128,7 +128,7 @@ import ../make-test-python.nix (
           podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
 
           client.succeed(
-            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
+            "docker run -d --name=sleeping -v /nix/store:/nix/store localhost/scratchimg ${lib.getExe pkgs.catatonit} -P"
           )
           client.succeed("docker ps | grep sleeping")
           podman.succeed("docker ps | grep sleeping")
