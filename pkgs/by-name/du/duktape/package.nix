@@ -4,6 +4,7 @@
   fetchurl,
   fixDarwinDylibNames,
   validatePkgConfig,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.7.0";
   src = fetchurl {
     url = "https://duktape.org/duktape-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-kPjS+otVZ8aJmDDd7ywD88J5YLEayiIvoXqnrGE8KJA=";
+    hash = "sha256-kPjS+otVZ8aJmDDd7ywD88J5YLEayiIvoXqnrGE8KJA=";
   };
 
   # https://github.com/svaarala/duktape/issues/2464
@@ -21,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+
+  strictDeps = true;
 
   buildPhase = ''
     make -f Makefile.cmdline
@@ -42,6 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.tests = lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
+  __structuredAttrs = true;
+
   meta = {
     description = "Embeddable Javascript engine, with a focus on portability and compact footprint";
     homepage = "https://duktape.org/";
@@ -50,5 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.fgaz ];
     mainProgram = "duk";
     platforms = lib.platforms.all;
+  }
+  // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
+    pkgConfigModules = [ "duktape" ];
   };
 })
