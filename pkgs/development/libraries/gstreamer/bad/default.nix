@@ -16,6 +16,7 @@
   wayland-scanner,
   enableZbar ? false,
   faacSupport ? false,
+  fdkAacSupport ? true,
   faac,
   opencvSupport ? false,
   opencv4,
@@ -172,7 +173,6 @@ stdenv.mkDerivation (finalAttrs: {
     libopus
     librsvg
     curl.dev
-    fdk_aac
     gsm
     libaom
     libdc1394
@@ -213,6 +213,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals faacSupport [
     faac
+  ]
+  ++ lib.optionals fdkAacSupport [
+    fdk_aac
   ]
   ++ lib.optionals enableGplPlugins [
     libmpeg2
@@ -290,6 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
+    "-Dfdkaac=${if fdkAacSupport then "enabled" else "disabled"}"
     "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing, also this is AGPL so update license when adding support
     "-Dlcevcencoder=disabled" # not packaged in nixpkgs as of writing
     "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
