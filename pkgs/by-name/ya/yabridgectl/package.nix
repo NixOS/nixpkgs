@@ -1,4 +1,5 @@
 {
+  fetchpatch,
   lib,
   rustPlatform,
   yabridge,
@@ -21,6 +22,11 @@ rustPlatform.buildRustPackage {
 
     # Dependencies are hardcoded in yabridge, so the check is unnecessary and likely incorrect
     ./remove-dependency-verification.patch
+
+    (fetchpatch {
+      url = "https://github.com/robbert-vdh/yabridge/commit/5151f1c447ba5d0f96d4f27931a0a6582cbf511f.patch";
+      sha256 = "sha256-hn4biAxcWewSkx2PlQKWCJWJJ1cJ3KBcRAsL3WRd8hE=";
+    })
   ];
 
   patchFlags = [ "-p3" ];
