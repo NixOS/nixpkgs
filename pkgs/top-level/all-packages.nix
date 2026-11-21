@@ -2232,7 +2232,7 @@ with pkgs;
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
 
-  miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
+  miniupnpd-nftables = miniupnpd;
 
   mjpegtoolsFull = mjpegtools.override {
     withMinimal = false;
