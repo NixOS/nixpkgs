@@ -26,20 +26,27 @@ let
     # some gfx1100 kernels fail with error: branch size exceeds simm16
     # but build proceeds and those ops will fallback so it's ok
     "gfx1100"
-    "gfx1151"
+    "gfx1101"
+    "gfx1102"
+    "gfx1103"
     "gfx1150"
-    "gfx1201"
+    "gfx1151"
+    "gfx1152"
+    "gfx1153"
     "gfx1200"
+    "gfx1201"
+    "gfx1250"
   ] gpuTargets;
   anySupportedTargets = supportedTargets != [ ];
   # Pick a single arbitrary target to speed up shim build when we can't support our target
   supportedTargets' =
     if anySupportedTargets then lib.concatStringsSep ";" supportedTargets else "gfx1200";
   sourceRoot = "aotriton";
+  suffix = if !anySupportedTargets then "-shim" else "${clr.gpuArchSuffix}";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "aotriton${lib.optionalString (!anySupportedTargets) "-shim"}";
-  version = "0.12b";
+  pname = "aotriton${suffix}";
+  version = "0.13b";
   inherit sourceRoot;
 
   srcs = [
@@ -47,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "ROCm";
       repo = "aotriton";
       tag = finalAttrs.version;
-      hash = "sha256-KOc+xAoWABjokIEq5n9olpln3JUqVFYGADLwqV/H2Zc=";
+      hash = "sha256-yFOZ0DwpHZo26IxNO5izZlkfBfE0KNd5mYOdmts8Mg8=";
       # for reference false is the default, setting it here to document upstream has an unused triton submodule that is ~500MB we don't want to download.
       fetchSubmodules = false;
       name = sourceRoot;
@@ -68,18 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./aiter-no-git-checkout.patch
+    ./pip.patch
+    ./use-response-file.patch
     # Backport of "flash: make empty composed offsets one-element tensors for
     # Triton 3.9" (merged upstream as part of fb3d390, the 0.15b release).
-    # 0.12b predates the tritonsrc -> modules/flash/kernel move, so the path in
-    # the upstream commit has to be rewritten to the one 0.12b actually has.
     (fetchpatch2 {
       name = "triton-3.9-composed-tensors.patch";
       url = "https://github.com/ROCm/aotriton/commit/ab24ced82e999dfaf05dfee46f6da50ca2c0561f.patch?full_index=1";
-      hash = "sha256-t4wwbEuuM0RPpyIvY3QaQAXHkCbSXA41tx0SxVgjn9o=";
-      postFetch = ''
-        substituteInPlace $out \
-          --replace-fail 'modules/flash/kernel/composed_tensors.py' 'tritonsrc/composed_tensors.py'
-      '';
+      hash = "sha256-63cd9xeoD9UnHmJEef0cfTqrF7wW05tDyqckkvdfJFY=";
     })
   ];
 
@@ -96,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     CFLAGS = "-w -g1 -gz -Wno-c++11-narrowing";
     CXXFLAGS = finalAttrs.env.CFLAGS;
     TRITON_STORE_BINARY_ONLY = 1; # reduce triton disk space usage
-    AOTRITON_GIT_TREESHA1 = "35bfbd0ebe2fd774e97cdc12421592c23f59abfe"; # git rev-parse 'HEAD^{tree}'
+    AOTRITON_GIT_TREESHA1 = "0a9c220761603465c794bc6522564452d43ebc23"; # git rev-parse 'HEAD^{tree}'
     TRITON_DEFAULT_FP_FUSION = "1"; # Silence warning introduced in triton 3.9 https://github.com/triton-lang/triton/pull/12479
   };
 
@@ -124,7 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
     pluggy
     pybind11
     pandas
+    pip
     triton
+    virtualenv
   ]);
 
   # Excerpt from README:
@@ -134,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   # This builds+installs
   installPhase = ''
     runHook preInstall
-    ninja install
+    ninja install -j$NIX_BUILD_CORES
     runHook postInstall
   '';
   # tests are intended to be ran manually as test/ python scripts and need accelerator

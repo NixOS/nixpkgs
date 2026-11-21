@@ -1,0 +1,11 @@
+diff --git a/v3src/CMakeLists.txt b/v3src/CMakeLists.txt
+--- a/v3src/CMakeLists.txt
++++ b/v3src/CMakeLists.txt
+@@ -365,6 +365,7 @@ file(STRINGS "${AOTRITON_V2_BUILD_DIR}/Bare.shim" SHIM_CC_FILES ENCODING UTF-8)
+ aux_source_directory(. CC_FILES)
+ aux_source_directory(flash/ FLASH_CC_FILES)
+ aux_source_directory(flash/aiter FLASH_AITER_CC_FILES)
+ add_library(aotriton_v2 SHARED ${SHIM_CC_FILES} ${CC_FILES} ${FLASH_CC_FILES} ${FLASH_AITER_CC_FILES})
++set_property(TARGET aotriton_v2 PROPERTY RULE_LAUNCH_LINK "env NIX_CC_USE_RESPONSE_FILE=1")
+ set_target_properties(aotriton_v2 PROPERTIES LINKER_LANGUAGE CXX)
+ target_link_libraries(aotriton_v2 PRIVATE ${CMAKE_DL_LIBS})
