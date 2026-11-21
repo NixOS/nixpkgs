@@ -443,6 +443,14 @@ EOF
         next;
     }
 
+    # Skip overlay filesystems. They are commonly mounted by container
+    # runtimes (Docker, containerd, etc.) and are meaningless to recreate at
+    # boot, so emitting them would leave the system unbootable.
+    if ($fsType eq "overlay") {
+        print STDERR "warning: don't know how to emit ‘fileSystem’ option for overlay filesystem ‘$mountPoint’\n";
+        next;
+    }
+
     # Is this a mount of a loopback device?
     my @extraOptions;
     if ($device =~ /\/dev\/loop(\d+)/) {
