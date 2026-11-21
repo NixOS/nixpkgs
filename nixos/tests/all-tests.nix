@@ -471,6 +471,7 @@ in
   containers-ephemeral = runTest ./containers-ephemeral.nix;
   containers-eval = import ./containers-eval.nix { inherit pkgs; };
   containers-extra_veth = runTest ./containers-extra_veth.nix;
+  containers-flake-update = runTest ./containers-flake-update.nix;
   containers-gateway = runTest ./containers-gateway.nix;
   containers-hosts = runTest ./containers-hosts.nix;
   containers-imperative = runTest ./containers-imperative.nix;
