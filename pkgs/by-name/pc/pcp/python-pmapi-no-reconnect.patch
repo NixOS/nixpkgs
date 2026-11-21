@@ -1,0 +1,28 @@
+--- a/src/python/pcp/pmapi.py
++++ b/src/python/pcp/pmapi.py
+@@ -1715,9 +1715,9 @@ class pmContext(object):
+             text = str(errmsg.value.decode())
+             LIBC.free(errmsg)
+             raise pmErr(c_api.PM_ERR_CONV, text)
+-        status = LIBPCP.pmReconnectContext(self.ctx)
+-        if status < 0:
+-            raise pmErr(status)
++        # Note: pmReconnectContext removed here - calling it after each derived metric
++        # registration corrupts the IPC version table when connected to pmcd, causing
++        # subsequent PMNS lookups to fail with PM_ERR_NOPMNS. See NixOS MicroVM testing.
+
+     def pmLoadDerivedConfig(self, fname):
+         """PMAPI - Register derived metric names and definitions from a file
+@@ -1726,9 +1726,9 @@ class pmContext(object):
+         if not isinstance(fname, bytes):
+             fname = fname.encode('utf-8')
+         status = count = LIBPCP.pmLoadDerivedConfig(fname)
+-        if status < 0:
+-            raise pmErr(status)
+-        status = LIBPCP.pmReconnectContext(self.ctx)
++        # Note: pmReconnectContext removed here - calling it after loading derived
++        # configs corrupts the IPC version table when connected to pmcd, causing
++        # subsequent PMNS lookups to fail with PM_ERR_NOPMNS. See NixOS MicroVM testing.
+         if status < 0:
+             raise pmErr(status)
+         return count

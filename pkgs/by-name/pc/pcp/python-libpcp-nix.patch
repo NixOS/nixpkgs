@@ -1,0 +1,118 @@
+diff --git a/src/python/pcp/mmv.py b/src/python/pcp/mmv.py
+index 57bb7e2292..f2a4b6a73b 100644
+--- a/src/python/pcp/mmv.py
++++ b/src/python/pcp/mmv.py
+@@ -78,7 +78,22 @@ from ctypes import Structure, POINTER
+ from ctypes import c_int, c_uint, c_long, c_char, c_char_p, c_double, c_void_p
+
+ # Performance Co-Pilot MMV library (C)
+-LIBPCP_MMV = ctypes.CDLL(ctypes.util.find_library("pcp_mmv"))
++def _find_libpcp_mmv():
++    """Find libpcp_mmv.so, with fallback for NixOS."""
++    lib = ctypes.util.find_library("pcp_mmv")
++    if lib:
++        return ctypes.CDLL(lib)
++    import os
++    ld_path = os.environ.get("LD_LIBRARY_PATH", "")
++    for path in ld_path.split(":"):
++        if path:
++            for libname in ("libpcp_mmv.so", "libpcp_mmv.so.1"):
++                candidate = os.path.join(path, libname)
++                if os.path.exists(candidate):
++                    return ctypes.CDLL(candidate)
++    return ctypes.CDLL("libpcp_mmv.so")
++
++LIBPCP_MMV = _find_libpcp_mmv()
+
+ ##############################################################################
+ #
+diff --git a/src/python/pcp/pmapi.py b/src/python/pcp/pmapi.py
+index 0d98a12121..9a13d8fd04 100644
+--- a/src/python/pcp/pmapi.py
++++ b/src/python/pcp/pmapi.py
+@@ -116,7 +116,28 @@ from ctypes.util import find_library
+ #
+ # dynamic library loads
+ #
+-LIBPCP = CDLL(find_library("pcp"))
++def _find_libpcp():
++    """Find libpcp.so, with fallback for NixOS where find_library uses ldconfig."""
++    # Try standard find_library first (works on FHS systems)
++    lib = find_library("pcp")
++    if lib:
++        return CDLL(lib)
++
++    # Fallback: search LD_LIBRARY_PATH (for NixOS and similar)
++    # Prefer libpcp.so (symlink to current version) over versioned names
++    ld_path = os.environ.get("LD_LIBRARY_PATH", "")
++    for path in ld_path.split(":"):
++        if not path:
++            continue
++        for libname in ("libpcp.so", "libpcp.so.4", "libpcp.so.3"):
++            candidate = os.path.join(path, libname)
++            if os.path.exists(candidate):
++                return CDLL(candidate)
++
++    # Last resort: try loading by name (might work if rpath is set)
++    return CDLL("libpcp.so")
++
++LIBPCP = _find_libpcp()
+ libc_name = "c" if sys.platform != "win32" else "msvcrt"
+ LIBC = CDLL(find_library(libc_name))
+
+diff --git a/src/python/pcp/pmda.py b/src/python/pcp/pmda.py
+index 70b5a23a83..43748275eb 100644
+--- a/src/python/pcp/pmda.py
++++ b/src/python/pcp/pmda.py
+@@ -33,7 +33,22 @@ from ctypes import CDLL, c_int, c_long, c_char_p, c_void_p
+ from ctypes import addressof, byref, POINTER, Structure
+
+ ## Performance Co-Pilot PMDA library (C)
+-LIBPCP_PMDA = CDLL(find_library("pcp_pmda"))
++def _find_libpcp_pmda():
++    """Find libpcp_pmda.so, with fallback for NixOS."""
++    lib = find_library("pcp_pmda")
++    if lib:
++        return CDLL(lib)
++    import os
++    ld_path = os.environ.get("LD_LIBRARY_PATH", "")
++    for path in ld_path.split(":"):
++        if path:
++            for libname in ("libpcp_pmda.so", "libpcp_pmda.so.3"):
++                candidate = os.path.join(path, libname)
++                if os.path.exists(candidate):
++                    return CDLL(candidate)
++    return CDLL("libpcp_pmda.so")
++
++LIBPCP_PMDA = _find_libpcp_pmda()
+
+
+ ###
+diff --git a/src/python/pcp/pmi.py b/src/python/pcp/pmi.py
+index 7b884c6e50..c9037b3aa3 100644
+--- a/src/python/pcp/pmi.py
++++ b/src/python/pcp/pmi.py
+@@ -57,7 +57,22 @@ from datetime import datetime, timedelta, tzinfo
+ from math import modf
+
+ # Performance Co-Pilot PMI library (C)
+-LIBPCP_IMPORT = CDLL(find_library("pcp_import"))
++def _find_libpcp_import():
++    """Find libpcp_import.so, with fallback for NixOS."""
++    lib = find_library("pcp_import")
++    if lib:
++        return CDLL(lib)
++    import os
++    ld_path = os.environ.get("LD_LIBRARY_PATH", "")
++    for path in ld_path.split(":"):
++        if path:
++            for libname in ("libpcp_import.so", "libpcp_import.so.1"):
++                candidate = os.path.join(path, libname)
++                if os.path.exists(candidate):
++                    return CDLL(candidate)
++    return CDLL("libpcp_import.so")
++
++LIBPCP_IMPORT = _find_libpcp_import()
+
+ ##
+ # PMI Log Import Services
