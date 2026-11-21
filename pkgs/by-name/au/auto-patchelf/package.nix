@@ -11,7 +11,7 @@ in
 # Note: Not using python3Packages.buildPythonApplication because of dependency propagation.
 stdenv.mkDerivation {
   pname = "auto-patchelf";
-  version = "0-unstable-2024-08-14";
+  version = "0-unstable-2026-01-29";
 
   buildInputs = [ pythonEnv ];
 
