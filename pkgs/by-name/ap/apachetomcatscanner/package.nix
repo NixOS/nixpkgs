@@ -16,11 +16,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-9gaue/XfxtU+5URYfg+uYaNcx8G3Eu9DgVEpj/lk8TY=";
   };
 
-  # Posted a PR for discussion upstream that can be followed:
-  # https://github.com/p0dalirius/ApacheTomcatScanner/pull/32
-  postPatch = ''
-    sed -i '/apachetomcatscanner=apachetomcatscanner\.__main__:main/d' setup.py
-  '';
+  patches = [
+    # fix compatibility with urllib3 2.x
+    ./urllib3-default-ciphers-attributeerror.patch
+  ];
 
   pythonRelaxDeps = [
     "requests"
@@ -47,6 +46,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/p0dalirius/ApacheTomcatScanner/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "ApacheTomcatScanner";
+    mainProgram = "apachetomcatscanner";
   };
 })
