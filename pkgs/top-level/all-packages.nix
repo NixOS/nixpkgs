@@ -3776,8 +3776,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  squirrel-sql = callPackage ../development/tools/database/squirrel-sql { };
-
   swiftPackages = recurseIntoAttrs (callPackage ./swift-packages.nix { });
   inherit (swiftPackages)
     fetchSwiftPMDeps
