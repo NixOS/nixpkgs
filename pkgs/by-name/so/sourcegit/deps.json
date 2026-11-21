@@ -241,8 +241,8 @@
   },
   {
     "pname": "StbImageSharp",
-    "version": "2.30.15",
-    "hash": "sha256-Wvc6uAKOsOx3D2/P3PKDs2KdogRNOBzXli/fwNv15E4="
+    "version": "2.30.16",
+    "hash": "sha256-e8acj+iix2TQfeMgqiAJuxVgOSiuAEzeRWhsAQbKhJs="
   },
   {
     "pname": "System.ClientModel",
