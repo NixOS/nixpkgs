@@ -89,6 +89,7 @@ selectKernel {
         [
           icu
           libappindicator
+          libsecret
         ]
         ++ appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
       runScript = "${src}/bin/jetbrains-toolbox --update-failed";
