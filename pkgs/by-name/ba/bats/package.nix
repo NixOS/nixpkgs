@@ -25,8 +25,12 @@
   kikit,
   locate-dominating-file,
   packcc,
+  python3, # just for testing bats-file
 }:
 
+let
+  libraries = callPackages ./libraries.nix { };
+in
 resholve.mkDerivation (finalAttrs: {
   pname = "bats";
   version = "1.14.0";
@@ -132,7 +136,7 @@ resholve.mkDerivation (finalAttrs: {
     };
   };
 
-  passthru.libraries = callPackages ./libraries.nix { };
+  passthru.libraries = libraries;
 
   passthru.withLibraries =
     selector:
@@ -156,106 +160,138 @@ resholve.mkDerivation (finalAttrs: {
       meta = removeAttrs finalAttrs.meta [ "position" ];
     };
 
-  passthru.tests = {
-    libraries =
-      let
-        testScript = writeText "bats-libraries-test-script" ''
-          setup() {
-            bats_load_library bats-support
-            bats_load_library bats-assert
-            bats_load_library bats-file
-            bats_load_library bats-detik/detik.bash
+  passthru.tests =
+    let
+      testBatsLibrary =
+        name: library:
+        stdenv.mkDerivation {
+          name = "test-${library.name}-${bats.version}";
 
-            bats_require_minimum_version 1.5.0
+          src = library.src;
+          patches = library.patches;
 
-            TEST_TEMP_DIR="$(temp_make --prefix 'nixpkgs-bats-test')"
-          }
+          dontBuild = true;
+          doCheck = true;
 
-          teardown() {
-            temp_del "$TEST_TEMP_DIR"
-          }
+          nativeCheckInputs = [
+            batsWithLibraries
+            python3 # just for bats-file
+          ];
 
-          @test echo_hi {
-            run -0 echo hi
-            assert_output "hi"
-          }
+          checkPhase = ''
+            ${library.testPatch or ""}
 
-          @test cp_failure {
-            run ! cp
-            assert_line --index 0 "cp: missing file operand"
-            assert_line --index 1 "Try 'cp --help' for more information."
-          }
+            echo global test patch for lib/*.bash test*/*.*
+            grep -n '/var/tmp' lib/*.bash test*/*.* || echo no "/var/tmp" hits1
+            grep -n '/tmp/' lib/*.bash test*/*.* || echo no "/tmp/" hits1
 
-          @test file_exists {
-            echo "hi" > "$TEST_TEMP_DIR/hello.txt"
-            assert_file_exist "$TEST_TEMP_DIR/hello.txt"
-            run cat "$TEST_TEMP_DIR/hello.txt"
-            assert_output "hi"
-          }
-        '';
-        batsWithLibraries = bats.withLibraries (p: [
-          p.bats-support
-          p.bats-assert
-          p.bats-file
-          p.bats-detik
-        ]);
-      in
-      runCommand "${bats.name}-with-libraries-test" { } ''
+            substituteInPlace lib/*.bash test*/*.* --replace-quiet '/var/tmp' '$TMPDIR' --replace-quiet '/tmp/' '$TMPDIR/'
+
+            bats test*/
+            touch "$out"
+          '';
+
+          meta = removeAttrs finalAttrs.meta [ "position" ];
+        };
+      testScript = writeText "bats-libraries-test-script" ''
+        setup() {
+          bats_load_library bats-support
+          bats_load_library bats-assert
+          bats_load_library bats-file
+          bats_load_library bats-detik/detik.bash
+
+          bats_require_minimum_version 1.5.0
+
+          TEST_TEMP_DIR="$(temp_make --prefix 'nixpkgs-bats-test')"
+        }
+
+        teardown() {
+          temp_del "$TEST_TEMP_DIR"
+        }
+
+        @test echo_hi {
+          run -0 echo hi
+          assert_output "hi"
+        }
+
+        @test cp_failure {
+          run ! cp
+          assert_line --index 0 "cp: missing file operand"
+          assert_line --index 1 "Try 'cp --help' for more information."
+        }
+
+        @test file_exists {
+          echo "hi" > "$TEST_TEMP_DIR/hello.txt"
+          assert_file_exist "$TEST_TEMP_DIR/hello.txt"
+          run cat "$TEST_TEMP_DIR/hello.txt"
+          assert_output "hi"
+        }
+      '';
+      batsWithLibraries = bats.withLibraries (p: [
+        p.bats-support
+        p.bats-assert
+        p.bats-file
+        p.bats-detik
+      ]);
+    in
+    {
+      libraries = runCommand "${bats.name}-with-libraries-test" { } ''
         ${lib.getExe batsWithLibraries} "${testScript}"
         touch "$out"
       '';
 
-    upstream = bats.unresholved.overrideAttrs (old: {
-      name = "${bats.name}-tests";
-      dontInstall = true; # just need the build directory
-      # after 411981, make-symlinks-relative breaks a parallelization test:
-      # "setup_file is not over parallelized"
-      dontRewriteSymlinks = true;
-      nativeInstallCheckInputs = [
-        ncurses
-        parallel # skips some tests if it can't detect
-        flock # skips some tests if it can't detect
-        procps
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ lsof ];
-      inherit doInstallCheck;
-      installCheckPhase = ''
-        # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
-        sed -i '/test works even if PATH is reset/a skip "disabled for nix build"' test/bats.bats
+      upstream = bats.unresholved.overrideAttrs (old: {
+        name = "${bats.name}-tests";
+        dontInstall = true; # just need the build directory
+        # after 411981, make-symlinks-relative breaks a parallelization test:
+        # "setup_file is not over parallelized"
+        dontRewriteSymlinks = true;
+        nativeInstallCheckInputs = [
+          ncurses
+          parallel # skips some tests if it can't detect
+          flock # skips some tests if it can't detect
+          procps
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ lsof ];
+        inherit doInstallCheck;
+        installCheckPhase = ''
+          # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
+          sed -i '/test works even if PATH is reset/a skip "disabled for nix build"' test/bats.bats
 
-        # skip tests that assume bats `install.sh` will be in BATS_ROOT
-        rm test/root.bats
+          # skip tests that assume bats `install.sh` will be in BATS_ROOT
+          rm test/root.bats
 
-      ''
-      + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # skip new timeout tests which are failing on macOS for unclear reasons
-        # This might relate to procps not having a pkill?
-        rm test/timeout.bats
-      '')
-      + ''
+        ''
+        + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+          # skip new timeout tests which are failing on macOS for unclear reasons
+          # This might relate to procps not having a pkill?
+          rm test/timeout.bats
+        '')
+        + ''
 
-        # test generates file with absolute shebang dynamically
-        substituteInPlace test/install.bats --replace \
-          "/usr/bin/env bash" "${bash}/bin/bash"
+          # test generates file with absolute shebang dynamically
+          substituteInPlace test/install.bats --replace \
+            "/usr/bin/env bash" "${bash}/bin/bash"
 
-        ${bats}/bin/bats test
-        touch $out
-      '';
-    });
+          ${bats}/bin/bats test
+          touch $out
+        '';
+      });
 
-    # to see when updates would break things, include packages
-    # that use nixpkgs' bats for testing (as long as they
-    # aren't massive builds)
-    inherit bash-preexec locate-dominating-file;
-    resholve = resholve.tests.cli;
-  }
-  // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-    # TODO:
-    # - kikit's kicad dependency is marked broken on darwin atm
-    #   may be able to fold this up if that resolves.
-    # - packcc's tests currently broken on darwin (apr 2026)
-    inherit kikit packcc;
-  };
+      # to see when updates would break things, include packages
+      # that use nixpkgs' bats for testing (as long as they
+      # aren't massive builds)
+      inherit bash-preexec locate-dominating-file;
+      resholve = resholve.tests.cli;
+    }
+    // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      # TODO:
+      # - kikit's kicad dependency is marked broken on darwin atm
+      #   may be able to fold this up if that resolves.
+      # - packcc's tests currently broken on darwin (apr 2026)
+      inherit kikit packcc;
+    }
+    // builtins.mapAttrs testBatsLibrary libraries;
 
   meta = {
     homepage = "https://github.com/bats-core/bats-core";
@@ -263,10 +299,7 @@ resholve.mkDerivation (finalAttrs: {
     longDescription = ''
       Bats can be extended with libraries. The available libraries are:
 
-      - `bats-assert`
-      - `bats-file`
-      - `bats-detik`
-      - `bats-support`
+      ${builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: library: "- `${name}`") libraries)}
 
       An example of building this package with a few libraries:
       ```nix
