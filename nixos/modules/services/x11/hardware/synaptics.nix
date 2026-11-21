@@ -35,11 +35,7 @@ in
 
     services.xserver.synaptics = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable touchpad support. Deprecated: Consider services.libinput.enable.";
-      };
+      enable = lib.mkEnableOption "touchpad support. Deprecated: Consider services.libinput.enable";
 
       dev = mkOption {
         type = types.nullOr types.str;
@@ -76,11 +72,7 @@ in
         description = "Move distance of the finger for a scroll event.";
       };
 
-      twoFingerScroll = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable two-finger drag-scrolling. Overridden by horizTwoFingerScroll and vertTwoFingerScroll.";
-      };
+      twoFingerScroll = lib.mkEnableOption "two-finger drag-scrolling. Overridden by horizTwoFingerScroll and vertTwoFingerScroll";
 
       horizTwoFingerScroll = mkOption {
         type = types.bool;
@@ -148,11 +140,7 @@ in
         apply = map toString;
       };
 
-      palmDetect = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable palm detection (hardware support required)";
-      };
+      palmDetect = lib.mkEnableOption "palm detection (hardware support required)";
 
       palmMinWidth = mkOption {
         type = types.nullOr types.int;

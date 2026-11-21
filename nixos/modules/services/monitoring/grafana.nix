@@ -1067,11 +1067,7 @@ in
           };
 
           smtp = {
-            enabled = mkOption {
-              description = "Whether to enable SMTP.";
-              default = false;
-              type = types.bool;
-            };
+            enabled = lib.mkEnableOption "SMTP";
 
             host = mkOption {
               description = "Host to connect to.";

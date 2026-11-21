@@ -35,11 +35,7 @@ in
 {
   options = {
     services.hologram-server = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the Hologram server for AWS instance credentials";
-      };
+      enable = lib.mkEnableOption "the Hologram server for AWS instance credentials";
 
       listenAddress = lib.mkOption {
         type = lib.types.str;

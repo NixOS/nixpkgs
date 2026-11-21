@@ -68,11 +68,7 @@ in
       example = "0 2 * * *";
     };
 
-    auth.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to enable authentication for the Tdarr web UI and API.";
-    };
+    auth.enable = lib.mkEnableOption "authentication for the Tdarr web UI and API";
 
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;

@@ -17,17 +17,9 @@ in
 
     nix.sshServe = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable serving the Nix store as a remote store via SSH.";
-      };
+      enable = lib.mkEnableOption "serving the Nix store as a remote store via SSH";
 
-      write = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable writing to the Nix store as a remote store via SSH. Note: by default, the sshServe user is named nix-ssh and is not a trusted-user. nix-ssh should be added to the {option}`nix.sshServe.trusted` option in most use cases, such as allowing remote building of derivations to anonymous people based on ssh key";
-      };
+      write = lib.mkEnableOption "writing to the Nix store as a remote store via SSH. Note: by default, the sshServe user is named nix-ssh and is not a trusted-user. nix-ssh should be added to the {option}`nix.sshServe.trusted` option in most use cases, such as allowing remote building of derivations to anonymous people based on ssh key";
 
       trusted = lib.mkOption {
         type = lib.types.bool;

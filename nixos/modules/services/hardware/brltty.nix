@@ -27,11 +27,7 @@ in
 
   options = {
 
-    services.brltty.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to enable the BRLTTY daemon.";
-    };
+    services.brltty.enable = lib.mkEnableOption "the BRLTTY daemon";
 
   };
 

@@ -19,11 +19,7 @@ in
   options = {
     services.cachefilesd = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable cachefilesd network filesystems caching daemon.";
-      };
+      enable = lib.mkEnableOption "cachefilesd network filesystems caching daemon";
 
       cacheDir = lib.mkOption {
         type = lib.types.str;

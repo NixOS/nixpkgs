@@ -163,11 +163,7 @@ in
         description = "Whether Kubo should try to migrate its filesystem repository automatically.";
       };
 
-      enableGC = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable automatic garbage collection";
-      };
+      enableGC = lib.mkEnableOption "automatic garbage collection";
 
       emptyRepo = lib.mkOption {
         type = lib.types.bool;

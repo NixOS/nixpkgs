@@ -20,11 +20,7 @@ in
 
   options = {
     services.headphones = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the headphones server.";
-      };
+      enable = lib.mkEnableOption "the headphones server";
       dataDir = lib.mkOption {
         type = lib.types.path;
         default = "/var/lib/${name}";

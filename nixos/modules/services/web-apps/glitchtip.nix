@@ -91,11 +91,7 @@ in
               default = null;
             };
 
-            GLITCHTIP_ENABLE_MCP = lib.mkOption {
-              type = lib.types.bool;
-              description = "Whether to enable the MCP api.";
-              default = false;
-            };
+            GLITCHTIP_ENABLE_MCP = lib.mkEnableOption "the MCP api";
 
             GRANIAN_WORKERS = lib.mkOption {
               type = lib.types.ints.positive;
@@ -103,11 +99,7 @@ in
               default = 1;
             };
 
-            ENABLE_OBSERVABILITY_API = lib.mkOption {
-              type = lib.types.bool;
-              description = "Whether to enable the Prometheus metrics endpoint.";
-              default = false;
-            };
+            ENABLE_OBSERVABILITY_API = lib.mkEnableOption "the Prometheus metrics endpoint";
 
             ENABLE_USER_REGISTRATION = lib.mkOption {
               type = lib.types.bool;
@@ -146,11 +138,7 @@ in
       };
 
       nginx = {
-        createLocally = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = "Whether to enable and configure a local Nginx server.";
-        };
+        createLocally = lib.mkEnableOption "and configure a local Nginx server";
 
         domain = lib.mkOption {
           type = lib.types.str;

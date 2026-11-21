@@ -19,11 +19,7 @@ in
 
     services.svnserve = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable svnserve to serve Subversion repositories through the SVN protocol.";
-      };
+      enable = lib.mkEnableOption "svnserve to serve Subversion repositories through the SVN protocol";
 
       svnBaseDir = lib.mkOption {
         type = lib.types.str;

@@ -63,12 +63,7 @@ in
         description = "Set number of threads.";
       };
 
-      enableApiKeys = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        example = true;
-        description = "Whether to enable the API keys database.";
-      };
+      enableApiKeys = lib.mkEnableOption "the API keys database";
 
       disableWebUI = lib.mkOption {
         type = lib.types.bool;

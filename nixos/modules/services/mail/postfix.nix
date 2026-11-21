@@ -833,12 +833,7 @@ in
         description = "Extra lines to append to the generated master.cf file.";
       };
 
-      enableHeaderChecks = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        example = true;
-        description = "Whether to enable postfix header checks";
-      };
+      enableHeaderChecks = lib.mkEnableOption "postfix header checks";
 
       headerChecks = lib.mkOption {
         type = lib.types.listOf (lib.types.submodule headerCheckOptions);

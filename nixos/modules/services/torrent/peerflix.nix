@@ -22,11 +22,7 @@ in
   ###### interface
 
   options.services.peerflix = {
-    enable = lib.mkOption {
-      description = "Whether to enable peerflix service.";
-      default = false;
-      type = lib.types.bool;
-    };
+    enable = lib.mkEnableOption "peerflix service";
 
     stateDir = lib.mkOption {
       description = "Peerflix state directory.";

@@ -13,11 +13,7 @@ in
   ##### interface
   options = {
     services.redsocks = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable redsocks.";
-      };
+      enable = lib.mkEnableOption "redsocks";
 
       log_debug = mkOption {
         type = types.bool;
