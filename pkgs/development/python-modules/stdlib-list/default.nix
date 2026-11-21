@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  flit-core_3,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-UXgk8n7onlkdiufB3Z/zT2curlDuiG6jG7iBbXdTVnU=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   pythonImportsCheck = [ "stdlib_list" ];
 
