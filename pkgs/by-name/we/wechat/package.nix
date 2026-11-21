@@ -1,12 +1,15 @@
 {
-  callPackage,
-  fetchurl,
   lib,
   stdenvNoCC,
+  callPackage,
+  fetchurl,
 }:
 
 let
-  inherit (stdenvNoCC.hostPlatform) system;
+  inherit (stdenvNoCC.hostPlatform) system isDarwin;
+
+  sources = lib.importJSON ./sources.json;
+  source = sources.${system} or (throw "Unsupported system: ${system}");
 
   pname = "wechat";
   meta = {
@@ -15,55 +18,38 @@ let
     downloadPage = "https://linux.weixin.qq.com/en";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ prince213 ];
-    mainProgram = "wechat";
-    platforms = [
-      "aarch64-darwin"
-      "x86_64-darwin"
-      "aarch64-linux"
-      "x86_64-linux"
+    maintainers = with lib.maintainers; [
+      moraxyc
+      prince213
     ];
+    mainProgram = "wechat";
+    platforms = lib.attrNames sources;
   };
 
-  sources =
-    let
-      # https://dldir1.qq.com/weixin/mac/mac-release.xml
-      any-darwin =
-        let
-          version = "4.1.8.106-37335";
-          version' = lib.replaceString "-" "_" version;
-        in
-        {
-          inherit version;
-          src = fetchurl {
-            url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_${version'}.dmg";
-            hash = "sha256-lygjqWbNqh9fCnhbyfEhnRdKdfQ9MOwPv5unqwJJsvE=";
-          };
-        };
-    in
-    {
-      aarch64-darwin = any-darwin;
-      x86_64-darwin = any-darwin;
-      # use https://web.archive.org/save to archive the Linux versions
-      # add `if_` at the end of timestamps to avoid toolbar insertion
-      # for a more complicated guide, see https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine
-      aarch64-linux = {
-        version = "4.1.1.4";
-        src = fetchurl {
-          url = "https://web.archive.org/web/20260311102559if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
-          hash = "sha256-YlWJxT62tXDaNwYVpsPMC5elFH8fsbI1HjTQn6ePiPo=";
-        };
-      };
-      x86_64-linux = {
-        version = "4.1.1.4";
-        src = fetchurl {
-          url = "https://web.archive.org/web/20260311102439if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
-          hash = "sha256-XxAvFnlljqurGPDgRr+DnuCKbdVvgXBPh02DLHY3Oz8=";
-        };
-      };
-    };
 in
-callPackage (if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
+callPackage (if isDarwin then ./darwin.nix else ./linux.nix) {
   inherit pname meta;
-  inherit (sources.${system} or (throw "Unsupported system: ${system}")) version src;
+  inherit (source) version;
+  src =
+    if isDarwin then
+      fetchurl source.src
+    else
+      # Try upstream first as Wayback Machine is slow in China (where most users are located)
+      fetchurl {
+        inherit (source.src) url hash;
+        netrcPhase = ''
+          touch netrc
+
+          url=${lib.escapeShellArg source.upstream.url}
+          crc=${lib.escapeShellArg source.upstream."x-cos-hash-crc64ecma"}
+          ver=${lib.escapeShellArg source.upstream."x-cos-version-id"}
+
+          if actual=$(curl -fsSIL -o /dev/null -w '%header{x-cos-hash-crc64ecma}:%header{x-cos-version-id}' "$url") && [[ "$actual" == "$crc:$ver" ]]; then
+            urls=("$url")
+          fi
+        '';
+      };
+  passthru = {
+    updateScript = ./update.py;
+  };
 }
