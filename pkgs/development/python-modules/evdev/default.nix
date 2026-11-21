@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "evdev";
-  version = "1.9.3";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-LBQOAayEN3WPoj/lyHE5dBJGH0LUIaogJB3I/oz8y8k=";
+    hash = "sha256-RC+z9MjfyeYekBEzw1YiDALWY+yo80ci4M7N1jfrpQQ=";
   };
 
   patchPhase = ''
