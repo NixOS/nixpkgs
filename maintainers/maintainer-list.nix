@@ -28288,6 +28288,12 @@
     githubId = 98590;
     name = "Laurent Arnoud";
   };
+  sployt = {
+    email = "bartalis.hunor17@gmail.com";
+    github = "sployty";
+    githubId = 174591185;
+    name = "Bartalis Hunor";
+  };
   spoonbaker = {
     github = "Spoonbaker";
     githubId = 47164123;
