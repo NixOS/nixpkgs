@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trl";
-  version = "0.24.0";
+  version = "1.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "trl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t0wOuEKlcZzFlQeS4PYHykFsz+43hYc0gJ9u4emr8HI=";
+    hash = "sha256-GwhvWnbDhVfLBcTHhrH51FRpsdklMGBsWsOexufsoDc=";
   };
 
   build-system = [ setuptools ];
