@@ -12,14 +12,14 @@
   zlib-ng,
   zstd,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "strfry";
-  version = "1.0.4";
+  version = "1.1.3";
   src = fetchFromGitHub {
     owner = "hoytech";
     repo = "strfry";
-    tag = "1.0.4";
-    hash = "sha256-2+kPUgyb9ZtC51EK66d3SX2zyqnS6lju2jkIhakcudg";
+    tag = finalAttrs.version;
+    hash = "sha256-27+m8snpT1LRRnOvykNxolvDDh1YXXEw1g0XcwXG3S4=";
     fetchSubmodules = true;
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ felixzieger ];
     platforms = lib.platforms.linux;
   };
-}
+})
