@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohomeconnect";
-  version = "0.41.0";
+  version = "0.43.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiohomeconnect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TUe8layhme3OMKKCAxKF5Ach8tAQ+FdalzXBfM8yiNY=";
+    hash = "sha256-bdvPYGHqi94BdHz8gwFkB6+Xw5PWMYAakOYEdXFZmMk=";
   };
 
   build-system = [ setuptools ];
