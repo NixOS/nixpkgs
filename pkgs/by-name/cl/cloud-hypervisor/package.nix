@@ -35,6 +35,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.OPENSSL_NO_VENDOR = true;
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
+  buildFeatures =
+    lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64) [
+      "fw_cfg"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      "sev_snp"
+    ];
+
   cargoTestFlags = [
     "--workspace"
     "--exclude"
@@ -57,6 +65,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # io_uring syscalls are blocked by the Lix sandbox
     "--skip=formats"
     "--skip=io_impl::async_io::uring_data_io"
+    # sev_snp options have incorrect ordering, fixed in v55.0
+    "--skip=test_cli_options_sorted"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # failing on aarch64 due to incorrect byte order in test code, fixed in v55.0
+    "--skip=legacy::fw_cfg::tests::test_initram_fs"
+    "--skip=legacy::fw_cfg::tests::test_kernel_cmdline"
+    "--skip=legacy::fw_cfg::tests::test_string_item"
   ];
 
   nativeInstallCheckInputs = [
