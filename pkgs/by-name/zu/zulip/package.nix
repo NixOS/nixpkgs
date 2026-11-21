@@ -7,25 +7,25 @@
   pnpm_12,
   pnpmConfigHook,
   python3,
-  electron_44,
+  electron_45,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
 }:
 
 let
-  electron = electron_44;
+  electron = electron_45;
   pnpm = pnpm_12;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
-  version = "5.13.2";
+  version = "5.14.2";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QFKyslnO+C64ursHyFWFbBzOqFHFXwiavDNfA13eJww=";
+    hash = "sha256-RyYRwD3bx+ZnVhFscf5fK8D0K8TQ+QnbtiZ8CUZiH50=";
   };
 
   __structuredAttrs = true;
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-7F1mRrNgU9Ki7yfkz46LXgw10bY5roJP12oo4wSg91s=";
+    fetcherVersion = 5;
+    hash = "sha256-7U26LEHueQzNURp8sQuHwzc7zHD0mNXMCxPTeMf0s4Y=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "zulip";
+      name = "org.zulip.Zulip";
       exec = "zulip %U";
       icon = "zulip";
       desktopName = "Zulip";
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
         "Network"
         "InstantMessaging"
       ];
-      startupWMClass = "Zulip";
+      startupWMClass = "org.zulip.Zulip";
       terminal = false;
     })
   ];
