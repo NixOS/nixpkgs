@@ -1,0 +1,42 @@
+Description: lxml fromstring does not accept iterables
+
+This test has never actually checked that XML entities are rejected:
+the ValueError it catches is actually lxml fromstring() rejecting
+any stream input.  lxml upstream pull 448 (release 6.0) changes this
+error from ValueError to TypeError, failing this test.
+
+Also stop using empty input (which lxml also rejects), and
+rename the test to something that isn't a duplicate or misleading.
+
+Author: Rebecca N. Palmer <rebecca_palmer@zoho.com>
+Bug-Debian: https://bugs.debian.org/1112366
+Forwarded: no
+
+--- a/openpyxl/xml/tests/test_functions.py
++++ b/openpyxl/xml/tests/test_functions.py
+@@ -38,7 +38,7 @@ vulnerable_xml_strings = (
+           <!DOCTYPE test [
+           <!ENTITY % one SYSTEM "http://127.0.0.1:8100/x.xml" >
+           %one;
+-          ]>""",
++          ]><foo></foo>""",
+     b"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+         <!DOCTYPE bomb [
+         <!ENTITY a "{loads_of_bs}">
+@@ -66,10 +66,12 @@ def test_iterparse(xml_input):
+ 
+ @pytest.mark.lxml_required
+ @pytest.mark.parametrize("xml_input", vulnerable_xml_strings)
+-def test_iterparse(xml_input):
+-    f = BytesIO(xml_input)
++def test_lxml_fromstring(xml_input):
+-    with pytest.raises(ValueError):
+-        fromstring(f)
++    tree1 = fromstring(xml_input)
++    import lxml.etree
++    tree1str = lxml.etree.tostring(tree1)
++    # check that entities have not been expanded
++    assert len(tree1str) < 25, tree1str
+ 
+ 
+ from ..functions import Element, whitespace, XML_NS
