@@ -650,6 +650,9 @@ lib.mapAttrs mkLicense (
     fraunhofer-fdk = {
       fullName = "Fraunhofer FDK AAC Codec Library";
       spdxId = "FDK-AAC";
+      # "You may use this FDK AAC Codec software or modifications thereto only for
+      # purposes that are authorized by appropriate patent licenses."
+      needsPatentGrant = true;
     };
 
     free = {

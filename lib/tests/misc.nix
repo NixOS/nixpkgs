@@ -5285,6 +5285,33 @@ runTests {
     expected = false;
   };
 
+  testNeedsPatentGrant = {
+    expr = lib.licenses.needsPatentGrant (
+      lib.licenses.AND [
+        lib.licenses.mit
+        (lib.licenses.OR [
+          lib.licenses.fraunhofer-fdk
+          lib.licenses.fraunhofer-fdk
+        ])
+      ]
+    );
+    expected = true;
+  };
+
+  testNeedsNoPatentGrant = {
+    expr = lib.licenses.needsPatentGrant (
+      lib.licenses.AND [
+        lib.licenses.mit
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.fraunhofer-fdk
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+      ]
+    );
+    expected = false;
+  };
+
   testIsRedistributable = {
     expr = lib.licenses.isRedistributable (
       lib.licenses.AND [
