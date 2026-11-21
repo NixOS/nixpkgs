@@ -1,0 +1,69 @@
+{
+  "version": "0.8.0",
+  "src": {
+    "url": "https://github.com/odoo/paper-muncher/archive/refs/tags/v0.8.0.tar.gz",
+    "hash": "sha256-wY0j+o3KhNhMQr4avp+9p5ZrjoBO7NJ2hgFDWYY2gmM="
+  },
+  "externs": {
+    "cute-engineering/cat": {
+      "owner": "cute-engineering",
+      "repo": "cat",
+      "rev": "90d53f480be8552ffffed64861c551830a06746d",
+      "hash": "sha256-qCAKvRN72wMBopnAxW9/7SeyxjYjw751Hw5VAwrwyOw="
+    },
+    "cute-engineering/ce-bootfs": {
+      "owner": "cute-engineering",
+      "repo": "ce-bootfs",
+      "rev": "07f00223a9dc333ce81e11016887331b11d8e78b",
+      "hash": "sha256-u+NWrYHQgnzMUHN2y/2XdqY//qeXz3cVruL95hx2bsY="
+    },
+    "cute-engineering/ce-heap": {
+      "owner": "cute-engineering",
+      "repo": "ce-heap",
+      "rev": "664de4bd5c3810da1a679724c3533204f30e80f8",
+      "hash": "sha256-m02CKQ1ChnZebH9z2520UvPEJk5dQC3zENEW/qIEXLM="
+    },
+    "cute-engineering/ce-libc": {
+      "owner": "cute-engineering",
+      "repo": "ce-libc",
+      "rev": "f7bc62eeef96e8525818ee97184da685b26badef",
+      "hash": "sha256-KeCIJTg3Zgv72ljFlWIEZB7/KxNXy6DjBtg3QZLbgqg="
+    },
+    "cute-engineering/ce-libm": {
+      "owner": "cute-engineering",
+      "repo": "ce-libm",
+      "rev": "8301826a0f0eac2cfa98fe0e88205225196a1a59",
+      "hash": "sha256-uoK8lk6UzEQu41hvYHutG8Wme8PphrzHPvstio2Wwg0="
+    },
+    "cute-engineering/ce-mdi": {
+      "owner": "cute-engineering",
+      "repo": "ce-mdi",
+      "rev": "6403ae0f9867c2a01b7d982081fe554b627cda8e",
+      "hash": "sha256-uiA2fK7keAdA41swxmjgA4uD3VRkq0bLtqsdyaR7ZnA="
+    },
+    "cute-engineering/ce-stdcpp": {
+      "owner": "cute-engineering",
+      "repo": "ce-stdcpp",
+      "rev": "e92e902d4b3ebad8c79cebc7e059b7a1b4f075ff",
+      "hash": "sha256-vDv65wlR16wyV8cjyFpBXcOhhHJ+fLLrU3b0oaktMUE="
+    },
+    "cute-engineering/ce-targets": {
+      "owner": "cute-engineering",
+      "repo": "ce-targets",
+      "rev": "28728bc72f837549261ace928815b34f709bbaec",
+      "hash": "sha256-GUIsdhLw1CTu7dDeST0fCy67Da/sZo0Fixw59zFM/8c="
+    },
+    "skift/assets": {
+      "owner": "skift",
+      "repo": "assets",
+      "rev": "52ff6480ff3c4b25d1e7b7bda820e9c7e4fc5488",
+      "hash": "sha256-rzJSZ9KzGEQIAOjs9la7lYA6hnUXJKdjbovJUh4iHpI="
+    },
+    "skift/karm": {
+      "owner": "skift",
+      "repo": "karm",
+      "rev": "0ef199b07cde2f03380d1edac2f3d9984ac7cd0f",
+      "hash": "sha256-sT+PBptJ4G17qrGn3oFxm5GZDK68KUtNBMMwKlmUvP8="
+    }
+  }
+}
