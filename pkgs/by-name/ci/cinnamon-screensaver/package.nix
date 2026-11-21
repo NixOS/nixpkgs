@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-screensaver";
-  version = "6.6.1";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-screensaver";
     tag = finalAttrs.version;
-    hash = "sha256-NK33cIrcTicLs59eJ550FghjuWS93yD642ObAS55Dtk=";
+    hash = "sha256-boeCos+btHcCwdXYIspChIVzWqS+QDNLVet2K0/BuKk=";
   };
 
   patches = [
