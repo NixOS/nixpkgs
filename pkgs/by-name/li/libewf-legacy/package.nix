@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libewf-legacy";
-  version = "20140816";
+  version = "20140817";
 
   src = fetchurl {
     url = "https://github.com/libyal/libewf-legacy/releases/download/${finalAttrs.version}/libewf-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ay0Hj7OGFnm6g5Qv6lHp5gKcN+wuoMN/V0QlbW9wJak=";
+    hash = "sha256-bbvv5o6RMkPcAAudqvWfKT4zwjQAJPffsUTxrZCwZUQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
