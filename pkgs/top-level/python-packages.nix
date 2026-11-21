@@ -3222,6 +3222,8 @@ self: super: with self; {
 
   clang = callPackage ../development/python-modules/clang { };
 
+  clang-repl-kernel = callPackage ../development/python-modules/clang-repl-kernel { };
+
   clarabel = callPackage ../development/python-modules/clarabel { };
 
   clarifai = callPackage ../development/python-modules/clarifai { };
