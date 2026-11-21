@@ -4,30 +4,26 @@
   appimageTools,
 }:
 
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 (finalAttrs: {
   pname = "kchat";
   version = "3.5.3";
 
   src = fetchurl {
-    url = "https://download.storage5.infomaniak.com/kchat/kchat-desktop-${version}-linux-x86_64.AppImage";
-    name = "kchat-${version}.AppImage";
+    url = "https://download.storage5.infomaniak.com/kchat/kchat-desktop-${finalAttrs.version}-linux-x86_64.AppImage";
+    name = "kchat-${finalAttrs.version}.AppImage";
     hash = "sha256-1WlOKVjazzmPuAbJR5woP0sE9EkSxmcsJnZrmTotFYg=";
   };
 
-  extraInstallCommands =
-    let
-      contents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      mkdir -p "$out/share/applications"
-      mkdir -p "$out/share/lib/kchat"
-      cp -r ${contents}/{locales,resources} "$out/share/lib/kchat"
-      cp -r ${contents}/usr/* "$out"
-      cp "${contents}/kchat-desktop.desktop" "$out/share/applications/"
-      mv "$out/bin/kchat" "$out/bin/${meta.mainProgram}" || true
-      install -m 444 -D ${contents}/kchat-desktop.desktop $out/share/applications/kchat-desktop.desktop
-      substituteInPlace $out/share/applications/kchat-desktop.desktop --replace-fail 'Exec=AppRun' 'Exec=${meta.mainProgram}'
-    '';
+  extraInstallCommands = ''
+    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share/lib/kchat"
+    cp -r ${finalAttrs.contents}/{locales,resources} "$out/share/lib/kchat"
+    cp -r ${finalAttrs.contents}/usr/* "$out"
+    cp "${finalAttrs.contents}/kchat-desktop.desktop" "$out/share/applications/"
+    mv "$out/bin/kchat" "$out/bin/kchat" || true
+    install -m 444 -D ${finalAttrs.contents}/kchat-desktop.desktop $out/share/applications/kchat-desktop.desktop
+    substituteInPlace $out/share/applications/kchat-desktop.desktop --replace-fail 'Exec=AppRun' 'Exec=kchat'
+  '';
 
   meta = {
     description = "Instant messaging service part of Infomaniak KSuite";
@@ -42,4 +38,4 @@ appimageTools.wrapType2 rec {
       security via your Internet browser, mobile phone, tablet or computer.
     '';
   };
-}
+})
