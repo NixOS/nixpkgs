@@ -1,19 +1,20 @@
 {
   lib,
-  stdenv,
+  mkKdeDerivation,
   fetchFromGitLab,
-  cmake,
-  kdePackages,
-  qtbase,
+  kirigami,
   qtdeclarative,
   libhwy,
   opencv,
 }:
 
-stdenv.mkDerivation rec {
+mkKdeDerivation rec {
   pname = "kquickimageeditor";
   version = "0.7.0.1";
 
+  # Project doesn't appear in any ../../generated/sources/*.json files,
+  # although it appears in ../../generated/projects.json and
+  # ../../generated/dependencies.json
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
@@ -22,13 +23,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-xNMXEVU/fflaHbDSgTwsj1QcH77CUFCgPJI5f60TEEg=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    kdePackages.extra-cmake-modules
-  ];
-  buildInputs = [
-    kdePackages.kirigami
-    qtbase
+  extraBuildInputs = [
+    kirigami
     qtdeclarative
     libhwy
     (opencv.override {
@@ -42,6 +38,8 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true;
 
+  # Project doesn't exist in ../../generated/licenses.json so we write it
+  # ourselves.
   meta = {
     description = "Set of QtQuick components providing basic image editing capabilities";
     homepage = "https://invent.kde.org/libraries/kquickimageeditor";
