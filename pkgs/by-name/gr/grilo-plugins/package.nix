@@ -17,7 +17,7 @@
   librest,
   gnome,
   libxml2,
-  lua5_4,
+  lua5_5,
   liboauth,
   libmediaart,
   grilo,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     grilo
     libxml2
-    lua5_4
+    lua5_5
     liboauth
     sqlite
     gnome-online-accounts
