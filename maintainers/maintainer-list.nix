@@ -15125,6 +15125,11 @@
     github = "karaolidis";
     githubId = 46189100;
   };
+  karitham = {
+    name = "Pierre-Louis Pery";
+    github = "karitham";
+    githubId = 57440386;
+  };
   karlbeecken = {
     name = "Karl Beecken";
     email = "karl@beecken.berlin";
