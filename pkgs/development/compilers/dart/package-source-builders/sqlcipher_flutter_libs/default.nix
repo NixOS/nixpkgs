@@ -33,21 +33,26 @@ stdenv.mkDerivation rec {
   inherit version src;
   inherit (src) passthru;
 
+  # Since 0.7.0 the package no longer ships any native build scripts, so there
+  # is nothing to patch and no SQLCipher sources to fetch.
   installPhase = ''
     runHook preInstall
 
     cp -r "$src" "$out"
-    _replace() {
-      # --replace-fail messes with the file if it fails (is empty afterwards) so we do this instead
-      if cat "$out/linux/CMakeLists.txt" | grep "$1" >/dev/null 2>/dev/null; then
-        substituteInPlace "$out/linux/CMakeLists.txt" --replace "$1" "file://$2"
-      else
-        return 2
-      fi
-    }
 
-    ${lib.concatMapAttrsStringSep " || " (_: v: ''_replace "${v.url}" "${v.file}"'') artifacts} || \
-    (echo "unknown version of sqlcipher, please add to pkgs/development/compilers/dart/package-source-builders/sqlcipher_flutter_libs" && cat linux/CMakeLists.txt | grep "https://storage.*" -o && exit 2)
+    ${lib.optionalString (lib.versionOlder version "0.7.0") ''
+      _replace() {
+        # --replace-fail messes with the file if it fails (is empty afterwards) so we do this instead
+        if cat "$out/linux/CMakeLists.txt" | grep "$1" >/dev/null 2>/dev/null; then
+          substituteInPlace "$out/linux/CMakeLists.txt" --replace "$1" "file://$2"
+        else
+          return 2
+        fi
+      }
+
+      ${lib.concatMapAttrsStringSep " || " (_: v: ''_replace "${v.url}" "${v.file}"'') artifacts} || \
+      (echo "unknown version of sqlcipher, please add to pkgs/development/compilers/dart/package-source-builders/sqlcipher_flutter_libs" && grep -o "https://storage[^ ]*" "$out/linux/CMakeLists.txt" && exit 2)
+    ''}
 
     runHook postInstall
   '';
