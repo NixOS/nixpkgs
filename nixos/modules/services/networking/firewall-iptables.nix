@@ -328,6 +328,14 @@ in
         assertion = cfg.checkReversePath == false || kernelHasRPFilter;
         message = "This kernel does not support rpfilter";
       }
+      {
+        # networking.firewall.package defaults to pkgs.nftables when networking.nftables.enable
+        # is set. That package has no iptables binary, so firewall-start would fail and leave
+        # the host unfiltered.
+        assertion =
+          lib.getName cfg.package != "nftables" || lib.any (p: lib.getName p == "iptables") cfg.extraPackages;
+        message = "The iptables firewall backend runs iptables, but networking.firewall.package is the nftables package, which has no iptables binary. It is the default when networking.nftables.enable is set. Add pkgs.iptables to networking.firewall.extraPackages, or use the nftables backend.";
+      }
     ];
 
     networking.firewall.checkReversePath = lib.mkIf (!kernelHasRPFilter) (lib.mkDefault false);
