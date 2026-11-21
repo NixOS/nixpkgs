@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -44,7 +45,10 @@ buildPythonPackage rec {
     # This will fail if prctl(PR_SET_SPECULATION_CTRL, PR_SPEC_FORCE_DISABLE)
     # has been set system-wide, even outside the sandbox
     "test_speculation_ctrl"
-  ];
+  ]
+  # get_tsc doesn't actually raise OSError
+  # The test has an "untested" comment, presumably it's just incorrect
+  ++ lib.optional stdenv.isAarch64 "test_tsc";
 
   meta = {
     description = "Python(ic) interface to the linux prctl syscall";
