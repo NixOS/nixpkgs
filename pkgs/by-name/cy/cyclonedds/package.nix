@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyclonedds";
-  version = "11.0.1";
+  version = "11.1.0";
 
   src = fetchFromGitHub {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds";
     tag = finalAttrs.version;
-    hash = "sha256-+p1J6xEwrUPLheuQL4gm4x1e6rH/+qYsWc9eeJrmRR4=";
+    hash = "sha256-7WfSAO12tKh33q71inmlQkaziiePVW4W+H9JRHZJJ1E=";
   };
 
   nativeBuildInputs = [ cmake ];
