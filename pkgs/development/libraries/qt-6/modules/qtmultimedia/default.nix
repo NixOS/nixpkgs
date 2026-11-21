@@ -7,7 +7,6 @@
   qtquick3d,
   qtshadertools,
   qtsvg,
-  pkg-config,
   alsa-lib,
   gstreamer,
   gst-plugins-bad,
@@ -28,7 +27,6 @@
 
 qtModule {
   pname = "qtmultimedia";
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     ffmpeg
   ]
