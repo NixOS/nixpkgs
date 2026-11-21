@@ -27,6 +27,9 @@ in
 # JS-plugin-capable runtime. The standalone Rust `oxlint` binary intentionally
 # runs without an external linter, which leaves `jsPlugins` configs inert.
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "oxlint";
   version = "1.94.0";
 

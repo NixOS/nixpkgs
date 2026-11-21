@@ -9,6 +9,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "fh";
   version = "0.1.27";
 

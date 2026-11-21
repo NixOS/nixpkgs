@@ -13,6 +13,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "bws";
   version = "2.1.0";
 

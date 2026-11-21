@@ -9,6 +9,8 @@
 }:
 
 buildNpmPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "snyk";
   version = "1.1308.4";
 

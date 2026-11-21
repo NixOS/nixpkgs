@@ -8,6 +8,8 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "mongodb-cli";
   version = "2.0.9";
 

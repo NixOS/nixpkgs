@@ -8,6 +8,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "acorns";
   version = "1.2.2";
 

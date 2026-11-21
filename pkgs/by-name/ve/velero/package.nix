@@ -7,6 +7,8 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "velero";
   version = "1.18.4";
 

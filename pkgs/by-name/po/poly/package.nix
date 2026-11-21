@@ -6,6 +6,9 @@
 }:
 
 stdenvNoCC.mkDerivation {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "poly";
   version = "0-unstable-2026-03-25";
 

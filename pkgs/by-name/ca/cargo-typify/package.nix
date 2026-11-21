@@ -8,6 +8,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "cargo-typify";
   version = "0.8.0";
 
