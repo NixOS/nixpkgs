@@ -4,6 +4,7 @@
   rustPlatform,
   makeWrapper,
   pkg-config,
+  tzdata,
   perl,
   openssl,
   rust-jemalloc-sys,
@@ -12,18 +13,17 @@
   python3Packages,
   qt6,
   xdg-utils,
-  replaceVars,
   nodejs_22,
   buildNpmPackage,
 }:
 
 let
-  version = "0.13.2";
+  version = "0.14.2";
   sources = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "activitywatch";
     rev = "v${version}";
-    sha256 = "sha256-Z3WAg3b1zN0nS00u0zIose55JXRzQ7X7qy39XMY7Snk=";
+    hash = "sha256-lAE9pTC9tGB0mIuYOPcsWyv66aOov/5uA8QblvmlrOw=";
     fetchSubmodules = true;
   };
 in
@@ -102,10 +102,13 @@ rec {
 
     dependencies = with python3Packages; [
       aw-core
-      qt6.qtbase
-      qt6.qtsvg # Rendering icons in the trayicon menu
       pyqt6
       click
+    ];
+
+    buildInputs = [
+      qt6.qtbase
+      qt6.qtsvg # Rendering icons in the trayicon menu
     ];
 
     nativeBuildInputs = [
@@ -153,31 +156,25 @@ rec {
     };
   };
 
-  aw-notify = python3Packages.buildPythonApplication {
+  aw-notify = rustPlatform.buildRustPackage {
     pname = "aw-notify";
     inherit version;
+    __structuredAttrs = true;
 
     src = "${sources}/aw-notify";
 
-    pyproject = true;
-    build-system = [ python3Packages.poetry-core ];
+    cargoHash = "sha256-Mep7ppAQ/nCwHKSsokjY7HKFwDtakmqK8oFoM6HtTT0=";
 
-    patches = [
-      # Backport desktop-notifier 6 / rubicon-objc 0.5 support.
-      # https://github.com/ActivityWatch/aw-notify/pull/10
-      ./aw-notify-desktop-notifier-6.patch
+    nativeBuildInputs = [
+      pkg-config
     ];
 
-    dependencies = with python3Packages; [
-      aw-client
-      desktop-notifier
+    buildInputs = [
+      openssl
     ];
 
-    pythonRelaxDeps = [
-      "desktop-notifier"
-    ];
-
-    pythonImportsCheck = [ "aw_notify" ];
+    # Scheduling tests need a time zone database
+    nativeCheckInputs = [ tzdata ];
 
     meta = {
       description = "Desktop notification service for ActivityWatch";
@@ -194,14 +191,13 @@ rec {
 
     src = "${sources}/aw-server-rust";
 
-    cargoHash = "sha256-E89E/LWBPHtb6vX94swodmE+UrWMrzQnm8AO5GeyuoA=";
+    cargoHash = "sha256-8qbH7jlduLQhfrGMbpvZYs/BMojzaGOIa3+Prv0tlO0=";
 
-    patches = [
-      # Override version string with hardcoded value as it may be outdated upstream.
-      (replaceVars ./override-version.patch {
-        version = sources.rev;
-      })
-    ];
+    # Override version string with hardcoded value as it may be outdated upstream.
+    postPatch = ''
+      substituteInPlace aw-server/src/version.rs \
+        --replace-fail 'option_env!("CARGO_PKG_VERSION")' 'Some("${version}")'
+    '';
 
     nativeBuildInputs = [
       makeWrapper
@@ -215,10 +211,14 @@ rec {
       sqlite
     ];
 
+    # Build only aw-server package to bypass broken aw-sync features
+    cargoTestFlags = [ "--package aw-server" ];
+    cargoBuildFlags = [ "--package aw-server" ];
+
     env.AW_WEBUI_DIR = aw-webui;
 
+    # Fake home folder for tests that use ~/.cache and ~/.local/share
     preCheck = ''
-      # Fake home folder for tests that use ~/.cache and ~/.local/share
       export HOME="$TMPDIR"
     '';
 
@@ -239,17 +239,16 @@ rec {
     src = "${sources}/aw-server-rust/aw-webui";
 
     nodejs = nodejs_22;
-    npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
+    npmDepsHash = "sha256-XJuIBFNdm8he7OF3X6Szxo74/usfIcwtrLPPY3HYnlU=";
 
     makeCacheWritable = true;
     npmFlags = [ "--legacy-peer-deps" ];
 
-    patches = [
-      # Hardcode version to avoid the need to have the Git repo available at build time.
-      (replaceVars ./commit-hash.patch {
-        commit_hash = sources.rev;
-      })
-    ];
+    # The fetched source has no .git, so hardcode the `commit hash` shown in the developer settings
+    postPatch = ''
+      substituteInPlace vue.config.js \
+        --replace-fail "child_process.execSync('git rev-parse --short HEAD').toString().trim()" '"${sources.rev}"'
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -259,6 +258,7 @@ rec {
     '';
 
     doCheck = true;
+
     checkPhase = ''
       runHook preCheck
       npm test
