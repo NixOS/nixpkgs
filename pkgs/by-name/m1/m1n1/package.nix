@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h+gRa1Msdbb7CCYWo2Wo5Q1MwPfIXBBBpdAGWLbRDdk=";
+    hash = "sha256-gDRCgDEOl87EbbZh0QMOQHPgY2YZSpLFgNsg8XzRuMk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
