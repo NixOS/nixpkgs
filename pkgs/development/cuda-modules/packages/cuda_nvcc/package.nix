@@ -11,7 +11,6 @@
   glibc,
   lib,
   libnvvm,
-  makeBinaryWrapper,
 }:
 buildRedist (finalAttrs: {
   redistName = "cuda";
@@ -25,10 +24,6 @@ buildRedist (finalAttrs: {
 
   # The nvcc and cicc binaries contain hard-coded references to /usr
   allowFHSReferences = true;
-
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
 
   # Entries here will be in nativeBuildInputs when cuda_nvcc is in nativeBuildInputs
   propagatedBuildInputs = [ setupCudaHook ];
@@ -162,11 +157,14 @@ buildRedist (finalAttrs: {
         # Fix a compatible backend compiler
         compiler-bindir = ${backendStdenv.cc}/bin
         EOF
-
-        nixLog "wrapping nvcc to add backendStdenv.cc to its PATH"
-        wrapProgramBinary \
-          "''${!outputBin:?}/bin/nvcc" \
-          --prefix PATH : ${lib.makeBinPath [ backendStdenv.cc ]}
+      ''
+      # nvcc fails without the host compiler on PATH, and it names its intermediate files and some symbols after its
+      # process ID, which makes its output differ from build to build. See README.md.
+      # NOTE: The wrapper is copied rather than linked, so that cuda_nvcc doesn't refer to it.
+      + ''
+        nixLog "wrapping nvcc to add backendStdenv.cc to its PATH and to make its output reproducible"
+        mv --verbose "''${!outputBin:?}/bin/nvcc" "''${!outputBin:?}/bin/.nvcc-wrapped"
+        install --mode=0755 "${finalAttrs.passthru.nvccWrapper}/bin/nvcc-wrapper" "''${!outputBin:?}/bin/nvcc"
       ''
       # nvlink records its command line, including the library and NVVM directories in the Nix store, in the cubins it
       # writes. See README.md.
@@ -264,6 +262,10 @@ buildRedist (finalAttrs: {
   ];
 
   passthru = {
+    nvccWrapper = callPackage ./nvcc-wrapper.nix {
+      compilerBindir = "${backendStdenv.cc}/bin";
+      frandomSeed = cudaAtLeast "12.9";
+    };
     nvlinkWrapper = callPackage ./nvlink-wrapper.nix { };
     gpuCheck = callPackage ./gpu-check.nix { cuda_nvcc = finalAttrs.finalPackage; };
     tests = callPackages ./tests.nix { cuda_nvcc = finalAttrs.finalPackage; };

@@ -10,16 +10,15 @@ stdenv.mkDerivation {
 
   name = "nvlink-wrapper";
 
-  src = ./nvlink-wrapper.cpp;
+  src = ./wrappers;
 
-  dontUnpack = true;
   dontConfigure = true;
 
   # NOTE: libstdc++ is linked statically, as nvlink doesn't use it and may run with an incompatible one on
   # LD_LIBRARY_PATH (e.g. from JAX).
   buildPhase = ''
     runHook preBuild
-    "$CXX" -std=c++23 -O2 -Wall -Wextra -static-libstdc++ -static-libgcc "$src" -o nvlink-wrapper
+    "$CXX" -std=c++23 -O2 -Wall -Wextra -static-libstdc++ -static-libgcc nvlink-wrapper.cpp -o nvlink-wrapper
     runHook postBuild
   '';
 

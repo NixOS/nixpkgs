@@ -14,7 +14,7 @@
   python3,
   testers,
 }:
-# Tests for the nvlink wrapper; see README.md.
+# Tests for the nvcc and nvlink wrappers; see README.md.
 let
   # nvlink records its command line from CUDA 12.8 for some architectures, including sm_100, and from CUDA 13 for all.
   # The tests link programs without running them, so they use one of those architectures.
@@ -22,6 +22,9 @@ let
   arch = if recordsCommandLine then "sm_100" else lib.head flags.realArches;
 
   cudadevrtDir = "${lib.getOutput "static" cuda_cudart}/lib";
+
+  # Whether the nvcc wrapper passes --frandom-seed. nvcc has that option from CUDA 12.9.
+  seeds = cudaAtLeast "12.9";
 
   helpers = ''
     # Prints the command line recorded in each note written by nvlink.
@@ -61,6 +64,16 @@ let
         exit 1
       fi
     }
+
+    # For the tests which run a wrapper next to a stand-in for the tool it wraps (tests/fake-tool).
+    status() { "$@" && echo 0 || echo $?; }
+    signal() { python3 ${./tests/signal.py} "$@"; }
+    expect() {
+      if [[ $1 != "$2" ]]; then
+        nixErrorLog "$3: expected $2, got $1"
+        exit 1
+      fi
+    }
   '';
 
   mkTest =
@@ -88,6 +101,7 @@ let
         cp ${./tests/kernel.cu} kernel.cu
         cp ${./tests/caller.cu} caller.cu
         cp ${./tests/answer.cu} answer.cu
+        cp ${./tests/templates.cu} templates.cu
         cp ${./gpu-check.cu} gpu-check.cu
       ''
       + helpers
@@ -113,6 +127,265 @@ let
     };
 in
 {
+  # nvcc writes the same objects and programs when it runs again.
+  nvcc-reproducible = mkTest "nvcc-reproducible" ''
+    # Runs a command twice and compares the two outputs.
+    twice() {
+      local output="$1"
+      shift
+      "$@" -o "$output"
+      mv "$output" first
+      "$@" -o "$output"
+      if ! cmp first "$output"; then
+        nixErrorLog "$* wrote a different $output the second time"
+        exit 1
+      fi
+    }
+    twice kernel.o nvcc -arch="$arch" -c kernel.cu
+    twice debug.o nvcc -arch="$arch" -g -c kernel.cu
+    twice relocatable.o nvcc -arch="$arch" -rdc=true -c caller.cu
+    # CMake compiles sources that are not named *.cu in this way.
+    cp kernel.cu kernel.cpp
+    twice language.o nvcc -arch="$arch" -x cu -c kernel.cpp
+    # Without -c, the objects are intermediate files as well.
+    twice result nvcc -arch="$arch" kernel.cu
+    # CMake can pass the arguments in an options file.
+    echo "-arch=$arch -c kernel.cu" > compile.optf
+    twice options.o nvcc -optf compile.optf
+    ${lib.optionalString seeds ''twice templates.o nvcc -arch="$arch" -c templates.cu''}
+
+    # Without --keep, nvcc names its intermediate files tmpxft_<pid>_...
+    if grep --text --fixed-strings tmpxft ./*.o result; then
+      nixErrorLog "an output contains the name of a temporary file"
+      exit 1
+    fi
+
+    # nvcc without the wrapper must still write different objects. If it does not, the wrapper is no longer needed.
+    for source in kernel.cu ${lib.optionalString seeds "templates.cu"}; do
+      (exec -a nvcc ${cuda_nvcc}/bin/.nvcc-wrapped -arch="$arch" -c "$source" -o unwrapped-1.o)
+      (exec -a nvcc ${cuda_nvcc}/bin/.nvcc-wrapped -arch="$arch" --keep --keep-dir "$(mktemp -d)" -c "$source" \
+        -o unwrapped-2.o)
+      (exec -a nvcc ${cuda_nvcc}/bin/.nvcc-wrapped -arch="$arch" --keep --keep-dir "$(mktemp -d)" -c "$source" \
+        -o unwrapped-3.o)
+      if cmp --silent unwrapped-1.o unwrapped-2.o; then
+        nixErrorLog "expected nvcc to name the object of $source after a temporary file"
+        exit 1
+      fi
+      if ${lib.boolToString seeds} && [[ $source == templates.cu ]] && cmp --silent unwrapped-2.o unwrapped-3.o; then
+        nixErrorLog "expected nvcc to name the symbols of $source after its process ID"
+        exit 1
+      fi
+    done
+
+    # The wrapper removes the directory in which nvcc kept the intermediate files.
+    if [[ -n $(find "$TMPDIR" -maxdepth 1 -name 'nvcc-keep-*') ]]; then
+      nixErrorLog "the wrapper left a directory in $TMPDIR"
+      exit 1
+    fi
+  '';
+
+  # The cases in which the wrapper does not override the caller, with the real nvcc.
+  nvcc-options = mkTest "nvcc-options" ''
+    # Two sources with the same name cannot share a directory for their intermediate files. Without -c, their objects
+    # are in that directory too.
+    mkdir a b
+    echo 'int a() { return 1; }' > a/same.cu
+    echo 'int a(); int main() { return a(); }' > b/same.cu
+    nvcc -arch="$arch" a/same.cu b/same.cu -o result
+
+    # nvcc uses the directory that the caller passes, and the wrapper does not remove it. CMake depends on this when
+    # it identifies nvcc.
+    mkdir kept
+    nvcc -arch="$arch" --keep --keep-dir kept -c kernel.cu -o kernel.o
+    [[ -e kept/kernel.ptx ]]
+    nvcc -arch="$arch" -rdc=true --keep -c caller.cu -o caller.o
+    [[ -e caller.ptx ]]
+    NVCC_APPEND_FLAGS="--keep --keep-dir=kept" nvcc -arch="$arch" -c answer.cu -o answer.o
+    [[ -e kept/answer.ptx ]]
+    rm kept/kernel.ptx
+    echo "--keep --keep-dir kept" > keep.optf
+    nvcc -arch="$arch" -optf keep.optf -c kernel.cu -o kernel.o
+    [[ -e kept/kernel.ptx ]]
+    ${lib.optionalString seeds ''
+      # nvcc uses the seed that the caller passes.
+      nvcc -arch="$arch" --frandom-seed=1 -c templates.cu -o seed-1.o
+      nvcc -arch="$arch" --frandom-seed=2 -c templates.cu -o seed-2.o
+      NVCC_PREPEND_FLAGS=--frandom-seed=1 nvcc -arch="$arch" -c templates.cu -o seed-3.o
+      if cmp --silent seed-1.o seed-2.o || ! cmp seed-1.o seed-3.o; then
+        nixErrorLog "expected the seed passed to nvcc to be used"
+        exit 1
+      fi
+    ''}
+
+    # The wrapper exits with the status of nvcc, and removes the directory when nvcc fails too.
+    echo 'syntax error' > broken.cu
+    expected=0
+    (exec -a nvcc ${cuda_nvcc}/bin/.nvcc-wrapped -arch="$arch" -c broken.cu -o broken.o) || expected=$?
+    status=0
+    nvcc -arch="$arch" -c broken.cu -o broken.o || status=$?
+    if [[ $expected == 0 || $status != "$expected" ]]; then
+      nixErrorLog "expected nvcc to exit with its status ($expected), got $status"
+      exit 1
+    fi
+
+    # A configure check can pass an output that is not in a writable directory.
+    nvcc -arch="$arch" -c kernel.cu -o /dev/null
+
+    nvcc --version
+    nvcc -arch="$arch" -E kernel.cu > /dev/null
+
+    if [[ -n $(find "$TMPDIR" -maxdepth 1 -name 'nvcc-keep-*') ]]; then
+      nixErrorLog "the wrapper left a directory in $TMPDIR"
+      exit 1
+    fi
+  '';
+
+  # The installed nvcc wrapper with a stand-in for nvcc next to it: the options it adds, and how it runs nvcc.
+  nvcc-wrapper =
+    (mkTest "nvcc-wrapper" ''
+      cp ${cuda_nvcc}/bin/nvcc nvcc
+      cp ${./tests/fake-tool} .nvcc-wrapped
+      chmod +w nvcc
+      chmod +x .nvcc-wrapped
+      patchShebangs .nvcc-wrapped
+      mkdir alone
+      cp nvcc alone/nvcc
+      export FAKE_LOG=$PWD/log
+      touch source.cu
+      mkdir a b
+      touch a/same.cu b/same.cu
+
+      # Prints the arguments that nvcc received.
+      arguments() { sed '/^FAKE_ENV=/,$d' "$FAKE_LOG" | tr '\n' ' '; }
+      # Runs the wrapper and prints the arguments that nvcc received.
+      received() {
+        FAKE=exit FAKE_STATUS=0 ./nvcc "$@"
+        arguments
+      }
+      leftover() { find "$TMPDIR" -maxdepth 1 -name 'nvcc-keep-*' | wc -l; }
+
+      # The wrapper adds its options before those of the caller. The seed and the directory have the same hash, which
+      # depends on the arguments and on the working directory only.
+      FAKE=exit FAKE_STATUS=0 ./nvcc -c source.cu -o source.o
+      keepDir="$(sed -n 's/^--keep-dir=//p' log)"
+      id="''${keepDir##*-}"
+      [[ $keepDir == "$TMPDIR"/nvcc-keep-* && $id =~ ^[0-9a-f]{16}$ ]]
+      seed=${lib.optionalString seeds ''"--frandom-seed=$id "''}
+      keep="--keep --keep-dir=$keepDir "
+      expect "$(arguments)" "$seed$keep-c source.cu -o source.o " "the arguments for a source file"
+      expect "$(received -c source.cu -o source.o)" "$seed$keep-c source.cu -o source.o " "the arguments the second time"
+      if [[ $(received -c source.cu -o other.o) == *"$id"* ]] ||
+        [[ $(cd a && FAKE=exit FAKE_STATUS=0 ../nvcc -c ../source.cu -o source.o && arguments) == *"$id"* ]]; then
+        nixErrorLog "expected another hash for other arguments and for another directory"
+        exit 1
+      fi
+      # Without a source file, the wrapper adds nothing.
+      expect "$(received source.o -o program)" "source.o -o program " "the arguments for a link"
+      expect "$(received --version)" "--version " "the arguments without a file"
+
+      # The caller's options are kept, whether they are arguments, in an options file, or in the environment.
+      for option in --keep -keep --save-temps --keep-dir=kept -keep-dir=kept --objdir-as-tempdir; do
+        expect "$(received "$option" -c source.cu | sed 's/^--frandom-seed=[^ ]* //')" "$option -c source.cu " \
+          "the arguments with $option"
+      done
+      for option in --frandom-seed=1 "-frandom-seed 1"; do
+        # shellcheck disable=SC2086
+        expect "$(received $option -c source.cu | sed 's/^--keep --keep-dir=[^ ]* //')" "$option -c source.cu " \
+          "the arguments with $option"
+      done
+      echo '-c "source.cu"' > source.optf
+      echo '-optf source.optf --keep' > nested.optf
+      [[ $(received -optf source.optf) == *"--keep --keep-dir="*"-optf source.optf " ]]
+      [[ $(received --options-file=empty.optf,,source.optf) != *"--keep "* ]]
+      expect "$(received -optf nested.optf | grep -c -e '--keep')" 0 "the directories added with --keep in an options file"
+      expect "$(NVCC_APPEND_FLAGS="-O2 --keep-dir=kept" received -c source.cu | grep -c -e '--keep')" 0 \
+        "the directories added with --keep-dir in NVCC_APPEND_FLAGS"
+      expect "$(NVCC_PREPEND_FLAGS="--frandom-seed=1" received -c source.cu | grep -c -e '--frandom-seed')" 0 \
+        "the seeds added with --frandom-seed in NVCC_PREPEND_FLAGS"
+      # Two source files with the same name would overwrite each other's intermediate files.
+      expect "$(received a/same.cu b/same.cu | grep -c -e '--keep')" 0 "the directories added for sources with the same name"
+      # The wrapper leaves the arguments as they are when it can't read them; nvcc reports the error.
+      echo '-c "source.cu' > unterminated.optf
+      echo '-optf self.optf' > self.optf
+      expect "$(received -optf unterminated.optf -c source.cu)" "-optf unterminated.optf -c source.cu " \
+        "the arguments with an options file which ends in a quotation"
+      expect "$(received -optf self.optf -c source.cu)" "-optf self.optf -c source.cu " \
+        "the arguments with an options file which includes itself"
+      expect "$(received -c source.cu -optf)" "-c source.cu -optf " "the arguments with -optf missing its value"
+      # The wrapper doesn't read an options file which is a pipe, as nvcc would then find it empty.
+      mkfifo pipe.optf
+      echo '-c source.cu' > pipe.optf &
+      expect "$(received -optf pipe.optf)" "-optf pipe.optf " "the arguments with an options file which is a pipe"
+      expect "$(timeout 10 cat pipe.optf)" "-c source.cu" "the contents of the pipe after the wrapper ran"
+      wait
+      rm pipe.optf
+      # The wrapper doesn't use a directory which isn't its own.
+      ln -s "$PWD/a" "$keepDir"
+      expect "$(received -c source.cu -o source.o | grep -c -e '--keep')" 0 "the directories added when it is a link"
+      rm "$keepDir"
+
+      # The directory exists while nvcc runs, only for the user, and is removed afterwards.
+      rm -f log*
+      FAKE="wait" ./nvcc -c source.cu -o source.o &
+      until [[ -e log.ready ]]; do sleep 0.05; done
+      expect "$(stat -c %a "$keepDir")" 700 "the mode of the directory"
+      wait
+      expect "$(leftover)" 0 "the directories left"
+
+      # Exit statuses, arguments, and the environment are passed through, and the directory is removed.
+      expect "$(FAKE=exit FAKE_STATUS=3 status ./nvcc -c source.cu)" 3 "nvcc's exit status"
+      expect "$(FAKE=exit FAKE_STATUS=3 status ./nvcc --version)" 3 "nvcc's exit status without a source file"
+      FAKE=exit FAKE_STATUS=0 FAKE_ENV="a b" ./nvcc "x y" "" -c source.cu --keep
+      # Outside the foreground of a terminal, as here, nvcc runs in a process group of its own when the wrapper waits
+      # for it.
+      expect "$(sed -n '/^x y$/,$p' log | grep -v -e '^pid=' -e '^group=')" $'x y\n\n-c\nsource.cu\n--keep\nFAKE_ENV=a b' \
+        "nvcc's arguments and environment"
+      FAKE=exit FAKE_STATUS=0 ./nvcc -c source.cu
+      expect "$(sed -n 's/^group=//p' log)" own "nvcc's process group"
+      expect "$(status ./alone/nvcc -c source.cu)" 127 "the exit status without .nvcc-wrapped next to the wrapper"
+      expect "$(status ./alone/nvcc --version)" 127 "the exit status without .nvcc-wrapped and without a source file"
+      # The wrapper finds nvcc next to itself rather than to the link it was run through.
+      mkdir linked
+      ln -s ../nvcc linked/nvcc
+      expect "$(FAKE=exit FAKE_STATUS=4 status ./linked/nvcc -c source.cu)" 4 "nvcc's exit status through a symbolic link"
+      expect "$(leftover)" 0 "the directories left"
+
+      # If nvcc is killed by a signal, so is the wrapper, after it removed the directory.
+      expect "$(FAKE=kill FAKE_SIGNAL=TERM signal none - ./nvcc -c source.cu)" -15 "how the wrapper exits when nvcc is killed"
+      expect "$(leftover)" 0 "the directories left"
+
+      # Signals sent to the wrapper, or to its process group, are forwarded to nvcc once, and the wrapper removes the
+      # directory when nvcc exits.
+      for sig in INT TERM group:TERM; do
+        rm -f log*
+        expect "$(FAKE="wait" signal "$sig" log.ready ./nvcc -c source.cu)" 0 "the exit status after $sig"
+        expect "$(grep -c "received ''${sig#group:}" log)" 1 "$sig received by nvcc"
+        expect "$(leftover)" 0 "the directories left"
+      done
+      rm -f log*
+      expect "$(FAKE="wait" signal ctrl-c log.ready ./nvcc -c source.cu)" 0 "the exit status after Ctrl-C"
+      expect "$(grep -c "received INT" log)" 1 "SIGINT received by nvcc after Ctrl-C"
+      expect "$(sed -n 's/^group=//p' log)" shared "nvcc's process group in the foreground of a terminal"
+
+      # nvcc doesn't outlive the wrapper. The directory is left, and the next run uses and removes it.
+      rm -f log*
+      expect "$(FAKE="sleep" signal KILL log.ready ./nvcc -c source.cu -o source.o)" -9 "how the wrapper exits when killed"
+      for _ in $(seq 50); do
+        kill -0 "$(sed -n 's/^pid=//p' log)" 2> /dev/null || break
+        sleep 0.1
+      done
+      if kill -0 "$(sed -n 's/^pid=//p' log)" 2> /dev/null; then
+        nixErrorLog "nvcc outlived the wrapper"
+        exit 1
+      fi
+      expect "$(leftover)" 1 "the directories left by a wrapper which was killed"
+      expect "$(received -c source.cu -o source.o)" "$seed$keep-c source.cu -o source.o " "the arguments with the directory left"
+      expect "$(leftover)" 0 "the directories left"
+    '').overrideAttrs
+      (prevAttrs: {
+        nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ python3 ];
+      });
+
   # nvcc runs nvlink for a whole-program link, even without -rdc.
   nvcc-whole-program = mkTest "nvcc-whole-program" ''
     nvcc -arch="$arch" kernel.cu -o result
@@ -265,22 +538,13 @@ in
   wrapper =
     (mkTest "wrapper" ''
       cp ${cuda_nvcc}/bin/nvlink nvlink
-      cp ${./tests/fake-nvlink} .nvlink-wrapped
+      cp ${./tests/fake-tool} .nvlink-wrapped
       chmod +w nvlink
       chmod +x .nvlink-wrapped
       patchShebangs .nvlink-wrapped
       mkdir alone
       cp nvlink alone/nvlink
       export FAKE_LOG=$PWD/log
-
-      status() { "$@" && echo 0 || echo $?; }
-      signal() { python3 ${./tests/signal.py} "$@"; }
-      expect() {
-        if [[ $1 != "$2" ]]; then
-          nixErrorLog "$3: expected $2, got $1"
-          exit 1
-        fi
-      }
 
       # Exit statuses, arguments, and the environment are passed through.
       expect "$(FAKE=exit FAKE_STATUS=3 status ./nvlink)" 3 "nvlink's exit status"

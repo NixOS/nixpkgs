@@ -1,9 +1,124 @@
 # cuda_nvcc
 
+## nvcc wrapper
+
+`bin/nvcc` is a wrapper around the nvcc of NVIDIA, which is installed as `bin/.nvcc-wrapped`. The wrapper is built from
+[`nvcc-wrapper.cpp`](./wrappers/nvcc-wrapper.cpp) by [`nvcc-wrapper.nix`](./nvcc-wrapper.nix) (`passthru.nvccWrapper`) with the
+ordinary stdenv, and copied into `cuda_nvcc`. It does two things:
+
+- It puts the host compiler that nvcc requires (`backendStdenv.cc`) on `PATH`.
+- It passes nvcc the options that make its output reproducible, so that a rebuild writes the same objects and
+  programs.
+
+Two facts are compiled into the wrapper: the directory of the host compiler, and whether nvcc has `--frandom-seed`.
+The wrapper is therefore built once for each combination of the two, not once for all CUDA releases.
+
+### Why
+
+Without these options, nvcc writes a different object each time it compiles the same source file. There are two
+causes.
+
+The first cause is the names of the intermediate files. nvcc names them after its process ID, for example
+`tmpxft_<pid>_<n>-<m>_<source>.cudafe1.cpp`, and the host compiler compiles the host code from them. The host compiler
+stores the file name in the symbol table of the object, as the `STT_FILE` symbol. It also names the function that runs
+the static initializers after the file: `_GLOBAL__sub_I_tmpxft_<pid>_...`. `strip -S` removes the `STT_FILE` symbol,
+but it does not remove the name of that function.
+
+The second cause is the names of entities with internal linkage, for example functions in an unnamed namespace. nvcc
+gives every source file an identifier and puts it into these names: `_INTERNAL_<identifier>...` and
+`_GLOBAL__N__<identifier>`. The names are used in the host code and in the device code. The identifier is the same in
+every build if the source file defines a function or a variable that has external linkage and is not a template. If
+the source file defines no such function or variable, the identifier contains the process ID. Source files that define
+only templates are an example, and some of the CUDA modules of OpenCV contain such files.
+
+nvcc has one option for each cause:
+
+- `--keep` tells nvcc not to remove its intermediate files. nvcc then names them after the source file:
+  `<source>.cudafe1.cpp`.
+- `--frandom-seed` tells nvcc to derive the identifier from a seed. nvcc has this option from CUDA 12.9. nvcc also
+  passes the seed to the host compiler as `-frandom-seed`. NVIDIA requires a different seed for every source file of a
+  program.
+
+These options cannot be set once for a whole build, for example through `NVCC_PREPEND_FLAGS` in `setupCudaHook`:
+
+- `--keep` needs a directory for the intermediate files (`--keep-dir`). With one directory for the whole build, two
+  source files that have the same name and are compiled at the same time would overwrite each other's files.
+- The seed would be the same for every source file.
+
+`--objdir-as-tempdir` looks like an alternative to `--keep`, because it names the intermediate files after the object
+and needs no directory. It has two problems:
+
+- It has no effect without `-c`. The object is then an intermediate file itself, and nvcc names it after the process
+  ID.
+- nvcc fails if the directory of the object is not writable, for example with `-o /dev/null`.
+
+### How
+
+The wrapper runs `.nvcc-wrapped` from its own directory. It finds that directory through `/proc/self/exe`, so this
+also works when the wrapper is run through a symbolic link, for example from `cudatoolkit`. nvcc gets the same
+`argv[0]` and the same environment, except for `PATH`.
+
+The wrapper adds options only if nvcc is given at least one source file. It reads the arguments and the options files
+(`-optf`) that they name, and it looks for two things: the names of the source files, and the options listed below.
+It computes a hash of the working directory and of the arguments, called `<id>` below. `<id>` is the same when the
+same command runs again in the same directory, as in a rebuild. It is different for every source file of a build.
+
+The wrapper passes these options:
+
+- `--frandom-seed=<id>`, from CUDA 12.9.
+- `--keep --keep-dir=$TMPDIR/nvcc-keep-<id>`. The wrapper creates this directory and removes it when nvcc exits. The
+  name of the directory must not be random, because the path of the intermediate files is part of the debugging
+  information of the host code (`-g`).
+
+The wrapper does not override the caller. The caller can set options on the command line, in an options file, in
+`NVCC_PREPEND_FLAGS` or in `NVCC_APPEND_FLAGS`.
+
+- If the caller passes a seed, the wrapper does not pass one.
+- If the caller passes `--keep`, `--keep-dir`, `--save-temps` or `--objdir-as-tempdir`, the wrapper passes neither
+  `--keep` nor `--keep-dir`. CMake depends on this: it identifies nvcc from the intermediate files that it tells nvcc
+  to keep.
+- If two of the source files have the same name, the wrapper passes neither `--keep` nor `--keep-dir`. Without `-c`,
+  nvcc keeps the objects in the same directory as the other intermediate files, so the second object would overwrite
+  the first.
+
+The wrapper puts its options before the options of the caller. nvcc uses the last value of an option, so an option of
+the caller that the wrapper missed still takes precedence.
+
+The wrapper never fails a build that nvcc would complete. If it cannot read an options file, it adds no options, and
+nvcc reports the error. If an options file is not a regular file (e.g. a pipe), the wrapper does not read it and adds
+no options, because nvcc would otherwise find it empty. If it cannot create the directory, or the directory exists and belongs to another user, it
+passes neither `--keep` nor `--keep-dir`.
+
+If the wrapper created a directory, it waits for nvcc and then removes the directory. While it waits, it treats nvcc
+as the nvlink wrapper treats nvlink, with the same code ([`wrapper.hpp`](./wrappers/wrapper.hpp)): it forwards signals, nvcc is
+killed if the wrapper dies, and the wrapper exits with the status of nvcc or is killed by the same signal. The section
+on the nvlink wrapper describes this. If the wrapper is killed with `SIGKILL`, the directory stays behind. The next
+run of the same command uses it and removes it. Without a directory, the wrapper replaces itself with nvcc.
+
+Two things are not fixed:
+
+- Before CUDA 12.9 there is no `--frandom-seed`. A source file that defines only templates and entities with internal
+  linkage still gets the process ID in its symbol names.
+- Objects still depend on the directory in which they are built. The identifier contains a hash of the path of the
+  source file, and debugging information contains the working directory.
+
+### Testing
+
+- `cudaPackages.cuda_nvcc.tests.nvcc-reproducible` compiles sources twice and compares the results. It also checks
+  that `bin/.nvcc-wrapped` without the wrapper still writes different objects. That check fails when a CUDA release no
+  longer needs the options.
+- `cudaPackages.cuda_nvcc.tests.nvcc-options` checks with nvcc that the options of the caller have their effect.
+- `cudaPackages.cuda_nvcc.tests.nvcc-wrapper` puts the installed wrapper next to a stand-in for nvcc
+  ([`tests/fake-tool`](./tests/fake-tool)). It checks which options the wrapper adds, and how the wrapper runs nvcc
+  and removes the directory.
+
+To check a package, build it twice and compare the outputs, for example with `nix-build --check`. A small test source
+can be reproducible where a package is not, so check the package itself.
+
 ## nvlink wrapper
 
 `bin/nvlink` is a wrapper around NVIDIA's nvlink, which is installed as `bin/.nvlink-wrapped`. The wrapper is built
-from [`nvlink-wrapper.cpp`](./nvlink-wrapper.cpp) by [`nvlink-wrapper.nix`](./nvlink-wrapper.nix)
+from [`nvlink-wrapper.cpp`](./wrappers/nvlink-wrapper.cpp) by [`nvlink-wrapper.nix`](./nvlink-wrapper.nix)
 (`passthru.nvlinkWrapper`) with the ordinary stdenv, once for every CUDA release, and copied into `cuda_nvcc`.
 
 ### Why
@@ -94,7 +209,7 @@ nvlink passes its paths on. No package in Nixpkgs uses these libraries to produc
   flag Clang rejects), and checks the notes in the results with `cuobjdump`; the results must not refer to `cuda_nvcc`
   or `cuda_cudart` (or Clang). `cuobjdump` also reads the notes of compressed fatbins (`-Xfatbin -compress-all`), in
   which Nix doesn't find references, so `nvcc-compressed` checks those. The `wrapper` test puts the installed wrapper
-  next to a stand-in for nvlink ([`tests/fake-nvlink`](./tests/fake-nvlink)) to check how it runs nvlink and handles
+  next to a stand-in for nvlink ([`tests/fake-tool`](./tests/fake-tool)) to check how it runs nvlink and handles
   its output. With CUDA 12.6, nvlink writes no note, so only the `wrapper` test checks the wrapper.
 - `cudaPackages.cuda_nvcc.gpuCheck` (requires a GPU) runs programs linked through the wrapper.
 
@@ -103,7 +218,8 @@ When the wrapper fails, run the command with `bin/.nvlink-wrapped` in place of `
 
 ### Development
 
-The wrapper is C++23 and builds with stdenv's compiler. Defining `NVLINK_WRAPPER_NO_MAIN` omits `main` and the code
-which runs nvlink, so `tokenize`, `findOutput`, and `scrub` (on a `std::span<char>` holding an output) can be exercised
-directly, e.g. by a fuzzer including the source file. Before changing it, check it with `clang-tidy`, `cppcheck`,
+Both wrappers are C++23 and build with stdenv's compiler. They share [`wrapper.hpp`](./wrappers/wrapper.hpp): how they read
+options files, find the tool they wrap, and run it. Defining `NVLINK_WRAPPER_NO_MAIN` omits `main` from the nvlink
+wrapper, so `tokenize`, `findOutput`, and `scrub` (on a `std::span<char>` holding an output) can be exercised directly,
+e.g. by a fuzzer including the source file. Before changing a wrapper, check it with `clang-tidy`, `cppcheck`,
 `g++ -fanalyzer`, and a build with `-fsanitize=address,undefined` running the tests above.

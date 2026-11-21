@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# A stand-in for nvlink, run by the wrapper: records its arguments and environment in $FAKE_LOG, then acts as $FAKE asks.
+# A stand-in for nvcc or nvlink, run by its wrapper: records its arguments and environment in $FAKE_LOG, then acts as $FAKE asks.
 : "${FAKE:?}" "${FAKE_LOG:?}"
 # Whether it shares the process group of its parent, the wrapper.
 read -r _ _ _ _ group _ < "/proc/$$/stat"
@@ -26,5 +26,5 @@ case "$FAKE" in
   detached) FAKE="wait" exec python3 -c 'import os, sys; os.setsid(); os.execv(sys.argv[1], sys.argv[1:])' "$0" ;;
   # Sleeps without holding on to the output of the command running the wrapper.
   sleep) touch "$FAKE_LOG.ready"; exec sleep 60 > /dev/null 2>&1 ;;
-  *) echo "fake-nvlink: unknown FAKE=$FAKE" >&2; exit 99 ;;
+  *) echo "fake-tool: unknown FAKE=$FAKE" >&2; exit 99 ;;
 esac

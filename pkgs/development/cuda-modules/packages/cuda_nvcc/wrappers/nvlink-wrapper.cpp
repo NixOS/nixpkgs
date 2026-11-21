@@ -1,6 +1,8 @@
 // Wrapper for nvlink which removes references to the Nix store from the command line nvlink records in its output; see
 // README.md. The real nvlink is .nvlink-wrapped, next to the wrapper.
 
+#include "wrapper.hpp"
+
 #include <algorithm>
 #include <array>
 #include <cerrno>
@@ -10,7 +12,6 @@
 #include <cstring>
 #include <elf.h>
 #include <fcntl.h>
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -20,7 +21,6 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-#include <sys/prctl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -30,11 +30,7 @@
 
 namespace {
 
-using namespace std::literals;
-
-struct Error : std::runtime_error {
-    using std::runtime_error::runtime_error;
-};
+using namespace wrapper;
 
 // Overwrites with e's, as remove-references-to does, each hash of a path in the Nix store (32 characters of Nix's
 // base-32 alphabet, which lacks e), which is what Nix looks for to find references, whatever the spelling of the path.
@@ -51,32 +47,6 @@ bool blankHashes(std::span<char> text) {
         }
     }
     return changed;
-}
-
-// Splits an options file into arguments the way nvlink does: arguments are separated by whitespace, double quotes
-// group, and a backslash escapes the next character. nvlink drops escaped double quotes as well.
-std::vector<std::string> tokenize(std::string_view contents) {
-    std::vector<std::string> args;
-    std::optional<std::string> arg;
-    bool quoted = false;
-    bool escaped = false;
-    for (const char c : contents) {
-        if (!escaped && c == '\\') {
-            escaped = true;
-        } else if (!escaped && c == '"') {
-            quoted = !quoted;
-            if (!arg) arg.emplace();
-        } else if (!escaped && !quoted && " \t\n\r\f\v"sv.contains(c)) {
-            if (arg) args.push_back(*std::exchange(arg, std::nullopt));
-        } else {
-            if (!arg) arg.emplace();
-            if (c != '"') *arg += c;
-            escaped = false;
-        }
-    }
-    if (escaped || quoted) throw Error("an options file ends in a backslash or a quotation");
-    if (arg) args.push_back(*arg);
-    return args;
 }
 
 // Returns the output (the last -o), including those in options files (comma-separated lists of files of arguments),
@@ -241,67 +211,6 @@ class File {
     std::uint64_t size_ = 0;
 };
 
-// Returns the real nvlink, next to the wrapper wherever the wrapper is installed, copied, or linked from.
-std::string wrapped() {
-    std::error_code error;
-    const auto self = std::filesystem::read_symlink("/proc/self/exe", error);
-    if (error) throw Error("cannot find the wrapper: " + error.message());
-    return self.parent_path() / ".nvlink-wrapped";
-}
-
-// Whether the wrapper is in the foreground process group of its controlling terminal.
-bool inForeground() {
-    const int tty = open("/dev/tty", O_RDONLY | O_NOCTTY | O_CLOEXEC);
-    if (tty < 0) return false;
-    const bool foreground = tcgetpgrp(tty) == getpgrp();
-    static_cast<void>(::close(tty));
-    return foreground;
-}
-
-// Runs the real nvlink with argv and returns its wait status.
-int run(const std::string &nvlink, char **argv) {
-    // An ignored SIGCHLD, which is inherited, would let the kernel reap nvlink without telling the wrapper.
-    static_cast<void>(std::signal(SIGCHLD, SIG_DFL));
-    // Receive the signals to forward, and SIGCHLD, synchronously rather than in a handler.
-    sigset_t signals;
-    sigset_t original;
-    sigemptyset(&signals);
-    for (const int sig : {SIGHUP, SIGINT, SIGQUIT, SIGTERM, SIGUSR1, SIGUSR2, SIGCHLD}) sigaddset(&signals, sig);
-    sigprocmask(SIG_BLOCK, &signals, &original);
-
-    // In the foreground of a terminal, nvlink stays in the wrapper's process group, so that it receives the signals
-    // from the terminal itself and the wrapper doesn't forward them. Otherwise nvlink gets a process group of its own,
-    // so that a signal sent to the wrapper's process group (e.g. by timeout) reaches nvlink once, by being forwarded.
-    const bool foreground = inForeground();
-    const pid_t parent = getpid();
-    const pid_t child = fork();
-    if (child < 0) throw Error("fork: "s + std::strerror(errno));
-    if (child == 0) {
-        // Don't outlive the wrapper.
-        if (prctl(PR_SET_PDEATHSIG, SIGKILL) != 0 || getppid() != parent) _exit(127);
-        if (!foreground && setpgid(0, 0) != 0) _exit(127);
-        sigprocmask(SIG_SETMASK, &original, nullptr);
-        // Keep argv[0], whose basename nvlink records as the tool name.
-        execv(nvlink.c_str(), argv);
-        std::cerr << "nvlink wrapper: error: execv " << nvlink << ": " << std::strerror(errno) << '\n';
-        _exit(127);
-    }
-
-    for (;;) {
-        siginfo_t info;
-        if (sigwaitinfo(&signals, &info) < 0) continue; // EINTR
-        if (info.si_signo != SIGCHLD) {
-            if (!foreground || info.si_code != SI_KERNEL) kill(child, info.si_signo);
-            continue;
-        }
-        int status = 0;
-        if (waitpid(child, &status, WNOHANG) == child) {
-            sigprocmask(SIG_SETMASK, &original, nullptr);
-            return status;
-        }
-    }
-}
-
 #endif
 
 } // namespace
@@ -312,7 +221,7 @@ int main(int argc, char **argv) {
     std::optional<std::string> output;
     bool written = false;
     try {
-        const std::string nvlink = wrapped();
+        const std::string nvlink = wrapped(".nvlink-wrapped");
         const auto args = std::span(argv, static_cast<std::size_t>(argc)).subspan(1);
         output = findOutput(std::vector<std::string>(args.begin(), args.end()));
 
@@ -321,7 +230,8 @@ int main(int argc, char **argv) {
         const bool existed = output && stat(output->c_str(), &before) == 0;
         if (existed && !S_ISREG(before.st_mode)) throw Error(*output + " is not a regular file");
 
-        const int status = run(nvlink, argv);
+        // nvlink records the basename of argv[0] as the tool name.
+        const int status = run("nvlink", nvlink, argv);
         if (WIFSIGNALED(status)) {
             // Terminate with the same signal.
             static_cast<void>(std::signal(WTERMSIG(status), SIG_DFL));
