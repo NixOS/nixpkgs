@@ -93,6 +93,7 @@ luaexpat,,,,,,arobyn flosse
 luaffi,,,https://luarocks.org/dev,,,
 luaffi-tkl,,,,,,
 luafilesystem,,,,,,flosse alerque
+luagobject,,,,,,hythera
 lualdap,,,,,,aanderse
 lualine.nvim,,,https://luarocks.org/dev,,,
 lualogging,,,,,,
