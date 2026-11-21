@@ -174,4 +174,46 @@
     '';
   };
   # TODO: add strip
+  separate-debug-info =
+    pkgs.runCommandCC "test-separate-debug-info"
+      {
+        outputs = [
+          "out"
+          "debug"
+        ];
+        meta.platforms = lib.platforms.linux;
+      }
+      ''
+        source ${../../build-support/setup-hooks/separate-debug-info.sh}
+        src=
+        prefix=$out
+        id=0123456789abcdef0123456789abcdef01234567
+        export NIX_BUILD_ID_STYLE=0x$id
+        mkdir -p "$out/bin"
+        printf 'int main(void) { return 0; }\n' > a.c
+        printf 'int main(void) { return 1; }\n' > b.c
+        $CC -g a.c -o "$out/bin/a"
+        ln "$out/bin/a" "$out/bin/a-link"
+        $CC -g b.c -o "$out/bin/b"
+        ! cmp -s "$out/bin/a" "$out/bin/b"
+        $READELF -n "$out/bin/a" | grep "$id"
+        $READELF -n "$out/bin/b" | grep "$id"
+
+        realObjcopy=$OBJCOPY
+        recordObjcopy() {
+          echo "$1" >> objcopy.calls
+          "$realObjcopy" "$@"
+        }
+        OBJCOPY=recordObjcopy
+        _separateDebugInfo > hook.log
+        cat hook.log
+        test "$(wc -l < objcopy.calls)" -eq 2
+        test "$(grep -c 'multiple files with build id' hook.log)" -eq 1
+
+        debugFile="$debug/lib/debug/.build-id/01/23456789abcdef0123456789abcdef01234567.debug"
+        for name in a a-link b; do
+          test "$debug/lib/debug/$name" -ef "$debugFile"
+        done
+        $READELF --debug-dump=info "$debugFile" | grep DW_TAG_compile_unit
+      '';
 }
