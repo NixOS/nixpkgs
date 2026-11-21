@@ -19,13 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "imsprog";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "bigbigmdm";
     repo = "IMSProg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K7biDYnWl4wbQ2t69x5X7/Cz/bWUvWlDeDOeNKrjCTg=";
+    hash = "sha256-pqbsOh2jkoskNAIPmg1dxKulqBaX9bzQFew8bN+lMBs=";
   };
 
   env.LC_ALL = "C.UTF-8";
