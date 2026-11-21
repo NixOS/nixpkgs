@@ -30,8 +30,8 @@
   xorg-server,
   kmod,
   xf86-video-nouveau,
-  nvidia_x11 ? linuxPackages.nvidia_x11,
-  linuxPackages,
+  nvidia_x11 ? nvidiaPackages.stable.driver,
+  nvidiaPackages,
   pkgsi686Linux,
   virtualgl,
   libglvnd,
@@ -41,7 +41,7 @@
   # TODO: Confusing. Perhaps use "SubArch" instead of i686?
   nvidia_x11_i686 ?
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; }
+      pkgsi686Linux.nvidiaPackages.stable.driver.override { libsOnly = true; }
     else
       null,
   libglvnd_i686 ?

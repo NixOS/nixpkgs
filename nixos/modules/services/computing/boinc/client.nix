@@ -68,7 +68,7 @@ in
         - {var}`pkgs.ocl-icd`:
           OpenCL infrastructure library. Required by BOINC projects that
           use OpenCL, in addition to a device-specific OpenCL driver.
-        - {var}`pkgs.linuxPackages.nvidia_x11`:
+        - {var}`pkgs.nvidiaPackages.stable.driver`:
           Provides CUDA libraries. Required by BOINC projects that use
           CUDA. Note that this requires an NVIDIA graphics device to be
           present on the system.

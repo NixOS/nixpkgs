@@ -143,10 +143,10 @@ in
           lib.mkIf
             (
               (lib.elem "nvidia" config.services.xserver.videoDrivers)
-              && (lib.versionOlder (lib.versions.major (lib.getVersion config.hardware.nvidia.package)) "551")
+              && (lib.versionOlder (lib.versions.major (lib.getVersion config.hardware.nvidia.package.driver)) "551")
             )
             [
-              "Using Sway with Nvidia driver version <= 550 may result in a broken system. Configure hardware.nvidia.package to use a newer version."
+              "Using Sway with Nvidia driver version <= 550 may result in a broken system. Configure hardware.nvidia.branch (or hardware.nvidia.package) to use a newer version."
             ];
 
         environment = {

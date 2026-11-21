@@ -1,16 +1,45 @@
 {
+  # Package dependencies
+  lib,
+  stdenv,
+  config,
+  runCommandLocal,
+  patchutils,
+  callPackage,
+  pkgsi686Linux,
+  fetchzip,
+  fetchFromGitHub,
+
+  libsOnly ? false,
+  # Older drivers take their 32-bit libraries from a separate i686 archive,
+  # which a host without 32-bit x86 support does not fetch.
+  disable32Bit ? stdenv.hostPlatform.system == "aarch64-linux",
+  # Driver version and sources
   version,
+  # Name of this driver branch, shared with the kernel modules built from the
+  # same sources.
+  branch ? version,
+  # Only set from `linuxPackages`, where the same driver builds its kernel modules.
+  kernel ? null,
+  # The kernel's common make flags, needed by the module build and passed only with `kernel`.
+  kernelModuleMakeFlags ? [ ],
   url ? null,
   sha256_32bit ? null,
   sha256_64bit,
   sha256_aarch64 ? null,
   openSha256 ? null,
+  # Hashes and versions of the companion packages
   settingsSha256 ? null,
-  settingsVersion ? null,
+  settingsVersion ? version,
   persistencedSha256 ? null,
-  persistencedVersion ? null,
+  persistencedVersion ? version,
   fabricmanagerSha256 ? null,
-  fabricmanagerVersion ? null,
+  fabricmanagerVersion ? version,
+  # Every branch of `nvidiaPackages` carries nvidia-modprobe; the NixOS module
+  # needs it for its udev rules, so it is not optional.
+  modprobeSha256,
+  modprobeVersion ? version,
+  # Feature flags
   useGLVND ? true,
   useProfiles ? true,
   preferGtk2 ? false,
@@ -19,7 +48,7 @@
   usePersistenced ? true,
   useFabricmanager ? false,
   ibtSupport ? false,
-
+  # Build customization
   prePatch ? null,
   postPatch ? null,
   patchFlags ? null,
@@ -27,311 +56,295 @@
   patchesOpen ? [ ],
   preInstall ? null,
   postInstall ? null,
-  broken ? false,
-  brokenOpen ? broken,
-}@args:
-
-{
-  lib,
-  stdenv,
-  runCommandLocal,
-  patchutils,
-  callPackage,
-  pkgs,
-  pkgsi686Linux,
-  fetchurl,
-  fetchzip,
-  which,
-  libarchive,
-  jq,
-  zstd,
-  # Whether to build only userspace libraries (without bin/modsrc/firmware
-  # outputs). Used to support 32-bit binaries on 64-bit Linux.
-  libsOnly ? false,
-  # don't include the bundled 32-bit libraries on 64-bit platforms,
-  # even if it’s in downloaded binary
-  disable32Bit ? stdenv.hostPlatform.system == "aarch64-linux",
-  # 32 bit libs only version of this package
-  lib32 ? null,
-  # Whether to extract the GSP firmware, datacenter drivers needs to extract the
-  # firmware
-  firmware ? openSha256 != null || useFabricmanager,
-  # Whether the user accepts the NVIDIA Software License
-  config,
-  acceptLicense ? config.nvidia.acceptLicense or false,
+  # Kernel modules from these sources do not build against this kernel version
+  # or newer. The userspace libraries have no such limit.
+  brokenFrom ? null,
 }:
 
-assert lib.versionOlder version "391" -> sha256_32bit != null;
 assert useSettings -> settingsSha256 != null;
 assert usePersistenced -> persistencedSha256 != null;
 assert useFabricmanager -> fabricmanagerSha256 != null;
 assert useFabricmanager -> !useSettings;
+# `makeExtensible` keeps the throwing names below lazy; `makeScope`'s bound
+# `callPackage` would force every member.
 
-let
-  # Rewrites patches meant for the kernel/* folder structure to kernel-open/*
-  rewritePatch =
-    { from, to }:
-    patch:
-    runCommandLocal (baseNameOf patch)
-      {
-        inherit patch;
-        nativeBuildInputs = [ patchutils ];
-      }
-      ''
-        lsdiff \
-          -p1 -i ${from}/'*' \
-          "$patch" \
-        | sort -u | sed -e 's/[*?]/\\&/g' \
-        | xargs -I{} \
-          filterdiff \
-          --include={} \
-          --strip=2 \
-          --addoldprefix=a/${to}/ \
-          --addnewprefix=b/${to}/ \
-          --clean "$patch" > "$out"
-      '';
+lib.makeExtensible (
+  self:
+  let
+    nvidiaDriver = self.driver;
 
-  pkgSuffix = lib.optionalString (lib.versionOlder version "304") "-pkg0";
-  i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
+    # The old member spellings of a branch: the driver's outputs, plus the
+    # 32-bit libraries, which are an output where the archive carries them and
+    # a `passthru` member elsewhere. Like ./binaries.nix's `outputs`, this is
+    # derived from the branch's parameters instead of probed on `nvidiaDriver`:
+    # probing would force the driver, and with it this scope, while the scope
+    # is being built, which Nix rejects as infinite recursion.
+    driverAliases = [
+      "out"
+    ]
+    ++ lib.optionals (!libsOnly) [ "bin" ]
+    ++ lib.optionals (!libsOnly && (openSha256 != null || useFabricmanager)) [ "firmware" ]
+    ++ lib.optional (!disable32Bit) "lib32";
 
-  libPathFor =
-    pkgs:
-    lib.makeLibraryPath (
-      with pkgs;
-      [
-        libdrm
-        libxext
-        libx11
-        libxv
-        libxrandr
-        libxcb
-        zlib
-        stdenv.cc.cc
-        wayland
-        libgbm
-        libGL
-        openssl
-        dbus # for nvidia-powerd
-      ]
-    );
+    modulesBroken = brokenFrom != null && kernel.kernelAtLeast brokenFrom;
 
-  # maybe silly since we've ignored this previously and just unfree..
-  throwLicense = throw ''
-    Use of NVIDIA Software requires license acceptance of the license:
-
-      - License For Customer Use of NVIDIA Software [1]
-
-    You can express acceptance by setting acceptLicense to true your nixpkgs.config.
-    Example:
-
-      configuration.nix:
-        nixpkgs.config.allowUnfree = true;
-        nixpkgs.config.nvidia.acceptLicense = true;
-
-      config.nix:
-        allowUnfree = true;
-        nvidia.acceptLicense = true;
-
-    [1]: https://www.nvidia.com/content/DriverDownloads/licence.php?lang=us
-  '';
-in
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "nvidia-${if useFabricmanager then "dc" else "x11"}";
-
-  builder = ./builder.sh;
-
-  src =
-    if !acceptLicense && (openSha256 == null) then
-      throwLicense
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        urls =
-          if args ? url then
-            [ args.url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_64bit;
-      }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        urls =
-          if args ? url then
-            [ args.url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_32bit;
-      }
-    else if stdenv.hostPlatform.system == "aarch64-linux" && sha256_aarch64 != null then
-      fetchurl {
-        urls =
-          if args ? url then
-            [ args.url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_aarch64;
-      }
-    else
-      throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
-
-  patches = if libsOnly then null else patches;
-  inherit prePatch postPatch patchFlags;
-  inherit preInstall postInstall;
-  inherit version useGLVND useProfiles;
-  inherit (stdenv.hostPlatform) system;
-  inherit i686bundled;
-
-  outputs = [
-    "out"
-  ]
-  ++ lib.optional i686bundled "lib32"
-  ++ lib.optionals (!libsOnly) [
-    "bin"
-    "modsrc"
-  ]
-  ++ lib.optional (!libsOnly && firmware) "firmware";
-  outputDev = if libsOnly then null else "bin";
-
-  dontStrip = true;
-  dontPatchELF = true;
-
-  libPath = libPathFor pkgs;
-  libPath32 = lib.optionalString i686bundled (libPathFor pkgsi686Linux);
-
-  nativeBuildInputs = [
-    libarchive
-    jq
-  ]
-  # NVIDIA has changed the compression format of their driver to zstd since version 530.30.02
-  # https://forums.developer.nvidia.com/t/linux-solaris-and-freebsd-driver-530-30-02-beta/244406
-  ++ (if (lib.versionAtLeast version "530") then [ zstd ] else [ which ]);
-
-  passthru =
-    let
-      fetchFromGithubOrNvidia =
-        {
-          owner,
-          repo,
-          rev,
-          ...
-        }@args:
-        let
-          args' = removeAttrs args [
-            "owner"
-            "repo"
-            "rev"
-          ];
-          baseUrl = "https://github.com/${owner}/${repo}";
-        in
-        fetchzip (
-          args'
-          // {
-            urls = [
-              "${baseUrl}/archive/${rev}.tar.gz"
-              "https://download.nvidia.com/XFree86/${repo}/${repo}-${rev}.tar.bz2"
-            ];
-            # github and nvidia use different compression algorithms,
-            #  use an invalid file extension to force detection.
-            extension = "tar.??";
-          }
-        );
-    in
-    {
-      mod =
-        if !libsOnly then
-          callPackage ./kernel-modules.nix {
-            open = false;
-            nvidia_x11 = finalAttrs.finalPackage;
-            # build files already patched when building the main package, so no need to patch them again
-            patches = [ ];
-            inherit broken;
-          }
-        else
-          { };
-      open = lib.mapNullable (
-        hash:
-        callPackage ./kernel-modules.nix {
-          open = true;
-          inherit hash;
-          nvidia_x11 = finalAttrs.finalPackage;
-          patches =
-            (map (rewritePatch {
-              from = "kernel";
-              to = "kernel-open";
-            }) patches)
-            ++ patchesOpen;
-          broken = brokenOpen;
-        }
-      ) openSha256;
-      settings =
-        if useSettings then
-          (if settings32Bit then pkgsi686Linux.callPackage else callPackage)
-            (import ./settings.nix finalAttrs.finalPackage settingsSha256)
-            {
-              withGtk2 = preferGtk2;
-              withGtk3 = !preferGtk2;
-              fetchFromGitHub = fetchFromGithubOrNvidia;
-            }
-        else
-          { };
-      persistenced =
-        if usePersistenced then
-          lib.mapNullable (
-            hash:
-            callPackage (import ./persistenced.nix finalAttrs.finalPackage hash) {
-              fetchFromGitHub = fetchFromGithubOrNvidia;
-            }
-          ) persistencedSha256
-        else
-          { };
-      fabricmanager =
-        if useFabricmanager then
-          lib.mapNullable (
-            hash: callPackage (import ./fabricmanager.nix finalAttrs.finalPackage hash) { }
-          ) fabricmanagerSha256
-        else
-          { };
-      settingsVersion = if settingsVersion != null then settingsVersion else finalAttrs.version;
-      persistencedVersion =
-        if persistencedVersion != null then persistencedVersion else finalAttrs.version;
-      fabricmanagerVersion =
-        if fabricmanagerVersion != null then fabricmanagerVersion else finalAttrs.version;
-      compressFirmware = false;
-      ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
-    }
-    // lib.optionalAttrs (!i686bundled) {
-      inherit lib32;
+    # The installer is a Makeself archive that both the userspace build and the
+    # kernel module build read, so it is unpacked once, for each platform.
+    installerArgs = {
+      inherit
+        version
+        url
+        sha256_32bit
+        sha256_64bit
+        sha256_aarch64
+        openSha256
+        ;
     };
 
-  meta = {
-    homepage = "https://www.nvidia.com/object/unix.html";
-    description = "${
-      if useFabricmanager then "Data Center" else "X.org"
-    } driver and kernel module for NVIDIA cards";
-    license = lib.licenses.unfreeRedistributable;
-    platforms = [
-      "x86_64-linux"
-    ]
-    ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
-    ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [
-      binaryNativeCode
-      binaryFirmware
-    ];
-    maintainers = with lib.maintainers; [
-      kiskae
-      edwtjo
-    ];
-    priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
-    broken = broken && brokenOpen;
-  };
-})
+    # Drivers from 391 on carry the 32-bit libraries in their own archive;
+    # older ones come from a separate i686 archive, fetched as its own source.
+    i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
+
+    fetchFromGithubOrNvidia =
+      {
+        owner,
+        repo,
+        tag,
+        nvrepo ? repo,
+        nvext ? "bz2",
+        ...
+      }@fetchArgs:
+      let
+        fetchArgs' = removeAttrs fetchArgs [
+          "owner"
+          "repo"
+          "tag"
+          "nvrepo"
+          "nvext"
+        ];
+        baseUrl = "https://github.com/${owner}/${repo}";
+      in
+      fetchzip (
+        fetchArgs'
+        // {
+          urls = [
+            "${baseUrl}/archive/${tag}.tar.gz"
+            "https://download.nvidia.com/XFree86/${nvrepo}/${nvrepo}-${tag}.tar.${nvext}"
+          ];
+          # github and nvidia use different compression algorithms,
+          # use an invalid file extension to force detection.
+          extension = "tar.??";
+          # do not try to retry 4xx errors
+          curlOptsList = [ "--no-retry-all-errors" ];
+        }
+      );
+
+    # Rewrites patches meant for the kernel/* folder structure to kernel-open/*
+    rewritePatch =
+      { from, to }:
+      patch:
+      runCommandLocal (baseNameOf patch)
+        {
+          inherit patch;
+          nativeBuildInputs = [ patchutils ];
+        }
+        ''
+          lsdiff \
+            -p1 -i ${from}/'*' \
+            "$patch" \
+          | sort -u | sed -e 's/[*?]/\\&/g' \
+          | xargs -I{} \
+            filterdiff \
+            --include={} \
+            --strip=2 \
+            --addoldprefix=a/${to}/ \
+            --addnewprefix=b/${to}/ \
+            --clean "$patch" > "$out"
+        '';
+  in
+  {
+    inherit
+      branch
+      version
+      ibtSupport
+      useGLVND
+      useProfiles
+      ;
+
+    # Unpacked installer archive, exposed as a member so the proprietary kernel
+    # module build reads the same tree and the hash verifier in
+    # `maintainers/scripts/` finds the archive URLs on `.src`.
+    installer = callPackage ./installer.nix installerArgs;
+
+    driver =
+      let
+        # Driver arguments shared between the main build and the i686 lib32 build.
+        driverArgs = {
+          inherit
+            version
+            sha256_32bit
+            sha256_aarch64
+            openSha256
+            useGLVND
+            useProfiles
+            useFabricmanager
+            ibtSupport
+            prePatch
+            postPatch
+            patchFlags
+            patches
+            preInstall
+            postInstall
+            i686bundled
+            ;
+        };
+
+        # 32-bit libraries taken from the separate i686 archive, since the
+        # driver's own archive has none. Only on hosts that build i686, which
+        # rules out aarch64.
+        driverLib32 =
+          if i686bundled || disable32Bit then
+            null
+          else
+            pkgsi686Linux.callPackage ./binaries.nix (
+              driverArgs
+              // {
+                src = self.installer32;
+                libsOnly = true;
+                lib32 = null;
+                firmware = false;
+              }
+            );
+      in
+      # Extracts the libraries, binaries and firmware from the installer.
+      callPackage ./binaries.nix (
+        driverArgs
+        // {
+          src = self.installer;
+          inherit libsOnly;
+          lib32 = if driverLib32 == null then null else driverLib32.out;
+        }
+      );
+
+    settings =
+      if useSettings then
+        (if settings32Bit then pkgsi686Linux.callPackage else callPackage) ./settings.nix {
+          version = settingsVersion;
+          hash = settingsSha256;
+          withGtk2 = preferGtk2;
+          withGtk3 = !preferGtk2;
+          inherit fetchFromGithubOrNvidia useProfiles;
+          supportedPlatforms = nvidiaDriver.meta.platforms;
+        }
+      else
+        null;
+
+    persistenced =
+      if usePersistenced then
+        lib.mapNullable (
+          hash:
+          callPackage ./persistenced.nix {
+            version = persistencedVersion;
+            inherit fetchFromGithubOrNvidia hash;
+            supportedPlatforms = nvidiaDriver.meta.platforms;
+          }
+        ) persistencedSha256
+      else
+        null;
+
+    fabricmanager =
+      if useFabricmanager then
+        lib.mapNullable (
+          hash:
+          callPackage ./fabricmanager.nix {
+            version = fabricmanagerVersion;
+            inherit hash;
+            supportedPlatforms = nvidiaDriver.meta.platforms;
+          }
+        ) fabricmanagerSha256
+      else
+        null;
+
+    modprobe = callPackage ./modprobe.nix {
+      hash = modprobeSha256;
+      inherit fetchFromGithubOrNvidia;
+      version = modprobeVersion;
+      supportedPlatforms = nvidiaDriver.meta.platforms;
+    };
+
+    inherit
+      settingsVersion
+      persistencedVersion
+      fabricmanagerVersion
+      modprobeVersion
+      ;
+
+  }
+  // lib.optionalAttrs (!i686bundled && !disable32Bit && sha256_32bit != null) {
+    # i686 archive older drivers take their 32-bit libraries from, kept on the
+    # branch for the hash verifier in `maintainers/scripts/`. Absent without such
+    # an archive or a host that builds i686, where it would be an evaluation error.
+    installer32 = pkgsi686Linux.callPackage ./installer.nix installerArgs;
+  }
+  // lib.optionalAttrs (kernel != null) {
+    # Kernel modules exist only in the `linuxPackages` instantiation, which
+    # passes `kernel`.
+    mod = callPackage ./kernel-modules.nix {
+      open = false;
+      inherit fetchFromGithubOrNvidia;
+      inherit prePatch patches patchFlags;
+      inherit
+        kernel
+        kernelModuleMakeFlags
+        version
+        branch
+        ;
+      src = self.installer;
+      # The installer archive exists only for the platforms the branch carries
+      # a hash for.
+      supportedPlatforms = [ "x86_64-linux" ] ++ lib.optional (sha256_aarch64 != null) "aarch64-linux";
+      # The kernel's stdenv, like every other out-of-tree module.
+      inherit (kernel) stdenv;
+      broken = modulesBroken;
+    };
+
+    open = lib.mapNullable (
+      hash:
+      callPackage ./kernel-modules.nix {
+        open = true;
+        # Fetched from source, so the default `supportedPlatforms` applies.
+        inherit
+          hash
+          kernel
+          kernelModuleMakeFlags
+          version
+          branch
+          ;
+        patches =
+          (map (rewritePatch {
+            from = "kernel";
+            to = "kernel-open";
+          }) patches)
+          ++ patchesOpen;
+        inherit (kernel) stdenv;
+        broken = modulesBroken;
+        inherit fetchFromGithubOrNvidia;
+      }
+    ) openSha256;
+
+  }
+  # Old output and module-source spellings on the branch. The release and eval
+  # configs disable `allowAliases`, so the release walk never reaches a warning
+  # or a throw.
+  // lib.optionalAttrs config.allowAliases (
+    # `driverAliases` names exactly the members the driver has, so one it lacks
+    # stays absent and `? firmware`-style capability probes keep working.
+    lib.genAttrs driverAliases (
+      name:
+      lib.warnOnInstantiate "nvidiaPackages.${branch}.${name} is now .driver.${name}" nvidiaDriver.${name}
+    )
+    // {
+      modsrc = throw "nvidiaPackages.${branch}.modsrc has been removed. The kernel module is now built from the installer archive itself; see pkgs/os-specific/linux/nvidia-x11/README.md";
+    }
+  )
+)

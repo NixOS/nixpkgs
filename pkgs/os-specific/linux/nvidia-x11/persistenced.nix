@@ -1,28 +1,30 @@
-nvidia_x11: sha256:
-
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGithubOrNvidia,
   buildPackages,
   m4,
   pkg-config,
   addDriverRunpath,
   libtirpc,
+  version,
+  hash,
+  supportedPlatforms,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvidia-persistenced";
-  version = nvidia_x11.persistencedVersion;
+  inherit version;
 
-  src = fetchFromGitHub {
+  src = fetchFromGithubOrNvidia {
     owner = "NVIDIA";
     repo = "nvidia-persistenced";
-    rev = nvidia_x11.persistencedVersion;
-    inherit sha256;
+    tag = finalAttrs.version;
+    inherit hash;
   };
 
-  env = lib.optionalAttrs (lib.versionOlder nvidia_x11.persistencedVersion "450.51") {
+  env = lib.optionalAttrs (lib.versionOlder finalAttrs.version "450.51") {
     NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
     NIX_LDFLAGS = toString [ "-ltirpc" ];
   };
@@ -34,6 +36,10 @@ stdenv.mkDerivation {
     pkg-config
     addDriverRunpath
   ];
+
+  # `nvidia-persistenced --version` prints the built source's version, catching a stale hash.
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   buildInputs = [
     libtirpc
@@ -52,7 +58,14 @@ stdenv.mkDerivation {
     # Save a copy of persistenced for mounting in containers
     mkdir $out/origBin
     cp $out/{bin,origBin}/nvidia-persistenced
-    patchelf --set-interpreter /lib64/ld-linux-x86-64.so.2 $out/origBin/nvidia-persistenced
+    patchelf --set-interpreter ${
+      if stdenv.hostPlatform.isx86_64 then
+        "/lib64/ld-linux-x86-64.so.2"
+      else if stdenv.hostPlatform.isAarch64 then
+        "/lib/ld-linux-aarch64.so.1"
+      else
+        throw "nvidia-persistenced: no container loader for ${stdenv.hostPlatform.system}"
+    } $out/origBin/nvidia-persistenced
 
     addDriverRunpath $out/bin/nvidia-persistenced
   '';
@@ -61,8 +74,8 @@ stdenv.mkDerivation {
     homepage = "https://github.com/NVIDIA/nvidia-persistenced";
     description = "NVIDIA driver persistence daemon";
     license = lib.licenses.mit;
-    platforms = nvidia_x11.meta.platforms;
+    platforms = supportedPlatforms;
     maintainers = [ ];
     mainProgram = "nvidia-persistenced";
   };
-}
+})
