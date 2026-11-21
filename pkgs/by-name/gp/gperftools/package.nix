@@ -5,6 +5,7 @@
   fetchpatch,
   autoreconfHook,
   libunwind,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic)
   ) libunwind;
 
+  strictDeps = true;
+
   # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
   configureFlags = lib.optional stdenv.hostPlatform.isAarch "--disable-general-dynamic-tls";
@@ -53,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/gperftools/gperftools/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/gperftools/gperftools";
@@ -60,5 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vcunat ];
+    pkgConfigModules = [
+      "libtcmalloc"
+      "libtcmalloc_debug"
+      "libtcmalloc_minimal"
+      "libtcmalloc_minimal_debug"
+      "libprofiler"
+    ];
   };
 })
