@@ -95,6 +95,7 @@ buildPythonPackage (finalAttrs: {
     "objsize"
     "protobuf"
     "pyarrow"
+    "pillow" # remove after 2.78.0 update
   ];
 
   build-system = [
