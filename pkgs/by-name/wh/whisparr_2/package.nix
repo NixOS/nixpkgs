@@ -3,11 +3,11 @@
   dotnetCorePackages,
   fetchFromGitHub,
   fetchYarnDeps,
-  ffmpeg-headless,
   lib,
   nix-update-script,
   nixosTests,
   nodejs-slim_24,
+  openur-ffmpeg,
   sqlite,
   stdenvNoCC,
   writeText,
@@ -16,19 +16,19 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform.extensions) sharedLibrary;
-  ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
+  ffprobe = lib.getExe' openur-ffmpeg "ffprobe";
   libsqlite3 = "${lib.getLib sqlite}/lib/libsqlite3${sharedLibrary}";
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
 buildDotnetModule (finalAttrs: {
   pname = "whisparr";
-  version = "2.2.0-develop.404";
+  version = "2.3.0-release.455";
 
   src = fetchFromGitHub {
     owner = "Whisparr";
     repo = "Whisparr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k7lJdNxUYs54p0rjjNlQcdvLRf3DCGAOqxw+d9RqXMo=";
+    hash = "sha256-AN53g/c7JwQQJDSY+x7yiqEwHoFsVAOT9RpeXHNWfgY=";
   };
 
   __structuredAttrs = true;
@@ -60,7 +60,7 @@ buildDotnetModule (finalAttrs: {
   executables = [ "Whisparr" ];
 
   dotnetFlags = [
-    "--property:AssemblyConfiguration=v2-develop"
+    "--property:AssemblyConfiguration=v2"
     "--property:AssemblyVersion=${finalAttrs.versionForDotnet}"
     "--property:Copyright=Copyright whisparr.com (${finalAttrs.meta.license.fullName})"
     "--property:EnableAnalyzers=false"
@@ -174,8 +174,7 @@ buildDotnetModule (finalAttrs: {
       extraArgs = lib.cli.toCommandLineGNU { } {
         subpackage = "frontend";
         use-github-releases = true;
-        version = "unstable";
-        version-regex = ''v(\d+\.\d+\.\d+-develop\.\d+)$'';
+        version-regex = ''v(\d+\.\d+\.\d+-release\.\d+)$'';
       };
     };
   };
