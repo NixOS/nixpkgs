@@ -417,6 +417,11 @@
                 If this option and the `group` option is set to `null`,
                 the service runs as a dynamically allocated user.
 
+                Runners sharing the same user are not isolated from each other.
+                A job can read the state of any other runner running as the same user,
+                including its token while that runner registers.
+                Use a distinct user for each runner if the jobs must not access the tokens of other runners.
+
                 Also see the `group` option for an overview on the effects of the `user` and `group` settings.
               '';
               default = null;
