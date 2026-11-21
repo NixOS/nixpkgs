@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-statedir=/var/lib/nfs"
     "--with-krb5=${lib.getLib libkrb5}"
     "--enable-libmount-mount"
+    "--enable-nfsv4server"
     "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
     "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
     "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
