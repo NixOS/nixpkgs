@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle_8,
+  gradle_9,
   jdk,
   quark-engine,
   coreutils,
@@ -13,22 +13,21 @@
   desktopToDarwinBundle,
 }:
 let
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
+  gradle = gradle_9;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.5.6";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qwGFMj18xJOrBudthAIeKc/PT0uUzjmTgBYovF4A/94=";
+    hash = "sha256-MA6YbHKhyS3UgNpIIwHsUS0PzVeN8w8AGEIpfAb9Ows=";
   };
 
   patches = [
-    # Remove launch4j (uncacheable Windows binaries) and OpenRewrite (build failures)
+    # Remove launch4j (uncacheable Windows binaries)
     ./nix-build.patch
   ];
 
