@@ -84,7 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.25.1";
 
   src = fetchurl {
-    url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
+    urls = [
+      "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz"
+      "https://www.mirrorservice.org/sites/ftp.samba.org/stable/samba-${finalAttrs.version}.tar.gz"
+      "https://fossies.org/linux/misc/samba-${finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-fzZ1Rbymmqlol2KPgvDwTUtms7yzbLl4ubuVLEtMQo0=";
   };
 
