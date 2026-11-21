@@ -1,0 +1,100 @@
+diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+index 7bf6b16b2d93..1dae989e826e 100644
+--- a/arch/powerpc/kernel/Makefile
++++ b/arch/powerpc/kernel/Makefile
+@@ -213,8 +213,12 @@ targets += prom_init_check
+ clean-files := vmlinux.lds
+ 
+ # Force dependency (incbin is bad)
+-$(obj)/vdso32_wrapper.o : $(obj)/vdso/vdso32.so.dbg
+-$(obj)/vdso64_wrapper.o : $(obj)/vdso/vdso64.so.dbg
++$(obj)/vdso32_wrapper.o : $(obj)/vdso/vdso32.so
++$(obj)/vdso64_wrapper.o : $(obj)/vdso/vdso64.so
++
++$(obj)/vdso/vdso%.so :
++	$(Q)$(MAKE) \
++		$(build)=arch/powerpc/kernel/vdso $@
+ 
+ # for cleaning
+ subdir- += vdso
+diff --git a/arch/powerpc/kernel/vdso/.gitignore b/arch/powerpc/kernel/vdso/.gitignore
+index dd9bdd67758b..0fce53337d80 100644
+--- a/arch/powerpc/kernel/vdso/.gitignore
++++ b/arch/powerpc/kernel/vdso/.gitignore
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ vdso32.lds
++vdso32.so
+ vdso32.so.dbg
+ vdso64.lds
++vdso64.so
+ vdso64.so.dbg
+diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+index 0d1a49529885..fd230bed94db 100644
+--- a/arch/powerpc/kernel/vdso/Makefile
++++ b/arch/powerpc/kernel/vdso/Makefile
+@@ -33,10 +33,10 @@ else
+     VDSOCC := $(CC)
+ endif
+ 
+-targets := $(obj-vdso32) vdso32.so.dbg vgettimeofday-32.o vgetrandom-32.o
++targets := $(obj-vdso32) vdso32.so vdso32.so.dbg vgettimeofday-32.o vgetrandom-32.o
+ targets += crtsavres-32.o
+ obj-vdso32 := $(addprefix $(obj)/, $(obj-vdso32))
+-targets += $(obj-vdso64) vdso64.so.dbg vgettimeofday-64.o vgetrandom-64.o
++targets += $(obj-vdso64) vdso64.so vdso64.so.dbg vgettimeofday-64.o vgetrandom-64.o
+ obj-vdso64 := $(addprefix $(obj)/, $(obj-vdso64))
+ 
+ ccflags-y := -fno-common -fno-builtin -DBUILD_VDSO
+@@ -87,6 +87,10 @@ $(obj)/vdso32.so.dbg: $(obj)/vdso32.lds $(obj-vdso32) $(obj)/vgettimeofday-32.o
+ $(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj)/vgettimeofday-64.o $(obj)/vgetrandom-64.o FORCE
+ 	$(call if_changed,vdso64ld_and_check)
+ 
++$(obj)/%.so: OBJCOPYFLAGS := -S --remove-section __ex_table
++$(obj)/%.so: $(obj)/%.so.dbg FORCE
++	$(call if_changed,objcopy)
++
+ # assembly rules for the .S files
+ $(obj-vdso32): %-32.o: %.S FORCE
+ 	$(call if_changed_dep,vdso32as)
+diff --git a/arch/powerpc/kernel/vdso32_wrapper.S b/arch/powerpc/kernel/vdso32_wrapper.S
+index 20bca3548b44..63f7f1163270 100644
+--- a/arch/powerpc/kernel/vdso32_wrapper.S
++++ b/arch/powerpc/kernel/vdso32_wrapper.S
+@@ -7,7 +7,7 @@
+ 	.globl vdso32_start, vdso32_end
+ 	.balign PAGE_SIZE
+ vdso32_start:
+-	.incbin "arch/powerpc/kernel/vdso/vdso32.so.dbg"
++	.incbin "arch/powerpc/kernel/vdso/vdso32.so"
+ 	.balign PAGE_SIZE
+ vdso32_end:
+ 
+diff --git a/arch/powerpc/kernel/vdso64_wrapper.S b/arch/powerpc/kernel/vdso64_wrapper.S
+index 1912936fa227..4a5b55bf39a6 100644
+--- a/arch/powerpc/kernel/vdso64_wrapper.S
++++ b/arch/powerpc/kernel/vdso64_wrapper.S
+@@ -7,7 +7,7 @@
+ 	.globl vdso64_start, vdso64_end
+ 	.balign PAGE_SIZE
+ vdso64_start:
+-	.incbin "arch/powerpc/kernel/vdso/vdso64.so.dbg"
++	.incbin "arch/powerpc/kernel/vdso/vdso64.so"
+ 	.balign PAGE_SIZE
+ vdso64_end:
+ 
+diff --git a/arch/powerpc/purgatory/Makefile b/arch/powerpc/purgatory/Makefile
+index e9890085953e..a3dd04a7e9f3 100644
+--- a/arch/powerpc/purgatory/Makefile
++++ b/arch/powerpc/purgatory/Makefile
+@@ -5,7 +5,9 @@ targets += trampoline_$(BITS).o purgatory.ro
+ # When profile-guided optimization is enabled, llvm emits two different
+ # overlapping text sections, which is not supported by kexec. Remove profile
+ # optimization flags.
+-KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%,$(KBUILD_CFLAGS))
++KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%,$(KBUILD_CFLAGS)) -g0
++
++asflags-remove-y += $(foreach x, -g -gdwarf-4 -gdwarf-5, $(x) -Wa,$(x))
+ 
+ LDFLAGS_purgatory.ro := -e purgatory_start -r --no-undefined
+ 
