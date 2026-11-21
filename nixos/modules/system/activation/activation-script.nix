@@ -241,6 +241,16 @@ in
       '';
     };
 
+    environment.createUsrBinEnv = mkOption {
+      default = true;
+      type = types.bool;
+      internal = true;
+      description = ''
+        Whether the system manages `/usr/bin/env` at activation.
+        Modules that provide `/usr/bin` themselves set this to `false`.
+      '';
+    };
+
     system.build.installBootLoader = mkOption {
       internal = true;
       default = pkgs.writeShellScript "no-bootloader" ''
@@ -285,7 +295,9 @@ in
     ];
 
     system.activationScripts.usrbinenv =
-      if config.environment.usrbinenv != null then
+      if !config.environment.createUsrBinEnv then
+        ""
+      else if config.environment.usrbinenv != null then
         ''
           mkdir -p /usr/bin
           chmod 0755 /usr/bin
