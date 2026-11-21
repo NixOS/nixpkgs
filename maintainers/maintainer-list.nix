@@ -17514,6 +17514,11 @@
     github = "LucasFA";
     matrix = "@lucasfa:matrix.org";
   };
+  lucasmrod = {
+    name = "Lucas Manuel Rodriguez";
+    github = "lucasmrod";
+    githubId = 2073526;
+  };
   lucastso10 = {
     email = "lucastso10@gmail.com";
     github = "lucastso10";
@@ -22122,6 +22127,11 @@
     name = "nullstring1";
     github = "nullstring1";
     githubId = 53035336;
+  };
+  nulmete = {
+    name = "Nico";
+    github = "nulmete";
+    githubId = 32375741;
   };
   numbleroot = {
     email = "hello@lennartoldenburg.de";
