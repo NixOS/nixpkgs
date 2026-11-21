@@ -20,7 +20,7 @@ ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe
 GET_PLUGINS = f"""with import <localpkgs> {{ }};
 let
   inherit (kakouneUtils.override {{ }}) buildKakounePluginFrom2Nix;
-  generated = callPackage {ROOT}/generated.nix {{ inherit buildKakounePluginFrom2Nix; }};
+  generated = builtins.removeAttrs (import {ROOT}/generated.nix {{ inherit lib buildKakounePluginFrom2Nix fetchFromGitHub; }}) ["__unfix__"];
 
   hasChecksum =
     value:
