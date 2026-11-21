@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://geuz.org/gl2ps";
     description = "OpenGL to PostScript printing library";
     platforms = lib.platforms.all;
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       raskin
       twhitehead

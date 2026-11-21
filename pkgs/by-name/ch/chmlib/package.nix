@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.jedrea.com/chmlib";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl21Plus;
     description = "Library for dealing with Microsoft ITSS/CHM format files";
     platforms = lib.platforms.unix;
   };
