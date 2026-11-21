@@ -64,6 +64,8 @@ buildPythonPackage rec {
     "tests/test_control_socket_integration.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "WSGI HTTP Server for UNIX, fast clients and sleepy applications";
     homepage = "https://github.com/benoitc/gunicorn";
