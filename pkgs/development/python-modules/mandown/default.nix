@@ -50,6 +50,7 @@ buildPythonPackage rec {
     "beautifulsoup4"
     "lxml"
     "pillow"
+    "python-slugify"
     "typer"
   ];
 
