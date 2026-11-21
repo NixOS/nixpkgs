@@ -14,7 +14,7 @@
   tqdm,
 }:
 buildPythonPackage rec {
-  pname = "stac-validator";
+  pname = "stac-valid";
   version = "4.6.1";
   pyproject = true;
 

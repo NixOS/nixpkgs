@@ -20263,7 +20263,7 @@ self: super: with self; {
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
-  stac-validator = callPackage ../development/python-modules/stac-validator { };
+  stac-valid = callPackage ../development/python-modules/stac-valid { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
