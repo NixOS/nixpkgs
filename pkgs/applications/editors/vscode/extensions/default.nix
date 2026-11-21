@@ -635,6 +635,8 @@ let
         };
       };
 
+      bierner.lit-html = callPackage ./bierner.lit-html { };
+
       bierner.markdown-checkbox = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "markdown-checkbox";
