@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorgproto";
-  version = "2025.1";
+  version = "2026.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/proto/xorgproto-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VomMcWwFeN+KLYKMnD5cUoJ3cFwEhDgagZYP4aZ2aOg=";
+    hash = "sha256-+b/kqe2MirnSo7DUl5fwRgUtrdBreotF2/+v+xN+gpA=";
   };
 
   patches = [
