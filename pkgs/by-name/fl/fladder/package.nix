@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  flutter335,
+  flutter350,
   copyDesktopItems,
   makeDesktopItem,
   undmg,
@@ -21,16 +21,16 @@
 }:
 
 let
-  flutter = flutter335;
+  flutter = flutter350;
   sourceBuild = flutter.buildFlutterApplication (finalAttrs: {
     pname = "fladder";
-    version = "0.11.1";
+    version = "0.12.1";
 
     src = fetchFromGitHub {
       owner = "DonutWare";
       repo = "Fladder";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-inBjXTIsmBNWFVbykZgiAAI99sByT2IJGn9AyVo9kkk=";
+      hash = "sha256-fnJ/MuAAEkgwyab9kakp+71t8a37XGwj3WoEnA/hLtg=";
     };
 
     inherit targetFlutterPlatform;
@@ -38,6 +38,31 @@ let
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
     gitHashes = lib.importJSON ./git-hashes.json;
+
+    customSourceBuilders = lib.optionalAttrs (targetFlutterPlatform == "linux") {
+      media_kit_video =
+        { version, src, ... }:
+        stdenv.mkDerivation {
+          pname = "media_kit_video";
+          inherit version src;
+          inherit (src) passthru;
+
+          # Import shared mpv without probing its static dependencies.
+          postPatch = ''
+            substituteInPlace "${src.passthru.packageRoot}/linux/CMakeLists.txt" \
+              --replace-fail 'pkg_check_modules(mpv IMPORTED_TARGET mpv)' 'cmake_pkg_config(IMPORT mpv REQUIRED)' \
+              --replace-fail 'target_compile_options(''${PLUGIN_NAME} PRIVATE "''${mpv_CFLAGS_OTHER}")' "" \
+              --replace-fail '"''${mpv_INCLUDE_DIRS}"' ""
+          '';
+
+          dontBuild = true;
+          installPhase = ''
+            runHook preInstall
+            cp -r . "$out"
+            runHook postInstall
+          '';
+        };
+    };
 
     nativeBuildInputs = lib.optionals (targetFlutterPlatform == "linux") [
       copyDesktopItems
@@ -106,7 +131,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/DonutWare/Fladder/releases/download/v${sourceBuild.version}/Fladder-macOS-${sourceBuild.version}.dmg";
-      hash = "sha256-23+T6DOhSvq7cQMqBmTIMcVnEo1bYMaszEAndQZe/lE=";
+      hash = "sha256-Ro8JXV4SwJUHZvR433iSB8reSrYts/AFsrzUSKeSD44=";
     };
 
     nativeBuildInputs = [
