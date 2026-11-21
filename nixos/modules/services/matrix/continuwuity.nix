@@ -6,8 +6,6 @@
 }:
 let
   cfg = config.services.matrix-continuwuity;
-  defaultUser = "continuwuity";
-  defaultGroup = "continuwuity";
 
   format = pkgs.formats.toml { };
   configFile = format.generate "continuwuity.toml" cfg.settings;
@@ -21,24 +19,22 @@ in
     nyabinary
     snaki
   ];
+
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "matrix-continuwuity"
+      "user"
+    ] "Continuwuity uses a dynamic user")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "matrix-continuwuity"
+      "group"
+    ] "Continuwuity uses a dynamic group")
+  ];
+
   options.services.matrix-continuwuity = {
     enable = lib.mkEnableOption "continuwuity";
-
-    user = lib.mkOption {
-      type = lib.types.nonEmptyStr;
-      description = ''
-        The user {command}`continuwuity` is run as.
-      '';
-      default = defaultUser;
-    };
-
-    group = lib.mkOption {
-      type = lib.types.nonEmptyStr;
-      description = ''
-        The group {command}`continuwuity` is run as.
-      '';
-      default = defaultGroup;
-    };
 
     extraEnvironment = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
@@ -198,27 +194,7 @@ in
           Leave one of the two options unset or explicitly set them to `null`.
         '';
       }
-      {
-        assertion = cfg.user != defaultUser -> config ? users.users.${cfg.user};
-        message = "If `services.continuwuity.user` is changed, the configured user must already exist.";
-      }
-      {
-        assertion = cfg.group != defaultGroup -> config ? users.groups.${cfg.group};
-        message = "If `services.continuwuity.group` is changed, the configured group must already exist.";
-      }
     ];
-
-    users.users = lib.mkIf (cfg.user == defaultUser) {
-      ${defaultUser} = {
-        group = cfg.group;
-        home = cfg.settings.global.database_path;
-        isSystemUser = true;
-      };
-    };
-
-    users.groups = lib.mkIf (cfg.group == defaultGroup) {
-      ${defaultGroup} = { };
-    };
 
     systemd.services.continuwuity = {
       description = "Continuwuity Matrix Server";
@@ -236,8 +212,6 @@ in
         Type = "notify";
 
         DynamicUser = true;
-        User = cfg.user;
-        Group = cfg.group;
 
         # To avoid timing out during database migrations
         TimeoutStartSec = "10m";
