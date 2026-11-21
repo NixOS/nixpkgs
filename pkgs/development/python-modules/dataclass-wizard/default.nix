@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dataclass-wizard";
-  version = "0.39.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dataclass-wizard";
     tag = "v${version}";
-    hash = "sha256-X4/qe1nv/NwUvQGvVqbqIgi9Ej43jwJjzXyMaKAtN2A=";
+    hash = "sha256-tp7GnkCFCSnP13MKMO5rOkzrlTOuLCh/Zjfgz/Whgs0=";
   };
 
   build-system = [ setuptools ];
