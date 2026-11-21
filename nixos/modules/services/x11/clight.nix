@@ -160,6 +160,8 @@ in
       };
     };
 
+    systemd.user.services."app-clight@autostart".enable =
+      !lib.any (x: x == "/etc/xdg/autostart") config.environment.pathsToLink;
     systemd.user.services.clight = {
       after = [
         "upower.service"
