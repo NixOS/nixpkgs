@@ -8,6 +8,25 @@
 let
   cfg = config.programs.chromium;
 
+  nativeMessagingHostsPackages =
+    cfg.nativeMessagingHosts.packages
+    ++ lib.optionals (cfg.enable && cfg.enablePlasmaBrowserIntegration) [
+      cfg.plasmaBrowserIntegrationPackage
+    ];
+
+  nativeMessagingHosts = pkgs.buildEnv {
+    name = "chromium-native-messaging-hosts";
+    paths = nativeMessagingHostsPackages;
+    pathsToLink = [
+      "/etc/chromium/native-messaging-hosts"
+      "/etc/opt/chrome/native-messaging-hosts"
+    ];
+    postBuild = ''
+      mkdir -p $out/etc/chromium/native-messaging-hosts \
+        $out/etc/opt/chrome/native-messaging-hosts
+    '';
+  };
+
   defaultProfile = lib.filterAttrs (k: v: v != null) {
     HomepageLocation = cfg.homepageLocation;
     DefaultSearchProviderEnabled = cfg.defaultSearchProviderEnabled;
@@ -147,56 +166,66 @@ in
           }
         '';
       };
+      nativeMessagingHosts.packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        description = ''
+          Additional packages containing native messaging hosts that should be made available to Chromium extensions.
+
+          Host manifests are taken from `etc/chromium/native-messaging-hosts` (Chromium)
+          and `etc/opt/chrome/native-messaging-hosts` (Google Chrome) in each package.
+        '';
+      };
     };
   };
 
   ###### implementation
 
   config = {
-    environment.etc = lib.mkIf cfg.enable {
-      # for chromium
-      "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-        lib.mkIf cfg.enablePlasmaBrowserIntegration
-          {
-            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-          };
-      "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
-      "chromium/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
-        text = builtins.toJSON cfg.extraOptsRecommended;
-      };
-      "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
-        text = builtins.toJSON cfg.initialPrefs;
-      };
-      # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-      "opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json" =
-        lib.mkIf cfg.enablePlasmaBrowserIntegration
-          {
-            source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json";
-          };
-      "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
-      "opt/chrome/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
-        text = builtins.toJSON cfg.extraOptsRecommended;
-      };
-      # for brave
-      "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
-      "brave/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
-        text = builtins.toJSON cfg.extraOptsRecommended;
-      };
-    };
+    environment.etc = lib.mkMerge [
+      # Not gated on cfg.enable, so that other modules can register hosts via
+      # programs.chromium.nativeMessagingHosts.packages without enabling policies.
+      (lib.mkIf (nativeMessagingHostsPackages != [ ]) {
+        # for chromium
+        "chromium/native-messaging-hosts".source =
+          "${nativeMessagingHosts}/etc/chromium/native-messaging-hosts";
+        # for google-chrome https://www.chromium.org/administrators/linux-quick-start
+        "opt/chrome/native-messaging-hosts".source =
+          "${nativeMessagingHosts}/etc/opt/chrome/native-messaging-hosts";
+      })
+      (lib.mkIf cfg.enable {
+        "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+          text = builtins.toJSON defaultProfile;
+        };
+        "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
+          text = builtins.toJSON cfg.extraOpts;
+        };
+        "chromium/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+          text = builtins.toJSON cfg.extraOptsRecommended;
+        };
+        "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
+          text = builtins.toJSON cfg.initialPrefs;
+        };
+        "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+          text = builtins.toJSON defaultProfile;
+        };
+        "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
+          text = builtins.toJSON cfg.extraOpts;
+        };
+        "opt/chrome/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+          text = builtins.toJSON cfg.extraOptsRecommended;
+        };
+        # for brave
+        "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
+          text = builtins.toJSON defaultProfile;
+        };
+        "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
+          text = builtins.toJSON cfg.extraOpts;
+        };
+        "brave/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+          text = builtins.toJSON cfg.extraOptsRecommended;
+        };
+      })
+    ];
   };
 }
