@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -80,6 +81,11 @@ buildPythonPackage (finalAttrs: {
     tensorflow
   ];
 
+  pytestFlags = [
+    # orbax-checkpoint still uses the deprecated jax.sharding.SingleDeviceSharding (jax>=0.12.1)
+    "-Wignore:jax.sharding.SingleDeviceSharding is deprecated:DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
@@ -115,6 +121,11 @@ buildPythonPackage (finalAttrs: {
     "test_shared_modules"
     # AttributeError: 'MLP' object has no attribute 'scope
     "test_transforms"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # 1-ULP mismatch between eager and jitted init since jax 0.12.1
+    # AssertionError: Array([[1.7469548]], dtype=float32) != Array([[1.7469546]], dtype=float32)
+    "test_jit_rng_equivalance"
   ];
 
   passthru = {
