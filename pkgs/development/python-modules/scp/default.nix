@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "scp";
-  version = "0.16.1";
+  version = "0.16.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PysmC/m9TCtoV/aXodfo7cJvpWkoK3cCfoSd/h5IWAo=";
+    hash = "sha256-0En5qnfbQELES5Is7KvpfvBxb7M0qVcB1o0ceZFoT8I=";
   };
 
   propagatedBuildInputs = [ paramiko ];
