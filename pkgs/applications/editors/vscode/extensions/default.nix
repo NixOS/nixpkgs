@@ -1312,6 +1312,8 @@ let
 
       detachhead.basedpyright = callPackage ./detachhead.basedpyright { };
 
+      devkir.elixir-syntax-vscode = callPackage ./devkir.elixir-syntax-vscode { };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
