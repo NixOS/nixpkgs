@@ -160,6 +160,7 @@ buildGoModule (finalAttrs: {
       # related modules
       inherit (nixosTests)
         podman
+        podman-with-account-utils
         podman-dns
         podman-tls-ghostunnel
         ;

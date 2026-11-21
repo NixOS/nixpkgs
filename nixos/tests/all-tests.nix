@@ -1517,6 +1517,10 @@ in
   podman = runTest ./podman/default.nix;
   podman-dns = runTest ./podman/dns.nix;
   podman-tls-ghostunnel = runTest ./podman/tls-ghostunnel.nix;
+  podman-with-account-utils = runTest {
+    imports = [ ./podman/default.nix ];
+    defaults.security.account-utils.enable = true;
+  };
   polaris = runTest ./polaris.nix;
   pomerium = handleTestOn [ "x86_64-linux" ] ./pomerium.nix { };
   portmaster = runTest ./portmaster.nix;
