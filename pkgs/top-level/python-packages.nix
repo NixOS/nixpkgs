@@ -10743,6 +10743,8 @@ self: super: with self; {
 
   materialyoucolor = callPackage ../development/python-modules/materialyoucolor { };
 
+  mathics3-scanner = callPackage ../development/python-modules/mathics3-scanner { };
+
   mathutils = callPackage ../development/python-modules/mathutils { };
 
   matplotlib = callPackage ../development/python-modules/matplotlib {
@@ -21091,6 +21093,8 @@ self: super: with self; {
   timeago = callPackage ../development/python-modules/timeago { };
 
   timecop = callPackage ../development/python-modules/timecop { };
+
+  timed-threads = callPackage ../development/python-modules/timed-threads { };
 
   timelength = callPackage ../development/python-modules/timelength { };
 
