@@ -5012,6 +5012,11 @@
     matrix = "@cawilliamson:nixos.dev";
     name = "Christopher A. Williamson";
   };
+  cazier = {
+    github = "cazier";
+    githubId = 520246;
+    name = "Brendan Cazier";
+  };
   cbarrete = {
     github = "cbarrete";
     githubId = 62146989;
