@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-ext4" # requires patched kernel & e2fsprogs
+    "BTRFS_BIN=${btrfs-progs}/bin/btrfs"
     "DIFFBIN=${diffutils}/bin/diff"
     "RMBIN=${coreutils}/bin/rm"
   ];
