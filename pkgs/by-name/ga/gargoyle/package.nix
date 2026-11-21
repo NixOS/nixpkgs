@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
       patch = "ftbfs_gcc14.patch";
       hash = "sha256-eMx/RlUpq5Ez+1L8VZo40Y3h2ZKkqiQEmKTlkZRMXnI=";
     })
+    # Let the Qt interface find its fonts and themes on darwin
+    # https://github.com/garglk/garglk/pull/1047
+    ./macos-qt-datadir.patch
   ];
 
   postPatch = ''
