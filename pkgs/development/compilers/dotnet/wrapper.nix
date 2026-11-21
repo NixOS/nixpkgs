@@ -2,7 +2,7 @@
   stdenv,
   stdenvNoCC,
   lib,
-  writeText,
+  makeWrapper,
   testers,
   runCommand,
   runCommandWith,
@@ -47,13 +47,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     replaceVars ./dotnet-sdk-setup-hook.sh {
       inherit lndir xmlstarlet;
     }
+  )
+  ++ lib.optional (unwrapped.passthru ? workloadPackRoot) (
+    replaceVars ./dotnet-workload-hook.sh {
+      inherit (unwrapped.passthru) workloadPackRoot;
+    }
   );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
   propagatedBuildInputs = lib.optional (type == "sdk") nugetPackageHook;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optional (unwrapped.passthru ? workloadPackRoot) makeWrapper;
 
   outputs = [ "out" ] ++ lib.optional (unwrapped ? man) "man";
 
@@ -71,6 +79,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --bash ${./completions/dotnet.bash} \
       --zsh ${./completions/dotnet.zsh} \
       --fish ${./completions/dotnet.fish}
+  ''
+  + lib.optionalString (unwrapped.passthru ? workloadPackRoot) ''
+    wrapProgram "$out"/bin/dotnet \
+      --set DOTNET_ROOT "${unwrapped}/share/dotnet" \
+      --set DOTNET_HOST_PATH "${unwrapped}/share/dotnet/dotnet" \
+      --prefix DOTNETSDK_WORKLOAD_PACK_ROOTS : "${unwrapped.passthru.workloadPackRoot}/share/dotnet"
   '';
 
   doInstallCheck = true;
@@ -95,6 +109,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }
     // {
       inherit unwrapped;
+      withWorkloads =
+        workloadIds: callPackage (import ./with-workloads.nix finalAttrs.finalPackage workloadIds) { };
       tests =
         let
           mkDotnetTest =
@@ -313,6 +329,42 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             cs = mkWebTest "C#" "cs";
             fs = mkWebTest "F#" "fs";
           };
-        };
+        }
+        //
+          lib.optionalAttrs
+            (
+              type == "sdk"
+              && !(unwrapped.passthru ? workloadIds)
+              && lib.elem (lib.versions.major unwrapped.version) [
+                "10"
+                "11"
+              ]
+              && lib.elem stdenv.hostPlatform.system [
+                "x86_64-linux"
+                "aarch64-linux"
+                "aarch64-darwin"
+              ]
+            )
+            {
+              workloads = lib.recurseIntoAttrs (callPackage ./tests { sdk = finalAttrs.finalPackage; });
+            }
+        //
+          lib.optionalAttrs
+            (type == "sdk" && builtins.elem "wasm-tools" (unwrapped.passthru.workloadIds or [ ]))
+            {
+              wasm = mkDotnetTest {
+                name = "wasm-build";
+                template = "web";
+                usePackageSource = true;
+                build = ''
+                  cp ${./tests/wasm}/* .
+                  chmod u+w test.csproj
+                  substituteInPlace test.csproj \
+                    --replace-fail "@targetFramework@" "${lib.versions.majorMinor unwrapped.version}"
+                  dotnet build -o $out
+                  test -f "$out/test.dll"
+                '';
+              };
+            };
     };
 })

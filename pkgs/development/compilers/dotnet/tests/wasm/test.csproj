@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net@targetFramework@</TargetFramework>
+    <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+    <WasmMainJSPath>main.mjs</WasmMainJSPath>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+</Project>
