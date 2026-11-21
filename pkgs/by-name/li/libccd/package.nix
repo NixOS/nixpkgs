@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_DOUBLE_PRECISION" true)
+  ];
+
   meta = {
     description = "Library for collision detection between two convex shapes";
     homepage = "https://github.com/danfis/libccd";
