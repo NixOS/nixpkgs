@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "closure-compiler";
-  version = "20260804";
+  version = "20261108";
 
   src = fetchurl {
     url = "mirror://maven/com/google/javascript/closure-compiler/v${finalAttrs.version}/closure-compiler-v${finalAttrs.version}.jar";
-    sha256 = "sha256-DLhqS5Z2nGebT8LS3A5azQq9Df+TKUW5D74yckdGaik=";
+    sha256 = "sha256-6U3j4IQ1fBxoplhlWTldu7iOkTWR0Y7336zU7pNuoII=";
   };
 
   dontUnpack = true;
