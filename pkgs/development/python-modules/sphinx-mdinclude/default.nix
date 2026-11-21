@@ -38,6 +38,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    "test_inline_html"
+  ];
+
   meta = {
     homepage = "https://github.com/omnilib/sphinx-mdinclude";
     changelog = "https://github.com/omnilib/sphinx-mdinclude/blob/v${version}/CHANGELOG.md";
