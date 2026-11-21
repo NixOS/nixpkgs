@@ -3,7 +3,7 @@
   gcc14Stdenv,
   lib,
   buildBazelPackage,
-  bazel_7,
+  bazel_9,
   fetchFromGitHub,
   cctools,
 }:
@@ -17,19 +17,30 @@ let
       }
     else
       buildBazelPackage;
+  registry = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "bazel-central-registry";
+    rev = "0aeaaaeee4bb913e21853a0ee0b935b2c114ae3f";
+    hash = "sha256-OZjzzwO2+SmlhJvkTaW26gNvmZx0amCLF6e6MGJkRlI=";
+  };
 in
 buildBazelPackage' rec {
   pname = "protoc-gen-js";
-  version = "3.21.4";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-javascript";
     rev = "v${version}";
-    hash = "sha256-eIOtVRnHv2oz4xuVc4aL6JmhpvlODQjXHt1eJHsjnLg=";
+    hash = "sha256-fcLtBXXAnK1iunrDfT9V8aX6AbaWgCeS0lcueuThM5s=";
   };
 
-  bazel = bazel_7;
+  bazelFlags = [
+    "--registry"
+    "file://${registry}"
+  ];
+
+  bazel = bazel_9;
   bazelTargets = [ "generator:protoc-gen-js" ];
   bazelBuildFlags = lib.optionals stdenv.cc.isClang [
     "--cxxopt=-x"
@@ -45,11 +56,7 @@ buildBazelPackage' rec {
   };
 
   fetchAttrs = {
-    preInstall = ''
-      rm -rv "$bazelOut/external/host_platform"
-    '';
-
-    hash = "sha256-znkwUs984vbinz/BLo1uxQ+PvxkpXo719lJu4TD1Vmg=";
+    hash = "sha256-6WRtI2lZUYyhTpggoISVVq45tszttLhS+7fXx/ySwG4=";
   };
 
   buildAttrs.installPhase = ''
@@ -69,6 +76,6 @@ buildBazelPackage' rec {
       bsd3
     ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hzeller ];
   };
 }
