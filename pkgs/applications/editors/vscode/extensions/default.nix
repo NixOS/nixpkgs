@@ -759,6 +759,8 @@ let
 
       bodil.blueprint-gtk = callPackage ./bodil.blueprint-gtk { };
 
+      boyswan.glsl-literal = callPackage ./boyswan.glsl-literal { };
+
       bradgashler.htmltagwrap = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "bradgashler";
