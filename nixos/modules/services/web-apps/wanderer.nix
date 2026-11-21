@@ -42,8 +42,26 @@ let
         aboutFile = if types.path.check cfg.about then cfg.about else pkgs.writeText "about.md" cfg.about;
       };
 
-  secrets = filterAttrs (_: v: v != null) cfg.secrets;
-  webSecrets = filterAttrs (n: _: n == "POCKETBASE_PROXY_SECRET") secrets;
+  nonNull = filterAttrs (_: v: v != null);
+  sharedSecrets = nonNull cfg.secrets.shared;
+  backendSecrets = sharedSecrets // nonNull cfg.secrets.backend;
+  webSecrets = sharedSecrets // nonNull cfg.secrets.web;
+
+  # a secrets group accepts arbitrary additional environment variables next to the declared ones
+  mkSecretsOption =
+    {
+      options ? { },
+      example ? { },
+      description,
+    }:
+    mkOption {
+      type = types.submodule {
+        freeformType = with types; attrsOf (nullOr path);
+        inherit options;
+      };
+      default = { };
+      inherit example description;
+    };
 
   # wanderer only reads secrets from environment variables, so export each credential loaded through `LoadCredential`
   exportSecrets =
@@ -233,14 +251,27 @@ in
       description = ''
         Environment variables passed to the wanderer backend and frontend.
         See [the wanderer documentation](https://wanderer.to/run/environment-configuration/) for available options.
-        Secrets must be set using {option}`services.wanderer.secrets` instead.
+        Secrets must be set using {option}`services.wanderer.secrets.shared`, {option}`services.wanderer.secrets.backend` or {option}`services.wanderer.secrets.web` instead.
       '';
     };
 
-    secrets = mkOption {
-      type = types.submodule {
-        freeformType = with types; attrsOf (nullOr path);
+    secrets = {
+      shared = mkSecretsOption {
+        options.POCKETBASE_PROXY_SECRET = mkOption {
+          type = with types; nullOr path;
+          default = null;
+          example = "/run/secrets/wanderer-proxy-secret";
+          description = ''
+            File containing the secret authenticating the frontend to the backend, for example generated with `openssl rand -hex 32`.
+          '';
+        };
+        description = ''
+          Files containing secrets, passed to both the backend and the frontend as environment variables named after the attribute.
+          The files are loaded with systemd's `LoadCredential` and need not be readable by the service user.
+        '';
+      };
 
+      backend = mkSecretsOption {
         options = {
           MEILI_MASTER_KEY = mkOption {
             type = with types; nullOr path;
@@ -258,42 +289,58 @@ in
               Must be exactly 32 characters long, for example generated with `openssl rand -hex 16`.
             '';
           };
-
-          POCKETBASE_PROXY_SECRET = mkOption {
-            type = with types; nullOr path;
-            default = null;
-            example = "/run/secrets/wanderer-proxy-secret";
-            description = ''
-              File containing the secret authenticating the frontend to the backend, for example generated with `openssl rand -hex 32`.
-            '';
-          };
         };
+        example = {
+          POCKETBASE_SMTP_PASSWORD = "/run/secrets/wanderer-smtp-password";
+        };
+        description = ''
+          Files containing secrets, passed only to the backend as environment variables named after the attribute.
+          The files are loaded with systemd's `LoadCredential` and need not be readable by the service user.
+        '';
       };
-      default = { };
-      example = {
-        POCKETBASE_ENCRYPTION_KEY = "/run/secrets/wanderer-encryption-key";
-        POCKETBASE_PROXY_SECRET = "/run/secrets/wanderer-proxy-secret";
-        POCKETBASE_SMTP_PASSWORD = "/run/secrets/wanderer-smtp-password";
+
+      web = mkSecretsOption {
+        options.PROTOMAPS_API_KEY = mkOption {
+          type = with types; nullOr path;
+          default = null;
+          example = "/run/secrets/wanderer-protomaps-api-key";
+          description = ''
+            File containing a Protomaps API key, used by the mobile app to load map tiles.
+            Not needed if {env}`TILE_SERVER_URL` is set in {option}`services.wanderer.settings`.
+            Note that wanderer hands this key to every logged-in app user.
+          '';
+        };
+        description = ''
+          Files containing secrets, passed only to the frontend as environment variables named after the attribute.
+          The files are loaded with systemd's `LoadCredential` and need not be readable by the service user.
+        '';
       };
-      description = ''
-        Files containing secrets, passed to the backend as environment variables named after the attribute.
-        {env}`POCKETBASE_PROXY_SECRET` is passed to the frontend as well.
-        The files are loaded with systemd's `LoadCredential` and need not be readable by the service user.
-      '';
     };
   };
 
   config = mkIf cfg.enable {
     assertions =
       map
-        (name: {
-          assertion = cfg.secrets.${name} != null;
-          message = "services.wanderer.secrets.${name} must be set.";
-        })
+        (
+          { group, name }:
+          {
+            assertion = cfg.secrets.${group}.${name} != null;
+            message = "services.wanderer.secrets.${group}.${name} must be set.";
+          }
+        )
         [
-          "MEILI_MASTER_KEY"
-          "POCKETBASE_ENCRYPTION_KEY"
-          "POCKETBASE_PROXY_SECRET"
+          {
+            group = "shared";
+            name = "POCKETBASE_PROXY_SECRET";
+          }
+          {
+            group = "backend";
+            name = "MEILI_MASTER_KEY";
+          }
+          {
+            group = "backend";
+            name = "POCKETBASE_ENCRYPTION_KEY";
+          }
         ];
 
     services.meilisearch.enable = mkIf cfg.meilisearch.enable (lib.mkDefault true);
@@ -307,7 +354,7 @@ in
       inherit environment;
 
       script = ''
-        ${exportSecrets secrets}
+        ${exportSecrets backendSecrets}
         exec ${
           lib.escapeShellArgs [
             (getExe cfg.package)
@@ -329,7 +376,7 @@ in
           "${cfg.package}/share/wanderer/initial_data:${stateDir}/migrations/initial_data"
         ]
         ++ optional (cfg.plugins != [ ]) "${pluginDir}:${stateDir}/data/plugins";
-        LoadCredential = mapAttrsToList (name: path: "${name}:${path}") secrets;
+        LoadCredential = mapAttrsToList (name: path: "${name}:${path}") backendSecrets;
       };
     };
 
