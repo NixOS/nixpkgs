@@ -3625,42 +3625,44 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.12.1";
+    version = "1.15.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-OUB6hPlFBB9FRdZgZXSye4lDOg+fbrqKe8ePv2IM7NY=";
+      hash = "sha256-ftyytmVYzl0oUnMTmCBNS7TTMSjqCsHNlnGbswGxYY8=";
     };
   in
   {
-    # Switch cachix-api from memory to ram to match crypton >= 1.1
     cachix-api = lib.pipe super.cachix-api [
       (overrideSrc {
         inherit version;
         src = src + "/cachix-api";
       })
-      (drv: drv.override { memory = self.ram; })
-      (appendPatches [ ./patches/cachix-api-crypton-1.1-and-ram.patch ])
+      (addBuildDepend self.openapi3)
     ];
 
-    # Switch cachix from memory to ram to match crypton >= 1.1
     cachix = lib.pipe super.cachix [
       (overrideSrc {
         inherit version;
         src = src + "/cachix";
       })
+      # The test suite spawns the built cachix binary.
+      (overrideCabal (drv: {
+        preCheck = ''
+          export PATH="$PWD/dist/build/cachix:$PATH"
+        ''
+        + (drv.preCheck or "");
+      }))
       (
         drv:
         drv.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
           hnix-store-core = self.hnix-store-core_0_8_0_0;
           hnix-store-nar = self.hnix-store-nar;
-          memory = self.ram;
         }
       )
-      (appendPatches [ ./patches/cachix-crypton-1.1-and-ram.patch ])
     ];
   }
 )

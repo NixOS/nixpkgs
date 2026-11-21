@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "camel-converter";
-  version = "6.0.1";
+  version = "6.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanders41";
     repo = "camel-converter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XdJW1YzOEtLJQedc9tTcNZGhQoxv5B9r5YuvZDLpXuU=";
+    hash = "sha256-/VKiPXUHiLXu/dJhSHY8GfAX5VyxCSoXCpAH40GiqFs=";
   };
 
   build-system = [ hatchling ];

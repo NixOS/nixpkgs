@@ -8,19 +8,17 @@
   metaCommon ? { },
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
+  inherit pname version;
+
   src = fetchurl {
     url = "https://github.com/sindresorhus/caprine/releases/download/v${version}/Caprine-${version}.AppImage";
     name = "Caprine-${version}.AppImage";
     inherit sha256;
   };
-  extracted = appimageTools.extract { inherit pname version src; };
-in
-(appimageTools.wrapType2 {
-  inherit pname version src;
 
   passthru = {
-    inherit pname version src;
+    inherit (finalAttrs) src;
   };
 
   profile = ''
@@ -29,10 +27,10 @@ in
 
   extraInstallCommands = ''
     mkdir -p $out/share
-    "${lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
-    ln -s ${extracted}/caprine.png $out/share/icons/caprine.png
+    "${lndir}/bin/lndir" -silent "${finalAttrs.contents}/usr/share" "$out/share"
+    ln -s ${finalAttrs.contents}/caprine.png $out/share/icons/caprine.png
     mkdir $out/share/applications
-    cp ${extracted}/caprine.desktop $out/share/applications/
+    cp ${finalAttrs.contents}/caprine.desktop $out/share/applications/
     substituteInPlace $out/share/applications/caprine.desktop \
         --replace AppRun caprine
   '';

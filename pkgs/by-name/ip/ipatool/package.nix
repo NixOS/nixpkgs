@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ipatool";
-  version = "2.7.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wT2oo2TvwkpH8WC497q7W7hX6PozESpkm240LVGcvLU=";
+    hash = "sha256-CDDa2QnbXa9RAvjBVmaccKgpq46Ed3LC+ToRjZxhHmY=";
   };
 
-  vendorHash = "sha256-ePQ78/Ki1u9US9yLvWVx3oxvBWXYA1Pg3jl+IGYpXW8=";
+  vendorHash = "sha256-Fb5Zufd/K8a0why62V8ShQR65P/FefRFfde5tYVB4JQ=";
 
   # Fixes "import lookup disabled by -mod=vendor" for onepassword-sdk-go on macOS
   proxyVendor = true;

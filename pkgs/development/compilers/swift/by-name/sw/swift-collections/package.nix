@@ -33,6 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Avoid the following error when running `install_name_tool`:
+    #    changing install names or rpaths can't be redone for: <some exe> (for architecture arm64) because larger updated load commands do not fit
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
+
   cmakeFlags = [
     # Defaults to not building shared libs on Linux.
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
