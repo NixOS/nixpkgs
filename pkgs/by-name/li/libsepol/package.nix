@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "SELinux binary policy manipulation library";
     homepage = "https://github.com/SELinuxProject/selinux";
