@@ -305,6 +305,12 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
   ];
 
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+    pcre2
+  ];
+
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "${placeholder "doc"}/share/doc/fish")
     (lib.cmakeFeature "Rust_CARGO_TARGET" stdenv.hostPlatform.rust.rustcTarget)
