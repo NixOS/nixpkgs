@@ -8,7 +8,6 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installShellFiles,
   lib,
-  libgit2,
   pkg-config,
   rustPlatform,
   stdenv,
@@ -41,14 +40,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit buildNoDefaultFeatures;
 
   pname = "comodoro";
-  version = "2.0.0";
-  cargoHash = "sha256-GA1Snf7EEM5ue6HE1QquW0xXu/qwdhQITqBDjOP9+zk=";
+  version = "3.0.0";
+  cargoHash = "sha256-cECMJcYUm811pX8wXMBvh91TIvoGloslSKpZlLz8YOs=";
 
   src = fetchFromGitHub {
     owner = "pimalaya";
     repo = "comodoro";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W/ZTgQ7JsVOjkbK8JjoTf154v5RTnQZ5d6AAlL/RTNs=";
+    hash = "sha256-rDXEOqxFncnqm/Eq8gn6rP5Cyz93qNx0dCqsp7x8nJE=";
   };
 
   # pkg-config hands the linker libdbus but no rpath, leaving a binary that
@@ -63,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # dbus is provided by vendors on windows
-  buildInputs = [ libgit2 ] ++ lib.optional (notify && !stdenv.hostPlatform.isWindows) dbus';
+  buildInputs = lib.optional (notify && !stdenv.hostPlatform.isWindows) dbus';
 
   buildFeatures =
     buildFeatures'
@@ -80,9 +79,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       mkdir -p $out/share/{completions,man,schemas}
+      install -Dm644 config.sample.toml "$out"/share/doc/comodoro/config.sample.toml
       ${exe} completion -d "$out"/share/completions bash elvish fish powershell zsh
-      ${exe} manual "$out"/share/man
-      ${exe} json-schema "$out"/share/schemas
+      ${exe} manual -d "$out"/share/man
+      ${exe} json-schema -d "$out"/share/schemas
     ''
     + lib.optionalString installManPages ''
       installManPage "$out"/share/man/*
@@ -95,10 +95,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
 
   # disable impure integration tests: they bind sockets and spawn processes
-  cargoTestFlags = [
-    "--bins"
-    "--lib"
-  ];
+  cargoTestFlags = [ "--bins" ];
+
+  # the unit tests of 3.0.0 bind a loopback socket
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "CLI to manage timers";
