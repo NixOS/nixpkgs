@@ -76,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/sane-project/backends/-/commit/ebd4d82bd7a6b8c57870dbfb492e4c186cf584d8.patch";
       hash = "sha256-vHtv+OMA0f9JR1ReshTg8IOgcZf7cnV7chitRBBCAg4=";
     })
+
+    # search /run/current-system for backends and /etc/sane.d for config
+    ./paths.patch
   ];
 
   postPatch = ''
