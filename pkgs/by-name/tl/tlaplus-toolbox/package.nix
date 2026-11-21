@@ -12,6 +12,9 @@
   copyDesktopItems,
   bintools,
   unzip,
+  cacert,
+  jdk_headless,
+  jre-generate-cacerts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
       "$(find "$out/libexec/toolbox" -name java)"
     patchelf --set-interpreter ${bintools.dynamicLinker} \
       "$(find "$out/libexec/toolbox" -name jspawnhelper)"
+
+    # regenerate the bundled JRE's CA keystore from cacert, as openjdk does
+    pushd "$out"/libexec/toolbox/plugins/org.lamport.openjdk.*/jre/lib/security
+    rm cacerts
+    JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+      ${jre-generate-cacerts} ${jdk_headless}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+    popd
 
     # Populate gappsWrapperArgs now instead of in a preFixupPhase.
     gappsWrapperArgsHook
