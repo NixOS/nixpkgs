@@ -2,6 +2,24 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::type_complexity)]
 
+/// Like `eprintln!`, but ignores write errors instead of panicking.
+///
+/// stderr is frequently a pipe to a remote session (e.g. `systemd-run --pipe` over SSH). If that
+/// session goes away, writing to stderr fails with EPIPE, and `eprintln!` would panic, aborting
+/// the switch halfway through, for example after units were stopped but before they were started
+/// again.
+///
+/// errno is preserved across the write, so that a failed write does not change the exit code of a
+/// following `die()`.
+macro_rules! eprintln_lossy {
+    ($($arg:tt)*) => {{
+        use std::io::Write as _;
+        let errno = nix::errno::Errno::last_raw();
+        _ = writeln!(std::io::stderr(), $($arg)*);
+        nix::errno::Errno::set_raw(errno);
+    }};
+}
+
 use std::{
     cell::RefCell,
     collections::HashMap,
@@ -236,7 +254,7 @@ fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Resul
         bail!("missing first argument in pre-switch check");
     };
 
-    match std::process::Command::new(argv0)
+    match child_command(argv0)
         .args(cmd_split.collect::<Vec<&str>>())
         .arg(toplevel)
         .arg::<&str>(action.into())
@@ -245,7 +263,7 @@ fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Resul
     {
         Ok(Ok(status)) if status.success() => {}
         _ => {
-            eprintln!("Pre-switch checks failed");
+            eprintln_lossy!("Pre-switch checks failed");
             std::process::exit(1);
         }
     }
@@ -259,7 +277,7 @@ fn do_install_bootloader(command: &str, toplevel: &Path) -> Result<()> {
         bail!("missing first argument in install bootloader commands");
     };
 
-    match std::process::Command::new(argv0)
+    match child_command(argv0)
         .args(cmd_split.collect::<Vec<&str>>())
         .arg(toplevel)
         .spawn()
@@ -267,7 +285,7 @@ fn do_install_bootloader(command: &str, toplevel: &Path) -> Result<()> {
     {
         Ok(Ok(status)) if status.success() => {}
         _ => {
-            eprintln!("Failed to install bootloader");
+            eprintln_lossy!("Failed to install bootloader");
             std::process::exit(1);
         }
     }
@@ -275,7 +293,25 @@ fn do_install_bootloader(command: &str, toplevel: &Path) -> Result<()> {
     Ok(())
 }
 
-extern "C" fn handle_sigpipe(_signal: nix::libc::c_int) {}
+/// Creates a [`std::process::Command`] whose child process starts with SIGPIPE ignored.
+///
+/// The standard library resets SIGPIPE to its default disposition in child processes. If our
+/// stdout/stderr goes away (see `eprintln_lossy!`), children writing to it (e.g. the activation
+/// script or the bootloader installer) would then be killed by SIGPIPE halfway through instead of
+/// getting EPIPE.
+#[allow(clippy::disallowed_methods)]
+fn child_command(program: impl AsRef<std::ffi::OsStr>) -> std::process::Command {
+    let mut cmd = std::process::Command::new(program);
+    // SAFETY: the closure only calls signal(2), which is async-signal-safe, and converting its
+    // Errno into an io::Error does not allocate.
+    unsafe {
+        cmd.pre_exec(|| {
+            signal::signal(Signal::SIGPIPE, SigHandler::SigIgn)?;
+            Ok(())
+        });
+    }
+    cmd
+}
 
 fn required_env(var: &str) -> anyhow::Result<String> {
     std::env::var(var).with_context(|| format!("missing required environment variable ${var}"))
@@ -1331,7 +1367,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             .context("Failed to get full path to current executable")?
             .as_path()
     {
-        eprintln!(
+        eprintln_lossy!(
             r#"This program is not meant to be called from outside of switch-to-configuration."#
         );
         die();
@@ -1503,7 +1539,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         }
         let mut names: Vec<&str> = units.keys().map(String::as_str).collect();
         names.sort_by_key(|n| n.to_lowercase());
-        eprintln!("{verb} the following user units: {}", names.join(", "));
+        eprintln_lossy!("{verb} the following user units: {}", names.join(", "));
     };
 
     if dry_run {
@@ -1550,7 +1586,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 submitted_jobs.borrow_mut().insert(job_path, Job::Reload);
             }
             Err(err) => {
-                eprintln!("Failed to reload user unit {unit}: {err}");
+                eprintln_lossy!("Failed to reload user unit {unit}: {err}");
                 exit_code = 4;
             }
         }
@@ -1566,7 +1602,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 submitted_jobs.borrow_mut().insert(job_path, Job::Restart);
             }
             Err(err) => {
-                eprintln!("Failed to restart user unit {unit}: {err}");
+                eprintln_lossy!("Failed to restart user unit {unit}: {err}");
                 exit_code = 4;
             }
         }
@@ -1583,7 +1619,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 submitted_jobs.borrow_mut().insert(job_path, Job::Start);
             }
             Err(err) => {
-                eprintln!("Failed to start user unit {unit}: {err}");
+                eprintln_lossy!("Failed to start user unit {unit}: {err}");
                 exit_code = 4;
             }
         }
@@ -1597,7 +1633,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     // Toplevels with system.activatable = false do not ship this unit; mirror
     // the system scope's tolerance for a missing activate script.
     if new_unit_dir.join("nixos-activation.service").exists() {
-        eprintln!("restarting the following user units: nixos-activation.service");
+        eprintln_lossy!("restarting the following user units: nixos-activation.service");
         match systemd.restart_unit("nixos-activation.service", "replace") {
             Ok(_) => {
                 log::debug!("waiting for nixos activation to finish");
@@ -1608,7 +1644,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
             Err(err) => {
-                eprintln!("Failed to restart nixos-activation.service: {err}");
+                eprintln_lossy!("Failed to restart nixos-activation.service: {err}");
                 exit_code = 4;
             }
         }
@@ -1680,7 +1716,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                     submitted_jobs.borrow_mut().insert(job_path, Job::Reload);
                 }
                 Err(err) => {
-                    eprintln!("Failed to reload user unit {unit}: {err}");
+                    eprintln_lossy!("Failed to reload user unit {unit}: {err}");
                     exit_code = 4;
                 }
             }
@@ -1694,7 +1730,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                     submitted_jobs.borrow_mut().insert(job_path, Job::Restart);
                 }
                 Err(err) => {
-                    eprintln!("Failed to restart user unit {unit}: {err}");
+                    eprintln_lossy!("Failed to restart user unit {unit}: {err}");
                     exit_code = 4;
                 }
             }
@@ -1709,7 +1745,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                     submitted_jobs.borrow_mut().insert(job_path, Job::Start);
                 }
                 Err(err) => {
-                    eprintln!("Failed to start user unit {unit}: {err}");
+                    eprintln_lossy!("Failed to start user unit {unit}: {err}");
                     exit_code = 4;
                 }
             }
@@ -1721,14 +1757,14 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     let mut failed_units = Vec::new();
     for (unit, job, result) in finished.values() {
         if matches!(result.as_str(), "timeout" | "failed" | "dependency") {
-            eprintln!("Failed to {job} user unit {unit}");
+            eprintln_lossy!("Failed to {job} user unit {unit}");
             failed_units.push(unit.as_str());
             exit_code = 4;
         }
     }
     if !failed_units.is_empty() {
         failed_units.sort_by_key(|name| name.to_lowercase());
-        eprintln!(
+        eprintln_lossy!(
             "warning: the following user units failed: {}\n\
              See `systemctl --user status {}` for details.",
             failed_units.join(", "),
@@ -1744,7 +1780,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 }
 
 fn usage(argv0: &str) -> ! {
-    eprintln!(
+    eprintln_lossy!(
         r#"Usage: {argv0} [check|switch|boot|test|dry-activate]
 check:        run pre-switch checks and exit
 switch:       make the configuration the boot default and activate now
@@ -1797,7 +1833,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
             .map(|id| distro_id_re.is_match(id))
             .unwrap_or_default()
     {
-        eprintln!("This is not a NixOS installation!");
+        eprintln_lossy!("This is not a NixOS installation!");
         die();
     }
 
@@ -1812,13 +1848,13 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         .create(true)
         .open("/run/nixos/switch-to-configuration.lock")
     else {
-        eprintln!("Could not open lock");
+        eprintln_lossy!("Could not open lock");
         die();
     };
 
     log::debug!("Acquiring lock on file /run/nixos/switch-to-configuration.lock");
     let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusiveNonblock) else {
-        eprintln!("Could not acquire lock");
+        eprintln_lossy!("Could not acquire lock");
         die();
     };
 
@@ -1869,7 +1905,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
 
     // Check if we can activate the new configuration.
     if current_init_interface_version != new_init_interface_version {
-        eprintln!(
+        eprintln_lossy!(
             r#"Warning: the new NixOS configuration has an ‘init’ that is
 incompatible with the current configuration.  The new configuration
 won't take effect until you reboot the system.
@@ -1877,11 +1913,6 @@ won't take effect until you reboot the system.
         );
         std::process::exit(100);
     }
-
-    // Ignore SIGHUP so that we're not killed if we're running on (say) virtual console 1 and we
-    // restart the "tty1" unit.
-    let handler = SigHandler::Handler(handle_sigpipe);
-    unsafe { signal::signal(Signal::SIGPIPE, handler) }.context("Failed to set SIGPIPE handler")?;
 
     let mut units_to_stop = HashMap::new();
     let mut units_to_skip = HashMap::new();
@@ -2007,14 +2038,14 @@ won't take effect until you reboot the system.
             // Swap entry disappeared, so turn it off.  Can't use "systemctl stop" here because
             // systemd has lots of alias units that prevent a stop from actually calling "swapoff".
             if *action == Action::DryActivate {
-                eprintln!("would stop swap device: {}", device);
+                eprintln_lossy!("would stop swap device: {}", device);
             } else {
-                eprintln!("stopping swap device: {}", device);
+                eprintln_lossy!("stopping swap device: {}", device);
                 let c_device = std::ffi::CString::new(device.clone())
                     .context("failed to convert device to cstring")?;
                 if unsafe { nix::libc::swapoff(c_device.as_ptr()) } != 0 {
                     let err = std::io::Error::last_os_error();
-                    eprintln!("Failed to stop swapping to {device}: {err}");
+                    eprintln_lossy!("Failed to stop swapping to {device}: {err}");
                 }
             }
         }
@@ -2049,7 +2080,7 @@ won't take effect until you reboot the system.
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("would stop the following units: {}", units.join(", "));
+            eprintln_lossy!("would stop the following units: {}", units.join(", "));
         }
 
         if !units_to_skip.is_empty() {
@@ -2058,14 +2089,14 @@ won't take effect until you reboot the system.
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
-            eprintln!(
+            eprintln_lossy!(
                 "would NOT stop the following changed units: {}",
                 units.join(", ")
             );
         }
 
-        eprintln!("would activate the configuration...");
-        _ = std::process::Command::new(out.join("dry-activate"))
+        eprintln_lossy!("would activate the configuration...");
+        _ = child_command(out.join("dry-activate"))
             .arg(&out)
             .spawn()
             .map(|mut child| child.wait());
@@ -2075,7 +2106,7 @@ won't take effect until you reboot the system.
         if std::fs::exists(DRY_RESTART_BY_ACTIVATION_LIST_FILE)?
             || std::fs::exists(DRY_RELOAD_BY_ACTIVATION_LIST_FILE)?
         {
-            eprintln!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
+            eprintln_lossy!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
         }
 
         for unit in std::fs::read_to_string(DRY_RESTART_BY_ACTIVATION_LIST_FILE)
@@ -2153,7 +2184,7 @@ won't take effect until you reboot the system.
             .with_context(|| format!("Failed to remove {DRY_RELOAD_BY_ACTIVATION_LIST_FILE}"))?;
 
         if restart_systemd {
-            eprintln!("would restart systemd");
+            eprintln_lossy!("would restart systemd");
         }
 
         if !units_to_reload.is_empty() {
@@ -2162,7 +2193,7 @@ won't take effect until you reboot the system.
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("would reload the following units: {}", units.join(", "));
+            eprintln_lossy!("would reload the following units: {}", units.join(", "));
         }
 
         if !units_to_restart.is_empty() {
@@ -2171,7 +2202,7 @@ won't take effect until you reboot the system.
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("would restart the following units: {}", units.join(", "));
+            eprintln_lossy!("would restart the following units: {}", units.join(", "));
         }
 
         let units_to_start_filtered = filter_units(&units_to_filter, &units_to_start);
@@ -2181,7 +2212,7 @@ won't take effect until you reboot the system.
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("would start the following units: {}", units.join(", "));
+            eprintln_lossy!("would start the following units: {}", units.join(", "));
         }
 
         std::process::exit(0);
@@ -2196,7 +2227,7 @@ won't take effect until you reboot the system.
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("stopping the following units: {}", units.join(", "));
+            eprintln_lossy!("stopping the following units: {}", units.join(", "));
         }
 
         for unit in units_to_stop.keys() {
@@ -2215,7 +2246,7 @@ won't take effect until you reboot the system.
             .map(String::as_str)
             .collect::<Vec<&str>>();
         units.sort_by_key(|name| name.to_lowercase());
-        eprintln!(
+        eprintln_lossy!(
             "NOT restarting the following changed units: {}",
             units.join(", "),
         );
@@ -2227,8 +2258,8 @@ won't take effect until you reboot the system.
     let mut exit_code = 0;
 
     // Activate the new configuration (i.e., update /etc, make accounts, and so on).
-    eprintln!("activating the configuration...");
-    match std::process::Command::new(out.join("activate"))
+    eprintln_lossy!("activating the configuration...");
+    match child_command(out.join("activate"))
         .arg(&out)
         .spawn()
         .map(|mut child| child.wait())
@@ -2238,7 +2269,7 @@ won't take effect until you reboot the system.
             // allow toplevel to not have an activation script
         }
         _ => {
-            eprintln!("Failed to run activate script");
+            eprintln_lossy!("Failed to run activate script");
             exit_code = 2;
         }
     }
@@ -2246,7 +2277,7 @@ won't take effect until you reboot the system.
     if std::fs::exists(RESTART_BY_ACTIVATION_LIST_FILE)?
         || std::fs::exists(RELOAD_BY_ACTIVATION_LIST_FILE)?
     {
-        eprintln!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
+        eprintln_lossy!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
     }
 
     // Handle the activation script requesting the restart or reload of a unit.
@@ -2329,7 +2360,7 @@ won't take effect until you reboot the system.
     // Restart systemd if necessary. Note that this is done using the current version of systemd,
     // just in case the new one has trouble communicating with the running pid 1.
     if restart_systemd {
-        eprintln!("restarting systemd...");
+        eprintln_lossy!("restarting systemd...");
         *systemd_is_reloading.borrow_mut() = true;
         _ = systemd.reexecute(); // we don't get a dbus reply here
 
@@ -2381,7 +2412,7 @@ won't take effect until you reboot the system.
     // Reload user units
     match logind.list_users() {
         Err(err) => {
-            eprintln!("Unable to list users with logind: {err}");
+            eprintln_lossy!("Unable to list users with logind: {err}");
             exit_code = 4;
         }
         Ok(users) => {
@@ -2395,7 +2426,7 @@ won't take effect until you reboot the system.
                 let metadata = match std::fs::metadata(&runtime_path) {
                     Ok(m) => m,
                     Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
-                        eprintln!(
+                        eprintln_lossy!(
                             "skipping user {name}: {} not found \
                              (user manager not running)",
                             runtime_path.display()
@@ -2403,7 +2434,7 @@ won't take effect until you reboot the system.
                         continue;
                     }
                     Err(err) => {
-                        eprintln!(
+                        eprintln_lossy!(
                             "warning: failed to stat {} for user {name}; \
                              skipping: {err}",
                             runtime_path.display()
@@ -2413,13 +2444,13 @@ won't take effect until you reboot the system.
                     }
                 };
 
-                eprintln!("reloading user units for {name}...");
+                eprintln_lossy!("reloading user units for {name}...");
                 let myself = Path::new("/proc/self/exe")
                     .canonicalize()
                     .context("Failed to get full path to /proc/self/exe")?;
 
                 log::debug!("Performing user switch for {name}");
-                let status = std::process::Command::new(&myself)
+                let status = child_command(&myself)
                     .uid(uid)
                     .gid(metadata.gid())
                     .env_clear()
@@ -2433,7 +2464,7 @@ won't take effect until you reboot the system.
                     .wait()
                     .with_context(|| format!("Failed to run user activation for {name}"))?;
                 if !status.success() {
-                    eprintln!("warning: user activation for {name} failed");
+                    eprintln_lossy!("warning: user activation for {name} failed");
                     exit_code = 4;
                 }
             }
@@ -2446,14 +2477,14 @@ won't take effect until you reboot the system.
     // default dependency on sysinit.target. sysinit-reactivation.target ensures that services
     // ordered BEFORE sysinit.target get re-started in the correct order. Ordering between these
     // services is respected.
-    eprintln!("restarting {SYSINIT_REACTIVATION_TARGET}");
+    eprintln_lossy!("restarting {SYSINIT_REACTIVATION_TARGET}");
     match systemd.restart_unit(SYSINIT_REACTIVATION_TARGET, "replace") {
         Ok(job_path) => {
             let mut jobs = submitted_jobs.borrow_mut();
             jobs.insert(job_path, Job::Restart);
         }
         Err(err) => {
-            eprintln!("Failed to restart {SYSINIT_REACTIVATION_TARGET}: {err}");
+            eprintln_lossy!("Failed to restart {SYSINIT_REACTIVATION_TARGET}: {err}");
             exit_code = 4;
         }
     }
@@ -2498,7 +2529,7 @@ won't take effect until you reboot the system.
             .map(String::as_str)
             .collect::<Vec<&str>>();
         units.sort_by_key(|name| name.to_lowercase());
-        eprintln!("reloading the following units: {}", units.join(", "));
+        eprintln_lossy!("reloading the following units: {}", units.join(", "));
 
         for unit in units {
             match systemd.reload_unit(unit, "replace") {
@@ -2508,7 +2539,7 @@ won't take effect until you reboot the system.
                         .insert(job_path.clone(), Job::Reload);
                 }
                 Err(err) => {
-                    eprintln!("Failed to reload {unit}: {err}");
+                    eprintln_lossy!("Failed to reload {unit}: {err}");
                     exit_code = 4;
                 }
             }
@@ -2527,7 +2558,7 @@ won't take effect until you reboot the system.
             .map(String::as_str)
             .collect::<Vec<&str>>();
         units.sort_by_key(|name| name.to_lowercase());
-        eprintln!("restarting the following units: {}", units.join(", "));
+        eprintln_lossy!("restarting the following units: {}", units.join(", "));
 
         for unit in units {
             match systemd.restart_unit(unit, "replace") {
@@ -2536,7 +2567,7 @@ won't take effect until you reboot the system.
                     jobs.insert(job_path, Job::Restart);
                 }
                 Err(err) => {
-                    eprintln!("Failed to restart {unit}: {err}");
+                    eprintln_lossy!("Failed to restart {unit}: {err}");
                     exit_code = 4;
                 }
             }
@@ -2559,7 +2590,7 @@ won't take effect until you reboot the system.
             .map(String::as_str)
             .collect::<Vec<&str>>();
         units.sort_by_key(|name| name.to_lowercase());
-        eprintln!("starting the following units: {}", units.join(", "));
+        eprintln_lossy!("starting the following units: {}", units.join(", "));
     }
 
     for unit in units_to_start.keys() {
@@ -2569,7 +2600,7 @@ won't take effect until you reboot the system.
                 jobs.insert(job_path, Job::Start);
             }
             Err(err) => {
-                eprintln!("Failed to start {unit}: {err}");
+                eprintln_lossy!("Failed to start {unit}: {err}");
                 exit_code = 4;
             }
         }
@@ -2583,7 +2614,7 @@ won't take effect until you reboot the system.
     for (unit, job, result) in finished_jobs.borrow().values() {
         match result.as_str() {
             "timeout" | "failed" | "dependency" => {
-                eprintln!("Failed to {job} {unit}");
+                eprintln_lossy!("Failed to {job} {unit}");
                 exit_code = 4;
             }
             _ => {}
@@ -2660,7 +2691,7 @@ won't take effect until you reboot the system.
 
     if !new_units.is_empty() {
         new_units.sort_by_key(|name| name.to_lowercase());
-        eprintln!(
+        eprintln_lossy!(
             "the following new units were started: {}",
             new_units.join(", ")
         );
@@ -2668,11 +2699,11 @@ won't take effect until you reboot the system.
 
     if !failed_units.is_empty() {
         failed_units.sort_by_key(|name| name.to_lowercase());
-        eprintln!(
+        eprintln_lossy!(
             "warning: the following units failed: {}",
             failed_units.join(", ")
         );
-        _ = std::process::Command::new(new_systemd.join("bin/systemctl"))
+        _ = child_command(new_systemd.join("bin/systemctl"))
             .arg("status")
             .arg("--no-pager")
             .arg("--full")
