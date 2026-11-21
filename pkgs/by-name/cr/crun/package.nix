@@ -25,6 +25,7 @@
   withWasmedge ? false,
   withWasmer ? false,
   withWasmtime ? false,
+  removeReferencesTo,
 }:
 
 let
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     go-md2man
     pkg-config
     python3
+    removeReferencesTo
   ];
 
   buildInputs = [
@@ -124,8 +126,15 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-wasmtime"
     ];
 
+  __structuredAttrs = true;
   enableParallelBuilding = true;
   strictDeps = true;
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
 
   env = {
     # wamr.c calls two functions directly instead of via dlsym (upstream bug)
@@ -174,6 +183,10 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  postInstall = ''
+    remove-references-to -t $lib/lib/crun/handlers $out/bin/crun
+  '';
 
   meta = {
     changelog = "https://github.com/containers/crun/releases/tag/${finalAttrs.version}";
