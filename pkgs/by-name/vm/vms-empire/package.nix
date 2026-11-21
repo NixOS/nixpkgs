@@ -2,27 +2,23 @@
   lib,
   stdenv,
   fetchurl,
+  asciidoctor,
   ncurses,
-  xmlto,
-  docbook_xml_dtd_44,
-  docbook_xsl,
   installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vms-empire";
-  version = "1.20";
+  version = "1.23";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/vms-empire/vms-empire-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ILRmql+jlOhJ08yLBpnrpeI5fyMVzcXrXIll4n3lTbM=";
+    hash = "sha256-b8SSOnA2aXvRJ3hiWyL2tJYDMTWQRGgTZ2K0cLYtAOk=";
   };
 
   nativeBuildInputs = [
+    asciidoctor
     installShellFiles
-    xmlto
-    docbook_xml_dtd_44
-    docbook_xsl
   ];
 
   buildInputs = [
@@ -37,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  postBuild = ''
-    xmlto man vms-empire.xml
-    xmlto html-nochunks vms-empire.xml
-  '';
+  buildFlags = [
+    "all"
+    "vms-empire.html"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -48,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -D vms-empire.html -t ${placeholder "doc"}/share/doc/vms-empire/
     install -D vms-empire.desktop -t ${placeholder "out"}/share/applications/
     install -D vms-empire.png -t ${placeholder "out"}/share/icons/hicolor/48x48/apps/
-    install -D vms-empire.xml -t ${placeholder "out"}/share/appdata/
+    install -D vms-empire.adoc -t ${placeholder "out"}/share/appdata/
     installManPage empire.6
     runHook postInstall
   '';
