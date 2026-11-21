@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "evohome-async";
-  version = "3.1.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "evohome-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NoaW5wSOdYcWXPuK/mqSwaVoeh8N0uyNw08ih/729WM=";
+    hash = "sha256-H5tc9Qx4+SgBCOB+KxqPGqo6uNmAtBJ4zXv5htX1APY=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
