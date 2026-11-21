@@ -1,33 +1,50 @@
 {
   fetchFromGitHub,
-  fetchpatch,
   lib,
   postgresql,
   postgresqlBuildExtension,
+  postgresqlTestExtension,
 }:
 
-postgresqlBuildExtension {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_similarity";
-  version = "pg_similarity_1_0-unstable-2021-01-12";
+  version = "pg_similarity_1_0-unstable-2026-11-22";
 
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "pg_similarity";
-    rev = "b9cb0a2d501b91e33cd1ef550b05483ca3563f71";
-    hash = "sha256-L04ANvyfzHgW7fINeJEY6T77Vojq3SI8P1TWiCRSPs0=";
+    rev = "3a3ac5f5aaadce22d0dc303475f73ba90dfcd7a6";
+    hash = "sha256-DdkbKQco4xWhIfNAZ2L3LiV/Qu+yNS+CsyNlRFTOD84=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/eulerto/pg_similarity/pull/43
-      # Also applied in debian as https://sources.debian.org/data/main/p/pg-similarity/1.0-8/debian/patches/pg16
-      name = "pg16.patch";
-      url = "https://github.com/eulerto/pg_similarity/commit/f7781ea5ace80f697a8249e03e3ce47d4b0f6b2f.patch";
-      hash = "sha256-MPDvWfNzSg28lXL5u5/Un9pOCJjqJ4Fz9b8XCfalgts=";
-    })
-  ];
-
   makeFlags = [ "USE_PGXS=1" ];
+
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    sql = "CREATE EXTENSION pg_similarity;";
+    asserts = [
+      {
+        query = "lev('nixpkgs', 'nixpkgs')";
+        expected = "1";
+        description = "lev() returns 1 for identical strings";
+      }
+      {
+        query = "hamming_text('abc', 'abd') < 1";
+        expected = "true";
+        description = "hamming_text() returns less than 1 for different strings";
+      }
+      {
+        query = "'nixpkgs'::text ~== 'nixpkgs'::text";
+        expected = "true";
+        description = "~== operator matches identical strings";
+      }
+      {
+        query = "jaccard('', '')";
+        expected = "1";
+        description = "jaccard() returns 1 instead of NaN when neither side has tokens";
+      }
+    ];
+  };
 
   meta = {
     description = "Extension to support similarity queries on PostgreSQL";
@@ -41,4 +58,4 @@ postgresqlBuildExtension {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
