@@ -9,7 +9,7 @@ Dependencies are added automatically to `CMAKE_PREFIX_PATH` so that packages are
 Some additional flags are passed in to give similar behavior to configure-based packages.
 
 By default, parallel building is enabled as CMake supports parallel building almost everywhere.
-Unless set explicitly, `enableParallelChecking` defaults to `true` when building in parallel.
+Unless set explicitly, `enableParallelInstalling` follows `enableParallelBuilding`, and `enableParallelChecking` defaults to `true` when building in parallel.
 `ctest` runs tests in parallel unless `enableParallelChecking` is `false`, even when not building in parallel.
 
 You can disable this hook’s behavior by setting `configurePhase` to a custom value, or by setting `dontUseCmakeConfigure`.
