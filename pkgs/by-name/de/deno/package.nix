@@ -32,17 +32,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.8.3";
+  version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-jOcIrZj+830XMZJcgTm0C4yDvk96dbW7RYGgyhLHS4Y=";
+    hash = "sha256-piJetMgFpg8xzEveqRQEq4kJINaLRDOrHp7Nd0z8wok=";
   };
 
-  cargoHash = "sha256-QtCkmNXOrtl4T4NSESV7J3qiyKMwMOoa4oWfTZIJRMc=";
+  cargoHash = "sha256-LNYXzS0oespQMeT/1fGcOvaDy5ErVeY7jUPL19OgeZ4=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -85,6 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "__vendored_zlib_ng"
+    "v8"
   ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
@@ -202,6 +203,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
     "--skip=tests::test_userspace_resolver"
+    # We don't have a tmp dir with sticky bit during build
+    "--skip=util::temp::test::test_ensure_secure_temp_parent_rejects_non_sticky_writable_dir"
   ];
 
   __darwinAllowLocalNetworking = true;
