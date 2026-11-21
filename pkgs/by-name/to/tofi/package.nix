@@ -14,17 +14,18 @@
   pango,
   wayland,
   libxkbcommon,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "tofi";
-  version = "0.9.1";
+  version = "0.9.1-unstable-2024-12-30";
 
   src = fetchFromGitHub {
     owner = "philj56";
     repo = "tofi";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-lokp6Zmdt7WuAyuRnHBkKD4ydbNiQY7pEVY97Z62U90=";
+    rev = "1eb6137572ab6c257ab6ab851d5d742167c18120";
+    hash = "sha256-OD56rwDrXgb5pg85sT5v+zl9A1/sfn77PBSG4gT76bE=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -45,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
   ];
 
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
   meta = {
     description = "Tiny dynamic menu for Wayland";
     homepage = "https://github.com/philj56/tofi";
@@ -53,4 +56,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "tofi";
   };
-})
+}
