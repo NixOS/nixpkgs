@@ -29,6 +29,7 @@
   libngspice,
   withScripting ? true,
   python3,
+  extraPythonPackages ? ps: [ ],
   withJava ? false,
   jre,
   addons ? [ ],
@@ -45,6 +46,15 @@
 # ```nix
 # kicad = pkgs.kicad.override {
 #   addons = with pkgs.kicadAddons; [ kikit kikit-library ];
+# };
+# ```
+
+# `extraPythonPackages`: Python packages for plugins, added to the wrapper's
+# PYTHONPATH. KiCad itself is not rebuilt.
+#
+# ```nix
+# kicad = pkgs.kicad.override {
+#   extraPythonPackages = ps: [ ps.numpy ];
 # };
 # ```
 
@@ -203,6 +213,7 @@ stdenv.mkDerivation rec {
       python.pkgs.six
       python.pkgs.requests
     ]
+    ++ optionals withScripting (extraPythonPackages python.pkgs)
     ++ addonsDrvs;
 
   nativeBuildInputs = [ makeWrapper ] ++ optionals withScripting [ python.pkgs.wrapPython ];
