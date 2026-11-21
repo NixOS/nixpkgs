@@ -657,6 +657,9 @@ lib.fix (
 
       pos = builtins.unsafeGetAttrPos "pname" args;
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       prePhases = [ "setupCompilerEnvironmentPhase" ];
       preConfigurePhases = [ "compileBuildDriverPhase" ];
       preInstallPhases = [ "haddockPhase" ];
