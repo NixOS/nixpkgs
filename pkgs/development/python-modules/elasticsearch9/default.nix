@@ -15,12 +15,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "elasticsearch9";
-  version = "9.3.0";
+  version = "9.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-WPj2PfqPLHXm2HVM6avl0noLL+35OHNW0z9zaKMvAXo=";
+    hash = "sha256-DiBN4JqGxd6Vp7wOYPJuxeCjZbI0s1Nj8AUPfx/Mm+s=";
   };
 
   build-system = [ hatchling ];

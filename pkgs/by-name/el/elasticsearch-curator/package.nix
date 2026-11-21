@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "elasticsearch-curator";
-  version = "8.0.21";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yVOZBz4AJNjmpxRp3t03KwDzp/3W8uJiHwuSRJbfLvk=";
+    hash = "sha256-tNdr9aHUFN2bQF3Gtl/LuCK34XC0UmfE1AZDJJ0J928=";
   };
 
   pythonRelaxDeps = [ "es-client" ];
@@ -27,8 +27,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     certifi
     click
     ecs-logging
-    elasticsearch8
-    es-client_8
+    elasticsearch9
+    es-client
     pyyaml
     six
     voluptuous
