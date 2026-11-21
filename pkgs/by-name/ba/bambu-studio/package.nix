@@ -237,14 +237,16 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
     mv $out/README.md $out/share/BambuStudio/README.md
 
-    mkdir -p $out/share/BambuStudio/web/device_page/dist
-    cp -r ${finalAttrs.passthru.device_page}/dist/* $out/share/BambuStudio/web/device_page/dist/
+    mkdir -p $out/share/BambuStudio/web/device_page
+    cp -r --no-preserve=mode ${finalAttrs.passthru.device_page}/dist $out/share/BambuStudio/web/device_page/dist
   '';
 
   passthru = {
     device_page = stdenv.mkDerivation (finalAttrs': {
       pname = "bambu-studio-device-page";
       inherit (finalAttrs) version src;
+
+      sourceRoot = "${finalAttrs.src.name}/src/slic3r/GUI/DeviceWeb/device_page";
 
       nativeBuildInputs = [
         nodejs
@@ -253,22 +255,28 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
       pnpmDeps = fetchPnpmDeps {
-        inherit (finalAttrs') pname version src;
+        inherit (finalAttrs')
+          pname
+          version
+          src
+          sourceRoot
+          ;
         pnpm = pnpm_10;
-        sourceRoot = "${finalAttrs.src.name}/src/slic3r/GUI/DeviceWeb/device_page";
-        fetcherVersion = 4;
-        hash = "sha256-4hpdGeC+SQgGZl0M6KI7Del2TErIU/T6cuza7/GNUE0=";
+        fetcherVersion = 5;
+        hash = "sha256-zV88mxayrMvkfa7eGXEaCWlRvhsbfWyQXVN3CZXddhI=";
       };
 
-      sourceRoot = "${finalAttrs.src.name}/src/slic3r/GUI/DeviceWeb/device_page";
-
       buildPhase = ''
+        runHook preBuild
         pnpm run build
+        runHook postBuild
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/dist
         cp -r dist/* $out/dist/
+        runHook postInstall
       '';
     });
   };
