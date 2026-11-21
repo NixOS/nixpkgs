@@ -1,9 +1,8 @@
 {
   buildNpmPackage,
+  dart-sass,
   fetchFromGitHub,
-  vips,
   lib,
-  pkg-config,
   jq,
   makeWrapper,
   nix-update-script,
@@ -11,22 +10,22 @@
 }:
 buildNpmPackage rec {
   pname = "factoriolab";
-  version = "3.21.2";
+  version = "4.16.5";
 
   src = fetchFromGitHub {
     owner = "factoriolab";
     repo = "factoriolab";
     tag = "v${version}";
-    hash = "sha256-9RmCdU2LertIZ8crZZGHQbiev6T2dIcWkuAczQyIrJg=";
+    hash = "sha256-Xn3qOLIlts6O6pkwOILvaNYMzG55Sv8WAG2LSAqB3ok=";
     fetchLFS = true;
   };
-  buildInputs = [ vips ];
   nativeBuildInputs = [
-    pkg-config
     makeWrapper
   ];
 
-  npmDepsHash = "sha256-FX9zxq3kIQ5nxEPW57X53novtCFBPV5w9jg882EC2Lo=";
+  npmDepsHash = "sha256-GJ2AXMTfgAzVXxdAd7rKoO+znuzICyjANGlEswAFbJQ=";
+  # sharp is only used by the data scripts, not by `ng build`, and fails to build from source
+  npmFlags = [ "--ignore-scripts" ];
   # By default angular tries to optimize fonts by inlining them
   # which needs internet access during building to download said fonts.
   # Internet access during build would necessitate turning this into a fixed output derivation
@@ -37,12 +36,18 @@ buildNpmPackage rec {
     mv -f angular.json.new angular.json
   '';
 
+  # Use our dart-sass instead of the bundled binary, which can't run on NixOS
+  preBuild = ''
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+  '';
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share
 
-    cp -r dist/browser $out/share/factoriolab
+    cp -r dist/factoriolab/browser $out/share/factoriolab
 
     runHook postInstall
   '';
