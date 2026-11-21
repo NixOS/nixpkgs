@@ -588,8 +588,12 @@ in
 
     systemd.services.lasuite-docs-yhub-server-setup-db = {
       description = "DB setup for Y collaboration server of LaSuite docs";
-      after = optional cfg.redis.createLocally "redis-lasuite-docs.service";
-      wants = optional cfg.redis.createLocally "redis-lasuite-docs.service";
+      after =
+        optional cfg.redis.createLocally "redis-lasuite-docs.service"
+        ++ optional cfg.postgresql.createLocally "postgresql.target";
+      wants =
+        optional cfg.redis.createLocally "redis-lasuite-docs.service"
+        ++ optional cfg.postgresql.createLocally "postgresql.target";
       environment = yhubEnv;
       serviceConfig = commonServiceConfigYhub // {
         Type = "oneshot";
