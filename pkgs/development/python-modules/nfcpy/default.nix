@@ -10,21 +10,26 @@
   pytest-tornasync,
   pytest-mock,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nfcpy";
   version = "1.0.4";
-  format = "setuptools";
+  pyproject = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "nfcpy";
     repo = "nfcpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HFWOCiz6ISfxEeC6KPKNKGZoHvFjFGUn7QJWnwvJKYw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     libusb1
     ndeflib
     pydes
@@ -51,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to read/write NFC tags or communicate with another NFC device";
     homepage = "https://github.com/nfcpy/nfcpy";
-    changelog = "https://github.com/nfcpy/nfcpy/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/nfcpy/nfcpy/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.eupl11;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
