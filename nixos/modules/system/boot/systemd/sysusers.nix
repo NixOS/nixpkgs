@@ -59,6 +59,11 @@ let
     )}
   '';
 
+  sysusersDir = pkgs.symlinkJoin {
+    name = "sysusers.d";
+    paths = [ sysusersConfig ] ++ map (p: p + "/lib/sysusers.d") cfg.packages;
+  };
+
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
   # The location of the password files when using an immutable /etc.
   immutablePasswordFilesLocation = "/var/lib/nixos/etc";
@@ -89,6 +94,21 @@ in
           Note: This is experimental.
         '';
       };
+    };
+
+    systemd.sysusers.packages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      apply = map lib.getLib;
+      description = ''
+        List of packages containing {command}`systemd-sysusers` rules.
+
+        All files in {file}`«pkg»/lib/sysusers.d` will be included.
+
+        If a {file}`lib` output is available, rules are searched there and only there.
+        If there is no {file}`lib` output it will fall back to {file}`out`
+        and if that does not exist either, the default output will be used.
+      '';
     };
 
   };
@@ -198,7 +218,7 @@ in
 
     environment.etc = lib.mkMerge [
       {
-        "sysusers.d".source = sysusersConfig;
+        "sysusers.d".source = sysusersDir;
       }
 
       # Statically create the symlinks to immutablePasswordFilesLocation when
