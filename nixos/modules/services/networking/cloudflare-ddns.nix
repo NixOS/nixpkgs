@@ -160,10 +160,13 @@ in
 
     tz = lib.mkOption {
       type = lib.types.str;
-      default = "UTC";
+      default = lib.defaultTo "UTC" config.time.timeZone;
+      defaultText = lib.literalMD "The system time zone, or UTC if unset.";
       description = ''
-        Timezone used for logging messages and parsing `updateCron`.
-        Accepts any IANA Time Zone name.
+        Time zone used for log messages and the schedule in `updateCron`.
+        By default, this follows the system time zone set in `time.timeZone`,
+        using UTC if no system time zone is configured.
+        Accepts any IANA time zone name.
         Corresponds to the `TZ` environment variable.
       '';
       example = "Asia/Kathmandu";
