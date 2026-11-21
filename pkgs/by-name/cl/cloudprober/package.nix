@@ -1,10 +1,12 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+# go 1.27 speeded up the compression so the
+# test TestCompressBytes fail because the output changed
+buildGo126Module (finalAttrs: {
   pname = "cloudprober";
   version = "0.14.3";
 
