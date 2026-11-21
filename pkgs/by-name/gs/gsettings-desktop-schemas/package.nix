@@ -15,12 +15,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsettings-desktop-schemas";
   version = "51.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gsettings-desktop-schemas/${lib.versions.major version}/gsettings-desktop-schemas-${version}.tar.xz";
+    url = "mirror://gnome/sources/gsettings-desktop-schemas/${lib.versions.major finalAttrs.version}/gsettings-desktop-schemas-${finalAttrs.version}.tar.xz";
     hash = "sha256-HiQZpfIdJsMksorhwA4p6Rdei1lv/zhaBMIXKzZlIiY=";
   };
 
@@ -62,9 +62,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gsettings-desktop-schemas";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas";
@@ -72,4 +74,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
   };
-}
+})
