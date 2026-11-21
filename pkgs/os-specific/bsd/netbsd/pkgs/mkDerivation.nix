@@ -90,14 +90,6 @@ lib.makeOverridable (
       makeFlags = defaultMakeFlags;
 
       strictDeps = true;
-
-      meta = {
-        maintainers = with lib.maintainers; [
-          qyliss
-        ];
-        platforms = lib.platforms.unix;
-        license = lib.licenses.bsd2;
-      };
     }
     // lib.optionalAttrs stdenv'.hasCC {
       # TODO should CC wrapper set this?
@@ -116,6 +108,16 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // attrs
+    // {
+      meta = {
+        maintainers = with lib.maintainers; [
+          qyliss
+        ];
+        platforms = lib.platforms.unix;
+        license = lib.licenses.bsd2;
+      }
+      // attrs.meta or { };
+    }
     // {
       # Files that use NetBSD-specific macros need to have nbtool_config.h
       # included ahead of them on non-NetBSD platforms.
