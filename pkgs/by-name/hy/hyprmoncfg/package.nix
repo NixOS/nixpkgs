@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "hyprmoncfg";
-  version = "1.22.1";
+  version = "1.30.0";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ buildGoModule (finalAttrs: {
     owner = "crmne";
     repo = "hyprmoncfg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G7H/xPfmAcrvyHID95UM9hTBAw5UHSFh3NEJjpsb+sQ=";
+    hash = "sha256-xAUwx9lTvNXoeYztCV+eI4YYwUHyeWcSCW5iZ5bJ8A8=";
   };
 
-  vendorHash = "sha256-gQbjvdKtO0hCXrs9RnWo1s0YeHf5W9t+8AgS2ELXlPo=";
+  vendorHash = "sha256-+dwqyH7JDrXoKu3j3gdFPWa834gFv66gFSf57qxCzkI=";
 
   # documentation helper, not meant to be installed
   excludedPackages = [ "scripts/capture-fixture" ];
