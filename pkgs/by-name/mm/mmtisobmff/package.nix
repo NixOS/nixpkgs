@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ISOBMFF reader and writer library with MPEG-H 3D Audio support";
     homepage = "https://github.com/Fraunhofer-IIS/mmtisobmff";
-    license = lib.licenses.fraunhofer-fdk;
+    license = lib.licenses.fraunhofer-fdk-mpeg-h;
     maintainers = [ lib.maintainers.jopejoe1 ];
     pkgConfigModules = [ "mmtisobmff" ];
   };
