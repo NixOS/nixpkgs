@@ -5,7 +5,32 @@ let
     id = "local"
     kind = "local"
     path = "/home/alice/.local/share/rosec/providers/local.vault"
+
+    [[provider]]
+    id = "gnome-keyring"
+    kind = "gnome-keyring"
+
+    [[provider]]
+    id = "bitwarden-pm"
+    kind = "bitwarden-pm"
+    options = { email = "alice@example.com" }
+
+    [[provider]]
+    id = "bitwarden-sm"
+    kind = "bitwarden-sm"
+    options = { organization_id = "00000000-0000-0000-0000-000000000000" }
   '';
+
+  wasm-providers = [
+    pkgs.rosec-gnome-keyring-bin
+    pkgs.rosec-bitwarden-pm-bin
+    pkgs.rosec-bitwarden-sm-bin
+  ];
+
+  # Compile the system provider scan path (SYSTEM_PLUGIN_DIR) to a store path
+  # with the WASM providers baked in, so discovery exercises the system path
+  # rather than the per-user copy under ~/.local/share/rosec/providers.
+  rosec-with-providers = pkgs.rosec.override { provider = wasm-providers; };
 in
 {
   name = "rosec";
@@ -27,6 +52,7 @@ in
       services.rosec = {
         enable = true;
         pam.enable = true;
+        package = rosec-with-providers;
       };
 
       environment.systemPackages = [ pkgs.libsecret ];
@@ -54,6 +80,8 @@ in
     in
     ''
       machine.wait_until_tty_matches("1", "login: ")
+      machine.succeed("su - alice -c 'mkdir -p ~/.config/rosec ~/.local/share/keyrings'")
+      machine.succeed("su - alice -c 'cp ${config-path} ~/.config/rosec/config.toml'")
       machine.send_chars("alice\n")
       machine.wait_until_tty_matches("1", "login: alice")
       machine.wait_until_succeeds("pgrep login")
@@ -61,8 +89,6 @@ in
       machine.send_chars("${user.password}\n")
       machine.wait_until_succeeds("pgrep -u alice bash")
 
-      machine.succeed("su - alice -c 'mkdir -p ~/.config/rosec ~/.local/share/rosec/providers'")
-      machine.succeed("su - alice -c 'cp ${config-path} ~/.config/rosec/config.toml'")
       machine.succeed("su - alice -c 'systemctl --user import-environment SSH_ASKPASS SSH_ASKPASS_REQUIRE'")
 
       with subtest("D-Bus activation starts rosecd and registers portal"):
@@ -70,6 +96,28 @@ in
           _, output = machine.systemctl("status rosecd --no-pager", "alice")
           assert "Active: active (running)" in output
           machine.succeed("su - alice -c 'busctl --user list | grep -q org.freedesktop.impl.portal.desktop.rosec'")
+
+      with subtest("WASM providers are discovered and loaded"):
+          # Client-side discovery: re-runs the plugin scan and verifies each
+          # minisig against the release keys embedded in the rosec binary.
+          kinds = machine.succeed("su - alice -c 'rosec provider kinds'")
+          for kind in ["gnome-keyring", "bitwarden-pm", "bitwarden-sm"]:
+              assert kind in kinds, f"{kind} missing from 'rosec provider kinds'"
+
+          # Daemon-side load: each configured provider registered with a live
+          # state (not 'daemon not running').
+          machine.wait_until_succeeds("su - alice -c 'systemctl --user is-active rosecd'")
+          listing = machine.succeed("su - alice -c 'rosec provider list'")
+          assert "daemon not running" not in listing
+          for pid in ["gnome-keyring", "bitwarden-pm", "bitwarden-sm"]:
+              assert pid in listing, f"provider {pid} missing from 'rosec provider list'"
+
+          # rosecd journal confirms signature verification and discovery
+          # through the compiled-in system path (source=System).
+          machine.wait_until_succeeds(
+              "su - alice -c 'journalctl --user -u rosecd | grep -q \"WASM plugin signature verified.*source=System\"'"
+          )
+          machine.succeed("su - alice -c 'journalctl --user -u rosecd | grep -q \"discovered WASM providers\"'")
 
       with subtest("PAM is configured with pam_rosec"):
           login_pam = machine.succeed("cat /etc/pam.d/login")
