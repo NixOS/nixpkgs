@@ -28792,6 +28792,12 @@
     githubId = 65870;
     name = "Сухарик";
   };
+  sulfiore = {
+    email = "sulfiore@postnet.cc";
+    github = "sulfiore";
+    githubId = 3856645;
+    name = "Sulfiore";
+  };
   sumnerevans = {
     email = "me@sumnerevans.com";
     github = "sumnerevans";
