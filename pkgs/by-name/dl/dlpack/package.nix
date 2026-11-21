@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dlpack";
-  version = "1.3";
+  version = "1.4";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dmlc";
     repo = "dlpack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kIHBgTYaHEmweRBFtRl1pXhOyQ5TEwU8dLUssTMEnpc=";
+    hash = "sha256-CCFSmJTuDduzZo7NgOvo7bqqzfyPm+sGY8TG8z2GE5c=";
   };
 
   postPatch =
