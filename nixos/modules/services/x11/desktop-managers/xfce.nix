@@ -12,6 +12,64 @@ let
   cfg = config.services.xserver.desktopManager.xfce;
   excludePackages = config.environment.xfce.excludePackages;
 
+  xfcePackages = utils.removePackagesByName (
+    with pkgs;
+    [
+      glib # for gsettings
+      gtk3.out # gtk-update-icon-cache
+
+      gnome-themes-extra
+      adwaita-icon-theme
+      hicolor-icon-theme
+      tango-icon-theme
+      xfce4-icon-theme
+
+      desktop-file-utils
+      shared-mime-info # for update-mime-database
+
+      # For a polkit authentication agent
+      polkit_gnome
+
+      # Needed by Xfce's xinitrc script
+      xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+
+      xfce4-exo
+      garcon
+      libxfce4ui
+
+      mousepad
+      parole
+      ristretto
+      xfce4-appfinder
+      xfce4-notifyd
+      xfce4-screenshooter
+      xfce4-session
+      xfce4-settings
+      xfce4-taskmanager
+      xfce4-terminal
+    ]
+    # TODO: NetworkManager doesn't belong here
+    ++ lib.optional config.networking.networkmanager.enable networkmanagerapplet
+    ++ lib.optional config.powerManagement.enable xfce4-power-manager
+    ++ lib.optionals (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) [
+      pavucontrol
+      # volume up/down keys support:
+      # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
+      # but can only be used with xfce4-panel, so for no-desktop usage we still include
+      # xfce4-volumed-pulse
+      (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
+    ]
+    ++ lib.optionals cfg.enableXfwm [
+      xfwm4
+      xfwm4-themes
+    ]
+    ++ lib.optionals (!cfg.noDesktop) [
+      xfce4-panel
+      xfdesktop
+    ]
+    ++ lib.optional cfg.enableScreensaver xfce4-screensaver
+  ) excludePackages;
+
 in
 {
   meta = {
@@ -108,63 +166,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = utils.removePackagesByName (
-      with pkgs;
-      [
-        glib # for gsettings
-        gtk3.out # gtk-update-icon-cache
+    environment.systemPackages = xfcePackages;
 
-        gnome-themes-extra
-        adwaita-icon-theme
-        hicolor-icon-theme
-        tango-icon-theme
-        xfce4-icon-theme
-
-        desktop-file-utils
-        shared-mime-info # for update-mime-database
-
-        # For a polkit authentication agent
-        polkit_gnome
-
-        # Needed by Xfce's xinitrc script
-        xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-
-        xfce4-exo
-        garcon
-        libxfce4ui
-
-        mousepad
-        parole
-        ristretto
-        xfce4-appfinder
-        xfce4-notifyd
-        xfce4-screenshooter
-        xfce4-session
-        xfce4-settings
-        xfce4-taskmanager
-        xfce4-terminal
-      ]
-      # TODO: NetworkManager doesn't belong here
-      ++ lib.optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ lib.optional config.powerManagement.enable xfce4-power-manager
-      ++ lib.optionals (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) [
-        pavucontrol
-        # volume up/down keys support:
-        # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
-        # but can only be used with xfce4-panel, so for no-desktop usage we still include
-        # xfce4-volumed-pulse
-        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
-      ]
-      ++ lib.optionals cfg.enableXfwm [
-        xfwm4
-        xfwm4-themes
-      ]
-      ++ lib.optionals (!cfg.noDesktop) [
-        xfce4-panel
-        xfdesktop
-      ]
-      ++ lib.optional cfg.enableScreensaver xfce4-screensaver
-    ) excludePackages;
+    services.dbus.packages = xfcePackages;
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gnome3;
     programs.xfconf.enable = true;
