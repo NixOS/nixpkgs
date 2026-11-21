@@ -1702,6 +1702,7 @@ in
   shelfmark = runTest ./shelfmark.nix;
   shiori = runTest ./shiori.nix;
   shoko = import ./shoko.nix { inherit runTest; };
+  shufflecake = runTest ./shufflecake.nix;
   signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = runTest ./silverbullet.nix;
   simple-container = runTest ./simple-container.nix;

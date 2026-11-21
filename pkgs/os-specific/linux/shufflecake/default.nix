@@ -6,6 +6,7 @@
   fetchFromCodeberg,
   libgcrypt,
   lvm2,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
@@ -41,11 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    install -Dm444 dm-sflc/dm-sflc.ko $out/lib/modules/${kernel.modDirVersion}/drivers/md/dm-sflc.ko
-    install -Dm555 sflc/build/bin/sflc $bin/sflc
+    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \
+      M=$PWD/dm-sflc \
+      INSTALL_MOD_PATH=$out \
+      $makeFlags \
+      modules_install
+
+    mkdir -p $bin/bin
+    install -Dm555 sflc/build/bin/sflc $bin/bin/sflc
     # v0.6 provides an alias for pre-v0.6 compatibility
-    ln -s sflc $bin/shufflecake
+    ln -s sflc $bin/bin/shufflecake
   '';
+
+  passthru.tests = { inherit (nixosTests) shufflecake; };
 
   meta = {
     description = "Plausible deniability (hidden storage) layer for Linux";
