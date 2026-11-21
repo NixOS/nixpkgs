@@ -27,6 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-rd/yQH3sbZqQAQ1AN44vChe30GMJuIlZj3Ccfv1m3lU=";
   };
 
+  # Remove an unused import of a private module removed in pandas 3.
+  postPatch = ''
+    substituteInPlace siuba/dply/verbs.py \
+      --replace-fail 'from pandas.core.reshape.util import cartesian_product' ""
+  '';
+
   propagatedBuildInputs = [
     numpy
     pandas
