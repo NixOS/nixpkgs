@@ -1,6 +1,12 @@
 {
   lib,
   writeScript,
+  # Newest major this set accepts; a newer major goes into a new rocmPackages_X.
+  maxMajor ? 7,
+  # Tag prefixes this set's versions are published under (rocm-X.Y.Z, therock-X.Y[.Z]).
+  tagPrefixes ? [ "rocm" ],
+  # Attribute path of the package set, for update-source-version.
+  setName ? "rocmPackages",
 }:
 
 {
@@ -8,10 +14,17 @@
   name ? finalAttrs.pname,
   owner ? finalAttrs.src.owner,
   repo ? finalAttrs.src.repo,
-  page ? "releases?per_page=10",
-  # input: array of [ { tag_name: "rocm-6.x.x", }, ... ]. some entries may have bad names like rocm-test-date we want to skip
-  # output: first tag_name/name that's a proper version if any
-  filter ? "map(.tag_name // .name) | map(select(test(\"^rocm-[0-9]+\\\\.[0-9]+(\\\\.[0-9]+)?$\"))) | first | ltrimstr(\"rocm-\")",
+  page ? "releases?per_page=100",
+  # input: array of [ { tag_name: "rocm-7.2.4", }, { tag_name: "therock-10.1" }, ... ]. some entries
+  # may have bad names like rocm-test-date we want to skip
+  # output: the highest proper version with an accepted prefix and major <= maxMajor, if any.
+  # Releases are not ordered by version (a rocm-7.2.x maintenance release can follow therock-10.1).
+  filter ? lib.concatStringsSep " | " [
+    "map(.tag_name // .name)"
+    "map(select(test(\"^(${lib.concatStringsSep "|" tagPrefixes})-[0-9]+\\\\.[0-9]+(\\\\.[0-9]+)?$\")) | sub(\"^(${lib.concatStringsSep "|" tagPrefixes})-\"; \"\"))"
+    "map(select((split(\".\")[0] | tonumber) <= ${toString maxMajor}))"
+    "sort_by(split(\".\") | map(tonumber)) | last // empty"
+  ],
 }:
 
 let
@@ -23,14 +36,21 @@ let
     #!nix-shell -i bash -p curl jq common-updater-scripts
     set -euo pipefail
 
-    fetch_releases() {
+    fetch_releases() (
       local api_url="https://api.github.com/repos/${owner}/${repo}/${page}"
-      if [ "${page}" = "releases" ]; then
-        api_url="$api_url?per_page=4"
+      local headers
+      headers="$(mktemp)"
+      trap 'rm -f "$headers"' EXIT
+      local -a auth=()
+      if [[ -n "''${GITHUB_TOKEN:-}" ]]; then
+        auth=(-H "Authorization: Bearer $GITHUB_TOKEN")
       fi
-      >&2 echo $api_url
-      curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} -sL "$api_url"
-    }
+      while [[ -n "$api_url" ]]; do
+        curl "''${auth[@]}" -fsSL --dump-header "$headers" "$api_url" || return
+        printf '\n'
+        api_url="$(tr -d '\r' < "$headers" | sed -nE 's/^link:.*<([^>]+)>; rel="next".*/\1/ip')"
+      done
+    )
 
     find_valid_version() {
       local releases="$1"
@@ -40,7 +60,7 @@ let
       echo "$releases" | jq -r 'if type == "array" then . else [.] end | ${filter}'
     }
 
-    releases="$(fetch_releases)"
+    releases="$(fetch_releases | jq -s 'map(if type == "array" then . else [.] end) | add')"
     version="$(find_valid_version "$releases")"
 
     if [ -z "$version" ]; then
@@ -52,12 +72,12 @@ let
 
     >&2 echo parsed version "$version_arr" from "$version"
 
-    if (( ''${version_arr[0]} > 7 )); then
-      echo "'rocmPackages.${pname}' is already at its maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${pname}'." >&2
+    if (( ''${version_arr[0]} > ${toString maxMajor} )); then
+      echo "'${setName}.${pname}' is already at its maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${pname}'." >&2
       exit 1
     fi
 
-    update-source-version rocmPackages.${pname} "$version" --ignore-same-hash
+    update-source-version ${setName}.${pname} "$version" --ignore-same-hash
   '';
 in
 [ updateScript ]
