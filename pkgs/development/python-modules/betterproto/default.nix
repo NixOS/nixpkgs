@@ -54,6 +54,10 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
+  pythonRelaxDeps = [
+    "python-dateutil"
+  ];
+
   optional-dependencies.compiler = [
     black
     jinja2
