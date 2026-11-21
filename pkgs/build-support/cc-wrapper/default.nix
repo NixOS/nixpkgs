@@ -907,9 +907,13 @@ stdenvNoCC.mkDerivation {
     # performance regressions:
     #   https://bugs.launchpad.net/ubuntu-z-systems/+bug/2064538
     #   https://github.com/NixOS/nixpkgs/issues/428260
+    # Also skip AVR: with only three pointer registers and a few KiB of flash,
+    # reserving Y as a frame pointer costs code size and there is no unwinder
+    # to use it:
+    #   https://github.com/NixOS/nixpkgs/issues/585479
     + (
       let
-        enable_fp = !targetPlatform.isx86_32 && !targetPlatform.isS390;
+        enable_fp = !targetPlatform.isx86_32 && !targetPlatform.isS390 && !targetPlatform.isAvr;
         enable_leaf_fp =
           !isFlang
           && enable_fp
