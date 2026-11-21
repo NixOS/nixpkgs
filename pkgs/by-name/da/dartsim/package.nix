@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
   pythonImportsCheck = [ "dartpy" ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") # does not build with C++20
     (lib.cmakeBool "DART_VERBOSE" true)
     (lib.cmakeBool "DART_BUILD_DARTPY" pythonSupport)
     (lib.cmakeBool "DART_USE_SYSTEM_GOOGLEBENCHMARK" true)
