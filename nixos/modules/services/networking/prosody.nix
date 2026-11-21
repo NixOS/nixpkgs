@@ -389,7 +389,7 @@ let
       # See https://prosody.im/doc/modules/mod_muc for more details.
       roomDefaultPublic = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = "If set, the MUC rooms will be public by default.";
       };
       roomDefaultMembersOnly = mkOption {
