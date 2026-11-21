@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rexi";
-  version = "1.2.1-unstable-2026-06-23";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
