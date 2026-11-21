@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   lib,
   autoreconfHook,
   bison,
@@ -23,6 +24,10 @@ stdenv.mkDerivation {
     bison
     flex
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "PIM for IPv6 sparse mode daemon";
