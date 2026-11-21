@@ -47,6 +47,46 @@ let
   prioritySuggestion = ''
     Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
   '';
+
+  /**
+    Creates a boolean option declaration with a configurable default value.
+
+    # Inputs
+
+    Structured function argument
+    : Attribute set containing the following attributes:
+
+      `default`
+      : Optional default value for the option (`true` or `false`). Default: `false`
+
+      `name`
+      : Name for the created option
+
+    # Examples
+    :::{.example}
+    ## `mkToggleOption` usage example
+
+    ```nix
+    mkToggleOption {
+      default = true;
+      name = "foo";
+    }
+    => { ...; default = true; example = false; description = "Whether to enable foo."; }
+    ```
+
+    :::
+  */
+  mkToggleOption =
+    {
+      default ? false,
+      name,
+    }:
+    lib.mkOption {
+      inherit default;
+      example = !default;
+      description = "Whether to enable ${name}.";
+      type = lib.types.bool;
+    };
 in
 rec {
 
@@ -186,11 +226,48 @@ rec {
   */
   mkEnableOption =
     name:
-    mkOption {
+    mkToggleOption {
       default = false;
-      example = true;
-      description = "Whether to enable ${name}.";
-      type = lib.types.bool;
+      inherit name;
+    };
+
+  /**
+    Creates an option declaration with a default value of `true`, and can be defined to `false`.
+
+    # Inputs
+
+    `name`
+
+    : Name for the created option
+
+    # Examples
+    :::{.example}
+    ## `lib.options.mkEnabledOption` usage example
+
+    ```nix
+    # module
+    let
+      eval = lib.evalModules {
+        modules = [
+          {
+            options.foo.enable = mkEnabledOption "foo";
+
+            config.foo.enable = false;
+          }
+        ];
+      };
+    in
+    eval.config
+    => { foo.enable = false; }
+    ```
+
+    :::
+  */
+  mkEnabledOption =
+    name:
+    mkToggleOption {
+      default = true;
+      inherit name;
     };
 
   /**
