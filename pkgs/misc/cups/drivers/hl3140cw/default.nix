@@ -11,6 +11,8 @@
   a2ps,
   coreutils,
   gawk,
+  gnugrep,
+  runtimeShell,
 }:
 
 let
@@ -97,7 +99,17 @@ stdenv.mkDerivation {
 
     cp brcupsconfpt1 $out/opt/brother/Printers/hl3140cw/cupswrapper/
     ln -s $out/opt/brother/Printers/hl3140cw/cupswrapper/brcupsconfpt1 $out/lib/cups/filter/brcupsconfpt1
-    ln -s $out/opt/brother/Printers/hl3140cw/lpd/filterhl3140cw $out/lib/cups/filter/brother_lpdwrapper_hl3140cw
+    substitute ${./brother_lpdwrapper_hl3140cw.sh} $out/lib/cups/filter/brother_lpdwrapper_hl3140cw \
+      --subst-var out \
+      --subst-var-by bash ${runtimeShell} \
+      --subst-var-by path ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+          gnugrep
+        ]
+      }
+    chmod +x $out/lib/cups/filter/brother_lpdwrapper_hl3140cw
 
     wrapProgram $out/opt/brother/Printers/hl3140cw/cupswrapper/cupswrapperhl3140cw \
       --prefix PATH ":" ${
