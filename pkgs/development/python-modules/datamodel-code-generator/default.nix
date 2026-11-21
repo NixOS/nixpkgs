@@ -128,6 +128,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "datamodel_code_generator" ];
 
   meta = {
+    broken = true; # outdated, unmaintained, hard to upgrade
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";
     homepage = "https://github.com/datamodel-code-generator/datamodel-code-generator";
     changelog = "https://github.com/datamodel-code-generator/datamodel-code-generator/releases/tag/${finalAttrs.src.tag}";
