@@ -35,6 +35,12 @@ in
         description = "Port used by automx2.";
       };
 
+      nginx = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to configure nginx hosts";
+      };
+
       settings = lib.mkOption {
         inherit (format) type;
         description = ''
@@ -46,7 +52,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.nginx = {
+    services.nginx = lib.mkIf cfg.nginx {
       enable = true;
       virtualHosts = {
         "autoconfig.${cfg.domain}" = {
