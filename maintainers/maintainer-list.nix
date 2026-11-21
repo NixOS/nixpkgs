@@ -1132,6 +1132,11 @@
     githubId = 339369;
     name = "Alexander Kjeldaas";
   };
+  ak2k = {
+    github = "ak2k";
+    githubId = 19240940;
+    name = "Adam";
+  };
   akamaus = {
     email = "dmitryvyal@gmail.com";
     github = "akamaus";
