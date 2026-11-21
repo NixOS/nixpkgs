@@ -3772,9 +3772,7 @@ with pkgs;
     coursier = coursier.override { jre = jdk8; };
   };
 
-  squeak = callPackage ../development/compilers/squeak {
-    stdenv = clangStdenv;
-  };
+  squeak = callPackage ../development/compilers/squeak { };
 
   squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
     drivers = [

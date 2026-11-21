@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
   fetchurl,
   fetchzip,
@@ -38,7 +38,7 @@ let
 
   nullableOr = o: default: if o == null then default else o;
 
-  bits = stdenv.hostPlatform.parsed.cpu.bits;
+  bits = clangStdenv.hostPlatform.parsed.cpu.bits;
 
   squeakVersion = nullableOr args.squeakVersion or null "5.3-19459";
   squeakVersionSplit = builtins.split "-" squeakVersion;
@@ -67,7 +67,7 @@ let
         "sha256-quwmhpJlb2fp0fI9b03fBxSR44j1xmHPW20wkSqTOhQ=";
   });
 in
-stdenv.mkDerivation {
+clangStdenv.mkDerivation {
   pname = "squeak";
   version = squeakVersion;
 
@@ -179,7 +179,7 @@ stdenv.mkDerivation {
       # C23 default rejects implicit declarations (e.g. close() without <unistd.h>).
       "-std=gnu17"
     ]
-    ++ (lib.optionals stdenv.cc.isClang [
+    ++ (lib.optionals clangStdenv.cc.isClang [
       # LLVM 16 turned these into errors (rightly, perhaps.)
       # Allow this package to continue to build despite this change.
       "-Wno-error=int-conversion"
