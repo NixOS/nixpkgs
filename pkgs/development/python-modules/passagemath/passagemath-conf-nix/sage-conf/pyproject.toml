@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "passagemath-conf"
+version = "10.8.13"
+
+[tool.setuptools]
+py-modules = ["sage.config"]
+packages = ["_sage_conf"]
+
+[project.scripts]
+sage-config = "sage.config:main"
+
