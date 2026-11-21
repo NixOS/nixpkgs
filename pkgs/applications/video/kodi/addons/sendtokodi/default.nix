@@ -42,13 +42,13 @@ in
 buildKodiAddon rec {
   pname = "sendtokodi";
   namespace = "plugin.video.sendtokodi";
-  version = "0.10.0";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "firsttris";
     repo = "plugin.video.sendtokodi";
     tag = "v${version}";
-    hash = "sha256-+xEso7Na+ffo/tdZc33/3UKGk+ZuN5yaPH2Se8CSr8w=";
+    hash = "sha256-LCXeAgQ53FeNn5Z7iJJgDk4EsIedCgOFkrGREPIhi1o=";
   };
 
   nativeBuildInputs = [ yq-go ];
