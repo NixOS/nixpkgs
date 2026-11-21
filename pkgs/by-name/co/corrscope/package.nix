@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "corrscope";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
     tag = finalAttrs.version;
-    hash = "sha256-76qa4jOSncK1eDly/uXJzpWWdsEz7Hg3DyFb7rmrQBc=";
+    hash = "sha256-oA3ysMS0MYaz9lC4P9I56SvKgY/+n1WAuN0mj3JIdNg=";
   };
 
   nativeBuildInputs = with qt6Packages; [
