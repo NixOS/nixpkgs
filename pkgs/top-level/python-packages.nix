@@ -4839,6 +4839,8 @@ self: super: with self; {
 
   django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
 
+  django-modern-rest = callPackage ../development/python-modules/django-modern-rest { };
+
   django-money = callPackage ../development/python-modules/django-money { };
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
@@ -14472,6 +14474,8 @@ self: super: with self; {
   pulumiverse-talos = callPackage pkgs.pulumiPackages.pulumiverse-talos.sdks.python.override { };
 
   puppetparser = callPackage ../development/python-modules/puppetparser { };
+
+  punq = callPackage ../development/python-modules/punq { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
