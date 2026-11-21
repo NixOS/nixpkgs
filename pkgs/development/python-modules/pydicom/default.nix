@@ -29,14 +29,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pydicom";
-  version = "3.0.2";
+  version = "2.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d7fFsNKzUoGUDg9E6KVHq64g7p8QzIAAEIk3vLQ+rQ0=";
+    hash = "sha256-91OJz7rGuHgpKa4I8DuORMQbUT0c6xCSMBDYblzSPYE=";
   };
 
   build-system = [ flit-core ];
