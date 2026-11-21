@@ -1,11 +1,146 @@
---- a/aeron-archive/src/main/cpp/CMakeLists.txt
-+++ b/aeron-archive/src/main/cpp/CMakeLists.txt
-@@ -59,7 +59,7 @@ set(GENERATED_CODECS
-     ${ARCHIVE_CODEC_TARGET_DIR}/aeron_archive_client/RecordingSignalEvent.h)
+diff --git a/aeron-archive/src/main/c/CMakeLists.txt b/aeron-archive/src/main/c/CMakeLists.txt
+index ad9d9f9..aa6bd11 100644
+--- a/aeron-archive/src/main/c/CMakeLists.txt
++++ b/aeron-archive/src/main/c/CMakeLists.txt
+@@ -65,62 +65,62 @@ endif ()
  
- add_custom_command(OUTPUT ${GENERATED_CODECS}
--    COMMAND ${CMAKE_COMMAND} -E env JAVA_HOME=$ENV{JAVA_HOME} BUILD_JAVA_HOME=$ENV{BUILD_JAVA_HOME} BUILD_JAVA_VERSION=$ENV{BUILD_JAVA_VERSION} ${GRADLE_WRAPPER} -Dcodec.target.dir=${ARCHIVE_CODEC_TARGET_DIR} :aeron-archive:generateCppCodecs --no-daemon --console=plain -q
-+    COMMAND ${CMAKE_COMMAND} -E env JAVA_HOME=$ENV{JAVA_HOME} BUILD_JAVA_HOME=$ENV{BUILD_JAVA_HOME} BUILD_JAVA_VERSION=$ENV{BUILD_JAVA_VERSION} java -cp sbe.jar -Dsbe.output.dir=${ARCHIVE_CODEC_TARGET_DIR} -Dsbe.target.language=Cpp -Dsbe.target.namespace=aeron.archive.client uk.co.real_logic.sbe.SbeTool ${ARCHIVE_CODEC_SCHEMA_DIR}/aeron-archive-codecs.xml
+ set(CODEC_SCHEMA ${ARCHIVE_CODEC_SCHEMA_DIR}/aeron-archive-codecs.xml)
+ set(GENERATED_C_CODECS
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/archiveIdRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/attachSegmentsRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/authConnectRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/booleanType.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/boundedReplayRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/catalogHeader.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/challenge.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/challengeResponse.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/closeSessionRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/connectRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/controlResponse.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/controlResponseCode.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/deleteDetachedSegmentsRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/detachSegmentsRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/extendRecordingRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/extendRecordingRequest2.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/findLastMatchingRecordingRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/keepAliveRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/listRecordingRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/listRecordingSubscriptionsRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/listRecordingsForUriRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/listRecordingsRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/maxRecordedPositionRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/messageHeader.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/migrateSegmentsRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/purgeRecordingRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/purgeSegmentsRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingDescriptor.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingDescriptorHeader.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingPositionRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingProgress.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingSignal.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingSignalEvent.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingStarted.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingState.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingStopped.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/recordingSubscriptionDescriptor.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/replayRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/replayTokenRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/replicateRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/replicateRequest2.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/sourceLocation.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/startPositionRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/startRecordingRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/startRecordingRequest2.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/stopAllReplaysRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/stopPositionRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/stopRecordingByIdentityRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/stopRecordingRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/stopRecordingSubscriptionRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/stopReplayRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/stopReplicationRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/taggedReplicateRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/truncateRecordingRequest.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/varAsciiEncoding.h
+-    ${ARCHIVE_CODEC_TARGET_DIR}/aeron_c_archive_client/varDataEncoding.h)
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/archiveIdRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/attachSegmentsRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/authConnectRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/booleanType.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/boundedReplayRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/catalogHeader.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/challenge.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/challengeResponse.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/closeSessionRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/connectRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/controlResponse.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/controlResponseCode.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/deleteDetachedSegmentsRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/detachSegmentsRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/extendRecordingRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/extendRecordingRequest2.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/findLastMatchingRecordingRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/keepAliveRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/listRecordingRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/listRecordingSubscriptionsRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/listRecordingsForUriRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/listRecordingsRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/maxRecordedPositionRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/messageHeader.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/migrateSegmentsRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/purgeRecordingRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/purgeSegmentsRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingDescriptor.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingDescriptorHeader.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingPositionRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingProgress.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingSignal.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingSignalEvent.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingStarted.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingState.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingStopped.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/recordingSubscriptionDescriptor.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/replayRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/replayTokenRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/replicateRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/replicateRequest2.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/sourceLocation.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/startPositionRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/startRecordingRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/startRecordingRequest2.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/stopAllReplaysRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/stopPositionRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/stopRecordingByIdentityRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/stopRecordingRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/stopRecordingSubscriptionRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/stopReplayRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/stopReplicationRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/taggedReplicateRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/truncateRecordingRequest.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/varAsciiEncoding.h
++    ${ARCHIVE_CODEC_TARGET_DIR}/c/aeron_archive_client/varDataEncoding.h)
+ 
+ add_custom_command(OUTPUT ${GENERATED_C_CODECS}
+     COMMAND ${CMAKE_COMMAND}
+@@ -128,12 +128,16 @@ add_custom_command(OUTPUT ${GENERATED_C_CODECS}
+             JAVA_HOME=${JAVA_HOME}
+             BUILD_JAVA_HOME=${BUILD_JAVA_HOME}
+             BUILD_JAVA_VERSION=${BUILD_JAVA_VERSION}
+-            ${GRADLE_WRAPPER}
+-            -Dcodec.target.dir=${ARCHIVE_C_CODEC_TARGET_DIR}
+-            :aeron-archive:generateCCodecs
+-            --no-daemon
+-            --console=plain
+-            --quiet
++            java
++            --add-opens
++            java.base/jdk.internal.misc=ALL-UNNAMED
++            -cp
++            sbe.jar
++            -Dsbe.output.dir=${ARCHIVE_C_CODEC_TARGET_DIR}
++            -Dsbe.target.language=C
++            -Dsbe.target.namespace=aeron.archive.client
++            uk.co.real_logic.sbe.SbeTool
++            ${CODEC_SCHEMA}
      DEPENDS ${CODEC_SCHEMA} aeron-all-jar
      WORKING_DIRECTORY ${ARCHIVE_CODEC_WORKING_DIR}
-     COMMENT "Generating C++ Archive codecs")
+     COMMENT "Generating C Archive codecs"
