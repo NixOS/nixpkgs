@@ -329,6 +329,9 @@ in
 
     environment.systemPackages =
       let
+        calibrate-shaper = pkgs.writeShellScriptBin "klipper-calibrate-shaper" ''
+          exec ${lib.getExe' cfg.package "klipper-calibrate-shaper"} "$@"
+        '';
         genconf = pkgs.klipper-genconf.override {
           klipper = cfg.package;
         };
@@ -339,7 +342,12 @@ in
           lib.mapAttrsToList (mcu: firmware: firmware.klipperFlashPackage) cfg.firmwares
         );
       in
-      [ genconf ] ++ firmwares ++ firmwareFlashers;
+      [
+        calibrate-shaper
+        genconf
+      ]
+      ++ firmwares
+      ++ firmwareFlashers;
   };
   meta.maintainers = [
     lib.maintainers.cab404
