@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
-  version = "0.8.7";
+  version = "0.9.0";
   __structuredAttrs = true;
 
   buildInputs = [
@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cloudflare";
     repo = "workers-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZZFyZeu/PGwUatOWG/SPI7y+XyiuUyHO7L5y0qtJl70=";
+    hash = "sha256-zmeQp7db2rwfECp9p5NthKvzsZFnQPFO+eueIhFsIwE=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-AHTBKz8jwUaQpC03oH15NxtBQYO5PrvUVLwkz4+L5K8=";
+  cargoHash = "sha256-EbRwSrxRys2EcDfB88apmH5Rm0NUWLKtmGPS77fAhpI=";
 
   buildAndTestSubdir = "worker-build";
 

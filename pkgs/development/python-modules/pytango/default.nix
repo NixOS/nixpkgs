@@ -26,12 +26,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytango";
-  version = "10.3.1";
+  version = "10.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-uFEJFeT4WbK5d1sjZBqy4tVpM8niDYnxMj7g1Vw88Ec=";
+    hash = "sha256-hKteM3DTJfQRt8bt+N566A2zsXA7wpE7GSipkhIJShM=";
   };
 
   dontUseCmakeConfigure = true;

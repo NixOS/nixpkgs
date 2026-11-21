@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tlsx";
-  version = "1.4.5";
+  version = "1.5.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "projectdiscovery";
     repo = "tlsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-clKmXZxfP5xZZUNFZ+N/Y+cQnhe1wJC+QIlkrJ+L5KY=";
+    hash = "sha256-kTSgWRmnbYbOOZaXizIINYIw65fWmtHq99VzRTHHV/0=";
   };
 
-  vendorHash = "sha256-kzzQx5+A/TZ8wBex01nuhJx9gkE2Ef9EOkkqlBEBNzc=";
+  vendorHash = "sha256-DiSKAGzxRM1qcIj1UTlptE1vfWKIMtzRH71aTVwCio8=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

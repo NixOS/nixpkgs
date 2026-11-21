@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
+  nodejs,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -17,10 +17,9 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDepsHash = "sha256-7AajJbMRirj1diuSIHC8MgYMChsZfvq1t+IBk0y/46Y=";
-  # Using the npmDeps with a newer nodejs causes `npm ci` errors, also upstream
-  # states they stick to the LTS version of nodejs:
-  # https://meshcentral.com/docs/MeshCentral2InstallGuide.pdf
-  nodejs = nodejs_22;
+
+  # node-gyp needs distutils
+  nativeBuildInputs = [ (nodejs.python.withPackages (ps: [ ps.setuptools ])) ];
 
   patches = [
     ./fix-js-include-paths.patch

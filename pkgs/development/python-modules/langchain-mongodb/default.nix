@@ -50,6 +50,8 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [ "langchain-core" ];
+
   dependencies = [
     langchain
     langchain-classic

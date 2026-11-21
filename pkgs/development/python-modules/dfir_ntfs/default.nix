@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dfir-ntfs";
-  version = "1.1.19";
+  version = "1.1.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "msuhanov";
     repo = "dfir_ntfs";
     tag = finalAttrs.version;
-    hash = "sha256-iZd8qFLm77Fv8iUAB5M75u9a3SSBHqUEtZ8CPq8g7Ps=";
+    hash = "sha256-7Ogn3oUrsdeeyQ6WdunJDY0NClzUUjL7brQt6j7IETo=";
   };
 
   build-system = [ setuptools ];
