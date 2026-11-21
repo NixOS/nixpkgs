@@ -10,23 +10,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "adguardhome";
-  version = "0.107.80";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "AdguardTeam";
     repo = "AdGuardHome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B+Li3aeijXFcc+AAXkafinldEluHu1oeUdk919eGkxQ=";
+    hash = "sha256-+pn+0OEk9CR3HdMvxtpAUId2ivzZWTHVuDO6gfCGGOw=";
   };
 
-  vendorHash = "sha256-xQUbRYS1z9WI8x0Uw/QNrITw8Itof6KxRdtnC0DJVkg=";
+  vendorHash = "sha256-J9MjRREeFe3NI9jmECaZ6rqRIRwDx2PfcgirJOPx084=";
 
   dashboard = buildNpmPackage {
     inherit (finalAttrs) src version;
     pname = "adguardhome-dashboard";
     postPatch = ''
-      cd client
+      cd client_v2
     '';
-    npmDepsHash = "sha256-Yyv8dTKhZ9IlIW/x/57cl/+cpvjjycaFLSyOR0IiIPk=";
+    npmDepsHash = "sha256-PV5G1DOOk1Q2dJNfBp9uEeRIFHyUBpf8Un9X8AX9Ro8=";
     npmBuildScript = "build-prod";
     postBuild = ''
       mkdir -p $out/build/
