@@ -24660,6 +24660,12 @@
     name = "Rin";
     keys = [ { fingerprint = "476A F55D 6378 F878 0709  848A 18F9 F516 1CC0 576C"; } ];
   };
+  r1w1s1 = {
+    email = "ricardsonwilliams@gmail.com";
+    github = "r1w1s1";
+    githubId = 9008753;
+    name = "Ricardson";
+  };
   r3dl3g = {
     email = "redleg@rothfuss-web.de";
     github = "r3dl3g";
