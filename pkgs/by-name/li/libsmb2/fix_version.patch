@@ -1,0 +1,14 @@
+--- a/CMakeLists.txt	2026-02-16 12:09:21.737951500 +0100
++++ b/CMakeLists.txt	2026-02-16 12:09:47.681936339 +0100
+@@ -29,9 +29,9 @@
+   else()
+     project(libsmb2
+             LANGUAGES C
+-            VERSION 6.1.0
++            VERSION 6.2.0
+     )  
+-    set(VERSION 6.1.0)
++    set(VERSION 6.2.0)
+     set(PACKAGE "libsmb2")
+     set(PACKAGE_BUGREPORT "ronniesahlberg@gmail.com")
+     set(PACKAGE_NAME "libsmb2")
