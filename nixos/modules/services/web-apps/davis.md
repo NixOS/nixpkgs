@@ -31,3 +31,35 @@ After that, `davis` can be deployed like this:
 This deploys Davis using a sqlite database running out of `/var/lib/davis`.
 
 Logs can be found in `/var/lib/davis/var/log/`.
+
+## Configure WebDAV storage {#module-services-davis-webdav}
+
+This module does not create WebDAV storage directories. Set the paths through
+`services.davis.config`, create the directories, and give the service write
+access. This example uses `/srv/webdav`, outside `services.davis.dataDir`:
+
+```nix
+{ config, ... }:
+let
+  cfg = config.services.davis;
+in
+{
+  services.davis.config = {
+    WEBDAV_ENABLED = true;
+    WEBDAV_TMP_DIR = "/srv/webdav/tmp";
+    WEBDAV_PUBLIC_DIR = "/srv/webdav/public";
+  };
+  systemd.tmpfiles.rules = [
+    "d /srv/webdav        0700 ${cfg.user} ${cfg.group} - -"
+    "d /srv/webdav/tmp    0700 ${cfg.user} ${cfg.group} - -"
+    "d /srv/webdav/public 0700 ${cfg.user} ${cfg.group} - -"
+  ];
+  systemd.services.phpfpm-davis.serviceConfig.ReadWritePaths = [ "/srv/webdav" ];
+}
+```
+
+PHP-FPM already has write access to `services.davis.dataDir`. For storage under
+that directory, the extra `ReadWritePaths` entry is not necessary.
+
+See the [Davis documentation](https://github.com/tchapi/davis#configuration)
+for directory settings and file access rules.
