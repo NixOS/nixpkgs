@@ -93,7 +93,6 @@
           ProtectSystem = "strict";
           NoNewPrivileges = true;
           ProtectHostname = true;
-          ProtectProc = "invisible";
           ProcSubset = "pid";
           SystemCallArchitectures = "native";
           PrivateTmp = true;
@@ -114,7 +113,7 @@
             "AF_INET AF_INET6 AF_NETLINK AF_PACKET AF_UNIX"
           ];
           CapabilityBoundingSet = [
-            "CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SETUID CAP_SETGID CAP_CHOWN CAP_MKNOD"
+            "CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SETUID CAP_SETGID CAP_CHOWN CAP_MKNOD CAP_SYS_PTRACE CAP_DAC_READ_SEARCH"
           ];
           SystemCallFilter = [
             "~@aio @chown @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @pkey @privileged @raw-io @reboot @sandbox @setuid @swap @timer"
