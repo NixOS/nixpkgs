@@ -884,6 +884,7 @@
   ./services/misc/bepasty.nix
   ./services/misc/bifrost.nix
   ./services/misc/blenderfarm.nix
+  ./services/misc/bt-dualboot.nix
   ./services/misc/calibre-server.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/castsponsorskip.nix
