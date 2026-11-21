@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "piv-agent";
-  version = "0.24.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "smlx";
     repo = "piv-agent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fFnUWV+q9M0QS84N59DKMVQ+uTG8adZaUi1fPipwF/U=";
+    hash = "sha256-j8u6/Hn6v2OMCTks6O/r4SpBoTvaOl/M7r6GYgECUpw=";
   };
 
-  vendorHash = "sha256-j8Sq8j99APyOmfgpqkaVTgawJ0ahToHQt71TMBoafm0=";
+  vendorHash = "sha256-RezpLJzSL6TfS60DJOdznLKLPUdFcqTBZBQxw5UWavM=";
 
   subPackages = [ "cmd/piv-agent" ];
 
