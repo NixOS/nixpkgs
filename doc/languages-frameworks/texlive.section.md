@@ -69,9 +69,7 @@ There is a TeX Live packaging that lives entirely under attribute `texlive`.
     inherit (finalAttrs.src) pname version;
 
     installPhase = ''
-      runHook preInstall
       install -Dm644 $src/fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
-      runHook postInstall
     '';
   })
   ```
@@ -118,13 +116,9 @@ let
     ];
 
     unpackPhase = ''
-      runHook preUnpack
-
       for _src in $srcs; do
         cp "$_src" $(stripHash "$_src")
       done
-
-      runHook postUnpack
     '';
 
     nativeBuildInputs = [
@@ -146,20 +140,14 @@ let
     dontConfigure = true;
 
     buildPhase = ''
-      runHook preBuild
-
       # Generate the style files
       latex foiltex.ins
 
       # Generate the documentation
       latexmk -pdf foiltex.dtx
-
-      runHook postBuild
     '';
 
     installPhase = ''
-      runHook preInstall
-
       path="$tex/tex/latex/foiltex"
       mkdir -p "$path"
       cp *.{cls,def,clo,sty} "$path/"
@@ -167,8 +155,6 @@ let
       path="$texdoc/doc/tex/latex/foiltex"
       mkdir -p "$path"
       cp *.pdf "$path/"
-
-      runHook postInstall
     '';
 
     meta = {

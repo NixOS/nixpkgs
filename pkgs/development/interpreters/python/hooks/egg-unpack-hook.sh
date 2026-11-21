@@ -7,7 +7,7 @@ eggUnpackPhase() {
 
     cp "$src" "$(stripHash "$src")"
 
-    # runHook postUnpack # Calls find...?
+    runHookDone[postUnpack]=1 # Calls find...?
     echo "Finished executing eggUnpackPhase"
 }
 
