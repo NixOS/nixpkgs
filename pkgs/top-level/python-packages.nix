@@ -2758,6 +2758,8 @@ self: super: with self; {
 
   brunt = callPackage ../development/python-modules/brunt { };
 
+  bscpylgtv = callPackage ../development/python-modules/bscpylgtv { };
+
   bsdiff4 = callPackage ../development/python-modules/bsdiff4 { };
 
   bson = callPackage ../development/python-modules/bson { };
