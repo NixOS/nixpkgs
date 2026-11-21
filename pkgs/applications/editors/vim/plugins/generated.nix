@@ -108,6 +108,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  denote-nvim = buildVimPlugin {
+    pname = "denote.nvim";
+    version = "0.2-unstable-2026-10-07";
+    src = fetchFromGitHub {
+      owner = "cvigilv";
+      repo = "denote.nvim";
+      rev = "3476238c315838da2d10b749290bb0cec37265a1";
+      hash = "sha256-cULpXw3/X9+b7kbAWKCfa4FrwnGt/i0q+6IrFU1gxao=";
+    };
+    meta.homepage = "https://github.com/cvigilv/denote.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   DoxygenToolkit-vim = buildVimPlugin {
     pname = "DoxygenToolkit.vim";
     version = "0.2.13";
