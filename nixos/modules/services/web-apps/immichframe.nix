@@ -25,6 +25,24 @@ in
       description = "The port that ImmichFrame will listen on.";
     };
 
+    configSource = mkOption {
+      type = types.enum [
+        "file"
+        "database"
+      ];
+      default = "file";
+      description = ''
+        Whether a config file or the database is the source of truth for ImmichFrame's configuration.
+
+        The default ("file") allows for purely declarative management of ImmichFrame,
+        but disables the admin UI.
+
+        "database" enables the admin UI, but means the values you set in
+        {option}`config.services.immichframe.settings`  will only be read the first time ImmichFrame starts.
+        After that, changes must be made through the admin UI.
+      '';
+    };
+
     settings = mkOption {
       type = types.submodule {
         freeformType = format.type;
@@ -120,6 +138,7 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment = {
+          IMMICHFRAME_CONFIG_SOURCE = cfg.configSource;
           IMMICHFRAME_CONFIG_PATH = pkgs.runCommand "Config" { } ''
             mkdir $out
             ln -s ${format.generate "Settings.json" settingsWithFixedSecretPaths} $out/Settings.json
