@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     "aiovban"
   ];
 
-  passthru.tests = finalAttrs.finalPackage.overrideAttrs (_: {
+  passthru.tests.pytest = finalAttrs.finalPackage.overrideAttrs (_: {
     doInstallCheck = true;
   });
 
