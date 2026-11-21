@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove syscalls during build to make it reproducible
     # We also need to adjust some header paths for darwin
     ./remove-hard-encodings.patch
+
+    # Backport https://gitlab.com/eliggett/wfview/-/merge_requests/51 to 2.11
+    ./fix-qt-6.11.patch
   ];
 
   buildInputs = [
