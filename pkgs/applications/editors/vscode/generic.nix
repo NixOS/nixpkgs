@@ -501,6 +501,10 @@ stdenv.mkDerivation (
           --add-needed ${libglvnd}/lib/libGL.so.1 \
           --add-needed ${libglvnd}/lib/libEGL.so.1 \
           $out/lib/${libraryName}/${executableName}
+
+        patchelf \
+          --add-needed ${lib.getLib openssl}/lib/libssl.so.3 \
+          $out/lib/vscode/resources/app/node_modules.asar.unpacked/@github/copilot-sdk-linux-x64/prebuilds/linux-x64/runtime.node
       ''
       # restore original vsce-sign, which has integrity checks
       + (lib.optionalString hasVsceSign ''
