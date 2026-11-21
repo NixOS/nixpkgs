@@ -9888,6 +9888,8 @@ with pkgs;
       }
     );
 
+  vmlinux-to-elf-gui = vmlinux-to-elf.override { withGui = true; };
+
   py-wacz = with python3Packages; toPythonApplication wacz;
 
   winePackagesFor = wineBuild: callPackage ./wine-packages.nix { inherit wineBuild; };
