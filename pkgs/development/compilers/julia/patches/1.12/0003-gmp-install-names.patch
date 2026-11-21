@@ -1,0 +1,23 @@
+Subject: [PATCH] fix libgmpxx install names on darwin
+
+deps/gmp.mk only ran INSTALL_NAME_CMD on libgmp, so libgmpxx kept the
+absolute build-directory paths it was linked with, both as its own id and
+as its reference to libgmp. Loading GMP_jll from an installed tree then
+fails with "Library not loaded: <builddir>/usr/lib/libgmp.10.dylib".
+
+diff --git a/deps/gmp.mk b/deps/gmp.mk
+index 23075c8..4410182 100644
+--- a/deps/gmp.mk
++++ b/deps/gmp.mk
+@@ -68,7 +68,10 @@ $(eval $(call staged-install, \
+ 	gmp,gmp-$(GMP_VER), \
+ 	MAKE_INSTALL,,, \
+ 	$$(WIN_MAKE_HARD_LINK) $(build_bindir)/libgmp-*.dll $(build_bindir)/libgmp.dll && \
+-		$$(INSTALL_NAME_CMD)libgmp.$$(SHLIB_EXT) $$(build_shlibdir)/libgmp.$$(SHLIB_EXT)))
++		$$(INSTALL_NAME_CMD)libgmp.$$(SHLIB_EXT) $$(build_shlibdir)/libgmp.$$(SHLIB_EXT) && \
++		$$(INSTALL_NAME_CMD)libgmpxx.$$(SHLIB_EXT) $$(build_shlibdir)/libgmpxx.$$(SHLIB_EXT) && \
++		$$(INSTALL_NAME_CHANGE_CMD) $$(build_shlibdir)/libgmp.10.dylib @rpath/libgmp.$$(SHLIB_EXT) \
++			$$(build_shlibdir)/libgmpxx.$$(SHLIB_EXT)))
+ 
+ clean-gmp:
+ 	-rm -f $(BUILDDIR)/gmp-$(GMP_VER)/build-configured $(BUILDDIR)/gmp-$(GMP_VER)/build-compiled
