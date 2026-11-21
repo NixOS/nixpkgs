@@ -1,25 +1,25 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   autoAddDriverRunpath,
   dcgm,
 }:
-buildGoModule rec {
+buildGo127Module rec {
   pname = "dcgm-exporter";
 
-  # The first portion of this version string corresponds to a compatible DCGM
-  # version.
-  version = "4.3.1-4.4.0"; # N.B: If you change this, update dcgm as well to the matching version.
+  version = "4.8.4"; # N.B: If you change this, update dcgm as well to the matching version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "dcgm-exporter";
     tag = version;
-    hash = "sha256-NafQWP1NxHTwmOND8ovy3oVia7qq0rCwZYE3VNlMBKQ=";
+    hash = "sha256-xyOWhORqdUeWnEXDlTLsAuWEPb3q9+ioGJObwysJFBk=";
   };
 
   env.CGO_LDFLAGS = "-ldcgm";
+
+  ldflags = [ "-X main.BuildVersion=${version}" ];
 
   buildInputs = [
     dcgm
@@ -29,7 +29,7 @@ buildGoModule rec {
   # symbols are available on startup.
   hardeningDisable = [ "bindnow" ];
 
-  vendorHash = "sha256-BfHC49Dzb4ArXK87JKD+aYEHR5HUS5NL0fEHa0jOCYM=";
+  vendorHash = "sha256-rAfObalba7d4euXDX407PfKASuxNQT2dBr2rg7BsmZo=";
 
   nativeBuildInputs = [
     autoAddDriverRunpath
@@ -37,6 +37,15 @@ buildGoModule rec {
 
   # Tests try to interact with running DCGM service.
   doCheck = false;
+
+  # Ship the upstream metric-counter CSVs (--collectors) alongside the binary.
+  # See https://github.com/NVIDIA/dcgm-exporter/issues/684.
+  postInstall = ''
+    install -Dm444 -t "$out/share/dcgm-exporter" \
+      etc/default-counters.csv \
+      etc/dcp-metrics-included.csv \
+      etc/1.x-compatibility-metrics.csv
+  '';
 
   postFixup = ''
     patchelf --add-needed libnvidia-ml.so "$out/bin/dcgm-exporter"
