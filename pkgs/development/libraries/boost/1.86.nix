@@ -13,7 +13,7 @@ callPackage ./generic.nix (
         }.tar.bz2"
       ];
       # SHA256 from http://www.boost.org/users/history/version_1_86_0.html
-      sha256 = "1bed88e40401b2cb7a1f76d4bab499e352fa4d0c5f31c0dbae64e24d34d7513b";
+      hash = "sha256-G+2I5AQBsst6H3bUurSZ41L6TQxfMcDbrmTiTTTXUTs=";
     };
   }
 )
