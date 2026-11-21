@@ -13,6 +13,7 @@
   gnupg,
   hivex,
   jansson,
+  json_c,
   libguestfs-with-appliance,
   libosinfo,
   libvirt,
@@ -31,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guestfs-tools";
-  version = "1.52.3";
+  version = "1.54.0";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor finalAttrs.version}-stable/guestfs-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0xLCwj6TXU5b+tUewhKE9X0E+FN0MpX6+V+WHFxmiEc=";
+    hash = "sha256-m27742X3r+RGSe2YO7RWSYW1I/iLQau4wrDeFZiGj6I=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     hivex
     jansson
+    json_c
     libguestfs-with-appliance
     libosinfo
     libvirt
@@ -83,6 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace common/mlstdutils/std_utils.ml \
         --replace Sys.executable_name '(Array.get Sys.argv 0)'
   '';
+
+  patches = [
+    # https://github.com/libguestfs/guestfs-tools/issues/28
+    ./guestfs-tools-libguestfs-1.58-compat.patch
+  ];
 
   preConfigure = ''
     patchShebangs ocaml-dep.sh.in ocaml-link.sh.in run.in
