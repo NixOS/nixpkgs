@@ -37,6 +37,7 @@ let
     gnused
     gnutar
     gzip
+    mount
     perl
     util-linux
     wget
