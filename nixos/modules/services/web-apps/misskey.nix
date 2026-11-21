@@ -125,6 +125,24 @@ let
           default = null;
           description = "`ioredis` options for timelines. See [`README`](https://github.com/redis/ioredis?tab=readme-ov-file#connect-to-redis) for reference.";
         };
+        fulltextSearch = lib.mkOption {
+          description = "Fulltext search options.";
+          type = lib.types.submodule {
+            freeformType = lib.types.attrsOf settingsFormat.type;
+            options = {
+              provider = lib.mkOption {
+                type = lib.types.enum [
+                  "sqlLike"
+                  "sqlPgroonga"
+                  "meilisearch"
+                ];
+                default = "sqlLike";
+                description = "The fulltext search provider to use.";
+              };
+            };
+          };
+          default = { };
+        };
         meilisearch = lib.mkOption {
           description = "Meilisearch connection options.";
           type = lib.types.nullOr (
@@ -300,10 +318,12 @@ in
       (lib.mkIf cfg.redis.createLocally { redis.host = lib.mkDefault "localhost"; })
       (lib.mkIf (cfg.redis.passwordFile != null) { redis.pass = lib.mkDefault "@REDIS_PASSWORD@"; })
       (lib.mkIf cfg.meilisearch.createLocally {
+        fulltextSearch.provider = lib.mkDefault "meilisearch";
         meilisearch = {
           host = lib.mkDefault "localhost";
           port = lib.mkDefault config.services.meilisearch.listenPort;
           ssl = lib.mkDefault false;
+          index = lib.mkDefault "misskey";
         };
       })
       (lib.mkIf (cfg.meilisearch.keyFile != null) {
@@ -320,8 +340,15 @@ in
       after = [
         "network-online.target"
         "postgresql.target"
-      ];
-      wants = [ "network-online.target" ];
+      ]
+      ++ lib.optional cfg.redis.createLocally "redis-misskey.service"
+      ++ lib.optional cfg.meilisearch.createLocally "meilisearch.service";
+      wants = [
+        "network-online.target"
+      ]
+      ++ lib.optional cfg.database.createLocally "postgresql.target"
+      ++ lib.optional cfg.redis.createLocally "redis-misskey.service"
+      ++ lib.optional cfg.meilisearch.createLocally "meilisearch.service";
       wantedBy = [ "multi-user.target" ];
       environment = {
         MISSKEY_CONFIG_YML = "/run/misskey/default.yml";
@@ -329,9 +356,6 @@ in
       serviceConfig = {
         ExecStartPre = [
           "${lib.getExe' pkgs.coreutils "install"} -m 700 ${settingsFormat.generate "misskey-config.yml" cfg.settings} /run/misskey/default.yml"
-          "${lib.getExe' pkgs.coreutils "install"} -m 700 ${
-            (pkgs.formats.json { }).generate "misskey-config.json" cfg.settings
-          } /run/misskey/default.json"
         ]
         ++ (lib.optionals (cfg.database.passwordFile != null) [
           "${lib.getExe pkgs.replace-secret} '@DATABASE_PASSWORD@' '${cfg.database.passwordFile}' /run/misskey/default.yml"
