@@ -32868,6 +32868,11 @@
     githubId = 11229748;
     name = "Lin Yinfeng";
   };
+  yippii = {
+    github = "yippii";
+    githubId = 72115911;
+    name = "Boris";
+  };
   yisraeldov = {
     email = "lebow@lebowtech.com";
     name = "Yisrael Dov Lebow";
