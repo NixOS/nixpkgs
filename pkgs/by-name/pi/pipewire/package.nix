@@ -45,6 +45,7 @@
   ffmpeg-headless,
   fftwFloat,
   bluezSupport ? stdenv.hostPlatform.isLinux,
+  fdkAacSupport ? bluezSupport,
   bluez,
   sbc,
   libfreeaptx,
@@ -194,9 +195,9 @@ stdenv.mkDerivation (finalAttrs: {
     libfreeaptx
     liblc3
     sbc
-    fdk_aac
     spandsp
   ]
+  ++ lib.optional (bluezSupport && fdkAacSupport) fdk_aac
   ++ lib.optional ffadoSupport ffado
   ++ lib.optional stdenv.hostPlatform.isLinux libselinux
   ++ lib.optional onnxruntimeSupport onnxruntime
@@ -242,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
     # source code is not easily obtainable
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
+    (lib.mesonEnable "bluez5-codec-aac" (bluezSupport && fdkAacSupport))
     (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
     (lib.mesonEnable "bluez5-codec-ldac-dec" (bluezSupport && ldacbtSupport))
     (lib.mesonEnable "opus" true)
