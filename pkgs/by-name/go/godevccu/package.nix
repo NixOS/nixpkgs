@@ -7,14 +7,14 @@
 
 buildGo127Module (finalAttrs: {
   pname = "godevccu";
-  version = "0.10.1";
+  version = "0.12.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "godevccu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S+hcvHnXoDRDUyLveSKbH/qaLs/+P7SradDextLcHZE=";
+    hash = "sha256-zKMYdmZbeJbHqq+VV2lcNgm7amcwl3rMcHR0EknI7VY=";
   };
 
   vendorHash = null;
