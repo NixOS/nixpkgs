@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.33";
+  version = "0.0.35";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "pcffont-python";
     tag = version;
-    hash = "sha256-inK/+oQkWfhIwhUjN3TkKvyk0AAxoliSsUzR84tLt9U=";
+    hash = "sha256-/ysGjrkeH0nXFO88aMYu4uUq0Ct8IlV1mT7ETB9wJcg=";
   };
 
   build-system = [ uv-build ];
