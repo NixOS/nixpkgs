@@ -3,12 +3,15 @@
   lib,
   pkgs,
   options,
+  utils,
   ...
 }:
 
 let
   logPrefix = "services.prometheus.exporter.ipmi";
   cfg = config.services.prometheus.exporters.ipmi;
+  enableInBand = cfg.inBandDevices != [ ];
+  deviceUnits = map (device: "${utils.escapeSystemdPath device}.device") cfg.inBandDevices;
   inherit (lib)
     mkOption
     types
@@ -21,6 +24,17 @@ in
   port = 9290;
 
   extraOpts = {
+    inBandDevices = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "/dev/ipmi0" ];
+      description = ''
+        Paths to local IPMI devices the exporter may access. The service
+        waits for every listed device to become ready before starting.
+        Configure which devices to query separately in {option}`configFile`.
+      '';
+    };
+
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -37,6 +51,11 @@ in
       '';
     };
   };
+
+  # Device units become ready after udev has applied their access permissions.
+  serviceOpts.after = deviceUnits ++ optionals enableInBand [ "modprobe@ipmi_devintf.service" ];
+  serviceOpts.requires = deviceUnits;
+  serviceOpts.wants = optionals enableInBand [ "modprobe@ipmi_devintf.service" ];
 
   serviceOpts.serviceConfig = {
     ExecStart =
@@ -56,10 +75,13 @@ in
       );
 
     ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+    DeviceAllow = lib.mkIf enableInBand (map (device: "${device} rw") cfg.inBandDevices);
+    PrivateDevices = lib.mkIf enableInBand false;
     RestrictAddressFamilies = [
       "AF_INET"
       "AF_INET6"
       "AF_UNIX"
     ];
+    SupplementaryGroups = lib.mkIf enableInBand [ "ipmi-exporter-access" ];
   };
 }
