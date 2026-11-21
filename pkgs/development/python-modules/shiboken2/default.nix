@@ -69,6 +69,6 @@ stdenv.mkDerivation {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = [ ];
-    broken = python.pythonAtLeast "3.13";
+    broken = python.pythonAtLeast "3.14";
   };
 }
