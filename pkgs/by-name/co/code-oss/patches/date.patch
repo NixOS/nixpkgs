@@ -1,0 +1,238 @@
+diff --git a/build/azure-pipelines/common/codesign.js b/build/azure-pipelines/common/codesign.js
+index 4e82538d105..2699efb6749 100644
+--- a/build/azure-pipelines/common/codesign.js
++++ b/build/azure-pipelines/common/codesign.js
+@@ -8,8 +8,9 @@ exports.spawnCodesignProcess = spawnCodesignProcess;
+  *  Licensed under the MIT License. See License.txt in the project root for license information.
+  *--------------------------------------------------------------------------------------------*/
+ const zx_1 = require("zx");
++const util_1 = require("../../lib/util");
+ function printBanner(title) {
+-    title = `${title} (${new Date().toISOString()})`;
++    title = `${title} (${(0, util_1.getDate)().toISOString()})`;
+     console.log('\n');
+     console.log('#'.repeat(75));
+     console.log(`# ${title.padEnd(71)} #`);
+diff --git a/build/azure-pipelines/common/codesign.ts b/build/azure-pipelines/common/codesign.ts
+index 9f26b3924b5..559ab052cd1 100644
+--- a/build/azure-pipelines/common/codesign.ts
++++ b/build/azure-pipelines/common/codesign.ts
+@@ -4,9 +4,10 @@
+  *--------------------------------------------------------------------------------------------*/
+ 
+ import { $, ProcessPromise } from 'zx';
++import { getDate } from '../../lib/util';
+ 
+ export function printBanner(title: string) {
+-	title = `${title} (${new Date().toISOString()})`;
++	title = `${title} (${getDate().toISOString()})`;
+ 
+ 	console.log('\n');
+ 	console.log('#'.repeat(75));
+diff --git a/build/azure-pipelines/common/createBuild.js b/build/azure-pipelines/common/createBuild.js
+index feb06cbe67f..cde7d05d0ba 100644
+--- a/build/azure-pipelines/common/createBuild.js
++++ b/build/azure-pipelines/common/createBuild.js
+@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ const identity_1 = require("@azure/identity");
+ const cosmos_1 = require("@azure/cosmos");
+ const retry_1 = require("./retry");
++const util_1 = require("../../lib/util");
+ if (process.argv.length !== 3) {
+     console.error('Usage: node createBuild.js VERSION');
+     process.exit(-1);
+@@ -31,7 +32,7 @@ async function main() {
+     console.log('Commit:', commit);
+     const build = {
+         id: commit,
+-        timestamp: (new Date()).getTime(),
++        timestamp: (0, util_1.getDate)().getTime(),
+         version,
+         isReleased: false,
+         private: process.env['VSCODE_PRIVATE_BUILD']?.toLowerCase() === 'true',
+diff --git a/build/azure-pipelines/common/createBuild.ts b/build/azure-pipelines/common/createBuild.ts
+index 6afeb01e6cc..24f0a7b67b6 100644
+--- a/build/azure-pipelines/common/createBuild.ts
++++ b/build/azure-pipelines/common/createBuild.ts
+@@ -6,6 +6,7 @@
+ import { ClientAssertionCredential } from '@azure/identity';
+ import { CosmosClient } from '@azure/cosmos';
+ import { retry } from './retry';
++import { getDate } from '../../lib/util';
+ 
+ if (process.argv.length !== 3) {
+ 	console.error('Usage: node createBuild.js VERSION');
+@@ -37,7 +38,7 @@ async function main(): Promise<void> {
+ 
+ 	const build = {
+ 		id: commit,
+-		timestamp: (new Date()).getTime(),
++		timestamp: getDate().getTime(),
+ 		version,
+ 		isReleased: false,
+ 		private: process.env['VSCODE_PRIVATE_BUILD']?.toLowerCase() === 'true',
+diff --git a/build/gulpfile.vscode.linux.js b/build/gulpfile.vscode.linux.js
+index 9cf6411e46a..e08f7bab35e 100644
+--- a/build/gulpfile.vscode.linux.js
++++ b/build/gulpfile.vscode.linux.js
+@@ -10,7 +10,7 @@ const replace = require('gulp-replace');
+ const rename = require('gulp-rename');
+ const es = require('event-stream');
+ const vfs = require('vinyl-fs');
+-const { rimraf } = require('./lib/util');
++const { rimraf, getDate } = require('./lib/util');
+ const { getVersion } = require('./lib/getVersion');
+ const task = require('./lib/task');
+ const packageJson = require('../package.json');
+@@ -25,7 +25,7 @@ const exec = util.promisify(cp.exec);
+ const root = path.dirname(__dirname);
+ const commit = getVersion(root);
+ 
+-const linuxPackageRevision = Math.floor(new Date().getTime() / 1000);
++const linuxPackageRevision = Math.floor(getDate().getTime() / 1000);
+ 
+ /**
+  * @param {string} arch
+diff --git a/build/lib/date.js b/build/lib/date.js
+index d189815ab06..c8d84256748 100644
+--- a/build/lib/date.js
++++ b/build/lib/date.js
+@@ -11,6 +11,7 @@ exports.readISODate = readISODate;
+  *--------------------------------------------------------------------------------------------*/
+ const path_1 = __importDefault(require("path"));
+ const fs_1 = __importDefault(require("fs"));
++const util_1 = require("./util");
+ const root = path_1.default.join(__dirname, '..', '..');
+ /**
+  * Writes a `outDir/date` file with the contents of the build
+@@ -21,7 +22,7 @@ function writeISODate(outDir) {
+     const result = () => new Promise((resolve, _) => {
+         const outDirectory = path_1.default.join(root, outDir);
+         fs_1.default.mkdirSync(outDirectory, { recursive: true });
+-        const date = new Date().toISOString();
++        const date = (0, util_1.getDate)().toISOString();
+         fs_1.default.writeFileSync(path_1.default.join(outDirectory, 'date'), date, 'utf8');
+         resolve();
+     });
+diff --git a/build/lib/date.ts b/build/lib/date.ts
+index 8a933178952..5bc20ecc61b 100644
+--- a/build/lib/date.ts
++++ b/build/lib/date.ts
+@@ -5,6 +5,7 @@
+ 
+ import path from 'path';
+ import fs from 'fs';
++import { getDate } from './util';
+ 
+ const root = path.join(__dirname, '..', '..');
+ 
+@@ -18,7 +19,7 @@ export function writeISODate(outDir: string) {
+ 		const outDirectory = path.join(root, outDir);
+ 		fs.mkdirSync(outDirectory, { recursive: true });
+ 
+-		const date = new Date().toISOString();
++		const date = getDate().toISOString();
+ 		fs.writeFileSync(path.join(outDirectory, 'date'), date, 'utf8');
+ 
+ 		resolve();
+diff --git a/build/lib/electron.js b/build/lib/electron.js
+index 0602307f4c3..d0e4e276dcc 100644
+--- a/build/lib/electron.js
++++ b/build/lib/electron.js
+@@ -213,7 +213,7 @@ exports.config = {
+             urlSchemes: [product.urlProtocol]
+         }],
+     darwinForceDarkModeSupport: true,
+-    darwinCredits: darwinCreditsTemplate ? Buffer.from(darwinCreditsTemplate({ commit: commit, date: new Date().toISOString() })) : undefined,
++    darwinCredits: darwinCreditsTemplate ? Buffer.from(darwinCreditsTemplate({ commit: commit, date: util.getDate().toISOString() })) : undefined,
+     linuxExecutableName: product.applicationName,
+     winIcon: 'resources/win32/code.ico',
+     token: process.env['GITHUB_TOKEN'],
+diff --git a/build/lib/electron.ts b/build/lib/electron.ts
+index 3bb047dfcee..97f8c09c383 100644
+--- a/build/lib/electron.ts
++++ b/build/lib/electron.ts
+@@ -194,7 +194,7 @@ export const config = {
+ 		urlSchemes: [product.urlProtocol]
+ 	}],
+ 	darwinForceDarkModeSupport: true,
+-	darwinCredits: darwinCreditsTemplate ? Buffer.from(darwinCreditsTemplate({ commit: commit, date: new Date().toISOString() })) : undefined,
++	darwinCredits: darwinCreditsTemplate ? Buffer.from(darwinCreditsTemplate({ commit: commit, date: util.getDate().toISOString() })) : undefined,
+ 	linuxExecutableName: product.applicationName,
+ 	winIcon: 'resources/win32/code.ico',
+ 	token: process.env['GITHUB_TOKEN'],
+diff --git a/build/lib/policies.js b/build/lib/policies.js
+index d2ef760870d..42b607c4248 100644
+--- a/build/lib/policies.js
++++ b/build/lib/policies.js
+@@ -13,6 +13,7 @@ const path_1 = __importDefault(require("path"));
+ const byline_1 = __importDefault(require("byline"));
+ const ripgrep_1 = require("@vscode/ripgrep");
+ const tree_sitter_1 = __importDefault(require("tree-sitter"));
++const util_1 = require("./util");
+ const { typescript } = require('tree-sitter-typescript');
+ const product = require('../../product.json');
+ const packageJson = require('../../package.json');
+@@ -642,7 +643,7 @@ function renderProfileManifest(appName, bundleIdentifier, _versions, _categories
+     <key>pfm_interaction</key>
+     <string>combined</string>
+     <key>pfm_last_modified</key>
+-    <date>${new Date().toISOString().replace(/\.\d+Z$/, 'Z')}</date>
++    <date>${(0, util_1.getDate)().toISOString().replace(/\.\d+Z$/, 'Z')}</date>
+     <key>pfm_platforms</key>
+     <array>
+         <string>macOS</string>
+diff --git a/build/lib/policies.ts b/build/lib/policies.ts
+index 381d2f4c1ac..b7098e54e19 100644
+--- a/build/lib/policies.ts
++++ b/build/lib/policies.ts
+@@ -9,6 +9,7 @@ import path from 'path';
+ import byline from 'byline';
+ import { rgPath } from '@vscode/ripgrep';
+ import Parser from 'tree-sitter';
++import { getDate } from './util';
+ const { typescript } = require('tree-sitter-typescript');
+ const product = require('../../product.json');
+ const packageJson = require('../../package.json');
+@@ -849,7 +850,7 @@ function renderProfileManifest(appName: string, bundleIdentifier: string, _versi
+     <key>pfm_interaction</key>
+     <string>combined</string>
+     <key>pfm_last_modified</key>
+-    <date>${new Date().toISOString().replace(/\.\d+Z$/, 'Z')}</date>
++    <date>${getDate().toISOString().replace(/\.\d+Z$/, 'Z')}</date>
+     <key>pfm_platforms</key>
+     <array>
+         <string>macOS</string>
+diff --git a/build/lib/util.js b/build/lib/util.js
+index 389b9e0cd4f..0b2a76c3dab 100644
+--- a/build/lib/util.js
++++ b/build/lib/util.js
+@@ -22,6 +22,7 @@ exports.rebase = rebase;
+ exports.filter = filter;
+ exports.streamToPromise = streamToPromise;
+ exports.getElectronVersion = getElectronVersion;
++exports.getDate = getDate;
+ /*---------------------------------------------------------------------------------------------
+  *  Copyright (c) Microsoft Corporation. All rights reserved.
+  *  Licensed under the MIT License. See License.txt in the project root for license information.
+@@ -311,4 +312,7 @@ function getElectronVersion() {
+     const msBuildId = /^ms_build_id="(.*)"$/m.exec(npmrc)[1];
+     return { electronVersion, msBuildId };
+ }
++function getDate() {
++    return process.env.BUILD_DATE ? new Date(process.env.BUILD_DATE) : new Date();
++}
+ //# sourceMappingURL=util.js.map
+\ No newline at end of file
+diff --git a/build/lib/util.ts b/build/lib/util.ts
+index 49313429da9..9baab5702d6 100644
+--- a/build/lib/util.ts
++++ b/build/lib/util.ts
+@@ -378,3 +378,7 @@ export function getElectronVersion(): Record<string, string> {
+ 	const msBuildId = /^ms_build_id="(.*)"$/m.exec(npmrc)![1];
+ 	return { electronVersion, msBuildId };
+ }
++
++export function getDate() {
++	return process.env.BUILD_DATE ? new Date(process.env.BUILD_DATE) : new Date()
++}
