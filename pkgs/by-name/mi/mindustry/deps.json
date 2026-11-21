@@ -39,10 +39,10 @@
   }
  },
  "https://repo.maven.apache.org/maven2": {
-  "at/yawk/lz4#lz4-java/1.10.2": {
-   "jar": "sha256-JS2r1YbSIUmjFmGor8GlB0dxTrGimL1KbngMjJGhOGY=",
-   "module": "sha256-LYLf2sMRuwSqec4UpQGJCvdAbJyj6CQHMidx1/QaXrQ=",
-   "pom": "sha256-7o1bwxjqVI5VT8I/gm1Fooq5AEpGqZ4dkaZIQxuHcAc="
+  "at/yawk/lz4#lz4-java/1.12.0": {
+   "jar": "sha256-McKHBB6rQfJFnpNlnUkWLv8BWg64WId+HF6dzOGhDCY=",
+   "module": "sha256-mIlTVqL/WqxaB4ELYbIQ+5/NG1eT96bTsz+Gx+HHc1c=",
+   "pom": "sha256-UusxkvioR2bY22EBvd44jnD7/MQFJdWVgjy/FCaTC44="
   },
   "ch/qos/logback#logback-classic/1.4.12": {
    "jar": "sha256-S0qZ4ZMbsOpsC2xI1CvEjN42oY6Nycwve4yKI2TC7JM=",

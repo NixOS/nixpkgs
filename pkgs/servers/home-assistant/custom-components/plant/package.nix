@@ -12,13 +12,13 @@
 buildHomeAssistantComponent rec {
   owner = "olen";
   domain = "plant";
-  version = "2026.11.1";
+  version = "2026.11.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-plant";
     tag = "v${version}";
-    hash = "sha256-vKaPvO+sNOlq+C0VNXsRrdlpCNO0pmp0FnXRs2a5WZk=";
+    hash = "sha256-jxNGNh852sW+fRkTQlRaTMMupGhgSikhWhWLMHiJR+E=";
   };
 
   dependencies = [
@@ -31,6 +31,8 @@ buildHomeAssistantComponent rec {
     pytest-homeassistant
     pytestCheckHook
   ];
+
+  dontUsePytestXdist = true;
 
   meta = {
     description = "Alternative Plant component of home assistant";

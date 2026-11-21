@@ -48,7 +48,6 @@ let
     StateDirectory = "lasuite-docs-yhub-server";
     WorkingDirectory = "%S/lasuite-docs-yhub-server";
     User = "lasuite-docs-yhub-server";
-    RuntimeDirectory = "lasuite-docs-yhub-server";
   };
 
   commonServiceConfig' = {
@@ -212,12 +211,9 @@ in
         default = { };
         type = types.submodule {
           freeformType = types.attrsOf types.str;
-          config = {
-            POSTGRES = lib.mkIf (cfg.postgresql.createLocally) (lib.mkOptionDefault "");
-          };
           options = {
             POSTGRES = mkOption {
-              type = types.str;
+              type = types.nullOr types.str;
               description = ''
                 Connection URL to PostgreSQL.
                 See the [upstream docs on the format](https://github.com/suitenumerique/docs/tree/v6.0.0/src/yhub-server#database-schema-yarn-init-db) for more information.
@@ -592,8 +588,12 @@ in
 
     systemd.services.lasuite-docs-yhub-server-setup-db = {
       description = "DB setup for Y collaboration server of LaSuite docs";
-      after = optional cfg.redis.createLocally "redis-lasuite-docs.service";
-      wants = optional cfg.redis.createLocally "redis-lasuite-docs.service";
+      after =
+        optional cfg.redis.createLocally "redis-lasuite-docs.service"
+        ++ optional cfg.postgresql.createLocally "postgresql.target";
+      wants =
+        optional cfg.redis.createLocally "redis-lasuite-docs.service"
+        ++ optional cfg.postgresql.createLocally "postgresql.target";
       environment = yhubEnv;
       serviceConfig = commonServiceConfigYhub // {
         Type = "oneshot";
@@ -680,6 +680,7 @@ in
       description = "Docs Celery broker from SuiteNumérique";
       after = [
         "network.target"
+        "lasuite-docs-setup-keys.service"
       ]
       ++ (optional cfg.postgresql.createLocally "postgresql.target")
       ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");

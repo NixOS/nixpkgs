@@ -7,10 +7,14 @@
   nodejs,
   pkg-config,
   protobuf,
+  aws-lc,
   sqlite,
   writableTmpDirAsHomeHook,
   gitMinimal,
   jq,
+  python3,
+  expect,
+  curl,
   versionCheckHook,
   makeBinaryWrapper,
   which,
@@ -33,13 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # zerocode is a separate workspace member and expects the daemon beside it.
   cargoBuildFlags = [
     "--package"
-    "zeroclawlabs"
+    "zeroclaw"
     "--package"
     "zerocode"
   ]
   ++ lib.optionals withMatrix [
     "--features"
-    "zeroclawlabs/channel-matrix"
+    "zeroclaw/channel-matrix"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
@@ -70,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     sqlite
   ];
 
@@ -80,11 +85,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     popd
   '';
 
+  preCheck = ''
+    unset RUST_LOG
+  '';
+
   # the release-workflow architecture tests shell out to scripts/release/*.sh
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     gitMinimal
     jq
+    python3
+    expect
+    curl
     which
   ];
 
