@@ -10,13 +10,13 @@ with python3Packages;
 
 buildPythonApplication (finalAttrs: {
   pname = "vit";
-  version = "2.3.4";
+  version = "2.3.5";
   pyproject = true;
   disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-NGohCqDedUz3ra9zcjv30syO51Tut4XrGDcNM/dOXOI=";
+    hash = "sha256-8JlNMJevKQR4sIq7EebebvhGHV/DF72V/Upymp3VfR4=";
   };
 
   build-system = with python3Packages; [ setuptools ];
