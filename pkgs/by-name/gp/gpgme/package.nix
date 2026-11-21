@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       versionCheck = true;
     };
-    python = python3.pkgs.gpgme;
+    python = python3.pkgs.gpg;
     qt5 = libsForQt5.qgpgme;
     qt6 = qt6Packages.qgpgme;
   };
