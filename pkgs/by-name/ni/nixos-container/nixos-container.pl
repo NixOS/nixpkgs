@@ -144,6 +144,11 @@ if (defined $configFile and defined $extraConfig) {
         "Please define one or the other, but not both";
 }
 
+if (defined $flake and defined $systemPath) {
+    die "--flake and --system-path are mutually incompatible. " .
+        "Please define one or the other, but not both";
+}
+
 if (defined $flake && $flake =~ /^(.*)#([^#"]+)$/) {
     $flake = $1;
     $flakeAttr = $2;
