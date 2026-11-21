@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-nNwCWOgE+W/RQ+ms/Ov6EQp7DnZXlnYOHJZZWizzWew=";
   };
 
+  patches = [
+    # Fix heap buffer overflow in the ZFP compressors when the compressed
+    # stream is smaller than the input but larger than the output buffer
+    ./zfp-check-output-size.patch
+  ];
+
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''
     sed -i -E \
