@@ -82,6 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Interactive fiction interpreter GUI";
     mainProgram = "gargoyle";
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })
