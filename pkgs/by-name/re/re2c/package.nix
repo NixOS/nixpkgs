@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   nix-update-script,
-  python3,
+  python3Minimal,
 
   # for passthru.tests
   ninja,
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
-    python3
+    python3Minimal
   ];
 
   strictDeps = true;
