@@ -12,12 +12,10 @@
   libpng,
   cups ? null,
   freetype ? null,
-  qtbase ? null,
-  qtsvg ? null,
-  wrapQtAppsHook,
+  qt6Packages,
 }:
 
-assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
+assert enableGUI -> qt6Packages.qtbase != null && qt6Packages.qtsvg != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
 assert enablePrinting -> cups != null;
 
@@ -45,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     copyDesktopItems
   ]
-  ++ lib.optional enableGUI wrapQtAppsHook;
+  ++ lib.optional enableGUI qt6Packages.wrapQtAppsHook;
 
   cmakeFlags = [
     "-DSYSTEM_XPDFRC=/etc/xpdfrc"
@@ -58,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libpng
   ]
-  ++ lib.optional enableGUI qtbase
+  ++ lib.optional enableGUI qt6Packages.qtbase
   ++ lib.optional enablePrinting cups
   ++ lib.optional enablePDFtoPPM freetype;
 

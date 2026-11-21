@@ -8875,8 +8875,6 @@ with pkgs;
     gbmSupport = true;
   };
 
-  xpdf = qt6.callPackage ../applications/misc/xpdf { };
-
   xmobar = haskellPackages.xmobar.bin;
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
@@ -8895,8 +8893,6 @@ with pkgs;
   xmonad-log-applet-xfce = xmonad-log-applet.override {
     desktopSupport = "xfce4";
   };
-
-  libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   inherit (callPackage ../applications/misc/xppen { })
     xppen_3
