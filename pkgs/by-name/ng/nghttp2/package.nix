@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nghttp2/nghttp2/releases/tag/v${finalAttrs.version}";
     # News articles with changes summary can be found here: https://nghttp2.org/blog/archives/
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ enovamaker ];
     platforms = lib.platforms.all;
   };
 })
