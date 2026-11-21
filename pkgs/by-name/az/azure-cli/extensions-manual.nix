@@ -275,6 +275,28 @@
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
+  ml = mkAzExtension rec {
+    pname = "ml";
+    version = "2.45.2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/ml-${version}-py3-none-any.whl";
+    hash = "sha256-SeUKgY/kqIuLSwq7UixhsgFj2FyCOUPJodxtJAWN1wg=";
+    description = "Microsoft Azure Command-Line Tools AzureMachineLearningWorkspaces Extension";
+    propagatedBuildInputs = with python3Packages; [
+      azure-ai-ml
+      azure-identity
+      cryptography
+      docker
+    ];
+    # Upstream pins exact versions of both
+    pythonRelaxDeps = [
+      "azure-ai-ml"
+      "azure-identity"
+    ];
+    # Not in nixpkgs, and only needed to list virtual clusters
+    pythonRemoveDeps = [ "azure-mgmt-resourcegraph" ];
+    meta.maintainers = with lib.maintainers; [ takishima ];
+  };
+
   rdbms-connect = mkAzExtension rec {
     pname = "rdbms-connect";
     version = "1.0.7";
