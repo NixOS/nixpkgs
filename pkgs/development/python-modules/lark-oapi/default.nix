@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lark-oapi";
-  version = "1.7.5";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "larksuite";
     repo = "oapi-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NR/6xYWrhBhAGTj09i57qqR5zIYqSJPHfoT7gBokBdc=";
+    hash = "sha256-A2cjYwa1HAMTXHfi6jPaASD++Ca8ozsDvYFv19gXIgw=";
   };
 
   build-system = [ setuptools ];
@@ -40,6 +40,13 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  # stop() doesn't cancel the in-flight bot identity fetch,
+  # so start() can block for up to 10s while the test only waits 2s.
+  # https://github.com/larksuite/oapi-sdk-python/issues/159
+  disabledTests = [
+    "test_stop_during_pre_ws_start_prevents_late_ws_creation"
   ];
 
   pythonImportsCheck = [ "lark_oapi" ];
