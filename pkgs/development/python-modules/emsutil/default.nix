@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "emsutil";
-  version = "0.8.3-unstable-2026-08-03";
+  version = "1.1.6-unstable-2026-11-10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FennisRobert";
     repo = "emsutil";
-    rev = "18449659ca374ba84f02709a0d245b6bebb8ddb6";
-    hash = "sha256-9kyEBNKKP9Dz6s1svzq6C3ow27jV+zwz2M82gJndZsg=";
+    rev = "e2d88fdd3564071e8a18272d545ec062cf849b9f";
+    hash = "sha256-i8ny+8CGJ+1ugP79zkpx6K5wENo5S5zqfwM9ISUO3UE=";
   };
 
   build-system = [
