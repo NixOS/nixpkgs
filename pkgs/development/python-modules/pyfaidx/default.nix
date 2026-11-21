@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyfaidx";
-  version = "0.9.2.2";
+  version = "0.9.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdshw5";
     repo = "pyfaidx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5F49RHh8q/TvUDt+HaXdeU+FsWBcNep/lSQ7TYs/x3A=";
+    hash = "sha256-36pW2oq2KOrKBw1kSDuZidW5+kt1W5kv13+wAh7z4J8=";
   };
 
   build-system = [
