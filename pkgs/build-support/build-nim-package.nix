@@ -80,10 +80,19 @@ let
 in
 buildNimPackageArgs:
 let
-  composition =
-    finalAttrs:
+  # Normalize the user-provided arguments to a fixed-point function.
+  # This supports both the plain attribute set and the function styles,
+  # where the function may either take only `finalAttrs`, or take a
+  # second argument receiving `baseAttrs`.
+  fpargs = finalAttrs: (asFunc ((asFunc buildNimPackageArgs) finalAttrs)) baseAttrs;
+in
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+
+  extendDrvArgs =
+    finalAttrs: previousAttrs:
     let
-      postPkg = baseAttrs // (asFunc ((asFunc buildNimPackageArgs) finalAttrs)) baseAttrs;
+      postPkg = baseAttrs // previousAttrs;
 
       lockAttrs = lib.attrsets.optionalAttrs (builtins.hasAttr "lockFile" postPkg) (
         builtins.fromJSON (builtins.readFile postPkg.lockFile)
@@ -163,6 +172,4 @@ let
     lib.trivial.warnIf (builtins.hasAttr "nimBinOnly" attrs)
       "the nimBinOnly attribute is deprecated for buildNimPackage"
       attrs;
-
-in
-stdenv.mkDerivation composition
+} fpargs
