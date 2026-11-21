@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication {
 
   dontUnpack = true;
 
-  strictDeps = false;
+  strictDeps = true;
 
   nativeBuildInputs = [
     wrapGAppsNoGuiHook
