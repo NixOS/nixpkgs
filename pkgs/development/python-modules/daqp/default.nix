@@ -9,14 +9,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "daqp";
-  version = "0.9.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ms+N/m33zqO0qgtQykOI++eCkDPf50qf8lbi+tO5ae0=";
+    hash = "sha256-QWLH9v2AJhmc19C2rlUo/IPgtugRMvnVMHFMmw0FrUs=";
   };
 
   # Don't try to `rmtree` to "Cleanup C-source"
