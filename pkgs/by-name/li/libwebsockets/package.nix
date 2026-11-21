@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwebsockets";
-  version = "4.5.8";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "warmcat";
