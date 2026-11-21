@@ -8,6 +8,7 @@
   pkg-config,
   bash,
   coreutils,
+  curl,
   gnugrep,
   gnused,
   gnutls,
@@ -15,6 +16,7 @@
   libidn2,
   netcat-gnu,
   texinfo,
+  util-linux,
   which,
   withKeyring ? true,
   libsecret,
@@ -31,13 +33,13 @@
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.32";
+  version = "1.8.34";
 
   src = fetchFromGitHub {
     owner = "marlam";
     repo = "msmtp";
     rev = "msmtp-${version}";
-    hash = "sha256-ofyDtP7KgTKX/O1O4g3OcDwgihDveAiJ5s5GQtSqf28=";
+    hash = "sha256-0gDCnpgdrGLM7TSODlkiNqqDwfUgfTH8BMH1Q4DKxdk=";
   };
 
   meta = {
@@ -120,15 +122,18 @@ let
         inputs = [
           binaries
           coreutils
+          curl
           gnugrep
           gnused
           netcat-gnu
+          util-linux
           which
         ]
         ++ optionals withSystemd [ systemd ]
         ++ optionals withLibnotify [ libnotify ];
         execer = [
           "cannot:${getBin binaries}/bin/msmtp"
+          "cannot:${getBin curl}/bin/curl"
           "cannot:${getBin netcat-gnu}/bin/nc"
         ]
         ++ optionals withSystemd [
@@ -143,7 +148,7 @@ let
         ]
         ++ optionals (!withSystemd) [ "systemd-cat" ]
         ++ optionals (!withLibnotify) [ "notify-send" ];
-        keep.source = [ "~/.msmtpqrc" ];
+        keep.source = [ "$XDG_CONFIG_HOME" "$MSMTPQ_RC" ];
       };
 
       msmtp-queue = {
