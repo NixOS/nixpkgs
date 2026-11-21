@@ -5,23 +5,60 @@ let
     all
     any
     elem
+    filterAttrs
     optionalAttrs
+    isList
+    isString
     ;
+
+  inherit (lib.licenses) mkLicense;
+
+  # TODO: actually add proper typing to `meta.license`
+  # This removes unsupported keys and adds all required keys for a license
+  mkLicense' =
+    {
+      shortName ? "unknown",
+      ...
+    }@attrs:
+    mkLicense filterAttrs (
+      name: _:
+      elem name [
+        "shortName"
+        "free"
+        "deprecated"
+        "spdxId"
+        "url"
+        "fullName"
+        "redistributable"
+      ]
+    ) attrs;
+
   handleComplexProperty =
     evaluateSubProperty: AND: OR: license:
-    if license.licenseType == "compound" then
+    if isList license then
+      AND evaluateSubProperty license
+    # TODO: Returning free in the case of a string is a bug that should be fixed.
+    # In a previous implementation of this function the function body
+    # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
+    # which always evaluates to `!true` for strings.
+    else if isString license then
+      evaluateSubProperty (mkLicense {
+        shortName = license;
+        deprecated = true;
+      })
+    else if license.licenseType or null == "compound" then
       if license.operator == "OR" then
         OR evaluateSubProperty license.licenses
       else if license.operator == "AND" then
         AND evaluateSubProperty license.licenses
       else
         throw "Unknown license operator"
-    else if license.licenseType == "exception" then
+    else if license.licenseType or null == "exception" then
       evaluateSubProperty license.license && evaluateSubProperty license.exception
-    else if license.licenseType == "plus" then
+    else if license.licenseType or null == "plus" then
       evaluateSubProperty license.license
     else
-      throw "Unknown license type or legacy license";
+      evaluateSubProperty (mkLicense' license);
 in
 rec {
   /**
@@ -61,7 +98,10 @@ rec {
       evaluateComplexProperty = handleComplexProperty (evaluateProperty predicate permissive) AND OR;
     in
     license:
-    if license.licenseType == "simple" then predicate license else evaluateComplexProperty license;
+    if license.licenseType or null == "simple" then
+      predicate license
+    else
+      evaluateComplexProperty license;
 
   /**
     Evaluate a license expression for a given property name. The property must
@@ -101,7 +141,10 @@ rec {
       evaluateComplexProperty = handleComplexProperty (evaluateNamedProperty name permissive) AND OR;
     in
     license:
-    if license.licenseType == "simple" then license.${name} else evaluateComplexProperty license;
+    if license.licenseType or null == "simple" then
+      license.${name}
+    else
+      evaluateComplexProperty license;
 
   /**
     Check whether a license expression is free.
@@ -211,16 +254,18 @@ rec {
         x:
         if x.licenseType == "compound" || x.licenseType == "exception" then "(${toSPDX x})" else toSPDX x;
     in
-    if license.licenseType == "simple" then
-      license.spdxId or "LicenseRef-nixos-${license.shortName}"
-    else if license.licenseType == "compound" then
-      lib.concatMapStringsSep " ${license.operator} " (x: mkBracket x) license.licenses
-    else if license.licenseType == "exception" then
+    if isList license then
+      lib.concatMapStringsSep " AND " mkBracket license
+    else if isString license then
+      "LicenseRef-${license}"
+    else if license.licenseType or null == "compound" then
+      lib.concatMapStringsSep " ${license.operator} " mkBracket license.licenses
+    else if license.licenseType or null == "exception" then
       "${mkBracket license.license} ${license.operator} ${mkBracket license.exception}"
-    else if license.licenseType == "plus" then
+    else if license.licenseType or null == "plus" then
       "${mkBracket license.license}${license.operator}"
     else
-      throw "Unknown license type";
+      license.spdxId or "LicenseRef-nixos-${license.shortName or "unknown"}";
 
   /**
     Create a license.
