@@ -14,6 +14,7 @@ let
     mkChangedOptionModule
     maintainers
     optionalString
+    optionalAttrs
     findFirst
     attrValues
     ;
@@ -245,7 +246,6 @@ in
               "AF_INET6"
             ];
             RestrictNamespaces = true;
-            PrivateDevices = true;
             PrivateUsers = true;
             ProtectClock = true;
             ProtectControlGroups = true;
@@ -264,6 +264,21 @@ in
             MemoryDenyWriteExecute = false;
             UMask = "0066";
             ProtectHostname = true;
+          }
+          // optionalAttrs (!(cfg.settings.Jukebox.Enabled or false)) {
+            # Implemented via kernel mount namespaces
+            # systemd says to use when you want to block all devices
+            PrivateDevices = true;
+          }
+          // optionalAttrs (cfg.settings.Jukebox.Enabled or false) {
+            # Jukebox needs access to sound devices.
+            #
+            # Implemented via eBPF
+            # I'm not quite sure the difference between alsa devices and sound devices.
+            DeviceAllow = [
+              "char-alsa rw"
+              "char-sound rw"
+            ];
           };
         };
       };
