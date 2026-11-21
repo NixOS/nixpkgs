@@ -1514,12 +1514,9 @@ in
   plikd = runTest ./plikd.nix;
   plotinus = runTest ./plotinus.nix;
   pocket-id = runTest ./pocket-id.nix;
-  podman = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./podman/default.nix { };
+  podman = runTest ./podman/default.nix;
   podman-dns = runTest ./podman/dns.nix;
-  podman-tls-ghostunnel = handleTestOn [
-    "aarch64-linux"
-    "x86_64-linux"
-  ] ./podman/tls-ghostunnel.nix { };
+  podman-tls-ghostunnel = runTest ./podman/tls-ghostunnel.nix;
   polaris = runTest ./polaris.nix;
   pomerium = handleTestOn [ "x86_64-linux" ] ./pomerium.nix { };
   portmaster = runTest ./portmaster.nix;
