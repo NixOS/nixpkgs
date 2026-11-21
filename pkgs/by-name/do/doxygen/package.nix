@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ../examples $examples
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.doxygen.nl";
