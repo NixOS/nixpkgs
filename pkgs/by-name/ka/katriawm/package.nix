@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "katriawm";
-  version = "26.08";
+  version = "26.11";
 
   src = fetchzip {
     url = "https://www.uninformativ.de/git/katriawm/archives/katriawm-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-q7HwQd/19eV8g2FAJypWWgj7tKphqIL1VusjXtBSnpY=";
+    hash = "sha256-EU35thPyrSwvJ259sDX7EnjuA38aXAzPDrZZzogqWgo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
