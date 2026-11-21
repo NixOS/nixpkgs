@@ -118,6 +118,8 @@ self: super: with self; {
 
   adsbcot = callPackage ../development/python-modules/adsbcot { };
 
+  advanced-alchemy = callPackage ../development/python-modules/advanced-alchemy { };
+
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
   advent-of-code-data = callPackage ../development/python-modules/advent-of-code-data { };
