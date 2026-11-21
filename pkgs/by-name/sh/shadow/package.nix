@@ -20,6 +20,8 @@
   withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
   tcb,
   cmocka,
+  binlore,
+  shadow,
 }:
 let
   glibc' =
@@ -142,6 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
+    # Nothing in passwd --help or passwd’s man page mentions anything about
+    # passwd executing its arguments.
+    binlore.out = binlore.synthesize shadow ''
+      execer cannot bin/passwd
+    '';
     shellPath = "/bin/nologin";
     tests = { inherit (nixosTests) shadow; };
     # Package the upstream system test framework for use in nixosTests
