@@ -20,8 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.24.0";
   strictDeps = true;
 
-  src = /tmp/hailort;
-  asrc = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "hailo-ai";
     repo = "hailort";
     tag = "v${finalAttrs.version}";
@@ -71,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.updateScript = nix-update-script {
-    extraArgs = ["--version-regex '^4\\..*$'"];
+    extraArgs = [ "--version-regex '^4\\..*$'" ];
   };
 
   __structuredAttrs = true;
@@ -79,12 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "An open source light-weight and high performance inference framework for Hailo devices";
     homepage = "https://github.com/hailo-ai/hailort";
-    license = with lib.licenses;
+    license =
+      with lib.licenses;
       AND [
         mit # libhailort, pyhailort, hailortcli
         lgpl21Plus # hailonet gstreamer plugin
       ];
-    maintainers = with lib.maintainers; [hexa];
+    maintainers = with lib.maintainers; [
+      hexa
+      gravydigger
+    ];
     mainProgram = "hailort";
     platforms = lib.platforms.all;
   };

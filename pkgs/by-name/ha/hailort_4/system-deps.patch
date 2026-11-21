@@ -56,16 +56,15 @@ index 5ee8da9..10ee202 100644
 -    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
 -        add_subdirectory(${dotwriter_SOURCE_DIR} ${dotwriter_BINARY_DIR} EXCLUDE_FROM_ALL)
 -    endif()
--endif()
-\ No newline at end of file
-+if(NOT TARGET dotwriter)
-+    add_library(dotwriter STATIC IMPORTED GLOBAL)
++if(NOT TARGET DotWriter)
++    add_library(DotWriter STATIC IMPORTED GLOBAL)
 +
-+    set_target_properties(dotwriter PROPERTIES
++    set_target_properties(DotWriter PROPERTIES
 +        IMPORTED_LOCATION "${DOTWRITER_LIBRARY}"
 +        INTERFACE_INCLUDE_DIRECTORIES "${DOTWRITER_INCLUDE_DIR}"
 +    )
-+endif()
+ endif()
+\ No newline at end of file
 diff --git a/hailort/cmake/external/eigen.cmake b/hailort/cmake/external/eigen.cmake
 index 1bb1f66..773a5c2 100644
 --- a/hailort/cmake/external/eigen.cmake

@@ -2,7 +2,15 @@ diff --git a/hailort/hailortcli/CMakeLists.txt b/hailort/hailortcli/CMakeLists.t
 index 59b2f89..5eedd3e 100644
 --- a/hailort/hailortcli/CMakeLists.txt
 +++ b/hailort/hailortcli/CMakeLists.txt
-@@ -93,4 +93,3 @@ install(TARGETS hailortcli
+@@ -4,6 +4,7 @@ include(GNUInstallDirs)
+ include(${HAILO_EXTERNALS_CMAKE_SCRIPTS}/cli11.cmake)
+ include(${HAILO_EXTERNALS_CMAKE_SCRIPTS}/json.cmake)
+ include(${HAILO_EXTERNALS_CMAKE_SCRIPTS}/dotwriter.cmake)
++include(${HAILO_EXTERNALS_CMAKE_SCRIPTS}/eigen.cmake)
+ 
+ set(HAILORTCLI_CPP_FILES
+     hailortcli.cpp
+@@ -93,4 +94,3 @@ install(TARGETS hailortcli
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     CONFIGURATIONS Release
  )
