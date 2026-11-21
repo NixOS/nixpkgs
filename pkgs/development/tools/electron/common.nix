@@ -14,9 +14,11 @@
   writers,
   substitute,
 
+  libkrb5,
   libnotify,
   libpulseaudio,
   libsecret,
+  libva,
   pipewire,
   speechd-minimal,
 
@@ -274,6 +276,8 @@ in
         libsecret
         libpulseaudio
         speechd-minimal
+        libkrb5
+        libva
       ];
     in
     base.postFixup
