@@ -1,0 +1,64 @@
+--- a/ppd/canonmp280.ppd	2010-03-10 03:16:28.000000000 +0100
++++ b/ppd/canonmp280.ppd	2026-09-08 00:49:58.828970335 +0200
+@@ -167,6 +167,61 @@
+ *CNExtension 3/3: "<</CNExtension(3)>>setpagedevice"
+ *CloseUI: *CNExtension
+ 
++*OpenUI *CNQuality/Quality: PickOne
++*DefaultCNQuality: 3
++*CNQuality 2/Fine: ""
++*CNQuality 3/Normal: ""
++*CloseUI: *CNQuality
++
++*OpenUI *CNDensity/Density: PickOne
++*DefaultCNDensity: 0
++*CNDensity -50/-50: ""
++*CNDensity -40/-40: ""
++*CNDensity -30/-30: ""
++*CNDensity -20/-20: ""
++*CNDensity -10/-10: ""
++*CNDensity 0/0: ""
++*CNDensity 10/10: ""
++*CNDensity 20/20: ""
++*CNDensity 30/30: ""
++*CNDensity 40/40: ""
++*CNDensity 50/50: ""
++*CloseUI: *CNDensity
++
++*OpenUI *CNContrast/Contrast: PickOne
++*DefaultCNContrast: 0
++*CNContrast -50/-50: ""
++*CNContrast -40/-40: ""
++*CNContrast -30/-30: ""
++*CNContrast -20/-20: ""
++*CNContrast -10/-10: ""
++*CNContrast 0/0: ""
++*CNContrast 10/10: ""
++*CNContrast 20/20: ""
++*CNContrast 30/30: ""
++*CNContrast 40/40: ""
++*CNContrast 50/50: ""
++*CloseUI: *CNContrast
++
++*OpenUI *CNRenderIntent/Rendering Intent: PickOne
++*DefaultCNRenderIntent: Vivid
++*CNRenderIntent Photo/Photo: ""
++*CNRenderIntent Vivid/Vivid: ""
++*CloseUI: *CNRenderIntent
++
++*OpenUI *CNGrayscale/Grayscale: Boolean
++*DefaultCNGrayscale: False
++*CNGrayscale True/True: ""
++*CNGrayscale False/False: ""
++*CloseUI: *CNGrayscale
++
++*OpenUI *CNCartridge/Ink Cartridge: PickOne
++*DefaultCNCartridge: BkColor
++*CNCartridge BkColor/Both: ""
++*CNCartridge Bk/Black Only: ""
++*CNCartridge Color/Color Only: ""
++*CloseUI: *CNCartridge
++
+ *DefaultImageableArea: A4
+ *ImageableArea Letter: "18.14 14.17 594.14 783.50"
+ *ImageableArea Letter.bl: "0 0 612 792"

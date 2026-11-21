@@ -1,0 +1,109 @@
+--- a/backend/configure.in	2010-02-23 07:57:49.000000000 +0400
++++ b/backend/configure.in	2013-01-12 17:57:23.186495527 +0400
+@@ -1,7 +1,7 @@
+ AC_INIT(src/cnij_backend_common.c)
+ AM_INIT_AUTOMAKE(backend, 3.40-1)
+ 
+-AM_CONFIG_HEADER(config.h)
++#AC_CONFIG_HEADERS(config.h)
+ 
+ AC_ARG_ENABLE(progpath)
+ if test "${enable_progpath}" = "" ; then
+ 
+--- a/backendnet/configure.in	2010-03-10 06:16:28.000000000 +0400
++++ b/backendnet/configure.in	2013-01-12 17:57:36.019761830 +0400
+@@ -1,7 +1,7 @@
+ AC_INIT(backend/cnijnetlm.c)
+ AM_INIT_AUTOMAKE(backendnet, 3.40-1)
+ 
+-AM_CONFIG_HEADER(config.h)
++#AC_CONFIG_HEADERS(config.h)
+ 
+ AC_ARG_ENABLE(progpath)
+ if test "${enable_progpath}" = "" ; then
+ 
+--- a/cngpij/configure.in	2010-02-23 07:57:49.000000000 +0400
++++ b/cngpij/configure.in	2013-01-12 17:55:19.960473398 +0400
+@@ -1,7 +1,7 @@
+ AC_INIT(cngpij/bjcups.c)
+ AM_INIT_AUTOMAKE(cngpij, 3.40-1)
+ 
+-AM_CONFIG_HEADER(config.h)
++#AC_CONFIG_HEADERS(config.h)
+ 
+ AC_ARG_ENABLE(progpath)
+ if test "${enable_progpath}" = "" ; then
+ 
+--- a/cngpijmon/cnijnpr/configure.in	2010-03-11 05:33:21.000000000 +0400
++++ b/cngpijmon/cnijnpr/configure.in	2013-01-12 17:56:57.729961931 +0400
+@@ -1,7 +1,7 @@
+ AC_INIT(configure.in)
+ AM_INIT_AUTOMAKE(cnijnpr, 3.40-1)
+ 
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(cnijnpr/config.h)
+ 
+ 
+ AC_ARG_ENABLE(libpath)
+ 
+--- a/cnijfilter/configure.in	2010-03-09 14:51:24.000000000 +0400
++++ b/cnijfilter/configure.in	2013-01-12 17:55:42.657021362 +0400
+@@ -25,7 +25,7 @@
+ 
+ 
+ AM_INIT_AUTOMAKE(cif${program_suffix}, 3.40-1)
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(src/config.h)
+ 
+ dnl Checks for programs.
+ AC_ISC_POSIX
+@@ -47,7 +47,6 @@
+ AC_SUBST(ARC)
+ 
+ AC_PROG_CC
+-AM_PROG_CC_STDC
+ 
+ dnl Checks for libraries.
+ 
+--- a/lgmon/configure.in	2010-03-11 05:18:24.000000000 +0400
++++ b/lgmon/configure.in	2013-01-12 17:56:21.380152122 +0400
+@@ -9,7 +9,7 @@
+ fi
+ 
+ AM_INIT_AUTOMAKE(lgmon{program_suffix}, 3.40-1)
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(src/config.h)
+ dnl AM_MAINTAINER_MODE
+ 
+ AC_DEFINE_UNQUOTED(PACKAGE_PRINTER_MODEL, "${program_suffix}")
+@@ -41,7 +41,6 @@
+ AC_SUBST(ARC)
+ 
+ AC_PROG_CC
+-AM_PROG_CC_STDC
+ AC_HEADER_STDC
+ AC_PROG_RANLIB
+ 
+--- a/libs/configure.in	2010-02-23 07:57:49.000000000 +0400
++++ b/libs/configure.in	2013-01-12 17:54:56.233930669 +0400
+@@ -1,7 +1,7 @@
+ AC_INIT(paramlist/paramlist.h)
+ AM_INIT_AUTOMAKE(buftool, 1.0.0)
+ 
+-AM_CONFIG_HEADER(config.h)
++#AC_CONFIG_HEADERS(config.h)
+ 
+ # Checks for programs.
+ AC_PROG_CXX
+ 
+--- a/pstocanonij/configure.in	2010-02-23 07:57:49.000000000 +0400
++++ b/pstocanonij/configure.in	2013-01-12 17:56:03.480245771 +0400
+@@ -1,7 +1,7 @@
+ AC_INIT(filter/pstocanonij.c)
+ AM_INIT_AUTOMAKE(pstocanonij, 1.0.0)
+ 
+-AM_CONFIG_HEADER(config.h)
++#AC_CONFIG_HEADERS(config.h)
+ 
+ AC_ARG_ENABLE(progpath)
+ if test "${enable_progpath}" = "" ; then
