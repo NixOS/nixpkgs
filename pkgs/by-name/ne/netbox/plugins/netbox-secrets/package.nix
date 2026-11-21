@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netbox-secrets";
-  version = "3.1.2";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Onemind-Services-LLC";
     repo = "netbox-secrets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fCeghFaCPhP2aG8A8WIQDkkEk5ueIZ797hq1c6xhZnY=";
+    hash = "sha256-1z1MtA9ej+xlASvIzs9mXmwxLhHSO/35nWjn8x/MkMk=";
   };
 
   build-system = [ setuptools ];
