@@ -1195,6 +1195,9 @@ let
         UNIX = yes; # Unix domain sockets.
 
         MD = yes; # Device mapper (RAID, LVM, etc.)
+        DM_VERITY_FEC = yes;
+        DM_VERITY_VERIFY_ROOTHASH_SIG = yes;
+        DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING = yes;
 
         # enable support for device trees and overlays
         OF = option yes;
