@@ -21,6 +21,7 @@ in
     nyabinary
     snaki
   ];
+
   options.services.matrix-continuwuity = {
     enable = lib.mkEnableOption "continuwuity";
 
@@ -89,12 +90,12 @@ in
             description = ''
               Listen on a UNIX socket at the specified path. If listening on a UNIX socket,
               listening on an address will be disabled. The `address` option must be set to
-              `null` (the default value). The option {option}`services.continuwuity.group` must
+              `null` (the default value). The option {option}`services.matrix-continuwuity.group` must
               be set to a group your reverse proxy is part of.
 
               This will automatically add a system user "continuwuity" to your system if
-              {option}`services.continuwuity.user` is left at the default, and a "continuwuity"
-              group if {option}`services.continuwuity.group` is left at the default.
+              {option}`services.matrix-continuwuity.user` is left at the default, and a "continuwuity"
+              group if {option}`services.matrix-continuwuity.group` is left at the default.
             '';
           };
           global.unix_socket_perms = lib.mkOption {
@@ -193,18 +194,18 @@ in
       {
         assertion = !(cfg.settings ? global.unix_socket_path) || !(cfg.settings ? global.address);
         message = ''
-          In `services.continuwuity.settings.global`, `unix_socket_path` and `address` cannot be set at the
+          In `services.matrix-continuwuity.settings.global`, `unix_socket_path` and `address` cannot be set at the
           same time.
           Leave one of the two options unset or explicitly set them to `null`.
         '';
       }
       {
         assertion = cfg.user != defaultUser -> config ? users.users.${cfg.user};
-        message = "If `services.continuwuity.user` is changed, the configured user must already exist.";
+        message = "If `services.matrix-continuwuity.user` is changed, the configured user must already exist.";
       }
       {
         assertion = cfg.group != defaultGroup -> config ? users.groups.${cfg.group};
-        message = "If `services.continuwuity.group` is changed, the configured group must already exist.";
+        message = "If `services.matrix-continuwuity.group` is changed, the configured group must already exist.";
       }
     ];
 
