@@ -1875,6 +1875,7 @@
   ./services/web-apps/rutorrent.nix
   ./services/web-apps/screego.nix
   ./services/web-apps/selfoss.nix
+  ./services/web-apps/semaphoreui.nix
   ./services/web-apps/sftpgo.nix
   ./services/web-apps/shiori.nix
   ./services/web-apps/sillytavern.nix
