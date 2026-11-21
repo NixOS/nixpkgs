@@ -976,7 +976,7 @@ The following situations are fully or partially exempt:
 
 * Use of automated tools to develop upstream software packaged inside Nixpkgs is not in scope.
 
-* Any form of automation (including LLMs) may be used to generate the summary (first line) or trailers (e.g. `Changelog: ...`, `Assisted-by: ...`) of a commit message.
+* Any form of automation (including LLMs) may be used to generate the subject (first line) or trailers (e.g. `Changelog: ...`, `Assisted-by: ...`) of a commit message.
   Disclosure of this is not required.
   Whether automation is used or not, adhering to our [commit conventions](#commit-conventions) remains required.
 
