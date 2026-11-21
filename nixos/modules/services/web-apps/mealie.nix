@@ -9,6 +9,16 @@ let
   pkg = cfg.package;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "mealie"
+        "extraOptions"
+      ]
+      "Mealie switched to uvicorn and no longer accepts gunicorn command line arguments. Switch to `services.mealie.settings`."
+    )
+  ];
   options.services.mealie = {
     enable = lib.mkEnableOption "Mealie, a recipe manager and meal planner";
 
@@ -47,18 +57,6 @@ in
       };
     };
 
-    extraOptions = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      example = [
-        "--log-level"
-        "debug"
-      ];
-      description = ''
-        Specifies extra command line arguments to pass to mealie (Gunicorn).
-      '';
-    };
-
     credentialsFile = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -93,6 +91,7 @@ in
 
       environment = {
         PRODUCTION = "true";
+        API_HOST = cfg.listenAddress;
         API_PORT = toString cfg.port;
         BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
@@ -103,8 +102,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         User = "mealie";
-        ExecStartPre = "${pkg}/libexec/init_db";
-        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${toString cfg.port} ${lib.escapeShellArgs cfg.extraOptions}";
+        ExecStart = lib.getExe pkg;
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
         StandardOutput = "journal";
