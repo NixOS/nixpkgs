@@ -9,18 +9,20 @@
   callPackage,
 }:
 stdenv.mkDerivation rec {
-  version = "1.6.2";
+  version = "1.8.0";
   pname = "pastebinit";
 
   src = fetchFromGitHub {
     owner = "pastebinit";
     repo = "pastebinit";
     rev = version;
-    hash = "sha256-vuAWkHlQM6QTWarThpSbY0qrxzej0GvLU0jT2JOS/qc=";
+    hash = "sha256-+2vcpLueYUMrOJvSPo7Uxk3PWHR2MB0z1YtGeqJMsSM=";
   };
 
   patches = [
     ./use-drv-etc.patch
+    # https://github.com/pastebinit/pastebinit/pull/19
+    ./switch-default.patch
   ];
 
   nativeBuildInputs = [
