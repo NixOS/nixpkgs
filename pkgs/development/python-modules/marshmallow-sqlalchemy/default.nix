@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  flit-core_3,
   marshmallow,
   packaging,
   sqlalchemy,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-5RGSwgR3BkWi+rDXL0T4eJJy7vdZUfhLFgjWtLC/4OY=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   propagatedBuildInputs = [
     marshmallow
