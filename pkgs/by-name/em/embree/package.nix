@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "embree";
-  version = "4.4.1";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "RenderKit";
     repo = "embree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZJItp33XUmaTk5s4AbM/uzWGxSdGh5scdZAZDBYy28M=";
+    hash = "sha256-lozz1eGWm6/XlMbHQRTyQtQ7abuxoU4qBmRj/4gkZsM=";
   };
 
   postPatch = ''
