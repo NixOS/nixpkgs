@@ -1,0 +1,62 @@
+diff --git a/src/grd-configuration.c b/src/grd-configuration.c
+index d48b40c..aac8aed 100644
+--- a/src/grd-configuration.c
++++ b/src/grd-configuration.c
+@@ -191,6 +191,7 @@ on_handle_enable (GrdDBusRemoteDesktopConfigurationRdpServer *configuration_rdp_
+ {
+   g_autoptr (GError) error = NULL;
+
++#if 0 // skip the attempt to modify `/etc/systemd/system` when running on NixOS
+   if (!grd_toggle_systemd_unit (GRD_RUNTIME_MODE_SYSTEM, TRUE, &error))
+     {
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+@@ -200,6 +201,7 @@ on_handle_enable (GrdDBusRemoteDesktopConfigurationRdpServer *configuration_rdp_
+                                              error->message);
+       return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
++#endif
+
+   g_object_set (G_OBJECT (configuration->settings), "rdp-enabled", TRUE, NULL);
+
+@@ -217,6 +219,7 @@ on_handle_disable (GrdDBusRemoteDesktopConfigurationRdpServer *configuration_rdp
+ {
+   g_autoptr (GError) error = NULL;
+
++#if 0 // skip the attempt to modify `/etc/systemd/system` when running on NixOS
+   if (!grd_toggle_systemd_unit (GRD_RUNTIME_MODE_SYSTEM, FALSE, &error))
+     {
+       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR,
+@@ -226,6 +229,7 @@ on_handle_disable (GrdDBusRemoteDesktopConfigurationRdpServer *configuration_rdp
+                                              error->message);
+       return G_DBUS_METHOD_INVOCATION_HANDLED;
+     }
++#endif
+
+   g_object_set (G_OBJECT (configuration->settings), "rdp-enabled", FALSE, NULL);
+
+diff --git a/src/grd-enable-service.c b/src/grd-enable-service.c
+index 5c98c71..bca8169 100644
+--- a/src/grd-enable-service.c
++++ b/src/grd-enable-service.c
+@@ -111,6 +111,10 @@ enable_systemd_unit (GrdRuntimeMode   runtime_mode,
+   GBusType bus_type;
+   const char *unit;
+
++  // skip the attempt to modify `/etc/systemd/system` when running on NixOS
++  if (runtime_mode == GRD_RUNTIME_MODE_SYSTEM)
++    return TRUE;
++
+   get_systemd_unit_info (runtime_mode, &bus_type, &unit);
+
+   connection = g_bus_get_sync (bus_type, NULL, error);
+@@ -157,6 +161,10 @@ disable_systemd_unit (GrdRuntimeMode   runtime_mode,
+   GBusType bus_type;
+   const char *unit;
+
++  // skip the attempt to modify `/etc/systemd/system` when running on NixOS
++  if (runtime_mode == GRD_RUNTIME_MODE_SYSTEM)
++    return TRUE;
++
+   get_systemd_unit_info (runtime_mode, &bus_type, &unit);
+
+   connection = g_bus_get_sync (bus_type, NULL, error);
