@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
 }:
@@ -25,6 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -Dm644 -t $out/include crates/c-api/*.h
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -id $out/lib/libresvg.dylib $out/lib/libresvg.dylib
   '';
 
   meta = {
