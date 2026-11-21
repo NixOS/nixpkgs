@@ -5,6 +5,7 @@
   base,
   binary,
   bytestring,
+  callPackage,
   containers,
   directory,
   edit-distance,
@@ -83,4 +84,8 @@ mkDerivation {
   description = "The `elm` command line interface";
   license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
   mainProgram = "elm";
+
+  passthru.tests = {
+    testProjectAndTooling = callPackage ../../../test-project/default.nix { };
+  };
 }
