@@ -37,7 +37,7 @@ buildEnv {
 
     # Regenerate the depmod map files.  Be sure to pass an explicit
     # kernel version number, otherwise depmod will use `uname -r'.
-    if test -w $out/lib/modules/$kernelVersion; then
+    if [[ $(readlink -f "$out/lib/modules/$kernelVersion") == "$out/"* ]]; then
         rm -f $out/lib/modules/$kernelVersion/modules.!(builtin*|order*|cer)
         ${kmod}/bin/depmod -b $out -C $out/etc/depmod.d -a $kernelVersion
         cd -- "$out/lib/modules/$kernelVersion"
