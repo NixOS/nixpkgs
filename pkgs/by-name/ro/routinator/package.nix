@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "routinator";
-  version = "0.15.3";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "routinator";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0z8vUIbWT9LF1uglz/5QNZ/RTiGN4k/OK55cB1r1wAQ=";
+    hash = "sha256-6X4hQDvFSxht2ehEk5h5n+gV5C+UqOyYFVccgmFwEro=";
   };
 
-  cargoHash = "sha256-mlY9tFNTKf25VM4hJNegc1grxtZ/iJmlNmBd5SBellc=";
+  cargoHash = "sha256-A4DbwsJrWBsHQqR3xteR974lui61c0OWBkj/d3I2ApI=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ aws-lc ];
