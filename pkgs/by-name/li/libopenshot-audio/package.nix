@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -id $out/lib/libopenshot-audio.10.dylib $out/lib/libopenshot-audio.${finalAttrs.version}.dylib
+    install_name_tool -change @rpath/libopenshot-audio.10.dylib $out/lib/libopenshot-audio.10.dylib $out/bin/openshot-audio-demo
+  '';
+
   meta = {
     homepage = "http://openshot.org/";
     description = "High-quality sound editing library";
