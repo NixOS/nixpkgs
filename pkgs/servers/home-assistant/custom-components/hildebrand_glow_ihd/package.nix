@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "megakid";
   domain = "hildebrand_glow_ihd";
-  version = "1.8.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha_hildebrand_glow_ihd_mqtt";
     tag = "v${version}";
-    hash = "sha256-13NmNHaCYDZkWK5uqKeTZlB84UuThNLOAYaPS4QfTKY=";
+    hash = "sha256-DvE6DtBkdA7NOzrnCSoou2eNwXTqXzyGmabHfitrtOg=";
   };
 
   passthru.updateScript = nix-update-script { };
