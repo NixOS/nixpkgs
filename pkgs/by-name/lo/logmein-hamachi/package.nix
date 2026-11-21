@@ -33,7 +33,10 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    # The binary's segments are 2 MiB aligned, with patchelf's default page size
+    # the grown .dynamic overlaps the text segment and ld.so segfaults on it.
     patchelf \
+      --page-size 2097152 \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       --set-rpath ${libraries} \
       hamachid
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
     changelog = "https://support.logmeininc.com/central/help/whats-new-in-hamachi";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ amz-x ];
     platforms = lib.platforms.linux;
   };
 }
