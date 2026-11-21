@@ -7,14 +7,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "pygtrie";
-  version = "2.5.0";
+  version = "2.6.2";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "pygtrie";
     inherit (finalAttrs) version;
-    hash = "sha256-IDUUrYJutAPasdLi3dA04NFTS75NvgITuwWT9mvrpOI=";
+    hash = "sha256-h5JkWXdD71K/gPLf8IU2QIjAhIriJUTbldrSv1LgZHE=";
   };
 
   build-system = [ setuptools ];
