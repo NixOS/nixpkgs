@@ -137,7 +137,7 @@ in
               type = format.type;
               default = { };
               example = {
-                group = [
+                groups = [
                   {
                     name = "TestGroup";
                     rules = [
