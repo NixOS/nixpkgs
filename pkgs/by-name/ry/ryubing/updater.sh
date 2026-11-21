@@ -6,12 +6,12 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 # If NEW_VERSION or COMMIT are not set, fetch the latest version
 if [ -z ${NEW_VERSION+x} ] && [ -z ${COMMIT+x} ]; then
-    RELEASE_DATA=$(curl -s "https://git.ryujinx.app/api/v1/repos/projects/Ryubing/tags")
+    RELEASE_DATA=$(curl -s "https://git.ryujinx.app/api/v1/repos/projects/Ryubing/releases/latest")
     if [ -z "$RELEASE_DATA" ] || [[ $RELEASE_DATA =~ "imposed ratelimits" ]]; then
         echo "failed to get release job data" >&2
         exit 1
     fi
-    NEW_VERSION=$(echo "$RELEASE_DATA" | jq -r '[.[] | select(.name | startswith("Canary") | not)][0].name')
+    NEW_VERSION=$(echo "$RELEASE_DATA" | jq -r '.tag_name')
 fi
 
 OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./package.nix)"
