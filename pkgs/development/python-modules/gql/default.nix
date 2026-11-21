@@ -6,6 +6,7 @@
   backoff,
   botocore,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   graphql-core,
   httpx,
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cacert
     parse
     pytest-asyncio_0
     pytest-console-scripts

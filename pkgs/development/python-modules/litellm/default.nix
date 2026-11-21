@@ -13,6 +13,7 @@
   backoff,
   boto3,
   buildPythonPackage,
+  cacert,
   certifi,
   click,
   cryptography,
@@ -92,6 +93,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = with rustPlatform; [
+    # pythonImportsCheck loads the CA bundle (doCheck is off, so it can't go
+    # in nativeCheckInputs)
+    cacert
     cargoSetupHook
     maturinBuildHook
     pkg-config

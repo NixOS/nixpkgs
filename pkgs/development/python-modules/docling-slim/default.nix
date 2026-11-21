@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
 
   # build-system
@@ -298,6 +299,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "docling" ];
 
   nativeCheckInputs = [
+    cacert
     beautifulsoup4
     docling-ibm-models
     docling-parse

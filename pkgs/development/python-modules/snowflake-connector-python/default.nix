@@ -7,6 +7,7 @@
   boto3,
   botocore,
   buildPythonPackage,
+  cacert,
   certifi,
   charset-normalizer,
   cryptography,
@@ -93,6 +94,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
+    cacert
     aioboto3
     aiohttp
     numpy

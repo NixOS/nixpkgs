@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   httpx,
   pytest,
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "httpx" ];
 
   nativeCheckInputs = [
+    cacert
     pytest-asyncio
     pytestCheckHook
   ];

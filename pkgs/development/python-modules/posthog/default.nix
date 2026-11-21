@@ -8,6 +8,7 @@
 
   # dependencies
   backoff,
+  cacert,
   distro,
   requests,
   typing-extensions,
@@ -58,6 +59,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     anthropic
     celery
     django

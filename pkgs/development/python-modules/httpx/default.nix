@@ -5,6 +5,7 @@
   brotli,
   brotlicffi,
   buildPythonPackage,
+  cacert,
   certifi,
   chardet,
   click,
@@ -68,6 +69,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
+    cacert
     chardet
     multipart
     pytestCheckHook

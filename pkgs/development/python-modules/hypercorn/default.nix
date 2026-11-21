@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   fetchpatch2,
   aioquic,
@@ -58,6 +59,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    cacert
     httpx
     pytest-asyncio
     pytest-trio

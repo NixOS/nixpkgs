@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   certifi,
   cryptography,
   fetchFromGitHub,
@@ -33,7 +34,10 @@ buildPythonPackage (finalAttrs: {
     lxml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    cacert
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "signxml" ];
 

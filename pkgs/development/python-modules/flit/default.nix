@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
 
   # build-system
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cacert
     pytestCheckHook
     testpath
     responses

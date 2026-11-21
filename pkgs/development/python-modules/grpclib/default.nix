@@ -2,6 +2,7 @@
   lib,
   async-timeout,
   buildPythonPackage,
+  cacert,
   certifi,
   faker,
   fetchFromGitHub,
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cacert
     pytestCheckHook
     pytest-asyncio
     async-timeout

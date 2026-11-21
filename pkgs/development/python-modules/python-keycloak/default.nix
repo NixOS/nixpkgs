@@ -2,6 +2,7 @@
   lib,
   aiofiles,
   buildPythonPackage,
+  cacert,
   deprecation,
   fetchFromGitHub,
   httpx,
@@ -44,6 +45,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     freezegun
     pytest-asyncio
     pytestCheckHook

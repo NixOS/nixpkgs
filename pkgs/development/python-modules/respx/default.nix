@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   flask,
   httpcore,
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   dependencies = [ httpx ];
 
   nativeCheckInputs = [
+    cacert
     httpcore
     httpx
     flask

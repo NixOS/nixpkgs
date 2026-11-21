@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
   setuptools,
   addBinToPathHook,
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "curl_cffi" ];
 
   nativeCheckInputs = [
+    cacert
     addBinToPathHook
     charset-normalizer
     cryptography

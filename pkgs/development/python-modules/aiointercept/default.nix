@@ -1,6 +1,7 @@
 {
   aiohttp,
   buildPythonPackage,
+  cacert,
   ddt,
   fetchFromGitHub,
   hatchling,
@@ -39,6 +40,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     ddt
     httpx
     pytest-asyncio

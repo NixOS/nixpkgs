@@ -2,6 +2,7 @@
   lib,
   anyio,
   buildPythonPackage,
+  cacert,
   certifi,
   fetchFromGitHub,
   hatchling,
@@ -49,6 +50,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    cacert
     pytest-httpbin
     pytest-trio
     pytestCheckHook

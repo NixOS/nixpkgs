@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
 
   # buildInputs
@@ -116,6 +117,7 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    cacert
     cachetools
     orjson
     pyflakes

@@ -4,6 +4,7 @@
   aioresponses,
   attrs,
   buildPythonPackage,
+  cacert,
   defusedxml,
   fetchFromGitHub,
   freezegun,
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zeep" ];
 
   nativeCheckInputs = [
+    cacert
     aiohttp
     aioresponses
     freezegun

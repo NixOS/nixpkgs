@@ -3,6 +3,7 @@
   aiohttp,
   anyio,
   buildPythonPackage,
+  cacert,
   dirty-equals,
   distro,
   fetchFromGitHub,
@@ -59,6 +60,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    cacert
     dirty-equals
     nest-asyncio
     pytest-asyncio

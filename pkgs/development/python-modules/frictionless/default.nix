@@ -1,6 +1,7 @@
 args@{
   lib,
   buildPythonPackage,
+  cacert,
   fetchFromGitHub,
 
   # build-system
@@ -188,6 +189,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    cacert
     moto
     openpyxl
     pytest-lazy-fixtures

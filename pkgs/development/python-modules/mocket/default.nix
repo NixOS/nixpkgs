@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   stdenv,
+  cacert,
   fetchPypi,
 
   # build-system
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    cacert
     aiohttp
     asgiref
     fastapi
