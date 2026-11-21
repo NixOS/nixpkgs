@@ -5,7 +5,6 @@
   replaceVars,
   cairo,
   cinnamon-desktop,
-  dbus,
   desktop-file-utils,
   egl-wayland,
   glib,
@@ -16,7 +15,6 @@
   libcanberra,
   libdrm,
   libgbm,
-  libgnomekbd,
   libgudev,
   libinput,
   libstartup_notification,
@@ -24,6 +22,7 @@
   libxcvt,
   libxdamage,
   libxkbcommon,
+  libxkbfile,
   libxtst,
   mesa-gl-headers,
   meson,
@@ -36,14 +35,18 @@
   wayland-protocols,
   wayland-scanner,
   wrapGAppsHook3,
+  xenity,
+  xkeyboard-config,
   xorg-server,
   xwayland,
-  zenity,
 }:
 
+let
+  pythonEnv = python3.withPackages (ps: [ ps.pygobject3 ]);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "muffin";
-  version = "6.6.3";
+  version = "6.8.1";
 
   outputs = [
     "out"
@@ -55,12 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxmint";
     repo = "muffin";
     rev = finalAttrs.version;
-    hash = "sha256-PNL6PAZinds+kqCUCesJkTS+93juhm35sPE7RFUdxeU=";
+    hash = "sha256-GHmv612v9U5H491p4W928ewvxTeIdLk30U2lfepVkKo=";
   };
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      inherit zenity;
+      inherit xenity;
     })
   ];
 
@@ -79,14 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     cinnamon-desktop
-    dbus
     egl-wayland
     glib
     gtk3
     libcanberra
     libdrm
     libgbm
-    libgnomekbd
     libgudev
     libinput
     libstartup_notification
@@ -94,10 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
     libxcvt
     libxdamage
     libxkbcommon
+    libxkbfile
     pipewire
+    pythonEnv
     udev
     wayland
     wayland-protocols
+    xkeyboard-config
     xwayland
   ];
 
@@ -113,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Based on Mint's debian/rules.
     "-Dwayland_eglstream=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
+    "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
 
   postPatch = ''

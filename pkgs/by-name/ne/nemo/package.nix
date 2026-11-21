@@ -23,6 +23,9 @@
   cinnamon-translations,
   libgsf,
   python3,
+  gst_all_1,
+  gtk-layer-shell,
+  wayland,
 }:
 
 let
@@ -37,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemo";
-  version = "6.6.4";
+  version = "6.8.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo";
     rev = finalAttrs.version;
-    hash = "sha256-HYrpq22rWScdweDQQlrQbOShYFH4FjZWQKBnvKIsOAI=";
+    hash = "sha256-jIe0ETErvUzF5miKa5zHbPltiQ7wZQfr7zpTLp6xGoA=";
   };
 
   patches = [
@@ -70,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     gvfs
     libgsf
     json-glib
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gtk-layer-shell
+    wayland
   ];
 
   nativeBuildInputs = [
@@ -85,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
+    # see Mint's debian/rules
+    "-Dgtk_layer_shell=true"
   ];
 
   preFixup = ''

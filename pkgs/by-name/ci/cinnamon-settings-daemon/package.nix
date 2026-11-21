@@ -32,18 +32,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-settings-daemon";
-  version = "6.6.4";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-settings-daemon";
     tag = finalAttrs.version;
-    hash = "sha256-zdrT9te/C62g1MZlILbicxaDWO+uS3iW448YBTpPz1Y=";
+    hash = "sha256-F+Fr9nRfvUstW3K99yhKvdTng6K7xXYCFHWQ7tzzYZs=";
   };
-
-  patches = [
-    ./csd-backlight-helper-fix.patch
-  ];
 
   buildInputs = [
     cinnamon-desktop
@@ -87,12 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   # use locales from cinnamon-translations (not using --localedir because datadir is used)
   postInstall = ''
     ln -s ${cinnamon-translations}/share/locale $out/share/locale
-  '';
-
-  # So the polkit policy can reference /run/current-system/sw/bin/cinnamon-settings-daemon/csd-backlight-helper
-  postFixup = ''
-    mkdir -p $out/bin/cinnamon-settings-daemon
-    ln -s $out/libexec/csd-backlight-helper $out/bin/cinnamon-settings-daemon/csd-backlight-helper
   '';
 
   meta = {

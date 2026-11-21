@@ -9,15 +9,17 @@
     {
       imports = [ ./common/user-account.nix ];
       services.xserver.enable = true;
-      services.xserver.desktopManager.cinnamon.enable = true;
+      services.desktopManager.cinnamon.enable = true;
       services.displayManager = {
         autoLogin.enable = true;
         autoLogin.user = nodes.machine.users.users.alice.name;
         defaultSession = "cinnamon-wayland";
       };
 
+      virtualisation.memorySize = 2047;
+
       # For the sessionPath subtest.
-      services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
+      services.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
     };
 
   enableOCR = true;
@@ -53,7 +55,7 @@
 
       with subtest("Check if Cinnamon components actually start"):
           # https://unix.stackexchange.com/a/74186
-          for i in ["[c]sd-media-keys", "[x]app-sn-watcher", "[n]emo-desktop"]:
+          for i in ["[c]sd-media-keys", "[x]app-sn-watcher", "[n]emo-desktop", "[c]innamon-background-daemon"]:
             machine.wait_until_succeeds(f"pgrep -f \"{i}\"")
           machine.wait_until_succeeds("journalctl -b --grep 'Loaded applet menu@cinnamon.org'")
           machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
@@ -76,14 +78,15 @@
           machine.screenshot("cinnamon_settings")
 
       with subtest("Check if screensaver works"):
-          # This is not supported at the moment.
-          # https://trello.com/b/HHs01Pab/cinnamon-wayland
           machine.execute("${su "cinnamon-screensaver-command -l >&2 &"}")
-          machine.wait_until_succeeds("journalctl -b --grep 'cinnamon-screensaver is disabled in wayland sessions'")
+          machine.wait_until_succeeds("${su "cinnamon-screensaver-command -q"} | grep 'The screensaver is active'")
+          machine.sleep(datetime.timedelta(seconds=2))
+          machine.send_chars("${user.password}\n", delay=datetime.timedelta(seconds=0.2))
+          machine.wait_until_succeeds("${su "cinnamon-screensaver-command -q"} | grep 'The screensaver is inactive'")
 
-      with subtest("Open GNOME Terminal"):
-          machine.succeed("${su "dbus-launch gnome-terminal"}")
-          machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'gnome-terminal'")
+      with subtest("Open Velocitty"):
+          machine.succeed("${su "velocitty >&2 &"}")
+          machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'velocitty'")
           machine.sleep(datetime.timedelta(seconds=2))
 
       # Only can be tested after opening the above apps.
