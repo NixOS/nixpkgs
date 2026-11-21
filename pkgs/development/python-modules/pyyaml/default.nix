@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyyaml";
-  version = "6.0.3";
+  version = "6.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "pyyaml";
     tag = version;
-    hash = "sha256-jUooIBp80cLxvdU/zLF0X8Yjrf0Yp9peYeiFjuV8AHA=";
+    hash = "sha256-7EKChsoRuDFyTlemqBNorX6IgoY4wD5n/4QzEMatL1o=";
   };
 
   build-system = [
