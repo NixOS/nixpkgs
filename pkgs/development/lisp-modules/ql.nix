@@ -233,6 +233,30 @@ let
       cl-readline = super.cl-readline.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.readline ];
       });
+      hamcrest-tests = super.hamcrest-tests.overrideLispAttrs (o: {
+        preBuild = (o.preBuild or "") + ''
+          export CL_SOURCE_REGISTRY="$(pwd)//:$CL_SOURCE_REGISTRY"
+        '';
+        lispLibs = o.lispLibs ++ [
+          self._40ants-asdf-system
+          self.hamcrest
+        ];
+      });
+      cl-telegram-bot-tests = super.cl-telegram-bot-tests.overrideLispAttrs (o: {
+        lispLibs = o.lispLibs ++ [
+          self._40ants-asdf-system
+          self.cl-telegram-bot
+        ];
+      });
+      reblocks-file-server-tests = super.reblocks-file-server-tests.overrideLispAttrs (o: {
+        lispLibs = o.lispLibs ++ [
+          self._40ants-asdf-system
+          self.reblocks-file-server
+        ];
+      });
+      clsql-cffi = super.clsql-cffi.overrideLispAttrs (o: {
+        lispLibs = o.lispLibs ++ [ self.cffi-uffi-compat ];
+      });
       md5 = super.md5.overrideLispAttrs (o: {
         lispLibs = [ super.flexi-streams ];
       });
