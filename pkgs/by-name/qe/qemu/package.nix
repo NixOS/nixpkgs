@@ -98,6 +98,8 @@
   valgrind-light,
   brlttySupport ? !minimal && !stdenv.hostPlatform.isDarwin,
   brltty,
+  igvmSupport ? !minimal,
+  libigvm,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -249,6 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals capstoneSupport [ capstone ]
   ++ lib.optionals valgrindSupport [ valgrind-light ]
   ++ lib.optionals brlttySupport [ brltty ]
+  ++ lib.optionals igvmSupport [ libigvm ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   # QEMU uses Meson and Ninja but still wants Make to be the entrypoint.
@@ -347,6 +350,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional u2fEmuSupport "--enable-u2f"
   ++ lib.optional capstoneSupport "--enable-capstone"
   ++ lib.optional brlttySupport "--enable-brlapi"
+  ++ lib.optional igvmSupport "--enable-igvm"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"
   ++ lib.optional (!enableBlobs) "--disable-install-blobs"
   ++ lib.optional userOnly "--disable-system"
