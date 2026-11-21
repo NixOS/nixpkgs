@@ -8,6 +8,7 @@
 {
   package ? null,
   maintainer ? null,
+  skip-teams ? false,
   team ? null,
   predicate ? null,
   get-script ? pkg: pkg.updateScript or null,
@@ -146,20 +147,18 @@ let
           throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
         else
           builtins.getAttr maintainer' lib.maintainers;
+
+      maintainerAttribute = if isTrue skip-teams then "nonTeamMaintainers" else "maintainers";
     in
     packagesWithUpdateScriptMatchingPredicate (
       path: pkg:
-      (
-        if builtins.hasAttr "maintainers" pkg.meta then
-          (
-            if builtins.isList pkg.meta.maintainers then
-              builtins.elem maintainer pkg.meta.maintainers
-            else
-              maintainer == pkg.meta.maintainers
-          )
-        else
-          false
-      )
+      let
+        maintainers = pkg.meta.${maintainerAttribute} or [ ];
+      in
+      if builtins.isList maintainers then
+        builtins.elem maintainer maintainers
+      else
+        maintainer == maintainers
     );
 
   # Recursively find all packages under `path` in `pkgs` with updateScript.
@@ -211,7 +210,12 @@ let
         % nix-shell maintainers/scripts/update.nix --argstr maintainer garbas
 
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
-    and have \`updateScript\` defined, or:
+    and have \`updateScript\` defined. This includes packages maintained through team
+    membership. To select only packages that explicitly list the maintainer, add:
+
+        --arg skip-teams true
+
+    Or select packages maintained by a team:
 
         % nix-shell maintainers/scripts/update.nix --argstr team ngi
 
