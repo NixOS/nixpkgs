@@ -13,6 +13,7 @@ let
   # Testfiles
   foofile = writeText "foofile" "foo";
   barfile = writeText "barfile" "bar";
+  multilinefile = writeText "multilinefile" "foo\nbar\n";
 
   # Wrapped binaries
   wrappedArgv0 = writeCBin "wrapped-argv0" ''
@@ -87,6 +88,14 @@ runCommand "make-wrapper-test"
           "--set-default"
           "VAR"
           "abc"
+        ];
+      })
+      (mkWrapperBinary {
+        name = "test-set-from-file";
+        args = [
+          "--set-from-file"
+          "VAR"
+          "${multilinefile}"
         ];
       })
       (mkWrapperBinary {
@@ -245,6 +254,8 @@ runCommand "make-wrapper-test"
     + mkTest "test-set-default" "VAR=abc"
     # --set-default doesn"t overwrite the variable
     + mkTest "VAR=foo test-set-default" "VAR=foo"
+    # --set-from-file works (newlines removed)
+    + mkTest "test-set-from-file" "VAR=foobar"
     # --unset works
     + mkTest "VAR=foo test-unset" "VAR="
 
