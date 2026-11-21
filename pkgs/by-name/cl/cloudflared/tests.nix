@@ -5,6 +5,7 @@
   pkgsCross,
   testers,
   cloudflared,
+  nixosTests,
   runCommand,
   wine,
   wine64,
@@ -14,6 +15,8 @@ let
   inherit (stdenv) buildPlatform;
 in
 {
+  inherit (nixosTests) cloudflared;
+
   version = testers.testVersion {
     package = cloudflared;
     command = "cloudflared help";
