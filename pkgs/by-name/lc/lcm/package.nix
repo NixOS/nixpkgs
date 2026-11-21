@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcm";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "lcm-proj";
     repo = "lcm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-72fytJY+uXEHGdZ7N+0g+JK7ALb2e2ZtJuvhiGIMHiA=";
+    hash = "sha256-2IWIVq2o6R4pU48VXbizYpmZXsq1r5siATDE4j6WiZU=";
   };
 
   outputs = [
