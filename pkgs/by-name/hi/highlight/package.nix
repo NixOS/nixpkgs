@@ -16,7 +16,7 @@ let
   lua = lua5_2_compat;
   self = stdenv.mkDerivation (finalAttrs: {
     pname = "highlight";
-    version = "4.21";
+    version = "4.22";
 
     strictDeps = true;
     __structuredAttrs = true;
@@ -25,7 +25,7 @@ let
       owner = "saalen";
       repo = "highlight";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-lIfaiVM6M6RN4DeTGTdASNavFljyDRpts3a+N6I2gJY=";
+      hash = "sha256-tfWCQVebU54dZsnfiU92oBHgwS0l2npY6+EyuIiINAM=";
     };
 
     enableParallelBuilding = true;
