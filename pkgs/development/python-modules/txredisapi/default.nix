@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "txredisapi";
-  version = "1.4.12";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IlyaSkriblovsky";
     repo = "txredisapi";
     tag = version;
-    hash = "sha256-jvxqHYDRTnG1X+VkC1syTM/W+CRiL9w4Ehf7pe147Uo=";
+    hash = "sha256-PXWw2AGeEbaxh9PG7MqTnhU5/5S90GQuq5PNwGIoKxY=";
   };
 
   nativeBuildInputs = [ setuptools ];
