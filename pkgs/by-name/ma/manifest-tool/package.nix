@@ -10,14 +10,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "manifest-tool";
-  version = "2.2.2";
+  version = "2.2.3";
   modRoot = "v2";
 
   src = fetchFromGitHub {
     owner = "estesp";
     repo = "manifest-tool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hY+cNGjNWPlJAyOBdc5P52M3Ab6wpn7wEDLUbBz8ogk=";
+    hash = "sha256-tpran0b8R25r8KIj8muueD1zBA1ToPBJH/OD5yBzl60=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git-revision
