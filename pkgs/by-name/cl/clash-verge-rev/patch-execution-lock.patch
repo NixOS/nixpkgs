@@ -1,0 +1,25 @@
+diff --git a/src/execution.rs b/src/execution.rs
+--- a/src/execution.rs
++++ b/src/execution.rs
+@@ -148,7 +148,9 @@ fn process_has_exited(pid: u32) -> bool {
+ }
+ 
+ fn coordination_path() -> Result<PathBuf> {
+-    #[cfg(unix)]
++    #[cfg(all(target_os = "linux", not(feature = "test")))]
++    let root = PathBuf::from("/run/clash-verge-service");
++    #[cfg(all(unix, any(not(target_os = "linux"), feature = "test")))]
+     let root = PathBuf::from("/tmp");
+     #[cfg(windows)]
+     let root = {
+@@ -164,7 +166,9 @@ fn coordination_path() -> Result<PathBuf> {
+     // Both channels may keep idle helpers, but core execution is shared.
+     #[cfg(feature = "test")]
+     let name = "clash-verge-service.core-execution-test.lock";
+-    #[cfg(not(feature = "test"))]
++    #[cfg(all(target_os = "linux", not(feature = "test")))]
++    let name = "core-execution.lock";
++    #[cfg(all(not(target_os = "linux"), not(feature = "test")))]
+     let name = "clash-verge-service.core-execution.lock";
+     Ok(root.join(name))
+ }
