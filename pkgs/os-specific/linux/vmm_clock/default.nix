@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   kernel,
   kernelModuleMakeFlags,
 }:
@@ -16,6 +17,13 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-XYRxrVixvImxr2j3qxBcv1df1LvPRKqKKgegW3HqUcQ=";
   };
+
+  patches = lib.optionals (lib.versionAtLeast kernel.version "6.16") [
+    (fetchpatch2 {
+      url = "https://raw.githubusercontent.com/alpinelinux/aports/d5c16d40fc1e874bb88a32bbe4deeae55cb49657/community/vmm_clock-lts/kernel-7.3.patch";
+      hash = "sha256-A/wBdMKt4Bw9nGF7emcw3IETHRc0FIC0HTvxPDmten4=";
+    })
+  ];
 
   hardeningDisable = [
     "pic"
