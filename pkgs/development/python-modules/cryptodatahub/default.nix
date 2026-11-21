@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptodatahub";
-  version = "1.6.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptodatahub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iR+21qY1IxaGg9s9E82RbxSLMA+50ztDBXci1+iJPXY=";
+    hash = "sha256-FcOk+iSuakJz3+vd6OHs7ZnnPG7bFzC2ZxGXCzGrdTg=";
   };
 
   build-system = [
