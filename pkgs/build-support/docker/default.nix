@@ -772,7 +772,7 @@ rec {
 
             mkdir image
             touch baseFiles
-            baseEnvs='[]'
+            baseConfig='{}'
             if [[ -n "$fromImage" ]]; then
               echo "Unpacking base image..."
               tar -C image -xpf "$fromImage"
@@ -780,7 +780,7 @@ rec {
               # Store the layers and the environment variables from the base image
               cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
               configName="$(cat ./image/manifest.json | jq -r '.[0].Config')"
-              baseEnvs="$(cat "./image/$configName" | jq '.config.Env // []')"
+              baseConfig="$(cat "./image/$configName" | jq '.config')"
 
               # Extract the parentID from the manifest
               if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
@@ -864,8 +864,14 @@ rec {
             ) | sponge layer-list
 
             # Create image json and image manifest
-            imageJson=$(cat ${baseJson} | jq '.config.Env = $baseenv + .config.Env' --argjson baseenv "$baseEnvs")
-            imageJson=$(echo "$imageJson" | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
+            imageJson=$(jq  --argjson baseConfig "$baseConfig" '
+              # Prepend the provided config env to the image env.
+              .config.Env |= ($baseConfig.Env // []) + .
+              # Merge all other provided config entries with the image config. Provided config wins.
+              | .config |= $baseConfig * .
+              # Add rootfs information.
+              | . + {"rootfs": {"diff_ids": [], "type": "layers"}}
+            ' ${baseJson})
             manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
 
             for layerTar in $(cat ./layer-list); do
