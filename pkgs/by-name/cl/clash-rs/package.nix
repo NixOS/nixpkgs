@@ -16,13 +16,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.10.11";
+  version = "0.10.12";
 
   src = fetchFromGitHub {
     owner = "Watfaq-legacy";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kGJ06U4Z7CETt0BI9JswEzYEPnSbt4oQH/n13anfvSc=";
+    hash = "sha256-P/4cQMeqqGm2uLsd2cCdXMBFR2OXb/DwESUc9yuGTJQ=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./skip-npm-ci.patch
   ];
 
-  cargoHash = "sha256-adYPPjMaA4RmcbKm3PyPn3mO7zgfiVx1w3E3tRzACs4=";
+  cargoHash = "sha256-gjrFMslfS6tNca/AADhArYnPIEam6vkcdBWKVdE5b6I=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
