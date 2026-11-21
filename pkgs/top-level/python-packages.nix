@@ -4434,6 +4434,8 @@ self: super: with self; {
 
   devtools = callPackage ../development/python-modules/devtools { };
 
+  dextrace = callPackage ../development/python-modules/dextrace { };
+
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
   dfir-ntfs = callPackage ../development/python-modules/dfir_ntfs { };
