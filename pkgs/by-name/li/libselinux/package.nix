@@ -121,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  __structuredAttrs = true;
+
   passthru = {
     updateScript = gitUpdater {
       url = "https://github.com/SELinuxProject/selinux";
