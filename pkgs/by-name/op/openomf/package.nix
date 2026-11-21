@@ -1,24 +1,23 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   fetchurl,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_mixer,
   cmake,
-  argtable,
   enet,
   libconfuse,
-  libnatpmp,
   libepoxy,
+  libnatpmp,
   libpng,
   libxmp,
   miniupnpc,
-  opusfile,
-  SDL2,
-  SDL2_mixer,
-  unzip,
-  zlib,
   nix-update-script,
+  opusfile,
+  unzip,
   versionCheckHook,
+  zlib,
 }:
 
 let
@@ -28,7 +27,7 @@ let
   };
   icons = fetchurl {
     url = "https://www.omf2097.com/pub/files/omf/openomf-icons.zip";
-    hash = "sha256-8LWmrkY3ZiXcuVe0Zj90RQFUTwM27dJ4ev9TiBGoVk0=";
+    hash = "sha256-nsmM1daT2IKh8DIai9EzulhPFXTOCedXpKt4qvbR3w4=";
   };
   musicRemixes = fetchurl {
     url = "https://github.com/omf2097/openomf-music-mod/releases/download/1.0/openomf-mods-1.0.zip";
@@ -70,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    argtable
     enet
     libconfuse
     libepoxy
@@ -85,14 +83,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/icons/hicolor/256x256/apps
-
     unzip -j ${assets} -d $out/share/games/openomf/resources
 
     unzip ${musicRemixes} -d $out/share/games/openomf/mods
 
-    unzip -p ${icons} omf-logo/omf-256x256.png > $out/share/icons/hicolor/256x256/apps/org.openomf.OpenOMF.png
-    install -Dm644 $src/resources/flatpak/org.openomf.OpenOMF.desktop $out/share/applications/org.openomf.OpenOMF.desktop
+    unzip -j ${icons} -d icons
+    for size in 48 64 128 256; do
+      install -Dm644 icons/omf-''${size}x''${size}.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/org.openomf.OpenOMF.png
+    done
+
+    install -Dm644 $src/resources/flatpak/org.openomf.OpenOMF.desktop -t $out/share/applications
+    install -Dm644 $src/resources/flatpak/org.openomf.OpenOMF.metainfo.xml -t $out/share/metainfo
   '';
 
   doInstallCheck = true;
@@ -120,10 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
         3. SDL's preference path, ~/.local/share/OpenOMF/mods
     '';
     homepage = "https://www.openomf.org";
-    changelog = "https://github.com/omf2097/openomf/releases/tag/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/omf2097/openomf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ keenanweaver ];
-    mainProgram = "openomf";
     platforms = lib.platforms.all;
+    mainProgram = "openomf";
   };
 })
