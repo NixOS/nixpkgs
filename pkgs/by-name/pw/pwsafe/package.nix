@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pwsafe";
-  version = "1.25.0"; # do NOT update to 3.x Windows releases
+  version = "1.26.1"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
     owner = "pwsafe";
     repo = "pwsafe";
     rev = finalAttrs.version;
-    hash = "sha256-ebwrGgZIzWux5lvYeRiBRutZtMqXwDpolsNNoE4jHrk=";
+    hash = "sha256-4HbGyp4k+z5B/SNrTFE0q0GiL5VuW0HAcUwrN1zsF6k=";
   };
 
   strictDeps = true;
