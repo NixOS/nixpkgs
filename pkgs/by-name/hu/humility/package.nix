@@ -6,6 +6,7 @@
   libftdi,
   cargo-readme,
   pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage {
@@ -19,6 +20,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     libusb1
     libftdi
+    zstd
   ];
 
   src = fetchFromGitHub {
@@ -31,7 +33,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-GZkHPoDKiqTVwRAWXXbELXC1I/KRO+9sshY8/rGbA4A=";
 
   # Prevent building and installing xtask, as it's a developer utility not intended for the end user
-  cargoBuildFlags = [ "-p humility-cli" ];
+  cargoBuildFlags = [ "-p humility-bin" ];
 
   meta = {
     description = "Debugger for Hubris";
