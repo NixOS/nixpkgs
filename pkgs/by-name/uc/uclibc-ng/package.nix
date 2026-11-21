@@ -69,13 +69,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.59";
+  version = "1.0.60";
 
   src = fetchFromGitHub {
     owner = "wbx-github";
     repo = "uclibc-ng";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x5uQlzxkO+sRBYQCYX016iGT0VgjYu0U1vHlnS3it50=";
+    hash = "sha256-RCtmIdZpKZp6a4nXVoVCQDpJ5q2Aj97lA3y1oehFYCw=";
   };
 
   configurePhase = ''
