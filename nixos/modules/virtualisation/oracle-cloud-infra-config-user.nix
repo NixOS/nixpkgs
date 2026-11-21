@@ -8,5 +8,5 @@
   # This configures everything but bootstrap services,
   # which only need to be run once and have already finished
   # if you are able to see this comment.
-  imports = [ "${modulesPath}/virtualisation/oci-common.nix" ];
+  imports = [ "${modulesPath}/virtualisation/oracle-cloud-infra-common.nix" ];
 }
