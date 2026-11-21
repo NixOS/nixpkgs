@@ -29,11 +29,12 @@ Subject: [PATCH 1/6] replace-impure-paths
  Sources/SWBTestSupport/LibraryGeneration.swift       |  8 ++++----
  Sources/SWBTestSupport/TestWorkspaces.swift          |  4 ++--
  Sources/SWBTestSupport/Xcode.swift                   |  2 +-
+ .../Specs/BuiltInCompilers.xcspec                    |  2 +-
  Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec   |  2 +-
  Sources/SWBUtil/PbxCp.swift                          | 12 ++++++------
  Sources/SWBUtil/Signatures.swift                     |  2 +-
  .../CoreQualificationTester.swift                    |  4 ++--
- 29 files changed, 52 insertions(+), 50 deletions(-)
+ 30 files changed, 53 insertions(+), 51 deletions(-)
 
 diff --git a/Plugins/run-xcodebuild/run-xcodebuild.swift b/Plugins/run-xcodebuild/run-xcodebuild.swift
 index 710a84a2..c83982de 100644
@@ -462,6 +463,19 @@ index 969fc923..087816c7 100644
      }
  
      package func productBuildVersion() throws -> ProductBuildVersion {
+diff --git a/Sources/SWBUniversalPlatform/Specs/BuiltInCompilers.xcspec b/Sources/SWBUniversalPlatform/Specs/BuiltInCompilers.xcspec
+index 70cac820..c2ffadb1 100644
+--- a/Sources/SWBUniversalPlatform/Specs/BuiltInCompilers.xcspec
++++ b/Sources/SWBUniversalPlatform/Specs/BuiltInCompilers.xcspec
+@@ -38,7 +38,7 @@
+         Name = "dsymutil";
+         Description = "dsymutil dSYM file generator";
+         IsAbstract = YES;
+-        CommandLine = "dsymutil [options] [input] -o $(OutputPath)";
++        CommandLine = "@llvm@/bin/dsymutil [options] [input] -o $(OutputPath)";
+         RuleName = "GenerateDSYMFile $(OutputPath) $(InputPath)";
+ 
+         ExecDescription = "Generate $(OutputFile:file) for $(InputPath:file)";
 diff --git a/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec b/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
 index 02ec3dd5..51629c96 100644
 --- a/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
