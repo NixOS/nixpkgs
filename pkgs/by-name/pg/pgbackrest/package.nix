@@ -13,6 +13,7 @@
   pkg-config,
   python3,
   stdenv,
+  systemdLibs,
   zlib,
   zstd,
   nixosTests,
@@ -20,22 +21,35 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgbackrest";
-  version = "2.58.0";
+  version = "2.60.1";
 
   src = fetchFromGitHub {
     owner = "pgbackrest";
     repo = "pgbackrest";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-RxvVqThfGnTCWTaM54Job+2HgJ7baf6ciFYTz496aKQ=";
+    hash = "sha256-F/BAvdmUhXavvj75IY7lN+WhK4o4WwSH5wrDOsYHQcw=";
   };
 
   strictDeps = true;
+
+  # The source tree ships a top-level build/ directory; with meson's default
+  # build directory (source/build) meson 1.12 mis-resolves ../../.. paths in
+  # depend_files, so keep the build directory outside the source tree.
+  mesonBuildDir = "../build";
+
+  # build/build.py is executed directly by meson custom commands and starts
+  # with #!/usr/bin/env python3; the Linux sandbox has no /usr/bin/env, so
+  # rewrite the shebang to the build-time python3.
+  postPatch = ''
+    patchShebangs --build build/build.py
+  '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
+    # build.py code generator needs PyYAML
+    (python3.withPackages (ps: [ ps.pyyaml ]))
   ];
 
   buildInputs = [
@@ -48,7 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     zlib
     zstd
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
+
+  # libsystemd (sd_notify) is only available on Linux; the nixpkgs meson hook
+  # enables auto features by default, so disable the lookup elsewhere.
+  mesonFlags = lib.optionals (!stdenv.hostPlatform.isLinux) [ "-Dlibsystemd=disabled" ];
 
   passthru.tests = nixosTests.pgbackrest;
 
