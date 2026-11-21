@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "waypaper";
-  version = "2.7-unstable-2026-01-13";
+  version = "2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
