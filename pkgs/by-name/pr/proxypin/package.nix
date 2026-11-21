@@ -1,17 +1,18 @@
 {
   lib,
-  flutter338,
+  flutter344,
   fetchFromGitHub,
   autoPatchelfHook,
+  libappindicator,
   writeShellScript,
   nix-update,
   yq-go,
 }:
 
 let
-  version = "1.2.6";
+  version = "1.4.0";
 in
-flutter338.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   pname = "proxypin";
   inherit version;
 
@@ -19,7 +20,7 @@ flutter338.buildFlutterApplication {
     owner = "wanghongenpin";
     repo = "proxypin";
     tag = "v${version}";
-    hash = "sha256-QZn2o6J1w0d/Ro3IC3cls5JD+b7RpoT6mOf34rbImFc=";
+    hash = "sha256-Ni64MGweHV6e945nbntMWr7Gfv3EL2rZ705F8WXTCgQ=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -32,6 +33,11 @@ flutter338.buildFlutterApplication {
   '';
 
   nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [ libappindicator ];
+
+  # `code_forge` loads its Rust library at runtime via flutter_rust_bridge.
+  extraWrapProgramArgs = "--set FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR $out/app/proxypin/lib";
 
   postInstall = ''
     substituteInPlace linux/proxy-pin.desktop \
@@ -49,7 +55,7 @@ flutter338.buildFlutterApplication {
     cp --recursive --no-preserve=mode $src/* $WORKDIR
     PACKAGE_DIR=$(dirname $(EDITOR=echo nix edit --file . proxypin))
     pushd $WORKDIR
-    ${lib.getExe flutter338} pub get
+    ${lib.getExe flutter344} pub get
     ${lib.getExe yq-go} eval --output-format=json --prettyPrint pubspec.lock > $PACKAGE_DIR/pubspec.lock.json
     popd
     $(nix eval --file . dart.fetchGitHashesScript) --input $PACKAGE_DIR/pubspec.lock.json --output $PACKAGE_DIR/git-hashes.json
