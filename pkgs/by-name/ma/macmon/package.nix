@@ -8,19 +8,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "macmon";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "vladkens";
     repo = "macmon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TWrT5NG8XW/C7rgKMw06s+Ynsvly6bM1s+ffcV19tgo=";
+    hash = "sha256-5Mzt4Lmo5VW4K7q/C1+XX7gueq8kN1V11tHmgF18jCk=";
   };
 
-  cargoHash = "sha256-H6CaEsLR1yXtMTU8m30P1nUSG2QidK+IaOwzn6zgRxk=";
+  cargoHash = "sha256-SlSMymT5c4OaXXcYMEfOnxn3GelEOznnFTi6ihTLqC4=";
 
   checkFlags = [
-    # Reads launchd through /bin/ps, which is unavailable in the sandbox
+    # Read launchd through /bin/ps, which is unavailable in the sandbox
+    "--skip=procs::tests::ps_rows_are_reused_until_the_next_run"
     "--skip=procs::tests::samples_current_process"
   ];
 
@@ -37,7 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/vladkens/macmon/releases/tag/${finalAttrs.src.tag}";
     platforms = [ "aarch64-darwin" ];
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ schrobingus ];
+    maintainers = with lib.maintainers; [
+      baptiste0928
+      schrobingus
+    ];
     mainProgram = "macmon";
   };
 })
