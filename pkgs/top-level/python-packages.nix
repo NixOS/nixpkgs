@@ -1191,6 +1191,10 @@ self: super: with self; {
     inherit (pkgs) antlr4;
   };
 
+  antspyx = callPackage ../development/python-modules/antspyx {
+    inherit (pkgs) itk vtk;
+  };
+
   anyascii = callPackage ../development/python-modules/anyascii { };
 
   anybadge = callPackage ../development/python-modules/anybadge { };
