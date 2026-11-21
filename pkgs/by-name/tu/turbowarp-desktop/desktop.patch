@@ -1,0 +1,13 @@
+diff --git a/linux-files/org.turbowarp.TurboWarp.desktop b/linux-files/org.turbowarp.TurboWarp.desktop
+index eea3c34..8379a51 100644
+--- a/linux-files/org.turbowarp.TurboWarp.desktop
++++ b/linux-files/org.turbowarp.TurboWarp.desktop
+@@ -1,7 +1,6 @@
+ [Desktop Entry]
+ Name=TurboWarp
+-# Change the path to match where you install the app.
+-Exec=/opt/TurboWarp/turbowarp-desktop %U
++Exec=turbowarp-desktop %U
+ Terminal=false
+ Type=Application
+ Icon=org.turbowarp.TurboWarp
