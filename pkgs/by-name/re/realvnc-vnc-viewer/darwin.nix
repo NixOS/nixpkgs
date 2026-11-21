@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl rec {
     name = "RealVNC-Connect-Viewer-${finalAttrs.version}-MacOSX-universal.pkg";
     url = "https://downloads.realvnc.com/download/file/realvnc-connect-viewer/${name}";
-    hash = "sha256-+7lwjzGTIkAxp+CFb2chlAQ4TTr6EBPqWyQsC1JSVlk=";
+    hash = "sha256:0rpgvifx3r1acb2ny40k80c1ayxhi14wnnd88yw707qcqrg0ziz9";
   };
 
   dontPatch = true;
