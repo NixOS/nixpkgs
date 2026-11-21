@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   gitUpdater,
   cmake,
   nasm,
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "4.1.0";
+  version = "4.3.1";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NPJG1SsRlG9kGtUwdJa/uP6DAtF09nCctzeorrvjAhQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3Z23LtZNgyimaYGgXQVDrNVNPNSWgZ8fWEsBZuoCSgs=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";
+      ignoredVersions = "-";
     };
     tests = {
       ffmpeg = ffmpeg.override { withSvtav1 = true; };
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    homepage = "https://gitlab.com/AOMediaCodec/SVT-AV1";
+    homepage = "https://github.com/AOMediaCodec/SVT-AV1";
     description = "AV1-compliant encoder/decoder library core";
 
     longDescription = ''
@@ -58,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       activities.
     '';
 
-    changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/AOMediaCodec/SVT-AV1/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       aom
       bsd3
