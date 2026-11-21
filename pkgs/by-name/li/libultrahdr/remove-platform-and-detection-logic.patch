@@ -6,15 +6,12 @@ Subject: [PATCH] Remove platform and architecture detection logic
 Also drop arch-specific compile and optimization flags to ensure
 packaging friendliness.
 ---
- CMakeLists.txt      | 104 +++-----------------------------------------
- cmake/package.cmake |   3 --
- 2 files changed, 5 insertions(+), 102 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 51283356..07ed9100 100644
+index a6ed814..e705310 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -25,44 +25,6 @@ project(libuhdr
+@@ -19,44 +19,6 @@ project(libuhdr
          LANGUAGES C CXX
          DESCRIPTION "Library for encoding and decoding ultrahdr images")
  
@@ -24,6 +21,7 @@ index 51283356..07ed9100 100644
 -if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 -elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 -elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
+-elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
 -elseif(WIN32)
 -elseif(APPLE)
 -else()
@@ -55,11 +53,10 @@ index 51283356..07ed9100 100644
 -else()
 -  message(FATAL_ERROR "Architecture: ${CMAKE_SYSTEM_PROCESSOR} not recognized")
 -endif()
--
- ###########################################################
- # Directories
- ###########################################################
-@@ -287,45 +228,9 @@ elseif(EMSCRIPTEN)
+ 
+ # Cross compiling on macOS. The cross compiling architecture should override
+ # auto-detected system architecture settings.
+@@ -286,45 +248,9 @@ elseif(EMSCRIPTEN)
                             or try 'cmake -DUHDR_BUILD_DEPS=1'")
      endif()
    endif()
@@ -108,7 +105,7 @@ index 51283356..07ed9100 100644
  endif()
  
  ###########################################################
-@@ -585,7 +490,8 @@ set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
+@@ -613,7 +539,8 @@ set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
  ###########################################################
  file(GLOB UHDR_CORE_SRCS_LIST "${SOURCE_DIR}/src/*.cpp")
  if(UHDR_ENABLE_INTRINSICS)
@@ -119,10 +116,10 @@ index 51283356..07ed9100 100644
      list(APPEND UHDR_CORE_SRCS_LIST ${UHDR_CORE_NEON_SRCS_LIST})
    endif()
 diff --git a/cmake/package.cmake b/cmake/package.cmake
-index 2e3649aa..5a416c22 100644
+index f5fac27..200c9b5 100644
 --- a/cmake/package.cmake
 +++ b/cmake/package.cmake
-@@ -29,9 +29,7 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "")
+@@ -23,9 +23,7 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "")
    message(FATAL_ERROR "Failed to determine CPACK_SYSTEM_NAME. Is CMAKE_SYSTEM_NAME set?" )
  endif()
  string(TOLOWER "${CMAKE_SYSTEM_NAME}" CPACK_SYSTEM_NAME)
@@ -132,7 +129,7 @@ index 2e3649aa..5a416c22 100644
  set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
  set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
  
-@@ -46,7 +44,6 @@ elseif(UNIX)
+@@ -40,7 +38,6 @@ elseif(UNIX)
      set(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${CPACK_PACKAGE_HOMEPAGE_URL})
    elseif(EXISTS "/etc/redhat-release")
      set(CPACK_GENERATOR "RPM")
