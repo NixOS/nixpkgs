@@ -20,7 +20,7 @@
 
 let
   pname = "typora";
-  version = "1.14.9";
+  version = "1.14.15";
 
   passthru = {
     sources = {
@@ -43,7 +43,7 @@ let
           "https://download.typora.io/mac/Typora-${version}.dmg"
           "https://downloads.typoraio.cn/mac/Typora-${version}.dmg"
         ];
-        hash = "sha256-QAJrZ1vIESSk8RLoYBvwxHzEtbfwXlK/rxTFzo+F/7U=";
+        hash = "sha256-bzdu+aYfBkcGUNJMLmR4lHqaXcTjD+ZBriZrBr2JJFE=";
       };
     };
     updateScript = ./update.sh;
