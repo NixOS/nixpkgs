@@ -9,6 +9,7 @@ SDK_PACKAGES=(
     "vulkan-validation-layers"
     "vulkan-tools"
     "vulkan-tools-lunarg"
+    "vulkan-profiles"
     "vulkan-extension-layer"
     "vulkan-utility-libraries"
     "vulkan-volk"
