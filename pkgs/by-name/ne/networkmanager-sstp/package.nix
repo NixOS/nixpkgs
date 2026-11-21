@@ -3,7 +3,6 @@
   lib,
   autoreconfHook,
   fetchurl,
-  fetchpatch,
   file,
   glib,
   gnome,
@@ -33,10 +32,7 @@ stdenv.mkDerivation rec {
   patches = [
     # CVE-2026-91838: quote the profile values that reach the pppd `pty` shell command
     # https://gitlab.gnome.org/GNOME/network-manager-sstp/-/merge_requests/60
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/network-manager-sstp/-/commit/4b61bab805b779b68918846fa7b76c6e68737f95.patch";
-      hash = "sha256-CvSAbRXQ8EGf8BTFg2CfJvnYgUoyCFkqYiteG9o7z10=";
-    })
+    ./fix-cve-2026-91838-quote-pty.patch
   ];
 
   nativeBuildInputs = [
