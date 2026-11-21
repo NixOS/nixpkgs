@@ -36,7 +36,7 @@ with lib;
 
   fileSystems."/" = {
     fsType = "ext4";
-    device = "/dev/sda";
+    device = "/dev/disk/by-label/nixos";
     autoResize = true;
   };
 
