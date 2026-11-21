@@ -16,6 +16,18 @@
   tests,
   pkgsCross,
 }:
+let
+  linkerFor =
+    cc:
+    "${cc}/bin/${cc.targetPrefix}${
+      if cc.isGNU or false then
+        "gcc"
+      else if cc.isClang or false then
+        "clang"
+      else
+        "cc"
+    }";
+in
 {
   cargoBuildHook = makeSetupHook {
     name = "cargo-build-hook.sh";
@@ -85,7 +97,7 @@
       cargoConfig =
         lib.optionalString (stdenv.hostPlatform.config != stdenv.targetPlatform.config) ''
           [target."${stdenv.targetPlatform.rust.rustcTarget}"]
-          "linker" = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
+          "linker" = "${linkerFor pkgsTargetTarget.stdenv.cc}"
           "rustflags" = [ ${
             lib.concatStringsSep ", " (
               [
@@ -97,7 +109,7 @@
         ''
         + ''
           [target."${stdenv.hostPlatform.rust.rustcTarget}"]
-          "linker" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+          "linker" = "${linkerFor stdenv.cc}"
           "rustflags" = [ ${
             lib.optionalString (!stdenv.hostPlatform.isx86_32) ''"-Cforce-frame-pointers=yes"''
           } ]
@@ -108,6 +120,8 @@
       test = tests.rust-hooks.cargoSetupHook;
       ${if stdenv.hostPlatform.isLinux then "testCross" else null} =
         pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
+      ${if stdenv.hostPlatform.isLinux then "testAarch64Embedded" else null} =
+        pkgsCross.aarch64-embedded.tests.rust-hooks.cargoSetupHookNoStd;
     };
     meta.license = lib.licenses.mit;
   } ./cargo-setup-hook.sh;
