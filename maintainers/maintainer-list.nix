@@ -16472,6 +16472,12 @@
     githubId = 16354815;
     name = "Taran Lynn";
   };
+  LambdaBytes = {
+    email = "acf981@protonmail.com";
+    github = "LambdaBytes";
+    githubId = 284417835;
+    name = "Antonio Cotos";
+  };
   lammermann = {
     email = "k.o.b.e.r@web.de";
     github = "lammermann";
