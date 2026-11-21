@@ -3,7 +3,7 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-ELpPq7pqcLfAqUuHh8NOAOOiGPDImTFsA7WUHvVfMiI=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   propagatedBuildInputs = [ django ];
 
