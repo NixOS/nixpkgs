@@ -14,8 +14,8 @@ let
 in
 {
   fuse_3 = mkFuse {
-    version = "3.18.2";
-    hash = "sha256-QArQMSStVxwUo6CgU2JlXBdFWjzlGXfZk1AVGLGeE70=";
+    version = "3.18.3";
+    hash = "sha256-1LuXO7TU2MUP3OFx2khT1wQ3cNmrk87yXaE4V3F1BeA=";
   };
 }
 // lib.optionalAttrs config.allowAliases {
