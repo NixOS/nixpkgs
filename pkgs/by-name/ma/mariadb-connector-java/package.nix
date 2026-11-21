@@ -7,16 +7,16 @@
 
 maven.buildMavenPackage rec {
   pname = "mariadb-connector-java";
-  version = "3.5.11";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-j";
     tag = version;
-    hash = "sha256-ov/v/0MX+5Pvh8PbPNhDATksULCjgnvw867HXs1X+8U=";
+    hash = "sha256-2a7km8HFGCeVI0nceBs/OtkXC4vW+Nvho7hxIWka89Q=";
   };
 
-  mvnHash = "sha256-tcUNqPNJQ61ZCesC6R3lEN4vnw4eqqHl17l1Nbw90uI=";
+  mvnHash = "sha256-IEgYKBRlmfxJF93OuNMSxOKAZ3S+rJb5wvye2fdAD0o=";
 
   mvnParameters = lib.escapeShellArgs [
     # Skip enrich-sbom: it needs the SBOM from makeBom, which Maven skips when offline
