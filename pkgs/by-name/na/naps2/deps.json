@@ -221,8 +221,8 @@
   },
   {
     "pname": "NAPS2.Tesseract.Binaries",
-    "version": "1.4.0",
-    "hash": "sha256-cX+0nD7hLroL2pyRsB2mAErHLuG04B7fcm273BQpL5E="
+    "version": "1.5.0",
+    "hash": "sha256-H+7ZQkQFkn9G9k9xjewXWIPk8E3Q+wDHTj9OA+BJ6S4="
   },
   {
     "pname": "NAPS2.Wia",
