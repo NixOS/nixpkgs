@@ -37,7 +37,7 @@ let
   nixos-background-dark = pkgs.nixos-artwork.wallpapers.simple-dark-gray;
 
   # TODO: Having https://github.com/NixOS/nixpkgs/issues/54150 would supersede this
-  nixos-gsettings-desktop-schemas = pkgs.gnome.nixos-gsettings-overrides.override {
+  nixos-gsettings-desktop-schemas = pkgs.gnome-gsettings-overrides.override {
     inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages favoriteAppsOverride;
     inherit flashbackEnabled nixos-background-dark nixos-background-light;
   };
