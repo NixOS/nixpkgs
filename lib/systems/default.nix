@@ -5,11 +5,13 @@ let
     any
     foldl'
     hasInfix
+    hasPrefix
     isAttrs
     isList
     mapAttrs
     optional
     optionalString
+    removePrefix
     removeSuffix
     replaceString
     toUpper
@@ -442,6 +444,19 @@ let
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args
       // {
+        clang =
+          let
+            hasPpc64UnsupportedGnuSuffix = final.isPower64 && hasPrefix "gnuabielfv" final.parsed.abi.name;
+          in
+          {
+            target =
+              if hasPpc64UnsupportedGnuSuffix then
+                removeSuffix (removePrefix "gnu" final.parsed.abi.name) final.config
+              else
+                final.config;
+            abi = if hasPpc64UnsupportedGnuSuffix then final.parsed.abi.abi else "";
+          };
+
         rust = rust // {
           platform =
             rust.platform or (
