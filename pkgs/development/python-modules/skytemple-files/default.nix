@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -45,6 +46,13 @@ buildPythonPackage (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-s7r6wS7H19+is3CFr+dLaTiq0N/gaO/8IFknmr+OAJk=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/marius851000/skytemple-files/commit/b9ef40dc9e080b762e7e7332cfd922d893868e31.patch";
+      hash = "sha256-SNUKeAYbTHkkwFqJp97/DbNrFYpRi3bkblSUfudJpxQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace \
