@@ -27,6 +27,7 @@ stdenvNoCC.mkDerivation {
     BL31_RK3588 = "${rkbin}/bin/rk35/rk3588_bl31_v1.56.elf";
     TPL_RK3566 = "${rkbin}/bin/rk35/rk3566_ddr_1056MHz_v1.26.bin";
     TPL_RK3568 = "${rkbin}/bin/rk35/rk3568_ddr_1056MHz_v1.26.bin";
+    TPL_RK3576 = "${rkbin}/bin/rk35/rk3576_ddr_lp4_2112MHz_lp5_2736MHz_v1.13.bin";
     TPL_RK3588 = "${rkbin}/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.24.bin";
   };
 
