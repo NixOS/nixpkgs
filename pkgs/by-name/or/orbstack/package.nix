@@ -7,7 +7,7 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "2.2.4-21120";
+  version = "2.2.5-21124";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "orbstack";
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v${
       lib.replaceString "-" "_" version
     }_arm64.dmg";
-    hash = "sha256-8MaY5wnJn7Puh/ksOgRFxrj1oQ1qDt1PTUYZJdGUuGo=";
+    hash = "sha256-8riH0moh4KEhR+sAUpd4J5Syb0Yfd8a5zftX9XatXm0=";
   };
 
   nativeBuildInputs = [
