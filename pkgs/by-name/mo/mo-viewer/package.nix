@@ -4,9 +4,11 @@
   buildGoModule,
   fetchFromGitHub,
   fetchPnpmDeps,
+  applyPatches,
+  jq,
+  yq,
   nodejs,
   pnpm_10,
-  jq,
   pnpmConfigHook,
   installShellFiles,
   versionCheckHook,
@@ -15,18 +17,37 @@
 
 buildGoModule (finalAttrs: {
   pname = "mo-viewer";
-  version = "1.6.9";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "mo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BXGMjybhKZzw+yae478EP2j3cKw/ZbJMrW342W8ZCmY=";
+    hash = "sha256-ITHJJT3xbA2HXwU2YVetyKlmNmlhwdFTiY0azH6Mgtk=";
   };
 
   frontend = stdenvNoCC.mkDerivation (finalFrontendAttrs: {
     pname = "${finalAttrs.pname}-frontend";
-    inherit (finalAttrs) version src;
+    inherit (finalAttrs) version;
+
+    src = applyPatches {
+      inherit (finalAttrs) src;
+      nativeBuildInputs = [
+        jq
+        yq
+      ];
+      postPatch = ''
+        pushd internal/frontend
+        jq 'del(.devEngines.runtime)' package.json > package.json.tmp
+        mv package.json.tmp package.json
+        yq -yi '
+          del(.importers["."].devDependencies.node)
+          | del(.packages | .[keys[] | select(startswith("node@runtime:"))])
+          | del(.snapshots | .[keys[] | select(startswith("node@runtime:"))])
+        ' pnpm-lock.yaml
+        popd
+      '';
+    };
 
     pnpmRoot = "internal/frontend";
 
@@ -35,20 +56,14 @@ buildGoModule (finalAttrs: {
       sourceRoot = "${finalFrontendAttrs.src.name}/internal/frontend";
       pnpm = pnpm_10;
       fetcherVersion = 4;
-      hash = "sha256-jnajsNerQ6VCOvgP5PQSG/SL+98SD+AXQXg2s0fC9xE=";
+      hash = "sha256-PpDGiEZXh5vjaiIZku4fInnu9xrdMyY4RYCkw0Eapa4=";
     };
 
     nativeBuildInputs = [
       nodejs
       pnpm_10
       pnpmConfigHook
-      jq
     ];
-
-    postPatch = ''
-      jq 'del(.pnpm.executionEnv)' internal/frontend/package.json > internal/frontend/package.json.tmp
-      mv internal/frontend/package.json.tmp internal/frontend/package.json
-    '';
 
     buildPhase = ''
       runHook preBuild
@@ -63,7 +78,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-v1EfsHryyLfv9/ZzVazSMFySio62upqsB33eLV6LZZU=";
+  vendorHash = "sha256-k5yOrB+3kVwC2DEJ63I+EycaT6BZPmkkRLixaDntETU=";
 
   preBuild = ''
     cp -r ${finalAttrs.frontend} internal/static/dist
