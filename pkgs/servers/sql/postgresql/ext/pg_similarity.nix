@@ -25,6 +25,12 @@ postgresqlBuildExtension {
       url = "https://github.com/eulerto/pg_similarity/commit/f7781ea5ace80f697a8249e03e3ce47d4b0f6b2f.patch";
       hash = "sha256-MPDvWfNzSg28lXL5u5/Un9pOCJjqJ4Fz9b8XCfalgts=";
     })
+    (fetchpatch {
+      # https://github.com/eulerto/pg_similarity/pull/45
+      name = "pg19.patch";
+      url = "https://github.com/eulerto/pg_similarity/commit/0c2797f9cf14d3657fb04972b940db9048ebb090.patch";
+      hash = "sha256-ob0dZkQqF07zbHsBFmHgAFcJoRMD17q9VEYmxqY7KQ4=";
+    })
   ];
 
   makeFlags = [ "USE_PGXS=1" ];
