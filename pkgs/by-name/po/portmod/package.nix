@@ -18,15 +18,15 @@ let
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
-    rev = "aa454a8ed943758a2f73efa82766d5f627bb3ccd"; # Release 2.9.2 has no upstream tag
-    hash = "sha256-bnCyjHy3I5ETnfvkTGPEwVD5LtrvavU9AisFvQ942l8=";
+    tag = "v${version}";
+    hash = "sha256-/cO+NrGJwHj0S6Ubo8uXaIx/Qw+6V71mhLPLYIcscZI=";
   };
 
   portmod-rust = rustPlatform.buildRustPackage {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoHash = "sha256-KVs1LqwsfWaQb91mhlyKMAh0uDEDDAJHsUSLMIfJq18=";
+    cargoHash = "sha256-WT1jn0j47SgCorrR5Rak16nkqF56YuYpLYW2/xZkNfk=";
 
     nativeBuildInputs = [
       python3Packages.python
