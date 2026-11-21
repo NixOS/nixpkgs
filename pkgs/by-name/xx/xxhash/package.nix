@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     mainProgram = "xxhsum";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ enovamaker ];
     platforms = lib.platforms.all;
     pkgConfigModules = [
       "libxxhash"
