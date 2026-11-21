@@ -1401,6 +1401,8 @@ let
         };
       };
 
+      dmitry-korobchenko.prototxt = callPackage ./dmitry-korobchenko.prototxt { };
+
       docker.docker = callPackage ./docker.docker { };
 
       donjayamanne.githistory = buildVscodeMarketplaceExtension {
