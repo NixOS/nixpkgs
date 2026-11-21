@@ -15,11 +15,11 @@ let
   ''
   + optionalString (cfg.secretKeyFile != null) ''
     with open('${cfg.secretKeyFile}') as file:
-      SECRET_KEY = file.read()
+      SECRET_KEY = file.read().strip()
   ''
   + optionalString (cfg.saltFile != null) ''
     with open('${cfg.saltFile}') as file:
-      SALT = file.read()
+      SALT = file.read().strip()
   '';
 in
 {
@@ -63,8 +63,9 @@ in
       type = types.nullOr types.path;
       example = "/etc/powerdns-admin/secret";
       description = ''
-        The secret used to create cookies.
-        This needs to be set, otherwise the default is used and everyone can forge valid login cookies.
+        The secret used to sign cookies and email-confirmation links.
+        It must be at least 32 characters long, otherwise PowerDNS-Admin refuses
+        to start. Generate one with e.g. `openssl rand -hex 32`.
         Set this to null to ignore this setting and configure it through another way.
       '';
     };
@@ -73,8 +74,10 @@ in
       type = types.nullOr types.path;
       example = "/etc/powerdns-admin/salt";
       description = ''
-        The salt used for serialization.
-        This should be set, otherwise the default is used.
+        The bcrypt salt used to hash API keys, in the `$2b$12$` plus 22
+        characters form. It must be valid, otherwise PowerDNS-Admin refuses to
+        start. Generate one with
+        `nix-shell -p 'python3.withPackages (p: [ p.bcrypt ])' --run "python3 -c 'import bcrypt; print(bcrypt.gensalt().decode())'"`.
         Set this to null to ignore this setting and configure it through another way.
       '';
     };
@@ -88,10 +91,14 @@ in
 
       environment.FLASK_CONF = builtins.toFile "powerdns-admin-config.py" configText;
       environment.PYTHONPATH = pkgs.powerdns-admin.pythonPath;
+      environment.POWERDNSADMIN_ASSETS_PREBUILT = "1";
       serviceConfig = {
         ExecStart = "${pkgs.powerdns-admin}/bin/powerdns-admin --pid /run/powerdns-admin/pid ${escapeShellArgs cfg.extraArgs}";
-        # Set environment variables only for starting flask database upgrade
-        ExecStartPre = "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations";
+        ExecStartPre = [
+          "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations"
+          # Fails when the table the last migration creates is missing.
+          "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py ${pkgs.python3Packages.flask}/bin/flask check-auth-throttle"
+        ];
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         PIDFile = "/run/powerdns-admin/pid";

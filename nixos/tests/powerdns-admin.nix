@@ -18,6 +18,11 @@ let
     SESSION_CACHELIB = cachelib.simple.SimpleCache()
   '';
 
+  # 2026.11.0+ requires SECRET_KEY >= 32 chars and a bcrypt SALT. TESTING and
+  # PDA_ALLOW_INSECURE_SECRETS are left unset so the startup checks still run.
+  testSecretKey = "nixos-test-secret-key-0123456789abcdef";
+  testSalt = "$2b$12$K3J9lJqK3Pq7o1nF0G6k3u";
+
   makeAppTest =
     name: configs:
     makeTest {
@@ -40,8 +45,8 @@ let
                 saltFile = "/etc/powerdns-admin/salt";
               };
               # It's insecure to have secrets in the world-readable nix store, but this is just a test
-              environment.etc."powerdns-admin/secret".text = "secret key";
-              environment.etc."powerdns-admin/salt".text = "salt";
+              environment.etc."powerdns-admin/secret".text = testSecretKey;
+              environment.etc."powerdns-admin/salt".text = testSalt;
               environment.systemPackages = [
                 (pkgs.writeShellScriptBin "run-test" config.system.build.testScript)
               ];
@@ -117,6 +122,16 @@ let
         system.build.testScript = ''
           set -euxo pipefail
           curl -sSf http://127.0.0.1:8000/
+
+          # The bundles are pre-built, check that the webfont resolves as well
+          curl -sSf http://127.0.0.1:8000/static/generated/main.css > /dev/null
+          curl -sSf http://127.0.0.1:8000/static/generated/main.js > /dev/null
+          font="$(curl -sSf http://127.0.0.1:8000/static/generated/main.css | grep -o 'url("[^"]*\.woff2")' | head -n1 | cut -d'"' -f2)"
+          test -n "$font"
+          curl -sSf "http://127.0.0.1:8000/static/generated/$font" > /dev/null
+
+          # Fails when the auth throttle table is missing
+          curl -sSf http://127.0.0.1:8000/healthcheck | grep -qx ok
 
           # Create account to check that the database migrations ran
           csrf_token="$(curl -sSfc session http://127.0.0.1:8000/register | grep _csrf_token | cut -d\" -f6)"
