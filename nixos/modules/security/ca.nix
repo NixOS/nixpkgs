@@ -113,6 +113,16 @@ in
 
       # P11-Kit trust source.
       environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
+
+      environment.variables = {
+        SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+        NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+      };
+
+      systemd.globalEnvironment = {
+        SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+        NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+      };
     })
     { security.pki.caBundle = caBundle; }
   ];
