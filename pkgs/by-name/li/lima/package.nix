@@ -46,6 +46,8 @@ buildGoModule (finalAttrs: {
 
   inherit (source) version src vendorHash;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
