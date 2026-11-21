@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "greeclimate";
-  version = "3.5.2";
+  version = "4.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cmroche";
     repo = "greeclimate";
     tag = "v${version}";
-    hash = "sha256-qtdMEN4zMAA28/Co+T9HDu7OuRjTMdTRXJnWPiwuTSY=";
+    hash = "sha256-2eHt1EyPiGqEmmCyWhbleq4SZ/KavJx5tTzDLNCPMec=";
   };
 
   pythonRelaxDeps = [ "pycryptodome" ];
