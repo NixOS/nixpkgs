@@ -43,7 +43,7 @@ lib.extendMkDerivation {
     }:
     let
       d2u = if normalizeCore then (lib.replaceStrings [ "-" ] [ "_" ]) else (x: x);
-      coreDir = placeholder "out" + libretroCore;
+      coreDir = placeholder (if finalAttrs.includeRetroArch then "lib" else "out") + libretroCore;
       coreFilename = "${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
       mainProgram = "retroarch-${core}";
     in
@@ -52,6 +52,8 @@ lib.extendMkDerivation {
 
       buildInputs = [ zlib ] ++ extraBuildInputs;
       nativeBuildInputs = lib.optional finalAttrs.includeRetroArch makeWrapper ++ extraNativeBuildInputs;
+
+      outputs = [ "out" ] ++ lib.optional finalAttrs.includeRetroArch "lib";
 
       inherit
         enableParallelBuilding
