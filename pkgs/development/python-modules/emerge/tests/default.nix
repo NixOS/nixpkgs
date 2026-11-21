@@ -54,7 +54,7 @@ let
         meta.broken = lib.elem file brokenTests;
       }
       ''
-        xvfb-run python ${file}
+        xvfb-run python -P ${file}
         mkdir -p $out
         cp *.png $out
       '';

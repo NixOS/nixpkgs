@@ -518,7 +518,7 @@ in
 
           tmpfile=$(mktemp)
 
-          ${lib.getExe (pkgs.python3.withPackages (py: [ py.configobj ]))} \
+          ${lib.getExe (pkgs.python3.withPackages (py: [ py.configobj ]))} -P \
             ${./config_merge.py} \
             "''${files[@]}" \
             > "$tmpfile"

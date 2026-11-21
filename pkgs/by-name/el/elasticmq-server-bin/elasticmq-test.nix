@@ -51,8 +51,8 @@ runCommand "${elasticmq-server.name}-tests"
     SERVER_PID=$!
     sleep 10
 
-    python $putMessagePy
-    python $checkMessagePy
+    python -P $putMessagePy
+    python -P $checkMessagePy
     touch $out
 
     # needed on darwin

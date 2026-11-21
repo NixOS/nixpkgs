@@ -85,7 +85,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
         export PYTHONPATH=${finalAttrs.finalPackage}/${python3.sitePackages}
         export QT_API=pyside6
         export QT_QPA_PLATFORM=offscreen
-        python ${./tests/smoke.py} ${finalAttrs.version}
+        python -P ${./tests/smoke.py} ${finalAttrs.version}
 
         set +e
         timeout 5s ${finalAttrs.finalPackage}/bin/angr-management >launcher.log 2>&1

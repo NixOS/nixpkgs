@@ -35,5 +35,5 @@ runCommand "allowed-patterns.json"
     };
   }
   ''
-    python ${./scripts/nix_required_mounts_closure.py}
+    python -P ${./scripts/nix_required_mounts_closure.py}
   ''

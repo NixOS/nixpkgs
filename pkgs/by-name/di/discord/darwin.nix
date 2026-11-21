@@ -42,7 +42,7 @@ let
   src = fetchurl { inherit (source.distro) url hash; };
 
   fixDistroSymlinks = writeScript "discord-fix-distro-symlinks.py" ''
-    #!${python3.interpreter}
+    #!${python3.interpreter} -P
     import pathlib
     import sys
     import tarfile
