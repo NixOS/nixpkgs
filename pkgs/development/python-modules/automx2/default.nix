@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "automx2";
-  version = "2026.0";
+  version = "2026.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rseichter";
     repo = "automx2";
     tag = version;
-    hash = "sha256-7tMcX4BZ6yxlYGy2/3Ffr0X7xtPgcC9YtKcoz1i32sM=";
+    hash = "sha256-i4t1JtzUbYbUFkEuPUNk8iBCCBYKK6Nv0b73jnqkLQU=";
   };
 
   build-system = [ setuptools ];
