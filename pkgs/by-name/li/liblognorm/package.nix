@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblognorm";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "rsyslog";
     repo = "liblognorm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XHfTSLYjfGRNmPUQrLWK+Co4v4cCmtfhZ0wruAC0RNI=";
+    hash = "sha256-pkOXAyzYBAfFbT2Pmr/AK3gNF7K2/z9ue6PKdJGI3ts=";
   };
 
   postPatch = ''
