@@ -15,6 +15,7 @@ let
     literalExpression
     mkEnableOption
     mkPackageOption
+    mkDefault
     mkIf
     mkOption
     mkOptionDefault
@@ -65,6 +66,13 @@ let
     ''}
     exec ${cfg.package}/bin/captive-browser
   '';
+
+  iface =
+    prefixes: optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
+
+  useDhcpcd = !config.networking.networkmanager.enable && config.networking.dhcpcd.enable;
+
+  dhcpcdDnsCommand = "${pkgs.dhcpcd}/bin/dhcpcd ${iface [ "-U" ]} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers";
 in
 {
   ###### interface
@@ -136,20 +144,21 @@ in
       captive-browser-configured
     ];
 
-    programs.captive-browser.dhcp-dns =
-      let
-        iface =
-          prefixes: optionalString cfg.bindInterface (escapeShellArgs (prefixes ++ [ cfg.interface ]));
-      in
-      mkOptionDefault (
-        if config.networking.networkmanager.enable then
-          "${pkgs.networkmanager}/bin/nmcli dev show ${iface [ ]} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
-        else if config.networking.dhcpcd.enable then
-          "${pkgs.dhcpcd}/bin/dhcpcd ${iface [ "-U" ]} | ${pkgs.gnugrep}/bin/fgrep domain_name_servers"
-        else if config.networking.useNetworkd then
-          "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
-        else
-          throw "programs.captive-browser.dhcp-dns must be set"
-      );
+    programs.captive-browser.dhcp-dns = mkOptionDefault (
+      if config.networking.networkmanager.enable then
+        "${pkgs.networkmanager}/bin/nmcli dev show ${iface [ ]} | ${pkgs.gnugrep}/bin/fgrep IP4.DNS"
+      else if config.networking.dhcpcd.enable then
+        dhcpcdDnsCommand
+      else if config.networking.useNetworkd then
+        "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
+      else
+        throw "programs.captive-browser.dhcp-dns must be set"
+    );
+
+    # The default dhcpcd command runs `dhcpcd -U`, which needs read access to
+    # the dhcpcd control socket.
+    networking.dhcpcd.readGroup = mkIf (useDhcpcd && cfg.dhcp-dns == dhcpcdDnsCommand) (
+      mkDefault "dhcpcd-read"
+    );
   };
 }

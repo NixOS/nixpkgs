@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       dhcpSimple
       dhcpHostname
       dhcpOneIf
+      dhcpReadGroup
       ;
   };
 
