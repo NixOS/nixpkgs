@@ -62,6 +62,7 @@
   plasma-workspace = callPackage ./plasma-workspace { };
   plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers { };
   plasma5support = callPackage ./plasma5support { };
+  plasmazones = callPackage ./plasmazones/package.nix { };
   plymouth-kcm = callPackage ./plymouth-kcm { };
   polkit-kde-agent-1 = callPackage ./polkit-kde-agent-1 { };
   powerdevil = callPackage ./powerdevil { };
