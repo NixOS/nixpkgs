@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysaunum";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mettolen";
     repo = "pysaunum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+aPDiUJFg/keWElHfKeE5tbC7mT4HzHHLMggmrT3u2c=";
+    hash = "sha256-sYdtx3Slb2pi+rSa5jwFXMXn2hEN3KeURy3BO2o2nEY=";
   };
 
   build-system = [ setuptools ];
