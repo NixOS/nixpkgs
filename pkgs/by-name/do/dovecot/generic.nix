@@ -2,6 +2,7 @@
   version,
   hash,
   patches,
+  knownVulnerabilities ? [ ],
 }:
 {
   autoreconfHook,
@@ -249,6 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
       prince213
     ];
     platforms = lib.platforms.unix;
+    inherit knownVulnerabilities;
   };
   passthru = {
     inherit dovecot_pigeonhole;
