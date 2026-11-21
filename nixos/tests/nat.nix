@@ -23,7 +23,6 @@ import ./make-test-python.nix (
     unit = if nftables then "nftables" else (if withFirewall then "firewall" else "nat");
 
     testInterfaceWildcard = nftables && withFirewall;
-    routerLanInterface = if testInterfaceWildcard then "ve-lan" else "eth1";
 
     routerAlternativeExternalIp = "192.168.2.234";
 
@@ -119,7 +118,7 @@ import ./make-test-python.nix (
           {
             virtualisation.vlans = [ 1 ];
             networking.defaultGateway =
-              (pkgs.lib.head nodes.router.networking.interfaces.${routerLanInterface}.ipv4.addresses).address;
+              (pkgs.lib.head nodes.router.networking.interfaces.eth1.ipv4.addresses).address;
             networking.nftables.enable = nftables;
             networking.firewall.enable = false;
           }
@@ -130,25 +129,14 @@ import ./make-test-python.nix (
         lib.mkMerge [
           (makeCommonConfig "router")
           {
-            virtualisation.vlans = lib.optionals (!testInterfaceWildcard) [
+            virtualisation.vlans = [
               1
               2
             ];
-            virtualisation.interfaces = lib.optionalAttrs testInterfaceWildcard {
-              eth1 = {
-                name = routerLanInterface;
-                vlan = 1;
-                assignIP = true;
-              };
-              eth2 = {
-                vlan = 2;
-                assignIP = true;
-              };
-            };
             networking.firewall = {
               enable = withFirewall;
               filterForward = nftables;
-              trustedInterfaces = lib.optional testInterfaceWildcard "ve-+";
+              trustedInterfaces = lib.optional testInterfaceWildcard "eth1+";
               allowedTCPPorts = [
                 21
                 80
@@ -172,7 +160,7 @@ import ./make-test-python.nix (
                 enable = true;
                 internalIPs = lib.optional (!testInterfaceWildcard) "${clientIp}/24";
                 internalInterfaces = lib.optionals testInterfaceWildcard [
-                  "ve-+"
+                  "eth1+"
                   "eth0"
                 ];
                 externalInterface = "eth2";
@@ -234,8 +222,7 @@ import ./make-test-python.nix (
       let
         clientIp = (pkgs.lib.head nodes.client.networking.interfaces.eth1.ipv4.addresses).address;
         serverIp = (pkgs.lib.head nodes.server.networking.interfaces.eth1.ipv4.addresses).address;
-        routerLanIp =
-          (pkgs.lib.head nodes.router.networking.interfaces.${routerLanInterface}.ipv4.addresses).address;
+        routerLanIp = (pkgs.lib.head nodes.router.networking.interfaces.eth1.ipv4.addresses).address;
         routerIp = (pkgs.lib.head nodes.router.networking.interfaces.eth2.ipv4.addresses).address;
       in
       ''
