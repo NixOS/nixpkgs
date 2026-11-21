@@ -277,7 +277,8 @@ in
                 dbPort = toString cfg.database.port;
                 dbName = cfg.database.name;
                 dbCharset = cfg.database.charset;
-                dbUnixSocket = if cfg.database.socket != null then "&unixSocket=${cfg.database.socket}" else "";
+                # Doctrine DBAL expects `unix_socket`, not `unixSocket`.
+                dbUnixSocket = if cfg.database.socket != null then "&unix_socket=${cfg.database.socket}" else "";
                 # Note: serverVersion is a shell variable. See below.
                 dbUri =
                   "mysql://${dbUser}${dbPwd}@${dbHost}:${dbPort}"
