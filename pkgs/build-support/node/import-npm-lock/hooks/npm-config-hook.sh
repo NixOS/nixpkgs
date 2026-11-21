@@ -15,6 +15,7 @@ npmConfigHook() {
     echo "Configuring npm"
 
     export HOME="$TMPDIR"
+    export NIX_NODEJS_BUILDNPMPACKAGE=1
     export npm_config_nodedir="@nodeSrc@"
     export npm_config_node_gyp="@nodeGyp@"
     npm config set offline true
