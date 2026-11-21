@@ -191,7 +191,7 @@ in
             ${lib.optionalString (
               cfg.cleanup.maxIncr != null
             ) "${dup} remove-all-inc-of-but-n-full ${toString cfg.cleanup.maxIncr} ${target} --force ${extra}"}
-            exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "incr"} ${
+            exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "backup"} ${
               lib.escapeShellArgs (
                 [
                   cfg.root
@@ -225,6 +225,10 @@ in
           ProtectSystem = "strict";
           ProtectHome = "read-only";
           StateDirectory = baseNameOf stateDirectory;
+          # The archive dir holds unencrypted manifests and signatures, which
+          # list every backed-up path with its owner, mode and size.
+          StateDirectoryMode = "0700";
+          UMask = "0077";
         }
         // lib.optionalAttrs (localTarget != null) {
           ReadWritePaths = localTarget;
