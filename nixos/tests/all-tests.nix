@@ -1401,6 +1401,7 @@ in
     _module.args.name = "opencloud-production";
   };
   openldap = runTest ./openldap.nix;
+  openlist = runTest ./openlist.nix;
   openresty = import ./openresty.nix { inherit lib runTest; };
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);
