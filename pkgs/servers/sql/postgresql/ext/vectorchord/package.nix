@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_17_0,
+  cargo-pgrx_0_19_4,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -13,7 +13,7 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_17_0;
+  cargo-pgrx = cargo-pgrx_0_19_4;
 
   pname = "vectorchord";
   version = "1.1.1";
@@ -25,7 +25,15 @@ buildPgrxExtension (finalAttrs: {
     hash = "sha256-QL9XGSQFOcrpww03Y5F0JuDbpo0v8oidUqucLxggkqE=";
   };
 
-  cargoHash = "sha256-IXOCzKJArNOcb/2TcJbLz1XdCquUpyF/cLHYU5vmlko=";
+  cargoPatches = [
+    # fix compatibility with postgreSQL 19
+    # https://github.com/supervc-stack/VectorChord/issues/464#issuecomment-6886551170
+    ./vectorchord-pg19.patch
+    # Since pgrx 0.18 schema metadata is embedded into the library which replaced pgrx_embed
+    ./pgrx-0.18-migration.patch
+  ];
+
+  cargoHash = "sha256-GmINtHWVikgSga/1IsFMyyFEooebnjHtpEZH7CoOxm0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -114,12 +122,6 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    # PostgreSQL 19 is not yet supported
-    # See https://github.com/supervc-stack/VectorChord/issues/464
-    # Check after next package update.
-    broken = lib.warnIf (
-      finalAttrs.version != "1.1.1"
-    ) "Is postgresql19Packages.vectorchord still broken?" (lib.versionAtLeast postgresql.version "19");
     changelog = "https://github.com/supervc-stack/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
     homepage = "https://github.com/supervc-stack/VectorChord";
