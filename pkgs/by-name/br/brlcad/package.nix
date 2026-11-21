@@ -39,7 +39,10 @@
   writableTmpDirAsHomeHook,
 
   # build options
+  config,
   enableQt ? false,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 let
   bext = fetchFromGitHub {
@@ -213,6 +216,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableQt [
     qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -240,6 +246,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableQt [
     qt6.qtbase
     qt6.qtsvg
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ];
 
   cmakeFlags = [
