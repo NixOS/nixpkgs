@@ -1,0 +1,31 @@
+diff --git a/src/N_m3u8DL-RE/Program.cs b/src/N_m3u8DL-RE/Program.cs
+index dc4b6b4..eed7c56 100644
+--- a/src/N_m3u8DL-RE/Program.cs
++++ b/src/N_m3u8DL-RE/Program.cs
+@@ -159,7 +159,7 @@ internal class Program
+             {
+                 case DecryptEngine.SHAKA_PACKAGER:
+                 {
+-                    var file = FindShakaPackager();
++                    var file = option.DecryptionBinaryPath ?? FindShakaPackager();
+                     if (file == null) throw new FileNotFoundException(ResString.shakaPackagerNotFound);
+                     option.DecryptionBinaryPath = file;
+                     Logger.Extra($"shaka-packager => {option.DecryptionBinaryPath}");
+@@ -167,7 +167,7 @@ internal class Program
+                 }
+                 case DecryptEngine.MP4DECRYPT:
+                 {
+-                    var file = GlobalUtil.FindExecutable("mp4decrypt");
++                    var file = option.DecryptionBinaryPath ?? GlobalUtil.FindExecutable("mp4decrypt");
+                     if (file == null) throw new FileNotFoundException(ResString.mp4decryptNotFound);
+                     option.DecryptionBinaryPath = file;
+                     Logger.Extra($"mp4decrypt => {option.DecryptionBinaryPath}");
+@@ -433,7 +433,7 @@ internal class Program
+ 
+     private static string? FindShakaPackager()
+     {
+-        var file = GlobalUtil.FindExecutable("shaka-packager");
++        var file = GlobalUtil.FindExecutable("shaka-packager") ?? GlobalUtil.FindExecutable("packager");
+         if (file != null) return file;
+ 
+         // 按照架构优先搜索同架构二进制
