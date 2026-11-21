@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "udp-over-tcp";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "udp-over-tcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nlLo5/CpieBuRpQyd0eybfkltZyt4qeiupkbtfL/qWE=";
+    hash = "sha256-+1jbBOLQ7uB1QxqiOHRO5vkGChl26z/AZkjxvG07P0c=";
   };
 
-  cargoHash = "sha256-s72C+7q56dSwrmkUBy871rF1MvPkhg8780S+dN/ETh0=";
+  cargoHash = "sha256-CI+wm574J5qsTaEODlm2UqvD9KN8gZJ8e500aFdx35E=";
   cargoBuildFlags = [
     "--bins"
     "--features"
