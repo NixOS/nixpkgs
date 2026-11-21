@@ -144,6 +144,18 @@ in
           `nix-shell -p util-linux --run uuidgen`.
         '';
       };
+
+      cacheDir = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/cache/gerrit";
+        description = "";
+      };
+
+      stateDir = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/lib/gerrit";
+        description = "";
+      };
     };
   };
 
@@ -157,7 +169,7 @@ in
     ];
 
     services.gerrit.settings = {
-      cache.directory = "/var/cache/gerrit";
+      cache.directory = cfg.cacheDir;
       container.heapLimit = cfg.jvmHeapLimit;
       gerrit.basePath = lib.mkDefault "git";
       gerrit.serverId = cfg.serverId;
@@ -194,10 +206,10 @@ in
       ];
 
       environment = {
-        GERRIT_HOME = "%S/gerrit";
+        GERRIT_HOME = "${cfg.stateDir}/gerrit";
         GERRIT_TMP = "%T";
-        HOME = "%S/gerrit";
-        XDG_CONFIG_HOME = "%S/gerrit/.config";
+        HOME = "${cfg.stateDir}/gerrit";
+        XDG_CONFIG_HOME = "${cfg.stateDir}/gerrit/.config";
       };
 
       preStart = ''
@@ -228,11 +240,11 @@ in
         LimitNOFILE = 4096;
         StandardInput = "socket";
         StandardOutput = "journal";
-        StateDirectory = "gerrit";
+        StateDirectory = lib.mkIf (cfg.stateDir == "/var/lib/gerrit") "gerrit";
         StateDirectoryMode = "750";
-        CacheDirectory = "gerrit";
+        CacheDirectory = lib.mkIf (cfg.cacheDir == "/var/cache/gerrit") "gerrit";
         CacheDirectoryMode = "750";
-        WorkingDirectory = "%S/gerrit";
+        WorkingDirectory = "${cfg.stateDir}/gerrit";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
