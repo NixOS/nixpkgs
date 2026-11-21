@@ -59,9 +59,16 @@
   enableRelocatedStaticLibs ?
     stdenv.targetPlatform != stdenv.hostPlatform && !stdenv.targetPlatform.isWindows,
 
+  # If enabled, use Hadrian's quick flavour.
+  enableQuickFlavour ?
+    useLLVM
+    && stdenv.targetPlatform.isLoongArch64
+    && stdenv.targetPlatform.isLinux
+    && lib.versionAtLeast version "9.12",
+
   # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
-  enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64,
+  enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64 && !enableQuickFlavour,
 
   # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -104,7 +111,7 @@
   ghcFlavour ?
     let
       # TODO(@sternenseemann): does using the static flavour make sense?
-      baseFlavour = "release";
+      baseFlavour = if enableQuickFlavour then "quick" else "release";
       # Note: in case hadrian's flavour transformers cease being expressive
       # enough for us, we'll need to resort to defining a "nixpkgs" flavour
       # in hadrianUserSettings and using that instead.
@@ -928,6 +935,7 @@ stdenv.mkDerivation (
       inherit llvmPackages;
       inherit enableShared;
       inherit enableProfiledLibs;
+      inherit enableQuickFlavour;
       inherit hasHaddock;
 
       # Expose hadrian used for bootstrapping, for debugging purposes

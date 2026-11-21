@@ -1338,7 +1338,16 @@ with haskellLib;
   alex = overrideCabal (drv: {
     testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.which ];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
+    configureFlags =
+      (drv.configureFlags or [ ])
+      ++ lib.optional (super.ghc.enableQuickFlavour or false) "--disable-optimization";
   }) super.alex;
+
+  doctemplates = overrideCabal (drv: {
+    configureFlags =
+      (drv.configureFlags or [ ])
+      ++ lib.optional (super.ghc.enableQuickFlavour or false) "--disable-optimization";
+  }) super.doctemplates;
 
   # 2025-01-27: allow aeson >= 2.2, 9.8 versions of text and bytestring
   dhall-json = doJailbreak super.dhall-json;
