@@ -15,17 +15,17 @@
   tree-sitter-json,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tree-sitter";
-  version = "0.25.2";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
-    tag = "v${version}";
-    hash = "sha256-MgiVxq9MUaOkNNgn46g2Cy7/IUx/yatKSR1vE6LscKg=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-sPKOS24j1bT90x6PH6+/UzqERQUOOcuCD1sTLrt2r2E=";
   };
 
   build-system = [ setuptools ];
@@ -41,8 +41,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tree_sitter" ];
 
+  # https://github.com/NixOS/nixpkgs/issues/255262#issuecomment-1721265871
   preCheck = ''
-    # https://github.com/NixOS/nixpkgs/issues/255262#issuecomment-1721265871
     rm -r tree_sitter
   '';
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
-    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/${src.tag}";
+    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
