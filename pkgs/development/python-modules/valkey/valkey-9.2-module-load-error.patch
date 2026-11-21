@@ -1,0 +1,34 @@
+From e87c922292a3d199ef6a2a1502a0607e14fe8b39 Mon Sep 17 00:00:00 2001
+From: Matteo Centenaro <matteo.centenaro@aiven.io>
+Date: Tue, 13 Oct 2026 20:33:35 +0200
+Subject: [PATCH] Parse module load error for server version >= 9.2
+
+Signed-off-by: Matteo Centenaro <matteo.centenaro@aiven.io>
+
+Backported to 6.1.1 for nixpkgs: upstream reformatted the surrounding
+lines after this release, so the original commit does not apply.
+---
+ valkey/_parsers/base.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+--- a/valkey/_parsers/base.py
++++ b/valkey/_parsers/base.py
+@@ -27,6 +27,10 @@
+ from .socket import SERVER_CLOSED_CONNECTION_ERROR, SocketBuffer
+ 
+ MODULE_LOAD_ERROR = "Error loading the extension. " "Please check the server logs."
++MODULE_LOAD_ERROR_9_2 = (
++    "Error loading module: failed to open the module library. "
++    "Check the server logs for more info"
++)
+ NO_SUCH_MODULE_ERROR = "Error unloading module: no such module with that name"
+ MODULE_UNLOAD_NOT_POSSIBLE_ERROR = "Error unloading module: operation not " "possible."
+ MODULE_EXPORTS_DATA_TYPES_ERROR = (
+@@ -59,6 +63,7 @@
+             "wrong number of arguments "
+             "for 'AUTH' command": AuthenticationWrongNumberOfArgsError,
+             MODULE_LOAD_ERROR: ModuleError,
++            MODULE_LOAD_ERROR_9_2: ModuleError,
+             MODULE_EXPORTS_DATA_TYPES_ERROR: ModuleError,
+             NO_SUCH_MODULE_ERROR: ModuleError,
+             MODULE_UNLOAD_NOT_POSSIBLE_ERROR: ModuleError,
