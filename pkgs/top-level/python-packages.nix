@@ -3226,8 +3226,6 @@ self: super: with self; {
 
   clarifai-protocol = callPackage ../development/python-modules/clarifai-protocol { };
 
-  class-doc = callPackage ../development/python-modules/class-doc { };
-
   classify-imports = callPackage ../development/python-modules/classify-imports { };
 
   claude-agent-sdk = callPackage ../development/python-modules/claude-agent-sdk { };
