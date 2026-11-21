@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ettercap";
-  version = "0.8.5.1";
+  version = "0.8.5.2";
 
   src = fetchFromGitHub {
     owner = "Ettercap";
     repo = "ettercap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HTHrQTHs3WKQXbfFbtVixACwEaiiYIivdqgaFHKIB3M=";
+    hash = "sha256-TebkIBTiyta2aZ8ZPxYW4367aAOHZxtVVb4pjP6aqPA=";
   };
 
   strictDeps = true;
