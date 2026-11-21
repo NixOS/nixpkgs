@@ -5,6 +5,8 @@
   olm,
   nix-update-script,
   versionCheckHook,
+  testers,
+  mautrix-slack,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
   # is not recommended by the mautrix developers, but they are interested in
@@ -12,19 +14,19 @@
   # any issues they run into.
   withGoolm ? false,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mautrix-slack";
-  version = "26.10";
-  tag = "v0.2610.0";
+  version = "26.11";
+  tag = "v0.2611.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "slack";
-    inherit tag;
-    hash = "sha256-NYTYamZsPIvVZpqUZ5d8EMMDMsIlEBfpHbXANdDQtgs=";
+    inherit (finalAttrs) tag;
+    hash = "sha256-g8Tx+dkK+OWqchw1laJC8lInhOQk0d17dr4hwZIAqVQ";
   };
 
-  vendorHash = "sha256-FtEjVcWBcgX9cFZn6oSFpW4Y7rQaHbivD30aoAhgY0o=";
+  vendorHash = "sha256-1B4e4Ka+IYO1/d0GpGhR85hth3tnPCN7LVuWzyk/x9s=";
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
@@ -42,17 +44,28 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "main.Tag=${tag}"
+    "main.Tag=${finalAttrs.tag}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = mautrix-slack;
+      version = "v${finalAttrs.version}";
+    };
+  };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Matrix-Slack puppeting bridge";
     homepage = "https://github.com/mautrix/slack";
-    changelog = "https://github.com/mautrix/slack/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mautrix/slack/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ BonusPlay ];
+    maintainers = with lib.maintainers; [
+      BonusPlay
+      logn
+    ];
     mainProgram = "mautrix-slack";
   };
-}
+})
