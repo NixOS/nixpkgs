@@ -9,6 +9,8 @@
   unzip,
   zip,
   xdg-utils,
+  cacert,
+  jre-generate-cacerts,
   gtk3,
   jdk25,
   openjfx25,
@@ -103,6 +105,13 @@ stdenv.mkDerivation rec {
       --replace-fail '/usr' '/run/current-system/sw'
 
     sed -i -e '/setOutputRedirector/d' src/main/java/org/jabref/logic/search/PostgreServer.java
+
+    # JabRef copies this truststore to the user's data dir and trusts it in addition to the JRE's
+    pushd src/main/resources/ssl
+    rm truststore.jks
+    ${jre-generate-cacerts} ${jdk}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+    mv cacerts truststore.jks
+    popd
 
     popd
   '';
