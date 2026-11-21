@@ -93,6 +93,7 @@ let
       };
       qtmqtt = callPackage ./modules/qtmqtt.nix { };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
+      qtopcua = callPackage ./modules/qtopcua.nix { };
       qtpositioning = callPackage ./modules/qtpositioning.nix { };
       qtsensors = callPackage ./modules/qtsensors.nix { };
       qtserialbus = callPackage ./modules/qtserialbus.nix { };
