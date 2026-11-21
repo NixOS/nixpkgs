@@ -34,6 +34,7 @@
   libxcb-render-util,
   libgbm,
   alsa-lib,
+  xkeyboard-config,
   wayland,
   atk,
   qt6,
@@ -50,6 +51,8 @@
   gdk-pixbuf,
   libexif,
   ffmpeg,
+  libjack2,
+  pipewire,
   pulseaudio,
   systemdLibs,
   libuuid,
@@ -61,6 +64,7 @@
   libnotify,
   krb5,
   buildFHSEnv,
+  makeShellWrapper,
   writeShellScript,
 }:
 let
@@ -135,6 +139,9 @@ let
     vulkan-loader
     systemdLibs
     wayland
+    libjack2
+    pipewire
+    xkeyboard-config
     pulseaudio
     qt6.qt5compat
     bzip2
@@ -162,7 +169,10 @@ let
     stdenvNoCC.mkDerivation {
       inherit pname src version;
 
-      nativeBuildInputs = [ dpkg ];
+      nativeBuildInputs = [
+        dpkg
+        makeShellWrapper
+      ];
 
       unpackPhase = ''
         runHook preUnpack
@@ -180,6 +190,19 @@ let
         cp -r wechat-uos/* $out
 
         runHook postInstall
+      '';
+
+      postInstall = ''
+        appEx="$out/opt/apps/com.tencent.wechat/files/RadiumWMPF/runtime/WeChatAppEx"
+        if [ -e "$appEx" ]; then
+          wrapProgramShell "$appEx" \
+            --run '
+              if [ -n "''${NIXOS_OZONE_WL:-}" ] && [ -n "''${WAYLAND_DISPLAY:-}" ]; then
+                export GDK_BACKEND=wayland
+                set -- --ozone-platform=wayland "$@"
+              fi
+            '
+        fi
       '';
 
       meta = {
@@ -203,20 +226,30 @@ in
 buildFHSEnv {
   inherit (wechat) pname version meta;
   runScript = writeShellScript "wechat-uos-launcher" ''
-    export QT_QPA_PLATFORM=xcb
     export QT_AUTO_SCREEN_SCALE_FACTOR=1
     export LD_LIBRARY_PATH=${lib.makeLibraryPath wechat-uos-runtime}
+    export XKB_CONFIG_ROOT=${xkeyboard-config}/share/X11/xkb
+    export XLOCALEDIR=${libx11}/share/X11/locale
 
-    if [[ ''${XMODIFIERS} =~ fcitx ]]; then
-      export QT_IM_MODULE=fcitx
-      export GTK_IM_MODULE=fcitx
-    elif [[ ''${XMODIFIERS} =~ ibus ]]; then
-      export QT_IM_MODULE=ibus
-      export GTK_IM_MODULE=ibus
-      export IBUS_USE_PORTAL=1
+    if [[ -z ''${QT_QPA_PLATFORM:-} ]]; then
+      if [[ -n ''${WAYLAND_DISPLAY:-} || ''${XDG_SESSION_TYPE:-} = wayland ]]; then
+        export QT_QPA_PLATFORM=wayland
+        export QT_IM_MODULE=text-input-unstable-v3
+      else
+        export QT_QPA_PLATFORM=xcb
+
+        if [[ ''${XMODIFIERS:-} =~ fcitx ]]; then
+          export QT_IM_MODULE=fcitx
+          export GTK_IM_MODULE=fcitx
+        elif [[ ''${XMODIFIERS:-} =~ ibus ]]; then
+          export QT_IM_MODULE=ibus
+          export GTK_IM_MODULE=ibus
+          export IBUS_USE_PORTAL=1
+        fi
+      fi
     fi
 
-    ${wechat.outPath}/opt/apps/com.tencent.wechat/files/wechat
+    ${wechat.outPath}/opt/apps/com.tencent.wechat/files/wechat "$@"
   '';
   extraInstallCommands = ''
     mkdir -p $out/share/applications

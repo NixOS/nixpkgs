@@ -1,6 +1,12 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash --pure --keep GITHUB_TOKEN -p nix git curl cacert nix-prefetch-git gzip
 
+set -euo pipefail
+
+# maintainers/scripts/update.nix (and nixpkgs-update) invoke update scripts with
+# the nixpkgs checkout as CWD; resolve paths relative to this script instead.
+cd -- "$(dirname -- "$0")"
+
 base_url_suffix="https://pro-store-packages.uniontech.com/appstore/dists/eagle-pro/appstore/binary-"
 base_url_appendix="/Packages.gz"
 target_package="com.tencent.wechat"
@@ -40,7 +46,7 @@ do
     }
     ')
     hash+=("$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $sha256sum)")
-    url+=("https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_"$version"_"$i".deb")
+    url+=("https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_"$current_version"_"$i".deb")
 done
 
 cat >sources.nix <<EOF
