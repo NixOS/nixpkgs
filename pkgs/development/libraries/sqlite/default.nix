@@ -67,6 +67,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://src.fedoraproject.org/rpms/sqlite/raw/faea37529752d0134154f3678443e2822a105834/f/sqlite-3.53.3-fix-fts3corrupt4-test.patch";
       hash = "sha256-cfwBOomIjm8szInOqKZfg2lmRM9K663ujKR3wVmAtrE=";
     })
+
+    # CVE-2026-119586
+    # https://sqlite.org/src/info/d684ccc9ec4e41d8
+    ./CVE-2026-119586-recover-strip-tail.patch
+    # https://sqlite.org/src/info/f2be7c2a98f2dc65
+    ./CVE-2026-119586-safe-command.patch
+    # https://sqlite.org/src/info/d486e997908bbd1b
+    ./CVE-2026-119586-safe-unregister-fileio.patch
+    # https://sqlite.org/src/info/8981033053d69c0a
+    ./CVE-2026-119586-recover-strip-tail-views.patch
   ];
 
   # capi3c.test is a copy of capi3.test, but upstream only disabled the
