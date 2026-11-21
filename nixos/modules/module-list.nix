@@ -54,6 +54,7 @@
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix
   ./hardware/apple-touchbar.nix
+  ./hardware/black-magic-debug.nix
   ./hardware/bladeRF.nix
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
