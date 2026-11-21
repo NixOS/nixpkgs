@@ -5,6 +5,7 @@
   gitUpdater,
   setuptools,
   cython,
+  nixosTests,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -24,14 +25,24 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
-  # Do not run pyTest, causes infinite recursion as `buildstream-plugins`
-  # depends on `Buildstream`, and vice-versa for tests.
-  # May be fixable by skipping certain tests? TODO.
+  # `buildstream-plugins` is loaded by `buildstream` at runtime, so it
+  # will always have `buildstream` in its environment when imported; it
+  # is not declared as a `dependencies` entry here since `buildstream`
+  # bundles `buildstream-plugins` by default, which would otherwise
+  # cause infinite recursion between the two packages. Its test suite
+  # (which does need `buildstream` present, and needs real `/dev/fuse`
+  # access that the Nix build sandbox doesn't provide) is run as a NixOS
+  # VM test instead; see `passthru.tests.pytest`.
+  doCheck = false;
 
   pythonImportsCheck = [ "buildstream_plugins" ];
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = "dev";
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "dev";
+    };
+
+    tests.pytest = nixosTests.buildstream-plugins;
   };
 
   meta = {
