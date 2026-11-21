@@ -39,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Let the Qt interface find its fonts and themes on darwin
     # https://github.com/garglk/garglk/pull/1047
     ./macos-qt-datadir.patch
+    # Backport of the fixes for CVE-2026-131873 and CVE-2026-131874 in the Plus interpreter,
+    # which upstream fixed with a rewrite in https://github.com/garglk/garglk/pull/1041
+    ./plus-cve-2026-131873-131874.patch
   ];
 
   postPatch = ''
