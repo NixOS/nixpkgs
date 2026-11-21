@@ -5,7 +5,7 @@
 }:
 let
   pname = "realvnc-vnc-viewer";
-  version = "8.5.0";
+  version = "8.6.2";
 
   meta = {
     description = "VNC remote desktop client software by RealVNC";
