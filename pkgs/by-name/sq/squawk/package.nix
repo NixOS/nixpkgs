@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "squawk";
   version = "2.70.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = "squawk";
@@ -43,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoBuildFlags = [
-    "-p squawk"
+    "--package=squawk"
   ];
 
   meta = {
