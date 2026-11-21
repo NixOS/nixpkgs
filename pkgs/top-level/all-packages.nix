@@ -1731,12 +1731,9 @@ with pkgs;
     };
   };
 
-  interception-tools = callPackage ../tools/inputmethods/interception-tools { };
   interception-tools-plugins = recurseIntoAttrs {
-    caps2esc = callPackage ../tools/inputmethods/interception-tools/caps2esc.nix { };
-    dual-function-keys =
-      callPackage ../tools/inputmethods/interception-tools/dual-function-keys.nix
-        { };
+    caps2esc = callPackage ../by-name/in/interception-tools/caps2esc.nix { };
+    dual-function-keys = callPackage ../by-name/in/interception-tools/dual-function-keys.nix { };
   };
 
   blacken-docs = with python3Packages; toPythonApplication blacken-docs;
