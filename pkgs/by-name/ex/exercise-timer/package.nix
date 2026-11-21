@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exercise-timer";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "exercise-timer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-81bGX5Oa5z5AbtYDzPcSyFsz0/zWcDw/Ky9n+EfnZNo=";
+    hash = "sha256-Des1hypTztxDWhznFVI8UJBclMgSFPJnEoru/9/AzrU=";
   };
 
   nativeBuildInputs = [

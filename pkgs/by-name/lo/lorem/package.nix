@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lorem";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "design";
     repo = "lorem";
     rev = finalAttrs.version;
-    hash = "sha256-DY2UVB6N3vQehDm1s3KIjodUfyWu3QBo6NxWlPswDN4=";
+    hash = "sha256-NHoK8XLnK6kZviDIJDe1lX+Pz5tu+u/hrGMx6uDmies=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-DE0jzI9Tmusm6VT19PsmJoTYHQ4fjrg3ik6tAWhMVSA=";
+    hash = "sha256-WuH9Bh/F0puqFMQj1Dmkq4IEZ/XFIFOGWnHt0d0syCo=";
   };
 
   nativeBuildInputs = [

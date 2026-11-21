@@ -1,4 +1,5 @@
 {
+  aws-lc,
   cargo,
   desktop-file-utils,
   fetchFromGitLab,
@@ -23,19 +24,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "citations";
     rev = finalAttrs.version;
-    hash = "sha256-CnCXyKXB/wH6lt35370dh+lFhqdJLCJRGBs2WH+FCP0=";
+    hash = "sha256-euPwI7r2R+EeoVRHk7B29zJNAzcYUWHocQhzJHpVboI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-xEJe752Qr1s2d/9nfTpwDP+zxZKwx0UuEUwIf4wzJW4=";
+    hash = "sha256-0C/SzDyUBsh4zzO/IlTJ1TfRWAcV8/8R09jKm4/3+wI=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib
     gtk4
     gtksourceview5
