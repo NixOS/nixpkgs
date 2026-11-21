@@ -4,6 +4,7 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  nixosTests,
   pkg-config,
   runCommand,
   rustPlatform,
@@ -62,6 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "^desktop-v(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
+    # Sends and reads a message on a closed relay as a member.
+    tests.buzz-relay = nixosTests.buzz-relay;
     # `buzz pack` works without a relay: a minimal persona pack validates and
     # inspects, and one that points at a missing persona file is rejected.
     tests.persona-pack = runCommand "buzz-cli-persona-pack" { } ''
