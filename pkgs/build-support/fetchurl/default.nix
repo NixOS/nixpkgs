@@ -130,6 +130,8 @@ let
 in
 
 lib.extendMkDerivation {
+  calculateExpectDrvArgs = true;
+
   constructDrv = stdenvNoCC.mkDerivation;
 
   excludeDrvArgNames = [
