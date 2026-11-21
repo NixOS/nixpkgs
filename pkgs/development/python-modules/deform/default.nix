@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "deform";
-  version = "2.0.15";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HpEpN2UMHbuDAHndnAOZUHYqIwIjpWd0D78bI/EJA2c=";
+    hash = "sha256-41wBUlJyXlLhlJAPilAxS9dktm49KphrRvRnbw2v5uk=";
   };
 
   build-system = [ setuptools ];
