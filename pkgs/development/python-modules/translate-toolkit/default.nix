@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.19.19";
+  version = "3.20.6";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     owner = "translate";
     repo = "translate";
     tag = finalAttrs.version;
-    hash = "sha256-TWEVrZHtMgXn4oG3Wfx3LMbAoX1S770PCdRoq/qKzZE=";
+    hash = "sha256-eA5mBWgUDRvP8yvtCBjS+6vdtnvl5WGyMs8S/T7Mwas=";
   };
 
   build-system = [ setuptools-scm ];

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "social-auth-app-django";
-  version = "6.0.1";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-app-django";
     tag = finalAttrs.version;
-    hash = "sha256-5aZQcGPX93XITzJCgL+s5Jxep+qqVbYGvzMXDRpZXdY=";
+    hash = "sha256-7iuIydh1D9RcBdUmQyNtJe3ZzMcgfE7E8FFkC2LSYWI=";
   };
 
   build-system = [ setuptools ];

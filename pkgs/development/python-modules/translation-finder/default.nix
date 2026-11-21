@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   charset-normalizer,
-  ruamel-yaml,
   weblate-language-data,
   pytestCheckHook,
   hypothesis,
@@ -12,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "translation-finder";
-  version = "3.4.0";
+  version = "3.10.0";
 
   pyproject = true;
 
@@ -22,14 +21,13 @@ buildPythonPackage (finalAttrs: {
     owner = "WeblateOrg";
     repo = "translation-finder";
     tag = finalAttrs.version;
-    hash = "sha256-uPX3jKQoQxvtu01TwSmmFOjxMtiZsAwBja9jilaa5+o=";
+    hash = "sha256-5KTR6+9ZpjDRtKnRuzFMOyX4ItInY7+Pg3Gnx3yyr5c=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     charset-normalizer
-    ruamel-yaml
     weblate-language-data
   ];
 
