@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "octodns-cloudflare";
-  version = "1.2.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-cloudflare";
     tag = "v${version}";
-    hash = "sha256-h3NgzqKgUlzUYN8QycHQE7V1YoBe8fWzHWQPv+Afplo=";
+    hash = "sha256-hHSzZtSVonKqbH7xK2Xbn4DvNnxqxyoDtPA3FmCbE/w=";
   };
 
   build-system = [
