@@ -25,7 +25,7 @@ let
     chromium:
     concatStringsSep " " [
       ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
-      "${chromium}/bin/chromium"
+      "${lib.getExe chromium}"
       "--user-data-dir=\${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive"
       ''--proxy-server="socks5://$PROXY"''
       ''--proxy-bypass-list="<-loopback>"''
@@ -56,7 +56,7 @@ let
   captive-browser-configured = pkgs.writeShellScriptBin "captive-browser" ''
     export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
     export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
-      browser = """${cfg.browser}"""
+      browser = """${if cfg.browser != null then cfg.browser else (browserDefault cfg.browser-package)}"""
       dhcp-dns = """${cfg.dhcp-dns}"""
       socks5-addr = """${cfg.socks5-addr}"""
       ${optionalString cfg.bindInterface ''
@@ -81,10 +81,17 @@ in
       };
 
       # the options below are the same as in "captive-browser.toml"
+      browser-package = mkOption {
+        type = types.package;
+        default = pkgs.chromium;
+        description = ''
+          The chromium package to use with captive-browser
+        '';
+      };
+
       browser = mkOption {
-        type = types.str;
-        default = browserDefault pkgs.chromium;
-        defaultText = literalExpression (browserDefault "\${pkgs.chromium}");
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           The shell (/bin/sh) command executed once the proxy starts.
           When browser exits, the proxy exits. An extra env var PROXY is available.
