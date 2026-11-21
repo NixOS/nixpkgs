@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
-  version = "2.61.1";
+  version = "2.62";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
-    hash = "sha256-cRvZ7HB2ZhZ4Rp5Ruuh23rrAegjDLxscazuP5edhwTo=";
+    hash = "sha256-nAewU5oBPuXiKyb9gG5HLBhYvC8/eztEBvRAR3QmOsA=";
   };
 
   sourceRoot = ".";
