@@ -7,14 +7,14 @@
 }:
 mkNginxPlugin (finalAttrs: {
   pname = "oidc";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "kjdev";
     repo = "nginx-oidc";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-d1be3U7ybfYDCoLYdIDp9JEs29+NMFTr16SRj5vOX0w=";
+    hash = "sha256-jwTzUwkPUlnuZ497k8eae3vzjWlAllewngrtM5Bhv8g=";
   };
 
   buildInputs = [
