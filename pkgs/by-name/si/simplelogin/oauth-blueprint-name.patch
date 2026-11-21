@@ -1,0 +1,5 @@
+--- a/simplelogin_app.py
++++ b/simplelogin_app.py
+@@ -211 +211 @@
+-    app.register_blueprint(oauth_bp, url_prefix="/oauth2")
++    app.register_blueprint(oauth_bp, url_prefix="/oauth2", name="oauth2")
