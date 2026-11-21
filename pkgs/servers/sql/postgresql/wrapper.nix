@@ -21,7 +21,7 @@ let
 in
 buildEnv (finalAttrs: {
   pname = "${postgresql.pname}-and-plugins";
-  inherit (postgresql) version;
+  inherit (postgresql) version meta;
   paths = installedExtensions ++ [
     # consider keeping in-sync with `postBuild` below
     postgresql
