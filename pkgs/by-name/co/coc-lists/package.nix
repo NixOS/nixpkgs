@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "coc-lists";
-  version = "1.5.4";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "neoclide";
     repo = "coc-lists";
     tag = finalAttrs.version;
-    hash = "sha256-jt7JnGRXGgG+tbk0GySZeVAlOeTL/pX6+6WK3Qv6mYg=";
+    hash = "sha256-SBqSBmAwklItqpNKjX3KaKlk1ve+siFfbtzeuCqiMxI=";
   };
 
-  npmDepsHash = "sha256-9GndvIt7kQwT/wcS0qmeB0aIRNI/8UoW5b1JfoVAfn0=";
+  npmDepsHash = "sha256-c0sFu6eLrxTWq6iIWOke3jVjvntKkB3BjIZ9vpwz6eI=";
 
   npmBuildScript = "prepare";
 
