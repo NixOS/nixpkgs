@@ -11,12 +11,12 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "rtl-wmbus";
-  version = "1.1.0";
+  version = "d2be82c";
   src = fetchFromGitHub {
     owner = "xaelsouth";
     repo = "rtl-wmbus";
     tag = "${finalAttrs.version}";
-    hash = "sha256-T8cYRkj7w4nAtcPvDkpPTwbDPXUr1qYZtyDtTjHWDMA=";
+    hash = "sha256-TbNOvEyG0vNG68UpKRwJYDcUiDWTujneSD0Vx/4eFrA=";
 
     # need to fetch revision from git
     leaveDotGit = true;
