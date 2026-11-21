@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r $out/share/pixmaps
 
     # Requirements for tuxpaint-import
+    patchShebangs --build $out/bin/tuxpaint-import
     wrapProgram $out/bin/tuxpaint-import \
       --prefix PATH : ${lib.makeBinPath [ netpbm ]}
   '';
