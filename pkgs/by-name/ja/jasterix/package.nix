@@ -8,6 +8,7 @@
   libarchive,
   libpcap,
   log4cpp,
+  nlohmann_json,
   onetbb,
   openssl,
   stdenv,
@@ -15,28 +16,49 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasterix";
-  version = "0.1.4";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "OpenATSGmbH";
     repo = "jASTERIX";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-df5tByZwtQLdV0UlSo1WkgyoF3hReU/mN74V2WL6zoI=";
+    hash = "sha256-vYlaN/R2TzEfdnNmfA1XcVl1QXo9cmOT+zPn1a6q+ys=";
   };
 
   patches = [
     (fetchpatch {
-      name = "jasterix-fix-tests.patch";
-      url = "https://github.com/OpenATSGmbH/jASTERIX/commit/b79e59c042ebb7eee31f50a7ed48840bcec50429.patch";
-      hash = "sha256-V0/nMJGb8ZB/Z6bKvyZnic57HXAsUAHXgyVq+D4yFDw=";
+      name = "jasterix-fix-include-json.patch";
+      url = "https://github.com/OpenATSGmbH/jASTERIX/pull/51.patch";
+      hash = "sha256-ZnbLa1FHBZgo83jKzMUDfcPhSRx+XgJgw3M6zjgy5ZI=";
     })
   ];
 
-  # Disable boost-stacktrace_backtrace, which is an optional dependency and not yet available in Nix.
+  # Disabling boost-stacktrace_backtrace, which is an optional dependency and not yet available in Nix.
   postPatch = ''
     sed -i 's/\(find_package .*\) stacktrace_backtrace/\1/' CMakeLists.txt
     sed -i 's/BOOST_STACKTRACE_USE_BACKTRACE/#BOOST_STACKTRACE_USE_BACKTRACE/' CMakeLists.txt
     sed -i 's/BOOST_STACKTRACE_LINK/#BOOST_STACKTRACE_LINK/' CMakeLists.txt
+  '';
+
+  postInstall = ''
+    install -d $out/share/jasterix
+    cp -rL ../definitions $out/share/jasterix
+
+    install -Dm444 /dev/stdin $dev/lib/pkgconfig/jasterix.pc <<EOF
+    prefix=$out
+    exec_prefix=\''${prefix}
+    libdir=\''${prefix}/lib
+    includedir=$dev/include
+    datadir=\''${prefix}/share/jasterix
+
+    Name: jASTERIX
+    URL: ${finalAttrs.meta.homepage}
+    Description: ${finalAttrs.meta.description}
+    Version: ${finalAttrs.version}
+    Libs: -L\''${libdir} -lboost_filesystem -lboost_iostreams -ljasterix
+    Cflags: -I\''${includedir}
+    Requires: libcrypto libpcap tbb boost log4cpp
+    EOF
   '';
 
   outputs = [
@@ -58,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive.dev
     libpcap
     log4cpp
+    nlohmann_json
     onetbb.dev
     openssl.dev
   ];
