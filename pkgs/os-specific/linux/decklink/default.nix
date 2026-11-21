@@ -3,7 +3,11 @@
   lib,
   blackmagic-desktop-video,
   kernel,
+  kernelModuleMakeFlags,
 }:
+let
+  kernelDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "decklink";
 
@@ -12,10 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   # See pkgs/by-name/bl/blackmagic-desktop-video/package.nix for more.
   inherit (blackmagic-desktop-video) src version;
 
-  env = {
-    KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-    INSTALL_MOD_PATH = placeholder "out";
-  };
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -27,21 +30,32 @@ stdenv.mkDerivation (finalAttrs: {
       tar xf Blackmagic_Desktop_Video_Linux_${finalAttrs.version}/other/${arch}/desktopvideo-${finalAttrs.version}*-${arch}.tar.gz
       bmVersion=$(ls -d $NIX_BUILD_TOP/desktopvideo-${finalAttrs.version}*-${arch}/usr/src | sed -e 's/.*desktopvideo-\([[:digit:]\.a-z]\+\).*/\1/')
 
-      moduleRoot=$NIX_BUILD_TOP/desktopvideo-$bmVersion-${arch}/usr/src
-      sourceRoot=$moduleRoot
+      sourceRoot=$NIX_BUILD_TOP/desktopvideo-$bmVersion-${arch}/usr/src
     '';
+
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
 
   buildPhase = ''
     runHook preBuild
-    make -C $moduleRoot/blackmagic-$bmVersion -j$NIX_BUILD_CORES
-    make -C $moduleRoot/blackmagic-io-$bmVersion -j$NIX_BUILD_CORES
+
+    mv $sourceRoot/blackmagic-$bmVersion/bmd-support.o_shipped $sourceRoot/blackmagic-$bmVersion/bmd-support.o
+    mv $sourceRoot/blackmagic-io-$bmVersion/blackmagic.o_shipped $sourceRoot/blackmagic-io-$bmVersion/blackmagic.o
+
+    touch $sourceRoot/blackmagic-$bmVersion/.bmd-support.o.cmd
+    touch $sourceRoot/blackmagic-io-$bmVersion/.blackmagic.o.cmd
+
+    make -C ${kernelDir} M=$sourceRoot/blackmagic-$bmVersion "''${makeFlags[@]}" modules
+    make -C ${kernelDir} M=$sourceRoot/blackmagic-io-$bmVersion "''${makeFlags[@]}" modules
+
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    make -C $KERNELDIR M=$moduleRoot/blackmagic-$bmVersion modules_install
-    make -C $KERNELDIR M=$moduleRoot/blackmagic-io-$bmVersion modules_install
+    make -C ${kernelDir} M=$sourceRoot/blackmagic-$bmVersion "''${makeFlags[@]}" modules_install
+    make -C ${kernelDir} M=$sourceRoot/blackmagic-io-$bmVersion "''${makeFlags[@]}" modules_install
     runHook postInstall
   '';
 
