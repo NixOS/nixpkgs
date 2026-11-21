@@ -25,8 +25,12 @@ in
     # The upstream package has this in Install, but that's not enough, see the NixOS manual
     systemd.services.throttled = {
       wantedBy = [ "multi-user.target" ];
+      requires = [ "upower.service" ];
+      after = [ "upower.service" ];
       restartTriggers = [ config.environment.etc."throttled.conf".source ];
     };
+
+    services.upower.enable = true;
 
     environment.etc."throttled.conf".source =
       if cfg.extraConfig != "" then
