@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "iceshelf";
-  version = "0-unstable-2025-06-29";
+  version = "0-unstable-2026-09-17";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "mrworf";
     repo = "iceshelf";
-    rev = "5380c49e3f7f3df04b61a494b2d94db2f2c65e25";
-    sha256 = "hiJZX6HG6a9kUr8R7DdkPBcuH3tmVJthWXrPtCaVayU=";
+    rev = "a99b802ea1998da2d1b667004314eef787ff419c";
+    sha256 = "GsJyFzM4k+S3jSR8/ncYto4mhRtatCU9jtRDNYesBUE=";
   };
 
   propagatedBuildInputs = [
