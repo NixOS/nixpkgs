@@ -1,0 +1,19 @@
+--- a/plugin/tmux-agent-usage.tmux
++++ b/plugin/tmux-agent-usage.tmux
+@@ -1,16 +1,6 @@
+ #!/usr/bin/env bash
+ CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+-# Auto-install binary if not found
+-if ! command -v agent-usage >/dev/null 2>&1; then
+-    tmux display-message "agent-usage: installing binary..."
+-    if bash "$CURRENT_DIR/../scripts/install.sh" >/dev/null 2>&1; then
+-        tmux display-message "agent-usage: installed successfully"
+-    else
+-        tmux display-message "agent-usage: install failed, see https://github.com/raine/tmux-agent-usage"
+-    fi
+-fi
+-
+ # Configurable providers: set -g @agent-usage-providers "codex claude"
+ # Defaults to "codex" if not set.
+ providers="$(tmux show-option -gqv @agent-usage-providers)"
