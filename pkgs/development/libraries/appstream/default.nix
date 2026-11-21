@@ -100,9 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxmlb
     libfyaml
     curl
+    bash-completion
+  ]
+  # only used by appstream-compose
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     cairo
     pango
-    bash-completion
     vips
     wayland
   ]
@@ -112,7 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonBool "apidocs" false)
-    (lib.mesonBool "compose" true)
+    # uses Linux-specific APIs
+    (lib.mesonBool "compose" stdenv.hostPlatform.isLinux)
     (lib.mesonBool "docs" false)
     (lib.mesonBool "gir" withIntrospection)
     (lib.mesonBool "systemd" withSystemd)
