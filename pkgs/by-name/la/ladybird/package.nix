@@ -2,8 +2,10 @@
   lib,
   stdenv,
   apple-sdk_26,
+  darwin,
   darwinMinVersionHook,
   cacert,
+  callPackage,
   fetchFromGitHub,
   pdfjs,
   chromium-hsts-preload-list,
@@ -17,6 +19,7 @@
   angle, # libEGL
   brotli,
   cpptrace,
+  dbus,
   glib,
   glslang,
   harfbuzz,
@@ -25,13 +28,11 @@
   libjpeg_turbo,
   libpng,
   libpsl,
-  libxml2,
   libedit,
   libpulseaudio,
   libwebp,
   mimalloc,
   openssl,
-  perl,
   python3,
   qt6Packages,
   woff2,
@@ -42,7 +43,6 @@
   fontconfig,
   rustPlatform,
   rustc,
-  rcodesign,
   makeWrapper,
   simdutf,
   skia,
@@ -50,7 +50,6 @@
   unstableGitUpdater,
   _experimental-update-script-combinators,
   common-updater-scripts,
-  libtommath,
   sdl3,
   icu78,
   simdjson,
@@ -62,28 +61,38 @@
   zmij,
 }:
 
+let
+  llvmLibcHeaders = callPackage ./llvm-libc-headers.nix { };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-11-01";
+  version = "0-unstable-2026-11-21";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "7ec8a4e31c2690dbede396ca5abee52c5050d895";
-    hash = "sha256-DMmHl2bV4aucB8BU9K3IHC/0ecF+JTyQpeqGj6aGWnw=";
+    rev = "18499442e5b3be9eb8cc5c96884ca62c53f96ec9";
+    hash = "sha256-ZI2ItWkRocN4owJULK159qgBpuAhXdj6gHzc9dWaNXw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-o4MoxCSyhKp8jtkyTnTgue0JvVbBqGQshb9+UvppICg=";
+    hash = "sha256-qvQSxzv8Ynb396L32dFGNCNTA5ZO7Lgei1dXDdQfBXY=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    # https://github.com/LadybirdBrowser/ladybird/issues/11891
-    ./darwin-build.patch
-  ];
+  patches =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      ./patches/ffmpeg-optional-av1-workaround.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # https://github.com/LadybirdBrowser/ladybird/issues/11891
+      ./patches/darwin-build.patch
+    ];
 
   postPatch = ''
+    # Source archives have no Git metadata; use upstream's revision-file support.
+    echo ${finalAttrs.src.rev} > REVISION
+
     sed -i '/iconutil/d' UI/CMakeLists.txt
 
     # https://github.com/LadybirdBrowser/ladybird/pull/12751
@@ -91,24 +100,17 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Meta/CMake/rust_crate.cmake \
       --replace-fail 'set(RUSTC_TARGET_FLAGS -Dwarnings ' 'set(RUSTC_TARGET_FLAGS '
 
-    # Upstream suffixes its reduced FFmpeg build to coexist with system FFmpeg.
-    # Use nixpkgs' FFmpeg, which already provides the additional decoders.
+    # Use nixpkgs' FFmpeg with upstream's Vulkan fixes instead of suffixing
+    # its libraries to coexist with a separate system FFmpeg.
     substituteInPlace Meta/CMake/check_for_dependencies.cmake \
       --replace-fail libavcodec-ladybird libavcodec \
       --replace-fail libavutil-ladybird libavutil \
       --replace-fail libswresample-ladybird libswresample
 
-    perl -0pi -e \
-      's/find_package\(ICU 78\.[0-9]+ EXACT REQUIRED COMPONENTS data i18n uc\)/find_package(ICU ${icu78.version} EXACT REQUIRED COMPONENTS data i18n uc)/ or die "ICU dependency not found\n"' \
-      Meta/CMake/check_for_dependencies.cmake
-
     # Install the same PDF viewer assets and integration patch as the vcpkg build.
     cp -r ${pdfjs}/share/pdf.js pdfjs
     chmod -R u+w pdfjs
     patch -d pdfjs -p1 < Meta/CMake/vcpkg/overlay-ports/pdfjs/0001-ladybird-embed.patch
-    substituteInPlace UI/cmake/ResourceFiles.cmake \
-      --replace-fail 'if (NOT "''${VCPKG_INSTALLED_DIR}" STREQUAL "" AND NOT "''${VCPKG_TARGET_TRIPLET}" STREQUAL "")' 'if (TRUE)' \
-      --replace-fail '"''${VCPKG_INSTALLED_DIR}/''${VCPKG_TARGET_TRIPLET}/share/pdfjs"' '"''${LADYBIRD_SOURCE_DIR}/pdfjs"'
 
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
@@ -121,6 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preConfigure = ''
+    # Use upstream's PDF.js discovery with our patched distribution.
+    cmakeFlagsArray+=("-DPDFJS_DIR=$PWD/pdfjs")
+
     # HSTS preload data is the only remaining downloaded data cache.
     mkdir -p build/Caches
     cmakeFlagsArray+=("-DLADYBIRD_CACHE_DIR=$PWD/build/Caches")
@@ -134,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     gitMinimal
     ninja
-    perl
     pkg-config
     python3
     rustPlatform.cargoSetupHook
@@ -145,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeWrapper
     libicns
-    rcodesign
+    darwin.sigtool
   ];
 
   buildInputs = [
@@ -162,11 +166,10 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg_turbo
     libpng
     libpsl
-    libtommath
-    libxml2
     libedit
     libwebp
-    (mimalloc.overrideAttrs {
+    llvmLibcHeaders
+    (mimalloc.overrideAttrs (prev: {
       # Ladybird uses heap APIs removed in mimalloc 3.
       version = "2.2.7";
       src = fetchFromGitHub {
@@ -175,7 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
         tag = "v2.2.7";
         hash = "sha256-z9qMOTcGkURblZChXDGfQ58hrql52lG6EE1NQmxxuj0=";
       };
-    })
+      # Upstream disables block padding to avoid inflating allocation size classes.
+      cmakeFlags = prev.cmakeFlags ++ [ (lib.cmakeBool "MI_NO_PADDING" true) ];
+    }))
     openssl
     qt6Packages.qtbase
     sdl3
@@ -204,10 +209,12 @@ stdenv.mkDerivation (finalAttrs: {
     zmij
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
     libpulseaudio.dev
     glib
     libdrm
     qt6Packages.qtpositioning
+    qt6Packages.qtsvg
     qt6Packages.qtwayland
     vulkan-headers
     vulkan-loader
@@ -223,12 +230,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
     # Disable network operations
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
+    # Nix manages updates. This also disables Sparkle on macOS.
+    (lib.cmakeBool "LADYBIRD_ENABLE_UPDATE_CHECK" false)
     # Ladybird requires icu 78, but without this flag the default icu
     # from other dependencies gets picked up instead.
     (lib.cmakeFeature "ICU_ROOT" (toString icu78.dev))
     # Upstream defaults to -Ctarget-cpu=native for Rust, which cc-wrapper
     # cannot strip; target a portable baseline instead.
-    (lib.cmakeBool "ENABLE_CI_BASELINE_CPU" true)
+    (lib.cmakeBool "LADYBIRD_BASELINE_CPU_TARGET" true)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
@@ -247,10 +256,19 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "$out/Applications/Ladybird.app/Contents/MacOS/Ladybird" "$out/bin/Ladybird"
   '';
 
-  # Sign the complete bundle after stripping and other fixups, preserving entitlements.
+  # Restore per-process entitlements after stripping and other fixups, then seal the bundle.
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    rcodesign sign \
-      --entitlements-xml-file ${finalAttrs.src}/Meta/Entitlements.plist \
+    for entitlements in Services/*/*.entitlements; do
+      case "$entitlements" in
+        *.release.entitlements) continue ;;
+      esac
+      helper=$(basename "$entitlements" .entitlements)
+      codesign --force --sign - --options runtime --entitlements "$entitlements" \
+        "$out/Applications/Ladybird.app/Contents/MacOS/$helper"
+    done
+    codesign --force --sign - --entitlements ${finalAttrs.src}/Meta/Entitlements.plist \
+      "$out/Applications/Ladybird.app/Contents/MacOS/Ladybird"
+    codesign --force --sign - --preserve-metadata=entitlements,flags \
       "$out/Applications/Ladybird.app"
   '';
 
