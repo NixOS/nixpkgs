@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
+  nix-update-script,
   nextcloud33Packages,
   nextcloud34Packages,
   nextcloud35Packages,
@@ -39,6 +40,12 @@ let
       passthru = {
         tests = nixosTests.nextcloud."nextcloud${lib.versions.major version}";
         inherit packages;
+        updateScript = nix-update-script {
+          extraArgs = [
+            "--url=https://github.com/nextcloud/server"
+            "--version-regex=^v(${lib.versions.major version}\\.[0-9]+\\.[0-9]+)$"
+          ];
+        };
       };
 
       meta = {
@@ -72,6 +79,4 @@ in
     packages = nextcloud35Packages;
   };
 
-  # tip: get the sha with:
-  # curl  "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha512" | grep '.tar.bz2'  | cut -f1 -d' ' | xargs nix hash convert --hash-algo sha512 --to sri
 }
