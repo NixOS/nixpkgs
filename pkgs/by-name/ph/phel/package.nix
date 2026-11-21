@@ -27,6 +27,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/phel-lang/phel-lang";
     license = lib.licenses.mit;
     mainProgram = "phel";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Chemaclass ];
   };
 })
