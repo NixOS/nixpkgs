@@ -1,0 +1,37 @@
+--- a/src-tauri/src/lib.rs
++++ b/src-tauri/src/lib.rs
+@@ -58,7 +58,7 @@
+ };
+ use nsec_backup_choice::{nsec_backup_choice, nsec_backup_set_choice};
+ mod claude_key;
+-#[cfg(unix)]
++#[cfg(all(unix, test))]
+ mod cli_link;
+ mod clipboard;
+ mod jev;
+@@ -1032,25 +1032,6 @@
+                     eprintln!("Could not remove old Buzz's CLI shortcut: {error}");
+                 }
+             }
+-            #[cfg(unix)]
+-            if let (Some(home), Ok(cli)) = (
+-                dirs::home_dir(),
+-                app.path()
+-                    .resource_dir()
+-                    .map_err(std::io::Error::other)
+-                    .and_then(|resources| resources.join("bin/buzz").canonicalize()),
+-            ) {
+-                if cli_link::owns(
+-                    cli_link::development(tauri::is_dev()),
+-                    &app.config().identifier,
+-                    std::env::var_os("APPIMAGE").is_some(),
+-                    &cli,
+-                ) {
+-                    if let Err(error) = cli_link::ensure(&home.join(".local/bin"), &cli) {
+-                        eprintln!("Could not link the buzz command: {error}");
+-                    }
+-                }
+-            }
+             tauri::async_runtime::spawn(host_command::load_login_shell_path());
+             if let Ok(manager) = &app.state::<PluginManager>().0 {
+                 packaged_plugins::spawn(manager.clone());
