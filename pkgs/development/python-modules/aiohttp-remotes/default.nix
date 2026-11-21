@@ -7,20 +7,25 @@
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-remotes";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp-remotes";
     tag = "v${version}";
-    hash = "sha256-/bcYrpZfO/sXc0Tcpr67GBqCu4ZSAVmUj9kzupIHHnM=";
+    hash = "sha256-eFDUc18zGGLkc5Ip87r+UAX6+yzbFGhHo9g8m20hFk0=";
   };
+
+  # flit-core 4 is not packaged yet, 3.x builds this package fine
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"flit_core >=4.1.0,<5"' '"flit_core"'
+  '';
 
   build-system = [
     flit-core
@@ -28,7 +33,6 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    typing-extensions
   ];
 
   nativeCheckInputs = [
