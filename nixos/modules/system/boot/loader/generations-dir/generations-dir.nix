@@ -19,7 +19,7 @@ let
         pkgs.gnused
         pkgs.gnugrep
       ];
-      inherit (config.boot.loader.generationsDir) copyKernels;
+      inherit (config.boot.loader.generationsDir) copyKernels copyDefault;
     };
   };
 
@@ -55,6 +55,25 @@ in
         description = ''
           Whether to copy the necessary boot files into /boot, so
           /nix/store is not needed by the boot loader.
+        '';
+      };
+
+      copyDefault = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Whether to copy the default system profile boot files to a second set
+          of files in `/boot` (`nixos-kernel`, `nixos-initrd`, `nixos-init`).
+
+          Disable this option to save space on the `/boot` partition if your
+          boot loader can follow the `default` symlink.
+
+          If you previously enabled this option, you need to clean up the old
+          files manually:
+
+          ```
+          rm -vf /boot/nixos-{kernel,initrd,init}
+          ```
         '';
       };
 
