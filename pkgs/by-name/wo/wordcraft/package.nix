@@ -79,18 +79,47 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     patchelf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    rcodesign
   ];
 
   buildInputs = [ aws-lc ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/share/icons
-    cp -R assets/app-icon/hicolor $out/share/icons/
-    install -Dm644 packaging/linux/ai.storyteller.wordcraft.desktop \
-      $out/share/applications/ai.storyteller.wordcraft.desktop
-    install -Dm644 packaging/linux/ai.storyteller.wordcraft.mime.xml \
-      $out/share/mime/packages/ai.storyteller.wordcraft.xml
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+        mkdir -p $out/share/icons
+        cp -R assets/app-icon/hicolor $out/share/icons/
+      install -Dm644 packaging/linux/ai.storyteller.wordcraft.desktop \
+        $out/share/applications/ai.storyteller.wordcraft.desktop
+      install -Dm644 packaging/linux/ai.storyteller.wordcraft.mime.xml \
+        $out/share/mime/packages/ai.storyteller.wordcraft.xml
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      APP="$out/Applications/WordCraft.app"
+
+      mkdir -p $APP/Contents/{MacOS,Resources}
+
+      ln -s $out/bin/wordcraft $APP/Contents/MacOS/WordCraft
+
+      cp $NIX_BUILD_TOP/source/assets/app-icon/wordcraft.icns $APP/Contents/Resources/WordCraft.icns
+
+      sed -e "s/@VERSION@/${finalAttrs.version}/g" -e "s/@SHORT_VERSION@/${finalAttrs.version}/g" \
+        -e "s/@BUILD_SHA@/unknown}/g" \
+        "$NIX_BUILD_TOP/source/packaging/macos/Info.plist.in" >"$APP/Contents/Info.plist"
+      plutil -lint "$APP/Contents/Info.plist"
+
+      printf 'APPL????' >"$APP/Contents/PkgInfo"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP/Contents/MacOS/WordCraft"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP"
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${lib.makeLibraryPath runtimeDeps} $out/bin/wordcraft
