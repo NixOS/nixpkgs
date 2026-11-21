@@ -10,7 +10,6 @@
   firefox-unwrapped,
   zip,
   pkg-config,
-  npapi_sdk,
   bash,
   bc,
   makeWrapper,
@@ -42,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     firefox-unwrapped
     zip
-    npapi_sdk
   ];
 
   preConfigure = ''
