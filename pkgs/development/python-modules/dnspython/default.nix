@@ -3,7 +3,7 @@
   aioquic,
   buildPythonPackage,
   cryptography,
-  fetchPypi,
+  fetchFromGitHub,
   h2,
   httpcore,
   httpx2,
@@ -15,12 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.9.0";
+  version = "2.9.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tE3GsY8HqLHFZnahn7/bUglBWwRqnOzihrqvqH/z9/E=";
+  src = fetchFromGitHub {
+    owner = "rthalley";
+    repo = pname;
+    tag = "v${version}";
+    hash = "sha256-S5hVsKS3k9O9CIznNq6mFrsc94ypKwxHG+9kE+vCl7Y=";
   };
 
   build-system = [ uv-build ];
@@ -49,7 +51,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'uv_build>=0.9.21,<0.13.0' "uv_build"
+      --replace-fail 'uv_build>=0.9.21,<0.14.0' "uv_build"
   '';
 
   # disable network on all builds (including darwin)
