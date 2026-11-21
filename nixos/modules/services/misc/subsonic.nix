@@ -139,7 +139,7 @@ in
                 [ -d "$oldHome" ] &&
                 [ $(${pkgs.coreutils}/bin/stat -c %u "$oldHome") -eq \
                     ${toString config.users.users.subsonic.uid} ]; then
-            logger Moving "$oldHome" to "${cfg.home}"
+            ${pkgs.util-linux}/bin/logger Moving "$oldHome" to "${cfg.home}"
             ${pkgs.coreutils}/bin/mv -T "$oldHome" "${cfg.home}"
         fi
 
