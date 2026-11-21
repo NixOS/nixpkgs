@@ -5,6 +5,7 @@
   qt5,
   git,
   ffmpeg_6,
+  gst_all_1,
   nix-update-script,
 }:
 
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [ ./git-inherit.patch ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg_6 ]}" ];
 
   nativeBuildInputs = with qt5; [
     qmake
@@ -53,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
     qtwayland
     ffmpeg_6
+    gst_all_1.gst-libav
   ];
 
   meta = {
