@@ -1,6 +1,7 @@
 {
   lib,
   cmake,
+  codediff-watcher,
   fetchFromGitHub,
   nix-update-script,
   vimUtils,
@@ -44,9 +45,13 @@ vimUtils.buildVimPlugin rec {
     rm -rf build
   '';
 
+  # The plugin looks for the watcher in its root before downloading it at runtime.
+  postInstall = ''
+    ln -s ${lib.getExe codediff-watcher} $out/codediff-watcher
+  ''
   # The plugin detects Nix and tries to download libgomp at runtime.
   # Symlinking it into the plugin directory fixes error message.
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     ln -s ${stdenv.cc.cc.lib}/lib/libgomp.so.1 $out/libgomp.so.1
   '';
 
