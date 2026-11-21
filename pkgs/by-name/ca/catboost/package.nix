@@ -117,7 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "rc[0-9]*$";
+  };
 
   meta = {
     description = "High-performance library for gradient boosting on decision trees";

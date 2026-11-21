@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--url=https://gitlab.gnome.org/api/v4/projects/World%2Fdesign%2Ftypography/repository/archive.tar.gz?sha=HEAD"
+    ];
+  };
 
   meta = {
     description = "Tool for looking up text styles";

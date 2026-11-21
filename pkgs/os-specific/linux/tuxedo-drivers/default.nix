@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
+    ignoredVersions = "_rc$";
   };
 
   meta = {

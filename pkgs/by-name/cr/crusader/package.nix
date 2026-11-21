@@ -74,7 +74,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v(\\d+(?:\\.\\d+)*)$" ];
+  };
 
   meta = {
     description = "Network throughput and latency tester";

@@ -150,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater {
     url = "https://github.com/Warzone2100/warzone2100";
+    ignoredVersions = "-(alpha|beta|rc)";
   };
 
   meta = {

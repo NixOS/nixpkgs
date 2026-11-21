@@ -78,7 +78,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   doCheck = false;
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater { tagFormat = "[0-9]*"; };
     tests.rust =
       runCommand "owi-test-rust"
         {

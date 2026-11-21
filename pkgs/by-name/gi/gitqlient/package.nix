@@ -4,7 +4,7 @@
   fetchFromGitHub,
   qt6,
   cmake,
-  gitUpdater,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,8 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    tagFormat = "v[0-9]*";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # QCheckBox::stateChanged is deprecated

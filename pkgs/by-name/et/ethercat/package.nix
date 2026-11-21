@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
-    updateScript = gitUpdater { };
+    updateScript = gitUpdater { ignoredVersions = "-dev$"; };
   };
 
   meta = {

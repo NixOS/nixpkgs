@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "-rc$"; };
 
   meta = {
     description = "Drop-in replacement for Nmap powered by shodan.io";
