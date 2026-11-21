@@ -15,12 +15,4 @@ generic: {
     mssqlHash = "sha256-KFBQ6Zyt11Zwc9nxPyHBsvCSGenc3T7tKkfJYxbq7Ko=";
     postgresqlHash = "sha256-uD2QNJ1YoPQVac69zWHDi0hHF+7T8PKDi88OKg0hERw=";
   };
-  v60 = generic {
-    version = "6.0.49";
-    hash = "sha256-AiLoioosRKmamGvGy3lRM6My1UuowyeyvGSUoX0WH2s=";
-    emberPlusHash = "sha256-MKHX1ZCKZUOQLoAUdUDujd1ios0Q7flFZixuXVq5eXI=";
-    mongodbHash = "sha256-Il289I5Va+6713GFF1lw/ABcTFopRXJHiWjFgW6roQc=";
-    mssqlHash = "sha256-kvW5uDAZUetbCn0m9Bdw64g7/6ZWIzmCvxpjVDGGxEQ=";
-    postgresqlHash = "sha256-K/nuxo4n9+YpLlLi4GPs62P+uY/DvKF4S+/bv7La2qA=";
-  };
 }
