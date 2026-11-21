@@ -10,7 +10,6 @@ let
     head
     isFunction
     length
-    recursiveUpdate
     splitVersion
     tail
     take

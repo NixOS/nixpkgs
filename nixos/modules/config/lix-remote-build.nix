@@ -15,16 +15,10 @@
 let
   inherit (lib)
     any
-    concatMapStrings
     concatStringsSep
-    filter
-    getVersion
     mkIf
     mkOption
-    optional
-    optionalString
     types
-    versionAtLeast
     ;
 
   cfg = config.lix;

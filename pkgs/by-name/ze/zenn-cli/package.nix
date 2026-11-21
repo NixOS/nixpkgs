@@ -11,7 +11,7 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";

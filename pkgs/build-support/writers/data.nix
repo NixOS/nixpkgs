@@ -4,13 +4,6 @@
   formats,
   runCommand,
 }:
-let
-  inherit (lib)
-    last
-    optionalString
-    types
-    ;
-in
 {
   makeDataWriter = throw "pkgs.writers.makeDataWriter has been removed. Use pkgs.writeTextFile instead.";
 

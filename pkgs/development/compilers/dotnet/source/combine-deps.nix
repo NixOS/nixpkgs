@@ -9,14 +9,11 @@ let
 
   inherit (pkgs.lib)
     concatMap
-    concatMapStringsSep
-    generators
     importJSON
     optionals
     replaceStrings
     sortOn
     strings
-    unique
     ;
 
   packages = concatMap (file: importJSON file) list;

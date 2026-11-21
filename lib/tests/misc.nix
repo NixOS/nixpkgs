@@ -57,7 +57,6 @@ let
     foldlAttrs
     foldr
     functionArgs
-    genAttrs
     generators
     genList
     getExe

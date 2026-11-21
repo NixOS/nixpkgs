@@ -476,20 +476,6 @@ let
         }
       ) { };
 
-      package-stub-disabled-finalAttrs = pkgs.python3Packages.callPackage (
-        {
-          buildPythonPackage,
-          emptyDirectory,
-        }:
-        buildPythonPackage (finalAttrs: {
-          pname = "python-package-stub";
-          version = "0.1.0";
-          pyproject = true;
-          src = emptyDirectory;
-          disabled = true;
-        })
-      ) { };
-
       package-stub-unsupportedPython = pkgs.python3Packages.callPackage (
         {
           buildPythonPackage,
@@ -502,20 +488,6 @@ let
           src = emptyDirectory;
           meta.problems.unsupportedPython = { };
         }
-      ) { };
-
-      package-stub-unsupportedPython-finalAttrs = pkgs.python3Packages.callPackage (
-        {
-          buildPythonPackage,
-          emptyDirectory,
-        }:
-        buildPythonPackage (finalAttrs: {
-          pname = "python-package-stub";
-          version = "0.1.0";
-          pyproject = true;
-          src = emptyDirectory;
-          meta.problems.unsupportedPython = { };
-        })
       ) { };
 
       applyOverridePythonAttrs =

@@ -80,7 +80,6 @@ let
     optionalAttrs
     optionals
     optionalString
-    platforms
     removePrefix
     replaceStrings
     ;

@@ -166,7 +166,7 @@ in
 
   config =
     let
-      inherit (lib) mkIf optional getExe;
+      inherit (lib) mkIf optional;
       WorkingDirectory = "/var/lib/navidrome";
 
       settingsFile = settingsFormat.generate "navidrome.json" cfg.settings;

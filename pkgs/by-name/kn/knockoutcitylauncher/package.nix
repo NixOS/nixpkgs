@@ -10,7 +10,7 @@
 }:
 let
   electron = electron_43;
-  stdenv = stdenvNoCC;
+
 in
 buildNpmPackage (finalAttrs: {
   pname = "knockoutcitylauncher";

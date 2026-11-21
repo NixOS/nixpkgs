@@ -107,24 +107,6 @@ let
     ];
   };
 
-  darwinArgs = {
-    nativeBuildInputs = [
-      _7zz
-    ];
-    src = fetchurl {
-      url = "https://jp-minerals.org/vesta/archives/${version}/VESTA.dmg";
-      hash = "sha256-L8vj3MNwHo3m5wP1lByNjHZ4VTVOWSm0Aiw1ItosbSw=";
-    };
-    sourceRoot = "VESTA/VESTA";
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/Applications
-      cp -r *.app $out/Applications
-
-      runHook postInstall
-    '';
-  };
 in
 stdenvNoCC.mkDerivation (
   {

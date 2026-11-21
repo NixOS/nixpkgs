@@ -14,7 +14,7 @@ let
   REAndroidLibrary =
     args:
     let
-      inherit (args) pname version projectName;
+      inherit (args) projectName;
       outJar = "share/${projectName}/${projectName}.jar";
       self = stdenv.mkDerivation (
         {

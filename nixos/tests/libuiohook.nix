@@ -24,7 +24,7 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.client.users.users.alice;
+
     in
     ''
       client.wait_for_x()

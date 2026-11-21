@@ -42,7 +42,7 @@ in
   testScript =
     { nodes, ... }:
     let
-      user = nodes.machine.users.users.alice;
+
     in
     ''
       start_all()

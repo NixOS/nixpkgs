@@ -198,7 +198,6 @@ stdenvNoCC.mkDerivation (
     args' = transformArgs finalAttrs args;
     inherit (args')
       nugetDeps
-      runtimeId
       meta
       dotnet-sdk
       ;

@@ -9,7 +9,6 @@
 let
   inherit (lib) mkOption types mkIf;
 
-  opt = options.services.quicktun;
   cfg = config.services.quicktun;
 in
 {

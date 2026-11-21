@@ -10,10 +10,9 @@
 }:
 
 let
-  pname = "TypedExtraction";
+
   repo = "rocq-typed-extraction";
   owner = "peregrine-project";
-  domain = "github.com";
 
   inherit version;
   defaultVersion =

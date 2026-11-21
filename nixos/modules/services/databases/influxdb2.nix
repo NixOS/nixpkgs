@@ -29,7 +29,6 @@ let
     optional
     subtractLists
     types
-    unique
     ;
 
   format = pkgs.formats.json { };
@@ -164,7 +163,7 @@ let
             types.submodule (
               bucketSubmod:
               let
-                bucket = bucketSubmod.config._module.args.name;
+
               in
               {
                 options = {
@@ -389,8 +388,7 @@ in
             types.submodule (
               userSubmod:
               let
-                user = userSubmod.config._module.args.name;
-                org = userSubmod.config.org;
+
               in
               {
                 options = {

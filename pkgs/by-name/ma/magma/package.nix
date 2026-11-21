@@ -33,7 +33,7 @@ let
     trivial
     ;
 
-  inherit (cudaPackages) cudaAtLeast flags cudaOlder;
+  inherit (cudaPackages) flags;
 
   supportedGpuTargets = [
     "700"

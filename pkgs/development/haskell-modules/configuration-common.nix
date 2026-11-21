@@ -15,7 +15,7 @@ self: super:
 
 let
   inherit (pkgs) fetchpatch lib;
-  inherit (lib) throwIfNot versionOlder;
+  inherit (lib) versionOlder;
 
   warnAfterVersion =
     ver: pkg:

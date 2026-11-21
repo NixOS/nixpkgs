@@ -9,7 +9,6 @@ let
   inherit (lib)
     matchAttrs
     any
-    all
     isDerivation
     getBin
     ;

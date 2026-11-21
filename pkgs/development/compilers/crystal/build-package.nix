@@ -63,8 +63,6 @@ let
     "--verbose"
   ];
 
-  buildDirectly = shardsFile == null || crystalBinaries != { };
-
   mkCrystalBuildArgs =
     bin: attrs:
     lib.concatStringsSep " " (

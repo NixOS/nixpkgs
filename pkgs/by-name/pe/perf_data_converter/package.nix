@@ -10,7 +10,7 @@
 }:
 
 let
-  system = stdenv.hostPlatform.system;
+
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";

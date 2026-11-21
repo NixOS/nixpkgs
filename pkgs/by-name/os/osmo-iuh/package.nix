@@ -12,10 +12,6 @@
   python3,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-iuh";
   version = "1.6.0";

@@ -12,7 +12,6 @@ let
     match
     elemAt
     toJSON
-    toFile
     removeAttrs
     ;
   inherit (lib) importJSON mapAttrs;

@@ -28,13 +28,6 @@ let
     hash = "sha256-N/YA8r7zxegwAUcFlWiyouQKetbMxlzpQlVtSUKcxmc=";
   };
 
-  linkerFile =
-    {
-      x86_64-linux = "ld-linux-x86-64";
-      i686-linux = "ld-linux";
-    }
-    .${buildPlatform.system};
-
 in
 bash.runCommand "${pname}-${version}"
   {

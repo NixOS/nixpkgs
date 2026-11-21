@@ -7,9 +7,6 @@
   versionCheckHook,
 }:
 
-let
-  inherit (stdenv.hostPlatform) system;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
   version = "2.24.1";

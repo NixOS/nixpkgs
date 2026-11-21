@@ -13,10 +13,6 @@
   osmo-iuh,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-hnodeb";
   version = "0.1.1";

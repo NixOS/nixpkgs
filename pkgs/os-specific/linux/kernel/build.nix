@@ -114,7 +114,6 @@ lib.makeOverridable (
       getAttr
       optional
       optionals
-      optionalString
       maintainers
       teams
       platforms

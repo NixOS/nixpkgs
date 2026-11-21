@@ -2,7 +2,7 @@
 
 let
   port = 3142;
-  defaultPort = 8083;
+
   libraryPath = "/var/lib/test-books";
 in
 {

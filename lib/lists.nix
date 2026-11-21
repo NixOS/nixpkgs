@@ -9,7 +9,6 @@ let
     id
     min
     seq
-    warn
     ;
   inherit (lib.attrsets) mapAttrs attrNames attrValues;
 in

@@ -67,12 +67,6 @@ let
   version = year; # keep names simple for now
 
   # detect and stop redundant rebuilds that may occur when building new fixed hashes
-  assertFixedHash =
-    name: src:
-    if !useFixedHashes || src ? outputHash then
-      src
-    else
-      throw "The TeX Live package '${src.pname}' must have a fixed hash before building '${name}'.";
 
   # list of packages whose binaries are built in core, core-big
   # generated manually by inspecting ${core}/bin

@@ -7,14 +7,6 @@
 let
   inherit (pkgs) buildEnv;
 
-  testingThrow = expr: {
-    expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
-    expected = {
-      success = false;
-      value = false;
-    };
-  };
-
   tests-name = {
     testNameFromNameArg = {
       expr =

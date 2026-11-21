@@ -108,7 +108,7 @@ let
     versionAtLeast
     ;
 
-  inherit (stdenvNoCC) buildPlatform hostPlatform targetPlatform;
+  inherit (stdenvNoCC) hostPlatform targetPlatform;
 
   includeFortifyHeaders' =
     if includeFortifyHeaders != null then
@@ -130,9 +130,6 @@ let
   libc_lib = optionalString (libc != null) (getLib libc);
   cc_solib =
     optionalString (!nativeTools) (getLib cc)
-    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
-  cc_bin =
-    optionalString (!nativeTools) (getBin cc)
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.

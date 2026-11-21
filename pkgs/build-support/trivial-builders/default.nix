@@ -11,13 +11,10 @@
 
 let
   inherit (lib)
-    optionalAttrs
     optionalString
     hasPrefix
-    warn
     map
     isList
-    foldl'
     ;
   hasRootPrefix = hasPrefix "/";
 in

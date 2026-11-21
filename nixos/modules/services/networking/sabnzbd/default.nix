@@ -15,11 +15,6 @@ let
     literalExpression
     types
     ;
-  inherit (lib.generators)
-    mkKeyValueDefault
-    mkValueStringDefault
-    toKeyValue
-    ;
 
   enumFromAttrs =
     enum_values:

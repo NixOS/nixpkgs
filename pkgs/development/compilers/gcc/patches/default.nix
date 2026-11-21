@@ -29,7 +29,7 @@
 }:
 
 let
-  atLeast15 = lib.versionAtLeast version "15";
+
   atLeast14 = lib.versionAtLeast version "14";
   is16 = majorVersion == "16";
   is15 = majorVersion == "15";
