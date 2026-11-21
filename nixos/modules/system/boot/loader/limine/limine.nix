@@ -28,6 +28,7 @@ let
       style = cfg.style;
       resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
+      expandGenerations = cfg.expandGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
       timeout = if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout;
       enableEditor = cfg.enableEditor;
@@ -73,6 +74,17 @@ in
         Useful to prevent boot partition of running out of disk space.
         `null` means no limit i.e. all generations that were not
         garbage collected yet.
+      '';
+    };
+
+    expandGenerations = lib.mkOption {
+      default = true;
+      example = false;
+      type = lib.types.bool;
+      description = ''
+        Whether the top-level generation groups in the boot menu (for example
+        "NixOS generations" or "NixOS profile 'foo'") are expanded by default.
+        When set to false, they start collapsed and can be opened from the menu.
       '';
     };
 
