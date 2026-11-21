@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "doublemetaphone";
-  version = "1.2i";
+  version = "1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "doublemetaphone";
     tag = "v${version}";
-    hash = "sha256-VPJqHxQHLiLSko+aJYTIgISluHPARgQN5pYWYxP9QKQ=";
+    hash = "sha256-uduTnqNZaVf1cteQTXk7i1nutpQIVkKYc+BhLSzwVDs=";
   };
 
   build-system = [
