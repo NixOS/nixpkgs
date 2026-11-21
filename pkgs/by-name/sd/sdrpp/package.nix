@@ -28,8 +28,9 @@
   limesdr_source ? true,
   limesuite,
   network_source ? true,
-  # needs libperseus-sdr, not yet available in nixpks
+  # this package is too old to be default installed
   perseus_source ? false,
+  libperseus-sdr,
   plutosdr_source ? stdenv.hostPlatform.isLinux,
   libiio,
   libad9361,
@@ -124,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional dragonlabs_source libdlcr
   ++ lib.optional hackrf_source hackrf
   ++ lib.optional limesdr_source limesuite
+  ++ lib.optional perseus_source libperseus-sdr
   ++ lib.optionals rtl_sdr_source [
     rtl-sdr-osmocom
     libusb1
