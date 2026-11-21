@@ -5,7 +5,7 @@
   lib,
   pkg-config,
   alsa-lib,
-  ffmpeg,
+  ffmpeg-headless,
   libjack2,
   libogg,
   libpulseaudio,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    ffmpeg
+    ffmpeg-headless
     libjack2
     libogg
     libpulseaudio
