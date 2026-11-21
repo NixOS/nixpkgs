@@ -6,14 +6,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mandown";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-a+1tm9YlBuroTtgCL0nTjASaPiJHif89pRH0CWw7RjM=";
+    hash = "sha256-Gxvtslik93BxGG1L+r6f/L2Vt3MkzMJFWy5wJSEqcCI=";
   };
 
-  cargoHash = "sha256-ZyjoAvsqUyHgfEsG3+CvJatmBt0AJ2ga6HRJ8Y7her0=";
+  cargoHash = "sha256-1NrfQBXOROla74iTA1AQndgfEA6YWPurnC1Odc7pdQU=";
 
   passthru.updateScript = nix-update-script { };
 
