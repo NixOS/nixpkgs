@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-1fg1KRu685hnAyHCOKKqvwU/K8Sm4D7/TRKLBI2tBu0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools<81"' '"setuptools"'
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
