@@ -14,6 +14,9 @@ stdenv.mkDerivation {
   pname = "sxbar";
   version = "1.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "uint23";
     repo = "sxbar";
