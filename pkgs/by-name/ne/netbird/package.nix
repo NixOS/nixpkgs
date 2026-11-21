@@ -78,7 +78,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.82.0";
+  version = "0.83.2";
 
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ buildGoModule (finalAttrs: {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NIYOIc0Q7FLLKZCKVhCfGSojbS3Rux8dxPg6Mq0A/cs=";
+    hash = "sha256-t4ldTHghqmSNQf2VFRgR/rYGd0ARnok6Bu31Vhv0t4A=";
   };
 
   overrideModAttrs = final: prev: {
@@ -100,7 +100,7 @@ buildGoModule (finalAttrs: {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-rzHnfPjjv4fNHSE2qk6/5wCZ3BH0LrFvDDmNNU5Di0s=";
+  vendorHash = "sha256-iIbATQiIfazszBSi4jl5Ys/27uYwfweEMo+4BLSnRms=";
 
   nativeBuildInputs = [
     installShellFiles
