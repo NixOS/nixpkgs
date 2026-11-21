@@ -12,6 +12,146 @@ let
 
   overrides = (
     self: super: {
+      cl-cerf = super.cl-cerf.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libcerf ];
+      });
+      cl-gcrypt = super.cl-gcrypt.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libgcrypt ];
+      });
+      cl-geos = super.cl-geos.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.geos ];
+      });
+      cl-libevent2 = super.cl-libevent2.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libevent ];
+      });
+      cl-liblinear = super.cl-liblinear.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.liblinear ];
+      });
+      cl-libsvm = super.cl-libsvm.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libsvm ];
+      });
+      cl-mecab = super.cl-mecab.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.mecab ];
+      });
+      cl-libiio = super.cl-libiio.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libiio ];
+      });
+      leveldb = super.leveldb.overrideLispAttrs (o: {
+        nativeBuildInputs = [ pkgs.leveldb ];
+        nativeLibs = [ pkgs.leveldb ];
+      });
+      lmdb = super.lmdb.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.lmdb ];
+      });
+      nlopt = super.nlopt.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.nlopt ];
+      });
+      ev = super.ev.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libev ];
+      });
+      cl-fastcgi = super.cl-fastcgi.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.fcgi ];
+      });
+      cl-openal = super.cl-openal.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.openal ];
+      });
+      cl-alut = super.cl-alut.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.freealut ];
+      });
+      cl-portaudio = super.cl-portaudio.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.portaudio ];
+      });
+      cl-out123 = super.cl-out123.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.mpg123 ];
+      });
+      cl-mpg123 = super.cl-mpg123.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.mpg123 ];
+      });
+      mpg123-ffi = super.mpg123-ffi.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.mpg123 ];
+      });
+      cl-rrd = super.cl-rrd.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.rrdtool ];
+      });
+      lzlib = super.lzlib.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.lzlib ];
+      });
+      deoxybyte-gzip = super.deoxybyte-gzip.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.zlib ];
+      });
+      pixman = super.pixman.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.pixman ];
+      });
+      libcmark = super.libcmark.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.cmark ];
+      });
+      tesseract-capi = super.tesseract-capi.overrideLispAttrs (o: {
+        nativeLibs = [ (pkgs.tesseract.override { enableLanguages = [ ]; }) ];
+      });
+      cl-tesseract =
+        let
+          tesseract = pkgs.tesseract.override { enableLanguages = [ "eng" ]; };
+        in
+        super.cl-tesseract.overrideLispAttrs (o: {
+          nativeLibs = [ tesseract ];
+          patches = [ (pkgs.replaceVars ./patches/cl-tesseract-tessdata.patch { inherit tesseract; }) ];
+        });
+      also-alsa = super.also-alsa.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.alsa-lib ];
+      });
+      croatoan-ncurses = super.croatoan-ncurses.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.ncurses ];
+      });
+      cl-kyoto-cabinet = super.cl-kyoto-cabinet.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.kyotocabinet ];
+      });
+      cl-tokyo-cabinet = super.cl-tokyo-cabinet.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.tokyocabinet ];
+      });
+      cl-geoip = super.cl-geoip.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.geoip ];
+      });
+      cl-pslib = super.cl-pslib.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.pslib ];
+      });
+      cl-termbox = super.cl-termbox.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.termbox ];
+      });
+      cl-drm = super.cl-drm.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libdrm ];
+      });
+      cl-egl = super.cl-egl.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libGL ];
+      });
+      cl-xkb = super.cl-xkb.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libxkbcommon ];
+      });
+      cl-wayland = super.cl-wayland.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.wayland ];
+      });
+      cl-oclapi = super.cl-oclapi.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.ocl-icd ];
+      });
+      cl-opencl = super.cl-opencl.overrideLispAttrs (o: {
+        nativeBuildInputs = [
+          pkgs.pkg-config
+          pkgs.ocl-icd
+          pkgs.opencl-headers
+        ];
+        nativeLibs = [ pkgs.ocl-icd ];
+      });
+      or-glpk = super.or-glpk.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.glpk ];
+      });
+      or-fann = super.or-fann.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libfann ];
+      });
+      or-gsl = super.or-gsl.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.gsl ];
+      });
+      glu-tessellate = super.glu-tessellate.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.libGLU ];
+      });
       cl_plus_ssl = super.cl_plus_ssl.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.openssl ];
       });
