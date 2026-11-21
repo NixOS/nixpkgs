@@ -12,25 +12,32 @@
   pyopenssl,
   python-dateutil,
   pytz,
+  six,
   urllib3,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.190.0";
+  version = "2.192.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
     tag = "v${version}";
-    hash = "sha256-FaKjwSV+d1+Syv8OwbDTRUJK8JYf7MJZGcZVv5STtvE=";
+    hash = "sha256-fHs86ecOIvAwHldU8JjTICgzVFv2eIbv4lgLY4R2miU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<84" setuptools
+  '';
 
   pythonRelaxDeps = [
     "cryptography"
     "pyOpenSSL"
+    "python-dateutil"
     "urllib3"
   ];
 
@@ -47,6 +54,7 @@ buildPythonPackage rec {
     pyopenssl
     python-dateutil
     pytz
+    six
     urllib3
   ];
 
