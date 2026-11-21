@@ -29,6 +29,7 @@
   coreutils,
   withQt ? false,
   qt5,
+  emacs,
 }:
 
 let
@@ -44,10 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cyN/N/AzBtaL+uEzqaUNXpNBOE4ZjVqzfuypq1NN7tg=";
   };
 
+  outputs = [
+    "out"
+    "info"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
     texinfo
+    emacs
   ]
   ++ lib.optionals withQt [
     qt5.qttools
@@ -121,12 +128,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  installTargets = [
+    "install"
+    "install-info"
+  ];
+
   meta = {
     homepage = "http://www.gnuplot.info/";
     description = "Portable command-line driven graphing utility for many platforms";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gnuplot;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ wentasah ];
     mainProgram = "gnuplot";
   };
 })
