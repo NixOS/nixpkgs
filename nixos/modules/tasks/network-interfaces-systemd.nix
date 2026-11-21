@@ -80,12 +80,6 @@ let
 
   interfaceNetworks = mkMerge (
     forEach interfaces (i: {
-      links = mkIf i.wakeOnLan.enable {
-        "40-${i.name}" = {
-          matchConfig.name = i.name;
-          linkConfig.WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
-        };
-      };
       netdevs = mkIf i.virtual {
         "40-${i.name}" = {
           netdevConfig = {
