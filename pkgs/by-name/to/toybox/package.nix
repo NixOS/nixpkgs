@@ -5,17 +5,12 @@
   fetchpatch2,
   which,
   buildPackages,
-  libxcrypt,
+  libxcrypt-legacy,
   libiconv,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,
   extraConfig ? "",
 }:
-
-let
-  inherit (lib) optionals;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "toybox";
   version = "0.8.15";
@@ -36,25 +31,46 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
   ];
   buildInputs = [
-    libxcrypt
+    libxcrypt-legacy
   ]
-  ++ optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ]
-  ++ optionals (enableStatic && stdenv.cc.libc ? static) [
+  ++ lib.optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
     stdenv.cc.libc.static
   ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+
+    # the tar tests need the "sys" group to exist
+    rm tests/tar.test
+
+    # modify/skip tests that try to use setuid/setgid
+    substituteInPlace tests/chmod.test \
+      --replace-fail '[ "$(uname)" == Darwin ] && ' ""
+    substituteInPlace tests/install.test \
+      --replace-fail '2750' '750'
+  ''
+  + lib.optionalString enableStatic ''
+    # static sed builds don't handle null bytes properly
+    rm tests/sed.test
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # can't read /etc/ in the Darwin sandbox
+    sed -i -e '145,146d' tests/find.test
+  '';
 
   inherit extraConfig;
 
   configurePhase = ''
+    runHook preConfigure
+
     make ${
       if enableMinimal then
         "allnoconfig"
@@ -71,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv .config- .config
 
     make oldconfig
+
+    runHook postConfigure
   '';
 
   hardeningDisable = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
@@ -82,22 +100,25 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)/bin"
     "CC=${stdenv.cc.targetPrefix}cc"
   ]
-  ++ optionals (enableStatic && !stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals (enableStatic && !stdenv.hostPlatform.isDarwin) [
     "LDFLAGS=--static"
   ];
 
   installTargets = [ "install_flat" ];
 
-  # tests currently (as of 0.8.0) get stuck in an infinite loop...
-  # ...this is fixed in latest git, so doCheck can likely be enabled for next release
-  # see https://github.com/landley/toybox/commit/b928ec480cd73fd83511c0f5ca786d1b9f3167c3
-  #doCheck = true;
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
+
+  doCheck = true;
   nativeCheckInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
   checkTarget = "tests";
+  preCheck = ''
+    export USER=$(id -un)
+  '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-unused-result -Wno-discarded-qualifiers";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Lightweight implementation of some Unix command line utilities";
