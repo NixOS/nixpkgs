@@ -36,6 +36,7 @@ replaceVarsWith {
         containers-ip
         containers-tmpfs
         containers-ephemeral
+        containers-flake-update
         containers-unified-hierarchy
         ;
     };
