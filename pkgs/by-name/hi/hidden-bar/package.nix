@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "hidden-bar";
-  version = "1.10";
+  version = "1.13.0";
 
   src = fetchurl {
     url = "https://github.com/dwarvesf/hidden/releases/download/v${version}/Hidden-Bar-v${version}-macos.zip";
-    hash = "sha256-qKX1KZ/fq1K9/7L1cop21MumkHVOmzsS8nvTjy52wLw=";
+    hash = "sha256-qBFxfYT6ukeOpmyqIk8zYKnl2ESnpQ+gkAnzLXgTGkQ=";
   };
 
   sourceRoot = ".";
