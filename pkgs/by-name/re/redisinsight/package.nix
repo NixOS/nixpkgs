@@ -5,11 +5,12 @@
   fetchFromGitHub,
   fetchYarnDeps,
   makeDesktopItem,
+  nix-update-script,
 
   copyDesktopItems,
   dart-sass,
   makeWrapper,
-  nodejs-slim_24,
+  nodejs-slim_26,
   pkg-config,
   yarnConfigHook,
 
@@ -20,17 +21,17 @@
 
 let
   electron = electron_41;
-  nodejs = nodejs-slim_24;
+  nodejs = nodejs-slim_26;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";
-  version = "3.6.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "RedisInsight";
     rev = finalAttrs.version;
-    hash = "sha256-YnBy++KshDVNw3p1gf7gHydQyyh03fkSULhnZsqZMxs=";
+    hash = "sha256-BxK+b2gQQZaURKjnxO3L7imojkA5eiYR6Ld8lM0SafM=";
   };
 
   patches = [
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   baseOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-base-offline-cache";
     inherit (finalAttrs) src patches;
-    hash = "sha256-lfCasq3C0jD4wNpguxSOxwrR0Sx3ZfwK95Ib31TShSQ=";
+    hash = "sha256-GRAelr2czhPzje/4cwGLk7WiQqPJQpt+31Lk9Sbk1+U=";
   };
 
   innerOfflineCache = fetchYarnDeps {
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "redisinsight-${finalAttrs.version}-api-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight/api";
-    hash = "sha256-8u4igcegknwydNsVLcPv6E5/uwQJpwNWhIpCujfoXqk=";
+    hash = "sha256-GyJVXgU7vBes8JD4OCsxtbS9d0LRXH4hrQwBqxid1wQ=";
   };
 
   nativeBuildInputs = [
@@ -171,6 +172,17 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "redisinsight";
     })
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--custom-dep"
+      "baseOfflineCache"
+      "--custom-dep"
+      "innerOfflineCache"
+      "--custom-dep"
+      "apiOfflineCache"
+    ];
+  };
 
   meta = {
     description = "Developer GUI for Redis";
