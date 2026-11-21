@@ -113,10 +113,7 @@ in
       services.postfix = {
         enable = true;
         settings.main = {
-          compatibility_level = "2";
-          mydestination = [ clientDomain ];
           myhostname = clientDomain;
-          origin = clientDomain;
           relay_domains = [ clientDomain ];
           smtpd_banner = "ESMTP server";
         };
