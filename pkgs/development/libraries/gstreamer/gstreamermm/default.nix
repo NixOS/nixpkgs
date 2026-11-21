@@ -9,6 +9,7 @@
   gst_all_1,
   gnome,
   apple-sdk_gstreamer,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,12 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "gstreamermm";
       versionPolicy = "odd-unstable";
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = {
     description = "C++ interface for GStreamer";
     homepage = "https://gstreamer.freedesktop.org/bindings/cplusplus.html";
     license = lib.licenses.lgpl21Plus;
+    pkgConfigModules = [ "gstreamermm-1.0" ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
   };
