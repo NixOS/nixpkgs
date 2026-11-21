@@ -109,6 +109,7 @@ let
             coq.ocamlPackages.zarith
             coq.ocamlPackages.stdlib-shims
           ]
+          ++ lib.optional (package == "template-rocq") coq
           ++ metarocq-deps;
 
           useDuneifVersion = v: v != null && (v == "dev" || lib.versions.isGt "1.5.1-9.2" v);
