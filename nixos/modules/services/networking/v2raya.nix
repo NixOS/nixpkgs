@@ -65,6 +65,7 @@ in
             iptables
             bash
             iproute2
+            kmod
           ]
           ++ lib.optionals nftablesEnabled [ nftables ]; # required by v2rayA TProxy functionality
       };
