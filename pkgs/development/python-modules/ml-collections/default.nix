@@ -6,7 +6,7 @@
   lib,
   pyyaml,
   six,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
   pytest-xdist,
 }:
@@ -15,7 +15,6 @@ buildPythonPackage rec {
   pname = "ml-collections";
   version = "1.1.0";
   pyproject = true;
-  build-system = [ flit-core ];
 
   src = fetchFromGitHub {
     owner = "google";
@@ -23,6 +22,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-G9+UBqHalzI3quR8T5NEgJs+ep60ffFw9vyTTZDeZ9M=";
   };
+
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     six
