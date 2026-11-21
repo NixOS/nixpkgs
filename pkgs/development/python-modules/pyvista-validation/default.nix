@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvista-validation";
-  version = "0.2.2";
+  version = "0.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista-validation";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LuY3AYWmsETjItFdgKcK6nRm5GYlqWbrznxYO+EaUYY=";
+    hash = "sha256-bo13Q0SAYESx0NVt/9VB4lvFIllZwkjYrmD/LRC/p30=";
   };
 
   build-system = [
