@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubetrim";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "kubetrim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XYsj4wbVNPfPht9Odqk2FjlhS2uJUQS7vLRUd5rAht4=";
+    hash = "sha256-uUSvLSk8GiR316CoSCY2eJo3gaa7TYhk/izHiqzLSRs=";
   };
 
-  vendorHash = "sha256-m9OuVFlD4F170Q6653HdvUhdULjR2cAttLsUN03XIXo=";
+  vendorHash = null;
 
   ldflags = [
     "-s"
