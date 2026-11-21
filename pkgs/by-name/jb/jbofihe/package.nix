@@ -42,5 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/lojban/jbofihe";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ chkno ];
+    # ld: unaligned pointer(s) for architecture arm64
+    broken = stdenv.hostPlatform.isAarch64;
   };
 })
