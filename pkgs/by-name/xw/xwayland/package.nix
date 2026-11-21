@@ -50,7 +50,7 @@
   xorgproto,
   xtrans,
   zlib,
-  defaultFontPath ? "",
+  defaultFontPath ? "/run/current-system/sw/share/X11/fonts",
   gitUpdater,
 }:
 
