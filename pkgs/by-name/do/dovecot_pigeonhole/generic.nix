@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot-pigeonhole";
   inherit version;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchzip {
     url = url {
       inherit (finalAttrs) version;
@@ -43,12 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/plugins/settings/settings-get.pl
   '';
 
-  nativeBuildInputs = lib.optional isCurrent perl;
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optional isCurrent perl;
 
   buildInputs = [
     dovecot
     openssl
-    pkg-config
   ]
   ++ lib.optionals (isCurrent && stdenv.hostPlatform.isDarwin) [
     icu75
