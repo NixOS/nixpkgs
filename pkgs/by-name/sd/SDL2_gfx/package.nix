@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_gfx";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "http://www.ferzkopp.net/Software/SDL2_gfx/SDL2_gfx-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Y+DgGt3tyd8vhbk6JI8G6KBK/6AUqDXC6jS/405XYmI=";
+    hash = "sha256-mEOSTUbqy6u6aFojnPIoS5SHZqIO8sqkjLGEYqMpXK8=";
   };
 
   nativeBuildInputs = [
