@@ -6,18 +6,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "zoraxy";
-  version = "3.3.1";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NhjT1z/O2KJtlF/LkGWgxhm2/i83mJUZeBHDiZke0FE=";
+    hash = "sha256-3zwiD1LPnQsfPlJUtSCeFAejEPtrge4wYZZC7PxMSHY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-HaQP6ZARSHwEnW/G95t5NHdM8/EcXEfN2Q1wPVRWIzQ=";
+  vendorHash = "sha256-qZxVLMd2EENDNczd5Teaoziaoaddra5khFNy4umEnS4=";
 
   checkFlags =
     let
