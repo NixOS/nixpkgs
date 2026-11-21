@@ -34736,6 +34736,9 @@ with self;
       TestRequiresInternet
       TestWarnings
     ];
+    preCheck = ''
+      export NO_NETWORK_TESTING=1
+    '';
     meta = {
       description = "LWP::UserAgent suitable for simulating and testing network calls";
       homepage = "https://github.com/karenetheridge/Test-LWP-UserAgent";
