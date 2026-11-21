@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -9,12 +10,6 @@ let
   udev = config.systemd.package;
 
   cfg = config.services.udev;
-
-  extraUdevRules = pkgs.writeTextFile {
-    name = "extra-udev-rules";
-    text = cfg.extraRules;
-    destination = "/etc/udev/rules.d/99-local.rules";
-  };
 
   extraHwdbFile = pkgs.writeTextFile {
     name = "extra-hwdb-file";
@@ -266,6 +261,22 @@ in
         '';
       };
 
+      rules = lib.mkOption {
+        default = { };
+        description = ''
+          Additional {command}`udev` rules in {command}`<name> = <text>` format.
+          The text will be written into {file}`/etc/udev/rules.d/<name>.rules`.
+        '';
+        example = lib.literalExpression ''
+          {
+            "99-backup-on-plugin" = '''
+              SUBSYSTEM=="usb", ATTRS{idVendor}=="0fa9", ATTRS{idProduct}=="fa01", SYSTEMD_USER_WANTS="backup.service"
+            ''';
+          }
+        '';
+        type = lib.types.attrsOf lib.types.lines;
+      };
+
       extraRules = lib.mkOption {
         default = "";
         example = ''
@@ -406,7 +417,6 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-
     assertions = [
       {
         assertion =
@@ -426,13 +436,23 @@ in
       }
     ];
 
-    services.udev.extraRules = nixosRules;
+    services.udev.rules."99-local" = lib.mkMerge [
+      nixosRules
+      cfg.extraRules
+    ];
 
     services.udev.packages = [
       config.systemd.package
-      extraUdevRules
       extraHwdbFile
-    ];
+    ]
+    ++ lib.optionals (cfg.rules != { }) lib.mapAttrsToList (
+      name: text:
+      pkgs.writeTextFile {
+        inherit name;
+        inherit text;
+        destination = "/lib/udev/rules.d/${name}.rules";
+      }
+    ) cfg.rules;
 
     services.udev.path = [
       pkgs.coreutils
