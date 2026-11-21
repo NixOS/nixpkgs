@@ -48,114 +48,6 @@ let
       ) [ ] cfg.podConfig
     );
 
-  package =
-    let
-      p = cfg.package.override (
-        {
-          inherit phpCfg;
-          inherit (cfg) minifyStaticFiles;
-        }
-        // lib.optionalAttrs (cfg.database.type == "postgresql") {
-          withPostgreSQL = true;
-        }
-        // lib.optionalAttrs (cfg.database.type == "mariadb") {
-          withMySQL = true;
-        }
-      );
-    in
-    p.overrideAttrs (
-      finalAttrs: prevAttrs:
-      let
-        appDir = "$out/share/php/${finalAttrs.pname}";
-
-        stateDirectories = # sh
-          ''
-            # Symlinking in our state directories
-            rm -rf $out/{.env,cache} ${appDir}/{log,public/cache,public/images}
-            ln -s ${cfg.dataDir}/.env ${appDir}/.env
-            ln -s ${cfg.dataDir}/public/cache ${appDir}/public/cache
-            ln -s ${cfg.dataDir}/public/images ${appDir}/public/images
-            ln -s ${cfg.logDir} ${appDir}/log
-            ln -s ${cfg.runtimeDir}/cache ${appDir}/cache
-          '';
-
-        exposeComposer = # sh
-          ''
-            # Expose PHP Composer for scripts
-            mkdir -p $out/bin
-            echo "#!${lib.getExe pkgs.dash}" > $out/bin/movim-composer
-            echo "${finalAttrs.php.packages.composer}/bin/composer --working-dir="${appDir}" \"\$@\"" >> $out/bin/movim-composer
-            chmod +x $out/bin/movim-composer
-          '';
-
-        podConfigInputDisableReplace = lib.optionalString (podConfigFlags != "") (
-          lib.concatStringsSep "\n" (
-            lib.attrsets.foldlAttrs (
-              acc: k: v:
-              acc
-              ++
-                lib.optional (v != null)
-                  # Disable all Admin panel options that were set in the
-                  # `cfg.podConfig` to prevent confusing situtions where the
-                  # values are rewritten on server reboot
-                  # sh
-                  ''
-                    substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
-                      --replace-warn 'name="${k}"' 'name="${k}" readonly'
-                  ''
-            ) [ ] cfg.podConfig
-          )
-        );
-
-        precompressStaticFilesJobs =
-          let
-            inherit (cfg.precompressStaticFiles) brotli gzip;
-
-            findTextFileNames = lib.concatStringsSep " -o " (
-              map (n: ''-iname "*.${n}"'') [
-                "css"
-                "ini"
-                "js"
-                "json"
-                "manifest"
-                "mjs"
-                "svg"
-                "webmanifest"
-              ]
-            );
-          in
-          lib.concatStringsSep "\n" [
-            (lib.optionalString brotli.enable # sh
-              ''
-                echo -n "Precompressing static files with Brotli …"
-                find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                  | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe brotli.package} --keep --quality=${toString brotli.compressionLevel} --output={}.br {}
-                echo " done."
-              ''
-            )
-            (lib.optionalString gzip.enable # sh
-              ''
-                echo -n "Precompressing static files with Gzip …"
-                find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                  | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe gzip.package} -c -${toString gzip.compressionLevel} {} > {}.gz
-                echo " done."
-              ''
-            )
-          ];
-      in
-      {
-        postInstall = lib.concatStringsSep "\n\n" [
-          prevAttrs.postInstall
-          stateDirectories
-          exposeComposer
-          podConfigInputDisableReplace
-          precompressStaticFilesJobs
-        ];
-      }
-    );
-
   configFile = pipe cfg.settings [
     (filterAttrsRecursive (_: v: v != null))
     (generators.toKeyValue { })
@@ -210,6 +102,16 @@ in
       enable = mkEnableOption "a Movim instance";
       package = mkPackageOption pkgs "movim" { };
       phpPackage = mkPackageOption pkgs "php" { };
+
+      finalPackage = lib.mkOption {
+        type = lib.types.package;
+        readOnly = true;
+        description = ''
+          The final Movim package which is being used in the service, including
+          database plugins, front-end optimization, precompression, disabling
+          fields set in NixOS config.
+        '';
+      };
 
       phpCfg = mkOption {
         type =
@@ -587,7 +489,7 @@ in
       )
     ];
 
-    environment.systemPackages = [ package ];
+    environment.systemPackages = [ cfg.finalPackage ];
 
     users = {
       users = {
@@ -609,6 +511,105 @@ in
 
     services = {
       movim = {
+        finalPackage =
+          let
+            appDir = "$out/share/php/movim";
+
+            findTextFileNames = lib.concatStringsSep " -o " (
+              map (n: ''-iname "*.${n}"'') [
+                "css"
+                "ini"
+                "js"
+                "json"
+                "manifest"
+                "mjs"
+                "svg"
+                "webmanifest"
+              ]
+            );
+          in
+          (cfg.package.override (
+            {
+              inherit phpCfg;
+              inherit (cfg) minifyStaticFiles;
+            }
+            // lib.optionalAttrs (cfg.database.type == "postgresql") {
+              withPostgreSQL = true;
+            }
+            // lib.optionalAttrs (cfg.database.type == "mariadb") {
+              withMySQL = true;
+            }
+          )).overrideAttrs
+            (
+              finalAttrs: prevAttrs: {
+                postInstall =
+                  (prevAttrs.postInstall or "")
+                  + /* bash */ ''
+                    # Symlinking in our state directories
+                    rm -rf $out/{.env,cache} ${appDir}/{log,public/cache,public/images}
+                    ln -s ${cfg.dataDir}/.env ${appDir}/.env
+                    ln -s ${cfg.dataDir}/public/cache ${appDir}/public/cache
+                    ln -s ${cfg.dataDir}/public/images ${appDir}/public/images
+                    ln -s ${cfg.logDir} ${appDir}/log
+                    ln -s ${cfg.runtimeDir}/cache ${appDir}/cache
+                    # Expose PHP Composer for scripts
+                    mkdir -p $out/bin
+                    echo "#!${lib.getExe pkgs.dash}" >"$out/bin/movim-composer"
+                    echo "${finalAttrs.php.packages.composer}/bin/composer --working-dir="${appDir}" \"\$@\"" >>"$out/bin/movim-composer"
+                    chmod +x "$out/bin/movim-composer"
+                  ''
+                  + lib.optionalString (podConfigFlags != "") (
+                    lib.concatStringsSep "\n" (
+                      lib.attrsets.foldlAttrs (
+                        acc: k: v:
+                        acc
+                        ++
+                          lib.optional (v != null)
+                            # Disable all Admin panel options that were set in the
+                            # `cfg.podConfig` to prevent confusing situtions where
+                            # the values are rewritten on server reboot
+                            /* bash */ ''
+                              substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
+                                --replace-warn 'name="${k}"' 'name="${k}" readonly'
+                            ''
+                      ) [ ] cfg.podConfig
+                    )
+                  )
+                  + (
+                    let
+                      inherit (cfg.precompressStaticFiles.brotli)
+                        enable
+                        package
+                        compressionLevel
+                        ;
+                    in
+                    lib.optionalString enable /* bash */ ''
+                      echo -n "Precompressing static files with Brotli …"
+                      find ${appDir}/public -type f ${findTextFileNames} -print0 \
+                        | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                            ${lib.getExe package} --keep --quality=${toString compressionLevel} --output={}.br {}
+                      echo " done."
+                    ''
+                  )
+                  + (
+                    let
+                      inherit (cfg.precompressStaticFiles.gzip)
+                        enable
+                        package
+                        compressionLevel
+                        ;
+                    in
+                    lib.optionalString enable /* bash */ ''
+                      echo -n "Precompressing static files with Gzip …"
+                      find ${appDir}/public -type f ${findTextFileNames} -print0 \
+                        | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                            ${lib.getExe package} -c -${toString compressionLevel} {} >{}.gz
+                      echo " done."
+                    ''
+                  );
+              }
+            );
+
         settings = mkMerge [
           {
             DAEMON_URL = "//${cfg.domain}";
@@ -657,7 +658,7 @@ in
                   "proxy.reverse.url" = "http://${cfg.settings.DAEMON_INTERFACE}:${toString cfg.port}/";
                 };
                 "/" = {
-                  "file.dir" = "${package}/share/php/movim/public";
+                  "file.dir" = "${cfg.finalPackage}/share/php/movim/public";
                   "file.index" = [
                     "index.php"
                     "index.html"
@@ -677,7 +678,7 @@ in
               };
               "file.custom-handler" = {
                 extension = [ ".php" ];
-                "fastcgi.document_root" = package;
+                "fastcgi.document_root" = cfg.finalPackage;
                 "fastcgi.connect" = {
                   port = fpm.socket;
                   type = "unix";
@@ -703,7 +704,7 @@ in
           virtualHosts."${cfg.domain}" = mkMerge [
             cfg.nginx
             {
-              root = lib.mkForce "${package}/share/php/movim/public";
+              root = lib.mkForce "${cfg.finalPackage}/share/php/movim/public";
               locations = {
                 "/favicon.ico" = {
                   priority = 100;
@@ -817,7 +818,7 @@ in
       };
 
       phpfpm.pools.${pool} = {
-        phpPackage = package.php;
+        phpPackage = cfg.finalPackage.php;
         user = cfg.user;
         group = cfg.group;
 
@@ -875,9 +876,9 @@ in
           chmod -R ug+rwx ${cfg.runtimeDir}/cache
 
           # Migrations
-          MOVIM_VERSION="${package.version}"
+          MOVIM_VERSION="${cfg.finalPackage.version}"
           if [[ ! -f "${cfg.dataDir}/.migration-version" ]] || [[ "$MOVIM_VERSION" != "$(<${cfg.dataDir}/.migration-version)" ]]; then
-            ${package}/bin/movim-composer movim:migrate && echo $MOVIM_VERSION > ${cfg.dataDir}/.migration-version
+            ${cfg.finalPackage}/bin/movim-composer movim:migrate && echo $MOVIM_VERSION > ${cfg.dataDir}/.migration-version
           fi
         ''
         + lib.optionalString (podConfigFlags != "") (
@@ -889,7 +890,7 @@ in
             );
           in
           ''
-            ${lib.getExe package} config ${podConfigFlags}
+            ${lib.getExe cfg.finalPackage} config ${podConfigFlags}
           ''
         );
       };
@@ -930,8 +931,8 @@ in
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
-          WorkingDirectory = "${package}/share/php/movim";
-          ExecStart = "${lib.getExe package} start";
+          WorkingDirectory = "${cfg.finalPackage}/share/php/movim";
+          ExecStart = "${lib.getExe cfg.finalPackage} start";
         };
       };
 
