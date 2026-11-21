@@ -21,9 +21,9 @@ let
     # variable with the same name exported by dhcpcd.
     interface_order='lo lo[0-9]*'
   ''
-  + lib.optionalString config.services.nscd.enable ''
+  + lib.optionalString (config.services.nscd.enable && !config.services.nscd.enableNsncd) ''
     # Invalidate the nscd cache whenever resolv.conf is
-    # regenerated.
+    # regenerated. nsncd does not cache, so it needs no restart.
     libc_restart='/run/current-system/systemd/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
   ''
   + lib.optionalString (lib.length resolvconfOptions > 0) ''
