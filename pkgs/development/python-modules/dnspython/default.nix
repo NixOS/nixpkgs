@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.9.1";
+  version = "2.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rthalley";
-    repo = pname;
+    repo = "dnspython";
     tag = "v${version}";
-    hash = "sha256-S5hVsKS3k9O9CIznNq6mFrsc94ypKwxHG+9kE+vCl7Y=";
+    hash = "sha256-SepJHOeSPixMeYKonfD3eWzaIvW+YaGgPyavUOWQdUo=";
   };
 
   build-system = [ uv-build ];
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
+    "test_wks_bounds"
   ];
 
   postPatch = ''
