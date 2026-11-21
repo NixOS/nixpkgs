@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   markdown-it-py,
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   dependencies = [
