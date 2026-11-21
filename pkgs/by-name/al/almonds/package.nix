@@ -1,11 +1,11 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   ncurses,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "almonds";
   version = "1.25b";
   pyproject = true;
@@ -17,13 +17,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     sha256 = "0j8d8jizivnfx8lpc4w6sbqj5hq35nfz0vdg7ld80sc5cs7jr3ws";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [ pillow ];
+  dependencies = with python3Packages; [ pillow ];
 
   buildInputs = [ ncurses ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = {
     description = "Terminal Mandelbrot fractal viewer";
