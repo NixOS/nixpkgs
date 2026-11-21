@@ -37,7 +37,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mudlet";
-  version = "5.1.0";
+  version = "5.1.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "Mudlet";
     rev = "Mudlet-${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-SPk4uxBZiZgufU0+OHHgQoGTdcT4SPeyEyJ6142kAVs=";
+    hash = "sha256-PR8OOVKCzS8hkv0OpjHdJj+0OMiI5ClfGA7F8aE6Jpw=";
   };
 
   nativeBuildInputs = [
