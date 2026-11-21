@@ -1,0 +1,10 @@
+Backport the process-pool cleanup from:
+https://github.com/ross/requests-futures/commit/16552cf70938047cc7a16119a966d1ee6e99aa36
+
+diff --git a/tests/test_requests_futures.py b/tests/test_requests_futures.py
+--- a/tests/test_requests_futures.py
++++ b/tests/test_requests_futures.py
+@@ -185,2 +185,3 @@ class RequestsProcessPoolTestCase(TestCase):
+         self.proc_executor = ProcessPoolExecutor(max_workers=2)
++        self.addCleanup(self.proc_executor.shutdown)
+         self.session = session()

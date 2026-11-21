@@ -23,6 +23,8 @@ buildPythonPackage rec {
     hash = "sha256-eUu+M9rPyvc7OaOCCnUvGliK4gicYh6hfB0Jo19Yy1g=";
   };
 
+  patches = [ ./close-test-process-pools.patch ];
+
   build-system = [ setuptools ];
 
   dependencies = [ requests ];
