@@ -42,6 +42,10 @@ postgresqlBuildExtension (finalAttrs: {
   # fails to build with boost 1.87
   buildInputs = [ boost186 ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast postgresql.version "19") (toString [
+    "-Wno-int-conversion"
+  ]);
+
   patches = [
     # https://github.com/apache/datasketches-cpp/pull/500
     (fetchpatch {
