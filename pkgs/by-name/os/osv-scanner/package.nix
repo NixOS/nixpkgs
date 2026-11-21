@@ -9,16 +9,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "osv-scanner";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "osv-scanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QiViquOBkOl+UnsYZQK8dtE0I2kiOUXT8mfy6/4cFbc=";
+    hash = "sha256-eIfrC9g7Y93DsuzN39X6GZAtS4xsKFyE4eXxL56tn+g=";
   };
 
-  vendorHash = "sha256-0IV+50vJv81yUkDHeVOFLjma1Wzg0T7wdbA1ZSKXWgg=";
+  vendorHash = "sha256-8fB4ktq0sgFmWJ64NyiMYJZ1Q9sPiLlHpyFmIuu25iA=";
 
   subPackages = [
     "cmd/osv-scanner"
