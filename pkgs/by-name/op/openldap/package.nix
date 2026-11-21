@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openldap";
-  version = "2.6.13";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${finalAttrs.version}.tgz";
-    hash = "sha256-1pO0lRekLvuFoaNkoxCu0WpT1CjRtGwNMe8/unj8tlY=";
+    hash = "sha256-JT24DzASWOppzaEYR2bVc5W4Nqqr9BFX6wMW6w+sE0E=";
   };
 
   patches = [
