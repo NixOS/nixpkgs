@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeInstallCheckInputs = [
     # running libical-glib tests
-    (python3.pythonOnBuildForHost.withPackages (
+    (python3.withPackages (
       pkgs: with pkgs; [
         pygobject3
       ]

@@ -118,8 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional docsSupport pandoc
   ++ lib.optional (docsSupport || extrasSupport) (
-    # Use buildPackages to work around https://github.com/NixOS/nixpkgs/issues/305858
-    buildPackages.python3.withPackages (ps: [
+    python3.withPackages (ps: [
       ps.jinja2
       ps.pyyaml
     ])

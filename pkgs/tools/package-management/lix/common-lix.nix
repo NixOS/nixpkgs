@@ -71,7 +71,7 @@ assert lib.assertMsg (
   rust-cbindgen,
   toml11,
   pegtl,
-  buildPackages,
+  python3,
   pkg-config,
   rapidcheck,
   sqlite,
@@ -231,8 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
-    # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
-    (buildPackages.python3.withPackages (
+    (python3.withPackages (
       p:
       [ p.python-frontmatter ]
       ++ lib.optionals (lib.versionOlder version "2.94") [ p.toml ]

@@ -100,7 +100,7 @@ let
           bison
           flex
           installShellFiles
-          (buildPackages.python3.withPackages (p: [
+          (python3.withPackages (p: [
             p.libfdt
             p.setuptools # for pkg_resources
             p.pyelftools

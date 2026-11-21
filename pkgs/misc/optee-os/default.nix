@@ -4,6 +4,7 @@
   lib,
   nukeReferences,
   pkgsBuildBuild,
+  python3,
   stdenv,
 }:
 
@@ -64,7 +65,7 @@ let
         nativeBuildInputs = [
           dtc
           nukeReferences
-          (pkgsBuildBuild.python3.withPackages (
+          (python3.withPackages (
             p: with p; [
               pyelftools
               cryptography
