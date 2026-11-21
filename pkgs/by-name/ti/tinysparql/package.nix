@@ -169,6 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
