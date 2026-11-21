@@ -9433,6 +9433,8 @@ self: super: with self; {
 
   kvf = callPackage ../development/python-modules/kvf { };
 
+  kvxopt = callPackage ../development/python-modules/kvxopt { inherit (pkgs) osqp; };
+
   l18n = callPackage ../development/python-modules/l18n { };
 
   la-panic = callPackage ../development/python-modules/la-panic { };

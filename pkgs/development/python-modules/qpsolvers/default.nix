@@ -13,6 +13,7 @@
   # optional-dependencies
   clarabel,
   cvxopt,
+  kvxopt,
   daqp,
   ecos,
   gurobipy,
@@ -50,6 +51,7 @@ buildPythonPackage (finalAttrs: {
     # FIXME commented out solvers have not been packaged yet
     clarabel = [ clarabel ];
     cvxopt = [ cvxopt ];
+    kvxopt = [ kvxopt ];
     daqp = [ daqp ];
     ecos = [ ecos ];
     gurobi = [ gurobipy ];
@@ -62,6 +64,7 @@ buildPythonPackage (finalAttrs: {
     # qpalm = [ qpalm ];
     quadprog = [ quadprog ];
     scs = [ scs ];
+    # qpax = [ qpax ]
     open_source_solvers =
       with self;
       lib.flatten [
@@ -70,12 +73,14 @@ buildPythonPackage (finalAttrs: {
         daqp
         ecos
         highs
+        jaxopt
         osqp
         piqp
         proxqp
         # qpalm
         quadprog
         scs
+        # qpax
       ];
   });
 
