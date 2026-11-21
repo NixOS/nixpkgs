@@ -1,96 +1,145 @@
 {
-  config,
   lib,
-  buildFHSEnv,
+  stdenvNoCC,
   fetchurl,
-  jdk,
+  jre,
+  copyDesktopItems,
+  makeBinaryWrapper,
+  makeShellWrapper,
   makeDesktopItem,
   unzip,
+  zip,
+  chromium,
 
   # Either "community" or "pro"
   iconName ? "community",
-  licenseAccepted ? config.burpsuite.accept_license or false,
+  licenseAccepted ? false,
+  javaArgs ? [ ],
+  burpArgs ? [ ],
 }:
+let
+  chromiumPlatform =
+    {
+      "x86_64-linux" = "linux64";
+      "aarch64-linux" = "linuxarm64";
+    }
+    .${stdenvNoCC.hostPlatform.system} or null;
+in
 assert lib.assertMsg (
   iconName == "pro" || iconName == "community"
 ) "iconName has to be either pro or community";
 
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "burpsuite";
   version = "2026.10.1";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger-cdn.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
-      "https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
+      "https://portswigger-cdn.net/burp/releases/download?product=desktop&version=${finalAttrs.version}&type=Jar"
+      "https://portswigger.net/burp/releases/download?product=desktop&version=${finalAttrs.version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${finalAttrs.version}&type=Jar"
     ];
     hash = "sha256-6KsIZTexZDuRygnS/CpsPgiouuDIUoB5fFyex2UGw8U=";
   };
 
-  description = "Integrated platform for performing security testing of web applications";
+  strictDeps = true;
+  __structuredAttrs = true;
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    desktopName = "Burp Suite Desktop";
-    comment = description;
-    categories = [
-      "Development"
-      "Security"
-      "System"
-    ];
-  };
-in
-buildFHSEnv {
-  inherit pname version;
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeBinaryWrapper
+    makeShellWrapper
+    unzip
+    zip
+  ];
 
-  runScript =
-    "${lib.getExe jdk} -jar ${src} --suppress-jre-check --disable-check-for-updates-dialog --disable-auto-update"
-    + lib.optionalString licenseAccepted " --i-accept-the-license-agreement";
+  unpackPhase = ''
+    runHook preUnpack
 
-  targetPkgs =
-    pkgs: with pkgs; [
-      alsa-lib
-      at-spi2-core
-      cairo
-      cups
-      dbus
-      expat
-      glib
-      gtk3
-      gtk3-x11
-      jython
-      libcanberra-gtk3
-      libdrm
-      udev
-      libxkbcommon
-      libgbm
-      libglvnd
-      nspr
-      nss
-      pango
-      libx11
-      libxcb
-      libxcomposite
-      libxdamage
-      libxext
-      libxfixes
-      libxrandr
-    ];
+    install $src ${finalAttrs.src.name}
 
-  extraInstallCommands = ''
-    mkdir -p "$out/share/icons/hicolor/64x64/apps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${iconName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
-    cp -r ${desktopItem}/share/applications $out/share
+    runHook postUnpack
   '';
+
+  buildPhase = lib.optionalString (chromiumPlatform != null) ''
+    runHook preBuild
+
+    # Replace the embedded Chromium with the nixpkgs one on Linux
+    chromiumVersion=$(
+      unzip -p ${finalAttrs.src.name} chromium.properties |
+        grep "^${chromiumPlatform}=" |
+        cut -d= -f2
+    )
+
+    archive=chromium-${chromiumPlatform}-$chromiumVersion.zip
+
+    mkdir chromium
+
+    # We need to use a binary wrapper, as burpsuite checks the file for ELF magic bytes
+    makeBinaryWrapper \
+      ${lib.getExe chromium} \
+      chromium/chrome
+
+    # Generate the values for the manifest.properties file
+    size=$(stat -Lc %s chromium/chrome)
+    md5=$(md5sum chromium/chrome | cut -d' ' -f1)
+
+    echo "chrome:$size;$md5;exe;False;null" > chromium/manifest.properties
+
+    # Normalize timestamps of the generated files before zipping for reproducibility
+    touch -d @$SOURCE_DATE_EPOCH chromium/chrome chromium/manifest.properties
+
+    (
+      cd chromium
+      zip -0 -X -o -q ../"$archive" chrome manifest.properties
+    )
+
+    zip -X -q -d ${finalAttrs.src.name} "$archive"
+    zip -0 -X -q ${finalAttrs.src.name} "$archive"
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 ${finalAttrs.src.name} "$out/share/${finalAttrs.src.name}"
+
+    makeShellWrapper ${lib.getExe jre} "$out/bin/burpsuite" \
+      --add-flags "${lib.concatStringsSep " " javaArgs}" \
+      --add-flags "-jar $out/share/${finalAttrs.src.name}" \
+      --add-flags "--suppress-jre-check --disable-check-for-updates-dialog --disable-auto-update" \
+      --add-flags "${lib.optionalString licenseAccepted "--i-accept-the-license-agreement"}" \
+      --add-flags "${lib.concatStringsSep " " burpArgs}"
+
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    mkdir -p "$out/share/icons/hicolor/64x64/apps"
+    unzip -p ${finalAttrs.src} resources/Media/icon64${iconName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      exec = "burpsuite";
+      icon = "burpsuite";
+      desktopName = "Burp Suite Desktop";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Development"
+        "Security"
+        "System"
+      ];
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    inherit description;
+    description = "Integrated platform for performing security testing of web applications";
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
       Its various tools work seamlessly together to support the entire testing process, from
@@ -99,18 +148,19 @@ buildFHSEnv {
     '';
     homepage = "https://portswigger.net/burp/";
     changelog = "https://portswigger.net/burp/releases/professional-community-${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.unfree;
-    platforms = jdk.meta.platforms;
+    platforms = jre.meta.platforms;
     hydraPlatforms = [ ];
     maintainers = with lib.maintainers; [
       bennofs
       blackzeshi
       fab
       yechielw
+      letgamer
     ];
     mainProgram = "burpsuite";
   };
-}
+})
