@@ -3161,7 +3161,8 @@
       ];
     "hp_printer" =
       ps: with ps; [
-      ]; # missing inputs: aiohpprinter
+        aiohpprinter
+      ];
     "hr_energy_qube" =
       ps: with ps; [
         ifaddr
@@ -9289,6 +9290,7 @@
     "honeywell_string_lights"
     "hortimax"
     "hotspring"
+    "hp_printer"
     "hr_energy_qube"
     "html5"
     "http"

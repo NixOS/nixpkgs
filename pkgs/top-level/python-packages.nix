@@ -348,6 +348,8 @@ self: super: with self; {
 
   aiohortos = callPackage ../development/python-modules/aiohortos { };
 
+  aiohpprinter = callPackage ../development/python-modules/aiohpprinter { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
