@@ -1,5 +1,6 @@
 {
   asciidoctor,
+  configFiles,
   dbus,
   docbook_xml_dtd_45,
   docbook_xsl,
@@ -108,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
+    configFiles = configFiles (import ./config-files.nix);
+    configModule = ./config-module.nix;
     updateScript = nix-update-script { };
   };
 
