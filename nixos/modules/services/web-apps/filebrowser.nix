@@ -112,13 +112,32 @@ in
           Group = cfg.group;
           UMask = "0077";
 
+          # FileBrowser writes only to the files it serves, its database, and
+          # its state and cache directories. BindPaths, unlike ReadWritePaths,
+          # keeps a root under /home reachable through the empty /home of
+          # ProtectHome = "tmpfs".
+          ProtectSystem = "strict";
+          BindPaths = [
+            cfg.settings.root
+            (dirOf cfg.settings.database)
+          ];
+
+          CapabilityBoundingSet = "";
           NoNewPrivileges = true;
           PrivateDevices = true;
+          PrivateTmp = true;
+          ProtectClock = true;
+          ProtectHome = "tmpfs";
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
           ProtectKernelTunables = true;
           ProtectKernelModules = true;
           ProtectControlGroups = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
           MemoryDenyWriteExecute = true;
           LockPersonality = true;
+          RemoveIPC = true;
           RestrictAddressFamilies = [
             "AF_UNIX"
             "AF_INET"
@@ -128,6 +147,12 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@resources"
+          ];
         };
       };
 
