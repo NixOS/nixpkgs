@@ -15,30 +15,30 @@
   zstd,
 }:
 let
-  version = "3.0.7";
+  version = "3.0.45";
   # Fetch GPL packaging helpers with their original license rather than vendoring
   # them as Nixpkgs contributions under COPYING.
   relocateCaches = fetchurl {
-    url = "https://raw.githubusercontent.com/snapetech-org/pleazyng/a8b0105b74659166ad85605cf754851c09fbfb9f/linux/packaging/flatpak/relocate-caches.py";
+    url = "https://raw.githubusercontent.com/snapetech-org/pleazyng/3f135d18dc5ef1bb7984ca1959900d86c6e898de/linux/packaging/flatpak/relocate-caches.py";
     sha256 = "39afab559ba590a1eea0ad59a687234483d3377fd77ecda9f007da9823179921";
   };
   rebuildPixbuf = fetchurl {
-    url = "https://raw.githubusercontent.com/snapetech-org/pleazyng/a8b0105b74659166ad85605cf754851c09fbfb9f/linux/packaging/rebuild-pixbuf-cache.py";
+    url = "https://raw.githubusercontent.com/snapetech-org/pleazyng/3f135d18dc5ef1bb7984ca1959900d86c6e898de/linux/packaging/rebuild-pixbuf-cache.py";
     sha256 = "ab9ae42d2061af4f6b1dfd9aab2abd88416cefd0082a31217d0ea7e9b3251325";
   };
   webkitInstaller = fetchurl {
-    url = "https://raw.githubusercontent.com/snapetech-org/pleazyng/a8b0105b74659166ad85605cf754851c09fbfb9f/linux/packaging/install-webkit-helpers.py";
+    url = "https://raw.githubusercontent.com/snapetech-org/pleazyng/3f135d18dc5ef1bb7984ca1959900d86c6e898de/linux/packaging/install-webkit-helpers.py";
     sha256 = "fc28ccb4ff06df8fd5ff4212f84d221143560b9309ad497cf47b72c366ed71ba";
   };
 
   sources = {
     x86_64-linux = {
       arch = "x64";
-      sha256 = "fbe98082916f0131981d71e4fee4dba900a2da1b62d9f82b9a3555e1da09fde9";
+      sha256 = "9f0f1d2eb30d0363ea9116ea079524fcba10c6ead766da0b209cdc46b02330ec";
     };
     aarch64-linux = {
       arch = "arm64";
-      sha256 = "6d02b9fc2d7fb142093e9b5b34846674339ae068c722e51db80f65413a31643d";
+      sha256 = "63a6fb788d5041127228c571ae044aa2edf6bb8a21319a90ccaaaabbd2a5d94c";
     };
   };
   source =
@@ -48,7 +48,7 @@ let
     pname = "pleazyng-bundle";
     inherit version;
     src = fetchurl {
-      url = "https://github.com/snapetech-org/pleazyng/releases/download/v3.0.7/pleazyng-linux-${source.arch}.tar.gz";
+      url = "https://github.com/snapetech-org/pleazyng/releases/download/v3.0.45/pleazyng-linux-${source.arch}.tar.gz";
       inherit (source) sha256;
     };
     # Preserve native engines, models and providers exactly as released.
