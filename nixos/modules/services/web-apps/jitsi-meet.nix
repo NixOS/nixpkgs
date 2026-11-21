@@ -236,7 +236,16 @@ in
       # required for muc_breakout_rooms
       package = lib.mkDefault (
         pkgs.prosody.override {
-          withExtraLuaPackages = p: with p; [ cjson ];
+          withExtraLuaPackages =
+            p:
+            with p;
+            [ cjson ]
+            # required by mod_auth_token (token/util, luajwtjitsi)
+            ++ optionals (cfg.secureDomain.authentication == "token") [
+              basexx
+              inspect
+              luaossl
+            ];
         }
       );
 
