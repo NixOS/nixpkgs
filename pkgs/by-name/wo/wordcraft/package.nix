@@ -21,6 +21,8 @@
   craft-i18n,
 
   nix-update-script,
+  xcbuild,
+  rcodesign,
 }:
 
 let
@@ -73,24 +75,60 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=wordcraft-cli"
   ];
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # tests are broken in Darwin (see https://github.com/storytold/wordcraft/issues/6630#issuecomment-6888749626)
+    "--skip=strict::a_character_in_a_metafile_pictures_text_fails_strict_like_the_pages_own"
+    "--skip=strict::an_uncovered_code_point_fails_strict_with_a_report_and_no_file"
+    "--skip=strict::render_strict_refuses_an_uncovered_character_on_the_page_with_no_stdout_or_file"
+  ];
+
   # The wordcraft-zotero tests talk to a fake Zotero over a loopback TCP socket.
   __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     pkg-config
     patchelf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    rcodesign
   ];
 
   buildInputs = [ aws-lc ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/share/icons
-    cp -R assets/app-icon/hicolor $out/share/icons/
-    install -Dm644 packaging/linux/ai.storyteller.wordcraft.desktop \
-      $out/share/applications/ai.storyteller.wordcraft.desktop
-    install -Dm644 packaging/linux/ai.storyteller.wordcraft.mime.xml \
-      $out/share/mime/packages/ai.storyteller.wordcraft.xml
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+        mkdir -p $out/share/icons
+        cp -R assets/app-icon/hicolor $out/share/icons/
+      install -Dm644 packaging/linux/ai.storyteller.wordcraft.desktop \
+        $out/share/applications/ai.storyteller.wordcraft.desktop
+      install -Dm644 packaging/linux/ai.storyteller.wordcraft.mime.xml \
+        $out/share/mime/packages/ai.storyteller.wordcraft.xml
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      APP="$out/Applications/WordCraft.app"
+
+      mkdir -p $APP/Contents/{MacOS,Resources}
+
+      ln -s $out/bin/wordcraft $APP/Contents/MacOS/WordCraft
+
+      cp $NIX_BUILD_TOP/source/assets/app-icon/wordcraft.icns $APP/Contents/Resources/WordCraft.icns
+
+      sed -e "s/@VERSION@/${finalAttrs.version}/g" -e "s/@SHORT_VERSION@/${finalAttrs.version}/g" \
+        -e "s/@BUILD_SHA@/unknown}/g" \
+        "$NIX_BUILD_TOP/source/packaging/macos/Info.plist.in" >"$APP/Contents/Info.plist"
+      plutil -lint "$APP/Contents/Info.plist"
+
+      printf 'APPL????' >"$APP/Contents/PkgInfo"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP/Contents/MacOS/WordCraft"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP"
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${lib.makeLibraryPath runtimeDeps} $out/bin/wordcraft
