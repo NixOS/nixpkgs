@@ -1,0 +1,73 @@
+--- a/src/slic3r/GUI/WebGuideDialog.cpp
++++ b/src/slic3r/GUI/WebGuideDialog.cpp
+@@ -1303,7 +1303,7 @@
+         m_Region = wxGetApp().app_config->get("region");
+         m_ProfileJson["region"] = m_Region;
+ 
+-        m_ProfileJson["network_plugin_install"] = wxGetApp().app_config->get("app","installed_networking");
+-        m_ProfileJson["network_plugin_compability"] = wxGetApp().is_compatibility_version() ? "1" : "0";
+-        network_plugin_ready = wxGetApp().is_compatibility_version();
++        m_ProfileJson["network_plugin_install"] = "1";
++        m_ProfileJson["network_plugin_compability"] = "1";
++        network_plugin_ready = true;
+     }
+--- a/src/slic3r/Utils/NetworkAgent.cpp
++++ b/src/slic3r/Utils/NetworkAgent.cpp
+@@ -238,27 +238,27 @@
+             networking_module = LoadLibrary(lib_wstr);
+     }
+ #else
+     #if defined(__WXMAC__)
+-    library = plugin_folder.string() + "/" + std::string("lib") + std::string(BAMBU_NETWORK_LIBRARY) + ".dylib";
++    library = "@obn_plugin_path@";
+     #else
+-    library = plugin_folder.string() + "/" + std::string("lib") + std::string(BAMBU_NETWORK_LIBRARY) + ".so";
++    library = "@obn_plugin_path@";
+     #endif
+     BOOST_LOG_TRIVIAL(info) << __FUNCTION__ << boost::format(", line %1%, loading network module, using_backup %2%\n")%__LINE__ %using_backup;
+-    module_cert_summary = SummarizeModule(library);
+-    if (self_cert_summary) {
++    //module_cert_summary = SummarizeModule(library);
++    if (false) {
+         module_cert_summary = SummarizeModule(library);
+         if (module_cert_summary) {
+             if (IsSamePublisher(*self_cert_summary, *module_cert_summary))
+                 networking_module = dlopen(library.c_str(), RTLD_LAZY);
+             else
+                 BOOST_LOG_TRIVIAL(info) << "module is from another publisher:" << module_cert_summary->as_print();
+         }
+         else
+             BOOST_LOG_TRIVIAL(info) << "module_cert is null";
+     }
+     else
+         networking_module = dlopen( library.c_str(), RTLD_LAZY);
+     if (!networking_module) {
+         char* dll_error = dlerror();
+         std::string err       = dll_error ? std::string(dll_error) : std::string("(null)");
+         BOOST_LOG_TRIVIAL(warning) << __FUNCTION__ << boost::format(", error, dlerror is %1%") % err;
+@@ -542,11 +542,11 @@
+         source_module = LoadLibrary(lib_wstr);
+     }
+ #else
+ #if defined(__WXMAC__)
+-    library = plugin_folder.string() + "/" + std::string("lib") + std::string(BAMBU_SOURCE_LIBRARY) + ".dylib";
++    library = "@obn_bambu_source_path@";
+ #else
+-    library = plugin_folder.string() + "/" + std::string("lib") + std::string(BAMBU_SOURCE_LIBRARY) + ".so";
++    library = "@obn_bambu_source_path@";
+ #endif
+     source_module = dlopen( library.c_str(), RTLD_LAZY);
+     /*if (!source_module) {
+ #if defined(__WXMAC__)
+diff -urN a/resources/web/guide/5/5.js b/resources/web/guide/5/5.js
+--- a/resources/web/guide/5/5.js	2026-07-09 08:36:44.901436793 +1000
++++ b/resources/web/guide/5/5.js	2026-07-09 08:36:44.905436784 +1000
+@@ -1,7 +1,7 @@
+ 
+ function OnInit()
+ {
+-	TranslatePage();
++	FinishGuide(); return;
+ 	
+ 	SendInstallPluginCheck();
+ }
