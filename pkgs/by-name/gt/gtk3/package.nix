@@ -197,6 +197,8 @@ stdenv.mkDerivation (finalAttrs: {
     cups
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withIntrospection}"
     "-Dtests=false"
