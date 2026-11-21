@@ -890,7 +890,7 @@ in
             );
           in
           ''
-            ${lib.getExe cfg.finalPackage} config ${podConfigFlags}
+            ${lib.getExe cfg.finalPackage} ${flags} config ${podConfigFlags}
           ''
         );
       };
