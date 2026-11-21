@@ -51,6 +51,7 @@
   rubberband,
   shaderc, # instead of spirv-cross
   stdenv,
+  subrandr,
   swift,
   testers,
   vapoursynth,
@@ -80,6 +81,7 @@
   rubberbandSupport ? true,
   sdl2Support ? false,
   sixelSupport ? false,
+  subrandrSupport ? true,
   vaapiSupport ? !stdenv.hostPlatform.isDarwin && (x11Support || waylandSupport),
   vapoursynthSupport ? false,
   vdpauSupport ? true,
@@ -143,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "sdl2-audio" sdl2Support)
     (lib.mesonEnable "sdl2-gamepad" sdl2Support)
     (lib.mesonEnable "sdl2-video" sdl2Support)
+    (lib.mesonEnable "subrandr" subrandrSupport)
   ];
 
   mesonAutoFeatures = "auto";
@@ -199,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals rubberbandSupport [ rubberband ]
   ++ lib.optionals sdl2Support [ SDL2 ]
   ++ lib.optionals sixelSupport [ libsixel ]
+  ++ lib.optionals subrandrSupport [ subrandr ]
   ++ lib.optionals vaapiSupport [ libva ]
   ++ lib.optionals vapoursynthSupport [ vapoursynth ]
   ++ lib.optionals vdpauSupport [ libvdpau ]
