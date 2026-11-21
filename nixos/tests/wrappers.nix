@@ -14,7 +14,7 @@ in
   name = "wrappers";
 
   nodes.machine =
-    { config, pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       ids.gids.users = usersGid;
 
@@ -27,37 +27,69 @@ in
 
       security.apparmor.enable = true;
 
-      security.wrappers = {
-        disabled = {
-          enable = false;
-          owner = "root";
-          group = "root";
-          setuid = true;
-          source = "${busybox pkgs}/bin/busybox";
-          program = "disabled_busybox";
+      security.wrappers =
+        let
+          print_at_secure = pkgs.writeCBin "print_at_secure" ''
+            #include <sys/auxv.h>
+            #include <stdio.h>
+            int main(void) {
+              printf("%lu\n", getauxval(AT_SECURE));
+              return 0;
+            }
+          '';
+        in
+        {
+          disabled = {
+            enable = false;
+            owner = "root";
+            group = "root";
+            setuid = true;
+            source = "${busybox pkgs}/bin/busybox";
+            program = "disabled_busybox";
+          };
+          suidRoot = {
+            owner = "root";
+            group = "root";
+            setuid = true;
+            source = "${busybox pkgs}/bin/busybox";
+            program = "suid_root_busybox";
+          };
+          sgidRoot = {
+            owner = "root";
+            group = "root";
+            setgid = true;
+            source = "${busybox pkgs}/bin/busybox";
+            program = "sgid_root_busybox";
+          };
+          withChown = {
+            owner = "root";
+            group = "root";
+            source = "${pkgs.libcap}/bin/capsh";
+            program = "capsh_with_chown";
+            capabilities = "cap_chown+ep";
+          };
+          suidRootPrintAtSecure = {
+            owner = "root";
+            group = "root";
+            setuid = true;
+            source = lib.getExe print_at_secure;
+            program = "suid_root_print_at_secure";
+          };
+          sgidRootPrintAtSecure = {
+            owner = "root";
+            group = "root";
+            setgid = true;
+            source = lib.getExe print_at_secure;
+            program = "sgid_root_print_at_secure";
+          };
+          withChownPrintAtSecure = {
+            owner = "root";
+            group = "root";
+            source = lib.getExe print_at_secure;
+            program = "print_at_secure_with_chown";
+            capabilities = "cap_chown+ep";
+          };
         };
-        suidRoot = {
-          owner = "root";
-          group = "root";
-          setuid = true;
-          source = "${busybox pkgs}/bin/busybox";
-          program = "suid_root_busybox";
-        };
-        sgidRoot = {
-          owner = "root";
-          group = "root";
-          setgid = true;
-          source = "${busybox pkgs}/bin/busybox";
-          program = "sgid_root_busybox";
-        };
-        withChown = {
-          owner = "root";
-          group = "root";
-          source = "${pkgs.libcap}/bin/capsh";
-          program = "capsh_with_chown";
-          capabilities = "cap_chown+ep";
-        };
-      };
     };
 
   testScript = ''
@@ -81,38 +113,45 @@ in
     test_as_regular('/run/wrappers/bin/suid_root_busybox id -ru', '${toString userUid}')
     test_as_regular('/run/wrappers/bin/suid_root_busybox id -g', '${toString usersGid}')
     test_as_regular('/run/wrappers/bin/suid_root_busybox id -rg', '${toString usersGid}')
+    test_as_regular('/run/wrappers/bin/suid_root_print_at_secure', '1')
 
     test_as_regular('/run/wrappers/bin/sgid_root_busybox id -u', '${toString userUid}')
     test_as_regular('/run/wrappers/bin/sgid_root_busybox id -ru', '${toString userUid}')
     test_as_regular('/run/wrappers/bin/sgid_root_busybox id -g', '0')
     test_as_regular('/run/wrappers/bin/sgid_root_busybox id -rg', '${toString usersGid}')
+    test_as_regular('/run/wrappers/bin/sgid_root_print_at_secure', '1')
 
     test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/suid_root_busybox id -u', '0')
     test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/suid_root_busybox id -ru', '0')
     test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/suid_root_busybox id -g', '0')
     test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/suid_root_busybox id -rg', '0')
+    test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/suid_root_print_at_secure', '0')
 
     test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/sgid_root_busybox id -u', '0')
     test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/sgid_root_busybox id -ru', '0')
     test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/sgid_root_busybox id -g', '0')
     test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/sgid_root_busybox id -rg', '0')
+    test_as_regular_in_userns_mapped_as_root('/run/wrappers/bin/sgid_root_print_at_secure', '0')
 
     # Test that in nonewprivs environment the wrappers simply exec their target.
     test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_busybox id -u', '${toString userUid}')
     test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_busybox id -ru', '${toString userUid}')
     test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_busybox id -g', '${toString usersGid}')
     test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_busybox id -rg', '${toString usersGid}')
+    test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_print_at_secure', '0')
 
     test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_busybox id -u', '${toString userUid}')
     test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_busybox id -ru', '${toString userUid}')
     test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_busybox id -g', '${toString usersGid}')
     test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_busybox id -rg', '${toString usersGid}')
+    test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_print_at_secure', '0')
 
     # We are only testing the permitted set, because it's easiest to look at with capsh.
     machine.fail(cmd_as_regular('${pkgs.libcap}/bin/capsh --has-p=CAP_CHOWN'))
     machine.fail(cmd_as_regular('${pkgs.libcap}/bin/capsh --has-p=CAP_SYS_ADMIN'))
     machine.succeed(cmd_as_regular('/run/wrappers/bin/capsh_with_chown --has-p=CAP_CHOWN'))
     machine.fail(cmd_as_regular('/run/wrappers/bin/capsh_with_chown --has-p=CAP_SYS_ADMIN'))
+    test_as_regular('/run/wrappers/bin/print_at_secure_with_chown', '1')
 
     # Test that the only user of apparmor policy includes generated by
     # wrappers works. Ideally this'd be located in a test for the module that
