@@ -36,6 +36,11 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail '"conan~=2.0.16",' "" \
       --replace-fail '"pybind11~=2.11.1",' '"pybind11",'
+
+    # Pillow 13 rejects an explicit "I;16" mode for native uint16 arrays,
+    # let Pillow infer the mode from the array in that case
+    substituteInPlace test/test_image_formats.py \
+      --replace-fail 'Image.fromarray(data, mode)' 'Image.fromarray(data, None if mode == "I;16" else mode)'
   '';
 
   build-system = [
