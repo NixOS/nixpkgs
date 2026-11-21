@@ -12,13 +12,13 @@ let
 in
 buildNpmPackage rec {
   pname = "piped";
-  version = "0-unstable-2026-09-11";
+  version = "0-unstable-2026-11-08";
 
   src = fetchFromGitHub {
     owner = "TeamPiped";
     repo = "piped";
-    rev = "70453d1b5795d4acee90a33a2596a315ef72d961";
-    hash = "sha256-dDdTUgxJb3/WXCf4os8Q2KzSljBGPXqKq2zOeyuT7pk=";
+    rev = "4f79bb74f023c46d55bc504ee8399a55282965c7";
+    hash = "sha256-QNpkYAzez8VJilvrDE5upS+Oc4tV84WgpMvlO5hHAq4=";
   };
 
   nativeBuildInputs = [ pnpm ];
