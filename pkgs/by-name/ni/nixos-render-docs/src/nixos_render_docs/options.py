@@ -41,6 +41,15 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
         super().__init__()
         self._options = {}
         self._revision = revision
+        # Inline footnotes (`^[...]`) aren't supported by option docs: their
+        # tokens carry no label (crashing footnote id generation), and the
+        # manpage, commonmark and asciidoc renderers reject footnote tokens
+        # outright. Don't parse them so a bare `^[` (e.g. a regex anchor
+        # written out in prose) stays literal text. Reference footnotes
+        # `[^x]` are unaffected: they only produce tokens together with a
+        # matching `[^x]:` definition. ignoreInvalid tolerates versions
+        # that don't register this rule.
+        self._md.disable("footnote_inline", ignoreInvalid=True)
 
     def _sorted_options(self) -> list[tuple[str, RenderedOption]]:
         keys = list(self._options.keys())
