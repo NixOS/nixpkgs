@@ -7,23 +7,69 @@
   stuffbin,
   nixosTests,
   nix-update-script,
+  bun,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "listmonk";
-  version = "6.2.0";
+  version = "7.0.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yLOs1vhTV/0zzq/2Rk5rJ3/1z+kE5xaYODM5NO06F6U=";
+    hash = "sha256-JpbeQjn2Z3QLTyp1tKh//n4YE+GjA+ea/+nh/CACFV8=";
   };
 
-  vendorHash = "sha256-t4l8872bniTmNIW4ias1gImURJgrR6htXkncqfrJ+AU=";
+  vendorHash = "sha256-IL3LmeeqIb2q/Z1Hlmprbw1KxoZS1h0vpVDjjD8MeqA=";
+
+  node_modules = stdenv.mkDerivation {
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
+    sourceRoot = "${finalAttrs.src.name}/static/admin";
+
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    dontConfigure = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      bun install \
+        --cpu="*" \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*"
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -R node_modules $out
+
+      runHook postInstall
+    '';
+
+    dontFixup = true;
+
+    outputHash = "sha256-1zIc6XslRCLfC7A8MwHO5kvPUFWAF81F4XJkBRStLDg=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
 
   nativeBuildInputs = [
     stuffbin
+    bun
   ];
 
   ldflags = [
@@ -32,6 +78,16 @@ buildGoModule (finalAttrs: {
     "-X main.versionString=${finalAttrs.version}"
     "-X \"main.buildString=v${finalAttrs.version} (${stdenv.hostPlatform.system})\""
   ];
+
+  postConfigure = ''
+    cp -R ${finalAttrs.node_modules}/. static/admin/
+  '';
+
+  postBuild = ''
+    pushd static/admin
+    bun ./build.mjs
+    popd
+  '';
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/listmonk
@@ -46,10 +102,11 @@ buildGoModule (finalAttrs: {
         "queries"
         "permissions.json"
         "static/public:/public"
-        "${finalAttrs.passthru.frontend}/altcha.umd.js:/public/static/altcha.umd.js"
+        "static/admin/views:/admin/views"
+        "static/admin/partials:/admin/partials "
+        "static/admin/dist:/admin/static"
+        "static/admin/i18n.txt:/admin/i18n.txt"
         "static/email-templates"
-        "${finalAttrs.passthru.frontend}/admin:/admin"
-        "${finalAttrs.passthru.email-builder}:/admin/static/email-builder"
         "i18n:/i18n"
       ];
     in
@@ -58,16 +115,15 @@ buildGoModule (finalAttrs: {
         ${lib.concatStringsSep " " vfsMappings}
     '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    frontend = callPackage ./frontend.nix { inherit (finalAttrs) meta version src; };
-    email-builder = callPackage ./email-builder.nix { inherit (finalAttrs) meta version src; };
     tests = { inherit (nixosTests) listmonk; };
     updateScript = nix-update-script {
       extraArgs = [
         "-s"
-        "frontend"
-        "-s"
-        "email-builder"
+        "node_modules"
       ];
     };
   };
