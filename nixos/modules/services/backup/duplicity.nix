@@ -225,6 +225,10 @@ in
           ProtectSystem = "strict";
           ProtectHome = "read-only";
           StateDirectory = baseNameOf stateDirectory;
+          # The archive dir holds unencrypted manifests and signatures, which
+          # list every backed-up path with its owner, mode and size.
+          StateDirectoryMode = "0700";
+          UMask = "0077";
         }
         // lib.optionalAttrs (localTarget != null) {
           ReadWritePaths = localTarget;
