@@ -2611,6 +2611,7 @@ mapAliases {
   sshd-openpgpg-auth = throw "'sshd-openpgpg-auth' has been removed as it is no longer maintained and fails a few tests."; # Added 2026-10-23
   ssl-proxy = throw "'ssl-proxy' has been removed as it was unmaintained both upstream and in nixpkgs, pinned to dangerously old version of go crypto."; # Added 2026-10-17
   ssm-agent = throw "'ssm-agent' has been renamed to/replaced by 'amazon-ssm-agent'"; # Converted to throw 2025-10-27
+  stac-validator = warnAlias "'stac-validator' has been renamed to 'stac-valid', following upstream's rename" stac-valid; # Added 2026-11-21
   stacer = throw "'stacer' has been removed because it was abandoned upstream and relied upon vulnerable software"; # Added 2025-11-08
   stalwart = warnAlias "`stalwart` is currently pinned to `0.15.5`. If `0.16.x` is needed, it is available as `stalwart_0_16`. Note: `stalwart_0_16` is not compatible with `services.stalwart` at this time." stalwart_0_15;
   stalwart-mail = warnAlias "'stalwart-mail' has been renamed to/replaced by 'stalwart'" stalwart; # Added 2026-01-19
