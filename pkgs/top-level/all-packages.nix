@@ -1244,6 +1244,8 @@ with pkgs;
 
   arpack-mpi = arpack.override { useMpi = true; };
 
+  aurralPlugins = recurseIntoAttrs (callPackage ../by-name/au/aurral/plugins.nix { });
+
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
