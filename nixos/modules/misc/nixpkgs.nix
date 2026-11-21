@@ -178,10 +178,9 @@ in
       default = [ ];
       example = lib.literalExpression ''
         [
-          (self: super: {
-            openssh = super.openssh.override {
-              hpnSupport = true;
-              kerberos = self.libkrb5;
+          (final: prev: {
+            samba4 = prev.samba4.override {
+              enableMDNS = true;
             };
           })
         ]
