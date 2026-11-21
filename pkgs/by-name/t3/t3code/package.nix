@@ -4,6 +4,25 @@
   cloudflared,
   symlinkJoin,
   makeBinaryWrapper,
+  stdenv,
+  alsa-lib,
+  at-spi2-core,
+  dbus,
+  expat,
+  glib,
+  libgbm,
+  libgcc,
+  libx11,
+  libxcb,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxkbcommon,
+  libxrandr,
+  nspr,
+  nss,
+  systemdLibs,
   enableAzureDevOps ? false,
   azure-cli,
   azure-cli-extensions,
@@ -69,10 +88,38 @@ let
       "--set-default"
       "T3CODE_RESOURCE_MONITOR_PATH"
       (lib.getExe t3code-resource-monitor)
+    ]
+    # HTML previews and recording use the downloaded headless browser even in
+    # desktop mode. Its RPATH cannot be patched during the build.
+    # On NixOS, running it currently requires nix-ld or manual ELF patching.
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [
+        alsa-lib
+        at-spi2-core
+        dbus
+        expat
+        glib
+        libgbm
+        libgcc
+        libx11
+        libxcb
+        libxcomposite
+        libxdamage
+        libxext
+        libxfixes
+        libxkbcommon
+        libxrandr
+        nspr
+        nss
+        systemdLibs
+      ])
     ];
 
 in
-symlinkJoin {
+symlinkJoin (finalAttrs: {
   pname = "t3code";
   inherit (t3code-unwrapped) version;
   __structuredAttrs = true;
@@ -88,11 +135,11 @@ symlinkJoin {
     done
   '';
 
-  passthru = {
+  passthru = t3code-unwrapped.passthru // {
     unwrapped = t3code-unwrapped;
     resourceMonitor = t3code-resource-monitor;
-  }
-  // t3code-unwrapped.passthru;
+    tests = callPackage ./tests.nix { t3code = finalAttrs.finalPackage; };
+  };
 
   meta = {
     # Manually inherit so that pos works
@@ -107,4 +154,4 @@ symlinkJoin {
       platforms
       ;
   };
-}
+})
