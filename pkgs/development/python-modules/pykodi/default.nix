@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pykodi";
-  version = "0.2.7";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2fFkbZZ3RXMolaaGpkvvVfSYtNNB1bTsoRCin3GnVKM=";
+    hash = "sha256-wNmVvl7lhDbRjBfXD0kmS45Q66bXKPCzZs4JhPQ78IE=";
   };
 
   propagatedBuildInputs = [
