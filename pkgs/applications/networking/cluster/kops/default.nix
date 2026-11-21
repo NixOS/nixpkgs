@@ -20,8 +20,8 @@ in
   });
 
   kops_1_36 = mkKops (finalAttrs: {
-    version = "1.36.2";
-    sha256 = "sha256-XKehbH0zk07xizLPETctPBrf2NqT+dwURJqKg5568kg=";
+    version = "1.36.3";
+    sha256 = "sha256-x3erjPb/kJHKlJp2krXzvRqip70hNfAmjlhF9QIojo0=";
     rev = "v${finalAttrs.version}";
   });
 }
