@@ -1,0 +1,14 @@
+[package]
+name = "ventoy-compat-protocol"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.98"
+clap = { version = "4.5.40", features = ["derive"] }
+env_logger = "0.11.8"
+log = "0.4.27"
+uuid = "1.17.0"
+
+[build-dependencies]
+anyhow = "1.0.98"
