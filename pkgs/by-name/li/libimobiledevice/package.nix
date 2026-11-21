@@ -26,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SWWsa7asCXpcz80VNhxoePWr74QY8SP0byGSCp+nGG0=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "0001-ostrace-fix-memory-leak.patch";
+      url = "https://github.com/libimobiledevice/libimobiledevice/commit/5ca453f9e3950b1f24b51e4cdf255236e34254c4.patch";
+      hash = "sha256-4QFwnE5Es3pjbQgqwsGmkMsdyyyfmXrmlb5d73vcK2U=";
+    })
+  ];
+
   preAutoreconf = ''
     export RELEASE_VERSION=${finalAttrs.version}
   '';
