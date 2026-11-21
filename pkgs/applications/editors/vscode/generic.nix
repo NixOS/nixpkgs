@@ -77,6 +77,8 @@
 
   extraNativeBuildInputs ? [ ],
 
+  extraPostPatch ? "",
+
   # Customize FHS environment
   # Function that takes default buildFHSEnv arguments and returns modified arguments
   customizeFHSEnv ? args: args,
@@ -492,7 +494,8 @@ stdenv.mkDerivation (
           ''
             chmod +x ${vscodeRipgrep}
           ''
-      );
+      )
+      + extraPostPatch;
 
     postFixup = lib.optionalString stdenv.hostPlatform.isLinux (
       ''
