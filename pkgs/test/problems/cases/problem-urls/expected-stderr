@@ -1,4 +1,4 @@
-error: Refusing to evaluate package 'a-0' in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:20 because it has problems:
+error: Refusing to evaluate package 'a-0' in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:21 because it has problems:
 - removal: Removed because of XYZ. (https://example.com, https://anotherexample.com)
 
 See also https://nixos.org/manual/nixpkgs/unstable#sec-problems
