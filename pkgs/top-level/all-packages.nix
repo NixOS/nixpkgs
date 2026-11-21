@@ -3550,7 +3550,7 @@ with pkgs;
   lldb = llvmPackages.lldb;
 
   llvm = llvmPackages.llvm;
-  flang = llvmPackages_20.flang;
+  flang = llvmPackages.flang;
 
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;

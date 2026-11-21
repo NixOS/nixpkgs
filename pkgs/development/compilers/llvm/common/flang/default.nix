@@ -115,5 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.ncsa;
     mainProgram = "flang";
     maintainers = with lib.maintainers; [ acture ];
+    # The source copies flang-rt/, which only exists since LLVM 21
+    broken = lib.versionOlder version "21";
   };
 })
