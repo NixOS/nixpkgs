@@ -72,7 +72,7 @@ let
     attrs:
     attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
 
-  cef = cef-binary.overrideAttrs (
+  cef = (cef-binary.override { withAngleLibs = true; }).overrideAttrs (
     oldAttrs:
     let
       version = "6533";
