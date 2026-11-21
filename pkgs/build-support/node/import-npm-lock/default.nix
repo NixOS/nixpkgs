@@ -195,6 +195,7 @@ lib.fix (self: {
       # Backwards compatibility: if derivationArgs contains passAsFile,
       # we can't force structuredAttrs here yet.
       __structuredAttrs = !(derivationArgs ? passAsFile);
+      workspaces = lib.optionals (npmRoot != null) (package.workspaces or [ ]);
     in
     stdenv.mkDerivation (
       {
@@ -215,6 +216,7 @@ lib.fix (self: {
           mkdir $out
           cp package.json $out/
           cp package-lock.json $out/
+          ${lib.concatMapStringsSep "\n" (w: "cp -R ${w} $out/") workspaces}
           [[ -d node_modules ]] && mv node_modules $out/
           runHook postInstall
         '';
@@ -242,6 +244,11 @@ lib.fix (self: {
                 cp --no-preserve=mode "$packageLockPath" package-lock.json
               ''
           )
+          + ''
+            ${lib.concatMapStringsSep "\n" (
+              w: "install --mode ugo=r -Dt ${w} ${npmRoot}/${w}/package.json"
+            ) workspaces}
+          ''
           + derivationArgs.postPatch or "";
 
         inherit __structuredAttrs;
