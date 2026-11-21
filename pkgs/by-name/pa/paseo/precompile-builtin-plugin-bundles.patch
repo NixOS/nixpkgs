@@ -1,0 +1,90 @@
+--- a/packages/server/src/server/plugins/compiler-build.ts
++++ b/packages/server/src/server/plugins/compiler-build.ts
+@@ -1,4 +1,4 @@
+-import { stat } from "node:fs/promises";
++import { readFile, stat } from "node:fs/promises";
+ import { readPluginManifest } from "./manifest.js";
+ import { assertPluginCompatibility } from "@getpaseo/protocol/plugin-requirements";
+ import { existsSync, readFileSync, realpathSync } from "node:fs";
+@@ -435,6 +435,31 @@
+   );
+ }
+ 
++export const PREBUILT_BUNDLES_FILENAME = "paseo-prebuilt-bundles.json";
++
++async function readPrebuiltBundles(
++  directory: string,
++): Promise<{ clientBundle: string | null; serverBundle: string | null } | null> {
++  const filePath = path.join(directory, PREBUILT_BUNDLES_FILENAME);
++  const info = await stat(filePath).catch(() => null);
++  if (!info?.isFile()) return null;
++  try {
++    const parsed: unknown = JSON.parse(await readFile(filePath, "utf8"));
++    if (typeof parsed !== "object" || parsed === null) return null;
++    const { serverBundle, clientBundle } = parsed as {
++      serverBundle?: unknown;
++      clientBundle?: unknown;
++    };
++    if (typeof serverBundle !== "string" && typeof clientBundle !== "string") return null;
++    return {
++      serverBundle: typeof serverBundle === "string" ? serverBundle : null,
++      clientBundle: typeof clientBundle === "string" ? clientBundle : null,
++    };
++  } catch {
++    return null;
++  }
++}
++
+ export async function compileDirectoryPlugin(
+   directory: string,
+   version: string,
+@@ -445,6 +470,7 @@
+     throw new Error(`Built-in plugin ${builtinId} has manifest ID ${manifest.id}`);
+   }
+   assertPluginCompatibility({ ...manifest, version, runtime: "daemon" });
+-  const bundles = await compilePlugin(await resolveEntryPaths(directory));
++  const prebuilt = await readPrebuiltBundles(directory);
++  const bundles = prebuilt ?? (await compilePlugin(await resolveEntryPaths(directory)));
+   return { ...bundles, manifest };
+ }
+--- a/scripts/precompile-builtin-plugins.mjs
++++ b/scripts/precompile-builtin-plugins.mjs
+@@ -0,0 +1,38 @@
++import { readdir, readFile, writeFile } from "node:fs/promises";
++import path from "node:path";
++import { pathToFileURL } from "node:url";
++
++import { PREBUILT_BUNDLES_FILENAME } from "../packages/server/dist/server/server/plugins/compiler-build.js";
++
++const REPO_ROOT = path.resolve(import.meta.dirname, "..");
++const BUILTIN_PLUGINS_ROOT = path.join(
++  REPO_ROOT,
++  "packages/server/dist/server/builtin-plugins",
++);
++
++const { version } = JSON.parse(
++  await readFile(path.join(REPO_ROOT, "packages/server/package.json"), "utf8"),
++);
++const { compileDirectoryPlugin } = await import(
++  pathToFileURL(
++    path.join(REPO_ROOT, "packages/server/dist/server/server/plugins/compiler.js"),
++  ).href
++);
++
++const directories = (await readdir(BUILTIN_PLUGINS_ROOT, { withFileTypes: true }))
++  .filter((entry) => entry.isDirectory())
++  .map((entry) => entry.name)
++  .sort();
++
++for (const id of directories) {
++  const directory = path.join(BUILTIN_PLUGINS_ROOT, id);
++  const started = Date.now();
++  const { clientBundle, serverBundle } = await compileDirectoryPlugin(directory, version, id);
++  await writeFile(
++    path.join(directory, PREBUILT_BUNDLES_FILENAME),
++    `${JSON.stringify({ serverBundle, clientBundle })}\n`,
++  );
++  process.stdout.write(
++    `pre-compiled ${id}: server ${serverBundle?.length ?? 0}B, client ${clientBundle?.length ?? 0}B in ${Date.now() - started}ms\n`,
++  );
++}
