@@ -1,0 +1,82 @@
+diff --git a/meson.options b/meson.options
+--- a/meson.options
++++ b/meson.options
+@@ -17,6 +17,11 @@
+   type: 'boolean',
+   value: false,
+   description: 'Enable to install tests`',
++)
++option('installed-tests-prefix',
++  type: 'string',
++  value: '',
++  description: 'Installation prefix for installed tests',
+ )
+ option('xim',
+   type: 'feature',
+diff --git a/src/tests/meson.build b/src/tests/meson.build
+--- a/src/tests/meson.build
++++ b/src/tests/meson.build
+@@ -1,8 +1,10 @@
+-# Need get_option('prefix') for configuration()
+-test_execsdir = \
+-  get_option('prefix') / get_option('libexecdir') / 'installed-tests' / 'ibus'
+-test_sourcesdir = \
+-  get_option('prefix') / get_option('datadir') / 'installed-tests' / 'ibus'
++# Keep test executables, helpers, and data in the same installation prefix.
++test_prefix = get_option('installed-tests-prefix')
++test_bindir = test_prefix / 'bin'
++test_libexecdir = test_prefix / 'libexec'
++test_datadir = test_prefix / 'share'
++test_execsdir = test_libexecdir / 'installed-tests' / 'ibus'
++test_sourcesdir = test_datadir / 'installed-tests' / 'ibus'
+ 
+ ibus_tests = [
+   { 'name': 'ibus-bus' },
+@@ -133,15 +135,15 @@
+ desktop_testing_shells = [
+   {
+     'name' : 'ibus-desktop-testing-autostart.in',
+-    'path' : get_option('libexecdir'),
++    'path' : test_libexecdir,
+   },
+   {
+     'name' : 'ibus-desktop-testing-module',
+-    'path' : get_option('libexecdir'),
++    'path' : test_libexecdir,
+   },
+   {
+     'name' : 'ibus-desktop-testing-runner.in',
+-    'path' : get_option('bindir'),
++    'path' : test_bindir,
+   },
+ ]
+ 
+@@ -151,9 +153,9 @@
+     input: _desktop_sh['name'],
+     output: '@BASENAME@',
+     configuration: {
+-      'DATADIR': get_option('prefix') / get_option('datadir'),
++      'DATADIR': test_datadir,
+       'INSTALLEDDIR': installeddir,
+-      'LIBEXECDIR': get_option('prefix') / get_option('libexecdir'),
++      'LIBEXECDIR': test_libexecdir,
+     },
+     install_dir: _desktop_sh['path'],
+     install_mode: 'rwxr-xr-x',
+@@ -206,13 +208,13 @@
+     input: 'ibus-desktop-testing.desktop.in',
+     output: 'org.freedesktop.IBus.Desktop.Testing.desktop',
+     configuration: {
+-        'libexecdir': get_option('prefix') / get_option('libexecdir'),
++        'libexecdir': test_libexecdir,
+     },
+-    install_dir: pkgdatadir / 'tests',
++    install_dir: test_datadir / 'ibus' / 'tests',
+   )
+ 
+   install_data(
+     '100-ibus-ci.rules',
+-    install_dir: pkgdatadir / 'tests',
++    install_dir: test_datadir / 'ibus' / 'tests',
+   )
+ endif
