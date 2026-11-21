@@ -122,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-  enableParallelChecking = true;
   checkTarget = "check";
 
   passthru = {

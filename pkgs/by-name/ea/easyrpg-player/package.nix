@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  enableParallelChecking = true;
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { attrPath = "liblcf"; })
