@@ -237,13 +237,11 @@ in
     services.nginx.virtualHosts."${cfg.vhostName}" = {
       locations."/".extraConfig = ''
         rewrite ^ https://$server_name/SOGo;
-        allow all;
       '';
 
       # For iOS 7
       locations."/principals/".extraConfig = ''
         rewrite ^ https://$server_name/SOGo/dav;
-        allow all;
       '';
 
       locations."^~/SOGo".extraConfig = ''
@@ -272,12 +270,10 @@ in
 
       locations."/SOGo.woa/WebServerResources/".extraConfig = ''
         alias ${pkgs.sogo}/lib/GNUstep/SOGo/WebServerResources/;
-        allow all;
       '';
 
       locations."/SOGo/WebServerResources/".extraConfig = ''
         alias ${pkgs.sogo}/lib/GNUstep/SOGo/WebServerResources/;
-        allow all;
       '';
 
       locations."~ ^/SOGo/so/ControlPanel/Products/([^/]*)/Resources/(.*)$".extraConfig = ''
