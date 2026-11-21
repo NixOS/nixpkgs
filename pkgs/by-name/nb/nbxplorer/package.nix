@@ -27,6 +27,8 @@ buildDotnetModule rec {
     mv $out/bin/{NBXplorer,nbxplorer} || :
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
     homepage = "https://github.com/btcpayserver/NBXplorer";
