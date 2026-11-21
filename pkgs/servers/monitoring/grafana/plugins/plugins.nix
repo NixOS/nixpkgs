@@ -5,6 +5,7 @@
   grafanaPlugin = callPackage ./grafana-plugin.nix { };
 
   bsull-console-datasource = callPackage ./bsull-console-datasource { };
+  canvas = callPackage ./canvas { };
   doitintl-bigquery-datasource = callPackage ./doitintl-bigquery-datasource { };
   fetzerch-sunandmoon-datasource = callPackage ./fetzerch-sunandmoon-datasource { };
   frser-sqlite-datasource = callPackage ./frser-sqlite-datasource { };
