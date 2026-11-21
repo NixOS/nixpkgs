@@ -11,19 +11,22 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "chipsec";
-  version = "1.13.20";
+  version = "2.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     tag = finalAttrs.version;
-    hash = "sha256-TSw/1NdPGefWXRMleXTeLWDgRw/m+luIQ0lF8UlgfLs=";
+    hash = "sha256-SynciTQU7kWzWu7wFN0oZ9mL7quUnPw6qc0FqUKd98g=";
   };
 
-  patches = [
-    ./log-path.diff
-  ];
+  postPatch = ''
+    substituteInPlace chipsec/library/logger.py \
+      --replace-fail "dir_path = os.path.dirname(os.path.realpath(__file__))" "" \
+      --replace-fail "BASE_PATH = os.path.join(dir_path, os.pardir, os.pardir)" "" \
+      --replace-fail 'self.LOG_PATH = os.path.join(BASE_PATH, "logs")' 'self.LOG_PATH = "/tmp/chipsec"'
+  '';
 
   env = lib.optionalAttrs withDriver {
     KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -37,10 +40,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ]
   ++ lib.optionals withDriver kernel.moduleBuildDependencies;
 
-  build-system = [ python3.pkgs.setuptools ];
-  dependencies = with python3.pkgs; [
-    brotli
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [ brotli ];
 
   # Marker file preventing driver from being built
   preBuild = lib.optionalString (!withDriver) ''
@@ -52,12 +54,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytestCheckHook
   ];
 
-  # Otherwise chipsec tries and fails import "tpm_cmd"
-  postInstall = ''
-    cp -R chipsec/library/tpm $out/${python3.pkgs.python.sitePackages}/chipsec/library/tpm
-  ''
   # Allow the kernel module to be loaded manually
-  + lib.optionalString withDriver ''
+  postInstall = lib.optionalString withDriver ''
     pushd $out/${python3.pkgs.python.sitePackages}/chipsec/helper/linux/
       xz -k chipsec.ko
       install -Dm444 chipsec.ko.xz $out/lib/modules/${kernel.modDirVersion}/chipsec.ko.xz
@@ -65,9 +63,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     popd
   '';
 
-  pythonImportsCheck = [
-    "chipsec"
-  ];
+  pythonImportsCheck = [ "chipsec" ];
 
   meta = {
     description = "Platform Security Assessment Framework";
@@ -80,6 +76,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     license = lib.licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
+    changelog = "https://github.com/chipsec/chipsec/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [
       johnazoidberg
       erdnaxe
