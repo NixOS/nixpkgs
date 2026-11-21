@@ -29165,6 +29165,12 @@
     githubId = 64192;
     name = "Asumu Takikawa";
   };
+  takishima = {
+    name = "Damien Nguyen";
+    email = "ngn.damien@gmail.com";
+    github = "Takishima";
+    githubId = 739325;
+  };
   taktoa = {
     email = "taktoa@gmail.com";
     matrix = "@taktoa:matrix.org";
