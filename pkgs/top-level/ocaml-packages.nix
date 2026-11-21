@@ -731,6 +731,8 @@ let
           why3 = pkgs.why3.override { ocamlPackages = self; };
         };
 
+        frama-c-metacsl = callPackage ../development/ocaml-modules/frama-c-metacsl { };
+
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
         };
