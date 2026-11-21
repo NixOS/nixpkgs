@@ -1,0 +1,17 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 7cb4132..d174534 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -38,12 +38,6 @@ documentation = "https://pyhwloc.readthedocs.io/"
+ [tool.hatch.version]
+ path = "src/pyhwloc/hwloc/__init__.py"
+ 
+-[tool.hatch.build.targets.wheel.force-include]
+-"src/pyhwloc/_lib" = "pyhwloc/_lib"
+-
+-[tool.hatch.build.targets.wheel.shared-data]
+-"src/pyhwloc/_lib" = "pyhwloc/_lib"
+-
+ [tool.hatch.build.targets.wheel.hooks.custom]
+ path = "hatch/hook.py"
+ 
