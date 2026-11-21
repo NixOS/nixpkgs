@@ -1,0 +1,49 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8d856d88..8539314e 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -138,8 +138,8 @@ if(USE_LV2)
+     endif()
+ 
+     # Create Lv2 install dir
+-    install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E make_directory \"\$ENV{DESTDIR}${LV2DIR_PROJ}\")"
+-            RESULT_VARIABLE calfResult)
++    install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E make_directory \"\$ENV{DESTDIR}${LV2DIR_PROJ}\" \
++            RESULT_VARIABLE calfResult)")
+     if(NOT ${calfResult} EQUAL 0)
+         message(FATAL_ERROR "Could not create ${LV2DIR_PROJ}/")
+     endif()
+@@ -148,8 +148,8 @@ if(USE_LV2)
+         COMMAND \"${CMAKE_COMMAND}\" -E ${COPY_ACTION} \
+ 	\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/${LIB_PREFIX}${PROJECT_NAME}${LIB_SUFFIX}\" \
+ 	\"\$ENV{DESTDIR}${LV2DIR_PROJ}/${PROJECT_NAME}${LIB_SUFFIX}\" \
++        RESULT_VARIABLE calfResult \
+         )"
+-        RESULT_VARIABLE calfResult
+     )
+     if(NOT ${calfResult} EQUAL 0)
+         message(FATAL_ERROR "Could not create ${LV2DIR_PROJ}/${PROJECT_NAME}${LIB_SUFFIX}")
+@@ -159,8 +159,8 @@ if(USE_LV2)
+             COMMAND \"${CMAKE_COMMAND}\" -E ${COPY_ACTION} \
+             \"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/${LIB_PREFIX}${PROJECT_NAME}lv2gui${LIB_SUFFIX}\" \
+             \"\$ENV{DESTDIR}${LV2DIR_PROJ}/${PROJECT_NAME}lv2gui${LIB_SUFFIX}\" \
++            RESULT_VARIABLE calfResult \
+             )"
+-            RESULT_VARIABLE calfResult
+         )
+         if(NOT ${calfResult} EQUAL 0)
+             message(FATAL_ERROR "Could not create ${LV2DIR_PROJ}/${PROJECT_NAME}lv2gui${LIB_SUFFIX}")
+@@ -181,9 +181,10 @@ if(USE_LV2)
+         file(GLOB ttl_files "${LV2DIR_PROJ}/*.ttl")
+         foreach(ttl_file ${ttl_files})
+             install(
+-                CODE "execute_process(COMMAND \"${SORDI}\" -o turtle \"${ttl_file}\")"
+-                RESULT_VARIABLE result
+-                OUTPUT_VARIABLE nothing
++                CODE "execute_process(COMMAND \"${SORDI}\" -o turtle \"${ttl_file}\" \
++                RESULT_VARIABLE result \
++                OUTPUT_VARIABLE nothing \
++                )"
+                 )
+             if(NOT ${result} EQUAL 0)
+                 message(FATAL_ERROR "Sordi failed for ${ttl_file}")
