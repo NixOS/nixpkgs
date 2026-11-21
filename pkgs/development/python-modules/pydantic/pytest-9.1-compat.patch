@@ -1,0 +1,53 @@
+--- a/tests/test_deprecated_fields.py
++++ b/tests/test_deprecated_fields.py
+@@ -28 +28,2 @@
+-    pytest.warns(DeprecationWarning, lambda: instance.a, match='^$')
++    with pytest.warns(DeprecationWarning, match='^$'):
++        instance.a
+@@ -55,3 +56,6 @@
+-    pytest.warns(DeprecationWarning, lambda: instance.a, match='^$')
+-    pytest.warns(DeprecationWarning, lambda: instance.b, match='^This is deprecated$')
+-    pytest.warns(DeprecationWarning, lambda: instance.c, match='^This is deprecated$')
++    with pytest.warns(DeprecationWarning, match='^$'):
++        instance.a
++    with pytest.warns(DeprecationWarning, match='^This is deprecated$'):
++        instance.b
++    with pytest.warns(DeprecationWarning, match='^This is deprecated$'):
++        instance.c
+@@ -150,4 +154,11 @@
+-    pytest.warns(DeprecationWarning, lambda: instance.p1, match='^This is deprecated$')
+-    pytest.warns(DeprecationWarning, lambda: instance.p2, match='^This is deprecated$')
+-    pytest.warns(DeprecationWarning, lambda: instance.p4, match='^This is deprecated$')
+-    pytest.warns(DeprecationWarning, lambda: instance.p5, match='^This is deprecated$')
++    with pytest.warns(DeprecationWarning, match='^This is deprecated$'):
++        instance.p1
++    # TODO: This should be match='^This is deprecated$' instead, but the
++    # overriding mechanism has apparently never worked:
++    # https://github.com/pydantic/pydantic/issues/13356
++    with pytest.warns(DeprecationWarning, match=r'^This is deprecated \(this message is overridden\)$'):
++        instance.p2
++    with pytest.warns(DeprecationWarning, match='^This is deprecated$'):
++        instance.p4
++    with pytest.warns(DeprecationWarning, match='^This is deprecated$'):
++        instance.p5
+@@ -222 +233,2 @@
+-    pytest.warns(DeprecationWarning, lambda: instance.a, match='deprecated')
++    with pytest.warns(DeprecationWarning, match='deprecated'):
++        instance.a
+@@ -260 +272,2 @@
+-    pytest.warns(DeprecationWarning, lambda: m.a, match='test')
++    with pytest.warns(DeprecationWarning, match='test'):
++        m.a
+--- a/tests/test_utils.py
++++ b/tests/test_utils.py
+@@ -377 +377 @@
+-@pytest.mark.parametrize('empty_collection', (collection() for collection in BUILTIN_COLLECTIONS))
++@pytest.mark.parametrize('empty_collection', [collection() for collection in BUILTIN_COLLECTIONS])
+@@ -386 +386 @@
+-    'collection', (c.fromkeys((1,)) if issubclass(c, dict) else c((1,)) for c in BUILTIN_COLLECTIONS)
++    'collection', [c.fromkeys((1,)) if issubclass(c, dict) else c((1,)) for c in BUILTIN_COLLECTIONS]
+--- a/tests/test_validators.py
++++ b/tests/test_validators.py
+@@ -1615 +1615 @@
+-@pytest.mark.parametrize('validator_classmethod,root_validator_classmethod', product(*[[True, False]] * 2))
++@pytest.mark.parametrize('validator_classmethod,root_validator_classmethod', list(product(*[[True, False]] * 2)))
