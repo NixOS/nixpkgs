@@ -1,4 +1,31 @@
 { pkgs, ... }:
+let
+  pluginName = "DefaultTrackers";
+  plugin = (
+    pkgs.callPackage (
+      { python3, fetchFromGitHub }:
+      python3.pkgs.buildPythonPackage {
+        name = "deluge-default-trackers";
+        version = "v0.6";
+        src = fetchFromGitHub {
+          owner = "stefantalpalaru/";
+          repo = "deluge-default-trackers";
+          rev = "v0.6";
+          sha256 = "sha256-4dii8OLobczEDXhD+TFUD2yCXHf1B4Ns51cRQJsGIvI=";
+        };
+        doCheck = false;
+        format = "other";
+        nativeBuildInputs = [ python3.pkgs.setuptools ];
+        buildPhase = ''
+          mkdir "$out"
+          python3 setup.py bdist_egg
+          cp dist/* "$out"
+        '';
+        doInstallPhase = false;
+      }
+    ) { }
+  );
+in
 {
   name = "deluge";
   meta = with pkgs.lib.maintainers; {
@@ -31,6 +58,7 @@
             6881
             6889
           ];
+          enabled_plugins = [ pluginName ];
         };
         web = {
           enable = true;
@@ -41,12 +69,25 @@
           andrew:password:10
           user3:anotherpass:5
         '';
+        additionalPlugins = [
+          plugin
+        ];
       };
     };
 
   };
 
   testScript = ''
+    def deluge_console(node, cmd):
+        out = node.succeed(f"deluge-console 'connect 127.0.0.1:58846 andrew password; {cmd}'")
+        print(f"{cmd}:\n{out}")
+        return out
+
+    def parse_plugin(out):
+        return [p.strip() for p in out.splitlines()[1:]]
+
+    pluginName = "${pluginName}"
+
     start_all()
 
     simple.wait_for_unit("deluged")
@@ -59,9 +100,16 @@
     declarative.wait_for_unit("delugeweb")
     declarative.wait_until_succeeds("curl --fail http://declarative:3142")
 
-    # deluge-console always exits with 1. https://dev.deluge-torrent.org/ticket/3291
-    declarative.succeed(
-        "(deluge-console 'connect 127.0.0.1:58846 andrew password; help' || true) | grep -q 'rm.*Remove a torrent'"
-    )
+    deluge_console(declarative, "help")
+
+    with subtest("Additional plugin found in available plugins list"):
+        available_plugins = parse_plugin(deluge_console(declarative, "plugin --list"))
+        if pluginName not in available_plugins:
+           raise Exception(f"Expected {pluginName} to be in available plugins list: {", ".join(available_plugins)}")
+
+    with subtest("Additional plugin found in enabled plugins list"):
+        enabled_plugins = parse_plugin(deluge_console(declarative, "plugin --show"))
+        if pluginName not in enabled_plugins:
+           raise Exception(f"Expected {pluginName} to be in enabled plugins list: {", ".join(enabled_plugins)}")
   '';
 }
