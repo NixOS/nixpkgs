@@ -12,7 +12,9 @@
   no-broken-symlinks = lib.recurseIntoAttrs (
     import ./no-broken-symlinks.nix { inherit stdenv lib pkgs; }
   );
-  # TODO: add audit-tmpdir
+  audit-tmpdir = import ./audit-tmpdir.nix {
+    inherit initialBash initialPath stdenv;
+  };
   compress-man-pages =
     let
       manFile = pkgs.writeText "small-man" ''
