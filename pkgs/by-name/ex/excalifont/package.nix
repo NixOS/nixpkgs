@@ -11,9 +11,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "excalidraw";
-    repo = "excalidraw";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-XhxNXi6JwBq5vw+/6HQTp6NPX3etmCkdBdNboeBru/k=";
+    repo = "cli";
+    rev = "d1e716f1aef2c2417772366b3869bbaee7b385c6";
+    hash = "sha256-ViuUVCpGJmzJQWQiGdDWfbNmjZNfqIpG35G4b3JHG/s=";
   };
 
   nativeBuildInputs = [
@@ -23,9 +23,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    for file in packages/excalidraw/fonts/Excalifont/*.woff2; do
-      woff2_decompress $file
-    done
+    cp .github/assets/banner/Excalifont.woff2 Excalifont-Regular.woff2
+    woff2_decompress Excalifont-Regular.woff2
 
     runHook postBuild
   '';
@@ -33,8 +32,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D -m 444 packages/excalidraw/fonts/Excalifont/*.ttf -t $out/share/fonts/ttf
-    install -D -m 444 packages/excalidraw/fonts/Excalifont/*.woff2 -t $out/share/fonts/woff2
+    install -D -m 444 Excalifont-Regular.ttf -t $out/share/fonts/ttf
+    install -D -m 444 Excalifont-Regular.woff2 -t $out/share/fonts/woff2
 
     runHook postInstall
   '';
