@@ -74,10 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "INTERFACE" "QT")
     (lib.cmakeFeature "SOUND" "QT")
     (lib.cmakeBool "WITH_QT6" true)
-    # fatal error: 'macglk_startup.h' file not found
-    (lib.cmakeBool "WITH_AGILITY" (!stdenv.hostPlatform.isDarwin))
-    (lib.cmakeBool "WITH_LEVEL9" (!stdenv.hostPlatform.isDarwin))
-    (lib.cmakeBool "WITH_MAGNETIC" (!stdenv.hostPlatform.isDarwin))
   ];
 
   meta = {
