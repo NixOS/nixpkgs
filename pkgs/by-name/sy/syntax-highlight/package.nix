@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  makeWrapper,
   nix-update-script,
 }:
 
@@ -18,15 +19,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p "$out/Applications" "$out/bin"
     cp -R "Syntax Highlight.app" "$out/Applications/"
 
-    ln -s \
+    # The CLI cannot locate its app bundle when invoked through $PATH.
+    makeWrapper \
       "$out/Applications/Syntax Highlight.app/Contents/Resources/syntax_highlight_cli" \
-      "$out/bin/syntax_highlight_cli"
+      "$out/bin/syntax_highlight_cli" \
+      --add-flags --app \
+      --add-flags "\"$out/Applications/Syntax Highlight.app\""
 
     runHook postInstall
   '';
