@@ -758,7 +758,9 @@ Notable attributes:
 
 Compliance suite for [modular service](https://nixos.org/manual/nixos/unstable/#modular-services) integrations.
 
-Tests that a service manager integration correctly handles the portable modular services contract: `process.argv`, sub-services, assertions, and warnings.
+Tests that a service manager integration correctly handles the portable modular services contract: `process.argv`, sub-services, assertions, warnings, and identity (user/group requests).
+
+The identity coverage is probed: services that make no identity requests must resolve to a user name derived from the service's attribute path on platforms that support users, and to `null` everywhere on platforms without user support. When user support is present, the suite checks the default resolution, the pass-through of requests, `identity.sameUser` references and the precedence of requests set on the referencing service, and it runs a service that records the user and group it actually runs as.
 
 ### Return value {#tester-modularServiceCompliance-return}
 
@@ -861,5 +863,9 @@ The following compliance items are not yet automated and must be verified manual
 - **Warnings are visible to the user.**
   A service with `warnings = [ "..." ]` must surface the warning to the user.
   On NixOS these are `builtins.warn` messages emitted during evaluation.
+
+- **sharedDir is writable by every service user.**
+  Services may run as distinct users (per-service identity is the default on platforms that support users), and each of them writes to its own subdirectory of `sharedDir`.
+  The integration must ensure `sharedDir` is available and writable by all of them; on NixOS this is done with a `systemd.tmpfiles.rules` entry creating it with mode `1777`.
 
 [file system object]: https://nix.dev/manual/nix/latest/store/file-system-object
