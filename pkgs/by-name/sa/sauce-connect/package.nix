@@ -9,21 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sauce-connect";
-  version = "5.5.3";
+  version = "5.5.4";
 
   passthru = {
     sources = {
       x86_64-linux = fetchurl {
         url = "https://saucelabs.com/downloads/sauce-connect/${version}/sauce-connect-${version}_linux.x86_64.tar.gz";
-        hash = "sha256-s71/6EA5H9Tp5FFDQZRnoWa1DVALhUnLnhMOEQOvqIs=";
+        hash = "sha256-3WOz9yPulBIfssOP/RWVbSUVstYv8TTFtk9I6XNE03E=";
       };
       aarch64-linux = fetchurl {
         url = "https://saucelabs.com/downloads/sauce-connect/${version}/sauce-connect-${version}_linux.aarch64.tar.gz";
-        hash = "sha256-VZ+hBomcFzXs+iJ0mdnvAH1LBI3V497L9qE8Yn+jKpI=";
+        hash = "sha256-uZfFmNwgDXHfJniDAvVV8Wv3+1VQRK5NvWZP6ejDcXM=";
       };
       aarch64-darwin = fetchurl {
         url = "https://saucelabs.com/downloads/sauce-connect/${version}/sauce-connect-${version}_darwin.all.zip";
-        hash = "sha256-O0ixRKJiwlTPuGSDVX2AR01pZBFWPWmyqQxMEr7X4zk=";
+        hash = "sha256-48B0CWx1FuNzbx2nmTJdK+cBjnmy/uVpQkAbA/gKWeU=";
       };
     };
     updateScript = ./update.sh;
