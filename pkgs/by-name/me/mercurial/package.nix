@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   python3Packages,
-  makeWrapper,
   gettext,
   installShellFiles,
   re2Support ? true,
@@ -73,7 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ++ lib.optional gitSupport pygit2
     ++ lib.optional highlightSupport pygments;
   nativeBuildInputs = [
-    makeWrapper
     gettext
     installShellFiles
     setuptools
@@ -91,6 +89,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ lib.optionals rustSupport [
     zstd
+  ]
+  ++ lib.optionals guiSupport [
+    tk
   ];
 
   makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional rustSupport "PURE=--rust";
@@ -104,16 +105,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       hgk=$out/${python.sitePackages}/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
-      WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
-                --set HG $out/bin/hg
-                --prefix PATH : ${tk}/bin "
+      wrapTk=( --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
+               --set HG $out/bin/hg )
+      makeWrapperArgs+=(''${wrapTk[@]})
+      wrapProgram $out/bin/hgk ''${wrapTk[@]}
     '')
     + ''
-      for i in $(cd $out/bin && ls); do
-        wrapProgram $out/bin/$i \
-          $WRAP_TK
-      done
-
       # copy hgweb.cgi to allow use in apache
       mkdir -p $out/share/cgi-bin
       cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
