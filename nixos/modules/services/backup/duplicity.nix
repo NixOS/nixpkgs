@@ -191,7 +191,7 @@ in
             ${lib.optionalString (
               cfg.cleanup.maxIncr != null
             ) "${dup} remove-all-inc-of-but-n-full ${toString cfg.cleanup.maxIncr} ${target} --force ${extra}"}
-            exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "incr"} ${
+            exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "backup"} ${
               lib.escapeShellArgs (
                 [
                   cfg.root
