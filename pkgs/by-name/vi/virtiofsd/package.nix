@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "virtiofsd";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitLab {
     owner = "virtio-fs";
     repo = "virtiofsd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NeqeSqPeD3hjAcbck+g8bmarbUL1Nks8AMAi/WxwzwY=";
+    hash = "sha256-itgICmROSz+5fjqDHy1S3Bp8CPyOaoFgvOkJvboDeB0=";
   };
 
   separateDebugInfo = true;
 
-  cargoHash = "sha256-7byiMT2/jf0R7zHr/HBeXKk2T+OQhlVhZ9QJHlEY/Ao=";
+  cargoHash = "sha256-bC2QJRuLsPkgZ6hf+Isli/UoVtyjDbhoj1R6sdo32/w=";
 
   env = {
     LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
