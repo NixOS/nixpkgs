@@ -1,0 +1,315 @@
+From 659b4547122259623c97fec0f949ccb53c57504e Mon Sep 17 00:00:00 2001
+From: eveeifyeve <open-source@eveeifyeve.dev>
+Date: Thu, 22 Oct 2026 17:55:48 +1100
+Subject: [PATCH] Port to PCRE2
+
+PCRE1 (libpcre 8.x) is end of life and distributions are dropping it.
+Replace the dependency on Nim's std/re (which binds PCRE1 through
+std/pcre) with nitely regex.
+---
+ .github/workflows/run-tests.yml  |  2 +-
+ Dockerfile                       |  4 ++--
+ README.md                        |  1 -
+ config.nims                      |  7 ++++++
+ nitter.nimble                    |  3 ++-
+ src/experimental/parser/user.nim | 11 +++++----
+ src/formatters.nim               | 39 ++++++++++++++++----------------
+ src/parserutils.nim              | 11 +++++----
+ src/routes/media.nim             | 11 +++++----
+ 9 files changed, 51 insertions(+), 38 deletions(-)
+
+diff --git a/.github/workflows/run-tests.yml b/.github/workflows/run-tests.yml
+index 33dcba5..cf19e2c 100644
+--- a/.github/workflows/run-tests.yml
++++ b/.github/workflows/run-tests.yml
+@@ -73,7 +73,7 @@ jobs:
+     steps:
+       - name: Install runtime deps
+         run: |
+-          sudo apt-get install -y --no-install-recommends libsass-dev libpcre3
++          sudo apt-get install -y --no-install-recommends libsass-dev
+ 
+       - name: Checkout code
+         uses: actions/checkout@v6
+diff --git a/Dockerfile b/Dockerfile
+index 251b63a..cd56081 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,7 +1,7 @@
+ FROM nimlang/nim:2.2.6-alpine-regular as nim
+ LABEL maintainer="setenforce@protonmail.com"
+ 
+-RUN apk --no-cache add libsass-dev pcre
++RUN apk --no-cache add libsass-dev
+ 
+ WORKDIR /src/nitter
+ 
+@@ -15,7 +15,7 @@ RUN nimble build -d:danger -d:lto -d:strip --mm:refc \
+ 
+ FROM alpine:latest
+ WORKDIR /src/
+-RUN apk --no-cache add pcre ca-certificates openssl
++RUN apk --no-cache add ca-certificates openssl
+ COPY --from=nim /src/nitter/nitter ./
+ COPY --from=nim /src/nitter/nitter.example.conf ./nitter.conf
+ COPY --from=nim /src/nitter/public ./public
+diff --git a/README.md b/README.md
+index 63c09c2..aadf814 100644
+--- a/README.md
++++ b/README.md
+@@ -81,7 +81,6 @@ Twitter account.
+ 
+ ### Dependencies
+ 
+-- libpcre
+ - libsass
+ - redis/valkey
+ 
+diff --git a/config.nims b/config.nims
+index 3ee4842..c692663 100644
+--- a/config.nims
++++ b/config.nims
+@@ -2,6 +2,13 @@
+ --define:useStdLib
+ --threads:off
+ 
++# allow linking openssl from a non-standard lib dir when provided; Nix's
++# propagated openssl on macOS, for instance, where the SDK has no libcrypto
++when defined(macosx):
++  let opensslLib = getEnv("OPENSSL_LIB_DIR")
++  if opensslLib.len > 0:
++    switch("passL", "-L" & opensslLib)
++
+ # workaround httpbeast file upload bug
+ --assertions:off
+ 
+diff --git a/nitter.nimble b/nitter.nimble
+index b36f498..8a3fb4e 100644
+--- a/nitter.nimble
++++ b/nitter.nimble
+@@ -11,7 +11,7 @@ bin           = @["nitter"]
+ # Dependencies
+ 
+ requires "nim >= 2.0.0"
+-requires "jester == 0.6.0"
++requires "https://github.com/eveeifyeve/jester#nitely-regex"
+ requires "karax == 1.5.0"
+ requires "sass == 0.2.0"
+ requires "nimcrypto == 0.7.3"
+@@ -23,6 +23,7 @@ requires "zippy == 0.10.19"
+ requires "flatty == 0.4.0"
+ requires "jsony == 1.1.6"
+ requires "oauth == 0.11"
++requires "regex >= 0.19.0"
+ 
+ # Tasks
+ 
+diff --git a/src/experimental/parser/user.nim b/src/experimental/parser/user.nim
+index 866973c..06c7c85 100644
+--- a/src/experimental/parser/user.nim
++++ b/src/experimental/parser/user.nim
+@@ -1,14 +1,17 @@
+-import std/[algorithm, unicode, re, strutils, strformat, options, nre]
++import std/[algorithm, unicode, strutils, strformat, options]
+ import jsony
++import regex
+ import utils, slices
+ import ../types/user as userType
+ from ../../types import Result, User, Error
+ 
+ let
+-  unRegex = re.re"(^|[^A-z0-9-_./?])@([A-z0-9_]{1,15})"
++  unRegex = re2"(^|[^A-z0-9-_./?])@([A-z0-9_]{1,15})"
+   unReplace = "$1<a href=\"/$2\">@$2</a>"
+ 
+-  htRegex = nre.re"""(*U)(^|[^\w-_.?])([#＃$])([\w_]*+)(?!</a>|">|#)"""
++  # nitely regex has no possessive quantifiers; (?![\w_]) anchors the word run
++  # so it cannot shrink on backtrack (same effect as PCRE's [\w_]*+)
++  htRegex = re2"""(^|[^\w.?-])([#＃$])([\w_]*(?![\w_]))(?!</a>|">|#)"""
+   htReplace = "$1<a href=\"/search?f=tweets&q=%23$3\">$2$3</a>"
+ 
+ proc expandUserEntities*(user: var User; ent: Entities) =
+@@ -26,7 +29,7 @@ proc expandUserEntities*(user: var User; ent: Entities) =
+   replacements.sort(cmp)
+ 
+   user.bio = orig.replacedWith(replacements, 0 .. orig.len)
+-                 .replacef(unRegex, unReplace)
++                 .replace(unRegex, unReplace)
+                  .replace(htRegex, htReplace)
+ 
+ proc getBanner(user: RawUser): string =
+diff --git a/src/formatters.nim b/src/formatters.nim
+index 958e518..a783b4e 100644
+--- a/src/formatters.nim
++++ b/src/formatters.nim
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: AGPL-3.0-only
+ import strutils, strformat, times, uri, tables, xmltree, htmlparser, htmlgen, math
+-import std/[enumerate, re]
++import std/enumerate
++import regex
+ import types, utils, query
+ 
+ const
+@@ -9,25 +10,25 @@ const
+   twitter = parseUri("https://x.com")
+ 
+ let
+-  twRegex = re"(?<=(?<!\S)https:\/\/|(?<=\s))(www\.|mobile\.)?twitter\.com"
+-  twLinkRegex = re"""<a href="https:\/\/twitter.com([^"]+)">twitter\.com(\S+)</a>"""
+-  xRegex = re"(?<=(?<!\S)https:\/\/|(?<=\s))(www\.|mobile\.)?x\.com"
+-  xLinkRegex = re"""<a href="https:\/\/x.com([^"]+)">x\.com(\S+)</a>"""
++  twRegex = re2"(?<=(?<!\S)https:\/\/|(?<=\s))(www\.|mobile\.)?twitter\.com"
++  twLinkRegex = re2"""<a href="https:\/\/twitter.com([^"]+)">twitter\.com(\S+)</a>"""
++  xRegex = re2"(?<=(?<!\S)https:\/\/|(?<=\s))(www\.|mobile\.)?x\.com"
++  xLinkRegex = re2"""<a href="https:\/\/x.com([^"]+)">x\.com(\S+)</a>"""
+ 
+-  ytRegex = re(r"([A-z.]+\.)?youtu(be\.com|\.be)", {reStudy, reIgnoreCase})
++  ytRegex = re2(r"(?i)([A-z.]+\.)?youtu(be\.com|\.be)")
+ 
+-  rdRegex = re"(?<![.b])((www|np|new|amp|old)\.)?reddit.com"
+-  rdShortRegex = re"(?<![.b])redd\.it\/"
++  rdRegex = re2"(?<![.b])((www|np|new|amp|old)\.)?reddit.com"
++  rdShortRegex = re2"(?<![.b])redd\.it\/"
+   # Videos cannot be supported uniformly between Teddit and Libreddit,
+   # so v.redd.it links will not be replaced.
+   # Images aren't supported due to errors from Teddit when the image
+   # wasn't first displayed via a post on the Teddit instance.
+ 
+-  wwwRegex = re"https?://(www[0-9]?\.)?"
+-  m3u8Regex = re"""url="(.+.m3u8)""""
+-  userPicRegex = re"_(normal|bigger|mini|200x200|400x400)(\.[A-z]+)$"
+-  extRegex = re"(\.[A-z]+)$"
+-  illegalXmlRegex = re"(*UTF8)[^\x09\x0A\x0D\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]"
++  wwwRegex = re2"https?://(www[0-9]?\.)?"
++  m3u8Regex = re2"""url="(.+.m3u8)""""
++  userPicRegex = re2"_(normal|bigger|mini|200x200|400x400)(\.[A-z]+)$"
++  extRegex = re2"(\.[A-z]+)$"
++  illegalXmlRegex = re2"[^\x09\x0A\x0D\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]"
+ 
+ proc getUrlPrefix*(cfg: Config): string =
+   if cfg.useHttps: https & cfg.hostname
+@@ -68,12 +69,12 @@ proc replaceUrls*(body: string; prefs: Prefs; absolute=""): string =
+       result = result.replace(tco, https & twitterHost & "/t.co")
+     if "x.com" in result:
+       result = result.replace(xRegex, twitterHost)
+-      result = result.replacef(xLinkRegex, a(
++      result = result.replace(xLinkRegex, a(
+         twitterHost & "$2", href = https & twitterHost & "$1"))
+     if "twitter.com" in result:
+       result = result.replace(cards, twitterHost & "/cards")
+       result = result.replace(twRegex, twitterHost)
+-      result = result.replacef(twLinkRegex, a(
++      result = result.replace(twLinkRegex, a(
+         twitterHost & "$2", href = https & twitterHost & "$1"))
+ 
+   if prefs.replaceReddit.len > 0 and ("reddit.com" in result or "redd.it" in result):
+@@ -87,9 +88,9 @@ proc replaceUrls*(body: string; prefs: Prefs; absolute=""): string =
+     result = result.replace("href=\"/", &"href=\"{absolute}/")
+ 
+ proc getM3u8Url*(content: string): string =
+-  var matches: array[1, string]
+-  if re.find(content, m3u8Regex, matches) != -1:
+-    result = matches[0]
++  var m: RegexMatch2
++  if content.find(m3u8Regex, m):
++    result = content[m.group(0)]
+ 
+ proc proxifyVideo*(manifest: string; proxy: bool; manifestUrl = ""): string =
+   let (baseUrl, basePath) =
+@@ -119,7 +120,7 @@ proc proxifyVideo*(manifest: string; proxy: bool; manifestUrl = ""): string =
+   return manifest.multiReplace(replacements)
+ 
+ proc getUserPic*(userPic: string; style=""): string =
+-  userPic.replacef(userPicRegex, "$2").replacef(extRegex, style & "$1")
++  userPic.replace(userPicRegex, "$2").replace(extRegex, style & "$1")
+ 
+ proc getUserPic*(user: User; style=""): string =
+   getUserPic(user.userPic, style)
+diff --git a/src/parserutils.nim b/src/parserutils.nim
+index 4b8e0b4..e98333e 100644
+--- a/src/parserutils.nim
++++ b/src/parserutils.nim
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: AGPL-3.0-only
+-import std/[times, macros, htmlgen, options, algorithm, re]
++import std/[times, macros, htmlgen, options, algorithm]
++import regex
+ import std/strutils except escape
+ import std/unicode except strip
+ from xmltree import escape
+@@ -13,10 +14,10 @@ const
+   xmlClose = escape(">")
+ 
+ let
+-  unRegex = re"(^|[^A-z0-9-_./?])@([A-z0-9_]{1,15})"
++  unRegex = re2"(^|[^A-z0-9-_./?])@([A-z0-9_]{1,15})"
+   unReplace = "$1<a href=\"/$2\">@$2</a>"
+ 
+-  htRegex = re"(^|[^\w-_./?])([#$]|＃)([\w_]+)"
++  htRegex = re2"(^|[^\w./?-])([#$]|＃)([\w_]+)"
+   htReplace = "$1<a href=\"/search?f=tweets&q=%23$3\">$2$3</a>"
+ 
+ type
+@@ -277,8 +278,8 @@ proc expandUserEntities*(user: var User; js: JsonNode) =
+   replacements.sort(cmp)
+ 
+   user.bio = orig.replacedWith(replacements, 0 .. orig.len)
+-  user.bio = user.bio.replacef(unRegex, unReplace)
+-                     .replacef(htRegex, htReplace)
++  user.bio = user.bio.replace(unRegex, unReplace)
++                     .replace(htRegex, htReplace)
+ 
+ proc expandTextEntities(tweet: Tweet; entities: JsonNode; text: string; textSlice: Slice[int];
+                         replyTo=""; hasRedundantLink=false; hasArticle=false) =
+diff --git a/src/routes/media.nim b/src/routes/media.nim
+index 3442916..7a51b58 100644
+--- a/src/routes/media.nim
++++ b/src/routes/media.nim
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: AGPL-3.0-only
+-import uri, strutils, httpclient, os, hashes, base64, re
++import uri, strutils, httpclient, os, hashes, base64
++import regex
+ import asynchttpserver, asyncstreams, asyncfile, asyncnet
+ import asyncdispatch
+ 
+@@ -9,7 +10,7 @@ import router_utils
+ import ".."/[types, formatters, utils]
+ 
+ export asynchttpserver, asyncstreams, asyncfile, asyncnet
+-export httpclient, os, strutils, asyncstreams, base64, re
++export httpclient, os, strutils, asyncstreams, base64, regex
+ 
+ const
+   m3u8Mime* = "application/vnd.apple.mpegurl"
+@@ -132,7 +133,7 @@ proc createMediaRouter*(cfg: Config) =
+     get "/pic/?":
+       resp Http404
+ 
+-    get re"^\/pic\/orig\/(enc)?\/?(.+)":
++    get re2"^\/pic\/orig\/(enc)?\/?(.+)":
+       var url = decoded(request, 1)
+       cond "/amplify_video/" notin url
+       normalizeImgUrl(url)
+@@ -144,7 +145,7 @@ proc createMediaRouter*(cfg: Config) =
+       let code = await proxyMedia(request, url)
+       check code
+ 
+-    get re"^\/pic\/(enc)?\/?(.+)":
++    get re2"^\/pic\/(enc)?\/?(.+)":
+       var url = decoded(request, 1)
+       cond "/amplify_video/" notin url
+       normalizeImgUrl(url)
+@@ -155,7 +156,7 @@ proc createMediaRouter*(cfg: Config) =
+       let code = await proxyMedia(request, url)
+       check code
+ 
+-    get re"^\/video\/(enc)?\/?(.+)\/(.+)$":
++    get re2"^\/video\/(enc)?\/?(.+)\/(.+)$":
+       let url = decoded(request, 2)
+       cond isTwitterUrl(url)
+ 
+-- 
+2.55.0
+
