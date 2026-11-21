@@ -337,36 +337,42 @@ let
 
         outputs = [ "out" ];
 
-        installPhase = ''
-          runHook preInstall
+        installPhase =
+          let
+            cliPluginsDirsPrefix = lib.optionalString (
+              dockerCliPluginsDirs != ""
+            ) ''--prefix DOCKER_CLI_PLUGIN_DIRS : "${dockerCliPluginsDirs}"'';
+          in
+          ''
+            runHook preInstall
 
-          install -Dm755 ./build/docker $out/libexec/docker/docker
+            install -Dm755 ./build/docker $out/libexec/docker/docker
 
-          makeWrapper $out/libexec/docker/docker $out/bin/docker \
-            --prefix PATH : "$out/libexec/docker" \
-            --prefix DOCKER_CLI_PLUGIN_DIRS : "${dockerCliPluginsDirs}"
-        ''
-        + lib.optionalString (!clientOnly) ''
-          # symlink docker daemon to docker cli derivation
-          ln -s ${moby}/bin/dockerd $out/bin/dockerd
-          ln -s ${moby}/bin/dockerd-rootless $out/bin/dockerd-rootless
+            makeWrapper $out/libexec/docker/docker $out/bin/docker \
+              ${cliPluginsDirsPrefix} \
+              --prefix PATH : "$out/libexec/docker"
+          ''
+          + lib.optionalString (!clientOnly) ''
+            # symlink docker daemon to docker cli derivation
+            ln -s ${moby}/bin/dockerd $out/bin/dockerd
+            ln -s ${moby}/bin/dockerd-rootless $out/bin/dockerd-rootless
 
-          # systemd
-          mkdir -p $out/etc/systemd/system
-          ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
-          ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
-        ''
-        # Required to avoid breaking cross builds
-        + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-          # completion (cli)
-          installShellCompletion --cmd docker \
-            --bash <($out/bin/docker completion bash) \
-            --fish <($out/bin/docker completion fish) \
-            --zsh <($out/bin/docker completion zsh)
-        ''
-        + ''
-          runHook postInstall
-        '';
+            # systemd
+            mkdir -p $out/etc/systemd/system
+            ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
+            ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
+          ''
+          # Required to avoid breaking cross builds
+          + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+            # completion (cli)
+            installShellCompletion --cmd docker \
+              --bash <($out/bin/docker completion bash) \
+              --fish <($out/bin/docker completion fish) \
+              --zsh <($out/bin/docker completion zsh)
+          ''
+          + ''
+            runHook postInstall
+          '';
 
         doInstallCheck = true;
         nativeInstallCheckInputs = [ versionCheckHook ];
