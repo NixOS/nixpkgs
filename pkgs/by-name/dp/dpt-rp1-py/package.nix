@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dpt-rp1-py";
-  version = "0.1.19";
+  version = "0.1.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "janten";
     repo = "dpt-rp1-py";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cJ9dc8TRuduIka6T/MQsetDAjIhb+i2U9F8Qm9h29d8=";
+    sha256 = "sha256-d3SvKtoEq0+Ojs0jy8xWsiErFpKNVL0g8lfUTjYJww8=";
   };
 
   doCheck = false;
