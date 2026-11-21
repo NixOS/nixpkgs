@@ -9,6 +9,8 @@ buildGoModule (finalAttrs: {
   pname = "protoc-gen-go";
   version = "1.36.12";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-go";
