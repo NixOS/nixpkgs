@@ -1,0 +1,57 @@
+From aea1ac74ed4301df12adbffff535f72f37d0bb13 Mon Sep 17 00:00:00 2001
+From: Wenju He <wenju.he@intel.com>
+Date: Thu, 3 Aug 2023 18:42:46 +0800
+Subject: [PATCH] Fix delete of functions that becomes unused (#2109)
+
+After the first loop of deleting instructions in ValuesToDelete, deleted
+instructions in ValuesToDelete are in an unstable state. Then in the
+second loop of deleting, dyn_cast to GlobalValue could return true for
+an instruction and double eraseFromParent causes crash.
+
+Global values in ValuesToDelete are functions. Unused functions are
+deleted by eraseUselessFunctions anyway.
+---
+ lib/SPIRV/OCLToSPIRV.cpp | 9 ++-------
+ lib/SPIRV/OCLToSPIRV.h   | 2 +-
+ 2 files changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/llvm-project/llvm/projects/llvm-spirv/lib/SPIRV/OCLToSPIRV.cpp b/llvm-project/llvm/projects/llvm-spirv/lib/SPIRV/OCLToSPIRV.cpp
+index 6d6b111ded78e93c13b1083e9cadd93295ee5c66..a43ec1617b425545d02a01cf7e151ab7ef5c9a36 100644
+--- a/llvm-project/llvm/projects/llvm-spirv/lib/SPIRV/OCLToSPIRV.cpp
++++ b/llvm-project/llvm/projects/llvm-spirv/lib/SPIRV/OCLToSPIRV.cpp
+@@ -176,12 +176,8 @@ bool OCLToSPIRVBase::runOCLToSPIRV(Module &Module) {
+ 
+   visit(*M);
+ 
+-  for (auto &I : ValuesToDelete)
+-    if (auto Inst = dyn_cast<Instruction>(I))
+-      Inst->eraseFromParent();
+-  for (auto &I : ValuesToDelete)
+-    if (auto GV = dyn_cast<GlobalValue>(I))
+-      GV->eraseFromParent();
++  for (Instruction *I : ValuesToDelete)
++    I->eraseFromParent();
+ 
+   eraseUselessFunctions(M); // remove unused functions declarations
+   LLVM_DEBUG(dbgs() << "After OCLToSPIRV:\n" << *M);
+@@ -1060,7 +1056,6 @@ bool OCLToSPIRVBase::eraseUselessConvert(CallInst *CI, StringRef MangledName,
+                     << *CI->getArgOperand(0) << '\n');
+     CI->replaceAllUsesWith(CI->getArgOperand(0));
+     ValuesToDelete.insert(CI);
+-    ValuesToDelete.insert(CI->getCalledFunction());
+     return true;
+   }
+   return false;
+diff --git a/llvm-project/llvm/projects/llvm-spirv/lib/SPIRV/OCLToSPIRV.h b/llvm-project/llvm/projects/llvm-spirv/lib/SPIRV/OCLToSPIRV.h
+index 4a1e42414e9fb80b5774cef94fbdcb1852405628..a9745c027516ce15536f5d959abeba6e3c7f5cff 100644
+--- a/llvm-project/llvm/projects/llvm-spirv/lib/SPIRV/OCLToSPIRV.h
++++ b/llvm-project/llvm/projects/llvm-spirv/lib/SPIRV/OCLToSPIRV.h
+@@ -268,7 +268,7 @@ class OCLToSPIRVBase : public InstVisitor<OCLToSPIRVBase>, BuiltinCallHelper {
+ private:
+   LLVMContext *Ctx;
+   unsigned CLVer; /// OpenCL version as major*10+minor
+-  std::set<Value *> ValuesToDelete;
++  std::set<Instruction *> ValuesToDelete;
+   OCLTypeToSPIRVBase *OCLTypeToSPIRVPtr;
+ 
+   ConstantInt *addInt32(int I) { return getInt32(M, I); }

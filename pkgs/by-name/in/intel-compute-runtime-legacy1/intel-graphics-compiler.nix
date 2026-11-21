@@ -76,6 +76,13 @@ stdenv.mkDerivation rec {
     # warnings within LLVM. This is in accordance with IGC disabling warnings
     # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
     ./gcc15-allow-llvm-free-nonheap-object-warning.patch
+
+    # Fix a use-after-free in OCLToSPIRVBase::runOCLToSPIRV that can crash kernel
+    # compilation. Upstream has not backported this to llvm_release_160.
+    # https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/aea1ac74ed4301df12adbffff535f72f37d0bb13
+    # https://github.com/KhronosGroup/SPIRV-LLVM-Translator/issues/4151
+    # https://github.com/NixOS/nixpkgs/issues/583806
+    ./fix-ocltospirv-use-after-free.patch
   ];
 
   sourceRoot = ".";
