@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2025.1.5";
+  version = "2026.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5t7bgfw8jNzWbPYuhjN8uRNXDrssmUyatSAS0Fnghq0=";
+    hash = "sha256-4yyO7KRwh2mVSBl/EBsf4ZWrgYe5DhcfCjjMCFL8pzw=";
   };
 
   build-system = [ hatchling ];
