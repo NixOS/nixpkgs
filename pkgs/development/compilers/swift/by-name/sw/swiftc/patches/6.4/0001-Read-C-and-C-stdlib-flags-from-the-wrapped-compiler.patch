@@ -15,24 +15,24 @@ negative affects on every package that wants to use Swift and compile
 C++ code. The C++ library must be removed from the standard platform
 configuration, which makes adding Swift as a dependency too disruptive.
 ---
- include/swift/Nixpkgs/NixCC.h           | 76 +++++++++++++++++++++++++
+ include/swift/Nixpkgs/NixCC.h           | 86 +++++++++++++++++++++++++
  lib/CMakeLists.txt                      |  1 +
  lib/ClangImporter/CMakeLists.txt        |  3 +-
- lib/ClangImporter/ClangImporter.cpp     |  9 +++
- lib/ClangImporter/ClangIncludePaths.cpp | 10 ++++
+ lib/ClangImporter/ClangImporter.cpp     | 11 ++++
+ lib/ClangImporter/ClangIncludePaths.cpp | 12 ++++
  lib/Nixpkgs/CMakeLists.txt              |  4 ++
  lib/Nixpkgs/NixCC.cpp                   | 15 +++++
- 7 files changed, 117 insertions(+), 1 deletion(-)
+ 7 files changed, 131 insertions(+), 1 deletion(-)
  create mode 100644 include/swift/Nixpkgs/NixCC.h
  create mode 100644 lib/Nixpkgs/CMakeLists.txt
  create mode 100644 lib/Nixpkgs/NixCC.cpp
 
 diff --git a/include/swift/Nixpkgs/NixCC.h b/include/swift/Nixpkgs/NixCC.h
 new file mode 100644
-index 00000000000..4669c2c4486
+index 00000000000..dfb1aadfeae
 --- /dev/null
 +++ b/include/swift/Nixpkgs/NixCC.h
-@@ -0,0 +1,76 @@
+@@ -0,0 +1,86 @@
 +// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 +#pragma once
 +
@@ -41,6 +41,8 @@ index 00000000000..4669c2c4486
 +#include "llvm/Support/FileSystem.h"
 +#include "llvm/Support/Process.h"
 +#include "llvm/Support/VirtualFileSystem.h"
++#include "llvm/TargetParser/Host.h"
++#include "llvm/TargetParser/Triple.h"
 +
 +#include <filesystem>
 +#include <functional>
@@ -50,6 +52,14 @@ index 00000000000..4669c2c4486
 +
 +using nixsupportcache_t = std::unordered_map<std::string, std::vector<std::string>>;
 +extern void accessNixSupportCache(std::function<void(nixsupportcache_t&)>&& fn);
++
++inline bool isWrappedCompilerTarget(const llvm::Triple &triple) {
++  const llvm::Triple wrapped{llvm::sys::getDefaultTargetTriple()};
++  if (triple.getArch() != wrapped.getArch()) return false;
++  // The default triple says `darwin`, but Swift's macOS targets say `macosx`.
++  if (wrapped.isMacOSX()) return triple.isMacOSX();
++  return triple.getOS() == wrapped.getOS();
++}
 +
 +template<typename T>
 +void addFlagsFromNixCC(std::vector<T> &invocationArgStrs, const char* flagFile) {
@@ -136,7 +146,7 @@ index 2eb5b1fa131..adfdb95a912 100644
  target_link_libraries(swiftClangImporter INTERFACE
    clangDependencyScanning)
 diff --git a/lib/ClangImporter/ClangImporter.cpp b/lib/ClangImporter/ClangImporter.cpp
-index 2815b8baf4c..9f3f44a3f25 100644
+index 2815b8baf4c..c2637f8e01f 100644
 --- a/lib/ClangImporter/ClangImporter.cpp
 +++ b/lib/ClangImporter/ClangImporter.cpp
 @@ -50,6 +50,7 @@
@@ -147,23 +157,25 @@ index 2815b8baf4c..9f3f44a3f25 100644
  #include "swift/Parse/ParseVersion.h"
  #include "swift/Strings.h"
  #include "swift/Subsystems.h"
-@@ -624,6 +625,14 @@ void importer::getNormalInvocationArguments(
+@@ -624,6 +625,16 @@ void importer::getNormalInvocationArguments(
      });
    }
  
-+  // Ensure libc is available. The C standard library is separate from the sysroot
-+  // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
-+  addFlagsFromNixCC(invocationArgStrs, "libc-cflags");
-+  
-+  // Ensure the libc++ headers are available. The C++ standard library is separate
-+  // from the sysroot on most platforms in Nixpkgs.
-+  addFlagsFromNixCC(invocationArgStrs, "libcxx-cxxflags");
++  if (isWrappedCompilerTarget(triple)) {
++    // Ensure libc is available. The C standard library is separate from the sysroot
++    // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
++    addFlagsFromNixCC(invocationArgStrs, "libc-cflags");
++
++    // Ensure the libc++ headers are available. The C++ standard library is separate
++    // from the sysroot on most platforms in Nixpkgs.
++    addFlagsFromNixCC(invocationArgStrs, "libcxx-cxxflags");
++  }
 +
    if (LangOpts.EnableCXXInterop) {
      if (auto path = getCxxShimModuleMapPath(searchPathOpts, LangOpts, triple)) {
        invocationArgStrs.push_back((Twine("-fmodule-map-file=") + *path).str());
 diff --git a/lib/ClangImporter/ClangIncludePaths.cpp b/lib/ClangImporter/ClangIncludePaths.cpp
-index 5bc725811f7..cd1f5814b89 100644
+index 5bc725811f7..48f8ee2712b 100644
 --- a/lib/ClangImporter/ClangIncludePaths.cpp
 +++ b/lib/ClangImporter/ClangIncludePaths.cpp
 @@ -18,6 +18,7 @@
@@ -174,18 +186,20 @@ index 5bc725811f7..cd1f5814b89 100644
  #include "clang/Driver/Driver.h"
  #include "clang/Driver/ToolChain.h"
  #include "clang/Frontend/CompilerInstance.h"
-@@ -191,6 +192,15 @@ ClangImporter::createClangArgs(const ClangImporterOptions &ClangImporterOpts,
+@@ -191,6 +192,17 @@ ClangImporter::createClangArgs(const ClangImporterOptions &ClangImporterOpts,
    for (const auto &each : ClangImporterOpts.ExtraArgs) {
      clangArgs.push_back(each.c_str());
    }
 +
-+  // Ensure libc is available. The C standard library is separate from the sysroot
-+  // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
-+  addFlagsFromNixCC(clangArgs, "libc-cflags");
-+  
-+  // Ensure the libc++ headers are available. The C++ standard library is separate
-+  // from the sysroot on most platforms in Nixpkgs.
-+  addFlagsFromNixCC(clangArgs, "libcxx-cxxflags");
++  if (isWrappedCompilerTarget(llvm::Triple(clangDriver.getTargetTriple()))) {
++    // Ensure libc is available. The C standard library is separate from the sysroot
++    // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
++    addFlagsFromNixCC(clangArgs, "libc-cflags");
++
++    // Ensure the libc++ headers are available. The C++ standard library is separate
++    // from the sysroot on most platforms in Nixpkgs.
++    addFlagsFromNixCC(clangArgs, "libcxx-cxxflags");
++  }
 +
    llvm::opt::InputArgList clangDriverArgs =
        parseClangDriverArgs(clangDriver, clangArgs);
