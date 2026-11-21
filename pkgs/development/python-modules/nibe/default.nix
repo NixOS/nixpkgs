@@ -13,19 +13,21 @@
   pytestCheckHook,
   python-slugify,
   setuptools,
+  syrupy,
   tenacity,
+  textual,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nibe";
-  version = "2.25.0";
+  version = "2.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "nibe";
     tag = finalAttrs.version;
-    hash = "sha256-KilNRw/pO0a/x75yCUic58wyf7AD2sFyax+jk+mdxQc=";
+    hash = "sha256-wsGkpMSiC8sibmHPkg++YUEOnkObhEOeGkJgyaHyZ9M=";
   };
 
   pythonRelaxDeps = [ "async-modbus" ];
@@ -45,13 +47,17 @@ buildPythonPackage (finalAttrs: {
       pandas
       python-slugify
     ];
-    cli = [ asyncclick ];
+    cli = [
+      asyncclick
+      textual
+    ];
   };
 
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
