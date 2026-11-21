@@ -76,6 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # https://github.com/networkupstools/nut/pull/3499 , but does not apply cleanly
     ./CVE-2026-54161.patch
+
+    # Backport of upstream commit f8962ee331074f959b699b08a118e012e1c8cc43
+    # (networkupstools/nut PR #3437, merged into master 2026-07-21, milestone
+    # 2.8.6 which is unreleased): split background() into background_fork()
+    # + background_child() so the libusb thread created during driver init only
+    # exists in the daemon process. Without this, `systemctl stop upsdrv` hangs
+    # until the 90s stop timeout and the driver is SIGKILLed.
+    ./split-background-two-stages.patch
   ];
 
   buildInputs = [
