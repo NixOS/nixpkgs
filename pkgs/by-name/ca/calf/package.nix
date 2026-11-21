@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ypSoKUeJC8EUc0a5xIYQ/7/mSQKjWLqM4h/UrDRzujs=";
   };
 
+  patches = [
+    # https://github.com/calf-studio-gear/calf/pull/414
+    ./cmake-4.5-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt src/CMakeLists.txt \
       --replace-fail '"''${CMAKE_INSTALL_PREFIX}/''${CMAKE_INSTALL_LIBDIR}' '"''${CMAKE_INSTALL_FULL_LIBDIR}'
