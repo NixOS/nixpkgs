@@ -12,18 +12,18 @@ buildDotnetModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "source2viewer-cli";
-  version = "20.1";
+  version = "21.1";
 
   src = fetchFromGitHub {
     owner = "ValveResourceFormat";
     repo = "ValveResourceFormat";
     tag = finalAttrs.version;
-    hash = "sha256-CMcWWf06lBNLGvFbalEn+LsbeOV3NmUtneDa8tKrfhQ=";
+    hash = "sha256-f/G9tUovrX7LQ1SyIagjegt2z4EdGgGlzDteTTVciWs=";
   };
 
   projectFile = "CLI/CLI.csproj";
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
-  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_11_0;
+  dotnet-runtime = dotnetCorePackages.runtime_11_0;
   nugetDeps = ./deps.json;
 
   executables = [ "Source2Viewer-CLI" ];
