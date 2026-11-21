@@ -1,0 +1,317 @@
+diff --git a/hailort/cmake/external/cli11.cmake b/hailort/cmake/external/cli11.cmake
+index 31545f3..24ad9a2 100644
+--- a/hailort/cmake/external/cli11.cmake
++++ b/hailort/cmake/external/cli11.cmake
+@@ -1,20 +1,3 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
+-
+-FetchContent_Declare(
+-    cli11
+-    GIT_REPOSITORY https://github.com/hailo-ai/CLI11.git
+-    GIT_TAG ae78ac41cf225706e83f57da45117e3e90d4a5b4 # Version 2.2.0 + hailo completion
+-    SOURCE_DIR ${HAILO_EXTERNAL_DIR}/cli11-src
+-    SUBBUILD_DIR ${HAILO_EXTERNAL_DIR}/cli11-subbuild
+-)
+-
+-# https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+-FetchContent_GetProperties(cli11)
+-if(NOT cli11_POPULATED)
+-    FetchContent_Populate(cli11)
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        add_subdirectory(${cli11_SOURCE_DIR} ${cli11_BINARY_DIR} EXCLUDE_FROM_ALL)
+-    endif()
+-endif()
++find_package(CLI11 CONFIG REQUIRED)
+diff --git a/hailort/cmake/external/dotwriter.cmake b/hailort/cmake/external/dotwriter.cmake
+index 5ee8da9..10ee202 100644
+--- a/hailort/cmake/external/dotwriter.cmake
++++ b/hailort/cmake/external/dotwriter.cmake
+@@ -1,21 +1,20 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
++find_library(DOTWRITER_LIBRARY
++    NAMES dotwriter
++    REQUIRED
++)
+ 
+-FetchContent_Declare(
+-    dotwriter
+-    GIT_REPOSITORY https://github.com/hailo-ai/DotWriter
+-    GIT_TAG e5fa8f281adca10dd342b1d32e981499b8681daf # Version master
+-    GIT_SHALLOW TRUE
+-    SOURCE_DIR ${HAILO_EXTERNAL_DIR}/dotwriter-src
+-    SUBBUILD_DIR ${HAILO_EXTERNAL_DIR}/dotwriter-subbuild
++find_path(DOTWRITER_INCLUDE_DIR
++    NAMES DotWriter.h
++    REQUIRED
+ )
+ 
+-# https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+-FetchContent_GetProperties(dotwriter)
+-if(NOT dotwriter_POPULATED)
+-    FetchContent_Populate(dotwriter)
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        add_subdirectory(${dotwriter_SOURCE_DIR} ${dotwriter_BINARY_DIR} EXCLUDE_FROM_ALL)
+-    endif()
++if(NOT TARGET DotWriter)
++    add_library(DotWriter STATIC IMPORTED GLOBAL)
++
++    set_target_properties(DotWriter PROPERTIES
++        IMPORTED_LOCATION "${DOTWRITER_LIBRARY}"
++        INTERFACE_INCLUDE_DIRECTORIES "${DOTWRITER_INCLUDE_DIR}"
++    )
+ endif()
+\ No newline at end of file
+diff --git a/hailort/cmake/external/eigen.cmake b/hailort/cmake/external/eigen.cmake
+index 1bb1f66..773a5c2 100644
+--- a/hailort/cmake/external/eigen.cmake
++++ b/hailort/cmake/external/eigen.cmake
+@@ -1,28 +1,7 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
++find_package(Eigen3 CONFIG REQUIRED)
+ 
+-FetchContent_Declare(
+-    eigen
+-    GIT_REPOSITORY https://gitlab.com/libeigen/eigen
+-    GIT_TAG 3147391d946bb4b6c68edd901f2add6ac1f31f8c # Version 3.4.0
+-    GIT_SHALLOW TRUE
+-    SOURCE_DIR ${HAILO_EXTERNAL_DIR}/eigen-src
+-    SUBBUILD_DIR ${HAILO_EXTERNAL_DIR}/eigen-subbuild
+-)
+-
+-
+-# https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+-FetchContent_GetProperties(eigen)
+-if(NOT eigen_POPULATED)
+-    FetchContent_Populate(eigen)
+-    option(EIGEN_BUILD_DOC OFF)
+-    option(BUILD_TESTING OFF)
+-    option(EIGEN_LEAVE_TEST_IN_ALL_TARGET OFF)
+-    option(EIGEN_BUILD_PKGCONFIG OFF)
+-    option(CMAKE_Fortran_COMPILER OFF)
+-
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        add_subdirectory(${eigen_SOURCE_DIR} ${eigen_BINARY_DIR} EXCLUDE_FROM_ALL)
+-    endif()
+-endif()
+\ No newline at end of file
++if(NOT TARGET eigen)
++    add_library(eigen ALIAS Eigen3::Eigen)
++endif()
+diff --git a/hailort/cmake/external/json.cmake b/hailort/cmake/external/json.cmake
+index 8c1d4b3..c74fd61 100644
+--- a/hailort/cmake/external/json.cmake
++++ b/hailort/cmake/external/json.cmake
+@@ -1,21 +1,3 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
+-
+-FetchContent_Declare(
+-    json
+-    GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent.git
+-    GIT_TAG 391786c6c3abdd3eeb993a3154f1f2a4cfe137a0 # Version 3.9.1
+-    GIT_SHALLOW TRUE
+-    SOURCE_DIR ${HAILO_EXTERNAL_DIR}/json-src
+-    SUBBUILD_DIR ${HAILO_EXTERNAL_DIR}/json-subbuild
+-)
+-
+-# https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+-FetchContent_GetProperties(json)
+-if(NOT json_POPULATED)
+-    FetchContent_Populate(json)
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+-    endif()
+-endif()
+\ No newline at end of file
++find_package(nlohmann_json CONFIG REQUIRED)
+diff --git a/hailort/cmake/external/protobuf.cmake b/hailort/cmake/external/protobuf.cmake
+index 1503920..e7f86cf 100644
+--- a/hailort/cmake/external/protobuf.cmake
++++ b/hailort/cmake/external/protobuf.cmake
+@@ -1,67 +1,18 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
++find_package(Protobuf MODULE REQUIRED)
+ 
+-# TODO: support cross generators - https://gitlab.kitware.com/cmake/cmake/-/issues/20536
+-FetchContent_Declare(
+-    protobuf
+-    GIT_REPOSITORY  https://github.com/protocolbuffers/protobuf.git
+-    GIT_TAG         f0dc78d7e6e331b8c6bb2d5283e06aa26883ca7c # v21.12
+-    GIT_SHALLOW     TRUE
+-    SOURCE_DIR      ${HAILO_EXTERNAL_DIR}/protobuf-src
+-    SUBBUILD_DIR    ${HAILO_EXTERNAL_DIR}/protobuf-subbuild
+-)
++message(STATUS "Using system protobuf: ${Protobuf_VERSION}")
++message(STATUS "Protobuf compiler: ${Protobuf_PROTOC_EXECUTABLE}")
++message(STATUS "Protobuf libraries: ${Protobuf_LIBRARIES}")
+ 
+-FetchContent_GetProperties(protobuf)
+-if(NOT protobuf_POPULATED)
+-    FetchContent_Populate(protobuf)
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        message(STATUS "Building protobuf::protoc...")
+-        include(${CMAKE_CURRENT_LIST_DIR}/../execute_cmake.cmake)
+-        set(TOOL_BUILD_TYPE "Release")
+-        set(PROTOBUF_INSTALL_DIR ${HAILO_EXTERNAL_DIR}/protobuf-install)
+-
+-        execute_cmake(
+-            SOURCE_DIR ${HAILO_EXTERNAL_DIR}/protobuf-src
+-            BUILD_DIR ${HAILO_EXTERNAL_DIR}/protobuf-build
+-            CONFIGURE_ARGS
+-                -DCMAKE_BUILD_TYPE=${TOOL_BUILD_TYPE}
+-                -DCMAKE_INSTALL_PREFIX=${PROTOBUF_INSTALL_DIR}
+-
+-                -Dprotobuf_BUILD_TESTS:BOOL=OFF
+-                -Dprotobuf_WITH_ZLIB:BOOL=OFF
+-                -Dprotobuf_MSVC_STATIC_RUNTIME:BOOL=OFF
+-            BUILD_ARGS
+-                # NOTE: We are installing instead of building protoc because "hailort\external\protobuf-build\cmake\protobuf-targets.cmake" (in Windows) is based on config type.
+-                # TODO: consider importing protobuf_generate_cpp instead? will it solve it?
+-                --config ${TOOL_BUILD_TYPE} --target install ${CMAKE_EXTRA_BUILD_ARGS}
+-            PARALLEL_BUILD
+-        )
+-
+-        if(WIN32)
+-            set(PROTOBUF_CONFIG_DIR ${PROTOBUF_INSTALL_DIR}/cmake)
+-        else()
+-            set(PROTOBUF_CONFIG_DIR ${PROTOBUF_INSTALL_DIR}/lib/cmake/protobuf)
+-        endif()
+-
+-        # Include host protobuf for protoc (https://stackoverflow.com/questions/53651181/cmake-find-protobuf-package-in-custom-directory)
+-        include(${PROTOBUF_CONFIG_DIR}/protobuf-config.cmake)
+-        include(${PROTOBUF_CONFIG_DIR}/protobuf-module.cmake)
+-
+-        set(protobuf_BUILD_TESTS OFF CACHE BOOL "Build protobuf tests" FORCE)
+-        set(protobuf_BUILD_PROTOC_BINARIES OFF CACHE BOOL "Build libprotoc and protoc compiler" FORCE)
+-        set(protobuf_MSVC_STATIC_RUNTIME OFF CACHE BOOL "Protobuf MSVC static runtime" FORCE)
+-        set(protobuf_WITH_ZLIB OFF CACHE BOOL "Compile protobuf with zlib" FORCE)
+-        add_subdirectory(${protobuf_SOURCE_DIR} ${protobuf_BINARY_DIR} EXCLUDE_FROM_ALL)
+-
+-        if(NOT MSVC)
+-            set_target_properties(libprotobuf PROPERTIES POSITION_INDEPENDENT_CODE ON)
+-            set_target_properties(libprotobuf-lite PROPERTIES POSITION_INDEPENDENT_CODE ON)
+-        endif()
+-    endif()
++# HailoRT uses the legacy, un-namespaced target names.
++if(NOT TARGET libprotobuf)
++    add_library(libprotobuf ALIAS protobuf::libprotobuf)
+ endif()
+ 
++if(NOT TARGET libprotobuf-lite)
++    add_library(libprotobuf-lite ALIAS protobuf::libprotobuf-lite)
++endif()
+ 
+-
+-
+-
++set(PROTOC_EXE "${Protobuf_PROTOC_EXECUTABLE}")
+diff --git a/hailort/cmake/external/readerwriterqueue.cmake b/hailort/cmake/external/readerwriterqueue.cmake
+index 403b1bc..7f8c90e 100644
+--- a/hailort/cmake/external/readerwriterqueue.cmake
++++ b/hailort/cmake/external/readerwriterqueue.cmake
+@@ -1,23 +1,7 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
++find_package(readerwriterqueue CONFIG REQUIRED)
+ 
+-FetchContent_Declare(
+-    readerwriterqueue
+-    GIT_REPOSITORY https://github.com/cameron314/readerwriterqueue
+-    GIT_TAG 435e36540e306cac40fcfeab8cc0a22d48464509 # Version 1.0.3
+-    GIT_SHALLOW TRUE
+-    SOURCE_DIR ${HAILO_EXTERNAL_DIR}/readerwriterqueue-src
+-    SUBBUILD_DIR ${HAILO_EXTERNAL_DIR}/readerwriterqueue-subbuild
+-)
+-
+-# https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+-FetchContent_GetProperties(readerwriterqueue)
+-if(NOT readerwriterqueue_POPULATED)
+-    FetchContent_Populate(readerwriterqueue)
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        # Add readerwriterqueue as a header-only library
+-        add_library(readerwriterqueue INTERFACE)
+-        target_include_directories(readerwriterqueue INTERFACE ${readerwriterqueue_SOURCE_DIR})
+-    endif()
++if(NOT TARGET readerwriterqueue)
++    add_library(readerwriterqueue ALIAS readerwriterqueue::readerwriterqueue)
+ endif()
+\ No newline at end of file
+diff --git a/hailort/cmake/external/spdlog.cmake b/hailort/cmake/external/spdlog.cmake
+index 14a0949..587079e 100644
+--- a/hailort/cmake/external/spdlog.cmake
++++ b/hailort/cmake/external/spdlog.cmake
+@@ -1,22 +1,7 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
++find_package(spdlog CONFIG REQUIRED)
+ 
+-FetchContent_Declare(
+-    spdlog
+-    GIT_REPOSITORY https://github.com/gabime/spdlog
+-    GIT_TAG 27cb4c76708608465c413f6d0e6b8d99a4d84302 # version 1.14.1
+-    GIT_SHALLOW TRUE
+-    SOURCE_DIR ${HAILO_EXTERNAL_DIR}/spdlog-src
+-    SUBBUILD_DIR ${HAILO_EXTERNAL_DIR}/spdlog-subbuild
+-)
+-
+-# https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+-FetchContent_GetProperties(spdlog)
+-if(NOT spdlog_POPULATED)
+-    FetchContent_Populate(spdlog)
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR} EXCLUDE_FROM_ALL)
+-        set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
+-    endif()
++if(NOT TARGET spdlog)
++    add_library(spdlog ALIAS spdlog::spdlog)
+ endif()
+diff --git a/hailort/cmake/external/xxhash.cmake b/hailort/cmake/external/xxhash.cmake
+index 875bb19..325c971 100644
+--- a/hailort/cmake/external/xxhash.cmake
++++ b/hailort/cmake/external/xxhash.cmake
+@@ -1,23 +1,14 @@
+ cmake_minimum_required(VERSION 3.11.0)
+ 
+-include(FetchContent)
++find_path(XXHASH_INCLUDE_DIR NAMES xxhash.h)
++find_library(XXHASH_LIBRARY NAMES xxhash)
+ 
+-FetchContent_Declare(
+-    xxhash
+-    GIT_REPOSITORY https://github.com/Cyan4973/xxHash
+-    GIT_TAG bbb27a5efb85b92a0486cf361a8635715a53f6ba # Version 0.8.2
+-    GIT_SHALLOW TRUE
+-    SOURCE_DIR ${HAILO_EXTERNAL_DIR}/xxhash-src
+-    SUBBUILD_DIR ${HAILO_EXTERNAL_DIR}/xxhash-subbuild
+-)
++if(NOT XXHASH_INCLUDE_DIR OR NOT XXHASH_LIBRARY)
++    message(FATAL_ERROR "System xxHash not found")
++endif()
+ 
+-# https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+-FetchContent_GetProperties(xxhash)
+-if(NOT xxhash_POPULATED)
+-    FetchContent_Populate(xxhash)
+-    if (NOT HAILO_EXTERNALS_EXCLUDE_TARGETS)
+-        # Add xxhash as a header-only library
+-        add_library(xxhash INTERFACE)
+-        target_include_directories(xxhash INTERFACE ${xxhash_SOURCE_DIR})
+-    endif()
+-endif()
+\ No newline at end of file
++if(NOT TARGET xxhash)
++    add_library(xxhash INTERFACE)
++    target_include_directories(xxhash INTERFACE ${XXHASH_INCLUDE_DIR})
++    target_link_libraries(xxhash INTERFACE ${XXHASH_LIBRARY})
++endif()

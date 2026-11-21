@@ -163,6 +163,7 @@ let
     devicePrefix = "pci";
   };
   withCoral = withCoralPCI || withCoralUSB;
+  withHailo8l = hasDetector { type = "hailo8l"; };
   withOpenVINO = hasDetector { type = "openvino"; };
 in
 
@@ -735,6 +736,9 @@ in
       usb.enable = mkDefault withCoralUSB;
       pcie.enable = mkDefault withCoralPCI;
     };
+
+    boot.extraModulePackages = lib.optionals withHailo8l [ config.boot.kernelPackages.hailo8 ];
+    hardware.firmware = lib.optionals withHailo8l [ pkgs.hailo8-firmware ];
 
     users.users.frigate = {
       isSystemUser = true;

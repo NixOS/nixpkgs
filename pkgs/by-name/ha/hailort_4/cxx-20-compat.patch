@@ -1,0 +1,282 @@
+diff --git a/hailort/common/CMakeLists.txt b/hailort/common/CMakeLists.txt
+index ca7d2be..d5bd4fb 100644
+--- a/hailort/common/CMakeLists.txt
++++ b/hailort/common/CMakeLists.txt
+@@ -47,7 +47,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL QNX)
+ endif()
+ 
+ set_target_properties(hailort_common PROPERTIES
+-    CXX_STANDARD              14
++    CXX_STANDARD              20
+     CXX_STANDARD_REQUIRED     YES
+     CXX_EXTENSIONS            NO
+     POSITION_INDEPENDENT_CODE ON
+diff --git a/hailort/hailort_service/CMakeLists.txt b/hailort/hailort_service/CMakeLists.txt
+index 1b1232d..5689759 100644
+--- a/hailort/hailort_service/CMakeLists.txt
++++ b/hailort/hailort_service/CMakeLists.txt
+@@ -15,7 +15,7 @@ add_executable(hailort_service
+     ${HAILORT_SERVICE_OS_DIR}/hailort_service.cpp
+ )
+ target_compile_options(hailort_service PRIVATE ${HAILORT_COMPILE_OPTIONS})
+-set_property(TARGET hailort_service PROPERTY CXX_STANDARD 14)
++set_property(TARGET hailort_service PROPERTY CXX_STANDARD 20)
+ target_link_libraries(hailort_service
+     libhailort
+     hailort_common
+diff --git a/hailort/hailortcli/CMakeLists.txt b/hailort/hailortcli/CMakeLists.txt
+index 2c1f6f6..5eedd3e 100644
+--- a/hailort/hailortcli/CMakeLists.txt
++++ b/hailort/hailortcli/CMakeLists.txt
+@@ -61,7 +61,7 @@ add_executable(hailortcli
+ )
+ 
+ target_compile_options(hailortcli PRIVATE ${HAILORT_COMPILE_OPTIONS})
+-set_property(TARGET hailortcli PROPERTY CXX_STANDARD 14)
++set_property(TARGET hailortcli PROPERTY CXX_STANDARD 20)
+ 
+ # Link with a relative libhailort
+ set_property(TARGET hailortcli PROPERTY INSTALL_RPATH "$ORIGIN")
+diff --git a/hailort/hrpc_protocol/CMakeLists.txt b/hailort/hrpc_protocol/CMakeLists.txt
+index fce92db..1021f4a 100644
+--- a/hailort/hrpc_protocol/CMakeLists.txt
++++ b/hailort/hrpc_protocol/CMakeLists.txt
+@@ -5,7 +5,7 @@ get_filename_component(PROTO_HEADER_DIRECTORY ${PROTO_RPC_HEADER} DIRECTORY)
+ 
+ add_library(rpc_proto STATIC EXCLUDE_FROM_ALL ${PROTO_RPC_SRC} ${PROTO_RPC_HEADER})
+ target_link_libraries(rpc_proto libprotobuf-lite)
+-set_target_properties(rpc_proto PROPERTIES CXX_STANDARD 14 GENERATED TRUE POSITION_INDEPENDENT_CODE ON)
++set_target_properties(rpc_proto PROPERTIES CXX_STANDARD 20 GENERATED TRUE POSITION_INDEPENDENT_CODE ON)
+ if(CMAKE_HOST_WIN32)
+     # https://github.com/protocolbuffers/protobuf/tree/master/cmake#notes-on-compiler-warnings
+     target_compile_options(rpc_proto PRIVATE /wd4244)
+diff --git a/hailort/libhailort/CMakeLists.txt b/hailort/libhailort/CMakeLists.txt
+index cd48c05..71cf1b1 100644
+--- a/hailort/libhailort/CMakeLists.txt
++++ b/hailort/libhailort/CMakeLists.txt
+@@ -15,7 +15,7 @@ protobuf_generate_python(PROTO_HEF_PY tracer_profiler.proto)
+ 
+ add_library(hef_proto ${PROTO_HEF_SRC} ${PROTO_HEF_HEADER} ${PROTO_HEF_PY})
+ target_link_libraries(hef_proto libprotobuf-lite)
+-set_target_properties(hef_proto PROPERTIES CXX_STANDARD 14 GENERATED TRUE POSITION_INDEPENDENT_CODE ON)
++set_target_properties(hef_proto PROPERTIES CXX_STANDARD 20 GENERATED TRUE POSITION_INDEPENDENT_CODE ON)
+ if(CMAKE_HOST_WIN32)
+     # https://github.com/protocolbuffers/protobuf/tree/master/cmake#notes-on-compiler-warnings
+     target_compile_options(hef_proto PRIVATE /wd4244)
+@@ -30,7 +30,7 @@ target_include_directories(hef_proto
+ protobuf_generate_cpp(PROTO_SCHEDULER_MON_SRC PROTO_SCHEDULER_MON_HEADR scheduler_mon.proto)
+ add_library(scheduler_mon_proto ${PROTO_SCHEDULER_MON_SRC} ${PROTO_SCHEDULER_MON_HEADR})
+ target_link_libraries(scheduler_mon_proto libprotobuf-lite)
+-set_target_properties(scheduler_mon_proto PROPERTIES CXX_STANDARD 14 GENERATED TRUE POSITION_INDEPENDENT_CODE ON)
++set_target_properties(scheduler_mon_proto PROPERTIES CXX_STANDARD 20 GENERATED TRUE POSITION_INDEPENDENT_CODE ON)
+ if(CMAKE_HOST_WIN32)
+     target_compile_options(scheduler_mon_proto PRIVATE /wd4244)
+ endif()
+@@ -44,7 +44,7 @@ target_include_directories(scheduler_mon_proto
+ protobuf_generate_cpp(PROTO_PROFILER_SRC PROTO_PROFILER_HEADR tracer_profiler.proto)
+ add_library(profiler_proto ${PROTO_PROFILER_SRC} ${PROTO_PROFILER_HEADR})
+ target_link_libraries(profiler_proto libprotobuf-lite)
+-set_target_properties(profiler_proto PROPERTIES CXX_STANDARD 14 GENERATED TRUE POSITION_INDEPENDENT_CODE ON)
++set_target_properties(profiler_proto PROPERTIES CXX_STANDARD 20 GENERATED TRUE POSITION_INDEPENDENT_CODE ON)
+ if(CMAKE_HOST_WIN32)
+     target_compile_options(profiler_proto PRIVATE /wd4244)
+ endif()
+diff --git a/hailort/libhailort/bindings/gstreamer/CMakeLists.txt b/hailort/libhailort/bindings/gstreamer/CMakeLists.txt
+index fbcea90..b9190d0 100644
+--- a/hailort/libhailort/bindings/gstreamer/CMakeLists.txt
++++ b/hailort/libhailort/bindings/gstreamer/CMakeLists.txt
+@@ -35,10 +35,10 @@ endif ()
+ 
+ add_library(gsthailo SHARED ${GSTHAILO_SOURCES})
+ 
+-set_property(TARGET gsthailo PROPERTY CXX_STANDARD 14)
++set_property(TARGET gsthailo PROPERTY CXX_STANDARD 20)
+ 
+ set_target_properties(gsthailo PROPERTIES
+-    CXX_STANDARD              14
++    CXX_STANDARD              20
+     CXX_STANDARD_REQUIRED     YES
+     CXX_EXTENSIONS            NO
+     C_VISIBILITY_PRESET       hidden
+diff --git a/hailort/libhailort/bindings/python/src/CMakeLists.txt b/hailort/libhailort/bindings/python/src/CMakeLists.txt
+index c3ab8ad..f74f3f7 100644
+--- a/hailort/libhailort/bindings/python/src/CMakeLists.txt
++++ b/hailort/libhailort/bindings/python/src/CMakeLists.txt
+@@ -59,7 +59,7 @@ pybind11_add_module(_pyhailort
+ )
+ 
+ set_target_properties(_pyhailort PROPERTIES
+-    CXX_STANDARD              14
++    CXX_STANDARD              20
+     CXX_STANDARD_REQUIRED     YES
+     CXX_EXTENSIONS            NO
+     C_VISIBILITY_PRESET       hidden
+diff --git a/hailort/libhailort/examples/cpp/async_infer_advanced_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/async_infer_advanced_example/CMakeLists.txt
+index 1265c94..888290d 100644
+--- a/hailort/libhailort/examples/cpp/async_infer_advanced_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/async_infer_advanced_example/CMakeLists.txt
+@@ -13,4 +13,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_async_infer_advanced_example PROPERTIES CXX_STANDARD 14)
++set_target_properties(cpp_async_infer_advanced_example PROPERTIES CXX_STANDARD 20)
+diff --git a/hailort/libhailort/examples/cpp/async_infer_basic_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/async_infer_basic_example/CMakeLists.txt
+index 6f0e022..23d5999 100644
+--- a/hailort/libhailort/examples/cpp/async_infer_basic_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/async_infer_basic_example/CMakeLists.txt
+@@ -13,4 +13,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_async_infer_basic_example PROPERTIES CXX_STANDARD 14)
++set_target_properties(cpp_async_infer_basic_example PROPERTIES CXX_STANDARD 20)
+diff --git a/hailort/libhailort/examples/cpp/infer_pipeline_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/infer_pipeline_example/CMakeLists.txt
+index 454f2f1..ce2bf35 100644
+--- a/hailort/libhailort/examples/cpp/infer_pipeline_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/infer_pipeline_example/CMakeLists.txt
+@@ -13,4 +13,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_infer_pipeline_example PROPERTIES CXX_STANDARD 14)
++set_target_properties(cpp_infer_pipeline_example PROPERTIES CXX_STANDARD 20)
+diff --git a/hailort/libhailort/examples/cpp/multi_device_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/multi_device_example/CMakeLists.txt
+index 46db00c..419831e 100644
+--- a/hailort/libhailort/examples/cpp/multi_device_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/multi_device_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_multi_device_example PROPERTIES CXX_STANDARD 14)
++set_target_properties(cpp_multi_device_example PROPERTIES CXX_STANDARD 20)
+diff --git a/hailort/libhailort/examples/cpp/multi_network_vstream_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/multi_network_vstream_example/CMakeLists.txt
+index 7b4c1d6..5f7dd80 100644
+--- a/hailort/libhailort/examples/cpp/multi_network_vstream_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/multi_network_vstream_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_multi_network_vstream_example PROPERTIES CXX_STANDARD 14)
++set_target_properties(cpp_multi_network_vstream_example PROPERTIES CXX_STANDARD 20)
+diff --git a/hailort/libhailort/examples/cpp/multi_process_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/multi_process_example/CMakeLists.txt
+index 15096b5..fd2abb4 100644
+--- a/hailort/libhailort/examples/cpp/multi_process_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/multi_process_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_multi_process_example PROPERTIES CXX_STANDARD 14)
+\ No newline at end of file
++set_target_properties(cpp_multi_process_example PROPERTIES CXX_STANDARD 20)
+\ No newline at end of file
+diff --git a/hailort/libhailort/examples/cpp/notification_callback_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/notification_callback_example/CMakeLists.txt
+index bc470c4..83b3683 100644
+--- a/hailort/libhailort/examples/cpp/notification_callback_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/notification_callback_example/CMakeLists.txt
+@@ -13,4 +13,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_notification_callback_example PROPERTIES CXX_STANDARD 14)
++set_target_properties(cpp_notification_callback_example PROPERTIES CXX_STANDARD 20)
+diff --git a/hailort/libhailort/examples/cpp/power_measurement_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/power_measurement_example/CMakeLists.txt
+index 0b622ab..a7d9183 100644
+--- a/hailort/libhailort/examples/cpp/power_measurement_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/power_measurement_example/CMakeLists.txt
+@@ -13,4 +13,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_power_measurement_example PROPERTIES CXX_STANDARD 14)
+\ No newline at end of file
++set_target_properties(cpp_power_measurement_example PROPERTIES CXX_STANDARD 20)
+\ No newline at end of file
+diff --git a/hailort/libhailort/examples/cpp/raw_async_streams_multi_thread_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/raw_async_streams_multi_thread_example/CMakeLists.txt
+index a6109cb..4e7b978 100644
+--- a/hailort/libhailort/examples/cpp/raw_async_streams_multi_thread_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/raw_async_streams_multi_thread_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_raw_async_streams_multi_thread_example PROPERTIES CXX_STANDARD 14)
+\ No newline at end of file
++set_target_properties(cpp_raw_async_streams_multi_thread_example PROPERTIES CXX_STANDARD 20)
+\ No newline at end of file
+diff --git a/hailort/libhailort/examples/cpp/raw_async_streams_single_thread_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/raw_async_streams_single_thread_example/CMakeLists.txt
+index 2416a8c..acba507 100644
+--- a/hailort/libhailort/examples/cpp/raw_async_streams_single_thread_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/raw_async_streams_single_thread_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_raw_async_streams_single_thread_example PROPERTIES CXX_STANDARD 14)
+\ No newline at end of file
++set_target_properties(cpp_raw_async_streams_single_thread_example PROPERTIES CXX_STANDARD 20)
+\ No newline at end of file
+diff --git a/hailort/libhailort/examples/cpp/raw_streams_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/raw_streams_example/CMakeLists.txt
+index 9c9f670..4577a0f 100644
+--- a/hailort/libhailort/examples/cpp/raw_streams_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/raw_streams_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_raw_streams_example PROPERTIES CXX_STANDARD 14)
+\ No newline at end of file
++set_target_properties(cpp_raw_streams_example PROPERTIES CXX_STANDARD 20)
+\ No newline at end of file
+diff --git a/hailort/libhailort/examples/cpp/switch_network_groups_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/switch_network_groups_example/CMakeLists.txt
+index 06d524d..f9e275a 100644
+--- a/hailort/libhailort/examples/cpp/switch_network_groups_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/switch_network_groups_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_switch_network_groups_example PROPERTIES CXX_STANDARD 14)
+\ No newline at end of file
++set_target_properties(cpp_switch_network_groups_example PROPERTIES CXX_STANDARD 20)
+\ No newline at end of file
+diff --git a/hailort/libhailort/examples/cpp/switch_network_groups_manually_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/switch_network_groups_manually_example/CMakeLists.txt
+index 4c88393..b2b7da0 100644
+--- a/hailort/libhailort/examples/cpp/switch_network_groups_manually_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/switch_network_groups_manually_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_switch_network_groups_manually_example PROPERTIES CXX_STANDARD 14)
+\ No newline at end of file
++set_target_properties(cpp_switch_network_groups_manually_example PROPERTIES CXX_STANDARD 20)
+\ No newline at end of file
+diff --git a/hailort/libhailort/examples/cpp/vstreams_example/CMakeLists.txt b/hailort/libhailort/examples/cpp/vstreams_example/CMakeLists.txt
+index a2608f1..8a5990c 100644
+--- a/hailort/libhailort/examples/cpp/vstreams_example/CMakeLists.txt
++++ b/hailort/libhailort/examples/cpp/vstreams_example/CMakeLists.txt
+@@ -16,4 +16,4 @@ if(WIN32)
+     )
+ endif()
+ 
+-set_target_properties(cpp_vstreams_example PROPERTIES CXX_STANDARD 14)
+\ No newline at end of file
++set_target_properties(cpp_vstreams_example PROPERTIES CXX_STANDARD 20)
+\ No newline at end of file
+diff --git a/hailort/libhailort/src/CMakeLists.txt b/hailort/libhailort/src/CMakeLists.txt
+index 26461f8..e897cfb 100644
+--- a/hailort/libhailort/src/CMakeLists.txt
++++ b/hailort/libhailort/src/CMakeLists.txt
+@@ -138,7 +138,7 @@ set_target_properties(libhailort PROPERTIES
+     VERSION ${HAILORT_MAJOR_VERSION}.${HAILORT_MINOR_VERSION}.${HAILORT_REVISION_VERSION}
+     # SOVERSION ${HAILORT_MAJOR_VERSION}
+ 
+-    CXX_STANDARD              14
++    CXX_STANDARD              20
+     CXX_STANDARD_REQUIRED     YES
+     CXX_EXTENSIONS            NO
+     C_VISIBILITY_PRESET       hidden

@@ -1,0 +1,66 @@
+diff --git a/hailort/libhailort/include/hailo/buffer.hpp b/hailort/libhailort/include/hailo/buffer.hpp
+index 14b82e5..0123b22 100644
+--- a/hailort/libhailort/include/hailo/buffer.hpp
++++ b/hailort/libhailort/include/hailo/buffer.hpp
+@@ -138,7 +138,7 @@ public:
+     // Returns a pointer to the start of the buffer, cast to T*
+     // Note: If this->size() is less than sizeof(T), then part of the data pointed to by the returned pointer
+     //       will be outside of the buffer's bounds.
+-    template<typename T, std::enable_if_t<std::is_pod<T>::value, int> = 0>
++    template<typename T, std::enable_if_t<std::is_trivial<T>::value, int> = 0>
+     T* as_pointer() const
+     {
+         assert(m_size >= sizeof(T));
+@@ -147,7 +147,7 @@ public:
+ 
+     // Returns a copy of the data at the start of the buffer, cast to T
+     // Note: If this->size() is less than sizeof(T), then the copy will hold data that isn't from the buffer!
+-    template<typename T, std::enable_if_t<std::is_pod<T>::value, int> = 0>
++    template<typename T, std::enable_if_t<std::is_trivial<T>::value, int> = 0>
+     T as_type() const
+     {
+         assert(m_size >= sizeof(T));
+@@ -163,7 +163,7 @@ public:
+ 
+     // Returns a reference to the data at the start of the buffer, cast to T
+     // Note: If this->size() is less than sizeof(T), then the reference will hold data that isn't from the buffer!
+-    template<typename T, std::enable_if_t<std::is_pod<T>::value, int> = 0>
++    template<typename T, std::enable_if_t<std::is_trivial<T>::value, int> = 0>
+     T& as_type()
+     {
+         assert(m_size >= sizeof(T));
+@@ -261,7 +261,7 @@ public:
+     // Returns a pointer to the start of the buffer, cast to T*
+     // Note: If this->size() is less than sizeof(T), then part of the data pointed to by the returned pointer
+     //       will be outside of the buffer's bounds.
+-    template<typename T, std::enable_if_t<std::is_pod<T>::value, int> = 0>
++    template<typename T, std::enable_if_t<std::is_trivial<T>::value, int> = 0>
+     T* as_pointer() const
+     {
+         assert(m_size >= sizeof(T));
+diff --git a/hailort/libhailort/src/vdma/channel/channel_id.hpp b/hailort/libhailort/src/vdma/channel/channel_id.hpp
+index 53cbc72..7c03f9d 100644
+--- a/hailort/libhailort/src/vdma/channel/channel_id.hpp
++++ b/hailort/libhailort/src/vdma/channel/channel_id.hpp
+@@ -51,7 +51,7 @@ struct ChannelId
+ template<>
+ struct fmt::formatter<hailort::vdma::ChannelId> : fmt::formatter<fmt::string_view> {
+     template <typename FormatContext>
+-    auto format(const hailort::vdma::ChannelId &input, FormatContext& ctx) -> decltype(ctx.out()) {
++    auto format(const hailort::vdma::ChannelId &input, FormatContext& ctx) const -> decltype(ctx.out()) {
+         std::stringstream ss;
+         ss << static_cast<uint32_t>(input.engine_index) << ":" 
+             << static_cast<uint32_t>(input.channel_index);
+diff --git a/hailort/common/file_utils.cpp b/hailort/common/file_utils.cpp
+index 7f5f71a..8cc17c0 100644
+--- a/hailort/common/file_utils.cpp
++++ b/hailort/common/file_utils.cpp
+@@ -41,7 +41,7 @@ Expected<Buffer> read_binary_file(const std::string &file_path, const BufferStor
+ 
+     TRY(const auto file_size, get_istream_size(file), "Failed to get file size");
+     TRY(auto buffer, Buffer::create(file_size, output_buffer_params),
+-        "Failed to allocate file buffer ({} bytes}", file_size);
++        "Failed to allocate file buffer ({} bytes)", file_size);
+ 
+     // Read the data
+     file.read(reinterpret_cast<char*>(buffer.data()), buffer.size());

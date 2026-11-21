@@ -11001,6 +11001,12 @@
     githubId = 4656860;
     name = "Gaute Ravndal";
   };
+  gravydigger = {
+    email = "mail@gravydigger.net";
+    github = "Gravydigger";
+    githubId = 53815736;
+    name = "Gravydigger";
+  };
   gray-heron = {
     email = "ave+nix@cezar.info";
     github = "gray-heron";

@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fad4d56..b5428c4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -27,10 +27,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
+ 
+ target_include_directories(${PROJECT_NAME} INTERFACE 
+     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib>
++    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+ )
+ 
+ install(TARGETS ${PROJECT_NAME}
+-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-    ARCHIVE DESTINATION build/
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+ )

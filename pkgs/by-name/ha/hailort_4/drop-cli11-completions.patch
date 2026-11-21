@@ -1,0 +1,76 @@
+diff --git a/hailort/hailortcli/CMakeLists.txt b/hailort/hailortcli/CMakeLists.txt
+index 59b2f89..5eedd3e 100644
+--- a/hailort/hailortcli/CMakeLists.txt
++++ b/hailort/hailortcli/CMakeLists.txt
+@@ -4,6 +4,7 @@ include(GNUInstallDirs)
+ include(${HAILO_EXTERNALS_CMAKE_SCRIPTS}/cli11.cmake)
+ include(${HAILO_EXTERNALS_CMAKE_SCRIPTS}/json.cmake)
+ include(${HAILO_EXTERNALS_CMAKE_SCRIPTS}/dotwriter.cmake)
++include(${HAILO_EXTERNALS_CMAKE_SCRIPTS}/eigen.cmake)
+ 
+ set(HAILORTCLI_CPP_FILES
+     hailortcli.cpp
+@@ -93,4 +94,3 @@ install(TARGETS hailortcli
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    CONFIGURATIONS Release
+ )
+-cli11_install_completion_file(hailortcli)
+diff --git a/hailort/hailortcli/hailortcli.hpp b/hailort/hailortcli/hailortcli.hpp
+index f86fd54..8aad074 100644
+--- a/hailort/hailortcli/hailortcli.hpp
++++ b/hailort/hailortcli/hailortcli.hpp
+@@ -80,14 +80,6 @@ public:
+         desc_function_ = [non_hidden_values]() {
+             return CLI::detail::generate_map(CLI::detail::smart_deref(non_hidden_values), true);
+         };
+-
+-        autocomplete_func_ = [non_hidden_values](const std::string &) {
+-            std::vector<std::string> completions;
+-            for (const auto &completion : non_hidden_values) {
+-                completions.emplace_back(completion.first);
+-            }
+-            return completions;
+-        };
+     }
+ 
+ private:
+diff --git a/hailort/hailortcli/run2/run2_command.cpp b/hailort/hailortcli/run2/run2_command.cpp
+index 21b69f8..889b46d 100644
+--- a/hailort/hailortcli/run2/run2_command.cpp
++++ b/hailort/hailortcli/run2/run2_command.cpp
+@@ -50,10 +50,6 @@ VStreamNameValidator::VStreamNameValidator(const CLI::Option *hef_path_option, c
+         //TODO: support?
+         return std::string();
+     };
+-    autocomplete_func_ = [hef_path_option, net_group_name_option](const std::string&) {
+-        // TODO: remove existing names from prev user input
+-        return get_values(hef_path_option->as<std::string>(), net_group_name_option->as<std::string>());
+-    };
+ }
+ 
+ std::vector<std::string> VStreamNameValidator::get_values(const std::string &hef_path, const std::string &net_group_name)
+@@ -97,10 +93,6 @@ StreamNameValidator::StreamNameValidator(const CLI::Option *hef_path_option, con
+         //TODO: support?
+         return std::string();
+     };
+-    autocomplete_func_ = [hef_path_option, net_group_name_option](const std::string&) {
+-        // TODO: remove existing names from prev user input
+-        return get_values(hef_path_option->as<std::string>(), net_group_name_option->as<std::string>());
+-    };
+ }
+ 
+ std::vector<std::string> StreamNameValidator::get_values(const std::string &hef_path, const std::string &net_group_name)
+@@ -251,13 +243,6 @@ NetworkGroupNameValidator::NetworkGroupNameValidator(const CLI::Option *hef_path
+         //TODO: support?
+         return std::string();
+     };
+-    autocomplete_func_ = [hef_path_option](const std::string&) -> std::vector<std::string>{
+-        auto hef = Hef::create(hef_path_option->as<std::string>());
+-        if (!hef.has_value()) {
+-            return {};
+-        }
+-        return hef->get_network_groups_names();
+-    };
+ }
+ 
+ /** NetworkApp */
