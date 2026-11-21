@@ -7,6 +7,7 @@
   lib,
   hostPkgs,
   bootMode,
+  nvme,
   ...
 }:
 
@@ -67,8 +68,12 @@ let
 in
 {
   _module.args.bootMode = lib.mkDefault null;
+  _module.args.nvme = lib.mkDefault false;
 
-  name = "ec2-image" + lib.optionalString (bootMode == "uefi") "-systemd-boot";
+  name =
+    "ec2-image"
+    + lib.optionalString (bootMode == "uefi") "-systemd-boot"
+    + lib.optionalString nvme "-nvme";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -101,6 +106,9 @@ in
       import re
       import subprocess
       import tempfile
+
+      NVME = ${if nvme then "True" else "False"}
+      EBS_MODEL = "Amazon Elastic Block Store"
 
       # Instance Metadata Service (IMDSv2 with 1.0 metadata version)
       # TODO: Use 'latest' metadata version instead of '1.0'
@@ -187,6 +195,19 @@ in
           ])
           subprocess.check_call([QEMU_IMG, "resize", disk_image, "10G"])
 
+          if NVME:
+              # Attach the disks as Nitro does, as EBS NVMe controllers.
+              data_image = os.path.join(image_dir, "data.qcow2")
+              subprocess.check_call([QEMU_IMG, "create", "-f", "qcow2", data_image, "1G"])
+              drives = (
+                  f" -drive file={disk_image},if=none,id=root,werror=report"
+                  + f" -device 'nvme,drive=root,serial=vol0123456789abcdef0,model={EBS_MODEL}'"
+                  + f" -drive file={data_image},if=none,id=data,werror=report"
+                  + f" -device 'nvme,drive=data,serial=vol0fedcba9876543210,model={EBS_MODEL}'"
+              )
+          else:
+              drives = f" -drive file={disk_image},if=virtio,werror=report"
+
           # Create fake EC2 metadata in temporary directory with client's public key
           metadata_dir = create_ec2_metadata_dir(temp_dir, client_pubkey)
 
@@ -205,7 +226,7 @@ in
               f"{QEMU}/bin/qemu-kvm -m 1024"
               + " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
               + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
-              + f" -drive file={disk_image},if=virtio,werror=report"
+              + drives
               + vlan_net
               + metadata_net
               + " $QEMU_OPTS"
@@ -308,6 +329,26 @@ in
               machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("test $(stat -c %a ${imageCfg.boot.loader.efi.efiSysMountPoint}) = 700")
               machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
+
+          if NVME:
+              with subtest("EBS NVMe device names"):
+                  machine.succeed("udevadm settle")
+                  # The kernel numbers NVMe controllers in probe order, so go by serial.
+                  by_id = "/dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_"
+                  devs = machine.succeed(
+                      f"readlink -f {by_id}vol0123456789abcdef0 {by_id}vol0123456789abcdef0-part1 {by_id}vol0fedcba9876543210"
+                  ).split()
+                  for dev in devs:
+                      # udevd ran ebsnvme-bdev at boot, and nvme-cli read QEMU's vendor ID.
+                      machine.succeed(
+                          f"journalctl -b -t ebsnvme-bdev _SYSTEMD_UNIT=systemd-udevd.service --grep '^{dev}: vid=0x1b36 bdev=$'"
+                      )
+                      # QEMU can't set the vendor-specific device name, so nothing gets an xvd or sd name.
+                      ctrl = machine.succeed(f"${lib.getExe pkgs.nvme-cli} amzn id-ctrl {dev}")
+                      assert re.search(r"^bdev +: *$", ctrl, re.M), ctrl
+                  machine.fail("ls /dev/xvd* /dev/sd*")
+                  failed = machine.succeed("systemctl list-units --failed --plain --no-legend")
+                  assert not failed.strip(), failed
 
           with subtest("Store paths and profiles"):
               machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
