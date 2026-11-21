@@ -1,0 +1,72 @@
+From: Ben Siraphob <bensiraphob@gmail.com>
+Date: Wed, 12 Aug 2026 11:05:38 -0700
+Subject: Support modern 64-bit Unix systems
+
+Select the POSIX terminal interface and use pointer-width cells in the
+Gofer-to-C runtime.
+
+diff --git a/prelude.h b/prelude.h
+--- a/prelude.h
++++ b/prelude.h
+@@ -28,14 +28,14 @@
+ #define ZTC      0	/* For IBM PC (>= 386) Zortech C++ v3.0 (-mx)	   */
+ #define DJGPP    0	/* For DJGPP version 1.09 (gcc2.2.2) and DOS 5.0   */
+ #define OS2      0	/* For IBM OS/2 2.0 using EMX GCC		   */
+-#define SUNOS    1      /* For Sun 3/Sun 4 running SunOs 4.x		   */
++#define SUNOS    0      /* For Sun 3/Sun 4 running SunOs 4.x		   */
+ #define MIPS	 0	/* For MIPS RC6280/Sony machine NWS-3870	UN */
+ #define NEXTSTEP 0      /* For NeXTstep 3.0 using NeXT cc		   */
+ #define NEXTGCC  0	/* For NeXTstep with gcc 2.x, doesn't work w/ NS3.2*/
+ #define MINIX68K 0	/* For Minix68k with gcc			UN */
+ #define AMIGA    0	/* For Amiga using gcc 2.2.2			UN */
+ #define HPUX     0      /* For HPUX using gcc				   */
+-#define LINUX    0      /* For Linux using gcc				UN */
++#define LINUX    1      /* For Linux using gcc				UN */
+ #define RISCOS   0	/* For Acorn DesktopC and RISCOS2 or 3		   */
+ #define ALPHA	 0	/* For DEC Alpha with OSF/1 (32 bit ints, no gofc) */
+ #define SVR4	 0	/* For SVR4 using GCC2.2			   */
+@@ -88,10 +88,10 @@
+ #define LARGE_GOFER	(UNIX   | WATCOM)
+ #define JMPBUF_ARRAY	(UNIX   | DJGPP | RISCOS | ZTC | ATARI)
+ #define DOS_IO		(TURBOC | BCC | DJGPP | ZTC | WATCOM | ATARI)
+-#define TERMIO_IO	(LINUX  | HPUX | OS2 | SVR4 | SGI4)
++#define TERMIO_IO	0
+ #define SGTTY_IO	(SUNOS  | NEXTSTEP | NEXTGCC | AMIGA | MINIX68K | \
+ 			 ALPHA  | ULTRIX | AIX | MIPS)
+-#define TERMIOS_IO      (NETBSD)
++#define TERMIOS_IO      1
+ #define BREAK_FLOATS	(TURBOC | BCC)
+ #define HAS_FLOATS	(REGULAR_GOFER | LARGE_GOFER | BREAK_FLOATS)
+ 
+diff --git a/gofc.h b/gofc.h
+--- a/gofc.h
++++ b/gofc.h
+@@ -8,13 +8,14 @@
+  * ------------------------------------------------------------------------*/
+ 
+ #include "prelude.h"
++#include <stdint.h>
+ 
+ /*- Garbage collected heap ------------------------------------------------*/
+ 
+ #define GC_MARKSCAN	0			/* for mark/scan collector */
+ #define GC_TWOSPACE	1			/* for twospace collector  */
+ 
+-typedef Int		Cell;			/* general cell value	   */
++typedef intptr_t	Cell;			/* general cell value	   */
+ typedef Cell far	*Heap;			/* storage of heap	   */
+ extern  Int		heapSize;		/* Pairs are stored in the */
+ extern  Void		garbageCollect Args((Void));
+@@ -123,10 +124,10 @@ extern	FloatPro	floatOf		Args((Cell));
+ extern	String		floatToString	Args((FloatPro));
+ extern  FloatPro	stringToFloat	Args((String));
+ 
+-#define mkString(s)	pair(STRCELL,(Int)(s))
++#define mkString(s)	pair(STRCELL,(Cell)(s))
+ #define stringOf(c)	((String)(snd(c)))
+ 
+-#define mkSuper(sc)	pair(SUPERCOMB,(Int)(sc))
++#define mkSuper(sc)	pair(SUPERCOMB,(Cell)(sc))
+ #define superOf(c)      ((Super *)(snd(c)))
+ 
+ /*- Cells>MAXTAG represent small integers, characters, dictionaries and -- */
