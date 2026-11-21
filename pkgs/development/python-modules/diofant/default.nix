@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "diofant";
-  version = "0.15.0";
+  version = "0.16.0a2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "diofant";
     repo = "diofant";
     tag = "v${version}";
-    hash = "sha256-uQvAYSURDhuAKcX0WVMk4y2ZXiiq0lPZct/7A5n5t34=";
+    hash = "sha256-zUa2Egbg3KO7d+50Tw3sypA19nABD7JZY4Ia0NcX2/0=";
   };
 
   build-system = [ setuptools-scm ];
