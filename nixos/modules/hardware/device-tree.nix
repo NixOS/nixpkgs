@@ -30,6 +30,8 @@ let
         description = ''
           Path to .dts overlay file, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
+          The overlay must follow the overlay fortmat described
+          in [overlay notes](https://www.kernel.org/doc/Documentation/devicetree/overlay-notes.txt)
         '';
         default = null;
         example = lib.literalExpression "./dts/overlays.dts";
@@ -41,18 +43,20 @@ let
         description = ''
           Literal DTS contents, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
+          The overlay must follow the overlay fortmat described
+          in [overlay notes](https://www.kernel.org/doc/Documentation/devicetree/overlay-notes.txt)
         '';
         example = ''
           /dts-v1/;
           /plugin/;
-          / {
-                  compatible = "raspberrypi";
-          };
-          &{/soc} {
-                  pps {
-                          compatible = "pps-gpio";
-                          status = "okay";
+          /{
+              compatible = "brcm,bcm2711";
+              fragment@0 {
+                  target = <&i2c1>;
+                  __overlay__ {
+                      status = "okay";
                   };
+              };
           };
         '';
       };
