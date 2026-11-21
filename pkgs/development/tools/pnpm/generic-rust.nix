@@ -6,6 +6,7 @@
   pkg-config,
   aws-lc,
   sqlite,
+  zstd,
   nodejs-slim,
   rustPlatform,
   stdenv,
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     aws-lc
     sqlite
+    zstd
   ];
 
   postPatch = ''
