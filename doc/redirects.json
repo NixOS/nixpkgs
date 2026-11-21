@@ -440,6 +440,9 @@
   "sec-allow-insecure": [
     "index.html#sec-allow-insecure"
   ],
+  "sec-allow-patent-encumbered": [
+    "index.html#sec-allow-patent-encumbered"
+  ],
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
   ],
@@ -1728,6 +1731,9 @@
   ],
   "var-meta-sourceProvenance": [
     "index.html#var-meta-sourceProvenance"
+  ],
+  "var-meta-needsPatentGrant": [
+    "index.html#var-meta-needsPatentGrant"
   ],
   "var-meta-maintainers": [
     "index.html#var-meta-maintainers"
