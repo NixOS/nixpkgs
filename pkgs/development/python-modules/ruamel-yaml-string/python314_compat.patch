@@ -1,0 +1,72 @@
+diff --git a/setup.py b/setup.py
+index 50f4d1e..80a02d3 100644
+--- a/setup.py
++++ b/setup.py
+@@ -75,7 +75,9 @@ else:
+             print('{:%Y-%d-%mT%H:%M:%S}'.format(datetime.datetime.now()), file=fp, end=' ')
+             print(*args, **kw1)
+ 
+-if sys.version_info >= (3, 8):
++if sys.version_info >= (3, 14):
++    from ast import Constant
++elif sys.version_info >= (3, 8):
+     from ast import Str, Num, Bytes, NameConstant  # NOQA
+ 
+ 
+@@ -98,13 +100,24 @@ def literal_eval(node_or_string):
+         raise TypeError('only string or AST nodes supported')
+ 
+     def _convert(node):
+-        if isinstance(node, Str):
++        def _is_num(node):
++            if sys.version_info >= (3, 14):
++                return isinstance(node, Constant) and isinstance(node.value, (bool, float, complex))
++            else:
++                return isinstance(node, Num)
++
++        def _is_num_or_op(node):
++            return _is_num(node) or isinstance(node, BinOp, UnaryOp)
++
++        if sys.version_info >= (3, 14) and isinstance(node, Constant):
++            return node.value
++        elif sys.version_info < (3, 14) and isinstance(node, Str):
+             if sys.version_info < (3,) and not isinstance(node.s, unicode):
+                 return node.s.decode('utf-8')
+             return node.s
+-        elif isinstance(node, Bytes):
++        elif sys.version_info < (3, 14) and isinstance(node, Bytes):
+             return node.s
+-        elif isinstance(node, Num):
++        elif sys.version_info < (3, 14) and isinstance(node, Num):
+             return node.n
+         elif isinstance(node, Tuple):
+             return tuple(map(_convert, node.elts))
+@@ -114,7 +127,7 @@ def literal_eval(node_or_string):
+             return set(map(_convert, node.elts))
+         elif isinstance(node, Dict):
+             return dict((_convert(k), _convert(v)) for k, v in zip(node.keys, node.values))
+-        elif isinstance(node, NameConstant):
++        elif sys.version_info < (3, 14) and isinstance(node, NameConstant):
+             return node.value
+         elif sys.version_info < (3, 4) and isinstance(node, Name):
+             if node.id in _safe_names:
+@@ -122,7 +135,7 @@ def literal_eval(node_or_string):
+         elif (
+             isinstance(node, UnaryOp)
+             and isinstance(node.op, (UAdd, USub))
+-            and isinstance(node.operand, (Num, UnaryOp, BinOp))
++            and _is_num_or_op(node.operand)
+         ):  # NOQA
+             operand = _convert(node.operand)
+             if isinstance(node.op, UAdd):
+@@ -132,8 +145,8 @@ def literal_eval(node_or_string):
+         elif (
+             isinstance(node, BinOp)
+             and isinstance(node.op, (Add, Sub))
+-            and isinstance(node.right, (Num, UnaryOp, BinOp))
+-            and isinstance(node.left, (Num, UnaryOp, BinOp))
++            and _is_num_or_op(node.right)
++            and _is_num_or_op(node.left)
+         ):  # NOQA
+             left = _convert(node.left)
+             right = _convert(node.right)
