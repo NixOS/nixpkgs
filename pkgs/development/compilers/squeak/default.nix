@@ -30,74 +30,69 @@
   squeakVersion ? null,
   squeakVmCommitHash ? null,
   squeakVmCommitHashHash ? null,
+  squeakVmHash ? null,
   squeakVmVersion ? null,
 }@args:
-
 let
-  inherit (builtins) elemAt;
-
   nullableOr = o: default: if o == null then default else o;
+in
+clangStdenv.mkDerivation (finalAttrs: {
+  pname = "squeak";
+  version = finalAttrs.squeakVersion;
 
   bits = clangStdenv.hostPlatform.parsed.cpu.bits;
 
-  squeakVersion = nullableOr args.squeakVersion or null "5.3-19459";
-  squeakVersionSplit = builtins.split "-" squeakVersion;
-  squeakVersionBase = elemAt squeakVersionSplit 0;
-  squeakVersionBaseSplit = lib.splitVersion squeakVersionBase;
-  squeakVersionMajor = elemAt squeakVersionBaseSplit 0;
-  squeakVersionMinor = elemAt squeakVersionBaseSplit 1;
+  squeakVersion = nullableOr (args.squeakVersion or null) "5.3-19459";
+  squeakVersionSplit = builtins.split "-" finalAttrs.squeakVersion;
+  squeakVersionBase = builtins.elemAt finalAttrs.squeakVersionSplit 0;
+  squeakVersionBaseSplit = lib.splitVersion finalAttrs.squeakVersionBase;
+  squeakVersionMajor = builtins.elemAt finalAttrs.squeakVersionBaseSplit 0;
+  squeakVersionMinor = builtins.elemAt finalAttrs.squeakVersionBaseSplit 1;
 
-  squeakImageVersion = elemAt squeakVersionSplit 2;
+  squeakImageVersion = builtins.elemAt finalAttrs.squeakVersionSplit 2;
 
-  squeakSourcesVersion = nullableOr args.squeakSourcesVersion or null "50";
+  squeakSourcesVersion = nullableOr (args.squeakSourcesVersion or null) "50";
 
-  squeakVmVersion = nullableOr args.squeakVmVersion or null "5.0-202003021730";
-  squeakVmVersionSplit = builtins.split "-" squeakVmVersion;
-  squeakVmVersionBase = elemAt squeakVmVersionSplit 0;
-  squeakVmVersionBaseSplit = lib.splitVersion squeakVmVersionBase;
-  squeakVmVersionMajor = elemAt squeakVmVersionBaseSplit 0;
-  squeakVmVersionMinor = elemAt squeakVmVersionBaseSplit 1;
-  squeakVmVersionRelease = elemAt squeakVmVersionSplit 2;
+  squeakVmVersion = nullableOr (args.squeakVmVersion or null) "5.0-202003021730";
+  squeakVmVersionSplit = builtins.split "-" finalAttrs.squeakVmVersion;
+  squeakVmVersionBase = builtins.elemAt finalAttrs.squeakVmVersionSplit 0;
+  squeakVmVersionBaseSplit = lib.splitVersion finalAttrs.squeakVmVersionBase;
+  squeakVmVersionMajor = builtins.elemAt finalAttrs.squeakVmVersionBaseSplit 0;
+  squeakVmVersionMinor = builtins.elemAt finalAttrs.squeakVmVersionBaseSplit 1;
+  squeakVmVersionRelease = builtins.elemAt finalAttrs.squeakVmVersionSplit 2;
 
-  squeakVmCommitHash = nullableOr args.squeakVmCommitHash or null (fetchurl {
-    url = "https://api.github.com/repos/OpenSmalltalk/opensmalltalk-vm/commits/${squeakVmVersionRelease}";
+  squeakVmCommitHash = nullableOr (args.squeakVmCommitHash or null) (fetchurl {
+    url = "https://api.github.com/repos/OpenSmalltalk/opensmalltalk-vm/commits/${finalAttrs.squeakVmVersionRelease}";
     curlOpts = "--header Accept:application/vnd.github.v3.sha";
-    hash =
-      nullableOr args.squeakVmCommitHashHash or null
-        "sha256-quwmhpJlb2fp0fI9b03fBxSR44j1xmHPW20wkSqTOhQ=";
+    hash = nullableOr (args.squeakVmCommitHashHash or null
+    ) "sha256-quwmhpJlb2fp0fI9b03fBxSR44j1xmHPW20wkSqTOhQ=";
   });
-in
-clangStdenv.mkDerivation {
-  pname = "squeak";
-  version = squeakVersion;
 
-  vmVersionRelease = squeakVmVersionRelease; # "202003021730"
-  vmHash = squeakVmCommitHash;
+  vmVersionRelease = finalAttrs.squeakVmVersionRelease; # "202003021730"
+  vmHash = finalAttrs.squeakVmCommitHash;
 
   vmSrcUrl = "https://github.com/OpenSmalltalk/opensmalltalk-vm.git";
   src = fetchFromGitHub {
     owner = "OpenSmalltalk";
     repo = "opensmalltalk-vm";
-    rev = squeakVmVersionRelease;
-    hash = nullableOr args.squeakVmHash or null "sha256-rNJn5ya+7ggC21MpwSrl2ByJDjVycONKHADboH7dQLM=";
+    rev = finalAttrs.squeakVmVersionRelease;
+    hash = nullableOr (args.squeakVmHash or null) "sha256-rNJn5ya+7ggC21MpwSrl2ByJDjVycONKHADboH7dQLM=";
   };
   imageSrc =
     let
-      squeakImageName = "Squeak${squeakVersionBase}-${squeakImageVersion}-${toString bits}bit";
+      squeakImageName = "Squeak${finalAttrs.squeakVersionBase}-${finalAttrs.squeakImageVersion}-${toString finalAttrs.bits}bit";
     in
     fetchzip {
-      url = "https://files.squeak.org/${squeakVersionBase}/${squeakImageName}/${squeakImageName}.zip";
+      url = "https://files.squeak.org/${finalAttrs.squeakVersionBase}/${squeakImageName}/${squeakImageName}.zip";
       name = "source";
       stripRoot = false;
-      hash =
-        nullableOr args.squeakImageHash or null
-          "sha256-wDuRyc/DNqG1D4DzyBkUvrzFkBlXBtbpnANZlRV/Fas=";
+      hash = nullableOr (args.squeakImageHash or null
+      ) "sha256-wDuRyc/DNqG1D4DzyBkUvrzFkBlXBtbpnANZlRV/Fas=";
     };
   sourcesSrc = fetchurl {
-    url = "https://files.squeak.org/sources_files/SqueakV${squeakSourcesVersion}.sources.gz";
-    hash =
-      nullableOr args.squeakSourcesHash or null
-        "sha256-ZViZ1VgI32LwLTEyw7utp8oaAK3UmCNJnHqsGm1IKYE=";
+    url = "https://files.squeak.org/sources_files/SqueakV${finalAttrs.squeakSourcesVersion}.sources.gz";
+    hash = nullableOr (args.squeakSourcesHash or null
+    ) "sha256-ZViZ1VgI32LwLTEyw7utp8oaAK3UmCNJnHqsGm1IKYE=";
   };
 
   vmBuild = "linux64x64";
@@ -128,8 +123,8 @@ clangStdenv.mkDerivation {
   ];
 
   postUnpack = ''
-    for file in "$imageSrc"/*.{image,changes}; do
-      gzip -c "$file" > "$sourceRoot/''${file##"$imageSrc"/}.gz"
+    for file in "${finalAttrs.imageSrc}"/*.{image,changes}; do
+      gzip -c "$file" > "$sourceRoot/''${file##"${finalAttrs.imageSrc}"/}.gz"
     done
   '';
 
@@ -147,20 +142,20 @@ clangStdenv.mkDerivation {
   ];
 
   postPatch = ''
-    vmVersionDate=$(sed 's/\([0-9][0-9][0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)/\1-\2-\3T\4:\5+0000/' <<< "$vmVersionRelease")
+    vmVersionDate=$(sed 's/\([0-9][0-9][0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)/\1-\2-\3T\4:\5+0000/' <<< "${finalAttrs.vmVersionRelease}")
     vmVersionDate=$(date -u '+%a %b %-d %T %Y %z' -d "$vmVersionDate")
     vmVersionFiles=$(sed -n 's/^versionfiles="\(.*\)"/\1/p' ./scripts/updateSCCSVersions)
-    vmHash=$(< "$vmHash")
+    vmHash=$(< "${finalAttrs.vmHash}")
     vmAbbrevHash=''${vmHash:0:12}
     printf '%s\n' "$vmAbbrevHash"
     for vmVersionFile in $vmVersionFiles; do
       substituteInPlace "$vmVersionFile" \
         --replace "\$Date\$" "\$Date: ''${vmVersionDate} \$" \
-        --replace "\$URL\$" "\$URL: ''${vmSrcUrl} \$" \
-        --replace "\$Rev\$" "\$Rev: ''${vmVersionRelease} \$" \
+        --replace "\$URL\$" "\$URL: ${finalAttrs.vmSrcUrl} \$" \
+        --replace "\$Rev\$" "\$Rev: ${finalAttrs.vmVersionRelease} \$" \
         --replace "\$CommitHash\$" "\$CommitHash: ''${vmAbbrevHash} \$"
     done
-    patchShebangs --build ./"build.$vmBuild"/squeak.cog.spur ./scripts
+    patchShebangs --build ./"build.${finalAttrs.vmBuild}"/squeak.cog.spur ./scripts
     for squeaksh in ./platforms/unix/config/{,bin.}squeak.sh.in; do
       substituteInPlace "$squeaksh" \
         --subst-var-by 'glibc' ${lib.escapeShellArg (lib.getBin glibc)} \
@@ -208,7 +203,7 @@ clangStdenv.mkDerivation {
 
     substituteInPlace ./platforms/unix/config/configure \
       --replace "/usr/bin/file" "${file}/bin/file"
-    cd ./"build.$vmBuild"/squeak.cog.spur/build
+    cd ./"build.${finalAttrs.vmBuild}"/squeak.cog.spur/build
     substituteInPlace ./mvm \
       --replace 'read a' 'a=y' \
       --replace $'if [ $# -ge 1 ]; then\n\tINSTALLDIR="$1"; shift\nfi\n' "" \
@@ -218,15 +213,15 @@ clangStdenv.mkDerivation {
 
   configureFlags = [
     "--disable-dynamicopenssl"
-    "SQ_MAJOR=${squeakVersionMajor}"
-    "SQ_MINOR=${squeakVersionMinor}"
-    "SQ_UPDATE=${squeakImageVersion}"
-    "SQ_VERSION=${squeakVersion}-${toString bits}bit"
-    "SQ_SRC_VERSION=${squeakSourcesVersion}"
-    "VM_MAJOR=${squeakVmVersionMajor}"
-    "VM_MINOR=${squeakVmVersionMinor}"
-    "VM_RELEASE=${squeakVmVersionRelease}"
-    "VM_VERSION=${squeakVmVersion}"
+    "SQ_MAJOR=${finalAttrs.squeakVersionMajor}"
+    "SQ_MINOR=${finalAttrs.squeakVersionMinor}"
+    "SQ_UPDATE=${finalAttrs.squeakImageVersion}"
+    "SQ_VERSION=${finalAttrs.squeakVersion}-${toString finalAttrs.bits}bit"
+    "SQ_SRC_VERSION=${finalAttrs.squeakSourcesVersion}"
+    "VM_MAJOR=${finalAttrs.squeakVmVersionMajor}"
+    "VM_MINOR=${finalAttrs.squeakVmVersionMinor}"
+    "VM_RELEASE=${finalAttrs.squeakVmVersionRelease}"
+    "VM_VERSION=${finalAttrs.squeakVmVersion}"
   ];
   configureScript = "./mvm";
 
@@ -237,7 +232,7 @@ clangStdenv.mkDerivation {
 
   postInstall = ''
     rm "$out/squeak"
-    cp --no-preserve mode "$sourcesSrc" "$out"/lib/squeak/SqueakV${lib.escapeShellArg squeakSourcesVersion}.sources
+    cp --no-preserve mode "${finalAttrs.sourcesSrc}" "$out"/lib/squeak/SqueakV${lib.escapeShellArg finalAttrs.squeakSourcesVersion}.sources
   '';
 
   meta = {
@@ -249,4 +244,4 @@ clangStdenv.mkDerivation {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
