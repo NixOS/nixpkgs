@@ -23,7 +23,6 @@ qtModule {
     qtsvg
     openssl
   ];
-  strictDeps = true;
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
