@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "metaphlan";
-  version = "4.2.4";
+  version = "4.2.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "biobakery";
     repo = "MetaPhlAn";
     tag = finalAttrs.version;
-    hash = "sha256-qvjC6jozhv1dz/9eC9kEU/3OHMystX0020EyzrP71eQ=";
+    hash = "sha256-6GI4Alogef9VqmnB4Zs/qCSwS0CLWeCvxQ3Tgxb/R3Y=";
   };
 
   build-system = with python3Packages; [ setuptools ];
