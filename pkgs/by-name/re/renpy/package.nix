@@ -22,8 +22,8 @@
   openssl,
   pkg-config,
   python312,
-  SDL2,
-  SDL2_image,
+  sdl3,
+  sdl3-image,
   versionCheckHook,
   zenity,
   zlib,
@@ -66,6 +66,7 @@ let
       requests
       rsa
       six
+      truststore
     ]
     ++ lib.optionals withDoc [
       sphinx
@@ -81,20 +82,20 @@ let
       requests
       rsa
       six
+      truststore
     ]
   );
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
-  # 8.5.3 tag is on fix branch, but we need new dependency lookup behavior (currently only on master branch)
-  version = "8.5.3.26051504-unstable-2026-05-17";
+  version = "8.6.1.26111705";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
-    rev = "cb1a79e8d2e02936baaf9d3c6ec9ac28d68b9014";
-    hash = "sha256-gm+E5/fEgNFl+UU382QZpBAcOmUDhFbxj3XW/e21vxQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-TbXNWO8PiKM0xgD+S2Wf5SA6vFXhkRQ1wGYLeZBSo8E=";
   };
 
   __structuredAttrs = true;
@@ -119,8 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libjpeg
     openssl
-    SDL2
-    SDL2_image
+    sdl3
+    sdl3-image
     pythonRunTime
   ];
 
@@ -139,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     # use nix out path instead of `renpy.config.renpy_base` because otherwise we cannot compile them in the build phase
     substituteInPlace renpy/script.py --replace-fail "@systemRenpy@" "$out/share/renpy"
 
+    chmod +x setup.py
     patchShebangs --build setup.py
 
     # https://github.com/renpy/renpy/blob/8.5.2.26010301/tutorial/game/01director_support.rpy
@@ -150,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
-    version_name = "We Can Go to the Moon"
+    version_name = "Real Artists Ship"
     EOF
   '';
 
@@ -263,12 +265,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     binSrc = fetchzip {
       url = "https://www.renpy.org/dl/${finalAttrs.passthru.semver}/renpy-${finalAttrs.passthru.semver}-sdk.tar.bz2";
-      hash = "sha256-l91zD0n/c5E80YfgZ/m5AbIj/RKL5OFosfwz7RHu7aQ=";
+      hash = "sha256-GL7srpNh83SeRn9BcBFzhLZB9knCBJwUFvBYpXId0i8=";
     };
 
     binSrcArm = fetchzip {
       url = "https://www.renpy.org/dl/${finalAttrs.passthru.semver}/renpy-${finalAttrs.passthru.semver}-sdkarm.tar.bz2";
-      hash = "sha256-51+swtUfDK0on9wVVXOyzJKxHtV6m4u9X1wvpp85stI=";
+      hash = "sha256-uXIc6MPqBtbZ5Lzr3UJY+p+8VWC3Y2njkVic41V0hd4=";
     };
 
     distributedRenpy =
