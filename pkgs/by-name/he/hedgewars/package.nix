@@ -1,12 +1,11 @@
 {
-  stdenv,
   SDL2_image,
+  stdenv,
   SDL2_ttf,
   SDL2_net,
   fpc,
   haskell,
   ffmpeg,
-  libglut,
   lib,
   fetchurl,
   fetchpatch,
@@ -19,34 +18,21 @@
   libpng,
   libGL,
   libGLU,
+  libglut,
   physfs,
   qt5,
-  withServer ? true,
+  hicolor-icon-theme,
+  withServer ? !stdenv.hostPlatform.isDarwin,
 }:
 
 let
   inherit (qt5) qtbase qttools wrapQtAppsHook;
-
-  ghc = haskell.packages.ghc94.ghcWithPackages (
-    pkgs: with pkgs; [
-      SHA
-      bytestring
-      entropy
-      hslogger
-      network
-      pkgs.zlib
-      random
-      regex-tdfa
-      sandi
-      utf8-string
-      vector
-    ]
-  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hedgewars";
   version = "1.0.3";
 
+  # Fetchg is disabled due to adversarial auth conditions
   src = fetchurl {
     url = "https://hedgewars.org/download/releases/hedgewars-src-${finalAttrs.version}.tar.bz2";
     hash = "sha256-xcGHfAuuE1THXSuVJ7b5qfeemZMuXQix9vfeFwgGYTA=";
@@ -58,7 +44,53 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/hedgewars/-/raw/1b03bb9764d38fa6020552174676a9e024d8b18e/ffmpeg-9.patch?inline=false";
       hash = "sha256-J8W8WvQgcteKoUUVDxBINVhMzmec+UuWWltKZ2aq9Go=";
     })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./cmake-darwin-arm64.patch
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-deprecated-declarations -Wno-format-security";
+
+  postPatch = ''
+    # cmake >= 3.20 rejects get_target_property with LOCATION.
+    substituteInPlace misc/liblua/CMakeLists.txt \
+      --replace-fail 'get_target_property(lua_fullpath lua LOCATION)' \
+                     'set(lua_fullpath "$<TARGET_FILE:lua>")'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Anchor the bundle prefix to the Nix store path so cmake installs into
+    # $out/Hedgewars.app/... rather than a bare relative path outside the store.
+    substituteInPlace cmake_modules/paths.cmake \
+      --replace-fail \
+        'set(CMAKE_INSTALL_PREFIX "Hedgewars.app/Contents/MacOS/")' \
+        'set(CMAKE_INSTALL_PREFIX "''${CMAKE_INSTALL_PREFIX}/Hedgewars.app/Contents/MacOS/")'
+
+    # hedgewars passes the full physfs dylib path to -Fl but should pass the dir.
+    substituteInPlace hedgewars/CMakeLists.txt \
+      --replace-fail \
+        'add_flag_append(CMAKE_Pascal_FLAGS "-Fl''${PHYSFS_LIBRARY}")' \
+        'add_flag_append(CMAKE_Pascal_FLAGS "-Fl''${PHYSFS_LIBRARY_DIR}")'
+
+    # Apple SDK 14+ no longer ships libz.tbd, so FPC cannot find it via the
+    # baked-in SDK path.
+    substituteInPlace hedgewars/CMakeLists.txt \
+      --replace-fail \
+        'add_flag_append(CMAKE_Pascal_FLAGS "-k-L''${PNG_LIBRARY_DIR} -Fl''${PNG_LIBRARY_DIR}")' \
+        'add_flag_append(CMAKE_Pascal_FLAGS "-k-L''${PNG_LIBRARY_DIR} -Fl''${PNG_LIBRARY_DIR} -Fl${zlib.out}/lib")'
+
+    # SDLInteraction.h explicitly undefs and resets MAC_OS_X_VERSION_MIN_REQUIRED
+    # to MAC_OS_X_VERSION_10_6 (= 1060) just before including SDL_mixer.h.
+    substituteInPlace QTfrontend/util/SDLInteraction.h \
+      --replace-fail 'MAC_OS_X_VERSION_10_6' 'MAC_OS_X_VERSION_10_7'
+
+  '';
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Reset to 10.13 so the Nix clang wrapper emits -mmacos-version-min=10.13
+    # rather than the nixpkgs apple-sdk default of 14.0, which would make
+    # MAC_OS_X_VERSION_MIN_REQUIRED resolve below the value sdl2-compat requires.
+    export MACOSX_DEPLOYMENT_TARGET=10.13
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -76,32 +108,76 @@ stdenv.mkDerivation (finalAttrs: {
     fpc
     lua5_1
     ffmpeg
-    libglut
     physfs
     qtbase
+    hicolor-icon-theme
   ]
-  ++ lib.optional withServer ghc;
-
-  cmakeFlags = [
-    "-DNOVERSIONINFOUPDATE=ON"
-    "-DNOSERVER=${if withServer then "OFF" else "ON"}"
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+    libglut
+  ]
+  ++ lib.optionals withServer [
+    (haskell.packages.ghc948.ghcWithPackages (
+      hpkgs: with hpkgs; [
+        SHA
+        aeson
+        bytestring
+        entropy
+        hslogger
+        mtl
+        network
+        network-bsd
+        random
+        regex-tdfa
+        sandi
+        text
+        utf8-string
+        vector
+        yaml
+        # This attribute must be explicit: the outer `zlib` argument is the C library.
+        hpkgs.zlib
+      ]
+    ))
   ];
 
-  env.NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
+  cmakeFlags = [
+    (lib.cmakeBool "NOVERSIONINFOUPDATE" true)
+    (lib.cmakeBool "NOSERVER" (!withServer))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Prevents fixup_bundle from running (it needs OggVorbis and fails in sandbox).
+    (lib.cmakeBool "SKIPBUNDLE" true)
+    (lib.cmakeOptionType "STRING" "CMAKE_OSX_DEPLOYMENT_TARGET" "10.13")
+    (lib.cmakeBool "NOAUTOUPDATE" true)
+  ];
+
+  # runtimeDependencies adds -rpath entries via cc-wrapper so the Qt frontend
+  # and C helpers can find these libraries without LD_LIBRARY_PATH at runtime.
+  runtimeDependencies = [
     SDL2.out
     SDL2_image
     SDL2_mixer
     SDL2_net
     SDL2_ttf
-    libGL
-    libGLU
     libpng.out
     lua5_1
     physfs
     zlib.out
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
   ];
 
-  qtWrapperArgs = [
+  # Build system isn't well-behaved
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework Foundation -framework AppKit -lobjc";
+
+  # wrapQtAppsHook would wrap every executable it finds, including dylibs in
+  # Frameworks/, replacing them with shell scripts dyld cannot load.
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
+  qtWrapperArgs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--prefix"
     "LD_LIBRARY_PATH"
     ":"
@@ -113,16 +189,43 @@ stdenv.mkDerivation (finalAttrs: {
     ])
   ];
 
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapQtApp "$out/Hedgewars.app/Contents/MacOS/hedgewars"
+  '';
+
+  postInstall =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      install -Dm644 "$out/share/hedgewars/Data/misc/hedgewars.desktop" \
+        "$out/share/applications/hedgewars.desktop"
+
+      substituteInPlace "$out/share/applications/hedgewars.desktop" \
+        --replace-fail "Exec=hedgewars" "Exec=$out/bin/hedgewars"
+
+      for size in 16 32 48 64 128 256 512; do
+        install -Dm644 "$NIX_BUILD_TOP/$sourceRoot/misc/hedgewars.png" \
+          "$out/share/icons/hicolor/''${size}x''${size}/apps/hedgewars.png"
+      done
+
+      install -Dm644 "$NIX_BUILD_TOP/$sourceRoot/share/hedgewars.appdata.xml" \
+        "$out/share/metainfo/hedgewars.appdata.xml"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Expose the bundle binary on PATH so that wrapQtAppsHook wraps it and
+      # it is accessible without invoking the .app bundle directly.
+      mkdir -p "$out/bin"
+      ln -s "$out/Hedgewars.app/Contents/MacOS/hedgewars" "$out/bin/hedgewars"
+    ''
+    + ''
+      install -Dm644 "$NIX_BUILD_TOP/$sourceRoot/Fonts_LICENSE.txt" \
+        "$out/share/licenses/hedgewars/Fonts_LICENSE.txt"
+    '';
+
   meta = {
     description = "Funny turn-based artillery game, featuring fighting hedgehogs";
     homepage = "https://hedgewars.org/";
     license = with lib.licenses; [
       gpl2Only
-
-      # Assets
       fdl12Only
-
-      # Fonts
       bitstreamVera
       asl20
     ];
@@ -147,12 +250,14 @@ stdenv.mkDerivation (finalAttrs: {
       the island, or through a hole in the bottom of it), it is thrown off
       either side of the arena or when its health is reduced, typically from
       contact with explosions, to zero (the damage dealt to the attacked
-      hedgehog or hedgehogs after a player's or CPU turn is shown only when
-      all movement on the battlefield has ceased).'';
+      hedgehog or hedgehogs after a player's or CPU turn is shown only after
+      all movement on the battlefield has ceased).
+    '';
     maintainers = with lib.maintainers; [
       kragniz
       fpletz
+      philocalyst
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
