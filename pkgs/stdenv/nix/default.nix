@@ -4,11 +4,9 @@
   config,
   overlays,
   bootStages,
+  genericStdenv,
 }:
 
-let
-  genericStdenv = import ../generic { defaultConfig = config; };
-in
 bootStages
 ++ [
   (prevStage: {
