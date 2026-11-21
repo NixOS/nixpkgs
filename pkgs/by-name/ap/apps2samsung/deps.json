@@ -526,8 +526,8 @@
   },
   {
     "pname": "TizenSdb.Core",
-    "version": "1.1.7",
-    "hash": "sha256-I+lsahsqeoAlcBoBEVHi6KVoFD0/c3ilf/0hd9xeOZo="
+    "version": "1.1.9",
+    "hash": "sha256-AcnyA15UUKf+3bB2YoiqMR+WSnyz+hGdA5Rssy3bizs="
   },
   {
     "pname": "Tmds.DBus.Protocol",
