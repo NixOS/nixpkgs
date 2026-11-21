@@ -7,8 +7,8 @@
   nix-update,
   nodejs,
   pnpm_12,
-  fetchPnpmDeps,
-  pnpmConfigHook,
+  fetchPnpmCache,
+  pnpmCacheConfigHook,
   stdenv,
   writeShellScript,
   discord,
@@ -31,20 +31,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+dN4wAFNmYVDiEe0QStqrFBRFHBBRkApqbmhuvsLZZM=";
   };
 
-  pnpmDeps = fetchPnpmDeps {
+  mitmCache = fetchPnpmCache {
     inherit (finalAttrs)
       pname
       src
       ;
-    inherit pnpm;
-    fetcherVersion = 5;
-    hash = "sha256-/cnY+wj2/oHohUwf7zUHsE4aWI8YdhBNO8jSVuvQH+M=";
+    hash = "sha256-6ZdkLzh1R8kccW0WQOE/FOHtn3yROaXKmxx4D2VUq+s=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpmConfigHook
+    pnpmCacheConfigHook
     pnpm
   ];
 
@@ -94,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
       p: lib.nameValuePair p.pname p.tests.withVencord
     );
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Cutest Discord client mod";
