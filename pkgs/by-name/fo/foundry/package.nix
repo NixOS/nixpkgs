@@ -4,6 +4,7 @@
   aws-lc,
   darwin,
   fetchFromGitHub,
+  fetchurl,
   libusb1,
   nix-update-script,
   perl,
@@ -17,7 +18,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "foundry";
-  version = "1.8.6";
+  version = "1.10.0";
 
   __structuredAttrs = true;
 
@@ -25,10 +26,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BpyYQai8iR75wDKcKccuqhrwFxu/JChVxCTvpV2mYt8=";
+    hash = "sha256-9k+78ednqFo8/rdGDOWqS8Y+eZ/6kxFd5Ojit/pjeJM=";
   };
 
-  cargoHash = "sha256-2spjGbWSg1NpEgojA9tBeheqrYwlYMfablZfo9pAG/E=";
+  cargoHash = "sha256-LBhRrQ1N6ygZZ6hApX+WOtZmKypmO95fOThIo+tyZks=";
+
+  # Cargo vendoring drops the tempo repository root, where tempo-chainspec's build.rs looks for these files.
+  postPatch =
+    let
+      tempoIdentity =
+        network: hash:
+        fetchurl {
+          url = "https://raw.githubusercontent.com/tempoxyz/tempo/9634fed25ed0b19d7d7680c949a1706181a4086f/${network}-network-identity.json";
+          inherit hash;
+        };
+    in
+    ''
+      for crate in "$cargoDepsCopy"/source-git-*/tempo-chainspec-*; do
+        cp ${tempoIdentity "mainnet" "sha256-XZakmOuroaTfsx9N4yDDMjqktcqyCd7F9wW3HtxyWkU="} "$crate/mainnet-network-identity.json"
+        cp ${tempoIdentity "testnet" "sha256-wIVvzfPgpguSaTZjnLnFfGGaLrJQdlE+aNVn35x2KpU="} "$crate/testnet-network-identity.json"
+      done
+    '';
 
   nativeBuildInputs = [
     # `sha3-asm`'s build script runs cryptogams perl scripts to generate
@@ -78,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/foundry-rs/foundry";
     description = "Portable, modular toolkit for Ethereum application development written in Rust";
-    changelog = "https://github.com/foundry-rs/foundry/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/foundry-rs/foundry/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
