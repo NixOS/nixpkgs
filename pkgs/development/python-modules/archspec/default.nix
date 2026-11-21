@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "archspec";
-  version = "0.2.5";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     repo = "archspec";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-BfjFNwfNyT/da0Z5/bBdbv+RT8lqM0s2q64cz79vuF0=";
+    hash = "sha256-mgROiFCG0kyZ1g8HWyeHldbBQGFlFrBFf0iek5m6tbE=";
   };
 
   build-system = [ poetry-core ];
