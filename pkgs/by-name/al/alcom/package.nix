@@ -8,6 +8,7 @@
   lib,
   libsoup_3,
   makeBinaryWrapper,
+  nix-update-script,
   nodejs,
   npmHooks,
   openssl,
@@ -22,12 +23,12 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alcom";
-  version = "1.1.9";
+  version = "1.1.10";
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
     tag = "gui-v${finalAttrs.version}";
-    hash = "sha256-90FLIJDawG9KoVgk6jxrvwjnue7OJYAxMLLmNhsWlto=";
+    hash = "sha256-qC9kCIIdXq9KmwBQyxSBg7jJ+37Oy4x9n7nGkd2zKNQ=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  cargoHash = "sha256-h+tblYrLpuUwDDZV2rS3h9q2UuZtZ/5/S2rh4BzFnHg=";
+  cargoHash = "sha256-i8pdbdnovEUILiD2bG15UjlOngSxlMEMCx6W6J1ExP0=";
   buildFeatures = [ "no-self-updater" ];
   buildAndTestSubdir = subdir;
 
@@ -68,6 +69,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-flWM2ctaGak/KaTZ5sCj3Z28vIqOeiX8VJMTaIxg2fw=";
   };
   npmRoot = subdir;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^gui-v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Experimental GUI application to manage VRChat Unity Projects";
