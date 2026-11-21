@@ -6,6 +6,7 @@ makeInstalledTest {
   testConfig = {
     environment.systemPackages = with pkgs; [
       gnupg
+      jq
       ostree
     ];
   };

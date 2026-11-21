@@ -492,6 +492,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for easily interacting with trained machine learning models";
     license = lib.licenses.asl20;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gradio_project" finalAttrs.version // {
+      target_sw = "python";
+    };
     maintainers = with lib.maintainers; [ pbsds ];
   };
 })

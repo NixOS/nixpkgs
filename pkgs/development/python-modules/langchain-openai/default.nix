@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-openai";
-  version = "1.6.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${finalAttrs.version}";
-    hash = "sha256-VCob54ZCetohK8ZvgAHPdExr2UPgD4vxGCXM0pKW3hQ=";
+    hash = "sha256-Vt7vzMlL/Iel79ZWEVtqQsPmOA7HpcWa/VdY6mgmdwo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/openai";
@@ -48,7 +48,10 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   # The python3Packages.openai update has to go through staging, so be open to newer versions
-  pythonRelaxDeps = [ "openai" ];
+  pythonRelaxDeps = [
+    "langchain-core"
+    "openai"
+  ];
 
   dependencies = [
     langchain-core

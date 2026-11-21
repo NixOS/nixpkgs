@@ -10,13 +10,13 @@
 }:
 mkLibretroCore {
   core = "parallel-n64";
-  version = "0-unstable-2026-11-11";
+  version = "0-unstable-2026-11-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "parallel-n64";
-    rev = "51def588f1c0ddb25caed1848d3e3ca6a4898b5f";
-    hash = "sha256-vCCRKYUd0P+9rY854UV5Dl9aidhmW1tDFKxs8ZbK1tw=";
+    rev = "31858dac789ea86069dbdba8f09d2d08c05d0d39";
+    hash = "sha256-3PXZSi82mVZfQSgj9mvd1FlSK0hJe223JNwUt+W4Hac=";
   };
 
   extraNativeBuildInputs = lib.optionals stdenv.hostPlatform.isx86 [ nasm ];

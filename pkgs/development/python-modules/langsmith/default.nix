@@ -41,19 +41,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.14.17";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D/4tbYB3mKk4mlY7HtBtz/m4Iw/NaDZ5AwyiEkuajqE=";
+    hash = "sha256-N5dv7flAHrXJea8rfYkXLz0NeOpdL1BvBzcDvB1Bq9c=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==" "hatchling>="
+    sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
   '';
 
   pythonRelaxDeps = [ "orjson" ];

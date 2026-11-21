@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter,
+  flutter347,
   fetchurl,
   fetchFromGitHub,
   autoPatchelfHook,
@@ -46,7 +46,7 @@ let
   };
 in
 
-flutter.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   pname = "kazumi";
   inherit version src;
 

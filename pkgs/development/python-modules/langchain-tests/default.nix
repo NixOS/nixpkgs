@@ -48,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "langchain-core"
     "pytest"
     "syrupy"
     "vcrpy"

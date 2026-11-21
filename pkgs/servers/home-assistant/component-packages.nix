@@ -2327,12 +2327,13 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pyflic-ble
         pymicro-vad
         pysmlight
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: pyflic-ble
+      ];
     "flipr" =
       ps: with ps; [
       ];
@@ -9151,6 +9152,7 @@
     "flexit"
     "flexit_bacnet"
     "flic"
+    "flic_button"
     "flipr"
     "flo"
     "flow_it"
