@@ -325,20 +325,29 @@ in
       extraModules = [ "proxy_fcgi" ];
       virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
         cfg.virtualHost
-        {
-          documentRoot = mkForce "${cfg.package}/share/moodle";
-          extraConfig = ''
-            <Directory "${cfg.package}/share/moodle">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                </If>
-              </FilesMatch>
-              Options -Indexes
-              DirectoryIndex index.php
-            </Directory>
-          '';
-        }
+        (
+          let
+            documentRoot =
+              if lib.versionAtLeast cfg.package.version "5.1" then
+                "${cfg.package}/share/moodle/public"
+              else
+                "${cfg.package}/share/moodle";
+          in
+          {
+            documentRoot = mkForce documentRoot;
+            extraConfig = ''
+              <Directory "${documentRoot}">
+                <FilesMatch "\.php$">
+                  <If "-f %{REQUEST_FILENAME}">
+                    SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                  </If>
+                </FilesMatch>
+                Options -Indexes
+                DirectoryIndex index.php
+              </Directory>
+            '';
+          }
+        )
       ];
     };
 
