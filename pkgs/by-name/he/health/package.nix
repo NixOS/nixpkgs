@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/app/dev.Cogitri.Health";
     license = lib.licenses.gpl3Plus;
     mainProgram = "dev.Cogitri.Health";
-    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
   };
 }
