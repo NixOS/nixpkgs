@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "quantile-forest";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zillow";
     repo = "quantile-forest";
     tag = "v${version}";
-    hash = "sha256-K/8W/BkQVeFsJyQMdOHX997/yrhTcvHU9vuYmZ4W+Qo=";
+    hash = "sha256-ki8zlKy1efrY0wjGQ9QpyfOKVmgXojMNXz1HH9CEd9A=";
   };
 
   build-system = [
