@@ -1,0 +1,12 @@
+diff --git a/apps/desktop/src/main/runtime-host-boot.ts b/apps/desktop/src/main/runtime-host-boot.ts
+--- a/apps/desktop/src/main/runtime-host-boot.ts
++++ b/apps/desktop/src/main/runtime-host-boot.ts
+@@ -913,7 +913,7 @@ const desktopUpdateChannel = app.isPackaged
+   : "release";
+ const updateService = createAppUpdateService({
+   currentVersion: app.getVersion(),
+-  isPackaged: app.isPackaged,
++  isPackaged: false,
+   updateChannel: desktopUpdateChannel,
+   testFeedUrl: updateTestFeed,
+   mockLatestVersion: process.env.MAKA_UPDATE_MOCK_VERSION,
