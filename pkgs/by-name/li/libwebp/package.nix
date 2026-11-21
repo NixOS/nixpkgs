@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libwebp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7i4fGBTsTjAkBzCjVqXqX4n22j6dLgF/0mz4ajNA45U=";
   };
 
@@ -80,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals tiffSupport [ libtiff ]
     ++ lib.optionals gifSupport [ giflib ];
 
+  strictDeps = true;
+
   passthru.tests = {
     inherit
       gd
@@ -94,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     haskell-webp = haskellPackages.webp;
     pkg-config = testers.hasPkgConfigModules { package = libwebp; };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tools and library for the WebP image format";
