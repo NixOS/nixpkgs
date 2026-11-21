@@ -37,6 +37,8 @@ let
     in
     runCommand "${cmd}-${provider.name}"
       {
+        strictDeps = true;
+        __structuredAttrs = true;
         meta = {
           mainProgram = cmd;
           priority = 10;
@@ -76,6 +78,8 @@ let
     runCommand pkgs.less.name
       {
         inherit (pkgs.less) version pname;
+        strictDeps = true;
+        __structuredAttrs = true;
         meta = {
           inherit (pkgs.less.meta) license;
         };
