@@ -61,6 +61,7 @@ in
         users.users.alice = {
           isNormalUser = true;
           extraGroups = [ "podman" ];
+          uid = 1000;
         };
 
         users.users.mallory = {
@@ -222,6 +223,26 @@ in
         docker.succeed("podman ps | grep sleeping")
         docker.succeed("docker stop sleeping")
         docker.succeed("docker rm sleeping")
+
+    with subtest("Run rootless container via docker cli"):
+        docker.succeed("loginctl enable-linger alice")
+        docker.wait_for_unit("user@1000.service")
+        docker.wait_for_unit("podman.socket", "alice")
+
+        def rootless_cmd(cmd: str) -> str:
+            return docker.succeed(su_cmd(
+                f"export DOCKER_HOST=unix:///run/user/1000/podman/podman.sock; {cmd}"
+            ))
+
+        rootless_cmd("docker version")
+        rootless_cmd("tar cv --files-from /dev/null | docker import - scratchimg")
+        rootless_cmd(
+          "docker run -d --name=sleeping -v /nix/store:/nix/store scratchimg ${lib.getExe pkgs.catatonit} -P"
+        )
+        rootless_cmd("docker ps | grep sleeping")
+        rootless_cmd("podman ps | grep sleeping")
+        rootless_cmd("docker stop sleeping")
+        rootless_cmd("docker rm sleeping")
 
     with subtest("A podman non-member can not use the docker cli"):
         docker.fail(su_cmd("docker version", user="mallory"))
