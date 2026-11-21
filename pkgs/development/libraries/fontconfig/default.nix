@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     expat
   ];
 
+  strictDeps = true;
+
   postPatch = ''
     # Requires networking.
     sed -i '/check_PROGRAMS += test-crbug1004254/d' test/Makefile.am
@@ -118,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.freedesktop.org/fontconfig/fontconfig.git";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for font customization and configuration";
