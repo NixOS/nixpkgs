@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptoparser";
-  version = "1.6.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptoparser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V2h2lQjdDorqffLyo3RV3r0G/1wAYj2sa7LfKC25wjY=";
+    hash = "sha256-vOTH4QDP2mkyWxBvBhd7iLHW5myJm++vQlzUXbOR0oA=";
   };
 
   build-system = [
