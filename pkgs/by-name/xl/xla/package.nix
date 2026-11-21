@@ -45,12 +45,12 @@ let
   cudaManifestHash = builtins.hashString "sha256" (builtins.toJSON cudaManifests);
   cudaLocal = callPackage ./cuda-local.nix { inherit cudaPackages; };
   cudaHashes = {
-    "41d8c351dd9ceb95086c8fc2ebcb49b317c5082393220e5919372a7860487c60" =
-      "sha256-BXPlzvYSCOudbKgHU/IhHaHG5umNBGgD0hKl7jnOxcc=";
+    "d0cec4ea055822b5d09b10ea410abf90852c910273de16e2f23cb884e2d5ce99" =
+      "sha256-6WS3Zo9N2IdTwtqePqKwwMIOZ4ZLZnK/KZzCFJQ+tXg=";
   };
   cudaHash =
-    cudaHashes.${cudaManifestHash} or throw
-      "xla: no Bazel dependency hash for these CUDA/cuDNN manifests; overrideAttrs with deps.overrideAttrs { outputHash = ...; outputHashAlgo = \"sha256\"; } (see tests/README.md)";
+    cudaHashes.${cudaManifestHash}
+      or (throw "xla: no Bazel dependency hash for these CUDA/cuDNN manifests; overrideAttrs with deps.overrideAttrs { outputHash = ...; outputHashAlgo = \"sha256\"; } (see tests/README.md)");
 
   # Keep a real build-only driver, not a toolkit stub, for CUDA-linked exec
   # tools. CCCL has its own LOCAL_CCCL_PATH hook and stays pinned by XLA.
@@ -192,8 +192,9 @@ in
     # rules_python's python_repository.bzl to run patchelf right after
     # extracting the binary, using NIX_DYNAMIC_LINKER from --repo_env.
     #
-    # In the build phase, fetchAttrs.installPhase normalizes all /nix/store
-    # paths for reproducibility (breaking the patchelf), so
+    # The patched binary embeds the glibc store path, and its ELF layout depends
+    # on the patchelf version, so the patch keeps a pristine *.nix-unpatched
+    # copy that fetchAttrs.installPhase restores before archiving.
     # buildAttrs.postConfigure re-patchelfs the binary for the actual build.
     + ''
       cp ${./rules-python-nix-patchelf.patch} third_party/py/rules_python_nix_patchelf.patch
@@ -291,7 +292,7 @@ in
 
     sha256 =
       {
-        cpu.x86_64-linux = "sha256-wbLvzCLpFw4+QF86zIBroAeFrwqUTe31aJV7tcjhSZE=";
+        cpu.x86_64-linux = "sha256-20LrJ1amS20l1lyWSJlE/y24Gwifha6lmjTwax3DNkA=";
         # This hash covers the selected manifests, not cudaCapabilities. Alternate
         # manifests need a caller-supplied deps outputHash/outputHashAlgo override.
         cuda.x86_64-linux = cudaHash;
@@ -302,18 +303,25 @@ in
     # buildBazelPackage normally removes every top-level symlink. Preserve
     # directory aliases used by hermetic LLVM, sysroot, and CUDA repositories.
     # Repository archives can contain read-only directories and symlinks.
-    # Normalize the fully materialized archive tree only after repository
-    # aliases have been copied into it.
+    # Check the fully materialized archive tree only after repository aliases
+    # have been copied into it. Any /nix/store reference, even with its hash
+    # normalized, ties the fixed-output hash to the nixpkgs revision through the
+    # referenced package's name and version, so reject them all.
     installPhase = ''
       runHook preInstall
 
       ${lib.optionalString cudaSupport removeLocalCudaRepositories}chmod -R +w "$bazelOut/external"
+
+      find "$bazelOut/external" -name '*.nix-unpatched' -type f | while read -r pristine; do
+        mv "$pristine" "''${pristine%.nix-unpatched}"
+      done
 
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
       rm -rf $bazelOut/external/{local_config_cc,\@local_config_cc.marker}
       rm -rf $bazelOut/external/{local_config_python,\@local_config_python.marker}
       rm -rf $bazelOut/external/{local_config_sh,\@local_config_sh.marker}
+      rm -rf $bazelOut/external/{local_config_shell,\@local_config_shell.marker}
       rm -rf $bazelOut/external/{local_config_xcode,\@local_config_xcode.marker}
       rm -rf $bazelOut/external/{local_execution_config_python,\@local_execution_config_python.marker}
       rm -rf $bazelOut/external/{local_jdk,\@local_jdk.marker}
@@ -342,26 +350,18 @@ in
       done
 
       chmod -R +w "$bazelOut/external"
-      find "$bazelOut/external" -type f -exec \
-        sed -i 's|/nix/store/[a-z0-9]\{32\}-|/nix/store/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-|g' {} +
       find "$bazelOut/external" -name '*.pyc' -delete
 
-      remaining_store_refs="$(
+      store_refs="$(
         {
-          find "$bazelOut/external" -type f -exec \
-            grep -aohE '/nix/store/[a-z0-9]{32}-' {} + \
-            || true
-          find "$bazelOut/external" -type l -exec readlink {} \; \
-            | grep -oE '/nix/store/[a-z0-9]{32}-' \
-            || true
+          grep -raoE '/nix/store/[a-z0-9]{32}-[a-zA-Z0-9+._?=-]*' "$bazelOut/external" || true
+          find "$bazelOut/external" -type l -lname '/nix/store/*' -printf '%p -> %l\n'
         } \
-          | grep -vFx '/nix/store/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-' \
-          | sort -u \
-          || true
+          | sort -u
       )"
-      if [ -n "$remaining_store_refs" ]; then
-        printf '%s\n' "$remaining_store_refs" >&2
-        echo "un-normalized Nix store reference in Bazel dependency archive" >&2
+      if [ -n "$store_refs" ]; then
+        printf '%s\n' "$store_refs" >&2
+        echo "Nix store reference in Bazel dependency archive" >&2
         exit 1
       fi
 
@@ -596,16 +596,6 @@ in
     ++ lib.optionals cudaSupport ([ lib.licenses.nvidiaCudaRedist ] ++ cudaPackages.cudnn.meta.license);
     maintainers = with lib.maintainers; [ samuela ];
     platforms = [ "x86_64-linux" ];
-    problems = lib.optionalAttrs (cudaSupport && !(lib.hasAttr cudaManifestHash cudaHashes)) {
-      unsupported-cuda-toolkit = {
-        message = ''
-          Unsupported cuda version for XLA.
-            Current `cudaManifestHash`: ${cudaManifestHash}
-            Supported hash(es): ${lib.concatStringsSep ", " (builtins.attrNames cudaHashes)}
-        '';
-        kind = "broken";
-      };
-    };
   };
 }).overrideAttrs
   # buildBazelPackage accepts only an attrset, not mkDerivation's finalAttrs callback.
@@ -622,6 +612,22 @@ in
       passthru = (previousAttrs.passthru or { }) // {
         inherit cudaSupport;
         inherit (checks) tests testers;
+      };
+      # Check the final deps so that a caller-supplied outputHash for other
+      # CUDA/cuDNN manifests (see tests/README.md) also clears the problem.
+      meta = previousAttrs.meta // {
+        problems =
+          lib.optionalAttrs (cudaSupport && !(builtins.tryEval finalAttrs.deps.outputHash).success)
+            {
+              unsupported-cuda-toolkit = {
+                message = ''
+                  Unsupported cuda version for XLA.
+                    Current `cudaManifestHash`: ${cudaManifestHash}
+                    Supported hash(es): ${lib.concatStringsSep ", " (builtins.attrNames cudaHashes)}
+                '';
+                kind = "broken";
+              };
+            };
       };
     }
   )

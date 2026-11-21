@@ -53,6 +53,17 @@ builtins.intersectAttrs super {
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch ./patches/ghc-paths-nix.patch super.ghc-paths;
 
+  freetype2 = overrideCabal (drv: {
+    librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.zlib ];
+    postPatch = (drv.postPatch or "") + ''
+      # Cabal's include-dirs must not select the bundled zlib header.
+      rm freetype2/src/gzip/zlib.h
+      substituteInPlace freetype2.cabal \
+        --replace-fail '  cc-options:' \
+          $'  extra-libraries: z\n  cc-options: -DFT_CONFIG_OPTION_SYSTEM_ZLIB'
+    '';
+  }) super.freetype2;
+
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################

@@ -233,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
-    configureFlagsArray+=(
+    configureFlags+=(
       "--cc=$CC"
       "--host-cc=$CC_FOR_BUILD"
       "--as=$AS"

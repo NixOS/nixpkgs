@@ -24,8 +24,6 @@
 
 let
   inherit (unwrapped) version;
-  major = lib.versions.major version;
-  minor = lib.versions.minor version;
 
   makeWrapperArgs = builtins.concatStringsSep " " (
     [
@@ -164,10 +162,6 @@ runCommand "${unwrapped.name}-wrapped"
         else
           ln -s $dir $out/share/
         fi
-      done
-      for f in $out/share/applications/*.desktop; do
-        substituteInPlace "$f" \
-          --replace "Exec=libreoffice${major}.${minor}" "Exec=soffice"
       done
 
       mkdir -p $out/bin
