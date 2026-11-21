@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.9";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UBk3wp1wuMqyY8KMSvc/URAw9awZMFQZrJgQe59PYmA=";
+    hash = "sha256-e9h2AE8GdjK5GZqbKoIzdPcyWxilCuPpPnwiyJbMJW4=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_12;
     fetcherVersion = 5;
-    hash = "sha256-efgDw/4orFP9kSWjtkyXcfkXsfYLx4LGTVNKfZ5LhdM=";
+    hash = "sha256-K9mT/5JM9AnQM436VMeJL416etr+j/+xcNbiXWAnstw=";
   };
 
   nativeBuildInputs = [
