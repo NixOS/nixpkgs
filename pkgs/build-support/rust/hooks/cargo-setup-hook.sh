@@ -146,6 +146,27 @@ cargoUseSystemLibs() {
 
   # https://github.com/tikv/jemallocator/blob/a181911517adff5331e43dfd9804086f7c392a25/jemalloc-sys/build.rs#L132
   export JEMALLOC_OVERRIDE="${JEMALLOC_OVERRIDE:-"$sentinel_dir/lib/libjemalloc"}"
+
+  # https://github.com/google/shaderc-rs/blob/78e480d4ef3471b0ddec5ff093c52fdcdd90cadf/shaderc-sys/build/build.rs#L204-L205
+  # Note that this does not prevent shaderc from being built, as the presence
+  # of CARGO_FEATURE_BUILD_FROM_SOURCE takes precedence
+  export SHADERC_LIB_DIR="${SHADERC_LIB_DIR:-"$sentinel_dir/lib/shaderc"}"
+
+  # https://github.com/messense/mupdf-rs/blob/d03a17106e0164fe84c6e7fbe415cda20297825f/mupdf-sys/make.rs#L93
+  export CARGO_FEATURE_SYS_LIB_FREETYPE=1;
+  export CARGO_FEATURE_SYS_LIB_GUMBO=1;
+  export CARGO_FEATURE_SYS_LIB_HARFBUZZ=1;
+  export CARGO_FEATURE_SYS_LIB_JBIG2DEC=1;
+  # export CARGO_FEATURE_SYS_LIB_JPEGXR=1;
+  export CARGO_FEATURE_SYS_LIB_LCMS2=1;
+  export CARGO_FEATURE_SYS_LIB_LIBJPEG=1;
+  export CARGO_FEATURE_SYS_LIB_OPENJPEG=1;
+  export CARGO_FEATURE_SYS_LIB_ZLIB=1;
+  export CARGO_FEATURE_SYS_LIB_TESSERACT=1;
+  export CARGO_FEATURE_SYS_LIB_LEPTONICA=1;
+  export CARGO_FEATURE_SYS_LIB_LIBARCHIVE=1;
+  # export CARGO_FEATURE_SYS_LIB_ZXINGCPP=1;
+  export CARGO_FEATURE_SYS_LIB_BROTLI=1;
 }
 
 # Cargo defaults to one job per host CPU. Limit builds that invoke Cargo
