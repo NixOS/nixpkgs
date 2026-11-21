@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "etuples";
-  version = "0.3.10";
+  version = "0.3.11";
   pyproject = true;
 
   src = fetchFromGitHub {
