@@ -651,6 +651,8 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to fail if the package depends on two different versions of the same dependency.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
+- `pythonRelaxBuildSystemHook` will relax Python build dependencies restrictions for the package.
+  See [example usage](#using-pythonrelaxbuildsystemhook).
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
@@ -1541,6 +1543,54 @@ However, this is done in its own phase, and not dependent on whether [`doCheck =
 This can also be useful in verifying that the package doesn't assume commonly
 present packages (e.g. `setuptools`).
 
+#### Using pythonRelaxBuildSystemHook {#using-pythonrelaxbuildsystemhook}
+
+Upstream often specify version ranges for build system dependencies in their
+`pyproject.toml` under `[build-system].requires`. When the version of a
+build tool provided by Nixpkgs is outside the declared range, the build
+fails. `pythonRelaxBuildSystemHook` resolves this by modifying `pyproject.toml`
+before the build to strip or remove those version constraints.
+
+For example, given the following `pyproject.toml`:
+
+```toml
+[build-system]
+requires = ["setuptools>=81,<84", "wheel>=0.48"]
+build-backend = "setuptools.build_meta"
+```
+
+we can do:
+
+```nix
+{
+  pythonRelaxBuildSystem = [ "setuptools" ];
+}
+```
+
+which would result in:
+
+```toml
+[build-system]
+requires = ["setuptools", "wheel>=0.48"]
+build-backend = "setuptools.build_meta"
+```
+
+To relax all build requirements at once, pass `true`:
+
+```nix
+{ pythonRelaxBuildSystem = true; }
+```
+
+To remove a build requirement entirely, use `pythonRemoveBuildSystem`:
+
+```nix
+{ pythonRemoveBuildSystem = [ "wheel" ]; }
+```
+
+Both `buildPythonPackage` and `buildPythonApplication` will automatically add
+`pythonRelaxBuildSystemsHook` when either `pythonRelaxBuildSystem` or
+`pythonRemoveBuildSystem` is specified. This hook only affects `pyproject.toml`.
+
 #### Using pythonRelaxDepsHook {#using-pythonrelaxdepshook}
 
 It is common for upstream to specify a range of versions for its package
@@ -1605,11 +1655,6 @@ instead of a dev dependency).
 Keep in mind that while the examples above are done with `requirements.txt`,
 `pythonRelaxDepsHook` works by modifying the resulting wheel file, so it should
 work with any of the [existing hooks](#setup-hooks).
-
-The `pythonRelaxDepsHook` has no effect on build time dependencies, such as
-those specified in `build-system`. If a package requires incompatible build
-time dependencies, they should be removed in `postPatch` through
-`substituteInPlace` or similar.
 
 For ease of use, both `buildPythonPackage` and `buildPythonApplication` will
 automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
@@ -2244,6 +2289,7 @@ The following rules are desired to be respected:
 * Only unversioned attributes (e.g. `pydantic`, but not `pydantic_1`) can be included in `dependencies`,
   since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
   without running into duplicate module name conflicts.
+* The version restrictions of `build-system` can be relaxed by [`pythonRelaxBuildSystemHook`](#using-pythonrelaxbuildsystemhook).
 * The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
 * Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be

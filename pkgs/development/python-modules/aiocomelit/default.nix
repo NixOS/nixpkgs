@@ -26,10 +26,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-pjCjlgL/KqCDh/s2ALuf0xU90hsonae1j1E3KqGhnbM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=84.2.1" "setuptools"
-  '';
+  pythonRelaxBuildSystem = true;
 
   pythonRelaxDeps = [ "orjson" ];
 
