@@ -205,6 +205,8 @@ in
       wantedBy = [ "tailscaled.service" ];
       serviceConfig = {
         Type = "notify";
+        RuntimeDirectory = "tailscaled-autoconnect";
+        RuntimeDirectoryMode = "0700";
       };
       path = [
         cfg.package
@@ -234,7 +236,10 @@ in
               case "$state" in
                 NeedsLogin|NeedsMachineAuth|Stopped)
                   echo "Server needs authentication, sending auth key"
-                  tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+                  # Hand the key over as a file, so it never appears in argv,
+                  # where `ps` shows it and `tailscale up` echoes it on errors.
+                  (umask 077; printf '%s%s' "$(<${escapeShellArg cfg.authKeyFile})" ${escapeShellArg params} >"$RUNTIME_DIRECTORY/auth-key")
+                  tailscale up --auth-key "file:$RUNTIME_DIRECTORY/auth-key" ${escapeShellArgs cfg.extraUpFlags}
                   ;;
                 Running)
                   echo "Tailscale is running"
