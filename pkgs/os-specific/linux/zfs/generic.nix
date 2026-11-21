@@ -17,6 +17,7 @@ let
       bashNonInteractive,
       zlib,
       libuuid,
+      libunwind,
       python3Packages,
       attr,
       openssl,
@@ -69,6 +70,7 @@ let
         ;
 
       smartmon = smartmontools.override { inherit enableMail; };
+      enableLibunwind = lib.meta.availableOn stdenv.hostPlatform libunwind;
 
       buildKernel = elem configFile [
         "kernel"
@@ -195,6 +197,7 @@ let
           openssl
           curl
         ]
+        ++ optional (buildUser && enableLibunwind) libunwind
         ++ optionals (buildUser && enablePython) [ python3Packages.python ]
         ++ optionals buildPyzfs [
           python3Packages.packaging
@@ -229,6 +232,7 @@ let
         "--localstatedir=/var"
         "--enable-systemd"
         "--enable-pam"
+        (lib.withFeature enableLibunwind "libunwind")
       ]
       ++ optionals buildPyzfs [ "--enable-pyzfs" ]
       ++ optionals buildKernel (
