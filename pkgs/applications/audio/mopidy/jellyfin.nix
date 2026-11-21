@@ -20,6 +20,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   dependencies = [
     mopidy
+    pythonPackages.requests
     pythonPackages.unidecode
     pythonPackages.websocket-client
   ];

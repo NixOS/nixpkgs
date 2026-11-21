@@ -8,17 +8,20 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-spotify";
-  version = "5.0.0a3";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-spotify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pM+kqeWYiPXv9DZDBTgwiEwC6Sbqv6uz5vJ5odcixOw=";
+    hash = "sha256-lrbQFEEEv7vw2dvx26DDEh9k/VUomcpCAYeS85uRKY8=";
   };
 
-  build-system = [ pythonPackages.setuptools ];
+  build-system = [
+    pythonPackages.setuptools
+    pythonPackages.setuptools-scm
+  ];
 
   dependencies = [
     mopidy

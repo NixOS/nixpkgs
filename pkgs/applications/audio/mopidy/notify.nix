@@ -17,6 +17,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     hash = "sha256-oAOJvonDDmtpmzgu8Y+BczuLYpfrVlwASIFOW7rhZ94=";
   };
 
+  # Mopidy 4 exposes CoreListener from mopidy.core instead of mopidy.core.listener.
+  # Remove when upstream supports Mopidy 4.
+  postPatch = ''
+    substituteInPlace mopidy_notify/frontend.py \
+      --replace-fail 'from mopidy.core.listener import CoreListener' 'from mopidy.core import CoreListener'
+  '';
+
   build-system = [
     pythonPackages.setuptools
   ];
@@ -26,6 +33,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   dependencies = [
     mopidy
     pythonPackages.pydbus
+    pythonPackages.requests
   ];
 
   nativeBuildInputs = [

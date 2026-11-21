@@ -7,17 +7,18 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-somafm";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
-    pname = "Mopidy-SomaFM";
-    sha256 = "DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
+    pname = "mopidy_somafm";
+    hash = "sha256-d7yr3jbZ28Sj5I06i34xvxZtXnynW5f6+Iem5lQ6EZ4=";
   };
 
   build-system = [
     pythonPackages.setuptools
+    pythonPackages.setuptools-scm
   ];
 
   dependencies = [
