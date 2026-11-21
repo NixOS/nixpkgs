@@ -333,7 +333,9 @@ in
                   ${
                     if config.system.etc.overlay.mutable then
                       ''
-                        if [[ -f "$mountPoint" ]]; then
+                        # Avoid copying up an existing lower-layer placeholder
+                        # and retaining its origin handle across generations.
+                        if [[ -f "$mountPoint" && ! -e "$tmpMountPoint" ]]; then
                           touch "$tmpMountPoint"
                         elif [[ -d "$mountPoint" ]]; then
                           mkdir -p "$tmpMountPoint"
