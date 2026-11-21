@@ -42,6 +42,8 @@ buildPythonPackage rec {
     yarl
   ];
 
+  pythonRelaxDeps = [ "multidict" ];
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
