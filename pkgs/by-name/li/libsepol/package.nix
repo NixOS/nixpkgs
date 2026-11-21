@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ flex ];
 
+  strictDeps = true;
+
   makeFlags = [
     "PREFIX=$(out)"
     "BINDIR=$(bin)/bin"
