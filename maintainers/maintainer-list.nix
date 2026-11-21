@@ -22639,6 +22639,12 @@
     githubId = 135209509;
     name = "Oliver Richter";
   };
+  oriionn = {
+    email = "contact@oriondev.fr";
+    github = "oriionn";
+    githubId = 38093786;
+    name = "Orion";
+  };
   ornxka = {
     email = "ornxka@littledevil.sh";
     github = "warmdarksea";
