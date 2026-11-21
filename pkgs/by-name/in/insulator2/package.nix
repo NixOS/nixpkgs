@@ -20,6 +20,8 @@
   libsoup_3,
   openssl,
   curl,
+  sqlite,
+  wrapGAppsHook3,
 
   nix-update-script,
 }:
@@ -80,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     yarn-berry_4
     yarn-berry_4.yarnBerryConfigHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -89,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     webkitgtk_4_1
     curl
+    sqlite
   ];
 
   env.OPENSSL_NO_VENDOR = 1;
