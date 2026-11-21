@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "stepcode";
-  version = "0.8.2-unstable-2026-02-09";
+  version = "0.8.2-unstable-2026-09-28";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -15,9 +15,16 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "stepcode";
     repo = "stepcode";
-    rev = "74b6fe45751bd60be749bc80766f38745d29ed72";
-    hash = "sha256-RDYHRvotBd6xBuo6eZ6ZB8RHJz5suQ5Rx8LeZlbbBGQ=";
+    rev = "24783b448511b8f6bce2829286a3f00015430236";
+    hash = "sha256-wzdm18qTRW3NLLBTwO+1Gji3U7DXjWXeOYIt3zHB5U4=";
   };
+
+  patches = [
+    # exp2cxx emits a null element type for nested aggregates (e.g. LIST OF LIST) when
+    # the compiler evaluates the left side of an assignment first, as GCC does on aarch64.
+    # This makes brlcad's step-g segfault on aarch64-linux.
+    ./fix-aggregate-referent-eval-order.patch
+  ];
 
   nativeBuildInputs = [
     cmake

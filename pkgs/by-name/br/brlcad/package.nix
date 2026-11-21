@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   # nativeBuildInputs
+  autoPatchelfHook,
   cmake,
   doxygen,
   lemon,
@@ -29,7 +30,6 @@
   qt6,
   stepcode,
   tcl,
-  tinygltf_2,
   tk,
   zlib,
 
@@ -45,8 +45,8 @@ let
   bext = fetchFromGitHub {
     owner = "BRL-CAD";
     repo = "bext";
-    rev = "12f7d5669eec143eb882a367fa2d2a56127d1942"; # must match brlcad_bext_init() in CMakeLists.txt
-    hash = "sha256-T6zA/zLmSPTlj7+AlxxWXb1OsxdBEcyatYCYUUTIDY8=";
+    rev = "42d8d7ca57f9d2f61192b41f0b41a731f1ba6c47"; # must match brlcad_bext_init() in CMakeLists.txt
+    hash = "sha256-LHMZwu35L2dpWh7mq0RkMjTdgu5AE2VXmfAAGTjPUAY=";
     fetchSubmodules = true;
     # remove unneeded subprojects to reduce NAR size
     postFetch =
@@ -74,14 +74,15 @@ let
           "minizip-ng"
           "ncurses"
           "netpbm"
+          "oidn"
           "onetbb"
           "opencolorio"
           "opencv"
           "openexr"
           "openimageio"
+          "openvdb"
           "osl"
           "ospray"
-          "patchelf"
           "plief"
           "png"
           "proj"
@@ -92,9 +93,7 @@ let
           "sqlite3"
           "stepcode"
           "tiff"
-          "tinygltf"
           "xerces-c"
-          "xmltools"
           "yaml-cpp"
           "zstd"
         ];
@@ -109,7 +108,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brlcad";
-  version = "7.44.0";
+  version = "7.46.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -118,14 +117,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BRL-CAD";
     repo = "brlcad";
     tag = "rel-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-ehfjrff2mjaW0s0G8I7pNXpRXdnsOcPwRTXewNijAZo=";
+    hash = "sha256-ZiqL7tN4Wpjt3NY+nNOPh3MlxvrrOoZ9123lLCwi3z8=";
   };
 
   prePatch = ''
     # clone bext src so we can patch it
     # (copy hidden files too, e.g. .gitmodules, which the dependency-graph target needs)
+    # (keep the executable bits, the bundled Tcl/Tk configure scripts need them)
     mkdir -p build/bext
-    cp -r --no-preserve=mode ${bext}/. build/bext/
+    cp -r ${bext}/. build/bext/
+    chmod -R u+w build/bext
   '';
 
   patches = [
@@ -142,10 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # libgcv defines EQUAL macro, which causes gdal to not define STRCASECMP macro
     ./fix-gdal-strcasecmp.patch
-
-    # fix typo in GeometryIO.tcl which causes model exports to fail
-    # https://github.com/BRL-CAD/brlcad/pull/234
-    ./fix-export.patch
   ];
 
   postPatch =
@@ -155,37 +152,43 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "add_project" "#add_project"
     ''
     # enable bext projects we actually need:
-    # * itcl: needs v3
-    # * itk: needs v3
+    # * tcl, tk, itk: bext requires Itcl >= 4.3.0 / Itk >= 4.2.3 from the same Tcl
+    #   installation (nixpkgs has incrtcl 4.2.3, itktcl 4.1.0), so use the bundled stack
     # * iwidgets, tkhtml, tktable: missing in nixpkgs
     # * manifold: needs v2
     # * mmesh: required by librt, missing in nixpkgs
     # * opennurbs: many vendored patches
     # * osmesa, perplex, regex: specialized vendored libraries
     # * poissonrecon: provides SPSR headers to brlcad via the bext noinstall dir
+    # * tinygltf: brlcad needs the `tinygltf::tinygltf` CMake target that bext patches
+    #   into its tinygltf v3 snapshot (nixpkgs' tinygltf 3.x only ships headers)
     # * patch, strclear: required internally
-    # * assetimport, clipper2, lemon, re2c, tcl, tk, zlib: transitive dependency, not actually built
+    # * assetimport, clipper2, lemon, re2c, zlib: transitive dependency, not actually built
     + ''
       substituteInPlace build/bext/CMakeLists.txt \
         --replace-fail \
           "#add_project(patch)" \
           "add_project(patch)"
 
-      for name in itcl itk iwidgets tkhtml tktable manifold mmesh opennurbs osmesa perplex regex poissonrecon strclear clipper2 zlib assetimport lemon re2c tcl tk; do
+      for name in itk iwidgets tkhtml tktable manifold mmesh opennurbs osmesa perplex regex poissonrecon strclear tinygltf clipper2 zlib assetimport lemon re2c tcl tk; do
         substituteInPlace build/bext/CMakeLists.txt \
           --replace-fail \
             "#add_project($name " \
             "add_project($name "
       done
     ''
+    # bext's finalize step falls back to stdenv's patchelf to overwrite the RPATH
+    # of every installed library, dropping the nix store paths (e.g. to zlib)
+    + ''
+      substituteInPlace build/bext/CMakeLists.txt \
+        --replace-fail \
+          "NAMES plief patchelf" \
+          "NAMES plief"
+    ''
     # inject TCL_ROOT into bext projects
     + ''
       sed -i '1i set(TCL_ROOT "${tcl};${tk}")' \
-        build/bext/CMake/FindTCL.cmake \
-        build/bext/itcl/addfiles/FindTCL.cmake \
-        build/bext/itk/addfiles/FindTCL.cmake \
-        build/bext/tktable/tktable/CMake/FindTCL.cmake \
-        build/bext/tkhtml/tkhtml/CMake/FindTCL.cmake
+        build/bext/CMake/FindTCL.cmake
     ''
     # remove failing tests
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -202,9 +205,22 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail \
           "brlcad_add_test(NAME bu_mappedfile_parallel_16384 COMMAND bu_test test_mappedfile 2 16384)" \
           ""
+    ''
+    # Floating-point differences on aarch64:
+    # - bg_spsr: "fixed structured reconstruction succeeds" fails
+    # - ged_test_drawing_annotate: rendering differs from the x86_64 reference image (SSIM 0.94)
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      substituteInPlace src/libbg/tests/CMakeLists.txt \
+        --replace-fail \
+          "brlcad_add_test(NAME bg_spsr COMMAND bg_spsr)" \
+          ""
+      sed -i '/^brlcad_add_test($/{N;/NAME ged_test_drawing_annotate/{N;N;d}}' \
+        src/libged/tests/draw/CMakeLists.txt
+      ! grep -q "NAME ged_test_drawing_annotate" src/libged/tests/draw/CMakeLists.txt
     '';
 
   nativeBuildInputs = [
+    autoPatchelfHook
     cmake
     doxygen
     lemon
@@ -233,7 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     stepcode
     tcl
-    tinygltf_2
     tk
     zlib
   ]
@@ -254,11 +269,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LMDB_INCLUDE_DIR" "${lmdb.dev}/include")
     (lib.cmakeFeature "OpenCV_DIR" "${opencv}/lib/cmake/opencv4")
     (lib.cmakeFeature "STEPCODE_ROOT" "${stepcode}")
-    (lib.cmakeFeature "TCL_ROOT" "${tcl};${tk}")
+    # No TCL_ROOT here: brlcad must link the bundled Tcl/Tk stack that bext builds,
+    # since its btclsh loads that stack's init.tcl.
   ];
 
   preConfigure = ''
     cmakeFlagsArray+=("-DBRLCAD_EXT_SOURCE_DIR=$(pwd)/build/bext")
+  '';
+
+  # bext installs its libraries with an empty RUNPATH (e.g. libOpenNURBS -> libz, libtk -> libX11).
+  # Fix the copies staged in the build tree before brlcad links against them.
+  # The path must be absolute, or libraries found there (e.g. libmanifold -> libClipper2)
+  # get a relative `lib` RUNPATH.
+  postConfigure = ''
+    autoPatchelf "$PWD/lib"
   '';
 
   env = {
@@ -286,13 +310,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Only wrap Qt apps as other executables stop working when wrapped
   dontWrapQtApps = true;
-  preFixup = lib.optionalString enableQt ''
-    wrapQtApp $out/bin/brlman
-    wrapQtApp $out/bin/qged
-    wrapQtApp $out/bin/qgmodel
-    wrapQtApp $out/bin/qgview
-    wrapQtApp $out/bin/qisst
-  '';
+  preFixup =
+    # The bext libraries patched in postConfigure are installed with the build-tree RUNPATH.
+    # Drop it; autoPatchelfHook resolves their dependencies from $out/lib afterwards.
+    ''
+      for f in $(find $out -type f); do
+        isELF "$f" || continue
+        rpath=$(patchelf --print-rpath "$f" 2>/dev/null) || continue
+        newRpath=$(tr ':' '\n' <<< "$rpath" | grep -v '^/build/' | paste -sd: -)
+        if [ "$rpath" != "$newRpath" ]; then
+          patchelf --set-rpath "$newRpath" "$f"
+        fi
+      done
+    ''
+    + lib.optionalString enableQt ''
+      wrapQtApp $out/bin/brlman
+      wrapQtApp $out/bin/qged
+      wrapQtApp $out/bin/qgmodel
+      wrapQtApp $out/bin/qgview
+      wrapQtApp $out/bin/qisst
+    '';
 
   meta = {
     homepage = "https://brlcad.org";

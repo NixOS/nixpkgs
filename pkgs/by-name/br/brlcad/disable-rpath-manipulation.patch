@@ -1,10 +1,13 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7d02fe2b83..b3c75e639a 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -356,20 +356,6 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
- # directories outside the build tree to the install RPATH
- set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
- 
+@@ -355,21 +355,7 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+ # Installed runtime paths are defined explicitly below.  Do not append
+ # directories discovered on the build host, since those paths may not exist
+ # or may resolve to unrelated libraries on the installed system.
+-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+-
 -# The following logic is what allows binaries to run successfully in the build
 -# directory AND install directory.
 -# This will need to be overridden for some targets that have a different
@@ -18,33 +21,37 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 -  set(CMAKE_INSTALL_RPATH "@executable_path/../${LIB_DIR}")
 -  set(CMAKE_INSTALL_NAME_DIR "@executable_path/../${LIB_DIR}")
 -endif(NOT APPLE)
--
++set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ 
  #---------------------------------------------------------------------
  # For certain platforms (in particular Visual C++) we want to keep some pre-defined
- # flags that are commonly used in the build logic.
 diff --git a/misc/CMake/BRLCAD_ExternalDeps.cmake b/misc/CMake/BRLCAD_ExternalDeps.cmake
+index 7eff276a95..1397030acf 100644
 --- a/misc/CMake/BRLCAD_ExternalDeps.cmake
 +++ b/misc/CMake/BRLCAD_ExternalDeps.cmake
-@@ -905,15 +905,6 @@ endfunction()
-   string(REPLACE ";" "\n" TP_B "${ALL_BINARY_FILES}")
-   file(WRITE "${TP_INVENTORY_BINARIES}" "${TP_B}")
+@@ -1502,7 +1502,7 @@ endfunction()
+     file(APPEND "${_brlcad_ext_strclear_history_log}" "External install directory: ${BRLCAD_EXT_DIR_REAL}\n")
+   endif(NBINARY_FILES OR NNOEXEC_FILES OR NTEXT_FILES)
  
 -  if(NBINARY_FILES)
--    message("Setting rpath on new 3rd party lib and exe files...")
--    # Set local RPATH so the files will work during build
--    foreach(lf ${NBINARY_FILES})
--      rpath_build_dir_process("${CMAKE_BINARY_DIR}" "${lf}")
--    endforeach(lf ${NBINARY_FILES})
--    message("Setting rpath on new 3rd party lib and exe files... done.")
++  if(NBINARY_FILES AND FALSE)
+     set(_brlcad_ext_plief_updated 0)
+     set(_brlcad_ext_binary_updated 0)
+     list(LENGTH NBINARY_FILES _brlcad_ext_binary_processed)
+@@ -1639,7 +1639,7 @@ endfunction()
+       endforeach(lf ${NBINARY_FILES})
+     endif(P_RPATH_SUPPORTS_FILE_LIST AND STRCLEAR_SUPPORTS_FILE_LIST AND NOT APPLE)
+     message("Setting rpath on new 3rd party lib and exe files... done (${_brlcad_ext_binary_processed} files checked, ${_brlcad_ext_plief_updated} files updated by plief, ${_brlcad_ext_binary_updated} files updated by strclear).")
 -  endif(NBINARY_FILES)
--
++  endif(NBINARY_FILES AND FALSE)
+ 
    if(NNOEXEC_FILES)
-     message("Scrubbing paths from new 3rd party data files...")
-     foreach(tf ${NNOEXEC_FILES})
+     set(_brlcad_ext_noexec_updated 0)
 diff --git a/misc/CMake/BRLCAD_Util.cmake b/misc/CMake/BRLCAD_Util.cmake
+index 8ee30fee61..0202148d80 100644
 --- a/misc/CMake/BRLCAD_Util.cmake
 +++ b/misc/CMake/BRLCAD_Util.cmake
-@@ -220,17 +220,6 @@ function(PLUGIN_SETUP plugin_targets subdir)
+@@ -225,17 +225,6 @@ function(PLUGIN_SETUP plugin_targets subdir)
        LIBRARY DESTINATION ${LIBEXEC_DIR}/${subdir}
        ARCHIVE DESTINATION ${LIBEXEC_DIR}/${subdir}
      )
