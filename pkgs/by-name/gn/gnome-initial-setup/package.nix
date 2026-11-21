@@ -33,6 +33,7 @@
   tzdata,
   gnome-tecla,
   gsettings-desktop-schemas,
+  gnome-session-ctl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -85,10 +86,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "--sysconfdir=/etc"
     "-Dibus=disabled"
     "-Dparental_controls=disabled"
-    "-Dvendor-conf-file=${./vendor.conf}"
   ];
+
+  postPatch = ''
+    substituteInPlace data/gnome-initial-setup.service.in \
+      --replace-fail '@libexecdir@/gnome-session-ctl' '${gnome-session-ctl}/libexec/gnome-session-ctl'
+  '';
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-initial-setup"; };
