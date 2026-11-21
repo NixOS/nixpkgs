@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libstemmer";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "snowball";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FpvV2brpjl0/l/EmrHN9tWFrXUUz9BDUH548MAjiTa8=";
+    hash = "sha256-N5grPCbly0hp0n7RlqkQDztdjvSb1VtzLAJT68T6ng4=";
   };
 
   nativeBuildInputs = [ perl ];
