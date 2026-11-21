@@ -1,12 +1,12 @@
 {
-  stdenv,
+  clangStdenv,
   lib,
   fetchFromGitHub,
   unstableGitUpdater,
 }:
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "nn";
-  version = "2.0.8-unstable-2024-04-08";
+  version = "2.0.10-unstable-2025-11-20";
 
   src = fetchFromGitHub {
     owner = "sakov";
