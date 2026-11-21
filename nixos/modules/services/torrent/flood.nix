@@ -30,6 +30,13 @@ in
       default = "localhost";
       example = "::";
     };
+    stateDir = lib.mkOption {
+      type = lib.types.str;
+      default = "/var/lib/flood";
+      description = ''
+        The directory where flood stores its data files.
+      '';
+    };
     extraArgs = lib.mkOption {
       type = with lib.types; listOf str;
       description = "Extra arguments passed to `flood`.";
@@ -56,7 +63,7 @@ in
             cfg.host
             "--port"
             (toString cfg.port)
-            "--rundir=/var/lib/flood"
+            "--rundir=${cfg.stateDir}"
           ]
           ++ cfg.extraArgs
         );
