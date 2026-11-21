@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ouman-eh-800-api";
-  version = "1.1.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Markus98";
     repo = "ouman-eh-800-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NJvUNEhMreUNbeLhaYwSaAzCR9Ryj3vrZc838nRZoCs=";
+    hash = "sha256-LISpFmIm0xuFO3FH5nRfGpg0YonAiRHE5YlNLQ+A7TU=";
   };
 
   postPatch = ''
