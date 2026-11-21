@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   blinker,
-  flit-core,
+  flit-core_3,
   flask,
   pytestCheckHook,
 }:
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-G2Z8dj1/IuLsZoNJVrL6LYu0XjTEHtWB9Z058aqG9Ic=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     blinker
