@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -64,6 +65,9 @@ buildPythonPackage rec {
     xdpyinfo
     xvfb
   ];
+
+  # Starting Xvfb and i3 for each test can exceed the 5 s timeout from pytest.ini on Darwin
+  pytestFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--timeout=30" ];
 
   disabledTestPaths = [
     # Timeout
