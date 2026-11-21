@@ -5,8 +5,6 @@
   groff,
   less,
   nix-update-script,
-  testers,
-  awscli,
   versionCheckHook,
 }:
 
@@ -15,14 +13,14 @@ let
     pname = "awscli";
     # N.B: if you change this, change botocore and boto3 to a matching version too
     # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
-    version = "1.44.21";
+    version = "1.46.3";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "aws";
       repo = "aws-cli";
       tag = finalAttrs.version;
-      hash = "sha256-yQFK1YjehmACZGMXfMQLc5OiiIGDO08OtwFSpaRyi58=";
+      hash = "sha256-0QtGw6bWjs8u/9GjQzBh37yAu7aFJ57EX+2oiOJvbIk=";
     };
 
     pythonRelaxDeps = [
@@ -36,13 +34,13 @@ let
     ];
 
     dependencies = with python3Packages; [
-      botocore
       docutils
-      s3transfer
       pyyaml
       colorama
       rsa
-
+      jmespath
+      python-dateutil
+      urllib3
       groff
       less
     ];
@@ -62,7 +60,6 @@ let
     installCheckPhase = ''
       runHook preInstallCheck
 
-      $out/bin/aws --version | grep "${python3Packages.botocore.version}"
       $out/bin/aws --version | grep "${finalAttrs.version}"
 
       runHook postInstallCheck
