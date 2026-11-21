@@ -14,6 +14,7 @@
   # dependencies
   backports-strenum,
   flatbuffers,
+  ml-dtypes,
   numpy,
   protobuf,
   tqdm,
@@ -21,7 +22,6 @@
 
   # optional-dependencies
   lark,
-  ml-dtypes,
 }:
 
 let
@@ -53,8 +53,8 @@ buildPythonPackage {
   buildInputs = [ openvino-native ];
 
   dependencies = [
-    backports-strenum
     flatbuffers
+    ml-dtypes
     numpy
     protobuf
     tqdm
@@ -64,7 +64,6 @@ buildPythonPackage {
   optional-dependencies = {
     model-utils = [
       lark
-      ml-dtypes
       # TODO :xdsl
     ];
     # TODO: npu-intel
@@ -73,8 +72,8 @@ buildPythonPackage {
 
   preFixup = ''
     while IFS= read -r -d "" so; do
-      ${patchelf}/bin/patchelf --replace-needed libopenvino.so.2630 libopenvino.so "$so"
-      ${patchelf}/bin/patchelf --replace-needed libopenvino_tensorflow_lite_frontend.so.2630 libopenvino_tensorflow_lite_frontend.so "$so"
+      ${patchelf}/bin/patchelf --replace-needed libopenvino.so.2631 libopenvino.so "$so"
+      ${patchelf}/bin/patchelf --replace-needed libopenvino_tensorflow_lite_frontend.so.2631 libopenvino_tensorflow_lite_frontend.so "$so"
     done < <(find "$out" -type f \( -name '*.so' -o -name '*.so.*' \) -print0)
   '';
 
@@ -83,11 +82,12 @@ buildPythonPackage {
     # https://www.qualcomm.com/developer/software/qualcomm-ai-engine-direct-sdk
     "libQnnHtp.so"
     "libQnnIr.so"
+    "libQnnLpai.so"
     "libQnnSaver.so"
     "libQnnSystem.so"
   ];
 
-  pythonRemoveDeps = lib.optionals (pythonAtLeast "3.12") [
+  pythonRemoveDeps = [
     # https://github.com/google-ai-edge/LiteRT/pull/5298
     "backports.strenum"
   ];

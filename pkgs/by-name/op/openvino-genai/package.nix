@@ -17,6 +17,9 @@
   python3Packages,
 }:
 
+# nixpkgs-update: no auto update
+# version needs to stay in sync with openvino
+
 let
   inherit (lib) cmakeBool cmakeFeature;
 
@@ -55,18 +58,16 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-genai";
-  version = "2026.4.0.0";
+  version = "2026.4.1.0";
 
   __structuredAttrs = true;
 
-  src =
-    assert lib.hasPrefix openvino.version finalAttrs.version;
-    fetchFromGitHub {
-      owner = "openvinotoolkit";
-      repo = "openvino.genai";
-      tag = finalAttrs.version;
-      hash = "sha256-sRJbnXF7/CaHx86+dbIDv9FC1GthMW58vstQ4elf16Q=";
-    };
+  src = fetchFromGitHub {
+    owner = "openvinotoolkit";
+    repo = "openvino.genai";
+    tag = finalAttrs.version;
+    hash = "sha256-NgfzcBl3DPja2Jcf+9VFGsTQG1pKrJsB1FlbGpjY/bc=";
+  };
 
   outputs = [
     "out"
