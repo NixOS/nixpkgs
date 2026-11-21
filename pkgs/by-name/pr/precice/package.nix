@@ -18,13 +18,13 @@ assert petsc.mpiSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "precice";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "precice";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/pMJd2ONEFi1Eo4RAL7viXGJf1i1b0Ccb/1y8m/ir0M=";
+    hash = "sha256-YXFmzlVBEDubuWJCAo3KNn3e2e4wmO2y1DQwgAo9fT4=";
   };
 
   cmakeFlags = [
