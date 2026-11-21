@@ -19,5 +19,8 @@
 
     status, stdout = machine.execute("localectl")
     t.assertIn("X11 Layout: jp", stdout)
+
+    status, stdout = machine.execute("localectl list-locales")
+    t.assertIn("en_US.UTF-8", stdout)
   '';
 }
