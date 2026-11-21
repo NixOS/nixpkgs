@@ -7,23 +7,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xxhash";
-  version = "0.8.3";
+  version = "0.8.4";
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-h6kohM+NxvQ89R9NEXZcYBG2wPOuB4mcyPfofKrx9wQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YbWK23lU2/DiKQFPWioMHLgEt8vBtDpjBakT9ds3XpI=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  # Using unofficial CMake build script to install CMake module files.
-  cmakeDir = "../cmake_unofficial";
+  cmakeDir = "../build/cmake";
 
   meta = {
     description = "Extremely fast hash algorithm";
@@ -35,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       endian).
     '';
     homepage = "https://github.com/Cyan4973/xxHash";
+    changelog = "https://github.com/Cyan4973/xxHash/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       bsd2
       gpl2Plus

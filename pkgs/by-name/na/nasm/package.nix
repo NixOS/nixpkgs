@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ perl ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   doCheck = true;
@@ -46,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "nasm-";
     ignoredVersions = "rc.*";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.nasm.us/";

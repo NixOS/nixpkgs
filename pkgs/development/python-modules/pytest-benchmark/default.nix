@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-benchmark";
-  version = "5.3.0";
+  version = "5.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "pytest-benchmark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f3v+jAPMz4Cc+Al3pwqb887QzhGI5k5W80C4Vnk4qt4=";
+    hash = "sha256-PPrkvqfW0YOPgxJhiUDIQLw04oNX0kl4JoXakBO6Pok=";
   };
 
   build-system = [ setuptools ];

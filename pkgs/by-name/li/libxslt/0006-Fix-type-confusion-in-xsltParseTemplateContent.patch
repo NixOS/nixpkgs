@@ -1,0 +1,33 @@
+diff --git a/libxslt/xslt.c b/libxslt/xslt.c
+index 6532f976..fed69cef 100644
+--- a/libxslt/xslt.c
++++ b/libxslt/xslt.c
+@@ -5019,7 +5019,8 @@ xsltParseTemplateContent(xsltStylesheetPtr style, xmlNodePtr templ) {
+ 		goto skip_children;
+ 	    }
+ 	}
+-	else if ((cur->ns != NULL) && (style->nsDefs != NULL) &&
++	else if ((cur->type == XML_ELEMENT_NODE) && (cur->ns != NULL) &&
++	    (style->nsDefs != NULL) &&
+ 	    (xsltCheckExtPrefix(style, cur->ns->prefix)))
+ 	{
+ 	    /*
+@@ -5047,10 +5048,16 @@ xsltParseTemplateContent(xsltStylesheetPtr style, xmlNodePtr templ) {
+ 	    }
+ 	}
+ 	/*
+-	 * Skip to next node
++	 * Skip to next node. DTD-related nodes are explicitly skipped because
++	 * they lack the `ns` field found in `xmlNode` and `xmlAttr`. While
++	 * they share a common header with `xmlNode`, accessing their fields
++	 * as if they were elements can lead to type confusion.
+ 	 */
+ 	if (cur->children != NULL) {
+-	    if (cur->children->type != XML_ENTITY_DECL) {
++	    if ((cur->type != XML_ENTITY_DECL) &&
++	        (cur->type != XML_DTD_NODE) &&
++	        (cur->type != XML_ELEMENT_DECL) &&
++	        (cur->type != XML_ATTRIBUTE_DECL)) {
+ 		cur = cur->children;
+ 		continue;
+ 	    }

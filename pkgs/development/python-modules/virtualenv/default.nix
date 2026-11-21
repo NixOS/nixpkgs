@@ -8,12 +8,14 @@
   flaky,
   hatch-vcs,
   hatchling,
+  packaging,
   platformdirs,
   pytest-freezer,
   pytest-mock,
   pytestCheckHook,
   python-discovery,
   time-machine,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +43,7 @@ buildPythonPackage rec {
   dependencies = [
     distlib
     filelock
+    packaging
     platformdirs
     python-discovery
   ];
@@ -49,6 +52,7 @@ buildPythonPackage rec {
     flaky
     pytest-mock
     pytestCheckHook
+    versionCheckHook
   ]
   ++ lib.optionals isPyPy [ pytest-freezer ]
   ++ lib.optionals (!isPyPy) [ time-machine ];

@@ -106,6 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
     RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
+  }
+  // lib.optionalAttrs ((lib.versions.majorMinor rustc.version) == "1.99") {
+    # https://github.com/rust-lang/rust/issues/161742
+    # https://github.com/rust-lang/rust/issues/163272
+    # Default in built rustc is patched, still need to override the one from the unpatched prebuilt binaries
+    RUST_MIN_STACK = 17 * 1024 * 1024;
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.

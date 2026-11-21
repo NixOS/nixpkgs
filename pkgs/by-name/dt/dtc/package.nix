@@ -50,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./python-path.patch {
       python_bin = lib.getExe python;
     })
+
+    # Fix build with SWIG 4.5
+    # FIXME: remove with next update
+    (fetchpatch2 {
+      url = "https://github.com/dgibson/dtc/commit/5008d1d6a356b8d0a78060da2e1021507d529cff.patch?full_index=1";
+      hash = "sha256-vHZL9kzLOWVeULZCr6DtDm90IZI7aQWS77F/LvHU5ro=";
+    })
   ];
 
   nativeBuildInputs = [

@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxpm
   ];
 
+  strictDeps = true;
+
   outputs = [
     "bin"
     "dev"
@@ -73,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = false; # fails 2 tests
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://libgd.github.io/";

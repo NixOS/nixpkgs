@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gettext,
   meson,
   ninja,
@@ -81,7 +82,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.90.0";
+  version = "2.90.1";
 
   outputs = [
     "bin"
@@ -94,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-F9FcrCr4CjMnESdAjgq8J0jrKXxZXComQJ6B4U59G48=";
+    hash = "sha256-k8lBqhfV6x1T/oODZfKai05TnCIqJW2XTsjzD8QT45Y=";
   };
 
   patches =
@@ -153,6 +154,16 @@ stdenv.mkDerivation (finalAttrs: {
       # and by default meson installs in to $out/share/gdb/auto-load
       # which does not help
       ./gdb_script.patch
+
+      # Fix buffer overflow in `g_unix_socket_address_to_native` causing the
+      # `glib:gdbus-server-auth` test to fail.
+      # Upstream issue: https://gitlab.gnome.org/GNOME/glib/-/work_items/4110
+      # Upstream PR: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/5473
+      (fetchpatch {
+        name = "fix-gdbus-server-auth-test.patch";
+        url = "https://gitlab.gnome.org/GNOME/glib/-/commit/e0eb65127608e7935d6951a540520655e5e7b710.patch";
+        hash = "sha256-I/KY73uBfswdTs5gCIC622enQi/gmUERPPJpLR19Lks=";
+      })
     ];
 
   strictDeps = true;

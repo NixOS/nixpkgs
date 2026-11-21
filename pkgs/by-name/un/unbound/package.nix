@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   openssl,
   nettle,
   expat,
@@ -72,6 +73,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "release-${finalAttrs.version}";
     hash = "sha256-2CcDPUwzBRjRFzkXVinc7N956Cieb5QSS3BqDfFGgz0=";
   };
+
+  # Fix build with SWIG 4.5
+  # FIXME: remove after update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/93a56205cfa6b9a6d34db7245aa71e5ca67d1fd7.diff";
+      includes = [ "pythonmod/*" ];
+      hash = "sha256-hHCFnoDgXUItZPSqP3pmdBz3GC/tujQrVND9LmMAf/8=";
+    })
+  ];
 
   outputs = [
     "out"

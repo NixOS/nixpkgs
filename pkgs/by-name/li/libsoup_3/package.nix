@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsoup";
-  version = "3.8.0";
+  version = "3.8.1";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsoup/${lib.versions.majorMinor finalAttrs.version}/libsoup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-u/CPo+A6iMMaPSeg2Hy0IulJDy0I4UkhEQPfbWOKIjg=";
+    hash = "sha256-UBPc75E29vhh5lKfyleK9QwfUqOSGQJ/ta/2UtE3GgQ=";
   };
 
   depsBuildBuild = [
@@ -91,8 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: For some reason the pkg-config setup hook does not pick this up.
   env.PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
 
-  # HSTS tests fail.
-  doCheck = false;
+  # the darwin sandbox does not allow the protocols required for many of these tests
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  disabledTests = [
+    "hsts-test"
+    "hsts-db-test"
+  ];
+
   separateDebugInfo = true;
 
   postPatch = ''

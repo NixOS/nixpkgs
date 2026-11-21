@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gflags";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "gflags";
     repo = "gflags";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sud3c6XH24YA6vzGQ7LhSoiKycan5JYehC5l2gH6DEo=";
+    hash = "sha256-haLm7T0ZrXLuGMYEszhKkBJEMV9SUjos5X7vXlHd0uU=";
   };
 
   nativeBuildInputs = [ cmake ];

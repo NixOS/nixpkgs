@@ -8,6 +8,7 @@
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -43,6 +44,8 @@ buildPythonPackage (finalAttrs: {
     "tests/test_filelock.py"
     "tests/test_read_write.py"
   ];
+
+  doCheck = !stdenv.hostPlatform.isFreeBSD;
 
   meta = {
     changelog = "https://github.com/tox-dev/filelock/blob/${finalAttrs.src.tag}/docs/changelog.rst";

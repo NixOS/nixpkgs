@@ -2,12 +2,14 @@
   lib,
   stdenv,
   buildPythonPackage,
+  cacert,
   c-ares,
   cython,
   fetchPypi,
   openssl,
   pkg-config,
   protobuf,
+  python,
   typing-extensions,
   setuptools,
   zlib,
@@ -18,18 +20,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.84.1";
+  version = "1.85.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RG54drm5kfoSTB1BSJn6fPlfiaPnEjfqAWGGPcCywJ8=";
+    hash = "sha256-X1MCh9XeX39mCJ6tgd5E9nhxYpRNqzki76Zd/f8Qih0=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail cython==3.1.1 cython
-  '';
 
   outputs = [
     "out"
@@ -75,6 +72,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt \
+      $out/${python.sitePackages}/grpc/_cython/_credentials/roots.pem
+  '';
 
   pythonImportsCheck = [ "grpc" ];
 

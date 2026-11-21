@@ -10,3 +10,17 @@
          if (VERSION_FILE)
              file(READ "${VERSION_FILE}" FILE_CONTENTS)
              if ("${FILE_CONTENTS}" MATCHES "([0-9]+(\\.[0-9]+)*)")
+@@ -64,8 +65,13 @@ if (NOT CMAKE_CROSSCOMPILING AND NOT MODULE_NOTFOUND AND NOT @GENMODULE@_FOUND A
+         find_program(QMLPLUGINDUMP_PROGRAM NAMES qmlplugindump HINTS ${qt_binaries_dir})
+     endif()
+ 
++    # Make sure we restore the path as it may be used for more lookups after
++    # FIXME: use ENVIRONMENT here once cmake 4.4+ is required
++    set(_ECM_QML2_IMPORT_PATH $ENV{QML2_IMPORT_PATH})
+     set(ENV{QML2_IMPORT_PATH} ${KDE_INSTALL_FULL_QMLDIR})
+     execute_process(COMMAND "${QMLPLUGINDUMP_PROGRAM}" "@MODULE_NAME@" "@VERSION@" ERROR_VARIABLE ERRORS_OUTPUT OUTPUT_VARIABLE DISREGARD_VARIABLE RESULT_VARIABLE ExitCode TIMEOUT 30)
++    set(ENV{QML2_IMPORT_PATH} ${_ECM_QML2_IMPORT_PATH})
++
+     if(ExitCode EQUAL 0)
+         set(@GENMODULE@_FOUND TRUE)
+     else()

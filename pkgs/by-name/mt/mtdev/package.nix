@@ -17,10 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.hostPlatform.isFreeBSD evdev-proto;
 
+  strictDeps = true;
+
   passthru.updateScript = gitUpdater {
     url = "https://bitmath.org/git/mtdev.git";
     rev-prefix = "v";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://bitmath.org/code/mtdev/";
