@@ -5,6 +5,7 @@
   setuptools,
   pytestCheckHook,
   pytest-asyncio,
+  aiohttp,
   pytak,
   aircot,
   websockets,
@@ -12,19 +13,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adsbcot";
-  version = "9.0.1";
+  version = "9.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snstac";
     repo = "adsbcot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pOSeWwNrqF4OGL/b6cz8W1+e+jz7ShmoF5WEcKl3y2E=";
+    hash = "sha256-kRmkjrGhQaP3goFZoLdWm5RKrQEMeNPCqr1oLVTBgQw=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     pytak
     aircot
     websockets
@@ -37,12 +39,6 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
   ];
 
-  disabledTests = [
-    # broken upstream, see https://github.com/snstac/adsbcot/issues/61
-    "test_adsb_to_cot_xml"
-    "test_adsb_to_cot_with_known_craft"
-  ];
-
   pythonImportsCheck = [ "adsbcot" ];
 
   meta = {
@@ -51,6 +47,5 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/snstac/adsbcot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
-    platforms = lib.platforms.linux;
   };
 })
