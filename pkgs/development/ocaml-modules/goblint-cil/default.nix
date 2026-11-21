@@ -16,7 +16,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "goblint-cil";
-  version = "2.1.1";
+  version = "2.2.0";
 
   minimalOCamlVersion = "4.12";
   __structuredAttrs = true;
@@ -25,7 +25,7 @@ buildDunePackage (finalAttrs: {
     owner = "goblint";
     repo = "cil";
     tag = finalAttrs.version;
-    hash = "sha256-nfu8LqTNyx/pkTlAHSay8q3KSYQ+asNAnnZjPUhkNwg=";
+    hash = "sha256-HS9IDBqLoRmnvpQdlR0paTi6Z2JkoeTbo6XSiAe2peY=";
   };
 
   nativeBuildInputs = [
