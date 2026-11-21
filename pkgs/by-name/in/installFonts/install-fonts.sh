@@ -32,13 +32,50 @@ installFont() {
   find -iname "*.$1" -print0 | xargs -0 -r install -m644 -D -t "$2"
 }
 
+handleBaseFontTypes() {
+  local otfs=$(find -iname "*.otf")
+  local otcs=$(find -iname "*.otc")
+  set -f
+  otfs=(${otfs[@]})
+  otcs=(${otcs[@]})
+  set +f
+
+  # Individual fonts
+  if [[ ${#otfs[@]} -eq 0 ]]; then
+    installFont 'ttf' "$out/share/fonts/truetype"
+  else
+    if [ -n "${truetype-}" ]; then
+      installFont 'ttf' "$truetype/share/fonts/truetype"
+    else
+      echo "ERROR: installFonts: Please create a 'truetype' output"
+      exit 1
+    fi
+    for otffont in "${otfs[@]}"; do
+      install -Dm644 "$otffont" -t "$out/share/fonts/opentype"
+    done
+  fi
+
+  # Collections
+  if [[ ${#otcs[@]} -eq 0 ]]; then
+    installFont 'ttc' "$out/share/fonts/truetype"
+  else
+    if [ -n "${truetype-}" ]; then
+      installFont 'ttc' "$truetype/share/fonts/truetype"
+    else
+      cho "ERROR: installFonts: Please create a 'truetype' output"
+      exit 1
+    fi
+    for otcfont in "${otcs[@]}"; do
+      install -Dm644 "$otcfont" -t "$out/share/fonts/opentype"
+    done
+  fi
+}
+
 installFonts() {
   if [ "${dontInstallFonts-}" == 1 ]; then return; fi
 
-  installFont 'ttf' "$out/share/fonts/truetype"
-  installFont 'ttc' "$out/share/fonts/truetype"
-  installFont 'otf' "$out/share/fonts/opentype"
-  installFont 'otc' "$out/share/fonts/opentype"
+  handleBaseFontTypes
+
   installFont 'pfa' "$out/share/fonts/type1"
   installFont 'pfb' "$out/share/fonts/type1"
   installFont 'pfm' "$out/share/fonts/type1"
