@@ -158,6 +158,8 @@ self: super: with self; {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  agent-shell-py = callPackage ../development/python-modules/agent-shell-py { };
+
   agentic-threat-hunting-framework =
     callPackage ../development/python-modules/agentic-threat-hunting-framework
       { };
