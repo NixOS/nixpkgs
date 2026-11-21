@@ -1,61 +1,70 @@
-diff --git a/operations/javadl/javadl_test.go b/operations/javadl/javadl_test.go
-index 3938a58c..a51e2f4a 100644
---- a/operations/javadl/javadl_test.go
-+++ b/operations/javadl/javadl_test.go
-@@ -22,6 +22,8 @@ import (
- )
+diff --git a/operations/neoforgedl/neoforgedl_test.go b/operations/neoforgedl/neoforgedl_test.go
+index ba5201bd..dd4274e1 100644
+--- a/operations/neoforgedl/neoforgedl_test.go
++++ b/operations/neoforgedl/neoforgedl_test.go
+@@ -3,6 +3,8 @@ package neoforgedl
+ import "testing"
  
- func Test_downloadJava(t *testing.T) {
+ func Test_getLatestForMCVersion(t *testing.T) {
 +	t.Skip("requires network access")
 +
- 	tests := []struct {
- 		name    string
- 		wantErr bool
-diff --git a/operations/spongedl/spongedl_test.go b/operations/spongedl/spongedl_test.go
-index efb1665c..1b93be8c 100644
---- a/operations/spongedl/spongedl_test.go
-+++ b/operations/spongedl/spongedl_test.go
-@@ -5,6 +5,8 @@ import (
- )
+ 	type args struct {
+ 		minecraftVersion string
+ 	}
+diff --git a/operations/steamgamedl/depotdownloader_test.go b/operations/steamgamedl/depotdownloader_test.go
+index 2af38f87..2545579d 100644
+--- a/operations/steamgamedl/depotdownloader_test.go
++++ b/operations/steamgamedl/depotdownloader_test.go
+@@ -3,6 +3,8 @@ package steamgamedl
+ import "testing"
  
- func TestSpongeDl_Run(t *testing.T) {
+ func Test_getLatestVersion(t *testing.T) {
 +	t.Skip("requires network access")
 +
- 	type fields struct {
- 		Recommended      bool
- 		SpongeType       string
-diff --git a/operations/steamgamedl/dl_test.go b/operations/steamgamedl/dl_test.go
-index f4df4bf3..f7cd9681 100644
---- a/operations/steamgamedl/dl_test.go
-+++ b/operations/steamgamedl/dl_test.go
-@@ -19,6 +19,8 @@ import (
- )
+ 	t.Run("resolved dd versions", func(t *testing.T) {
+ 		got, err := getLatestVersion()
+ 		if err != nil {
+diff --git a/web/tests/server_test.go b/web/tests/server_test.go
+index 022f0531..3275af9d 100644
+--- a/web/tests/server_test.go
++++ b/web/tests/server_test.go
+@@ -459,6 +459,8 @@ func TestServers(t *testing.T) {
+ 			})
  
- func Test_downloadSteamcmd(t *testing.T) {
-+	t.Skip("requires network access")
+ 			t.Run("InstallServer", func(t *testing.T) {
++				t.Skip("requires network access")
 +
- 	tests := []struct {
- 		name    string
- 		wantErr bool
-diff --git a/services/templates_test.go b/services/templates_test.go
-index 5305dbc0..127efc54 100644
---- a/services/templates_test.go
-+++ b/services/templates_test.go
-@@ -9,6 +9,8 @@ import (
- )
+ 				response := CallAPI("POST", "/api/servers/"+ServerId+"/install", nil, session)
+ 				if !assert.Equal(t, http.StatusAccepted, response.Code) {
+ 					return
+@@ -722,6 +724,8 @@ func TestServers(t *testing.T) {
+ 				})
  
- func TestTemplate_GetImportableTemplates(t1 *testing.T) {
-+	t1.Skip("requires network access")
+ 				t.Run("Run", func(t *testing.T) {
++					t.Skip("requires network access")
 +
- 	t1.Run("GetImportableTemplates", func(t1 *testing.T) {
- 		t := &Template{}
+ 					eulaFile := filepath.Join(serverDir, "eula.txt")
+ 					err := os.Remove(eulaFile)
+ 					if !assert.NoError(t, err) {
+diff --git a/web/tests/templates_test.go b/web/tests/templates_test.go
+index cc7756ed..c06a2034 100644
+--- a/web/tests/templates_test.go
++++ b/web/tests/templates_test.go
+@@ -50,6 +50,8 @@ func TestTemplateAPI(t *testing.T) {
+ 	})
  
-@@ -26,6 +28,8 @@ func TestTemplate_GetImportableTemplates(t1 *testing.T) {
- }
- 
- func TestTemplate_ImportTemplates(t1 *testing.T) {
-+	t1.Skip("requires network access")
+ 	t.Run("GetCommunityRepo", func(t *testing.T) {
++		t.Skip("requires network access")
 +
- 	t1.Run("GetImportableTemplates", func(t1 *testing.T) {
- 		db := prepareDatabase(t1)
- 		if t1.Failed() {
+ 		t.Parallel()
+ 
+ 		response := CallAPI("GET", "/api/templates/1", nil, session)
+@@ -67,6 +69,8 @@ func TestTemplateAPI(t *testing.T) {
+ 	})
+ 
+ 	t.Run("GetTemplateFromCommunity", func(t *testing.T) {
++		t.Skip("requires network access")
++
+ 		response := CallAPI("GET", "/api/templates/1/minecraft", nil, session)
+ 		if !assert.Equal(t, http.StatusOK, response.Code) {
+ 			return
