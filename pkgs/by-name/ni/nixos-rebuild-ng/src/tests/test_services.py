@@ -169,7 +169,7 @@ def test_reexec(
         call(
             s.NIXOS_REBUILD_ATTR,
             n.models.BuildAttr(ANY, ANY),
-            {"build": True, "no_out_link": True},
+            build_flags={"build": True, "no_out_link": True},
         )
     ]
     # do not exec if there is no new version
