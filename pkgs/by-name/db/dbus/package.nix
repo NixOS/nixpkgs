@@ -21,6 +21,12 @@
   libx11,
   libsm,
   libice,
+
+  # for passthru.tests
+  cups,
+  libsecret,
+  tinysparql,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -176,6 +182,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     dbus-launch = "${dbus.lib}/bin/dbus-launch";
+
+    tests = {
+      inherit cups libsecret tinysparql;
+      inherit (python3Packages) dbus-fast jeepney;
+    };
   };
 
   meta = {
