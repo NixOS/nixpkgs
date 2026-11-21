@@ -32770,6 +32770,11 @@
     githubId = 15948162;
     name = "Yanni Papandreou";
   };
+  yannmasoch = {
+    github = "yannmasoch";
+    githubId = 231734284;
+    name = "Yann Masoch";
+  };
   yarekt = {
     name = "Yarek T";
     email = "yarekt+nixpkgs@gmail.com";
