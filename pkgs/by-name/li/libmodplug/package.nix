@@ -7,19 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmodplug";
-  version = "0.8.9.0";
+  version = "0.8.9.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/modplug-xmms/libmodplug/${finalAttrs.version}/libmodplug-${finalAttrs.version}.tar.gz";
-    sha256 = "1pnri98a603xk47smnxr551svbmgbzcw018mq1k6srbrq6kaaz25";
+    hash = "sha256-5NnLRtp4pjnW6ttP86uVX2jDCZV5tTEK9ks3CR4olX4=";
   };
 
   postPatch = ''
-    # Unfortunately, upstream appears inactive and the patches from the fork don’t apply cleanly.
-    # Modify `src/fastmix.cpp` to remove usage of the register storage class, which is
-    # not allowed in C++17 and is an error in clang 16.
-    substituteInPlace src/fastmix.cpp --replace-fail 'register ' ""
-
     substituteInPlace libmodplug.pc.in \
       --replace-fail 'includedir=''${prefix}/include' 'includedir=@includedir@'
   '';
