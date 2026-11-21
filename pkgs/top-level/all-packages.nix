@@ -1315,8 +1315,6 @@ with pkgs;
 
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
 
-  gams = callPackage ../tools/misc/gams (config.gams or { });
-
   gancioPlugins = recurseIntoAttrs (callPackage ../by-name/ga/gancio/plugins.nix { });
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
