@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leptosfmt";
-  version = "0.1.33";
+  version = "0.1.34";
 
   src = fetchFromGitHub {
     owner = "bram209";
     repo = "leptosfmt";
     tag = finalAttrs.version;
-    hash = "sha256-+trLQFU8oP45xHQ3DsEESQzQX2WpvQcfpgGC9o5ITcY=";
+    hash = "sha256-0LLqjIiqP+/VpmGYifjt5wO5Yh7WCM9QkGOpVauveWk=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-m9426zuxp9GfbYoljW49BVgetLTqqcqGHCb7I+Yw+bc=";
+  cargoHash = "sha256-Qhcj4NBEcD2FG7PRsiwc/cfSUFwObXizDlNPTPHv848=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
