@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--with-gcc-arch=generic" # no detection of -march= or -mtune=
+    "--with-gcc-arch=${stdenv.hostPlatform.gcc.arch or "unknown"}" # https://github.com/libffi/libffi/blob/30c03c63aca3d1f5d7e9ce43de5b2edce930b0e5/m4/ax_gcc_archflag.m4
     "--enable-pax_emutramp"
   ];
 
