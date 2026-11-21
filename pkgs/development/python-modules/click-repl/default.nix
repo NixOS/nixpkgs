@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "click-repl";
-  version = "0.3.0-unstable-2026-03-26";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
