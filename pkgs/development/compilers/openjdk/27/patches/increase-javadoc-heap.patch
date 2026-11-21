@@ -1,0 +1,11 @@
+--- a/make/Docs.gmk
++++ b/make/Docs.gmk
+@@ -291,7 +291,7 @@
+   $1_INDIRECT_EXPORTS := $$(call FindTransitiveIndirectDepsForModules, $$($1_MODULES))
+   $1_ALL_MODULES := $$(sort $$($1_MODULES) $$($1_INDIRECT_EXPORTS))
+ 
+-  $1_JAVA_ARGS := -Dextlink.spec.version=$$(VERSION_SPECIFICATION)
++  $1_JAVA_ARGS := -Dextlink.spec.version=$$(VERSION_SPECIFICATION) -Xmx1G
+ 
+   ifeq ($$(ENABLE_FULL_DOCS), true)
+     $1_SEALED_GRAPHS_DIR := $$(SUPPORT_OUTPUTDIR)/docs/$1-sealed-graphs
