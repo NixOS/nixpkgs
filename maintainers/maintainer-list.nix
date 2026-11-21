@@ -10147,6 +10147,12 @@
     email = "fsnkty@shimeji.cafe";
     matrix = "@nuko:shimeji.cafe";
   };
+  fsrv-xyz = {
+    email = "florian@fsrv.xyz";
+    github = "fsrv-xyz";
+    githubId = 35347506;
+    name = "Florian Bauer";
+  };
   fstamour = {
     email = "fr.st-amour@gmail.com";
     github = "fstamour";
