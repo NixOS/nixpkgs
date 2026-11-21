@@ -2,12 +2,13 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  nix-update-script,
   fonts ? [ ],
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
-  version = "0-unstable-2026-03-13";
+  version = "0-unstable-2026-11-08";
 
   # Adobe Blank is split out in a separate output,
   # because it causes crashes with `libfontconfig`.
@@ -20,8 +21,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "5174b3333331c966c38f4355d50b03ca1c1df2f9";
-    hash = "sha256-XvFlnyXCM69WscpY20EhKAaKYj1fs0eqmODZWx0NIPg=";
+    rev = "5bb28733cec313b63fbd415b574b5ae35c8aa8b8";
+    hash = "sha256-jhJHGJNm3pPqDDcGr7y2oc9esVmCmBrS0xxY9KMfhuM=";
   };
 
   postPatch = ''
@@ -50,6 +51,8 @@ stdenvNoCC.mkDerivation {
   # only the specified fonts by FamilyName.
   fonts = map (font: builtins.replaceStrings [ " " ] [ "" ] font) fonts;
   installPhase = ''
+    runHook preInstall
+
     adobeBlankDest=$adobeBlank/share/fonts/truetype
     install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
     rm -r ofl/adobeblank
@@ -66,7 +69,17 @@ stdenvNoCC.mkDerivation {
           find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
         done
       ''
-  );
+  )
+  + ''
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=(0-unstable-.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://fonts.google.com";
@@ -79,5 +92,6 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.all;
     hydraPlatforms = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    maintainers = with lib.maintainers; [ ozozka ];
   };
 }
