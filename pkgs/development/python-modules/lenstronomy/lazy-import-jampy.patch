@@ -1,0 +1,40 @@
+diff --git a/lenstronomy/Analysis/kinematics_api.py b/lenstronomy/Analysis/kinematics_api.py
+index 57d6c36a..50aaa92b 100644
+--- a/lenstronomy/Analysis/kinematics_api.py
++++ b/lenstronomy/Analysis/kinematics_api.py
+@@ -4,8 +4,6 @@ import numpy as np
+ import copy
+ from lenstronomy.GalKin.galkin import Galkin
+ from lenstronomy.GalKin.galkin_shells import GalkinShells
+-from lenstronomy.JAMPy.jam_wrapper import JAMWrapper
+-from lenstronomy.JAMPy.mge import MGEMass, MGELight
+ from lenstronomy.Cosmo.lens_cosmo import LensCosmo
+ from lenstronomy.Util import class_creator
+ from lenstronomy.Analysis.lens_profile import LensProfileAnalysis
+@@ -464,6 +462,8 @@ class KinematicsAPI(object):
+                     )
+             elif self.kinematics_backend == "jampy":
+                 kwargs_model["symmetry"] = self.axial_symmetry
++                from lenstronomy.JAMPy.jam_wrapper import JAMWrapper
++
+                 jam_model_i = JAMWrapper(
+                     kwargs_model=kwargs_model,
+                     kwargs_aperture=self._kwargs_aperture_kin[i],
+@@ -591,6 +591,8 @@ class KinematicsAPI(object):
+                 if model_kinematics_bool[i]
+                 and lens_model not in ["POINT_MASS", "POINT_MASS_LOG_SCALED"]
+             ]
++            from lenstronomy.JAMPy.mge import MGEMass
++
+             MGE_mass_fitter = MGEMass(mass_profile_list, kwargs_mge)
+             amps, sigmas = MGE_mass_fitter.mge_fit(kwargs_lens_mge, theta_E)
+             kwargs_profile = [{"amp": amps, "sigma": sigmas}]
+@@ -789,6 +791,8 @@ class KinematicsAPI(object):
+                 kwargs_light.append(kwargs_lens_light_i)
+ 
+         if MGE_fit is True:
++            from lenstronomy.JAMPy.mge import MGELight
++
+             MGE_light_fitter = MGELight(light_profile_list, kwargs_mge)
+             amps, sigmas = MGE_light_fitter.mge_fit(kwargs_lens_light, r_eff)
+             kwargs_light = [{"amp": amps, "sigma": sigmas}]
