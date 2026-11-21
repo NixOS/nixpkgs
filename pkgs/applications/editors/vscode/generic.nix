@@ -31,6 +31,7 @@
   fontconfig,
   imagemagick,
   libdbusmenu,
+  libpulseaudio,
   glib,
   wayland,
   libglvnd,
@@ -38,6 +39,10 @@
   webkitgtk_4_1,
   ripgrep,
   which,
+  libxtst,
+  libjpeg8,
+  pipewire,
+  libei,
 
   # needed to fix "Save as Root"
   asar,
@@ -193,8 +198,16 @@ stdenv.mkDerivation (
         updateScript
         vscodeVersion
         ;
-      fhs = fhs { };
-      fhsWithPackages = f: fhs { additionalPkgs = f; };
+      fhs = (fhs { }).overrideAttrs (old: {
+        strictDeps = true;
+        __structuredAttrs = true;
+      });
+      fhsWithPackages =
+        f:
+        (fhs { additionalPkgs = f; }).overrideAttrs (old: {
+          strictDeps = true;
+          __structuredAttrs = true;
+        });
     }
     // lib.optionalAttrs (vscodeServer != null) {
       inherit rev vscodeServer;
@@ -243,6 +256,9 @@ stdenv.mkDerivation (
       })
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     buildInputs = [
       libsecret
     ]
@@ -255,6 +271,10 @@ stdenv.mkDerivation (
       systemdLibs
       webkitgtk_4_1
       libxkbfile
+      libxtst
+      libjpeg8.out
+      pipewire
+      libei
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
@@ -263,6 +283,9 @@ stdenv.mkDerivation (
       libdbusmenu
       wayland
       libsecret
+      # dlopen()ed by Chromium; without it audio falls back to ALSA and
+      # accessibility signal sounds stay silent on PipeWire/PulseAudio setups
+      libpulseaudio
     ];
 
     nativeBuildInputs = [
@@ -294,11 +317,6 @@ stdenv.mkDerivation (
     dontBuild = true;
     dontConfigure = true;
     noDumpEnvVars = true;
-
-    stripExclude = lib.optionals hasVsceSign [
-      # vsce-sign is a single executable application built with Node.js, and it becomes non-functional if stripped
-      "lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
-    ];
 
     installPhase = ''
       runHook preInstall
@@ -373,7 +391,7 @@ stdenv.mkDerivation (
           )
         }
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+        --append-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';
 
@@ -392,6 +410,13 @@ stdenv.mkDerivation (
           packed="resources/app/node_modules.asar"
           unpacked="resources/app/node_modules"
           asar extract "$packed" "$unpacked"
+
+          # FIXME: drop this when `asar extract` preserves the mode of unpacked files in
+          # the archives Microsoft ships, fixes https://github.com/NixOS/nixpkgs/issues/573021
+          if [ -d "$packed.unpacked" ]; then
+            cp -a "$packed.unpacked/." "$unpacked/"
+          fi
+
           substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
             --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
             --replace-fail "/bin/bash" "${bash}/bin/bash"
@@ -404,17 +429,52 @@ stdenv.mkDerivation (
         + ''
           ln -rs "$unpacked" "$packed"
         ''
+        # Some resources, such as Tree-Sitter WASM, are loaded directly from this directory.
+        # Keep it available without duplicating the extracted files.
+        + ''
+          rm -rf "resources/app/node_modules.asar.unpacked"
+          ln -rs "$unpacked" "resources/app/node_modules.asar.unpacked"
+        ''
       )
       + (
         let
-          vscodeRipgrep =
+          nodeModulesPath =
             if stdenv.hostPlatform.isDarwin then
-              if lib.versionAtLeast vscodeVersion "1.94.0" then
-                "Contents/Resources/app/node_modules/@vscode/ripgrep/bin/rg"
+              # 1.129 moved node_modules back into app.asar, shipping native
+              # binaries in the asar.unpacked directory like before 1.94
+              if lib.versionAtLeast vscodeVersion "1.129.0" then
+                "Contents/Resources/app/node_modules.asar.unpacked"
+              else if lib.versionAtLeast vscodeVersion "1.94.0" then
+                "Contents/Resources/app/node_modules"
               else
-                "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
+                "Contents/Resources/app/node_modules.asar.unpacked"
             else
-              "resources/app/node_modules/@vscode/ripgrep/bin/rg";
+              "resources/app/node_modules";
+
+          # see https://www.npmjs.com/package/@vscode/ripgrep-universal?activeTab=code
+          ripgrepSystem =
+            {
+              aarch64-darwin = "darwin-arm64";
+              x86_64-darwin = "darwin-x64";
+              armv7l-linux = "linux-arm";
+              aarch64-linux = "linux-arm64";
+              i686-linux = "linux-ia32";
+              loongarch64-linux = "linux-loong64";
+              powerpc64-linux = "linux-ppc64";
+              riscv64-linux = "linux-riscv64";
+              s390x-linux = "linux-s390x";
+              x86_64-linux = "linux-x64";
+            }
+            .${stdenv.hostPlatform.system}
+              or (throw "Unknown system for ripgrep-universal: ${stdenv.hostPlatform.system}");
+
+          ripgrepPath =
+            if lib.versionAtLeast vscodeVersion "1.122.0" then
+              "@vscode/ripgrep-universal/bin/${ripgrepSystem}/rg"
+            else
+              "@vscode/ripgrep/bin/rg";
+
+          vscodeRipgrep = "${nodeModulesPath}/${ripgrepPath}";
         in
         if !useVSCodeRipgrep then
           ''
@@ -435,10 +495,13 @@ stdenv.mkDerivation (
           --add-needed ${libglvnd}/lib/libEGL.so.1 \
           $out/lib/${libraryName}/${executableName}
       ''
+      # restore original vsce-sign, which has integrity checks
       + (lib.optionalString hasVsceSign ''
+        cp -r ./resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign "$out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
         patchelf \
-          --add-needed ${lib.getLib openssl}/lib/libssl.so \
+          --add-needed ${lib.getLib openssl}/lib/libssl.so.3 \
           $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
+        chmod +x $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
       '')
     );
 
