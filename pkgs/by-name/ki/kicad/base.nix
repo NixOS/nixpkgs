@@ -167,7 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
         numpy
         pytest
         cairosvg
-        pytest-image-diff
       ]
     ))
     writableTmpDirAsHomeHook
