@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  python313,
-  SDL2,
+  python314,
+  sdl3,
+  libglvnd,
+  zstd,
   cairo,
   pango,
   libvorbis,
@@ -25,11 +27,11 @@ let
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-zKZpRsyBCTYDJbTwjaP/HFXfYvD9zBhetUGzriB9754=";
+        hash = "sha256-7Y29LfPD5xbnmtCscfo7i03QgAnSPGI9WSR1pwBb8kg=";
       };
       aarch64-linux = {
         name = "BombSquad_Linux_Arm64";
-        hash = "sha256-Q87KbQqwEOaMiJ4uSgZ3eD8AYKQCoJWPzq7rt9Nu9Co=";
+        hash = "sha256-wToTflonUCtZrP5/zYB/6axTBzTkx1W2ZsW9dRtIJ94=";
       };
     }
     .${stdenv.targetPlatform.system} or (throw "${stdenv.targetPlatform.system} is unsupported.");
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Note: This version trails behind the latest version by one since the latest
   # version sometimes gets replaced for minor updates. The builds in /old/ are
   # stable.
-  version = "1.7.63";
+  version = "1.8.6";
 
   src = fetchurl {
     url = "https://files.ballistica.net/bombsquad/builds/old/${archive.name}_${finalAttrs.version}.tar.gz";
@@ -55,13 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${archive.name}_${finalAttrs.version}";
 
   buildInputs = [
-    SDL2
+    sdl3
     cairo
     libgcc
+    libglvnd
     libvorbis
     openal
     pango
-    python313
+    python314
+    zstd
   ];
 
   nativeBuildInputs = [
