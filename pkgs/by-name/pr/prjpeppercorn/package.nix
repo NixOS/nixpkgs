@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prjpeppercorn";
-  version = "1.13";
+  version = "1.14";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "prjpeppercorn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vlwb/lWVUUdI95GPE887jque7WmNWtBSxSIRcK6k7cU=";
+    hash = "sha256-cQgSgiBvrjkqJcC5g0ZlcGwTkzeOn3vR9N/aUHda6Jk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libgm";
