@@ -13,6 +13,10 @@
               label = "local";
               path = "/var/backup";
             }
+            {
+              path = "/var/backup2";
+              encryption = "repokey-blake2";
+            }
           ];
           keep_daily = 7;
         };
