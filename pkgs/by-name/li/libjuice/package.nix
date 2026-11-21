@@ -7,14 +7,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjuice";
-  version = "1.7.4";
+  version = "1.7.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "libjuice";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zol24jt43fQP+CZPsBddvJx8PzXlWV4G42ikQQSBex4=";
+    hash = "sha256-Nzvy5+v10nzFBudTDafGAmXn2Mpn2CN9dSgkLzCXJ3U=";
   };
 
   strictDeps = true;
