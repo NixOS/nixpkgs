@@ -58,6 +58,7 @@ let
   );
 
   amnezia-xray = callPackage ./xray-lib.nix { };
+  libagw = callPackage ./libagw.nix { };
 
   # Amnezia Gateway (AGW) public keys for premium server list verification.
   # These build-time values are not published in the source repository and
@@ -84,7 +85,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "5.0.3.0";
+  version = "5.1.0.6";
 
   __structuredAttrs = true;
 
@@ -92,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-ryKvEy4Oj6PP0WTs+XWqHSVInrVhP0tZcQqgs7gHOls=";
+    hash = "sha256-o09F55FjmlBXtFTWwWmAOsea+56QlJiA4DuRFuBVtRI=";
     fetchSubmodules = true;
     # Preserve VCS metadata needed by the build before .git is removed.
     postCheckout = ''
@@ -127,6 +128,13 @@ stdenv.mkDerivation (finalAttrs: {
     # nixpkgs' libssh CMake config exports "ssh", while Conan exports "ssh::ssh".
     substituteInPlace client/cmake/3rdparty.cmake \
       --replace-fail 'list(APPEND LIBS ssh::ssh)' 'list(APPEND LIBS ssh)'
+
+    # Use the Nix-built libagw instead of Conan's package.
+    substituteInPlace client/CMakeLists.txt \
+      --replace-fail 'find_package(libagw REQUIRED)' 'add_library(amnezia::libagw STATIC IMPORTED)
+    set_target_properties(amnezia::libagw PROPERTIES
+      IMPORTED_LOCATION "${libagw}/lib/libagw.a"
+      INTERFACE_INCLUDE_DIRECTORIES "${libagw}/include")'
 
     # The resolver script is installed in libexec instead of beside the GUI binary.
     substituteInPlace client/core/configurators/openVpnConfigurator.cpp \
@@ -180,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qt5compat
     kdePackages.qtbase
     kdePackages.qtdeclarative
+    kdePackages.qthttpserver
     kdePackages.qtremoteobjects
     kdePackages.qtsvg
     libsecret
