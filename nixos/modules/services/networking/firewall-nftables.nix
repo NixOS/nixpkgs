@@ -8,7 +8,14 @@ let
 
   cfg = config.networking.firewall;
 
-  ifaceSet = lib.concatStringsSep ", " (map (x: ''"${x}"'') cfg.trustedInterfaces);
+  # iptables uses a trailing "+" for interface prefixes, while nftables uses "*".
+  ifaceSet = lib.concatMapStringsSep ", " (
+    iface: ''"${if lib.hasSuffix "+" iface then lib.removeSuffix "+" iface + "*" else iface}"''
+  ) cfg.trustedInterfaces;
+  # A bare "+" already matches every input interface, including loopback.
+  trustedIfaceMatch = lib.optionalString (
+    !(lib.elem "+" cfg.trustedInterfaces)
+  ) "iifname { ${ifaceSet} } ";
 
   portsToNftSet =
     ports: portRanges:
@@ -114,8 +121,8 @@ in
         type filter hook input priority filter; policy drop;
 
         ${lib.optionalString (
-          ifaceSet != ""
-        ) ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
+          cfg.trustedInterfaces != [ ]
+        ) ''${trustedIfaceMatch}accept comment "trusted interfaces"''}
 
         # Multicast ICMPv6 echo replies get marked as invalid by conntrack.
         # Accept them before conntrack to avoid dropped replies.

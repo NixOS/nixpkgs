@@ -12,7 +12,19 @@ let
   toNftSet = list: concatStringsSep ", " list;
   toNftRange = ports: replaceStrings [ ":" ] [ "-" ] (toString ports);
 
-  ifaceSet = toNftSet (map (x: ''"${x}"'') cfg.internalInterfaces);
+  # iptables uses a trailing "+" for interface prefixes, while nftables uses "*".
+  ifaceSet = toNftSet (
+    map (
+      iface: ''"${if hasSuffix "+" iface then removeSuffix "+" iface + "*" else iface}"''
+    ) cfg.internalInterfaces
+  );
+  ifaceMatch =
+    if elem "+" cfg.internalInterfaces then
+      # A bare "+" matches forwarded traffic with any input interface.
+      "meta iif != 0"
+    else
+      "iifname { ${ifaceSet} }";
+
   ipSet = toNftSet cfg.internalIPs;
   ipv6Set = toNftSet cfg.internalIPv6s;
   oifExpr = optionalString (cfg.externalInterface != null) ''oifname "${cfg.externalInterface}"'';
@@ -94,8 +106,8 @@ let
       chain post {
         type nat hook postrouting priority srcnat;
 
-        ${optionalString (ifaceSet != "") ''
-          iifname { ${ifaceSet} } ${oifExpr} ${dest} comment "from internal interfaces"
+        ${optionalString (cfg.internalInterfaces != [ ]) ''
+          ${ifaceMatch} ${oifExpr} ${dest} comment "from internal interfaces"
         ''}
         ${optionalString (ipSet != "") ''
           ${ipVer} saddr { ${ipSet} } ${oifExpr} ${dest} comment "from internal IPs"
@@ -161,8 +173,8 @@ in
     };
 
     networking.firewall.extraForwardRules = optionalString config.networking.firewall.filterForward ''
-      ${optionalString (ifaceSet != "") ''
-        iifname { ${ifaceSet} } ${oifExpr} accept comment "from internal interfaces"
+      ${optionalString (cfg.internalInterfaces != [ ]) ''
+        ${ifaceMatch} ${oifExpr} accept comment "from internal interfaces"
       ''}
       ${optionalString (ipSet != "") ''
         ip saddr { ${ipSet} } ${oifExpr} accept comment "from internal IPs"
