@@ -48,6 +48,7 @@ let
       url,
       hash,
       description,
+      changelog ? "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst",
       ...
     }@args:
     let
@@ -64,16 +65,17 @@ let
             inherit description;
             inherit (azure-cli.meta) platforms maintainers;
             homepage = "https://github.com/Azure/azure-cli-extensions";
-            changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
             license = lib.licenses.mit;
             sourceProvenance = [ lib.sourceTypes.fromSource ];
           }
+          // lib.optionalAttrs (changelog != null) { inherit changelog; }
           // args.meta or { };
         }
         // (removeAttrs args [
           "url"
           "hash"
           "description"
+          "changelog"
           "passthru"
           "meta"
         ])
@@ -112,7 +114,39 @@ let
     '';
 
   extensions-generated = lib.mapAttrs (
-    name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
+    name: ext:
+    let
+      changelog =
+        if name == "cli-translator" then
+          "https://github.com/Azure/azure-cli-extensions/blob/main/src/cli-translator/HISTORY.md"
+        else if name == "cloud-service" then
+          "https://github.com/Azure/azure-cli-extensions/blob/main/src/cloudservice/HISTORY.rst"
+        else if name == "customlocation" then
+          "https://github.com/Azure/azure-cli-extensions/releases/tag/customlocation-${ext.version}"
+        else if name == "deploy-to-azure" then
+          "https://github.com/Azure/deploy-to-azure-cli-extension/releases/tag/20200318.1"
+        else if name == "fzf" then
+          "https://github.com/phealy/azure-cli-fzf/releases/tag/${ext.version}"
+        else if name == "image-copy-extension" then
+          "https://github.com/Azure/azure-cli-extensions/blob/main/src/image-copy/HISTORY.rst"
+        else if name == "sentinel" then
+          "https://github.com/Azure/azure-cli-extensions/blob/main/src/securityinsight/HISTORY.rst"
+        else if name == "stack-hci-vm" then
+          "https://github.com/Azure/azure-cli-extensions/blob/main/src/stack-hci/HISTORY.rst"
+        else if name == "support" then
+          "https://github.com/Azure/azure-cli-extensions/blob/main/src/support/HISTORY.md"
+        else if name == "virtual-network-manager" then
+          "https://github.com/Azure/azure-cli-extensions/blob/main/src/network-manager/HISTORY.rst"
+        else if name == "vmware" then
+          "https://github.com/Azure/azure-cli-extensions/blob/main/src/vmware/HISTORY.md"
+        else
+          null;
+    in
+    mkAzExtension (
+      ext
+      // { passthru.updateScript = [ ]; }
+      // lib.optionalAttrs (changelog != null) { inherit changelog; }
+    )
   ) (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
   extensions-manual = callPackages ./extensions-manual.nix {
     inherit mkAzExtension;
