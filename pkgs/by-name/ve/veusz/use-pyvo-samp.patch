@@ -1,0 +1,19 @@
+--- a/veusz/utils/vzsamp.py
++++ b/veusz/utils/vzsamp.py
+@@ -28,10 +28,13 @@ sampcl = None
+
+ try:
+     try:
+-        # astropy 2.0+
+-        from astropy import samp
++        from pyvo import samp
+     except ImportError:
+-        from astropy.io import samp
++        try:
++            # astropy 2.0+
++            from astropy import samp
++        except ImportError:
++            from astropy.io import samp
+
+ except ImportError:
+     def setup():
