@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
   ];
 
+  strictDeps = true;
+
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
