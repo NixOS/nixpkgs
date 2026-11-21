@@ -10132,6 +10132,8 @@ self: super: with self; {
 
   litecli = callPackage ../development/python-modules/litecli { };
 
+  litedram = callPackage ../development/python-modules/litedram { };
+
   litellm = callPackage ../development/python-modules/litellm { };
 
   litellm-proxy-extras = callPackage ../development/python-modules/litellm-proxy-extras { };
@@ -10141,6 +10143,8 @@ self: super: with self; {
   litestar = callPackage ../development/python-modules/litestar { };
 
   litestar-htmx = callPackage ../development/python-modules/litestar-htmx { };
+
+  litex = callPackage ../development/python-modules/litex { };
 
   littleutils = callPackage ../development/python-modules/littleutils { };
 
