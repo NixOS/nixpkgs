@@ -1,0 +1,16 @@
+{
+  "better_player": "sha256-Q9Zclqs3jKIxgWKsFA4gzgUAbAKdi3RTpKgbEi2+Vwk=",
+  "better_player_ios": "sha256-Q9Zclqs3jKIxgWKsFA4gzgUAbAKdi3RTpKgbEi2+Vwk=",
+  "better_player_macos": "sha256-Q9Zclqs3jKIxgWKsFA4gzgUAbAKdi3RTpKgbEi2+Vwk=",
+  "linkify": "sha256-TpMD6+0zyY6i9l+6d8ErnVufmepCv362rCtnbOht/z4=",
+  "location": "sha256-zWnffXiK1LD4Ln23coPozBjYfTlhZmBhC5Z8mCdAgwQ=",
+  "fab_m3e": "sha256-5V9m6yY0jimx2gh7lQHYg4HDKQ4Wrl0ATmBhw5DkQMI=",
+  "fluttertagger": "sha256-tHUNU2+fBPkq5UK5YRi3SWs1zF2PIPz6RgSbwignU/I=",
+  "m3e_design": "sha256-5V9m6yY0jimx2gh7lQHYg4HDKQ4Wrl0ATmBhw5DkQMI=",
+  "native_toolchain_cmake": "sha256-/drnHZebmTnsCnHgC1xmlAe+U4PSrjw5Sm9axicuTrY=",
+  "navigation_rail_m3e": "sha256-5V9m6yY0jimx2gh7lQHYg4HDKQ4Wrl0ATmBhw5DkQMI=",
+  "pasteboard": "sha256-7c8fkNBrvJuWar58aS0z657cP7pCZ+az4XPi1/o0ynY=",
+  "unifiedpush_linux": "sha256-KQKyBPL2ORK9O89C4K3RHGve/lvFaU1vIjSDnj6+bj4=",
+  "unifiedpush_platform_interface": "sha256-KQKyBPL2ORK9O89C4K3RHGve/lvFaU1vIjSDnj6+bj4=",
+  "xdg_desktop_portal": "sha256-8GgiXHGv+wy6hJgj/rZxbymMitNVmdDLAnedZm9STSc="
+}
