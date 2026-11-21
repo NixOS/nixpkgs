@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hugin";
-  version = "2025.0.1";
+  version = "2026.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/hugin-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-fPjrM6aohIzH+Bb69LyIOJIoiD1VExNtzLXLJDkSq3k=";
+    hash = "sha256-Yd6JF52XwrYBtGNroX39zyXUI+dfatUPhqy92b/03eQ=";
   };
 
   buildInputs = [
