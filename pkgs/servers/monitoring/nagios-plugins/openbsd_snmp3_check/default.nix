@@ -2,9 +2,8 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  openbsd_snmp3_check,
   python3Packages,
-  testers,
+  versionCheckHook,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "openbsd_snmp3_check";
@@ -22,11 +21,10 @@ python3Packages.buildPythonApplication rec {
     install -Dm755 openbsd_snmp3.py $out/bin/openbsd_snmp3.py
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = openbsd_snmp3_check;
-    };
   };
 
   meta = {
