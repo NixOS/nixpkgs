@@ -1,0 +1,30 @@
+From b3214a94befff646e9d1e44ba1f249065026e35b Mon Sep 17 00:00:00 2001
+From: comonad <comonad@a-stable.com>
+Date: Wed, 1 Apr 2026 14:17:56 +0800
+Subject: [PATCH 2/6] file_system: adapt try_lock return type
+
+---
+ components/file_system/src/file.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/components/file_system/src/file.rs b/components/file_system/src/file.rs
+index 76d662464..71fb407ce 100644
+--- a/components/file_system/src/file.rs
++++ b/components/file_system/src/file.rs
+@@ -177,11 +177,11 @@ impl File {
+     }
+ 
+     pub fn try_lock_shared(&self) -> io::Result<()> {
+-        self.inner.try_lock_shared()
++        Ok(self.inner.try_lock_shared()?)
+     }
+ 
+     pub fn try_lock_exclusive(&self) -> io::Result<()> {
+-        self.inner.try_lock_exclusive()
++        Ok(self.inner.try_lock_exclusive()?)
+     }
+ 
+     pub fn unlock(&self) -> io::Result<()> {
+-- 
+2.53.0
+
