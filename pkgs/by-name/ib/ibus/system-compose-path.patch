@@ -1,0 +1,11 @@
+diff --git a/src/ibuscomposetable.c b/src/ibuscomposetable.c
+--- a/src/ibuscomposetable.c
++++ b/src/ibuscomposetable.c
+@@ -1583,6 +1583,7 @@
+     if (!g_ascii_strncasecmp (compose_file, "/usr/", 5) ||
+         !g_ascii_strncasecmp (compose_file, "/etc/", 5) ||
+         !g_ascii_strncasecmp (compose_file, "/opt/", 5) ||
++        g_str_has_prefix (compose_file, X11_LOCALEDATADIR "/") ||
+         !g_ascii_strncasecmp (compose_file, "/var/opt/", 9)) {
+         return TRUE;
+     }
