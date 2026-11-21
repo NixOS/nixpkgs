@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     homepage = "https://github.com/roddhjav/apparmor.d";

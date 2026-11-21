@@ -45,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "-(alpha|beta|rc)";
+  };
 
   meta = {
     description = "Full-featured & carefully designed adaptive prompt for Bash & Zsh";

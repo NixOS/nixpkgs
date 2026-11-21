@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     description = "Port of Mighty Mike, a 1995 Macintosh game by Pangea Software, for modern operating systems";

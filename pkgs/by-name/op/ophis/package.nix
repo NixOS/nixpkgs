@@ -21,7 +21,7 @@ let
     build-system = [ python3Packages.setuptools ];
 
     passthru = {
-      updateScript = unstableGitUpdater { };
+      updateScript = unstableGitUpdater { tagPrefix = "v"; };
     };
 
     meta = {

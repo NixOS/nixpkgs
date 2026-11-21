@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs systemdSupport "bluealsaaplayuser" "bluealsa")
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     homepage = "https://github.com/Arkq/bluez-alsa";

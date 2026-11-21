@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "ARP scan tool for fast local network scans";

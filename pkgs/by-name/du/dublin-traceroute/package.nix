@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
   passthru = {
     # 0.4.2 was tagged in 2017
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
     tests = {
       inherit (nixosTests) dublin-traceroute;

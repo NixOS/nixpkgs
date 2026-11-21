@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {

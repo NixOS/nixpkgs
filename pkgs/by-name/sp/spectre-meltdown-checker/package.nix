@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-y0hbqLgq3rCehj1fOqxCcMUsEHNlO/kRNoFENOSH8b0=";
   };
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   prePatch = ''
     substituteInPlace spectre-meltdown-checker.sh \

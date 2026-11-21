@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     qt6.qtwebengine
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     homepage = "https://apps.kde.org/karp/";
