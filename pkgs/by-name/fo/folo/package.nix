@@ -1,5 +1,5 @@
 {
-  electron,
+  electron_44,
   fetchFromGitHub,
   nix-update-script,
   imagemagick,
@@ -7,7 +7,7 @@
   makeDesktopItem,
   makeWrapper,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
@@ -15,19 +15,19 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "folo";
 
-  version = "1.14.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Folo";
     tag = "desktop/v${finalAttrs.version}";
-    hash = "sha256-16hKEgTv2pWDsoxMG7Ct2xCvjCnmbPK2bymyutb1uW8=";
+    hash = "sha256-7fscXgNqp/R6dyKgn1kyhqtjWVTh5Z0wx1w4Ne5g9F4=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_11
+    pnpm_12
     makeWrapper
     imagemagick
   ];
@@ -39,9 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmInstallFlags
       ;
-    pnpm = pnpm_11;
-    fetcherVersion = 4;
-    hash = "sha256-6ExELKJr6oAkywYSjsw+c24IHtipJ213N74aSzhEUTs=";
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-x2YZ9vEl1n1p9BeN7vfCuWaviLN5NmD1ooAcqKSt6lg=";
   };
 
   __structuredAttrs = true;
@@ -54,8 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Copy from:
     # 1. https://github.com/RSSNext/Folo/blob/v0.4.6/.github/workflows/build-desktop.yml#L27
     # 2. And logs in the corresponding GitHub Actions: https://github.com/RSSNext/Folo/actions/workflows/build-desktop.yml
-    VITE_WEB_URL = "https://app.follow.is";
-    VITE_API_URL = "https://api.follow.is";
+    VITE_WEB_URL = "https://app.folo.is";
+    VITE_API_URL = "https://api.folo.is";
     VITE_SENTRY_DSN = "https://e5bccf7428aa4e881ed5cb713fdff181@o4507542488023040.ingest.us.sentry.io/4507570439979008";
     VITE_OPENPANEL_CLIENT_ID = "0e477ab4-d92d-4d6e-b889-b09d86ab908e";
     VITE_OPENPANEL_API_URL = "https://openpanel.follow.is/api";
@@ -76,10 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
   # ast-kit from unplugin-ast).
   pnpmInstallFlags = [ "--shamefully-hoist" ];
 
-  patches = [ ./runtime-jsdom.patch ];
-
   postPatch = ''
-    # pnpm 11 verifies node_modules before every `pnpm run` which conflicts
+    # pnpm verifies node_modules before every `pnpm run` which conflicts
     # with --shamefully-hoist
     echo 'verifyDepsBeforeRun: false' >> pnpm-workspace.yaml
   '';
@@ -89,9 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     desktopName = "Folo";
     comment = "Next generation information browser";
     icon = "follow";
-    exec = "follow";
+    exec = "follow %u";
     categories = [ "Utility" ];
-    mimeTypes = [ "x-scheme-handler/follow" ];
+    mimeTypes = [
+      "x-scheme-handler/folo"
+      "x-scheme-handler/follow"
+    ];
   };
 
   icon = finalAttrs.src + "/apps/desktop/resources/icon.png";
@@ -106,9 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm run build:electron-vite
     cd ../..
 
-    # Remove dev dependencies.
-    CI=true pnpm --ignore-scripts prune --prod
-    # Clean up broken symlinks left behind by `pnpm prune`
+    # Reuse the prefetched store for the production dependency tree.
+    CI=true pnpm install --offline --frozen-lockfile --ignore-scripts --prod
+    # Clean up broken symlinks left behind when removing dev dependencies.
     [ -d node_modules/.bin ] && find node_modules/.bin -xtype l -delete
 
     runHook postBuild
@@ -121,8 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r . $out/share/follow
     rm -rf $out/share/follow/{.vscode,.github}
 
-    makeWrapper "${electron}/bin/electron" "$out/bin/follow" \
+    makeWrapper "${electron_44}/bin/electron" "$out/bin/follow" \
       --inherit-argv0 \
+      --set CHROME_DESKTOP folo.desktop \
       --add-flags $out/share/follow/apps/desktop \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
