@@ -23370,6 +23370,12 @@
     githubId = 3438604;
     name = "Petter Storvik";
   };
+  pexea12 = {
+    email = "info@ambierhq.com";
+    github = "pexea12";
+    githubId = 10600525;
+    name = "Dzung Nguyen";
+  };
   phaer = {
     name = "Paul Haerle";
     email = "nix@phaer.org";
