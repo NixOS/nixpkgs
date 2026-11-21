@@ -57,6 +57,9 @@ let
       echo "export CC=\"$out/bin/icx\"" >> $out/nix-support/setup-hook
 
       echo "export ONEAPI_ROOT=\"${kit}\"" >> $out/nix-support/setup-hook
+
+      # Drop fortify from device code only: GPUs lack __memcpy_chk and friends.
+      echo "--start-no-unused-arguments -Xarch_device -U_FORTIFY_SOURCE --end-no-unused-arguments" >> $out/nix-support/cc-cflags
     '';
   };
 in
