@@ -10,6 +10,8 @@
   nanoflann,
   glm,
   cxxopts,
+  zlib,
+  zstd,
   nix-update-script,
   config,
   cudaSupport ? config.cudaSupport,
@@ -17,7 +19,6 @@
   rocmSupport ? config.rocmSupport,
   rocmPackages,
   autoAddDriverRunpath,
-  fetchpatch2,
 }:
 let
   torch = python3.pkgs.torch.override { inherit cudaSupport rocmSupport; };
@@ -27,7 +28,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "opensplat";
-  version = "1.1.4";
+  version = "1.1.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -36,15 +37,8 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "WebODM";
     repo = "OpenSplat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u2UmD0O3sUWELYb4CjQE19i4HUjLMcaWqOinQH0PPTM=";
+    hash = "sha256-quMsTtW0NeYxxGU3DRINuzxqPo1VR4Auhq5P5+X9VTA=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/WebODM/OpenSplat/commit/7fb96e86a43ac6cfd3eb3a7f6be190c5f2dbeb73.patch";
-      hash = "sha256-hWJWU/n1pRAAbExAYUap6CoSjIu2dzCToUmacSSpa0I=";
-    })
-  ];
 
   postPatch = lib.optionalString rocmSupport (
     # Recent PyTorch HIP builds no longer hipify the caching allocator namespace:
@@ -95,6 +89,8 @@ stdenv'.mkDerivation (finalAttrs: {
     torch.cxxdev
     torch
     opencv
+    zlib
+    zstd
   ]
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
@@ -136,6 +132,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "GPU_RUNTIME" "CUDA")
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" cudaPackages.cuda_nvcc.outPath)
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -149,9 +146,10 @@ stdenv'.mkDerivation (finalAttrs: {
       # vendored+modified gsplat
       lib.licenses.asl20
     ];
-    maintainers = [
-      lib.maintainers.jcaesar
-      lib.maintainers.LunNova
+    maintainers = with lib.maintainers; [
+      _81reap
+      jcaesar
+      LunNova
     ];
     platforms = lib.platforms.linux ++ lib.optionals (!cudaSupport) lib.platforms.darwin;
   };
