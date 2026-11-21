@@ -101,6 +101,7 @@ in
       import re
       import subprocess
       import tempfile
+      import time
 
       # Instance Metadata Service (IMDSv2 with 1.0 metadata version)
       # TODO: Use 'latest' metadata version instead of '1.0'
@@ -223,6 +224,23 @@ in
           assert test_marker in result, f"Expected '{test_marker}' in decompressed {format_name} content, got: {result}"
           journal = machine.succeed("journalctl -u fetch-ec2-metadata --no-pager -b")
           assert "decompressing:" in journal, f"Expected decompression log in journal for {format_name}"
+
+      def test_fetch_gives_up(machine, cause):
+          """Test that fetch-ec2-metadata fails quickly without blocking boot"""
+          machine.succeed("rm -f /etc/ec2-metadata/*")
+          # multi-user.target wants the fetcher, so this runs it again, and
+          # must succeed although the fetcher fails.
+          start = time.monotonic()
+          machine.succeed("systemctl start multi-user.target")
+          elapsed = time.monotonic() - start
+          assert elapsed < 35, f"fetch-ec2-metadata took {elapsed:.0f}s with {cause}"
+          machine.succeed("systemctl is-failed fetch-ec2-metadata")
+          machine.succeed("systemctl is-active multi-user.target")
+          machine.succeed(
+              "journalctl _SYSTEMD_INVOCATION_ID=$(systemctl show -P InvocationID fetch-ec2-metadata)"
+              " --grep 'metadata service is unreachable'"
+          )
+          machine.fail("test -e /etc/ec2-metadata/hostname")
 
       # Create temporary directory for metadata (scoped for cleanup)
       temp_dir = tempfile.TemporaryDirectory()
@@ -348,6 +366,33 @@ in
                   input=test_data, capture_output=True, check=True,
               )
               test_userdata_decompression(machine, user_data_path, proc.stdout, "lzip")
+
+          with subtest("Metadata fetching gives up without IMDS"):
+              # Dropped packets, as with IMDS disabled or blocked, make every connection time out.
+              machine.succeed("iptables -I OUTPUT -d 169.254.169.254 -j DROP")
+              test_fetch_gives_up(machine, "dropped packets")
+              machine.succeed("iptables -D OUTPUT -d 169.254.169.254 -j DROP")
+
+              # An IMDS that accepts connections but never answers makes every request stall.
+              machine.succeed(
+                  "systemd-run --unit=stalled-imds --"
+                  " socat -u TCP-LISTEN:8080,fork,reuseaddr OPEN:/dev/null"
+              )
+              machine.succeed(
+                  "iptables -t nat -I OUTPUT -d 169.254.169.254 -p tcp --dport 80 -j REDIRECT --to-ports 8080"
+              )
+              # Wait for the listener; 28 is curl's exit code for timeouts.
+              machine.wait_until_succeeds(
+                  "[ $(curl -s -o /dev/null -w '%{exitcode}' --max-time 1 http://169.254.169.254/latest/api/token) = 28 ]"
+              )
+              test_fetch_gives_up(machine, "a stalled IMDS")
+              machine.succeed(
+                  "iptables -t nat -D OUTPUT -d 169.254.169.254 -p tcp --dport 80 -j REDIRECT --to-ports 8080"
+              )
+              machine.succeed("systemctl stop stalled-imds")
+
+              machine.succeed("systemctl restart fetch-ec2-metadata")
+              machine.succeed("test -s /etc/ec2-metadata/hostname")
 
           with subtest("IPv6 IMDS fallback"):
               # Save hostname fetched via IPv4 for later comparison
