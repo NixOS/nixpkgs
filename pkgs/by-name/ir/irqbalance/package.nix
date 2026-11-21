@@ -7,8 +7,8 @@
   glib,
   ncurses,
   libcap_ng,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  systemdMinimal,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   nixosTests,
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcap_ng
   ]
   ++ (lib.optionals enableSystemd [
-    systemdMinimal
+    systemdLibs
   ]);
 
   configureFlags = lib.optionals enableSystemd [

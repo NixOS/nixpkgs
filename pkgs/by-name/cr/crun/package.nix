@@ -11,7 +11,7 @@
   libkrun-sev,
   libseccomp,
   python3,
-  systemdMinimal,
+  systemdLibs,
   nixosTests,
   criu,
   versionCheckHook,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     libcap
     libseccomp
-    systemdMinimal
+    systemdLibs
   ]
   ++ lib.optionals withLibkrun [
     libkrun

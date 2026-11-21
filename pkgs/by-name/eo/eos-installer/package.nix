@@ -12,7 +12,7 @@
   gnome-desktop,
   gnupg,
   gtk3,
-  systemdMinimal,
+  systemdLibs,
   udisks,
   xz,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gnome-desktop
     gtk3
-    systemdMinimal
+    systemdLibs
     udisks
     xz
   ];
