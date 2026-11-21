@@ -25,6 +25,9 @@ lib.optionalAttrs (stdenv.hostPlatform.isLinux) (
   lib.recurseIntoAttrs {
     nixos-test =
       (pkgs.nixos {
+        environment.defaultPackages = [
+          # Temporary workaround for #263295/#263289
+        ];
         system.nixos = dummyVersioning;
         boot.loader.grub.enable = false;
         fileSystems."/" = {
