@@ -15510,6 +15510,12 @@
     githubId = 20063;
     name = "Pascal Hertleif";
   };
+  killioiden = {
+    email = "derek.verduijn@proton.me";
+    github = "Definitely-Not-A-Dolphin";
+    githubId = 158269354;
+    name = "Derek Verduijn";
+  };
   kilyanni = {
     name = "Nikolas Kilian";
     email = "nix@nkilian.org";
