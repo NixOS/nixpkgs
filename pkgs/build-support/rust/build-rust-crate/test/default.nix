@@ -1237,6 +1237,49 @@ rec {
               ''
           );
 
+      # configure-crate.nix links dependencies in batches of
+      # dependencyBatchSize (256). The manydeps crate depends on one more
+      # leaf than that, so its libraries and link files take two batches.
+      # The binary only builds if every leaf rlib reached target/deps,
+      # because rustc loads all crates that manydeps uses, and the link
+      # file of manydeps has to keep the flag of every leaf.
+      manyDependencies =
+        let
+          leafCount = 257;
+          leafName = n: "leaf${toString n}";
+          leaves = lib.genList (
+            n:
+            mkHostCrate {
+              crateName = leafName n;
+              src = mkLib "src/lib.rs";
+              extraLinkFlags = [ "-L ${leafName n}" ];
+            }
+          ) leafCount;
+          libCrate = mkHostCrate {
+            crateName = "manydeps";
+            dependencies = leaves;
+            src = mkFile "src/lib.rs" ''
+              ${lib.concatMapStrings (n: "extern crate ${leafName n};\n") (lib.range 0 (leafCount - 1))}
+              pub fn test() -> i32 { ${leafName 0}::test() }
+            '';
+          };
+          binCrate = mkHostCrate {
+            crateName = "manydepsbin";
+            dependencies = [ libCrate ];
+            src = mkBinExtern "src/main.rs" "manydeps";
+          };
+        in
+        runCommand "run-manyDependencies" { } ''
+          test "$(grep -c '^-L leaf' ${libCrate.lib}/lib/link)" -eq ${toString leafCount}
+          ${
+            if stdenv.hostPlatform == stdenv.buildPlatform then
+              "${binCrate}/bin/manydepsbin"
+            else
+              "test -x ${binCrate}/bin/manydepsbin"
+          }
+          touch $out
+        '';
+
       # Test that propagatedBuildInputs declared in a crate override are
       # collected by completePropagatedBuildInputs and propagate transitively
       # to all crates that depend on it.
