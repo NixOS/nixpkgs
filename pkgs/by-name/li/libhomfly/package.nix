@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.04";
+  version = "1.05";
   pname = "libhomfly";
 
   src = fetchFromGitHub {
     owner = "miguelmarco";
     repo = "libhomfly";
     rev = finalAttrs.version;
-    hash = "sha256-ND2ZBKwHlRYTqxC+ltkCQ2lolNAkhZZm5hriIaOLqC4=";
+    hash = "sha256-FDlHiwZW4+JV0n34OyJmO3WDNjSnNRx0nQIyAEXwhfc=";
   };
 
   buildInputs = [
