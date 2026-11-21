@@ -91,8 +91,8 @@ let
 
                   clusterAddress =
                     "gcomm://"
-                    + lib.optionalString (id == 2 || id == 3) "galera_01,galera_02,galera_03"
-                    + lib.optionalString (id == 5 || id == 6) "galera_04,galera_05,galera_06";
+                    + lib.optionalString (id == 1 || id == 2 || id == 3) "galera_01,galera_02,galera_03"
+                    + lib.optionalString (id == 4 || id == 5 || id == 6) "galera_04,galera_05,galera_06";
                 };
 
                 settings = {
@@ -138,6 +138,7 @@ let
 
       testScript = ''
         galera_01.start()
+        galera_01.succeed("galera_new_cluster")
         galera_01.wait_for_unit("mysql")
         galera_01.wait_for_open_port(3306)
         galera_01.succeed(
@@ -193,6 +194,7 @@ let
         galera_03.crash()
 
         galera_04.start()
+        galera_04.succeed("galera_new_cluster")
         galera_04.wait_for_unit("mysql")
         galera_04.wait_for_open_port(3306)
         galera_04.succeed(
