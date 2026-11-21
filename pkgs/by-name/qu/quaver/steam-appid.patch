@@ -1,0 +1,17 @@
+diff --git a/Quaver.Shared/Online/SteamManager.cs b/Quaver.Shared/Online/SteamManager.cs
+index e3dd2f594..4c2872576 100644
+--- a/Quaver.Shared/Online/SteamManager.cs
++++ b/Quaver.Shared/Online/SteamManager.cs
+@@ -104,10 +104,10 @@ namespace Quaver.Shared.Online
+                 Logger.Error(log, LogType.Runtime);
+                 throw new InvalidOperationException(log);
+             }
+-#if DEBUG
++
+             // Creates a file with the Steam Application Id, this is required for debugging
+             File.WriteAllText($"{Directory.GetCurrentDirectory()}/steam_appid.txt", ApplicationId.ToString());
+-#endif
++
+             // Make sure the game is started with Steam.
+             if (SteamAPI.RestartAppIfNecessary((AppId_t)ApplicationId))
+                 Environment.Exit(0);
