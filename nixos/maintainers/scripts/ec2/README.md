@@ -28,6 +28,22 @@ export AWS_PROFILE=my-profile
 nix run github:NixOS/amis#upload-ami -- --image-info ./result/nix-support/image-info.json
 ```
 
+## Root partition growth
+
+On first boot, and after the EBS volume grows, systemd-repart grows the root
+partition in the initrd and systemd-growfs grows its file system. The image
+defines that partition as `systemd.repart.partitions.root`. To use growpart
+after boot instead, set:
+
+```nix
+{ boot.initrd.systemd.repart.enable = false; }
+```
+
+Without a `root` definition, growpart stays on even with initrd systemd-repart
+enabled. `boot.growPartition` refuses to run alongside systemd-repart, so such a
+configuration fails to evaluate until you add `root` back or set
+`boot.growPartition = false`.
+
 ## Roadmap
 
 * @arianvp is planning to perhaps rewrite `upload-ami` to use coldnsap
