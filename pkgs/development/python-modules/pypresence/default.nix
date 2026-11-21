@@ -5,7 +5,7 @@
   setuptools,
 }:
 let
-  version = "4.6.1";
+  version = "4.6.2";
 in
 buildPythonPackage {
   pname = "pypresence";
@@ -16,7 +16,7 @@ buildPythonPackage {
     owner = "qwertyquerty";
     repo = "pypresence";
     tag = "v${version}";
-    hash = "sha256-VvVHJ3S+Yusq4cK4KyDQlnL3VwAyrZqNKYzEgJPU8Vk=";
+    hash = "sha256-dYV9AoTAJ3h141PtQB258N2xDzydKdMrLFvNZRbv36E=";
   };
 
   build-system = [ setuptools ];
