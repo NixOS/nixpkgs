@@ -1468,6 +1468,8 @@ with pkgs;
 
   inherit (ocamlPackages) dune-release;
 
+  dukpy = with python3Packages; toPythonApplication dukpy;
+
   dune_2 = callPackage ../by-name/du/dune/package.nix {
     version = "2.9.3";
   };
@@ -2140,6 +2142,8 @@ with pkgs;
   lagrange-tui = lagrange.override { enableTUI = true; };
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
+
+  markdown-to-confluence = with python3Packages; toPythonApplication markdown-to-confluence;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
 
