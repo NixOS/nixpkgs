@@ -805,6 +805,12 @@ stdenv.mkDerivation (finalAttrs: {
           ;
       }
       // {
+        inherit (prefixTests "predictable-interface-names")
+          predictable-interface-names-predictableNetworkd
+          predictable-interface-names-unpredictableNetworkd
+          ;
+      }
+      // {
         inherit (nixosTests)
           simple-vm
           fsck
