@@ -256,6 +256,7 @@ in
   actual = runTest ./actual.nix;
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTestOn [ "x86_64-linux" ] ./aesmd.nix;
+  affine-server = runTest ./affine-server.nix;
   agate = runTest ./web-servers/agate.nix;
   agda = import ./agda {
     inherit runTest;
