@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aemet-opendata";
-  version = "0.6.4";
+  version = "0.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "AEMET-OpenData";
     tag = version;
-    hash = "sha256-xxpB5JFPkTwd7dxba9pXRvcont/i3wXBdJh5NfLnZTM=";
+    hash = "sha256-zLrvPoMPq6wYGzVPWn+z8FPMg+37cDWzY42U+XQC7O0=";
   };
 
   build-system = [ setuptools ];
