@@ -12,6 +12,10 @@
   libicns,
   pipewire,
   libpulseaudio,
+  libx11,
+  libxrandr,
+  libxt,
+  libxtst,
   autoPatchelfHook,
   pnpm_12,
   fetchPnpmDeps,
@@ -73,6 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
+    libx11
+    libxrandr
+    libxt
+    libxtst
     pipewire
     (lib.getLib stdenv.cc.cc)
   ];
