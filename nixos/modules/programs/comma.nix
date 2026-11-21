@@ -21,6 +21,9 @@ in
     enableFishIntegration = lib.mkEnableOption "comma command-not-found handler for fish" // {
       default = true;
     };
+    enableNushellIntegration = lib.mkEnableOption "comma command-not-found handler for nushell" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -35,6 +38,9 @@ in
       fish.interactiveShellInit = ''
         source ${cfg.package}/share/comma/command-not-found.fish
       '';
+      nushell.interactiveShellInit = lib.mkIf cfg.enableNushellIntegration ''
+        source ${cfg.package}/share/comma/command-not-found.nu
+      '';
 
       # Disable *other* command-not-found handlers
       command-not-found.enable = lib.mkIf (
@@ -44,6 +50,7 @@ in
         enableBashIntegration = lib.mkIf (cfg.enableBashIntegration) (lib.mkDefault false);
         enableZshIntegration = lib.mkIf (cfg.enableZshIntegration) (lib.mkDefault false);
         enableFishIntegration = lib.mkIf (cfg.enableFishIntegration) (lib.mkDefault false);
+        enableNushellIntegration = lib.mkIf (cfg.enableNushellIntegration) (lib.mkDefault false);
       };
     };
   };
