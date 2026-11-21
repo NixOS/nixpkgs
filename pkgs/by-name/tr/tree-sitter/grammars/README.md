@@ -87,6 +87,19 @@ To use [other fetchers](https://nixos.org/manual/nixpkgs/unstable/#chap-pkgs-fet
 }
 ```
 
+## Grammars Sharing a Source
+
+Some repositories provide more than one grammar (e.g. `ocaml` and `ocaml_interface`).
+Rather than duplicating fields, derive the extra grammar from the primary entry through `self`:
+
+```nix
+{
+  ocaml-interface = self.ocaml // {
+    language = "ocaml_interface";
+  };
+}
+```
+
 ## Modifying Build Behaviour
 
 Additional attributes in the grammar definition are forwarded to `buildGrammar`, and then to `mkDerivation`.
