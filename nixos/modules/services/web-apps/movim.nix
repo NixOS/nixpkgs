@@ -586,7 +586,7 @@ in
                     lib.optionalString enable /* bash */ ''
                       echo -n "Precompressing static files with Brotli …"
                       find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                        | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                        | xargs -0 -P$NIX_BUILD_CORES -I{} \
                             ${lib.getExe package} --keep --quality=${toString compressionLevel} --output={}.br {}
                       echo " done."
                     ''
@@ -602,7 +602,7 @@ in
                     lib.optionalString enable /* bash */ ''
                       echo -n "Precompressing static files with Gzip …"
                       find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                        | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                        | xargs -0 -P$NIX_BUILD_CORES -I{} \
                             ${lib.getExe package} -c -${toString compressionLevel} {} >{}.gz
                       echo " done."
                     ''
