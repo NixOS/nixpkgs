@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "keychain";
-  version = "3.0.4";
+  version = "3.0.10";
 
   pyproject = true;
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "danielrobbins";
     repo = "keychain";
     tag = finalAttrs.version;
-    hash = "sha256-1cIrbMj+Y94PuDapZVk2buVolAKisaQghWdyPD5xCMQ=";
+    hash = "sha256-MK3TkVfu+1Le/pRUXhSuTcuz8WDxhkGbtANH5Dl+T2U=";
   };
 
   build-system = with python3Packages; [
