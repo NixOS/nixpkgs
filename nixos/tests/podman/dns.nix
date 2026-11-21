@@ -51,11 +51,11 @@
                 node.succeed(f"podman network create {network} --interface-name {interface}")
 
         node.succeed(
-            f"podman run -d {network_arg} --name=webserver -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -w ${pkgs.writeTextDir "index.html" "<h1>Testing</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8000"
+            f"podman run -d {network_arg} --stop-signal=SIGINT --name=webserver -v /nix/store:/nix/store -w ${pkgs.writeTextDir "index.html" "<h1>Testing</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8000"
         )
         node.succeed("podman ps | grep webserver")
         node.wait_until_succeeds(
-            f"podman run --rm {network_arg} --name=client -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg ${pkgs.curl}/bin/curl http://webserver:8000 | grep Testing"
+            f"podman run --rm {network_arg} --name=client -v /nix/store:/nix/store scratchimg ${pkgs.curl}/bin/curl http://webserver:8000 | grep Testing"
         )
         node.succeed("podman stop webserver")
         node.succeed("podman rm webserver")
