@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/81bd9hAeNQweWk8UOTDZHewbCT55Sa2GbYGYYvMR5c=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     nodejs
     pnpm_11
