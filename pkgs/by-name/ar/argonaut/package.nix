@@ -4,17 +4,23 @@
   fetchFromGitHub,
   testers,
   versionCheckHook,
+  git,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "argonaut";
-  version = "2.17.2";
+  version = "2.20.0";
 
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
   src = fetchFromGitHub {
     owner = "darksworm";
     repo = "argonaut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zx/9dpnrOTVVv3Fif//w7agqWtoKo00YrltlJn6axAs=";
+    hash = "sha256-RW3GoIwlySQixarsFy5jVejzl7WP7oB9lRmH+OD6SAQ=";
   };
 
   vendorHash = "sha256-b9Xq7CTEvdwtNtgF9PRKp2HkVNzxm6z+yCmH5ny9Hfc=";
