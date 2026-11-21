@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "lingva";
-  version = "5.0.6";
+  version = "5.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "lingva";
     tag = "v${version}";
-    hash = "sha256-eGXUBSEO5n5WUENhJ+p5eKTdenBsONUWw1mDax7QcSA=";
+    hash = "sha256-jGdDXRNhgF3sy9clx9rg7T2rjYlH7UHm0QsN+HZV0Sk=";
   };
 
   build-system = [ setuptools ];
