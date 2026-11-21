@@ -40,9 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  postPatch = lib.optionalString enableXdg ''
-    substituteInPlace skyscraper.pro --replace-fail "#DEFINES+=XDG" "DEFINES+=XDG"
-  '';
+  # skyscraper.pro carries the define as a commented-out line, so it is set on
+  # the qmake command line rather than by uncommenting: upstream respaced that
+  # comment in 3.20.3, which silently broke the substitution this used to do.
+  qmakeFlags = lib.optional enableXdg "DEFINES+=XDG";
 
   postInstall = ''
     installShellCompletion --cmd Skyscraper \
