@@ -8,19 +8,21 @@
   pytest9_0CheckHook,
   pytest-examples,
   pytest-mock,
+  typing-extensions,
+  typing-inspection,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "pydantic-settings";
-    version = "2.14.2";
+    version = "2.16.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-settings";
       tag = "v${version}";
-      hash = "sha256-7h0Jr/0qGJmve6fav9hKR1npDz29zD6Cci8h1TmuK4M=";
+      hash = "sha256-R8XXkBs0fVMedhGte4Bt0BHcpKCKDO8unThOjXFmeAs=";
     };
 
     build-system = [ hatchling ];
@@ -28,6 +30,8 @@ let
     dependencies = [
       pydantic
       python-dotenv
+      typing-extensions
+      typing-inspection
     ];
 
     pythonImportsCheck = [ "pydantic_settings" ];
