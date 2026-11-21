@@ -20,6 +20,7 @@
   gzip,
   jq,
   ld64,
+  libedit,
   libffi,
   libiconv,
   libplist,
@@ -168,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -d ${getLib llvmPackages.compiler-rt}/lib/darwin/libclang_rt.{,profile_}osx.a  $out/lib/darwin
       cp -d ${getLib llvmPackages.compiler-rt}/lib/libclang_rt.{,profile_}osx.a $out/lib
       cp -d ${getLib llvmPackages.llvm}/lib/libLLVM.dylib $out/lib
+      cp -d ${getLib libedit}/lib/libedit*.dylib $out/lib
       cp -d ${getLib libffi}/lib/libffi*.dylib $out/lib
 
       cp -rd ${getDev llvmPackages.libcxx}/include/c++ $out/include
