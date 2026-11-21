@@ -1449,6 +1449,13 @@ in
         RootDirectoryStartOnly = true;
         #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
+        # The daemon runs in RootDirectory, which holds only the StateDirectory paths
+        # and the binds below, so a DataDirectory outside stateDir must be bound in.
+        BindPaths = lib.optional (
+          cfg.settings.DataDirectory != null
+          && cfg.settings.DataDirectory != stateDir
+          && !lib.hasPrefix "${stateDir}/" cfg.settings.DataDirectory
+        ) cfg.settings.DataDirectory;
         BindReadOnlyPaths = [
           "/etc"
         ]
