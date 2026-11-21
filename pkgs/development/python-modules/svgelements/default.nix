@@ -10,7 +10,7 @@
   pillow,
   pytest-forked,
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   scipy,
 }:
 
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     pillow
     pytest-forked
     pytest-xdist
-    pytestCheckHook
+    pytest9_1CheckHook
     scipy
   ];
 
