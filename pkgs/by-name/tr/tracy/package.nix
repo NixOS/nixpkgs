@@ -4,8 +4,6 @@
   fetchFromGitHub,
   fetchFromGitLab,
   fetchpatch,
-  fetchurl,
-  callPackage,
 
   coreutils,
   cmake,
@@ -36,6 +34,8 @@
   nlohmann_json,
   nativefiledialog-extended,
   html-tidy,
+  python3,
+  pandoc,
 }:
 
 (import ./package-versions.nix {
@@ -45,8 +45,6 @@
     fetchFromGitHub
     fetchFromGitLab
     fetchpatch
-    fetchurl
-    callPackage
 
     coreutils
     cmake
@@ -77,5 +75,7 @@
     nlohmann_json
     nativefiledialog-extended
     html-tidy
+    python3
+    pandoc
     ;
 }).tracy_latest
