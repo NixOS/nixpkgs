@@ -2,50 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  pytest-cov-stub,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "strenum";
-  version = "0.4.15";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irgeek";
     repo = "StrEnum";
-    tag = "v${version}";
-    hash = "sha256-LrDLIWiV/zIbl7CwKh7DAy4LoLyY7+hfUu8nqduclnA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TnCyMDMPEqFiNrLsgmIX47l7RYU8UFo5p/bqJTzjPmI=";
   };
 
-  patches = [
-    # Replace SafeConfigParser and readfp, https://github.com/milanmeu/aioaseko/pull/6
-    (fetchpatch {
-      name = "replace-safeconfigparser.patch";
-      url = "https://github.com/irgeek/StrEnum/commit/896bef1b7e4a50c8b53d90c8d2fb5c0164f08ecd.patch";
-      hash = "sha256-dmmEzhy17huclo1wOubpBUDc2L7vqEU5b/6a5loM47A=";
-    })
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-    substituteInPlace pytest.ini \
-      --replace " --cov=strenum --cov-report term-missing --black --pylint" ""
-  '';
-
-  nativeBuildInputs = [ setuptools ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "strenum" ];
 
   meta = {
     description = "Module for enum that inherits from str";
     homepage = "https://github.com/irgeek/StrEnum";
-    changelog = "https://github.com/irgeek/StrEnum/releases/tag/v${version}";
+    changelog = "https://github.com/irgeek/StrEnum/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
