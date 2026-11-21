@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "steamvr-linux-fixes";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "BnuuySolutions";
     repo = "SteamVRLinuxFixes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zvk7I4df+Y8FsnkNLZ+h3SsdFK9BL35TCJgsSk/G58U=";
+    hash = "sha256-Ls8pP/PDh3Zn2BQv+D/XCUAzFCV6NqlBm1TOSs/tQgo=";
 
     fetchSubmodules = true;
   };
@@ -29,27 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ];
 
-  env.NIX_CFLAGS_LINK = "-Wl,-z,noexecstack";
-
   cmakeFlags = [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DISTORM" "${python3Packages.distorm3.src}")
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 libsteamvr_linux_fixes.so -t $out/lib
-
-    layerJson="$out/share/vulkan/implicit_layer.d/VkLayer_steamvr_linux_fixes.json"
-
-    install -Dm644 "$src/VkLayer_steamvr_linux_fixes.json" "$layerJson"
-
-    substituteInPlace "$layerJson" \
+  postInstall = ''
+    substituteInPlace $out/share/vulkan/implicit_layer.d/VkLayer_steamvr_linux_fixes.json \
       --replace-fail \
-        '"library_path": "./libsteamvr_linux_fixes.so"' \
+        '"library_path": "../../../lib/libsteamvr_linux_fixes.so"' \
         '"library_path": "'"$out"'/lib/libsteamvr_linux_fixes.so"'
-
-    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };
