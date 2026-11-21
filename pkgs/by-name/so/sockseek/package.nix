@@ -10,7 +10,7 @@
   lib,
 }:
 let
-  version = "3.0.6";
+  version = "3.1.0";
 in
 buildDotnetModule {
   pname = "sockseek";
@@ -20,7 +20,7 @@ buildDotnetModule {
     owner = "fiso64";
     repo = "sockseek";
     rev = "v${version}";
-    hash = "sha256-9qdMJawjc9BmLaMFCctP9Pj/Cjpk/NbICMRttmmO21I=";
+    hash = "sha256-zNT0jQOvSgTTUB651MA+MOHMy3AP0+07v/qkvk5IMyk=";
   };
 
   strictDeps = true;
