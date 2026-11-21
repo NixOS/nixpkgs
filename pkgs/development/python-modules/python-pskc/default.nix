@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-pskc";
-  version = "1.4-unstable-2026-07-18";
+  version = "1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
