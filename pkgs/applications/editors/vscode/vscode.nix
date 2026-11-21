@@ -120,6 +120,7 @@ buildVscode {
       bobby285271
       johnrtitor
       jefflabonte
+      Max-42
       wetrustinprize
       oenu
       yuannan
