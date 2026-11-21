@@ -4,6 +4,7 @@
   fetchurl,
   makeWrapper,
   coreutils,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -22,10 +23,9 @@ stdenv.mkDerivation {
       --replace "PREFIX?=/usr/local" "PREFIX=$out"
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/ts \
-      --set-default TS_SLOTS "$(${coreutils}/bin/nproc --all)"
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
 
   meta = {
     description = "Simple single node task scheduler";

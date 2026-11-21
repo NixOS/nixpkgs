@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "martindell";
   domain = "entity_notes";
-  version = "3.3.11";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-entity-notes";
     tag = "v${version}";
-    hash = "sha256-J+HIa8VgfObhuOY8jn39hQH3I4DEgVn65U9w9a/vNd4=";
+    hash = "sha256-I2qQq31OhK4lBLx+TO0BRWOvjtwsLWE/kJXwsCgUrYE=";
   };
 
   dependencies = [

@@ -55,7 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./bootstrap
   '';
 
-  doCheck = true;
+  # The smoke-test fails on aarch64-linux (journal.log mismatch);
+  # disable the check phase there until it is fixed upstream.
+  # This can be reverted to `doCheck = true` with the next upstream release
+  # which will contain https://github.com/gefla/empserver/commit/52926dafa264c1be47757d0cd4fed15678d45ba3
+  doCheck = stdenv.hostPlatform.system != "aarch64-linux";
 
   meta = {
     description = "Multi-player, client/server Internet based war game";

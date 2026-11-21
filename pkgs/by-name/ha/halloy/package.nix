@@ -8,6 +8,7 @@
   makeBinaryWrapper,
   nix-update-script,
   openssl,
+  sqlite,
   pkg-config,
   rustPlatform,
   vulkan-loader,
@@ -21,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "halloy";
-  version = "2026.9";
+  version = "2026.10";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = finalAttrs.version;
-    hash = "sha256-rIrmhrnM4UWZeDZVOyDu13WiTROcQWsDBztqeQzRbuQ=";
+    hash = "sha256-DgyS7uoLxXoH7NkcEohW9xbuWnm6VBbjIODBW3IGSUA=";
   };
 
-  cargoHash = "sha256-pyRh6zSle4ZCGUsf2R7YIhcBOT53WKBFA0JHWGA3Z5s=";
+  cargoHash = "sha256-S/6JHaAbT6aylj9qx40YEiMpN7Am8RFy2EpoYkbaWl4=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib

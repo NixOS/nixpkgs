@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "radian";
-  version = "0.7.1";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "radian";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M7NyL0arkM9VNnOf65Dt3ITWCmiwmXWwLGXc0/Td+iw=";
+    hash = "sha256-UgAMyn0mqMPH2qr2JXyJXLtp8i4PNnSIhwmToWtPF/k=";
   };
 
   build-system = with python3Packages; [
@@ -60,6 +60,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--set"
     "R_HOME"
     "${R}/lib/R"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${placeholder "out"}/${python3Packages.python.sitePackages}:${python3Packages.makePythonPath finalAttrs.propagatedBuildInputs}"
   ];
 
   preCheck = ''

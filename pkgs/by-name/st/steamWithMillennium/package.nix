@@ -29,9 +29,8 @@
     (prevArgs.extraProfile or "")
     + extraProfile
     + ''
-      mkdir -p "$HOME"/.local/share/Steam/ubuntu12_{32,64}
-      ln -sf ${millennium}/lib/libmillennium_bootstrap_x86.so "$HOME/.local/share/Steam/ubuntu12_32/libXtst.so.6"
-      ln -sf ${millennium}/lib/libmillennium_bootstrap_hhx64.so "$HOME/.local/share/Steam/ubuntu12_64/libXtst.so.6"
+      mkdir -p "$HOME/.local/share/Steam/steamrt64"
+      ln -sf ${millennium}/lib/libmillennium_bootstrap_x64.so "$HOME/.local/share/Steam/steamrt64/libXtst.so.6"
     '';
 })).overrideAttrs
   (old: {

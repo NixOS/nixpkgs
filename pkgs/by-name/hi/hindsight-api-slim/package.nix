@@ -15,14 +15,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "hindsight-api-slim";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vectorize-io";
     repo = "hindsight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0+BuUhlf3mljlo9F9cVLcnOORZhMlK1mFY7Cqem6oYs=";
+    hash = "sha256-fykytEgE0dapJhDtky4zyWwXgBgiuvufPkfdbnssi8g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/hindsight-api-slim";
@@ -35,13 +35,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "asyncpg"
     "opentelemetry-api"
     "opentelemetry-sdk"
     "opentelemetry-instrumentation-fastapi"
     "opentelemetry-exporter-prometheus"
     "opentelemetry-exporter-otlp-proto-http"
     "opentelemetry-semantic-conventions"
-    "regex"
     "greenlet"
   ];
 

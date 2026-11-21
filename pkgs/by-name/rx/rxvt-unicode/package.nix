@@ -5,6 +5,7 @@
   rxvt-unicode-unwrapped,
   rxvt-unicode-plugins,
   perlPackages,
+  libxcursor,
   nixosTests,
   configure ?
     { availablePlugins, ... }:
@@ -52,11 +53,15 @@ let
       nativeBuildInputs = [ makeWrapper ];
 
       postBuild = ''
+        # Xlib dlopens libXcursor for themed cursors, but cannot find it without
+        # an explicit runtime dependency. Both standalone and daemon mode need it.
         wrapProgram $out/bin/urxvt \
           --prefix PERL5LIB : "${perlPackages.makePerlPath perlDeps}" \
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libxcursor ]}" \
           --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
         wrapProgram $out/bin/urxvtd \
           --prefix PERL5LIB : "${perlPackages.makePerlPath perlDeps}" \
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libxcursor ]}" \
           --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
       '';
 

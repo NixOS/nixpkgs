@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   uv-build,
   scim2-client,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "scim2-tester";
-  version = "0.2.8";
+  version = "0.6.4";
 
   pyproject = true;
 
@@ -21,12 +20,12 @@ buildPythonPackage rec {
     owner = "python-scim";
     repo = "scim2-tester";
     tag = version;
-    hash = "sha256-mWlIZC7080YABBWT2oNDVyrV5YrRzkzCUSZZBK7NNVM=";
+    hash = "sha256-V57yIi/0SbvRxqtXbZ5TKbNzieVZpIhx3l0Kwm/N7JE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'uv_build>=0.8.9,<0.9.0' 'uv_build'
+      --replace-fail 'uv_build>=0.12.13,<0.14.0' 'uv_build'
   '';
 
   build-system = [ uv-build ];
@@ -41,11 +40,11 @@ buildPythonPackage rec {
     pytest-scim2-server
     pytest-httpserver
   ]
-  ++ optional-dependencies.httpx;
+  ++ optional-dependencies.httpx2;
 
   pythonImportsCheck = [ "scim2_tester" ];
 
-  optional-dependencies.httpx = scim2-client.optional-dependencies.httpx;
+  optional-dependencies.httpx2 = scim2-client.optional-dependencies.httpx2;
 
   meta = {
     description = "SCIM RFCs server compliance checker";

@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
   buildInputs = [ git ];
 
   ldflags = [
-    "-s" # Disable symbole table.
+    "-s" # Disable symbol table.
     "-w" # Disable DWARF generation.
   ];
 

@@ -50,9 +50,13 @@ stdenv.mkDerivation {
 
   mesonFlags = [ "--prefix=${placeholder "out"}/lib/lv2" ];
 
+  # Install the generated manifest.ttl by reference; Meson >= 1.12 resolves the
+  # hardcoded 'build/manifest.ttl' string inside the build dir and fails.
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)"
+      --replace-fail "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)" \
+      --replace-fail "configure_file(input" "manifest_ttl = configure_file(input" \
+      --replace-fail "'build/manifest.ttl'" "manifest_ttl"
   '';
 
   meta = {

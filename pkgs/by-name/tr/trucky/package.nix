@@ -4,7 +4,7 @@
   lib,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "trucky";
   version = "3.8.2";
 
@@ -13,19 +13,14 @@ let
     hash = "sha256-8F6tIyooqzjgH2+qHsaoFwJkFzzW07fjqK9znDW/AyA=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 rec {
-  inherit pname version src;
-
   extraBwrapArgs = [ "--setenv QT_QPA_PLATFORM xcb" ];
 
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/trucky-electron.desktop $out/share/applications/trucky-electron.desktop
+    install -Dm444 ${finalAttrs.contents}/trucky-electron.desktop $out/share/applications/trucky-electron.desktop
     substituteInPlace $out/share/applications/trucky-electron.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=trucky'
 
-    install -Dm444 ${appimageContents}/trucky-electron.png $out/share/icons/hicolor/48x48/apps/trucky-electron.png
+    install -Dm444 ${finalAttrs.contents}/trucky-electron.png $out/share/icons/hicolor/48x48/apps/trucky-electron.png
   '';
 
   meta = {
@@ -36,4 +31,4 @@ appimageTools.wrapType2 rec {
     maintainers = [ lib.maintainers.liamthexpl0rer ];
     platforms = lib.platforms.all;
   };
-}
+})

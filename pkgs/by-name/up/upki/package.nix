@@ -18,17 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "upki";
-  version = "1.0.1";
+  version = "1.0.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "upki";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rEGFhMWnFOBSaWpEY9/HJGxJK7OSAb+yPNWuNgTJ768=";
+    hash = "sha256-aHZY4RmvlxspaepkT2hwOmi4BGk6aVfbaDDGBE4OhxM=";
   };
 
-  cargoHash = "sha256-5eecMFTVq1scGAw9DEXEYz/89Qe9dVBymyJmKgYfoqg=";
+  cargoHash = "sha256-ZtrJ1JdOYXKgx5gk6DtIW/L7ik+AFnL22UGaPSl/IrQ=";
 
   cargoBuildFlags = [
     "--package=upki-cli"
@@ -39,6 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=upki-cli"
   ];
 
+  nativeCheckInputs = [ cacert ];
+
   nativeBuildInputs = [
     cargo-c
     pkg-config
@@ -47,8 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     aws-lc
     openssl
   ];
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   postBuild = ''
     ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen \

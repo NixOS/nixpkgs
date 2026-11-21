@@ -221,7 +221,7 @@ freecad-utils.makeCustomizable (
         programmer, an experienced CAD user, a student or a teacher, you will feel
         right at home with FreeCAD.
       '';
-      license = lib.licenses.lgpl2Plus;
+      license = lib.licenses.lgpl21Plus;
       maintainers = with lib.maintainers; [
         srounce
         grimmauld

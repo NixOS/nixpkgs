@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   lib,
   pytestCheckHook,
   setuptools,
@@ -53,6 +54,7 @@ buildPythonPackage {
   passthru = {
     # bulk updater uses wrong tag
     skipBulkUpdate = true;
+    updateScript = gitUpdater { rev-prefix = "fluent.runtime@"; };
   };
 
   meta = {

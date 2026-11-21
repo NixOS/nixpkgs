@@ -10,6 +10,7 @@
   hatchling,
 
   # dependencies
+  array-api-compat,
   numpy,
 
   # optional-dependencies
@@ -17,39 +18,30 @@
   numba,
   # dask
   dask,
-  # doc
-  furo,
-  pytest,
-  sphinx,
   # full
   h5py,
   zarr,
-  # test
-  anndata,
-  scikit-learn,
-  # test-min
-  coverage,
-  pytest-codspeed,
-  pytest-doctestplus,
-  pytest-xdist,
+  # sparse
+  scipy,
   # testing
   packaging,
 
   # tests
+  pytest-codspeed,
+  pytest-doctestplus,
   pytestCheckHook,
-  scipy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fast-array-utils";
-  version = "1.4.1";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "fast-array-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9tB8cV3i9WPbdLeS5/FmQzLu8rk/jRVtUZ35X/XSCx8=";
+    hash = "sha256-qOFq0xzi7ylmSqLhGv1QoDQPQW56qsf8dA2A0wcMK3M=";
   };
 
   # hatch-min-requirements tries to talk to PyPI by default. See https://github.com/tlambert03/hatch-min-requirements?tab=readme-ov-file#environment-variables.
@@ -63,6 +55,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    array-api-compat
     numpy
   ];
 
@@ -72,12 +65,6 @@ buildPythonPackage (finalAttrs: {
     ];
     dask = [
       dask
-    ];
-    doc = [
-      furo
-      pytest
-      sphinx
-      # sphinx-autofixture
     ];
     full = [
       h5py
@@ -89,21 +76,6 @@ buildPythonPackage (finalAttrs: {
     sparse = [
       scipy
     ];
-    test = [
-      anndata
-      scikit-learn
-      zarr
-    ]
-    ++ self.accel;
-    test-min = [
-      coverage
-      pytest
-      pytest-codspeed
-      pytest-doctestplus
-      pytest-xdist
-    ]
-    ++ self.sparse
-    ++ self.testing;
     testing = [
       packaging
     ];

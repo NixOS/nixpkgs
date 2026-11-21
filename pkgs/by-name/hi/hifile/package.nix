@@ -2,8 +2,8 @@
   lib,
   appimageTools,
   fetchurl,
-  version ? "0.9.20.0",
-  hash ? "sha256-dHs4yxID6Vo92BZPHYRCUMFJ1MKfhX5qSG5KJT59Zbk=",
+  version ? "0.9.21.1",
+  hash ? "sha256-aaQ/cmeXNZra9Qhq0rotX6nv9vDQ6xtgP3w95Ln6uxs=",
 }:
 
 let
@@ -24,7 +24,7 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/HiFile.desktop $out/share/applications/HiFile.desktop
-    install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/512x512/apps/HiFile.png
+    install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/256x256/apps/HiFile.png
     substituteInPlace $out/share/applications/HiFile.desktop \
       --replace-fail 'Exec=HiFile' 'Exec=hifile'
     echo "StartupWMClass=app.hifile.www.HiFile" >> $out/share/applications/HiFile.desktop

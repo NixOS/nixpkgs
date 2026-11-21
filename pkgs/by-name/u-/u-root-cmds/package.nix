@@ -203,6 +203,7 @@ u-root.overrideAttrs (prevAttrs: {
     rm cmds/core/mkdir/*_test.go # Error: Mode = 'drwxr-xr-x', want: 'dgrwxrwxrwx'
     rm cmds/core/netcat/*_test.go # Error: parseRemoteAddr(tcp, ::1) = [::1 localhost], want a subset of [::1 ip6-localhost]
     rm cmds/exp/bzimage/*_test.go # Error: compressed KernelCode too big: was 611116, now 611124
+    rm cmds/core/netstat/*_test.go # Fails due to dependence on udplite which was removed from the kernel
   '';
 
   meta = (lib.removeAttrs prevAttrs.meta [ "mainProgram" ]) // {

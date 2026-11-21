@@ -2,10 +2,13 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
   protobuf,
   python3,
   rust-jemalloc-sys-unprefixed,
   rustc,
+  sqlite,
+  zstd,
   makeWrapper,
   nix-update-script,
 }:
@@ -23,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    pkg-config
     protobuf
     rustc.llvmPackages.lld
   ];
@@ -30,6 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     rust-jemalloc-sys-unprefixed
     python3
+    sqlite
+    zstd
   ];
 
   env = {

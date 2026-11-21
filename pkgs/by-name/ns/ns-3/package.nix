@@ -142,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPython3_LIBRARY_DIRS=${pythonEnv}/lib"
     "-DPython3_INCLUDE_DIRS=${pythonEnv}/include"
     "-DPython3_EXECUTABLE=${pythonEnv}/bin/python"
+    "-DNS3_WARNINGS_AS_ERRORS=OFF"
     "-DNS3_PYTHON_BINDINGS=ON"
     "-DNS3_DES_METRICS=ON"
     "-DNS3_BINDINGS_INSTALL_DIR=${pythonEnv.sitePackages}"

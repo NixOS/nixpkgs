@@ -408,15 +408,10 @@ let
 in
 self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
-  mariadb_106 = self.callPackage generic {
-    # Supported until 2026-07-06
-    version = "10.6.27";
-    hash = "sha256-jrdq07Gz0UxWYRzMkQQoFB/lYWAEOBnmR0FgOF9pZl4=";
-  };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.18";
-    hash = "sha256-pGhSxoB1vnwxx7M/7iM8W1oAyMKBF/UgTRJOTy/Vb6g=";
+    version = "10.11.19";
+    hash = "sha256-uOVD7mnTgPsc/VYyJvSeD+luTWfnt6kEXuUUoWjtIGY=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29

@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Minegame YTB <53137994+minegameYTB@users.noreply.github.com>
+Date: Fri, 6 Nov 2026 22:05:00 +0100
+Subject: [PATCH] Remove makers that need unpublished git dependencies
+
+The AppImage and Pacman makers are git dependencies without a compiled
+build in the repository. We only run `electron-forge package`, not
+`electron-forge make`, so these makers are not needed.
+---
+ forge.config.ts | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
+
+diff --git a/forge.config.ts b/forge.config.ts
+index e9ac1ce..f3b1c18 100644
+--- a/forge.config.ts
++++ b/forge.config.ts
+@@ -1,6 +1,4 @@
+ import type { ForgeConfig } from '@electron-forge/shared-types';
+-import { MakerAppImage } from 'electron-forge-maker-appimage';
+-import { MakerPacman } from 'electron-forge-maker-pacman';
+ // import { MakerFlatpak } from '@electron-forge/maker-flatpak';
+ // import { MakerSnap } from '@electron-forge/maker-snap';
+ import { MakerDeb } from '@electron-forge/maker-deb';
+@@ -20,15 +18,7 @@ const config: ForgeConfig = {
+   },
+   rebuildConfig: {},
+   makers: [
+-    new MakerAppImage({
+-      options: {
+-        productName: "Deezer Enhanced",
+-        icon: "./build/icon.png",
+-        categories: ["Audio"],
+-        mimeType: ['x-scheme-handler/deezer']
+-      },
+-    }), 
+-    new MakerPacman({}),
++
+     // new MakerFlatpak({
+     //   options: {
+     //     files: 
+-- 
+2.51.0

@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "validate-pyproject-schema-store";
-  version = "2026.11.10";
+  version = "2026.11.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "henryiii";
     repo = "validate-pyproject-schema-store";
     tag = finalAttrs.version;
-    hash = "sha256-KyUkun6BX7F2woQATPOr4JEW5ttxXOKCa3OqTa9y+4A=";
+    hash = "sha256-LMhRALL0cDKHTnhN4UzPqjNYbA5xr7epD2DYYIruAGo=";
   };
 
   build-system = [ hatchling ];

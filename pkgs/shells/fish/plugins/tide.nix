@@ -7,13 +7,13 @@
 # Refer to the following comment to get you setup: https://github.com/NixOS/nixpkgs/pull/201646#issuecomment-1320893716
 buildFishPlugin (finalAttrs: {
   pname = "tide";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "IlanCosman";
     repo = "tide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1ApDjBUZ1o5UyfQijv9a3uQJ/ZuQFfpNmHiDWzoHyuw=";
+    hash = "sha256-IK4xXwZOYq81NDWlxdPN+HJ8ixnrn2iIAtQYOM8ZMKQ=";
   };
 
   #buildFishplugin will only move the .fish files, but tide has a tide configure function

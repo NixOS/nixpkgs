@@ -1,7 +1,9 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   nix-update-script,
+  oniguruma,
   openssl,
   pkg-config,
   rustPlatform,
@@ -32,6 +34,8 @@ let
     ];
 
     buildInputs = [
+      aws-lc
+      oniguruma
       openssl
     ];
 

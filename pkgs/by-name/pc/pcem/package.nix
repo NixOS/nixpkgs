@@ -1,52 +1,62 @@
 {
   stdenv,
   lib,
-  fetchzip,
+  fetchFromGitHub,
   wxwidgets_3_2,
-  coreutils,
+  cmake,
   SDL2,
   openal,
   alsa-lib,
+  libGL,
+  libpcap,
+  libslirp,
   pkg-config,
   gtk3,
   wrapGAppsHook3,
-  autoreconfHook,
   withNetworking ? true,
-  withALSA ? true,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "pcem";
-  version = "17";
+  version = "17-unstable-2026-11-15";
 
-  src = fetchzip {
-    url = "https://pcem-emulator.co.uk/files/PCemV${finalAttrs.version}Linux.tar.gz";
-    stripRoot = false;
-    sha256 = "067pbnc15h6a4pnnym82klr1w8qwfm6p0pkx93gx06wvwqsxvbdv";
+  src = fetchFromGitHub {
+    owner = "sarah-walker-pcem";
+    repo = "pcem";
+    rev = "711eebf6ba2b15866b8e77b9de705c753be957db";
+    hash = "sha256-zpFLatEPxXfsqRB8qXAeuBZ1WyFePPEqwZsT+TjBxWQ=";
   };
 
+  postPatch = ''
+    # uint64_t is used without including relevant header
+    substituteInPlace src/wx-ui/wx-hdgeometry.cc \
+      --replace-fail '#include <stdio.h>' '#include <stdio.h>
+    #include <stdint.h>'
+  '';
+
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
     pkg-config
     wrapGAppsHook3
   ];
+
   buildInputs = [
     wxwidgets_3_2
-    coreutils
     SDL2
     openal
     gtk3
+    libGL
   ]
-  ++ lib.optional withALSA alsa-lib;
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optionals withNetworking [
+    libpcap
+    libslirp
+  ];
 
-  configureFlags = [
-    "--enable-release-build"
+  cmakeFlags = [
+    (lib.cmakeBool "USE_NETWORKING" withNetworking)
+    (lib.cmakeFeature "CMAKE_C_STANDARD" "17")
   ]
-  ++ lib.optional withNetworking "--enable-networking"
-  ++ lib.optional withALSA "--enable-alsa";
-
-  # Fix GCC 14 build
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -std=gnu17";
+  ++ lib.optional stdenv.hostPlatform.isx86_64 (lib.cmakeFeature "PCEM_MARCH" "x86-64");
 
   meta = {
     description = "Emulator for IBM PC computers and clones";
@@ -56,4 +66,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.terin ];
     platforms = lib.platforms.linux ++ lib.platforms.windows;
   };
-})
+}

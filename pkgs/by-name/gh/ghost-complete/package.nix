@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   nix-update-script,
   versionCheckHook,
 }:
@@ -28,6 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   cargoHash = "sha256-l1Gp9FVtrGhzobM2Wdq110y1W7V6PNsQsJLBJ3sgOEs=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   cargoBuildFlags = [ "--package=ghost-complete" ];
 

@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.26.10";
+  version = "1.26.11";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-/WPog7ovK/ypPBZGsx6+9j4rHk0rMXyXidl2po2B828=";
+    hash = "sha256-1EEBsP8n7SpMda1GwXucdDWSCeLrLKfJ32y0/baOGWk=";
   };
 
   strictDeps = true;
@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
+    # This patch is never used in tree, and very rarely out-of-tree. The one exception is in
+    # gomod2nix. ref. https://github.com/NixOS/nixpkgs/pull/109127 (patchfile in PR has more context)
     ./go_no_vendor_checks-1.26.patch
     ./go-env-go_ldso.patch
   ];
@@ -135,36 +137,25 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/regexp/syntax/make_perl_groups.pl
   ''
   + (
-    # Not equivalent to isCross; e.g. x86_64-linux vs. musl64 have the same system string
-    if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
-      ''
-        mv bin/*_*/* bin
-        rmdir bin/*_*
-        ${lib.optionalString
-          (
-            !(
-              finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS
-            )
-          )
-          ''
-            rm -rf pkg/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH} pkg/tool/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH}
-          ''
-        }
-      ''
-    else
-      lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
-        rm -rf bin/*_*
-        ${lib.optionalString
-          (
-            !(
-              finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS
-            )
-          )
-          ''
-            rm -rf pkg/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH} pkg/tool/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH}
-          ''
-        }
-      ''
+    let
+      inherit (finalAttrs.env)
+        GOHOSTOS
+        GOHOSTARCH
+        GOOS
+        GOARCH
+        ;
+      # Not equivalent to isCross; e.g. x86_64-linux vs. musl64 have the same GOOS/GOARCH
+      # Specifically exclude GOARM; it doesn't appear in the folder output names
+      isCrossGo = GOHOSTOS != GOOS || GOHOSTARCH != GOARCH;
+    in
+    # When we're cross-compiling to another OS or architecture, Go puts our architecture's binaries as bin/go{,fmt},
+    # and their binaries as bin/$goos_$goarch/go{,fmt}. We only want the host binaries, so when build/host GOOS/GOARCH differ,
+    # move the host binaries over the build binaries. Also remove other stuff just for the build platform.
+    lib.optionalString isCrossGo ''
+      mv bin/*_*/* bin
+      rmdir bin/*_*
+      rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
+    ''
   );
 
   installPhase = ''

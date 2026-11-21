@@ -7,6 +7,7 @@
   makeWrapper,
   versionCheckHook,
   craft-fonts,
+  craft-i18n,
   dbus,
   libx11,
   libxcb,
@@ -33,7 +34,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "photocraft";
-  version = "0.21.0";
+  version = "0.23.1";
 
   __structuredAttrs = true;
 
@@ -41,10 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "storytold";
     repo = "photocraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TjW9nhq234RDe1fbb7oElMZwKwmDY+0UBNZvqUjdgJI=";
+    hash = "sha256-EhyYkRRQBvVX6CbSJX8gk4UOi/zHlE/jgC8wYUfm0ew=";
   };
 
-  cargoHash = "sha256-u6hM6QTbRwbiuc24hGiQRv2Wsh70Wg07yZM1IQGVyUs=";
+  cargoHash = "sha256-1L3JH41lUlbGF+Jq+XKb9t32EfvTdSpgd0GkkVPMg5E=";
 
   cargoBuildFlags = [
     "--package=photocraft"
@@ -54,6 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     CRAFT_FONTS_DIR = craft-fonts;
     CRAFT_FONTS_REQUIRED = "1";
+    CRAFT_I18N_DIR = craft-i18n;
+    CRAFT_I18N_REQUIRED = "1";
   };
 
   # The `photocraft` crate runs live GPU tests; software rendering in CI is too slow.

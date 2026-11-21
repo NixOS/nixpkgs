@@ -4,19 +4,22 @@
   installShellFiles,
   lib,
   stdenv,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "srgn";
-  version = "0.14.3";
+  version = "0.14.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
     rev = "srgn-v${finalAttrs.version}";
-    hash = "sha256-xkdqmjeZEK72W8u8Mjm1heh+UI7GNPIMlPqOT3G9SIw=";
+    hash = "sha256-FoQG0Yz9yNuvmMvjivdnVzXDw/CAjV3rDnrJpWm51KM=";
   };
 
-  cargoHash = "sha256-CPiPGcfjVDW38F/AAm0onxiAn7cV4y2jUiToT4RQyig=";
+  cargoHash = "sha256-Osnnmt/8TqSHuNScHGGw0mr4q2+hVoZK/itFQi6wnnE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,10 +29,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Code surgeon for precise text and code transplantation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ magistau ];
+    maintainers = with lib.maintainers; [
+      adda
+      magistau
+    ];
     mainProgram = "srgn";
     homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/";
     downloadPage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/releases/tag/${finalAttrs.src.rev}";

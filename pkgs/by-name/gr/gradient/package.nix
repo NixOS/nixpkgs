@@ -97,7 +97,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    frontend = callPackage ./frontend.nix { gradient = finalAttrs.finalPackage; };
     nix = callPackage ./nix.nix { inherit (finalAttrs) src; };
   };
 

@@ -3,6 +3,7 @@
   lib,
   fasm-bin,
   isx86_64,
+  updateScript ? fasm-bin.updateScript,
 }:
 
 stdenv.mkDerivation {
@@ -34,5 +35,5 @@ stdenv.mkDerivation {
     cp tools/readme.txt $docs/tools.txt
   '';
 
-  passthru.updateScript = fasm-bin.updateScript;
+  passthru = { inherit updateScript; };
 }

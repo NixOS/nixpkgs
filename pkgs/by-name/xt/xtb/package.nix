@@ -28,17 +28,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xtb";
-  # No tagged release supports the tblite 0.6 / dftd4 4.2 API; the latest tag (6.7.1) targets
-  # tblite 0.3. Track master, which builds against the current grimme-lab stack packaged in nixpkgs
-  version = "6.7.1-unstable-2026-07-13";
+  version = "6.8.0";
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "xtb";
-    rev = "b31754bf3c7cccf8c242c469b03ae675e04bd608";
-    hash = "sha256-HLKSVP/U6rggFYE9l7e4rRBGxkdWCmiYf/KpsQmF3Yw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vym5FptwF3F1fedcQrpOYBoSi05PX6kKSgJIvMSZGTk=";
   };
 
   # The `solve`/`solve4` eigensolvers size the DSYGVD workspace from a `LWORK = -1` query.
@@ -92,15 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      "--version=branch"
-      "--version-regex=v(\\d.*)"
+      "--version-regex"
+      "v(\\d.*)"
     ];
   };
 
   meta = {
     description = "Semiempirical Extended Tight-Binding Program Package";
     homepage = "https://github.com/grimme-lab/xtb";
-    # changelog = "https://github.com/grimme-lab/xtb/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/grimme-lab/xtb/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       GaetanLepage

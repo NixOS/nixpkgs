@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiopowerwall";
-  version = "0.4.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "aiopowerwall";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I1TdmsMgCGzBMAnx+QUTHB4UmxunmYnf+VS11kPrc8o=";
+    hash = "sha256-be6q7Wn8OMHMPkNJSR/E4Ah0j4Clz9dj1YG4irpLqW8=";
   };
 
   build-system = [ hatchling ];

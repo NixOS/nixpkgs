@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
     description = "GObject-based plugins engine";
     homepage = "https://gitlab.gnome.org/GNOME/libpeas";
     license = lib.licenses.gpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" version;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
   };

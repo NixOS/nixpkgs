@@ -11,6 +11,7 @@
   pkg-config,
   readline,
   rustPlatform,
+  rust-jemalloc-sys-unprefixed,
   useMoldLinker,
   versionCheckHook,
   withMold ? with clangStdenv.hostPlatform; isLinux,
@@ -21,16 +22,16 @@ let
 in
 rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "pgdog";
-  version = "0.1.64";
+  version = "0.1.65";
 
   src = fetchFromGitHub {
     owner = "pgdogdev";
     repo = "pgdog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8jk7kBGiYsqVeMXpnLjUX9NM0C940QeNL+ePZ3rR9pg=";
+    hash = "sha256-/R5g0UenVd+CBXjnkkWiF6pHRxYKTtG6QakH0tgA/vM=";
   };
 
-  cargoHash = "sha256-b/pIyN/Dp3xZQfO1GA31c6xmgxS/BopwHQcY3FxMaPo=";
+  cargoHash = "sha256-oKJmgx6FeIxn5z/W6gfl0RKXfMZiRUd2A4cpSEnFeDU=";
 
   # Hardcoded paths for C compiler and linker
   postPatch = ''
@@ -57,6 +58,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
     openssl
     readline
     zlib
+    rust-jemalloc-sys-unprefixed
   ];
 
   # Several tests rely on networking

@@ -21,21 +21,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-sdk";
-  version = "0.4.10";
+  version = "0.4.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "sdk==${finalAttrs.version}";
-    hash = "sha256-ypYo+pqQZ+KUYU+c8iwVApxFtdTpLd0NbJ/ZyiDzWyw=";
+    hash = "sha256-9NV17PJVinQVMIjvpb1R/8XZltcrOqXHK5iOZVX0ZDA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/sdk-py";
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "websockets" ];
+  pythonRelaxDeps = [
+    "langchain-core"
+    "websockets"
+  ];
 
   dependencies = [
     httpx

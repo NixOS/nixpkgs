@@ -1,14 +1,14 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
-  darwin,
   gitUpdater,
   rustc,
   fetchurl,
+  zstd,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,6 +47,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+    zstd
+    sqlite
   ];
 
   checkType = "debug";

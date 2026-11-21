@@ -17,6 +17,9 @@
   # buildInputs
   libayatana-appindicator,
 
+  # runtimeDependencies
+  zlib,
+
   # passthru
   nixosTests,
 }:
@@ -50,6 +53,8 @@ flutter341.buildFlutterApplication (finalAttrs: {
   nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [ libayatana-appindicator ];
+
+  runtimeDependencies = [ zlib ];
 
   customSourceBuilders.rust_lib_localsend_app =
     { version, src, ... }:

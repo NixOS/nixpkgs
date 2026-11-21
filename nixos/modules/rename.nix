@@ -269,6 +269,10 @@ in
         See <https://grafana.com/docs/alloy/latest/set-up/migrate/> or <https://docs.fluentbit.io/manual/data-pipeline/outputs/loki>.
       ''
     )
+    (mkRemovedOptionModule [
+      "services"
+      "haste-server"
+    ] "The `services.haste-server` module has been removed because the upstream project was deleted.")
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
     )
@@ -419,6 +423,10 @@ in
       "services"
       "winstone"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "wg-access-server"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "auto" ] ''
       The services.xserver.displayManager.auto module has been removed
       because it was only intended for use in internal NixOS tests, and gave the
@@ -554,9 +562,6 @@ in
       Consider migrating or switching to Incus, or remove from your configuration.
       https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
     '')
-    (mkRemovedOptionModule [ "services" "filesender" ] ''
-      services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
-    '')
     (mkRemovedOptionModule [ "services" "pghero" ] ''
       services.pghero has been removed because the (unmaintained) package was removed from Nixpkgs.
     '')
@@ -607,6 +612,9 @@ in
     (mkRemovedOptionModule [ "services" "scx" ] "Please migrate to services.scx-loader instead.")
     (mkRemovedOptionModule [ "services" "nixops-dns" ] ''
       services.nixops-dns has been removed together with pkgs.nixops-dns.
+    '')
+    (mkRemovedOptionModule [ "services" "sharkey" ] ''
+      services.sharkey has been removed together with pkgs.sharkey.
     '')
     # Do NOT add any option renames here, see top of the file
   ];

@@ -17,6 +17,7 @@
   writeText,
   pkg-config,
   dbus,
+  aws-lc,
 }:
 
 let
@@ -57,6 +58,7 @@ let
     buildInputs = [
       dbus
       udev
+      aws-lc
     ];
 
     passthru.libraryPath = "lib/librust_lib_intiface_central.so";
@@ -140,6 +142,7 @@ flutter347.buildFlutterApplication {
   buildInputs = [
     jdk
     udev
+    aws-lc
   ];
 
   env.ZLIB_ROOT = zlib-root;

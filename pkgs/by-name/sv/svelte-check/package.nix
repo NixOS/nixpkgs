@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-check";
-  version = "4.7.7";
+  version = "4.7.8";
 
   src = fetchFromGitHub {
     owner = "sveltejs";
     repo = "language-tools";
     tag = "svelte-check@${finalAttrs.version}";
-    hash = "sha256-AJZj3dDvDG2PvT8YFRS0lEbnXckdZ1XX22j1phSc2Ig=";
+    hash = "sha256-UjNOWCKSFIyO4wAxlhY8wsnc3uxpnxDvQpEzjgT/M+A=";
   };
 
   pnpmWorkspaces = [ "svelte-check..." ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-OdPwM+IL2h90BIJdyBzpXx+Z9NT+zKfZoFYOrTsiaP0=";
+    hash = "sha256-9mdeJk8HDpR+l4pX4l/M1ENz36KKkLNTTk1z/9tjqGA=";
   };
 
   nativeBuildInputs = [

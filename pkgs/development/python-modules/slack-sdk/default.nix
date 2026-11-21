@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "slack-sdk";
-  version = "3.46.0";
+  version = "3.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tf6D991dhzbYE5rs6DAOmAg0nnASIgtbGsgQpFtdnqA=";
+    hash = "sha256-yRfdJ8Ypmp93xffN6IiZpqBhWH0ChzFmY6WBKT4DoXg=";
   };
 
   build-system = [ setuptools ];
@@ -64,6 +64,8 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
     # ConnectionResetError in webhook test server
     "test_send_dict"
+    "test_ratelimited"
+    "test_run_on_returns_callback"
   ];
 
   disabledTestPaths = [

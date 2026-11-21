@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   protobuf,
-  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   zeroconf,
@@ -12,19 +11,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiobafi6";
-  version = "0.10.1";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jfroy";
     repo = "aiobafi6";
     tag = finalAttrs.version;
-    hash = "sha256-EXLMrZobSICAmWPREjx5D8boj/S/3AH5+lsWQlTCl1g=";
+    hash = "sha256-FxuzYrVR+VA7tggFVyaxh785cn+n+/am8fI4l7IdLLQ=";
   };
-
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
 
   build-system = [ poetry-core ];
 

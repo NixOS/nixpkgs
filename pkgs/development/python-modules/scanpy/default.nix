@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatch-vcs,
@@ -10,11 +9,10 @@
 
   # dependencies
   anndata,
-  certifi,
+  array-api-compat,
   fast-array-utils,
   h5py,
   joblib,
-  legacy-api-wrap,
   matplotlib,
   natsort,
   networkx,
@@ -32,8 +30,7 @@
   statsmodels,
   tqdm,
   umap-learn,
-  # python<3.13 only:
-  typing-extensions,
+  zarr,
 
   # optional-attrs
   # dask
@@ -50,7 +47,9 @@
 
   # tests
   dependency-groups,
+  jax,
   jinja2,
+  pooch,
   pytest-cov-stub,
   pytest-mock,
   pytest-randomly,
@@ -59,29 +58,37 @@
   pytestCheckHook,
   tuna,
   writableTmpDirAsHomeHook,
-  zarr,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.5";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-uHXgLJv8ViBhShxfo7jAAm9mMuC3jtyj37JtE55zkxY=";
+    hash = "sha256-S4PDxQbp/XQ4UCkW548syT1QE6PTmXCpx/UGpILXfHM=";
   };
 
-  # Otherwise, several tests fail to be collected:
-  # AssertionError: scanpy is already imported, this will mess up test coverage
-  postPatch = ''
-    substituteInPlace src/testing/scanpy/_pytest/__init__.py \
-      --replace-fail \
-        'assert "scanpy" not in sys.modules,' \
-        'assert True,'
-  '';
+  postPatch =
+    # Otherwise, several tests fail to be collected:
+    # AssertionError: scanpy is already imported, this will mess up test coverage
+    ''
+      substituteInPlace src/testing/scanpy/_pytest/__init__.py \
+        --replace-fail \
+          'assert "scanpy" not in sys.modules,' \
+          'assert True,'
+    ''
+    # pytest_ignore_collect is firstresult: returning False (instead of None) overrides
+    # pytest's own --ignore/--ignore-glob handling, making disabledTestPaths ineffective
+    + ''
+      substituteInPlace src/testing/scanpy/_pytest/__init__.py \
+        --replace-fail \
+          'return "_v2" in collection_path.parts and not bool(find_spec("holoviews"))' \
+          'return ("_v2" in collection_path.parts and not bool(find_spec("holoviews"))) or None'
+    '';
 
   build-system = [
     hatch-vcs
@@ -90,11 +97,10 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     anndata
-    certifi
+    array-api-compat
     fast-array-utils
     h5py
     joblib
-    legacy-api-wrap
     matplotlib
     natsort
     networkx
@@ -112,12 +118,12 @@ buildPythonPackage (finalAttrs: {
     statsmodels
     tqdm
     umap-learn
+    zarr
   ]
   ++ fast-array-utils.optional-dependencies.accel
   ++ fast-array-utils.optional-dependencies.sparse
-  ++ lib.optionals (pythonOlder "3.13") [
-    typing-extensions
-  ];
+  ++ scverse-misc.optional-dependencies.datasets
+  ++ scverse-misc.optional-dependencies.settings;
 
   optional-dependencies = {
     # commented attributes are due to some dependencies not being in Nixpkgs
@@ -131,9 +137,6 @@ buildPythonPackage (finalAttrs: {
     dask-ml = [
       dask-ml
     ];
-    #harmony = [
-    #  harmonypy
-    #];
     leiden = [
       igraph
       leidenalg
@@ -145,13 +148,14 @@ buildPythonPackage (finalAttrs: {
     #magic = [
     #  magic-impute
     #];
+    #networkit = [
+    #  networkit
+    #];
     paga = [
       igraph
     ];
-    #rapids = [
-    #  cudf
-    #  cugraph
-    #  cuml
+    #plotting = [
+    #  colour-science
     #];
     #scanorama = [
     #  scanorama
@@ -166,7 +170,9 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     dependency-groups
+    jax
     jinja2
+    pooch
     pytest-cov-stub
     pytest-mock
     pytest-randomly
@@ -175,7 +181,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     tuna
     writableTmpDirAsHomeHook
-    zarr
   ];
 
   preCheck = ''
@@ -214,6 +219,10 @@ buildPythonPackage (finalAttrs: {
     "test_download_atomic"
     "test_download_failure"
     "test_ebi_expression_atlas"
+    "test_harmony2_ircolitis_reference"
+    "test_harmony2_multikey_default_seeding"
+    "test_harmony2_multikey_reference"
+    "test_harmony_integrate_reference"
     "test_mean_var"
     "test_paul15"
     "test_pbmc3k"

@@ -3,6 +3,7 @@
   catch2_3,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   gtkmm4,
   libadwaita,
   libuuid,
@@ -23,6 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jFHB/YqdRlLihRWfxgap1OCZkbYqh5knfBzuEiWJjRY=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # TODO: Drop that whenever a new version > 1.7.3 comes out.
+    # Here we include this fix from the main branch.
+    (fetchpatch {
+      name = "include-mutex.patch";
+      url = "https://github.com/smolBlackCat/progress-tracker/commit/ca9493895dcf5b369f7852ee7ee647295bd4f442.patch";
+      includes = [ "src/core/*" ];
+      hash = "sha256-f3F4eggQRPc37i+J8yDY97xUrtwqHVehiP2QUi0kCe8=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

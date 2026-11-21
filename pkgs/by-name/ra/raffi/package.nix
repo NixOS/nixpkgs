@@ -7,22 +7,23 @@
   fuzzel,
   wayland,
   libxkbcommon,
+  sqlite,
   writableTmpDirAsHomeHook,
   additionalPrograms ? [ ],
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "raffi";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "raffi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2p8seAYWO2DhUvGIAMFQsS9IgWusIsUNf1WlmcoN3/c=";
+    hash = "sha256-mft3inmZMe+8utMA34uEKwcUVLhFA0SxH0djqoaKz8Y=";
   };
 
-  cargoHash = "sha256-4bojdlSDOz+wGrlx+dxYcBuMze+igt/TOFOGSU1ekLQ=";
+  cargoHash = "sha256-QPlClKiKrhDiLJlljWj8VeIdhOjYFx6HqbQqJTlOi8k=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     wayland
     libxkbcommon
+    sqlite
   ];
 
   preCheck = ''

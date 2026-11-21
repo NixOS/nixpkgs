@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     description = "Add .env support to your django/flask apps in development and deployments";
     mainProgram = "dotenv";
     homepage = "https://github.com/theskumar/python-dotenv";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 })

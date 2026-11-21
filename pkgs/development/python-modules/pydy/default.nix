@@ -1,4 +1,5 @@
 {
+  distutils,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -27,6 +28,7 @@ buildPythonPackage (finalAttrs: {
     numpy
     scipy
     sympy
+    distutils
   ];
 
   nativeCheckInputs = [

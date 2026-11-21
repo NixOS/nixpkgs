@@ -67,8 +67,8 @@ let
 in
 {
   tomcat9 = common {
-    version = "9.0.123";
-    hash = "sha256-/HgKaFIP868/IPlyvAOjk4THZu1obdaFk/oG0JjtpDc=";
+    version = "9.0.124";
+    hash = "sha256-8helujEzZ0LXPq+SiuAgIn5o2ndxA79AKhlR872Bfxo=";
   };
 
   tomcat10 = common {
@@ -77,7 +77,7 @@ in
   };
 
   tomcat11 = common {
-    version = "11.0.26";
-    hash = "sha256-a2rHnBVwfR0r9UxpixoZwEbCGlb8jd+CoIRcxU32gyQ=";
+    version = "11.0.29";
+    hash = "sha256-In3SK7Z7zElDHOT1PM4jDuZYWb9QHaraKTx5SpyecvM=";
   };
 }

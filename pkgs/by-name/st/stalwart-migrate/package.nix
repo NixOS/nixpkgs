@@ -19,16 +19,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-migrate" + lib.optionalString withEnterprise "-${variant}";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart-migrate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0K4nlQEPocrl612JN8T5nyDU9ddAG4X8J7D6vcU52dk=";
+    hash = "sha256-EWMrRE41RsDeFCS9cpmqRRNWqGYYd5gqXD5WPKaoUHk=";
   };
 
-  cargoHash = "sha256-AUws5yo7GqC0G7UHgylClVlcgbzC4JPXkqI0KmghHiI=";
+  cargoHash = "sha256-OL4wSnAnDmuqVY2Nx9Oa1XqCP1twLDNEMeOx7mVrKfM=";
 
   __structuredAttrs = true;
   strictDeps = true;

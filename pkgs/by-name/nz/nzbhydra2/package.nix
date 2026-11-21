@@ -75,7 +75,7 @@ maven.buildMavenPackage {
   pname = "nzbhydra2";
   inherit version src;
 
-  mvnHash = "sha256-J/yRwJIfonXFOMCuQAQyaDoggpAqSCQ90E0VNb8Cx0k=";
+  mvnHash = "sha256-RkNKiwto4y+B8SXOnrbmK2lL85X+o2wwhU3WvAsu65s=";
 
   # The fetch runs core's tests too, and WebConfigurationTest needs the UI bundle on the classpath.
   mvnFetchExtraArgs.preBuild = ''
@@ -134,7 +134,7 @@ maven.buildMavenPackage {
     changelog = "https://github.com/theotherp/nzbhydra2/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     platforms = lib.platforms.linux;
     mainProgram = "nzbhydra2";

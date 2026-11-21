@@ -11,7 +11,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kache";
-  version = "2.0.1";
+  version = "2.2.0";
   __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optional stdenv.hostPlatform.isUnix "shims";
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kunobi-ninja";
     repo = "kache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CjU+bbTWRwJDV0aPW5CBrrvRTEFBhFrr/qwm9JptuKk=";
+    hash = "sha256-q0B7gnWphc/h4QduBahvZcSL8LfBxNROsoCyp1w+uJY=";
   };
 
-  cargoHash = "sha256-1u++FcH6eQV8TEi6OwgA5VZL/7OKKYfplzoQOQWEVCU=";
+  cargoHash = "sha256-EPtQ79pC5vrCwZPv/30V38v3TaeQ2KGA1kz/Quasu2k=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isUnix ''
     mkdir -p "$shims/bin"
-    for name in cc c++ gcc g++ clang clang++; do
+    for name in cc c++ gcc g++ clang clang++ cargo rustdoc; do
       ln -s "$out/bin/kache" "$shims/bin/$name"
     done
     # Let another kache on PATH recognize and skip this shim directory.

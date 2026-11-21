@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "sbomit";
-  version = "0.2.1";
+  version = "0.3.0";
 
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "SBOMit";
     repo = "sbomit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/tst1XGwW8LTuEFbY1KA+C93TNapVJsYstFY9oPH8yA=";
+    hash = "sha256-l7lqe4yoOiu0g1d6a9b3hPVcqYLyJv6e0h3+ZLgudFg=";
   };
 
   vendorHash = "sha256-R3WBmmoh+YJMJlo+OgSXU50YcEfLQWAxkBYHPAT3NZM=";

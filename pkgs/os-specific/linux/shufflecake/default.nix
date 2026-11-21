@@ -10,13 +10,13 @@
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "shufflecake";
-  version = "0.5.8";
+  version = "0.6.2";
 
   src = fetchFromCodeberg {
     owner = "shufflecake";
     repo = "shufflecake-c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eI5tWujUHj9S8d1aOFMuokjVWI2GGEml68cuQ6K0/C8=";
+    hash = "sha256-Hrejg+9CwTWlcRnJ0fBAsiaQoxBuOSvlC+gFEFw2rVA=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -41,8 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    install -Dm444 dm-sflc.ko $out/lib/modules/${kernel.modDirVersion}/drivers/md/dm-sflc.ko
-    install -Dm555 shufflecake $bin/shufflecake
+    install -Dm444 dm-sflc/dm-sflc.ko $out/lib/modules/${kernel.modDirVersion}/drivers/md/dm-sflc.ko
+    install -Dm555 sflc/build/bin/sflc $bin/sflc
+    # v0.6 provides an alias for pre-v0.6 compatibility
+    ln -s sflc $bin/shufflecake
   '';
 
   meta = {

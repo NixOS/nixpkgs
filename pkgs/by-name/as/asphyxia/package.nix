@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asphyxia";
-  version = "0.10.0";
+  version = "0.11.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jtprogru";
     repo = "asphyxia";
     tag = finalAttrs.version;
-    hash = "sha256-XjpGhdHYzTCFtQ2W9KD8VY7RSvQPPgbxJD80GIAaKFM=";
+    hash = "sha256-VKxCDvL5y5K0GkV1tGN9SrWlewtoW/CSR4B/cu20Bxg=";
   };
 
-  cargoHash = "sha256-lOH8mrZiauXoI7jYFHQ/klo9enS0aOixk5b6InUED2o=";
+  cargoHash = "sha256-rRzzuVAM0Kf6Fc7tcUzSstT7WMMDIgCRoMNDqjbz1NA=";
 
   nativeBuildInputs = [ pkg-config ];
 

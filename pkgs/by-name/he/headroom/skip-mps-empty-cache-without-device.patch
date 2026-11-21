@@ -1,0 +1,18 @@
+diff --git a/headroom/models/ml_models.py b/headroom/models/ml_models.py
+index 73765fcb..1d3deadd 100644
+--- a/headroom/models/ml_models.py
++++ b/headroom/models/ml_models.py
+@@ -129,7 +129,12 @@ class MLModelRegistry:
+                 torch.cuda.empty_cache()
+ 
+             mps = getattr(torch, "mps", None)
+-            if mps is not None and hasattr(mps, "empty_cache"):
++            # Calling empty_cache() without an MPS device segfaults.
++            if (
++                mps is not None
++                and hasattr(mps, "empty_cache")
++                and getattr(mps, "is_available", lambda: True)()
++            ):
+                 mps.empty_cache()
+ 
+     @classmethod

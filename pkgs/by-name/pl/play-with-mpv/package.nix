@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   fetchurl,
-  youtube-dl,
+  yt-dlp,
 }:
 
 let
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication {
   ];
 
   propagatedBuildInputs = [
-    youtube-dl
+    yt-dlp
   ];
 
   # package has no tests

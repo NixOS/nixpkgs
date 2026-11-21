@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyvcf2";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brentp";
     repo = "cyvcf2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XDo2cEcZm5y6u9Gc2e7q2tg8pt3C/5cmnWRe6Dr5x7M=";
+    hash = "sha256-ilidZhLvxFnA3qIRfifz1qCzdVgiL5zUPRJudFSPnNU=";
   };
 
   build-system = [

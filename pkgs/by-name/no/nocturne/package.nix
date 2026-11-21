@@ -19,6 +19,7 @@
   libportal,
   libportal-gtk4,
   gobject-introspection,
+  libglycin,
   libsecret,
   gst_all_1,
   xdg-user-dirs,
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Nocturne";
     tag = finalAttrs.version;
-    hash = "sha256-wFLsbBXbKo6z0DGxv427Vi8WkQiIE9k49ftIsVZYq5c=";
+    hash = "sha256-EzEmEwmyudPBYU/5M+0xVdOiyiT99JU9dilMJzBmKpQ=";
   };
 
   __structuredAttrs = true;
@@ -67,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libportal
     libportal-gtk4
+    libglycin
     libsecret
     python3
     glib-networking

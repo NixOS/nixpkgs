@@ -6,24 +6,23 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "conpass";
-  version = "0.1.2";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "login-securite";
     repo = "conpass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7o4aQ6qpaWimWqgFO35Wht7mQsdVezoPTm7hp54FWR8=";
+    hash = "sha256-EXmmLL2z/jG3ThIyOXnJbYoorOg40HRhJ/74hN44NO4=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     impacket
     python-ldap
     rich
+    typer
   ];
 
   # Project has no tests

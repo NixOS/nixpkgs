@@ -5,8 +5,10 @@
   fetchFromGitHub,
   rustPlatform,
   pythonAtLeast,
+  pkgs,
 
   # buildInputs
+  aws-lc,
   openssl,
 
   # nativeBuildInputs
@@ -27,6 +29,7 @@
   # tests
   aiohttp,
   boto3,
+  cacert,
   datafusion,
   duckdb,
   pandas,
@@ -40,21 +43,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.40.0";
+  version = "0.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6L6ayJJaL8nhO+ep9Us1zq+bYDaUashVjmzW1ji8yAk=";
+    hash = "sha256-abf4D6TSdeyxJyjengqus5zW/sef0/NfsvxrxDFjEVw=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-aNTHrXC8Zheg5NG8Ew+jQNRcNLmZeVznzQqQgzRo9+s=";
+    hash = "sha256-znaeSv/jsHoJk8sqPZck8RmJs8La4KBUg05foG28O/I=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -98,7 +101,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    (pkgs.__splicedPackages.zstd or pkgs.zstd)
   ];
 
   dependencies = [
@@ -119,6 +124,8 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     aiohttp
     boto3
+    # reqwest panics with "No CA certificates were loaded from the system" otherwise
+    cacert
     datafusion
     duckdb
     pandas
@@ -162,6 +169,9 @@ buildPythonPackage (finalAttrs: {
     # TypeError: FFILanceTableProvider.__datafusion_table_provider__() missing 1 required positional
     # argument: 'session'
     "test_sql_query"
+
+    # AssertionError: the LanceDB native extension must use rustls ...
+    "test_native_extension_does_not_link_openssl"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # TypeError: Converting Pydantic type to Arrow Type: unsupported type

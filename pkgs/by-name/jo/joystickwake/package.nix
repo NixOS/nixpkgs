@@ -1,45 +1,69 @@
 {
   lib,
-  python3,
   fetchFromCodeberg,
+  installShellFiles,
+  nix-update-script,
+  python3Packages,
+  versionCheckHook,
 }:
-python3.pkgs.buildPythonApplication (finalAttrs: {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "joystickwake";
-  version = "0.5.2";
+  version = "1.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "forestix";
     repo = "joystickwake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qIXXlwZec4CQk93gmY5O3mdGdlNCeXWTr/DDw4vwRUM=";
+    hash = "sha256-p2zhoOLO3WLyn5U6X1c4diywNBmOZNb7Y9l9RoZDlQo=";
   };
 
-  build-system = with python3.pkgs; [
+  # Make the path relative to put it under $out instead of /etc
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "/etc/xdg/autostart" "etc/xdg/autostart"
+  '';
+
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  nativeBuildInputs = [
+    installShellFiles
+    python3Packages.docutils
+  ];
+
+  dependencies = with python3Packages; [
     dbus-fast
     pyudev
     python-xlib
   ];
 
   postInstall = ''
-    # autostart file
-    ln -s $out/${python3.sitePackages}/etc $out/etc
+    rst2man README.rst joystickwake.1
+    installManPage joystickwake.1
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Joystick-aware screen waker";
-    mainProgram = "joystickwake";
     longDescription = ''
       Linux gamers often find themselves unexpectedly staring at a blank screen, because their display server fails to recognize game controllers as input devices, allowing the screen blanker to activate during gameplay.
-      This program works around the problem by temporarily disabling screen blankers when joystick activity is detected.
+      This program works around the problem by suppressing screen blankers while joystick activity is detected.
     '';
     homepage = "https://codeberg.org/forestix/joystickwake";
-    maintainers = with lib.maintainers; [ bertof ];
+    changelog = "https://codeberg.org/forestix/joystickwake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bertof ];
     platforms = lib.platforms.linux;
+    mainProgram = "joystickwake";
   };
 })

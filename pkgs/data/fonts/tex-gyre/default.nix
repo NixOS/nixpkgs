@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -17,13 +18,9 @@ let
         inherit hash;
       };
 
-      installPhase = ''
-        runHook preInstall
-
-        install -Dm644 -t $out/share/fonts/opentype *.otf
-
-        runHook postInstall
-      '';
+      nativeBuildInputs = [
+        installFonts
+      ];
 
       meta = {
         description = "TeX Gyre ${variant} font family";

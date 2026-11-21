@@ -5,18 +5,23 @@
   autoPatchelfHook,
   qt5,
   libusb1,
+  libxrandr,
+  libxtst,
   pname,
   version,
-  url,
   hash,
 }:
 
+let
+  date = lib.last (lib.splitString "-" version);
+  year20xx = lib.substring 0 2 date;
+  month = lib.substring 2 2 date;
+  url = "https://download01.xp-pen.com/file/20${year20xx}/${month}/XPPenLinux${version}.tar.gz";
+in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchzip {
-    name = "XPPenLinux${version}.tar.gz";
-    extension = "tar.gz";
     inherit url hash;
   };
 
@@ -28,6 +33,10 @@ stdenv.mkDerivation {
   buildInputs = [
     qt5.qtbase
     libusb1
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "4") [
+    libxrandr
+    libxtst
   ];
 
   dontConfigure = true;

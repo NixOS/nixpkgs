@@ -23,6 +23,7 @@
   systemd,
   xdp-tools,
   zlib,
+  removeReferencesTo,
 }:
 let
   lua = lua5_2_compat;
@@ -46,6 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-aM2xhk8Jesvbn5t+lu8tlb11lHM8thQ3Qf//VTcjri0=";
     })
   ];
+
+  # Avoid embedding /nix/store paths
+  postConfigure = ''
+    sed -i -E \
+      '/PKG_CONFIG_PATH=/ s#/nix/store/[0-9a-z]{32}-#/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-#g' \
+      config.h
+  '';
+
   nativeBuildInputs = [
     cargo
     pkg-config
@@ -53,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     python3.pkgs.pyyaml
     rustPlatform.cargoSetupHook
+    removeReferencesTo
   ];
 
   buildInputs = [
@@ -101,6 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   enableParallelBuilding = true;
+
+  postFixup = ''
+    remove-references-to -t ${boost.dev} $out/bin/dnsdist
+  '';
 
   passthru.tests = nixosTests.dnsdist;
 

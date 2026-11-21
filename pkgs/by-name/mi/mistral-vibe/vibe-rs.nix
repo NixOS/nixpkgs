@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   alsa-lib,
+  aws-lc,
   oniguruma,
   cacert,
   coreutils,
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     oniguruma
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

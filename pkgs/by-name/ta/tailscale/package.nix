@@ -29,7 +29,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "tailscale";
-  version = "1.104.5";
+  version = "1.104.6";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ buildGo127Module (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aq4pBe75wNRFDEa3kSDa/pBLsZws5mOUOjHDUycpmXM=";
+    hash = "sha256-oF3izFlknJRuEYp3rw1urN4XKZPvjtda6lsIw9arRvs=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ buildGo127Module (finalAttrs: {
     })
   ];
 
-  vendorHash = "sha256-RvaouD88naVNOPJBVcqMaAn+ovjXI4g83ShCdRiR5/Q=";
+  vendorHash = "sha256-IJ0m56UP0RyMBE5eQeQ082EMJZfvrgE37lfPHE2ujCA=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -191,7 +191,8 @@ buildGo127Module (finalAttrs: {
     installShellCompletion --cmd tailscale \
       --bash <($out/bin/tailscale completion bash) \
       --fish <($out/bin/tailscale completion fish) \
-      --zsh <($out/bin/tailscale completion zsh)
+      --zsh <($out/bin/tailscale completion zsh) \
+      --powershell <($out/bin/tailscale completion powershell)
   '';
 
   passthru.tests =

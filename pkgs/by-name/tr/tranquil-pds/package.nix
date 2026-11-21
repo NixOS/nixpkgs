@@ -11,15 +11,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tranquil-pds";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromTangled {
     did = "did:plc:jj6ajj6duxnlthwtnob4qyuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qsV7AXQHITaWQ3lFGyvdukV8gcVoI4P02QWS4BsZxIQ=";
+    hash = "sha256-0/eBbeO31lCI99TNSSQlk9QaWzegpAuYyGCQMupPb9s=";
   };
 
-  cargoHash = "sha256-K4wTFCEozwqAoaFFPhN6ZgonPB1FBuFDT9mjNHumHcs=";
+  cargoHash = "sha256-r6j925a6PfVKNLg60vxKRVw4rddLsGtQ0G2/KvyGw3Q=";
 
   __structuredAttrs = true;
 
@@ -43,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tranquil ATProto Personal Data Server implementation written in Rust";
     homepage = "https://tangled.org/tranquil.farm/tranquil-pds";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ nelind ];
+    maintainers = with lib.maintainers; [
+      nelind
+      pyrox0
+    ];
     mainProgram = "tranquil-server";
   };
 })

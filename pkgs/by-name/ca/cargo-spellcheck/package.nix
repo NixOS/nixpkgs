@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
+  pkg-config,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,7 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-0TsDcdO7qCVcj6eNVu/lcehwsO2IhpNzW1C9zLbXXJs=";
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
+
+  buildInputs = [ oniguruma ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 

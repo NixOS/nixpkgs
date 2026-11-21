@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "5.1.6";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-CMLTtwvNMvRULOR9VpsPDOfF7710lxzeSPfArX7MTYE=";
+    hash = "sha256-Vm3n2IgAbmbRNC/RZhgf+XNffgQzPCyumrCQlOCltYw=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-EYtpxi9sTpn5Xpvf84UGAFkqJS+/p9vHwNUu/Vve4pg=";
+  npmDepsHash = "sha256-92dswMIbCDixBYqruWsZAveewkKlyhdNhCvo5Gt/DNc=";
   makeCacheWritable = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -94,7 +94,10 @@ buildNpmPackage rec {
       icon = "blockbench";
       desktopName = "Blockbench";
       comment = meta.description;
-      categories = [ "3DGraphics" ];
+      categories = [
+        "3DGraphics"
+        "Graphics"
+      ];
       startupWMClass = "Blockbench";
       terminal = false;
     })

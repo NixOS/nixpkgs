@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "django-ninja";
-  version = "1.7.1";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vitalik";
     repo = "django-ninja";
     tag = "v${version}";
-    hash = "sha256-/KsFq6LgaRMxMHmWO5vuzeVZTsmnERTbuS2ne4jc6eA=";
+    hash = "sha256-+/uDtgUyXYwpLCzKzHgKqYTdy9js4/XQnYUxztd/uc4=";
   };
 
   build-system = [ flit-core ];

@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pynx584";
-  version = "0.9.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "pynx584";
     tag = finalAttrs.version;
-    hash = "sha256-hTBi/muMmPrn7AVHQuuM3egADW+p18eFzU7l6bN/NkM=";
+    hash = "sha256-KZ5wdWIs5lnUPQyeWsP+iR4NtLLZZ1husFzNsu1keKI=";
   };
 
   build-system = [ setuptools ];

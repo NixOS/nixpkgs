@@ -554,13 +554,6 @@ let
             nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
           });
 
-          zig-mode = super.zig-mode.overrideAttrs (attrs: {
-            postPatch = attrs.postPatch or "" + ''
-              substituteInPlace zig-mode.el \
-                --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${lib.getExe pkgs.zig}"'
-            '';
-          });
-
           zmq = super.zmq.overrideAttrs (old: {
             stripDebugList = [ "share" ];
             preBuild = ''
@@ -959,6 +952,9 @@ let
 
           # needs network during compilation
           consult-gh-with-pr-review = ignoreCompilationError super.consult-gh-with-pr-review;
+
+          # tightly coupled to ghostel (from manual-packages), use the same source
+          consult-ghostel = externalSrc super.consult-ghostel self.ghostel;
 
           counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 

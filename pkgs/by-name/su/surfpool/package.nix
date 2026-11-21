@@ -6,6 +6,8 @@
   pkg-config,
   versionCheckHook,
   openssl,
+  sqlite,
+  zstd,
 }:
 
 let
@@ -39,7 +41,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+    zstd
+  ];
 
   doInstallCheck = true;
 

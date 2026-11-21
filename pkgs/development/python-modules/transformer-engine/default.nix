@@ -3,7 +3,6 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   python,
   cudaPackages,
@@ -37,6 +36,8 @@
   nvdlfw-inspect,
   onnx,
   onnxscript,
+  # jax-only:
+  triton,
 
   # passthru
   pytestCheckHook,
@@ -98,7 +99,7 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.20.2";
+  version = "2.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -107,35 +108,18 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-YXo0LIq13HNVrYa19npDoLRrB2NY4IjZb3E+asblBnQ=";
+    hash = "sha256-vncBah8PBZGxnVI5XcWTHFZiHQHaQ1Sjo1ZI+9di4kk=";
   };
 
-  patches =
-    # Never destroy cuda_driver::call's symbol caches, the KernelManager (which unloads its NVRTC modules) or the
-    # fused-attention graph caches (which destroy cuDNN plans retained by CUDA graphs). Without these, processes that ran
-    # an NVRTC kernel or captured fused attention into a CUDA graph can segfault at exit.
-    # https://github.com/NVIDIA/TransformerEngine/pull/3733 (merged after 2.20.2); drop it once a release contains it.
-    [
-      (fetchpatch {
-        name = "never-destroy-exit-statics.patch";
-        url = "https://github.com/NVIDIA/TransformerEngine/commit/dd628d3a11b7b52908ea5b7bba7d38d739df6f55.patch";
-        includes = [
-          "transformer_engine/common/fused_attn/graph_cache.h"
-          "transformer_engine/common/util/cuda_driver.h"
-          "transformer_engine/common/util/rtc.cpp"
-        ];
-        hash = "sha256-96O66tXnfVMWw7L39if1ME4GTlTvSAroOyh+fRFIIC8=";
-      })
-    ]
-    ++ optionals cudaSupport [
-      (replaceVars ./cuda-libs-paths.patch {
-        libcudnn_so = "${getLib cudaPackages.cudnn}/lib/libcudnn.so";
-        libnvrtc_so = "${getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so";
-        libcurand_so = "${getLib cudaPackages.libcurand}/lib/libcurand.so";
+  patches = optionals cudaSupport [
+    (replaceVars ./cuda-libs-paths.patch {
+      libcudnn_so = "${getLib cudaPackages.cudnn}/lib/libcudnn.so";
+      libnvrtc_so = "${getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so";
+      libcurand_so = "${getLib cudaPackages.libcurand}/lib/libcurand.so";
 
-        cudart_include_dir = "${getInclude cudaPackages.cuda_cudart}/include";
-      })
-    ];
+      cudart_include_dir = "${getInclude cudaPackages.cuda_cudart}/include";
+    })
+  ];
 
   postPatch =
     # Patch build-system requirements:
@@ -278,6 +262,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   ++ optionals withJax [
     flax
     jax
+    triton
   ]
   ++ optionals withPytorch [
     einops

@@ -9,6 +9,12 @@
   cargo,
   rustc,
 
+  # nativeBuildInputs
+  pkg-config,
+
+  # buildInputs
+  zstd,
+
   # dependencies
   arro3-core,
   arviz,
@@ -56,6 +62,14 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     rustc
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
   ];
 
   dependencies = [

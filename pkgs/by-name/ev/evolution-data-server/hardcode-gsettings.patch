@@ -178,10 +178,10 @@ index 8bf2aed..5090738 100644
  	cbc->priv->update_alarms_id = 0;
  	cbc->priv->alarm_enabled = FALSE;
 diff --git a/src/calendar/backends/file/e-cal-backend-file.c b/src/calendar/backends/file/e-cal-backend-file.c
-index ccf87f0..228c546 100644
+index 67ea115..f0f5936 100644
 --- a/src/calendar/backends/file/e-cal-backend-file.c
 +++ b/src/calendar/backends/file/e-cal-backend-file.c
-@@ -3698,7 +3698,20 @@ e_cal_backend_file_receive_objects (ECalBackendSync *backend,
+@@ -3701,7 +3701,20 @@ e_cal_backend_file_receive_objects (ECalBackendSync *backend,
  			if (is_declined) {
  				GSettings *settings;
  
@@ -244,7 +244,7 @@ index a51c457..13cb4fe 100644
  		g_signal_connect_object (
  			watcher->priv->desktop_settings,
 diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
-index 5e5db03..3279dcf 100644
+index 6c080be..409852f 100644
 --- a/src/calendar/libedata-cal/e-cal-meta-backend.c
 +++ b/src/calendar/libedata-cal/e-cal-meta-backend.c
 @@ -149,7 +149,18 @@ ecmb_is_power_saver_enabled (void)
@@ -267,7 +267,7 @@ index 5e5db03..3279dcf 100644
  
  	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
  		GPowerProfileMonitor *power_monitor;
-@@ -2606,7 +2617,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
+@@ -2610,7 +2621,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
  			if (is_declined) {
  				GSettings *settings;
  
@@ -507,7 +507,7 @@ index d354463..1c02ad1 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index 801fc67..281125b 100644
+index 9126b92..26f628f 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
 @@ -89,7 +89,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
@@ -531,10 +531,10 @@ index 801fc67..281125b 100644
  	g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-source-registry.c b/src/libedataserver/e-source-registry.c
-index d336cc9..42dd5ab 100644
+index 91c92f1..296b6af 100644
 --- a/src/libedataserver/e-source-registry.c
 +++ b/src/libedataserver/e-source-registry.c
-@@ -1738,7 +1738,19 @@ e_source_registry_init (ESourceRegistry *registry)
+@@ -1763,7 +1763,19 @@ e_source_registry_init (ESourceRegistry *registry)
  
  	g_mutex_init (&registry->priv->sources_lock);
  

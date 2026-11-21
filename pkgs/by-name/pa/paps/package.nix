@@ -2,35 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
   fmt_11,
   glib,
+  libpaper,
   pango,
   versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "paps";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "dov";
     repo = "paps";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-bNF/kZl/fGAT+He9kMHYj5ERhJwCJJABjhV3H+bs3D0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4SZOIV5Lp1qqC1RH+jYYfgOMmh7uBELIB1o1Bhrtzbw=";
   };
-
-  patches = [
-    # remove when 0.8.1 is released
-    (fetchpatch {
-      url = "https://github.com/dov/paps/commit/e9270aaac5e0b8018a6fad9a562ee48e7b2c3113.patch";
-      name = "fix-g_utf8_next_char-cast";
-      hash = "sha256-fedkyjd8cGFUuUQCbGii7wfMCmK6vye/1/vHWuJiJI4=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -40,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fmt_11
     glib
+    libpaper
     pango
   ];
 
@@ -50,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pango to PostScript converter";
     homepage = "https://github.com/dov/paps";
     license = lib.licenses.lgpl2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
     mainProgram = "paps";
   };

@@ -1,44 +1,50 @@
 {
   lib,
-  stdenv,
-  fetchYarnDeps,
+  buildNpmPackage,
   fetchFromGitHub,
-  yarnConfigHook,
-  npmHooks,
-  nodejs,
+  jq,
   git,
+  versionCheckHook,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "auto-changelog";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "cookpete";
     repo = "auto-changelog";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ticQpDOQieLaWXfavDKIH0jSenRimp5QYeJy42BjpKw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-STW2iYn2/yJDU0lLDgvaNV/GM8+BzyYCt8bHYUc3AnM=";
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-NGQbzogQi0XbeGd7fYNyw0i9Yo9j91CfeTdO7nhq4Yw=";
-  };
+  # upstream doesn't ship a lockfile, the vendored one only covers runtime deps
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+    ${lib.getExe jq} 'del(.devDependencies)' package.json > package.json.tmp
+    mv package.json.tmp package.json
+  '';
 
-  nativeBuildInputs = [
-    yarnConfigHook
-    npmHooks.npmInstallHook
-    nodejs
+  npmDepsHash = "sha256-McMDjN+O5ds2XelNP3m8nBfu7ffJGXJmc5Omv280TWY=";
+
+  dontNpmBuild = true;
+  dontNpmPrune = true;
+
+  npmPackFlags = [ "--ignore-scripts" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    git
+    versionCheckHook
   ];
 
-  doCheck = true;
-
-  nativeCheckInputs = [ git ];
-
-  checkPhase = ''
-    runHook preCheck
-    yarn --offline run test -i -g 'compileTemplate'
-    runHook postCheck
+  postInstallCheck = ''
+    export HOME=$TMPDIR
+    repo=$(mktemp -d)
+    git -C "$repo" init -q
+    git -C "$repo" -c user.name=nix -c user.email=nix@localhost commit -q --allow-empty -m init
+    git -C "$repo" tag v0.1.0
+    (cd "$repo" && $out/bin/auto-changelog --stdout) | grep -q 'v0.1.0'
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -46,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Command line tool for generating a changelog from git tags and commit history";
     homepage = "https://github.com/cookpete/auto-changelog";
-    changelog = "https://github.com/cookpete/auto-changelog/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/cookpete/auto-changelog/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "auto-changelog";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ samirbgno ];
   };
 })

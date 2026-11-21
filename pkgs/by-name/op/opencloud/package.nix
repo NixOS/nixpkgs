@@ -1,11 +1,11 @@
 import ./generic.nix {
-  version = "8.1.0";
+  version = "9.1.0";
   production = false;
-  hash = "sha256-Y7S26FWP+QkOdbuwu32xOgpAoupIoOnCu3KtzNjKev0=";
-  webVersion = "8.1.0";
-  webHash = "sha256-AiRxobjUk38IqCoSzoijMbLPzQGdSFeRCTIkKGfcR90=";
-  webPnpmDepsHash = "sha256-z+uy+Ys0wflLNtUqbfETfkztOmkN72cAptBPOytdMXg=";
-  idpWebPnpmDepsHash = "sha256-rj6KFrzuINVpxrrel2p2iWtJVH8Zg1jrZEIAs8S+8Qs=";
+  hash = "sha256-AZr4JB6PmCx1jqYzzETU/QgTMlDcmu31KQEhDzZbW8s=";
+  webVersion = "8.2.2";
+  webHash = "sha256-HyuHWi4G39MN6rQpqbduCbcmKqOQhMHpxKzwn2XpEM8=";
+  webPnpmDepsHash = "sha256-n6zv/QpZw81qDrFP/QmU3VTf+zbX0Vn2SpemB1MvfNA=";
+  idpWebPnpmDepsHash = "sha256-k6CzXQuUMXWiUnviljRx1u1ApmORRZhdlUQBlgMh02I=";
   nixUpdateExtraArgs = [
     "--override-filename"
     "pkgs/by-name/op/opencloud/package.nix"

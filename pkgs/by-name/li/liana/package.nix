@@ -12,6 +12,7 @@
   fontconfig,
   freetype,
   libGL,
+  sqlite,
   udev,
   libxkbcommon,
   wayland,
@@ -62,6 +63,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     fontconfig
+    sqlite
     udev
   ];
 

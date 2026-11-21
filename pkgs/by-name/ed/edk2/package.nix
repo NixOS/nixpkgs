@@ -86,6 +86,19 @@ stdenv.mkDerivation (finalAttrs: {
       ]}
       )
 
+      # de-vendor brotli
+      local -r path=BaseTools/Source/C/BrotliCompress/brotli
+      rm -r $path
+      cp -r ${buildPackages.brotli.src} $path
+      chmod -R u+w $path
+
+      ${lib.concatMapStringsSep "\n" (
+        patch: "patch -p1 -d $path < ${patch}"
+      ) buildPackages.brotli.patches}
+
+      rm -r MdeModulePkg/Library/BrotliCustomDecompressLib/brotli
+      cp -r $path MdeModulePkg/Library/BrotliCustomDecompressLib/brotli
+
       # enable compilation using Clang
       # https://bugzilla.tianocore.org/show_bug.cgi?id=4620
       substituteInPlace BaseTools/Conf/tools_def.template --replace-fail \

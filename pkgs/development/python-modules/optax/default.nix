@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "optax";
-  version = "0.2.8";
+  version = "0.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "optax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dVmMacQx6V5lv0z4nWUTlekuEDqtIZlxJazAeA9UR+E=";
+    hash = "sha256-K/N46I6TA6uiRtQqN4L5k9bas4ZgbcjWibNiHRrKHjE=";
   };
 
   outputs = [

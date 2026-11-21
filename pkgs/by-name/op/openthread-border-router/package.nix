@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openthread-border-router";
-  version = "2026.10.0";
+  version = "2026.11.0";
 
   src = fetchFromGitHub {
     owner = "openthread";
     repo = "ot-br-posix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-saTJ6lt9kNOdyNVvZ1RRg16KsgooSrT5+Y6zrj9Ifb4=";
+    hash = "sha256-Bjzfi2w3atDCWMJwZ71nDx2SCDrkNZsujOmtsLMjaEA=";
     fetchSubmodules = true;
   };
 

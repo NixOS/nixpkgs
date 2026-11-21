@@ -1,23 +1,23 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   cmake,
-  pkg-config,
+  fetchFromGitHub,
   ffmpeg-headless,
-  libpng,
+  lib,
   libjpeg,
+  libpng,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpegthumbnailer";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1FM0jMzCdLLi91B4Vtcfa9Yiz23DPXRHi12lzgTurr0=";
+    hash = "sha256-LvurrguCs/NOs4pZ+zbvWFGJ25pYeKO9vblfwEtC/LE=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     ffmpeg-headless
-    libpng
     libjpeg
+    libpng
   ];
 
   cmakeFlags = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = "FFmpegthumbnailer is a lightweight video
         thumbnailer that can be used by file managers to create thumbnails
         for your video files. The thumbnailer uses ffmpeg to decode frames
-        from the video files, so supported videoformats depend on the
+        from the video files, so supported video formats depend on the
         configuration flags of ffmpeg.
         This thumbnailer was designed to be as fast and lightweight as possible.
         The only dependencies are ffmpeg and libpng/libjpeg.
@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "ffmpegthumbnailer";
+    maintainers = with lib.maintainers; [ gaelj ];
   };
 })

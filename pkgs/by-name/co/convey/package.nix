@@ -4,6 +4,7 @@
   fetchFromGitLab,
   pkg-config,
   gtk4,
+  ibus,
   vala,
   enchant,
   wrapGAppsHook3,
@@ -50,14 +51,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "convey";
-  version = "50.2-1";
+  version = "51.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "donnybeelo";
     repo = "convey";
     tag = finalAttrs.version;
-    hash = "sha256-YFdAhC7xPGaqEdDuv1Kb6b1NHjivfkc+TnXEGhpkdQw=";
+    hash = "sha256-5bkxYYzh1rmxGaF1hweTk3XH3Cp0HgQAvH9UlXXIXlk=";
   };
 
   strictDeps = true;
@@ -92,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gtk4
+    ibus
     icu
     isocodes
     json-glib
@@ -148,6 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     # Add geary to path for geary-attach
     gappsWrapperArgs+=(--prefix PATH : "$out/bin")
+    # Prefer the ibus immodules built against the same GTK as this package.
+    gappsWrapperArgs+=(--prefix GTK_PATH : "${lib.getLib ibus}/lib/gtk-4.0")
   '';
 
   meta = {

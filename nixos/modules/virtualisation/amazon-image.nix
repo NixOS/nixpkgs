@@ -14,6 +14,10 @@
 let
   inherit (lib) mkDefault mkIf;
   cfg = config.ec2;
+  efiBoot = cfg.bootMode != "legacy-bios";
+  biosBoot = cfg.bootMode != "uefi";
+  # The Limine image has an ESP even when it boots with legacy BIOS.
+  hasEsp = efiBoot || config.boot.loader.limine.enable;
 in
 
 {
@@ -29,35 +33,40 @@ in
 
   config = {
 
-    assertions = [ ];
+    assertions = [
+      {
+        assertion = biosBoot -> pkgs.stdenv.hostPlatform.isx86;
+        message = "ec2.bootMode = \"${cfg.bootMode}\" needs legacy BIOS, which only x86 instances have.";
+      }
+    ];
 
     boot.growPartition = true;
 
-    fileSystems."/" = mkIf (!cfg.zfs.enable) (
-      lib.mkDefault {
-        device = "/dev/disk/by-label/nixos";
-        fsType = "ext4";
-        autoResize = true;
-      }
-    );
+    fileSystems."/" = lib.mkDefault {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
+      autoResize = true;
+    };
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) (
+    fileSystems.${config.boot.loader.efi.efiSysMountPoint} = mkIf hasEsp (
       lib.mkDefault {
-        # The ZFS image uses a partition labeled ESP whether or not we're
-        # booting with EFI.
         device = "/dev/disk/by-label/ESP";
         fsType = "vfat";
+        options = [
+          "fmask=0077"
+          "dmask=0077"
+        ];
       }
     );
-
-    services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
-
-    boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
     ];
-    boot.initrd.availableKernelModules = [ "nvme" ];
+    boot.initrd.availableKernelModules = [
+      "nvme"
+    ]
+    # Xen instance types, such as t2, need it to find the root disk.
+    ++ lib.optional pkgs.stdenv.hostPlatform.isx86 "xen-blkfront";
     boot.kernelParams =
       let
         # Amazon recommends setting this to the highest possible value for a good EBS
@@ -81,15 +90,22 @@ in
       "xen_fbfront"
     ];
 
-    boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
-    boot.loader.grub.efiSupport = cfg.efi;
-    boot.loader.grub.efiInstallAsRemovable = cfg.efi;
+    boot.loader.grub.device = if biosBoot then "/dev/xvda" else "nodev";
+    boot.loader.grub.efiSupport = efiBoot;
+    boot.loader.grub.efiInstallAsRemovable = efiBoot;
     boot.loader.timeout = 1;
     boot.loader.grub.extraConfig = ''
       serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
       terminal_output console serial
       terminal_input console serial
     '';
+    boot.loader.limine = {
+      efiSupport = efiBoot;
+      efiInstallAsRemovable = efiBoot;
+      biosSupport = biosBoot;
+      biosDevice = if biosBoot then "/dev/xvda" else "nodev";
+      extraConfig = "serial: yes";
+    };
 
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];

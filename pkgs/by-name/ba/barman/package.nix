@@ -29,6 +29,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace src/barman/encryption.py \
       --replace-fail '"file"' '"${lib.getExe file}"'
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.11.17,<0.13' 'uv_build>=0.11.17'
   '';
 
   build-system = with python3Packages; [

@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   cmake,
   ninja,
@@ -25,7 +24,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unified-memory-framework";
-  version = "1.2.0";
+  version = "1.3.0";
 
   nativeBuildInputs = [
     cmake
@@ -61,30 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oneapi-src";
     repo = "unified-memory-framework";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HC4ZtW9rcoY9krWJnhdD/vwborBVKjbaZKyS/5MmRjw=";
+    hash = "sha256-yMFKUUS05obXTI0T3G1QYtT+hbjdjY18BuYueOtRjco=";
   };
 
   strictDeps = true;
   __structuredAttrs = true;
-
-  patches = [
-    # The IPC test scripts put `#!/bin/bash` after the license header, so
-    # ctest cannot execute them (exec format error).
-    # https://github.com/oneapi-src/unified-memory-framework/pull/1618
-    (fetchpatch {
-      name = "move-shebangs-to-the-top.patch";
-      url = "https://github.com/oneapi-src/unified-memory-framework/commit/3ab0bc195f72060555f154475ec3abe01d2ba742.patch";
-      hash = "sha256-0+dgOFNmGrxXPWxtsc1mvzj0V8+eJhH2HkGooDcNdhs=";
-    })
-    # Several file provider tests share a backing file name in the same
-    # working directory and race when ctest runs them in parallel.
-    # https://github.com/oneapi-src/unified-memory-framework/pull/1620
-    (fetchpatch {
-      name = "use-different-temporary-file-names.patch";
-      url = "https://github.com/oneapi-src/unified-memory-framework/commit/afa229239daabfee2722f780f83d933654d5965a.patch";
-      hash = "sha256-mDQCz9sAxFemsGGhY6hwx4vsQgSrchuik/a4+7Gdp9M=";
-    })
-  ];
 
   postPatch = ''
     # The CMake tries to find out the version via git.

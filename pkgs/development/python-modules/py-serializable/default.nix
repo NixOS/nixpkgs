@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "py-serializable";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "madpah";
     repo = "serializable";
     tag = "v${version}";
-    hash = "sha256-nou1/80t9d2iKOdZZbcN4SI3dlvuC8T55KMCP/cDEEU=";
+    hash = "sha256-ao/PWyUAuVewe/BmugsEubtFkOSJ+wGDn/Vh01ctKP4=";
   };
 
   build-system = [ poetry-core ];

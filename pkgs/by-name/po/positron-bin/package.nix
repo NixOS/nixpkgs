@@ -32,7 +32,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2026.09.1-2";
+  version = "2026.11.1-4";
 in
 stdenv.mkDerivation {
   dontFixup = stdenv.hostPlatform.isDarwin;
@@ -42,17 +42,17 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/mac/arm64/Positron-${version}-arm64.dmg";
-        hash = "sha256-+QIAnlikidPkath2DayaWw6pkeT4A/a69W5AMiVha8s=";
+        hash = "sha256-UGF/E5BoDyqfEhBEYwLfMlJ5+jE/81Wv5mRCFwtiVH0=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-k7A/KrXPJAkXsGlrijqmMyjyhrQroSLzbfmOyIVz8pI=";
+        hash = "sha256-5rjkfF3UOEmezcRMGqmPlst7RM+OeaMazpF8jQoHiGc=";
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-IfqVmvaIR9uwwT89OthGZf8VbgryCoBGnEodXbAYIJs=";
+        hash = "sha256-NWmBXtVAg63YGnhW+BszotZLPI40nisM/4FU2PvykQY=";
       };
 
   buildInputs = [

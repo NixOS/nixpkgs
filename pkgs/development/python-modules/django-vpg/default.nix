@@ -1,9 +1,12 @@
 {
   lib,
   aws-lc,
+  boto3,
   buildPythonPackage,
+  cacert,
   django,
   django-async-backend,
+  fetchpatch,
   fetchFromGitLab,
   pkg-config,
   postgresql,
@@ -17,20 +20,29 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-vpg";
-  version = "0.4.0";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "django-vpg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OTmiTuEITDXvjfwfMsDsFGB+/RitpixPZkaQsgTccw8=";
+    hash = "sha256-rw91j+a7xbcfM/Xk9CR/dFpLJPFlkEFyQfFEpVkTxlI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-OogYNLzPk7Dxkzkevkjsgrl8fRb1TE9wEqhVIRkhknU=";
+    hash = "sha256-18MJRjbK/1R7sHCCbtOO9w2eJ3idfCFJIJvAynQZp6s=";
   };
+
+  patches = [
+    # psycopg 3.3.6 changed interval typmod 0xffff to mean unspecified precision
+    (fetchpatch {
+      url = "https://gitlab.com/glitchtip/django-vpg/-/commit/45878878a722d02af530be90ec054fe1ae99d28f.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-p3n0sIoBHrJxOEw1VgJV3mezQGIe1HwHteLwrZc7W/Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -47,6 +59,7 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     async = [ django-async-backend ];
+    aws = [ boto3 ];
   };
 
   pythonImportsCheck = [ "django_vpg" ];
@@ -62,15 +75,14 @@ buildPythonPackage (finalAttrs: {
   postgresqlEnableTCP = 1;
 
   nativeCheckInputs = [
+    cacert
     postgresql
     postgresqlTestHook
     pytest-asyncio
     pytest-postgresql
     pytestCheckHook
   ]
-  ++ lib.optionals (
-    lib.versions.major django.version == "6"
-  ) finalAttrs.passthru.optional-dependencies.async;
+  ++ finalAttrs.passthru.optional-dependencies.async;
 
   meta = {
     description = "Rust-powered PostgreSQL driver and Django database backend";
@@ -80,5 +92,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       felbinger
     ];
+    broken = lib.versionOlder django.version "6.1";
   };
 })

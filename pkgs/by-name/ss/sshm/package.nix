@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sshm";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "Gu1llaum-3";
     repo = "sshm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eqObVdyfGAD+kiIvRZZOHPVtFzYnGztVn2odsE+voLI=";
+    hash = "sha256-Vi41BWLLGZu3zd1mfT2eCzaQGLttO6fBb8kQUA8DORA=";
   };
 
   vendorHash = "sha256-aU/+bxcETs/Jq5FVAdiioyuc1AufvWeiqFQ7uo1cK1k=";

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   pytestCheckHook,
 }:
 
@@ -32,6 +33,8 @@ buildPythonPackage rec {
     "maxcube"
     "maxcube.cube"
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "V"; };
 
   meta = {
     description = "eQ-3/ELV MAX! Cube Python API";

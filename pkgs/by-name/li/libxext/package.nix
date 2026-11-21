@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       isc
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.smakarov ];
     pkgConfigModules = [ "xext" ];
     platforms = lib.platforms.unix;
   };

@@ -6,32 +6,38 @@
   npm-lockfile-fix,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "opencommit";
   version = "3.3.11";
 
   src = fetchFromGitHub {
     owner = "di-sukharev";
     repo = "opencommit";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wYwZlqItbjNjdScvPIx8/8ND3FTRsXwwu6e2WI19HcU=";
     postFetch = ''
-      cd $out
       # Fix lockfile issues with bundled dependencies
-      ${lib.getExe npm-lockfile-fix} package-lock.json
+      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
   npmDepsHash = "sha256-ID7xdL6loDYsCYzQgLp5daTYsIEyJQGK1VoKIZjlxgU=";
 
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    npm run test:unit
+    runHook postCheck
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "AI-powered commit message generator";
-    homepage = "https://www.npmjs.com/package/opencommit";
+    description = "Generate git commit messages with an LLM";
+    homepage = "https://github.com/di-sukharev/opencommit";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "oco";
   };
-
-}
+})

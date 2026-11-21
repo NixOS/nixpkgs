@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSDL2_INCLUDE_DIRS=${lib.getInclude SDL2}/include/SDL2"
   ];
 
+  # The game data has nothing to strip, and strip segfaults on some of its textures
+  ${if stdenv.hostPlatform.isDarwin then "stripExclude" else null} = [
+    "Applications/Bugdom.app/Contents/Resources/*"
+  ];
+
   installPhase = ''
     runHook preInstall
 

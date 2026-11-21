@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brutecraber";
-  version = "0.10.0";
+  version = "0.10.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Erikgavs";
     repo = "brutecraber";
     tag = finalAttrs.version;
-    hash = "sha256-2NbSqLa9+NIkdmiuSsX243xoZXc5DL1canlC/31nWXU=";
+    hash = "sha256-i2bhScXYZgdhT15NJYtGmqQXOAqZMlTDVSgkbDIRhfY=";
   };
 
-  cargoHash = "sha256-+jBNcwgR+HNzfDZ+SBFl+zmQgGJpl7ZyQzBRrDpZmPU=";
+  cargoHash = "sha256-PY041MrcsFWLQF5fmsdU+YEABcxsXkuvqyWSEM4oxBM=";
 
   buildInputs = [ ocl-icd ];
 

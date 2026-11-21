@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rdx";
-  version = "0.7.0";
+  version = "0.8.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Ch0pin";
     repo = "rdx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eu3S4NtRPHczeDJYrAIoqYN0wIeB4JWjL6xqFfS/fZ0=";
+    hash = "sha256-ycLHnqiZ/P1xKC1W0a0aXuy/2bsbM2tBv2pZKDs3RqI=";
   };
 
-  cargoHash = "sha256-TNXmBvrnDUw78Sixv2lZBAlKHsOB9YOvk1YxNbpy6JU=";
+  cargoHash = "sha256-Q32ihQVkgC5tMwf7bXQevi2UQhoUC/encrtlcuJnxiQ=";
 
   nativeBuildInputs = [ pkg-config ];
 

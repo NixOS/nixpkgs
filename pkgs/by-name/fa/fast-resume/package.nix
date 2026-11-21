@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fast-resume";
-  version = "2.14.0";
+  version = "2.14.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "angristan";
     repo = "fast-resume";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J8KCli0q7BiUU1eXbbWfkYWvKaNgMY0GtfG+nwb8qOg=";
+    hash = "sha256-ptLdVz27CyLZ2sebE3bnhKvIdbBbpEdr5fHqY7HNw34=";
   };
 
-  cargoHash = "sha256-2TaKJfNGbhzB17KUFyJp27DBRt3S8QnpqS8xvdZPjIs=";
+  cargoHash = "sha256-zEK3dmgzx7GO77vAZfE6WTVR43iCohpC4maMXl8uKKs=";
 
   nativeBuildInputs = [
     pkg-config

@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aver";
-  version = "0.30.0";
+  version = "0.36.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jasisz";
     repo = "aver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ncAPlJue+GGhfSB16jjTpC3V+b8Xc+9d4ITOCqywRf4=";
+    hash = "sha256-OwuKW97Q/+QIBZK52p/7UXDUCGvsNfOyBl04E3aclG4=";
   };
 
-  cargoHash = "sha256-J/X2X0HES4oZkYUKmsHFby/HhS3qXWptmbMqmExychs=";
+  cargoHash = "sha256-hFDlod4ZPhGD97hWLEFQyTHSm3P2wjaJ3vmDd23/QaY=";
 
   cargoBuildFlags = [
     "--workspace"

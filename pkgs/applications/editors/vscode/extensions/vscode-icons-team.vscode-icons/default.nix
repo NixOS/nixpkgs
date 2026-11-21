@@ -63,7 +63,7 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
   passthru = {
     vsix = finalAttrs.src;
     updateScript = nix-update-script {
-      attrPath = "vscode-extensions.kilocode.kilo-kode.vsix";
+      attrPath = "vscode-extensions.vscode-icons-team.vscode-icons.vsix";
     };
   };
 

@@ -11,19 +11,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "glitchtip-rust";
-  version = "0.9.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XQoJJ3w1HTyOtzjnsU2OD2IkOMLUSvIf+9Xd0sF9s5E=";
+    hash = "sha256-m3MgInmxcDW/kB9EfbpmrM7pWzw/RlmEpoRQwcmWGdQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-vXRcONfyrHCjcdfjHjpauoRTgiqcHgkBsNIS6VDPWpo=";
+    hash = "sha256-BcAoRg1JStwMleGoSE214cbHMjIg1v62Q+TYooWzS5Y=";
   };
 
   nativeBuildInputs = [

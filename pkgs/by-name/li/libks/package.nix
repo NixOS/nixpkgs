@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libks";
-  version = "2.0.11";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "libks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tPhGXDEAKgeODAcM6hu4GDU83A3Zi7sIMnTQkfCGlFc=";
+    hash = "sha256-56CmNhA7TpVLv/JlfrMhuPPFFNV6LRcjSYrQjRZtLnA=";
   };
 
   patches = [

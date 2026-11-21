@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "whirlpool-sixth-sense";
-  version = "2.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
     tag = finalAttrs.version;
-    hash = "sha256-s3chUYo3rMWLnDYioI3kPrd5GLERtnMihfWh6eqgI0Q=";
+    hash = "sha256-Tw+Denbgr1poQ8btQdvE34Flb7kpwfON8MZeqf9A1BQ=";
   };
 
   build-system = [ setuptools ];

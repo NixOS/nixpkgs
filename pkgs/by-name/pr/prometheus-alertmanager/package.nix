@@ -19,13 +19,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.34.2";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iOtR8wA9N63fop6ZqGN7AeJgGmSaUwUn552T8WHxtYc=";
+    hash = "sha256-5LvztWE9NyidvondMWQtDG1N2HpGHV3Urz9kNrUk7B0=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
   # don't copy elmUi into go vendor
   overrideModAttrs.postPatch = "";
 
-  vendorHash = "sha256-YtFwsrlRVoMX4w7PoKpBbYq21lEOtzQt3jnLOdXk7VI=";
+  vendorHash = "sha256-0pqugpISejz+OGSFShD/pGQQGloGvbiVUaW8Pv/rqpk=";
 
   subPackages = [
     "cmd/alertmanager"

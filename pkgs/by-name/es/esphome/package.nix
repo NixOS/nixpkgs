@@ -15,23 +15,18 @@
 }:
 
 let
-  python = python3Packages.python.override {
-    self = python;
-    packageOverrides = self: super: {
-      paho-mqtt = self.paho-mqtt_1;
-    };
-  };
+  python = python3Packages.python;
 in
-python.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.10.1";
+  version = "2026.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-JsPHa3aKHfSSdn31xGSn/+cKynQR8urmegDzCpZTjv0=";
+    hash = "sha256-JY7USkJL/+3yd+EE9atCgldrEFox8EZfDTrpKQ3X19w=";
   };
 
   patches = [
@@ -63,7 +58,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==84.0.0" "setuptools" \
+      --replace-fail "setuptools==84.2.1" "setuptools" \
       --replace-fail "wheel>=0.43,<0.49" "wheel"
   '';
 
@@ -219,7 +214,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       picnoir
       thanegill
       karlbeecken
-      tmarkus
+      AAAAAASomeThingsFailToEvaluate
     ];
     mainProgram = "esphome";
   };

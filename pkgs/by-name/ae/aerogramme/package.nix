@@ -1,39 +1,47 @@
 {
   lib,
   rustPlatform,
-  fetchgit,
+  fetchFromGitHub,
   nix-update-script,
   pkg-config,
   openssl,
+  libsodium,
+  aws-lc,
+  zstd,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aerogramme";
-  version = "0.3.0";
+  version = "0.6.0";
 
-  src = fetchgit {
-    url = "https://git.deuxfleurs.fr/Deuxfleurs/aerogramme/";
+  src = fetchFromGitHub {
+    owner = "deuxfleurs-org";
+    repo = "aerogramme";
     tag = finalAttrs.version;
-    hash = "sha256-ER+P/XGqNzTLwDLK5EBZq/Dl29ZZKl2FdxDb+oLEJ8Y=";
+    hash = "sha256-Ec3EaBnrdL1gU2oKSfNmJyRJwxv4AH74q+Qv/wZlaBc=";
   };
 
-  cargoPatches = [
-    ./0001-update-time-rs.patch
-  ];
+  # git.deuxfleurs.fr is not letting shallow clones of commits and getting timedout
+  postUnpack = ''
+    substituteInPlace "$sourceRoot/Cargo.lock" \
+      --replace-fail "https://git.deuxfleurs.fr/Deuxfleurs/garage.git" "https://github.com/deuxfleurs-org/garage.git"
+    substituteInPlace "$sourceRoot/Cargo.toml" \
+      --replace-fail "https://git.deuxfleurs.fr/Deuxfleurs/garage.git" "https://github.com/deuxfleurs-org/garage.git"
+  '';
 
-  cargoHash = "sha256-GPj8qhfKgfAadQD9DJafN4ec8L6oY62PS/w/ljkPHpw=";
-
-  # disable network tests as Nix sandbox breaks them
-  doCheck = false;
-
-  env = {
-    # get openssl-sys to use pkg-config
-    OPENSSL_NO_VENDOR = true;
-    RUSTC_BOOTSTRAP = true;
-  };
+  cargoHash = "sha256-oJS/OCDcjW9eLprr43uQByNv/p8z3Dh+D2ItgazP74g=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    libsodium
+    aws-lc
+    zstd
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

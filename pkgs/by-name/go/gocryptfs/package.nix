@@ -12,18 +12,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "gocryptfs";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "gocryptfs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-uQLFcabN418m1dvogJ71lJeTF3F9JycK/8qCPaXblSU=";
+    sha256 = "sha256-c7vBcaNlISzbkK5MFFFzmQMstvinYH4jX/hBBUbGZWk=";
   };
 
   patches = [ ./0001-mount.go-try-fusermount3-suid-wrapper-and-fallback-t.patch ];
 
-  vendorHash = "sha256-dvOROh5TsMl+52RvKmDG4ftNv3WF19trgttu5BGWktU=";
+  vendorHash = "sha256-6K8J4VttEbvehq8mc8sc0jgh8/buS295JWyJJA9QIBQ=";
 
   nativeBuildInputs = [
     makeWrapper

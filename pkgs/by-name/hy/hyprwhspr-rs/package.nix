@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  oniguruma,
   openssl,
   pkg-config,
   alsa-lib,
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    oniguruma
     openssl
     alsa-lib
     onnxruntime

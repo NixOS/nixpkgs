@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "parsimonious"
     "prometheus-client"
     "python-daemon"
+    "python-box"
   ];
 
   nativeBuildInputs = with python3.pkgs; [

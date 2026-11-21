@@ -26,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hydra-core";
-  version = "1.3.5";
+  version = "1.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hydra-ecosystem";
     repo = "hydra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z71H0kE/iRh88b71jX7iPW8B2W3nscCj+SyVNfMkoXw=";
+    hash = "sha256-p3YOHTniKOtufhrcF1uEQCRJjU3SvtJ12xpfyYVoJKA=";
   };
 
   patches = [

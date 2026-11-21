@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
     export DJANGO_SETTINGS_MODULE=tests.settings
     # See below about xdist
     substituteInPlace pyproject.toml \
-      --replace-fail '    "-n", "auto",' "" \
       --replace-fail '    "--dist", "loadfile",' ""
   '';
 

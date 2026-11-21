@@ -11,18 +11,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diskwatch";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "diskwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VhbD1NkJhT5LevzNTTFwKSslqwLc2zsT60/cZpYaX/k=";
+    hash = "sha256-Y5imQcouSiOtVjEvf7uwspvBZepo/hPZ3SAXtoCWqxo=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-5HCJblaylsjV64E2TVuO3WOvIXzSjmbta/soS4kO0oE=";
+  cargoHash = "sha256-CFE9ZfVygKeTtMn1a9GqgRFzVG8adHT1CUo5tutO1Ck=";
 
   nativeCheckInputs = [ versionCheckHook ];
 

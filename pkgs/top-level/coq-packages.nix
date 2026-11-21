@@ -27,13 +27,10 @@ let
   mkCoqPackages' =
     self: coq:
     let
-      callPackage = self.callPackage;
-      rocqPackages = self // {
-        recurseForDerivations = false;
-      };
+      callPackage = self.newScope { rocqPackages = self; };
     in
     {
-      inherit rocqPackages lib;
+      inherit lib;
 
       metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
@@ -203,7 +200,7 @@ let
       metarocq = callPackage ../development/rocq-modules/metarocq { };
       metarocq-utils = self.metarocq.utils;
       metarocq-common = self.metarocq.common;
-      metarocq-template-rocq = self.metarocq.template-rocq;
+      metarocq-template = self.metarocq.template;
       metarocq-pcuic = self.metarocq.pcuic;
       metarocq-safechecker = self.metarocq.safechecker;
       metarocq-template-pcuic = self.metarocq.template-pcuic;

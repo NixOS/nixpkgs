@@ -4,17 +4,15 @@
   fetchFromGitHub,
   libmaxminddb,
 }:
-let
+
+buildPecl (finalAttrs: {
   pname = "maxminddb";
   version = "1.14.0";
-in
-buildPecl {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "MaxMind-DB-Reader-php";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2ooq36ylpS+RchgyLc1N+q20ona+j8Rsg27vGSRni5I=";
   };
 
@@ -31,4 +29,4 @@ buildPecl {
     maintainers = with lib.maintainers; [ helsinki-Jo ];
     teams = [ lib.teams.php ];
   };
-}
+})

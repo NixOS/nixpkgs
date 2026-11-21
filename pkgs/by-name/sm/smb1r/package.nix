@@ -82,7 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(.*-stable)$"
+    ];
+  };
 
   meta = {
     description = "Remake / Celebration of the original 'Super Mario Bros.' games";

@@ -10,6 +10,7 @@
   rust-jemalloc-sys-unprefixed,
   versionCheckHook,
   nix-update-script,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     rust-jemalloc-sys
     rust-jemalloc-sys-unprefixed
+    zstd
   ];
 
   # Needed to get openssl-sys to use pkg-config.

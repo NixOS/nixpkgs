@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   udev,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-zz0hqOrk74FD2ct4LIDJJJRNxwR/6OXk3PUJFBYX0AA=";
 
-  buildInputs = [ udev ];
+  buildInputs = [
+    udev
+    sqlite
+  ];
 
   buildAndTestSubdir = "lianad";
 

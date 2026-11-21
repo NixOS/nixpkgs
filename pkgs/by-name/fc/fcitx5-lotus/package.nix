@@ -18,6 +18,7 @@
   python3,
   qt6,
   udev,
+  xvfb-run,
 }:
 
 let
@@ -31,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "6.0.5";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l9/r6GIghNGl1PCSue1nkl9p+CI/6Au1yA36QcQzFe4=";
+    hash = "sha256-bV1KtqE03bOPly8IvT/oSNnBFnIwp3uimmBuwSb6fW0=";
   };
 
   passthru = {
@@ -51,6 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.extra-cmake-modules
     pkg-config
     qt6.wrapQtAppsHook
+  ];
+
+  nativeCheckInputs = [
+    dbus
+    xvfb-run
   ];
 
   buildInputs = [

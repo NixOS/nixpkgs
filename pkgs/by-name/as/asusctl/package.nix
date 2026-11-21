@@ -16,6 +16,7 @@
   glibc,
   udevCheckHook,
   gettext,
+  addDriverRunpath,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
@@ -63,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
     udevCheckHook
     gettext
+    addDriverRunpath
   ];
 
   buildInputs = [
@@ -98,6 +100,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     patchelf $out/bin/rog-control-center \
       --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
+  '';
+
+  # NVIDIA's kernel modules register no hwmon device, so rog-control-center
+  # dlopen()s libnvidia-ml.so.1 to read the dGPU temperature and usage
+  postFixup = ''
+    addDriverRunpath $out/bin/rog-control-center
   '';
 
   meta = {

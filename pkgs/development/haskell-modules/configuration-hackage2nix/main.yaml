@@ -373,6 +373,16 @@ package-maintainers:
     - ihp-ide
     - ihp-migrate
     - ihp-postgresql-simple-extra
+  ncaq:
+    - debug-trace-var
+    - haskell-import-graph
+    - himari
+    - homura-stopwatch
+    - shakespeare-babel
+    - string-transform
+    - uniq-deep
+    - yesod-form-bootstrap4
+    - yesod-recaptcha2
   ncfavier:
     - Agda
     - agda2hs

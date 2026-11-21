@@ -5,13 +5,15 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "bitbucket-cli";
-  version = "1.0.0";
+  version = "1.1.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "swisscom";
     repo = "bitbucket-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8Qvlv/S5IkRk+2D/Pnb0+FP7ryHh1kSRJCiUjSO0OtI=";
+    hash = "sha256-hcfvVmqdnCaTdazN1Jq0+K8U9zdSATTm4ui8x2abZhM=";
   };
 
   vendorHash = "sha256-xjCY3Ycz5Ty6jTDHNNUWYp2SP8EPhDiwO7+WJBL3lAQ=";

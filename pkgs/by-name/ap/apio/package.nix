@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Open source ecosystem for open FPGA boards";
     mainProgram = "apio";
     homepage = "https://github.com/FPGAwars/apio";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
 })

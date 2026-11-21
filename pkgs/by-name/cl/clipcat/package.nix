@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fetchpatch,
   rustPlatform,
+  libgit2,
+  pkg-config,
   protobuf,
   installShellFiles,
   writableTmpDirAsHomeHook,
@@ -40,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-YYlNH95A2aGVWd0vw2vmTMXTA3ornCBHbcFrg59uh3I=";
 
   nativeBuildInputs = [
+    pkg-config
     protobuf
     installShellFiles
   ]
@@ -47,6 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # fix following error on darwin:
     # objc/notify.h:1:9: fatal error: could not build module 'Cocoa'
     writableTmpDirAsHomeHook
+  ];
+
+  buildInputs = [
+    libgit2
   ];
 
   checkFlags = [

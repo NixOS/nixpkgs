@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "twm";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "vinnymeller";
     repo = "twm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GJTy0uIYALp3tp/ZO+zEQoQk8fF/5R8jbWBy92ID7aU=";
+    hash = "sha256-ZJI1qFWmmZ0OJZN5qc7gpTGnhxrNAp3ZUsjqbWRPM+8=";
   };
 
-  cargoHash = "sha256-ctpYZCVGGrnS7eHeia0NnK1uc0rLi8GpmmBhAIz5WzY=";
+  cargoHash = "sha256-VxVl/Ugcr56IrG+Y+R5PbdGsyHWdya+m/JgAK02CI2U=";
 
   nativeBuildInputs = [
     pkg-config

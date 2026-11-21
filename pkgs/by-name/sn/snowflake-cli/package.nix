@@ -4,39 +4,69 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 
+let
+  # RuntimeError: There is no active click context
+  # Upstream pins click==8.1.8 and typer==0.17.3, see https://github.com/snowflakedb/snowflake-cli/issues/3175
+  click_8_1 = python3Packages.click.overridePythonAttrs (_old: rec {
+    version = "8.1.8";
+    src = python3Packages.click.src.override {
+      tag = version;
+      hash = "sha256-pAAqf8jZbDfVZUoltwIFpov/1ys6HSYMyw3WV2qcE/M=";
+    };
+  });
+  typer_0_17 = python3Packages.typer.overridePythonAttrs (_old: rec {
+    version = "0.17.3";
+    src = python3Packages.typer.src.override {
+      tag = version;
+      hash = "sha256-ir4RL1Cdq0ENr0ojiJvrdFaZHb4bF8q4rLcKeowliR0=";
+    };
+    # Patches tests that don't exist in 0.17.3
+    postPatch = null;
+    dependencies = with python3Packages; [
+      click_8_1
+      rich
+      shellingham
+      typing-extensions
+    ];
+    doCheck = false;
+  });
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snowflake-cli";
-  version = "3.13.1";
+  version = "3.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2cZ9tRcQ/sWHkkSXMZ9pXP4zM3OsNbKr2kR/Ob/F9Hk=";
+    hash = "sha256-9E/TYnCC3+1hsZvkN4ceL+N/xmvJoWv3OJJc+G3tPPM=";
   };
 
   build-system = with python3Packages; [
     hatchling
   ];
 
-  patches = [
-    ./generate-json-schema-kwargs.patch
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
   dependencies = with python3Packages; [
-    click
+    configobj
     gitpython
     id
     jinja2
     pip # required by some plugins
+    keyring # snowflake-connector-python[secure-local-storage]
     pluggy
     prompt-toolkit
+    protobuf
     pydantic
+    python-dotenv
     pyyaml
     requests
     requirements-parser
@@ -45,9 +75,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     snowflake-connector-python
     snowflake-core
     tomlkit
-    typer
+    typer_0_17
     urllib3
+    websocket-client
   ];
+
+  pythonRemoveDeps = [ "snowflake-snowpark-python" ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
@@ -61,9 +94,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pytestFlags = [
     "--snapshot-warn-unused"
+    # Upstream sets `--maxfail=10`, hiding most failures
+    "--maxfail=0"
   ];
 
   disabledTests = [
+    # Snapshot has TOML parse error column from the pinned tomlkit version
+    "test_corrupted_config_raises_human_friendly_error"
     "integration"
     "spcs"
     "loaded_modules"
@@ -85,53 +122,37 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_command_without_any_options"
     "test_command_with_connection_options"
 
-    # RuntimeError: There is no active click context
-    "test_enhanced_exit_codes_context"
+    # Template values no longer bypass validation with pydantic 2.13
+    "test_updatable_model_with_plain_validator"
+    "test_updatable_model_with_sub_classes_and_template_values_and_custom_validator_in_parent"
+    "test_updatable_model_with_sub_classes_and_template_values_and_custom_validator_in_child"
+    "test_updatable_model_with_int_and_templates"
+    "test_updatable_model_with_validators"
+    "test_updatable_model_with_bool_and_templates"
+    "test_updatable_model_with_sub_classes_and_template_values"
 
-    # typer.exceptions.Abort
-    "test_drop_application_cascade"
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/tmp.../.snowflake/connections.toml'
+    "test_new_connection_with_jwt_auth"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Long macOS tmpdir path gets wrapped mid-assertion
+    "test_output_file_missing_parent_raises"
   ];
 
   disabledTestPaths = [
+    # Version is a placeholder without .git metadata
     "tests/app/test_version_check.py"
-    "tests/nativeapp/test_sf_sql_facade.py"
-
-    # Require network access
-    "tests/test_connection.py"
-    "tests/app/test_telemetry.py"
 
     # snowflake-snowpark isn't packaged
     "tests/snowpark/"
+    "tests/feature"
+    "tests/stage/test_stage.py::test_execute_with_variables"
+    "tests/stage/test_stage.py::test_execute_continue_on_error"
+    "tests/stage/test_stage.py::test_execute_stop_on_error"
 
-    # RuntimeError: There is no active click context
-    "tests/api"
-    "tests/app/test_telemetry.py"
-    "tests/cortex/test_cortex_commands.py"
-    "tests/dbt/test_dbt_commands.py"
-    "tests/dcm/test_commands.py"
-    "tests/git/test_git_commands.py"
-    "tests/helpers/test_snowsql_env_vars.py"
-    "tests/helpers/test_v1_to_v2.py"
-    "tests/logs/test_logs.py"
-    "tests/notebook/test_notebook_commands.py"
-    "tests/object/test_object.py"
-    "tests/output/test_silent_output.py"
-    "tests/snowpark/"
-    "tests/sql"
-    "tests/stage/test_stage.py"
-    "tests/streamlit"
-    "tests/test_cli.py"
-    "tests/test_command_registration.py"
-    "tests/test_config.py"
-    "tests/test_docs_generation_output.py"
-    "tests/test_experimental_behaviour.py"
-    "tests/test_init.py"
-    "tests/test_main.py"
-    "tests/test_oauth.py"
-    "tests/test_snow_connector.py"
-    "tests/test_workload_identity.py"
-    "tests/workspace/test_manager.py"
-    "tests/workspace/test_ws_dump.py"
+    # Upstream release tooling
+    "tests/packaging"
+    "tests/test_assemble_channel.py"
   ];
 
   pythonRelaxDeps = true;
@@ -145,7 +166,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # [Errno 17] File exists: '/build/tmp.W654FVhCPT/.config/snowflake/logs'
     #
     # This creates a fake config that prevents logging in the build sandbox.
-    export HOME=$(mktemp -d)
     mkdir -p $HOME/.config/snowflake
     cat <<EOF > $HOME/.config/snowflake/config.toml
     [cli.logs]

@@ -87,6 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-ffat-lto-objects"
   ];
 
+  # needed to fix a VersionInfo compile error with more recent versions of c++ standard
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+    (lib.cmakeBool "CMAKE_CXX_STANDARD_REQUIRED" true)
+  ];
+
   postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     patchShebangs linux/install.sh
   '';

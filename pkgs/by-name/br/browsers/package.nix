@@ -59,7 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Open the right browser at the right time";
     homepage = "https://browsers.software";
     changelog = "https://github.com/Browsers-software/browsers/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.OR [
+      lib.licenses.mit
+      lib.licenses.asl20
+    ];
     maintainers = with lib.maintainers; [ ravenz46 ];
     mainProgram = "browsers";
   };

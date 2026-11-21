@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "substudy";
   version = "0.6.10";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "emk";
     repo = "subtitles-rs";
@@ -31,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  cargoBuildFlags = [ "-p substudy" ];
+  cargoBuildFlags = [ "--package=substudy" ];
 
   checkFlags = [
     # flaky: relies on sqlite ms timestamps differing across 3 quick inserts

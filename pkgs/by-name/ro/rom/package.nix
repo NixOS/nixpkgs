@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rom";
-  version = "0.4.0";
+  version = "0.6.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "manic-systems";
     repo = "rom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DDoke7/RqXX/1ccS3No2DnkXo8Im8eokrGZyCDayHlk=";
+    hash = "sha256-KRYqHqIOlfcpkxDTQJT7FDlmNpucexRlgWF24AvajuI=";
   };
 
-  cargoHash = "sha256-TQj4Mgcd948vPPsYrbOTgVpmyEHOxysa/a4a4m+WbIk=";
+  cargoHash = "sha256-XcFgDZQQGY9HMGEf6K8RSEOS5bRcjo4wdWIrlbMOhtw=";
 
   passthru.updateScript = nix-update-script { };
 

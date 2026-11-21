@@ -9,7 +9,7 @@ Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mkosi/qemu.py b/mkosi/qemu.py
-index 4d1bec15605ca36d66a05add0744afdfbdc4853d..d10007ed58ebc16271b313b1a846ca2c24d8ae81 100644
+index 3c4e6bd71a96437cfd3b7f53fde061fed4c034af..1f745b2c7b1d92aaf6e740aa114eb1cb9d2f3beb 100644
 --- a/mkosi/qemu.py
 +++ b/mkosi/qemu.py
 @@ -192,7 +192,7 @@ def find_ovmf_firmware(config: Config, firmware: Firmware) -> Optional[OvmfConfi

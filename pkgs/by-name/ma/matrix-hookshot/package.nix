@@ -10,6 +10,7 @@
   pnpm_11,
   rustPlatform,
   rustc,
+  aws-lc,
   napi-rs-cli,
   pkg-config,
   nodejs,
@@ -22,28 +23,31 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = "7.6.0";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     tag = finalAttrs.version;
-    hash = "sha256-8kWmVgtw1l1HckfWS4sukQs8KFJced2zTVhKlR/9qP8=";
+    hash = "sha256-oWmVjwDl1TcCFzvN97xbnmmWuLUioKlzjBc9EC0srdg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-HOeKyzk+EIPdlVuJ6wbgtWT4YEGv9IQZYSo0L7fH23I=";
+    hash = "sha256-KbXT3Ee7XTiiapVi1R4gBME0SGrP4gw8EQ4szahRV1Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Sxsb/VYNBBJLeEJr62Q6hSnn2Ofn47hxFs/nvesbDEw=";
+    hash = "sha256-R2iAu0hF3AMr+oetLmiyWEHQOH9tTMZks11FyuOn5dI=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -70,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
       node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
   '';
 
   buildPhase = ''
@@ -94,6 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
       node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.7.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
 
     mkdir -p $out/lib/node_modules/.pnpm/matrix-hookshot/
     mkdir $out/bin

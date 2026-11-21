@@ -207,9 +207,15 @@ class HomeAssistant:
         new_hash = await Nurl.prefetch(
             "https://pypi.org/project/home_assistant_frontend/",
             new_version,
-            "-A", "format", "wheel",
-            "-A", "dist", "py3",
-            "-A", "python", "py3"
+            "--arg-str",
+            "format",
+            "wheel",
+            "--arg-str",
+            "dist",
+            "py3",
+            "--arg-str",
+            "python",
+            "py3",
         )
         print(f"frontend: {old_hash} -> {new_hash}")
 

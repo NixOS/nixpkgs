@@ -54,11 +54,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Interactive replacer for ripgrep that makes it easy to find and replace across files on the command line";
     homepage = "https://github.com/acheronfail/repgrep";
     changelog = "https://github.com/acheronfail/repgrep/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit
-      asl20
-      unlicense
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+        unlicense
+      ];
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "rgr";
   };

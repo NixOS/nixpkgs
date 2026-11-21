@@ -4,23 +4,27 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "portfolio_rs";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "MarkusZoppelt";
     repo = "portfolio_rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C90Y9qbiFccJRcuc83dVJiehafZj1EQaUi7JAOscpYQ=";
+    hash = "sha256-1ECy27iBdG0/mql6Xg0SgJWYSLGNMKGCWuaUOriVRIs=";
   };
 
-  cargoHash = "sha256-kypFlb+HclafS0ZATzDifbvPOEUMVCieEnKMgGfmlZk=";
+  cargoHash = "sha256-KNvQWkEuUSBr7qQrS0dXROVjeqfD4tmqSYybywIb+Mw=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    aws-lc
+  ];
 
   # Skip network-dependent tests during build
   checkFlags = [

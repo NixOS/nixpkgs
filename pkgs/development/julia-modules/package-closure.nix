@@ -13,7 +13,6 @@
 let
   juliaExpression = packageNames: ''
     import Pkg
-    Pkg.Registry.add(Pkg.RegistrySpec(path="${augmentedRegistry}"))
 
     import Pkg.Types: Context, PackageSpec
 
@@ -73,6 +72,10 @@ runCommand "julia-package-closure.yml"
   ''
     mkdir home
     export HOME=$(pwd)/home
+
+    # Symlink the augmented registry so Julia doesn't copy it to the depot
+    mkdir -p "$HOME/.julia/registries"
+    ln -s "${augmentedRegistry}" "$HOME/.julia/registries/General"
 
     echo "Resolving Julia packages with the following inputs"
     echo "Julia: ${julia}"

@@ -8,22 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-noise";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-noise";
     rev = "v${version}";
-    hash = "sha256-D9vGXCrmQ8IDRmL8qZ1ZBiOz9AjhKm45W37zC16kRCk=";
+    hash = "sha256-koU3xqGZ3gWBGd+EMDG/GkarSB9rZibFasprMSqVFg8=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
-
-  postFixup = ''
-    mv $out/data/obs-plugins/${pname}/shaders $out/share/obs/obs-plugins/${pname}/
-    rm -rf $out/data $out/obs-plugins
-  '';
 
   meta = {
     description = "Plug-in for noise generation and noise effects for OBS";

@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "glances";
-  version = "4.5.7";
+  version = "4.5.9";
   pyproject = true;
 
   disabled = python3Packages.isPyPy;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4SaIrvudjK2NGe13PscO3+5EYr2zgzb1mhRvTlEAZyg=";
+    hash = "sha256-CvT9GQ29xXTVxC7V2nGmfDhHLsAtF61+XMMLG8cmHww=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       uvicorn
       requests
       jinja2
-      python-jose
+      pyjwt
       prometheus-client
       shtab
     ]
@@ -65,6 +65,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     with python3Packages;
     [
       chevron
+      pysmart
       pytestCheckHook
       selenium
     ]

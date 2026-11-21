@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu-lint";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromCodeberg {
     owner = "wvhulle";
     repo = "nu-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H3zGDJ/9LyzwFkl9X+36SfKHSliIQxiajl2LHwXpEc0=";
+    hash = "sha256-2j6ib7UkvhWRmmme/ewrqyxY1ff6FAtNpoGQyoO1/zg=";
   };
 
-  cargoHash = "sha256-ILoFnyq1j6kY2YUGuuk+rVVYc6GZr+qlgebEw7RXfA0=";
+  cargoHash = "sha256-X3/aLLMXAVn7Q2EM3/I8D1tfJNq/MP1vYjoc+zSqVp0=";
 
   nativeBuildInputs = [
     pkg-config

@@ -11,7 +11,7 @@
   runCommand,
   nix-update-script,
   nixosTests,
-  immich-machine-learning,
+  immich-ml,
   # build-time deps
   pkg-config,
   makeWrapper,
@@ -112,7 +112,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.4.0";
+  version = "3.4.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -121,14 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JnFhVuMekKDvmxE7X2gngAfmAOHiu6WyhjNSACpT3Vw=";
+    hash = "sha256-7/deC9JvYx9ZrILeVhUCwkyxpNhyhxvIWTGxV/2YW1c=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-nFNLPAhC7wkgqHfXfXywASAAF7lIO6xxFp3cHYHCWZ8=";
+    hash = "sha256-dDGolfTZ8sa/MXsjcVEYxaBV5DRAdmMukAMDw9qvEj4=";
   };
 
   postPatch = ''
@@ -240,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) immich immich-vectorchord-reindex;
     };
 
-    machine-learning = immich-machine-learning.override {
+    machine-learning = immich-ml.override {
       immich = finalAttrs.finalPackage;
     };
 

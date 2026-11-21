@@ -10,7 +10,8 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovban-pyaudio";
-  inherit (aiovban) version pyproject src;
+  version = "0.2.8";
+  inherit (aiovban) pyproject src;
 
   sourceRoot = "${aiovban.src.name}/aiovban_pyaudio";
 

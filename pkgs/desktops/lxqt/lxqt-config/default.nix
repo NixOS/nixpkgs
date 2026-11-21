@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   glib,
   kwindowsystem,
@@ -29,23 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-config";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-config";
     tag = finalAttrs.version;
-    hash = "sha256-BG3+/QZkqCZp7kdaHgiruOMq506l8+9KKNq+IUgoTPw=";
+    hash = "sha256-z2MgCOJeJbzFpxQ1WHDhnBIj413G6bna4wovglZvBVo=";
   };
-
-  # Remove when updating to a release containing upstream commit 8efdae2.
-  patches = [
-    (fetchpatch2 {
-      name = "fix-kscreen-build.patch";
-      url = "https://github.com/lxqt/lxqt-config/commit/8efdae223bbea13a653d66a1bca6004df77d7033.patch?full_index=1";
-      hash = "sha256-VJ4uZme4j49VKIyr87NX9z0enJwVdoK1dpXsuIFQ5jo=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

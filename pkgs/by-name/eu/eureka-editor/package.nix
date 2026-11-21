@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FLTK_SKIP_FLUID" true)
     (lib.cmakeBool "ENABLE_UNIT_TESTS" false)
     (lib.cmakeBool "USE_SYSTEM_FLTK" true)
+    (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" stdenv.hostPlatform.darwinMinVersion)
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev cairo}/include/cairo";

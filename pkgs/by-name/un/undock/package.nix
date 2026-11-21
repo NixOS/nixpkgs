@@ -20,6 +20,10 @@ buildGoModule (finalAttrs: {
     "containers_image_openpgp"
     "exclude_graphdriver_btrfs"
     "exclude_graphdriver_devicemapper"
+    # On Go 1.27 the vendored x/net v0.54.0 wraps the standard library's
+    # HTTP/2, which lacks http2.TrailerPrefix, so the vendored grpc v1.80.0
+    # fails to compile. http2legacy keeps x/net's own implementation.
+    "http2legacy" # fix for v0.14.1 - upstream main branch already has the fix
   ];
 
   env.CGO_ENABLED = 0;

@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rchitect";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "rchitect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/p77OoEJWc7aME7itWkwZAHJW7sNEB1iAUwvbCis//U=";
+    hash = "sha256-2OpOlPo5AVpkRbVPrXeHqCm6tK3JPI+IdMULaf0O9E0=";
   };
 
   postPatch = ''

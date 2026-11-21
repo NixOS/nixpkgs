@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "watergate-local-api";
-  version = "2026.2.2";
+  version = "2026.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "watergate-ai";
     repo = "watergate-local-api-python";
     tag = version;
-    hash = "sha256-0iAxK2l9zNiVTn1FlYSq7EY9Ak2AImeYqtslrfu8qOc=";
+    hash = "sha256-niK9lJQ7YX/HJsyurbQra3H7O8mrnjfPH7uuet/MqF8=";
   };
 
   build-system = [

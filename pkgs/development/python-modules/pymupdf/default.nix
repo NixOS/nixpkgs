@@ -77,11 +77,11 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "ret.append('swig==4.3.1')" "pass"
   '';
 
-  # `build_extension` passes arguments to `$LD` that are meant for `c++`.
-  # When `LD` is not set, `build_extension` falls back to using `c++` in `PATH`.
-  # See https://github.com/pymupdf/PyMuPDF/blob/1.26.6/pipcl.py#L1998 for details.
+  # pipcl's `build_extension` links with `$LD` and passes it compiler-driver
+  # arguments, falling back to a bare `c++` when `LD` is unset. Link with the
+  # (possibly target-prefixed) C++ compiler that pipcl already compiles with.
   preConfigure = ''
-    unset LD
+    export LD="$CXX"
   '';
 
   build-system = [

@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage {
 
   env.OPENSSL_NO_VENDOR = 1;
 
+  # libgit2-sys 0.16 needs libgit2 1.7, nixpkgs has 1.9: use the bundled copy
+  preBuild = ''
+    export LIBGIT2_NO_VENDOR=0
+  '';
+
   # Tests using git fail
   # Skipping individual checks causes failure as `--skip` flags
   # end up passed to executable

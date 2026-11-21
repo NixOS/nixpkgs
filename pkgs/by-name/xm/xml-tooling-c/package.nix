@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-boost=${boost.dev}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { CXXFLAGS = "-std=c++14"; };
 
   enableParallelBuilding = true;
 

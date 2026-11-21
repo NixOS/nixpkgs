@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-xQP/cAPdff7hm1da7WpAn7m8Fb+fHEBTiSx5PgW17bM=";
+    hash = "sha256-v2aflEKIA4Vxp527uYyelNS5stl+quXJjPdfdL4vHG0=";
   };
 
   build-system = [ setuptools ];

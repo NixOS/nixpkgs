@@ -11,24 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-applet-privacy-indicator";
-  version = "0.1.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "D-Brox";
     repo = "cosmic-ext-applet-privacy-indicator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LfvnVkyXRl58YAXi98B/c0DXve+tT4picRlT6+t4Hqw=";
+    hash = "sha256-W7ZS/wS3il0kM6dys/PsxwxVRiyMea9jEup0ogIb9DQ=";
   };
 
-  cargoHash = "sha256-Tbcjnbjyo+FoYtRe5KnPiEzV+1PkzHOnbVDRe/pJul0=";
-
-  cargoPatches = [
-    (fetchpatch {
-      name = "deduplicate-sctk.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/D-Brox/cosmic-ext-applet-privacy-indicator/pull/7.diff?full_index=1";
-      hash = "sha256-BN32JHouyIqJzBR6Mlp2pw/JhU5c6hdtG+P2SEl/0pA=";
-    })
-  ];
+  cargoHash = "sha256-llRReOfYZG4nFNci7XoyR4YXj37CHsXEX4ejy6orbUs=";
 
   nativeBuildInputs = [
     just

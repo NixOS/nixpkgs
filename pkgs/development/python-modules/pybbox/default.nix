@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   netaddr,
+  nix-update-script,
   requests,
 }:
 
@@ -27,6 +28,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "pybbox" ];
+
+  # The only upstream releases are alphas
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
 
   meta = {
     description = "Python library for the Bouygues BBox Routeur API";

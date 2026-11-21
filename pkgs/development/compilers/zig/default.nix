@@ -1,7 +1,6 @@
 {
   lib,
   callPackage,
-  llvmPackages_18,
   llvmPackages_19,
   llvmPackages_20,
   llvmPackages_21,
@@ -10,10 +9,6 @@
 }:
 let
   versions = {
-    "0.13.0" = {
-      llvmPackages = llvmPackages_18;
-      hash = "sha256-5qSiTq+UWGOwjDVZMIrAt2cDKHkyNPBSAEjpRQUByFM=";
-    };
     "0.14.1" = {
       llvmPackages = llvmPackages_19;
       hash = "sha256-DhVJIY/z12PJZdb5j4dnCRb7k1CmeQVOnayYRP8azDI=";

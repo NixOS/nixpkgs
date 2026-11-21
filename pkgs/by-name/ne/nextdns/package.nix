@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "nextdns";
-  version = "1.49.0";
+  version = "1.50.2";
 
   __structuredAttrs = true;
 
@@ -16,11 +16,11 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nextdns";
     repo = "nextdns";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-kBmLVBwzt+oqM3Hx8qeyMuOw9bNU+r2FDueUTWWae8Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RR63A3+RXlEodNl6Bn0KyYyZSgSjicLmfR8pbu5/eOk=";
   };
 
-  vendorHash = "sha256-sDofbS1kq3nQDufxiYse4uxcPE1oTSITsI6RU7pFFSM=";
+  vendorHash = "sha256-3Evnbwg3Q2SrmJUrPIEirMeHYnySofS4EEGvd7x6H7E=";
 
   ldflags = [
     "-s"

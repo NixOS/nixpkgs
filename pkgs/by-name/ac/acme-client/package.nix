@@ -33,7 +33,7 @@ gccStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Secure ACME/Let's Encrypt client";
-    homepage = "https://git.wolfsden.cz/acme-client-portable";
+    homepage = "https://wolfsden.cz/project/acme-client.html";
     platforms = lib.platforms.unix;
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [

@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_44,
+  electron_45,
   python3,
   makeWrapper,
   callPackage,
@@ -34,7 +34,7 @@ assert lib.throwIf (commandLineArgs != "")
 let
   nodejs = nodejs_24;
   pnpm = pnpm_11;
-  electron = electron_44;
+  electron = electron_45;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
@@ -45,13 +45,13 @@ let
   webrtc = callPackage ./webrtc.nix { ringrtcSrc = ringrtc.src; };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.32.0";
+  version = "8.36.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-6eh+Cuz/OAJP8gs0kOsfRb+trT7IpgQ5d/isr9x0kQg=";
+    hash = "sha256-DH5VuHCSlDfS+tnjx5nWmm6FAttEhli2Yf+ODk+XYTE=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -69,6 +69,9 @@ let
     pname = "signal-desktop-sticker-creator";
     inherit src version;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     pnpmRoot = "sticker-creator";
     pnpmWorkspaces = [ "signal-art-creator" ];
 
@@ -83,11 +86,10 @@ let
       prePnpmInstall = ''
         pnpm config set fetch-timeout 300000
       '';
-      fetcherVersion = 4;
-      hash = "sha256-uL6fTAoKwSy7sQmvKuQheAYP8tmCnZnfBUK1Ijxinhk=";
+      fetcherVersion = 5;
+      hash = "sha256-NjEgZ8dXMBS6pWmUBq2j8MaxAZreB1Fs8CYs1p3zAls=";
     };
 
-    strictDeps = true;
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
@@ -106,7 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop";
   inherit src version;
 
+  __structuredAttrs = true;
   strictDeps = true;
+
   nativeBuildInputs = [
     actool
     node-gyp
@@ -190,8 +194,8 @@ stdenv.mkDerivation (finalAttrs: {
     prePnpmInstall = ''
       pnpm config set fetch-timeout 300000
     '';
-    fetcherVersion = 4;
-    hash = "sha256-uL6fTAoKwSy7sQmvKuQheAYP8tmCnZnfBUK1Ijxinhk=";
+    fetcherVersion = 5;
+    hash = "sha256-NjEgZ8dXMBS6pWmUBq2j8MaxAZreB1Fs8CYs1p3zAls=";
   };
 
   env = {
@@ -199,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     SIGNAL_ENV = "production";
     # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
     # We set the source-changed date to match the corresponding upstream release date.
-    SOURCE_DATE_EPOCH = 1792514633;
+    SOURCE_DATE_EPOCH = 1795099114;
   };
 
   preBuild = ''

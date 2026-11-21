@@ -6,6 +6,7 @@
   cuda_cudart,
   cuda_nvcc,
   cudaAtLeast,
+  cudaMajorMinorVersion,
   cudaNamePrefix,
   fetchFromGitHub,
   flags,
@@ -22,7 +23,8 @@
   withRdmaCore ? true,
 }:
 let
-  inherit (_cuda.lib) _mkMetaBadPlatforms;
+  inherit (_cuda.lib) _getJetsonMinSbsaCapability _mkMetaBadPlatforms;
+  sbsaJetsonCapability = _getJetsonMinSbsaCapability cudaMajorMinorVersion;
   inherit (backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
   inherit (lib)
     all
@@ -164,9 +166,10 @@ backendStdenv.mkDerivation (finalAttrs: {
   passthru = {
     platformAssertions = [
       {
-        message = "Pre-Thor Jetson devices (CUDA capabilities < 10.1) are not supported by NCCL";
+        message = "Pre-SBSA Jetson devices (CUDA capabilities < ${sbsaJetsonCapability}) are not supported by NCCL";
         assertion =
-          !hasJetsonCudaCapability || all (flip versionAtLeast "10.1") requestedJetsonCudaCapabilities;
+          !hasJetsonCudaCapability
+          || all (flip versionAtLeast sbsaJetsonCapability) requestedJetsonCudaCapabilities;
       }
     ];
 
@@ -185,8 +188,8 @@ backendStdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    # NCCL is not supported on Pre-Thor Jetsons, because it does not use NVLink or PCI-e for inter-GPU communication.
-    # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
+    # NCCL does not support Jetson that need NVIDIA's linux-aarch64 (L4T) packages. Since CUDA 13.2, Orin uses SBSA.
+    # https://forums.developer.nvidia.com/t/how-do-i-correctly-install-pytorch-on-jetpack-7-2/372773
     badPlatforms = _mkMetaBadPlatforms finalAttrs;
     maintainers = with maintainers; [
       mdaiter

@@ -1,35 +1,51 @@
-diff --git a/src/start/cp2k.F b/src/start/cp2k.F
-index f69146ea3..a195f0620 100644
---- a/src/start/cp2k.F
-+++ b/src/start/cp2k.F
-@@ -58,8 +58,7 @@ PROGRAM cp2k
-    USE input_cp2k,                      ONLY: create_cp2k_root_section
+--- a/src/start/cp2k.F	2026-11-11 15:46:16.839624788 +0100
++++ b/src/start/cp2k.F	2026-11-11 15:46:16.921625041 +0100
+@@ -58,8 +58,7 @@
     USE input_section_types,             ONLY: section_release,&
                                                section_type
+    USE iso_c_binding,                   ONLY: C_NULL_CHAR
 -   USE iso_fortran_env,                 ONLY: compiler_options,&
 -                                              compiler_version
 +   USE iso_fortran_env,                 ONLY: compiler_version
     USE kinds,                           ONLY: default_path_length
-    USE machine,                         ONLY: default_output_unit
- #include "../base/base_uses.f90"
-@@ -70,7 +69,6 @@ PROGRAM cp2k
+    USE machine,                         ONLY: default_error_unit,&
+                                               default_output_unit,&
+@@ -75,7 +74,6 @@
                                             arg_att, command
     CHARACTER(LEN=default_path_length), &
        DIMENSION(:, :), ALLOCATABLE      :: initial_variables, initial_variables_tmp
 -   CHARACTER(LEN=:), ALLOCATABLE        :: compiler_options_string
-    INTEGER                              :: output_unit, l, i, var_set_sep, inp_var_idx
+    INTEGER                              :: cpuid, cpuid_static, output_unit, l, i, var_set_sep, inp_var_idx
     INTEGER                              :: ierr, i_arg
     LOGICAL                              :: check, usage, echo_input, command_line_error
-@@ -328,14 +326,6 @@ PROGRAM cp2k
-                WRITE (output_unit, "(T2,A)") cp2k_version, &
-                   "Source code revision "//TRIM(compile_revision), &
-                   TRIM(cp2k_flags())
--               compiler_options_string = compiler_options()
+@@ -343,32 +341,6 @@
+                ! The trailing NUL character bounds the in-place prefix replacement of
+                ! package managers like conda to this string, which would otherwise
+                ! shift and corrupt the subsequent string literals in the binary
+-               compiler_options_string = compiler_options()//C_NULL_CHAR
+-               l = INDEX(compiler_options_string, C_NULL_CHAR) - 1
 -               WRITE (output_unit, "(T2,A,A)") "compiler: ", compiler_version()
+-               cpuid = m_cpuid()
+-               cpuid_static = m_cpuid_static()
+-               IF ((cpuid > 0) .OR. (cpuid_static > 0)) THEN
+-                  WRITE (output_unit, "(T2,A,1X,I6,1X,A)") &
+-                     "compiler target: cpuid", cpuid_static, "("//TRIM(m_cpuid_name(cpuid_static))//")"
+-                  IF (cpuid /= cpuid_static) THEN
+-                     WRITE (output_unit, "(T2,A,1X,I6,1X,A)") &
+-                        "current: cpuid", cpuid, "("//TRIM(m_cpuid_name(cpuid))//")"
+-                  END IF
+-               END IF
+-               IF (m_cpuid_vlen(cpuid_static) < m_cpuid_vlen(cpuid)) THEN
+-                  WRITE (output_unit, "(T2,A)") &
+-                     "WARNING: The compiler target used to build this binary does not "// &
+-                     "enable all instruction-set extensions available on this CPU. "// &
+-                     "Consider reconfiguring and rebuilding CP2K for this target system "// &
+-                     "to enable them."
+-               END IF
 -               WRITE (output_unit, "(T2,A)") "compiler options:"
--               DO i = 0, (LEN(compiler_options_string) - 1)/68
+-               DO i = 0, (l - 1)/68
 -                  WRITE (output_unit, "(T4,A)") &
--                     compiler_options_string(i*68 + 1:MIN(LEN(compiler_options_string), (i + 1)*68))
+-                     compiler_options_string(i*68 + 1:MIN(l, (i + 1)*68))
 -               END DO
 -               DEALLOCATE (compiler_options_string)
              END IF

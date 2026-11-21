@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       An open source, free and easy to use math plotter. It can plot functions,
       sequences, parametric equations and data on the plane.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "ZeGrapher";
     maintainers = [ ];
     platforms = lib.platforms.unix;

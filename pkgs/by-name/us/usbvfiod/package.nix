@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       lbeierlieb
       snu
+      noi0103
     ];
     platforms = [
       "aarch64-linux"

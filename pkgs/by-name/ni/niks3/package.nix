@@ -9,17 +9,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "niks3";
-  version = "1.16.2";
+  version = "1.18.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "niks3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ssKKtq4I595Z32NQR9sc/hlKAeqaYtI2jz83M0TZSos=";
+    hash = "sha256-QVyM2INwcmj9pEenKVBFGs19n34hKzfw+A6QeFaHPNk=";
   };
 
-  vendorHash = "sha256-oE2viHmrFeg7m5fYFzzv6OdJahHgI1iyfNNJoTzSScU=";
+  vendorHash = "sha256-rwmSuiEkrLe7N81FdVQkq70tZWlR9bETdT8s5Qw9Mhc=";
 
   subPackages = [
     "cmd/niks3"

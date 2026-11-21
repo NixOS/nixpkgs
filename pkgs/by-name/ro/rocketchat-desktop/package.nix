@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.19.2";
+  version = "4.19.3";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
     tag = finalAttrs.version;
-    hash = "sha256-SteP/7k0aFGj93dLcHgyaOa15wLLdOZFf1YfPWarxWw=";
+    hash = "sha256-6G43E11jYTqsTDCDM6VShMfdt2TwMW3oCto2YHDbaSM=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/RocketChat/Rocket.Chat.Electron/blob/master/package.json#L187

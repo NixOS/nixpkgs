@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGoLatestModule,
   callPackage,
   fetchFromGitHub,
   makeBinaryWrapper,
@@ -7,23 +7,27 @@
   nixosTests,
 }:
 let
-  version = "14.9.0";
+  version = "16.0.1";
   src = fetchFromGitHub {
     owner = "jhaals";
     repo = "yopass";
     tag = version;
-    hash = "sha256-QGa6T0XNQaYIKyhGSnBNMjEaJk9JgEldxdv974lMtBU=";
+    hash = "sha256-wnVoEOfx2OKkkm3FAZEIntt2xq0Kqi4RhCjLjeeHsFM=";
   };
 
   website = callPackage ./website.nix { inherit src version; };
 in
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   inherit version src;
   pname = "yopass";
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-CFo/rI6M7pbjVK0AtL92UyehNgobfWkw61tDNvqpCLY=";
+  # go.work only adds deploy/cdk (AWS Lambda deployment); go mod vendor
+  # refuses to run in workspace mode.
+  env.GOWORK = "off";
+
+  vendorHash = "sha256-FwKL2yQ62wZnDouQv3xt4cRi4rf+42SMSzXbm/T52+k=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

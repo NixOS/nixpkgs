@@ -18,10 +18,19 @@
   libxtst,
   re2,
 
+  openssl,
+  curl,
+  minizip-ng,
+  bzip2,
+  xz,
+  zstd,
+  nlohmann_json,
+  zlib,
+
 }:
-pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "millennium";
-  version = "3.6.2";
+  version = "3.6.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,7 +39,7 @@ pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
     owner = "SteamClientHomebrew";
     repo = "Millennium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-We8OIJP/5q0nv2RVHQYfjRaHK6ZQuSM88eKa9BezUPk=";
+    hash = "sha256-UZQSHMsAaYTcx1TDAI7FTqVRsMpB1jLBL8kYKivwbYo=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +48,9 @@ pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bun
     nodejs
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
   ];
 
   cmakeFlags = [
@@ -82,89 +94,63 @@ pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
     outputHash = "sha256-HrgEEmrBjirAkOv6v2qe3XWsNlNuCUOTbOkUfUuCRP4=";
   };
 
-  millennium-64-bit-libs = stdenv.mkDerivation (finalAttrs64: {
-    pname = "millennium-64-bit";
-    inherit (finalAttrs) src version;
-
-    nativeBuildInputs = finalAttrs.nativeBuildInputs ++ [
-      rustPlatform.cargoSetupHook
-      rustPlatform.rust.cargo
-      rustPlatform.rust.rustc
-    ];
-
-    cargoRoot = "src/instrumentation/loopback";
-    cargoDeps = rustPlatform.fetchCargoVendor {
-      inherit (finalAttrs64) src cargoRoot;
-      hash = "sha256-8XGEBVYgNYEgkfR67m5pKxCEovSAhctAWoB87Y5JAuM=";
-    };
-
-    buildInputs = [
-      libx11
-      libxi
-      libxtst
-      re2
-    ];
-
-    cmakeFlags = finalAttrs.cmakeFlags ++ [
-      (lib.cmakeBool "MILLENNIUM_NIX_64BIT" true)
-    ];
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/lib/
-      install -Dm555 libmillennium_hhx64.so           $out/lib/libmillennium_hhx64.so
-      install -Dm555 libmillennium_pvs64              $out/lib/libmillennium_pvs64
-      install -Dm555 libmillennium_bootstrap_hhx64.so $out/lib/libmillennium_bootstrap_hhx64.so
-      runHook postInstall
-    '';
-  });
+  cargoRoot = "src/instrumentation/loopback";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src cargoRoot;
+    hash = "sha256-8XGEBVYgNYEgkfR67m5pKxCEovSAhctAWoB87Y5JAuM=";
+  };
 
   buildInputs = [
-    pkgsi686Linux.libx11
-    pkgsi686Linux.libxi
-    pkgsi686Linux.libxtst
-    pkgsi686Linux.openssl
-    pkgsi686Linux.curl
-    pkgsi686Linux.minizip-ng
-    pkgsi686Linux.bzip2
-    pkgsi686Linux.xz
-    pkgsi686Linux.zstd
-    pkgsi686Linux.nlohmann_json
-    pkgsi686Linux.zlib
-    pkgsi686Linux.luajit
+    libx11
+    libxi
+    libxtst
+    re2
+    openssl
+    curl
+    minizip-ng
+    bzip2
+    xz
+    zstd
+    nlohmann_json
+    zlib
   ];
 
   postPatch = ''
-    substituteInPlace src/system/environment.cc \
-      --replace-fail "/usr/lib/millennium/libmillennium_x86.so" "${placeholder "out"}/lib/libmillennium_x86.so"
-    substituteInPlace src/bootstrap/linux/libmillennium_bootstrap.c \
-      --replace-fail "/usr/lib/millennium/libmillennium_x86.so" "${placeholder "out"}/lib/libmillennium_x86.so"
+     substituteInPlace src/system/environment.cc \
+       --replace-fail "/usr/lib/millennium/libmillennium_x64.so" "${placeholder "out"}/lib/libmillennium_x64.so"
+     substituteInPlace src/bootstrap/linux/libmillennium_bootstrap_x64.c \
+    --replace-fail '#define MILLENNIUM_DEFAULT_LIBRARY_DIR "/usr/lib/millennium"' \
+                   '#define MILLENNIUM_DEFAULT_LIBRARY_DIR "${placeholder "out"}/lib"'
 
-    cp -r ${finalAttrs.typescript-deps}/src .
-    chmod -R u+w src/typescript/ttc/dist
+     cp -r ${finalAttrs.typescript-deps}/src .
+     chmod -R u+w src/typescript/ttc/dist
 
-    patchShebangs src/typescript/node_modules
-    for dir in "ttc/" "sdk/" "frontend/"; do
-        (cd "src/typescript/$dir" && bun run build)
-    done
+     patchShebangs src/typescript/node_modules
+     for dir in "ttc/" "sdk/" "frontend/"; do
+         (cd "src/typescript/$dir" && bun run build)
+     done
 
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/lib/
-    install -Dm555 libmillennium_x86.so           $out/lib/libmillennium_x86.so
-    install -Dm555 libmillennium_luavm_x86        $out/lib/libmillennium_luavm_x86
-    install -Dm555 libmillennium_bootstrap_x86.so $out/lib/libmillennium_bootstrap_x86.so
-    cp -r ${finalAttrs.millennium-64-bit-libs}/lib/* $out/lib/
+
+    install -Dm755 libmillennium_x64.so            $out/lib/libmillennium_x64.so
+    install -Dm755 libmillennium_luavm_x64         $out/lib/libmillennium_luavm_x64
+    install -Dm755 libmillennium_bootstrap_x64.so  $out/lib/libmillennium_bootstrap_x64.so
+
+    install -Dm755 libmillennium_hhx64.so          $out/lib/libmillennium_hhx64.so
+    install -Dm755 libmillennium_pvs64             $out/lib/libmillennium_pvs64
+    install -Dm755 libmillennium_bootstrap_hhx64.so $out/lib/libmillennium_bootstrap_hhx64.so
     runHook postInstall
   '';
 
   postFixup = ''
     patchelf --force-rpath --set-rpath \
-      "$(patchelf --print-rpath $out/lib/libmillennium_x86.so)" $out/lib/libmillennium_x86.so
+      "$(patchelf --print-rpath $out/lib/libmillennium_x64.so)" $out/lib/libmillennium_x64.so
     patchelf --force-rpath --set-rpath \
-      "$(patchelf --print-rpath $out/lib/libmillennium_bootstrap_x86.so)" $out/lib/libmillennium_bootstrap_x86.so
+      "$(patchelf --print-rpath $out/lib/libmillennium_bootstrap_x64.so)" $out/lib/libmillennium_bootstrap_x64.so
   '';
 
   passthru.updateScript = nix-update-script {
@@ -180,7 +166,7 @@ pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
     longDescription = "An open-source low-code modding framework to create, manage and use themes/plugins for the desktop Steam Client without any low-level internal interaction or overhead";
 
     maintainers = [ lib.maintainers.DrymarchonShaun ];
-    platforms = [ "i686-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 
 })

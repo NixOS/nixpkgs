@@ -2,6 +2,7 @@
   stdenv,
   buildGo127Module,
   exiftool,
+  vips,
   fetchurl,
   ffmpeg-headless,
   fetchFromGitHub,
@@ -19,9 +20,9 @@ let
       vendorHash = null;
     };
     "34" = {
-      version = "11.0.2";
-      appHash = "sha256-ygV6UFNKOr5zUaSPtwcH/wIf7hfxbzj4kUTFoM0sxD8=";
-      srcHash = "sha256-Fp9tgiyHXnqEsS4xA+eEDGkl0ouXQhnHQn5eETyot+c=";
+      version = "11.1.4";
+      appHash = "sha256-ObXsa/F1M0Qy6MQJoEhNqGb/+QPGNJQsyzxBgJ+QY1M=";
+      srcHash = "sha256-8ZGPfx3bQyUHoh0huuYgA5utCl69SVkRYz0+tumGOGY=";
       vendorHash = "sha256-rEJXO55TKg3GMV5/5JQsRf0tktzNQovY9ONtDFuznqk=";
     };
     "35" = latestVersionForNc."34";
@@ -34,7 +35,7 @@ let
     homepage = "https://apps.nextcloud.com/apps/memories";
     changelog = "https://github.com/pulsejet/memories/blob/v${currentVersionInfo.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ rahoni ];
   };
 
   go-vod = buildGo127Module rec {
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
       ffmpeg = lib.getExe ffmpeg-headless;
       ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
       go-vod = lib.getExe go-vod;
+      vips = lib.getExe vips;
     })
   ];
 
@@ -81,8 +83,11 @@ stdenv.mkDerivation rec {
     rm -rf bin-ext/
 
     sed -i 's/EXIFTOOL_VER = .*/EXIFTOOL_VER = @;/' lib/Service/BinExt.php
+    sed -i 's/VIPS_VER = .*/VIPS_VER = @;/' lib/Service/BinExt.php
     substituteInPlace lib/Service/BinExt.php \
       --replace-fail "EXIFTOOL_VER = @" "EXIFTOOL_VER = '${exiftool.version}'"
+    substituteInPlace lib/Service/BinExt.php \
+      --replace-fail "VIPS_VER = @" "VIPS_VER = '${vips.version}'"
   '';
 
   installPhase = ''

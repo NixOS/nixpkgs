@@ -5,6 +5,8 @@
   rustPlatform,
   pkg-config,
   protobuf,
+  libgit2,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,6 +29,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     protobuf
+  ];
+
+  buildInputs = [
+    libgit2
+    sqlite
   ];
 
   cargoBuildFlags = [

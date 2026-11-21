@@ -311,7 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir dependencies/dictionaries
     for dict in ${builtins.concatStringsSep " " dictionaries}; do
       for i in "$dict/share/hunspell/"*; do
-        ln -s $i dependencies/dictionaries/
+        test -f dependencies/dictionaries/$(basename $i) || ln -s $i dependencies/dictionaries/
       done
     done
 

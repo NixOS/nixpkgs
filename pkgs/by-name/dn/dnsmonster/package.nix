@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
     description = "Passive DNS Capture and Monitoring Toolkit";
     homepage = "https://github.com/FenkoHQ/dnsmonster";
     changelog = "https://github.com/FenkoHQ/dnsmonster/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dnsmonster";
   };

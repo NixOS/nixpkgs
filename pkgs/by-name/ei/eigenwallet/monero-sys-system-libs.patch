@@ -1,0 +1,133 @@
+--- a/monero-sys/build.rs
++++ b/monero-sys/build.rs
+@@ -124,51 +124,19 @@
+     // Rerun if the patches directory or any patch files change
+     println!("cargo:rerun-if-changed=patches");
+ 
+-    // Apply embedded patches before building
+-    apply_patches().expect("Failed to apply our patches");
+-
+-    // flush std::out
+-    std::io::stdout().flush().unwrap();
+-    std::io::stderr().flush().unwrap();
+-
+-    let contrib_depends_dir = std::env::current_dir()
+-        .expect("current directory to be accessible")
+-        .join(MONERO_DEPENDS_DIR);
+-
+-    // Use stable location in target/debug/monero-depends to avoid rebuilding deps unnecessarily
+-    let target_dir = find_workspace_target_dir();
+-    let stable_depends_dir = target_dir
+-        .join("debug")
+-        .join("monero-depends")
+-        .join(std::env::var("TARGET").expect("TARGET env var to be present"));
+-
+-    let (contrib_depends_dir, target) =
+-        compile_dependencies(contrib_depends_dir, stable_depends_dir);
++    let target = std::env::var("TARGET").expect("TARGET env var to be present");
+ 
+     // Build with the monero library all dependencies required
+     let mut config = Config::new(MONERO_CPP_DIR);
+ 
+-    let toolchain_file = contrib_depends_dir
+-        .join(format!("{target}/share/toolchain.cmake"))
+-        .display()
+-        .to_string();
+-    config.define("CMAKE_TOOLCHAIN_FILE", toolchain_file.clone());
+-    println!("cargo:debug=Using toolchain file: {toolchain_file}");
+-
+-    let depends_lib_dir = contrib_depends_dir.join(format!("{target}/lib"));
+-
+-    println!(
+-        "cargo:rustc-link-search=native={}",
+-        depends_lib_dir.display()
+-    );
+-
+     let output_directory = config
+         .build_target("wallet_api")
+         // Builds currently fail in Release mode
+         // .define("CMAKE_BUILD_TYPE", "Release")
+         // .define("CMAKE_RELEASE_TYPE", "Release")
+         // Force building static libraries
+-        .define("STATIC", "ON")
++        .define("STATIC", "OFF")
++        .define("MANUAL_SUBMODULES", "ON")
+         .define("BUILD_SHARED_LIBS", "OFF")
+         .define("BUILD_TESTS", "OFF")
+         .define("USE_DEVICE_TREZOR", "OFF")
+@@ -184,17 +152,9 @@
+         .define("USE_DEVICE_LEDGER", "OFF")
+         .define("CMAKE_DISABLE_FIND_PACKAGE_HIDAPI", "ON")
+         .define("GTEST_HAS_ABSL", "OFF")
+-        .define("SODIUM_LIBRARY", "libsodium.a")
+         // Use lightweight crypto library
+         .define("MONERO_WALLET_CRYPTO_LIBRARY", "cn")
+         .define("CMAKE_CROSSCOMPILING", "OFF")
+-        .define(
+-            "SODIUM_INCLUDE_PATH",
+-            contrib_depends_dir
+-                .join(format!("{target}/include"))
+-                .display()
+-                .to_string(),
+-        ) // This is needed for libsodium.a to be found on mingw-w64
+         .build_arg("-Wno-dev") // Disable warnings we can't fix anyway
+         .build_arg(format!(
+             "-j{}",
+@@ -367,12 +327,12 @@
+     println!("cargo:rustc-link-lib=static=mnemonics");
+     println!("cargo:rustc-link-lib=static=rpc_base");
+ 
+-    // Static linking for boost
+-    println!("cargo:rustc-link-lib=static=boost_serialization");
+-    println!("cargo:rustc-link-lib=static=boost_filesystem");
+-    println!("cargo:rustc-link-lib=static=boost_thread");
+-    println!("cargo:rustc-link-lib=static=boost_chrono");
+-    println!("cargo:rustc-link-lib=static=boost_program_options");
++    // Dynamic linking for boost
++    println!("cargo:rustc-link-lib=boost_serialization");
++    println!("cargo:rustc-link-lib=boost_filesystem");
++    println!("cargo:rustc-link-lib=boost_thread");
++    println!("cargo:rustc-link-lib=boost_chrono");
++    println!("cargo:rustc-link-lib=boost_program_options");
+ 
+     if target.contains("w64-mingw32") {
+         println!("cargo:rustc-link-lib=static=boost_locale");
+@@ -383,16 +343,16 @@
+         println!("cargo:rustc-link-arg=-static-libgcc");
+     }
+ 
+-    // Link libsodium statically
+-    println!("cargo:rustc-link-lib=static=sodium");
++    // Link libsodium dynamically
++    println!("cargo:rustc-link-lib=sodium");
+ 
+-    // Link OpenSSL statically
+-    println!("cargo:rustc-link-lib=static=ssl"); // This is OpenSSL (libsll)
+-    println!("cargo:rustc-link-lib=static=crypto"); // This is OpenSSLs crypto library (libcrypto)
+-
+-    // Link unbound statically
+-    println!("cargo:rustc-link-lib=static=unbound");
+-    println!("cargo:rustc-link-lib=static=expat"); // Expat is required by unbound
++    // Link OpenSSL dynamically
++    println!("cargo:rustc-link-lib=ssl"); // This is OpenSSL (libsll)
++    println!("cargo:rustc-link-lib=crypto"); // This is OpenSSLs crypto library (libcrypto)
++
++    // Link unbound dynamically
++    println!("cargo:rustc-link-lib=unbound");
++    println!("cargo:rustc-link-lib=expat"); // Expat is required by unbound
+     // println!("cargo:rustc-link-lib=static=nghttp2");
+     // println!("cargo:rustc-link-lib=static=event");
+ 
+@@ -420,12 +380,6 @@
+         .include("monero/external/easylogging++") // Includes the easylogging++ headers
+         .include("monero/external")
+         .include("monero/contrib/epee/include") // Includes the epee headers for net/http_client.h
+-        .include(
+-            contrib_depends_dir
+-                .join(format!("{target}/include"))
+-                .display()
+-                .to_string(),
+-        )
+         .include(output_directory)
+         .flag("-fPIC") // Position independent code
+         .flag("-Wno-unused-parameter") // Suppress warnings from upstream Monero C++ headers

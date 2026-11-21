@@ -8,6 +8,7 @@
   pkg-config,
   withPCRE2 ? true,
   pcre2,
+  rust-jemalloc-sys,
   writableTmpDirAsHomeHook,
 }:
 
@@ -35,7 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook # required for wine when cross-compiling to Windows
   ]
   ++ lib.optional withPCRE2 pkg-config;
-  buildInputs = lib.optional withPCRE2 pcre2;
+  buildInputs =
+    lib.optional withPCRE2 pcre2 ++ lib.optional stdenv.hostPlatform.isStatic rust-jemalloc-sys;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 

@@ -4,6 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
   openssl,
+  aws-lc,
+  zstd,
   pkg-config,
   protobuf,
   versionCheckHook,
@@ -31,7 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    aws-lc
+    zstd
+  ];
   nativeBuildInputs = [
     pkg-config
     protobuf

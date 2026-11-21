@@ -29,19 +29,25 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-google-genai";
-  version = "4.3.4";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
     tag = "libs/genai/v${finalAttrs.version}";
-    hash = "sha256-w0N9xRvBWaWpOH+i3Oz+3TnBxt+jibqDNtfP6LY4Aeg=";
+    hash = "sha256-fLmgqT87sJNyfylySfQ3StYhkLk2ZGx9rEy1FTeG+LE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/genai";
 
   build-system = [ hatchling ];
+
+  # Relax overly-tight pins
+  pythonRelaxDeps = [
+    "google-genai"
+    "langchain-core"
+  ];
 
   dependencies = [
     filetype

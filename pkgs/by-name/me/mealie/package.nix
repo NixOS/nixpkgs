@@ -9,7 +9,7 @@
   nix-update-script,
 
   # frontend
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   dart-sass,
@@ -19,14 +19,14 @@
 }:
 
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 
-  version = "3.29.0";
+  version = "3.31.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-lp+lLv0D2K3v64tVudkleLBfazv2f2ylXyRQsh7OdMY=";
+    hash = "sha256-12/yaK3gZprx5/uXCf8BIMCNU7tg6ironjyH0ln6Cj4=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -49,8 +49,8 @@ let
       inherit pnpm;
       inherit (finalAttrs) version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      fetcherVersion = 4;
-      hash = "sha256-y5w6hI6T+QOxmy65rN44/0H18eqmoNXhUE1NL7NtpqY=";
+      fetcherVersion = 5;
+      hash = "sha256-9y9ZJOb+Rx2QPDHlbkVwLRC0b61n7zVvWiEGffLAFYk=";
     };
 
     env = {
@@ -107,17 +107,14 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
   dependencies =
     with pythonpkgs;
     [
-      aiofiles
       alembic
-      aniso8601
-      appdirs
       apprise
       authlib
       bcrypt
       beautifulsoup4
       extruct
       fastapi
-      freezegun
+      fpdf2
       html2text
       httpx
       httpx-curl-cffi
@@ -131,6 +128,7 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
       paho-mqtt
       pillow
       pillow-heif
+      pint
       psycopg2 # pgsql optional-dependencies
       pydantic
       pydantic-settings
@@ -158,7 +156,7 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
     rm -rf dev # Do not need dev scripts & code
 
     substituteInPlace pyproject.toml \
-     --replace-fail '"setuptools==84.0.0"' '"setuptools"'
+     --replace-fail '"setuptools==84.2.1"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
@@ -187,9 +185,10 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
     '';
 
   nativeCheckInputs = with pythonpkgs; [
-    pytestCheckHook
-    pytest-asyncio
+    freezegun
     httpx2
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   # Needed for tests

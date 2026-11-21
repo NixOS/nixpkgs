@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ chvp ];
   };
 })

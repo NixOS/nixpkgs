@@ -8,7 +8,7 @@
   faraday,
   httpun-types,
   alcotest,
-  version ? "1.1.1",
+  version ? "1.1.2",
 }:
 
 buildDunePackage {
@@ -18,7 +18,7 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/robur-coop/ocaml-h1/releases/download/v${version}/h1-${version}.tbz";
-    hash = "sha256-K3hsBXZmlZqeBm8O58uEmvjknJX1UIRf+fG0gLzI4Zo=";
+    hash = "sha256-3wI9JIPGMSuiulnpjZ0BFgByZblv/sN8rCMO4Z8K45M=";
   };
 
   propagatedBuildInputs = [

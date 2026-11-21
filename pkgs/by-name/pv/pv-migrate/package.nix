@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
     description = "CLI tool to easily migrate Kubernetes persistent volumes";
     homepage = "https://github.com/utkuozdemir/pv-migrate";
     changelog = "https://github.com/utkuozdemir/pv-migrate/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.afl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ivankovnatsky
       qjoly

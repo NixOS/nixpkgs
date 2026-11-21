@@ -11,7 +11,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  zig_0_16,
+  zig_0_17,
   withStripDebug ? true,
 }:
 
@@ -19,11 +19,11 @@ let
   inherit (lib.trivial)
     boolToString
     ;
-  zig = zig_0_16;
+  zig = zig_0_17;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rhine";
-  version = "0.4.1";
+  version = "0.5.0";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Sivecano";
     repo = "rhine";
     tag = finalAttrs.version;
-    hash = "sha256-wJPwooj1f1xb+DhnxaF6iDD9NASlgQZ1OPgrtCCXtoQ=";
+    hash = "sha256-BwNMQe6aVUmTyRzkAnwubgYmyXZksxJOjDrfew9xZXI=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-nePZDV4TnFdI20cvhmyRoNi4OG33f+bvRPOE1xbrG4E=";
+    hash = "sha256-ScevH+3LjMCuYZqwufO6+XdipkDB1WGNIUexUERSdqY=";
   };
 
   zigBuildFlags = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       atemu
     ];
     license = with lib.licenses; [
-      gpl3Only
+      agpl3Only
     ];
     mainProgram = "rhine";
   };

@@ -53,6 +53,9 @@ buildPythonPackage rec {
     # Tests requires network access
     "test_document_cannot_identify_image"
     "test_document_with_broken_image"
+    # pypdf.errors.DeprecationError
+    "test_document_background_image"
+    "test_document_background_image_not_on_all_pages"
   ];
 
   pythonImportsCheck = [

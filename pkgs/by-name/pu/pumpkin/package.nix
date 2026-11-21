@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   nix-update-script,
   nixosTests,
 }:
@@ -20,6 +22,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-AgIPV5zexoA4OqTS4navDQM0U29Tg63JPnIjPrI4ssA=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
+
   cargoBuildFlags = [
     "--package"
     "pumpkin"
@@ -32,12 +39,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doCheck = true;
+  # ice_socket_uses_the_shared_udp_port binds a UDP socket on 127.0.0.1
+  __darwinAllowLocalNetworking = true;
 
   env = {
     # reduce peak RAM usage during the build
     CARGO_PROFILE_RELEASE_LTO = "thin";
     # split codegen into more units (should reduce memory peak)
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "16";
+    # rustc overflows its default 8 MiB stack on pumpkin-data's large generated matches
+    RUST_MIN_STACK = 67108864;
   };
 
   passthru = {

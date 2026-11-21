@@ -26,9 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
     aws-lc
     oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
 

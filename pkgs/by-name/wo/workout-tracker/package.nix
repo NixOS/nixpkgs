@@ -69,7 +69,6 @@ buildGoModule {
     license = lib.licenses.mit;
     mainProgram = "workout-tracker";
     maintainers = with lib.maintainers; [
-      bhankas
       sikmir
     ];
   };

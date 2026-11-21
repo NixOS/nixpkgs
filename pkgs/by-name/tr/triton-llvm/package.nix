@@ -73,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "23.0.0-unstable-2026-08-17"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+  version = "24.0.0-unstable-2026-08-03"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
 
   __structuredAttrs = true;
 
@@ -87,14 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # Triton pins its LLVM in `cmake/llvm-info.json`. For the 3.8 release, this is not an upstream
-  # commit but a `triton-lang/llvm-project` branch carrying SLP vectorizer and AMDGPU backports:
-  # https://github.com/triton-lang/triton/blob/release/3.8.x/cmake/llvm-info.json
+  # See https://github.com/triton-lang/triton/blob/v3.9.0/cmake/llvm-info.json
   src = fetchFromGitHub {
-    owner = "triton-lang";
+    owner = "llvm";
     repo = "llvm-project";
-    rev = "5f07f818b51b786b0a87b4e514882600ecba112f";
-    hash = "sha256-1sWaezAmvrPbrYVh2CLgtPEjkDiZBQkNymp18Eosbd0=";
+    rev = "b010a18d2b648cab83c83967ff26b8fde11acdc6";
+    hash = "sha256-stgOKrTcZo6eq/oOkIRo89t/lIJ2ADFzh7XHuNdxeJs=";
   };
 
   nativeBuildInputs = [
@@ -108,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     sphinx
     python3Packages.recommonmark
     python3Packages.myst-parser
+    # https://github.com/llvm/llvm-project/pull/211993
+    python3Packages.furo
   ];
 
   buildInputs = [

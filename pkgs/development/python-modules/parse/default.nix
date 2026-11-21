@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     description = "parse() is the opposite of format()";
     homepage = "https://github.com/r1chardj0n3s/parse";
     changelog = "https://github.com/r1chardj0n3s/parse/releases/tag/v${finalAttrs.src.tag}";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alunduil ];
   };
 })

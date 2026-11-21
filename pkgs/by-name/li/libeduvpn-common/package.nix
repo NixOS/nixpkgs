@@ -6,16 +6,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "libeduvpn-common";
-  version = "5.0.3";
+  version = "5.0.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "eduVPN";
     repo = "eduvpn-common";
     tag = finalAttrs.version;
-    hash = "sha256-tJT0+ZCtiHOcWFBsIFuVocwGTDaj7fCK8B5eu+J1Y50=";
+    hash = "sha256-00Zr5WLm6tagwh0frW+wPthNGdTkwmFo3ebyf0syKfo=";
   };
 
-  vendorHash = "sha256-FoYK6f7AvkYf8PjI2JK0Jld/nFQ4Q5fulepqEhw3B4g=";
+  vendorHash = "sha256-IlvVaTGHrTBu5Oq1fGDwDpKuQHOHxSXj++2fDed3NSU=";
 
   buildPhase = ''
     runHook preBuild

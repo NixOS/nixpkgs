@@ -17,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "rabits";
   domain = "ef_ble";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "rabits";
     repo = "ha-ef-ble";
     tag = "v${version}";
-    hash = "sha256-B/r/VK4qz22oa5zQ+UwaIMGK8/OUiuNrSBkKnDa1K7M=";
+    hash = "sha256-7QGcR9uJvQ43EGKPc0ioregFEZPW8qAQbu/4zRDPTos=";
   };
 
   dependencies = [

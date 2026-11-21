@@ -3,27 +3,34 @@
   buildGoModule,
   fetchFromGitHub,
   osv-detector,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "osv-detector";
-  version = "0.11.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "G-Rath";
     repo = "osv-detector";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vIkLrKyDeMfRe/0EPhlKlHAO6XB0/OFY5mTUHeZbcg8=";
+    hash = "sha256-3XKH2CgZeawzmIMQPMGLz9A1ax1L3ynrwpQmvOiHBgo=";
   };
 
-  vendorHash = "sha256-Rrosye8foVntoFDvDmyNuXgnEgjzcOXenOKBMZVCRio=";
+  vendorHash = "sha256-zjoscB0dy9rStDWpGS9XLxvCcIJaa1zNjETxx9hpPYw=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
-    "-w"
     "-s"
-    "-X main.version=${finalAttrs.version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
+
+  preCheck = ''
+    # go-snaps fails the run when skipped tests leave orphaned snapshot files
+    export CI=false
+    export UPDATE_SNAPS=clean
+  '';
 
   checkFlags =
     let
@@ -37,6 +44,9 @@ buildGoModule (finalAttrs: {
         "TestRun_Ignores"
         "TestRun_ParseAsSpecific"
         "TestRun_Configs"
+        # Snapshots are outdated
+        "TestRun_APIError"
+        "TestRun_UpdatingConfigIgnores"
       ];
     in
     [
@@ -44,18 +54,14 @@ buildGoModule (finalAttrs: {
       "${builtins.concatStringsSep "|" skippedTests}"
     ];
 
-  passthru.tests.version = testers.testVersion {
-    package = osv-detector;
-    command = "osv-detector -version";
-    version = "osv-detector ${finalAttrs.version} (unknown, commit none)";
-  };
+  doInstallCheck = true;
 
   meta = {
     description = "Auditing tool for detecting vulnerabilities";
-    mainProgram = "osv-detector";
     homepage = "https://github.com/G-Rath/osv-detector";
-    changelog = "https://github.com/G-Rath/osv-detector/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/G-Rath/osv-detector/releases/tag/v${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "osv-detector";
   };
 })

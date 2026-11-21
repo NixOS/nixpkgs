@@ -368,6 +368,10 @@
                 {
                   "id": "checkpoint-build",
                   "file": "build-helpers/special/checkpoint-build.section.md"
+                },
+                {
+                  "id": "mkprotonbinderivation",
+                  "file": "build-helpers/special/mkprotonbinderivation.section.md"
                 }
               ]
             },
@@ -628,6 +632,10 @@
                 {
                   "id": "xfce4-dev-tools",
                   "file": "hooks/xfce4-dev-tools.section.md"
+                },
+                {
+                  "id": "xtool-build-hook",
+                  "file": "hooks/xtool-build-hook.section.md"
                 }
               ]
             }

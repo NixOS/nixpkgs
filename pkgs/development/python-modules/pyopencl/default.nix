@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyopencl";
-  version = "2026.1.4";
+  version = "2026.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     repo = "pyopencl";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-jYonctlEmvfZoY8n5eNfh5XQdUPrZRGcKzFVUP78eUk=";
+    hash = "sha256-4OU3URzd39hGRZYA/Hw51A6rhqRbABrtVTYxlgCLhA0=";
   };
 
   postPatch = ''

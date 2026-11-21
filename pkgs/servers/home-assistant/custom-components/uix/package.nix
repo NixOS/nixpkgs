@@ -13,19 +13,19 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "Lint-Free-Technology";
   domain = "uix";
-  version = "8.4.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "uix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+JRkonJeBBY7O9rSG/HQK1+HU1lktSvUuWYWyvSv1yo=";
+    hash = "sha256-Zhve7CSVqTUyOPk8dJCqN9DuZJHdwurLrAfhdx6YDjI=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "uix-${finalAttrs.version}-npm-deps";
-    hash = "sha256-lWJiCetV3oJz9EsZ7a7pFsOXdZKKOTfHyoh5emhaHK0=";
+    hash = "sha256-9pQIECBd2fMa1qJLGmGsrKoonzHxqAxpRVogwgaLJBQ=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,7 @@ buildHomeAssistantComponent (finalAttrs: {
     "tests/test_console_debug_dom_helpers.py"
     "tests/test_forge_spark_form_data.py"
     "tests/test_forge_spark_map_positions.py"
+    "tests/test_ll_custom_actions_popover.py"
     "tests/visual"
   ];
 

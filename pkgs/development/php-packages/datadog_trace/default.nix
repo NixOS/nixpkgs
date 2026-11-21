@@ -1,10 +1,8 @@
 {
   lib,
-  php,
   stdenv,
   buildPecl,
   cargo,
-  cmake,
   rustc,
   fetchFromGitHub,
   rustPlatform,
@@ -12,36 +10,44 @@
   pcre2,
   valgrind,
   libiconv,
+  libddwaf,
+  llvmPackages,
   pkg-config,
   zstd,
 }:
 
-buildPecl rec {
+buildPecl (finalAttrs: {
   pname = "ddtrace";
-  version = "1.26.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-35Pb68wFg/HwuN3qrxRFo/rN9rOdnx30vUScWPQGQ5s=";
+    hash = "sha256-9MTIbbV/JnSTSerHpJIReeTZtW1lxIIeXCGR9RaCZG4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-IcyygiMLiaKkb+4W+YtTQuRrunego6KtbISw5u1egoI=";
+    inherit (finalAttrs) src;
+    hash = "sha256-97PlYf9KY0C+J1HYkJM/oqAjxwz+c8cYtF53L4EvE5I=";
   };
 
-  env.NIX_CFLAGS_COMPILE = "-O2";
+  env = {
+    NIX_CFLAGS_COMPILE = "-O2";
+    LIBDDWAF_PREFIX = libddwaf;
+    DDTRACE_SHARED_LIBADD = "-lddwaf";
+  };
 
-  configureFlags = [ "--enable-ddtrace-libddwaf-source" ];
-
-  dontUseCmakeConfigure = true;
+  # Use the packaged shared library instead of building or downloading libddwaf.
+  postPatch = ''
+    substituteInPlace appsec/helper-rust/Cargo.toml \
+      --replace-fail 'features = ["ring"]' 'features = ["ring", "dynamic-link"]'
+  '';
 
   nativeBuildInputs = [
     cargo
-    cmake
+    llvmPackages.llvm
     pkg-config
     rustc
     rustPlatform.bindgenHook
@@ -50,6 +56,7 @@ buildPecl rec {
 
   buildInputs = [
     curl
+    libddwaf
     pcre2
     zstd
   ]
@@ -61,8 +68,7 @@ buildPecl rec {
   ];
 
   meta = {
-    broken = lib.versionAtLeast php.version "8.6";
-    changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/DataDog/dd-trace-php/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Datadog Tracing PHP Client";
     homepage = "https://github.com/DataDog/dd-trace-php";
     license = with lib.licenses; [
@@ -71,4 +77,4 @@ buildPecl rec {
     ];
     teams = [ lib.teams.php ];
   };
-}
+})

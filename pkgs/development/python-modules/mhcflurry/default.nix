@@ -11,6 +11,7 @@
   ahocorasick-rs,
   appdirs,
   argcomplete,
+  filelock,
   matplotlib,
   mhcgnomes,
   numpy,
@@ -30,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcflurry";
-  version = "2.3.25";
+  version = "2.3.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
     tag = finalAttrs.version;
-    hash = "sha256-513yiFwGPzpE/b58A03+6OZW9TwiFIEKGCyw+1sH8wA=";
+    hash = "sha256-0WsDL6BQZB8Hyzj5oxtfsF1Jxt2HP/jo6UNUGbcNoZs=";
   };
 
   build-system = [
@@ -48,6 +49,7 @@ buildPythonPackage (finalAttrs: {
     ahocorasick-rs
     appdirs
     argcomplete
+    filelock
     matplotlib
     mhcgnomes
     numpy

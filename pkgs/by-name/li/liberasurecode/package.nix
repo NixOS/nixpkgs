@@ -35,6 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace Makefile.am src/Makefile.am \
       --replace-fail "-Werror" ""
+
+    # dyld doesn't search $out/lib for dlopen(), use absolute paths for macOS backends
+    substituteInPlace src/backends/null/null.c --replace-fail \
+      '"libnullcode" LIBERASURECODE_SO_SUFFIX ".dylib"' \
+      "\"$out/lib/libnullcode\" LIBERASURECODE_SO_SUFFIX \".dylib\""
+    substituteInPlace src/backends/rs_vand/liberasurecode_rs_vand.c --replace-fail \
+      '"liberasurecode_rs_vand" LIBERASURECODE_SO_SUFFIX ".dylib"' \
+      "\"$out/lib/liberasurecode_rs_vand\" LIBERASURECODE_SO_SUFFIX \".dylib\""
+    substituteInPlace src/backends/xor/flat_xor_hd.c --replace-fail \
+      '"libXorcode" LIBERASURECODE_SO_SUFFIX ".dylib"' \
+      "\"$out/lib/libXorcode\" LIBERASURECODE_SO_SUFFIX \".dylib\""
   '';
 
   nativeBuildInputs = [

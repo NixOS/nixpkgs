@@ -1,17 +1,27 @@
 diff --git a/aider/exceptions.py b/aider/exceptions.py
 --- a/aider/exceptions.py
 +++ b/aider/exceptions.py
-@@ -33,7 +33,9 @@
+@@ -23,6 +23,8 @@
+     ExInfo("BadGatewayError", True, None),
+     ExInfo("BadRequestError", False, None),
+     ExInfo("BudgetExceededError", True, None),
++    ExInfo("CallerCredentialAuthenticationError", False, None),
++    ExInfo("CallerCredentialRateLimitError", True, None),
+     ExInfo(
+         "ContentPolicyViolationError",
+         True,
+@@ -33,7 +35,10 @@
      ExInfo("InternalServerError", True, "The API provider's servers are down or overloaded."),
      ExInfo("InvalidRequestError", True, None),
      ExInfo("JSONSchemaValidationError", True, None),
++    ExInfo("MalformedRequestFieldError", False, None),
 +    ExInfo("ModelNotMappedError", False, None),
      ExInfo("NotFoundError", False, None),
 +    ExInfo("PaymentRequiredError", False, None),
      ExInfo(
          "PermissionDeniedError",
          False,
-@@ -49,6 +51,8 @@
+@@ -49,6 +54,8 @@
      ExInfo("ServiceUnavailableError", True, "The API provider's servers are down or overloaded."),
      ExInfo("UnprocessableEntityError", True, None),
      ExInfo("UnsupportedParamsError", True, None),
@@ -20,3 +30,12 @@ diff --git a/aider/exceptions.py b/aider/exceptions.py
      ExInfo(
          "Timeout",
          True,
+@@ -69,7 +76,7 @@
+ 
+         for var in dir(litellm):
+             if var.endswith("Error"):
+-                if var not in self.exception_info and var not in [ "ErrorEventError" ]:
++                if var not in self.exception_info and var not in ["ErrorEventError", "ValidationError"]:
+                     raise ValueError(f"{var} is in litellm but not in aider's exceptions list")
+ 
+         for var in self.exception_info:

@@ -58,6 +58,7 @@
   rdma-core,
 
   # buildInputs
+  apple-sdk_26,
   openssl,
   numactl,
   llvmPackages,
@@ -299,7 +300,7 @@ in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.14.1";
+  version = "2.15.0";
   pyproject = true;
 
   outputs = [
@@ -684,6 +685,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
   ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
+  # MPS code uses MTLLanguageVersion3_2/4_0, only declared in the macOS 26 SDK
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_26 ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [

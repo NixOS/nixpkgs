@@ -20,13 +20,13 @@
 buildHomeAssistantComponent rec {
   owner = "danielcherubini";
   domain = "elegoo_printer";
-  version = "2.13.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "danielcherubini";
     repo = "elegoo-homeassistant";
     tag = "v${version}";
-    hash = "sha256-L3oFUCqxkygiwTTeHR9MMneA5q4+YFHBoNAxqbqp/Sk=";
+    hash = "sha256-AA3unv5dLdkR1yJ6f7YsAfpsOQyQ0696RGAHi4wMdIY=";
   };
 
   dependencies = [
@@ -45,8 +45,8 @@ buildHomeAssistantComponent rec {
   ];
 
   disabledTestPaths = [
-    # https://github.com/danielcherubini/elegoo-homeassistant/issues/419
-    "custom_components/elegoo_printer/tests/test_coordinator.py"
+    # multicast is not available in the nix sandbox
+    "custom_components/elegoo_printer/tests/test_config_flow_cc2_options.py::TestManualIpWithProxyHost::test_blank_proxy_host_runs_discovery_as_before"
   ];
 
   meta = {

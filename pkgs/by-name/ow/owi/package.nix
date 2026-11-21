@@ -7,13 +7,13 @@
   zig,
   makeWrapper,
   unstableGitUpdater,
-  nixosTests,
+  runCommand,
 }:
 
 let
   ocamlPackages = ocaml-ng.ocamlPackages_5_4;
 in
-ocamlPackages.buildDunePackage {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "owi";
   version = "0.2-unstable-2026-05-22";
 
@@ -79,7 +79,21 @@ ocamlPackages.buildDunePackage {
 
   passthru = {
     updateScript = unstableGitUpdater { };
-    tests = { inherit (nixosTests) owi; };
+    tests.rust =
+      runCommand "owi-test-rust"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          owi rust --fail-on-assertion-only ${./test-pass.rs}
+
+          if owi rust --fail-on-assertion-only ${./test-fail.rs}; then
+            echo "owi did not find the assertion failure in test-fail.rs" >&2
+            exit 1
+          fi
+
+          touch $out
+        '';
   };
 
   meta = {
@@ -95,4 +109,4 @@ ocamlPackages.buildDunePackage {
     mainProgram = "owi";
     badPlatforms = lib.platforms.darwin;
   };
-}
+})

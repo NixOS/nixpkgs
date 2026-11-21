@@ -1,14 +1,18 @@
 {
   lib,
   stdenv,
+  aws-lc,
   darwin,
   fetchFromGitHub,
   libusb1,
   nix-update-script,
   perl,
   pkg-config,
+  rust-jemalloc-sys,
   rustPlatform,
+  sqlite,
   versionCheckHook,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,7 +38,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 
   # Tests are run upstream, and many perform I/O
   # incompatible with the nix build sandbox.

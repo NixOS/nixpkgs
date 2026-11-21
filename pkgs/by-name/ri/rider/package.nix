@@ -89,6 +89,10 @@ in
         [ lib.sourceTypes.binaryNativeCode ]
       else
         [ lib.sourceTypes.binaryBytecode ];
+    knownVulnerabilities = [
+      # Fixed in 2026.3.0.1
+      "CVE-2026-111497; see https://github.com/NixOS/nixpkgs/issues/590447"
+    ];
   };
 }).overrideAttrs
   (attrs: {

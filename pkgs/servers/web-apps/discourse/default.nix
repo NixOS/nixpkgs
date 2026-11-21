@@ -56,13 +56,13 @@
 }:
 
 let
-  version = "2026.9.1";
+  version = "2026.9.2";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     tag = "v${version}";
-    hash = "sha256-j3JjLYNcv3lluoCekyUUKMfkSX/ExeDsa8zrQ+pDrwg=";
+    hash = "sha256-7uWEli3Rkrx4UBOjrDUA7C7mltRH6cteR6vHW2sZiE8=";
   };
 
   pnpm = pnpm_10;
@@ -532,6 +532,13 @@ let
 
       # Skip voice plugin asset symlink removal/recreation at runtime.
       ./voice-plugin-assets.patch
+
+      # Change the location of the vips worker socket to
+      # /run/discourse/sockets/vips.sock because otherwise it tries to allocate
+      # it in the Nix store, which exceeds the maximum length (108 bytes) for
+      # UNIX socket path. Also prevents the code that spawn the socket from
+      # restricting permissions to the sockets directory
+      ./vips-socket-path.patch
     ];
 
     postPatch = ''

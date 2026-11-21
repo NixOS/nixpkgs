@@ -13,12 +13,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "twill";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-/ZT5ntn7YMafrD9/rWaOvROKo+CGFKSldG9jjH/eR0Q=";
+    hash = "sha256-wG1py+No7OQ8dfM93EOalot6gdB9bN4DsLinfq74dcs=";
   };
 
   pythonRelaxDeps = [ "lxml" ];
