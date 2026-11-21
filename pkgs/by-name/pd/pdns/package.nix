@@ -51,8 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     unixodbc
     openssl
-    systemd
     lmdb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    systemd
     tinycdb
   ];
 
@@ -64,26 +66,28 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "reproducible")
     (lib.enableFeature true "tools")
     (lib.enableFeature true "ixfrdist")
-    (lib.enableFeature true "systemd")
+    (lib.enableFeature stdenv.hostPlatform.isLinux "systemd")
     (lib.withFeature true "libsodium")
     (lib.withFeature true "sqlite3")
     (lib.withFeatureAs true "libcrypto" (lib.getDev openssl))
     (lib.withFeatureAs true "modules" "")
     (lib.withFeatureAs true "dynmodules" (
-      lib.concatStringsSep " " [
-        "bind"
-        "geoip"
-        "gmysql"
-        "godbc"
-        "gpgsql"
-        "gsqlite3"
-        "ldap"
-        "lmdb"
-        "lua2"
-        "pipe"
-        "remote"
-        "tinydns"
-      ]
+      lib.concatStringsSep " " (
+        [
+          "bind"
+          "geoip"
+          "gmysql"
+          "godbc"
+          "gpgsql"
+          "gsqlite3"
+          "ldap"
+          "lmdb"
+          "lua2"
+          "pipe"
+          "remote"
+        ]
+        ++ lib.optional stdenv.hostPlatform.isLinux "tinydns"
+      )
     ))
     "--with-boost=${boost.dev}"
     "sysconfdir=/etc/pdns"
@@ -108,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       mic92
