@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
   git,
@@ -17,76 +17,33 @@
   stdenv,
   sqliteSupport ? true,
   nixosTests,
+  nix-update-script,
 }:
 
-let
-  pnpm = pnpm_11;
-
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "gitea-frontend";
-    inherit (gitea) src version;
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      inherit pnpm;
-      fetcherVersion = 4;
-      hash = "sha256-rduD3GqgdUlF95HTnKe8smToyHop4RrO6QDTRzh2RCk=";
-    };
-
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm
-    ];
-
-    __darwinAllowLocalNetworking = true;
-
-    buildPhase = ''
-      make frontend
-    '';
-
-    installPhase = ''
-      mkdir -p $out
-      cp -R public $out/
-    '';
-  });
-in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gitea";
-  version = "1.27.3";
-
-  src = fetchFromGitHub {
-    owner = "go-gitea";
-    repo = "gitea";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-91hF7VpMDHyBj1dBlsVC/b3IhNAnUwK/qhZb77GPEnc=";
-  };
-
-  proxyVendor = true;
-
-  vendorHash = "sha256-YRBMGWKIZgMxOXaXG2bIBj1XzkhSwiMyfRy+yQGw+Bo=";
+  version = "28.4.0";
 
   outputs = [
     "out"
     "data"
   ];
 
-  patches = [ ./static-root-path.patch ];
-
-  # go-modules derivation doesn't provide $data
-  # so we need to wait until it is built, and then
-  # at that time we can then apply the substituteInPlace
-  overrideModAttrs = _: {
-    postPatch = ''
-      substituteInPlace go.mod \
-        --replace-fail "go 1.26.4" "go 1.26.0"
-    '';
+  src = fetchFromGitHub {
+    owner = "go-gitea";
+    repo = "gitea";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YR9IrLGPRuxiuoIoBwd9MsX+S3r/pqw/D4H5qtRsrmg=";
   };
 
+  proxyVendor = true;
+
+  vendorHash = "sha256-DHRcBNzoR3w9T0e20qiX6VD7STH30ql0pRBUbyNeKTU=";
+
   postPatch = ''
-    substituteInPlace modules/setting/server.go --subst-var data
-    substituteInPlace go.mod \
-      --replace-fail "go 1.26.4" "go 1.26.0"
+    substituteInPlace modules/setting/server.go \
+      --replace-fail '"gitea.dev/modules/util"' "" \
+      --replace-fail "StaticRootPath = util.IfZero(StaticRootPath, AppWorkPath)" "StaticRootPath = \"$data\""
   '';
 
   subPackages = [ "." ];
@@ -105,9 +62,38 @@ buildGoModule (finalAttrs: {
     "-X 'main.Tags=${lib.concatStringsSep " " finalAttrs.tags}'"
   ];
 
+  frontend = stdenv.mkDerivation (finalFrontendAttrs: {
+    pname = "${finalAttrs.pname}-frontend";
+    inherit (finalAttrs) src version;
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalFrontendAttrs) pname version src;
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-ali72RBRH2tGUY7n2vQIxnIenxZZ7GdVtVcMAZZwa1w=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm_11
+    ];
+
+    __darwinAllowLocalNetworking = true;
+
+    buildPhase = ''
+      make frontend
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -R public $out/
+    '';
+  });
+
   postInstall = ''
     mkdir $data
-    ln -s ${frontend}/public $data/public
+    ln -s ${finalAttrs.frontend}/public $data/public
     cp -R ./{templates,options} $data
     mkdir -p $out
     cp -R ./options/locale $out/locale
@@ -131,6 +117,13 @@ buildGoModule (finalAttrs: {
         (compressDrvWeb gitea.data { });
 
     tests = nixosTests.gitea;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
   };
 
   meta = {
