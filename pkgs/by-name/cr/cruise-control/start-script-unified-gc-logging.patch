@@ -1,0 +1,11 @@
+--- a/kafka-cruise-control-start.sh
++++ b/kafka-cruise-control-start.sh
+@@ -156,7 +156,7 @@ GC_FILE_SUFFIX='-gc.log'
+ GC_LOG_FILE_NAME=''
+ if [ "x$GC_LOG_ENABLED" = "xtrue" ]; then
+   GC_LOG_FILE_NAME=$DAEMON_NAME$GC_FILE_SUFFIX
+-  KAFKA_GC_LOG_OPTS="-Xloggc:$LOG_DIR/$GC_LOG_FILE_NAME -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M"
++  KAFKA_GC_LOG_OPTS="-Xlog:gc*:file=$LOG_DIR/$GC_LOG_FILE_NAME:time,tags:filecount=10,filesize=100M"
+ fi
+ 
+ # If Cygwin is detected, classpath is converted to Windows format.
