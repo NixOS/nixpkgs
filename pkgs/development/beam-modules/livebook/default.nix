@@ -57,6 +57,7 @@ beamPackages.mixRelease (finalAttrs: {
         --no-cache \
         --backend=copyfile \
         --cpu="*" \
+        --libc="*" \
         --frozen-lockfile \
         --ignore-scripts \
         --no-progress \

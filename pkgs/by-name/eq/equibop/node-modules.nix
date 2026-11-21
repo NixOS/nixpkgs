@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
 
     export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-    bun install \
+    bun install --cpu="*" --os="*" --libc="*" \
         --filter=equibop \
         --force \
         --frozen-lockfile \
@@ -48,13 +48,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  outputHash =
-    {
-      x86_64-linux = "sha256-Gtsy22jI9y6a8NB/bRR4j1z1PwFlfJPzIPznr7fLb8M=";
-      aarch64-linux = "sha256-LCmlxa6SZwex33c0zjR+cIIp2HdyHNtpZHoAfFKaR+Y=";
-    }
-    .${stdenvNoCC.hostPlatform.system}
-      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+  outputHash = "sha256-pemXG9vrOw8qiLalkq9LM/0pNUlGRhUsOQ+ajxkBVr0=";
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
 }

@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       bun install \
         --cpu="*" \
+        --libc="*" \
         --frozen-lockfile \
         --ignore-scripts \
         --no-progress \

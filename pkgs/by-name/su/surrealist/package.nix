@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-      bun install --no-progress --frozen-lockfile --no-cache
+      bun install --cpu="*" --os="*" --libc="*" --no-progress --frozen-lockfile --no-cache
 
       runHook postBuild
     '';
@@ -93,13 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       runHook postInstall
     '';
-    outputHash =
-      {
-        x86_64-linux = "sha256-tZYIiWHaeryV/f9AFNknRZp8om0y8QH8RCxoqgmbR5g=";
-        aarch64-linux = "sha256-6nB8wcXIYR1WcYqZrNFl0Jfdz/Z3PttULQHsQcfAsOk=";
-      }
-      .${stdenv.hostPlatform.system}
-        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux, aarch64-linux.");
+    outputHash = "sha256-jNE7NiMM3w/mMeeFu7ABJKxee0KV64tYWDPCgD2LaTA=";
     outputHashMode = "recursive";
   };
 

@@ -34,7 +34,7 @@ let
       runHook preBuild
 
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-      bun install --frozen-lockfile --ignore-scripts --no-progress --cpu="*" --os="*"
+      bun install --frozen-lockfile --ignore-scripts --no-progress --cpu="*" --os="*" --libc="*"
 
       runHook postBuild
     '';

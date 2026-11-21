@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
       bun install \
         --cpu="*" \
+        --libc="*" \
         --frozen-lockfile \
         --ignore-scripts \
         --no-progress \
