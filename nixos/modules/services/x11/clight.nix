@@ -10,33 +10,51 @@ with lib;
 let
   cfg = config.services.clight;
 
-  toConf =
-    v:
-    if builtins.isFloat v then
-      toString v
-    else if isInt v then
-      toString v
-    else if isBool v then
-      boolToString v
-    else if isString v then
-      ''"${escape [ ''"'' ] v}"''
-    else if isList v then
-      "[ " + concatMapStringsSep ", " toConf v + " ]"
-    else if isAttrs v then
-      "\n{\n" + convertAttrs v + "\n}"
-    else
-      abort "clight.toConf: unexpected type (v = ${v})";
+  configFormat = pkgs.formats.libconfig { };
 
-  getSep = v: if isAttrs v then ":" else "=";
-
-  convertAttrs =
-    attrs:
-    concatStringsSep "\n" (
-      mapAttrsToList (name: value: "${toString name} ${getSep value} ${toConf value};") attrs
+  isLibconfigMarker =
+    value:
+    isAttrs value
+    &&
+      builtins.attrNames value == [
+        "_type"
+        "value"
+      ]
+    && isString value._type
+    && (
+      (
+        elem value._type [
+          "array"
+          "list"
+        ]
+        && isList value.value
+      )
+      || (
+        elem value._type [
+          "hex"
+          "octal"
+          "float"
+        ]
+        && isString value.value
+      )
     );
 
-  clightConf = pkgs.writeText "clight.conf" (
-    convertAttrs (filterAttrs (_: value: value != null) cfg.settings)
+  toLibconfig =
+    value:
+    if isLibconfigMarker value then
+      value
+    else if isList value then
+      let
+        converted = map toLibconfig value;
+      in
+      if all (v: !isAttrs v && !isList v) value then configFormat.lib.mkArray converted else converted
+    else if isAttrs value then
+      mapAttrs (_: toLibconfig) value
+    else
+      value;
+
+  clightConf = configFormat.generate "clight.conf" (
+    toLibconfig (filterAttrs (_: value: value != null) cfg.settings)
   );
 in
 {
@@ -62,41 +80,34 @@ in
       };
     };
 
-    settings =
-      let
-        validConfigTypes =
-          with types;
-          oneOf [
-            int
-            str
-            bool
-            float
-          ];
-        collectionTypes =
-          with types;
-          oneOf [
-            validConfigTypes
-            (listOf validConfigTypes)
-          ];
-      in
-      mkOption {
-        type = with types; attrsOf (nullOr (either collectionTypes (attrsOf collectionTypes)));
-        default = { };
-        example = {
-          captures = 20;
-          gamma_long_transition = true;
-          ac_capture_timeouts = [
-            120
-            300
-            60
-          ];
-        };
-        description = ''
-          Additional configuration to extend clight.conf. See
-          <https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf> for a
-          sample configuration file.
-        '';
+    settings = mkOption {
+      type = types.attrsOf (types.nullOr configFormat.type.nestedTypes.elemType);
+      default = { };
+      example = {
+        captures = 20;
+        gamma_long_transition = true;
+        ac_capture_timeouts = [
+          120
+          300
+          60
+        ];
+        monitor_override = [
+          {
+            monitor_id = "example_1";
+            ac_regression_points = [
+              0.0
+              0.1
+              0.2
+            ];
+          }
+        ];
       };
+      description = ''
+        Additional configuration to extend clight.conf. See
+        <https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf> for a
+        sample configuration file.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
