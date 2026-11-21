@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "petl";
-  version = "1.7.29";
+  version = "1.7.33";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "petl-developers";
     repo = "petl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1pfnjdosPN06eYJEY5ez8Ckngy0tNF5/5oLmSESBuNY=";
+    hash = "sha256-U90t5vGZG1A1fNyoQ3bEVUkDRgXbqheIDVDrqX15eC8=";
   };
 
   build-system = [
