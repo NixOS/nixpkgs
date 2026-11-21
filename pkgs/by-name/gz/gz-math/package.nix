@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-math";
-  version = "9.1.0";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "gazebosim";
     repo = "gz-math";
     tag = "gz-math${lib.versions.major finalAttrs.version}_${finalAttrs.version}";
-    hash = "sha256-Kc9g5D52+NVygYLpMf+4GFPPn2sTEfXBOC14iw39NlA=";
+    hash = "sha256-K5K/KISfKLZrEXqD4sdjJJ+6itgrVH5llonatTq9prw=";
   };
 
   strictDeps = true;
