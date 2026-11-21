@@ -4,7 +4,6 @@
   nukeReferences,
   langC,
   langCC,
-  runtimeShell,
   buildIsHost,
   hostIsTarget,
 }:
@@ -34,7 +33,7 @@ in
       postInstallSaveChecksumPhase = ''
         mv gcc/build/genchecksum gcc/build/.genchecksum-wrapped
         cat > gcc/build/genchecksum <<\EOF
-        #!${runtimeShell}
+        #!${stdenv.shell}
         set -e
         ${nukeReferences}/bin/nuke-refs $@
         for INPUT in "$@"; do install -Dt "$checksum/inputs/" "$INPUT"; done
