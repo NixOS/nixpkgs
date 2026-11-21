@@ -535,6 +535,8 @@ let
         getFiles
         optionAttrSetToDocList
         optionAttrSetToDocList'
+        optionToDoc
+        optionToDoc'
         scrubOptionValue
         literalExpression
         showOption
