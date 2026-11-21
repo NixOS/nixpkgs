@@ -7,6 +7,7 @@
 let
   cfg = config.services.aurral;
   libraryFolder = cfg.environment.LIBRARY_FOLDER or (cfg.environment.DOWNLOAD_FOLDER or null);
+  pluginIdType = lib.types.strMatching "[a-z0-9][a-z0-9-]*";
 in
 {
   options = {
@@ -14,6 +15,26 @@ in
       enable = lib.mkEnableOption "Aurral, a self-hosted music discovery, library management, and streaming service";
 
       package = lib.mkPackageOption pkgs "aurral" { };
+
+      plugins = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.addCheck lib.types.package (p: pluginIdType.check (p.pluginId or null))
+        );
+        default = [ ];
+        example = lib.literalExpression "with pkgs.aurralPlugins; [ lidarr metadata ]";
+        description = ''
+          Plugin packages to install alongside plugins from the web interface.
+          Enable plugins and configure their settings in Aurral. Update or remove
+          packaged plugins through this option. A packaged plugin takes precedence
+          over a web-installed copy with the same ID while it is listed here.
+          Removing a packaged plugin can leave an empty directory under
+          `plugins/` in the data directory. If Aurral reports a missing
+          manifest for that plugin, remove the empty directory with `rmdir`.
+
+          Each package must provide `passthru.pluginId` matching its manifest ID
+          and install `manifest.json` and `index.js` at the root of its output.
+        '';
+      };
 
       directories = lib.mkOption {
         type = lib.types.listOf lib.types.externalPath;
@@ -87,6 +108,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = lib.allUnique (map (p: p.pluginId) cfg.plugins);
+        message = "services.aurral.plugins must contain at most one package per plugin ID.";
+      }
+    ];
+
     systemd.services.aurral = {
       description = "Aurral";
       after = [ "network.target" ];
@@ -123,7 +151,8 @@ in
         ++ lib.optionals config.services.resolved.enable [
           "/run/systemd/resolve/stub-resolv.conf"
           "/run/systemd/resolve/resolv.conf"
-        ];
+        ]
+        ++ map (p: "${p}:${cfg.dataDir}/plugins/${p.pluginId}") cfg.plugins;
         RestrictSUIDSGID = true;
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [
@@ -164,6 +193,14 @@ in
       ${libraryFolder}.d = {
         inherit (cfg) user group;
         mode = "0770";
+      };
+    };
+
+    # Create the writable parent before systemd sets up the read-only mounts.
+    systemd.tmpfiles.settings."10-aurral-plugins" = lib.mkIf (cfg.plugins != [ ]) {
+      "${cfg.dataDir}/plugins".d = {
+        inherit (cfg) user group;
+        mode = "0750";
       };
     };
 
