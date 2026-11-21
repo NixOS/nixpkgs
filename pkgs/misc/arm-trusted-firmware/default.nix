@@ -40,13 +40,13 @@ let
       rec {
 
         pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-        version = "2.14.0";
+        version = "2.15.0";
 
         src = fetchFromGitHub {
           owner = "ARM-software";
           repo = "arm-trusted-firmware";
           tag = "v${version}";
-          hash = "sha256-7imeQocGMSyGXTEhNs4s0bcDxZpbLSSkOyI7c5UxqVs=";
+          hash = "sha256-pFisArv6snepJ1qWmjckbr0O2Jg4WMhUkN3exgdyb+c=";
         };
 
         patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -206,6 +206,13 @@ in
   armTrustedFirmwareRK3568 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3568";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
+  };
+
+  armTrustedFirmwareRK3576 = buildArmTrustedFirmware rec {
+    extraMakeFlags = [ "bl31" ];
+    platform = "rk3576";
     extraMeta.platforms = [ "aarch64-linux" ];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
   };
