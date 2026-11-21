@@ -1,0 +1,51 @@
+diff --git a/src-tauri/src/tray.rs b/src-tauri/src/tray.rs
+index 4b944b3..77a7f22 100644
+--- a/src-tauri/src/tray.rs
++++ b/src-tauri/src/tray.rs
+@@ -43,13 +43,6 @@ pub fn sync_icon_for_theme(app: &AppHandle) {
+ pub fn create(app: &AppHandle) -> tauri::Result<()> {
+     let show_item = MenuItem::with_id(app, "show", "Show App", true, None::<&str>)?;
+     let settings_item = MenuItem::with_id(app, "settings", "Settings", true, Some("CmdOrCtrl+,"))?;
+-    let update_item = MenuItem::with_id(
+-        app,
+-        "check-updates",
+-        "Check for Updates",
+-        true,
+-        None::<&str>,
+-    )?;
+     let about_item = MenuItem::with_id(app, "about", "About Lumo", true, None::<&str>)?;
+     let quit_item = MenuItem::with_id(app, "quit", "Quit", true, Some("CmdOrCtrl+Q"))?;
+ 
+@@ -63,7 +56,6 @@ pub fn create(app: &AppHandle) -> tauri::Result<()> {
+         true,
+         &[
+             &about_item,
+-            &update_item,
+             &PredefinedMenuItem::separator(app)?,
+             &settings_item,
+             &show_item,
+@@ -96,7 +88,6 @@ pub fn create(app: &AppHandle) -> tauri::Result<()> {
+         &[
+             &show_item,
+             &settings_item,
+-            &update_item,
+             &about_item,
+             &quit_item,
+         ],
+diff --git a/src-tauri/src/updater.rs b/src-tauri/src/updater.rs
+index 426e065..7b0d26f 100644
+--- a/src-tauri/src/updater.rs
++++ b/src-tauri/src/updater.rs
+@@ -60,7 +60,12 @@ fn mandatory(current: &Version, release: &Version, raw: &serde_json::Value) -> b
+     *current < minimum
+ }
+ 
++// Every update check goes through here. Updates are delivered through Nix, so
++// report that none are available.
++#[allow(unreachable_code, unused_variables)]
+ async fn check(app: &AppHandle) -> Result<Option<(Update, bool)>, String> {
++    return Ok(None);
++
+     let mut builder = app.updater_builder().timeout(Duration::from_secs(15));
+ 
+     if let Some(url) = manifest_url() {
