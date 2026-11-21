@@ -14,6 +14,7 @@ let
     ln -s /run/wrappers/bin/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
     ln -s /run/wrappers/bin/go.d.plugin $out/libexec/netdata/plugins.d/go.d.plugin
+    ln -s /run/wrappers/bin/ipmi.plugin $out/libexec/netdata/plugins.d/ipmi.plugin
     ln -s /run/wrappers/bin/logs-management.plugin $out/libexec/netdata/plugins.d/logs-management.plugin
     ln -s /run/wrappers/bin/network-viewer.plugin $out/libexec/netdata/plugins.d/network-viewer.plugin
     ln -s /run/wrappers/bin/otel-plugin $out/libexec/netdata/plugins.d/otel-plugin
@@ -371,7 +372,7 @@ in
         AmbientCapabilities = lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
         # Capabilities
         CapabilityBoundingSet = [
-          "CAP_DAC_OVERRIDE" # is required for freeipmi and slabinfo plugins
+          "CAP_DAC_OVERRIDE" # is required for freeipmi, ipmi and slabinfo plugins
           "CAP_DAC_READ_SEARCH" # is required for apps, systemd-journal and go.d/filecheck collector
           "CAP_NET_ADMIN" # is required for the go.d/wireguard collector
           "CAP_NET_BIND_SERVICE" # is required for the go.d/snmp_traps collector
@@ -385,7 +386,7 @@ in
           "CAP_SYS_PTRACE" # is required for apps plugin
           "CAP_SYS_RESOURCE" # is required for ebpf plugin
         ]
-        ++ lib.optionals cfg.package.withIpmi [
+        ++ lib.optionals cfg.package.withFreeIpmi [
           "CAP_FOWNER"
           "CAP_SYS_RAWIO"
         ]
@@ -479,6 +480,15 @@ in
       };
     }
     // lib.optionalAttrs (cfg.package.withIpmi) {
+      "ipmi.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/ipmi.plugin.org";
+        capabilities = "cap_dac_override+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+    }
+    // lib.optionalAttrs (cfg.package.withFreeIpmi) {
       "freeipmi.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/freeipmi.plugin.org";
         capabilities = "cap_dac_override,cap_fowner,cap_sys_rawio+ep";
