@@ -97,7 +97,7 @@ in
             in
             {
               Type = "notify";
-              ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} up_sdnotify nolog";
+              ExecStart = "${getBin cfg.package}/sbin/pppd nolog call ${peerCfg.name} up_sdnotify";
               Restart = "always";
               RestartSec = 5;
 
@@ -110,7 +110,7 @@ in
               PrivateMounts = true;
               PrivateTmp = true;
               ProtectControlGroups = true;
-              ProtectHome = true;
+              ProtectHome = "tmpfs";
               ProtectHostname = true;
               ProtectKernelModules = true;
               # pppd can be configured to tweak kernel settings.
