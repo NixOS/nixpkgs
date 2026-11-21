@@ -11,6 +11,7 @@
   python3Packages ? null,
   fts,
   gitUpdater,
+  testers,
 }:
 
 assert enablePython -> swig != null && python3 != null && !stdenv.hostPlatform.isStatic;
@@ -120,13 +121,17 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/SELinuxProject/selinux";
-    # Skips release candidates and the date tags of old releases
-    allowedVersions = "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$";
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://github.com/SELinuxProject/selinux";
+      # Skips release candidates and the date tags of old releases
+      allowedVersions = "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$";
+    };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
     description = "SELinux core library";
+    pkgConfigModules = [ "libselinux" ];
   };
 })

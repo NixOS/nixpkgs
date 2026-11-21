@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   flex,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru = { inherit (finalAttrs) se_url; };
+  passthru = {
+    inherit (finalAttrs) se_url;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "SELinux binary policy manipulation library";
@@ -61,6 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       naxdy
     ];
     license = lib.licenses.gpl2Plus;
-    pkgConfigModules = [ "libselinux" ];
+    pkgConfigModules = [ "libsepol" ];
   };
 })
