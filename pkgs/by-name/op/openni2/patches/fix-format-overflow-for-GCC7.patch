@@ -1,0 +1,37 @@
+From: Jochen Sprickerhof <git@jochen.sprickerhof.de>
+Date: Tue, 7 Feb 2017 17:30:41 +0100
+Subject: fix format-overflow for GCC7
+
+---
+ Source/Drivers/PS1080/Sensor/XnFrameStreamProcessor.cpp | 4 ++--
+ Source/Drivers/PS1080/Sensor/XnSensorFirmwareParams.cpp | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Source/Drivers/PS1080/Sensor/XnFrameStreamProcessor.cpp b/Source/Drivers/PS1080/Sensor/XnFrameStreamProcessor.cpp
+index 9663e41..62cf1c7 100644
+--- a/Source/Drivers/PS1080/Sensor/XnFrameStreamProcessor.cpp
++++ b/Source/Drivers/PS1080/Sensor/XnFrameStreamProcessor.cpp
+@@ -40,8 +40,8 @@ XnFrameStreamProcessor::XnFrameStreamProcessor(XnFrameStream* pStream, XnSensorS
+ 	m_nLastSOFPacketID(0),
+ 	m_nFirstPacketTimestamp(0)
+ {
+-	sprintf(m_csInDumpMask, "%sIn", pStream->GetType());
+-	sprintf(m_csInternalDumpMask, "Internal%s", pStream->GetType());
++	snprintf(m_csInDumpMask, 100, "%.90sIn", pStream->GetType());
++	snprintf(m_csInternalDumpMask, 100, "Internal%.90s", pStream->GetType());
+ 	m_InDump = xnDumpFileOpen(m_csInDumpMask, "%s_0.raw", m_csInDumpMask);
+ 	m_InternalDump = xnDumpFileOpen(m_csInternalDumpMask, "%s_0.raw", m_csInternalDumpMask);
+ }
+diff --git a/Source/Drivers/PS1080/Sensor/XnSensorFirmwareParams.cpp b/Source/Drivers/PS1080/Sensor/XnSensorFirmwareParams.cpp
+index f93f333..d962ec0 100644
+--- a/Source/Drivers/PS1080/Sensor/XnSensorFirmwareParams.cpp
++++ b/Source/Drivers/PS1080/Sensor/XnSensorFirmwareParams.cpp
+@@ -263,7 +263,7 @@ XnStatus XnSensorFirmwareParams::AddFirmwareParam(XnActualIntProperty& Property,
+ 	XN_IS_STATUS_OK(nRetVal);
+ 
+ 	XnChar csNewName[XN_DEVICE_MAX_STRING_LENGTH];
+-	sprintf(csNewName, "%s (%d)", Property.GetName(), nFirmwareParam);
++	snprintf(csNewName, XN_DEVICE_MAX_STRING_LENGTH, "%.150s (%d)", Property.GetName(), nFirmwareParam);
+ 
+ 	Property.UpdateName("Firmware", csNewName);
+ 	Property.SetLogSeverity(XN_LOG_VERBOSE);
