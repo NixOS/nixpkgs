@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "risor";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "deepnoodle-ai";
     repo = "risor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SXUaSJmtWul4LYRdoxv4lXBB4HHp62xrWbEchI691YY=";
+    hash = "sha256-NAvC0LV+15NUSHTUpPGa45YjMtktOcdS5iC43BHCjDE=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-WUvCzdDSsCan4K568k53oveYIzFQCxFi2B9gQEaeFEM=";
+  vendorHash = "sha256-bBudCrm8fwWYUwBrWNE3zvdBlsvXjV+dIb3nZWHl5Mo=";
 
   subPackages = [
     "cmd/risor"
