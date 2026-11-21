@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "calf";
-  version = "0.90.6";
+  version = "0.90.9";
 
   src = fetchFromGitHub {
     owner = "calf-studio-gear";
     repo = "calf";
     tag = finalAttrs.version;
-    hash = "sha256-rcMuQFig6BrnyGFyvYaAHmOvabEHGl+1lMNfffLHn1w=";
+    hash = "sha256-ypSoKUeJC8EUc0a5xIYQ/7/mSQKjWLqM4h/UrDRzujs=";
   };
 
   outputs = [
@@ -29,7 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [ (lib.cmakeBool "WANT_GUI" false) ];
+  cmakeFlags = [
+    (lib.cmakeBool "WANT_GUI" false)
+    # upstream appends CMAKE_INSTALL_LIBDIR to CMAKE_INSTALL_PREFIX, so it must be relative
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -49,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://calf-studio-gear.org";
     description = "Set of high quality open source audio plugins for musicians";
     license = lib.licenses.lgpl2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
     mainProgram = "calfjackhost";
   };
