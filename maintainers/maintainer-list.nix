@@ -8178,6 +8178,12 @@
     githubId = 757125;
     name = "Dzmitry Lahoda";
   };
+  e-jigsaw = {
+    email = "m@jgs.me";
+    github = "e-jigsaw";
+    githubId = 557961;
+    name = "jigsaw";
+  };
   e-v-o-l-v-e = {
     email = "oss@imp-network.com";
     github = "e-v-o-l-v-e";
