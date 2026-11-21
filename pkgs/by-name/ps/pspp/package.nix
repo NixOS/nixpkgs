@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pspp";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "mirror://gnu/pspp/pspp-${version}.tar.gz";
-    sha256 = "sha256-teVQk3vfpmoebKcpGVJy6OXmaz4EaGstg/suZtTvFMM=";
+    sha256 = "sha256-BC4IJ5Z59KtRfQHQJBFfcZHrTQreIiwMopZgRAbus74=";
   };
 
   nativeBuildInputs = [
