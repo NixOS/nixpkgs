@@ -20053,6 +20053,11 @@
     githubId = 20619776;
     name = "Lythe Marvin L. Lacre";
   };
+  monk3yd = {
+    name = "monk3yd";
+    github = "monk3yd";
+    githubId = 59047243;
+  };
   monkieeboi = {
     name = "MonkieeBoi";
     github = "MonkieeBoi";
