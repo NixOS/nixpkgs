@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvi";
-  version = "7.9.33";
+  version = "8.0.34";
 
   src = fetchFromGitHub {
     owner = "johnsonjh";
     repo = "OpenVi";
     tag = finalAttrs.version;
-    hash = "sha256-TGljDbQZw8s+9W+otmpI6MdupRuKSDi4GBFHz+nmLdg=";
+    hash = "sha256-exWAh8V47bjIMANgyME9Tre8Rg5J9ezveHtwS1xZykQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
