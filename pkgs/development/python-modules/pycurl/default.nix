@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ curl ];
+  env.PYCURL_CURL_CONFIG = "${curl.dev}/bin/curl-config";
 
   buildInputs = [
     curl
