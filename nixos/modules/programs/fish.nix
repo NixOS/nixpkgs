@@ -451,8 +451,8 @@ in
       ''
       + ''
         # prevent fish from generating completions on first run
-        if not test -d $__fish_user_data_dir/generated_completions
-          ${pkgs.coreutils}/bin/mkdir $__fish_user_data_dir/generated_completions
+        if not test -d $__fish_cache_dir/generated_completions
+          ${pkgs.coreutils}/bin/mkdir -p $__fish_cache_dir/generated_completions
         end
       '';
 
