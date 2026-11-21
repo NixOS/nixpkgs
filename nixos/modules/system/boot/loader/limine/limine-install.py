@@ -666,7 +666,7 @@ def install_bootloader() -> None:
         group_name = (
             "generations" if profile == "system" else f"profile '{profile}'"
         )
-        config_file += f"/+{config('distroName')} {group_name}\n"
+        config_file += f"/{'+' if config('expandGenerations') else ''}{config('distroName')} {group_name}\n"
 
         isFirst = True
 
