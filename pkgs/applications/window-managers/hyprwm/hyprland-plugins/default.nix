@@ -37,6 +37,7 @@ let
 
   plugins = lib.mergeAttrsList [
     { hy3 = import ./hy3.nix; }
+    { hymission = import ./hymission.nix; }
     { hypr-darkwindow = import ./hypr-darkwindow.nix; }
     { hypr-dynamic-cursors = import ./hypr-dynamic-cursors.nix; }
     { hyprgrass = import ./hyprgrass.nix; }
