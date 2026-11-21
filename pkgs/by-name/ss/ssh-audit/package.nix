@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+      l0b0
       tv
       SuperSandro2000
     ];

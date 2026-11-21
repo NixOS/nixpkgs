@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   sshKeys = import (pkgs.path + "/nixos/tests/ssh-keys.nix") pkgs;
   sshUsername = "any-user";
@@ -101,4 +101,8 @@ in
     )
     ${serverName}.succeed(f"exit $(systemctl show --property=ExecMainStatus --value {service_name})")
   '';
+
+  meta = {
+    inherit (pkgs.ssh-audit.meta) maintainers;
+  };
 }
