@@ -31,6 +31,7 @@
   marcusolsson-calendar-panel = callPackage ./marcusolsson-calendar-panel { };
   marcusolsson-csv-datasource = callPackage ./marcusolsson-csv-datasource { };
   marcusolsson-dynamictext-panel = callPackage ./marcusolsson-dynamictext-panel { };
+  marcusolsson-hourly-heatmap-panel = callPackage ./marcusolsson-hourly-heatmap-panel { };
   marcusolsson-json-datasource = callPackage ./marcusolsson-json-datasource { };
   mesak-imagesave-panel = callPackage ./mesak-imagesave-panel { };
   prometheus = callPackage ./prometheus { };
