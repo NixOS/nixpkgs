@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pypitoken";
-  version = "7.1.1";
+  version = "7.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ewjoachim";
     repo = "pypitoken";
     tag = version;
-    hash = "sha256-esn7Pbmpo4BAvLefOWMeQNEB0UYwBf9vgcuzmuGwH30=";
+    hash = "sha256-0AtQH7fn4mgS+zH0RVla60u6kZb9H1xln6OsxDgSgIg=";
   };
 
   postPatch = ''
