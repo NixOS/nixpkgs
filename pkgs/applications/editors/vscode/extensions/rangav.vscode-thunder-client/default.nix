@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-thunder-client";
     publisher = "rangav";
-    version = "3.2.4";
-    hash = "sha256-bFTnaGNo/DBFMI2wkc2DnBJBFfuVB2I2sn3Zx94TsR4=";
+    version = "3.2.6";
+    hash = "sha256-afHGZYMVCwBQnqzmCTh5AONG466/duRz/A8YxnT3yaE=";
   };
 
   meta = {
