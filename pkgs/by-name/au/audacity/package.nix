@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
-    cmakeFlagsArray+=("-DEXTDEPS_CACHE=$PWD/offline-deps")
+    cmakeFlags+=("-DEXTDEPS_CACHE=$PWD/offline-deps")
   '';
 
   preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
