@@ -12,6 +12,7 @@
   git,
   openssl,
   nix-update-script,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     cairo
     pango
     openssl
+    oniguruma
   ];
 
   doCheck = false;
@@ -59,6 +61,11 @@ rustPlatform.buildRustPackage rec {
     gappsWrapperArgs+=(
       --prefix PATH : "${lib.makeBinPath [ git ]}"
     )
+  '';
+
+  # libgit2-sys 0.17 needs libgit2 1.8, nixpkgs has 1.9: use the bundled copy
+  preBuild = ''
+    export LIBGIT2_NO_VENDOR=0
   '';
 
   passthru.updateScript = nix-update-script { };
