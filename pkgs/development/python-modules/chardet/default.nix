@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   hatch-vcs,
@@ -33,6 +34,9 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
   ];
+
+  # random tests exceed the upstream 60s timeout on slow hardware
+  pytestFlags = lib.optionals stdenv.hostPlatform.isRiscV64 [ "--timeout=600" ];
 
   disabledTests = [
     # flaky; https://github.com/chardet/chardet/issues/256
