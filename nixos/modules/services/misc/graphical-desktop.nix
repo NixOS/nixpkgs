@@ -47,6 +47,8 @@ in
 
     fonts.enableDefaultPackages = lib.mkDefault true;
 
+    gtk.iconCache.enable = lib.mkDefault true;
+
     hardware.graphics.enable = lib.mkDefault true;
 
     programs.gnupg.agent.pinentryPackage = lib.mkOverride 1100 pkgs.pinentry-gnome3;
