@@ -743,6 +743,7 @@ rec {
     };
     musl = { };
 
+    mlibc = { };
     picolibc = { };
 
     uclibceabi = {
