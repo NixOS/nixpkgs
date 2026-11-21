@@ -1,4 +1,8 @@
-{ buildRedist }:
+{
+  buildRedist,
+  cudaOlder,
+  lib,
+}:
 buildRedist {
   redistName = "cuda";
   pname = "cuda_opencl";
@@ -10,6 +14,11 @@ buildRedist {
     "lib"
   ];
 
+  # Before 13.4 the pkg-config file asks for -lopencl, but the library is libOpenCL.so.
+  postPatch = lib.optionalString (cudaOlder "13.4") ''
+    substituteInPlace share/pkgconfig/opencl-*.pc --replace-fail "-lopencl" "-lOpenCL"
+  '';
+
   meta = {
     description = "Low-level API for heterogeneous computing that runs on CUDA-powered GPUs";
     longDescription = ''
@@ -18,5 +27,8 @@ buildRedist {
       language on a GPU.
     '';
     homepage = "https://developer.nvidia.com/opencl";
+    pkgConfigModules = [
+      "opencl"
+    ];
   };
 }
