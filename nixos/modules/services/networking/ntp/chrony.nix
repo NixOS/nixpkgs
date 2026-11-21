@@ -32,10 +32,13 @@ let
 
     driftfile ${driftFile}
     keyfile ${keyFile}
-    ${lib.optionalString (cfg.enableRTCTrimming) "rtcfile ${rtcFile}"}
+    dumpdir ${stateDir}
     ${lib.optionalString (cfg.enableNTS) "ntsdumpdir ${stateDir}"}
 
-    ${lib.optionalString (cfg.enableRTCTrimming) "rtcautotrim ${toString cfg.autotrimThreshold}"}
+    ${lib.optionalString (cfg.enableRTCTrimming) ''
+      rtcfile ${rtcFile}
+      rtcautotrim ${toString cfg.autotrimThreshold}
+    ''}
     ${lib.optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
 
     ${cfg.extraConfig}
@@ -47,6 +50,10 @@ let
     "chrony"
     "-f"
     "${configFile}"
+    # Set the system clock on startup from RTC or driftfile.
+    "-s"
+    # Load saved sample histories of servers, refclocks and RTC.
+    "-r"
   ]
   ++ lib.optional cfg.enableMemoryLocking "-m"
   ++ cfg.extraFlags;
