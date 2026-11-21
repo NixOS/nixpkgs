@@ -8,8 +8,18 @@
   makeWrapper,
   unzip,
   jre,
-  drivers ? [ ],
+  jtds_jdbc,
+  mssql_jdbc,
+  mysql_jdbc,
+  postgresql_jdbc,
+  drivers ? [
+    jtds_jdbc
+    mssql_jdbc
+    mysql_jdbc
+    postgresql_jdbc
+  ],
 }:
+
 stdenv.mkDerivation rec {
   pname = "squirrel-sql";
   version = "5.1.0";
