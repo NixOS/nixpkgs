@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit (nushell)
     version
     src
-    cargoPatches
     cargoHash
     ;
 
@@ -33,8 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "crates/nu_plugin_polars";
 
   checkFlags = [ "--skip=dataframe::command::core::to_repr::test::test_examples" ];
-
-  patches = [ ../plugin-engine-default-features.patch ];
 
   passthru.updateScript = nix-update-script {
     # Skip the version check and only check the hash because we inherit version from nushell.

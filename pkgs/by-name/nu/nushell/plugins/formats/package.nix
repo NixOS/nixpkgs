@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit (nushell)
     version
     src
-    cargoPatches
     cargoHash
     ;
 
@@ -24,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Skip the version check and only check the hash because we inherit version from nushell.
     extraArgs = [ "--version=skip" ];
   };
-
-  patches = [ ../plugin-engine-default-features.patch ];
 
   meta = {
     description = "Formats plugin for Nushell";
