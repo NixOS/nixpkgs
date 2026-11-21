@@ -21,7 +21,12 @@
   wxwidgets_3_2,
   # GStreamer
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   # User-agent info
   lsb-release,
   # rt2rtng
@@ -34,7 +39,7 @@
 }:
 
 let
-  gstInputs = with gst_all_1; [
+  gstInputs = [
     gstreamer
     gst-plugins-base
     gst-plugins-good

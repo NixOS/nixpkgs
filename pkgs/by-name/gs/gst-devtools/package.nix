@@ -23,7 +23,7 @@
   directoryListingUpdater,
   _experimental-update-script-combinators,
   common-updater-scripts,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    apple-sdk_gstreamer
+    apple-sdk
   ];
 
   propagatedBuildInputs = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
                   common-updater-scripts
                 ]
               }
-              update-source-version gst_all_1.gst-devtools --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+              update-source-version gst-devtools --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
             ''
           ];
           # Experimental feature: do not copy!

@@ -12,7 +12,10 @@
 
   enableGstPlugin ? true,
   enableViewer ? true,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk3,
   wrapGAppsHook3,
 
@@ -25,7 +28,6 @@
   nix-update-script,
 }:
 
-assert enableGstPlugin -> gst_all_1 != null;
 assert enableViewer -> enableGstPlugin;
 assert enableViewer -> gtk3 != null;
 assert enableViewer -> wrapGAppsHook3 != null;
@@ -62,15 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ]
   ++ lib.optional enableUsb libusb1
-  ++ lib.optionals (enableViewer || enableGstPlugin) (
-    with gst_all_1;
-    [
-      gstreamer
-      gst-plugins-base
-      (gst-plugins-good.override { gtkSupport = true; })
-      gst-plugins-bad
-    ]
-  )
+  ++ lib.optionals (enableViewer || enableGstPlugin) [
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+  ]
   ++ lib.optionals enableViewer [ gtk3 ];
 
   mesonFlags = [

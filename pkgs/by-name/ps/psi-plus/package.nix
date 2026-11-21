@@ -21,7 +21,8 @@
 
   # Voice messages
   voiceMessagesSupport ? true,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
   enablePsiMedia ? false,
   pkg-config,
 
@@ -78,8 +79,8 @@ stdenv.mkDerivation rec {
     kdePackages.qtkeychain
   ]
   ++ lib.optionals voiceMessagesSupport [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-plugins-base
+    gst-plugins-good
   ]
   ++ lib.optionals enablePlugins [
     html-tidy

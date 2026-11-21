@@ -16,7 +16,10 @@
   findutils,
   gnused,
   coreutils,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   patches ? null,
 }:
 stdenv.mkDerivation {
@@ -43,13 +46,13 @@ stdenv.mkDerivation {
     gtk3
     webkitgtk_4_1
   ]
-  ++ (with gst_all_1; [
+  ++ [
     # Audio & video support for webkitgtk WebView
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-  ]);
+  ];
 
   inherit patches;
 

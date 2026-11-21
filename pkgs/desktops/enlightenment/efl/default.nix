@@ -19,7 +19,10 @@
   ghostscript,
   giflib,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-libav,
   gtk3,
   harfbuzz,
   hicolor-icon-theme,
@@ -103,10 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     giflib
     glib
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     ibus
     libGL
     libpng

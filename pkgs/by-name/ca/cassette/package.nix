@@ -10,7 +10,10 @@
   vala,
   wrapGAppsHook4,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   json-glib,
   libadwaita,
@@ -45,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib-networking
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
     gtk4
     json-glib
     libadwaita

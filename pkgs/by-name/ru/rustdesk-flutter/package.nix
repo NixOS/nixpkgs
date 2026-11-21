@@ -6,7 +6,8 @@
   fetchFromGitHub,
   flutter329,
   ffmpeg_7,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   fuse3,
   libxtst,
   libaom,
@@ -136,8 +137,8 @@ flutter329.buildFlutterApplication rec {
   buildInputs = [
     ffmpeg_7
     fuse3
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     libxtst
     libaom
     libopus

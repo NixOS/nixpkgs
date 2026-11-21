@@ -13,7 +13,7 @@
   evolution-data-server-gtk4,
   glib-networking,
   gpgme,
-  gst_all_1,
+  gstreamer,
   libportal-gtk4,
   libpsl,
   nix-update-script,
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     evolution-data-server-gtk4
     glib-networking
     gpgme
-    gst_all_1.gstreamer
+    gstreamer
     libadwaita
     libportal-gtk4
     libpsl

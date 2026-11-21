@@ -7,7 +7,10 @@
   ninja,
   perl,
   pkg-config,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   openssl,
   protobuf,
   libspelling,
@@ -70,10 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
 
     # To reproduce audio messages
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
   ];
 
   meta = {

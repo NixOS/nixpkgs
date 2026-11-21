@@ -11,7 +11,11 @@
   wrapGAppsHook3,
   yelp-tools,
   clutter-gtk,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   glib,
   gtk3,
   libgsf,
@@ -48,17 +52,17 @@ stdenv.mkDerivation {
 
   buildInputs = [
     clutter-gtk
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
     glib
     gtk3
     libgsf
     libxml2
     # optional packages
     fluidsynth
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gst-plugins-bad
+    gst-plugins-ugly
     orc
   ];
 

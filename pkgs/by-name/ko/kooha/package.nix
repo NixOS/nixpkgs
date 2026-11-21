@@ -6,7 +6,10 @@
   cargo,
   desktop-file-utils,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
   pipewire,
   gtk4,
   libadwaita,
@@ -51,10 +54,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-ugly
+    gstreamer
+    gst-plugins-good
+    gst-plugins-base
+    gst-plugins-ugly
     gtk4
     libadwaita
     libpulseaudio

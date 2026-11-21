@@ -2,7 +2,8 @@
   lib,
   flutter344,
   fetchFromGitHub,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libunwind,
   orc,
   webkitgtk_4_1,
@@ -44,8 +45,8 @@ flutter344.buildFlutterApplication {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     libunwind
     orc
     webkitgtk_4_1

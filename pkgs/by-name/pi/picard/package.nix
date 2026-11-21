@@ -8,7 +8,10 @@
   qt6,
   wrapGAppsHook3,
 
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   chromaprint,
 
   writableTmpDirAsHomeHook,
@@ -37,10 +40,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     qt6.qtbase
     qt6.qtmultimedia
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform qt6.qtwayland) [
     qt6.qtwayland

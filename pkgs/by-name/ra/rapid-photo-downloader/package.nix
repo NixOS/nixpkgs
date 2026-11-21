@@ -9,7 +9,10 @@
   libgudev,
   udisks,
   gexiv2_0_10,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-libav,
   libnotify,
   ifuse,
   libimobiledevice,
@@ -74,11 +77,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     gdk-pixbuf
     gexiv2_0_10
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
-    gst_all_1.gstreamer.dev
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+    gstreamer.dev
     libgudev
     libnotify
     udisks

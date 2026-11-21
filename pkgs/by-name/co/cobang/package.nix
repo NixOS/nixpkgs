@@ -4,7 +4,9 @@
   blueprint-compiler,
   desktop-file-utils,
   fetchFromGitHub,
-  gst_all_1,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
   gobject-introspection,
   libadwaita,
   libportal-gtk4,
@@ -40,11 +42,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     # Requires v4l2src
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    (gst-plugins-good.override { gtkSupport = true; })
     # gtk4paintablesink
-    gst_all_1.gst-plugins-rs
+    gst-plugins-rs
     libadwaita
     libportal-gtk4
     networkmanager

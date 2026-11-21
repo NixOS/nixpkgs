@@ -2,7 +2,12 @@
   lib,
   fetchFromGitHub,
   glib-networking,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   help2man,
   luajit,
@@ -41,14 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     webkitgtk_4_1
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-  ]);
+  ];
 
   strictDeps = true;
 

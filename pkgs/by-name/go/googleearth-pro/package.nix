@@ -20,7 +20,8 @@
   dpkg,
   libproxy,
   libxml2_13,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   dbus,
   makeWrapper,
 
@@ -60,8 +61,8 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     glib
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     libGL
     libGLU
     libsm

@@ -8,7 +8,8 @@
   gtk3-x11,
   gtkSupport ? null,
   libpulseaudio,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libvorbis,
   libcap,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
@@ -38,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libtool # in buildInputs rather than nativeBuildInputs since libltdl is used (not libtool itself)
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
-  ])
+  ]
   ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
   ++ lib.optional stdenv.hostPlatform.isLinux libcap
   ++ lib.optional withSystemd systemdLibs

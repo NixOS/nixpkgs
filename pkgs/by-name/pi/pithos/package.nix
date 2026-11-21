@@ -14,7 +14,11 @@
   gobject-introspection,
   libnotify,
   libsecret,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -50,13 +54,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     libsecret
     glib
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gst-plugins-bad
-  ]);
+  ];
 
   propagatedBuildInputs = [
     adwaita-icon-theme

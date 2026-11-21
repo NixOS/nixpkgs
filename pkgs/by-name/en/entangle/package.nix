@@ -18,7 +18,8 @@
   gexiv2_0_10,
   glib,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk3,
   lcms2,
   libdatrie,
@@ -90,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     gexiv2_0_10
     glib
     lerc
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     gtk3
     lcms2
     libdatrie

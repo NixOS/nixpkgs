@@ -25,7 +25,9 @@
   wrapGAppsNoGuiHook,
   bash,
   dbus,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   libgudev,
   umockdev,
   replaceVars,
@@ -100,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     json-glib
     pipewire
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     libgudev
 
     # For icon validator
@@ -118,8 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     dbus
     gdk-pixbuf
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-good
     gobject-introspection
 
     # NB: this Python is used both for build-time tests

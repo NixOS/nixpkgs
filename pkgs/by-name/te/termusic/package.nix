@@ -4,7 +4,7 @@
   dbus,
   fetchFromGitHub,
   glib,
-  gst_all_1,
+  gstreamer,
   lib,
   mpv-unwrapped,
   openssl,
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     dbus
     glib
-    gst_all_1.gstreamer
+    gstreamer
     mpv-unwrapped
     openssl
     sqlite

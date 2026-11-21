@@ -39,7 +39,7 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null,
   hotdoc,
-  apple-sdk_gstreamer,
+  apple-sdk,
 }:
 
 let
@@ -284,7 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
+    apple-sdk
   ]
   ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
 

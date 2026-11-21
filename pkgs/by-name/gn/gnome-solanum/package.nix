@@ -16,7 +16,9 @@
   git,
   glib,
   gtk4,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
   libadwaita,
   nix-update-script,
 }:
@@ -61,9 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
   ];
 
   passthru = {

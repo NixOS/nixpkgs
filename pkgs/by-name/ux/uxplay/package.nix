@@ -7,7 +7,12 @@
   wrapGAppsHook3,
   avahi,
   avahi-compat,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libplist,
   openssl,
   nix-update-script,
@@ -40,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     avahi
     avahi-compat
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
     libplist
     openssl
   ];

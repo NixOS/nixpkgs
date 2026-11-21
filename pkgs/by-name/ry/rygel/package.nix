@@ -21,7 +21,12 @@
   gupnp_1_6,
   gupnp-av,
   gupnp-dlna,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-editing-services,
   libgee,
   libsoup_3,
   libx11,
@@ -94,14 +99,14 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ]
   ++ lib.optionals withGtk [ gtk4 ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-editing-services
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ]);
+  ];
 
   mesonFlags = [
     "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"

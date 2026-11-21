@@ -10,7 +10,13 @@
   wrapGAppsHook4,
   gdk-pixbuf,
   granite7,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk4,
   libadwaita,
   libgee,
@@ -38,14 +44,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdk-pixbuf
     granite7
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
     # https://github.com/elementary/videos/issues/356
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gst-plugins-rs # GTK 4 Sink
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gstreamer
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-rs # GTK 4 Sink
+    gst-plugins-ugly
+    gstreamer
     gtk4
     libadwaita
     libgee

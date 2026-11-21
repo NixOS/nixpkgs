@@ -7,7 +7,12 @@
   gettext,
   glib,
   gnome-common,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   intltool,
   libtool,
@@ -61,7 +66,7 @@ stdenv.mkDerivation {
     xwininfo
     libxdamage
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-bad
@@ -69,7 +74,7 @@ stdenv.mkDerivation {
     gst-plugins-ugly
     gst-libav
     wrapGAppsHook3
-  ]);
+  ];
 
   meta = {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";

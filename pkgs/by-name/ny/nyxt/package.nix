@@ -18,7 +18,12 @@
   webkitgtk_4_1,
   openssl,
   sqlite,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   xdg-utils,
   xclip,
   wl-clipboard,
@@ -48,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     glib-networking
     gtk3
-    gst_all_1.gstreamer
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
   ];
 
   # for cffi

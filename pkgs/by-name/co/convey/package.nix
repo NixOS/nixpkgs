@@ -46,7 +46,8 @@
   gcr_4,
   libspelling,
   libadwaita,
-  gst_all_1,
+  gst-plugins-base,
+  gst-plugins-bad,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -90,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     gsound
     gspell
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-base
     gtk4
     ibus
     icu

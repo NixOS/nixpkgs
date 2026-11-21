@@ -20,7 +20,8 @@
   docbook-xsl-nons,
   docbook_xml_dtd_42,
   libxml2,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk3,
   enableCommandNotFound ? false,
   enableBashCompletion ? false,
@@ -51,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     polkit
     python3
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     gtk3
     jansson
     sqlite

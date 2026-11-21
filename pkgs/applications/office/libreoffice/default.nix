@@ -101,7 +101,12 @@
   libe-book,
   libmwaw,
   glm,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gdb,
   adwaita-icon-theme,
   glib,
@@ -851,7 +856,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Although present in qtPackages, we need qtbase.qtPluginPrefix and
     # qtbase.qtQmlPrefix
     inherit (qt6) qtbase;
-    gst_packages = with gst_all_1; [
+    gst_packages = [
       gst-libav
       gst-plugins-bad
       gst-plugins-base

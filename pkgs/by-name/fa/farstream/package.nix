@@ -6,7 +6,11 @@
   buildPackages,
   libnice,
   pkg-config,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gupnp-igd,
   gobject-introspection,
   python3,
@@ -47,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  propagatedBuildInputs = with gst_all_1; [
+  propagatedBuildInputs = [
     gstreamer
     gst-plugins-base
     gst-plugins-good

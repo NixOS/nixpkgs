@@ -27,7 +27,9 @@
   speechd-minimal,
   brltty,
   liblouis,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   common-updater-scripts,
   _experimental-update-script-combinators,
 }:
@@ -105,9 +107,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     at-spi2-core
     dbus
     gsettings-desktop-schemas
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
   ];
 
   nativeCheckInputs = with python3.pkgs; [

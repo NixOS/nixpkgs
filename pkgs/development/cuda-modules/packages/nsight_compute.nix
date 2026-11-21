@@ -7,7 +7,8 @@
   e2fsprogs,
   elfutils,
   flags,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   lib,
   libjpeg8,
   qt5 ? null,
@@ -60,8 +61,8 @@ buildRedist (
       libjpeg8
     ]
     ++ lib.optionals (cudaAtLeast "12.1" && cudaOlder "12.4") [
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
+      gstreamer
+      gst-plugins-base
     ]
     ++ lib.optionals (cudaAtLeast "12.0" && cudaOlder "12.7") [
       e2fsprogs

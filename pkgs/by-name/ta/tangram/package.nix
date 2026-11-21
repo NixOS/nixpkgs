@@ -13,7 +13,11 @@
   gsettings-desktop-schemas,
   gtk4,
   libadwaita,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   hicolor-icon-theme,
   meson,
   ninja,
@@ -61,13 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     webkitgtk_6_0
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-libav
     gst-plugins-base
     (gst-plugins-good.override { gtkSupport = true; })
     gst-plugins-bad
-  ]);
+  ];
 
   dontPatchShebangs = true;
 

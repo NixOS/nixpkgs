@@ -8,7 +8,12 @@
   ffmpeg,
   glib,
   gsm,
-  gst_all_1,
+
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   lib,
   libre,
@@ -84,20 +89,20 @@ stdenv.mkDerivation (finalAttrs: {
     srtp
     zlib
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-libav
     gst-plugins-base
     gst-plugins-bad
     gst-plugins-good
-  ]);
+  ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-Dre_DIR=${libre}/include/re"
     "-DGL_INCLUDE_DIRS=${lib.getDev glib}/include/glib-2.0"
     "-DGLIB_INCLUDE_DIRS=${glib.out}/lib/glib-2.0/include"
-    "-DGST_INCLUDE_DIRS=${lib.getDev gst_all_1.gstreamer}/include/gstreamer-1.0"
+    "-DGST_INCLUDE_DIRS=${lib.getDev gstreamer}/include/gstreamer-1.0"
   ];
 
   makeFlags = [

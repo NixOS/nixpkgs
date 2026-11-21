@@ -21,7 +21,10 @@
   glib,
   glib-networking,
   gmp,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtest,
   gtk3,
   hicolor-icon-theme,
@@ -100,10 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gmp
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
     gtk3
     hicolor-icon-theme
     libpng

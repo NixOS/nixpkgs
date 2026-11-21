@@ -6,7 +6,7 @@
   gobject-introspection,
   wrapGAppsHook3,
   gtk3,
-  gst_all_1,
+  gst-plugins-base,
   writableTmpDirAsHomeHook,
   gtksourceview4,
 }:
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gtk3
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     gtksourceview4
   ];
 

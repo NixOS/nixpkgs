@@ -27,7 +27,11 @@
   aws-lc,
   fontconfig,
   freetype,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   harfbuzz,
   libGL,
   libunwind,
@@ -151,11 +155,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     aws-lc
     fontconfig
     freetype
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
     harfbuzz
     libunwind
     libGL

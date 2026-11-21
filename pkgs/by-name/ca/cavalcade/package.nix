@@ -4,7 +4,7 @@
   fetchFromGitHub,
   gtk3,
   cava,
-  gst_all_1,
+  gstreamer,
   gobject-introspection,
   wrapGAppsHook3,
   copyDesktopItems,
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     wrapGAppsHook3
     copyDesktopItems
     gobject-introspection
-    gst_all_1.gstreamer
+    gstreamer
   ];
 
   buildInputs = [ gtk3 ];

@@ -11,7 +11,11 @@
   libjpeg,
   libtiff,
   libadwaita,
-  gst_all_1,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   libraw,
   glib,
   gtk4,
@@ -55,11 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     glib
     gsettings-desktop-schemas
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-ugly
     gtk4
     lcms2
     libadwaita

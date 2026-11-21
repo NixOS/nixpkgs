@@ -23,7 +23,8 @@
   libcacard,
   lz4,
   libopus,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   orc,
   gdk-pixbuf,
 }:
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cyrus_sasl
     glib
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     libxext
     libxfixes
     libxinerama

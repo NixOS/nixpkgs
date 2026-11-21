@@ -12,7 +12,7 @@
   nodejs,
   yt-dlp,
   opus-tools,
-  gst_all_1,
+  gstreamer,
   enableSonos ? true,
   libsForQt5,
 }:
@@ -23,7 +23,7 @@ let
     flac
     lame
     opus-tools
-    gst_all_1.gstreamer
+    gstreamer
     nodejs
     ffmpeg
     yt-dlp

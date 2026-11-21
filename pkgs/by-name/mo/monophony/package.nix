@@ -5,7 +5,9 @@
   wrapGAppsHook4,
   gobject-introspection,
   yt-dlp,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   libadwaita,
   glib-networking,
   nix-update-script,
@@ -46,11 +48,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # needed for gstreamer https
     glib-networking
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-plugins-base
     gst-plugins-good
     gstreamer
-  ]);
+  ];
 
   postInstall = ''
     make install prefix=$out

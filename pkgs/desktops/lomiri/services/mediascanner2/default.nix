@@ -12,7 +12,10 @@
   dbus-cpp,
   gdk-pixbuf,
   glib,
-  gst_all_1,
+
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtest,
   libapparmor,
   libexif,
@@ -55,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    gst_all_1.gstreamer # GST_PLUGIN_SYSTEM_PATH_1_0 setup hook
+    gstreamer # GST_PLUGIN_SYSTEM_PATH_1_0 setup hook
     pkg-config
     wrapQtAppsHook
   ];
@@ -77,11 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     udisks
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
-  ]);
+  ];
 
   nativeCheckInputs = [ dbus ];
 

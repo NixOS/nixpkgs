@@ -7,7 +7,8 @@
   pkg-config,
   libdrm,
   libGL,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-bad,
   nv-codec-headers-11,
   libva,
   addDriverRunpath,
@@ -41,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libdrm
     libGL
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-bad
+    gstreamer
+    gst-plugins-bad
     nv-codec-headers-11
     libva
   ];

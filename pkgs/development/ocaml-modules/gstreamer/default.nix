@@ -1,11 +1,12 @@
 {
   lib,
+  pkgs,
   buildDunePackage,
   fetchFromGitHub,
   dune-configurator,
   pkg-config,
   glib,
-  gst_all_1,
+  gst-plugins-base,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -23,15 +24,15 @@ buildDunePackage (finalAttrs: {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
     glib.dev
-    gst_all_1.gstreamer.dev
-    gst_all_1.gst-plugins-base
+    pkgs.gstreamer.dev
+    gst-plugins-base
   ];
 
   env.CFLAGS_COMPILE = toString [
     "-I${glib.dev}/include/glib-2.0"
     "-I${glib.out}/lib/glib-2.0/include"
-    "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
-    "-I${gst_all_1.gstreamer.dev}/include/gstreamer-1.0"
+    "-I${gst-plugins-base.dev}/include/gstreamer-1.0"
+    "-I${pkgs.gstreamer.dev}/include/gstreamer-1.0"
   ];
 
   meta = {

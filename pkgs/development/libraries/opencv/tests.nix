@@ -1,7 +1,9 @@
 {
   enableGStreamer,
   enableGtk3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   lib,
   opencv4,
   runAccuracyTests,
@@ -25,14 +27,11 @@ runCommand "opencv4-tests"
     nativeBuildInputs = [
       writableTmpDirAsHomeHook
     ]
-    ++ optionals enableGStreamer (
-      with gst_all_1;
-      [
-        gstreamer
-        gst-plugins-base
-        gst-plugins-good
-      ]
-    );
+    ++ optionals enableGStreamer [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ];
 
     ignoredTests = [
       "AsyncAPICancelation/cancel*"

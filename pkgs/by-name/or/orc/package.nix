@@ -15,7 +15,10 @@
 
   # for passthru.tests
   gnuradio,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-bad,
   qt6,
   vips,
 }:
@@ -70,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
+      inherit gst-plugins-good gst-plugins-bad gst-plugins-ugly;
       inherit gnuradio vips;
       qt6-qtmultimedia = qt6.qtmultimedia;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

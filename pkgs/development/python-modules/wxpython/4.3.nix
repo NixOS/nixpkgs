@@ -15,7 +15,8 @@
 
   # runtime
   cairo,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk3,
   libGL,
   libGLU,
@@ -67,8 +68,8 @@ buildPythonPackage (finalAttrs: {
     wxwidgets_3_3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     libGL
     libGLU
     libsm

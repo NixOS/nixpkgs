@@ -7,7 +7,8 @@
   cmake,
   qt6,
   ffmpeg,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   libpulseaudio,
   alsa-lib,
   jack2,
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
     qt6.qtdeclarative
     qt6.qtsvg
     ffmpeg
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     alsa-lib
     libpulseaudio
     jack2

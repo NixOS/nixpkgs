@@ -9,7 +9,8 @@
   fetchFromGitHub,
   gettext,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk4,
   libadwaita,
   libhandy,
@@ -65,8 +66,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     glib
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     gtk4
     libadwaita
     libhandy

@@ -29,7 +29,7 @@ let
   kernelPackages = config.boot.kernelPackages;
 
   gst = (
-    with pkgs.gst_all_1;
+    with pkgs;
     [
       gst-plugins-bad
       gst-plugins-base

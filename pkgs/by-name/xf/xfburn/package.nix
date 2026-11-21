@@ -10,7 +10,8 @@
   pkg-config,
   wrapGAppsHook3,
   xfce4-exo,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk3,
   libburn,
   libgudev,
@@ -47,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     xfce4-exo
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+    gstreamer
+    gst-plugins-base
     gtk3
     libburn
     libgudev

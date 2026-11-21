@@ -3,7 +3,9 @@
   fetchFromGitHub,
   fetchpatch,
   glibmm_2_4,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   lib,
   libarchive,
   makeDesktopItem,
@@ -60,9 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals usePulseaudio [
     pulseaudio
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
   ];
 
   preFixup = lib.optionalString usePulseaudio ''

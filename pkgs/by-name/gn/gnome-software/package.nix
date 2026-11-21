@@ -40,7 +40,8 @@
   gtk-doc,
   desktop-file-utils,
   libsysprof-capture,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
 }:
 
 let
@@ -101,8 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     malcontent
     libsysprof-capture
     # For video screenshots
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-plugins-base
+    gst-plugins-good
   ]
   ++ lib.optionals withFwupd [ fwupd ];
 

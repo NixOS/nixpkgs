@@ -12,7 +12,10 @@
   libgee,
   ryokucha,
   pantheon,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-libav,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,10 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     libgee
     pantheon.live-chart
     ryokucha
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-libav
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-libav
   ];
 
   mesonFlags = [ (lib.mesonBool "use_submodule" false) ];

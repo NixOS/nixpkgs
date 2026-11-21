@@ -5,7 +5,9 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
-  gst_all_1,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-libav,
   zlib,
   qt6,
   qt6Packages,
@@ -42,9 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   buildInputs = [
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
     zlib
     qt6.qtbase
     qt6.qtsvg

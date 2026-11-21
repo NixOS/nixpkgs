@@ -27,7 +27,9 @@
   libglycin-gtk4,
   glycin-loaders,
   gsettings-desktop-schemas,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-rs,
+  gst-plugins-base,
   pipewire,
 }:
 
@@ -55,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-rs # GTK4 sink & paintable
+    gstreamer
+    gst-plugins-base
+    gst-plugins-rs # GTK4 sink & paintable
     pipewire # pipewiresrc
     gtk4
     glib

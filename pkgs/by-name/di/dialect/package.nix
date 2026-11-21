@@ -11,7 +11,9 @@
   glib,
   gtk4,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   libsoup_3,
   glib-networking,
   libadwaita,
@@ -46,9 +48,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   buildInputs = [
     gtk4
     glib
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
     libsoup_3
     glib-networking
     libadwaita

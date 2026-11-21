@@ -14,7 +14,11 @@
   rustPlatform,
   wrapGAppsHook4,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
   libcamera,
@@ -50,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin.setupHook
     libglycin-gtk4
     glycin-loaders
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-rs # for gtk4paintablesink
-    gst_all_1.gstreamer
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-rs # for gtk4paintablesink
+    gstreamer
     gtk4
     libadwaita
     libcamera # for the gstreamer plugin
@@ -70,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       # vp8enc preset
-      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      --prefix GST_PRESET_PATH : "${gst-plugins-good}/share/gstreamer-1.0/presets"
     )
   '';
 

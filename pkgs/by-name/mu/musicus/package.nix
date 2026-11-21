@@ -14,7 +14,10 @@
   glib,
   libadwaita,
   sqlite,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   dbus,
   openssl,
   nix-update-script,
@@ -54,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     openssl
     sqlite
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    gstreamer
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
   ];
 
   passthru.updateScript = nix-update-script { };

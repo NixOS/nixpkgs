@@ -5,7 +5,12 @@
   autoreconfHook,
   pkg-config,
   wrapGAppsHook3,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   gtk3,
   ncurses,
 }:
@@ -31,14 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     ncurses
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
     gst-libav
-  ]);
+  ];
 
   enableParallelBuilding = true;
 

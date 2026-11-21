@@ -11,7 +11,7 @@
   docbook-xsl-nons,
   docbook_xml_dtd_412,
   libxml2,
-  gst_all_1,
+  gst-plugins-base,
   gnome,
 }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
   ];
 
   mesonFlags = [

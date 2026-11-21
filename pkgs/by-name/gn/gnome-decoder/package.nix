@@ -14,7 +14,11 @@
   sqlite,
   openssl,
   pipewire,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-rs,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
@@ -60,17 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     openssl
     pipewire
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-rs # for gtk4paintablesink
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-rs # for gtk4paintablesink
   ];
 
   # Adds vp8enc preset for camera enablement
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      --prefix GST_PRESET_PATH : "${gst-plugins-good}/share/gstreamer-1.0/presets"
     )
   '';
 

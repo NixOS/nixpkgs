@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   curl,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   gtk3,
   libGL,
   libGLU,
@@ -48,8 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3

@@ -14,7 +14,10 @@
   python,
   pygobject3,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-rtsp-server,
+  gst-plugins-base,
+  gst-plugins-bad,
   isPy3k,
   directoryListingUpdater,
 }:
@@ -50,21 +53,21 @@ buildPythonPackage rec {
     ninja
     pkg-config
     gobject-introspection
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
   ];
 
   buildInputs = [
     # for gstreamer-analytics-1.0
-    gst_all_1.gst-plugins-bad
+    gst-plugins-bad
   ];
 
   propagatedBuildInputs = [
-    gst_all_1.gst-plugins-base
+    gst-plugins-base
     pygobject3
   ];
 
   checkInputs = [
-    gst_all_1.gst-rtsp-server
+    gst-rtsp-server
   ];
 
   mesonFlags = [
@@ -91,7 +94,7 @@ buildPythonPackage rec {
   '';
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="${gst_all_1.gst-plugins-base}/lib"
+    export DYLD_LIBRARY_PATH="${gst-plugins-base}/lib"
   '';
 
   passthru = {

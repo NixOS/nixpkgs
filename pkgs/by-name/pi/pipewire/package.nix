@@ -37,7 +37,8 @@
   valgrind,
   libcamera,
   libdrm,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
   # ffmpeg depends on SDL2 which depends on pipewire by default.
   # Break the cycle by depending on ffmpeg-headless.
   # Pipewire only uses libavcodec (via an SPA plugin), which isn't
@@ -141,8 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg-headless
     fftwFloat
     glib
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    gst-plugins-base
+    gstreamer
     libebur128
     libjack2
     libmysofa

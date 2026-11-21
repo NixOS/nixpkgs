@@ -6,7 +6,9 @@
   buildRedist,
   cudaAtLeast,
   e2fsprogs,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
   lib,
   nss,
   numactl,
@@ -121,8 +123,8 @@ buildRedist (
       qt6.qtwayland
       boost
       e2fsprogs
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
+      gst-plugins-base
+      gstreamer
       nss
       numactl
       pulseaudio
@@ -138,7 +140,7 @@ buildRedist (
     ]
     # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
     ++ lib.optionals (backendStdenv.hostPlatform.isAarch64 && cudaAtLeast "11.8") [
-      gst_all_1.gst-plugins-bad
+      gst-plugins-bad
     ];
 
     postInstall = ''

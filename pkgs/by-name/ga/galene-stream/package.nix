@@ -6,7 +6,10 @@
   nixosTests,
   galene,
   gobject-introspection,
-  gst_all_1,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   libnice,
   wrapGAppsHook3,
 }:
@@ -62,12 +65,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     libnice # libgstnice.so
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly # libgstx264.so
-  ]);
+  ];
 
   dependencies = with python3Packages; [
     pygobject3

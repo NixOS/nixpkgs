@@ -21,7 +21,9 @@
   ffmpeg-full,
   python3,
   libxml2,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
   which,
   gifski,
 }:
@@ -65,9 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gsettings-desktop-schemas
     gtk3
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-ugly
+    gstreamer
+    gst-plugins-good
+    gst-plugins-ugly
     keybinder3
   ];
 

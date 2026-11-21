@@ -9,7 +9,10 @@
   dpkg,
   gdk-pixbuf,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-base,
+  gst-plugins-bad,
   libsoup_3,
   webkitgtk_4_1,
   xdotool,
@@ -105,10 +108,10 @@ else
       libsoup_3
       webkitgtk_4_1
       gdk-pixbuf
-      gst_all_1.gst-plugins-ugly
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
+      gst-plugins-ugly
+      gst-plugins-bad
+      gst-plugins-base
+      gstreamer
     ];
 
     installPhase = ''

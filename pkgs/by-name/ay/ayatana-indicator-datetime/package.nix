@@ -11,7 +11,9 @@
   evolution-data-server,
   kdePackages,
   glib,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-good,
+  gst-plugins-base,
   gtest,
   intltool,
   libaccounts-glib,
@@ -81,11 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     properties-cpp
     systemdLibs
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gstreamer
     gst-plugins-base
     gst-plugins-good
-  ])
+  ]
   ++ (with lomiri; [
     cmake-extras
   ])

@@ -12,7 +12,11 @@
   elementary-icon-theme,
   glib,
   granite7,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
   gtk4,
   libadwaita,
 }:
@@ -43,13 +47,13 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
   ]
-  ++ (with gst_all_1; [
+  ++ [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-  ]);
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

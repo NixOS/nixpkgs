@@ -3,7 +3,12 @@
   buildNpmPackage,
   fetchFromSourcehut,
   gobject-introspection,
-  gst_all_1,
+  gstreamer,
+  gst-plugins-ugly,
+  gst-plugins-good,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-libav,
   poppler-utils,
   python3Packages,
   lndir,
@@ -105,7 +110,7 @@ pythonPackages.buildPythonApplication rec {
     with pythonPackages;
     let
       # not really documented in python build system
-      gst = with gst_all_1; [
+      gst = [
         # https://git.sr.ht/~mediagoblin/mediagoblin/tree/bf61d38df21748aadb480c53fdd928647285e35f/item/.guix/modules/mediagoblin-package.scm#L122-127
         gst-libav
         gst-plugins-bad

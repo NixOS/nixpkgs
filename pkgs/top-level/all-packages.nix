@@ -6747,6 +6747,31 @@ with pkgs;
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
 
+  inherit
+    ({
+      icamerasrc-ipu6 = callPackage ../development/libraries/gstreamer/icamerasrc { };
+      icamerasrc-ipu6ep = callPackage ../development/libraries/gstreamer/icamerasrc {
+        ipu6-camera-hal = ipu6ep-camera-hal;
+      };
+      icamerasrc-ipu6epmtl = callPackage ../development/libraries/gstreamer/icamerasrc {
+        ipu6-camera-hal = ipu6epmtl-camera-hal;
+      };
+
+      icamerasrc-ipu7x = callPackage ../development/libraries/gstreamer/icamerasrc {
+        ipuVariant = "ipu7";
+      };
+      icamerasrc-ipu75xa = callPackage ../development/libraries/gstreamer/icamerasrc {
+        ipuVariant = "ipu7";
+        ipu7x-camera-hal = ipu75xa-camera-hal;
+      };
+    })
+    icamerasrc-ipu6
+    icamerasrc-ipu6ep
+    icamerasrc-ipu6epmtl
+    icamerasrc-ipu7x
+    icamerasrc-ipu75xa
+    ;
+
   inspircdMinimal = inspircd.override { extraModules = [ ]; };
 
   inherit (callPackages ../by-name/je/jetty { })
