@@ -1,0 +1,31 @@
+diff --git a/pyobjc_setup.py b/pyobjc_setup.py
+index 2992c01fe..0dfff5d03 100644
+--- a/pyobjc_setup.py
++++ b/pyobjc_setup.py
+@@ -249,7 +249,7 @@ def get_os_level():
+     # to retrieve the version in-process will retrieve a compatibility
+     # version when compiled with an SDK older than 11.0.
+     v = (
+-        subprocess.check_output(["/usr/bin/sw_vers", "-productVersion"])
++        subprocess.check_output(["sw_vers", "-productVersion"])
+         .decode()
+         .strip()
+     )
+@@ -406,7 +406,7 @@ def _fixup_compiler(use_ccache):
+         # Default compiler is not usable, try finding 'clang'
+         cc = _find_executable("clang")
+         if cc is None:
+-            cc = os.popen("/usr/bin/xcrun -find clang").read()
++            cc = os.popen("xcrun -find clang").read()
+ 
+     if not cc:
+         raise SystemExit("Cannot locate compiler candidate")
+@@ -480,7 +480,7 @@ def Extension(*args, **kwds):
+         # We're likely on a system with the Xcode Command Line Tools.
+         # Explicitly use the most recent SDK to avoid compile problems.
+         data = subprocess.check_output(
+-            ["/usr/bin/xcrun", "-sdk", "macosx", "--show-sdk-path"],
++            ["xcrun", "-sdk", "macosx", "--show-sdk-path"],
+             text=True,
+         ).strip()
+ 
