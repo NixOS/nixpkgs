@@ -1242,6 +1242,8 @@ with pkgs;
 
   arduino = arduino-core.override { withGui = true; };
 
+  aristotle = with python3Packages; toPythonApplication aristotlelib;
+
   arpack-mpi = arpack.override { useMpi = true; };
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
