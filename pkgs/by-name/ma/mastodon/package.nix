@@ -8,6 +8,7 @@
   callPackage,
   ruby_3_4,
   writeShellScript,
+  runCommand,
   brotli,
   python3,
 
@@ -39,6 +40,20 @@ stdenv.mkDerivation rec {
     name = "${pname}-gems-${version}";
     inherit version gemset ruby;
     gemdir = src;
+    # skip groups `development` and `test`
+    groups = [
+      "default"
+      "production"
+      "opentelemetry"
+      "pam_authentication"
+    ];
+    # mark unneeded groups optional so we can skip them
+    gemfile = runCommand "Gemfile" { } ''
+      substitute ${src}/Gemfile $out \
+        --replace-fail "group :test do" "group :test, optional: true do" \
+        --replace-fail "group :development do" "group :development, optional: true do" \
+        --replace-fail "group :development, :test do" "group :development, :test, optional: true do"
+    '';
   };
 
   mastodonModules = stdenv.mkDerivation (finalAttrs: {
