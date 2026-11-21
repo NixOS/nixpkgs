@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ticktick.com/home/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      andreszb
       hbjydev
       jonocodes
     ];
