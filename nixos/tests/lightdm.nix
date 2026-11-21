@@ -10,7 +10,10 @@
     {
       imports = [ ./common/user-account.nix ];
       services.xserver.enable = true;
-      services.xserver.displayManager.lightdm.enable = true;
+      services.xserver.displayManager.lightdm = {
+        enable = true;
+        debug = true;
+      };
       services.displayManager.defaultSession = "none+icewm";
       services.xserver.windowManager.icewm.enable = true;
     };
@@ -30,5 +33,7 @@
       machine.wait_for_file("${user.home}/.Xauthority")
       machine.succeed("xauth merge ${user.home}/.Xauthority")
       machine.wait_for_window("^IceWM ")
+      machine.succeed("journalctl -b -u display-manager.service --grep='DEBUG: Starting Light Display Manager'")
+      machine.succeed("journalctl -b -t Xorg --grep='X.Org X Server'")
     '';
 }

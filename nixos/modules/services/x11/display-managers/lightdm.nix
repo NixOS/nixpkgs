@@ -31,7 +31,10 @@ let
     else additionalArgs="-logfile /var/log/X.$display.log"
     fi
 
-    exec ${xcfg.displayManager.xserverBin} ${toString xcfg.displayManager.xserverArgs} $additionalArgs "$@"
+    # LightDM redirects the X server's stderr to a file before running this wrapper.
+    # Reconnect it to the journal when debugging.
+    exec ${optionalString cfg.debug "${config.systemd.package}/bin/systemd-cat -t Xorg"} \
+      ${xcfg.displayManager.xserverBin} ${toString xcfg.displayManager.xserverArgs} $additionalArgs "$@"
   '';
 
   usersConf = writeText "users.conf" ''
@@ -120,6 +123,16 @@ in
         default = false;
         description = ''
           Whether to enable lightdm as the display manager.
+        '';
+      };
+
+      debug = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable LightDM debug logging and send LightDM and X server
+          output to the systemd journal. LightDM and Xorg also continue writing
+          their own log files.
         '';
       };
 
@@ -237,7 +250,7 @@ in
     # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
     services.displayManager.generic.execCmd = ''
       export PATH=${lightdm}/sbin:$PATH
-      exec ${lightdm}/sbin/lightdm
+      exec ${lightdm}/sbin/lightdm ${optionalString cfg.debug "--debug"}
     '';
 
     # Pull in dependencies of services we replace.
