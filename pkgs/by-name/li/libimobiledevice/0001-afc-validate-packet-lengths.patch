@@ -1,0 +1,33 @@
+diff --git a/src/afc.c b/src/afc.c
+index c7eed5c..7cc2008 100644
+--- a/src/afc.c
++++ b/src/afc.c
+@@ -256,6 +256,12 @@ static afc_error_t afc_receive_data(afc_client_t client, char **bytes, uint32_t
+ 		debug_info("Invalid AFCPacket header received!");
+ 		return AFC_E_OP_HEADER_INVALID;
+ 	}
++	if (header.entire_length < sizeof(AFCPacket)
++		|| header.this_length > header.entire_length
++		|| header.entire_length - sizeof(AFCPacket) > UINT32_MAX) {
++		debug_info("Invalid AFCPacket length received!");
++		return AFC_E_OP_HEADER_INVALID;
++	}
+ 	if ((header.this_length == header.entire_length)
+ 		&& header.entire_length == sizeof(AFCPacket)) {
+ 		debug_info("Empty AFCPacket received!");
+@@ -267,10 +273,13 @@ static afc_error_t afc_receive_data(afc_client_t client, char **bytes, uint32_t
+ 
+ 	debug_info("received AFC packet, full len=%lld, this len=%lld, operation=0x%llx", header.entire_length, header.this_length, header.operation);
+ 
+-	entire_len = (uint32_t)header.entire_length - sizeof(AFCPacket);
+-	this_len = (uint32_t)header.this_length - sizeof(AFCPacket);
++	entire_len = (uint32_t)(header.entire_length - sizeof(AFCPacket));
++	this_len = (uint32_t)(header.this_length - sizeof(AFCPacket));
+ 
+ 	buf = (char*)malloc(entire_len);
++	if (!buf) {
++		return AFC_E_NO_MEM;
++	}
+ 	if (this_len > 0) {
+ 		recv_len = 0;
+ 		service_receive(client->parent, buf, this_len, &recv_len);
