@@ -44,6 +44,7 @@
           contour
           foot
           ghostty
+          jotty
           kitty
           mtm
           rio
