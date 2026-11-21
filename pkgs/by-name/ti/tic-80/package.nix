@@ -27,18 +27,18 @@ in
 
 stdenv.mkDerivation {
   pname = "tic-80";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "nesbox";
     repo = "TIC-80";
-    rev = "v1.2.0";
+    rev = "v1.3.1";
     # TIC-80 vendors its dependencies as submodules. For the following dependencies,
     # there are no (or no compatible) packages in nixpkgs yet, so we use the vendored
     # ones as a fill-in: wasm, squirrel, pocketpy, argparse, naett,
     # sdlgpu, mruby.
     fetchSubmodules = true;
-    hash = "sha256-RTtqgGAAolK1qoaKV08i/KfGu7fd34W+AyXeNcqPVgk=";
+    hash = "sha256-W3xtBtxaUzGDnIwKH8F0vs2SlUoqj6AzezGz7+R3v/4=";
   };
 
   # To avoid the awkward copyright range of "2017-1980", which would be caused by the
