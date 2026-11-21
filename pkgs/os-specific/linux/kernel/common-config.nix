@@ -769,6 +769,8 @@ let
 
       EROFS_FS_ZIP_DEFLATE = whenAtLeast "6.6" yes;
       EROFS_FS_ZIP_ZSTD = whenAtLeast "6.10" yes;
+      EROFS_FS_PCPU_KTHREAD = whenAtLeast "6.3" yes;
+      EROFS_FS_PAGE_CACHE_SHARE = whenAtLeast "7.0" yes;
 
       # Native Language Support modules, needed by some filesystems
       NLS = yes;
