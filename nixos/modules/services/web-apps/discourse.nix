@@ -28,6 +28,23 @@ let
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
 
   tlsEnabled = cfg.enableACME || cfg.sslCertificate != null || cfg.sslCertificateKey != null;
+
+  discordConsoleWrapper = pkgs.writeShellApplication {
+    name = "discourse-console";
+    runtimeInputs = with pkgs; [
+      util-linux
+    ];
+    text = ''
+      cd ${cfg.package}/share/discourse
+      exec runuser ${
+        lib.cli.toCommandLineShellGNU { } {
+          user = "discourse";
+          group = "discourse";
+        }
+      } -- ${lib.getExe' cfg.package.rubyEnv "bundle"} \
+         exec rails console -e production
+    '';
+  };
 in
 {
   options = {
@@ -1161,6 +1178,7 @@ in
 
     environment.systemPackages = [
       cfg.package.rake
+      discordConsoleWrapper
     ];
   };
 
