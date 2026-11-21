@@ -15,10 +15,10 @@
         };
       };
 
-      services.geth."holesky" = {
+      services.geth."hoodi" = {
         enable = true;
         port = 30304;
-        network = "holesky";
+        network = "hoodi";
         http = {
           enable = true;
           port = 18545;
@@ -48,7 +48,7 @@
     start_all()
 
     machine.wait_for_unit("geth-mainnet.service")
-    machine.wait_for_unit("geth-holesky.service")
+    machine.wait_for_unit("geth-hoodi.service")
     machine.wait_for_unit("geth-sepolia.service")
     machine.wait_for_open_port(8545)
     machine.wait_for_open_port(18545)
