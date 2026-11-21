@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "apidog";
-  version = "2.8.52";
+  version = "2.8.54";
 
   src = fetchurl {
     url = "https://file-assets.apidog.com/download/${finalAttrs.version}/Apidog-${finalAttrs.version}.AppImage";
-    hash = "sha256-xf+xMayNgJE6ms7/xvTAQj0jZlgPknHvGqNN5DQprsI=";
+    hash = "sha256-B31f3ugn/1xhs9PbL6d5pOZMro9BcgWlH/K4ypZtVd0=";
   };
 
   extraPkgs = pkgs: [
