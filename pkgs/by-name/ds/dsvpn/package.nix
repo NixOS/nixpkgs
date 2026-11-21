@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Dead Simple VPN";
     homepage = "https://github.com/jedisct1/dsvpn";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ enovamaker ];
     platforms = lib.platforms.unix;
     mainProgram = "dsvpn";
   };
