@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     boost
-    coal
     console-bridge
     eigen
     urdfdom
@@ -98,7 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit casadiSupport collisionSupport;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
