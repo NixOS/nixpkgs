@@ -65,6 +65,7 @@ stdenvNoCC.mkDerivation rec {
   makeFlags = [
     "EMOJI=TwitterColorEmoji"
     "EMOJI_SRC_DIR=${twemojiSrc.name}/assets/72x72"
+    "FLAGS="
     "BODY_DIMENSIONS=76x72"
     # twemoji contains some codepoints noto doesn't like
     "BYPASS_SEQUENCE_CHECK=True"
