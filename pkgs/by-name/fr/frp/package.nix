@@ -22,6 +22,11 @@ buildGoModule (finalAttrs: {
 
   doCheck = false;
 
+  patches = [
+    # stopgap solution for CVE-2026-110619
+    ./apply-middleware-pprof-path.patch
+  ];
+
   subPackages = [
     "cmd/frpc"
     "cmd/frps"
