@@ -1483,6 +1483,8 @@ let
         };
       };
 
+      dtsvet.vscode-wasm = callPackage ./dtsvet.vscode-wasm { };
+
       eamodio.gitlens = callPackage ./eamodio.gitlens { };
 
       earthly.earthfile-syntax-highlighting = buildVscodeMarketplaceExtension {
