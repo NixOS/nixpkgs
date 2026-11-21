@@ -55,6 +55,14 @@
         services.userborn.importLegacyState = false;
         users.users.intruder.enable = true;
       };
+
+      # userborn bind-mounts the password files read-only.
+      userborn-immutable.configuration = {
+        services.userborn.enable = lib.mkForce true;
+        users.mutableUsers = lib.mkForce false;
+        users.allowNoPasswordLogin = true;
+        users.users.intruder.enable = true;
+      };
     };
   };
 
@@ -95,10 +103,10 @@
           )
 
       with subtest("userborn: legacy state is imported"):
-          # The import only runs while userborn's state directory is absent.
-          machine.fail("test -e /var/lib/userborn")
+          # The import only runs while the previous config is absent.
+          machine.fail("test -e /etc/previous-userborn.json")
           switch("userborn")
-          machine.succeed("test -d /var/lib/userborn")
+          machine.succeed("test -e /etc/previous-userborn.json")
 
           # ghost must be a locked stub with its original uid.
           ghost_passwd = machine.succeed("getent passwd ghost").strip()
@@ -158,5 +166,17 @@
       with subtest("legacy import service can be excluded"):
           switch("userborn-without-import")
           machine.fail("systemctl cat userborn-import-legacy.service")
+
+      with subtest("legacy import reruns over read-only password files"):
+          switch("userborn-immutable")
+          machine.succeed("findmnt --noheadings --options ro /etc/group")
+          machine.succeed(
+              "sed -i 's/^{/{\"phantom\":4242,/' /var/lib/nixos/gid-map",
+              "rm /etc/previous-userborn.json",
+          )
+          machine.succeed("systemctl restart userborn-import-legacy.service")
+          machine.wait_for_unit("userborn.service")
+          t.assertEqual(machine.succeed("getent group phantom").strip(), "phantom:x:4242:")
+          machine.succeed("findmnt --noheadings --options ro /etc/group")
     '';
 }

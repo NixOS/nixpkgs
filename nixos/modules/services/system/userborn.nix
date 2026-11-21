@@ -53,7 +53,7 @@ let
         mkdir -p $out
         userborn ${userbornConfigJson} $out
       '';
-  previousConfigPath = "/var/lib/userborn/previous-userborn.json";
+  previousConfigPath = "${cfg.passwordFilesLocation}/previous-userborn.json";
 
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
   # The files live outside /etc and need to be linked or bind-mounted there.
@@ -69,6 +69,12 @@ let
     "subuid"
     "subgid"
   ];
+  # Make the source files writable, userborn bind-mounts them read-only.
+  unmountPasswordFiles = lib.mkIf (!userCfg.mutableUsers) (
+    lib.map (file: "-${pkgs.util-linux}/bin/umount ${cfg.passwordFilesLocation}/${file}") (
+      passwordFiles ++ subIdFiles
+    )
+  );
 
 in
 {
@@ -191,12 +197,13 @@ in
           DefaultDependencies = false;
           ConditionPathExists = [
             "/var/lib/nixos/uid-map"
-            "!/var/lib/userborn"
+            "!${previousConfigPath}"
           ];
         };
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
+          ExecStartPre = unmountPasswordFiles;
           ExecStart = "${lib.getExe pkgs.userborn-import-legacy} --nogroup-gid ${toString config.ids.gids.nogroup} ${cfg.passwordFilesLocation}";
         };
       };
@@ -236,7 +243,6 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
           TimeoutSec = "90s";
-          StateDirectory = "userborn";
 
           ExecStart = "${lib.getExe cfg.package} ${userbornConfigJson} ${cfg.passwordFilesLocation}";
 
@@ -245,12 +251,7 @@ in
               "${pkgs.coreutils}/bin/mkdir -p ${cfg.passwordFilesLocation}"
             ])
 
-            # Make the source files writable before executing userborn.
-            (lib.mkIf (!userCfg.mutableUsers) (
-              lib.map (file: "-${pkgs.util-linux}/bin/umount ${cfg.passwordFilesLocation}/${file}") (
-                passwordFiles ++ subIdFiles
-              )
-            ))
+            unmountPasswordFiles
           ];
 
           ExecStartPost =
