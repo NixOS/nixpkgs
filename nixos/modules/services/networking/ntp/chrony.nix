@@ -11,7 +11,6 @@ let
 
   stateDir = cfg.directory;
   driftFile = "${stateDir}/chrony.drift";
-  keyFile = "${stateDir}/chrony.keys";
   rtcFile = "${stateDir}/chrony.rtc";
 
   configFile = pkgs.writeText "chrony.conf" ''
@@ -31,7 +30,7 @@ let
     ${lib.optionalString cfg.makestep.enable "makestep ${toString cfg.makestep.threshold} ${toString cfg.makestep.limit}"}
 
     driftfile ${driftFile}
-    keyfile ${keyFile}
+    ${lib.optionalString (cfg.keyFile != null && cfg.keyFile != "") "keyfile ${cfg.keyFile}"}
     ${lib.optionalString (cfg.enableRTCTrimming) "rtcfile ${rtcFile}"}
     ${lib.optionalString (cfg.enableNTS) "ntsdumpdir ${stateDir}"}
 
@@ -50,6 +49,108 @@ let
   ]
   ++ lib.optional cfg.enableMemoryLocking "-m"
   ++ cfg.extraFlags;
+
+  checkConfigScriptFile = pkgs.writeShellScript "chrony-check-config.sh" ''
+    set -eu
+
+    # NB these assume stderr is connected to the journal
+    note () {
+      local IFS=" "
+      printf '<5>%s\n' "$*" >&2
+    }
+    warn () {
+      local IFS=" "
+      printf '<4>%s\n' "$*" >&2
+    }
+    err () {
+      local IFS=" "
+      printf '<3>%s\n' "$*" >&2
+    }
+    fatal () {
+      err "$@"
+      exit 1
+    }
+
+    # Very basic validation of the setup.
+    # It might be nice to check for appropriate permissions, but this is
+    # difficult to do accurately without assuming the existence of a
+    # sudo-like program, and chrony already does those checks itself
+    config_file="${configFile}"
+    state_dir="${stateDir}"
+    [[ -f "$config_file" ]] ||
+      fatal "chrony config file '$config_file' is missing"
+    [[ -d "$state_dir" ]] ||
+      fatal "chrony state directory '$state_dir' is missing or not a directory"
+
+    # Check for migration problems related to the removal of the auto-created
+    # empty keyfile in 26.11.
+    state_dir=$(realpath -- "$state_dir")
+    old_keyfile="$state_dir/chrony.keys"
+    cfg_keyfile=$(sed -ne 's/^[[:blank:]]*keyfile[[:blank:]]*//p' "$config_file")
+
+    if [[ -z "$cfg_keyfile" ]]; then
+      # No explicitly configured keyfile post-migration.
+
+      if [[ -h "$old_keyfile" ]]; then
+          warn "Potential breakage due to 26.11 upgrade: shared-key packet authentication"
+          warn "is not enabled in the chrony configuration, but $old_keyfile"
+          warn "is a symlink.  Did you manually replace the empty file created by the NixOS"
+          warn "chrony module with a symlink to a file containing packet authentication"
+          warn "keys?  If so, see the release notes for instructions on how to correct your"
+          warn "configuration and reactivate packet authentication."
+          warn "If you aren't using shared-key packet authentication, $old_keyfile"
+          warn "can probably be removed, but check what it points to first."
+      elif [[ -s "$old_keyfile" ]]; then
+          warn "Potential breakage due to 26.11 upgrade: shared-key packet authentication"
+          warn "is not enabled in the chrony configuration, but $old_keyfile"
+          warn "exists and is not empty.  Did you manually add packet authentication keys"
+          warn "to this file?  If so, see the release notes for instructions on how to"
+          warn "correct your configuration and reactivate packet authentication.  If you"
+          warn "aren't using shared-key packet authentication, $old_keyfile can probably be"
+          warn "removed, but check its contents first."
+      elif [[ -f "$old_keyfile" ]]; then
+          note "Manual cleanup needed after 26.11 upgrade: shared-key packet authentication"
+          note "is not enabled in the chrony configuration, but $old_keyfile"
+          note "exists and is empty.  The empty file was probably created by an"
+          note "older version of the NixOS chrony module; it should be deleted."
+      elif [[ -e "$old_keyfile" ]]; then
+          warn "Potential breakage due to 26.11 upgrade: shared-key packet authentication"
+          warn "is not enabled in the chrony configuration, but $old_keyfile"
+          warn "exists and is not a regular file.  chrony was probably ignoring it before."
+          warn "If you aren't using shared-key packet authentication, $old_keyfile"
+          warn "can probably be removed, but check what it is first.  If you meant to"
+          warn "use shared-key packet authentication, consult the chrony manual for"
+          warn "how to configure it correctly."
+      fi
+
+    else
+      # expand symlinks in the directory part of cfg_keyfile, but not in the
+      # name itself
+      cfg_keyfile_dir=''${cfg_keyfile%/*}
+      cfg_keyfile_base=''${cfg_keyfile##*/}
+      cfg_keyfile=$(realpath -m "$cfg_keyfile_dir")/$cfg_keyfile_base
+
+      if ! [[ $(realpath --relative-base="$state_dir" -- "$cfg_keyfile") =~ ^/ ]]; then
+        warn "Insecure configuration detected: NTP packet authentication keys are"
+        warn "symmetric keys that must be kept secret.  They should not be stored in"
+        warn "the chrony state directory, or any other directory that is writable by"
+        warn "the chrony user.  Relocate $cfg_keyfile to a location suitable"
+        warn "for storing secrets.  Make sure it is writable only by root, and readable only"
+        warn "by root and the chrony group.  Then update the NixOS configuration option"
+        warn "\`services.chrony.keyFile\` to refer to it in its new location."
+        warn "If you did not intend to use shared-key NTP packet authentication, remove"
+        warn "the option \`services.chrony.keyFile\` from your NixOS configuration."
+        warn "$cfg_keyfile should probably also be removed, but check its contents first."
+      elif [[ ! -s "$cfg_keyfile" ]]; then
+        note "Packet authentication key file '$cfg_keyfile' is empty, missing,"
+        note "or not a regular file.  Shared-key NTP packet authentication will not be active."
+        note "If you did not intend to use shared-key NTP packet authentication,"
+        note "remove the file and remove the option \`services.chrony.keyFile\`"
+        note "from your NixOS configuration.  Otherwise, consult the chrony manual and"
+        note "the administrators of your NTP servers to learn what to put in this file."
+      fi
+    fi
+  '';
 
   dispatcherScriptFile = pkgs.callPackage (
     {
@@ -149,6 +250,26 @@ in
         description = ''
           Whether to enable Network Time Security authentication.
           Make sure it is supported by your selected NTP server(s).
+        '';
+      };
+
+      keyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Absolute pathname of a file containing NTP packet authentication keys.
+
+          Because these keys are shared secrets, chronyd requires this file to be owned by
+          root (*not* the chrony user), writable only by root, and readable only by root
+          and the chrony group.  Also, it should *not* be stored within chrony's state
+          directory ([](#opt-services.chrony.directory)), because the chrony user can
+          clobber any file in this directory, regardless of ownership.
+
+          ::: {.note}
+          Packet authentication keys have to be shared with all configured NTP servers.
+          If you're not running your own private NTP pool, you probably want the
+          [](#opt-services.chrony.enableNTS) option instead.
+          :::
         '';
       };
 
@@ -271,7 +392,6 @@ in
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0750 chrony chrony - -"
       "f ${driftFile} 0640 chrony chrony - -"
-      "f ${keyFile} 0640 root chrony - -"
     ]
     ++ lib.optionals cfg.enableRTCTrimming [
       "f ${rtcFile} 0640 chrony chrony - -"
@@ -300,6 +420,7 @@ in
       serviceConfig = {
         Type = "notify";
         ExecStart = "${chronyPkg}/bin/chronyd ${toString chronyFlags}";
+        ExecStartPre = checkConfigScriptFile;
         Restart = "on-failure";
 
         # Proc filesystem
@@ -378,6 +499,19 @@ in
           Unless you are very sure the former isn't what you want, please remove
           `rtcsync` from `services.chrony.extraConfig`.
           Alternatively, disable this behaviour by `services.chrony.enableRTCTrimming = false;`
+        '';
+      }
+      {
+        # TODO it can't be inside a *subdirectory* of stateDir either;
+        # the check-config script catches that, but this assertion should too.
+        assertion =
+          cfg.keyFile == null || cfg.keyFile == "" || (lib.filesystem.dirOf cfg.keyFile) != cfg.stateDir;
+        message = ''
+          The shared-key packet authentication file (`keyFile`) should not be
+          stored inside chrony's state directory (`stateDir`), as this makes it
+          possible for a process running as the chrony user to replace the file.
+          It should be provided by a secrets service, or else kept in a location
+          where only root can alter it.
         '';
       }
     ];
