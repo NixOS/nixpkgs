@@ -102,5 +102,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "popcorntime";
+    knownVulnerabilities = [
+      "Uses vendored Electron 6, EOL on May 18, 2020 with many CVEs"
+    ];
   };
 }
