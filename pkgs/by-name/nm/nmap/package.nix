@@ -102,7 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Free and open source utility for network discovery and security auditing";
     homepage = "http://www.nmap.org";
     changelog = "https://nmap.org/changelog.html#${finalAttrs.version}";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.mkLicense {
+      shortName = "NPSL";
+      fullName = "Nmap Public Source License";
+      free = false;
+      url = "https://svn.nmap.org/nmap/LICENSE";
+    };
     platforms = lib.platforms.all;
     mainProgram = "nmap";
     maintainers = with lib.maintainers; [
