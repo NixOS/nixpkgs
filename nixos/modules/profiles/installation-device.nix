@@ -117,6 +117,10 @@ with lib;
     # remove warning about unset mail
     boot.swraid.mdadmConf = "PROGRAM ${pkgs.coreutils}/bin/true";
 
+    # Export pools so they may be re-imported (without `zpool import -f`) on a
+    # system with a different hostId (e.g. the installation target).
+    boot.zfs.exportOnShutdown = mkDefault true;
+
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.

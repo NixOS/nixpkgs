@@ -293,6 +293,56 @@ in
       '';
   };
 
+  export-on-shutdown = runTest {
+    name = "zfs-export-on-shutdown";
+    nodes.machine =
+      { lib, ... }:
+      {
+        virtualisation = {
+          emptyDiskImages = [ 4096 ];
+          useBootLoader = true;
+          useEFIBoot = true;
+        };
+        boot.loader.systemd-boot.enable = true;
+        boot.loader.timeout = 0;
+        boot.loader.efi.canTouchEfiVariables = true;
+        networking.hostId = "deadbeef";
+        boot.supportedFilesystems = [ "zfs" ];
+        boot.zfs.devNodes = "/dev/disk/by-uuid";
+        boot.zfs.forceImportRoot = false;
+        boot.zfs.exportOnShutdown = true;
+
+        specialisation.otherHost.configuration = {
+          networking.hostId = lib.mkForce "deadcafe";
+        };
+      };
+
+    testScript =
+      { nodes, ... }:
+      let
+        otherHost = nodes.machine.specialisation.otherHost.configuration.system.build.toplevel;
+      in
+      ''
+        machine.wait_for_unit("multi-user.target")
+
+        with subtest("pools are exported on shutdown"):
+            machine.succeed(
+                "zpool create tank /dev/vdb",
+                "zfs create tank/data",
+                "zpool list tank",
+                "${otherHost}/bin/switch-to-configuration boot",
+            )
+            machine.shutdown()
+            machine.start()
+            machine.wait_for_unit("multi-user.target")
+            assert "deadcafe" in machine.succeed("hostid")
+            machine.succeed(
+                "zpool import tank",
+                "zpool list tank",
+            )
+      '';
+  };
+
   zfs-mount-generator = runTest {
     name = "zfs-mount-generator";
     nodes.machine =
