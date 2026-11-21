@@ -31,6 +31,9 @@ python3.pkgs.buildPythonApplication {
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;
   sourceRoot = main_src.name;
 
+  # Lets nix-update find the version and hash to update, as there is no single src
+  passthru.src = main_src;
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "pygame>=2.5.2" "pygame-ce"
