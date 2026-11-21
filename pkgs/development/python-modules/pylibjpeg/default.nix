@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  flit-core,
+  flit-core_3,
   numpy,
   pydicom,
   pylibjpeg-data,
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-jMdNzruzr2VgEntFF5BBoK3yrq0VegtJNXAkCpHjsks=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ numpy ];
 
