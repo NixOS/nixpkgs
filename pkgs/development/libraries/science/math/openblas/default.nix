@@ -66,7 +66,9 @@ let
 
     armv7l-linux = {
       BINARY = 32;
-      TARGET = setTarget "ARMV7";
+      # The code in the library uses d16-d31 regiter unavailable in our
+      # platofrm settings with fpu set to vfpv3-d16.
+      TARGET = setTarget "ARMV6";
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
