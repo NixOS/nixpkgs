@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tvm";
-  version = "0.26.0";
+  version = "0.27.0.post1";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tvm";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-sUVD2vrYh/kC5V+70Xa70e0LJLa7lk+DcFfQdxX6w6g=";
+    hash = "sha256-7m5Ob4qUVJV3ABLXHhvXLKvI1I6ayf91PJCvFUG8KBI=";
   };
 
   nativeBuildInputs = [ cmake ];
