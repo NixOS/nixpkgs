@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libx11
     libxcb
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r assets/app-icon/hicolor $out/share/icons
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --set-rpath "${
       lib.makeLibraryPath [
         alsa-lib
