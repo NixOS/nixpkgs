@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openinference-semantic-conventions";
-  version = "0.1.32";
+  version = "0.1.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arize-ai";
     repo = "openinference";
     tag = "python-openinference-semantic-conventions-v${finalAttrs.version}";
-    hash = "sha256-rEF7Ijx3Zo3NHywFJFa5+QpXZjIWOvkQBie+54v/f8A=";
+    hash = "sha256-R1iaM9w6u4EBJSclr3LPHwURphDeYGS/Pks19n2HQ/s=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/${finalAttrs.pname}";
