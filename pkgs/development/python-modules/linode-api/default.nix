@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "linode-api";
+  pname = "linode-api4";
   version = "5.46.0";
   pyproject = true;
 
@@ -23,6 +23,12 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-d9VgHHbyEcFHy3bM2KpuwUN3Su7ABYqYRWL+nOZ1Xd4=";
   };
+
+  # Upstream sets the version during its release workflow
+  postPatch = ''
+    substituteInPlace linode_api4/version.py \
+      --replace-fail '"0.0.0.dev"' '"${version}"'
+  '';
 
   build-system = [ setuptools ];
 
