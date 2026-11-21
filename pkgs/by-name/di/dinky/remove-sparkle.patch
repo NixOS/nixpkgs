@@ -1,0 +1,80 @@
+--- a/Package.resolved
++++ b/Package.resolved
+@@ -2,15 +2,6 @@
+   "originHash" : "cec9fab1e9ac4e5acb54b8ee7f67a205fcdff147b17500aba3055fc1d909025d",
+   "pins" : [
+     {
+-      "identity" : "sparkle",
+-      "kind" : "remoteSourceControl",
+-      "location" : "https://github.com/sparkle-project/Sparkle",
+-      "state" : {
+-        "revision" : "ac2def288cbff5cfc7df3ffef6abdf45b72bcb0a",
+-        "version" : "2.9.6"
+-      }
+-    },
+-    {
+       "identity" : "tomldecoder",
+       "kind" : "remoteSourceControl",
+       "location" : "https://github.com/dduan/TOMLDecoder",
+--- a/Package.swift
++++ b/Package.swift
+@@ -6,7 +6,6 @@
+     platforms: [.macOS(.v15)],
+     dependencies: [
+         .package(url: "https://github.com/dduan/TOMLDecoder", exact: "0.4.4"),
+-        .package(url: "https://github.com/sparkle-project/Sparkle", exact: "2.9.6"),
+     ],
+     targets: [
+         // Private SkyLight and CGS calls. Objective-C, capability checked, nothing else lives here.
+@@ -64,8 +63,7 @@
+         .executableTarget(
+             name: "dinky",
+             dependencies: [
+-                "DinkyPrivate", "DinkyLayout", "DinkyConfig", "DinkyCommands", "DinkySocket",
+-                .product(name: "Sparkle", package: "Sparkle"),
++                "DinkyPrivate", "DinkyLayout", "DinkyConfig", "DinkyCommands", "DinkySocket"
+             ],
+             swiftSettings: [.swiftLanguageMode(.v5)],
+             // The app bundle carries Sparkle.framework in Contents/Frameworks.
+--- a/Sources/dinky/App.swift
++++ b/Sources/dinky/App.swift
+@@ -1,7 +1,6 @@
+ import AppKit
+ import DinkyConfig
+ import DinkyPrivate
+-import Sparkle
+ 
+ // `dinky app`: a menu bar item showing the focused display's workspace number, with commands as menu
+ // items, and the socket the CLI talks to.
+@@ -27,10 +26,6 @@
+     private var socket: SocketServer?
+     private let onboarding = Onboarding()
+     private var signals: [DispatchSourceSignal] = []
+-    // Only a bundle carries the feed URL; a bare debug binary would otherwise show an "Unable to Check
+-    // For Updates" alert at launch that blocks the socket until dismissed.
+-    private let updater = SPUStandardUpdaterController(startingUpdater: Bundle.main.infoDictionary?["SUFeedURL"] != nil,
+-                                                       updaterDelegate: nil, userDriverDelegate: nil)
+ 
+     func applicationDidFinishLaunching(_ note: Notification) {
+         AppState.shared.loadConfig()
+@@ -209,9 +204,6 @@
+             menu.addItem(item("Restore \(recoverable) windows from the previous session", "recover"))
+         }
+         menu.addItem(.separator())
+-        let updates = NSMenuItem(title: "Check for Updates…", action: #selector(checkForUpdates(_:)), keyEquivalent: "")
+-        updates.target = self
+-        menu.addItem(updates)
+         menu.addItem(NSMenuItem(title: "Quit dinky", action: #selector(NSApplication.terminate(_:)), keyEquivalent: ""))
+     }
+ 
+@@ -251,10 +243,6 @@
+         return it
+     }
+ 
+-    @objc private func checkForUpdates(_ sender: Any?) {
+-        updater.checkForUpdates(sender)
+-    }
+-
+     @objc private func runCommand(_ sender: NSMenuItem) {
+         guard let commands = sender.representedObject as? [String] else { return }
+         for command in commands {
