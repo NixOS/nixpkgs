@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-ds3">
+    <comment xml:lang="en">Dust3D Document</comment>
+    <glob pattern="*.ds3"/>
+    <icon name="dust3d"/>
+  </mime-type>
+</mime-info>
