@@ -111,6 +111,7 @@ let
       seekTo
       ; # added 2024-11-28
     mpv-cheatsheet = throw "'mpv-cheatsheet' is no longer maintained, use 'mpv-cheatsheet-ng' instead"; # added 2026-02-13
+    sponsorblock = throw "'sponsorblock' is no longer maintained, use 'sponsorblock-minimal' instead"; # added 2026-11-20
     youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
   };
 in
