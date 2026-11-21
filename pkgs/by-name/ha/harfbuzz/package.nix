@@ -106,12 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
   ]
-  ++ lib.optional withIntrospection gobject-introspection
-  ++ lib.optional withCairo cairo;
+  ++ lib.optional withIntrospection gobject-introspection;
 
   buildInputs = [
     glib
     freetype
+  ]
+  ++ lib.optionals withCairo [
+    cairo
   ];
 
   propagatedBuildInputs =
@@ -120,6 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
       icu
       harfbuzz
     ];
+
+  strictDeps = true;
 
   doCheck = true;
 
@@ -151,6 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
@@ -162,8 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
       "harfbuzz"
       "harfbuzz-gobject"
       "harfbuzz-subset"
-      "harfbuzz-vector"
     ]
+    ++ (lib.optional withVector "harfbuzz-vector")
     ++ (lib.optional withIcu "harfbuzz-icu")
     ++ (lib.optional withRaster "harfbuzz-raster")
     ++ (lib.optional withCairo "harfbuzz-cairo");
