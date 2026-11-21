@@ -7,6 +7,7 @@
   gnutar,
   gzip,
   nix-update,
+  nixosTests,
   makeBinaryWrapper,
   python3,
   stdenvNoCC,
@@ -108,6 +109,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit python pythonEnv;
+
+    tests.comfyui = nixosTests.comfyui;
 
     updateScript = lib.getExe (writeShellApplication {
       name = "update-comfyui";
