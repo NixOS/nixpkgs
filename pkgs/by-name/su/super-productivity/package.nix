@@ -57,10 +57,11 @@ buildNpmPackage (finalAttrs: {
       buildPhase = ''
         mkdir -p $out
         find -name package-lock.json | sort | while read -r lockfile; do
-          prefetch-npm-deps $lockfile /tmp/cache
+          cacheDir=$(mktemp -d)
+          prefetch-npm-deps "$lockfile" "$cacheDir"
           # Merge output
-          rsync -a /tmp/cache/ $out
-          rm -rf /tmp/cache
+          rsync -a "$cacheDir/" "$out"
+          rm -rf "$cacheDir"
         done
         # Ensure that the root package-lock.json is placed in the output.
         # This means only the root lockfile is checked for consistancy,
