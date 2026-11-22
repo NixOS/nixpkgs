@@ -29,4 +29,4 @@ echo "$pkg_body" >"$PKG_FILE"
 update-source-version "$PNAME" "$new_version" --ignore-same-version --print-changes
 
 # Update cargoHash
-nix-update --version=skip "$PNAME"
+nix-update --version=skip --no-src "$PNAME"
