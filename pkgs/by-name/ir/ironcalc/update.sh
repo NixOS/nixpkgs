@@ -31,8 +31,8 @@ update-source-version ironcalc "$new_version"
 
 echo "Updating hashes..."
 
-nix-update ironcalc.tools --version=skip
-nix-update ironcalc.server --version=skip
-nix-update ironcalc.workbook --version=skip
-nix-update ironcalc.frontend --version=skip
-nix-update ironcalc.nodejs --version=skip
+nix-update ironcalc.tools --version=skip --no-src
+nix-update ironcalc.server --version=skip --no-src
+nix-update ironcalc.workbook --version=skip --no-src
+nix-update ironcalc.frontend --version=skip --no-src
+nix-update ironcalc.nodejs --version=skip --no-src
