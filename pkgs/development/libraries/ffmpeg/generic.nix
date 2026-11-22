@@ -1059,7 +1059,9 @@ stdenv.mkDerivation (
           ++ optional buildSwscale "libswscale";
       in
       ''
+        runHook preCheck
         ${ldLibraryPathEnv}="${lib.concatStringsSep ":" libsToLink}" make check -j$NIX_BUILD_CORES
+        runHook postCheck
       '';
 
     outputs =
