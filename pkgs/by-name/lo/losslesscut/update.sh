@@ -20,4 +20,4 @@ src=$(nix-build --no-link "$PWD" -A "$UPDATE_NIX_PNAME.src")
 yarn-berry-fetcher missing-hashes "$src/yarn.lock" >"$ROOT/missing-hashes.json"
 
 # Update offlineCache
-nix-update "$UPDATE_NIX_PNAME" --version skip
+nix-update "$UPDATE_NIX_PNAME" --version skip --no-src
