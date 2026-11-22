@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "oc";
-  version = "0.5.8";
+  version = "0.5.10";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "only-cli";
     repo = "oc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fCQ+bwlkmb1d9uO6ux+h69LgKX57GQaTiY7tQgX7+q8=";
+    hash = "sha256-4kTmHm0i22WfAUFDGMYFmibS/eUwMcaeubi3bOjzrn4=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-Lsv5/5n592oqeo3Hq5JMXg+ADh6AajhGD0MrxUU6SFs=";
+    hash = "sha256-yx9SAESUBqm6GrSFUJnFqQE8pMmPsFgg+56/F5ZGpXU=";
   };
 
   dontNpmBuild = true;

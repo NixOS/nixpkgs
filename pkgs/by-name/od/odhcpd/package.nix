@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odhcpd";
-  version = "0-unstable-2026-11-08";
+  version = "0-unstable-2026-11-17";
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/odhcpd.git";
-    rev = "f97b5d335c513cedd5b81ef9f39bdc799de8f535";
-    hash = "sha256-0FzNElifbL/YRrprErROSSE9tpox/cSz3f9IXTLSmSk=";
+    rev = "4580970dabfb289de57fe5297c0be6f578bb30d2";
+    hash = "sha256-2T0Nnw84Dj37QK0NBsofcfYNzOeOcg5TUvZ2JxEP7RQ=";
   };
 
   nativeBuildInputs = [ cmake ];
