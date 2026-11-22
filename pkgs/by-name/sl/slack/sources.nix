@@ -4,6 +4,7 @@
 {
   aarch64-darwin = {
     version = "4.53.287";
+    electronVersion = "45.2.3";
     src = fetchurl {
       url = "https://downloads.slack-edge.com/desktop-releases/mac/arm64/4.53.287/Slack-4.53.287-macOS.dmg";
       hash = "sha256-TUt5TPygdtQ4EiaTiJF572xZBmojlBO3bfm1HG3RQII=";
@@ -11,6 +12,7 @@
   };
   x86_64-linux = {
     version = "4.53.287";
+    electronVersion = "45.2.3";
     src = fetchurl {
       url = "https://downloads.slack-edge.com/desktop-releases/linux/x64/4.53.287/slack-desktop-4.53.287-amd64.deb";
       hash = "sha256-wgV/Ih5BJ1t+rcW2WO3AAolGa2+1XJEsWJSDH2kA+Wk=";

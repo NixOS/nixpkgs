@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash --pure -p cacert curl jq nix
+#! nix-shell -i bash --pure -p cacert curl dpkg jq nix undmg
 
 set -euo pipefail
 
@@ -14,8 +14,25 @@ x86_64_linux_version=$(jq -r .version <<< "$x86_64_linux_data")
 aarch64_darwin_url=$(jq -r .download_url <<< "$aarch64_darwin_data")
 x86_64_linux_url=$(jq -r .download_url <<< "$x86_64_linux_data")
 
-aarch64_darwin_hash=$(nix-prefetch-url "$aarch64_darwin_url")
-x86_64_linux_hash=$(nix-prefetch-url "$x86_64_linux_url")
+{
+  read -r aarch64_darwin_hash
+  read -r aarch64_darwin_path
+} < <(nix-prefetch-url --print-path "$aarch64_darwin_url")
+{
+  read -r x86_64_linux_hash
+  read -r x86_64_linux_path
+} < <(nix-prefetch-url --print-path "$x86_64_linux_url")
+
+x86_64_linux_electron_version=$(dpkg-deb --fsys-tarfile "$x86_64_linux_path" | tar -xO ./usr/lib/slack/version)
+
+dmg_dir=$(mktemp -d)
+trap 'rm -rf "$dmg_dir"' EXIT
+(cd "$dmg_dir" && undmg "$aarch64_darwin_path" >/dev/null)
+aarch64_darwin_electron_version=$(
+  grep -A1 '<key>CFBundleVersion</key>' \
+    "$dmg_dir/Slack.app/Contents/Frameworks/Electron Framework.framework/Resources/Info.plist" |
+    sed -n 's|.*<string>\(.*\)</string>.*|\1|p'
+)
 
 # use friendlier hashes
 
@@ -29,6 +46,7 @@ cat >sources.nix <<EOF
 {
   aarch64-darwin = {
     version = "$aarch64_darwin_version";
+    electronVersion = "$aarch64_darwin_electron_version";
     src = fetchurl {
       url = "$aarch64_darwin_url";
       hash = "$aarch64_darwin_hash";
@@ -36,6 +54,7 @@ cat >sources.nix <<EOF
   };
   x86_64-linux = {
     version = "$x86_64_linux_version";
+    electronVersion = "$x86_64_linux_electron_version";
     src = fetchurl {
       url = "$x86_64_linux_url";
       hash = "$x86_64_linux_hash";
