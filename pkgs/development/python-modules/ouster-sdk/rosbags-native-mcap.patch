@@ -1,0 +1,66 @@
+Subject: [PATCH] Use the native MCAP reader when rosbags provides it
+
+Ouster replaces two rosbags reader constructors process-wide to add
+MCAP support through private reader and connection APIs. The rosbags
+version in nixpkgs already registers an MCAP storage plugin. Using it
+avoids file collisions in Python environments that would otherwise
+contain both the packaged rosbags and a private runtime copy.
+
+Check the plugin registry before installing either override in the SDK
+or CLI. Have the shared bag fixture verify that both constructors keep
+their original identities.
+
+---
+diff --git a/python/src/ouster/sdk/bag/bag_packet_source.py b/python/src/ouster/sdk/bag/bag_packet_source.py
+--- a/python/src/ouster/sdk/bag/bag_packet_source.py
++++ b/python/src/ouster/sdk/bag/bag_packet_source.py
+@@ -176,11 +176,11 @@
+         from rosbags.rosbag2 import Reader as Reader2
+
+         # lets monkeypatch AnyReader
+-        if AnyReader.__init__ != _anybag_monkey:
++        if ".mcap" not in Reader2.STORAGE_PLUGINS and AnyReader.__init__ != _anybag_monkey:
+             AnyReader.old_init = AnyReader.__init__
+             AnyReader.__init__ = _anybag_monkey
+
+-        if Reader2.__init__ != _bag2_monkey:
++        if ".mcap" not in Reader2.STORAGE_PLUGINS and Reader2.__init__ != _bag2_monkey:
+             Reader2.old_init = Reader2.__init__
+             Reader2.__init__ = _bag2_monkey
+
+diff --git a/python/src/ouster/cli/plugins/source_bag.py b/python/src/ouster/cli/plugins/source_bag.py
+--- a/python/src/ouster/cli/plugins/source_bag.py
++++ b/python/src/ouster/cli/plugins/source_bag.py
+@@ -30,11 +30,11 @@
+     file = ctx.source_uri or ""
+
+     # monkeypatch AnyReader and Reader2 to support mcap directly
+-    if AnyReader.__init__ != _anybag_monkey:
++    if ".mcap" not in Reader2.STORAGE_PLUGINS and AnyReader.__init__ != _anybag_monkey:
+         AnyReader.old_init = AnyReader.__init__  # type: ignore
+         AnyReader.__init__ = _anybag_monkey  # type: ignore
+
+-    if Reader2.__init__ != _bag2_monkey:
++    if ".mcap" not in Reader2.STORAGE_PLUGINS and Reader2.__init__ != _bag2_monkey:
+         Reader2.old_init = Reader2.__init__  # type: ignore
+         Reader2.__init__ = _bag2_monkey  # type: ignore
+
+diff --git a/python/tests/test_bag.py b/python/tests/test_bag.py
+--- a/python/tests/test_bag.py
++++ b/python/tests/test_bag.py
+@@ -39,6 +39,7 @@
+ @pytest.fixture(params=["bag", "mcap-dir", "mcap-file"])
+ def test_bag_file(request, tmp_path_factory):
+     from rosbags import convert, highlevel, rosbag2
++    constructors = highlevel.AnyReader.__init__, rosbag2.Reader.__init__
+     bag = Path(BAGS_DATA_DIR) / '512x10_raw.bag'
+     if request.param != "bag":
+         dst = tmp_path_factory.mktemp("mcap") / "recording.mcap"
+@@ -48,6 +49,7 @@
+         dst = dst.rename(dst.with_suffix(".bag"))
+         bag = next(dst.glob("*.mcap")) if request.param == "mcap-file" else dst
+     yield str(bag)
++    assert (highlevel.AnyReader.__init__, rosbag2.Reader.__init__) == constructors
+
+
+ def test_bag_convert(tmp_path, test_bag_file):

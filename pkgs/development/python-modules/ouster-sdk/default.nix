@@ -46,7 +46,9 @@ buildPythonPackage (finalAttrs: {
   # rosbags; a private runtime version causes collisions in Python environments.
   patches = [
     ./nix-compat.patch
-    ./rosbags-compat.patch
+    ./rosbags-ros2-directories.patch
+    ./rosbags-native-mcap.patch
+    ./rosbags-write-version-8.patch
     ./deterministic-bag-splits.patch
   ];
 
