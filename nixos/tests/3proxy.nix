@@ -119,11 +119,12 @@
             }
           ];
         };
+        systemd.tmpfiles.rules = [
+          "f /etc/3proxy.passwd 0400 root root - admin:CR:$1$.GUV4Wvk$WnEVQtaqutD9.beO5ar1W/"
+        ];
         services._3proxy = {
           enable = true;
-          usersFile = pkgs.writeText "3proxy.passwd" ''
-            admin:CR:$1$.GUV4Wvk$WnEVQtaqutD9.beO5ar1W/
-          '';
+          usersFile = "/etc/3proxy.passwd";
           services = [
             {
               type = "admin";
@@ -182,6 +183,10 @@
     peer0.fail(
         "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.3:3128 -S -O /dev/null http://127.0.0.1:9999"
     )
+
+    # 3proxy.passwd is owned by root and is not directly accessible to the service account.
+    peer3.succeed("test -f /etc/3proxy.passwd")
+    peer3.succeed("test \"$(stat -c '%U:%G:%a' /etc/3proxy.passwd)\" = 'root:root:400'")
 
     peer3.wait_for_unit("3proxy.service")
     peer3.wait_for_open_port(9999)
