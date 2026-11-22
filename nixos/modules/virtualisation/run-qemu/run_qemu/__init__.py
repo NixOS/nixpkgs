@@ -189,18 +189,19 @@ async def amain():
 
     settings.virtiofs_dir.mkdir(exist_ok=True, parents=True)
 
-    await asyncio.gather(
-        *(
-            create_empty_disk_image(Path(f"empty{idx}.qcow2"), size)
-            for idx, size in enumerate(settings.empty_disk_images)
-        )
-    )
-
     async with AsyncExitStack() as virtiofsds:
         await asyncio.gather(
             *(
-                virtiofsds.enter_async_context(virtiofsd(settings.virtiofs_dir, *defin))
-                for defin in settings.virtiofsds
+                *(
+                    create_empty_disk_image(Path(f"empty{idx}.qcow2"), size)
+                    for idx, size in enumerate(settings.empty_disk_images)
+                ),
+                *(
+                    virtiofsds.enter_async_context(
+                        virtiofsd(settings.virtiofs_dir, *defin)
+                    )
+                    for defin in settings.virtiofsds
+                ),
             )
         )
 
