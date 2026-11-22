@@ -52,7 +52,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    deno
     qt6.qtbase
     qt6.wrapQtAppsHook
   ];
