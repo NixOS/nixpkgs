@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.12.2";
+  version = "1.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psd-tools";
     repo = "psd-tools";
     tag = "v${version}";
-    hash = "sha256-YasCeRl9oF0ES1E9D7WXCOFTGKhQZltu7EPu6llndrM=";
+    hash = "sha256-NHkJukQYGzfXp1FMvCPEMW7pxVPWiyt3jgjTBE2WDQA=";
   };
 
   build-system = [
