@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "markdownify";
-  version = "1.2.3";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthewwithanm";
     repo = "python-markdownify";
     tag = finalAttrs.version;
-    hash = "sha256-zhkWkEFdDLVvA0xgFOG2PDXCTLZy+DWweuiiSVNUU80=";
+    hash = "sha256-CGVZDDkD2NGudvNBSrhfZBUIs6WnYSnDud+c+dQeUBo=";
   };
 
   build-system = [
