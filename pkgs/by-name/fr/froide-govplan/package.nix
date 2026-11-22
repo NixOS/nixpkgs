@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchPnpmDeps,
   makeBinaryWrapper,
   froide,
   gdal,
@@ -13,6 +14,16 @@
 }:
 let
   inherit (froide) python;
+
+  # Pinning older froide version which still compatible with standalone
+  # setup of froide-govplan
+  froideVersion = "0-unstable-2026-08-19";
+  froideSrc = fetchFromGitHub {
+    owner = "okfde";
+    repo = "froide";
+    rev = "a83f2c28e96f15c55f3009cdadbf2a8fcf17fda8";
+    hash = "sha256-hC/CfKh8PTuDiB8PvjdpbOjEVLwVGyR4lxBBcm9vcRg=";
+  };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide-govplan";
@@ -78,6 +89,15 @@ python.pkgs.buildPythonApplication rec {
     # Patch froide to avoid loading account module
     (toPythonModule (
       froide.overridePythonAttrs (prev: {
+        version = froideVersion;
+        src = froideSrc;
+        pnpmDeps = fetchPnpmDeps {
+          inherit (prev) pname;
+          version = froideVersion;
+          src = froideSrc;
+          fetcherVersion = 5;
+          hash = "sha256-rxdv06ttnWZ0ve4EAXagd0uc4bni74Mud/tA9WkKzLM=";
+        };
         patches = prev.patches ++ [ ./froide_avoid_loading_account_module.patch ];
         doCheck = false;
       })
