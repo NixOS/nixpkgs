@@ -4,21 +4,24 @@
   fetchFromGitHub,
   karton-core,
   malduck,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-config-extractor";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-config-extractor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EhvMPlwrKlh5M1R0mVBiSdFhPQiYjWSUKEMt200o3mI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     karton-core
     malduck
   ];
@@ -32,10 +35,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Static configuration extractor for the Karton framework";
-    mainProgram = "karton-config-extractor";
     homepage = "https://github.com/CERT-Polska/karton-config-extractor";
-    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/${src.tag}";
+    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "karton-config-extractor";
   };
-}
+})
