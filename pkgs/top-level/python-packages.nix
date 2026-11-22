@@ -12085,6 +12085,8 @@ self: super: with self; {
 
   napari-console = callPackage ../development/python-modules/napari-console { };
 
+  napari-mlarray = callPackage ../development/python-modules/napari-mlarray { };
+
   napari-nifti = callPackage ../development/python-modules/napari-nifti { };
 
   napari-plugin-engine = callPackage ../development/python-modules/napari-plugin-engine { };
