@@ -100,7 +100,7 @@ buildGoModule (finalAttrs: {
         exit 0
       fi
       update-source-version tiny-rdm "$latestVersion" --source-key=npmDeps --ignore-same-version
-      nix-update tiny-rdm --version skip
+      nix-update tiny-rdm --version skip --no-src
     '';
   };
 
