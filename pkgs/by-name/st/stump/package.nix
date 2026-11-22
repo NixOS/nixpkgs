@@ -19,25 +19,27 @@
   sqlite,
   nix-update-script,
   writableTmpDirAsHomeHook,
+  zstd,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stump";
-  version = "0.1.11";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "stumpapp";
     repo = "stump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-izz5ijAvSuqCjSBQarVV+XtkTcSt2VYgYSIIvXqXnms=";
+    hash = "sha256-EkQId7cnqG0LGntwy8rEbrkPfqduGbD9VqlhGWsLuwk=";
   };
 
-  frontend = stdenv.mkDerivation (_: {
+  frontend = stdenv.mkDerivation {
     pname = "stump-frontend";
     inherit (finalAttrs) src version;
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
-      hash = "sha256-yz+Ersi1fJdUUpi1ulTFxzpSIEU7o/ivKnL3+ICAotk=";
+      hash = "sha256-a48gfef+LHb/KW1cV8qTKjMwva3v18Oz7fiRhzoq+QI=";
     };
 
     nativeBuildInputs = [
@@ -58,11 +60,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installPhase = ''
       mv ./apps/web/dist $out
     '';
-  });
+  };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-434ffJRKlD9iL01v1dQmLatrtfpgDtxVdsryDNmlICg=";
+  cargoHash = "sha256-Ht7dueO7J7TAnMZnK0P36oDBlJYiTpKfJixq4ptCXJw=";
 
   cargoBuildFlags = [
     "--package"
@@ -90,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     sqlite
     webkitgtk_4_1
+    zstd
   ];
 
   postInstall = ''
