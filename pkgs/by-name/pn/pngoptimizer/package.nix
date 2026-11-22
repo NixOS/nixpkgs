@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fix build with GCC 15
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=old-style-definition";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=old-style-definition -Wno-error=unused-but-set-variable";
 
   postInstall = ''
     mv $out/usr/bin $out/bin
