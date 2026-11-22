@@ -18,6 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kchxG+8mbXAMxBKo3TZikHuUhJhpNwq5bpPsVKlwsF8=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'WIREGUARD_VERSION = 1.0.0' 'WIREGUARD_VERSION = ${finalAttrs.version}'
+  '';
+
   sourceRoot = "${finalAttrs.src.name}/src";
   hardeningDisable = [ "pic" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
