@@ -2274,6 +2274,15 @@ with haskellLib;
   # https://github.com/phadej/cabal-fmt/issues/98
   cabal-fmt = doJailbreak super.cabal-fmt;
 
+  # https://github.com/cdornan/fmt/issues/41
+  fmt = appendPatches [
+    (pkgs.fetchpatch {
+      name = "fmt-fix-doctest-prop-ghc-9.12.5.patch";
+      url = "https://github.com/cdornan/fmt/commit/039b85cee5826e4b276ffd7d2c2c1526f136e746.patch";
+      hash = "sha256-iPK7l/akM/9qiZjr28pe8fXQJo6t5BnvUUgS9hCaPyI=";
+    })
+  ] super.fmt;
+
   # Pick bound changes from development branch, same commit also adds support for Cabal >= 3.14
   glirc = lib.pipe super.glirc [
     (warnAfterVersion "2.41")
