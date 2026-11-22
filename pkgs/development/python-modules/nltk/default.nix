@@ -20,18 +20,19 @@
   pyparsing,
   pytestCheckHook,
   pytest-mock,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nltk";
-  version = "3.10.3";
+  version = "3.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nltk";
     repo = "nltk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PaMW9QNV+++Gz+OoG7m2VFn6L3vkG/Mg9ZLx9KlN19U=";
+    hash = "sha256-6/IHVEdyYkkbl/21hZlPXvuCK68fP68rVBt9j3cILKI=";
   };
 
   postPatch = ''
@@ -57,7 +58,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preInstallCheck = ''
-    export NLTK_DATA=${
+    # nltk refuses to load resources directly from the Nix store because within
+    # the sandbox they are owned by nobody rather than root or noxbld:
+    #     Refused, writable by other accounts
+    export NLTK_DATA=$(mktemp -d)
+    cp -rL ${
       nltk.dataDir (
         d: with d; [
           averaged-perceptron-tagger-eng
@@ -93,7 +98,7 @@ buildPythonPackage (finalAttrs: {
           words
         ]
       )
-    }
+    }/. "$NLTK_DATA"
   '';
 
   nativeCheckInputs = [
@@ -104,6 +109,7 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
 
     pkgs.which
+    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
