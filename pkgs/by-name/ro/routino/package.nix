@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "routino";
-  version = "3.4.4";
+  version = "3.5";
 
   src = fetchurl {
     url = "https://routino.org/download/routino-${finalAttrs.version}.tgz";
-    hash = "sha256-pwF/8EMT+k+1O5ld5Q/to56l54Z7tAo/nIhhh69wKDA=";
+    hash = "sha256-a1jElz2hP2yEQ/qycc7WmgKR0XgAAn7tevAr18rAHBk=";
   };
 
   patchFlags = [ "-p0" ];
