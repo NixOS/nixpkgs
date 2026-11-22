@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "parallel-disk-usage";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "KSXGitHub";
     repo = "parallel-disk-usage";
     tag = finalAttrs.version;
-    hash = "sha256-fxEiZGdBUYmPcTPDpcwlB8xYcA/zC+HBspNAUpg0Rgg=";
+    hash = "sha256-kfqmwb8MScETGEImjCF6w6tnn5D3oomJ7H9GMoUkus4=";
   };
 
-  cargoHash = "sha256-goPN4O2HfSqyzfvJ8c6NqHSA3+S54tE8SgiYoAaeUW4=";
+  cargoHash = "sha256-DYlX8+nPPPo9Mk/HxWYTFKrR8vRTsUTImN0Seq3hQU0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
