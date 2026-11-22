@@ -40,6 +40,7 @@ buildPythonPackage rec {
     "lxml"
     "pillow"
     "pypdf"
+    "python-slugify"
   ];
 
   doCheck = false; # test artifacts are not public
