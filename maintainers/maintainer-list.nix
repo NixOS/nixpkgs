@@ -10589,7 +10589,6 @@
     githubId = 10131418;
     name = "Gerardo Doro";
   };
-
   gerschtli = {
     email = "tobias.happ@gmx.de";
     github = "Gerschtli";
