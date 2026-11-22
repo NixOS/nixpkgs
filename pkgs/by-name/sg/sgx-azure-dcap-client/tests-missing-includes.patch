@@ -1,0 +1,12 @@
+diff --git a/src/UnitTest/test_local_cache.cpp b/src/UnitTest/test_local_cache.cpp
+index 5fbc31b..6b8d52e 100644
+--- a/src/UnitTest/test_local_cache.cpp
++++ b/src/UnitTest/test_local_cache.cpp
+@@ -5,6 +5,7 @@
+ #include <gtest/gtest.h>
+ 
+ #undef NDEBUG // ensure that asserts are never compiled out
++#include <array>
+ #include <cassert>
+ #include <cstdio>
+ #include <cstring>

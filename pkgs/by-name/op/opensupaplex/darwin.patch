@@ -1,0 +1,16 @@
+diff --git a/src/sdl_common/audio.c b/src/sdl_common/audio.c
+index 3921185..eb8cd4e 100644
+--- a/src/sdl_common/audio.c
++++ b/src/sdl_common/audio.c
+@@ -21,11 +21,7 @@
+ 
+ #if HAVE_SDL2
+ #include <SDL.h>
+-#if TARGET_OS_MAC
+-#include <SDL2_mixer/SDL_mixer.h>
+-#else
+ #include <SDL2/SDL_mixer.h>
+-#endif
+ #elif HAVE_SDL
+ #include <SDL/SDL.h>
+ #include <SDL/SDL_mixer.h>

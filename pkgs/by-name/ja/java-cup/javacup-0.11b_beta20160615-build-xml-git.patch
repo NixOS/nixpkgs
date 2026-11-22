@@ -1,0 +1,38 @@
+--- javacup/build.xml.orig	2016-06-15 07:10:15.000000000 -0300
++++ javacup/build.xml	2016-07-17 08:46:46.632722844 -0300
+@@ -21,26 +21,6 @@
+     <mkdir dir="${dist}" />
+     <loadfile property="cupversion" srcFile="version.txt" failonerror="false" />
+     <property name="cupversion" value="custombuild" unless:set="cupversion"/>
+-    <exec executable="git" outputproperty="gitversion">
+-      <arg value="log"/>
+-      <arg value="-1"/>
+-      <arg value="--format=%h"/>
+-    </exec>
+-    <exec executable="git" outputproperty="changed">
+-      <arg value="status"/>
+-      <arg value="--porcelain"/>
+-      <redirector>
+-	<outputfilterchain>
+-	<linecontainsregexp>
+-	  <regexp pattern='^M.*'/>
+-	</linecontainsregexp>
+-	<tokenfilter>
+-	  <replaceregex pattern=".*" replace="modifications based on "/>
+-	</tokenfilter>
+-	</outputfilterchain>
+-	</redirector>
+-    </exec>
+-    <property name="svnversion">${changed}${gitversion}</property>
+   </target>
+ 
+   <property environment="env" />
+@@ -79,7 +59,7 @@
+     <copy todir="${java}"><fileset dir="${src}"></fileset></copy>
+     <replace file="${java}/java_cup/version.java"
+        token="+ version_str"
+-       value='+ "v0.11b ${cupversion} (GIT ${svnversion})"'>
++       value='+ "v0.11b ${cupversion}"'>
+     </replace>
+     <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on" source="1.8" target="1.8">
+       <classpath refid="libraries"/>

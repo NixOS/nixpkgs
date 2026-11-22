@@ -1,0 +1,15 @@
+--- a/core/fxcodec/BUILD.gn
++++ b/core/fxcodec/BUILD.gn
+@@ -129,11 +129,10 @@ source_set("fxcodec") {
+     "../../:pdfium_noshorten_config",
+   ]
+   public_deps = [
+-    "../../third_party:fx_lcms2",
++    "../../third_party:lcms2",
+     "../fxcrt",
+   ]
+   deps = [
+-    "../../third_party:lcms2",
+     "../../third_party:libopenjpeg2",
+     "../../third_party:zlib",
+     "../fxge",

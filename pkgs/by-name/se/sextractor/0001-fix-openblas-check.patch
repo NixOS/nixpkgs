@@ -1,0 +1,624 @@
+From 04016a19c79bb72962c3d09f31bf22159671a159 Mon Sep 17 00:00:00 2001
+From: mathar <mathar@mpia-hd.mpg.de>
+Date: Mon, 21 Jul 2025 15:26:09 +0200
+Subject: [PATCH] separate m4 macros checking openblas and lapacke
+
+---
+ configure.ac       |  34 +++----
+ m4/acx_atlas.m4    |   2 +-
+ m4/acx_openblas.m4 | 140 -------------------------
+ m4/ax_blas.m4      | 248 +++++++++++++++++++++++++++++++++++++++++++++
+ m4/ax_lapack.m4    | 122 ++++++++++++++++++++++
+ 5 files changed, 385 insertions(+), 161 deletions(-)
+ delete mode 100644 m4/acx_openblas.m4
+ create mode 100644 m4/ax_blas.m4
+ create mode 100644 m4/ax_lapack.m4
+
+diff --git a/configure.ac b/configure.ac
+index 0b2e7ae7..d2edddea 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -26,7 +26,7 @@
+ #	You should have received a copy of the GNU General Public License
+ #	along with SExtractor. If not, see <http://www.gnu.org/licenses/>.
+ #
+-#	Last modified:		27/03/2025
++#	Last modified:		2025-07-21
+ #
+ #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+@@ -53,16 +53,6 @@ AC_SUBST(DATE2, "$date2")
+ AC_SUBST(DATE3, "$date3")
+ AM_CFLAGS="$AM_CFLAGS -Wall"
+ 
+-# Include macros
+-sinclude(acx_atlas.m4)
+-sinclude(acx_openblas.m4)
+-sinclude(acx_fftw.m4)
+-sinclude(acx_mkl.m4)
+-sinclude(acx_cfitsio.m4)
+-sinclude(acx_prog_cc_optim.m4)
+-sinclude(acx_pthread.m4)
+-sinclude(acx_urbi_resolve_dir.m4)
+-
+ # Provide a special option for setting the package release number
+ AC_ARG_WITH(release,
+ 	[AS_HELP_STRING([--with-release=<release number>],
+@@ -310,23 +300,27 @@ if test "$enable_model_fitting" != "no"; then
+ 
+     if test "x$enable_openblas" = "xyes"; then
+ ######## Handle the OpenBLAS library (linear algebra: BLAS + LAPACKe) ########
+-      ACX_OPENBLAS($with_openblas_libdir, $with_openblas_incdir, $use_pthreads, no,
++      AC_MSG_NOTICE("checking openblas + lapacke")
++      AX_BLAS(
++        [
++          LIBS="$BLAS_LIBS $LIBS"
++        ],
++        AC_MSG_ERROR([blas error... Exiting.])
++      )
++      AX_LAPACK($with_openblas_libdir, $with_openblas_incdir,
+         [
+-          AM_CFLAGS="$AM_CFLAGS $OPENBLAS_CFLAGS "
+-          AM_LDFLAGS="$AM_LDFLAGS $OPENBLAS_LDFLAGS "
+-          LIBS="$OPENBLAS_LIBS $LIBS"
+-          if test "$OPENBLAS_WARN" != ""; then
+-            AC_MSG_WARN([$OPENBLAS_WARN])
+-          fi
++          AM_CFLAGS="$AM_CFLAGS $LAPACK_CFLAGS "
++          AM_LDFLAGS="$AM_LDFLAGS $LAPACK_LDFLAGS "
++          LIBS="$LAPACK_LIBS $LIBS"
+         ],
+-        AC_MSG_ERROR([$OPENBLAS_ERROR Exiting.])
++        AC_MSG_ERROR([$LAPACK_ERROR Exiting.])
+       )
+     else
+ ######### handle the ATLAS library (linear algebra: BLAS + cLAPACK) ##########
+       ACX_ATLAS($with_atlas_libdir, $with_atlas_incdir, $use_pthreads,
+         [
+           [LIBS="$ATLAS_LIBS $LIBS"]
+-          if test "$ATLAS_WARN" != ""; then
++          if test -n $ATLAS_WARN ; then
+             AC_MSG_WARN([$ATLAS_WARN])
+ 	  fi
+         ],
+diff --git a/m4/acx_atlas.m4 b/m4/acx_atlas.m4
+index 6959fdb2..ddaeff7b 100644
+--- a/m4/acx_atlas.m4
++++ b/m4/acx_atlas.m4
+@@ -67,7 +67,7 @@ if test x$2 = x; then
+   )
+ fi
+ 
+-if test x$ATLAS_ERROR = x; then
++if test "x$ATLAS_ERROR" = "x"; then
+   AC_DEFINE_UNQUOTED(ATLAS_BLAS_H, "${acx_atlas_incdir}cblas.h", [BLAS header filename.])
+   AC_DEFINE_UNQUOTED(ATLAS_LAPACK_H, "${acx_atlas_incdir}clapack.h", [CLAPACK header filename.])
+ 
+diff --git a/m4/acx_openblas.m4 b/m4/acx_openblas.m4
+deleted file mode 100644
+index 5421eece..00000000
+--- a/m4/acx_openblas.m4
++++ /dev/null
+@@ -1,140 +0,0 @@
+-dnl
+-dnl				acx_openblas.m4
+-dnl
+-dnl Figure out if the OpenBLAS library and header files are installed.
+-dnl
+-dnl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-dnl
+-dnl	This file part of:	AstrOmatic software
+-dnl
+-dnl	Copyright:		(C) 2016 IAP/CNRS/UPMC
+-dnl
+-dnl	License:		GNU General Public License
+-dnl
+-dnl	AstrOmatic software is free software: you can redistribute it and/or
+-dnl	modify it under the terms of the GNU General Public License as
+-dnl	published by the Free Software Foundation, either version 3 of the
+-dnl	License, or (at your option) any later version.
+-dnl	AstrOmatic software is distributed in the hope that it will be useful,
+-dnl	but WITHOUT ANY WARRANTY; without even the implied warranty of
+-dnl	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-dnl	GNU General Public License for more details.
+-dnl	You should have received a copy of the GNU General Public License
+-dnl	along with AstrOmatic software.
+-dnl	If not, see <http://www.gnu.org/licenses/>.
+-dnl
+-dnl	Last modified:		12/10/2016
+-dnl
+-dnl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-dnl
+-dnl @synopsis ACX_OPENBLAS([OPENBLAS_LIBSDIR, OPENBLAS_INCDIR, OPENBLAS_PFLAG,
+-dnl                  ILP64_FLAG, [ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]]])
+-dnl
+-dnl You may wish to use these variables in your default LIBS:
+-dnl
+-dnl        LIBS="$OPENBLAS_LIBS $LIBS"
+-dnl
+-dnl ACTION-IF-FOUND is a list of shell commands to run if OPENBLAS
+-dnl is found (HAVE_OPENBLAS is defined first), and ACTION-IF-NOT-FOUND
+-dnl is a list of commands to run it if it is not found.
+-
+-AC_DEFUN([ACX_OPENBLAS], [
+-AC_REQUIRE([AC_CANONICAL_HOST])
+-
+-dnl --------------------
+-dnl Search include files
+-dnl --------------------
+-
+-OPENBLAS_ERROR=""
+-if test x$2 = x; then
+-  [acx_openblas_incdir="openblas/"]
+-  AC_CHECK_HEADERS(
+-    [${acx_openblas_incdir}cblas.h ${acx_openblas_incdir}lapacke.h],,
+-    [
+-      [acx_openblas_incdir=""]
+-      AC_CHECK_HEADER(
+-        [cblas.h lapacke.h],,
+-        [OPENBLAS_ERROR="OpenBLAS header files not found!"]
+-      )
+-    ]
+-  )
+-else
+-  acx_openblas_incdir="$2/"
+-  AC_CHECK_HEADER(
+-    [${acx_openblas_incdir}cblas.h],,
+-    [
+-      [acx_openblas_incdir="$2/include/"]
+-      AC_CHECK_HEADERS(
+-        [${acx_openblas_incdir}cblas.h ${acx_openblas_incdir}lapacke.h],,
+-        [OPENBLAS_ERROR="OpenBLAS header files not found in "$2"!"]
+-    )]
+-  )
+-fi
+-
+-if test "x$OPENBLAS_ERROR" = "x"; then
+-  AC_DEFINE_UNQUOTED(BLAS_H, "${acx_openblas_incdir}cblas.h", [BLAS header filename.])
+-  AC_DEFINE_UNQUOTED(LAPACKE_H, "${acx_openblas_incdir}lapacke.h", [LAPACKe header filename.])
+-
+-dnl ----------------------------
+-dnl Search OpenBLAS library file
+-dnl ----------------------------
+-
+-  OLIBS="$LIBS"
+-  LIBS=""
+-  if test x$4 = xyes; then
+-    acx_openblas_suffix="64"
+-    OPENBLAS_CFLAGS="-DOPENBLAS_USE64BITINT -DLAPACK_ILP64"
+-  else
+-    acx_openblas_suffix=""
+-    OPENBLAS_CFLAGS=""
+-  fi
+-  if test x$1 = x; then
+-    acx_openblas_libopt=""
+-  else
+-    acx_openblas_libopt="-L$1"
+-  fi
+-  if test x$3 == xyes; then
+-    AC_SEARCH_LIBS(
+-      [LAPACKE_dpotrf], ["openblasp"$acx_openblas_suffix],
+-      AC_DEFINE(HAVE_OPENBLASP,1,
+-		[Define if you have the OpenBLAS parallel library and header files.]),
+-      unset ac_cv_search_LAPACKE_dpotrf
+-      [AC_SEARCH_LIBS(
+-        [LAPACKE_dpotrf], ["openblas"$acx_openblas_suffix],
+-	[OPENBLAS_WARN="parallel OpenBLAS"$acx_openblas_suffix" not found, reverting to scalar OpenBLAS"$acx_openblas_suffix"!"],
+-        [OPENBLAS_ERROR="OpenBLAS"$acx_openblas_suffix" library file not found!"],
+-        $acx_openblas_libopt
+-      )],
+-      $acx_openblas_libopt
+-    )
+-  else
+-    AC_SEARCH_LIBS(
+-      [LAPACKE_dpotrf], ["openblas"$acx_openblas_suffix],,
+-      [OPENBLAS_ERROR="OpenBLAS"$acx_openblas_suffix" library file not found!"],
+-      $acx_openblas_libopt
+-    )
+-  fi
+-  LIBS="$OLIBS"
+-fi
+-
+-dnl -------------------------------------------------------------------------
+-dnl Finally execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND
+-dnl -------------------------------------------------------------------------
+-
+-if test "x$OPENBLAS_ERROR" = "x"; then
+-  AC_DEFINE(HAVE_OPENBLAS,1, [Define if you have the OpenBLAS library and header files.])
+-  AC_DEFINE(HAVE_BLAS,1, [Define if you have the BLAS library and header files.])
+-  AC_DEFINE(HAVE_LAPACKE,1, [Define if you have the LAPACKe library and header files.])
+-  OPENBLAS_LIBS="$acx_openblas_libopt $ac_cv_search_LAPACKE_dpotrf"
+-  AC_SUBST(OPENBLAS_CFLAGS)
+-  AC_SUBST(OPENBLAS_LDFLAGS, "")
+-  AC_SUBST(OPENBLAS_LIBS)
+-  AC_SUBST(OPENBLAS_WARN)
+-  $5
+-else
+-  AC_SUBST(OPENBLAS_ERROR)
+-  $6
+-fi
+-
+-])dnl ACX_OPENBLAS
+-
+diff --git a/m4/ax_blas.m4 b/m4/ax_blas.m4
+new file mode 100644
+index 00000000..851a2571
+--- /dev/null
++++ b/m4/ax_blas.m4
+@@ -0,0 +1,248 @@
++# ===========================================================================
++#         https://www.gnu.org/software/autoconf-archive/ax_blas.html
++# ===========================================================================
++#
++# SYNOPSIS
++#
++#   AX_BLAS([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
++#
++# DESCRIPTION
++#
++#   This macro looks for a library that implements the BLAS linear-algebra
++#   interface (see http://www.netlib.org/blas/). On success, it sets the
++#   BLAS_LIBS output variable to hold the requisite library linkages.
++#
++#   To link with BLAS, you should link with:
++#
++#     $BLAS_LIBS $LIBS $FLIBS
++#
++#   in that order. FLIBS is the output variable of the
++#   AC_F77_LIBRARY_LDFLAGS macro (called if necessary by AX_BLAS), and is
++#   sometimes necessary in order to link with F77 libraries. Users will also
++#   need to use AC_F77_DUMMY_MAIN (see the autoconf manual), for the same
++#   reason.
++#
++#   Many libraries are searched for, from ATLAS to CXML to ESSL. The user
++#   may also use --with-blas=<lib> in order to use some specific BLAS
++#   library <lib>. In order to link successfully, however, be aware that you
++#   will probably need to use the same Fortran compiler (which can be set
++#   via the F77 env. var.) as was used to compile the BLAS library.
++#
++#   ACTION-IF-FOUND is a list of shell commands to run if a BLAS library is
++#   found, and ACTION-IF-NOT-FOUND is a list of commands to run it if it is
++#   not found. If ACTION-IF-FOUND is not specified, the default action will
++#   define HAVE_BLAS.
++#
++# LICENSE
++#
++#   Copyright (c) 2008 Steven G. Johnson <stevenj@alum.mit.edu>
++#   Copyright (c) 2019 Geoffrey M. Oxberry <goxberry@gmail.com>
++#
++#   This program is free software: you can redistribute it and/or modify it
++#   under the terms of the GNU General Public License as published by the
++#   Free Software Foundation, either version 3 of the License, or (at your
++#   option) any later version.
++#
++#   This program is distributed in the hope that it will be useful, but
++#   WITHOUT ANY WARRANTY; without even the implied warranty of
++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
++#   Public License for more details.
++#
++#   You should have received a copy of the GNU General Public License along
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
++#
++#   As a special exception, the respective Autoconf Macro's copyright owner
++#   gives unlimited permission to copy, distribute and modify the configure
++#   scripts that are the output of Autoconf when processing the Macro. You
++#   need not follow the terms of the GNU General Public License when using
++#   or distributing such scripts, even though portions of the text of the
++#   Macro appear in them. The GNU General Public License (GPL) does govern
++#   all other use of the material that constitutes the Autoconf Macro.
++#
++#   This special exception to the GPL applies to versions of the Autoconf
++#   Macro released by the Autoconf Archive. When you make and distribute a
++#   modified version of the Autoconf Macro, you may extend this special
++#   exception to the GPL to apply to your modified version as well.
++
++#serial 21
++
++AU_ALIAS([ACX_BLAS], [AX_BLAS])
++AC_DEFUN([AX_BLAS], [
++AC_PREREQ([2.55])
++AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])
++AC_REQUIRE([AC_CANONICAL_HOST])
++ax_blas_ok=no
++
++AC_ARG_WITH(blas,
++	[AS_HELP_STRING([--with-blas=<lib>], [use BLAS library <lib>])])
++case $with_blas in
++	yes | "") ;;
++	no) ax_blas_ok=disable ;;
++	-* | */* | *.a | *.so | *.so.* | *.dylib | *.dylib.* | *.o)
++		BLAS_LIBS="$with_blas"
++	;;
++	*) BLAS_LIBS="-l$with_blas" ;;
++esac
++
++# Get fortran linker names of BLAS functions to check for.
++AC_F77_FUNC(sgemm)
++AC_F77_FUNC(dgemm)
++
++ax_blas_save_LIBS="$LIBS"
++LIBS="$LIBS $FLIBS"
++
++# First, check BLAS_LIBS environment variable
++if test $ax_blas_ok = no; then
++if test "x$BLAS_LIBS" != x; then
++	save_LIBS="$LIBS"; LIBS="$BLAS_LIBS $LIBS"
++	AC_MSG_CHECKING([for $sgemm in $BLAS_LIBS])
++	AC_LINK_IFELSE([AC_LANG_CALL([], [$sgemm])], [ax_blas_ok=yes], [BLAS_LIBS=""])
++	AC_MSG_RESULT($ax_blas_ok)
++	LIBS="$save_LIBS"
++fi
++fi
++
++# BLAS linked to by default?  (happens on some supercomputers)
++if test $ax_blas_ok = no; then
++	save_LIBS="$LIBS"; LIBS="$LIBS"
++	AC_MSG_CHECKING([if $sgemm is being linked in already])
++	AC_LINK_IFELSE([AC_LANG_CALL([], [$sgemm])], [ax_blas_ok=yes])
++	AC_MSG_RESULT($ax_blas_ok)
++	LIBS="$save_LIBS"
++fi
++
++# BLAS linked to by flexiblas? (Default on FC33+ and RHEL9+)
++
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(flexiblas, $sgemm, [ax_blas_ok=yes
++			                BLAS_LIBS="-lflexiblas"])
++fi
++
++# BLAS in OpenBLAS library? (http://xianyi.github.com/OpenBLAS/)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(openblas, $sgemm, [ax_blas_ok=yes
++			                BLAS_LIBS="-lopenblas"])
++fi
++
++# BLAS in ATLAS library? (http://math-atlas.sourceforge.net/)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(atlas, ATL_xerbla,
++		[AC_CHECK_LIB(f77blas, $sgemm,
++		[AC_CHECK_LIB(cblas, cblas_dgemm,
++			[ax_blas_ok=yes
++			 BLAS_LIBS="-lcblas -lf77blas -latlas"],
++			[], [-lf77blas -latlas])],
++			[], [-latlas])])
++fi
++
++# BLAS in PhiPACK libraries? (requires generic BLAS lib, too)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(blas, $sgemm,
++		[AC_CHECK_LIB(dgemm, $dgemm,
++		[AC_CHECK_LIB(sgemm, $sgemm,
++			[ax_blas_ok=yes; BLAS_LIBS="-lsgemm -ldgemm -lblas"],
++			[], [-lblas])],
++			[], [-lblas])])
++fi
++
++# BLAS in Intel MKL library?
++if test $ax_blas_ok = no; then
++	# MKL for gfortran
++	if test x"$ac_cv_fc_compiler_gnu" = xyes; then
++		# 64 bit
++		if test $host_cpu = x86_64; then
++			AC_CHECK_LIB(mkl_gf_lp64, $sgemm,
++			[ax_blas_ok=yes;BLAS_LIBS="-lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lpthread"],,
++			[-lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lpthread])
++		# 32 bit
++		elif test $host_cpu = i686; then
++			AC_CHECK_LIB(mkl_gf, $sgemm,
++				[ax_blas_ok=yes;BLAS_LIBS="-lmkl_gf -lmkl_sequential -lmkl_core -lpthread"],,
++				[-lmkl_gf -lmkl_sequential -lmkl_core -lpthread])
++		fi
++	# MKL for other compilers (Intel, PGI, ...?)
++	else
++		# 64-bit
++		if test $host_cpu = x86_64; then
++			AC_CHECK_LIB(mkl_intel_lp64, $sgemm,
++				[ax_blas_ok=yes;BLAS_LIBS="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread"],,
++				[-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread])
++		# 32-bit
++		elif test $host_cpu = i686; then
++			AC_CHECK_LIB(mkl_intel, $sgemm,
++				[ax_blas_ok=yes;BLAS_LIBS="-lmkl_intel -lmkl_sequential -lmkl_core -lpthread"],,
++				[-lmkl_intel -lmkl_sequential -lmkl_core -lpthread])
++		fi
++	fi
++fi
++# Old versions of MKL
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(mkl, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-lmkl -lguide -lpthread"],,[-lguide -lpthread])
++fi
++
++# BLAS in Apple vecLib library?
++if test $ax_blas_ok = no; then
++	save_LIBS="$LIBS"; LIBS="-framework Accelerate $LIBS"
++	AC_MSG_CHECKING([for $sgemm in -framework Accelerate])
++	AC_LINK_IFELSE([AC_LANG_CALL([], [$sgemm])], [ax_blas_ok=yes;BLAS_LIBS="-framework Accelerate"])
++	AC_MSG_RESULT($ax_blas_ok)
++	LIBS="$save_LIBS"
++fi
++
++# BLAS in Alpha CXML library?
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(cxml, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-lcxml"])
++fi
++
++# BLAS in Alpha DXML library? (now called CXML, see above)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(dxml, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-ldxml"])
++fi
++
++# BLAS in Sun Performance library?
++if test $ax_blas_ok = no; then
++	if test "x$GCC" != xyes; then # only works with Sun CC
++		AC_CHECK_LIB(sunmath, acosp,
++			[AC_CHECK_LIB(sunperf, $sgemm,
++				[BLAS_LIBS="-xlic_lib=sunperf -lsunmath"
++                                 ax_blas_ok=yes],[],[-lsunmath])])
++	fi
++fi
++
++# BLAS in SCSL library?  (SGI/Cray Scientific Library)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(scs, $sgemm, [ax_blas_ok=yes; BLAS_LIBS="-lscs"])
++fi
++
++# BLAS in SGIMATH library?
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(complib.sgimath, $sgemm,
++		     [ax_blas_ok=yes; BLAS_LIBS="-lcomplib.sgimath"])
++fi
++
++# BLAS in IBM ESSL library? (requires generic BLAS lib, too)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(blas, $sgemm,
++		[AC_CHECK_LIB(essl, $sgemm,
++			[ax_blas_ok=yes; BLAS_LIBS="-lessl -lblas"],
++			[], [-lblas $FLIBS])])
++fi
++
++# Generic BLAS library?
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(blas, $sgemm, [ax_blas_ok=yes; BLAS_LIBS="-lblas"])
++fi
++
++AC_SUBST(BLAS_LIBS)
++
++LIBS="$ax_blas_save_LIBS"
++
++# Finally, execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND:
++if test x"$ax_blas_ok" = xyes; then
++        ifelse([$1],,AC_DEFINE(HAVE_BLAS,1,[Define if you have a BLAS library.]),[$1])
++        :
++else
++        ax_blas_ok=no
++        $2
++fi
++])dnl AX_BLAS
+diff --git a/m4/ax_lapack.m4 b/m4/ax_lapack.m4
+new file mode 100644
+index 00000000..cb296ef7
+--- /dev/null
++++ b/m4/ax_lapack.m4
+@@ -0,0 +1,122 @@
++dnl
++dnl				ax_lapack.m4
++dnl
++dnl Figure out if the OpenBLAS library and header files are installed.
++dnl
++dnl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
++dnl
++dnl	This file part of:	AstrOmatic software
++dnl
++dnl	Copyright:		(C) 2016 IAP/CNRS/UPMC
++dnl
++dnl	License:		GNU General Public License
++dnl
++dnl	AstrOmatic software is free software: you can redistribute it and/or
++dnl	modify it under the terms of the GNU General Public License as
++dnl	published by the Free Software Foundation, either version 3 of the
++dnl	License, or (at your option) any later version.
++dnl	AstrOmatic software is distributed in the hope that it will be useful,
++dnl	but WITHOUT ANY WARRANTY; without even the implied warranty of
++dnl	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++dnl	GNU General Public License for more details.
++dnl	You should have received a copy of the GNU General Public License
++dnl	along with AstrOmatic software.
++dnl	If not, see <http://www.gnu.org/licenses/>.
++dnl
++dnl	Last modified:		2025-07-21
++dnl
++dnl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
++dnl
++dnl @synopsis AX_LAPACK([LAPACK_LIBSDIR, LAPACK_INCDIR,
++dnl                  [ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]]])
++dnl
++dnl You may wish to use these variables in your default LIBS:
++dnl
++dnl        LIBS="$LAPACK_LIBS $LIBS"
++dnl
++dnl ACTION-IF-FOUND is a list of shell commands to run if LAPACK
++dnl is found (HAVE_LAPACK is defined first), and ACTION-IF-NOT-FOUND
++dnl is a list of commands to run it if it is not found.
++
++AC_DEFUN([AX_LAPACK], [
++AC_REQUIRE([AC_CANONICAL_HOST])
++
++dnl --------------------
++dnl Search include files
++dnl Under openSUSE and Fedora we have /usr/include/openblas/{lapack.h,lapacke.h,lapacke_config.h}
++dnl Under Ubuntu we have /usr/include/{lapack.h,lapacke.h,lapacke_64.h}
++dnl --------------------
++
++LAPACK_ERROR=""
++if test x$2 = x; then
++  [acx_lapack_incdir="openblas/"]
++  AC_CHECK_HEADERS(
++    [${acx_lapack_incdir}lapacke.h],,
++    [
++      [acx_lapack_incdir=""]
++      AC_CHECK_HEADER(
++        [lapacke.h],,
++        [LAPACK_ERROR="lapacke header files not found!"]
++      )
++    ]
++  )
++else
++  acx_lapack_incdir="$2/"
++  AC_CHECK_HEADER(
++    [${acx_lapack_incdir}lapacke.h],,
++    [
++      [acx_lapack_incdir="$2/include/"]
++      AC_CHECK_HEADERS(
++        [${acx_lapack_incdir}lapacke.h],,
++        [LAPACK_ERROR="lapacke header files not found in "$2"!"]
++    )]
++  )
++fi
++
++if test "x$LAPACK_ERROR" = "x"; then
++  AC_DEFINE_UNQUOTED(LAPACKE_H, "${acx_lapack_incdir}lapacke.h", [LAPACKe header filename.])
++  LAPACK_CFLAGS="-I ${acx_lapack_incdir}"
++
++dnl ----------------------------
++dnl Search lapack library file
++dnl On Fedora we have (dnf install lapack-devel) /usr/lib64/{liblapack64*,liblapack* ,liblapacke*}
++dnl On Ubuntu we have /usr/lib/x86_64-linux-gnu/liblapacke* 
++dnl    and /usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so
++dnl On openSUSE we have /usr/lib64/lapack/liblapack.so.3, /usr/lib64/liblapack{e}.so
++dnl ----------------------------
++
++  OLIBS="$LIBS"
++  LIBS=""
++  if test x$1 = x; then
++    acx_lapack_libopt=""
++  else
++    acx_lapack_libopt="-L$1"
++  fi
++
++  AC_SEARCH_LIBS(
++    [LAPACKE_dpotrf], ["lapacke" "lapack" "openblas"],,
++    [LAPACK_ERROR="lapacke library file not found!"],
++    $acx_lapack_libopt
++  )
++  LIBS="$OLIBS"
++fi
++
++dnl -------------------------------------------------------------------------
++dnl Finally execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND
++dnl -------------------------------------------------------------------------
++
++if test "x$LAPACK_ERROR" = "x"; then
++  AC_DEFINE(HAVE_LAPACKE,1, [Define if you have the lapacke library and header files.])
++  LAPACK_LIBS="$ac_cv_search_LAPACKE_dpotrf"
++  AC_SUBST(LAPACK_CFLAGS)
++  AC_SUBST(LAPACK_LDFLAGS, $acx_lapack_libopt)
++  AC_SUBST(LAPACK_LIBS)
++  AC_SUBST(LAPACK_WARN)
++  $3
++else
++  AC_SUBST(LAPACK_ERROR)
++  $4
++fi
++
++])dnl AX_LAPACK
++

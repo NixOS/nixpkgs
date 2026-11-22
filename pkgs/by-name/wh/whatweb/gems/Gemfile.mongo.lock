@@ -1,0 +1,34 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
+    base64 (0.3.0)
+    bson (5.1.1)
+    getoptlong (0.2.1)
+    ipaddr (1.2.7)
+    json (2.13.2)
+    mongo (2.21.3)
+      base64
+      bson (>= 4.14.1, < 6.0.0)
+    public_suffix (6.0.2)
+    rchardet (1.9.0)
+    resolv (0.6.2)
+    resolv-replace (0.1.1)
+      resolv
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  addressable
+  getoptlong
+  ipaddr
+  json
+  mongo
+  rchardet
+  resolv-replace
+
+BUNDLED WITH
+   2.7.1

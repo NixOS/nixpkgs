@@ -1,0 +1,42 @@
+From e4d8d49beebea53f5ed71d7134528a806e89d95f Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sun, 5 Oct 2025 00:35:33 +0200
+Subject: [PATCH] Raise minimum CMake version
+
+Compatibility with CMake versions older than 3.5 is removed in CMake 4
+and older than 3.10 is deprecated.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ CMakeLists.txt | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 68c9781..c77176c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -13,20 +13,10 @@
+ # You should have received a copy of the GNU General Public License
+ # along with MAXFLOW.  If not, see <http://www.gnu.org/licenses/>.
+ 
++CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+ 
+ PROJECT("maxflow")
+ 
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5 FATAL_ERROR)
+-
+-if(COMMAND cmake_policy)
+-  cmake_policy(SET CMP0003 NEW)
+-  cmake_policy(SET CMP0012 NEW)
+-  IF(${CMAKE_VERSION} VERSION_GREATER 3.0.0) 
+-    cmake_policy(SET CMP0042 NEW)
+-  ENDIF()
+-endif(COMMAND cmake_policy)
+-
+-
+ SET(PACKAGE_NAME "maxflow")
+ SET(MAJOR_VERSION 3)
+ SET(MINOR_VERSION 0)
+-- 
+2.51.0
+

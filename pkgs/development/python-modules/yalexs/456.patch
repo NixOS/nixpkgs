@@ -1,0 +1,22 @@
+From fb6776fb7c53656f129042f67d73a13880bcced7 Mon Sep 17 00:00:00 2001
+From: Jamie Magee <jamie.magee@gmail.com>
+Date: Mon, 5 Oct 2026 16:22:12 -0700
+Subject: [PATCH] fix: remove padding from refresh token fixture
+
+---
+ tests/test_authenticator_async.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_authenticator_async.py b/tests/test_authenticator_async.py
+index dccc8681..2e24614e 100644
+--- a/tests/test_authenticator_async.py
++++ b/tests/test_authenticator_async.py
+@@ -119,7 +119,7 @@ async def test_async_refresh_token(self, mock_aioresponses):
+         authenticator = await self._async_create_authenticator_async(mock_aioresponses)
+         await authenticator.async_authenticate()
+ 
+-        token = "e30=.eyJleHAiOjEzMzd9.e30="
++        token = "e30.eyJleHAiOjEzMzd9.e30"
+         mock_aioresponses.get(
+             ApiCommon(DEFAULT_BRAND).get_brand_url(API_GET_HOUSES_URL),
+             body=token,

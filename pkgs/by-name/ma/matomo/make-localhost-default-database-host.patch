@@ -1,0 +1,11 @@
+--- a/plugins/Installation/FormDatabaseSetup.php
++++ b/plugins/Installation/FormDatabaseSetup.php
+@@ -91,7 +91,7 @@
+         $this->addElement('submit', 'submit', array('value' => Piwik::translate('General_Next') . ' »', 'class' => 'btn'));
+ 
+         $defaults = array(
+-            'host'          => '127.0.0.1',
++            'host'          => 'localhost',
+             'tables_prefix' => 'matomo_',
+             'schema'        => 'Mysql',
+             'port'          => '3306',

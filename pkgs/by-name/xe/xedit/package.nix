@@ -1,0 +1,66 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  util-macros,
+  libx11,
+  libxaw,
+  libxmu,
+  libxt,
+  makeWrapper,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "xedit";
+  version = "1.2.5";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "xorg/app";
+    repo = "xedit";
+    tag = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-+nWtoqm+5ie2U5nFJRioftMkxJFNtws09kTelmWhqgA=";
+  };
+
+  # ./lisp/mathimp.c:493:10: error: implicitly declaring library function 'finite' with type 'int (double)'
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for i in $(find . -type f -name "*.c"); do
+      substituteInPlace $i --replace "finite" "isfinite"
+    done
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    util-macros
+    makeWrapper
+  ];
+  buildInputs = [
+    libx11
+    libxaw
+    libxmu
+    libxt
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/xedit \
+      --set-default XAPPLRESDIR $out/share/X11/app-defaults'';
+
+  configureFlags = [
+    "--with-lispdir=${placeholder "out"}/share/X11/xedit/lisp"
+    "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
+  ];
+
+  meta = {
+    description = "Simple graphical text editor using Athena Widgets (Xaw)";
+    homepage = "https://gitlab.freedesktop.org/xorg/app/xedit";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [ Holiu618 ];
+    mainProgram = "xedit";
+  };
+})

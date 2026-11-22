@@ -1,0 +1,42 @@
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  topkg,
+  ocamlbuild,
+  re,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-simple-diff";
+  version = "0.3";
+
+  src = fetchFromGitHub {
+    owner = "gjaldon";
+    repo = "simple_diff";
+    tag = "v${version}";
+    hash = "sha256-OaKECUBCCt9KfdRJf3HcXTUJVxKKdYtnzOHpMPOllrk=";
+  };
+
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
+  buildInputs = [ topkg ];
+  propagatedBuildInputs = [ re ];
+
+  strictDeps = true;
+
+  inherit (topkg) buildPhase installPhase;
+
+  meta = {
+    homepage = "https://github.com/gjaldon/simple_diff";
+    description = "Simple_diff is a pure OCaml diffing algorithm";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ ulrikstrid ];
+  };
+}

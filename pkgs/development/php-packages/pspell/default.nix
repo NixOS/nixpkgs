@@ -1,0 +1,31 @@
+{
+  aspell,
+  buildPecl,
+  fetchFromGitHub,
+  lib,
+  php,
+}:
+
+buildPecl (finalAttrs: {
+  pname = "pspell";
+  version = "1.0.1";
+
+  src = fetchFromGitHub {
+    owner = "php";
+    repo = "pecl-text-pspell";
+    tag = finalAttrs.version;
+    hash = "sha256-IVBuEVsUKah8W+oVpIPT9Iln6MFox0e5/5Y14/Kgcg4=";
+  };
+
+  configureFlags = [ "--with-pspell=${aspell}" ];
+
+  doCheck = true;
+
+  meta = {
+    broken = lib.versionAtLeast php.version "8.6";
+    description = "PHP extension for checking the spelling of a word";
+    homepage = "https://pecl.php.net/package/pspell";
+    license = lib.licenses.php301;
+    teams = [ lib.teams.php ];
+  };
+})

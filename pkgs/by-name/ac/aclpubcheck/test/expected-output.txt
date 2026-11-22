@@ -1,0 +1,28 @@
+Checking 2023.acl-tutorials.1.pdf
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Found text violation:	Margin.BOTTOM	{'top': 780, 'bottom': 841}
+Errors. Check errors-2023.acl-tutorials.1.json for details.
+Error (Margin): Text on page 1 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 2 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 3 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 4 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 5 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 6 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 7 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 8 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 9 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+Error (Margin): Text on page 10 bleeds into the bottom margin. It should be empty (e.g., without page number) and populated when building the proceedings.
+
+We detected 10 errors and 0 warnings in your paper.
+In general, it is required that you fix errors for your paper to be published. Fixing warnings is optional, but recommended.
+Important: Some of the margin errors may be spurious. The library detects the location of images, but not whether they have a white background that blends in.
+Important: Some of the warnings generated for citations may be spurious and inaccurate, due to parsing and indexing errors.
+We encourage you to double check the citations and update them depending on the latest source. If you believe that your citation is updated and correct, then please ignore those warnings.

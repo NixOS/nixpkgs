@@ -1,0 +1,236 @@
+diff --git a/Libraries/acdriver/Headers/acdriver/Output.h b/Libraries/acdriver/Headers/acdriver/Output.h
+index 8a263db652..288b75779f 100644
+--- a/Libraries/acdriver/Headers/acdriver/Output.h
++++ b/Libraries/acdriver/Headers/acdriver/Output.h
+@@ -9,6 +9,7 @@
+ #ifndef __acdriver_Output_h
+ #define __acdriver_Output_h
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <unordered_map>
+diff --git a/Libraries/acdriver/Sources/Result.cpp b/Libraries/acdriver/Sources/Result.cpp
+index a89baa1588..6689a88538 100644
+--- a/Libraries/acdriver/Sources/Result.cpp
++++ b/Libraries/acdriver/Sources/Result.cpp
+@@ -14,6 +14,7 @@
+ #include <plist/String.h>
+ 
+ #include <cstdlib>
++#include <cstdint>
+ 
+ using acdriver::Result;
+ using acdriver::Output;
+diff --git a/Libraries/dependency/Headers/dependency/BinaryDependencyInfo.h b/Libraries/dependency/Headers/dependency/BinaryDependencyInfo.h
+index 94d91c42af..57fc6d13be 100644
+--- a/Libraries/dependency/Headers/dependency/BinaryDependencyInfo.h
++++ b/Libraries/dependency/Headers/dependency/BinaryDependencyInfo.h
+@@ -12,6 +12,7 @@
+ #include <dependency/DependencyInfo.h>
+ #include <dependency/DependencyInfoFormat.h>
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <vector>
+diff --git a/Libraries/pbxbuild/Sources/DerivedDataHash.cpp b/Libraries/pbxbuild/Sources/DerivedDataHash.cpp
+index f001ba4548..be7a7330d9 100644
+--- a/Libraries/pbxbuild/Sources/DerivedDataHash.cpp
++++ b/Libraries/pbxbuild/Sources/DerivedDataHash.cpp
+@@ -11,6 +11,8 @@
+ #include <libutil/FSUtil.h>
+ #include <libutil/md5.h>
+ 
++#include <cstdint>
++
+ using pbxbuild::DerivedDataHash;
+ using libutil::FSUtil;
+ 
+diff --git a/Libraries/pbxproj/Headers/pbxproj/PBX/BuildPhase.h b/Libraries/pbxproj/Headers/pbxproj/PBX/BuildPhase.h
+index a244da2d0a..bb7076cd7b 100644
+--- a/Libraries/pbxproj/Headers/pbxproj/PBX/BuildPhase.h
++++ b/Libraries/pbxproj/Headers/pbxproj/PBX/BuildPhase.h
+@@ -11,6 +11,8 @@
+ 
+ #include <pbxproj/PBX/BuildFile.h>
+ 
++#include <cstdint>
++
+ namespace pbxproj { namespace PBX {
+ 
+ class BuildPhase : public Object {
+diff --git a/Libraries/pbxproj/Headers/pbxproj/PBX/ContainerItemProxy.h b/Libraries/pbxproj/Headers/pbxproj/PBX/ContainerItemProxy.h
+index 7d400fd84c..3447992dad 100644
+--- a/Libraries/pbxproj/Headers/pbxproj/PBX/ContainerItemProxy.h
++++ b/Libraries/pbxproj/Headers/pbxproj/PBX/ContainerItemProxy.h
+@@ -11,6 +11,8 @@
+ 
+ #include <pbxproj/PBX/FileReference.h>
+ 
++#include <cstdint>
++
+ namespace pbxproj { namespace PBX {
+ 
+ class ContainerItemProxy : public Object {
+diff --git a/Libraries/pbxproj/Headers/pbxproj/PBX/FileReference.h b/Libraries/pbxproj/Headers/pbxproj/PBX/FileReference.h
+index 5b446ab149..49823bdfbf 100644
+--- a/Libraries/pbxproj/Headers/pbxproj/PBX/FileReference.h
++++ b/Libraries/pbxproj/Headers/pbxproj/PBX/FileReference.h
+@@ -11,6 +11,8 @@
+ 
+ #include <pbxproj/PBX/GroupItem.h>
+ 
++#include <cstdint>
++
+ namespace pbxproj { namespace PBX {
+ 
+ class FileReference : public GroupItem {
+diff --git a/Libraries/pbxproj/Headers/pbxproj/PBX/Group.h b/Libraries/pbxproj/Headers/pbxproj/PBX/Group.h
+index bcd5649ebb..c8f77273c3 100644
+--- a/Libraries/pbxproj/Headers/pbxproj/PBX/Group.h
++++ b/Libraries/pbxproj/Headers/pbxproj/PBX/Group.h
+@@ -11,6 +11,8 @@
+ 
+ #include <pbxproj/PBX/BaseGroup.h>
+ 
++#include <cstdint>
++
+ namespace pbxproj { namespace PBX {
+ 
+ class Group : public BaseGroup {
+diff --git a/Libraries/pbxspec/Headers/pbxspec/PBX/FileType.h b/Libraries/pbxspec/Headers/pbxspec/PBX/FileType.h
+index ecb6df1efb..ecdd72be2c 100644
+--- a/Libraries/pbxspec/Headers/pbxspec/PBX/FileType.h
++++ b/Libraries/pbxspec/Headers/pbxspec/PBX/FileType.h
+@@ -12,6 +12,7 @@
+ #include <pbxspec/PBX/Specification.h>
+ #include <pbxspec/PBX/BuildPhaseInjection.h>
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <vector>
+diff --git a/Libraries/plist/Headers/plist/Data.h b/Libraries/plist/Headers/plist/Data.h
+index 5b651b80ff..6c59d8bbd9 100644
+--- a/Libraries/plist/Headers/plist/Data.h
++++ b/Libraries/plist/Headers/plist/Data.h
+@@ -12,6 +12,7 @@
+ #include <plist/Base.h>
+ #include <plist/Object.h>
+ 
++#include <cstdint>
+ #include <cstring>
+ #include <vector>
+ 
+diff --git a/Libraries/plist/Headers/plist/Date.h b/Libraries/plist/Headers/plist/Date.h
+index 4cff02d261..f21c24aade 100644
+--- a/Libraries/plist/Headers/plist/Date.h
++++ b/Libraries/plist/Headers/plist/Date.h
+@@ -12,6 +12,7 @@
+ #include <plist/Base.h>
+ #include <plist/Object.h>
+ 
++#include <cstdint>
+ #include <ctime>
+ 
+ namespace plist {
+diff --git a/Libraries/plist/Headers/plist/Format/Encoding.h b/Libraries/plist/Headers/plist/Format/Encoding.h
+index 34986985a3..6f05047ef0 100644
+--- a/Libraries/plist/Headers/plist/Format/Encoding.h
++++ b/Libraries/plist/Headers/plist/Format/Encoding.h
+@@ -11,6 +11,7 @@
+ 
+ #include <plist/Base.h>
+ 
++#include <cstdint>
+ #include <vector>
+ 
+ namespace plist {
+diff --git a/Libraries/plist/Headers/plist/Format/Format.h b/Libraries/plist/Headers/plist/Format/Format.h
+index e0d516e0f3..cc220f2803 100644
+--- a/Libraries/plist/Headers/plist/Format/Format.h
++++ b/Libraries/plist/Headers/plist/Format/Format.h
+@@ -12,6 +12,7 @@
+ #include <plist/Base.h>
+ #include <plist/Object.h>
+ 
++#include <cstdint>
+ #include <vector>
+ 
+ namespace plist {
+diff --git a/Libraries/plist/Headers/plist/UID.h b/Libraries/plist/Headers/plist/UID.h
+index a571713cc4..ffedf4391a 100644
+--- a/Libraries/plist/Headers/plist/UID.h
++++ b/Libraries/plist/Headers/plist/UID.h
+@@ -12,6 +12,8 @@
+ #include <plist/Base.h>
+ #include <plist/Object.h>
+ 
++#include <cstdint>
++
+ namespace plist {
+ 
+ class UID : public Object {
+diff --git a/Libraries/plist/PrivateHeaders/plist/Base64.h b/Libraries/plist/PrivateHeaders/plist/Base64.h
+index 3cdf066739..b8e4ee812e 100644
+--- a/Libraries/plist/PrivateHeaders/plist/Base64.h
++++ b/Libraries/plist/PrivateHeaders/plist/Base64.h
+@@ -11,6 +11,7 @@
+ 
+ #include <plist/Base.h>
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+diff --git a/Libraries/plist/PrivateHeaders/plist/Format/BaseXMLParser.h b/Libraries/plist/PrivateHeaders/plist/Format/BaseXMLParser.h
+index 77c1203690..1676c254ce 100644
+--- a/Libraries/plist/PrivateHeaders/plist/Format/BaseXMLParser.h
++++ b/Libraries/plist/PrivateHeaders/plist/Format/BaseXMLParser.h
+@@ -11,6 +11,7 @@
+ 
+ #include <plist/Base.h>
+ 
++#include <cstdint>
+ #include <vector>
+ #include <string>
+ #include <unordered_map>
+diff --git a/Libraries/plist/PrivateHeaders/plist/UnixTime.h b/Libraries/plist/PrivateHeaders/plist/UnixTime.h
+index a52dea31c2..020e059ae2 100644
+--- a/Libraries/plist/PrivateHeaders/plist/UnixTime.h
++++ b/Libraries/plist/PrivateHeaders/plist/UnixTime.h
+@@ -11,6 +11,8 @@
+ 
+ #include <plist/Base.h>
+ 
++#include <cstdint>
++
+ namespace plist {
+ 
+ struct UnixTime {
+diff --git a/Libraries/xcscheme/Headers/xcscheme/XC/LaunchAction.h b/Libraries/xcscheme/Headers/xcscheme/XC/LaunchAction.h
+index 3d055b1c17..7059aa55db 100644
+--- a/Libraries/xcscheme/Headers/xcscheme/XC/LaunchAction.h
++++ b/Libraries/xcscheme/Headers/xcscheme/XC/LaunchAction.h
+@@ -15,6 +15,8 @@
+ #include <xcscheme/XC/CommandLineArgument.h>
+ #include <xcscheme/XC/AdditionalOption.h>
+ 
++#include <cstdint>
++
+ namespace xcscheme { namespace XC {
+ 
+ class LaunchAction : public Action {
+diff --git a/Libraries/xcscheme/Headers/xcscheme/XC/LocationScenarioReference.h b/Libraries/xcscheme/Headers/xcscheme/XC/LocationScenarioReference.h
+index 9e5cfd690e..ad4bc1d813 100644
+--- a/Libraries/xcscheme/Headers/xcscheme/XC/LocationScenarioReference.h
++++ b/Libraries/xcscheme/Headers/xcscheme/XC/LocationScenarioReference.h
+@@ -9,6 +9,7 @@
+ #ifndef __xcscheme_XC_LocationScenarioReference_h
+ #define __xcscheme_XC_LocationScenarioReference_h
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ 

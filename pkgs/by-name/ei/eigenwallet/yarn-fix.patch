@@ -1,0 +1,24 @@
+diff --git a/src-gui/.yarnrc.yml b/src-gui/.yarnrc.yml
+--- a/src-gui/.yarnrc.yml
++++ b/src-gui/.yarnrc.yml
+@@ -1,3 +1,8 @@
+ nodeLinker: node-modules
+ 
+ npmMinimalAgeGate: 7d
++
++approvedGitRepositories:
++  - "**"
++
++enableScripts: true
+diff --git a/src-gui/yarn.lock b/src-gui/yarn.lock
+--- a/src-gui/yarn.lock
++++ b/src-gui/yarn.lock
+@@ -2,7 +2,7 @@
+ # Manual changes might be lost - proceed with caution!
+ 
+ __metadata:
+-  version: 8
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
+   cacheKey: 10c0
+ 
+ "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.27.1":

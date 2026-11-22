@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a4c631102..13b5743ca 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -141,7 +141,7 @@ include(GitUtilities)
+ if("${SRB2_SDL2_EXE_NAME}" STREQUAL "")
+ 	# cause a reconfigure if the branch changes
+ 	get_git_dir(SRB2_GIT_DIR)
+-	configure_file("${SRB2_GIT_DIR}/HEAD" HEAD COPYONLY)
++	#configure_file("${SRB2_GIT_DIR}/HEAD" HEAD COPYONLY)
+ 
+ 	git_current_branch(SRB2_GIT_REVISION)
+ 

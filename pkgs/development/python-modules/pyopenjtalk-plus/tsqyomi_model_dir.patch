@@ -1,0 +1,14 @@
+diff --git a/pyopenjtalk/tsqyomi/model.py b/pyopenjtalk/tsqyomi/model.py
+index 5bbdb0a..ffd2853 100644
+--- a/pyopenjtalk/tsqyomi/model.py
++++ b/pyopenjtalk/tsqyomi/model.py
+@@ -636,6 +636,9 @@ def load_model(
+         _is_model_loading = True
+ 
+     try:
++        # next two lines are patched in by nixpkgs:
++        if model_dir is None:
++            model_dir = "@model_dir@";
+         # ローカル配置のモデルも Hub 配布のモデルも同じ ONNX 検証を行う
+         if model_dir is not None:
+             directory = Path(model_dir)

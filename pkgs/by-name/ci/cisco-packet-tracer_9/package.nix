@@ -1,0 +1,88 @@
+{
+  appimageTools,
+  dpkg,
+  lib,
+  libpng,
+  libxkbfile,
+  requireFile,
+  stdenvNoCC,
+  version ? "9.0.1",
+}:
+
+appimageTools.wrapType2 (finalAttrs: {
+  pname = "cisco-packet-tracer";
+  inherit version;
+
+  src = stdenvNoCC.mkDerivation {
+    pname = "cisco-packet-tracer-appimage";
+    inherit (finalAttrs) version;
+
+    src =
+      let
+        sources = {
+          "9.0.1" = {
+            name = "CiscoPacketTracer_901_Ubuntu_64bit.deb";
+            hash = "sha256-NoPdh+d5iFNyrpo1wabllNEvST5knnxpdAhynBRZR5s=";
+          };
+        };
+      in
+      requireFile {
+        inherit (sources."${finalAttrs.version}") name hash;
+        url = "https://www.netacad.com/resources/lab-downloads";
+      };
+
+    nativeBuildInputs = [
+      dpkg
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      cp opt/pt/packettracer.AppImage $out
+
+      runHook postInstall
+    '';
+  };
+
+  extraPkgs = _: [
+    libpng
+    libxkbfile
+  ];
+
+  extraBwrapArgs = [
+    # fixes launch on wayland when the user sets QT_QPA_PLATFORM=wayland:
+    # "Fatal: This application failed to start because no Qt platform plugin could be initialized."
+    "--setenv QT_QPA_PLATFORM xcb"
+  ];
+
+  extraInstallCommands = ''
+    mv $out/bin/cisco-packet-tracer $out/bin/packettracer9
+
+    install -Dm444 ${finalAttrs.contents}/CiscoPacketTracer-${finalAttrs.version}.desktop $out/share/applications/cisco-packet-tracer-9.desktop
+    install -Dm444 ${finalAttrs.contents}/CiscoPacketTracerPtsa-${finalAttrs.version}.desktop $out/share/applications/cisco-packet-tracer-ptsa-9.desktop
+    substituteInPlace $out/share/applications/* \
+      --replace-fail "Exec=@EXEC_PATH@" "Exec=packettracer9" \
+      --replace-fail "Icon=app" "Icon=cisco-packet-tracer-9"
+
+    install -Dm444 ${finalAttrs.contents}/usr/share/icons/hicolor/48x48/apps/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer-9.png
+    cp -r ${finalAttrs.contents}/usr/share/icons/gnome/48x48/mimetypes $out/share/icons/hicolor/48x48/
+
+    cp -r ${finalAttrs.contents}/usr/share/mime $out/share/
+
+    for desktop in $out/share/applications/*.desktop; do
+      sed -i '/^\[Desktop Entry\]/a StartupWMClass=PacketTracer' "$desktop"
+    done
+  '';
+
+  meta = {
+    description = "Network simulation tool from Cisco";
+    homepage = "https://www.netacad.com/courses/packet-tracer";
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
+    mainProgram = "packettracer9";
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  };
+})

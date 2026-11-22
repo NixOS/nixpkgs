@@ -1,0 +1,13 @@
+import("//build/config/linux/pkg_config.gni")
+
+pkg_config("system_absl") {
+  packages = [
+    "absl_cleanup",
+    "absl_flat_hash_set",
+    "absl_inlined_vector",
+  ]
+}
+
+group("absl") {
+  public_configs = [ ":system_absl" ]
+}

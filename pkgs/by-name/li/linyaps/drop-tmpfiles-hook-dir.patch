@@ -1,0 +1,15 @@
+# Drop the tmpfiles rule that expands to a path under
+# CMAKE_INSTALL_FULL_SYSCONFDIR, which is read-only with the nixpkgs packaging.
+# Not sent upstream: the rule is the only creator of the hooks directory on FHS
+# distros and is correct there; upstream has stated they have no NixOS support
+# plans (https://github.com/OpenAtom-Linyaps/linyaps/issues/1070).
+diff --git a/misc/lib/tmpfiles.d/linglong.conf b/misc/lib/tmpfiles.d/linglong.conf
+index 7fcfcce..d6c0b15 100644
+--- a/misc/lib/tmpfiles.d/linglong.conf
++++ b/misc/lib/tmpfiles.d/linglong.conf
+@@ -13,5 +13,3 @@ d /run/linglong 1777 @LINGLONG_USERNAME@ @LINGLONG_USERNAME@ - -
+ 
+ f /run/linglong/lock 0644 @LINGLONG_USERNAME@ @LINGLONG_USERNAME@ - -
+ 
+-# Create a directory to place the hook script
+-d @CMAKE_INSTALL_FULL_SYSCONFDIR@/linglong/config.d 0755 root root - -

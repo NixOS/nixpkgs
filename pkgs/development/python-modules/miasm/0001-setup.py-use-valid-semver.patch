@@ -1,0 +1,26 @@
+From c85780ce97798f332d627bd44cbbfa19c9ea565e Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Sat, 11 May 2024 11:03:34 +0200
+Subject: [PATCH] setup.py: use valid semver
+
+Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index e1e54434..98e29fee 100644
+--- a/setup.py
++++ b/setup.py
+@@ -314,7 +314,7 @@ def build_all():
+         try:
+             s = setup(
+                 name = "miasm",
+-                version = __import__("miasm").VERSION,
++                version = "v0.0.0",
+                 packages = packages,
+                 data_files=[("", ["README.md"])],
+                 package_data = {
+-- 
+2.44.0
+

@@ -1,0 +1,28 @@
+diff --git a/vobcopy.h b/vobcopy.h
+index dcf4266..d34c2b4 100644
+--- a/vobcopy.h
++++ b/vobcopy.h
+@@ -115,6 +115,7 @@ typedef enum  { FALSE=0, TRUE=1 }  bool;
+ 
+ #ifdef HAVE_SYS_STATVFS_H
+ #include <sys/statvfs.h>
++#ifndef __APPLE__
+ #ifndef USE_STATFS
+ #define USE_STATVFS
+ #ifndef USE_STATFS_FOR_DEV
+@@ -122,6 +123,7 @@ typedef enum  { FALSE=0, TRUE=1 }  bool;
+ #endif
+ #endif
+ #endif
++#endif
+ 
+ #ifdef HAVE_MNTENT_H
+ #include <mntent.h>
+@@ -164,6 +166,6 @@ char *safestrncpy(char *dest, const char *src, size_t n);
+ int check_progress( void ); /* this can be removed because the one below supersedes it */
+ int progressUpdate( int starttime, int cur, int tot, int force );
+ 
+-#ifndef HAVE_FDATASYNC
++#if !defined(HAVE_FDATASYNC) || defined(__APPLE__)
+ #define fdatasync(fd) 0
+ #endif

@@ -1,0 +1,22 @@
+diff --git a/Scripts/make_mac_app.py b/Scripts/make_mac_app.py
+index f02930ecb2..6fdaa6f36a 100644
+--- a/Scripts/make_mac_app.py
++++ b/Scripts/make_mac_app.py
+@@ -48,7 +48,7 @@ def write_executable(zfile, path, zip_path=None):
+ if not Path(out).exists():
+     Path(out).mkdir()
+ 
+-with ZipFile(out / "mac.zip", 'w', ZIP_DEFLATED) as zip_f:
++with ZipFile(out / "mac.zip", 'w', ZIP_DEFLATED, strict_timestamps=False) as zip_f:
+     for root, dirs, files in walk(app_dir):
+         root = Path(root)
+ 
+@@ -78,7 +78,7 @@ def write_executable(zfile, path, zip_path=None):
+ 
+                 zip_f.write(path, zip_path)
+ 
+-        write_executable(zip_f, publish_root / "Lumafly", root / "MacOS" / "run")
++        write_executable(zip_f, exe, root / "MacOS" / "run")
+ 
+ 
+ print("Created mac.zip")

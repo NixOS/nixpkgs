@@ -1,0 +1,33 @@
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index 9d595e5..28d39ff 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -1,5 +1,5 @@
+ [env]
+ SERVER_PATH = "data/server.js"
+ ANV_DEBUG = "video-decode,video-encode" # Video acceleration with Vulkan for Intel
+-GSETTINGS_SCHEMA_DIR = "target/schemas"
+-GETTEXT_DIR = "target/locale"
+\ No newline at end of file
++GSETTINGS_SCHEMA_DIR = "@out@/share/glib-2.0/schemas"
++GETTEXT_DIR = "@out@/share/locale"
+diff --git a/data/com.stremio.Stremio.service b/data/com.stremio.Stremio.service
+index 7cfb139..7491969 100644
+--- a/data/com.stremio.Stremio.service
++++ b/data/com.stremio.Stremio.service
+@@ -1,3 +1,3 @@
+ [D-BUS Service]
+ Name=com.stremio.Stremio
+-Exec=/app/bin/stremio --gapplication-service
++Exec=@out@/bin/stremio --gapplication-service
+diff --git a/data/stremio.sh b/data/stremio.sh
+index 8fa5689..d034ad9 100644
+--- a/data/stremio.sh
++++ b/data/stremio.sh
+@@ -10,4 +10,4 @@ if [ -f /app/etc/fonts/stremio.conf ]; then
+     export FONTCONFIG_FILE=/app/etc/fonts/stremio.conf
+ fi
+ 
+-exec /app/libexec/stremio/stremio "$@"
+\ No newline at end of file
++exec @out@/libexec/stremio/stremio "$@"

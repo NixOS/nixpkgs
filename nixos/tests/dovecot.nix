@@ -1,0 +1,106 @@
+{
+  name = "dovecot";
+
+  nodes.machine =
+    { config, pkgs, ... }:
+    let
+      dovecot = config.services.dovecot2.package;
+    in
+    {
+      imports = [ common/user-account.nix ];
+      services.postfix.enable = true;
+      services.dovecot2 = {
+        enable = true;
+        enablePAM = true;
+        settings = {
+          dovecot_config_version = dovecot.version;
+          dovecot_storage_version = dovecot.version;
+          mail_driver = "maildir";
+          mail_path = "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
+          protocols = [
+            "imap"
+            "pop3"
+          ];
+          mail_uid = "vmail";
+          mail_gid = "vmail";
+        };
+      };
+      environment.systemPackages =
+        let
+          sendTestMail = pkgs.writeScriptBin "send-testmail" ''
+            #!${pkgs.runtimeShell}
+            exec sendmail -vt <<MAIL
+            From: root@localhost
+            To: alice@localhost
+            Subject: Very important!
+
+            Hello world!
+            MAIL
+          '';
+
+          sendTestMailViaDeliveryAgent = pkgs.writeScriptBin "send-lda" ''
+            #!${pkgs.runtimeShell}
+
+            exec ${dovecot}/libexec/dovecot/deliver -d bob <<MAIL
+            From: root@localhost
+            To: bob@localhost
+            Subject: Something else...
+
+            I'm running short of ideas!
+            MAIL
+          '';
+
+          testImap = pkgs.writeScriptBin "test-imap" ''
+            #!${pkgs.python3.interpreter}
+            import imaplib
+
+            with imaplib.IMAP4('localhost') as imap:
+              imap.login('alice', 'foobar')
+              imap.select()
+              status, refs = imap.search(None, 'ALL')
+              assert status == 'OK'
+              assert len(refs) == 1
+              status, msg = imap.fetch(refs[0], 'BODY[TEXT]')
+              assert status == 'OK'
+              assert msg[0][1].strip() == b'Hello world!'
+          '';
+
+          testPop = pkgs.writeScriptBin "test-pop" ''
+            #!${pkgs.python3.interpreter}
+            import poplib
+
+            pop = poplib.POP3('localhost')
+            try:
+              pop.user('bob')
+              pop.pass_('foobar')
+              assert len(pop.list()[1]) == 1
+              status, fullmail, size = pop.retr(1)
+              assert status.startswith(b'+OK ')
+              body = b"".join(fullmail[fullmail.index(b""):]).strip()
+              assert body == b"I'm running short of ideas!"
+            finally:
+              pop.quit()
+          '';
+
+        in
+        [
+          dovecot.passthru.dovecot_pigeonhole
+          sendTestMail
+          sendTestMailViaDeliveryAgent
+          testImap
+          testPop
+        ];
+    };
+
+  testScript = ''
+    machine.wait_for_unit("postfix.service")
+    machine.wait_for_unit("dovecot.service")
+    machine.succeed("send-testmail")
+    machine.succeed("send-lda")
+    machine.wait_until_fails('[ "$(postqueue -p)" != "Mail queue is empty" ]')
+    machine.succeed("test-imap")
+    machine.succeed("test-pop")
+
+    machine.log(machine.succeed("systemd-analyze security dovecot.service | grep -v ✓"))
+  '';
+}

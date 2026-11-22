@@ -1,0 +1,12 @@
+diff --git a/pyrefly/lib/test/python_env.rs b/pyrefly/lib/test/python_env.rs
+--- a/pyrefly/lib/test/python_env.rs
++++ b/pyrefly/lib/test/python_env.rs
+@@ -279,7 +279,7 @@ impl PythonEnv {
+         let script = format!(
+-            r#"#!/usr/bin/env bash
++            r#"#!@bash@
+ if [[ "$1" == "-c" && "$2" == *"import importlib.metadata, json, sys, sysconfig"* ]]; then
+     cat << 'EOF'
+ {response}
+ EOF
+ else

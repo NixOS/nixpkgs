@@ -1,0 +1,26 @@
+diff --git a/distrobox-generate-entry b/distrobox-generate-entry
+index 65fcea0..8d57e4e 100755
+--- a/distrobox-generate-entry
++++ b/distrobox-generate-entry
+@@ -51,7 +51,7 @@ container_manager="autodetect"
+ container_name_default="my-distrobox"
+ delete=0
+ icon="auto"
+-icon_default="${XDG_DATA_HOME:-${HOME}/.local/share}/icons/terminal-distrobox-icon.svg"
++icon_default="terminal-distrobox-icon"
+ verbose=0
+ online=0
+ version="1.8.0"
+@@ -335,12 +335,6 @@ if [ "${icon}" = "auto" ]; then
+ 
+ 	icon_url="$(echo "${DISTRO_ICON_MAP}" | grep "${container_distro}:" | cut -d':' -f2-)"
+ 
+-	# Distro not found in our map, fallback to generic icon
+-	if [ -z "${icon_url}" ]; then
+-		icon_url="https://raw.githubusercontent.com/89luca89/distrobox/main/icons/terminal-distrobox-icon.svg"
+-		container_distro="terminal-distrobox-icon"
+-	fi
+-
+ 	if [ -n "${icon_url}" ] && [ "${download}" != "null" ]; then
+ 		icon_extension="${icon_url##*.}"
+ 

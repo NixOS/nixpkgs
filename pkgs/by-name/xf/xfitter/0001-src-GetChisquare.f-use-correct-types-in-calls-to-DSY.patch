@@ -1,0 +1,50 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -54,21 +54,7 @@ endif()
+ endif()
+ 
+ #Use c preprocessor with fortran
+-
+-if(UNIX AND NOT APPLE)
+-  set(CMAKE_Fortran_FLAGS "-cpp -Wno-argument-mismatch")
+-endif()
+-
+-if(APPLE)
+-  set(CMAKE_Fortran_FLAGS "-cpp -fallow-argument-mismatch")
+-endif()
+-
+-
+-if (CMAKE_MAJOR_VERSION VERSION_GREATER_EQUAL "3")
+-if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "10")
+-  set(CMAKE_Fortran_FLAGS "-cpp -fallow-argument-mismatch")
+-endif()
+-endif()
++set(CMAKE_Fortran_FLAGS "-cpp")
+ 
+ 
+ #For Fortran
+diff --git a/src/GetChisquare.f b/src/GetChisquare.f
+index b21413fe..28391bcb 100644
+--- a/src/GetChisquare.f
++++ b/src/GetChisquare.f
+@@ -2418,8 +2418,8 @@ C> @Brief Interface to lapack, to dynamically allocate work arrays
+       integer NCovar, NDimCovar
+       double precision Covar(NDimCovar,NDimCovar), EigenValues(NCovar)
+       integer IFail
+-      double precision Work
+-      integer IWork
++      double precision Work(1)
++      integer IWork(1)
+       Character*80 msg
+ C---------------------------------------------------------------
+ C Determine optimal size of the work array:
+@@ -2432,7 +2432,7 @@ C Determine optimal size of the work array:
+      $     int(work)+1, iwork
+       call HF_ERRLOG(14121701,msg)
+       call MyDSYEVD2(NCovar,Covar,NDimCovar, EigenValues,
+-     $     int(work)+1,iwork,ifail)
++     $     int(work(1))+1,iwork(1),ifail)
+ 
+       end
+ 

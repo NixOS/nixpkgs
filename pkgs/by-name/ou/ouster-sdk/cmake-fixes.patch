@@ -1,0 +1,27 @@
+Include the public perception stub in shared builds on Unix too.
+Keep repeated Shared and Static component discovery idempotent.
+Discover the OpenGL target exported by the static visualizer library.
+
+--- a/ouster_library/CMakeLists.txt
++++ b/ouster_library/CMakeLists.txt
+@@ -170,3 +170,3 @@
+     )
+-  elseif(TARGET ouster_perception AND WIN32)
++  elseif(TARGET ouster_perception)
+     # Stub build (no ouster_perception_private): absorb ouster_perception and
+@@ -299,3 +299,3 @@
+   install(TARGETS shared_library
+-        EXPORT ouster-sdk-targets
++
+         LIBRARY DESTINATION lib
+--- a/cmake/OusterSDKConfig.cmake.in
++++ b/cmake/OusterSDKConfig.cmake.in
+@@ -57,2 +57,3 @@
+   find_package(PNG REQUIRED)
++      find_dependency(OpenGL)
+   # Transitive deps for ouster_mapping and thirdparty targets (e.g. zpng).
+@@ -72,3 +73,3 @@
+
+-if(OUSTER_SDK_COMPONENT_SHARED)
++if(OUSTER_SDK_COMPONENT_SHARED AND NOT TARGET OusterSDK::shared_library)
+   SET(OUSTER_SKIP_FIND_PACKAGE_STANDARD TRUE)

@@ -1,0 +1,22 @@
+Ada makes extensive use of nested functions, and gcc by default uses trampolines
+to avoid using fat pointers (carry link to parent stack frame along with link to
+actual function body). However, executable stack has been disabled on darwin
+since version 20 (macOS 11). Thus, make heap trampolines unconditionally used on
+darwin as we only support macOS version 13+
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -1177,13 +1177,13 @@ esac
+ # Figure out if we need to enable heap trampolines
+ # and variadic functions handling.
+ case ${target} in
+-aarch64*-*-darwin2*)
++aarch64*-*-darwin* | arm64*-*-darwin*)
+   # This applies to arm64 Darwin variadic funtions.
+   tm_defines="$tm_defines STACK_USE_CUMULATIVE_ARGS_INIT=1"
+   # Executable stack is forbidden.
+   tm_defines="$tm_defines HEAP_TRAMPOLINES_INIT=1"
+   ;;
+-*-*-darwin2*)
++*-*-darwin*)
+   tm_defines="$tm_defines STACK_USE_CUMULATIVE_ARGS_INIT=0"
+   # Currently, we do this for macOS 11 and above.

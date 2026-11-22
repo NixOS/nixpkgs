@@ -1,0 +1,30 @@
+From 7e103db5e99a82751361d4e9fa926200315bd9d3 Mon Sep 17 00:00:00 2001
+From: Amaan Qureshi <git@amaanq.com>
+Date: Fri, 20 Mar 2026 21:56:15 -0400
+Subject: [PATCH] dxf: fix binary DXF double parsing on big-endian
+
+struct.unpack("d") uses native byte order, but the DXF binary format
+is always little-endian. All other fields in the parser already use '<'
+for little-endian. Without this fix, double-precision coordinates are
+byte-swapped on big-endian hosts, producing garbage values that cascade
+into empty SVG transforms and ValueErrors.
+---
+ dxf_input.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/share/extensions/dxf_input.py b/share/extensions/dxf_input.py
+index 3f5ce96d..17f62034 100644
+--- a/share/extensions/dxf_input.py
++++ b/share/extensions/dxf_input.py
+@@ -1336,7 +1336,7 @@ class DxfInput(inkex.InputExtension):
+                     or 460 <= key <= 469
+                     or 1010 <= key <= 1059
+                 ):
+-                    value = struct.unpack("d", stream.read(8))[0]
++                    value = struct.unpack("<d", stream.read(8))[0]
+                 elif (
+                     60 <= key <= 79
+                     or 170 <= key <= 179
+-- 
+GitLab
+

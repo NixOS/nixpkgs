@@ -1,0 +1,48 @@
+diff --git a/lib/core/private/LCompositorPrivate.h b/lib/core/private/LCompositorPrivate.h
+index 4de2495..5acec8e 100644
+--- a/lib/core/private/LCompositorPrivate.h
++++ b/lib/core/private/LCompositorPrivate.h
+@@ -14,6 +14,7 @@
+ #include <unistd.h>
+ #include <string>
+ #include <filesystem>
++#include <mutex>
+ #include <set>
+ #include <unordered_set>
+ 
+diff --git a/lib/protocols/GammaControl/RGammaControl.cpp b/lib/protocols/GammaControl/RGammaControl.cpp
+index 1f503ed..e1e1431 100644
+--- a/lib/protocols/GammaControl/RGammaControl.cpp
++++ b/lib/protocols/GammaControl/RGammaControl.cpp
+@@ -5,6 +5,7 @@
+ #include <LCompositor.h>
+ #include <LUtils.h>
+ #include <fcntl.h>
++#include <unistd.h>
+ 
+ using namespace Louvre::Protocols::GammaControl;
+ 
+diff --git a/lib/protocols/LinuxDMABuf/LDMABuffer.cpp b/lib/protocols/LinuxDMABuf/LDMABuffer.cpp
+index 059cd36..60317ea 100644
+--- a/lib/protocols/LinuxDMABuf/LDMABuffer.cpp
++++ b/lib/protocols/LinuxDMABuf/LDMABuffer.cpp
+@@ -2,6 +2,7 @@
+ #include <protocols/LinuxDMABuf/LDMABuffer.h>
+ #include <LCompositor.h>
+ #include <LSurface.h>
++#include <unistd.h>
+ 
+ using namespace Louvre::Protocols::Wayland;
+ using namespace Louvre;
+diff --git a/lib/protocols/Wayland/RDataOffer.cpp b/lib/protocols/Wayland/RDataOffer.cpp
+index 62a72d3..3481dc6 100644
+--- a/lib/protocols/Wayland/RDataOffer.cpp
++++ b/lib/protocols/Wayland/RDataOffer.cpp
+@@ -3,6 +3,7 @@
+ #include <protocols/Wayland/GSeat.h>
+ #include <LClient.h>
+ #include <LDNDSession.h>
++#include <unistd.h>
+ 
+ using namespace Louvre;
+ using namespace Louvre::Protocols::Wayland;

@@ -1,0 +1,47 @@
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  buildPackages,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "scdoc";
+  version = "1.11.5";
+
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "scdoc";
+    tag = finalAttrs.version;
+    hash = "sha256-Tjafa7m+YcUTryYHnW2EF0yaXPRc3uNzWdeEucCdEso=";
+  };
+
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
+
+  strictDeps = true;
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "HOST_SCDOC=${lib.getExe buildPackages.scdoc}"
+  ];
+
+  doCheck = true;
+
+  __structuredAttrs = true;
+
+  meta = {
+    description = "Simple man page generator written in C99 for POSIX systems";
+    homepage = "https://git.sr.ht/~sircmpwn/scdoc";
+    changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    mainProgram = "scdoc";
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+  };
+})

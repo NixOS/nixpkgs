@@ -1,0 +1,11 @@
+--- a/usr.bin/xinstall/Makefile	2023-09-23 19:18:49.165192183 -0700
++++ b/usr.bin/xinstall/Makefile	2023-12-06 17:06:57.836888028 -0700
+@@ -14,7 +14,7 @@
+ CFLAGS+=	-I${SRCTOP}/lib/libnetbsd
+ 
+ LIBADD=		md
+-CFLAGS+=	-DWITH_MD5 -DWITH_RIPEMD160
++CFLAGS+=		-I${BSDSRCDIR}/contrib/libc-vis -I${BSDSRCDIR}/lib/libnetbsd
+ 
+ .ifdef BOOTSTRAPPING
+ # For the bootstrap we disable copy_file_range()

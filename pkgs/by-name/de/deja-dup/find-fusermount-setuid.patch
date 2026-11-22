@@ -1,0 +1,13 @@
+diff --git a/libdeja/find-fusermount b/libdeja/find-fusermount
+index 1b3211bb..95b35cf5 100755
+--- a/libdeja/find-fusermount
++++ b/libdeja/find-fusermount
+@@ -20,6 +20,8 @@
+ if [ ! -f /.flatpak-info ]; then
+   if [ -n "@FUSERMOUNT_CMD@" ]; then
+     echo "@FUSERMOUNT_CMD@"
++  elif [ -f /run/wrappers/bin/fusermount3 ]; then
++    echo /run/wrappers/bin/fusermount3
+   elif command -pv fusermount3 > /dev/null; then
+     command -pv fusermount3
+   elif command -pv fusermount > /dev/null; then

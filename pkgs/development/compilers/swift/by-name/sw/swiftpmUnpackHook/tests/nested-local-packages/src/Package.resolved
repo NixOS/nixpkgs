@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "version",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mrackwitz/Version.git",
+      "state" : {
+        "revision" : "fd4b0eb5756aa7f1c33977fb626cf37d2140a3a0",
+        "version" : "0.8.0"
+      }
+    }
+  ],
+  "version" : 2
+}

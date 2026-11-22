@@ -1,0 +1,74 @@
+{
+  lib,
+  buildGo127Module,
+  coreutils,
+  python313,
+  src,
+  version,
+  pkg-config,
+  vips,
+  symlinkJoin,
+  nix-update-script,
+}:
+
+let
+  # tensorflow does not yet support python314: https://github.com/tensorflow/tensorflow/issues/102890
+  python3 = python313;
+
+  # we need to copy these, to add the symlinks, so the linker actually finds these libraries
+  libtensorflow = symlinkJoin {
+    name = "libtensorflow";
+    paths = [ "${python3.pkgs.tensorflow-bin}/${python3.sitePackages}/tensorflow" ];
+    postBuild = ''
+      ln -s "$out/libtensorflow_cc.so.2" "$out/libtensorflow.so"
+      ln -s "$out/libtensorflow_framework.so.2" "$out/libtensorflow_framework.so"
+    '';
+  };
+in
+buildGo127Module {
+  inherit src version;
+  pname = "photoprism-backend";
+
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    coreutils
+    libtensorflow
+    vips
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
+  postPatch = ''
+    substituteInPlace internal/commands/passwd.go --replace-fail '/bin/stty' "${coreutils}/bin/stty"
+  '';
+
+  vendorHash = "sha256-w7QJKGyxVQZZ3xlz9yqS495oYIokR9qiUCgZu/VxXl0=";
+
+  subPackages = [ "cmd/photoprism" ];
+
+  env = {
+    CGO_CFLAGS = "-I${libtensorflow}/include";
+    CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
+  };
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    homepage = "https://photoprism.app";
+    description = "Photoprism's backend";
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      ipetkov
+    ];
+  };
+}

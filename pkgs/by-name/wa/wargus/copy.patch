@@ -1,0 +1,29 @@
+diff --git a/gameheaders/stratagus-gameutils.h b/gameheaders/stratagus-gameutils.h
+index 042564b19..b62d99d9f 100644
+--- a/gameheaders/stratagus-gameutils.h
++++ b/gameheaders/stratagus-gameutils.h
+@@ -141,12 +141,19 @@ void copy_dir(fs::path source_folder, fs::path target_folder)
+ 		}
+ 		// first delete the target_folder, if it exists, to ensure clean slate
+ 		fs::remove_all(target_folder);
+-	} else {
+-		// make the parentdir of the target folder
+-		fs::create_directories(target_folder.parent_path());
+ 	}
+-	// now copy the new folder in its place
+-	fs::copy(source_folder, target_folder, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
++	// make the target folder
++	fs::create_directories(target_folder);
++	// now copy the folder content
++	for (const auto& entry : fs::recursive_directory_iterator(source_folder)) {
++		auto relative_path = fs::relative(entry.path(), source_folder);
++		auto target_path = target_folder / relative_path;
++		if (entry.is_directory()) {
++			fs::create_directory(target_path);
++		} else {
++			fs::copy(entry.path(), target_path, fs::copy_options::overwrite_existing);
++		}
++	}
+ }
+ 
+ #ifdef WIN32

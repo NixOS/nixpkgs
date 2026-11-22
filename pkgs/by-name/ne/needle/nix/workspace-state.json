@@ -1,0 +1,93 @@
+{
+    "object": {
+      "artifacts": [],
+      "dependencies": [
+        {
+          "basedOn": null,
+          "packageRef": {
+            "identity": "swift-common",
+            "kind": "remoteSourceControl",
+            "location": "https://github.com/uber/swift-common.git",
+            "name": "Swift-Common"
+          },
+          "state": {
+            "checkoutState": {
+              "revision": "32c4757e0702686df12c32e06b9bbf815ec4e641",
+              "version": "0.5.0"
+            },
+            "name": "sourceControlCheckout"
+          },
+          "subpath": "swift-common"
+        },
+        {
+          "basedOn": null,
+          "packageRef": {
+            "identity": "swift-concurrency",
+            "kind": "remoteSourceControl",
+            "location": "https://github.com/uber/swift-concurrency.git",
+            "name": "Concurrency"
+          },
+          "state": {
+            "checkoutState": {
+              "revision": "e29e42c41c47c82ec32d3a2b2695719c32415ca9",
+              "version": "0.7.1"
+            },
+            "name": "sourceControlCheckout"
+          },
+          "subpath": "swift-concurrency"
+        },
+        {
+          "basedOn": null,
+          "packageRef": {
+            "identity": "swift-syntax",
+            "kind": "remoteSourceControl",
+            "location": "https://github.com/apple/swift-syntax.git",
+            "name": "SwiftSyntax"
+          },
+          "state": {
+            "checkoutState": {
+              "branch": "0e85cf7",
+              "revision": "0e85cf739b10103190a2d7e6de0c0532a0514981"
+            },
+            "name": "sourceControlCheckout"
+          },
+          "subpath": "swift-syntax"
+        },
+        {
+          "basedOn": null,
+          "packageRef": {
+            "identity": "swift-system",
+            "kind": "remoteSourceControl",
+            "location": "https://github.com/apple/swift-system.git",
+            "name": "swift-system"
+          },
+          "state": {
+            "checkoutState": {
+              "revision": "836bc4557b74fe6d2660218d56e3ce96aff76574",
+              "version": "1.1.1"
+            },
+            "name": "sourceControlCheckout"
+          },
+          "subpath": "swift-system"
+        },
+        {
+          "basedOn": null,
+          "packageRef": {
+            "identity": "swift-tools-support-core",
+            "kind": "remoteSourceControl",
+            "location": "https://github.com/apple/swift-tools-support-core",
+            "name": "swift-tools-support-core"
+          },
+          "state": {
+            "checkoutState": {
+              "revision": "4f07be3dc201f6e2ee85b6942d0c220a16926811",
+              "version": "0.2.7"
+            },
+            "name": "sourceControlCheckout"
+          },
+          "subpath": "swift-tools-support-core"
+        }
+      ]
+    },
+    "version": 6
+}

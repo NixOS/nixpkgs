@@ -1,0 +1,74 @@
+From df8402575f1550d79c751051e9006fd3b7fa0fe0 Mon Sep 17 00:00:00 2001
+From: Hannes Braun <hannes@hannesbraun.net>
+Date: Thu, 9 Oct 2025 20:28:34 +0200
+Subject: [PATCH] Fix compatibility with FFmpeg 8
+
+---
+ src/spek-fft.cc | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/src/spek-fft.cc b/src/spek-fft.cc
+index 3105213f..00d4fa5c 100644
+--- a/src/spek-fft.cc
++++ b/src/spek-fft.cc
+@@ -2,7 +2,7 @@
+ 
+ #define __STDC_CONSTANT_MACROS
+ extern "C" {
+-#include <libavcodec/avfft.h>
++#include <libavutil/tx.h>
+ }
+ 
+ #include "spek-fft.h"
+@@ -16,7 +16,10 @@ class FFTPlanImpl : public FFTPlan
+     void execute() override;
+ 
+ private:
+-    struct RDFTContext *cx;
++    struct AVTXContext *cx;
++    av_tx_fn tx;
++    float* tmp;
++    const int len;
+ };
+ 
+ std::unique_ptr<FFTPlan> FFT::create(int nbits)
+@@ -24,27 +27,31 @@ std::unique_ptr<FFTPlan> FFT::create(int nbits)
+     return std::unique_ptr<FFTPlan>(new FFTPlanImpl(nbits));
+ }
+ 
+-FFTPlanImpl::FFTPlanImpl(int nbits) : FFTPlan(nbits), cx(av_rdft_init(nbits, DFT_R2C))
++FFTPlanImpl::FFTPlanImpl(int nbits) : FFTPlan(nbits), len(1 << nbits)
+ {
++    const float scale = 1.0;
++    av_tx_init(&this->cx, &this->tx, AV_TX_FLOAT_RDFT, 0, this->len, &scale, 0);
++    this->tmp = (float*) av_malloc((this->len + 2) * sizeof(float));
+ }
+ 
+ FFTPlanImpl::~FFTPlanImpl()
+ {
+-    av_rdft_end(this->cx);
++    av_tx_uninit(&this->cx);
++    av_freep(&this->tmp);
+ }
+ 
+ void FFTPlanImpl::execute()
+ {
+-    av_rdft_calc(this->cx, this->get_input());
++    this->tx(this->cx, this->tmp, this->get_input(), sizeof(AVComplexFloat));
+ 
+     // Calculate magnitudes.
+     int n = this->get_input_size();
+     float n2 = n * n;
+-    this->set_output(0, 10.0f * log10f(this->get_input(0) * this->get_input(0) / n2));
+-    this->set_output(n / 2, 10.0f * log10f(this->get_input(1) * this->get_input(1) / n2));
++    this->set_output(0, 10.0f * log10f(this->tmp[0] * this->tmp[0] / n2));
+     for (int i = 1; i < n / 2; i++) {
+-        float re = this->get_input(i * 2);
+-        float im = this->get_input(i * 2 + 1);
++        float re = this->tmp[i * 2];
++        float im = this->tmp[i * 2 + 1];
+         this->set_output(i, 10.0f * log10f((re * re + im * im) / n2));
+     }
++    this->set_output(n / 2, 10.0f * log10f(this->tmp[this->len] * this->tmp[this->len] / n2));
+ }
+

@@ -1,0 +1,79 @@
+From 9c3b5760bfe021d0d6f974ad1559bcc13c7c463c Mon Sep 17 00:00:00 2001
+From: Janusz Lisiecki <jlisiecki@nvidia.com>
+Date: Mon, 19 Oct 2026 09:53:38 +0200
+Subject: [PATCH 2/2] Batch staging copies for nvCOMP decompression
+
+Signed-off-by: Janusz Lisiecki <jlisiecki@nvidia.com>
+---
+ dali/operators/decoder/inflate/inflate_gpu.cc | 18 ++++++++----------
+ dali/test/python/operator_1/test_inflate.py   |  3 ++-
+ 2 files changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/dali/operators/decoder/inflate/inflate_gpu.cc b/dali/operators/decoder/inflate/inflate_gpu.cc
+index 658f3922..b54bc0fb 100644
+--- a/dali/operators/decoder/inflate/inflate_gpu.cc
++++ b/dali/operators/decoder/inflate/inflate_gpu.cc
+@@ -22,6 +22,7 @@
+ #include "dali/core/common.h"
+ #include "dali/core/static_switch.h"
+ #include "dali/core/tensor_shape.h"
++#include "dali/kernels/common/scatter_gather.h"
+ #include "dali/kernels/kernel_manager.h"
+ #include "dali/operators/decoder/inflate/inflate.h"
+ #include "dali/operators/decoder/inflate/inflate_gpu.h"
+@@ -59,18 +60,20 @@ class InflateOpGpuLZ4Impl : public InflateOpImplBase<GPUBackend> {
+     // aligned input and output buffers, so stage only the chunks that need it.
+     constexpr size_t alignment = nvcompLZ4RequiredDecompressionAlignment;
+     const auto &in_chunk_sizes = params_.GetInChunkSizes();
+-    auto original_output_ptrs = inflated_ptrs_;
++    kernels::ScatterGatherGPU input_copies, output_copies;
+     for (size_t i = 0; i < total_chunks_num; i++) {
+       if (reinterpret_cast<uintptr_t>(input_ptrs_[i]) % alignment != 0) {
+         auto *aligned_input = scratchpad.AllocateGPU<uint8_t>(in_chunk_sizes[i], alignment);
+-        CUDA_CALL(cudaMemcpyAsync(aligned_input, input_ptrs_[i], in_chunk_sizes[i],
+-                                  cudaMemcpyDeviceToDevice, stream));
++        input_copies.AddCopy(aligned_input, input_ptrs_[i], in_chunk_sizes[i]);
+         input_ptrs_[i] = aligned_input;
+       }
+       if (reinterpret_cast<uintptr_t>(inflated_ptrs_[i]) % alignment != 0) {
+-        inflated_ptrs_[i] = scratchpad.AllocateGPU<uint8_t>(inflated_sizes_[i], alignment);
++        auto *aligned_output = scratchpad.AllocateGPU<uint8_t>(inflated_sizes_[i], alignment);
++        output_copies.AddCopy(inflated_ptrs_[i], aligned_output, inflated_sizes_[i]);
++        inflated_ptrs_[i] = aligned_output;
+       }
+     }
++    input_copies.Run(stream);
+     size_t *actual_out_sizes = scratchpad.AllocateGPU<size_t>(total_chunks_num);
+ 
+     auto [in_sizes, in, out_sizes, out] = scratchpad.ToContiguousGPU(
+@@ -121,12 +124,7 @@ class InflateOpGpuLZ4Impl : public InflateOpImplBase<GPUBackend> {
+     // Here, we take care of the opposite case, when the allocations are bigger than really
+     // necessary and thus may contain some uninitialized memory.
+     FillTheTails(output.type(), total_chunks_num, out, actual_out_sizes, out_sizes, stream);
+-    for (size_t i = 0; i < total_chunks_num; i++) {
+-      if (inflated_ptrs_[i] != original_output_ptrs[i]) {
+-        CUDA_CALL(cudaMemcpyAsync(original_output_ptrs[i], inflated_ptrs_[i], inflated_sizes_[i],
+-                                  cudaMemcpyDeviceToDevice, stream));
+-      }
+-    }
++    output_copies.Run(stream);
+   }
+ 
+  protected:
+diff --git a/dali/test/python/operator_1/test_inflate.py b/dali/test/python/operator_1/test_inflate.py
+index 2cb176c0..a3e5f257 100644
+--- a/dali/test/python/operator_1/test_inflate.py
++++ b/dali/test/python/operator_1/test_inflate.py
+@@ -178,7 +178,8 @@ def test_checks_sufficient_output_buffer():
+     ]
+ )
+ def test_unaligned_chunks(dtype, offset, oversized):
+-    sample = np.arange(15, dtype=dtype).reshape(3, 5)
++    # Enough unaligned ranges to exercise the batched copy kernel in both directions.
++    sample = np.arange(85, dtype=dtype).reshape(17, 5)
+     chunks = [sample_to_lz4(frame) for frame in sample]
+     sizes = np.array([len(chunk) for chunk in chunks], dtype=np.int32)
+     offsets = np.array(offset + np.cumsum([0] + list(sizes[:-1])), dtype=np.int32)
+-- 
+2.43.0
+

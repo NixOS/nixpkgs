@@ -1,0 +1,101 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+  fontconfig,
+  libdrm,
+  libevdev,
+  libinput,
+  libxkbcommon,
+  libxcb-wm,
+  makeWrapper,
+  meson,
+  ninja,
+  nixosTests,
+  nix-update-script,
+  pango,
+  pixman,
+  pkg-config,
+  scdoc,
+  systemdLibs,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  withXwayland ? true,
+  xwayland,
+  wlroots_0_20,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "cagebreak";
+  version = "3.2.1";
+
+  src = fetchFromGitHub {
+    owner = "project-repo";
+    repo = "cagebreak";
+    tag = finalAttrs.version;
+    hash = "sha256-MnavSWvYuiyQP+sIFnlU4647oemqe0bTiJF5W0vRq/U=";
+  };
+
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    cairo
+    fontconfig
+    libdrm
+    libevdev
+    libinput
+    libxkbcommon
+    libxcb-wm
+    pango
+    pixman
+    systemdLibs
+    wayland
+    wayland-protocols
+    wlroots_0_20
+  ];
+
+  mesonFlags = [
+    "-Dman-pages=true"
+    "-Dversion_override=${finalAttrs.version}"
+    "-Dxwayland=${lib.boolToString withXwayland}"
+  ];
+
+  postPatch = ''
+    # TODO: investigate why is this happening
+    sed -i -e 's|<drm_fourcc.h>|<libdrm/drm_fourcc.h>|' *.c
+
+    # Patch cagebreak to read its default configuration from $out/share/cagebreak
+    sed -i "s|/etc/xdg/cagebreak|$out/share/cagebreak|" meson.build cagebreak.c
+    substituteInPlace meson.build \
+      --replace "/usr/share/licenses" "$out/share/licenses"
+  '';
+
+  postFixup = lib.optionalString withXwayland ''
+    wrapProgram $out/bin/cagebreak \
+      --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
+  '';
+
+  meta = {
+    homepage = "https://github.com/project-repo/cagebreak";
+    description = "Wayland tiling compositor inspired by ratpoison";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    changelog = "https://github.com/project-repo/cagebreak/blob/${finalAttrs.version}/Changelog.md";
+    mainProgram = "cagebreak";
+  };
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.basic = nixosTests.cagebreak;
+  };
+})

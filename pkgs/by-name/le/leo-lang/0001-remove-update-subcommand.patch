@@ -1,0 +1,59 @@
+diff --git i/errors/src/errors/cli/cli_errors.rs w/errors/src/errors/cli/cli_errors.rs
+index 9e3995743b..89617d451d 100644
+--- i/errors/src/errors/cli/cli_errors.rs
++++ w/errors/src/errors/cli/cli_errors.rs
+@@ -328,6 +328,13 @@ create_messages!(
+         help: None,
+     }
+ 
++    @backtraced
++    nix_update_build_error {
++       args: (),
++       msg: format!("Self update is not supported on Nix."),
++       help: Some("Package must be updated via Nix".to_string()),
++    }
++
+     @backtraced
+     custom {
+         args: (msg: impl Display),
+diff --git i/leo/cli/commands/update.rs w/leo/cli/commands/update.rs
+index 156e3ccce3..83dad3139b 100644
+--- i/leo/cli/commands/update.rs
++++ w/leo/cli/commands/update.rs
+@@ -15,7 +15,6 @@
+ // along with the Leo library. If not, see <https://www.gnu.org/licenses/>.
+ 
+ use super::*;
+-use crate::cli::helpers::updater::Updater;
+ 
+ /// Update Leo to the latest version
+ #[derive(Debug, Parser)]
+@@ -47,27 +46,6 @@ impl Command for LeoUpdate {
+     where
+         Self: Sized,
+     {
+-        match self.list {
+-            true => match Updater::show_available_releases() {
+-                Ok(output) => tracing::info!("{output}"),
+-                Err(error) => tracing::info!("Failed to list the available versions of Leo\n{error}\n"),
+-            },
+-            false => {
+-                let result = Updater::update(!self.quiet, self.name);
+-                if !self.quiet {
+-                    match result {
+-                        Ok(status) => {
+-                            if status.uptodate() {
+-                                tracing::info!("\nLeo is already on the latest version")
+-                            } else if status.updated() {
+-                                tracing::info!("\nLeo has updated to version {}", status.version())
+-                            }
+-                        }
+-                        Err(e) => tracing::info!("\nFailed to update Leo to the latest version\n{e}\n"),
+-                    }
+-                }
+-            }
+-        }
+-        Ok(())
++        return Err(CliError::nix_update_build_error().into());
+     }
+ }

@@ -1,0 +1,32 @@
+diff --git a/package-lock.json b/package-lock.json
+index c0db8fd5..a060c1cc 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -12156,9 +12156,6 @@
+             "dependencies": {
+                 "node-fetch": "^2.6.1",
+                 "ws": "^7.3.1"
+-            },
+-            "optionalDependencies": {
+-                "register-scheme": "github:devsnek/node-register-scheme"
+             }
+         },
+         "node_modules/dmg-builder": {
+@@ -21476,17 +21473,6 @@
+                 "node": ">=4"
+             }
+         },
+-        "node_modules/register-scheme": {
+-            "version": "0.0.2",
+-            "resolved": "git+ssh://git@github.com/devsnek/node-register-scheme.git#e7cc9a63a1f512565da44cb57316d9fb10750e17",
+-            "hasInstallScript": true,
+-            "license": "MIT",
+-            "optional": true,
+-            "dependencies": {
+-                "bindings": "^1.3.0",
+-                "node-addon-api": "^1.3.0"
+-            }
+-        },
+         "node_modules/regjsgen": {
+             "version": "0.8.0",
+             "resolved": "https://registry.npmjs.org/regjsgen/-/regjsgen-0.8.0.tgz",

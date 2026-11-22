@@ -1,0 +1,42 @@
+From a3698dc952fce0d07628133e987b7b43ed6e1157 Mon Sep 17 00:00:00 2001
+From: Rouven Czerwinski <rouven@czerwinskis.de>
+Date: Sun, 9 Sep 2018 20:08:40 +0200
+Subject: [PATCH] serial/rfc2217: add timeout.setter for rfc2217
+
+Add a new setter method for the timeout property which does not invoke
+the port reconfiguration.
+This is a direct copy of the SerialBase timeout property without the port
+reconfiguration.
+
+Signed-off-by: Rouven Czerwinski <r.czerwinski@pengutronix.de>
+---
+ serial/rfc2217.py | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/serial/rfc2217.py b/serial/rfc2217.py
+index d962c1e8..12615cf3 100644
+--- a/serial/rfc2217.py
++++ b/serial/rfc2217.py
+@@ -722,5 +722,22 @@ def cd(self):
+             raise portNotOpenError
+         return bool(self.get_modem_state() & MODEMSTATE_MASK_CD)
+
++    @property
++    def timeout(self):
++        """Get the current timeout setting."""
++        return self._timeout
++
++    @timeout.setter
++    def timeout(self, timeout):
++        """Change timeout setting."""
++        if timeout is not None:
++            try:
++                timeout + 1     # test if it's a number, will throw a TypeError if not...
++            except TypeError:
++                raise ValueError("Not a valid timeout: {!r}".format(timeout))
++            if timeout < 0:
++                raise ValueError("Not a valid timeout: {!r}".format(timeout))
++        self._timeout = timeout
++
+     # - - - platform specific - - -
+     # None so far

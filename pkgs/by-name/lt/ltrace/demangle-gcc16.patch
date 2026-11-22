@@ -1,0 +1,48 @@
+From 4dd63658b42db7f13119019c230056f1b1d0efbe Mon Sep 17 00:00:00 2001
+From: Hiroaki Tagawa <tagawa0525@gmail.com>
+Date: Thu, 1 Oct 2026 01:16:11 +0900
+Subject: [PATCH] fix(testsuite): drop volatile from Fv_Vi return type in
+ demangle test
+
+gcc 16 warns "'volatile'-qualified return type is deprecated" (C++20,
+-Wvolatile) for demangle-lib.cpp. The test harness treats any compiler
+output as a failure, so demangle.exp fails to build its test binary and
+all of its checks fail.
+
+The return type is not part of an Itanium-mangled function name, so the
+qualifier does not affect what the test checks (the demangled name
+Fv_Vi()). Drop it from both the definition and the declaration.
+---
+ testsuite/ltrace.minor/demangle-lib.cpp | 2 +-
+ testsuite/ltrace.minor/demangle.cpp     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/testsuite/ltrace.minor/demangle-lib.cpp b/testsuite/ltrace.minor/demangle-lib.cpp
+index 3091f31..fe60e6c 100644
+--- a/testsuite/ltrace.minor/demangle-lib.cpp
++++ b/testsuite/ltrace.minor/demangle-lib.cpp
+@@ -20,7 +20,7 @@ unsigned short Fv_Us(void) 	{ return 0; }
+ int Fv_i(void) 			{ return 0; }
+ const int Fv_Ci(void) 		{ return 0; }
+ unsigned int Fv_Ui(void) 	{ return 0; }
+-volatile int Fv_Vi(void) 	{ return 0; }
++int Fv_Vi(void) 	{ return 0; }
+ long Fv_l(void) 		{ return 0; }
+ unsigned long Fv_Ul(void) 	{ return 0; }
+ float Fv_f(void) 		{ return 0; }
+diff --git a/testsuite/ltrace.minor/demangle.cpp b/testsuite/ltrace.minor/demangle.cpp
+index 14cc9f6..0df7e39 100644
+--- a/testsuite/ltrace.minor/demangle.cpp
++++ b/testsuite/ltrace.minor/demangle.cpp
+@@ -23,7 +23,7 @@ extern unsigned short Fv_Us(void);
+ extern int Fv_i(void);
+ extern const int Fv_Ci(void);
+ extern unsigned int Fv_Ui(void);
+-extern volatile int Fv_Vi(void);
++extern int Fv_Vi(void);
+ extern long Fv_l(void);
+ extern unsigned long Fv_Ul(void);
+ extern float Fv_f(void) ;
+-- 
+GitLab
+

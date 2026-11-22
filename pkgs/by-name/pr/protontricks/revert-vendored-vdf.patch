@@ -1,0 +1,32 @@
+diff --git a/src/protontricks/steam.py b/src/protontricks/steam.py
+index 986b878..db34fe8 100644
+--- a/src/protontricks/steam.py
++++ b/src/protontricks/steam.py
+@@ -11,7 +11,6 @@ from pathlib import Path
+ 
+ import vdf
+ 
+-from ._vdf import binary_loads as vendored_binary_loads
+ from .util import is_arm64, is_steam_deck, is_steam_frame, lower_dict
+ 
+ __all__ = (
+@@ -597,18 +596,8 @@ def _appinfo_vdf_binary_loads(data, key_table):
+     """
+     Load binary VDF segment extracted from an appinfo.vdf file
+     using a key table.
+-
+-    Not all distros provide a VDF library that support the new `key_table`
+-    parameter, so use a vendored copy of vdf as a fallback.
+     """
+-    try:
+-        return vdf.binary_loads(data, key_table=key_table)
+-    except TypeError:
+-        # System 'vdf' is too old and does not support 'key_table',
+-        # use the bundled one instead. This is cursed, but it's
+-        # so far the only reasonable option without a proper maintained
+-        # release on PyPI.
+-        return vendored_binary_loads(data, key_table=key_table)
++    return vdf.binary_loads(data, key_table=key_table)
+ 
+ 
+ def _iter_v40_appinfo(data, start):

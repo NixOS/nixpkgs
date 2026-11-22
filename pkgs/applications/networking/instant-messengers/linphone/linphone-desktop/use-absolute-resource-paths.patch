@@ -1,0 +1,38 @@
+diff --git a/Linphone/core/path/Paths.cpp b/Linphone/core/path/Paths.cpp
+index 33449dc..734ba51 100644
+--- a/Linphone/core/path/Paths.cpp
++++ b/Linphone/core/path/Paths.cpp
+@@ -115,7 +115,6 @@ static inline QDir getAppPackageDir() {
+ }
+ 
+ static inline QString getAppPackageDataDirPath() {
+-	QDir executableDir(QCoreApplication::applicationDirPath());
+ 	QDir dir = getAppPackageDir();
+ #ifdef __APPLE__
+ 	if (!dir.cd("Resources")) {
+@@ -127,22 +126,17 @@ static inline QString getAppPackageDataDirPath() {
+ 		dir.mkdir("share");
+ 		dir.cd("share");
+ 	}
+-	lInfo() << executableDir.absolutePath() << " VS " << dir.absolutePath()
+-	        << " == " << executableDir.relativeFilePath(dir.absolutePath());
+-	return executableDir.relativeFilePath(dir.absolutePath());
++	return dir.absolutePath();
+ }
+ 
+ static inline QString getAppPackageMsPluginsDirPath() {
+-	QDir executableDir(QCoreApplication::applicationDirPath());
+ 	QDir dir = getAppPackageDir();
+ 	dir.cd(MSPLUGINS_DIR);
+-	return executableDir.relativeFilePath(dir.absolutePath());
++	return dir.absolutePath();
+ }
+ 
+ static inline QString getAppPackagePluginsDirPath() {
+-	QDir executableDir(QCoreApplication::applicationDirPath());
+-	QDir packageDir = getAppPackageDir();
+-	return executableDir.relativeFilePath(packageDir.absolutePath() + Constants::PathPlugins);
++	return getAppPackageDir().absolutePath() + Constants::PathPlugins;
+ }
+ 
+ static inline QString getAppBinDirPath() {

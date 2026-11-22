@@ -1,0 +1,22 @@
+diff --git a/src/basic/constants.h b/src/basic/constants.h
+index 475d8bf79a..fa11813911 100644
+--- a/src/basic/constants.h
++++ b/src/basic/constants.h
+@@ -40,13 +40,15 @@
+         "/etc/" n "\0"                          \
+         "/run/" n "\0"                          \
+         "/usr/local/lib/" n "\0"                \
+-        "/usr/lib/" n "\0"
++        "/usr/lib/" n "\0"                      \
++        PREFIX "/lib/" n "\0"
+ 
+ #define CONF_PATHS(n)                           \
+         "/etc/" n,                              \
+         "/run/" n,                              \
+         "/usr/local/lib/" n,                    \
+-        "/usr/lib/" n
++        "/usr/lib/" n,                          \
++        PREFIX "/lib/" n
+ 
+ #define CONF_PATHS_STRV(n)                      \
+         STRV_MAKE(CONF_PATHS(n))

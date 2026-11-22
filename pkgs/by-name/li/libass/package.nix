@@ -1,0 +1,56 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  yasm,
+  freetype,
+  fribidi,
+  harfbuzz,
+  fontconfigSupport ? true,
+  fontconfig ? null, # fontconfig support
+  largeTilesSupport ? false, # Use larger tiles in the rasterizer
+  libiconv,
+}:
+
+assert fontconfigSupport -> fontconfig != null;
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libass";
+  version = "0.17.5";
+
+  src = fetchurl {
+    url = "https://github.com/libass/libass/releases/download/${finalAttrs.version}/libass-${finalAttrs.version}.tar.xz";
+    hash = "sha256-LcolwODIN93wC1IBGz+CysHk3dOtAYIngGsMIoiGSsw=";
+  };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  configureFlags = [
+    (lib.enableFeature fontconfigSupport "fontconfig")
+    (lib.enableFeature largeTilesSupport "large-tiles")
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    yasm
+  ];
+
+  buildInputs = [
+    freetype
+    fribidi
+    harfbuzz
+  ]
+  ++ lib.optional fontconfigSupport fontconfig;
+
+  meta = {
+    description = "Portable ASS/SSA subtitle renderer";
+    homepage = "https://github.com/libass/libass";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
+  };
+})

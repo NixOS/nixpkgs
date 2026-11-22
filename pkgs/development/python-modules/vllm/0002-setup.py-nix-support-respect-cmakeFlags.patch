@@ -1,0 +1,28 @@
+diff --git a/setup.py b/setup.py
+index 37bfc3e41b..8281d56590 100644
+--- a/setup.py
++++ b/setup.py
+@@ -22,6 +22,15 @@ from setuptools_rust.build import build_rust
+ from setuptools_scm import get_version
+ from torch.utils.cpp_extension import CUDA_HOME, ROCM_HOME
+ 
++import os
++import json
++
++if "NIX_ATTRS_JSON_FILE" in os.environ:
++    with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
++        NIX_ATTRS = json.load(f)
++else:
++    NIX_ATTRS = { "cmakeFlags": os.environ.get("cmakeFlags", "").split() }
++
+ # Select vLLM release tags, excluding crate tags such as "proto-v0.3.0".
+ VLLM_GIT_DESCRIBE_COMMAND = [
+     "git",
+@@ -270,6 +279,7 @@ class cmake_build_ext(build_ext):
+         cmake_args = [
+             f"-DCMAKE_BUILD_TYPE={cfg}",
+             f"-DVLLM_TARGET_DEVICE={VLLM_TARGET_DEVICE}",
++            *NIX_ATTRS["cmakeFlags"],
+         ]
+ 
+         verbose = envs.VERBOSE

@@ -1,0 +1,13 @@
+diff --git c/src/meson.build i/src/meson.build
+index a92e46fe2..3514ae85b 100644
+--- c/src/meson.build
++++ i/src/meson.build
+@@ -1238,7 +1238,7 @@ if get_option('tests').enabled()
+   env.set('HBHEADERS', ' '.join(HBHEADERS))
+ 
+   if cpp.get_argument_syntax() != 'msvc' and not meson.is_cross_build() # ensure the local tools are usable
+-    dist_check_script += ['check-static-inits', 'check-symbols']
++    dist_check_script += ['check-static-inits']
+     if get_option('wasm').disabled() and not get_option('with_libstdcxx')
+       dist_check_script += ['check-libstdc++']
+     endif

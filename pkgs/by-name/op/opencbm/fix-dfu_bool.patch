@@ -1,0 +1,16 @@
+diff --git a/xum1541cfg/dfu-programmer-0.5.4/src/dfu-bool.h b/xum1541cfg/dfu-programmer-0.5.4/src/dfu-bool.h
+index 3dbe5a53..c77bc686 100644
+--- a/xum1541cfg/dfu-programmer-0.5.4/src/dfu-bool.h
++++ b/xum1541cfg/dfu-programmer-0.5.4/src/dfu-bool.h
+@@ -1,9 +1,6 @@
+ #ifndef __DFU_BOOL_H__
+ #define __DFU_BOOL_H__
+ 
+-typedef enum {
+-    false = 0,
+-    true  = 1
+-} dfu_bool;
+-
++#include <stdbool.h>
++#define dfu_bool bool
+ #endif

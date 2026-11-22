@@ -1,0 +1,124 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  click,
+  filelock,
+  fsspec,
+  hf-xet,
+  httpx2,
+  packaging,
+  pyyaml,
+  tqdm,
+  typing-extensions,
+
+  # optional-dependencies
+  # torch
+  torch,
+  safetensors,
+  # fastai
+  toml,
+  fastai,
+  fastcore,
+  # gradio
+  gradio,
+  requests,
+  # oauth
+  authlib,
+  fastapi,
+  itsdangerous,
+  # mcp
+  mcp,
+
+  # tests
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "huggingface-hub";
+  version = "2.4.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "huggingface";
+    repo = "huggingface_hub";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EbKvIHuUUUcA24dfB4pFJlrAo6Q4WCIPbJps/KUZxXY=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    click
+    filelock
+    fsspec
+    hf-xet
+    httpx2
+    packaging
+    pyyaml
+    tqdm
+    typing-extensions
+  ];
+
+  optional-dependencies = {
+    all = [
+    ];
+    fastai = [
+      toml
+      fastai
+      fastcore
+    ];
+    gradio = [
+      gradio
+      requests
+    ];
+    hf_xet = [
+      hf-xet
+    ];
+    mcp = [
+      mcp
+    ];
+    oauth = [
+      authlib
+      fastapi
+      itsdangerous
+    ];
+    torch = [
+      torch
+      safetensors
+    ]
+    ++ safetensors.optional-dependencies.torch;
+  };
+
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
+
+  pythonImportsCheck = [ "huggingface_hub" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
+  meta = {
+    description = "Download and publish models and other files on the huggingface.co hub";
+    mainProgram = "hf";
+    homepage = "https://github.com/huggingface/huggingface_hub";
+    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      osbm
+    ];
+  };
+})

@@ -1,0 +1,13 @@
+diff --git a/gui/build.sh b/gui/build.sh
+index a858a81..ac43f52 100755
+--- a/gui/build.sh
++++ b/gui/build.sh
+@@ -94,6 +94,8 @@ function buildQmake {
+     mkdir -p $QTBUILD
+     $QMAKE -early QMAKE_CC=$CC QMAKE_CXX=$CXX QMAKE_LINK=$CXX -o "$QTBUILD/Makefile" CONFIG+=release VENDOR_PATH="${VENDOR_PATH}" $PROJECT
+     #CONFIG=+force_debug_info CONFIG+=debug CONFIG+=debug_and_release
++    sed -i 's|@qtbase@/libexec/qmlcachegen|@qtdeclarative@/libexec/qmlcachegen|g' $QTBUILD/Makefile
++    sed -i 's|@qtbase@/bin/lrelease|@qttools@/bin/lrelease|g' $QTBUILD/Makefile
+ }
+
+ function renameOutput {

@@ -1,0 +1,24 @@
+diff --git a/KikoPlay.pro b/KikoPlay.pro
+index e3f57f5..813e42a 100644
+--- a/KikoPlay.pro
++++ b/KikoPlay.pro
+@@ -749,14 +749,14 @@ linux-g++* {
+ 
+ unix {
+     # Install settings
+-    target.path += /usr/bin
+-    unix:desktop.path = /usr/share/applications
++    target.path += OUTPATH/bin
++    unix:desktop.path = OUTPATH/share/applications
+     unix:desktop.files = io.github.KikoPlayProject.KikoPlay.desktop
+-    unix:icons.path = /usr/share/icons/hicolor/128x128/apps
++    unix:icons.path = OUTPATH/share/icons/hicolor/128x128/apps
+     unix:icons.files = io.github.KikoPlayProject.KikoPlay.png
+-    unix:metainfo.path = /usr/share/metainfo
++    unix:metainfo.path = OUTPATH/share/metainfo
+     unix:metainfo.files = io.github.KikoPlayProject.KikoPlay.metainfo.xml
+-    unix:web.path = /usr/share/kikoplay/web
++    unix:web.path = OUTPATH/share/kikoplay/web
+     unix:web.files = web/*
+ 
+     INSTALLS += target desktop icons metainfo web

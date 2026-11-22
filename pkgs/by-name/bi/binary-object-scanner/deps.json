@@ -1,0 +1,87 @@
+[
+  {
+    "pname": "Blake3",
+    "version": "1.1.0",
+    "hash": "sha256-gSXmXolZOlon1UG2miI9bdS1542vGR8EyukwIkqXdoE="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "OpenMcdf",
+    "version": "2.3.1",
+    "hash": "sha256-7Mjp7oAQCy+X/UG/40NzzDdYho3CbOd0HW2w0bE21QI="
+  },
+  {
+    "pname": "SabreTools.ASN1",
+    "version": "1.5.1",
+    "hash": "sha256-J6Iw44x6DGSAWmo4q1+sTrkcIc41eEBjChYNdazhvwM="
+  },
+  {
+    "pname": "SabreTools.Compression",
+    "version": "0.6.3",
+    "hash": "sha256-ZgoJzy7QpIl5Qqlk8O4DYXpV6kIaf04zStaV8SvzJNE="
+  },
+  {
+    "pname": "SabreTools.Hashing",
+    "version": "1.4.1",
+    "hash": "sha256-tCOMMhRtdW16NWi7fCkqXWls5Tb108LawDjWAqBIaLg="
+  },
+  {
+    "pname": "SabreTools.IO",
+    "version": "1.6.2",
+    "hash": "sha256-RrSr9yGfqUGIu5iG0AAv0MwZ2/+9a/2XNYaPOPFsNzM="
+  },
+  {
+    "pname": "SabreTools.Matching",
+    "version": "1.5.1",
+    "hash": "sha256-YrcdBXJKFfoD3+S4XkoAUH4LhN1rPk5DMY6z9UwTXQ8="
+  },
+  {
+    "pname": "SabreTools.Models",
+    "version": "1.5.8",
+    "hash": "sha256-6Erd8nBwLVK3KVmZPAH2P58NQbinCMW98gveqoo1WL8="
+  },
+  {
+    "pname": "SabreTools.Serialization",
+    "version": "1.8.4",
+    "hash": "sha256-LjtX79eJGeD1Bz+SWeZP/8BMGo+ZEHNnLEa3MQ2d3rU="
+  },
+  {
+    "pname": "SabreTools.Serialization",
+    "version": "1.8.6",
+    "hash": "sha256-zJRpTturGPiFSm05XMxOEg5G1gdT05VhuLgNyikXLBM="
+  },
+  {
+    "pname": "SharpCompress",
+    "version": "0.38.0",
+    "hash": "sha256-bQL3kazuqbuqn+Csy9RYMMUsNMtqkGXF7x32s787UBM="
+  },
+  {
+    "pname": "System.IO.Hashing",
+    "version": "8.0.0",
+    "hash": "sha256-szOGt0TNBo6dEdC3gf6H+e9YW3Nw0woa6UnCGGGK5cE="
+  },
+  {
+    "pname": "System.Text.Encoding.CodePages",
+    "version": "8.0.0",
+    "hash": "sha256-fjCLQc1PRW0Ix5IZldg0XKv+J1DqPSfu9pjMyNBp7dE="
+  },
+  {
+    "pname": "UnshieldSharp",
+    "version": "1.9.4",
+    "hash": "sha256-ie1OBWmOYoAx0u8gzUj+ay/K/h96XessaGMsxRlI6WM="
+  },
+  {
+    "pname": "WiseUnpacker",
+    "version": "1.5.6",
+    "hash": "sha256-zsAEUN1/4mdl+J2Vk8kA/1XXzomiMQ72hjHgndB6ZrY="
+  },
+  {
+    "pname": "ZstdSharp.Port",
+    "version": "0.8.1",
+    "hash": "sha256-PeQvyz3lUrK+t+n1dFtNXCLztQtAfkqUuM6mOqBZHLg="
+  }
+]

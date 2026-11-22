@@ -1,0 +1,93 @@
+From f3f792cc05080a4bcc3c2886c0c7cee9294c4a05 Mon Sep 17 00:00:00 2001
+From: Jordan Moore <lockbox@struct.foo>
+Date: Mon, 2 Jun 2025 16:58:31 -0400
+Subject: [PATCH] fix: build with modern cmake
+
+---
+ CMakeLists.txt        | 19 +------------------
+ kstool/CMakeLists.txt |  2 +-
+ llvm/CMakeLists.txt   | 15 +--------------
+ 3 files changed, 3 insertions(+), 33 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 938d4983..9ce08362 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # Keystone Assembler Engine (www.keystone-engine.org)
+ # By Nguyen Anh Quynh, 2016
+ 
+-cmake_minimum_required(VERSION 2.8.7)
++cmake_minimum_required(VERSION 3.10.0)
+ project(keystone)
+ 
+ set(KEYSTONE_VERSION_MAJOR 0)
+@@ -15,23 +15,6 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+   set(CMAKE_BUILD_TYPE "Debug")
+ endif()
+ 
+-if (POLICY CMP0022)
+-  cmake_policy(SET CMP0022 NEW) # automatic when 2.8.12 is required
+-endif()
+-
+-if (POLICY CMP0051)
+-  # CMake 3.1 and higher include generator expressions of the form
+-  # $<TARGETLIB:obj> in the SOURCES property.  These need to be
+-  # stripped everywhere that access the SOURCES property, so we just
+-  # defer to the OLD behavior of not including generator expressions
+-  # in the output for now.
+-  cmake_policy(SET CMP0051 OLD)
+-endif()
+-
+-if (POLICY CMP0063)
+-  set(CMAKE_POLICY_DEFAULT_CMP0063 NEW) # automatic when 3.3.2 is required
+-endif()
+-
+ if (CMAKE_VERSION VERSION_LESS 3.1.20141117)
+   set(cmake_3_2_USES_TERMINAL)
+ else()
+diff --git a/kstool/CMakeLists.txt b/kstool/CMakeLists.txt
+index d28da481..25113821 100644
+--- a/kstool/CMakeLists.txt
++++ b/kstool/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # Kstool for Keystone assembler engine.
+ # By Nguyen Anh Quynh, 2016
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10.0)
+ 
+ project(kstool)
+ 
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index d926b082..518613a5 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ # See docs/CMake.html for instructions about how to build LLVM with CMake.
+ 
+-cmake_minimum_required(VERSION 2.8.7)
++cmake_minimum_required(VERSION 3.10.0)
+ 
+ set(LLVM_INSTALL_TOOLCHAIN_ONLY ON)
+ 
+@@ -9,19 +9,6 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+   set(CMAKE_BUILD_TYPE "Debug")
+ endif()
+ 
+-if(POLICY CMP0022)
+-  cmake_policy(SET CMP0022 NEW) # automatic when 2.8.12 is required
+-endif()
+-
+-if (POLICY CMP0051)
+-  # CMake 3.1 and higher include generator expressions of the form
+-  # $<TARGETLIB:obj> in the SOURCES property.  These need to be
+-  # stripped everywhere that access the SOURCES property, so we just
+-  # defer to the OLD behavior of not including generator expressions
+-  # in the output for now.
+-  cmake_policy(SET CMP0051 OLD)
+-endif()
+-
+ if(CMAKE_VERSION VERSION_LESS 3.1.20141117)
+   set(cmake_3_2_USES_TERMINAL)
+ else()

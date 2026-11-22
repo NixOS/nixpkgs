@@ -1,0 +1,11 @@
+--- a/src/orpie/dune	2021-10-05 06:09:09.040120000 +0200
++++ b/src/orpie/dune	2021-10-05 06:10:06.568418512 +0200
+@@ -18,7 +18,7 @@
+ ; Support $PREFIX for overriding installation location
+ (rule
+   (targets install.ml)
+-  (action (run %{project_root}/scripts/compute_prefix subst %{deps} %{targets}))
++  (action (copy# %{deps} %{targets}))
+   (deps (file install.ml.in)))
+ 
+ 

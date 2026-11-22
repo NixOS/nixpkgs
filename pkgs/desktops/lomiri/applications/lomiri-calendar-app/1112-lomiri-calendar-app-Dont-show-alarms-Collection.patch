@@ -1,0 +1,46 @@
+From 2e8411528eddb5e3e76edef417ed96ce1ed82466 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Mon, 27 Jan 2025 22:26:52 +0100
+Subject: [PATCH] Don't show alarms Collection
+
+---
+ src/qml/EventListModel.qml | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/qml/EventListModel.qml b/src/qml/EventListModel.qml
+index 8e9c958a..b40d84a6 100644
+--- a/src/qml/EventListModel.qml
++++ b/src/qml/EventListModel.qml
+@@ -93,6 +93,11 @@ OrganizerModel {
+         var collections = eventModel.collections;
+         for(var i = 0 ; i < collections.length ; ++i) {
+             var cal = collections[i];
++            // don't show Alarms collection
++            if (cal.name === "Alarms") {
++                continue
++            }
++
+             // Handle the special QtContactBirthdays calendar from lomiri-abook2cal-syncd
+             if (cal.name === "QtContactBirthdays") {
+                 cal.name = i18n.tr("Birthdays & Anniversaries")
+@@ -106,15 +111,15 @@ OrganizerModel {
+ 
+     function getWritableAndSelectedCollections(){
+         var cals = [];
+-        var collections = eventModel.collections;
++        var collections = getCollections();
+         for(var i = 0 ; i < collections.length ; ++i) {
+             var cal = collections[i];
++
+             if( cal.extendedMetaData("visible") === true &&
+                     !collectionIsReadOnly(cal)) {
+                 cals.push(cal);
+             }
+         }
+-        cals.sort(eventModel._sortCollections);
+         return cals
+     }
+ 
+-- 
+GitLab
+

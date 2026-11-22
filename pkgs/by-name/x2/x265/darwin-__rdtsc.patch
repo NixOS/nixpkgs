@@ -1,0 +1,29 @@
+From 5ad351f7d271d0be0611797542c831898b2f531c Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Sun, 11 Aug 2024 22:09:34 +0100
+Subject: [PATCH] source/test/testharness.h: don't redefine `__rdtsc()` builtin
+
+On darwin clang-16 provides `__rdtsc()` builtin. As a result the build
+fails in `nixpkgs` as:
+
+    source/test/testharness.h:78:24: error: static declaration of '__rdtsc' follows non-static declaration
+    static inline uint32_t __rdtsc(void)
+                           ^
+    x265_3.6/source/test/testharness.h:78:24: note: '__rdtsc' is a builtin with type 2
+
+The change avoid redefinition on targets that define `__rdtsc()` builtin.
+---
+ source/test/testharness.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/test/testharness.h
++++ b/test/testharness.h
+@@ -69,6 +69,8 @@ protected:
+ #include <intrin.h>
+ #elif HAVE_RDTSC
+ #include <intrin.h>
++#elif defined(__has_builtin) && __has_builtin(__rdtsc)
++/* compiler-provided builtin */
+ #elif (!defined(__APPLE__) && (defined (__GNUC__) && (defined(__x86_64__) || defined(__i386__))))
+ #include <x86intrin.h>
+ #elif ( !defined(__APPLE__) && defined (__GNUC__) && defined(__ARM_NEON__))

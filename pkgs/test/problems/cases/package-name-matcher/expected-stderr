@@ -1,0 +1,3 @@
+error: Failed assertions:
+- There is a problems.matchers with `package = "a"` and `name = "b". Use the following instead:
+  problems.handlers.a.b = "error";

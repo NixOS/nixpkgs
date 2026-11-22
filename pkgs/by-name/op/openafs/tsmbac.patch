@@ -1,0 +1,75 @@
+diff -ru openafs-1.8.13.2/src/butc/afsxbsa.c openafs-1.8.13.2.new/src/butc/afsxbsa.c
+--- openafs-1.8.13.2/src/butc/afsxbsa.c	2025-01-23 12:12:55.000000000 -0500
++++ openafs-1.8.13.2.new/src/butc/afsxbsa.c	2025-07-13 19:30:19.513895421 -0400
+@@ -631,7 +631,7 @@
+ #if defined(AFS_AIX_ENV)
+         dynlib = dlopen("/usr/lib/libApiDS.a(dsmapish.o)", RTLD_NOW | RTLD_LOCAL | RTLD_MEMBER);
+ #elif defined (AFS_AMD64_LINUX_ENV)
+-	dynlib = dlopen("/usr/lib64/libApiTSM64.so", RTLD_NOW | RTLD_LOCAL);
++	dynlib = dlopen(XBSA_TSMLIB, RTLD_NOW | RTLD_LOCAL);
+ #elif defined(AFS_SUN5_ENV) || defined(AFS_LINUX_ENV)
+         dynlib = dlopen("/usr/lib/libApiDS.so", RTLD_NOW | RTLD_LOCAL);
+ #else
+diff -ru openafs-1.8.13.2/src/butc/lwps.c openafs-1.8.13.2.new/src/butc/lwps.c
+--- openafs-1.8.13.2/src/butc/lwps.c	2025-01-23 12:12:55.000000000 -0500
++++ openafs-1.8.13.2.new/src/butc/lwps.c	2025-07-14 01:02:51.409677422 -0400
+@@ -53,7 +53,7 @@
+ /* XBSA Global Parameters */
+ extern afs_int32 xbsaType;
+ #ifdef xbsa
+-struct butx_transactionInfo butxInfo;
++extern struct butx_transactionInfo butxInfo;
+ #endif
+ 
+ static struct TapeBlock {		/* A 16KB tapeblock */
+Only in openafs-1.8.13.2.new/src/butc: lwps.c~
+diff -ru openafs-1.8.13.2/src/cf/tivoli.m4 openafs-1.8.13.2.new/src/cf/tivoli.m4
+--- openafs-1.8.13.2/src/cf/tivoli.m4	2025-01-23 12:12:55.000000000 -0500
++++ openafs-1.8.13.2.new/src/cf/tivoli.m4	2025-07-13 19:30:39.350794275 -0400
+@@ -1,45 +1,7 @@
+ AC_DEFUN([OPENAFS_TIVOLI_TESTS],[
+ dnl check for tivoli
+ AC_MSG_CHECKING(for tivoli tsm butc support)
+-XBSA_CFLAGS=""
+-if test "$enable_tivoli_tsm" = "yes"; then
+-        XBSADIR1=/usr/tivoli/tsm/client/api/bin/xopen
+-        XBSADIR2=/opt/tivoli/tsm/client/api/bin/xopen
+-        XBSADIR3=/usr/tivoli/tsm/client/api/bin/sample
+-        XBSADIR4=/opt/tivoli/tsm/client/api/bin/sample
+-        XBSADIR5=/usr/tivoli/tsm/client/api/bin64/sample
+-        XBSADIR6=/opt/tivoli/tsm/client/api/bin64/sample
+-
+-        if test -r "$XBSADIR3/dsmapifp.h"; then
+-                XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I$XBSADIR3"
+-                XBSA_XLIBS="-ldl"
+-                AC_MSG_RESULT([yes, $XBSA_CFLAGS])
+-        elif test -r "$XBSADIR4/dsmapifp.h"; then
+-                XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I$XBSADIR4"
+-                XBSA_XLIBS="-ldl"
+-                AC_MSG_RESULT([yes, $XBSA_CFLAGS])
+-        elif test -r "$XBSADIR5/dsmapifp.h"; then
+-                XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I$XBSADIR5"
+-                XBSA_XLIBS="-ldl"
+-                AC_MSG_RESULT([yes, $XBSA_CFLAGS])
+-        elif test -r "$XBSADIR6/dsmapifp.h"; then
+-                XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I$XBSADIR6"
+-                XBSA_XLIBS="-ldl"
+-                AC_MSG_RESULT([yes, $XBSA_CFLAGS])
+-        elif test -r "$XBSADIR1/xbsa.h"; then
+-                XBSA_CFLAGS="-Dxbsa -I$XBSADIR1"
+-                XBSA_XLIBS=""
+-                AC_MSG_RESULT([yes, $XBSA_CFLAGS])
+-        elif test -r "$XBSADIR2/xbsa.h"; then
+-                XBSA_CFLAGS="-Dxbsa -I$XBSADIR2"
+-                XBSA_XLIBS=""
+-                AC_MSG_RESULT([yes, $XBSA_CFLAGS])
+-        else
+-                AC_MSG_RESULT([no, missing xbsa.h and dsmapifp.h header files])
+-        fi
+-else
+-        AC_MSG_RESULT([no])
+-fi
++AC_MSG_RESULT([yes])
+ AC_SUBST(XBSA_CFLAGS)
+ AC_SUBST(XBSA_XLIBS)
+ XLIBS="$XBSA_XLIBS $XLIBS"

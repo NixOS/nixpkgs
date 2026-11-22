@@ -1,0 +1,158 @@
+# Configuration for Amazon EC2 instances. (Note that this file is a
+# misnomer - it should be "amazon-config.nix" or so, not
+# "amazon-image.nix", since it's used not only to build images but
+# also to reconfigure instances. However, we can't rename it because
+# existing "configuration.nix" files on EC2 instances refer to it.)
+
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  inherit (lib) mkDefault mkIf;
+  cfg = config.ec2;
+  efiBoot = cfg.bootMode != "legacy-bios";
+  biosBoot = cfg.bootMode != "uefi";
+  # The Limine image has an ESP even when it boots with legacy BIOS.
+  hasEsp = efiBoot || config.boot.loader.limine.enable;
+in
+
+{
+  imports = [
+    ../profiles/headless.nix
+    # Note: While we do use the headless profile, we also explicitly
+    # turn on the serial console on ttyS0 below. This is because
+    # AWS does support accessing the serial console:
+    # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configure-access-to-serial-console.html
+    ./ec2-data.nix
+    ./amazon-init.nix
+  ];
+
+  config = {
+
+    assertions = [
+      {
+        assertion = biosBoot -> pkgs.stdenv.hostPlatform.isx86;
+        message = "ec2.bootMode = \"${cfg.bootMode}\" needs legacy BIOS, which only x86 instances have.";
+      }
+    ];
+
+    boot.growPartition = true;
+
+    fileSystems."/" = lib.mkDefault {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
+      autoResize = true;
+    };
+
+    fileSystems.${config.boot.loader.efi.efiSysMountPoint} = mkIf hasEsp (
+      lib.mkDefault {
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+        options = [
+          "fmask=0077"
+          "dmask=0077"
+        ];
+      }
+    );
+
+    boot.extraModulePackages = [
+      config.boot.kernelPackages.ena
+    ];
+    boot.initrd.availableKernelModules = [
+      "nvme"
+    ]
+    # Xen instance types, such as t2, need it to find the root disk.
+    ++ lib.optional pkgs.stdenv.hostPlatform.isx86 "xen-blkfront";
+    boot.kernelParams =
+      let
+        # Amazon recommends setting this to the highest possible value for a good EBS
+        # experience, which prior to 4.15 was 255.
+        # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
+        nvmeTimeout =
+          if lib.versionAtLeast config.boot.kernelPackages.kernel.version "4.15" then "4294967295" else "255";
+      in
+      [
+        "console=ttyS0,115200n8"
+        "random.trust_cpu=on"
+        "nvme_core.io_timeout=${nvmeTimeout}"
+      ];
+
+    # Prevent the nouveau kernel module from being loaded, as it
+    # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
+    # Also blacklist xen_fbfront to prevent a 30 second delay during
+    # boot.
+    boot.blacklistedKernelModules = [
+      "nouveau"
+      "xen_fbfront"
+    ];
+
+    boot.loader.grub.device = if biosBoot then "/dev/xvda" else "nodev";
+    boot.loader.grub.efiSupport = efiBoot;
+    boot.loader.grub.efiInstallAsRemovable = efiBoot;
+    boot.loader.timeout = 1;
+    boot.loader.grub.extraConfig = ''
+      serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+      terminal_output console serial
+      terminal_input console serial
+    '';
+    boot.loader.limine = {
+      efiSupport = efiBoot;
+      efiInstallAsRemovable = efiBoot;
+      biosSupport = biosBoot;
+      biosDevice = if biosBoot then "/dev/xvda" else "nodev";
+      extraConfig = "serial: yes";
+    };
+
+    systemd.services.fetch-ec2-metadata = {
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      path = with pkgs; [
+        bzip2
+        curl
+        file
+        gzip
+        lzip
+        mktemp
+        xz
+        zstd
+      ];
+      script = builtins.readFile ./ec2-metadata-fetcher.sh;
+      serviceConfig.Type = "oneshot";
+      serviceConfig.StandardOutput = "journal+console";
+    };
+
+    # Amazon-issued AMIs include the SSM Agent by default, so we do the same.
+    # https://docs.aws.amazon.com/systems-manager/latest/userguide/ami-preinstalled-agent.html
+    services.amazon-ssm-agent.enable = true;
+
+    # Allow root logins only using the SSH key that the user specified
+    # at instance creation time.
+    services.openssh.enable = true;
+    services.openssh.settings.PermitRootLogin = "prohibit-password";
+
+    # Enable the serial console on ttyS0
+    systemd.services."serial-getty@ttyS0".enable = true;
+
+    # Creates symlinks for block device names.
+    services.udev.packages = [ pkgs.amazon-ec2-utils ];
+
+    # Force getting the hostname from EC2.
+    networking.hostName = mkDefault "";
+
+    # Always include cryptsetup so that Charon can use it.
+    environment.systemPackages = [ pkgs.cryptsetup ];
+
+    # EC2 has its own NTP server provided by the hypervisor
+    networking.timeServers = [ "169.254.169.123" ];
+
+    # udisks has become too bloated to have in a headless system
+    # (e.g. it depends on GTK).
+    services.udisks2.enable = false;
+  };
+  meta.maintainers = with lib.maintainers; [ arianvp ];
+}

@@ -1,0 +1,32 @@
+From ff6f49f32de68ed0ec9405a1ed73e9e845c77b1c Mon Sep 17 00:00:00 2001
+From: Aaron Masover <amasover@gmail.com>
+Date: Wed, 19 Aug 2026 23:47:53 -0600
+Subject: [PATCH] gnome-shell: exclude directories from gresource depend_files
+
+The find that collects gresource asset dependencies also prints the
+three searched directories themselves. Meson 1.12 validates every
+depend_files entry as an existing *file* (File.from_source_file uses
+os.path.isfile), so configuring with -Dgnome_shell_gresource=true now
+fails on the first entry:
+
+    common/gnome-shell/meson.build:98:28: ERROR: File .../icons does not exist.
+
+Meson 1.11.2 and earlier did not validate these entries, which is why
+the same tree configured fine before. Filter the find to exclude
+directories.
+---
+ common/gnome-shell/meson.build | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/common/gnome-shell/meson.build b/common/gnome-shell/meson.build
+index bd71648d0..fa80c0c7f 100644
+--- a/common/gnome-shell/meson.build
++++ b/common/gnome-shell/meson.build
+@@ -90,6 +90,7 @@ foreach variant : get_option('variants')
+       meson.current_source_dir() / gnome_shell_ver / 'icons',
+       meson.current_source_dir() / gnome_shell_ver / 'common-assets',
+       meson.current_source_dir() / gnome_shell_ver / variant + '-assets',
++      '-not', '-type', 'd',
+       check : true
+     ).stdout().split()
+ 

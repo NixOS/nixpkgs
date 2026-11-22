@@ -1,0 +1,95 @@
+diff --git a/src-tauri/qf_api/src/endpoints/analytics.rs b/src-tauri/qf_api/src/endpoints/analytics.rs
+index b7ea6076..1476cfc1 100644
+--- a/src-tauri/qf_api/src/endpoints/analytics.rs
++++ b/src-tauri/qf_api/src/endpoints/analytics.rs
+@@ -52,35 +52,7 @@ impl AnalyticsRoute {
+ 
+     pub fn start(self: Arc<Self>) -> Result<(), ApiError> {
+         let mut stop = self._stop.lock().unwrap();
+-        *stop = false;
+-        tokio::spawn({
+-            let this = Arc::clone(&self);
+-            async move {
+-                // Create Timer for sending metrics
+-                let mut last_metric_time = Instant::now();
+-                loop {
+-                    if *this._stop.lock().unwrap() {
+-                        break;
+-                    }
+-                    if last_metric_time.elapsed() < Duration::from_secs(30) || !this.is_active() {
+-                        tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
+-                        continue;
+-                    }
+-                    last_metric_time = Instant::now();
+-
+-                    match this.send_current_metrics().await {
+-                        Ok(_) => {
+-                            this._metrics.lock().unwrap().clear();
+-                        }
+-                        Err(e) => {
+-                            eprintln!("Failed to send metrics: {}", e);
+-                        }
+-                    };
+-                    // Sleep for a while before checking again
+-                    tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
+-                }
+-            }
+-        });
++        *stop = true;
+         Ok(())
+     }
+ 
+@@ -100,40 +72,6 @@ impl AnalyticsRoute {
+         mut retry_count: i64,
+         data: Value,
+     ) -> Result<(), ApiError> {
+-        let client = self.client.upgrade().expect("Client should not be dropped");
+-
+-        while retry_count >= 0 {
+-            let err = match client
+-                .call_api::<Value>(
+-                    Method::POST,
+-                    format!("{}", url).as_str(),
+-                    Some(data.clone()),
+-                    None,
+-                    ResponseFormat::Json,
+-                )
+-                .await
+-            {
+-                Ok(_) => {
+-                    return Ok(());
+-                }
+-                Err(e) => e,
+-            };
+-            if let ApiError::UserBanned(_) = &err {
+-                let mut stop = self._stop.lock().unwrap();
+-                *stop = true;
+-                return Err(err);
+-            }
+-
+-            if retry_count == 0 {
+-                return Err(err);
+-            }
+-            retry_count -= 1;
+-            println!(
+-                "Retrying to send analytics data, attempts left: {}",
+-                retry_count
+-            );
+-            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+-        }
+         Ok(())
+     }
+ 
+diff --git a/src/contexts/app.context.tsx b/src/contexts/app.context.tsx
+index 673440d9..26d09d0b 100644
+--- a/src/contexts/app.context.tsx
++++ b/src/contexts/app.context.tsx
+@@ -124,7 +124,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
+     const end = context.indexOf("</ID>");
+     const id = context.substring(start, end);
+ 
+-    if (id == info?.tos_uuid) return;
++    if (info || true) return;
+     const modalId = modals.open({
+       title: useTranslateComponent("modals.tos.title", { version: id }),
+       withCloseButton: false,

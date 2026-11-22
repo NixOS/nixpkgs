@@ -1,0 +1,13 @@
+diff --git a/scripts/folders-color-chooser b/scripts/folders-color-chooser
+index 749725212..989bdf78c 100755
+--- a/scripts/folders-color-chooser
++++ b/scripts/folders-color-chooser
+@@ -33,6 +33,8 @@ icon_pack_path() {
+     echo "${XDG_DATA_HOME:-"${HOME}/.local/share"}/icons/${icon_pack_theme}"
+   elif [[ -d "${HOME}/.icons/${icon_pack_theme}" ]]; then
+     echo "${HOME}/.icons/${icon_pack_theme}"
++  elif [[ -d "$out/share/icons/${icon_pack_theme}" ]]; then
++    echo "$out/share/icons/${icon_pack_theme}"
+   else
+     data_dirs=$(echo "${XDG_DATA_DIRS:-"/usr/local/share:/usr/share"}" | tr ":" "\n")
+     for path in $data_dirs; do

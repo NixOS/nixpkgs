@@ -1,0 +1,20 @@
+else the build fails with error: ‘stdout’ undeclared
+---
+ src/util/np_skiplist.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/util/np_skiplist.c b/src/util/np_skiplist.c
+index c52b9f39..2d7a08ed 100644
+--- a/src/util/np_skiplist.c
++++ b/src/util/np_skiplist.c
+@@ -9,6 +9,7 @@
+ // been compared
+ 
+ #include "util/np_skiplist.h"
++#include <stdio.h>
+ 
+ /**
+  * Implementation of a skip list
+-- 
+2.54.0
+

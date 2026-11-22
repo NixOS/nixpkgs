@@ -1,0 +1,28 @@
+From cf3051c1251c21d65344c953730111941fa7125e Mon Sep 17 00:00:00 2001
+From: Marcel <me@m4rc3l.de>
+Date: Sat, 3 Oct 2026 19:38:58 +0200
+Subject: [PATCH] setup.py: devendor lexbor
+
+---
+ setup.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 60f71bd..d821d41 100644
+--- a/setup.py
++++ b/setup.py
+@@ -122,9 +122,9 @@ def make_extensions():
+             files_to_compile_lxb,
+             language="c",
+             include_dirs=[
+-                "lexbor/source/",
++                "@lexbor@/include/",
+             ],
+-            extra_objects=extra_objects_lxb,
++            libraries=["lexbor"],
+             extra_compile_args=compile_arguments_lxb,
+         )
+     )
+-- 
+2.54.0
+

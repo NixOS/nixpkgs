@@ -1,0 +1,15 @@
+diff --git a/src/common/tracker-landlock.c b/src/common/tracker-landlock.c
+index a3f390585..3629107e7 100644
+--- a/src/common/tracker-landlock.c
++++ b/src/common/tracker-landlock.c
+@@ -192,6 +192,10 @@ tracker_landlock_init (const gchar         *executable_name,
+ 		  (LANDLOCK_ACCESS_FS_EXECUTE |
+ 		   LANDLOCK_ACCESS_FS_READ_FILE |
+ 		   LANDLOCK_ACCESS_FS_READ_DIR) },
++		{ "/nix/store",
++		  (LANDLOCK_ACCESS_FS_EXECUTE |
++		   LANDLOCK_ACCESS_FS_READ_FILE |
++		   LANDLOCK_ACCESS_FS_READ_DIR) },
+ #if INTPTR_MAX == INT64_MAX
+ 		{ "/usr/lib64",
+ 		  (LANDLOCK_ACCESS_FS_EXECUTE |

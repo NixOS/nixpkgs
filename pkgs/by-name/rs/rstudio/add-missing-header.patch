@@ -1,0 +1,12 @@
+diff --git a/src/cpp/session/include/session/SessionPackageProvidedExtension.hpp b/src/cpp/session/include/session/SessionPackageProvidedExtension.hpp
+index 204aafa..05122cf 100644
+--- a/src/cpp/session/include/session/SessionPackageProvidedExtension.hpp
++++ b/src/cpp/session/include/session/SessionPackageProvidedExtension.hpp
+@@ -20,6 +20,7 @@
+ #include <vector>
+ 
+ #include <shared_core/json/Json.hpp>
++#include <shared_core/FilePath.hpp>
+ 
+ #include <boost/function.hpp>
+ #include <boost/noncopyable.hpp>

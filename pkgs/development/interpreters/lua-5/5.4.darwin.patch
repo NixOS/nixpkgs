@@ -1,0 +1,48 @@
+--- a/Makefile	2021-05-14 22:39:14.407200562 +0300
++++ b/Makefile	2021-05-14 22:36:23.828513407 +0300
+@@ -41,7 +41,7 @@
+ # What to install.
+ TO_BIN= lua luac
+ TO_INC= lua.h luaconf.h lualib.h lauxlib.h lua.hpp
+-TO_LIB= liblua.a
++TO_LIB= liblua.${pkgversion}.dylib
+ TO_MAN= lua.1 luac.1
+ 
+ # Lua version and release.
+@@ -60,6 +60,8 @@
+ 	cd src && $(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
+ 	cd src && $(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
+ 	cd doc && $(INSTALL_DATA) $(TO_MAN) $(INSTALL_MAN)
++	ln -s -f liblua.${pkgversion}.dylib $(INSTALL_LIB)/liblua.${luaversion}.dylib
++	ln -s -f liblua.${luaversion}.dylib $(INSTALL_LIB)/liblua.dylib
+ 
+ uninstall:
+ 	cd src && cd $(INSTALL_BIN) && $(RM) $(TO_BIN)
+--- a/src/Makefile	2021-05-14 22:35:38.575051882 +0300
++++ b/src/Makefile	2021-05-14 22:35:33.584631206 +0300
+@@ -32,7 +32,7 @@
+ 
+ PLATS= guess aix bsd c89 freebsd generic linux linux-readline macosx mingw posix solaris
+ 
+-LUA_A=	liblua.a
++LUA_A=	liblua.${pkgversion}.dylib
+ CORE_O=	lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o lundump.o lvm.o lzio.o
+ LIB_O=	lauxlib.o lbaselib.o lcorolib.o ldblib.o liolib.o lmathlib.o loadlib.o loslib.o lstrlib.o ltablib.o lutf8lib.o linit.o
+ BASE_O= $(CORE_O) $(LIB_O) $(MYOBJS)
+@@ -57,11 +57,13 @@
+ a:	$(ALL_A)
+ 
+ $(LUA_A): $(BASE_O)
+-	$(AR) $@ $(BASE_O)
+-	$(RANLIB) $@
++	$(CC) -dynamiclib -install_name $(out)/lib/liblua.${pkgversion}.dylib \
++		-compatibility_version ${pkgversion} -current_version ${pkgversion} \
++		-o liblua.${pkgversion}.dylib $^
+ 
+ $(LUA_T): $(LUA_O) $(LUA_A)
+-	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
++	$(CC) -fno-common $(MYLDFLAGS) \
++		-o $@ $(LUA_O) $(LUA_A) -L. -llua.${pkgversion} $(LIBS)
+ 
+ $(LUAC_T): $(LUAC_O) $(LUA_A)
+ 	$(CC) -o $@ $(LDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)

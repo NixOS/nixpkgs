@@ -1,0 +1,20 @@
+--- a/test_quickjs.py
++++ b/test_quickjs.py
+@@ -119,7 +119,7 @@
+         """
+         self.context.eval(code)
+         self.context.set_memory_limit(1000)
+-        with self.assertRaisesRegex(quickjs.JSException, "null"):
++        with self.assertRaisesRegex(quickjs.JSException, "out of memory"):
+             self.context.eval(code)
+         self.context.set_memory_limit(1000000)
+         self.context.eval(code)
+@@ -508,7 +508,7 @@
+         """)
+
+         self.assertEqual(f(100), 100)
+-        limit = 1500
++        limit = 3000
+         with self.assertRaises(quickjs.StackOverflow):
+             f(limit)
+         f.set_max_stack_size(2000 * limit)

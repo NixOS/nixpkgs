@@ -1,0 +1,55 @@
+From 074cb54aba5d6782dc1d6d1c9fd78e538ddfcd5c Mon Sep 17 00:00:00 2001
+From: John Ericson <John.Ericson@Obsidian.Systems>
+Date: Tue, 13 Oct 2026 15:12:38 -0400
+Subject: [PATCH] Don't let NetBSD's <nl_types.h> redeclare the host's locale_t
+
+`tools/compat` is compiled against the *host* libc, and `compat_defs.h` pulls in
+`<ctype.h>`, which on glibc drags in `bits/types/locale_t.h` and declares
+`locale_t` as `struct __locale_struct *`.
+
+Host tools then reach NetBSD's own headers through the shims `configure`
+generates into `tools/compat/include`, and NetBSD's `<nl_types.h>` does:
+
+    #if defined(_NETBSD_SOURCE)
+    #  ifndef __LOCALE_T_DECLARED
+    typedef struct _locale		*locale_t;
+    #  define __LOCALE_T_DECLARED
+    #  endif
+
+Nothing outside NetBSD's own headers sets `__LOCALE_T_DECLARED`, so on a glibc
+host the typedef fires a second time and the build stops:
+
+    nl_types.h:94:34: error: conflicting types for 'locale_t'; have 'struct _locale *'
+    bits/types/locale_t.h:24:20: note: previous declaration of 'locale_t' ...
+
+This is latent in NetBSD's own tree, because it only bites when the build host
+is not NetBSD. `compat_defs.h` is included by every host tool -- via
+`nbtool_config.h`, under `HAVE_NBTOOL_CONFIG_H` -- and always after `<ctype.h>`,
+so claiming the declaration here is both sufficient and correctly ordered.
+
+Assisted-by: Claude Code (Claude Opus 5.5)
+---
+ tools/compat/compat_defs.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/tools/compat/compat_defs.h b/tools/compat/compat_defs.h
+index ed8d0dbfae37..e5a3c6c400b9 100644
+--- a/tools/compat/compat_defs.h
++++ b/tools/compat/compat_defs.h
+@@ -108,6 +108,16 @@ typedef unsigned long ulong_t;
+ #include <limits.h>
+ #include <paths.h>
+ #include <ctype.h>
++
++/*
++ * <ctype.h> has just given us the host's locale_t. NetBSD's <nl_types.h>
++ * (and friends) will otherwise typedef their own, incompatible one, since
++ * the only thing suppressing that is a macro no non-NetBSD libc defines.
++ */
++#ifndef __LOCALE_T_DECLARED
++#define __LOCALE_T_DECLARED
++#endif
++
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <stdlib.h>

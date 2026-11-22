@@ -1,0 +1,61 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-auth,
+  grpcio,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+}:
+
+buildPythonPackage rec {
+  pname = "google-cloud-appengine-logging";
+  version = "1.11.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "google_cloud_appengine_logging";
+    inherit version;
+    hash = "sha256-zgU3kt+Y/eR5DF8HAXYIjJ6/DlWjfHVMj44Rso3bTXM=";
+  };
+
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
+    google-api-core
+    google-auth
+    grpcio
+    proto-plus
+    proto-plus
+    protobuf
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.appengine_logging"
+    "google.cloud.appengine_logging_v1"
+  ];
+
+  meta = {
+    description = "Appengine logging client library";
+    homepage = "https://github.com/googleapis/python-appengine-logging";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-appengine-logging-v${version}/packages/google-cloud-appengine-logging/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+}

@@ -1,0 +1,23 @@
+diff --git a/doc/CMakeLists.txt b/doc/CMakeLists.txt
+index eb60d2dc69..69d937b55f 100644
+--- a/doc/CMakeLists.txt
++++ b/doc/CMakeLists.txt
+@@ -41,6 +41,18 @@
+     VERBATIM
+     DEPENDS ${PROJECT_NAME}_doc
+   )
++
++  include(GNUInstallDirs)
++
++  install(
++    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/
++    DESTINATION ${CMAKE_INSTALL_DOCDIR}
++  )
++
++  install(
++    FILES ${CMAKE_CURRENT_BINARY_DIR}/doc/latex/refman.pdf
++    DESTINATION ${CMAKE_INSTALL_DOCDIR}
++  )
+ else()
+   message("Doxygen need to be installed to generate the doxygen documentation")
+ endif()

@@ -1,0 +1,13 @@
+diff --git a/src/imgui/imgui_extension.cpp b/src/imgui/imgui_extension.cpp
+index f1c072f..e3e901d 100644
+--- a/src/imgui/imgui_extension.cpp
++++ b/src/imgui/imgui_extension.cpp
+@@ -129,8 +129,6 @@ void ImGui_UpdateWindowInformation(bool mainWindow)
+ 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+ #if BOOST_OS_WINDOWS
+ 	io.ImeWindowHandle = mainWindow ? g_window_info.window_main.hwnd : g_window_info.window_pad.hwnd;
+-#else
+-	io.ImeWindowHandle = nullptr;
+ #endif
+ 
+ 	io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);

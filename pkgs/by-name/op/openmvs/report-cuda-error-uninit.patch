@@ -1,0 +1,25 @@
+Initialize the CUDA error name and description before logging them.
+
+cuGetErrorName and cuGetErrorString leave their out-parameters untouched when
+they fail, as they do with the CUDA driver stub (CUDA_ERROR_STUB_LIBRARY) on
+machines without a GPU. __reportCudaError then passes uninitialized pointers to
+printf, which crashes (e.g. in initDevice, before the CPU fallback is reached).
+
+--- a/libs/Common/UtilCUDA.h
++++ b/libs/Common/UtilCUDA.h
+@@ -54,10 +54,13 @@
+ inline CUresult __reportCudaError(CUresult result, LPCSTR errorMessage) {
+ 	if (result == CUDA_SUCCESS)
+ 		return CUDA_SUCCESS;
++	// the out-parameters are left untouched on failure (e.g. CUDA_ERROR_STUB_LIBRARY)
+ 	LPCSTR szName;
+-	cuGetErrorName(result, &szName);
++	if (cuGetErrorName(result, &szName) != CUDA_SUCCESS)
++		szName = "unknown";
+ 	LPCSTR szError;
+-	cuGetErrorString(result, &szError);
++	if (cuGetErrorString(result, &szError) != CUDA_SUCCESS)
++		szError = "unknown error";
+ 	#ifdef _DEBUG
+ 	VERBOSE("CUDA error at %s:%d: %s (%s (code %d) - %s)", __FILE__, __LINE__, errorMessage, szName, static_cast<unsigned>(result), szError);
+ 	#else

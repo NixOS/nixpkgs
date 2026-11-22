@@ -1,0 +1,77 @@
+{
+  lib,
+  stdenv,
+  skawarePackages,
+  targetPackages,
+  skalibs,
+  execline,
+  s6,
+}:
+
+skawarePackages.buildPackage {
+  pname = "s6-rc";
+  version = "0.7.0.0";
+  sha256 = "sha256-v1uM4NpaTucNZCuBi2HZkWp6m2SkV1lfOIET5UoYhog=";
+
+  manpages = skawarePackages.buildManPages {
+    pname = "s6-rc-man-pages";
+    version = "0.6.0.0.1";
+    sha256 = "sha256-zHkh5H0/nXsLjHJE9PT+2ga8gK1evm4ktheMqqNV1hQ=";
+    description = "mdoc(7) versions of the documentation for the s6-rc service manager";
+    maintainers = [ lib.maintainers.qyliss ];
+  };
+
+  meta.description = "Service manager for s6-based systems";
+  meta.platforms = lib.platforms.unix;
+
+  outputs = [
+    # "bin" "lib"
+    "out"
+    "dev"
+    "doc"
+  ];
+  buildInputs = [
+    skalibs
+    execline
+    s6
+  ];
+
+  configureFlags = [
+    "--libdir=${placeholder "out"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--bindir=${placeholder "out"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
+    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+  ];
+
+  # s6-rc-compile generates built-in service definitions containing
+  # absolute paths to execline, s6, and s6-rc programs.  If we're
+  # running s6-rc-compile as part of a Nix derivation, and we want to
+  # cross-compile that derivation, those paths will be wrong --
+  # they'll be for execline, s6, and s6-rc on the platform we're
+  # running s6-rc-compile on, not the platform we're targeting.
+  #
+  # We can detect this special case of s6-rc being used at build time
+  # in a derivation that's being cross-compiled, because that's the
+  # only time hostPlatform != targetPlatform.  When that happens we
+  # modify s6-rc-compile to use the configuration headers for the
+  # system we're cross-compiling for.
+  postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+    substituteInPlace src/s6-rc/s6-rc-compile.c \
+        --replace-fail '<execline/config.h>' '"${targetPackages.execline.dev}/include/execline/config.h"' \
+        --replace-fail '<s6/config.h>' '"${targetPackages.s6.dev}/include/s6/config.h"' \
+        --replace-fail '<s6-rc/config.h>' '"${targetPackages.s6-rc.dev}/include/s6-rc/config.h"'
+  '';
+
+  postInstall = ''
+    # remove all s6 executables from build directory
+    rm $(find -name "s6-rc-*" -type f -mindepth 1 -maxdepth 1 -executable)
+    rm s6-rc libs6rc*
+
+    mv doc $doc/share/doc/s6-rc/html
+    mv examples $doc/share/doc/s6-rc/examples
+  '';
+
+}

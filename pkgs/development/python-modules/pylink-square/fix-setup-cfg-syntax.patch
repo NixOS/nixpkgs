@@ -1,0 +1,24 @@
+diff --git a/setup.cfg b/setup.cfg
+index 22f5e1c..fcad35f 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -11,19 +11,3 @@ universal = 1
+ [behave]
+ color = True
+ summary = True
+-
+-[options.extras_require]
+-  dev =
+-    behave==1.2.5
+-    coverage==4.4.1
+-    psutil>=5.2.2
+-    pycodestyle>=2.3.1
+-    setuptools>=70.2.0
+-    six
+-    sphinx==1.4.8
+-    sphinx-argparse==0.1.15
+-    sphinx_rtd_theme==0.2.4
+-    sphinxcontrib-napoleon==0.5.3
+-    wheel
+-  test =
+-    mock==2.0.0

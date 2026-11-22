@@ -1,0 +1,57 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -20,7 +20,7 @@
+ PKG_CHECK_MODULES(XCB, xcb xcb-ewmh)
+ 
+ PKG_CHECK_MODULES(DBUS_GLIB, dbus-glib-1 >= 0.80)
+-SESSION_BUS_SERVICES_DIR=`$PKG_CONFIG --variable=session_bus_services_dir dbus-1`
++SESSION_BUS_SERVICES_DIR=$prefix/share/dbus-1/services
+ AC_SUBST([SESSION_BUS_SERVICES_DIR])
+ 
+ AC_ARG_WITH(
+@@ -32,35 +32,35 @@
+ AS_IF(
+     [test "x$panel" = xgnome2],
+         [PKG_CHECK_MODULES(LIBPANEL, libpanelapplet-3.0 >= 2.32.0)]
+-        LIBPANEL_APPLET_DIR=`$PKG_CONFIG --variable=prefix libpanelapplet-3.0`/share/gnome-panel/applets
+-        PLUGIN_DIR=`$PKG_CONFIG --variable=prefix libpanelapplet-3.0`/libexec
++        LIBPANEL_APPLET_DIR=$prefix/share/gnome-panel/applets
++        PLUGIN_DIR=$prefix/libexec
+         [AC_DEFINE(PANEL_GNOME, 1, [panel type])]
+         [AC_DEFINE(PANEL_GNOME2, 1, [panel type])]
+         ,
+     [test "x$panel" = xgnome3],
+         [PKG_CHECK_MODULES(LIBPANEL, libpanelapplet-4.0 >= 3.0.0)]
+-        LIBPANEL_APPLET_DIR=`$PKG_CONFIG --variable=libpanel_applet_dir libpanelapplet-4.0`
+-        PLUGIN_DIR=`$PKG_CONFIG --variable=prefix libpanelapplet-4.0`/libexec
++        LIBPANEL_APPLET_DIR=`$PKG_CONFIG --define-variable=prefix=$prefix --variable=libpanel_applet_dir libpanelapplet-4.0`
++        PLUGIN_DIR=$prefix/libexec
+         [AC_DEFINE(PANEL_GNOME, 1, [panel type])]
+         [AC_DEFINE(PANEL_GNOME3, 1, [panel type])]
+         ,
+     [test "x$panel" = xgnomeflashback],
+         [PKG_CHECK_MODULES(LIBPANEL, libpanel-applet >= 3.0.0)]
+-        LIBPANEL_APPLET_DIR=`$PKG_CONFIG --variable=libpanel_applet_dir libpanel-applet`
+-        PLUGIN_DIR=`$PKG_CONFIG --variable=prefix libpanel-applet`/libexec
++        LIBPANEL_APPLET_DIR=`$PKG_CONFIG --define-variable=prefix=$prefix --variable=libpanel_applet_dir libpanel-applet`
++        PLUGIN_DIR=$prefix/libexec
+         [AC_DEFINE(PANEL_GNOME, 1, [panel type])]
+         [AC_DEFINE(PANEL_GNOMEFLASHBACK, 1, [panel type])]
+         ,
+     [test "x$panel" = xmate],
+         [PKG_CHECK_MODULES(LIBPANEL, libmatepanelapplet-4.0 >= 1.4.0)]
+-        LIBPANEL_APPLET_DIR=`$PKG_CONFIG --variable=prefix libmatepanelapplet-4.0`/share/mate-panel/applets
+-        PLUGIN_DIR=`$PKG_CONFIG --variable=prefix libmatepanelapplet-4.0`/libexec
++        LIBPANEL_APPLET_DIR=$prefix/share/mate-panel/applets
++        PLUGIN_DIR=$prefix/libexec
+         [AC_DEFINE(PANEL_MATE, 1, [panel type])]
+         ,
+     [test "x$panel" = xxfce4],
+         [PKG_CHECK_MODULES(LIBPANEL, libxfce4panel-1.0 >= 4.6.0)]
+-        LIBPANEL_APPLET_DIR=`$PKG_CONFIG --variable=prefix libxfce4panel-1.0`/share/xfce4/panel-plugins
+-        PLUGIN_DIR=`$PKG_CONFIG --variable=libdir libxfce4panel-1.0`/xfce4/panel/plugins
++        LIBPANEL_APPLET_DIR=$prefix/share/xfce4/panel-plugins
++        PLUGIN_DIR=`$PKG_CONFIG --define-variable=prefix=$prefix --variable=libdir libxfce4panel-1.0`/xfce4/panel/plugins
+         [AC_DEFINE(PANEL_XFCE4, 1, [panel type])]
+         ,
+     [AC_MSG_ERROR([Unknown panel type, use gnome2, gnome3, gnomeflashback, mate or xfce4])]

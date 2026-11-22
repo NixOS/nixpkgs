@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=MeshLab
+Version=@version@
+Name[en_GB]=MeshLab
+GenericName=Mesh processing
+GenericName[en_GB]=Mesh processing
+Comment=View and process meshes
+Type=Application
+Exec=@out@/bin/meshlab %U
+TryExec=@out@/bin/meshlab
+Icon=@out@/share/icons/hicolor/meshlab.png
+Terminal=false
+MimeType=model/mesh;application/x-3ds;image/x-3ds;model/x-ply;application/sla;model/x-quad-object;model/x-geomview-off;application/x-cyclone-ptx;application/x-vmi;application/x-bre;model/vnd.collada+xml;model/openctm;application/x-expe-binary;application/x-expe-ascii;application/x-xyz;application/x-gts;chemical/x-pdb;application/x-tri;application/x-asc;model/x3d+xml;model/x3d+vrml;model/vrml;model/u3d;model/idtf;
+Categories=Graphics;3DGraphics;Viewer;Qt;

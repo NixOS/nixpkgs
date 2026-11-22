@@ -1,0 +1,51 @@
+diff --git a/axml-parser/CMakeLists.txt b/axml-parser/CMakeLists.txt
+index 633c915..50c5ffb 100644
+--- a/axml-parser/CMakeLists.txt
++++ b/axml-parser/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.10)
+ project(axml_parser)
+ 
+ set(CMAKE_CXX_STANDARD 11)
+diff --git a/mcpelauncher-common/CMakeLists.txt b/mcpelauncher-common/CMakeLists.txt
+index 393162f..b1aefdb 100644
+--- a/mcpelauncher-common/CMakeLists.txt
++++ b/mcpelauncher-common/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.6)
++cmake_minimum_required (VERSION 3.10)
+ 
+ project(mcpelauncher-common LANGUAGES CXX)
+ 
+diff --git a/mcpelauncher-extract/CMakeLists.txt b/mcpelauncher-extract/CMakeLists.txt
+index 164cfc8..1406fc9 100644
+--- a/mcpelauncher-extract/CMakeLists.txt
++++ b/mcpelauncher-extract/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.1)
++cmake_minimum_required (VERSION 3.10)
+ 
+ project(mcpelauncher-extract LANGUAGES CXX)
+ 
+diff --git a/mcpelauncher-ui-qt/CMakeLists.txt b/mcpelauncher-ui-qt/CMakeLists.txt
+index a396838..53693cf 100644
+--- a/mcpelauncher-ui-qt/CMakeLists.txt
++++ b/mcpelauncher-ui-qt/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(mcpelauncher-ui-qt LANGUAGES CXX)
+ 
+diff --git a/playdl-signin-ui-qt/CMakeLists.txt b/playdl-signin-ui-qt/CMakeLists.txt
+index 7f02ff3..c00b1a8 100644
+--- a/playdl-signin-ui-qt/CMakeLists.txt
++++ b/playdl-signin-ui-qt/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(playdl-signin-ui-qt)
+ 
+

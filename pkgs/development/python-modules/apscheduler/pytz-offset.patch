@@ -1,0 +1,11 @@
+--- a/src/apscheduler/util.py	1970-01-01 01:00:01.000000000 +0100
++++ b/src/apscheduler/util.py	2026-11-02 01:03:59.743158612 +0100
+@@ -115,7 +115,7 @@
+             if obj.zone:
+                 return ZoneInfo(obj.zone)
+ 
+-            return timezone(obj._offset)
++            return timezone(obj._utcoffset)
+ 
+         return obj
+ 

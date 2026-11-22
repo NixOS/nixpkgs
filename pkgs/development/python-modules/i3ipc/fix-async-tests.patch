@@ -1,0 +1,28 @@
+diff --git a/test/aio/ipctest.py b/test/aio/ipctest.py
+index 88e4cda..3d0fd9c 100644
+--- a/test/aio/ipctest.py
++++ b/test/aio/ipctest.py
+@@ -1,5 +1,6 @@
+ from subprocess import Popen
+ import pytest
++import pytest_asyncio
+ 
+ from i3ipc.aio import Connection
+ from i3ipc import CommandReply
+@@ -19,7 +20,7 @@ class IpcTest:
+     def event_loop(self):
+         return asyncio.get_event_loop()
+ 
+-    @pytest.fixture(scope='class')
++    @pytest_asyncio.fixture(scope='class', loop_scope='class')
+     async def i3(self):
+         process = Popen(['i3', '-c', 'test/i3.config'])
+         # wait for i3 to start up
+diff --git a/pytest.ini b/pytest.ini
+index 1ea6b80..788bdac 100644
+--- a/pytest.ini
++++ b/pytest.ini
+@@ -1,2 +1,3 @@
+ [pytest]
+ timeout = 5
++asyncio_default_test_loop_scope = class

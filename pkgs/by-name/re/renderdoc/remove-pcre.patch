@@ -1,0 +1,13 @@
+diff --git a/qrenderdoc/CMakeLists.txt b/qrenderdoc/CMakeLists.txt
+index 47fa949..1858b13 100644
+--- a/qrenderdoc/CMakeLists.txt
++++ b/qrenderdoc/CMakeLists.txt
+@@ -163,7 +163,7 @@ CHECK_INCLUDE_FILE(pcre.h PCRE_HEADER)
+ 
+ set(PCRE_PREFIX_PATH "")
+ 
+-if(PCRE_HEADER)
++if(true)
+     message(STATUS "pcre library is found, using it as-is")
+ 
+     add_custom_target(local_pcre)

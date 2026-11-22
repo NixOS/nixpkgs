@@ -1,0 +1,25 @@
+From edba7fcb38457932337e442aac7d50528d2a5d71 Mon Sep 17 00:00:00 2001
+From: loner <2788892716@qq.com>
+Date: Thu, 9 Oct 2025 07:19:53 +0800
+Subject: [PATCH] Fix minimum required CMake version to be compatible with
+ modern CMake
+
+---
+ CMakeRC.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeRC.cmake b/CMakeRC.cmake
+index 6a5147a..5d48bbc 100644
+--- a/CMakeRC.cmake
++++ b/CMakeRC.cmake
+@@ -34,7 +34,7 @@ endif()
+
+ set(_version 2.0.0)
+
+-cmake_minimum_required(VERSION 3.3)
++cmake_minimum_required(VERSION 3.5...3.30)
+ include(CMakeParseArguments)
+
+ if(COMMAND cmrc_add_resource_library)
+--
+2.51.0

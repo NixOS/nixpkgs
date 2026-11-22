@@ -1,0 +1,11 @@
+diff --git a/src/tests/test_startup.py b/src/tests/test_startup.py
+index 9234696f6..9fe910814 100644
+--- a/src/tests/test_startup.py
++++ b/src/tests/test_startup.py
+@@ -42,5 +42,6 @@ def test_start_with_redis_down():
+             ],
+             env={
+                 "PRETIX_CONFIG_FILE": f.name,
++                "PYTHONPATH": os.environ.get("PYTHONPATH", ""),
+             }
+         ) == 0

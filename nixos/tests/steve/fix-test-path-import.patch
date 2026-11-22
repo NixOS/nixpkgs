@@ -1,0 +1,14 @@
+Backport of upstream test fix:
+https://gitweb.gentoo.org/proj/steve.git/commit/?id=b4459231c5bd66a3edfcf760bf0ae22b4fb84119
+
+diff --git a/test/test_steve.py b/test/test_steve.py
+--- a/test/test_steve.py
++++ b/test/test_steve.py
+@@ -1,6 +1,7 @@
+ import errno
+ import multiprocessing
+ import os
++from pathlib import Path
+ 
+ import pytest
+ 

@@ -1,0 +1,26 @@
+diff --git a/xBRZ/src/xbrz.cpp b/xBRZ/src/xbrz.cpp
+index 0ddb4e1..aa52e7e 100644
+--- a/xBRZ/src/xbrz.cpp
++++ b/xBRZ/src/xbrz.cpp
+@@ -82,7 +82,7 @@ uint32_t gradientARGB(uint32_t pixFront, uint32_t pixBack)
+ //
+ 
+ 
+-#if  def __GNUC__
++#ifdef __GNUC__
+     #define FORCE_INLINE __attribute__((always_inline)) inline
+ #else
+     #define FORCE_INLINE inline
+diff --git a/zen/argon2.cpp b/zen/argon2.cpp
+index ee16a17..f58a03f 100644
+--- a/zen/argon2.cpp
++++ b/zen/argon2.cpp
+@@ -39,7 +39,7 @@
+ #include <cassert>
+ #include <cstdint>
+ 
+-#if  def __GNUC__ //including clang
++#ifdef __GNUC__ //including clang
+     #pragma GCC diagnostic ignored "-Wimplicit-fallthrough" //"this statement may fall through"
+     #pragma GCC diagnostic ignored "-Wcast-align" //"cast from 'char *' to 'blake2b *' increases required alignment from 1 to 8"
+ #endif

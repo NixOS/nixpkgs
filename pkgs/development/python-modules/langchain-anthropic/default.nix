@@ -1,0 +1,92 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  anthropic,
+  langchain-core,
+  pydantic,
+
+  # tests
+  blockbuster,
+  langchain,
+  langchain-tests,
+  pytest-asyncio,
+  pytestCheckHook,
+
+  # passthru
+  gitUpdater,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "langchain-anthropic";
+  version = "1.7.10";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "langchain-ai";
+    repo = "langchain";
+    tag = "langchain-anthropic==${finalAttrs.version}";
+    hash = "sha256-T8dcBgOE8QuXV0dDxrxg9e1/uwQHnFuaPpavkvSYNHw=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/anthropic";
+
+  build-system = [ hatchling ];
+
+  # Langchain always tracks the latest release of anthropic whether or not it's needed
+  pythonRelaxDeps = [
+    "anthropic"
+    "langchain-core"
+  ];
+
+  dependencies = [
+    anthropic
+    langchain-core
+    pydantic
+  ];
+
+  nativeCheckInputs = [
+    blockbuster
+    langchain
+    langchain-tests
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  enabledTestPaths = [
+    "tests/unit_tests"
+  ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this
+    "test_serdes"
+    # KeyError: 'versions' in 1.4.6
+    "test_anthropic_model_params"
+  ];
+
+  pythonImportsCheck = [ "langchain_anthropic" ];
+
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-anthropic==";
+      ignoredVersions = "a|b|dev|rc";
+    };
+  };
+
+  meta = {
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
+    description = "Build LangChain applications with Anthropic";
+    homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/anthropic";
+    license = lib.licenses.mit;
+    maintainers = [
+      lib.maintainers.sarahec
+    ];
+  };
+})

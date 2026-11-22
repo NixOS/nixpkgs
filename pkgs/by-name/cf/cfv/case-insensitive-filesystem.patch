@@ -1,0 +1,28 @@
+diff --git a/test/test_caching.py b/test/test_caching.py
+index 7db575d4386d..92002e392a13 100644
+--- a/test/test_caching.py
++++ b/test/test_caching.py
+@@ -24,6 +24,7 @@ import tempfile
+ 
+ from cfv.caching import FileInfoCache
+ from cfvtest import TestCase
++from unittest import skip
+ 
+ 
+ class AbsTestCase(TestCase):
+@@ -130,6 +131,7 @@ class AbsPathKeyTest(AbsTestCase):
+ 
+ 
+ class RelPathKeyTest(RelTestCase):
++    @skip("case-insensitive filesystem behavior differs on Darwin")
+     def test_nocase_findfile(self):
+         cache = FileInfoCache()
+         a1 = self.mkfile('aAaA/AaA1', '1')
+@@ -149,6 +151,7 @@ class RelPathKeyTest(RelTestCase):
+             cache.nocase_findfile(self.mkpath('aaAA/aaa2'))
+         self.assertEqual(errno.EEXIST, cm.exception.errno)
+ 
++    @skip("case-insensitive filesystem behavior differs on Darwin")
+     def test_nocase_findfile_parent(self):
+         cache = FileInfoCache()
+         self.mkfile('aaaA/aaA1', '1')

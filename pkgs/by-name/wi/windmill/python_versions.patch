@@ -1,0 +1,36 @@
+diff --git a/windmill-worker/src/python_versions.rs b/windmill-worker/src/python_versions.rs
+index 3a15de1..eeb4dc5 100644
+--- a/windmill-worker/src/python_versions.rs
++++ b/windmill-worker/src/python_versions.rs
+@@ -300,6 +300,7 @@ impl PyV {
+     }
+
+     pub async fn list_available_python_versions() -> Vec<Self> {
++        return vec![PyVAlias::Py312.into()];
+         match Self::list_available_python_versions_inner().await {
+             Ok(pyvs) => pyvs,
+             Err(e) => {
+@@ -526,6 +527,10 @@ impl PyV {
+         w_id: &str,
+         occupancy_metrics: &mut Option<&mut OccupancyMetrics>,
+     ) -> error::Result<()> {
++        let v = self.to_string();
++        append_logs(job_id, w_id, format!("\nREQUESTED PYTHON INSTALL IGNORED ({})", v), conn).await;
++        return Err(error::Error::BadConfig(format!("Python is managed through the NixOS system configuration. Change the Windmill instance setting to version '3.12'")));
++
+         let v = self.to_string();
+         append_logs(job_id, w_id, format!("\nINSTALLING PYTHON ({})", v), conn).await;
+         // Create dirs for newly installed python
+@@ -695,10 +700,10 @@ impl PyV {
+                 "find",
+                 &self.to_string(),
+                 "--system",
+-                "--python-preference=only-managed",
++                "--python-preference=only-system",
+             ])
+             .env("UV_PYTHON_INSTALL_DIR", &*PY_INSTALL_DIR)
+-            .env("UV_PYTHON_PREFERENCE", "only-managed")
++            .env("UV_PYTHON_PREFERENCE", "only-system")
+             .env("UV_CACHE_DIR", &*UV_CACHE_DIR)
+             // .stdout(Stdio::piped())
+             .stderr(Stdio::piped())

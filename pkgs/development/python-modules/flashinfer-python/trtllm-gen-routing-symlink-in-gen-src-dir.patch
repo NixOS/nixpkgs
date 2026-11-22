@@ -1,0 +1,19 @@
+--- a/flashinfer/jit/fused_moe.py
++++ b/flashinfer/jit/fused_moe.py
+@@ -486,7 +486,7 @@
+         h = get_artifact(f"{bmm_export_path}/{header}", get_meta_hash(checksum, header))
+         assert h, f"{header} not found"
+     symlink_path = (
+-        jit_env.FLASHINFER_CUBIN_DIR
++        jit_env.FLASHINFER_GEN_SRC_DIR
+         / "flashinfer"
+         / "trtllm"
+         / "batched_gemm"
+@@ -531,6 +531,7 @@
+             jit_env.FLASHINFER_CSRC_DIR,
+             jit_env.FLASHINFER_CSRC_DIR / "nv_internal",
+             jit_env.FLASHINFER_CSRC_DIR / "nv_internal/include",
++            jit_env.FLASHINFER_GEN_SRC_DIR,
+             jit_env.FLASHINFER_CUBIN_DIR,
+         ],
+     )

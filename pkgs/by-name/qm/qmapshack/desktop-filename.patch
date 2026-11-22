@@ -1,0 +1,24 @@
+diff --git i/src/qmapshack/main.cpp w/src/qmapshack/main.cpp
+index 00cf8e69..e7a16714 100644
+--- i/src/qmapshack/main.cpp
++++ w/src/qmapshack/main.cpp
+@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
+   QCoreApplication::setApplicationName("QMapShack");
+   QCoreApplication::setOrganizationName("QLandkarte");
+   QCoreApplication::setOrganizationDomain("qlandkarte.org");
++  QGuiApplication::setDesktopFileName("org.qlandkarte.qmapshack");
+   QCoreApplication::setApplicationVersion(VER_STR);
+   QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
+   QCoreApplication::setAttribute(Qt::AA_DontShowShortcutsInContextMenus, false);
+diff --git i/src/qmaptool/main.cpp w/src/qmaptool/main.cpp
+index 7f516d3e..d481014d 100644
+--- i/src/qmaptool/main.cpp
++++ w/src/qmaptool/main.cpp
+@@ -46,6 +46,7 @@ int main(int argc, char** argv) {
+   QCoreApplication::setApplicationName("QMapTool");
+   QCoreApplication::setOrganizationName("QLandkarte");
+   QCoreApplication::setOrganizationDomain("qlandkarte.org");
++  QGuiApplication::setDesktopFileName("org.qlandkarte.qmaptool");
+   QCoreApplication::setApplicationVersion(VER_STR);
+   QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
+   QCoreApplication::setAttribute(Qt::AA_DontShowShortcutsInContextMenus, false);

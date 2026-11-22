@@ -1,0 +1,22 @@
+Use protobuf's CMake config instead of the FindProtobuf module.
+
+protobuf >= 22 depends on abseil, and its headers inline calls into
+absl logging. FindProtobuf only yields libprotobuf.so, so executables
+linking against it fail with "DSO missing from command line" for
+libabsl_log_internal_message. The protobuf::libprotobuf target from the
+CMake config carries the abseil link dependencies.
+
+--- a/cmake/ProtoBuf.cmake
++++ b/cmake/ProtoBuf.cmake
+@@ -1,7 +1,10 @@
+ # Finds Google Protocol Buffers library and compilers and extends
+ # the standard cmake script with version and python generation support
+ 
+-find_package( Protobuf REQUIRED )
++set(protobuf_MODULE_COMPATIBLE ON CACHE BOOL "")
++find_package( Protobuf CONFIG REQUIRED )
++set(PROTOBUF_INCLUDE_DIR ${Protobuf_INCLUDE_DIRS})
++set(PROTOBUF_LIBRARIES protobuf::libprotobuf)
+ list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${PROTOBUF_INCLUDE_DIR})
+ list(APPEND Caffe_LINKER_LIBS PUBLIC ${PROTOBUF_LIBRARIES})
+ 

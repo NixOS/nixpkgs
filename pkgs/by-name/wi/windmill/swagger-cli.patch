@@ -1,0 +1,10 @@
+diff --git a/windmill-api-client/bundle.sh b/windmill-api-client/bundle.sh
+index 0fe4b172..bd66b49f 100644
+--- a/windmill-api-client/bundle.sh
++++ b/windmill-api-client/bundle.sh
+@@ -1,3 +1,3 @@
+ #!/bin/sh
+ 
+-npx swagger-cli bundle ../windmill-api/openapi.yaml > bundled.json
+\ No newline at end of file
++swagger-cli bundle ../windmill-api/openapi.yaml > bundled.json

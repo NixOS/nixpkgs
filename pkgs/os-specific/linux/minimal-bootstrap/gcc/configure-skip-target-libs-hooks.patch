@@ -1,0 +1,19 @@
+diff --git a/configure b/configure
+index 911351626..7ae019dc7 100755
+--- a/configure
++++ b/configure
+@@ -2775,8 +2775,12 @@ fi
+ 
+ # Skipdirs are removed silently.
+ skipdirs=
+-# Noconfigdirs are removed loudly.
+-noconfigdirs=""
++# Add a hook to permit gcc-ng to avoid invoking configure on target libraries prematurely.
++if [ "$gccng_skip_target_lib_config" = "y" ]; then
++  noconfigdirs="$noconfigdirs $target_libraries"
++else
++  noconfigdirs=""
++fi
+ 
+ use_gnu_ld=
+ # Make sure we don't let GNU ld be added if we didn't want it.

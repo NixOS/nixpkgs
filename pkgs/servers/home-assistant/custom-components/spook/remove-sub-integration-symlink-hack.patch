@@ -1,0 +1,31 @@
+diff --git a/custom_components/spook/__init__.py b/custom_components/spook/__init__.py
+index 2b337e24..2521e2e4 100644
+--- a/custom_components/spook/__init__.py
++++ b/custom_components/spook/__init__.py
+@@ -95,21 +95,6 @@ def _async_restart_for_sub_integrations(hass: HomeAssistant) -> bool:
+ 
+ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+     """Set up from a config entry."""
+-    # Symlink all sub integrations from Spook to the parent integrations folder.
+-    # This is a workaround for the fact that Home Assistant doesn't support
+-    # sub integrations. The loader only scans custom_components once, so a
+-    # freshly linked one needs it to look again, no restart required.
+-    if linked := await hass.async_add_executor_job(link_sub_integrations, hass):
+-        LOGGER.debug("Newly symlinked sub integrations, rescanning custom components")
+-        async_clear_custom_components_cache(hass)
+-
+-        # A helper made with a sub integration before its link went missing
+-        # had nothing to set it up with when Home Assistant started, and that
+-        # is not tried again. Only a restart picks it up.
+-        waiting = _has_entries_waiting(hass, linked)
+-        if waiting and not _async_restart_for_sub_integrations(hass):
+-            return False
+-
+     # Forward async_setup_entry to ectoplasms
+     await async_forward_setup_entry(hass, entry)
+ 
+@@ -213,4 +198,3 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+ 
+ async def async_remove_entry(hass: HomeAssistant, _: ConfigEntry) -> None:
+     """Remove a config entry."""
+-    await hass.async_add_executor_job(unlink_sub_integrations, hass)

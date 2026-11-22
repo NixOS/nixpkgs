@@ -1,0 +1,43 @@
+{
+    "release_date": "2026-10-28",
+    "release_label": "0.11.0",
+    "release_product": "cublasmp",
+    "libcublasmp": {
+        "name": "NVIDIA cuBLASMp library",
+        "license": "cuBLASMp library",
+        "license_path": "libcublasmp/LICENSE.txt",
+        "version": "0.11.0.4074",
+        "linux-x86_64": {
+            "cuda12": {
+                "relative_path": "libcublasmp/linux-x86_64/libcublasmp-linux-x86_64-0.11.0.4074_cuda12-archive.tar.xz",
+                "sha256": "1081732939c40e0b197e9cdb3bd34bbd02f7681a955b3950073b04811d1e5fb8",
+                "md5": "d3a85e0b7606185d0bd02e8c7389608f",
+                "size": "17576684"
+            },
+            "cuda13": {
+                "relative_path": "libcublasmp/linux-x86_64/libcublasmp-linux-x86_64-0.11.0.4074_cuda13-archive.tar.xz",
+                "sha256": "01cae55105049a6a449b6cf88c6b9f2228434b89afe20e7bed944a1955eeb89f",
+                "md5": "5488bc559cb503c365fb9012c84ea1a9",
+                "size": "11405776"
+            }
+        },
+        "cuda_variant": [
+            "12",
+            "13"
+        ],
+        "linux-sbsa": {
+            "cuda12": {
+                "relative_path": "libcublasmp/linux-sbsa/libcublasmp-linux-sbsa-0.11.0.4074_cuda12-archive.tar.xz",
+                "sha256": "87f4509f3b9b763b5343a20893807a048ea4342514ecea027b1d780809161658",
+                "md5": "f23cfd49d1f4a159ebcf869c1f9b4adc",
+                "size": "17340676"
+            },
+            "cuda13": {
+                "relative_path": "libcublasmp/linux-sbsa/libcublasmp-linux-sbsa-0.11.0.4074_cuda13-archive.tar.xz",
+                "sha256": "0f3024a03d01c5bb131043f6df1f9dd91d19d841cb7d0b2bb2e908e0c12c5e08",
+                "md5": "4d450282ef040e6bbab21c300169d916",
+                "size": "11265848"
+            }
+        }
+    }
+}

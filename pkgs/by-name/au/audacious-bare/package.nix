@@ -1,0 +1,77 @@
+{
+  lib,
+  stdenv,
+  _experimental-update-script-combinators,
+  audacious-plugins,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  qt6,
+  withPlugins ? false,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "audacious";
+  version = "4.6.2";
+
+  src = fetchFromGitHub {
+    owner = "audacious-media-player";
+    repo = "audacious";
+    rev = "${pname}-${version}";
+    hash = "sha256-+WzKbPtY9LuuT8INH4A6fiCoK0Z4RG1drmintQ7Lh5A=";
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtwayland
+  ];
+
+  mesonFlags = [
+    "-Dgtk=false"
+    "-Dbuildstamp=NixOS"
+  ];
+
+  postInstall = lib.optionalString withPlugins ''
+    ln -s ${audacious-plugins}/lib/audacious $out/lib
+    lndir -silent ${audacious-plugins}/share $out/share
+  '';
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "audacious-plugins";
+      extraArgs = [ "--version-regex=audacious-plugins-(.*)" ];
+    })
+    (nix-update-script {
+      extraArgs = [ "--version-regex=audacious-(.*)" ];
+    })
+  ];
+
+  meta = {
+    description = "Lightweight and versatile audio player";
+    homepage = "https://audacious-media-player.org";
+    downloadPage = "https://github.com/audacious-media-player/audacious";
+    mainProgram = "audacious";
+    maintainers = with lib.maintainers; [
+      ramkromberg
+      thiagokokada
+    ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
+      bsd2
+      bsd3 # https://github.com/audacious-media-player/audacious/blob/master/COPYING
+      gpl2
+      gpl3
+      lgpl2Plus # http://redmine.audacious-media-player.org/issues/46
+    ];
+  };
+}

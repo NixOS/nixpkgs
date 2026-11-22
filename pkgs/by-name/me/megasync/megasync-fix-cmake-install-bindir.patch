@@ -1,0 +1,12 @@
+diff --git a/cmake/modules/desktopapp_configuration.cmake b/cmake/modules/desktopapp_configuration.cmake
+index a14ac8669..e80c5e9f6 100644
+--- a/cmake/modules/desktopapp_configuration.cmake
++++ b/cmake/modules/desktopapp_configuration.cmake
+@@ -30,7 +30,6 @@ if(UNIX AND NOT APPLE)
+     #       Used for building packages: in which install dir is a path construction folder that will not be there in packages
+ 
+     set(CMAKE_INSTALL_LIBDIR "opt/megasync/lib") # override default "lib" from GNUInstallDirs
+-    set(CMAKE_INSTALL_BINDIR "usr/bin") # override default "bin" from GNUInstallDirs
+ 
+     # Override CMAKE_INSTALL_PREFIX
+     if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT) # In consecutive runs it will always be undef/false

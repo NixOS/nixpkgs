@@ -1,0 +1,15 @@
+diff --git a/config/config.cmake.in b/config/config.cmake.in
+index e5e4f6b..d41c070 100644
+--- a/config/config.cmake.in
++++ b/config/config.cmake.in
+@@ -23,6 +23,10 @@ if(NOT TARGET "@PROJECT_NAME@::@PROJECT_NAME@")
+ 
+   include(CMakeFindDependencyMacro)
+ 
++  if(NOT TARGET "numsa::numsa")
++    find_dependency("numsa" REQUIRED)
++  endif()
++
+   if(NOT TARGET "mctc-lib::mctc-lib")
+     find_dependency("mctc-lib" REQUIRED)
+   endif()

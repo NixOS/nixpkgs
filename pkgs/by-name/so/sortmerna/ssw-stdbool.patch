@@ -1,0 +1,13 @@
+diff --git a/include/ssw.h b/include/ssw.h
+index 5259c95..32bb146 100644
+--- a/include/ssw.h
++++ b/include/ssw.h
+@@ -35,7 +35,7 @@ struct _profile;
+ typedef struct _profile s_profile;
+ 
+ #ifndef __cplusplus
+-typedef unsigned char bool;
++#include <stdbool.h>
+ static const bool False = 0;
+ static const bool True = 1;
+ #endif

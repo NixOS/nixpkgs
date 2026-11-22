@@ -1,0 +1,25 @@
+diff --git a/python/cuda_cccl/cuda/compute/_bindings.py b/python/cuda_cccl/cuda/compute/_bindings.py
+index 4c0012b1bf..5c0ee776ea 100644
+--- a/python/cuda_cccl/cuda/compute/_bindings.py
++++ b/python/cuda_cccl/cuda/compute/_bindings.py
+@@ -27,17 +27,15 @@ from __future__ import annotations
+ import importlib
+ import os
+ 
+-from cuda.pathfinder import (  # type: ignore[import-not-found]
+-    load_nvidia_dynamic_lib,
+-)
++from ctypes import CDLL
+ 
+ from cuda.cccl._cuda_version_utils import detect_cuda_version, get_recommended_extra
+ 
+ 
+ def _load_cuda_libraries():
+     # Load appropriate libraries for the detected CUDA version.
+-    for libname in ("nvrtc", "nvJitLink"):
+-        load_nvidia_dynamic_lib(libname)
++    CDLL("@libnvrtc@/lib/libnvrtc.so")
++    CDLL("@libnvjitlink@/lib/libnvJitLink.so")
+ 
+ 
+ _load_cuda_libraries()

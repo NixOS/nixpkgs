@@ -1,0 +1,11 @@
+--- a/src/basic/cublas.cc
++++ b/src/basic/cublas.cc
+@@ -66,7 +66,7 @@
+ #define cublasZgemv hipblasZgemv /*_v2*/
+ #define cublasZherk hipblasZherk /*_v2*/
+ #define cublasZtrsm hipblasZtrsm /*_v2*/
+-#define cuDoubleComplex hipblasDoubleComplex
++#define cuDoubleComplex hipDoubleComplex
+ #else
+ #include <cublas_v2.h>
+ #include <cuda.h>

@@ -1,0 +1,22 @@
+From e08aafe1363fa9ed98ee16026ed2b81d2c2c1977 Mon Sep 17 00:00:00 2001
+From: Thomas Bracht Laumann Jespersen <t@laumann.xyz>
+Date: Tue, 24 Jun 2025 12:37:33 +0200
+Subject: [PATCH] Increase cmake_minimum_required version for CMake 4 compat
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d360291..e1cfa8c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -51,7 +51,7 @@
+ # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ # OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(TLSH)
+ 

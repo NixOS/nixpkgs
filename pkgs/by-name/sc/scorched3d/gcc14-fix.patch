@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 59414ee..c53064d 100755
+--- a/configure
++++ b/configure
+@@ -4881,7 +4881,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ 
+ 		int main(int argc, char *argv[])
+ 		{
+-			alutInit(argc, argv);
++			alutInit(&argc, argv);
+ 			return 0;
+ 		}
+ #undef  main

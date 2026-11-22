@@ -1,0 +1,25 @@
+diff --git a/Makefile.am b/Makefile.am
+index 24c1a85..cfabbbf 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,6 +6,6 @@ plugin_LTLIBRARIES = top.la
+ top_la_SOURCES=\
+ 		 src/top.c
+ 
+-top_la_CFLAGS= @glib_CFLAGS@ @rofi_CFLAGS@
+-top_la_LIBADD= @glib_LIBS@ @rofi_LIBS@
++top_la_CFLAGS= @glib_CFLAGS@ @rofi_CFLAGS@ @cairo_CFLAGS@
++top_la_LIBADD= @glib_LIBS@ @rofi_LIBS@ @cairo_LIBS@
+ top_la_LDFLAGS= -module -avoid-version
+diff --git a/configure.ac b/configure.ac
+index 4d2df69..f340a7a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -53,6 +53,7 @@ dnl PKG_CONFIG based dependencies
+ dnl ---------------------------------------------------------------------
+ PKG_CHECK_MODULES([glib],     [glib-2.0 >= 2.40 gio-unix-2.0 gmodule-2.0 libgtop-2.0])
+ PKG_CHECK_MODULES([rofi],     [rofi])
++PKG_CHECK_MODULES([cairo],    [cairo cairo-xcb])
+ 
+ [rofi_PLUGIN_INSTALL_DIR]="`$PKG_CONFIG --variable=pluginsdir rofi`"
+ AC_SUBST([rofi_PLUGIN_INSTALL_DIR])

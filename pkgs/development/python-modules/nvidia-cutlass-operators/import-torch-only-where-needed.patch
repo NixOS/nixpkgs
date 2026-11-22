@@ -1,0 +1,229 @@
+From 795b006d4afb17228d837a984a3921e3a8b225e6 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Wed, 21 Oct 2026 19:52:00 -0700
+Subject: [PATCH] [Operators] Import torch only where the blockscaled GEMM
+ kernels need it
+
+nvidia-cutlass-operators makes torch an optional dependency (the "torch"
+extra), and the operators package checks is_torch_available() before
+importing it. But importing cutlass.operators loads the CuTe DSL GEMM
+provider, which imports the sm107 dense blockscaled GEMM kernels, and their
+modules import torch and cutlass.torch unconditionally. Without torch,
+`import cutlass.operators` fails with "CuTeDSLProvider is unavailable".
+
+Only the reference implementations and the test harness in these modules use
+torch, not the kernels, so import torch and cutlass.torch only when torch is
+installed, as find_spec, which is_torch_available() uses, reports. Quote the
+torch.Tensor annotations of those helpers, which are evaluated when the
+functions are defined.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ ...kwell_blockscaled_dense_gemm_persistent.py | 51 +++++++++++--------
+ .../base/dense_blockscaled_gemm_persistent.py | 17 +++++--
+ .../gemm/dense_blockscaled_gemm_universal.py  | 11 +++-
+ 3 files changed, 50 insertions(+), 29 deletions(-)
+
+diff --git a/operators/cutlass/kernels/rubin/gemm/base/blackwell_blockscaled_dense_gemm_persistent.py b/operators/cutlass/kernels/rubin/gemm/base/blackwell_blockscaled_dense_gemm_persistent.py
+index bbc2a67..3f1b534 100644
+--- a/operators/cutlass/kernels/rubin/gemm/base/blackwell_blockscaled_dense_gemm_persistent.py
++++ b/operators/cutlass/kernels/rubin/gemm/base/blackwell_blockscaled_dense_gemm_persistent.py
+@@ -27,16 +27,15 @@
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ import argparse
++import importlib.util
+ from typing import Type, Tuple, Union, Literal
+ 
+ import cuda.bindings.driver as cuda
+-import torch
+ 
+ import cutlass
+ import cutlass.cute as cute
+ from cutlass import testing
+ from cutlass.cute.nvgpu import cpasync, tcgen05, OperandMajorMode
+-import cutlass.torch as cutlass_torch
+ import cutlass.utils as utils
+ import cutlass.pipeline as pipeline
+ from cutlass.pipeline import pipeline_init_arrive, pipeline_init_wait
+@@ -44,6 +43,14 @@ import cutlass.utils.blackwell_helpers as sm100_utils
+ import cutlass.utils.blockscaled_layout as blockscaled_utils
+ from cutlass.cute.runtime import make_ptr
+ 
++# Only the reference implementation and the test harness in this file use torch; the
++# kernel doesn't, so importing it (e.g. through cutlass.operators) doesn't need
++# torch.
++if importlib.util.find_spec("torch") is not None:
++    import torch
++
++    import cutlass.torch as cutlass_torch
++
+ 
+ """
+ This example provides an experimental implementation of the SM100 batched dense blockscaled GEMM kernel, please note that the APIs and implementation details related to this kernel may change in future releases.
+@@ -2412,11 +2419,11 @@ def to_blocked(input_matrix):
+ 
+ # Reference implementation of the persistent dense blockscaled GEMM operation (emulated version)
+ def reference_scaled_mm_emulated(
+-    a: torch.Tensor,
+-    b: torch.Tensor,
+-    sfa: torch.Tensor,
+-    sfb: torch.Tensor,
+-    c: torch.Tensor,
++    a: "torch.Tensor",
++    b: "torch.Tensor",
++    sfa: "torch.Tensor",
++    sfb: "torch.Tensor",
++    c: "torch.Tensor",
+     mnkl: Tuple[int, int, int, int],
+     sf_vec_size: int,
+     c_dtype: Type[cutlass.Numeric],
+@@ -2442,11 +2449,11 @@ def reference_scaled_mm_emulated(
+ 
+ # Reference implementation of the persistent dense blockscaled GEMM operation (non-emulated version)
+ def reference_scaled_mm(
+-    a: torch.Tensor,
+-    b: torch.Tensor,
+-    sfa: torch.Tensor,
+-    sfb: torch.Tensor,
+-    c: torch.Tensor,
++    a: "torch.Tensor",
++    b: "torch.Tensor",
++    sfa: "torch.Tensor",
++    sfb: "torch.Tensor",
++    c: "torch.Tensor",
+     mnkl: Tuple[int, int, int, int],
+     c_dtype: Type[cutlass.Numeric],
+ ):
+@@ -2475,11 +2482,11 @@ def reference_scaled_mm(
+ 
+ # Construct CuTe Pointers for the persistent dense blockscaled GEMM operation (emulated version)
+ def construct_cute_pointers_emulated(
+-    a: torch.Tensor,
+-    b: torch.Tensor,
+-    sfa: torch.Tensor,
+-    sfb: torch.Tensor,
+-    c: torch.Tensor,
++    a: "torch.Tensor",
++    b: "torch.Tensor",
++    sfa: "torch.Tensor",
++    sfb: "torch.Tensor",
++    c: "torch.Tensor",
+     a_dtype: Type[cutlass.Numeric],
+     b_dtype: Type[cutlass.Numeric],
+     sf_dtype: Type[cutlass.Numeric],
+@@ -2524,11 +2531,11 @@ def construct_cute_pointers_emulated(
+ 
+ # Construct CuTe Pointers for the persistent dense blockscaled GEMM operation (non-emulated version)
+ def construct_cute_pointers(
+-    a: torch.Tensor,
+-    b: torch.Tensor,
+-    sfa: torch.Tensor,
+-    sfb: torch.Tensor,
+-    c: torch.Tensor,
++    a: "torch.Tensor",
++    b: "torch.Tensor",
++    sfa: "torch.Tensor",
++    sfb: "torch.Tensor",
++    c: "torch.Tensor",
+     a_dtype: Type[cutlass.Numeric],
+     b_dtype: Type[cutlass.Numeric],
+     sf_dtype: Type[cutlass.Numeric],
+diff --git a/operators/cutlass/kernels/rubin/gemm/base/dense_blockscaled_gemm_persistent.py b/operators/cutlass/kernels/rubin/gemm/base/dense_blockscaled_gemm_persistent.py
+index ba56bc4..b7cc66e 100644
+--- a/operators/cutlass/kernels/rubin/gemm/base/dense_blockscaled_gemm_persistent.py
++++ b/operators/cutlass/kernels/rubin/gemm/base/dense_blockscaled_gemm_persistent.py
+@@ -28,13 +28,13 @@
+ 
+ 
+ import argparse
++import importlib.util
+ import os
+ import sys
+ from pathlib import Path
+ from typing import Tuple, Type, Union, Literal, Optional, NamedTuple
+ 
+ import cuda.bindings.driver as cuda
+-import torch
+ 
+ import cutlass
+ import cutlass.cute as cute
+@@ -42,7 +42,6 @@ from cutlass import testing
+ from cutlass.cute.runtime import from_dlpack, make_ptr
+ from cutlass.cute.nvgpu import cpasync, tcgen05, OperandMajorMode
+ from cutlass.cute.nvgpu.tcgen05.mma import CollectorOp
+-import cutlass.torch as cutlass_torch
+ import cutlass.utils as utils
+ import cutlass.pipeline as pipeline
+ from cutlass.pipeline import pipeline_init_arrive, pipeline_init_wait
+@@ -50,6 +49,14 @@ import cutlass.utils.blackwell_helpers as sm100_utils
+ import cutlass.utils.rubin_helpers as sm107_utils
+ import cutlass.utils.blockscaled_layout as blockscaled_utils
+ 
++# Only the reference implementation and the test harness in this file use torch; the
++# kernel doesn't, so importing it (e.g. through cutlass.operators) doesn't need
++# torch.
++if importlib.util.find_spec("torch") is not None:
++    import torch
++
++    import cutlass.torch as cutlass_torch
++
+ if __name__ == "__main__":
+     current_dir = Path(__file__).resolve().parent
+     sys.path.insert(0, str(current_dir / "../../../../../"))
+@@ -2463,9 +2470,9 @@ def create_scale_factor_tensor(l, mn, k, sf_vec_size, dtype, torch_tensor_f32):
+ 
+ # Construct CuTe Pointers for the persistent dense blockscaled GEMM operation (emulated version)
+ def construct_abc_cute_pointers_emulated(
+-    a: torch.Tensor,
+-    b: torch.Tensor,
+-    c: torch.Tensor,
++    a: "torch.Tensor",
++    b: "torch.Tensor",
++    c: "torch.Tensor",
+     a_dtype: Type[cutlass.Numeric],
+     b_dtype: Type[cutlass.Numeric],
+     c_dtype: Type[cutlass.Numeric],
+diff --git a/operators/cutlass/kernels/rubin/gemm/dense_blockscaled_gemm_universal.py b/operators/cutlass/kernels/rubin/gemm/dense_blockscaled_gemm_universal.py
+index 02baaeb..2fa826e 100644
+--- a/operators/cutlass/kernels/rubin/gemm/dense_blockscaled_gemm_universal.py
++++ b/operators/cutlass/kernels/rubin/gemm/dense_blockscaled_gemm_universal.py
+@@ -28,13 +28,13 @@
+ 
+ 
+ import argparse
++import importlib.util
+ import os
+ import sys
+ from pathlib import Path
+ from typing import Tuple, Type, Union, Literal, Optional
+ 
+ import cuda.bindings.driver as cuda
+-import torch
+ 
+ import cutlass
+ import cutlass.cute as cute
+@@ -42,12 +42,19 @@ from cutlass import testing
+ from cutlass.cute.runtime import make_ptr
+ from cutlass.cute.nvgpu import cpasync, tcgen05, OperandMajorMode
+ from cutlass.cute.nvgpu.tcgen05.mma import CollectorOp
+-import cutlass.torch as cutlass_torch
+ import cutlass.utils as utils
+ import cutlass.utils.blackwell_helpers as sm100_utils
+ import cutlass.utils.rubin_helpers as sm107_utils
+ import cutlass.utils.blockscaled_layout as blockscaled_utils
+ 
++# Only the reference implementation and the test harness in this file use torch; the
++# kernel doesn't, so importing it (e.g. through cutlass.operators) doesn't need
++# torch.
++if importlib.util.find_spec("torch") is not None:
++    import torch
++
++    import cutlass.torch as cutlass_torch
++
+ if __name__ == "__main__":
+     current_dir = Path(__file__).resolve().parent
+     sys.path.insert(0, str(current_dir / "../../../../"))
+-- 
+2.43.0
+

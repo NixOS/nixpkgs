@@ -1,0 +1,10 @@
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index d3e3031e1..96b624fb3 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -1,5 +1,2 @@
+-[build]
+-rustflags = ["-C", "target-cpu=native"]
+-
+ [target.wasm32-unknown-unknown]
+ rustflags = ["-C", "target-feature=+simd128"]

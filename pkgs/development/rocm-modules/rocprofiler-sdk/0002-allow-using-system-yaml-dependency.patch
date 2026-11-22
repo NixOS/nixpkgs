@@ -1,0 +1,68 @@
+From 0477671140ffc3d1b50e1cca69f107b51112faa8 Mon Sep 17 00:00:00 2001
+From: Anund <anundm@gmail.com>
+Date: Sun, 11 Oct 2026 17:29:27 +1100
+Subject: [PATCH 2/8] allow using system yaml dependency
+
+---
+ cmake/rocprofiler_options.cmake |  2 ++
+ external/CMakeLists.txt         | 29 +++++++++++++++++------------
+ 2 files changed, 19 insertions(+), 12 deletions(-)
+
+diff --git a/cmake/rocprofiler_options.cmake b/cmake/rocprofiler_options.cmake
+index 08d1032635..faee11049f 100644
+--- a/cmake/rocprofiler_options.cmake
++++ b/cmake/rocprofiler_options.cmake
+@@ -65,6 +65,8 @@ rocprofiler_add_option(ROCPROFILER_BUILD_PYBIND11
+                        "Enable building pybind11 library internally" ON)
+ rocprofiler_add_option(ROCPROFILER_BUILD_GOTCHA
+                        "Enable building gotcha library internally" ON)
++rocprofiler_add_option(ROCPROFILER_BUILD_YAML_CPP
++                       "Enable building yaml-cpp library internally" ON)
+ if(ROCPROFILER_BUILD_TESTS)
+     rocprofiler_add_option(
+         ROCPROFILER_BUILD_GTEST
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index 5bee3dc032..cab59c07bd 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -131,20 +131,25 @@ if(NOT TARGET PTL::ptl-static)
+     add_subdirectory(ptl EXCLUDE_FROM_ALL)
+ endif()
+ 
+-rocprofiler_checkout_git_submodule(
+-    RECURSIVE
+-    RELATIVE_PATH external/yaml-cpp
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+-    REPO_URL https://github.com/jbeder/yaml-cpp.git
+-    REPO_BRANCH "master")
++if(ROCPROFILER_BUILD_YAML_CPP)
++    rocprofiler_checkout_git_submodule(
++        RECURSIVE
++        RELATIVE_PATH external/yaml-cpp
++        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
++        REPO_URL https://github.com/jbeder/yaml-cpp.git
++        REPO_BRANCH "master")
+ 
+-add_subdirectory(yaml-cpp EXCLUDE_FROM_ALL)
++    add_subdirectory(yaml-cpp EXCLUDE_FROM_ALL)
+ 
+-target_link_libraries(rocprofiler-sdk-yaml-cpp
+-                      INTERFACE $<BUILD_INTERFACE:yaml-cpp::yaml-cpp>)
+-target_include_directories(
+-    rocprofiler-sdk-yaml-cpp
+-    INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/yaml-cpp/include>)
++    target_link_libraries(rocprofiler-sdk-yaml-cpp
++                          INTERFACE $<BUILD_INTERFACE:yaml-cpp::yaml-cpp>)
++    target_include_directories(
++        rocprofiler-sdk-yaml-cpp
++        INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/yaml-cpp/include>)
++else()
++    find_package(yaml-cpp 0.8.0 REQUIRED)
++    target_link_libraries(rocprofiler-sdk-yaml-cpp INTERFACE yaml-cpp::yaml-cpp)
++endif()
+ 
+ # checkout submodule if not already checked out or clone repo if no .gitmodules file
+ rocprofiler_checkout_git_submodule(
+-- 
+2.55.0
+

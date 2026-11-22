@@ -1,0 +1,11 @@
+--- a/package.json
++++ b/package.json
+@@ -34,7 +34,7 @@
+     "yarn.lock"
+   ],
+   "engines": {
+-    "node": ">=14 <=23"
++    "node": ">=14 <=24"
+   },
+   "dependencies": {
+     "@atproto/api": "^0.17.2",

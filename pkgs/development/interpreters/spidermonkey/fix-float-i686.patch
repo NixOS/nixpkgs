@@ -1,0 +1,16 @@
+diff --git a/modules/fdlibm/src/math_private.h b/modules/fdlibm/src/math_private.h
+index 51d79f9c2ec59..fafd7d6fc1e0d 100644
+--- a/modules/fdlibm/src/math_private.h
++++ b/modules/fdlibm/src/math_private.h
+@@ -30,5 +30,9 @@
+  * Adapted from https://github.com/freebsd/freebsd-src/search?q=__double_t
+  */
+
++#if defined __FLT_EVAL_METHOD__ && (__FLT_EVAL_METHOD__ == 2)
++typedef long double      __double_t;
++#else
+ typedef double      __double_t;
++#endif
+ typedef __double_t  double_t;
+
+ /*

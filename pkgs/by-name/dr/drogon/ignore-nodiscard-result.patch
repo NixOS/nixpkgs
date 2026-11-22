@@ -1,0 +1,11 @@
+diff --git a/trantor/trantor/utils/TaskQueue.h b/trantor/trantor/utils/TaskQueue.h
+--- a/trantor/trantor/utils/TaskQueue.h
++++ b/trantor/trantor/utils/TaskQueue.h
+@@ -49,7 +49,7 @@
+             prom.set_value(1);
+         });
+-        fut.get();
++        (void)fut.get();
+     };
+     virtual ~TaskQueue()
+     {

@@ -1,0 +1,15 @@
+--- a/install.sh
++++ b/install.sh
+@@ -176,12 +176,6 @@
+   ln -s assets/process-working.svg process-working.svg
+   ln -s assets/no-notifications.svg no-notifications.svg
+ 
+-  mkdir -p                                                                                   "${THEME_DIR}/gtk-2.0"
+-  # cp -r "${SRC_DIR}/main/gtk-2.0/gtkrc${theme}${ELSE_DARK:-}${ctype}"                        "${THEME_DIR}/gtk-2.0/gtkrc"
+-  make_gtkrc
+-  cp -r "${SRC_DIR}/main/gtk-2.0/common/"*'.rc'                                              "${THEME_DIR}/gtk-2.0"
+-  cp -r "${SRC_DIR}/assets/gtk-2.0/assets-common${ELSE_DARK:-}${ctype}"                      "${THEME_DIR}/gtk-2.0/assets"
+-  cp -r "${SRC_DIR}/assets/gtk-2.0/assets${theme}${ELSE_DARK:-}${ctype}/"*.png               "${THEME_DIR}/gtk-2.0/assets"
+ 
+   mkdir -p                                                                                   "${THEME_DIR}/gtk-3.0"
+   local gtk_assets="assets${theme}"

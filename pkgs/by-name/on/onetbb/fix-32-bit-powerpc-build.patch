@@ -1,0 +1,38 @@
+From c828ae47b8f4bea7736d2f9d05460e2b529c9d7d Mon Sep 17 00:00:00 2001
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Date: Fri, 9 Dec 2022 12:36:11 +0100
+Subject: [PATCH] Add cmake check for libatomic requirement when building with
+ gcc (#980)
+
+Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+---
+ cmake/compilers/GNU.cmake | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/cmake/compilers/GNU.cmake b/cmake/compilers/GNU.cmake
+index cd76acfe1e..59f4e6934f 100644
+--- a/cmake/compilers/GNU.cmake
++++ b/cmake/compilers/GNU.cmake
+@@ -44,6 +44,22 @@ if (NOT MINGW)
+     set(TBB_COMMON_LINK_LIBS dl)
+ endif()
+ 
++# Check whether code with full atomics can be built without libatomic
++# see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81358
++include(CheckCXXSourceCompiles)
++check_cxx_source_compiles("#include <atomic>
++int main() {
++  std::atomic<uint8_t> w1;
++  std::atomic<uint16_t> w2;
++  std::atomic<uint32_t> w4;
++  std::atomic<uint64_t> w8;
++  return ++w1 + ++w2 + ++w4 + ++w8;
++}" TBB_BUILDS_WITHOUT_LIBATOMIC)
++
++if(NOT TBB_BUILDS_WITHOUT_LIBATOMIC)
++   set(TBB_COMMON_LINK_LIBS ${TBB_COMMON_LINK_LIBS} atomic)
++endif()
++
+ # Ignore -Werror set through add_compile_options() or added to CMAKE_CXX_FLAGS if TBB_STRICT is disabled.
+ if (NOT TBB_STRICT AND COMMAND tbb_remove_compile_flag)
+     tbb_remove_compile_flag(-Werror)

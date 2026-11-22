@@ -1,0 +1,167 @@
+[
+  {
+    "pname": "DiscordRichPresence",
+    "version": "1.2.1.24",
+    "hash": "sha256-oRNrlF1/yK0QvrW2+48RsmSg9h9/pDIfA56/bpoHXFU="
+  },
+  {
+    "pname": "fantomas",
+    "version": "7.0.5",
+    "hash": "sha256-fseS0ORahl/iK/uZmGOooTmrny8YL1KEwNNq27VxLj0="
+  },
+  {
+    "pname": "FParsec",
+    "version": "1.1.1",
+    "hash": "sha256-BFTUFsdUDtPf3Y7YYsIHGnR3SykVeE6MAN3NRHv+Qwc="
+  },
+  {
+    "pname": "FSharp.Core",
+    "version": "9.0.201",
+    "hash": "sha256-38Y0QFg/knogSJtxDVpVXKo5n4zAo8zaffeT6tbhahk="
+  },
+  {
+    "pname": "LZMA-SDK",
+    "version": "22.1.1",
+    "hash": "sha256-PI79dMSrLSmoJzQLSFxgfhDqdkyNvdlzFhxWbdrMKXs="
+  },
+  {
+    "pname": "ManagedBass",
+    "version": "3.1.1",
+    "hash": "sha256-JhcmZiLchAQXrFG6+ye/w3W4IG6f63K/hH+fAWNM90I="
+  },
+  {
+    "pname": "ManagedBass.Fx",
+    "version": "3.1.1",
+    "hash": "sha256-AJHXB/q9CtEPw9JVlX0ZhOju5gi+Dm3ftUURaYGvq6E="
+  },
+  {
+    "pname": "Microsoft.Data.Sqlite",
+    "version": "8.0.0",
+    "hash": "sha256-0Q+1SxcHyNgkz4DUTJVaiteOQGydf2Uzk6y/R/rwwws="
+  },
+  {
+    "pname": "Microsoft.Data.Sqlite.Core",
+    "version": "8.0.0",
+    "hash": "sha256-aew8/vRyzCc7MMNHziR8tsg66EFkJC+Snst3F+a3Ehc="
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
+  },
+  {
+    "pname": "NativeFileDialogSharp",
+    "version": "0.6.0-alpha",
+    "hash": "sha256-S49SM+jWWM7bF8pdmnxvRxUKkWpSULwk/ljk0hB5sVE="
+  },
+  {
+    "pname": "NetCoreServer",
+    "version": "8.0.7",
+    "hash": "sha256-RUYic8uAgJGdhUCrMJQULKlHB6xvw9H1lnNGU1axNZw="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "1.6.1",
+    "hash": "sha256-iNan1ix7RtncGWC9AjAZ2sk70DoxOsmEOgQ10fXm4Pw="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.1",
+    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
+  },
+  {
+    "pname": "OpenTK",
+    "version": "4.8.2",
+    "hash": "sha256-PnE/hFTE90bH95jjECBjiSbHnpT/Esb6sxfXTdHom58="
+  },
+  {
+    "pname": "OpenTK.Audio.OpenAL",
+    "version": "4.8.2",
+    "hash": "sha256-i5KRiTYTNMB4Y5Qd5xewaYrb9sBbnXMDu2QXbM3RCeU="
+  },
+  {
+    "pname": "OpenTK.Compute",
+    "version": "4.8.2",
+    "hash": "sha256-n3IjP9lOWvwGPtJz721MkyA13I1m17wRGpZtGd/ditc="
+  },
+  {
+    "pname": "OpenTK.Core",
+    "version": "4.8.2",
+    "hash": "sha256-59S4Vj13y8HtZT6RZTwO6ZZbk1GUNDcYx1rMdv5jr4I="
+  },
+  {
+    "pname": "OpenTK.Graphics",
+    "version": "4.8.2",
+    "hash": "sha256-DNpXqtM9Oj6wDGYSF2FD4A4ueWG892Wk6uGWffNspo0="
+  },
+  {
+    "pname": "OpenTK.Input",
+    "version": "4.8.2",
+    "hash": "sha256-jIIdhNaOlH2D2alRzZl60XaVapDWtpboBiOaHsu/V+U="
+  },
+  {
+    "pname": "OpenTK.Mathematics",
+    "version": "4.8.2",
+    "hash": "sha256-TPsts443n6iEajfH2EuYTKtubrWuTLiCrTB1F4FndIo="
+  },
+  {
+    "pname": "OpenTK.redist.glfw",
+    "version": "3.3.8.39",
+    "hash": "sha256-bg8bGfoDDqmZ/efLFVm8l5etQajIVvOcQ/Nv+yKD4Bc="
+  },
+  {
+    "pname": "OpenTK.Windowing.Common",
+    "version": "4.8.2",
+    "hash": "sha256-62E0rxgkNOg02WWqG/seMtNuIYksPK3Zjm24oRHblpw="
+  },
+  {
+    "pname": "OpenTK.Windowing.Desktop",
+    "version": "4.8.2",
+    "hash": "sha256-55Pbe8x1snZqqM87gmgrp2hD14A6XwTcW1PBjN/hWao="
+  },
+  {
+    "pname": "OpenTK.Windowing.GraphicsLibraryFramework",
+    "version": "4.8.2",
+    "hash": "sha256-a1MGtU+27pBNns55g8mOsxXpZxfEr6M62zLkIkkJTIY="
+  },
+  {
+    "pname": "SixLabors.Fonts",
+    "version": "1.0.0-beta15",
+    "hash": "sha256-ewHnwTH4kZ2IJ4jaC3yUcIhO/YYZndrpMyeUKDKRHmA="
+  },
+  {
+    "pname": "SixLabors.ImageSharp",
+    "version": "1.0.3",
+    "hash": "sha256-7xDWHx9oHRSM0u44GEpZJTYICTqhEMSohznFJ+H+g/g="
+  },
+  {
+    "pname": "SixLabors.ImageSharp",
+    "version": "1.0.4",
+    "hash": "sha256-mUa/3cWwdX4tZ07MPbfdmAIFgmAUJ3SffOb4SgKxrzo="
+  },
+  {
+    "pname": "SixLabors.ImageSharp.Drawing",
+    "version": "1.0.0-beta13",
+    "hash": "sha256-BkXH6NK6UGp2W7/uLCfhMyXcV/vlX2ftWCMnsElZ0UQ="
+  },
+  {
+    "pname": "SQLitePCLRaw.bundle_e_sqlite3",
+    "version": "2.1.6",
+    "hash": "sha256-dZD/bZsYXjOu46ZH5Y/wgh0uhHOqIxC+S+0ecKhr718="
+  },
+  {
+    "pname": "SQLitePCLRaw.core",
+    "version": "2.1.6",
+    "hash": "sha256-RxWjm52PdmMV98dgDy0BCpF988+BssRZUgALLv7TH/E="
+  },
+  {
+    "pname": "SQLitePCLRaw.lib.e_sqlite3",
+    "version": "2.1.6",
+    "hash": "sha256-uHt5d+SFUkSd6WD7Tg0J3e8eVoxy/FM/t4PAkc9PJT0="
+  },
+  {
+    "pname": "SQLitePCLRaw.provider.e_sqlite3",
+    "version": "2.1.6",
+    "hash": "sha256-zHc/YZsd72eXlI8ba1tv58HZWUIiyjJaxq2CCP1hQe8="
+  }
+]

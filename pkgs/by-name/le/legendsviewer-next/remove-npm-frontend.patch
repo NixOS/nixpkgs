@@ -1,0 +1,21 @@
+diff --git a/LegendsViewer.Frontend/LegendsViewer.Frontend.csproj b/LegendsViewer.Frontend/LegendsViewer.Frontend.csproj
+index 3275f9c..aac315e 100644
+--- a/LegendsViewer.Frontend/LegendsViewer.Frontend.csproj
++++ b/LegendsViewer.Frontend/LegendsViewer.Frontend.csproj
+@@ -21,16 +21,8 @@
+ 	</PropertyGroup>
+ 
+ 	<!-- Always run npm install -->
+-	<Target Name="OnPackageChange" BeforeTargets="BeforeBuild">
+-		<Message Importance="high" Text="Installing npm packages..." />
+-		<Exec Command="npm install" WorkingDirectory="$(SpaRoot)" />
+-	</Target>
+ 
+ 	<!-- Always run npm run build -->
+-	<Target Name="OnSourceChange" BeforeTargets="BeforeBuild">
+-		<Message Importance="high" Text="Compiling WebApp..." />
+-		<Exec Command="npm run build" WorkingDirectory="$(SpaRoot)" />
+-	</Target>
+ 
+ 	<Target Name="CopyFilesAfterBuild" BeforeTargets="BeforeBuild;IncrementalClean">
+ 		<ItemGroup>

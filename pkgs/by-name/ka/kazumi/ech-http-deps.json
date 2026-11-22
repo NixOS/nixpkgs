@@ -1,0 +1,12 @@
+{
+  "aarch64-linux": {
+    "target": "linux-arm64",
+    "url": "https://github.com/ech-research/libechhttp-linux-build/releases/download/v0.1.1/libechhttp-deps-v0.1.1-linux-arm64.zip",
+    "hash": "sha256-Ah/2sLbJCdMuiN2ngnGcgVzPHE8cfwMQp6ReKleicbw="
+  },
+  "x86_64-linux": {
+    "target": "linux-x64",
+    "url": "https://github.com/ech-research/libechhttp-linux-build/releases/download/v0.1.1/libechhttp-deps-v0.1.1-linux-x64.zip",
+    "hash": "sha256-0SQqQ/SJn810rL7+jH2V4entjkwgNcV5jnR8wnLRpdY="
+  }
+}

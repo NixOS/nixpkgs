@@ -1,0 +1,13 @@
+diff --git a/src/meson.build b/src/meson.build
+index cc9d3856..f909836d 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -165,7 +165,7 @@ libeog = shared_library(
+   link_args: ldflags,
+   link_depends: symbol_map,
+   install: true,
+-  install_dir: eog_pkglibdir,
++  install_dir: eog_prefix / eog_pkglibdir,
+ )
+ 
+ libeog_dep = declare_dependency(

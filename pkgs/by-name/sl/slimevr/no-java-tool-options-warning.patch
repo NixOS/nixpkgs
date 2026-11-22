@@ -1,0 +1,13 @@
+diff --git a/gui/electron/main/index.ts b/gui/electron/main/index.ts
+index 52bd95fd..26ad5fe9 100644
+--- a/gui/electron/main/index.ts
++++ b/gui/electron/main/index.ts
+@@ -371,7 +371,7 @@ function createWindow() {
+ }
+ 
+ const checkEnvironmentVariables = () => {
+-  const disallowedVars = ['_JAVA_OPTIONS', 'JAVA_TOOL_OPTIONS'];
++  const disallowedVars = ['_JAVA_OPTIONS'];
+ 
+   const set = disallowedVars.filter((env) => !!process.env[env]);
+   if (set.length > 0) {

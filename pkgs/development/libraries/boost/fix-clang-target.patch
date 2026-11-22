@@ -1,0 +1,14 @@
+--- a/tools/build/src/tools/clang.jam	2024-07-25 10:38:16.278401900 -0700
++++ b/tools/build/src/tools/clang.jam	2024-07-25 10:38:52.659750666 -0700
+@@ -90,11 +90,6 @@
+                 case x86-64 : arch = x86_64 ;
+                 case x86-32 : arch = i386 ;
+             }
+-
+-            toolset.flags $(toolset)
+-                OPTIONS $(condition)/<target-os>$(target-os)/<architecture>$(_architecture_)/<address-model>$(_address-model_)
+-                : "--target=$(arch)-$(vendor-sys)"
+-                : unchecked ;
+         }
+     }
+ }

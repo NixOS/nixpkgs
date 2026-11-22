@@ -1,0 +1,12 @@
+--- a/src/server/storage/dbconfigmysql.cpp
++++ b/src/server/storage/dbconfigmysql.cpp
+@@ -241,8 +241,7 @@ bool DbConfigMysql::startInternalServer()
+     bool confUpdate = false;
+     QFile actualFile(actualConfig);
+     // update conf only if either global (or local) is newer than actual
+-    if ((QFileInfo(globalConfig).lastModified() > QFileInfo(actualFile).lastModified())
+-        || (QFileInfo(localConfig).lastModified() > QFileInfo(actualFile).lastModified())) {
++    if (true) {
+         QFile globalFile(globalConfig);
+         QFile localFile(localConfig);
+         if (globalFile.open(QFile::ReadOnly) && actualFile.open(QFile::WriteOnly)) {

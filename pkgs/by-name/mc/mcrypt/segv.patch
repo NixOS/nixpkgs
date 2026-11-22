@@ -1,0 +1,39 @@
+From 5bee29fae8f0e936ad4c957aef6035d09532a57a Mon Sep 17 00:00:00 2001
+From: Alon Bar-Lev <alon.barlev@gmail.com>
+Date: Sat, 22 Dec 2012 22:04:27 +0200
+Subject: [PATCH] cleanup: fixup segv on buffer access
+
+use exact buffer size instead of guess.
+
+do not copy out of source buffer.
+
+Signed-off-by: Alon Bar-Lev <alon.barlev@gmail.com>
+---
+ mcrypt-2.6.8/src/rfc2440.c |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/mcrypt-2.6.8/src/rfc2440.c b/mcrypt-2.6.8/src/rfc2440.c
+index 5a1f296..929b9ab 100644
+--- a/src/rfc2440.c
++++ b/src/rfc2440.c
+@@ -497,7 +497,7 @@ plaintext_encode(const USTRING dat)
+     time_t t;
+
+     assert(dat->len > 0);
+-    result = make_ustring( NULL,  2 * dat->len); /* xxx */
++    result = make_ustring( NULL,  dat->len + 12); /* xxx */
+     newdat = (USTRING)dat;
+     result->d[pos++] = (0x80 | 0x40 | PKT_PLAINTEXT);
+
+@@ -810,7 +810,8 @@ encrypted_encode(const USTRING pt, const DEK *dek)
+     _mcrypt_encrypt(dek->hd, rndpref, dek->blocklen + 2, NULL, 0);
+     _mcrypt_sync(dek->hd, rndpref, dek->blocklen);
+
+-    ct = make_ustring( rndpref,   2 * pt->len); /* xxx */
++    ct = make_ustring( NULL, dek->blocklen + 2 + pt->len + 12); /* xxx */
++    memcpy(ct->d, rndpref, dek->blocklen + 2);
+     pos = dek->blocklen + 2;
+
+     _mcrypt_encrypt(dek->hd, ct->d + pos, pt->len, pt->d, pt->len);
+--
+1.7.8.6

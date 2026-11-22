@@ -1,0 +1,35 @@
+diff --git a/gcc/ada/gcc-interface/Makefile.in b/gcc/ada/gcc-interface/Makefile.in
+index 4e74252bd74..0d848b5b4e3 100644
+--- a/gcc/ada/gcc-interface/Makefile.in
++++ b/gcc/ada/gcc-interface/Makefile.in
+@@ -111,7 +111,7 @@ NO_OMIT_ADAFLAGS = -fno-omit-frame-pointer
+ NO_SIBLING_ADAFLAGS = -fno-optimize-sibling-calls
+ NO_REORDER_ADAFLAGS = -fno-toplevel-reorder
+ GNATLIBFLAGS = -W -Wall -gnatg -nostdinc
+-GNATLIBCFLAGS = -g -O2
++GNATLIBCFLAGS = -g -O2 $(CFLAGS_FOR_TARGET)
+ # Pretend that _Unwind_GetIPInfo is available for the target by default.  This
+ # should be autodetected during the configuration of libada and passed down to
+ # here, but we need something for --disable-libada and hope for the best.
+@@ -198,7 +198,7 @@ RTSDIR = rts$(subst /,_,$(MULTISUBDIR))
+ # Link flags used to build gnat tools.  By default we prefer to statically
+ # link with libgcc to avoid a dependency on shared libgcc (which is tricky
+ # to deal with as it may conflict with the libgcc provided by the system).
+-GCC_LINK_FLAGS=-static-libstdc++ -static-libgcc
++GCC_LINK_FLAGS=-static-libstdc++ -static-libgcc $(CFLAGS_FOR_TARGET)
+
+ # End of variables for you to override.
+
+diff --git a/libada/Makefile.in b/libada/Makefile.in
+index 522b9207326..ca866c74471 100644
+--- a/libada/Makefile.in
++++ b/libada/Makefile.in
+@@ -59,7 +59,7 @@ LDFLAGS=
+ CFLAGS=-g
+ PICFLAG = @PICFLAG@
+ GNATLIBFLAGS= -W -Wall -gnatpg -nostdinc
+-GNATLIBCFLAGS= -g -O2
++GNATLIBCFLAGS= -g -O2 $(CFLAGS)
+ GNATLIBCFLAGS_FOR_C = -W -Wall $(GNATLIBCFLAGS) $(CFLAGS_FOR_TARGET) \
+        -fexceptions -DIN_RTS @have_getipinfo@ @have_capability@
+

@@ -1,0 +1,19 @@
+/ {
+  keymap {
+    compatible = "zmk,keymap";
+
+    default_layer {
+      bindings = <
+        &kp ESC   &kp A   &kp B
+        &kp SPACE &kp C   &kp D
+      >;
+    };
+
+    fn_layer {
+      bindings = <
+        &kp F1  &kp F2  &kp F3
+        &kp F4  &kp F5  &kp F6
+      >;
+    };
+  };
+};

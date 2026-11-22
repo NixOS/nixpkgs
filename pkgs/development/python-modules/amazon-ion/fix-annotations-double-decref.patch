@@ -1,0 +1,28 @@
+diff --git a/src/ioncmodule.c b/src/ioncmodule.c
+index b53258d..747d6f9 100644
+--- a/src/ioncmodule.c
++++ b/src/ioncmodule.c
+@@ -315,8 +315,13 @@ static iERR ionc_write_annotations(hWRITER writer, PyObject* obj) {
+         SUCCEED();
+     }
+ 
+-    annotations = PySequence_Fast(annotations, "expected sequence");
+-    Py_ssize_t len = PySequence_Size(annotations);
++    PyObject* annotations_seq = PySequence_Fast(annotations, "expected sequence");
++    Py_DECREF(annotations);
++    annotations = annotations_seq;
++    if (annotations == NULL) {
++        _FAILWITH_PENDING_PYERR();
++    }
++    Py_ssize_t len = PySequence_Fast_GET_SIZE(annotations);
+     Py_ssize_t i;
+ 
+     for (i = 0; i < len; i++) {
+@@ -333,7 +338,6 @@ static iERR ionc_write_annotations(hWRITER writer, PyObject* obj) {
+         Py_DECREF(pyAnnotation);
+         if (err) break;
+     }
+-    Py_XDECREF(annotations);
+ fail:
+     Py_XDECREF(annotations);
+     cRETURN;

@@ -1,0 +1,84 @@
+{
+  fetchFromGitHub,
+  gns3-gui,
+  gns3-server,
+  lib,
+  python3Packages,
+  qt6,
+  stdenv,
+  testers,
+  writableTmpDirAsHomeHook,
+}:
+
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "gns3-gui";
+  version = "2.2.61";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "GNS3";
+    repo = "gns3-gui";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BgLJC5boDCpQXr//5uans/Efqihmce+HCf4+xJAlxTE=";
+  };
+
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+
+  buildInputs = [
+    qt6.qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
+
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
+    distro
+    jsonschema
+    psutil
+    pyqt6
+    sentry-sdk
+    truststore
+    qdarkstyle
+  ];
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  preCheck = ''
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM=offscreen
+  '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = gns3-gui;
+      command = "${lib.getExe gns3-gui} --version";
+    };
+    inherit (gns3-server.passthru) updateScript;
+  };
+
+  meta = {
+    description = "Graphical Network Simulator 3 GUI";
+    longDescription = ''
+      Graphical user interface for controlling the GNS3 network simulator. This
+      requires access to a local or remote GNS3 server (it's recommended to
+      download the official GNS3 VM).
+    '';
+    homepage = "https://www.gns3.com/";
+    changelog = "https://github.com/GNS3/gns3-gui/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+    mainProgram = "gns3";
+  };
+})

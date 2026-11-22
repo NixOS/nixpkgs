@@ -1,0 +1,42 @@
+diff --git a/exultmenu.cc b/exultmenu.cc
+index 8873159..3551013 100644
+--- a/exultmenu.cc
++++ b/exultmenu.cc
+@@ -399,7 +399,6 @@ BaseGameInfo* ExultMenu::run() {
+ 				= "Please add the games in File Sharing";
+ 		const char close_screen_msg[] = "Touch screen for help!";
+ #else
+-		const char game_missing_msg[] = "Please edit the configuration file.";
+ 		const char close_screen_msg[] = "Press ESC to exit.";
+ #endif
+ 		// Create our message and programatically center it.
+@@ -408,9 +407,9 @@ BaseGameInfo* ExultMenu::run() {
+ 				"",
+ 				"To play you need the static data for either",
+ 				R"("The Black Gate" or "Serpent Isle".)",
+-				game_missing_msg,
+-				"",
+-				"",
++				"Please copy the GAMEDAT and STATIC directories",
++				"from either to the appropriate game directory",
++				"in ~/.exult/ (e.g. ~/.exult/blackgate).",
+ 				close_screen_msg,
+ 		};
+ 		const int total_lines
+diff --git a/files/utils.cc b/files/utils.cc
+index bd0b11d..6860def 100644
+--- a/files/utils.cc
++++ b/files/utils.cc
+@@ -960,8 +960,10 @@ static string Get_gamehome_dir(
+ 	gamehome_dir += "/config/non-packaged/data/exult";
+ 	return gamehome_dir;
+ #elif defined(XWIN)
+-	ignore_unused_variable_warning(home_dir, config_dir);
+-	return EXULT_DATADIR;
++	ignore_unused_variable_warning(config_dir);
++	string gamehome_dir(home_dir);
++	gamehome_dir += "/.exult";
++	return gamehome_dir;
+ #else
+ 	ignore_unused_variable_warning(home_dir, config_dir);
+ 	return ".";

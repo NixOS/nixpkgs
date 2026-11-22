@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 25 Sep 2026 09:17:33 -0400
+Subject: [PATCH 4/6] Help Swift Build find things in the store
+
+---
+ Sources/SWBCore/Settings/Settings.swift |  5 ++++-
+ Sources/SWBCore/ToolchainRegistry.swift | 17 +++++++++++++----
+ 2 files changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/Sources/SWBCore/Settings/Settings.swift b/Sources/SWBCore/Settings/Settings.swift
+index 5c531d00..d1deb913 100644
+--- a/Sources/SWBCore/Settings/Settings.swift
++++ b/Sources/SWBCore/Settings/Settings.swift
+@@ -1001,7 +1001,10 @@ extension Core {
+                 paths.append(path.join("usr").join("bin"))
+                 paths.append(path.join("usr").join("local").join("bin"))
+             case .swiftToolchain(let path, let xcodeDeveloperPath):
+-                if hostOperatingSystem != .windows {
++                if Path("@store-dir@").isAncestor(of: path) {
++                    // In Nixpkgs, only the “bin” folder will be present.
++                    paths.append(path.join("bin"))
++                } else if hostOperatingSystem != .windows {
+                     // On Windows the Swift toolchain's "developer dir" is mapped to %APPDATA%\Local\Programs\Swift, which doesn't have these directories
+                     paths.append(path.join("usr").join("bin"))
+                     paths.append(path.join("usr").join("local").join("bin"))
+diff --git a/Sources/SWBCore/ToolchainRegistry.swift b/Sources/SWBCore/ToolchainRegistry.swift
+index 24212280..27b6f5c2 100644
+--- a/Sources/SWBCore/ToolchainRegistry.swift
++++ b/Sources/SWBCore/ToolchainRegistry.swift
+@@ -89,10 +89,19 @@ public final class Toolchain: Hashable, Sendable {
+         self.overrideSettings = overrideSettings
+         self.defaultSettingsWhenPrimary = defaultSettingsWhenPrimary
+         self.executableSearchPaths = StackedSearchPath(paths: executableSearchPaths, fs: fs)
+-        self.librarySearchPaths = StackedSearchPath(
+-            paths: [path.join("usr/lib"), path.join("usr/local/lib")],
+-            fs: fs
+-        )
++        self.librarySearchPaths =
++            if Path("@store-dir@").isAncestor(of: path) && path.fileExtension != "xctoolchain" {
++                // Special case the toolchain in Nixpkgs, which will only have “lib”.
++                StackedSearchPath(
++                    paths: [path.join("lib")],
++                    fs: fs
++                )
++            } else {
++                StackedSearchPath(
++                    paths: [path.join("usr/lib"), path.join("usr/local/lib")],
++                    fs: fs
++                )
++            }
+         let frameworkSearchPaths = frameworkPaths.map { path.join($0) }
+         self.fallbackFrameworkSearchPaths = StackedSearchPath(
+             paths: frameworkSearchPaths,
+-- 
+2.54.0
+

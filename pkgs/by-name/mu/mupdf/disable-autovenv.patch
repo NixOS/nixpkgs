@@ -1,0 +1,28 @@
+--- a/scripts/wrap/__main__.py
++++ b/scripts/wrap/__main__.py
+@@ -918,24 +918,7 @@ import sysconfig
+ import tempfile
+ import textwrap
+ 
+-sys.path.insert(0, os.path.normpath(f'{__file__}/../..'))
+-try:
+-    import autovenv
+-finally:
+-    del sys.path[0]
+-
+-autovenv.enter()
+-
+-# Install/import pipcl. We don't pass 'pipcl' to above call to autovenv.enter()
+-# because this would do `pip install pipcl`, which seems to fail if we are
+-# being run via `pip install`. It looks like `pip install` deliberately does
+-# not install pip in a build venv.
+-#
+-try:
+-    import pipcl
+-except ImportError:
+-    subprocess.run(f'pip install --upgrade pipcl', shell=1, check=1)
+-    import pipcl
++import pipcl
+ 
+ if platform.system() == 'Windows':
+     '''

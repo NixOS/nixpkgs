@@ -1,0 +1,2534 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Amini Allight <amini.allight@protonmail.com>
+Date: Wed, 12 Feb 2025 03:53:35 +0000
+Subject: [PATCH 1/7] fixed incompatibility with Boost 1.87 due to use of
+ previously-deprecated now-removed functionality
+
+(cherry picked from commit 146925c2404655dbb61b9a18e57692bfc18eb6c6)
+
+ Conflicts:
+	examples/broadcast_server/broadcast_server.cpp
+	websocketpp/transport/asio/endpoint.hpp
+	websocketpp/transport/asio/security/none.hpp
+	websocketpp/transport/asio/security/tls.hpp
+---
+ SConstruct                                    |   4 +-
+ docs/faq.dox                                  |  12 +-
+ .../broadcast_server/broadcast_server.cpp     |   2 +-
+ examples/debug_client/debug_client.cpp        |   2 +-
+ examples/debug_server/debug_server.cpp        |   2 +-
+ examples/echo_client/echo_client.cpp          |   2 +-
+ examples/echo_server/echo_server.cpp          |   2 +-
+ .../echo_server_both/echo_server_both.cpp     |   8 +-
+ examples/echo_server_tls/echo_server_tls.cpp  |   2 +-
+ .../CMakeLists.txt                            |   2 +-
+ .../SConscript                                |   4 +-
+ .../external_io_context.cpp}                  |  14 +-
+ .../tcp_echo_server.hpp                       |  12 +-
+ examples/print_client/print_client.cpp        |   2 +-
+ .../print_client_tls/print_client_tls.cpp     |   2 +-
+ examples/scratch_server/scratch_server.cpp    |   2 +-
+ examples/sip_client/sip_client.cpp            |   2 +-
+ .../telemetry_client/telemetry_client.cpp     |   4 +-
+ .../telemetry_server/telemetry_server.cpp     |   2 +-
+ examples/testee_client/testee_client.cpp      |   2 +-
+ examples/testee_server/testee_server.cpp      |   2 +-
+ test/endpoint/endpoint.cpp                    |   6 +-
+ test/transport/asio/timers.cpp                |   8 +-
+ test/transport/integration.cpp                |  27 ++-
+ tutorials/utility_server/step1.cpp            |   2 +-
+ tutorials/utility_server/step2.cpp            |   2 +-
+ tutorials/utility_server/utility_server.md    |   8 +-
+ websocketpp/roles/server_endpoint.hpp         |   4 +-
+ websocketpp/transport/asio/base.hpp           |   2 +-
+ websocketpp/transport/asio/connection.hpp     |  44 ++---
+ websocketpp/transport/asio/endpoint.hpp       | 182 +++++++++---------
+ websocketpp/transport/asio/security/none.hpp  |  16 +-
+ websocketpp/transport/asio/security/tls.hpp   |  20 +-
+ websocketpp/transport/debug/endpoint.hpp      |   2 +-
+ websocketpp/transport/iostream/endpoint.hpp   |   2 +-
+ websocketpp/transport/stub/endpoint.hpp       |   2 +-
+ 36 files changed, 205 insertions(+), 208 deletions(-)
+ rename examples/{external_io_service => external_io_context}/CMakeLists.txt (87%)
+ rename examples/{external_io_service => external_io_context}/SConscript (72%)
+ rename examples/{external_io_service/external_io_service.cpp => external_io_context/external_io_context.cpp} (92%)
+ rename examples/{external_io_service => external_io_context}/tcp_echo_server.hpp (92%)
+
+diff --git a/SConstruct b/SConstruct
+index ae3df10..08a75a3 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -271,8 +271,8 @@ subprotocol_server = SConscript('#/examples/subprotocol_server/SConscript',varia
+ # telemetry_server
+ telemetry_server = SConscript('#/examples/telemetry_server/SConscript',variant_dir = builddir + 'telemetry_server',duplicate = 0)
+ 
+-# external_io_service
+-external_io_service = SConscript('#/examples/external_io_service/SConscript',variant_dir = builddir + 'external_io_service',duplicate = 0)
++# external_io_context
++external_io_context = SConscript('#/examples/external_io_context/SConscript',variant_dir = builddir + 'external_io_context',duplicate = 0)
+ 
+ if not env['PLATFORM'].startswith('win'):
+     # iostream_server
+diff --git a/docs/faq.dox b/docs/faq.dox
+index 9f417ec..c89e85b 100644
+--- a/docs/faq.dox
++++ b/docs/faq.dox
+@@ -29,19 +29,19 @@ Note: some browsers will allow the connection to continue if they requested a su
+ 
+ ### How do I cleanly exit an Asio transport based program
+ 
+-The Asio transport based clients and servers use the Asio library's underlying `io_service` to handle asyncronous networking operations. The standard behavior of the io_service is to run until there are no async operations left and then return. WebSocket++, when using the Asio transport, behaves like a standard Asio application. If you want your WebSocket++/Asio based program to stop network operations and cleanly close all sockets you will want to do the following:
++The Asio transport based clients and servers use the Asio library's underlying `io_context` to handle asyncronous networking operations. The standard behavior of the io_context is to run until there are no async operations left and then return. WebSocket++, when using the Asio transport, behaves like a standard Asio application. If you want your WebSocket++/Asio based program to stop network operations and cleanly close all sockets you will want to do the following:
+ 
+ - For servers, call `websocketpp::transport::asio::endpoint::stop_listening` to initiate the closing of the server listening socket.
+ - For clients, if you have engaged perpetual mode with `websocketpp::transport::asio::endpoint::start_perpetual`, disable it with `websocketpp::transport::asio::endpoint::stop_perpetual`.
+ - For both, run `websocketpp::endpoint::close` or `websocketpp::connection::close` on all currently outstanding connections. This will initiate the WebSocket closing handshake for these connections
+-- Wait. Asio is asyncronous. When the calls to the above methods (stop_listening, close, etc) complete the server *will still be listening*, the connections *will still be active* until the io_service gets around to asyncronously processing the socket and WebSocket protocol closing handshakes. The `io_service::run` method will exit cleanly and automatically when all operations are complete.
++- Wait. Asio is asyncronous. When the calls to the above methods (stop_listening, close, etc) complete the server *will still be listening*, the connections *will still be active* until the io_context gets around to asyncronously processing the socket and WebSocket protocol closing handshakes. The `io_context::run` method will exit cleanly and automatically when all operations are complete.
+ 
+-__WARNING__: Asio's `io_service` has a method called `stop`. WebSocket++ wraps this method as `websocketpp::transport::asio::endpoint::stop`. While this operation has a benign sounding name, it is a powerful and destructive operation that should only be used in special cases. If you are using `io_service::stop` or `endpoint::stop` without a very good reason your program is likely broken and may exhibit erratic behavior. Specifically, `io_service::stop` stops the processing of events entirely. This does not give current operations (such as socket closing handshakes) the opportunity to finish. It will leave your sockets in a dangling state that may invoke operating system level timeouts or other errors.
++__WARNING__: Asio's `io_context` has a method called `stop`. WebSocket++ wraps this method as `websocketpp::transport::asio::endpoint::stop`. While this operation has a benign sounding name, it is a powerful and destructive operation that should only be used in special cases. If you are using `io_context::stop` or `endpoint::stop` without a very good reason your program is likely broken and may exhibit erratic behavior. Specifically, `io_context::stop` stops the processing of events entirely. This does not give current operations (such as socket closing handshakes) the opportunity to finish. It will leave your sockets in a dangling state that may invoke operating system level timeouts or other errors.
+ 
+ __Special cases__:
+-- If your client uses the `start_perpetual` method it will prevent the io_service from exiting even if it has nothing to do. This is useful if you want a client endpoint to idle in the background to allow new connections to be formed on demand rather than generating a new endpoint for each.
+-- If you are using an external io_service and/or are placing non-WebSocket++ operations on the `io_service` those operations may keep the `io_service` open even after all WebSocket++ operations have completed.
+-- If you are using `poll`/`poll_one`/`run_one` or otherwise manually driving the `io_service` event loop you may need to adjust usage to make sure you are correctly recognizing the "done with work" and "not done but idling / `io_service::work`" cases.
++- If your client uses the `start_perpetual` method it will prevent the io_context from exiting even if it has nothing to do. This is useful if you want a client endpoint to idle in the background to allow new connections to be formed on demand rather than generating a new endpoint for each.
++- If you are using an external io_context and/or are placing non-WebSocket++ operations on the `io_context` those operations may keep the `io_context` open even after all WebSocket++ operations have completed.
++- If you are using `poll`/`poll_one`/`run_one` or otherwise manually driving the `io_context` event loop you may need to adjust usage to make sure you are correctly recognizing the "done with work" and "not done but idling / `io_context::work`" cases.
+ 
+ ### Is there a way to check the validity of a `connection_hdl`?
+ 
+diff --git a/examples/broadcast_server/broadcast_server.cpp b/examples/broadcast_server/broadcast_server.cpp
+index b02e7cd..106eba7 100644
+--- a/examples/broadcast_server/broadcast_server.cpp
++++ b/examples/broadcast_server/broadcast_server.cpp
+@@ -63,7 +63,7 @@ public:
+         // Start the server accept loop
+         m_server.start_accept();
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         try {
+             m_server.run();
+         } catch (const std::exception & e) {
+diff --git a/examples/debug_client/debug_client.cpp b/examples/debug_client/debug_client.cpp
+index d3e9153..d3e21ab 100644
+--- a/examples/debug_client/debug_client.cpp
++++ b/examples/debug_client/debug_client.cpp
+@@ -83,7 +83,7 @@ public:
+ 
+         m_endpoint.connect(con);
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         m_start = std::chrono::high_resolution_clock::now();
+         m_endpoint.run();
+     }
+diff --git a/examples/debug_server/debug_server.cpp b/examples/debug_server/debug_server.cpp
+index 8d1ff0e..3748800 100644
+--- a/examples/debug_server/debug_server.cpp
++++ b/examples/debug_server/debug_server.cpp
+@@ -162,7 +162,7 @@ int main() {
+         // Start the server accept loop
+         echo_server.start_accept();
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         echo_server.run();
+     } catch (websocketpp::exception const & e) {
+         std::cout << e.what() << std::endl;
+diff --git a/examples/echo_client/echo_client.cpp b/examples/echo_client/echo_client.cpp
+index 59af661..88171d9 100644
+--- a/examples/echo_client/echo_client.cpp
++++ b/examples/echo_client/echo_client.cpp
+@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
+         // exchanged until the event loop starts running in the next line.
+         c.connect(con);
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         // this will cause a single connection to be made to the server. c.run()
+         // will exit when this connection is closed.
+         c.run();
+diff --git a/examples/echo_server/echo_server.cpp b/examples/echo_server/echo_server.cpp
+index d234009..639c79f 100644
+--- a/examples/echo_server/echo_server.cpp
++++ b/examples/echo_server/echo_server.cpp
+@@ -55,7 +55,7 @@ int main() {
+         // Start the server accept loop
+         echo_server.start_accept();
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         echo_server.run();
+     } catch (websocketpp::exception const & e) {
+         std::cout << e.what() << std::endl;
+diff --git a/examples/echo_server_both/echo_server_both.cpp b/examples/echo_server_both/echo_server_both.cpp
+index 2c2c4ea..869c006 100644
+--- a/examples/echo_server_both/echo_server_both.cpp
++++ b/examples/echo_server_both/echo_server_both.cpp
+@@ -58,13 +58,13 @@ context_ptr on_tls_init(websocketpp::connection_hdl hdl) {
+ }
+ 
+ int main() {
+-    // set up an external io_service to run both endpoints on. This is not
++    // set up an external io_context to run both endpoints on. This is not
+     // strictly necessary, but simplifies thread management a bit.
+-    boost::asio::io_service ios;
++    boost::asio::io_context ios;
+ 
+     // set up plain endpoint
+     server_plain endpoint_plain;
+-    // initialize asio with our external io_service rather than an internal one
++    // initialize asio with our external io_context rather than an internal one
+     endpoint_plain.init_asio(&ios);
+     endpoint_plain.set_message_handler(
+         bind(&on_message<server_plain>,&endpoint_plain,::_1,::_2));
+@@ -82,6 +82,6 @@ int main() {
+     endpoint_tls.listen(443);
+     endpoint_tls.start_accept();
+ 
+-    // Start the ASIO io_service run loop running both endpoints
++    // Start the ASIO io_context run loop running both endpoints
+     ios.run();
+ }
+diff --git a/examples/echo_server_tls/echo_server_tls.cpp b/examples/echo_server_tls/echo_server_tls.cpp
+index 3d704f5..2f75a7d 100644
+--- a/examples/echo_server_tls/echo_server_tls.cpp
++++ b/examples/echo_server_tls/echo_server_tls.cpp
+@@ -148,7 +148,7 @@ int main() {
+     // Start the server accept loop
+     echo_server.start_accept();
+ 
+-    // Start the ASIO io_service run loop
++    // Start the ASIO io_context run loop
+     echo_server.run();
+ 
+ }
+diff --git a/examples/external_io_service/CMakeLists.txt b/examples/external_io_context/CMakeLists.txt
+similarity index 87%
+rename from examples/external_io_service/CMakeLists.txt
+rename to examples/external_io_context/CMakeLists.txt
+index 5223da1..a0e89ec 100644
+--- a/examples/external_io_service/CMakeLists.txt
++++ b/examples/external_io_context/CMakeLists.txt
+@@ -2,7 +2,7 @@
+ file (GLOB SOURCE_FILES *.cpp)
+ file (GLOB HEADER_FILES *.hpp)
+ 
+-init_target (external_io_service)
++init_target (external_io_context)
+ 
+ build_executable (${TARGET_NAME} ${SOURCE_FILES} ${HEADER_FILES})
+ 
+diff --git a/examples/external_io_service/SConscript b/examples/external_io_context/SConscript
+similarity index 72%
+rename from examples/external_io_service/SConscript
+rename to examples/external_io_context/SConscript
+index beb7c1c..57305aa 100644
+--- a/examples/external_io_service/SConscript
++++ b/examples/external_io_context/SConscript
+@@ -15,9 +15,9 @@ prgs = []
+ # if a C++11 environment is available build using that, otherwise use boost
+ if env_cpp11.has_key('WSPP_CPP11_ENABLED'):
+    ALL_LIBS = boostlibs(['system'],env_cpp11) + [platform_libs] + [polyfill_libs]
+-   prgs += env_cpp11.Program('external_io_service', ["external_io_service.cpp"], LIBS = ALL_LIBS)
++   prgs += env_cpp11.Program('external_io_context', ["external_io_context.cpp"], LIBS = ALL_LIBS)
+ else:
+    ALL_LIBS = boostlibs(['system'],env) + [platform_libs] + [polyfill_libs]
+-   prgs += env.Program('external_io_service', ["external_io_service.cpp"], LIBS = ALL_LIBS)
++   prgs += env.Program('external_io_context', ["external_io_context.cpp"], LIBS = ALL_LIBS)
+ 
+ Return('prgs')
+diff --git a/examples/external_io_service/external_io_service.cpp b/examples/external_io_context/external_io_context.cpp
+similarity index 92%
+rename from examples/external_io_service/external_io_service.cpp
+rename to examples/external_io_context/external_io_context.cpp
+index 7372d59..c5ba0a4 100644
+--- a/examples/external_io_service/external_io_service.cpp
++++ b/examples/external_io_context/external_io_context.cpp
+@@ -59,10 +59,10 @@ void on_message(ws_echo_server* s, websocketpp::connection_hdl hdl, ws_echo_serv
+ }
+ 
+ int main() {
+-    asio::io_service service;
++    asio::io_context context;
+ 
+     // Add a TCP echo server on port 9003
+-    tcp_echo_server custom_http_server(service, 9003);
++    tcp_echo_server custom_http_server(context, 9003);
+ 
+     // Add a WebSocket echo server on port 9002
+     ws_echo_server ws_server;
+@@ -70,8 +70,8 @@ int main() {
+     ws_server.clear_access_channels(websocketpp::log::alevel::frame_payload);
+ 
+     // The only difference in this code between an internal and external
+-    // io_service is the different constructor to init_asio
+-    ws_server.init_asio(&service);
++    // io_context is the different constructor to init_asio
++    ws_server.init_asio(&context);
+ 
+     // Register our message handler
+     ws_server.set_message_handler(bind(&on_message,&ws_server,::_1,::_2));
+@@ -80,6 +80,6 @@ int main() {
+ 
+     // TODO: add a timer?
+ 
+-    // Start the Asio io_service run loop for all
+-    service.run();
+-}
+\ No newline at end of file
++    // Start the Asio io_context run loop for all
++    context.run();
++}
+diff --git a/examples/external_io_service/tcp_echo_server.hpp b/examples/external_io_context/tcp_echo_server.hpp
+similarity index 92%
+rename from examples/external_io_service/tcp_echo_server.hpp
+rename to examples/external_io_context/tcp_echo_server.hpp
+index ef4ce18..2e14703 100644
+--- a/examples/external_io_service/tcp_echo_server.hpp
++++ b/examples/external_io_context/tcp_echo_server.hpp
+@@ -44,7 +44,7 @@ namespace asio = websocketpp::lib::asio;
+ struct tcp_echo_session : websocketpp::lib::enable_shared_from_this<tcp_echo_session> {
+     typedef websocketpp::lib::shared_ptr<tcp_echo_session> ptr;
+     
+-    tcp_echo_session(asio::io_service & service) : m_socket(service) {}
++    tcp_echo_session(asio::io_context & context) : m_socket(context) {}
+ 
+     void start() {
+         m_socket.async_read_some(asio::buffer(m_buffer, sizeof(m_buffer)),
+@@ -72,15 +72,15 @@ struct tcp_echo_session : websocketpp::lib::enable_shared_from_this<tcp_echo_ses
+ };
+ 
+ struct tcp_echo_server {
+-    tcp_echo_server(asio::io_service & service, short port)
+-        : m_service(service)
+-        , m_acceptor(service, asio::ip::tcp::endpoint(asio::ip::tcp::v6(), port))
++    tcp_echo_server(asio::io_context & context, short port)
++        : m_context(context)
++        , m_acceptor(context, asio::ip::tcp::endpoint(asio::ip::tcp::v6(), port))
+     {
+         this->start_accept();
+     }
+     
+     void start_accept() {
+-        tcp_echo_session::ptr new_session(new tcp_echo_session(m_service));
++        tcp_echo_session::ptr new_session(new tcp_echo_session(m_context));
+         m_acceptor.async_accept(new_session->m_socket,
+             bind(&tcp_echo_server::handle_accept, this, new_session, _1));
+     }
+@@ -92,6 +92,6 @@ struct tcp_echo_server {
+         start_accept();
+     }
+ 
+-    asio::io_service & m_service;
++    asio::io_context & m_context;
+     asio::ip::tcp::acceptor m_acceptor;
+ };
+diff --git a/examples/print_client/print_client.cpp b/examples/print_client/print_client.cpp
+index 7ba6e5f..20a2bd3 100644
+--- a/examples/print_client/print_client.cpp
++++ b/examples/print_client/print_client.cpp
+@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
+         // exchanged until the event loop starts running in the next line.
+         c.connect(con);
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         // this will cause a single connection to be made to the server. c.run()
+         // will exit when this connection is closed.
+         c.run();
+diff --git a/examples/print_client_tls/print_client_tls.cpp b/examples/print_client_tls/print_client_tls.cpp
+index 469d9c6..43164ea 100644
+--- a/examples/print_client_tls/print_client_tls.cpp
++++ b/examples/print_client_tls/print_client_tls.cpp
+@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
+ 
+         c.get_alog().write(websocketpp::log::alevel::app, "Connecting to " + uri);
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         // this will cause a single connection to be made to the server. c.run()
+         // will exit when this connection is closed.
+         c.run();
+diff --git a/examples/scratch_server/scratch_server.cpp b/examples/scratch_server/scratch_server.cpp
+index 901ae8e..dab20b9 100644
+--- a/examples/scratch_server/scratch_server.cpp
++++ b/examples/scratch_server/scratch_server.cpp
+@@ -94,7 +94,7 @@ int main(int argc, char * argv[]) {
+         // Start the server accept loop
+         echo_server.start_accept();
+ 	    
+-	    // Start the ASIO io_service run loop
++	    // Start the ASIO io_context run loop
+         echo_server.run();
+     } catch (websocketpp::exception const & e) {
+         std::cout << e.what() << std::endl;
+diff --git a/examples/sip_client/sip_client.cpp b/examples/sip_client/sip_client.cpp
+index 66fa857..c9f33e7 100644
+--- a/examples/sip_client/sip_client.cpp
++++ b/examples/sip_client/sip_client.cpp
+@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
+ 
+         sip_client.connect(con);
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         sip_client.run();
+ 
+         while(!received) {
+diff --git a/examples/telemetry_client/telemetry_client.cpp b/examples/telemetry_client/telemetry_client.cpp
+index f0f7fae..12390b8 100644
+--- a/examples/telemetry_client/telemetry_client.cpp
++++ b/examples/telemetry_client/telemetry_client.cpp
+@@ -62,10 +62,10 @@ public:
+         m_hdl = con->get_handle();
+ 
+         // Queue the connection. No DNS queries or network connections will be
+-        // made until the io_service event loop is run.
++        // made until the io_context event loop is run.
+         m_client.connect(con);
+ 
+-        // Create a thread to run the ASIO io_service event loop
++        // Create a thread to run the ASIO io_context event loop
+         websocketpp::lib::thread asio_thread(&client::run, &m_client);
+ 
+         // Create a thread to run the telemetry loop
+diff --git a/examples/telemetry_server/telemetry_server.cpp b/examples/telemetry_server/telemetry_server.cpp
+index 3f8e604..2286c50 100644
+--- a/examples/telemetry_server/telemetry_server.cpp
++++ b/examples/telemetry_server/telemetry_server.cpp
+@@ -66,7 +66,7 @@ public:
+         // Set the initial timer to start telemetry
+         set_timer();
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         try {
+             m_endpoint.run();
+         } catch (websocketpp::exception const & e) {
+diff --git a/examples/testee_client/testee_client.cpp b/examples/testee_client/testee_client.cpp
+index b66e633..12583e5 100644
+--- a/examples/testee_client/testee_client.cpp
++++ b/examples/testee_client/testee_client.cpp
+@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
+         client::connection_ptr con = c.get_connection(uri+"/getCaseCount", ec);
+         c.connect(con);
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         c.run();
+ 
+         std::cout << "case count: " << case_count << std::endl;
+diff --git a/examples/testee_server/testee_server.cpp b/examples/testee_server/testee_server.cpp
+index 9ac9a7d..13e574e 100644
+--- a/examples/testee_server/testee_server.cpp
++++ b/examples/testee_server/testee_server.cpp
+@@ -124,7 +124,7 @@ int main(int argc, char * argv[]) {
+         // Start the server accept loop
+         testee_server.start_accept();
+ 
+-        // Start the ASIO io_service run loop
++        // Start the ASIO io_context run loop
+         if (num_threads == 1) {
+             testee_server.run();
+         } else {
+diff --git a/test/endpoint/endpoint.cpp b/test/endpoint/endpoint.cpp
+index b4c429e..fa58e66 100644
+--- a/test/endpoint/endpoint.cpp
++++ b/test/endpoint/endpoint.cpp
+@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE( initialize_server_asio ) {
+ 
+ BOOST_AUTO_TEST_CASE( initialize_server_asio_external ) {
+     websocketpp::server<websocketpp::config::asio> s;
+-    boost::asio::io_service ios;
++    boost::asio::io_context ios;
+     s.init_asio(&ios);
+ }
+ 
+@@ -141,8 +141,8 @@ BOOST_AUTO_TEST_CASE( listen_after_listen_failure ) {
+     server1.init_asio();
+     server2.init_asio();
+ 
+-    boost::asio::ip::tcp::endpoint ep1(boost::asio::ip::address::from_string("127.0.0.1"), 12345);
+-    boost::asio::ip::tcp::endpoint ep2(boost::asio::ip::address::from_string("127.0.0.1"), 23456);
++    boost::asio::ip::tcp::endpoint ep1(boost::asio::ip::make_address("127.0.0.1"), 12345);
++    boost::asio::ip::tcp::endpoint ep2(boost::asio::ip::make_address("127.0.0.1"), 23456);
+ 
+     server1.listen(ep1, ec);
+     BOOST_CHECK(!ec);
+diff --git a/test/transport/asio/timers.cpp b/test/transport/asio/timers.cpp
+index aa03d61..391b755 100644
+--- a/test/transport/asio/timers.cpp
++++ b/test/transport/asio/timers.cpp
+@@ -54,9 +54,9 @@ void run_dummy_server(int port) {
+     using boost::asio::ip::tcp;
+ 
+     try {
+-        boost::asio::io_service io_service;
+-        tcp::acceptor acceptor(io_service, tcp::endpoint(tcp::v6(), port));
+-        tcp::socket socket(io_service);
++        boost::asio::io_context io_context;
++        tcp::acceptor acceptor(io_context, tcp::endpoint(tcp::v6(), port));
++        tcp::socket socket(io_context);
+ 
+         acceptor.accept(socket);
+         for (;;) {
+@@ -79,7 +79,7 @@ void run_dummy_server(int port) {
+ 
+ // Wait for the specified time period then fail the test
+ void run_test_timer(long value) {
+-    boost::asio::io_service ios;
++    boost::asio::io_context ios;
+     boost::asio::deadline_timer t(ios,boost::posix_time::milliseconds(value));
+     boost::system::error_code ec;
+     t.wait(ec);
+diff --git a/test/transport/integration.cpp b/test/transport/integration.cpp
+index c083cfd..ab82b1a 100644
+--- a/test/transport/integration.cpp
++++ b/test/transport/integration.cpp
+@@ -221,9 +221,9 @@ void run_dummy_server(int port) {
+     using boost::asio::ip::tcp;
+ 
+     try {
+-        boost::asio::io_service io_service;
+-        tcp::acceptor acceptor(io_service, tcp::endpoint(tcp::v6(), port));
+-        tcp::socket socket(io_service);
++        boost::asio::io_context io_context;
++        tcp::acceptor acceptor(io_context, tcp::endpoint(tcp::v6(), port));
++        tcp::socket socket(io_context);
+ 
+         acceptor.accept(socket);
+         for (;;) {
+@@ -248,13 +248,12 @@ void run_dummy_client(std::string port) {
+     using boost::asio::ip::tcp;
+ 
+     try {
+-        boost::asio::io_service io_service;
+-        tcp::resolver resolver(io_service);
+-        tcp::resolver::query query("localhost", port);
+-        tcp::resolver::iterator iterator = resolver.resolve(query);
+-        tcp::socket socket(io_service);
++        boost::asio::io_context io_context;
++        tcp::resolver resolver(io_context);
++        tcp::resolver::results_type endpoints = resolver.resolve("localhost", port);
++        tcp::socket socket(io_context);
+ 
+-        boost::asio::connect(socket, iterator);
++        boost::asio::connect(socket, endpoints);
+         for (;;) {
+             char data[512];
+             boost::system::error_code ec;
+@@ -358,11 +357,11 @@ class test_deadline_timer
+ {
+ public:
+     test_deadline_timer(int seconds)
+-    : m_timer(m_io_service, boost::posix_time::seconds(seconds))
++    : m_timer(m_io_context, boost::posix_time::seconds(seconds))
+     {
+         m_timer.async_wait(bind(&test_deadline_timer::expired, this, ::_1));
+-        std::size_t (boost::asio::io_service::*run)() = &boost::asio::io_service::run;
+-        m_timer_thread = websocketpp::lib::thread(websocketpp::lib::bind(run, &m_io_service));
++        std::size_t (boost::asio::io_context::*run)() = &boost::asio::io_context::run;
++        m_timer_thread = websocketpp::lib::thread(websocketpp::lib::bind(run, &m_io_context));
+     }
+     ~test_deadline_timer()
+     {
+@@ -379,7 +378,7 @@ public:
+         BOOST_FAIL("Test timed out");
+     }
+ 
+-    boost::asio::io_service m_io_service;
++    boost::asio::io_context m_io_context;
+     boost::asio::deadline_timer m_timer;
+     websocketpp::lib::thread m_timer_thread;
+ };
+@@ -541,7 +540,7 @@ BOOST_AUTO_TEST_CASE( client_runs_out_of_work ) {
+ 
+     c.run();
+ 
+-    // This test checks that an io_service with no work ends immediately.
++    // This test checks that an io_context with no work ends immediately.
+     BOOST_CHECK(true);
+ }
+ 
+diff --git a/tutorials/utility_server/step1.cpp b/tutorials/utility_server/step1.cpp
+index c0e4643..dae4a2a 100644
+--- a/tutorials/utility_server/step1.cpp
++++ b/tutorials/utility_server/step1.cpp
+@@ -57,7 +57,7 @@ public:
+         // Queues a connection accept operation
+         m_endpoint.start_accept();
+ 
+-        // Start the Asio io_service run loop
++        // Start the Asio io_context run loop
+         m_endpoint.run();
+     }
+ private:
+diff --git a/tutorials/utility_server/step2.cpp b/tutorials/utility_server/step2.cpp
+index a2815bb..c4fe486 100644
+--- a/tutorials/utility_server/step2.cpp
++++ b/tutorials/utility_server/step2.cpp
+@@ -68,7 +68,7 @@ public:
+         // Queues a connection accept operation
+         m_endpoint.start_accept();
+ 
+-        // Start the Asio io_service run loop
++        // Start the Asio io_context run loop
+         m_endpoint.run();
+     }
+ private:
+diff --git a/tutorials/utility_server/utility_server.md b/tutorials/utility_server/utility_server.md
+index 1c7ee3f..461eed0 100644
+--- a/tutorials/utility_server/utility_server.md
++++ b/tutorials/utility_server/utility_server.md
+@@ -56,7 +56,7 @@ m_endpoint.set_access_channels(websocketpp::log::alevel::all ^ websocketpp::log:
+ 
+ Next, we initialize the transport system underlying the endpoint. This method is specific to the Asio transport not WebSocket++ core. It will not be necessary or present in endpoints that use a non-asio config.
+ 
+-> **Note:** This example uses an internal Asio `io_service` that is managed by the endpoint itself. This is a simple arrangement suitable for programs where WebSocket++ is the only code using Asio. If you have an existing program that already manages an `io_service` object or want to build a new program where WebSocket++ handlers share an io_service with other handlers you can pass the `io_service` you want WebSocket++ to register its handlers on to the `init_asio()` method and it will use it instead of generating and managing its own. [TODO: FAQ link instead?]
++> **Note:** This example uses an internal Asio `io_context` that is managed by the endpoint itself. This is a simple arrangement suitable for programs where WebSocket++ is the only code using Asio. If you have an existing program that already manages an `io_context` object or want to build a new program where WebSocket++ handlers share an io_context with other handlers you can pass the `io_context` you want WebSocket++ to register its handlers on to the `init_asio()` method and it will use it instead of generating and managing its own. [TODO: FAQ link instead?]
+ 
+ ~~~{.cpp}
+ m_endpoint.init_asio();
+@@ -64,7 +64,7 @@ m_endpoint.init_asio();
+ 
+ #### `utility_server::run` method
+ 
+-In addition to the constructor, we also add a run method that sets up the listening socket, begins accepting connections, starts the Asio io_service event loop.
++In addition to the constructor, we also add a run method that sets up the listening socket, begins accepting connections, starts the Asio io_context event loop.
+ 
+ ~~~{.cpp}
+ // Listen on port 9002
+@@ -73,7 +73,7 @@ m_endpoint.listen(9002);
+ // Queues a connection accept operation
+ m_endpoint.start_accept();
+ 
+-// Start the Asio io_service run loop
++// Start the Asio io_context run loop
+ m_endpoint.run();
+ ~~~
+ 
+@@ -123,7 +123,7 @@ public:
+         // Queues a connection accept operation
+         m_endpoint.start_accept();
+ 
+-        // Start the Asio io_service run loop
++        // Start the Asio io_context run loop
+         m_endpoint.run();
+     }
+ private:
+diff --git a/websocketpp/roles/server_endpoint.hpp b/websocketpp/roles/server_endpoint.hpp
+index 9cc652f..ed4b703 100644
+--- a/websocketpp/roles/server_endpoint.hpp
++++ b/websocketpp/roles/server_endpoint.hpp
+@@ -110,8 +110,8 @@ public:
+     /// Starts the server's async connection acceptance loop (exception free)
+     /**
+      * Initiates the server connection acceptance loop. Must be called after
+-     * listen. This method will have no effect until the underlying io_service
+-     * starts running. It may be called after the io_service is already running.
++     * listen. This method will have no effect until the underlying io_context
++     * starts running. It may be called after the io_context is already running.
+      *
+      * Refer to documentation for the transport policy you are using for
+      * instructions on how to stop this acceptance loop.
+diff --git a/websocketpp/transport/asio/base.hpp b/websocketpp/transport/asio/base.hpp
+index b945fe1..8d980ad 100644
+--- a/websocketpp/transport/asio/base.hpp
++++ b/websocketpp/transport/asio/base.hpp
+@@ -40,7 +40,7 @@ namespace websocketpp {
+ namespace transport {
+ /// Transport policy that uses asio
+ /**
+- * This policy uses a single asio io_service to provide transport
++ * This policy uses a single asio io_context to provide transport
+  * services to a WebSocket++ endpoint.
+  */
+ namespace asio {
+diff --git a/websocketpp/transport/asio/connection.hpp b/websocketpp/transport/asio/connection.hpp
+index 57dda74..eaee6bc 100644
+--- a/websocketpp/transport/asio/connection.hpp
++++ b/websocketpp/transport/asio/connection.hpp
+@@ -85,10 +85,10 @@ public:
+     typedef typename config::response_type response_type;
+     typedef typename response_type::ptr response_ptr;
+ 
+-    /// Type of a pointer to the Asio io_service being used
+-    typedef lib::asio::io_service * io_service_ptr;
+-    /// Type of a pointer to the Asio io_service::strand being used
+-    typedef lib::shared_ptr<lib::asio::io_service::strand> strand_ptr;
++    /// Type of a pointer to the Asio io_context being used
++    typedef lib::asio::io_context * io_context_ptr;
++    /// Type of a pointer to the Asio io_context::strand being used
++    typedef lib::shared_ptr<lib::asio::io_context::strand> strand_ptr;
+     /// Type of a pointer to the Asio timer class
+     typedef lib::shared_ptr<lib::asio::steady_timer> timer_ptr;
+ 
+@@ -97,7 +97,7 @@ public:
+     // to the public api.
+     friend class endpoint<config>;
+ 
+-    // generate and manage our own io_service
++    // generate and manage our own io_context
+     explicit connection(bool is_server, const lib::shared_ptr<alog_type> & alog, const lib::shared_ptr<elog_type> & elog)
+       : m_is_server(is_server)
+       , m_alog(alog)
+@@ -313,7 +313,7 @@ public:
+     timer_ptr set_timer(long duration, timer_handler callback) {
+         timer_ptr new_timer(
+             new lib::asio::steady_timer(
+-                *m_io_service,
++                *m_io_context,
+                 lib::asio::milliseconds(duration))
+         );
+ 
+@@ -393,7 +393,7 @@ public:
+     /// Initialize transport for reading
+     /**
+      * init_asio is called once immediately after construction to initialize
+-     * Asio components to the io_service
++     * Asio components to the io_context
+      *
+      * The transport initialization sequence consists of the following steps:
+      * - Pre-init: the underlying socket is initialized to the point where
+@@ -451,21 +451,21 @@ protected:
+     /// Finish constructing the transport
+     /**
+      * init_asio is called once immediately after construction to initialize
+-     * Asio components to the io_service.
++     * Asio components to the io_context.
+      *
+-     * @param io_service A pointer to the io_service to register with this
++     * @param io_context A pointer to the io_context to register with this
+      * connection
+      *
+      * @return Status code for the success or failure of the initialization
+      */
+-    lib::error_code init_asio (io_service_ptr io_service) {
+-        m_io_service = io_service;
++    lib::error_code init_asio (io_context_ptr io_context) {
++        m_io_context = io_context;
+ 
+         if (config::enable_multithreading) {
+-            m_strand.reset(new lib::asio::io_service::strand(*io_service));
++            m_strand.reset(new lib::asio::io_context::strand(*io_context));
+         }
+ 
+-        lib::error_code ec = socket_con_type::init_asio(io_service, m_strand,
++        lib::error_code ec = socket_con_type::init_asio(io_context, m_strand,
+             m_is_server);
+ 
+         return ec;
+@@ -573,7 +573,7 @@ protected:
+         lib::error_code const & ec)
+     {
+         if (ec == transport::error::operation_aborted ||
+-            (post_timer && lib::asio::is_neg(post_timer->expires_from_now())))
++            (post_timer && lib::asio::is_neg(post_timer->expiry() - std::chrono::steady_clock::now())))
+         {
+             m_alog->write(log::alevel::devel,"post_init cancelled");
+             return;
+@@ -679,7 +679,7 @@ protected:
+         // Whatever aborted it will be issuing the callback so we are safe to
+         // return
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(m_proxy_data->timer->expires_from_now()))
++            lib::asio::is_neg(m_proxy_data->timer->expiry() - std::chrono::steady_clock::now()))
+         {
+             m_elog->write(log::elevel::devel,"write operation aborted");
+             return;
+@@ -751,7 +751,7 @@ protected:
+         // Whatever aborted it will be issuing the callback so we are safe to
+         // return
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(m_proxy_data->timer->expires_from_now()))
++            lib::asio::is_neg(m_proxy_data->timer->expiry() - std::chrono::steady_clock::now()))
+         {
+             m_elog->write(log::elevel::devel,"read operation aborted");
+             return;
+@@ -1012,18 +1012,18 @@ protected:
+      */
+     lib::error_code interrupt(interrupt_handler handler) {
+         if (config::enable_multithreading) {
+-            m_io_service->post(m_strand->wrap(handler));
++            boost::asio::post(m_io_context->get_executor(), m_strand->wrap(handler));
+         } else {
+-            m_io_service->post(handler);
++            boost::asio::post(m_io_context->get_executor(), handler);
+         }
+         return lib::error_code();
+     }
+ 
+     lib::error_code dispatch(dispatch_handler handler) {
+         if (config::enable_multithreading) {
+-            m_io_service->post(m_strand->wrap(handler));
++            boost::asio::post(m_io_context->get_executor(), m_strand->wrap(handler));
+         } else {
+-            m_io_service->post(handler);
++            boost::asio::post(m_io_context->get_executor(), handler);
+         }
+         return lib::error_code();
+     }
+@@ -1095,7 +1095,7 @@ protected:
+         callback, lib::asio::error_code const & ec)
+     {
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(shutdown_timer->expires_from_now()))
++            lib::asio::is_neg(shutdown_timer->expiry() - std::chrono::steady_clock::now()))
+         {
+             m_alog->write(log::alevel::devel,"async_shutdown cancelled");
+             return;
+@@ -1172,7 +1172,7 @@ private:
+     lib::shared_ptr<proxy_data> m_proxy_data;
+ 
+     // transport resources
+-    io_service_ptr  m_io_service;
++    io_context_ptr  m_io_context;
+     strand_ptr      m_strand;
+     connection_hdl  m_connection_hdl;
+ 
+diff --git a/websocketpp/transport/asio/endpoint.hpp b/websocketpp/transport/asio/endpoint.hpp
+index 94509ad..7af0915 100644
+--- a/websocketpp/transport/asio/endpoint.hpp
++++ b/websocketpp/transport/asio/endpoint.hpp
+@@ -77,25 +77,25 @@ public:
+     /// associated with this endpoint transport component
+     typedef typename transport_con_type::ptr transport_con_ptr;
+ 
+-    /// Type of a pointer to the ASIO io_service being used
+-    typedef lib::asio::io_service * io_service_ptr;
++    /// Type of a pointer to the ASIO io_context being used
++    typedef lib::asio::io_context * io_context_ptr;
+     /// Type of a shared pointer to the acceptor being used
+     typedef lib::shared_ptr<lib::asio::ip::tcp::acceptor> acceptor_ptr;
+     /// Type of a shared pointer to the resolver being used
+     typedef lib::shared_ptr<lib::asio::ip::tcp::resolver> resolver_ptr;
+     /// Type of timer handle
+     typedef lib::shared_ptr<lib::asio::steady_timer> timer_ptr;
+-    /// Type of a shared pointer to an io_service work object
+-    typedef lib::shared_ptr<lib::asio::io_service::work> work_ptr;
++    /// Type of a shared pointer to an io_context work object
++    typedef lib::shared_ptr<lib::asio::executor_work_guard<lib::asio::io_context::executor_type>> work_ptr;
+ 
+     /// Type of socket pre-bind handler
+     typedef lib::function<lib::error_code(acceptor_ptr)> tcp_pre_bind_handler;
+ 
+-    // generate and manage our own io_service
++    // generate and manage our own io_context
+     explicit endpoint()
+-      : m_io_service(NULL)
+-      , m_external_io_service(false)
+-      , m_listen_backlog(lib::asio::socket_base::max_connections)
++      : m_io_context(NULL)
++      , m_external_io_context(false)
++      , m_listen_backlog(lib::asio::socket_base::max_listen_connections)
+       , m_reuse_addr(false)
+       , m_state(UNINITIALIZED)
+     {
+@@ -103,14 +103,14 @@ public:
+     }
+ 
+     ~endpoint() {
+-        // clean up our io_service if we were initialized with an internal one.
++        // clean up our io_context if we were initialized with an internal one.
+ 
+         // Explicitly destroy local objects
+         m_acceptor.reset();
+         m_resolver.reset();
+         m_work.reset();
+-        if (m_state != UNINITIALIZED && !m_external_io_service) {
+-            delete m_io_service;
++        if (m_state != UNINITIALIZED && !m_external_io_context) {
++            delete m_io_context;
+         }
+     }
+ 
+@@ -132,34 +132,34 @@ public:
+       : config::socket_type(std::move(src))
+       , m_tcp_pre_init_handler(src.m_tcp_pre_init_handler)
+       , m_tcp_post_init_handler(src.m_tcp_post_init_handler)
+-      , m_io_service(src.m_io_service)
+-      , m_external_io_service(src.m_external_io_service)
++      , m_io_context(src.m_io_context)
++      , m_external_io_context(src.m_external_io_context)
+       , m_acceptor(src.m_acceptor)
+-      , m_listen_backlog(lib::asio::socket_base::max_connections)
++      , m_listen_backlog(lib::asio::socket_base::max_listen_connections)
+       , m_reuse_addr(src.m_reuse_addr)
+       , m_elog(src.m_elog)
+       , m_alog(src.m_alog)
+       , m_state(src.m_state)
+     {
+-        src.m_io_service = NULL;
+-        src.m_external_io_service = false;
++        src.m_io_context = NULL;
++        src.m_external_io_context = false;
+         src.m_acceptor = NULL;
+         src.m_state = UNINITIALIZED;
+     }
+ 
+     /*endpoint & operator= (const endpoint && rhs) {
+         if (this != &rhs) {
+-            m_io_service = rhs.m_io_service;
+-            m_external_io_service = rhs.m_external_io_service;
++            m_io_context = rhs.m_io_context;
++            m_external_io_context = rhs.m_external_io_context;
+             m_acceptor = rhs.m_acceptor;
+             m_listen_backlog = rhs.m_listen_backlog;
+             m_reuse_addr = rhs.m_reuse_addr;
+             m_state = rhs.m_state;
+ 
+-            rhs.m_io_service = NULL;
+-            rhs.m_external_io_service = false;
++            rhs.m_io_context = NULL;
++            rhs.m_external_io_context = false;
+             rhs.m_acceptor = NULL;
+-            rhs.m_listen_backlog = lib::asio::socket_base::max_connections;
++            rhs.m_listen_backlog = lib::asio::socket_base::max_listen_connections;
+             rhs.m_state = UNINITIALIZED;
+             
+             // TODO: this needs to be updated
+@@ -173,16 +173,16 @@ public:
+         return socket_type::is_secure();
+     }
+ 
+-    /// initialize asio transport with external io_service (exception free)
++    /// initialize asio transport with external io_context (exception free)
+     /**
+      * Initialize the ASIO transport policy for this endpoint using the provided
+-     * io_service object. asio_init must be called exactly once on any endpoint
++     * io_context object. asio_init must be called exactly once on any endpoint
+      * that uses transport::asio before it can be used.
+      *
+-     * @param ptr A pointer to the io_service to use for asio events
++     * @param ptr A pointer to the io_context to use for asio events
+      * @param ec Set to indicate what error occurred, if any.
+      */
+-    void init_asio(io_service_ptr ptr, lib::error_code & ec) {
++    void init_asio(io_context_ptr ptr, lib::error_code & ec) {
+         if (m_state != UNINITIALIZED) {
+             m_elog->write(log::elevel::library,
+                 "asio::init_asio called from the wrong state");
+@@ -193,34 +193,34 @@ public:
+ 
+         m_alog->write(log::alevel::devel,"asio::init_asio");
+ 
+-        m_io_service = ptr;
+-        m_external_io_service = true;
+-        m_acceptor.reset(new lib::asio::ip::tcp::acceptor(*m_io_service));
++        m_io_context = ptr;
++        m_external_io_context = true;
++        m_acceptor.reset(new lib::asio::ip::tcp::acceptor(*m_io_context));
+ 
+         m_state = READY;
+         ec = lib::error_code();
+     }
+ 
+-    /// initialize asio transport with external io_service
++    /// initialize asio transport with external io_context
+     /**
+      * Initialize the ASIO transport policy for this endpoint using the provided
+-     * io_service object. asio_init must be called exactly once on any endpoint
++     * io_context object. asio_init must be called exactly once on any endpoint
+      * that uses transport::asio before it can be used.
+      *
+-     * @param ptr A pointer to the io_service to use for asio events
++     * @param ptr A pointer to the io_context to use for asio events
+      */
+-    void init_asio(io_service_ptr ptr) {
++    void init_asio(io_context_ptr ptr) {
+         lib::error_code ec;
+         init_asio(ptr,ec);
+         if (ec) { throw exception(ec); }
+     }
+ 
+-    /// Initialize asio transport with internal io_service (exception free)
++    /// Initialize asio transport with internal io_context (exception free)
+     /**
+      * This method of initialization will allocate and use an internally managed
+-     * io_service.
++     * io_context.
+      *
+-     * @see init_asio(io_service_ptr ptr)
++     * @see init_asio(io_context_ptr ptr)
+      *
+      * @param ec Set to indicate what error occurred, if any.
+      */
+@@ -230,21 +230,21 @@ public:
+         // TODO: remove the use of auto_ptr when C++98/03 support is no longer
+         //       necessary.
+ #ifdef _WEBSOCKETPP_CPP11_MEMORY_
+-        lib::unique_ptr<lib::asio::io_service> service(new lib::asio::io_service());
++        lib::unique_ptr<lib::asio::io_context> context(new lib::asio::io_context());
+ #else
+-        lib::auto_ptr<lib::asio::io_service> service(new lib::asio::io_service());
++        lib::auto_ptr<lib::asio::io_context> context(new lib::asio::io_context());
+ #endif
+-        init_asio(service.get(), ec);
+-        if( !ec ) service.release(); // Call was successful, transfer ownership
+-        m_external_io_service = false;
++        init_asio(context.get(), ec);
++        if( !ec ) context.release(); // Call was successful, transfer ownership
++        m_external_io_context = false;
+     }
+ 
+-    /// Initialize asio transport with internal io_service
++    /// Initialize asio transport with internal io_context
+     /**
+      * This method of initialization will allocate and use an internally managed
+-     * io_service.
++     * io_context.
+      *
+-     * @see init_asio(io_service_ptr ptr)
++     * @see init_asio(io_context_ptr ptr)
+      */
+     void init_asio() {
+         // Use a smart pointer until the call is successful and ownership has 
+@@ -252,14 +252,14 @@ public:
+         // TODO: remove the use of auto_ptr when C++98/03 support is no longer
+         //       necessary.
+ #ifdef _WEBSOCKETPP_CPP11_MEMORY_
+-        lib::unique_ptr<lib::asio::io_service> service(new lib::asio::io_service());
++        lib::unique_ptr<lib::asio::io_context> context(new lib::asio::io_context());
+ #else
+-        lib::auto_ptr<lib::asio::io_service> service(new lib::asio::io_service());
++        lib::auto_ptr<lib::asio::io_context> context(new lib::asio::io_context());
+ #endif
+-        init_asio( service.get() );
++        init_asio( context.get() );
+         // If control got this far without an exception, then ownership has successfully been taken
+-        service.release();
+-        m_external_io_service = false;
++        context.release();
++        m_external_io_context = false;
+     }
+ 
+     /// Sets the tcp pre bind handler
+@@ -330,7 +330,7 @@ public:
+      *
+      * New values affect future calls to listen only.
+      *
+-     * The default value is specified as *::asio::socket_base::max_connections
++     * The default value is specified as *::asio::socket_base::max_listen_connections
+      * which uses the operating system defined maximum queue length. Your OS
+      * may restrict or silently lower this value. A value of zero may cause
+      * all connections to be rejected.
+@@ -364,19 +364,19 @@ public:
+         m_reuse_addr = value;
+     }
+ 
+-    /// Retrieve a reference to the endpoint's io_service
++    /// Retrieve a reference to the endpoint's io_context
+     /**
+-     * The io_service may be an internal or external one. This may be used to
+-     * call methods of the io_service that are not explicitly wrapped by the
++     * The io_context may be an internal or external one. This may be used to
++     * call methods of the io_context that are not explicitly wrapped by the
+      * endpoint.
+      *
+      * This method is only valid after the endpoint has been initialized with
+      * `init_asio`. No error will be returned if it isn't.
+      *
+-     * @return A reference to the endpoint's io_service
++     * @return A reference to the endpoint's io_context
+      */
+-    lib::asio::io_service & get_io_service() {
+-        return *m_io_service;
++    lib::asio::io_context & get_io_context() {
++        return *m_io_context;
+     }
+     
+     /// Get local TCP endpoint
+@@ -557,17 +557,15 @@ public:
+         lib::error_code & ec)
+     {
+         using lib::asio::ip::tcp;
+-        tcp::resolver r(*m_io_service);
+-        tcp::resolver::query query(host, service);
+-        tcp::resolver::iterator endpoint_iterator = r.resolve(query);
+-        tcp::resolver::iterator end;
+-        if (endpoint_iterator == end) {
++        tcp::resolver r(*m_io_context);
++        tcp::resolver::results_type endpoints = r.resolve(host, service);
++        if (endpoints.empty()) {
+             m_elog->write(log::elevel::library,
+                 "asio::listen could not resolve the supplied host or service");
+             ec = make_error_code(error::invalid_host_service);
+             return;
+         }
+-        listen(*endpoint_iterator,ec);
++        listen(*endpoints.begin(),ec);
+     }
+ 
+     /// Set up endpoint for listening on a host and service
+@@ -636,42 +634,42 @@ public:
+         return (m_state == LISTENING);
+     }
+ 
+-    /// wraps the run method of the internal io_service object
++    /// wraps the run method of the internal io_context object
+     std::size_t run() {
+-        return m_io_service->run();
++        return m_io_context->run();
+     }
+ 
+-    /// wraps the run_one method of the internal io_service object
++    /// wraps the run_one method of the internal io_context object
+     /**
+      * @since 0.3.0-alpha4
+      */
+     std::size_t run_one() {
+-        return m_io_service->run_one();
++        return m_io_context->run_one();
+     }
+ 
+-    /// wraps the stop method of the internal io_service object
++    /// wraps the stop method of the internal io_context object
+     void stop() {
+-        m_io_service->stop();
++        m_io_context->stop();
+     }
+ 
+-    /// wraps the poll method of the internal io_service object
++    /// wraps the poll method of the internal io_context object
+     std::size_t poll() {
+-        return m_io_service->poll();
++        return m_io_context->poll();
+     }
+ 
+-    /// wraps the poll_one method of the internal io_service object
++    /// wraps the poll_one method of the internal io_context object
+     std::size_t poll_one() {
+-        return m_io_service->poll_one();
++        return m_io_context->poll_one();
+     }
+ 
+-    /// wraps the reset method of the internal io_service object
++    /// wraps the restart method of the internal io_context object
+     void reset() {
+-        m_io_service->reset();
++        m_io_context->restart();
+     }
+ 
+-    /// wraps the stopped method of the internal io_service object
++    /// wraps the stopped method of the internal io_context object
+     bool stopped() const {
+-        return m_io_service->stopped();
++        return m_io_context->stopped();
+     }
+ 
+     /// Marks the endpoint as perpetual, stopping it from exiting when empty
+@@ -687,7 +685,7 @@ public:
+      * @since 0.3.0
+      */
+     void start_perpetual() {
+-        m_work.reset(new lib::asio::io_service::work(*m_io_service));
++        m_work.reset(new lib::asio::executor_work_guard<lib::asio::io_context::executor_type>(m_io_context->get_executor()));
+     }
+ 
+     /// Clears the endpoint's perpetual flag, allowing it to exit when empty
+@@ -716,7 +714,7 @@ public:
+      */
+     timer_ptr set_timer(long duration, timer_handler callback) {
+         timer_ptr new_timer = lib::make_shared<lib::asio::steady_timer>(
+-            *m_io_service,
++            *m_io_context,
+              lib::asio::milliseconds(duration)
+         );
+ 
+@@ -851,7 +849,7 @@ protected:
+ 
+         // Create a resolver
+         if (!m_resolver) {
+-            m_resolver.reset(new lib::asio::ip::tcp::resolver(*m_io_service));
++            m_resolver.reset(new lib::asio::ip::tcp::resolver(*m_io_context));
+         }
+ 
+         tcon->set_uri(u);
+@@ -883,8 +881,6 @@ protected:
+             port = pu->get_port_str();
+         }
+ 
+-        tcp::resolver::query query(host,port);
+-
+         if (m_alog->static_test(log::alevel::devel)) {
+             m_alog->write(log::alevel::devel,
+                 "starting async DNS resolve for "+host+":"+port);
+@@ -905,7 +901,8 @@ protected:
+ 
+         if (config::enable_multithreading) {
+             m_resolver->async_resolve(
+-                query,
++                host,
++                port,
+                 tcon->get_strand()->wrap(lib::bind(
+                     &type::handle_resolve,
+                     this,
+@@ -918,7 +915,8 @@ protected:
+             );
+         } else {
+             m_resolver->async_resolve(
+-                query,
++                host,
++                port,
+                 lib::bind(
+                     &type::handle_resolve,
+                     this,
+@@ -966,10 +964,10 @@ protected:
+ 
+     void handle_resolve(transport_con_ptr tcon, timer_ptr dns_timer,
+         connect_handler callback, lib::asio::error_code const & ec,
+-        lib::asio::ip::tcp::resolver::iterator iterator)
++        lib::asio::ip::tcp::resolver::results_type endpoints)
+     {
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(dns_timer->expires_from_now()))
++            lib::asio::is_neg(dns_timer->expiry() - std::chrono::steady_clock::now()))
+         {
+             m_alog->write(log::alevel::devel,"async_resolve cancelled");
+             return;
+@@ -987,8 +985,8 @@ protected:
+             std::stringstream s;
+             s << "Async DNS resolve successful. Results: ";
+ 
+-            lib::asio::ip::tcp::resolver::iterator it, end;
+-            for (it = iterator; it != end; ++it) {
++            lib::asio::ip::tcp::resolver::results_type::iterator it;
++            for (it = endpoints.begin(); it != endpoints.end(); ++it) {
+                 s << (*it).endpoint() << " ";
+             }
+ 
+@@ -1014,7 +1012,7 @@ protected:
+         if (config::enable_multithreading) {
+             lib::asio::async_connect(
+                 tcon->get_raw_socket(),
+-                iterator,
++                endpoints,
+                 tcon->get_strand()->wrap(lib::bind(
+                     &type::handle_connect,
+                     this,
+@@ -1027,7 +1025,7 @@ protected:
+         } else {
+             lib::asio::async_connect(
+                 tcon->get_raw_socket(),
+-                iterator,
++                endpoints,
+                 lib::bind(
+                     &type::handle_connect,
+                     this,
+@@ -1077,7 +1075,7 @@ protected:
+         connect_handler callback, lib::asio::error_code const & ec)
+     {
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(con_timer->expires_from_now()))
++            lib::asio::is_neg(con_timer->expiry() - std::chrono::steady_clock::now()))
+         {
+             m_alog->write(log::alevel::devel,"async_connect cancelled");
+             return;
+@@ -1119,7 +1117,7 @@ protected:
+ 
+         lib::error_code ec;
+ 
+-        ec = tcon->init_asio(m_io_service);
++        ec = tcon->init_asio(m_io_context);
+         if (ec) {return ec;}
+ 
+         tcon->set_tcp_pre_init_handler(m_tcp_pre_init_handler);
+@@ -1158,8 +1156,8 @@ private:
+     tcp_init_handler    m_tcp_post_init_handler;
+ 
+     // Network Resources
+-    io_service_ptr      m_io_service;
+-    bool                m_external_io_service;
++    io_context_ptr      m_io_context;
++    bool                m_external_io_context;
+     acceptor_ptr        m_acceptor;
+     resolver_ptr        m_resolver;
+     work_ptr            m_work;
+diff --git a/websocketpp/transport/asio/security/none.hpp b/websocketpp/transport/asio/security/none.hpp
+index 6c7d352..009063f 100644
+--- a/websocketpp/transport/asio/security/none.hpp
++++ b/websocketpp/transport/asio/security/none.hpp
+@@ -62,10 +62,10 @@ public:
+     /// Type of a shared pointer to this connection socket component
+     typedef lib::shared_ptr<type> ptr;
+ 
+-    /// Type of a pointer to the Asio io_service being used
+-    typedef lib::asio::io_service* io_service_ptr;
+-    /// Type of a pointer to the Asio io_service strand being used
+-    typedef lib::shared_ptr<lib::asio::io_service::strand> strand_ptr;
++    /// Type of a pointer to the Asio io_context being used
++    typedef lib::asio::io_context* io_context_ptr;
++    /// Type of a pointer to the Asio io_context strand being used
++    typedef lib::shared_ptr<lib::asio::io_context::strand> strand_ptr;
+     /// Type of the ASIO socket being used
+     typedef lib::asio::ip::tcp::socket socket_type;
+     /// Type of a shared pointer to the socket being used.
+@@ -156,19 +156,19 @@ protected:
+     /// Perform one time initializations
+     /**
+      * init_asio is called once immediately after construction to initialize
+-     * Asio components to the io_service
++     * Asio components to the io_context
+      *
+-     * @param service A pointer to the endpoint's io_service
++     * @param service A pointer to the endpoint's io_context
+      * @param strand A shared pointer to the connection's asio strand
+      * @param is_server Whether or not the endpoint is a server or not.
+      */
+-    lib::error_code init_asio (io_service_ptr service, strand_ptr, bool)
++    lib::error_code init_asio (io_context_ptr context, strand_ptr, bool)
+     {
+         if (m_state != UNINITIALIZED) {
+             return socket::make_error_code(socket::error::invalid_state);
+         }
+ 
+-        m_socket.reset(new lib::asio::ip::tcp::socket(*service));
++        m_socket.reset(new lib::asio::ip::tcp::socket(*context));
+ 
+         if (m_socket_init_handler) {
+             m_socket_init_handler(m_hdl, *m_socket);
+diff --git a/websocketpp/transport/asio/security/tls.hpp b/websocketpp/transport/asio/security/tls.hpp
+index 04ac379..9f86fc1 100644
+--- a/websocketpp/transport/asio/security/tls.hpp
++++ b/websocketpp/transport/asio/security/tls.hpp
+@@ -71,10 +71,10 @@ public:
+     typedef lib::asio::ssl::stream<lib::asio::ip::tcp::socket> socket_type;
+     /// Type of a shared pointer to the ASIO socket being used
+     typedef lib::shared_ptr<socket_type> socket_ptr;
+-    /// Type of a pointer to the ASIO io_service being used
+-    typedef lib::asio::io_service * io_service_ptr;
+-    /// Type of a pointer to the ASIO io_service strand being used
+-    typedef lib::shared_ptr<lib::asio::io_service::strand> strand_ptr;
++    /// Type of a pointer to the ASIO io_context being used
++    typedef lib::asio::io_context * io_context_ptr;
++    /// Type of a pointer to the ASIO io_context strand being used
++    typedef lib::shared_ptr<lib::asio::io_context::strand> strand_ptr;
+     /// Type of a shared pointer to the ASIO TLS context being used
+     typedef lib::shared_ptr<lib::asio::ssl::context> context_ptr;
+ 
+@@ -176,13 +176,13 @@ protected:
+     /// Perform one time initializations
+     /**
+      * init_asio is called once immediately after construction to initialize
+-     * Asio components to the io_service
++     * Asio components to the io_context
+      *
+-     * @param service A pointer to the endpoint's io_service
++     * @param service A pointer to the endpoint's io_context
+      * @param strand A pointer to the connection's strand
+      * @param is_server Whether or not the endpoint is a server or not.
+      */
+-    lib::error_code init_asio (io_service_ptr service, strand_ptr strand,
++    lib::error_code init_asio (io_context_ptr context, strand_ptr strand,
+         bool is_server)
+     {
+         if (!m_tls_init_handler) {
+@@ -193,13 +193,13 @@ protected:
+         if (!m_context) {
+             return socket::make_error_code(socket::error::invalid_tls_context);
+         }
+-        m_socket.reset(new socket_type(*service, *m_context));
++        m_socket.reset(new socket_type(*context, *m_context));
+ 
+         if (m_socket_init_handler) {
+             m_socket_init_handler(m_hdl, get_socket());
+         }
+ 
+-        m_io_service = service;
++        m_io_context = context;
+         m_strand = strand;
+         m_is_server = is_server;
+ 
+@@ -381,7 +381,7 @@ private:
+         }
+     }
+ 
+-    io_service_ptr      m_io_service;
++    io_context_ptr      m_io_context;
+     strand_ptr          m_strand;
+     context_ptr         m_context;
+     socket_ptr          m_socket;
+diff --git a/websocketpp/transport/debug/endpoint.hpp b/websocketpp/transport/debug/endpoint.hpp
+index adc89b3..3606441 100644
+--- a/websocketpp/transport/debug/endpoint.hpp
++++ b/websocketpp/transport/debug/endpoint.hpp
+@@ -60,7 +60,7 @@ public:
+     /// associated connection transport component
+     typedef typename transport_con_type::ptr transport_con_ptr;
+ 
+-    // generate and manage our own io_service
++    // generate and manage our own io_context
+     explicit endpoint()
+     {
+         //std::cout << "transport::iostream::endpoint constructor" << std::endl;
+diff --git a/websocketpp/transport/iostream/endpoint.hpp b/websocketpp/transport/iostream/endpoint.hpp
+index 14cba72..257472d 100644
+--- a/websocketpp/transport/iostream/endpoint.hpp
++++ b/websocketpp/transport/iostream/endpoint.hpp
+@@ -64,7 +64,7 @@ public:
+     /// associated connection transport component
+     typedef typename transport_con_type::ptr transport_con_ptr;
+ 
+-    // generate and manage our own io_service
++    // generate and manage our own io_context
+     explicit endpoint() : m_output_stream(NULL), m_is_secure(false)
+     {
+         //std::cout << "transport::iostream::endpoint constructor" << std::endl;
+diff --git a/websocketpp/transport/stub/endpoint.hpp b/websocketpp/transport/stub/endpoint.hpp
+index 3bbb78f..8f8493a 100644
+--- a/websocketpp/transport/stub/endpoint.hpp
++++ b/websocketpp/transport/stub/endpoint.hpp
+@@ -60,7 +60,7 @@ public:
+     /// associated connection transport component
+     typedef typename transport_con_type::ptr transport_con_ptr;
+ 
+-    // generate and manage our own io_service
++    // generate and manage our own io_context
+     explicit endpoint()
+     {
+         //std::cout << "transport::iostream::endpoint constructor" << std::endl;
+-- 
+2.48.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Amini Allight <amini.allight@protonmail.com>
+Date: Wed, 12 Feb 2025 04:46:30 +0000
+Subject: [PATCH 2/7] updated docstrings
+
+(cherry picked from commit 30e77468e093e8384fa07819b345f81a0431eb37)
+
+ Conflicts:
+	websocketpp/transport/asio/endpoint.hpp
+---
+ websocketpp/transport/asio/endpoint.hpp      | 2 +-
+ websocketpp/transport/asio/security/none.hpp | 2 +-
+ websocketpp/transport/asio/security/tls.hpp  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/websocketpp/transport/asio/endpoint.hpp b/websocketpp/transport/asio/endpoint.hpp
+index 7af0915..a5e1700 100644
+--- a/websocketpp/transport/asio/endpoint.hpp
++++ b/websocketpp/transport/asio/endpoint.hpp
+@@ -549,7 +549,7 @@ public:
+      *
+      * @param host A string identifying a location. May be a descriptive name or
+      * a numeric address string.
+-     * @param service A string identifying the requested service. This may be a
++     * @param context A string identifying the requested service. This may be a
+      * descriptive name or a numeric string corresponding to a port number.
+      * @param ec Set to indicate what error occurred, if any.
+      */
+diff --git a/websocketpp/transport/asio/security/none.hpp b/websocketpp/transport/asio/security/none.hpp
+index 009063f..ff19d5c 100644
+--- a/websocketpp/transport/asio/security/none.hpp
++++ b/websocketpp/transport/asio/security/none.hpp
+@@ -158,7 +158,7 @@ protected:
+      * init_asio is called once immediately after construction to initialize
+      * Asio components to the io_context
+      *
+-     * @param service A pointer to the endpoint's io_context
++     * @param context A pointer to the endpoint's io_context
+      * @param strand A shared pointer to the connection's asio strand
+      * @param is_server Whether or not the endpoint is a server or not.
+      */
+diff --git a/websocketpp/transport/asio/security/tls.hpp b/websocketpp/transport/asio/security/tls.hpp
+index 9f86fc1..8b27656 100644
+--- a/websocketpp/transport/asio/security/tls.hpp
++++ b/websocketpp/transport/asio/security/tls.hpp
+@@ -178,7 +178,7 @@ protected:
+      * init_asio is called once immediately after construction to initialize
+      * Asio components to the io_context
+      *
+-     * @param service A pointer to the endpoint's io_context
++     * @param context A pointer to the endpoint's io_context
+      * @param strand A pointer to the connection's strand
+      * @param is_server Whether or not the endpoint is a server or not.
+      */
+-- 
+2.48.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Amini Allight <amini.allight@protonmail.com>
+Date: Wed, 12 Feb 2025 04:48:13 +0000
+Subject: [PATCH 3/7] updated docstrings
+
+(cherry picked from commit 3d13472f7489bda718ded20d885dbaf98e36442c)
+---
+ websocketpp/transport/asio/endpoint.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/websocketpp/transport/asio/endpoint.hpp b/websocketpp/transport/asio/endpoint.hpp
+index a5e1700..7af0915 100644
+--- a/websocketpp/transport/asio/endpoint.hpp
++++ b/websocketpp/transport/asio/endpoint.hpp
+@@ -549,7 +549,7 @@ public:
+      *
+      * @param host A string identifying a location. May be a descriptive name or
+      * a numeric address string.
+-     * @param context A string identifying the requested service. This may be a
++     * @param service A string identifying the requested service. This may be a
+      * descriptive name or a numeric string corresponding to a port number.
+      * @param ec Set to indicate what error occurred, if any.
+      */
+-- 
+2.48.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Amini Allight <amini.allight@protonmail.com>
+Date: Fri, 14 Feb 2025 07:48:42 +0000
+Subject: [PATCH 4/7] silenced warning about unused variable in TLS IP address
+ validation, improved time-to-expiry calculation (credit toonetown), added
+ CMake flag to compile tests and examples with ASIO standalone, fixed example
+ and test compilation with ASIO standalone
+
+(cherry picked from commit 6867ad089932fc2a786c39dae5ed152991e4ee46)
+
+ Conflicts:
+	websocketpp/transport/asio/security/tls.hpp
+---
+ CMakeLists.txt                                |  5 +++
+ examples/debug_client/debug_client.cpp        | 12 +++---
+ .../echo_server_both/echo_server_both.cpp     | 16 ++++----
+ .../external_io_context.cpp                   |  2 +-
+ .../external_io_context/tcp_echo_server.hpp   | 28 +++++++-------
+ .../print_client_tls/print_client_tls.cpp     | 14 +++----
+ examples/testee_server/testee_server.cpp      |  4 +-
+ test/endpoint/endpoint.cpp                    |  6 +--
+ test/http/parser_perf.cpp                     |  4 +-
+ test/transport/asio/timers.cpp                |  4 +-
+ test/transport/integration.cpp                | 38 ++++++++++---------
+ websocketpp/common/asio.hpp                   |  2 +-
+ websocketpp/transport/asio/connection.hpp     | 18 ++++-----
+ websocketpp/transport/asio/endpoint.hpp       |  4 +-
+ 14 files changed, 81 insertions(+), 76 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4f93e24..cde4273 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -75,6 +75,7 @@ include (CMakeHelpers)
+ option (ENABLE_CPP11 "Build websocketpp with CPP11 features enabled." TRUE)
+ option (BUILD_EXAMPLES "Build websocketpp examples." FALSE)
+ option (BUILD_TESTS "Build websocketpp tests." FALSE)
++option (USE_ASIO_STANDALONE "Build websocketpp examples and tests using the standalone ASIO library." FALSE)
+ 
+ if (BUILD_TESTS OR BUILD_EXAMPLES)
+ 
+@@ -246,6 +247,10 @@ endif()
+ 
+ ############ Add projects
+ 
++if (USE_ASIO_STANDALONE)
++    add_definitions("-DASIO_STANDALONE -DASIO_HAS_BOOST_DATE_TIME")
++endif ()
++
+ # Add main library
+ add_subdirectory (websocketpp)
+ 
+diff --git a/examples/debug_client/debug_client.cpp b/examples/debug_client/debug_client.cpp
+index d3e21ab..7b6b40e 100644
+--- a/examples/debug_client/debug_client.cpp
++++ b/examples/debug_client/debug_client.cpp
+@@ -44,7 +44,7 @@ using websocketpp::lib::bind;
+ 
+ // pull out the type of messages sent by our config
+ typedef websocketpp::config::asio_tls_client::message_type::ptr message_ptr;
+-typedef websocketpp::lib::shared_ptr<boost::asio::ssl::context> context_ptr;
++typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
+ typedef client::connection_ptr connection_ptr;
+ 
+ 
+@@ -94,13 +94,13 @@ public:
+ 
+     context_ptr on_tls_init(websocketpp::connection_hdl) {
+         m_tls_init = std::chrono::high_resolution_clock::now();
+-        context_ptr ctx = websocketpp::lib::make_shared<boost::asio::ssl::context>(boost::asio::ssl::context::tlsv1);
++        context_ptr ctx = websocketpp::lib::make_shared<websocketpp::lib::asio::ssl::context>(websocketpp::lib::asio::ssl::context::tlsv1);
+ 
+         try {
+-            ctx->set_options(boost::asio::ssl::context::default_workarounds |
+-                             boost::asio::ssl::context::no_sslv2 |
+-                             boost::asio::ssl::context::no_sslv3 |
+-                             boost::asio::ssl::context::single_dh_use);
++            ctx->set_options(websocketpp::lib::asio::ssl::context::default_workarounds |
++                             websocketpp::lib::asio::ssl::context::no_sslv2 |
++                             websocketpp::lib::asio::ssl::context::no_sslv3 |
++                             websocketpp::lib::asio::ssl::context::single_dh_use);
+         } catch (std::exception& e) {
+             std::cout << e.what() << std::endl;
+         }
+diff --git a/examples/echo_server_both/echo_server_both.cpp b/examples/echo_server_both/echo_server_both.cpp
+index 869c006..a4f6a19 100644
+--- a/examples/echo_server_both/echo_server_both.cpp
++++ b/examples/echo_server_both/echo_server_both.cpp
+@@ -14,7 +14,7 @@ using websocketpp::lib::placeholders::_2;
+ using websocketpp::lib::bind;
+ 
+ // type of the ssl context pointer is long so alias it
+-typedef websocketpp::lib::shared_ptr<boost::asio::ssl::context> context_ptr;
++typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
+ 
+ // The shared on_message handler takes a template parameter so the function can
+ // resolve any endpoint dependent types like message_ptr or connection_ptr
+@@ -41,16 +41,16 @@ std::string get_password() {
+ 
+ context_ptr on_tls_init(websocketpp::connection_hdl hdl) {
+     std::cout << "on_tls_init called with hdl: " << hdl.lock().get() << std::endl;
+-    context_ptr ctx(new boost::asio::ssl::context(boost::asio::ssl::context::tlsv1));
++    context_ptr ctx(new websocketpp::lib::asio::ssl::context(websocketpp::lib::asio::ssl::context::tlsv1));
+ 
+     try {
+-        ctx->set_options(boost::asio::ssl::context::default_workarounds |
+-                         boost::asio::ssl::context::no_sslv2 |
+-                         boost::asio::ssl::context::no_sslv3 |
+-                         boost::asio::ssl::context::single_dh_use);
++        ctx->set_options(websocketpp::lib::asio::ssl::context::default_workarounds |
++                         websocketpp::lib::asio::ssl::context::no_sslv2 |
++                         websocketpp::lib::asio::ssl::context::no_sslv3 |
++                         websocketpp::lib::asio::ssl::context::single_dh_use);
+         ctx->set_password_callback(bind(&get_password));
+         ctx->use_certificate_chain_file("server.pem");
+-        ctx->use_private_key_file("server.pem", boost::asio::ssl::context::pem);
++        ctx->use_private_key_file("server.pem", websocketpp::lib::asio::ssl::context::pem);
+     } catch (std::exception& e) {
+         std::cout << e.what() << std::endl;
+     }
+@@ -60,7 +60,7 @@ context_ptr on_tls_init(websocketpp::connection_hdl hdl) {
+ int main() {
+     // set up an external io_context to run both endpoints on. This is not
+     // strictly necessary, but simplifies thread management a bit.
+-    boost::asio::io_context ios;
++    websocketpp::lib::asio::io_context ios;
+ 
+     // set up plain endpoint
+     server_plain endpoint_plain;
+diff --git a/examples/external_io_context/external_io_context.cpp b/examples/external_io_context/external_io_context.cpp
+index c5ba0a4..c6132ed 100644
+--- a/examples/external_io_context/external_io_context.cpp
++++ b/examples/external_io_context/external_io_context.cpp
+@@ -59,7 +59,7 @@ void on_message(ws_echo_server* s, websocketpp::connection_hdl hdl, ws_echo_serv
+ }
+ 
+ int main() {
+-    asio::io_context context;
++    websocketpp::lib::asio::io_context context;
+ 
+     // Add a TCP echo server on port 9003
+     tcp_echo_server custom_http_server(context, 9003);
+diff --git a/examples/external_io_context/tcp_echo_server.hpp b/examples/external_io_context/tcp_echo_server.hpp
+index 2e14703..f132c06 100644
+--- a/examples/external_io_context/tcp_echo_server.hpp
++++ b/examples/external_io_context/tcp_echo_server.hpp
+@@ -39,42 +39,40 @@ using websocketpp::lib::placeholders::_1;
+ using websocketpp::lib::placeholders::_2;
+ using websocketpp::lib::bind;
+ 
+-namespace asio = websocketpp::lib::asio;
+-
+ struct tcp_echo_session : websocketpp::lib::enable_shared_from_this<tcp_echo_session> {
+     typedef websocketpp::lib::shared_ptr<tcp_echo_session> ptr;
+     
+-    tcp_echo_session(asio::io_context & context) : m_socket(context) {}
++    tcp_echo_session(websocketpp::lib::asio::io_context & context) : m_socket(context) {}
+ 
+     void start() {
+-        m_socket.async_read_some(asio::buffer(m_buffer, sizeof(m_buffer)),
++        m_socket.async_read_some(websocketpp::lib::asio::buffer(m_buffer, sizeof(m_buffer)),
+             websocketpp::lib::bind(
+                 &tcp_echo_session::handle_read, shared_from_this(), _1, _2));
+     }
+     
+-    void handle_read(const asio::error_code & ec, size_t transferred) {
++    void handle_read(const websocketpp::lib::asio::error_code & ec, size_t transferred) {
+         if (!ec) {
+-            asio::async_write(m_socket,
+-                asio::buffer(m_buffer, transferred),
++            websocketpp::lib::asio::async_write(m_socket,
++                websocketpp::lib::asio::buffer(m_buffer, transferred),
+                     bind(&tcp_echo_session::handle_write, shared_from_this(), _1));
+         }
+     }
+     
+-    void handle_write(const asio::error_code & ec) {
++    void handle_write(const websocketpp::lib::asio::error_code & ec) {
+         if (!ec) {
+-            m_socket.async_read_some(asio::buffer(m_buffer, sizeof(m_buffer)),
++            m_socket.async_read_some(websocketpp::lib::asio::buffer(m_buffer, sizeof(m_buffer)),
+                 bind(&tcp_echo_session::handle_read, shared_from_this(), _1, _2));
+         }
+     }
+ 
+-    asio::ip::tcp::socket m_socket;
++    websocketpp::lib::asio::ip::tcp::socket m_socket;
+     char m_buffer[1024];
+ };
+ 
+ struct tcp_echo_server {
+-    tcp_echo_server(asio::io_context & context, short port)
++    tcp_echo_server(websocketpp::lib::asio::io_context & context, short port)
+         : m_context(context)
+-        , m_acceptor(context, asio::ip::tcp::endpoint(asio::ip::tcp::v6(), port))
++        , m_acceptor(context, websocketpp::lib::asio::ip::tcp::endpoint(websocketpp::lib::asio::ip::tcp::v6(), port))
+     {
+         this->start_accept();
+     }
+@@ -85,13 +83,13 @@ struct tcp_echo_server {
+             bind(&tcp_echo_server::handle_accept, this, new_session, _1));
+     }
+     
+-    void handle_accept(tcp_echo_session::ptr new_session, const asio::error_code & ec) {
++    void handle_accept(tcp_echo_session::ptr new_session, const websocketpp::lib::asio::error_code & ec) {
+         if (!ec) {
+             new_session->start();
+         }
+         start_accept();
+     }
+ 
+-    asio::io_context & m_context;
+-    asio::ip::tcp::acceptor m_acceptor;
++    websocketpp::lib::asio::io_context & m_context;
++    websocketpp::lib::asio::ip::tcp::acceptor m_acceptor;
+ };
+diff --git a/examples/print_client_tls/print_client_tls.cpp b/examples/print_client_tls/print_client_tls.cpp
+index 43164ea..cf616e1 100644
+--- a/examples/print_client_tls/print_client_tls.cpp
++++ b/examples/print_client_tls/print_client_tls.cpp
+@@ -112,7 +112,7 @@ bool verify_common_name(char const * hostname, X509 * cert) {
+  * and
+  * https://github.com/iSECPartners/ssl-conservatory
+  */
+-bool verify_certificate(const char * hostname, bool preverified, boost::asio::ssl::verify_context& ctx) {
++bool verify_certificate(const char * hostname, bool preverified, websocketpp::lib::asio::ssl::verify_context& ctx) {
+     // The verify callback can be used to check whether the certificate that is
+     // being presented is valid for the peer. For example, RFC 2818 describes
+     // the steps involved in doing this for HTTPS. Consult the OpenSSL
+@@ -176,16 +176,16 @@ bool verify_certificate(const char * hostname, bool preverified, boost::asio::ss
+  * (websocketpp.org, for example).
+  */
+ context_ptr on_tls_init(const char * hostname, websocketpp::connection_hdl) {
+-    context_ptr ctx = websocketpp::lib::make_shared<boost::asio::ssl::context>(boost::asio::ssl::context::sslv23);
++    context_ptr ctx = websocketpp::lib::make_shared<websocketpp::lib::asio::ssl::context>(websocketpp::lib::asio::ssl::context::sslv23);
+ 
+     try {
+-        ctx->set_options(boost::asio::ssl::context::default_workarounds |
+-                         boost::asio::ssl::context::no_sslv2 |
+-                         boost::asio::ssl::context::no_sslv3 |
+-                         boost::asio::ssl::context::single_dh_use);
++        ctx->set_options(websocketpp::lib::asio::ssl::context::default_workarounds |
++                         websocketpp::lib::asio::ssl::context::no_sslv2 |
++                         websocketpp::lib::asio::ssl::context::no_sslv3 |
++                         websocketpp::lib::asio::ssl::context::single_dh_use);
+ 
+ 
+-        ctx->set_verify_mode(boost::asio::ssl::verify_peer);
++        ctx->set_verify_mode(websocketpp::lib::asio::ssl::verify_peer);
+         ctx->set_verify_callback(bind(&verify_certificate, hostname, ::_1, ::_2));
+ 
+         // Here we load the CA certificates of all CA's that this client trusts.
+diff --git a/examples/testee_server/testee_server.cpp b/examples/testee_server/testee_server.cpp
+index 13e574e..8920270 100644
+--- a/examples/testee_server/testee_server.cpp
++++ b/examples/testee_server/testee_server.cpp
+@@ -87,8 +87,8 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
+     s->send(hdl, msg->get_payload(), msg->get_opcode());
+ }
+ 
+-void on_socket_init(websocketpp::connection_hdl, boost::asio::ip::tcp::socket & s) {
+-    boost::asio::ip::tcp::no_delay option(true);
++void on_socket_init(websocketpp::connection_hdl, websocketpp::lib::asio::ip::tcp::socket & s) {
++    websocketpp::lib::asio::ip::tcp::no_delay option(true);
+     s.set_option(option);
+ }
+ 
+diff --git a/test/endpoint/endpoint.cpp b/test/endpoint/endpoint.cpp
+index fa58e66..c5f5a82 100644
+--- a/test/endpoint/endpoint.cpp
++++ b/test/endpoint/endpoint.cpp
+@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE( initialize_server_asio ) {
+ 
+ BOOST_AUTO_TEST_CASE( initialize_server_asio_external ) {
+     websocketpp::server<websocketpp::config::asio> s;
+-    boost::asio::io_context ios;
++    websocketpp::lib::asio::io_context ios;
+     s.init_asio(&ios);
+ }
+ 
+@@ -141,8 +141,8 @@ BOOST_AUTO_TEST_CASE( listen_after_listen_failure ) {
+     server1.init_asio();
+     server2.init_asio();
+ 
+-    boost::asio::ip::tcp::endpoint ep1(boost::asio::ip::make_address("127.0.0.1"), 12345);
+-    boost::asio::ip::tcp::endpoint ep2(boost::asio::ip::make_address("127.0.0.1"), 23456);
++    websocketpp::lib::asio::ip::tcp::endpoint ep1(websocketpp::lib::asio::ip::make_address("127.0.0.1"), 12345);
++    websocketpp::lib::asio::ip::tcp::endpoint ep2(websocketpp::lib::asio::ip::make_address("127.0.0.1"), 23456);
+ 
+     server1.listen(ep1, ec);
+     BOOST_CHECK(!ec);
+diff --git a/test/http/parser_perf.cpp b/test/http/parser_perf.cpp
+index 0c76bc7..0a9cc0b 100644
+--- a/test/http/parser_perf.cpp
++++ b/test/http/parser_perf.cpp
+@@ -31,11 +31,11 @@
+ 
+ class scoped_timer {
+ public:
+-    scoped_timer(std::string i) : m_id(i),m_start(std::chrono::steady_clock::now()) {
++    scoped_timer(std::string i) : m_id(i),m_start(timer_ptr::element_type::clock_type::now()) {
+         std::cout << "Clock " << i << ": ";
+     }
+     ~scoped_timer() {
+-        std::chrono::nanoseconds time_taken = std::chrono::steady_clock::now()-m_start;
++        std::chrono::nanoseconds time_taken = timer_ptr::element_type::clock_type::now()-m_start;
+ 
+         //nanoseconds_per_test
+ 
+diff --git a/test/transport/asio/timers.cpp b/test/transport/asio/timers.cpp
+index 391b755..d59654d 100644
+--- a/test/transport/asio/timers.cpp
++++ b/test/transport/asio/timers.cpp
+@@ -106,9 +106,9 @@ struct config {
+ };
+ 
+ // Mock context that does no validation
+-typedef websocketpp::lib::shared_ptr<boost::asio::ssl::context> context_ptr;
++typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
+ context_ptr on_tls_init(websocketpp::connection_hdl) {
+-    return context_ptr(new boost::asio::ssl::context(boost::asio::ssl::context::sslv23));
++    return context_ptr(new websocketpp::lib::asio::ssl::context(websocketpp::lib::asio::ssl::context::sslv23));
+ }
+ 
+ // Mock connection
+diff --git a/test/transport/integration.cpp b/test/transport/integration.cpp
+index ab82b1a..526b243 100644
+--- a/test/transport/integration.cpp
++++ b/test/transport/integration.cpp
+@@ -38,6 +38,8 @@
+ #include <websocketpp/server.hpp>
+ #include <websocketpp/client.hpp>
+ 
++#include "boost/date_time/posix_time/posix_time.hpp"
++
+ struct config : public websocketpp::config::asio_client {
+     typedef config type;
+     typedef websocketpp::config::asio base;
+@@ -218,19 +220,19 @@ void run_time_limited_client(client & c, std::string uri, long timeout,
+ }
+ 
+ void run_dummy_server(int port) {
+-    using boost::asio::ip::tcp;
++    using websocketpp::lib::asio::ip::tcp;
+ 
+     try {
+-        boost::asio::io_context io_context;
++        websocketpp::lib::asio::io_context io_context;
+         tcp::acceptor acceptor(io_context, tcp::endpoint(tcp::v6(), port));
+         tcp::socket socket(io_context);
+ 
+         acceptor.accept(socket);
+         for (;;) {
+             char data[512];
+-            boost::system::error_code ec;
+-            socket.read_some(boost::asio::buffer(data), ec);
+-            if (ec == boost::asio::error::eof) {
++            websocketpp::lib::asio::error_code ec;
++            socket.read_some(websocketpp::lib::asio::buffer(data), ec);
++            if (ec == websocketpp::lib::asio::error::eof) {
+                 break;
+             } else if (ec) {
+                 // other error
+@@ -239,26 +241,26 @@ void run_dummy_server(int port) {
+         }
+     } catch (std::exception & e) {
+         std::cout << e.what() << std::endl;
+-    } catch (boost::system::error_code & ec) {
++    } catch (websocketpp::lib::asio::error_code & ec) {
+         std::cout << ec.message() << std::endl;
+     }
+ }
+ 
+ void run_dummy_client(std::string port) {
+-    using boost::asio::ip::tcp;
++    using websocketpp::lib::asio::ip::tcp;
+ 
+     try {
+-        boost::asio::io_context io_context;
++        websocketpp::lib::asio::io_context io_context;
+         tcp::resolver resolver(io_context);
+         tcp::resolver::results_type endpoints = resolver.resolve("localhost", port);
+         tcp::socket socket(io_context);
+ 
+-        boost::asio::connect(socket, endpoints);
++        websocketpp::lib::asio::connect(socket, endpoints);
+         for (;;) {
+             char data[512];
+-            boost::system::error_code ec;
+-            socket.read_some(boost::asio::buffer(data), ec);
+-            if (ec == boost::asio::error::eof) {
++            websocketpp::lib::asio::error_code ec;
++            socket.read_some(websocketpp::lib::asio::buffer(data), ec);
++            if (ec == websocketpp::lib::asio::error::eof) {
+                 break;
+             } else if (ec) {
+                 // other error
+@@ -267,7 +269,7 @@ void run_dummy_client(std::string port) {
+         }
+     } catch (std::exception & e) {
+         std::cout << e.what() << std::endl;
+-    } catch (boost::system::error_code & ec) {
++    } catch (websocketpp::lib::asio::error_code & ec) {
+         std::cout << ec.message() << std::endl;
+     }
+ }
+@@ -360,7 +362,7 @@ public:
+     : m_timer(m_io_context, boost::posix_time::seconds(seconds))
+     {
+         m_timer.async_wait(bind(&test_deadline_timer::expired, this, ::_1));
+-        std::size_t (boost::asio::io_context::*run)() = &boost::asio::io_context::run;
++        std::size_t (websocketpp::lib::asio::io_context::*run)() = &websocketpp::lib::asio::io_context::run;
+         m_timer_thread = websocketpp::lib::thread(websocketpp::lib::bind(run, &m_io_context));
+     }
+     ~test_deadline_timer()
+@@ -370,16 +372,16 @@ public:
+     }
+ 
+   private:
+-    void expired(const boost::system::error_code & ec)
++    void expired(const websocketpp::lib::asio::error_code & ec)
+     {
+-        if (ec == boost::asio::error::operation_aborted)
++        if (ec == websocketpp::lib::asio::error::operation_aborted)
+             return;
+         BOOST_CHECK(!ec);
+         BOOST_FAIL("Test timed out");
+     }
+ 
+-    boost::asio::io_context m_io_context;
+-    boost::asio::deadline_timer m_timer;
++    websocketpp::lib::asio::io_context m_io_context;
++    websocketpp::lib::asio::deadline_timer m_timer;
+     websocketpp::lib::thread m_timer_thread;
+ };
+ 
+diff --git a/websocketpp/common/asio.hpp b/websocketpp/common/asio.hpp
+index 3c8fa13..7322c25 100644
+--- a/websocketpp/common/asio.hpp
++++ b/websocketpp/common/asio.hpp
+@@ -51,7 +51,7 @@
+     
+     #include <asio.hpp>
+     #include <asio/steady_timer.hpp>
+-    #include <websocketpp/common/chrono.hpp> 
++    #include <websocketpp/common/chrono.hpp>
+ #else
+     #include <boost/version.hpp>
+     
+diff --git a/websocketpp/transport/asio/connection.hpp b/websocketpp/transport/asio/connection.hpp
+index eaee6bc..d1a2c20 100644
+--- a/websocketpp/transport/asio/connection.hpp
++++ b/websocketpp/transport/asio/connection.hpp
+@@ -374,7 +374,7 @@ public:
+      * fail handler is called.
+      *
+      * Primarily used if you are using mismatched asio / system_error
+-     * implementations such as `boost::asio` with `std::system_error`. In these
++     * implementations such as `lib::asio` with `std::system_error`. In these
+      * cases the transport error type is different than the library error type
+      * and some WebSocket++ functions that return transport errors via the 
+      * library error code type will be coerced into a catch all `pass_through`
+@@ -573,7 +573,7 @@ protected:
+         lib::error_code const & ec)
+     {
+         if (ec == transport::error::operation_aborted ||
+-            (post_timer && lib::asio::is_neg(post_timer->expiry() - std::chrono::steady_clock::now())))
++            (post_timer && lib::asio::is_neg(post_timer->expiry() - timer_ptr::element_type::clock_type::now())))
+         {
+             m_alog->write(log::alevel::devel,"post_init cancelled");
+             return;
+@@ -679,7 +679,7 @@ protected:
+         // Whatever aborted it will be issuing the callback so we are safe to
+         // return
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(m_proxy_data->timer->expiry() - std::chrono::steady_clock::now()))
++            lib::asio::is_neg(m_proxy_data->timer->expiry() - timer_ptr::element_type::clock_type::now()))
+         {
+             m_elog->write(log::elevel::devel,"write operation aborted");
+             return;
+@@ -751,7 +751,7 @@ protected:
+         // Whatever aborted it will be issuing the callback so we are safe to
+         // return
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(m_proxy_data->timer->expiry() - std::chrono::steady_clock::now()))
++            lib::asio::is_neg(m_proxy_data->timer->expiry() - timer_ptr::element_type::clock_type::now()))
+         {
+             m_elog->write(log::elevel::devel,"read operation aborted");
+             return;
+@@ -1012,18 +1012,18 @@ protected:
+      */
+     lib::error_code interrupt(interrupt_handler handler) {
+         if (config::enable_multithreading) {
+-            boost::asio::post(m_io_context->get_executor(), m_strand->wrap(handler));
++            lib::asio::post(m_io_context->get_executor(), m_strand->wrap(handler));
+         } else {
+-            boost::asio::post(m_io_context->get_executor(), handler);
++            lib::asio::post(m_io_context->get_executor(), handler);
+         }
+         return lib::error_code();
+     }
+ 
+     lib::error_code dispatch(dispatch_handler handler) {
+         if (config::enable_multithreading) {
+-            boost::asio::post(m_io_context->get_executor(), m_strand->wrap(handler));
++            lib::asio::post(m_io_context->get_executor(), m_strand->wrap(handler));
+         } else {
+-            boost::asio::post(m_io_context->get_executor(), handler);
++            lib::asio::post(m_io_context->get_executor(), handler);
+         }
+         return lib::error_code();
+     }
+@@ -1095,7 +1095,7 @@ protected:
+         callback, lib::asio::error_code const & ec)
+     {
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(shutdown_timer->expiry() - std::chrono::steady_clock::now()))
++            lib::asio::is_neg(shutdown_timer->expiry() - timer_ptr::element_type::clock_type::now()))
+         {
+             m_alog->write(log::alevel::devel,"async_shutdown cancelled");
+             return;
+diff --git a/websocketpp/transport/asio/endpoint.hpp b/websocketpp/transport/asio/endpoint.hpp
+index 7af0915..57f784f 100644
+--- a/websocketpp/transport/asio/endpoint.hpp
++++ b/websocketpp/transport/asio/endpoint.hpp
+@@ -967,7 +967,7 @@ protected:
+         lib::asio::ip::tcp::resolver::results_type endpoints)
+     {
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(dns_timer->expiry() - std::chrono::steady_clock::now()))
++            lib::asio::is_neg(dns_timer->expiry() - timer_ptr::element_type::clock_type::now()))
+         {
+             m_alog->write(log::alevel::devel,"async_resolve cancelled");
+             return;
+@@ -1075,7 +1075,7 @@ protected:
+         connect_handler callback, lib::asio::error_code const & ec)
+     {
+         if (ec == lib::asio::error::operation_aborted ||
+-            lib::asio::is_neg(con_timer->expiry() - std::chrono::steady_clock::now()))
++            lib::asio::is_neg(con_timer->expiry() - timer_ptr::element_type::clock_type::now()))
+         {
+             m_alog->write(log::alevel::devel,"async_connect cancelled");
+             return;
+-- 
+2.48.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Amini Allight <amini.allight@protonmail.com>
+Date: Fri, 14 Feb 2025 23:13:38 +0000
+Subject: [PATCH 5/7] improved variable names and fixed comments
+
+(cherry picked from commit dbdde20a9b4ffd49f480fd9e6e29ea212a73253b)
+
+ Conflicts:
+	websocketpp/transport/asio/endpoint.hpp
+---
+ .../echo_server_both/echo_server_both.cpp     |  8 +++---
+ test/endpoint/endpoint.cpp                    |  4 +--
+ test/transport/asio/timers.cpp                |  4 +--
+ test/transport/integration.cpp                |  4 +--
+ websocketpp/transport/asio/connection.hpp     |  2 +-
+ websocketpp/transport/asio/endpoint.hpp       | 27 +++++++++----------
+ 6 files changed, 24 insertions(+), 25 deletions(-)
+
+diff --git a/examples/echo_server_both/echo_server_both.cpp b/examples/echo_server_both/echo_server_both.cpp
+index a4f6a19..886ea7f 100644
+--- a/examples/echo_server_both/echo_server_both.cpp
++++ b/examples/echo_server_both/echo_server_both.cpp
+@@ -60,12 +60,12 @@ context_ptr on_tls_init(websocketpp::connection_hdl hdl) {
+ int main() {
+     // set up an external io_context to run both endpoints on. This is not
+     // strictly necessary, but simplifies thread management a bit.
+-    websocketpp::lib::asio::io_context ios;
++    websocketpp::lib::asio::io_context ctx;
+ 
+     // set up plain endpoint
+     server_plain endpoint_plain;
+     // initialize asio with our external io_context rather than an internal one
+-    endpoint_plain.init_asio(&ios);
++    endpoint_plain.init_asio(&ctx);
+     endpoint_plain.set_message_handler(
+         bind(&on_message<server_plain>,&endpoint_plain,::_1,::_2));
+     endpoint_plain.listen(80);
+@@ -73,7 +73,7 @@ int main() {
+ 
+     // set up tls endpoint
+     server_tls endpoint_tls;
+-    endpoint_tls.init_asio(&ios);
++    endpoint_tls.init_asio(&ctx);
+     endpoint_tls.set_message_handler(
+         bind(&on_message<server_tls>,&endpoint_tls,::_1,::_2));
+     // TLS endpoint has an extra handler for the tls init
+@@ -83,5 +83,5 @@ int main() {
+     endpoint_tls.start_accept();
+ 
+     // Start the ASIO io_context run loop running both endpoints
+-    ios.run();
++    ctx.run();
+ }
+diff --git a/test/endpoint/endpoint.cpp b/test/endpoint/endpoint.cpp
+index c5f5a82..1840278 100644
+--- a/test/endpoint/endpoint.cpp
++++ b/test/endpoint/endpoint.cpp
+@@ -53,8 +53,8 @@ BOOST_AUTO_TEST_CASE( initialize_server_asio ) {
+ 
+ BOOST_AUTO_TEST_CASE( initialize_server_asio_external ) {
+     websocketpp::server<websocketpp::config::asio> s;
+-    websocketpp::lib::asio::io_context ios;
+-    s.init_asio(&ios);
++    websocketpp::lib::asio::io_context ctx;
++    s.init_asio(&ctx);
+ }
+ 
+ #ifdef _WEBSOCKETPP_MOVE_SEMANTICS_
+diff --git a/test/transport/asio/timers.cpp b/test/transport/asio/timers.cpp
+index d59654d..84938cb 100644
+--- a/test/transport/asio/timers.cpp
++++ b/test/transport/asio/timers.cpp
+@@ -79,8 +79,8 @@ void run_dummy_server(int port) {
+ 
+ // Wait for the specified time period then fail the test
+ void run_test_timer(long value) {
+-    boost::asio::io_context ios;
+-    boost::asio::deadline_timer t(ios,boost::posix_time::milliseconds(value));
++    boost::asio::io_context ctx;
++    boost::asio::deadline_timer t(ctx,boost::posix_time::milliseconds(value));
+     boost::system::error_code ec;
+     t.wait(ec);
+     BOOST_FAIL( "Test timed out" );
+diff --git a/test/transport/integration.cpp b/test/transport/integration.cpp
+index 526b243..371c554 100644
+--- a/test/transport/integration.cpp
++++ b/test/transport/integration.cpp
+@@ -252,10 +252,10 @@ void run_dummy_client(std::string port) {
+     try {
+         websocketpp::lib::asio::io_context io_context;
+         tcp::resolver resolver(io_context);
+-        tcp::resolver::results_type endpoints = resolver.resolve("localhost", port);
++        tcp::resolver::results_type results = resolver.resolve("localhost", port);
+         tcp::socket socket(io_context);
+ 
+-        websocketpp::lib::asio::connect(socket, endpoints);
++        websocketpp::lib::asio::connect(socket, results);
+         for (;;) {
+             char data[512];
+             websocketpp::lib::asio::error_code ec;
+diff --git a/websocketpp/transport/asio/connection.hpp b/websocketpp/transport/asio/connection.hpp
+index d1a2c20..f4c13f3 100644
+--- a/websocketpp/transport/asio/connection.hpp
++++ b/websocketpp/transport/asio/connection.hpp
+@@ -374,7 +374,7 @@ public:
+      * fail handler is called.
+      *
+      * Primarily used if you are using mismatched asio / system_error
+-     * implementations such as `lib::asio` with `std::system_error`. In these
++     * implementations such as `boost::asio` with `std::system_error`. In these
+      * cases the transport error type is different than the library error type
+      * and some WebSocket++ functions that return transport errors via the 
+      * library error code type will be coerced into a catch all `pass_through`
+diff --git a/websocketpp/transport/asio/endpoint.hpp b/websocketpp/transport/asio/endpoint.hpp
+index 57f784f..2aafd67 100644
+--- a/websocketpp/transport/asio/endpoint.hpp
++++ b/websocketpp/transport/asio/endpoint.hpp
+@@ -86,7 +86,7 @@ public:
+     /// Type of timer handle
+     typedef lib::shared_ptr<lib::asio::steady_timer> timer_ptr;
+     /// Type of a shared pointer to an io_context work object
+-    typedef lib::shared_ptr<lib::asio::executor_work_guard<lib::asio::io_context::executor_type>> work_ptr;
++    typedef lib::shared_ptr<lib::asio::executor_work_guard<lib::asio::io_context::executor_type>> work_guard_ptr;
+ 
+     /// Type of socket pre-bind handler
+     typedef lib::function<lib::error_code(acceptor_ptr)> tcp_pre_bind_handler;
+@@ -108,7 +108,7 @@ public:
+         // Explicitly destroy local objects
+         m_acceptor.reset();
+         m_resolver.reset();
+-        m_work.reset();
++        m_work_guard.reset();
+         if (m_state != UNINITIALIZED && !m_external_io_context) {
+             delete m_io_context;
+         }
+@@ -541,8 +541,7 @@ public:
+     /**
+      * Bind the internal acceptor using the given host and service. More details
+      * about what host and service can be are available in the Asio
+-     * documentation for ip::basic_resolver_query::basic_resolver_query's
+-     * constructors.
++     * documentation for the ip::basic_resolver::resolve function.
+      *
+      * The endpoint must have been initialized by calling init_asio before
+      * listening.
+@@ -558,14 +557,14 @@ public:
+     {
+         using lib::asio::ip::tcp;
+         tcp::resolver r(*m_io_context);
+-        tcp::resolver::results_type endpoints = r.resolve(host, service);
+-        if (endpoints.empty()) {
++        tcp::resolver::results_type results = r.resolve(host, service);
++        if (results.empty()) {
+             m_elog->write(log::elevel::library,
+                 "asio::listen could not resolve the supplied host or service");
+             ec = make_error_code(error::invalid_host_service);
+             return;
+         }
+-        listen(*endpoints.begin(),ec);
++        listen(*(results.begin()),ec);
+     }
+ 
+     /// Set up endpoint for listening on a host and service
+@@ -685,7 +684,7 @@ public:
+      * @since 0.3.0
+      */
+     void start_perpetual() {
+-        m_work.reset(new lib::asio::executor_work_guard<lib::asio::io_context::executor_type>(m_io_context->get_executor()));
++        m_work_guard.reset(new lib::asio::executor_work_guard<lib::asio::io_context::executor_type>(m_io_context->get_executor()));
+     }
+ 
+     /// Clears the endpoint's perpetual flag, allowing it to exit when empty
+@@ -697,7 +696,7 @@ public:
+      * @since 0.3.0
+      */
+     void stop_perpetual() {
+-        m_work.reset();
++        m_work_guard.reset();
+     }
+ 
+     /// Call back a function after a period of time.
+@@ -964,7 +963,7 @@ protected:
+ 
+     void handle_resolve(transport_con_ptr tcon, timer_ptr dns_timer,
+         connect_handler callback, lib::asio::error_code const & ec,
+-        lib::asio::ip::tcp::resolver::results_type endpoints)
++        lib::asio::ip::tcp::resolver::results_type results)
+     {
+         if (ec == lib::asio::error::operation_aborted ||
+             lib::asio::is_neg(dns_timer->expiry() - timer_ptr::element_type::clock_type::now()))
+@@ -986,7 +985,7 @@ protected:
+             s << "Async DNS resolve successful. Results: ";
+ 
+             lib::asio::ip::tcp::resolver::results_type::iterator it;
+-            for (it = endpoints.begin(); it != endpoints.end(); ++it) {
++            for (it = results.begin(); it != results.end(); ++it) {
+                 s << (*it).endpoint() << " ";
+             }
+ 
+@@ -1012,7 +1011,7 @@ protected:
+         if (config::enable_multithreading) {
+             lib::asio::async_connect(
+                 tcon->get_raw_socket(),
+-                endpoints,
++                results,
+                 tcon->get_strand()->wrap(lib::bind(
+                     &type::handle_connect,
+                     this,
+@@ -1025,7 +1024,7 @@ protected:
+         } else {
+             lib::asio::async_connect(
+                 tcon->get_raw_socket(),
+-                endpoints,
++                results,
+                 lib::bind(
+                     &type::handle_connect,
+                     this,
+@@ -1160,7 +1159,7 @@ private:
+     bool                m_external_io_context;
+     acceptor_ptr        m_acceptor;
+     resolver_ptr        m_resolver;
+-    work_ptr            m_work;
++    work_guard_ptr      m_work_guard;
+ 
+     // Network constants
+     int                 m_listen_backlog;
+-- 
+2.48.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Amini Allight <amini.allight@protonmail.com>
+Date: Thu, 20 Feb 2025 06:19:46 +0000
+Subject: [PATCH 6/7] fixed use of deprecated boost::asio::deadline_timer in
+ tests
+
+(cherry picked from commit 096487461fe834c30fb322ac0b9088ad82e5a2d5)
+---
+ test/transport/asio/timers.cpp |  3 ++-
+ test/transport/integration.cpp | 27 ++++++++++++++-------------
+ 2 files changed, 16 insertions(+), 14 deletions(-)
+
+diff --git a/test/transport/asio/timers.cpp b/test/transport/asio/timers.cpp
+index 84938cb..22a4bba 100644
+--- a/test/transport/asio/timers.cpp
++++ b/test/transport/asio/timers.cpp
+@@ -80,7 +80,8 @@ void run_dummy_server(int port) {
+ // Wait for the specified time period then fail the test
+ void run_test_timer(long value) {
+     boost::asio::io_context ctx;
+-    boost::asio::deadline_timer t(ctx,boost::posix_time::milliseconds(value));
++    boost::asio::system_timer t(ctx);
++    t.expires_after(std::chrono::milliseconds(value));
+     boost::system::error_code ec;
+     t.wait(ec);
+     BOOST_FAIL( "Test timed out" );
+diff --git a/test/transport/integration.cpp b/test/transport/integration.cpp
+index 371c554..70f4442 100644
+--- a/test/transport/integration.cpp
++++ b/test/transport/integration.cpp
+@@ -355,17 +355,18 @@ void close(T * e, websocketpp::connection_hdl hdl) {
+     e->get_con_from_hdl(hdl)->close(websocketpp::close::status::normal,"");
+ }
+ 
+-class test_deadline_timer
++class test_system_timer
+ {
+ public:
+-    test_deadline_timer(int seconds)
+-    : m_timer(m_io_context, boost::posix_time::seconds(seconds))
++    test_system_timer(int seconds)
++    : m_timer(m_io_context)
+     {
+-        m_timer.async_wait(bind(&test_deadline_timer::expired, this, ::_1));
++        m_timer.expires_after(std::chrono::seconds(seconds));
++        m_timer.async_wait(bind(&test_system_timer::expired, this, ::_1));
+         std::size_t (websocketpp::lib::asio::io_context::*run)() = &websocketpp::lib::asio::io_context::run;
+         m_timer_thread = websocketpp::lib::thread(websocketpp::lib::bind(run, &m_io_context));
+     }
+-    ~test_deadline_timer()
++    ~test_system_timer()
+     {
+         m_timer.cancel();
+         m_timer_thread.join();
+@@ -381,7 +382,7 @@ public:
+     }
+ 
+     websocketpp::lib::asio::io_context m_io_context;
+-    websocketpp::lib::asio::deadline_timer m_timer;
++    websocketpp::lib::asio::system_timer m_timer;
+     websocketpp::lib::thread m_timer_thread;
+ };
+ 
+@@ -427,7 +428,7 @@ BOOST_AUTO_TEST_CASE( pong_timeout ) {
+     websocketpp::lib::thread sthread(websocketpp::lib::bind(&run_server,&s,9005,false));
+     sleep(1); // give the server thread some time to start
+ 
+-    test_deadline_timer deadline(10);
++    test_system_timer deadline(10);
+ 
+     run_client(c, "http://localhost:9005",false);
+ 
+@@ -448,7 +449,7 @@ BOOST_AUTO_TEST_CASE( client_open_handshake_timeout ) {
+ 
+     sleep(1); // give the server thread some time to start
+ 
+-    test_deadline_timer deadline(10);
++    test_system_timer deadline(10);
+ 
+     run_client(c, "http://localhost:9005");
+ }
+@@ -464,7 +465,7 @@ BOOST_AUTO_TEST_CASE( server_open_handshake_timeout ) {
+ 
+     websocketpp::lib::thread sthread(websocketpp::lib::bind(&run_server,&s,9005,false));
+ 
+-    test_deadline_timer deadline(10);
++    test_system_timer deadline(10);
+ 
+     sleep(1); // give the server thread some time to start
+ 
+@@ -489,7 +490,7 @@ BOOST_AUTO_TEST_CASE( client_self_initiated_close_handshake_timeout ) {
+ 
+     websocketpp::lib::thread sthread(websocketpp::lib::bind(&run_server,&s,9005,false));
+ 
+-    test_deadline_timer deadline(10);
++    test_system_timer deadline(10);
+ 
+     sleep(1); // give the server thread some time to start
+ 
+@@ -522,7 +523,7 @@ BOOST_AUTO_TEST_CASE( server_self_initiated_close_handshake_timeout ) {
+     c.set_open_handler(bind(&delay,::_1,1));
+ 
+     websocketpp::lib::thread sthread(websocketpp::lib::bind(&run_server,&s,9005,false));
+-    test_deadline_timer deadline(10);
++    test_system_timer deadline(10);
+ 
+     sleep(1); // give the server thread some time to start
+ 
+@@ -534,7 +535,7 @@ BOOST_AUTO_TEST_CASE( server_self_initiated_close_handshake_timeout ) {
+ BOOST_AUTO_TEST_CASE( client_runs_out_of_work ) {
+     client c;
+ 
+-    test_deadline_timer deadline(3);
++    test_system_timer deadline(3);
+ 
+     websocketpp::lib::error_code ec;
+     c.init_asio(ec);
+@@ -600,7 +601,7 @@ BOOST_AUTO_TEST_CASE( stop_listening ) {
+     c.set_open_handler(bind(&close<client>,&c,::_1));
+ 
+     websocketpp::lib::thread sthread(websocketpp::lib::bind(&run_server,&s,9005,false));
+-    test_deadline_timer deadline(5);
++    test_system_timer deadline(5);
+ 
+     sleep(1); // give the server thread some time to start
+ 
+-- 
+2.48.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Amini Allight <amini.allight@protonmail.com>
+Date: Thu, 20 Feb 2025 17:25:03 +0000
+Subject: [PATCH 7/7] replaced uses of boost::asio::io_context::strand::wrap
+ with boost::asio::bind_executor to avoid future deprecation issues
+
+(cherry picked from commit a11fa6fe4937ca251753e90b1836a68bf57768a9)
+---
+ websocketpp/transport/asio/connection.hpp   | 16 ++++++++--------
+ websocketpp/transport/asio/endpoint.hpp     |  6 +++---
+ websocketpp/transport/asio/security/tls.hpp |  4 ++--
+ 3 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/websocketpp/transport/asio/connection.hpp b/websocketpp/transport/asio/connection.hpp
+index f4c13f3..4baa2ea 100644
+--- a/websocketpp/transport/asio/connection.hpp
++++ b/websocketpp/transport/asio/connection.hpp
+@@ -318,7 +318,7 @@ public:
+         );
+ 
+         if (config::enable_multithreading) {
+-            new_timer->async_wait(m_strand->wrap(lib::bind(
++            new_timer->async_wait(lib::asio::bind_executor(*m_strand, lib::bind(
+                 &type::handle_timer, get_shared(),
+                 new_timer,
+                 callback,
+@@ -629,7 +629,7 @@ protected:
+             lib::asio::async_write(
+                 socket_con_type::get_next_layer(),
+                 m_bufs,
+-                m_strand->wrap(lib::bind(
++                lib::asio::bind_executor(*m_strand, lib::bind(
+                     &type::handle_proxy_write, get_shared(),
+                     callback,
+                     lib::placeholders::_1
+@@ -713,7 +713,7 @@ protected:
+                 socket_con_type::get_next_layer(),
+                 m_proxy_data->read_buf,
+                 "\r\n\r\n",
+-                m_strand->wrap(lib::bind(
++                lib::asio::bind_executor(*m_strand, lib::bind(
+                     &type::handle_proxy_read, get_shared(),
+                     callback,
+                     lib::placeholders::_1, lib::placeholders::_2
+@@ -841,7 +841,7 @@ protected:
+                 socket_con_type::get_socket(),
+                 lib::asio::buffer(buf,len),
+                 lib::asio::transfer_at_least(num_bytes),
+-                m_strand->wrap(make_custom_alloc_handler(
++                lib::asio::bind_executor(*m_strand, make_custom_alloc_handler(
+                     m_read_handler_allocator,
+                     lib::bind(
+                         &type::handle_async_read, get_shared(),
+@@ -910,7 +910,7 @@ protected:
+             lib::asio::async_write(
+                 socket_con_type::get_socket(),
+                 m_bufs,
+-                m_strand->wrap(make_custom_alloc_handler(
++                lib::asio::bind_executor(*m_strand, make_custom_alloc_handler(
+                     m_write_handler_allocator,
+                     lib::bind(
+                         &type::handle_async_write, get_shared(),
+@@ -947,7 +947,7 @@ protected:
+             lib::asio::async_write(
+                 socket_con_type::get_socket(),
+                 m_bufs,
+-                m_strand->wrap(make_custom_alloc_handler(
++                lib::asio::bind_executor(*m_strand, make_custom_alloc_handler(
+                     m_write_handler_allocator,
+                     lib::bind(
+                         &type::handle_async_write, get_shared(),
+@@ -1012,7 +1012,7 @@ protected:
+      */
+     lib::error_code interrupt(interrupt_handler handler) {
+         if (config::enable_multithreading) {
+-            lib::asio::post(m_io_context->get_executor(), m_strand->wrap(handler));
++            lib::asio::post(m_io_context->get_executor(), lib::asio::bind_executor(*m_strand, handler));
+         } else {
+             lib::asio::post(m_io_context->get_executor(), handler);
+         }
+@@ -1021,7 +1021,7 @@ protected:
+ 
+     lib::error_code dispatch(dispatch_handler handler) {
+         if (config::enable_multithreading) {
+-            lib::asio::post(m_io_context->get_executor(), m_strand->wrap(handler));
++            lib::asio::post(m_io_context->get_executor(), lib::asio::bind_executor(*m_strand, handler));
+         } else {
+             lib::asio::post(m_io_context->get_executor(), handler);
+         }
+diff --git a/websocketpp/transport/asio/endpoint.hpp b/websocketpp/transport/asio/endpoint.hpp
+index 2aafd67..b9e1ae8 100644
+--- a/websocketpp/transport/asio/endpoint.hpp
++++ b/websocketpp/transport/asio/endpoint.hpp
+@@ -776,7 +776,7 @@ public:
+         if (config::enable_multithreading) {
+             m_acceptor->async_accept(
+                 tcon->get_raw_socket(),
+-                tcon->get_strand()->wrap(lib::bind(
++                lib::asio::bind_executor(*tcon->get_strand(), lib::bind(
+                     &type::handle_accept,
+                     this,
+                     callback,
+@@ -902,7 +902,7 @@ protected:
+             m_resolver->async_resolve(
+                 host,
+                 port,
+-                tcon->get_strand()->wrap(lib::bind(
++                lib::asio::bind_executor(*tcon->get_strand(), lib::bind(
+                     &type::handle_resolve,
+                     this,
+                     tcon,
+@@ -1012,7 +1012,7 @@ protected:
+             lib::asio::async_connect(
+                 tcon->get_raw_socket(),
+                 results,
+-                tcon->get_strand()->wrap(lib::bind(
++                lib::asio::bind_executor(*tcon->get_strand(), lib::bind(
+                     &type::handle_connect,
+                     this,
+                     tcon,
+diff --git a/websocketpp/transport/asio/security/tls.hpp b/websocketpp/transport/asio/security/tls.hpp
+index 8b27656..07651c0 100644
+--- a/websocketpp/transport/asio/security/tls.hpp
++++ b/websocketpp/transport/asio/security/tls.hpp
+@@ -266,7 +266,7 @@ protected:
+         if (m_strand) {
+             m_socket->async_handshake(
+                 get_handshake_type(),
+-                m_strand->wrap(lib::bind(
++                lib::asio::bind_executor(*m_strand, lib::bind(
+                     &type::handle_init, get_shared(),
+                     callback,
+                     lib::placeholders::_1
+@@ -326,7 +326,7 @@ protected:
+ 
+     void async_shutdown(socket::shutdown_handler callback) {
+         if (m_strand) {
+-            m_socket->async_shutdown(m_strand->wrap(callback));
++            m_socket->async_shutdown(lib::asio::bind_executor(*m_strand, callback));
+         } else {
+             m_socket->async_shutdown(callback);
+         }
+-- 
+2.48.1
+

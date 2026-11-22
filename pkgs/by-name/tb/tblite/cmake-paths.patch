@@ -1,0 +1,46 @@
+Fix double absolute paths in generated cmake target files.
+
+When CMAKE_INSTALL_INCLUDEDIR is an absolute path (as in nixpkgs multi-output
+builds), the template concatenates it with CMAKE_INSTALL_PREFIX, producing
+paths like /nix/store/...-out//nix/store/...-dev/include. Use the full
+path variables instead.
+
+--- a/config/template-targets.cmake
++++ b/config/template-targets.cmake
+@@ -3,11 +3,11 @@
+ set(
+   TBLITE_INCLUDEDIRS
+-  "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@"
+-  "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/@module-dir@"
++  "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
++  "@CMAKE_INSTALL_FULL_INCLUDEDIR@/@module-dir@"
+ )
+ find_library(
+   TBLITE_LIBRARIES
+   "@PROJECT_NAME@"
+-  PATHS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@"
++  PATHS "@CMAKE_INSTALL_FULL_LIBDIR@"
+   NO_DEFAULT_PATH
+ )
+
+--- a/config/template.pc
++++ b/config/template.pc
+@@ -1,5 +1,5 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ fmoddir=@pkgconfig_fmoddir@
+
+ Name: @PROJECT_NAME@
+
+--- a/meson.build
++++ b/meson.build
+@@ -106,4 +106,6 @@
+     'CMAKE_INSTALL_PREFIX': get_option('prefix'),
+     'CMAKE_INSTALL_INCLUDEDIR': get_option('includedir'),
+     'CMAKE_INSTALL_LIBDIR': get_option('libdir'),
++    'CMAKE_INSTALL_FULL_INCLUDEDIR': get_option('includedir').startswith('/') ? get_option('includedir') : get_option('prefix') / get_option('includedir'),
++    'CMAKE_INSTALL_FULL_LIBDIR': get_option('libdir').startswith('/') ? get_option('libdir') : get_option('prefix') / get_option('libdir'),
+     'TBLITE_WITH_API': get_option('api') ? 'ON' : 'OFF',

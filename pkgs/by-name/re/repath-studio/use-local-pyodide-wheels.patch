@@ -1,0 +1,34 @@
+--- a/src/build/fetch-pyodide-wheels.mjs
++++ b/src/build/fetch-pyodide-wheels.mjs
+@@ -39,7 +39,8 @@ const wheelNames = new Set([...needed.values()].map((p) => p.file_name));
+ await mkdir(pyodideDir, { recursive: true });
+ for (const [name, pkg] of needed) {
+   const dest = path.join(pyodideDir, pkg.file_name);
+-  if (existsSync(dest) && sha256(await readFile(dest)) === pkg.sha256) {
++  if (existsSync(dest)) {
++    pkg.sha256 = sha256(await readFile(dest));
+     console.log(`up to date: ${pkg.file_name}`);
+     continue;
+   }
+@@ -57,6 +58,11 @@ for (const [name, pkg] of needed) {
+   console.log(`downloaded: ${pkg.file_name}`);
+ }
+ 
++await writeFile(
++  path.join(pyodideDir, "pyodide-lock.json"),
++  JSON.stringify(lock, null, 2)
++);
++
+ // Drop wheels left over from older pyodide versions.
+ for (const file of await readdir(pyodideDir)) {
+   if (file.endsWith(".whl") && !wheelNames.has(file)) {
+--- a/src/renderer/shell/impl/python.cljs
++++ b/src/renderer/shell/impl/python.cljs
+@@ -151,7 +151,7 @@
+ 
+ (defn load-pyodide
+   [{:keys [on-success on-error]}]
+-  (-> (js/loadPyodide)
++  (-> (js/loadPyodide #js {:indexURL "pyodide/"})
+       (.then (fn [^js pyodide]
+                (aset js/window "pyodide" pyodide)

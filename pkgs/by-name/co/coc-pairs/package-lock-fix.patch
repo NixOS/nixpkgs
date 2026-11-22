@@ -1,0 +1,28 @@
+diff --git c/package-lock.json i/package-lock.json
+index ee9b22f..4d693ab 100644
+--- c/package-lock.json
++++ i/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "coc-pairs",
+-  "version": "1.5.1",
++  "version": "1.5.2",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "coc-pairs",
+-      "version": "1.5.1",
++      "version": "1.5.2",
+       "license": "MIT",
+       "devDependencies": {
+         "@chemzqm/tsconfig": "^0.0.3",
+@@ -20,6 +20,8 @@
+     },
+     "node_modules/@chemzqm/tsconfig": {
+       "version": "0.0.3",
++      "resolved": "https://registry.npmjs.org/@chemzqm/tsconfig/-/tsconfig-0.0.3.tgz",
++      "integrity": "sha512-MjF25vbqLYR+S+JJLgBi0vn4gZqv/C87H+yPSlVKEqlIJAJOGJOgFPUFvRS7pdRHqkv2flX/oRxzxhlu2V0X1w==",
+       "dev": true,
+       "license": "MIT"
+     },

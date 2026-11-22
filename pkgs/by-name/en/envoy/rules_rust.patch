@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Thu, 17 Apr 2025 02:44:24 +0100
+Subject: [PATCH] rules_rust base
+
+Signed-off-by: Luke Granger-Brown <git@lukegb.com>
+---
+ crate_universe/src/lockfile.rs    |  4 ++--
+ rust/private/rustc.bzl            |  4 ++--
+ 4 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git crate_universe/src/lockfile.rs crate_universe/src/lockfile.rs
+index 3e0ce6265fda6fbdd9e3e989e3e4e4443b615b8c..0fafcea8fbc7a590676d34d2c4ca8c413b953955 100644
+--- crate_universe/src/lockfile.rs
++++ crate_universe/src/lockfile.rs
+@@ -146,10 +146,10 @@ impl Digest {
+         ));
+         hasher.update(b"\0");
+ 
+-        hasher.update(Digest::compute_single_hash(cargo_version, "Cargo version"));
++        hasher.update(Digest::compute_single_hash("hermetic", "Cargo version"));
+         hasher.update(b"\0");
+ 
+-        hasher.update(Digest::compute_single_hash(rustc_version, "Rustc version"));
++        hasher.update(Digest::compute_single_hash("hermetic", "Rustc version"));
+         hasher.update(b"\0");
+ 
+         let hash = hasher.finalize().encode_hex::<String>();
+diff --git rust/private/rustc.bzl rust/private/rustc.bzl
+index d78c28902c8f73ae655b8f6b5df3db5a1805aa19..321a24a946c33d5e3452758a72a77b52d5a3eccf 100644
+--- rust/private/rustc.bzl
++++ rust/private/rustc.bzl
+@@ -1059,7 +1059,7 @@ def construct_arguments(
+ 
+     if toolchain.llvm_cov and ctx.configuration.coverage_enabled:
+         # https://doc.rust-lang.org/rustc/instrument-coverage.html
+-        rustc_flags.add("--codegen=instrument-coverage")
++        pass
+ 
+     if toolchain._experimental_link_std_dylib:
+         rustc_flags.add("--codegen=prefer-dynamic")
+@@ -1563,7 +1563,7 @@ def rustc_compile_action(
+         })
+         crate_info = rust_common.create_crate_info(**crate_info_dict)
+ 
+-    if crate_info.type in ["staticlib", "cdylib"]:
++    if crate_info.type in ["staticlib", "cdylib"] and not out_binary:
+         # These rules are not supposed to be depended on by other rust targets, and
+         # as such they shouldn't provide a CrateInfo. However, one may still want to
+         # write a rust_test for them, so we provide the CrateInfo wrapped in a provider

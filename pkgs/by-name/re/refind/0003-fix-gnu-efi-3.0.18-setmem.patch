@@ -1,0 +1,77 @@
+The same commit from gnu-efi that changed CopyMem in a way that broke refind also changed SetMem.
+This patch attempts to fix it in the same way upstream fixed CopyMem.
+
+The commit: https://sourceforge.net/p/gnu-efi/code/ci/deb8a7f267d96299b9aa41300539f617db54c2a9/
+The bug: https://bugs.gentoo.org/934474
+
+--- a/gptsync/gptsync.c
++++ b/gptsync/gptsync.c
+@@ -164,7 +164,7 @@ static UINTN write_mbr(VOID)
+     }
+     if (!have_bootcode) {
+         // no boot code found in the MBR, add the syslinux MBR code
+-        SetMem(sector, MBR_BOOTCODE_SIZE, 0);
++        refit_call3_wrapper(gBS->SetMem, sector, MBR_BOOTCODE_SIZE, 0);
+         refit_call3_wrapper(gBS->CopyMem, sector, syslinux_mbr, SYSLINUX_MBR_SIZE);
+     }
+ 
+--- a/libeg/lodepng_xtra.c
++++ b/libeg/lodepng_xtra.c
+@@ -87,7 +87,7 @@ int MyStrlen(const char *InString) {
+ } // int MyStrlen()
+ 
+ VOID *MyMemSet(VOID *s, int c, size_t n) {
+-    SetMem(s, c, n);
++    MySetMem(s, c, n);
+     return s;
+ }
+ 
+--- a/refind/config.c
++++ b/refind/config.c
+@@ -667,7 +667,7 @@ VOID ReadConfig(CHAR16 *FileName)
+             HandleStrings(TokenList, TokenCount, &(GlobalConfig.DriverDirs));
+ 
+         } else if (MyStriCmp(TokenList[0], L"showtools")) {
+-            SetMem(GlobalConfig.ShowTools, NUM_TOOLS * sizeof(UINTN), 0);
++            MySetMem(GlobalConfig.ShowTools, NUM_TOOLS * sizeof(UINTN), 0);
+             GlobalConfig.HiddenTags = FALSE;
+             for (i = 1; (i < TokenCount) && (i < NUM_TOOLS); i++) {
+                 FlagName = TokenList[i];
+--- a/refind/launch_legacy.c
++++ b/refind/launch_legacy.c
+@@ -114,7 +114,7 @@ static EFI_STATUS ActivateMbrPartition(IN EFI_BLOCK_IO *BlockIO, IN UINTN Partit
+     }
+     if (!HaveBootCode) {
+         // no boot code found in the MBR, add the syslinux MBR code
+-        SetMem(SectorBuffer, MBR_BOOTCODE_SIZE, 0);
++        MySetMem(SectorBuffer, MBR_BOOTCODE_SIZE, 0);
+         MyCopyMem(SectorBuffer, syslinux_mbr, SYSLINUX_MBR_SIZE);
+     }
+ 
+--- a/refind/lib.c
++++ b/refind/lib.c
+@@ -651,7 +651,7 @@ static VOID SetFilesystemData(IN UINT8 *Buffer, IN UINTN BufferSize, IN OUT REFI
+ 
+     LOG(2, LOG_LINE_NORMAL, L"Identifying filesystem types....");
+     if ((Buffer != NULL) && (Volume != NULL)) {
+-        SetMem(&(Volume->VolUuid), sizeof(EFI_GUID), 0);
++        MySetMem(&(Volume->VolUuid), sizeof(EFI_GUID), 0);
+         Volume->FSType = FS_TYPE_UNKNOWN;
+ 
+         if (BufferSize >= (1024 + 100)) {
+--- a/refind/lib.h
++++ b/refind/lib.h
+@@ -133,10 +133,13 @@ VOID MyFreePool(IN OUT VOID *Pointer);
+ 
+ // When using GNU-EFI, call the EFI's built-in gBS->CopyMem() function, because
+ // GNU-EFI 3.0.18 changed its CopyMem() definition in a way that broke rEFInd.
++// Same for SetMem
+ #ifdef __MAKEWITH_GNUEFI
+ #define MyCopyMem(Dest, Src, len) refit_call3_wrapper(gBS->CopyMem, Dest, Src, len)
++#define MySetMem(Dest, Src, len) refit_call3_wrapper(gBS->SetMem, Dest, Src, len)
+ #else
+ #define MyCopyMem(Dest, Src, len) CopyMem(Dest, Src, len)
++#define MySetMem(Dest, Src, len) SetMem(Dest, Src, len)
+ #endif
+ 
+ BOOLEAN EjectMedia(VOID);

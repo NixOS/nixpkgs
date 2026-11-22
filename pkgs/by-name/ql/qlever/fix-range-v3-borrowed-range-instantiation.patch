@@ -1,0 +1,61 @@
+Hoist the `std::string_view` specialization of `enable_borrowed_range`
+
+When `RANGE_V3_COMBINE_WITH_STD` is defined, `range_fwd.hpp` declares a
+partial specialization of `std::ranges::enable_borrowed_range` that is
+constrained on `ranges::enable_borrowed_range<T>`. Forming that constraint
+instantiates the *primary* template `ranges::enable_borrowed_range` for
+whatever `T` is passed, which can happen before `range/access.hpp` has had a
+chance to declare its own partial specialization for
+`std::basic_string_view`. With GCC 16 that is diagnosed as
+
+  partial specialization of 'ranges::enable_borrowed_range<std::basic_string_view<_CharT, _Traits> >'
+  after instantiation of 'ranges::enable_borrowed_range<std::basic_string_view<char> >'
+
+Declaring the `std::basic_string_view` specialization right after the primary
+template in `range_fwd.hpp` guarantees it is visible before anything can
+instantiate the primary, so the constraint above resolves to the intended
+specialization.
+
+This is a local fix; upstream range-v3 has not addressed it yet.
+---
+ include/range/v3/range/access.hpp | 6 ------
+ include/range/v3/range_fwd.hpp   | 7 +++++++
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/include/range/v3/range/access.hpp b/range/v3/range/access.hpp
+--- a/include/range/v3/range/access.hpp
++++ b/include/range/v3/range/access.hpp
+@@ -42,11 +42,6 @@
+
+ namespace ranges
+ {
+-#if defined(__cpp_lib_string_view) && __cpp_lib_string_view >= 201603L
+-    template<class CharT, class Traits>
+-    RANGES_INLINE_VAR constexpr bool
+-        enable_borrowed_range<std::basic_string_view<CharT, Traits>> = true;
+-#endif
+
+ // libstdc++'s <span> header only defines std::span when concepts
+ // are also enabled. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97869
+ #if defined(__cpp_lib_span) && __cpp_lib_span >= 202002L && \
+diff --git a/include/range/v3/range_fwd.hpp b/range/v3/range_fwd.hpp
+--- a/include/range/v3/range_fwd.hpp
++++ b/include/range/v3/range_fwd.hpp
+@@ -1,3 +1,4 @@
++#include <string_view>
+ /// \file
+ // Range v3 library
+ //
+@@ -538,6 +539,12 @@
+     template<typename R>
+     RANGES_INLINE_VAR constexpr bool enable_borrowed_range = false;
+
++#if defined(__cpp_lib_string_view) && __cpp_lib_string_view >= 201603L
++    template<class CharT, class Traits>
++    RANGES_INLINE_VAR constexpr bool
++        enable_borrowed_range<std::basic_string_view<CharT, Traits>> = true;
++#endif
++
+     namespace detail
+     {
+         template<typename R>

@@ -1,0 +1,170 @@
+Backported from <https://github.com/hrydgard/ppsspp/commit/930b7f644d74c74d9e58bf8e5300bf9ea9fb78a9>.
+
+Original author: Andrew Udvare <audvare@gmail.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bfd5e69035..f7c43800fa 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -117,6 +117,7 @@
+ endif()
+ 
+ include(ccache)
++include(CheckCXXSourceCompiles)
+ include(GNUInstallDirs)
+ 
+ add_definitions(-DASSETS_DIR="${CMAKE_INSTALL_FULL_DATADIR}/ppsspp/assets/")
+@@ -949,6 +950,23 @@
+ 	endif()
+ 
+ 	find_package(FFmpeg REQUIRED avcodec avformat avutil swresample swscale)
++	# Check if we need to use avcodec_(alloc|free)_frame instead of av_frame_(alloc|free)
++	# Check if we need to use const AVCodec
++	set(CMAKE_REQUIRED_LIBRARIES avcodec;avformat)
++	set(CMAKE_REQUIRED_FLAGS "-pedantic -Wall -Werror -Wno-unused-variable")
++	check_cxx_source_compiles("extern \"C\" {
++		#include <libavcodec/avcodec.h>
++		#include <libavformat/avformat.h>
++		}
++		static AVCodecContext *s_codec_context = NULL;
++		int main() {
++			const AVCodec *codec = avcodec_find_encoder(s_codec_context->codec_id);
++			return 0;
++		}
++		" HAVE_LIBAVCODEC_CONST_AVCODEC FAIL_REGEX "invalid conversion")
++
++	# Check if we need to use avcodec_alloc_context3 instead of stream->codec
++	# Check if we need to use av_frame_get_buffer instead of avcodec_default_get_buffer
+ endif(USE_FFMPEG)
+ 
+ find_package(ZLIB)
+@@ -2020,6 +2038,7 @@
+ 	Core/ELF/PrxDecrypter.h
+ 	Core/ELF/ParamSFO.cpp
+ 	Core/ELF/ParamSFO.h
++	Core/FFMPEGCompat.h
+ 	Core/FileSystems/tlzrc.cpp
+ 	Core/FileSystems/BlobFileSystem.cpp
+ 	Core/FileSystems/BlobFileSystem.h
+@@ -2354,6 +2373,9 @@
+ 
+ if(FFmpeg_FOUND)
+ 	target_compile_definitions(${CoreLibName} PRIVATE USE_FFMPEG=1)
++	if (HAVE_LIBAVCODEC_CONST_AVCODEC)
++		target_compile_definitions(${CoreLibName} PRIVATE HAVE_LIBAVCODEC_CONST_AVCODEC=1)
++	endif()
+ 	set_target_properties(${CoreLibName} PROPERTIES NO_SYSTEM_FROM_IMPORTED true)
+ 	target_include_directories(${CoreLibName} BEFORE PUBLIC ${FFmpeg_INCLUDE_avcodec})
+ 	target_link_libraries(${CoreLibName}
+diff --git a/Core/AVIDump.cpp b/Core/AVIDump.cpp
+index 7c9576d292..aa81165031 100644
+--- a/Core/AVIDump.cpp
++++ b/Core/AVIDump.cpp
+@@ -45,9 +45,7 @@
+ #define av_frame_free avcodec_free_frame
+ #endif
+ 
+-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(59, 16, 100)
+-#define AVCodec const AVCodec
+-#endif
++#include "FFMPEGCompat.h"
+ 
+ static AVFormatContext *s_format_context = nullptr;
+ static AVCodecContext *s_codec_context = nullptr;
+diff --git a/Core/FFMPEGCompat.h b/Core/FFMPEGCompat.h
+new file mode 100644
+index 0000000000..fed3b1c853
+--- /dev/null
++++ b/Core/FFMPEGCompat.h
+@@ -1,0 +1,8 @@
++#ifndef FFMPEG_COMPAT_H
++#define FFMPEG_COMPAT_H
++
++#ifdef HAVE_LIBAVCODEC_CONST_AVCODEC
++#define AVCodec const AVCodec
++#endif
++
++#endif // FFMPEG_COMPAT_H
+diff --git a/Core/HLE/sceAtrac.cpp b/Core/HLE/sceAtrac.cpp
+index fe0e8a54de..f83d9ffdf1 100644
+--- a/Core/HLE/sceAtrac.cpp
++++ b/Core/HLE/sceAtrac.cpp
+@@ -129,10 +129,7 @@
+ #include "libavcodec/avcodec.h"
+ #include "libavutil/version.h"
+ }
+-
+-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(59, 16, 100)
+-#define AVCodec const AVCodec
+-#endif
++#include "Core/FFMPEGCompat.h"
+ 
+ #endif // USE_FFMPEG
+ 
+diff --git a/Core/HLE/sceMpeg.cpp b/Core/HLE/sceMpeg.cpp
+index d050d62f3d..8be78c73e0 100644
+--- a/Core/HLE/sceMpeg.cpp
++++ b/Core/HLE/sceMpeg.cpp
+@@ -113,9 +113,7 @@
+ #include "libswscale/swscale.h"
+ #include "libavcodec/avcodec.h"
+ }
+-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(59, 16, 100)
+-#define AVCodec const AVCodec
+-#endif
++#include "Core/FFMPEGCompat.h"
+ static AVPixelFormat pmp_want_pix_fmt;
+ 
+ #endif
+diff --git a/Core/HW/MediaEngine.cpp b/Core/HW/MediaEngine.cpp
+index 0ed957edfd..7e8b37d4dc 100644
+--- a/Core/HW/MediaEngine.cpp
++++ b/Core/HW/MediaEngine.cpp
+@@ -56,9 +56,7 @@
+ 
+ #ifdef USE_FFMPEG
+ 
+-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(59, 16, 100)
+-#define AVCodec const AVCodec
+-#endif
++#include "Core/FFMPEGCompat.h"
+ 
+ static AVPixelFormat getSwsFormat(int pspFormat)
+ {
+diff --git a/Core/HW/SimpleAudioDec.cpp b/Core/HW/SimpleAudioDec.cpp
+index 7994a7f402..80397bf6da 100644
+--- a/Core/HW/SimpleAudioDec.cpp
++++ b/Core/HW/SimpleAudioDec.cpp
+@@ -33,6 +33,7 @@
+ #include "libavutil/samplefmt.h"
+ #include "libavcodec/avcodec.h"
+ }
++#include "Core/FFMPEGCompat.h"
+ 
+ #endif  // USE_FFMPEG
+ 
+diff --git a/Core/HW/SimpleAudioDec.h b/Core/HW/SimpleAudioDec.h
+index 52a78bf3b4..9bf2427a4a 100644
+--- a/Core/HW/SimpleAudioDec.h
++++ b/Core/HW/SimpleAudioDec.h
+@@ -33,10 +33,6 @@
+ #include "libavutil/version.h"
+ };
+ 
+-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(59, 16, 100)
+-#define AVCodec const AVCodec
+-#endif
+-
+ #endif
+ 
+ // Wraps FFMPEG for audio decoding in a nice interface.
+@@ -90,6 +86,9 @@
+ 	int wanted_resample_freq; // wanted resampling rate/frequency
+ 
+ 	AVFrame *frame_;
++#if HAVE_LIBAVCODEC_CONST_AVCODEC // USE_FFMPEG is implied
++	const
++#endif
+ 	AVCodec *codec_;
+ 	AVCodecContext  *codecCtx_;
+ 	SwrContext      *swrCtx_;

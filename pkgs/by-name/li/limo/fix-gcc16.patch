@@ -1,0 +1,84 @@
+diff --git a/src/core/installer.cpp b/src/core/installer.cpp
+index 5662845..336d558 100644
+--- a/src/core/installer.cpp
++++ b/src/core/installer.cpp
+@@ -1,6 +1,7 @@
+ #include "installer.h"
+ #include "compressionerror.h"
+ #include "pathutils.h"
++#include <cstdint>
+ #include <archive.h>
+ #include <archive_entry.h>
+ #include <filesystem>
+diff --git a/src/core/progressnode.cpp b/src/core/progressnode.cpp
+index 7701aed..d598747 100644
+--- a/src/core/progressnode.cpp
++++ b/src/core/progressnode.cpp
+@@ -1,6 +1,7 @@
+ #include "progressnode.h"
+ #include <limits>
+ #include <numeric>
++#include <cstdint>
+ 
+ 
+ ProgressNode::ProgressNode(int id,
+diff --git a/src/core/progressnode.h b/src/core/progressnode.h
+index c09b3e3..6b1c769 100644
+--- a/src/core/progressnode.h
++++ b/src/core/progressnode.h
+@@ -8,6 +8,7 @@
+ #include <functional>
+ #include <memory>
+ #include <optional>
++#include <cstdint>
+ #include <vector>
+ 
+ 
+diff --git a/src/core/versionchangelog.cpp b/src/core/versionchangelog.cpp
+index 470c53d..74358d6 100644
+--- a/src/core/versionchangelog.cpp
++++ b/src/core/versionchangelog.cpp
+@@ -1,6 +1,7 @@
+ #include "versionchangelog.h"
+ #include <algorithm>
+ #include <chrono>
++#include <iomanip>
+ 
+ 
+ VersionChangelog::VersionChangelog(const Json::Value& json)
+diff --git a/src/ui/applicationmanager.cpp b/src/ui/applicationmanager.cpp
+index 4c53f5d..86673cc 100644
+--- a/src/ui/applicationmanager.cpp
++++ b/src/ui/applicationmanager.cpp
+@@ -8,6 +8,7 @@
+ #include <QSettings>
+ #include <QUrl>
+ #include <regex>
++#include <cstdint>
+ 
+ namespace sfs = std::filesystem;
+ namespace pu = path_utils;
+diff --git a/src/ui/modlistmodel.cpp b/src/ui/modlistmodel.cpp
+index 1a56ae9..c7cee30 100644
+--- a/src/ui/modlistmodel.cpp
++++ b/src/ui/modlistmodel.cpp
+@@ -5,6 +5,7 @@
+ #include <QIcon>
+ #include <QPainter>
+ #include <QTableView>
++#include <iomanip>
+ 
+ 
+ ModListModel::ModListModel(ModListProxyModel* proxy, QObject* parent) :
+diff --git a/src/ui/nexusmoddialog.cpp b/src/ui/nexusmoddialog.cpp
+index 41968c3..d78d602 100644
+--- a/src/ui/nexusmoddialog.cpp
++++ b/src/ui/nexusmoddialog.cpp
+@@ -10,6 +10,7 @@
+ #include <algorithm>
+ #include <ranges>
+ #include <sstream>
++#include <iomanip>
+ 
+ namespace str = std::ranges;
+ 

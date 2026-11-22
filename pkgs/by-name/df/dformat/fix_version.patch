@@ -1,0 +1,13 @@
+diff --git a/dub.json b/dub.json
+index a0d6357..abae578 100644
+--- a/dub.json
++++ b/dub.json
+@@ -13,8 +13,5 @@
+     ],
+     "versions" : [
+         "built_with_dub"
+-    ],
+-    "preBuildCommands" : [
+-      "$DC -run \"$PACKAGE_DIR/dubhash.d\""
+     ]
+ }

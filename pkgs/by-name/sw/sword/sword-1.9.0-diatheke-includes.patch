@@ -1,0 +1,13 @@
+diff --git a/utilities/diatheke/Makefile.am b/utilities/diatheke/Makefile.am
+index 8ba34e5..545af2c 100644
+--- a/utilities/diatheke/Makefile.am
++++ b/utilities/diatheke/Makefile.am
+@@ -1,5 +1,8 @@
+ AUTOMAKE_OPTIONS = 1.6
+ 
++if USE_INTERNAL_REGEX
++AM_CPPFLAGS = -I$(top_srcdir)/include/internal/regex
++endif
+ LDADD = $(top_builddir)/lib/libsword.la
+ 
+ bin_PROGRAMS = diatheke

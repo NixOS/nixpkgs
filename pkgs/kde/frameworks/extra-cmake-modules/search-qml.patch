@@ -1,0 +1,12 @@
+--- a/modules/ECMFindQmlModule.cmake.in
++++ b/modules/ECMFindQmlModule.cmake.in
+@@ -31,7 +31,8 @@ if (QT_MAJOR_VERSION EQUAL "6")
+     endif()
+ 
+     if (NOT MODULE_NOTFOUND AND NOT "@VERSION@" STREQUAL "") # Check if we even need to check the version
+-        find_file(VERSION_FILE kde-qmlmodule.version ${KDE_QMLDIR} NO_CACHE)
++        cmake_path(GET QMLDIR_FILE PARENT_PATH QMLDIR_DIR)
++        find_file(VERSION_FILE kde-qmlmodule.version ${QMLDIR_DIR} NO_CACHE)
+         if (VERSION_FILE)
+             file(READ "${VERSION_FILE}" FILE_CONTENTS)
+             if ("${FILE_CONTENTS}" MATCHES "([0-9]+(\\.[0-9]+)*)")

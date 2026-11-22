@@ -1,0 +1,44 @@
+From 53b5a8d84c414c9b61c47e3877e5d465bcf8c285 Mon Sep 17 00:00:00 2001
+From: felix <felix@call-with-current-continuation.org>
+Date: Thu, 22 Oct 2026 21:29:44 +0200
+Subject: [PATCH] ensure target marker is properly applied for cross builds
+
+(thanks to Jared Baur)
+
+Upstream: https://code.call-cc.org/githtml/chicken-core/master/commits/53b5a8d84c414c9b61c47e3877e5d465bcf8c285.html
+(manual/Acknowledgements change dropped: release tarballs do not ship manual/)
+---
+ egg-compile.scm | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/egg-compile.scm b/egg-compile.scm
+index 80e59363..56d367a0 100644
+--- a/egg-compile.scm
++++ b/egg-compile.scm
+@@ -686,8 +686,10 @@
+ 			 platform)
+     (when (pair? link-objects)
+       (let ((lobjs (filelist srcdir
+-                             (map (cut conc <> ".static" (object-extension platform))
+-                               link-objects))))
++                             (map (lambda (lo)
++                                    (target-file (conc lo ".static" (object-extension platform))
++                                                 mode))
++                              link-objects))))
+ 	(print-build-command (list out3)
+ 			     `(,out2 ,@lobjs)
+ 			     `(,target-librarian ,target-librarian-options ,out3 ,out2 ,@lobjs)
+@@ -1208,7 +1210,12 @@ EOF
+ 	      str)))
+ 
+ (define (target-file fname mode)
+-  (if (eq? mode 'target) (string-append fname ".target") fname))
++  (if (eq? mode 'target)
++      (make-pathname
++        (pathname-directory fname)
++        (string-append (pathname-file fname) ".target")
++        (pathname-extension fname))
++      fname))
+ 
+ (define (joins strs platform)
+   (string-intersperse (map qs* strs) " "))

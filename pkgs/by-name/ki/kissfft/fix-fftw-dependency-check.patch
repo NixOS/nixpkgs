@@ -1,0 +1,23 @@
+From a73134e594d85abc32e27a34a78ce75c5f006f92 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Sat, 3 Aug 2024 17:49:57 +0100
+Subject: [PATCH] Fix FFTW dependency check
+
+`KISFFT_FLOAT` is not defined anywhere.
+---
+ test/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 0a0e403..d7d8350 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -24,7 +24,7 @@ add_kissfft_test_executable(bm_kiss benchkiss.c pstats.c)
+ # set_tests_properties(${NAME} PROPERTIES TIMEOUT 3600)
+ 
+ include(FindPkgConfig)
+-if(KISSFFT_FLOAT)
++if(KISSFFT_DATATYPE MATCHES "^float$")
+     set(fftw3_pkg fftw3f)
+ else()
+     set(fftw3_pkg fftw3)

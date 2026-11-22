@@ -1,0 +1,108 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  gfortran,
+  pkg-config,
+  blas,
+  bzip2,
+  cbc,
+  clp,
+  doxygen,
+  graphviz,
+  ipopt,
+  lapack,
+  libamplsolver,
+  osi,
+  texliveSmall,
+  zlib,
+}:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "bonmin";
+  version = "1.8.9";
+
+  src = fetchFromGitHub {
+    owner = "coin-or";
+    repo = "Bonmin";
+    rev = "releases/${finalAttrs.version}";
+    sha256 = "sha256-nqjAQ1NdNJ/T4p8YljEWRt/uy2aDwyBeAsag0TmRc5Q=";
+  };
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+  # The old autoconf-generated configure script does not support `--docdir`
+  setOutputFlags = false;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    doxygen
+    gfortran
+    graphviz
+    pkg-config
+    texliveSmall
+  ];
+  buildInputs = [
+    blas
+    bzip2
+    cbc
+    clp
+    ipopt
+    lapack
+    libamplsolver
+    osi
+    zlib
+  ];
+
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-asl-lib=-lipoptamplinterface -lamplsolver"
+  ];
+
+  # Fix doc install. Should not be necessary after next release
+  # ref https://github.com/coin-or/Bonmin/commit/4f665bc9e489a73cb867472be9aea518976ecd28
+  sourceRoot = "${finalAttrs.src.name}/Bonmin";
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  # Fontconfig error: No writable cache directories
+  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
+
+  doCheck = true;
+  checkTarget = "test";
+
+  # ignore one failing test
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace test/Makefile.in --replace-fail \
+      "./unitTest\''$(EXEEXT)" \
+      ""
+  '';
+
+  # Install the doxygen documentation into the separate `doc` output
+  installTargets = [
+    "install"
+    "install-doxygen-docs"
+  ];
+  installFlags = [ "DocInstallDir=${placeholder "doc"}/share/doc/bonmin" ];
+
+  # The LaTeX logs from the formula rendering reference texlive
+  postInstall = ''
+    rm -f $doc/share/doc/bonmin/doxydoc/_formulas*.log
+  '';
+
+  meta = {
+    description = "Open-source code for solving general MINLP (Mixed Integer NonLinear Programming) problems";
+    mainProgram = "bonmin";
+    homepage = "https://github.com/coin-or/Bonmin";
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aanderse ];
+  };
+})

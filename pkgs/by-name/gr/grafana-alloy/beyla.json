@@ -1,0 +1,10 @@
+{
+  "amd64": {
+    "url": "https://github.com/grafana/beyla/releases/download/v3.40.0/beyla-linux-amd64-v3.40.0.tar.gz",
+    "hash": "sha256-6VC+yBHPRtu2fJnwLnueTBWDOxPAMHNv2gPvzbCr5lw="
+  },
+  "arm64": {
+    "url": "https://github.com/grafana/beyla/releases/download/v3.40.0/beyla-linux-arm64-v3.40.0.tar.gz",
+    "hash": "sha256-WqdLHPU26t8hPpf6e7GZPM5FgZUIPlrc3NJn+VDy65o="
+  }
+}

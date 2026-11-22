@@ -1,0 +1,50 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pysigma,
+  pytest-cov-stub,
+  pytestCheckHook,
+  requests,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "pysigma-backend-elasticsearch";
+  version = "2.1.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "SigmaHQ";
+    repo = "pySigma-backend-elasticsearch";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-47jvbbgCtsJC8q7rZVLyZNL77/fcwyQzBup9HVUNY8g=";
+  };
+
+  pythonRelaxDeps = [ "pysigma" ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [ pysigma ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+    requests
+    writableTmpDirAsHomeHook
+  ];
+
+  # All tests require network access
+  doCheck = false;
+
+  pythonImportsCheck = [ "sigma.backends.elasticsearch" ];
+
+  meta = {
+    description = "Library to support Elasticsearch for pySigma";
+    homepage = "https://github.com/SigmaHQ/pySigma-backend-elasticsearch";
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-elasticsearch/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

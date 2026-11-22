@@ -1,0 +1,28 @@
+diff --git a/config/filesystems.php b/config/filesystems.php
+index 12f6054d..a179e829 100644
+--- a/config/filesystems.php
++++ b/config/filesystems.php
+@@ -52,19 +52,21 @@
+         ],
+ 
+         's3' => [
+-            'driver' => 's3',
++            'driver' => env('AWS_DRIVER', 's3'),
+             'key' => env('AWS_ACCESS_KEY_ID'),
+             'secret' => env('AWS_SECRET_ACCESS_KEY'),
+             'region' => env('AWS_DEFAULT_REGION'),
+             'bucket' => env('AWS_BUCKET'),
+-            'url' => env('AWS_URL'),
++            'url' => env('AWS_URL', env('APP_URL').'/storage'),
+             'endpoint' => env('AWS_ENDPOINT'),
+             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
++            'root' => env('AWS_ROOT', storage_path('app/public')),
++            'visibility' => env('AWS_VISIBILITY', 'public'),
+             'throw' => false,
+             'options' => [
+                 'request_checksum_calculation' => env('AWS_REQUEST_CHECKSUM_CALCULATION', 'WHEN_SUPPORTED'),
+                 'response_checksum_validation' => env('AWS_RESPONSE_CHECKSUM_VALIDATION', 'WHEN_SUPPORTED'),
+             ],
+         ],
+ 
+         'backupS3' => [

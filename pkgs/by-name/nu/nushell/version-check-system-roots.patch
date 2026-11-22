@@ -1,0 +1,55 @@
+--- a/crates/nu-command/src/network/version_check.rs
++++ b/crates/nu-command/src/network/version_check.rs
+@@ -2,10 +2,31 @@
+ use serde::Deserialize;
+ use update_informer::{
+     Check, Package, Registry, Result as UpdateResult,
+-    http_client::{GenericHttpClient, HttpClient},
++    http_client::{GenericHttpClient, HeaderMap, HttpClient},
+     registry,
+ };
+ 
++struct NuHttpClient;
++
++impl HttpClient for NuHttpClient {
++    fn get<T: serde::de::DeserializeOwned>(
++        url: &str,
++        timeout: std::time::Duration,
++        headers: HeaderMap,
++    ) -> UpdateResult<T> {
++        let config = ureq::Agent::config_builder()
++            .timeout_global(Some(timeout))
++            .tls_config(super::tls::tls_config(false)?)
++            .build();
++        let agent: ureq::Agent = config.into();
++        let mut req = agent.get(url);
++        for (header, value) in headers {
++            req = req.header(header, value);
++        }
++        Ok(req.call()?.body_mut().read_json()?)
++    }
++}
++
+ #[derive(Clone)]
+ pub struct VersionCheck;
+ 
+@@ -97,7 +118,8 @@
+         // Since this is run on demand, there isn't really a need to cache the check.
+         let informer =
+             update_informer::new(NuShellNightly, nightly_pkg_name, current_version.clone())
+-                .interval(std::time::Duration::ZERO);
++                .interval(std::time::Duration::ZERO)
++                .http_client(NuHttpClient);
+ 
+         if let Ok(Some(new_version)) = informer.check_version() {
+             rec.push("current", Value::test_bool(false));
+@@ -117,7 +139,8 @@
+         // is why we set the interval to std::time::Duration::ZERO.
+         let informer =
+             update_informer::new(registry::GitHub, normal_pkg_name, current_version.clone())
+-                .interval(std::time::Duration::ZERO);
++                .interval(std::time::Duration::ZERO)
++                .http_client(NuHttpClient);
+ 
+         if let Ok(Some(new_version)) = informer.check_version() {
+             rec.push("current", Value::test_bool(false));

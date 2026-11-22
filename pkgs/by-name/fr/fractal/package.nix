@@ -1,0 +1,126 @@
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  nix-update-script,
+  cargo,
+  meson,
+  ninja,
+  rustPlatform,
+  rustc,
+  pkg-config,
+  glib,
+  grass-sass,
+  gtk4,
+  gtksourceview5,
+  lcms2,
+  libadwaita,
+  gst_all_1,
+  desktop-file-utils,
+  appstream-glib,
+  openssl,
+  aws-lc,
+  pipewire,
+  libshumate,
+  wrapGAppsHook4,
+  blueprint-compiler,
+  sqlite,
+  xdg-desktop-portal,
+  libseccomp,
+  libglycin-gtk4,
+  glycin-loaders,
+  libwebp,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "fractal";
+  version = "14.3";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = "fractal";
+    tag = finalAttrs.version;
+    hash = "sha256-AHksQ+DXIf/wFj/K24xbiT5Qr6tbzRHOLnCDMlAbTC0=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-wRTXNnM8NscEjNbO7sXaO8LM1u2iuDYUtVuot7csBcg=";
+  };
+
+  patches = [
+    # Disable debug symbols in release builds
+    # The debug symbols are stripped afterwards anyways, and building with them requires extra memory
+    ./disable-debug.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "target_dir / rust_target / meson.project_name()" \
+      "target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+
+    patchShebangs ./build-aux/compile-blueprints.sh
+  '';
+
+  nativeBuildInputs = [
+    glib
+    grass-sass
+    gtk4
+    meson
+    ninja
+    pkg-config
+    rustPlatform.bindgenHook
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    desktop-file-utils
+    appstream-glib
+    wrapGAppsHook4
+    blueprint-compiler
+  ];
+
+  buildInputs = [
+    glib
+    glycin-loaders
+    gtk4
+    gtksourceview5
+    lcms2
+    libadwaita
+    libglycin-gtk4
+    openssl
+    aws-lc
+    pipewire
+    libshumate
+    sqlite
+    xdg-desktop-portal
+    libseccomp
+    libwebp
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-rs
+  ]);
+
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Matrix group messaging app";
+    homepage = "https://gitlab.gnome.org/World/fractal";
+    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
+    mainProgram = "fractal";
+  };
+})

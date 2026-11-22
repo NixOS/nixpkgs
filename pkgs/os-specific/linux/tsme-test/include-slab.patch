@@ -1,0 +1,10 @@
+--- a/tsme-test.c
++++ b/tsme-test.c
+@@ -13,6 +13,7 @@
+ #include <linux/smp.h>
+ #include <linux/mm.h>
+ #include <linux/io.h>
++#include <linux/slab.h>
+ #include <linux/kobject.h>
+ #include <linux/sysfs.h>
+
