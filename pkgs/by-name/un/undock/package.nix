@@ -5,13 +5,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "undock";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "crazy-max";
     repo = "undock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QL4HcC8Tkbp6UQ/UuShfV2LlYCAhj4UnL8BvdpeRH0U=";
+    hash = "sha256-bdX9YITBesMioiWp3irI4+yJRMhzbu//neso6oANcLA=";
   };
 
   vendorHash = null;
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
     # On Go 1.27 the vendored x/net v0.54.0 wraps the standard library's
     # HTTP/2, which lacks http2.TrailerPrefix, so the vendored grpc v1.80.0
     # fails to compile. http2legacy keeps x/net's own implementation.
-    "http2legacy" # fix for v0.14.1 - upstream main branch already has the fix
+    "http2legacy" # fix for v0.15.0 - upstream main branch already has the fix
   ];
 
   env.CGO_ENABLED = 0;
