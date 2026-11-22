@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "megatools";
-  version = "1.11.5";
+  version = "1.12.2";
 
   src = fetchgit {
     url = "https://xff.cz/git/megatools";
     rev = finalAttrs.version;
-    hash = "sha256-XOGjdvMw8wfhBwyOBnQqiiJeOGvYXKMYxiJ6BZeEwDQ=";
+    hash = "sha256-7wzEfqBhqCs7QDmXZqq0DvC1J2xiw8hb9Yne7DC9U6g=";
   };
 
   nativeBuildInputs = [
