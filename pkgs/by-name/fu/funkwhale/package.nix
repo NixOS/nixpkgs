@@ -1,5 +1,6 @@
 {
   lib,
+  fetchFromGitHub,
   python3,
   callPackage,
   fetchFromGitLab,
@@ -11,6 +12,22 @@
 
   nixosTests,
 }:
+let
+  # Pin to 3.1.0 to match upstream poetry.lock, with >= 3.4 DB migration required
+  django-oauth-toolkit' = (python3.pkgs.django-oauth-toolkit.overridePythonAttrs (old: {
+    version = "3.1.0";
+    src = fetchFromGitHub {
+      owner = "django-oauth";
+      repo = "django-oauth-toolkit";
+      tag = "3.1.0";
+      hash = "sha256-c7LaB8426qjwDveec3BghqCEtPs572PTVodvLAO2CcQ=";
+    };
+    preCheck = ''
+      export DJANGO_SETTINGS_MODULE=tests.settings
+    '';
+    doCheck = true;
+  }));
+in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "funkwhale";
   version = "2.0.18";
@@ -30,31 +47,20 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/api";
 
   patches = [
-    # `unicode-slugify` was removed from nixpkgs.
-    # See https://github.com/NixOS/nixpkgs/pull/448893.
+    # unicode-slugify was dropped from nixpkgs (#448893); replace with python-slugify
     ./replace-unicode-slugify.patch
 
+    # mock filesystem access in tests to avoid probing / in the build sandbox
     ./fix-root-filesystem-tests.patch
 
-    # Fix compatibility with django-allauth >= 65.18 where filter_users_by_username
-    # was moved from allauth.account.auth_backends to allauth.account.internal.userkit.
+    # compatibility with django-allauth >= 65.18
     ./django-allauth-compat.patch
 
-    # Fix Celery task argument validation on Python 3.14 / Celery >= 5.5.
-    # Celery unwraps __wrapped__ when checking arguments, causing @require_instance
-    # to reject keyword arguments like upload_id.
+    # fix celery task argument validation on Python 3.14
     ./celery-python314-compat.patch
 
-    # Disable socket_timeout in channels_redis host configuration.
-    # redis-py >= 8.0 defaults socket_timeout to 5s, clashing with channels_redis's
-    # 5s brpop timeout and causing WebSocket TimeoutErrors on idle activity streams.
+    # prevent idle WebSocket disconnects under redis-py >= 8.0 default socket timeout
     ./channels-redis-timeout.patch
-
-    # Fix compatibility with django-oauth-toolkit >= 3.4 where AbstractAccessToken,
-    # AbstractRefreshToken, AbstractGrant gained RFC 8707 'resource' and AbstractApplication
-    # gained 'registration_source' and 'cimd_expires_at'. Since Funkwhale swaps these models,
-    # it must provide a migration for the new columns.
-    ./django-oauth-toolkit-3.4-compat.patch
   ];
 
   build-system = with python3.pkgs; [
@@ -83,7 +89,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       django-dynamic-preferences
       django-environ
       django-filter
-      django-oauth-toolkit
+      django-oauth-toolkit'
       django-redis
       django-silk
       django-storages
