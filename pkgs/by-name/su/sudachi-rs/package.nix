@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       set -eu -o pipefail
       nix-update sudachi-rs
-      nix-update --version=skip python3Packages.sudachipy
+      nix-update --version=skip --no-src python3Packages.sudachipy
     '';
     tests = {
       # detects an error that sudachidict is not found
