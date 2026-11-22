@@ -9,6 +9,7 @@
   udev,
   yarn-berry_4,
   libusb1,
+  alsa-lib,
   electron,
   makeWrapper,
   nix-update-script,
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libusb1
+    alsa-lib
     nodejs_26
     electron
     udev
@@ -148,6 +150,7 @@ stdenv.mkDerivation rec {
         lib.makeLibraryPath [
           libusb1
           udev
+          alsa-lib
         ]
       }" \
       --set NODE_PATH $out/share/bitfocus-companion/node_modules
