@@ -60,7 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     }))
     (nix-update-script {
       # Changing the pnpm version requires updating `pnpmDeps.hash`.
-      extraArgs = [ "--version=skip" ];
+      extraArgs = [
+        "--version=skip"
+        "--no-src"
+      ];
     })
   ];
 
