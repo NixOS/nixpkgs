@@ -1,0 +1,20 @@
+--- a/funkwhale_api/music/filters.py	2026-11-23 02:12:50.783486065 +0530
++++ b/funkwhale_api/music/filters.py	2026-11-23 02:12:50.823675195 +0530
+@@ -226,7 +226,7 @@
+     def filter_artist(self, queryset, name, value):
+         return queryset.filter(
+             Q(artist_credit__artist=value) | Q(album__artist_credit__artist=value)
+-        )
++        ).distinct()
+ 
+     def filter_has_mbid(self, queryset, name, value):
+         return queryset.filter(mbid__isnull=(not value))
+@@ -370,7 +370,7 @@
+         return queryset.filter(release_date__isnull=(not value))
+ 
+     def filter_artist(self, queryset, name, value):
+-        return queryset.filter(artist_credit__artist=value)
++        return queryset.filter(artist_credit__artist=value).distinct()
+ 
+     def filter_content_category(self, queryset, name, value):
+         exists = models.ArtistCredit.objects.filter(

@@ -61,6 +61,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
     # prevent idle WebSocket disconnects under redis-py >= 8.0 default socket timeout
     ./channels-redis-timeout.patch
+
+    # prevent duplicate tracks when filtering by artist on M2M relations
+    ./fix-artist-tracks-count-distinct.patch
   ];
 
   build-system = with python3.pkgs; [
