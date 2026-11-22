@@ -7215,10 +7215,6 @@ with pkgs;
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
-  lvm2_dmeventd = lvm2.override {
-    enableDmeventd = true;
-    enableCmdlib = true;
-  };
   lvm2_vdo = lvm2_dmeventd.override {
     enableVDO = true;
   };
