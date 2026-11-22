@@ -30,6 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pl/0YmZxPZfb+nubzig9DmyGonvnitVPr5f4n8ll3Bs=";
   };
 
+  # Look up icon themes and MIME globs in XDG_DATA_DIRS instead of hardcoded /usr/share
+  patches = lib.optionals stdenv.hostPlatform.isLinux [ ./xdg-data-dirs.patch ];
+
   nativeBuildInputs = [
     fpc
     getopt

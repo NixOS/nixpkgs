@@ -1,0 +1,77 @@
+diff '--color=auto' -ru a/src/platform/unix/uunixicontheme.pas b/src/platform/unix/uunixicontheme.pas
+--- a/src/platform/unix/uunixicontheme.pas
++++ b/src/platform/unix/uunixicontheme.pas
+@@ -316,22 +316,28 @@
+ procedure InitIconThemesBaseDirList;
+ var
+   Home: String;
+-  I: Integer = 1;
++  I, J: Integer;
++  DataDirs: TDynamicStringArray;
+ begin
+   Home := GetHomeDir;
+-  SetLength(UnixIconThemesBaseDirList, 6);
++  DataDirs := GetSystemDataDirs;
++  SetLength(UnixIconThemesBaseDirList, 3 + Length(DataDirs) * 2);
+   UnixIconThemesBaseDirList[0] := Home + '/.icons';
+   UnixIconThemesBaseDirList[1] := Home + '/.local/share/icons';
++  J := 2;
+   if DesktopEnv = DE_KDE then
+   begin
+-    I:= 2;
+-    SetLength(UnixIconThemesBaseDirList, 7);
+-    UnixIconThemesBaseDirList[2] := Home + '/.kde/share/icons';
++    UnixIconThemesBaseDirList[J] := Home + '/.kde/share/icons';
++    Inc(J);
+   end;
+-  UnixIconThemesBaseDirList[I + 1] := '/usr/local/share/icons';
+-  UnixIconThemesBaseDirList[I + 2] := '/usr/local/share/pixmaps';
+-  UnixIconThemesBaseDirList[I + 3] := '/usr/share/icons';
+-  UnixIconThemesBaseDirList[I + 4] := '/usr/share/pixmaps';
++  for I := 0 to High(DataDirs) do
++  begin
++    if DataDirs[I] = '' then Continue;
++    UnixIconThemesBaseDirList[J] := IncludeTrailingPathDelimiter(DataDirs[I]) + 'icons';
++    UnixIconThemesBaseDirList[J + 1] := IncludeTrailingPathDelimiter(DataDirs[I]) + 'pixmaps';
++    Inc(J, 2);
++  end;
++  SetLength(UnixIconThemesBaseDirList, J);
+ end;
+ 
+ initialization
+diff '--color=auto' -ru a/src/platform/upixmapmanager.pas b/src/platform/upixmapmanager.pas
+--- a/src/platform/upixmapmanager.pas
++++ b/src/platform/upixmapmanager.pas
+@@ -922,7 +922,7 @@
+   node: THTDataNode = nil;
+   cache: TFileStreamEx = nil;
+   EntriesCount, IconsCount: Cardinal;
+-  GlobalMime: String = '/usr/share/mime/';
++  DataDirs: TDynamicStringArray;
+   sMimeType, sMimeIconName, sExtension: String;
+ 
+   procedure LoadGlobs(const APath: String);
+@@ -1023,8 +1023,11 @@
+ begin
+   LocalMime:= IncludeTrailingBackslash(GetUserDataDir) + 'mime/';
+ 
+-  mTime:= Max(mbFileAge(LocalMime + mime_globs),
+-              mbFileAge(GlobalMime + mime_globs));
++  DataDirs:= GetSystemDataDirs;
++
++  mTime:= mbFileAge(LocalMime + mime_globs);
++  for I:= 0 to High(DataDirs) do
++    mTime:= Max(mTime, mbFileAge(IncludeTrailingBackslash(DataDirs[I]) + 'mime/' + mime_globs));
+ 
+   // Try to load from cache.
+   if (mbFileAge(gpCfgDir + pixmaps_cache) = mTime) and
+@@ -1065,7 +1068,8 @@
+ 
+   EntriesCount := 0;
+   LoadGlobs(LocalMime);
+-  LoadGlobs(GlobalMime);
++  for I:= 0 to High(DataDirs) do
++    LoadGlobs(IncludeTrailingBackslash(DataDirs[I]) + 'mime/');
+ 
+   // save to cache
+   if EntriesCount > 0 then
