@@ -5,21 +5,26 @@
   writableTmpDirAsHomeHook,
   cdxgen,
   nixosTests,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dep-scan";
-  version = "6.3.1";
+  version = "6.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mJ1HyWhg5otDKwalJzKMFJ3jCiLnAGkwzF6AMDvpnwo=";
+    hash = "sha256-sStziMmhZz5yytaU5rUDTcdQCEsXL19FI/gpSIVxI0o=";
   };
 
   build-system = with python3Packages; [ setuptools ];
+
+  pythonRelaxDeps = [
+    "defusedxml"
+  ];
 
   dependencies = with python3Packages; [
     appthreat-vulnerability-db
@@ -30,6 +35,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ds-reporting-lib
     ds-server-lib
     ds-xbom-lib
+    httpx
     jinja2
     oras
     packageurl-python
@@ -48,6 +54,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   pythonImportsCheck = [ "depscan" ];
 
