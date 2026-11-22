@@ -44,7 +44,7 @@ fi
 
 fetchBinaryTargets() {
   local name=$1 location=$2 identity=$3
-  local scratch target url checksum dir xcframework
+  local scratch target url checksum dir artifact kind
   scratch=$(mktemp -d)
 
   HOME=$scratch swift-package --disable-sandbox --package-path "$dest/Packages/$name" --scratch-path "$scratch/build" dump-package \
@@ -59,18 +59,26 @@ fetchBinaryTargets() {
     unzip -q "$scratch/$target.zip" -d "$dir"
     rm -rf "$dir/__MACOSX"
 
-    xcframework=$(find "$dir" -mindepth 1 -maxdepth 1 -name '*.xcframework' -printf '%f')
-    if [ -z "$xcframework" ]; then
-      echo "$name: binary target $target is not an XCFramework, which fetchSwiftPMDeps does not support" >&2
-      exit 1
-    fi
+    artifact=$(find "$dir" -mindepth 1 -maxdepth 1 \( -name '*.xcframework' -o -name '*.artifactbundle' \) -printf '%f')
+    case $artifact in
+      *.xcframework)
+        kind='{ "xcframework": { } }'
+        ;;
+      *.artifactbundle)
+        kind=$(jq '{ "typedArtifactsArchive": { "_0": [ .artifacts[].type ] } }' "$dir/$artifact/info.json")
+        ;;
+      *)
+        echo "$name: binary target $target is neither an XCFramework nor an artifact bundle" >&2
+        exit 1
+        ;;
+    esac
 
     jq --null-input --compact-output --sort-keys \
       --arg name "$name" --arg location "$location" --arg identity "$identity" \
       --arg target "$target" --arg url "$url" --arg checksum "$checksum" \
-      --arg path "artifacts/$name/$target/$xcframework" '
+      --arg path "artifacts/$name/$target/$artifact" --argjson kind "$kind" '
         {
-            "kind": { "xcframework": { } },
+            "kind": $kind,
             "packageRef": {
                 "identity": $name,
                 "kind": "remoteSourceControl",
