@@ -15,7 +15,7 @@ index 915e7ea16..7938d1d8d 100644
 
  __metadata:
 -  version: 8
-+  version: 9
++  version: 10
    cacheKey: 10c0
 
  "@ai-sdk/anthropic@npm:1.1.15":

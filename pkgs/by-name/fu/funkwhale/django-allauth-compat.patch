@@ -1,0 +1,33 @@
+--- a/funkwhale_api/users/auth_backends.py	2026-11-22 19:27:06.204680438 +0530
++++ b/funkwhale_api/users/auth_backends.py	2026-11-22 19:27:06.205019838 +0530
+@@ -22,12 +22,24 @@
+     return inner
+ 
+ 
+-auth_backends.filter_users_by_email = decorate_for_auth(
+-    auth_backends.filter_users_by_email
+-)
+-auth_backends.filter_users_by_username = decorate_for_auth(
+-    auth_backends.filter_users_by_username
+-)
++try:
++    from allauth.account.internal import userkit
++
++    userkit.filter_users_by_email = decorate_for_auth(userkit.filter_users_by_email)
++    userkit.filter_users_by_username = decorate_for_auth(
++        userkit.filter_users_by_username
++    )
++except ImportError:
++    pass
++
++if hasattr(auth_backends, "filter_users_by_email"):
++    auth_backends.filter_users_by_email = decorate_for_auth(
++        auth_backends.filter_users_by_email
++    )
++if hasattr(auth_backends, "filter_users_by_username"):
++    auth_backends.filter_users_by_username = decorate_for_auth(
++        auth_backends.filter_users_by_username
++    )
+ 
+ 
+ class ModelBackend(backends.ModelBackend):

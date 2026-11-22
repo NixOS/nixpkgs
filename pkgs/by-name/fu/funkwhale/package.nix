@@ -8,18 +8,12 @@
   redisTestHook,
   funkwhale,
   runCommand,
-  typesense,
-  curl,
 
-  nix-update-script,
   nixosTests,
 }:
-let
-  python = python3;
-in
-python.pkgs.buildPythonApplication (finalAttrs: {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "funkwhale";
-  version = "2.0.2";
+  version = "2.0.17";
   pyproject = true;
 
   strictDeps = true;
@@ -30,7 +24,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "funkwhale";
     repo = "funkwhale";
     tag = finalAttrs.version;
-    hash = "sha256-VTY9t+K3ne44rTDTctHMJALFpakdl+pld3t4/qHJm5Q=";
+    hash = "sha256-OOICdc86TspoAeqhiFKk0tTX7n4dki6YMtZk28x5p4Y=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/api";
@@ -41,9 +35,13 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     ./replace-unicode-slugify.patch
 
     ./fix-root-filesystem-tests.patch
+
+    # Fix compatibility with django-allauth >= 65.18 where filter_users_by_username
+    # was moved from allauth.account.auth_backends to allauth.account.internal.userkit.
+    ./django-allauth-compat.patch
   ];
 
-  build-system = with python.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
@@ -55,7 +53,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies =
-    with python.pkgs;
+    with python3.pkgs;
     [
       # Django
       dj-rest-auth
@@ -71,6 +69,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       django-filter
       django-oauth-toolkit
       django-redis
+      django-silk
       django-storages
       django-versatileimagefield
       djangorestframework
@@ -129,7 +128,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     ++ channels.optional-dependencies.daphne
     ++ uvicorn.optional-dependencies.standard;
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     postgresql
     postgresqlTestHook
     redisTestHook
@@ -157,14 +156,17 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     DATABASE_URL="postgresql:///$PGDATABASE?host=$PGHOST&user=$PGUSER" \
     FUNKWHALE_URL="https://example.com" \
     DJANGO_SETTINGS_MODULE="config.settings.local" \
-    CACHE_URL="redis://$REDIS_SOCKET:6379/0" \
+    CACHE_URL="redis://127.0.0.1:$redisTestPort/0" \
     python -m django migrate --no-input
 
     runHook postCheck
   '';
 
+  # importlib.metadata.PackageNotFoundError: No package metadata was found for funkwhale
+  dontCheckPythonMetadata = true;
+
   passthru = {
-    inherit python;
+    python = python3;
     tests = { inherit (nixosTests) funkwhale; };
 
     static = runCommand "funkwhale-static" { } ''
@@ -176,12 +178,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
     frontend = callPackage ./frontend.nix { };
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "frontend"
-      ];
-    };
+    updateScript = ./update.sh;
   };
 
   meta = {
