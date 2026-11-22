@@ -1,27 +1,8 @@
-diff --git a/build.rs b/build.rs
-index 103c6c9..696bf66 100644
---- a/build.rs
-+++ b/build.rs
-@@ -73,13 +73,7 @@ fn main() {
-         .include("parallel-rdp/parallel-rdp-standalone/vulkan")
-         .include("parallel-rdp/parallel-rdp-standalone/vulkan-headers/include")
-         .include("parallel-rdp/parallel-rdp-standalone/util")
--        .include(
--            std::path::PathBuf::from(std::env::var("DEP_SDL3_OUT_DIR").unwrap()).join("include"),
--        )
--        .include(
--            std::path::PathBuf::from(std::env::var("DEP_SDL3_TTF_OUT_DIR").unwrap())
--                .join("include"),
--        );
-+        ;
- 
-     let mut retroachievements_build = cc::Build::new();
-     retroachievements_build
 diff --git a/Cargo.lock b/Cargo.lock
-index 5492b47..b35a2d2 100644
+index 05e1104..e8310cf 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -1267,15 +1267,6 @@ dependencies = [
+@@ -1149,15 +1149,6 @@ dependencies = [
   "hashbrown 0.16.1",
  ]
  
@@ -37,7 +18,7 @@ index 5492b47..b35a2d2 100644
  [[package]]
  name = "cmov"
  version = "0.5.4"
-@@ -5758,12 +5749,6 @@ dependencies = [
+@@ -5372,12 +5363,6 @@ dependencies = [
   "memchr",
  ]
  
@@ -50,21 +31,21 @@ index 5492b47..b35a2d2 100644
  [[package]]
  name = "rspolib"
  version = "0.1.2"
-@@ -6034,43 +6019,24 @@ dependencies = [
+@@ -5847,43 +5832,24 @@ dependencies = [
   "tiny-skia 0.11.4",
  ]
  
 -[[package]]
 -name = "sdl3-src"
--version = "3.4.18"
+-version = "3.4.20"
 -source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "400d0fb006a4485fde477cfc56a250c99d7bfb183fefd145c15fe7607db7fc49"
+-checksum = "dc5181b85760f18170dbc15b27b00d5aaaa003058bb14333ec7dd280665ef3a4"
 -
  [[package]]
  name = "sdl3-sys"
- version = "0.7.2+SDL-3.4.18"
+ version = "0.7.3+SDL-3.4.20"
  source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "82b6a7f3cad40c5b318b3539bb4624389f4a03504cd5f4c65030787b962505ac"
+ checksum = "0e68da4d2bcf29a81a1ea71ec27b93bb27151d649c2b186eb5988ad4dcb17d11"
  dependencies = [
 - "cc",
 - "cmake",
@@ -95,11 +76,11 @@ index 5492b47..b35a2d2 100644
  ]
  
 diff --git a/Cargo.toml b/Cargo.toml
-index 55cac11..2ef57d3 100644
+index e97fee1..ebbd8a3 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
 @@ -45,14 +45,14 @@ slint = { version = "1.16", default-features = false, features = ["compat-1-2",
- rfd = {version = "0.17", optional = true }
+ rfd = {version = "0.18", optional = true }
  dirs = "7.0"
  open = { version = "5.3", optional = true }
 -sdl3-sys = { version = "0.7", features = ["build-from-source-static"] }
@@ -116,4 +97,23 @@ index 55cac11..2ef57d3 100644
 +sdl3-ttf-sys = { version = "0.7" }
  webpki-roots = "1.0"
  
- [build-dependencies]
+ [target.'cfg(target_os = "macos")'.dependencies]
+diff --git a/build.rs b/build.rs
+index d4bd4a1..5b91d64 100644
+--- a/build.rs
++++ b/build.rs
+@@ -74,13 +74,7 @@ fn main() {
+         .include("parallel-rdp/parallel-rdp-standalone/vulkan")
+         .include("parallel-rdp/parallel-rdp-standalone/vulkan-headers/include")
+         .include("parallel-rdp/parallel-rdp-standalone/util")
+-        .include(
+-            std::path::PathBuf::from(std::env::var("DEP_SDL3_OUT_DIR").unwrap()).join("include"),
+-        )
+-        .include(
+-            std::path::PathBuf::from(std::env::var("DEP_SDL3_TTF_OUT_DIR").unwrap())
+-                .join("include"),
+-        );
++        ;
+ 
+     let mut retroachievements_build = cc::Build::new();
+     retroachievements_build
