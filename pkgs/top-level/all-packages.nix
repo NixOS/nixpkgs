@@ -7215,10 +7215,6 @@ with pkgs;
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
-  lvm2_vdo = lvm2_dmeventd.override {
-    enableVDO = true;
-  };
-
   mdadm = mdadm4;
 
   # minimal-bootstrap packages aren't used for anything but bootstrapping our
