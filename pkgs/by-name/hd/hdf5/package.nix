@@ -21,6 +21,17 @@
   jdk,
   apiVersion ? null,
   threadsafe ? false,
+  ros3Support ? false,
+  curl,
+  aws-c-s3,
+  aws-c-auth,
+  aws-c-common,
+  aws-c-cal,
+  aws-c-io,
+  aws-c-http,
+  aws-c-compression,
+  aws-checksums,
+  s2n-tls,
   python3,
 }:
 
@@ -52,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   passthru = {
     inherit
       cppSupport
@@ -80,7 +94,21 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional fortranSupport gfortran;
 
   buildInputs =
-    optional fortranSupport gfortran ++ optional szipSupport libaec ++ optional javaSupport jdk;
+    optional fortranSupport gfortran
+    ++ optional szipSupport libaec
+    ++ optional javaSupport jdk
+    ++ optionals ros3Support [
+      curl
+      aws-c-s3
+      aws-c-auth
+      aws-c-common
+      aws-c-cal
+      aws-c-io
+      aws-c-http
+      aws-c-compression
+      aws-checksums
+      s2n-tls
+    ];
 
   propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
 
@@ -96,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
     (lib.cmakeBool "HDF5_BUILD_HL_LIB" (!threadsafe))
     (lib.cmakeBool "HDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16" true)
+    (lib.cmakeBool "HDF5_ENABLE_ROS3_VFD" ros3Support)
   ]
   ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
 
