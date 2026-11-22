@@ -9217,6 +9217,8 @@ self: super: with self; {
 
   kaco-modbus = callPackage ../development/python-modules/kaco-modbus { };
 
+  kaco-serial = callPackage ../development/python-modules/kaco-serial { };
+
   kafka-python = callPackage ../development/python-modules/kafka-python { };
 
   kaggle = callPackage ../development/python-modules/kaggle { };
