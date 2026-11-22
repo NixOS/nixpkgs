@@ -8,7 +8,7 @@
   yara-python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-yaramatcher";
   version = "1.3.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-yaramatcher";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-URGW8FyJZ3ktrwolls5ElSWn8FD6vWCA+Eu0aGtPh6U=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
     description = "File and analysis artifacts yara matcher for the Karton framework";
     mainProgram = "karton-yaramatcher";
     homepage = "https://github.com/CERT-Polska/karton-yaramatcher";
-    changelog = "https://github.com/CERT-Polska/karton-yaramatcher/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/karton-yaramatcher/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
