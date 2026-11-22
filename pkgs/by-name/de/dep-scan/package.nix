@@ -95,16 +95,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     updateScript = ./update.sh;
     vdb = {
       index = fetchurl {
-        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/data.index.vdb6";
-        hash = "sha256-UyE0xiLT0T4ygBdEvDi4VQW/vxwalN6YV9EJ9RoLYy4=";
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/207ab805b2656679bb649b2ff6aef4fa875fade5/app-2y/data.index.vdb6";
+        hash = "sha256-PVWyNVV+vHWELLA0QxI47fhCbrlvXJXM2llL14vMtg4=";
       };
       data = fetchurl {
-        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/data.vdb6";
-        hash = "sha256-k5QIowFD8H/hwaRz1p8RXlFEIrKjnFUtxtZTfD67B+U=";
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/207ab805b2656679bb649b2ff6aef4fa875fade5/app-2y/data.vdb6";
+        hash = "sha256-Q/+xYfq5BtSH+c0RMwUDBu10kcmjnDeKD3kH5oVUxzM=";
       };
       meta = fetchurl {
-        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/vdb.meta";
-        hash = "sha256-eQB0dHlNw31sKsRcVUByhIfuIN35+m3VAcBHIfusNPY=";
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/207ab805b2656679bb649b2ff6aef4fa875fade5/app-2y/vdb.meta";
+        hash = "sha256-l8BJHoetvxV2YJQLPo9n/3AB01XvSKgj5HbQc2hSqxY=";
       };
     };
 
