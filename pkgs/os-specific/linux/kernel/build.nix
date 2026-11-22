@@ -210,8 +210,8 @@ lib.makeOverridable (
     outputs = [
       "out"
       "dev"
-    ]
-    ++ lib.optional isModular "modules";
+      "modules"
+    ];
 
     # We remove a bunch of stuff that is symlinked from other places to save space,
     # which trips the broken symlink check. So, just skip it. We'll know if it explodes.
@@ -477,9 +477,11 @@ lib.makeOverridable (
 
       ln -s "$buildRoot/vmlinux" "$dev/"
 
-      if [[ -v modules ]]; then
-        unlink $modules/lib/modules/${modDirVersion}/build
-      fi
+      ${lib.optionalString isModular ''
+        if [[ -v modules ]]; then
+          unlink $modules/lib/modules/${modDirVersion}/build
+        fi
+      ''}
 
       # !!! No documentation on how much of the source tree must be kept
       # If/when kernel builds fail due to missing files, you can add
@@ -540,13 +542,24 @@ lib.makeOverridable (
       # Delete empty directories
       find -empty -type d -delete
 
-      if [[ -v modules ]]; then
-        # Replace the individual kmodigest single‐module certificates (see
-        # `common-flags.nix`) with a concatenated `modules.cer`.
-        cd -- "$modules/lib/modules/${modDirVersion}"
-        sed 's/$/\.cer/' modules.order | xargs -d'\n' cat > modules.cer
-        sed 's/$/\.cer/' modules.order | xargs -d'\n' rm
-      fi
+      ${
+        if isModular then
+          ''
+            if [[ -v modules ]]; then
+              # Replace the individual kmodigest single‐module certificates (see
+              # `common-flags.nix`) with a concatenated `modules.cer`.
+              cd -- "$modules/lib/modules/${modDirVersion}"
+              sed 's/$/\.cer/' modules.order | xargs -d'\n' cat > modules.cer
+              sed 's/$/\.cer/' modules.order | xargs -d'\n' rm
+            fi
+          ''
+        else
+          ''
+            # Nothing is installed here with `CONFIG_MODULES=n` but this
+            # output is always expected.
+            mkdir -p "$modules"
+          ''
+      }
     '';
 
     stripDebugList = [
