@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     pushd $WORKDIR
     ${lib.getExe yarn-berry.yarn-berry-fetcher} missing-hashes yarn.lock >$missingHashes
     popd
-    ${lib.getExe nix-update} learn6502 --version skip
+    ${lib.getExe nix-update} learn6502 --version skip --no-src
   '';
 
   meta = {
