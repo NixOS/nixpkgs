@@ -10,11 +10,11 @@
   _7zz,
 }:
 let
-  version = "5.127.0";
+  version = "5.128.0";
 
   linuxSrc = fetchurl {
     url = "https://desktop.app.music.yandex.net/stable/Yandex_Music_amd64_${version}.deb";
-    hash = "sha256-Xn/B6hjE+ijGSf453yw6av+tTRvwBQFDgVaazCOOVXs=";
+    hash = "sha256-NvNajTsw0sxy83ingAq3Cr34rzcVDpaSAJ+Ol9kyI+k=";
   };
 
   darwinSrc = fetchurl {
