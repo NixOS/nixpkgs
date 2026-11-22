@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  version ? "8.0",
-  hash ? "sha256-ssIBl+lLOJsSXSS8lDqUqIcGRPRal0PXtRRK2dqivZQ=",
+  version ? "8.0.1",
+  hash ? "sha256-CjwdIuh2X4dLgSdGrMtnqZPPzOj59We+TI/WJ3bntrY=",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
