@@ -1,5 +1,3 @@
-{ version, hash }:
-
 {
   lib,
   stdenv,
@@ -41,7 +39,7 @@ stdenv.mkDerivation rec {
     "lvm2"
     + lib.optionalString enableDmeventd "-with-dmeventd"
     + lib.optionalString enableVDO "-with-vdo";
-  inherit version;
+  version = "2.03.41";
 
   __structuredAttrs = true;
 
@@ -50,7 +48,7 @@ stdenv.mkDerivation rec {
       "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz"
       "ftp://sourceware.org/pub/lvm2/LVM2.${version}.tgz"
     ];
-    inherit hash;
+    hash = "sha256-1YARuEXfjsE4FsoT6mw51Ms9A4zS19OHrN9Wga19Zjc=";
   };
 
   strictDeps = true;
