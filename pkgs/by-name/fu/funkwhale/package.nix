@@ -13,7 +13,7 @@
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "funkwhale";
-  version = "2.0.17";
+  version = "2.0.18";
   pyproject = true;
 
   strictDeps = true;
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "funkwhale";
     repo = "funkwhale";
     tag = finalAttrs.version;
-    hash = "sha256-OOICdc86TspoAeqhiFKk0tTX7n4dki6YMtZk28x5p4Y=";
+    hash = "sha256-CyQ8YSGwUTcx9BU9jj+xvSDeiLsdVXdHvxZAfrEup+g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/api";
@@ -49,6 +49,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # redis-py >= 8.0 defaults socket_timeout to 5s, clashing with channels_redis's
     # 5s brpop timeout and causing WebSocket TimeoutErrors on idle activity streams.
     ./channels-redis-timeout.patch
+
+    # Fix compatibility with django-oauth-toolkit >= 3.4 where AbstractAccessToken,
+    # AbstractRefreshToken, AbstractGrant gained RFC 8707 'resource' and AbstractApplication
+    # gained 'registration_source' and 'cimd_expires_at'. Since Funkwhale swaps these models,
+    # it must provide a migration for the new columns.
+    ./django-oauth-toolkit-3.4-compat.patch
   ];
 
   build-system = with python3.pkgs; [
