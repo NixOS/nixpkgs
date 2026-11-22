@@ -823,13 +823,13 @@
     "vendorHash": "sha256-UuLHaOEG6jmOAgfdNOtLyUimlAr3g6K8n3Ehu64sKqk="
   },
   "keycloak_keycloak": {
-    "hash": "sha256-JTPFFgJxfZcUnf7LIhfb2u+g+htaqE9eYsyI2Iy7nZo=",
+    "hash": "sha256-wIwAs80PrdVQ9ghtqtRkAmWcFTn0FFAHsudB0oFxhbw=",
     "homepage": "https://registry.terraform.io/providers/keycloak/keycloak",
     "owner": "keycloak",
     "repo": "terraform-provider-keycloak",
-    "rev": "v5.10.0",
+    "rev": "v5.11.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-b9zRbftxrwwX1rzi8LcFY6res8mz2S0AKZ0rN97WRRc="
+    "vendorHash": "sha256-yXJUdvPvQHvrkogfLsCP77mwcgQRLeT9j2CHAPznW6Y="
   },
   "kreuzwerker_docker": {
     "hash": "sha256-Ox0W6WappTs6WAgPwYq4n5tGOJLuJt2pdUOUrSsk4Qw=",
