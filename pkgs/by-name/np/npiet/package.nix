@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "npiet";
-  version = "1.3f";
+  version = "1.3g";
 
   src = fetchurl {
     url = "https://www.bertnase.de/npiet/npiet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Le2FYGKr1zWZ6F4edozmvGC6LbItx9aptidj3KBLhVo=";
+    hash = "sha256-Tcs8l4z3sklJmguRc7nBe780X6AtZLZsKW7K6qElYDA=";
   };
 
   buildInputs = [
