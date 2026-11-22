@@ -55,12 +55,12 @@ let
       constituents = [
         jobs.nixos-render-docs.x86_64-linux # Used in nixos manual
         jobs.remarshal.x86_64-linux # Used in pkgs.formats.yaml_1_1
-        jobs.python313Packages.afdko.x86_64-linux # Used in noto-fonts-color-emoji
-        jobs.python313Packages.buildcatrust.x86_64-linux # Used in pkgs.cacert
-        jobs.python313Packages.colorama.x86_64-linux # Used in nixos test-driver
-        jobs.python313Packages.ptpython.x86_64-linux # Used in nixos test-driver
-        jobs.python313Packages.requests.x86_64-linux # Almost ubiquous package
-        jobs.python313Packages.sphinx.x86_64-linux # Document creation for many packages
+        jobs.python314Packages.afdko.x86_64-linux # Used in noto-fonts-color-emoji
+        jobs.python314Packages.buildcatrust.x86_64-linux # Used in pkgs.cacert
+        jobs.python314Packages.colorama.x86_64-linux # Used in nixos test-driver
+        jobs.python314Packages.ptpython.x86_64-linux # Used in nixos test-driver
+        jobs.python314Packages.requests.x86_64-linux # Almost ubiquitous package
+        jobs.python314Packages.sphinx.x86_64-linux # Document creation for many packages
       ];
     };
 
