@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_18_0,
+  cargo-pgrx_0_19_1,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -11,19 +11,19 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_18_0;
+  cargo-pgrx = cargo-pgrx_0_19_1;
 
   pname = "pglite_fusion";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "pglite-fusion";
-    tag = finalAttrs.version;
-    hash = "sha256-/BUA3bxp/5di6R574VtAaWqhMWrJYyt2Me3pMBtk76s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GInkNJlrAoemswelBXBFSyChVl+XDqNY+HC4zNeY1EM=";
   };
 
-  cargoHash = "sha256-954nNwdMDE9tVOvql/fMR8J1pIq64AdKiKlBjl0yqRI=";
+  cargoHash = "sha256-Jk8I/1H0zdtZeMDgCMiZXGoUOKIM7XryD4lBIeHSziw=";
 
   # pgrx tests try to install the extension into the postgresql nix store
   doCheck = false;

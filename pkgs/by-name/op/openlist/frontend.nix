@@ -12,18 +12,18 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "openlist-frontend";
-  version = "4.2.9";
+  version = "4.2.10";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList-Frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x9FQ5k2YpNGwU3xa6utHz5csHC6PdHKHDUY/uc/RN10=";
+    hash = "sha256-vR+2vhmJKw8VeG5eLGlu6sIC+XrvgPyEW6M60FlP/Qc=";
   };
 
   i18n = fetchzip {
     url = "https://github.com/OpenListTeam/OpenList-Frontend/releases/download/v${finalAttrs.version}/i18n.tar.gz";
-    hash = "sha256-RkIRLA8Zc90lYYnZfWwR+gxBl1jj81OpXVLL5qQJT+c=";
+    hash = "sha256-ekm55QngHhmOXcZpA0oFDD5CszrIr4Afr7VIiCz8n8Y=";
     stripRoot = false;
   };
 
@@ -41,7 +41,7 @@ buildNpmPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = openlistPnpm;
     fetcherVersion = 4;
-    hash = "sha256-Hlz82KV41gpFx8BltxD/f4z0we4/KSMAtQdLo+V7WBM=";
+    hash = "sha256-nT5Zmh4MDnrY2FDiTpcAOcYFovmN4nJ8yQ4FBMmfrc8=";
   };
 
   npmConfigHook = pnpmConfigHook;

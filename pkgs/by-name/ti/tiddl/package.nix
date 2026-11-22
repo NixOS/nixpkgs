@@ -44,6 +44,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/oskvr37/tiddl";
     license = lib.licenses.asl20;
     mainProgram = "tiddl";
-    maintainers = [ lib.maintainers.quantenzitrone ];
+    maintainers = with lib.maintainers; [
+      quantenzitrone
+      yuri-becker
+    ];
   };
 })

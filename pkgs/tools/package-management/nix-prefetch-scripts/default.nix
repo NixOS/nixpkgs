@@ -50,6 +50,7 @@ let
         description = "Script used to obtain source hashes for fetch${tool}";
         maintainers = with lib.maintainers; [ bennofs ];
         platforms = lib.platforms.unix;
+        license = lib.licenses.mit;
         mainProgram = "nix-prefetch-${tool}";
       };
     };

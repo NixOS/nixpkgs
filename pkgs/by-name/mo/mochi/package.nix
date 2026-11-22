@@ -14,7 +14,7 @@ let
   pname = "mochi";
   version = "26.10.1";
 
-  linux = appimageTools.wrapType2 rec {
+  linux = appimageTools.wrapType2 (finalAttrs: {
     inherit pname version meta;
 
     src = fetchurl {
@@ -22,20 +22,18 @@ let
       hash = "sha256-dDF3R6KUoKWskMbFgRlQe6urgxJuv9PER/8hdc4Fkbg=";
     };
 
-    appimageContents = appimageTools.extract { inherit pname version src; };
-
     extraPkgs = pkgs: [ libxshmfence ];
 
     extraInstallCommands = ''
-      install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
-      ${lib.getExe imagemagick} ${appimageContents}/${pname}.png -resize 512x512 ${pname}_512.png
-      install -Dm444 ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=${pname}'
+      install -Dm444 ${finalAttrs.contents}/mochi.desktop -t $out/share/applications/
+      ${lib.getExe imagemagick} ${finalAttrs.contents}/mochi.png -resize 512x512 mochi_512.png
+      install -Dm444 mochi_512.png $out/share/icons/hicolor/512x512/apps/mochi.png
+      substituteInPlace $out/share/applications/mochi.desktop \
+        --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=mochi'
     '';
 
     passthru.updateScript = ./update.sh;
-  };
+  });
 
   darwin = stdenv.mkDerivation {
     inherit pname version meta;
@@ -57,7 +55,7 @@ let
 
       mkdir -p $out/{Applications,bin}
       cp -a Mochi.app $out/Applications
-      makeWrapper $out/Applications/Mochi.app/Contents/MacOS/Mochi $out/bin/${pname}
+      makeWrapper $out/Applications/Mochi.app/Contents/MacOS/Mochi $out/bin/mochi
 
       runHook postInstall
     '';

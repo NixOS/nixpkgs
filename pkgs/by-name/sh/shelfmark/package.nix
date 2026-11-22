@@ -41,13 +41,13 @@ let
     publicsuffixlist
   ];
 
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "calibrain";
     repo = "shelfmark";
     tag = "v${version}";
-    hash = "sha256-/AF+Uzu+P7yKFiC8lIN6EBbDVdbqs174HMkivb9/+gE=";
+    hash = "sha256-n0NB1pY8smabkWh+ecXXnBqkjRetfIA+8wYCUj3jo90=";
   };
 
   frontend = buildNpmPackage (finalAttrs: {

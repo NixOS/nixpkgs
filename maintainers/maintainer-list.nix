@@ -4610,13 +4610,6 @@
     githubId = 8891115;
     name = "Brian Choy";
   };
-  byteflavour = {
-    email = "synapse@byteflavour.dev";
-    github = "byteflavour";
-    githubId = 131113314;
-    matrix = "@synapse:byteflavour.dev";
-    name = "Byte Flavour";
-  };
   ByteSudoer = {
     email = "bytesudoer@gmail.com";
     github = "ByteSudoer";
@@ -4956,6 +4949,12 @@
     githubId = 53847249;
     name = "Casey Avila";
   };
+  cashewna = {
+    email = "krishnakhong@gmail.com";
+    github = "cashewna";
+    githubId = 65855420;
+    name = "cashewna";
+  };
   caspersonn = {
     email = "lucakasper8@gmail.com";
     github = "Caspersonn";
@@ -5228,6 +5227,12 @@
     github = "chekoopa";
     githubId = 1689801;
     name = "Mikhail Chekan";
+  };
+  Chemaclass = {
+    github = "Chemaclass";
+    githubId = 5256287;
+    name = "Jose M. Valera Reales";
+    keys = [ { fingerprint = "56D5 D60B 0934 0999 199C  3750 E51B 5BF4 5F85 D160"; } ];
   };
   chemonke = {
     email = "nixpkgs@chemonke.ch";
@@ -7139,6 +7144,12 @@
     github = "Delta456";
     githubId = 28479139;
     name = "Swastik Baranwal";
+  };
+  DeltaCalcium = {
+    name = "DeltaCalcium";
+    email = "git@deltacalcium.dev";
+    github = "DeltaCalcium";
+    githubId = 47009341;
   };
   deltadelta = {
     email = "contact@libellules.eu";
@@ -29545,6 +29556,12 @@
     githubId = 6579711;
     name = "Martin Hostettler";
   };
+  tfausak = {
+    email = "taylor@fausak.me";
+    github = "tfausak";
+    githubId = 408753;
+    name = "Taylor Fausak";
+  };
   tfc = {
     email = "jacek@galowicz.de";
     matrix = "@tfc:matrix.org";
@@ -33092,6 +33109,13 @@
     github = "yureka-wdz";
     githubId = 255085068;
     name = "Yureka (WDZ)";
+  };
+  yuri-becker = {
+    name = "Yuri";
+    githubId = 16067917;
+    github = "yuri-becker";
+    email = "hi@yuri.li";
+    matrix = "@yuri:bundestag.gmbh";
   };
   yurkobb = {
     name = "Yury Bulka";

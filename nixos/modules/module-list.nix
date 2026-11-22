@@ -1406,6 +1406,7 @@
   ./services/networking/nullidentdmod.nix
   ./services/networking/nylon.nix
   ./services/networking/ocserv.nix
+  ./services/networking/odhcpd.nix
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/oink.nix
@@ -1750,6 +1751,7 @@
   ./services/web-apps/gancio.nix
   ./services/web-apps/geoserver.nix
   ./services/web-apps/gerrit.nix
+  ./services/web-apps/ghostfolio.nix
   ./services/web-apps/glance.nix
   ./services/web-apps/glitchtip.nix
   ./services/web-apps/go-httpbin.nix

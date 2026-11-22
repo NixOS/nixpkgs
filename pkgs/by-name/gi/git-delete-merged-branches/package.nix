@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-delete-merged-branches";
-  version = "7.7.0";
+  version = "7.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hartwork";
     repo = "git-delete-merged-branches";
     tag = finalAttrs.version;
-    sha256 = "sha256-Ddhh6op88zjcDhjlZfCyUSY0xtkaGNjUN+R23mChNmU=";
+    sha256 = "sha256-HeKQ8e4eshu5XE6Cmq9qBXumjgDZp8c1RtL8SMLVlbI=";
   };
 
   build-system = with python3Packages; [ setuptools ];

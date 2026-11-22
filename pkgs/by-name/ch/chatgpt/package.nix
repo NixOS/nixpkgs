@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       }
 
       # Resolve the default runtime root to the nix store.
-      replaceInBundle 4 'homedir(),".cache","codex-runtimes")' 'homedir()&&"${finalAttrs.passthru.primaryRuntime}/lib")'
+      replaceInBundle 6 'homedir(),".cache","codex-runtimes")' 'homedir()&&"${finalAttrs.passthru.primaryRuntime}/lib")'
 
       # Refuse to install or update it.
       replaceInBundle 1 '="manual_install"}){' '="manual_install"}){throw Error("The Codex runtime is managed by Nix.");'

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pynrrd";
-  version = "1.1.3";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mhe";
     repo = "pynrrd";
     tag = "v${version}";
-    hash = "sha256-qu3s3XswJCUchqYfYMuqIzI4sfeXrttvXSEW9/GSENA=";
+    hash = "sha256-6WJECFBvRuYM73ipmxuhuDAlE+s1/rvFxMCpdL+ts00=";
   };
 
   build-system = [ setuptools ];

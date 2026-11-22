@@ -39,12 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     librdf_rasqal
   ];
 
-  preConfigure = ''
+  configureFlags = [
     # Define _XOPEN_SOURCE to enable, e.g., getaddrinfo.
-    configureFlagsArray+=(
-      "CFLAGS=-D_XOPEN_SOURCE=600 -I${librdf_raptor2}/include/raptor2 -I${librdf_rasqal}/include/rasqal"
-    )
-  '';
+    "CFLAGS=-D_XOPEN_SOURCE=600 -I${librdf_raptor2}/include/raptor2 -I${librdf_rasqal}/include/rasqal"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
