@@ -1,0 +1,29 @@
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command.dart b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+index 7db62a2..a4a8fec 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+@@ -1623,7 +1623,7 @@ abstract class FlutterCommand extends Command<void> {
+   Future<FlutterProject> _updateCacheAndRunPubGet() async {
+     // Populate the cache. We call this before pub get below so that the
+     // sky_engine package is available in the flutter cache for pub to find.
+-    if (shouldUpdateCache) {
++    if (false) {
+       // First always update universal artifacts, as some of these (e.g.
+       // ios-deploy on macOS) are required to determine `requiredArtifacts`.
+       final bool offline;
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+index c49a5bf..aaa45e8 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+@@ -600,11 +600,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+         // Required to support `flutter --version` before artifacts are cached.
+         await cache.updateAll(<DevelopmentArtifact>{DevelopmentArtifact.informative});
+ 
+-        flutterVersion.ensureVersionFile();
+-        if (await _shouldCheckForUpdates(topLevelResults)) {
+-          await flutterVersion.checkFlutterVersionFreshness();
+-        }
+-
+         // See if the user specified a specific device.
+         final specifiedDeviceId = topLevelResults[FlutterGlobalOptions.kDeviceIdOption] as String?;
+         if (specifiedDeviceId != null) {

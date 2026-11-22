@@ -965,7 +965,7 @@ The following situations are fully or partially exempt:
 
 * Use of standard community automation is exempt, such as `nix-update`, the official Nixpkgs CI bots, the @r-ryantm update bot, other maintainer‐approved bots that run update scripts, and the Nixpkgs security tracker bot.
 
-* Use of AI tools for research, testing, debugging, or private review is out of scope, if no substantial amount of their output is included in the resulting contribution.
+* Use of AI tools for research, testing, debugging, or private review (for feedback on code or prose writing) is out of scope, if no substantial amount of their output is included in the resulting contribution.
   However, if these tools had a significant technical influence on your contribution, you are still responsible for it per the Accountability section, and are expected to disclose this where relevant.
 
 * Use of machine translation is exempt from the requirement to understand the translated output, and from the ban in the ["Use of LLM output in prose" section above](#use-of-llm-output-in-prose).
@@ -976,7 +976,7 @@ The following situations are fully or partially exempt:
 
 * Use of automated tools to develop upstream software packaged inside Nixpkgs is not in scope.
 
-* Any form of automation (including LLMs) may be used to generate the summary (first line) or trailers (e.g. `Changelog: ...`, `Assisted-by: ...`) of a commit message.
+* Any form of automation (including LLMs) may be used to generate the subject (first line) or trailers (e.g. `Changelog: ...`, `Assisted-by: ...`) of a commit message.
   Disclosure of this is not required.
   Whether automation is used or not, adhering to our [commit conventions](#commit-conventions) remains required.
 

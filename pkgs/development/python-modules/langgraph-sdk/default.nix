@@ -35,7 +35,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "websockets" ];
+  pythonRelaxDeps = [
+    "langchain-core"
+    "websockets"
+  ];
 
   dependencies = [
     httpx

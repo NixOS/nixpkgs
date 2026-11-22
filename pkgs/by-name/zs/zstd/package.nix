@@ -167,6 +167,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3; # Or, at your opinion, GPL-2.0-only.
     mainProgram = "zstd";
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "facebook" finalAttrs.version // {
+      product = "zstandard";
+    };
     maintainers = [ ];
     pkgConfigModules = [ "libzstd" ];
   };

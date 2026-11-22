@@ -67,6 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
   ];
 
+  # gcc false positive in the vendored blake3 on aarch64, upstream builds with -Werror
+  env = lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isAarch64) {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=stringop-overflow"
+      "-Wno-error=array-bounds"
+    ];
+  };
+
   # Otherwise the install would use upstream's default prefix /usr/local.
   prefixKey = "PREFIX=";
 

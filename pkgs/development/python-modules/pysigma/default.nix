@@ -1,12 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  diskcache-stubs,
-  diskcache,
+  diskcache-community,
   fetchFromGitHub,
   jinja2,
   jq,
   packaging,
+  google-re2,
   poetry-core,
   pyparsing,
   pytestCheckHook,
@@ -19,37 +19,31 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma";
-  version = "1.5.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7U8XoXejRV3gP31PuhlEEg03YlzRdHKkfkWkDm/zRd4=";
+    hash = "sha256-g3oUFDYMao9NIzPEvhvWM9sFirbiiHNX771QbFqthgw=";
   };
 
-  pythonRelaxDeps = [
-    "diskcache-stubs"
-    "jinja2"
-    "packaging"
-    "pyparsing"
-    "types-pyyaml"
-  ];
+  pythonRelaxDeps = [ "types-pyyaml" ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    diskcache
-    diskcache-stubs
+    diskcache-community
     jinja2
     jq
+    google-re2
     packaging
     pyparsing
     pyyaml
     requests
-    types-pyyaml
     typing-extensions
+    types-pyyaml
   ];
 
   nativeCheckInputs = [

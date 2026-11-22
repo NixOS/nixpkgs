@@ -8,8 +8,11 @@
   uv-build,
 
   # dependencies
+  anyio,
   filelock,
   fonttools,
+  fsspec,
+  hf-transfer,
   huggingface-hub,
   matplotlib,
   mlx,
@@ -18,6 +21,8 @@
   piexif,
   pillow,
   platformdirs,
+  protobuf,
+  pyyaml,
   regex,
   requests,
   safetensors,
@@ -31,25 +36,26 @@
   urllib3,
 
   # tests
+  gitMinimal,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mflux";
-  version = "0.15.4";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mflux-community";
     repo = "mflux";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-rubwj4/XCUajnr1wp64rnzbvS+yXt9zbG6eT+DXEdko=";
+    hash = "sha256-S4JjxJSHxebSku8ppxxgWWR6gOkzUN8NoTT5/Mh+Djw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.7.19,<0.8.0" "uv_build"
+      --replace-fail "uv_build>=0.12.5,<0.13.0" "uv_build"
   '';
 
   build-system = [
@@ -61,10 +67,14 @@ buildPythonPackage (finalAttrs: {
     "mlx"
     "pillow"
     "transformers"
+    "urllib3"
   ];
   dependencies = [
+    anyio
     filelock
     fonttools
+    fsspec
+    hf-transfer
     huggingface-hub
     matplotlib
     mlx
@@ -73,6 +83,8 @@ buildPythonPackage (finalAttrs: {
     piexif
     pillow
     platformdirs
+    protobuf
+    pyyaml
     regex
     requests
     safetensors
@@ -89,65 +101,19 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "mflux" ];
 
   nativeCheckInputs = [
+    gitMinimal
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests = [
-    # Require internet access
-    "test_concept_attention_from_image"
-    "test_concept_attention_generation"
-    "test_empty_stdin_fails_generation"
-    "test_fill"
-    "test_flux2_klein_9b_edit_dalmatian"
-    "test_flux2_klein_9b_edit_glasses_wide"
-    "test_flux2_klein_9b_edit_sunglasses_wide"
-    "test_flux2_klein_9b_text_to_image"
-    "test_flux2_klein_text_to_image"
-    "test_ic_edit_with_instruction"
-    "test_image_generation_dev"
-    "test_image_generation_dev_controlnet"
-    "test_image_generation_dev_image_to_image"
-    "test_image_generation_dev_lora"
-    "test_image_generation_dev_lora_controlnet"
-    "test_image_generation_dev_multiple_loras"
-    "test_image_generation_fibo"
-    "test_image_generation_fibo_refined_white_owl"
-    "test_image_generation_kontext"
-    "test_image_generation_qwen_edit"
-    "test_image_generation_qwen_edit_multiple_images"
-    "test_image_generation_redux"
-    "test_image_generation_schnell"
-    "test_image_generation_schnell_controlnet"
-    "test_image_generation_with_reference_image"
-    "test_image_generation_z_image_turbo"
-    "test_image_generation_z_image_turbo_lora"
-    "test_image_upscaling"
-    "test_in_context_lora_identity"
-    "test_metadata_complete"
-    "test_pipe_from_echo_command"
-    "test_qwen_image_generation_image_to_image"
-    "test_qwen_image_generation_lora"
-    "test_qwen_image_generation_text_to_image"
-    "test_resume_training"
-    "test_save_and_load_4bit_model"
-    "test_save_and_load_4bit_model_with_lora"
-    "test_save_with_lora_has_same_shard_count_as_base"
-    "test_seedvr2_upscale"
-    "test_stdin_prompt_multiline_with_actual_generation"
-    "test_stdin_prompt_with_actual_generation"
-    "test_train_and_load_weights"
-    "test_vlm_generate_json"
-    "test_vlm_inspire_json_from_image"
-    "test_vlm_inspire_json_from_image_with_prompt"
-    "test_vlm_refine_json_text_only"
+  disabledTests = lib.optionals stdenv.hostPlatform.isLinux [
+    # mlx's CPU backend has no "memory_size" in mx.device_info()
+    "test_verify_retries_survive_the_low_ram_memory_saver"
 
-    # Hangs indefinitely
-    "test_real_vae_tiling_compatibility"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Hangs indefinitely
-    "test_depth_pro_generation"
+    # Tolerances are tuned for Metal and miss on the CPU backend
+    "test_flash_sdpa_avoids_materializing_dense_scores"
+    "test_full_precision_with_attention_chunks_matches_legacy_within_rounding"
+    "test_shared_qwen3_vl_pieces_reproduce_the_recorded_outputs"
   ];
 
   meta = {

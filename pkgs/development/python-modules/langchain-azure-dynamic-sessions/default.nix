@@ -4,12 +4,13 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  uv-build,
 
   # dependencies
+  azure-core,
   azure-identity,
   langchain-core,
-  langchain-openai,
+  requests,
 
   # tests
   freezegun,
@@ -28,32 +29,33 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-azure-dynamic-sessions";
-  version = "0.2.0";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
-    repo = "langchain";
-    tag = "langchain-azure-dynamic-sessions==${version}";
-    hash = "sha256-tgvoOSr4tpi+tFBan+kw8FZUfUJHcQXv9e1nyeGP0so=";
+    repo = "langchain-azure";
+    tag = "libs/azure-dynamic-sessions/v${finalAttrs.version}";
+    hash = "sha256-kxj1LotC3MgdWHuOpWHNJvjuCvd/nyLDvmgvm42aA/k=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/azure-dynamic-sessions";
+  sourceRoot = "${finalAttrs.src.name}/libs/azure-dynamic-sessions";
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    sed -i -E 's/"uv_build[^"]*"/"uv_build"/' pyproject.toml
+  '';
 
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
+  build-system = [ uv-build ];
+
+  pythonRelaxDeps = [ "langchain-core" ];
 
   dependencies = [
+    azure-core
     azure-identity
     langchain-core
-    langchain-openai
+    requests
   ];
 
   nativeCheckInputs = [
@@ -78,19 +80,19 @@ buildPythonPackage rec {
     # python updater script sets the wrong tag
     skipBulkUpdate = true;
     updateScript = gitUpdater {
-      rev-prefix = "langchain-azure-dynamic-sessions==";
+      rev-prefix = "libs/azure-dynamic-sessions/v";
       ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
     description = "Integration package connecting Azure Container Apps dynamic sessions and LangChain";
-    homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/azure-dynamic-sessions";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    homepage = "https://github.com/langchain-ai/langchain-azure/tree/main/libs/azure-dynamic-sessions";
+    changelog = "https://github.com/langchain-ai/langchain-azure/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
       sarahec
     ];
   };
-}
+})
