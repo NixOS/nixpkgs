@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfontenc";
-  version = "1.1.9";
+  version = "1.1.10";
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libfontenc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nYOScFyxCAPV/h0n0jbLqz9mTiaEHOAZFru+Qwzyc+I=";
+    hash = "sha256-2qGGpJ48wrb8WFygmXE1Hm8BD2GKvGoWTtqC5C5KpNY=";
   };
 
   strictDeps = true;
