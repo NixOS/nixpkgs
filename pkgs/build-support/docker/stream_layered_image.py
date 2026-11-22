@@ -281,6 +281,10 @@ def add_customisation_layer(target_tar, customisation_layer, mtime):
     tarinfo = target_tar.gettarinfo(layer_path)
     tarinfo.name = path
     tarinfo.mtime = mtime
+    tarinfo.uid = 0
+    tarinfo.gid = 0
+    tarinfo.uname = ""
+    tarinfo.gname = ""
 
     with open(layer_path, "rb") as f:
         target_tar.addfile(tarinfo, f)
