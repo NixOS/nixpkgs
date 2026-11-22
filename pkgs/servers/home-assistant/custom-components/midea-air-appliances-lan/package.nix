@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "nbogojevic";
   domain = "midea_dehumidifier_lan";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-midea-air-appliances-lan";
     rev = "v${version}";
-    hash = "sha256-Rya1mP4KcKA2ZZ16DpxOgXN7NA4Iv0q7PgS+fV5vZq0=";
+    hash = "sha256-1DYUMx0pDMoiwcTNfQmfSB0Asa2ZAlPu0R4bDeBNuEM=";
   };
 
   dependencies = [ midea-beautiful-air ];
