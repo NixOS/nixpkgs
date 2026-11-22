@@ -27,8 +27,8 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-extraBefore=(@defaultArgs@ "${defaultSysroot[@]}")
-extraAfter=($@extraFlagsVar@)
+extraBefore=("${defaultSysroot[@]}")
+extraAfter=(@defaultArgs@ $@extraFlagsVar@)
 
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then

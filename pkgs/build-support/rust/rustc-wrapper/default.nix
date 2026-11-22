@@ -27,7 +27,7 @@ let
   # anyway.
   defaultArgs = lib.optionalString (
     with rustc-unwrapped.stdenv.targetPlatform; isMusl && !isStatic
-  ) "-C target-feature=-crt-static";
+  ) "-C link-self-contained=no -C target-feature=-crt-static";
 in
 runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}"
   {
