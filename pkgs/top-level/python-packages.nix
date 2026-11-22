@@ -10110,8 +10110,6 @@ self: super: with self; {
 
   linode = callPackage ../development/python-modules/linode { };
 
-  linode-api = callPackage ../development/python-modules/linode-api { };
-
   linode-api4 = callPackage ../development/python-modules/linode-api4 { };
 
   linode-metadata = callPackage ../development/python-modules/linode-metadata { };
