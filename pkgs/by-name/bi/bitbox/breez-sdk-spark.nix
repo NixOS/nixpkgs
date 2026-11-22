@@ -12,16 +12,16 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "breez-sdk-spark";
   # Must match github.com/breez/breez-sdk-spark-go in BitBox's go.mod.
-  version = "0.25.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "breez";
     repo = "spark-sdk";
     tag = finalAttrs.version;
-    hash = "sha256-dNJjdzAxm5tjeM5DTozOat7QH6oRz0lgNvN802mppAM=";
+    hash = "sha256-x8lRqroW5Y3x39jcKF8MNeSMCT/hWMux6Bs6StRuQUY=";
   };
 
-  cargoHash = "sha256-Dfok3pCFqPLrtx9mV8AshyZ2cGOPUTo/aIzudIPihE8=";
+  cargoHash = "sha256-r7VIeYVXNx2ObUAXxAqncbsr2x16EOvjAy+l5MU/GjE=";
 
   # Let the Nix linker wrapper set RPATHs without retaining the Rust toolchain.
   env.CARGO_PROFILE_RELEASE_RPATH = "false";
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [
     "-p"
-    "breez-sdk-bindings"
+    "breez-sdk-spark-bindings"
     "--lib"
   ];
 

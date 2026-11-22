@@ -3,32 +3,34 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  nix-update-script,
 
   # build-time
   makeBinaryWrapper,
   nodejs,
   pnpmBuildHook,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_12,
+
+  versionCheckHook,
+  nix-update-script,
 
   chromium,
   defaultBrowser ? chromium,
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_12;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vivliostyle";
-  version = "11.2.0";
+  version = "11.5.0";
 
   src = fetchFromGitHub {
     owner = "vivliostyle";
     repo = "vivliostyle-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AIzFccN9Q0qDe/x8gAGuVXFnzZNg9RIYB3y6Hm0mc+M=";
+    hash = "sha256-Mruulx2Zz98Xgqs452DeNu+OADTmyyedYt82bzilyg4=";
   };
 
   patches = [
@@ -41,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-zgsbTUtkotQ07YP2JktiNRF2KLAbEdXGFzoNPwzcNjY=";
+    fetcherVersion = 5;
+    hash = "sha256-AK1Q6Q7OyRDWO87WhIQepMAJaCVihocnAPIpF4x+waw=";
   };
 
   nativeBuildInputs = [
@@ -53,16 +55,34 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
   ];
 
+  buildInputs = [
+    nodejs
+  ];
+
   pnpmBuildFlags = [
     "--mode"
     "production"
   ];
 
+  preBuild = ''
+    # delete local pnpm so the build uses pkgs.pnpm
+    find . -name pnpm -path '*/.bin/pnpm' -delete
+  '';
+
   preInstall = ''
-    CI=true pnpm prune --prod --ignore-scripts
-    # Clean up broken symlinks left behind by `pnpm prune`
-    # https://github.com/pnpm/pnpm/issues/3645
-    find node_modules -xtype l -delete
+    # `pnpm prune` doesn't support monorepos, and with pnpm 12 it also tries
+    # to verify the lockfile against supply-chain policies over the network.
+    # Reinstall production dependencies only instead.
+    rm -rf node_modules
+    pnpm install \
+      --config.trust-lockfile=true \
+      --frozen-lockfile \
+      --ignore-scripts \
+      --offline \
+      --prod
+
+    # remove broken symlinks
+    find . -xtype l -delete
   '';
 
   installPhase = ''
@@ -84,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s $out/bin/vivliostyle $out/bin/vs
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = nix-update-script { };

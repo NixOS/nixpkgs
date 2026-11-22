@@ -42,7 +42,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       malik
-      byteflavour
     ];
     mainProgram = "forgejo-mcp";
   };

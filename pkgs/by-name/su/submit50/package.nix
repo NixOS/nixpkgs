@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "submit50";
-  version = "3.2.1";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "submit50";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D71d8f2XfLrsDRBuEZK7B96UTUkJLkHsCWchDNO8epI=";
+    hash = "sha256-e6DbXnu49lMz0O1Ce4CK47Y7Lorjc4SU8SuorZ40nT4=";
   };
 
   build-system = [

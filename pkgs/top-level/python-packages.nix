@@ -348,6 +348,8 @@ self: super: with self; {
 
   aiohortos = callPackage ../development/python-modules/aiohortos { };
 
+  aiohpprinter = callPackage ../development/python-modules/aiohpprinter { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
@@ -2604,6 +2606,8 @@ self: super: with self; {
   bluetooth-sensor-state-data =
     callPackage ../development/python-modules/bluetooth-sensor-state-data
       { };
+
+  bluetti-modbus = callPackage ../development/python-modules/bluetti-modbus { };
 
   bluezero = callPackage ../development/python-modules/bluezero { };
 

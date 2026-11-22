@@ -12,7 +12,7 @@
         services.aurral = {
           enable = true;
           environment = {
-            DOWNLOAD_FOLDER = "/var/lib/aurral-downloads";
+            LIBRARY_FOLDER = "/var/lib/aurral-music";
           };
         };
       };

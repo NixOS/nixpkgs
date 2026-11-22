@@ -13,16 +13,10 @@ appimageTools.wrapType2 (finalAttrs: {
     hash = "sha256-q8KZmhI4X4V3W9P5hvqJHHa2nfN5H3wS5MeDzzw2MPU=";
   };
 
-  extraInstallCommands =
-    let
-      appimageContents = appimageTools.extract {
-        inherit (finalAttrs) pname version src;
-      };
-    in
-    ''
-      install -Dm 444 ${appimageContents}/org.es_de.frontend.desktop -t $out/share/applications
-      cp -r ${appimageContents}/usr/share/icons $out/share
-    '';
+  extraInstallCommands = ''
+    install -Dm 444 ${finalAttrs.contents}/org.es_de.frontend.desktop -t $out/share/applications
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

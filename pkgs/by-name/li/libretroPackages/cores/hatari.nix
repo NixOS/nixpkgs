@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "hatari";
-  version = "0-unstable-2026-11-06";
+  version = "0-unstable-2026-11-13";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "hatari";
-    rev = "819c2f7fb2e3aaea5ce6a7db99836af3a985fcbd";
-    hash = "sha256-ncPdxJHn9wpRWDwWFEhv6fA5mKIWMlHE15toInOYc0g=";
+    rev = "4edc56f4e2add886ed5406854d12f95fdfdf67b6";
+    hash = "sha256-h8GM2gqxy327VZYZ07M4yvoh2BC6MPGe0Pxw2XqxOoA=";
   };
 
   extraNativeBuildInputs = [ cmake ];
