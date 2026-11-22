@@ -16,13 +16,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "sub-store";
-  version = "2.44.7";
+  version = "2.44.25";
 
   src = fetchFromGitHub {
     owner = "sub-store-org";
     repo = "Sub-Store";
     tag = finalAttrs.version;
-    hash = "sha256-uzA9ENkfMoz8egMx683+jiS7QBXJWN+qq1sDebvgVKg=";
+    hash = "sha256-PUzmTIVIbxtJUWuVR3Xc6XgT1fRQuH3qo7xsMVwjHpQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
