@@ -10,7 +10,6 @@
   pkg-config,
   wayland-scanner,
 
-  capstone,
   dbus,
   freetype,
   glfw,
@@ -50,7 +49,6 @@
     pkg-config
     wayland-scanner
 
-    capstone
     dbus
     freetype
     glfw

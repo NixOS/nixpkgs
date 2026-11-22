@@ -10,7 +10,6 @@
   pkg-config,
   wayland-scanner,
 
-  capstone,
   dbus,
   freetype,
   glfw,
@@ -200,26 +199,6 @@ let
     };
 in
 rec {
-  tracy_0_11 = mkTracyPackage (
-    import ./tracy-0.11.nix {
-      inherit
-        lib
-        stdenv
-        capstone
-        ;
-    }
-  );
-
-  tracy_0_12 = mkTracyPackage (
-    import ./tracy-0.12.nix {
-      inherit
-        fetchFromGitHub
-        zstd
-        nativefiledialog-extended
-        ;
-    }
-  );
-
   tracy_0_13 = mkTracyPackage (
     import ./tracy-0.13.nix {
       inherit
