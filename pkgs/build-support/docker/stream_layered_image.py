@@ -285,9 +285,8 @@ def add_customisation_layer(target_tar, customisation_layer, mtime):
     with open(layer_path, "rb") as f:
         target_tar.addfile(tarinfo, f)
 
-    return LayerInfo(
-        size=None, checksum=checksum, path=path, paths=[customisation_layer]
-    )
+    # Store path depends on the build system, contents not so much
+    return LayerInfo(size=None, checksum=checksum, path=path, paths=[])
 
 
 def add_bytes(tar, path, content, mtime):
