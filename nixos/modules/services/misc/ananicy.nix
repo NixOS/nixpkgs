@@ -152,7 +152,7 @@ in
           {
             # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/blob/master/src/config.cpp#L12
             loglevel = mkOD "warn"; # default is info but its spammy
-            cgroup_realtime_workaround = true;
+            cgroup_realtime_workaround = mkOD true;
             log_applied_rule = mkOD false;
           }
         else
@@ -167,6 +167,7 @@ in
       packages = [ cfg.package ];
       services."${servicename}" = {
         wantedBy = [ "default.target" ];
+        serviceConfig.Delegate = "yes";
       };
     };
   };
