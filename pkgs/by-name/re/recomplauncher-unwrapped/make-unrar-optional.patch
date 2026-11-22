@@ -1,0 +1,62 @@
+diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
+index fd59653..fc4bcd6 100644
+--- a/src-tauri/Cargo.toml
++++ b/src-tauri/Cargo.toml
+@@ -37,7 +37,7 @@ sevenz-rust = "0.6"
+ nod = { version = "1.4", default-features = false, features = ["compress-bzip2", "compress-zlib", "compress-zstd"] }
+ chd = "0.4"
+ lz4_flex = { version = "0.11", default-features = false, features = ["std", "safe-decode"] }
+-unrar = "0.5"
++unrar = { version = "0.5", optional = true }
+ flate2 = "1"
+ zstd = "0.13"
+ # .tar.xz releases. Already built in for backhand's xz AppImages; named here since install.rs uses it.
+diff --git a/src-tauri/src/gamebanana.rs b/src-tauri/src/gamebanana.rs
+index b6663ac..04f69d3 100644
+--- a/src-tauri/src/gamebanana.rs
++++ b/src-tauri/src/gamebanana.rs
+@@ -220,7 +220,7 @@ fn kind_of_name(name: &str) -> Option<&'static str> {
+         Some("zip")
+     } else if n.ends_with(".7z") {
+         Some("7z")
+-    } else if n.ends_with(".rar") {
++    } else if cfg!(feature = "unrar") && n.ends_with(".rar") {
+         Some("rar")
+     } else {
+         None
+@@ -237,7 +237,7 @@ pub fn parse_detail(v: &Value) -> Detail {
+             let name = s(f, "_sFile");
+             let av = s(f, "_sAvResult");
+             let why = if kind_of_name(&name).is_none() {
+-                "It isn't a zip, 7z or rar.".to_string()
++                if cfg!(feature = "unrar") { "It isn't a zip, 7z or rar." } else { "It isn't a zip or 7z." }.to_string()
+             } else if av != "clean" {
+                 "GameBanana's virus scan hasn't passed it.".to_string()
+             } else {
+@@ -418,6 +418,10 @@ pub fn extract(archive: &Path, to: &Path) -> Result<(), Error> {
+         }
+         r.map_err(|e| bad(e.to_string()))
+     } else if head.starts_with(b"Rar!\x1A\x07") {
++        #[cfg(not(feature = "unrar"))]
++        return Err(Error::Msg("This build can't open rar files.".into()));
++        #[cfg(feature = "unrar")]
++        {
+         let mut a = unrar::Archive::new(archive).open_for_processing().map_err(|e| bad(e.to_string()))?;
+         let mut count = 0usize;
+         while let Some(h) = a.read_header().map_err(|e| bad(e.to_string()))? {
+@@ -440,6 +444,7 @@ pub fn extract(archive: &Path, to: &Path) -> Result<(), Error> {
+             };
+         }
+         Ok(())
++        }
+     } else {
+         Err(Error::Msg("That download isn't a zip, 7z or rar.".into()))
+     }
+@@ -919,6 +924,7 @@ mod tests {
+         assert_eq!(Ini::parse("\u{feff}[Main]\nA=\"1\"\n").get("Main", "A"), Some("1"));
+     }
+ 
++    #[cfg(feature = "unrar")]
+     #[test]
+     fn unpacks_rar() {
+         // A sample from the unrar crate itself, when it's in the local registry.

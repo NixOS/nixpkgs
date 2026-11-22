@@ -1,0 +1,70 @@
+diff --git a/src-tauri/Cargo.lock b/src-tauri/Cargo.lock
+index e76bf41..890e65d 100644
+--- a/src-tauri/Cargo.lock
++++ b/src-tauri/Cargo.lock
+@@ -911,15 +911,6 @@ dependencies = [
+  "error-code",
+ ]
+ 
+-[[package]]
+-name = "cmake"
+-version = "0.1.58"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
+-dependencies = [
+- "cc",
+-]
+-
+ [[package]]
+ name = "color_quant"
+ version = "1.1.0"
+@@ -4954,12 +4945,6 @@ dependencies = [
+  "windows-sys 0.52.0",
+ ]
+ 
+-[[package]]
+-name = "rpkg-config"
+-version = "0.1.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5a2d2f3481209a6b42eec2fbb49063fb4e8d35b57023401495d4fe0f85c817f0"
+-
+ [[package]]
+ name = "rust-ini"
+ version = "0.21.3"
+@@ -5136,22 +5121,13 @@ version = "1.2.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
+ 
+-[[package]]
+-name = "sdl3-src"
+-version = "3.4.18"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "400d0fb006a4485fde477cfc56a250c99d7bfb183fefd145c15fe7607db7fc49"
+-
+ [[package]]
+ name = "sdl3-sys"
+ version = "0.7.2+SDL-3.4.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "82b6a7f3cad40c5b318b3539bb4624389f4a03504cd5f4c65030787b962505ac"
+ dependencies = [
+- "cc",
+- "cmake",
+- "rpkg-config",
+- "sdl3-src",
++ "pkg-config",
+ ]
+ 
+ [[package]]
+diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
+index fd59653..b935515 100644
+--- a/src-tauri/Cargo.toml
++++ b/src-tauri/Cargo.toml
+@@ -64,7 +64,7 @@ plist = "1"
+ tauri-plugin-deep-link = "2"
+ # Controllers. SDL 3 is built from source and linked in, with only its joystick and HIDAPI parts:
+ # no SDL library to ship, and nothing needed on the player's system.
+-sdl3-sys = { version = "=0.7.2", default-features = false, features = ["build-from-source-static", "no-default-subsystems", "sdl-joystick", "sdl-hidapi", "sdl-unix-console-build"] }
++sdl3-sys = { version = "=0.7.2", default-features = false, features = ["use-pkg-config"] }
+ 
+ [dev-dependencies]
+ # DwarFS AppImages for appimage.rs's tests (never part of the launcher itself).

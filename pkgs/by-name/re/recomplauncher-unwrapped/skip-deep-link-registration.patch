@@ -1,0 +1,13 @@
+diff --git a/src-tauri/src/lib.rs b/src-tauri/src/lib.rs
+index 67032fc..7db93e3 100644
+--- a/src-tauri/src/lib.rs
++++ b/src-tauri/src/lib.rs
+@@ -10032,7 +10032,7 @@ pub fn run() {
+                 // Windows (a portable copy too) and Linux (an AppImage, the .deb, a build of its
+                 // own) tell the system about the links each time, with the link passed along.
+                 #[cfg(any(windows, target_os = "linux"))]
+-                {
++                if !nix_managed() {
+                     let h = app.handle().clone();
+                     std::thread::spawn(move || {
+                         if let Err(e) = h.deep_link().register_all() {
