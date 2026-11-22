@@ -14,6 +14,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mullvad-vpn";
+  # nixpkgs-update: no auto update
   inherit (mullvad) src version;
 
   npmDepsHash = "sha256-CKhPOV0Nd/YoTXqbTQOFrKp3QUacrTJ/B+oEkuFMWsM=";
@@ -110,7 +111,11 @@ buildNpmPackage (finalAttrs: {
     terminal = false;
   });
 
-  passthru.hasMullvadGUI = true;
+  passthru = {
+    hasMullvadGUI = true;
+    # Updates mullvad and this package together.
+    inherit (mullvad) updateScript;
+  };
 
   meta = {
     homepage = "https://mullvad.net/";
