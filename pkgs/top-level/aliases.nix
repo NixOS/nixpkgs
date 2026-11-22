@@ -401,6 +401,7 @@ mapAliases {
   ayu-theme-gtk = throw "'ayu-theme-gtk' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   b43FirmwareCutter = warnAlias "'b43FirmwareCutter' has been renamed to 'b43-fwcutter'" b43-fwcutter; # Added 2026-02-08
   backlight-auto = throw "'backlight-auto' has been removed as it relies on Zig 0.12 which has been dropped."; # Added 2025-08-22
+  badlion-client = throw "'badlion-client' has been discontinued; use 'lunar-client' instead."; # Added 2026-11-22
   badtouch = throw "'badtouch' has been renamed to/replaced by 'authoscope'"; # Converted to throw 2025-10-27
   balatro-mod-manager = throw "'balatro-mod-manager' has been removed as it was discontinued"; # Added 2026-11-02
   banana-vera = throw "'banana-vera' has been removed as it relies on python3.10"; # Added 2026-02-09
