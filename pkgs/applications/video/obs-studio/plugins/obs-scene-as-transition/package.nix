@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   obs-studio,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +24,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -rf $out/obs-plugins $out/data
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OBS Studio plugin that will allow you to use a Scene as a transition";
