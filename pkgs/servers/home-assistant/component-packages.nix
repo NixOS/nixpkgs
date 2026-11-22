@@ -3294,7 +3294,8 @@
       ];
     "ialarm" =
       ps: with ps; [
-      ]; # missing inputs: pyasyncialarm
+        pyasyncialarm
+      ];
     "iammeter" =
       ps: with ps; [
         iammeter
@@ -9310,6 +9311,7 @@
     "hydrawise"
     "hyperion"
     "hypontech"
+    "ialarm"
     "iaqualink"
     "ibeacon"
     "icloud"
