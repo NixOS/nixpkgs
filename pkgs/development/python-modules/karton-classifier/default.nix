@@ -24,6 +24,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "chardet"
+    "karton-core"
     "python-magic"
   ];
 
