@@ -51,4 +51,4 @@ CARGO_HOME="$work/cargo-home" cargo metadata --format-version 1 > /dev/null
 git diff > "$pkgDir/use-system-ca-store.patch"
 
 cd "$nixpkgs"
-nix-update "$attr" --version skip --subpackage yarnOfflineCache
+nix-update "$attr" --version skip --no-src --subpackage yarnOfflineCache
