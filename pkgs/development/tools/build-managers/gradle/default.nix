@@ -153,7 +153,6 @@ let
       autoPatchelfHook,
       buildPackages,
       cacert,
-      jre-generate-cacerts,
       zip,
 
       # The JDK/JRE used for running Gradle.
@@ -221,7 +220,7 @@ let
             work="$(mktemp -d)"
             pushd "$work"
             export JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE"
-            ${jre-generate-cacerts} ${buildPackages.jdk}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+            ${buildPackages.jre-generate-cacerts} ${buildPackages.jdk}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
             mkdir -p com/google/api/client/googleapis
             ${buildPackages.jdk}/bin/keytool -importkeystore -noprompt \
               -srckeystore cacerts -srcstorepass changeit \
