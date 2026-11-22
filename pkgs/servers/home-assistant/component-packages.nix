@@ -3283,7 +3283,8 @@
       ];
     "hydroquebec_peak" =
       ps: with ps; [
-      ]; # missing inputs: hydropeak-opendata
+        hydropeak-opendata
+      ];
     "hyperion" =
       ps: with ps; [
         hyperion-py
@@ -9308,6 +9309,7 @@
     "huum"
     "hvv_departures"
     "hydrawise"
+    "hydroquebec_peak"
     "hyperion"
     "hypontech"
     "iaqualink"
