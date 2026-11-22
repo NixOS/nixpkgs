@@ -14,7 +14,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "esphome-device-builder-frontend";
-  version = "0.1.383";
+  version = "0.1.387";
   pyproject = true;
 
   src = fetchFromGitHub {
