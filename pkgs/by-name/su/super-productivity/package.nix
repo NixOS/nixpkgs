@@ -211,6 +211,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       pineapplehunter
       tebriel
+      yzx9
     ];
     mainProgram = "superproductivity";
   };
