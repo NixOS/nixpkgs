@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnfs";
-  version = "6.0.2";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "sahlberg";
     repo = "libnfs";
     tag = "libnfs-${finalAttrs.version}";
-    hash = "sha256-uD7PtW2rcpGVzqD6U0DXK1gUaCKlKh+p+i6CW6jLGdw=";
+    hash = "sha256-KjR8H4U0drxK/L1LXS2r909p8MUCT4zh3FGuWM2gfzc=";
   };
 
   nativeBuildInputs = [ cmake ];
