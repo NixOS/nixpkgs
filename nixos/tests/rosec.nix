@@ -26,6 +26,7 @@ in
 
       services.rosec = {
         enable = true;
+        package = pkgs.rosecFull;
         pam.enable = true;
       };
 
@@ -70,6 +71,13 @@ in
           _, output = machine.systemctl("status rosecd --no-pager", "alice")
           assert "Active: active (running)" in output
           machine.succeed("su - alice -c 'busctl --user list | grep -q org.freedesktop.impl.portal.desktop.rosec'")
+
+      with subtest("source-built WASM providers are trusted by package digest"):
+          kinds = machine.succeed("su - alice -c 'rosec provider kinds'")
+          assert "bitwarden-pm" in kinds, kinds
+          validated = machine.succeed("su - alice -c 'rosec provider validate'")
+          assert "bitwarden-pm" in validated, validated
+          assert "embedded package hashes" in validated, validated
 
       with subtest("PAM is configured with pam_rosec"):
           login_pam = machine.succeed("cat /etc/pam.d/login")
