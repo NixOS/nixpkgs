@@ -34,6 +34,9 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
   wasmSupport ? false,
   webUISupport ? false,
+  # Wrap program with wasi-sdk, binaryen, and lld to support building grammars to wasm (`tree-sitter build --wasm`).
+  # Necessary for webUISupport as `tree-sitter playground` requires building the wasm grammar.
+  wasmBuildSupport ? wasmSupport || webUISupport,
 }:
 
 let
@@ -190,6 +193,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals wasmSupport [
     cmake
+  ]
+  ++ lib.optionals wasmBuildSupport [
     makeWrapper
   ]
   ++ lib.optionals webUISupport [
@@ -260,10 +265,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     make install PREFIX=$out LIBDIR=$lib/lib INCLUDEDIR=$dev/include
   ''
-  # supply the nix paths for the Wasi SDK & `wasm-opt`: https://tree-sitter.github.io/tree-sitter/6-contributing.html#wasm-stdlib
-  # lld is required for the linker phase in `tree-sitter build --wasm`
   + lib.optionalString wasmSupport ''
     cmake --install $cmakeBuildDir
+  ''
+  # supply the nix paths for the Wasi SDK & `wasm-opt`: https://tree-sitter.github.io/tree-sitter/6-contributing.html#wasm-stdlib
+  # lld is required for the linker phase in `tree-sitter build --wasm`
+  + lib.optionalString wasmBuildSupport ''
     wrapProgram $out/bin/tree-sitter \
       --set-default TREE_SITTER_BINARYEN_PATH "${binaryen}" \
       --set-default TREE_SITTER_WASI_SDK_PATH "${wasiSdk}" \
