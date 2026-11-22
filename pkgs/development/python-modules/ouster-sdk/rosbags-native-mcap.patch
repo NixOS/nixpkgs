@@ -32,7 +32,7 @@ diff --git a/python/src/ouster/cli/plugins/source_bag.py b/python/src/ouster/cli
 --- a/python/src/ouster/cli/plugins/source_bag.py
 +++ b/python/src/ouster/cli/plugins/source_bag.py
 @@ -30,11 +30,11 @@
-     file = ctx.source_uri or ""
+     file = ctx.source_uri
 
      # monkeypatch AnyReader and Reader2 to support mcap directly
 -    if AnyReader.__init__ != _anybag_monkey:

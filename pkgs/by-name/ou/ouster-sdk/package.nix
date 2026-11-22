@@ -35,18 +35,21 @@ in
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   pname = "ouster-sdk";
-  version = "1.0.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ouster-lidar";
     repo = "ouster-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tiytOySeS/uOzGPyFK6UjnOq5XaXWy5LK3wuEsZ/WN8=";
+    hash = "sha256-MSZgFsilOzgVkbmvaxlvxUzyRJ8J0gUyJLBCz/AtJXE=";
   };
 
   strictDeps = true;
 
-  patches = [ ./cmake-fixes.patch ];
+  patches = [
+    ./cmake-fixes.patch
+    ./time-correction-frame-state.patch
+  ];
 
   nativeBuildInputs = [
     cmake

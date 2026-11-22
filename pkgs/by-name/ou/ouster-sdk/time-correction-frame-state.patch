@@ -1,0 +1,46 @@
+Subject: [PATCH] Size SLAM timestamp state before processing new frame slots
+
+SLAM can interpolate a pose for a camera appended to a lidar frame set,
+as exercised by test_slam_update_writes_camera_pose. The timestamp
+vectors start with one entry per configured sensor, so the first update
+reads beyond the timestamp history for the extra camera. A later frame
+with a backwards timestamp also reads beyond the frame durations.
+
+Grow the timestamp history before its first lookup, retaining it across
+shorter frame sets. A slot without sensor metadata has no known frame
+rate, so use the same zero duration as a sensor with unknown FPS.
+
+---
+diff --git a/ouster_mapping/src/active_time_correction.cpp b/ouster_mapping/src/active_time_correction.cpp
+--- a/ouster_mapping/src/active_time_correction.cpp
++++ b/ouster_mapping/src/active_time_correction.cpp
+@@ -116,6 +116,9 @@
+ void ActiveTimeCorrection::update(FrameSet& frame_set) {
+     auto frame_ts_range = get_frame_ts_range(frame_set);
++    if (last_frame_ts_range_.size() < frame_ts_range.size()) {
++        last_frame_ts_range_.resize(frame_ts_range.size(), {-1, -1});
++    }
+
+     // Sensor sync check. fall back to packet timestamp offsets if sensors
+     // are not synchronized.
+     bool is_synced = check_sensors_synchronization(frame_ts_range);
+@@ -197,9 +200,6 @@
+     // Carry the last seen range forward across missing frames so that sensors
+     // which skip frame sets (e.g. a camera slower than the lidar) still have
+     // their next frame checked against the previous one.
+-    if (last_frame_ts_range_.size() < frame_ts_range.size()) {
+-        last_frame_ts_range_.resize(frame_ts_range.size(), {-1, -1});
+-    }
+     for (size_t idx = 0; idx < frame_ts_range.size(); ++idx) {
+         if (frame_ts_range[idx].first >= 0) {
+             last_frame_ts_range_[idx] = frame_ts_range[idx];
+@@ -289,7 +289,8 @@
+         return;  // nothing to correct
+     }
+     int64_t last_start_ts = last_frame_ts_range_[sensor_idx].first;
+-    double frame_duration = frame_durations_[sensor_idx];
++    double frame_duration =
++        sensor_idx < frame_durations_.size() ? frame_durations_[sensor_idx] : 0.0;
+     if (last_start_ts != -1 && frame_duration <= 0.0) {
+         return;  // unknown frame rate; cannot extrapolate from the last frame
+     }

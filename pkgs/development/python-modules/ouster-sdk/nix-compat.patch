@@ -12,11 +12,6 @@ Stub generation imports target bindings; configuration uses build Python.
 -            self.install_deps(ext)
 +            self._cmake_path = "cmake"
              self.cmake_log(f"CMake: Extension: {ext.name} Build Dir: {ext.builddir}")
-@@ -323,3 +323,3 @@
-         if platform.system() == "Darwin":
--            run.extend(["arch", "-arch", platform.machine()])
-+            pass
-         run.extend([self._cmake_path, ext.sourcedir])
 @@ -509,3 +509,3 @@
          description='Ouster Sensor SDK',
 -        license='BSD-3-Clause AND Ouster-Freeware-EULA (See project links)',
