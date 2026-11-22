@@ -7,6 +7,7 @@
   setuptools,
   ty,
   makeBinaryWrapper,
+  qemu,
 }:
 
 buildPythonApplication {
@@ -39,7 +40,9 @@ buildPythonApplication {
 
   postInstall = ''
     wrapProgram $out/bin/run-virtiofsd-qemu \
-      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [ virtiofsd ])}"
+      --prefix PATH : "${
+        lib.makeBinPath ([ qemu ] ++ lib.optionals stdenv.hostPlatform.isLinux [ virtiofsd ])
+      }"
   '';
 
   meta = {

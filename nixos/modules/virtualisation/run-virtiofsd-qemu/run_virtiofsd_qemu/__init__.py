@@ -18,6 +18,20 @@ def fatal_error(msg: str):
     exit(1)
 
 
+async def create_empty_disk_image(target: Path, size: int):
+    loop = asyncio.get_running_loop()
+    if not await loop.run_in_executor(None, lambda: target.exists()):
+        proc = await asyncio.create_subprocess_exec(
+            "qemu-img",
+            "create",
+            "-f",
+            "qcow2",
+            target,
+            f"{size}M",
+        )
+        await proc.wait()
+
+
 @asynccontextmanager
 async def virtiofsd(virtiofs_dir: Path, tag: str, source: Path, cache: str, flag: str):
     socket_path = virtiofs_dir / tag
@@ -99,6 +113,7 @@ class Settings:
     virtiofsds: list[tuple[str, Path, str, str]]
     qemu_args: list[str]
     force_accel: bool
+    empty_disk_images: list[int]
 
 
 def extract_arguments() -> Settings:
@@ -113,6 +128,13 @@ def extract_arguments() -> Settings:
         "--force-accel",
         action="store_true",
         help="Whether it's intended to run with an accelerator.",
+    )
+    parser.add_argument(
+        "--empty-disk-images",
+        nargs="+",
+        type=int,
+        default=[],
+        help="Empty disk images to create. Each value is the size in MiB.",
     )
 
     args, qemu_args = parser.parse_known_args()
@@ -142,6 +164,7 @@ def extract_arguments() -> Settings:
         virtiofsds=defs,
         qemu_args=qemu_args,
         force_accel=args.force_accel,
+        empty_disk_images=args.empty_disk_images,
     )
 
 
@@ -162,6 +185,13 @@ async def amain():
             virtiofs_dir = Path(environ["NIX_VIRTIOFS_DIR"])
         except KeyError:
             fatal_error("NIX_VIRTIOFS_DIR is unset!")
+
+    await asyncio.gather(
+        *(
+            create_empty_disk_image(Path(f"empty{idx}.qcow2"), size)
+            for idx, size in enumerate(settings.empty_disk_images)
+        )
+    )
 
     async with AsyncExitStack() as virtiofsds:
         await asyncio.gather(

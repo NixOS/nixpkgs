@@ -29,7 +29,9 @@ let
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  runScript = hostPkgs.callPackage ./run-virtiofsd-qemu { };
+  runScript = hostPkgs.callPackage ./run-virtiofsd-qemu {
+    inherit qemu;
+  };
 
   driveOptions =
     { ... }:
@@ -289,17 +291,6 @@ let
 
     cd "$TMPDIR"
 
-    ${lib.pipe cfg.emptyDiskImages [
-      (lib.imap0 (
-        idx:
-        { size, ... }:
-        ''
-          test -e "empty${toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${toString idx}.qcow2" "${toString size}M"
-        ''
-      ))
-      (builtins.concatStringsSep "")
-    ]}
-
     ${lib.optionalString needsVirtiofs ''
       export NIX_VIRTIOFS_DIR=$(mktemp -d)
     ''}
@@ -316,6 +307,13 @@ let
           )
         } \
       ''} \
+      ${
+        lib.optionalString (cfg.emptyDiskImages != [ ]) ''
+          --empty-disk-images ${
+            lib.concatMapStringsSep " " ({ size, ... }: toString size) cfg.emptyDiskImages
+          } \
+        ''
+      } \
       -- \
       ${
         qemu-common.qemuBinaryWith {
