@@ -2013,6 +2013,16 @@
     };
   };
 
+  nix-numtide = {
+    version = "0.5.0-unstable-2026-10-08";
+    url = "github:numtide/tree-sitter-nix";
+    rev = "381ec8d119d9d24fd345174e2dc7b2e90f5d2b05";
+    hash = "sha256-EwFDD2WRGoyDyMW3lUBAsnt1aWjcQaDqfQ8rdceb7h8=";
+    meta = {
+      license = lib.licenses.mit;
+    };
+  };
+
   norg = {
     version = "0.2.6";
     url = "github:nvim-neorg/tree-sitter-norg";
