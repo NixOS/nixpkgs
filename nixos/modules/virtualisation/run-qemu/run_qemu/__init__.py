@@ -6,7 +6,6 @@ import signal
 import subprocess
 from contextlib import AsyncExitStack, asynccontextmanager
 from dataclasses import dataclass
-from os import environ
 from pathlib import Path
 from sys import exit, platform
 
@@ -114,6 +113,7 @@ class Settings:
     qemu_args: list[str]
     force_accel: bool
     empty_disk_images: list[int]
+    virtiofs_dir: Path
 
 
 def extract_arguments() -> Settings:
@@ -135,6 +135,12 @@ def extract_arguments() -> Settings:
         type=int,
         default=[],
         help="Empty disk images to create. Each value is the size in MiB.",
+    )
+    parser.add_argument(
+        "--virtiofs_dir",
+        type=Path,
+        default=Path("virtiofsd"),
+        help="State dir where socket of each virtiofsd instance is saved. Assumed to be inside the TMPDIR and thus not cleaned up on its own.",
     )
 
     args, qemu_args = parser.parse_known_args()
@@ -165,6 +171,7 @@ def extract_arguments() -> Settings:
         qemu_args=qemu_args,
         force_accel=args.force_accel,
         empty_disk_images=args.empty_disk_images,
+        virtiofs_dir=args.virtiofs_dir,
     )
 
 
@@ -175,16 +182,12 @@ async def amain():
     if settings.force_accel:
         await assert_accelerator_available()
 
-    if settings.virtiofsds:
-        if platform != "linux":
-            fatal_error(
-                "virtiofsd is only supported on Linux! Use 9pfs with this wrapper on other platforms!"
-            )
+    if settings.virtiofsds and platform != "linux":
+        fatal_error(
+            "virtiofsd is only supported on Linux! Use 9pfs with this wrapper on other platforms!"
+        )
 
-        try:
-            virtiofs_dir = Path(environ["NIX_VIRTIOFS_DIR"])
-        except KeyError:
-            fatal_error("NIX_VIRTIOFS_DIR is unset!")
+    settings.virtiofs_dir.mkdir(exist_ok=True, parents=True)
 
     await asyncio.gather(
         *(
@@ -196,7 +199,7 @@ async def amain():
     async with AsyncExitStack() as virtiofsds:
         await asyncio.gather(
             *(
-                virtiofsds.enter_async_context(virtiofsd(virtiofs_dir, *defin))
+                virtiofsds.enter_async_context(virtiofsd(settings.virtiofs_dir, *defin))
                 for defin in settings.virtiofsds
             )
         )

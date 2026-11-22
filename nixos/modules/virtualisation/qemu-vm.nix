@@ -291,10 +291,6 @@ let
 
     cd "$TMPDIR"
 
-    ${lib.optionalString needsVirtiofs ''
-      export NIX_VIRTIOFS_DIR=$(mktemp -d)
-    ''}
-
     # Start QEMU.
     exec ${lib.getExe runScript} ${lib.optionalString cfg.qemu.forceAccel "--force-accel"} \
       ${lib.optionalString needsVirtiofs ''
@@ -1288,7 +1284,7 @@ in
           tag: share:
           if useVirtiofs then
             [
-              "-chardev socket,id=${tag},path=$NIX_VIRTIOFS_DIR/${tag}"
+              "-chardev socket,id=${tag},path=virtiofsd/${tag}"
               "-device vhost-user-fs-pci,chardev=${tag},tag=${tag}"
             ]
           else
