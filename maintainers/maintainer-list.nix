@@ -9707,6 +9707,12 @@
     githubId = 415760;
     name = "Jonas Höglund";
   };
+  first-uninteresting-username = {
+    email = "janekmusin@proton.me";
+    github = "first-uninteresting-username";
+    githubId = 196055729;
+    name = "Jan Musiński";
+  };
   fishi0x01 = {
     email = "fishi0x01@gmail.com";
     github = "fishi0x01";
