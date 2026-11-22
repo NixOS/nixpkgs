@@ -7,12 +7,12 @@
   nixosTests,
 }:
 let
-  version = "16.0.1";
+  version = "16.2.0";
   src = fetchFromGitHub {
     owner = "jhaals";
     repo = "yopass";
     tag = version;
-    hash = "sha256-wnVoEOfx2OKkkm3FAZEIntt2xq0Kqi4RhCjLjeeHsFM=";
+    hash = "sha256-gdX3jhaOi+DwA2sI7jB19a+NBtRAjC7uDvAb5Li/aNI=";
   };
 
   website = callPackage ./website.nix { inherit src version; };
@@ -27,7 +27,7 @@ buildGoLatestModule (finalAttrs: {
   # refuses to run in workspace mode.
   env.GOWORK = "off";
 
-  vendorHash = "sha256-FwKL2yQ62wZnDouQv3xt4cRi4rf+42SMSzXbm/T52+k=";
+  vendorHash = "sha256-7cN47LWlGHSAnhK31O3V9ryetcWczG/fyUVANdhG5VY=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
