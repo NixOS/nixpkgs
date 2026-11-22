@@ -1,0 +1,11 @@
+--- a/src/lake/Lake/CLI/Check.lean
++++ b/src/lake/Lake/CLI/Check.lean
+@@ -581,5 +581,7 @@
+     -- Resolved rather than left to `PATH`: an external kernel installed under the home directory
+     -- the sandbox covers has to be bound back, which needs its path.
+-    let kernelExe := (← whichExe kernelCommand[0]!).getD kernelCommand[0]!
++    let kernelExe ← match ← whichExe kernelCommand[0]! with
++      | some path => IO.FS.realPath path
++      | none => pure (kernelCommand[0]! : System.FilePath)
+     let spawnArgs := {
+       cmd := kernelExe.toString,
