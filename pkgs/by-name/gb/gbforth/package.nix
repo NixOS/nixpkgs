@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "gbforth";
-  version = "0-unstable-2025-10-08";
+  version = "0-unstable-2025-10-09";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -50,7 +50,8 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  # Upstream tags are not versions
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://gbforth.org/";
