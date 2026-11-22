@@ -14,6 +14,8 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "ibisoffice";
   version = "0.8.9";
 
