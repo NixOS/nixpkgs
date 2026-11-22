@@ -15,12 +15,18 @@ let
   inherit (kernel) stdenv;
 
   ## symlink farm for --sysroot flag
-  sysroot = runCommand "systemtap-sysroot-${kernel.version}" { } ''
-    mkdir -p $out/boot $out/usr/lib/debug
-    ln -s ${kernel.dev}/vmlinux ${kernel.dev}/lib $out
-    ln -s ${kernel.dev}/vmlinux $out/usr/lib/debug
-    ln -s ${kernel}/System.map $out/boot/System.map-${kernel.version}
-  '';
+  sysroot =
+    runCommand "systemtap-sysroot-${kernel.version}"
+      {
+        strictDeps = true;
+        __structuredAttrs = true;
+      }
+      ''
+        mkdir -p $out/boot $out/usr/lib/debug
+        ln -s ${kernel.dev}/vmlinux ${kernel.dev}/lib $out
+        ln -s ${kernel.dev}/vmlinux $out/usr/lib/debug
+        ln -s ${kernel}/System.map $out/boot/System.map-${kernel.version}
+      '';
 
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
@@ -29,6 +35,8 @@ runCommand "systemtap-${systemtap-unwrapped.version}"
   {
     stapBuild = systemtap-unwrapped;
     nativeBuildInputs = [ makeWrapper ];
+    strictDeps = true;
+    __structuredAttrs = true;
     passthru.tests = { inherit (nixosTests.systemtap) linux_default linux_latest; };
     inherit (systemtap-unwrapped) meta version pname;
   }
