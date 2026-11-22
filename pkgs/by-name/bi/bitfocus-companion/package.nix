@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${lib.getExe nodejs_26} $out/bin/bitfocus-companion \
       --add-flags $out/share/bitfocus-companion/dist/main.js \
-      --set LD_LIBRARY_PATH "${
+      --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libusb1
           udev
