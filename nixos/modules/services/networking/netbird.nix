@@ -747,7 +747,13 @@ in
           nameValuePair "${client.service.name}-login" {
             after = [ "${client.service.name}.service" ] ++ client.login.systemdDependencies;
             requires = [ "${client.service.name}.service" ] ++ client.login.systemdDependencies;
-            wantedBy = [ "${client.service.name}.service" ];
+            # also wanted by multi-user.target, so that `switch` starts a login
+            # enabled while the client is already running; on a registered
+            # client it sees `Connected` and exits right away
+            wantedBy = [
+              "${client.service.name}.service"
+              "multi-user.target"
+            ];
 
             serviceConfig = {
               Type = "oneshot";
