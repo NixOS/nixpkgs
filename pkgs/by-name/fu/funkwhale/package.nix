@@ -39,6 +39,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # Fix compatibility with django-allauth >= 65.18 where filter_users_by_username
     # was moved from allauth.account.auth_backends to allauth.account.internal.userkit.
     ./django-allauth-compat.patch
+
+    # Fix Celery task argument validation on Python 3.14 / Celery >= 5.5.
+    # Celery unwraps __wrapped__ when checking arguments, causing @require_instance
+    # to reject keyword arguments like upload_id.
+    ./celery-python314-compat.patch
+
+    # Disable socket_timeout in channels_redis host configuration.
+    # redis-py >= 8.0 defaults socket_timeout to 5s, clashing with channels_redis's
+    # 5s brpop timeout and causing WebSocket TimeoutErrors on idle activity streams.
+    ./channels-redis-timeout.patch
   ];
 
   build-system = with python3.pkgs; [
