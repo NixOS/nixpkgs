@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   versionCheckHook,
   nix-update-script,
@@ -22,6 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  # CVE-2026-116734: the overflow guard in check_header was dead code.
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-116734.patch";
+      url = "https://github.com/dvidelabs/flatcc/commit/0df9c097a19badc8bd22d93af8fd47bd291e5d9f.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-xSKzWtcgmIl91IQ78Q8diIYAzvxrh3/AhELC5hgjxHA=";
+    })
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "FLATCC_INSTALL" true)
