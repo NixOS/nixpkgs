@@ -12,7 +12,6 @@
   nab-project,
   nab,
   ninja,
-  patchelf,
   pytest-mock,
   pytestCheckHook,
   python-sbom,
@@ -41,14 +40,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-iLeSUqvGf0MsrpQOV52p3uqN9TlW0g71LIxBEqEU8zg=";
   };
 
-  # We remove patchelf from the pyproject.toml because we don't package the
-  # python package (which just contains the executable).
-  # We provide the executable in nativeBuildInputs below.
   postPatch = ''
     patchShebangs tools
 
     substituteInPlace pyproject.toml \
-      --replace-fail "meson-python>=0.22.1" "meson-python" \
       --replace-fail "\"patchelf>=0.11; sys_platform=='linux'\"," ""
   '';
 
@@ -56,9 +51,6 @@ buildPythonPackage (finalAttrs: {
     cargo
     rustc
     rustPlatform.cargoSetupHook
-  ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
-    patchelf
   ];
 
   build-system = [
