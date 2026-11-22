@@ -77,10 +77,10 @@ in
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.10.12";
-        hash = "sha256-KIFenIPyMWflO9SnnAhea5VHrigIrLI0FatcVYqFzuw=";
+        version = "1.10.14";
+        hash = "sha256-dwFSM8jHZ7qhaeKjJJOadofG5BjVlokQKskjzyRJopk=";
         knownVulnerabilities = [
-          "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.4.0 in Julia 1.10.12, curl 8.7.1 in Julia 1.10.13). See https://julialang.org/downloads/."
+          "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.7.1). See https://julialang.org/downloads/."
         ];
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
@@ -90,13 +90,6 @@ in
             url = "https://github.com/JuliaLang/julia/commit/0be37db8c5b5a440bd9a11960ae9c998027b7337.patch";
             revert = true;
             hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
-          })
-          # stackwalk: derive glibc longjmp pointer mangling
-          # https://github.com/JuliaLang/julia/pull/62775
-          # Probably not needed after the next release on this branch (1.10.13+)
-          (fetchpatch2 {
-            url = "https://github.com/JuliaLang/julia/commit/cf08907c8fc7ffc64dc664e2dd7469707824b601.patch?full_index=1";
-            hash = "sha256-1Dq5gEo+MiBoIZq8xBHNONwDrwLLQ3Yr6qQh6EJKCCQ=";
           })
         ];
       })
