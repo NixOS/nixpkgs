@@ -14764,6 +14764,8 @@ self: super: with self; {
 
   pyasynchat = callPackage ../development/python-modules/pyasynchat { };
 
+  pyasyncialarm = callPackage ../development/python-modules/pyasyncialarm { };
+
   pyasyncore = callPackage ../development/python-modules/pyasyncore { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
