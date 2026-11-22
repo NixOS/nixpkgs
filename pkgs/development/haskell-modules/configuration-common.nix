@@ -1236,11 +1236,18 @@ with haskellLib;
   idris = lib.pipe super.idris [
     dontCheck
     doJailbreak
-    (appendPatch (fetchpatch {
-      name = "idris-bumps.patch";
-      url = "https://github.com/idris-lang/Idris-dev/compare/c99bc9e4af4ea32d2172f873152b76122ee4ee14...cf78f0fb337d50f4f0dba235b6bbe67030f1ff47.patch";
-      hash = "sha256-RCMIRHIAK1PCm4B7v+5gXNd2buHXIqyAxei4bU8+eCk=";
-    }))
+    (appendPatches (
+      [
+        (fetchpatch {
+          name = "idris-bumps.patch";
+          url = "https://github.com/idris-lang/Idris-dev/compare/c99bc9e4af4ea32d2172f873152b76122ee4ee14...cf78f0fb337d50f4f0dba235b6bbe67030f1ff47.patch";
+          hash = "sha256-RCMIRHIAK1PCm4B7v+5gXNd2buHXIqyAxei4bU8+eCk=";
+        })
+      ]
+      ++ lib.optionals (lib.versionAtLeast self.ghc.version "9.12") [
+        ./patches/idris-Setup-symbolic-paths.patch
+      ]
+    ))
   ];
 
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
