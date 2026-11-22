@@ -29,7 +29,7 @@ let
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  runScript = hostPkgs.callPackage ./run-virtiofsd-qemu {
+  runScript = hostPkgs.callPackage ./run-qemu {
     inherit qemu;
   };
 

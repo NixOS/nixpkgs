@@ -3,11 +3,11 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "run-virtiofsd-qemu"
+name = "run-qemu"
 version = "1.0"
 
 [project.scripts]
-run-virtiofsd-qemu = "run_virtiofsd_qemu:main"
+run-qemu = "run_qemu:main"
 
 [tool.setuptools.packages]
 find = {}
