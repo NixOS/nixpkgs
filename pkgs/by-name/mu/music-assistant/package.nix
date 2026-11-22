@@ -82,14 +82,14 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.10.12";
+  version = "2.10.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-Hk8GFCkmwPZ4oFwSWa28zoHnYsoDrXBAj+2W7OKhuKI=";
+    hash = "sha256-OGAn3uDek22Scq8IFDH7ylceHoIGXHRD6GtKPpdgIVE=";
   };
 
   patches = [
