@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xfr";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lance0";
     repo = "xfr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VjT8vxDaFZthe0TfhYfav9WzxIFjbMqbhILJMokw1rc=";
+    hash = "sha256-Is7hHLxRlyrkQORI7GpwWJzn5kLvg6Yq5eORvjBom30=";
   };
 
-  cargoHash = "sha256-lRmBdW42BuF+IkHsmd1fN1dHhYGuycCW2GuApG2MoeI=";
+  cargoHash = "sha256-EwR6edfCa0BHEwFriyWP5z1dDa5OhcavZ1pc9Mwvvzw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [
     "discovery"
+    "tui"
   ];
 
   checkFlags = [

@@ -261,7 +261,7 @@ def save_to_wayback(url: str) -> str:
     return format_wayback_url(saved_url)
 
 
-def update_darwin(sources: dict) -> bool:
+def update_darwin(sources: dict, *, force: bool = False) -> bool:
     platform = "aarch64-darwin"
     log(f"[{platform}] Fetching update configuration: {UPDATE_CONFIG_URL}")
     macupdate_url = macupdate_package_url(fetch(UPDATE_CONFIG_URL))
@@ -282,9 +282,13 @@ def update_darwin(sources: dict) -> bool:
     log(f"[{platform}] DMG URL: {dmg_url}")
 
     current = sources.get(platform, {})
+    current_hash = current.get("src", {}).get("hash")
     if (
-        current.get("version") == full_version
+        not force
+        and current.get("version") == full_version
         and current.get("src", {}).get("url") == dmg_url
+        and current_hash
+        and current_hash != "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     ):
         log(f"[{platform}] Already up to date.")
         return False
@@ -295,24 +299,31 @@ def update_darwin(sources: dict) -> bool:
         download(dmg_url, tmp_dmg)
         hash_value = hash_file(tmp_dmg)
 
-    sources[platform] = {
+    new_entry = {
         "version": full_version,
         "src": {
             "url": dmg_url,
             "hash": hash_value,
         },
     }
+    if current == new_entry:
+        log(f"[{platform}] Already up to date.")
+        return False
+
+    sources[platform] = new_entry
     log(f"[{platform}] Updated to {full_version} ({hash_value})")
     return True
 
 
-def update_linux(platform: str, sources: dict) -> bool:
+def update_linux(platform: str, sources: dict, *, force: bool = False) -> bool:
     url = LINUX_URLS[platform]
 
     log(f"[{platform}] Checking upstream headers: {url}")
     headers = fetch_head_headers(url)
 
     current = sources.get(platform, {})
+    current_src = current.get("src", {})
+    current_hash = current_src.get("hash")
     current_upstream = current.get("upstream", {})
 
     crc = headers.get("x-cos-hash-crc64ecma")
@@ -327,7 +338,14 @@ def update_linux(platform: str, sources: dict) -> bool:
     else:
         is_unchanged = False
 
-    if current.get("src", {}).get("url") and current.get("version") and is_unchanged:
+    if (
+        not force
+        and current_src.get("url")
+        and current.get("version")
+        and current_hash
+        and current_hash != "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+        and is_unchanged
+    ):
         log(
             f"[{platform}] Upstream binary unchanged (CRC64: {crc}). Already up to date."
         )
@@ -348,9 +366,31 @@ def update_linux(platform: str, sources: dict) -> bool:
         log(f"[{platform}] Computing hash...")
         hash_value = hash_file(package_path)
 
-    log(f"[{platform}] Archiving to Wayback Machine...")
-    archived_url = save_to_wayback(url)
-    log(f"[{platform}] Archived URL: {archived_url}")
+    # Some CDN edges omit x-cos-* HEAD headers; verify content hash before re-archiving
+    # so unchanged binaries keep their existing upstream metadata.
+    if (
+        current.get("version") == version
+        and current_src.get("url")
+        and current_hash == hash_value
+    ):
+        log(
+            f"[{platform}] Upstream binary unchanged (hash: {hash_value}). Already up to date."
+        )
+        return False
+
+    if (
+        current.get("version") == version
+        and current_src.get("url")
+        and (
+            not current_hash
+            or current_hash == "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+        )
+    ):
+        archived_url = current_src["url"]
+    else:
+        log(f"[{platform}] Archiving to Wayback Machine...")
+        archived_url = save_to_wayback(url)
+        log(f"[{platform}] Archived URL: {archived_url}")
 
     sources[platform] = {
         "version": version,
@@ -384,6 +424,12 @@ def main() -> None:
         help="Platforms to update",
     )
     parser.add_argument(
+        "--force",
+        "-f",
+        action="store_true",
+        help="Force re-download and recompute hashes",
+    )
+    parser.add_argument(
         "--sources-json",
         type=Path,
         default=None,
@@ -407,10 +453,10 @@ def main() -> None:
 
     for target in targets:
         if target == "aarch64-darwin":
-            if update_darwin(sources):
+            if update_darwin(sources, force=args.force):
                 changed = True
         else:
-            if update_linux(target, sources):
+            if update_linux(target, sources, force=args.force):
                 changed = True
 
     if changed:
