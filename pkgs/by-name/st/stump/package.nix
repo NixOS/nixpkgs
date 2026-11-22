@@ -123,6 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "stump_server";
     maintainers = with lib.maintainers; [
       jvanbruegge
+      stepbrobd
       tr3foil
     ];
   };
