@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-postgres";
-  version = "1.11.0";
+  version = "1.17.3";
   pyproject = true;
 
   src = fetchFromGitHub {
