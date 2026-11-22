@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   stdenv,
   stdenvNoCC,
   fetchurl,
@@ -53,6 +54,9 @@
   meta,
   ...
 }:
+let
+  notificationFix = callPackage ./notification-fix { };
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname;
   inherit (finalAttrs.passthru.source) version;
@@ -163,7 +167,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeShellWrapper "$out/opt/wechat/wechat" "$out/bin/wechat" \
       "''${gappsWrapperArgs[@]}" \
-      --prefix LD_PRELOAD : "${lib.getLib libredirect}/lib/libredirect.so" \
+      --prefix LD_PRELOAD : "${notificationFix}/lib/libwechat-notification-fix.so:${lib.getLib libredirect}/lib/libredirect.so" \
       --prefix NIX_REDIRECTS : "/usr/bin/lsblk=${lib.getExe' util-linuxMinimal "lsblk"}" \
       --set XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
       --set XLOCALEDIR "${libx11}/share/X11/locale" \
@@ -213,7 +217,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       '
   '';
 
-  passthru = passthru finalAttrs;
+  passthru = passthru finalAttrs // {
+    inherit notificationFix;
+  };
 
   meta = meta finalAttrs;
 })
