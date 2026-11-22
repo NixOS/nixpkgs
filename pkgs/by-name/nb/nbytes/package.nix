@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbytes";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "nbytes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-etCRWjak7tKL6dKlQR7SD6HXx/mn/8gnR4l+CAjoQgA=";
+    hash = "sha256-D0RLpE/UWhqFVy7dR5UOy5O5K6kP5Al0P7NaoP5aIOM=";
   };
 
   nativeBuildInputs = [
