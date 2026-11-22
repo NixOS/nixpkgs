@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqlx-cli";
-  version = "0.9.0";
+  version = "0.9.1";
 
   # Upstream stopped shipping a Cargo.lock starting with the v0.9.0 release
   # https://github.com/transact-rs/sqlx/blob/v0.9.0/CHANGELOG.md#cargolock-removed-from-tracking
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-XariusjsCgn0Qai0XWtr7EzSzDDTp1cCzjff1kJNO9Y=";
+    hash = "sha256-/79FV0dejidwYAErgzJIyAxxdsb923yQEJYoyUsUmXA=";
   };
 
-  cargoHash = "sha256-pHaMKuB9v3fjbgeVyLyRtfoQ9BkE6z+TjDfdBaVdbXM=";
+  cargoHash = "sha256-UBVSIIbcRf6nwgn+iMSOkWBCmS8qgEnDUEo88ALb3MY=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
