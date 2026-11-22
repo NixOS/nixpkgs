@@ -46,7 +46,12 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (gitUpdater { rev-prefix = "v"; }).command
-    (nix-update-script { extraArgs = [ "--version=skip" ]; })
+    (nix-update-script {
+      extraArgs = [
+        "--version=skip"
+        "--no-src"
+      ];
+    })
   ];
 
   postFixup = ''
