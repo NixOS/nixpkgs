@@ -64,10 +64,9 @@ lib.extendMkDerivation {
           inherit tzdata;
         })
         ./remove-tools-1.11.patch
+        ./go-env-go_ldso.patch
       ]
-      ++ patches
-      # Rebuild avoidance
-      ++ [ ./go-env-go_ldso.patch ];
+      ++ patches;
 
       env = {
         # These control the architectures we're building the toolchain itself for in make.bash.
