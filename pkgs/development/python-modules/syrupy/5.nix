@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "syrupy";
-  version = "5.5.3";
+  version = "7.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aFwYJsDviI7j7xeEdtDGy0t4JCLMr/z57Gjl9mQo0SE=";
+    hash = "sha256-R7gxGiaZ+Bii/ut9B02qrDWU81f5i4SvDcyMvcFUDmE=";
   };
 
   build-system = [ hatchling ];
