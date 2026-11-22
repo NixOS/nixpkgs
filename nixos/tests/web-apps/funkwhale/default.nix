@@ -1,7 +1,21 @@
-{ ... }:
+{ pkgs, ... }:
 let
   port = 5000;
   portStr = toString port;
+
+  testTrack = pkgs.runCommand "test-track.mp3" {
+    nativeBuildInputs = [ pkgs.ffmpeg-headless ];
+  } ''
+    ffmpeg -f lavfi -i 'sine=frequency=1000:duration=75' \
+           -f lavfi -i 'testsrc=duration=1:size=500x500:rate=1' \
+           -map 0:a -map 1:v \
+           -c:a libmp3lame -b:a 320k -c:v mjpeg \
+           -metadata title='Test Music' \
+           -metadata artist='Nixpkgs' \
+           -metadata album='Greatest Hits' \
+           -id3v2_version 3 \
+           -y "$out"
+  '';
 in
 {
   name = "funkwhale";
@@ -60,28 +74,45 @@ in
     machine.wait_for_console_text("typesense\\.build_canonical_index.*succeeded")
 
     # Can import and play a track
-    machine.succeed("ffmpeg -f lavfi -i sine=frequency=1000:duration=1 -metadata title=\"test\" -metadata artist=\"test\" -metadata album=\"test\" -c:a libvorbis /tmp/test.ogg")
-    machine.succeed("chown funkwhale:funkwhale /tmp/test.ogg")
-
     machine.succeed(
         "library_uuid=$(funkwhale-manage create_library testinahat --name test_library --privacy-level everyone | grep -oP 'UUID \\K.*') && "
-        "funkwhale-manage import_files $library_uuid /tmp/test.ogg --noinput"
+        "funkwhale-manage import_files $library_uuid ${testTrack} --noinput"
     )
 
-    machine.wait_until_succeeds("funkwhale-manage shell -c 'from funkwhale_api.music.models import Track; assert Track.objects.exists()'")
+    machine.wait_until_succeeds("funkwhale-manage shell -c 'from funkwhale_api.music.models import Track; assert Track.objects.filter(title=\"Test Music\").exists()'")
 
     track_uuid = machine.succeed(
-        "funkwhale-manage shell -c 'from funkwhale_api.music.models import Track; print(\"UUID_MAGIC_\" + str(Track.objects.last().uuid))' | grep -oP 'UUID_MAGIC_\\K.*'"
+        "funkwhale-manage shell -c 'from funkwhale_api.music.models import Track; print(\"UUID_MAGIC_\" + str(Track.objects.get(title=\"Test Music\").uuid))' | grep -oP 'UUID_MAGIC_\\K.*'"
     ).strip()
 
+    # Verify ID3 cover art was extracted and is served by Nginx
+    cover_path = machine.succeed(
+        "funkwhale-manage shell -c 'import urllib.parse; from funkwhale_api.music.models import Track; print(\"COVER_MAGIC_\" + urllib.parse.urlsplit(Track.objects.get(title=\"Test Music\").album.attachment_cover.file.url).path)' | grep -oP 'COVER_MAGIC_\\K.*'"
+    ).strip()
+    machine.succeed(f"curl -s -f -I -H 'Host: localhost:${portStr}' http://localhost{cover_path} | grep -i 'image/jpeg'")
+
+    # Create OAuth application and token to test authenticated playback
+    token = machine.succeed(
+        "funkwhale-manage shell -c '"
+        "from datetime import timedelta; "
+        "from django.utils import timezone; "
+        "from funkwhale_api.users.models import User, AccessToken, Application; "
+        "user = User.objects.get(username=\"testinahat\"); "
+        "app = Application.objects.create(name=\"test\", client_type=\"confidential\", authorization_grant_type=\"password\", user=user, scope=\"read:libraries\"); "
+        "token = AccessToken.objects.create(user=user, application=app, token=\"test_token_12345\", expires=timezone.now() + timedelta(days=1), scope=\"read:libraries\"); "
+        "print(\"TOKEN_MAGIC_\" + token.token)"
+        "' | grep -oP 'TOKEN_MAGIC_\\K.*'"
+    ).strip()
+
+    # Stream track with Bearer token authentication and on-the-fly transcoding
     machine.succeed(
-        f"curl -s -f -L -b /tmp/cookies.txt -H 'Host: localhost:${portStr}' http://localhost/api/v2/listen/{track_uuid}/ --output /tmp/downloaded.ogg"
+        f"curl -s -f -H 'Authorization: Bearer {token}' -H 'Host: localhost:${portStr}' http://localhost/api/v2/listen/{track_uuid}/?to=mp3 --output /tmp/downloaded.mp3"
     )
 
-    out = machine.succeed("ls -l /tmp/downloaded.ogg && file /tmp/downloaded.ogg && head -c 20 /tmp/downloaded.ogg")
+    out = machine.succeed("ls -lh /tmp/downloaded.mp3 && file /tmp/downloaded.mp3")
     machine.log(f"DOWNLOADED FILE INFO: {out}")
 
-    machine.succeed("file /tmp/downloaded.ogg | grep -i 'Ogg data'")
+    machine.succeed("file /tmp/downloaded.mp3 | grep -i 'Audio file with ID3'")
   '';
 
   # Debug interactively with:
@@ -101,6 +132,9 @@ in
           guest.port = 80;
         }
       ];
+
+      # Give some disk size for uploads.
+      virtualisation.diskSize = 4096;
 
       # forwarded ports need to be accessible
       networking.firewall.allowedTCPPorts = [ 80 ];
