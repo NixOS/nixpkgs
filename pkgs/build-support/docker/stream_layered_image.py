@@ -67,6 +67,10 @@ def archive_paths_to(obj, paths, mtime, uid, gid, uname, gname):
         ti.gid = gid
         ti.uname = uname
         ti.gname = gname
+        # normalize symlinks to mode 0777 like Linux
+        # regardless of the system where layer was constructed
+        if ti.issym():
+            ti.mode = 0o777
         return ti
 
     def nix_root(ti):
