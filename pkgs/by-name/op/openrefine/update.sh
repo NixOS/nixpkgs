@@ -3,8 +3,7 @@
 
 set -euxo pipefail
 
-nix-update "${UPDATE_NIX_ATTR_PATH}"
-nix-update "${UPDATE_NIX_ATTR_PATH}.npmPkg" --version=skip
+nix-update "${UPDATE_NIX_ATTR_PATH}" --subpackage npmPkg
 
 FILE="$(nix-instantiate --eval -E 'with import ./. {}; (builtins.unsafeGetAttrPos "version" '"${UPDATE_NIX_ATTR_PATH}"').file' | tr -d '"')"
 
