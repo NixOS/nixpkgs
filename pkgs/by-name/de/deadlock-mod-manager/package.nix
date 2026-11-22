@@ -319,7 +319,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           --subpackage cargo-tauri-cef \
           "$attr"
 
-        nix-update --version=skip "$attr-cef"
+        nix-update --version=skip --no-src "$attr-cef"
       '';
     });
   };
