@@ -82,6 +82,10 @@ rustPlatform.buildRustPackage rec {
   # Orphan soloist process never appears in the Nix sandbox; upstream CI runs it outside Nix.
   checkFlags = [
     "--skip=soloist::tests::reclaims_a_leftover_soloist_from_this_installation"
+  ]
+  # The child process outlives its killed parent in the Darwin sandbox.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=soloist::owned::tests::a_child_dies_with_its_killed_parent"
   ];
 
   buildInputs =
