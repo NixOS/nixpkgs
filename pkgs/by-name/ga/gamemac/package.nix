@@ -8,12 +8,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gamemac";
-  version = "0.8.328";
+  version = "0.8.613";
 
   src = fetchurl {
     name = "GameHub_en_${finalAttrs.version}.dmg";
-    url = "https://gamehub-cdn.masnet.cn/uploads/upgrade/20260618/b616a96780c249a789d95f7b897333cb.dmg";
-    hash = "sha256-uo/kr9PAFREfbkXX9hpJJNT6OZDv3jnOuZgc2fwtSyM=";
+    url = "https://gamehub-cdn.masnet.cn/uploads/upgrade/20260921/4627fea6e1294a11951abf805754b28a.dmg";
+    hash = "sha256-STawGSPxfFnnFEhT+XN/ehC8uSZ9LyVyJ8SW43Oh8oo=";
   };
 
   strictDeps = true;
