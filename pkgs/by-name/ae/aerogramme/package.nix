@@ -30,6 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "https://git.deuxfleurs.fr/Deuxfleurs/garage.git" "https://github.com/deuxfleurs-org/garage.git"
   '';
 
+  patches = [
+    # remove once https://git.deuxfleurs.fr/Deuxfleurs/aerogramme/pulls/211 is available
+    # not using fetchpatch because git.deuxfleurs.fr frequently times out.
+    ./fix-unselect-test-race.patch
+  ];
+
   cargoHash = "sha256-oJS/OCDcjW9eLprr43uQByNv/p8z3Dh+D2ItgazP74g=";
 
   nativeBuildInputs = [ pkg-config ];
