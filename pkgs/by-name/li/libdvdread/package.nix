@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libdvdcss ];
 
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonEnable "libdvdcss" true)
   ];
@@ -32,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ln -s dvdread $out/include/libdvdread
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";
