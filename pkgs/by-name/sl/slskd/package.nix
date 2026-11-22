@@ -28,6 +28,12 @@ buildDotnetModule rec {
     hash = "sha256-B0LAd9Fn1E5heGPk5dd7DoHWreHRxe42Xew5PmLId7g=";
   };
 
+  postPatch = ''
+    substituteInPlace src/slskd/slskd.csproj \
+      --replace-fail '</Project>' \
+      '<ItemGroup><RuntimeHostConfigurationOption Include="System.Threading.Mutex.UnsafeDefaultMutexScopeGlobal" Value="true"/></ItemGroup></Project>'
+  '';
+
   nativeBuildInputs = [
     nodejs
     npmHooks.npmConfigHook

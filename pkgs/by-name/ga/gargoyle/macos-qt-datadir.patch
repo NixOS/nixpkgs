@@ -1,0 +1,44 @@
+From a1b2c4b479ae545d857404197d2797b6ac7427ec Mon Sep 17 00:00:00 2001
+From: Rafael Ieda <git@ieda.me>
+Date: Sat, 21 Nov 2026 09:46:11 -0300
+Subject: [PATCH] macOS: Tell Qt builds outside the app bundle where data files
+ are
+
+---
+ garglk/CMakeLists.txt | 4 ++++
+ garglk/sysqt.cpp      | 4 +++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/garglk/CMakeLists.txt b/garglk/CMakeLists.txt
+index 5682cecc..5eb98615 100644
+--- a/garglk/CMakeLists.txt
++++ b/garglk/CMakeLists.txt
+@@ -135,6 +135,10 @@ warnings(garglk-common)
+ if(UNIX AND NOT APPLE)
+     target_compile_definitions(garglk-common PRIVATE "GARGLKINI=\"${GARGLKINI}\"")
+     target_compile_definitions(garglk-common PRIVATE "GARGLK_CONFIG_DATADIR=\"${CMAKE_INSTALL_FULL_DATAROOTDIR}/gargoyle\"")
++elseif(APPLE AND NOT DIST_INSTALL)
++    # Outside of the app bundle, fonts and themes are installed here (see
++    # below), so Qt builds have to be told where to find them.
++    target_compile_definitions(garglk-common PRIVATE "GARGLK_CONFIG_DATADIR=\"${CMAKE_INSTALL_FULL_DATAROOTDIR}/gargoyle\"")
+ endif()
+ 
+ if(DEFAULT_SOUNDFONT)
+diff --git a/garglk/sysqt.cpp b/garglk/sysqt.cpp
+index 0c52bbb2..3e096bd0 100644
+--- a/garglk/sysqt.cpp
++++ b/garglk/sysqt.cpp
+@@ -1000,7 +1000,9 @@ std::vector<std::string> garglk::winthemedirs()
+     paths.push_back(QCoreApplication::applicationDirPath().toStdString() + "/themes");
+ #endif
+ 
+-#if GARGLK_CONFIG_APPIMAGE
++#if GARGLK_CONFIG_APPIMAGE || defined(__APPLE__)
++    // QStandardPaths doesn't know about these locations: AppImages keep
++    // their data next to the binary, and on macOS it ignores XDG_DATA_DIRS.
+     paths.push_back(Format("{}/themes", garglk::windatadir()));
+ #endif
+ 
+-- 
+2.56.0
+
