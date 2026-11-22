@@ -5,6 +5,7 @@ import os
 import signal
 import subprocess
 from contextlib import AsyncExitStack, asynccontextmanager
+from dataclasses import dataclass
 from os import environ
 from pathlib import Path
 from sys import exit, platform
@@ -93,7 +94,14 @@ async def assert_accelerator_available():
         )
 
 
-def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str], bool]:
+@dataclass
+class Settings:
+    virtiofsds: list[tuple[str, Path, str, str]]
+    qemu_args: list[str]
+    force_accel: bool
+
+
+def extract_arguments() -> Settings:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--virtiofs-paths",
@@ -130,17 +138,21 @@ def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str], bo
             )
         defs.append((inner[0], Path(inner[1]), inner[2], inner[3]))
 
-    return defs, qemu_args, args.force_accel
+    return Settings(
+        virtiofsds=defs,
+        qemu_args=qemu_args,
+        force_accel=args.force_accel,
+    )
 
 
 async def amain():
     logging.basicConfig(format="%(levelname)s: %(funcName)s: %(message)s")
-    args, qemu_args, force_accel = extract_arguments()
+    settings = extract_arguments()
 
-    if force_accel:
+    if settings.force_accel:
         await assert_accelerator_available()
 
-    if args:
+    if settings.virtiofsds:
         if platform != "linux":
             fatal_error(
                 "virtiofsd is only supported on Linux! Use 9pfs with this wrapper on other platforms!"
@@ -155,11 +167,13 @@ async def amain():
         await asyncio.gather(
             *(
                 virtiofsds.enter_async_context(virtiofsd(virtiofs_dir, *defin))
-                for defin in args
+                for defin in settings.virtiofsds
             )
         )
 
-        proc = await asyncio.create_subprocess_exec(*qemu_args, close_fds=False)
+        proc = await asyncio.create_subprocess_exec(
+            *settings.qemu_args, close_fds=False
+        )
         loop = asyncio.get_running_loop()
         loop.add_signal_handler(signal.SIGTERM, lambda: proc.terminate())
         loop.add_signal_handler(signal.SIGINT, lambda: proc.terminate())
