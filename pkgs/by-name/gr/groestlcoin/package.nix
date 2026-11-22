@@ -8,14 +8,14 @@
   installShellFiles,
   darwin,
   boost,
+  capnproto,
   libevent,
   zeromq,
   zlib,
-  db53,
   sqlite,
   qrencode,
   libsystemtap,
-  qt5,
+  qt6,
   python3,
   versionCheckHook,
   withGui ? true,
@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "groestlcoin" else "groestlcoind";
-  version = "29.0";
+  version = "32.1";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${finalAttrs.version}";
-    sha256 = "17b83jch717d91srw1yc93p8ndl894ld9gx916wyy6jis07px6xh";
+    hash = "sha256-JShhamgEc1p4JXD94BGmpqBm2s5LGr8b+P+/u6dS6jU=";
   };
 
   nativeBuildInputs = [
@@ -48,23 +48,21 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ]
-  ++ lib.optionals withGui [ qt5.wrapQtAppsHook ];
+  ++ lib.optionals withGui [ qt6.wrapQtAppsHook ];
 
   buildInputs = [
     boost
+    capnproto
     libevent
     zeromq
     zlib
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libsystemtap ]
-  ++ lib.optionals withWallet [
-    db53
-    sqlite
-  ]
+  ++ lib.optionals withWallet [ sqlite ]
   ++ lib.optionals withGui [
     qrencode
-    qt5.qtbase
-    qt5.qttools
+    qt6.qtbase
+    qt6.qttools
   ];
 
   postInstall = ''
@@ -105,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Groestlcoin's GUI.
   # See also https://github.com/NixOS/nixpkgs/issues/24256
-  ++ lib.optional withGui "QT_PLUGIN_PATH=${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}";
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 
@@ -128,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://groestlcoin.org/";
     downloadPage = "https://github.com/Groestlcoin/groestlcoin/releases/tag/v${finalAttrs.version}/";
-    changelog = "https://github.com/Groestlcoin/groestlcoin/blob/${finalAttrs.version}.0/doc/release-notes/release-notes-${finalAttrs.version}.0.md";
+    changelog = "https://github.com/Groestlcoin/groestlcoin/blob/v${finalAttrs.version}/doc/release-notes/release-notes-${finalAttrs.version}.0.md";
     maintainers = with lib.maintainers; [ gruve-p ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
