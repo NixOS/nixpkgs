@@ -5,52 +5,70 @@
   fetchFromGitHub,
   gitMinimal,
   graphviz-nox,
-  meson,
+  hatch-fancy-pypi-readme,
   meson-python,
-  nab,
+  meson,
   nab-index,
   nab-project,
+  nab,
   ninja,
+  patchelf,
+  pytest-mock,
   pytestCheckHook,
+  python-sbom,
   rustc,
   rustPlatform,
+  scikit-build-core,
+  setuptools-scm,
+  stdenvNoCC,
   versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pipdeptree";
-  version = "4.2.9";
+  version = "4.2.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = finalAttrs.version;
-    hash = "sha256-PHuwLe0ITPWaA06SYC7tZ1jcbPEMCIMCfAEUWsET5Fc=";
+    hash = "sha256-kneg+woQFZt1wqTvF/DEqd7OXLZ5vUk2QA0MXUKolEI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-5EqZBM+Gv47cCrwbl6oPNgP43zNcsvrtRnEVFu/WbRk=";
+    hash = "sha256-iLeSUqvGf0MsrpQOV52p3uqN9TlW0g71LIxBEqEU8zg=";
   };
 
+  # We remove patchelf from the pyproject.toml because we don't package the
+  # python package (which just contains the executable).
+  # We provide the executable in nativeBuildInputs below.
   postPatch = ''
     patchShebangs tools
 
     substituteInPlace pyproject.toml \
-      --replace-fail "meson-python>=0.22.1" meson-python
+      --replace-fail "meson-python>=0.22.1" "meson-python" \
+      --replace-fail "\"patchelf>=0.11; sys_platform=='linux'\"," ""
   '';
 
   nativeBuildInputs = [
     cargo
     rustc
     rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    patchelf
   ];
 
   build-system = [
+    hatch-fancy-pypi-readme
     meson
     meson-python
     ninja
+    python-sbom
+    scikit-build-core
+    setuptools-scm
   ];
 
   dontUseMesonConfigure = true;
@@ -66,6 +84,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     gitMinimal
     graphviz-nox
+    pytest-mock
     pytestCheckHook
     versionCheckHook
   ];
