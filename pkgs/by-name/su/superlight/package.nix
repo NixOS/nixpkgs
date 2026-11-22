@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "superlight";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "superlight";
     tag = finalAttrs.version;
-    hash = "sha256-ecgAgUNbbS9vCdhd9SdM09TFHXPzHU6Jiou5xItw3tw=";
+    hash = "sha256-9rxAHAGynERQnXyG75vaRRNCGBlwhrbwDMLvLDM2GMc=";
   };
 
   strictDeps = true;
