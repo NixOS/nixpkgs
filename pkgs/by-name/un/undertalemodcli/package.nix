@@ -29,12 +29,6 @@ buildDotnetModule rec {
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LC_ALL = "en_US.UTF-8"; };
   # vstest talks to its test host over a loopback socket
   __darwinAllowLocalNetworking = true;
-  # __darwinAllowLocalNetworking does not cover IPv4-mapped IPv6 addresses
-  # See: https://github.com/NixOS/nix/pull/11270#issuecomment-3936740134
-  dotnetTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--environment"
-    "DOTNET_SYSTEM_NET_DISABLEIPV6=1"
-  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
