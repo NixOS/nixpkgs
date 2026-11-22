@@ -29,6 +29,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/exeldro/obs-move-transition";
     maintainers = with lib.maintainers; [ starcraft66 ];
     license = lib.licenses.gpl2Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }

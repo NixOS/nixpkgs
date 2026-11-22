@@ -35,6 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/exeldro/obs-transition-table";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }

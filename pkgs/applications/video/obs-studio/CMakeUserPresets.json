@@ -11,6 +11,7 @@
       "name": "nixpkgs-darwin",
       "displayName": "Nixpkgs (Darwin)",
       "inherits": ["macos"],
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/build"
     }
   ]

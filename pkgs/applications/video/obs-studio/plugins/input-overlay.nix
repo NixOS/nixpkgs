@@ -74,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/univrsal/input-overlay";
     maintainers = with lib.maintainers; [ glittershark ];
     license = lib.licenses.gpl2;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 })

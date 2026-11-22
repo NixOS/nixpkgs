@@ -55,6 +55,6 @@ buildGoModule rec {
     homepage = "https://github.com/fzwoch/obs-teleport";
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
-    platforms = obs-studio.meta.platforms;
+    platforms = lib.platforms.linux;
   };
 }

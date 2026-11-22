@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
       pedrohlc
     ];
     license = lib.licenses.gpl2Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }
