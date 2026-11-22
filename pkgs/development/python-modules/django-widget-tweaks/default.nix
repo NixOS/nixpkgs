@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";
-  version = "1.5.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-commons";
     repo = "django-widget-tweaks";
     tag = version;
-    hash = "sha256-ymjBuNGfndUwQdBU2xnc9CA51oOaEPA+RaAspJMKQ04=";
+    hash = "sha256-lPWUSnp33KUFtmKDA4NucZw+DotUcZMa7V63krhyRBA=";
   };
 
   build-system = [ setuptools-scm ];
