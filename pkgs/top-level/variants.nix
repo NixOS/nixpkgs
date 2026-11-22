@@ -88,6 +88,16 @@ self: super: {
       cudaSupport = false;
       rocmSupport = true;
     };
+    localSystem = stdenv.buildPlatform // {
+      gpu = stdenv.buildPlatform.gpu // {
+        cuda = null;
+      };
+    };
+    crossSystem = stdenv.hostPlatform // {
+      gpu = stdenv.hostPlatform.gpu // {
+        cuda = null;
+      };
+    };
   };
 
   # Full package set with cuda on rocm off
@@ -96,6 +106,16 @@ self: super: {
     config = super.config // {
       cudaSupport = true;
       rocmSupport = false;
+    };
+    localSystem = stdenv.buildPlatform // {
+      gpu = stdenv.buildPlatform.gpu // {
+        rocm = null;
+      };
+    };
+    crossSystem = stdenv.hostPlatform // {
+      gpu = stdenv.hostPlatform.gpu // {
+        rocm = null;
+      };
     };
   };
 
@@ -115,6 +135,18 @@ self: super: {
           # Users can choose to build for family-specific feature sets if they wish.
           cudaForwardCompat = false;
           cudaCapabilities = [ cudaCapability ];
+        };
+        localSystem = stdenv.buildPlatform // {
+          gpu = stdenv.buildPlatform.gpu // {
+            cuda.capabilities = [ cudaCapability ];
+            rocm = null;
+          };
+        };
+        crossSystem = stdenv.hostPlatform // {
+          gpu = stdenv.hostPlatform.gpu // {
+            cuda.capabilities = [ cudaCapability ];
+            rocm = null;
+          };
         };
       };
     }) (lib.attrNames self._cuda.db.cudaCapabilityToInfo)

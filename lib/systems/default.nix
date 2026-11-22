@@ -101,6 +101,8 @@ let
       # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
       rust = args.rust or args.rustc or { };
 
+      gpu = args.gpu or { };
+
       selectEmulator =
         pkgs:
         let
@@ -442,6 +444,34 @@ let
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args
       // {
+        gpu = gpu // {
+          cuda =
+            if gpu ? cuda && gpu.cuda != null then
+              {
+                # CUDA compute capability: https://developer.nvidia.com/cuda/gpus
+                capabilities = [ ];
+              }
+              // gpu.cuda
+            else
+              null;
+          rocm =
+            if gpu ? rocm && gpu.rocm != null then
+              {
+                # https://rocm.docs.amd.com/projects/AMDMIGraphX/en/latest/dev/targets.html
+                targets = [ ];
+              }
+              // gpu.rocm
+            else
+              null;
+          levelZero = if gpu ? levelZero && gpu.levelZero != null then { } else null;
+          metal = if (gpu ? metal && gpu.metal != null) || final.isDarwin then { } else null;
+
+          hasCuda = final.gpu.cuda != null;
+          hasRocm = final.gpu.rocm != null;
+          hasLevelZero = final.gpu.levelZero != null;
+          hasMetal = final.gpu.metal != null;
+        };
+
         rust = rust // {
           platform =
             rust.platform or (
