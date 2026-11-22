@@ -426,6 +426,8 @@ self: super: with self; {
 
   aiolibrenms = callPackage ../development/python-modules/aiolibrenms { };
 
+  aiolibresync = callPackage ../development/python-modules/aiolibresync { };
+
   aiolichess = callPackage ../development/python-modules/aiolichess { };
 
   aiolifx = callPackage ../development/python-modules/aiolifx { };
