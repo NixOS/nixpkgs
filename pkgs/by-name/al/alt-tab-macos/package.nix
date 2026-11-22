@@ -380,6 +380,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
       cc-by-40 # ShortcutRecorder
     ];
+    mainDarwinApp = "AltTab.app";
     mainProgram = "alt-tab";
     maintainers = with lib.maintainers; [
       _4evy
