@@ -17,6 +17,18 @@ let
       pyPkgs.gunicorn
     ]
   );
+
+  hostName = lib.head (lib.splitString ":" (cfg.settings.FUNKWHALE_HOSTNAME or ""));
+  vHost = config.services.nginx.virtualHosts.${hostName} or null;
+  sslEnabled =
+    cfg.configureNginx
+    && vHost != null
+    && (
+      vHost.forceSSL or false
+      || vHost.onlySSL or false
+      || vHost.addSSL or false
+      || vHost.enableACME or false
+    );
 in
 {
   options.services.funkwhale = {
@@ -197,12 +209,14 @@ in
       (lib.mkIf cfg.configureNginx {
         REVERSE_PROXY_TYPE = "nginx";
         NGINX_MAX_BODY_SIZE = lib.mkDefault "100M";
+        FUNKWHALE_PROTOCOL = lib.mkDefault (if sslEnabled then "https" else "http");
       })
     ];
 
     users = {
       users.${user} = {
         isSystemUser = true;
+        home = "/var/lib/funkwhale";
         inherit group;
       };
       groups.${group} = { };
@@ -210,15 +224,11 @@ in
 
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "funkwhale-manage" ''
-        if [[ ! "$USER" == "${user}" ]]; then
-          echo "This has to be run with the \`${user}\` user. Ex: \`sudo -u ${user} funkwhale-manage\`"
-          exit 1
+        if [[ "$USER" != "${user}" ]]; then
+          exec /run/wrappers/bin/sudo -u ${user} "$0" "$@"
         fi
 
-        # `troi.utils.discover_patches()` will error, because it looks for patches
-        # in the current directory.
-        stat . &> /dev/null || echo -e \
-          "WARNING: funkwhale-manage should be run from a directory the ${user} user has read access to.\n"
+        cd /var/lib/funkwhale
 
         # Set `cfg.settings` environment variables.
         ${lib.concatMapAttrsStringSep "\n" (
@@ -286,11 +296,10 @@ in
         (
           _: unitAttrs:
           lib.recursiveUpdate {
-            after = [
-              "typesense.service"
-            ]
-            ++ lib.optionals cfg.createDatabaseLocally [ "postgresql.service" ]
-            ++ lib.optionals cfg.createRedisLocally [ "redis-funkwhale.service" ];
+            after =
+              lib.optional config.services.typesense.enable "typesense.service"
+              ++ lib.optionals cfg.createDatabaseLocally [ "postgresql.service" ]
+              ++ lib.optionals cfg.createRedisLocally [ "redis-funkwhale.service" ];
 
             partOf = [ "funkwhale.target" ];
 
@@ -303,9 +312,10 @@ in
               StateDirectory = "funkwhale";
               RuntimeDirectory = "funkwhale";
 
-              EnvironmentFile = (lib.optional (cfg.secretEnvironmentFile != null) cfg.secretEnvironmentFile) ++ [
+              EnvironmentFile = [
                 "-/var/lib/funkwhale/config/django_secret_key.env"
-              ];
+              ]
+              ++ (lib.optional (cfg.secretEnvironmentFile != null) cfg.secretEnvironmentFile);
             };
           } unitAttrs
         )
@@ -323,17 +333,16 @@ in
             script = ''
               if [[ ! -v DJANGO_SECRET_KEY ]]; then
                 echo "No \`DJANGO_SECRET_KEY\` found, auto-generating one."
-                ${pythonEnv.interpreter} -c \
-                  "from django.core.management.utils import get_random_secret_key; \
-                  print(f'DJANGO_SECRET_KEY=\"{get_random_secret_key()}\"')" \
-                  > $STATE_DIRECTORY/config/django_secret_key.env
-                export DJANGO_SECRET_KEY="$(cat $STATE_DIRECTORY/config/django_secret_key.env)"
+                key=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c64)
+                printf 'DJANGO_SECRET_KEY=%s\n' "$key" > $STATE_DIRECTORY/config/django_secret_key.env
+                export DJANGO_SECRET_KEY="$key"
               fi
 
               ${lib.getExe cfg.package} migrate
             '';
             serviceConfig = {
               Type = "oneshot";
+              RemainAfterExit = true;
             };
           };
 
@@ -341,7 +350,7 @@ in
             description = "Funkwhale application server";
 
             serviceConfig = {
-              type = "notify";
+              Type = "notify";
               KillMode = "mixed";
               ExecStart = ''
                 ${lib.getExe' pythonEnv "gunicorn"} \
@@ -413,139 +422,122 @@ in
         "${cfg.settings.FUNKWHALE_API_IP}:${cfg.settings.FUNKWHALE_API_PORT}" = { };
       };
 
-      virtualHosts."${lib.head (lib.splitString ":" cfg.settings.FUNKWHALE_HOSTNAME)}" = {
-        root = cfg.package.frontend;
-        extraConfig = ''
-          add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self' 'unsafe-eval'; script-src 'self' 'wasm-unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; media-src https: http: 'self' data:; object-src 'none'";
-          add_header Referrer-Policy "strict-origin-when-cross-origin";
-          add_header X-Frame-Options "SAMEORIGIN" always;
-          add_header Service-Worker-Allowed "/";
-        '';
-
-        locations = {
-          "/api/" = {
-            recommendedProxySettings = true;
-            proxyWebsockets = true;
-            extraConfig = ''
-              client_max_body_size ${cfg.settings.NGINX_MAX_BODY_SIZE};
-            '';
-            proxyPass = "http://funkwhale-api";
-          };
-
-          "~ ^/library/(albums|tracks|artists|playlists)/" = {
+      virtualHosts.${hostName} =
+        let
+          proxyApi = {
             recommendedProxySettings = true;
             proxyWebsockets = true;
             proxyPass = "http://funkwhale-api";
           };
+        in
+        {
+          root = cfg.package.frontend;
+          extraConfig = ''
+            add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self' 'unsafe-eval'; script-src 'self' 'wasm-unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; media-src https: http: 'self' data:; object-src 'none'";
+            add_header Referrer-Policy "strict-origin-when-cross-origin";
+            add_header X-Frame-Options "SAMEORIGIN" always;
+            add_header Service-Worker-Allowed "/";
+          '';
 
-          "/channels/" = {
-            recommendedProxySettings = true;
-            proxyWebsockets = true;
-            proxyPass = "http://funkwhale-api";
-          };
+          locations = {
+            "/api/" = proxyApi // {
+              extraConfig = ''
+                client_max_body_size ${cfg.settings.NGINX_MAX_BODY_SIZE};
+              '';
+            };
 
-          "~ ^/@(vite-plugin-pwa|vite|id)/" = {
-            recommendedProxySettings = true;
-            proxyWebsockets = true;
-            alias = "${cfg.package.frontend}/";
-            tryFiles = "$uri $uri/ /index.html";
-          };
+            "~ ^/library/(albums|tracks|artists|playlists)/" = proxyApi;
 
-          "/@" = {
-            recommendedProxySettings = true;
-            proxyWebsockets = true;
-            proxyPass = "http://funkwhale-api";
-          };
+            "/channels/" = proxyApi;
 
-          "/" = {
-            recommendedProxySettings = true;
-            proxyWebsockets = true;
-            alias = "${cfg.package.frontend}/";
-            tryFiles = "$uri $uri/ /index.html";
-            extraConfig = ''
-              expires 1d;
-            '';
-          };
+            "~ ^/@(vite-plugin-pwa|vite|id)/" = {
+              recommendedProxySettings = true;
+              proxyWebsockets = true;
+              alias = "${cfg.package.frontend}/";
+              tryFiles = "$uri $uri/ /index.html";
+            };
 
-          "~ \"/(front/)?embed.html\"" = {
-            alias = "${cfg.package.frontend}/embed.html";
-            extraConfig = ''
-              add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";
-              add_header Referrer-Policy "strict-origin-when-cross-origin";
+            "/@" = proxyApi;
 
-              expires 1d;
-            '';
-          };
+            "/" = {
+              recommendedProxySettings = true;
+              proxyWebsockets = true;
+              alias = "${cfg.package.frontend}/";
+              tryFiles = "$uri $uri/ /index.html";
+              extraConfig = ''
+                expires 1d;
+              '';
+            };
 
-          "/federation/" = {
-            recommendedProxySettings = true;
-            proxyWebsockets = true;
-            proxyPass = "http://funkwhale-api";
-          };
+            "~ \"/(front/)?embed.html\"" = {
+              alias = "${cfg.package.frontend}/embed.html";
+              extraConfig = ''
+                add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";
+                add_header Referrer-Policy "strict-origin-when-cross-origin";
 
-          "/rest/" = {
-            recommendedProxySettings = true;
-            proxyWebsockets = true;
-            proxyPass = "http://funkwhale-api/api/subsonic/rest/";
-          };
+                expires 1d;
+              '';
+            };
 
-          "/.well-known/" = {
-            recommendedProxySettings = true;
-            proxyWebsockets = true;
-            proxyPass = "http://funkwhale-api";
-          };
+            "/federation/" = proxyApi;
 
-          # Allow direct access to only specific subdirectories in `/media`.
-          "/media/__sized__/" = {
-            alias = "${cfg.settings.MEDIA_ROOT}/__sized__/";
-            extraConfig = ''
-              add_header Access-Control-Allow-Origin '*';
-            '';
-          };
-          "/media/attachments/" = {
-            alias = "${cfg.settings.MEDIA_ROOT}/attachments/";
-            extraConfig = ''
-              add_header Access-Control-Allow-Origin '*';
-            '';
-          };
-          "/media/dynamic_preferences/" = {
-            alias = "${cfg.settings.MEDIA_ROOT}/dynamic_preferences/";
-            extraConfig = ''
-              add_header Access-Control-Allow-Origin '*';
-            '';
-          };
+            "/rest/" = proxyApi // {
+              proxyPass = "http://funkwhale-api/api/subsonic/rest/";
+            };
 
-          # This is an internal location that is used to serve media (uploaded) files
-          # once correct permission / authentication has been checked on API side.
-          "~ /_protected/media/(.+)" = {
-            alias = "${cfg.settings.MEDIA_ROOT}/$1";
-            extraConfig = ''
-              internal;
-              add_header Access-Control-Allow-Origin '*';
-            '';
-          };
+            "/.well-known/" = proxyApi;
 
-          # This is an internal location that is used to serve media (uploaded) files
-          # once correct permission / authentication has been checked on API side.
-          "/_protected/music/" = {
-            alias = "${cfg.settings.MUSIC_DIRECTORY_PATH}/";
-            extraConfig = ''
-              internal;
-              add_header Access-Control-Allow-Origin '*';
-            '';
-          };
+            # Allow direct access to only specific subdirectories in `/media`.
+            "/media/__sized__/" = {
+              alias = "${cfg.settings.MEDIA_ROOT}/__sized__/";
+              extraConfig = ''
+                add_header Access-Control-Allow-Origin '*';
+              '';
+            };
+            "/media/attachments/" = {
+              alias = "${cfg.settings.MEDIA_ROOT}/attachments/";
+              extraConfig = ''
+                add_header Access-Control-Allow-Origin '*';
+              '';
+            };
+            "/media/dynamic_preferences/" = {
+              alias = "${cfg.settings.MEDIA_ROOT}/dynamic_preferences/";
+              extraConfig = ''
+                add_header Access-Control-Allow-Origin '*';
+              '';
+            };
 
-          "/manifest.json" = {
-            # If the reverse proxy is terminating SSL, nginx gets confused and redirects
-            # to http, hence the full URL.
-            return = "302 ${cfg.settings.FUNKWHALE_PROTOCOL}://${cfg.settings.FUNKWHALE_HOSTNAME}/api/v2/instance/spa-manifest.json";
-          };
+            # This is an internal location that is used to serve media (uploaded) files
+            # once correct permission / authentication has been checked on API side.
+            "~ /_protected/media/(.+)" = {
+              alias = "${cfg.settings.MEDIA_ROOT}/$1";
+              extraConfig = ''
+                internal;
+                add_header Access-Control-Allow-Origin '*';
+              '';
+            };
 
-          "/staticfiles/" = {
-            alias = "${cfg.package.static}/";
+            # This is an internal location that is used to serve media (uploaded) files
+            # once correct permission / authentication has been checked on API side.
+            "/_protected/music/" = {
+              alias = "${cfg.settings.MUSIC_DIRECTORY_PATH}/";
+              extraConfig = ''
+                internal;
+                add_header Access-Control-Allow-Origin '*';
+              '';
+            };
+
+            "/manifest.json" = {
+              # If the reverse proxy is terminating SSL, nginx gets confused and redirects
+              # to http, hence the full URL.
+              return = "302 ${cfg.settings.FUNKWHALE_PROTOCOL}://${cfg.settings.FUNKWHALE_HOSTNAME}/api/v2/instance/spa-manifest.json";
+            };
+
+            "/staticfiles/" = {
+              alias = "${cfg.package.static}/";
+            };
           };
         };
-      };
     };
   };
 
