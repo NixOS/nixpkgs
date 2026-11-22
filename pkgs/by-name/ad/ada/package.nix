@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ada";
-  version = "4.0.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "ada-url";
     repo = "ada";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TvjoLUKO2+YgS1mlyglLb+rBLTO/SWSBVA2S34Z6kMI=";
+    hash = "sha256-Rwn8bKG6PEVUMCj0Oz6/BGFRH25IoyGf1iMWvGXm4r4=";
   };
 
   outputs = [
