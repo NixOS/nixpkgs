@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-embeddings-openai";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_openai";
     inherit (finalAttrs) version;
-    hash = "sha256-6z5mBr6By4kSUHPiPJfAphGdq7SCetvRRpfCAprXPyk=";
+    hash = "sha256-dSFUhBUFy+Nfq/yQ6uJwP1QbtnKk4U4oK5LA1YZz0q0=";
   };
 
   build-system = [ hatchling ];
