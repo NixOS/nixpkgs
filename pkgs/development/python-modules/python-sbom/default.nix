@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-sbom";
-  version = "0.3.1";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "python-sbom";
     tag = finalAttrs.version;
-    hash = "sha256-3PISPLGVcaJmCuUh/kxZTqS3kmYqWmYFqS+96LhxhJA=";
+    hash = "sha256-+Hm571vb/5aiSO6DGw/veL8ipW20m3oBTflETaL3vik=";
   };
 
   postPatch = ''
