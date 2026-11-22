@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   karton-core,
   unittestCheckHook,
   yara-python,
@@ -18,6 +19,18 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-URGW8FyJZ3ktrwolls5ElSWn8FD6vWCA+Eu0aGtPh6U=";
   };
+
+  patches = [
+    # Modernize to karton v6.1.0
+    (fetchpatch2 {
+      name = "modernize.patch";
+      url = "https://github.com/CERT-Polska/karton-yaramatcher/commit/b56f8382f119ee94fdff9e7fbb63e2f5e685c801.patch";
+      hash = "sha256-NMVYMMWa/YTqRsq4KZbsJzuIMW41F1O3EaeEaAqd2c0=";
+      includes = [ "karton/yaramatcher/yaramatcher.py" ];
+    })
+  ];
+
+  pythonRelaxDeps = [ "karton-core" ];
 
   propagatedBuildInputs = [
     karton-core
