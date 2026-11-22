@@ -32,23 +32,31 @@ buildGoModule (finalAttrs: {
     installAgentSkills
   ];
 
+  # Only install the gh-stack executable, not the test executable.
+  subPackages = [ "." ];
+
   nativeCheckInputs = [ gitMinimal ];
 
-  # some tests resolve branches through git and need to run inside a repository
-  preCheck = ''
-    git init --quiet
+  preCheck =
+    # Some tests resolve branches through git and need to run inside a
+    # repository.
+    ''
+      git init --quiet
+    ''
+    # Having subPackages set prevents some of the tests from being run, so unset
+    # it while running the check phase.
+    + ''
+      orig_subPackages="$(declare -p subPackages)"
+      unset subPackages
+    '';
+
+  # Restore the value of subPackages in case it's needed by any later phases.
+  postCheck = ''
+    eval "$orig_subpackages"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
-  # By default, a "test" binary is installed in the bin directory.  That
-  # doesn't seem to be useful for end users, and can conflict with the "test"
-  # binary that some applications expect to find on the PATH as provided by
-  # coreutils or similar.
-  fixupPhase = ''
-    rm "$out"/bin/test
-  '';
 
   passthru.updateScript = nix-update-script { };
 
