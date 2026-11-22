@@ -4,67 +4,74 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  pkg-config,
   libGL,
   libx11,
-  libxcursor,
-  libxrandr,
-  libxinerama,
-  libxi,
-  libxxf86vm,
-  mupdf,
-  fontconfig,
-  freetype,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gcs";
-  version = "5.42.0";
+  version = "5.62.0";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eCWMaO1iv917aHcdln2B10oCSbmzpXvQIF/luztHwRc=";
+    hash = "sha256-u7hJ5/LPQFKeB8cuIUrvK57HGL0sh2ck6m1jMwf2YeY=";
   };
 
-  modPostBuild = ''
-    chmod +w vendor/github.com/richardwilkes/pdf
-    sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
-  '';
-
-  vendorHash = "sha256-pbt4zNbFYTXKVe9D70Lg3XVsjadnUIuPwbbV1CJNLc8=";
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [
-    mupdf
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGL
-    libx11
-    libxcursor
-    libxrandr
-    libxinerama
-    libxi
-    libxxf86vm
-    fontconfig
-    freetype
-  ];
+  vendorHash = "sha256-IJ9oKdlV8v8vyLUybilyEZcKXDSU0B67Qtw1x8zoOm0=";
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
   flags = [ "-a" ];
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${finalAttrs.version}"
+    "-X github.com/richardwilkes/toolbox/v2/xos.AppVersion=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Scan the whole tree, including vendor/
+        "TestGoSourcesHaveCopyrightHeader"
+        "TestNoOrphanedGeneratedFiles"
+        # Writes a stand-in hdiutil script with a /usr/bin/env shebang
+        "TestExtractArchivesMountsDMG"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # FSEventStreamStart fails in the sandbox
+        "TestLibrarySetPathAfterWatchFailsRestartsWatch"
+        "TestLibrarySetPathWatchesAFolderHoldingAnotherLibrary"
+        "TestLibraryWatchOutlivesTheWatchOfALibraryWithinIt"
+        "TestLibraryWatchReportsPathsAsTheLibraryNamesThem"
+        "TestRenameFolderMovesItsLibrariesAheadOfAWalk"
+        "TestStopWatchesWithinReportsFoldersJustLetGoOf"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   installPhase = ''
     runHook preInstall
     install -Dm755 $GOPATH/bin/gcs -t $out/bin
     runHook postInstall
   '';
+
+  # Loaded at runtime
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf $out/bin/gcs \
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          libx11
+        ]
+      }
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -76,7 +83,5 @@ buildGoModule (finalAttrs: {
     mainProgram = "gcs";
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    # incompatible vendor/github.com/richardwilkes/unison/internal/skia/libskia_linux.a
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 })
