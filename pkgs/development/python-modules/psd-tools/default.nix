@@ -6,7 +6,6 @@
   attrs,
   docopt,
   pillow,
-  scikit-image,
   scipy,
   numpy,
   aggdraw,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
     docopt
     numpy
     pillow
-    scikit-image
     scipy
   ];
 
