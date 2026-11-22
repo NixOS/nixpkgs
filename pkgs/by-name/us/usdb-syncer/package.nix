@@ -114,6 +114,26 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "$RCC" -g python "$qrc" -o "$FORMS/resources_rc.py"
   '';
 
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    defusedxml
+  ];
+
+  disabledTestPaths = [
+    # Inspects icon files in the source tree, which the wheel excludes,
+    # so it can't pass against the installed package.
+    "tests/unit/test_icons.py"
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTests = [
+    # Fetches the remote config from raw.githubusercontent.com, which fails in the sandbox
+    "test_discord_webhook_url"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
