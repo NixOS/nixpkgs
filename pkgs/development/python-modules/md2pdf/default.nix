@@ -18,17 +18,26 @@
 
 buildPythonPackage rec {
   pname = "md2pdf";
-  version = "3.1.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmaupetit";
     repo = "md2pdf";
     tag = "v${version}";
-    hash = "sha256-EZIiuyy2FhHgpCh95/KbYfQpxyPQfDHnB/Q5yo2xVac=";
+    hash = "sha256-Q6RZ1eKKhraDJnOqRuK9fCSIIRxeFYZKecGx+ehbziU=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_cli.py \
+      --replace-fail "': path '" "': Path '"
+  '';
+
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    "weasyprint"
+  ];
 
   dependencies = [
     jinja2
