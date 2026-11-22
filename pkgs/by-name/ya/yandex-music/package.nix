@@ -10,16 +10,16 @@
   _7zz,
 }:
 let
-  version = "5.127.0";
+  version = "5.128.0";
 
   linuxSrc = fetchurl {
     url = "https://desktop.app.music.yandex.net/stable/Yandex_Music_amd64_${version}.deb";
-    hash = "sha256-Xn/B6hjE+ijGSf453yw6av+tTRvwBQFDgVaazCOOVXs=";
+    hash = "sha256-NvNajTsw0sxy83ingAq3Cr34rzcVDpaSAJ+Ol9kyI+k=";
   };
 
   darwinSrc = fetchurl {
     url = "https://desktop.app.music.yandex.net/stable/Yandex_Music_universal_${version}.dmg";
-    hash = "sha256-v/jCKcsY6LXVAxyoBfRZji6w/FmZlQR2jl1MWz8It88=";
+    hash = "sha256-6LLtnh2SHfA1HmQZjeeTupqWcGdoE3hZ9C/uduJeqEw=";
   };
 in
 stdenvNoCC.mkDerivation {
@@ -114,7 +114,10 @@ stdenvNoCC.mkDerivation {
     homepage = "https://music.yandex.com/";
     downloadPage = "https://music.yandex.com/download/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ shved ];
+    maintainers = with lib.maintainers; [
+      shved
+      ndenissov
+    ];
     # Do not inherit electron.meta.platforms:
     # - Linux: source is amd64 deb; pure JS app.asar runs on x86_64/aarch64 host electron.
     #   Remaining electron platforms (32-bit, riscv, mips, etc.) are unsupported.
