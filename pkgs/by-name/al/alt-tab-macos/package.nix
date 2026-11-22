@@ -384,6 +384,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "alt-tab";
     maintainers = with lib.maintainers; [
       _4evy
+      eclairevoyant
       emilytrau
       Br1ght0ne
     ];
