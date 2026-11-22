@@ -30,7 +30,10 @@ let
     loongarch64-linux = {
       toolPrefix = "loongarch64-linux-gnu-";
       src = {
-        url = "http://ftp.ports.debian.org/debian-ports/pool-loong64/main/g/ghc/ghc_9.6.6-4+b1_loong64.deb";
+        urls = [
+          "http://ftp.ports.debian.org/debian-ports/pool-loong64/main/g/ghc/ghc_9.6.6-4+b1_loong64.deb"
+          "https://snapshot.debian.org/archive/debian-ports/20250222T020536Z/pool-loong64/main/g/ghc/ghc_9.6.6-4+b1_loong64.deb"
+        ];
         sha256 = "f14b5e3c8e6bd233b5be8e72c369fea0644f2a804d7636f930c05b4abf77d57f";
       };
       exePathForLibraryCheck = null;
