@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   stdenvNoCC,
   fetchFromGitHub,
   buildDotnetModule,
@@ -75,7 +74,7 @@ buildDotnetModule {
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
   __darwinAllowLocalNetworking = true; # for tests
 
