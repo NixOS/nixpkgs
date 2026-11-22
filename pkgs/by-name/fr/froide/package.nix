@@ -8,26 +8,34 @@
   geos,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_11,
+  pnpm_12,
   nodejs,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
 }:
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 
   python = python3Packages.python.override {
     packageOverrides = self: super: {
       django_5 = super.django_5.override { withGdal = true; };
       django = super.django_5;
 
-      django-oauth-toolkit = super.django-oauth-toolkit.overrideAttrs (old: {
+      # django-oauth-toolkit 3.4 added fields to AbstractApplication that
+      # froide's own migrations do not know about yet. Use the version from
+      # froide's uv.lock until froide ships the corresponding migration.
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (_: {
         version = "3.3.0";
-
-        src = old.src.override {
+        src = fetchFromGitHub {
+          owner = "django-oauth";
+          repo = "django-oauth-toolkit";
+          tag = "3.3.0";
           hash = "sha256-eRQzAFUvSgoDiP7LW/+hMrNxHuXVxY+wc/E3VU/zeXo=";
         };
+        preCheck = ''
+          export DJANGO_SETTINGS_MODULE=tests.settings
+        '';
       });
 
       # custom python module part of froide
@@ -51,14 +59,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "froide";
-  version = "0-unstable-2026-08-19";
+  version = "0-unstable-2026-11-19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "okfde";
     repo = "froide";
-    rev = "a83f2c28e96f15c55f3009cdadbf2a8fcf17fda8";
-    hash = "sha256-hC/CfKh8PTuDiB8PvjdpbOjEVLwVGyR4lxBBcm9vcRg=";
+    rev = "3011580ba064037a04fe7891b9652d6b31adefbd";
+    hash = "sha256-owDg++YB4Eb/bIJDwerJcwL+t63+UpZpZOBp8hNid7s=";
   };
 
   patches = [ ./django_42_storages.patch ];
@@ -130,8 +138,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       version
       src
       ;
-    fetcherVersion = 4;
-    hash = "sha256-+ywpcwF4H2s6s+ls71S+sy6l3gikz62haXCBuI4z+f4=";
+    fetcherVersion = 5;
+    hash = "sha256-aIFqmnYouSql+wDEw7aDoe8qLYjcRa1pwfexS06kg98=";
   };
 
   postBuild = ''
@@ -194,6 +202,17 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "test_edit_request_boilerplate"
     "test_skip_search_similar"
     "test_list_hide_project_duplicates_filter"
+    "test_make_request_claims_vip"
+    "test_make_request_captcha"
+    # Requires axe-playwright-python, which is not packaged
+    "test_a11y"
+    "test_manage_attachments_document_modal"
+    # pytest-playwright-asyncio (async page fixture) is not packaged,
+    # the sync pytest-playwright page fixture conflicts with async tests
+    "test_bs_modal"
+    "test_withdrawal_modal_send_message_moves_focus_to_message"
+    "test_share_mastodon_modal_stays_open_on_invalid_input"
+    "test_make_request_server_side_error"
     # pytest-asyncio/pytest-playwright event-loop
     # incompatibility on Python 3.14 (RuntimeError: Runner.run()
     "test_redaction"
