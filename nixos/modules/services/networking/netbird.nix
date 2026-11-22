@@ -589,6 +589,11 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
 
+          # config.d is merged into config.json in preStart only
+          restartTriggers = [
+            config.environment.etc."${client.dir.baseName}/config.d/50-nixos.json".source
+          ];
+
           path = [ pkgs.shadow ] ++ optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
 
           serviceConfig = {
