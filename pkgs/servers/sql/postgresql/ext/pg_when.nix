@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_18_0,
+  cargo-pgrx_0_19_1,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -10,19 +10,19 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_18_0;
+  cargo-pgrx = cargo-pgrx_0_19_1;
 
   pname = "pg_when";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "pg-when";
     tag = finalAttrs.version;
-    hash = "sha256-2+YCxOB3Svl1DY4mNQg4giks8/fagHAXQ0K16PR96hM=";
+    hash = "sha256-XNQY0og2ywLmy8F/jUQglJyL/s1lvL28ij32WFLEvyc=";
   };
 
-  cargoHash = "sha256-pHY71+egTX9AU8nNeDHCymmaFsz+2JYmRGqKq4uT7w4=";
+  cargoHash = "sha256-iF8BH8oaWtDF5yC//p1eE9gvrYE0hZkGAnAiGljtnI4=";
 
   # pgrx tests try to install the extension into the postgresql nix store
   doCheck = false;
