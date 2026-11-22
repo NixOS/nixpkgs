@@ -7077,8 +7077,6 @@ with pkgs;
     enableExperimental = true;
   };
 
-  conky = callPackage ../os-specific/linux/conky { };
-
   # Darwin package set
   #
   # Even though this is a set of packages not single package, use `callPackage`
