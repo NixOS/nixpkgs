@@ -64,6 +64,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
     # prevent duplicate tracks when filtering by artist on M2M relations
     ./fix-artist-tracks-count-distinct.patch
+
+    # normalize audio/x-flac to audio/flac for native browser playback
+    ./normalize-flac-mimetype.patch
   ];
 
   build-system = with python3.pkgs; [

@@ -1,0 +1,99 @@
+--- a/funkwhale_api/music/utils.py
++++ b/funkwhale_api/music/utils.py
+@@ -19,7 +19,8 @@
+     t = magic.from_buffer(f.read(b), mime=True)
+     if not t.startswith("audio/"):
+         t = guess_mimetype_from_name(f.name)
+-
++    if t == "audio/x-flac":
++        t = "audio/flac"
+     return t
+ 
+ 
+@@ -30,6 +31,8 @@
+         t = mt
+     else:
+         t = EXTENSION_TO_MIMETYPE.get(name.split(".")[-1])
++    if t == "audio/x-flac":
++        t = "audio/flac"
+     return t
+ 
+ 
+--- a/funkwhale_api/music/models.py
++++ b/funkwhale_api/music/models.py
+@@ -1116,6 +1116,8 @@
+                 self.mimetype = utils.guess_mimetype(self.audio_file)
+             elif self.source and self.source.startswith("file://"):
+                 self.mimetype = utils.guess_mimetype_from_name(self.source)
++        if self.mimetype == "audio/x-flac":
++            self.mimetype = "audio/flac"
+         if not self.size and self.audio_file:
+             self.size = self.audio_file.size
+         if not self.checksum:
+--- a/funkwhale_api/music/serializers.py
++++ b/funkwhale_api/music/serializers.py
+@@ -195,6 +195,12 @@
+ 
+     def get_is_local(self, upload) -> bool:
+         return federation_utils.is_local(upload.fid)
++
++    def to_representation(self, instance):
++        ret = super().to_representation(instance)
++        if ret.get("mimetype") == "audio/x-flac":
++            ret["mimetype"] = "audio/flac"
++        return ret
+ 
+ 
+ def sort_uploads_for_listen(uploads):
+@@ -442,6 +448,12 @@
+                 validated_data["duration"] = audio_data["length"]
+                 validated_data["bitrate"] = audio_data["bitrate"]
+         return validated_data
++
++    def to_representation(self, instance):
++        ret = super().to_representation(instance)
++        if ret.get("mimetype") == "audio/x-flac":
++            ret["mimetype"] = "audio/flac"
++        return ret
+ 
+ 
+ def filter_album(qs, context):
+--- a/funkwhale_api/music/views.py
++++ b/funkwhale_api/music/views.py
+@@ -649,15 +649,16 @@
+         return False
+     format_need_transcoding = True
+     bitrate_need_transcoding = True
++    upload_mimetype = "audio/flac" if upload.mimetype == "audio/x-flac" else upload.mimetype
+     if format is None:
+         format_need_transcoding = False
+     elif format not in utils.EXTENSION_TO_MIMETYPE:
+         # format should match supported formats
+         format_need_transcoding = False
+-    elif upload.mimetype is None:
++    elif upload_mimetype is None:
+         # upload should have a mimetype, otherwise we cannot transcode
+         format_need_transcoding = False
+-    elif upload.mimetype == utils.EXTENSION_TO_MIMETYPE[format]:
++    elif upload_mimetype == utils.EXTENSION_TO_MIMETYPE[format]:
+         # requested format should be different than upload mimetype, otherwise
+         # there is no need to transcode
+         format_need_transcoding = False
+@@ -734,7 +735,7 @@
+         file_path = get_file_path(f.audio_file)
+     elif f.source and f.source.startswith("file://"):
+         file_path = get_file_path(f.source.replace("file://", "", 1))
+-    mt = f.mimetype
++    mt = "audio/flac" if f.mimetype == "audio/x-flac" else f.mimetype
+ 
+     if should_transcode(f, format, max_bitrate=max_bitrate):
+         transcoded_version = f.get_transcoded_version(format, max_bitrate=max_bitrate)
+@@ -742,7 +743,7 @@
+         transcoded_version.save(update_fields=["accessed_date"])
+         f = transcoded_version
+         file_path = get_file_path(f.audio_file)
+-        mt = f.mimetype
++        mt = "audio/flac" if f.mimetype == "audio/x-flac" else f.mimetype
+     if not proxy_media and f.audio_file:
+         # we simply issue a 302 redirect to the real URL
+         response = Response(status=302)
