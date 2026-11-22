@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pysmt";
-  version = "0.9.6";
+  version = "0.10.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pysmt";
     repo = "pysmt";
     rev = "v${version}";
-    hash = "sha256-HmEdCJOF04h0z5UPpfYa07b78EEBj5KyVAk6aNRFPEo=";
+    hash = "sha256-MCw2a3KLROBwc0NHBz0Qf6YAsVfDt8pqyVL3G2ZkbZg=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
