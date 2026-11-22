@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fontconfig";
-  version = "2.18.3";
+  version = "2.18.4";
 
   outputs = [
     "bin"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   # ref: https://github.com/NixOS/nixpkgs/pull/401037#discussion_r2055430206
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/${finalAttrs.version}/fontconfig-${finalAttrs.version}.tar.xz";
-    hash = "sha256-T3tVSjjN94wDP2ZsiHHzdJ4UoJT2Wgf2MMke0LQ9NeM=";
+    hash = "sha256-lQE2N+/1+B1Icd0WzQmMJzJkwW0PnwsnzEO4GyeUvuM=";
   };
 
   nativeBuildInputs = [
