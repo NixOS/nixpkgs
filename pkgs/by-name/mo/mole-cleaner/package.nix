@@ -3,7 +3,7 @@
   stdenv,
   buildGoModule,
   bash,
-  coreutils,
+  darwin,
   fd,
   fetchFromGitHub,
   installShellFiles,
@@ -11,37 +11,17 @@
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-  writeShellScriptBin,
 }:
 
-let
-  duForTests = writeShellScriptBin "du" ''
-    args=()
-    while (( $# > 0 )); do
-      case "$1" in
-        -I)
-          shift
-          args+=("--exclude=$1")
-          ;;
-        *)
-          args+=("$1")
-          ;;
-      esac
-      shift
-    done
-
-    exec ${lib.getExe' coreutils "du"} "''${args[@]}"
-  '';
-in
 buildGoModule (finalAttrs: {
   pname = "mole-cleaner";
-  version = "1.73.0";
+  version = "1.74.0";
 
   src = fetchFromGitHub {
     owner = "tw93";
     repo = "Mole";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-3TJL45ggnN8DWv+uOhSUdbrRp3QLm8laT84lBT+rt50=";
+    hash = "sha256-Ve0/LOW/AY414QJB/ENApMdesSR4VfQ8R3l/pXHBQwE=";
   };
 
   vendorHash = "sha256-OQ7QTSuulopAS+2Jet2roZVGPMXgJUav73du+MJlt6o=";
@@ -56,9 +36,15 @@ buildGoModule (finalAttrs: {
     substituteInPlace cmd/analyze/analyze_test.go \
       --replace-fail '/usr/bin/tail' 'tail'
 
-    substituteInPlace mole \
-      --replace-fail '/bin/pwd' 'pwd' \
-      --replace-fail 'update_message="$(read_update_message_cache "$msg_cache")"' 'update_message=""'
+    # Use packaged BSD du only in the tests. The installed analyzer
+    # must continue using macOS /usr/bin/du, independently of PATH.
+    substituteInPlace cmd/analyze/oplog_test.go \
+      --replace-fail 'func TestMain(m *testing.M) {' \
+        'func TestMain(m *testing.M) { duBinary = "${lib.getExe' darwin.file_cmds "du"}";'
+    substituteInPlace cmd/analyze/scanner_test.go \
+      --replace-fail '/usr/bin/du' '${lib.getExe' darwin.file_cmds "du"}'
+
+    substituteInPlace mole --replace-fail '/bin/pwd' 'pwd'
   '';
 
   buildInputs = [
@@ -73,10 +59,6 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-  ];
-
-  nativeCheckInputs = [
-    duForTests
   ];
 
   checkFlags = [
@@ -94,16 +76,8 @@ buildGoModule (finalAttrs: {
         # that assertion cannot hold while sandboxed.
         "TestValidateTrashTargetRejectsCriticalRoots"
 
-        # The disk-usage probe always runs the system /usr/bin/du (it relies on
-        # BSD du's -I), and some tests also call /usr/bin/du or /usr/bin/plutil
-        # directly. /usr/bin is not available in the build sandbox.
-        "TestOldDownloadsStopsAtMountPoints"
-        "TestGetDirectorySizeFromDuMeasuresUserLibraryInOneTraversal"
-        "TestGetDirectorySizeFromDuWithIgnoresSkipsCloudPlaceholderTree"
-        "TestDuIgnoresUseSystemDuWhenGNUDuIsFirstInPath"
-        "TestUserLibraryOverviewDeduplicatesHardlinks"
-        "TestHomeOverviewDeduplicatesHardlinks"
-        "TestSimulatorMetadataXMLAndBinary"
+        # Only the binary plist subtest requires macOS plutil.
+        "^TestSimulatorMetadataXMLAndBinary$/^binary=true$"
       ]
     }"
   ];
@@ -120,19 +94,7 @@ buildGoModule (finalAttrs: {
     makeWrapper $out/libexec/mole/mole $out/bin/mo \
      --prefix PATH : '/bin' \
      --prefix PATH : '/usr/bin' \
-     --prefix PATH : ${
-       lib.makeBinPath [
-         fd
-       ]
-     } \
-      --run '
-        case "$1" in
-          update|remove)
-            echo "mo $1 is unsupported for Nix-installed Mole; update or remove it through your Nix profile or configuration." >&2
-            exit 1
-            ;;
-        esac
-        '
+     --prefix PATH : ${lib.makeBinPath [ fd ]}
 
     runHook postInstall
   '';
