@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   fetchgit,
+  gitUpdater,
   lib,
   libfprint-tod,
   openssl,
@@ -77,7 +78,10 @@ stdenv.mkDerivation {
       "$out/lib/libfprint-2/tod-1/libfprint-2-tod-1-broadcom.so"
   '';
 
-  passthru.driverPath = "/lib/libfprint-2/tod-1";
+  passthru = {
+    driverPath = "/lib/libfprint-2/tod-1";
+    updateScript = gitUpdater { rev-prefix = "upstream/"; };
+  };
 
   meta = {
     description = "Broadcom driver module for libfprint-2-tod Touch OEM Driver for Dell ControlVault v3";
