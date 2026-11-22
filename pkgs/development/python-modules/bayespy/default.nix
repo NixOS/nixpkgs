@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "bayespy";
-  version = "0.6.1";
+  version = "0.6.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bayespy";
     repo = "bayespy";
     tag = version;
-    hash = "sha256-kx87XY4GCL1PQIeZyovEbrPyCC/EVA6Hdvt+3P/D6VI=";
+    hash = "sha256-gxvfUaRFZASZCWcwuM57J3opKKlhaBW8u3uPl08/lXw=";
   };
 
   patches = [
@@ -31,9 +31,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace versioneer.py \
-      --replace-fail SafeConfigParser ConfigParser \
-      --replace-fail readfp read_file
+    sed -i setup.cfg \
+      -e '/tag_build =/d' \
+      -e '/tag_date =/d'
   '';
 
   build-system = [ setuptools ];
