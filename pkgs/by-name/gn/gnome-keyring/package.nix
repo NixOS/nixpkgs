@@ -8,7 +8,6 @@
   dbus,
   libgcrypt,
   pam,
-  python3,
   glib,
   libxslt,
   gettext,
@@ -16,16 +15,19 @@
   libcap_ng,
   libselinux,
   p11-kit,
+  systemdLibs,
   wrapGAppsNoGuiHook,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
   gnome,
+  nixosTests,
   useWrappedDaemon ? true,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-keyring";
-  version = "50.0";
+  version = "51.1";
 
   outputs = [
     "out"
@@ -34,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major finalAttrs.version}/gnome-keyring-${finalAttrs.version}.tar.xz";
-    hash = "sha256-y9cgYsU8lwK8LEczmRrV8FHKaCiCswkFooKbzxqOzHw=";
+    hash = "sha256-3+etxYdu8GcOfropB3mb27iHXOWLtCCOGlIWm9FqR8o=";
   };
 
   nativeBuildInputs = [
@@ -57,37 +59,33 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     gcr_3
     p11-kit
+  ]
+  ++ lib.optionals withSystemd [
+    systemdLibs
   ];
 
-  nativeCheckInputs = [
-    dbus
-    python3
-  ];
+  nativeCheckInputs = [ dbus ];
 
   mesonFlags = [
     # installation directories
     "-Dpkcs11-config=${placeholder "out"}/etc/pkcs11" # todo: this should probably be /share/p11-kit/modules
     "-Dpkcs11-modules=${placeholder "out"}/lib/pkcs11"
-    # TODO: enable socket activation
-    "-Dsystemd=disabled"
+    (lib.mesonEnable "systemd" withSystemd)
   ];
 
-  # Tends to fail non-deterministically.
-  # - https://github.com/NixOS/nixpkgs/issues/55293
-  # - https://github.com/NixOS/nixpkgs/issues/51121
-  # - At least “gnome-keyring:gkm::xdg-store / xdg-trust” is still flaky on 48.beta.
-  doCheck = false;
+  doCheck = true;
   strictDeps = true;
 
   checkPhase = ''
-    runHook postCheck
+    runHook preCheck
 
     export HOME=$(mktemp -d)
+    # The import test races its own teardown and aborts under load.
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
+      meson test --print-errorlogs --exclude gnome-keyring:import
 
-    runHook preCheck
+    runHook postCheck
   '';
 
   postFixup =
@@ -102,15 +100,22 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
     + lib.optionalString useWrappedDaemon ''
-      files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
+      files=(
+        $out/etc/xdg/autostart/*
+        $out/share/dbus-1/services/*
+        ${lib.optionalString withSystemd "$out/share/systemd/user/gnome-keyring-daemon.service"}
+      )
 
-      for file in ''${files[*]}; do
-        substituteInPlace $file \
-          --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
+      for file in "''${files[@]}"; do
+        substituteInPlace "$file" \
+          --replace-fail "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
       done
     '';
 
   passthru = {
+    tests = {
+      inherit (nixosTests) gnome-keyring;
+    };
     updateScript = gnome.updateScript {
       packageName = "gnome-keyring";
     };
