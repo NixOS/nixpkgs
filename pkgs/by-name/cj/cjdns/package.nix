@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cjdns";
-  version = "22.3";
+  version = "22.4";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
     tag = "cjdns-v${finalAttrs.version}";
-    hash = "sha256-A5KPcjFrCIYhT/6W+J4Nvb1y23cAgv9M6PWcyN43st4=";
+    hash = "sha256-iq4w9ngQ8itXCnDMhPYTlJfootVU1kFEcvaa1zbRSV0=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
-  cargoHash = "sha256-tob45/99svE0R1Kk7G1+H7waBWYmI9VKC8ffl3ZmdcU=";
+  cargoHash = "sha256-NKZc/3zjtRZYKUwyUSarwULL21FTRfrS1wXQPp1cZqI=";
 
   nativeBuildInputs = [
     which
