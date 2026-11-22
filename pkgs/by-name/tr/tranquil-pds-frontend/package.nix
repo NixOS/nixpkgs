@@ -12,12 +12,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tranquil-frontend";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromTangled {
     did = "did:plc:jj6ajj6duxnlthwtnob4qyuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0/eBbeO31lCI99TNSSQlk9QaWzegpAuYyGCQMupPb9s=";
+    hash = "sha256-G+8jFPbBzXLE40sC8oxfSUVU1T8aFlb6GJJ+nGvs1iY=";
   };
   sourceRoot = "${finalAttrs.src.name}/frontend";
 
@@ -29,8 +29,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-+P4UUkZKQJVfGbDFKR0gRMU+wYK9K7NBYo1s/ebRK9I=";
+    fetcherVersion = 5;
+    hash = "sha256-XW18EsInZHOpg9rYC/W7PDl5D0458VnKUswone6rWwI=";
   };
 
   strictDeps = true;
