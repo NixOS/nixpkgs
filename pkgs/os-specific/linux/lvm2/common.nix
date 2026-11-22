@@ -19,7 +19,10 @@
   onlyLib ? stdenv.hostPlatform.isStatic,
   # Otherwise we have an infinite recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
-  util-linux,
+  # break the cyclic dependency:
+  # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
+  # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
+  util-linuxMinimal,
   enableVDO ? false,
   vdo,
   enableMdadm ? false,
@@ -135,7 +138,7 @@ stdenv.mkDerivation rec {
       in
       {
         inherit coreutils;
-        util_linux = optionalTool enableUtilLinux util-linux;
+        util_linux = optionalTool enableUtilLinux util-linuxMinimal;
         mdadm = optionalTool enableMdadm mdadm;
         multipath_tools = optionalTool enableMultipath multipath-tools;
         vdo = optionalTool enableVDO vdo;
