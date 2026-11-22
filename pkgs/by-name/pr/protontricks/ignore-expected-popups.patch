@@ -1,0 +1,75 @@
+diff --git a/src/winetricks b/src/winetricks
+index d0b0796..184847c 100755
+--- a/src/winetricks
++++ b/src/winetricks
+@@ -228,12 +228,17 @@ w_askpermission()
+ }
+ 
+ # Display info message.  Time out quickly if user doesn't click.
+-w_info()
++w_info_no_gui()
+ {
+     # If $WINETRICKS_SUPER_QUIET is set, w_info is a no-op:
+     if [ -z "${WINETRICKS_SUPER_QUIET}" ] ; then
+         printf '%s\n%b\n%s\n' "${W_TEXT_LINE}" "${@}" "${W_TEXT_LINE}" >&2
+     fi
++}
++
++w_info()
++{
++    w_info_no_gui "${@}"
+ 
+     # kdialog doesn't allow a timeout unless you use --passivepopup
+     if test "${W_OPT_UNATTENDED}"; then
+@@ -252,12 +257,17 @@ w_info()
+ }
+ 
+ # Display warning message to stderr (since it is called inside redirected code)
+-w_warn()
++w_warn_no_gui()
+ {
+     # If $WINETRICKS_SUPER_QUIET is set, w_warn is a no-op:
+     if [ -z "${WINETRICKS_SUPER_QUIET}" ] ; then
+         printf '%s\nwarning: %b\n%s\n' "${W_TEXT_LINE}" "${*}" "${W_TEXT_LINE}" >&2
+     fi
++}
++
++w_warn()
++{
++    w_warn_no_gui "${@}"
+ 
+     # kdialog doesn't allow a timeout unless you use --passivepopup
+     if test "${W_OPT_UNATTENDED}"; then
+@@ -3073,7 +3083,7 @@ winetricks_get_platform()
+ winetricks_latest_version_check()
+ {
+     if [ "${WINETRICKS_LATEST_VERSION_CHECK}" = 'disabled' ] || [ -f "${WINETRICKS_CONFIG}/disable-latest-version-check" ] ; then
+-        w_info "winetricks latest version check update disabled"
++        w_info_no_gui "winetricks latest version check update disabled"
+         return
+     # Used by ./src/release.sh, not for end users. Silently disables update check, without using $WINETRICKS_SUPER_QUIET
+     elif [ "${WINETRICKS_LATEST_VERSION_CHECK}" = 'development' ] ; then
+@@ -4726,16 +4736,16 @@ winetricks_set_wineprefix()
+ 
+         if [ "${W_NO_WIN64_WARNINGS}" = 0 ]; then
+             case ${LANG} in
+-                bg*) w_warn "Използвате 64-битова папка. Повечето програми са за 32-битова архитектура. Ако възникнат проблеми, моля, използвайте 32-битова папка, преди да ги докладвате." ;;
+-                fr*) w_warn "Vous utilisez un WINEPREFIX 64 bits. Notez que de nombreux verbes n'installent que des versions 32 bits des paquets. Si vous rencontrez des problèmes, veuillez refaire un test dans un WINEPREFIX 32 bits propre avant de signaler un bug." ;;
+-                ru*) w_warn "Вы используете 64-битный WINEPREFIX. Важно: многие ветки устанавливают только 32-битные версии пакетов. Если у вас возникли проблемы, пожалуйста, проверьте еще раз на чистом 32-битном WINEPREFIX до отправки отчета об ошибке." ;;
+-                pt*) w_warn "Você está usando um WINEPREFIX de 64-bit. Observe que muitos casos instalam apenas versões de pacotes de 32-bit. Se você encontrar problemas, teste novamente em um WINEPREFIX limpo de 32-bit antes de relatar um bug." ;;
+-                zh_CN*) w_warn "您正在使用 64 位的 WINEPREFIX。请注意，许多脚本（verbs）只安装 32 位版本的软件包。如果遇到问题，请先在干净的 32 位 WINEPREFIX 中重新测试，然后再报告错误。" ;;
+-                *) w_warn "You are using a 64-bit WINEPREFIX. Note that many verbs only install 32-bit versions of packages. If you encounter problems, please retest in a clean 32-bit WINEPREFIX before reporting a bug." ;;
++                bg*) w_warn_no_gui "Използвате 64-битова папка. Повечето програми са за 32-битова архитектура. Ако възникнат проблеми, моля, използвайте 32-битова папка, преди да ги докладвате." ;;
++                fr*) w_warn_no_gui "Vous utilisez un WINEPREFIX 64 bits. Notez que de nombreux verbes n'installent que des versions 32 bits des paquets. Si vous rencontrez des problèmes, veuillez refaire un test dans un WINEPREFIX 32 bits propre avant de signaler un bug." ;;
++                ru*) w_warn_no_gui "Вы используете 64-битный WINEPREFIX. Важно: многие ветки устанавливают только 32-битные версии пакетов. Если у вас возникли проблемы, пожалуйста, проверьте еще раз на чистом 32-битном WINEPREFIX до отправки отчета об ошибке." ;;
++                pt*) w_warn_no_gui "Você está usando um WINEPREFIX de 64-bit. Observe que muitos casos instalam apenas versões de pacotes de 32-bit. Se você encontrar problemas, teste novamente em um WINEPREFIX limpo de 32-bit antes de relatar um bug." ;;
++                zh_CN*) w_warn_no_gui "您正在使用 64 位的 WINEPREFIX。请注意，许多脚本（verbs）只安装 32 位版本的软件包。如果遇到问题，请先在干净的 32 位 WINEPREFIX 中重新测试，然后再报告错误。" ;;
++                *) w_warn_no_gui "You are using a 64-bit WINEPREFIX. Note that many verbs only install 32-bit versions of packages. If you encounter problems, please retest in a clean 32-bit WINEPREFIX before reporting a bug." ;;
+             esac
+ 
+             if [ "${_W_wow64_style}" = "new" ]; then
+-                w_warn "You appear to be using Wine's new wow64 mode. Note that this is EXPERIMENTAL and not yet fully supported. If reporting an issue, be sure to mention this."
++                w_warn_no_gui "You appear to be using Wine's new wow64 mode. Note that this is EXPERIMENTAL and not yet fully supported. If reporting an issue, be sure to mention this."
+             elif [ "${_W_wow64_style}" = "unknown" ]; then
+                 w_warn "WoW64 type could not be detected."
+             fi

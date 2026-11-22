@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pineconemc-unwrapped";
-  version = "11.1.1";
+  version = "11.1.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     # pulls libnbtplusplus (git submodule) at the exact commit the fork pins
     fetchSubmodules = true;
-    hash = "sha256-0zxviSzoCZkrUu9OZTGQe/+pwyGaklHDZYYeyAquVGw=";
+    hash = "sha256-+zat+ecVSlrdDRmlUvU+6RaAsgXCLdtSMsc2oXat2ic=";
   };
 
   # Ensure that instance shortcuts point to our final wrapper, rather than this unwrapped version

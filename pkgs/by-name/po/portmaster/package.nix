@@ -26,7 +26,7 @@
 }:
 
 let
-  version = "2.2.8";
+  version = "2.2.9";
 
   nodejsPython = buildPackages.nodejs.python.withPackages (ps: [ ps.setuptools ]);
 
@@ -34,7 +34,7 @@ let
     owner = "safing";
     repo = "portmaster";
     tag = "v${version}";
-    hash = "sha256-INqNYIIxrsIcHj2LVcZVEQnnp1gsc6Qp2tG/NMRqWBs=";
+    hash = "sha256-Cz47Tlxc4HLDoRPN4kds53dYfpCQc7NIggYXM8cgWII=";
   };
 
   portmasterUI = buildNpmPackage {
@@ -49,7 +49,7 @@ let
     ];
 
     sourceRoot = "${src.name}/desktop/angular";
-    npmDepsHash = "sha256-Tdoqd/tIG0ZuyWIfBJ2i22IMz44SZc4B50zPBGKN75Y=";
+    npmDepsHash = "sha256-oFo1jXgCSgZYO4NZkVDkeUwI01MsOnw41fyubtGn3Vo=";
 
     nativeBuildInputs = [ nodejsPython ];
 
@@ -85,7 +85,7 @@ let
     pname = "portmaster-desktop";
     inherit version src;
 
-    cargoHash = "sha256-RO06OFXjPYhSQGayH7gaClF0AdIyLbxnGWtLElrbJKU=";
+    cargoHash = "sha256-GkuG610sJ2MyS+U6McRxr7JenV2Vxd9IhYOJ0YqtwdE=";
     cargoRoot = "desktop/tauri/src-tauri";
     buildAndTestSubdir = finalAttrs.cargoRoot;
 

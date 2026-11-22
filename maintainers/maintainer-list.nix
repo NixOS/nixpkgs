@@ -4610,13 +4610,6 @@
     githubId = 8891115;
     name = "Brian Choy";
   };
-  byteflavour = {
-    email = "synapse@byteflavour.dev";
-    github = "byteflavour";
-    githubId = 131113314;
-    matrix = "@synapse:byteflavour.dev";
-    name = "Byte Flavour";
-  };
   ByteSudoer = {
     email = "bytesudoer@gmail.com";
     github = "ByteSudoer";
@@ -33098,6 +33091,13 @@
     github = "yureka-wdz";
     githubId = 255085068;
     name = "Yureka (WDZ)";
+  };
+  yuri-becker = {
+    name = "Yuri";
+    githubId = 16067917;
+    github = "yuri-becker";
+    email = "hi@yuri.li";
+    matrix = "@yuri:bundestag.gmbh";
   };
   yurkobb = {
     name = "Yury Bulka";

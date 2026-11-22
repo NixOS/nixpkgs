@@ -29,14 +29,14 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "13.2.1";
+  version = "13.2.2";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/Cu4Zc00OdvwojfTah6NIH/S0sowGyyh0RXcBmfvi9M=";
+    hash = "sha256-Px2sTJ9hTvShviLoQbmAtpMx1zSOWC1XeVagNg4fWiY=";
   };
 
   vendorHash = "sha256-6ao0x5rPZmyrvvGVLTSTjtrV3UbTqeUeV0OpHDqriHc=";

@@ -1291,13 +1291,13 @@
     "vendorHash": "sha256-lknT9bDZKTKn/IY2KIdMj854IMk7cT5U0glKL7wMIa8="
   },
   "tailscale_tailscale": {
-    "hash": "sha256-XuYXf/6pKK7MJazZ1+yelWAbRv8gclkzfmC7PzbXPaY=",
+    "hash": "sha256-x+FzTXkNMncBr2XrYEFDj2RyUqHEXGdbtjQQnRTzMCM=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.29.3",
+    "rev": "v0.30.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-hXdv+K2nM99L3uVI+tkOvS4HAjzEJEGHBrXEU+QLqpU="
+    "vendorHash": "sha256-kePAihNXyM+Wyl9hQK0sQwaHEAVgS04CsELcXTGFlCk="
   },
   "tasansga_lldap": {
     "hash": "sha256-esRIRh4l3PxRrzx+CPbaf4XhBQTKwPLK+ZU4VlHP7UE=",
@@ -1444,13 +1444,13 @@
     "vendorHash": "sha256-YfTEKgFb2Rwm7QhIhkQKcXUhQ64OU85U5PEht4NKEko="
   },
   "venafi_venafi": {
-    "hash": "sha256-tCjeApdanKPNEy7snb6QJoCvwjpNa2fdDryoD+7wn8Y=",
+    "hash": "sha256-9jKKMtjfeKtjYfas6kSWYpHdn6IQdWyf1C1RJVuREX0=",
     "homepage": "https://registry.terraform.io/providers/Venafi/venafi",
     "owner": "Venafi",
     "repo": "terraform-provider-venafi",
-    "rev": "v0.24.1",
+    "rev": "v0.24.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-MXkMUXhE5oUIni9nlZgyN5rXCUl52NmYqMwAnvXpBBo="
+    "vendorHash": "sha256-n5JOGWmFe2W4vvSH978bltnOXHpOFdOIfpJVse3WN8M="
   },
   "vinyldns_vinyldns": {
     "hash": "sha256-/M+HFMDeKpIzzdn04TkMxriVeE6vvORRiqonxF38B9Q=",

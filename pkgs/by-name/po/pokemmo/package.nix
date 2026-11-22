@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (
   finalAttrs:
   {
     pname = "pokemmo";
-    version = "34995"; # https://dl.pokemmo.com/live/current/revision.txt
+    version = "35119"; # https://dl.pokemmo.com/live/current/revision.txt
     __structuredAttrs = true;
     strictDeps = true;
 
@@ -46,12 +46,12 @@ stdenvNoCC.mkDerivation (
       if stdenvNoCC.hostPlatform.isDarwin then
         fetchurl {
           url = "https://dl.pokemmo.com/PokeMMO-v${launcherVersion}.dmg";
-          hash = "sha256-2YUvrV2xaMJiJ3KaefIV/4PRj0b+5KRu5T4Y7bycj5s=";
+          hash = "sha256:16wgkjyfs61ywmpa9r7y8s7x30zz2pr7k6kj4xic4s5ibnnjz1fr";
         }
       else
         fetchurl {
           url = "https://dl.pokemmo.com/PokeMMO-Client.zip?r=${finalAttrs.version}";
-          hash = "sha256-ISbhgKromCslgmU7jWTG2xn8fx+7ZFWTK5eTGdss64s=";
+          hash = "sha256-xPd2yH6Xnl2Ih1oW7OImhXh+2to800BI/Llqx3ouBpA=";
         };
 
     desktopItems = [
