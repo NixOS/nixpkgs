@@ -218,6 +218,7 @@ let
       executable = "python${pythonVersion}${abiFlags}";
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
+      isFreeThreaded = !enableGIL;
       inherit (splices)
         pythonOnBuildForBuild
         pythonOnBuildForHost

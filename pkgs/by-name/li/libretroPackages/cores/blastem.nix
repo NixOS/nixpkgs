@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "blastem";
-  version = "0-unstable-2026-11-08";
+  version = "0-unstable-2026-11-21";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "blastem";
-    rev = "ec73825ece2a134beb7825a5fd6fd21a398ff12e";
-    hash = "sha256-/tKLDecaH7uXybLRHFThmOKG/XL4oTqDGVQl3DiWAKs=";
+    rev = "aa11275a99b3ea0ee477fed2844bb7d9f9faf3f6";
+    hash = "sha256-nSBX8e8ZHx1pGybc6ZKrlDGRZAQOaQHlcJnJ+jZ2OGg=";
   };
 
   # cpu_dsl.py generates the CPU cores at build time
