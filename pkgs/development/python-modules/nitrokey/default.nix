@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nitrokey";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-sdk-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zzdm1A1zlxuMVqAd/KwKFvrDGGyCyHN52OY5iezAr9k=";
+    hash = "sha256-HvTirrcOHyG9e++5xvAprGEbLNENuL/hZHduswB7Vv8=";
   };
 
   pythonRelaxDeps = [
