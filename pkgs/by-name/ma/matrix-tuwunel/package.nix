@@ -91,13 +91,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.9.4";
+  version = "2.0.0-assets";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TuX1JOCTOaynGho9lGpBKjuoJQXT69kp25FM99rDGcg=";
+    hash = "sha256-klBp0a9ad+TTNr5t3CDhCpM/t5Ndqw3FIxVvm6kMmvA=";
   };
 
   # Integration tests require networking. Only run the unit tests.
@@ -106,7 +106,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bins"
   ];
 
-  cargoHash = "sha256-bQxdrPghImV6OytnTGtoVyEEh80FfI4ApYNE0zsoETI=";
+  cargoHash = "sha256-f7864AwkfSnYLYuFjHLXGKmf+vZoSp4cm+ROIzXBeBw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -134,17 +134,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   buildNoDefaultFeatures = true;
-  # See https://github.com/matrix-construct/tuwunel/blob/main/src/main/Cargo.toml
-  # for available features.
+  # See [1] for the default features and [2]  for an explanation as to what they do.
+  #
+  # [1]: https://github.com/matrix-construct/tuwunel/blob/main/src/main/Cargo.toml
+  # [2]: https://matrix-construct.github.io/tuwunel/development/build-features.html#cargo-features
+  #
   # We enable all default features except jemalloc and io_uring, which
   # we guard behind our own (default-enabled) flags.
   buildFeatures = [
     "brotli_compression"
+    "bzip2_compression"
+    "console"
+    "cpu_affinity"
     "direct_tls"
     "element_hacks"
+    "email"
+    "gcs_storage"
     "gzip_compression"
+    "jwt_login"
+    "lz4_compression"
+    "markdown"
+    "mas"
     "media_thumbnail"
+    "oidc"
     "release_max_log_level"
+    "s3_storage"
+    "sentry_telemetry"
+    "synapse_admin"
     "systemd"
     "url_preview"
     "zstd_compression"
