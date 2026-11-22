@@ -1,10 +1,12 @@
 {
+  stdenv,
   lib,
   buildPythonApplication,
   virtiofsd,
   ruff,
   setuptools,
   ty,
+  makeBinaryWrapper,
 }:
 
 buildPythonApplication {
@@ -14,21 +16,13 @@ buildPythonApplication {
 
   src = ./.;
 
-  postPatch = ''
-    substituteInPlace ./run_virtiofsd_qemu/__init__.py \
-      --replace-fail "@virtiofsd@" "${lib.getExe virtiofsd}"
-  '';
-
   build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    virtiofsd
-  ];
-
   doCheck = true;
 
+  nativeBuildInputs = [ makeBinaryWrapper ];
   nativeCheckInputs = [
     ruff
     ty
@@ -43,7 +37,13 @@ buildPythonApplication {
     ruff format --check --diff .
   '';
 
+  postInstall = ''
+    wrapProgram $out/bin/run-virtiofsd-qemu \
+      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [ virtiofsd ])}"
+  '';
+
   meta = {
     mainProgram = "run-virtiofsd-qemu";
+    platforms = lib.platforms.unix;
   };
 }

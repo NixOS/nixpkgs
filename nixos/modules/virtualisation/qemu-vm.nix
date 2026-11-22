@@ -334,18 +334,18 @@ let
     ''}
 
     # Start QEMU.
-    exec ${lib.optionalString needsVirtiofs ''
-      ${lib.getExe runScript} \
-      --virtiofs-paths ${
-        lib.concatStringsSep " " (
-          lib.mapAttrsToList (
-            tag: share:
-            "${tag}:${share.source}:${share.cache}:${if share.writable then "writeback" else "readonly"}"
-          ) cfg.sharedDirectories
-        )
-      } \
+    exec ${lib.getExe runScript} \
+      ${lib.optionalString needsVirtiofs ''
+        --virtiofs-paths ${
+          lib.concatStringsSep " " (
+            lib.mapAttrsToList (
+              tag: share:
+              "${tag}:${share.source}:${share.cache}:${if share.writable then "writeback" else "readonly"}"
+            ) cfg.sharedDirectories
+          )
+        } \
+      ''} \
       -- \
-    ''} \
       ${
         qemu-common.qemuBinaryWith {
           qemuPkg = qemu;

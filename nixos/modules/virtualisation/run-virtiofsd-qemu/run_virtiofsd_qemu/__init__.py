@@ -5,7 +5,7 @@ import signal
 from contextlib import AsyncExitStack, asynccontextmanager
 from os import environ
 from pathlib import Path
-from sys import exit
+from sys import exit, platform
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ def fatal_error(msg: str):
 async def virtiofsd(virtiofs_dir: Path, tag: str, source: Path, cache: str, flag: str):
     socket_path = virtiofs_dir / tag
     proc = await asyncio.create_subprocess_exec(
-        "@virtiofsd@",
+        "virtiofsd",
         f"--socket-path={socket_path}",
         f"--shared-dir={source.resolve()}",
         f"--{flag}",
@@ -59,6 +59,7 @@ def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str]]:
     parser.add_argument(
         "--virtiofs-paths",
         nargs="+",
+        default=[],
         help="Paths to be exposed with virtiofsd in the format 'tag:source:cache:mode'",
     )
 
@@ -92,10 +93,16 @@ async def amain():
     logging.basicConfig(format="%(levelname)s: %(funcName)s: %(message)s")
     args, qemu_args = extract_arguments()
 
-    try:
-        virtiofs_dir = Path(environ["NIX_VIRTIOFS_DIR"])
-    except KeyError:
-        fatal_error("NIX_VIRTIOFS_DIR is unset!")
+    if args:
+        if platform != "linux":
+            fatal_error(
+                "virtiofsd is only supported on Linux! Use 9pfs with this wrapper on other platforms!"
+            )
+
+        try:
+            virtiofs_dir = Path(environ["NIX_VIRTIOFS_DIR"])
+        except KeyError:
+            fatal_error("NIX_VIRTIOFS_DIR is unset!")
 
     async with AsyncExitStack() as virtiofsds:
         await asyncio.gather(
