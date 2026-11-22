@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-scene-as-transition";
-  version = "1.1.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
-    owner = "andilippi";
-    repo = "obs-scene-as-transition";
-    rev = "v${version}";
-    hash = "sha256-qeiJR68MqvhpzvY7yNnR6w77SvavlZTdbnGBWrd7iZM=";
+    owner = "StreamUPTips";
+    repo = "obs-streamup-scene-as-transition";
+    tag = "${version}";
+    hash = "sha256-g/IAk7wqrSJI5Kfn7XDH4Oj25EA2TIcKLtoaGN2VL7Q=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OBS Studio plugin that will allow you to use a Scene as a transition";
-    homepage = "https://github.com/andilippi/obs-scene-as-transition";
+    homepage = "https://github.com/StreamUPTips/obs-streamup-scene-as-transition";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
     inherit (obs-studio.meta) platforms;
