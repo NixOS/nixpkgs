@@ -550,7 +550,6 @@ in
   deconz = runTest ./deconz.nix;
   deluge = runTest ./deluge.nix;
   dendrite = runTest ./matrix/dendrite.nix;
-  dep-scan = runTest ./dep-scan.nix;
   dependency-track = runTest ./dependency-track.nix;
   devpi-server = runTest ./devpi-server.nix;
   dex-oidc = runTest ./dex-oidc.nix;

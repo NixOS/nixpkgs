@@ -1,10 +1,12 @@
 {
   lib,
   fetchFromGitHub,
+  fetchurl,
   python3Packages,
   writableTmpDirAsHomeHook,
   cdxgen,
-  nixosTests,
+  jq,
+  runCommand,
   versionCheckHook,
 }:
 
@@ -87,7 +89,47 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ])
   ];
 
-  passthru.tests = { inherit (nixosTests) dep-scan; };
+  passthru = {
+    vdb = {
+      index = fetchurl {
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/data.index.vdb6";
+        hash = "sha256-UyE0xiLT0T4ygBdEvDi4VQW/vxwalN6YV9EJ9RoLYy4=";
+      };
+      data = fetchurl {
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/data.vdb6";
+        hash = "sha256-k5QIowFD8H/hwaRz1p8RXlFEIrKjnFUtxtZTfD67B+U=";
+      };
+      meta = fetchurl {
+        url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/vdb.meta";
+        hash = "sha256-eQB0dHlNw31sKsRcVUByhIfuIN35+m3VAcBHIfusNPY=";
+      };
+    };
+
+    tests.scan =
+      runCommand "dep-scan-test"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            jq
+          ];
+        }
+        ''
+          mkdir -p vdb
+          cp ${finalAttrs.passthru.vdb.index} vdb/data.index.vdb6
+          cp ${finalAttrs.passthru.vdb.data} vdb/data.vdb6
+          cp ${finalAttrs.passthru.vdb.meta} vdb/vdb.meta
+
+          export VDB_HOME=$(pwd)/vdb
+          export VDB_AGE_HOURS=999999
+          export HOME=$(pwd)/home
+          mkdir -p "$HOME" reports
+
+          depscan --src ${finalAttrs.src} --reports-dir reports
+          jq . reports/*.json
+
+          touch $out
+        '';
+  };
 
   meta = {
     description = "Security and risk audit tool based on known vulnerabilities, advisories, and license limitations for project dependencies";
