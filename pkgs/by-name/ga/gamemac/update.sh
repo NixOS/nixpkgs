@@ -11,8 +11,8 @@ UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, l
 DIRECT_URL=$(curl -fsSL -A "$UA" -w "%{url_effective}" -o /dev/null "$ROLLING_URL")
 CDN_URL="${DIRECT_URL%%\?*}"
 
-# Extract version from CDN filename (e.g. .../GameHub_en_0.8.328.dmg)
-VERSION=$(basename "$CDN_URL" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+# Extract version from the filename in the query string (e.g. ...filename%3D%22GameHub_en_0.8.328.dmg%22)
+VERSION=$(echo "$DIRECT_URL" | grep -oE 'GameHub_en_[0-9]+\.[0-9]+\.[0-9]+' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
 
 CURRENT=$(grep 'version = ' package.nix | head -1 | grep -oE '"[0-9.]+"' | tr -d '"')
 if [ "$VERSION" = "$CURRENT" ]; then
