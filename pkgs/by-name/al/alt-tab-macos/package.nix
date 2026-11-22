@@ -8,6 +8,7 @@
   makeWrapper,
   nix-update-script,
   rcodesign,
+  python3,
 }:
 
 let
@@ -99,9 +100,11 @@ let
 
   # These are the non-localized files in upstream's PBXResourcesBuildPhase.
   appResources = [
-    "resources/icons/app/app.icns"
+    "resources/icons/app/app.png"
     "resources/icons/menubar/*.pdf"
     "resources/illustrations/*.heic"
+    "resources/l10n/*.lproj"
+    "resources/native-illustrations/"
     "resources/*.otf"
     "docs/contributors.md"
     "docs/acknowledgments.md"
@@ -260,13 +263,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "alt-tab-macos";
-  version = "11.7.1";
+  version = "11.10.2";
 
   src = fetchFromGitHub {
     owner = "lwouis";
     repo = "alt-tab-macos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bSkuu07gPSH2Abr4E+ZhM2AKHQuOe3A4jUhr4uZaBh8=";
+    hash = "sha256-Yf9+137rsvfuVwZicTR+tpuaMrOQ5E3x2BC7J1rocwM=";
   };
 
   nativeBuildInputs = [
@@ -275,13 +278,14 @@ stdenv.mkDerivation (finalAttrs: {
     lld
     makeWrapper
     rcodesign
+    python3
   ];
 
   patches = [
     # Don't offer preferences for services disabled by the source-only stubs.
-    ./0004-hide-settings-for-disabled-services.patch
+    ./0001-hide-settings-for-disabled-services.patch
     # Avoids error about `CGDisplayStream` initializer being unavailable on macOS when using the 26.x SDK.
-    ./0005-avoid-using-obsolete-api.patch
+    ./0002-avoid-using-obsolete-api.patch
   ];
 
   postPatch = ''
@@ -300,6 +304,9 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.toShellVars { inherit commonSwiftFlags; }}
 
     ${lib.concatMapStringsSep "\n" buildFramework frameworks}
+
+    nixLog "Building native illustrations"
+    python3 scripts/assets/compile_illustrations.py
 
     nixLog "Compiling AppCenterApplication"
     clang -fobjc-arc -fmodules -fmodules-cache-path="$buildDir/module-cache" -O2 \
@@ -351,8 +358,7 @@ stdenv.mkDerivation (finalAttrs: {
     printf 'APPL????' > "$app/Contents/PkgInfo"
 
     # Xcode flattens these PBXGroup resources into Contents/Resources.
-    cp ${lib.concatStringsSep " " appResources} "$app/Contents/Resources/"
-    cp -R resources/l10n/*.lproj "$app/Contents/Resources/"
+    cp -R ${lib.concatStringsSep " " appResources} "$app/Contents/Resources/"
 
     makeWrapper "$app/Contents/MacOS/AltTab" "$out/bin/alt-tab"
 
