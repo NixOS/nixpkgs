@@ -11,6 +11,8 @@
   libsForQt5,
   lua5_5,
   libssh2,
+  systemdLibs,
+  udisks,
   writableTmpDirAsHomeHook,
 }:
 
@@ -76,6 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
             --replace-fail "LuaDLL = 'liblua5.1.so.0';" "LuaDLL = '%COMMANDER_PATH%/liblua.so';"
           substituteInPlace plugins/wfx/ftp/src/sftp/libssh.pas \
             --replace-fail "'libssh2.so.1'" "'${lib.getLib libssh2}/lib/libssh2.so.1'"
+
+          # libudev and libudisks2 are dlopen()ed, so they are not in DT_NEEDED and
+          # patchelf --shrink-rpath drops them from the rpath. Use store paths, like for libssh2.
+          substituteInPlace src/platform/unix/linux/uudev.pas \
+            --replace-fail "'libudev.so.%d'" "'${lib.getLib systemdLibs}/lib/libudev.so.%d'"
+          substituteInPlace src/platform/unix/linux/uudisks2.pas \
+            --replace-fail "'libudisks2.so.0'" "'${lib.getLib udisks}/lib/libudisks2.so.0'"
         ''
     }
   '';
