@@ -64,7 +64,7 @@ While `swiftpm2nix` is not deprecated, using `fetchSwiftPMDeps` is preferred bec
 
 ### Packaging with `fetchSwiftPMDeps` {#ssec-swift-packaging-with-fetch-swiftpm-deps}
 
-Swift provides a fetcher that will download all of your dependencies, and the XCFramework binary targets they declare, based on the `Package.resolved` shipped by your package.
+Swift provides a fetcher that will download all of your dependencies, and the XCFramework and artifact bundle binary targets they declare, based on the `Package.resolved` shipped by your package.
 If your package does not ship one, you will have to generate it yourself and provide it with your package.
 Otherwise, set `swiftpmDeps` as follows:
 
