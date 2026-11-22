@@ -206,11 +206,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (substitute {
       src = ./remove-web-interface.patch;
     })
-    (fetchpatch {
-      name = "feat: allow `-` in grammar names";
-      url = "https://github.com/tree-sitter/tree-sitter/commit/7d3c32125379c1dc02f47277bcd4eceaac299bdb.diff";
-      hash = "sha256-ZNjdNateHVHDy0/txlAW8TUdz+DVxLKXpw8ojZbIQS8=";
-    })
   ];
 
   postPatch =
