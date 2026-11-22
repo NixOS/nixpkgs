@@ -91,7 +91,10 @@ buildGoModule (finalAttrs: {
 
       # Update vendorHash
       (nix-update-script {
-        extraArgs = [ "--version=skip" ];
+        extraArgs = [
+          "--version=skip"
+          "--no-src"
+        ];
       })
     ];
   };
