@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "s2n-tls";
-  version = "1.7.12";
+  version = "1.7.14";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2DbRhS4TQCK8ttFLVlIL9QYa1LHMJSoZWF9q7qVqGaY=";
+    hash = "sha256-GkRkhfOZsUn35A7S0EExxNcsVN5nudhdgKuEhfJto+w=";
   };
 
   outputs = [
