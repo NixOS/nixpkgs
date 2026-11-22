@@ -90,6 +90,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
+    # Huggingface has a habit of removing their pinned commit dataset urls
+    # so an update script exists to keep these models up to date
+    updateScript = ./update.sh;
     vdb = {
       index = fetchurl {
         url = "https://huggingface.co/datasets/AppThreat/vdb/resolve/40609f230dd7c83178e054e0219c367b49a2c920/app-2y/data.index.vdb6";
