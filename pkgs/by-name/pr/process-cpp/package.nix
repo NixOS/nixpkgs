@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  testers,
   gitUpdater,
+  makeFontsConf,
+  testers,
   boost,
   cmake,
   coreutils,
@@ -13,18 +14,19 @@
   lomiri,
   properties-cpp,
   pkg-config,
+  writableTmpDirAsHomeHook,
   withDocumentation ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "process-cpp";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/process-cpp";
     rev = finalAttrs.version;
-    hash = "sha256-hS9V1SLO1eaIFz6ppF87c0kXHHQq6ZPOxfr00XuvWhQ=";
+    hash = "sha256-WVC3kc4ueXjt7ppiobGg9hi4DxgPDGoJ1x4JlHhrysA=";
   };
 
   outputs = [
@@ -41,10 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
 
     substituteInPlace tests/posix_process_test.cpp \
-      --replace-fail '/usr/bin/sleep' '${lib.getExe' coreutils "sleep"}' \
-      --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
+      --replace-fail '/usr/bin/sleep' '${lib.getExe' coreutils "sleep"}'
   '';
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -54,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withDocumentation [
     doxygen
     graphviz
+    writableTmpDirAsHomeHook # silencing fontconfig warnings
   ];
 
   buildInputs = [
@@ -65,14 +68,22 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ gtest ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "PROCESS_CPP_ENABLE_DOC_GENERATION" withDocumentation)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  env = lib.optionalAttrs withDocumentation {
+    # silence fontconfig warnings
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  };
+
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+      version = "${lib.versions.major finalAttrs.version}.0.0";
+    };
     updateScript = gitUpdater { };
   };
 

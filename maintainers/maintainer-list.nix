@@ -4949,6 +4949,12 @@
     githubId = 53847249;
     name = "Casey Avila";
   };
+  cashewna = {
+    email = "krishnakhong@gmail.com";
+    github = "cashewna";
+    githubId = 65855420;
+    name = "cashewna";
+  };
   caspersonn = {
     email = "lucakasper8@gmail.com";
     github = "Caspersonn";
@@ -7138,6 +7144,12 @@
     github = "Delta456";
     githubId = 28479139;
     name = "Swastik Baranwal";
+  };
+  DeltaCalcium = {
+    name = "DeltaCalcium";
+    email = "git@deltacalcium.dev";
+    github = "DeltaCalcium";
+    githubId = 47009341;
   };
   deltadelta = {
     email = "contact@libellules.eu";

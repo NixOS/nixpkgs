@@ -8,6 +8,7 @@
   libxcrypt,
   subunit,
   python3Packages,
+  libpcap,
   nix-update-script,
 
   withDoc ? false,
@@ -33,13 +34,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.4.22";
+  version = "1.5.10";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iOrLLCWpXbUfixxAPMm+J3Nu5Crgy4XAB27Izkhj+tI=";
+    hash = "sha256-R6v8tCtrqrrUcqs9/ZN0uV85IUA13csIoxUazvJ1+xo=";
     fetchSubmodules = true;
   };
 
@@ -51,9 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "UA_NAMESPACE_ZERO" "FULL")
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
-    # Note comment near doCheck
     (lib.cmakeBool "UA_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "UA_ENABLE_ALLOW_REUSEADDR" finalAttrs.finalPackage.doCheck)
 
     (lib.cmakeBool "UA_BUILD_EXAMPLES" withExamples)
   ]
@@ -79,16 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [ "all" ] ++ lib.optional withDoc "doc";
 
-  # Tests must normally be disabled because they require
-  # -DUA_ENABLE_ALLOW_REUSEADDR=ON. The option must not be used in production,
-  # since it is a security risk.
-  # See https://github.com/open62541/open62541/issues/6407
-  doCheck = false;
+  doCheck = true;
 
   checkInputs = [
     check
     libxcrypt
     subunit
+    libpcap
   ];
 
   # Tests must run sequentially to avoid port collisions on localhost
@@ -113,6 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
         "check_pubsub_multiple_subscribe_rt_levels"
         "check_pubsub_config_freeze"
         "check_pubsub_publish_rt_levels"
+        "check_pubsub_offset"
+        "check_pubsub_custom_state_machine"
+        "check_pubsub_subscribe_msgrcvtimeout"
+        "check_pubsub_encryption"
+        "check_pubsub_encryption_aes256"
+        "check_pubsub_decryption"
+        "check_pubsub_subscribe_encrypted"
 
         # Could not find the interface
         "check_pubsub_connection_ethernet"
@@ -120,6 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
         "check_pubsub_publish_ethernet_etf"
         "check_pubsub_informationmodel"
         "check_pubsub_informationmodel_methods"
+
+        # Failed to validate multicast for "224.0.0.22" on port 4840 (None)
+        # Could not open an UDP channel for receiving
+        "check_pubsub_pds"
+        "check_pubsub_state_machine"
+        "check_pubsub_state_machine_extra"
       ];
       regex = "^(${builtins.concatStringsSep "|" disabledTests})\$";
     in
@@ -153,31 +162,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^v(1[.]4[.][0-9]+)$"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests =
     let
       open62541Full =
         encBackend:
-        (open62541.overrideAttrs (_: {
-          doCheck = true;
-        })).override
-          {
-            withDoc = true;
-            # if withExamples, one of the example currently fails to build
-            #withExamples = true;
-            withEncryption = encBackend;
-          };
+        open62541.override {
+          withDoc = true;
+          # if withExamples, one of the example currently fails to build
+          #withExamples = true;
+          withEncryption = encBackend;
+        };
     in
     {
-      open62541WithTests = finalAttrs.finalPackage.overrideAttrs (_: {
-        doCheck = true;
-      });
       open62541Full = open62541Full false;
       open62541Full-openssl = open62541Full "openssl";
       open62541Full-mbedtls = open62541Full "mbedtls";
@@ -198,5 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ panicgh ];
     platforms = lib.platforms.unix;
+    # build failure
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
