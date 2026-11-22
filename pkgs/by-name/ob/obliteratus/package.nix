@@ -97,6 +97,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
     # RuntimeError: Failed to initialize cpuinfo!
     "test_output_dtype_preserved"
+  ]
+  ++ lib.optionals pythonPackages.torch.rocmSupport [
+    # The ROCm runtime warns on stderr that /sys/class/kfd does not exist in the sandbox,
+    # and this test asserts that the UI subprocess writes nothing to stderr
+    "test_gradio_application_constructs_without_public_listener"
   ];
 
   passthru.updateScript = nix-update-script {
